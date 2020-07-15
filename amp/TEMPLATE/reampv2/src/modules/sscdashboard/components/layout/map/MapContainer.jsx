@@ -11,15 +11,17 @@ import SimplePopup from '../popups/homepopup/SimplePopup';
 import { SSCTranslationContext } from '../../StartUp';
 
 class MapContainer extends Component {
+
     render() {
         const {countries} = this.props.filters.countries;
+        const {countriesForExport, countriesForExportChanged, selectedFilters, filtersRestrictions, handleSelectedFiltersChange, chartSelected} = this.props;
         const {translations} = this.context;
         return (
             <div className="col-md-10 col-md-offset-2 map-wrapper">
-                <HorizontalFilters selectedFilters={this.props.selectedFilters}
-                                   filtersRestrictions={this.props.filtersRestrictions}
-                                   handleSelectedFiltersChange={this.props.handleSelectedFiltersChange}
-                                   chartSelected={this.props.chartSelected}
+                <HorizontalFilters selectedFilters={selectedFilters}
+                                   filtersRestrictions={filtersRestrictions}
+                                   handleSelectedFiltersChange={handleSelectedFiltersChange}
+                                   chartSelected={chartSelected}
 
                 />
                 <MapHome filteredProjects={this.props.filteredProjects} countries={countries}/>
@@ -29,7 +31,10 @@ class MapContainer extends Component {
                                  onClose={this.props.onNoProjectsModalClose}/>
                 </PopupOverlay>
                 <CountryPopupOverlay show={this.props.showLargeCountryPopin} projects={this.props.filteredProjects}
-                                     closeLargeCountryPopin={this.props.closeLargeCountryPopin}
+                                     closeLargeCountryPopinAndClearFilter={this.props.closeLargeCountryPopinAndClearFilter}
+                                     countriesForExport={countriesForExport}
+                                     countriesForExportChanged={countriesForExportChanged}
+
                 />
 
 

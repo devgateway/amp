@@ -1,0 +1,104 @@
+#print-dummy, #print-simple-dummy {
+    position: absolute;
+    top: -20000px;
+    left: 50px;
+}
+
+#print-dummy {
+    top: -10000px;
+    border: 1px solid black;
+
+}
+
+#print-simple-dummy .country-popup-all.line {
+    border: 1px solid #313d4f !important;
+}
+
+#print-dummy .export-checkbox,
+#print-simple-dummy .export-checkbox {
+    visibility: hidden;
+}
+
+#print-simple-dummy .country-popup-all.left {
+    border-radius: 0;
+}
+
+#print-dummy .row, #print-simple-dummy .row {
+    margin-right: 0px;
+    margin-left: 0px;
+}
+
+#print-dummy .countries-charts .row.bottomBorder {
+    border-bottom: 1px solid #313d4f;
+}
+
+#print-dummy .chart-column, #print-simple-dummy .chart-column {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+#print-dummy .country-popup-1 .header .country-name,
+#print-dummy .country-popup-2 .header .country-name,
+#print-dummy .country-popup-3 .header .country-name,
+#print-simple-dummy .country-popup-1 .header .country-name,
+#print-simple-dummy .country-popup-2 .header .country-name,
+#print-simple-dummy .country-popup-3 .header .country-name {
+    padding-left: 15px;
+}
+
+#print-dummy .country-popup-1 .popup-footer ul li a,
+#print-dummy .custom-legend ul li .label,
+#print-simple-dummy .country-popup-1 .popup-footer ul li a,
+#print-simple-dummy .custom-legend ul li .label {
+    color: #273142;
+}
+
+#print-simple-dummy .countries-charts,
+#print-dummy .countries-charts {
+    /*height: 358px;*/
+    border-top: 1px solid black;
+}
+
+#print-simple-dummy .print-title,
+#print-dummy .print-title {
+    height: 80px;
+    line-height: 80px;
+    color: #0966ac;
+    font-size: 25px;
+    font-weight: bold;
+    margin-left: 15px;
+}
+
+#print-simple-dummy .print-filter-header,
+#print-dummy .print-filter-header {
+    height: 40px;
+    line-height: 40px;
+    color: #0966ac;
+    font-size: 18px;
+    font-weight: 300;
+    font-weight: bold;
+}
+
+#print-dummy .print-filters > div,
+#print-simple-dummy .print-filters > div {
+    margin-left: 20px;
+}
+
+#print-simple-dummy .print-filters > div > div,
+#print-dummy .print-filters > div > div {
+    margin-left: 20px;
+}
+
+#print-simple-dummy .print-filters > div div,
+#print-dummy .print-filters > div div {
+    font-size: 14px;
+    font-weight: bold;
+    padding-top: 10px;
+}
+
+#print-simple-dummy .print-filters > div ul,
+#print-dummy .print-filters > div ul {
+    margin-left: 10px;
+}
+
+/*# sourceMappingURL=print.css.map */

@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 class CountryPopup extends Component {
 
     render() {
-        const {project, columnCount, borderClass, lineClass} = this.props;
+        const {project, columnCount, borderClass, lineClass, countriesForExportChanged, countriesForExport} = this.props;
         const {countries} = this.props.filters.countries;
         const {sectors} = this.props.filters.sectors;
         const {activitiesDetails} = this.props.projects;
@@ -21,7 +21,9 @@ class CountryPopup extends Component {
             <div
                 className={`country-popup-all country-popup-${columnCount} ${borderClass ? borderClass : ''} ${lineClass ? lineClass : ''}`}
             >
-                <CountryPopupHeader country={country} projectsBySectors={projectsBySectors} columnCount={columnCount}/>
+                <CountryPopupHeader country={country} projectsBySectors={projectsBySectors} columnCount={columnCount}
+                                    countriesForExportChanged={countriesForExportChanged}
+                                    countriesForExport={countriesForExport}/>
                 <CountryPopupChart projectsBySectors={projectsBySectors} sectors={sectors} columnCount={columnCount}/>
 
                 {columnCount === 1 && <CountryPopupFooter projects={[...projectsBySectors.uniqueProjects]}

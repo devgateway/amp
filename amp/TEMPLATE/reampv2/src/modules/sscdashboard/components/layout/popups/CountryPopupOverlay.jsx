@@ -5,11 +5,12 @@ import { calculateColumnCount } from '../../../utils/Utils';
 
 
 class CountryPopupOverlay extends Component {
+
     render() {
         if (!this.props.show) {
             return null;
         }
-        const {projects, closeLargeCountryPopin} = this.props;
+        const {projects, closeLargeCountryPopinAndClearFilter, countriesForExport, countriesForExportChanged} = this.props;
         if (!projects || projects.length === 0) {
             return null;
         }
@@ -23,7 +24,12 @@ class CountryPopupOverlay extends Component {
         return (
             <div className={`country-popup-wrapper${columnCount === 1 ? '' : ' country' + columnCount}`}>
                 <div className="container-fluid">
-                    <CountryPopupContainer rows={rows} columnCount={columnCount} closeLargeCountryPopin={closeLargeCountryPopin}/>
+                    <CountryPopupContainer rows={rows} columnCount={columnCount}
+                                           closeLargeCountryPopinAndClearFilter={closeLargeCountryPopinAndClearFilter}
+                                           countriesForExport={countriesForExport}
+                                           countriesForExportChanged={countriesForExportChanged}
+
+                    />
                 </div>
             </div>
         );

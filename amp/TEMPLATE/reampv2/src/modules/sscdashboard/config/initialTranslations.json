@@ -25,5 +25,8 @@
   "amp.ssc.dashboard:sectors-project": "Project",
   "amp.ssc.dashboard:sectors-projects": "Projects",
   "amp.ssc.dashboard:sectors-sector-types": "Sector types",
-  "amp.ssc.dashboard:sectors-others": "Others"
+  "amp.ssc.dashboard:sectors-others": "Others",
+  "amp.ssc.dashboard:project-percentage":"Percentage of total SSC projects",
+  "amp.ssc.dashboard:project-count":"Projects count"
+
 }

@@ -1,6 +1,7 @@
 import * as FieldsConstants from './FieldsConstants';
 import EllipsisText from 'react-ellipsis-text';
 import React from 'react';
+import { SECTORS_DECIMAL_POINTS_CHART } from './constants';
 
 
 export function generateStructureBasedOnSector(objectData) {
@@ -48,6 +49,26 @@ export function getProjects(projects, elementId, activitiesDetails, ellipsisLeng
         </li>)
     })
 }
+
+
+export function getChartData(projectsBySectors, sectors, includeActivities) {
+    const totalActivities = projectsBySectors.sectors.reduce((prev, s) => prev + s.activities.size, 0);
+
+    return projectsBySectors.sectors.map(s => {
+        const sector = {};
+        const sectorName = sectors.find(ss => ss.id === s.id).name;
+        sector.id = s.id.toString();
+        sector.value = s.activities.size;
+        if (includeActivities) {
+            sector.activities = s.activities;
+        }
+        sector.percentage = ((sector.value * 100) / totalActivities);
+        sector.label = `${sectorName} ${sector.percentage.toFixed(SECTORS_DECIMAL_POINTS_CHART)}%`;
+        sector.simpleLabel = sectorName;
+        return sector;
+    }).sort(((a, b) => a.value > b.value ? -1 : 1));
+}
+;
 
 export function getProject(projectId, activitiesDetails) {
     if (activitiesDetails && activitiesDetails.activities.length > 0) {

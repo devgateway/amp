@@ -5,7 +5,6 @@ import CountryPopup from './CountryPopup';
 import { calculateColumnCount } from '../../../../utils/Utils';
 import { BOOTSTRAP_COLUMNS_COUNT } from '../../../../utils/constants';
 import { SSCTranslationContext } from '../../../StartUp';
-import SidebarIntro from '../../sidebar/SidebarIntro';
 
 export default class CountryPopupContainer extends Component {
     constructor(props) {
@@ -15,7 +14,7 @@ export default class CountryPopupContainer extends Component {
 
     render() {
         const {translations} = this.context;
-        const {rows, closeLargeCountryPopinAndClearFilter, columnCount, countriesForExport, countriesForExportChanged} = this.props;
+        const {rows, closeLargeCountryPopinAndClearFilter, columnCount, countriesForExport, countriesForExportChanged,getExportData} = this.props;
         return (<div>
 
             <CountryPopupOverlayTitle/>
@@ -26,6 +25,7 @@ export default class CountryPopupContainer extends Component {
                                 printChartId="countries-charts"
                                 countriesForExport={countriesForExport}
                                 countriesForExportChanged={countriesForExportChanged}
+                                getExportData={getExportData}
             />
             <div className="countries-charts" id="countries-charts">
                 {this.getCountryPopup(rows)}

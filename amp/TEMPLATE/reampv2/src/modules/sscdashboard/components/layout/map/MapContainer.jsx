@@ -14,6 +14,8 @@ class MapContainer extends Component {
 
     render() {
         const {countries} = this.props.filters.countries;
+        const {sectors} = this.props.filters.sectors;
+        const {activitiesDetails} = this.props.projects;
         const {countriesForExport, countriesForExportChanged, selectedFilters, filtersRestrictions, handleSelectedFiltersChange, chartSelected} = this.props;
         const {translations} = this.context;
         return (
@@ -34,6 +36,9 @@ class MapContainer extends Component {
                                      closeLargeCountryPopinAndClearFilter={this.props.closeLargeCountryPopinAndClearFilter}
                                      countriesForExport={countriesForExport}
                                      countriesForExportChanged={countriesForExportChanged}
+                                     sectors={sectors}
+                                     activitiesDetails={activitiesDetails}
+                                     countries={countries}
 
                 />
 

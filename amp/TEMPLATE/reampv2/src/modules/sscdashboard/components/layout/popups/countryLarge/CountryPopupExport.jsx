@@ -1,14 +1,15 @@
 import React, { Component } from "react";
 import '../popups.css';
 import { printChart, printInnerCharts } from '../../../../utils/PrintUtils';
-import { PNG_FORMAT, SVG_FORMAT } from '../../../../utils/constants';
+import { exportToXLS } from '../../../../utils/exportUtils';
+import { PNG_FORMAT } from '../../../../utils/constants';
 import ReactTooltip from 'react-tooltip';
 import { SSCTranslationContext } from '../../../StartUp';
-import CountryPopupHeader from './CountryPopupHeader';
 
 
 class CountryPopupExport extends Component {
-    export(printFormat) {
+
+    exportToImage(printFormat) {
         const {printTitle, printChartId, printFilters} = this.props;
         if (this.props.countriesForExport.length === 0 || this.props.onlyOneCountry) {
             printChart(printTitle, printChartId, printFilters, printFormat, true, 'print-dummy-container').then(() => {
@@ -21,18 +22,23 @@ class CountryPopupExport extends Component {
 
     }
 
+    exportChartToXls() {
+        const {getExportData} = this.props;
+        exportToXLS(getExportData());
+    }
+
     render() {
         const {onlyOneCountry} = this.props;
         const {translations} = this.context;
         return (
             <div className={`export-wrapper ${onlyOneCountry ? 'single-country' : ''}`}>
                 <ul>
-                    <li className="png" onClick={this.export.bind(this, PNG_FORMAT)}
+                    <li className="png" onClick={this.exportToImage.bind(this, PNG_FORMAT)}
                         data-tip={translations['amp.ssc.dashboard:sectors-png-tooltip']}
                         data-for={"download-png"}>png
                     </li>
                     <li className="xls" data-tip={translations['amp.ssc.dashboard:sectors-xls-tooltip']}
-                        data-for={"download-xls"}>xls
+                        data-for={"download-xls"} onClick={this.exportChartToXls.bind(this)}>xls
                     </li>
                     <li className="print">print</li>
                     <li className="return-link" onClick={() => this.props.closeLargeCountryPopinAndClearFilter()}>X</li>

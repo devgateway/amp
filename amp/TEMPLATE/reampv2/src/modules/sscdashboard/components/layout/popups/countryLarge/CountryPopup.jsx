@@ -3,10 +3,11 @@ import '../popups.css';
 import CountryPopupHeader from "./CountryPopupHeader";
 import CountryPopupChart from "./CountryPopupChart";
 import CountryPopupFooter from "./CountryPopupFooter";
-import { generateStructureBasedOnSectorProjectCount } from '../../../../utils/ProjectUtils';
+import { generateStructureBasedOnSectorProjectCount, getChartData } from '../../../../utils/ProjectUtils';
 import { bindActionCreators } from 'redux';
 import { SSCTranslationContext } from '../../../StartUp';
 import { connect } from 'react-redux';
+import { SECTORS_DECIMAL_POINTS_CHART } from '../../../../utils/constants';
 
 class CountryPopup extends Component {
 
@@ -16,6 +17,9 @@ class CountryPopup extends Component {
         const {sectors} = this.props.filters.sectors;
         const {activitiesDetails} = this.props.projects;
         const projectsBySectors = generateStructureBasedOnSectorProjectCount(project);
+
+
+        const chartData = getChartData(projectsBySectors,sectors);
         const country = countries.find(c => c.id === project.id);
         return (
             <div
@@ -24,7 +28,8 @@ class CountryPopup extends Component {
                 <CountryPopupHeader country={country} projectsBySectors={projectsBySectors} columnCount={columnCount}
                                     countriesForExportChanged={countriesForExportChanged}
                                     countriesForExport={countriesForExport}/>
-                <CountryPopupChart projectsBySectors={projectsBySectors} sectors={sectors} columnCount={columnCount}/>
+                <CountryPopupChart columnCount={columnCount}
+                                   chartData={chartData}/>
 
                 {columnCount === 1 && <CountryPopupFooter projects={[...projectsBySectors.uniqueProjects]}
                                                           activitiesDetails={activitiesDetails}/>}

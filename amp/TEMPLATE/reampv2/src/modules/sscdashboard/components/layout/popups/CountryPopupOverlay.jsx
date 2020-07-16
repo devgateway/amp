@@ -48,7 +48,7 @@ class CountryPopupOverlay extends Component {
         console.log(countriesForExport);
         projects.forEach(p => {
             debugger;
-            if (countriesForExport.length == 0 || countriesForExport.includes(p.id)) {
+            if (countriesForExport.length === 0 || countriesForExport.includes(p.id)) {
                 const projectsBySectors = generateStructureBasedOnSectorProjectCount(p);
                 const chartData = getChartData(projectsBySectors, sectors, true);
                 chartData.forEach(cd => {

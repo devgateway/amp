@@ -7,10 +7,6 @@ import { BOOTSTRAP_COLUMNS_COUNT } from '../../../../utils/constants';
 import { SSCTranslationContext } from '../../../StartUp';
 
 export default class CountryPopupContainer extends Component {
-    constructor(props) {
-        super(props);
-    }
-
 
     render() {
         const {translations} = this.context;

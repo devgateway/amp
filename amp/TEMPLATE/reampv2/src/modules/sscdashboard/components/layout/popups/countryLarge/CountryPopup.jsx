@@ -7,7 +7,6 @@ import { generateStructureBasedOnSectorProjectCount, getChartData } from '../../
 import { bindActionCreators } from 'redux';
 import { SSCTranslationContext } from '../../../StartUp';
 import { connect } from 'react-redux';
-import { SECTORS_DECIMAL_POINTS_CHART } from '../../../../utils/constants';
 
 class CountryPopup extends Component {
 

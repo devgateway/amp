@@ -9,6 +9,8 @@
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "d3": "^5.16.0",
+    "dom-to-image-font-patch": "^1.0.1",
+    "exceljs": "^4.1.1",
     "history": "^4.10.1",
     "leaflet": "^1.6.0",
     "leaflet-curve": "^1.0.0",

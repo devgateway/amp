@@ -23,7 +23,8 @@ export const NON_SELECTED_BUBBLE_COLOR = '#fd8f00';
 
 export const SELECTED_LINE_COLOR = '#007236';
 export const SELECTED_BUBBLE_COLOR = '#007236';
-
+export const PNG_FORMAT = 'png';
+export const SVG_FORMAT = 'svg';
 export const PROJECT_LENGTH_HOME_PAGE = 50;
 export const UNDEFINED_FILTER = -999999999;
 export const FLAGS_TO_SHOW_DEFAULT = 9;

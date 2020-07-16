@@ -8,14 +8,15 @@ import { bindActionCreators } from 'redux';
 import { loadActivitiesDetails } from './actions/callReports';
 import { connect } from 'react-redux';
 import { loadCountriesFilters, loadModalitiesFilters, loadSectorsFilters } from './actions/loadFilters';
+import './utils/print.css';
 
 class SssDashboardHome extends Component {
 
     constructor(props) {
         super(props);
         this.countriesWithData = [];
-
         this.state = {
+            countriesForExport: [],
             chartSelected: HOME_CHART,
             showEmptyProjects: false,
             showLargeCountryPopin: false,
@@ -27,6 +28,11 @@ class SssDashboardHome extends Component {
             }
         };
 
+    }
+
+
+    countriesForExportChanged(countries) {
+        this.setState({countriesForExport: countries});
     }
 
     componentDidMount() {
@@ -70,6 +76,10 @@ class SssDashboardHome extends Component {
         }
     }
 
+    closeLargeCountryPopinAndClearFilter() {
+        this.handleSelectedCountryChanged([]);
+    }
+
     closeLargeCountryPopin() {
         this.setState({showLargeCountryPopin: false});
     }
@@ -83,6 +93,12 @@ class SssDashboardHome extends Component {
     }
 
     handleSelectedCountryChanged(pSelectedCountries) {
+        //we only keep for export the countries that are selected
+        this.setState(previousState => {
+            const countriesForExport = [...previousState.countriesForExport].filter(c => pSelectedCountries.includes(c));
+            return {countriesForExport};
+
+        })
         if (this.state.chartSelected === SECTORS_CHART && pSelectedCountries && pSelectedCountries.length >= 1) {
             //currently we open large popin, in next tickets we will open also the popin for 2/3 countries selected
             this.setState({showLargeCountryPopin: true});
@@ -201,9 +217,17 @@ class SssDashboardHome extends Component {
                                   filtersRestrictions={filtersRestrictions}
                                   showEmptyProjects={this.state.showEmptyProjects}
                                   showLargeCountryPopin={this.state.showLargeCountryPopin}
-                                  closeLargeCountryPopin={this.closeLargeCountryPopin.bind(this)}
+                                  closeLargeCountryPopinAndClearFilter={this.closeLargeCountryPopinAndClearFilter.bind(this)}
                                   onNoProjectsModalClose={this.onNoProjectsModalClose.bind(this)}
+                                  countriesForExport={this.state.countriesForExport}
+                                  countriesForExportChanged={this.countriesForExportChanged.bind(this)}
                     />
+                </div>
+                <div id="print-dummy">
+                    <div id="print-dummy-container"/>
+                </div>
+                <div id="print-simple-dummy">
+                    <div id="print-simple-dummy-container"/>
                 </div>
             </div>
         );

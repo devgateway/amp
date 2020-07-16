@@ -32,23 +32,13 @@ class CountryPopupChart extends Component {
     }
 
     render() {
-        const {projectsBySectors, sectors, columnCount} = this.props;
+
+        const { chartData, columnCount} = this.props;
         const {translations} = this.context;
-        const totalActivities = projectsBySectors.sectors.reduce((prev, s) => prev + s.activities.size, 0);
 
-        const data = projectsBySectors.sectors.map(s => {
-            const sector = {};
-            const sectorName = sectors.find(ss => ss.id === s.id).name;
-            sector.id = s.id.toString();
-            sector.value = s.activities.size;
-            sector.percentage = ((sector.value * 100) / totalActivities);
-            sector.label = `${sectorName} ${sector.percentage.toFixed(SECTORS_DECIMAL_POINTS_CHART)}%`;
-            sector.simpleLabel = sectorName;
-            return sector;
-        }).sort(((a, b) => a.value > b.value ? -1 : 1));
 
-        const nonGrouped = data.slice(0, SECTORS_LIMIT_CHART);
-        const others = data.slice(SECTORS_LIMIT_CHART, data.length);
+        const nonGrouped = chartData.slice(0, SECTORS_LIMIT_CHART);
+        const others = chartData.slice(SECTORS_LIMIT_CHART, chartData.length);
         if (others.length > 0) {
             const other = {};
             const othersLabel = toCamelCase(translations['amp.ssc.dashboard:sectors-others']);

@@ -21,6 +21,10 @@ public final class AmpFieldsEnumerator implements InitializingBean {
 
     private static CachingFieldsEnumeratorFactory enumeratorFactory;
 
+    public static final String TYPE_ACTIVITY = "TYPE_ACTIVITY";
+    public static final String TYPE_CONTACT = "TYPE_CONTACT";
+    public static final String TYPE_RESOURCE = "TYPE_RESOURCE";
+
     @Autowired
     private SyncDAO syncDAO;
 
@@ -38,9 +42,10 @@ public final class AmpFieldsEnumerator implements InitializingBean {
      * Group the fields by workspace member
      *
      * @param wsMemberIds
+     * @param type
      * @return
      */
-    public static List<APIWorkspaceMemberFieldList> getAvailableActivityFieldsBasedOnWs(List<Long> wsMemberIds) {
+    public static List<APIWorkspaceMemberFieldList> getAvailableFieldsBasedOnWs(List<Long> wsMemberIds, String type) {
         List<APIWorkspaceMemberFieldList> wsList = new ArrayList<>();
 
         Map<Long, List<Long>> fmTreesWsMap = FMService.getFMTreeWsMap();
@@ -55,69 +60,19 @@ public final class AmpFieldsEnumerator implements InitializingBean {
 
             if (!wsIds.isEmpty()) {
                 CachingFieldsEnumerator cachingFieldsEnumerator = enumeratorFactory.getEnumerator(templateId);
-                APIWorkspaceMemberFieldList fieldList = new APIWorkspaceMemberFieldList(wsIds,
-                        cachingFieldsEnumerator.getActivityFields());
-                wsList.add(fieldList);
-            }
-        }
-
-        return wsList;
-    }
-
-    /**
-     * Group the fields by workspace member
-     *
-     * @param wsMemberIds
-     * @return
-     */
-    public static List<APIWorkspaceMemberFieldList> getAvailableResourceFieldsBasedOnWs(List<Long> wsMemberIds) {
-        List<APIWorkspaceMemberFieldList> wsList = new ArrayList<>();
-
-        Map<Long, List<Long>> fmTreesWsMap = FMService.getFMTreeWsMap();
-
-        for (Map.Entry<Long, List<Long>> t : fmTreesWsMap.entrySet()) {
-            Long templateId = t.getKey();
-            List<Long> wsIds = t.getValue();
-
-            if (!wsMemberIds.isEmpty()) {
-                wsIds.retainAll(wsMemberIds);
-            }
-
-            if (!wsIds.isEmpty()) {
-                CachingFieldsEnumerator cachingFieldsEnumerator = enumeratorFactory.getEnumerator(templateId);
-                APIWorkspaceMemberFieldList fieldList = new APIWorkspaceMemberFieldList(wsIds,
-                        cachingFieldsEnumerator.getResourceFields());
-                wsList.add(fieldList);
-            }
-        }
-
-        return wsList;
-    }
-
-    /**
-     * Group the fields by workspace member
-     *
-     * @param wsMemberIds
-     * @return
-     */
-    public static List<APIWorkspaceMemberFieldList> getAvailableContactFieldsBasedOnWs(List<Long> wsMemberIds) {
-        List<APIWorkspaceMemberFieldList> wsList = new ArrayList<>();
-
-        Map<Long, List<Long>> fmTreesWsMap = FMService.getFMTreeWsMap();
-
-        for (Map.Entry<Long, List<Long>> t : fmTreesWsMap.entrySet()) {
-            Long templateId = t.getKey();
-            List<Long> wsIds = t.getValue();
-
-            if (!wsMemberIds.isEmpty()) {
-                wsIds.retainAll(wsMemberIds);
-            }
-
-            if (!wsIds.isEmpty()) {
-                CachingFieldsEnumerator cachingFieldsEnumerator = enumeratorFactory.getEnumerator(templateId);
-                APIWorkspaceMemberFieldList fieldList = new APIWorkspaceMemberFieldList(wsIds,
-                        cachingFieldsEnumerator.getContactFields());
-                wsList.add(fieldList);
+                if (type.equals(TYPE_ACTIVITY)) {
+                    APIWorkspaceMemberFieldList fieldList = new APIWorkspaceMemberFieldList(wsIds,
+                            cachingFieldsEnumerator.getActivityFields());
+                    wsList.add(fieldList);
+                } else if (type.equals(TYPE_CONTACT)) {
+                    APIWorkspaceMemberFieldList fieldList = new APIWorkspaceMemberFieldList(wsIds,
+                            cachingFieldsEnumerator.getContactFields());
+                    wsList.add(fieldList);
+                } else if (type.equals(TYPE_RESOURCE)) {
+                    APIWorkspaceMemberFieldList fieldList = new APIWorkspaceMemberFieldList(wsIds,
+                            cachingFieldsEnumerator.getResourceFields());
+                    wsList.add(fieldList);
+                }
             }
         }
 

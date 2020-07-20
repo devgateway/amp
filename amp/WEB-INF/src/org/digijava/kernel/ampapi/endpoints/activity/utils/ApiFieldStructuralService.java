@@ -12,6 +12,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.field.APIType;
 
 import org.digijava.kernel.services.AmpFieldsEnumerator;
 
+import static org.digijava.kernel.services.AmpFieldsEnumerator.*;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.*;
 
 /**
@@ -38,11 +39,11 @@ public final class ApiFieldStructuralService {
         clientFields.forEach(clientField -> {
             List<APIWorkspaceMemberFieldList> ampFields = null;
             if (collection.equals(COLLECTION_TYPE_ACTIVITY)) {
-                ampFields = AmpFieldsEnumerator.getAvailableActivityFieldsBasedOnWs(clientField.getWsMemberIds());
+                ampFields = AmpFieldsEnumerator.getAvailableFieldsBasedOnWs(clientField.getWsMemberIds(), TYPE_ACTIVITY);
             } else if (collection.equals(COLLECTION_TYPE_CONTACT)) {
-                ampFields = AmpFieldsEnumerator.getAvailableContactFieldsBasedOnWs(clientField.getWsMemberIds());
+                ampFields = AmpFieldsEnumerator.getAvailableFieldsBasedOnWs(clientField.getWsMemberIds(), TYPE_CONTACT);
             } else if (collection.equals(COLLECTION_TYPE_RESOURCE)) {
-                ampFields = AmpFieldsEnumerator.getAvailableResourceFieldsBasedOnWs(clientField.getWsMemberIds());
+                ampFields = AmpFieldsEnumerator.getAvailableFieldsBasedOnWs(clientField.getWsMemberIds(), TYPE_RESOURCE);
             }
             ampFields.forEach(ampField -> {
                 if (ampField.getWsMemberIds().equals(clientField.getWsMemberIds())) {

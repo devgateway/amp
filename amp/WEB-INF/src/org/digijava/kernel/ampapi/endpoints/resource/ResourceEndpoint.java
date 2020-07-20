@@ -75,7 +75,7 @@ public class ResourceEndpoint {
     @ApiMethod(id = "getAvailableFieldsBasedOnWs", ui = false)
     public List<APIWorkspaceMemberFieldList>
     getAvailableFieldsBasedOnWs(@ApiParam(value = "List of WS ids", required = true) List<Long> ids) {
-        return AmpFieldsEnumerator.getAvailableResourceFieldsBasedOnWs(ids);
+        return AmpFieldsEnumerator.getAvailableFieldsBasedOnWs(ids, AmpFieldsEnumerator.TYPE_RESOURCE);
     }
 
     @GET
@@ -123,10 +123,10 @@ public class ResourceEndpoint {
     @ApiMethod(id = "getResource", ui = false)
     @ApiOperation("Retrieve resource by uuid")
     @ApiResponses({
-        @ApiResponse(code = HttpServletResponse.SC_OK, reference = "AmpResource_Full",
-                message = "resource with all fields"),
-        @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse",
-                message = "error if invalid configuration is received")})
+            @ApiResponse(code = HttpServletResponse.SC_OK, reference = "AmpResource_Full",
+                    message = "resource with all fields"),
+            @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse",
+                    message = "error if invalid configuration is received")})
     @JsonView(ResourceView.Full.class)
     public JsonApiResponse<AmpResource> getResource(@PathParam("uuid") String uuid) {
         return resourceService.getResource(uuid);
@@ -137,10 +137,10 @@ public class ResourceEndpoint {
     @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getAllResources", ui = false)
     @ApiOperation(value = "Retrieve all resources from AMP.")
     @ApiResponses({
-        @ApiResponse(code = HttpServletResponse.SC_OK, response = SwaggerListResource.class,
-                message = "list of resources with full information"),
-        @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse",
-                message = "error if a probel encountered")})
+            @ApiResponse(code = HttpServletResponse.SC_OK, response = SwaggerListResource.class,
+                    message = "list of resources with full information"),
+            @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse",
+                    message = "error if a probel encountered")})
     public List<JsonApiResponse> getAllResources() {
         return resourceService.getAllResources();
     }
@@ -150,10 +150,10 @@ public class ResourceEndpoint {
     @ApiMethod(id = "getAllResourcesByIds", ui = false)
     @ApiOperation("Retrieve resources from AMP.")
     @ApiResponses({
-        @ApiResponse(code = HttpServletResponse.SC_OK, response = SwaggerListResource.class,
-                message = "list of resources with full information"),
-        @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse",
-                message = "error if a probel encountered")})
+            @ApiResponse(code = HttpServletResponse.SC_OK, response = SwaggerListResource.class,
+                    message = "list of resources with full information"),
+            @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse",
+                    message = "error if a probel encountered")})
     public List<JsonApiResponse> getAllResources(List<String> uuids) {
         return resourceService.getAllResources(uuids);
     }
@@ -173,10 +173,10 @@ public class ResourceEndpoint {
                     + "}\n"
                     + "</pre>")
     @ApiResponses({
-        @ApiResponse(code = HttpServletResponse.SC_OK, response = AmpResource.class,
-                message = "the brief representationresource"),
-        @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse_Link",
-                message = "error if invalid configuration is received")})
+            @ApiResponse(code = HttpServletResponse.SC_OK, response = AmpResource.class,
+                    message = "the brief representationresource"),
+            @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse_Link",
+                    message = "error if invalid configuration is received")})
     @JsonView(ResourceView.Link.class)
     public JsonApiResponse<AmpResource> createResource(@ApiParam("resource configuration") SwaggerResource resource) {
         return new ResourceImporter().createResource(resource.getMap()).getResult();
@@ -185,8 +185,8 @@ public class ResourceEndpoint {
     @PUT
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_OPTIONAL}, 
-                    id = "createResourceWithDoc", ui = false)
+    @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_OPTIONAL},
+            id = "createResourceWithDoc", ui = false)
     @ApiOperation(value = "Create new web link or document resource.",
             notes = "Returns brief representation of resource.\n\n"
                     + "<h3>Sample resource parameter:</h3><pre>\n"
@@ -197,14 +197,14 @@ public class ResourceEndpoint {
                     + "}\n"
                     + "</pre>")
     @ApiResponses({
-        @ApiResponse(code = HttpServletResponse.SC_OK, response = AmpResource.class,
-                message = "the brief representationresource"),
-        @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse_File-or-Link",
-                message = "error if invalid configuration is received")})
-    @JsonView({ ResourceView.File.class, ResourceView.Link.class })
+            @ApiResponse(code = HttpServletResponse.SC_OK, response = AmpResource.class,
+                    message = "the brief representationresource"),
+            @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse_File-or-Link",
+                    message = "error if invalid configuration is received")})
+    @JsonView({ResourceView.File.class, ResourceView.Link.class})
     public JsonApiResponse<AmpResource> createDocResource(
             @FormDataParam("resource") @ApiParam(value = "resource configuration", type = "SwaggerResource")
-            SwaggerResource resource,
+                    SwaggerResource resource,
             @FormDataParam("file") InputStream uploadedInputStream,
             @FormDataParam("file") FormDataContentDisposition fileDetail) {
 

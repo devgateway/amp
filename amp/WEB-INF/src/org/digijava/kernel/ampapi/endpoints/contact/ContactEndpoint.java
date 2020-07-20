@@ -57,7 +57,7 @@ public class ContactEndpoint {
     @ApiMethod(id = "getAvailableFieldsBasedOnWs", ui = false)
     public List<APIWorkspaceMemberFieldList>
     getAvailableFieldsBasedOnWs(@ApiParam(value = "List of WS ids", required = true) List<Long> ids) {
-        return AmpFieldsEnumerator.getAvailableContactFieldsBasedOnWs(ids);
+        return AmpFieldsEnumerator.getAvailableFieldsBasedOnWs(ids, AmpFieldsEnumerator.TYPE_CONTACT);
     }
 
     @GET

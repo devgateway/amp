@@ -249,7 +249,7 @@ public final class ContentRepositoryManager {
     }
 
     public static Set<String> getTeamUuids() {
-        return privateResources.get();
+        return teamResourcesCache.get();
     }
 
     private static Set<String> getUuidsFromPath(String path) {

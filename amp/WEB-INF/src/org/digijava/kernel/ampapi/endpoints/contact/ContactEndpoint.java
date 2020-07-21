@@ -20,7 +20,11 @@ import javax.ws.rs.core.MediaType;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
-import org.digijava.kernel.ampapi.endpoints.activity.*;
+import org.digijava.kernel.ampapi.endpoints.activity.APIWorkspaceMemberFieldList;
+import org.digijava.kernel.ampapi.endpoints.activity.FieldIdValue;
+import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
+import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
 import org.digijava.kernel.ampapi.endpoints.contact.dto.ContactView;

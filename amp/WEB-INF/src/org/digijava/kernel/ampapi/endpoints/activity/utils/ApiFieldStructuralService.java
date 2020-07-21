@@ -12,8 +12,12 @@ import org.digijava.kernel.ampapi.endpoints.activity.field.APIType;
 
 import org.digijava.kernel.services.AmpFieldsEnumerator;
 
-import static org.digijava.kernel.services.AmpFieldsEnumerator.*;
-import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.*;
+import static org.digijava.kernel.services.AmpFieldsEnumerator.TYPE_ACTIVITY;
+import static org.digijava.kernel.services.AmpFieldsEnumerator.TYPE_CONTACT;
+import static org.digijava.kernel.services.AmpFieldsEnumerator.TYPE_RESOURCE;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.COLLECTION_TYPE_ACTIVITY;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.COLLECTION_TYPE_CONTACT;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.COLLECTION_TYPE_RESOURCE;
 
 /**
  * Utility class used for detecting structural changes of api fields during AMP offline synchronization
@@ -39,11 +43,14 @@ public final class ApiFieldStructuralService {
         clientFields.forEach(clientField -> {
             List<APIWorkspaceMemberFieldList> ampFields = null;
             if (collection.equals(COLLECTION_TYPE_ACTIVITY)) {
-                ampFields = AmpFieldsEnumerator.getAvailableFieldsBasedOnWs(clientField.getWsMemberIds(), TYPE_ACTIVITY);
+                ampFields = AmpFieldsEnumerator.getAvailableFieldsBasedOnWs(clientField.getWsMemberIds(),
+                        TYPE_ACTIVITY);
             } else if (collection.equals(COLLECTION_TYPE_CONTACT)) {
-                ampFields = AmpFieldsEnumerator.getAvailableFieldsBasedOnWs(clientField.getWsMemberIds(), TYPE_CONTACT);
+                ampFields = AmpFieldsEnumerator.getAvailableFieldsBasedOnWs(clientField.getWsMemberIds(),
+                        TYPE_CONTACT);
             } else if (collection.equals(COLLECTION_TYPE_RESOURCE)) {
-                ampFields = AmpFieldsEnumerator.getAvailableFieldsBasedOnWs(clientField.getWsMemberIds(), TYPE_RESOURCE);
+                ampFields = AmpFieldsEnumerator.getAvailableFieldsBasedOnWs(clientField.getWsMemberIds(),
+                        TYPE_RESOURCE);
             }
             ampFields.forEach(ampField -> {
                 if (ampField.getWsMemberIds().equals(clientField.getWsMemberIds())) {

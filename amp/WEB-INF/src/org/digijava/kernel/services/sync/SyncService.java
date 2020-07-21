@@ -4,7 +4,23 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.singletonMap;
-import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.*;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.CALENDAR;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.COLLECTION_TYPE_ACTIVITY;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.COLLECTION_TYPE_CONTACT;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.COLLECTION_TYPE_RESOURCE;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.CONTACT;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.EXCHANGE_RATES;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.FEATURE_MANAGER;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.LOCATORS;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.MAP_TILES;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.RESOURCE;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.TRANSLATION;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.WORKSPACES;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.GLOBAL_SETTINGS;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.WORKSPACE_FILTER_DATA;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.WORKSPACE_MEMBER;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.WORKSPACE_ORGANIZATIONS;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.WORKSPACE_SETTINGS;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Ops.DELETED;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Ops.UPDATED;
 
@@ -667,11 +683,11 @@ public class SyncService implements InitializingBean {
 
         String messageKeyFilter = "";
         if (lastSyncTime != null) {
-            messageKeyFilter = "and m_orig.message_key in (" +
-                    "select entity_id " +
-                    "from amp_offline_changelog " +
-                    "where operation_time > :lastSyncTime " +
-                    "and entity_name = :entity)";
+            messageKeyFilter = "and m_orig.message_key in ("
+                    + "select entity_id "
+                    + "from amp_offline_changelog "
+                    + "where operation_time > :lastSyncTime "
+                    + "and entity_name = :entity)";
 
             args.put("lastSyncTime", lastSyncTime);
             args.put("entity", TRANSLATION);
@@ -768,17 +784,20 @@ public class SyncService implements InitializingBean {
 
     private boolean existsActivityStructuralChanges(SyncRequest syncRequest) {
         ApiFieldStructuralService structuralService = ApiFieldStructuralService.getInstance();
-        return structuralService.existsStructuralChangesBasedOnWs(syncRequest.getActivityFields(), COLLECTION_TYPE_ACTIVITY);
+        return structuralService.existsStructuralChangesBasedOnWs(syncRequest.getActivityFields(),
+                COLLECTION_TYPE_ACTIVITY);
     }
 
     private boolean existsContactStructuralChanges(SyncRequest syncRequest) {
         ApiFieldStructuralService structuralService = ApiFieldStructuralService.getInstance();
-        return structuralService.existsStructuralChangesBasedOnWs(syncRequest.getContactFields(), COLLECTION_TYPE_CONTACT);
+        return structuralService.existsStructuralChangesBasedOnWs(syncRequest.getContactFields(),
+                COLLECTION_TYPE_CONTACT);
     }
 
     private boolean existsResourceStructuralChanges(SyncRequest syncRequest) {
         ApiFieldStructuralService structuralService = ApiFieldStructuralService.getInstance();
-        return structuralService.existsStructuralChangesBasedOnWs(syncRequest.getResourceFields(), COLLECTION_TYPE_RESOURCE);
+        return structuralService.existsStructuralChangesBasedOnWs(syncRequest.getResourceFields(),
+                COLLECTION_TYPE_RESOURCE);
     }
 
 }

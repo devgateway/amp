@@ -32,7 +32,12 @@ public class CachingFieldsEnumeratorFactory {
     }
 
     public CachingFieldsEnumerator getEnumerator(Long templateId) {
-        return cache.putIfAbsent(templateId, buildEnumerator(new FMVisibility(templateId)));
+        CachingFieldsEnumerator cacheFieldsEnumerator = buildEnumerator(new FMVisibility(templateId));
+        CachingFieldsEnumerator result = cache.putIfAbsent(templateId, cacheFieldsEnumerator);
+        if (result == null) {
+            result = cache.putIfAbsent(templateId, cacheFieldsEnumerator);
+        }
+        return result;
     }
 
     private CachingFieldsEnumerator buildEnumerator(FMVisibility fmVisibility) {

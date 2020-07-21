@@ -694,16 +694,16 @@ public class SyncService implements InitializingBean {
         }
 
         return jdbcTemplate.query(
-                "select m.message_key \"key\", coalesce(m_orig.orig_message, m_orig.message_utf8) \"label\", " +
-                        "  m.lang_iso locale, m.message_utf8 translatedLabel " +
-                        "from dg_message m " +
-                        "  left join dg_message m_orig on m.message_key = m_orig.message_key " +
-                        "where (m.amp_offline = true or m_orig.amp_offline = true) " +
-                        "and m.site_id = :siteId " +
-                        "and m.lang_iso in (:localeCodes) " +
-                        "and m_orig.site_id = :siteId " +
-                        "and m_orig.lang_iso = 'en' " +
-                        messageKeyFilter,
+                "select m.message_key \"key\", coalesce(m_orig.orig_message, m_orig.message_utf8) \"label\", "
+                        + "  m.lang_iso locale, m.message_utf8 translatedLabel "
+                        + "from dg_message m "
+                        + "  left join dg_message m_orig on m.message_key = m_orig.message_key "
+                        + "where (m.amp_offline = true or m_orig.amp_offline = true) "
+                        + "and m.site_id = :siteId "
+                        + "and m.lang_iso in (:localeCodes) "
+                        + "and m_orig.site_id = :siteId "
+                        + "and m_orig.lang_iso = 'en' "
+                        + messageKeyFilter,
                 args,
                 TRANSLATION_ROW_MAPPER);
     }

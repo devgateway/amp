@@ -553,6 +553,14 @@ public class TranslatorWorker {
         }
     }
 
+    public static List<String> getAllPrefixes() {
+        String query = "select distinct message.prefix from org.digijava.kernel.entity.Message "
+                + "where message.prefix is not null";
+        Session session = PersistenceManager.getSession();
+        Query q = session.createQuery(query);
+        return (List<String>) q.list();
+    }
+
     private Map<String, Message> getMessagesForCriteria(
         String prefix,
         Long siteId,

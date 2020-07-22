@@ -1,6 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.common;
 
 import static javax.servlet.http.HttpServletResponse.SC_OK;
+import static org.digijava.kernel.translator.util.TrnUtil.DEFAULT;
+import static org.digijava.kernel.translator.util.TrnUtil.PREFIX;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -9,6 +11,8 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.Example;
 import io.swagger.annotations.ExampleProperty;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -197,5 +201,42 @@ public class TranslationsEndPoints {
     public Map<String, Map<String, String>> translateLabels(
             @ApiParam(name = "labels", required = true) List<String> labels) {
         return TranslationUtil.translateLabels(labels);
+    }
+
+    @POST
+    @Path("/translateWithPrefix")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiOperation(
+            value = "Translate a list of labels in multiple languages at once.",
+            notes = "The array holds the list of labels to translate at once:\n"
+                    + "### Sample Input\n"
+                    + "```\n"
+                    + "[\n"
+                    + "   \"Log out\"\n"
+                    + "]\n"
+                    + "```"
+    )
+    @ApiResponses(@ApiResponse(code = SC_OK, message = "Map of translation grouped by labels and locale code.",
+            examples =
+            @Example(value = {
+                    @ExampleProperty(
+                            mediaType = "application/json;charset=utf-8",
+                            value = "{\n  \"Log out\": {\n    \"fr\": \"Déconnecter\"\n  }\n}"
+                    )
+            })
+    ))
+    public Map<String, Map<String, Map<String, String>>> translateLabelsWithPrefix(
+            @ApiParam(name = "labels", required = true) List<String> labels) {
+
+        List<String> prefixes = TranslatorWorker.getAllPrefixes();
+        Map<String, Map<String, String>> noPrefixTranslations = TranslationUtil.translateLabels(labels);
+        Map<String, Map<String, Map<String, String>>> allTranslations = new HashMap<>();
+        allTranslations.put(DEFAULT, noPrefixTranslations);
+        prefixes.forEach(prefix -> {
+            TLSUtils.getRequest().setAttribute(PREFIX, prefix);
+            allTranslations.put(prefix, TranslationUtil.translateLabels(labels));
+        });
+        return allTranslations;
     }
 }

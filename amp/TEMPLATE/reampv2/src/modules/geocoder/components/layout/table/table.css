@@ -1,0 +1,109 @@
+.activity-table > .react-bootstrap-table {
+    width: 100%;
+    font-size: 12px;
+    max-height: 500px;
+    height: 500px;
+    overflow-y: scroll;
+}
+
+.table {
+    margin-bottom: 0px;
+}
+
+.geocoded-table {
+    width: 100%;
+    max-height: 50px;
+    height: 50px;
+}
+
+.table-bordered > tbody > tr > td,
+.table-bordered > tbody > tr > th,
+.table-bordered > tfoot > tr > td,
+.table-bordered > tfoot > tr > th,
+.table-bordered > thead > tr > td,
+.table-bordered > thead > tr > th {
+    border-left: none;
+    border-right: none;
+}
+
+table thead tr th {
+    /* Important */
+    background-color: #FFFFFF;
+    position: sticky;
+    z-index: 5;
+    top: 0;
+    color: #8492B4;
+    font-size: 13px;
+    font-weight: normal;
+}
+
+.table > thead {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    border: 1px solid #ddd;
+}
+
+.table-container > tbody > tr > td {
+    border: none;
+    color: #81878E;
+    font-size: 12px;
+    padding: 5px 10px 15px 15px;
+}
+
+.pagination > .active > a,
+.pagination > .active > a:focus,
+.pagination > .active > a:hover,
+.pagination > .active > span,
+.pagination > .active > span:focus,
+.pagination > .active > span:hover {
+    z-index: 3;
+    color: #fff;
+    cursor: default;
+    background-color: #5cb85c;
+    border-color: #4cae4c;
+}
+
+.table > tbody > tr > td {
+    overflow: hidden;
+}
+
+.pagination {
+    margin: 0;
+}
+
+.react-bs-table-sizePerPage-dropdown {
+    margin-left: 10px;
+}
+
+.react-bootstrap-table-pagination-list {
+    margin-bottom: 10px;
+}
+
+.react-bootstrap-table-pagination {
+    margin-left: 0px;
+    margin-right: 0px;
+    padding-top: 15px;
+    border-top: 1px solid #ddd;
+}
+
+.fa {
+    display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.fa-icon {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.search-result {
+    float:right;
+    padding-bottom: 10px
+}
+

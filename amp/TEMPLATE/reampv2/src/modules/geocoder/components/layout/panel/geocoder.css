@@ -1,0 +1,21 @@
+.geocoder-header {
+    background-color: #F5F8FA;
+    font-weight: bold;
+    vertical-align: center;
+    font-size: 14px;
+    color: #8694B5;
+}
+
+.text-header {
+    padding-top: 5px;
+}
+
+.title-container {
+    margin-bottom: 20px;
+}
+
+@media (min-width: 1600px) {
+    .container {
+        width: 1570px;
+    }
+}

@@ -1,0 +1,26 @@
+
+.ReactTable {
+    width: 100%;
+}
+
+.rt-tbody,
+.rt-thead {
+    overflow-x: hidden !important;
+    padding: 10px;
+}
+
+.rt-table > thead > tr > th{
+    border: none;
+    color: #8694B5;
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 120%;
+    padding: 20px 10px 15px 15px;
+}
+
+.rt-table > tbody > tr > td {
+    border: none;
+    color: #81878E;
+    font-size: 13px;
+    padding: 5px 10px 15px 15px;
+}

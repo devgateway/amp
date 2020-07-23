@@ -11,6 +11,7 @@ import org.dgfoundation.amp.visibility.data.FMTree;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.FMSettingsConfig;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,7 +31,7 @@ public class FMService {
     protected static final Logger logger = Logger.getLogger(FMService.class);
 
     public static FMSettingsResult getFMSettingsResult(FMSettingsConfig config) {
-        return getFMSettingsResult(config, null);
+        return getFMSettingsResult(config,  FeaturesUtil.getCurrentTemplateId());
     }
 
     /**

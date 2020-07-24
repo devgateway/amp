@@ -33,7 +33,7 @@ class CountryPopupChart extends Component {
 
     render() {
 
-        const { chartData, columnCount} = this.props;
+        const {chartData, columnCount} = this.props;
         const {translations} = this.context;
 
 
@@ -59,14 +59,14 @@ class CountryPopupChart extends Component {
         const chartComponents = this.getChart(nonGrouped, columnCount);
 
         return (
-            <div>
+            <>
                 <div className="chart-container">
                     {chartComponents.chart}
                 </div>
                 {chartComponents.legend && <div className="chart-legend">
                     {chartComponents.legend}
                 </div>}
-            </div>
+            </>
         );
     }
 

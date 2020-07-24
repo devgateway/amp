@@ -5,6 +5,7 @@ import { exportToXLS } from '../../../../utils/exportUtils';
 import { PNG_FORMAT } from '../../../../utils/constants';
 import ReactTooltip from 'react-tooltip';
 import { SSCTranslationContext } from '../../../StartUp';
+import PrintCountryCharts from './PrintCountryCharts';
 
 
 class CountryPopupExport extends Component {
@@ -40,7 +41,7 @@ class CountryPopupExport extends Component {
                     <li className="xls" data-tip={translations['amp.ssc.dashboard:sectors-xls-tooltip']}
                         data-for={"download-xls"} onClick={this.exportChartToXls.bind(this)}>xls
                     </li>
-                    <li className="print">print</li>
+                    <PrintCountryCharts/>
                     <li className="return-link" onClick={() => this.props.closeLargeCountryPopinAndClearFilter()}>X</li>
                 </ul>
                 <ReactTooltip place={'bottom'} multiline id={"download-png"}

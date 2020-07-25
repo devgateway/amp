@@ -3,6 +3,7 @@ package org.digijava.kernel.ampapi.endpoints.activity.field;
 import static java.util.stream.Collectors.toList;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.NONE;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.SUBMIT;
+import static org.digijava.kernel.translator.util.TrnUtil.DEFAULT;
 import static org.digijava.kernel.translator.util.TrnUtil.PREFIX;
 import static org.digijava.kernel.util.SiteUtils.DEFAULT_SITE_ID;
 
@@ -454,10 +455,10 @@ public class FieldsEnumerator {
             TLSUtils.getRequest().setAttribute(PREFIX, null);
             Collection<Message> defaultMessages = translatorService.getAllTranslationOfBody(label, DEFAULT_SITE_ID);
             for (Message m : defaultMessages) {
-                translations.set("default", m.getLocale(), m.getMessage());
+                translations.set(DEFAULT, m.getLocale(), m.getMessage());
             }
             if (translations.isEmpty()) {
-                translations.set("default", "EN", label);
+                translations.set(DEFAULT, "en", label);
             }
             prefixes.forEach(prefix -> {
                 try {

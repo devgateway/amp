@@ -35,6 +35,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableSet;
 
+import org.apache.struts.mock.MockHttpServletRequest;
+import org.apache.struts.mock.MockHttpSession;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIType;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldInfoProvider;
@@ -50,7 +52,11 @@ import org.digijava.kernel.ampapi.endpoints.dto.UnwrappedTranslationsByWorkspace
 import org.digijava.kernel.ampapi.endpoints.resource.dto.AmpResource;
 import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.kernel.ampapi.filters.ClientMode;
+import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.request.SiteDomain;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.services.sync.model.SyncConstants;
 import org.digijava.kernel.translator.util.TrnUtil;
 import org.digijava.kernel.validators.ValidatorUtil;
@@ -104,6 +110,15 @@ public class FieldsEnumeratorTest {
         translatorService = new TestTranslatorService();
         fmService = new TestFMService();
         provider = new TestFieldInfoProvider();
+
+        MockHttpServletRequest mockRequest = new MockHttpServletRequest(new MockHttpSession());
+        Site site = new Site("Test Site", "1");
+        site.setDefaultLanguage(new Locale("en", "English"));
+        SiteDomain siteDomain = new SiteDomain();
+        siteDomain.setSite(site);
+        siteDomain.setDefaultDomain(true);
+        TLSUtils.populate(mockRequest, siteDomain);
+        TLSUtils.getRequest().setAttribute(TrnUtil.PREFIXES, new ArrayList<>());
 
         when(throwingTranslatorService.getAllTranslationOfBody(any(), any())).thenThrow(new WorkerException());
 
@@ -641,7 +656,7 @@ public class FieldsEnumeratorTest {
         assertEqualsSingle(expected, fields);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = WorkerException.class)
     public void testExceptionInTranslator() {
         new FieldsEnumerator(provider, fmService, throwingTranslatorService, name -> true)
                 .getAllAvailableFields(OneFieldClass.class);
@@ -653,21 +668,21 @@ public class FieldsEnumeratorTest {
                 .getAllAvailableFields(OneFieldClass.class);
 
         assertEquals(1, fields.size());
-        assertEquals("One Field", fields.get(0).getFieldLabel().get(TrnUtil.DEFAULT, "EN"));
+        assertEquals("One Field", fields.get(0).getFieldLabel().get(TrnUtil.DEFAULT, "en"));
     }
 
     @Test
     public void testNonEmptyChildren() {
         String originalJson = "[{\"field_name\":\"field\"," +
                 "\"field_type\":\"object\"," +
-                "\"field_label\":{\"en\":\"field en\",\"fr\":\"field fr\"}," +
+                "\"field_label\":{\"default\":{\"en\":\"field en\",\"fr\":\"field fr\"}}," +
                 "\"required\":\"N\"," +
                 "\"importable\":false," +
                 "\"id\":false," +
                 "\"children\":[{" +
                     "\"field_name\":\"field\"," +
                     "\"field_type\":\"long\"," +
-                    "\"field_label\":{\"en\":\"field en\",\"fr\":\"field fr\"}," +
+                    "\"field_label\":{\"default\":{\"en\":\"field en\",\"fr\":\"field fr\"}}," +
                     "\"required\":\"N\"," +
                     "\"importable\":false," +
                     "\"id\":false" +
@@ -686,7 +701,7 @@ public class FieldsEnumeratorTest {
     public void testEmptyChildren() {
         String originalJson = "[{\"field_name\":\"field\"" +
                 ",\"field_type\":\"long\"," +
-                "\"field_label\":{\"en\":\"field en\",\"fr\":\"field fr\"}," +
+                "\"field_label\":{\"default\":{\"en\":\"field en\",\"fr\":\"field fr\"}}," +
                 "\"required\":\"N\"," +
                 "\"importable\":false," +
                 "\"id\":false}]";

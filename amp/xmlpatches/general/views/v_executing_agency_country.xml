@@ -37,7 +37,7 @@
 							FROM amp_org_role f
 								JOIN ni_all_orgs_dimension org ON org.org_id = f.organisation
 								JOIN amp_role r ON (f.role = r.amp_role_id) AND (r.role_code = 'EA')
-								JOIN ni_all_locations_with_levels locs ON org.amp_country_id = locs.acvl_id
+								LEFT JOIN ni_all_locations_with_levels locs ON org.amp_country_id = locs.acvl_id
 							GROUP BY f.activity, locs.acvl_name, locs.acvl_id
                     ) v
                     ON aav.amp_activity_id = v.amp_activity_id;

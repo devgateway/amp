@@ -79,6 +79,7 @@ public class TrnUtil {
 
     public static final String PREFIX = "prefix";
     public static final String DEFAULT = "default";
+    public static final String PREFIXES = "prefixes";
     
     /**
      * These are languages that has its own weight for sorting

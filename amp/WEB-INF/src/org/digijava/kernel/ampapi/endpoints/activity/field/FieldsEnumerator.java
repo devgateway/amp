@@ -5,6 +5,7 @@ import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.SUBMIT;
 import static org.digijava.kernel.translator.util.TrnUtil.DEFAULT;
 import static org.digijava.kernel.translator.util.TrnUtil.PREFIX;
+import static org.digijava.kernel.translator.util.TrnUtil.PREFIXES;
 import static org.digijava.kernel.util.SiteUtils.DEFAULT_SITE_ID;
 
 import java.lang.reflect.Field;
@@ -449,8 +450,7 @@ public class FieldsEnumerator {
      */
     private UnwrappedTranslationsByWorkspacePrefix getTranslationsForLabel(String label) {
         UnwrappedTranslationsByWorkspacePrefix translations = new UnwrappedTranslationsByWorkspacePrefix();
-        // TODO: Send prefixes by context.
-        List<String> prefixes = TranslatorWorker.getAllPrefixes();
+        List<String> prefixes = (List<String>) TLSUtils.getRequest().getAttribute(PREFIXES);
         try {
             TLSUtils.getRequest().setAttribute(PREFIX, null);
             Collection<Message> defaultMessages = translatorService.getAllTranslationOfBody(label, DEFAULT_SITE_ID);
@@ -475,7 +475,6 @@ public class FieldsEnumerator {
         } catch (WorkerException e) {
             e.printStackTrace();
         }
-        // TODO: Check if we need a patch or code for missing language fallback on non default prefixes.
         return translations;
     }
 

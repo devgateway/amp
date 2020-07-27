@@ -2,6 +2,8 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
+import static org.digijava.kernel.translator.util.TrnUtil.PREFIX;
+import static org.digijava.kernel.translator.util.TrnUtil.PREFIXES;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -44,6 +46,7 @@ import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 
@@ -115,6 +118,8 @@ public class InterchangeEndpoints {
         if (fields == null) {
             response = Collections.emptyMap();
         } else {
+            List<String> prefixes = TranslatorWorker.getAllPrefixes();
+            TLSUtils.getRequest().setAttribute(PREFIXES, prefixes);
             List<APIField> apiFields = AmpFieldsEnumerator.getEnumerator().getActivityFields();
             response = fields.stream()
                     .filter(Objects::nonNull)

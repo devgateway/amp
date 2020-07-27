@@ -3,7 +3,7 @@ import CountryPopupOverlayTitle from './CountryPopupOverlayTitle';
 import CountryPopupExport from './CountryPopupExport';
 import CountryPopup from './CountryPopup';
 import { calculateColumnCount } from '../../../../utils/Utils';
-import { BOOTSTRAP_COLUMNS_COUNT } from '../../../../utils/constants';
+import { BOOTSTRAP_COLUMNS_COUNT, COUNTRY_COLUMN } from '../../../../utils/constants';
 import { SSCTranslationContext } from '../../../StartUp';
 
 export default class CountryPopupContainer extends Component {
@@ -79,7 +79,7 @@ export default class CountryPopupContainer extends Component {
 
                     const lineClass = (i + 1) === 1 || (i + 1 === 2 && r.length > 2) ? 'line' : '';
                     return (
-                        <div className={`chart-column col-md-${classCount}`} key={c.id} id={`country-column${c.id}`}>
+                        <div className={`chart-column col-md-${classCount}`} key={c.id} id={`${COUNTRY_COLUMN}${c.id}`}>
                             <CountryPopup project={c}
                                           columnCount={columnCount}
                                           {...(columnCount > 1 ? {'borderClass': borderClass} : {})}

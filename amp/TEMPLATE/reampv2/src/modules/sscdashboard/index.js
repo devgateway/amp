@@ -5,6 +5,7 @@ import { Provider } from 'react-redux'
 import rootReducer from './reducers/rootReducer';
 import Startup from './components/StartUp';
 import SssDashboardHome from './SssDashboardHome';
+import SSCDashboardRouter from './components/SSCDashboard.router';
 
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -18,7 +19,7 @@ class SSCDashboardApp extends Component {
     render() {
         return (<Provider store={this.store}>
             <Startup>
-                <SssDashboardHome/>
+                <SSCDashboardRouter/>
             </Startup>
         </Provider>);
     }

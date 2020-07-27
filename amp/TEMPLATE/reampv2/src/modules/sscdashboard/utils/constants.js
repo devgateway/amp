@@ -41,6 +41,7 @@ export const HOME_CHART = 'home';
 export const SECTORS_CHART = 'sector';
 export const MODALITY_CHART = 'modality';
 export const DOWNLOAD_CHART = 'download';
+export const COUNTRY_COLUMN = 'country-column';
 export const COLOR_MAP = [
     '#4bbc4e',
     '#40557d',

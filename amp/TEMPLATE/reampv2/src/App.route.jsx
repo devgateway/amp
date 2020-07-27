@@ -2,7 +2,6 @@ import React, { Suspense, lazy, Component } from 'react';
 import { Router, Route } from "react-router-dom";
 import { createHashHistory } from 'history';
 import './App.css';
-import PrinterFriendly from './modules/sscdashboard/utils/PrinterFriendly';
 
 const SSCDashboardApp = lazy(() => import('./modules/sscdashboard'));
 const AMPOfflineDownloadApp = lazy(() => import('./modules/ampoffline/Download'));
@@ -14,7 +13,6 @@ class AppRoute extends Component {
                 <Suspense fallback={<div>Loading...</div>}>
                     <Route path="/ssc" component={SSCDashboardApp}/>
                     <Route path="/ampofflinedownload" component={AMPOfflineDownloadApp}/>
-                    <Route path="/print" component={PrinterFriendly}/>
                 </Suspense>
             </Router>
 

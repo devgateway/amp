@@ -57,16 +57,15 @@ class CountryPopupChart extends Component {
             nonGrouped.push(other);
         }
         const chartComponents = this.getChart(nonGrouped, columnCount);
-
         return (
-            <>
-                <div className="chart-container">
+            <div className={"row"}>
+                <div className="chart-container single-50 float-left">
                     {chartComponents.chart}
                 </div>
-                {chartComponents.legend && <div className="chart-legend">
+                {chartComponents.legend && <div className="chart-legend single-50 float-right">
                     {chartComponents.legend}
                 </div>}
-            </>
+            </div>
         );
     }
 

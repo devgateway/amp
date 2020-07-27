@@ -44,6 +44,10 @@
     padding-left: 0px;
     padding-right: 0px;
 }
+#print-friendly-dummy .one-by-one .chart-column{
+
+    height: 250px;
+}
 
 #print-dummy .country-popup-1 .header .country-name,
 #print-simple-dummy .country-popup-1 .header .country-name,
@@ -142,13 +146,18 @@
         padding-top: 5px;
     }
 
-    #print-friendly-dummy-container:last-of-type, .print-row.row.border-bottom {
+    #print-friendly-dummy-container:last-of-type:not(.one-by-one),
+    .print-row.row.border-bottom {
         border-bottom: 1px solid black;
     }
 
     .print-row.row {
         border-right: 1px solid black;
         border-left: 1px solid black;
+    }
+
+    .one-by-one .print-row.row {
+        border-bottom: 1px solid black;
     }
 
     #print-friendly-dummy-container .border-right {
@@ -172,9 +181,14 @@
         transform: translate(30%, 0) !important;
     }
 
+
+    .one-by-one .chart-container > div > div > svg{
+        transform: translate(-10%, 0) !important;
+    }
     .last-row .col-print-12 .chart-container > div > div > svg {
         transform: translate(5%, 0) !important;
     }
+
 
     #print-friendly-dummy .header {
         padding-top: 5px;
@@ -204,6 +218,24 @@
     .header .projects > .label {
         font-size: 9px !important;
     }
+
+    .one-by-one .single-50 {
+        width: 50% !important;
+    }
+
+    .one-by-one .new-page {
+        page-break-before: always;
+    }
+
+
+    .one-by-one .float-right {
+        float: right;
+    }
+
+    .one-by-one .float-left {
+        float: left;
+    }
+
 
 }
 

@@ -1,5 +1,5 @@
 import domtoimage from 'dom-to-image-font-patch';
-import { PNG_FORMAT } from './constants';
+import { COUNTRY_COLUMN, PNG_FORMAT } from './constants';
 
 export const printInnerCharts = (title, chartId, filtersObject, format, countriesForExport) => {
     const rows = document.getElementById(chartId).childNodes;
@@ -17,11 +17,18 @@ export const printInnerCharts = (title, chartId, filtersObject, format, countrie
         });
     }, Promise.resolve());
 };
-export const printChartPrinter = (title, chartId, printContainer, iframe) => {
-    try {
-        const doc = iframe ? iframe.contentDocument : document;
 
+export const printChartPrinter = (title, chartId, printContainer, iframe, countriesForExport) => {
+    try {
+        let oneByOne = false;
+        if (countriesForExport && countriesForExport.length > 0) {
+            oneByOne = true;
+        }
+        const doc = iframe ? iframe.contentDocument : document;
         const printElement = doc.getElementById(printContainer);
+        if (oneByOne) {
+            printElement.className = printElement.className + ' one-by-one';
+        }
         const charts = document.getElementsByClassName("chart-column");
 
         let titleElement;
@@ -29,35 +36,57 @@ export const printChartPrinter = (title, chartId, printContainer, iframe) => {
             titleElement = doc.createElement('div');
             titleElement.className = "print-title";
             titleElement.appendChild(doc.createTextNode(title));
-            printElement.appendChild(titleElement);
+            if (!oneByOne) {
+                printElement.appendChild(titleElement);
+            }
         }
-        const totalRows = Math.ceil(charts.length / 2);
+        let totalRows = 1;
+        if (!oneByOne) {
+            totalRows = Math.ceil(charts.length / 2);
+        } else {
+            totalRows = charts.length;
+        }
         let rowCount = 1;
         for (let i = 0; i < charts.length;) {
             const col1 = charts[i].cloneNode(true);
-            col1.style["height"] = charts[i].clientHeight;
-            col1.style["width"] = charts[i].clientWidth;
-            i++;
-            let col2;
-            if (i < charts.length) {
-                col2 = charts[i].cloneNode(true);
-                col2.style["height"] = charts[i].clientHeight;
-                col2.style["width"] = charts[i].clientWidth;
+            if (!oneByOne || countriesForExport.includes(parseInt(col1.id.substring(COUNTRY_COLUMN.length)))) {
+                col1.style["height"] = charts[i].clientHeight;
+                col1.style["width"] = charts[i].clientWidth;
                 i++;
-            }
-            const theRow = doc.createElement('div');
-            theRow.className = `print-row row${rowCount < totalRows ? ' border-bottom ' : ' last-row'}`;
+                let col2;
+                if (i < charts.length && !oneByOne) {
+                    col2 = charts[i].cloneNode(true);
+                    col2.style["height"] = charts[i].clientHeight;
+                    col2.style["width"] = charts[i].clientWidth;
+                    i++;
+                }
+                const theRow = doc.createElement('div');
+                theRow.className = `print-row row${rowCount < totalRows ? ' border-bottom ' : (!oneByOne ? ' last-row' : '')}`;
+                rowCount++;
+                if (titleElement && oneByOne) {
+                    const newTitleElement = titleElement.cloneNode(true);
+                    printElement.appendChild(newTitleElement);
+                }
 
-            rowCount++;
-            theRow.appendChild(col1);
-            if (col2) {
-                theRow.appendChild(col2)
-                col1.className = 'chart-column col-print-6 border-right';
-                col2.className = 'chart-column col-print-6';
+                theRow.appendChild(col1);
+                if (col2) {
+                    theRow.appendChild(col2)
+                    col1.className = 'chart-column col-print-6 border-right';
+                    col2.className = 'chart-column col-print-6';
+                } else {
+                    col1.className = 'chart-column col-print-12';
+                }
+                printElement.appendChild(theRow);
+                if (oneByOne) {
+                    const pageBreak = doc.createElement('p');
+                    pageBreak.className = "new-page";
+                    printElement.appendChild(pageBreak);
+
+                }
             } else {
-                col1.className = 'chart-column col-print-12';
+                i++;
+                rowCount++;
             }
-            printElement.appendChild(theRow);
         }
     } catch (ex) {
         console.log('problem creating elements for print: ' + ex);

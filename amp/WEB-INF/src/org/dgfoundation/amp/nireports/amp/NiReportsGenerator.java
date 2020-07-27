@@ -59,7 +59,8 @@ public class NiReportsGenerator extends NiReportExecutor implements ReportExecut
     public GeneratedReport executeReport(ReportSpecification spec) {
         GeneratedReport apiReport = executeReport(spec,
                 AmpNiReportsFormatter.asOutputBuilder(outputSettings));
-        logger.info(String.format("I just ran a report with cols %s, hiers %s, measures %s, filters %s and got back %d acts",
+        logger.info(String.format("I just ran a report with cols %s, hiers %s, measures %s, filters %s "
+                        + "and got back %d acts",
                 spec.getColumnNames(), spec.getHierarchyNames(), spec.getMeasureNames(), spec.getFilters() == null ? null : spec.getFilters().getAllFilterRules(), apiReport.reportContents.getNrEntities()));
         return apiReport;
     }

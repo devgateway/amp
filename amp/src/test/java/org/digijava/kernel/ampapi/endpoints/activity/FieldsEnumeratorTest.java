@@ -46,11 +46,13 @@ import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.kernel.ampapi.endpoints.common.values.ValueConverter;
 import org.digijava.kernel.ampapi.endpoints.dto.UnwrappedTranslations;
+import org.digijava.kernel.ampapi.endpoints.dto.UnwrappedTranslationsByWorkspacePrefix;
 import org.digijava.kernel.ampapi.endpoints.resource.dto.AmpResource;
 import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.kernel.ampapi.filters.ClientMode;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.services.sync.model.SyncConstants;
+import org.digijava.kernel.translator.util.TrnUtil;
 import org.digijava.kernel.validators.ValidatorUtil;
 import org.digijava.kernel.validators.activity.TreeCollectionValidator;
 import org.digijava.kernel.validators.common.RequiredValidator;
@@ -651,7 +653,7 @@ public class FieldsEnumeratorTest {
                 .getAllAvailableFields(OneFieldClass.class);
 
         assertEquals(1, fields.size());
-        assertEquals("One Field", fields.get(0).getFieldLabel().get("EN"));
+        assertEquals("One Field", fields.get(0).getFieldLabel().get(TrnUtil.DEFAULT, "EN"));
     }
 
     @Test
@@ -982,10 +984,12 @@ public class FieldsEnumeratorTest {
                 actual.stream().map(this::digest).collect(Collectors.toList()));
     }
 
-    private UnwrappedTranslations fieldLabelFor(String baseText) {
-        return new UnwrappedTranslations()
+    private UnwrappedTranslationsByWorkspacePrefix fieldLabelFor(String baseText) {
+        UnwrappedTranslationsByWorkspacePrefix trn = new UnwrappedTranslationsByWorkspacePrefix();
+        trn.set(TrnUtil.DEFAULT, new UnwrappedTranslations()
                 .set("en", baseText + " en")
-                .set("fr", baseText + " fr");
+                .set("fr", baseText + " fr"));
+        return trn;
     }
 
     private <T> String digest(T obj) {

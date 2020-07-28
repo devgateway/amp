@@ -122,7 +122,8 @@ public class TranslationsEndPoints {
     ))
     @ApiMethod(ui = false, id = "CustomLanguageTranslations")
     public Map<String, String> getLangPack(@PathParam("langCode") @ApiParam(example = "en") String langCode,
-                                           @ApiParam(name = "param", required = true, value = "Key-label pairs to translate")
+                                           @ApiParam(name = "param", required = true,
+                                                   value = "Key-label pairs to translate")
                                            @RequestBody final Map<String, String> param) {
 
         String language = langCode == null ? TLSUtils.getEffectiveLangCode() : langCode;

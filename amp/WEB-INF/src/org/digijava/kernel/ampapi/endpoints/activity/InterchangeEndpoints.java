@@ -2,7 +2,6 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
-import static org.digijava.kernel.translator.util.TrnUtil.PREFIX;
 import static org.digijava.kernel.translator.util.TrnUtil.PREFIXES;
 
 import java.util.ArrayList;

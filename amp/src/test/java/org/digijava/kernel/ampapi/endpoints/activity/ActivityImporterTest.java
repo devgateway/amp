@@ -29,6 +29,7 @@ import java.util.function.Supplier;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import org.dgfoundation.amp.testutils.TransactionUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldsEnumerator;
@@ -136,6 +137,8 @@ public class ActivityImporterTest {
     
     @Before
     public void setUp() {
+        TransactionUtil.setUpWorkspaceEmptyPrefixes();
+
         ptm = new TestPersistenceTransactionManager();
     
         translatorService = new TestTranslatorService();

@@ -13,6 +13,7 @@ import com.google.common.collect.ImmutableSet;
 import org.dgfoundation.amp.activity.builder.ActivityBuilder;
 import org.dgfoundation.amp.activity.builder.FundingBuilder;
 import org.dgfoundation.amp.activity.builder.TransactionBuilder;
+import org.dgfoundation.amp.testutils.TransactionUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.persistence.InMemoryCategoryValuesManager;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
@@ -34,6 +35,7 @@ public class FundingWithTransactionsValidatorTest {
 
     @BeforeClass
     public static void setUp() {
+        TransactionUtil.setUpWorkspaceEmptyPrefixes();
         activityField = ValidatorUtil.getMetaData();
         categoryValues = InMemoryCategoryValuesManager.getInstance();
     }

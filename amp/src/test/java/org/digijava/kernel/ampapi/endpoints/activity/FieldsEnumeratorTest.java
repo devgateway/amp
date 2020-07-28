@@ -35,8 +35,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableSet;
 
-import org.apache.struts.mock.MockHttpServletRequest;
-import org.apache.struts.mock.MockHttpSession;
+import org.dgfoundation.amp.testutils.TransactionUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIType;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldInfoProvider;
@@ -52,11 +51,6 @@ import org.digijava.kernel.ampapi.endpoints.dto.UnwrappedTranslationsByWorkspace
 import org.digijava.kernel.ampapi.endpoints.resource.dto.AmpResource;
 import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.kernel.ampapi.filters.ClientMode;
-import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.persistence.WorkerException;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.request.SiteDomain;
-import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.services.sync.model.SyncConstants;
 import org.digijava.kernel.translator.util.TrnUtil;
 import org.digijava.kernel.validators.ValidatorUtil;
@@ -111,14 +105,7 @@ public class FieldsEnumeratorTest {
         fmService = new TestFMService();
         provider = new TestFieldInfoProvider();
 
-        MockHttpServletRequest mockRequest = new MockHttpServletRequest(new MockHttpSession());
-        Site site = new Site("Test Site", "1");
-        site.setDefaultLanguage(new Locale("en", "English"));
-        SiteDomain siteDomain = new SiteDomain();
-        siteDomain.setSite(site);
-        siteDomain.setDefaultDomain(true);
-        TLSUtils.populate(mockRequest, siteDomain);
-        TLSUtils.getRequest().setAttribute(TrnUtil.PREFIXES, new ArrayList<>());
+        TransactionUtil.setUpWorkspaceEmptyPrefixes();
 
         when(throwingTranslatorService.getAllTranslationOfBody(any(), any())).thenThrow(new RuntimeException());
 

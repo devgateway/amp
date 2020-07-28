@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +41,8 @@ import com.google.cloud.translate.v3.GcsSource;
 import com.google.cloud.translate.v3.InputConfig;
 import com.google.cloud.translate.v3.LocationName;
 import com.google.cloud.translate.v3.OutputConfig;
+import com.google.cloud.translate.v3.TranslateTextRequest;
+import com.google.cloud.translate.v3.TranslateTextResponse;
 import com.google.cloud.translate.v3.TranslationServiceClient;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang.StringUtils;
@@ -66,6 +69,8 @@ public class GoogleMachineTranslationService implements MachineTranslationServic
     private static final String LOCATION = "us-central1";
 
     private static final int MAX_RETRIES = 10;
+
+    private static final int FAST_TRANSLATE_CODE_POINT_LIMIT = 30000;
 
     private String projectId;
 
@@ -150,11 +155,45 @@ public class GoogleMachineTranslationService implements MachineTranslationServic
 
         initIfNeeded();
 
-        return CompletableFuture
-                .supplyAsync(() -> uploadSourceFile(contents))
-                .thenCompose(id -> batchTranslateText(srcLang, destLang, id)
-                        .whenCompleteAsync((r, e) -> deleteSourceFile(id)))
-                .thenApplyAsync(this::readTranslatedContent);
+        if (countCodePoints(contents) < FAST_TRANSLATE_CODE_POINT_LIMIT) {
+            return CompletableFuture
+                    .supplyAsync(() -> translateText(srcLang, destLang, contents));
+        } else {
+            return CompletableFuture
+                    .supplyAsync(() -> uploadSourceFile(contents))
+                    .thenCompose(id -> batchTranslateText(srcLang, destLang, id)
+                            .whenCompleteAsync((r, e) -> deleteSourceFile(id)))
+                    .thenApplyAsync(this::readTranslatedContent);
+        }
+    }
+
+    private int countCodePoints(List<String> contents) {
+        return contents.stream()
+                .mapToInt(s -> s.codePointCount(0, s.length()))
+                .sum();
+    }
+
+    /**
+     * Invoke Google API's translateText operation. Much faster than batch translation.
+     */
+    private Map<String, String> translateText(String srcLang, String destLang, List<String> contents) {
+
+        LocationName parent = LocationName.of(projectId, LOCATION);
+
+        TranslateTextRequest request = TranslateTextRequest.newBuilder()
+                .setParent(parent.toString())
+                .setSourceLanguageCode(srcLang)
+                .setTargetLanguageCode(destLang)
+                .addAllContents(contents)
+                .build();
+
+        TranslateTextResponse response = client.translateText(request);
+
+        Map<String, String> translated = new HashMap<>();
+        for (int i = 0; i < contents.size(); i++) {
+            translated.put(contents.get(0), response.getTranslations(i).getTranslatedText());
+        }
+        return translated;
     }
 
     /**

@@ -120,7 +120,7 @@ public class FieldsEnumeratorTest {
         TLSUtils.populate(mockRequest, siteDomain);
         TLSUtils.getRequest().setAttribute(TrnUtil.PREFIXES, new ArrayList<>());
 
-        when(throwingTranslatorService.getAllTranslationOfBody(any(), any())).thenThrow(new WorkerException());
+        when(throwingTranslatorService.getAllTranslationOfBody(any(), any())).thenThrow(new RuntimeException());
 
         when(emptyTranslatorService.getAllTranslationOfBody(any(), any())).thenReturn(Collections.emptyList());
 
@@ -656,7 +656,7 @@ public class FieldsEnumeratorTest {
         assertEqualsSingle(expected, fields);
     }
 
-    @Test(expected = WorkerException.class)
+    @Test(expected = RuntimeException.class)
     public void testExceptionInTranslator() {
         new FieldsEnumerator(provider, fmService, throwingTranslatorService, name -> true)
                 .getAllAvailableFields(OneFieldClass.class);

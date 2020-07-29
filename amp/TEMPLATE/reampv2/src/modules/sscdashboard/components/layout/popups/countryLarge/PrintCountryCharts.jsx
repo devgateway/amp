@@ -59,7 +59,6 @@ class PrintCountryCharts extends React.Component {
                     title="Country chart"
                 />
                 <li className="print" onClick={() => this.printIframe('countryChart')}>print</li>
-                <li onClick={this.printIframe2.bind(this)}>do print print</li>
             </>
         );
     }

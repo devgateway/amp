@@ -1,5 +1,10 @@
 import {fetchApiData} from "../../../utils/loadTranslations";
-import {API_REPORTS_URL} from "../utils/geocoder-constants";
+import {
+    API_REPORTS_URL,
+    FIELD_ACTIVITY_DATE, FIELD_LOCATION, FIELD_PROJECT_DESCRIPTION,
+    FIELD_PROJECT_NUMBER,
+    FIELD_PROJECT_TITLE
+} from "../utils/geocoder-constants";
 
 export const FETCH_ACTIVITIES_PENDING = 'FETCH_ACTIVITIES_PENDING';
 export const FETCH_ACTIVITIES_SUCCESS = 'FETCH_ACTIVITIES_SUCCESS';

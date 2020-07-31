@@ -1,6 +1,7 @@
 import React from 'react';
 import { printChartPrinter } from '../../../../utils/PrintUtils';
 import { SSCTranslationContext } from '../../../StartUp';
+import {  getRootUrl } from '../../../../utils/Utils';
 
 class PrintCountryCharts extends React.Component {
     constructor(props) {
@@ -21,11 +22,12 @@ class PrintCountryCharts extends React.Component {
             const iframeWindow = iframe.contentWindow || iframe;
             this.cleanPrintNodes(iframe);
             iframe.focus();
-            printChartPrinter(translations['amp.ssc.dashboard:Sector-Analysis'], 'countries-charts', 'print-friendly-dummy-container', iframe,countriesForExport);
+            printChartPrinter(translations['amp.ssc.dashboard:Sector-Analysis'], 'countries-charts', 'print-friendly-dummy-container', iframe, countriesForExport);
             iframeWindow.print();
             return false;
         }
     }
+
     cleanPrintNodes(iframe) {
         const node = iframe.contentDocument.getElementById('print-friendly-dummy-container');
         while (node.firstChild) {
@@ -54,7 +56,7 @@ class PrintCountryCharts extends React.Component {
             <>
                 <iframe
                     id="countryChart"
-                    src="/#/ssc/print"
+                    src={`${getRootUrl()}/ssc/print`}
                     style={{display: 'none'}}
                     title="Country chart"
                 />

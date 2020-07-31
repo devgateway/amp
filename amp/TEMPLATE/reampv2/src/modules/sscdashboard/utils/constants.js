@@ -4,6 +4,7 @@ export const ROUTES_HOME = '/ssc/home';
 //TODO DELETE THIS ROUTE
 export const FLAGS_DIRECTORY = '/assets/img/flags/';
 export const FLAG_DEFAULT = '/assets/img/flags/';
+export const DEVELOPMENT = 'development';
 
 export const DASHBOARD_DEFAULT_MIN_YEAR_RANGE = 'dashboard-default-min-year-range';
 export const DASHBOARD_DEFAULT_MAX_YEAR_RANGE = 'dashboard-default-max-year-range';

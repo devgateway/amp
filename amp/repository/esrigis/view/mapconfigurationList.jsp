@@ -1,4 +1,4 @@
-<%@ page pageEncoding="UTF-8" import="org.digijava.module.esrigis.helpers.MapConstants"%>
+<%@ page pageEncoding="UTF-8" %>
 
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
@@ -97,6 +97,8 @@ $(document).ready(function(){
 });
 
 </script>
+<digi:instance property="mapsconfigurationform" />
+
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 align=center>
   <tr>
     <td width=14>&nbsp;</td>
@@ -149,13 +151,14 @@ $(document).ready(function(){
                     </c:set>
                       <c:forEach  var="mapConfig" items="${requestScope.mapList}">
                         <tr bgColor=#f4f4f2>
-                          <td align="center" class="inside"><digi:trn>${MapConstants.mapTypeNames.get(mapConfig.mapType)}</digi:trn></td>
+                          <td align="center" class="inside">
+                              <digi:trn>${mapsconfigurationform.getMapTypeName(mapConfig.mapType) }</digi:trn></td>
                           <td align="center" class="inside">
                           <c:if test="${mapConfig.mapSubType == 2}">
-                          	<digi:trn>${MapConstants.mapTypeNames.get(mapConfig.mapType)}</digi:trn>: ${mapConfig.configName}
+                          	<digi:trn>${mapsconfigurationform.getMapTypeName(mapConfig.mapType)}</digi:trn>: ${mapConfig.configName}
                           </c:if>
                           <c:if test="${mapConfig.mapSubType != 2}">
-                          	<digi:trn>${MapConstants.mapTypeNames.get(mapConfig.mapType)}</digi:trn>
+                          	<digi:trn>${mapsconfigurationform.getMapTypeName(mapConfig.mapType)}</digi:trn>
                           </c:if>
                           </td>
                           <td align="left" class="inside"> ${mapConfig.mapUrl} </td>

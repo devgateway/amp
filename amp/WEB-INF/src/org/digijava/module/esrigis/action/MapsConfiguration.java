@@ -32,6 +32,9 @@ public class MapsConfiguration extends DispatchAction {
         Collection<AmpMapConfig> maps = new ArrayList<AmpMapConfig>();
         maps = DbHelper.getMaps();
         request.setAttribute("mapList", maps);
+        MapsConfigurationForm mapForm = (MapsConfigurationForm)form;
+        mapForm.setMapTypeList(MapConstants.mapTypeNames);
+        mapForm.setMapSubTypeList(MapConstants.mapSubTypeNames);
         return mapping.findForward("list");
     }
     

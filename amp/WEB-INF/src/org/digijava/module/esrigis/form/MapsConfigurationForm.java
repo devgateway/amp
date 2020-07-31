@@ -102,6 +102,10 @@ public class MapsConfigurationForm extends ActionForm {
         return mapTypeList;
     }
 
+    public String getMapTypeName(Integer index){
+        return mapTypeList.get(index);
+    }
+
     public void setMapTypeList(HashMap<Integer, String> mapTypeList) {
         this.mapTypeList = mapTypeList;
     }

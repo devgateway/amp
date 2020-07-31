@@ -1,6 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
@@ -100,21 +99,11 @@ public class ObjectExporterTest {
         private AmpActivityGroup activityGroup;
 
         @Interchangeable(fieldTitle = "List Of Integers")
-        private List<Integer> listOfIntegers;
+        private List<Integer> listOfIntegers = new ArrayList<>();
 
         @Interchangeable(fieldTitle = "Simple Value With PV")
         @PossibleValues(OnePV.class)
         private Long simpleValueWithPV;
-
-        /**
-         * It is impossible to export multiple ids when field is discriminated and pickIdOnly=true,
-         * multipleValues parameter is irrelevant.
-         */
-        @InterchangeableDiscriminator(discriminatorField = "type", settings = {
-                @Interchangeable(fieldTitle = "Category A", discriminatorOption = "A", pickIdOnly = true),
-                @Interchangeable(fieldTitle = "Category B", discriminatorOption = "B", pickIdOnly = true)
-        })
-        private List<DummyCategory> categories = new ArrayList<>();
 
         /**
          * It is impossible to export a single object in discriminated case, output will be an object
@@ -129,26 +118,6 @@ public class ObjectExporterTest {
         @Override
         public Object getIdentifier() {
             return id;
-        }
-    }
-
-    public static class DummyCategory implements Identifiable {
-
-        private Long id;
-        private String type;
-
-        DummyCategory(Long id, String type) {
-            this.id = id;
-            this.type = type;
-        }
-
-        @Override
-        public Object getIdentifier() {
-            return id;
-        }
-
-        public String getType() {
-            return type;
         }
     }
 
@@ -254,31 +223,6 @@ public class ObjectExporterTest {
         assertThat(jsonObj, (Matcher) hasEntry(
                 equalTo("activity_group"),
                 hasEntry("version", 2L)));
-    }
-
-    @Test
-    public void testDiscriminatedPickIdOnly() {
-        Dummy dummy = new Dummy();
-        dummy.categories = ImmutableList.of(
-                new DummyCategory(1L, "A"),
-                new DummyCategory(2L, "B"));
-
-        Map<String, Object> jsonObj = exporter.export(dummy);
-
-        assertThat(jsonObj,
-                allOf(
-                        hasEntry("category_a", 1L),
-                        hasEntry("category_b", 2L)));
-    }
-
-    @Test(expected = RuntimeException.class)
-    public void testDiscriminatedPickIdOnlyMultiple() {
-        Dummy dummy = new Dummy();
-        dummy.categories = ImmutableList.of(
-                new DummyCategory(1L, "A"),
-                new DummyCategory(2L, "A"));
-
-        exporter.export(dummy);
     }
 
     @Test

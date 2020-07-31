@@ -6,10 +6,11 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.emptyIterable;
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.IntStream;
 
-import com.google.common.collect.ImmutableList;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
@@ -37,14 +38,14 @@ public class SizeValidatorTest {
                 interValidators = @InterchangeableValidator(
                         value = SizeValidator.class,
                         attributes = "max=1"))
-        private List<Integer> max1;
+        private List<Integer> max1 = new ArrayList<>();
 
         @Interchangeable(
                 fieldTitle = "max3",
                 interValidators = @InterchangeableValidator(
                         value = SizeValidator.class,
                         attributes = "max=3"))
-        private List<Integer> max3;
+        private List<Integer> max3 = new ArrayList<>();
     }
 
     @BeforeClass
@@ -53,19 +54,8 @@ public class SizeValidatorTest {
     }
 
     @Test
-    public void testNull() {
-        TestObject testObject = new TestObject();
-
-        Set<ConstraintViolation> violations = getConstraintViolations(testObject);
-
-        assertThat(violations, emptyIterable());
-    }
-
-    @Test
     public void testEmpty() {
         TestObject testObject = new TestObject();
-        testObject.max1 = ImmutableList.of();
-        testObject.max3 = ImmutableList.of();
 
         Set<ConstraintViolation> violations = getConstraintViolations(testObject);
 
@@ -75,7 +65,7 @@ public class SizeValidatorTest {
     @Test
     public void test1AtLimit() {
         TestObject testObject = new TestObject();
-        testObject.max1 = ImmutableList.of(1);
+        testObject.max1.add(1);
 
         Set<ConstraintViolation> violations = getConstraintViolations(testObject);
 
@@ -85,7 +75,7 @@ public class SizeValidatorTest {
     @Test
     public void test3AtLimit() {
         TestObject testObject = new TestObject();
-        testObject.max3 = ImmutableList.of(1, 2, 3);
+        IntStream.range(1, 4).forEach(testObject.max3::add);
 
         Set<ConstraintViolation> violations = getConstraintViolations(testObject);
 
@@ -95,7 +85,7 @@ public class SizeValidatorTest {
     @Test
     public void test1OverLimit() {
         TestObject testObject = new TestObject();
-        testObject.max1 = ImmutableList.of(1, 2);
+        IntStream.range(1, 3).forEach(testObject.max1::add);
 
         Set<ConstraintViolation> violations = getConstraintViolations(testObject);
 
@@ -105,7 +95,7 @@ public class SizeValidatorTest {
     @Test
     public void test3OverLimit() {
         TestObject testObject = new TestObject();
-        testObject.max3 = ImmutableList.of(1, 2, 3, 4);
+        IntStream.range(1, 5).forEach(testObject.max3::add);
 
         Set<ConstraintViolation> violations = getConstraintViolations(testObject);
 

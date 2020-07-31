@@ -216,18 +216,7 @@
 	}
 
 	function init() {
-		var u = document.getElementById('userEmail');
-		u.setAttribute("autocomplete", "off");
-		
-		var u = document.getElementById('userEmailConfirmation');
-		u.setAttribute("autocomplete", "off");
-		
-		var u = document.getElementById('userPassword');
-		u.setAttribute("autocomplete", "off");
-		
-		var u = document.getElementById('userPasswordConfirmation');
-		u.setAttribute("autocomplete", "off");
-		
+
 		$('#notificationEmailEnabled').bind("click", function() {
 	        $('#notificationEmailRow') [this.checked ? "show" : "hide"]();
 	      });
@@ -354,7 +343,7 @@
 													<digi:trn key="um:emailAddress">E-mail Address</digi:trn></td>
 												<td align="left">
 													<html:text  styleId="userEmail" property="email" size="20"
-																styleClass="inp-text pwd_username" />
+																styleClass="inp-text pwd_username" autocomplete="off"/>
 												</td>
 											</tr>
 											<tr>
@@ -363,7 +352,8 @@
 													<FONT color=red>*</FONT>
 													<digi:trn key="um:repEmailAddress">Repeat Email Address</digi:trn></td>
 												<td align="left">
-													<html:text styleId="userEmailConfirmation" property="emailConfirmation"	size="20" styleClass="inp-text" />
+													<html:text styleId="userEmailConfirmation" property="emailConfirmation"
+															   size="20" styleClass="inp-text" autocomplete="off" />
 												</td>
 											</tr>
 											<tr>
@@ -376,7 +366,7 @@
 												</td>
 												<td align="left">
 													<html:password styleId="userPassword"
-																   property="password" size="20" />
+																   property="password" size="20" autocomplete="new-password" />
 													<div style="padding-left: 2px; margin: 5px">
 														<div style="display: none" class="pwd_container" id="pwd_container">
 															<span class="pwstrength_viewport_verdict">&nbsp;</span>
@@ -392,7 +382,8 @@
 													<FONT color=red>*</FONT>
 													<digi:trn key="um:repPassword">Repeat Password</digi:trn></td>
 												<td align="left">
-													<html:password styleId="userPasswordConfirmation" property="passwordConfirmation" size="20" />
+													<html:password styleId="userPasswordConfirmation" property="passwordConfirmation"
+																   size="20" autocomplete="new-password" />
 												</td>
 											</tr>
 											<tr>

@@ -102,7 +102,7 @@ public class MapsConfigurationForm extends ActionForm {
         return mapTypeList;
     }
 
-    public String getMapTypeName(Integer index){
+    public String getMapTypeName(Integer index) {
         return mapTypeList.get(index);
     }
 

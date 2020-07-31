@@ -1,4 +1,5 @@
-<%@ page pageEncoding="UTF-8" %>
+<%@ page pageEncoding="UTF-8" import="org.digijava.module.esrigis.helpers.MapConstants"%>
+
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
@@ -81,7 +82,7 @@ function setHoveredTable(tableId, hasHeaders) {
 		}
 		rows = null;
 	}
-	
+
 
 
 }
@@ -125,7 +126,7 @@ $(document).ready(function(){
           <td noWrap width=570 vAlign="top"><table border="0" width="100%">
               <tr>
                 <td align="center">
-                  <table width="100%" id="dataTable" cellpadding="4" class="inside"> 
+                  <table width="100%" id="dataTable" cellpadding="4" class="inside">
                     <tr>
                       <td bgcolor="#c7d4db" align="center" width="10%" class="inside"><strong style="font-size:12px;"><digi:trn>Indicator/Base</digi:trn></strong></td>
                       <td bgcolor="#c7d4db" align="center" width="10%" class="inside"><strong style="font-size:12px;"><digi:trn>Type</digi:trn></strong></td>
@@ -148,13 +149,13 @@ $(document).ready(function(){
                     </c:set>
                       <c:forEach  var="mapConfig" items="${requestScope.mapList}">
                         <tr bgColor=#f4f4f2>
-                          <td align="center" class="inside"><digi:trn>${mapConfig.mapSubTypeName}</digi:trn></td>
-                          <td align="center" class="inside"> 
+                          <td align="center" class="inside"><digi:trn>${MapConstants.mapTypeNames.get(mapConfig.mapType)}</digi:trn></td>
+                          <td align="center" class="inside">
                           <c:if test="${mapConfig.mapSubType == 2}">
-                          	<digi:trn>${mapConfig.mapTypeName}</digi:trn>: ${mapConfig.configName}
+                          	<digi:trn>${MapConstants.mapTypeNames.get(mapConfig.mapType)}</digi:trn>: ${mapConfig.configName}
                           </c:if>
                           <c:if test="${mapConfig.mapSubType != 2}">
-                          	<digi:trn>${mapConfig.mapTypeName}</digi:trn>
+                          	<digi:trn>${MapConstants.mapTypeNames.get(mapConfig.mapType)}</digi:trn>
                           </c:if>
                           </td>
                           <td align="left" class="inside"> ${mapConfig.mapUrl} </td>
@@ -194,7 +195,7 @@ $(document).ready(function(){
                       <td class="inside" width=100%>
                       	<c:set var="translation">
 								<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-							</c:set> 
+							</c:set>
 							<a href="/admin.do" title="${translation}"><digi:trn key="aim:AmpAdminHome">
 									Admin Home
 									</digi:trn></a>

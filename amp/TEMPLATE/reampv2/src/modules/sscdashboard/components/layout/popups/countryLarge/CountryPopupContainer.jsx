@@ -10,7 +10,7 @@ export default class CountryPopupContainer extends Component {
 
     render() {
         const {translations} = this.context;
-        const {rows, closeLargeCountryPopinAndClearFilter, columnCount, countriesForExport, countriesForExportChanged,getExportData} = this.props;
+        const {rows, closeLargeCountryPopinAndClearFilter, columnCount, countriesForExport, countriesForExportChanged, getExportData} = this.props;
         return (<div>
 
             <CountryPopupOverlayTitle/>

@@ -43,6 +43,7 @@ export const SECTORS_CHART = 'sector';
 export const MODALITY_CHART = 'modality';
 export const DOWNLOAD_CHART = 'download';
 export const COUNTRY_COLUMN = 'country-column';
+export const FALLBACK_FLAG = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAbCAQAAACkGQXlAAAAI0lEQVR42mP8L8lAVcA4auCogaMGjho4auCogaMGjhpINAAAOBcdpLw/CDsAAAAASUVORK5CYII='
 export const COLOR_MAP = [
     '#4bbc4e',
     '#40557d',

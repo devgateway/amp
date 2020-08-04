@@ -35,7 +35,7 @@ class PrintCountryCharts extends React.Component {
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
         window.addEventListener('message', this.handleMessage);
     }
 

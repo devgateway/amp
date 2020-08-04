@@ -1,11 +1,10 @@
 import React, { Component } from "react";
 import '../popups.css';
-import { Img } from 'react-image';
-import * as Utils from '../../../../utils/Utils';
 import { SSCTranslationContext } from '../../../StartUp';
 import { SECTOR_LEADING_LEFT, SECTOR_MIN_SIZE } from '../../../../utils/constants';
 import { calculateUpdatedValuesForDropDowns } from '../../../../utils/Utils';
 import ReactTooltip from 'react-tooltip';
+import CountryFlag from '../../../utils/CountryFlag';
 
 class CountryPopupHeader extends Component {
     onCountrySelected(e) {
@@ -21,8 +20,7 @@ class CountryPopupHeader extends Component {
         return (
             <div className="header row">
                 <div className={`col-md-${columnCount === 1 ? '4' : '5'}  col-xs-5 country-name`}>
-                    <Img
-                        src={Utils.getCountryFlag(country.name)}/>
+                    <CountryFlag countryName={country.name}/>
                     {country.name}
                 </div>
                 <div className={`col-md-${columnCount === 1 ? '2' : '3'} col-xs-3 projects`}>

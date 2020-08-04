@@ -1,22 +1,20 @@
-import React, { Component } from "react";
+import React, { Component, Suspense } from "react";
 import InfiniteCarousel from 'react-leaf-carousel';
-import { Img } from 'react-image'
 import EllipsisText from 'react-ellipsis-text';
 import * as Utils from '../../../utils/Utils';
 import './filters.css';
 import { FLAGS_TO_SHOW_DEFAULT, FLAGS_TO_SHOW_SMALL } from '../../../utils/constants';
+import CountryFlag from '../../utils/CountryFlag';
 
 
 export default class CountryCarousel extends Component {
     constructor(props) {
         super();
-        this.state = {slidesToShow: this.calculateCarouselValues()};
+        this.state = {slidesToShow: FLAGS_TO_SHOW_DEFAULT};
     }
 
     componentDidMount() {
-
         window.addEventListener('resize', this.onResize.bind(this));
-
     }
 
     componentWillUnmount() {
@@ -49,8 +47,9 @@ export default class CountryCarousel extends Component {
         return options.sort((a, b) => a.name > b.name ? 1 : -1).map((c) => {
                 return (<div key={`flag-${c.id}`} onClick={this.onFlagClick(c.id)}
                              className={`flag ${selectedOptions.includes(c.id) ? 'selected' : ''}`}>
-                    <Img
-                        src={Utils.getCountryFlag(c.name)}/>
+                    <Suspense fallback={(<div>loading</div>)}>
+                        <CountryFlag countryName={c.name}/>
+                    </Suspense>
                     <EllipsisText
                         text={c.name}
                         length={9} tail={''}/>

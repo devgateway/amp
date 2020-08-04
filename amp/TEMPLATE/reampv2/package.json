@@ -19,7 +19,6 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-ellipsis-text": "^1.2.1",
-    "react-image": "^4.0.1",
     "react-image": "^4.0.3",
     "react-leaf-carousel": "git@github.com:jdeanquin-dg/react-infinite-carousel.git#master",
     "react-leaflet": "^2.6.3",

@@ -5,12 +5,14 @@ import java.util.Comparator;
 
 import javax.jcr.Node;
 import javax.jcr.Property;
+import javax.ws.rs.core.Response;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.utils.BoundedList;
+import org.digijava.kernel.ampapi.endpoints.resource.ResourceErrors;
 import org.digijava.kernel.util.ResponseUtil;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.contentrepository.helper.CrConstants;
@@ -35,6 +37,11 @@ public class DownloadFile extends Action {
             Node node = DocumentManagerUtil.getReadNode(nodeUUID, request);
             if (node == null) {
                 throw new RuntimeException("node with uuid = " + nodeUUID + " not found!");
+            }
+            if (!node.hasProperty("ampdoc:cmDocType")) {
+                response.setStatus(Response.Status.BAD_REQUEST.getStatusCode());
+                response.getWriter().println(ResourceErrors.RESOURCE_NOT_VALID.description);
+                return null;
             }
 
             Property contentType = node.getProperty(CrConstants.PROPERTY_CONTENT_TYPE);

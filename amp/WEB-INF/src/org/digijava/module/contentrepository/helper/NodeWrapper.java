@@ -1007,9 +1007,9 @@ public class NodeWrapper{
         String value = null;
         if (ContentTranslationUtil.multilingualIsEnabled()) {
             try {
-                Node titleNode = node.getNode(fieldName);
-                if (titleNode != null) {
-                    PropertyIterator  iterator = titleNode.getProperties();
+                if (node.hasNode(fieldName)) {
+                    Node fieldNode = node.getNode(fieldName);
+                    PropertyIterator iterator = fieldNode.getProperties();
                     while (iterator.hasNext()) {
                         PropertyImpl property = (PropertyImpl) iterator.next();
                         if (property.getName().equals(language)) {
@@ -1033,13 +1033,13 @@ public class NodeWrapper{
     private Map <String,String> getTranslatedNode (String fieldName) {
         Map <String, String> translatedField = new HashMap<String,String> ();
         try {
-            Node titleNode = node.getNode(fieldName);
-            if (titleNode != null) {
-                PropertyIterator  iterator = titleNode.getProperties();
+            if (node.hasNode(fieldName)) {
+                Node fieldNode = node.getNode(fieldName);
+                PropertyIterator iterator = fieldNode.getProperties();
                 while (iterator.hasNext()) {
-                    PropertyImpl property = (PropertyImpl)iterator.next();
-                    translatedField.put(property.getName(),property.getString());
-                        
+                    PropertyImpl property = (PropertyImpl) iterator.next();
+                    translatedField.put(property.getName(), property.getString());
+
                 }
             }
         } catch (PathNotFoundException e) {

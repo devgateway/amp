@@ -417,6 +417,10 @@ public class NodeWrapper{
                 }
                 else logger.error("Form file is null. It is ok if it imported using IDML");
             }
+
+            if (tempDoc.getCreatorClient() != null) {
+                newNode.setProperty(CrConstants.PROPERTY_CREATOR_CLIENT, tempDoc.getCreatorClient());
+            }
             
             if ( !errorAppeared ) {
                 Calendar yearofPublicationDate=null;
@@ -747,6 +751,18 @@ public class NodeWrapper{
         }
         return null;
     }
+
+    public String getCreatorClient() {
+        Property creatorClient = DocumentManagerUtil.getPropertyFromNode(node, CrConstants.PROPERTY_CREATOR_CLIENT);
+        if (creatorClient != null) {
+            try {
+                return creatorClient.getString();
+            } catch (Exception e) {
+                logger.error(e.getMessage(), e);
+            }
+        }
+        return null;
+    }
     
     public List<Label> getLabels() {
         ArrayList<Label> labels = new ArrayList<Label>();
@@ -1034,5 +1050,5 @@ public class NodeWrapper{
         
         return translatedField;
     }
-    
+
 }

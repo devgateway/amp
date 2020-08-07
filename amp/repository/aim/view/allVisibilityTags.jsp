@@ -1096,6 +1096,7 @@ deleted 6 fields, do not reinsert
 <module:display name="Menu Options" parentModule="PUBLIC VIEW"></module:display>
 <feature:display name="Enable New User Registration" module="Login - User Management"></feature:display>
 <feature:display name="Change Password" module="Login - User Management"></feature:display>
+<feature:display name="Detect browser" module="Login - User Management"></feature:display>
 <feature:display name="Trouble signing in" module="Login - User Management"></feature:display>
 
 <module:display name="Activity Preview" parentModule="PUBLIC VIEW"></module:display>

@@ -20,6 +20,7 @@ import org.digijava.kernel.ampapi.endpoints.dto.MultilingualContent;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.resource.dto.AmpResource;
 import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
+import org.digijava.kernel.ampapi.filters.ClientMode;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
@@ -200,6 +201,10 @@ public class ResourceImporter extends ObjectImporter<AmpResource> {
             tdd.setWebLink(null);
             tdd.setFileSize(formFile.getFileSize());
             tdd.setFormFile(formFile);
+        }
+
+        if (AmpClientModeHolder.isIatiImporterClient()) {
+            tdd.setCreatorClient(ClientMode.IATI_IMPORTER.name());
         }
 
         return tdd;

@@ -96,6 +96,17 @@ public class InterchangeEndpoints {
         return Response.ok(possibleValues, responseType).build();
     }
 
+    // TODO TO be removed after AMP-29486 is merged into FUTURE.
+    // Restored so the new preview works until AMP-29486 is done. 
+
+    @GET
+    @Path("fields-no-workspace")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "getDefaultFields", ui = false)
+    public List<APIField> getAvailableFieldsBasedOnDefaultFM() {
+        return getAvailableFields();
+    }
+
     @POST
     @Path("field/values")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8", AmpMediaType.POSSIBLE_VALUES_V2_JSON})

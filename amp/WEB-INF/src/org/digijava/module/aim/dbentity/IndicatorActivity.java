@@ -1,6 +1,7 @@
 package org.digijava.module.aim.dbentity;
 
 import org.digijava.kernel.ampapi.endpoints.activity.values.AmpIndicatorRiskRatingsPossibleValuesProvider;
+import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
@@ -43,7 +44,8 @@ public class IndicatorActivity extends IndicatorConnection implements Versionabl
      * Actually risk is in each connection of indicator and activity.
      */
     @PossibleValues(AmpIndicatorRiskRatingsPossibleValuesProvider.class)
-    @Interchangeable(fieldTitle = "Risk", importable = true, pickIdOnly = true)
+    @Interchangeable(fieldTitle = "Risk", importable = true, pickIdOnly = true,
+            fmPath = FMVisibility.PARENT_FM + "/Risk")
     private AmpIndicatorRiskRatings risk;
 
     @Interchangeable(fieldTitle = "Log Frame", importable = true, pickIdOnly = true,

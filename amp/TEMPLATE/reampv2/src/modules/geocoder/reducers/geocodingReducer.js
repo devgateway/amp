@@ -4,11 +4,11 @@ import {
 
 const initialState = {
     pending: true,
-    geocodings: [],
+    geocoding: [],
     error: null
 };
 
-export default function activitiesReducer(state = initialState, action) {
+export default function geocodingReducer(state = initialState, action) {
     switch(action.type) {
         case FETCH_GEOCODING_PENDING:
             return {
@@ -19,13 +19,13 @@ export default function activitiesReducer(state = initialState, action) {
             return {
                 ...state,
                 pending: false,
-                geocodings: action.payload
+                geocoding: action.payload,
             };
         case FETCH_GEOCODING_ERROR:
             return {
                 ...state,
                 pending: false,
-                error: action.error
+                error: action.error,
             };
         default:
             return state;

@@ -20,7 +20,9 @@ class GeocoderAPP extends Component {
     render() {
         return (<Provider store={this.store}>
             <AppContext defaultTrnPack = {defaultTrnPack}>
-                <GeocoderPanel props={this.props}/>
+                <div className='container'>
+                    <GeocoderPanel props={this.props}/>
+                </div>
             </AppContext>
         </Provider>);
 

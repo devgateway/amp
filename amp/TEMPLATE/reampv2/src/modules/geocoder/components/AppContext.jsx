@@ -6,6 +6,7 @@ import fetchTranslations from '../../../utils/actions/fetchTranslations';
 import defaultTrnPack from '../config/initialTranslations.json';
 import {Loading} from '../../../utils/components/Loading';
 import {loadActivities} from "../actions/activitiesAction";
+import {loadGeocoding} from "../actions/geocodingAction";
 
 
 export const TranslationContext = React.createContext({translations: defaultTrnPack});
@@ -22,13 +23,13 @@ class AppContext extends Component {
 
     componentDidMount() {
         this.props.fetchTranslations(defaultTrnPack);
-        this.props.loadActivities();
+        this.props.loadGeocoding();
     }
 
     render() {
         return this.props.translationPending
             ? (<Loading/>) :
-            <TranslationContext.Provider value={{translations: this.props.translations, activities: this.props.activities}}>
+            <TranslationContext.Provider value={{translations: this.props.translations}}>
                 {this.props.children}
             </TranslationContext.Provider>;
     }
@@ -38,13 +39,13 @@ const mapStateToProps = state => {
     return {
         translationPending: state.translationsReducer.pending,
         translations: state.translationsReducer.translations,
-        activities: state.activitiesReducer.activities
+        geocoding: state.geocodingReducer.geocoding,
     };
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     fetchTranslations: fetchTranslations,
-    loadActivities: loadActivities
+    loadGeocoding: loadGeocoding
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppContext);

@@ -6,10 +6,10 @@ import {connect} from "react-redux";
 import TableActions from "./ActivityActions";
 
 import './table.css';
-import ActivityLocations from "./Locations";
+import Locations from "./Locations";
 import {loadActivities} from "../../../actions/activitiesAction";
 
-class ActivityTable extends Component {
+class GeocodingTable extends Component {
     constructor(props) {
         super(props);
         this.state = { selectedRowAction: null };
@@ -18,16 +18,19 @@ class ActivityTable extends Component {
         this.wrapper = React.createRef();
     }
 
-    componentDidMount() {
-        this.props.loadActivities();
-    }
-
     handleActionsClick = selectedRowId => {
         this.setState({ selectedRowAction: selectedRowId });
     };
 
 
     render() {
+        let expandRow = {
+            onlyOneExpanding: true,
+            renderer: row => (
+                <Locations/>
+            )
+        };
+
         let options = {
 
             page: 1,
@@ -45,12 +48,6 @@ class ActivityTable extends Component {
             nextPage: 'Next',
             firstPage: 'First',
             lastPage: 'Last',
-        };
-
-        let selectRow = {
-            mode: 'checkbox',
-            clickToExpand: true,
-            style: { background: '#F2FFF8' }
         };
 
         let columns = [
@@ -85,6 +82,23 @@ class ActivityTable extends Component {
                     return { width: "15%" };
                 },
                 sort:true
+            },
+            {
+                dataField: "actions",
+                text: "Actions",
+                formatExtraData: this.state.selectedRowAction,
+                formatter: (cell, row, rowIndex, formatExtraData) => {
+                    return (
+                        <TableActions
+                            isOpen={formatExtraData === row.id ? true : false}
+                            onActionClick={this.handleActionsClick}
+                            rowId={row.id}
+                        />
+                    );
+                },
+                headerStyle: () => {
+                    return { width: "5%" };
+                },
             }
         ];
 
@@ -97,7 +111,7 @@ class ActivityTable extends Component {
                     maxHeight="200px"
                     columns={columns}
                     classes="table-striped"
-                    selectRow={selectRow}
+                    expandRow={expandRow}
                     pagination={paginationFactory(options)}
                 />
             </div>
@@ -107,12 +121,10 @@ class ActivityTable extends Component {
 
 const mapStateToProps = state => {
     return {
-        activities: state.activitiesReducer.activities
+        activities: state.geocodingReducer.geocoding.activities,
     };
 };
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-    loadActivities: loadActivities,
-}, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(ActivityTable);
+export default connect(mapStateToProps, mapDispatchToProps)(GeocodingTable);

@@ -1,4 +1,4 @@
-import {fetchApiData} from "../../../utils/loadTranslations";
+import {fetchApiData} from "../../../utils/apiOperations";
 import {
     API_REPORTS_URL,
     FIELD_ACTIVITY_DATE, FIELD_LOCATION, FIELD_PROJECT_DESCRIPTION,
@@ -18,10 +18,9 @@ export function fetchActivitiesPending() {
 
 export function fetchActivitiesSuccess(activities) {
     function extractActivity(activity) {
-        console.log(activity.contents);
         return {
             id: activity.contents['[' + FIELD_PROJECT_TITLE + ']'].entityId,
-            col1: activity.contents['[' + FIELD_ACTIVITY_DATE + ']'].displayedValue,
+            col1: activity.contents['[' + FIELD_ACTIVITY_DATE + ']'] ? activity.contents['[' + FIELD_ACTIVITY_DATE + ']'].displayedValue : "",
             col2: activity.contents['[' + FIELD_PROJECT_NUMBER + ']'] ? activity.contents['[' + FIELD_PROJECT_NUMBER + ']'].displayedValue : "",
             col3: activity.contents['[' + FIELD_PROJECT_TITLE + ']'].displayedValue,
             col4: activity.contents['[' + FIELD_LOCATION + ']'].displayedValue ? activity.contents['[' + FIELD_LOCATION + ']'].displayedValue : "---"
@@ -59,6 +58,7 @@ export const loadActivities = () => {
                 return dispatch(fetchActivitiesSuccess(activities));
             })
             .catch(error => {
+                console.error(error);
                 return dispatch(fetchActivitiesError(error))
             });
     }

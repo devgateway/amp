@@ -4,5 +4,6 @@
   "amp.geocoder:selectProjects": "Select Projects",
   "amp.geocoder:settings": "Settings",
   "amp.geocoder:resetAll": "Reset All",
-  "amp.geocoder:saveAllEdits": "Save All Edits"
+  "amp.geocoder:saveAllEdits": "Save All Edits",
+  "amp.geocoder:runSearch": "Run Search"
 }

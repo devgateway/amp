@@ -4,18 +4,13 @@
 package org.dgfoundation.amp.onepager.components.features.items;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.AbstractSingleSelectChoice;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
-import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
@@ -23,7 +18,8 @@ import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpIndicatorGroupField;
-import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
+import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
+import org.dgfoundation.amp.onepager.translation.TranslatedChoiceRenderer;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
@@ -70,30 +66,10 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
             logger.error(e.getMessage(), e);
         }
 
-        final IModel<AmpIndicatorRiskRatings> riskModel = new PropertyModel<>(conn, "risk");
-        ChoiceRenderer cr = new ChoiceRenderer(){
-            @Override
-            public Object getDisplayValue(Object object) {
-                AmpIndicatorRiskRatings rating = (AmpIndicatorRiskRatings)object;           
-                return TranslatorUtil.getTranslation(rating.getRatingName());
-            }
-        };
-        final AbstractSingleSelectChoice<AmpIndicatorRiskRatings> risk = new DropDownChoice<AmpIndicatorRiskRatings>(
-                "risk",
-                riskModel, new LoadableDetachableModel<List<AmpIndicatorRiskRatings>>() {
-                    @Override
-                    protected List<AmpIndicatorRiskRatings> load() {
-                        return (List<AmpIndicatorRiskRatings>) MEIndicatorsUtil.getAllIndicatorRisks();
-                    }
-                }, cr).setNullValid(true);
-        risk.add(new AjaxFormComponentUpdatingBehavior("onchange") {
-            @Override
-            protected void onUpdate(AjaxRequestTarget target) {
-                riskModel.setObject(risk.getConvertedInput());
-            }
-        });
-                
-        add(risk);
+        final AmpSelectFieldPanel<AmpIndicatorRiskRatings> riskSelect = new AmpSelectFieldPanel("risk",
+                new PropertyModel<>(conn, "risk"), MEIndicatorsUtil.getAllIndicatorRisks(), "Risk", false, false,
+                new TranslatedChoiceRenderer<AmpIndicatorRiskRatings>(), false);
+        add(riskSelect);
 
         final AmpIndicatorValue baseVal = new AmpIndicatorValue(AmpIndicatorValue.BASE);
         final AmpIndicatorValue targetVal = new AmpIndicatorValue(AmpIndicatorValue.TARGET);
@@ -101,11 +77,6 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
         final AmpIndicatorValue currentVal = new AmpIndicatorValue(AmpIndicatorValue.ACTUAL);
         
         final Model<Boolean> valuesSet = new Model<Boolean>(false);
-
-//      Iterator<AmpIndicatorValue> iterator = values.getObject().iterator();
-//      while (iterator.hasNext()) {
-//      AmpIndicatorValue val = (AmpIndicatorValue) iterator
-//      .next();
 
         for (AmpIndicatorValue val : values.getObject()){
             

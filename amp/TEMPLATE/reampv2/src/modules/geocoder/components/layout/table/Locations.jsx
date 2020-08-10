@@ -3,7 +3,7 @@ import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import BootstrapTable from "react-bootstrap-table-next";
 
-class LocationsTabel extends Component {
+class Locations extends Component {
     render() {
         let columns = [
             {
@@ -64,4 +64,4 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(LocationsTabel);
+export default connect(mapStateToProps, mapDispatchToProps)(Locations);

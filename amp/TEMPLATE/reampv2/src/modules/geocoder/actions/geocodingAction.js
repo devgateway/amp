@@ -2,15 +2,44 @@ export const FETCH_GEOCODING_PENDING = 'FETCH_GEOCODING_PENDING';
 export const FETCH_GEOCODING_SUCCESS = 'FETCH_GEOCODING_SUCCESS';
 export const FETCH_GEOCODING_ERROR = 'FETCH_GEOCODING_ERROR';
 
-let geocondings = {
-    1 : {
-        activityId : 1,
-        name: "Haiti"
-    },
-    2 : {
-        activityId : 2,
-        name: "Jacmel"
-    }
+let geocoding_available = {
+    status : "AVAILABLE",
+    activities : [{
+            activityId : 1,
+            col1: "23/02/20116",
+            col2: "XYZ-65-65",
+            col3: "Emergency Spending Allocation - (BID/HA-G1001)",
+            col4: "---"
+        },
+        {
+            activityId : 1,
+            col1: "23/02/2014",
+            col2: "XYZ-65-68",
+            col3: "Development of the Industrial Park Model to Improve Trade Opportunities for Jacmel",
+            col4: "---"
+        }
+    ]
+}
+
+let geocoding_not_available = {
+    status : "NOT_AVAILABLE",
+    creator: "John Doe",
+    workspace: "Training Workspace",
+    activities : []
+}
+
+let geocoding_completed = {
+    status : "COMPLETED",
+    creator: null,
+    workspace: null,
+    activities : []
+}
+
+let geocoding_running = {
+    status : "RUNNING",
+    creator: "John Doe",
+    workspace: "Training Workspace",
+    activities : []
 }
 
 export function fetchGeocodingPending() {
@@ -33,12 +62,11 @@ export function fetchGeocodingError(error) {
     }
 }
 
-export const loadGeocoding = (activityId) => {
+export const loadGeocoding = () => {
     return dispatch => {
         dispatch(fetchGeocodingPending());
-        let geocoding = geocondings[activityId];
-        return dispatch(fetchGeocodingSuccess(geocoding));
-        // return fetchApiData({url: '/rest/data/saikureport/8106', body: queryModel})
+        return dispatch(fetchGeocodingSuccess(geocoding_completed));
+        // return fetchApiData({url: '/rest/geocoding/results', body: queryModel})
         //     .then(geocoding => {
         //         return dispatch(fetchGeocodingSuccess(geocoding));
         //     })

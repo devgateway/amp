@@ -13,7 +13,8 @@ export default class GeocoderHeader extends Component {
                 <div className={'col-md-2 text-header'}>{translations['amp.geocoder:selectProjects']}</div>
                 <div className={'col-md-2 header-settings text-header'}><a href={'#geocoder'}>{translations['amp.geocoder:settings']}</a></div>
                 <div className={'col-md-2 text-header'}><a href={'#geocoder'}>{translations['amp.geocoder:resetAll']}</a></div>
-                <Button variant="success" className={'pull-right'}>{translations['amp.geocoder:saveAllEdits']}</Button>
+                <Button variant="success" className={'pull-right button-header'}>{translations['amp.geocoder:saveAllEdits']}</Button>
+                <Button variant="success" className={'pull-right button-header'}>{translations['amp.geocoder:runSearch']}</Button>
             </div>);
     }
 }

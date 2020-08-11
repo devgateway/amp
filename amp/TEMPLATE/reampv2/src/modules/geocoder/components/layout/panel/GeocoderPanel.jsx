@@ -5,6 +5,7 @@ import ActivityTable from "../table/ActivityTable";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import GeocodingTable from "../table/GeocodingTable";
+import {SECTORS_CHART} from "../../../../sscdashboard/utils/constants";
 
 function GeocodingNotAvailable(props) {
     return <h4>Geocoding process not available. User {props.user} is owner of the process in '{props.workspace}' workspace</h4>;
@@ -24,6 +25,34 @@ function ProjectList(props) {
 
 class GeocoderPanel extends Component {
 
+    state = {
+        selectedActivities: []
+    };
+
+    onSelectActivity = (isSelected, activityId) => {
+        let selectedActivities = Array.from(this.state.selectedActivities);
+        if (isSelected) {
+            selectedActivities.push(activityId);
+        } else {
+            selectedActivities = selectedActivities.filter(id => id !== activityId);
+        }
+
+        this.setState({selectedActivities});
+    }
+
+    onSelectAllActivities = (isSelected, rows) => {
+        let selectedActivities = Array.from(this.state.selectedActivities);
+        let activityIds = rows.map(r => r.id);
+
+        if (isSelected) {
+            activityIds.forEach(activityId => selectedActivities.push(activityId));
+        } else {
+            selectedActivities = selectedActivities.filter(id => !activityIds.includes(id));
+        }
+
+        this.setState({selectedActivities});
+    }
+
     render() {
         const {translations} = this.context;
 
@@ -39,9 +68,11 @@ class GeocoderPanel extends Component {
                 <div>
                     <ProjectList title={translations['amp.geocoder:projectList']}/>
                     <div className='panel panel-default'>
-                        <GeocoderHeader/>
+                        <GeocoderHeader selectedActivities={this.state.selectedActivities}/>
                         {isGeocodingAvailable && <GeocodingTable/>}
-                        {isGeocodingCompleted && <ActivityTable/>}
+                        {isGeocodingCompleted && <ActivityTable onSelectActivity={this.onSelectActivity.bind(this)}
+                                                                onSelectAllActivities={this.onSelectAllActivities.bind(this)}
+                                                                selectedActivities={this.state.selectedActivities}/>}
                     </div>
                 </div>
             }

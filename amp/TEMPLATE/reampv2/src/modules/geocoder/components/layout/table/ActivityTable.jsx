@@ -24,22 +24,14 @@ class ActivityTable extends Component {
     constructor(props) {
         super(props);
 
-        this.handleOnSelect = this.handleOnSelect.bind(this);
-        this.handleOnSelectAll = this.handleOnSelectAll.bind(this);
+        this.handleOnSelect = this.props.onSelectActivity;
+        this.handleOnSelectAll = this.props.onSelectAllActivities;
 
         this.wrapper = React.createRef();
     }
 
     componentDidMount() {
         this.props.loadActivities();
-    }
-
-    handleOnSelect = (isSelected, rowId) => {
-        this.props.selectActivityForGeocoding(this.props.selectedActivities, isSelected, rowId);
-    }
-
-    handleOnSelectAll = (isSelected, rows) => {
-        this.props.selectAllActivitiesForGeocoding(this.props.selectedActivities, isSelected, rows.map(r => r.id));
     }
 
     render() {
@@ -128,14 +120,11 @@ const mapStateToProps = state => {
     return {
         activitiesPending: state.activitiesReducer.pending,
         activities: state.activitiesReducer.activities,
-        selectedActivities: state.activitiesReducer.selectedActivities
     };
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     loadActivities: loadActivities,
-    selectActivityForGeocoding: selectActivityForGeocoding,
-    selectAllActivitiesForGeocoding: selectAllActivitiesForGeocoding
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ActivityTable);

@@ -1,10 +1,11 @@
 import {
-    FETCH_ACTIVITIES_ERROR, FETCH_ACTIVITIES_PENDING, FETCH_ACTIVITIES_SUCCESS
+    FETCH_ACTIVITIES_ERROR, FETCH_ACTIVITIES_PENDING, FETCH_ACTIVITIES_SUCCESS, SELECT_ACTIVITY_FOR_GEOCODING
 } from '../actions/activitiesAction';
 
 const initialState = {
     pending: true,
     activities: [],
+    selectedActivities: [],
     error: null
 };
 
@@ -26,6 +27,12 @@ export default function activitiesReducer(state = initialState, action) {
                 ...state,
                 pending: false,
                 error: action.error
+            };
+        case SELECT_ACTIVITY_FOR_GEOCODING:
+            return {
+                ...state,
+                pending: false,
+                selectedActivities: action.payload
             };
         default:
             return state;

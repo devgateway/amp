@@ -10,6 +10,8 @@ export const FETCH_ACTIVITIES_PENDING = 'FETCH_ACTIVITIES_PENDING';
 export const FETCH_ACTIVITIES_SUCCESS = 'FETCH_ACTIVITIES_SUCCESS';
 export const FETCH_ACTIVITIES_ERROR = 'FETCH_ACTIVITIES_ERROR';
 
+export const SELECT_ACTIVITY_FOR_GEOCODING = 'SELECT_ACTIVITY_FOR_GEOCODING';
+
 export function fetchActivitiesPending() {
     return {
         type: FETCH_ACTIVITIES_PENDING
@@ -37,6 +39,36 @@ export function fetchActivitiesError(error) {
     return {
         type: FETCH_ACTIVITIES_ERROR,
         error: error
+    }
+}
+
+export function selectActivityForGeocoding(currentSelectedActivities, isSelected, activityId) {
+    let selectedActivities = Array.from(currentSelectedActivities);
+
+    if (isSelected) {
+        selectedActivities.push(activityId);
+    } else {
+        selectedActivities = selectedActivities.filter(id => id !== activityId);
+    }
+
+    return {
+        type: SELECT_ACTIVITY_FOR_GEOCODING,
+        payload: selectedActivities
+    }
+}
+
+export function selectAllActivitiesForGeocoding(currentSelectedActivities, isSelected, activityIds) {
+    let selectedActivities = Array.from(currentSelectedActivities);
+
+    if (isSelected) {
+        activityIds.forEach(activityId => selectedActivities.push(activityId));
+    } else {
+        selectedActivities = selectedActivities.filter(id => !activityIds.includes(id));
+    }
+
+    return {
+        type: SELECT_ACTIVITY_FOR_GEOCODING,
+        payload: selectedActivities
     }
 }
 

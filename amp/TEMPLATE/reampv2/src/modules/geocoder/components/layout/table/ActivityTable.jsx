@@ -1,20 +1,32 @@
-import React, {Component} from 'react';
+import React, {Component, useState} from 'react';
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
-import TableActions from "./ActivityActions";
 
 import './table.css';
-import ActivityLocations from "./Locations";
-import {loadActivities} from "../../../actions/activitiesAction";
+import {
+    loadActivities,
+    selectActivityForGeocoding,
+    selectAllActivitiesForGeocoding
+} from "../../../actions/activitiesAction";
+import {Loading} from "../../../../../utils/components/Loading";
+
+const SelectedActivitiesMessage = (props) =>  {
+    return (
+        <>
+           <div className="activities-message"><b>{props.size}</b> activities selected for geocoding</div>
+        </>
+    );
+}
 
 class ActivityTable extends Component {
     constructor(props) {
         super(props);
-        this.state = { selectedRowAction: null };
 
-        this.handleActionsClick = this.handleActionsClick.bind(this);
+        this.handleOnSelect = this.handleOnSelect.bind(this);
+        this.handleOnSelectAll = this.handleOnSelectAll.bind(this);
+
         this.wrapper = React.createRef();
     }
 
@@ -22,10 +34,13 @@ class ActivityTable extends Component {
         this.props.loadActivities();
     }
 
-    handleActionsClick = selectedRowId => {
-        this.setState({ selectedRowAction: selectedRowId });
-    };
+    handleOnSelect = (isSelected, rowId) => {
+        this.props.selectActivityForGeocoding(this.props.selectedActivities, isSelected, rowId);
+    }
 
+    handleOnSelectAll = (isSelected, rows) => {
+        this.props.selectAllActivitiesForGeocoding(this.props.selectedActivities, isSelected, rows.map(r => r.id));
+    }
 
     render() {
         let options = {
@@ -49,8 +64,11 @@ class ActivityTable extends Component {
 
         let selectRow = {
             mode: 'checkbox',
-            clickToExpand: true,
-            style: { background: '#F2FFF8' }
+            style: { background: '#F2FFF8' },
+            onSelect: (row, isSelected, rowIndex, e) => {
+                this.handleOnSelect(isSelected, row.id);
+            },
+            onSelectAll: this.handleOnSelectAll
         };
 
         let columns = [
@@ -88,31 +106,36 @@ class ActivityTable extends Component {
             }
         ];
 
-        return (
-            <div className="activity-table">
-                <BootstrapTable
-                    keyField="id"
-                    scrollY
-                    data={this.props.activities}
-                    maxHeight="200px"
-                    columns={columns}
-                    classes="table-striped"
-                    selectRow={selectRow}
-                    pagination={paginationFactory(options)}
-                />
-            </div>
-        );
+        return this.props.activitiesPending ? (<div className="activity-table"><Loading/></div>)
+                : (<div className="activity-table">
+                        <BootstrapTable
+                            ref={n => this.node = n}
+                            keyField="id"
+                            scrollY
+                            data={this.props.activities}
+                            maxHeight="200px"
+                            columns={columns}
+                            classes="table-striped"
+                            selectRow={selectRow}
+                            pagination={paginationFactory(options)}
+                        />
+                        <SelectedActivitiesMessage size={this.props.selectedActivities.length} />
+                    </div>);
     }
 }
 
 const mapStateToProps = state => {
     return {
-        activities: state.activitiesReducer.activities
+        activitiesPending: state.activitiesReducer.pending,
+        activities: state.activitiesReducer.activities,
+        selectedActivities: state.activitiesReducer.selectedActivities
     };
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     loadActivities: loadActivities,
+    selectActivityForGeocoding: selectActivityForGeocoding,
+    selectAllActivitiesForGeocoding: selectAllActivitiesForGeocoding
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ActivityTable);

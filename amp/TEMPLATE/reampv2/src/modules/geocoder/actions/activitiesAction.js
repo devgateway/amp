@@ -80,7 +80,12 @@ export const loadActivities = () => {
             FIELD_ACTIVITY_DATE,
             FIELD_PROJECT_NUMBER,
             FIELD_LOCATION,
-            FIELD_PROJECT_DESCRIPTION]
+            FIELD_PROJECT_DESCRIPTION],
+        filters : {
+            'administrative-level-0': [96, -999999999]
+        },
+        recordsPerPage : -1,
+        'include-location-children': false
     }
 
     return dispatch => {

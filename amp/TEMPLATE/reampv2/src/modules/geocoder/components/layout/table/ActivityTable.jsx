@@ -47,7 +47,7 @@ class ActivityTable extends Component {
             }],
             sizePerPage: 10,
             pageStartIndex: 1,
-            paginationSize: 5,
+            paginationSize: 15,
             prePage: 'Prev',
             nextPage: 'Next',
             firstPage: 'First',

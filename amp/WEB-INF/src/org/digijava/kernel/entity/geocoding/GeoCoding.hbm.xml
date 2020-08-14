@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.kernel.entity.geocoding.GeoCoding" table="AMP_GEO_CODING" lazy="false">
+		<cache usage="read-write" />
+		<id name="id" type="long">
+			<generator class="native">
+				<param name="sequence">AMP_GEO_CODING_SEQ</param>
+			</generator>
+		</id>
+		<many-to-one name="teamMember" column="TEAM_MEMBER_ID"
+					 class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none" lazy="false"
+					 not-null="true" />
+		<list name="activities" lazy="false" inverse="true" cascade="all-delete-orphan">
+			<cache usage="read-write" />
+			<key column="GEO_CODING_ID" />
+			<list-index column="INDEX" />
+			<one-to-many class="org.digijava.kernel.entity.geocoding.GeoCodedActivity" />
+		</list>
+	</class>
+</hibernate-mapping>

@@ -206,6 +206,8 @@ public class GlobalSettingsConstants {
     
     public static final String AMP_SERVER_ID = "AMP Server ID";
 
+    public static final String GEO_CODER_URL = "Geo coder URL";
+
     public static final String FUZZY_SEARCH_DISTANCE = "Fuzzy search distance";
 
     public static final String WS_PREFIX_SSC = "Workspace prefix for SSC Workspaces";

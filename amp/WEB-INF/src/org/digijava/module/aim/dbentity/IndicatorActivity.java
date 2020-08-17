@@ -45,7 +45,7 @@ public class IndicatorActivity extends IndicatorConnection implements Versionabl
      */
     @PossibleValues(AmpIndicatorRiskRatingsPossibleValuesProvider.class)
     @Interchangeable(fieldTitle = "Risk", importable = true, pickIdOnly = true,
-            fmPath = FMVisibility.PARENT_FM + "/Risk")
+            fmPath = "/Activity Form/M&E/ME Item/Risk")
     private AmpIndicatorRiskRatings risk;
 
     @Interchangeable(fieldTitle = "Log Frame", importable = true, pickIdOnly = true,

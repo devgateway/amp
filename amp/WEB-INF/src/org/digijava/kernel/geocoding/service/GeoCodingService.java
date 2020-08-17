@@ -213,4 +213,15 @@ public class GeoCodingService {
     private AmpTeamMember getPrincipal() {
         return TeamUtil.getCurrentAmpTeamMember();
     }
+
+    public void changeLocationStatus(Long ampActivityId, Long acvlId, Boolean accepted) {
+        GeoCodingProcess geoCoding = getGeoCodingProcess();
+        if (geoCoding != null && geoCoding.getTeamMember().equals(getPrincipal())) {
+            geoCoding.getActivities().stream()
+                    .filter(a -> a.getActivity().getAmpActivityId().equals(ampActivityId))
+                    .flatMap(a -> a.getLocations().stream())
+                    .filter(l -> l.getLocation().getId().equals(acvlId))
+                    .forEach(l -> l.setAccepted(accepted));
+        }
+    }
 }

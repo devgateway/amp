@@ -175,7 +175,7 @@ public class ResourceService {
         try {
             QueryManager queryManager = session.getWorkspace().getQueryManager();
             Query query = queryManager.createQuery(String.format("SELECT * FROM nt:base WHERE %s "
-                    + "IS NOT NULL AND " + CrConstants.PROPERTY_CONTENT_TYPE +" IS NOT NULL "
+                    + "IS NOT NULL AND " + CrConstants.PROPERTY_CONTENT_TYPE + " IS NOT NULL "
                     + "AND jcr:path LIKE '/%s/%%/'", CrConstants.PROPERTY_CREATOR, path), Query.SQL);
             NodeIterator nodes = query.execute().getNodes();
             while (nodes.hasNext()) {

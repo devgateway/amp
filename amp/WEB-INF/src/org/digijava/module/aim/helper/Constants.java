@@ -317,6 +317,7 @@ public final class Constants {
     public static final String MY_LINKS = "myLinks";
     //public static final String MOST_RECENT_RESOURCES_UUIDS = "recentResources_uuid"; // BoundedList of most-recently-visited-resources
     public static final String MOST_RECENT_RESOURCES = "recentResources"; // BoundedList of most-recently-visited-resources
+    public static final Integer MAX_MOST_RECENT_RESOURCES = 5;
     public static final String MY_TEAM_MEMBERS = "myTeamMembers";
     public static final String MY_DOCUMENTS = "myDocuments";
     public static final String MY_LAST_VERSIONS = "lastVersions";

@@ -1,6 +1,7 @@
 {
   "amp.geocoder:resetAll": "Reset All",
   "amp.geocoder:projectList": "Project List",
+  "amp.geocoder:geocodedSelection": "GeoCoded Selection",
   "amp.geocoder:selectProjects": "Select Projects",
   "amp.geocoder:settings": "Settings",
   "amp.geocoder:resetAll": "Reset All",

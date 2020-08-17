@@ -58,8 +58,8 @@ public class ResourceService {
         }
 
         try {
-            if (!readNode.hasProperty(CrConstants.PROPERTY_CM_DOCUMENT_TYPE)) {
-                ApiErrorResponseService.reportResourceNotFound(ResourceErrors.RESOURCE_NOT_VALID);
+            if (!readNode.hasProperty(CrConstants.PROPERTY_CONTENT_TYPE)) {
+                ApiErrorResponseService.reportResourceNotFound(ResourceErrors.RESOURCE_NOT_VALID.withDetails(uuid));
             }
         } catch (RepositoryException e) {
             return new JsonApiResponse(ApiError.toError(ResourceErrors.RESOURCE_ERROR));
@@ -173,7 +173,7 @@ public class ResourceService {
         try {
             QueryManager queryManager = session.getWorkspace().getQueryManager();
             Query query = queryManager.createQuery(String.format("SELECT * FROM nt:base WHERE %s "
-                    + "IS NOT NULL AND " + CrConstants.PROPERTY_CONTENT_TYPE +" IS NOT NULL "
+                    + "IS NOT NULL AND " + CrConstants.PROPERTY_CONTENT_TYPE + " IS NOT NULL "
                     + "AND jcr:path LIKE '/%s/%%/'", CrConstants.PROPERTY_CREATOR, path), Query.SQL);
             NodeIterator nodes = query.execute().getNodes();
             while (nodes.hasNext()) {

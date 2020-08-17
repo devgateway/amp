@@ -20,12 +20,6 @@ import org.digijava.module.contentrepository.helper.DocumentData;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
-import javax.jcr.Node;
-import javax.jcr.Property;
-import javax.ws.rs.core.Response;
-import java.util.Calendar;
-import java.util.Comparator;
-
 /**
  *
  * @author Alex Gartner
@@ -63,7 +57,8 @@ public class DownloadFile extends Action {
                     }
                 };
 
-                request.getSession().setAttribute(Constants.MOST_RECENT_RESOURCES, new BoundedList<DocumentData>(5, documentDataComparator));
+                request.getSession().setAttribute(Constants.MOST_RECENT_RESOURCES,
+                        new BoundedList<DocumentData>(Constants.MAX_MOST_RECENT_RESOURCES, documentDataComparator));
             }
 
             NodeWrapper nodeWrapper = new NodeWrapper(node);

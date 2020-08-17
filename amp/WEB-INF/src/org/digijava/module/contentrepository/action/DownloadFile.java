@@ -38,11 +38,6 @@ public class DownloadFile extends Action {
             if (node == null) {
                 throw new RuntimeException("node with uuid = " + nodeUUID + " not found!");
             }
-            if (!node.hasProperty("ampdoc:cmDocType")) {
-                response.setStatus(Response.Status.BAD_REQUEST.getStatusCode());
-                response.getWriter().println(ResourceErrors.RESOURCE_NOT_VALID.description);
-                return null;
-            }
 
             Property contentType = node.getProperty(CrConstants.PROPERTY_CONTENT_TYPE);
             Property name = node.getProperty(CrConstants.PROPERTY_NAME);

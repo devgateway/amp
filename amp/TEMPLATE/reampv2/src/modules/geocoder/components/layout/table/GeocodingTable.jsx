@@ -3,11 +3,10 @@ import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
-import TableActions from "./ActivityActions";
+import GeocodingActionColumn from "./GeocodingActionColumn";
 
 import './table.css';
 import Locations from "./Locations";
-import {loadActivities} from "../../../actions/activitiesAction";
 
 class GeocodingTable extends Component {
     constructor(props) {
@@ -22,12 +21,50 @@ class GeocodingTable extends Component {
         this.setState({ selectedRowAction: selectedRowId });
     };
 
+    expandComponent(row) {
+        return (
+            <div>
+                <Locations/>
+            </div>
+        );
+    }
+
+    expandColumnComponent({ isExpandableRow, isExpanded }) {
+        let content = '';
+
+        if (isExpandableRow) {
+            content = (isExpanded ? '(-)' : '(+)' );
+        } else {
+            content = ' ';
+        }
+
+        return (
+            <div>
+            <GeocodingActionColumn onActionClick={this.handleActionsClick} />
+            {content}
+            </div>
+        );
+    }
+
+    isExpandableRow(row) {
+        if (row.id < 2) return true;
+        else return false;
+    }
+
 
     render() {
         let expandRow = {
             onlyOneExpanding: true,
             renderer: row => (
-                <Locations/>
+                <Locations activityId={row.activity_id}/>
+            ),
+            showExpandColumn: true,
+            expandByColumnOnly: true,
+            expandColumnPosition: 'right',
+            expandColumnRenderer: ({ expanded, rowKey, expandable }) => (
+                <GeocodingActionColumn
+                    activityId={rowKey}
+                />
             )
         };
 
@@ -52,7 +89,7 @@ class GeocodingTable extends Component {
 
         let columns = [
             {
-                dataField: "col1",
+                dataField: "project_date",
                 text: "Date",
                 sort: true,
                 headerStyle: () => {
@@ -60,7 +97,7 @@ class GeocodingTable extends Component {
                 }
             },
             {
-                dataField: "col2",
+                dataField: "project_number",
                 text: "Project Number",
                 headerStyle: () => {
                     return { width: "20%" };
@@ -68,7 +105,7 @@ class GeocodingTable extends Component {
                 sort:true
             },
             {
-                dataField: "col3",
+                dataField: "project_title",
                 text: "Project Name",
                 headerStyle: () => {
                     return { width: "50%" };
@@ -76,43 +113,33 @@ class GeocodingTable extends Component {
                 sort:true
             },
             {
-                dataField: "col4",
+                dataField: "location",
                 text: "Location",
                 headerStyle: () => {
                     return { width: "15%" };
                 },
                 sort:true
             },
-            {
-                dataField: "actions",
-                text: "Actions",
-                formatExtraData: this.state.selectedRowAction,
-                formatter: (cell, row, rowIndex, formatExtraData) => {
-                    return (
-                        <TableActions
-                            isOpen={formatExtraData === row.id ? true : false}
-                            onActionClick={this.handleActionsClick}
-                            rowId={row.id}
-                        />
-                    );
-                },
-                headerStyle: () => {
-                    return { width: "5%" };
-                },
-            }
         ];
 
         return (
             <div className="activity-table">
                 <BootstrapTable
-                    keyField="id"
+                    keyField="activity_id"
                     scrollY
                     data={this.props.activities}
                     maxHeight="200px"
                     columns={columns}
                     classes="table-striped"
                     expandRow={expandRow}
+                    expandableRow={ this.isExpandableRow }
+                    expandComponent={ this.expandComponent }
                     pagination={paginationFactory(options)}
+                    expandColumnOptions={ {
+                        expandColumnVisible: true,
+                        expandColumnComponent: this.expandColumnComponent,
+                        columnWidth: '200px'
+                    } }
                 />
             </div>
         );
@@ -121,7 +148,7 @@ class GeocodingTable extends Component {
 
 const mapStateToProps = state => {
     return {
-        activities: state.geocodingReducer.geocoding.activities,
+        activities: state.geocodingReducer.activities,
     };
 };
 

@@ -1,10 +1,18 @@
 import {
-    FETCH_GEOCODING_ERROR, FETCH_GEOCODING_PENDING, FETCH_GEOCODING_SUCCESS
+    FETCH_GEOCODING_ERROR,
+    FETCH_GEOCODING_PENDING,
+    FETCH_GEOCODING_SUCCESS, GEOCODING_LOCATION_ERROR,
+    GEOCODING_LOCATION_PENDING,
+    GEOCODING_LOCATION_SUCCESS, GEOCODING_RESET_ALL_ERROR, GEOCODING_RESET_ALL_PENDING, GEOCODING_RESET_ALL_SUCCESS
 } from '../actions/geocodingAction';
 
 const initialState = {
     pending: true,
-    geocoding: [],
+    reset_pending: false,
+    status : "NOT_AVAILABLE",
+    creator: null,
+    workspace: null,
+    activities : [],
     error: null
 };
 
@@ -19,7 +27,7 @@ export default function geocodingReducer(state = initialState, action) {
             return {
                 ...state,
                 pending: false,
-                geocoding: action.payload,
+                ...action.payload,
             };
         case FETCH_GEOCODING_ERROR:
             return {
@@ -27,7 +35,87 @@ export default function geocodingReducer(state = initialState, action) {
                 pending: false,
                 error: action.error,
             };
+        case GEOCODING_LOCATION_PENDING:
+            return {
+                ...state,
+                activities: updateActivity(state.activities, action)
+            };
+        case GEOCODING_LOCATION_SUCCESS:
+            return {
+                ...state,
+                pending: false,
+                activities: updateActivity(state.activities, action)
+            };
+        case GEOCODING_LOCATION_ERROR:
+            return {
+                ...state,
+                pending: false,
+                activities: updateActivity(state.activities, action)
+            };
+        case GEOCODING_RESET_ALL_PENDING:
+            return {
+                ...state,
+                reset_pending: true,
+            };
+        case GEOCODING_RESET_ALL_SUCCESS:
+            return {
+                ...state,
+                reset_pending: false,
+                activities: resetAll(state.activities)
+            };
+        case GEOCODING_RESET_ALL_ERROR:
+            return {
+                ...state,
+                reset_pending: false,
+                error: action.error,
+            };
         default:
             return state;
     }
+}
+
+function updateActivity(activities, action) {
+    return activities.map( (item, id) => {
+        if(item.activity_id === action.payload.activity_id) {
+            return {
+                ...item,
+                locations: updateLocation(item.locations, action)
+            };
+        }
+
+        return item;
+    });
+}
+
+function updateLocation(locations, action) {
+    return locations.map((item, id) => {
+        if(item.id === action.payload.location_id) {
+            return {
+                ...item,
+                status: action.payload.status,
+                pending: false
+            };
+        }
+
+        return item;
+    });
+}
+
+function resetAll(activities) {
+    return activities.map((item, id) => {
+        return {
+            ...item,
+            locations: resetLocations(item.locations)
+        };
+    });
+}
+
+function resetLocations(locations) {
+    return locations.map((item, id) => {
+        return {
+            ...item,
+            status: null,
+            pending: false
+        };
+    });
 }

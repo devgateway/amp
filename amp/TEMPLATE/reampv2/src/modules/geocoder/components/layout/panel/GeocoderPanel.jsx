@@ -54,21 +54,27 @@ class GeocoderPanel extends Component {
     }
 
     render() {
-        const {translations} = this.context;
+        let {translations} = this.context;
 
-        const isGeocodingNotAvailable = this.props.geocoding.status === 'NOT_AVAILABLE';
-        const isGeocodingAvailable = this.props.geocoding.status === 'AVAILABLE';
-        const isGeocodingRunning = this.props.geocoding.status === 'RUNNING';
-        const isGeocodingCompleted = this.props.geocoding.status === 'COMPLETED';
+        let isGeocodingNotAvailable = this.props.geocoding.status === 'NOT_AVAILABLE';
+        let isGeocodingAvailable = this.props.geocoding.status === 'AVAILABLE';
+        let isGeocodingRunning = this.props.geocoding.status === 'RUNNING';
+        let isGeocodingCompleted = this.props.geocoding.status === 'COMPLETED';
+
+        let title = translations['amp.geocoder:projectList'];
+
+        if (isGeocodingAvailable) {
+            title = title +  ' - ' + translations['amp.geocoder:geocodedSelection'];
+        }
 
         return (
             <div>
             {isGeocodingNotAvailable && <GeocodingNotAvailable user={this.props.geocoding.creator} workspace={this.props.geocoding.workspace}/>}
             {(isGeocodingCompleted || isGeocodingAvailable) &&
                 <div>
-                    <ProjectList title={translations['amp.geocoder:projectList']}/>
+                    <ProjectList title={title}/>
                     <div className='panel panel-default'>
-                        <GeocoderHeader selectedActivities={this.state.selectedActivities}/>
+                        <GeocoderHeader selectedActivities={this.state.selectedActivities} />
                         {isGeocodingAvailable && <GeocodingTable/>}
                         {isGeocodingCompleted && <ActivityTable onSelectActivity={this.onSelectActivity.bind(this)}
                                                                 onSelectAllActivities={this.onSelectAllActivities.bind(this)}
@@ -86,7 +92,7 @@ GeocoderPanel.contextType = TranslationContext;
 
 const mapStateToProps = state => {
     return {
-        geocoding: state.geocodingReducer.geocoding,
+        geocoding: state.geocodingReducer,
     };
 };
 

@@ -8,8 +8,8 @@
 				<param name="sequence">AMP_GEO_CODED_ACTIVITY_SEQ</param>
 			</generator>
 		</id>
-		<many-to-one name="geoCoding" column="GEO_CODING_ID"
-					 class="org.digijava.kernel.entity.geocoding.GeoCoding" cascade="none" lazy="false"
+		<many-to-one name="geoCodingProcess" column="GEO_CODING_ID"
+					 class="org.digijava.kernel.entity.geocoding.GeoCodingProcess" cascade="none" lazy="false"
 					 not-null="true" />
 		<property name="queueId" column="QUEUE_ID" type="long" not-null="true" />
 		<many-to-one name="activity" class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none"

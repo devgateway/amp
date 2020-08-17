@@ -20,7 +20,7 @@ public class GeoCodedActivity {
     private Long id;
 
     @JsonIgnore
-    private GeoCoding geoCoding;
+    private GeoCodingProcess geoCodingProcess;
 
     /**
      * Queue Id on geo coding server. Used to retrieve results.
@@ -65,12 +65,12 @@ public class GeoCodedActivity {
         this.id = id;
     }
 
-    public GeoCoding getGeoCoding() {
-        return geoCoding;
+    public GeoCodingProcess getGeoCodingProcess() {
+        return geoCodingProcess;
     }
 
-    public void setGeoCoding(GeoCoding geoCoding) {
-        this.geoCoding = geoCoding;
+    public void setGeoCodingProcess(GeoCodingProcess geoCodingProcess) {
+        this.geoCodingProcess = geoCodingProcess;
     }
 
     public Long getQueueId() {

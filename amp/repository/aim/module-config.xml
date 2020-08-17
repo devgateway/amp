@@ -265,7 +265,7 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpOfflineChangelog</hibernate-class>
 
 		<!-- Geo Coding -->
-		<hibernate-class>org.digijava.kernel.entity.geocoding.GeoCoding</hibernate-class>
+		<hibernate-class>org.digijava.kernel.entity.geocoding.GeoCodingProcess</hibernate-class>
 		<hibernate-class>org.digijava.kernel.entity.geocoding.GeoCodedActivity</hibernate-class>
 		<hibernate-class>org.digijava.kernel.entity.geocoding.GeoCodedLocation</hibernate-class>
 		<hibernate-class>org.digijava.kernel.entity.geocoding.GeoCodedField</hibernate-class>

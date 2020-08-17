@@ -16,7 +16,7 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
  *
  * @author Octavian Ciubotaru
  */
-public class GeoCoding {
+public class GeoCodingProcess {
 
     @JsonIgnore
     private Long id;
@@ -29,10 +29,10 @@ public class GeoCoding {
 
     private List<GeoCodedActivity> activities = new ArrayList<>();
 
-    public GeoCoding() {
+    public GeoCodingProcess() {
     }
 
-    public GeoCoding(AmpTeamMember teamMember) {
+    public GeoCodingProcess(AmpTeamMember teamMember) {
         this.teamMember = teamMember;
     }
 
@@ -61,7 +61,7 @@ public class GeoCoding {
     }
 
     public void addActivity(GeoCodedActivity activity) {
-        activity.setGeoCoding(this);
+        activity.setGeoCodingProcess(this);
         activities.add(activity);
     }
 }

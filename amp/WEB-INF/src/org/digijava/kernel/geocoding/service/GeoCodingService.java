@@ -8,10 +8,11 @@ import java.util.Set;
 import org.digijava.kernel.entity.geocoding.GeoCodedActivity;
 import org.digijava.kernel.entity.geocoding.GeoCodedField;
 import org.digijava.kernel.entity.geocoding.GeoCodedLocation;
-import org.digijava.kernel.entity.geocoding.GeoCoding;
+import org.digijava.kernel.entity.geocoding.GeoCodingProcess;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.geocoding.client.GeoCoderClient;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -30,18 +31,26 @@ public class GeoCodingService {
 
     private static GeoCoderClient client = new GeoCoderClient();
 
+    /**
+     * Add activities to be geo coded as part of the current process. If the same activity is added twice, previous
+     * geo coding information about activity is removed and the activity is geo coded again.
+     *
+     * @param activityIds activities to geo code
+     * @throws GeoCodingNotAvailableException if geo coding is in use by someone else
+     * @throws GeneralGeoCodingException if activity cannot be loaded or it already has locations assigned
+     */
     public void processActivities(Set<Long> activityIds) {
-        GeoCoding geoCoding = getCurrentGeoCoding();
+        GeoCodingProcess geoCodingProcess = getCurrentGeoCoding();
 
         AmpTeamMember principal = getPrincipal();
 
-        if (geoCoding != null && !geoCoding.getTeamMember().equals(principal)) {
-            throw new GeoCodingNotAvailableException(geoCoding.getTeamMember());
+        if (geoCodingProcess != null && !geoCodingProcess.getTeamMember().equals(principal)) {
+            throw new GeoCodingNotAvailableException(geoCodingProcess.getTeamMember());
         }
 
-        if (geoCoding == null) {
-            geoCoding = new GeoCoding(principal);
-            PersistenceManager.getSession().save(geoCoding);
+        if (geoCodingProcess == null) {
+            geoCodingProcess = new GeoCodingProcess(principal);
+            PersistenceManager.getSession().save(geoCodingProcess);
         }
 
         // TODO update locations only if changed
@@ -51,7 +60,7 @@ public class GeoCodingService {
         for (Long activityId : activityIds) {
             try {
                 AmpActivityVersion v = ActivityUtil.loadActivity(activityId);
-                if (!v.getLocations().isEmpty()) {
+                if (locationsAreAlreadyAssigned(v)) {
                     throw new GeneralGeoCodingException(
                             "Activity with id " + activityId + " already has locations assigned.");
                 }
@@ -67,7 +76,7 @@ public class GeoCodingService {
             Long queueId = queueIds.get(i);
             AmpActivityVersion activity = activities.get(i);
 
-            GeoCodedActivity geoCodedActivity = geoCoding.getActivities().stream()
+            GeoCodedActivity geoCodedActivity = geoCodingProcess.getActivities().stream()
                     .filter(a -> a.getActivity().getAmpActivityId().equals(activity.getAmpActivityId()))
                     .findFirst()
                     .orElse(null);
@@ -77,37 +86,48 @@ public class GeoCodingService {
                 geoCodedActivity.setStatus(GeoCodedActivity.Status.RUNNING);
                 geoCodedActivity.getLocations().clear();
             } else {
-                geoCoding.addActivity(new GeoCodedActivity(queueId, activity));
+                geoCodingProcess.addActivity(new GeoCodedActivity(queueId, activity));
             }
         }
 
         PersistenceManager.getSession().flush();
     }
 
-    /**
-     * Returns current geo coding. Also, updates activities that were geo coded.
-     *
-     * If another team member is in geo coding process, then return null.
-     *
-     * @return geo coding status if there the process was started
-     *         null - if geo coding process did not start yet or already started but for another user
-     */
-    public GeoCoding getProcessingStatus() {
-        GeoCoding geoCoding = getCurrentGeoCoding();
+    private boolean locationsAreAlreadyAssigned(AmpActivityVersion v) {
+        return !v.getLocations().stream().allMatch(this::isAtNationalLevel);
+    }
 
-        if (geoCoding != null) {
-            syncGeoCoding(geoCoding);
+    private boolean isAtNationalLevel(AmpActivityLocation ampActivityLocation) {
+        return ampActivityLocation.getLocation().getLocation().getParentLocation() == null;
+    }
+
+    /**
+     * Returns geo coding process. Also, updates activities that were geo coded.
+     *
+     * @return geo coding process if the process was started
+     *         or null if geo coding process did not start yet
+     * @throws GeoCodingNotAvailableException if geo coding is in use by someone else
+     */
+    public GeoCodingProcess getGeoCodingProcess() {
+        GeoCodingProcess geoCodingProcess = getCurrentGeoCoding();
+
+        if (geoCodingProcess != null && !geoCodingProcess.getTeamMember().equals(getPrincipal())) {
+            throw new GeoCodingNotAvailableException(geoCodingProcess.getTeamMember());
         }
 
-        return geoCoding;
+        if (geoCodingProcess != null) {
+            syncGeoCodedActivities(geoCodingProcess);
+        }
+
+        return geoCodingProcess;
     }
 
     /**
      * For all activities that are still being processed, retrieve the result from geo coding server and update the
      * activity to reflect the current status.
      */
-    private void syncGeoCoding(GeoCoding geoCoding) {
-        for (GeoCodedActivity activity : geoCoding.getActivities()) {
+    private void syncGeoCodedActivities(GeoCodingProcess geoCodingProcess) {
+        for (GeoCodedActivity activity : geoCodingProcess.getActivities()) {
             if (activity.getStatus() == GeoCodedActivity.Status.RUNNING) {
                 syncGeoCodedActivity(activity);
             }
@@ -150,7 +170,9 @@ public class GeoCodingService {
     private Set<Long> getAcvlIds(List<GeoCoderClient.GeoCodingResult> geoCodingResults) {
         Set<Long> acvlIds = new HashSet<>();
         for (GeoCoderClient.GeoCodingResult geoCodingResult : geoCodingResults) {
-            acvlIds.addAll(geoCodingResult.getAcvlIds());
+            if (geoCodingResult.getAcvlIds() != null) {
+                acvlIds.addAll(geoCodingResult.getAcvlIds());
+            }
         }
         return acvlIds;
     }
@@ -159,7 +181,7 @@ public class GeoCodingService {
             List<GeoCoderClient.GeoCodingResult> geoCodingResults) {
         GeoCodedLocation l = new GeoCodedLocation(acvl);
         for (GeoCoderClient.GeoCodingResult r : geoCodingResults) {
-            if (r.getAcvlIds().contains(acvl.getId())) {
+            if (r.getAcvlIds() != null && r.getAcvlIds().contains(acvl.getId())) {
                 l.addField(new GeoCodedField(r.getField(), r.getValue()));
             }
         }
@@ -173,19 +195,19 @@ public class GeoCodingService {
      * Accepted locations are not saved.
      */
     public void finishGeoCoding() {
-        GeoCoding geoCoding = getCurrentGeoCoding();
+        GeoCodingProcess geoCodingProcess = getCurrentGeoCoding();
 
-        if (geoCoding != null) {
-            PersistenceManager.getSession().delete(geoCoding);
+        if (geoCodingProcess != null) {
+            PersistenceManager.getSession().delete(geoCodingProcess);
         }
     }
 
-    private GeoCoding getCurrentGeoCoding() {
-        List<GeoCoding> geoCodings = PersistenceManager.getSession()
-                .createCriteria(GeoCoding.class)
+    private GeoCodingProcess getCurrentGeoCoding() {
+        List<GeoCodingProcess> geoCodingProcesses = PersistenceManager.getSession()
+                .createCriteria(GeoCodingProcess.class)
                 .list();
 
-        return geoCodings.isEmpty() ? null : geoCodings.get(0);
+        return geoCodingProcesses.isEmpty() ? null : geoCodingProcesses.get(0);
     }
 
     private AmpTeamMember getPrincipal() {

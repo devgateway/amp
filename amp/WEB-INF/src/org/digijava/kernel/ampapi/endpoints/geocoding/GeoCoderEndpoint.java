@@ -21,7 +21,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
-import org.digijava.kernel.entity.geocoding.GeoCoding;
+import org.digijava.kernel.entity.geocoding.GeoCodingProcess;
 import org.digijava.kernel.geocoding.service.GeneralGeoCodingException;
 import org.digijava.kernel.geocoding.service.GeoCodingNotAvailableException;
 import org.digijava.kernel.geocoding.service.GeoCodingService;
@@ -35,8 +35,9 @@ public class GeoCoderEndpoint {
 
     private final GeoCodingService service = new GeoCodingService();
 
-    @ApiOperation(value = "Geo code activities",
-            notes = "This operation will fail if geo coding is in use by another team member.")
+    @ApiOperation(value = "Add activities to current geo coding process",
+            notes = "If there is no geo coding process yet, this operation will start a new one."
+                    + "\n\nThis operation will fail if geo coding is in use by another team member.")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_NO_CONTENT, message = "success"))
     @ApiMethod(id = "process", authTypes = AuthRule.IN_WORKSPACE)
     @POST
@@ -58,22 +59,29 @@ public class GeoCoderEndpoint {
         return Response.noContent().build();
     }
 
-    @ApiOperation("Returns geo coding status")
+    @ApiOperation(value = "Returns current geo coding process",
+            notes = "This operation will fail if geo coding is in use by another team member.")
     @ApiResponses({
-            @ApiResponse(code = HttpServletResponse.SC_OK, message = "geo coding status", response = GeoCoding.class),
+            @ApiResponse(code = HttpServletResponse.SC_OK, message = "geo coding status", response = GeoCodingProcess.class),
             @ApiResponse(code = HttpServletResponse.SC_NOT_FOUND, message = "no geo coding in progress") })
     @ApiMethod(id = "process", authTypes = AuthRule.IN_WORKSPACE)
     @GET
-    @Path("status")
+    @Path("process")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    public GeoCoding getProcessingStatus() {
-        GeoCoding status = service.getProcessingStatus();
-        if (status == null) {
-            throw new WebApplicationException(
-                    Response.status(Response.Status.NOT_FOUND)
-                            .entity("No geo coding in progress")
-                            .build());
+    public GeoCodingProcess getGeoCodingProcess() {
+        try {
+            GeoCodingProcess process = service.getGeoCodingProcess();
+            if (process == null) {
+                throw new WebApplicationException(
+                        Response.status(Response.Status.NOT_FOUND)
+                                .entity("Geo coding process not started")
+                                .build());
+            }
+            return process;
+        } catch (GeoCodingNotAvailableException e) {
+            ApiErrorResponse apiErrorResponse = ApiError.toError(
+                    GeoCoderEndpointErrors.GEO_CODING_NOT_AVAILABLE.withDetails(e.getTeamMember().toString()));
+            throw new ApiRuntimeException(Response.Status.BAD_REQUEST, apiErrorResponse);
         }
-        return status;
     }
 }

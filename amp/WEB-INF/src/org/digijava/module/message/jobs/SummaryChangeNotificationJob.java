@@ -54,7 +54,7 @@ public class SummaryChangeNotificationJob extends ConnectionCleaningJob implemen
                         for (String receiver : reminderUsers.keySet()) {
                             StringBuffer body = new StringBuffer();
 
-                            User user = UserUtils.getUserByEmail(receiver);
+                            User user = UserUtils.getUserByEmailAddress(receiver);
 
                             for (AmpActivityVersion activity : reminderUsers.get(receiver)) {
 

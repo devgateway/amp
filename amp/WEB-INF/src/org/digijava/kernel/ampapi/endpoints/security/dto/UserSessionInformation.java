@@ -5,14 +5,6 @@ import io.swagger.annotations.ApiModelProperty;
 
 public class UserSessionInformation {
     
-    @JsonProperty("token")
-    @ApiModelProperty(example = "34bf1c55-f2d1-43bb-bef4-e98b6077f66f")
-    private String token;
-    
-    @JsonProperty("token-expiration")
-    @ApiModelProperty(value = "The expiration time in ms", example = "1546859700327")
-    private Long tokenExpiration;
-    
     @JsonProperty("url")
     @ApiModelProperty(value = "The login URL", example = "http://localhost:8080/showLayout.do?layout=login")
     private String url;
@@ -40,22 +32,6 @@ public class UserSessionInformation {
     @JsonProperty("national-coordinator")
     @ApiModelProperty("Clarifies if user is part of the national coordinator group")
     private Boolean nationalCoordinator;
-    
-    public String getToken() {
-        return token;
-    }
-    
-    public void setToken(String token) {
-        this.token = token;
-    }
-    
-    public Long getTokenExpiration() {
-        return tokenExpiration;
-    }
-    
-    public void setTokenExpiration(Long tokenExpiration) {
-        this.tokenExpiration = tokenExpiration;
-    }
     
     public String getUrl() {
         return url;

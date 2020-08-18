@@ -1275,17 +1275,6 @@ public class DgUtil {
     }
 
     /**
-     * Returns user by the specified email
-     * @param email email address
-     * @return user by the specified email
-     * @throws DgException
-     * @deprecated use UserUtils.getUserByEmail() instead
-     */
-    public static User getUserByEmail(String email) throws DgException {
-        return UserUtils.getUserByEmail(email);
-    }
-
-    /**
      * Returns ModuleInstance object, for which request was caled. Return value
      * is the REAL ModuleInstance object, for mapped instances it returns
      * original module instance, not the link.

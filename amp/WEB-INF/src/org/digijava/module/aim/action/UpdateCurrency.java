@@ -17,15 +17,12 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.dbentity.Country;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpCurrencyRate;
 import org.digijava.module.aim.form.CurrencyForm;
-import org.digijava.module.aim.helper.CountryBean;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.util.CurrencyUtil;
-import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
@@ -84,7 +81,8 @@ public class UpdateCurrency extends Action {
                 crForm.setExchangeRateDate(null);
             }
 
-            Collection<AmpCategoryValueLocations> countries = DynLocationManagerUtil.getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+            Collection<AmpCategoryValueLocations> countries = DynLocationManagerUtil.getLocationsByLayer(
+                    CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0);
             crForm.setCountries(countries);
 
             if (crForm.getCurrencyCode() != null && crForm.getDoAction().equals("add")) {

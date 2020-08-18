@@ -110,4 +110,15 @@ public class GeoCoderEndpoint {
         service.saveActivities();
         return Response.noContent().build();
     }
+
+    @ApiOperation("Reset location statuses")
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_NO_CONTENT, message = "success"))
+    @ApiMethod(id = "resetLocationStatuses", authTypes = AuthRule.IN_WORKSPACE)
+    @POST
+    @Path("reset-location-statuses")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    public Response resetLocationStatuses() {
+        service.resetLocationStatuses();
+        return Response.noContent().build();
+    }
 }

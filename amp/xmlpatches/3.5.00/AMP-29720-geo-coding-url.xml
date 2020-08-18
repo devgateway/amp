@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+    xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>AMP-29720</jira>
+    <keyword>global settings</keyword>
+    <author>Octavian</author>
+    <description>add 'Geo coder URL' global settings</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                
+                INSERT INTO amp_global_settings (id, settingsname, settingsvalue, possiblevalues, description, section, internal)
+                VALUES (
+                    nextval('amp_global_settings_seq'), 'Geo coder URL',
+                    'http://localhost:5000/',
+                    '', 'Geo coder service URL', '', true
+                );
+                
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

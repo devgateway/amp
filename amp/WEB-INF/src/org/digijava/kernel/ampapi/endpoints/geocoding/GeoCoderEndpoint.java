@@ -85,4 +85,16 @@ public class GeoCoderEndpoint {
             throw new ApiRuntimeException(Response.Status.BAD_REQUEST, apiErrorResponse);
         }
     }
+
+    @ApiOperation("Change location status")
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_NO_CONTENT, message = "success"))
+    @ApiMethod(id = "process", authTypes = AuthRule.IN_WORKSPACE)
+    @POST
+    @Path("location-status")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    public Response changeLocationStatus(
+            @ApiParam("Save location status request") ChangeLocationStatusRequest request) {
+        service.changeLocationStatus(request.getAmpActivityId(), request.getAcvlId(), request.getAccepted());
+        return Response.noContent().build();
+    }
 }

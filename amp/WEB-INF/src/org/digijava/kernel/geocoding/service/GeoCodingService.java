@@ -287,7 +287,8 @@ public class GeoCodingService {
                 .filter(GeoCodedLocation::getAccepted)
                 .count();
 
-        int scale = FeaturesUtil.getGlobalSettingValueInteger(Constants.GlobalSettings.DECIMAL_LOCATION_PERCENTAGES_DIVIDE);
+        int scale = FeaturesUtil.getGlobalSettingValueInteger(
+                Constants.GlobalSettings.DECIMAL_LOCATION_PERCENTAGES_DIVIDE);
 
         PercentagesUtil.SplitResult split = PercentagesUtil.split(ONE_HUNDRED, numLocations, scale);
 

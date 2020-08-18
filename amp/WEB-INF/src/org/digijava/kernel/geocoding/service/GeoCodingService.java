@@ -1,10 +1,14 @@
 package org.digijava.kernel.geocoding.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.dgfoundation.amp.onepager.util.PercentagesUtil;
+import org.dgfoundation.amp.onepager.util.SaveContext;
 import org.digijava.kernel.entity.geocoding.GeoCodedActivity;
 import org.digijava.kernel.entity.geocoding.GeoCodedField;
 import org.digijava.kernel.entity.geocoding.GeoCodedLocation;
@@ -12,13 +16,20 @@ import org.digijava.kernel.entity.geocoding.GeoCodingProcess;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.geocoding.client.GeoCoderClient;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.startup.AMPStartupListener;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.hibernate.FlushMode;
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,6 +39,8 @@ import org.slf4j.LoggerFactory;
 public class GeoCodingService {
 
     private static final Logger logger = LoggerFactory.getLogger(GeoCodingService.class);
+
+    private static final BigDecimal ONE_HUNDRED = BigDecimal.valueOf(100);
 
     private static GeoCoderClient client = new GeoCoderClient();
 
@@ -223,5 +236,106 @@ public class GeoCodingService {
                     .filter(l -> l.getLocation().getId().equals(acvlId))
                     .forEach(l -> l.setAccepted(accepted));
         }
+    }
+
+    public void saveActivities() {
+        Session session = PersistenceManager.getSession();
+        session.setFlushMode(FlushMode.MANUAL);
+
+        GeoCodingProcess geoCoding = getGeoCodingProcess();
+        if (geoCoding != null) {
+            Iterator<GeoCodedActivity> iterator = geoCoding.getActivities().iterator();
+            while (iterator.hasNext()) {
+                GeoCodedActivity activity = iterator.next();
+                if (allLocationsHaveStatusSet(activity)) {
+                    if (acceptedLocationsExist(activity)) {
+                        updateActivity(activity);
+                    }
+                    iterator.remove();
+                }
+            }
+        }
+    }
+
+    private boolean acceptedLocationsExist(GeoCodedActivity activity) {
+        return activity.getLocations().stream().anyMatch(l -> l.getAccepted() == Boolean.TRUE);
+    }
+
+    private boolean allLocationsHaveStatusSet(GeoCodedActivity activity) {
+        return activity.getLocations().stream().allMatch(l -> l.getAccepted() != null);
+    }
+
+    private void updateActivity(GeoCodedActivity geoCodedActivity) {
+
+        AmpActivityVersion activity = geoCodedActivity.getActivity();
+
+        if (locationsAreAlreadyAssigned(activity)) {
+            throw new GeneralGeoCodingException("Locations are already assigned!");
+        }
+
+        updateCategoryValues(geoCodedActivity, activity);
+
+        updateLocations(geoCodedActivity, activity);
+
+        org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivity(activity, null, getPrincipal(),
+                SiteUtils.getDefaultSite(), new java.util.Locale("en"),
+                AMPStartupListener.SERVLET_CONTEXT_ROOT_REAL_PATH, activity.getDraft(), SaveContext.job());
+    }
+
+    private void updateLocations(GeoCodedActivity geoCodedActivity, AmpActivityVersion activity) {
+        int numLocations = (int) geoCodedActivity.getLocations().stream()
+                .filter(GeoCodedLocation::getAccepted)
+                .count();
+
+        int scale = FeaturesUtil.getGlobalSettingValueInteger(Constants.GlobalSettings.DECIMAL_LOCATION_PERCENTAGES_DIVIDE);
+
+        PercentagesUtil.SplitResult split = PercentagesUtil.split(ONE_HUNDRED, numLocations, scale);
+
+        activity.getLocations().clear();
+
+        for (GeoCodedLocation geoCodedLocation : geoCodedActivity.getLocations()) {
+            if (geoCodedLocation.getAccepted()) {
+                AmpActivityLocation activityLocation = new AmpActivityLocation();
+                activityLocation.setLocationPercentage(split.getValueFor(activity.getLocations().size()).floatValue());
+                activityLocation.setLocation(
+                        LocationUtil.getAmpLocationByCVLocation(geoCodedLocation.getLocation().getId()));
+                activity.addLocation(activityLocation);
+            }
+        }
+    }
+
+    private void updateCategoryValues(GeoCodedActivity geoCodedActivity, AmpActivityVersion activity) {
+        AmpCategoryValue implementationLocation = getImplementationLocation(geoCodedActivity);
+        AmpCategoryValue implementationLevel = getImplementationLevel(implementationLocation);
+
+        replaceCategoryValue(activity, implementationLocation);
+        replaceCategoryValue(activity, implementationLevel);
+    }
+
+    private void replaceCategoryValue(AmpActivityVersion activity, AmpCategoryValue cv) {
+        activity.getCategories().removeIf(c -> c.getAmpCategoryClass().equals(cv.getAmpCategoryClass()));
+        activity.getCategories().add(cv);
+    }
+
+    private AmpCategoryValue getImplementationLevel(AmpCategoryValue implementationLocation) {
+        Iterator<AmpCategoryValue> iterator = implementationLocation.getUsedValues().iterator();
+        if (iterator.hasNext()) {
+            return iterator.next();
+        } else {
+            throw new GeneralGeoCodingException("Could not determine implementation level.");
+        }
+    }
+
+    private AmpCategoryValue getImplementationLocation(GeoCodedActivity geoCodedActivity) {
+        AmpCategoryValue implementationLocation = null;
+        for (GeoCodedLocation location : geoCodedActivity.getLocations()) {
+            AmpCategoryValue cat = location.getLocation().getParentCategoryValue();
+            if (implementationLocation == null) {
+                implementationLocation = cat;
+            } else if (!implementationLocation.equals(cat)) {
+                throw new GeneralGeoCodingException("Different implementation levels selected");
+            }
+        }
+        return implementationLocation;
     }
 }

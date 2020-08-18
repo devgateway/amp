@@ -14,8 +14,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
-import org.apache.struts.mock.MockHttpServletRequest;
-import org.apache.struts.mock.MockHttpSession;
+import org.dgfoundation.amp.testutils.TransactionUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldInfoProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldsEnumerator;
@@ -24,10 +23,6 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
-import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.request.SiteDomain;
-import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
@@ -60,16 +55,7 @@ public class PossibleValuesEnumeratorTest {
 
     @Before
     public void setup() throws WorkerException {
-        MockHttpServletRequest mockRequest = new MockHttpServletRequest(new MockHttpSession());
-
-        Site site = new Site("Test Site", "1");
-        site.setDefaultLanguage(new Locale("en", "English"));
-
-        SiteDomain siteDomain = new SiteDomain();
-        siteDomain.setSite(site);
-        siteDomain.setDefaultDomain(true);
-
-        TLSUtils.populate(mockRequest, siteDomain);
+        TransactionUtil.setUpWorkspaceEmptyPrefixes();
 
         when(provider.getType(any())).thenAnswer(invocation -> {
             Field f = (Field) invocation.getArguments()[0];

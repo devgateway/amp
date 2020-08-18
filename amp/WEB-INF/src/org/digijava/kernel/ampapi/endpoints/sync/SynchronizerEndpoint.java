@@ -1,7 +1,10 @@
 package org.digijava.kernel.ampapi.endpoints.sync;
 
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
+import static org.digijava.kernel.translator.util.TrnUtil.DEFAULT;
+import static org.digijava.kernel.translator.util.TrnUtil.PREFIX;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,10 +26,12 @@ import org.digijava.kernel.ampapi.endpoints.exception.AmpWebApplicationException
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.types.ISO8601TimeStamp;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.services.sync.SyncService;
 import org.digijava.kernel.services.sync.model.ExchangeRatesDiff;
 import org.digijava.kernel.services.sync.model.SystemDiff;
 import org.digijava.kernel.services.sync.model.Translation;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.SpringUtil;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.util.TeamUtil;
@@ -87,6 +92,28 @@ public class SynchronizerEndpoint {
             @QueryParam("last-sync-time") ISO8601TimeStamp lastSyncTime) {
         List<Translation> translations = syncService.getTranslationsToSync(lastSyncTime);
         return TranslationUtil.groupByLabelAndLocale(translations);
+    }
+
+    @GET
+    @Path("/translationsWithPrefix")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "", ui = false, authTypes = {AuthRule.AMP_OFFLINE})
+    @ApiOperation(
+            value = "Returns translations that were changed since last sync.",
+            notes = "")
+    public Map<String, Map<String, Map<String, String>>> getTranslationsToSyncWithPrefix(
+            @QueryParam("last-sync-time") ISO8601TimeStamp lastSyncTime) {
+
+        List<Translation> translations = syncService.getTranslationsToSync(lastSyncTime);
+        List<String> prefixes = TranslatorWorker.getAllPrefixes();
+        Map<String, Map<String, String>> noPrefixTranslations = TranslationUtil.groupByLabelAndLocale(translations);
+        Map<String, Map<String, Map<String, String>>> allTranslations = new HashMap<>();
+        allTranslations.put(DEFAULT, noPrefixTranslations);
+        prefixes.forEach(prefix -> {
+            TLSUtils.getRequest().setAttribute(PREFIX, prefix);
+            allTranslations.put(prefix, TranslationUtil.groupByLabelAndLocale(translations));
+        });
+        return allTranslations;
     }
 
     @GET

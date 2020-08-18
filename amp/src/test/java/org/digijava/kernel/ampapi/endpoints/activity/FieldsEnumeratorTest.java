@@ -35,6 +35,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableSet;
 
+import org.dgfoundation.amp.testutils.TransactionUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIType;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldInfoProvider;
@@ -46,11 +47,12 @@ import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.kernel.ampapi.endpoints.common.values.ValueConverter;
 import org.digijava.kernel.ampapi.endpoints.dto.UnwrappedTranslations;
+import org.digijava.kernel.ampapi.endpoints.dto.UnwrappedTranslationsByWorkspacePrefix;
 import org.digijava.kernel.ampapi.endpoints.resource.dto.AmpResource;
 import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.kernel.ampapi.filters.ClientMode;
-import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.services.sync.model.SyncConstants;
+import org.digijava.kernel.translator.util.TrnUtil;
 import org.digijava.kernel.validators.ValidatorUtil;
 import org.digijava.kernel.validators.activity.TreeCollectionValidator;
 import org.digijava.kernel.validators.common.RequiredValidator;
@@ -103,7 +105,9 @@ public class FieldsEnumeratorTest {
         fmService = new TestFMService();
         provider = new TestFieldInfoProvider();
 
-        when(throwingTranslatorService.getAllTranslationOfBody(any(), any())).thenThrow(new WorkerException());
+        TransactionUtil.setUpWorkspaceEmptyPrefixes();
+
+        when(throwingTranslatorService.getAllTranslationOfBody(any(), any())).thenThrow(new RuntimeException());
 
         when(emptyTranslatorService.getAllTranslationOfBody(any(), any())).thenReturn(Collections.emptyList());
 
@@ -651,21 +655,21 @@ public class FieldsEnumeratorTest {
                 .getAllAvailableFields(OneFieldClass.class);
 
         assertEquals(1, fields.size());
-        assertEquals("One Field", fields.get(0).getFieldLabel().get("EN"));
+        assertEquals("One Field", fields.get(0).getFieldLabel().get(TrnUtil.DEFAULT, "en"));
     }
 
     @Test
     public void testNonEmptyChildren() {
         String originalJson = "[{\"field_name\":\"field\"," +
                 "\"field_type\":\"object\"," +
-                "\"field_label\":{\"en\":\"field en\",\"fr\":\"field fr\"}," +
+                "\"field_label\":{\"default\":{\"en\":\"field en\",\"fr\":\"field fr\"}}," +
                 "\"required\":\"N\"," +
                 "\"importable\":false," +
                 "\"id\":false," +
                 "\"children\":[{" +
                     "\"field_name\":\"field\"," +
                     "\"field_type\":\"long\"," +
-                    "\"field_label\":{\"en\":\"field en\",\"fr\":\"field fr\"}," +
+                    "\"field_label\":{\"default\":{\"en\":\"field en\",\"fr\":\"field fr\"}}," +
                     "\"required\":\"N\"," +
                     "\"importable\":false," +
                     "\"id\":false" +
@@ -684,7 +688,7 @@ public class FieldsEnumeratorTest {
     public void testEmptyChildren() {
         String originalJson = "[{\"field_name\":\"field\"" +
                 ",\"field_type\":\"long\"," +
-                "\"field_label\":{\"en\":\"field en\",\"fr\":\"field fr\"}," +
+                "\"field_label\":{\"default\":{\"en\":\"field en\",\"fr\":\"field fr\"}}," +
                 "\"required\":\"N\"," +
                 "\"importable\":false," +
                 "\"id\":false}]";
@@ -982,10 +986,12 @@ public class FieldsEnumeratorTest {
                 actual.stream().map(this::digest).collect(Collectors.toList()));
     }
 
-    private UnwrappedTranslations fieldLabelFor(String baseText) {
-        return new UnwrappedTranslations()
+    private UnwrappedTranslationsByWorkspacePrefix fieldLabelFor(String baseText) {
+        UnwrappedTranslationsByWorkspacePrefix trn = new UnwrappedTranslationsByWorkspacePrefix();
+        trn.set(TrnUtil.DEFAULT, new UnwrappedTranslations()
                 .set("en", baseText + " en")
-                .set("fr", baseText + " fr");
+                .set("fr", baseText + " fr"));
+        return trn;
     }
 
     private <T> String digest(T obj) {

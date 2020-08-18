@@ -9,6 +9,7 @@ import static org.junit.Assert.*;
 import java.util.Set;
 
 import org.dgfoundation.amp.activity.builder.ActivityBuilder;
+import org.dgfoundation.amp.testutils.TransactionUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.persistence.InMemoryCategoryValuesManager;
 import org.digijava.kernel.persistence.InMemoryLocationManager;
@@ -34,6 +35,7 @@ public class TreeCollectionValidatorTest {
         InMemoryCategoryValuesManager categoryValues = InMemoryCategoryValuesManager.getInstance();
         locationManager = InMemoryLocationManager.getInstance();
 
+        TransactionUtil.setUpWorkspaceEmptyPrefixes();
         activityField = ValidatorUtil.getMetaData();
     }
 

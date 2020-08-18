@@ -201,13 +201,10 @@ public class GeoCodingService {
         return l;
     }
 
-    public void assignLocationsToActivities() {
-    }
-
     /**
      * Accepted locations are not saved.
      */
-    public void finishGeoCoding() {
+    public void cancelGeoCoding() {
         GeoCodingProcess geoCodingProcess = getCurrentGeoCoding();
 
         if (geoCodingProcess != null) {

@@ -62,7 +62,8 @@ public class GeoCoderEndpoint {
     @ApiOperation(value = "Returns current geo coding process",
             notes = "This operation will fail if geo coding is in use by another team member.")
     @ApiResponses({
-            @ApiResponse(code = HttpServletResponse.SC_OK, message = "geo coding status", response = GeoCodingProcess.class),
+            @ApiResponse(code = HttpServletResponse.SC_OK, message = "geo coding status",
+                    response = GeoCodingProcess.class),
             @ApiResponse(code = HttpServletResponse.SC_NOT_FOUND, message = "no geo coding in progress") })
     @ApiMethod(id = "getGeoCodingProcess", authTypes = AuthRule.IN_WORKSPACE)
     @GET

@@ -6,5 +6,6 @@
   "amp.geocoder:settings": "Settings",
   "amp.geocoder:resetAll": "Reset All",
   "amp.geocoder:saveAllEdits": "Save All Edits",
-  "amp.geocoder:runSearch": "Run Search"
+  "amp.geocoder:runSearch": "Run Search",
+  "amp.geocoder:running": "Geocoding is still running"
 }

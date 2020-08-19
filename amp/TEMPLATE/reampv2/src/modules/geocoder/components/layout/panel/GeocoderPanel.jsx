@@ -7,21 +7,11 @@ import {connect} from "react-redux";
 import GeocodingTable from "../table/GeocodingTable";
 import {SECTORS_CHART} from "../../../../sscdashboard/utils/constants";
 
-function GeocodingNotAvailable(props) {
-    return <h4>Geocoding process not available. User {props.user} is owner of the process in '{props.workspace}' workspace</h4>;
-}
+const GeocodingNotAvailable = ({user, workspace}) => <h4>Geocoding process not available. User {user} is owner of the process in '{workspace}' workspace</h4>;
 
-function GeocodingRunning() {
-    return (
-        <div>
-            <h4>Geocoding is still running</h4>
-        </div>
-    );
-}
+const GeocodingRunning = ({message}) => <div><h4>{message}</h4></div>
 
-function ProjectList(props) {
-    return <h3>{props.title}</h3>;
-}
+const ProjectList = ({title}) => <h3>{title}</h3>;
 
 class GeocoderPanel extends Component {
 
@@ -30,14 +20,15 @@ class GeocoderPanel extends Component {
     };
 
     onSelectActivity = (isSelected, activityId) => {
-        let selectedActivities = Array.from(this.state.selectedActivities);
-        if (isSelected) {
-            selectedActivities.push(activityId);
-        } else {
-            selectedActivities = selectedActivities.filter(id => id !== activityId);
-        }
-
-        this.setState({selectedActivities});
+        this.setState(previousState => {
+            let selectedActivities = Array.from(this.state.selectedActivities);
+            if (isSelected) {
+                selectedActivities.push(activityId);
+            } else {
+                selectedActivities = selectedActivities.filter(id => id !== activityId);
+            }
+            return {selectedActivities};
+        });
     }
 
     onSelectAllActivities = (isSelected, rows) => {
@@ -82,7 +73,7 @@ class GeocoderPanel extends Component {
                     </div>
                 </div>
             }
-            {isGeocodingRunning && <GeocodingRunning/>}
+            {isGeocodingRunning && <GeocodingRunning message={translations['amp.geocoder:running']}/>}
             </div>
         );
     }

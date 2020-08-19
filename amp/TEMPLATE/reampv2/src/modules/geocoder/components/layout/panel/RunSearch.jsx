@@ -14,19 +14,15 @@ export default class RunSearch extends Component  {
     }
 
     handleClose() {
-        this.setState(prevState => {
-            return {show: false}
-        });
+        this.setState({show:false});
     }
 
     handleShow () {
-        this.setState(prevState => {
-            return {show: true}
-        });
+        this.setState({show:true});
     }
 
     render() {
-        let {translations} = this.context;
+        const {translations} = this.context;
 
         return (
                 <>

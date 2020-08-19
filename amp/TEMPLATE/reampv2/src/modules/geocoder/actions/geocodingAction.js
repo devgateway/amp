@@ -154,7 +154,7 @@ export function resetAllActivitiesError(error) {
 export const loadGeocoding = () => {
     return dispatch => {
         dispatch(fetchGeocodingPending());
-        return dispatch(fetchGeocodingSuccess(geocoding_available));
+        return dispatch(fetchGeocodingSuccess(geocoding_completed));
         // return fetchApiData({url: '/rest/geocoding/results', body: queryModel})
         //     .then(geocoding => {
         //         return dispatch(fetchGeocodingSuccess(geocoding));

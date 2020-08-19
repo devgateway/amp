@@ -12,10 +12,10 @@ import {
 } from "../../../actions/activitiesAction";
 import {Loading} from "../../../../../utils/components/Loading";
 
-const SelectedActivitiesMessage = (props) =>  {
+const SelectedActivitiesMessage = ({size}) =>  {
     return (
         <>
-           <div className="activities-message"><b>{props.size}</b> activities selected for geocoding</div>
+           <div className="activities-message"><b>{size}</b> activities selected for geocoding</div>
         </>
     );
 }
@@ -23,9 +23,6 @@ const SelectedActivitiesMessage = (props) =>  {
 class ActivityTable extends Component {
     constructor(props) {
         super(props);
-
-        this.handleOnSelect = this.props.onSelectActivity;
-        this.handleOnSelectAll = this.props.onSelectAllActivities;
 
         this.wrapper = React.createRef();
     }
@@ -58,9 +55,9 @@ class ActivityTable extends Component {
             mode: 'checkbox',
             style: { background: '#F2FFF8' },
             onSelect: (row, isSelected, rowIndex, e) => {
-                this.handleOnSelect(isSelected, row.id);
+                this.props.onSelectActivity(isSelected, row.id);
             },
-            onSelectAll: this.handleOnSelectAll
+            onSelectAll: this.props.onSelectAllActivities
         };
 
         let columns = [
@@ -98,8 +95,11 @@ class ActivityTable extends Component {
             }
         ];
 
-        return this.props.activitiesPending ? (<div className="activity-table"><Loading/></div>)
-                : (<div className="activity-table">
+        return (
+            <div className="activity-table">
+                {this.props.activitiesPending
+                    ? <Loading/>
+                    : <>
                         <BootstrapTable
                             ref={n => this.node = n}
                             keyField="id"
@@ -112,7 +112,9 @@ class ActivityTable extends Component {
                             pagination={paginationFactory(options)}
                         />
                         <SelectedActivitiesMessage size={this.props.selectedActivities.length} />
-                    </div>);
+                        </>}
+               </div>
+          );
     }
 }
 

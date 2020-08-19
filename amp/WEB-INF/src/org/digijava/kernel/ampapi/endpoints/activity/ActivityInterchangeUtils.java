@@ -21,6 +21,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivityInformation;
 import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivitySummary;
 import org.digijava.kernel.ampapi.endpoints.activity.dto.TeamMemberInformation;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.common.AMPTranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
@@ -47,6 +48,9 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.aim.util.ValidationStatus;
+import org.digijava.module.categorymanager.action.CategoryManager;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.CacheMode;
 
 /**
@@ -334,5 +338,40 @@ public final class ActivityInterchangeUtils {
         }
 
         return calculatedAmount.doubleValue();
+    }
+
+    /*
+    * AMPOFFLINE-1528: Return categories with prefixes not mapped on the list of activity fields.
+    */
+    public static Map<String, List<PossibleValue>> addCategoriesWithWorkspacePrefix(final Map<String,
+            List<PossibleValue>> response, final List<String> fields) {
+        CategoryManager categoryManager = new CategoryManager();
+        Collection<AmpCategoryClass> allCategories;
+        allCategories = categoryManager.loadCategories(null);
+        for (AmpCategoryClass cat : allCategories) {
+            boolean skip = true;
+            // Skip categories that are not in the list of fields (ie: "modalities" <-> "SSC_modalities")
+            for (String catName : fields) {
+                if (cat.getKeyName().contains(catName)) {
+                    skip = false;
+                    break;
+                }
+            }
+            // Skip categories already in the response.
+            if (!skip && response.containsKey(cat.getKeyName())) {
+                skip = true;
+            }
+            if (!skip) {
+                List<PossibleValue> values = new ArrayList<>();
+                for (AmpCategoryValue value : cat.getPossibleValues()) {
+                    PossibleValue pv = new PossibleValue(value.getId(), value.getLabel(),
+                            AMPTranslatorService.INSTANCE.translateLabel(value.getLabel()),
+                            new CategoryValueExtraInfo(value.getIndex()));
+                    values.add(pv);
+                }
+                response.put(cat.getKeyName(), values);
+            }
+        }
+        return response;
     }
 }

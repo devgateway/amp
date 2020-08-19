@@ -7,7 +7,6 @@ import static org.digijava.kernel.translator.util.TrnUtil.PREFIXES;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -39,7 +38,6 @@ import org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewActivityServ
 import org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewWorkspace;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.AmpMediaType;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.ApiCompat;
-import org.digijava.kernel.ampapi.endpoints.common.AMPTranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
@@ -58,10 +56,6 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.Example;
 import io.swagger.annotations.ExampleProperty;
-import org.digijava.module.categorymanager.action.CategoryManager;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-
 
 /**
  * AMP Activity Endpoints for Activity Import / Export
@@ -130,7 +124,6 @@ public class InterchangeEndpoints {
             @ApiParam(value = "List of fully qualified activity fields.")
                     List<String> fields) {
         Map<String, List<PossibleValue>> response;
-        Collection<AmpCategoryClass> allCategories;
         if (fields == null) {
             response = Collections.emptyMap();
         } else {
@@ -143,33 +136,7 @@ public class InterchangeEndpoints {
                     .distinct()
                     .collect(toMap(identity(), fieldName -> InterchangeUtils.possibleValuesFor(fieldName, apiFields)));
 
-            // AMPOFFLINE-1528: Return categories with prefixes not mapped on the list of activity fields.
-            CategoryManager categoryManager = new CategoryManager();
-            allCategories = categoryManager.loadCategories(null);
-            for (AmpCategoryClass cat : allCategories) {
-                boolean skip = true;
-                // Skip categories that are not in the list of fields (ie: "modalities" and "SSC_modalities")
-                for (String catName : fields) {
-                    if (cat.getKeyName().contains(catName)) {
-                        skip = false;
-                        break;
-                    }
-                }
-                // Skip categories already in the response.
-                if (!skip && response.containsKey(cat.getKeyName())) {
-                    skip = true;
-                }
-                if (!skip) {
-                    List<PossibleValue> values = new ArrayList<>();
-                    for (AmpCategoryValue value : cat.getPossibleValues()) {
-                        PossibleValue pv = new PossibleValue(value.getId(), value.getLabel(),
-                                AMPTranslatorService.INSTANCE.translateLabel(value.getLabel()),
-                                new CategoryValueExtraInfo(value.getIndex()));
-                        values.add(pv);
-                    }
-                    response.put(cat.getKeyName(), values);
-                }
-            }
+            response = ActivityInterchangeUtils.addCategoriesWithWorkspacePrefix(response, fields);
         }
         MediaType responseType = MediaType.APPLICATION_JSON_TYPE;
         if (AmpMediaType.POSSIBLE_VALUES_V2_JSON.equals(ApiCompat.getRequestedMediaType())) {

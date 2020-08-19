@@ -10,8 +10,8 @@ public class ProgramExtraInfo implements ParentExtraInfo {
     @JsonProperty("parent-program-id")
     private final Long parentProgramId;
 
-    public ProgramExtraInfo(Long parentSectorId) {
-        this.parentProgramId = parentSectorId;
+    public ProgramExtraInfo(Long parentProgramId) {
+        this.parentProgramId = parentProgramId;
     }
 
     public Long getParentProgramId() {

@@ -162,9 +162,9 @@ public class InterchangeEndpoints {
                 if (!skip) {
                     List<PossibleValue> values = new ArrayList<>();
                     for (AmpCategoryValue value : cat.getPossibleValues()) {
-                        Map<String, String> translatedValues = new HashMap<>();
                         PossibleValue pv = new PossibleValue(value.getId(), value.getLabel(),
-                                AMPTranslatorService.INSTANCE.translateLabel(value.getLabel()), value.getIndex());
+                                AMPTranslatorService.INSTANCE.translateLabel(value.getLabel()),
+                                new CategoryValueExtraInfo(value.getIndex()));
                         values.add(pv);
                     }
                     response.put(cat.getKeyName(), values);

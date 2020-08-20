@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import PropTypes from 'prop-types';
 import Sidebar from './components/layout/sidebar/sidebar';
 import MapContainer from './components/layout/map/MapContainer';
 import { SSCTranslationContext } from './components/StartUp';
 import { HOME_CHART, SECTORS_CHART } from './utils/constants';
 import { DONOR_COUNTRY, MODALITIES, PRIMARY_SECTOR } from './utils/FieldsConstants';
-import { loadActivitiesDetails } from './actions/callReports';
+import * as CallReports from './actions/callReports';
 
-import { loadCountriesFilters, loadModalitiesFilters, loadSectorsFilters } from './actions/loadFilters';
+import * as LoadFilters from './actions/loadFilters';
 import './utils/print.css';
 import PrintDummy from './utils/PrintDummy';
 
-class SssDashboardHome extends Component {
+class SscDashboardHome extends Component {
   constructor(props) {
     super(props);
     this.countriesWithData = [];
@@ -30,16 +31,15 @@ class SssDashboardHome extends Component {
     };
   }
 
-  countriesForExportChanged(countries) {
-    this.setState({ countriesForExport: countries });
-  }
-
   componentDidMount() {
-    this.props.loadSectorsFilters();
-    this.props.loadCountriesFilters();
-    this.props.loadModalitiesFilters();
+    const {
+      loadSectorsFilters, loadCountriesFilters, loadModalitiesFilters, projects
+    } = this.props;
+    loadSectorsFilters();
+    loadCountriesFilters();
+    loadModalitiesFilters();
 
-    if (this.props.projects.activitiesLoaded) {
+    if (projects.activitiesLoaded) {
       this.getProjectsData();
     }
     const initialData = this.getFilteredData();
@@ -49,14 +49,14 @@ class SssDashboardHome extends Component {
     });
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     if (this.props !== prevProps && this.countriesWithData.length === 0) {
-      // TOD check
-      if (this.props.projects.activitiesLoaded) {
+      const { projects } = this.props;
+      if (projects.activitiesLoaded) {
         const initialData = this.getFilteredData();
         this.countriesWithData = initialData.map(c => c.id);
         const selectedYears = [];
-        selectedYears.push(this.props.projects.activities.mostRecentYear);
+        selectedYears.push(projects.activities.mostRecentYear);
         // this.handleSelectedYearChanged(selectedYears);
         this.setState({
           filteredProjects: initialData
@@ -72,52 +72,19 @@ class SssDashboardHome extends Component {
     }
   }
 
-  closeLargeCountryPopinAndClearFilter() {
-    this.handleSelectedCountryChanged([]);
+  onNoProjectsModalClose() {
+    this.setState({ showEmptyProjects: false });
   }
 
-  closeLargeCountryPopin() {
-    this.setState({ showLargeCountryPopin: false });
-  }
-
-  handleSelectedSectorChanged(pSelectedSectors) {
-    this.updateFilterState('selectedSectors', pSelectedSectors);
-  }
-
-  handleSelectedYearChanged(pSelectedYears) {
-    this.updateFilterState('selectedYears', pSelectedYears);
-  }
-
-  handleSelectedCountryChanged(pSelectedCountries) {
-    // we only keep for export the countries that are selected
-    this.setState(previousState => {
-      const countriesForExport = [...previousState.countriesForExport].filter(c => pSelectedCountries.includes(c));
-      return { countriesForExport };
-    });
-    if (this.state.chartSelected === SECTORS_CHART && pSelectedCountries && pSelectedCountries.length >= 1) {
-      // currently we open large popin, in next tickets we will open also the popin for 2/3 countries selected
-      this.setState({ showLargeCountryPopin: true });
-    } else {
-      this.closeLargeCountryPopin();
-    }
-    this.updateFilterState('selectedCountries', pSelectedCountries);
-  }
-
-  handleSelectedModalityChanged(pSelectedModalities) {
-    this.updateFilterState('selectedModalities', pSelectedModalities);
-  }
-
-  updateFilterState(filterSelector, updatedSelectedFilters) {
-    this.setState((currentState) => {
-      const selectedFilters = { ...currentState.selectedFilters };
-      selectedFilters[filterSelector] = updatedSelectedFilters;
-      return { selectedFilters };
-    }, this.getFilteredProjects);
+  getProjectsData() {
+    const { loadActivitiesDetails, projects } = this.props;
+    loadActivitiesDetails(projects.activities.activitiesId);
   }
 
   getFilteredProjects() {
     const filteredProjects = this.getFilteredData();
     this.setState({ filteredProjects });
+    const { selectedFilters } = this.state;
     if (filteredProjects.length === 0) {
       this.setState({ showEmptyProjects: true });
     } else {
@@ -125,29 +92,23 @@ class SssDashboardHome extends Component {
     }
 
     const countryWithProjects = filteredProjects.map(p => p.id);
-    const intersection = this.state.selectedFilters.selectedCountries.filter(c => countryWithProjects.includes(c));
+    const intersection = selectedFilters.selectedCountries.filter(c => countryWithProjects.includes(c));
     if (!intersection || intersection.length === 0) {
       this.closeLargeCountryPopin();
     }
   }
 
-  getProjectsData() {
-    this.props.loadActivitiesDetails(this.props.projects.activities.activitiesId);
-  }
-
-  onNoProjectsModalClose() {
-    this.setState({ showEmptyProjects: false });
-  }
-
   getFilteredData() {
     // TODO see how we can simply or make a bit more generic this function
+    const { selectedFilters } = this.state;
+    const { projects } = this.props;
     const {
       selectedYears = [], selectedCountries = [], selectedSectors = [], selectedModalities = []
-    } = this.state.selectedFilters;
-    if (!this.props.projects.activitiesLoaded) {
+    } = selectedFilters;
+    if (!projects.activitiesLoaded) {
       return [];
     }
-    const clonedProjectsActivities = this.props.projects.activities[DONOR_COUNTRY].map(a => ({ ...a }));
+    const clonedProjectsActivities = projects.activities[DONOR_COUNTRY].map(a => ({ ...a }));
     return clonedProjectsActivities.filter(p => {
       if (selectedCountries.length === 0 || selectedCountries.includes(p.id)) {
         const sectors = p[PRIMARY_SECTOR].filter(sector => {
@@ -155,7 +116,7 @@ class SssDashboardHome extends Component {
             const modalities = sector[MODALITIES].filter(modality => {
               if (selectedModalities.length === 0 || selectedModalities.includes(modality.id)) {
                 if (selectedYears.length > 0) {
-                  const filteredProjects = modality.activities.filter(p => selectedYears.includes(p.year));
+                  const filteredProjects = modality.activities.filter(a => selectedYears.includes(a.year));
                   if (filteredProjects.length === 0) {
                     return false;
                   } else {
@@ -190,6 +151,54 @@ class SssDashboardHome extends Component {
     });
   }
 
+  countriesForExportChanged(countries) {
+    this.setState({ countriesForExport: countries });
+  }
+
+  updateFilterState(filterSelector, updatedSelectedFilters) {
+    this.setState((currentState) => {
+      const selectedFilters = { ...currentState.selectedFilters };
+      selectedFilters[filterSelector] = updatedSelectedFilters;
+      return { selectedFilters };
+    }, this.getFilteredProjects);
+  }
+
+  handleSelectedYearChanged(pSelectedYears) {
+    this.updateFilterState('selectedYears', pSelectedYears);
+  }
+
+  handleSelectedCountryChanged(pSelectedCountries) {
+    // we only keep for export the countries that are selected
+    this.setState(previousState => {
+      const countriesForExport = [...previousState.countriesForExport].filter(c => pSelectedCountries.includes(c));
+      return { countriesForExport };
+    });
+    const { chartSelected } = this.state;
+    if (chartSelected === SECTORS_CHART && pSelectedCountries && pSelectedCountries.length >= 1) {
+      // currently we open large popin, in next tickets we will open also the popin for 2/3 countries selected
+      this.setState({ showLargeCountryPopin: true });
+    } else {
+      this.closeLargeCountryPopin();
+    }
+    this.updateFilterState('selectedCountries', pSelectedCountries);
+  }
+
+  handleSelectedModalityChanged(pSelectedModalities) {
+    this.updateFilterState('selectedModalities', pSelectedModalities);
+  }
+
+  closeLargeCountryPopinAndClearFilter() {
+    this.handleSelectedCountryChanged([]);
+  }
+
+  closeLargeCountryPopin() {
+    this.setState({ showLargeCountryPopin: false });
+  }
+
+  handleSelectedSectorChanged(pSelectedSectors) {
+    this.updateFilterState('selectedSectors', pSelectedSectors);
+  }
+
   render() {
     const filtersRestrictions = { countriesWithData: this.countriesWithData };
 
@@ -199,26 +208,29 @@ class SssDashboardHome extends Component {
       handleSelectedYearChanged: this.handleSelectedYearChanged.bind(this),
       handleSelectedSectorChanged: this.handleSelectedSectorChanged.bind(this)
     };
+    const {
+      chartSelected, selectedFilters, filteredProjects, showEmptyProjects, showLargeCountryPopin, countriesForExport
+    } = this.state;
     return (
       <div className="container-fluid content-wrapper">
         <div className="row">
           <Sidebar
-            chartSelected={this.state.chartSelected}
+            chartSelected={chartSelected}
             onChangeChartSelected={this.onChangeChartSelected.bind(this)}
-            selectedFilters={this.state.selectedFilters}
+            selectedFilters={selectedFilters}
             handleSelectedFiltersChange={handleSelectedFiltersChange}
                     />
           <MapContainer
-            chartSelected={this.state.chartSelected}
-            selectedFilters={this.state.selectedFilters}
+            chartSelected={chartSelected}
+            selectedFilters={selectedFilters}
             handleSelectedFiltersChange={handleSelectedFiltersChange}
-            filteredProjects={this.state.filteredProjects}
+            filteredProjects={filteredProjects}
             filtersRestrictions={filtersRestrictions}
-            showEmptyProjects={this.state.showEmptyProjects}
-            showLargeCountryPopin={this.state.showLargeCountryPopin}
+            showEmptyProjects={showEmptyProjects}
+            showLargeCountryPopin={showLargeCountryPopin}
             closeLargeCountryPopinAndClearFilter={this.closeLargeCountryPopinAndClearFilter.bind(this)}
             onNoProjectsModalClose={this.onNoProjectsModalClose.bind(this)}
-            countriesForExport={this.state.countriesForExport}
+            countriesForExport={countriesForExport}
             countriesForExportChanged={this.countriesForExportChanged.bind(this)}
                     />
         </div>
@@ -247,11 +259,19 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  loadActivitiesDetails,
-  loadSectorsFilters,
-  loadCountriesFilters,
-  loadModalitiesFilters
+  loadActivitiesDetails: CallReports.loadActivitiesDetails,
+  loadSectorsFilters: LoadFilters.loadSectorsFilters,
+  loadCountriesFilters: LoadFilters.loadCountriesFilters,
+  loadModalitiesFilters: LoadFilters.loadModalitiesFilters
 }, dispatch);
 
-SssDashboardHome.contextType = SSCTranslationContext;
-export default connect(mapStateToProps, mapDispatchToProps)(SssDashboardHome);
+SscDashboardHome.contextType = SSCTranslationContext;
+SscDashboardHome.propTypes = {
+  projects: PropTypes.object.isRequired,
+  loadSectorsFilters: PropTypes.func.isRequired,
+  loadCountriesFilters: PropTypes.func.isRequired,
+  loadModalitiesFilters: PropTypes.func.isRequired,
+  loadActivitiesDetails: PropTypes.func.isRequired,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SscDashboardHome);

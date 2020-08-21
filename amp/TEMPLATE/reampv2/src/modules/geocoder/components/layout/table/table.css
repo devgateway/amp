@@ -226,3 +226,11 @@ table thead tr th {
 .col-70 {
     width: 70%;
 }
+
+.alert {
+    margin-top: 20px;
+}
+
+.alert {
+    text-align: left;
+}

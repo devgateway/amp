@@ -27,3 +27,31 @@ export const fetchApiData = ({body, url}) => {
             });
     })
 };
+
+export const fetchApiDataWithStatus = ({body, url}) => {
+    return new Promise((resolve, reject) => {
+        return fetch(url, getRequestOptions(body))
+            .then(response => response.json().then(data => ({
+                    data: data,
+                    ok : response.ok,
+                    status: response.status
+                })
+            ).then(res => {
+                if (!res.ok) {
+                    return reject({status: res.status, message: extractErrorMessageFromResponse(res)});
+                }
+
+                return resolve(res);
+            }));
+    })
+};
+
+export function extractErrorMessageFromResponse(response) {
+    let errorMessage = response.status + ": ";
+
+    for(let k in response.data.error) {
+        errorMessage += response.data.error[k][0] + "\n";
+    };
+
+    return errorMessage;
+}

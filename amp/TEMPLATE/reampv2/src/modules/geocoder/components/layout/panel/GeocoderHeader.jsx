@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import RunSearch from "./RunSearch";
-import {resetAllActivities} from "../../../actions/geocodingAction";
+import {resetAllActivities, runSearch} from "../../../actions/geocodingAction";
 
 class GeocoderHeader extends Component {
 
@@ -13,6 +13,7 @@ class GeocoderHeader extends Component {
         super(props);
 
         this.handleResetAll = this.handleResetAll.bind(this);
+        this.onRunSearch = this.onRunSearch.bind(this);
     }
 
     handleResetAll = (e) => {
@@ -22,9 +23,14 @@ class GeocoderHeader extends Component {
         console.log('User clicked reset All:', this);
     };
 
+    onRunSearch = () => {
+        this.props.runSearch(this.props.selectedActivities);
+        console.log('User clicked run search:', this.props.selectedActivities);
+    }
+
     render() {
-        let {translations} = this.context;
-        let isActivityTable = this.props.geocoding.status === 'COMPLETED';
+        const {translations} = this.context;
+        const isActivityTable = this.props.geocoding.status === 'NOT_STARTED';
 
         return (
             <div className='panel-body custom-panel geocoder-header'>
@@ -32,7 +38,9 @@ class GeocoderHeader extends Component {
                 <div className={'col-md-2 header-settings text-header'}><a href={'#geocoder'}>{translations['amp.geocoder:settings']}</a></div>
                 {!isActivityTable && <div className={'col-md-2 text-header'}><a href={'#geocoder'}  onClick={this.handleResetAll}>{translations['amp.geocoder:resetAll']}</a></div>}
                 {isActivityTable
-                    ? <RunSearch title={translations['amp.geocoder:runSearch']} selectedActivities={this.props.selectedActivities}/>
+                    ? <RunSearch title={translations['amp.geocoder:runSearch']}
+                                 selectedActivities={this.props.selectedActivities}
+                                 onRunSearch={this.onRunSearch}/>
                     : <Button variant="success" className={'pull-right button-header'}>{translations['amp.geocoder:saveAllEdits']}</Button>
                 }
             </div>);
@@ -48,7 +56,8 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-    resetAllActivities: resetAllActivities
+    resetAllActivities: resetAllActivities,
+    runSearch: runSearch,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(GeocoderHeader);

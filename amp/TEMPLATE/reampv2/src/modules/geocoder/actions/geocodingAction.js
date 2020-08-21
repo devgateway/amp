@@ -1,3 +1,5 @@
+import {fetchApiData, fetchApiDataWithStatus} from "../../../utils/apiOperations";
+
 export const FETCH_GEOCODING_PENDING = 'FETCH_GEOCODING_PENDING';
 export const FETCH_GEOCODING_SUCCESS = 'FETCH_GEOCODING_SUCCESS';
 export const FETCH_GEOCODING_ERROR = 'FETCH_GEOCODING_ERROR';
@@ -9,6 +11,10 @@ export const GEOCODING_LOCATION_ERROR = 'GEOCODING_LOCATION_ERROR';
 export const GEOCODING_RESET_ALL_PENDING = 'GEOCODING_RESET_ALL_PENDING';
 export const GEOCODING_RESET_ALL_SUCCESS = 'GEOCODING_RESET_ALL_SUCCESS';
 export const GEOCODING_RESET_ALL_ERROR = 'GEOCODING_RESET_ALL_ERROR';
+
+export const GEOCODING_RUN_SEARCH_PENDING = 'GEOCODING_RUN_SEARCH_PENDING';
+export const GEOCODING_RUN_SEARCH_SUCCESS = 'GEOCODING_RUN_SEARCH_SUCCESS';
+export const GEOCODING_RUN_SEARCH_ERROR = 'GEOCODING_RUN_SEARCH_ERROR';
 
 let geocoding_available = {
     status : "AVAILABLE",
@@ -26,7 +32,7 @@ let geocoding_available = {
                     {"field_name": "project_title", "text": "Project title Haiti"},
                     {"field_name": "description", "text": "Project description Haiti etc."}
                 ],
-                "status": "ACCEPTED",
+                    accepted: true,
                 },
                 {  "id": 3268,
                     "name": "Jacmel",
@@ -34,7 +40,7 @@ let geocoding_available = {
                     "fields": [
                     {"field_name": "objective", "text": "Project objective Jacmel"}
                 ],
-                    "status": "REJECTED"
+                    accepted: false
                 }
             ]
         },
@@ -52,7 +58,7 @@ let geocoding_available = {
                         {"field_name": "project_title", "text": "Project title Haiti"},
                         {"field_name": "description", "text": "Project description Haiti etc."}
                     ],
-                    "status": null
+                    accepted: null
                 }
             ]
         }
@@ -93,31 +99,41 @@ export function fetchGeocodingSuccess(geocoding) {
     }
 }
 
-export function fetchGeocodingError(error) {
+export function fetchGeocodingNotFound(geocoding) {
     return {
-        type: FETCH_GEOCODING_ERROR,
-        error: error
+        type: FETCH_GEOCODING_SUCCESS,
+        error: null,
+        status: 'NOT_STARTED'
     }
 }
 
-export function geocodeLocationPending(activity_id, location_id, status) {
+
+export function fetchGeocodingError(error, status) {
+    return {
+        type: FETCH_GEOCODING_ERROR,
+        error: error,
+        status: status
+    }
+}
+
+export function geocodeLocationPending(activity_id, location_id, accepted) {
     return {
         type: GEOCODING_LOCATION_PENDING,
         payload: {
             activity_id: activity_id,
             location_id: location_id,
-            status: status
+            accepted: accepted
         }
     }
 }
 
-export function geocodeLocationSuccess(activity_id, location_id, status) {
+export function geocodeLocationSuccess(activity_id, location_id, accepted) {
     return {
         type: GEOCODING_LOCATION_SUCCESS,
         payload: {
             activity_id: activity_id,
             location_id: location_id,
-            status: status
+            accepted: accepted
         }
     }
 }
@@ -132,14 +148,12 @@ export function geocodeLocationError(error) {
 export function resetAllActivitiesPending() {
     return {
         type: GEOCODING_RESET_ALL_PENDING,
-        pending: true
     }
 }
 
 export function resetAllActivitiesSuccess() {
     return {
         type: GEOCODING_RESET_ALL_SUCCESS,
-        pending: false
     }
 }
 
@@ -147,35 +161,73 @@ export function resetAllActivitiesError(error) {
     return {
         type: GEOCODING_RESET_ALL_ERROR,
         error: error,
-        pending: false
+    }
+}
+
+export function runSearchPending() {
+    return {
+        type: GEOCODING_RUN_SEARCH_PENDING,
+    }
+}
+
+export function runSearchSuccess() {
+    return {
+        type: GEOCODING_RUN_SEARCH_SUCCESS,
+    }
+}
+
+export function runSearchError(error) {
+    return {
+        type: GEOCODING_RUN_SEARCH_ERROR,
+        error: error,
     }
 }
 
 export const loadGeocoding = () => {
     return dispatch => {
         dispatch(fetchGeocodingPending());
-        return dispatch(fetchGeocodingSuccess(geocoding_completed));
-        // return fetchApiData({url: '/rest/geocoding/results', body: queryModel})
-        //     .then(geocoding => {
-        //         return dispatch(fetchGeocodingSuccess(geocoding));
-        //     })
-        //     .catch(error => {
-        //         return dispatch(fetchGeocodingError(error))
-        //     });
+        return fetchApiDataWithStatus({url: '/rest/geo-coder/process'})
+            .then(geocoding => {
+                return dispatch(fetchGeocodingSuccess(geocoding));
+            })
+            .catch(error => {
+                if(isGeocodingNotFound(error)) {
+                    return dispatch(fetchGeocodingNotFound(null));
+                }
+                return dispatch(fetchGeocodingError(error.message, "NOT_AVAILABLE"))
+            });
     }
 };
 
-export const geocodeLocation = (activityId, locationId, status) => {
+export const runSearch = (activityIds) => {
     return dispatch => {
-        dispatch(geocodeLocationPending(activityId, locationId, status));
-        return dispatch(geocodeLocationSuccess(activityId, locationId, status));
-        // return fetchApiData({url: '/rest/geocoding/results', body: queryModel})
-        //     .then(geocoding => {
-        //         return dispatch(fetchGeocodingSuccess(geocoding));
-        //     })
-        //     .catch(error => {
-        //         return dispatch(fetchGeocodingError(error))
-        //     });
+        dispatch(runSearchPending());
+        return fetchApiDataWithStatus({body: activityIds, url: '/rest/geo-coder/process'})
+            .then(() => {
+                return dispatch(runSearchSuccess());
+            })
+            .catch(error => {
+                return dispatch(runSearchError(error.message))
+            });
+    }
+};
+
+export const geocodeLocation = (activityId, locationId, accepted) => {
+    const locationStatusRequest = {
+        amp_activity_id: activityId,
+        amp_category_value_location_id : locationId,
+        accepted: accepted
+    }
+
+    return dispatch => {
+        dispatch(geocodeLocationPending(activityId, locationId, accepted));
+        return fetchApiDataWithStatus({url: '/rest/geo-coder/location-status', body: locationStatusRequest})
+            .then(() => {
+                return dispatch(geocodeLocationSuccess(activityId, locationId, accepted));
+            })
+            .catch(error => {
+                return dispatch(geocodeLocationError(error.message))
+            });
     }
 };
 
@@ -192,3 +244,7 @@ export const resetAllActivities = () => {
         //     });
     }
 };
+
+function isGeocodingNotFound(errorObject) {
+    return errorObject.status == 404;
+}

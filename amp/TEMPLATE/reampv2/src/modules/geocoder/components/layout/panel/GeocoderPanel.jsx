@@ -1,15 +1,26 @@
-import React, {Component} from 'react';
+import React, {Component, useState} from 'react';
 import {TranslationContext} from '../../AppContext';
 import GeocoderHeader from "./GeocoderHeader";
 import ActivityTable from "../table/ActivityTable";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import GeocodingTable from "../table/GeocodingTable";
-import {SECTORS_CHART} from "../../../../sscdashboard/utils/constants";
+import Alert from "react-bootstrap/Alert";
+import Modal from "react-bootstrap/Modal";
+import {runSearch} from "../../../actions/geocodingAction";
+import * as PropTypes from "prop-types";
+import AlertError from "./AlertError";
 
-const GeocodingNotAvailable = ({user, workspace}) => <h4>Geocoding process not available. User {user} is owner of the process in '{workspace}' workspace</h4>;
+const GeocodingNotAvailable = ({user, workspace}) =>
+    <h4>Geocoding process not available. User {user} is owner of the process in '{workspace}' workspace</h4>;
 
-const GeocodingRunning = ({message}) => <div><h4>{message}</h4></div>
+const GeocodingRunning = ({message, running}) => {
+    return (
+        <Modal show={running} animation={false}>
+            <Modal.Body>{message}</Modal.Body>
+        </Modal>
+    )
+}
 
 const ProjectList = ({title}) => <h3>{title}</h3>;
 
@@ -45,35 +56,32 @@ class GeocoderPanel extends Component {
     }
 
     render() {
-        let {translations} = this.context;
+        const {translations} = this.context;
 
-        let isGeocodingNotAvailable = this.props.geocoding.status === 'NOT_AVAILABLE';
-        let isGeocodingAvailable = this.props.geocoding.status === 'AVAILABLE';
-        let isGeocodingRunning = this.props.geocoding.status === 'RUNNING';
-        let isGeocodingCompleted = this.props.geocoding.status === 'COMPLETED';
+        const isGeocoding = this.props.geocoding.activities.length > 0;
 
         let title = translations['amp.geocoder:projectList'];
 
-        if (isGeocodingAvailable) {
+        if (isGeocoding) {
             title = title +  ' - ' + translations['amp.geocoder:geocodedSelection'];
         }
 
         return (
             <div>
-            {isGeocodingNotAvailable && <GeocodingNotAvailable user={this.props.geocoding.creator} workspace={this.props.geocoding.workspace}/>}
-            {(isGeocodingCompleted || isGeocodingAvailable) &&
-                <div>
-                    <ProjectList title={title}/>
-                    <div className='panel panel-default'>
-                        <GeocoderHeader selectedActivities={this.state.selectedActivities} />
-                        {isGeocodingAvailable && <GeocodingTable/>}
-                        {isGeocodingCompleted && <ActivityTable onSelectActivity={this.onSelectActivity.bind(this)}
-                                                                onSelectAllActivities={this.onSelectAllActivities.bind(this)}
-                                                                selectedActivities={this.state.selectedActivities}/>}
+            {/*{isGeocodingNotAvailable && <GeocodingNotAvailable user={this.props.geocoding.creator} workspace={this.props.geocoding.workspace}/>}*/}
+                {this.props.geocoding.error
+                    ?  <AlertError error={this.props.geocoding.error}/>
+                    : <div>
+                        <ProjectList title={title}/>
+                        <div className='panel panel-default'>
+                            <GeocoderHeader selectedActivities={this.state.selectedActivities}/>
+                            {isGeocoding ? <GeocodingTable/>
+                            : <ActivityTable onSelectActivity={this.onSelectActivity.bind(this)}
+                                                                    onSelectAllActivities={this.onSelectAllActivities.bind(this)}
+                                                                    selectedActivities={this.state.selectedActivities}/>}
+                        </div>
                     </div>
-                </div>
-            }
-            {isGeocodingRunning && <GeocodingRunning message={translations['amp.geocoder:running']}/>}
+                }
             </div>
         );
     }

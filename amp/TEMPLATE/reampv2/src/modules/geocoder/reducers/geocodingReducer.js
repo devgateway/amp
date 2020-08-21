@@ -1,19 +1,27 @@
 import {
     FETCH_GEOCODING_ERROR,
     FETCH_GEOCODING_PENDING,
-    FETCH_GEOCODING_SUCCESS, GEOCODING_LOCATION_ERROR,
+    FETCH_GEOCODING_SUCCESS,
+    GEOCODING_LOCATION_ERROR,
     GEOCODING_LOCATION_PENDING,
-    GEOCODING_LOCATION_SUCCESS, GEOCODING_RESET_ALL_ERROR, GEOCODING_RESET_ALL_PENDING, GEOCODING_RESET_ALL_SUCCESS
+    GEOCODING_LOCATION_SUCCESS,
+    GEOCODING_RESET_ALL_ERROR,
+    GEOCODING_RESET_ALL_PENDING,
+    GEOCODING_RESET_ALL_SUCCESS, GEOCODING_RUN_SEARCH_ERROR,
+    GEOCODING_RUN_SEARCH_PENDING, GEOCODING_RUN_SEARCH_SUCCESS
 } from '../actions/geocodingAction';
 
 const initialState = {
     pending: true,
     reset_pending: false,
-    status : "NOT_AVAILABLE",
+    run_search_pending: false,
+    running: false,
+    status : "NOT_STARTED",
     creator: null,
     workspace: null,
     activities : [],
-    error: null
+    error: null,
+    run_search_error: null
 };
 
 export default function geocodingReducer(state = initialState, action) {
@@ -26,14 +34,32 @@ export default function geocodingReducer(state = initialState, action) {
         case FETCH_GEOCODING_SUCCESS:
             return {
                 ...state,
+                ...action.payload.data,
                 pending: false,
-                ...action.payload,
+                error: null
             };
         case FETCH_GEOCODING_ERROR:
             return {
                 ...state,
                 pending: false,
                 error: action.error,
+                status : action.status,
+            };
+        case GEOCODING_RUN_SEARCH_PENDING:
+            return {
+                ...state,
+                run_search_pending: true,
+            };
+        case GEOCODING_RUN_SEARCH_SUCCESS:
+            return {
+                ...state,
+                run_search_pending: false,
+            };
+        case GEOCODING_RUN_SEARCH_ERROR:
+            return {
+                ...state,
+                run_search_pending: false,
+                run_search_error: action.error
             };
         case GEOCODING_LOCATION_PENDING:
             return {

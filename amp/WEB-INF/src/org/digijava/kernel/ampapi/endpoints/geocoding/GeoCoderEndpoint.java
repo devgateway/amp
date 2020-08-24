@@ -3,6 +3,7 @@ package org.digijava.kernel.ampapi.endpoints.geocoding;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -65,7 +66,7 @@ public class GeoCoderEndpoint {
             @ApiResponse(code = HttpServletResponse.SC_OK, message = "geo coding status",
                     response = GeoCodingProcess.class),
             @ApiResponse(code = HttpServletResponse.SC_NOT_FOUND, message = "no geo coding in progress") })
-    @ApiMethod(id = "process", authTypes = AuthRule.IN_WORKSPACE)
+    @ApiMethod(id = "getGeoCodingProcess", authTypes = AuthRule.IN_WORKSPACE)
     @GET
     @Path("process")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -88,13 +89,48 @@ public class GeoCoderEndpoint {
 
     @ApiOperation("Change location status")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_NO_CONTENT, message = "success"))
-    @ApiMethod(id = "process", authTypes = AuthRule.IN_WORKSPACE)
+    @ApiMethod(id = "changeLocationStatus", authTypes = AuthRule.IN_WORKSPACE)
     @POST
     @Path("location-status")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public Response changeLocationStatus(
             @ApiParam("Save location status request") ChangeLocationStatusRequest request) {
         service.changeLocationStatus(request.getAmpActivityId(), request.getAcvlId(), request.getAccepted());
+        return Response.noContent().build();
+    }
+
+    @ApiOperation(value = "Apply changes to activities",
+            notes = "Changes are applied only to activities for which all locations were either accepted or rejected "
+                    + "after which the activity is removed from geo coding process.")
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_NO_CONTENT, message = "success"))
+    @ApiMethod(id = "saveActivities", authTypes = AuthRule.IN_WORKSPACE)
+    @POST
+    @Path("save-activities")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    public Response saveActivities() {
+        service.saveActivities();
+        return Response.noContent().build();
+    }
+
+    @ApiOperation("Reset location statuses")
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_NO_CONTENT, message = "success"))
+    @ApiMethod(id = "resetLocationStatuses", authTypes = AuthRule.IN_WORKSPACE)
+    @POST
+    @Path("reset-location-statuses")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    public Response resetLocationStatuses() {
+        service.resetLocationStatuses();
+        return Response.noContent().build();
+    }
+
+    @ApiOperation("Cancel geo coding process")
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_NO_CONTENT, message = "success"))
+    @ApiMethod(id = "cancelGeoCoding", authTypes = AuthRule.IN_WORKSPACE)
+    @DELETE
+    @Path("process")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    public Response cancelGeoCoding() {
+        service.cancelGeoCoding();
         return Response.noContent().build();
     }
 }

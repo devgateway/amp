@@ -339,4 +339,13 @@ public class GeoCodingService {
         }
         return implementationLocation;
     }
+
+    public void resetLocationStatuses() {
+        GeoCodingProcess geoCodingProcess = getGeoCodingProcess();
+        if (geoCodingProcess != null) {
+            geoCodingProcess.getActivities().stream()
+                    .flatMap(a -> a.getLocations().stream())
+                    .forEach(l -> l.setAccepted(null));
+        }
+    }
 }

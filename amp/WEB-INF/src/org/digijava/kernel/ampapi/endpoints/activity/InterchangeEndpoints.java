@@ -135,8 +135,6 @@ public class InterchangeEndpoints {
                     .filter(Objects::nonNull)
                     .distinct()
                     .collect(toMap(identity(), fieldName -> InterchangeUtils.possibleValuesFor(fieldName, apiFields)));
-
-            response = ActivityInterchangeUtils.addCategoriesWithWorkspacePrefix(response, fields);
         }
         MediaType responseType = MediaType.APPLICATION_JSON_TYPE;
         if (AmpMediaType.POSSIBLE_VALUES_V2_JSON.equals(ApiCompat.getRequestedMediaType())) {

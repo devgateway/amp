@@ -9,7 +9,7 @@ function LocationFields(props) {
     return (
         props.fields.map((field) =>
             <>
-            <div> / <b>{field.field_name}</b> | {field.text}</div>
+            <div> / <b>{field.name}</b> | {field.value}</div>
             </>
         )
     );

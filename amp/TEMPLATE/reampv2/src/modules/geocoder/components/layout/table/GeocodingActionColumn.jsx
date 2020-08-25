@@ -7,8 +7,8 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 export default class GeocodingActionColumn extends Component {
 
     render() {
-        return (<td>
+        return (
             <FontAwesomeIcon className={'fa-icon fa-lg'} icon={faPencilAlt}/>
-        </td>);
+        );
     }
 }

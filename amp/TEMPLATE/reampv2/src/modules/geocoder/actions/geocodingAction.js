@@ -95,7 +95,8 @@ export function fetchGeocodingPending() {
 export function fetchGeocodingSuccess(geocoding) {
     return {
         type: FETCH_GEOCODING_SUCCESS,
-        payload: geocoding
+        payload: geocoding,
+        status: 'IN_PROGRESS'
     }
 }
 
@@ -103,6 +104,7 @@ export function fetchGeocodingNotFound(geocoding) {
     return {
         type: FETCH_GEOCODING_SUCCESS,
         error: null,
+        payload: {},
         status: 'NOT_STARTED'
     }
 }
@@ -148,19 +150,22 @@ export function geocodeLocationError(error) {
 export function resetAllActivitiesPending() {
     return {
         type: GEOCODING_RESET_ALL_PENDING,
+        reset_pending: true
     }
 }
 
 export function resetAllActivitiesSuccess() {
     return {
         type: GEOCODING_RESET_ALL_SUCCESS,
+        reset_pending: false
     }
 }
 
 export function resetAllActivitiesError(error) {
     return {
         type: GEOCODING_RESET_ALL_ERROR,
-        error: error,
+        reset_error: error,
+        reset_pending: false
     }
 }
 
@@ -179,7 +184,7 @@ export function runSearchSuccess() {
 export function runSearchError(error) {
     return {
         type: GEOCODING_RUN_SEARCH_ERROR,
-        error: error,
+        error: error
     }
 }
 

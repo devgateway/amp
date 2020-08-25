@@ -21,7 +21,8 @@ const initialState = {
     workspace: null,
     activities : [],
     error: null,
-    run_search_error: null
+    run_search_error: null,
+    reset_error: null
 };
 
 export default function geocodingReducer(state = initialState, action) {
@@ -35,6 +36,7 @@ export default function geocodingReducer(state = initialState, action) {
             return {
                 ...state,
                 ...action.payload.data,
+                status: action.status,
                 pending: false,
                 error: null
             };

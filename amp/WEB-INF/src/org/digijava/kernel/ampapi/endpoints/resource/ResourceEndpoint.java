@@ -3,7 +3,6 @@ package org.digijava.kernel.ampapi.endpoints.resource;
 import static java.util.Collections.emptyMap;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
-import static org.digijava.kernel.translator.util.TrnUtil.PREFIXES;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,9 +40,9 @@ import org.digijava.kernel.ampapi.endpoints.resource.dto.SwaggerListResource;
 import org.digijava.kernel.ampapi.endpoints.resource.dto.SwaggerResource;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
-import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -104,8 +103,7 @@ public class ResourceEndpoint {
     public Map<String, List<PossibleValue>> getValues(
             @ApiParam("list of fully qualified resource fields") List<String> fields) {
         Map<String, List<PossibleValue>> response;
-        List<String> prefixes = TranslatorWorker.getAllPrefixes();
-        TLSUtils.getRequest().setAttribute(PREFIXES, prefixes);
+        ActivityUtil.loadWorkspacePrefixesIntoRequest();
         if (fields == null) {
             response = emptyMap();
         } else {

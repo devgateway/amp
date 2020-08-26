@@ -37,6 +37,7 @@ import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.admin.helper.AmpActivityFake;
@@ -100,6 +101,8 @@ import org.hibernate.type.LongType;
 import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.type.StringType;
 import org.joda.time.Period;
+
+import static org.digijava.kernel.translator.util.TrnUtil.PREFIXES;
 
 public class ActivityUtil {
 
@@ -2105,5 +2108,11 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
     public static boolean isAutomaticValidationEnabled() {
         return (QuartzJobUtils.getJobByClassFullname(Constants.AUTOMATIC_VALIDATION_JOB_CLASS_NAME) == null
                 ? false : true);
+    }
+
+    public static List<String> loadWorkspacePrefixesIntoRequest() {
+        List<String> prefixes = TranslatorWorker.getAllPrefixes();
+        TLSUtils.getRequest().setAttribute(PREFIXES, prefixes);
+        return prefixes;
     }
 }

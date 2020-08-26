@@ -11,12 +11,12 @@ import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampapi.endpoints.common.values.providers.GenericPossibleValuesProvider;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.criterion.Restrictions;
 
@@ -41,8 +41,7 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
                 + AmpCategoryValue.class.getName() + " acv ";
         List<String> prefixes = ((List<String>) TLSUtils.getRequest().getAttribute(PREFIXES));
         if (prefixes == null) {
-            prefixes = TranslatorWorker.getAllPrefixes();
-            TLSUtils.getRequest().setAttribute(PREFIXES, prefixes);
+            prefixes = ActivityUtil.loadWorkspacePrefixesIntoRequest();
         }
         if (prefixes != null && prefixes.size() > 0) {
             queryString += " WHERE acv.ampCategoryClass.keyName IN (";

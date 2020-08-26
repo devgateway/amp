@@ -2,7 +2,6 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
-import static org.digijava.kernel.translator.util.TrnUtil.PREFIXES;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -45,7 +44,6 @@ import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
-import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 
@@ -56,6 +54,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.Example;
 import io.swagger.annotations.ExampleProperty;
+import org.digijava.module.aim.util.ActivityUtil;
 
 /**
  * AMP Activity Endpoints for Activity Import / Export
@@ -127,8 +126,7 @@ public class InterchangeEndpoints {
         if (fields == null) {
             response = Collections.emptyMap();
         } else {
-            List<String> prefixes = TranslatorWorker.getAllPrefixes();
-            TLSUtils.getRequest().setAttribute(PREFIXES, prefixes);
+            ActivityUtil.loadWorkspacePrefixesIntoRequest();
             List<APIField> apiFields = AmpFieldsEnumerator.getEnumerator().getActivityFields();
 
             response = fields.stream()
@@ -392,8 +390,7 @@ public class InterchangeEndpoints {
         ActivityImportRules rules = new ActivityImportRules(canDowngradeToDraft, isProcessApprovalFields,
                 isTrackEditors);
 
-        List<String> prefixes = TranslatorWorker.getAllPrefixes();
-        TLSUtils.getRequest().setAttribute(PREFIXES, prefixes);
+        ActivityUtil.loadWorkspacePrefixesIntoRequest();
         return ActivityInterchangeUtils.importActivity(newJson.getMap(), true, rules, uri.getBaseUri() + "activity");
     }
 

@@ -456,18 +456,20 @@ public class FieldsEnumerator {
             if (translations.isEmpty()) {
                 translations.set(DEFAULT, "en", label);
             }
-            prefixes.forEach(prefix -> {
-                try {
-                    TLSUtils.getRequest().setAttribute(PREFIX, prefix);
-                    Collection<Message> messages = translatorService.getAllTranslationOfBody(label, DEFAULT_SITE_ID);
-                    for (Message m : messages) {
-                        translations.set(prefix, m.getLocale(), m.getMessage());
+            if (prefixes != null) {
+                prefixes.forEach(prefix -> {
+                    try {
+                        TLSUtils.getRequest().setAttribute(PREFIX, prefix);
+                        Collection<Message> messages = translatorService.getAllTranslationOfBody(label, DEFAULT_SITE_ID);
+                        for (Message m : messages) {
+                            translations.set(prefix, m.getLocale(), m.getMessage());
+                        }
+                    } catch (WorkerException e) {
+                        e.printStackTrace();
+                        throw new RuntimeException(e);
                     }
-                } catch (WorkerException e) {
-                    e.printStackTrace();
-                    throw new RuntimeException(e);
-                }
-            });
+                });
+            }
         } catch (WorkerException e) {
             e.printStackTrace();
         }

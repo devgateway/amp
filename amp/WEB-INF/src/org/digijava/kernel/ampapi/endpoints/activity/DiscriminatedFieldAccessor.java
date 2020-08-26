@@ -46,7 +46,9 @@ public class DiscriminatedFieldAccessor implements FieldAccessor {
         if (multipleValues) {
             List<Object> filteredItems = new ArrayList<>();
             for (Object item : collection) {
-                if (getDiscriminationValue(item).equals(discriminatorValue)) {
+                // AMPOFFLINE-1528
+                if (getDiscriminationValue(item).equals(discriminatorValue) ||
+                        getDiscriminationValue(item).contains(discriminatorValue)) {
                     filteredItems.add(item);
                 }
             }
@@ -54,7 +56,9 @@ public class DiscriminatedFieldAccessor implements FieldAccessor {
         } else {
             Object singleItem = null;
             for (Object item : collection) {
-                if (getDiscriminationValue(item).equals(discriminatorValue)) {
+                // AMPOFFLINE-1528
+                if (getDiscriminationValue(item).equals(discriminatorValue) ||
+                        getDiscriminationValue(item).contains(discriminatorValue)) {
                     if (singleItem == null) {
                         singleItem = item;
                     } else {
@@ -85,7 +89,9 @@ public class DiscriminatedFieldAccessor implements FieldAccessor {
             Iterator it = collection.iterator();
             while (it.hasNext()) {
                 Object item = it.next();
-                if (getDiscriminationValue(item).equals(discriminatorValue)) {
+                // AMPOFFLINE-1528
+                if (getDiscriminationValue(item).equals(discriminatorValue) ||
+                        getDiscriminationValue(item).contains(discriminatorValue)) {
                     boolean removed = newItems.remove(item);
                     if (!removed) {
                         it.remove();
@@ -98,7 +104,9 @@ public class DiscriminatedFieldAccessor implements FieldAccessor {
             Iterator it = collection.iterator();
             while (it.hasNext()) {
                 Object item = it.next();
-                if (getDiscriminationValue(item).equals(discriminatorValue)) {
+                // AMPOFFLINE-1528
+                if (getDiscriminationValue(item).equals(discriminatorValue) ||
+                        getDiscriminationValue(item).contains(discriminatorValue)) {
                     it.remove();
                     if (removed) {
                         throw newMultipleValuesException();

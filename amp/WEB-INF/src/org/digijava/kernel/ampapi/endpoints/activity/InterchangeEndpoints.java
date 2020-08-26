@@ -392,6 +392,8 @@ public class InterchangeEndpoints {
         ActivityImportRules rules = new ActivityImportRules(canDowngradeToDraft, isProcessApprovalFields,
                 isTrackEditors);
 
+        List<String> prefixes = TranslatorWorker.getAllPrefixes();
+        TLSUtils.getRequest().setAttribute(PREFIXES, prefixes);
         return ActivityInterchangeUtils.importActivity(newJson.getMap(), true, rules, uri.getBaseUri() + "activity");
     }
 

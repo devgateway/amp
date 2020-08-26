@@ -3,6 +3,7 @@ package org.digijava.kernel.ampapi.endpoints.contact;
 import static java.util.Collections.emptyMap;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
+import static org.digijava.kernel.translator.util.TrnUtil.PREFIXES;
 
 import java.util.Collection;
 import java.util.List;
@@ -31,7 +32,9 @@ import org.digijava.kernel.ampapi.endpoints.contact.dto.ContactView;
 import org.digijava.kernel.ampapi.endpoints.contact.dto.SwaggerContact;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpContact;
 
 import io.swagger.annotations.Api;
@@ -91,6 +94,8 @@ public class ContactEndpoint {
     public Map<String, List<PossibleValue>> getValues(
             @ApiParam("list of fully qualified contact fields") List<String> fields) {
         Map<String, List<PossibleValue>> response;
+        List<String> prefixes = TranslatorWorker.getAllPrefixes();
+        TLSUtils.getRequest().setAttribute(PREFIXES, prefixes);
         if (fields == null) {
             response = emptyMap();
         } else {

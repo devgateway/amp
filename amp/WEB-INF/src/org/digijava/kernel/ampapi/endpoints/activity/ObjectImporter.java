@@ -433,14 +433,12 @@ public abstract class ObjectImporter<T> {
 
                         isFormatValid = validateAndImport(newFieldValue, childrenFields, newJsonObjValue, fieldPath)
                                 && isFormatValid;
-
-                        if (isFormatValid) {
-                            valueConverter.configureDiscriminationField(newFieldValue, fieldDef);
-                        }
+                    }
+                    if (isFormatValid) {
+                        valueConverter.configureDiscriminationField(newFieldValue, fieldDef);
                     }
                 }
             }
-
             fieldDef.getFieldAccessor().set(newParent, newFieldValue);
         }
         return isFormatValid;

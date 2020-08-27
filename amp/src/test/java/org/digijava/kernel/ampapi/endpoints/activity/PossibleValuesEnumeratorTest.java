@@ -200,14 +200,14 @@ public class PossibleValuesEnumeratorTest {
         when(translatorService.translateLabel(any())).thenReturn(ImmutableMap.of("en", "en value", "fr", "fr value"));
 
         when(possibleValuesDAO.getCategoryValues(any())).thenReturn(Arrays.asList(
-                values(1, "Planned", false, 1),
-                values(2, "Canceled", true, 2)
+                values(1, "Planned", false, 1, ""),
+                values(2, "Canceled", true, 2, "")
         ));
 
         assertJsonEquals(possibleValuesFor("activity_status"),
                 "[{\"id\":1,\"value\":\"Planned\","
                         + "\"translated-value\":{\"en\":\"en value\",\"fr\":\"fr value\"},"
-                        + "\"extra_info\":{\"index\":1}}]");
+                        + "\"extra_info\":{\"index\":1,\"workspace-prefix\":\"\"}}]");
     }
 
     @Test

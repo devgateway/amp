@@ -460,7 +460,8 @@ public class FieldsEnumerator {
                 prefixes.forEach(prefix -> {
                     try {
                         TLSUtils.getRequest().setAttribute(PREFIX, prefix);
-                        Collection<Message> messages = translatorService.getAllTranslationOfBody(label, DEFAULT_SITE_ID);
+                        Collection<Message> messages = translatorService.getAllTranslationOfBody(label,
+                                DEFAULT_SITE_ID);
                         for (Message m : messages) {
                             translations.set(prefix, m.getLocale(), m.getMessage());
                         }

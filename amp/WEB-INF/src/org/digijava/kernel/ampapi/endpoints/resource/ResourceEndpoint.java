@@ -41,7 +41,6 @@ import org.digijava.kernel.ampapi.endpoints.resource.dto.SwaggerResource;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
-import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

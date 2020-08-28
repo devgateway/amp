@@ -102,6 +102,7 @@ import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.type.StringType;
 import org.joda.time.Period;
 
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils.WORKSPACE_PREFIX;
 import static org.digijava.kernel.translator.util.TrnUtil.PREFIXES;
 
 public class ActivityUtil {
@@ -468,6 +469,14 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                 Hibernate.initialize(str.getImages());
                 Hibernate.initialize(str.getType());
                 Hibernate.initialize(str.getCoordinates());
+            }
+
+            // AMPOFFLINE-1528
+            if (result.getTeam().getWorkspacePrefix() != null) {
+                TLSUtils.getRequest().setAttribute(WORKSPACE_PREFIX,
+                        result.getTeam().getWorkspacePrefix().getLabel());
+            } else {
+                TLSUtils.getRequest().setAttribute(WORKSPACE_PREFIX, "");
             }
             
             ActivityUtil.initializeForApi(result);

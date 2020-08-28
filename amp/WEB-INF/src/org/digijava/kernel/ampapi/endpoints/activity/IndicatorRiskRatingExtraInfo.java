@@ -10,11 +10,18 @@ public class IndicatorRiskRatingExtraInfo {
     @JsonProperty("rating-value")
     private final int ratingValue;
 
-    public IndicatorRiskRatingExtraInfo(int ratingValue) {
+    private final int index;
+
+    public IndicatorRiskRatingExtraInfo(int ratingValue, int index) {
         this.ratingValue = ratingValue;
+        this.index = index;
     }
 
     public int getRatingValue() {
         return ratingValue;
+    }
+
+    public int getIndex() {
+        return index;
     }
 }

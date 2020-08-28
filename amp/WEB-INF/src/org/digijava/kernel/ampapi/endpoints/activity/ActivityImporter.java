@@ -289,12 +289,7 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
             }
 
             // AMPOFFLINE-1528
-            if (newActivity.getTeam() != null && newActivity.getTeam().getWorkspacePrefix() != null) {
-                TLSUtils.getRequest().setAttribute(WORKSPACE_PREFIX,
-                        newActivity.getTeam().getWorkspacePrefix().getLabel());
-            } else {
-                TLSUtils.getRequest().setAttribute(WORKSPACE_PREFIX, "");
-            }
+            org.digijava.module.aim.util.ActivityUtil.setCurrentWorkspacePrefixIntoRequest(newActivity);
 
             validateAndImport(newActivity, newJson);
             

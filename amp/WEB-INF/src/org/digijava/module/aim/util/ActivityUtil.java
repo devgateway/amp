@@ -472,13 +472,8 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             }
 
             // AMPOFFLINE-1528
-            if (result.getTeam().getWorkspacePrefix() != null) {
-                TLSUtils.getRequest().setAttribute(WORKSPACE_PREFIX,
-                        result.getTeam().getWorkspacePrefix().getLabel());
-            } else {
-                TLSUtils.getRequest().setAttribute(WORKSPACE_PREFIX, "");
-            }
-            
+            ActivityUtil.setCurrentWorkspacePrefixIntoRequest(result);
+
             ActivityUtil.initializeForApi(result);
             
         } catch (ObjectNotFoundException e) {
@@ -2123,5 +2118,14 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         List<String> prefixes = TranslatorWorker.getAllPrefixes();
         TLSUtils.getRequest().setAttribute(PREFIXES, prefixes);
         return prefixes;
+    }
+
+    public static void setCurrentWorkspacePrefixIntoRequest(AmpActivityVersion activity) {
+        if (activity.getTeam() != null && activity.getTeam().getWorkspacePrefix() != null) {
+            TLSUtils.getRequest().setAttribute(WORKSPACE_PREFIX,
+                    activity.getTeam().getWorkspacePrefix().getLabel());
+        } else {
+            TLSUtils.getRequest().setAttribute(WORKSPACE_PREFIX, "");
+        }
     }
 }

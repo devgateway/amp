@@ -220,12 +220,7 @@ public final class ActivityInterchangeUtils {
                 try {
 
                     // AMPOFFLINE-1528
-                    if (activity.getTeam().getWorkspacePrefix() != null) {
-                        TLSUtils.getRequest().setAttribute(WORKSPACE_PREFIX,
-                                activity.getTeam().getWorkspacePrefix().getLabel());
-                    } else {
-                        TLSUtils.getRequest().setAttribute(WORKSPACE_PREFIX, "");
-                    }
+                    ActivityUtil.setCurrentWorkspacePrefixIntoRequest(activity);
 
                     ActivityUtil.initializeForApi(activity);
                     result = exporter.export(activity);

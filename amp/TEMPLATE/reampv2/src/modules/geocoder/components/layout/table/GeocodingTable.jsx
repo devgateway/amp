@@ -7,6 +7,7 @@ import GeocodingActionColumn from "./GeocodingActionColumn";
 
 import './table.css';
 import Locations from "./Locations";
+import {Loading} from "../../../../../utils/components/Loading";
 
 class GeocodingTable extends Component {
     constructor(props) {
@@ -124,23 +125,25 @@ class GeocodingTable extends Component {
 
         return (
             <div className="activity-table">
-                <BootstrapTable
-                    keyField="activity_id"
-                    scrollY
-                    data={this.props.activities}
-                    maxHeight="200px"
-                    columns={columns}
-                    classes="table-striped"
-                    expandRow={expandRow}
-                    expandableRow={ this.isExpandableRow }
-                    expandComponent={ this.expandComponent }
-                    pagination={paginationFactory(options)}
-                    expandColumnOptions={ {
-                        expandColumnVisible: true,
-                        expandColumnComponent: this.expandColumnComponent,
-                        columnWidth: '200px'
-                    } }
-                />
+                {this.props.geocodingPending
+                    ? <Loading/>
+                    : <BootstrapTable
+                        keyField="activity_id"
+                        scrollY
+                        data={this.props.activities}
+                        maxHeight="200px"
+                        columns={columns}
+                        classes="table-striped"
+                        expandRow={expandRow}
+                        expandableRow={ this.isExpandableRow }
+                        expandComponent={ this.expandComponent }
+                        pagination={paginationFactory(options)}
+                        expandColumnOptions={{
+                            expandColumnVisible: true,
+                            expandColumnComponent: this.expandColumnComponent,
+                            columnWidth: '200px'
+                        }}/>
+                }
             </div>
         );
     }
@@ -148,6 +151,7 @@ class GeocodingTable extends Component {
 
 const mapStateToProps = state => {
     return {
+        geocodingPending: state.geocodingReducer.pending,
         activities: state.geocodingReducer.activities,
     };
 };

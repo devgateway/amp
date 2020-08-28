@@ -5,9 +5,9 @@ import LocationActionColumn from "./LocationActionColumn";
 import {geocodeLocation} from "../../../actions/geocodingAction";
 
 
-function LocationFields(props) {
+function LocationFields({fields}) {
     return (
-        props.fields.map((field) =>
+        fields.map((field) =>
             <>
             <div> / <b>{field.name}</b> | {field.value}</div>
             </>
@@ -29,20 +29,18 @@ class Locations extends Component {
     }
 
     handleAcceptLocation = (e, locationId) => {
-        this.props.geocodeLocation(this.props.activityId, locationId, 'ACCEPTED')
+        this.props.geocodeLocation(this.props.activityId, locationId, true)
 
         e.preventDefault();
         console.log('User clicked accepted:', this);
-        // this.setState({ status: 'ACCEPTED' });
 
     };
 
     handleRejectLocation = (e, locationId) => {
-        this.props.geocodeLocation(this.props.activityId, locationId, 'REJECTED');
+        this.props.geocodeLocation(this.props.activityId, locationId, false);
 
         e.preventDefault();
         console.log('User clicked reject:', this);
-        // this.setState({ status: 'REJECTED' });
     };
 
     render() {
@@ -56,8 +54,9 @@ class Locations extends Component {
         let locationItems = locations.map((location) =>
             <>
                 <tr>
-                    <td className="col-10 location-name-column ">
-                        {location.name}
+                    <td className="col-10 location-name-column">
+                        <span className="location-name">{location.name}</span>
+                        <span>({location.administrative_level})</span>
                     </td>
                     <td className="col-70 location-field-column ">
                         <LocationFields fields={location.fields}/>

@@ -4,21 +4,14 @@ import './geocoder.css'
 import Button from 'react-bootstrap/Button';
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
-import {resetAllActivities, runSearch} from "../../../actions/geocodingAction";
-import RunSearchButton from "./RunSearchButton";
-import ResetAllButton from "./ResetAllButton";
+import RunSearchButton from "./button/RunSearchButton";
+import ResetAllButton from "./button/ResetAllButton";
+import CancelGeocodingButton from "./button/CancelGeocodingButton";
 
 class GeocoderHeader extends Component {
 
     constructor(props) {
         super(props);
-
-        this.onRunSearch = this.onRunSearch.bind(this);
-    }
-
-    onRunSearch = () => {
-        this.props.runSearch(this.props.selectedActivities);
-        console.log('User clicked run search:', this.props.selectedActivities);
     }
 
     render() {
@@ -35,6 +28,7 @@ class GeocoderHeader extends Component {
                                  onRunSearch={this.onRunSearch}/>
                     : (<>
                         <ResetAllButton title={translations['amp.geocoder:resetAll']} />
+                        <CancelGeocodingButton title={translations['amp.geocoder:cancelGeocoding']} />
                         <Button variant="success" className={'pull-right button-header'}>{translations['amp.geocoder:saveAllEdits']}</Button>
                     </>)
                 }
@@ -50,8 +44,6 @@ const mapStateToProps = state => {
     };
 };
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-    runSearch: runSearch,
-}, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(GeocoderHeader);

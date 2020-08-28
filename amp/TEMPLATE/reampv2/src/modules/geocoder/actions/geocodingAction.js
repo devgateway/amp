@@ -1,4 +1,4 @@
-import {fetchApiData, fetchApiDataWithStatus} from "../../../utils/apiOperations";
+import {callDeleteApiEndpoint, fetchApiData, fetchApiDataWithStatus} from "../../../utils/apiOperations";
 
 export const FETCH_GEOCODING_PENDING = 'FETCH_GEOCODING_PENDING';
 export const FETCH_GEOCODING_SUCCESS = 'FETCH_GEOCODING_SUCCESS';
@@ -12,79 +12,13 @@ export const GEOCODING_RESET_ALL_PENDING = 'GEOCODING_RESET_ALL_PENDING';
 export const GEOCODING_RESET_ALL_SUCCESS = 'GEOCODING_RESET_ALL_SUCCESS';
 export const GEOCODING_RESET_ALL_ERROR = 'GEOCODING_RESET_ALL_ERROR';
 
+export const GEOCODING_CANCEL_PENDING = 'GEOCODING_CANCEL_PENDING';
+export const GEOCODING_CANCEL_SUCCESS = 'GEOCODING_CANCEL_SUCCESS';
+export const GEOCODING_CANCEL_ERROR = 'GEOCODING_CANCEL_ERROR';
+
 export const GEOCODING_RUN_SEARCH_PENDING = 'GEOCODING_RUN_SEARCH_PENDING';
 export const GEOCODING_RUN_SEARCH_SUCCESS = 'GEOCODING_RUN_SEARCH_SUCCESS';
 export const GEOCODING_RUN_SEARCH_ERROR = 'GEOCODING_RUN_SEARCH_ERROR';
-
-let geocoding_available = {
-    status : "AVAILABLE",
-    activities : [{
-            activity_id : 1,
-            project_date: "23/02/20116",
-            project_number: "XYZ-65-65",
-            project_title: "Emergency Spending Allocation - (BID/HA-G1001)",
-            location: "---",
-            locations: [
-                {"id": 3265,
-                "name": "Haiti",
-                "administrative_level": "Country",
-                "fields": [
-                    {"field_name": "project_title", "text": "Project title Haiti"},
-                    {"field_name": "description", "text": "Project description Haiti etc."}
-                ],
-                    accepted: true,
-                },
-                {  "id": 3268,
-                    "name": "Jacmel",
-                    "administrative_level": "Region",
-                    "fields": [
-                    {"field_name": "objective", "text": "Project objective Jacmel"}
-                ],
-                    accepted: false
-                }
-            ]
-        },
-        {
-            activity_id : 2,
-            project_date: "23/02/2014",
-            project_number: "XYZ-65-68",
-            project_title: "Development of the Industrial Park Model to Improve Trade Opportunities for Jacmel",
-            location: "---",
-            locations: [
-                {"id": 3265,
-                    "name": "Haiti",
-                    "administrative_level": "Country",
-                    "fields": [
-                        {"field_name": "project_title", "text": "Project title Haiti"},
-                        {"field_name": "description", "text": "Project description Haiti etc."}
-                    ],
-                    accepted: null
-                }
-            ]
-        }
-    ]
-}
-
-let geocoding_not_available = {
-    status : "NOT_AVAILABLE",
-    creator: "John Doe",
-    workspace: "Training Workspace",
-    activities : []
-}
-
-let geocoding_completed = {
-    status : "COMPLETED",
-    creator: null,
-    workspace: null,
-    activities : []
-}
-
-let geocoding_running = {
-    status : "RUNNING",
-    creator: "John Doe",
-    workspace: "Training Workspace",
-    activities : []
-}
 
 export function fetchGeocodingPending() {
     return {
@@ -103,7 +37,6 @@ export function fetchGeocodingSuccess(geocoding) {
 export function fetchGeocodingNotFound(geocoding) {
     return {
         type: FETCH_GEOCODING_SUCCESS,
-        error: null,
         payload: {},
         status: 'NOT_STARTED'
     }
@@ -150,34 +83,57 @@ export function geocodeLocationError(error) {
 export function resetAllActivitiesPending() {
     return {
         type: GEOCODING_RESET_ALL_PENDING,
-        reset_pending: true
     }
 }
 
-export function resetAllActivitiesSuccess() {
+export function resetAllLocationStatusesSuccess() {
     return {
         type: GEOCODING_RESET_ALL_SUCCESS,
-        reset_pending: false
     }
 }
 
-export function resetAllActivitiesError(error) {
+export function resetAllLocationStatusesError(error) {
     return {
         type: GEOCODING_RESET_ALL_ERROR,
-        reset_error: error,
-        reset_pending: false
+        error: error,
+    }
+}
+
+export function cancelGeocodingPending() {
+    return {
+        type: GEOCODING_CANCEL_PENDING,
+        error: null,
+        pending: true
+    }
+}
+
+export function cancelGeocodingSuccess() {
+    return {
+        type: GEOCODING_CANCEL_SUCCESS,
+        error: null,
+        pending: false
+    }
+}
+
+export function cancelGeocodingError(error) {
+    return {
+        type: GEOCODING_CANCEL_ERROR,
+        error: error,
+        pending: false
     }
 }
 
 export function runSearchPending() {
     return {
-        type: GEOCODING_RUN_SEARCH_PENDING,
+        type: GEOCODING_RUN_SEARCH_PENDING
     }
 }
 
-export function runSearchSuccess() {
+export function runSearchSuccess(geocoding) {
     return {
         type: GEOCODING_RUN_SEARCH_SUCCESS,
+        payload: geocoding,
+        status: 'IN_PROGRESS'
     }
 }
 
@@ -208,8 +164,8 @@ export const runSearch = (activityIds) => {
     return dispatch => {
         dispatch(runSearchPending());
         return fetchApiDataWithStatus({body: activityIds, url: '/rest/geo-coder/process'})
-            .then(() => {
-                return dispatch(runSearchSuccess());
+            .then(geocoding => {
+                return dispatch(runSearchSuccess(geocoding));
             })
             .catch(error => {
                 return dispatch(runSearchError(error.message))
@@ -236,17 +192,29 @@ export const geocodeLocation = (activityId, locationId, accepted) => {
     }
 };
 
-export const resetAllActivities = () => {
+export const resetAllLocationStatuses = () => {
     return dispatch => {
         dispatch(resetAllActivitiesPending());
-        return dispatch(resetAllActivitiesSuccess());
-        // return fetchApiData({url: '/rest/geocoding/results', body: queryModel})
-        //     .then(geocoding => {
-        //         return dispatch(fetchGeocodingSuccess(geocoding));
-        //     })
-        //     .catch(error => {
-        //         return dispatch(fetchGeocodingError(error))
-        //     });
+        return fetchApiDataWithStatus({url: '/rest/geo-coder/reset-location-statuses', body: {}})
+            .then(() => {
+                return dispatch(resetAllLocationStatusesSuccess());
+            })
+            .catch(error => {
+                return dispatch(resetAllLocationStatusesError(error.message))
+            });
+    }
+};
+
+export const cancelGeocoding = () => {
+    return dispatch => {
+        dispatch(cancelGeocodingPending());
+        return callDeleteApiEndpoint({url: '/rest/geo-coder/process'})
+            .then(geocoding => {
+                return dispatch(cancelGeocodingSuccess());
+            })
+            .catch(error => {
+                return dispatch(cancelGeocodingError(error))
+            });
     }
 };
 

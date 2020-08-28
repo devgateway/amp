@@ -19,7 +19,8 @@ export default class LocationActionColumn extends Component {
 
         return (
             <div className={'location-action'}>
-                {this.props.location.status ? this.props.location.status :
+                {this.props.location.accepted === true ? 'ACCEPTED' : this.props.location.accepted === false ? 'REJECTED'
+                        :
                     <ul>
                         <li><a href="#" title="accept" onClick={e => handleAcceptLocation(e, this.props.location.id)}>
                                 <FontAwesomeIcon className={'fa-icon fa-2x'} icon={faCheckCircle}/>

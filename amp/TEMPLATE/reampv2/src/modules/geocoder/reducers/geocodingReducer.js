@@ -1,7 +1,7 @@
 import {
     FETCH_GEOCODING_ERROR,
     FETCH_GEOCODING_PENDING,
-    FETCH_GEOCODING_SUCCESS,
+    FETCH_GEOCODING_SUCCESS, GEOCODING_CANCEL_ERROR, GEOCODING_CANCEL_PENDING, GEOCODING_CANCEL_SUCCESS,
     GEOCODING_LOCATION_ERROR,
     GEOCODING_LOCATION_PENDING,
     GEOCODING_LOCATION_SUCCESS,
@@ -12,16 +12,14 @@ import {
 } from '../actions/geocodingAction';
 
 const initialState = {
-    pending: true,
+    pending: false,
     reset_pending: false,
-    run_search_pending: false,
     running: false,
     status : "NOT_STARTED",
     creator: null,
     workspace: null,
     activities : [],
     error: null,
-    run_search_error: null,
     reset_error: null
 };
 
@@ -47,21 +45,13 @@ export default function geocodingReducer(state = initialState, action) {
                 error: action.error,
                 status : action.status,
             };
-        case GEOCODING_RUN_SEARCH_PENDING:
-            return {
-                ...state,
-                run_search_pending: true,
-            };
         case GEOCODING_RUN_SEARCH_SUCCESS:
             return {
                 ...state,
-                run_search_pending: false,
-            };
-        case GEOCODING_RUN_SEARCH_ERROR:
-            return {
-                ...state,
-                run_search_pending: false,
-                run_search_error: action.error
+                ...action.payload.data,
+                status: action.status,
+                pending: false,
+                error: null
             };
         case GEOCODING_LOCATION_PENDING:
             return {
@@ -83,18 +73,38 @@ export default function geocodingReducer(state = initialState, action) {
         case GEOCODING_RESET_ALL_PENDING:
             return {
                 ...state,
-                reset_pending: true,
+                pending: true,
+                error: null
             };
         case GEOCODING_RESET_ALL_SUCCESS:
             return {
                 ...state,
-                reset_pending: false,
+                pending: false,
                 activities: resetAll(state.activities)
             };
         case GEOCODING_RESET_ALL_ERROR:
             return {
                 ...state,
-                reset_pending: false,
+                pending: false,
+                error: action.error,
+            };
+        case GEOCODING_CANCEL_PENDING:
+            return {
+                ...state,
+                pending: true,
+                error: null
+            };
+        case GEOCODING_CANCEL_SUCCESS:
+            return {
+                ...state,
+                status : "NOT_STARTED",
+                error: null,
+                pending: false,
+                activities : []
+            };
+        case GEOCODING_CANCEL_ERROR:
+            return {
+                ...state,
                 error: action.error,
             };
         default:
@@ -120,7 +130,7 @@ function updateLocation(locations, action) {
         if(item.id === action.payload.location_id) {
             return {
                 ...item,
-                status: action.payload.status,
+                accepted: action.payload.accepted,
                 pending: false
             };
         }
@@ -142,7 +152,7 @@ function resetLocations(locations) {
     return locations.map((item, id) => {
         return {
             ...item,
-            status: null,
+            accepted: null,
             pending: false
         };
     });

@@ -1,14 +1,15 @@
 import React, {Component} from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import {TranslationContext} from "../../AppContext";
+import Alert from "react-bootstrap/Alert";
+import {TranslationContext} from "../../../AppContext";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
-import AlertError from "./AlertError";
-import {Loading} from "../../../../../utils/components/Loading";
-import {resetAllActivities} from "../../../actions/geocodingAction";
+import AlertError from "../AlertError";
+import {Loading} from "../../../../../../utils/components/Loading";
+import {runSearch} from "../../../../actions/geocodingAction";
 
-class ResetAllButton extends Component {
+class RunSearchButton extends Component {
 
     constructor(props) {
         super(props);
@@ -16,8 +17,7 @@ class ResetAllButton extends Component {
 
         this.handleClose = this.handleClose.bind(this);
         this.handleShow = this.handleShow.bind(this);
-        this.onResetAll = this.onResetAll.bind(this);
-
+        this.onRunSearch = this.onRunSearch.bind(this);
     }
 
     handleClose() {
@@ -28,32 +28,37 @@ class ResetAllButton extends Component {
         this.setState({show: true});
     }
 
-    onResetAll = (e) => {
-        this.props.resetAllActivities();
+    onRunSearch = () => {
+        this.props.runSearch(this.props.selectedActivities);
         this.handleClose();
-    };
+    }
 
     render() {
         const {translations} = this.context;
 
         return (
             <>
-                <Button variant="primary" onClick={this.handleShow}>{this.props.title}</Button>
+                <Button variant="success"
+                        className={'pull-right button-header'}
+                        disabled={this.props.selectedActivities.length < 1 || this.props.activitiesPending} onClick={this.handleShow}>{this.props.title}
+                </Button>
 
                 <Modal show={this.state.show} onHide={this.handleClose} animation={false}>
                     <Modal.Header closeButton>
                         <Modal.Title>{this.props.title}</Modal.Title>
                     </Modal.Header>
-                    <Modal.Body>All the geocoded locations would be reset.</Modal.Body>
+                    <Modal.Body>Activities to be geocoded:
+                        {this.props.selectedActivities.map((value) => {
+                            return <div>{value}</div>
+                        })}
+                        </Modal.Body>
                     <Modal.Footer>
                         <Button variant="secondary" onClick={this.handleClose}>
                             {translations['amp.geocoder:cancel']}
                         </Button>
-                        <Button variant="primary" className={'button-header'} onClick={this.onResetAll}>
+                        <Button variant="success" className={'button-header'} onClick={this.onRunSearch}>
                             {this.props.title}
                         </Button>
-                        {this.props.geocoding.reset_pending && <Loading/>}
-                        {this.props.geocoding.reset_error && <AlertError error={this.props.geocoding.reset_error}/>}
                     </Modal.Footer>
                 </Modal>
             </>
@@ -61,16 +66,17 @@ class ResetAllButton extends Component {
     }
 }
 
-ResetAllButton.contextType = TranslationContext;
+RunSearchButton.contextType = TranslationContext;
 
 const mapStateToProps = state => {
     return {
         geocoding: state.geocodingReducer,
+        activitiesPending: state.activitiesReducer.pending,
     };
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-    resetAllActivities: resetAllActivities,
+    runSearch: runSearch,
 }, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(ResetAllButton);
+export default connect(mapStateToProps, mapDispatchToProps)(RunSearchButton);

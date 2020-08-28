@@ -1,14 +1,14 @@
 import React, {Component} from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import Alert from "react-bootstrap/Alert";
-import {TranslationContext} from "../../AppContext";
+import {TranslationContext} from "../../../AppContext";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
-import AlertError from "./AlertError";
-import {Loading} from "../../../../../utils/components/Loading";
+import AlertError from "../AlertError";
+import {Loading} from "../../../../../../utils/components/Loading";
+import {cancelGeocoding, resetAllLocationStatuses} from "../../../../actions/geocodingAction";
 
-class RunSearchButton extends Component {
+class CancelGeocodingButton extends Component {
 
     constructor(props) {
         super(props);
@@ -16,6 +16,8 @@ class RunSearchButton extends Component {
 
         this.handleClose = this.handleClose.bind(this);
         this.handleShow = this.handleShow.bind(this);
+        this.onCancelGeocoding = this.onCancelGeocoding.bind(this);
+
     }
 
     handleClose() {
@@ -26,34 +28,32 @@ class RunSearchButton extends Component {
         this.setState({show: true});
     }
 
+    onCancelGeocoding = (e) => {
+        this.props.cancelGeocoding();
+        this.handleClose();
+    };
+
     render() {
         const {translations} = this.context;
 
         return (
             <>
-                <Button variant="success"
-                        className={'pull-right button-header'}
-                        disabled={this.props.selectedActivities.length < 1} onClick={this.handleShow}>{this.props.title}
-                </Button>
+                <Button variant="warning" onClick={this.handleShow}>{this.props.title}</Button>
 
                 <Modal show={this.state.show} onHide={this.handleClose} animation={false}>
                     <Modal.Header closeButton>
                         <Modal.Title>{this.props.title}</Modal.Title>
                     </Modal.Header>
-                    <Modal.Body>Activities to be geocoded:
-                        {this.props.selectedActivities.map((value) => {
-                            return <div>{value}</div>
-                        })}
-                        </Modal.Body>
+                    <Modal.Body>Cancel the geocode process?</Modal.Body>
                     <Modal.Footer>
                         <Button variant="secondary" onClick={this.handleClose}>
                             {translations['amp.geocoder:cancel']}
                         </Button>
-                        <Button variant="success" className={'button-header'} onClick={this.props.onRunSearch}>
+                        <Button variant="primary" className={'button-header'} onClick={this.onCancelGeocoding}>
                             {this.props.title}
                         </Button>
-                        {this.props.geocoding.run_search_pending && <Loading/>}
-                        {this.props.geocoding.run_search_error && <AlertError error={this.props.geocoding.run_search_error}/>}
+                        {this.props.geocoding.pending && <Loading/>}
+                        {this.props.geocoding.error && <AlertError error={this.props.geocoding.error}/>}
                     </Modal.Footer>
                 </Modal>
             </>
@@ -61,7 +61,7 @@ class RunSearchButton extends Component {
     }
 }
 
-RunSearchButton.contextType = TranslationContext;
+CancelGeocodingButton.contextType = TranslationContext;
 
 const mapStateToProps = state => {
     return {
@@ -69,6 +69,8 @@ const mapStateToProps = state => {
     };
 };
 
-const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({
+    cancelGeocoding: cancelGeocoding,
+}, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(RunSearchButton);
+export default connect(mapStateToProps, mapDispatchToProps)(CancelGeocodingButton);

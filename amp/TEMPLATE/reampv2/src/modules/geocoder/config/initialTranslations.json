@@ -5,6 +5,7 @@
   "amp.geocoder:selectProjects": "Select Projects",
   "amp.geocoder:settings": "Settings",
   "amp.geocoder:resetAll": "Reset All",
+  "amp.geocoder:cancelGeocoding": "Cancel Geocoding",
   "amp.geocoder:saveAllEdits": "Save All Edits",
   "amp.geocoder:runSearch": "Run Search",
   "amp.geocoder:running": "Geocoding is still running",

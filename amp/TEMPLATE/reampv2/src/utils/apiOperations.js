@@ -1,5 +1,6 @@
 const POST = 'POST';
 const GET = 'GET';
+const DELETE = 'DELETE';
 
 export function getRequestOptions(body) {
     const requestOptions = {
@@ -11,6 +12,23 @@ export function getRequestOptions(body) {
     }
     return requestOptions;
 }
+
+export const callDeleteApiEndpoint = ({url}) => {
+    const deleteRequestOptions = {
+        method: DELETE,
+        headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}
+    }
+
+    return new Promise((resolve, reject) => {
+        return fetch(url, deleteRequestOptions)
+            .then(data => {
+                if (data.error) {
+                    return reject(data.error);
+                }
+                return resolve(data);
+            });
+    })
+};
 
 export const fetchApiData = ({body, url}) => {
     return new Promise((resolve, reject) => {
@@ -31,17 +49,17 @@ export const fetchApiData = ({body, url}) => {
 export const fetchApiDataWithStatus = ({body, url}) => {
     return new Promise((resolve, reject) => {
         return fetch(url, getRequestOptions(body))
-            .then(response => response.json().then(data => ({
-                    data: data,
+            .then(response => response.text().then(data => ({
+                    data: data ? JSON.parse(data) : {},
                     ok : response.ok,
                     status: response.status
                 })
-            ).then(res => {
-                if (!res.ok) {
-                    return reject({status: res.status, message: extractErrorMessageFromResponse(res)});
+            ).then(response => {
+                if (!response.ok) {
+                    return reject({status: response.status, message: extractErrorMessageFromResponse(response)});
                 }
 
-                return resolve(res);
+                return resolve(response);
             }));
     })
 };

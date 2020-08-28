@@ -200,16 +200,20 @@ table thead tr th {
 
 .location-name-column {
     text-align: right;
-    font-weight: bolder;
-    font-size:15px;
-    color: #2E69A0;
     vertical-align: top;
     line-height: 26px;
 }
 
+.location-name {
+    font-weight: bolder;
+    font-size:15px;
+    color: #2E69A0;
+    margin-right: 5px;
+}
+
 .location-field-column {
     border-right: 1px solid #ddd;
-    padding-left: 20px;
+    padding-left: 10px;
     font-size:13px;
     vertical-align: top;
     line-height: 25px;
@@ -233,4 +237,60 @@ table thead tr th {
 
 .alert {
     text-align: left;
+}
+
+.btn {
+    margin-right: 5px;
+    margin-left: 5px;
+}
+
+.loading {
+    position: fixed;
+    top: 30%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1050;
+    overflow: hidden;
+    -webkit-overflow-scrolling: touch;
+    outline: 0;
+}
+
+.loading-dialog {
+    position: relative;
+    width: 600px;
+    margin: 30px auto;
+}
+
+.loading-content {
+    position: relative;
+    background-color: #fff;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 1px solid #999;
+    border: 1px solid rgba(0,0,0,.2);
+    outline: 0;
+    -webkit-box-shadow: 0 3px 9px rgba(0,0,0,.5);
+    box-shadow: 0 3px 9px rgba(0,0,0,.5);
+    text-align: center;
+}
+
+.loading-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 20px;
+    color: #5cb85c;
+}
+
+.loading-spinner {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.loading-text {
+    margin-top: 20px;
+    margin-bottom: 20px;
 }

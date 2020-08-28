@@ -10,6 +10,7 @@ import Modal from "react-bootstrap/Modal";
 import {runSearch} from "../../../actions/geocodingAction";
 import * as PropTypes from "prop-types";
 import AlertError from "./AlertError";
+import {Loading} from "../../../../../utils/components/Loading";
 
 const GeocodingNotAvailable = ({user, workspace}) =>
     <h4>Geocoding process not available. User {user} is owner of the process in '{workspace}' workspace</h4>;
@@ -66,6 +67,7 @@ class GeocoderPanel extends Component {
             title = title +  ' - ' + translations['amp.geocoder:geocodedSelection'];
         }
 
+
         return (
             <div>
             {/*{isGeocodingNotAvailable && <GeocodingNotAvailable user={this.props.geocoding.creator} workspace={this.props.geocoding.workspace}/>}*/}
@@ -75,10 +77,12 @@ class GeocoderPanel extends Component {
                         <ProjectList title={title}/>
                         <div className='panel panel-default'>
                             <GeocoderHeader selectedActivities={this.state.selectedActivities}/>
-                            {isGeocoding ? <GeocodingTable/>
-                            : <ActivityTable onSelectActivity={this.onSelectActivity.bind(this)}
-                                                                    onSelectAllActivities={this.onSelectAllActivities.bind(this)}
-                                                                    selectedActivities={this.state.selectedActivities}/>}
+                            {isGeocoding
+                                ? <GeocodingTable/>
+                                : <ActivityTable onSelectActivity={this.onSelectActivity.bind(this)}
+                                                 onSelectAllActivities={this.onSelectAllActivities.bind(this)}
+                                                 selectedActivities={this.state.selectedActivities}/>
+                            }
                         </div>
                     </div>
                 }
@@ -91,6 +95,7 @@ GeocoderPanel.contextType = TranslationContext;
 
 const mapStateToProps = state => {
     return {
+        activitiesPending: state.activitiesReducer.pending,
         geocoding: state.geocodingReducer,
     };
 };

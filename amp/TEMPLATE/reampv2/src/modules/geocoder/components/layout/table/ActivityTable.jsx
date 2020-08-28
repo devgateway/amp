@@ -1,16 +1,12 @@
-import React, {Component, useState} from 'react';
+import React, {Component} from 'react';
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 
 import './table.css';
-import {
-    loadActivities,
-    selectActivityForGeocoding,
-    selectAllActivitiesForGeocoding
-} from "../../../actions/activitiesAction";
-import {Loading} from "../../../../../utils/components/Loading";
+import {loadActivities} from "../../../actions/activitiesAction";
+import {Loading} from "../panel/Loading";
 
 const SelectedActivitiesMessage = ({size}) =>  {
     return (

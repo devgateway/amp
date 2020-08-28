@@ -1,5 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils.WORKSPACE_PREFIX;
 import static org.digijava.kernel.ampapi.endpoints.activity.SaveMode.DRAFT;
 import static org.digijava.kernel.ampapi.endpoints.activity.SaveMode.SUBMIT;
 
@@ -285,6 +286,14 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
                 }
             } else if (!update) {
                 newActivity = new AmpActivityVersion();
+            }
+
+            // AMPOFFLINE-1528
+            if (newActivity.getTeam().getWorkspacePrefix() != null) {
+                TLSUtils.getRequest().setAttribute(WORKSPACE_PREFIX,
+                        newActivity.getTeam().getWorkspacePrefix().getLabel());
+            } else {
+                TLSUtils.getRequest().setAttribute(WORKSPACE_PREFIX, "");
             }
 
             validateAndImport(newActivity, newJson);

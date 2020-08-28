@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.TreeSet;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.digijava.kernel.request.TLSUtils;
+
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils.WORKSPACE_PREFIX;
 
 /**
  * On read will return a list of objects that satisfy discrimination condition. Changes to this list are not propagated
@@ -43,12 +46,13 @@ public class DiscriminatedFieldAccessor implements FieldAccessor {
     @Override
     public Object get(Object targetObject) {
         Collection collection = getWrappedCollection(targetObject);
+        String prefix = "" + TLSUtils.getRequest().getAttribute(WORKSPACE_PREFIX);
         if (multipleValues) {
             List<Object> filteredItems = new ArrayList<>();
             for (Object item : collection) {
                 // AMPOFFLINE-1528
-                if (getDiscriminationValue(item).equals(discriminatorValue) ||
-                        getDiscriminationValue(item).contains(discriminatorValue)) {
+                if (getDiscriminationValue(item).equals(discriminatorValue)
+                        || getDiscriminationValue(item).equals(prefix + discriminatorValue)) {
                     filteredItems.add(item);
                 }
             }
@@ -57,8 +61,8 @@ public class DiscriminatedFieldAccessor implements FieldAccessor {
             Object singleItem = null;
             for (Object item : collection) {
                 // AMPOFFLINE-1528
-                if (getDiscriminationValue(item).equals(discriminatorValue) ||
-                        getDiscriminationValue(item).contains(discriminatorValue)) {
+                if (getDiscriminationValue(item).equals(discriminatorValue)
+                        || getDiscriminationValue(item).equals(prefix + discriminatorValue)) {
                     if (singleItem == null) {
                         singleItem = item;
                     } else {
@@ -82,6 +86,7 @@ public class DiscriminatedFieldAccessor implements FieldAccessor {
     @Override
     public void set(Object targetObject, Object value) {
         Collection collection = getWrappedCollection(targetObject);
+        String prefix = "" + TLSUtils.getRequest().getAttribute(WORKSPACE_PREFIX);
         if (multipleValues) {
             TreeSet<Object> newItems = new TreeSet<>(Comparator.comparingInt(System::identityHashCode));
             newItems.addAll((Collection) value);
@@ -90,8 +95,8 @@ public class DiscriminatedFieldAccessor implements FieldAccessor {
             while (it.hasNext()) {
                 Object item = it.next();
                 // AMPOFFLINE-1528
-                if (getDiscriminationValue(item).equals(discriminatorValue) ||
-                        getDiscriminationValue(item).contains(discriminatorValue)) {
+                if (getDiscriminationValue(item).equals(discriminatorValue)
+                        || getDiscriminationValue(item).equals(prefix + discriminatorValue)) {
                     boolean removed = newItems.remove(item);
                     if (!removed) {
                         it.remove();
@@ -105,8 +110,8 @@ public class DiscriminatedFieldAccessor implements FieldAccessor {
             while (it.hasNext()) {
                 Object item = it.next();
                 // AMPOFFLINE-1528
-                if (getDiscriminationValue(item).equals(discriminatorValue) ||
-                        getDiscriminationValue(item).contains(discriminatorValue)) {
+                if (getDiscriminationValue(item).equals(discriminatorValue)
+                        || getDiscriminationValue(item).equals(prefix + discriminatorValue)) {
                     it.remove();
                     if (removed) {
                         throw newMultipleValuesException();

@@ -56,6 +56,8 @@ public final class ActivityInterchangeUtils {
 
     private static final Logger logger = Logger.getLogger(ActivityInterchangeUtils.class);
 
+    public static final String WORKSPACE_PREFIX = "workspacePrefix";
+
     private ActivityInterchangeUtils() {
     }
 
@@ -216,6 +218,15 @@ public final class ActivityInterchangeUtils {
                 String ampId = activity.getAmpId();
                 Map<String, Object> result = new LinkedHashMap<>();
                 try {
+
+                    // AMPOFFLINE-1528
+                    if (activity.getTeam().getWorkspacePrefix() != null) {
+                        TLSUtils.getRequest().setAttribute(WORKSPACE_PREFIX,
+                                activity.getTeam().getWorkspacePrefix().getLabel());
+                    } else {
+                        TLSUtils.getRequest().setAttribute(WORKSPACE_PREFIX, "");
+                    }
+
                     ActivityUtil.initializeForApi(activity);
                     result = exporter.export(activity);
                 } catch (Exception e) {

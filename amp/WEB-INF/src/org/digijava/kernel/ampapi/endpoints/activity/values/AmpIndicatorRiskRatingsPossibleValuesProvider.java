@@ -18,9 +18,12 @@ public class AmpIndicatorRiskRatingsPossibleValuesProvider extends AbstractPossi
     @Override
     public List<PossibleValue> getPossibleValues(TranslatorService translatorService) {
         List<PossibleValue> pvs = new ArrayList<>();
+        Integer index = 0;
         List<AmpIndicatorRiskRatings> indicatorRiskRatings = possibleValuesDAO.getIndicatorRiskRatings();
+        indicatorRiskRatings.sort((AmpIndicatorRiskRatings ir1, AmpIndicatorRiskRatings ir2)
+                ->ir2.getRatingValue() - ir1.getRatingValue());
         for (AmpIndicatorRiskRatings r : indicatorRiskRatings) {
-            IndicatorRiskRatingExtraInfo extra = new IndicatorRiskRatingExtraInfo(r.getRatingValue());
+            IndicatorRiskRatingExtraInfo extra = new IndicatorRiskRatingExtraInfo(r.getRatingValue(), ++index);
             pvs.add(new PossibleValue(r.getAmpIndRiskRatingsId(), r.getRatingName(), ImmutableMap.of(), extra));
         }
         return pvs;

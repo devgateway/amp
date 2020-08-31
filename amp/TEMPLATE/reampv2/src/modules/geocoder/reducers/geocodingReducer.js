@@ -1,14 +1,21 @@
 import {
     FETCH_GEOCODING_ERROR,
     FETCH_GEOCODING_PENDING,
-    FETCH_GEOCODING_SUCCESS, GEOCODING_CANCEL_ERROR, GEOCODING_CANCEL_PENDING, GEOCODING_CANCEL_SUCCESS,
+    FETCH_GEOCODING_SUCCESS,
+    GEOCODING_CANCEL_ERROR,
+    GEOCODING_CANCEL_PENDING,
+    GEOCODING_CANCEL_SUCCESS,
     GEOCODING_LOCATION_ERROR,
     GEOCODING_LOCATION_PENDING,
     GEOCODING_LOCATION_SUCCESS,
     GEOCODING_RESET_ALL_ERROR,
     GEOCODING_RESET_ALL_PENDING,
-    GEOCODING_RESET_ALL_SUCCESS, GEOCODING_RUN_SEARCH_ERROR,
-    GEOCODING_RUN_SEARCH_PENDING, GEOCODING_RUN_SEARCH_SUCCESS
+    GEOCODING_RESET_ALL_SUCCESS,
+    GEOCODING_RUN_SEARCH_ERROR,
+    GEOCODING_RUN_SEARCH_PENDING,
+    GEOCODING_RUN_SEARCH_SUCCESS, GEOCODING_SAVE_ALL_EDITS_ERROR,
+    GEOCODING_SAVE_ALL_EDITS_PENDING,
+    GEOCODING_SAVE_ALL_EDITS_SUCCESS
 } from '../actions/geocodingAction';
 
 const initialState = {
@@ -103,6 +110,23 @@ export default function geocodingReducer(state = initialState, action) {
                 activities : []
             };
         case GEOCODING_CANCEL_ERROR:
+            return {
+                ...state,
+                error: action.error,
+            };
+        case GEOCODING_SAVE_ALL_EDITS_PENDING:
+            return {
+                ...state,
+                pending: true,
+                error: null
+            };
+        case GEOCODING_SAVE_ALL_EDITS_SUCCESS:
+            return {
+                ...state,
+                error: null,
+                pending: false,
+            };
+        case GEOCODING_SAVE_ALL_EDITS_ERROR:
             return {
                 ...state,
                 error: action.error,

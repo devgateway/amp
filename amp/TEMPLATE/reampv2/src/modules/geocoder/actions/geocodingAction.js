@@ -20,6 +20,10 @@ export const GEOCODING_RUN_SEARCH_PENDING = 'GEOCODING_RUN_SEARCH_PENDING';
 export const GEOCODING_RUN_SEARCH_SUCCESS = 'GEOCODING_RUN_SEARCH_SUCCESS';
 export const GEOCODING_RUN_SEARCH_ERROR = 'GEOCODING_RUN_SEARCH_ERROR';
 
+export const GEOCODING_SAVE_ALL_EDITS_PENDING = 'GEOCODING_CANCEL_PENDING';
+export const GEOCODING_SAVE_ALL_EDITS_SUCCESS = 'GEOCODING_CANCEL_SUCCESS';
+export const GEOCODING_SAVE_ALL_EDITS_ERROR = 'GEOCODING_CANCEL_ERROR';
+
 export function fetchGeocodingPending() {
     return {
         type: FETCH_GEOCODING_PENDING
@@ -102,16 +106,12 @@ export function resetAllLocationStatusesError(error) {
 export function cancelGeocodingPending() {
     return {
         type: GEOCODING_CANCEL_PENDING,
-        error: null,
-        pending: true
     }
 }
 
 export function cancelGeocodingSuccess() {
     return {
         type: GEOCODING_CANCEL_SUCCESS,
-        error: null,
-        pending: false
     }
 }
 
@@ -119,7 +119,24 @@ export function cancelGeocodingError(error) {
     return {
         type: GEOCODING_CANCEL_ERROR,
         error: error,
-        pending: false
+    }
+}
+
+export function saveAllEditsPending() {
+    return {
+        type: GEOCODING_SAVE_ALL_EDITS_PENDING,
+    }
+}
+
+export function saveAllEditsSuccess() {
+    return {
+        type: GEOCODING_SAVE_ALL_EDITS_SUCCESS,
+    }
+}
+
+export function saveAllEditsError(error) {
+    return {
+        type: GEOCODING_SAVE_ALL_EDITS_ERROR,
     }
 }
 
@@ -209,11 +226,24 @@ export const cancelGeocoding = () => {
     return dispatch => {
         dispatch(cancelGeocodingPending());
         return callDeleteApiEndpoint({url: '/rest/geo-coder/process'})
-            .then(geocoding => {
+            .then(() => {
                 return dispatch(cancelGeocodingSuccess());
             })
             .catch(error => {
                 return dispatch(cancelGeocodingError(error))
+            });
+    }
+};
+
+export const saveAllEdits = () => {
+    return dispatch => {
+        dispatch(saveAllEditsPending());
+        return fetchApiDataWithStatus({url: '/rest/geo-coder/save-activities', body: {}})
+            .then(() => {
+                return dispatch(saveAllEditsSuccess());
+            })
+            .catch(error => {
+                return dispatch(saveAllEditsError(error))
             });
     }
 };

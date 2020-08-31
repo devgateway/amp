@@ -7,6 +7,7 @@ import {connect} from "react-redux";
 import RunSearchButton from "./button/RunSearchButton";
 import ResetAllButton from "./button/ResetAllButton";
 import CancelGeocodingButton from "./button/CancelGeocodingButton";
+import SaveAllEditsButton from "./button/SaveAllEditsButton";
 
 class GeocoderHeader extends Component {
 
@@ -29,7 +30,7 @@ class GeocoderHeader extends Component {
                     : (<>
                         <ResetAllButton title={translations['amp.geocoder:resetAll']} />
                         <CancelGeocodingButton title={translations['amp.geocoder:cancelGeocoding']} />
-                        <Button variant="success" className={'pull-right button-header'}>{translations['amp.geocoder:saveAllEdits']}</Button>
+                        <SaveAllEditsButton className={'pull-right button-header'} title={translations['amp.geocoder:saveAllEdits']} />
                     </>)
                 }
             </div>);

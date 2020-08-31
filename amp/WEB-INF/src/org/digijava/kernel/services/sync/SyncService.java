@@ -23,7 +23,6 @@ import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.WOR
 import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.WORKSPACE_SETTINGS;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Ops.DELETED;
 import static org.digijava.kernel.services.sync.model.SyncConstants.Ops.UPDATED;
-import static org.digijava.kernel.translator.util.TrnUtil.PREFIXES;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -73,12 +72,12 @@ import org.digijava.kernel.services.sync.model.ListDiff;
 import org.digijava.kernel.services.sync.model.ResourceChange;
 import org.digijava.kernel.services.sync.model.SystemDiff;
 import org.digijava.kernel.services.sync.model.Translation;
-import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpOfflineChangelog;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.repository.AmpOfflineChangelogRepository;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.contentrepository.helper.CrConstants;
@@ -158,8 +157,7 @@ public class SyncService implements InitializingBean {
             systemDiff.updateTimestamp(new Date());
         }
 
-        List<String> prefixes = TranslatorWorker.getAllPrefixes();
-        TLSUtils.getRequest().setAttribute(PREFIXES, prefixes);
+        ActivityUtil.loadWorkspacePrefixesIntoRequest();
 
         systemDiff.setActivityFieldsStructuralChanges(existsActivityStructuralChanges(syncRequest));
         systemDiff.setContactFieldsStructuralChanges(existsContactStructuralChanges(syncRequest));

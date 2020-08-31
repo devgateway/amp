@@ -41,6 +41,7 @@ import org.digijava.kernel.ampapi.endpoints.resource.dto.SwaggerResource;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -101,6 +102,7 @@ public class ResourceEndpoint {
     public Map<String, List<PossibleValue>> getValues(
             @ApiParam("list of fully qualified resource fields") List<String> fields) {
         Map<String, List<PossibleValue>> response;
+        ActivityUtil.loadWorkspacePrefixesIntoRequest();
         if (fields == null) {
             response = emptyMap();
         } else {

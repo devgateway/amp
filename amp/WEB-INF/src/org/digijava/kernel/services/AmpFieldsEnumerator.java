@@ -8,14 +8,11 @@ import org.digijava.kernel.ampapi.endpoints.activity.APIWorkspaceMemberFieldList
 import org.digijava.kernel.ampapi.endpoints.activity.field.CachingFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.field.CachingFieldsEnumeratorFactory;
 import org.digijava.kernel.ampapi.endpoints.common.fm.FMService;
-import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.services.sync.SyncDAO;
-import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import static org.digijava.kernel.translator.util.TrnUtil.PREFIXES;
 
 /**
  * @author Octavian Ciubotaru
@@ -62,8 +59,7 @@ public final class AmpFieldsEnumerator implements InitializingBean {
                 wsIds.retainAll(wsMemberIds);
             }
 
-            List<String> prefixes = TranslatorWorker.getAllPrefixes();
-            TLSUtils.getRequest().setAttribute(PREFIXES, prefixes);
+            ActivityUtil.loadWorkspacePrefixesIntoRequest();
 
             if (!wsIds.isEmpty()) {
                 CachingFieldsEnumerator cachingFieldsEnumerator = enumeratorFactory.getEnumerator(templateId);

@@ -22,7 +22,8 @@ public class CategoryValuePossibleValuesProvider extends AbstractPossibleValuesD
     @Override
     protected Object getExtraInfo(Object[] items) {
         Integer index = ((Number) (items[CategoryValueExtraInfo.EXTRA_INFO_START_INDEX])).intValue();
-        return new CategoryValueExtraInfo(index);
+        String prefix = "" + items[CategoryValueExtraInfo.EXTRA_INFO_PREFIX_INDEX];
+        return new CategoryValueExtraInfo(index, prefix);
     }
 
     @Override

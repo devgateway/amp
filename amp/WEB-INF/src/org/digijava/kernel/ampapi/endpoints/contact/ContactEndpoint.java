@@ -39,6 +39,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.digijava.module.aim.util.ActivityUtil;
 
 /**
  * @author Octavian Ciubotaru
@@ -91,6 +92,7 @@ public class ContactEndpoint {
     public Map<String, List<PossibleValue>> getValues(
             @ApiParam("list of fully qualified contact fields") List<String> fields) {
         Map<String, List<PossibleValue>> response;
+        ActivityUtil.loadWorkspacePrefixesIntoRequest();
         if (fields == null) {
             response = emptyMap();
         } else {

@@ -1,3 +1,5 @@
+import {ActivityConstants} from 'amp-ui';
+
 export const ACTIVITY_API = '/rest/activity/projects/';
 export const ACTIVITY_INFO_API = '/rest/activity/info/';
 
@@ -34,3 +36,6 @@ export const VERSION_HISTORY_URL = '/aim/viewActivityHistory.do';
 export const COMPARE_ACTIVITY_URL = '/aim/compareActivityVersions.do';
 
 export const PRODUCTION = 'production';
+export const REGIONAL_FUNDINGS = [ActivityConstants.REGIONAL_FUNDINGS_COMMITMENTS,
+    ActivityConstants.REGIONAL_FUNDINGS_DISBURSEMENTS,
+    ActivityConstants.REGIONAL_FUNDINGS_EXPENDITURES];

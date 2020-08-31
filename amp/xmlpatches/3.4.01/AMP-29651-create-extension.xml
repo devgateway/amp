@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+    xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>AMP-29651</jira>
+    <keyword>create extension</keyword>
+    <author>Jdeanquin</author>
+    <description>create unaccent extension</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                create extension if not exists unaccent;
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

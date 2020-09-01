@@ -16,7 +16,8 @@ import {
     PUBLIC_CHANGE_SUMMARY,
     TEAM_ID,
     PUBLIC_VERSION_HISTORY,
-    HIDE_CONTACTS_PUBLIC_VIEW
+    HIDE_CONTACTS_PUBLIC_VIEW,
+    REGIONAL_FUNDINGS
 } from '../common/ReampConstants.jsx';
 import DateUtils from '../utils/DateUtils.jsx';
 import HydratorHelper from '../utils/HydratorHelper.jsx';
@@ -168,6 +169,7 @@ export function loadActivityForActivityPreview(activityId) {
                                 const transactionInWsCurrency =
                                     transactionListInWsCurrency.find(tiwc => tiwc[TRANSACTION_ID] === t[TRANSACTION_ID]);
                                 t[ActivityConstants.TRANSACTION_AMOUNT] = transactionInWsCurrency[ActivityConstants.TRANSACTION_AMOUNT];
+                                // TODO convert the whole curreny not only the code
                                 t[ActivityConstants.CURRENCY].value = currencyCode;
                             })
                         }
@@ -175,6 +177,14 @@ export function loadActivityForActivityPreview(activityId) {
                 }
             });
         }
+       REGIONAL_FUNDINGS.forEach(rf => {
+            activity[rf].forEach(regionalFundingItem => {
+                const convertedAmount = activityFundingInformation[rf].find(arf => arf.id === regionalFundingItem.id);
+                regionalFundingItem.transaction_amount = convertedAmount.transaction_amount;
+                // TODO convert the whole curreny not only the code
+                regionalFundingItem[ActivityConstants.CURRENCY].value= convertedAmount.currency.currencyCode;
+            })
+        });
     }
 
     function _getActivityContext(settings, activityInfo, activity) {

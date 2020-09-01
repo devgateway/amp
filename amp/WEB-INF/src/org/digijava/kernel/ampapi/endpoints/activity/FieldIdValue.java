@@ -3,8 +3,8 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 import java.util.List;
 import java.util.Map;
 
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class FieldIdValue {
 
@@ -15,7 +15,7 @@ public class FieldIdValue {
     @JsonProperty("translated-value")
     private Map<String, String> translatedValue;
     
-    @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty("ancestor-values")
     private List<String> ancestorValues;
     

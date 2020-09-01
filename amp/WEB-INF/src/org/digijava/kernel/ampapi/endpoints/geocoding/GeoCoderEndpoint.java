@@ -76,7 +76,7 @@ public class GeoCoderEndpoint {
             if (process == null) {
                 throw new WebApplicationException(
                         Response.status(Response.Status.NOT_FOUND)
-                                .entity("Geo coding process not started")
+                                .entity(ApiError.toError(GeoCoderEndpointErrors.GEO_CODING_NOT_STARTED))
                                 .build());
             }
             return process;

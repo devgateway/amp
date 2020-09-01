@@ -3,12 +3,11 @@ package org.digijava.kernel.entity.geocoding;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModelProperty;
+import org.digijava.kernel.ampapi.endpoints.serializers.GeoCodedCategoryValueLocationSerializer;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 
 /**
@@ -27,9 +26,8 @@ public class GeoCodedLocation {
     private Boolean accepted;
 
     @ApiModelProperty("Location Id")
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-    @JsonIdentityReference(alwaysAsId = true)
-    @JsonProperty("amp_category_value_location_id")
+    @JsonSerialize(using = GeoCodedCategoryValueLocationSerializer.class)
+    @JsonUnwrapped
     private AmpCategoryValueLocations location;
 
     @ApiModelProperty("Fields that refer to this location")

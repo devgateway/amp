@@ -3,12 +3,11 @@ package org.digijava.kernel.entity.geocoding;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModelProperty;
+import org.digijava.kernel.ampapi.endpoints.serializers.GeoCodedActivityVersionSerializer;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
 /**
@@ -28,9 +27,8 @@ public class GeoCodedActivity {
     @JsonIgnore
     private Long queueId;
 
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "ampActivityId")
-    @JsonIdentityReference(alwaysAsId = true)
-    @JsonProperty("amp_activity_id")
+    @JsonSerialize(using = GeoCodedActivityVersionSerializer.class)
+    @JsonUnwrapped
     private AmpActivityVersion activity;
 
     @ApiModelProperty("Geo coding status for this activity")

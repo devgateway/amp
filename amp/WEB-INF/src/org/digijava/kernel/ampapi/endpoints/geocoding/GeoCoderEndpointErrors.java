@@ -16,5 +16,7 @@ public final class GeoCoderEndpointErrors {
             "Invalid URL value");
     public static final ApiErrorMessage GEO_CODING_GENERAL_ERROR = new ApiErrorMessage(ERROR_CLASS_GEO_CODER_ID, 1,
             "General error");
+    public static final ApiErrorMessage GEO_CODING_NOT_STARTED = new ApiErrorMessage(ERROR_CLASS_GEO_CODER_ID, 2,
+            "Geo coding process not started");
 
 }

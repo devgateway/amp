@@ -275,6 +275,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
     // various single-dimension-usage 
     public final static NiDimensionUsage LOC_DIM_USG = locsDimension.getDimensionUsage("LOCS");
     public final static NiDimensionUsage AGR_DIM_USG = agreementsDimension.getDimensionUsage("agr");
+    public static final NiDimensionUsage DN_COUNTRY_DIM_USG = locsDimension.getDimensionUsage("DN Country");
+    public static final NiDimensionUsage BA_COUNTRY_DIM_USG = locsDimension.getDimensionUsage("BA Country");
+    public static final NiDimensionUsage EA_COUNTRY_DIM_USG = locsDimension.getDimensionUsage("EA Country");
     public final static LevelColumn AGR_LEVEL_COLUMN = AGR_DIM_USG.getLevelColumn(0);
     
     public final static NiDimensionUsage ACT_DIM_USG = activitiesDimension.getDimensionUsage("acts");
@@ -364,6 +367,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
             .put(ColumnConstants.COMPONENT_FUNDING_ORGANIZATION, "component_rep_org_id")
             .put(ColumnConstants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION, "component_second_rep_org_id")
             .put(ColumnConstants.REGIONAL_REGION, "region_location_id")
+            .put(ColumnConstants.PROJECT_RESULTS_AVAILABLE, "project_results_available_id")
+            .put(ColumnConstants.VULNERABLE_GROUP, "vulnerable_group_id")
+            .put(ColumnConstants.DONOR_COUNTRY, "donor_org_country_id")
             .build());
 
     /**
@@ -381,6 +387,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         no_dimension(ColumnConstants.ACTIVITY_ID, "v_activity_ids");
         no_dimension(ColumnConstants.TEAM, "v_teams");
         no_entity(ColumnConstants.OBJECTIVE, "v_objectives", DG_EDITOR_POSTPROCESSOR);
+        no_entity(ColumnConstants.MULTI_STAKEHOLDER_PARTNERS, "v_multi_stakeholder_partners", DG_EDITOR_POSTPROCESSOR);
         no_dimension(ColumnConstants.ISSUES, "v_issues");
         date_column(ColumnConstants.ISSUE_DATE, "v_issue_date");
 
@@ -420,6 +427,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         degenerate_dimension(ColumnConstants.FINANCING_INSTRUMENT, "v_financing_instrument", catsDimension);
         degenerate_dimension(ColumnConstants.FUNDING_STATUS, "v_funding_status", catsDimension);
         degenerate_dimension(ColumnConstants.HUMANITARIAN_AID, "v_humanitarian_aid", boolDimension);
+        degenerate_dimension(ColumnConstants.MULTI_STAKEHOLDER_PARTNERSHIP, "v_multi_stakeholder_partnership",
+                boolDimension);
         degenerate_dimension(ColumnConstants.IMPLEMENTATION_LEVEL, "v_implementation_level", catsDimension);
         degenerate_dimension(ColumnConstants.PERFORMANCE_ALERT_TYPE, "v_performance_alert_type", 
                 PERF_TYPE_DIM, PERFORMANCE_ALERT_POSTPROCESSOR);
@@ -550,6 +559,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         single_dimension(ColumnConstants.DONOR_TYPE, "v_ni_donor_orgstypes", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION_TYPE));
         single_dimension(ColumnConstants.DONOR_BUDGET_CODE, "v_ni_donor_orgbudget_code",
                 DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
+        single_dimension(ColumnConstants.DONOR_COUNTRY, "v_ni_donor_orgs_country",
+                DN_COUNTRY_DIM_USG.getLevelColumn(0));
 
         single_dimension(ColumnConstants.DONOR_ACRONYM, "v_ni_donor_orgsacronyms", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
         
@@ -561,10 +572,15 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         with_percentage(ColumnConstants.BENEFICIARY_AGENCY_GROUPS, "v_beneficiary_agency_groups", BA_DIM_USG, LEVEL_ORGANISATION_GROUP);
         with_percentage(ColumnConstants.BENEFICIARY_AGENCY_TYPE, "v_beneficiary_agency_type", BA_DIM_USG,
                 LEVEL_ORGANISATION_TYPE);
-        
+        with_percentage(ColumnConstants.BENEFICIARY_AGENCY_COUNTRY, "v_beneficiary_agency_country",
+                BA_COUNTRY_DIM_USG, ADM_LEVEL_0);
+
+
         with_percentage(ColumnConstants.EXECUTING_AGENCY, "v_executing_agency", EA_DIM_USG, LEVEL_ORGANISATION);
         with_percentage(ColumnConstants.EXECUTING_AGENCY_GROUPS, "v_executing_agency_groups", EA_DIM_USG, LEVEL_ORGANISATION_GROUP);
         with_percentage(ColumnConstants.EXECUTING_AGENCY_TYPE, "v_executing_agency_type", EA_DIM_USG, LEVEL_ORGANISATION_TYPE);
+        with_percentage(ColumnConstants.EXECUTING_AGENCY_COUNTRY, "v_executing_agency_country",
+                EA_COUNTRY_DIM_USG, ADM_LEVEL_0);
 
         with_percentage(ColumnConstants.RESPONSIBLE_ORGANIZATION, "v_responsible_organisation", RO_DIM_USG, LEVEL_ORGANISATION);
         with_percentage(ColumnConstants.RESPONSIBLE_ORGANIZATION_GROUPS, "v_responsible_org_groups", RO_DIM_USG, LEVEL_ORGANISATION_GROUP);
@@ -697,6 +713,14 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         date_column(ColumnConstants.PLEDGES_DETAIL_END_DATE, "v_pledges_funding_end_date");
         date_column(ColumnConstants.PROPOSED_COMPLETION_DATE, "v_proposed_completion_date");
         date_column(ColumnConstants.PROPOSED_START_DATE, "v_proposed_start_date");
+
+        degenerate_dimension(ColumnConstants.PROJECT_RESULTS_AVAILABLE, "v_project_results_available", boolDimension);
+        no_entity(ColumnConstants.PROJECT_RESULTS_LINK, "v_project_results_link");
+        no_entity(ColumnConstants.PROJECT_JOINT_DECISION, "v_project_joint_decision");
+        no_entity(ColumnConstants.PROJECT_MONITORING, "v_project_monitoring");
+        no_entity(ColumnConstants.PROJECT_SUSTAINABILITY, "v_project_sustainability");
+        no_entity(ColumnConstants.PROJECT_PROBLEMS, "v_project_problems");
+        degenerate_dimension(ColumnConstants.VULNERABLE_GROUP, "v_vulnerable_group", catsDimension);
 
         addPledgeColumns();
         

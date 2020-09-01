@@ -59,6 +59,9 @@ public class ActivityEPConstants {
 
     public static final String PREVIEW_CURRENCY_ID = "currency-id";
 
+    public static final String API_WS_MEMBER_IDS = "ws-member-ids";
+    public static final String API_FIELDS = "fields";
+
     // fields constants
     public static final String AMP_ACTIVITY_ID_FIELD_NAME =
             FieldMap.underscorify(ActivityFieldsConstants.AMP_ACTIVITY_ID);
@@ -117,6 +120,7 @@ public class ActivityEPConstants {
             + "/Release of Funds/Release of Funds Table";
     public static final String EXPENDITURES_TABLE_FM_PATH = FUNDING_ITEM_FM_PATH
             + "/Expenditures/Expenditures Table";
+    public static final String FUNDING_ITEM_CLASSIFICATION_FM_PATH = FUNDING_ITEM_FM_PATH + "/Funding Classification";
 
     public static final String RECIPIENT_ROLE_FM_PATH = "/Funding Flows OrgRole Selector/Recipient Org Role";
     public static final String RECIPIENT_ORG_FM_PATH = "/Funding Flows OrgRole Selector/Recipient Organization";
@@ -138,7 +142,21 @@ public class ActivityEPConstants {
         add("fundings~disbursements~adjustment_type");
         add("fundings~expenditures~adjustment_type");
         add("fundings~estimated_disbursements~adjustment_type");
+        add("locations~location");
     }};
+
+    public static final String FUNDING_VULNERABLE_GROUP_LABEL =
+            "Which vulnerable groups does this project/action work with?";
+    public static final String FUNDING_PROJECT_RESULTS_AVAILABLE_LABEL =
+            "Are the project results available to the public?";
+    public static final String FUNDING_PROJECT_RESULTS_LINK_LABEL = "Please provide link if available";
+    public static final String FUNDING_PROJECT_JOINT_DECISION_LABEL =
+            "How is joint decision making made in this project/action?";
+    public static final String FUNDING_PROJECT_MONITORING_LABEL =
+            "How do you monitor and evaluate this project/action?";
+    public static final String FUNDING_PROJECT_SUSTAINABILITY_LABEL =
+            "Sustainability: what happens when the project/action ends?";
+    public static final String FUNDING_PROJECT_PROBLEMS_LABEL = "What problems were encountered in this project?";
 
 
 }

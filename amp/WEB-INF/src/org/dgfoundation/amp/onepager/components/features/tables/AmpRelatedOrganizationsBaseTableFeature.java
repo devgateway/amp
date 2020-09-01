@@ -46,6 +46,7 @@ import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRole;
+import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DbUtil;
@@ -77,6 +78,10 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
     
     public void setDefaultOrgGroup(AmpOrgGroup orgGroup) {
         searchOrganization.setDefaultOrgGroup(orgGroup);
+    }
+
+    public void setTemplateFilter(AmpTemplatesVisibility template) {
+        searchOrganization.setTemplateFilter(template);
     }
     
     public AmpSearchOrganizationComponent<String> getSearchOrganization(){

@@ -1051,16 +1051,32 @@ border-right: 1px solid rgb(208, 208, 208);
                                                     </html:select></td>
                                             </tr>
                                             <tr>
+                                                <td style=" text-align:left" class="tdBoldClass"><digi:trn>Country Of Origin</digi:trn>
+                                                    <field:display name="Mandatory Indicator For Country of Origin" feature="NGO Form">
+                                                        <span id="mandatoryCountryOfOrigin"><font color="red">*</font></span>
+                                                    </field:display>
+                                                </td>
+                                                <td>
+                                                    <c:set var="translation">
+                                                        <digi:trn>Select Country</digi:trn>
+                                                    </c:set>
+                                                    <html:select property="countryId" styleClass="selectStyle" styleId="countryId">
+                                                        <html:option value="-1">-- ${translation} --</html:option>
+                                                        <html:optionsCollection property="countries" label="name" value="id"/>
+                                                    </html:select>
+                                                </td>
+                                            </tr>
+                                            <tr>
                                                 <td style="text-align:left; " class="tdBoldClass" nowrap>
                                                     <digi:trn>Funding Org Id</digi:trn>
                                                 </td>
-                                                <td>    
+                                                <td>
                                                     <html:text name="aimAddOrgForm" property="fundingorgid" size="8" styleId="fundingorgid"/>
                                                 </td>
                                                 <td height="1" align="center" colspan="5"><digi:img
                                                         src="/TEMPLATE/ampTemplate/images/arrow-014E86.gif" styleClass="list-item-image" width="15"
                                                         height="10" /> <a href="javascript:addGroup()"> <digi:trn>Add a Group</digi:trn>
-                                                    </a></td>
+                                                </a></td>
                                             </tr>
                                         </table>
 										<hr width=80% align=center>
@@ -1367,22 +1383,6 @@ border-right: 1px solid rgb(208, 208, 208);
 
                                                                     </table>
                                                                 </c:if>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style=" text-align:right" class="tdBoldClass"><digi:trn>Country Of Origin</digi:trn>
-                                                        	<field:display name="Mandatory Indicator For Country of Origin" feature="NGO Form">
-                                                            	<span id="mandatoryCountryOfOrigin"><font color="red">*</font></span>
-                                                            </field:display>
-                                                        </td>
-                                                        <td>
-                                                            <c:set var="translation">
-                                                                <digi:trn>Select Country</digi:trn>
-                                                            </c:set>
-                                                            <html:select property="countryId" styleClass="selectStyle" styleId="countryId">
-                                                                <html:option value="-1">-- ${translation} --</html:option>
-                                                                <html:optionsCollection property="countries" label="name" value="id"/>
-                                                            </html:select>
                                                         </td>
                                                     </tr>
                                                     <tr>

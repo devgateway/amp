@@ -6,6 +6,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
+import org.digijava.kernel.ampapi.endpoints.activity.APIWorkspaceMemberFieldList;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 
 /**
@@ -44,15 +45,15 @@ public class SyncRequest {
     
     @ApiModelProperty(value = "activity fields currently known to the client")
     @JsonProperty(value = "activity-fields")
-    private List<APIField> activityFields;
+    private List<APIWorkspaceMemberFieldList> activityFields;
     
     @ApiModelProperty(value = "contact fields currently known to the client")
     @JsonProperty(value = "contact-fields")
-    private List<APIField> contactFields;
+    private List<APIWorkspaceMemberFieldList> contactFields;
     
     @ApiModelProperty(value = "resource fields currently known to the client")
     @JsonProperty(value = "resource-fields")
-    private List<APIField> resourceFields;
+    private List<APIWorkspaceMemberFieldList> resourceFields;
 
     public List<Long> getUserIds() {
         return userIds;
@@ -110,27 +111,27 @@ public class SyncRequest {
         this.commonPossibleValuesFields = commonPossibleValuesFields;
     }
 
-    public List<APIField> getActivityFields() {
+    public List<APIWorkspaceMemberFieldList> getActivityFields() {
         return activityFields;
     }
     
-    public void setActivityFields(List<APIField> activityFields) {
+    public void setActivityFields(List<APIWorkspaceMemberFieldList> activityFields) {
         this.activityFields = activityFields;
     }
     
-    public List<APIField> getContactFields() {
+    public List<APIWorkspaceMemberFieldList> getContactFields() {
         return contactFields;
     }
     
-    public void setContactFields(List<APIField> contactFields) {
+    public void setContactFields(List<APIWorkspaceMemberFieldList> contactFields) {
         this.contactFields = contactFields;
     }
     
-    public List<APIField> getResourceFields() {
+    public List<APIWorkspaceMemberFieldList> getResourceFields() {
         return resourceFields;
     }
     
-    public void setResourceFields(List<APIField> resourceFields) {
+    public void setResourceFields(List<APIWorkspaceMemberFieldList> resourceFields) {
         this.resourceFields = resourceFields;
     }
 }

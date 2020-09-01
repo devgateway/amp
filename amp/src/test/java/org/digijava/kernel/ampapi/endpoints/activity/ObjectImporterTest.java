@@ -30,6 +30,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import org.dgfoundation.amp.testutils.TransactionUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldInfoProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldsEnumerator;
@@ -684,12 +685,14 @@ public class ObjectImporterTest {
 
     @Before
     public void setUp() throws IOException {
+        TransactionUtil.setUpWorkspaceEmptyPrefixes();
+
         createObjectImporter();
         readJsonExamples();
     }
 
     private void createObjectImporter() {
-        FMService fmService = new TestFMService();
+        FeatureManagerService fmService = new TestFMService();
         FieldInfoProvider provider = new TestFieldInfoProvider();
         TranslatorService translatorService = new TestTranslatorService();
 

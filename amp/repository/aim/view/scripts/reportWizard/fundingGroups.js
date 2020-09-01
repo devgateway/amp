@@ -11,9 +11,11 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
 				,'Accession Instrument'
 				,'Executing Agency'
 				,'Executing Agency Type'
+				,'Executing Agency Country'
 				,'Donor'
 				,'Donor Group'
 				,'Donor Agency'
+				,'Donor Country'
 				,'Primary Sector'
 				,'Status', 'Administrative Level 0', 'Administrative Level 1', 'Administrative Level 2','Administrative Level 3'
 				,'Type Of Assistance'
@@ -55,6 +57,7 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
 				,'Credit/Donation'
 				,'Beneficiary Agency'
 				,'Beneficiary Agency Groups'
+				,'Beneficiary Agency Country'
 				,'Implementing Agency'
 				,'Implementing Agency Groups'
 				,'Implementing Agency Type'
@@ -95,6 +98,7 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
                 , 'Budget Structure'
                 , 'Indirect On Budget'
                 , 'Humanitarian Aid'
+                , 'Multi Stakeholder Partnership'
                 , 'Concessionality Level'
                 , 'Disaster Response Marker'
                 , 'Indicator Name'
@@ -108,6 +112,8 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
                 , 'Quinary Sector'
                 , 'Quinary Sector Sub-Sector'
                 , 'Quinary Sector Sub-Sub-Sector'
+                , 'Project Results Available'
+                , 'Vulnerable Group'
 			);
 
 YAHOO.amp.reportwizard.fundingGroups["regional"]		= new Array(

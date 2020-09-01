@@ -23,18 +23,36 @@ public class FilterListTreeNode {
     
     @ApiModelProperty(value = "The translated name", example = "Belgium")
     private String value;
-    
+
+    @ApiModelProperty(value = "The translated description ( use in case we want to add tooltips to a filter item)",
+            example = "Eastern Europe and Central Asia")
+    private String description;
+
     private List<Long> listDefinitionIds;
     
     private List<FilterListTreeNode> children;
-    
-    public FilterListTreeNode() { }
-    
+
+    @JsonProperty("extra_info")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Object extraInfo;
+
+    public FilterListTreeNode() {
+
+    }
+
     public FilterListTreeNode(Long id, String value) {
-        this(id, value, value);
+        this(id, value, null);
+    }
+
+    public FilterListTreeNode(Long id, String value, Object extraInfo) {
+        this(id, value, value, extraInfo);
     }
 
     public FilterListTreeNode(Long id, String value, String name) {
+        this(id, value, name, null);
+    }
+
+    public FilterListTreeNode(Long id, String value, String name, Object extraInfo) {
         super();
         this.id = id;
         this.name = name;
@@ -45,7 +63,7 @@ public class FilterListTreeNode {
         if (children == null) {
             children = new ArrayList<>();
         }
-        
+
         children.add(child);
     }
 
@@ -72,7 +90,7 @@ public class FilterListTreeNode {
     public void setChildren(List<FilterListTreeNode> children) {
         this.children = children;
     }
-    
+
     public String getAcronym() {
         return acronym;
     }
@@ -104,5 +122,20 @@ public class FilterListTreeNode {
     public void setValue(String value) {
         this.value = value;
     }
-    
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Object getExtraInfo() {
+        return extraInfo;
+    }
+
+    public void setExtraInfo(Object extraInfo) {
+        this.extraInfo = extraInfo;
+    }
 }

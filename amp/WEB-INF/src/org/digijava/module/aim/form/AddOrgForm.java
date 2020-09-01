@@ -896,7 +896,8 @@ public class AddOrgForm extends ActionForm {
     public void setBudgetOrgs(Set<AmpOrganisation> budgetOrgs) {
         this.budgetOrgs = budgetOrgs;
     }
-    
+
+
     public MultilingualInputFieldValues buildMultilingualNameInputInstance()
     {
         return new MultilingualInputFieldValues(AmpOrganisation.class, this.getAmpOrgId(), "name", null, null);

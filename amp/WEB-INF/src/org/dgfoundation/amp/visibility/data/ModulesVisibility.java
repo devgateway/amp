@@ -26,8 +26,8 @@ public class ModulesVisibility extends DataVisibility implements FMSettings {
     }
     
     @Override
-    public Set<String> getEnabledSettings() {
-        return getCurrentVisibleData();
+    public Set<String> getEnabledSettings(Long templateId) {
+        return getVisibleData(templateId);
     }
 
     @Override

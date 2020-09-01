@@ -568,4 +568,25 @@ public class SQLUtils {
         }
         return map;
     }
+    
+    /**
+     * @param conn
+     * @param query
+     * @param idColumnName
+     * @param payloadColumnName
+     * @param map
+     * @return
+     */
+    public static Map<Long, Long> collectKeyLongValue(Connection conn, String query) {
+        HashMap<Long, Long> map = new HashMap<>();
+        try (RsInfo rsi = rawRunQuery(conn, query, null)) {
+            while (rsi.rs.next()) {
+                map.put(rsi.rs.getLong(1), rsi.rs.getLong(2));
+            }
+        } catch (SQLException e) {
+            throw AlgoUtils.translateException(e);
+        }
+        
+        return map;
+    }
 }

@@ -4,12 +4,9 @@
  */
 package org.dgfoundation.amp.onepager.components.features.subsections;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -21,6 +18,7 @@ import org.apache.wicket.validation.validator.RangeValidator;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.AmpRequiredComponentContainer;
 import org.dgfoundation.amp.onepager.components.features.items.AmpAgreementItemPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpBooleanChoiceField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpFundingSummaryPanel;
@@ -34,6 +32,18 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FUNDING_PROJECT_JOINT_DECISION_LABEL;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FUNDING_PROJECT_MONITORING_LABEL;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FUNDING_PROJECT_PROBLEMS_LABEL;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FUNDING_PROJECT_RESULTS_AVAILABLE_LABEL;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FUNDING_PROJECT_RESULTS_LINK_LABEL;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FUNDING_PROJECT_SUSTAINABILITY_LABEL;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FUNDING_VULNERABLE_GROUP_LABEL;
+
 /**
  * @author mpostelnicu@dgateway.org since Nov 4, 2010
  */
@@ -45,6 +55,7 @@ implements AmpRequiredComponentContainer{
     private AmpCategorySelectFieldPanel financingInstrument;
     private AmpCategorySelectFieldPanel typeOfAssistance;
     private AmpCategorySelectFieldPanel concessionalityLevel;
+    private AmpCategorySelectFieldPanel vulnerableGroup;
     private AmpTextAreaFieldPanel loanTerms;
     private AmpTextFieldPanel<Float> interestRate;
     private AmpTextFieldPanel<Integer> gracePeriod;
@@ -86,7 +97,7 @@ implements AmpRequiredComponentContainer{
         concessionalityLevel.getChoiceContainer().setRequired(false);
         concessionalityLevel.getChoiceContainer().add(new AttributeModifier("style", "max-width: 210px!important;"));
         add(concessionalityLevel);
-        
+
         add(new AmpComponentPanel("concessionalityLevelRequired", "Required Validator for " + CategoryConstants.CONCESSIONALITY_LEVEL_NAME) {
             
             @Override
@@ -95,6 +106,153 @@ implements AmpRequiredComponentContainer{
                 if (this.isVisible()) {
                     concessionalityLevel.getChoiceContainer().setRequired(true);
                     requiredFormComponents.add(concessionalityLevel.getChoiceContainer());
+                }
+            }
+        });
+
+        vulnerableGroup = new AmpCategorySelectFieldPanel(
+                "vulnerableGroup", CategoryConstants.VULNERABLE_GROUP_LEVEL_KEY,
+                new PropertyModel<AmpCategoryValue>(model, "vulnerableGroup"),
+                CategoryConstants.VULNERABLE_GROUP_LEVEL_NAME, true, false) {
+            @Override
+            protected void configureLabelText() {
+                setLabelText(FUNDING_VULNERABLE_GROUP_LABEL);
+            }
+        };
+        vulnerableGroup.getChoiceContainer().setRequired(false);
+        vulnerableGroup.getChoiceContainer().add(new AttributeModifier("style", "max-width: 210px!important;"));
+        add(vulnerableGroup);
+        add(new AmpComponentPanel("vulnerableGroupRequired",
+                "Required Validator for " + CategoryConstants.VULNERABLE_GROUP_LEVEL_NAME) {
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                if (this.isVisible()) {
+                    vulnerableGroup.getChoiceContainer().setRequired(true);
+                    requiredFormComponents.add(vulnerableGroup.getChoiceContainer());
+                }
+            }
+        });
+
+        AmpBooleanChoiceField projectResultsAvailable = new AmpBooleanChoiceField("projectResultsAvailable",
+                new PropertyModel<>(model, "projectResultsAvailable"),
+                "Project Results Available") {
+            @Override
+            public void configureLabelText() {
+                this.setLabelText(FUNDING_PROJECT_RESULTS_AVAILABLE_LABEL);
+            }
+        };
+        add(projectResultsAvailable);
+        add(new AmpComponentPanel("projectResultsAvailableRequired",
+                "Required Validator for Project Results Available") {
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                if (this.isVisible()) {
+                    projectResultsAvailable.getChoiceContainer().setRequired(true);
+                    requiredFormComponents.add(projectResultsAvailable.getChoiceContainer());
+                }
+            }
+        });
+
+        AmpTextFieldPanel projectResultsLink = new AmpTextFieldPanel("projectResultsLink",
+                new PropertyModel<String>(model, "projectResultsLink"), "Project Results Link") {
+            @Override
+            protected void configureLabelText() {
+                this.setLabelText(FUNDING_PROJECT_RESULTS_LINK_LABEL);
+            }
+        };
+        projectResultsLink.setOutputMarkupPlaceholderTag(true);
+        projectResultsLink.setVisibilityAllowed(
+                Boolean.TRUE.equals(projectResultsAvailable.getChoiceContainer().getModel().getObject()));
+        projectResultsLink.getTextContainer().add(new AttributeModifier("style", "width: 300px"));
+        add(projectResultsLink);
+
+        projectResultsAvailable.getChoiceContainer().add(new AjaxFormChoiceComponentUpdatingBehavior() {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                projectResultsLink.setVisibilityAllowed(
+                        Boolean.TRUE.equals(projectResultsAvailable.getChoiceContainer().getConvertedInput()));
+                target.add(projectResultsLink);
+            }
+        });
+
+        AmpTextAreaFieldPanel projectJointDecision = new AmpTextAreaFieldPanel("projectJointDecision",
+                new PropertyModel<>(model, "projectJointDecision"),
+                "Project Joint Decision", false, false, false) {
+            @Override
+            public void configureLabelText() {
+                this.setLabelText(FUNDING_PROJECT_JOINT_DECISION_LABEL);
+            }
+        };
+        add(projectJointDecision);
+        add(new AmpComponentPanel("projectJointDecisionRequired", "Required Validator for Project Joint Decision") {
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                if (this.isVisible()) {
+                    projectJointDecision.getTextAreaContainer().setRequired(true);
+                    requiredFormComponents.add(projectJointDecision.getTextAreaContainer());
+                }
+            }
+        });
+
+        AmpTextAreaFieldPanel projectMonitoring = new AmpTextAreaFieldPanel("projectMonitoring",
+                new PropertyModel<>(model, "projectMonitoring"),
+                "Project Monitoring", false, false, false) {
+            @Override
+            public void configureLabelText() {
+                this.setLabelText(FUNDING_PROJECT_MONITORING_LABEL);
+            }
+        };
+        add(projectMonitoring);
+        add(new AmpComponentPanel("projectMonitoringRequired", "Required Validator for Project Monitoring") {
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                if (this.isVisible()) {
+                    projectMonitoring.getTextAreaContainer().setRequired(true);
+                    requiredFormComponents.add(projectMonitoring.getTextAreaContainer());
+                }
+            }
+        });
+
+        AmpTextAreaFieldPanel projectSustainability = new AmpTextAreaFieldPanel("projectSustainability",
+                new PropertyModel<>(model, "projectSustainability"),
+                "Project Sustainability", false, false, false) {
+            @Override
+            public void configureLabelText() {
+                this.setLabelText(FUNDING_PROJECT_SUSTAINABILITY_LABEL);
+            }
+        };
+        add(projectSustainability);
+        add(new AmpComponentPanel("projectSustainabilityRequired", "Required Validator for Project Sustainability") {
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                if (this.isVisible()) {
+                    projectSustainability.getTextAreaContainer().setRequired(true);
+                    requiredFormComponents.add(projectSustainability.getTextAreaContainer());
+                }
+            }
+        });
+
+        AmpTextAreaFieldPanel projectProblems = new AmpTextAreaFieldPanel("projectProblems",
+                new PropertyModel<>(model, "projectProblems"),
+                "Project Problems", false, false, false) {
+            @Override
+            public void configureLabelText() {
+                this.setLabelText(FUNDING_PROJECT_PROBLEMS_LABEL);
+            }
+        };
+        add(projectProblems);
+        add(new AmpComponentPanel("projectProblemsRequired", "Required Validator for Project Problems") {
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                if (this.isVisible()) {
+                    projectProblems.getTextAreaContainer().setRequired(true);
+                    requiredFormComponents.add(projectProblems.getTextAreaContainer());
                 }
             }
         });

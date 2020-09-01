@@ -23,6 +23,7 @@
 		  - containing amp_funding_details with an adjustment_type::category_class:key of "SSC_adjustment_type"   
 		   -->
 			<lang delimiter=";" type="postgres"><![CDATA[
+				DROP VIEW IF EXISTS v_ni_donor_orgstypes;
 				CREATE OR REPLACE VIEW v_ni_donor_orgstypes AS
 					SELECT
 						aav.amp_activity_id,
@@ -34,7 +35,10 @@
 						v.mode_of_payment_id,
 						v.funding_status_id,
 						v.agreement_id,
-						v.funding_id
+						v.funding_id,
+						v.vulnerable_group_id,
+						v.project_results_available_id,
+						v.donor_org_country_id
 					FROM amp_activity_version aav
 					LEFT JOIN (
 						SELECT d.amp_activity_id,
@@ -46,7 +50,10 @@
 							d.mode_of_payment_id,
 							d.funding_status_id,
 							d.agreement_id,
-							d.funding_id
+							d.funding_id,
+							d.vulnerable_group_id,
+							d.project_results_available_id,
+							d.donor_org_country_id
 						FROM v_ni_donor_orgs d
 						LEFT JOIN ni_all_orgs_dimension orgs ON orgs.org_id = d.org_id
 					) v

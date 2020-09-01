@@ -10,13 +10,17 @@ import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampapi.endpoints.common.values.providers.GenericPossibleValuesProvider;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.criterion.Restrictions;
+
+import static org.digijava.kernel.translator.util.TrnUtil.PREFIXES;
 
 /**
  * @author Octavian Ciubotaru
@@ -25,12 +29,36 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
 
     public static final String CACHE = "org.digijava.kernel.ampapi.endpoints.activity.AmpPossibleValuesDAO";
 
+    /**
+     * If there are workspace prefixes then look for the main category (ie: "modalities") and the related
+     * categories (ie: SSC_modalities).
+     * @param discriminatorOption
+     * @return
+     */
     @Override
     public List<Object[]> getCategoryValues(String discriminatorOption) {
-        String queryString = "SELECT acv.id, acv.value, acv.deleted, acv.index from "
-                + AmpCategoryValue.class.getName() + " acv "
-                + "WHERE acv.ampCategoryClass.keyName ='" + discriminatorOption + "' ORDER BY acv.id";
-        return query(queryString);
+        String queryString = "SELECT acv.id, acv.value, acv.deleted, acv.index, acv.ampCategoryClass.keyName from "
+                + AmpCategoryValue.class.getName() + " acv ";
+        List<String> prefixes = ((List<String>) TLSUtils.getRequest().getAttribute(PREFIXES));
+        if (prefixes == null) {
+            prefixes = ActivityUtil.loadWorkspacePrefixesIntoRequest();
+        }
+        if (prefixes != null && prefixes.size() > 0) {
+            queryString += " WHERE acv.ampCategoryClass.keyName IN (";
+            for (String prefix : prefixes) {
+                queryString += "'" + prefix + discriminatorOption + "', ";
+            }
+            queryString += "'" + discriminatorOption + "') ORDER BY acv.id";
+            List<Object[]> result = query(queryString);
+            result.forEach(row -> {
+                String value = row[CategoryValueExtraInfo.EXTRA_INFO_PREFIX_INDEX].toString();
+                row[CategoryValueExtraInfo.EXTRA_INFO_PREFIX_INDEX] = value.replace(discriminatorOption, "");
+            });
+            return result;
+        } else {
+            queryString += " WHERE acv.ampCategoryClass.keyName LIKE '" + discriminatorOption + "' ORDER BY acv.id";
+            return query(queryString);
+        }
     }
 
     @Override

@@ -238,10 +238,10 @@ public class PossibleValuesEnumeratorTest {
                         values(3, "Sector 2.1", 2L)
                 ));
         assertJsonEquals(possibleValuesFor("primary_sectors~sector"),
-                "[{\"id\":1,\"value\":\"Sector 1\",\"extra_info\":{\"parentSectorId\":null}},"
+                "[{\"id\":1,\"value\":\"Sector 1\",\"extra_info\":{\"parent-sector-id\":null}},"
                         + "{\"id\":2,\"value\":\"Sector 2\",\"children\":["
-                        + "{\"id\":3,\"value\":\"Sector 2.1\",\"extra_info\":{\"parentSectorId\":2}}],"
-                        + "\"extra_info\":{\"parentSectorId\":null}}]");
+                        + "{\"id\":3,\"value\":\"Sector 2.1\",\"extra_info\":{\"parent-sector-id\":2}}],"
+                        + "\"extra_info\":{\"parent-sector-id\":null}}]");
     }
 
     @Test
@@ -253,8 +253,8 @@ public class PossibleValuesEnumeratorTest {
                 ));
         assertJsonEquals(possibleValuesFor("primary_programs~program"),
                 "[{\"id\":1,\"value\":\"Theme 1\","
-                        + "\"children\":[{\"id\":2,\"value\":\"Theme 1.2\",\"extra_info\":{\"parentProgramId\":1}}],"
-                        + "\"extra_info\":{\"parentProgramId\":null}}]");
+                        + "\"children\":[{\"id\":2,\"value\":\"Theme 1.2\",\"extra_info\":{\"parent-program-id\":1}}],"
+                        + "\"extra_info\":{\"parent-program-id\":null}}]");
     }
 
     @Test

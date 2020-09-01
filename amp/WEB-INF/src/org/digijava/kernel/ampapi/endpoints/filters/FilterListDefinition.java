@@ -2,10 +2,10 @@ package org.digijava.kernel.ampapi.endpoints.filters;
 
 import java.util.List;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class FilterListDefinition {
 
     private Long id;

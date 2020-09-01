@@ -1,7 +1,6 @@
 package org.digijava.module.aim.dbentity;
 
 import org.digijava.kernel.ampapi.endpoints.activity.values.AmpIndicatorRiskRatingsPossibleValuesProvider;
-import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;

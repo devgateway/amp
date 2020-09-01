@@ -310,10 +310,10 @@ public class ActivityService {
                             Set<ReportOutputColumn> activityColumns = activityRow.keySet();
                             for (ReportOutputColumn activitiesCls : activityColumns) {
                                 DateCell cellActivity = (DateCell) activityRow.get(activitiesCls);
-                                if (activitiesCls.columnName.equals(ColumnConstants.ACTUAL_START_DATE)) {
+                                if (activitiesCls.originalColumnName.equals(ColumnConstants.ACTUAL_START_DATE)) {
                                     actualStartDate = cellActivity.entityId;
                                 } else {
-                                    if (activitiesCls.columnName.equals(ColumnConstants.PROPOSED_START_DATE)) {
+                                    if (activitiesCls.originalColumnName.equals(ColumnConstants.PROPOSED_START_DATE)) {
                                         proposedStartDate = cellActivity.entityId;
                                     }
                                 }

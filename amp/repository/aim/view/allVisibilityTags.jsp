@@ -946,7 +946,9 @@ deleted 6 fields, do not reinsert
 <field:display name="Total Funding Disbursements of Contract" feature="Contracting"></field:display> 
 <field:display name="Total Ordered" feature="Disbursement Orders"></field:display> 
 <field:display name="Total Private Contribution" feature="Contracting"></field:display> 
-<field:display name="Type Of Assistance" feature="Funding Information"></field:display> 
+<field:display name="Type Of Assistance" feature="Funding Information"></field:display>
+<field:display name="SSC Modalities" feature="Funding Information"></field:display>
+<field:display name="Modalities" feature="Funding Information"></field:display>
 <field:display name="Type" feature="Admin - Component"></field:display> 
 <field:display name="Uncommitted Cumulative Balance" feature="Funding Information"></field:display> 
 <field:display name="Undisbursed Cumulative Balance" feature="Funding Information"></field:display> 

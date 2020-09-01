@@ -31,7 +31,8 @@ public class FMService {
     protected static final Logger logger = Logger.getLogger(FMService.class);
 
     public static FMSettingsResult getFMSettingsResult(FMSettingsConfig config) {
-        return getFMSettingsResult(config,  FeaturesUtil.getCurrentTemplateId());
+        //there is no point in using a null template id
+            return getFMSettingsResult(config, FeaturesUtil.getCurrentTemplateId());
     }
 
     /**

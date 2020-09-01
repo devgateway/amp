@@ -22,7 +22,7 @@
 				DROP VIEW IF EXISTS v_communal_section;
 			    CREATE OR REPLACE VIEW v_communal_section AS
 					SELECT ra.amp_activity_id, loc.communal_section_name, loc.communal_section_id, sum(ra.location_percentage) AS percentage, COUNT(*) - COUNT(ra.location_percentage) AS cnt_nulls
-					FROM amp_activity_location ra JOIN ni_all_locations_with_levels loc on loc.amp_location_id = ra.amp_location_id
+					FROM amp_activity_location ra JOIN ni_all_locations_with_levels loc on loc.acvl_id = ra.location_id
 					GROUP BY ra.amp_activity_id, loc.communal_section_id, loc.communal_section_name;
 			</lang>
 		</script>

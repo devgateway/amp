@@ -15,7 +15,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -67,7 +66,7 @@ import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpLocation;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.OnepagerSection;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -343,7 +342,7 @@ public class OnePager extends AmpHeaderFooter {
     private void initializeActivity(AmpActivityVersion activity,
             String activityName, String latitude, String longitude, String geoId) {
         AmpActivityLocation actLoc = new AmpActivityLocation();
-        AmpLocation ampLoc = LocationUtil.getAmpLocationByGeoCode(geoId);
+        AmpCategoryValueLocations ampLoc = LocationUtil.getAmpLocationByGeoCode(geoId);
         // This check is necessary to avoid an exception if the location doesn't have geoCode
         if (ampLoc != null) {
             activity.setName(activityName);

@@ -1050,10 +1050,12 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                 currencyDate = new java.sql.Date(compFundItem.getTransactionDate().getTime());
                 if (!compFundItem.getComponent().equals(parent))
                     continue;
-            } else if (item instanceof AmpRegionalFunding && (regFundItem = (AmpRegionalFunding) item).getTransactionAmount() != null
-                    && regFundItem.getTransactionDate() != null) {
+            } else if (item instanceof AmpRegionalFunding
+                    && ((AmpRegionalFunding) item).getTransactionAmountWithFormatConversion() != null
+                    && ((AmpRegionalFunding) item).getTransactionDate() != null) {
+                regFundItem = (AmpRegionalFunding) item;
                 itemTransactionType = regFundItem.getTransactionType();
-                amount = regFundItem.getTransactionAmount();
+                amount = regFundItem.getTransactionAmountWithFormatConversion();
                 currency = regFundItem.getCurrency();
                 currencyDate = new java.sql.Date(regFundItem.getTransactionDate().getTime());
                 if (!regFundItem.getRegionLocation().equals(parent))

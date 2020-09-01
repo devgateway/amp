@@ -27,6 +27,7 @@ public class LocationExtraInfoJsonSerializer extends JsonSerializer<LocationExtr
         if (iso2 != null) {
             provider.defaultSerializeField("iso2", iso2, jgen);
         }
+        provider.defaultSerializeField("old_location_id", value.getOldLocationId(), jgen);
         jgen.writeEndObject();
     }
 }

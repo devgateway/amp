@@ -249,6 +249,7 @@ public abstract class ObjectImporter<T> {
         boolean isValidFormat = formatValidator.isValid(this, newParent, newJsonParent, fieldDef, currentFieldPath);
         if (isValidFormat) {
             if (newJsonParent.containsKey(fieldName)) {
+                // FIXME importable flag is not honored
                 isValidFormat = validateSubElements(fieldDef, newParent, newJsonValue, currentFieldPath);
             }
 
@@ -287,37 +288,35 @@ public abstract class ObjectImporter<T> {
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     private Object getNewValue(APIField apiField, Object parentObj, Object jsonValue) {
-        boolean isCollection = apiField.isCollection();
         // on a business rule validation error we configure the input to progress with further validation
         if (jsonValue != null && BadInput.class.isAssignableFrom(jsonValue.getClass())) {
             jsonValue = ((BadInput) jsonValue).getInput();
         }
 
-        if (jsonValue == null && !isCollection) {
-            return null;
+        FieldType fieldType = apiField.getApiType().getFieldType();
+
+        if (jsonValue == null) {
+            // return empty value. used to clear the field.
+            return fieldType.isList() ? new ArrayList<>() : null;
         }
 
-        FieldType fieldType = apiField.getApiType().getFieldType();
         boolean idOnly = apiField.isIdOnly();
-        // this field has possible values
-        if (!isCollection && idOnly) {
-            return valueConverter.getObjectById(apiField.getApiType().getType(), jsonValue);
-        }
 
         try {
-            if (isCollection) {
-                Collection collection = (Collection) apiField.getFieldAccessor().get(parentObj);
-                if (idOnly && jsonValue != null) {
-                    collection.clear();
-                    if (apiField.getApiType().isSimpleItemType()) {
-                        collection.addAll((Collection) jsonValue);
-                    } else {
-                        collection.add(valueConverter.getObjectById(apiField.getApiType().getType(), jsonValue));
+            if (fieldType.isList()) {
+                if (idOnly) {
+                    List list = new ArrayList();
+                    for (Object jsonValueItem : (Collection) jsonValue) {
+                        list.add(valueConverter.getObjectById(apiField.getApiType().getType(), jsonValueItem));
                     }
+                    return list;
+                } else {
+                    return apiField.getFieldAccessor().get(parentObj);
                 }
-                return collection;
             } else if (fieldType.isSimpleType()) {
-                if (fieldType.isDateType() || fieldType.isTimestampType()) {
+                if (idOnly) {
+                    return valueConverter.getObjectById(apiField.getApiType().getType(), jsonValue);
+                } else if (fieldType.isDateType() || fieldType.isTimestampType()) {
                     return DateTimeUtil.parseISO8601DateTimestamp((String) jsonValue, fieldType.isTimestampType());
                 } else if (fieldType.isStringType()) {
                     return extractString(apiField, parentObj, jsonValue);
@@ -327,14 +326,14 @@ public abstract class ObjectImporter<T> {
                 }
             } else if (fieldType.isObject()) {
                 return apiField.getFieldAccessor().get(parentObj);
+            } else {
+                throw new IllegalStateException("Unsupported field type.");
             }
         } catch (SecurityException | IllegalArgumentException | IllegalAccessException | NoSuchMethodException
                 | InvocationTargetException e) {
             logger.error(e.getMessage(), e);
             throw new RuntimeException(e);
         }
-
-        return null;
     }
 
     protected Object extractString(APIField apiField, Object parentObj, Object jsonValue) {
@@ -361,7 +360,7 @@ public abstract class ObjectImporter<T> {
         // skip children validation immediately if only ID is expected
         boolean idOnly = fieldDef.isIdOnly();
         boolean isList = fieldType.isList();
-        if (idOnly && !(isList && fieldDef.getApiType().isSimpleItemType())) {
+        if (idOnly) {
             return isFormatValid;
         }
 
@@ -424,31 +423,6 @@ public abstract class ObjectImporter<T> {
                     }
 
                     removeByIdExcept(idField, newFieldValueCollection, jsonIds);
-                } else if (fieldDef.isDiscriminatedObject()) {
-                    Collection newFieldValueCollection = (Collection) newFieldValue;
-                    Map<String, Object> newChild = childrenNewValues.isEmpty()
-                            ? Collections.emptyMap() : childrenNewValues.get(0);
-                    if (newFieldValueCollection.size() > 1) {
-                        throw new RuntimeException("Expected one element at most! At: " + fieldPath);
-                    }
-                    if (newJsonValue != null) { // avoid creating new object if it is missing in json
-                        Object element;
-                        boolean notYetAdded = false;
-                        if (newFieldValueCollection.isEmpty()) {
-                            element = valueConverter.instantiate(subElementClass);
-                            notYetAdded = true;
-                        } else {
-                            element = newFieldValueCollection.iterator().next();
-                        }
-                        isFormatValid = validateAndImport(element, childrenFields, newChild, fieldPath)
-                                && isFormatValid;
-                        if (isFormatValid) {
-                            valueConverter.configureDiscriminationField(element, fieldDef);
-                            if (notYetAdded) {
-                                newFieldValueCollection.add(element);
-                            }
-                        }
-                    }
                 } else {
                     if (newJsonValue != null) {
                         Map<String, Object> newJsonObjValue = (Map<String, Object>) newJsonValue;
@@ -457,13 +431,14 @@ public abstract class ObjectImporter<T> {
                             newFieldValue = valueConverter.getNewInstance(fieldDef.getApiType().getType());
                         }
 
-                        isFormatValid = validateAndImport(newFieldValue, childrenFields,
-                                newJsonObjValue, fieldPath) && isFormatValid;
+                        isFormatValid = validateAndImport(newFieldValue, childrenFields, newJsonObjValue, fieldPath)
+                                && isFormatValid;
+                    }
+                    if (isFormatValid) {
+                        valueConverter.configureDiscriminationField(newFieldValue, fieldDef);
                     }
                 }
-                // TODO: we also need to validate other children, some can be mandatory
             }
-
             fieldDef.getFieldAccessor().set(newParent, newFieldValue);
         }
         return isFormatValid;

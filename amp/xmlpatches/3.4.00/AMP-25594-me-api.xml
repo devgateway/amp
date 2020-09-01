@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>AMP-25594</jira>
+    <keyword>constraints fk</keyword>
+    <author>Octavian Ciubotaru</author>
+    <description>
+        Monitor changes to indicators and indicator risk ratings for AMP Offline.
+    </description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres"><![CDATA[
+
+                CREATE TRIGGER update_offline_changelog_trg
+                    AFTER INSERT OR UPDATE OR DELETE ON amp_indicator
+                    FOR EACH ROW EXECUTE PROCEDURE update_offline_changelog('indicator');
+                CREATE TRIGGER update_offline_changelog_trg
+                    AFTER INSERT OR UPDATE OR DELETE ON amp_sector_indicator
+                    FOR EACH ROW EXECUTE PROCEDURE update_offline_changelog('indicator');
+                CREATE TRIGGER update_offline_changelog_trg
+                    AFTER INSERT OR UPDATE OR DELETE ON amp_indicator_risk_ratings
+                    FOR EACH ROW EXECUTE PROCEDURE update_offline_changelog('indicator risk rating');
+
+            ]]></lang>
+        </script>
+    </apply>
+</tns:patch>

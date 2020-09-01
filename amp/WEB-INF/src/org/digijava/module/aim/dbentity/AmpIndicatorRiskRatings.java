@@ -7,13 +7,9 @@ import org.digijava.module.aim.util.Identifiable;
 public class AmpIndicatorRiskRatings implements Identifiable, Serializable {
     //IATI-check: to be ignored
     
-//  @Interchangeable(fieldTitle="Indicator Risk Ratings ID", id = true)
     private Long ampIndRiskRatingsId;
-//  @Interchangeable(fieldTitle="Rating Name", value = true)
     private String ratingName;
-//  @Interchangeable(fieldTitle="Translated Rating Name")
     private String translatedRatingName;
-//  @Interchangeable(fieldTitle="Rating Value")
     private int ratingValue;
     
     public Long getAmpIndRiskRatingsId() {

@@ -19,21 +19,19 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres"><![CDATA[
-				DROP VIEW IF EXISTS v_indicator_logframe_category;
 				CREATE OR REPLACE VIEW v_indicator_logframe_category AS
 				  SELECT
 					c.activity_id amp_activity_id,
 					acv.category_value::text logframe_category,
-					aux.log_frame_id id,
+					c.ind_val_category id,
 					c.indicator_id AS me_indicator_id,
 					si.amp_sector_id AS me_indicator_sector_id,
 					CASE ind.type WHEN 'A' THEN 1 :: BIGINT WHEN 'D' THEN 2 :: BIGINT ELSE 3 :: BIGINT END AS me_indicator_type_id,
-					aux.risk_rating_id AS me_indicator_risk_id
+					c.risk AS me_indicator_risk_id
 				  FROM amp_indicator_connection c
 					JOIN amp_indicator ind ON ind.indicator_id = c.indicator_id
 					LEFT JOIN amp_sector_indicator si ON si.indicator_id=ind.indicator_id
-					JOIN amp_indicator_connection_aux aux ON c.id=aux.indicator_connection_id
-					LEFT JOIN amp_category_value acv ON aux.log_frame_id=acv.id
+					LEFT JOIN amp_category_value acv ON c.ind_val_category=acv.id
 				  WHERE c.sub_clazz::text = 'a'::text;
 			]]></lang>
 		</script>

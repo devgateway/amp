@@ -138,9 +138,6 @@ public class APIField {
     private TranslationSettings.TranslationType translationType;
 
     @JsonIgnore
-    private boolean isCollection;
-
-    @JsonIgnore
     private ConstraintDescriptors beanConstraints;
 
     @JsonIgnore
@@ -405,15 +402,6 @@ public class APIField {
     @JsonIgnore
     public boolean isDiscriminatedObject() {
         return apiType.getFieldType().isObject() && discriminationConfigurer != null;
-    }
-
-    @JsonIgnore
-    public boolean isCollection() {
-        return isCollection;
-    }
-
-    public void setIsCollection(boolean isCollection) {
-        this.isCollection = isCollection;
     }
 
     @JsonIgnore

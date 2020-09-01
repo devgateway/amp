@@ -4,6 +4,7 @@ export const ROUTES_HOME = '/ssc/home';
 //TODO DELETE THIS ROUTE
 export const FLAGS_DIRECTORY = '/assets/img/flags/';
 export const FLAG_DEFAULT = '/assets/img/flags/';
+export const DEVELOPMENT = 'development';
 
 export const DASHBOARD_DEFAULT_MIN_YEAR_RANGE = 'dashboard-default-min-year-range';
 export const DASHBOARD_DEFAULT_MAX_YEAR_RANGE = 'dashboard-default-max-year-range';
@@ -41,6 +42,8 @@ export const HOME_CHART = 'home';
 export const SECTORS_CHART = 'sector';
 export const MODALITY_CHART = 'modality';
 export const DOWNLOAD_CHART = 'download';
+export const COUNTRY_COLUMN = 'country-column';
+export const FALLBACK_FLAG = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAbCAQAAACkGQXlAAAAI0lEQVR42mP8L8lAVcA4auCogaMGjho4auCogaMGjhpINAAAOBcdpLw/CDsAAAAASUVORK5CYII='
 export const COLOR_MAP = [
     '#4bbc4e',
     '#40557d',

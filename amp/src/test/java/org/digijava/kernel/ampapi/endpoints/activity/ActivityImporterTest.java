@@ -4,6 +4,7 @@ import static java.util.Collections.emptyMap;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.AMP_ACTIVITY_ID_FIELD_NAME;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.VERSION_FIELD_NAME;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors.ACTIVITY_IS_STALE;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils.WORKSPACE_PREFIX;
 import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.ACTIVITY_GROUP;
 import static org.digijava.module.aim.helper.Constants.PROJECT_VALIDATION_FOR_ALL_EDITS;
 import static org.digijava.module.aim.helper.Constants.PROJECT_VALIDATION_ON;
@@ -29,6 +30,7 @@ import java.util.function.Supplier;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import org.dgfoundation.amp.testutils.TransactionUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldsEnumerator;
@@ -136,6 +138,9 @@ public class ActivityImporterTest {
     
     @Before
     public void setUp() {
+        TransactionUtil.setUpWorkspaceEmptyPrefixes();
+        TLSUtils.getRequest().setAttribute(WORKSPACE_PREFIX, "");
+
         ptm = new TestPersistenceTransactionManager();
     
         translatorService = new TestTranslatorService();

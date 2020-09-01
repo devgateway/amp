@@ -1,4 +1,4 @@
-import { FLAGS_DIRECTORY } from './constants';
+import { DEVELOPMENT, FALLBACK_FLAG, FLAGS_DIRECTORY } from './constants';
 
 export function splitArray(a, n, balanced) {
     if (n < 2)
@@ -75,7 +75,15 @@ export function toCamelCase(str) {
 //TODO move to another utility class.
 export function getCountryFlag(name) {
     return [`${process.env.PUBLIC_URL}${FLAGS_DIRECTORY}${name.toLowerCase().replace(/ /g, "_")}.svg`
-        , `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAbCAQAAACkGQXlAAAAI0lEQVR42mP8L8lAVcA4auCogaMGjho4auCogaMGjhpINAAAOBcdpLw/CDsAAAAASUVORK5CYII=`];
+        , FALLBACK_FLAG];
+}
+
+export function getRootUrl() {
+    if (process.env.NODE_ENV === DEVELOPMENT) {
+        return "/#";
+    } else {
+        return process.env.PUBLIC_URL + "/index.html#";
+    }
 }
 
 export function calculateUpdatedValuesForDropDowns(ipSelectedFilter, selectedOptions) {

@@ -18,11 +18,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
-import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -36,8 +36,10 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Row;
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.lucene.LangSupport;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
@@ -56,6 +58,8 @@ import org.digijava.module.translation.importexport.TranslationSearcher;
 import org.digijava.module.translation.jaxb.Language;
 import org.digijava.module.translation.jaxb.Translations;
 import org.digijava.module.translation.jaxb.Trn;
+import org.digijava.module.translation.util.importexport.ImportResult;
+import org.digijava.module.translation.util.importexport.ImportRowConsumerCallable;
 import org.hibernate.Criteria;
 import org.hibernate.FlushMode;
 import org.hibernate.Query;
@@ -82,7 +86,8 @@ import org.hibernate.Transaction;
 public class ImportExportUtil {
 
     private static Logger logger = Logger.getLogger(ImportExportUtil.class);
-    private static final Message  POISON_MSG=new Message();
+    private static final Message  POISON_MSG = new Message();
+    private static final Integer TIME_TO_WAIT = 10000;
 
     /**
      * Imports data from JAXB translations instance to database.
@@ -113,22 +118,13 @@ public class ImportExportUtil {
                 option.setDbSession(session);
                 //set list of affected messages 
                 option.setAffectedMessages(new LinkedList<Message>());
-                
-//beginTransaction();
+
                 for (Trn xmlGroup : groups) {
                     processTranslationGroup(xmlGroup, option);
                 }
-                //tx.commit();
-                
-                //update translation cache after commit is success.
-                //refreshWorker(option);
                 tx.commit();
                 PersistenceManager.closeSession(session);
             }
-//          catch (WorkerException e) {
-//              logger.error(e);
-//              throw new DgException("Couldnot refresh cache after successfull import. you will need restart",e);
-//          }
             finally
             {
                 TrnAccesTimeSaver.SKIP_ALL_UPDATES = false;
@@ -180,15 +176,18 @@ public class ImportExportUtil {
      * @param message
      * @param option
      */
-    private static void saveMessage(Message message, ImportExportOption option){
-        if (message == null) return;
+    public static void saveMessage(Message message, ImportExportOption option) {
+        if (message == null) {
+            return;
+        }
         try {
             String msgKey       = message.getKey();
             String msgLang      = message.getLocale();
             String msgSiteId    = message.getSiteId();
             
             //find same record in db
-            Message existingMessage = option.getSearcher().get(msgKey, msgLang, Long.parseLong(msgSiteId));
+            Message existingMessage = option.getSearcher().get(msgKey, msgLang, Long.parseLong(msgSiteId),
+                    option.getDbSession());
             
             //default type in case we do not have specified types.
             //This default type means that we will not skip any record. If this is not goo didea, change with return;
@@ -345,11 +344,15 @@ public class ImportExportUtil {
     /**
      * Implements searcher that searches translation cache.
      */
-    private static class CacheSearcher implements TranslationSearcher{
+    private static class CacheSearcher implements TranslationSearcher {
         private TranslatorWorker worker = TranslatorWorker.getInstance("");
+
+        public Message get(String key, String locale, Long siteId) throws Exception {
+            return worker.getByKey(key, null, null, locale, siteId);
+        }
         @Override
-        public Message get(String key,String locale, Long siteId) throws Exception{
-            return worker.getByKey(key, locale, siteId);
+        public Message get(String key, String locale, Long siteId, Session dbSession) throws Exception {
+            return worker.getByKey(key, null, null, locale, siteId, dbSession);
         }
     }
     
@@ -514,107 +517,146 @@ public class ImportExportUtil {
 
     /**
      * Used to import translations from xsl file.
-     * @param inputStreame 
-     * @param msgSiteId 
+     * @param fsFileSystem
+     * @param option
+     * @param site
      * @return list of errors 
      * @throws AimException
      */
-    public static List<String> importExcelFile(POIFSFileSystem fsFileSystem,ImportExportOption option, Site site)  throws AimException{
-        String targetLanguage=null;
-        Session session = null;
+    public static List<String> importExcelFile(POIFSFileSystem fsFileSystem, ImportExportOption option, Site site)
+            throws AimException {
+        String targetLanguage = null;
         List<String> errors = new ArrayList<String>();
+        ExecutorService executorPool = Executors.newFixedThreadPool(1);
+        String error = null;
+        List<String> keysWithError = new ArrayList<>();
+        List<Future<ImportResult>> results = new ArrayList<>();
         try {
             HSSFWorkbook workBook = new HSSFWorkbook(fsFileSystem);
             HSSFSheet hssfSheet = workBook.getSheetAt(0);
-            session = PersistenceManager.getRequestDBSession();
-            //set session in parameter
-            option.setDbSession(session);
-            //set list of affected messages 
-            //option.setAffectedMessages(new ArrayList<Message>());
-            //TranslatorWorker worker = TranslatorWorker.getInstance("");
-            BlockingQueue<Message> queue=new LinkedBlockingQueue<Message>();
-            targetLanguage=hssfSheet.getRow(0).getCell(2).getStringCellValue();;
-        
-            
-            ExecutorService executorPool=Executors.newFixedThreadPool(1);
-            Future<?> consumerStatus=executorPool.submit(new ImportRowConsumerThread(option,queue));
-            int physicalNumberOfRows=hssfSheet.getPhysicalNumberOfRows();
-            
+            option.setDbSession(PersistenceManager.getRequestDBSession());
+            targetLanguage = getStringCellValue(hssfSheet.getRow(0), 2);
+
+            int physicalNumberOfRows = hssfSheet.getPhysicalNumberOfRows();
+
             for (int i = 1; i < physicalNumberOfRows; i++) {
                 Row hssfRow = hssfSheet.getRow(i);
                 hssfRow.getCell(COL_KEY).setCellType(HSSFCell.CELL_TYPE_STRING);
-                String key = hssfRow.getCell(COL_KEY).getStringCellValue();
+                String key = getStringCellValue(hssfRow, COL_KEY);
                 // We need to discard those keys that are not numbers or the whole process will fail when trying to make insert
                 // in table amp_etl_changelog(entity_name, entity_id).
                 try {
                     Integer.parseInt(key);
                 } catch (NumberFormatException nfe) {
-                    logger.error("Cant import key: " + key);
-                    errors.add(TranslatorWorker.translateText("Can not import key: " + key));
+                    errors.add(TranslatorWorker.translateText("key {key} must be a numeric value, record skipped.")
+                            .replace("{key}", key));
                     continue;
                 }
 
+                if (option.getTypeByLanguage().get(targetLanguage) != null
+                        && !option.getTypeByLanguage().get(targetLanguage).equals(ImportType.ONLY_NEW)) {
+                    Message existingMessage = option.getSearcher().get(key, "en", site.getId());
+                    if (existingMessage == null) {
+                        errors.add(TranslatorWorker.translateText(
+                                "Key \"{key}\" not found in the system. Please modify the import file and try again.")
+                                .replace("{key}", key));
+                        continue;
+                    }
+                }
                 hssfRow.getCell(COL_ENGLISH_TEXT).setCellType(HSSFCell.CELL_TYPE_STRING);
                 String englishText = (hssfRow.getCell(COL_ENGLISH_TEXT) == null) ? ""
-                        : hssfRow.getCell(COL_ENGLISH_TEXT).getStringCellValue();
+                        : getStringCellValue(hssfRow, COL_ENGLISH_TEXT);
                 //for AMP-16681 when the cell content is #N/A on third column you are getting an erro if getStringCellValue is called
                 //so if its an error cell the target text is "" as if the cell would be empty
+
                 String targetText = (hssfRow.getCell(COL_TARGET_TEXT) == null
                         || hssfRow.getCell(COL_TARGET_TEXT).getCellType() == HSSFCell.CELL_TYPE_ERROR) ? ""
-                        : hssfRow.getCell(COL_TARGET_TEXT).getStringCellValue();
-                
-                Date englishDate = getDate(hssfRow, COL_ENGLISH_DATE);
-                Date targetDate = getDate(hssfRow, COL_TARGET_DATE);
+                        : getStringCellValue(hssfRow, COL_TARGET_TEXT);
 
-                if(englishDate!=null){
-                    Message message = new Message();
-                    message.setKey(key);
-                    message.setMessage(englishText);
-                    message.setLocale("en");
-                    message.setSite(site);
-                    message.setCreated(new Timestamp(englishDate.getTime()));
-                    queue.put(message);
+                Date englishDate = null;
+                Date targetDate = null;
+                try {
+                    englishDate = getDate(hssfRow, COL_ENGLISH_DATE);
+                    targetDate = getDate(hssfRow, COL_TARGET_DATE);
+                } catch (ParseException ex) {
+                    errors.add(TranslatorWorker.translateText("key {key} contains invalid not null dates,"
+                            + " record skipped.").replace("{key}", key));
+                    continue;
                 }
-                
-                if(targetText != null && !targetText.trim().isEmpty() /*targetDate!=null*/){
-                    if (targetDate==null) {
+                if (englishDate != null) {
+                    results.add(getMessage(option, site, LangSupport.ENGLISH.getLangCode(), executorPool, key,
+                            englishText, new Timestamp(englishDate.getTime())));
+                }
+
+                if (targetText != null && !targetText.trim().isEmpty()) {
+                    if (targetDate == null) {
                         targetDate = new Date();
                     }
-
-                    Message targetMessage = new Message();
-                    targetMessage.setKey(key);
-                    targetMessage.setMessage(targetText);
-                    targetMessage.setLocale(targetLanguage);
-                    targetMessage.setSite(site);
-                    targetMessage.setCreated(new Timestamp(targetDate.getTime()));
-                    queue.put(targetMessage);   
+                    results.add(getMessage(option, site, targetLanguage, executorPool, key, targetText,
+                            new Timestamp(targetDate.getTime())));
                 }
-                
-                
             }
-            queue.put(POISON_MSG);
-            consumerStatus.get();
-            executorPool.shutdown();
-            //refreshWorker(option);
+        } catch (Exception e) {
+            logger.error("file is not ok", e);
+            error = e.getMessage();
+            throw new AimException("Cannot import messages", e);
+        } finally {
+            try {
+                executorPool.awaitTermination(TIME_TO_WAIT, TimeUnit.MILLISECONDS);
+                executorPool.shutdown();
+
+            } catch (InterruptedException ex) {
+                throw new AimException("Cannot import messages", ex);
+            }
         }
-        catch(NullPointerException e){
-            logger.error("file is not ok");
-            throw new AimException("Cannot import messages",e);
+        for (Future<ImportResult> result : results) {
+            ImportResult importResult;
+            try {
+                importResult = result.get();
+                if (!importResult.isSuccess()) {
+                    keysWithError.add(importResult.getKey());
+                }
+            } catch (InterruptedException e) {
+                throw new AimException("Cannot import messages", e);
+            } catch (ExecutionException e) {
+                throw new AimException("Cannot import messages", e);
+            }
         }
-        catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new AimException("Cannot import messages",e);
+        if (keysWithError.size() > 0) {
+            errors.add(TranslatorWorker.translateText("The following {keys} could not be imported")
+                    .replace("{keys}", SQLUtils.generateCSV(keysWithError)));
+        }
+        if (error != null) {
+            errors.add(TranslatorWorker.translateText("unexpected error occurred while processing the file {error}")
+                    .replace("{error}", error));
         }
         return errors;
+    }
+
+    private static String getStringCellValue(Row hssfRow, int colTargetText) {
+        hssfRow.getCell(colTargetText).setCellType(HSSFCell.CELL_TYPE_STRING);
+        return hssfRow.getCell(colTargetText).getStringCellValue();
+    }
+
+    private static Future<ImportResult> getMessage(ImportExportOption option, Site site, String targetLanguage,
+                                                   ExecutorService executorPool, String key, String targetText,
+                                                   Timestamp dateCreated) {
+        Message targetMessage = new Message();
+        targetMessage.setKey(key);
+        targetMessage.setMessage(targetText);
+        targetMessage.setLocale(targetLanguage);
+        targetMessage.setSite(site);
+        targetMessage.setCreated(dateCreated);
+        return executorPool.submit(new ImportRowConsumerCallable(option, targetMessage));
     }
 
     private static Date getDate(Row hssfRow, int col) throws ParseException {
         if (hssfRow.getCell(col) != null) {
             if (hssfRow.getCell(col).getCellType() == HSSFCell.CELL_TYPE_NUMERIC) {
                 return hssfRow.getCell(col).getDateCellValue();
-            } else if (StringUtils.isNotEmpty(hssfRow.getCell(col).getStringCellValue())) {
+            } else if (StringUtils.isNotEmpty(getStringCellValue(hssfRow, col))) {
                 return LocalizationUtil.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.ENGLISH)
-                                                .parse(hssfRow.getCell(col).getStringCellValue());
+                                                .parse(getStringCellValue(hssfRow, col));
             }
         }
         return null;
@@ -635,7 +677,7 @@ public class ImportExportUtil {
             fsFileSystem = new POIFSFileSystem(inputStreame);
             HSSFWorkbook workBook = new HSSFWorkbook(fsFileSystem);
             HSSFSheet hssfSheet = workBook.getSheetAt(0);
-            String targetLanguage=hssfSheet.getRow(0).getCell(2).getStringCellValue();
+            String targetLanguage = getStringCellValue(hssfSheet.getRow(0), 2);
             if(DbUtil.isAvailableLanguage(targetLanguage)){
                 importedLanguages.add(targetLanguage);
             }
@@ -649,41 +691,5 @@ public class ImportExportUtil {
             throw new AimException("Cannot import messages",e);
         }
         return fsFileSystem;
-
     }
-
-    
-    private static class ImportRowConsumerThread implements Runnable {
-        ImportExportOption option;
-        BlockingQueue<Message> queue;
-
-        ImportRowConsumerThread(ImportExportOption option, BlockingQueue<Message> queue) {
-            this.queue=queue;
-            this.option = option;
-
-        }
-
-        @Override
-        public void run() {
-            TranslatorWorker worker = TranslatorWorker.getInstance("");
-            try {
-                while (true) {
-                    Message message = queue.take();
-                    if(message.equals(POISON_MSG)) {
-                        break;
-                    }
-                    saveMessage(message, option);
-                    worker.refresh(message);
-                }
-            } catch (WorkerException e) {
-                logger.error("error", e);
-            } catch (Exception e) {
-                logger.error("error", e);
-            }
-
-        }
-
-    }
-
-    
 }

@@ -287,6 +287,9 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
                 newActivity = new AmpActivityVersion();
             }
 
+            // AMPOFFLINE-1528
+            org.digijava.module.aim.util.ActivityUtil.setCurrentWorkspacePrefixIntoRequest(newActivity);
+
             validateAndImport(newActivity, newJson);
             
             if (errors.isEmpty()) {

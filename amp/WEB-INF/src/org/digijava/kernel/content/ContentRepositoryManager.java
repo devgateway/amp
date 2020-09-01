@@ -249,7 +249,7 @@ public final class ContentRepositoryManager {
     }
 
     public static Set<String> getTeamUuids() {
-        return privateResources.get();
+        return teamResourcesCache.get();
     }
 
     private static Set<String> getUuidsFromPath(String path) {
@@ -258,8 +258,9 @@ public final class ContentRepositoryManager {
         try {
             QueryManager queryManager = session.getWorkspace().getQueryManager();
 
-            Query query = queryManager.createQuery(String.format("SELECT * FROM nt:base WHERE %s "
-                    + "IS NOT NULL AND jcr:path LIKE '/%s/%%/'", CrConstants.PROPERTY_CREATOR, path), Query.SQL);
+            Query query = queryManager.createQuery(String.format("SELECT * FROM nt:base WHERE %s IS NOT NULL "
+                    + "AND ampdoc:cmDocType IS NOT NULL "
+                    + "AND jcr:path LIKE '/%s/%%/'", CrConstants.PROPERTY_CREATOR, path), Query.SQL);
             NodeIterator nodes = query.execute().getNodes();
             while (nodes.hasNext()) {
                 uuids.add(nodes.nextNode().getIdentifier());

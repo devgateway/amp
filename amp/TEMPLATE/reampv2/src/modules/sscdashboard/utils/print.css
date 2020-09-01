@@ -7,7 +7,12 @@
 #print-dummy {
     top: -10000px;
     border: 1px solid black;
+}
 
+#print-friendly-dummy {
+
+    width: 670px;
+    height: 1040px;
 }
 
 #print-simple-dummy .country-popup-all.line {
@@ -15,15 +20,17 @@
 }
 
 #print-dummy .export-checkbox,
-#print-simple-dummy .export-checkbox {
-    visibility: hidden;
+#print-simple-dummy .export-checkbox,
+#print-friendly-dummy .export-checkbox {
+    display: none;
 }
 
 #print-simple-dummy .country-popup-all.left {
     border-radius: 0;
 }
 
-#print-dummy .row, #print-simple-dummy .row {
+#print-dummy .row, #print-simple-dummy .row,
+#print-friendly-dummy .row {
     margin-right: 0px;
     margin-left: 0px;
 }
@@ -32,12 +39,18 @@
     border-bottom: 1px solid #313d4f;
 }
 
-#print-dummy .chart-column, #print-simple-dummy .chart-column {
+#print-dummy .chart-column, #print-simple-dummy .chart-column,
+#print-friendly-dummy .chart-column {
     padding-left: 0px;
     padding-right: 0px;
 }
+#print-friendly-dummy .one-by-one .chart-column{
+
+    height: 250px;
+}
 
 #print-dummy .country-popup-1 .header .country-name,
+#print-simple-dummy .country-popup-1 .header .country-name,
 #print-dummy .country-popup-2 .header .country-name,
 #print-dummy .country-popup-3 .header .country-name,
 #print-simple-dummy .country-popup-1 .header .country-name,
@@ -56,7 +69,6 @@
 #print-simple-dummy .countries-charts,
 #print-dummy .countries-charts {
     /*height: 358px;*/
-    border-top: 1px solid black;
 }
 
 #print-simple-dummy .print-title,
@@ -102,3 +114,128 @@
 }
 
 /*# sourceMappingURL=print.css.map */
+
+#print-friendly-dummy .custom-legend ul li .label {
+    color: #273142 !important;
+}
+
+@media print {
+    .main-container {
+        padding: 10px !important;
+    }
+
+    .col-print-6 {
+        width: 50%;
+        float: left;
+    }
+
+    .col-print-12 {
+        width: 100%;
+        float: left;
+    }
+
+    .label {
+        border: 0;
+    }
+
+    .print-title {
+        border: 1px solid black;
+    }
+
+    #print-friendly-dummy .custom-legend {
+        padding-top: 5px;
+    }
+
+    #print-friendly-dummy-container:last-of-type:not(.one-by-one),
+    .print-row.row.border-bottom {
+        border-bottom: 1px solid black;
+    }
+
+    .print-row.row {
+        border-right: 1px solid black;
+        border-left: 1px solid black;
+    }
+
+    .one-by-one .print-row.row {
+        border-bottom: 1px solid black;
+    }
+
+    #print-friendly-dummy-container .border-right {
+        border-right: 1px solid black;
+    }
+
+
+    #print-friendly-dummy-container .country-popup-3 .chart-container > div > div > svg {
+        transform: translate(-10%, 0);
+    }
+
+    #print-friendly-dummy-container .country-popup-2 .chart-container > div > div > svg {
+        transform: translate(-22%, 0);
+    }
+
+    .country-popup-1 .chart-container > div > div > svg {
+        transform: translate(-35%, 0);
+    }
+
+    .col-print-12 .chart-container > div > div > svg {
+        transform: translate(30%, 0) !important;
+    }
+
+
+    .one-by-one .chart-container > div > div > svg{
+        transform: translate(-10%, 0) !important;
+    }
+    .last-row .col-print-12 .chart-container > div > div > svg {
+        transform: translate(5%, 0) !important;
+    }
+
+
+    #print-friendly-dummy .header {
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+
+    #print-friendly-dummy .header .country-name {
+        font-size: 11px;
+    }
+
+    #print-friendly-dummy .chart-container {
+        height: 185px !important;
+        padding-bottom: 0;
+        padding-top: 0;
+    }
+
+    #print-friendly-dummy .header .country-name img {
+        width: 18px;
+        margin-right: 5px;
+        margin-left: 5px;
+    }
+
+    #print-friendly-dummy .country-popup-all.line {
+        border-right: 0;
+    }
+
+    .header .projects > .label {
+        font-size: 9px !important;
+    }
+
+    .one-by-one .single-50 {
+        width: 50% !important;
+    }
+
+    .one-by-one .new-page {
+        page-break-before: always;
+    }
+
+
+    .one-by-one .float-right {
+        float: right;
+    }
+
+    .one-by-one .float-left {
+        float: left;
+    }
+
+
+}
+

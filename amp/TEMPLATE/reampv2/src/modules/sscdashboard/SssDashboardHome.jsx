@@ -9,6 +9,7 @@ import { loadActivitiesDetails } from './actions/callReports';
 import { connect } from 'react-redux';
 import { loadCountriesFilters, loadModalitiesFilters, loadSectorsFilters } from './actions/loadFilters';
 import './utils/print.css';
+import PrintDummy from './utils/PrintDummy';
 
 class SssDashboardHome extends Component {
 
@@ -223,12 +224,7 @@ class SssDashboardHome extends Component {
                                   countriesForExportChanged={this.countriesForExportChanged.bind(this)}
                     />
                 </div>
-                <div id="print-dummy">
-                    <div id="print-dummy-container"/>
-                </div>
-                <div id="print-simple-dummy">
-                    <div id="print-simple-dummy-container"/>
-                </div>
+                <PrintDummy/>
             </div>
         );
     }

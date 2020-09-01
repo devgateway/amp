@@ -56,8 +56,8 @@
 							d.vulnerable_group_id,
 							d.project_results_available_id
 						FROM v_ni_donor_orgs d
-						JOIN ni_all_orgs_dimension orgs ON orgs.org_id = d.org_id
-						JOIN ni_all_locations_with_levels locs ON orgs.amp_country_id = locs.acvl_id
+						LEFT JOIN ni_all_orgs_dimension orgs ON orgs.org_id = d.org_id
+						LEFT JOIN ni_all_locations_with_levels locs ON orgs.amp_country_id = locs.acvl_id
 					) v
 					ON aav.amp_activity_id = v.amp_activity_id;
 			]]></lang>

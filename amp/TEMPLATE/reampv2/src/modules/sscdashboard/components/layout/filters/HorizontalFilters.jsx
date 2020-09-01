@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import MultiSelectionDropDown from './MultiSelectionDropDown';
-import CountryCarousel from './carousel';
+import CountryCarousel from './CountryCarousel';
 
 import './filters.css';
 import {

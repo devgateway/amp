@@ -5,13 +5,14 @@ import { exportToXLS } from '../../../../utils/exportUtils';
 import { PNG_FORMAT } from '../../../../utils/constants';
 import ReactTooltip from 'react-tooltip';
 import { SSCTranslationContext } from '../../../StartUp';
+import PrintCountryCharts from './PrintCountryCharts';
 
 
 class CountryPopupExport extends Component {
 
     exportToImage(printFormat) {
-        const {printTitle, printChartId, printFilters} = this.props;
-        if (this.props.countriesForExport.length === 0 || this.props.onlyOneCountry) {
+        const {printTitle, printChartId, printFilters, countriesForExport, onlyOneCountry} = this.props;
+        if (countriesForExport.length === 0 || onlyOneCountry) {
             printChart(printTitle, printChartId, printFilters, printFormat, true, 'print-dummy-container').then(() => {
             }).catch(e => {
                 alert('Error while printing');
@@ -28,7 +29,7 @@ class CountryPopupExport extends Component {
     }
 
     render() {
-        const {onlyOneCountry} = this.props;
+        const {onlyOneCountry, countriesForExport} = this.props;
         const {translations} = this.context;
         return (
             <div className={`export-wrapper ${onlyOneCountry ? 'single-country' : ''}`}>
@@ -40,7 +41,7 @@ class CountryPopupExport extends Component {
                     <li className="xls" data-tip={translations['amp.ssc.dashboard:sectors-xls-tooltip']}
                         data-for={"download-xls"} onClick={this.exportChartToXls.bind(this)}>xls
                     </li>
-                    <li className="print">print</li>
+                    <PrintCountryCharts countriesForExport={countriesForExport}/>
                     <li className="return-link" onClick={() => this.props.closeLargeCountryPopinAndClearFilter()}>X</li>
                 </ul>
                 <ReactTooltip place={'bottom'} multiline id={"download-png"}

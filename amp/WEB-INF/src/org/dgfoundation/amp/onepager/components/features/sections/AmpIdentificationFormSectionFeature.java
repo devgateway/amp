@@ -547,7 +547,7 @@ implements AmpRequiredComponentContainer{
 
             AmpTextAreaFieldPanel multiStakeholderPartners = new AmpTextAreaFieldPanel("multiStakeholderPartners",
                     new PropertyModel<String>(am, "multiStakeholderPartners"), "Multi Stakeholder Partners",
-                    true, AmpFMTypes.MODULE) {
+                    false, AmpFMTypes.MODULE) {
                 @Override
                 protected void configureLabelText() {
                     this.setLabelText("Please list partners here");

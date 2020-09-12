@@ -21,7 +21,10 @@ import org.digijava.module.common.util.DateTimeUtil;
  * @author Nadejda Mandrescu
  */
 public class DateFilterUtils {
-    
+
+    public static final int MIN_QUARTER = 1;
+    public static final int MAX_QUARTER = 4;
+
     /**
      * Builds a date range filter [from .. to] or [from .. infinite ) or (infinite .. to]
      * @param from - the date to start from or null
@@ -72,19 +75,31 @@ public class DateFilterUtils {
     /**
      * Builds a filter for list of years 
      * @param years - years to filter by
-     * @param calendar - (optional) the calendar to use to store actual names 
      * @param valuesToInclude - true if this years to be kept, false if this years must be excluded
-     * @throws Exception if range is invalid
+     * @throws AmpApiException if range is invalid
      */
-    public static FilterRule getYearsFilterRule(List<Integer> years, AmpFiscalCalendar calendar, 
-            boolean valuesToInclude) throws Exception {
-//      List<String> yearNames = calendar == null ? null : new ArrayList<String>(years.size());
-//      if (calendar != null)
-//          for (Integer year : years)
-//              yearNames.add(getFiscalYear(year, calendar));
+    public static FilterRule getYearsFilterRule(List<Integer> years, boolean valuesToInclude) throws AmpApiException {
         return getDatesListFilterRule(ElementType.YEAR, years, valuesToInclude);
     }
-    
+
+    /**
+     * Builds a filter for range of years
+     * @param fromYear - first year to include
+     * @param untilYear - last year to include
+     * @throws AmpApiException if range is invalid
+     */
+    public static FilterRule getYearsFilterRule(Integer fromYear, Integer untilYear) throws AmpApiException {
+        return getDatesRangeFilterRule(ElementType.YEAR, fromYear, untilYear, true);
+    }
+
+    public static FilterRule getQuarterFilterRule(List<Integer> quarters) throws AmpApiException {
+        return getDatesListFilterRule(ElementType.QUARTER, quarters, true);
+    }
+
+    public static FilterRule getQuarterFilterRule(Integer start, Integer end) throws AmpApiException {
+        return getDatesRangeFilterRule(ElementType.QUARTER, start, end, true);
+    }
+
     /**
      * Builds a date list filter 
      * @param dates - the dates to filter by 
@@ -118,7 +133,7 @@ public class DateFilterUtils {
      * @throws Exception if range is invalid
      */
     public static FilterRule getYearsRangeFilter(Integer start, Integer end, AmpFiscalCalendar fromCalendar,
-            AmpFiscalCalendar toCalendar) throws Exception {
+            AmpFiscalCalendar toCalendar) throws AmpApiException {
         start = FiscalCalendarUtil.getActualYear(fromCalendar, start, 0, toCalendar);
         end = FiscalCalendarUtil.getActualYear(fromCalendar, end + 1, -1, toCalendar);
         return getDatesRangeFilterRule(ElementType.YEAR, start, end, false);
@@ -165,11 +180,17 @@ public class DateFilterUtils {
         Integer undefined = null;
         boolean mustBeNotNull = false;
         switch (elemType) {
-        case YEAR : 
-        case DATE :
-            lowerLimit = 0; upperLimit  = Integer.MAX_VALUE;
-            break;
-        default: break;
+            case YEAR:
+            case DATE:
+                lowerLimit = 0;
+                upperLimit = Integer.MAX_VALUE;
+                break;
+            case QUARTER:
+                lowerLimit = MIN_QUARTER;
+                upperLimit = MAX_QUARTER;
+                break;
+            default:
+                break;
         }
         if (mustBeNotNull && value == null || lowerLimit != null && value != null && (value < lowerLimit || value > upperLimit ) 
                 && (undefined != null && undefined != value))

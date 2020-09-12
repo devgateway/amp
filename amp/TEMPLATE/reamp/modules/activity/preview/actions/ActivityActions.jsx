@@ -16,7 +16,8 @@ import {
     PUBLIC_CHANGE_SUMMARY,
     TEAM_ID,
     PUBLIC_VERSION_HISTORY,
-    WORD_EXPORT_URL
+    HIDE_CONTACTS_PUBLIC_VIEW,
+    REGIONAL_FUNDINGS
 } from '../common/ReampConstants.jsx';
 import DateUtils from '../utils/DateUtils.jsx';
 import HydratorHelper from '../utils/HydratorHelper.jsx';
@@ -30,7 +31,6 @@ import ActivityFundingTotals from '../utils/ActivityFundingTotals.jsx'
 import translate from '../utils/translate.jsx';
 import * as ContactAction from './ContactsAction.jsx';
 import * as ResourceAction from './ResourceAction.jsx';
-import {CONTACTS_LOAD_LOADING, getActivityContactsId, loadHydratedContacts} from "./ContactsAction";
 import {ACTIVITY_PREVIEW_URL} from "../common/ReampConstants";
 
 export const ACTIVITY_LOAD_LOADING = 'ACTIVITY_LOAD_LOADING';
@@ -52,7 +52,7 @@ export function loadActivityForActivityPreview(activityId) {
             ActivityApi.fetchActivityInfo(activityId)]
         ).then(([activity, fieldsDef, fmTree, activityInfo]) => {
             _registerSettings(settings.language, settings['default-date-format'].toUpperCase());
-            if (settings['team-id']) {
+            if (settings[TEAM_ID]) {
                 ContactAction.loadHydratedContactsForActivity(activity)(dispatch, ownProps);
                 loadWsInfoForActivity(activity, dispatch);
             }
@@ -114,9 +114,8 @@ export function loadActivityForActivityPreview(activityId) {
         const viewLink = {url: ACTIVITY_PREVIEW_URL, isExternal: true};
         const versionHistoryLink = {url: VERSION_HISTORY_URL, isExternal: true};
         const compareActivityLink = {url: COMPARE_ACTIVITY_URL, isExternal: true};
-        const wordExportLink = {url: WORD_EXPORT_URL, isExternal: true};
 
-        ActivityLinks.registerLinks({editLink, versionHistoryLink, compareActivityLink, viewLink, wordExportLink});
+        ActivityLinks.registerLinks({editLink, versionHistoryLink, compareActivityLink, viewLink});
         DateUtils.registerSettings({lang, pGSDateFormat});
     }
 
@@ -135,7 +134,7 @@ export function loadActivityForActivityPreview(activityId) {
     function _configureNumberUtils(settings) {
         NumberUtils.registerSettings({
             gsDefaultGroupSeparator: settings['number-group-separator'],
-            gsDefaultDecimalSeparator: settings,
+            gsDefaultDecimalSeparator: settings['number-decimal-separator'],
             gsDefaultNumberFormat: settings['gs-number-format'],
             gsAmountInThousands: settings['number-divider'] + '',
             Translate: translate,
@@ -170,6 +169,7 @@ export function loadActivityForActivityPreview(activityId) {
                                 const transactionInWsCurrency =
                                     transactionListInWsCurrency.find(tiwc => tiwc[TRANSACTION_ID] === t[TRANSACTION_ID]);
                                 t[ActivityConstants.TRANSACTION_AMOUNT] = transactionInWsCurrency[ActivityConstants.TRANSACTION_AMOUNT];
+                                // TODO convert the whole curreny not only the code
                                 t[ActivityConstants.CURRENCY].value = currencyCode;
                             })
                         }
@@ -177,6 +177,14 @@ export function loadActivityForActivityPreview(activityId) {
                 }
             });
         }
+       REGIONAL_FUNDINGS.forEach(rf => {
+            activity[rf].forEach(regionalFundingItem => {
+                const convertedAmount = activityFundingInformation[rf].find(arf => arf.id === regionalFundingItem.id);
+                regionalFundingItem.transaction_amount = convertedAmount.transaction_amount;
+                // TODO convert the whole curreny not only the code
+                regionalFundingItem[ActivityConstants.CURRENCY].value= convertedAmount.currency.currencyCode;
+            })
+        });
     }
 
     function _getActivityContext(settings, activityInfo, activity) {
@@ -190,6 +198,7 @@ export function loadActivityForActivityPreview(activityId) {
             reorderFundingItemId: settings[REORDER_FUNDING_ITEM],
             rtlDirection: settings[RTL_DIRECTION],
             showActivityWorkspaces: settings[SHOW_ACTIVITY_WORKSPACES],
+            hideContacts: !settings[TEAM_ID] && settings[HIDE_CONTACTS_PUBLIC_VIEW],
             validation: {
                 status: activityInfo['validation-status'],
                 daysToAutomaticValidation: activityInfo['days-for-automatic-validation'],

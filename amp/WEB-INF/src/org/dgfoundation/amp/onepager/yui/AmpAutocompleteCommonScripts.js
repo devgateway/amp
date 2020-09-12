@@ -3,8 +3,9 @@ YAHOO.widget.WicketDataSource = function(callbackUrl) {
     this.responseArray = [];
     this.transactionId = 0;
     this.queryMatchContains = true;
-
 };
+
+var levelColors = ["222222", "444444", "666666", "888888", "AAAAAA", "BBBBBB", "CCCCCC"];
 
 YAHOO.widget.WicketDataSource.prototype = new YAHOO.util.LocalDataSource();
 
@@ -25,9 +26,8 @@ function ac_preg_quote( str ) {
 };
 
 //left padding a string + colorize siblings
-function ac_left_padding(str,level) {
-	var color=222+(222*level);
-   return (level>0?"<span style='color:#"+color+"'>":"")+Array(level*3).join("&nbsp;")+str+(level>0?"</span>":"");
+function ac_left_padding(str, level) {
+    return (level > 0 ? "<span style='color:#" + levelColors[level] + "'>" : "") + Array(level * 3).join("&nbsp;") + str + (level > 0 ? "</span>" : "");
 };
 
 //show loading icon while list is loading

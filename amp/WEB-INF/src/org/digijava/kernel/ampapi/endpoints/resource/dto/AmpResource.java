@@ -87,7 +87,7 @@ public class AmpResource {
     @JsonView(ResourceView.Full.class)
     private String url;
 
-    @Interchangeable(fieldTitle = "Year Of Publication")
+    @Interchangeable(fieldTitle = "Year Of Publication", importable = true)
     @JsonProperty(ResourceEPConstants.YEAR_OF_PUBLICATION)
     @ApiModelProperty(example = "2002")
     @JsonView(ResourceView.Full.class)

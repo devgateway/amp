@@ -12,5 +12,6 @@ public final class CommonFieldsConstants {
     public static final String COMMON_ROLE = COMMON + "~role";
     public static final String COMMON_CURRENCY = COMMON + "~currency";
     public static final String COMMON_CONTACT = COMMON + "~contact";
+    public static final String COMMON_REGION = COMMON + "~region";
 
 }

@@ -2,6 +2,7 @@ package org.digijava.module.translation.importexport;
 
 import org.digijava.kernel.entity.Message;
 import org.digijava.module.translation.util.ImportExportUtil;
+import org.hibernate.Session;
 
 /**
  * Defines interface for searching translation during import export.
@@ -12,5 +13,6 @@ import org.digijava.module.translation.util.ImportExportUtil;
  *
  */
 public interface TranslationSearcher {
+    Message get(String key, String locale, Long siteId, Session dbSession) throws Exception;
     Message get(String key, String locale, Long siteId) throws Exception;
 }

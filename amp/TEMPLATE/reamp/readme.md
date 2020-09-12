@@ -25,13 +25,16 @@ Run
     npm start
 
 Navigate to _dev.html's_ url. The browser will be automatically updated
- whenever you save some changes.
+	 whenever you save some changes. By default it will be deployed on port 3000.
 
 To get the project ready for production, run just
 
     webpack
 
 That will minify and optimize the scripts, use _index.html_ for production.
+### AMP-UI development
+
+TODO
 
 ### Debugging
 Add the "debug" key to the local storage to get debug messages

@@ -94,7 +94,8 @@ public class DocumentData implements Comparable<DocumentData>, Serializable {
     private Map <String,String> translatedTitles = null;
     private Map <String,String> translatedDescriptions = null;
     private Map <String,String> translatedNotes = null;
-    
+
+    private String creatorClient;
     
     public DocumentData()
     {
@@ -535,6 +536,7 @@ public class DocumentData implements Comparable<DocumentData>, Serializable {
         documentData.computeIconPath(true);
         documentData.setOrganisations(
                 DocumentOrganizationManager.getInstance().getOrganisationsAsStringByUUID(documentData.getUuid()));
+        documentData.setCreatorClient(nodeWrapper.getCreatorClient());
         return documentData;
     }
     
@@ -595,5 +597,13 @@ public class DocumentData implements Comparable<DocumentData>, Serializable {
 
     public void setTranslatedNotes(Map<String, String> translatedNotes) {
         this.translatedNotes = translatedNotes;
+    }
+
+    public String getCreatorClient() {
+        return creatorClient;
+    }
+
+    public void setCreatorClient(String creatorClient) {
+        this.creatorClient = creatorClient;
     }
 }

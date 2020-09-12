@@ -35,5 +35,10 @@ public final class ResourceErrors {
     
     public static final ApiErrorMessage RESOURCE_TYPE_INVALID = new ApiErrorMessage(ERROR_CLASS_RESOURCE_ID, 7,
             "Resource type is not valid");
-    
+
+    public static final ApiErrorMessage INVALID_YEAR_OF_PUBLICATION =
+            new ApiErrorMessage(ERROR_CLASS_RESOURCE_ID, 8, "Invalid year of publication");
+
+    public static final ApiErrorMessage RESOURCE_NOT_VALID =
+             new ApiErrorMessage(ERROR_CLASS_RESOURCE_ID, 9, "Resource not valid");
 }

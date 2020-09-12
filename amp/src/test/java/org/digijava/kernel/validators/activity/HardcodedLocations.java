@@ -5,7 +5,6 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
-import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 /**
@@ -76,13 +75,8 @@ public class HardcodedLocations {
     }
 
 
-    public AmpLocation getAmpLocation(String... path) {
-        AmpCategoryValueLocations location = getLocation(ImmutableList.copyOf(path));
-
-        AmpLocation ampLocation = new AmpLocation();
-        ampLocation.setAmpLocationId(location.getId());
-        ampLocation.setLocation(location);
-        return ampLocation;
+    public AmpCategoryValueLocations getAmpLocation(String... path) {
+        return getLocation(ImmutableList.copyOf(path));
     }
 
     public AmpCategoryValueLocations getLocation(List<String> path) {

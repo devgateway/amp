@@ -238,10 +238,10 @@ public class PossibleValuesEnumeratorTest {
                         values(3, "Sector 2.1", 2L)
                 ));
         assertJsonEquals(possibleValuesFor("primary_sectors~sector"),
-                "[{\"id\":1,\"value\":\"Sector 1\",\"extra_info\":{\"parentSectorId\":null}},"
+                "[{\"id\":1,\"value\":\"Sector 1\",\"extra_info\":{\"parent-sector-id\":null}},"
                         + "{\"id\":2,\"value\":\"Sector 2\",\"children\":["
-                        + "{\"id\":3,\"value\":\"Sector 2.1\",\"extra_info\":{\"parentSectorId\":2}}],"
-                        + "\"extra_info\":{\"parentSectorId\":null}}]");
+                        + "{\"id\":3,\"value\":\"Sector 2.1\",\"extra_info\":{\"parent-sector-id\":2}}],"
+                        + "\"extra_info\":{\"parent-sector-id\":null}}]");
     }
 
     @Test
@@ -253,23 +253,24 @@ public class PossibleValuesEnumeratorTest {
                 ));
         assertJsonEquals(possibleValuesFor("primary_programs~program"),
                 "[{\"id\":1,\"value\":\"Theme 1\","
-                        + "\"children\":[{\"id\":2,\"value\":\"Theme 1.2\",\"extra_info\":{\"parentProgramId\":1}}],"
-                        + "\"extra_info\":{\"parentProgramId\":null}}]");
+                        + "\"children\":[{\"id\":2,\"value\":\"Theme 1.2\",\"extra_info\":{\"parent-program-id\":1}}],"
+                        + "\"extra_info\":{\"parent-program-id\":null}}]");
     }
 
     @Test
     public void testStraightCaseAmpLocation() throws IOException {
         when(possibleValuesDAO.getPossibleLocations()).thenReturn(Arrays.asList(
-                        values(101, 1, "Loc 1", null, null, 50, "Country", "MD"),
-                        values(102, 2, "Loc 2", 1, "Loc 1", 51, "Commune", null)
+                        values(1, "Loc 1", null, null, 50, "Country", "MD", 443),
+                        values(2, "Loc 2", 1, "Loc 1", 51, "Commune", null, 444)
                 ));
         assertJsonEquals(possibleValuesFor("locations~location"),
-                "[{\"id\":101,\"value\":\"Loc 1\",\"children\":[{\"id\":102,\"value\":\"Loc 2\","
-                        + "\"extra_info\":{\"parent_location_id\":101,\"parent_location_name\":\"Loc 1\","
-                        + "\"implementation_level_id\":51,\"implementation_location_name\":\"Commune\"}}],"
+                "[{\"id\":1,\"value\":\"Loc 1\",\"children\":[{\"id\":2,\"value\":\"Loc 2\","
+                        + "\"extra_info\":{\"parent_location_id\":1,\"parent_location_name\":\"Loc 1\","
+                        + "\"implementation_level_id\":51,\"implementation_location_name\":\"Commune\","
+                        + "\"old_location_id\":444}}],"
                         + "\"extra_info\":{\"parent_location_id\":null,\"parent_location_name\":null,"
                         + "\"implementation_level_id\":50,\"implementation_location_name\":\"Country\","
-                        + "\"iso2\":\"MD\"}}]");
+                        + "\"iso2\":\"MD\",\"old_location_id\":443}}]");
     }
 
     private Object[] values(Object... values) {

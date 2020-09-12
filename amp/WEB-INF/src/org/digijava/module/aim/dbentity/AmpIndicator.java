@@ -8,10 +8,11 @@ import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
+import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 @TranslatableClass (displayName = "Indicator")
-public class AmpIndicator implements Serializable
+public class AmpIndicator implements Serializable, Identifiable
 {
     
     //IATI-check: to be ignored
@@ -159,5 +160,10 @@ public class AmpIndicator implements Serializable
 
     public void setUnit(String unit) {
         this.unit = unit;
+    }
+
+    @Override
+    public Object getIdentifier() {
+        return indicatorId;
     }
 }

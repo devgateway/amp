@@ -160,5 +160,8 @@
       "id": 1,
       "detail": "Detail A"
     }
+  },
+  "list-of-pick-id-only": {
+    "character": [55, 56, 57]
   }
 }

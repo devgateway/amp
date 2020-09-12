@@ -24,6 +24,7 @@ import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.currencyconvertor.AmpCurrencyConvertor;
 import org.dgfoundation.amp.nireports.ImmutablePair;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
+import org.digijava.kernel.ampapi.endpoints.activity.preview.regional.PreviewRegionalFundingItem;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
@@ -34,6 +35,7 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingAmount;
+import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.FundingInformationItem;
 import org.digijava.module.aim.helper.Constants;
@@ -47,9 +49,7 @@ import org.digijava.module.message.helper.AmpMessageWorker;
 import org.digijava.module.message.helper.Team;
 
 /**
- * 
  * @author Viorel Chihai
- *
  */
 public final class PreviewActivityService {
 
@@ -78,7 +78,6 @@ public final class PreviewActivityService {
                 throw new ApiRuntimeException(Response.Status.BAD_REQUEST,
                         ApiError.toError(ActivityErrors.ACTIVITY_NOT_FOUND));
             }
-
             AmpCurrency currency = null;
             if (currencyId != null) {
                 currency = CurrencyUtil.getAmpcurrency(currencyId);
@@ -103,6 +102,9 @@ public final class PreviewActivityService {
             activityFunding.setFundingInformation(getFundingInformation(activity, currencyCode));
 
             activityFunding.setCurrency(currency.getCurrencyCode());
+
+            this.populateRegionalFunding(activityFunding, activity, currency);
+
         } catch (DgException e) {
             throw new RuntimeException(e);
         }
@@ -134,8 +136,8 @@ public final class PreviewActivityService {
                             .collect(Collectors.toList());
 
                     List<PreviewFundingTransaction> previewTransactions =
-                    fundingItemTransactions.get(FieldMap.underscorify(ArConstants.TRANSACTION_ID_TO_TYPE_NAME.
-                            get(transactionType)));
+                            fundingItemTransactions.get(FieldMap.underscorify(ArConstants.TRANSACTION_ID_TO_TYPE_NAME.
+                                    get(transactionType)));
                     if (previewTransactions == null) {
                         previewTransactions = new ArrayList<>();
                     }
@@ -158,6 +160,7 @@ public final class PreviewActivityService {
 
         return fundingInformation;
     }
+
     /**
      * Calculate totals for transactions grouped by transaction type and adjustment type
      *
@@ -209,6 +212,7 @@ public final class PreviewActivityService {
                 ArConstants.DISBURSEMENT.toLowerCase());
         return new ImmutablePair(totalActualCommitments, totalActualDisbursements);
     }
+
     /**
      * Delviery Rate = Total Actual Disbursements / Total Actual Commitments * 100;
      *
@@ -265,11 +269,12 @@ public final class PreviewActivityService {
         transaction.setAdjustmentType(fd.getAdjustmentType().getId());
         transaction.setTransactionType(fd.getTransactionType().longValue());
         transaction.setTransactionAmount(convertedAmount);
-        transaction.setTransactionDate(DateTimeUtil.formatISO8601Timestamp(fd.getTransactionDate()));
-        transaction.setReportingDate(DateTimeUtil.formatISO8601Timestamp(fd.getReportingDate()));
+        transaction.setTransactionDate(fd.getTransactionDate());
+        transaction.setReportingDate(fd.getReportingDate());
 
         return transaction;
     }
+
     /**
      * Undisbursed Balance = Total Actual Commitments - Total Actual Disbursements
      *
@@ -281,11 +286,11 @@ public final class PreviewActivityService {
         Long actualCategoryValueId = CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getIdInDatabase();
 
         Double totalActualCommitments = transactions.getOrDefault(ArConstants.COMMITMENT.toLowerCase(),
-                Collections.emptyList()).stream().filter(t-> t.getAdjustmentType().equals(actualCategoryValueId)).
+                Collections.emptyList()).stream().filter(t -> t.getAdjustmentType().equals(actualCategoryValueId)).
                 collect(Collectors.summingDouble(PreviewFundingTransaction::getTransactionAmount));
 
         Double totalActualDisbursements = transactions.getOrDefault(ArConstants.DISBURSEMENT.toLowerCase(),
-                Collections.emptyList()).stream().filter(t-> t.getAdjustmentType().equals(actualCategoryValueId)).
+                Collections.emptyList()).stream().filter(t -> t.getAdjustmentType().equals(actualCategoryValueId)).
                 collect(Collectors.summingDouble(PreviewFundingTransaction::getTransactionAmount));
 
         return totalActualCommitments != 0 || totalActualDisbursements != 0
@@ -310,34 +315,34 @@ public final class PreviewActivityService {
             }
         }
     }
-    
+
     public List<PreviewWorkspace> getWorkspaces(Long activityId) {
         List<PreviewWorkspace> previewWorkspaces = new ArrayList<>();
-    
+
         try {
             AmpActivityVersion activity = ActivityUtil.loadActivity(activityId);
             AmpTeam ownerTeam = activity.getTeam();
             String ownerInfo = TranslatorWorker.translateText("Workspace where the activity was created");
             previewWorkspaces.add(new PreviewWorkspace(ownerTeam.getName(), PreviewWorkspace.Type.TEAM, ownerInfo));
-    
+
             AmpTeam parentTeam = ownerTeam.getParentTeamId();
             String path = ownerTeam.getName();
-            
+
             Set<Long> idStack = new HashSet<>();
             while (parentTeam != null && !idStack.contains(parentTeam.getAmpTeamId())) {
                 path = String.format("%s -> %s", path, parentTeam.getName());
                 previewWorkspaces.add(new PreviewWorkspace(parentTeam.getName(),
                         PreviewWorkspace.Type.MANAGEMENT, path));
-    
+
                 idStack.add(parentTeam.getAmpTeamId());
                 parentTeam = parentTeam.getParentTeamId();
             }
-    
+
             List<AmpTeam> computedTeams = TeamUtil.getAllTeams().stream()
                     .filter(t -> Boolean.TRUE.equals(t.getComputation()) || Boolean.TRUE.equals(t.getUseFilter()))
                     .filter(t -> t.getAmpTeamId() != ownerTeam.getAmpTeamId())
                     .collect(Collectors.toList());
-            
+
             final StringBuffer wsQueries = new StringBuffer();
             for (AmpTeam team : computedTeams) {
                 String wsQuery = WorkspaceFilter.generateWorkspaceFilterQueryForTeam(team.getAmpTeamId());
@@ -365,18 +370,63 @@ public final class PreviewActivityService {
                 }
                 teamsInActivityQuery.close();
             });
-            
+
             if (activityTeams.containsKey(activityId)) {
                 for (Team team : activityTeams.get(activityId)) {
                     previewWorkspaces.add(new PreviewWorkspace(team.getTeamName(), PreviewWorkspace.Type.COMPUTED));
                 }
             }
-            
+
         } catch (DgException e) {
             throw new RuntimeException(e);
         }
-        
+
         return previewWorkspaces;
     }
-    
+
+    private void populateRegionalFunding(PreviewActivityFunding activityFunding, AmpActivityVersion activity,
+                                         AmpCurrency currencyTo) {
+        Set<AmpRegionalFunding> rg = activity.getRegionalFundings();
+
+        Map<Integer, List<AmpRegionalFunding>> regionalFundingPerTransaction = rg.stream()
+                .collect(groupingBy(AmpRegionalFunding::getTransactionType));
+        //Populate
+
+        activityFunding.getRegionalCommitments().addAll(
+                getAmpRegionalFundings(regionalFundingPerTransaction, Constants.COMMITMENT)
+                        .stream().map(ampRegionalFunding ->
+                        generateRegionalFundingTransaction(ampRegionalFunding, currencyTo)).
+                        collect(Collectors.toList()));
+        activityFunding.getRegionalDisbursements().addAll(
+                getAmpRegionalFundings(regionalFundingPerTransaction, Constants.DISBURSEMENT)
+                        .stream().map(ampRegionalFunding ->
+                        generateRegionalFundingTransaction(ampRegionalFunding, currencyTo)).
+                        collect(Collectors.toList()));
+        activityFunding.getRegionalExpenditures().addAll(
+                getAmpRegionalFundings(regionalFundingPerTransaction, Constants.EXPENDITURE).
+                        stream().map(ampRegionalFunding ->
+                        generateRegionalFundingTransaction(ampRegionalFunding, currencyTo)).
+                        collect(Collectors.toList()));
+
+    }
+
+    private List<AmpRegionalFunding> getAmpRegionalFundings(Map<Integer,
+            List<AmpRegionalFunding>> regionalFundingPerTransaction, Integer transactionType) {
+        return Optional.ofNullable(regionalFundingPerTransaction.get(transactionType)).orElse(Collections.emptyList());
+    }
+
+    private PreviewRegionalFundingItem generateRegionalFundingTransaction(AmpRegionalFunding ampRegionalFunding,
+                                                                          AmpCurrency currencyTo) {
+        PreviewRegionalFundingItem pfr = new PreviewRegionalFundingItem();
+        LocalDate transactionDate = DateTimeUtil.getLocalDate(ampRegionalFunding.getTransactionDate());
+        pfr.setCurrency(currencyTo);
+        pfr.setId(ampRegionalFunding.getAmpRegionalFundingId());
+        pfr.setAdjustmentType(ampRegionalFunding.getAdjustmentType().getId());
+        pfr.setRegionLocation(ampRegionalFunding.getRegionLocation().getId());
+        pfr.setTransactionDate(ampRegionalFunding.getTransactionDate());
+        pfr.setTransactionAmount(AmpCurrencyConvertor.getInstance().convertAmount(ampRegionalFunding.
+                        getTransactionAmount(), ampRegionalFunding.getCurrency().getCurrencyCode(),
+                        currencyTo.getCurrencyCode(), transactionDate));
+        return pfr;
+    }
 }

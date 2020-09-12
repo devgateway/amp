@@ -46,4 +46,9 @@ public @interface InterchangeableValidator {
      * Validator is active only when corresponding FM entry is enabled.
      */
     String fmPath() default "";
+
+    /**
+     * Enable validator only for specific discriminator branches.
+     */
+    String[] discriminatorOptions() default {"*"};
 }

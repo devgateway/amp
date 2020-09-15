@@ -24,7 +24,7 @@ class CountryPopupHeader extends Component {
                     {country.name}
                 </div>
                 <div className={`col-md-${columnCount === 1 ? '2' : '3'} col-xs-3 projects`}>
-                    <span
+                        <span
                         className="count">{projectsBySectors.uniqueProjects.size.toString()
                         .padStart(SECTOR_MIN_SIZE, SECTOR_LEADING_LEFT)}</span>
                     <span className="label">{translations['amp.ssc.dashboard:sectors-project']}</span>

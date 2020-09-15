@@ -238,7 +238,7 @@ public class ActivityService {
             List<ReportArea> area = pagedReport.getChildren();
 
             boolean headerAdded = false;
-            for (Iterator<ReportArea> iterator = area.iterator(); iterator.hasNext();) {
+            for (Iterator<ReportArea> iterator = area.iterator(); iterator.hasNext(); ) {
                 Map<String, String> activityObj = new HashMap<>();
                 Map<String, String> header = new HashMap<>();
                 ReportArea reportArea = iterator.next();
@@ -327,11 +327,12 @@ public class ActivityService {
                                 } else {
                                     if (proposedStartDate == null) {
                                         da.setYear(DateTimeUtil.getYearFromJulianNumber(actualStartDate));
-                                    }
-                                    if (proposedStartDate < actualStartDate) {
-                                        da.setYear(DateTimeUtil.getYearFromJulianNumber(proposedStartDate));
                                     } else {
-                                        da.setYear(DateTimeUtil.getYearFromJulianNumber(actualStartDate));
+                                        if (proposedStartDate < actualStartDate) {
+                                            da.setYear(DateTimeUtil.getYearFromJulianNumber(proposedStartDate));
+                                        } else {
+                                            da.setYear(DateTimeUtil.getYearFromJulianNumber(actualStartDate));
+                                        }
                                     }
                                 }
                             }

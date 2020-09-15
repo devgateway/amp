@@ -33,10 +33,15 @@
     -webkit-box-shadow: none;
     box-shadow: none;
 }
+.map-control {
+    height: 26px;
+    width: 26px;
+    background: white;
+    border-radius:4px;
+    cursor: pointer;
+}
 
 @media print {
-
-
     .footer {
         visibility: hidden;
     }

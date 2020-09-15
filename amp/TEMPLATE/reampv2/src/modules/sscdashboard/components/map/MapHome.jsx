@@ -1,8 +1,10 @@
-import React, { Component } from 'react';
-import { Map, TileLayer, CircleMarker, Popup } from 'react-leaflet';
+import React, {Component} from 'react';
+import {Map, TileLayer, CircleMarker, Popup} from 'react-leaflet';
 import * as L from 'leaflet';
+import Control from 'react-leaflet-control';
+import CenterIcon from '../../images/icons/centermap.png';
 import '../../../../App.css';
-import ConnectionLayer from "./d3Layer/ConnectionLayer";
+import ConnectionLayer from './d3Layer/ConnectionLayer';
 import {
     NON_SELECTED_LINE_COLOR,
     SELECTED_BUBBLE_COLOR,
@@ -11,20 +13,28 @@ import {
 } from '../../utils/constants';
 import '../layout/map/map.css';
 import HomePopup from '../layout/popups/homepopup/HomePopup';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { EXTRA_INFO, CENTRO_ID } from '../../utils/FieldsConstants';
-
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+import {EXTRA_INFO, CENTRO_ID} from '../../utils/FieldsConstants';
+import {SSCTranslationContext} from "../StartUp";
 
 class MapHome extends Component {
     //TODO map config should come from configuration
-    state = {
-        zoom: 3,
-        lat: -6.227933930268672,
-        lng: 48.33984375,
-        selectedCountries: [],
-        showSector: true
-    };
+
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            zoom: 3,
+            lat: -6.227933930268672,
+            lng: 48.33984375,
+            selectedCountries: [],
+            showSector: true,
+            mapCentered: false
+
+        };
+        this.theMap = null;
+    }
 
     handleChangeDataToShow(checked) {
         this.setState({showSector: checked});
@@ -133,8 +143,31 @@ class MapHome extends Component {
         });
     }
 
+    handleCenterClick() {
+        this.setState({mapCentered: false}, () => this.centerMap(this.theMap));
+
+    }
+
+    centerMap(theMap) {
+        if (theMap && !this.state.mapCentered && this.props.filteredProjects && this.props.filteredProjects.length > 0) {
+            const points = []
+            this._generateDataPoints(points);
+            const arrayOfLatLngs = [];
+            points.forEach(data => {
+                const countryCenter = new L.LatLng(data.latitude, data.longitude);
+                arrayOfLatLngs.push(countryCenter);
+            });
+            const bounds = new L.LatLngBounds(arrayOfLatLngs);
+            if (bounds.isValid()) {
+                theMap.leafletElement.fitBounds(bounds);
+                this.setState({mapCentered: true})
+            }
+        }
+    }
+
     render() {
         const mapCenter = [this.state.lat, this.state.lng];
+        const {translations} = this.context;
         //TODO country centroID comes from config
         const center = {latitude: 18.567634, longitude: -72.315361};
         const points = [];
@@ -144,12 +177,20 @@ class MapHome extends Component {
         }
         return (
             <Map className={'map-container'} center={mapCenter} zoom={this.state.zoom} maxZoom={4}
-                 minZoom={2}
+                 minZoom={1} ref={ref => {
+                this.theMap = ref;
+                this.centerMap(ref);
+            }}
             >
                 <TileLayer
                     attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
+                /> <Control position="topleft" className={'leaflet-control-zoom leaflet-bar'}>
+                <a onClick={this.handleCenterClick.bind(this)}><img src={CenterIcon} className={'map-control'}
+                                                                    alt={translations['amp.ssc.dashboard:center-map']}
+                                                                    title={translations['amp.ssc.dashboard:center-map']}/>
+                </a>
+            </Control>
                 <ConnectionLayer points={points} nodePoint={center}
                                  onClick={(feature, position) => this.onLineClick(feature, position)}/>
                 {this.getPoints(points, center)}
@@ -175,5 +216,6 @@ const mapStateToProps = state => {
     };
 };
 const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+MapHome.contextType = SSCTranslationContext;
 
 export default connect(mapStateToProps, mapDispatchToProps)(MapHome);

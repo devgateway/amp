@@ -10,7 +10,8 @@
     margin-top: -30px;
 }
 
-.content-wrapper > .row {
+.content-wrapper > .row ,
+.h-filter-wrapper >.row {
     margin: 0;
 }
 

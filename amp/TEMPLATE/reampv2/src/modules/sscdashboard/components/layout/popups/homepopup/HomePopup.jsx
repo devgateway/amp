@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import ToggleSwitch from '../../../utils/ToggleSwitch';
 import './HomePopup.css';
-import { SSCTranslationContext } from '../../../StartUp';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+import {SSCTranslationContext} from '../../../StartUp';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
 import * as FieldsConstants from '../../../../utils/FieldsConstants';
-import { PROJECT_LENGTH_HOME_PAGE } from '../../../../utils/constants';
+import {PROJECT_LENGTH_HOME_PAGE, UNDEFINED_FILTER} from '../../../../utils/constants';
 import * as Utils from '../../../../utils/Utils';
-import { Img } from 'react-image';
-import { generateStructureBasedOnSector, getProjects } from '../../../../utils/ProjectUtils';
+import {Img} from 'react-image';
+import {generateStructureBasedOnSector, getProjects} from '../../../../utils/ProjectUtils';
 
 class HomePopup extends Component {
 
@@ -35,7 +35,7 @@ class HomePopup extends Component {
     getModalityName(modalityId) {
         const {modalities} = this.props.filters;
         const {translations} = this.context;
-        if (modalities.modalitiesLoaded) {
+        if (modalities.modalitiesLoaded && modalityId !== UNDEFINED_FILTER) {
             return modalities.modalities.find(s => s.id === modalityId).name;
         } else {
             return translations['amp.ssc.dashboard:NA'];

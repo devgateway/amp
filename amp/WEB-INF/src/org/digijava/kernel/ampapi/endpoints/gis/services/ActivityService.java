@@ -238,7 +238,7 @@ public class ActivityService {
             List<ReportArea> area = pagedReport.getChildren();
 
             boolean headerAdded = false;
-            for (Iterator<ReportArea> iterator = area.iterator(); iterator.hasNext(); ) {
+            for (Iterator<ReportArea> iterator = area.iterator(); iterator.hasNext();) {
                 Map<String, String> activityObj = new HashMap<>();
                 Map<String, String> header = new HashMap<>();
                 ReportArea reportArea = iterator.next();

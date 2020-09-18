@@ -32,15 +32,16 @@ class GeocoderHeader extends Component {
 
         return (
             <div className='panel-body custom-panel geocoder-header'>
-                <SelectedActivitiesMessage title={translations['amp.geocoder:selectProjects']}
-                                           selectedSize={this.props.selectedActivities.length}
-                                           size={this.props.activities.length}
-                />
                 {/*<div className={'col-md-2 header-settings text-header'}><a href={'#geocoder'}>{translations['amp.geocoder:settings']}</a></div>*/}
                 {isActivityTable
-                    ? <RunSearchButton title={translations['amp.geocoder:runSearch']}
+                    ? (<>
+                        <SelectedActivitiesMessage title={translations['amp.geocoder:selectProjects']}
+                                                    selectedSize={this.props.selectedActivities.length}
+                                                    size={this.props.activities.length} />
+                        <RunSearchButton title={translations['amp.geocoder:runSearch']}
                                  selectedActivities={this.props.selectedActivities}
                                  onRunSearch={this.onRunSearch}/>
+                     </>)
                     : (<>
                         <ResetAllButton title={translations['amp.geocoder:resetAll']} />
                         <CancelGeocodingButton title={translations['amp.geocoder:cancelGeocoding']} />

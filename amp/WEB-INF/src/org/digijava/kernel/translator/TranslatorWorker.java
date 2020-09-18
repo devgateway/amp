@@ -461,8 +461,7 @@ public class TranslatorWorker {
     
     public Message getByKey(String key, String locale, Site site) {
         return getByKey(key, "", null, locale, Site.getIdOf(site));
-    }    
-
+    }
     /**
      * Returns message by key, site and local.
      * This method searches db. See overloaded pair in {@link CachedTranslatorWorker}
@@ -476,6 +475,23 @@ public class TranslatorWorker {
      * @throws WorkerException
      */
     public Message getByKey(String key, String defaultText, String keyWords, String locale, Long siteId) {
+        return getByKey(key, defaultText, keyWords, locale, siteId, null);
+    }
+    /**
+     * Returns message by key, site and local.
+     * This method searches db. See overloaded pair in {@link CachedTranslatorWorker}
+     * Note that there is old workaround in this method which breaks this description.
+     * @param key mandatory.
+     * @param defaultText default text. Should not be null.
+     * @param keyWords used for grouping. not mandatory
+     * @param locale specifies in which language this message should be searched. part of the key, mandatory.
+     * @param siteId part of the key. mandatory.
+     * @param dbSession database session to get the meesage from. In case null using session from persistence manager
+     * @return
+     * @throws WorkerException
+     */
+    public Message getByKey(String key, String defaultText, String keyWords, String locale, Long siteId,
+                            Session dbSession) {
 
         /**
          * @todo This stuff needs to be changed. All developers should use
@@ -484,24 +500,22 @@ public class TranslatorWorker {
          * THIS IS A WORKAROUND,
          * Instead of change DgMarket code to get precached translations,
          * we decided to use such small trick
+         * TODO mag
          */
         TranslatorWorker realWorker = TranslatorWorker.getInstance(key);
+
         if (realWorker instanceof CachedTranslatorWorker) {
-            return realWorker.getByKey(key, locale, siteId);
+            return ((CachedTranslatorWorker) realWorker).getByKey(key, locale, siteId, true, null, dbSession);
         }
         // END OF WORKAROUND
-
-        Session session = null;
-
+        Session session = dbSession != null ? dbSession : PersistenceManager.getSession();
         try {
 
-            Message mesageKey = new Message();
-            mesageKey.setKey(processKeyCase(key));
-            mesageKey.setLocale(locale);
-            mesageKey.setSite(SiteCache.lookupById(siteId));
-
-            session = PersistenceManager.getSession();
-            Message message = (Message) session.load(Message.class, mesageKey);
+            Message messageKey = new Message();
+            messageKey.setKey(processKeyCase(key));
+            messageKey.setLocale(locale);
+            messageKey.setSite(SiteCache.lookupById(siteId));
+            Message message = (Message) session.load(Message.class, messageKey);
             message.setKeyWords(keyWords);
             updateTimeStamp(message);
             return message;
@@ -511,9 +525,8 @@ public class TranslatorWorker {
         }
 
         catch (HibernateException he) {
-            logger.error("Error reading translation. siteId="
-                         + siteId + ", key = " + key +
-                         ",locale=" + locale, he);
+            logger.error(String.format("Error reading translation. siteId=%s, key=%s,locale=%s", siteId, key, locale),
+                    he);
             throw new RuntimeException(he);
         }
         
@@ -551,6 +564,14 @@ public class TranslatorWorker {
             logger.l7dlog(Level.ERROR, errKey, params, he);
             throw new WorkerException(he.getMessage(), he);
         }
+    }
+
+    public static List<String> getAllPrefixes() {
+        String query = "select distinct message.prefix from org.digijava.kernel.entity.Message "
+                + "where message.prefix is not null";
+        Session session = PersistenceManager.getSession();
+        Query q = session.createQuery(query);
+        return (List<String>) q.list();
     }
 
     private Map<String, Message> getMessagesForCriteria(

@@ -13,6 +13,7 @@ import java.util.Set;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.dgfoundation.amp.onepager.helper.EditorStore;
+import org.dgfoundation.amp.testutils.TransactionUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.TestFieldInfoProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
@@ -36,6 +37,8 @@ public class UniqueActivityTitleValidatorTest {
 
     @Before
     public void setUp() {
+        TransactionUtil.setUpWorkspaceEmptyPrefixes();
+
         activityField = ValidatorUtil.getMetaData();
         activityFieldML = ValidatorUtil.getMetaData(AmpActivityFields.class, ImmutableSet.of(),
                 new TestFieldInfoProvider(true));

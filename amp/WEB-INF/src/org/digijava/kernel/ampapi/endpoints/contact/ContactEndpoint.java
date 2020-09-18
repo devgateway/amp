@@ -20,6 +20,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
+import org.digijava.kernel.ampapi.endpoints.activity.APIWorkspaceMemberFieldList;
 import org.digijava.kernel.ampapi.endpoints.activity.FieldIdValue;
 import org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
@@ -38,6 +39,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.digijava.module.aim.util.ActivityUtil;
 
 /**
  * @author Octavian Ciubotaru
@@ -45,6 +47,23 @@ import io.swagger.annotations.ApiResponses;
 @Path("contact")
 @Api("contact")
 public class ContactEndpoint {
+
+    /**
+     * Provides full set of available fields and their settings/rules in a hierarchical structure
+     * grouped by workspace member id
+     *
+     * @param wsMemberIds
+     * @return JSON with fields information grouped by ws-member-ids
+     * @see <a href="https://wiki.dgfoundation.org/display/AMPDOC/Fields+enumeration">Fields Enumeration Wiki<a/>
+     */
+    @POST
+    @Path("ws-member-fields")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "getAvailableFieldsBasedOnWs", ui = false)
+    public List<APIWorkspaceMemberFieldList>
+    getAvailableFieldsBasedOnWs(@ApiParam(value = "List of WS ids", required = true) List<Long> ids) {
+        return AmpFieldsEnumerator.getAvailableFieldsBasedOnWs(ids, AmpFieldsEnumerator.TYPE_CONTACT);
+    }
 
     @GET
     @Path("fields")
@@ -73,6 +92,7 @@ public class ContactEndpoint {
     public Map<String, List<PossibleValue>> getValues(
             @ApiParam("list of fully qualified contact fields") List<String> fields) {
         Map<String, List<PossibleValue>> response;
+        ActivityUtil.loadWorkspacePrefixesIntoRequest();
         if (fields == null) {
             response = emptyMap();
         } else {

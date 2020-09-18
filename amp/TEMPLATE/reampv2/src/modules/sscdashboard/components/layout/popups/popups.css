@@ -251,11 +251,6 @@
     font-weight: bold;
     margin-top: -5px;
 }
-
-.country-popup-1 .chart-container > div > div > svg {
-    transform: translate(-35%, 0);
-}
-
 .country-popup-2 .chart-container,
 .country-popup-3 .chart-container,
 .country-popup-1 .chart-container {

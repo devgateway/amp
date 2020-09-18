@@ -13,10 +13,10 @@ export default class CustomLegend extends Component {
                         return (
                             <li key={colors[d.id]}>
                                 <div className={"row"}>
-                                    <div className="col-md-1">
+                                    <div className="col-md-1 col-xs-1">
                                         <span className="symbol" style={{border: `2px solid ${colors[d.id]}`}}></span>
                                     </div>
-                                    <div className="col-md-9 label">{d.simpleLabel}
+                                    <div className="col-md-9 col-xs-9 label">{d.simpleLabel}
                                         <span
                                             className={"label percentage"}>{`${d.percentage.toFixed(SECTORS_DECIMAL_POINTS_CHART)}%`}</span>
                                     </div>

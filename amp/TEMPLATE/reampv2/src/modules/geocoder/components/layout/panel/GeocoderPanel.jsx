@@ -80,8 +80,7 @@ class GeocoderPanel extends Component {
                             {isGeocoding
                                 ? <GeocodingTable/>
                                 : <ActivityTable onSelectActivity={this.onSelectActivity.bind(this)}
-                                                 onSelectAllActivities={this.onSelectAllActivities.bind(this)}
-                                                 selectedActivities={this.state.selectedActivities}/>
+                                                 onSelectAllActivities={this.onSelectAllActivities.bind(this)}/>
                             }
                         </div>
                     </div>

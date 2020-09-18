@@ -47,10 +47,13 @@ class RunSearchButton extends Component {
                     <Modal.Header closeButton>
                         <Modal.Title>{this.props.title}</Modal.Title>
                     </Modal.Header>
-                    <Modal.Body>Activities to be geocoded:
-                        {this.props.selectedActivities.map((value) => {
-                            return <div>{value}</div>
-                        })}
+                    <Modal.Body>
+                        Activities to be geocoded:
+                        <div className="modal-activities">
+                            {this.props.selectedActivities.map((value) => {
+                                return <div>{value}</div>
+                            })}
+                        </div>
                         </Modal.Body>
                     <Modal.Footer>
                         <Button variant="secondary" onClick={this.handleClose}>

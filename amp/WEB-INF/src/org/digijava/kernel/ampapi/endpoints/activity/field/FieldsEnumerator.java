@@ -60,6 +60,7 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.validator.groups.Submit;
 
@@ -446,7 +447,7 @@ public class FieldsEnumerator {
      */
     private UnwrappedTranslationsByWorkspacePrefix getTranslationsForLabel(String label) {
         UnwrappedTranslationsByWorkspacePrefix translations = new UnwrappedTranslationsByWorkspacePrefix();
-        List<String> prefixes = (List<String>) TLSUtils.getRequest().getAttribute(PREFIXES);
+        List<String> prefixes = ActivityUtil.getWorkspacePrefixesFromRequest();
         try {
             TLSUtils.getRequest().setAttribute(PREFIX, null);
             Collection<Message> defaultMessages = translatorService.getAllTranslationOfBody(label, DEFAULT_SITE_ID);

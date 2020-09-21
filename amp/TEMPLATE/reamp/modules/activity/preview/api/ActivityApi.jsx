@@ -1,8 +1,8 @@
 import ApiHelper from "../utils/ApiHelper.jsx";
 import {
-    ACTIVITY_API, FIELDS_DEFINITION_API, POSSIBLE_VALUES_API, FM_API, SETTINGS_API, ACTIVITY_INFO_API,
+    ACTIVITY_API, FIELDS_DEFINITION_API, POSSIBLE_VALUES_API, FM_API, ACTIVITY_INFO_API,
     FUNDING_INFORMATION_API, ACTIVITY_FIELDS_ID_VALUES_API, ACTIVITY_WS_INFO
-} from '../common/ReampConstants.jsx'
+} from '../common/ReampConstants.jsx';
 
 
 export default class ActivityApi {
@@ -18,7 +18,7 @@ export default class ActivityApi {
 
     static fetchPossibleValues(body) {
         const url = POSSIBLE_VALUES_API;
-        return ApiHelper._postData(url, body)
+        return ApiHelper._postData(url, body);
 
     }
 

@@ -100,11 +100,11 @@ public class InterchangeEndpoints {
     // Restored so the new preview works until AMP-29486 is done. 
 
     @GET
-    @Path("fields-no-workspace")
+    @Path("fields-no-workspace/{id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "getDefaultFields", ui = false)
-    public List<APIField> getAvailableFieldsBasedOnDefaultFM() {
-        return getAvailableFields();
+    public List<APIField> getAvailableFieldsBasedOnDefaultFM(@ApiParam(value = "FM id", required = false) @PathParam("id") Long id) {
+        return getAvailableFields(id);
     }
 
     @POST
@@ -188,7 +188,10 @@ public class InterchangeEndpoints {
     @ApiOperation(value = "Returns the full list of activity fields.",
             notes = "Provides full set of available fields and their settings/rules in a hierarchical structure.\n\n"
                     + "See [Fields Enumeration Wiki](https://wiki.dgfoundation.org/display/AMPDOC/Fields+enumeration)")
-    public List<APIField> getAvailableFields() {
+    public List<APIField> getAvailableFields(@ApiParam(value = "FM id", required = false) Long id) {
+        if (id != null) {
+            return AmpFieldsEnumerator.getEnumerator(id).getActivityFields();
+        }
         return AmpFieldsEnumerator.getEnumerator().getActivityFields();
     }
 

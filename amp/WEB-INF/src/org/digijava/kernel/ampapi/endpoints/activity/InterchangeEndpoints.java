@@ -175,10 +175,7 @@ public class InterchangeEndpoints {
             notes = "For fields like locations, sectors, programs the object contains the ancestor values.")
     public Map<String, List<FieldIdValue>> getFieldValuesById(
             @ApiParam("List of fully qualified activity fields with list of ids.") Map<String, List<Long>> fieldIds) {
-        List<APIField> apiFields = AmpFieldsEnumerator.getEnumerator().getActivityFields();
-        Map<String, List<FieldIdValue>> response = InterchangeUtils.getIdValues(fieldIds, apiFields);
-
-        return response;
+        return getFieldValues(null, fieldIds);
     }
 
     @POST
@@ -190,9 +187,17 @@ public class InterchangeEndpoints {
     public Map<String, List<FieldIdValue>> getFieldValuesByIdWithFM(
             @ApiParam(value = "FM id", required = true) @PathParam("fmId") Long id,
             @ApiParam("List of fully qualified activity fields with list of ids.") Map<String, List<Long>> fieldIds) {
-        List<APIField> apiFields = AmpFieldsEnumerator.getEnumerator(id).getActivityFields();
-        Map<String, List<FieldIdValue>> response = InterchangeUtils.getIdValues(fieldIds, apiFields);
+        return getFieldValues(id, fieldIds);
+    }
 
+    private Map<String, List<FieldIdValue>> getFieldValues(Long id, Map<String, List<Long>> fieldIds) {
+        List<APIField> apiFields = null;
+        if (id != null) {
+            apiFields = AmpFieldsEnumerator.getEnumerator(id).getActivityFields();
+        } else {
+            apiFields = AmpFieldsEnumerator.getEnumerator().getActivityFields();
+        }
+        Map<String, List<FieldIdValue>> response = InterchangeUtils.getIdValues(fieldIds, apiFields);
         return response;
     }
 

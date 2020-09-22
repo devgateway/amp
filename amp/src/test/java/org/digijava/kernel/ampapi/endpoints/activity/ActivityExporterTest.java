@@ -21,6 +21,7 @@ import org.dgfoundation.amp.testutils.TransactionUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.common.TestTranslatorService;
+import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -140,6 +141,6 @@ public class ActivityExporterTest {
         Map<String, Object> filter = new HashMap<>();
         filter.put(ActivityEPConstants.FILTER_FIELDS, filterFields);
 
-        return new ActivityExporter(new NoTranslatedFieldReader(), fields, filter);
+        return new ActivityExporter(new NoTranslatedFieldReader(), AmpFieldsEnumerator.getAllEnumerators(), filter);
     }
 }

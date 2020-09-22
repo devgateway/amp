@@ -47,10 +47,11 @@ export function loadActivityForActivityPreview(activityId) {
         dispatch(sendingRequest());
         const paths = [...FieldPathConstants.ADJUSTMENT_TYPE_PATHS];
         const {settings} = ownProps().startUpReducer;
-        Promise.all([ActivityApi.getActivity(activityId), ActivityApi.getFieldsDefinition(),
-            ActivityApi.fetchFmConfiguration(FmManagerHelper.getRequestFmSyncUpBody(Object.values(FeatureManagerConstants))),
-            ActivityApi.fetchActivityInfo(activityId)]
-        ).then(([activity, fieldsDef, fmTree, activityInfo]) => {
+        ActivityApi.fetchActivityInfo(activityId).then(activityInfo => {
+            Promise.all([ActivityApi.getActivity(activityId),
+                ActivityApi.getFieldsDefinition(activityInfo.activityWorkspace['fm-template-id']),
+                ActivityApi.fetchFmConfiguration(FmManagerHelper.getRequestFmSyncUpBody(Object.values(FeatureManagerConstants)))]
+            ).then(([activity, fieldsDef, fmTree]) => {
             const isSSC = activity[ActivityConstants.ACTIVITY_TYPE] === ActivityConstants.ACTIVITY_TYPE_SSC;
             _registerSettings(settings.language, settings['default-date-format'].toUpperCase(), isSSC);
             if (settings[TEAM_ID]) {
@@ -71,7 +72,7 @@ export function loadActivityForActivityPreview(activityId) {
                     _configureNumberUtils(settings);
 
                     ActivityApi.fetchValuesForHydration(HydratorHelper.fetchRequestDataForHydration(activity,
-                        activityFieldsManager, ''))
+                            activityFieldsManager, ''), activityInfo.activityWorkspace['fm-template-id'])
                         .then(valuesForHydration => {
                             HydratorHelper.hydrateObject(activity, activityFieldsManager, '',
                                 null, valuesForHydration);
@@ -90,8 +91,8 @@ export function loadActivityForActivityPreview(activityId) {
                                     activityFundingTotals: new ActivityFundingTotals(activity, activityFundingInformation),
                                     currencyRatesManager
                                 }
-                            })
-                        })
+                                });
+                            });
                 }).catch(error => {
                 return dispatch({
                     type: ACTIVITY_LOAD_FAILED,
@@ -99,7 +100,7 @@ export function loadActivityForActivityPreview(activityId) {
                         error: error
                     }
                 });
-            })//TODO catch errors
+                }); //TODO catch errors
         }).catch(error => {
             return dispatch({
                 type: ACTIVITY_LOAD_FAILED,
@@ -107,7 +108,8 @@ export function loadActivityForActivityPreview(activityId) {
                     error: error
                 }
             });
-        })
+            });
+        });
     };
 
     function _registerSettings(lang, pGSDateFormat, isSSC) {

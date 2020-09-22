@@ -103,7 +103,8 @@ public class InterchangeEndpoints {
     @Path("fields-no-workspace/{id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "getDefaultFields", ui = false)
-    public List<APIField> getAvailableFieldsBasedOnDefaultFM(@ApiParam(value = "FM id", required = false) @PathParam("id") Long id) {
+    public List<APIField> getAvailableFieldsBasedOnDefaultFM(@ApiParam(value = "FM id", required = false)
+                                                             @PathParam("id") Long id) {
         return getAvailableFields(id);
     }
 

@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
@@ -16,7 +15,6 @@ import javax.ws.rs.core.PathSegment;
 import com.sun.jersey.spi.container.ContainerRequest;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.ecs.xhtml.object;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivityInformation;

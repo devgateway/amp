@@ -11,8 +11,8 @@ export default class ActivityApi {
         return ApiHelper._fetchData(url);
     }
 
-    static getFieldsDefinition() {
-        const url = FIELDS_DEFINITION_API;
+    static getFieldsDefinition(id) {
+        const url = FIELDS_DEFINITION_API + '/' + id;
         return ApiHelper._fetchData(url);
     }
 
@@ -43,8 +43,8 @@ export default class ActivityApi {
 
     }
 
-    static fetchValuesForHydration(activityFieldsWithIds) {
-        const url = ACTIVITY_FIELDS_ID_VALUES_API;
+    static fetchValuesForHydration(activityFieldsWithIds, fmId) {
+        const url = ACTIVITY_FIELDS_ID_VALUES_API + '/' + fmId;
         return ApiHelper._postData(url, activityFieldsWithIds);
     }
 

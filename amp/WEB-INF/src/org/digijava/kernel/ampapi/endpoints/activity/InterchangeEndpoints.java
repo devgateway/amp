@@ -181,6 +181,21 @@ public class InterchangeEndpoints {
         return response;
     }
 
+    @POST
+    @Path("field/id-values/{fmId}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "getIdValues", ui = false)
+    @ApiOperation(value = "Returns a list of values for all id of requested fields.",
+            notes = "For fields like locations, sectors, programs the object contains the ancestor values.")
+    public Map<String, List<FieldIdValue>> getFieldValuesByIdWithFM(
+            @ApiParam(value = "FM id", required = true) @PathParam("fmId") Long id,
+            @ApiParam("List of fully qualified activity fields with list of ids.") Map<String, List<Long>> fieldIds) {
+        List<APIField> apiFields = AmpFieldsEnumerator.getEnumerator(id).getActivityFields();
+        Map<String, List<FieldIdValue>> response = InterchangeUtils.getIdValues(fieldIds, apiFields);
+
+        return response;
+    }
+
     @GET
     @Path("fields")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")

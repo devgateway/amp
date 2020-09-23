@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.CachingFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
@@ -27,6 +28,27 @@ public class ActivityExporter extends ObjectExporter<AmpActivityVersion> {
                             Map<String, Object> filter) {
         super(translatedFieldReader, enumerators);
         this.filter = filter;
+    }
+
+    public ActivityExporter(TranslatedFieldReader translatedFieldReader, List<APIField> fields,
+                            Map<String, Object> filter) {
+        super(translatedFieldReader, fields);
+        this.filter = filter;
+    }
+
+    @Override
+    public Map<String, Object> export(AmpActivityVersion object) {
+        ApiErrorResponse error = ActivityInterchangeUtils.validateFilterActivityFields(filter, getApiFields());
+
+        if (error != null) {
+            return (Map) error.getErrors();
+        }
+
+        if (filter != null) {
+            this.filteredFields = (List<String>) filter.get(ActivityEPConstants.FILTER_FIELDS);
+        }
+
+        return super.export(object);
     }
 
     @Override

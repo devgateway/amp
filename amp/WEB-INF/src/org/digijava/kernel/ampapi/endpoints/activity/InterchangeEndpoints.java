@@ -98,7 +98,6 @@ public class InterchangeEndpoints {
 
     // TODO TO be removed after AMP-29486 is merged into FUTURE.
     // Restored so the new preview works until AMP-29486 is done. 
-
     @GET
     @Path("fields-no-workspace/{id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -106,6 +105,16 @@ public class InterchangeEndpoints {
     public List<APIField> getAvailableFieldsBasedOnDefaultFM(@ApiParam(value = "FM id", required = false)
                                                              @PathParam("id") Long id) {
         return getAvailableFields(id);
+    }
+
+    // TODO TO be removed after AMP-29486 is merged into FUTURE.
+    // Restored so the new preview works until AMP-29486 is done.
+    @GET
+    @Path("fields-no-workspace")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "getDefaultFields", ui = false)
+    public List<APIField> getAvailableFieldsBasedOnDefaultFM() {
+        return getAvailableFields(null);
     }
 
     @POST

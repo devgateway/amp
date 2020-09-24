@@ -11,8 +11,11 @@ export default class ActivityApi {
         return ApiHelper._fetchData(url);
     }
 
-    static getFieldsDefinition(id) {
-        const url = FIELDS_DEFINITION_API + '/' + id;
+    static getFieldsDefinition(fmId) {
+        let url = FIELDS_DEFINITION_API;
+        if (fmId) {
+            url += '/' + fmId;
+        }
         return ApiHelper._fetchData(url);
     }
 
@@ -44,7 +47,10 @@ export default class ActivityApi {
     }
 
     static fetchValuesForHydration(activityFieldsWithIds, fmId) {
-        const url = ACTIVITY_FIELDS_ID_VALUES_API + '/' + fmId;
+        let url = ACTIVITY_FIELDS_ID_VALUES_API;
+        if (fmId) {
+            url += '/' + fmId;
+        }
         return ApiHelper._postData(url, activityFieldsWithIds);
     }
 

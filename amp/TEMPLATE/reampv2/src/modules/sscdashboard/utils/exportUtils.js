@@ -69,6 +69,7 @@ export const exportToXLS = function (exportData) {
 
 const addWorkSheet = (workbook, sheetName, exportData) => {
     const {title, filters, columns, rows, source} = exportData;
+    debugger;
     workbook.addWorksheet(sheetName);
     const worksheet = workbook.getWorksheet(sheetName);
     worksheet.mergeCells(1, 1, 1, columns.length);

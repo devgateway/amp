@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './GenericTooltip.css';
-import { SECTORS_DECIMAL_POINTS_CHART } from '../../utils/constants';
+
 
 class GenericToolTip extends Component {
     render() {
@@ -16,7 +16,7 @@ class GenericToolTip extends Component {
                         return (<div className={'row'} key={v.id}>
                             <div className={'col-md-12'}>{`${v.simpleLabel}`}
                                 <span
-                                    className={"percentage"}>{v.percentage.toFixed(SECTORS_DECIMAL_POINTS_CHART)}%</span>
+                                    className={"percentage"}>{v.percentage}%</span>
                             </div>
                         </div>)
                     })}

@@ -1,34 +1,22 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import '../popups.css';
-import { SSCTranslationContext } from '../../../StartUp';
+import {SSCTranslationContext} from '../../../StartUp';
 import {
-    COLOR_MAP,
-    SECTORS_DECIMAL_POINTS_CHART,
-    SECTORS_LIMIT_CHART,
+    COLOR_MAP, OTHERS_CODE, SECTORS_LIMIT_CHART,
     SECTORS_OTHERS_ID_CHART
 } from '../../../../utils/constants';
-import { toCamelCase } from '../../../../utils/Utils';
-import { ResponsivePie } from '@nivo/pie';
+import {toCamelCase} from '../../../../utils/Utils';
+import {ResponsivePie} from '@nivo/pie';
 import Tooltip from '../../../utils/GenericTooltip';
 import CustomLegend from '../../../utils/CustomLegend';
 
 class CountryPopupChart extends Component {
     constructor(props) {
         super(props);
-
-        this.assignedColors = {}
     }
 
     getColor(item) {
-        return (this.assignedColors[item.id]);
-    }
-
-    computeColors(data) {
-        this.availableColors = [...COLOR_MAP];
-        this.assignedColors = {};
-        data.forEach(d => {
-            this.assignedColors[d.id] = this.availableColors.pop();
-        });
+        return (COLOR_MAP.get(item.code));
     }
 
     render() {
@@ -37,7 +25,14 @@ class CountryPopupChart extends Component {
         const {translations} = this.context;
 
 
-        const nonGrouped = chartData.slice(0, SECTORS_LIMIT_CHART);
+        const nonGrouped = chartData.slice(0, SECTORS_LIMIT_CHART).sort((b1, b2) => {
+            return b1.percentage < b2.percentage
+        });
+        const percentageAcum = nonGrouped.reduce((tot, s) =>
+            Math.round(((tot + s.percentage) + Number.EPSILON) * 100) / 100
+            , 0);
+
+        console.log("percentage acum:" + percentageAcum);
         const others = chartData.slice(SECTORS_LIMIT_CHART, chartData.length);
         if (others.length > 0) {
             const other = {};
@@ -46,13 +41,14 @@ class CountryPopupChart extends Component {
             other.id = SECTORS_OTHERS_ID_CHART;
             other.value = 0;
             other.percentage = 0;
+            other.code = OTHERS_CODE;
             other.otherValues = others;
             others.forEach(o => {
                 other.value += o.value;
                 other.percentage += o.percentage;
             });
 
-            other.label = `${othersLabel} ${other.percentage.toFixed(SECTORS_DECIMAL_POINTS_CHART)}%`;
+            other.label = `${othersLabel} ${other.percentage}%`;
             other.simpleLabel = othersLabel;
             nonGrouped.push(other);
         }
@@ -70,7 +66,6 @@ class CountryPopupChart extends Component {
     }
 
     getChart(data, columnCount) {
-        this.computeColors(data);
         const chartComponents = {};
         chartComponents.chart =
             (<ResponsivePie
@@ -116,7 +111,7 @@ class CountryPopupChart extends Component {
                 />
 
             );
-        chartComponents.legend = columnCount > 1 ? <CustomLegend colors={this.assignedColors} data={data}/> : null;
+        chartComponents.legend = columnCount > 1 ? <CustomLegend data={data}/> : null;
         return chartComponents;
     }
 }

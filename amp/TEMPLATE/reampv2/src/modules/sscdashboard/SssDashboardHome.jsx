@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import Sidebar from './components/layout/sidebar/sidebar';
 import MapContainer from './components/layout/map/MapContainer';
-import { SSCTranslationContext } from './components/StartUp';
-import { HOME_CHART, SECTORS_CHART } from './utils/constants';
-import { DONOR_COUNTRY, MODALITIES, PRIMARY_SECTOR } from './utils/FieldsConstants';
-import { bindActionCreators } from 'redux';
-import { loadActivitiesDetails } from './actions/callReports';
-import { connect } from 'react-redux';
-import { loadCountriesFilters, loadModalitiesFilters, loadSectorsFilters } from './actions/loadFilters';
+import {SSCTranslationContext} from './components/StartUp';
+import {HOME_CHART, SECTORS_CHART} from './utils/constants';
+import {DONOR_COUNTRY, MODALITIES, PRIMARY_SECTOR} from './utils/FieldsConstants';
+import {bindActionCreators} from 'redux';
+import {loadActivitiesDetails} from './actions/callReports';
+import {connect} from 'react-redux';
+import {loadCountriesFilters, loadModalitiesFilters, loadSectorsFilters} from './actions/loadFilters';
 import './utils/print.css';
 import PrintDummy from './utils/PrintDummy';
 
@@ -37,7 +37,6 @@ class SssDashboardHome extends Component {
     }
 
     componentDidMount() {
-
         this.props.loadSectorsFilters();
         this.props.loadCountriesFilters();
         this.props.loadModalitiesFilters();
@@ -53,14 +52,13 @@ class SssDashboardHome extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-
         if (this.props !== prevProps && this.countriesWithData.length === 0) {
             //TOD check
             if (this.props.projects.activitiesLoaded) {
                 const initialData = this.getFilteredData();
                 this.countriesWithData = initialData.map(c => c.id);
                 const selectedYears = [];
-                selectedYears.push(this.props.projects.activities.mostRecentYear);
+                //selectedYears.push(this.props.projects.activities.mostRecentYear);
                 this.handleSelectedYearChanged(selectedYears);
                 this.setState({
                     filteredProjects: initialData
@@ -73,7 +71,10 @@ class SssDashboardHome extends Component {
         this.setState({chartSelected});
         if (chartSelected !== SECTORS_CHART) {
             this.closeLargeCountryPopin();
-
+        } else {
+            if (this.state.selectedFilters.selectedCountries.length > 0) {
+                this.setState({showLargeCountryPopin: true});
+            }
         }
     }
 
@@ -129,7 +130,6 @@ class SssDashboardHome extends Component {
         } else {
             this.setState({showEmptyProjects: false});
         }
-
         const countryWithProjects = filteredProjects.map(p => p.id);
         const intersection = this.state.selectedFilters.selectedCountries.filter(c => countryWithProjects.includes(c));
         if (!intersection || intersection.length === 0) {

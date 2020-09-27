@@ -1,11 +1,11 @@
 #print-dummy, #print-simple-dummy {
     position: absolute;
-    top: -20000px;
+    /*top: -20000px;*/
     left: 50px;
 }
 
 #print-dummy {
-    top: -10000px;
+    /*top: -10000px;*/
     border: 1px solid black;
 }
 
@@ -64,6 +64,11 @@
 #print-simple-dummy .country-popup-1 .popup-footer ul li a,
 #print-simple-dummy .custom-legend ul li .label {
     color: #273142;
+}
+#print-dummy .country-popup-1 .popup-footer .project-list{
+    height: auto;
+    min-height: 0;
+    overflow: visible;
 }
 
 #print-simple-dummy .countries-charts,

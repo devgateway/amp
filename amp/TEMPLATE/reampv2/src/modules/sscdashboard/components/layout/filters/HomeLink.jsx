@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import './filters.css';
-import { SSCTranslationContext } from '../../StartUp';
+import {SSCTranslationContext} from '../../StartUp';
+
 class HomeLink extends Component {
 
     onSelectOptions() {
@@ -14,9 +15,10 @@ class HomeLink extends Component {
         return (
             <div className="sidebar-filter-wrapper">
                 <div className="panel panel-default">
-                    <div className={`panel-heading${chartSelected === chartName ? ` selected` : ``}`}>
+                    <div className={`panel-heading${chartSelected === chartName ? ` selected` : ``}`}
+                         onClick={this.onSelectOptions.bind(this)}>
                         <h4 className={`panel-title ${chartName}`} data-toggle="collapse" data-target={`#${chartName}`}>
-                            <a onClick={this.onSelectOptions.bind(this)} >
+                            <a onClick={this.onSelectOptions.bind(this)}>
                                 {translations[title]}
                             </a>
                         </h4>

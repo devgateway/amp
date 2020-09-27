@@ -1,24 +1,25 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import './customLegend.css';
-import { SECTORS_DECIMAL_POINTS_CHART } from '../../utils/constants';
+import {COLOR_MAP} from '../../utils/constants';
 
 export default class CustomLegend extends Component {
 
     render() {
-        const {colors, data} = this.props;
+        const {data} = this.props;
         return (
             <div className="custom-legend">
                 <ul className={data.length > 3 ? 'two-rows' : ''}>
                     {data.map(d => {
                         return (
-                            <li key={colors[d.id]}>
+                            <li key={COLOR_MAP.get(d.code)}>
                                 <div className={"row"}>
                                     <div className="col-md-1 col-xs-1">
-                                        <span className="symbol" style={{border: `2px solid ${colors[d.id]}`}}></span>
+                                        <span className="symbol"
+                                              style={{border: `2px solid ${COLOR_MAP.get(d.code)}`}}></span>
                                     </div>
                                     <div className="col-md-9 col-xs-9 label">{d.simpleLabel}
                                         <span
-                                            className={"label percentage"}>{`${d.percentage.toFixed(SECTORS_DECIMAL_POINTS_CHART)}%`}</span>
+                                            className={"label percentage"}>{`${d.percentage}%`}</span>
                                     </div>
                                 </div>
                             </li>

@@ -261,8 +261,8 @@ public class TranslatorWorker {
     }
 
     private static boolean isOriginalMsgKeyIncorrect(Message message) {
-        return (!TranslatorWorker.generateTrnKey(message.getOriginalMessage()).equals(message.getKey()) &&
-                !TranslatorWorker.generateTrnKey(message.getOriginalMessage(), true).equals(message.getKey()));
+        return (!TranslatorWorker.generateTrnKey(message.getOriginalMessage()).equals(message.getKey())
+                && !TranslatorWorker.generateTrnKey(message.getOriginalMessage(), true).equals(message.getKey()));
     }
 
     private static boolean isAmpOfflineMessage(Message message) {

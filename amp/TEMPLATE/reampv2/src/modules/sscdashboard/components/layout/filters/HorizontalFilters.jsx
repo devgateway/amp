@@ -53,7 +53,7 @@ class HorizontalFilters extends Component {
         const {modalities} = this.props.filters.modalities;
         let categoriesSelection = [];
         if (countries.length > 0 && this.props.filtersRestrictions.countriesWithData.length > 0) {
-            countries = countries.filter(c => this.props.filtersRestrictions.countriesWithData.includes(c.id));
+            //countries = countries.filter(c => this.props.filtersRestrictions.countriesWithData.includes(c.id));
             categoriesSelection = this.generateCountriesCategories(countries);
         }
         const {

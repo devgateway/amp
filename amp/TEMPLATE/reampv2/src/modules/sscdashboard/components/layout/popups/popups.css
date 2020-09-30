@@ -147,7 +147,10 @@
     border-bottom: 2px solid black;
 }
 
-.country-popup-1 .header,
+#country-row0 {
+    border-top: 1px solid #313d4f;
+}
+.country-popup-1 header,
 .country-popup-2 .header,
 .country-popup-3 .header {
     border-bottom: 1px solid #313d4f;
@@ -251,6 +254,7 @@
     font-weight: bold;
     margin-top: -5px;
 }
+
 .country-popup-2 .chart-container,
 .country-popup-3 .chart-container,
 .country-popup-1 .chart-container {
@@ -269,6 +273,19 @@
     width: 100%;
 }
 
+/*Single chart 50%*/
+.country-popup-1 .single-50 {
+    width: 50%;
+}
+
+.country-popup-1 .float-left {
+    float: left;
+}
+
+.country-popup-1 .float-right {
+    float: right;
+}
+
 .country-popup-1 .popup-footer,
 .country-popup-2 .popup-footer,
 .country-popup-3 .popup-footer {
@@ -285,7 +302,6 @@
 
 }
 
-.country-popup-1 .popup-footer .project-list,
 .country-popup-2 .popup-footer .project-list,
 .country-popup-3 .popup-footer .project-list {
 

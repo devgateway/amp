@@ -58,7 +58,7 @@ class SssDashboardHome extends Component {
                 const initialData = this.getFilteredData();
                 this.countriesWithData = initialData.map(c => c.id);
                 const selectedYears = [];
-                //selectedYears.push(this.props.projects.activities.mostRecentYear);
+                selectedYears.push(this.props.projects.activities.mostRecentYear);
                 this.handleSelectedYearChanged(selectedYears);
                 this.setState({
                     filteredProjects: initialData

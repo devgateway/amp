@@ -28,11 +28,6 @@ class CountryPopupChart extends Component {
         const nonGrouped = chartData.slice(0, SECTORS_LIMIT_CHART).sort((b1, b2) => {
             return b1.percentage < b2.percentage
         });
-        const percentageAcum = nonGrouped.reduce((tot, s) =>
-            Math.round(((tot + s.percentage) + Number.EPSILON) * 100) / 100
-            , 0);
-
-        console.log("percentage acum:" + percentageAcum);
         const others = chartData.slice(SECTORS_LIMIT_CHART, chartData.length);
         if (others.length > 0) {
             const other = {};
@@ -58,7 +53,8 @@ class CountryPopupChart extends Component {
                 <div className="chart-container single-50 float-left">
                     {chartComponents.chart}
                 </div>
-                {chartComponents.legend && <div className="chart-legend single-50 float-right">
+                {chartComponents.legend &&
+                <div className={`chart-legend single-50 float-right`}>
                     {chartComponents.legend}
                 </div>}
             </div>
@@ -106,44 +102,13 @@ class CountryPopupChart extends Component {
                             },
                         }
                     }}
-                    {...(columnCount === 1 ? {'legends': legends} : {})}
-
                 />
 
             );
-        chartComponents.legend = columnCount > 1 ? <CustomLegend data={data}/> : null;
+        chartComponents.legend = <CustomLegend data={data}/>;
         return chartComponents;
     }
 }
-
-const CustomSymbolShape = ({x, y, size, fill}) => {
-    return (
-        <circle className="donut-segment"
-                cx={x + size / 2}
-                cy={y + size / 2}
-                r={size / 3}
-                fill="transparent"
-                stroke={fill}
-                strokeWidth="2">
-        </circle>
-    );
-};
-const legends = [
-    {
-
-        anchor: 'right',
-        direction: 'column',
-
-        translateY: 0,
-        translateX: 200,
-        itemWidth: 450,
-        itemHeight: 18,
-        itemTextColor: '#999',
-        symbolSize: 15,
-        symbolShape: CustomSymbolShape,
-    }
-];
-
 
 CountryPopupChart.contextType = SSCTranslationContext;
 export default CountryPopupChart;

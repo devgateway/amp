@@ -102,6 +102,7 @@ import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.type.StringType;
 import org.joda.time.Period;
 
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils.ACTIVITY_FM_ID;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils.WORKSPACE_PREFIX;
 import static org.digijava.kernel.translator.util.TrnUtil.PREFIXES;
 
@@ -2120,12 +2121,32 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         return prefixes;
     }
 
+    public static List<String> getWorkspacePrefixesFromRequest() {
+        return (List<String>) TLSUtils.getRequest().getAttribute(PREFIXES);
+    }
+
+    /**
+     * Set the workspace prefix (if any) and the FM id of the activity into request scope.
+     * @param activity
+     */
     public static void setCurrentWorkspacePrefixIntoRequest(AmpActivityVersion activity) {
-        if (activity.getTeam() != null && activity.getTeam().getWorkspacePrefix() != null) {
-            TLSUtils.getRequest().setAttribute(WORKSPACE_PREFIX,
-                    activity.getTeam().getWorkspacePrefix().getLabel());
-        } else {
-            TLSUtils.getRequest().setAttribute(WORKSPACE_PREFIX, "");
+        if (activity.getTeam() != null) {
+            if (activity.getTeam().getWorkspacePrefix() != null) {
+                TLSUtils.getRequest().setAttribute(WORKSPACE_PREFIX,
+                        activity.getTeam().getWorkspacePrefix().getLabel());
+            } else {
+                TLSUtils.getRequest().setAttribute(WORKSPACE_PREFIX, "");
+            }
+            if (activity.getTeam().getFmTemplate() != null) {
+                TLSUtils.getRequest().setAttribute(ACTIVITY_FM_ID, activity.getTeam().getFmTemplate().getId());
+            }
         }
+    }
+
+    public static Long getCurrentFMId() {
+        if (TLSUtils.getRequest().getAttribute(ACTIVITY_FM_ID) != null) {
+            return Long.getLong(TLSUtils.getRequest().getAttribute(ACTIVITY_FM_ID).toString());
+        }
+        return null;
     }
 }

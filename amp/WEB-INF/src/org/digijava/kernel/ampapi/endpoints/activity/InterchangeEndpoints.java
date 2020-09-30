@@ -98,13 +98,23 @@ public class InterchangeEndpoints {
 
     // TODO TO be removed after AMP-29486 is merged into FUTURE.
     // Restored so the new preview works until AMP-29486 is done. 
+    @GET
+    @Path("fields-no-workspace/{id}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "getDefaultFields", ui = false)
+    public List<APIField> getAvailableFieldsBasedOnDefaultFM(@ApiParam(value = "FM id", required = false)
+                                                             @PathParam("id") Long id) {
+        return getAvailableFields(id);
+    }
 
+    // TODO TO be removed after AMP-29486 is merged into FUTURE.
+    // Restored so the new preview works until AMP-29486 is done.
     @GET
     @Path("fields-no-workspace")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "getDefaultFields", ui = false)
     public List<APIField> getAvailableFieldsBasedOnDefaultFM() {
-        return getAvailableFields();
+        return getAvailableFields(null);
     }
 
     @POST
@@ -175,9 +185,29 @@ public class InterchangeEndpoints {
             notes = "For fields like locations, sectors, programs the object contains the ancestor values.")
     public Map<String, List<FieldIdValue>> getFieldValuesById(
             @ApiParam("List of fully qualified activity fields with list of ids.") Map<String, List<Long>> fieldIds) {
-        List<APIField> apiFields = AmpFieldsEnumerator.getEnumerator().getActivityFields();
-        Map<String, List<FieldIdValue>> response = InterchangeUtils.getIdValues(fieldIds, apiFields);
+        return getFieldValues(null, fieldIds);
+    }
 
+    @POST
+    @Path("field/id-values/{fmId}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "getIdValues", ui = false)
+    @ApiOperation(value = "Returns a list of values for all id of requested fields.",
+            notes = "For fields like locations, sectors, programs the object contains the ancestor values.")
+    public Map<String, List<FieldIdValue>> getFieldValuesByIdWithFM(
+            @ApiParam(value = "FM id", required = true) @PathParam("fmId") Long id,
+            @ApiParam("List of fully qualified activity fields with list of ids.") Map<String, List<Long>> fieldIds) {
+        return getFieldValues(id, fieldIds);
+    }
+
+    private Map<String, List<FieldIdValue>> getFieldValues(Long id, Map<String, List<Long>> fieldIds) {
+        List<APIField> apiFields = null;
+        if (id != null) {
+            apiFields = AmpFieldsEnumerator.getEnumerator(id).getActivityFields();
+        } else {
+            apiFields = AmpFieldsEnumerator.getEnumerator().getActivityFields();
+        }
+        Map<String, List<FieldIdValue>> response = InterchangeUtils.getIdValues(fieldIds, apiFields);
         return response;
     }
 
@@ -188,7 +218,10 @@ public class InterchangeEndpoints {
     @ApiOperation(value = "Returns the full list of activity fields.",
             notes = "Provides full set of available fields and their settings/rules in a hierarchical structure.\n\n"
                     + "See [Fields Enumeration Wiki](https://wiki.dgfoundation.org/display/AMPDOC/Fields+enumeration)")
-    public List<APIField> getAvailableFields() {
+    public List<APIField> getAvailableFields(@ApiParam(value = "FM id", required = false) Long id) {
+        if (id != null) {
+            return AmpFieldsEnumerator.getEnumerator(id).getActivityFields();
+        }
         return AmpFieldsEnumerator.getEnumerator().getActivityFields();
     }
 

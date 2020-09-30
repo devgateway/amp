@@ -39,7 +39,7 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
     public List<Object[]> getCategoryValues(String discriminatorOption) {
         String queryString = "SELECT acv.id, acv.value, acv.deleted, acv.index, acv.ampCategoryClass.keyName from "
                 + AmpCategoryValue.class.getName() + " acv ";
-        List<String> prefixes = ((List<String>) TLSUtils.getRequest().getAttribute(PREFIXES));
+        List<String> prefixes = ActivityUtil.getWorkspacePrefixesFromRequest();
         if (prefixes == null) {
             prefixes = ActivityUtil.loadWorkspacePrefixesIntoRequest();
         }

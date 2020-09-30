@@ -26,6 +26,7 @@ export default class HydratorHelper {
                     fieldToHydrate = parent + "~";
                 }
                 fieldToHydrate = fieldToHydrate + objectField;
+                if (fieldsManager.getFieldDef(fieldToHydrate)) {
                 if (fieldsManager.getFieldDef(fieldToHydrate)['id_only'] === true) {
                     if (objectToHydrate[objectField]) {
                         if (!valuesForHydration) {
@@ -39,6 +40,9 @@ export default class HydratorHelper {
                                 .find(field => field.id === objectToHydrate[objectField]);
                         }
                     }
+                }
+                } else {
+                    console.warn('no field def: ' + fieldToHydrate);
                 }
             }
         });

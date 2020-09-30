@@ -5,7 +5,11 @@ import org.digijava.kernel.ampapi.endpoints.activity.AllowMultipleProgramsPredic
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.AMPTranslatorService;
 import org.digijava.kernel.services.sync.SyncDAO;
+import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
+import org.digijava.module.aim.util.FeaturesUtil;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
@@ -25,6 +29,15 @@ public class CachingFieldsEnumeratorFactory {
 
     public void buildDefaultEnumerator() {
         cache.put(-1L, buildEnumerator(new FMVisibility()));
+    }
+
+    public Map<Long, CachingFieldsEnumerator> getAllEnumerators() {
+        Map<Long, CachingFieldsEnumerator> enumeratorMap = new HashMap<>();
+        Collection<AmpTemplatesVisibility> fmTrees = FeaturesUtil.getAMPTemplatesVisibilityWithSession();
+        for (AmpTemplatesVisibility tree : fmTrees) {
+            enumeratorMap.put(tree.getId(), getEnumerator(tree.getId()));
+        }
+        return enumeratorMap;
     }
 
     public CachingFieldsEnumerator getDefaultEnumerator() {

@@ -9,6 +9,17 @@ import ResetAllButton from "./button/ResetAllButton";
 import CancelGeocodingButton from "./button/CancelGeocodingButton";
 import SaveAllEditsButton from "./button/SaveAllEditsButton";
 
+const SelectedActivitiesMessage = ({title, selectedSize, size}) =>  {
+    return (
+        <>
+            <div className={'col-md-2 text-header'}>
+                <span>{title}</span>
+                <span className="activities-message"><b>({selectedSize}/{size})</b></span>
+            </div>
+        </>
+    );
+}
+
 class GeocoderHeader extends Component {
 
     constructor(props) {
@@ -21,12 +32,16 @@ class GeocoderHeader extends Component {
 
         return (
             <div className='panel-body custom-panel geocoder-header'>
-                <div className={'col-md-2 text-header'}>{translations['amp.geocoder:selectProjects']}</div>
-                <div className={'col-md-2 header-settings text-header'}><a href={'#geocoder'}>{translations['amp.geocoder:settings']}</a></div>
+                {/*<div className={'col-md-2 header-settings text-header'}><a href={'#geocoder'}>{translations['amp.geocoder:settings']}</a></div>*/}
                 {isActivityTable
-                    ? <RunSearchButton title={translations['amp.geocoder:runSearch']}
+                    ? (<>
+                        <SelectedActivitiesMessage title={translations['amp.geocoder:selectProjects']}
+                                                    selectedSize={this.props.selectedActivities.length}
+                                                    size={this.props.activities.length} />
+                        <RunSearchButton title={translations['amp.geocoder:runSearch']}
                                  selectedActivities={this.props.selectedActivities}
                                  onRunSearch={this.onRunSearch}/>
+                     </>)
                     : (<>
                         <ResetAllButton title={translations['amp.geocoder:resetAll']} />
                         <CancelGeocodingButton title={translations['amp.geocoder:cancelGeocoding']} />
@@ -42,6 +57,7 @@ GeocoderHeader.contextType = TranslationContext;
 const mapStateToProps = state => {
     return {
         geocoding: state.geocodingReducer,
+        activities: state.activitiesReducer.activities,
     };
 };
 

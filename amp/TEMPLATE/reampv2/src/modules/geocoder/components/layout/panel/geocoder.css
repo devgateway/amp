@@ -2,8 +2,14 @@
     background-color: #F5F8FA;
     font-weight: bold;
     vertical-align: center;
-    font-size: 14px;
-    color: #8694B5;
+    font-size: 16px;
+    color: #111111;
+}
+
+.activities-message {
+    color: #5cb85c;
+    margin-left: 5px;
+    font-size: 13px;
 }
 
 .text-header {
@@ -26,4 +32,9 @@ h4 {
     .container {
         width: 1570px;
     }
+}
+
+.modal-activities {
+    height: 200px;
+    overflow-y: auto;
 }

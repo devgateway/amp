@@ -8,14 +8,6 @@ import './table.css';
 import {loadActivities} from "../../../actions/activitiesAction";
 import {Loading} from "../panel/Loading";
 
-const SelectedActivitiesMessage = ({size}) =>  {
-    return (
-        <>
-           <div className="activities-message"><b>{size}</b> activities selected for geocoding</div>
-        </>
-    );
-}
-
 class ActivityTable extends Component {
     constructor(props) {
         super(props);
@@ -107,7 +99,6 @@ class ActivityTable extends Component {
                             selectRow={selectRow}
                             pagination={paginationFactory(options)}
                         />
-                        <SelectedActivitiesMessage size={this.props.selectedActivities.length} />
                         </>}
                </div>
           );

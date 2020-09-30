@@ -37,7 +37,6 @@ class SssDashboardHome extends Component {
     }
 
     componentDidMount() {
-
         this.props.loadSectorsFilters();
         this.props.loadCountriesFilters();
         this.props.loadModalitiesFilters();
@@ -53,7 +52,6 @@ class SssDashboardHome extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-
         if (this.props !== prevProps && this.countriesWithData.length === 0) {
             //TOD check
             if (this.props.projects.activitiesLoaded) {
@@ -73,7 +71,10 @@ class SssDashboardHome extends Component {
         this.setState({chartSelected});
         if (chartSelected !== SECTORS_CHART) {
             this.closeLargeCountryPopin();
-
+        } else {
+            if (this.state.selectedFilters.selectedCountries.length > 0) {
+                this.setState({showLargeCountryPopin: true});
+            }
         }
     }
 
@@ -129,7 +130,6 @@ class SssDashboardHome extends Component {
         } else {
             this.setState({showEmptyProjects: false});
         }
-
         const countryWithProjects = filteredProjects.map(p => p.id);
         const intersection = this.state.selectedFilters.selectedCountries.filter(c => countryWithProjects.includes(c));
         if (!intersection || intersection.length === 0) {

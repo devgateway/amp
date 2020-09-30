@@ -3,6 +3,9 @@ package org.digijava.kernel.ampapi.endpoints.activity.field;
 import static java.util.stream.Collectors.toList;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.NONE;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.SUBMIT;
+import static org.digijava.kernel.translator.util.TrnUtil.DEFAULT;
+import static org.digijava.kernel.translator.util.TrnUtil.PREFIX;
+import static org.digijava.kernel.translator.util.TrnUtil.PREFIXES;
 import static org.digijava.kernel.util.SiteUtils.DEFAULT_SITE_ID;
 
 import java.lang.reflect.Field;
@@ -35,10 +38,11 @@ import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
-import org.digijava.kernel.ampapi.endpoints.dto.UnwrappedTranslations;
+import org.digijava.kernel.ampapi.endpoints.dto.UnwrappedTranslationsByWorkspacePrefix;
 import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.validation.ConstraintDescriptor;
 import org.digijava.kernel.validation.ConstraintDescriptors;
 import org.digijava.kernel.validators.activity.TreeCollectionValidator;
@@ -440,19 +444,35 @@ public class FieldsEnumerator {
      * @param label the label to be translated
      * @return a map from the ISO2 code -> translation in said text
      */
-    private UnwrappedTranslations getTranslationsForLabel(String label) {
-        UnwrappedTranslations translations = new UnwrappedTranslations();
+    private UnwrappedTranslationsByWorkspacePrefix getTranslationsForLabel(String label) {
+        UnwrappedTranslationsByWorkspacePrefix translations = new UnwrappedTranslationsByWorkspacePrefix();
+        List<String> prefixes = (List<String>) TLSUtils.getRequest().getAttribute(PREFIXES);
         try {
-            Collection<Message> messages = translatorService.getAllTranslationOfBody(label, DEFAULT_SITE_ID);
-            for (Message m : messages) {
-                translations.set(m.getLocale(), m.getMessage());
+            TLSUtils.getRequest().setAttribute(PREFIX, null);
+            Collection<Message> defaultMessages = translatorService.getAllTranslationOfBody(label, DEFAULT_SITE_ID);
+            for (Message m : defaultMessages) {
+                translations.set(DEFAULT, m.getLocale(), m.getMessage());
             }
             if (translations.isEmpty()) {
-                translations.set("EN", label);
+                translations.set(DEFAULT, "en", label);
+            }
+            if (prefixes != null) {
+                prefixes.forEach(prefix -> {
+                    try {
+                        TLSUtils.getRequest().setAttribute(PREFIX, prefix);
+                        Collection<Message> messages = translatorService.getAllTranslationOfBody(label,
+                                DEFAULT_SITE_ID);
+                        for (Message m : messages) {
+                            translations.set(prefix, m.getLocale(), m.getMessage());
+                        }
+                    } catch (WorkerException e) {
+                        e.printStackTrace();
+                        throw new RuntimeException(e);
+                    }
+                });
             }
         } catch (WorkerException e) {
-            LOGGER.error(e.getMessage());
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
         return translations;
     }

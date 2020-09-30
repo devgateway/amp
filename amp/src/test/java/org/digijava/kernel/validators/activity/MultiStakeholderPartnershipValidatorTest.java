@@ -2,6 +2,7 @@ package org.digijava.kernel.validators.activity;
 
 import com.google.common.collect.ImmutableList;
 import org.dgfoundation.amp.activity.builder.ActivityBuilder;
+import org.dgfoundation.amp.testutils.TransactionUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.validation.ConstraintViolation;
@@ -29,6 +30,7 @@ public class MultiStakeholderPartnershipValidatorTest {
 
     @BeforeClass
     public static void setUp() {
+        TransactionUtil.setUpWorkspaceEmptyPrefixes();
         activityField = ValidatorUtil.getMetaData();
     }
 

@@ -2,16 +2,19 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 
 import java.util.List;
 
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.annotate.JsonPropertyOrder;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 
 /**
  * @author Viorel Chihai
  */
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-@JsonPropertyOrder({ "ws-member-ids", "fields" })
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({"ws-member-ids", "fields"})
 public class APIWorkspaceMemberFieldList {
 
     @JsonProperty(ActivityEPConstants.API_WS_MEMBER_IDS)
@@ -19,7 +22,11 @@ public class APIWorkspaceMemberFieldList {
 
     @JsonProperty(ActivityEPConstants.API_FIELDS)
     private List<APIField> fields;
-    
+
+    public APIWorkspaceMemberFieldList() {
+        super();
+    }
+
     public APIWorkspaceMemberFieldList(List<Long> wsMemberIds, List<APIField> fields) {
         super();
         this.wsMemberIds = wsMemberIds;

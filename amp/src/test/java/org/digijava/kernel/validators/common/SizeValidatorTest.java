@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.IntStream;
 
+import org.dgfoundation.amp.testutils.TransactionUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
@@ -50,6 +51,7 @@ public class SizeValidatorTest {
 
     @BeforeClass
     public static void setUp() {
+        TransactionUtil.setUpWorkspaceEmptyPrefixes();
         objField = ValidatorUtil.getMetaData(TestObject.class);
     }
 

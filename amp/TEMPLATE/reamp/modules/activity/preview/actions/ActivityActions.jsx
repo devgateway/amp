@@ -51,7 +51,8 @@ export function loadActivityForActivityPreview(activityId) {
             ActivityApi.fetchFmConfiguration(FmManagerHelper.getRequestFmSyncUpBody(Object.values(FeatureManagerConstants))),
             ActivityApi.fetchActivityInfo(activityId)]
         ).then(([activity, fieldsDef, fmTree, activityInfo]) => {
-            _registerSettings(settings.language, settings['default-date-format'].toUpperCase());
+            const isSSC = activity[ActivityConstants.ACTIVITY_TYPE] === ActivityConstants.ACTIVITY_TYPE_SSC;
+            _registerSettings(settings.language, settings['default-date-format'].toUpperCase(), isSSC);
             if (settings[TEAM_ID]) {
                 ContactAction.loadHydratedContactsForActivity(activity)(dispatch, ownProps);
                 loadWsInfoForActivity(activity, dispatch);
@@ -109,14 +110,14 @@ export function loadActivityForActivityPreview(activityId) {
         })
     };
 
-    function _registerSettings(lang, pGSDateFormat) {
-        const editLink = {url: ACTIVITY_FORM_URL, isExternal: true};
+    function _registerSettings(lang, pGSDateFormat, isSSC) {
+        const projectEditLink = {url: ACTIVITY_FORM_URL, isExternal: true};
         const editSscLink = {url: ACTIVITY_FORM_URL_SSC, isExternal: true};
+        const editLink = isSSC ? editSscLink : projectEditLink;
         const viewLink = {url: ACTIVITY_PREVIEW_URL, isExternal: true};
         const versionHistoryLink = {url: VERSION_HISTORY_URL, isExternal: true};
         const compareActivityLink = {url: COMPARE_ACTIVITY_URL, isExternal: true};
-
-        ActivityLinks.registerLinks({editLink, versionHistoryLink, compareActivityLink, viewLink, editSscLink});
+        ActivityLinks.registerLinks({editLink, versionHistoryLink, compareActivityLink, viewLink});
         DateUtils.registerSettings({lang, pGSDateFormat});
     }
 

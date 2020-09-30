@@ -146,7 +146,7 @@ const doPrint = (printElement, titleElement, chartElement, format, title, height
                 link.download = `${title}.${format}`;
                 link.href = dataUrl;
                 document.body.appendChild(link);
-                    link.click();
+                link.click();
 
                 if (titleElement) {
                     printElement.removeChild(titleElement);

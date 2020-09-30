@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import './customLegend.css';
-import {COLOR_MAP} from '../../utils/constants';
+import { COLOR_MAP } from '../../utils/constants';
 
 export default class CustomLegend extends Component {
 

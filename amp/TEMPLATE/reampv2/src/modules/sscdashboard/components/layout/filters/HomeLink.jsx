@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import './filters.css';
-import {SSCTranslationContext} from '../../StartUp';
+import { SSCTranslationContext } from '../../StartUp';
 
 class HomeLink extends Component {
 

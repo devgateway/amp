@@ -1,13 +1,13 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Sidebar from './components/layout/sidebar/sidebar';
 import MapContainer from './components/layout/map/MapContainer';
-import {SSCTranslationContext} from './components/StartUp';
-import {HOME_CHART, SECTORS_CHART} from './utils/constants';
-import {DONOR_COUNTRY, MODALITIES, PRIMARY_SECTOR} from './utils/FieldsConstants';
-import {bindActionCreators} from 'redux';
-import {loadActivitiesDetails} from './actions/callReports';
-import {connect} from 'react-redux';
-import {loadCountriesFilters, loadModalitiesFilters, loadSectorsFilters} from './actions/loadFilters';
+import { SSCTranslationContext } from './components/StartUp';
+import { HOME_CHART, SECTORS_CHART } from './utils/constants';
+import { DONOR_COUNTRY, MODALITIES, PRIMARY_SECTOR } from './utils/FieldsConstants';
+import { bindActionCreators } from 'redux';
+import { loadActivitiesDetails } from './actions/callReports';
+import { connect } from 'react-redux';
+import { loadCountriesFilters, loadModalitiesFilters, loadSectorsFilters } from './actions/loadFilters';
 import './utils/print.css';
 import PrintDummy from './utils/PrintDummy';
 

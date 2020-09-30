@@ -1,8 +1,8 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import './popups.css';
 import CountryPopupContainer from './countryLarge/CountryPopupContainer';
-import {calculateColumnCount} from '../../../utils/Utils';
-import {SSCTranslationContext} from '../../StartUp';
+import { calculateColumnCount } from '../../../utils/Utils';
+import { SSCTranslationContext } from '../../StartUp';
 
 
 class CountryPopupOverlay extends Component {
@@ -12,8 +12,10 @@ class CountryPopupOverlay extends Component {
         if (!this.props.show) {
             return null;
         }
-        const {projects, closeLargeCountryPopinAndClearFilter, countriesForExport, countriesForExportChanged,
-            getExportData} = this.props;
+        const {
+            projects, closeLargeCountryPopinAndClearFilter, countriesForExport, countriesForExportChanged,
+            getExportData
+        } = this.props;
         if (!projects || projects.length === 0) {
             return null;
         }

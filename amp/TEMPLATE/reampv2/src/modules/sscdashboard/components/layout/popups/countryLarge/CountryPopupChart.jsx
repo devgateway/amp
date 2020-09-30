@@ -1,12 +1,12 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import '../popups.css';
-import {SSCTranslationContext} from '../../../StartUp';
+import { SSCTranslationContext } from '../../../StartUp';
 import {
     COLOR_MAP, OTHERS_CODE, SECTORS_LIMIT_CHART,
     SECTORS_OTHERS_ID_CHART
 } from '../../../../utils/constants';
-import {toCamelCase} from '../../../../utils/Utils';
-import {ResponsivePie} from '@nivo/pie';
+import { toCamelCase } from '../../../../utils/Utils';
+import { ResponsivePie } from '@nivo/pie';
 import Tooltip from '../../../utils/GenericTooltip';
 import CustomLegend from '../../../utils/CustomLegend';
 

@@ -1,8 +1,8 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import '../popups.css';
-import {SSCTranslationContext} from '../../../StartUp';
-import {SECTOR_LEADING_LEFT, SECTOR_MIN_SIZE} from '../../../../utils/constants';
-import {calculateUpdatedValuesForDropDowns} from '../../../../utils/Utils';
+import { SSCTranslationContext } from '../../../StartUp';
+import { SECTOR_LEADING_LEFT, SECTOR_MIN_SIZE } from '../../../../utils/constants';
+import { calculateUpdatedValuesForDropDowns } from '../../../../utils/Utils';
 import ReactTooltip from 'react-tooltip';
 import CountryFlag from '../../../utils/CountryFlag';
 

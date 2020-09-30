@@ -1,16 +1,16 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import HorizontalFilters from '../filters/HorizontalFilters';
 import './map.css';
 import MapHome from "../../map/MapHome";
 import PopupOverlay from "../popups/popupOverlay";
 import CountryPopupOverlay from "../popups/CountryPopupOverlay";
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {loadActivitiesDetails} from '../../../actions/callReports';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { loadActivitiesDetails } from '../../../actions/callReports';
 import SimplePopup from '../popups/homepopup/SimplePopup';
-import {SSCTranslationContext} from '../../StartUp';
-import {generateStructureBasedOnSectorProjectCount, getChartData} from "../../../utils/ProjectUtils";
-import {ACTIVITY_ID, PROJECT_TITLE} from "../../../utils/FieldsConstants";
+import { SSCTranslationContext } from '../../StartUp';
+import { generateStructureBasedOnSectorProjectCount, getChartData } from "../../../utils/ProjectUtils";
+import { ACTIVITY_ID, PROJECT_TITLE } from "../../../utils/FieldsConstants";
 
 class MapContainer extends Component {
     getExportData() {

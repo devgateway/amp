@@ -1,11 +1,11 @@
 #print-dummy, #print-simple-dummy {
     position: absolute;
-    /*top: -20000px;*/
+    top: -20000px;
     left: 50px;
 }
 
 #print-dummy {
-    /*top: -10000px;*/
+    top: -10000px;
     border: 1px solid black;
 }
 

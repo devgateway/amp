@@ -148,17 +148,16 @@ public class ProgramUtil {
         }
 
 
-        public static AmpTheme getTheme(String name) {
+        public static AmpTheme getTheme(String id) {
             Session session = null;
             AmpTheme theme = null;
 
             try {
                 session = PersistenceManager.getRequestDBSession();
-                String themeNameHql = AmpTheme.hqlStringForName("theme");
                 String qryStr = "select theme from " + AmpTheme.class.getName()
-                        + " theme where (" + themeNameHql + "=:name)";
+                        + " theme where (ampThemeId=:id)";
                 Query qry = session.createQuery(qryStr);
-                qry.setParameter("name", name, StringType.INSTANCE);
+                qry.setParameter("id", Long.valueOf(id));
                 Iterator itr = qry.list().iterator();
                 if (itr.hasNext()) {
                     theme = (AmpTheme) itr.next();

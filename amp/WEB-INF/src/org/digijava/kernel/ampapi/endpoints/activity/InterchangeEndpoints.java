@@ -2,6 +2,9 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.AMP_ID_FIELD_NAME;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.MAX_BULK_ACTIVITIES_ALLOWED;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,7 +27,13 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import com.fasterxml.jackson.annotation.JsonView;
-
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.Example;
+import io.swagger.annotations.ExampleProperty;
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivityInformation;
 import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivitySummary;
@@ -37,8 +46,13 @@ import org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewActivityServ
 import org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewWorkspace;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.AmpMediaType;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.ApiCompat;
+import org.digijava.kernel.ampapi.endpoints.async.AsyncApiService;
+import org.digijava.kernel.ampapi.endpoints.async.AsyncResult;
+import org.digijava.kernel.ampapi.endpoints.async.AsyncResultCacher;
+import org.digijava.kernel.ampapi.endpoints.async.AsyncStatus;
 import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
@@ -55,6 +69,8 @@ import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.Example;
 import io.swagger.annotations.ExampleProperty;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.springframework.security.web.util.UrlUtils;
+
 
 /**
  * AMP Activity Endpoints for Activity Import / Export
@@ -453,6 +469,82 @@ public class InterchangeEndpoints {
             @ApiParam("the id of the activity")
             @PathParam("projectId") Long projectId) {
         return PreviewActivityService.getInstance().getWorkspaces(projectId);
+    }
+
+    
+    @POST
+    @Path("/async/bulk")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_OPTIONAL}, id = "importProjects")
+    @ApiOperation(
+            value = "Imports asynchronous a list of activities.",
+            notes = "The input body is an array of activity objects."
+                    + "The format of activity object matches the existing format used by post / and POST /{projectId}."
+                    + "If the header Prefer: respond-async is not present, "
+                    + "then the endpoint will respond with a list of import/update result."
+                    + "If the header Prefer: respond-async is present then an immediate response will be returned."
+                    + "The response will contain in headers (location) the url where the results can be retrieved"
+                    + "If the size is bigger than 20, the request will be rejected.")
+    public Response importProjects(@QueryParam("can-downgrade-to-draft") @DefaultValue("false")
+                                               boolean canDowngradeToDraft,
+                                   @QueryParam("process-approval-fields") @DefaultValue("false")
+                                           boolean isProcessApprovalFields,
+                                   @QueryParam("track-editors") @DefaultValue("false") boolean isTrackEditors,
+                                   @ApiParam("activity configuration") List<SwaggerActivity> activitiesJson) {
+    
+        String resultId = (String) TLSUtils.getRequest().getAttribute("result-id");
+        if (activitiesJson != null || !activitiesJson.isEmpty()) {
+            if (activitiesJson.size() > MAX_BULK_ACTIVITIES_ALLOWED) {
+                ApiErrorResponseService.reportError(BAD_REQUEST, ActivityErrors.BULK_TO_BIG
+                        .withDetails("Maximum activities allowed: " + MAX_BULK_ACTIVITIES_ALLOWED));
+            }
+            
+            ActivityImportRules rules = new ActivityImportRules(canDowngradeToDraft, isProcessApprovalFields,
+                    isTrackEditors);
+            if (resultId != null) {
+                AsyncApiService.getInstance().importActivities(rules, resultId, activitiesJson, uri.getBaseUri());
+            } else {
+                List<JsonApiResponse<ActivitySummary>> results = new ArrayList<>();
+            
+                for (SwaggerActivity act : activitiesJson) {
+                    boolean toUpdate = act.getMap().containsKey(AMP_ID_FIELD_NAME);
+                    results.add(ActivityInterchangeUtils.importActivity(act.getMap(), toUpdate, rules,
+                            uri.getBaseUri() + "activity"));
+                }
+            
+                return Response.ok(results).build();
+            }
+        }
+        String location = String.format("%s/result/%s", UrlUtils.buildFullRequestUrl(TLSUtils.getRequest()), resultId);
+        return Response.ok()
+                .header("location", location)
+                .build();
+    }
+    
+    @GET
+    @Path("/async/bulk/result/{result-id}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_OPTIONAL}, id = "getAsyncResult")
+    @ApiOperation(
+            value = "Return the results generated by /async/bulk endpoint.")
+    public Response getAsyncResult(@PathParam("result-id") String resultId) {
+        
+        AsyncResult asyncResult = AsyncResultCacher.getAsyncResult(resultId);
+    
+        if (asyncResult == null) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .header("X-Async-Status", AsyncStatus.NOT_FOUND)
+                    .type(MediaType.APPLICATION_JSON).build();
+        }
+    
+        Response.ResponseBuilder responseBuilder = Response.status(Response.Status.OK)
+                .type(MediaType.APPLICATION_JSON);
+        
+        if (asyncResult.getStatus() == AsyncStatus.RUNNING) {
+            responseBuilder.header("X-Async-Status", AsyncStatus.RUNNING);
+        }
+        
+        return responseBuilder.entity(asyncResult.getResults()).build();
     }
 
 }

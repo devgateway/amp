@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import fetchTranslations from '../../../utils/actions/fetchTranslations';
 import defaultTrnPack from '../config/initialTranslations.json';
 import {Loading} from '../../../utils/components/Loading';
-import {loadActivities} from "../actions/activitiesAction";
 import {loadGeocoding} from "../actions/geocodingAction";
 
 
@@ -27,11 +26,14 @@ class AppContext extends Component {
     }
 
     render() {
-        return this.props.translationPending
-            ? (<Loading/>) :
+        if (this.props.translationPending || this.props.geocodingPending) {
+            return <Loading/>;
+        }
+
+        return (
             <TranslationContext.Provider value={{translations: this.props.translations}}>
                 {this.props.children}
-            </TranslationContext.Provider>;
+            </TranslationContext.Provider>);
     }
 }
 

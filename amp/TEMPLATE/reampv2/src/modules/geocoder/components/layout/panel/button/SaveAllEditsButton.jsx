@@ -14,7 +14,7 @@ class SaveAllEditsButton extends Component {
 
         this.handleClose = this.handleClose.bind(this);
         this.handleShow = this.handleShow.bind(this);
-        this.onRunSearch = this.onRunSearch.bind(this);
+        this.onSaveAllEdits = this.onSaveAllEdits.bind(this);
     }
 
     handleClose() {
@@ -25,7 +25,7 @@ class SaveAllEditsButton extends Component {
         this.setState({show: true});
     }
 
-    onRunSearch = () => {
+    onSaveAllEdits = () => {
         this.props.saveAllEdits();
         this.handleClose();
     }
@@ -49,7 +49,7 @@ class SaveAllEditsButton extends Component {
                         <Button variant="secondary" onClick={this.handleClose}>
                             {translations['amp.geocoder:cancel']}
                         </Button>
-                        <Button variant="success" className={'button-header'} onClick={this.onRunSearch}>
+                        <Button variant="success" className={'button-header'} onClick={this.onSaveAllEdits}>
                             {this.props.title}
                         </Button>
                     </Modal.Footer>

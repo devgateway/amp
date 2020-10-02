@@ -1,16 +1,13 @@
-import React, {Component, useState} from 'react';
+import React, {Component} from 'react';
 import {TranslationContext} from '../../AppContext';
-import GeocoderHeader from "./GeocoderHeader";
+import GeocodingTableHeader from "../table/GeocodingTableHeader";
 import ActivityTable from "../table/ActivityTable";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import GeocodingTable from "../table/GeocodingTable";
-import Alert from "react-bootstrap/Alert";
 import Modal from "react-bootstrap/Modal";
-import {runSearch} from "../../../actions/geocodingAction";
-import * as PropTypes from "prop-types";
 import AlertError from "./AlertError";
-import {Loading} from "../../../../../utils/components/Loading";
+import ActivityTableHeader from "../table/ActivityTableHeader";
 
 const GeocodingNotAvailable = ({user, workspace}) =>
     <h4>Geocoding process not available. User {user} is owner of the process in '{workspace}' workspace</h4>;
@@ -59,12 +56,20 @@ class GeocoderPanel extends Component {
     render() {
         const {translations} = this.context;
 
-        const isGeocoding = this.props.geocoding.activities.length > 0;
+        const isGeocoding = this.props.geocoding && this.props.geocoding.status != 'NOT_STARTED';
 
         let title = translations['amp.geocoder:projectList'];
+        let table;
+        let tableHeader;
 
         if (isGeocoding) {
             title = title +  ' - ' + translations['amp.geocoder:geocodedSelection'];
+            tableHeader =  <GeocodingTableHeader/>;
+            table = <GeocodingTable/>;
+        } else {
+            tableHeader =  <ActivityTableHeader selectedActivities={this.state.selectedActivities}/>;
+            table = <ActivityTable onSelectActivity={this.onSelectActivity.bind(this)}
+                                   onSelectAllActivities={this.onSelectAllActivities.bind(this)}/>
         }
 
 
@@ -76,12 +81,8 @@ class GeocoderPanel extends Component {
                     : <div>
                         <ProjectList title={title}/>
                         <div className='panel panel-default'>
-                            <GeocoderHeader selectedActivities={this.state.selectedActivities}/>
-                            {isGeocoding
-                                ? <GeocodingTable/>
-                                : <ActivityTable onSelectActivity={this.onSelectActivity.bind(this)}
-                                                 onSelectAllActivities={this.onSelectAllActivities.bind(this)}/>
-                            }
+                            {tableHeader}
+                            {table}
                         </div>
                     </div>
                 }

@@ -49,7 +49,7 @@ export default function activitiesReducer(state = initialState, action) {
         case GEOCODING_RUN_SEARCH_SUCCESS:
             return {
                 ...state,
-                pending: false,
+                pending: action.pending,
                 error: null
             };
         case SELECT_ACTIVITY_FOR_GEOCODING:

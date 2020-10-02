@@ -7,7 +7,8 @@ import GeocodingActionColumn from "./GeocodingActionColumn";
 
 import './table.css';
 import Locations from "./Locations";
-import {Loading} from "../../../../../utils/components/Loading";
+import {Loading} from "../panel/Loading";
+import {loadGeocoding} from "../../../actions/geocodingAction";
 
 class GeocodingTable extends Component {
     constructor(props) {
@@ -21,6 +22,20 @@ class GeocodingTable extends Component {
     handleActionsClick = selectedRowId => {
         this.setState({ selectedRowAction: selectedRowId });
     };
+
+    componentDidMount() {
+        console.log("Geocoding Table componentDidMount()");
+        if(this.props.geocodeShouldRun) {
+            this.props.loadGeocoding();
+        }
+    }
+
+    componentDidUpdate() {
+        console.log("Geocoding Table componentDidUpdate()");
+        if(this.props.geocodeShouldRun) {
+            this.props.loadGeocoding();
+        }
+    }
 
     expandComponent(row) {
         return (
@@ -52,8 +67,12 @@ class GeocodingTable extends Component {
         else return false;
     }
 
-
     render() {
+        console.log("Geocoding Table render()");
+        if (this.props.geocodingPending || this.props.geocodeShouldRun) {
+            return <Loading/>
+        }
+
         let expandRow = {
             onlyOneExpanding: true,
             renderer: row => (
@@ -125,25 +144,22 @@ class GeocodingTable extends Component {
 
         return (
             <div className="activity-table">
-                {this.props.geocodingPending
-                    ? <Loading/>
-                    : <BootstrapTable
-                        keyField="activity_id"
-                        scrollY
-                        data={this.props.activities}
-                        maxHeight="200px"
-                        columns={columns}
-                        classes="table-striped"
-                        expandRow={expandRow}
-                        expandableRow={ this.isExpandableRow }
-                        expandComponent={ this.expandComponent }
-                        pagination={paginationFactory(options)}
-                        expandColumnOptions={{
-                            expandColumnVisible: true,
-                            expandColumnComponent: this.expandColumnComponent,
-                            columnWidth: '200px'
-                        }}/>
-                }
+                <BootstrapTable
+                    keyField="activity_id"
+                    scrollY
+                    data={this.props.activities}
+                    maxHeight="200px"
+                    columns={columns}
+                    classes="table-striped"
+                    expandRow={expandRow}
+                    expandableRow={ this.isExpandableRow }
+                    expandComponent={ this.expandComponent }
+                    pagination={paginationFactory(options)}
+                    expandColumnOptions={{
+                        expandColumnVisible: true,
+                        expandColumnComponent: this.expandColumnComponent,
+                        columnWidth: '200px'
+                    }}/>
             </div>
         );
     }
@@ -153,9 +169,12 @@ const mapStateToProps = state => {
     return {
         geocodingPending: state.geocodingReducer.pending,
         activities: state.geocodingReducer.activities,
+        geocodeShouldRun: state.geocodingReducer.geocodeShouldRun,
     };
 };
 
-const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({
+    loadGeocoding: loadGeocoding,
+}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(GeocodingTable);

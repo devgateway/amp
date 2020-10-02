@@ -31,9 +31,15 @@ export function fetchGeocodingPending() {
 }
 
 export function fetchGeocodingSuccess(geocoding) {
+    function geocodeShouldRun(data) {
+        return data.activities && data.activities.filter(act => act.status == 'RUNNING').length > 0;
+    }
+
     return {
         type: FETCH_GEOCODING_SUCCESS,
         payload: geocoding,
+        pending: false,
+        geocodeShouldRun: geocodeShouldRun(geocoding.data),
         status: 'IN_PROGRESS'
     }
 }
@@ -150,6 +156,7 @@ export function runSearchSuccess(geocoding) {
     return {
         type: GEOCODING_RUN_SEARCH_SUCCESS,
         payload: geocoding,
+        pending: false,
         status: 'IN_PROGRESS'
     }
 }

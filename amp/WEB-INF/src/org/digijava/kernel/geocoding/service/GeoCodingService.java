@@ -141,7 +141,7 @@ public class GeoCodingService {
      */
     private void syncGeoCodedActivities(GeoCodingProcess geoCodingProcess) {
         for (GeoCodedActivity activity : geoCodingProcess.getActivities()) {
-            if (activity.getStatus() == GeoCodedActivity.Status.RUNNING) {
+            if (activity != null && activity.getStatus() == GeoCodedActivity.Status.RUNNING) {
                 syncGeoCodedActivity(activity);
             }
         }
@@ -170,8 +170,12 @@ public class GeoCodingService {
             }
         } catch (GeoCoderClient.GeoCodingNotProcessedException e) {
             // ok, do nothing
+            activity.setStatus(GeoCodedActivity.Status.RUNNING);
         } catch (GeoCoderClient.GeoCodingNotFoundException e) {
             logger.error("Geo coding not found", e);
+            activity.setStatus(GeoCodedActivity.Status.ERROR);
+        } catch (GeoCoderClient.GeoCodingErrorException e) {
+            logger.error("Error occurred during the geo coding", e);
             activity.setStatus(GeoCodedActivity.Status.ERROR);
         }
     }

@@ -105,8 +105,12 @@ public class GeoCoderClient {
                     .accept(MediaType.APPLICATION_JSON_TYPE)
                     .get(new GenericType<GeoCodingOperation>() { });
 
-            if (!operation.state.equals("PROCESSED")) {
+            if (operation.state.equals("PENDING")) {
                 throw new GeoCodingNotProcessedException();
+            }
+
+            if (operation.state.equals("ERROR") || !operation.state.equals("PROCESSED")) {
+                throw new GeoCodingErrorException();
             }
 
             return operation.extractData;
@@ -129,6 +133,12 @@ public class GeoCoderClient {
      * Geo coding is available but not yet ready.
      */
     public static class GeoCodingNotProcessedException extends RuntimeException {
+    }
+
+    /**
+     * An error occured during the geo coding.
+     */
+    public static class GeoCodingErrorException extends RuntimeException {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)

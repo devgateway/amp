@@ -52,6 +52,6 @@ public class ActivityErrors {
     public static final String INVALID_MODIFY_BY_FIELD = "Invalid team member in modified_by field.";
     
     public static final ApiErrorMessage BULK_TO_BIG =
-            new ApiErrorMessage(ERROR_CLASS_ACTIVITY_ID, 10, "Too many activities found in the request");
+            new ApiErrorMessage(ERROR_CLASS_ACTIVITY_ID, 11, "Too many activities found in the request");
     
 }

@@ -5,6 +5,7 @@ import './App.css';
 
 const SSCDashboardApp = lazy(() => import('./modules/sscdashboard'));
 const AMPOfflineDownloadApp = lazy(() => import('./modules/ampoffline/Download'));
+const AdminNDDApp = lazy(() => import('./modules/admin/ndd'));
 
 class AppRoute extends Component {
     render() {
@@ -13,9 +14,9 @@ class AppRoute extends Component {
                 <Suspense fallback={<div>Loading...</div>}>
                     <Route path="/ssc" component={SSCDashboardApp}/>
                     <Route path="/ampofflinedownload" component={AMPOfflineDownloadApp}/>
+                    <Route path="/ndd" component={AdminNDDApp}/>
                 </Suspense>
             </Router>
-
         );
     }
 }

@@ -277,6 +277,15 @@ public class ColumnConstants {
     public static final String PRIMARY_PROGRAM_LEVEL_6 = "Primary Program Level 6";
     public static final String PRIMARY_PROGRAM_LEVEL_7 = "Primary Program Level 7";
     public static final String PRIMARY_PROGRAM_LEVEL_8 = "Primary Program Level 8";
+    public static final String INDIRECT_PRIMARY_PROGRAM_LEVEL_0 = "Indirect Primary Program Level 0";
+    public static final String INDIRECT_PRIMARY_PROGRAM_LEVEL_1 = "Indirect Primary Program Level 1";
+    public static final String INDIRECT_PRIMARY_PROGRAM_LEVEL_2 = "Indirect Primary Program Level 2";
+    public static final String INDIRECT_PRIMARY_PROGRAM_LEVEL_3 = "Indirect Primary Program Level 3";
+    public static final String INDIRECT_PRIMARY_PROGRAM_LEVEL_4 = "Indirect Primary Program Level 4";
+    public static final String INDIRECT_PRIMARY_PROGRAM_LEVEL_5 = "Indirect Primary Program Level 5";
+    public static final String INDIRECT_PRIMARY_PROGRAM_LEVEL_6 = "Indirect Primary Program Level 6";
+    public static final String INDIRECT_PRIMARY_PROGRAM_LEVEL_7 = "Indirect Primary Program Level 7";
+    public static final String INDIRECT_PRIMARY_PROGRAM_LEVEL_8 = "Indirect Primary Program Level 8";
     public static final String PRIMARY_SECTOR = "Primary Sector";
     public static final String PRIMARY_SECTOR_CODE_OFFICIAL = "Primary Sector Code Official";
     public static final String PRIMARY_SECTOR_SUB_SECTOR = "Primary Sector Sub-Sector";

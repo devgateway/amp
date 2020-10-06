@@ -2,6 +2,8 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.digijava.kernel.ampapi.endpoints.common.values.providers.ThemePossibleValuesProvider;
 import org.digijava.kernel.validators.common.RequiredValidator;
@@ -27,10 +29,28 @@ public class AmpActivityProgram implements Versionable, Serializable, Cloneable 
         @Interchangeable(fieldTitle = "Program", importable = true, pickIdOnly = true, uniqueConstraint = true,
                 interValidators = @InterchangeableValidator(RequiredValidator.class))
         private AmpTheme program;
+
+    @Interchangeable(fieldTitle = "Indirect Programs")
+    private Set<AmpActivityIndirectProgram> indirectPrograms = new HashSet<>();
+
         @InterchangeableBackReference
         private AmpActivityVersion activity;
         private AmpActivityProgramSettings programSetting;
-        public Long getAmpActivityProgramId() {
+
+    public Set<AmpActivityIndirectProgram> getIndirectPrograms() {
+        return indirectPrograms;
+    }
+
+    public void setIndirectPrograms(Set<AmpActivityIndirectProgram> indirectPrograms) {
+        this.indirectPrograms = indirectPrograms;
+    }
+
+    public void addIndirectProgram(AmpActivityIndirectProgram indirectProgram) {
+        indirectProgram.setActivityProgram(this);
+        indirectPrograms.add(indirectProgram);
+    }
+
+    public Long getAmpActivityProgramId() {
                 return ampActivityProgramId;
         }
 
@@ -111,6 +131,14 @@ public class AmpActivityProgram implements Versionable, Serializable, Cloneable 
     public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
         AmpActivityProgram aux = (AmpActivityProgram) clone();
         aux.activity = newActivity;
+
+        aux.setIndirectPrograms(new HashSet<>());
+        for (AmpActivityIndirectProgram indirectProgram : indirectPrograms) {
+            AmpActivityIndirectProgram clonedIp = (AmpActivityIndirectProgram) indirectProgram.clone();
+            clonedIp.setId(null);
+            aux.addIndirectProgram(clonedIp);
+        }
+
         aux.ampActivityProgramId = null;
         
         return aux;

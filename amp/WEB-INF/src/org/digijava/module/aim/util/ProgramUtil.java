@@ -162,8 +162,8 @@ public class ProgramUtil {
             try {
                 session = PersistenceManager.getRequestDBSession();
                 String themeNameHql = AmpTheme.hqlStringForName("theme");
-                String qryStr = "select theme from " + AmpTheme.class.getName() + " theme " +
-                        ((id != null) ? " where (ampThemeId=:id)" : " where (" + themeNameHql + "=:name)");
+                String qryStr = "select theme from " + AmpTheme.class.getName() + " theme "
+                        + ((id != null) ? " where (ampThemeId=:id)" : " where (" + themeNameHql + "=:name)");
                 Query qry = session.createQuery(qryStr);
                 if (id != null) {
                     qry.setParameter("id", id);

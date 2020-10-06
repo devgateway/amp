@@ -1,0 +1,42 @@
+package org.digijava.kernel.ampapi.endpoints.ndd;
+
+import java.util.List;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
+import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
+import org.digijava.module.aim.dbentity.AmpIndirectTheme;
+
+/**
+ * @author Octavian Ciubotaru
+ */
+@Path("ndd")
+@Api("ndd")
+public class NDDEndpoints {
+
+    private final NDDService nddService = new NDDService();
+
+    @GET
+    @Path("mapping-config")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "getMappingConfiguration")
+    @ApiOperation("Returns configuration for mapping indirect programs.")
+    public MappingConfiguration getMappingConfiguration() {
+        return nddService.getMappingConfiguration();
+    }
+
+    @POST
+    @Path("mapping")
+    @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "updateMapping")
+    @ApiOperation("Update indirect program mapping.")
+    public void updateMapping(List<AmpIndirectTheme> mapping) {
+        nddService.updateMapping(mapping);
+    }
+}

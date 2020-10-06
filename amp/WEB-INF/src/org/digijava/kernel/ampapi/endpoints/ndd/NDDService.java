@@ -109,7 +109,7 @@ public class NDDService {
         if (indirectProgram == null) {
             throw new RuntimeException(GlobalSettingsConstants.INDIRECT_PROGRAM + " is not configured.");
         }
-        return ProgramUtil.getTheme(indirectProgram);
+        return ProgramUtil.getTheme(Long.valueOf(indirectProgram));
     }
 
     /**

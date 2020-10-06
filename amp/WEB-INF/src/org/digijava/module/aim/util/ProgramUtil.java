@@ -147,17 +147,29 @@ public class ProgramUtil {
             return theme;
         }
 
+        public static AmpTheme getTheme(String name) {
+            return getTheme(name, null);
+        }
 
-        public static AmpTheme getTheme(String id) {
+        public static AmpTheme getTheme(Long id) {
+            return getTheme(null, id);
+        }
+
+        public static AmpTheme getTheme(String name, Long id) {
             Session session = null;
             AmpTheme theme = null;
 
             try {
                 session = PersistenceManager.getRequestDBSession();
-                String qryStr = "select theme from " + AmpTheme.class.getName()
-                        + " theme where (ampThemeId=:id)";
+                String themeNameHql = AmpTheme.hqlStringForName("theme");
+                String qryStr = "select theme from " + AmpTheme.class.getName() + " theme " +
+                        ((id != null) ? " where (ampThemeId=:id)" : " where (" + themeNameHql + "=:name)");
                 Query qry = session.createQuery(qryStr);
-                qry.setParameter("id", Long.valueOf(id));
+                if (id != null) {
+                    qry.setParameter("id", id);
+                } else {
+                    qry.setParameter("name", name, StringType.INSTANCE);
+                }
                 Iterator itr = qry.list().iterator();
                 if (itr.hasNext()) {
                     theme = (AmpTheme) itr.next();
@@ -165,7 +177,7 @@ public class ProgramUtil {
             } catch (Exception e) {
                 logger.error("Exception from getTheme()");
                 logger.error(e.getMessage());
-            } 
+            }
             return theme;
         }
 

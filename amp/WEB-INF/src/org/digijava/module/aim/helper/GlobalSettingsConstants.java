@@ -210,6 +210,9 @@ public class GlobalSettingsConstants {
 
     public static final String WS_PREFIX_SSC = "Workspace prefix for SSC Workspaces";
 
+
+    public static final String INDIRECT_PROGRAM = "Indirect program";
+    
     // TODO will be removed once the new activity preview is finished
     public static final String USE_NEW_ACTIVITY_PREVIEW = "Use new activity preview";
 

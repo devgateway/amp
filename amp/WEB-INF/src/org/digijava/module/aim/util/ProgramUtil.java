@@ -1438,6 +1438,7 @@ public class ProgramUtil {
                                     + "where ap.name=:name";
                     Query qry = session.createQuery(queryString);
                     qry.setString("name", name);
+                    qry.setCacheable(true);
                     programSettings=(AmpActivityProgramSettings)qry.uniqueResult();
 
 

@@ -8,10 +8,10 @@ export function fetchNDDPending() {
     }
 }
 
-export function fetchNDDSuccess(releases) {
+export function fetchNDDSuccess(ndd) {
     return {
         type: FETCH_NDD_SUCCESS,
-        payload: releases
+        payload: ndd
     }
 }
 export function fetchNDDError(error) {

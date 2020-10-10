@@ -41,6 +41,19 @@ class ProgramSelectGroup extends Component {
                     });
                 }
                 break;
+            case SECOND_LEVEL:
+                if (this.state[STATE_LEVEL_FIELD + FIRST_LEVEL].id) {
+                    options = ndd[SRC_PROGRAM][CHILDREN]
+                        .find(i => i.id === this.state[STATE_LEVEL_FIELD + FIRST_LEVEL].id)[CHILDREN];
+                }
+                break;
+            case THIRD_LEVEL:
+                if (this.state[STATE_LEVEL_FIELD + SECOND_LEVEL].id) {
+                    options = ndd[SRC_PROGRAM][CHILDREN]
+                        .find(i => i.id === this.state[STATE_LEVEL_FIELD + FIRST_LEVEL].id)[CHILDREN]
+                        .find(i => i.id === this.state[STATE_LEVEL_FIELD + SECOND_LEVEL].id)[CHILDREN];
+                }
+                break;
         }
         return options;
     }

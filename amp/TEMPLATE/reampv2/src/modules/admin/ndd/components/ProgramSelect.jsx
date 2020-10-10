@@ -3,11 +3,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {Typeahead} from 'react-bootstrap-typeahead';
 import PropTypes from 'prop-types';
-import {getNDD, getNDDError, getNDDPending} from '../reducers/startupReducer';
-import fetchNDD from '../actions/fetchNDD';
 import {TranslationContext} from './Startup';
-import {CHILDREN, SRC_PROGRAM, VALUE} from '../constants/Constants'
-import * as Constants from "../constants/Constants";
 import '../../../../../node_modules/react-bootstrap-typeahead/css/Typeahead.min.css';
 import './css/style.css';
 
@@ -15,26 +11,26 @@ class ProgramSelect extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: undefined
+            value: undefined,
+            id: undefined
         };
         this.drawSelector = this.drawSelector.bind(this);
     }
 
     onChangeSelect(selected) {
-        const {onChange} = this.props;
+        const {onChange, level} = this.props;
         if (selected && selected[0]) {
             const value = selected[0].value;
             const id = selected[0].id;
-            this.setState({value: value});
-            onChange(id, value);
+            this.setState({value: value, id: id});
+            onChange(id, value, level);
         } else {
-            this.setState({value: undefined});
-            onChange(null, null);
+            this.setState({value: undefined, id: undefined});
+            onChange(null, null, level);
         }
     }
 
     drawSelector() {
-        const {translations} = this.context;
         const {options, placeholder} = this.props;
         const {value} = this.state;
         if (options) {
@@ -57,13 +53,11 @@ class ProgramSelect extends Component {
     render() {
         const {label, options} = this.props;
         if (options.length === 0) {
-            return <div>loading...</div>
+            return <div>No Data</div>
         } else {
-            return (<div>
-                <h4>{label}</h4>
-                <div style={{width: '50%'}}>
-                    {this.drawSelector()}
-                </div>
+            return (<div style={{width: '50%'}}>
+                <span>{label}</span>
+                {this.drawSelector()}
             </div>);
         }
     }
@@ -76,7 +70,8 @@ ProgramSelect.propTypes = {
     label: PropTypes.string.isRequired,
     placeholder: PropTypes.string.isRequired,
     selected: PropTypes.array,
-    onChange: PropTypes.func.isRequired
+    onChange: PropTypes.func.isRequired,
+    level: PropTypes.number.isRequired
 }
 
 const mapStateToProps = state => ({

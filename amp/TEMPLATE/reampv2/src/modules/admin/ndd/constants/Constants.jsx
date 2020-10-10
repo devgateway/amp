@@ -4,3 +4,7 @@ export const SRC_PROGRAM = 'src-program';
 export const DST_PROGRAM = 'dst-program';
 export const VALUE = 'value';
 export const CHILDREN = 'children';
+export const FIRST_LEVEL = 2;
+export const SECOND_LEVEL = 3;
+export const THIRD_LEVEL = 4;
+export const STATE_LEVEL_FIELD = 'srcLvl';

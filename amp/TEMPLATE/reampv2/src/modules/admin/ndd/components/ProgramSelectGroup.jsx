@@ -1,11 +1,9 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {Typeahead} from 'react-bootstrap-typeahead';
-import {getNDD, getNDDError, getNDDPending} from '../reducers/startupReducer';
-import fetchNDD from '../actions/fetchNDD';
+import PropTypes from 'prop-types';
 import {TranslationContext} from './Startup';
-import {CHILDREN, SRC_PROGRAM, VALUE} from '../constants/Constants'
+import {CHILDREN, SRC_PROGRAM, FIRST_LEVEL, SECOND_LEVEL, THIRD_LEVEL, STATE_LEVEL_FIELD} from '../constants/Constants'
 import * as Constants from "../constants/Constants";
 import '../../../../../node_modules/react-bootstrap-typeahead/css/Typeahead.min.css';
 import './css/style.css';
@@ -15,61 +13,70 @@ class ProgramSelectGroup extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            src2Lvl: undefined,
-            src3Lvl: undefined,
-            src4Lvl: undefined
+            id: undefined,
+            [STATE_LEVEL_FIELD + FIRST_LEVEL]: {id: undefined, value: undefined},
+            [STATE_LEVEL_FIELD + SECOND_LEVEL]: {id: undefined, value: undefined},
+            [STATE_LEVEL_FIELD + THIRD_LEVEL]: {id: undefined, value: undefined}
         };
-        this.shouldComponentRender = this.shouldComponentRender.bind(this);
+        this.onSelectChange = this.onSelectChange.bind(this);
+        this.getOptionsForLevel = this.getOptionsForLevel.bind(this);
+        this.getSelectedForLevel = this.getSelectedForLevel.bind(this);
     }
 
-    componentDidMount() {
-        const {fetchNDD} = this.props;
-        fetchNDD();
+    // TODO: I can have one function with lvl or 3 functions without lvl param.
+    onSelectChange(id, value, lvl) {
+        console.error(id + value + lvl);
+        this.setState({[STATE_LEVEL_FIELD + lvl]: {id: id, value: value}});
     }
 
-    shouldComponentRender() {
-        return !this.props.pending;
+    // TODO: same comment.
+    getOptionsForLevel(level) {
+        const {ndd} = this.props;
+        let options = [];
+        switch (level) {
+            case FIRST_LEVEL:
+                if (ndd && ndd[SRC_PROGRAM]) {
+                    options = ndd[SRC_PROGRAM][CHILDREN].map(i => {
+                        return {id: i.id, value: i.value}
+                    });
+                }
+                break;
+        }
+        return options;
     }
 
-    onSelectChange(id, value) {
-        console.error(id + value);
+    getSelectedForLevel(level) {
+        return [];
     }
 
     render() {
-        const {ndd} = this.props;
         const {translations} = this.context;
-        if (!this.shouldComponentRender() || ndd.length === 0) {
-            return <div>loading...</div>
-        } else {
-            const label = translations[Constants.TRN_PREFIX + 'src-program-lvl-2'] + ': ' + ndd[SRC_PROGRAM][VALUE];
-            let options = [];
-            if (ndd && ndd[SRC_PROGRAM]) {
-                options = ndd[SRC_PROGRAM][CHILDREN].map(i => {
-                    return {id: i.id, value: i.value}
-                });
-            }
-            /*const selected = src2Lvl ? [{
-                value: src2Lvl
-            }] : [];*/
-            return (<div>
-                <h4>{translations[Constants.TRN_PREFIX + 'src-program-lvl-1']}: {ndd[SRC_PROGRAM][VALUE]}</h4>
-                <div style={{width: '50%'}}>
-                    <ProgramSelect placeholder={translations[Constants.TRN_PREFIX + 'choose-src-lvl-2']}
-                                   label={translations[Constants.TRN_PREFIX + 'src-program-lvl-2']} options={options}
-                                   selected={[]} onChange={this.onSelectChange}/>
-                </div>
-            </div>);
-        }
+        return (<div>
+            <div style={{width: '50%'}}>
+                <ProgramSelect placeholder={translations[Constants.TRN_PREFIX + 'choose-src-lvl-' + FIRST_LEVEL]}
+                               label={translations[Constants.TRN_PREFIX + 'src-program-lvl-' + FIRST_LEVEL]}
+                               options={this.getOptionsForLevel(FIRST_LEVEL)}
+                               selected={[]} onChange={this.onSelectChange} level={FIRST_LEVEL}/>
+                <ProgramSelect placeholder={translations[Constants.TRN_PREFIX + 'choose-src-lvl-' + SECOND_LEVEL]}
+                               label={translations[Constants.TRN_PREFIX + 'src-program-lvl-' + SECOND_LEVEL]}
+                               options={this.getOptionsForLevel(SECOND_LEVEL)}
+                               selected={this.getSelectedForLevel(SECOND_LEVEL)} onChange={this.onSelectChange}
+                               level={SECOND_LEVEL}/>
+                <ProgramSelect placeholder={translations[Constants.TRN_PREFIX + 'choose-src-lvl-' + THIRD_LEVEL]}
+                               label={translations[Constants.TRN_PREFIX + 'src-program-lvl-' + THIRD_LEVEL]}
+                               options={this.getOptionsForLevel(THIRD_LEVEL)}
+                               selected={this.getSelectedForLevel(THIRD_LEVEL)} onChange={this.onSelectChange}
+                               level={THIRD_LEVEL}/>
+            </div>
+        </div>);
     }
 }
 
-ProgramSelectGroup.contextType = TranslationContext;
+ProgramSelectGroup.propTypes = {
+    ndd: PropTypes.object.isRequired
+}
 
-const mapStateToProps = state => ({
-    error: getNDDError(state.startupReducer),
-    ndd: getNDD(state.startupReducer),
-    pending: getNDDPending(state.startupReducer),
-    translations: state.translationsReducer.translations
-});
-const mapDispatchToProps = dispatch => bindActionCreators({fetchNDD: fetchNDD}, dispatch)
+ProgramSelectGroup.contextType = TranslationContext;
+const mapStateToProps = state => ({});
+const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch)
 export default connect(mapStateToProps, mapDispatchToProps)(ProgramSelectGroup);

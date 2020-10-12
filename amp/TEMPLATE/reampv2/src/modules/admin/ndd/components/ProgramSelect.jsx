@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {Typeahead} from 'react-bootstrap-typeahead';
 import PropTypes from 'prop-types';
-import {TranslationContext} from './Startup';
+import {NDDContext} from './Startup';
 import '../../../../../node_modules/react-bootstrap-typeahead/css/Typeahead.min.css';
 import './css/style.css';
 
@@ -20,7 +20,6 @@ class ProgramSelect extends Component {
 
     drawSelector() {
         const {options, placeholder, selected} = this.props;
-        debugger
         return (<Typeahead
             id="basic-typeahead-single"
             labelKey="value"
@@ -45,7 +44,7 @@ class ProgramSelect extends Component {
     }
 }
 
-ProgramSelect.contextType = TranslationContext;
+ProgramSelect.contextType = NDDContext;
 
 ProgramSelect.propTypes = {
     options: PropTypes.array.isRequired,

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import PropTypes from 'prop-types';
-import {TranslationContext} from './Startup';
+import {NDDContext} from './Startup';
 import {CHILDREN, SRC_PROGRAM, FIRST_LEVEL, SECOND_LEVEL, THIRD_LEVEL, STATE_LEVEL_FIELD} from '../constants/Constants'
 import * as Constants from "../constants/Constants";
 import '../../../../../node_modules/react-bootstrap-typeahead/css/Typeahead.min.css';
@@ -60,7 +60,7 @@ class ProgramSelectGroup extends Component {
     }
 
     getOptionsForLevel(level) {
-        const {ndd} = this.props;
+        const {ndd} = this.context;
         let options = [];
         switch (level) {
             case FIRST_LEVEL:
@@ -158,7 +158,7 @@ ProgramSelectGroup.propTypes = {
     ndd: PropTypes.object.isRequired
 }
 
-ProgramSelectGroup.contextType = TranslationContext;
+ProgramSelectGroup.contextType = NDDContext;
 const mapStateToProps = state => ({});
 const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch)
 export default connect(mapStateToProps, mapDispatchToProps)(ProgramSelectGroup);

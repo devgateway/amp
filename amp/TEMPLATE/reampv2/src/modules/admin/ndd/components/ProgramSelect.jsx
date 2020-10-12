@@ -10,44 +10,26 @@ import './css/style.css';
 class ProgramSelect extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            value: undefined,
-            id: undefined
-        };
         this.drawSelector = this.drawSelector.bind(this);
     }
 
     onChangeSelect(selected) {
         const {onChange, level} = this.props;
-        if (selected && selected[0]) {
-            const value = selected[0].value;
-            const id = selected[0].id;
-            this.setState({value: value, id: id});
-            onChange(id, value, level);
-        } else {
-            this.setState({value: undefined, id: undefined});
-            onChange(null, null, level);
-        }
+        onChange(selected, level);
     }
 
     drawSelector() {
-        const {options, placeholder} = this.props;
-        const {value} = this.state;
-        if (options) {
-            const selected = value ? [{
-                value: value
-            }] : [];
-            return (<Typeahead
-                id="basic-typeahead-single"
-                labelKey="value"
-                options={options}
-                clearButton
-                highlightOnlyResult
-                onChange={this.onChangeSelect.bind(this)}
-                selected={selected}
-                placeholder={placeholder}/>);
-        }
-        return null;
+        const {options, placeholder, selected} = this.props;
+        debugger
+        return (<Typeahead
+            id="basic-typeahead-single"
+            labelKey="value"
+            options={options}
+            clearButton
+            highlightOnlyResult
+            onChange={this.onChangeSelect.bind(this)}
+            selected={selected}
+            placeholder={placeholder}/>);
     }
 
     render() {

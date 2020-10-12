@@ -112,6 +112,15 @@ class ProgramSelectGroup extends Component {
                         id: this.state[STATE_LEVEL_FIELD + THIRD_LEVEL].id,
                         value: this.state[STATE_LEVEL_FIELD + THIRD_LEVEL].value
                     });
+                } else {
+                    // Auto-select when there is only 1 option available.
+                    const options = this.getOptionsForLevel(THIRD_LEVEL);
+                    if (options && options.length === 1) {
+                        selected.push({
+                            id: options[0].id,
+                            value: options[0].value
+                        });
+                    }
                 }
                 break;
         }
@@ -121,7 +130,7 @@ class ProgramSelectGroup extends Component {
     render() {
         const {translations} = this.context;
         return (<div>
-            <div style={{width: '50%'}}>
+            <div style={{width: '75%'}}>
                 <ProgramSelect placeholder={translations[Constants.TRN_PREFIX + 'choose-src-lvl-' + FIRST_LEVEL]}
                                label={translations[Constants.TRN_PREFIX + 'src-program-lvl-' + FIRST_LEVEL]}
                                options={this.getOptionsForLevel(FIRST_LEVEL)}

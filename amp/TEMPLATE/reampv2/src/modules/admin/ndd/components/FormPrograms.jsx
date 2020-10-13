@@ -8,6 +8,7 @@ import {NDDContext} from './Startup';
 import './css/style.css';
 import ProgramSelectGroupList from "./ProgramSelectGroupList";
 import Header from "./Header";
+import {DST_PROGRAM, PROGRAM_MAPPING, SRC_PROGRAM} from "../constants/Constants";
 
 class FormPrograms extends Component {
     constructor(props) {
@@ -18,11 +19,27 @@ class FormPrograms extends Component {
         this.onRowChange = this.onRowChange.bind(this);
     }
 
+    componentDidMount() {
+        const {ndd} = this.context;
+        const {data} = this.state;
+        // Load saved mapping.
+        if (ndd[PROGRAM_MAPPING]) {
+            ndd[PROGRAM_MAPPING].forEach(pm => {
+                const pair = {};
+                pair[SRC_PROGRAM] = pm[SRC_PROGRAM];
+                pair[DST_PROGRAM] = pm[DST_PROGRAM];
+                pair.id = pair[SRC_PROGRAM] + '' + pair[DST_PROGRAM];
+                data.push(pair);
+            });
+        }
+        this.setState(data);
+    }
+
     addRow() {
         const {data} = this.state;
         const pair = {
-            src: undefined,
-            dst: undefined,
+            [SRC_PROGRAM]: undefined,
+            [DST_PROGRAM]: undefined,
             id: Math.random() * -1
         };
         data.push(pair);

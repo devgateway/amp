@@ -14,9 +14,8 @@ class ProgramSelectGroupList extends Component {
 
     render() {
         const {list, translations} = this.props;
-        console.error(list);
+        // console.error(list);
         return (<div>
-            <span>{Math.random()}</span>
             <table className="table table-striped">
                 <thead>
                 <tr>
@@ -38,7 +37,7 @@ class ProgramSelectGroupList extends Component {
                 </thead>
                 <tbody>
                 {list.map(pair =>
-                    <ProgramSelectGroupRow rowData={pair}/>
+                    <ProgramSelectGroupRow rowData={pair} key={Math.random()}/>
                 )}
                 </tbody>
             </table>

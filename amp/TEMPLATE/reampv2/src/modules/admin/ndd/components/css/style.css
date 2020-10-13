@@ -38,3 +38,11 @@
 .clickable {
     cursor: pointer;
 }
+
+.success-color {
+    color: #5CB85C;
+}
+
+.error-color {
+    color: #ff0000;
+}

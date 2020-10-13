@@ -46,8 +46,8 @@ class FormPrograms extends Component {
         this.setState({data: data});
     }
 
-    onRowChange() {
-
+    onRowChange(id, value, level3) {
+        console.error(level3);
     }
 
     saveAll() {

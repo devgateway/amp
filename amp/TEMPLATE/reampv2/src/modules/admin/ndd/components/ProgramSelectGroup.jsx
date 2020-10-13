@@ -32,18 +32,19 @@ class ProgramSelectGroup extends Component {
                 [STATE_LEVEL_FIELD + SECOND_LEVEL]: populated.lvl2,
                 [STATE_LEVEL_FIELD + THIRD_LEVEL]: populated.lvl3
             }
-            debugger
             this.setState(newState);
         }
     }
 
     onSelectChange(selected, lvl) {
+        const {onChange} = this.props;
         let id = null;
         let value = null;
         if (selected && selected[0] && selected[0].id) {
             id = selected[0].id;
             value = selected[0].value;
         }
+        let level3;
         console.error(id + value + lvl);
         switch (lvl) {
             case FIRST_LEVEL:
@@ -66,11 +67,13 @@ class ProgramSelectGroup extends Component {
             case THIRD_LEVEL:
                 if (id && value) {
                     this.setState({[STATE_LEVEL_FIELD + THIRD_LEVEL]: {id: id, value: value}});
+                    level3 = {id, value}
                 } else {
                     this.setState({[STATE_LEVEL_FIELD + THIRD_LEVEL]: undefined});
                 }
                 break;
         }
+        onChange(id, value, level3);
     }
 
     getOptionsForLevel(level) {
@@ -115,8 +118,6 @@ class ProgramSelectGroup extends Component {
                     lvl2.value = l2.value;
                     lvl1.id = l1.id;
                     lvl1.value = l1.value;
-                } else {
-                    console.error('missing id: ' + id);
                 }
             });
         });
@@ -196,7 +197,8 @@ class ProgramSelectGroup extends Component {
 
 ProgramSelectGroup.propTypes = {
     type: PropTypes.string.isRequired,
-    data: PropTypes.object.isRequired
+    data: PropTypes.object.isRequired,
+    onChange: PropTypes.func.isRequired
 }
 
 ProgramSelectGroup.contextType = NDDContext;

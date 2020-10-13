@@ -36,7 +36,7 @@ class ProgramSelect extends Component {
         if (options.length === 0) {
             return null
         } else {
-            return (<div style={{width: '50%'}}>
+            return (<div>
                 <span>{label}</span>
                 {this.drawSelector()}
             </div>);

@@ -13,7 +13,7 @@ import ProgramSelectGroupRow from './ProgramSelectGroupRow.jsx'
 class ProgramSelectGroupList extends Component {
 
     render() {
-        const {list, translations} = this.props;
+        const {list, translations, onChange} = this.props;
         // console.error(list);
         return (<div>
             <table className="table table-striped">
@@ -37,7 +37,7 @@ class ProgramSelectGroupList extends Component {
                 </thead>
                 <tbody>
                 {list.map(pair =>
-                    <ProgramSelectGroupRow rowData={pair} key={Math.random()}/>
+                    <ProgramSelectGroupRow rowData={pair} key={Math.random()} onChange={onChange}/>
                 )}
                 </tbody>
             </table>

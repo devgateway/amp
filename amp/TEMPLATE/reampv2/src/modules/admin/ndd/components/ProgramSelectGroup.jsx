@@ -13,7 +13,6 @@ class ProgramSelectGroup extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            id: undefined, // todo: remove?
             [STATE_LEVEL_FIELD + FIRST_LEVEL]: undefined,
             [STATE_LEVEL_FIELD + SECOND_LEVEL]: undefined,
             [STATE_LEVEL_FIELD + THIRD_LEVEL]: undefined
@@ -26,54 +25,63 @@ class ProgramSelectGroup extends Component {
     componentDidMount() {
         const {data, type} = this.props;
         if (data && data[type + PROGRAM]) {
-            const populated = this.findProgramInTree(data[type + PROGRAM]);
             const newState = {
-                [STATE_LEVEL_FIELD + FIRST_LEVEL]: populated.lvl1,
-                [STATE_LEVEL_FIELD + SECOND_LEVEL]: populated.lvl2,
-                [STATE_LEVEL_FIELD + THIRD_LEVEL]: populated.lvl3
+                id: data.id,
+                [STATE_LEVEL_FIELD + FIRST_LEVEL]: data[type + PROGRAM].lvl1,
+                [STATE_LEVEL_FIELD + SECOND_LEVEL]: data[type + PROGRAM].lvl2,
+                [STATE_LEVEL_FIELD + THIRD_LEVEL]: data[type + PROGRAM].lvl3
             }
             this.setState(newState);
         }
     }
 
     onSelectChange(selected, lvl) {
-        const {onChange} = this.props;
+        const {onChange, type, data} = this.props;
         let id = null;
         let value = null;
         if (selected && selected[0] && selected[0].id) {
             id = selected[0].id;
             value = selected[0].value;
         }
-        let level3;
-        console.error(id + value + lvl);
+        let level1 = this.state[STATE_LEVEL_FIELD + FIRST_LEVEL];
+        let level2 = this.state[STATE_LEVEL_FIELD + SECOND_LEVEL];
+        let level3 = this.state[STATE_LEVEL_FIELD + THIRD_LEVEL];
         switch (lvl) {
             case FIRST_LEVEL:
                 if (id && value) {
-                    this.setState({[STATE_LEVEL_FIELD + FIRST_LEVEL]: {id: id, value: value}});
+                    level1 = {id: id, value: value};
+                    this.setState({[STATE_LEVEL_FIELD + FIRST_LEVEL]: level1});
                 } else {
-                    this.setState({[STATE_LEVEL_FIELD + FIRST_LEVEL]: undefined});
+                    level1 = undefined;
+                    this.setState({[STATE_LEVEL_FIELD + FIRST_LEVEL]: level1});
                 }
-                this.setState({[STATE_LEVEL_FIELD + SECOND_LEVEL]: undefined});
-                this.setState({[STATE_LEVEL_FIELD + THIRD_LEVEL]: undefined});
+                level2 = undefined;
+                level3 = undefined;
+                this.setState({[STATE_LEVEL_FIELD + SECOND_LEVEL]: level2});
+                this.setState({[STATE_LEVEL_FIELD + THIRD_LEVEL]: level3});
                 break;
             case SECOND_LEVEL:
                 if (id && value) {
-                    this.setState({[STATE_LEVEL_FIELD + SECOND_LEVEL]: {id: id, value: value}});
+                    level2 = {id: id, value: value};
+                    this.setState({[STATE_LEVEL_FIELD + SECOND_LEVEL]: level2});
                 } else {
-                    this.setState({[STATE_LEVEL_FIELD + SECOND_LEVEL]: undefined});
+                    level2 = undefined;
+                    this.setState({[STATE_LEVEL_FIELD + SECOND_LEVEL]: level2});
                 }
-                this.setState({[STATE_LEVEL_FIELD + THIRD_LEVEL]: undefined});
+                level3 = undefined;
+                this.setState({[STATE_LEVEL_FIELD + THIRD_LEVEL]: level3});
                 break;
             case THIRD_LEVEL:
                 if (id && value) {
-                    this.setState({[STATE_LEVEL_FIELD + THIRD_LEVEL]: {id: id, value: value}});
                     level3 = {id, value}
+                    this.setState({[STATE_LEVEL_FIELD + THIRD_LEVEL]: level3});
                 } else {
-                    this.setState({[STATE_LEVEL_FIELD + THIRD_LEVEL]: undefined});
+                    level3 = undefined;
+                    this.setState({[STATE_LEVEL_FIELD + THIRD_LEVEL]: level3});
                 }
                 break;
         }
-        onChange(id, value, level3);
+        onChange(level1, level2, level3, type, data.id);
     }
 
     getOptionsForLevel(level) {
@@ -103,25 +111,6 @@ class ProgramSelectGroup extends Component {
                 break;
         }
         return options;
-    }
-
-    findProgramInTree(id) {
-        let lvl1 = {}, lvl2 = {}, lvl3;
-        const {ndd} = this.context;
-        const {type} = this.props;
-        ndd[type + PROGRAM][CHILDREN].forEach(l1 => {
-            l1[CHILDREN].forEach(l2 => {
-                const l3 = l2[CHILDREN].find(l3 => l3.id === id);
-                if (l3) {
-                    lvl3 = l3;
-                    lvl2.id = l2.id;
-                    lvl2.value = l2.value;
-                    lvl1.id = l1.id;
-                    lvl1.value = l1.value;
-                }
-            });
-        });
-        return {lvl1, lvl2, lvl3};
     }
 
     getSelectedForLevel(level) {

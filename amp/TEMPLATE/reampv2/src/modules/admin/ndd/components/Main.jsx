@@ -2,14 +2,11 @@ import React, {Component} from 'react';
 import './css/style.css';
 import {NDDContext} from './Startup';
 import * as Constants from "../constants/Constants";
-import ProgramSelectGroup from "./ProgramSelectGroup";
 import {getNDD, getNDDError, getNDDPending} from "../reducers/startupReducer";
 import {bindActionCreators} from "redux";
 import fetchNDD from "../actions/fetchNDD";
 import {connect} from "react-redux";
 import {SRC_PROGRAM, VALUE} from "../constants/Constants";
-import ProgramSelect from "./ProgramSelect";
-import ProgramSelectGroupList from "./ProgramSelectGroupList";
 import FormPrograms from "./FormPrograms";
 
 class Main extends Component {

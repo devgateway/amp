@@ -1,6 +1,4 @@
-//TODO: esta es la tabla q contiene los ProgramSelectGroupListGroup en cada fila mas los botones de acciones.
-//TODO: tener en cuanta la paginacion
-
+//TODO: we need pagination.
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';

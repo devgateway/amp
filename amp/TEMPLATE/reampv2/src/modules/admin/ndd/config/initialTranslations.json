@@ -18,5 +18,8 @@
   "amp.admin.ndd:dst-programs-title": "Destination Programs",
   "amp.admin.ndd:action": "Action",
   "amp.admin.ndd:add-new": "Add New",
-  "amp.admin.ndd:button-save-all-edits": "Save all edits"
+  "amp.admin.ndd:button-save-all-edits": "Save all edits",
+  "amp.admin.ndd:validation_error": "Error: Can't save changes until all programs have been selected.",
+  "amp.admin.ndd:insert-data": "(insert data to the new field)",
+  "amp.admin.ndd:click-save": "Click the Save icon to save the added data row"
 }

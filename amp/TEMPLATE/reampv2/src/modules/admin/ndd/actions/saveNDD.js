@@ -1,19 +1,15 @@
 import {saveNDDSuccess, saveNDDPending, saveNDDError} from './saveAction';
-import {MAPPING_CONFIG} from '../constants/Constants'
+import {SAVE_CONFIG} from '../constants/Constants'
 
 function saveNDD(payload) {
-    debugger
     return dispatch => {
-        debugger
         dispatch(saveNDDPending());
-        fetch(MAPPING_CONFIG, {
+        fetch(SAVE_CONFIG, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: payload
+            body: JSON.stringify(payload)
         })
-            .then(res => res.json())
             .then(res => {
-                debugger
                 if (res.error) {
                     throw(res.error);
                 }
@@ -21,6 +17,7 @@ function saveNDD(payload) {
                 return res;
             })
             .catch(error => {
+                debugger
                 dispatch(saveNDDError(error));
             });
     }

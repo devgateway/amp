@@ -4,7 +4,7 @@ import {bindActionCreators} from 'redux';
 import {Typeahead} from 'react-bootstrap-typeahead';
 import PropTypes from 'prop-types';
 import {NDDContext} from './Startup';
-import '../../../../../node_modules/react-bootstrap-typeahead/css/Typeahead.min.css';
+import './css/Typeahead.css';
 import './css/style.css';
 
 class ProgramSelect extends Component {
@@ -20,12 +20,13 @@ class ProgramSelect extends Component {
 
     drawSelector() {
         const {options, placeholder, selected} = this.props;
+        const isValid = (selected && selected.length === 1);
         return (<Typeahead
             id="basic-typeahead-single"
             labelKey="value"
+            className={!isValid ? 'is-invalid' : ''}
             options={options}
             clearButton
-            highlightOnlyResult
             onChange={this.onChangeSelect.bind(this)}
             selected={selected}
             placeholder={placeholder}/>);

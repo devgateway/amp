@@ -46,3 +46,18 @@
 .error-color {
     color: #ff0000;
 }
+
+.notifications {
+    border: 1px solid #dfdada;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.is-invalid input {
+    border-color: red;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25)
+}
+
+.float-right {
+    float: right;
+}

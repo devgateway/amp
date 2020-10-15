@@ -146,6 +146,7 @@ class ProgramSelectGroup extends Component {
                             id: options[0].id,
                             value: options[0].value
                         });
+                        this.onSelectChange(selected, level);
                     }
                 }
                 break;

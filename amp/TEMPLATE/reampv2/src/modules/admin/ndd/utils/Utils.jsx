@@ -1,4 +1,4 @@
-import {CHILDREN, PROGRAM} from "../constants/Constants";
+import {CHILDREN, DST_PROGRAM, PROGRAM, SRC_PROGRAM} from "../constants/Constants";
 
 export function findProgramInTree(id, ndd, type) {
     let lvl1 = {}, lvl2 = {}, lvl3;
@@ -15,4 +15,16 @@ export function findProgramInTree(id, ndd, type) {
         });
     });
     return {lvl1, lvl2, lvl3};
+}
+
+export function validate(data) {
+    let ret = true;
+    if (data && data.length > 0) {
+        data.forEach(pair => {
+            if (!pair[SRC_PROGRAM].lvl3 || !pair[DST_PROGRAM].lvl3) {
+                ret = false;
+            }
+        });
+    }
+    return ret;
 }

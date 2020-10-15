@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import {NDDContext} from './Startup';
 import './css/style.css';
 import * as Constants from "../constants/Constants";
+import {TRN_PREFIX} from "../constants/Constants";
 
 class Header extends Component {
     constructor(props) {
@@ -18,12 +19,11 @@ class Header extends Component {
                 <div className="panel-body custom-panel">
                     <span className="glyphicon glyphicon-plus clickable" onClick={onAddRow}/>
                     <span onClick={onAddRow}
-                          className="add-new-text clickable">{translations[Constants.TRN_PREFIX + 'add-new']}</span>
-                    <span className="insert-data-text">{translations['amp.gpi-data:insert-data']}</span>
-                    <span> / </span> <span className="glyphicon glyphicon-ok-circle success-color"> </span> <span
-                    className="click-save-text">{translations['click-save']}</span>
+                          className="add-new-text clickable">{translations[Constants.TRN_PREFIX + 'add-new']} </span>
+                    <span className="insert-data-text">{translations[TRN_PREFIX + 'insert-data']}</span>
                     <span> / </span>
-                    <span className="required-fields">{translations['required-fields']}</span>
+                    <span className="glyphicon glyphicon-ok-circle success-color"> </span>
+                    <span className="click-save-text"> {translations[TRN_PREFIX + 'click-save']}</span>
                     <span className="float-right button-wrapper">
                         <button type="button" onClick={onSaveAll}
                                 className="btn btn-success">{translations[Constants.TRN_PREFIX + 'button-save-all-edits']}</button>

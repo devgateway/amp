@@ -5,15 +5,24 @@ import {NDDContext} from './Startup';
 import './css/style.css';
 import ProgramSelectGroupList from "./ProgramSelectGroupList";
 import Header from "./Header";
-import {DST_PROGRAM, PROGRAM, PROGRAM_MAPPING, SRC_PROGRAM, TYPE_SRC, TYPE_DST} from "../constants/Constants";
+import {
+    DST_PROGRAM,
+    PROGRAM,
+    PROGRAM_MAPPING,
+    SRC_PROGRAM,
+    TYPE_SRC,
+    TYPE_DST,
+    TRN_PREFIX
+} from "../constants/Constants";
 import * as Utils from "../utils/Utils";
 import {sendNDD, sendNDDError, sendNDDPending} from "../reducers/saveNDDReducer";
 import saveNDD from "../actions/saveNDD";
+import Notifications from "./Notifications";
 
 class FormPrograms extends Component {
     constructor(props) {
         super(props);
-        this.state = {data: []};
+        this.state = {data: [], validationErrors: undefined};
         this.addRow = this.addRow.bind(this);
         this.saveAll = this.saveAll.bind(this);
         this.onRowChange = this.onRowChange.bind(this);
@@ -64,15 +73,36 @@ class FormPrograms extends Component {
     }
 
     saveAll() {
-        debugger
         const {data} = this.state;
-        this.props.saveNDD(data);
+        const {saveNDD, translations} = this.props;
+        if (Utils.validate(data)) {
+            const toSave = [];
+            data.forEach(pair => {
+                toSave.push({
+                    [SRC_PROGRAM]: pair[SRC_PROGRAM].lvl3.id,
+                    [DST_PROGRAM]: pair[DST_PROGRAM].lvl3.id,
+                });
+            });
+            saveNDD(toSave);
+            this.setState({validationErrors: undefined});
+        } else {
+            this.setState({validationErrors: translations[TRN_PREFIX + 'validation_error']})
+        }
     }
 
     render() {
-        const {data} = this.state;
+        const {data, validationErrors} = this.state;
+        const {error} = this.props;
+        let messages = [];
+        if (error) {
+            messages.push({isError: true, text: error.toString()});
+        }
+        if (validationErrors) {
+            messages.push({isError: true, text: validationErrors});
+        }
         return (<div className="form-container">
             <Header onAddRow={this.addRow} onSaveAll={this.saveAll}/>
+            <Notifications messages={messages}/>
             <ProgramSelectGroupList list={data} onChange={this.onRowChange}/>
         </div>);
     }

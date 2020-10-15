@@ -1,4 +1,3 @@
-//TODO: we need pagination.
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
@@ -12,12 +11,10 @@ class ProgramSelectGroupList extends Component {
 
     render() {
         const {list, translations, onChange} = this.props;
-        // console.error(list);
         return (<div>
             <table className="table table-striped">
                 <thead>
                 <tr>
-                    <td></td>
                     <td>
                         <span data-field="srcProgramSelectGroup">
                             <span className="error-color">*&nbsp;</span>

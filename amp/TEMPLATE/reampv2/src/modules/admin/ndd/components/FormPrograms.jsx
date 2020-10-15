@@ -7,6 +7,8 @@ import ProgramSelectGroupList from "./ProgramSelectGroupList";
 import Header from "./Header";
 import {DST_PROGRAM, PROGRAM, PROGRAM_MAPPING, SRC_PROGRAM, TYPE_SRC, TYPE_DST} from "../constants/Constants";
 import * as Utils from "../utils/Utils";
+import {sendNDD, sendNDDError, sendNDDPending} from "../reducers/saveNDDReducer";
+import saveNDD from "../actions/saveNDD";
 
 class FormPrograms extends Component {
     constructor(props) {
@@ -19,31 +21,35 @@ class FormPrograms extends Component {
 
     componentDidMount() {
         const {ndd} = this.context;
-        const {data} = this.state;
         // Load saved mapping.
-        if (ndd[PROGRAM_MAPPING]) {
-            ndd[PROGRAM_MAPPING].forEach(pm => {
-                const fullTreeSrc = Utils.findProgramInTree(pm[SRC_PROGRAM], ndd, TYPE_SRC);
-                const fullTreeDst = Utils.findProgramInTree(pm[DST_PROGRAM], ndd, TYPE_DST);
-                const pair = {};
-                pair[SRC_PROGRAM] = fullTreeSrc;
-                pair[DST_PROGRAM] = fullTreeDst;
-                pair.id = pair[SRC_PROGRAM].lvl3.id + '' + pair[DST_PROGRAM].lvl3.id;
-                data.push(pair);
-            });
-        }
-        this.setState({data: data});
+        this.setState(previousState => {
+            const data = [...previousState.data];
+            if (ndd[PROGRAM_MAPPING]) {
+                ndd[PROGRAM_MAPPING].forEach(pm => {
+                    const fullTreeSrc = Utils.findProgramInTree(pm[SRC_PROGRAM], ndd, TYPE_SRC);
+                    const fullTreeDst = Utils.findProgramInTree(pm[DST_PROGRAM], ndd, TYPE_DST);
+                    const pair = {};
+                    pair[SRC_PROGRAM] = fullTreeSrc;
+                    pair[DST_PROGRAM] = fullTreeDst;
+                    pair.id = pair[SRC_PROGRAM].lvl3.id + '' + pair[DST_PROGRAM].lvl3.id;
+                    data.push(pair);
+                });
+            }
+            return {data};
+        });
     }
 
     addRow() {
-        const {data} = this.state;
-        const pair = {
-            [SRC_PROGRAM]: {},
-            [DST_PROGRAM]: {},
-            id: Math.random() * -1
-        };
-        data.push(pair);
-        this.setState({data: data});
+        this.setState(previousState => {
+            const data = [...previousState.data];
+            const pair = {
+                [SRC_PROGRAM]: {},
+                [DST_PROGRAM]: {},
+                id: Math.random() * -1
+            };
+            data.push(pair);
+            return {data};
+        });
     }
 
     onRowChange(level1, level2, level3, type, id) {
@@ -58,14 +64,16 @@ class FormPrograms extends Component {
     }
 
     saveAll() {
-        alert('saveAll');
+        debugger
+        const {data} = this.state;
+        this.props.saveNDD(data);
     }
 
     render() {
         const {data} = this.state;
         return (<div className="form-container">
             <Header onAddRow={this.addRow} onSaveAll={this.saveAll}/>
-            <ProgramSelectGroupList list={data} key={Math.random()} onChange={this.onRowChange}/>
+            <ProgramSelectGroupList list={data} onChange={this.onRowChange}/>
         </div>);
     }
 }
@@ -75,7 +83,9 @@ FormPrograms.contextType = NDDContext;
 FormPrograms.propTypes = {}
 
 const mapStateToProps = state => ({
-    translations: state.translationsReducer.translations
+    translations: state.translationsReducer.translations,
+    error: sendNDDError(state.saveNDDReducer),
+    pending: sendNDDPending(state.saveNDDReducer),
 });
-const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({saveNDD: saveNDD}, dispatch)
 export default connect(mapStateToProps, mapDispatchToProps)(FormPrograms);

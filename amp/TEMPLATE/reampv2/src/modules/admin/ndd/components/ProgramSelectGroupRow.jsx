@@ -15,7 +15,6 @@ class ProgramSelectGroupRow extends Component {
     render() {
         const {rowData, onChange} = this.props;
         return <tr>
-            <td></td>
             <td>
                 <ProgramSelectGroup type={TYPE_SRC} data={rowData} onChange={onChange}/>
             </td>

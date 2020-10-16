@@ -13,7 +13,7 @@ class ProgramSelectGroupRow extends Component {
     }
 
     render() {
-        const {rowData, onChange} = this.props;
+        const {rowData, onChange, remove} = this.props;
         return <tr>
             <td>
                 <ProgramSelectGroup type={TYPE_SRC} data={rowData} onChange={onChange}/>
@@ -22,11 +22,8 @@ class ProgramSelectGroupRow extends Component {
                 <ProgramSelectGroup type={TYPE_DST} data={rowData} onChange={onChange}/>
             </td>
             <td className="actions-column">
-                    <span className="glyphicon glyphicon-custom glyphicon-ok-circle success-color clickable"
-                          onClick={this.save}>
-                    </span>
                 <span className="glyphicon glyphicon-custom glyphicon-remove-sign clickable"
-                      onClick={this.cancel}>
+                      onClick={remove}>
                 </span>
             </td>
         </tr>;
@@ -37,7 +34,8 @@ ProgramSelectGroupRow.contextType = NDDContext;
 
 ProgramSelectGroupRow.propTypes = {
     rowData: PropTypes.object.isRequired,
-    onChange: PropTypes.func.isRequired
+    onChange: PropTypes.func.isRequired,
+    remove: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({

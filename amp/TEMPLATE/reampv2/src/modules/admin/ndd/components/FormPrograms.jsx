@@ -15,7 +15,7 @@ import {
     TRN_PREFIX
 } from "../constants/Constants";
 import * as Utils from "../utils/Utils";
-import {sendNDD, sendNDDError, sendNDDPending} from "../reducers/saveNDDReducer";
+import {sendNDDError, sendNDDPending} from "../reducers/saveNDDReducer";
 import saveNDD from "../actions/saveNDD";
 import Notifications from "./Notifications";
 
@@ -26,6 +26,7 @@ class FormPrograms extends Component {
         this.addRow = this.addRow.bind(this);
         this.saveAll = this.saveAll.bind(this);
         this.onRowChange = this.onRowChange.bind(this);
+        this.remove = this.remove.bind(this);
     }
 
     componentDidMount() {
@@ -72,6 +73,10 @@ class FormPrograms extends Component {
         this.setState(data);
     }
 
+    remove() {
+
+    }
+
     saveAll() {
         const {data} = this.state;
         const {saveNDD, translations} = this.props;
@@ -103,7 +108,7 @@ class FormPrograms extends Component {
         return (<div className="form-container">
             <Header onAddRow={this.addRow} onSaveAll={this.saveAll}/>
             <Notifications messages={messages}/>
-            <ProgramSelectGroupList list={data} onChange={this.onRowChange}/>
+            <ProgramSelectGroupList list={data} onChange={this.onRowChange} remove={this.remove}/>
         </div>);
     }
 }

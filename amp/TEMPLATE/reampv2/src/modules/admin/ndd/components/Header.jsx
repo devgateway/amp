@@ -21,9 +21,6 @@ class Header extends Component {
                     <span onClick={onAddRow}
                           className="add-new-text clickable">{translations[Constants.TRN_PREFIX + 'add-new']} </span>
                     <span className="insert-data-text">{translations[TRN_PREFIX + 'insert-data']}</span>
-                    <span> / </span>
-                    <span className="glyphicon glyphicon-ok-circle success-color"> </span>
-                    <span className="click-save-text"> {translations[TRN_PREFIX + 'click-save']}</span>
                     <span className="float-right button-wrapper">
                         <button type="button" onClick={onSaveAll}
                                 className="btn btn-success">{translations[Constants.TRN_PREFIX + 'button-save-all-edits']}</button>

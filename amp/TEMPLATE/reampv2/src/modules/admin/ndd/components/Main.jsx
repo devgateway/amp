@@ -32,7 +32,7 @@ class Main extends Component {
         if (!this.shouldComponentRender() || ndd.length === 0) {
             return <div>loading...</div>
         } else {
-            return (<div>
+            return (<div className="ndd-container">
                 <NDDContext.Provider value={{ndd: ndd, translations: translations}}>
                     <div className='col-md-12'>
                         <div>

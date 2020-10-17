@@ -23,7 +23,7 @@ class ProgramSelectGroupRow extends Component {
             </td>
             <td className="actions-column">
                 <span className="glyphicon glyphicon-custom glyphicon-remove-sign clickable"
-                      onClick={remove}>
+                      onClick={() => remove(rowData)}>
                 </span>
             </td>
         </tr>;

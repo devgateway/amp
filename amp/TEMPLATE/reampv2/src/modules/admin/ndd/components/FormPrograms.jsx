@@ -27,6 +27,7 @@ class FormPrograms extends Component {
         this.saveAll = this.saveAll.bind(this);
         this.onRowChange = this.onRowChange.bind(this);
         this.remove = this.remove.bind(this);
+        this.clearMessages = this.clearMessages.bind(this);
     }
 
     componentDidMount() {
@@ -73,8 +74,19 @@ class FormPrograms extends Component {
         this.setState(data);
     }
 
-    remove() {
+    remove(row) {
+        const {translations} = this.context;
+        if (window.confirm(translations[TRN_PREFIX + 'confirm-remove-row'])) {
+            this.setState(previousState => {
+                const data = [...previousState.data];
+                data.splice(data.findIndex(i => i.id === row.id), 1);
+                return {data};
+            });
+        }
+    }
 
+    clearMessages() {
+        this.setState({validationErrors: undefined});
     }
 
     saveAll() {
@@ -89,7 +101,7 @@ class FormPrograms extends Component {
                 });
             });
             saveNDD(toSave);
-            this.setState({validationErrors: undefined});
+            this.clearMessages();
         } else {
             this.setState({validationErrors: translations[TRN_PREFIX + 'validation_error']})
         }

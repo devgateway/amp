@@ -61,3 +61,19 @@
 .float-right {
     float: right;
 }
+
+.ndd-container {
+    min-height: 82vh;
+}
+
+.custom-panel > span {
+    margin-top: 10px;
+}
+
+.button-wrapper {
+    margin-top: 0 !important;
+}
+
+.footer {
+    position: relative !important;
+}

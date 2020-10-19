@@ -17,7 +17,6 @@ function saveNDD(payload) {
                 return res;
             })
             .catch(error => {
-                debugger
                 dispatch(saveNDDError(error));
             });
     }

@@ -18,11 +18,17 @@ export function findProgramInTree(id, ndd, type) {
 }
 
 export function validate(data) {
-    let ret = true;
+    let ret = 0;
+    const dstPairs = [];
     if (data && data.length > 0) {
         data.forEach(pair => {
             if (!pair[SRC_PROGRAM].lvl3 || !pair[DST_PROGRAM].lvl3) {
-                ret = false;
+                ret = 1; // missing value error.
+            } else {
+                if (dstPairs.find(p => p === pair[DST_PROGRAM].lvl3.id)) {
+                    ret = 2; // duplicated dst value error.
+                }
+                dstPairs.push(pair[DST_PROGRAM].lvl3.id);
             }
         });
     }

@@ -19,8 +19,9 @@
   "amp.admin.ndd:action": "Action",
   "amp.admin.ndd:add-new": "Add New",
   "amp.admin.ndd:button-save-all-edits": "Save all edits",
-  "amp.admin.ndd:validation_error": "Error: Can't save changes until all programs have been selected.",
   "amp.admin.ndd:insert-data": "(insert data to the new field)",
   "amp.admin.ndd:click-save": "Click the Save icon to save the added data row",
-  "amp.admin.ndd:confirm-remove-row": "Are you sure you want to remove this mapping? (remember to click Save All button to confirm your changes)."
+  "amp.admin.ndd:confirm-remove-row": "Are you sure you want to remove this mapping? (remember to click Save All button to confirm your changes).",
+  "amp.admin.ndd:validation_error_1": "Error: Can't save changes until all programs have been selected.",
+  "amp.admin.ndd:validation_error_2": "Error: Destination indicators can't be mapped more than one time."
 }

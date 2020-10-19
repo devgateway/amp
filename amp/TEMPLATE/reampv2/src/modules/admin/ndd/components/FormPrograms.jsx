@@ -92,7 +92,8 @@ class FormPrograms extends Component {
     saveAll() {
         const {data} = this.state;
         const {saveNDD, translations} = this.props;
-        if (Utils.validate(data)) {
+        const validationResult = Utils.validate(data);
+        if (validationResult === 0) {
             const toSave = [];
             data.forEach(pair => {
                 toSave.push({
@@ -103,7 +104,7 @@ class FormPrograms extends Component {
             saveNDD(toSave);
             this.clearMessages();
         } else {
-            this.setState({validationErrors: translations[TRN_PREFIX + 'validation_error']})
+            this.setState({validationErrors: translations[TRN_PREFIX + 'validation_error_' + validationResult]})
         }
     }
 

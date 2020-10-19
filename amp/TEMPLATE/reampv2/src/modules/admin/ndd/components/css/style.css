@@ -77,3 +77,8 @@
 .footer {
     position: relative !important;
 }
+
+.title {
+    text-align: center;
+    padding-bottom: 30px;
+}

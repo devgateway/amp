@@ -6,7 +6,7 @@ import {getNDD, getNDDError, getNDDPending} from "../reducers/startupReducer";
 import {bindActionCreators} from "redux";
 import fetchNDD from "../actions/fetchNDD";
 import {connect} from "react-redux";
-import {SRC_PROGRAM, VALUE} from "../constants/Constants";
+import {SRC_PROGRAM, VALUE, DST_PROGRAM} from "../constants/Constants";
 import FormPrograms from "./FormPrograms";
 
 class Main extends Component {
@@ -36,8 +36,13 @@ class Main extends Component {
                 <NDDContext.Provider value={{ndd: ndd, translations: translations}}>
                     <div className='col-md-12'>
                         <div>
-                            <h2>{translations[Constants.TRN_PREFIX + 'title']}</h2>
-                            <h4>{translations[Constants.TRN_PREFIX + 'src-program-lvl-1']}: {ndd[SRC_PROGRAM][VALUE]}</h4>
+                            <h2 className="title">{translations[Constants.TRN_PREFIX + 'title']}</h2>
+                            <h4>
+                                <b>{translations[Constants.TRN_PREFIX + 'src-program-lvl-1']}:</b> {ndd[SRC_PROGRAM][VALUE]}
+                            </h4>
+                            <h4>
+                                <b>{translations[Constants.TRN_PREFIX + 'dst-program-lvl-1']}:</b> {ndd[DST_PROGRAM][VALUE]}
+                            </h4>
                         </div>
                         <div>
                             <FormPrograms/>

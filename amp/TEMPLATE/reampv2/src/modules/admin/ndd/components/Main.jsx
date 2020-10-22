@@ -2,9 +2,17 @@ import React, {Component} from 'react';
 import './css/style.css';
 import {NDDContext} from './Startup';
 import * as Constants from "../constants/Constants";
-import {getNDD, getNDDError, getNDDPending} from "../reducers/startupReducer";
+import {
+    getNDD,
+    getNDDError,
+    getNDDPending,
+    getPrograms,
+    getProgramsError,
+    getProgramsPending
+} from "../reducers/startupReducer";
 import {bindActionCreators} from "redux";
 import fetchNDD from "../actions/fetchNDD";
+import fetchPrograms from "../actions/fetchAvailablePrograms";
 import {connect} from "react-redux";
 import {SRC_PROGRAM, VALUE, DST_PROGRAM} from "../constants/Constants";
 import FormPrograms from "./FormPrograms";
@@ -17,34 +25,28 @@ class Main extends Component {
     }
 
     componentDidMount() {
-        const {fetchNDD} = this.props;
+        const {fetchNDD, fetchPrograms} = this.props;
         fetchNDD();
+        fetchPrograms();
     }
 
     shouldComponentRender() {
-        return !this.props.pending;
+        const {pendingNDD, pendingPrograms} = this.props;
+        return !pendingNDD && !pendingPrograms;
     }
 
     render() {
-        const {ndd} = this.props;
+        const {ndd, programs} = this.props;
         const {translations} = this.context;
 
         if (!this.shouldComponentRender() || ndd.length === 0) {
             return <div>loading...</div>
         } else {
             return (<div className="ndd-container">
-                <NDDContext.Provider value={{ndd: ndd, translations: translations}}>
+                <NDDContext.Provider value={{ndd: ndd, translations: translations, programs: programs}}>
                     <div className='col-md-12'>
                         <div>
                             <h2 className="title">{translations[Constants.TRN_PREFIX + 'title']}</h2>
-                            <h4>
-                                <b>{translations[Constants.TRN_PREFIX + 'src-program-lvl-1']}:</b> {ndd[SRC_PROGRAM][VALUE]}
-                            </h4>
-                            <h4>
-                                <b>{translations[Constants.TRN_PREFIX + 'dst-program-lvl-1']}:</b> {ndd[DST_PROGRAM][VALUE]}
-                            </h4>
-                        </div>
-                        <div>
                             <FormPrograms/>
                         </div>
                     </div>
@@ -59,8 +61,13 @@ Main.contextType = NDDContext;
 const mapStateToProps = state => ({
     error: getNDDError(state.startupReducer),
     ndd: getNDD(state.startupReducer),
-    pending: getNDDPending(state.startupReducer),
+    programs: getPrograms(state.startupReducer),
+    pendingNDD: getNDDPending(state.startupReducer),
+    pendingPrograms: getProgramsPending(state.startupReducer),
     translations: state.translationsReducer.translations
 });
-const mapDispatchToProps = dispatch => bindActionCreators({fetchNDD: fetchNDD}, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({
+    fetchNDD: fetchNDD,
+    fetchPrograms: fetchPrograms
+}, dispatch)
 export default connect(mapStateToProps, mapDispatchToProps)(Main);

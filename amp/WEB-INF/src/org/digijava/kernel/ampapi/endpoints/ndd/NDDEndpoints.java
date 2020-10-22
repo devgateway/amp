@@ -13,7 +13,6 @@ import io.swagger.annotations.ApiOperation;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.module.aim.dbentity.AmpIndirectTheme;
-import org.digijava.module.aim.dbentity.AmpTheme;
 
 /**
  * @author Octavian Ciubotaru

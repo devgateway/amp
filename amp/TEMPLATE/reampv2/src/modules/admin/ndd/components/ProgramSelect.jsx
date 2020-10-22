@@ -34,7 +34,7 @@ class ProgramSelect extends Component {
 
     render() {
         const {label, options} = this.props;
-        if (options.length === 0) {
+        if (!options || options.length === 0) {
             return null
         } else {
             return (<div>

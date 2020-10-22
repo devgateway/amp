@@ -23,5 +23,7 @@
   "amp.admin.ndd:click-save": "Click the Save icon to save the added data row",
   "amp.admin.ndd:confirm-remove-row": "Are you sure you want to remove this mapping? (remember to click Save All button to confirm your changes).",
   "amp.admin.ndd:validation_error_1": "Error: Can't save changes until all programs have been selected.",
-  "amp.admin.ndd:validation_error_2": "Error: Indirect indicators can't be mapped more than one time."
+  "amp.admin.ndd:validation_error_2": "Error: Indirect indicators can't be mapped more than one time.",
+  "amp.admin.ndd:choose_main_src_program": "Choose a Main Direct Program",
+  "amp.admin.ndd:choose_main_dst_program": "Choose an Indirect Program"
 }

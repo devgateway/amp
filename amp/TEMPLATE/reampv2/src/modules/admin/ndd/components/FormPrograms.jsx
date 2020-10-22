@@ -12,26 +12,45 @@ import {
     SRC_PROGRAM,
     TYPE_SRC,
     TYPE_DST,
-    TRN_PREFIX
+    TRN_PREFIX, VALUE
 } from "../constants/Constants";
 import * as Utils from "../utils/Utils";
 import {sendNDDError, sendNDDPending} from "../reducers/saveNDDReducer";
 import saveNDD from "../actions/saveNDD";
 import Notifications from "./Notifications";
+import * as Constants from "../constants/Constants";
+import ProgramsHeader from "./ProgramsHeader";
 
 class FormPrograms extends Component {
     constructor(props) {
         super(props);
-        this.state = {data: [], validationErrors: undefined};
+        this.state = {data: [], validationErrors: undefined, src: undefined, dst: undefined, programs: undefined};
         this.addRow = this.addRow.bind(this);
         this.saveAll = this.saveAll.bind(this);
         this.onRowChange = this.onRowChange.bind(this);
         this.remove = this.remove.bind(this);
         this.clearMessages = this.clearMessages.bind(this);
+        this.onChangeMainSrcProgram = this.onChangeMainSrcProgram.bind(this);
+        this.onChangeMainDstProgram = this.onChangeMainDstProgram.bind(this);
     }
 
     componentDidMount() {
-        const {ndd} = this.context;
+        const {ndd, programs} = this.context;
+        // Load main programs.
+        this.setState(previousState => {
+            const src = {id: ndd[SRC_PROGRAM].id, value: ndd[SRC_PROGRAM].value};
+            return {src};
+        });
+        this.setState(previousState => {
+            const dst = {id: ndd[DST_PROGRAM].id, value: ndd[DST_PROGRAM].value};
+            return {dst};
+        });
+
+        // Available programs.
+        this.setState(previousState => {
+            return {programs: programs};
+        });
+
         // Load saved mapping.
         this.setState(previousState => {
             const data = [...previousState.data];
@@ -108,8 +127,16 @@ class FormPrograms extends Component {
         }
     }
 
+    onChangeMainSrcProgram() {
+
+    }
+
+    onChangeMainDstProgram() {
+
+    }
+
     render() {
-        const {data, validationErrors} = this.state;
+        const {data, validationErrors, src, dst} = this.state;
         const {error} = this.props;
         let messages = [];
         if (error) {
@@ -119,6 +146,9 @@ class FormPrograms extends Component {
             messages.push({isError: true, text: validationErrors});
         }
         return (<div className="form-container">
+            <ProgramsHeader onChangeMainDstProgram={this.onChangeMainDstProgram}
+                            onChangeMainSrcProgram={this.onChangeMainSrcProgram}
+                            src={src} dst={dst}/>
             <Header onAddRow={this.addRow} onSaveAll={this.saveAll}/>
             <Notifications messages={messages}/>
             <ProgramSelectGroupList list={data} onChange={this.onRowChange} remove={this.remove}/>

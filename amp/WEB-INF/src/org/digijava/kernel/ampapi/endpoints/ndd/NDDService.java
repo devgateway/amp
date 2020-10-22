@@ -1,5 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.ndd;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,6 +25,24 @@ import org.digijava.module.aim.util.ProgramUtil;
  */
 public class NDDService {
 
+    class SingleProgramData implements Serializable {
+        private Long id;
+        private String name;
+
+        SingleProgramData(Long id, String name) {
+            this.id = id;
+            this.name = name;
+        }
+
+        public Long getId() {
+            return id;
+        }
+
+        public String getName() {
+            return name;
+        }
+    }
+
     public MappingConfiguration getMappingConfiguration() {
         PossibleValue src = convert(getSrcProgramRoot(), IndirectProgramUpdater.INDIRECT_MAPPING_LEVEL);
         PossibleValue dst = convert(getDstProgramRoot(), IndirectProgramUpdater.INDIRECT_MAPPING_LEVEL);
@@ -30,6 +50,18 @@ public class NDDService {
         List<AmpIndirectTheme> mapping = loadMapping();
 
         return new MappingConfiguration(mapping, src, dst);
+    }
+
+    /**
+     * Returns a list of first level programs that are part of the multi-program configuration.
+     * Use a simplified object to reduce bandwidth.
+     */
+    public List<SingleProgramData> getAvailablePrograms() {
+        List<SingleProgramData> singleProgramDataList = ProgramUtil.getAllPrograms()
+                .stream().filter(p -> p.getIndlevel().equals(0) && p.getProgramSettings().size() > 0)
+                .map(p -> new SingleProgramData(p.getAmpThemeId(), p.getName()))
+                .collect(Collectors.toList());
+        return singleProgramDataList;
     }
 
     @SuppressWarnings("unchecked")

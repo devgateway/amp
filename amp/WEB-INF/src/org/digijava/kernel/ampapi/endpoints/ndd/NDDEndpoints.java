@@ -13,6 +13,7 @@ import io.swagger.annotations.ApiOperation;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.module.aim.dbentity.AmpIndirectTheme;
+import org.digijava.module.aim.dbentity.AmpTheme;
 
 /**
  * @author Octavian Ciubotaru
@@ -38,5 +39,14 @@ public class NDDEndpoints {
     @ApiOperation("Update indirect program mapping.")
     public void updateMapping(List<AmpIndirectTheme> mapping) {
         nddService.updateMapping(mapping);
+    }
+
+    @GET
+    @Path("available-programs")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "getAvailablePrograms")
+    @ApiOperation("Returns the list of programs we can use as Primary and Indirect.")
+    public List<NDDService.SingleProgramData> getAvailablePrograms() {
+        return nddService.getAvailablePrograms();
     }
 }

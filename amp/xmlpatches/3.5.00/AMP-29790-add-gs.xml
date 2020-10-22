@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>AMP-29790</jira>
+    <author>ginchauspe</author>
+    <description>Add new GS for programs, hide from UI.</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres"><![CDATA[
+				UPDATE amp_global_settings SET internal = TRUE WHERE settingsname LIKE 'NPD Default Program';
+
+				INSERT INTO amp_global_settings(id, settingsname, settingsvalue, possiblevalues, description, section, value_translatable, internal)
+				VALUES (nextval('amp_global_settings_seq'), 'NPD Default Primary Program', null, 'v_amp_theme', 'Program that is the source in mappings for NPD.', 'user', null, TRUE);
+			]]></lang>
+        </script>
+    </apply>
+</tns:patch>

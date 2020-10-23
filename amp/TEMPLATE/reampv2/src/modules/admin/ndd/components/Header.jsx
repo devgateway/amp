@@ -13,7 +13,7 @@ class Header extends Component {
     }
 
     render() {
-        const {translations, onAddRow, onSaveAll} = this.props;
+        const {translations, onAddRow, onSaveAll, onRevertAll} = this.props;
         return (<div>
             <div className="panel panel-default">
                 <div className="panel-body custom-panel">
@@ -22,8 +22,12 @@ class Header extends Component {
                           className="add-new-text clickable">{translations[Constants.TRN_PREFIX + 'add-new']} </span>
                     <span className="insert-data-text">{translations[TRN_PREFIX + 'insert-data']}</span>
                     <span className="float-right button-wrapper">
-                        <button type="button" onClick={onSaveAll}
-                                className="btn btn-success">{translations[Constants.TRN_PREFIX + 'button-save-all-edits']}</button>
+                        <button type="button" onClick={onSaveAll} className="btn btn-success margin_2">
+                            {translations[Constants.TRN_PREFIX + 'button-save-all-edits']}
+                        </button>
+                        <button type="button" onClick={onRevertAll} className="btn btn-danger margin_2">
+                            {translations[Constants.TRN_PREFIX + 'button-revert-all-edits']}
+                        </button>
                     </span>
                 </div>
             </div>
@@ -35,7 +39,8 @@ Header.contextType = NDDContext;
 
 Header.propTypes = {
     onAddRow: PropTypes.func.isRequired,
-    onSaveAll: PropTypes.func.isRequired
+    onSaveAll: PropTypes.func.isRequired,
+    onRevertAll: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({

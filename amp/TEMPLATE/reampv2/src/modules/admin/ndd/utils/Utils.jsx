@@ -34,3 +34,15 @@ export function validate(data) {
     }
     return ret;
 }
+
+export function validateMainPrograms(src, dst) {
+    let ret = undefined;
+    if (!src) {
+        ret = 3;
+    } else if (!dst) {
+        ret = 4;
+    } else if (src.id === dst.id) {
+        ret = 5;
+    }
+    return ret;
+}

@@ -30,8 +30,8 @@ class FormPrograms extends Component {
         this.onRowChange = this.onRowChange.bind(this);
         this.remove = this.remove.bind(this);
         this.clearMessages = this.clearMessages.bind(this);
-        this.onChangeMainSrcProgram = this.onChangeMainSrcProgram.bind(this);
-        this.onChangeMainDstProgram = this.onChangeMainDstProgram.bind(this);
+        this.onChangeMainProgram = this.onChangeMainProgram.bind(this);
+        this.clearAll = this.clearAll.bind(this);
     }
 
     componentDidMount() {
@@ -109,30 +109,73 @@ class FormPrograms extends Component {
     }
 
     saveAll() {
-        const {data} = this.state;
+        const {data, src, dst} = this.state;
         const {saveNDD, translations} = this.props;
-        const validationResult = Utils.validate(data);
-        if (validationResult === 0) {
-            const toSave = [];
-            data.forEach(pair => {
-                toSave.push({
-                    [SRC_PROGRAM]: pair[SRC_PROGRAM].lvl3.id,
-                    [DST_PROGRAM]: pair[DST_PROGRAM].lvl3.id,
+        const validateMappings = Utils.validate(data);
+        if (validateMappings === 0) {
+            const validateMain = Utils.validateMainPrograms(src, dst);
+            if (validateMain === 0) {
+                const toSave = [];
+                data.forEach(pair => {
+                    toSave.push({
+                        [SRC_PROGRAM]: pair[SRC_PROGRAM].lvl3.id,
+                        [DST_PROGRAM]: pair[DST_PROGRAM].lvl3.id,
+                    });
                 });
-            });
-            saveNDD(toSave);
-            this.clearMessages();
+                saveNDD(toSave);
+                this.clearMessages();
+            } else {
+                this.setState({validationErrors: translations[TRN_PREFIX + 'validation_error_' + validateMain]});
+            }
         } else {
-            this.setState({validationErrors: translations[TRN_PREFIX + 'validation_error_' + validationResult]})
+            this.setState({validationErrors: translations[TRN_PREFIX + 'validation_error_' + validateMappings]});
         }
     }
 
-    onChangeMainSrcProgram() {
-
+    onChangeMainProgram(type, program) {
+        const {translations} = this.context;
+        const {data} = this.state;
+        const newProgram = (program && program.length > 0) ? program[0] : {};
+        const oldProgram = (this.state[type] ? this.state[type] : {});
+        if (oldProgram.id !== newProgram.id) {
+            if (oldProgram.id !== undefined) {
+                if (data.length === 0 || window.confirm(translations[TRN_PREFIX + 'warning_on_change_main_programs'])) {
+                    if (newProgram.id !== undefined) {
+                        // Old Program -> New Program.
+                        this.setState(previousState => {
+                            return {[type]: newProgram};
+                        });
+                    } else {
+                        // Old Program -> Nothing.
+                        this.setState(previousState => {
+                            return {[type]: undefined};
+                        });
+                    }
+                    this.clearAll();
+                } else {
+                    // Revert to previous Program.
+                    this.setState(previousState => {
+                        return previousState;
+                    });
+                    // TODO: set focus in the selector.
+                }
+            } else {
+                // Nothing -> Program.
+                this.setState(previousState => {
+                    return {[type]: newProgram};
+                });
+            }
+        }
     }
 
-    onChangeMainDstProgram() {
+    clearAll() {
+        this.setState({
+            data: []
+        });
+    }
 
+    revertAllChanges() {
+        window.location.reload();
     }
 
     render() {
@@ -146,10 +189,8 @@ class FormPrograms extends Component {
             messages.push({isError: true, text: validationErrors});
         }
         return (<div className="form-container">
-            <ProgramsHeader onChangeMainDstProgram={this.onChangeMainDstProgram}
-                            onChangeMainSrcProgram={this.onChangeMainSrcProgram}
-                            src={src} dst={dst}/>
-            <Header onAddRow={this.addRow} onSaveAll={this.saveAll}/>
+            <ProgramsHeader onChange={this.onChangeMainProgram} src={src} dst={dst} key={Math.random()}/>
+            <Header onAddRow={this.addRow} onSaveAll={this.saveAll} onRevertAll={this.revertAllChanges}/>
             <Notifications messages={messages}/>
             <ProgramSelectGroupList list={data} onChange={this.onRowChange} remove={this.remove}/>
         </div>);

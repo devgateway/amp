@@ -10,7 +10,7 @@ import ProgramSelectGroupRow from './ProgramSelectGroupRow.jsx'
 class ProgramSelectGroupList extends Component {
 
     render() {
-        const {list, translations, onChange, save, remove} = this.props;
+        const {list, translations, onChange, remove} = this.props;
         return (<div>
             <table className="table table-striped">
                 <thead>

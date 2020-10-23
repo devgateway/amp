@@ -1,6 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.ndd;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -46,6 +47,9 @@ public class NDDEndpoints {
     @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "getAvailablePrograms")
     @ApiOperation("Returns the list of programs we can use as Primary and Indirect.")
     public List<NDDService.SingleProgramData> getAvailablePrograms() {
-        return nddService.getAvailablePrograms();
+        return nddService.getAvailablePrograms()
+                .stream()
+                .map(p -> new NDDService.SingleProgramData(p.getAmpThemeId(), p.getName()))
+                .collect(Collectors.toList());
     }
 }

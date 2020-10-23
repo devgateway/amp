@@ -20,11 +20,15 @@ public class MappingConfiguration {
     @JsonProperty("dst-program")
     private final PossibleValue dstProgram;
 
+    @JsonProperty("all-programs")
+    private final List<PossibleValue> allPrograms;
+
     public MappingConfiguration(List<AmpIndirectTheme> programMapping,
-            PossibleValue srcProgram, PossibleValue dstProgram) {
+            PossibleValue srcProgram, PossibleValue dstProgram, List<PossibleValue> allPrograms) {
         this.programMapping = programMapping;
         this.srcProgram = srcProgram;
         this.dstProgram = dstProgram;
+        this.allPrograms = allPrograms;
     }
 
     public List<AmpIndirectTheme> getProgramMapping() {

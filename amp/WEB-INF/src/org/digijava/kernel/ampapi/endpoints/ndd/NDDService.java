@@ -25,7 +25,7 @@ import org.digijava.module.aim.util.ProgramUtil;
  */
 public class NDDService {
 
-    class SingleProgramData implements Serializable {
+    static class SingleProgramData implements Serializable {
         private Long id;
         private String value;
 
@@ -47,21 +47,26 @@ public class NDDService {
         PossibleValue src = convert(getSrcProgramRoot(), IndirectProgramUpdater.INDIRECT_MAPPING_LEVEL);
         PossibleValue dst = convert(getDstProgramRoot(), IndirectProgramUpdater.INDIRECT_MAPPING_LEVEL);
 
+        List<PossibleValue> allPrograms = new ArrayList<>();
+        getAvailablePrograms().forEach(ampTheme -> {
+            PossibleValue pv = convert(ampTheme, IndirectProgramUpdater.INDIRECT_MAPPING_LEVEL);
+            allPrograms.add(pv);
+        });
+
         List<AmpIndirectTheme> mapping = loadMapping();
 
-        return new MappingConfiguration(mapping, src, dst);
+        return new MappingConfiguration(mapping, src, dst, allPrograms);
     }
 
     /**
      * Returns a list of first level programs that are part of the multi-program configuration.
      * Use a simplified object to reduce bandwidth.
      */
-    public List<SingleProgramData> getAvailablePrograms() {
-        List<SingleProgramData> singleProgramDataList = ProgramUtil.getAllPrograms()
+    public List<AmpTheme> getAvailablePrograms() {
+        List<AmpTheme> programs = ProgramUtil.getAllPrograms()
                 .stream().filter(p -> p.getIndlevel().equals(0) && p.getProgramSettings().size() > 0)
-                .map(p -> new SingleProgramData(p.getAmpThemeId(), p.getName()))
                 .collect(Collectors.toList());
-        return singleProgramDataList;
+        return programs;
     }
 
     @SuppressWarnings("unchecked")
@@ -90,6 +95,7 @@ public class NDDService {
      * <li>source program root is the one returned by {@link #getSrcProgramRoot()}</li>
      * <li>destination program root is the one returned by {@link #getDstProgramRoot()}</li>
      * <li>the same source and destination program appear only once in the mapping</li></ul>
+     *
      * @throws ValidationException when the mapping is invalid
      */
     private void validate(List<AmpIndirectTheme> mapping) {
@@ -98,11 +104,11 @@ public class NDDService {
 
         boolean hasInvalidMappings = mapping.stream().anyMatch(
                 m -> m.getNewTheme() == null
-                || m.getOldTheme() == null
-                || !m.getOldTheme().getIndlevel().equals(IndirectProgramUpdater.INDIRECT_MAPPING_LEVEL)
-                || !m.getNewTheme().getIndlevel().equals(IndirectProgramUpdater.INDIRECT_MAPPING_LEVEL)
-                || !getRoot(m.getOldTheme()).equals(srcProgramRoot)
-                || !getRoot(m.getNewTheme()).equals(dstProgramRoot));
+                        || m.getOldTheme() == null
+                        || !m.getOldTheme().getIndlevel().equals(IndirectProgramUpdater.INDIRECT_MAPPING_LEVEL)
+                        || !m.getNewTheme().getIndlevel().equals(IndirectProgramUpdater.INDIRECT_MAPPING_LEVEL)
+                        || !getRoot(m.getOldTheme()).equals(srcProgramRoot)
+                        || !getRoot(m.getNewTheme()).equals(dstProgramRoot));
 
         if (!hasInvalidMappings) {
             long distinctCount = mapping.stream().map(m -> Pair.of(m.getOldTheme(), m.getNewTheme()))

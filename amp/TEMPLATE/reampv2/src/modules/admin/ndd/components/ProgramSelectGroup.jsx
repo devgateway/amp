@@ -3,11 +3,20 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import PropTypes from 'prop-types';
 import {NDDContext} from './Startup';
-import {CHILDREN, PROGRAM, FIRST_LEVEL, SECOND_LEVEL, THIRD_LEVEL, STATE_LEVEL_FIELD} from '../constants/Constants'
+import {
+    CHILDREN,
+    PROGRAM,
+    FIRST_LEVEL,
+    SECOND_LEVEL,
+    THIRD_LEVEL,
+    STATE_LEVEL_FIELD,
+    ALL_PROGRAMS
+} from '../constants/Constants'
 import * as Constants from "../constants/Constants";
 import '../../../../../node_modules/react-bootstrap-typeahead/css/Typeahead.min.css';
 import './css/style.css';
 import ProgramSelect from "./ProgramSelect";
+import * as Utils from '../utils/Utils';
 
 class ProgramSelectGroup extends Component {
     constructor(props) {
@@ -86,25 +95,26 @@ class ProgramSelectGroup extends Component {
 
     getOptionsForLevel(level) {
         const {ndd} = this.context;
-        const {type} = this.props;
+        const {type, src, dst} = this.props;
         let options = [];
+        const tree = Utils.findFullProgramTree(ndd, type, src, dst);
         switch (level) {
             case FIRST_LEVEL:
-                if (ndd && ndd[type + PROGRAM]) {
-                    options = ndd[type + PROGRAM][CHILDREN].map(i => {
+                if (tree) {
+                    options = tree[CHILDREN].map(i => {
                         return {id: i.id, value: i.value}
                     });
                 }
                 break;
             case SECOND_LEVEL:
                 if (this.state[STATE_LEVEL_FIELD + FIRST_LEVEL]) {
-                    options = ndd[type + PROGRAM][CHILDREN]
+                    options = tree[CHILDREN]
                         .find(i => i.id === this.state[STATE_LEVEL_FIELD + FIRST_LEVEL].id)[CHILDREN];
                 }
                 break;
             case THIRD_LEVEL:
                 if (this.state[STATE_LEVEL_FIELD + SECOND_LEVEL]) {
-                    options = ndd[type + PROGRAM][CHILDREN]
+                    options = tree[CHILDREN]
                         .find(i => i.id === this.state[STATE_LEVEL_FIELD + FIRST_LEVEL].id)[CHILDREN]
                         .find(i => i.id === this.state[STATE_LEVEL_FIELD + SECOND_LEVEL].id)[CHILDREN];
                 }
@@ -188,7 +198,9 @@ class ProgramSelectGroup extends Component {
 ProgramSelectGroup.propTypes = {
     type: PropTypes.string.isRequired,
     data: PropTypes.object.isRequired,
-    onChange: PropTypes.func.isRequired
+    onChange: PropTypes.func.isRequired,
+    src: PropTypes.object,
+    dst: PropTypes.object
 }
 
 ProgramSelectGroup.contextType = NDDContext;

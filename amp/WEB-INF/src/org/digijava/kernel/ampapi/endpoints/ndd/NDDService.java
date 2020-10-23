@@ -55,7 +55,8 @@ public class NDDService {
 
         List<AmpIndirectTheme> mapping = loadMapping();
 
-        return new MappingConfiguration(mapping, src, dst, allPrograms);
+        return new MappingConfiguration(mapping, new SingleProgramData(src.getId(), src.getValue()),
+                new SingleProgramData(dst.getId(), dst.getValue()), allPrograms);
     }
 
     /**

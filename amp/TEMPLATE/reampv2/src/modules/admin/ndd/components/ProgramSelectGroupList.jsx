@@ -10,7 +10,7 @@ import ProgramSelectGroupRow from './ProgramSelectGroupRow.jsx'
 class ProgramSelectGroupList extends Component {
 
     render() {
-        const {list, translations, onChange, remove} = this.props;
+        const {list, translations, onChange, remove, dst, src} = this.props;
         return (<div>
             <table className="table table-striped">
                 <thead>
@@ -32,7 +32,8 @@ class ProgramSelectGroupList extends Component {
                 </thead>
                 <tbody>
                 {list.map(pair =>
-                    <ProgramSelectGroupRow rowData={pair} key={Math.random()} onChange={onChange} remove={remove}/>
+                    <ProgramSelectGroupRow rowData={pair} key={Math.random()} onChange={onChange} remove={remove}
+                                           dst={dst} src={src}/>
                 )}
                 </tbody>
             </table>
@@ -45,7 +46,9 @@ ProgramSelectGroupList.contextType = NDDContext;
 ProgramSelectGroupList.propTypes = {
     list: PropTypes.array.isRequired,
     onChange: PropTypes.func.isRequired,
-    remove: PropTypes.func.isRequired
+    remove: PropTypes.func.isRequired,
+    src: PropTypes.object,
+    dst: PropTypes.object
 }
 
 const mapStateToProps = state => ({

@@ -15,16 +15,17 @@ public class MappingConfiguration {
     private final List<AmpIndirectTheme> programMapping;
 
     @JsonProperty("src-program")
-    private final PossibleValue srcProgram;
+    private final NDDService.SingleProgramData srcProgram;
 
     @JsonProperty("dst-program")
-    private final PossibleValue dstProgram;
+    private final NDDService.SingleProgramData dstProgram;
 
     @JsonProperty("all-programs")
     private final List<PossibleValue> allPrograms;
 
     public MappingConfiguration(List<AmpIndirectTheme> programMapping,
-            PossibleValue srcProgram, PossibleValue dstProgram, List<PossibleValue> allPrograms) {
+                                NDDService.SingleProgramData srcProgram, NDDService.SingleProgramData dstProgram,
+                                List<PossibleValue> allPrograms) {
         this.programMapping = programMapping;
         this.srcProgram = srcProgram;
         this.dstProgram = dstProgram;
@@ -35,11 +36,11 @@ public class MappingConfiguration {
         return programMapping;
     }
 
-    public PossibleValue getSrcProgram() {
+    public NDDService.SingleProgramData getSrcProgram() {
         return srcProgram;
     }
 
-    public PossibleValue getDstProgram() {
+    public NDDService.SingleProgramData getDstProgram() {
         return dstProgram;
     }
 }

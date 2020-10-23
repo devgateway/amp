@@ -109,6 +109,7 @@ class FormPrograms extends Component {
     }
 
     saveAll() {
+        debugger
         const {data, src, dst} = this.state;
         const {saveNDD, translations} = this.props;
         const validateMappings = Utils.validate(data);
@@ -192,7 +193,7 @@ class FormPrograms extends Component {
             <ProgramsHeader onChange={this.onChangeMainProgram} src={src} dst={dst} key={Math.random()}/>
             <Header onAddRow={this.addRow} onSaveAll={this.saveAll} onRevertAll={this.revertAllChanges}/>
             <Notifications messages={messages}/>
-            <ProgramSelectGroupList list={data} onChange={this.onRowChange} remove={this.remove}/>
+            <ProgramSelectGroupList list={data} onChange={this.onRowChange} remove={this.remove} src={src} dst={dst}/>
         </div>);
     }
 }

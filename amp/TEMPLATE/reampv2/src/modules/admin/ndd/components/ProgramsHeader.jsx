@@ -16,7 +16,6 @@ class ProgramsHeader extends Component {
         const {translations, programs} = this.context;
         const {src, dst, onChange} = this.props;
         if (programs) {
-            console.error(src);
             return (<table className="programs-table">
                 <tbody>
                 <tr>

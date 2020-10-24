@@ -25,7 +25,7 @@ class ProgramSelect extends Component {
             id="basic-typeahead-single"
             labelKey="value"
             className={!isValid ? 'is-invalid' : ''}
-            options={options}
+            options={options || []}
             clearButton
             onChange={this.onChangeSelect.bind(this)}
             selected={selected}
@@ -33,15 +33,11 @@ class ProgramSelect extends Component {
     }
 
     render() {
-        const {label, options} = this.props;
-        if (!options || options.length === 0) {
-            return null
-        } else {
-            return (<div>
-                <span>{label}</span>
-                {this.drawSelector()}
-            </div>);
-        }
+        const {label} = this.props;
+        return (<div>
+            <span>{label}</span>
+            {this.drawSelector()}
+        </div>);
     }
 }
 

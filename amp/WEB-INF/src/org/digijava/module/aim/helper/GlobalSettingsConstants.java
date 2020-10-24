@@ -212,7 +212,7 @@ public class GlobalSettingsConstants {
 
 
     public static final String INDIRECT_PROGRAM = "Indirect program";
-    public static final String PRIMARY_PROGRAM = "Primary program";
+    public static final String PRIMARY_PROGRAM = "NPD Default Primary Program";
     
     // TODO will be removed once the new activity preview is finished
     public static final String USE_NEW_ACTIVITY_PREVIEW = "Use new activity preview";

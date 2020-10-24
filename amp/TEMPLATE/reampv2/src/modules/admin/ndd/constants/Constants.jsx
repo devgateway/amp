@@ -1,6 +1,7 @@
 export const TRN_PREFIX = 'amp.admin.ndd:';
 export const MAPPING_CONFIG = '/rest/ndd/mapping-config';
 export const AVAILABLE_PROGRAMS = '/rest/ndd/available-programs';
+export const SAVE_MAIN_PROGRAMS = '/rest/ndd/update-source-destination-programs';
 export const SAVE_CONFIG = '/rest/ndd/mapping';
 export const SRC_PROGRAM = 'src-program';
 export const DST_PROGRAM = 'dst-program';

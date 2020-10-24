@@ -109,21 +109,20 @@ class FormPrograms extends Component {
     }
 
     saveAll() {
-        debugger
         const {data, src, dst} = this.state;
         const {saveNDD, translations} = this.props;
         const validateMappings = Utils.validate(data);
         if (validateMappings === 0) {
             const validateMain = Utils.validateMainPrograms(src, dst);
             if (validateMain === 0) {
-                const toSave = [];
+                const mappings = [];
                 data.forEach(pair => {
-                    toSave.push({
+                    mappings.push({
                         [SRC_PROGRAM]: pair[SRC_PROGRAM].lvl3.id,
                         [DST_PROGRAM]: pair[DST_PROGRAM].lvl3.id,
                     });
                 });
-                saveNDD(toSave);
+                saveNDD(src, dst, mappings);
                 this.clearMessages();
             } else {
                 this.setState({validationErrors: translations[TRN_PREFIX + 'validation_error_' + validateMain]});

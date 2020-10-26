@@ -9,5 +9,6 @@
   "amp.geocoder:saveAllEdits": "Save All Edits",
   "amp.geocoder:runSearch": "Run Search",
   "amp.geocoder:running": "Geocoding is still running",
-  "amp.geocoder:cancel": "Cancel"
+  "amp.geocoder:cancel": "Cancel",
+  "amp.geocoder:noLocations": "No locations"
 }

@@ -9,6 +9,7 @@ import './table.css';
 import Locations from "./Locations";
 import {Loading} from "../panel/Loading";
 import {loadGeocoding} from "../../../actions/geocodingAction";
+import {TranslationContext} from "../../AppContext";
 
 class GeocodingTable extends Component {
     constructor(props) {
@@ -16,6 +17,7 @@ class GeocodingTable extends Component {
         this.state = { selectedRowAction: null };
 
         this.handleActionsClick = this.handleActionsClick.bind(this);
+        this.hasLocations = this.hasLocations.bind(this);
         this.wrapper = React.createRef();
     }
 
@@ -23,15 +25,21 @@ class GeocodingTable extends Component {
         this.setState({ selectedRowAction: selectedRowId });
     };
 
+    hasLocations = activityId => {
+        return this.props.activities.filter(activity => activity.activity_id === activityId)[0].locations.length > 0;
+    }
+
+    getNonExpandebleIds = () => {
+        return this.props.activities.filter(activity => activity.locations.length < 1).map(act => act.activity_id);
+    }
+
     componentDidMount() {
-        console.log("Geocoding Table componentDidMount()");
         if(this.props.geocodeShouldRun) {
             this.props.loadGeocoding();
         }
     }
 
     componentDidUpdate() {
-        console.log("Geocoding Table componentDidUpdate()");
         if(this.props.geocodeShouldRun) {
             this.props.loadGeocoding();
         }
@@ -45,8 +53,9 @@ class GeocodingTable extends Component {
         );
     }
 
-    expandColumnComponent({ isExpandableRow, isExpanded }) {
+    expandColumnComponent({ isExpandableRow, isExpanded}) {
         let content = '';
+        debugger;
 
         if (isExpandableRow) {
             content = (isExpanded ? '(-)' : '(+)' );
@@ -62,28 +71,26 @@ class GeocodingTable extends Component {
         );
     }
 
-    isExpandableRow(row) {
-        if (row.id < 2) return true;
-        else return false;
-    }
-
     render() {
-        console.log("Geocoding Table render()");
+        const {translations} = this.context;
+
         if (this.props.geocodingPending || this.props.geocodeShouldRun) {
             return <Loading/>
         }
+
 
         let expandRow = {
             onlyOneExpanding: true,
             renderer: row => (
                 <Locations activityId={row.activity_id}/>
             ),
+            nonExpandable: this.getNonExpandebleIds(),
             showExpandColumn: true,
             expandByColumnOnly: true,
             expandColumnPosition: 'right',
             expandColumnRenderer: ({ expanded, rowKey, expandable }) => (
                 <GeocodingActionColumn
-                    activityId={rowKey}
+                    activityId={rowKey} enabled={this.hasLocations(rowKey)} message={translations['amp.geocoder:noLocations']}
                 />
             )
         };
@@ -128,7 +135,7 @@ class GeocodingTable extends Component {
                 dataField: "project_title",
                 text: "Project Name",
                 headerStyle: () => {
-                    return { width: "50%" };
+                    return { width: "45%" };
                 },
                 sort:true
             },
@@ -164,6 +171,8 @@ class GeocodingTable extends Component {
         );
     }
 }
+
+GeocodingTable.contextType = TranslationContext;
 
 const mapStateToProps = state => {
     return {

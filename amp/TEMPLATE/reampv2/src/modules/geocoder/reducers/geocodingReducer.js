@@ -130,11 +130,13 @@ export default function geocodingReducer(state = initialState, action) {
                 ...state,
                 error: null,
                 pending: false,
+                geocodeShouldRun: true,
             };
         case GEOCODING_SAVE_ALL_EDITS_ERROR:
             return {
                 ...state,
                 error: action.error,
+                geocodeShouldRun: true,
             };
         default:
             return state;

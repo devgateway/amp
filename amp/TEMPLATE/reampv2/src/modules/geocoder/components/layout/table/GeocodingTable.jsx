@@ -33,12 +33,6 @@ class GeocodingTable extends Component {
         return this.props.activities.filter(activity => activity.locations.length < 1).map(act => act.activity_id);
     }
 
-    componentDidMount() {
-        if(this.props.geocodeShouldRun) {
-            this.props.loadGeocoding();
-        }
-    }
-
     componentDidUpdate() {
         if(this.props.geocodeShouldRun) {
             this.props.loadGeocoding();

@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.onepager.util.PercentagesUtil;
 import org.dgfoundation.amp.onepager.util.SaveContext;
@@ -263,7 +264,8 @@ public class GeoCodingService {
     }
 
     private boolean allLocationsHaveStatusSet(GeoCodedActivity activity) {
-        return activity.getLocations().stream().allMatch(l -> l.getAccepted() != null);
+        return activity.getLocations().size() > 0
+                && activity.getLocations().stream().allMatch(l -> l.getAccepted() != null);
     }
 
     private void updateActivity(GeoCodedActivity geoCodedActivity) {
@@ -281,6 +283,10 @@ public class GeoCodingService {
         org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivity(activity, null, getPrincipal(),
                 SiteUtils.getDefaultSite(), new java.util.Locale("en"),
                 AMPStartupListener.SERVLET_CONTEXT_ROOT_REAL_PATH, activity.getDraft(), SaveContext.job());
+        String locations = geoCodedActivity.getLocations().stream().filter(GeoCodedLocation::getAccepted)
+                .map(loc -> loc.getLocation().getName()).collect(Collectors.joining(","));
+        logger.info(String.format("Activity with amp_id = %s was updated with [%s] locations",
+                geoCodedActivity.getActivity().getAmpId(), locations));
     }
 
     private void updateLocations(GeoCodedActivity geoCodedActivity, AmpActivityVersion activity) {

@@ -7,7 +7,6 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.editor.exception.EditorException;

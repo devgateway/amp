@@ -105,7 +105,7 @@ public class GeoCoderClient {
                     .accept(MediaType.APPLICATION_JSON_TYPE)
                     .get(new GenericType<GeoCodingOperation>() { });
 
-            if (operation.state.equals("PENDING")) {
+            if (operation.state.equals("PENDING") || operation.state.equals("PROCESSING")) {
                 throw new GeoCodingNotProcessedException();
             }
 

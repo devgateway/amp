@@ -17,7 +17,9 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
@@ -49,10 +51,11 @@ public class AmpThemeSearchModel extends AbstractAmpAutoCompleteModel<AmpTheme> 
             List<AmpTheme> ret = new ArrayList<AmpTheme>();
             Session session = null;
             try {
+                String indirectProgram = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.INDIRECT_PROGRAM);
+
                 session = PersistenceManager.getRequestDBSession();
                 String pType = (String) getParams().get(PARAM.PROGRAM_TYPE);
-                AmpActivityProgramSettings aaps = ProgramUtil
-                        .getAmpActivityProgramSettings(pType);
+                AmpActivityProgramSettings aaps = ProgramUtil .getAmpActivityProgramSettings(pType);
                 AmpTheme def = aaps.getDefaultHierarchy();
                 
                 Criteria crit = session.createCriteria(AmpTheme.class);
@@ -85,6 +88,11 @@ public class AmpThemeSearchModel extends AbstractAmpAutoCompleteModel<AmpTheme> 
                         AmpTheme parentTheme = theme.getRootTheme();
                         if(def!=null && parentTheme!=null && parentTheme.getAmpThemeId().equals(def.getAmpThemeId())){
                             sameProgramThemes.add(theme);
+                            // Indirect Programs cant be used in the AF.
+                            if (indirectProgram != null
+                                    && !parentTheme.getAmpThemeId().equals(Long.valueOf(indirectProgram))) {
+                                sameProgramThemes.add(theme);
+                            }
                         }
                     }
                     ret.addAll((Collection<? extends AmpTheme>) createTreeView(sameProgramThemes));

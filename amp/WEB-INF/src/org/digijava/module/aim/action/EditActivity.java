@@ -1120,7 +1120,7 @@ public class EditActivity extends Action {
                 location.setCountry(cntry.getCountryName());
                 location.setIso(cntry.getIso());
 
-                location.setAmpCVLocation( loc);
+                location.setAmpCVLocation(loc);
                 location.setAncestorLocationNames(DynLocationManagerUtil.getParents(loc));
                 location.setLocationName(loc.getName());
                 location.setLocId(loc.getId());

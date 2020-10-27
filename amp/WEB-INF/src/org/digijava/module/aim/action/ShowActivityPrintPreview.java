@@ -331,10 +331,10 @@ public class ShowActivityPrintPreview
                         location.setCountry(cntry.getCountryName());
                         location.setIso(cntry.getIso());
 
-                        location.setAmpCVLocation( loc);
-                        location.setAncestorLocationNames( DynLocationManagerUtil.getParents( loc ));
+                        location.setAmpCVLocation(loc);
+                        location.setAncestorLocationNames(DynLocationManagerUtil.getParents(loc));
                         location.setLocationName(loc.getName());
-                          AmpCategoryValueLocations ampCVRegion = DynLocationManagerUtil.getAncestorByLayer(
+                        AmpCategoryValueLocations ampCVRegion = DynLocationManagerUtil.getAncestorByLayer(
                                   loc, CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1);
                         if ( ampCVRegion != null ) {
                             if (eaForm.getFunding().getFundingRegions() == null) {

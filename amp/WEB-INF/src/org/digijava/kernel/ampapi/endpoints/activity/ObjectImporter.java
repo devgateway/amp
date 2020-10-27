@@ -97,8 +97,8 @@ public abstract class ObjectImporter<T> {
         this(formatValidator, TranslationSettings.getCurrent(), apiField, site, valueConverter);
     }
 
-    public ObjectImporter(InputValidatorProcessor formatValidator,
-                          TranslationSettings trnSettings, APIField apiField, Site site, ValueConverter valueConverter) {
+    public ObjectImporter(InputValidatorProcessor formatValidator, TranslationSettings trnSettings,
+                          APIField apiField, Site site, ValueConverter valueConverter) {
         this.formatValidator = formatValidator;
         this.trnSettings = trnSettings;
         this.apiField = apiField;
@@ -371,9 +371,9 @@ public abstract class ObjectImporter<T> {
             // FIXME why not call deserializePrimitive ?
 
             Collection nvs = ((Collection<?>) childrenNewValues).stream()
-                    .map(v -> subElementClass.isAssignableFrom(v.getClass()) ?
-                            valueConverter.toSimpleTypeValue(subElementClass, v) :
-                            valueConverter.getObjectById(subElementClass, v)).collect(Collectors.toList());
+                    .map(v -> subElementClass.isAssignableFrom(v.getClass())
+                            ? valueConverter.toSimpleTypeValue(subElementClass, v)
+                            : valueConverter.getObjectById(subElementClass, v)).collect(Collectors.toList());
             collection.clear();
             collection.addAll(nvs);
         } else {

@@ -82,3 +82,16 @@
     text-align: center;
     padding-bottom: 30px;
 }
+
+.programs-table {
+    width: 100%;
+}
+
+.programs-table td {
+    padding-right: 5%;
+    padding-bottom: 1%;
+}
+
+.margin_2 {
+    margin: 2px;
+}

@@ -12,26 +12,45 @@ import {
     SRC_PROGRAM,
     TYPE_SRC,
     TYPE_DST,
-    TRN_PREFIX
+    TRN_PREFIX, VALUE
 } from "../constants/Constants";
 import * as Utils from "../utils/Utils";
 import {sendNDDError, sendNDDPending} from "../reducers/saveNDDReducer";
 import saveNDD from "../actions/saveNDD";
 import Notifications from "./Notifications";
+import * as Constants from "../constants/Constants";
+import ProgramsHeader from "./ProgramsHeader";
 
 class FormPrograms extends Component {
     constructor(props) {
         super(props);
-        this.state = {data: [], validationErrors: undefined};
+        this.state = {data: [], validationErrors: undefined, src: undefined, dst: undefined, programs: undefined};
         this.addRow = this.addRow.bind(this);
         this.saveAll = this.saveAll.bind(this);
         this.onRowChange = this.onRowChange.bind(this);
         this.remove = this.remove.bind(this);
         this.clearMessages = this.clearMessages.bind(this);
+        this.onChangeMainProgram = this.onChangeMainProgram.bind(this);
+        this.clearAll = this.clearAll.bind(this);
     }
 
     componentDidMount() {
-        const {ndd} = this.context;
+        const {ndd, programs} = this.context;
+        // Load main programs.
+        this.setState(previousState => {
+            const src = {id: ndd[SRC_PROGRAM].id, value: ndd[SRC_PROGRAM].value};
+            return {src};
+        });
+        this.setState(previousState => {
+            const dst = {id: ndd[DST_PROGRAM].id, value: ndd[DST_PROGRAM].value};
+            return {dst};
+        });
+
+        // Available programs.
+        this.setState(previousState => {
+            return {programs: programs};
+        });
+
         // Load saved mapping.
         this.setState(previousState => {
             const data = [...previousState.data];
@@ -90,26 +109,77 @@ class FormPrograms extends Component {
     }
 
     saveAll() {
-        const {data} = this.state;
+        const {data, src, dst} = this.state;
         const {saveNDD, translations} = this.props;
-        const validationResult = Utils.validate(data);
-        if (validationResult === 0) {
-            const toSave = [];
-            data.forEach(pair => {
-                toSave.push({
-                    [SRC_PROGRAM]: pair[SRC_PROGRAM].lvl3.id,
-                    [DST_PROGRAM]: pair[DST_PROGRAM].lvl3.id,
+        const validateMappings = Utils.validate(data);
+        if (validateMappings === 0) {
+            const validateMain = Utils.validateMainPrograms(src, dst);
+            if (validateMain === 0) {
+                const mappings = [];
+                data.forEach(pair => {
+                    mappings.push({
+                        [SRC_PROGRAM]: pair[SRC_PROGRAM].lvl3.id,
+                        [DST_PROGRAM]: pair[DST_PROGRAM].lvl3.id,
+                    });
                 });
-            });
-            saveNDD(toSave);
-            this.clearMessages();
+                saveNDD(src, dst, mappings);
+                this.clearMessages();
+            } else {
+                this.setState({validationErrors: translations[TRN_PREFIX + 'validation_error_' + validateMain]});
+            }
         } else {
-            this.setState({validationErrors: translations[TRN_PREFIX + 'validation_error_' + validationResult]})
+            this.setState({validationErrors: translations[TRN_PREFIX + 'validation_error_' + validateMappings]});
         }
     }
 
+    onChangeMainProgram(type, program) {
+        const {translations} = this.context;
+        const {data} = this.state;
+        const newProgram = (program && program.length > 0) ? program[0] : {};
+        const oldProgram = (this.state[type] ? this.state[type] : {});
+        if (oldProgram.id !== newProgram.id) {
+            if (oldProgram.id !== undefined) {
+                if (data.length === 0 || window.confirm(translations[TRN_PREFIX + 'warning_on_change_main_programs'])) {
+                    if (newProgram.id !== undefined) {
+                        // Old Program -> New Program.
+                        this.setState(previousState => {
+                            return {[type]: newProgram};
+                        });
+                    } else {
+                        // Old Program -> Nothing.
+                        this.setState(previousState => {
+                            return {[type]: undefined};
+                        });
+                    }
+                    this.clearAll();
+                } else {
+                    // Revert to previous Program.
+                    this.setState(previousState => {
+                        return previousState;
+                    });
+                    // TODO: set focus in the selector.
+                }
+            } else {
+                // Nothing -> Program.
+                this.setState(previousState => {
+                    return {[type]: newProgram};
+                });
+            }
+        }
+    }
+
+    clearAll() {
+        this.setState({
+            data: []
+        });
+    }
+
+    revertAllChanges() {
+        window.location.reload();
+    }
+
     render() {
-        const {data, validationErrors} = this.state;
+        const {data, validationErrors, src, dst} = this.state;
         const {error} = this.props;
         let messages = [];
         if (error) {
@@ -119,9 +189,10 @@ class FormPrograms extends Component {
             messages.push({isError: true, text: validationErrors});
         }
         return (<div className="form-container">
-            <Header onAddRow={this.addRow} onSaveAll={this.saveAll}/>
+            <ProgramsHeader onChange={this.onChangeMainProgram} src={src} dst={dst} key={Math.random()}/>
+            <Header onAddRow={this.addRow} onSaveAll={this.saveAll} onRevertAll={this.revertAllChanges}/>
             <Notifications messages={messages}/>
-            <ProgramSelectGroupList list={data} onChange={this.onRowChange} remove={this.remove}/>
+            <ProgramSelectGroupList list={data} onChange={this.onRowChange} remove={this.remove} src={src} dst={dst}/>
         </div>);
     }
 }

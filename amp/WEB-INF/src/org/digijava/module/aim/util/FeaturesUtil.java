@@ -663,11 +663,22 @@ public class FeaturesUtil {
         try {
             session = PersistenceManager.getSession();
             session.save(ampGlobalSettings);
+
+            updateCachedValue(ampGlobalSettings);
         }
         catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
         }
         return;
+    }
+
+    private static void updateCachedValue(AmpGlobalSettings ampGlobalSettings) {
+        if (globalSettingsCache != null) {
+            AmpGlobalSettings gs = globalSettingsCache.get(ampGlobalSettings.getGlobalSettingsName());
+            if (gs != null) {
+                gs.setGlobalSettingsValue(ampGlobalSettings.getGlobalSettingsValue());
+            }
+        }
     }
     
     public static String getGlobalSettingValue(String globalSettingName) {

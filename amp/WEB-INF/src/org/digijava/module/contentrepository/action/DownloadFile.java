@@ -1,5 +1,6 @@
 package org.digijava.module.contentrepository.action;
 
+import javax.ws.rs.core.Response;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -15,7 +16,6 @@ import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
 import javax.jcr.Node;
 import javax.jcr.Property;
-import javax.ws.rs.core.Response;
 import java.util.Calendar;
 import java.util.Comparator;
 

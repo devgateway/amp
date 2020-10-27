@@ -60,7 +60,7 @@ public class ResourceService {
 
         try {
             if (!readNode.hasProperty(CrConstants.PROPERTY_CONTENT_TYPE)) {
-                ApiErrorResponseService.reportResourceNotFound(ResourceErrors.RESOURCE_NOT_VALID);
+                ApiErrorResponseService.reportResourceNotFound(ResourceErrors.RESOURCE_NOT_VALID.withDetails(uuid));
             }
         } catch (RepositoryException e) {
             return new JsonApiResponse(ApiError.toError(ResourceErrors.RESOURCE_ERROR));
@@ -75,9 +75,9 @@ public class ResourceService {
                 nodeWrapper.getTranslatedTitle()));
         resource.setDescription(MultilingualContent.build(isMultilingual, nodeWrapper.getDescription(),
                 nodeWrapper.getTranslatedDescription()));
-        resource.setType(CategoryManagerUtil.getAmpCategoryValueFromDb(nodeWrapper.getCmDocTypeId()));
         resource.setNote(MultilingualContent.build(isMultilingual, nodeWrapper.getNotes(),
                 nodeWrapper.getTranslatedNote()));
+        resource.setType(CategoryManagerUtil.getAmpCategoryValueFromDb(nodeWrapper.getCmDocTypeId()));
         resource.setAddingDate(nodeWrapper.getCalendarDate() == null ? null : nodeWrapper.getCalendarDate().getTime());
         resource.setUrl("/contentrepository/downloadFile.do?uuid=" + uuid);
         resource.setCreatorEmail(nodeWrapper.getCreator());

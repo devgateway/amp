@@ -5,24 +5,17 @@ package org.dgfoundation.amp.ar.dyn;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
-import javax.servlet.jsp.JspException;
 
 import org.apache.log4j.Logger;
-import org.apache.struts.action.ActionMessage;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
-import org.dgfoundation.amp.visibility.FieldVisibilityTag;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
-import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 /**
  * @author Alex Gartner

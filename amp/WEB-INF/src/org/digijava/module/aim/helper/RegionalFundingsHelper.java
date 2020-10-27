@@ -56,7 +56,7 @@ public class RegionalFundingsHelper {
             
             fd.setCurrencyName(regFund.getCurrency().getCurrencyName());
             fd.setCurrencyCode(regFund.getCurrency().getCurrencyCode());
-            fd.setTransactionAmount(FormatHelper.formatNumber(regFund.getTransactionAmount().doubleValue()));
+            fd.setTransactionAmount(FormatHelper.formatNumber(regFund.getTransactionAmountWithFormatConversion()));
             
             String tsDate = DateConversion.convertDateToLocalizedString(regFund.getTransactionDate());
             fd.setTransactionDate(tsDate);
@@ -68,7 +68,7 @@ public class RegionalFundingsHelper {
             Date dt = regFund.getTransactionDate();
             double frmExRt = Util.getExchange(fd.getCurrencyCode(),new java.sql.Date(dt.getTime()));
             double toExRt = Util.getExchange(currCode,new java.sql.Date(dt.getTime()));
-            double amt = CurrencyWorker.convert1(regFund.getTransactionAmount().doubleValue(),frmExRt,toExRt);
+            double amt = CurrencyWorker.convert1(regFund.getTransactionAmountWithFormatConversion(), frmExRt, toExRt);
             fd.setTransactionAmount(FormatHelper.formatNumber(amt));
             fd.setCurrencyCode(currCode);
             fd.setAdjustmentTypeName(regFund.getAdjustmentType());

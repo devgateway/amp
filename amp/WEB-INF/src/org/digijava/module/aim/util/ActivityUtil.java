@@ -379,7 +379,7 @@ public class ActivityUtil {
         oql += " and (latestAct.actualStartDate <= :ToDate or (latestAct.actualStartDate is null and latestAct.proposedStartDate <= :ToDate) ) ";
       }
       if (locationId != null) {
-        oql += " and latestAct.locations in (from " + AmpLocation.class.getName() +" loc where loc.id=:LocationID)";
+        throw new RuntimeException("filtering by location not implemented");
       }
       oql+=whereTeamStatement.toString();
       return oql;

@@ -1,5 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.activity.field;
 
+import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -20,34 +22,29 @@ public class APIType {
 
     @JsonProperty(ActivityEPConstants.ITEM_TYPE)
     private final FieldType itemType;
-    
-    @JsonCreator
-    public APIType(@JsonProperty(ActivityEPConstants.FIELD_TYPE) String fieldType) {
-        this(FieldType.valueOf(fieldType.toUpperCase()) == FieldType.LIST ? Object.class : null,
-                FieldType.valueOf(fieldType.toUpperCase()));
-    }
 
-    public APIType(Class<?> type) {
-        this(type, null);
+    @JsonCreator
+    public APIType(
+            @JsonProperty(ActivityEPConstants.FIELD_TYPE) String fieldType,
+            @JsonProperty(ActivityEPConstants.ITEM_TYPE) String itemType) {
+        this(null, FieldType.valueOf(fieldType.toUpperCase()),
+                itemType == null ? null : FieldType.valueOf(itemType.toUpperCase()));
     }
 
     public APIType(Class<?> type, FieldType fieldType) {
+        this(type, fieldType, null);
+    }
+
+    public APIType(Class<?> type, FieldType fieldType, FieldType itemType) {
+        if (fieldType == FieldType.LIST && (itemType == null || itemType == FieldType.LIST)) {
+            throw new IllegalArgumentException("Invalid item type.");
+        }
+        if (fieldType != FieldType.LIST && itemType != null) {
+            throw new IllegalArgumentException("Item type must be null.");
+        }
         this.type = type;
-        if (fieldType == null) {
-            if (InterchangeableClassMapper.containsSimpleClass(type)) {
-                fieldType = InterchangeableClassMapper.getCustomMapping(type);
-            } else {
-                fieldType = FieldType.OBJECT;
-            }
-        }
-        if (fieldType.isList()) {
-            this.itemType = InterchangeableClassMapper.containsSimpleClass(type)
-                    ? InterchangeableClassMapper.getCustomMapping(type) : FieldType.OBJECT;
-             
-        } else {
-            this.itemType = null;
-        }
-        this.fieldType = fieldType;
+        this.fieldType = Objects.requireNonNull(fieldType);
+        this.itemType = itemType;
     }
 
     public FieldType getFieldType() {

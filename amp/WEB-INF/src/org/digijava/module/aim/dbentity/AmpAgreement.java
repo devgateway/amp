@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.validators.activity.AgreementCodeValidator;
 import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
@@ -23,7 +24,9 @@ public class AmpAgreement implements Serializable, Versionable, Identifiable {
     @Interchangeable(fieldTitle = "Code",
             fmPath = "/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement/Code",
             importable = true,
-            interValidators = @InterchangeableValidator(RequiredValidator.class))
+            interValidators = {
+                    @InterchangeableValidator(RequiredValidator.class),
+                    @InterchangeableValidator(AgreementCodeValidator.class)})
     private String code;
 
     @Interchangeable(fieldTitle = "Title",

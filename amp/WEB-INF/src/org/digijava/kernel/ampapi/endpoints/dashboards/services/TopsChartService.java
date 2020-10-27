@@ -135,8 +135,8 @@ public class TopsChartService {
                 name = DashboardConstants.TOP_EXECUTING_ORGS;
                 break;
             case RE:
-                setColumn(ColumnConstants.REGION);
-                applyFilter(FilterUtils.INSTANCE.idFromColumnName(ColumnConstants.REGION));
+                setColumn(ColumnConstants.LOCATION_ADM_LEVEL_1);
+                applyFilter(FilterUtils.INSTANCE.idFromColumnName(ColumnConstants.LOCATION_ADM_LEVEL_1));
                 title = TranslatorWorker.translateText(DashboardConstants.TOP_REGIONS);
                 name = DashboardConstants.TOP_REGIONS;
                 spec.setReportCollapsingStrategy(ReportCollapsingStrategy.NEVER);

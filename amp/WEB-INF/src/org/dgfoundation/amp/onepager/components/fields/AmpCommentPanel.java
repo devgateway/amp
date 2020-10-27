@@ -256,7 +256,7 @@ public class AmpCommentPanel extends AmpFieldPanel {
                     AmpAuthWebSession webSession = (AmpAuthWebSession) org.apache.wicket.Session.get();
                     
                     Long memberId = webSession.getCurrentMember().getMemberId();
-                    AmpTeamMember user = TeamMemberUtil.getAmpTeamMemberCached(memberId);
+                    AmpTeamMember user = TeamMemberUtil.getAmpTeamMember(memberId);
                     c.setMemberName(user.getUser().getName());
                     c.setComment(trnAddCommentModel.getObject().toString());
                     String msg = savedMsg;

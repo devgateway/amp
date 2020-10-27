@@ -41,7 +41,8 @@
 
     <Connector port="8080" URIEncoding="UTF-8" protocol="HTTP/1.1"
                connectionTimeout="20000"
-               redirectPort="8443" />
+               redirectPort="8443"
+               relaxedQueryChars="|{}" />
 
     <Engine name="Catalina" defaultHost="localhost">
 

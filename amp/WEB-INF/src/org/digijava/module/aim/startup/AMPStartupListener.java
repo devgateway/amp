@@ -245,7 +245,6 @@ public class AMPStartupListener extends HttpServlet implements
             ReportsUtil.checkDatabaseSanity(session);
             ReportsUtil.checkFilteringConfigurationSanity(session);
             ReportsUtil.checkPledgesViewsSanity(session);
-            ReportsUtil.checkLocationsSanity(session);
             CurrencyUtil.checkDatabaseSanity(session);
             OrganisationUtil.checkOrganisationNamesSanity(session);
         }catch(Exception e){

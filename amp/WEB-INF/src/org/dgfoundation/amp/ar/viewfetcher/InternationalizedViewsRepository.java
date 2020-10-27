@@ -331,18 +331,6 @@ public class InternationalizedViewsRepository {
                 addSimpleTranslatedView(this, "v_indirect_on_budget", "iob_text", "iob_id");
                 addSimpleTranslatedView(this, "v_institutions", "name", "id");
                 
-                addViewDef(this, new I18nViewDescription("v_line_ministry_observations").
-                        addColumnDef(new I18nViewColumnDescription("name", "amp_line_ministry_observation_id",
-                                AmpLineMinistryObservation.class, "name")));
-    
-                addViewDef(this, new I18nViewDescription("v_line_ministry_observations_actors").
-                        addColumnDef(new I18nViewColumnDescription("name", "amp_line_ministry_obs_actor_id",
-                                AmpLineMinistryObservationActor.class, "name")));
-    
-                addViewDef(this, new I18nViewDescription("v_line_ministry_observations_measures").
-                        addColumnDef(new I18nViewColumnDescription("name", "amp_line_ministry_obs_measure_id",
-                                AmpLineMinistryObservationMeasure.class, "name")));
-
                 addSimpleTranslatedView(this, "v_modalities", "name", "level_code");
                 addSimpleTranslatedView(this, "v_mode_of_payment", "mode_of_payment_name", "mode_of_payment_code");
                 addSimpleTranslatedView(this, "v_multi_donor", "value", "id");

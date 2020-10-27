@@ -72,9 +72,7 @@ public class TreeCollectionValidatorTest {
     
     @Test
     public void testObjectWithNullEntityInCollection() {
-        AmpLocation loc = new AmpLocation();
         AmpActivityVersion activity = new ActivityBuilder()
-                .addLocation(loc, 50f)
                 .addLocation(locationManager.getAmpLocation("Haiti"), 50f)
                 .getActivity();
         

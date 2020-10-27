@@ -922,7 +922,7 @@ public class ReportWizardAction extends MultiAction {
 
             if (type == ArConstants.PLEDGES_TYPE)
             {
-                // TODO-CONSTANTIN: looks stupid, should be moved out of the loop completely
+                // TODO-CONSTANTIN: should be moved out of the loop completely
                 for(AmpColumnsOrder aco:ampColumnsOrder)
                     if (aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_COLUMNS) ||
                             aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_CONTACTS_1)||aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_CONTACTS_2))

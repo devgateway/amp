@@ -156,11 +156,19 @@ public class AmpCategoryValueLocations implements Identifiable,
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof AmpCategoryValueLocations) {
-            AmpCategoryValueLocations loc = (AmpCategoryValueLocations) o;
-            return id.equals(loc.getId());
-        } else
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof AmpCategoryValueLocations)) {
             return false;
+        }
+        AmpCategoryValueLocations that = (AmpCategoryValueLocations) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     @Override

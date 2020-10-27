@@ -12,7 +12,6 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -28,13 +27,10 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.util.IndicatorUtil;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.ChartUtilities;
@@ -66,28 +62,16 @@ public class ChartGenerator {
             HttpSession session,PrintWriter pw,
             int chartWidth,int chartHeight,String url) throws Exception{
 
-        ArrayList<AmpIndicatorRiskRatings> risks=new ArrayList<AmpIndicatorRiskRatings>();
-        if(session.getAttribute("indsRisks")!=null){
-             risks=(ArrayList<AmpIndicatorRiskRatings>)session.getAttribute("indsRisks");
-             session.removeAttribute("indsRisks");
-        }else{
-            Set<IndicatorActivity> valuesActivity=IndicatorUtil.getAllIndicatorsForActivity(actId);
-            if(valuesActivity!=null && valuesActivity.size()>0){
-                Iterator<IndicatorActivity> it=valuesActivity.iterator();
-                while(it.hasNext()){
-                     IndicatorActivity indActivity=it.next();
-                     Set<AmpIndicatorValue> values=indActivity.getValues();
-                     for(Iterator<AmpIndicatorValue> valuesIter=values.iterator();valuesIter.hasNext();){
-                         AmpIndicatorValue val=valuesIter.next();
-                         if(val.getRisk()!=null){
-                             risks.add(val.getRisk());
-                             break;//TODO INDIC because this is stupid! all values have same risk and this risk should go to connection.
-                         }
-                    }
+        ArrayList<AmpIndicatorRiskRatings> risks = new ArrayList<>();
+        Set<IndicatorActivity> valuesActivity = IndicatorUtil.getAllIndicatorsForActivity(actId);
+        if (valuesActivity != null && valuesActivity.size() > 0) {
+            for (IndicatorActivity indActivity : valuesActivity) {
+                if (indActivity.getRisk() != null) {
+                    risks.add(indActivity.getRisk());
                 }
             }
         }
-        
+
 
         //ArrayList meRisks = (ArrayList) MEIndicatorsUtil.getMEIndicatorRisks(actId);
         for (Iterator<AmpIndicatorRiskRatings> riskIter = risks.iterator(); riskIter.hasNext(); ) {
@@ -118,86 +102,7 @@ public class ChartGenerator {
     public static String getActivityPerformanceChartFileName(Long actId,HttpSession session,PrintWriter pw,
             int chartWidth,int chartHeight,String url,boolean includeBaseline, HttpServletRequest request) throws Exception{
 
-        
-        Set<IndicatorActivity> values=null;
-        Collection<ActivityIndicator> actIndicators = (Collection)session.getAttribute("indsME");
-        session.removeAttribute("indsME");
-        if(actIndicators!=null && actIndicators.size()>0){
-            for (ActivityIndicator actInd : actIndicators) {
-                AmpIndicatorRiskRatings risk=null;
-                
-                  AmpIndicator ind=IndicatorUtil.getIndicator(actInd.getIndicatorId());
-                  if(actInd.getRisk()!=null && actInd.getRisk().longValue()>0){
-                      risk=IndicatorUtil.getRisk(actInd.getRisk());  
-                  }
-
-                  AmpCategoryValue categoryValue = null;
-                  if(actInd.getIndicatorsCategory() != null && actInd.getIndicatorsCategory().getId() != null){
-                      categoryValue = CategoryManagerUtil.getAmpCategoryValueFromDb(actInd.getIndicatorsCategory().getId());
-                  }               
-                 
-                  IndicatorActivity indConn=new IndicatorActivity();
-                  indConn.setIndicator(ind);
-                  indConn.setValues(new HashSet<AmpIndicatorValue>());
-                  //create each type of value and assign to connection
-                  AmpIndicatorValue indValActual = null;
-                  if (actInd.getCurrentVal()!=null){
-                      indValActual = new AmpIndicatorValue();
-                      indValActual.setValueType(AmpIndicatorValue.ACTUAL);
-                      indValActual.setValue(new Double(actInd.getCurrentVal()));
-                      indValActual.setComment(actInd.getCurrentValComments());
-                      indValActual.setValueDate(DateConversion.getDate(actInd.getCurrentValDate()));
-                      indValActual.setRisk(risk);
-                      indValActual.setLogFrame(categoryValue);
-                      indValActual.setIndicatorConnection(indConn);
-                      indConn.getValues().add(indValActual);
-                  }
-                  AmpIndicatorValue indValTarget = null;
-                  if (actInd.getTargetVal()!=null){
-                      indValTarget = new AmpIndicatorValue();
-                      indValTarget.setValueType(AmpIndicatorValue.TARGET);
-                      indValTarget.setValue(new Double(actInd.getTargetVal()));
-                      indValTarget.setComment(actInd.getTargetValComments());
-                      indValTarget.setValueDate(DateConversion.getDate(actInd.getTargetValDate()));
-                      indValTarget.setRisk(risk);
-                      indValTarget.setLogFrame(categoryValue);
-                      indValTarget.setIndicatorConnection(indConn);
-                      indConn.getValues().add(indValTarget);
-                  }
-                  AmpIndicatorValue indValBase = null;
-                  if (actInd.getBaseVal()!=null){
-                      indValBase = new AmpIndicatorValue();
-                      indValBase.setValueType(AmpIndicatorValue.BASE);
-                      indValBase.setValue(new Double(actInd.getBaseVal()));
-                      indValBase.setComment(actInd.getBaseValComments());
-                      indValBase.setValueDate(DateConversion.getDate(actInd.getBaseValDate()));
-                      indValBase.setRisk(risk);
-                      indValBase.setLogFrame(categoryValue);
-                      indValBase.setIndicatorConnection(indConn);
-                      indConn.getValues().add(indValBase);
-                  }
-                  AmpIndicatorValue indValRevised = null;
-                  if (actInd.getRevisedTargetVal()!=null){
-                      indValRevised = new AmpIndicatorValue();
-                      indValRevised.setValueType(AmpIndicatorValue.REVISED);
-                      indValRevised.setValue(new Double(actInd.getRevisedTargetVal()));
-                      indValRevised.setComment(actInd.getRevisedTargetValComments());
-                      indValRevised.setValueDate(DateConversion.getDate(actInd.getRevisedTargetValDate()));
-                      indValRevised.setRisk(risk);
-                      indValRevised.setLogFrame(categoryValue);
-                      indValRevised.setIndicatorConnection(indConn);
-                      indConn.getValues().add(indValRevised);
-                  }
-                
-                  if(values==null){
-                      values=new HashSet<IndicatorActivity>();
-                  }
-                  values.add(indConn);
-            }           
-        }else{
-            values=IndicatorUtil.getAllIndicatorsForActivity(actId);
-        }
-        
+        Set<IndicatorActivity> values = IndicatorUtil.getAllIndicatorsForActivity(actId);
 
         String retVal = null;
 

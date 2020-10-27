@@ -5,9 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesDAO;
-import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.*;
 
 /**
  * Non-persistent implementation of {@code PossibleValuesDAO} which is backed by an in-memory map.
@@ -65,15 +63,14 @@ public class InMemoryPossibleValuesDAO implements PossibleValuesDAO {
     public List<Object[]> getPossibleLocations() {
         return InMemoryLocationManager.getInstance().getAllValues()
                 .stream()
-                .map(loc -> Arrays.asList(loc.getAmpLocationId(),
-                        loc.getAmpLocationId(),
-                        loc.getLocation().getId(),
-                        loc.getLocation().getName(),
-                        loc.getLocation().getParentLocation().getId(),
-                        loc.getLocation().getParentLocation().getName(),
-                        loc.getLocation().getParentCategoryValue().getId(),
-                        loc.getLocation().getParentCategoryValue().getValue(),
-                        loc.getLocation().getIso())
+                .map(loc -> Arrays.asList(loc,
+                        loc.getId(),
+                        loc.getName(),
+                        loc.getParentLocation().getId(),
+                        loc.getParentLocation().getName(),
+                        loc.getParentCategoryValue().getId(),
+                        loc.getParentCategoryValue().getValue(),
+                        loc.getIso())
                         .toArray())
                 .collect(Collectors.toList());
     }
@@ -91,5 +88,25 @@ public class InMemoryPossibleValuesDAO implements PossibleValuesDAO {
     @Override
     public boolean isOrganizationValid(Long id) {
         return InMemoryOrganisationManager.getInstance().get(id) != null;
+    }
+
+    @Override
+    public List<AmpIndicatorRiskRatings> getIndicatorRiskRatings() {
+        throw new RuntimeException("Not Implemented");
+    }
+
+    @Override
+    public boolean isIndicatorRiskRatingValid(Long id) {
+        throw new RuntimeException("Not Implemented");
+    }
+
+    @Override
+    public List<AmpIndicator> getIndicators() {
+        throw new RuntimeException("Not Implemented");
+    }
+
+    @Override
+    public boolean isIndicatorValid(Long id) {
+        throw new RuntimeException("Not Implemented");
     }
 }

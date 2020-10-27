@@ -1,3 +1,5 @@
+import { ActivityConstants } from "amp-ui";
+
 export default class HydratorHelper {
     static fetchRequestDataForHydration(object, fieldsManager, parent) {
         const requestData = {};
@@ -37,6 +39,15 @@ export default class HydratorHelper {
                         } else {
                             objectToHydrate[objectField] = valuesForHydration[fieldToHydrate]
                                 .find(field => field.id === objectToHydrate[objectField]);
+                        }
+                        if (objectToHydrate[objectField].ancestorValues) {
+                            objectToHydrate[objectField][ActivityConstants.HIERARCHICAL_VALUE] =
+                                objectToHydrate[objectField].ancestorValues.map(i=>'[' + i + ']').join('');
+                            objectToHydrate[objectField][ActivityConstants.HIERARCHICAL_VALUE_DEPTH] =
+                                objectToHydrate[objectField].ancestorValues ? objectToHydrate[objectField].ancestorValues.length : 0;
+                        }
+                        if (objectToHydrate[objectField].translatedValue) {
+                            objectToHydrate[objectField]['translated-value'] = objectToHydrate[objectField].translatedValue;
                         }
                     }
                 }

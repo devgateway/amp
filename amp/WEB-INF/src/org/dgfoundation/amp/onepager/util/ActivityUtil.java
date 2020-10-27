@@ -74,7 +74,6 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.dbentity.FundingInformationItem;
-import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -83,7 +82,6 @@ import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.AuditLoggerUtil;
 import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.contentrepository.exception.JCRSessionException;
@@ -300,9 +298,6 @@ public class ActivityUtil {
         a.setAmpActivityGroup(group);
 
         if (isActivityForm) {
-
-            saveIndicators(a, session);
-
             saveActivityResources(a, session);
             saveActivityGPINiResources(a, session);
             saveComments(a, session, draft);
@@ -1281,38 +1276,6 @@ public class ActivityUtil {
                 == surveyResponse.getAmpGPINiSurvey().getAmpOrgRole().getOrganisation().getAmpOrgId()
                 && tempGPINiSurveyResponse.getAmpGPINiQuestion().getCode()
                 .equals(surveyResponse.getAmpGPINiQuestion().getCode()));
-    }
-
-    private static void saveIndicators(AmpActivityVersion a, Session session) throws Exception {
-        if (a.getAmpActivityId() != null){
-            //cleanup old indicators
-            Set<IndicatorActivity> old = IndicatorUtil.getAllIndicatorsForActivity(a.getAmpActivityId());
-            if (old != null){
-                for (IndicatorActivity oldInd : old) {
-                    boolean found=false;
-                    if (a.getIndicators() == null)
-                        continue;
-                    for (IndicatorActivity newind : a.getIndicators()) {
-                        if ((newind.getId() != null) && (newind.getId().compareTo(oldInd.getId()) == 0)){
-                            found=true;
-                            break;
-                        }
-                    }
-                    if (!found){
-                        Object tmp = session.load(IndicatorActivity.class, oldInd.getId());
-                        session.delete(tmp);
-                    }
-                }
-            }
-        }
-
-        Set<IndicatorActivity> inds = a.getIndicators();
-        if (inds != null){
-            for (IndicatorActivity ind : inds) {
-                ind.setActivity(a);
-                session.saveOrUpdate(ind);
-            }
-        }
     }
 
     public static void saveContacts(AmpActivityVersion a, Session session, boolean checkForContactsRemoval,

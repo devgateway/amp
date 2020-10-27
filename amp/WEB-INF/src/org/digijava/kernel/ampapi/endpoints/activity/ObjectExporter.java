@@ -20,9 +20,9 @@ import org.digijava.module.common.util.DateTimeUtil;
  */
 public class ObjectExporter<T> {
 
-    private List<APIField> apiFields;
+    private final List<APIField> apiFields;
 
-    private TranslatedFieldReader translatedFieldReader;
+    private final TranslatedFieldReader translatedFieldReader;
 
     public ObjectExporter(TranslatedFieldReader translatedFieldReader, List<APIField> apiFields) {
         this.translatedFieldReader = translatedFieldReader;
@@ -77,7 +77,7 @@ public class ObjectExporter<T> {
         } else if (field.getApiType().getFieldType().isObject()) {
             jsonValue = (fieldValue == null) ? null : getObjectJson(fieldValue, field.getChildren(), fieldPath);
         } else if (isList) {
-            jsonValue = readCollection(field, fieldPath, (Collection) fieldValue);
+            jsonValue = readCollection(field, fieldPath, object, (Collection<?>) fieldValue);
         } else {
             jsonValue = readPrimitive(field, object, fieldValue);
         }
@@ -106,7 +106,9 @@ public class ObjectExporter<T> {
      * Convert primitive value to json value.
      */
     private Object readPrimitive(APIField apiField, Object object, Object fieldValue) {
-        if (fieldValue instanceof Date) {
+        if (apiField.isIdOnly()) {
+            return readFieldWithPossibleValues(apiField, fieldValue);
+        } else if (fieldValue instanceof Date) {
             boolean isTimestamp = apiField.getApiType().getFieldType() == FieldType.TIMESTAMP;
             return DateTimeUtil.formatISO8601DateTimestamp((Date) fieldValue, isTimestamp);
         } else {
@@ -123,11 +125,13 @@ public class ObjectExporter<T> {
     /**
      * Convert list of objects to a json array.
      */
-    private List<Object> readCollection(APIField field, String fieldPath, Collection value) {
+    private List<Object> readCollection(APIField field, String fieldPath, Object object, Collection<?> value) {
         List<Object> collectionOutput = new ArrayList<>();
         if (value != null) {
             if (field.getApiType().isSimpleItemType()) {
-                collectionOutput.addAll(value);
+                for (Object item : value) {
+                    collectionOutput.add(readPrimitive(field, object, item));
+                }
             } else {
                 for (Object item : value) {
                     collectionOutput.add(getObjectJson(item, field.getChildren(), fieldPath));

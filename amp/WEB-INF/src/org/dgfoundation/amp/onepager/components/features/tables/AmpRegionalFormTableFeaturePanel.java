@@ -69,7 +69,7 @@ public abstract class AmpRegionalFormTableFeaturePanel extends
     protected AmpFundingAmountComponent getFundingAmountComponent(
             IModel<AmpRegionalFunding> model) {
         return new AmpTableFundingAmountComponent<AmpRegionalFunding>("fundingAmount",
-                model, "Amount", "transactionAmount", "Currency",
+                model, "Amount", "transactionAmountWithFormatConversion", "Currency",
                 "currency", "Transaction Date", "transactionDate", false);
     }
 

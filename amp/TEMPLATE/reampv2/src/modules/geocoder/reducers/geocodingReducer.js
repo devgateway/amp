@@ -22,7 +22,7 @@ const initialState = {
     pending: false,
     reset_pending: false,
     running: false,
-    status : "NOT_STARTED",
+    status : null,
     creator: null,
     workspace: null,
     activities : [],

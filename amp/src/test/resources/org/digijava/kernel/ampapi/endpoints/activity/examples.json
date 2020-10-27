@@ -182,5 +182,8 @@
       "number": "X"
     },
     "read_only_intelligence": 45
+  },
+   "list-of-pick-id-only": {
+    "character": [55, 56, 57]
   }
 }

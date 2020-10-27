@@ -4,7 +4,10 @@ import java.io.Serializable;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
-import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.kernel.validators.common.RequiredValidator;
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.common.util.DateTimeUtil;
 
@@ -32,19 +35,31 @@ public class AmpIndicatorValue implements Serializable, Cloneable{
 
 
     private static final long serialVersionUID = 1L;
+
     private Long indValId;
+
+    @Interchangeable(fieldTitle = "Comment", importable = true)
     private String comment;
+
+    @Interchangeable(fieldTitle = "Date", importable = true,
+            interValidators = @InterchangeableValidator(value = RequiredValidator.class, discriminatorOptions =
+                    {"" + AmpIndicatorValue.BASE, "" + AmpIndicatorValue.ACTUAL, "" + AmpIndicatorValue.TARGET}))
     private Date valueDate;
 
     private Date dataIntervalStart;
     private Date dataIntervalEnd;
 
+    @Interchangeable(fieldTitle = "Value", importable = true,
+            interValidators = @InterchangeableValidator(value = RequiredValidator.class, discriminatorOptions =
+                    {"" + AmpIndicatorValue.BASE, "" + AmpIndicatorValue.ACTUAL, "" + AmpIndicatorValue.TARGET}))
     private Double value;
+
     private int valueType;
-    private AmpCategoryValue logFrame;
-    private AmpIndicatorRiskRatings risk;
     private Boolean defaultInd;
+
+    @InterchangeableBackReference
     private IndicatorConnection indicatorConnection;
+
     private AmpLocation location;
     
     private AmpCategoryValue indicatorSource;
@@ -110,18 +125,6 @@ public class AmpIndicatorValue implements Serializable, Cloneable{
     }
     public void setValueType(int valueType) {
         this.valueType = valueType;
-    }
-    public AmpCategoryValue getLogFrame() {
-        return logFrame;
-    }
-    public void setLogFrame(AmpCategoryValue logFrame) {
-        this.logFrame = logFrame;
-    }
-    public AmpIndicatorRiskRatings getRisk() {
-        return risk;
-    }
-    public void setRisk(AmpIndicatorRiskRatings risk) {
-        this.risk = risk;
     }
     public IndicatorConnection getIndicatorConnection() {
         return indicatorConnection;

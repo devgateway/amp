@@ -1,6 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -14,20 +13,20 @@ public class FieldIdValue {
 
     @JsonProperty("translated-value")
     private Map<String, String> translatedValue;
-    
+
+    @JsonProperty("extra_info")
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    @JsonProperty("ancestor-values")
-    private List<String> ancestorValues;
-    
+    private Object extraInfo;
+
     public FieldIdValue(Long id) {
         this.id = id;
     }
 
-    public FieldIdValue(Long id, String value, Map<String, String> translatedValue, List<String> ancestorPath) {
+    public FieldIdValue(Long id, String value, Map<String, String> translatedValue, Object extraInfo) {
         this.id = id;
         this.value = value;
         this.translatedValue = translatedValue;
-        this.ancestorValues = ancestorPath;
+        this.extraInfo = extraInfo;
     }
 
     public Long getId() {
@@ -46,19 +45,19 @@ public class FieldIdValue {
         this.value = value;
     }
 
-    public List<String> getAncestorValues() {
-        return ancestorValues;
-    }
-
-    public void setAncestorValues(List<String> ancestorPath) {
-        this.ancestorValues = ancestorPath;
-    }
-
     public Map<String, String> getTranslatedValue() {
         return translatedValue;
     }
 
     public void setTranslatedValue(Map<String, String> translatedValue) {
         this.translatedValue = translatedValue;
+    }
+
+    public Object getExtraInfo() {
+        return extraInfo;
+    }
+
+    public void setExtraInfo(Object extraInfo) {
+        this.extraInfo = extraInfo;
     }
 }

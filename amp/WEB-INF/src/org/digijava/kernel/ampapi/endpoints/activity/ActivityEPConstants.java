@@ -9,6 +9,8 @@ import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import java.util.ArrayList;
 import java.util.List;
 
+import  org.dgfoundation.amp.ar.ArConstants;
+
 /**
  * Activity Endpoint related constants
  *
@@ -57,6 +59,7 @@ public class ActivityEPConstants {
     public static final String TREE_COLLECTION_CONSTRAINT = "tree_collection";
     public static final String COMMON_POSSIBLE_VALUES = "common-possible-values";
 
+
     public static final String PREVIEW_CURRENCY_ID = "currency-id";
 
     public static final String API_WS_MEMBER_IDS = "ws-member-ids";
@@ -69,6 +72,9 @@ public class ActivityEPConstants {
     public static final String MODIFIED_BY_FIELD_NAME =
             FieldMap.underscorify(ActivityFieldsConstants.MODIFIED_BY);
     public static final String VERSION_FIELD_NAME = FieldMap.underscorify(ActivityFieldsConstants.VERSION);
+
+    public static final String LOCATIONS_FIELD_NAME =
+            FieldMap.underscorify(ActivityFieldsConstants.LOCATIONS);
 
     public static final String AMP_ACTIVITY_ID = "amp-activity-id";
     public static final String AMP_ACTIVITY_LAST_VERSION_ID = "amp-activity-last-version-id";
@@ -145,6 +151,17 @@ public class ActivityEPConstants {
         add("fundings~expenditures~adjustment_type");
         add("fundings~estimated_disbursements~adjustment_type");
         add("locations~location");
+        add(ActivityFieldsConstants.FUNDINGS.toLowerCase() + "~" + ArConstants.COMMITMENT.toLowerCase()
+                + "~" + ActivityFieldsConstants.ADJUSTMENT_TYPE);
+        add(ActivityFieldsConstants.FUNDINGS.toLowerCase() + "~" + ArConstants.DISBURSEMENT.toLowerCase()
+                + "~" + ActivityFieldsConstants.ADJUSTMENT_TYPE);
+        add(ActivityFieldsConstants.FUNDINGS.toLowerCase() + "~" + ArConstants.EXPENDITURE.toLowerCase()
+                + "~" + ActivityFieldsConstants.ADJUSTMENT_TYPE);
+        add(ActivityFieldsConstants.FUNDINGS.toLowerCase() + "~"
+                + FieldMap.underscorify(ArConstants.ESTIMATED_DISBURSEMENTS).toLowerCase()
+                + "~" + ActivityFieldsConstants.ADJUSTMENT_TYPE);
+        add(ActivityFieldsConstants.LOCATIONS.toLowerCase() + "~"
+                + ActivityFieldsConstants.Locations.LOCATION.toLowerCase());
     }};
 
     public static final String FUNDING_VULNERABLE_GROUP_LABEL =

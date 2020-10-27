@@ -289,3 +289,8 @@ table thead tr th {
     margin-top: 20px;
     margin-bottom: 20px;
 }
+
+.no-locations {
+    color: #FF0000;
+    font-weight: bold;
+}

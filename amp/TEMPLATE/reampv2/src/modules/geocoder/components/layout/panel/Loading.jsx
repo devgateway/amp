@@ -1,6 +1,4 @@
 import React from 'react';
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {Spinner} from "react-bootstrap";
 import {ClipLoader} from "react-spinners";
 
 

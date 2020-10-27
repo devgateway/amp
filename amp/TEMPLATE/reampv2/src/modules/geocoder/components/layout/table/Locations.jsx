@@ -76,7 +76,9 @@ class Locations extends Component {
             <div className={'search-result'}><b>{locations.length}</b> Search Results of <b>Locations</b></div>
             <div>
                 <table className={'location-container'}>
-                    {locationItems}
+                    <tbody>
+                        {locationItems}
+                    </tbody>
                 </table>
             </div>
         </div>);

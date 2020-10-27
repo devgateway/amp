@@ -27,7 +27,8 @@ const initialState = {
     workspace: null,
     activities : [],
     error: null,
-    reset_error: null
+    reset_error: null,
+    geocodeShouldRun: false
 };
 
 export default function geocodingReducer(state = initialState, action) {
@@ -35,6 +36,7 @@ export default function geocodingReducer(state = initialState, action) {
         case FETCH_GEOCODING_PENDING:
             return {
                 ...state,
+                geocodeShouldRun: false,
                 pending: true,
             };
         case FETCH_GEOCODING_SUCCESS:
@@ -42,7 +44,8 @@ export default function geocodingReducer(state = initialState, action) {
                 ...state,
                 ...action.payload.data,
                 status: action.status,
-                pending: false,
+                pending: action.pending,
+                geocodeShouldRun: action.geocodeShouldRun,
                 error: null
             };
         case FETCH_GEOCODING_ERROR:
@@ -50,6 +53,7 @@ export default function geocodingReducer(state = initialState, action) {
                 ...state,
                 pending: false,
                 error: action.error,
+                geocodeShouldRun: false,
                 status : action.status,
             };
         case GEOCODING_RUN_SEARCH_SUCCESS:
@@ -58,6 +62,7 @@ export default function geocodingReducer(state = initialState, action) {
                 ...action.payload.data,
                 status: action.status,
                 pending: false,
+                geocodeShouldRun: true,
                 error: null
             };
         case GEOCODING_LOCATION_PENDING:

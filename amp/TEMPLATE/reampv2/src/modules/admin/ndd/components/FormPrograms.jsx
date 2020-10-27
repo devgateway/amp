@@ -38,12 +38,18 @@ class FormPrograms extends Component {
         const {ndd, programs} = this.context;
         // Load main programs.
         this.setState(previousState => {
-            const src = {id: ndd[SRC_PROGRAM].id, value: ndd[SRC_PROGRAM].value};
-            return {src};
+            if (ndd[SRC_PROGRAM]) {
+                const src = {id: ndd[SRC_PROGRAM].id, value: ndd[SRC_PROGRAM].value};
+                return {src};
+            }
+            return {src: undefined};
         });
         this.setState(previousState => {
-            const dst = {id: ndd[DST_PROGRAM].id, value: ndd[DST_PROGRAM].value};
-            return {dst};
+            if (ndd[DST_PROGRAM]) {
+                const dst = {id: ndd[DST_PROGRAM].id, value: ndd[DST_PROGRAM].value};
+                return {dst};
+            }
+            return {dst: undefined};
         });
 
         // Available programs.

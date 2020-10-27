@@ -46,8 +46,10 @@ public class NDDService {
     }
 
     public MappingConfiguration getMappingConfiguration() {
-        PossibleValue src = convert(getSrcProgramRoot(), IndirectProgramUpdater.INDIRECT_MAPPING_LEVEL);
-        PossibleValue dst = convert(getDstProgramRoot(), IndirectProgramUpdater.INDIRECT_MAPPING_LEVEL);
+        AmpTheme src = getSrcProgramRoot();
+        AmpTheme dst = getDstProgramRoot();
+        PossibleValue srcPV = src != null ? convert(src, IndirectProgramUpdater.INDIRECT_MAPPING_LEVEL) : null;
+        PossibleValue dstPV = dst != null ? convert(dst, IndirectProgramUpdater.INDIRECT_MAPPING_LEVEL) : null;
 
         List<PossibleValue> allPrograms = new ArrayList<>();
         getAvailablePrograms().forEach(ampTheme -> {
@@ -57,8 +59,9 @@ public class NDDService {
 
         List<AmpIndirectTheme> mapping = loadMapping();
 
-        return new MappingConfiguration(mapping, new SingleProgramData(src.getId(), src.getValue()),
-                new SingleProgramData(dst.getId(), dst.getValue()), allPrograms);
+        SingleProgramData srcSPD = srcPV != null ? new SingleProgramData(srcPV.getId(), srcPV.getValue()) : null;
+        SingleProgramData dstSPD = dstPV != null ? new SingleProgramData(dstPV.getId(), dstPV.getValue()) : null;
+        return new MappingConfiguration(mapping, srcSPD, dstSPD, allPrograms);
     }
 
     /**
@@ -165,7 +168,7 @@ public class NDDService {
     private AmpTheme getDstProgramRoot() {
         String indirectProgram = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.INDIRECT_PROGRAM);
         if (indirectProgram == null) {
-            throw new RuntimeException(GlobalSettingsConstants.INDIRECT_PROGRAM + " is not configured.");
+            return null;
         }
         return ProgramUtil.getTheme(Long.valueOf(indirectProgram));
     }
@@ -173,7 +176,7 @@ public class NDDService {
     private AmpTheme getSrcProgramRoot() {
         String primaryProgram = FeaturesUtil.getGlobalSettingValue(PRIMARY_PROGRAM);
         if (primaryProgram == null) {
-            throw new RuntimeException(PRIMARY_PROGRAM + " is not configured.");
+            return null;
         }
         return ProgramUtil.getTheme(Long.valueOf(primaryProgram));
     }

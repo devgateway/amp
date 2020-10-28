@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import ReactTooltip from 'react-tooltip';
 import VisibilitySensor from 'react-visibility-sensor'
 
 import './filters.css';
-import { SSCTranslationContext } from '../../StartUp';
-import { splitArray, compareArrayNumber, calculateUpdatedValuesForDropDowns } from '../../../utils/Utils';
+import {SSCTranslationContext} from '../../StartUp';
+import {splitArray, compareArrayNumber, calculateUpdatedValuesForDropDowns} from '../../../utils/Utils';
 
 const MultiSelectionDropDownContainer = (props) => {
     const {elements, columnsCount} = props;
@@ -174,7 +174,8 @@ class MultiSelectionDropDown extends Component {
                                        id={`select-all-${this.props.filterId}`}
                                        checked={this.getSelectedCount() === this.getOptionsCount()}
                                 />
-                                <label htmlFor='select-all' onClick={e => this.selectAll()}>Select All</label>
+                                <label htmlFor='select-all'
+                                       onClick={e => this.selectAll()}>{translations['amp.ssc.dashboard:select-all']}</label>
                             </span>
                                 }
                                 <span className="select-all all">
@@ -182,7 +183,7 @@ class MultiSelectionDropDown extends Component {
                                        id={`select-none-${this.props.filterId}`}
                                        checked={this.getSelectedCount() === 0}
                                 />
-                                <label htmlFor='select-none' onClick={e => this.selectNone()}>Select None</label>
+                                <label htmlFor='select-none' onClick={e => this.selectNone()}>{translations['amp.ssc.dashboard:select-none']}</label>
                             </span>
 
                                 {categoryFetcher && categoriesSelection && categoriesSelection.map((category, idx) => {

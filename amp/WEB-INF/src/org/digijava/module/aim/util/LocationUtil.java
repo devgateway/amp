@@ -60,21 +60,21 @@ public final class LocationUtil {
         return loc;
         
     }
-    public static AmpLocation getAmpLocationByGeoCode(String geoCode) {
+    public static AmpCategoryValueLocations getAmpLocationByGeoCode(String geoCode) {
         Session session = null;
-        AmpLocation loc = null;
+        AmpCategoryValueLocations loc = null;
 
         try {
             session = PersistenceManager.getRequestDBSession();
             
-            String queryString  = "select l from " + AmpLocation.class.getName()
-                    + " l where location.geoCode =:geoCode order by l.ampLocationId";
+            String queryString  = "select l from " + AmpCategoryValueLocations.class.getName()
+                    + " l where l.geoCode =:geoCode order by l.id";
             Query qry = session.createQuery(queryString);
             qry.setString("geoCode", geoCode);
             
             Collection result   = qry.list();
             if ( result != null && result.size() > 0 ) {
-                return (AmpLocation)result.iterator().next();
+                return (AmpCategoryValueLocations) result.iterator().next();
             }
             
         } catch (Exception e) {
@@ -201,21 +201,6 @@ public final class LocationUtil {
         DynLocationManagerUtil.getOrCreateAmpLocationByCVL(loc);
     }
        
-    /**
-     * Saves location into the database
-     * 
-     * @param AmpLocation location
-     */
-    public static void saveAmpLocation(AmpLocation loc) throws DgException {
-        try {
-            Session session = PersistenceManager.getRequestDBSession();
-            session.saveOrUpdate(loc);
-        } catch (Exception e) {
-            logger.error("Unable to save location into the database " + e.getMessage());
-            throw new DgException(e);
-        }
-    }
-    
     public static class HelperLocationAncestorLocationNamesAsc implements Comparator<Location> {
 
         Locale locale;

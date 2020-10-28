@@ -60,6 +60,7 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.validator.groups.Submit;
 
@@ -108,26 +109,8 @@ public class FieldsEnumerator {
 
         apiField.setId(field.isAnnotationPresent(InterchangeableId.class));
 
-        // for discriminated case we can override the type here
-        Class<?> type = InterchangeUtils.getClassOfField(field);
-        FieldType fieldType = null;
-        if (interchangeable.pickIdOnly()) {
-            fieldType = InterchangeableClassMapper.getCustomMapping(java.lang.Long.class);
-        } else if (InterchangeUtils.isCollection(field)) {
-            type = getType(field, context);
-            if (interchangeable.multipleValues()) {
-                fieldType = FieldType.LIST;
-            }
-        } else if (field.getType().equals(java.util.Date.class)) {
-            fieldType = InterchangeUtils.isTimestampField(field) ? FieldType.TIMESTAMP : FieldType.DATE;
-        }
+        APIType apiType = getApiType(field, context, interchangeable);
 
-        if (Collection.class.isAssignableFrom(field.getType()) && interchangeable.pickIdOnly()
-                && interchangeable.multipleValues()) {
-            throw new RuntimeException("Fields with pickIdOnly and multipleValues are not supported yet.");
-        }
-
-        APIType apiType = new APIType(type, fieldType);
         apiField.setApiType(apiType);
 
         boolean isList = apiType.getFieldType().isList();
@@ -161,7 +144,7 @@ public class FieldsEnumerator {
 
         if (!InterchangeUtils.isSimpleType(field.getType())) {
             if (!interchangeable.pickIdOnly()) {
-                apiField.setChildren(getAllAvailableFields(type, context));
+                apiField.setChildren(getAllAvailableFields(apiType.getType(), context));
             }
             if (isList) {
                 String uniqueConstraint = getUniqueConstraint(apiField, field, context);
@@ -255,6 +238,36 @@ public class FieldsEnumerator {
         return apiField;
     }
 
+    private APIType getApiType(Field field, FEContext context, Interchangeable interchangeable) {
+        Class<?> type = getType(field, context);
+        FieldType fieldType;
+        FieldType itemType;
+
+        if (InterchangeUtils.isCollection(field) && interchangeable.multipleValues()) {
+            fieldType = FieldType.LIST;
+            itemType = getFieldType(type, interchangeable, field);
+        } else {
+            fieldType = getFieldType(type, interchangeable, field);
+            itemType = null;
+        }
+
+        return new APIType(type, fieldType, itemType);
+    }
+
+    private FieldType getFieldType(Class<?> type, Interchangeable interchangeable, Field field) {
+        if (interchangeable.pickIdOnly()) {
+            return FieldType.LONG;
+        } else {
+            if (InterchangeUtils.isTimestampField(field)) {
+                return FieldType.TIMESTAMP;
+            } else {
+                return InterchangeableClassMapper.containsSimpleClass(type)
+                        ? InterchangeableClassMapper.getCustomMapping(type)
+                        : FieldType.OBJECT;
+            }
+        }
+    }
+
     private boolean hasTotalPercentageConstraint(List<ConstraintDescriptor> descriptors) {
         return descriptors.stream()
                 .anyMatch(d -> d.getConstraintValidatorClass().equals(TotalPercentageValidator.class));
@@ -309,13 +322,25 @@ public class FieldsEnumerator {
             ConstraintDescriptor.ConstraintTarget constraintTarget, FEContext context) {
         List<ConstraintDescriptor> descriptors = new ArrayList<>();
         for (InterchangeableValidator validator : validators) {
-            if (isVisible(validator.fmPath(), context)) {
+            if (isVisible(validator.fmPath(), context)
+                    && isVisibleByDiscriminator(validator.discriminatorOptions(), context)) {
                 ImmutableSet<Class<?>> groups = ImmutableSet.copyOf(validator.groups());
                 Map<String, String> attributes = parseAttributes(validator);
                 descriptors.add(new ConstraintDescriptor(validator.value(), attributes, groups, constraintTarget));
             }
         }
         return descriptors;
+    }
+
+    private boolean isVisibleByDiscriminator(String[] discriminatorOptions, FEContext context) {
+        ImmutablePair<Class<?>, Object> pair = context.getDiscriminationInfoStack().peek();
+        Object discriminatorOption = pair != null ? pair.v : null;
+        for (String opt : discriminatorOptions) {
+            if (opt != null && (opt.equals("*") || opt.equals(discriminatorOption))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private Map<String, String> parseAttributes(InterchangeableValidator validator) {
@@ -370,7 +395,7 @@ public class FieldsEnumerator {
 
     public APIField getMetaModel(Class<?> clazz) {
         APIField root = new APIField();
-        root.setApiType(new APIType(clazz));
+        root.setApiType(new APIType(clazz, FieldType.OBJECT));
         FEContext context = new FEContext();
         root.setChildren(getAllAvailableFields(clazz, context));
         root.setBeanConstraints(new ConstraintDescriptors(findBeanConstraints(clazz, context)));
@@ -420,7 +445,7 @@ public class FieldsEnumerator {
                         descr.setDiscriminatorField(discriminator.discriminatorField());
                         descr.setDiscriminationConfigurer(discriminator.configurer());
                         descr.setFieldAccessor(new DiscriminatedFieldAccessor(new SimpleFieldAccessor(field),
-                                discriminator.discriminatorField(), discriminatorOption,
+                                discriminator.discriminatorField(), settings[i].discriminatorOption(),
                                 settings[i].multipleValues()));
                         result.add(descr);
                     }
@@ -446,7 +471,7 @@ public class FieldsEnumerator {
      */
     private UnwrappedTranslationsByWorkspacePrefix getTranslationsForLabel(String label) {
         UnwrappedTranslationsByWorkspacePrefix translations = new UnwrappedTranslationsByWorkspacePrefix();
-        List<String> prefixes = (List<String>) TLSUtils.getRequest().getAttribute(PREFIXES);
+        List<String> prefixes = ActivityUtil.getWorkspacePrefixesFromRequest();
         try {
             TLSUtils.getRequest().setAttribute(PREFIX, null);
             Collection<Message> defaultMessages = translatorService.getAllTranslationOfBody(label, DEFAULT_SITE_ID);

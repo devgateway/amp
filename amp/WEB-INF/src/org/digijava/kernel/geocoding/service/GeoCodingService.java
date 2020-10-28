@@ -111,7 +111,7 @@ public class GeoCodingService {
     }
 
     private boolean isAtNationalLevel(AmpActivityLocation ampActivityLocation) {
-        return ampActivityLocation.getLocation().getLocation().getParentLocation() == null;
+        return ampActivityLocation.getLocation().getParentLocation() == null;
     }
 
     /**
@@ -299,8 +299,7 @@ public class GeoCodingService {
             if (geoCodedLocation.getAccepted()) {
                 AmpActivityLocation activityLocation = new AmpActivityLocation();
                 activityLocation.setLocationPercentage(split.getValueFor(activity.getLocations().size()).floatValue());
-                activityLocation.setLocation(
-                        LocationUtil.getAmpLocationByCVLocation(geoCodedLocation.getLocation().getId()));
+                activityLocation.setLocation(geoCodedLocation.getLocation());
                 activity.addLocation(activityLocation);
             }
         }

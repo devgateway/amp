@@ -473,7 +473,14 @@ public class CategoryManager extends Action {
                 
                 else {
                     if (myForm.getEditedCategoryId() == null) {
-                        dbSession.saveOrUpdate( dbCategory );
+                        // AMP-29782
+                        if (dbCategory.getPossibleValues() != null && dbCategory.getPossibleValues().size() > 0) {
+                            dbCategory.getPossibleValues().forEach(value -> {
+                                dbSession.saveOrUpdate(value);
+                            });
+                        }
+
+                        dbSession.saveOrUpdate(dbCategory);
                     }
                     else{
                         dbSession.flush();

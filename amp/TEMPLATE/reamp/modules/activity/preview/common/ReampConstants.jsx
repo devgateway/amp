@@ -1,3 +1,5 @@
+import {ActivityConstants} from 'amp-ui';
+
 export const ACTIVITY_API = '/rest/activity/projects/';
 export const ACTIVITY_INFO_API = '/rest/activity/info/';
 
@@ -5,7 +7,7 @@ export const FIELDS_DEFINITION_API = '/rest/activity/fields-no-workspace';
 export const POSSIBLE_VALUES_API = '/rest/activity/field/values/public';
 export const FM_API = '/rest/common/fm';
 export const SETTINGS_API = '/rest/amp/settings';
-export const ACTIVITY_FIELDS_ID_VALUES_API = '/rest/activity/field/id-values';
+export const ACTIVITY_FIELDS_ID_VALUES_API = '/rest/activity/field/id-values?translations=en&language=en';
 export const RESOURCES_POSSIBLE_VALUES_API = '/rest/resource/field/values';
 export const RESOURCES_ENABLED_FIELDS_API = '/rest/resource/fields';
 export const RESOURCES_API = '/rest/resource';
@@ -35,3 +37,6 @@ export const VERSION_HISTORY_URL = '/aim/viewActivityHistory.do';
 export const COMPARE_ACTIVITY_URL = '/aim/compareActivityVersions.do';
 
 export const PRODUCTION = 'production';
+export const REGIONAL_FUNDINGS = [ActivityConstants.REGIONAL_FUNDINGS_COMMITMENTS,
+    ActivityConstants.REGIONAL_FUNDINGS_DISBURSEMENTS,
+    ActivityConstants.REGIONAL_FUNDINGS_EXPENDITURES];

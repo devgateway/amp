@@ -10,6 +10,7 @@ import Locations from "./Locations";
 import {Loading} from "../panel/Loading";
 import {loadGeocoding} from "../../../actions/geocodingAction";
 import {TranslationContext} from "../../AppContext";
+import ActivityWithoutLocationsDialog from "../panel/dialog/ActivityWithoutLocationsDialog";
 
 class GeocodingTable extends Component {
     constructor(props) {
@@ -29,8 +30,14 @@ class GeocodingTable extends Component {
         return this.props.activities.filter(activity => activity.activity_id === activityId)[0].locations.length > 0;
     }
 
-    getNonExpandebleIds = () => {
+    getNonExpandableIds = () => {
         return this.props.activities.filter(activity => activity.locations.length < 1).map(act => act.activity_id);
+    }
+
+    existLocationsInGeocoding = () => {
+        console.log(this.props.activities.some(activity => activity.locations.length > 0));
+        console.log(this.props.activities.length);
+        return this.props.activities.some(activity => activity.locations.length > 0);
     }
 
     componentDidMount() {
@@ -78,13 +85,12 @@ class GeocodingTable extends Component {
             return <Loading/>
         }
 
-
         let expandRow = {
             onlyOneExpanding: true,
             renderer: row => (
                 <Locations activityId={row.activity_id}/>
             ),
-            nonExpandable: this.getNonExpandebleIds(),
+            nonExpandable: this.getNonExpandableIds(),
             showExpandColumn: true,
             expandByColumnOnly: true,
             expandColumnPosition: 'right',
@@ -150,6 +156,7 @@ class GeocodingTable extends Component {
         ];
 
         return (
+            <>
             <div className="activity-table">
                 <BootstrapTable
                     keyField="activity_id"
@@ -168,7 +175,11 @@ class GeocodingTable extends Component {
                         columnWidth: '200px'
                     }}/>
             </div>
-        );
+
+                {!this.existLocationsInGeocoding() && <ActivityWithoutLocationsDialog title={translations['amp.geocoder:discardGeocodingButton']}/>}
+            </>
+
+    );
     }
 }
 

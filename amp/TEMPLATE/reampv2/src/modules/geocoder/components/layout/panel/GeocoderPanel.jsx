@@ -8,6 +8,7 @@ import GeocodingTable from "../table/GeocodingTable";
 import Modal from "react-bootstrap/Modal";
 import AlertError from "./AlertError";
 import ActivityTableHeader from "../table/ActivityTableHeader";
+import {selectActivitiesForGeocoding} from "../../../actions/activitiesAction";
 
 const GeocodingNotAvailable = ({user, workspace}) =>
     <h4>Geocoding process not available. User {user} is owner of the process in '{workspace}' workspace</h4>;
@@ -24,24 +25,18 @@ const ProjectList = ({title}) => <h3>{title}</h3>;
 
 class GeocoderPanel extends Component {
 
-    state = {
-        selectedActivities: []
-    };
-
     onSelectActivity = (isSelected, activityId) => {
-        this.setState(previousState => {
-            let selectedActivities = Array.from(this.state.selectedActivities);
-            if (isSelected) {
-                selectedActivities.push(activityId);
-            } else {
-                selectedActivities = selectedActivities.filter(id => id !== activityId);
-            }
-            return {selectedActivities};
-        });
+        let selectedActivities = Array.from(this.props.selectedActivities);
+        if (isSelected) {
+            selectedActivities.push(activityId);
+        } else {
+            selectedActivities = selectedActivities.filter(id => id !== activityId);
+        }
+        this.props.selectActivitiesForGeocoding(selectedActivities);
     }
 
     onSelectAllActivities = (isSelected, rows) => {
-        let selectedActivities = Array.from(this.state.selectedActivities);
+        let selectedActivities = Array.from(this.props.selectedActivities);
         let activityIds = rows.map(r => r.id);
 
         if (isSelected) {
@@ -50,7 +45,7 @@ class GeocoderPanel extends Component {
             selectedActivities = selectedActivities.filter(id => !activityIds.includes(id));
         }
 
-        this.setState({selectedActivities});
+        this.props.selectActivitiesForGeocoding(selectedActivities);
     }
 
     render() {
@@ -67,7 +62,7 @@ class GeocoderPanel extends Component {
             tableHeader =  <GeocodingTableHeader/>;
             table = <GeocodingTable/>;
         } else {
-            tableHeader =  <ActivityTableHeader selectedActivities={this.state.selectedActivities}/>;
+            tableHeader =  <ActivityTableHeader selectedActivities={this.props.selectedActivities}/>;
             table = <ActivityTable onSelectActivity={this.onSelectActivity.bind(this)}
                                    onSelectAllActivities={this.onSelectAllActivities.bind(this)}/>
         }
@@ -97,9 +92,12 @@ const mapStateToProps = state => {
     return {
         activitiesPending: state.activitiesReducer.pending,
         geocoding: state.geocodingReducer,
+        selectedActivities: state.activitiesReducer.selectedActivities
     };
 };
 
-const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({
+    selectActivitiesForGeocoding: selectActivitiesForGeocoding,
+}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(GeocoderPanel);

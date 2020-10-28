@@ -294,3 +294,7 @@ table thead tr th {
     color: #FF0000;
     font-weight: bold;
 }
+
+.modal-header .close {
+    margin-top: -24px;
+}

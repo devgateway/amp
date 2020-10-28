@@ -30,5 +30,7 @@
   "amp.admin.ndd:warning_on_change_main_programs": "If you change the Primary Program or the Indirect Program the existing mappings will be deleted, are you sure you want to continue?",
   "amp.admin.ndd:validation_error_3": "Error: Primary Program not selected.",
   "amp.admin.ndd:validation_error_4": "Error: Indirect Program not selected.",
-  "amp.admin.ndd:validation_error_5": "Error: Primary Program and Indirect Program must be different."
+  "amp.admin.ndd:validation_error_5": "Error: Primary Program and Indirect Program must be different.",
+  "amp.admin.ndd:warning_on_change_indirect_program": "Warning: The new Indirect Program will be removes from all activities.",
+  "amp.admin.ndd:confirm-change-indirect-program": "Are you sure you want to : The new Indirect Program will be removes from all activities."
 }

@@ -26,8 +26,8 @@ export function findProgramInTree(lvl3Id, ndd, type) {
 }
 
 export function findFullProgramTree(ndd, type, src, dst) {
-    let tree = {};
-    if (ndd && ndd[ALL_PROGRAMS]) {
+    let tree = null;
+    if (ndd && ndd[ALL_PROGRAMS] && (src || dst)) {
         if (type === TYPE_SRC) {
             tree = ndd[ALL_PROGRAMS].find(p => p.id === src.id);
         } else if (type === TYPE_DST) {

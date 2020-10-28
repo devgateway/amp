@@ -30,10 +30,12 @@ public class NDDService {
     static class SingleProgramData implements Serializable {
         private Long id;
         private String value;
+        private boolean isIndirect;
 
-        SingleProgramData(Long id, String value) {
+        SingleProgramData(Long id, String value, boolean isIndirect) {
             this.id = id;
             this.value = value;
+            this.isIndirect = isIndirect;
         }
 
         public Long getId() {
@@ -42,6 +44,10 @@ public class NDDService {
 
         public String getValue() {
             return value;
+        }
+
+        public boolean isIndirect() {
+            return isIndirect;
         }
     }
 
@@ -52,27 +58,46 @@ public class NDDService {
         PossibleValue dstPV = dst != null ? convert(dst, IndirectProgramUpdater.INDIRECT_MAPPING_LEVEL) : null;
 
         List<PossibleValue> allPrograms = new ArrayList<>();
-        getAvailablePrograms().forEach(ampTheme -> {
+        getAvailablePrograms(false).forEach(ampTheme -> {
+            PossibleValue pv = convert(ampTheme, IndirectProgramUpdater.INDIRECT_MAPPING_LEVEL);
+            allPrograms.add(pv);
+        });
+        getAvailablePrograms(true).forEach(ampTheme -> {
             PossibleValue pv = convert(ampTheme, IndirectProgramUpdater.INDIRECT_MAPPING_LEVEL);
             allPrograms.add(pv);
         });
 
         List<AmpIndirectTheme> mapping = loadMapping();
 
-        SingleProgramData srcSPD = srcPV != null ? new SingleProgramData(srcPV.getId(), srcPV.getValue()) : null;
-        SingleProgramData dstSPD = dstPV != null ? new SingleProgramData(dstPV.getId(), dstPV.getValue()) : null;
+        SingleProgramData srcSPD = srcPV != null ? new SingleProgramData(srcPV.getId(), srcPV.getValue(), false) : null;
+        SingleProgramData dstSPD = dstPV != null ? new SingleProgramData(dstPV.getId(), dstPV.getValue(), true) : null;
         return new MappingConfiguration(mapping, srcSPD, dstSPD, allPrograms);
     }
 
     /**
-     * Returns a list of first level programs that are part of the multi-program configuration.
-     * Use a simplified object to reduce bandwidth.
+     * Returns a list of first level programs.
      */
-    public List<AmpTheme> getAvailablePrograms() {
+    public List<AmpTheme> getAvailablePrograms(boolean indirect) { // TODO: exclir los programas q esten usados en alguna actividad y los mapeados en el multo program mngr
         List<AmpTheme> programs = ProgramUtil.getAllPrograms()
-                .stream().filter(p -> p.getIndlevel().equals(0) && p.getProgramSettings().size() > 0)
+                .stream().filter(p -> p.getIndlevel().equals(0)
+                        && (indirect ? p.getProgramSettings().size() == 0 : p.getProgramSettings().size() > 0))
                 .collect(Collectors.toList());
         return programs;
+    }
+
+    /**
+     * Returns a list of programs available for mapping classified by direct/indirect (src/dst).
+     * @return
+     */
+    public List<SingleProgramData> getSinglePrograms() {
+        List<SingleProgramData> availablePrograms = new ArrayList<>();
+        List<AmpTheme> src = getAvailablePrograms(false);
+        List<AmpTheme> dst = getAvailablePrograms(true);
+        availablePrograms.addAll(src.stream().map(p -> new SingleProgramData(p.getAmpThemeId(), p.getName(), false))
+                .collect(Collectors.toList()));
+        availablePrograms.addAll(dst.stream().map(p -> new SingleProgramData(p.getAmpThemeId(), p.getName(), true))
+                .collect(Collectors.toList()));
+        return availablePrograms;
     }
 
     @SuppressWarnings("unchecked")

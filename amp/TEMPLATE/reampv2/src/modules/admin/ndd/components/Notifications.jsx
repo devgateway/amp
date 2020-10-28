@@ -14,7 +14,7 @@ class Notifications extends Component {
                 <ul className="notifications">
                     {messages.map(message => {
                         const className = message.isError ? 'error-color' : 'success-color';
-                        return <li className={className}>{message.text}</li>;
+                        return <li key={Math.random()} className={className}>{message.text}</li>;
                     })}
                 </ul>
             </div>);

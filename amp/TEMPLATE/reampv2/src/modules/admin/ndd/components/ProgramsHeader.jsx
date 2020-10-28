@@ -23,7 +23,7 @@ class ProgramsHeader extends Component {
                         <ProgramSelect
                             placeholder={translations[TRN_PREFIX + 'choose_main_src_program']}
                             label={translations[TRN_PREFIX + 'src-program-lvl-1']}
-                            options={programs}
+                            options={programs.filter(p => p.indirect === false)}
                             selected={src ? [src] : []}
                             onChange={onChange.bind(null, TYPE_SRC)}
                             level={0}/>
@@ -32,7 +32,7 @@ class ProgramsHeader extends Component {
                         <ProgramSelect
                             placeholder={translations[TRN_PREFIX + 'choose_main_dst_program']}
                             label={translations[TRN_PREFIX + 'dst-program-lvl-1']}
-                            options={programs}
+                            options={programs.filter(p => p.indirect === true)}
                             selected={dst ? [dst] : []}
                             onChange={onChange.bind(null, TYPE_DST)}
                             level={0}/>

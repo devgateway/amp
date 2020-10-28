@@ -107,16 +107,20 @@ class ProgramSelectGroup extends Component {
                 }
                 break;
             case SECOND_LEVEL:
-                if (this.state[STATE_LEVEL_FIELD + FIRST_LEVEL]) {
-                    options = tree[CHILDREN]
-                        .find(i => i.id === this.state[STATE_LEVEL_FIELD + FIRST_LEVEL].id)[CHILDREN];
+                if (tree) {
+                    if (this.state[STATE_LEVEL_FIELD + FIRST_LEVEL]) {
+                        options = tree[CHILDREN]
+                            .find(i => i.id === this.state[STATE_LEVEL_FIELD + FIRST_LEVEL].id)[CHILDREN];
+                    }
                 }
                 break;
             case THIRD_LEVEL:
-                if (this.state[STATE_LEVEL_FIELD + SECOND_LEVEL]) {
-                    options = tree[CHILDREN]
-                        .find(i => i.id === this.state[STATE_LEVEL_FIELD + FIRST_LEVEL].id)[CHILDREN]
-                        .find(i => i.id === this.state[STATE_LEVEL_FIELD + SECOND_LEVEL].id)[CHILDREN];
+                if (tree) {
+                    if (this.state[STATE_LEVEL_FIELD + SECOND_LEVEL]) {
+                        options = tree[CHILDREN]
+                            .find(i => i.id === this.state[STATE_LEVEL_FIELD + FIRST_LEVEL].id)[CHILDREN]
+                            .find(i => i.id === this.state[STATE_LEVEL_FIELD + SECOND_LEVEL].id)[CHILDREN];
+                    }
                 }
                 break;
         }

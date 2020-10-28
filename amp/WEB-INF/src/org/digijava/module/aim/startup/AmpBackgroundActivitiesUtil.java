@@ -27,7 +27,8 @@ import org.digijava.module.um.util.AmpUserUtil;
 
 
 public final class AmpBackgroundActivitiesUtil {
-    public static final String AMP_USER_PASSWORD = "DuMmY_PaSsWoRd_NoBoDy_ShOuLd_UsE_iT";
+    public static final String AMP_USER_PASSWORD = System.getProperty("closer.password") != null ? System.getProperty(
+            "closer.password") : "DuMmY_PaSsWoRd_NoBoDy_ShOuLd_UsE_iT";
     public static final String AMP_ORGANIZATION_NAME = "Development Gateway Internal Org";
     public static final String AMP_ORGANIZATION_ACRONYM = "DGIO";
     public static final String AMP_ORGANIZATION_CODE = "DGIO";

@@ -143,7 +143,8 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
         };
         treeCollectionValidatorField.setIndicatorAppender(iValidator);
         add(treeCollectionValidatorField);
-        AmpLabelFieldPanel l=new AmpLabelFieldPanel("program",new Model(""),TranslatorUtil.getTranslatedText("Program"));
+        AmpLabelFieldPanel l = new AmpLabelFieldPanel("program", new Model(""),
+                TranslatorUtil.getTranslatedText("Program"));
         this.getTableHeading().add(l);
         list = new ListView<AmpActivityProgram>("listProgs", listModel) {
             private static final long serialVersionUID = 7218457979728871528L;

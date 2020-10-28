@@ -77,7 +77,7 @@ public class NDDService {
     /**
      * Returns a list of first level programs.
      */
-    public List<AmpTheme> getAvailablePrograms(boolean indirect) { // TODO: exclir los programas q esten usados en alguna actividad y los mapeados en el multo program mngr
+    public List<AmpTheme> getAvailablePrograms(boolean indirect) {
         List<AmpTheme> programs = ProgramUtil.getAllPrograms()
                 .stream().filter(p -> p.getIndlevel().equals(0)
                         && (indirect ? p.getProgramSettings().size() == 0 : p.getProgramSettings().size() > 0))

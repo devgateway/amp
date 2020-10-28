@@ -42,7 +42,6 @@ import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
-import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
@@ -103,7 +102,8 @@ public class AmpLocationFormTableFeature extends
                 Comparator<AmpActivityLocation> comparator = new Comparator<AmpActivityLocation>(){
                     @Override
                     public int compare(AmpActivityLocation o1, AmpActivityLocation o2) {
-                        return o1.getLocation().getLocation().getAutoCompleteLabel().compareTo(o2.getLocation().getLocation().getAutoCompleteLabel());
+                        return o1.getLocation().getAutoCompleteLabel().compareTo(
+                                o2.getLocation().getAutoCompleteLabel());
                     }       
                 };
 
@@ -151,7 +151,7 @@ public class AmpLocationFormTableFeature extends
 
             @Override
             public Object getIdentifier(AmpActivityLocation t) {
-                return t.getLocation().getLocation().getAutoCompleteLabel();
+                return t.getLocation().getAutoCompleteLabel();
             }   
         };
         uniqueCollectionValidationField.setIndicatorAppender(iValidator);
@@ -175,7 +175,7 @@ public class AmpLocationFormTableFeature extends
         final AmpTreeCollectionValidatorField<AmpActivityLocation> treeCollectionValidatorField = new AmpTreeCollectionValidatorField<AmpActivityLocation>("treeValidator", listModel, "Tree Validator") {
             @Override
             public AmpAutoCompleteDisplayable getItem(AmpActivityLocation l) {
-                return l.getLocation().getLocation();
+                return l.getLocation();
             }
         };
         treeCollectionValidatorField.setIndicatorAppender(iValidator);
@@ -336,8 +336,7 @@ public class AmpLocationFormTableFeature extends
     public void locationSelected(AmpCategoryValueLocations choice, IModel<AmpActivityVersion> am, IModel<Boolean> disablePercentagesForInternational, boolean isCountryNational){
         AmpActivityLocation activityLocation = new AmpActivityLocation();
 
-        AmpLocation ampLoc = DynLocationManagerUtil.getOrCreateAmpLocationByCVLId(choice.getId());
-        activityLocation.setLocation(ampLoc);
+        activityLocation.setLocation(choice);
         if (disablePercentagesForInternational.getObject()){
             AmpCategoryValueLocations defCountry = DynLocationManagerUtil.getDefaultCountry();
             if (choice.getId().longValue() == defCountry.getId().longValue())
@@ -362,8 +361,10 @@ public class AmpLocationFormTableFeature extends
             Iterator<AmpActivityLocation> it = set.iterator();
             while(it.hasNext()){
                 AmpActivityLocation loc = it.next();
-                if(loc.getLocation()!=null && loc.getLocation().getLocation()!=null && loc.getLocation().getLocation()!=null && activityLocation.getLocation()!=null &&loc.getLocation().getLocation().compareTo(activityLocation.getLocation().getLocation())==0)
+                if (loc.getLocation() != null && activityLocation.getLocation() != null
+                        && loc.getLocation().compareTo(activityLocation.getLocation()) == 0) {
                     return;
+                }
             }
         }
         set.add(activityLocation);

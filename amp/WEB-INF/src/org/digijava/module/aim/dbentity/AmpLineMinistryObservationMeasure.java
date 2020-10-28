@@ -5,19 +5,29 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.digijava.module.aim.annotations.translation.TranslatableClass;
-import org.digijava.module.aim.annotations.translation.TranslatableField;
-@TranslatableClass (displayName = "Line Ministry Observation Measure")
+import org.digijava.kernel.validators.common.RequiredValidator;
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.annotations.interchange.InterchangeableId;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
+
 public class AmpLineMinistryObservationMeasure implements Serializable, Cloneable {
     //IATI-check: to be ignored
-//  @Interchangeable(fieldTitle="ID")
+
+    @InterchangeableId
+    @Interchangeable(fieldTitle = "ID")
     private Long ampLineMinistryObservationMeasureId;
-//  @Interchangeable(fieldTitle="Name")
-    @TranslatableField
+
+    @Interchangeable(fieldTitle = "Name", importable = true,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
     private String name;
+
+    @InterchangeableBackReference
     private AmpLineMinistryObservation lineMinistryObservation;
-//  @Interchangeable(fieldTitle="Actors",fmPath="/Activity Form/Line Ministry Observations/Observation/Measure/Actor")
-    private Set<AmpLineMinistryObservationActor> actors;
+
+    @Interchangeable(fieldTitle = "Actors", importable = true,
+            fmPath = "/Activity Form/Line Ministry Observations/Observation/Measure/Actor")
+    private Set<AmpLineMinistryObservationActor> actors = new HashSet<>();
 
     public String getName() {
         return name;

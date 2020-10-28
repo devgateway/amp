@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.activity.field.CachingFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -20,11 +21,17 @@ public class ActivityExporter extends ObjectExporter<AmpActivityVersion> {
     private List<String> filteredFields = new ArrayList<>();
 
     public ActivityExporter(Map<String, Object> filter) {
-        this(new DefaultTranslatedFieldReader(), AmpFieldsEnumerator.getEnumerator().getActivityFields(), filter);
+        this(new DefaultTranslatedFieldReader(), AmpFieldsEnumerator.getAllEnumerators(), filter);
+    }
+
+    public ActivityExporter(TranslatedFieldReader translatedFieldReader, Map<Long, CachingFieldsEnumerator> enumerators,
+                            Map<String, Object> filter) {
+        super(translatedFieldReader, enumerators);
+        this.filter = filter;
     }
 
     public ActivityExporter(TranslatedFieldReader translatedFieldReader, List<APIField> fields,
-            Map<String, Object> filter) {
+                            Map<String, Object> filter) {
         super(translatedFieldReader, fields);
         this.filter = filter;
     }
@@ -42,6 +49,21 @@ public class ActivityExporter extends ObjectExporter<AmpActivityVersion> {
         }
 
         return super.export(object);
+    }
+
+    @Override
+    public Map<String, Object> export(AmpActivityVersion object, Long fmId) {
+        ApiErrorResponse error = ActivityInterchangeUtils.validateFilterActivityFields(filter, getApiFields(fmId));
+
+        if (error != null) {
+            return (Map) error.getErrors();
+        }
+
+        if (filter != null) {
+            this.filteredFields = (List<String>) filter.get(ActivityEPConstants.FILTER_FIELDS);
+        }
+
+        return super.export(object, fmId);
     }
 
     /**

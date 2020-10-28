@@ -48,7 +48,7 @@ define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentV
 			app.TabsApp.filtersWidget.loaded.done(function() {
 				// includeLocationChildren is not part of the filters but the spec :((( so we add it manually.
 				var filters = firstContent.filtersToJSON();
-				var includeLocationChildren = firstContent.toJSON().reportMetadata.reportSpec.includeLocationChildren;
+				var includeLocationChildren = firstContent.get('reportMetadata').get('reportSpec').get('includeLocationChildren');
 				if (filters) {
 					filters.filters.includeLocationChildren = includeLocationChildren;
 				}

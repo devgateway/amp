@@ -1,6 +1,6 @@
 {
-  "amp.ssc.dashboard:Home-Page": "Home Page",
-  "amp.ssc.dashboard:Download-Page": "Download data",
+  "amp.ssc.dashboard:Home-Page": "Dashboard Home",
+  "amp.ssc.dashboard:Download-Page": "Data",
   "amp.ssc.dashboard:Year": "Year",
   "amp.ssc.dashboard:Sector": "Sector",
   "amp.ssc.dashboard:Sectors": "Sectors",
@@ -11,7 +11,7 @@
   "amp.ssc.dashboard:Country": "Country",
   "amp.ssc.dashboard:Modalities": "Modalities",
   "amp.ssc.dashboard:NA": "N/A",
-  "amp.ssc.dashboard:no-date": "There is no data for this selection",
+  "amp.ssc.dashboard:no-data": "There is no data for this selection",
   "amp.ssc.dashboard:search": "Search",
   "amp.ssc.dashboard:selected": "Selected",
   "amp.ssc.dashboard:un-selected": "Unselected",
@@ -26,7 +26,11 @@
   "amp.ssc.dashboard:sectors-projects": "Projects",
   "amp.ssc.dashboard:sectors-sector-types": "Sector types",
   "amp.ssc.dashboard:sectors-others": "Others",
-  "amp.ssc.dashboard:project-percentage": "Percentage of total SSC projects",
+  "amp.ssc.dashboard:project-percentage": "Sector percentage of total SSC projects",
   "amp.ssc.dashboard:project-count": "Projects count",
-  "amp.ssc.dashboard:print": "Print"
+  "amp.ssc.dashboard:select-all": "Select all",
+  "amp.ssc.dashboard:select-none": "Select none",
+  "amp.ssc.dashboard:center-map": "Center map",
+  "amp.ssc.dashboard:project-xls": "Project/s (pipe separated)"
+
 }

@@ -3,6 +3,8 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 import java.util.List;
 
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
+import org.digijava.module.aim.dbentity.AmpIndicator;
+import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 
 /**
@@ -10,15 +12,15 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
  */
 public interface PossibleValuesDAO {
 
-    int LOC_ID_POS = 0;
-    int LOC_CAT_ID_POS = 1;
-    int LOC_CAT_NAME_POS = 2;
-    int LOC_PARENT_CAT_ID_POS = 3;
-    int LOC_PARENT_CAT_NAME_POS = 4;
-    int LOC_CAT_VAL_ID_POS = 5;
-    int LOC_CAT_VAL_NAME_POS = 6;
-    int LOC_ISO = 7;
-    
+    int LOC_CAT_ID_POS = 0;
+    int LOC_CAT_NAME_POS = 1;
+    int LOC_PARENT_CAT_ID_POS = 2;
+    int LOC_PARENT_CAT_NAME_POS = 3;
+    int LOC_CAT_VAL_ID_POS = 4;
+    int LOC_CAT_VAL_NAME_POS = 5;
+    int LOC_ISO = 6;
+    int LOC_OLD_ID = 7;
+
     int SECTOR_PARENT_ID_POS = 2;
     int THEME_PARENT_ID_POS = 2;
 
@@ -43,4 +45,12 @@ public interface PossibleValuesDAO {
     List<AmpOrganisation> getOrganisations();
 
     boolean isOrganizationValid(Long id);
+
+    List<AmpIndicatorRiskRatings> getIndicatorRiskRatings();
+
+    boolean isIndicatorRiskRatingValid(Long id);
+
+    List<AmpIndicator> getIndicators();
+
+    boolean isIndicatorValid(Long id);
 }

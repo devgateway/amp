@@ -217,11 +217,11 @@ public class MEIndicatorsUtil
     }
 
 
-    public static Collection<AmpIndicatorRiskRatings> getAllIndicatorRisks()
+    public static List<AmpIndicatorRiskRatings> getAllIndicatorRisks()
     {
         Session session = null;
         Query qry = null;
-        Collection<AmpIndicatorRiskRatings> col = null;
+        List<AmpIndicatorRiskRatings> col = null;
         try
         {
             session = PersistenceManager.getSession();

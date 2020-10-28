@@ -327,11 +327,12 @@ public class ActivityService {
                                 } else {
                                     if (proposedStartDate == null) {
                                         da.setYear(DateTimeUtil.getYearFromJulianNumber(actualStartDate));
-                                    }
-                                    if (proposedStartDate < actualStartDate) {
-                                        da.setYear(DateTimeUtil.getYearFromJulianNumber(proposedStartDate));
                                     } else {
-                                        da.setYear(DateTimeUtil.getYearFromJulianNumber(actualStartDate));
+                                        if (proposedStartDate < actualStartDate) {
+                                            da.setYear(DateTimeUtil.getYearFromJulianNumber(proposedStartDate));
+                                        } else {
+                                            da.setYear(DateTimeUtil.getYearFromJulianNumber(actualStartDate));
+                                        }
                                     }
                                 }
                             }

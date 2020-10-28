@@ -2,6 +2,7 @@ package org.digijava.kernel.ampapi.endpoints.activity.preview;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.digijava.kernel.ampapi.endpoints.activity.preview.serializers.AmountSerializer;
 
 import java.util.List;
 

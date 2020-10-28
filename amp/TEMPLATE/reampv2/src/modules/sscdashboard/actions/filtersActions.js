@@ -39,7 +39,7 @@ export function fetchCountriesPending() {
 }
 
 export function fetchCountriesSuccess(countriesFilter) {
-    //this filter should check the SSC template as parameter
+    //TODO this filter should check the SSC template as parameter
     const countries =
         countriesFilter.items.locations.filter(c => c[EXTRA_INFO] && c[EXTRA_INFO].template && c.id !== UNDEFINED_FILTER);
     return {

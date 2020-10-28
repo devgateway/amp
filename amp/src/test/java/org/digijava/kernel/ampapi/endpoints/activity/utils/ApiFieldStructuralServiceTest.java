@@ -49,7 +49,7 @@ public class ApiFieldStructuralServiceTest {
         clientFields.add(newLongField("id"));
         clientFields.add(newStringField("title"));
         clientFields.add(newStringField("title2"));
-        clientFields.add(newListPrimitiveField("primitives", Integer.class));
+        clientFields.add(newListPrimitiveField("primitives", Integer.class, FieldType.LONG));
         clientFields.add(listFields);
         
         assertFalse(service.existsStructuralChanges(getAmpApiFields(), clientFields));
@@ -93,7 +93,7 @@ public class ApiFieldStructuralServiceTest {
         clientFields.add(newLongField("id"));
         clientFields.add(newStringField("title"));
         clientFields.add(listFields);
-        clientFields.add(newListPrimitiveField("primitives", String.class));
+        clientFields.add(newListPrimitiveField("primitives", String.class, FieldType.STRING));
         
         assertTrue(service.existsStructuralChanges(getAmpApiFields(), clientFields));
     }
@@ -108,7 +108,7 @@ public class ApiFieldStructuralServiceTest {
         clientFields.add(newLongField("id"));
         clientFields.add(newStringField("title"));
         clientFields.add(listFields);
-        clientFields.add(newListPrimitiveField("primitives", Integer.class));
+        clientFields.add(newListPrimitiveField("primitives", Integer.class, FieldType.LONG));
         
         assertFalse(service.existsStructuralChanges(getAmpApiFields(), clientFields));
     }
@@ -121,7 +121,7 @@ public class ApiFieldStructuralServiceTest {
     
         fields.add(newLongField("id"));
         fields.add(newStringField("title"));
-        fields.add(newListPrimitiveField("primitives", Integer.class));
+        fields.add(newListPrimitiveField("primitives", Integer.class, FieldType.LONG));
         fields.add(listFields);
         
         return fields;
@@ -131,28 +131,28 @@ public class ApiFieldStructuralServiceTest {
     private APIField newListField(String fieldName) {
         APIField field = new APIField();
         field.setFieldName(fieldName);
-        field.setApiType(new APIType(Object.class, FieldType.LIST));
+        field.setApiType(new APIType(Object.class, FieldType.LIST, FieldType.OBJECT));
         return field;
     }
     
-    private APIField newListPrimitiveField(String fieldName, Class<?> type) {
+    private APIField newListPrimitiveField(String fieldName, Class<?> type, FieldType itemType) {
         APIField field = new APIField();
         field.setFieldName(fieldName);
-        field.setApiType(new APIType(type, FieldType.LIST));
+        field.setApiType(new APIType(type, FieldType.LIST, itemType));
         return field;
     }
     
     private APIField newStringField(String fieldName) {
         APIField field = new APIField();
         field.setFieldName(fieldName);
-        field.setApiType(new APIType(String.class));
+        field.setApiType(new APIType(String.class, FieldType.STRING));
         return field;
     }
     
     private APIField newLongField(String fieldName) {
         APIField field = new APIField();
         field.setFieldName(fieldName);
-        field.setApiType(new APIType(Long.class));
+        field.setApiType(new APIType(Long.class, FieldType.LONG));
         return field;
     }
 }

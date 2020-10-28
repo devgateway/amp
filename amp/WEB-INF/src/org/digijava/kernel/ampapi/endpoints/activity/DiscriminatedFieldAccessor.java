@@ -17,6 +17,10 @@ import org.apache.commons.beanutils.PropertyUtils;
  * On write will replace all items that satisfy discrimination condition from underlying collection with provided
  * items. The other items will stay untouched.
  *
+ * If the discriminated field is known to have at most one value then instead of a collection the actual object
+ * is returned. Setting value to null in such case will mean that this element will be removed from the underlying
+ * collection.
+ *
  * @author Octavian Ciubotaru
  */
 public class DiscriminatedFieldAccessor implements FieldAccessor {
@@ -91,8 +95,7 @@ public class DiscriminatedFieldAccessor implements FieldAccessor {
             Object item = it.next();
             if (getDiscriminationValue(item).equals(discriminatorValue)) {
                 if (found) {
-                    throw new RuntimeException(
-                            "MultipleValues is false but the underlying collection contains two items.");
+                    throw newMultipleValuesException();
                 }
                 found = true;
                 if (item == value) {
@@ -124,10 +127,16 @@ public class DiscriminatedFieldAccessor implements FieldAccessor {
         targetCollection.addAll(newItems);
     }
 
+    private IllegalStateException newMultipleValuesException() {
+        return new IllegalStateException("Field is marked as single value but there are multiple values"
+                + " in the underlying collection. Accessor: " + this.toString());
+    }
+
     private Collection getWrappedCollection(Object targetObject) {
         Object obj = targetField.get(targetObject);
         if (!(obj instanceof Collection)) {
-            throw new IllegalStateException("Value is either null or does not implement java.util.Collection");
+            throw new IllegalStateException("Value is either null or does not implement java.util.Collection for "
+                    + this.toString());
         }
         return (Collection) obj;
     }
@@ -139,16 +148,23 @@ public class DiscriminatedFieldAccessor implements FieldAccessor {
             discriminatorObj = PropertyUtils.getProperty(obj, discriminatorField);
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw new RuntimeException(String.format(
-                    "Failed to read discriminator value. Object %s, discriminator field %s.",
-                    obj, discriminatorField), e);
+                    "Failed to read discriminator value. Object %s, accessor %s.",
+                    obj, this), e);
         }
 
         if (discriminatorObj == null) {
             throw new RuntimeException(String.format(
-                    "Discriminator value must be non-null. Object %s, discriminator field %s.",
-                    obj, discriminatorField));
+                    "Discriminator value must be non-null. Object %s, accessor %s.",
+                    obj, this));
         }
 
         return discriminatorObj.toString();
     }
+
+    @Override
+    public String toString() {
+        return "Discriminated accessor for " + targetField.toString() + " where "
+                + discriminatorField + "=" + discriminatorValue;
+    }
+
 }

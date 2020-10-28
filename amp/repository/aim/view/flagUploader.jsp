@@ -353,7 +353,7 @@ function deleteFlag(id) {
 
                         <td>
 
-                          <b><digi:trn  key="aim:country">Country</digi:trn></b>
+                          <b><digi:trn  key="aim:country">Administrative Level 0</digi:trn></b>
 
                         </td>
 

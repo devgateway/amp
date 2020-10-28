@@ -326,17 +326,16 @@ public class ShowActivityPrintPreview
                           ISO = ampG.getGlobalSettingsValue();
                         }
                         
-                        //Country cntry = DbUtil.getDgCountry(Constants.COUNTRY_ISO);
                         Country cntry = DbUtil.getDgCountry(ISO);
                         location.setCountryId(cntry.getCountryId());
                         location.setCountry(cntry.getCountryName());
-                        location.setNewCountryId(cntry.getIso());
+                        location.setIso(cntry.getIso());
 
                         location.setAmpCVLocation(loc);
                         location.setAncestorLocationNames(DynLocationManagerUtil.getParents(loc));
                         location.setLocationName(loc.getName());
-                        AmpCategoryValueLocations ampCVRegion = DynLocationManagerUtil.getAncestorByLayer(loc,
-                                CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
+                        AmpCategoryValueLocations ampCVRegion = DynLocationManagerUtil.getAncestorByLayer(
+                                  loc, CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1);
                         if ( ampCVRegion != null ) {
                             if (eaForm.getFunding().getFundingRegions() == null) {
                               eaForm.getFunding()

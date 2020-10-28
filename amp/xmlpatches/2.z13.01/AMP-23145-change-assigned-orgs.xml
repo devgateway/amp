@@ -13,7 +13,8 @@
 					where u.assigned_Org_Id is not null and not exists (select 1 from dg_user_orgs 
 					where org_id = u.assigned_org_id 
 					and user_id =u.id)
-					and assigned_Org_Id &lt;&gt; -1;
+					and assigned_Org_Id &lt;&gt; -1
+					and exists (select 1 from amp_organisation o where o.amp_org_id = u.assigned_org_id );
 					alter table dg_user drop column assigned_org_id; 
 			</lang>
 		</script>

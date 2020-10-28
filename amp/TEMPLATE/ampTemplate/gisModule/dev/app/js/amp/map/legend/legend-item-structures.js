@@ -83,7 +83,7 @@ module.exports = Backbone.View.extend({
 			  self.app.translator.translateList({
 				  'amp.gis:legend-popover': 'If there are less than',
 				  'amp.gis:legend-popover-2': 'points map will show icons otherwise: show coloured circles.',
-				  'amp.gis:title-Region': 'Region'
+				  'amp.gis:title-AdministrativeLevel1': 'Administrative Level 1'
 			  }).then(function(legendPopoverList) {
 				  var legendPopover = [legendPopoverList['amp.gis:legend-popover'],
 				                       ' ',

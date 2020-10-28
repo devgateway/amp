@@ -173,13 +173,14 @@ public final class AmpBackgroundActivitiesUtil {
     }
 
 
-    public static User createActivityUserIfNeeded(User u) throws Exception {
-        User user = UserUtils.getUserByEmail(u.getEmail());
+    public static User createActivityUserIfNeeded(User u) throws Exception
+    {
+        User user = UserUtils.getUserByEmailAddress(u.getEmail());
         if (user != null)
             return user;
 
         createAmpValidatorUser(u.getEmail(), u.getFirstNames(), u.getLastName());
-        user = UserUtils.getUserByEmail(u.getEmail());
+        user = UserUtils.getUserByEmailAddress(u.getEmail());
         if (user == null)
             throw new RuntimeException("bug creating user");
         return user;

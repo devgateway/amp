@@ -23,9 +23,6 @@ public class PossibleValuesCache {
     private PossibleValuesEnumerator pvEnumerator;
     private PossibleValueSource pvSource;
 
-    public PossibleValuesCache(PossibleValuesEnumerator pvEnumerator, PossibleValueSource pvSource) {
-        this (pvEnumerator, null, pvSource);
-    }
 
     public PossibleValuesCache(PossibleValuesEnumerator pvEnumerator, List<APIField> apiFields) {
         this (pvEnumerator, apiFields, PossibleValueSource.POSSIBLE_VALUES_CACHE);

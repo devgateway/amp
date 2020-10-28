@@ -282,31 +282,36 @@ public Cell filter(Cell metaCell, Set ids) {
             if (!ret.isGlobalAmount())
                 return null;  
     }
+    
+    if (metaCell.getColumn().getName().equals(ArConstants.COLUMN_LOC_ADM_LEVEL_1)
+            && this.getNearestReportData().getReportMetadata().getType() == ArConstants.REGIONAL_TYPE) {
+        String retRegionName = ret.getMetaValueString(ArConstants.COLUMN_LOC_ADM_LEVEL_1);
+        retRegionName = (retRegionName != null) ? retRegionName.trim() : retRegionName;
         
-    if(metaCell.getColumn().getName().equals(ArConstants.REGION) &&
-            this.getNearestReportData().getReportMetadata().getType()==ArConstants.REGIONAL_TYPE){
-                String retRegionName    = ret.getMetaValueString(ArConstants.REGION);
-                retRegionName           = (retRegionName!=null)?retRegionName.trim():retRegionName;
-                if(retRegionName!=null&& !metaCell.getValue().toString().equals( retRegionName ) )
-                    return null;
-            }
-        
-    if(metaCell.getColumn().getName().equals(ArConstants.DISTRICT) &&
-            this.getNearestReportData().getReportMetadata().getType()==ArConstants.REGIONAL_TYPE) {
-            
-        String retDistrictName  = ret.getMetaValueString(ArConstants.DISTRICT);
-        retDistrictName         = (retDistrictName!=null)?retDistrictName.trim():retDistrictName;
-        if(retDistrictName!=null&& !metaCell.getValue().toString().equals( retDistrictName ) )
-        return null;
+        if (retRegionName != null && !metaCell.getValue().toString().equals(retRegionName)) {
+            return null;
         }
+    }
+    
+    if (metaCell.getColumn().getName().equals(ArConstants.COLUMN_LOC_ADM_LEVEL_3)
+            && this.getNearestReportData().getReportMetadata().getType() == ArConstants.REGIONAL_TYPE) {
         
-    if(metaCell.getColumn().getName().equals(ArConstants.ZONE) &&
-            this.getNearestReportData().getReportMetadata().getType()==ArConstants.REGIONAL_TYPE) {
-                String retZoneName  = ret.getMetaValueString(ArConstants.ZONE);
-                retZoneName         = (retZoneName!=null)?retZoneName.trim():retZoneName;
-                if(retZoneName!=null&&!metaCell.getValue().toString().equals(ret.getMetaValueString(ArConstants.ZONE)))
-                    return null;
-            }
+        String retDistrictName = ret.getMetaValueString(ArConstants.COLUMN_LOC_ADM_LEVEL_3);
+        retDistrictName = (retDistrictName != null) ? retDistrictName.trim() : retDistrictName;
+        if (retDistrictName != null && !metaCell.getValue().toString().equals(retDistrictName)) {
+            return null;
+        }
+    }
+    
+    if (metaCell.getColumn().getName().equals(ArConstants.COLUMN_LOC_ADM_LEVEL_2)
+            && this.getNearestReportData().getReportMetadata().getType() == ArConstants.REGIONAL_TYPE) {
+        String retZoneName = ret.getMetaValueString(ArConstants.COLUMN_LOC_ADM_LEVEL_2);
+        retZoneName = (retZoneName != null) ? retZoneName.trim() : retZoneName;
+        if (retZoneName != null
+                && !metaCell.getValue().toString().equals(ret.getMetaValueString(ArConstants.COLUMN_LOC_ADM_LEVEL_2))) {
+            return null;
+        }
+    }
     
     boolean disablePercentage = false; // whether this cell should NOT have percentages applied to its value when filtering - this is for transactions towards an organisation
     if (mergedCells.isEmpty() && ArConstants.COLUMN_ANY_RELATED_ORGS.contains(metaCell.getColumn().getName()))
@@ -371,15 +376,17 @@ public Cell filter(Cell metaCell, Set ids) {
         if (!passesTest)
             return null;
     }
-        
+    
     //apply metatext filters
     if (metaCell instanceof MetaTextCell) {
         for (AmpReportHierarchy col : this.getNearestReportData().getReportMetadata().getHierarchies()) {
-//          AmpReportHierarchy col = (AmpReportHierarchy) iterator.next();
-            if(col.getColumn().getCellType().contains(MetaTextCell.class.getSimpleName()))
-            //NEVER apply this for regional reports with regional metaCell:
-                if(metaCell.getColumn().getName().equals(ArConstants.REGION) && this.getNearestReportData().getReportMetadata().getType()==ArConstants.REGIONAL_TYPE)
+            if (col.getColumn().getCellType().contains(MetaTextCell.class.getSimpleName())) {
+                //NEVER apply this for regional reports with regional metaCell:
+                if (metaCell.getColumn().getName().equals(ArConstants.COLUMN_LOC_ADM_LEVEL_1)
+                        && this.getNearestReportData().getReportMetadata().getType() == ArConstants.REGIONAL_TYPE) {
                     continue;
+                }
+            }
             //column is needed to get the tokenExpression on computed fields
             ret.setColumn(this.getColumn());
             applyMetaFilter(col.getColumn().getColumnName(), metaCell, ret, true, disablePercentage);

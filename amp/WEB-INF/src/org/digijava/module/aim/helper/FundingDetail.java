@@ -61,11 +61,6 @@ public class FundingDetail implements Serializable, Comparable
     //the fiscal year, e.g. 2014/2015
     private String fiscalYear;
     
-        /*
-    private Long regionId;
-    private String regionName;
-    */
-    
     public Boolean disasterResponse;
 
     public FundingDetail() {}

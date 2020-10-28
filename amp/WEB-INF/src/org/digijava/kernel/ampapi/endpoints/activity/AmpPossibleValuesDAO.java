@@ -10,9 +10,10 @@ import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampapi.endpoints.common.values.providers.GenericPossibleValuesProvider;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.TLSUtils;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
-import org.digijava.module.aim.dbentity.AmpLocation;
+import org.digijava.module.aim.dbentity.AmpIndicator;
+import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
@@ -20,14 +21,15 @@ import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.criterion.Restrictions;
 
-import static org.digijava.kernel.translator.util.TrnUtil.PREFIXES;
-
 /**
  * @author Octavian Ciubotaru
  */
 public class AmpPossibleValuesDAO implements PossibleValuesDAO {
 
     public static final String CACHE = "org.digijava.kernel.ampapi.endpoints.activity.AmpPossibleValuesDAO";
+
+    private static final int LOC_QUERY_COL_NUM = 8;
+
 
     /**
      * If there are workspace prefixes then look for the main category (ie: "modalities") and the related
@@ -39,7 +41,7 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
     public List<Object[]> getCategoryValues(String discriminatorOption) {
         String queryString = "SELECT acv.id, acv.value, acv.deleted, acv.index, acv.ampCategoryClass.keyName from "
                 + AmpCategoryValue.class.getName() + " acv ";
-        List<String> prefixes = ((List<String>) TLSUtils.getRequest().getAttribute(PREFIXES));
+        List<String> prefixes = ActivityUtil.getWorkspacePrefixesFromRequest();
         if (prefixes == null) {
             prefixes = ActivityUtil.loadWorkspacePrefixesIntoRequest();
         }
@@ -140,18 +142,37 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
 
     @Override
     public List<Object[]> getPossibleLocations() {
-        String queryString = "SELECT loc.id, acvl.id, acvl.name, acvlParent.id, acvlParent.name, "
-                + "parentCat.id, parentCat.value, acvl.iso "
-                + " FROM " + AmpLocation.class.getName() + " loc "
-                + " LEFT JOIN loc.location AS acvl"
-                + " LEFT JOIN acvl.parentLocation AS acvlParent"
-                + " LEFT JOIN acvl.parentCategoryValue AS parentCat"
-                + " ORDER BY loc.id";
-        return query(queryString);
+
+        String queryString = "SELECT acvl.id, acvl.location_name, acvlParent.id, acvlParent.location_name,"
+                + " parentCat.id, parentCat.category_value, acvl.iso, al.amp_location_id"
+                + " FROM amp_category_value_location acvl"
+                + " LEFT JOIN amp_category_value_location acvlParent on acvl.parent_location=acvlParent.id"
+                + " LEFT JOIN amp_category_value parentCat ON acvl.parent_category_value = parentCat.id"
+                + " LEFT JOIN amp_location al ON acvl.id = al.location_id"
+                + " WHERE NOT acvl.deleted"
+                + " OR acvl.deleted IS NULL"
+                + " ORDER BY acvl.id";
+
+        List<Object[]> result = new ArrayList<>();
+
+        PersistenceManager.getSession().doWork(conn -> {
+            try (RsInfo rsi = SQLUtils.rawRunQuery(conn, queryString, null)) {
+                ResultSet rs = rsi.rs;
+                while (rs.next()) {
+                    Object[] row = new Object[LOC_QUERY_COL_NUM];
+                    for (int i = 0; i < LOC_QUERY_COL_NUM; i++) {
+                        row[i] = rs.getObject(i + 1);
+                    }
+                    result.add(row);
+                }
+            }
+        });
+
+        return result;
     }
 
     public boolean isLocationValid(Long id) {
-        return GenericPossibleValuesProvider.isAllowed(AmpLocation.class, id);
+        return GenericPossibleValuesProvider.isAllowed(AmpCategoryValueLocations.class, id);
     }
 
     @Override
@@ -192,4 +213,31 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
         return o != null && !Boolean.TRUE.equals(o.getDeleted());
     }
 
+    @Override
+    public List<AmpIndicatorRiskRatings> getIndicatorRiskRatings() {
+        return InterchangeUtils.getSessionWithPendingChanges()
+                .createCriteria(AmpIndicatorRiskRatings.class)
+                .setCacheable(true)
+                .setCacheRegion(CACHE)
+                .list();
+    }
+
+    @Override
+    public boolean isIndicatorRiskRatingValid(Long id) {
+        return InterchangeUtils.getSessionWithPendingChanges().get(AmpIndicatorRiskRatings.class, id) != null;
+    }
+
+    @Override
+    public List<AmpIndicator> getIndicators() {
+        return InterchangeUtils.getSessionWithPendingChanges()
+                .createCriteria(AmpIndicator.class)
+                .setCacheable(true)
+                .setCacheRegion(CACHE)
+                .list();
+    }
+
+    @Override
+    public boolean isIndicatorValid(Long id) {
+        return InterchangeUtils.getSessionWithPendingChanges().get(AmpIndicator.class, id) != null;
+    }
 }

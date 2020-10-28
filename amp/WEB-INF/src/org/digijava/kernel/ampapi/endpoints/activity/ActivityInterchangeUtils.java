@@ -57,6 +57,7 @@ public final class ActivityInterchangeUtils {
     private static final Logger logger = Logger.getLogger(ActivityInterchangeUtils.class);
 
     public static final String WORKSPACE_PREFIX = "workspacePrefix";
+    public static final String ACTIVITY_FM_ID = "activityFMId";
 
     private ActivityInterchangeUtils() {
     }
@@ -223,11 +224,16 @@ public final class ActivityInterchangeUtils {
                     ActivityUtil.setCurrentWorkspacePrefixIntoRequest(activity);
 
                     ActivityUtil.initializeForApi(activity);
-                    result = exporter.export(activity);
+                    Long fmId = activity.getTeam().getFmTemplate() != null
+                            ? activity.getTeam().getFmTemplate().getId()
+                            : null;
+                    result = exporter.export(activity, fmId);
                 } catch (Exception e) {
                     result.put(EPConstants.ERROR, ApiError.toError(
                             GenericErrors.INTERNAL_ERROR.withDetails(e.getMessage())).getErrors());
                     result.put(ActivityEPConstants.AMP_ID_FIELD_NAME, ampId);
+                    logger.error(e.getMessage());
+                    e.printStackTrace();
                 } finally {
                     PersistenceManager.getSession().evict(activity);
                 }
@@ -310,8 +316,8 @@ public final class ActivityInterchangeUtils {
     public static Map<String, Object> getActivity(AmpActivityVersion activity, Map<String, Object> filter) {
         try {
             ActivityExporter exporter = new ActivityExporter(filter);
-
-            return exporter.export(activity);
+            Long fmId = activity.getTeam().getFmTemplate() != null ? activity.getTeam().getFmTemplate().getId() : null;
+            return exporter.export(activity, fmId);
         } catch (Exception e) {
             logger.error("Error in loading activity. " + e.getMessage());
             throw new RuntimeException(e);

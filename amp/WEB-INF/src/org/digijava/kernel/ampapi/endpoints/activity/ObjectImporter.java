@@ -91,14 +91,14 @@ public abstract class ObjectImporter<T> {
     public ObjectImporter(InputValidatorProcessor formatValidator, APIField apiField, Site site) {
         this(formatValidator, apiField, site, new ValueConverter());
     }
-    
+
     public ObjectImporter(InputValidatorProcessor formatValidator, APIField apiField, Site site,
                           ValueConverter valueConverter) {
         this(formatValidator, TranslationSettings.getCurrent(), apiField, site, valueConverter);
     }
 
-    public ObjectImporter(InputValidatorProcessor formatValidator,
-            TranslationSettings trnSettings, APIField apiField, Site site, ValueConverter valueConverter) {
+    public ObjectImporter(InputValidatorProcessor formatValidator, TranslationSettings trnSettings,
+                          APIField apiField, Site site, ValueConverter valueConverter) {
         this.formatValidator = formatValidator;
         this.trnSettings = trnSettings;
         this.apiField = apiField;
@@ -150,6 +150,7 @@ public abstract class ObjectImporter<T> {
     /**
      * This method is used to bypass violations and other configurations.
      * TODO to be updated during refactoring for Activity Importer unit tests
+     *
      * @param root
      * @param json
      * @param validateFormatOnly set it to true for test only
@@ -167,6 +168,7 @@ public abstract class ObjectImporter<T> {
 
     /**
      * Invokes interchangeable validation and then integrates all constraint violations directly into json object.
+     *
      * @param json json representation of the object
      * @param root internal representation of the object
      */
@@ -181,8 +183,9 @@ public abstract class ObjectImporter<T> {
 
     /**
      * Invokes bean validation and then integrates all constraint violations directly into json object.
+     *
      * @param json json representation of the object
-     * @param obj internal representation of the object
+     * @param obj  internal representation of the object
      */
     private void processViolationsForTypes(Map<String, Object> json, Object obj) {
         Set<ConstraintViolation<Object>> violations = beanValidator.validate(obj, API.class, Default.class);
@@ -194,15 +197,15 @@ public abstract class ObjectImporter<T> {
      * Deserialize one object. If JSON or deserialized object is invalid then a corresponding error will be added to
      * {@link errors}.
      *
-     * @param newParent Matched parent object in which resides the field of the activity we're importing or updating
-     * (for example, AmpActivityVersion newActivity is newParent for 'sectors'
-     * @param fieldsDef definitions of the fields in this parent (from Fields Enumeration EP)
+     * @param newParent     Matched parent object in which resides the field of the activity we're importing or updating
+     *                      (for example, AmpActivityVersion newActivity is newParent for 'sectors'
+     * @param fieldsDef     definitions of the fields in this parent (from Fields Enumeration EP)
      * @param newJsonParent parent JSON object in which reside the analyzed fields
-     * @param fieldPath the underscorified path to the field currently validated & imported
+     * @param fieldPath     the underscorified path to the field currently validated & imported
      * @return true if valid format. Check for all errors to find also business validation issues
      */
     private boolean deserializeObject(Object newParent, List<APIField> fieldsDef,
-            Map<String, Object> newJsonParent, String fieldPath) {
+                                      Map<String, Object> newJsonParent, String fieldPath) {
         boolean isFormatValid = true;
         restoreBackReferences(newParent);
         try {
@@ -251,14 +254,14 @@ public abstract class ObjectImporter<T> {
      * Deserialize and validate one field. If field type is an object or list of objects those objects will be
      * deserialized recursively.
      *
-     * @param newParent parent object containing the field
-     * @param fieldDef APIField holding the description of the field (obtained from the Fields Enumerator EP)
+     * @param newParent     parent object containing the field
+     * @param fieldDef      APIField holding the description of the field (obtained from the Fields Enumerator EP)
      * @param newJsonParent JSON as imported
-     * @param fieldPath underscorified path to the field
+     * @param fieldPath     underscorified path to the field
      * @return true if valid format. Check errors to see also any business rules validation errors.
      */
     private boolean deserializeField(Object newParent, APIField fieldDef,
-            Map<String, Object> newJsonParent, String fieldPath) {
+                                     Map<String, Object> newJsonParent, String fieldPath) {
         String fieldName = fieldDef.getFieldName();
         String currentFieldPath = (fieldPath == null ? "" : fieldPath + "~") + fieldName;
         Object newJsonValue = newJsonParent.get(fieldName);
@@ -275,7 +278,7 @@ public abstract class ObjectImporter<T> {
     }
 
     private void processInterViolationsForField(APIField field, Object parentObject, Map<String, Object> parentJson,
-            String fieldPath) {
+                                                String fieldPath) {
         Object fieldValue = field.getFieldAccessor().get(parentObject);
 
         TranslatedValueContext fieldTranslatedValueContext = translatedValueContext.forField(parentObject, field);
@@ -284,7 +287,7 @@ public abstract class ObjectImporter<T> {
     }
 
     public void processInterViolationsForField(APIField type, Map<String, Object> parentJson, String fieldPath,
-            Object fieldValue, TranslatedValueContext translatedValueContext) {
+                                               Object fieldValue, TranslatedValueContext translatedValueContext) {
 
         Set<org.digijava.kernel.validation.ConstraintViolation> violations =
                 importerInterchangeValidator.validateField(type, fieldValue, translatedValueContext);
@@ -301,7 +304,7 @@ public abstract class ObjectImporter<T> {
         if (apiField.isIdOnly()) {
             // this field has possible values
             jsonValue = convert(fieldType, jsonValue);
-            return jsonValue != null ?  valueConverter.getObjectById(type, jsonValue) : null;
+            return jsonValue != null ? valueConverter.getObjectById(type, jsonValue) : null;
         } else if (fieldType.isDateType() || fieldType.isTimestampType()) {
             return DateTimeUtil.parseISO8601DateTimestamp((String) jsonValue, fieldType.isTimestampType());
         } else if (fieldType.isStringType()) {
@@ -319,7 +322,7 @@ public abstract class ObjectImporter<T> {
      * Deserialize one field and set it on the object.
      * <p>The json value was already verified and is valid.</p>
      * <p>Resulting  is not invoked.</p>
-     *
+     * <p>
      * Validates sub-elements (recursively).
      *
      * @param fieldDef
@@ -366,8 +369,11 @@ public abstract class ObjectImporter<T> {
         if (fieldDef.getApiType().isSimpleItemType()) {
             // list of primitives
             // FIXME why not call deserializePrimitive ?
+
             Collection nvs = ((Collection<?>) childrenNewValues).stream()
-                    .map(v -> valueConverter.toSimpleTypeValue(subElementClass, v)).collect(Collectors.toList());
+                    .map(v -> subElementClass.isAssignableFrom(v.getClass())
+                            ? valueConverter.toSimpleTypeValue(subElementClass, v)
+                            : valueConverter.getObjectById(subElementClass, v)).collect(Collectors.toList());
             collection.clear();
             collection.addAll(nvs);
         } else {
@@ -453,7 +459,7 @@ public abstract class ObjectImporter<T> {
     /**
      * Try to convert the value to the required type. Currently only supports Integer to Long conversion. For the rest
      * of the cases it assumes that value parameter is valid and will return it.
-     *
+     * <p>
      * Sometimes value has wrong type and a correction is needed. It comes from the fact that Jackson deserialization
      * target is a Map and thus small numbers are read as Integer and larger numbers as Long.
      */
@@ -469,6 +475,7 @@ public abstract class ObjectImporter<T> {
 
     /**
      * Gets items marked under the "children" key in the hierarchical branch of the imported JSON
+     *
      * @param jsonValue
      * @param fieldType
      * @return

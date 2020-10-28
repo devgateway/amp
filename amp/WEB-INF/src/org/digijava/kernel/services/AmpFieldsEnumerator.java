@@ -33,6 +33,14 @@ public final class AmpFieldsEnumerator implements InitializingBean {
         return enumeratorFactory.getDefaultEnumerator();
     }
 
+    public static CachingFieldsEnumerator getEnumerator(Long id) {
+        return enumeratorFactory.getEnumerator(id);
+    }
+
+    public static Map<Long, CachingFieldsEnumerator> getAllEnumerators() {
+        return enumeratorFactory.getAllEnumerators();
+    }
+
     @Override
     public void afterPropertiesSet() {
         enumeratorFactory = new CachingFieldsEnumeratorFactory(syncDAO);

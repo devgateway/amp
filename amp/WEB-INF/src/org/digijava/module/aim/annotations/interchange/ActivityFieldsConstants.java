@@ -33,6 +33,7 @@ public class ActivityFieldsConstants {
     public static final String APPROVAL_DATE = "Approval Date";
     public static final String APPROVAL_STATUS = "Approval Status";
     public static final String MODIFIED_BY = "Modified By";
+    public static final String ACTIVITY_TYPE = "Activity Type";
     public static final String DONOR_CONTACT = "Donor Contact Information";
     public static final String PROJECT_COORDINATOR_CONTACT = "Project Coordinator Contact Information";
     public static final String SECTOR_MINISTRY_CONTACT = "Sector Ministry Contact Information";
@@ -40,6 +41,7 @@ public class ActivityFieldsConstants {
     public static final String IMPL_EXECUTING_AGENCY_CONTACT = "Implementing/Executing Agency Contact Information";
     public static final String PRIMARY_CONTACT = "Mark as primary";
     public static final String FUNDINGS = "Fundings";
+    public static final String ADJUSTMENT_TYPE = "adjustment_type";
     public static final String FUNDING_DETAILS = "Funding Details";
     public static final String MTEF_PROJECTIONS = "MTEF Projections";
     public static final String LOCATIONS = "Locations";
@@ -101,6 +103,13 @@ public class ActivityFieldsConstants {
 
             public static final String PLEDGE = "Pledge";
         }
+    }
+
+    public static final class RegionalFunding {
+        private RegionalFunding() {
+        }
+
+        public static final String LOCATION = "Region Location";
     }
 
     public static final Map<String, String> ORG_ROLE_CODES = new ImmutableMap.Builder<String, String>()

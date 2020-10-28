@@ -276,25 +276,6 @@ public class IndicatorUtil {
         return result;
     }
 
-    /**
-     * Loads sector indicator connection by its ID.
-     * @param connId
-     * @return
-     * @throws DgException
-     */
-    public static IndicatorSector getConnectionToSector(Long connId) throws DgException{
-        Session session = PersistenceManager.getRequestDBSession();
-        IndicatorSector result=null;
-        try {
-            result= (IndicatorSector)session.load(IndicatorSector.class, connId);
-        } catch (ObjectNotFoundException e) {
-            logger.debug("Sector-Indicator conenction with ID="+connId+" not found",e);
-        } catch (Exception ex){
-            throw new DgException("cannot load IndicatorSector with id="+connId,ex);
-        }
-        return result;
-    }
-        
         /**
      * Returns any indicator connection type by its id and class.
      * @param <E>
@@ -824,8 +805,6 @@ public class IndicatorUtil {
                         if (actInd.getIndicatorsCategory() != null) {
                             categoryValue = (AmpCategoryValue) session.get(AmpCategoryValue.class, actInd.getIndicatorsCategory().getId());
                         }
-                        indValRevised.setRisk(risk);
-                        indValRevised.setLogFrame(categoryValue);
                         indValRevised.setIndicatorConnection(indAct);
                         indAct.getValues().add(indValRevised);
                     }
@@ -848,8 +827,6 @@ public class IndicatorUtil {
                     indValTarget.setValue(new Double(actInd.getTargetVal()));
                     indValTarget.setComment(actInd.getTargetValComments());
                     indValTarget.setValueDate(DateConversion.getDate(actInd.getTargetValDate()));
-                    indValTarget.setRisk(risk);
-                    indValTarget.setLogFrame(categoryValue);
                     indValTarget.setIndicatorConnection(indAct);
                     indAct.getValues().add(indValTarget);
                 }
@@ -860,8 +837,6 @@ public class IndicatorUtil {
                     indValBase.setValue(new Double(actInd.getBaseVal()));
                     indValBase.setComment(actInd.getBaseValComments());
                     indValBase.setValueDate(DateConversion.getDate(actInd.getBaseValDate()));
-                    indValBase.setRisk(risk);
-                    indValBase.setLogFrame(categoryValue);
                     indValBase.setIndicatorConnection(indAct);
                     indAct.getValues().add(indValBase);
                 }
@@ -1082,13 +1057,8 @@ public class IndicatorUtil {
         
     }
 
-    //TODO INDIC this is stupid temporary solution. risk should be moved to connection but business team does not care about this and we have no time to do this changes.
-    public static AmpIndicatorRiskRatings getRisk(IndicatorActivity connection){
-        if (connection!=null && connection.getValues()!=null){
-            Iterator<AmpIndicatorValue> iter=connection.getValues().iterator();
-            if (iter.hasNext()) return iter.next().getRisk();
-        }
-        return null;
+    public static AmpIndicatorRiskRatings getRisk(IndicatorActivity connection) {
+        return connection != null ? connection.getRisk() : null;
     }
     
     public static AmpIndicatorRiskRatings getRisk(Long id){
@@ -1102,7 +1072,7 @@ public class IndicatorUtil {
         }
         return retVal;
     }
-    
+
     public static ActivityIndicator createIndicatorHelperBean(IndicatorActivity connection) {
         ActivityIndicator bean=new ActivityIndicator();
         bean.setActivityId(connection.getActivity().getAmpActivityId());
@@ -1115,7 +1085,8 @@ public class IndicatorUtil {
             bean.setAmpCategoryValue("Unknown");
         }
         bean.setIndicatorsCategory(connection.getIndicator().getIndicatorsCategory());
-        
+        bean.setIndicatorsCategory(connection.getLogFrame());
+
         //set values to helper bean
         Collection<AmpIndicatorValue> values=connection.getValues();
         if (values!=null){
@@ -1127,19 +1098,16 @@ public class IndicatorUtil {
                     bean.setCurrentVal(new Float(value.getValue()));
                     bean.setCurrentValComments(value.getComment());
                     bean.setCurrentValDate(DateConversion.convertDateToLocalizedString(value.getValueDate()));
-                    bean.setIndicatorsCategory(value.getLogFrame());
                 }
                 if (value.getValueType()==AmpIndicatorValue.BASE){
                     bean.setBaseVal(new Float(value.getValue()));
                     bean.setBaseValComments(value.getComment());
                     bean.setBaseValDate(DateConversion.convertDateToString(value.getValueDate()));
-                    bean.setIndicatorsCategory(value.getLogFrame());
                 }
                 if (value.getValueType()==AmpIndicatorValue.TARGET){
                     bean.setTargetVal(new Float(value.getValue()));
                     bean.setTargetValComments(value.getComment());
                     bean.setTargetValDate(DateConversion.convertDateToString(value.getValueDate()));
-                    bean.setIndicatorsCategory(value.getLogFrame());
                 }
                 if (value.getValueType()==AmpIndicatorValue.REVISED){
                     if(value.getValue()!=null){
@@ -1149,7 +1117,6 @@ public class IndicatorUtil {
                     if(value.getValueDate()!=null){
                         bean.setRevisedTargetValDate(DateConversion.convertDateToString(value.getValueDate()));
                     }
-                    bean.setIndicatorsCategory(value.getLogFrame());
                 }
             }
         }
@@ -1908,14 +1875,9 @@ public class IndicatorUtil {
                 if(valuesActivity!=null && valuesActivity.size()>0){
                     Iterator<IndicatorActivity> it=valuesActivity.iterator();
                     while(it.hasNext()){
-                         IndicatorActivity indActivity=it.next();
-                         Set<AmpIndicatorValue> values=indActivity.getValues();                 
-                         for(Iterator<AmpIndicatorValue> valuesIter=values.iterator();valuesIter.hasNext();){
-                             AmpIndicatorValue val=valuesIter.next();
-                             if(val.getRisk()!=null){
-                                 risks.add(val.getRisk());
-                                 break;//all values have same risk and this risk should go to connection.
-                             }                                      
+                        IndicatorActivity indActivity = it.next();
+                        if (indActivity.getRisk() != null) {
+                            risks.add(indActivity.getRisk());
                         }
                     }
                 }
@@ -1954,30 +1916,4 @@ public class IndicatorUtil {
             }
             return risk;
         }
-     
-     /**
-         * This class is used for sorting IndicatorSector onjects by name
-         * @author Dare Roinishvili
-         *
-         */
-        public static class HelperIndicatorSectorNameComparator implements Comparator<IndicatorSector> {
-            Locale locale;
-            Collator collator;
-
-            public HelperIndicatorSectorNameComparator(){
-                this.locale=new Locale("en", "EN");
-            }
-
-            public HelperIndicatorSectorNameComparator(String iso) {
-                this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
-            }
-
-            public int compare(IndicatorSector o1, IndicatorSector o2) {
-                collator = Collator.getInstance(locale);
-                collator.setStrength(Collator.TERTIARY);
-
-                int result = collator.compare(o1.getIndicator().getName().toLowerCase(),o2.getIndicator().getName().toLowerCase());
-                return result;
-            }
-        } 
 }

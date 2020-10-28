@@ -65,6 +65,11 @@
 #print-simple-dummy .custom-legend ul li .label {
     color: #273142;
 }
+#print-dummy .country-popup-1 .popup-footer .project-list{
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+}
 
 #print-simple-dummy .countries-charts,
 #print-dummy .countries-charts {
@@ -200,7 +205,6 @@
     }
 
     #print-friendly-dummy .chart-container {
-        height: 185px !important;
         padding-bottom: 0;
         padding-top: 0;
     }

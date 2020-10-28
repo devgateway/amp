@@ -190,7 +190,7 @@ public class NDDService {
      * Returns the root of the indirect program. Configured by {@link GlobalSettingsConstants#INDIRECT_PROGRAM}
      * Global Setting.
      */
-    private AmpTheme getDstProgramRoot() {
+    public static AmpTheme getDstProgramRoot() {
         String indirectProgram = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.INDIRECT_PROGRAM);
         if (indirectProgram == null) {
             return null;

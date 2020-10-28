@@ -35,8 +35,6 @@ class GeocodingTable extends Component {
     }
 
     existLocationsInGeocoding = () => {
-        console.log(this.props.activities.some(activity => activity.locations.length > 0));
-        console.log(this.props.activities.length);
         return this.props.activities.some(activity => activity.locations.length > 0);
     }
 
@@ -62,7 +60,6 @@ class GeocodingTable extends Component {
 
     expandColumnComponent({ isExpandableRow, isExpanded}) {
         let content = '';
-        debugger;
 
         if (isExpandableRow) {
             content = (isExpanded ? '(-)' : '(+)' );

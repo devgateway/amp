@@ -55,9 +55,6 @@ public class NDDEndpoints {
     @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "getAvailablePrograms")
     @ApiOperation("Returns the list of programs we can use as Primary and Indirect.")
     public List<NDDService.SingleProgramData> getAvailablePrograms() {
-        return nddService.getAvailablePrograms()
-                .stream()
-                .map(p -> new NDDService.SingleProgramData(p.getAmpThemeId(), p.getName()))
-                .collect(Collectors.toList());
+        return nddService.getSinglePrograms();
     }
 }

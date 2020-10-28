@@ -30,10 +30,12 @@ public class NDDService {
     static class SingleProgramData implements Serializable {
         private Long id;
         private String value;
+        private boolean isIndirect;
 
-        SingleProgramData(Long id, String value) {
+        SingleProgramData(Long id, String value, boolean isIndirect) {
             this.id = id;
             this.value = value;
+            this.isIndirect = isIndirect;
         }
 
         public Long getId() {
@@ -43,33 +45,59 @@ public class NDDService {
         public String getValue() {
             return value;
         }
+
+        public boolean isIndirect() {
+            return isIndirect;
+        }
     }
 
     public MappingConfiguration getMappingConfiguration() {
-        PossibleValue src = convert(getSrcProgramRoot(), IndirectProgramUpdater.INDIRECT_MAPPING_LEVEL);
-        PossibleValue dst = convert(getDstProgramRoot(), IndirectProgramUpdater.INDIRECT_MAPPING_LEVEL);
+        AmpTheme src = getSrcProgramRoot();
+        AmpTheme dst = getDstProgramRoot();
+        PossibleValue srcPV = src != null ? convert(src, IndirectProgramUpdater.INDIRECT_MAPPING_LEVEL) : null;
+        PossibleValue dstPV = dst != null ? convert(dst, IndirectProgramUpdater.INDIRECT_MAPPING_LEVEL) : null;
 
         List<PossibleValue> allPrograms = new ArrayList<>();
-        getAvailablePrograms().forEach(ampTheme -> {
+        getAvailablePrograms(false).forEach(ampTheme -> {
+            PossibleValue pv = convert(ampTheme, IndirectProgramUpdater.INDIRECT_MAPPING_LEVEL);
+            allPrograms.add(pv);
+        });
+        getAvailablePrograms(true).forEach(ampTheme -> {
             PossibleValue pv = convert(ampTheme, IndirectProgramUpdater.INDIRECT_MAPPING_LEVEL);
             allPrograms.add(pv);
         });
 
         List<AmpIndirectTheme> mapping = loadMapping();
 
-        return new MappingConfiguration(mapping, new SingleProgramData(src.getId(), src.getValue()),
-                new SingleProgramData(dst.getId(), dst.getValue()), allPrograms);
+        SingleProgramData srcSPD = srcPV != null ? new SingleProgramData(srcPV.getId(), srcPV.getValue(), false) : null;
+        SingleProgramData dstSPD = dstPV != null ? new SingleProgramData(dstPV.getId(), dstPV.getValue(), true) : null;
+        return new MappingConfiguration(mapping, srcSPD, dstSPD, allPrograms);
     }
 
     /**
-     * Returns a list of first level programs that are part of the multi-program configuration.
-     * Use a simplified object to reduce bandwidth.
+     * Returns a list of first level programs.
      */
-    public List<AmpTheme> getAvailablePrograms() {
+    public List<AmpTheme> getAvailablePrograms(boolean indirect) {
         List<AmpTheme> programs = ProgramUtil.getAllPrograms()
-                .stream().filter(p -> p.getIndlevel().equals(0) && p.getProgramSettings().size() > 0)
+                .stream().filter(p -> p.getIndlevel().equals(0)
+                        && (indirect ? p.getProgramSettings().size() == 0 : p.getProgramSettings().size() > 0))
                 .collect(Collectors.toList());
         return programs;
+    }
+
+    /**
+     * Returns a list of programs available for mapping classified by direct/indirect (src/dst).
+     * @return
+     */
+    public List<SingleProgramData> getSinglePrograms() {
+        List<SingleProgramData> availablePrograms = new ArrayList<>();
+        List<AmpTheme> src = getAvailablePrograms(false);
+        List<AmpTheme> dst = getAvailablePrograms(true);
+        availablePrograms.addAll(src.stream().map(p -> new SingleProgramData(p.getAmpThemeId(), p.getName(), false))
+                .collect(Collectors.toList()));
+        availablePrograms.addAll(dst.stream().map(p -> new SingleProgramData(p.getAmpThemeId(), p.getName(), true))
+                .collect(Collectors.toList()));
+        return availablePrograms;
     }
 
     @SuppressWarnings("unchecked")
@@ -162,10 +190,10 @@ public class NDDService {
      * Returns the root of the indirect program. Configured by {@link GlobalSettingsConstants#INDIRECT_PROGRAM}
      * Global Setting.
      */
-    private AmpTheme getDstProgramRoot() {
+    public static AmpTheme getDstProgramRoot() {
         String indirectProgram = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.INDIRECT_PROGRAM);
         if (indirectProgram == null) {
-            throw new RuntimeException(GlobalSettingsConstants.INDIRECT_PROGRAM + " is not configured.");
+            return null;
         }
         return ProgramUtil.getTheme(Long.valueOf(indirectProgram));
     }
@@ -173,7 +201,7 @@ public class NDDService {
     private AmpTheme getSrcProgramRoot() {
         String primaryProgram = FeaturesUtil.getGlobalSettingValue(PRIMARY_PROGRAM);
         if (primaryProgram == null) {
-            throw new RuntimeException(PRIMARY_PROGRAM + " is not configured.");
+            return null;
         }
         return ProgramUtil.getTheme(Long.valueOf(primaryProgram));
     }

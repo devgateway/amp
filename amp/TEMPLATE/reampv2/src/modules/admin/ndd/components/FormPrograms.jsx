@@ -38,12 +38,18 @@ class FormPrograms extends Component {
         const {ndd, programs} = this.context;
         // Load main programs.
         this.setState(previousState => {
-            const src = {id: ndd[SRC_PROGRAM].id, value: ndd[SRC_PROGRAM].value};
-            return {src};
+            if (ndd[SRC_PROGRAM]) {
+                const src = {id: ndd[SRC_PROGRAM].id, value: ndd[SRC_PROGRAM].value};
+                return {src};
+            }
+            return {src: undefined};
         });
         this.setState(previousState => {
-            const dst = {id: ndd[DST_PROGRAM].id, value: ndd[DST_PROGRAM].value};
-            return {dst};
+            if (ndd[DST_PROGRAM]) {
+                const dst = {id: ndd[DST_PROGRAM].id, value: ndd[DST_PROGRAM].value};
+                return {dst};
+            }
+            return {dst: undefined};
         });
 
         // Available programs.
@@ -180,7 +186,7 @@ class FormPrograms extends Component {
 
     render() {
         const {data, validationErrors, src, dst} = this.state;
-        const {error} = this.props;
+        const {error, pending} = this.props;
         let messages = [];
         if (error) {
             messages.push({isError: true, text: error.toString()});
@@ -190,7 +196,8 @@ class FormPrograms extends Component {
         }
         return (<div className="form-container">
             <ProgramsHeader onChange={this.onChangeMainProgram} src={src} dst={dst} key={Math.random()}/>
-            <Header onAddRow={this.addRow} onSaveAll={this.saveAll} onRevertAll={this.revertAllChanges}/>
+            <Header onAddRow={this.addRow} onSaveAll={this.saveAll} onRevertAll={this.revertAllChanges}
+                    disabled={pending}/>
             <Notifications messages={messages}/>
             <ProgramSelectGroupList list={data} onChange={this.onRowChange} remove={this.remove} src={src} dst={dst}/>
         </div>);

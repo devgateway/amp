@@ -292,36 +292,4 @@ public class GeoCoderClient {
                     + '}';
         }
     }
-
-//    public void sendLocations(List<AmpCategoryValueLocations> acvLocations) {
-//        List<Map<?, ?>> locations = acvLocations.stream()
-//                .map(this::toGeoCoderLocation)
-//                .collect(toList());
-//
-//        client.resource(UriBuilder.fromUri(getBaseUrl()).path(PATH_AMP_LOCATIONS).build())
-//                .type(MediaType.APPLICATION_JSON_TYPE)
-//                .put(locations);
-//    }
-//
-//    private Map<?, ?> toGeoCoderLocation(AmpCategoryValueLocations acvl) {
-//        Map<Object, Object> loc = new HashMap<>();
-//
-//        loc.put("amp_location_id", acvl.getId());
-//        loc.put("name", acvl.getName());
-//
-//        int lvl = 0;
-//        AmpCategoryValueLocations i = acvl;
-//        while (i.getParentLocation() != null) {
-//            i = i.getParentLocation();
-//            lvl++;
-//        }
-//        loc.put("admin_level_code", "ADM" + lvl);
-//
-//        loc.put("description", acvl.getDescription());
-//        loc.put("geo_code", acvl.getGeoCode());
-//        loc.put("gs_lat", acvl.getGsLat() != null ? Double.parseDouble(acvl.getGsLat()) : null);
-//        loc.put("gs_long", acvl.getGsLong() != null ? Double.parseDouble(acvl.getGsLong()) : null);
-//
-//        return loc;
-//    }
 }

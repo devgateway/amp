@@ -41,7 +41,7 @@ public class SyncConstants {
         public static final String COLLECTION_TYPE_ACTIVITY = "activity-fields";
         public static final String COLLECTION_TYPE_CONTACT = "contact-fields";
         public static final String COLLECTION_TYPE_RESOURCE = "resource-fields";
-		public static final String INDICATOR = "indicator";
+        public static final String INDICATOR = "indicator";
         public static final String INDICATOR_RISK_RATING = "indicator risk rating";
     }
 }

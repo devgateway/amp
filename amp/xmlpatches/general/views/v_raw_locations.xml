@@ -32,8 +32,7 @@
 					SELECT aal.amp_activity_id, acvl.location_name, acvl.id, sum(aal.location_percentage) AS percentage,
 							COUNT(*) - COUNT(aal.location_percentage) AS cnt_nulls
 					FROM amp_activity_location aal
-					JOIN amp_location al ON aal.amp_location_id = al.amp_location_id
-					JOIN amp_category_value_location acvl ON al.location_id = acvl.id
+					JOIN amp_category_value_location acvl ON aal.location_id = acvl.id
 					GROUP BY aal.amp_activity_id, acvl.location_name, acvl.id
 				) v
 				ON aav.amp_activity_id = v.amp_activity_id;

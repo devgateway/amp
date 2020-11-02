@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasEntry;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.lang.reflect.Field;
@@ -100,7 +101,7 @@ public class ObjectExporterTest {
         private AmpActivityGroup activityGroup;
 
         @Interchangeable(fieldTitle = "List Of Integers")
-        private List<Integer> listOfIntegers;
+        private List<Integer> listOfIntegers = new ArrayList<>();
 
         @Interchangeable(fieldTitle = "Simple Value With PV")
         @PossibleValues(OnePV.class)
@@ -111,9 +112,11 @@ public class ObjectExporterTest {
          * multipleValues parameter is irrelevant.
          */
         @InterchangeableDiscriminator(discriminatorField = "type", settings = {
-                @Interchangeable(fieldTitle = "Category A", discriminatorOption = "A", pickIdOnly = true),
-                @Interchangeable(fieldTitle = "Category B", discriminatorOption = "B", pickIdOnly = true)
-        })
+                @Interchangeable(fieldTitle = "Category A", discriminatorOption = "A", pickIdOnly = true,
+                        multipleValues = false),
+                @Interchangeable(fieldTitle = "Category B", discriminatorOption = "B", pickIdOnly = true,
+                        multipleValues = false),
+                @Interchangeable(fieldTitle = "Category C", discriminatorOption = "C", pickIdOnly = true)})
         private List<DummyCategory> categories = new ArrayList<>();
 
         /**
@@ -125,6 +128,9 @@ public class ObjectExporterTest {
                 @Interchangeable(fieldTitle = "Sub B", discriminatorOption = "B")
         })
         private List<DummySub> discriminatedSubs = new ArrayList<>();
+
+        @Interchangeable(fieldTitle = "List of PickIdOnly", pickIdOnly = true)
+        private List<DummyCategory> listOfPickIdOnly = new ArrayList<>();
 
         @Override
         public Object getIdentifier() {
@@ -261,14 +267,17 @@ public class ObjectExporterTest {
         Dummy dummy = new Dummy();
         dummy.categories = ImmutableList.of(
                 new DummyCategory(1L, "A"),
-                new DummyCategory(2L, "B"));
+                new DummyCategory(2L, "B"),
+                new DummyCategory(7L, "C"),
+                new DummyCategory(8L, "C"));
 
         Map<String, Object> jsonObj = exporter.export(dummy);
 
         assertThat(jsonObj,
                 allOf(
                         hasEntry("category_a", 1L),
-                        hasEntry("category_b", 2L)));
+                        hasEntry("category_b", 2L),
+                        hasEntry(is("category_c"), (Matcher) containsInAnyOrder(7L, 8L))));
     }
 
     @Test(expected = RuntimeException.class)
@@ -279,6 +288,18 @@ public class ObjectExporterTest {
                 new DummyCategory(2L, "A"));
 
         exporter.export(dummy);
+    }
+
+    @Test
+    public void testListOfPickIdOnly() {
+        Dummy dummy = new Dummy();
+        dummy.listOfPickIdOnly = ImmutableList.of(
+                new DummyCategory(1L, "A"),
+                new DummyCategory(2L, "B"));
+
+        Map<String, Object> jsonObj = exporter.export(dummy);
+
+        assertThat(jsonObj, hasEntry(is("list_of_pickidonly"), (Matcher) containsInAnyOrder(1L, 2L)));
     }
 
     @Test

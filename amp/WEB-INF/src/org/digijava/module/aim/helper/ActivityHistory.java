@@ -1,6 +1,6 @@
 package org.digijava.module.aim.helper;
 
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 
 /** bean used for holding information about user (first and last name) who modified the activity

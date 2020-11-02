@@ -21,8 +21,9 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
  * @author medea
  */
 @TranslatableClass (displayName = "Location")
-public class AmpCategoryValueLocations implements Identifiable, Comparable<AmpCategoryValueLocations>, 
-        HierarchyListable, ARDimensionable, Serializable, AmpAutoCompleteDisplayable,OrgProfileValue, NameableOrIdentifiable {
+public class AmpCategoryValueLocations implements Identifiable,
+        HierarchyListable, ARDimensionable, Serializable, AmpAutoCompleteDisplayable<AmpCategoryValueLocations>,
+        OrgProfileValue, NameableOrIdentifiable {
     //IATI-check: this is not to be ignored, but not importable, since it's obtained from possible values
     private Long id;
     @TranslatableField
@@ -155,11 +156,19 @@ public class AmpCategoryValueLocations implements Identifiable, Comparable<AmpCa
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof AmpCategoryValueLocations) {
-            AmpCategoryValueLocations loc = (AmpCategoryValueLocations) o;
-            return id.equals(loc.getId());
-        } else
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof AmpCategoryValueLocations)) {
             return false;
+        }
+        AmpCategoryValueLocations that = (AmpCategoryValueLocations) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     @Override

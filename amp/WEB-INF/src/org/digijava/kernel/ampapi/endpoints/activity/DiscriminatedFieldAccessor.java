@@ -17,27 +17,54 @@ import org.apache.commons.beanutils.PropertyUtils;
  * On write will replace all items that satisfy discrimination condition from underlying collection with provided
  * items. The other items will stay untouched.
  *
- * TODO this accessor works with lists even when field does not accept multiple values,
- *      refactor to return actual value instead of a list with one single item
+ * If the discriminated field is known to have at most one value then instead of a collection the actual object
+ * is returned. Setting value to null in such case will mean that this element will be removed from the underlying
+ * collection.
  *
  * @author Octavian Ciubotaru
  */
 public class DiscriminatedFieldAccessor implements FieldAccessor {
 
-    private String discriminatorField;
-    private String discriminatorValue;
+    private final String discriminatorField;
+    private final String discriminatorValue;
 
-    private FieldAccessor target;
+    private final FieldAccessor targetField;
 
-    public DiscriminatedFieldAccessor(FieldAccessor target, String discriminatorField, String discriminatorValue) {
-        this.target = target;
+    private final boolean multipleValues;
+
+    public DiscriminatedFieldAccessor(FieldAccessor targetField, String discriminatorField, String discriminatorValue,
+            boolean multipleValues) {
+        this.targetField = targetField;
         this.discriminatorField = discriminatorField;
         this.discriminatorValue = discriminatorValue;
+        this.multipleValues = multipleValues;
     }
 
     @Override
-    public Object get(Object targetObject) {
-        Collection collection = getWrappedCollection(targetObject);
+    public <T> T get(Object targetObject) {
+        Collection<?> collection = getWrappedCollection(targetObject);
+        if (multipleValues) {
+            return (T) getList(collection);
+        } else {
+            return (T) getObject(collection);
+        }
+    }
+
+    private Object getObject(Collection<?> collection) {
+        Object filteredItem = null;
+        for (Object item : collection) {
+            if (getDiscriminationValue(item).equals(discriminatorValue)) {
+                if (filteredItem != null) {
+                    throw new RuntimeException(
+                            "MultipleValues is false but the underlying collection contains two items.");
+                }
+                filteredItem = item;
+            }
+        }
+        return filteredItem;
+    }
+
+    private Object getList(Collection<?> collection) {
         List<Object> filteredItems = new ArrayList<>();
         for (Object item : collection) {
             if (getDiscriminationValue(item).equals(discriminatorValue)) {
@@ -47,21 +74,47 @@ public class DiscriminatedFieldAccessor implements FieldAccessor {
         return filteredItems;
     }
 
-    private Collection getWrappedCollection(Object targetObject) {
-        Object obj = target.get(targetObject);
-        if (!(obj instanceof Collection)) {
-            throw new IllegalStateException("Value is either null or does not implement java.util.Collection");
-        }
-        return (Collection) obj;
-    }
-
     @Override
     public void set(Object targetObject, Object value) {
-        Collection collection = getWrappedCollection(targetObject);
-        TreeSet<Object> newItems = new TreeSet<>(Comparator.comparingInt(System::identityHashCode));
-        newItems.addAll((Collection) value);
+        Collection targetCollection = getWrappedCollection(targetObject);
 
-        Iterator it = collection.iterator();
+        if (multipleValues) {
+            setList(targetCollection, (Collection) value);
+        } else {
+            setObject(targetCollection, value);
+        }
+
+        targetField.set(targetObject, targetCollection);
+    }
+
+    private void setObject(Collection targetCollection, Object value) {
+        Iterator<?> it = targetCollection.iterator();
+        boolean refPresent = false;
+        boolean found = false;
+        while (it.hasNext()) {
+            Object item = it.next();
+            if (getDiscriminationValue(item).equals(discriminatorValue)) {
+                if (found) {
+                    throw newMultipleValuesException();
+                }
+                found = true;
+                if (item == value) {
+                    refPresent = true;
+                } else {
+                    it.remove();
+                }
+            }
+        }
+        if (value != null && !refPresent) {
+            targetCollection.add(value);
+        }
+    }
+
+    private void setList(Collection targetCollection, Collection values) {
+        TreeSet<Object> newItems = new TreeSet<>(Comparator.comparingInt(System::identityHashCode));
+        newItems.addAll(values);
+
+        Iterator<?> it = targetCollection.iterator();
         while (it.hasNext()) {
             Object item = it.next();
             if (getDiscriminationValue(item).equals(discriminatorValue)) {
@@ -71,9 +124,21 @@ public class DiscriminatedFieldAccessor implements FieldAccessor {
                 }
             }
         }
-        collection.addAll(newItems);
+        targetCollection.addAll(newItems);
+    }
 
-        target.set(targetObject, collection);
+    private IllegalStateException newMultipleValuesException() {
+        return new IllegalStateException("Field is marked as single value but there are multiple values"
+                + " in the underlying collection. Accessor: " + this.toString());
+    }
+
+    private Collection getWrappedCollection(Object targetObject) {
+        Object obj = targetField.get(targetObject);
+        if (!(obj instanceof Collection)) {
+            throw new IllegalStateException("Value is either null or does not implement java.util.Collection for "
+                    + this.toString());
+        }
+        return (Collection) obj;
     }
 
     private String getDiscriminationValue(Object obj) {
@@ -83,25 +148,23 @@ public class DiscriminatedFieldAccessor implements FieldAccessor {
             discriminatorObj = PropertyUtils.getProperty(obj, discriminatorField);
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw new RuntimeException(String.format(
-                    "Failed to read discriminator value. Object %s, discriminator field %s.",
-                    obj, discriminatorField), e);
+                    "Failed to read discriminator value. Object %s, accessor %s.",
+                    obj, this), e);
         }
 
         if (discriminatorObj == null) {
             throw new RuntimeException(String.format(
-                    "Discriminator value must be non-null. Object %s, discriminator field %s.",
-                    obj, discriminatorField));
+                    "Discriminator value must be non-null. Object %s, accessor %s.",
+                    obj, this));
         }
 
         return discriminatorObj.toString();
     }
 
-    public static <T> T unwrapSingleElement(Collection collection) {
-        Iterator iterator = collection.iterator();
-        if (iterator.hasNext()) {
-            return (T) iterator.next();
-        } else {
-            return null;
-        }
+    @Override
+    public String toString() {
+        return "Discriminated accessor for " + targetField.toString() + " where "
+                + discriminatorField + "=" + discriminatorValue;
     }
+
 }

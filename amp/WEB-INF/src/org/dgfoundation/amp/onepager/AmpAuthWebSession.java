@@ -69,7 +69,7 @@ public class AmpAuthWebSession extends AuthenticatedWebSession {
         currentMember = (TeamMember)httpSession.getAttribute("currentMember");
         isAdmin = (String)httpSession.getAttribute("ampAdmin");
         if (currentMember != null)
-            ampCurrentMember = TeamMemberUtil.getAmpTeamMemberCached(currentMember.getMemberId());
+            ampCurrentMember = TeamMemberUtil.getAmpTeamMember(currentMember.getMemberId());
         else
             ampCurrentMember = null;
         
@@ -82,7 +82,7 @@ public class AmpAuthWebSession extends AuthenticatedWebSession {
         currentMember = (TeamMember) getHttpSession().getAttribute("currentMember");
         isAdmin = (String) getHttpSession().getAttribute("ampAdmin");
         if (currentMember != null)
-            ampCurrentMember = TeamMemberUtil.getAmpTeamMemberCached(currentMember.getMemberId());
+            ampCurrentMember = TeamMemberUtil.getAmpTeamMember(currentMember.getMemberId());
         else
             ampCurrentMember = null;
         dirty();
@@ -105,7 +105,7 @@ public class AmpAuthWebSession extends AuthenticatedWebSession {
         if (ampCurrentMember == null){
             getCurrentMember(); //may initialize currentMember if it's needed
             if (currentMember != null)
-                ampCurrentMember = TeamMemberUtil.getAmpTeamMemberCached(currentMember.getMemberId());
+                ampCurrentMember = TeamMemberUtil.getAmpTeamMember(currentMember.getMemberId());
         }
         return ampCurrentMember;
     }

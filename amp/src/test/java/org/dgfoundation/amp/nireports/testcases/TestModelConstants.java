@@ -36,10 +36,10 @@ public class TestModelConstants {
     public static int LEVEL_ORGANIZATION_TYPE = 0;
     public static int LEVEL_ORGANIZATION_GROUP = 1;
     public static int LEVEL_ORGANIZATION = 2;
-    public static int LEVEL_COUNTRY = 0;
-    public static int LEVEL_REGION = 1;
-    public static int LEVEL_ZONE = 2;
-    public static int LEVEL_DISTRICT = 3;
+    public static final int ADM_LEVEL_0 = 0;
+    public static final int ADM_LEVEL_1 = 1;
+    public static final int ADM_LEVEL_2 = 2;
+    public static final int ADM_LEVEL_3 = 3;
     public static int LEVEL_SECTOR = 0;
     public static int LEVEL_SUBSECTOR = 1;
     public static int LEVEL_SUBSUBSECTOR = 2;

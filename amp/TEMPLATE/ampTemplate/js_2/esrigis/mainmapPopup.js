@@ -28,9 +28,9 @@ var MapConstants = {
 var basemapUrl;
 var isOsm = false;
 var isFirstSelect = true;
-var tempId = 1; 
+var tempId = 1;
 var labels = {};
-var DEFAULT_STRUCTURE_COLOR = '#3388ff'; 
+var DEFAULT_STRUCTURE_COLOR = '#3388ff';
 
 function MapPopup(lat, long) {
 	latitude = lat;
@@ -209,41 +209,60 @@ function createColorCheckboxes(selectedGraphic) {
 		window.opener.structuresData.structureColors.forEach(function(c) {
 			appendColor(c);
 		});
-		
+
 		$('.color-checkbox').click(function(event ){
-			
+
 			if ($(this).data('wasChecked')) {
 				$(this).prop('checked', false);
 			}
-			
-			$(this).data('wasChecked', event.target.checked);				
-		    if (event.target.checked === true) {		    	
-		    	selectedGraphic.target.setStyle({color: event.target.dataset.color});	    		
+
+			$(this).data('wasChecked', event.target.checked);
+		    if (event.target.checked === true) {
+		    	selectedGraphic.target.setStyle({color: event.target.dataset.color});
 		    } else {
-		    	selectedGraphic.target.setStyle({color: DEFAULT_STRUCTURE_COLOR});		    
-		    }		
+		    	selectedGraphic.target.setStyle({color: DEFAULT_STRUCTURE_COLOR});
+		    }
 		});
-	}	
+	}
 }
 function isBlank(str) {
     return (!str || /^\s*$/.test(str));
 }
-function selectLocationCallerShape(selectedGraphic) {	
+
+/**
+ * TODO replace the places we are searching by index to search by input name
+ * @param row
+ * @param elementName
+ * @returns {*}
+ */
+function getRowElement(row, elementName) {
+	var elements = row.getElementsByTagName("INPUT");
+	var result;
+	for (var i = 0; i < elements.length; i++) {
+
+		if (elements[i].name.indexOf(elementName) >= 0) {
+			result = elements[i];
+			break;
+		}
+	}
+	return result;
+}
+function selectLocationCallerShape(selectedGraphic) {
 	$("#errorMsg").html("");
 	var callerButton = window.opener.callerGisObject;
-	var row = findRow(selectedGraphic);	
+	var row = findRow(selectedGraphic);
 
-	//set temporary client side id used for identifying structures and rows 
+	//set temporary client side id used for identifying structures and rows
 	if (selectedGraphic.target.tempId == null) {
 		selectedGraphic.target.tempId = tempId++;
 	}
-	
+
 	if (selectedGraphic.target instanceof L.Marker || selectedGraphic.target instanceof L.CircleMarker) {
 		$("#colors-section").hide();
 	} else {
 		$("#colors-section").show();
 	}
-	
+
 	 $("#locationTitleDialog").dialog({
 		"title" : TranslationManager.getTranslated("Select Structure"),
 		open : function(event, ui) {
@@ -251,11 +270,11 @@ function selectLocationCallerShape(selectedGraphic) {
 			createColorCheckboxes(selectedGraphic);
 			if (row) {
 				var title = row.getElementsByTagName("INPUT")[0];
-				$("#locationTitle").val(title.value);					
-				var structureColor = row.getElementsByTagName("INPUT")[8];
+				$("#locationTitle").val(title.value);
+				var structureColor = getRowElement(row, 'structureColorId');
 				if (structureColor && structureColor.value) {
 					$(".color-checkbox:radio[value='"+ structureColor.value +"']").attr("checked", true);
-				}				
+				}
 			}
 		},
 		buttons : [ {
@@ -270,8 +289,8 @@ function selectLocationCallerShape(selectedGraphic) {
 					$("#errorMsg").html(TranslationManager.getTranslated('Title is a required field'));
 					return;
 				}
-				
-				updateStructure(selectedGraphic, $("#locationTitle").val());				
+
+				updateStructure(selectedGraphic, $("#locationTitle").val());
 				isFirstSelect = false;
 				// if row does not exist, trigger click on add structure button to add row on structures table in AF
                 //this confirmation is added just in case the user closes the window before the content is submited
@@ -303,7 +322,7 @@ function updateActivityForm(row, selectedGraphic) {
 
 	var latitudeInput = row.getElementsByTagName("INPUT")[1];
 	latitudeInput.value = "";
-	
+
 	var longitudeInput = row.getElementsByTagName("INPUT")[2];
 	longitudeInput.value = "";
 
@@ -316,10 +335,10 @@ function updateActivityForm(row, selectedGraphic) {
 	var tempIdInput = row.getElementsByTagName("INPUT")[7];
 	tempIdInput.value = selectedGraphic.target.tempId;
 	window.opener.postvaluesx(tempIdInput);
-	
-	var structureColorInput = row.getElementsByTagName("INPUT")[8];
-	
-	var selectedColors = document.querySelectorAll('.color-checkbox:checked');	
+
+	var structureColorInput = getRowElement(row, 'structureColorId');
+
+	var selectedColors = document.querySelectorAll('.color-checkbox:checked');
 	if (selectedColors.length > 0){
 		structureColorInput.value = parseInt(selectedColors[0].value);
 	} else {
@@ -360,7 +379,7 @@ function updateActivityForm(row, selectedGraphic) {
 		}
 		window.opener.postvaluesx(shapeInput);
 	}
-	
+
 	fireChangeEvent(coordsInput);
 	fireChangeEvent(latitudeInput);
 	fireChangeEvent(longitudeInput);
@@ -376,13 +395,13 @@ function fireChangeEvent(element) {
 		var evt = document.createEvent("HTMLEvents");
 		evt.initEvent("change", false, true);
 		element.dispatchEvent(evt);
-	} else {		
+	} else {
 		element.fireEvent("onchange");
 	}
 }
 
 function updateStructure(selectedGraphic, title) {
-	var label = labels[selectedGraphic.target.tempId];	
+	var label = labels[selectedGraphic.target.tempId];
 	if (label) {
 		label.setIcon(L.divIcon({
 			iconSize : null,
@@ -410,20 +429,20 @@ function removeStructureLabel(selectedGraphic) {
 	}
 }
 
-function findRow(selectedGraphic) {	
+function findRow(selectedGraphic) {
 	var callerButton = window.opener.callerGisObject;
 	var rows = callerButton.ownerDocument.getElementsByClassName('structureRow');
-	
+
     if (isFirstSelect && rows.length !== 0) {
     	return callerButton.parentNode.parentNode;
-	}    
-	
+	}
+
 	for (var i = 0; i < rows.length; i++) {
-		var tempIdInput = rows[i].getElementsByTagName("INPUT")[7];		
+		var tempIdInput = rows[i].getElementsByTagName("INPUT")[7];
 		if (tempIdInput.value == selectedGraphic.target.tempId) {
 			return rows[i];
 		}
-	
+
 	}
 
 	return null;
@@ -570,14 +589,14 @@ function filterLocation(value) {
 }
 
 function appendColor(categoryValue) {
-	var colorHTML = getColorHTMLTemplate();	
+	var colorHTML = getColorHTMLTemplate();
 	colorHTML = colorHTML.replace('{value}', categoryValue.id);
 	var translatedValue = TranslationManager.getTranslated(categoryValue.value);
 	var splits = translatedValue.split(":");
 	if (splits.length == 2) {
 		colorHTML = colorHTML.replace('{color}', splits[0]).replace('{color}', splits[0]).replace('{name}', splits[1]);
 		$('.colors').append(colorHTML);
-	} 
+	}
 }
 
 function getColorHTMLTemplate() {
@@ -604,7 +623,7 @@ function startContextMenu() {
 		case "remove":
 			removeStructure(selectedPointEvent);
 			circlePoint = null;
-			break;		
+			break;
 		}
 
 		// Hide it AFTER the action was triggered
@@ -634,7 +653,7 @@ function findDeleteIcon(selectedPointEvent) {
 			}
 		}
 	}
-	
+
 	return null;
 }
 

@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import com.google.common.collect.ImmutableList;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
@@ -20,11 +22,11 @@ import org.digijava.kernel.validation.TranslatedValueContext;
 import org.digijava.kernel.validation.Path;
 import org.digijava.kernel.validation.TranslationContext;
 import org.digijava.kernel.validation.Validator;
-import org.digijava.kernel.validators.activity.UniqueActivityTitleValidator;
 import org.digijava.kernel.validators.activity.ComponentFundingOrgRoleValidator;
 import org.digijava.kernel.validators.activity.FundingWithTransactionsValidator;
 import org.digijava.kernel.validators.activity.ImplementationLevelValidator;
 import org.digijava.kernel.validators.activity.PledgeOrgValidator;
+import org.digijava.kernel.validators.activity.RegionLocationValidator;
 
 /**
  * Acts as a bridge between importer and interchangeable validation.
@@ -35,12 +37,16 @@ import org.digijava.kernel.validators.activity.PledgeOrgValidator;
  */
 public class ImporterInterchangeValidator {
 
+    private final Function<Supplier<Set<ConstraintViolation>>, Set<ConstraintViolation>> executor;
     private Validator validator;
 
     private Map<Integer, ApiErrorMessage> errors;
 
-    public ImporterInterchangeValidator(Map<Integer, ApiErrorMessage> errors) {
+
+    public ImporterInterchangeValidator(Map<Integer, ApiErrorMessage> errors,
+            Function<Supplier<Set<ConstraintViolation>>, Set<ConstraintViolation>> executor) {
         this.errors = errors;
+        this.executor = executor;
 
         validator = new Validator();
     }
@@ -61,8 +67,7 @@ public class ImporterInterchangeValidator {
      */
     public Set<ConstraintViolation> validate(APIField type, Object root, TranslationContext translationContext,
             Class<?>... groups) {
-        return UniqueActivityTitleValidator.withDao(new UniqueActivityTitleValidator.DatabaseBackedEnvironment(),
-                () -> validator.validate(type, root, translationContext, groups));
+        return doInValidatorEnv(() -> validator.validate(type, root, translationContext, groups));
     }
 
     /**
@@ -76,8 +81,7 @@ public class ImporterInterchangeValidator {
      */
     public Set<ConstraintViolation> validateField(APIField field, Object value,
             TranslatedValueContext translatedValueContext, Class<?>... groups) {
-        return UniqueActivityTitleValidator.withDao(new UniqueActivityTitleValidator.DatabaseBackedEnvironment(),
-                () -> validator.validateField(field, value, translatedValueContext, groups));
+        return doInValidatorEnv(() -> validator.validateField(field, value, translatedValueContext, groups));
     }
 
     /**
@@ -90,6 +94,10 @@ public class ImporterInterchangeValidator {
     public void integrateFieldErrorsIntoResult(Set<ConstraintViolation> violations, Map<String, Object> json,
             String fieldPath) {
         integrateErrorsIntoResult(violations, json, ConstraintDescriptor.ConstraintTarget.FIELD, fieldPath);
+    }
+
+    private Set<ConstraintViolation> doInValidatorEnv(Supplier<Set<ConstraintViolation>> supplier) {
+        return executor.apply(supplier);
     }
 
     /**
@@ -152,6 +160,9 @@ public class ImporterInterchangeValidator {
         } else if (validatorClass.equals(ImplementationLevelValidator.class)) {
             Long locId = (Long) violation.getAttributes().get(ImplementationLevelValidator.ATTR_LOC_ID);
             leafFilter = value -> locId == null || locId.equals(intToLong(value));
+        } else if (validatorClass.equals(RegionLocationValidator.class)) {
+            Set<?> ids = (Set<?>) violation.getAttributes().get(RegionLocationValidator.ATTR_LOC_IDS);
+            leafFilter = value -> ids.contains(intToLong(value));
         } else if (validatorClass.equals(FundingWithTransactionsValidator.class)) {
             // this condition is not sufficient, will match funding items what do not have transactions at all
             leafFilter = Objects::isNull;

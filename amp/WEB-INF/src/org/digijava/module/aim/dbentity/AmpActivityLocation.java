@@ -1,6 +1,7 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import org.digijava.kernel.ampapi.endpoints.common.values.providers.LocationPossibleValuesProvider;
 import org.digijava.kernel.validators.activity.ImplementationLevelValidator;
@@ -11,8 +12,9 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableBackRefere
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
-import org.digijava.module.aim.annotations.interchange.Validators;
+import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
 import org.digijava.module.aim.util.Output;
+import org.digijava.module.aim.util.TreeNodeAware;
 
 /**
  * Connection between Activity and Location.
@@ -20,7 +22,9 @@ import org.digijava.module.aim.util.Output;
  * @author Irakli Kobiashvili
  *
  */
-public class AmpActivityLocation implements Versionable, Serializable, Cloneable {
+public class AmpActivityLocation implements Versionable, Serializable, Cloneable,
+        TreeNodeAware<AmpCategoryValueLocations> {
+
     //IATI-check: should be exported.
     @InterchangeableId
     @Interchangeable(fieldTitle = "Id")
@@ -38,7 +42,8 @@ public class AmpActivityLocation implements Versionable, Serializable, Cloneable
                     ImplementationLevelValidator.IMPLEMENTATION_LEVEL_VALID_KEY,
                     ImplementationLevelValidator.IMPLEMENTATION_LOCATION_PRESENT_KEY
             })
-    private AmpLocation location;
+    private AmpCategoryValueLocations location;
+
     @Interchangeable(fieldTitle = "Location Percentage",
             interValidators = @InterchangeableValidator(value = RequiredValidator.class,
                     fmPath = "/Activity Form/Location/Locations/Location percentage required"),
@@ -62,10 +67,10 @@ public class AmpActivityLocation implements Versionable, Serializable, Cloneable
     public void setActivity(AmpActivityVersion activity) {
         this.activity = activity;
     }
-    public AmpLocation getLocation() {
+    public AmpCategoryValueLocations getLocation() {
         return location;
     }
-    public void setLocation(AmpLocation location) {
+    public void setLocation(AmpCategoryValueLocations location) {
         this.location = location;
     }
     public Float getLocationPercentage() {
@@ -78,25 +83,21 @@ public class AmpActivityLocation implements Versionable, Serializable, Cloneable
     @Override
     public boolean equalsForVersioning(Object obj) {
         AmpActivityLocation aux = (AmpActivityLocation) obj;
-        if (this.location.equalsForVersioning(aux.getLocation())) {
-            return true;
-        } else {
-            return false;
-        }
+        return location.getId().equals(aux.getLocation().getId());
     }
 
     @Override
     public Output getOutput() {
-        Output out = this.location.getOutput();
+        Output out = new Output();
+        out.setOutputs(new ArrayList<>());
+        out.add("ISO 3 Code", location.getIso3());
+        out.add("Name", location.getName());
+        out.add("Description", location.getDescription());
         out.getOutputs().add(
                 new Output(null, new String[] { "Percentage" },
                         new Object[] { this.locationPercentage != null ? this.locationPercentage : new Float(0) }));
-        out.getOutputs().add(
-                new Output(null, new String[] { "Latitude"},
-                        new Object[] { this.latitude != null ? this.latitude : "" }));
-        out.getOutputs().add(
-                new Output(null, new String[] { "Longitude"},
-                        new Object[] { this.longitude != null ? this.longitude : "" }));
+        out.add("Latitude", latitude);
+        out.add("Longitude", longitude);
         return out;
     }
 
@@ -134,4 +135,8 @@ public class AmpActivityLocation implements Versionable, Serializable, Cloneable
         return super.clone();
     }
 
+    @Override
+    public AmpAutoCompleteDisplayable<AmpCategoryValueLocations> getTreeNode() {
+        return location;
+    }
 }

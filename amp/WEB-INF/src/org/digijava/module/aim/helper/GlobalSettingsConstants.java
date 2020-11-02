@@ -213,6 +213,10 @@ public class GlobalSettingsConstants {
     // TODO will be removed once the new activity preview is finished
     public static final String USE_NEW_ACTIVITY_PREVIEW = "Use new activity preview";
 
+    public static final String MACHINE_TRANSLATION_ENABLED = "Machine Translation Enabled";
+
+    public static final String MACHINE_TRANSLATION_MAX_CHARACTERS = "Machine Translation Monthly Max Characters";
+
     /**
      * fields which, although existing in the database, should be rendered with a display: none on the GlobalSettings form so that the user never has a chance of changing their value
      */

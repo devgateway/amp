@@ -4,7 +4,6 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,9 +20,9 @@ import org.digijava.module.common.util.DateTimeUtil;
  */
 public class ObjectExporter<T> {
 
-    private List<APIField> apiFields;
+    private final List<APIField> apiFields;
 
-    private TranslatedFieldReader translatedFieldReader;
+    private final TranslatedFieldReader translatedFieldReader;
 
     public ObjectExporter(TranslatedFieldReader translatedFieldReader, List<APIField> apiFields) {
         this.translatedFieldReader = translatedFieldReader;
@@ -76,16 +75,9 @@ public class ObjectExporter<T> {
         if (field.isIdOnly() && !(isList && field.getApiType().isSimpleItemType())) {
             jsonValue = readFieldWithPossibleValues(field, fieldValue);
         } else if (field.getApiType().getFieldType().isObject()) {
-            if (fieldValue != null && Collection.class.isAssignableFrom(fieldValue.getClass())) {
-                Collection col = (Collection) fieldValue;
-                if (col.size() > 1) {
-                    throw new RuntimeException("Multiple values found for an object field");
-                }
-                fieldValue = col.size() == 1 ? col.iterator().next() : null;
-            }
             jsonValue = (fieldValue == null) ? null : getObjectJson(fieldValue, field.getChildren(), fieldPath);
         } else if (isList) {
-            jsonValue = readCollection(field, fieldPath, (Collection) fieldValue);
+            jsonValue = readCollection(field, fieldPath, object, (Collection<?>) fieldValue);
         } else {
             jsonValue = readPrimitive(field, object, fieldValue);
         }
@@ -95,18 +87,15 @@ public class ObjectExporter<T> {
 
     /**
      * Read value for a field that has possible values API.
-     * <p>When a field is discriminated, then value is list. In this case the value is expected to be a collection
-     * with one item.
      * <p>If the value is {@link Identifiable} then it's id is returned.
      */
     private Object readFieldWithPossibleValues(APIField field, Object value) {
-        Object singleValue = getSingleValue(value);
         if (ApprovalStatus.class.isAssignableFrom(field.getApiType().getType())) {
             return value == null ? null : ((ApprovalStatus) value).getId();
         } else if (Identifiable.class.isAssignableFrom(field.getApiType().getType())) {
-            return singleValue == null ? null : ((Identifiable) singleValue).getIdentifier();
+            return value == null ? null : ((Identifiable) value).getIdentifier();
         } else if (InterchangeUtils.isSimpleType(field.getApiType().getType())) {
-            return singleValue;
+            return value;
         } else {
             throw new RuntimeException("Invalid field mapping. Must be either of simple type or identifiable. "
                     + "Field: " + field.getFieldName());
@@ -114,30 +103,12 @@ public class ObjectExporter<T> {
     }
 
     /**
-     * <p>When a field is discriminated, then value is list. In this case the value is expected to be a collection
-     * with one item.
-     */
-    private Object getSingleValue(Object value) {
-        Object singleValue = null;
-        if (value instanceof Collection) {
-            Iterator iterator = ((Collection) value).iterator();
-            if (iterator.hasNext()) {
-                singleValue = iterator.next();
-            }
-            if (iterator.hasNext()) {
-                throw new RuntimeException("Value is a collection with more than one element.");
-            }
-        } else {
-            singleValue = value;
-        }
-        return singleValue;
-    }
-
-    /**
      * Convert primitive value to json value.
      */
     private Object readPrimitive(APIField apiField, Object object, Object fieldValue) {
-        if (fieldValue instanceof Date) {
+        if (apiField.isIdOnly()) {
+            return readFieldWithPossibleValues(apiField, fieldValue);
+        } else if (fieldValue instanceof Date) {
             boolean isTimestamp = apiField.getApiType().getFieldType() == FieldType.TIMESTAMP;
             return DateTimeUtil.formatISO8601DateTimestamp((Date) fieldValue, isTimestamp);
         } else {
@@ -154,11 +125,13 @@ public class ObjectExporter<T> {
     /**
      * Convert list of objects to a json array.
      */
-    private List<Object> readCollection(APIField field, String fieldPath, Collection value) {
+    private List<Object> readCollection(APIField field, String fieldPath, Object object, Collection<?> value) {
         List<Object> collectionOutput = new ArrayList<>();
         if (value != null) {
             if (field.getApiType().isSimpleItemType()) {
-                collectionOutput.addAll(value);
+                for (Object item : value) {
+                    collectionOutput.add(readPrimitive(field, object, item));
+                }
             } else {
                 for (Object item : value) {
                     collectionOutput.add(getObjectJson(item, field.getChildren(), fieldPath));

@@ -176,7 +176,6 @@ public final class Constants {
     public static final String CALENDAR_FILTER = "Calendar";
     public static final String CURRENCY_FILTER = "Currency";
     public static final String DONOR_FILTER = "Donor";
-    public static final String REGION_FILTER = "Region";
     public static final String SECTOR_FILTER = "Sector";
     public static final String STATUS_FILTER = "Status";
     public static final String PERSPECTIVE_FILTER = "Perspective";
@@ -318,6 +317,7 @@ public final class Constants {
     public static final String MY_LINKS = "myLinks";
     //public static final String MOST_RECENT_RESOURCES_UUIDS = "recentResources_uuid"; // BoundedList of most-recently-visited-resources
     public static final String MOST_RECENT_RESOURCES = "recentResources"; // BoundedList of most-recently-visited-resources
+    public static final Integer MAX_MOST_RECENT_RESOURCES = 5;
     public static final String MY_TEAM_MEMBERS = "myTeamMembers";
     public static final String MY_DOCUMENTS = "myDocuments";
     public static final String MY_LAST_VERSIONS = "lastVersions";

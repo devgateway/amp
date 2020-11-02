@@ -118,10 +118,8 @@ public class DynLocationManagerUtil {
             dbSession.save(loc);
             
             AmpLocation ampLocation = LocationUtil.getAmpLocationByCVLocation(loc.getId());
-            if (ampLocation != null && ampLocation.getActivities().isEmpty()) {
-                if (LocationUtil.getIndicatorValuesCountByAmpLocation(ampLocation) == 0) {
-                    dbSession.delete(ampLocation);
-                }
+            if (ampLocation != null && LocationUtil.getIndicatorValuesCountByAmpLocation(ampLocation) == 0) {
+                dbSession.delete(ampLocation);
             }
             
             for (AmpCategoryValueLocations l : loc.getChildLocations()) {
@@ -293,7 +291,7 @@ public class DynLocationManagerUtil {
                 return;
 
             Set<AmpCategoryValueLocations> countryLocations = DynLocationManagerUtil
-                    .getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+                    .getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0);
             HashMap<String, AmpCategoryValueLocations> nameToLocationsMap = new HashMap<String, AmpCategoryValueLocations>();
             HashMap<String, AmpCategoryValueLocations> iso3ToLocationsMap = new HashMap<String, AmpCategoryValueLocations>();
 
@@ -308,7 +306,7 @@ public class DynLocationManagerUtil {
                 }
             }
 
-            AmpCategoryValue layer = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getAmpCategoryValueFromDB();
+            AmpCategoryValue layer = CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.getAmpCategoryValueFromDB();
             if (layer == null) {
                 logger
                         .error("No Country value found in category Implementation Location. Please correct this.");
@@ -752,7 +750,8 @@ public class DynLocationManagerUtil {
      */
     public static AmpCategoryValueLocations getDefaultCountry()
     {
-        AmpCategoryValueLocations country = DynLocationManagerUtil.getLocationByIso(FeaturesUtil.getDefaultCountryIso(), CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY );
+        AmpCategoryValueLocations country = DynLocationManagerUtil.getLocationByIso(
+                FeaturesUtil.getDefaultCountryIso(), CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0);
         return country;
     }
     
@@ -775,20 +774,21 @@ public class DynLocationManagerUtil {
         }
      }
     
-    public static Set<AmpCategoryValueLocations> getLocationsOfTypeRegionOfDefCountry()
+    public static Set<AmpCategoryValueLocations> getLocationsOfTypeAdmLevel1OfDefCountry()
             throws Exception {
         TreeSet<AmpCategoryValueLocations> returnSet = new TreeSet<AmpCategoryValueLocations>(
                 alphabeticalLocComp);
         String defCountryIso = FeaturesUtil.getDefaultCountryIso();
         if (defCountryIso != null) {
-            Set<AmpCategoryValueLocations> allRegions = getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
+            Set<AmpCategoryValueLocations> allRegions = getLocationsByLayer(
+                    CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1);
             if (allRegions != null && allRegions.size() > 0) {
                 Iterator<AmpCategoryValueLocations> regIter = allRegions
                         .iterator();
                 while (regIter.hasNext()) {
                     AmpCategoryValueLocations reg = regIter.next();
                     AmpCategoryValueLocations country = getAncestorByLayer(reg,
-                            CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+                            CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0);
                     if (defCountryIso.equals(country.getIso())) {
                         returnSet.add(reg);
                     }
@@ -800,7 +800,7 @@ public class DynLocationManagerUtil {
     }
 
     public static Set<AmpCategoryValueLocations> getLocationsOfTypeRegion() {
-        return getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
+        return getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1);
     }
 
     public static Set<AmpCategoryValueLocations> getLocationsByLayer(HardCodedCategoryValue hcLayer) {
@@ -910,7 +910,7 @@ public class DynLocationManagerUtil {
             ampLoc.setLocation(ampCVLocation);
             
             AmpCategoryValueLocations regionLocation = DynLocationManagerUtil
-                    .getAncestorByLayer(ampCVLocation, CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
+                    .getAncestorByLayer(ampCVLocation, CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1);
             
             if (regionLocation != null) {
                 ampLoc.setRegionLocation(regionLocation);

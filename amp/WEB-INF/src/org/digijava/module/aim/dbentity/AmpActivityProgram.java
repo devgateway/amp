@@ -12,10 +12,12 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableBackRefere
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
+import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.aim.util.TreeNodeAware;
 
-public class AmpActivityProgram implements Versionable, Serializable, Cloneable {
+public class AmpActivityProgram implements Versionable, Serializable, Cloneable, TreeNodeAware<AmpTheme> {
 
     @InterchangeableId
     @Interchangeable(fieldTitle = "Id")
@@ -148,5 +150,9 @@ public class AmpActivityProgram implements Versionable, Serializable, Cloneable 
     protected Object clone() throws CloneNotSupportedException {
     return super.clone();
     }
-    
+
+    @Override
+    public AmpAutoCompleteDisplayable<AmpTheme> getTreeNode() {
+        return program;
+    }
 }

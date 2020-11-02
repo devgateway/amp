@@ -22,6 +22,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.resource.dto.AmpResource;
 import org.digijava.kernel.ampapi.filters.ClientMode;
+import org.digijava.kernel.content.ContentRepositoryManager;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -57,6 +58,13 @@ public class ResourceService {
             ApiErrorResponseService.reportResourceNotFound(ResourceErrors.RESOURCE_NOT_FOUND);
         }
 
+        try {
+            if (!readNode.hasProperty(CrConstants.PROPERTY_CONTENT_TYPE)) {
+                ApiErrorResponseService.reportResourceNotFound(ResourceErrors.RESOURCE_NOT_VALID.withDetails(uuid));
+            }
+        } catch (RepositoryException e) {
+            return new JsonApiResponse(ApiError.toError(ResourceErrors.RESOURCE_ERROR));
+        }
         boolean isMultilingual = ContentTranslationUtil.multilingualIsEnabled();
 
         NodeWrapper nodeWrapper = new NodeWrapper(readNode);
@@ -146,8 +154,8 @@ public class ResourceService {
      */
     public List<String> getAllNodeUuids() {
         List<String> nodeUuids = new ArrayList<>();
-        nodeUuids.addAll(getPrivateUuids());
-        nodeUuids.addAll(getTeamUuids());
+        nodeUuids.addAll(ContentRepositoryManager.getPrivateUuids());
+        nodeUuids.addAll(ContentRepositoryManager.getTeamUuids());
 
         return nodeUuids;
     }
@@ -166,7 +174,8 @@ public class ResourceService {
         try {
             QueryManager queryManager = session.getWorkspace().getQueryManager();
             Query query = queryManager.createQuery(String.format("SELECT * FROM nt:base WHERE %s "
-                    + "IS NOT NULL AND jcr:path LIKE '/%s/%%/'", CrConstants.PROPERTY_CREATOR, path), Query.SQL);
+                    + "IS NOT NULL AND " + CrConstants.PROPERTY_CONTENT_TYPE + " IS NOT NULL "
+                    + "AND jcr:path LIKE '/%s/%%/'", CrConstants.PROPERTY_CREATOR, path), Query.SQL);
             NodeIterator nodes = query.execute().getNodes();
             while (nodes.hasNext()) {
                 uuids.add(nodes.nextNode().getIdentifier());

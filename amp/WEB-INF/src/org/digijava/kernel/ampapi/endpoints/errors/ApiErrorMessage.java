@@ -42,6 +42,18 @@ public class ApiErrorMessage {
     @IgnoreCanonicalNames
     public final boolean isGeneric;
     
+    public Integer getId() {
+        return id;
+    }
+    
+    public String getDescription() {
+        return description;
+    }
+    
+    public Set<String> getValues() {
+        return values;
+    }
+    
     /**
      *
      * @param typeId - the type of error
@@ -55,7 +67,7 @@ public class ApiErrorMessage {
     public ApiErrorMessage(int typeId, int id, String description, String prefix) {
         this(typeId, id, description, prefix, null, false);
     }
-
+    
     private ApiErrorMessage(int typeId, int id, String description, String prefix, Set<String> values,
                             boolean isGeneric) {
         if (typeId < 0 || typeId > MAX_ERROR_CODE) {
@@ -123,8 +135,8 @@ public class ApiErrorMessage {
     public String toString() {
         return "[" + (isGeneric ? "generic" : "package") + "]" + "[" + id + "] "
                 + (prefix == null ? "" : "(" + prefix + ") ")
-                + description +
-                (values == null ? "" :  " : " + values);
+                + description
+                + (values == null ? "" :  " : " + values);
     }
 
     @Override

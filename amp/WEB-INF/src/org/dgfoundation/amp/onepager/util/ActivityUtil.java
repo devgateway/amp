@@ -74,7 +74,6 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.dbentity.FundingInformationItem;
-import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -83,7 +82,6 @@ import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.AuditLoggerUtil;
 import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.contentrepository.exception.JCRSessionException;
@@ -300,9 +298,6 @@ public class ActivityUtil {
         a.setAmpActivityGroup(group);
 
         if (isActivityForm) {
-
-            saveIndicators(a, session);
-
             saveActivityResources(a, session);
             saveActivityGPINiResources(a, session);
             saveComments(a, session, draft);
@@ -453,29 +448,6 @@ public class ActivityUtil {
      */
     private static void forceVersionIncrement(Session session, AmpActivityGroup group) {
         session.buildLockRequest(new LockOptions(LockMode.OPTIMISTIC_FORCE_INCREMENT)).lock(group);
-    }
-
-    /**
-     * Checks if the activity is stale. Used only for the case when new activity versions are created.
-     */
-    public static boolean isActivityStale(Long ampActivityId, Long activityGroupVersion) {
-        Number activityCount = (Number) PersistenceManager.getSession().createCriteria(AmpActivityVersion.class)
-                .add(Restrictions.eq("ampActivityId", ampActivityId))
-                .setProjection(Projections.count("ampActivityId"))
-                .uniqueResult();
-        if (activityCount.longValue() == 0) {
-            return false;
-        }
-
-        Number latestActivityCount = (Number) PersistenceManager.getSession().createCriteria(AmpActivityGroup.class)
-                .createAlias("ampActivityLastVersion", "a")
-                .add(Restrictions.and(
-                        Restrictions.eq("a.ampActivityId", ampActivityId),
-                        Restrictions.eq("version", activityGroupVersion)))
-                .setProjection(Projections.count("a.ampActivityId"))
-                .uniqueResult();
-
-        return latestActivityCount.longValue() == 0;
     }
 
     /**
@@ -664,7 +636,7 @@ public class ActivityUtil {
      */
     private static boolean isApprover(AmpTeamMember atm) {
         AmpTeamMemberRoles role = atm.getAmpMemberRole();
-        return role.getTeamHead() || role.isApprover();
+        return role != null && (role.getTeamHead() || role.isApprover());
     }
 
     public static boolean canApproveWith(ApprovalStatus approvalStatus, AmpTeamMember atm, boolean isNewActivity,
@@ -1310,38 +1282,6 @@ public class ActivityUtil {
                 == surveyResponse.getAmpGPINiSurvey().getAmpOrgRole().getOrganisation().getAmpOrgId()
                 && tempGPINiSurveyResponse.getAmpGPINiQuestion().getCode()
                 .equals(surveyResponse.getAmpGPINiQuestion().getCode()));
-    }
-
-    private static void saveIndicators(AmpActivityVersion a, Session session) throws Exception {
-        if (a.getAmpActivityId() != null){
-            //cleanup old indicators
-            Set<IndicatorActivity> old = IndicatorUtil.getAllIndicatorsForActivity(a.getAmpActivityId());
-            if (old != null){
-                for (IndicatorActivity oldInd : old) {
-                    boolean found=false;
-                    if (a.getIndicators() == null)
-                        continue;
-                    for (IndicatorActivity newind : a.getIndicators()) {
-                        if ((newind.getId() != null) && (newind.getId().compareTo(oldInd.getId()) == 0)){
-                            found=true;
-                            break;
-                        }
-                    }
-                    if (!found){
-                        Object tmp = session.load(IndicatorActivity.class, oldInd.getId());
-                        session.delete(tmp);
-                    }
-                }
-            }
-        }
-
-        Set<IndicatorActivity> inds = a.getIndicators();
-        if (inds != null){
-            for (IndicatorActivity ind : inds) {
-                ind.setActivity(a);
-                session.saveOrUpdate(ind);
-            }
-        }
     }
 
     public static void saveContacts(AmpActivityVersion a, Session session, boolean checkForContactsRemoval,

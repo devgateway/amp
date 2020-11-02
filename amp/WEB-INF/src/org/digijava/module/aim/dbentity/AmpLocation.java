@@ -1,14 +1,10 @@
 package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.digijava.module.aim.util.Identifiable;
-import org.digijava.module.aim.util.Output;
 
-public class AmpLocation implements Serializable, Versionable, Cloneable, Identifiable
+public class AmpLocation implements Serializable, Cloneable, Identifiable
 {
     private Long ampLocationId ;
     private String iso3Code ;
@@ -18,8 +14,6 @@ public class AmpLocation implements Serializable, Versionable, Cloneable, Identi
     private String language ;
     private String version ;
     private String geoCode;
-    
-    private Set<AmpActivityVersion> activities;
     
     private AmpCategoryValueLocations location;
     
@@ -47,14 +41,6 @@ public class AmpLocation implements Serializable, Versionable, Cloneable, Identi
         this.regionLocation = regionLocation;
     }
 
-    public Set<AmpActivityVersion> getActivities() {
-        return activities;
-    }
-
-    public void setActivities(Set<AmpActivityVersion> activities) {
-        this.activities = activities;
-    }
-    
     /**
      * @return
      */
@@ -158,68 +144,6 @@ public class AmpLocation implements Serializable, Versionable, Cloneable, Identi
         String ret=new String();
         if(name!=null) ret+=" - "+name;     
         return ret;
-    }
-
-    @Override
-    public boolean equalsForVersioning(Object obj) {
-        AmpLocation aux = (AmpLocation) obj;
-        String original = " " + this.getValue();
-        String copy = " " + aux.getValue();
-        if (original.equals(copy)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    public Output getOutput() {
-        Output out = new Output();
-        out.setOutputs(new ArrayList<Output>());
-        if (this.iso3Code != null && !this.iso3Code.trim().equals("")) {
-            out.getOutputs().add(new Output(null, new String[] { "ISO 3 Code" }, new Object[] { this.iso3Code }));
-        }
-        if (this.name != null && !this.name.trim().equals("")) {
-            out.getOutputs().add(new Output(null, new String[] { "Name" }, new Object[] { this.name }));
-        }
-        if (this.description != null && !this.description.trim().equals("")) {
-            out.getOutputs()
-                    .add(new Output(null, new String[] { "Description" }, new Object[] { this.description }));
-        }
-        if (this.gisCoordinates != null && !this.gisCoordinates.trim().equals("")) {
-            out.getOutputs().add(new Output(null, new String[] { "GIS" }, new Object[] { this.gisCoordinates }));
-        }
-        if (this.language != null && !this.language.trim().equals("")) {
-            out.getOutputs().add(new Output(null, new String[] { "Lang" }, new Object[] { this.language }));
-        }
-        if (this.version != null && !this.version.trim().equals("")) {
-            out.getOutputs().add(new Output(null, new String[] { "Version" }, new Object[] { this.version }));
-        }
-        if (this.location != null) {
-            if (this.location.getName() != null && !this.location.getName().trim().equals("")) {
-                out.getOutputs().add(
-                        new Output(null, new String[] { "Name" }, new Object[] { this.location.getName() }));
-            }
-        }
-        return out;
-    }
-
-    @Override
-    public Object getValue() {
-        return this.iso3Code + "-" + this.name + "-" + this.description + "-" + this.gisCoordinates + "-"
-                + this.language + "-" + this.version + "-"
-                + (this.location != null ? this.location.getName() : "");
-    }
-    
-    @Override
-    public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
-        AmpLocation aux = (AmpLocation) clone();
-        if (aux.activities == null) {
-            aux.activities = new HashSet<AmpActivityVersion>();
-        }
-        aux.activities.add(newActivity);
-        // this.ampLocationId = null;
-        return aux;
     }
 
     @Override

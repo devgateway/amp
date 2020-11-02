@@ -9,6 +9,8 @@ import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import java.util.ArrayList;
 import java.util.List;
 
+import  org.dgfoundation.amp.ar.ArConstants;
+
 /**
  * Activity Endpoint related constants
  *
@@ -57,6 +59,7 @@ public class ActivityEPConstants {
     public static final String TREE_COLLECTION_CONSTRAINT = "tree_collection";
     public static final String COMMON_POSSIBLE_VALUES = "common-possible-values";
 
+
     public static final String PREVIEW_CURRENCY_ID = "currency-id";
 
     // fields constants
@@ -66,6 +69,9 @@ public class ActivityEPConstants {
     public static final String MODIFIED_BY_FIELD_NAME =
             FieldMap.underscorify(ActivityFieldsConstants.MODIFIED_BY);
     public static final String VERSION_FIELD_NAME = FieldMap.underscorify(ActivityFieldsConstants.VERSION);
+
+    public static final String LOCATIONS_FIELD_NAME =
+            FieldMap.underscorify(ActivityFieldsConstants.LOCATIONS);
 
     public static final String AMP_ACTIVITY_ID = "amp-activity-id";
     public static final String AMP_ACTIVITY_LAST_VERSION_ID = "amp-activity-last-version-id";
@@ -93,6 +99,8 @@ public class ActivityEPConstants {
 
     // floating comparison constant
     public static final Double EPSILON = 0.0001;
+    
+    public static final Integer MAX_BULK_ACTIVITIES_ALLOWED = 20;
 
     /*
      * Based on local stats, 7 is the minimum DB query batch size with best outcome. 6-5 is pretty close, but going
@@ -118,6 +126,15 @@ public class ActivityEPConstants {
     public static final String EXPENDITURES_TABLE_FM_PATH = FUNDING_ITEM_FM_PATH
             + "/Expenditures/Expenditures Table";
 
+    public static final String REGIONAL_FUNDING_FM_PATH =  "/Activity Form/Regional Funding";
+    private static final String REGIONAL_FUNDING_ITEM_FM_PATH = REGIONAL_FUNDING_FM_PATH + "/Region Item";
+    public static final String REGIONAL_COMMITMENTS_FM_PATH =
+            REGIONAL_FUNDING_ITEM_FM_PATH + "/Commitments/Commitments Table";
+    public static final String REGIONAL_DISBURSEMENTS_FM_PATH =
+            REGIONAL_FUNDING_ITEM_FM_PATH + "/Disbursements/Disbursements Table";
+    public static final String REGIONAL_EXPENDITURES_FM_PATH =
+            REGIONAL_FUNDING_ITEM_FM_PATH + "/Expenditures/Expenditures Table";
+
     public static final String RECIPIENT_ROLE_FM_PATH = "/Funding Flows OrgRole Selector/Recipient Org Role";
     public static final String RECIPIENT_ORG_FM_PATH = "/Funding Flows OrgRole Selector/Recipient Organization";
 
@@ -134,10 +151,17 @@ public class ActivityEPConstants {
     public static final String REGEX_PATTERN_PHONE_EXTENSION = "^\\d{1,4}$";
 
     public static final List PUBLIC_ACTIVITY_FIELDS = new ArrayList<String>() {{
-        add("fundings~commitments~adjustment_type");
-        add("fundings~disbursements~adjustment_type");
-        add("fundings~expenditures~adjustment_type");
-        add("fundings~estimated_disbursements~adjustment_type");
+        add(ActivityFieldsConstants.FUNDINGS.toLowerCase() + "~" + ArConstants.COMMITMENT.toLowerCase()
+                + "~" + ActivityFieldsConstants.ADJUSTMENT_TYPE);
+        add(ActivityFieldsConstants.FUNDINGS.toLowerCase() + "~" + ArConstants.DISBURSEMENT.toLowerCase()
+                + "~" + ActivityFieldsConstants.ADJUSTMENT_TYPE);
+        add(ActivityFieldsConstants.FUNDINGS.toLowerCase() + "~" + ArConstants.EXPENDITURE.toLowerCase()
+                + "~" + ActivityFieldsConstants.ADJUSTMENT_TYPE);
+        add(ActivityFieldsConstants.FUNDINGS.toLowerCase() + "~"
+                + FieldMap.underscorify(ArConstants.ESTIMATED_DISBURSEMENTS).toLowerCase()
+                + "~" + ActivityFieldsConstants.ADJUSTMENT_TYPE);
+        add(ActivityFieldsConstants.LOCATIONS.toLowerCase() + "~"
+                + ActivityFieldsConstants.Locations.LOCATION.toLowerCase());
     }};
 
 

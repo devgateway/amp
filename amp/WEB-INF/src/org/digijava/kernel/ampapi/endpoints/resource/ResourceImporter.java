@@ -50,8 +50,7 @@ public class ResourceImporter extends ObjectImporter<AmpResource> {
     private AmpResource resource;
 
     public ResourceImporter() {
-        super(new InputValidatorProcessor(InputValidatorProcessor.getResourceFormatValidators()),
-                new InputValidatorProcessor(InputValidatorProcessor.getResourceBusinessRulesValidators()),
+        super(new InputValidatorProcessor(InputValidatorProcessor.getFormatValidators()),
                 AmpFieldsEnumerator.getEnumerator().getResourceField(),
                 TLSUtils.getSite());
     }
@@ -288,6 +287,9 @@ public class ResourceImporter extends ObjectImporter<AmpResource> {
 
     private ApiErrorMessage validateYearOfPublication(Map<String, Object> newJson) {
         String yearOfPublication = String.valueOf(newJson.get(ResourceEPConstants.YEAR_OF_PUBLICATION));
+        if ("null".equals(yearOfPublication)) {
+            yearOfPublication = String.valueOf(newJson.get(ResourceEPConstants.CLIENT_YEAR_OF_PUBLICATION));
+        }
         if (yearOfPublication != null) {
             Long year = isLong(yearOfPublication) ? Long.valueOf(yearOfPublication) : null;
             int currentYear = LocalDate.now().getYear();

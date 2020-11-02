@@ -21,13 +21,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -52,6 +46,7 @@ import org.digijava.kernel.ampapi.filters.ClientMode;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.services.sync.model.SyncConstants;
 import org.digijava.kernel.validators.ValidatorUtil;
+import org.digijava.kernel.validators.activity.TreeCollectionValidator;
 import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.kernel.validators.common.SizeValidator;
 import org.digijava.kernel.validators.common.TotalPercentageValidator;
@@ -180,12 +175,12 @@ public class FieldsEnumeratorTest {
     public void testDateTimesatmpField() {
         List<APIField> actual = fieldsFor(DateTimesatmpFieldClass.class);
 
-        APIField dateField = newListField();
+        APIField dateField = newAPIField();
         dateField.setFieldName("date-field");
         dateField.setFieldLabel(fieldLabelFor("date-field"));
         dateField.setApiType(new APIType(Date.class, FieldType.DATE));
 
-        APIField timestampField = newListField();
+        APIField timestampField = newAPIField();
         timestampField.setFieldName("timestamp-field");
         timestampField.setFieldLabel(fieldLabelFor("timestamp-field"));
         timestampField.setApiType(new APIType(Date.class, FieldType.TIMESTAMP));
@@ -421,7 +416,7 @@ public class FieldsEnumeratorTest {
         List<APIField> actual = fieldsFor(LongFieldClass.class);
 
         APIField expected = newAPIField();
-        expected.setApiType(new APIType(Long.class));
+        expected.setApiType(new APIType(Long.class, FieldType.LONG));
 
         assertEqualsSingle(expected, actual);
     }
@@ -484,7 +479,7 @@ public class FieldsEnumeratorTest {
         @Interchangeable(fieldTitle = "8", validators = @Validators(unique = "uniqueFmName"), uniqueConstraint = true)
         private Collection<Integer> field8;
 
-        @Interchangeable(fieldTitle = "5", validators = @Validators(treeCollection = "treeCollectionFmName"))
+        @Interchangeable(fieldTitle = "5", interValidators = @InterchangeableValidator(TreeCollectionValidator.class))
         private Collection<ObjWithId> field5;
 
         @Interchangeable(fieldTitle = "6",
@@ -505,6 +500,15 @@ public class FieldsEnumeratorTest {
         @InterchangeableId
         @Interchangeable(fieldTitle = "Id")
         private Long id;
+    }
+
+    private static class TypedObjWithId {
+
+        @InterchangeableId
+        @Interchangeable(fieldTitle = "Id")
+        private Long id;
+
+        private String type;
     }
 
     private static class PercentageConstrained extends ObjWithId {
@@ -528,13 +532,13 @@ public class FieldsEnumeratorTest {
         idField.setFieldName("id");
         idField.setFieldLabel(fieldLabelFor("Id"));
 
-        APIField expected1 = newListField();
+        APIField expected1 = newListField(FieldType.OBJECT);
         expected1.setMultipleValues(false);
         expected1.setFieldName("1");
         expected1.setFieldLabel(fieldLabelFor("1"));
         expected1.setChildren(Arrays.asList(idField));
 
-        APIField expected2 = newListField();
+        APIField expected2 = newListField(FieldType.OBJECT);
         expected2.setFieldName("2");
         expected2.setFieldLabel(fieldLabelFor("2"));
         expected2.setMultipleValues(true);
@@ -543,7 +547,7 @@ public class FieldsEnumeratorTest {
         APIField percentageField = newLongField();
         percentageField.setPercentage(true);
 
-        APIField expected3 = newListField();
+        APIField expected3 = newListField(FieldType.OBJECT);
         expected3.setFieldName("3");
         expected3.setFieldLabel(fieldLabelFor("3"));
         expected3.setPercentageConstraint("field");
@@ -552,34 +556,34 @@ public class FieldsEnumeratorTest {
 
         APIField expected4child = newLongField();
 
-        APIField expected4 = newListField();
+        APIField expected4 = newListField(FieldType.OBJECT);
         expected4.setFieldName("4");
         expected4.setFieldLabel(fieldLabelFor("4"));
         expected4.setUniqueConstraint("field");
         expected4.setChildren(Arrays.asList(expected4child, idField));
         expected4.setMultipleValues(true);
 
-        APIField expected8 = newListField(Integer.class);
+        APIField expected8 = newListField(Integer.class, FieldType.LONG);
         expected8.setFieldName("8");
         expected8.setFieldLabel(fieldLabelFor("8"));
         expected8.setUniqueConstraint("8");
         expected8.setMultipleValues(true);
 
-        APIField expected5 = newListField();
+        APIField expected5 = newListField(FieldType.OBJECT);
         expected5.setFieldName("5");
         expected5.setFieldLabel(fieldLabelFor("5"));
         expected5.setTreeCollectionConstraint(true);
         expected5.setMultipleValues(true);
         expected5.setChildren(Arrays.asList(idField));
 
-        APIField expected6 = newListField();
+        APIField expected6 = newListField(FieldType.OBJECT);
         expected6.setFieldName("6");
         expected6.setFieldLabel(fieldLabelFor("6"));
         expected6.setMultipleValues(true);
         expected6.setPercentageConstraint("field");
         expected6.setChildren(Arrays.asList(percentageField, idField));
 
-        APIField expected7 = newListField();
+        APIField expected7 = newListField(FieldType.OBJECT);
         expected7.setFieldName("7");
         expected7.setFieldLabel(fieldLabelFor("7"));
         expected7.setMultipleValues(true);
@@ -617,7 +621,7 @@ public class FieldsEnumeratorTest {
         expected1.setFieldLabel(fieldLabelFor("field1"));
         expected1.setFieldNameInternal("activity2");
         expected1.setIdOnly(true);
-        expected1.setApiType(new APIType(Long.class));
+        expected1.setApiType(new APIType(Long.class, FieldType.LONG));
 
         assertEqualsDigest(Arrays.asList(expected1), fields);
     }
@@ -832,28 +836,78 @@ public class FieldsEnumeratorTest {
 
 
     @Test
-    public void testAPIFieldActivityFields() {
-        List<APIField> nullableAPIFields = getAPIFieldWithNullCollections(AmpActivityVersion.class,
-                fieldsFor(AmpActivityFields.class));
+    public void testActivityCollectionFields() {
+        APIField apiField = fieldsEnumerator.getMetaModel(AmpActivityFields.class);
+        List<APIField> nullableAPIFields = getAPIFieldWithNullCollections(new AmpActivityVersion(), apiField);
         assertEquals(nullableAPIFields, Collections.emptyList());
     }
 
-    private List<APIField> getAPIFieldWithNullCollections(Class<?> type, List<APIField> apiFields) {
+    @Test
+    public void testContactCollectionFields() {
+        APIField apiField = fieldsEnumerator.getMetaModel(AmpContact.class);
+        List<APIField> nullableAPIFields = getAPIFieldWithNullCollections(new AmpContact(), apiField);
+        assertEquals(nullableAPIFields, Collections.emptyList());
+    }
+
+    @Test
+    public void testResourceCollectionFields() {
+        APIField apiField = fieldsEnumerator.getMetaModel(AmpResource.class);
+        List<APIField> nullableAPIFields = getAPIFieldWithNullCollections(new AmpResource(), apiField);
+        assertEquals(nullableAPIFields, Collections.emptyList());
+    }
+
+    private List<APIField> getAPIFieldWithNullCollections(Object object, APIField field) {
         List<APIField> nullableAPIFields = new ArrayList<>();
-        Object object = valueConverter.getNewInstance(type);
-        for (APIField apiField : apiFields) {
-            if (apiField.isCollection() && apiField.getFieldAccessor().get(object) == null) {
-                nullableAPIFields.add(apiField);
+        for (APIField subField : field.getChildren()) {
+            try {
+                // will trigger an exception if underlying collection was not initialized properly
+                subField.getFieldAccessor().get(object);
+            } catch (RuntimeException e) {
+                nullableAPIFields.add(subField);
             }
-            if (apiField.isCollection() && !InterchangeUtils.isSimpleType(apiField.getApiType().getType())) {
+            if (subField.getApiType().getFieldType() == FieldType.OBJECT ||
+                    (subField.getApiType().getFieldType() == FieldType.LIST &&
+                            subField.getApiType().getItemType() == FieldType.OBJECT)) {
                 nullableAPIFields.addAll(
-                        getAPIFieldWithNullCollections(apiField.getApiType().getType(), apiField.getChildren()));
+                        getAPIFieldWithNullCollections(instantiate(subField), subField));
             }
         }
 
         return nullableAPIFields;
     }
 
+    /**
+     * Copy of {@link ValueConverter#instantiate(APIField)} but without configuring the field by which objects are
+     * being discriminated. This method can be removed once discrimination configurers are made to work without a real
+     * database.
+     *
+     * @param field
+     * @return
+     */
+    private Object instantiate(APIField field) {
+        try {
+            Object newInstance = field.getApiType().getType().newInstance();
+            return newInstance;
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    /*2w34
+    @Test
+    public void testActivityFieldAccessorsDontFail() {
+        invokeAccessorGet(AmpActivityVersion.class, fieldsFor(AmpActivityFields.class));
+    }
+
+    private void invokeAccessorGet(Class<?> type, List<APIField> apiFields) {
+        Object object = valueConverter.getNewInstance(type);
+        for (APIField apiField : apiFields) {
+            apiField.getFieldAccessor().get(object);
+
+            if (apiField.getApiType().isAnObject() || apiField.getApiType().isAListOfObjects()) {
+                invokeAccessorGet(apiField.getApiType().getType(), apiField.getChildren());
+            }
+        }
+    }*/
     @Test
     public void testTreeValidatorVisibleAndUniqueValidatorHidden() {
         APIField apiField = ValidatorUtil.getMetaData(AmpActivityFields.class,
@@ -875,7 +929,7 @@ public class FieldsEnumeratorTest {
         assertThat(apiField.getChildren(), hasItem(allOf(
                 hasProperty("fieldName", equalTo("primary_sectors")),
                 hasProperty("uniqueConstraint", nullValue()),
-                hasProperty("treeCollectionConstraint", nullValue())
+                hasProperty("treeCollectionConstraint", equalTo(false))
         )));
     }
 
@@ -884,39 +938,75 @@ public class FieldsEnumeratorTest {
         ValidatorUtil.getMetaData(AmpActivityFields.class, ImmutableSet.of(), new TestFieldInfoProvider(true));
     }
 
-    private APIField newListField() {
+    private static class ObjWithListsOfPickIdOnly {
+
+        @Interchangeable(fieldTitle = "Id 1", pickIdOnly = true)
+        private Set<ObjWithId> ids = new HashSet<>();
+
+        @InterchangeableDiscriminator(discriminatorField = "type", settings = {
+                @Interchangeable(fieldTitle = "Discriminated A", discriminatorOption = "A", pickIdOnly = true,
+                        multipleValues = false),
+                @Interchangeable(fieldTitle = "Discriminated B", discriminatorOption = "B", pickIdOnly = true)})
+        private Set<TypedObjWithId> discriminatedIds = new HashSet<>();
+    }
+
+    @Test
+    public void testObjWithListsOfPickIdOnly() {
+        APIField metaData = ValidatorUtil.getMetaData(ObjWithListsOfPickIdOnly.class);
+
+        APIField fieldId1 = newListField(FieldType.LONG);
+        fieldId1.setIdOnly(true);
+        fieldId1.setMultipleValues(true);
+        fieldId1.setFieldName("id_1");
+        fieldId1.setFieldLabel(fieldLabelFor("Id 1"));
+
+        APIField fieldDA = newLongField();
+        fieldDA.setIdOnly(true);
+        fieldDA.setFieldName("discriminated_a");
+        fieldDA.setFieldLabel(fieldLabelFor("Discriminated A"));
+
+        APIField fieldDB = newListField(FieldType.LONG);
+        fieldDB.setIdOnly(true);
+        fieldDB.setMultipleValues(true);
+        fieldDB.setFieldName("discriminated_b");
+        fieldDB.setFieldLabel(fieldLabelFor("Discriminated B"));
+
+        assertEqualsDigest(Arrays.asList(fieldId1, fieldDA, fieldDB), metaData.getChildren());
+    }
+
+    private APIField newListField(FieldType itemType) {
         APIField field = newAPIField();
-        field.setApiType(new APIType(Object.class, FieldType.LIST));
+        field.setApiType(new APIType(Object.class, FieldType.LIST, itemType));
         return field;
     }
 
-    private APIField newListField(Class<?> type) {
+    private APIField newListField(Class<?> type, FieldType itemType) {
         APIField field = newAPIField();
-        field.setApiType(new APIType(type, FieldType.LIST));
+        field.setApiType(new APIType(type, FieldType.LIST, itemType));
         return field;
     }
 
     private APIField newObjectField() {
         APIField field = newAPIField();
-        field.setApiType(new APIType(Object.class));
+        field.setApiType(new APIType(Object.class, FieldType.OBJECT));
         return field;
     }
 
     private APIField newListOfLongField() {
         APIField field = newAPIField();
-        field.setApiType(new APIType(Long.class, FieldType.LIST));
+        field.setApiType(new APIType(Long.class, FieldType.LIST, FieldType.LONG));
         return field;
     }
 
     private APIField newLongField() {
         APIField field = newAPIField();
-        field.setApiType(new APIType(Long.class));
+        field.setApiType(new APIType(Long.class, FieldType.LONG));
         return field;
     }
 
     private APIField newStringField() {
         APIField field = newAPIField();
-        field.setApiType(new APIType(String.class));
+        field.setApiType(new APIType(String.class, FieldType.STRING));
         field.setFieldLength(TestFieldInfoProvider.MAX_STR_LEN);
         field.setTranslatable(false);
         return field;

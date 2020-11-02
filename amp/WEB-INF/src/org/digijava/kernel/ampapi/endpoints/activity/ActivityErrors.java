@@ -43,4 +43,15 @@ public class ActivityErrors {
     public static final ApiErrorMessage LOCALE_INVALID =
             new ApiErrorMessage(ERROR_CLASS_ACTIVITY_ID, 9, "Invalid translation language specified");
     
+    public static final ApiErrorMessage FIELD_ACTIVITY_ID_NULL =
+            new ApiErrorMessage(ERROR_CLASS_ACTIVITY_ID, 10, "Activity id cannot be null");
+    
+    public static final String ADD_ACTIVITY_NOT_ALLOWED = "Adding activity is not allowed";
+    public static final String EDIT_ACTIVITY_NOT_ALLOWED = "No right to edit this activity";
+    public static final String ACTIVITY_NOT_LAST_VERSION = "Activity is not the latest version.";
+    public static final String INVALID_MODIFY_BY_FIELD = "Invalid team member in modified_by field.";
+    
+    public static final ApiErrorMessage BULK_TO_BIG =
+            new ApiErrorMessage(ERROR_CLASS_ACTIVITY_ID, 11, "Too many activities found in the request");
+    
 }

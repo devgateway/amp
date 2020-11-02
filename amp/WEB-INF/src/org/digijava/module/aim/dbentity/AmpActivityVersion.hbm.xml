@@ -259,7 +259,8 @@
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityBudgetStructure" />
 		</set>
 
-		<set name="indicators" lazy="true" cascade="none" inverse="true" order-by="id">
+		<set name="indicators" lazy="true" cascade="all-delete-orphan" inverse="true" order-by="id">
+		    <cache usage="read-write" />
 			<key column="activity_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.IndicatorActivity" />
 		</set>

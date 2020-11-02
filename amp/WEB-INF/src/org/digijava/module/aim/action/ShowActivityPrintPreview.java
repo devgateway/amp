@@ -29,7 +29,6 @@ import org.digijava.module.aim.dbentity.AmpFundingAmount;
 import org.digijava.module.aim.dbentity.AmpGPISurvey;
 import org.digijava.module.aim.dbentity.AmpGPISurveyResponse;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
-import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
@@ -314,11 +313,11 @@ public class ShowActivityPrintPreview
                     for(AmpActivityLocation actLoc:ampLocs){
                         if (actLoc == null)
                             continue;
-                        AmpLocation loc=actLoc.getLocation();                               //AMP-2250
+                        AmpCategoryValueLocations loc = actLoc.getLocation();                               //AMP-2250
 
                       if (loc != null) {
                         Location location = new Location();
-                        location.setLocId(loc.getAmpLocationId());
+                        location.setLocId(loc.getId());
                         Collection col1 = FeaturesUtil.getDefaultCountryISO();
                         String ISO = null;
                         Iterator itr1 = col1.iterator();
@@ -327,20 +326,16 @@ public class ShowActivityPrintPreview
                           ISO = ampG.getGlobalSettingsValue();
                         }
                         
-                        //Country cntry = DbUtil.getDgCountry(Constants.COUNTRY_ISO);
                         Country cntry = DbUtil.getDgCountry(ISO);
                         location.setCountryId(cntry.getCountryId());
                         location.setCountry(cntry.getCountryName());
-                        location.setNewCountryId(cntry.getIso());
-                        
-                        location.setAmpCVLocation( loc.getLocation() );
-                        if ( loc.getLocation() != null ){
-                            location.setAncestorLocationNames( DynLocationManagerUtil.getParents( loc.getLocation()) );
-                            location.setLocationName(loc.getLocation().getName());
-                            location.setLocId( loc.getLocation().getId() );
-                        }
-                        AmpCategoryValueLocations ampCVRegion   = 
-                            DynLocationManagerUtil.getAncestorByLayer(loc.getLocation(), CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
+                        location.setIso(cntry.getIso());
+
+                        location.setAmpCVLocation(loc);
+                        location.setAncestorLocationNames(DynLocationManagerUtil.getParents(loc));
+                        location.setLocationName(loc.getName());
+                        AmpCategoryValueLocations ampCVRegion = DynLocationManagerUtil.getAncestorByLayer(
+                                  loc, CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1);
                         if ( ampCVRegion != null ) {
                             if (eaForm.getFunding().getFundingRegions() == null) {
                               eaForm.getFunding()
@@ -448,7 +443,7 @@ public class ShowActivityPrintPreview
                         double disb = 0;
                         if(ampRegFund.getAdjustmentType().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey()) &&
                            ampRegFund.getTransactionType().intValue() == 1)
-                            disb = ampRegFund.getTransactionAmount().
+                            disb = ampRegFund.getTransactionAmountWithFormatConversion().
                                 doubleValue();
                
                         eaForm.getFunding().setRegionTotalDisb(eaForm.getFunding().getRegionTotalDisb() +
@@ -464,7 +459,7 @@ public class ShowActivityPrintPreview
                         fd.setTransactionAmount(DecimalToText
                                                 .ConvertDecimalToText(
                                                     ampRegFund
-                                                    .getTransactionAmount().doubleValue()));
+                                                    .getTransactionAmountWithFormatConversion().doubleValue()));
                         fd.setTransactionDate(DateConversion.convertDateToString(ampRegFund.getTransactionDate()));
                         fd.setFiscalYear(DateConversion.convertDateToFiscalYearString(ampRegFund.getTransactionDate()));
 

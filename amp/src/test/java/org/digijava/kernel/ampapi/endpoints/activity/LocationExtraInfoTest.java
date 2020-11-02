@@ -15,12 +15,12 @@ import org.junit.Test;
  */
 public class LocationExtraInfoTest {
 
-    private LocationExtraInfo locationExtraInfo = new LocationExtraInfo(1L, "PL", 2L, "CV", null);
+    private LocationExtraInfo locationExtraInfo = new LocationExtraInfo(1L, "PL", 2L, "CV", null, 5L);
 
     private String originalJson = "{\"parent_location_id\":1,\"parent_location_name\":\"PL\","
-            + "\"implementation_level_id\":2,\"implementation_location_name\":\"CV\"}";
+            + "\"implementation_level_id\":2,\"implementation_location_name\":\"CV\",\"old_location_id\":5}";
 
-    private String treeJson = "{\"implementation_level_id\":2,\"implementation_location_name\":\"CV\"}";
+    private String treeJson = "{\"implementation_level_id\":2,\"implementation_location_name\":\"CV\",\"old_location_id\":5}";
 
     @Test
     public void testSimple() throws Exception {

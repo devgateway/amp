@@ -1,4 +1,4 @@
-package org.digijava.kernel.ampapi.endpoints.activity.preview;
+package org.digijava.kernel.ampapi.endpoints.activity.preview.serializers;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
@@ -29,7 +29,7 @@ public class AmountSerializer extends JsonSerializer<Double> implements Property
     public Property describe() {
         DoubleProperty property = new DoubleProperty();
         property.setDescription("Raw ");
-        property.setExample("2017-08-30");
+        property.setExample("200");
         return property;
 
     }

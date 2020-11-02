@@ -3,26 +3,30 @@ package org.digijava.kernel.ampapi.endpoints.activity.preview;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.digijava.kernel.ampapi.endpoints.activity.preview.serializers.AmountSerializer;
+import org.digijava.kernel.ampapi.endpoints.activity.preview.serializers.DateSerializer;
+
+import java.util.Date;
 
 /**
- * 
  * @author Viorel Chihai
- *
  */
-public class PreviewFundingTransaction {
+public class    PreviewFundingTransaction {
 
     @JsonProperty("transaction_id")
     private Long transactionId;
-    
+
     @JsonSerialize(using = AmountSerializer.class)
     @JsonProperty("transaction_amount")
     private Double transactionAmount;
-    
-    @JsonProperty("transaction_date")
-    private String transactionDate;
 
+    @JsonSerialize(using = DateSerializer.class)
+    @JsonProperty("transaction_date")
+    private Date transactionDate;
+
+    @JsonSerialize(using = DateSerializer.class)
     @JsonProperty("reporting_date")
-    private String reportingDate;
+    private Date reportingDate;
 
     @JsonProperty("adjustment_type")
     private Long adjustmentType;
@@ -46,19 +50,19 @@ public class PreviewFundingTransaction {
         this.transactionAmount = transactionAmount;
     }
 
-    public String getTransactionDate() {
+    public Date getTransactionDate() {
         return transactionDate;
     }
 
-    public void setTransactionDate(String transactionDate) {
+    public void setTransactionDate(Date transactionDate) {
         this.transactionDate = transactionDate;
     }
 
-    public String getReportingDate() {
+    public Date getReportingDate() {
         return reportingDate;
     }
 
-    public void setReportingDate(String reportingDate) {
+    public void setReportingDate(Date reportingDate) {
         this.reportingDate = reportingDate;
     }
 

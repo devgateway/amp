@@ -265,10 +265,8 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpOfflineChangelog</hibernate-class>
 
 		<hibernate-class>org.digijava.module.aim.dbentity.MachineTranslation</hibernate-class>
-
 		<hibernate-class>org.digijava.module.aim.dbentity.MachineTranslationCharactersUsed</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpIndirectTheme</hibernate-class>
-
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityIndirectProgram</hibernate-class>
 
 	</hibernate-classes>

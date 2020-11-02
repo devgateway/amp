@@ -1,5 +1,6 @@
 package org.digijava.module.contentrepository.action;
 
+import javax.ws.rs.core.Response;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;

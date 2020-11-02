@@ -8,7 +8,6 @@ import java.util.Map;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
-import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 /**
@@ -20,7 +19,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
  *
  * @author Octavian Ciubotaru
  */
-public class InMemoryLocationManager implements InMemoryManager<AmpLocation> {
+public class InMemoryLocationManager implements InMemoryManager<AmpCategoryValueLocations> {
     
     private static InMemoryLocationManager instance;
     
@@ -28,7 +27,7 @@ public class InMemoryLocationManager implements InMemoryManager<AmpLocation> {
     
     private AmpCategoryValueLocations root;
     
-    private Map<Long, AmpLocation> ampLocations = new HashMap<>();
+    private Map<Long, AmpCategoryValueLocations> ampLocations = new HashMap<>();
     
     public static InMemoryLocationManager getInstance() {
         if (instance == null) {
@@ -65,7 +64,7 @@ public class InMemoryLocationManager implements InMemoryManager<AmpLocation> {
     }
     
     private void addToAmpLocationsList(AmpCategoryValueLocations location) {
-        ampLocations.put(location.getId(), getAmpLocation(location));
+        ampLocations.put(location.getId(), location);
         for (AmpCategoryValueLocations loc : location.getChildren()) {
             addToAmpLocationsList(loc);
         }
@@ -104,24 +103,12 @@ public class InMemoryLocationManager implements InMemoryManager<AmpLocation> {
     }
     
     
-    public AmpLocation getAmpLocation(String... path) {
+    public AmpCategoryValueLocations getAmpLocation(String... path) {
         AmpCategoryValueLocations location = getLocation(ImmutableList.copyOf(path));
-        
-        AmpLocation ampLocation = new AmpLocation();
-        ampLocation.setAmpLocationId(location.getId());
-        ampLocation.setLocation(location);
-        
-        return getAmpLocation(location);
+
+        return location;
     }
-    
-    public AmpLocation getAmpLocation(AmpCategoryValueLocations location) {
-        AmpLocation ampLocation = new AmpLocation();
-        ampLocation.setAmpLocationId(location.getId());
-        ampLocation.setLocation(location);
-        
-        return ampLocation;
-    }
-    
+
     public AmpCategoryValueLocations getLocation(List<String> path) {
         if (path.size() > 0 && root.getName().equals(path.get(0))) {
             return getLocation(root, path.subList(1, path.size()));
@@ -144,12 +131,12 @@ public class InMemoryLocationManager implements InMemoryManager<AmpLocation> {
     }
     
     @Override
-    public AmpLocation get(Long id) {
+    public AmpCategoryValueLocations get(Long id) {
         return ampLocations.get(id);
     }
     
     @Override
-    public List<AmpLocation> getAllValues() {
+    public List<AmpCategoryValueLocations> getAllValues() {
         return new ArrayList<>(ampLocations.values());
     }
 }

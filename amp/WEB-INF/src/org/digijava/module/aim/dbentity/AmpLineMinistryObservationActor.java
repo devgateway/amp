@@ -2,20 +2,27 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 
-import org.digijava.module.aim.annotations.translation.TranslatableClass;
-import org.digijava.module.aim.annotations.translation.TranslatableField;
-@TranslatableClass (displayName = "Line Ministry Observation Actor")
+import org.digijava.kernel.validators.common.RequiredValidator;
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.annotations.interchange.InterchangeableId;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
+
 public class AmpLineMinistryObservationActor implements Serializable, Cloneable {
 
     //IATI-check: to be ignored
-    
-//  @Interchangeable(fieldTitle="ID")
+
+    @InterchangeableId
+    @Interchangeable(fieldTitle = "ID")
     private Long ampLineMinistryObservationActorId;
-//  @Interchangeable(fieldTitle="Name")
-    @TranslatableField
+
+    @Interchangeable(fieldTitle = "Name", importable = true,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
     private String name;
-//  @Interchangeable(fieldTitle="Name Trimmed")
+
     private String nameTrimmed;
+
+    @InterchangeableBackReference
     private AmpLineMinistryObservationMeasure measure;
 
     public String getName() {

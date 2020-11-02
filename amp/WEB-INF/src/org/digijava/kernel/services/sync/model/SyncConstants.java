@@ -21,7 +21,6 @@ public class SyncConstants {
         public static final String TRANSLATION = "translation";
         public static final String CATEGORY_CLASS = "category class";
         public static final String CATEGORY_VALUE = "category value";
-        public static final String LOCATION = "location";
         public static final String CATEGORY_VALUE_LOCATION = "category value location";
         public static final String SECTOR = "sector";
         public static final String SECTOR_SCHEME = "sector scheme";
@@ -42,5 +41,7 @@ public class SyncConstants {
         public static final String COLLECTION_TYPE_ACTIVITY = "activity-fields";
         public static final String COLLECTION_TYPE_CONTACT = "contact-fields";
         public static final String COLLECTION_TYPE_RESOURCE = "resource-fields";
+		public static final String INDICATOR = "indicator";
+        public static final String INDICATOR_RISK_RATING = "indicator risk rating";
     }
 }

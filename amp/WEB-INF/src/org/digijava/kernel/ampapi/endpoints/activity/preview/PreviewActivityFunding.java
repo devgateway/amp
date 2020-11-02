@@ -2,11 +2,14 @@ package org.digijava.kernel.ampapi.endpoints.activity.preview;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.digijava.kernel.ampapi.endpoints.activity.preview.regional.PreviewRegionalFundingItem;
+import org.digijava.kernel.ampapi.endpoints.activity.preview.serializers.AmountSerializer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * 
  * @author Viorel Chihai
- *
  */
 public class PreviewActivityFunding {
 
@@ -22,6 +25,19 @@ public class PreviewActivityFunding {
     private Double rpcAmount;
 
     private String currency;
+
+    @JsonProperty("regional_commitments")
+    private List<PreviewRegionalFundingItem> regionalCommitments;
+    @JsonProperty("regional_disbursements")
+    private List<PreviewRegionalFundingItem> regionalDisbursements;
+    @JsonProperty("regional_expenditures")
+    private List<PreviewRegionalFundingItem> regionalExpenditures;
+
+    public PreviewActivityFunding() {
+        regionalCommitments = new ArrayList<>();
+        regionalDisbursements = new ArrayList<>();
+        regionalExpenditures = new ArrayList<>();
+    }
 
     public PreviewFundingInformation getFundingInformation() {
         return fundingInformation;
@@ -53,5 +69,29 @@ public class PreviewActivityFunding {
 
     public void setCurrency(String currency) {
         this.currency = currency;
+    }
+
+    public List<PreviewRegionalFundingItem> getRegionalCommitments() {
+        return regionalCommitments;
+    }
+
+    public void setRegionalCommitments(List<PreviewRegionalFundingItem> regionalCommitments) {
+        this.regionalCommitments = regionalCommitments;
+    }
+
+    public List<PreviewRegionalFundingItem> getRegionalDisbursements() {
+        return regionalDisbursements;
+    }
+
+    public void setRegionalDisbursements(List<PreviewRegionalFundingItem> regionalDisbursements) {
+        this.regionalDisbursements = regionalDisbursements;
+    }
+
+    public List<PreviewRegionalFundingItem> getRegionalExpenditures() {
+        return regionalExpenditures;
+    }
+
+    public void setRegionalExpenditures(List<PreviewRegionalFundingItem> regionalExpenditures) {
+        this.regionalExpenditures = regionalExpenditures;
     }
 }

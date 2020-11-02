@@ -60,7 +60,7 @@ public class ResourceService {
 
         try {
             if (!readNode.hasProperty(CrConstants.PROPERTY_CONTENT_TYPE)) {
-                ApiErrorResponseService.reportResourceNotFound(ResourceErrors.RESOURCE_NOT_VALID);
+                ApiErrorResponseService.reportResourceNotFound(ResourceErrors.RESOURCE_NOT_VALID.withDetails(uuid));
             }
         } catch (RepositoryException e) {
             return new JsonApiResponse(ApiError.toError(ResourceErrors.RESOURCE_ERROR));

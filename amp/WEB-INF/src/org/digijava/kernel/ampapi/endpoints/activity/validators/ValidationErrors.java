@@ -67,8 +67,11 @@ public final class ValidationErrors {
     
     public static final ApiErrorMessage DOESNT_MATCH_IMPLEMENTATION_LEVEL =
             new ApiErrorMessage(ERROR_CLASS_VALIDATION_ID, 18, "Doesn't match with implementation level");
-    
+
     public static final ApiErrorMessage INVALID_ID = new ApiErrorMessage(ERROR_CLASS_VALIDATION_ID, 19, "Invalid id");
-    
+
+    public static final ApiErrorMessage LOCATION_NOT_DECLARED =
+            new ApiErrorMessage(ERROR_CLASS_VALIDATION_ID, 20, "Location is not declared.");
+
     private ValidationErrors() { }
 }

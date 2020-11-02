@@ -235,7 +235,7 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
     }
 
     public String getNameAndLastName() {
-        nameAndLastName = (name != null) ? name + " " + lastname : name;
+        nameAndLastName = (name != null) ? name + " " + lastname : "-";
         return nameAndLastName;
     }
 

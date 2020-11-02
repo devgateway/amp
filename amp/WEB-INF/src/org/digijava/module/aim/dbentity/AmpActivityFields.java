@@ -13,16 +13,21 @@ import java.util.Set;
 
 import javax.validation.Valid;
 
+import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpActivityProgramDiscriminatorConfigurer;
 import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpFundingAmountDiscriminationConfigurer;
 import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpOrgRoleDiscriminationConfigurer;
 import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpActivitySectorDiscriminationConfigurer;
+import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpRegionalFundingDiscriminationConfigurer;
 import org.digijava.kernel.ampapi.endpoints.activity.values.ApprovalStatusPossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.values.FiscalYearPossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
+import org.digijava.kernel.validators.activity.RegionLocationValidator;
+import org.digijava.kernel.validators.activity.TreeCollectionValidator;
+import org.digijava.kernel.validators.activity.UniqueActivityTitleValidator;
 import org.digijava.kernel.validators.activity.ComponentFundingOrgRoleValidator;
 import org.digijava.kernel.validators.activity.ImplementationLevelValidator;
 import org.digijava.kernel.validators.activity.MultiStakeholderPartnershipValidator;
@@ -65,6 +70,7 @@ import org.hibernate.Session;
 @InterchangeableValidator(UniqueActivityTitleValidator.class)
 @InterchangeableValidator(ComponentFundingOrgRoleValidator.class)
 @InterchangeableValidator(ImplementationLevelValidator.class)
+@InterchangeableValidator(RegionLocationValidator.class)
 @InterchangeableValidator(value = OnBudgetValidator.class, groups = Submit.class, attributes = "required=ND")
 @InterchangeableValidator(value = MultiStakeholderPartnershipValidator.class, groups = Submit.class,
         attributes = "required=ND")
@@ -472,9 +478,10 @@ LoggerIdentifiable, Cloneable {
     @VersionableCollection(fieldTitle = "Regional Observations")
     protected Set<AmpRegionalObservation> regionalObservations;
 
-//  @Interchangeable(fieldTitle = "Line Ministry Observations", importable = true, fmPath = "/Activity Form/Line Ministry Observations")
+    @Interchangeable(fieldTitle = "Line Ministry Observations", importable = true,
+            fmPath = "/Activity Form/Line Ministry Observations")
     @VersionableCollection(fieldTitle = "Line Ministry Observations")
-    protected Set<AmpLineMinistryObservation> lineMinistryObservations;
+    protected Set<AmpLineMinistryObservation> lineMinistryObservations = new HashSet<>();
 
     //seems obsolete
     @VersionableCollection(fieldTitle = "Costs")
@@ -676,9 +683,22 @@ LoggerIdentifiable, Cloneable {
     @TimestampField
     protected Date approvalDate;
 
-//  @Interchangeable(fieldTitle = "Regional Fundings", importable = true, fmPath = "/Activity Form/Regional Funding")
+    @InterchangeableDiscriminator(discriminatorField = "transactionType",
+            configurer = AmpRegionalFundingDiscriminationConfigurer.class, settings = {
+            @Interchangeable(fieldTitle = ArConstants.REGIONAL_COMMITMENTS,
+                    discriminatorOption = "" + Constants.COMMITMENT,
+                    fmPath = ActivityEPConstants.REGIONAL_COMMITMENTS_FM_PATH,
+                    importable = true),
+            @Interchangeable(fieldTitle = ArConstants.REGIONAL_DISBURSEMENTS,
+                    discriminatorOption = "" + Constants.DISBURSEMENT,
+                    fmPath = ActivityEPConstants.REGIONAL_DISBURSEMENTS_FM_PATH,
+                    importable = true),
+            @Interchangeable(fieldTitle = ArConstants.REGIONAL_EXPENDITURES,
+                    discriminatorOption = "" + Constants.EXPENDITURE,
+                    fmPath = ActivityEPConstants.REGIONAL_EXPENDITURES_FM_PATH,
+                    importable = true)})
     @VersionableCollection(fieldTitle = "Regional Fundings")
-    protected Set <AmpRegionalFunding> regionalFundings;
+    protected Set<AmpRegionalFunding> regionalFundings = new HashSet<>();
 
     @AllowedApprovalStatus(groups = API.class)
     @Interchangeable(fieldTitle = ActivityFieldsConstants.APPROVAL_STATUS, pickIdOnly = true, importable = true)
@@ -721,10 +741,10 @@ LoggerIdentifiable, Cloneable {
      * and contain set of values for this connection.
      * Please refer to AmpActivity.hbm.xml and IndicatorConnection.hbm.xml for details.
      */
-//  @Interchangeable(fieldTitle = "Indicators",fmPath="/Activity Form/M&E")
+    @Interchangeable(fieldTitle = "Indicators", fmPath = "/Activity Form/M&E", importable = true,
+            validators = @Validators(unique = "/Activity Form/M&E/Unique MEs Validator"))
     @VersionableCollection(fieldTitle = "Indicators")
-//  @Validators (unique="/Activity Form/M&E/Unique MEs Validator")
-    protected Set<IndicatorActivity> indicators;
+    protected Set<IndicatorActivity> indicators = new HashSet<>();
 
     @Interchangeable(fieldTitle = "Activity Documents", fmPath = "/Activity Form/Related Documents", importable = true)
     @VersionableCollection(fieldTitle = "Activity Documents")
@@ -780,7 +800,7 @@ LoggerIdentifiable, Cloneable {
                 discriminatorOption = CategoryConstants.IMPLEMENTATION_LOCATION_KEY,
                 dependencies = {ImplementationLevelValidator.IMPLEMENTATION_LOCATION_VALID_KEY},
                 fmPath = "/Activity Form/Location/Implementation Location", pickIdOnly = true),
-        @Interchangeable(fieldTitle = "Financial Instrument", importable = true, multipleValues = false,
+        @Interchangeable(fieldTitle = "Financial Instrument", importable = true, multipleValues = true,
                 discriminatorOption = CategoryConstants.FINANCIAL_INSTRUMENT_KEY, fmPath="/Activity Form/Identification/Financial Instrument", pickIdOnly=true)
     })
     @VersionableCollection(fieldTitle = "Categories")
@@ -1268,14 +1288,14 @@ LoggerIdentifiable, Cloneable {
         }
 
         /**
-         * @param string
+         * @param progress
          */
         public void setProgress(Set progress) {
             this.progress = progress;
         }
 
         /**
-         * @param string
+         * @param documents
          */
         public void setDocuments(Set documents) {
             this.documents = documents;
@@ -1581,7 +1601,7 @@ LoggerIdentifiable, Cloneable {
         /**
          * @return Returns the regionalFundings.
          */
-        public Set getRegionalFundings() {
+        public Set<AmpRegionalFunding> getRegionalFundings() {
             return regionalFundings;
         }
 
@@ -1589,7 +1609,7 @@ LoggerIdentifiable, Cloneable {
          * @param regionalFundings
          *            The regionalFundings to set.
          */
-        public void setRegionalFundings(Set regionalFundings) {
+        public void setRegionalFundings(Set<AmpRegionalFunding> regionalFundings) {
             this.regionalFundings = regionalFundings;
         }
 
@@ -1602,8 +1622,8 @@ LoggerIdentifiable, Cloneable {
             return approvalStatus;
         }
         /**
-         * @param approval_status
-         *            The approval_status to set.
+         * @param approvalStatus
+         *            The approvalStatus to set.
          */
         public void setApprovalStatus(ApprovalStatus approvalStatus) {
             this.approvalStatus = approvalStatus;

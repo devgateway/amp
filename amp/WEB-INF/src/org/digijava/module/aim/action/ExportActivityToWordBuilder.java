@@ -308,10 +308,10 @@ public class ExportActivityToWordBuilder {
                                 indicator.getIndicator().getCode(), false);
                     }
                     if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/ME Item/Logframe Category")) {
-                        if (indicator.getValues() != null && indicator.getValues().size() > 0) {
+                        if (indicator.getLogFrame() != null) {
                             setRun(headerRow.getCell(cellIndex++).getParagraphs().get(0).createRun(),
                                     new RunStyle(FONT_FAMILY, FONT_SIZE_NORMAL, null, false),
-                                    indicator.getLogFrame() + "\n", false);
+                                    indicator.getLogFrame().getValue() + "\n", false);
                         }
                     }
 
@@ -2241,7 +2241,7 @@ public class ExportActivityToWordBuilder {
                                 .addRowData(regFnd.getRegionLocation().getName())
                                 .addRowSimpleData(regFnd.getAdjustmentType().getLabel(), true)
                                 .addRowLtrData(DateConversion.convertDateToString(regFnd.getTransactionDate()))
-                                .addRowLtrData(regFnd.getTransactionAmount().toString())
+                                .addRowLtrData(regFnd.getTransactionAmountWithFormatConversion().toString())
                                 .addRowData(regFnd.getCurrency().getCurrencyCode()));
                         createSectionTable(eshRegFundingDetails);
                     }
@@ -2258,7 +2258,7 @@ public class ExportActivityToWordBuilder {
                                 .addRowData(regFnd.getRegionLocation().getName())
                                 .addRowSimpleData(regFnd.getAdjustmentType().getLabel(), true)
                                 .addRowLtrData(DateConversion.convertDateToString(regFnd.getTransactionDate()))
-                                .addRowLtrData(regFnd.getTransactionAmount().toString())
+                                .addRowLtrData(regFnd.getTransactionAmountWithFormatConversion().toString())
                                 .addRowData(regFnd.getCurrency().getCurrencyCode()));
                         createSectionTable(eshRegFundingDetails);
                     }
@@ -2275,7 +2275,7 @@ public class ExportActivityToWordBuilder {
                                 .addRowData(regFnd.getRegionLocation().getName())
                                 .addRowSimpleData(regFnd.getAdjustmentType().getLabel(), true)
                                 .addRowLtrData(DateConversion.convertDateToString(regFnd.getTransactionDate()))
-                                .addRowLtrData(regFnd.getTransactionAmount().toString())
+                                .addRowLtrData(regFnd.getTransactionAmountWithFormatConversion().toString())
                                 .addRowData(regFnd.getCurrency().getCurrencyCode()));
                         createSectionTable(eshRegFundingDetails);
                     }

@@ -15,6 +15,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIType;
+import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
 import org.digijava.kernel.util.SiteUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,7 +48,7 @@ public class ValidLocaleValidatorTest {
         translatableField = new APIField();
         translatableField.setFieldName(TRANSLATABLE_FIELD);
         translatableField.setImportable(true);
-        translatableField.setApiType(new APIType(String.class));
+        translatableField.setApiType(new APIType(String.class, FieldType.STRING));
         
         importer = mock(ActivityImporter.class);
     }

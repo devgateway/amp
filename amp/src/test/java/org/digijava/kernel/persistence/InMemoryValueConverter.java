@@ -20,15 +20,16 @@ import static org.junit.Assert.assertThat;
  *
  * @author Viorel Chihai
  */
-public class InMemoryValueConverter extends ValueConverter {
-    
-    public static final Map<Long, Object> PERSONE_ATTRIBUTE_TEST_OBJECTS = ImmutableMap.of(
-            10L, new ObjectImporterTest.PersonAttribute(10L, "Height", "Small"),
-            2L, new ObjectImporterTest.PersonAttribute(2L, "Color", "Red"),
-            1L, new ObjectImporterTest.PersonAttribute(1L, "Color", "Yellow")
 
-    );
-    
+public class InMemoryValueConverter extends ValueConverter {
+    public static final Map<Long, Object> PERSONE_ATTRIBUTE_TEST_OBJECTS = new ImmutableMap.Builder<Long, Object>()
+            .put(10L, new ObjectImporterTest.PersonAttribute(10L, "Height", "Small"))
+            .put(2L, new ObjectImporterTest.PersonAttribute(2L, "Color", "Red"))
+            .put(1L, new ObjectImporterTest.PersonAttribute(1L, "Color", "Yellow"))
+            .put(55L, new ObjectImporterTest.PersonAttribute(55L, "Character", "ch1"))
+            .put(56L, new ObjectImporterTest.PersonAttribute(56L, "Character", "ch2"))
+            .put(57L, new ObjectImporterTest.PersonAttribute(57L, "Character", "ch3"))
+            .build();
     public static final Map<Class<?>, Function<Long, Object>> DAO_PROVIDER = ImmutableMap.of(
             ObjectImporterTest.PersonAttribute.class, (id) -> PERSONE_ATTRIBUTE_TEST_OBJECTS.get(id),
             AmpCategoryValue.class, (id) -> InMemoryCategoryValuesManager.getInstance().get(id),
@@ -36,12 +37,12 @@ public class InMemoryValueConverter extends ValueConverter {
             AmpLocation.class, (id) -> InMemoryLocationManager.getInstance().get(id),
             AmpOrganisation.class, (id) -> InMemoryOrganisationManager.getInstance().get(id)
     );
-    
+
     public Object getObjectById(Class<?> entityClass, Object id) {
         if (DAO_PROVIDER.containsKey(entityClass)) {
             return DAO_PROVIDER.get(entityClass).apply(Long.valueOf(id.toString()));
         }
-        
+
         return super.getObjectById(entityClass, id);
     }
 }

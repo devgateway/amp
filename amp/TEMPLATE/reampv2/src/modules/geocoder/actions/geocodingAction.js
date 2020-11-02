@@ -1,4 +1,4 @@
-import {callDeleteApiEndpoint, fetchApiData, fetchApiDataWithStatus} from "../../../utils/apiOperations";
+import {callDeleteApiEndpoint, fetchApiDataWithStatus} from "../../../utils/apiOperations";
 
 export const FETCH_GEOCODING_PENDING = 'FETCH_GEOCODING_PENDING';
 export const FETCH_GEOCODING_SUCCESS = 'FETCH_GEOCODING_SUCCESS';
@@ -20,9 +20,15 @@ export const GEOCODING_RUN_SEARCH_PENDING = 'GEOCODING_RUN_SEARCH_PENDING';
 export const GEOCODING_RUN_SEARCH_SUCCESS = 'GEOCODING_RUN_SEARCH_SUCCESS';
 export const GEOCODING_RUN_SEARCH_ERROR = 'GEOCODING_RUN_SEARCH_ERROR';
 
-export const GEOCODING_SAVE_ALL_EDITS_PENDING = 'GEOCODING_CANCEL_PENDING';
-export const GEOCODING_SAVE_ALL_EDITS_SUCCESS = 'GEOCODING_CANCEL_SUCCESS';
-export const GEOCODING_SAVE_ALL_EDITS_ERROR = 'GEOCODING_CANCEL_ERROR';
+export const GEOCODING_SAVE_ALL_EDITS_PENDING = 'GEOCODING_SAVE_ALL_EDITS_PENDING';
+export const GEOCODING_SAVE_ALL_EDITS_SUCCESS = 'GEOCODING_SAVE_ALL_EDITS_SUCCESS';
+export const GEOCODING_SAVE_ALL_EDITS_ERROR = 'GEOCODING_SAVE_ALL_EDITS_ERROR';
+
+export const GEOCODING_SAVE_ACTIVITY_PENDING = 'GEOCODING_SAVE_ACTIVITY_PENDING';
+export const GEOCODING_SAVE_ACTIVITY_SUCCESS = 'GEOCODING_SAVE_ACTIVITY_SUCCESS';
+export const GEOCODING_SAVE_ACTIVITY_ERROR = 'GEOCODING_SAVE_ACTIVITY_ERROR';
+
+export const GEOCODING_RESET_SAVE_RESULTS = 'GEOCODING_RESET_SAVE_RESULTS';
 
 export function fetchGeocodingPending() {
     return {
@@ -146,6 +152,34 @@ export function saveAllEditsError(error) {
     }
 }
 
+export function saveActivityPending(activityId) {
+    return {
+        type: GEOCODING_SAVE_ACTIVITY_PENDING,
+        payload: activityId
+    }
+}
+
+export function saveActivitySuccess(activityId) {
+    return {
+        type: GEOCODING_SAVE_ACTIVITY_SUCCESS,
+        payload: activityId
+    }
+}
+
+export function saveActivityError(activityId, error) {
+    return {
+        type: GEOCODING_SAVE_ACTIVITY_ERROR,
+        error: error,
+        payload: activityId
+    }
+}
+
+export function resetSaveActivitiesResults() {
+    return {
+        type: GEOCODING_RESET_SAVE_RESULTS,
+    }
+}
+
 export function runSearchPending() {
     return {
         type: GEOCODING_RUN_SEARCH_PENDING
@@ -242,17 +276,29 @@ export const cancelGeocoding = () => {
     }
 };
 
-export const saveAllEdits = () => {
+export const saveAllEdits = (activityIds) => {
     return dispatch => {
         dispatch(saveAllEditsPending());
-        return fetchApiDataWithStatus({url: '/rest/geo-coder/save-activities', body: {}})
-            .then(() => {
-                return dispatch(saveAllEditsSuccess());
+        activityIds.forEach(activityId => dispatch(saveActivity(activityId)));
+        return dispatch(saveAllEditsSuccess());
+    }
+};
+
+export const saveActivity = (activityId) => {
+    return dispatch => {
+        dispatch(saveActivityPending(activityId));
+        return fetchApiDataWithStatus({body: {}, url: '/rest/geo-coder/activity/save/' + activityId})
+            .then(result => {
+                return dispatch(saveActivitySuccess(activityId));
             })
             .catch(error => {
-                return dispatch(saveAllEditsError(error))
+                return dispatch(saveActivityError(activityId, error.message))
             });
     }
+};
+
+export const resetSaveResults = () => {
+    return dispatch => dispatch(resetSaveActivitiesResults());
 };
 
 function isGeocodingNotFound(errorObject) {

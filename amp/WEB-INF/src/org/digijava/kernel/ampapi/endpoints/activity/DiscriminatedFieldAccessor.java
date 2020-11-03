@@ -77,7 +77,7 @@ public class DiscriminatedFieldAccessor implements FieldAccessor {
                 filteredItems.add(item);
             }
         }
-        return filteredItems;
+        return (Collection) filteredItems;
     }
 
     @Override

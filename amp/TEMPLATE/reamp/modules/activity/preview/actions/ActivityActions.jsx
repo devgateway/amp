@@ -17,7 +17,7 @@ import {
     TEAM_ID,
     PUBLIC_VERSION_HISTORY,
     HIDE_CONTACTS_PUBLIC_VIEW,
-    REGIONAL_FUNDINGS,
+    REGIONAL_FUNDINGS,    
     ACTIVITY_FORM_URL_SSC
 } from '../common/ReampConstants.jsx';
 import DateUtils from '../utils/DateUtils.jsx';

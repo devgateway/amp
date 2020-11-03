@@ -16,7 +16,6 @@ import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
 import javax.jcr.Node;
 import javax.jcr.Property;
-import javax.ws.rs.core.Response;
 import java.util.Calendar;
 import java.util.Comparator;
 

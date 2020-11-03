@@ -32,8 +32,6 @@ import org.digijava.kernel.validators.activity.ComponentFundingOrgRoleValidator;
 import org.digijava.kernel.validators.activity.ImplementationLevelValidator;
 import org.digijava.kernel.validators.activity.MultiStakeholderPartnershipValidator;
 import org.digijava.kernel.validators.activity.OnBudgetValidator;
-import org.digijava.kernel.validators.activity.TreeCollectionValidator;
-import org.digijava.kernel.validators.activity.UniqueActivityTitleValidator;
 import org.digijava.kernel.validators.common.TotalPercentageValidator;
 import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.kernel.validators.common.SizeValidator;

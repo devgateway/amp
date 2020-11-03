@@ -9,6 +9,7 @@ import static org.junit.Assert.assertThat;
 
 import java.util.Set;
 
+import org.dgfoundation.amp.testutils.TransactionUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.ampapi.endpoints.resource.ResourceErrors;
@@ -31,6 +32,7 @@ public class ResourceRequiredValidatorTest {
 
     @BeforeClass
     public static void setUp() {
+        TransactionUtil.setUpWorkspaceEmptyPrefixes();
         resourceField = ValidatorUtil.getMetaData(AmpResource.class);
     }
 

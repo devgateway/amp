@@ -1,0 +1,97 @@
+
+.map-container .leaflet-popup-content-wrapper {
+    border-radius: 0;
+}
+
+.map-container .leaflet-popup-content {
+    margin: -2px;
+}
+
+.map-container .homepage-popup {
+    font-family: 'Montserrat', sans-serif;
+    width: 300px;
+    height: 170px;
+}
+
+.map-container .homepage-popup .content {
+    max-height: 120px;
+    overflow-y: auto;
+    margin-left: 5px;
+}
+
+.map-container .homepage-popup .content .content-row .title {
+    color: #269af3;
+    font-size: 9px;
+}
+
+.map-container .homepage-popup .content .content-row .alternative {
+    color: #007236;
+}
+
+.project-list {
+    font-size: 10px;
+    margin-top: 5px;
+}
+
+.project-list li {
+    margin-bottom: 5px;
+}
+
+.map-container .homepage-popup .content .content-row {
+    border-bottom: 0.5pt solid #e7e9ed;
+}
+
+.map-container .homepage-popup .content .content-row li {
+    list-style: none;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYV2NgYGD4DwABBAEAcCBlCwAAAABJRU5ErkJggg==);
+    background-repeat: no-repeat;
+    background-position: 0 50%;
+    padding-left: 7px;
+}
+
+.map-container .homepage-popup .content .content-row ul {
+    padding-left: 4px;
+}
+
+.map-container .homepage-popup .header {
+    margin-bottom: 5px;
+    border-bottom: 0.5pt solid #e7e9ed;
+    background-color: #f6f6f6;
+    height: 28px;
+    vertical-align: middle;
+
+}
+
+.map-container .homepage-popup .header .country-name {
+
+
+}
+
+
+.map-container .homepage-popup .header .country-name {
+    height: inherit;
+    padding-top: 5px;
+    padding-left: 5px;
+}
+
+.map-container .homepage-popup .header .country-name span {
+    font-size: 12px;
+    font-weight: bold;
+    padding: 0;
+    color: #9ba7b6;
+}
+
+
+.map-container .homepage-popup .header .country-name img {
+    display: block;
+    float: left;
+    margin-right: 10px;
+    margin-left: 2px;
+    margin-top: 2px;
+    width: 20px;
+}
+
+.map-container .project-list a, .map-container .project-list a:hover {
+    color: #333;
+
+}

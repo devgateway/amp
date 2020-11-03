@@ -48,6 +48,7 @@ public class ColumnConstants {
     public static final String BENEFICIARY_AGENCY__DEPARTMENT_DIVISION = "Beneficiary Agency  Department/Division";
     public static final String BENEFICIARY_AGENCY_GROUPS = "Beneficiary Agency Groups";
     public static final String BENEFICIARY_AGENCY_TYPE = "Beneficiary Agency Type";
+    public static final String BENEFICIARY_AGENCY_COUNTRY = "Beneficiary Agency Country";
     public static final String BUDGET_CODE_PROJECT_ID = "Budget Code Project Id";
     public static final String BUDGET_DEPARTMENT = "Budget Department";
     public static final String BUDGET_ORGANIZATION = "Budget Organization";
@@ -90,6 +91,7 @@ public class ColumnConstants {
     public static final String DONOR_GROUP = "Donor Group";
     public static final String DONOR_TYPE = "Donor Type";
     public static final String DONOR_BUDGET_CODE = "Donor Budget Code";
+    public static final String DONOR_COUNTRY = "Donor Country";
     public static final String DRAFT = "Draft";
     public static final String ENVIRONMENT = "Environment";
     public static final String EQUAL_OPPORTUNITY = "Equal Opportunity";
@@ -97,6 +99,7 @@ public class ColumnConstants {
     public static final String EXECUTING_AGENCY_DEPARTMENT_DIVISION = "Executing Agency Department/Division";
     public static final String EXECUTING_AGENCY_GROUPS = "Executing Agency Groups";
     public static final String EXECUTING_AGENCY_TYPE = "Executing Agency Type";
+    public static final String EXECUTING_AGENCY_COUNTRY = "Executing Agency Country";
     public static final String EXECUTION_RATE = "Execution Rate";
     public static final String FINAL_DATE_FOR_CONTRACTING = "Final Date for Contracting";
     public static final String FINAL_DATE_FOR_DISBURSEMENTS = "Final Date for Disbursements";
@@ -178,6 +181,8 @@ public class ColumnConstants {
     public static final String OBJECTIVE = "Objective";
     public static final String ACTIVITY_BUDGET = "Activity Budget";
     public static final String HUMANITARIAN_AID = "Humanitarian Aid";
+    public static final String MULTI_STAKEHOLDER_PARTNERS = "Multi Stakeholder Partners";
+    public static final String MULTI_STAKEHOLDER_PARTNERSHIP = "Multi Stakeholder Partnership";
     public static final String DISASTER_RESPONSE_MARKER = "Disaster Response Marker";
     public static final String EXPENDITURE_CLASS = "Expenditure Class";
     public static final String ORGANIZATIONS_AND_PROJECT_ID = "Organizations and Project ID";
@@ -423,4 +428,11 @@ public class ColumnConstants {
     public static final String INDICATOR_REVISED_TARGET_DATE = "Indicator Revised Target Date";
     public static final String INDICATOR_REVISED_TARGET_COMMENT = "Indicator Revised Target Comment";
 
+    public static final String PROJECT_RESULTS_AVAILABLE = "Project Results Available";
+    public static final String VULNERABLE_GROUP = "Vulnerable Group";
+    public static final String PROJECT_RESULTS_LINK = "Project Results Link";
+    public static final String PROJECT_JOINT_DECISION = "Project Joint Decision";
+    public static final String PROJECT_MONITORING = "Project Monitoring";
+    public static final String PROJECT_SUSTAINABILITY = "Project Sustainability";
+    public static final String PROJECT_PROBLEMS = "Project Problems";
 }

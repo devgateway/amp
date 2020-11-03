@@ -21,7 +21,8 @@ public class InMemoryPossibleValuesDAO implements PossibleValuesDAO {
         return InMemoryCategoryValuesManager.getInstance().getAllValues()
                 .stream()
                 .filter(c -> c.getAmpCategoryClass().getKeyName().equals(discriminatorOption))
-                .map(c -> Arrays.asList(c.getId(), c.getValue(), c.getDeleted(), c.getIndex()).toArray())
+                .map(c -> Arrays.asList(c.getId(), c.getValue(), c.getDeleted(), c.getIndex(), discriminatorOption)
+                        .toArray())
                 .collect(Collectors.toList());
     }
     

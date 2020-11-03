@@ -16,6 +16,10 @@ public interface FilterListManager {
     default FilterList getFilterList() {
         return new FilterList();
     }
+
+    default FilterList getFilterList(boolean showAllCountries, boolean firstLevelOnly) {
+        return new FilterList();
+    }
     
     default FilterList getFilterList(String filterId) {
         return getFilterList();

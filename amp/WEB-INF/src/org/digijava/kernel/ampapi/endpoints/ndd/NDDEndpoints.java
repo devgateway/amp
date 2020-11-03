@@ -39,4 +39,21 @@ public class NDDEndpoints {
     public void updateMapping(List<AmpIndirectTheme> mapping) {
         nddService.updateMapping(mapping);
     }
+
+    @POST
+    @Path("update-source-destination-programs")
+    @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "updateSrcDstPrograms")
+    @ApiOperation("Update the Primary Program (source) and Indirect Program (destination) in GS.")
+    public void updateSrcDstPrograms(AmpIndirectTheme mapping) {
+        nddService.updateMainProgramsMapping(mapping);
+    }
+
+    @GET
+    @Path("available-programs")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "getAvailablePrograms")
+    @ApiOperation("Returns the list of programs we can use as Primary and Indirect.")
+    public List<NDDService.SingleProgramData> getAvailablePrograms() {
+        return nddService.getSinglePrograms();
+    }
 }

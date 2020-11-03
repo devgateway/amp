@@ -10,8 +10,11 @@ import java.util.Map;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.activity.field.CachingFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
+import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.dbentity.ApprovalStatus;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.common.util.DateTimeUtil;
 
@@ -20,10 +23,21 @@ import org.digijava.module.common.util.DateTimeUtil;
  */
 public class ObjectExporter<T> {
 
-    private final List<APIField> apiFields;
+    private List<APIField> apiFields;
+    private Map<Long, CachingFieldsEnumerator> enumerators;
 
     private final TranslatedFieldReader translatedFieldReader;
 
+    public ObjectExporter(TranslatedFieldReader translatedFieldReader, Map<Long, CachingFieldsEnumerator> enumerators) {
+        this.translatedFieldReader = translatedFieldReader;
+        this.enumerators = enumerators;
+    }
+
+    /**
+     * This constructor is for special cases like Contacts and Resources that are not tied to a specific/custom FM tree.
+     * @param translatedFieldReader
+     * @param apiFields
+     */
     public ObjectExporter(TranslatedFieldReader translatedFieldReader, List<APIField> apiFields) {
         this.translatedFieldReader = translatedFieldReader;
         this.apiFields = apiFields;
@@ -33,8 +47,24 @@ public class ObjectExporter<T> {
         return apiFields;
     }
 
+    public List<APIField> getApiFields(Long id) {
+        if (id != null) {
+            return this.enumerators.get(id).getActivityFields();
+        }
+        AmpTemplatesVisibility defaultTemplate = FeaturesUtil.getDefaultAmpTemplateVisibility();
+        return this.enumerators.get(defaultTemplate.getId()).getActivityFields();
+    }
+
     public Map<String, Object> export(T object) {
         return getObjectJson(object, apiFields, null);
+    }
+
+    public Map<String, Object> export(T object, Long id) {
+        if (id == null) {
+            AmpTemplatesVisibility defaultTemplate = FeaturesUtil.getDefaultAmpTemplateVisibility();
+            return getObjectJson(object, this.enumerators.get(defaultTemplate.getId()).getActivityFields(), null);
+        }
+        return getObjectJson(object, this.enumerators.get(id).getActivityFields(), null);
     }
 
     /**

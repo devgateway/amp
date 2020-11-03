@@ -10,7 +10,7 @@
 		</id>
 
 		<property name="name" column="location_name" type="java.lang.String" />
-		
+
 		<many-to-one name="parentCategoryValue" column="parent_category_value"
 			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" not-null="true" lazy="false" />
 		<many-to-one name="parentLocation" column="parent_location"
@@ -23,12 +23,16 @@
 		<property name="deleted" column="deleted" type="java.lang.Boolean" />
 		<property column="ISO3" length="3" name="iso3" type="java.lang.String" unique-key="iso3_key" />
 		<property column="ISO" length="3" name="iso" type="java.lang.String" unique-key="iso_key" />
-		
+
 		<set name="childLocations" inverse="true" lazy="true" cascade="all" order-by="location_name">
 			<cache usage="read-write" />
 			<key column="parent_location"/>
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" />
 		</set>
+		<many-to-one name="template" column="template_id" class="org.digijava.module.aim.dbentity.AmpTemplatesVisibility" cascade="none" />
+
+		<many-to-one name="group" column="amp_category_value_group_id"
+					 class="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" cascade="none" lazy="false"/>
 
 	</class>
 </hibernate-mapping>

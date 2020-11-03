@@ -10,6 +10,7 @@ import java.util.Set;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
+import org.dgfoundation.amp.testutils.TransactionUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.AMPRequestRule;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityTranslationUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.NoTranslatedFieldReader;
@@ -62,6 +63,8 @@ public class ResourceExporterTest {
                 program -> false);
 
         ActivityTranslationUtils.setTranslatorService(translatorService);
+
+        TransactionUtil.setUpWorkspaceEmptyPrefixes();
 
         root = enumerator.getMetaModel(AmpResource.class);
     }

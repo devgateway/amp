@@ -50,7 +50,10 @@ public class DateTimeUtil {
 
     private static final ThreadLocal<SimpleDateFormat> DATE_FORMATTER = new ThreadLocal<>();
     private static final ThreadLocal<SimpleDateFormat> TIMESTAMP_FORMATTER = new ThreadLocal<>();
-    
+    private static final long FIRST_JAN_1970 = 2440588;
+    private static final int JAN1970 = 2440587; // FIXME this numbers should have been 2440588 not changing until
+                                            // we evaluate the impact
+
     /**
      * Convert iso date to java.util.Calendar
      * example:
@@ -184,23 +187,34 @@ public class DateTimeUtil {
     }
         
     public static int toJulianDayNumber(LocalDate date) {
-        return (int) (date.toEpochDay() + 2440588);
+        return (int) (date.toEpochDay() + FIRST_JAN_1970);
     }
-    
+
+    public static Integer getYearFromJulianNumber(Long julianNumber) {
+        return getYearFromJulianNumber(Long.toString(julianNumber));
+    }
+
+    public static Integer getYearFromJulianNumber(String julianNumber) {
+        Date date = fromJulianNumberToDate(julianNumber);
+        if (date != null) {
+            return getLocalDate(date).getYear();
+        }
+        return null;
+    }
+
     public static Date fromJulianNumberToDate(String julianNumber) {
         if (julianNumber != null && !FiltersConstants.FILTER_UNDEFINED_MAX.equals(julianNumber)) {
             try {
-                int day = Integer.parseInt(julianNumber) - 2440587; 
+                int day = Integer.parseInt(julianNumber) - JAN1970;
                 julianNumber = Integer.toString(day);
                 Date date = new SimpleDateFormat("D").parse(julianNumber);
-                
+
                 return date;
             } catch (ParseException e) {
-                e.printStackTrace();
+                logger.error("fromJulianNumberToDate", e);
             }
         }
-        
-        
+
         return null;
     }
     

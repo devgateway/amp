@@ -13,6 +13,7 @@ import java.util.Set;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import org.dgfoundation.amp.testutils.TransactionUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
@@ -74,6 +75,7 @@ public class UniqueValidatorTest {
 
     @BeforeClass
     public static void setUp() {
+        TransactionUtil.setUpWorkspaceEmptyPrefixes();
         dummyIntField = ValidatorUtil.getMetaData(DummyInt.class);
         dummyObjField = ValidatorUtil.getMetaData(DummyObj.class);
     }

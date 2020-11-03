@@ -30,7 +30,10 @@
 			    		tos.category_value AS terms_assist_name, tos.id AS terms_assist_id, fin.category_value AS financing_instrument_name, fin.id AS financing_instrument_id, 
 			    		src_role.amp_role_id AS source_role_id, src_role.role_code AS source_role_code, src_role.name AS source_role_name,
 			    		recipient.name AS recipient_name, recipient.amp_org_id AS recipient_id,
-			    		dest_role.role_code AS recipient_role_code, dest_role.name AS recipient_role_name
+			    		dest_role.role_code AS recipient_role_code, dest_role.name AS recipient_role_name,
+						f.vulnerable_group_va AS vulnerable_group_id,
+						CASE WHEN f.project_results_available THEN 1 ELSE 2 END AS project_results_available_id,
+						donor.country_id as donor_org_country_id
 			    	FROM
 			    		amp_funding f
 			    		JOIN amp_funding_mtef_projection m ON m.amp_funding_id = f.amp_funding_id
@@ -43,7 +46,7 @@
 			    		JOIN amp_category_value fin ON fin.id = f.financing_instr_category_value
 			    		LEFT JOIN amp_role src_role ON f.source_role_id = src_role.amp_role_id
 			    		LEFT JOIN amp_organisation recipient ON recipient.amp_org_id = m.recipient_org_id
-			    		LEFT JOIN amp_role dest_role ON dest_role.amp_role_id = m.recipient_role_id
+			    		LEFT JOIN amp_role dest_role ON dest_role.amp_role_id = m.recipient_role_id;
         		</lang>
 		</script>
 	</apply>

@@ -167,4 +167,9 @@ public class ActivityBuilder {
 
         return this;
     }
+	
+	public ActivityBuilder withMultiStakeholderPartnership(boolean multiStakeholderPartnership) {
+        activity.setMultiStakeholderPartnership(multiStakeholderPartnership);
+        return this;
+    }
 }

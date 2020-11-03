@@ -13,6 +13,7 @@ import static org.junit.Assert.assertThat;
 import java.util.Set;
 
 import org.dgfoundation.amp.activity.builder.ActivityBuilder;
+import org.dgfoundation.amp.testutils.TransactionUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
@@ -37,6 +38,7 @@ public class ImplementationLevelValidatorTest {
 
     @BeforeClass
     public static void setUp() {
+        TransactionUtil.setUpWorkspaceEmptyPrefixes();
         activityField = ValidatorUtil.getMetaData();
         categoryValueManager = InMemoryCategoryValuesManager.getInstance();
         locationManager = InMemoryLocationManager.getInstance();

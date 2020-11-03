@@ -25,7 +25,7 @@ var AMPOfflineDownload = React.createClass( {
                     <img src='/TEMPLATE/reamp/modules/ampoffline/download/images/monitor.png' />
                 </div>
                 <div className='col-md-7'>
-                    <div className='main_text'>
+                    <div className='c'>
                         <h2>{this.state.translations['amp.offline:download-title']}</h2>
                         <span>{this.state.translations['amp.offline:text']}</span>
                     </div>

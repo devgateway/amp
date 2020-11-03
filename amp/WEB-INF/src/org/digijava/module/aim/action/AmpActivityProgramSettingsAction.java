@@ -8,6 +8,8 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.ampapi.endpoints.ndd.NDDService;
+import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.form.AmpActivityProgramSettingsForm;
 import org.digijava.module.aim.util.ProgramUtil;
 
@@ -33,6 +35,12 @@ public class AmpActivityProgramSettingsAction
                 else {
                         //Load programs settings
                         ampActivityProgramSettingsForm.setProgramList(ProgramUtil.getAllThemes());
+                        // Remove from the list of available themes the one used as indirect program.
+                        AmpTheme indirectProgram = NDDService.getDstProgramRoot();
+                        if (indirectProgram != null) {
+                                ampActivityProgramSettingsForm.getProgramList().remove(indirectProgram);
+                        }
+
                         ampActivityProgramSettingsForm.setSettingsList(ProgramUtil.getAmpActivityProgramSettingsList());
                         return mapping.findForward("forward");
 

@@ -25,13 +25,14 @@ import org.digijava.kernel.ampapi.endpoints.activity.values.FiscalYearPossibleVa
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
-import org.digijava.kernel.validators.activity.TreeCollectionValidator;
 import org.digijava.kernel.validators.activity.RegionLocationValidator;
+import org.digijava.kernel.validators.activity.TreeCollectionValidator;
 import org.digijava.kernel.validators.activity.UniqueActivityTitleValidator;
 import org.digijava.kernel.validators.activity.ComponentFundingOrgRoleValidator;
 import org.digijava.kernel.validators.activity.ImplementationLevelValidator;
-import org.digijava.kernel.validators.common.TotalPercentageValidator;
+import org.digijava.kernel.validators.activity.MultiStakeholderPartnershipValidator;
 import org.digijava.kernel.validators.activity.OnBudgetValidator;
+import org.digijava.kernel.validators.common.TotalPercentageValidator;
 import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.kernel.validators.common.SizeValidator;
 import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
@@ -69,6 +70,8 @@ import org.hibernate.Session;
 @InterchangeableValidator(ImplementationLevelValidator.class)
 @InterchangeableValidator(RegionLocationValidator.class)
 @InterchangeableValidator(value = OnBudgetValidator.class, groups = Submit.class, attributes = "required=ND")
+@InterchangeableValidator(value = MultiStakeholderPartnershipValidator.class, groups = Submit.class,
+        attributes = "required=ND")
 public abstract class AmpActivityFields extends Permissible implements Comparable<AmpActivityVersion>, Serializable,
 LoggerIdentifiable, Cloneable {
 
@@ -881,7 +884,21 @@ LoggerIdentifiable, Cloneable {
     @Interchangeable(fieldTitle = "Joint Criteria", importable = true, fmPath = "/Activity Form/Identification/Joint Criteria")
     @VersionableFieldSimple(fieldTitle = "Joint Criteria")
     protected Boolean jointCriteria;
-    
+
+    @Interchangeable(fieldTitle = "Multi Stakeholder Partnership", importable = true,
+            fmPath = "/Activity Form/Identification/Multi Stakeholder Partnership",
+            interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
+                    fmPath = "/Activity Form/Identification/Required Validator for Multi Stakeholder Partnership"))
+    @VersionableFieldSimple(fieldTitle = "Multi Stakeholder Partnership")
+    protected Boolean multiStakeholderPartnership;
+
+    @Interchangeable(fieldTitle = "Multi Stakeholder Partners", importable = true,
+            fmPath = "/Activity Form/Identification/Multi Stakeholder Partners",
+            requiredDependencies = MultiStakeholderPartnershipValidator.MULTI_STAKEHOLDER_PARTNERSHIP_KEY,
+            dependencyRequired = SUBMIT)
+    @VersionableFieldSimple(fieldTitle = "Multi Stakeholder Partners")
+    protected String multiStakeholderPartners;
+
     @Interchangeable(fieldTitle = "Humanitarian Aid", importable = true,
             fmPath = "/Activity Form/Identification/Humanitarian Aid",
             interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
@@ -984,6 +1001,8 @@ LoggerIdentifiable, Cloneable {
     /**
      * whether this is a PROJECT or a South-South Cooperation
      */
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.ACTIVITY_TYPE, pickIdOnly = true,
+            label = "Activity Type", importable = false)
     protected Long activityType = org.dgfoundation.amp.onepager.util.ActivityUtil.ACTIVITY_TYPE_PROJECT; //default type
 
     @Interchangeable(fieldTitle = "PPC Annual Budgets", importable = true, fmPath = "/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost")
@@ -1267,14 +1286,14 @@ LoggerIdentifiable, Cloneable {
         }
 
         /**
-         * @param string
+         * @param progress
          */
         public void setProgress(Set progress) {
             this.progress = progress;
         }
 
         /**
-         * @param string
+         * @param documents
          */
         public void setDocuments(Set documents) {
             this.documents = documents;
@@ -1601,8 +1620,8 @@ LoggerIdentifiable, Cloneable {
             return approvalStatus;
         }
         /**
-         * @param approval_status
-         *            The approval_status to set.
+         * @param approvalStatus
+         *            The approvalStatus to set.
          */
         public void setApprovalStatus(ApprovalStatus approvalStatus) {
             this.approvalStatus = approvalStatus;
@@ -1914,6 +1933,22 @@ LoggerIdentifiable, Cloneable {
 
         public Boolean getGovernmentApprovalProcedures() {
             return governmentApprovalProcedures;
+        }
+
+        public Boolean getMultiStakeholderPartnership() {
+            return multiStakeholderPartnership;
+        }
+
+        public void setMultiStakeholderPartnership(Boolean multiStakeholderPartnership) {
+            this.multiStakeholderPartnership = multiStakeholderPartnership;
+        }
+
+        public String getMultiStakeholderPartners() {
+            return multiStakeholderPartners;
+        }
+
+        public void setMultiStakeholderPartners(String multiStakeholderPartners) {
+            this.multiStakeholderPartners = multiStakeholderPartners;
         }
 
         public Boolean getJointCriteria() {

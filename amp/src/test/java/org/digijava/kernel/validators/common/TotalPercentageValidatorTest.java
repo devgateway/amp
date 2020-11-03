@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
+import org.dgfoundation.amp.testutils.TransactionUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
@@ -58,6 +59,7 @@ public class TotalPercentageValidatorTest {
 
     @BeforeClass
     public static void setUp() {
+        TransactionUtil.setUpWorkspaceEmptyPrefixes();
         objField = ValidatorUtil.getMetaData(Obj.class);
     }
 

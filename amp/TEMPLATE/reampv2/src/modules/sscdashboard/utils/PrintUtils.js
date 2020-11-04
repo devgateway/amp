@@ -37,7 +37,7 @@ export const printChartPrinter = (title, chartId, printContainer, iframe, countr
         printElement.appendChild(titleElement);
       }
     }
-    let totalRows = 1;
+    let totalRows;
     if (!oneByOne) {
       totalRows = Math.ceil(charts.length / 2);
     } else {
@@ -58,6 +58,7 @@ export const printChartPrinter = (title, chartId, printContainer, iframe, countr
           i += 1;
         }
         const theRow = doc.createElement('div');
+        // eslint-disable-next-line no-nested-ternary
         theRow.className = `print-row row${rowCount < totalRows ? ' border-bottom ' : (!oneByOne ? ' last-row' : '')}`;
         rowCount += 1;
         if (titleElement && oneByOne) {
@@ -96,6 +97,7 @@ export const printChartPrinter = (title, chartId, printContainer, iframe, countr
  * @param filtersObject
  * @param format
  * @param calculateChildren
+ * @param printContainer
  */
 export const printChart = (title, chartId, filtersObject, format, calculateChildren, printContainer) => {
   try {

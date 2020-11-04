@@ -43,7 +43,7 @@ export const dataDownloadStyles = {
   }
 };
 
-export const exportToXLS = function (exportData) {
+export const exportToXLS = (exportData) => {
   const workbook = new Excel.Workbook();
   let title;
   if (Array.isArray(exportData)) {
@@ -56,7 +56,8 @@ export const exportToXLS = function (exportData) {
     addWorkSheet(workbook, exportData.sheetName ? exportData.sheetName : 'Sheet 1', exportData);
   }
 
-  workbook.xlsx.writeBuffer().then((data: Blob) => {
+  // TODO its coming from VIFAA need to adujst
+  workbook.xlsx.writeBuffer().then((data) => {
     const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
     const url = window.URL.createObjectURL(blob);
     const anchor = document.createElement('a');
@@ -124,15 +125,19 @@ const addWorkSheet = (workbook, sheetName, exportData) => {
     };
   });
 
-  rows.forEach(row => {
-    worksheet.addRow(row);
+  rows.forEach(innerRow => {
+    worksheet.addRow(innerRow);
     const { lastRow } = worksheet;
-    if (row.cellsStyles) {
-      for (const key in row.cellsStyles) {
-        if (row.cellsStyles.hasOwnProperty(key)) {
-          const styleCell = row.cellsStyles[key];
+    if (innerRow.cellsStyles) {
+      // eslint-disable-next-line no-restricted-syntax
+      for (const key in innerRow.cellsStyles) {
+        // eslint-disable-next-line no-prototype-builtins
+        if (innerRow.cellsStyles.hasOwnProperty(key)) {
+          const styleCell = innerRow.cellsStyles[key];
           const cellToStyle = lastRow.getCell(key);
+          // eslint-disable-next-line no-restricted-syntax
           for (const styleKey in styleCell) {
+            // eslint-disable-next-line no-prototype-builtins
             if (styleCell.hasOwnProperty(styleKey)) {
               cellToStyle[styleKey] = styleCell[styleKey];
             }
@@ -141,18 +146,18 @@ const addWorkSheet = (workbook, sheetName, exportData) => {
       }
     }
 
-    if (row.mergeCells) {
+    if (innerRow.mergeCells) {
       const rowNumber = worksheet.rowCount;
-      worksheet.mergeCells(rowNumber, row.mergeCells.start, rowNumber, row.mergeCells.end);
+      worksheet.mergeCells(rowNumber, innerRow.mergeCells.start, rowNumber, innerRow.mergeCells.end);
     }
   });
   // worksheet.addRows(rows);
 
-  worksheet.eachRow((row, rowNumber) => {
+  worksheet.eachRow((innerRow, rowNumber) => {
     // add borders to data cells
     if (rowNumber > filters.length + 2) {
       columns.forEach(col => {
-        row.getCell(col.key).border = {
+        innerRow.getCell(col.key).border = {
           top: { style: 'thin' },
           left: { style: 'thin' },
           bottom: { style: 'thin' },
@@ -171,7 +176,7 @@ const addWorkSheet = (workbook, sheetName, exportData) => {
   }
 };
 
-export const exportToCSV = function (exportData) {
+export const exportToCSV = exportData => {
   let title; let columns; let
     rows;
   if (Array.isArray(exportData)) {

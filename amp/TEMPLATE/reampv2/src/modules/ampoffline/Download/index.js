@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 
 import AMPOfflineDownload from './components/AMPOfflineDownload';
 import rootReducer from './reducers/rootReducer';
-import defaultTrnPack from './config/initialTranslations';
+import defaultTrnPack from './config/initialTranslations.json';
 import Startup from './components/Startup';
 
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

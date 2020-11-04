@@ -12,6 +12,9 @@ const PrintDummy = ({ friendly }) => (
   </>
 );
 PrintDummy.propTypes = {
-  friendly: PropTypes.bool.isRequired
+  friendly: PropTypes.bool
+};
+PrintDummy.defaultProps = {
+  friendly: false
 };
 export default PrintDummy;

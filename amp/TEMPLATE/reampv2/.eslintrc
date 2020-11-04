@@ -1,4 +1,4 @@
-  {
+{
   "parser": "babel-eslint",
   "extends": "airbnb",
   "env": {
@@ -17,7 +17,8 @@
       "error",
       {
         "ignore": [
-          "electron"
+          "electron",
+          "build"
         ]
       }
     ],
@@ -53,32 +54,23 @@
       }
     ],
     "react/prefer-stateless-function": "off",
-    //"flowtype-errors/show-errors": 2,
     "no-else-return": 0,
     "no-param-reassign": 0,
     "jsx-a11y/no-static-element-interactions": "off",
     "react/no-danger": "off",
-    "react/jsx-space-before-closing": "off", /* replaced by react/jsx-tag-spacing */
+    "react/jsx-space-before-closing": "off",
     "react/jsx-tag-spacing": [
       "error",
-        {
-          "closingSlash": "never",
-          "beforeSelfClosing": "always",
-          "afterOpening": "allow-multiline"
-        }
+      {
+        "closingSlash": "never",
+        "beforeSelfClosing": "always",
+        "afterOpening": "allow-multiline"
+      }
     ]
   },
   "plugins": [
-    //"flowtype-errors",
     "import",
     "promise",
     "react"
-  ]/*,
-  "settings": {
-    "import/resolver": {
-      "webpack": {
-        "config": "webpack.config.eslint.js"
-      }
-    }
-  }*/
+  ]
 }

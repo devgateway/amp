@@ -15,14 +15,8 @@
 		<property name="language" column="language" type="java.lang.String" />
 		<property name="version" column="version" type="java.lang.String" />
 		<property name="geoCode" column="geo_code" type="java.lang.String" />
-			
-		<set name="activities" lazy="true" cascade="none" inverse="true">
-			<cache usage="read-write" />
-			<key column="amp_location_id" />
-			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityLocation" />
-		</set>
 
-		<many-to-one name="location" column="location_id" 
+		<many-to-one name="location" column="location_id"
 			class="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" cascade="none" />
 		<many-to-one name="regionLocation" column="region_location_id" 
 			class="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" cascade="none" />

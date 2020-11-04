@@ -10,8 +10,11 @@ import java.util.Map;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.activity.field.CachingFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
+import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.dbentity.ApprovalStatus;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.common.util.DateTimeUtil;
 
@@ -21,9 +24,20 @@ import org.digijava.module.common.util.DateTimeUtil;
 public class ObjectExporter<T> {
 
     private List<APIField> apiFields;
+    private Map<Long, CachingFieldsEnumerator> enumerators;
 
     private TranslatedFieldReader translatedFieldReader;
 
+    public ObjectExporter(TranslatedFieldReader translatedFieldReader, Map<Long, CachingFieldsEnumerator> enumerators) {
+        this.translatedFieldReader = translatedFieldReader;
+        this.enumerators = enumerators;
+    }
+
+    /**
+     * This constructor is for special cases like Contacts and Resources that are not tied to a specific/custom FM tree.
+     * @param translatedFieldReader
+     * @param apiFields
+     */
     public ObjectExporter(TranslatedFieldReader translatedFieldReader, List<APIField> apiFields) {
         this.translatedFieldReader = translatedFieldReader;
         this.apiFields = apiFields;
@@ -33,8 +47,24 @@ public class ObjectExporter<T> {
         return apiFields;
     }
 
+    public List<APIField> getApiFields(Long id) {
+        if (id != null) {
+            return this.enumerators.get(id).getActivityFields();
+        }
+        AmpTemplatesVisibility defaultTemplate = FeaturesUtil.getDefaultAmpTemplateVisibility();
+        return this.enumerators.get(defaultTemplate.getId()).getActivityFields();
+    }
+
     public Map<String, Object> export(T object) {
         return getObjectJson(object, apiFields, null);
+    }
+
+    public Map<String, Object> export(T object, Long id) {
+        if (id == null) {
+            AmpTemplatesVisibility defaultTemplate = FeaturesUtil.getDefaultAmpTemplateVisibility();
+            return getObjectJson(object, this.enumerators.get(defaultTemplate.getId()).getActivityFields(), null);
+        }
+        return getObjectJson(object, this.enumerators.get(id).getActivityFields(), null);
     }
 
     /**
@@ -77,7 +107,7 @@ public class ObjectExporter<T> {
         } else if (field.getApiType().getFieldType().isObject()) {
             jsonValue = (fieldValue == null) ? null : getObjectJson(fieldValue, field.getChildren(), fieldPath);
         } else if (isList) {
-            jsonValue = readCollection(field, fieldPath, (Collection) fieldValue);
+            jsonValue = readCollection(field, fieldPath, object, (Collection<?>) fieldValue);
         } else {
             jsonValue = readPrimitive(field, object, fieldValue);
         }
@@ -106,7 +136,9 @@ public class ObjectExporter<T> {
      * Convert primitive value to json value.
      */
     private Object readPrimitive(APIField apiField, Object object, Object fieldValue) {
-        if (fieldValue instanceof Date) {
+        if (apiField.isIdOnly()) {
+            return readFieldWithPossibleValues(apiField, fieldValue);
+        } else if (fieldValue instanceof Date) {
             boolean isTimestamp = apiField.getApiType().getFieldType() == FieldType.TIMESTAMP;
             return DateTimeUtil.formatISO8601DateTimestamp((Date) fieldValue, isTimestamp);
         } else {
@@ -123,11 +155,13 @@ public class ObjectExporter<T> {
     /**
      * Convert list of objects to a json array.
      */
-    private List<Object> readCollection(APIField field, String fieldPath, Collection value) {
+    private List<Object> readCollection(APIField field, String fieldPath, Object object, Collection<?> value) {
         List<Object> collectionOutput = new ArrayList<>();
         if (value != null) {
             if (field.getApiType().isSimpleItemType()) {
-                collectionOutput.addAll(value);
+                for (Object item : value) {
+                    collectionOutput.add(readPrimitive(field, object, item));
+                }
             } else {
                 for (Object item : value) {
                     collectionOutput.add(getObjectJson(item, field.getChildren(), fieldPath));

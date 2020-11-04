@@ -1567,8 +1567,8 @@ public class ExportActivityToPDF extends Action {
                             headerTable.addCell(indicator.getIndicator().getCode());
                         }
                         if (FeaturesUtil.isVisibleModule("/Activity Form/M&E/ME Item/Logframe Category")) {
-                            if (indicator.getValues() != null && indicator.getValues().size() > 0) {
-                                headerTable.addCell(indicator.getLogFrame());
+                            if (indicator.getLogFrame() != null) {
+                                headerTable.addCell(indicator.getLogFrame().getValue());
                             }
                         }
 

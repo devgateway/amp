@@ -2,6 +2,8 @@ package org.digijava.module.aim.util;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 public class Output {
 
     private String[] title;
@@ -109,6 +111,12 @@ public class Output {
 
     public void setDeletedValues(boolean deletedValues) {
         this.deletedValues = deletedValues;
+    }
+
+    public void add(String title, String value) {
+        if (StringUtils.isNotBlank(value)) {
+            outputs.add(new Output(null, new String[] { title }, new Object[] { value }));
+        }
     }
     
 }

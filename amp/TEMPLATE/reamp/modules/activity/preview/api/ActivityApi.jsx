@@ -1,8 +1,8 @@
 import ApiHelper from "../utils/ApiHelper.jsx";
 import {
-    ACTIVITY_API, FIELDS_DEFINITION_API, POSSIBLE_VALUES_API, FM_API, SETTINGS_API, ACTIVITY_INFO_API,
+    ACTIVITY_API, FIELDS_DEFINITION_API, POSSIBLE_VALUES_API, FM_API, ACTIVITY_INFO_API,
     FUNDING_INFORMATION_API, ACTIVITY_FIELDS_ID_VALUES_API, ACTIVITY_WS_INFO
-} from '../common/ReampConstants.jsx'
+} from '../common/ReampConstants.jsx';
 
 
 export default class ActivityApi {
@@ -11,14 +11,17 @@ export default class ActivityApi {
         return ApiHelper._fetchData(url);
     }
 
-    static getFieldsDefinition() {
-        const url = FIELDS_DEFINITION_API;
+    static getFieldsDefinition(fmId) {
+        let url = FIELDS_DEFINITION_API;
+        if (fmId) {
+            url += '/' + fmId;
+        }
         return ApiHelper._fetchData(url);
     }
 
     static fetchPossibleValues(body) {
         const url = POSSIBLE_VALUES_API;
-        return ApiHelper._postData(url, body)
+        return ApiHelper._postData(url, body);
 
     }
 
@@ -43,8 +46,11 @@ export default class ActivityApi {
 
     }
 
-    static fetchValuesForHydration(activityFieldsWithIds) {
-        const url = ACTIVITY_FIELDS_ID_VALUES_API;
+    static fetchValuesForHydration(activityFieldsWithIds, fmId) {
+        let url = ACTIVITY_FIELDS_ID_VALUES_API;
+        if (fmId) {
+            url += '/' + fmId;
+        }
         return ApiHelper._postData(url, activityFieldsWithIds);
     }
 

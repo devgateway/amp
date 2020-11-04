@@ -17,13 +17,15 @@ import {
     TEAM_ID,
     PUBLIC_VERSION_HISTORY,
     HIDE_CONTACTS_PUBLIC_VIEW,
-    ACTIVITY_FORM_URL_SSC
+    ACTIVITY_FORM_URL_SSC,
+    REGIONAL_FUNDINGS
 } from '../common/ReampConstants.jsx';
 import DateUtils from '../utils/DateUtils.jsx';
 import HydratorHelper from '../utils/HydratorHelper.jsx';
 import {
     FieldsManager, FieldPathConstants, ActivityConstants, FeatureManagerConstants, FeatureManager,
-    FmManagerHelper, CommonActivityHelper, Constants, NumberUtils, CurrencyRatesManager, ActivityLinks
+    FmManagerHelper, CommonActivityHelper, Constants, NumberUtils, CurrencyRatesManager, ActivityLinks,
+    WorkspaceConstants
 } from "amp-ui";
 import processPossibleValues from '../common/PossibleValuesHelper.jsx';
 import Logger from '../utils/LoggerManager' ;
@@ -47,67 +49,70 @@ export function loadActivityForActivityPreview(activityId) {
         dispatch(sendingRequest());
         const paths = [...FieldPathConstants.ADJUSTMENT_TYPE_PATHS];
         const {settings} = ownProps().startUpReducer;
-        Promise.all([ActivityApi.getActivity(activityId), ActivityApi.getFieldsDefinition(),
-            ActivityApi.fetchFmConfiguration(FmManagerHelper.getRequestFmSyncUpBody(Object.values(FeatureManagerConstants))),
-            ActivityApi.fetchActivityInfo(activityId)]
-        ).then(([activity, fieldsDef, fmTree, activityInfo]) => {
-            const isSSC = activity[ActivityConstants.ACTIVITY_TYPE] === ActivityConstants.ACTIVITY_TYPE_SSC;
-            _registerSettings(settings.language, settings['default-date-format'].toUpperCase(), isSSC);
-            if (settings[TEAM_ID]) {
-                ContactAction.loadHydratedContactsForActivity(activity)(dispatch, ownProps);
-                loadWsInfoForActivity(activity, dispatch);
-            }
-            ResourceAction.loadResourcesForActivity(activity)(dispatch, ownProps);
-            //TODO find a better way to filter out non enabled paths
-            const activityFieldsManagerTemp = new FieldsManager(fieldsDef, [],
-                settings.language, Logger);
-            const enabledPaths = paths.filter(path => activityFieldsManagerTemp.isFieldPathEnabled(path));
-            Promise.all([ActivityApi.fetchPossibleValues(enabledPaths),
-                ActivityApi.fetchFundingInformation(activityId, settings[Constants.EFFECTIVE_CURRENCY].id)])
-                .then(([possibleValuesCollectionAPI, activityFundingInformation]) => {
-                    const activityFieldsManager = new FieldsManager(fieldsDef,
-                        processPossibleValues(possibleValuesCollectionAPI), settings.language, Logger);
-                    _populateFMTree(fmTree);
-                    _configureNumberUtils(settings);
+        ActivityApi.fetchActivityInfo(activityId).then(activityInfo => {
+            Promise.all([ActivityApi.getActivity(activityId),
+                ActivityApi.getFieldsDefinition(activityInfo.activityWorkspace[WorkspaceConstants.TEMPLATE_ID]),
+                ActivityApi.fetchFmConfiguration(FmManagerHelper.getRequestFmSyncUpBody(Object.values(FeatureManagerConstants)))]
+            ).then(([activity, fieldsDef, fmTree]) => {
+                const isSSC = activity[ActivityConstants.ACTIVITY_TYPE] === ActivityConstants.ACTIVITY_TYPE_SSC;
+                _registerSettings(settings.language, settings['default-date-format'].toUpperCase(), isSSC);
+                if (settings[TEAM_ID]) {
+                    ContactAction.loadHydratedContactsForActivity(activity)(dispatch, ownProps);
+                    loadWsInfoForActivity(activity, dispatch);
+                }
+                ResourceAction.loadResourcesForActivity(activity)(dispatch, ownProps);
+                //TODO find a better way to filter out non enabled paths
+                const activityFieldsManagerTemp = new FieldsManager(fieldsDef, [],
+                    settings.language, Logger);
+                const enabledPaths = paths.filter(path => activityFieldsManagerTemp.isFieldPathEnabled(path));
+                Promise.all([ActivityApi.fetchPossibleValues(enabledPaths),
+                    ActivityApi.fetchFundingInformation(activityId, settings[Constants.EFFECTIVE_CURRENCY].id)])
+                    .then(([possibleValuesCollectionAPI, activityFundingInformation]) => {
+                        const activityFieldsManager = new FieldsManager(fieldsDef,
+                            processPossibleValues(possibleValuesCollectionAPI), settings.language, Logger);
+                        _populateFMTree(fmTree);
+                        _configureNumberUtils(settings);
 
-                    ActivityApi.fetchValuesForHydration(HydratorHelper.fetchRequestDataForHydration(activity,
-                        activityFieldsManager, ''))
-                        .then(valuesForHydration => {
-                            HydratorHelper.hydrateObject(activity, activityFieldsManager, '',
-                                null, valuesForHydration);
-                            activity.id = String(activity.internal_id);
-                            _convertCurrency(activity, activityFundingInformation);
-                            //we create an empty currency rates manager since we will be converting from same currencies,
-                            // it wont be used it will just return 1.
-                            const currencyRatesManager = new CurrencyRatesManager([],
-                                activityFundingInformation.currency, translate, DateUtils, {});
-                            return dispatch({
-                                type: ACTIVITY_LOAD_LOADED,
-                                payload: {
-                                    activity: activity,
-                                    activityFieldsManager,
-                                    activityContext: _getActivityContext(settings, activityInfo, activity),
-                                    activityFundingTotals: new ActivityFundingTotals(activity, activityFundingInformation),
-                                    currencyRatesManager
-                                }
-                            })
-                        })
-                }).catch(error => {
+                        ActivityApi.fetchValuesForHydration(HydratorHelper.fetchRequestDataForHydration(activity,
+                            activityFieldsManager, ''),
+                            activityInfo.activityWorkspace[WorkspaceConstants.TEMPLATE_ID])
+                            .then(valuesForHydration => {
+                                HydratorHelper.hydrateObject(activity, activityFieldsManager, '',
+                                    null, valuesForHydration);
+                                activity.id = String(activity.internal_id);
+                                _convertCurrency(activity, activityFundingInformation);
+                                // we create an empty currency rates manager since we will be converting from same currencies,
+                                // it wont be used it will just return 1.
+                                const currencyRatesManager = new CurrencyRatesManager([],
+                                    activityFundingInformation.currency, translate, DateUtils, {});
+                                return dispatch({
+                                    type: ACTIVITY_LOAD_LOADED,
+                                    payload: {
+                                        activity: activity,
+                                        activityFieldsManager,
+                                        activityContext: _getActivityContext(settings, activityInfo, activity),
+                                        activityFundingTotals: new ActivityFundingTotals(activity, activityFundingInformation),
+                                        currencyRatesManager
+                                    }
+                                });
+                            });
+                    }).catch(error => {
+                    return dispatch({
+                        type: ACTIVITY_LOAD_FAILED,
+                        payload: {
+                            error: error
+                        }
+                    });
+                }); //TODO catch errors
+            }).catch(error => {
                 return dispatch({
                     type: ACTIVITY_LOAD_FAILED,
                     payload: {
                         error: error
                     }
                 });
-            })//TODO catch errors
-        }).catch(error => {
-            return dispatch({
-                type: ACTIVITY_LOAD_FAILED,
-                payload: {
-                    error: error
-                }
             });
-        })
+        });
     };
 
     function _registerSettings(lang, pGSDateFormat, isSSC) {
@@ -136,7 +141,7 @@ export function loadActivityForActivityPreview(activityId) {
     function _configureNumberUtils(settings) {
         NumberUtils.registerSettings({
             gsDefaultGroupSeparator: settings['number-group-separator'],
-            gsDefaultDecimalSeparator: settings,
+            gsDefaultDecimalSeparator: settings['number-decimal-separator'],
             gsDefaultNumberFormat: settings['gs-number-format'],
             gsAmountInThousands: settings['number-divider'] + '',
             Translate: translate,
@@ -171,6 +176,7 @@ export function loadActivityForActivityPreview(activityId) {
                                 const transactionInWsCurrency =
                                     transactionListInWsCurrency.find(tiwc => tiwc[TRANSACTION_ID] === t[TRANSACTION_ID]);
                                 t[ActivityConstants.TRANSACTION_AMOUNT] = transactionInWsCurrency[ActivityConstants.TRANSACTION_AMOUNT];
+                                // TODO convert the whole curreny not only the code
                                 t[ActivityConstants.CURRENCY].value = currencyCode;
                             })
                         }
@@ -178,6 +184,14 @@ export function loadActivityForActivityPreview(activityId) {
                 }
             });
         }
+       REGIONAL_FUNDINGS.forEach(rf => {
+            activity[rf].forEach(regionalFundingItem => {
+                const convertedAmount = activityFundingInformation[rf].find(arf => arf.id === regionalFundingItem.id);
+                regionalFundingItem.transaction_amount = convertedAmount.transaction_amount;
+                // TODO convert the whole curreny not only the code
+                regionalFundingItem[ActivityConstants.CURRENCY].value= convertedAmount.currency.currencyCode;
+            })
+        });
     }
 
     function _getActivityContext(settings, activityInfo, activity) {

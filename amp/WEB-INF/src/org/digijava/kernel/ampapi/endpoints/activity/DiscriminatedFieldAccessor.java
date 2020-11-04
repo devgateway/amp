@@ -28,108 +28,130 @@ import static org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeU
  */
 public class DiscriminatedFieldAccessor implements FieldAccessor {
 
-    private String discriminatorField;
-    private String discriminatorValue;
+    private final String discriminatorField;
+    private final String discriminatorValue;
 
-    private boolean multipleValues;
+    private final FieldAccessor targetField;
 
-    private FieldAccessor target;
+    private final boolean multipleValues;
 
-    public DiscriminatedFieldAccessor(FieldAccessor target, String discriminatorField, String discriminatorValue,
+    public DiscriminatedFieldAccessor(FieldAccessor targetField, String discriminatorField, String discriminatorValue,
             boolean multipleValues) {
-        this.target = target;
+        this.targetField = targetField;
         this.discriminatorField = discriminatorField;
         this.discriminatorValue = discriminatorValue;
         this.multipleValues = multipleValues;
     }
 
     @Override
-    public Object get(Object targetObject) {
-        Collection collection = getWrappedCollection(targetObject);
+    public <T> T get(Object targetObject) {
+        Collection<?> collection = getWrappedCollection(targetObject);
         String prefix = "" + TLSUtils.getRequest().getAttribute(WORKSPACE_PREFIX);
         if (multipleValues) {
-            List<Object> filteredItems = new ArrayList<>();
-            for (Object item : collection) {
-                // AMPOFFLINE-1528
-                if (getDiscriminationValue(item).equals(discriminatorValue)
-                        || getDiscriminationValue(item).equals(prefix + discriminatorValue)) {
-                    filteredItems.add(item);
-                }
-            }
-            return filteredItems;
+            return (T) getList(collection, prefix);
         } else {
-            Object singleItem = null;
-            for (Object item : collection) {
-                // AMPOFFLINE-1528
-                if (getDiscriminationValue(item).equals(discriminatorValue)
-                        || getDiscriminationValue(item).equals(prefix + discriminatorValue)) {
-                    if (singleItem == null) {
-                        singleItem = item;
-                    } else {
-                        throw newMultipleValuesException();
-                    }
-                }
-            }
-            return singleItem;
+            return (T) getObject(collection, prefix);
         }
     }
 
-    private Collection getWrappedCollection(Object targetObject) {
-        Object obj = target.get(targetObject);
-        if (!(obj instanceof Collection)) {
-            throw new IllegalStateException("Value is either null or does not implement java.util.Collection for "
-                    + this.toString());
+    private Object getObject(Collection<?> collection, String prefix) {
+        Object filteredItem = null;
+        for (Object item : collection) {
+            // AMPOFFLINE-1528
+            if (getDiscriminationValue(item).equals(discriminatorValue)
+                    || getDiscriminationValue(item).equals(prefix + discriminatorValue)) {
+                if (filteredItem != null) {
+                    throw new RuntimeException(
+                            "MultipleValues is false but the underlying collection contains two items.");
+                }
+                filteredItem = item;
+            }
         }
-        return (Collection) obj;
+        return filteredItem;
+    }
+
+    private Object getList(Collection<?> collection, String prefix) {
+        List<Object> filteredItems = new ArrayList<>();
+        for (Object item : collection) {
+            // AMPOFFLINE-1528
+            if (getDiscriminationValue(item).equals(discriminatorValue)
+                    || getDiscriminationValue(item).equals(prefix + discriminatorValue)) {
+                filteredItems.add(item);
+            }
+        }
+        return filteredItems;
     }
 
     @Override
     public void set(Object targetObject, Object value) {
-        Collection collection = getWrappedCollection(targetObject);
+        Collection targetCollection = getWrappedCollection(targetObject);
         String prefix = "" + TLSUtils.getRequest().getAttribute(WORKSPACE_PREFIX);
-        if (multipleValues) {
-            TreeSet<Object> newItems = new TreeSet<>(Comparator.comparingInt(System::identityHashCode));
-            newItems.addAll((Collection) value);
 
-            Iterator it = collection.iterator();
-            while (it.hasNext()) {
-                Object item = it.next();
-                // AMPOFFLINE-1528
-                if (getDiscriminationValue(item).equals(discriminatorValue)
-                        || getDiscriminationValue(item).equals(prefix + discriminatorValue)) {
-                    boolean removed = newItems.remove(item);
-                    if (!removed) {
-                        it.remove();
-                    }
-                }
-            }
-            collection.addAll(newItems);
+        if (multipleValues) {
+            setList(targetCollection, (Collection) value, prefix);
         } else {
-            boolean removed = false;
-            Iterator it = collection.iterator();
-            while (it.hasNext()) {
-                Object item = it.next();
-                // AMPOFFLINE-1528
-                if (getDiscriminationValue(item).equals(discriminatorValue)
-                        || getDiscriminationValue(item).equals(prefix + discriminatorValue)) {
-                    it.remove();
-                    if (removed) {
-                        throw newMultipleValuesException();
-                    }
-                    removed = true;
-                }
-            }
-            if (value != null) {
-                collection.add(value);
-            }
+            setObject(targetCollection, value, prefix);
         }
 
-        target.set(targetObject, collection);
+        targetField.set(targetObject, targetCollection);
+    }
+
+    private void setObject(Collection targetCollection, Object value, String prefix) {
+        Iterator<?> it = targetCollection.iterator();
+        boolean refPresent = false;
+        boolean found = false;
+        while (it.hasNext()) {
+            Object item = it.next();
+            // AMPOFFLINE-1528
+            if (getDiscriminationValue(item).equals(discriminatorValue)
+                    || getDiscriminationValue(item).equals(prefix + discriminatorValue)) {
+                if (found) {
+                    throw newMultipleValuesException();
+                }
+                found = true;
+                if (item == value) {
+                    refPresent = true;
+                } else {
+                    it.remove();
+                }
+            }
+        }
+        if (value != null && !refPresent) {
+            targetCollection.add(value);
+        }
+    }
+
+    private void setList(Collection targetCollection, Collection values, String prefix) {
+        TreeSet<Object> newItems = new TreeSet<>(Comparator.comparingInt(System::identityHashCode));
+        newItems.addAll(values);
+
+        Iterator<?> it = targetCollection.iterator();
+        while (it.hasNext()) {
+            Object item = it.next();
+            // AMPOFFLINE-1528
+            if (getDiscriminationValue(item).equals(discriminatorValue)
+                    || getDiscriminationValue(item).equals(prefix + discriminatorValue)) {
+                boolean removed = newItems.remove(item);
+                if (!removed) {
+                    it.remove();
+                }
+            }
+        }
+        targetCollection.addAll(newItems);
     }
 
     private IllegalStateException newMultipleValuesException() {
         return new IllegalStateException("Field is marked as single value but there are multiple values"
                 + " in the underlying collection. Accessor: " + this.toString());
+    }
+
+    private Collection getWrappedCollection(Object targetObject) {
+        Object obj = targetField.get(targetObject);
+        if (!(obj instanceof Collection)) {
+            throw new IllegalStateException("Value is either null or does not implement java.util.Collection for "
+                    + this.toString());
+        }
+        return (Collection) obj;
     }
 
     private String getDiscriminationValue(Object obj) {
@@ -154,7 +176,8 @@ public class DiscriminatedFieldAccessor implements FieldAccessor {
 
     @Override
     public String toString() {
-        return "Discriminated accessor for " + target.toString() + " where "
+        return "Discriminated accessor for " + targetField.toString() + " where "
                 + discriminatorField + "=" + discriminatorValue;
     }
+
 }

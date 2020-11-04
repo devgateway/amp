@@ -6,8 +6,7 @@ import fetchTranslations from '../../../../utils/actions/fetchTranslations';
 import defaultTrnPack from '../config/initialTranslations';
 import { Loading } from '../../../../utils/components/Loading';
 
-
-export const TranslationContext = React.createContext({translations: defaultTrnPack});
+export const TranslationContext = React.createContext({ translations: defaultTrnPack });
 
 /**
  * Component used to load everything we need before launching the APP
@@ -15,30 +14,30 @@ export const TranslationContext = React.createContext({translations: defaultTrnP
  */
 class Startup extends Component {
     static propTypes = {
-        translationPending: PropTypes.bool,
-        translations: PropTypes.object
+      translationPending: PropTypes.bool,
+      translations: PropTypes.object
     };
 
     componentDidMount() {
-        this.props.fetchTranslations(defaultTrnPack);
+      this.props.fetchTranslations(defaultTrnPack);
     }
 
     render() {
-        return this.props.translationPending
-            ? (<Loading/>) :
-            <TranslationContext.Provider value={{translations: this.props.translations}}>
-                {this.props.children}
-            </TranslationContext.Provider>;
+      return this.props.translationPending
+        ? (<Loading />)
+        : (
+          <TranslationContext.Provider value={{ translations: this.props.translations }}>
+            {this.props.children}
+          </TranslationContext.Provider>
+        );
     }
 }
 
-const mapStateToProps = state => {
-    return {
-        translationPending: state.translationsReducer.pending,
-        translations: state.translationsReducer.translations
-    };
-};
+const mapStateToProps = state => ({
+  translationPending: state.translationsReducer.pending,
+  translations: state.translationsReducer.translations
+});
 
-const mapDispatchToProps = dispatch => bindActionCreators({fetchTranslations: fetchTranslations}, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ fetchTranslations }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Startup);

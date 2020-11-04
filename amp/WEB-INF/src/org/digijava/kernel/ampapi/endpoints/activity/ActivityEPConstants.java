@@ -155,6 +155,11 @@ public class ActivityEPConstants {
     public static final String REGEX_PATTERN_PHONE_EXTENSION = "^\\d{1,4}$";
 
     public static final List PUBLIC_ACTIVITY_FIELDS = new ArrayList<String>() {{
+        add("fundings~commitments~adjustment_type");
+        add("fundings~disbursements~adjustment_type");
+        add("fundings~expenditures~adjustment_type");
+        add("fundings~estimated_disbursements~adjustment_type");
+        add("locations~location");
         add(ActivityFieldsConstants.FUNDINGS.toLowerCase() + "~" + ArConstants.COMMITMENT.toLowerCase()
                 + "~" + ActivityFieldsConstants.ADJUSTMENT_TYPE);
         add(ActivityFieldsConstants.FUNDINGS.toLowerCase() + "~" + ArConstants.DISBURSEMENT.toLowerCase()
@@ -166,7 +171,6 @@ public class ActivityEPConstants {
                 + "~" + ActivityFieldsConstants.ADJUSTMENT_TYPE);
         add(ActivityFieldsConstants.LOCATIONS.toLowerCase() + "~"
                 + ActivityFieldsConstants.Locations.LOCATION.toLowerCase());
-        add("locations~location");
     }};
 
     public static final String FUNDING_VULNERABLE_GROUP_LABEL =

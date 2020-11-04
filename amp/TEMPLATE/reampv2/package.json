@@ -2,7 +2,7 @@
   "name": "create-react-app",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://amp-haiti-pr-3298-tc9.ampsite.net",
+  "proxy": "http://local.amp.org:8080",
   "dependencies": {
     "@nivo/pie": "^0.62.0",
     "@testing-library/jest-dom": "^4.2.4",
@@ -38,10 +38,15 @@
     "start": "react-scripts start",
     "build": "export PUBLIC_URL=/TEMPLATE/reampv2/build/ && react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint .",
+    "lintv": "eslint --version"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": [
+      "react-app",
+      "airbnb"
+    ]
   },
   "browserslist": {
     "production": [
@@ -56,5 +61,9 @@
       "last 1 safari version",
       "ie 11"
     ]
+  },
+  "devDependencies": {
+    "eslint-config-airbnb": "^18.2.0",
+    "eslint-plugin-promise": "^4.2.1"
   }
 }

@@ -17,8 +17,8 @@ import {
     TEAM_ID,
     PUBLIC_VERSION_HISTORY,
     HIDE_CONTACTS_PUBLIC_VIEW,
-    REGIONAL_FUNDINGS,    
-    ACTIVITY_FORM_URL_SSC
+    ACTIVITY_FORM_URL_SSC,
+    REGIONAL_FUNDINGS
 } from '../common/ReampConstants.jsx';
 import DateUtils from '../utils/DateUtils.jsx';
 import HydratorHelper from '../utils/HydratorHelper.jsx';

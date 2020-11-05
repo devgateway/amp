@@ -152,7 +152,7 @@ module.exports = BackboneDash.View.extend({
                 },
                 {app: this.app, url: '/rest/dashboard/heat-map/sec'}));
         }
-        if (_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function (item) {
+        if (_.find(enabledCharts, function (item) {
             return item === LOC;
         })) {
             col.push(new HeatMapChart(
@@ -166,7 +166,7 @@ module.exports = BackboneDash.View.extend({
                 },
                 {app: this.app, url: '/rest/dashboard/heat-map/loc'}));
         }
-        if (_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function (item) {
+        if (_.find(enabledCharts, function (item) {
             return item === PRG;
         })) {
             col.push(new HeatMapChart(

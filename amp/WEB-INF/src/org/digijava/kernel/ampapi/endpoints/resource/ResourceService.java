@@ -75,9 +75,9 @@ public class ResourceService {
                 nodeWrapper.getTranslatedTitle()));
         resource.setDescription(MultilingualContent.build(isMultilingual, nodeWrapper.getDescription(),
                 nodeWrapper.getTranslatedDescription()));
-        resource.setType(CategoryManagerUtil.getAmpCategoryValueFromDb(nodeWrapper.getCmDocTypeId()));
         resource.setNote(MultilingualContent.build(isMultilingual, nodeWrapper.getNotes(),
                 nodeWrapper.getTranslatedNote()));
+        resource.setType(CategoryManagerUtil.getAmpCategoryValueFromDb(nodeWrapper.getCmDocTypeId()));
         resource.setAddingDate(nodeWrapper.getCalendarDate() == null ? null : nodeWrapper.getCalendarDate().getTime());
         resource.setUrl("/contentrepository/downloadFile.do?uuid=" + uuid);
         resource.setCreatorEmail(nodeWrapper.getCreator());

@@ -26,7 +26,7 @@ public class ObjectExporter<T> {
     private List<APIField> apiFields;
     private Map<Long, CachingFieldsEnumerator> enumerators;
 
-    private final TranslatedFieldReader translatedFieldReader;
+    private TranslatedFieldReader translatedFieldReader;
 
     public ObjectExporter(TranslatedFieldReader translatedFieldReader, Map<Long, CachingFieldsEnumerator> enumerators) {
         this.translatedFieldReader = translatedFieldReader;

@@ -25,13 +25,13 @@ import org.digijava.kernel.ampapi.endpoints.activity.values.FiscalYearPossibleVa
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
-import org.digijava.kernel.validators.activity.RegionLocationValidator;
-import org.digijava.kernel.validators.activity.TreeCollectionValidator;
-import org.digijava.kernel.validators.activity.UniqueActivityTitleValidator;
 import org.digijava.kernel.validators.activity.ComponentFundingOrgRoleValidator;
 import org.digijava.kernel.validators.activity.ImplementationLevelValidator;
 import org.digijava.kernel.validators.activity.MultiStakeholderPartnershipValidator;
 import org.digijava.kernel.validators.activity.OnBudgetValidator;
+import org.digijava.kernel.validators.activity.RegionLocationValidator;
+import org.digijava.kernel.validators.activity.TreeCollectionValidator;
+import org.digijava.kernel.validators.activity.UniqueActivityTitleValidator;
 import org.digijava.kernel.validators.common.TotalPercentageValidator;
 import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.kernel.validators.common.SizeValidator;
@@ -68,10 +68,11 @@ import org.hibernate.Session;
 @InterchangeableValidator(UniqueActivityTitleValidator.class)
 @InterchangeableValidator(ComponentFundingOrgRoleValidator.class)
 @InterchangeableValidator(ImplementationLevelValidator.class)
-@InterchangeableValidator(RegionLocationValidator.class)
 @InterchangeableValidator(value = OnBudgetValidator.class, groups = Submit.class, attributes = "required=ND")
 @InterchangeableValidator(value = MultiStakeholderPartnershipValidator.class, groups = Submit.class,
         attributes = "required=ND")
+@InterchangeableValidator(RegionLocationValidator.class)
+@InterchangeableValidator(value = OnBudgetValidator.class, groups = Submit.class, attributes = "required=ND")
 public abstract class AmpActivityFields extends Permissible implements Comparable<AmpActivityVersion>, Serializable,
 LoggerIdentifiable, Cloneable {
 

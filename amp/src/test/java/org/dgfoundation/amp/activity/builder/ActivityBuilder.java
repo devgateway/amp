@@ -170,12 +170,6 @@ public class ActivityBuilder {
         funding.setRegionLocation(location);
 
         activity.getRegionalFundings().add(funding);
-
->>>>>>>>> Temporary merge branch 2
-    }
-	
-	public ActivityBuilder withMultiStakeholderPartnership(boolean multiStakeholderPartnership) {
-        activity.setMultiStakeholderPartnership(multiStakeholderPartnership);
         return this;
     }
 }

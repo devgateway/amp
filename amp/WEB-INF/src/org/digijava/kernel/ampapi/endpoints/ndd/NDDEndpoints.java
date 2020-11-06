@@ -10,6 +10,7 @@ import javax.ws.rs.core.MediaType;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.module.aim.dbentity.AmpIndirectTheme;
@@ -55,5 +56,14 @@ public class NDDEndpoints {
     @ApiOperation("Returns the list of programs we can use as Primary and Indirect.")
     public List<NDDService.SingleProgramData> getAvailablePrograms() {
         return nddService.getSinglePrograms();
+    }
+
+    @GET
+    @Path("direct-indirect-report")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = AuthRule.IN_WORKSPACE, id = "getDirectIndirectReport")
+    @ApiOperation("")
+    public GeneratedReport getDirectIndirectReport() {
+        return DashboardService.generateDirectIndirectReport();
     }
 }

@@ -28,7 +28,7 @@
 					(SELECT id FROM amp_modules_visibility WHERE name = 'AMP GeoCoder' AND parent IN (SELECT id FROM amp_modules_visibility WHERE name = 'PROJECT MANAGEMENT')));
 
 				INSERT INTO amp_menu_entry_view(select currval('amp_menu_entry_seq'),
-					(SELECT currval('amp_visibility_rule_seq')), 1, '/TEMPLATE/reampv2/build/index.html#/geocoder');
+					(SELECT currval('amp_visibility_rule_seq')), 2, '/TEMPLATE/reampv2/build/index.html#/geocoder');
 
 			]]></lang>
 		</script>

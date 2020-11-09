@@ -45,12 +45,14 @@ public class NDDSolarChartData {
 
         /**
          * Convert an AmpTheme tree into a plain structure.
+         *
          * @param program
          * @param amount
          */
         public ProgramData(AmpTheme program, BigDecimal amount) {
             this.programLvl3 = new Program(program.getThemeCode(), program.getName(), 3);
-            this.programLvl2 = new Program(program.getParentThemeId().getThemeCode(), program.getParentThemeId().getName(), 2);
+            this.programLvl2 = new Program(program.getParentThemeId().getThemeCode(),
+                    program.getParentThemeId().getName(), 2);
             this.programLvl1 = new Program(program.getParentThemeId().getParentThemeId().getThemeCode(),
                     program.getParentThemeId().getParentThemeId().getName(), 1);
             this.amount = amount;

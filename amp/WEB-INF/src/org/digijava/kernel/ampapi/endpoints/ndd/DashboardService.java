@@ -46,11 +46,10 @@ public class DashboardService {
         spec.addColumn(new ReportColumn(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_3));
         spec.setHierarchies(spec.getColumns());
 
-        // TODO: add param for the amount (commitment, disbursement, etc).
+        // TODO: add param for the amount type (commitment, disbursement, etc).
         spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
         GeneratedReport report = EndpointUtils.runReport(spec);
 
-        // TODO: return a new class with {direct_lvl0_id|direct_lvl0_name|direct_lvl0_acronym|direct_lvl0_children}
         List<NDDSolarChartData> list = new ArrayList<>();
         ReportOutputColumn directColumn = report.leafHeaders.get(0);
         ReportOutputColumn indirectColumn = report.leafHeaders.get(1);
@@ -69,7 +68,8 @@ public class DashboardService {
                             add.set(true);
                             AmpTheme indirect = ProgramUtil.getTheme(((TextCell) programCell).entityId);
                             BigDecimal amount = ((AmountCell) content2.get(totalColumn)).extractValue();
-                            nddSolarChartData.getIndirectPrograms().add(new NDDSolarChartData.ProgramData(indirect, amount));
+                            nddSolarChartData.getIndirectPrograms().add(new NDDSolarChartData.ProgramData(indirect,
+                                    amount));
                         }
                     });
                     if (add.get()) {

@@ -7,11 +7,12 @@ import CountryCarousel from './CountryCarousel';
 import './filters.css';
 import {
   DASHBOARD_DEFAULT_MAX_YEAR_RANGE,
-  DASHBOARD_DEFAULT_MIN_YEAR_RANGE, HOME_CHART,
+  DASHBOARD_DEFAULT_MIN_YEAR_RANGE, HOME_CHART, MODALITY_CHART,
   SECTORS_CHART
 } from '../../../utils/constants';
 import { EXTRA_INFO, GROUP_ID } from '../../../utils/FieldsConstants';
 import { SSCTranslationContext } from '../../StartUp';
+import PropTypes from "prop-types";
 
 class HorizontalFilters extends Component {
   getCategoryForCountry(country) {
@@ -42,16 +43,17 @@ class HorizontalFilters extends Component {
 
   render() {
     const { translations } = this.context;
+    const { chartSelected } = this.props;
     const years = [];
     const {
       selectedYears = [], selectedCountries = [], selectedSectors = [], selectedModalities = []
     } = this.props.selectedFilters;
     const { sectors } = this.props.filters.sectors;
-    const { countries } = this.props.filters.countries;
+    let { countries } = this.props.filters.countries;
     const { modalities } = this.props.filters.modalities;
     let categoriesSelection = [];
     if (countries.length > 0 && this.props.filtersRestrictions.countriesWithData.length > 0) {
-      // countries = countries.filter(c => this.props.filtersRestrictions.countriesWithData.includes(c.id));
+      countries = countries.filter(c => this.props.filtersRestrictions.countriesWithData.includes(c.id));
       categoriesSelection = this.generateCountriesCategories(countries);
     }
     const {
@@ -63,7 +65,7 @@ class HorizontalFilters extends Component {
     this._generateYearsFilters(years);
     return (
       <div className="h-filter-wrapper">
-        {this.props.chartSelected === SECTORS_CHART
+        {(chartSelected === SECTORS_CHART || chartSelected === MODALITY_CHART)
                 && (
                 <div className="carousel-filters-wrapper" id="country-accordion-filter">
                   <div className="col-md-6">
@@ -113,7 +115,7 @@ class HorizontalFilters extends Component {
                   </div>
                 </div>
                 )}
-        {this.props.chartSelected === HOME_CHART
+        {chartSelected === HOME_CHART
                 && (
                 <div className="row inner">
                   <div id="accordion-filter" className="home-filter">
@@ -217,3 +219,6 @@ const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
 export default connect(mapStateToProps, mapDispatchToProps)(HorizontalFilters);
 HorizontalFilters
   .contextType = SSCTranslationContext;
+HorizontalFilters.propTypes = {
+  handleSelectedFiltersChange: PropTypes.object.isRequired
+};

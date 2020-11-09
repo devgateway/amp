@@ -8,24 +8,68 @@ import java.util.List;
 
 public class NDDSolarChartData {
 
-    public static class ProgramData {
-        @JsonProperty("program")
-        private final AmpTheme program;
+    public static class Program {
 
-        @JsonProperty("amount")
-        private final BigDecimal amount;
+        private final String code;
+        private final String name;
+        private final int level;
 
-        public ProgramData(AmpTheme program, BigDecimal amount) {
-            this.program = program;
-            this.amount = amount;
+        public Program(String code, String name, int level) {
+            this.code = code;
+            this.name = name;
+            this.level = level;
         }
 
-        public AmpTheme getProgram() {
-            return program;
+        public String getCode() {
+            return code;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public int getLevel() {
+            return level;
+        }
+    }
+
+    public static class ProgramData {
+
+        private final Program programLvl1;
+
+        private final Program programLvl2;
+
+        private final Program programLvl3;
+
+        private final BigDecimal amount;
+
+        /**
+         * Convert an AmpTheme tree into a plain structure.
+         * @param program
+         * @param amount
+         */
+        public ProgramData(AmpTheme program, BigDecimal amount) {
+            this.programLvl3 = new Program(program.getThemeCode(), program.getName(), 3);
+            this.programLvl2 = new Program(program.getParentThemeId().getThemeCode(), program.getParentThemeId().getName(), 2);
+            this.programLvl1 = new Program(program.getParentThemeId().getParentThemeId().getThemeCode(),
+                    program.getParentThemeId().getParentThemeId().getName(), 1);
+            this.amount = amount;
         }
 
         public BigDecimal getAmount() {
             return amount;
+        }
+
+        public Program getProgramLvl1() {
+            return programLvl1;
+        }
+
+        public Program getProgramLvl2() {
+            return programLvl2;
+        }
+
+        public Program getProgramLvl3() {
+            return programLvl3;
         }
     }
 

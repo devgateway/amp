@@ -63,7 +63,7 @@ public class NDDEndpoints {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.IN_WORKSPACE, id = "getDirectIndirectReport")
     @ApiOperation("")
-    public GeneratedReport getDirectIndirectReport() {
+    public List<NDDSolarChartData> getDirectIndirectReport() {
         return DashboardService.generateDirectIndirectReport();
     }
 }

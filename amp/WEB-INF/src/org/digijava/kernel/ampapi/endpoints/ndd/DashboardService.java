@@ -7,13 +7,19 @@ import org.dgfoundation.amp.newreports.*;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.util.ProgramUtil;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DashboardService {
 
     // TODO: add params for filter widget.
-    public static GeneratedReport generateDirectIndirectReport() {
+    public static List<NDDSolarChartData> generateDirectIndirectReport() {
         ReportSpecificationImpl spec = new ReportSpecificationImpl("DirectIndirect", ArConstants.DONOR_TYPE);
         spec.setSummaryReport(true);
         spec.setGroupingCriteria(GroupingCriteria.GROUPING_TOTALS_ONLY);
@@ -45,6 +51,36 @@ public class DashboardService {
         GeneratedReport report = EndpointUtils.runReport(spec);
 
         // TODO: return a new class with {direct_lvl0_id|direct_lvl0_name|direct_lvl0_acronym|direct_lvl0_children}
-        return report;
+        List<NDDSolarChartData> list = new ArrayList<>();
+        ReportOutputColumn directColumn = report.leafHeaders.get(0);
+        ReportOutputColumn indirectColumn = report.leafHeaders.get(1);
+        ReportOutputColumn totalColumn = report.leafHeaders.get(2);
+        if (report.reportContents != null && report.reportContents.getChildren() != null) {
+            report.reportContents.getChildren().stream().forEach(children -> {
+                if (children.getChildren() != null && children.getChildren().size() > 0) {
+                    Map<ReportOutputColumn, ReportCell> content = children.getContents();
+                    NDDSolarChartData nddSolarChartData = new NDDSolarChartData(null, new ArrayList<>());
+                    AtomicBoolean add = new AtomicBoolean();
+                    children.getChildren().forEach(children2 -> {
+                        add.set(false);
+                        Map<ReportOutputColumn, ReportCell> content2 = children2.getContents();
+                        ReportCell programCell = children2.getContents().get(indirectColumn);
+                        if (((TextCell) programCell).entityId > -1) {
+                            add.set(true);
+                            AmpTheme indirect = ProgramUtil.getTheme(((TextCell) programCell).entityId);
+                            BigDecimal amount = ((AmountCell) content2.get(totalColumn)).extractValue();
+                            nddSolarChartData.getIndirectPrograms().add(new NDDSolarChartData.ProgramData(indirect, amount));
+                        }
+                    });
+                    if (add.get()) {
+                        AmpTheme direct = ProgramUtil.getTheme(((TextCell) content.get(directColumn)).entityId);
+                        BigDecimal amount = ((AmountCell) content.get(totalColumn)).extractValue();
+                        nddSolarChartData.setDirectProgram(new NDDSolarChartData.ProgramData(direct, amount));
+                        list.add(nddSolarChartData);
+                    }
+                }
+            });
+        }
+        return list;
     }
 }

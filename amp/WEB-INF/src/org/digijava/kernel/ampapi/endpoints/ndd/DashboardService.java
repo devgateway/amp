@@ -17,7 +17,10 @@ public class DashboardService {
         ReportSpecificationImpl spec = new ReportSpecificationImpl("DirectIndirect", ArConstants.DONOR_TYPE);
         spec.setSummaryReport(true);
         spec.setGroupingCriteria(GroupingCriteria.GROUPING_TOTALS_ONLY);
-        spec.setEmptyOutputForUnspecifiedData(false);
+        spec.setEmptyOutputForUnspecifiedData(true);
+        spec.setDisplayEmptyFundingColumns(false);
+        spec.setDisplayEmptyFundingRows(false);
+        spec.setDisplayEmptyFundingRowsWhenFilteringByTransactionHierarchy(false);
 
         AmpTheme directProgram = NDDService.getSrcProgramRoot();
         Set<AmpActivityProgramSettings> programSettings = directProgram.getProgramSettings();
@@ -34,11 +37,14 @@ public class DashboardService {
         } else if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES)) {
             spec.addColumn(new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_3));
         }
+        spec.addColumn(new ReportColumn(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_3));
         spec.setHierarchies(spec.getColumns());
 
         // TODO: add param for the amount (commitment, disbursement, etc).
         spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
         GeneratedReport report = EndpointUtils.runReport(spec);
+
+        // TODO: return a new class with {direct_lvl0_id|direct_lvl0_name|direct_lvl0_acronym|direct_lvl0_children}
         return report;
     }
 }

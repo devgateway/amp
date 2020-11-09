@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import '../popups.css';
 import ReactTooltip from 'react-tooltip';
 import { printChart, printInnerCharts } from '../../../../utils/PrintUtils';
@@ -47,19 +48,19 @@ class CountryPopupExport extends Component {
             onClick={this.exportChartToXls.bind(this)}>
             xls
           </li>
-          <PrintCountryCharts countriesForExport={countriesForExport} />
+          <PrintCountryCharts countriesForExport={countriesForExport}/>
           <li className="return-link" onClick={() => this.props.closeLargeCountryPopinAndClearFilter()}>X</li>
         </ul>
         <ReactTooltip
           place="bottom"
           multiline
           id="download-png"
-          className="download-checkbox-tooltip" />
+          className="download-checkbox-tooltip"/>
         <ReactTooltip
           place="bottom"
           multiline
           id="download-xls"
-          className="download-checkbox-tooltip" />
+          className="download-checkbox-tooltip"/>
       </div>
     );
   }
@@ -67,3 +68,6 @@ class CountryPopupExport extends Component {
 
 CountryPopupExport.contextType = SSCTranslationContext;
 export default CountryPopupExport;
+CountryPopupExport.propTypes = {
+  getExportData: PropTypes.func.isRequired
+}

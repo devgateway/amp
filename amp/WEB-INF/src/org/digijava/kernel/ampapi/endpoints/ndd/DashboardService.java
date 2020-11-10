@@ -26,6 +26,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DashboardService {
 
+    public DashboardService() {
+    }
+
     // TODO: add params for filter widget.
     public static List<NDDSolarChartData> generateDirectIndirectReport() {
         ReportSpecificationImpl spec = new ReportSpecificationImpl("DirectIndirect", ArConstants.DONOR_TYPE);

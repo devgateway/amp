@@ -16,7 +16,7 @@ class AppRoute extends Component {
                     <Route path="/ssc" component={SSCDashboardApp}/>
                     <Route path="/ampofflinedownload" component={AMPOfflineDownloadApp}/>
                     <Route path="/ndd" component={AdminNDDApp}/>
-                    <Route path="/ssc" component={NDDDashboardApp}/>
+                    <Route path="/ndddashboard" component={NDDDashboardApp}/>
                 </Suspense>
             </Router>
         );

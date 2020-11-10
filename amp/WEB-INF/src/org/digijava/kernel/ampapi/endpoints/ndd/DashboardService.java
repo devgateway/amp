@@ -24,9 +24,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class DashboardService {
+public final class DashboardService {
 
-    public DashboardService() {
+    private DashboardService() {
     }
 
     // TODO: add params for filter widget.

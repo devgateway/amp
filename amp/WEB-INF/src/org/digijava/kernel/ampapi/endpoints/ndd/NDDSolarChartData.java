@@ -12,12 +12,10 @@ public class NDDSolarChartData {
 
         private final String code;
         private final String name;
-        private final int level;
 
-        public Program(String code, String name, int level) {
+        public Program(String code, String name) {
             this.code = code;
             this.name = name;
-            this.level = level;
         }
 
         public String getCode() {
@@ -26,10 +24,6 @@ public class NDDSolarChartData {
 
         public String getName() {
             return name;
-        }
-
-        public int getLevel() {
-            return level;
         }
     }
 
@@ -50,11 +44,11 @@ public class NDDSolarChartData {
          * @param amount
          */
         public ProgramData(AmpTheme program, BigDecimal amount) {
-            this.programLvl3 = new Program(program.getThemeCode(), program.getName(), 3);
+            this.programLvl3 = new Program(program.getThemeCode(), program.getName());
             this.programLvl2 = new Program(program.getParentThemeId().getThemeCode(),
-                    program.getParentThemeId().getName(), 2);
+                    program.getParentThemeId().getName());
             this.programLvl1 = new Program(program.getParentThemeId().getParentThemeId().getThemeCode(),
-                    program.getParentThemeId().getParentThemeId().getName(), 1);
+                    program.getParentThemeId().getParentThemeId().getName());
             this.amount = amount;
         }
 

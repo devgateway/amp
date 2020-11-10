@@ -56,4 +56,13 @@ public class NDDEndpoints {
     public List<NDDService.SingleProgramData> getAvailablePrograms() {
         return nddService.getSinglePrograms();
     }
+
+    @GET
+    @Path("direct-indirect-report")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = AuthRule.IN_WORKSPACE, id = "getDirectIndirectReport")
+    @ApiOperation("")
+    public List<NDDSolarChartData> getDirectIndirectReport() {
+        return DashboardService.generateDirectIndirectReport();
+    }
 }

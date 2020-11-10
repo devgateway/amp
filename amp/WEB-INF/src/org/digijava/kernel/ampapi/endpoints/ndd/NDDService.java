@@ -92,7 +92,7 @@ public class NDDService {
     public List<SingleProgramData> getSinglePrograms() {
         List<SingleProgramData> availablePrograms = new ArrayList<>();
         List<AmpTheme> src = getAvailablePrograms(false);
-        List<AmpTheme> dst = getAvailablePrograms(true);
+        List<AmpTheme> dst = getAvailablePrograms(false);
         availablePrograms.addAll(src.stream().map(p -> new SingleProgramData(p.getAmpThemeId(), p.getName(), false))
                 .collect(Collectors.toList()));
         availablePrograms.addAll(dst.stream().map(p -> new SingleProgramData(p.getAmpThemeId(), p.getName(), true))
@@ -198,7 +198,7 @@ public class NDDService {
         return ProgramUtil.getTheme(Long.valueOf(indirectProgram));
     }
 
-    private AmpTheme getSrcProgramRoot() {
+    public static AmpTheme getSrcProgramRoot() {
         String primaryProgram = FeaturesUtil.getGlobalSettingValue(PRIMARY_PROGRAM);
         if (primaryProgram == null) {
             return null;

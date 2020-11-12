@@ -16,17 +16,36 @@ class SunburstChart extends Component {
   render() {
     return (
       <Plot
-        data={[
-          {
-            x: [1, 2, 3],
-            y: [2, 6, 3],
-            type: 'scatter',
-            mode: 'lines+markers',
-            marker: { color: 'red' },
-          },
-          { type: 'bar', x: [1, 2, 3], y: [2, 5, 3] },
-        ]}
-        layout={{ width: 320, height: 240, title: 'A Fancy Plot' }}
+        data={
+          [{
+            values: [22.5, 9.2, 20.9, 23.4, 2.9, 1.5, 19.6],
+            labels: ['IND11', 'IND12', 'IND13', 'IND21', 'IND22', 'IND31', 'IND32' ],
+            text: 'INDIRECT',
+            domain: {x: [0.15, 0.85], y: [0.15, 0.85]},
+            textposition: 'inside',
+            direction: 'clockwise',
+            name: 'INDIRECT',
+            hoverinfo: 'label+percent+name',
+            hole: .5,
+            type: 'pie',
+            sort: false,
+            textinfo: 'label',
+            marker:{line: {color: 'white', 'width': 1}}
+          }, {
+            values: [30, 15, 12],
+            labels: ['D1', 'D2', 'D3' ],
+            name: 'DIRECT',
+            hoverinfo: 'label+percent+name',
+            textposition: 'outside',
+            hole: .7,
+            type: 'pie',
+            sort: false,
+            direction: 'clockwise',
+            textinfo: 'label',
+            marker:{line: {'color': 'white', 'width': 1}}
+          }]
+        }
+        layout={{ width: 800, height: 600, title: 'TITLE' }}
       />
     );
   }

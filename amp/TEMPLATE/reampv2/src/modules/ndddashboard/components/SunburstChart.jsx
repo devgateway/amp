@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Sunburst } from '@nivo/sunburst';
-import data from '../test/data.json';
+
+// Dont use react-plotly directly: https://github.com/plotly/react-plotly.js/issues/135#issuecomment-501398125
+import Plotly from "plotly.js";
+import createPlotlyComponent from "react-plotly.js/factory";
+const Plot = createPlotlyComponent(Plotly);
 
 class SunburstChart extends Component {
   constructor(props) {
@@ -12,29 +15,19 @@ class SunburstChart extends Component {
 
   render() {
     return (
-      <Sunburst
-        data={data}
-        margin={{
-          top: 40,
-          right: 20,
-          bottom: 20,
-          left: 20
-        }}
-        height={500}
-        width={500}
-        identity="name"
-        value="loc"
-        cornerRadius={2}
-        borderWidth={1}
-        borderColor="white"
-        colors="set2"
-        colorBy="id"
-        childColor="inherit"
-        animate
-        motionStiffness={90}
-        motionDamping={15}
-        isInteractive
-    />
+      <Plot
+        data={[
+          {
+            x: [1, 2, 3],
+            y: [2, 6, 3],
+            type: 'scatter',
+            mode: 'lines+markers',
+            marker: { color: 'red' },
+          },
+          { type: 'bar', x: [1, 2, 3], y: [2, 5, 3] },
+        ]}
+        layout={{ width: 320, height: 240, title: 'A Fancy Plot' }}
+      />
     );
   }
 }
@@ -43,5 +36,4 @@ const mapStateToProps = state => ({});
 
 const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
 
-Sunburst.contextType = {};
 export default connect(mapStateToProps, mapDispatchToProps)(SunburstChart);

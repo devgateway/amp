@@ -7,7 +7,7 @@ class NDDDashboardRouter extends Component {
   render() {
     return (
       <>
-        <Route path="/ndddashboard" exact component={NDDDashboardHome}/>
+        <Route path="/ndddashboard" exact component={NDDDashboardHome} />
       </>
     );
   }

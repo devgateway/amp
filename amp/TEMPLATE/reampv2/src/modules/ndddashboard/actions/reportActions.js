@@ -9,10 +9,10 @@ export function fetchIndirectReportPending() {
 }
 
 // rest/ndd/direct-indirect-report
-export function fetchIndirectReportSuccess(directIindirectReport) {
+export function fetchIndirectReportSuccess(directIndirectReport) {
   return {
     type: FETCH_DIRECT_INDIRECT_NDD_SUCCESS,
-    payload: directIindirectReport
+    payload: directIndirectReport
   };
 }
 
@@ -21,4 +21,4 @@ export function fetchIndirectReportError(error) {
     type: FETCH_DIRECT_INDIRECT_NDD_ERROR,
     error
   };
-};
+}

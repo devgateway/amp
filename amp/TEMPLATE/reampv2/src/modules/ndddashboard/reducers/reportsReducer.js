@@ -18,7 +18,7 @@ export default (state = initialState, action) => {
       };
     case FETCH_DIRECT_INDIRECT_NDD_SUCCESS: {
       return {
-        ...this.state,
+        ...state,
         nddLoadingPending: false,
         nddLoaded: true,
         ndd: action.payload

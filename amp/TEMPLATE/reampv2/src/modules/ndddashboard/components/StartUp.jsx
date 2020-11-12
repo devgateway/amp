@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import fetchTranslations from '../../../utils/actions/fetchTranslations';
 import { Loading } from '../../../utils/components/Loading';
-import defaultTrnPack from '../config/initialTranslations';
+import defaultTrnPack from '../config/initialTranslations.json';
 
 export const NDDTranslationContext = React.createContext({ translations: defaultTrnPack });
 
@@ -13,28 +13,28 @@ export const NDDTranslationContext = React.createContext({ translations: default
  * TODO check if we should abstract it to a Load Translations component to avoid copy ^
  */
 class Startup extends Component {
-    static propTypes = {
-      translationPending: PropTypes.bool,
-      translations: PropTypes.object
-    };
+  static propTypes = {
+    translationPending: PropTypes.bool,
+    translations: PropTypes.object
+  };
 
-    componentDidMount() {
-      this.props.fetchTranslations(defaultTrnPack);
-    }
+  componentDidMount() {
+    this.props.fetchTranslations(defaultTrnPack);
+  }
 
-    render() {
-      if (this.props.translationPending) {
-        return (<Loading />);
-      } else {
-        const { translations } = this.props;
-        document.title = translations['amp.ndd.dashboard:page-title'];
-        return (
-          <NDDTranslationContext.Provider value={{ translations }}>
-            {this.props.children}
-          </NDDTranslationContext.Provider>
-        );
-      }
+  render() {
+    if (this.props.translationPending) {
+      return (<Loading />);
+    } else {
+      const { translations } = this.props;
+      document.title = translations['amp.ndd.dashboard:page-title'];
+      return (
+        <NDDTranslationContext.Provider value={{ translations }}>
+          {this.props.children}
+        </NDDTranslationContext.Provider>
+      );
     }
+  }
 }
 
 const mapStateToProps = state => ({
@@ -47,3 +47,6 @@ const mapDispatchToProps = dispatch => bindActionCreators({
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Startup);
+Startup.propTypes = {
+  children: PropTypes.object.isRequired
+};

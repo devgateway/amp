@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import SunburstChart from './SunburstChart';
+import NestedDonutsProgramChart from './NestedDonutsProgramChart';
 import callReport from '../actions/callReports';
 
 class MainDashboardContainer extends Component {
@@ -11,20 +11,24 @@ class MainDashboardContainer extends Component {
   }
 
   render() {
-    const { error } = this.props;
+    const { error, ndd, nddLoadingPending, nddLoaded } = this.props;
     if (error) {
       // TODO proper error handling
       return (<div>ERROR</div>);
     } else {
-      return (
-        <div>
-          <div className="solar-container">
-            <div><SunburstChart /></div>
-            <div>legends</div>
+      if (nddLoaded && !nddLoadingPending) {
+        return (
+          <div>
+            <div className="solar-container">
+              <div><NestedDonutsProgramChart data={this.props.ndd}/></div>
+              <div>legends</div>
+            </div>
+            <div className="year-chart-container">amounts by year</div>
           </div>
-          <div className="year-chart-container">amounts by year</div>
-        </div>
-      );
+        );
+      }
+      // TODO: proper loading component.
+      return (<div>Loading...</div>);
     }
   }
 }

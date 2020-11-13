@@ -1,2 +1,9 @@
 export const TRN_PREFIX = 'amp.ndd.dashboard:';
 export const DIRECT_INDIRECT_REPORT = '/rest/ndd/direct-indirect-report';
+export const DIRECT_PROGRAM = 'directProgram';
+export const INDIRECT_PROGRAMS = 'indirectPrograms';
+export const PROGRAMLVL1 = 'programLvl1';
+export const PROGRAMLVL2 = 'programLvl2';
+export const PROGRAMLVL3 = 'programLvl3';
+export const AMOUNT = 'amount';
+export const CODE = 'code';

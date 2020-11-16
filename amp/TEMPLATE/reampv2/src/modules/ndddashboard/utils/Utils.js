@@ -1,3 +1,4 @@
+/* eslint-disable  no-bitwise */
 export function hashCode(str) { // java String#hashCode
   let hash = 0;
   for (let i = 0; i < str.length; i++) {

@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { CSSTransitionGroup } from 'react-transition-group'
 
 // Dont use react-plotly directly: https://github.com/plotly/react-plotly.js/issues/135#issuecomment-501398125
 import Plotly from "plotly.js";
 import createPlotlyComponent from "react-plotly.js/factory";
 import { DIRECT_PROGRAM, INDIRECT_PROGRAMS, PROGRAMLVL1, AMOUNT, CODE } from '../utils/constants';
 import {intToRGB, hashCode} from '../utils/Utils';
+import styles from './styles.css'
 
 const Plot = createPlotlyComponent(Plotly);
 
@@ -96,38 +98,67 @@ class NestedDonutsProgramChart extends Component {
     const innerDataForChart = this.innerDataToChartValues(innerData, outerData);
     const innerColors = innerDataForChart.map(i => intToRGB(hashCode(i.name)));
     return (
-      <Plot
-        data={
-          [{
-            values: innerDataForChart.map(i => i[AMOUNT]),
-            labels: innerDataForChart.map(i => i[CODE]),
-            text: 'INDIRECT',
-            domain: {x: [0.15, 0.85], y: [0.15, 0.85]},
-            textposition: 'inside',
-            direction: 'clockwise',
-            name: 'INDIRECT',
-            hoverinfo: 'label+percent+name',
-            hole: .5,
-            type: 'pie',
-            sort: false,
-            textinfo: 'label',
-            marker:{colors: innerColors, line: {color: 'white', 'width': 1}}
-          }, {
-            values: outerData.map(i => i[AMOUNT]),
-            labels: outerData.map(i => i[CODE]),
-            name: 'DIRECT',
-            hoverinfo: 'label+percent+name',
-            textposition: 'outside',
-            hole: .7,
-            type: 'pie',
-            sort: false,
-            direction: 'clockwise',
-            textinfo: 'label',
-            marker:{line: {'color': 'white', 'width': 1}}
-          }]
-        }
-        layout={{ width: 800, height: 600, title: 'Title', showlegend: false }}
-      />
+      <CSSTransitionGroup
+        transitionName="solar-chart"
+        transitionAppear={true}
+        transitionAppearTimeout={500}>
+        <Plot
+          data={
+            [{
+              values: innerDataForChart.map(i => i[AMOUNT]),
+              labels: innerDataForChart.map(i => i[CODE]),
+              text: 'INDIRECT',
+              domain: {
+                x: [0.15, 0.85],
+                y: [0.15, 0.85]
+              },
+              textposition: 'inside',
+              direction: 'clockwise',
+              name: 'INDIRECT',
+              hoverinfo: 'label+percent+name',
+              hole: .5,
+              type: 'pie',
+              sort: false,
+              textinfo: 'label',
+              marker: {
+                colors: innerColors,
+                line: {
+                  color: 'white',
+                  'width': 1
+                }
+              }
+            }, {
+              values: outerData.map(i => i[AMOUNT]),
+              labels: outerData.map(i => i[CODE]),
+              name: 'DIRECT',
+              hoverinfo: 'label+percent+name',
+              textposition: 'outside',
+              hole: .7,
+              type: 'pie',
+              sort: false,
+              direction: 'clockwise',
+              textinfo: 'label',
+              marker: {
+                line: {
+                  'color': 'white',
+                  'width': 1
+                }
+              }
+            }]
+          }
+          layout={{
+            width: 800,
+            height: 600,
+            title: 'Title',
+            showlegend: false,
+            displaylogo: false
+          }}
+          config={{ displaylogo: false }}
+          onClick={(target) => {
+            console.error(target);
+          }}
+        />
+      </CSSTransitionGroup>
     );
   }
 }

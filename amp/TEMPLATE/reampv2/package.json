@@ -34,6 +34,7 @@
     "react-scripts": "3.4.1",
     "react-spinner": "^0.2.7",
     "react-tooltip": "^4.2.6",
+    "react-transition-group": "^1.2.1",
     "react-visibility-sensor": "^5.1.1",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0"

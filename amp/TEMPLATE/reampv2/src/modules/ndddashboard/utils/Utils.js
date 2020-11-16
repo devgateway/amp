@@ -14,3 +14,8 @@ export function intToRGB(i) {
 
   return '00000'.substring(0, 6 - c.length) + c;
 }
+
+export function addAlpha(color, opacity) {
+  const _opacity = Math.round(Math.min(Math.max(opacity || 1, 0), 1) * 255);
+  return color + _opacity.toString(16).toUpperCase();
+}

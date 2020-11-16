@@ -7,3 +7,5 @@ export const PROGRAMLVL2 = 'programLvl2';
 export const PROGRAMLVL3 = 'programLvl3';
 export const AMOUNT = 'amount';
 export const CODE = 'code';
+export const DIRECT = 'DIRECT';
+export const INDIRECT = 'INDIRECT';

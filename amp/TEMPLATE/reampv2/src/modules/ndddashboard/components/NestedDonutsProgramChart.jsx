@@ -7,7 +7,8 @@ import { CSSTransitionGroup } from 'react-transition-group'
 // Dont use react-plotly directly: https://github.com/plotly/react-plotly.js/issues/135#issuecomment-501398125
 import Plotly from "plotly.js";
 import createPlotlyComponent from "react-plotly.js/factory";
-import { DIRECT_PROGRAM, INDIRECT_PROGRAMS, PROGRAMLVL1, AMOUNT, CODE, DIRECT, INDIRECT } from '../utils/constants';
+import { DIRECT_PROGRAM, INDIRECT_PROGRAMS, PROGRAMLVL1, AMOUNT, CODE, DIRECT, INDIRECT,
+  TRANSITIONS} from '../utils/constants';
 import {intToRGB, hashCode, addAlpha} from '../utils/Utils';
 import styles from './styles.css'
 
@@ -99,8 +100,6 @@ class NestedDonutsProgramChart extends Component {
   handleOuterChartClick(event, outerData) {
     const { selectedDirectProgram } = this.state;
     if (event.points[0].data.name === DIRECT) {
-      console.error(event);
-      console.error(outerData);
       if (!selectedDirectProgram) {
         this.setState({ selectedDirectProgram: outerData[event.points[0].i] });
       } else {
@@ -143,10 +142,12 @@ class NestedDonutsProgramChart extends Component {
     // Note: Remove prop 'key' if you want to disable the fade effect after clicking the outer ring.
     return (
       <CSSTransitionGroup
-        key={selectedDirectProgram}
+        /* key={selectedDirectProgram} */
         transitionName="solar-chart"
         transitionAppear={true}
-        transitionAppearTimeout={100}>
+        transitionEnterTimeout={TRANSITIONS}
+        transitionLeaveTimeout={TRANSITIONS}
+        transitionAppearTimeout={TRANSITIONS}>
         <Plot
           key="solarChart"
           data={

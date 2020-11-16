@@ -9,3 +9,4 @@ export const AMOUNT = 'amount';
 export const CODE = 'code';
 export const DIRECT = 'DIRECT';
 export const INDIRECT = 'INDIRECT';
+export const TRANSITIONS = 100;

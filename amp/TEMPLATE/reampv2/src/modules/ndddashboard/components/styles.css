@@ -1,0 +1,26 @@
+.solar-chart-enter {
+    opacity: 0.01;
+}
+
+.solar-chart-enter.solar-chart-enter-active {
+    opacity: 1;
+    transition: opacity 500ms ease-in;
+}
+
+.solar-chart-leave {
+    opacity: 1;
+}
+
+.solar-chart-leave.solar-chart-leave-active {
+    opacity: 0.01;
+    transition: opacity 300ms ease-in;
+}
+
+.solar-chart-appear {
+    opacity: 0.01;
+}
+
+.solar-chart-appear.solar-chart-appear-active {
+    opacity: 1;
+    transition: opacity .5s ease-in;
+}

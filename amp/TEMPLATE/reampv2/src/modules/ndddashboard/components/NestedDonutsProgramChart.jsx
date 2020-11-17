@@ -208,12 +208,20 @@ class NestedDonutsProgramChart extends Component {
             }]
           }
           layout={{
-            width: 800,
-            height: 600,
-            title: 'Title',
+            autosize: false,
+            paper_bgcolor: "rgba(0,0,0,0)",
+            width: 600,
+            height: 500,
+            title: '',
             showlegend: false,
-            displaylogo: false,
-            transition
+            transition,
+            margin: {
+              l: 0,
+              r: 0,
+              b: 10,
+              t: 20,
+              pad: 4
+            },
           }}
           config={{ displaylogo: false }}
           onClick={event => this.handleOuterChartClick(event, outerData)}

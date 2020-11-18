@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import './popups.css';
 import CountryPopupContainer from './countryLarge/CountryPopupContainer';
 import { calculateColumnCount } from '../../../utils/Utils';
@@ -6,13 +7,13 @@ import { SSCTranslationContext } from '../../StartUp';
 
 class CountryPopupOverlay extends Component {
   render() {
-    if (!this.props.show) {
+    const {
+      show, projects, closeLargeCountryPopinAndClearFilter, countriesForExport,
+      countriesForExportChanged, getExportData, chartSelected
+    } = this.props;
+    if (!show) {
       return null;
     }
-    const {
-      projects, closeLargeCountryPopinAndClearFilter, countriesForExport, countriesForExportChanged,
-      getExportData
-    } = this.props;
     if (!projects || projects.length === 0) {
       return null;
     }
@@ -33,13 +34,23 @@ class CountryPopupOverlay extends Component {
             countriesForExport={countriesForExport}
             countriesForExportChanged={countriesForExportChanged}
             getExportData={getExportData}
-
-                    />
+            chartSelected={chartSelected}
+          />
         </div>
       </div>
-    );
+    )
+      ;
   }
 }
 
 export default CountryPopupOverlay;
 CountryPopupOverlay.contextType = SSCTranslationContext;
+CountryPopupOverlay.propTypes = {
+  show: PropTypes.bool.isRequired,
+  projects: PropTypes.array.isRequired,
+  closeLargeCountryPopinAndClearFilter: PropTypes.func.isRequired,
+  countriesForExportChanged: PropTypes.func.isRequired,
+  getExportData: PropTypes.func.isRequired,
+  countriesForExport: PropTypes.array.isRequired
+
+};

@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import NestedDonutsProgramChart from './NestedDonutsProgramChart';
 import callReport from '../actions/callReports';
 import { Col } from 'react-bootstrap';
+import FundingTypeSelector from './FundingTypeSelector';
 
 class MainDashboardContainer extends Component {
   componentDidMount() {
@@ -23,7 +24,10 @@ class MainDashboardContainer extends Component {
             <Col md={6}>
               <div>
                 <div className="solar-container">
-                  <div><NestedDonutsProgramChart data={ndd}/></div>
+                  <div>
+                    <NestedDonutsProgramChart data={ndd}/>
+                    <FundingTypeSelector/>
+                  </div>
                 </div>
                 <div className="year-chart-container">amounts by year</div>
               </div>
@@ -42,6 +46,7 @@ class MainDashboardContainer extends Component {
 
 const mapStateToProps = state => ({
   ndd: state.reportsReducer.ndd,
+  settings: state.reportsReducer.settings,
   error: state.reportsReducer.error,
   nddLoaded: state.reportsReducer.nddLoaded,
   nddLoadingPending: state.reportsReducer.nddLoadingPending,

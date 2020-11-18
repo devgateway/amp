@@ -1375,7 +1375,7 @@ public class AmpMessageWorker {
     private static void defineReceiversForSummaryChange(AmpMessage newMsg, Event e, TemplateAlert template) throws
             Exception {
 
-        User user = UserUtils.getUserByEmail(e.getParameters().get(SummaryChangeNotificationTrigger
+        User user = UserUtils.getUserByEmailAddress(e.getParameters().get(SummaryChangeNotificationTrigger
                 .PARAM_SUMMARY_EMAIL).toString());
         HashMap<String, String> params = new HashMap<String, String>();
         params.put(SummaryChangeNotificationTrigger.PARAM_SUMMARY_BODY, String.valueOf(

@@ -1,44 +1,42 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 
 /**
- * TODO rename to Reflective
- *
- * FIXME optimize! searching java.lang.reflect.Field involves involves throwing exceptions which are exceptionally slow
- *       if we keep reference to Field then get/set is 36 times faster
+ * Treats collections as values. In order to edit a collection one has to retrieve the collection, edit it, then write
+ * the collection back. Collections as values are necessary because in {@link DiscriminatedFieldAccessor} we would need
+ * to implement a collection wrapper that can iterate/manipulate the wrapped collection on the fly.
  *
  * @author Octavian Ciubotaru
  */
 public class SimpleFieldAccessor implements FieldAccessor {
 
-    private String fieldName;
+    private Field targetField;
+    private boolean isCollection;
 
-    public SimpleFieldAccessor(String fieldName) {
-        this.fieldName = fieldName;
+    public SimpleFieldAccessor(Field field) {
+        this.targetField = field;
+        isCollection = Collection.class.isAssignableFrom(targetField.getType());
     }
 
     @Override
     public Object get(Object targetObject) {
         Objects.requireNonNull(targetObject);
         try {
-            Object objectValue = FieldUtils.readField(targetObject, fieldName, true);
-            
-            if (objectValue instanceof Collection) {
-                List<Object> items = new ArrayList<>();
-                items.addAll((Collection) objectValue);
-                return items;
-            }
-            
-            return objectValue;
+            Object objectValue = FieldUtils.readField(targetField, targetObject, true);
+            if (isCollection) {
+                return new ArrayList<>((Collection) objectValue);
+            } else {
+                return objectValue;
+           }
         } catch (IllegalAccessException e) {
             throw new RuntimeException(
-                    String.format("Failed to read %s field value from %s.", fieldName, targetObject));
+                    String.format("Failed to read %s from %s.", targetField, targetObject));
         }
     }
 
@@ -46,19 +44,21 @@ public class SimpleFieldAccessor implements FieldAccessor {
     public void set(Object targetObject, Object value) {
         Objects.requireNonNull(targetObject);
         try {
-            Object currentValue = FieldUtils.readField(targetObject, fieldName, true);
-            if (currentValue instanceof Collection) {
+            if (isCollection) {
+                Object currentValue = FieldUtils.readField(targetField, targetObject, true);
                 ((Collection) currentValue).clear();
                 ((Collection) currentValue).addAll((Collection) value);
-                FieldUtils.writeField(targetObject, fieldName, currentValue, true);
             } else {
-                FieldUtils.writeField(targetObject, fieldName, value, true);
+                FieldUtils.writeField(targetField, targetObject, value, true);
             }
-            
         } catch (IllegalAccessException e) {
             throw new RuntimeException(
-                    String.format("Failed to write %s field value to %s.", fieldName, targetObject));
+                    String.format("Failed to write %s to %s.", targetField, targetObject));
         }
     }
 
+    @Override
+    public String toString() {
+        return "Reflective accessor for " + targetField;
+    }
 }

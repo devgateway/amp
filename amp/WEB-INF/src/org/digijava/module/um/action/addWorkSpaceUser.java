@@ -11,6 +11,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
+import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -47,7 +48,7 @@ public class addWorkSpaceUser extends Action {
             }
         } else {
             AmpTeam ampTeam = TeamUtil.getAmpTeam(upMemForm.getTeamId());
-            User user = org.digijava.module.aim.util.DbUtil.getUser(upMemForm.getEmail());
+            User user = UserUtils.getUserByEmailAddress(upMemForm.getEmail());
 
             /* check if the user have entered an invalid user id */
             if (user == null) {

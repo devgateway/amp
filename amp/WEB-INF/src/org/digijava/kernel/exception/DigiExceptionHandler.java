@@ -27,7 +27,6 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.ampapi.endpoints.util.SecurityUtil;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.helper.Constants;
 
@@ -88,12 +87,6 @@ public final class DigiExceptionHandler
             info.setErrorMessage(errorMsg + ";" + info.getErrorMessage());
         }
         //in case an exception happend check if we need to clean the request for token authentication
-
-        if ("true".equals(TLSUtils.getRequest().getAttribute(SecurityUtil.REMOVE_SESSION))) {
-            TLSUtils.getRequest().getSession().removeAttribute(Constants.CURRENT_USER);
-            TLSUtils.getRequest().getSession().removeAttribute(Constants.CURRENT_MEMBER);
-            TLSUtils.getRequest().removeAttribute(SecurityUtil.REMOVE_SESSION);
-        }
 
         return ExceptionHelper.processExceptionInfo(info, request, response);
 

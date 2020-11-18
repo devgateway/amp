@@ -90,7 +90,7 @@ public class IndicatorExporter {
 
     public static void populateIndicatorLayerTableValues(HSSFSheet sheet,int rowIndex, AmpCategoryValue categoryValue, String name) {
         Set<AmpCategoryValueLocations> locations = new HashSet<AmpCategoryValueLocations>();
-        if (CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(categoryValue)) {
+        if (CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.equalsCategoryValue(categoryValue)) {
             locations.add(DynLocationManagerUtil.getDefaultCountry());
         } else {
             locations = DynLocationManagerUtil.getLocationsByLayer(categoryValue);

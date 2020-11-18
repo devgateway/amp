@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import Sidebar from './components/layout/sidebar/sidebar';
 import MapContainer from './components/layout/map/MapContainer';
 import { SSCTranslationContext } from './components/StartUp';
-import { HOME_CHART, SECTORS_CHART } from './utils/constants';
+import { HOME_CHART, MODALITY_CHART, SECTORS_CHART } from './utils/constants';
 import { DONOR_COUNTRY, MODALITIES, PRIMARY_SECTOR } from './utils/FieldsConstants';
 import * as CallReports from './actions/callReports';
 
@@ -43,7 +43,7 @@ class SscDashboardHome extends Component {
       this.getProjectsData();
     }
     const initialData = this.getFilteredData();
-
+    // eslint-disable-next-line react/no-did-mount-set-state
     this.setState({
       filteredProjects: initialData
     });
@@ -56,7 +56,7 @@ class SscDashboardHome extends Component {
         const initialData = this.getFilteredData();
         this.countriesWithData = initialData.map(c => c.id);
         const selectedYears = [];
-        selectedYears.push(projects.activities.mostRecentYear);
+        // selectedYears.push(projects.activities.mostRecentYear);
         this.handleSelectedYearChanged(selectedYears);
         // eslint-disable-next-line react/no-did-update-set-state
         this.setState({
@@ -175,7 +175,8 @@ class SscDashboardHome extends Component {
       return { countriesForExport };
     });
     const { chartSelected } = this.state;
-    if (chartSelected === SECTORS_CHART && pSelectedCountries && pSelectedCountries.length >= 1) {
+    if ((chartSelected === SECTORS_CHART || chartSelected === MODALITY_CHART)
+        && pSelectedCountries && pSelectedCountries.length >= 1) {
       // currently we open large popin, in next tickets we will open also the popin for 2/3 countries selected
       this.setState({ showLargeCountryPopin: true });
     } else {
@@ -267,6 +268,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({
 }, dispatch);
 
 SscDashboardHome.contextType = SSCTranslationContext;
+
 SscDashboardHome.propTypes = {
   projects: PropTypes.object.isRequired,
   loadSectorsFilters: PropTypes.func.isRequired,

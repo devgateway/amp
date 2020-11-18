@@ -1,15 +1,16 @@
 import EllipsisText from 'react-ellipsis-text';
 import React from 'react';
 import * as FieldsConstants from './FieldsConstants';
+import { COLOR_MAP, COLOR_MAP_CUSTOM, MODALITY_CHART, SECTOR_COLOR_MAP } from './constants';
 
 export function generateStructureBasedOnSector(objectData) {
-  return generateStructureBasedOnSectorProjectCount(objectData).sectors;
+  return generateStructureBasedOnSectorProjectCount(objectData).groupings;
 }
 
 export function generateStructureBasedOnSectorProjectCount(objectData) {
   const projectSectors = {};
   projectSectors.uniqueProjects = new Set();
-  projectSectors.sectors = [];
+  projectSectors.groupings = [];
   objectData[FieldsConstants.PRIMARY_SECTOR].forEach(s => {
     const sector = {};
     sector.id = s.id;
@@ -20,9 +21,59 @@ export function generateStructureBasedOnSectorProjectCount(objectData) {
         projectSectors.uniqueProjects.add(p.id);
       });
     });
-    projectSectors.sectors.push(sector);
+    projectSectors.groupings.push(sector);
   });
   return projectSectors;
+}
+
+export function generateStructureBasedOnModalitiesProjectCount(objectData) {
+  const projectModalities = {};
+  projectModalities.groupings = new Map();
+  projectModalities.uniqueProjects = new Set();
+  objectData[FieldsConstants.PRIMARY_SECTOR].forEach(s => {
+    s[FieldsConstants.MODALITIES].forEach(m => {
+      let projectModality;
+      if (!projectModalities.groupings.has(m.id)) {
+        projectModality = {};
+        projectModality.id = m.id;
+        projectModality.code = m.id;
+        projectModality.activities = new Set();
+      } else {
+        projectModality = projectModalities.groupings.get(m.id);
+      }
+      m.activities.forEach(p => {
+        projectModality.activities.add(p.id);
+        projectModalities.uniqueProjects.add(p.id);
+      });
+      projectModalities.groupings.set(m.id, projectModality);
+    });
+  });
+
+  projectModalities.groupings = Array.from(projectModalities.groupings.values());
+  calculateColors(projectModalities.groupings, MODALITY_CHART);
+  return projectModalities;
+}
+
+function calculateColors(groupings, chartSelected) {
+  groupings.forEach(g => {
+    getColor(g, chartSelected);
+  });
+}
+
+export function getColor(item, chartSelected) {
+  let colorMap;
+  let color;
+  colorMap = COLOR_MAP.get(chartSelected);
+  if (!colorMap) {
+    colorMap = new Map();
+    COLOR_MAP.set(chartSelected, colorMap);
+  }
+  color = colorMap.get(item.code);
+  if (!color) {
+    color = COLOR_MAP_CUSTOM.get(chartSelected).shift();
+    colorMap.set(item.code, color);
+  }
+  return color;
 }
 
 export function getProjects(projects, elementId, activitiesDetails, ellipsisLength, na) {
@@ -40,33 +91,33 @@ export function getProjects(projects, elementId, activitiesDetails, ellipsisLeng
       <a href={p.ampUrl} target="_blank" rel="noopener noreferrer">
         <EllipsisText
           text={p.projectName}
-          length={ellipsisLength} />
+          length={ellipsisLength}/>
       </a>
     </li>
   ));
 }
 
-export function getChartData(projectsBySectors, sectors, includeActivities) {
-  const totalActivities = projectsBySectors.sectors.reduce((prev, s) => prev + s.activities.size, 0);
+export function getChartData(projectsByGroupings, groupings, includeActivities) {
+  const totalActivities = projectsByGroupings.groupings.reduce((prev, g) => prev + g.activities.size, 0);
   let tail = 0;
-  return projectsBySectors.sectors.map(s => {
-    const sector = {};
-    const sectorFilter = sectors.find(ss => ss.id === s.id);
-    sector.id = s.id.toString();
-    sector.code = sectorFilter.code;
-    sector.value = s.activities.size;
+  return projectsByGroupings.groupings.map(g => {
+    const grouping = {};
+    const groupingsFilter = groupings.find(ss => ss.id === g.id);
+    grouping.id = g.id.toString();
+    grouping.code = groupingsFilter.code ? groupingsFilter.code : groupingsFilter.id;
+    grouping.value = g.activities.size;
     if (includeActivities) {
-      sector.activities = s.activities;
+      grouping.activities = g.activities;
     }
 
-    const per = ((sector.value * 100) / totalActivities);
+    const per = ((grouping.value * 100) / totalActivities);
     const prevBaseLine = tail;
     tail += per;
     const tailRounded = Math.round((tail + Number.EPSILON) * 100) / 100;
-    sector.percentage = Math.round(((tailRounded - prevBaseLine) + Number.EPSILON) * 100) / 100;
-    sector.label = `${sectorFilter.name} ${sector.percentage}%`;
-    sector.simpleLabel = sectorFilter.name;
-    return sector;
+    grouping.percentage = Math.round(((tailRounded - prevBaseLine) + Number.EPSILON) * 100) / 100;
+    grouping.label = `${groupingsFilter.name} ${grouping.percentage}%`;
+    grouping.simpleLabel = groupingsFilter.name;
+    return grouping;
   }).sort(((a, b) => (a.value > b.value ? -1 : 1)));
 }
 

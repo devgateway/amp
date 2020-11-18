@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Sidebar from './components/layout/sidebar/sidebar';
 import MapContainer from './components/layout/map/MapContainer';
 import { SSCTranslationContext } from './components/StartUp';
-import { HOME_CHART, SECTORS_CHART } from './utils/constants';
+import { HOME_CHART, MODALITY_CHART, SECTORS_CHART } from './utils/constants';
 import { DONOR_COUNTRY, MODALITIES, PRIMARY_SECTOR } from './utils/FieldsConstants';
 import { loadActivitiesDetails } from './actions/callReports';
 import { loadCountriesFilters, loadModalitiesFilters, loadSectorsFilters } from './actions/loadFilters';
@@ -27,10 +27,6 @@ class SssDashboardHome extends Component {
         selectedModalities: []
       }
     };
-  }
-
-  countriesForExportChanged(countries) {
-    this.setState({ countriesForExport: countries });
   }
 
   componentDidMount() {
@@ -66,7 +62,7 @@ class SssDashboardHome extends Component {
 
   onChangeChartSelected(chartSelected) {
     this.setState({ chartSelected });
-    if (chartSelected !== SECTORS_CHART) {
+    if (chartSelected !== SECTORS_CHART && chartSelected !== MODALITY_CHART) {
       this.closeLargeCountryPopin();
     } else if (this.state.selectedFilters.selectedCountries.length > 0) {
       this.setState({ showLargeCountryPopin: true });
@@ -95,7 +91,10 @@ class SssDashboardHome extends Component {
       const countriesForExport = [...previousState.countriesForExport].filter(c => pSelectedCountries.includes(c));
       return { countriesForExport };
     });
-    if (this.state.chartSelected === SECTORS_CHART && pSelectedCountries && pSelectedCountries.length >= 1) {
+    // FIXME check that the code below is ok to be outside the setstate method
+    const { chartSelected } = this.state;
+    if ((chartSelected === SECTORS_CHART || chartSelected === MODALITY_CHART)
+        && pSelectedCountries && pSelectedCountries.length >= 1) {
       // currently we open large popin, in next tickets we will open also the popin for 2/3 countries selected
       this.setState({ showLargeCountryPopin: true });
     } else {
@@ -190,6 +189,10 @@ class SssDashboardHome extends Component {
     });
   }
 
+  countriesForExportChanged(countries) {
+    this.setState({ countriesForExport: countries });
+  }
+
   render() {
     const filtersRestrictions = { countriesWithData: this.countriesWithData };
 
@@ -199,23 +202,26 @@ class SssDashboardHome extends Component {
       handleSelectedYearChanged: this.handleSelectedYearChanged.bind(this),
       handleSelectedSectorChanged: this.handleSelectedSectorChanged.bind(this)
     };
+    const {
+      chartSelected, selectedFilters, filteredProjects, showEmptyProjects, showLargeCountryPopin
+    } = this.state;
     return (
       <div className="container-fluid content-wrapper">
         <div className="row">
           <Sidebar
-            chartSelected={this.state.chartSelected}
+            chartSelected={chartSelected}
             onChangeChartSelected={this.onChangeChartSelected.bind(this)}
-            selectedFilters={this.state.selectedFilters}
+            selectedFilters={selectedFilters}
             handleSelectedFiltersChange={handleSelectedFiltersChange}
                     />
           <MapContainer
-            chartSelected={this.state.chartSelected}
-            selectedFilters={this.state.selectedFilters}
+            chartSelected={selectedFilters}
+            selectedFilters={selectedFilters}
             handleSelectedFiltersChange={handleSelectedFiltersChange}
-            filteredProjects={this.state.filteredProjects}
+            filteredProjects={filteredProjects}
             filtersRestrictions={filtersRestrictions}
-            showEmptyProjects={this.state.showEmptyProjects}
-            showLargeCountryPopin={this.state.showLargeCountryPopin}
+            showEmptyProjects={showEmptyProjects}
+            showLargeCountryPopin={showLargeCountryPopin}
             closeLargeCountryPopinAndClearFilter={this.closeLargeCountryPopinAndClearFilter.bind(this)}
             onNoProjectsModalClose={this.onNoProjectsModalClose.bind(this)}
             countriesForExport={this.state.countriesForExport}

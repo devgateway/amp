@@ -5,39 +5,58 @@ import { connect } from 'react-redux';
 import CountryPopupHeader from './CountryPopupHeader';
 import CountryPopupChart from './CountryPopupChart';
 import CountryPopupFooter from './CountryPopupFooter';
-import { generateStructureBasedOnSectorProjectCount, getChartData } from '../../../../utils/ProjectUtils';
+import {
+  generateStructureBasedOnModalitiesProjectCount,
+  generateStructureBasedOnSectorProjectCount,
+  getChartData
+} from '../../../../utils/ProjectUtils';
 import { SSCTranslationContext } from '../../../StartUp';
+import { COLOR_MAP, SECTORS_CHART } from '../../../../utils/constants';
 
 class CountryPopup extends Component {
   render() {
     const {
-      project, columnCount, borderClass, lineClass, countriesForExportChanged, countriesForExport
+      project, columnCount, borderClass, lineClass, countriesForExportChanged, countriesForExport, chartSelected
     } = this.props;
     const { countries } = this.props.filters.countries;
     const { sectors } = this.props.filters.sectors;
+    const { modalities } = this.props.filters.modalities;
     const { activitiesDetails } = this.props.projects;
-    const projectsBySectors = generateStructureBasedOnSectorProjectCount(project);
+    let projectByGroupings;
+    let groupings;
 
-    const chartData = getChartData(projectsBySectors, sectors);
+    if (chartSelected === SECTORS_CHART) {
+      projectByGroupings = generateStructureBasedOnSectorProjectCount(project);
+      groupings = sectors;
+    } else {
+      projectByGroupings = generateStructureBasedOnModalitiesProjectCount(project);
+      groupings = modalities;
+    }
+
+    const chartData = getChartData(projectByGroupings, groupings);
     const country = countries.find(c => c.id === project.id);
     return (
       <div
         className={`country-popup-all country-popup-${columnCount} ${borderClass || ''} ${lineClass || ''}`}
-            >
+      >
         <CountryPopupHeader
           country={country}
-          projectsBySectors={projectsBySectors}
+          projectByGroupings={projectByGroupings}
           columnCount={columnCount}
           countriesForExportChanged={countriesForExportChanged}
-          countriesForExport={countriesForExport} />
+          countriesForExport={countriesForExport}
+          chartSelected={chartSelected}
+        />
         <CountryPopupChart
           columnCount={columnCount}
-          chartData={chartData} />
+          chartData={chartData}
+          chartSelected={chartSelected}
+        />
 
         {columnCount === 1 && (
-        <CountryPopupFooter
-          projects={[...projectsBySectors.uniqueProjects]}
-          activitiesDetails={activitiesDetails} />
+          <CountryPopupFooter
+            projects={[...projectByGroupings.uniqueProjects]}
+            activitiesDetails={activitiesDetails}/>
         )}
       </div>
     );
@@ -48,6 +67,9 @@ const mapStateToProps = state => ({
   filters: {
     sectors: {
       sectors: state.filtersReducer.sectors,
+    },
+    modalities: {
+      modalities: state.filtersReducer.modalities,
     },
     countries: {
       countries: state.filtersReducer.countries,

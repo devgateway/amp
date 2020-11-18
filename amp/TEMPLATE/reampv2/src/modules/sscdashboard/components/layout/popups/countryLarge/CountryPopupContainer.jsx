@@ -10,7 +10,8 @@ export default class CountryPopupContainer extends Component {
   render() {
     const { translations } = this.context;
     const {
-      rows, closeLargeCountryPopinAndClearFilter, columnCount, countriesForExport, countriesForExportChanged, getExportData
+      rows, closeLargeCountryPopinAndClearFilter, columnCount, countriesForExport, countriesForExportChanged, getExportData,
+      chartSelected
     } = this.props;
     return (
       <div>
@@ -25,7 +26,8 @@ export default class CountryPopupContainer extends Component {
           countriesForExport={countriesForExport}
           countriesForExportChanged={countriesForExportChanged}
           getExportData={getExportData}
-            />
+          chartSelected={chartSelected}
+        />
         <div className="countries-charts" id="countries-charts">
           {this.getCountryPopup(rows)}
         </div>
@@ -64,7 +66,7 @@ export default class CountryPopupContainer extends Component {
   }
 
   getCountryPopup(rows) {
-    const { countriesForExportChanged, countriesForExport } = this.props;
+    const { countriesForExportChanged, countriesForExport, chartSelected } = this.props;
     return rows.map((r, k) => {
       const columnCount = calculateColumnCount(r.length);
       const classCount = BOOTSTRAP_COLUMNS_COUNT / columnCount;
@@ -87,12 +89,12 @@ export default class CountryPopupContainer extends Component {
                 <CountryPopup
                   project={c}
                   columnCount={columnCount}
+                  chartSelected={chartSelected}
                   {...(columnCount > 1 ? { borderClass } : {})}
                   {...(columnCount > 1 ? { lineClass } : {})}
                   countriesForExportChanged={countriesForExportChanged}
                   countriesForExport={countriesForExport}
-
-                            />
+                />
               </div>
             );
           })}
@@ -102,3 +104,4 @@ export default class CountryPopupContainer extends Component {
   }
 }
 CountryPopupContainer.contextType = SSCTranslationContext;
+

@@ -1,14 +1,19 @@
 import React, { Component, Suspense } from 'react';
 import InfiniteCarousel from 'react-leaf-carousel';
 import EllipsisText from 'react-ellipsis-text';
+import PropTypes from 'prop-types';
 import * as Utils from '../../../utils/Utils';
 import './filters.css';
-import { FLAGS_TO_SHOW_DEFAULT, FLAGS_TO_SHOW_SMALL } from '../../../utils/constants';
+import {
+  FLAGS_TO_SHOW_DEFAULT,
+  FLAGS_TO_SHOW_SMALL,
+  FLAGS_TO_SHOW_SMALL_WIDTH_THRESHOLD, NEGATIVE_ONE, ONE, ZERO
+} from '../../../utils/constants';
 import CountryFlag from '../../utils/CountryFlag';
 
 export default class CountryCarousel extends Component {
   constructor(props) {
-    super();
+    super(props);
     this.state = { slidesToShow: FLAGS_TO_SHOW_DEFAULT };
   }
 
@@ -27,23 +32,15 @@ export default class CountryCarousel extends Component {
     });
   }
 
-  calculateCarouselValues() {
-    let slidesToShow = FLAGS_TO_SHOW_DEFAULT;
-    if (window.innerWidth <= 1766) {
-      slidesToShow = FLAGS_TO_SHOW_SMALL;
-    }
-    return slidesToShow;
-  }
-
-    onFlagClick = param => e => {
-      const ipSelectedFilter = parseInt(param);
-      const { selectedOptions } = this.props;
-      this.props.onChange(Utils.calculateUpdatedValuesForDropDowns(ipSelectedFilter, selectedOptions));
+    onFlagClick = param => () => {
+      const ipSelectedFilter = parseInt(param, 10);
+      const { selectedOptions, onChange } = this.props;
+      onChange(Utils.calculateUpdatedValuesForDropDowns(ipSelectedFilter, selectedOptions));
     };
 
     getFlags() {
       const { options, selectedOptions } = this.props;
-      return options.sort((a, b) => (a.name > b.name ? 1 : -1)).map((c) => (
+      return options.sort((a, b) => (a.name > b.name ? ONE : NEGATIVE_ONE)).map((c) => (
         <div
           key={`flag-${c.id}`}
           onClick={this.onFlagClick(c.id)}
@@ -59,10 +56,20 @@ export default class CountryCarousel extends Component {
       ));
     }
 
+    // eslint-disable-next-line class-methods-use-this
+    calculateCarouselValues() {
+      let slidesToShow = FLAGS_TO_SHOW_DEFAULT;
+      if (window.innerWidth <= FLAGS_TO_SHOW_SMALL_WIDTH_THRESHOLD) {
+        slidesToShow = FLAGS_TO_SHOW_SMALL;
+      }
+      return slidesToShow;
+    }
+
     render() {
       const { options } = this.props;
+      const { slidesToShow } = this.state;
       return (
-        options.length > 0
+        options.length > ZERO
           ? (
             <InfiniteCarousel
               breakpoints={[
@@ -86,9 +93,9 @@ export default class CountryCarousel extends Component {
               sidesOpacity={1}
               sideSize={0.1}
               slidesToScroll={4}
-              slidesToShow={this.state.slidesToShow}
+              slidesToShow={slidesToShow}
               scrollOnDevice
-                >
+                    >
               {this.getFlags()}
             </InfiniteCarousel>
           )
@@ -96,3 +103,8 @@ export default class CountryCarousel extends Component {
       );
     }
 }
+CountryCarousel.propTypes = {
+  options: PropTypes.array.isRequired,
+  onChange: PropTypes.func.isRequired,
+  selectedOptions: PropTypes.array.isRequired
+};

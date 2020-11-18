@@ -19,9 +19,7 @@ class NDDDashboardHome extends Component {
           <HeaderContainer />
         </Row>
         <Row>
-          <Col md={12}>
-            <MainDashboardContainer />
-          </Col>
+          <MainDashboardContainer />
         </Row>
       </Container>
     );

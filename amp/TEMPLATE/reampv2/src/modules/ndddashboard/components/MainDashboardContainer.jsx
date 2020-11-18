@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import NestedDonutsProgramChart from './NestedDonutsProgramChart';
 import callReport from '../actions/callReports';
+import { Col } from 'react-bootstrap';
 
 class MainDashboardContainer extends Component {
   componentDidMount() {
@@ -19,11 +20,17 @@ class MainDashboardContainer extends Component {
       if (nddLoaded && !nddLoadingPending) {
         return (
           <div>
-            <div className="solar-container">
-              <div><NestedDonutsProgramChart data={this.props.ndd}/></div>
+            <Col md={6}>
+              <div>
+                <div className="solar-container">
+                  <div><NestedDonutsProgramChart data={this.props.ndd}/></div>
+                </div>
+                <div className="year-chart-container">amounts by year</div>
+              </div>
+            </Col>
+            <Col md={6}>
               <div>legends</div>
-            </div>
-            <div className="year-chart-container">amounts by year</div>
+            </Col>
           </div>
         );
       }

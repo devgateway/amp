@@ -23,7 +23,7 @@ class MainDashboardContainer extends Component {
             <Col md={6}>
               <div>
                 <div className="solar-container">
-                  <div><NestedDonutsProgramChart data={this.props.ndd}/></div>
+                  <div><NestedDonutsProgramChart data={ndd}/></div>
                 </div>
                 <div className="year-chart-container">amounts by year</div>
               </div>

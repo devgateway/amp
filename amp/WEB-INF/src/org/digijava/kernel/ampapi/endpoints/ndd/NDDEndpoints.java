@@ -1,6 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.ndd;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -62,7 +64,7 @@ public class NDDEndpoints {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "getDirectIndirectReport")
     @ApiOperation("")
-    public List<NDDSolarChartData> getDirectIndirectReport(Object params) {
-        return DashboardService.generateDirectIndirectReport();
+    public List<NDDSolarChartData> getDirectIndirectReport(Map<String, Object> params) {
+        return DashboardService.generateDirectIndirectReport(params);
     }
 }

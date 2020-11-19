@@ -3,10 +3,11 @@ import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import NestedDonutsProgramChart from './NestedDonutsProgramChart';
-import callReport from '../actions/callReports';
+import { callReport } from '../actions/callReports';
 import loadDashboardSettings from '../actions/loadDashboardSettings';
 import { Col } from 'react-bootstrap';
 import FundingTypeSelector from './FundingTypeSelector';
+import { FUNDING_TYPE } from '../utils/constants';
 
 class MainDashboardContainer extends Component {
 
@@ -17,18 +18,21 @@ class MainDashboardContainer extends Component {
   }
 
   componentDidMount() {
-    this.props.loadDashboardSettings();
-    this.props.callReport();
+    const { loadDashboardSettings, callReport } = this.props;
+    loadDashboardSettings()
+      .then(settings => callReport(settings.payload.find(i => i.id === FUNDING_TYPE).value.defaultId));
   }
 
   onChangeFundingType(value) {
-    console.error(value);
+    const { callReport } = this.props;
     this.setState({ fundingType: value });
+    callReport(value);
   }
 
   render() {
     const { error, ndd, nddLoadingPending, nddLoaded } = this.props;
     const { fundingType } = this.state;
+    console.error(this.state);
     if (error) {
       // TODO proper error handling
       return (<div>ERROR</div>);
@@ -40,8 +44,8 @@ class MainDashboardContainer extends Component {
               <div>
                 <div className="solar-container">
                   <div>
-                    <NestedDonutsProgramChart data={ndd} fundingType={fundingType}/>
-                    <FundingTypeSelector onChange={this.onChangeFundingType} default={null}/>
+                    <NestedDonutsProgramChart data={ndd}/>
+                    <FundingTypeSelector onChange={this.onChangeFundingType} default={fundingType}/>
                   </div>
                 </div>
                 <div className="year-chart-container">amounts by year</div>
@@ -67,7 +71,8 @@ const mapStateToProps = state => ({
   nddLoadingPending: state.reportsReducer.nddLoadingPending,
 });
 const mapDispatchToProps = dispatch => bindActionCreators({
-  callReport, loadDashboardSettings
+  callReport,
+  loadDashboardSettings
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainDashboardContainer);

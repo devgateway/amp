@@ -13,15 +13,13 @@ import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.TextCell;
 import org.dgfoundation.amp.newreports.AmountCell;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.util.ProgramUtil;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public final class DashboardService {
@@ -30,7 +28,7 @@ public final class DashboardService {
     }
 
     // TODO: add params for filter widget.
-    public static List<NDDSolarChartData> generateDirectIndirectReport() {
+    public static List<NDDSolarChartData> generateDirectIndirectReport(Map<String, Object> params) {
         ReportSpecificationImpl spec = new ReportSpecificationImpl("DirectIndirect", ArConstants.DONOR_TYPE);
         spec.setSummaryReport(true);
         spec.setGroupingCriteria(GroupingCriteria.GROUPING_TOTALS_ONLY);
@@ -57,8 +55,11 @@ public final class DashboardService {
         spec.addColumn(new ReportColumn(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_3));
         spec.setHierarchies(spec.getColumns());
 
-        // TODO: add param for the amount type (commitment, disbursement, etc).
-        spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
+        if (params.get(SettingsConstants.FUNDING_TYPE_ID) != null) {
+            spec.addMeasure(new ReportMeasure(params.get(SettingsConstants.FUNDING_TYPE_ID).toString()));
+        } else {
+            spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
+        }
         GeneratedReport report = EndpointUtils.runReport(spec);
 
         List<NDDSolarChartData> list = new ArrayList<>();

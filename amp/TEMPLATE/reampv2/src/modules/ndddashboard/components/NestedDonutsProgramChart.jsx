@@ -2,15 +2,17 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { CSSTransitionGroup } from 'react-transition-group'
+import { CSSTransitionGroup } from 'react-transition-group';
 
 // Dont use react-plotly directly: https://github.com/plotly/react-plotly.js/issues/135#issuecomment-501398125
-import Plotly from "plotly.js";
-import createPlotlyComponent from "react-plotly.js/factory";
-import { DIRECT_PROGRAM, INDIRECT_PROGRAMS, PROGRAMLVL1, AMOUNT, CODE, DIRECT, INDIRECT,
-  TRANSITIONS, PROGRAMLVL2} from '../utils/constants';
-import {intToRGB, hashCode, addAlpha} from '../utils/Utils';
-import styles from './styles.css'
+import Plotly from 'plotly.js';
+import createPlotlyComponent from 'react-plotly.js/factory';
+import {
+  DIRECT_PROGRAM, INDIRECT_PROGRAMS, PROGRAMLVL1, AMOUNT, CODE, DIRECT, INDIRECT,
+  TRANSITIONS, PROGRAMLVL2
+} from '../utils/constants';
+import { intToRGB, hashCode, addAlpha } from '../utils/Utils';
+import styles from './styles.css';
 
 const Plot = createPlotlyComponent(Plotly);
 
@@ -33,7 +35,7 @@ class NestedDonutsProgramChart extends Component {
   extractOuterData(calculateLvl2) {
     const { selectedDirectProgram } = this.state;
     const ret = [];
-    const {data} = this.props;
+    const { data } = this.props;
     if (data && data.length > 0) {
       const totalAmount = data.reduce((acc, cur) => (acc + cur[DIRECT_PROGRAM][AMOUNT]), 0);
       data.forEach(i => {
@@ -69,7 +71,7 @@ class NestedDonutsProgramChart extends Component {
 
   extractInnerData(outerData) {
     const ret = [];
-    const {data} = this.props;
+    const { data } = this.props;
     if (data && data.length > 0) {
       outerData.forEach((i, index) => {
         const innerSubGroup = [];
@@ -78,7 +80,9 @@ class NestedDonutsProgramChart extends Component {
           j[INDIRECT_PROGRAMS].forEach(k => {
             if (innerSubGroup.filter(l => l[CODE] === k[PROGRAMLVL1][CODE]).length === 0) {
               innerSubGroup.push({
-                [CODE]: k[PROGRAMLVL1][CODE] + Array(index).fill(' ').join(''),
+                [CODE]: k[PROGRAMLVL1][CODE] + Array(index)
+                  .fill(' ')
+                  .join(''),
                 originalAmount: k[AMOUNT],
                 name: k[PROGRAMLVL1].name,
                 directProgramCode: j[DIRECT_PROGRAM][PROGRAMLVL1][CODE]
@@ -100,9 +104,13 @@ class NestedDonutsProgramChart extends Component {
     const ret = [];
     if (data) {
       data.forEach(i => {
-        i.forEach(j=>{
+        i.forEach(j => {
           const parentPercentage = outerData.find(k => k[CODE] === j.directProgramCode).percentageInTotal;
-          ret.push({[CODE]: j[CODE], name: j.name, [AMOUNT]: j.percentageInSubGroup / 100 * parentPercentage});
+          ret.push({
+            [CODE]: j[CODE],
+            name: j.name,
+            [AMOUNT]: j.percentageInSubGroup / 100 * parentPercentage
+          });
         });
       });
     }
@@ -154,86 +162,91 @@ class NestedDonutsProgramChart extends Component {
     };
     // Note: Remove prop 'key' if you want to disable the fade effect after clicking the outer ring.
     return (
-      <CSSTransitionGroup
-        /* key={selectedDirectProgram} */
-        transitionName="solar-chart"
-        transitionAppear={true}
-        transitionEnterTimeout={TRANSITIONS}
-        transitionLeaveTimeout={TRANSITIONS}
-        transitionAppearTimeout={TRANSITIONS}>
-        <Plot
-          key="solarChart"
-          data={
-            [{
-              values: innerDataForChart.map(i => i[AMOUNT]),
-              labels: innerDataForChart.map(i => i[CODE]),
-              text: INDIRECT,
-              domain: {
-                x: [0.15, 0.85],
-                y: [0.15, 0.85]
+      <div>
+        <span>{Math.random()}</span>
+        <CSSTransitionGroup
+          /* key={selectedDirectProgram} */
+          transitionName="solar-chart"
+          transitionAppear={true}
+          transitionLeave={true}
+          transitionEnter={true}
+          transitionEnterTimeout={TRANSITIONS}
+          transitionLeaveTimeout={TRANSITIONS}
+          transitionAppearTimeout={TRANSITIONS}>
+          <Plot
+            key="solarChart"
+            data={
+              [{
+                values: innerDataForChart.map(i => i[AMOUNT]),
+                labels: innerDataForChart.map(i => i[CODE]),
+                text: INDIRECT,
+                domain: {
+                  x: [0.15, 0.85],
+                  y: [0.15, 0.85]
+                },
+                textposition: 'inside',
+                direction: 'clockwise',
+                name: INDIRECT,
+                hoverinfo: 'label',
+                hole: .5,
+                type: 'pie',
+                sort: false,
+                textinfo: 'label',
+                marker: {
+                  colors: innerColors,
+                  line: {
+                    color: 'white',
+                    'width': 1
+                  }
+                }
+              }, {
+                values: outerDataLvl2.map(i => i[AMOUNT]),
+                labels: outerDataLvl2.map(i => i[CODE]),
+                name: DIRECT,
+                hoverinfo: 'percent+label',
+                textposition: 'outside',
+                hole: .7,
+                type: 'pie',
+                sort: false,
+                direction: 'clockwise',
+                textinfo: 'label',
+                marker: {
+                  colors: outerColors,
+                  line: {
+                    'color': 'white',
+                    'width': 1
+                  }
+                }
+              }]
+            }
+            layout={{
+              autosize: false,
+              paper_bgcolor: 'rgba(0,0,0,0)',
+              width: 500,
+              height: 400,
+              title: '',
+              showlegend: false,
+              transition,
+              margin: {
+                l: 0,
+                r: 0,
+                b: 10,
+                t: 20,
+                pad: 4
               },
-              textposition: 'inside',
-              direction: 'clockwise',
-              name: INDIRECT,
-              hoverinfo: 'label',
-              hole: .5,
-              type: 'pie',
-              sort: false,
-              textinfo: 'label',
-              marker: {
-                colors: innerColors,
-                line: {
-                  color: 'white',
-                  'width': 1
-                }
-              }
-            }, {
-              values: outerDataLvl2.map(i => i[AMOUNT]),
-              labels: outerDataLvl2.map(i => i[CODE]),
-              name: DIRECT,
-              hoverinfo: 'percent+label',
-              textposition: 'outside',
-              hole: .7,
-              type: 'pie',
-              sort: false,
-              direction: 'clockwise',
-              textinfo: 'label',
-              marker: {
-                colors: outerColors,
-                line: {
-                  'color': 'white',
-                  'width': 1
-                }
-              }
-            }]
-          }
-          layout={{
-            autosize: false,
-            paper_bgcolor: "rgba(0,0,0,0)",
-            width: 500,
-            height: 400,
-            title: '',
-            showlegend: false,
-            transition,
-            margin: {
-              l: 0,
-              r: 0,
-              b: 10,
-              t: 20,
-              pad: 4
-            },
-          }}
-          config={{ displaylogo: false }}
-          onClick={event => this.handleOuterChartClick(event, outerData)}
-        />
-      </CSSTransitionGroup>
+            }}
+            config={{ displaylogo: false }}
+            onClick={event => this.handleOuterChartClick(event, outerData)}
+          />
+        </CSSTransitionGroup>
+      </div>
     );
   }
 }
 
 NestedDonutsProgramChart.propTypes = {
   data: PropTypes.array.isRequired
-}
+};
 
 const mapStateToProps = state => ({});
 

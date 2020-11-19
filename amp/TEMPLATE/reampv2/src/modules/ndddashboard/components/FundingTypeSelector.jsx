@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import callReport from '../actions/callReports';
 
 class FundingTypeSelector extends Component {
 
@@ -12,11 +11,11 @@ class FundingTypeSelector extends Component {
   }
 
   generateDropdown() {
-    const { settings } = this.props;
-    const options = settings.find(s => s.id === 'funding-type');
+    const { dashboardSettings, onChange } = this.props;
+    const options = dashboardSettings.find(s => s.id === 'funding-type');
     return (<form className="form-inline dash-form dash-adj-type" role="form">
-      <select className="form-control like-btn-sm ftype-options">
-        {options.value.options.map(i => (<option value={i.id} selected="">{i.value}</option>))}
+      <select className="form-control like-btn-sm ftype-options" onChange={(e) => onChange(e.target.value)}>
+        {options.value.options.map(i => (<option key={i.id} value={i.id}>{i.name}</option>))}
       </select>
       <span className="cheat-lineheight"/>
     </form>);
@@ -46,12 +45,13 @@ class FundingTypeSelector extends Component {
 
 const mapStateToProps = state => ({
   ndd: state.reportsReducer.ndd,
-  settings: state.reportsReducer.settings,
+  dashboardSettings: state.dashboardSettingsReducer.dashboardSettings,
 });
 const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(FundingTypeSelector);
 
 FundingTypeSelector.propTypes = {
-  onChange: PropTypes.func.isRequired
+  onChange: PropTypes.func.isRequired,
+  default: PropTypes.string.isRequired
 };

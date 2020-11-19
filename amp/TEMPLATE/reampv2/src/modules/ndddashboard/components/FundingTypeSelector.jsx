@@ -11,10 +11,12 @@ class FundingTypeSelector extends Component {
   }
 
   generateDropdown() {
-    const { dashboardSettings, onChange } = this.props;
+    const { dashboardSettings, onChange, defaultValue } = this.props;
     const options = dashboardSettings.find(s => s.id === 'funding-type');
     return (<form className="form-inline dash-form dash-adj-type" role="form">
-      <select className="form-control like-btn-sm ftype-options" onChange={(e) => onChange(e.target.value)}>
+      <select defaultValue={defaultValue}
+              className="form-control like-btn-sm ftype-options"
+              onChange={(e) => onChange(e.target.value)}>
         {options.value.options.map(i => (<option key={i.id} value={i.id}>{i.name}</option>))}
       </select>
       <span className="cheat-lineheight"/>
@@ -53,5 +55,5 @@ export default connect(mapStateToProps, mapDispatchToProps)(FundingTypeSelector)
 
 FundingTypeSelector.propTypes = {
   onChange: PropTypes.func.isRequired,
-  default: PropTypes.string.isRequired
+  defaultValue: PropTypes.string.isRequired
 };

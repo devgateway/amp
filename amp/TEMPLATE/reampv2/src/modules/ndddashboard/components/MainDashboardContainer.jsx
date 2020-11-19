@@ -30,35 +30,30 @@ class MainDashboardContainer extends Component {
   }
 
   render() {
-    const { error, ndd, nddLoadingPending, nddLoaded } = this.props;
+    const { error, ndd, nddLoadingPending, nddLoaded, dashboardSettings } = this.props;
     const { fundingType } = this.state;
     console.error(this.state);
     if (error) {
       // TODO proper error handling
       return (<div>ERROR</div>);
     } else {
-      if (nddLoaded && !nddLoadingPending) {
-        return (
+      return (<div>
+        <Col md={6}>
           <div>
-            <Col md={6}>
+            <div className="solar-container">
               <div>
-                <div className="solar-container">
-                  <div>
-                    <NestedDonutsProgramChart data={ndd}/>
-                    <FundingTypeSelector onChange={this.onChangeFundingType} default={fundingType}/>
-                  </div>
-                </div>
-                <div className="year-chart-container">amounts by year</div>
+                {(nddLoaded && !nddLoadingPending) ? <NestedDonutsProgramChart data={ndd}/> : <div>Loading...</div>}
+                {dashboardSettings ?
+                  <FundingTypeSelector onChange={this.onChangeFundingType} defaultValue={fundingType}/> : null}
               </div>
-            </Col>
-            <Col md={6}>
-              <div>legends</div>
-            </Col>
+            </div>
+            <div className="year-chart-container">amounts by year</div>
           </div>
-        );
-      }
-      // TODO: proper loading component.
-      return (<div>Loading...</div>);
+        </Col>
+        <Col md={6}>
+          <div>legends</div>
+        </Col>
+      </div>);
     }
   }
 }
@@ -70,6 +65,7 @@ const mapStateToProps = state => ({
   nddLoaded: state.reportsReducer.nddLoaded,
   nddLoadingPending: state.reportsReducer.nddLoadingPending,
 });
+
 const mapDispatchToProps = dispatch => bindActionCreators({
   callReport,
   loadDashboardSettings

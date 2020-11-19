@@ -162,84 +162,81 @@ class NestedDonutsProgramChart extends Component {
     };
     // Note: Remove prop 'key' if you want to disable the fade effect after clicking the outer ring.
     return (
-      <div>
-        <span>{Math.random()}</span>
-        <CSSTransitionGroup
-          /* key={selectedDirectProgram} */
-          transitionName="solar-chart"
-          transitionAppear={true}
-          transitionLeave={true}
-          transitionEnter={true}
-          transitionEnterTimeout={TRANSITIONS}
-          transitionLeaveTimeout={TRANSITIONS}
-          transitionAppearTimeout={TRANSITIONS}>
-          <Plot
-            key="solarChart"
-            data={
-              [{
-                values: innerDataForChart.map(i => i[AMOUNT]),
-                labels: innerDataForChart.map(i => i[CODE]),
-                text: INDIRECT,
-                domain: {
-                  x: [0.15, 0.85],
-                  y: [0.15, 0.85]
-                },
-                textposition: 'inside',
-                direction: 'clockwise',
-                name: INDIRECT,
-                hoverinfo: 'label',
-                hole: .5,
-                type: 'pie',
-                sort: false,
-                textinfo: 'label',
-                marker: {
-                  colors: innerColors,
-                  line: {
-                    color: 'white',
-                    'width': 1
-                  }
-                }
-              }, {
-                values: outerDataLvl2.map(i => i[AMOUNT]),
-                labels: outerDataLvl2.map(i => i[CODE]),
-                name: DIRECT,
-                hoverinfo: 'percent+label',
-                textposition: 'outside',
-                hole: .7,
-                type: 'pie',
-                sort: false,
-                direction: 'clockwise',
-                textinfo: 'label',
-                marker: {
-                  colors: outerColors,
-                  line: {
-                    'color': 'white',
-                    'width': 1
-                  }
-                }
-              }]
-            }
-            layout={{
-              autosize: false,
-              paper_bgcolor: 'rgba(0,0,0,0)',
-              width: 500,
-              height: 400,
-              title: '',
-              showlegend: false,
-              transition,
-              margin: {
-                l: 0,
-                r: 0,
-                b: 10,
-                t: 20,
-                pad: 4
+      <CSSTransitionGroup
+        /* key={selectedDirectProgram} */
+        transitionName="solar-chart"
+        transitionAppear={true}
+        transitionLeave={true}
+        transitionEnter={true}
+        transitionEnterTimeout={TRANSITIONS}
+        transitionLeaveTimeout={TRANSITIONS}
+        transitionAppearTimeout={TRANSITIONS}>
+        <Plot
+          key="solarChart"
+          data={
+            [{
+              values: innerDataForChart.map(i => i[AMOUNT]),
+              labels: innerDataForChart.map(i => i[CODE]),
+              text: INDIRECT,
+              domain: {
+                x: [0.15, 0.85],
+                y: [0.15, 0.85]
               },
-            }}
-            config={{ displaylogo: false }}
-            onClick={event => this.handleOuterChartClick(event, outerData)}
-          />
-        </CSSTransitionGroup>
-      </div>
+              textposition: 'inside',
+              direction: 'clockwise',
+              name: INDIRECT,
+              hoverinfo: 'label',
+              hole: .5,
+              type: 'pie',
+              sort: false,
+              textinfo: 'label',
+              marker: {
+                colors: innerColors,
+                line: {
+                  color: 'white',
+                  'width': 1
+                }
+              }
+            }, {
+              values: outerDataLvl2.map(i => i[AMOUNT]),
+              labels: outerDataLvl2.map(i => i[CODE]),
+              name: DIRECT,
+              hoverinfo: 'percent+label',
+              textposition: 'outside',
+              hole: .7,
+              type: 'pie',
+              sort: false,
+              direction: 'clockwise',
+              textinfo: 'label',
+              marker: {
+                colors: outerColors,
+                line: {
+                  'color': 'white',
+                  'width': 1
+                }
+              }
+            }]
+          }
+          layout={{
+            autosize: false,
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            width: 500,
+            height: 400,
+            title: '',
+            showlegend: false,
+            transition,
+            margin: {
+              l: 0,
+              r: 0,
+              b: 10,
+              t: 20,
+              pad: 4
+            },
+          }}
+          config={{ displaylogo: false }}
+          onClick={event => this.handleOuterChartClick(event, outerData)}
+        />
+      </CSSTransitionGroup>
     );
   }
 }

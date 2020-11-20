@@ -160,6 +160,17 @@ class NestedDonutsProgramChart extends Component {
       duration: 2000,
       easing: 'cubic-in-out'
     };
+    const annotations = outerData.length === 0 ? [
+      {
+        'text': 'No matching data found',
+        'xref': 'paper',
+        'yref': 'paper',
+        'showarrow': false,
+        'font': {
+          'size': 28
+        }
+      }
+    ] : [];
     // Note: Remove prop 'key' if you want to disable the fade effect after clicking the outer ring.
     return (
       <CSSTransitionGroup
@@ -232,6 +243,7 @@ class NestedDonutsProgramChart extends Component {
               t: 20,
               pad: 4
             },
+            annotations: annotations
           }}
           config={{ displaylogo: false }}
           onClick={event => this.handleOuterChartClick(event, outerData)}

@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { NDDTranslationContext } from './components/StartUp';
 import MainDashboardContainer from './components/MainDashboardContainer';
+import HeaderContainer from './components/HeaderContainer';
 
 class NDDDashboardHome extends Component {
   constructor(props) {
@@ -13,14 +14,12 @@ class NDDDashboardHome extends Component {
 
   render() {
     return (
-      <Container fluid>
+      <Container fluid className="main-container">
         <Row>
-          <Col>top area for filters/settings/share</Col>
+          <HeaderContainer />
         </Row>
         <Row>
-          <Col>
-            <MainDashboardContainer />
-          </Col>
+          <MainDashboardContainer />
         </Row>
       </Container>
     );

@@ -10,3 +10,14 @@ export const CODE = 'code';
 export const DIRECT = 'DIRECT';
 export const INDIRECT = 'INDIRECT';
 export const TRANSITIONS = 100;
+
+export const DIRECT_PROGRAM_COLOR_MAP = new Map();
+
+export const DIRECT_PROGRAM_COLOR = ['#1f5177',
+	'#a42727',
+	'#b6861e',
+	'#598118',
+	'#551881'];
+
+export const NDD_COLOR_MAP = new Map([['DIRECT_PROGRAM', DIRECT_PROGRAM_COLOR_MAP]]);
+

@@ -1,0 +1,69 @@
+.custom-legend {
+    display: inline-block;
+    width: 100%;
+}
+
+.custom-legend ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.custom-legend .two-rows {
+    columns: 2;
+    -webkit-columns: 2;
+    -moz-columns: 2;
+}
+
+.custom-legend ul li {
+    display: block;
+}
+
+.custom-legend ul li .label {
+    white-space: normal;
+    font-size: 10px;
+    font-weight: 500;
+    padding-left: 4px;
+    padding-right: 2px;
+    text-align: left;
+    line-height: 15px;
+}
+.custom-legend .label{
+    color: #000000;
+}
+
+.custom-legend .label.amount {
+    font-size: 10px;
+    font-weight: bold;
+}
+.custom-legend ul li .symbol {
+    display: inline-block;
+    border-radius: 100%;
+    background-clip: padding-box;
+    height: 12px;
+    margin-top: 3px;
+    width: 12px;
+}
+
+.chart-legend {
+    height: 110px;
+}
+
+.country-popup-1 .chart-legend {
+    height: 215px;
+    border-bottom: 1px solid #313d4f;
+    position: relative;
+    /*margin: 0;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);*/
+}
+.country-popup-1 .chart-legend .custom-legend-inner{
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}

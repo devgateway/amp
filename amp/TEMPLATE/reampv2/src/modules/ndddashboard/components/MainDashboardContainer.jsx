@@ -59,6 +59,7 @@ class MainDashboardContainer extends Component {
 			//minimumFractionDigits: 0,
 			//maximumFractionDigits: 0,
 		});
+		// TODO pick the program names from config
 		const {error, ndd, nddLoadingPending, nddLoaded} = this.props;
 		if (error) {
 			// TODO proper error handling

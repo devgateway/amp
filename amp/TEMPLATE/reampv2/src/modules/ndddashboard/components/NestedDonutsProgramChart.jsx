@@ -9,7 +9,7 @@ import Plotly from "plotly.js";
 import createPlotlyComponent from "react-plotly.js/factory";
 import { DIRECT_PROGRAM, INDIRECT_PROGRAMS, PROGRAMLVL1, AMOUNT, CODE, DIRECT, INDIRECT,
   TRANSITIONS, PROGRAMLVL2} from '../utils/constants';
-import {intToRGB, hashCode, addAlpha} from '../utils/Utils';
+import { intToRGB, hashCode, addAlpha, getCustomColor } from '../utils/Utils';
 import styles from './styles.css'
 
 const Plot = createPlotlyComponent(Plotly);
@@ -145,9 +145,9 @@ class NestedDonutsProgramChart extends Component {
     const outerDataLvl2 = selectedDirectProgram ? this.extractOuterData(true) : this.extractOuterData(false);
     const innerData = this.extractInnerData(outerData);
     const innerDataForChart = this.innerDataToChartValues(innerData, outerData);
-    const innerColors = this.calculateOpacity(innerDataForChart.map(i => intToRGB(hashCode(i.name))),
-      innerDataForChart);
-    const outerColors = this.calculateOpacity(outerDataLvl2.map(i => intToRGB(hashCode(i.name))), outerDataLvl2);
+    const innerColors = this.calculateOpacity(innerDataForChart.map(i => getCustomColor(i, INDIRECT_PROGRAMS)),
+        innerDataForChart);
+    const outerColors = this.calculateOpacity(outerDataLvl2.map(o => getCustomColor(o, DIRECT_PROGRAM)), outerDataLvl2);
     const transition = {
       duration: 2000,
       easing: 'cubic-in-out'

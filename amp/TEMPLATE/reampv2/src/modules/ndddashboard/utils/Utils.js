@@ -1,5 +1,4 @@
 /* eslint-disable  no-bitwise */
-import { DIRECT_PROGRAM_COLOR, CHART_COLOR_MAP, AVAILABLE_COLORS } from "./constants";
 
 export function hashCode(str) { // java String#hashCode
 	let hash = 0;
@@ -25,10 +24,8 @@ export function addAlpha(color, opacity) {
 export function getCustomColor(item, program) {
 	let colorMap;
 	let color;
-	colorMap = CHART_COLOR_MAP.get(program);
 	if (!colorMap) {
 		colorMap = new Map();
-		CHART_COLOR_MAP.set(program, colorMap);
 	}
 	color = colorMap.get(item.code);
 	if (!color) {

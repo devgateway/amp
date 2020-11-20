@@ -7,7 +7,6 @@ import callReport from '../actions/callReports';
 import { Col } from 'react-bootstrap';
 import CustomLegend from "../../../utils/components/CustomLegend";
 import './legends/legends.css';
-import { DIRECT_PROGRAM_COLOR, CHART_COLOR_MAP, DIRECT_PROGRAM, INDIRECT_PROGRAMS } from "../utils/constants";
 import { Loading } from "../../../utils/components/Loading";
 import { getCustomColor } from "../utils/Utils";
 
@@ -66,7 +65,6 @@ class MainDashboardContainer extends Component {
 			return (<div>ERROR</div>);
 		} else {
 			if (nddLoaded && !nddLoadingPending) {
-				const programLegend = this.getProgramLegend();
 				return (
 					<div>
 						<Col md={6}>

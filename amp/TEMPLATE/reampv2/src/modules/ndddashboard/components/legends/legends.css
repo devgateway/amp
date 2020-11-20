@@ -69,21 +69,3 @@
 .chart-legend {
     height: 110px;
 }
-
-.country-popup-1 .chart-legend {
-    height: 215px;
-    border-bottom: 1px solid #313d4f;
-    position: relative;
-    /*margin: 0;
-    position: absolute;
-    top: 50%;
-    -ms-transform: translateY(-50%);
-    transform: translateY(-50%);*/
-}
-.country-popup-1 .chart-legend .custom-legend-inner{
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    -ms-transform: translateY(-50%);
-    transform: translateY(-50%);
-}

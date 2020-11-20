@@ -4,19 +4,12 @@ import EllipsisText from "react-ellipsis-text";
 export default class CustomLegend extends Component {
 	constructor(props) {
 		super(props);
-		this.formatter2 = new Intl.NumberFormat('en-US', {
-			style: 'currency',
-			currency: 'USD',
-			// These options are needed to round to whole numbers if that's what you want.
-			//minimumFractionDigits: 0,
-			//maximumFractionDigits: 0,
-		});
 	}
 
 	render() {
 		const {data, colorMap, shouldSplitBig, formatter} = this.props;
 		return (
-			 <div className="custom-legend">
+			<div className="custom-legend">
 				<div className="custom-legend-inner">
 					<ul className={data.length > 3 && shouldSplitBig ? 'two-rows' : ''}>
 						{data.map(d => {
@@ -31,8 +24,10 @@ export default class CustomLegend extends Component {
 								backgroundColor: `${colorMap.get(d.code)}`
 							}}/>
 										</div>
+										<div className="col-md-11 col-xs-11 label">
 											<EllipsisText
 												text={d.simpleLabel}
+												length={100}
 												tail=""/>
 											{d.percentage &&
 											<span
@@ -54,6 +49,6 @@ export default class CustomLegend extends Component {
 					</ul>
 				</div>
 			</div>)
-		;
+			;
 	}
 }

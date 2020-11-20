@@ -11,7 +11,7 @@ export const DIRECT = 'DIRECT';
 export const INDIRECT = 'INDIRECT';
 export const TRANSITIONS = 100;
 
-const DIRECT_PROGRAM_COLOR = ['#1f5177',
+const PROGRAMLVL1_COLOR = ['#1f5177',
 	'#a42727',
 	'#b6861e',
 	'#598118',
@@ -24,13 +24,12 @@ const INDIRECT_PROGRAM_COLOR = ['#91cb34',
 	'#ffbd2f'];
 
 export const AVAILABLE_COLORS = new Map([
-	[DIRECT_PROGRAM, DIRECT_PROGRAM_COLOR],
+	[PROGRAMLVL1, PROGRAMLVL1_COLOR],
 	[INDIRECT_PROGRAMS, INDIRECT_PROGRAM_COLOR]
 ]);
 
 
 export const CHART_COLOR_MAP = new Map([
-	[DIRECT_PROGRAM, new Map()],
+	[PROGRAMLVL1, new Map()],
 	[INDIRECT_PROGRAMS, new Map()]
 ]);
-

@@ -1,7 +1,11 @@
-.solar-container {
+.chart-container {
     border: 1px solid #ddd;
     border-radius: 0;
     background-color: white;
+}
+
+.chart-container .chart {
+    min-height: 405px;
 }
 
 .solar-chart-enter {
@@ -29,4 +33,14 @@
 .solar-chart-appear.solar-chart-appear-active {
     opacity: 1;
     transition: opacity .5s ease-in;
+}
+
+.loading {
+    background-image: url("/assets/loading.gif");
+    background-size: contain;
+    background-repeat: no-repeat;
+    height: 100px;
+    position: relative;
+    top: 151px;
+    background-position: center;
 }

@@ -212,7 +212,7 @@ class NestedDonutsProgramChart extends Component {
                 colors: outerColors,
                 line: {
                   'color': 'white',
-                  'width': 1
+                  'width': 3
                 }
               }
             }]
@@ -226,7 +226,7 @@ class NestedDonutsProgramChart extends Component {
             showlegend: false,
             transition,
             margin: {
-              l: 0,
+              l: 55,
               r: 0,
               b: 10,
               t: 20,

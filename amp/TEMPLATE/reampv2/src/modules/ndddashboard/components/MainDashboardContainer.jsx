@@ -32,7 +32,6 @@ class MainDashboardContainer extends Component {
   render() {
     const { error, ndd, nddLoadingPending, nddLoaded, dashboardSettings } = this.props;
     const { fundingType } = this.state;
-    console.error(this.state);
     if (error) {
       // TODO proper error handling
       return (<div>ERROR</div>);
@@ -40,18 +39,17 @@ class MainDashboardContainer extends Component {
       return (<div>
         <Col md={6}>
           <div>
-            <div className="solar-container">
-              <div>
-                {(nddLoaded && !nddLoadingPending) ? <NestedDonutsProgramChart data={ndd}/> : <div>Loading...</div>}
+            <div className="chart-container">
+              <div className="chart">
+                {nddLoaded && !nddLoadingPending ? <NestedDonutsProgramChart data={ndd}/> : <div className="loading"/>}
+              </div>
+              <div className="buttons">
                 {dashboardSettings ?
                   <FundingTypeSelector onChange={this.onChangeFundingType} defaultValue={fundingType}/> : null}
               </div>
             </div>
             <div className="year-chart-container">amounts by year</div>
           </div>
-        </Col>
-        <Col md={6}>
-          <div>legends</div>
         </Col>
       </div>);
     }

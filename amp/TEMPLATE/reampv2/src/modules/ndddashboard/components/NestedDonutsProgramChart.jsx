@@ -205,15 +205,18 @@ class NestedDonutsProgramChart extends Component {
 								colors: innerColors,
 								line: {
 									color: 'white',
-									'width': 1
+									'width': 2
 								}
+							},
+							textfont: {
+								color: 'white'
 							}
 						}, {
 							values: outerDataLvl2.map(i => i[AMOUNT]),
 							labels: outerDataLvl2.map(i => i[CODE]),
 							name: DIRECT,
 							hoverinfo: 'percent+label',
-							textposition: 'outside',
+							textposition: 'inside',
 							hole: .7,
 							type: 'pie',
 							sort: false,
@@ -223,8 +226,11 @@ class NestedDonutsProgramChart extends Component {
 								colors: outerColors,
 								line: {
 									'color': 'white',
-									'width': 1
+									'width': 2
 								}
+							},
+							textfont: {
+								color: 'white'
 							}
 						}]
 					}

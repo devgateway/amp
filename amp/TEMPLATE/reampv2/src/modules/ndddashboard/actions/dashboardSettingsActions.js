@@ -11,7 +11,7 @@ export function fetchDashboardSettingsPending() {
 export function fetchDashboardSettingsSuccess(payload) {
   return {
     type: FETCH_DASHBOARD_SETTINGS_SUCCESS,
-    payload: payload
+    payload
   };
 }
 

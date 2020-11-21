@@ -12,7 +12,7 @@ export function fetchIndirectReportPending() {
 export function fetchIndirectReportSuccess(payload) {
   return {
     type: FETCH_DIRECT_INDIRECT_NDD_SUCCESS,
-    payload: payload
+    payload
   };
 }
 

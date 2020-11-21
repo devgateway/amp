@@ -1,7 +1,9 @@
 import EllipsisText from 'react-ellipsis-text';
 import React from 'react';
 import * as FieldsConstants from './FieldsConstants';
-import { COLOR_MAP, COLOR_MAP_CUSTOM, MODALITY_CHART, SECTOR_COLOR_MAP } from './constants';
+import {
+  COLOR_MAP, COLOR_MAP_CUSTOM, MODALITY_CHART, SECTOR_COLOR_MAP
+} from './constants';
 
 export function generateStructureBasedOnSector(objectData) {
   return generateStructureBasedOnSectorProjectCount(objectData).groupings;
@@ -91,7 +93,7 @@ export function getProjects(projects, elementId, activitiesDetails, ellipsisLeng
       <a href={p.ampUrl} target="_blank" rel="noopener noreferrer">
         <EllipsisText
           text={p.projectName}
-          length={ellipsisLength}/>
+          length={ellipsisLength} />
       </a>
     </li>
   ));

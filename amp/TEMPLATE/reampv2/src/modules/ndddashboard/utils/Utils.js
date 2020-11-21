@@ -1,5 +1,5 @@
 /* eslint-disable  no-bitwise */
-import { DIRECT_PROGRAM_COLOR, CHART_COLOR_MAP, AVAILABLE_COLORS } from './constants';
+import { CHART_COLOR_MAP, AVAILABLE_COLORS } from './constants';
 
 export function hashCode(str) { // java String#hashCode
   let hash = 0;

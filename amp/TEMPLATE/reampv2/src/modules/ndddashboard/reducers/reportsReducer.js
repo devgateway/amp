@@ -21,7 +21,7 @@ export default (state = initialState, action) => {
         ...state,
         nddLoadingPending: false,
         nddLoaded: true,
-        ndd: action.payload
+        ndd: action.payload,
       };
     }
     case FETCH_DIRECT_INDIRECT_NDD_ERROR:

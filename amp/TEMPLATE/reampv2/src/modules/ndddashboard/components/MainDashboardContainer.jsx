@@ -3,8 +3,11 @@ import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import NestedDonutsProgramChart from './NestedDonutsProgramChart';
-import callReport from '../actions/callReports';
+import { callReport } from '../actions/callReports';
+import loadDashboardSettings from '../actions/loadDashboardSettings';
 import { Col } from 'react-bootstrap';
+import FundingTypeSelector from './FundingTypeSelector';
+import { FUNDING_TYPE } from '../utils/constants';
 import CustomLegend from "../../../utils/components/CustomLegend";
 import './legends/legends.css';
 import {
@@ -18,8 +21,23 @@ import { Loading } from "../../../utils/components/Loading";
 import { ColorLuminance, getCustomColor } from "../utils/Utils";
 
 class MainDashboardContainer extends Component {
+
+	constructor(props) {
+		super(props);
+		this.onChangeFundingType = this.onChangeFundingType.bind(this);
+		this.state = { fundingType: null };
+	}
+
 	componentDidMount() {
-		this.props.callReport();
+		const { loadDashboardSettings, callReport } = this.props;
+		loadDashboardSettings()
+			.then(settings => callReport(settings.payload.find(i => i.id === FUNDING_TYPE).value.defaultId));
+	}
+
+	onChangeFundingType(value) {
+		const { callReport } = this.props;
+		this.setState({ fundingType: value });
+		callReport(value);
 	}
 
 	getProgramLegend() {
@@ -59,6 +77,8 @@ class MainDashboardContainer extends Component {
 	}
 
 	render() {
+		const { error, ndd, nddLoadingPending, nddLoaded, dashboardSettings } = this.props;
+		const { fundingType } = this.state;
 		const formatter = new Intl.NumberFormat('en-US', {
 			style: 'currency',
 			currency: 'USD',
@@ -66,59 +86,67 @@ class MainDashboardContainer extends Component {
 			//minimumFractionDigits: 0,
 			//maximumFractionDigits: 0,
 		});
-		const {error, ndd, nddLoadingPending, nddLoaded} = this.props;
 		if (error) {
 			// TODO proper error handling
 			return (<div>ERROR</div>);
 		} else {
-			if (nddLoaded && !nddLoadingPending) {
-				const programLegend = this.getProgramLegend();
-				return (
-					<div>
-						<Col md={6}>
-							<div>
-								<div className="solar-container">
-									<div><NestedDonutsProgramChart data={ndd}/></div>
+			const programLegend = nddLoaded && !nddLoadingPending ? this.getProgramLegend() : null;
+			return (
+				<div>
+					<Col md={6}>
+						<div>
+							<div className="chart-container">
+								<div className="chart">
+									{nddLoaded && !nddLoadingPending ? <NestedDonutsProgramChart data={ndd}/> :
+										<div className="loading"/>}
 								</div>
-								<div className="year-chart-container">amounts by year</div>
+								<div className="buttons">
+									{dashboardSettings ?
+										<FundingTypeSelector onChange={this.onChangeFundingType}
+															 defaultValue={fundingType}/> : null}
+								</div>
 							</div>
-						</Col>
-						<Col md={6}>
-							<div className="legends-container">
-								<div className='legend-title'>PNSD <span
-									className="amount">{formatter.format(programLegend[0].total)}</span></div>
-								<CustomLegend formatter={formatter} data={programLegend[0].legends}
-											  colorMap={CHART_COLOR_MAP.get(PROGRAMLVL1)}/>
-								<div className='legend-title'>New Deal <span
-									className="amount">{formatter.format(programLegend[1].total)}</span></div>
-								<CustomLegend formatter={formatter} data={programLegend[1].legends}
-											  colorMap={CHART_COLOR_MAP.get(INDIRECT_PROGRAMS)}/>
+						</div>
+					</Col>
+					<Col md={6}>
+						{programLegend ? <div className="legends-container">
+							<div className='legend-title'>PNSD <span
+								className="amount">{formatter.format(programLegend[0].total)}</span>
 							</div>
-						</Col>
-					</div>
-				);
-			}
-			// TODO: proper loading component.
-			return (<Loading/>);
+							<CustomLegend formatter={formatter} data={programLegend[0].legends}
+										  colorMap={CHART_COLOR_MAP.get(PROGRAMLVL1)}/>
+							<div className='legend-title'>New Deal <span
+								className="amount">{formatter.format(programLegend[1].total)}</span>
+							</div>
+							<CustomLegend formatter={formatter} data={programLegend[1].legends}
+										  colorMap={CHART_COLOR_MAP.get(INDIRECT_PROGRAMS)}/>
+						</div> : null}
+					</Col>
+				</div>
+			);
 		}
 	}
 }
 
 const mapStateToProps = state => ({
 	ndd: state.reportsReducer.ndd,
+	dashboardSettings: state.dashboardSettingsReducer.dashboardSettings,
 	error: state.reportsReducer.error,
 	nddLoaded: state.reportsReducer.nddLoaded,
 	nddLoadingPending: state.reportsReducer.nddLoadingPending,
 });
+
 const mapDispatchToProps = dispatch => bindActionCreators({
-	callReport
+	callReport,
+	loadDashboardSettings
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainDashboardContainer);
 
 MainDashboardContainer.propTypes = {
 	callReport: PropTypes.func.isRequired,
-	error: PropTypes.object
+	error: PropTypes.object,
+	loadDashboardSettings: PropTypes.func.isRequired,
 };
 MainDashboardContainer.defaultProps = {
 	error: undefined

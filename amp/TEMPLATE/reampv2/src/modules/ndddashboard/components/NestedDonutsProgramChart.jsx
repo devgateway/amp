@@ -160,12 +160,25 @@ class NestedDonutsProgramChart extends Component {
 			duration: 2000,
 			easing: 'cubic-in-out'
 		};
+		const annotations = outerData.length === 0 ? [
+			{
+				'text': 'No matching data found',
+				'xref': 'paper',
+				'yref': 'paper',
+				'showarrow': false,
+				'font': {
+					'size': 28
+				}
+			}
+		] : [];
 		// Note: Remove prop 'key' if you want to disable the fade effect after clicking the outer ring.
 		return (
 			<CSSTransitionGroup
 				/* key={selectedDirectProgram} */
 				transitionName="solar-chart"
 				transitionAppear={true}
+				transitionLeave={true}
+				transitionEnter={true}
 				transitionEnterTimeout={TRANSITIONS}
 				transitionLeaveTimeout={TRANSITIONS}
 				transitionAppearTimeout={TRANSITIONS}>
@@ -192,15 +205,18 @@ class NestedDonutsProgramChart extends Component {
 								colors: innerColors,
 								line: {
 									color: 'white',
-									'width': 1
+									'width': 2
 								}
+							},
+							textfont: {
+								color: 'white'
 							}
 						}, {
 							values: outerDataLvl2.map(i => i[AMOUNT]),
 							labels: outerDataLvl2.map(i => i[CODE]),
 							name: DIRECT,
 							hoverinfo: 'percent+label',
-							textposition: 'outside',
+							textposition: 'inside',
 							hole: .7,
 							type: 'pie',
 							sort: false,
@@ -210,26 +226,30 @@ class NestedDonutsProgramChart extends Component {
 								colors: outerColors,
 								line: {
 									'color': 'white',
-									'width': 1
+									'width': 2
 								}
+							},
+							textfont: {
+								color: 'white'
 							}
 						}]
 					}
 					layout={{
 						autosize: false,
-						paper_bgcolor: "rgba(0,0,0,0)",
+						paper_bgcolor: 'rgba(0,0,0,0)',
 						width: 500,
 						height: 400,
 						title: '',
 						showlegend: false,
 						transition,
 						margin: {
-							l: 0,
+							l: 55,
 							r: 0,
 							b: 10,
 							t: 20,
 							pad: 4
 						},
+						annotations: annotations
 					}}
 					config={{displaylogo: false}}
 					onClick={event => this.handleOuterChartClick(event, outerData)}
@@ -241,7 +261,7 @@ class NestedDonutsProgramChart extends Component {
 
 NestedDonutsProgramChart.propTypes = {
 	data: PropTypes.array.isRequired
-}
+};
 
 const mapStateToProps = state => ({});
 

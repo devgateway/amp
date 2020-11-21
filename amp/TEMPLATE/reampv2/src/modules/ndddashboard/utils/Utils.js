@@ -1,4 +1,5 @@
 /* eslint-disable  no-bitwise */
+import { DIRECT_PROGRAM_COLOR, CHART_COLOR_MAP, AVAILABLE_COLORS } from "./constants";
 
 export function hashCode(str) { // java String#hashCode
 	let hash = 0;
@@ -24,8 +25,10 @@ export function addAlpha(color, opacity) {
 export function getCustomColor(item, program) {
 	let colorMap;
 	let color;
+	colorMap = CHART_COLOR_MAP.get(program);
 	if (!colorMap) {
 		colorMap = new Map();
+		CHART_COLOR_MAP.set(program, colorMap);
 	}
 	color = colorMap.get(item.code);
 	if (!color) {
@@ -34,4 +37,23 @@ export function getCustomColor(item, program) {
 		colorMap.set(item.code, color);
 	}
 	return color;
+}
+export function ColorLuminance(hex, lum) {
+
+	// validate hex string
+	hex = String(hex).replace(/[^0-9a-f]/gi, '');
+	if (hex.length < 6) {
+		hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+	}
+	lum = lum || 0;
+
+	// convert to decimal and change luminosity
+	let rgb = "#", c, i;
+	for (i = 0; i < 3; i++) {
+		c = parseInt(hex.substr(i*2,2), 16);
+		c = Math.round(Math.min(Math.max(0, c + (c * lum)), 255)).toString(16);
+		rgb += ("00"+c).substr(c.length);
+	}
+
+	return rgb;
 }

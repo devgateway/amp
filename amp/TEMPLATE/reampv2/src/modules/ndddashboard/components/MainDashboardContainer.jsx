@@ -7,8 +7,15 @@ import callReport from '../actions/callReports';
 import { Col } from 'react-bootstrap';
 import CustomLegend from "../../../utils/components/CustomLegend";
 import './legends/legends.css';
+import {
+	DIRECT_PROGRAM_COLOR,
+	CHART_COLOR_MAP,
+	DIRECT_PROGRAM,
+	INDIRECT_PROGRAMS,
+	PROGRAMLVL1
+} from "../utils/constants";
 import { Loading } from "../../../utils/components/Loading";
-import { getCustomColor } from "../utils/Utils";
+import { ColorLuminance, getCustomColor } from "../utils/Utils";
 
 class MainDashboardContainer extends Component {
 	componentDidMount() {
@@ -23,7 +30,7 @@ class MainDashboardContainer extends Component {
 		let directTotal = 0;
 		let indirectTotal = 0;
 		ndd.forEach(dp => {
-				directTotal += this.generateLegend(dp.directProgram, directLegend, DIRECT_PROGRAM, directTotal);
+				directTotal += this.generateLegend(dp.directProgram, directLegend, PROGRAMLVL1, directTotal);
 				dp.indirectPrograms.forEach(idp => {
 					indirectTotal += this.generateLegend(idp, indirectLegend, INDIRECT_PROGRAMS, indirectTotal);
 				})
@@ -59,13 +66,13 @@ class MainDashboardContainer extends Component {
 			//minimumFractionDigits: 0,
 			//maximumFractionDigits: 0,
 		});
-		// TODO pick the program names from config
 		const {error, ndd, nddLoadingPending, nddLoaded} = this.props;
 		if (error) {
 			// TODO proper error handling
 			return (<div>ERROR</div>);
 		} else {
 			if (nddLoaded && !nddLoadingPending) {
+				const programLegend = this.getProgramLegend();
 				return (
 					<div>
 						<Col md={6}>
@@ -81,7 +88,7 @@ class MainDashboardContainer extends Component {
 								<div className='legend-title'>PNSD <span
 									className="amount">{formatter.format(programLegend[0].total)}</span></div>
 								<CustomLegend formatter={formatter} data={programLegend[0].legends}
-											  colorMap={CHART_COLOR_MAP.get(DIRECT_PROGRAM)}/>
+											  colorMap={CHART_COLOR_MAP.get(PROGRAMLVL1)}/>
 								<div className='legend-title'>New Deal <span
 									className="amount">{formatter.format(programLegend[1].total)}</span></div>
 								<CustomLegend formatter={formatter} data={programLegend[1].legends}

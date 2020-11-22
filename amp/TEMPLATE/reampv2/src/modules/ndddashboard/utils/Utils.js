@@ -43,7 +43,7 @@ export function getCustomColor(item, program) {
   return color;
 }
 
-export function ColorLuminance(hex, lum) {
+export function getColorLuminance(hex, lum) {
   // validate hex string
   hex = String(hex)
     .replace(/[^0-9a-f]/gi, '');

@@ -12,7 +12,7 @@ import {
   TRANSITIONS, PROGRAMLVL2, CHART_COLOR_MAP, AVAILABLE_COLORS
 } from '../utils/constants';
 import {
-  intToRGB, hashCode, addAlpha, getCustomColor, getColorLuminance
+  addAlpha, getCustomColor, getGradient
 } from '../utils/Utils';
 import styles from './styles.css';
 
@@ -92,7 +92,7 @@ class NestedDonutsProgramChart extends Component {
         });
         const totalForSubGroup = innerSubGroup.reduce((acc, cur) => (acc + cur.originalAmount), 0);
         innerSubGroup.forEach(j => {
-          j.percentageInSubGroup = (j.originalAmount * 100 / totalForSubGroup);
+          j.percentageInSubGroup = ((j.originalAmount * 100) / totalForSubGroup);
         });
         ret.push(innerSubGroup);
       });
@@ -149,13 +149,9 @@ class NestedDonutsProgramChart extends Component {
 
   render() {
     const { selectedDirectProgram } = this.state;
+
     if (selectedDirectProgram && !AVAILABLE_COLORS.get(`${PROGRAMLVL1}_${selectedDirectProgram.code}`)) {
-      const colors = [];
-      for (let i = 0.1; i < 1; i += 0.1) {
-        console.log(i);
-        colors.push(getColorLuminance(getCustomColor(selectedDirectProgram.code, PROGRAMLVL1), i));
-      }
-      console.log(colors);
+      const colors = getGradient(getCustomColor(selectedDirectProgram, PROGRAMLVL1), '#FFFFFF');
       AVAILABLE_COLORS.set(`${PROGRAMLVL1}_${selectedDirectProgram.code}`, colors);
     }
     const outerData = this.extractOuterData(false);

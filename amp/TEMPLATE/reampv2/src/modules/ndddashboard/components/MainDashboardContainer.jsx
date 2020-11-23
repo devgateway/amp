@@ -65,7 +65,7 @@ class MainDashboardContainer extends Component {
       prog = {};
       prog.amount = 0;
       prog.code = program.programLvl1.code;
-      prog.simpleLabel = program.programLvl1.name;
+      prog.simpleLabel = `${program.programLvl1.code}:${program.programLvl1.name}`;
     }
     prog.amount += program.amount;
     total += program.amount;
@@ -164,7 +164,10 @@ MainDashboardContainer.propTypes = {
   callReport: PropTypes.func.isRequired,
   error: PropTypes.object,
   loadDashboardSettings: PropTypes.func.isRequired,
+  ndd: PropTypes.array.isRequired,
+  nddLoadingPending: PropTypes.bool.isRequired
 };
+
 MainDashboardContainer.defaultProps = {
   error: undefined
 };

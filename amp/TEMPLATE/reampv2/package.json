@@ -39,7 +39,7 @@
     "react-transition-group": "^1.2.1",
     "react-visibility-sensor": "^5.1.1",
     "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
     "react-bootstrap-modal": "^4.2.0"
   },
   "scripts": {

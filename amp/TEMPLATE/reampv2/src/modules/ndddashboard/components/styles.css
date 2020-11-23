@@ -44,3 +44,12 @@
     top: 151px;
     background-position: center;
 }
+
+/* To fix the modal library. */
+.modal {
+    display: block;
+}
+
+.label-bold {
+    font-weight: 700;
+}

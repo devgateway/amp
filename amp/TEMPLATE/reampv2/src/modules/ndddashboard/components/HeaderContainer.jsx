@@ -8,9 +8,9 @@ export default class HeaderContainer extends Component {
   render() {
     return (
       <div>
-        <Filters/>
-        <Settings/>
-        <Share/>
+        <Filters />
+        <Settings />
+        <Share />
       </div>
     );
   }

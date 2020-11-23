@@ -1,5 +1,6 @@
 /* eslint-disable  no-bitwise */
-import { DIRECT_PROGRAM_COLOR, CHART_COLOR_MAP, AVAILABLE_COLORS } from './constants';
+import Gradient from 'javascript-color-gradient';
+import { CHART_COLOR_MAP, AVAILABLE_COLORS } from './constants';
 
 export function hashCode(str) { // java String#hashCode
   let hash = 0;
@@ -31,7 +32,7 @@ export function getCustomColor(item, program) {
     colorMap = new Map();
     CHART_COLOR_MAP.set(program, colorMap);
   }
-  color = colorMap.get(item.code);
+  color = colorMap.get(item.code.trim());
   if (!color) {
     let CHART_COLORS = AVAILABLE_COLORS.get(program);
     if (!CHART_COLORS) {
@@ -43,25 +44,9 @@ export function getCustomColor(item, program) {
   return color;
 }
 
-export function ColorLuminance(hex, lum) {
-  // validate hex string
-  hex = String(hex)
-    .replace(/[^0-9a-f]/gi, '');
-  if (hex.length < 6) {
-    hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
-  }
-  lum = lum || 0;
+export function getGradient(colorFrom, colorTwo) {
+  const colorGradient = new Gradient();
 
-  // convert to decimal and change luminosity
-  let rgb = '#';
-  let c;
-  let i;
-  for (i = 0; i < 3; i++) {
-    c = parseInt(hex.substr(i * 2, 2), 16);
-    c = Math.round(Math.min(Math.max(0, c + (c * lum)), 255))
-      .toString(16);
-    rgb += (`00${c}`).substr(c.length);
-  }
-
-  return rgb;
+  colorGradient.setGradient(colorFrom, colorTwo);
+  return colorGradient.getArray();
 }

@@ -9,7 +9,7 @@ import Plotly from 'plotly.js';
 import createPlotlyComponent from 'react-plotly.js/factory';
 import {
   DIRECT_PROGRAM, INDIRECT_PROGRAMS, PROGRAMLVL1, AMOUNT, CODE, DIRECT, INDIRECT,
-  TRANSITIONS, PROGRAMLVL2, CHART_COLOR_MAP, AVAILABLE_COLORS
+  TRANSITIONS, PROGRAMLVL2, AVAILABLE_COLORS
 } from '../utils/constants';
 import {
   addAlpha, getCustomColor, getGradient
@@ -21,12 +21,10 @@ const Plot = createPlotlyComponent(Plotly);
 class NestedDonutsProgramChart extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      selectedDirectProgram: null
-    };
+    const { handleOuterChartClick } = this.props;
     this.extractOuterData = this.extractOuterData.bind(this);
     this.extractInnerData = this.extractInnerData.bind(this);
-    this.handleOuterChartClick = this.handleOuterChartClick.bind(this);
+    this.handleOuterChartClick = handleOuterChartClick;
     this.calculateOpacity = this.calculateOpacity.bind(this);
   }
 
@@ -35,7 +33,7 @@ class NestedDonutsProgramChart extends Component {
    * @returns {[]}
    */
   extractOuterData(calculateLvl2) {
-    const { selectedDirectProgram } = this.state;
+    const { selectedDirectProgram } = this.props;
     const ret = [];
     const { data } = this.props;
     if (data && data.length > 0) {
@@ -56,7 +54,7 @@ class NestedDonutsProgramChart extends Component {
               ), 0),
             neverFade: this.isSubProgram(i, selectedDirectProgram)
           };
-          item.percentageInTotal = item[AMOUNT] / totalAmount * 100;
+          item.percentageInTotal = (item[AMOUNT] / totalAmount) * 100;
           ret.push(item);
         }
       });
@@ -109,7 +107,7 @@ class NestedDonutsProgramChart extends Component {
           ret.push({
             [CODE]: j[CODE],
             name: j.name,
-            [AMOUNT]: j.percentageInSubGroup / 100 * parentPercentage
+            [AMOUNT]: (j.percentageInSubGroup / 100) * parentPercentage
           });
         });
       });
@@ -117,19 +115,8 @@ class NestedDonutsProgramChart extends Component {
     return ret;
   }
 
-  handleOuterChartClick(event, outerData) {
-    const { selectedDirectProgram } = this.state;
-    if (event.points[0].data.name === DIRECT) {
-      if (!selectedDirectProgram) {
-        this.setState({ selectedDirectProgram: outerData[event.points[0].i] });
-      } else {
-        this.setState({ selectedDirectProgram: null });
-      }
-    }
-  }
-
   calculateOpacity(colors, data) {
-    const { selectedDirectProgram } = this.state;
+    const { selectedDirectProgram } = this.props;
     let newColors = [];
     if (selectedDirectProgram) {
       colors.forEach((c, i) => {
@@ -148,7 +135,7 @@ class NestedDonutsProgramChart extends Component {
   }
 
   render() {
-    const { selectedDirectProgram } = this.state;
+    const { selectedDirectProgram } = this.props;
 
     if (selectedDirectProgram && !AVAILABLE_COLORS.get(`${PROGRAMLVL1}_${selectedDirectProgram.code}`)) {
       const colors = getGradient(getCustomColor(selectedDirectProgram, PROGRAMLVL1), '#FFFFFF');
@@ -267,7 +254,9 @@ class NestedDonutsProgramChart extends Component {
 }
 
 NestedDonutsProgramChart.propTypes = {
-  data: PropTypes.array.isRequired
+  data: PropTypes.array.isRequired,
+  handleOuterChartClick: PropTypes.func.isRequired,
+  selectedDirectProgram: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({});

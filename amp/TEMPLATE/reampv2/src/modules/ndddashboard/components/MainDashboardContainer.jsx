@@ -9,29 +9,36 @@ import loadDashboardSettings from '../actions/loadDashboardSettings';
 import FundingTypeSelector from './FundingTypeSelector';
 import {
   FUNDING_TYPE,
-  DIRECT_PROGRAM_COLOR,
   CHART_COLOR_MAP,
-  DIRECT_PROGRAM,
   INDIRECT_PROGRAMS,
-  PROGRAMLVL1
+  PROGRAMLVL1, DIRECT
 } from '../utils/constants';
 import CustomLegend from '../../../utils/components/CustomLegend';
 import './legends/legends.css';
-
-import { Loading } from '../../../utils/components/Loading';
-import { ColorLuminance, getCustomColor } from '../utils/Utils';
+import { getCustomColor } from '../utils/Utils';
 
 class MainDashboardContainer extends Component {
   constructor(props) {
     super(props);
     this.onChangeFundingType = this.onChangeFundingType.bind(this);
-    this.state = { fundingType: null };
+    this.state = { fundingType: null, selectedDirectProgram: null };
   }
 
   componentDidMount() {
     const { loadDashboardSettings, callReport } = this.props;
     loadDashboardSettings()
       .then(settings => callReport(settings.payload.find(i => i.id === FUNDING_TYPE).value.defaultId));
+  }
+
+  handleOuterChartClick(event, outerData) {
+    const { selectedDirectProgram } = this.state;
+    if (event.points[0].data.name === DIRECT) {
+      if (!selectedDirectProgram) {
+        this.setState({ selectedDirectProgram: outerData[event.points[0].i] });
+      } else {
+        this.setState({ selectedDirectProgram: null });
+      }
+    }
   }
 
   onChangeFundingType(value) {
@@ -91,13 +98,20 @@ class MainDashboardContainer extends Component {
       return (<div>ERROR</div>);
     } else {
       const programLegend = nddLoaded && !nddLoadingPending ? this.getProgramLegend() : null;
+      const { selectedDirectProgram } = this.state;
       return (
         <div>
           <Col md={6}>
             <div>
               <div className="chart-container">
                 <div className="chart">
-                  {nddLoaded && !nddLoadingPending ? <NestedDonutsProgramChart data={ndd} />
+                  {nddLoaded && !nddLoadingPending
+                    ? (
+                      <NestedDonutsProgramChart
+                        data={ndd}
+                        selectedDirectProgram={selectedDirectProgram}
+                        handleOuterChartClick={this.handleOuterChartClick.bind(this)} />
+                    )
                     : <div className="loading" />}
                 </div>
                 <div className="buttons">

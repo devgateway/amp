@@ -11,11 +11,11 @@ import {
   FUNDING_TYPE,
   CHART_COLOR_MAP,
   INDIRECT_PROGRAMS,
-  PROGRAMLVL1, DIRECT
+  PROGRAMLVL1, DIRECT, AVAILABLE_COLORS
 } from '../utils/constants';
 import CustomLegend from '../../../utils/components/CustomLegend';
 import './legends/legends.css';
-import { getCustomColor } from '../utils/Utils';
+import { getCustomColor, getGradient } from '../utils/Utils';
 
 class MainDashboardContainer extends Component {
   constructor(props) {
@@ -49,16 +49,25 @@ class MainDashboardContainer extends Component {
 
   getProgramLegend() {
     const { ndd } = this.props;
+    const { selectedDirectProgram } = this.state;
     const legends = [];
     const directLegend = new Map();
     const indirectLegend = new Map();
     let directTotal = 0;
     let indirectTotal = 0;
     ndd.forEach(dp => {
-      directTotal += this.generateLegend(dp.directProgram, directLegend, PROGRAMLVL1, directTotal);
-      dp.indirectPrograms.forEach(idp => {
-        indirectTotal += this.generateLegend(idp, indirectLegend, INDIRECT_PROGRAMS, indirectTotal);
-      });
+      if (selectedDirectProgram) {
+        if (dp.directProgram.programLvl1.code === selectedDirectProgram.code) {
+          directTotal += this.generateLegend(dp.directProgram, 2, directLegend,
+            `${PROGRAMLVL1}_${selectedDirectProgram.code}`, directTotal);
+        }
+      } else {
+        directTotal += this.generateLegend(dp.directProgram, 1, directLegend, PROGRAMLVL1);
+      }
+      if (!selectedDirectProgram) { // We only need indirect if no direct is selected
+        dp.indirectPrograms.forEach(idp => indirectTotal
+          += this.generateLegend(idp, 1, indirectLegend, INDIRECT_PROGRAMS));
+      }
     });
 
     legends.push({ total: directTotal, legends: [...directLegend.values()] });
@@ -66,26 +75,34 @@ class MainDashboardContainer extends Component {
     return legends;
   }
 
-  generateLegend(program, legend, programColor, total) {
-    let prog = legend.get(program.programLvl1.code);
+  generateLegend(program, level, legend, programColor) {
+    const programLevel = program[`programLvl${level}`];
+    let prog = legend.get(programLevel.code.trim());
     if (!prog) {
       prog = {};
       prog.amount = 0;
-      prog.code = program.programLvl1.code;
-      prog.simpleLabel = `${program.programLvl1.code}:${program.programLvl1.name}`;
+      prog.code = programLevel.code.trim();
+      prog.simpleLabel = `${programLevel.code}:${programLevel.name}`;
     }
     prog.amount += program.amount;
-    total += program.amount;
     getCustomColor(prog, programColor);
     legend.set(prog.code, prog);
-    return total;
+    return program.amount;
+  }
+
+  generate2LevelColors() {
+    const { selectedDirectProgram } = this.state;
+    if (selectedDirectProgram && !AVAILABLE_COLORS.get(`${PROGRAMLVL1}_${selectedDirectProgram.code}`)) {
+      const colors = getGradient(getCustomColor(selectedDirectProgram, PROGRAMLVL1), '#FFFFFF');
+      AVAILABLE_COLORS.set(`${PROGRAMLVL1}_${selectedDirectProgram.code}`, colors);
+    }
   }
 
   render() {
     const {
       error, ndd, nddLoadingPending, nddLoaded, dashboardSettings
     } = this.props;
-    const { fundingType } = this.state;
+    const { fundingType, selectedDirectProgram } = this.state;
     const formatter = new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
@@ -97,8 +114,8 @@ class MainDashboardContainer extends Component {
       // TODO proper error handling
       return (<div>ERROR</div>);
     } else {
+      this.generate2LevelColors();
       const programLegend = nddLoaded && !nddLoadingPending ? this.getProgramLegend() : null;
-      const { selectedDirectProgram } = this.state;
       return (
         <div>
           <Col md={6}>
@@ -129,7 +146,8 @@ class MainDashboardContainer extends Component {
             {programLegend ? (
               <div className="legends-container">
                 <div className="legend-title">
-                  PNSD
+                  {selectedDirectProgram ? selectedDirectProgram.name : 'PNSD'}
+                  :
                   <span
                     className="amount">
                     {formatter.format(programLegend[0].total)}
@@ -138,18 +156,24 @@ class MainDashboardContainer extends Component {
                 <CustomLegend
                   formatter={formatter}
                   data={programLegend[0].legends}
-                  colorMap={CHART_COLOR_MAP.get(PROGRAMLVL1)} />
-                <div className="legend-title">
-                  New Deal
-                  <span
-                    className="amount">
-                    {formatter.format(programLegend[1].total)}
-                  </span>
-                </div>
-                <CustomLegend
-                  formatter={formatter}
-                  data={programLegend[1].legends}
-                  colorMap={CHART_COLOR_MAP.get(INDIRECT_PROGRAMS)} />
+                  colorMap={CHART_COLOR_MAP.get(selectedDirectProgram ? `${PROGRAMLVL1}_${selectedDirectProgram.code}`
+                    : PROGRAMLVL1)} />
+                {selectedDirectProgram === null
+                && (
+                  <div>
+                    <div className="legend-title">
+                      New Deal
+                      <span
+                        className="amount">
+                        {formatter.format(programLegend[1].total)}
+                      </span>
+                    </div>
+                    <CustomLegend
+                      formatter={formatter}
+                      data={programLegend[1].legends}
+                      colorMap={CHART_COLOR_MAP.get(INDIRECT_PROGRAMS)} />
+                  </div>
+                )}
               </div>
             ) : null}
           </Col>
@@ -179,9 +203,12 @@ MainDashboardContainer.propTypes = {
   error: PropTypes.object,
   loadDashboardSettings: PropTypes.func.isRequired,
   ndd: PropTypes.array.isRequired,
-  nddLoadingPending: PropTypes.bool.isRequired
+  nddLoadingPending: PropTypes.bool.isRequired,
+  nddLoaded: PropTypes.bool.isRequired,
+  dashboardSettings: PropTypes.object
 };
 
 MainDashboardContainer.defaultProps = {
-  error: undefined
+  error: undefined,
+  dashboardSettings: undefined
 };

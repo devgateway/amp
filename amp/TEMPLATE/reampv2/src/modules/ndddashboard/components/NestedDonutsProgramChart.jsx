@@ -136,11 +136,6 @@ class NestedDonutsProgramChart extends Component {
 
   render() {
     const { selectedDirectProgram } = this.props;
-
-    if (selectedDirectProgram && !AVAILABLE_COLORS.get(`${PROGRAMLVL1}_${selectedDirectProgram.code}`)) {
-      const colors = getGradient(getCustomColor(selectedDirectProgram, PROGRAMLVL1), '#FFFFFF');
-      AVAILABLE_COLORS.set(`${PROGRAMLVL1}_${selectedDirectProgram.code}`, colors);
-    }
     const outerData = this.extractOuterData(false);
     const outerDataLvl2 = selectedDirectProgram ? this.extractOuterData(true) : this.extractOuterData(false);
     const innerData = this.extractInnerData(outerData);

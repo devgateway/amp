@@ -63,5 +63,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(FundingTypeSelector)
 
 FundingTypeSelector.propTypes = {
   onChange: PropTypes.func.isRequired,
-  defaultValue: PropTypes.string.isRequired
+  defaultValue: PropTypes.string.isRequired,
+  dashboardSettings: PropTypes.array.isRequired
 };

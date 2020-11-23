@@ -9,11 +9,15 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.module.aim.dbentity.AmpIndirectTheme;
+import org.digijava.module.esrigis.dbentity.AmpApiState;
+import org.digijava.module.esrigis.dbentity.ApiStateType;
 
 /**
  * @author Octavian Ciubotaru
@@ -65,5 +69,14 @@ public class NDDEndpoints {
     @ApiOperation("")
     public List<NDDSolarChartData> getDirectIndirectReport(Map<String, Object> params) {
         return DashboardService.generateDirectIndirectReport(params);
+    }
+
+    @POST
+    @Path("/saved-charts")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "SaveChart")
+    @ApiOperation("Save the state of a chart")
+    public AmpApiState saveChart(@JsonView(AmpApiState.DetailView.class) AmpApiState chart) {
+        return EndpointUtils.saveApiState(chart, ApiStateType.NDD);
     }
 }

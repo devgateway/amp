@@ -511,6 +511,18 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                 .uniqueResult();
     }
 
+
+    public static List<AmpActivityVersion> getLastActivitiesVersionByAmpIds(List<String> ampIds) {
+        String queryString = "select a from "
+                + AmpActivityVersion.class.getName()
+                + " a where a.ampId in (:ampIds) "
+                + " and a.ampActivityId =( select av.ampActivityId from " + AmpActivity.class.getName() + " av where av"
+                + ".ampId = a.ampId)";
+        return PersistenceManager.getSession().createQuery(queryString)
+                .setParameterList("ampIds", ampIds)
+                .list();
+    }
+
     public static List<AmpActivityVersion> getActivitiesByAmpIds(List<String> ampIds) {
         String queryString = "select a from "
                 + AmpActivity.class.getName()

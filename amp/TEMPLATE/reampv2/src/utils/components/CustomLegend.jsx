@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import EllipsisText from 'react-ellipsis-text';
+import PropTypes, { bool } from 'prop-types';
 
 export default class CustomLegend extends Component {
-
   render() {
     const {
       data, colorMap, shouldSplitBig, formatter
@@ -51,3 +51,11 @@ export default class CustomLegend extends Component {
     );
   }
 }
+CustomLegend.propTypes = {
+  data: PropTypes.array.isRequired,
+  colorMap: PropTypes.object.isRequired,
+  shouldSplitBig: PropTypes.bool
+};
+CustomLegend.defaultProps = {
+  shouldSplitBig: false
+};

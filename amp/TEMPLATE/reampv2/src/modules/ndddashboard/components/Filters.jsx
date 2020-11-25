@@ -3,6 +3,7 @@ import { Col } from 'react-bootstrap';
 // import $ from 'jquery';
 
 const Filter = require('../../../../../ampTemplate/node_modules/amp-filter/dist/amp-filter');
+
 const filter = new Filter({
   draggable: true,
   caller: 'DASHBOARD'
@@ -11,30 +12,49 @@ const filter = new Filter({
 export default class Filters extends Component {
   constructor(props) {
     super(props);
-    this.state = { registered: false };
+    this.state = { show: false };
   }
 
-  render() {
-    if (filter && !this.state.registered) {
-      this.setState({ registered: true });
-      filter.loaded.then(() => {
+  componentDidMount() {
+    filter.on('apply', this.applyFilters);
+    filter.on('cancel', this.hideFilters);
+    // filter.addEventListener('apply', this.applyFilter);
+  }
+
+  showFilters = () => {
+    if (filter && !this.state.show) {
+      this.setState({ show: true });
+      return filter.loaded.then(() => {
         filter.setElement(this.refs.filterPopup);
         return filter.showFilters();
       });
     }
-    // $(this.refs.filterPopup).show();
+  }
+
+  hideFilters = () => {
+    this.setState({ show: false });
+  }
+
+  applyFilters = () => {
+    const data = filter.serialize();
+    this.hideFilters();
+    console.error(data);
+  }
+
+  render() {
+    const { show } = this.state;
     return (
       <Col md={4}>
         <div className="panel">
           <div className="panel-body">
-            <button type="button" className="btn btn-sm btn-default pull-right show-filters">
+            <button type="button" className="btn btn-sm btn-default pull-right show-filters" onClick={this.showFilters}>
               <span className="glyphicon glyphicon-edit" />
               <span>Edit filters</span>
             </button>
             <h3 className="inline-heading">Filters</h3>
           </div>
         </div>
-        <div id="filter-popup" ref="filterPopup"> </div>
+        <div id="filter-popup" ref="filterPopup" style={{ display: (!show ? 'none' : 'block') }} />
       </Col>
     );
   }

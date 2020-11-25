@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Col } from 'react-bootstrap';
 import NestedDonutsProgramChart from './NestedDonutsProgramChart';
-import { callReport } from '../actions/callReports';
+import { callTopReport, calNddlReport } from '../actions/callReports';
 import loadDashboardSettings from '../actions/loadDashboardSettings';
 import FundingTypeSelector from './FundingTypeSelector';
 import {
@@ -16,6 +16,7 @@ import {
 import CustomLegend from '../../../utils/components/CustomLegend';
 import './legends/legends.css';
 import { getCustomColor, getGradient } from '../utils/Utils';
+import TopChart from './TopChart';
 
 class MainDashboardContainer extends Component {
   constructor(props) {
@@ -35,6 +36,8 @@ class MainDashboardContainer extends Component {
     if (event.points[0].data.name === DIRECT) {
       if (!selectedDirectProgram) {
         this.setState({ selectedDirectProgram: outerData[event.points[0].i] });
+        const { callTopReport } = this.props;
+        callTopReport();
       } else {
         this.setState({ selectedDirectProgram: null });
       }
@@ -100,7 +103,7 @@ class MainDashboardContainer extends Component {
 
   render() {
     const {
-      error, ndd, nddLoadingPending, nddLoaded, dashboardSettings
+      error, ndd, nddLoadingPending, nddLoaded, dashboardSettings, topLoaded, topLoadingPending, top
     } = this.props;
     const { fundingType, selectedDirectProgram } = this.state;
     const formatter = new Intl.NumberFormat('en-US', {
@@ -118,7 +121,7 @@ class MainDashboardContainer extends Component {
       const programLegend = nddLoaded && !nddLoadingPending ? this.getProgramLegend() : null;
       return (
         <div>
-          <Col md={6}>
+          <Col md={6} className="middle">
             <div>
               <div className="chart-container">
                 <div className="chart">
@@ -142,25 +145,27 @@ class MainDashboardContainer extends Component {
               </div>
             </div>
           </Col>
-          <Col md={6}>
+          <Col md={6} className="middle">
             {programLegend ? (
               <div className="legends-container">
-                <div className="legend-title">
-                  {selectedDirectProgram ? selectedDirectProgram.name : 'PNSD'}
-                  :
-                  <span
-                    className="amount">
-                    {formatter.format(programLegend[0].total)}
-                  </span>
+                <div className={`even-${selectedDirectProgram ? 'third' : 'middle'}`}>
+                  <div className="legend-title">
+                    {selectedDirectProgram ? selectedDirectProgram.name : 'PNSD'}
+                    :
+                    <span
+                      className="amount">
+                      {formatter.format(programLegend[0].total)}
+                    </span>
+                  </div>
+                  <CustomLegend
+                    formatter={formatter}
+                    data={programLegend[0].legends}
+                    colorMap={CHART_COLOR_MAP.get(selectedDirectProgram ? `${PROGRAMLVL1}_${selectedDirectProgram.code}`
+                      : PROGRAMLVL1)} />
                 </div>
-                <CustomLegend
-                  formatter={formatter}
-                  data={programLegend[0].legends}
-                  colorMap={CHART_COLOR_MAP.get(selectedDirectProgram ? `${PROGRAMLVL1}_${selectedDirectProgram.code}`
-                    : PROGRAMLVL1)} />
                 {selectedDirectProgram === null
                 && (
-                  <div>
+                  <div className="even-middle">
                     <div className="legend-title">
                       New Deal
                       <span
@@ -174,8 +179,23 @@ class MainDashboardContainer extends Component {
                       colorMap={CHART_COLOR_MAP.get(INDIRECT_PROGRAMS)} />
                   </div>
                 )}
+                {selectedDirectProgram !== null
+                && (
+                  <div className="even-sixth">
+                    <div className="legend-title">
+                      TOP DONORS
+                      <span
+                        className="amount">
+                        {formatter.format(programLegend[1].total)}
+                      </span>
+                    </div>
+                    {topLoaded && !topLoadingPending ? (<TopChart data={top} />) : (<div className="loading" />)}
+
+                  </div>
+                )}
+
               </div>
-            ) : null}
+            ) : <div className="loading" />}
           </Col>
         </div>
       );
@@ -185,15 +205,19 @@ class MainDashboardContainer extends Component {
 
 const mapStateToProps = state => ({
   ndd: state.reportsReducer.ndd,
+  top: state.reportsReducer.top,
   dashboardSettings: state.dashboardSettingsReducer.dashboardSettings,
   error: state.reportsReducer.error,
   nddLoaded: state.reportsReducer.nddLoaded,
   nddLoadingPending: state.reportsReducer.nddLoadingPending,
+  topLoaded: state.reportsReducer.topLoaded,
+  topLoadingPending: state.reportsReducer.topLoadingPending,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  callReport,
-  loadDashboardSettings
+  callReport: calNddlReport,
+  loadDashboardSettings,
+  callTopReport
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainDashboardContainer);
@@ -203,8 +227,11 @@ MainDashboardContainer.propTypes = {
   error: PropTypes.object,
   loadDashboardSettings: PropTypes.func.isRequired,
   ndd: PropTypes.array.isRequired,
+  top: PropTypes.array.isRequired,
   nddLoadingPending: PropTypes.bool.isRequired,
   nddLoaded: PropTypes.bool.isRequired,
+  topLoadingPending: PropTypes.bool.isRequired,
+  topLoaded: PropTypes.bool.isRequired,
   dashboardSettings: PropTypes.object
 };
 

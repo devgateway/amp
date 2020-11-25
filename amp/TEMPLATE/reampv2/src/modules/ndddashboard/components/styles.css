@@ -1,7 +1,23 @@
+
 .chart-container {
     border: 1px solid #ddd;
     border-radius: 0;
     background-color: white;
+}
+
+.middle {
+    height: 580px
+}
+
+.even-middle {
+    height: 50%;
+}
+
+.even-third {
+    height: 33%;
+}
+.even-sixth {
+    height: 66%;
 }
 
 .chart-container .chart {

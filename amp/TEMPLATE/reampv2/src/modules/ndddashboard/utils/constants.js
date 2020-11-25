@@ -1,5 +1,6 @@
 export const TRN_PREFIX = 'amp.ndd.dashboard:';
 export const DIRECT_INDIRECT_REPORT = '/rest/ndd/direct-indirect-report';
+export const TOP_DONOR_REPORT = '/rest/dashboard/tops/do?limit=5';
 export const DIRECT_PROGRAM = 'directProgram';
 export const INDIRECT_PROGRAMS = 'indirectPrograms';
 export const PROGRAMLVL1 = 'programLvl1';

@@ -12,7 +12,6 @@ import org.digijava.module.aim.dbentity.AmpLocationIndicatorValue;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 
 /**
  *
@@ -62,7 +61,7 @@ public class NewAddLocationForm extends ActivityForm {
     }
 
     public boolean getCategoryLevelCountry() {
-        return CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey().equals( 
+        return CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.getValueKey().equals(
                  CategoryManagerUtil.getAmpCategoryValueFromDb(parentCatValId).getValue() );
     }
 

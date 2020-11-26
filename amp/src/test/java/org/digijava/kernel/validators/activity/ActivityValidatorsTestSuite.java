@@ -14,7 +14,10 @@ import org.junit.runners.Suite;
         ComponentFundingOrgRoleValidatorTest.class,
         PledgeOrgValidatorTest.class,
         UniqueActivityTitleValidatorTest.class,
-        UniqueValidatorTest.class
+        UniqueValidatorTest.class,
+        TreeCollectionValidatorTest.class,
+        PrivateResourceValidatorTest.class,
+        AgreementCodeValidatorTest.class
 })
 public class ActivityValidatorsTestSuite {
 }

@@ -54,7 +54,7 @@ public class DynLocationSelected extends Action {
         if (!"true".equals(gsAllowPercentages)
                 && implLevel != null && implLocValue != null
                 && CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL.equalsCategoryValue(implLevel)
-                && CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(implLocValue)
+                && CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.equalsCategoryValue(implLocValue)
         ) {
             setFullPercForDefaultCountry = true;
         }
@@ -93,7 +93,7 @@ public class DynLocationSelected extends Action {
                 location.setPercent("0");
                 
                 if (setFullPercForDefaultCountry) {
-                    if (CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY
+                    if (CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0
                             .equalsCategoryValue(ampCVLocation.getParentCategoryValue())) {
                         if (ampCVLocation.getId().longValue() == defCountry.getId().longValue()) {
                             location.setPercent("100");
@@ -112,7 +112,7 @@ public class DynLocationSelected extends Action {
                     checkPercentLocations(eaForm.getLocation().getSelectedLocs());
                 }
                 AmpCategoryValueLocations ampRegion = DynLocationManagerUtil.getAncestorByLayer(ampCVLocation,
-                        CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
+                        CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1);
                 if (ampRegion != null) {
                     if (eaForm.getFunding().getFundingRegions() == null) {
                         eaForm.getFunding().setFundingRegions(new ArrayList<>());

@@ -75,7 +75,7 @@ export function loadActivityForActivityPreview(activityId) {
                             HydratorHelper.hydrateObject(activity, activityFieldsManager, '',
                                 null, valuesForHydration);
                             activity.id = String(activity.internal_id);
-                            _convertCurrency(activity, activityFundingInformation);
+                            _convertCurrency(activity, activityFundingInformation, activityFieldsManagerTemp);
                             //we create an empty currency rates manager since we will be converting from same currencies,
                             // it wont be used it will just return 1.
                             const currencyRatesManager = new CurrencyRatesManager([],
@@ -144,7 +144,7 @@ export function loadActivityForActivityPreview(activityId) {
         NumberUtils.createLanguage();
     }
 
-    function _convertCurrency(activity, activityFundingInformation) {
+    function _convertCurrency(activity, activityFundingInformation, activityFieldsManager) {
         const currencyCode = activityFundingInformation.currency;
         const fundings = activity[ActivityConstants.FUNDINGS];
         if (activity[ActivityConstants.PPC_AMOUNT] && activityFundingInformation[ActivityConstants.PPC_AMOUNT]) {
@@ -177,13 +177,16 @@ export function loadActivityForActivityPreview(activityId) {
                 }
             });
         }
+
        REGIONAL_FUNDINGS.forEach(rf => {
-            activity[rf].forEach(regionalFundingItem => {
-                const convertedAmount = activityFundingInformation[rf].find(arf => arf.id === regionalFundingItem.id);
-                regionalFundingItem.transaction_amount = convertedAmount.transaction_amount;
-                // TODO convert the whole curreny not only the code
-                regionalFundingItem[ActivityConstants.CURRENCY].value= convertedAmount.currency.currencyCode;
-            })
+           if(activityFieldsManager.isFieldPathEnabled(rf)) {
+               activity[rf].forEach(regionalFundingItem => {
+                   const convertedAmount = activityFundingInformation[rf].find(arf => arf.id === regionalFundingItem.id);
+                   regionalFundingItem.transaction_amount = convertedAmount.transaction_amount;
+                   // TODO convert the whole curreny not only the code
+                   regionalFundingItem[ActivityConstants.CURRENCY].value = convertedAmount.currency.currencyCode;
+               })
+           }
         });
     }
 

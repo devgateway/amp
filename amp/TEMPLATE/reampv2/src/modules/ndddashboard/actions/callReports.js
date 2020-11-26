@@ -4,11 +4,14 @@ import {
 import { fetchApiData } from '../../../utils/loadTranslations';
 import { DIRECT_INDIRECT_REPORT, FUNDING_TYPE } from '../utils/constants';
 
-export const callReport = (fundingType) => dispatch => {
+export const callReport = (fundingType, filters) => dispatch => {
   dispatch(fetchIndirectReportPending());
   return fetchApiData({
     url: DIRECT_INDIRECT_REPORT,
-    body: { [FUNDING_TYPE]: fundingType }
+    body: {
+      [FUNDING_TYPE]: fundingType,
+      filters
+    }
   })
     .then(payload => dispatch(fetchIndirectReportSuccess(payload)))
     .catch(error => dispatch(fetchIndirectReportError(error)));

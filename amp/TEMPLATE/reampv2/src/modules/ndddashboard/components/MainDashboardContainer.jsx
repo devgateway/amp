@@ -21,13 +21,13 @@ class MainDashboardContainer extends Component {
   constructor(props) {
     super(props);
     this.onChangeFundingType = this.onChangeFundingType.bind(this);
-    this.state = { fundingType: null, selectedDirectProgram: null };
+    this.state = { fundingType: null, selectedDirectProgram: null, filters: null };
   }
 
   componentDidMount() {
     const { loadDashboardSettings, callReport } = this.props;
     loadDashboardSettings()
-      .then(settings => callReport(settings.payload.find(i => i.id === FUNDING_TYPE).value.defaultId));
+      .then(settings => callReport(settings.payload.find(i => i.id === FUNDING_TYPE).value.defaultId), null);
   }
 
   handleOuterChartClick(event, outerData) {
@@ -41,10 +41,27 @@ class MainDashboardContainer extends Component {
     }
   }
 
+  // TODO: use a function like onChangeFundingType instead!!!!!
+  shouldComponentUpdate(nextProps, nextState, nextContext) {
+    const { filters, callReport } = this.props;
+    const { fundingType } = this.state;
+    if (nextProps.filters !== filters) {
+      console.error(filters);
+      console.error(nextProps.filters);
+      this.setState({ filters: nextProps.filters });
+      callReport(fundingType, nextProps.filters);
+      return true;
+    } else if (nextProps !== this.props) {
+      return true;
+    }
+    return false;
+  }
+
   onChangeFundingType(value) {
     const { callReport } = this.props;
+    const { filters } = this.state;
     this.setState({ fundingType: value });
-    callReport(value);
+    callReport(value, filters);
   }
 
   getProgramLegend() {
@@ -205,10 +222,12 @@ MainDashboardContainer.propTypes = {
   ndd: PropTypes.array.isRequired,
   nddLoadingPending: PropTypes.bool.isRequired,
   nddLoaded: PropTypes.bool.isRequired,
-  dashboardSettings: PropTypes.object
+  dashboardSettings: PropTypes.object,
+  filters: PropTypes.object
 };
 
 MainDashboardContainer.defaultProps = {
   error: undefined,
-  dashboardSettings: undefined
+  dashboardSettings: undefined,
+  filters: undefined
 };

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Col } from 'react-bootstrap';
-// import $ from 'jquery';
+import PropTypes from 'prop-types';
 
 const Filter = require('../../../../../ampTemplate/node_modules/amp-filter/dist/amp-filter');
 
@@ -18,11 +18,11 @@ export default class Filters extends Component {
   componentDidMount() {
     filter.on('apply', this.applyFilters);
     filter.on('cancel', this.hideFilters);
-    // filter.addEventListener('apply', this.applyFilter);
   }
 
   showFilters = () => {
-    if (filter && !this.state.show) {
+    const { show } = this.state;
+    if (filter && !show) {
       this.setState({ show: true });
       return filter.loaded.then(() => {
         filter.setElement(this.refs.filterPopup);
@@ -36,9 +36,10 @@ export default class Filters extends Component {
   }
 
   applyFilters = () => {
+    const { onApplyFilters } = this.props;
     const data = filter.serialize();
     this.hideFilters();
-    console.error(data);
+    onApplyFilters(data);
   }
 
   render() {
@@ -59,3 +60,7 @@ export default class Filters extends Component {
     );
   }
 }
+
+Filters.propTypes = {
+  onApplyFilters: PropTypes.func.isRequired
+};

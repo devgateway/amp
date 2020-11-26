@@ -51,7 +51,7 @@ class MainDashboardContainer extends Component {
       this.setState({ filters: nextProps.filters });
       callReport(fundingType, nextProps.filters);
       return true;
-    } else if (nextProps !== this.props) {
+    } else if (nextProps !== this.props || nextState !== this.state || nextContext !== this.context) {
       return true;
     }
     return false;

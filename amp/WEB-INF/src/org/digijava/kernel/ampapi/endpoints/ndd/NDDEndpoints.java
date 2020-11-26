@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.module.aim.dbentity.AmpIndirectTheme;
@@ -67,7 +68,7 @@ public class NDDEndpoints {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "getDirectIndirectReport")
     @ApiOperation("")
-    public List<NDDSolarChartData> getDirectIndirectReport(Map<String, Object> params) {
+    public List<NDDSolarChartData> getDirectIndirectReport(SettingsAndFiltersParameters params) {
         return DashboardService.generateDirectIndirectReport(params);
     }
 

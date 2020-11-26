@@ -9,8 +9,8 @@ export const callReport = (fundingType, filters) => dispatch => {
   return fetchApiData({
     url: DIRECT_INDIRECT_REPORT,
     body: {
-      [FUNDING_TYPE]: fundingType,
-      filters
+      settings: { [FUNDING_TYPE]: fundingType },
+      filters: (filters ? filters.filters : null)
     }
   })
     .then(payload => dispatch(fetchIndirectReportSuccess(payload)))

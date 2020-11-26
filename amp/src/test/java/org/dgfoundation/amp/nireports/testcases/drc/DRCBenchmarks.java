@@ -25,7 +25,7 @@ public class DRCBenchmarks {
             new ImmutablePair<>(
                     ReportSpecificationImpl.buildFor(
                         "flat", 
-                        Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PRIMARY_SECTOR, ColumnConstants.REGION),
+                        Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PRIMARY_SECTOR, ColumnConstants.LOCATION_ADM_LEVEL_1),
                         Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
                         null,
                         GroupingCriteria.GROUPING_YEARLY), 
@@ -34,7 +34,7 @@ public class DRCBenchmarks {
             new ImmutablePair<>(
                     ReportSpecificationImpl.buildFor(
                         "bySector", 
-                        Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PRIMARY_SECTOR, ColumnConstants.REGION),
+                        Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PRIMARY_SECTOR, ColumnConstants.LOCATION_ADM_LEVEL_1),
                         Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
                         Arrays.asList(ColumnConstants.PRIMARY_SECTOR),
                         GroupingCriteria.GROUPING_YEARLY),
@@ -43,18 +43,18 @@ public class DRCBenchmarks {
             new ImmutablePair<>(
                     ReportSpecificationImpl.buildFor(
                         "bySectorByLocation", 
-                        Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PRIMARY_SECTOR, ColumnConstants.REGION),
+                        Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PRIMARY_SECTOR, ColumnConstants.LOCATION_ADM_LEVEL_1),
                         Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
-                        Arrays.asList(ColumnConstants.PRIMARY_SECTOR, ColumnConstants.REGION),
+                        Arrays.asList(ColumnConstants.PRIMARY_SECTOR, ColumnConstants.LOCATION_ADM_LEVEL_1),
                         GroupingCriteria.GROUPING_YEARLY),
                     new BenchmarkResult(null, 291, 67, 6807, 34564, null)
                     ),
             new ImmutablePair<>(
                     ReportSpecificationImpl.buildFor(
                         "bySectorByLocationByProgramQuarterly", 
-                        Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PRIMARY_SECTOR, ColumnConstants.REGION, ColumnConstants.PRIMARY_PROGRAM_LEVEL_1),
+                        Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PRIMARY_SECTOR, ColumnConstants.LOCATION_ADM_LEVEL_1, ColumnConstants.PRIMARY_PROGRAM_LEVEL_1),
                         Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
-                        Arrays.asList(ColumnConstants.PRIMARY_SECTOR, ColumnConstants.REGION, ColumnConstants.PRIMARY_PROGRAM_LEVEL_1),
+                        Arrays.asList(ColumnConstants.PRIMARY_SECTOR, ColumnConstants.LOCATION_ADM_LEVEL_1, ColumnConstants.PRIMARY_PROGRAM_LEVEL_1),
                         GroupingCriteria.GROUPING_QUARTERLY),
                     new BenchmarkResult(null, 430, 120, 6807, 34564, null)
                     ),
@@ -62,7 +62,7 @@ public class DRCBenchmarks {
                     FilteringSanityChecks.buildSpecForFiltering("bySectorFilteredByLocation", 
                         Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PRIMARY_SECTOR), 
                         Arrays.asList(ColumnConstants.PRIMARY_SECTOR), 
-                        ColumnConstants.REGION, Arrays.asList(1613l), false),
+                        ColumnConstants.LOCATION_ADM_LEVEL_1, Arrays.asList(1613l), false),
                     new BenchmarkResult(null, 183, 25, 3868, 18736, null))
             );
         new SchemaBenchmarks(DRCReportsTestSchema.getInstance()).run("Hardcoded DRC", specs);

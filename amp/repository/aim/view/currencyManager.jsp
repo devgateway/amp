@@ -339,7 +339,7 @@ function exportXSL(){
 																	onMouseOver="this.className='colHeaderOver'"
 																	onclick="sortSubmit('country')"
 																	onMouseOut="this.className='colHeaderLink'"><b><digi:trn
-																			key="aim:countryName">Country</digi:trn>
+																			key="aim:countryName">Administrative Level 0</digi:trn>
 																</b>
 																<c:if test="${aimCurrencyForm.sort=='country' && aimCurrencyForm.sortOrder=='asc'}">
 																		<img src="/repository/aim/images/up.gif" alt="up" />

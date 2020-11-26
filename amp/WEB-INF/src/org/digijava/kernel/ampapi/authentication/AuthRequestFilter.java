@@ -13,11 +13,8 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
-import org.digijava.kernel.ampapi.endpoints.security.Security;
-import org.digijava.kernel.ampapi.endpoints.util.SecurityUtil;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.request.SiteDomain;
-import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.helper.Constants;
@@ -53,11 +50,6 @@ public class AuthRequestFilter implements ContainerRequestFilter {
         addTranslations(siteDomain);
         
         addDefaultTreeVisibility();
-
-        String token = containerReq.getHeaderValue("X-Auth-Token");
-        if (token != null) {
-            SecurityUtil.validateTokenAndRestoreSession(token);
-        }
 
         return containerReq;
     }

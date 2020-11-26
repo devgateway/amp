@@ -907,7 +907,8 @@ public class EditOrganisation extends DispatchAction {
       Long orgId = editForm.getAmpOrgId();
       String action = "create";
       boolean exist = false;
-      AmpOrganisation org = DbUtil.getOrganisationByName(editForm.getName());
+      String organisationName = StringUtils.trim(editForm.getName());
+      AmpOrganisation org = DbUtil.getOrganisationByName(organisationName);
       if (orgId == null || orgId.equals(0l)) {
           organization = new AmpOrganisation();
           if (org != null) {
@@ -916,7 +917,7 @@ public class EditOrganisation extends DispatchAction {
       } else {
           organization = DbUtil.getOrganisation(orgId);
           action = "edit";
-          if (org != null && !organization.getName().equals(editForm.getName())) {
+          if (org != null && !organization.getName().equals(organisationName)) {
               exist = true;
           }
       }
@@ -943,7 +944,7 @@ public class EditOrganisation extends DispatchAction {
             }
         }
       }
-            
+       
        String[] orgContsIds=editForm.getPrimaryOrgContIds();
 
         if(orgContsIds!=null && orgContsIds.length>1){ //more then one primary contact is not allowed
@@ -964,13 +965,13 @@ public class EditOrganisation extends DispatchAction {
       if(editForm.getResetPrimaryOrgContIds()!=null && editForm.getResetPrimaryOrgContIds()){
         editForm.setPrimaryOrgContIds(null);
       }
-      if(isAdmin){
-          if(ContentTranslationUtil.multilingualIsEnabled()){
-              organization.setName(editForm.getName());  
-          }else{
+      if (isAdmin) {
+          if (ContentTranslationUtil.multilingualIsEnabled()) {
+              organization.setName(organisationName);
+          } else {
               String langCode = TLSUtils.getSite().getDefaultLanguage().getCode();
-              String name = MultilingualInputFieldValues.readParameter(
-                      "AmpOrganisation_name_" + langCode, "AmpOrganisation_name", request).getRight();
+              String name = StringUtils.trim(MultilingualInputFieldValues.readParameter(
+                      "AmpOrganisation_name_" + langCode, "AmpOrganisation_name", request).getRight());
               organization.setName(name);
           }
               
@@ -1433,7 +1434,8 @@ public class EditOrganisation extends DispatchAction {
           form.setSectorScheme(SectorUtil.getAllSectorSchemes());
           form.setFiscalCal(DbUtil.getAllFisCalenders());
           form.setCurrencies(CurrencyUtil.getActiveAmpCurrencyByName());
-          Set<AmpCategoryValueLocations> countryLocations = DynLocationManagerUtil.getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+          Set<AmpCategoryValueLocations> countryLocations =
+                  DynLocationManagerUtil.getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0);
           form.setCountries(countryLocations);
           form.setYears(getYearsBeanList());
           form.setOrgInfoAmount(null);

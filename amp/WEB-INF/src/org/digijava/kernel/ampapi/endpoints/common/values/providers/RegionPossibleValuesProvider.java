@@ -29,7 +29,7 @@ public class RegionPossibleValuesProvider extends AbstractPossibleValuesBaseProv
 
             if (locCatName == null
                     && categoryValueName == null
-                    || !categoryValueName.equals(CategoryConstants.IMPLEMENTATION_LOCATION_REGION.getValueKey())) {
+                    || !categoryValueName.equals(CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1.getValueKey())) {
                 continue;
             }
 

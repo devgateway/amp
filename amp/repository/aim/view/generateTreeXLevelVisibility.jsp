@@ -146,13 +146,15 @@
 											</logic:equal>
 																						
 												<logic:equal name="aimVisibilityManagerForm" property="mode" value="addNew">
-													<input type="checkbox" id="fieldVis:<bean:write name="fieldAux" property="root.id"/>" 
+													<input  onclick="toggleParentVisibilityOfTheField('fieldVis:<bean:write name="fieldAux" property="root.id"/>')"
+													type="checkbox" id="fieldVis:<bean:write name="fieldAux" property="root.id"/>"
 													name="fieldVis:<bean:write name="fieldAux" property="root.id"/>" 
-													value="fieldVis:<bean:write name="fieldAux" property="root.id"/>" 
+													value="fieldVis:<bean:write name="fieldAux" property="root.id"/>"
 													/>
 												</logic:equal>
 												<logic:equal name="aimVisibilityManagerForm" property="mode" value="editTemplateTree">
-													<input type="checkbox" id="fieldVis:<bean:write name="fieldAux" property="root.id"/>" 
+													<input onclick="toggleParentVisibilityOfTheField('fieldVis:<bean:write name="fieldAux" property="root.id"/>')"
+													type="checkbox" id="fieldVis:<bean:write name="fieldAux" property="root.id"/>"
 													name="fieldVis:<bean:write name="fieldAux" property="root.id"/>" 
 													value="fieldVis:<bean:write name="fieldAux" property="root.id"/>" 
 													<%= fieldAux2.isVisibleTemplateObj(currentTemplate)?"checked":"" %>

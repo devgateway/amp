@@ -6011,13 +6011,11 @@
             </description>
         </attribute>
         <!-- autocomplete is a non-standard and not supported, uncomment to enable -->
-        <!--
         <attribute>
             <name>autocomplete</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
-         -->
         <attribute>
             <name>bundle</name>
             <required>false</required>
@@ -8340,13 +8338,11 @@
             </description>
         </attribute>
         <!-- autocomplete is a non-standard and not supported, uncomment to enable -->
-        <!--
         <attribute>
             <name>autocomplete</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
-         -->
         <attribute>
             <name>bundle</name>
             <required>false</required>

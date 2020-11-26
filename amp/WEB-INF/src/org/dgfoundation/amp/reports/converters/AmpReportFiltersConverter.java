@@ -192,17 +192,22 @@ public class AmpReportFiltersConverter {
         addFilter(ColumnConstants.PLEDGE_STATUS, AmpCategoryValue.class, "statuses", true);
 
         // Location section.
-        addFilter(ColumnConstants.COUNTRY, AmpCategoryValueLocations.class, "locationSelected", true);
-        addFilter(ColumnConstants.REGION, AmpCategoryValueLocations.class, "locationSelected", false);
-        addFilter(ColumnConstants.ZONE, AmpCategoryValueLocations.class, "locationSelected", false);
-        addFilter(ColumnConstants.DISTRICT, AmpCategoryValueLocations.class, "locationSelected", false);
-        addFilter(ColumnConstants.COMMUNAL_SECTION, AmpCategoryValueLocations.class, "locationSelected", false);
+        addFilter(ColumnConstants.LOCATION_ADM_LEVEL_0, AmpCategoryValueLocations.class, "locationSelected", true);
+        addFilter(ColumnConstants.LOCATION_ADM_LEVEL_1, AmpCategoryValueLocations.class, "locationSelected", false);
+        addFilter(ColumnConstants.LOCATION_ADM_LEVEL_2, AmpCategoryValueLocations.class, "locationSelected", false);
+        addFilter(ColumnConstants.LOCATION_ADM_LEVEL_3, AmpCategoryValueLocations.class, "locationSelected", false);
+        addFilter(ColumnConstants.LOCATION_ADM_LEVEL_4, AmpCategoryValueLocations.class, "locationSelected", false);
 
-        addFilter(ColumnConstants.PLEDGES_COUNTRIES, AmpCategoryValueLocations.class, "locationSelected", true);
-        addFilter(ColumnConstants.PLEDGES_REGIONS, AmpCategoryValueLocations.class, "locationSelected", false);
-        addFilter(ColumnConstants.PLEDGES_ZONES, AmpCategoryValueLocations.class, "locationSelected", false);
-        addFilter(ColumnConstants.PLEDGES_DISTRICTS, AmpCategoryValueLocations.class, "locationSelected", false);
-        addFilter(ColumnConstants.PLEDGES_COMMUNAL_SECTION, AmpCategoryValueLocations.class, "locationSelected", false);
+        addFilter(ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_0, AmpCategoryValueLocations.class,
+                "locationSelected", true);
+        addFilter(ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_1, AmpCategoryValueLocations.class,
+                "locationSelected", false);
+        addFilter(ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_2, AmpCategoryValueLocations.class,
+                "locationSelected", false);
+        addFilter(ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_3, AmpCategoryValueLocations.class,
+                "locationSelected", false);
+        addFilter(ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_4, AmpCategoryValueLocations.class,
+                "locationSelected", false);
         
         // Financial section.
         addFilter(ColumnConstants.FINANCING_INSTRUMENT, AmpCategoryValue.class, "financingInstruments", true);

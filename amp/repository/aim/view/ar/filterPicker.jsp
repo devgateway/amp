@@ -331,13 +331,13 @@
 				<table align="center" cellpadding="1" cellspacing="1">
 						<tr bgcolor="#EEEEEE">
 					<td colspan="5" onmouseout="UnTip()" onmouseover="Tip('${tooltip_translation}');">
-					<b><digi:trn key="rep:filter:RegionTitle">Region </digi:trn></b>
+					<b><digi:trn key="rep:filter:RegionTitle">Administrative Level 1</digi:trn></b>
 					<br>
 					</td>
 				</tr>
 				
 				<tr bgcolor="#EEEEEE" onmouseout="UnTip()" onmouseover="Tip('${tooltip_translation}');">
-					<td colspan="5"><digi:trn key="rep:filter:Location">Region</digi:trn></td>
+					<td colspan="5"><digi:trn key="rep:filter:Location">Administrative Level 1</digi:trn></td>
 				</tr>
 				<tr bgcolor="#EEEEEE" onmouseout="UnTip()" onmouseover="Tip('${tooltip_translation}');">
 					<td colspan="5"><html:select property="regionSelected"

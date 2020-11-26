@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -473,8 +472,9 @@ public class QueryUtil {
         return buildLocationsJsonBean(rootLocation, 1);
     }
     
-    private static final String[] LEVEL_TO_NAME = {"na", FiltersConstants.COUNTRY, FiltersConstants.REGION,
-            FiltersConstants.ZONE, FiltersConstants.DISTRICT, FiltersConstants.COMMUNAL_SECTION, "na3", "na4"};
+    private static final String[] LEVEL_TO_NAME = {"na", FiltersConstants.ADMINISTRATIVE_LEVEL_0,
+            FiltersConstants.ADMINISTRATIVE_LEVEL_1, FiltersConstants.ADMINISTRATIVE_LEVEL_2,
+            FiltersConstants.ADMINISTRATIVE_LEVEL_3, FiltersConstants.ADMINISTRATIVE_LEVEL_4, "na3", "na4"};
     
     private static Location buildLocationsJsonBean(LocationSkeleton loc, int level) {
         Location res = new Location();

@@ -511,6 +511,18 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                 .uniqueResult();
     }
 
+
+    public static List<AmpActivityVersion> getLastActivitiesVersionByAmpIds(List<String> ampIds) {
+        String queryString = "select a from "
+                + AmpActivityVersion.class.getName()
+                + " a where a.ampId in (:ampIds) "
+                + " and a.ampActivityId =( select av.ampActivityId from " + AmpActivity.class.getName() + " av where av"
+                + ".ampId = a.ampId)";
+        return PersistenceManager.getSession().createQuery(queryString)
+                .setParameterList("ampIds", ampIds)
+                .list();
+    }
+
     public static List<AmpActivityVersion> getActivitiesByAmpIds(List<String> ampIds) {
         String queryString = "select a from "
                 + AmpActivity.class.getName()
@@ -1880,15 +1892,11 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                 logActivityHistory.setModifiedDate(DateTimeUtil.formatISO8601Timestamp(aal.getLoggedDate()));
                 return logActivityHistory;
             } else if (StringUtils.isNotEmpty(aal.getEditorEmail())) {
-                try {
-                    User u = UserUtils.getUserByEmail(aal.getEditorEmail());
-                    if (u != null) {
-                        logActivityHistory.setModifiedBy(String.format("%s %s", u.getFirstNames(), u.getLastName()));
-                        logActivityHistory.setModifiedDate(DateTimeUtil.formatISO8601Timestamp(aal.getLoggedDate()));
-                        return logActivityHistory;
-                    }
-                } catch (DgException e) {
-                    logger.error(e.getMessage(), e);
+                User u = UserUtils.getUserByEmailAddress(aal.getEditorEmail());
+                if (u != null) {
+                    logActivityHistory.setModifiedBy(String.format("%s %s", u.getFirstNames(), u.getLastName()));
+                    logActivityHistory.setModifiedDate(DateTimeUtil.formatISO8601Timestamp(aal.getLoggedDate()));
+                    return logActivityHistory;
                 }
             }
         }

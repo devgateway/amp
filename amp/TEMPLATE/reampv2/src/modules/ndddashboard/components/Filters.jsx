@@ -48,11 +48,11 @@ export default class Filters extends Component {
       <Col md={4}>
         <div className="panel">
           <div className="panel-body">
+            <h3 className="inline-heading">Filters</h3>
             <button type="button" className="btn btn-sm btn-default pull-right show-filters" onClick={this.showFilters}>
               <span className="glyphicon glyphicon-edit" />
               <span>Edit filters</span>
             </button>
-            <h3 className="inline-heading">Filters</h3>
           </div>
         </div>
         <div id="filter-popup" ref="filterPopup" style={{ display: (!show ? 'none' : 'block') }} />

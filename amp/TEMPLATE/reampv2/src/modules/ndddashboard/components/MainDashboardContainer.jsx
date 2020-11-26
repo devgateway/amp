@@ -41,14 +41,11 @@ class MainDashboardContainer extends Component {
     }
   }
 
-  // TODO: use a function like onChangeFundingType instead!!!!!
   shouldComponentUpdate(nextProps, nextState, nextContext) {
     const { filters, callReport } = this.props;
     const { fundingType } = this.state;
     if (nextProps.filters !== filters) {
-      console.error(filters);
-      console.error(nextProps.filters);
-      this.setState({ filters: nextProps.filters });
+      this.setState({ filters: nextProps.filters, selectedDirectProgram: null });
       callReport(fundingType, nextProps.filters);
       return true;
     } else if (nextProps !== this.props || nextState !== this.state || nextContext !== this.context) {

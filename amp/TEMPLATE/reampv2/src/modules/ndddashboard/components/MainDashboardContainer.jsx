@@ -21,13 +21,13 @@ class MainDashboardContainer extends Component {
   constructor(props) {
     super(props);
     this.onChangeFundingType = this.onChangeFundingType.bind(this);
-    this.state = { fundingType: null, selectedDirectProgram: null };
+    this.state = { fundingType: null, selectedDirectProgram: null, filters: null };
   }
 
   componentDidMount() {
     const { loadDashboardSettings, callReport } = this.props;
     loadDashboardSettings()
-      .then(settings => callReport(settings.payload.find(i => i.id === FUNDING_TYPE).value.defaultId));
+      .then(settings => callReport(settings.payload.find(i => i.id === FUNDING_TYPE).value.defaultId), null);
   }
 
   handleOuterChartClick(event, outerData) {
@@ -41,10 +41,24 @@ class MainDashboardContainer extends Component {
     }
   }
 
+  shouldComponentUpdate(nextProps, nextState, nextContext) {
+    const { filters, callReport } = this.props;
+    const { fundingType } = this.state;
+    if (nextProps.filters !== filters) {
+      this.setState({ filters: nextProps.filters, selectedDirectProgram: null });
+      callReport(fundingType, nextProps.filters);
+      return true;
+    } else if (nextProps !== this.props || nextState !== this.state || nextContext !== this.context) {
+      return true;
+    }
+    return false;
+  }
+
   onChangeFundingType(value) {
     const { callReport } = this.props;
+    const { filters } = this.state;
     this.setState({ fundingType: value });
-    callReport(value);
+    callReport(value, filters);
   }
 
   getProgramLegend() {
@@ -205,10 +219,12 @@ MainDashboardContainer.propTypes = {
   ndd: PropTypes.array.isRequired,
   nddLoadingPending: PropTypes.bool.isRequired,
   nddLoaded: PropTypes.bool.isRequired,
-  dashboardSettings: PropTypes.object
+  dashboardSettings: PropTypes.object,
+  filters: PropTypes.object
 };
 
 MainDashboardContainer.defaultProps = {
   error: undefined,
-  dashboardSettings: undefined
+  dashboardSettings: undefined,
+  filters: undefined
 };

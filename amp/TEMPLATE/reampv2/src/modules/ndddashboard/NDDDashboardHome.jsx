@@ -9,17 +9,22 @@ import HeaderContainer from './components/HeaderContainer';
 class NDDDashboardHome extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { filters: undefined };
+  }
+
+  onApplyFilters = (data) => {
+    this.setState({ filters: data });
   }
 
   render() {
+    const { filters } = this.state;
     return (
       <Container fluid className="main-container">
         <Row>
-          <HeaderContainer />
+          <HeaderContainer onApplyFilters={this.onApplyFilters} />
         </Row>
         <Row>
-          <MainDashboardContainer />
+          <MainDashboardContainer filters={filters} />
         </Row>
       </Container>
     );

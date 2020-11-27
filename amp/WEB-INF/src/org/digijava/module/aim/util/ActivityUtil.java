@@ -2017,10 +2017,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
      * @return List<Long> with the editable activity Ids
      */
     public static List<Long> getEditableActivityIdsNoSession(TeamMember tm) {
-        AmpTeamMember ampTeamMember = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
-        AmpARFilter ampARFilter = FilterUtil.buildFilterFromSource(ampTeamMember.getAmpTeam());
-        ampARFilter.generateFilterQuery(tm);
-        String query = ampARFilter.getGeneratedFilterQuery();
+        String query = WorkspaceFilter.generateWorkspaceFilterQuery(tm);
         return ActivityUtil.getEditableActivityIds(tm, query);
     }
 

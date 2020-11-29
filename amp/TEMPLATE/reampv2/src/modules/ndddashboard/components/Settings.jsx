@@ -4,7 +4,7 @@ import { Col } from 'react-bootstrap';
 export default class Filters extends Component {
   render() {
     return (
-      <Col md={4}>
+      <Col md={3}>
         <div className="panel">
           <div className="panel-body">
             <h3 className="inline-heading">Settings</h3>

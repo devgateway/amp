@@ -50,7 +50,7 @@ class Share extends Component {
 
    render() {
      return (
-       <Col md={4}>
+       <Col md={3}>
          <div className="panel">
            <div className="panel-body">
              <h3 className="inline-heading">Share</h3>

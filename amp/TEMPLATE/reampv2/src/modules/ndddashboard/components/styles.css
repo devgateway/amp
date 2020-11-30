@@ -53,3 +53,49 @@
 .label-bold {
     font-weight: 700;
 }
+
+.panel {
+    margin-bottom: 20px;
+    background-color: #fff;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    padding: 0px 12px;
+}
+
+.panel .inline-heading, .applied-filters {
+    display: inline-block;
+    margin: 0 20px 0 0;
+    position: relative;
+    top: 0px;
+    /*min-width: 150px;*/
+}
+
+.applied-filters {
+    display: block;
+}
+
+.applied-filters li {
+    list-style-type: none;
+}
+
+.applied-filters li::before {
+    content: "";
+    display: inline-block;
+    height: 1em;
+    width: 1em;
+    margin: 3px 5px 0 -22px;
+    border-radius: .5em;
+    background: #a1d367;
+}
+
+.applied-filters h5 {
+    color: #428bca;
+    font-weight: 800;
+    text-transform: capitalize;
+}
+
+.filter-button {
+    position: relative;
+    top: 0px;
+}

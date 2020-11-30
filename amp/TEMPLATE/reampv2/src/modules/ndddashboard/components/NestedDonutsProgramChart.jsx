@@ -204,7 +204,7 @@ class NestedDonutsProgramChart extends Component {
               values: outerDataLvl2.map(i => i[AMOUNT]),
               labels: outerDataLvl2.map(i => i[CODE]),
               name: DIRECT,
-              hoverinfo: 'percent+label',
+              hoverinfo: 'skip',
               textposition: 'inside',
               hole: 0.7,
               type: 'pie',

@@ -9,19 +9,21 @@ import HeaderContainer from './components/HeaderContainer';
 class NDDDashboardHome extends Component {
   constructor(props) {
     super(props);
-    this.state = { filters: undefined };
+    this.state = { filters: undefined, filtersWithModels: undefined };
   }
 
-  onApplyFilters = (data) => {
-    this.setState({ filters: data });
+  onApplyFilters = (data, dataWithModels) => {
+    this.setState({ filters: data, filtersWithModels: dataWithModels });
   }
 
   render() {
     const { filters } = this.state;
+    // eslint-disable-next-line react/destructuring-assignment,react/prop-types
+    const { id } = this.props.match.params;
     return (
       <Container fluid className="main-container">
         <Row>
-          <HeaderContainer onApplyFilters={this.onApplyFilters} />
+          <HeaderContainer onApplyFilters={this.onApplyFilters} filters={filters} dashboardId={id} />
         </Row>
         <Row>
           <MainDashboardContainer filters={filters} />

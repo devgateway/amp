@@ -220,7 +220,8 @@ MainDashboardContainer.propTypes = {
   nddLoadingPending: PropTypes.bool.isRequired,
   nddLoaded: PropTypes.bool.isRequired,
   dashboardSettings: PropTypes.object,
-  filters: PropTypes.object
+  filters: PropTypes.object,
+  dashboardId: PropTypes.number
 };
 
 MainDashboardContainer.defaultProps = {

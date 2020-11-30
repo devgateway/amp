@@ -12,6 +12,7 @@ import javax.ws.rs.core.MediaType;
 import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
@@ -73,11 +74,21 @@ public class NDDEndpoints {
     }
 
     @POST
-    @Path("/saved-charts")
+    @Path("/save-charts")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "SaveChart")
     @ApiOperation("Save the state of a chart")
     public AmpApiState saveChart(@JsonView(AmpApiState.DetailView.class) AmpApiState chart) {
         return EndpointUtils.saveApiState(chart, ApiStateType.NDD);
+    }
+
+    @GET
+    @Path("/saved-charts/{id}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "SavedChart")
+    @JsonView(AmpApiState.DetailView.class)
+    @ApiOperation("Get the state of a saved chart")
+    public AmpApiState savedChart(@ApiParam("Property value") @PathParam("id") Long id) {
+        return EndpointUtils.getApiState(id, ApiStateType.NDD);
     }
 }

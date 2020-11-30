@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { Col } from 'react-bootstrap';
 import PropTypes from 'prop-types';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import FilterOutputItem from './FilterOutputItem';
+import { getGetSharedData } from '../actions/getSharedData';
 
 const Filter = require('../../../../../ampTemplate/node_modules/amp-filter/dist/amp-filter');
 
@@ -10,15 +13,27 @@ const filter = new Filter({
   caller: 'DASHBOARD'
 });
 
-export default class Filters extends Component {
+class Filters extends Component {
   constructor(props) {
     super(props);
     this.state = { show: false, filtersWithModels: null, showFiltersList: false };
   }
 
   componentDidMount() {
+    const { dashboardId, getGetSharedData } = this.props;
     filter.on('apply', this.applyFilters);
     filter.on('cancel', this.hideFilters);
+    if (dashboardId) {
+      getGetSharedData(dashboardId).then(data => {
+        filter.deserialize(JSON.parse(data.payload.stateBlob));
+        this.applyFilters();
+      });
+    }
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('apply', this.applyFilters);
+    window.removeEventListener('cancel', this.hideFilters);
   }
 
   showFilterWidget = () => {
@@ -39,8 +54,9 @@ export default class Filters extends Component {
   applyFilters = () => {
     const { onApplyFilters } = this.props;
     this.hideFilters();
-    this.setState({ filtersWithModels: filter.serializeToModels() });
-    onApplyFilters(filter.serialize());
+    const serializeWithModels = filter.serializeToModels();
+    this.setState({ filtersWithModels: serializeWithModels });
+    onApplyFilters(filter.serialize(), serializeWithModels);
   };
 
   toggleAppliedFilters = () => {
@@ -101,6 +117,21 @@ export default class Filters extends Component {
   }
 }
 
+const mapStateToProps = state => ({
+  ndd: state.reportsReducer.ndd,
+  dashboardSettings: state.dashboardSettingsReducer.dashboardSettings,
+  error: state.reportsReducer.error,
+  nddLoaded: state.reportsReducer.nddLoaded,
+  nddLoadingPending: state.reportsReducer.nddLoadingPending,
+});
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+  getGetSharedData,
+}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Filters);
+
 Filters.propTypes = {
-  onApplyFilters: PropTypes.func.isRequired
+  onApplyFilters: PropTypes.func.isRequired,
+  dashboardId: PropTypes.number
 };

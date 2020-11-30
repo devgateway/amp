@@ -67,5 +67,31 @@
     display: inline-block;
     margin: 0 20px 0 0;
     position: relative;
-    top: -5px;
+    top: 0px;
+    min-width: 150px;
+}
+
+.applied-filters li {
+    list-style-type: none;
+}
+
+.applied-filters li::before {
+    content: "";
+    display: inline-block;
+    height: 1em;
+    width: 1em;
+    margin: 3px 5px 0 -22px;
+    border-radius: .5em;
+    background: #a1d367;
+}
+
+.applied-filters h5 {
+    color: #428bca;
+    font-weight: 800;
+    text-transform: capitalize;
+}
+
+.filter-button {
+    position: relative;
+    top: 0px;
 }

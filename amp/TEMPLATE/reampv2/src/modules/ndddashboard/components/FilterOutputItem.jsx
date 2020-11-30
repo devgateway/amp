@@ -6,8 +6,18 @@ export default class FilterOutputItem extends Component {
     const ret = [];
     if (items.length > 0) {
       items.forEach(item => {
-        ret.push(<li>{item.get('name')}</li>);
+        ret.push(<li key={Math.random()}>{item.get('name')}</li>);
       });
+    } else if (items.modelType === 'DATE-RANGE-VALUES') {
+      ret.push(
+        <li key={Math.random()}>
+          {items.start ? items.start : 'No Data'}
+          {' --- '}
+          {items.end ? items.end : 'No Data'}
+        </li>
+      );
+    } else if (items.modelType === 'YEAR-SINGLE-VALUE') {
+      ret.push(<li key={Math.random()}>{items.year}</li>);
     }
     return <ul>{ret}</ul>;
   }
@@ -16,13 +26,15 @@ export default class FilterOutputItem extends Component {
     const { filters, i } = this.props;
     const ret = [];
     if (filters && filters[i]) {
+      let parent = null;
       if (filters[i].filterName) {
-        const parent = <span>{filters[i].filterName}</span>;
-        ret.push(parent);
+        parent = <h5>{filters[i].filterName}</h5>;
+      } else if (filters[i].displayName) {
+        parent = <h5>{filters[i].displayName}</h5>;
       } else {
-        const parent = <span>{i}</span>;
-        ret.push(parent);
+        parent = <h5>{i.replaceAll('-', ' ')}</h5>;
       }
+      ret.push(parent);
       const children = this.generateChildren(filters[i], i);
       ret.push(children);
     }

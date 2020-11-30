@@ -62,38 +62,37 @@ export default class Filters extends Component {
 
   render() {
     const { show, filtersWithModels, showFiltersList } = this.state;
-    console.info(filtersWithModels);
     return (
       <Col md={6}>
         <div className="panel">
           <div className="panel-body">
-            <h3 className="inline-heading">Filters</h3>
+            <h3 className="inline-heading" style={{ float: 'left' }}>Filters</h3>
             <button
               type="button"
-              className="btn btn-sm btn-default pull-right show-filters"
-              onClick={this.showFilterWidget}>
+              className="btn btn-sm btn-default filter-button"
+              onClick={this.showFilterWidget}
+              style={{ float: 'right' }}>
               <span className="glyphicon glyphicon-edit" />
               <span>Edit filters</span>
             </button>
-            <div className="applied-filters">
-              <span>
-                <button
-                  type="button"
-                  className="btn btn-default btn-sm show-filter-details"
-                  onClick={this.toggleAppliedFilters}>
-                  <span className="glyphicon glyphicon-eye-open" />
-                  <span data-i18n="amp.dashboard:filters-show-settings">Show filter settings </span>
-                  (
-                  <b>{filtersWithModels ? Object.keys(filtersWithModels.filters).length : 0}</b>
-                  )
-                </button>
-              </span>
-              {showFiltersList ? (
-                <div>
-                  {this.generateFilterOutput()}
-                </div>
-              ) : null}
-            </div>
+            <button
+              type="button"
+              className="btn btn-sm btn-default filter-button"
+              onClick={this.toggleAppliedFilters}
+              style={{ float: 'left' }}>
+              <span className="glyphicon glyphicon-eye-open" />
+              <span>{!showFiltersList ? ' Show filter settings ' : ' Hide filter settings '}</span>
+              (
+              <b>{filtersWithModels ? Object.keys(filtersWithModels.filters).length : 0}</b>
+              )
+            </button>
+          </div>
+          <div className="applied-filters">
+            {showFiltersList ? (
+              <div>
+                {this.generateFilterOutput()}
+              </div>
+            ) : null}
           </div>
         </div>
         <div id="filter-popup" ref="filterPopup" style={{ display: (!show ? 'none' : 'block') }} />

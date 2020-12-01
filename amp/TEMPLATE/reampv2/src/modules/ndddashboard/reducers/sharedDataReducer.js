@@ -1,34 +1,34 @@
 import {
-  FETCH_SHARE_LINK_ERROR,
-  FETCH_SHARE_LINK_PENDING,
-  FETCH_SHARE_LINK_SUCCESS
+  GET_SHARED_DATA_ERROR,
+  GET_SHARED_DATA_PENDING,
+  GET_SHARED_DATA_SUCCESS
 } from '../actions/shareLinkActions';
 
 const initialState = {
-  shareLinkLoaded: false,
-  shareLinkPending: false,
+  sharedDataLoaded: false,
+  sharedDataPending: false,
   error: null
 };
 export default (state = initialState, action) => {
   switch (action.type) {
-    case FETCH_SHARE_LINK_PENDING:
+    case GET_SHARED_DATA_PENDING:
       return {
         ...state,
-        shareLinkPending: true
+        sharedDataPending: true
       };
-    case FETCH_SHARE_LINK_SUCCESS: {
+    case GET_SHARED_DATA_SUCCESS: {
       return {
         ...state,
-        shareLinkPending: false,
-        shareLinkLoaded: true,
-        shareLink: action.payload,
+        sharedDataPending: false,
+        sharedDataLoaded: true,
+        sharedData: action.payload,
       };
     }
-    case FETCH_SHARE_LINK_ERROR:
+    case GET_SHARED_DATA_ERROR:
       return {
         ...state,
-        shareLinkLoaded: false,
-        shareLinkPending: false,
+        sharedDataLoaded: false,
+        sharedDataPending: false,
         error: action.error
       };
     default:

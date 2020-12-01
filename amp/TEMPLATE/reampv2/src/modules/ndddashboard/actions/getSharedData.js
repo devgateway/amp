@@ -4,7 +4,7 @@ import {
 import { fetchApiData } from '../../../utils/loadTranslations';
 import { GET_SHARED_EP } from '../utils/constants';
 
-export const getGetSharedData = (id) => dispatch => {
+export const getSharedData = (id) => dispatch => {
   dispatch(getSharedDataPending());
   return fetchApiData({
     url: GET_SHARED_EP + id

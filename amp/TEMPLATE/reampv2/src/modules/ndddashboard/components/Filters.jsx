@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import FilterOutputItem from './FilterOutputItem';
-import { getGetSharedData } from '../actions/getSharedData';
+import { getSharedData } from '../actions/getSharedData';
 
 const Filter = require('../../../../../ampTemplate/node_modules/amp-filter/dist/amp-filter');
 
@@ -16,18 +16,30 @@ const filter = new Filter({
 class Filters extends Component {
   constructor(props) {
     super(props);
-    this.state = { show: false, filtersWithModels: null, showFiltersList: false };
+    this.state = {
+      show: false, filtersWithModels: null, showFiltersList: false, loadedSavedData: false
+    };
   }
 
   componentDidMount() {
-    const { dashboardId, getGetSharedData } = this.props;
     filter.on('apply', this.applyFilters);
     filter.on('cancel', this.hideFilters);
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    const {
+      dashboardId, sharedData, sharedDataPending, sharedDataLoaded, getSharedData
+    } = this.props;
+    const { loadedSavedData } = this.state;
     if (dashboardId) {
-      getGetSharedData(dashboardId).then(data => {
-        filter.deserialize(JSON.parse(data.payload.stateBlob));
-        this.applyFilters();
-      });
+      if (!sharedDataPending && !sharedDataLoaded) {
+        getSharedData(dashboardId);
+      }
+      if (sharedDataPending === false && sharedDataLoaded === true && !loadedSavedData) {
+        this.setState({ loadedSavedData: true });
+        // Note: no need to explicitly call applyFilters when deserializing (unless you use silent: true).
+        filter.deserialize(JSON.parse(sharedData.stateBlob));
+      }
     }
   }
 
@@ -118,15 +130,13 @@ class Filters extends Component {
 }
 
 const mapStateToProps = state => ({
-  ndd: state.reportsReducer.ndd,
-  dashboardSettings: state.dashboardSettingsReducer.dashboardSettings,
-  error: state.reportsReducer.error,
-  nddLoaded: state.reportsReducer.nddLoaded,
-  nddLoadingPending: state.reportsReducer.nddLoadingPending,
+  sharedDataPending: state.sharedDataReducer.sharedDataPending,
+  sharedDataLoaded: state.sharedDataReducer.sharedDataLoaded,
+  sharedData: state.sharedDataReducer.sharedData,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  getGetSharedData,
+  getSharedData,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Filters);

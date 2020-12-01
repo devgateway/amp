@@ -4,8 +4,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Col } from 'react-bootstrap';
 import NestedDonutsProgramChart from './NestedDonutsProgramChart';
-import { callReport } from '../actions/callReports';
-import loadDashboardSettings from '../actions/loadDashboardSettings';
 import FundingTypeSelector from './FundingTypeSelector';
 import {
   FUNDING_TYPE,
@@ -21,13 +19,7 @@ class MainDashboardContainer extends Component {
   constructor(props) {
     super(props);
     this.onChangeFundingType = this.onChangeFundingType.bind(this);
-    this.state = { fundingType: null, selectedDirectProgram: null, filters: null };
-  }
-
-  componentDidMount() {
-    const { loadDashboardSettings, callReport } = this.props;
-    loadDashboardSettings()
-      .then(settings => callReport(settings.payload.find(i => i.id === FUNDING_TYPE).value.defaultId), null);
+    this.state = { fundingType: null, selectedDirectProgram: null };
   }
 
   handleOuterChartClick(event, outerData) {
@@ -41,7 +33,7 @@ class MainDashboardContainer extends Component {
     }
   }
 
-  shouldComponentUpdate(nextProps, nextState, nextContext) {
+  /* shouldComponentUpdate(nextProps, nextState, nextContext) {
     const { filters, callReport } = this.props;
     const { fundingType } = this.state;
     if (nextProps.filters !== filters) {
@@ -52,7 +44,7 @@ class MainDashboardContainer extends Component {
       return true;
     }
     return false;
-  }
+  } */
 
   onChangeFundingType(value) {
     const { callReport } = this.props;
@@ -197,35 +189,23 @@ class MainDashboardContainer extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  ndd: state.reportsReducer.ndd,
-  dashboardSettings: state.dashboardSettingsReducer.dashboardSettings,
-  error: state.reportsReducer.error,
-  nddLoaded: state.reportsReducer.nddLoaded,
-  nddLoadingPending: state.reportsReducer.nddLoadingPending,
-});
+const mapStateToProps = state => ({});
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-  callReport,
-  loadDashboardSettings
-}, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainDashboardContainer);
 
 MainDashboardContainer.propTypes = {
-  callReport: PropTypes.func.isRequired,
+  filters: PropTypes.object,
+  dashboardId: PropTypes.number,
   error: PropTypes.object,
   loadDashboardSettings: PropTypes.func.isRequired,
   ndd: PropTypes.array.isRequired,
   nddLoadingPending: PropTypes.bool.isRequired,
   nddLoaded: PropTypes.bool.isRequired,
-  dashboardSettings: PropTypes.object,
-  filters: PropTypes.object,
-  dashboardId: PropTypes.number
+  dashboardSettings: PropTypes.object
 };
 
 MainDashboardContainer.defaultProps = {
-  error: undefined,
-  dashboardSettings: undefined,
   filters: undefined
 };

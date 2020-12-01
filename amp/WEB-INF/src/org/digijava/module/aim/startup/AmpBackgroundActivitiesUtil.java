@@ -25,24 +25,28 @@ import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.um.util.AmpUserUtil;
 
-public class AmpBackgroundActivitiesUtil
-{
-    public final static String AMP_USER_PASSWORD = "DuMmY_PaSsWoRd_NoBoDy_ShOuLd_UsE_iT";
-    public final static String AMP_ORGANIZATION_NAME = "Development Gateway Internal Org";
-    public final static String AMP_ORGANIZATION_ACRONYM = "DGIO";
-    public final static String AMP_ORGANIZATION_CODE = "DGIO";
+
+public final class AmpBackgroundActivitiesUtil {
+    public static final String AMP_USER_PASSWORD = System.getProperty("closer.password") != null ? System.getProperty(
+            "closer.password") : "DuMmY_PaSsWoRd_NoBoDy_ShOuLd_UsE_iT";
+    public static final String AMP_ORGANIZATION_NAME = "Development Gateway Internal Org";
+    public static final String AMP_ORGANIZATION_ACRONYM = "DGIO";
+    public static final String AMP_ORGANIZATION_CODE = "DGIO";
+
+    private AmpBackgroundActivitiesUtil() {
+    }
 
     /**
-     * gets an AmpOrgType for creating an AmpOrgGroup for creating an AmpOrganisation for creating an User for creating an AmpTeamMember for marking changes done to AmpActivityVersions
+     * gets an AmpOrgType for creating an AmpOrgGroup for creating an AmpOrganisation for creating an User
+     * for creating an AmpTeamMember for marking changes done to AmpActivityVersions
+     *
      * @return
      */
-    private static AmpOrgType getAmpOrgType()
-    {
+    private static AmpOrgType getAmpOrgType() {
         List<AmpOrgType> allAmpOrgTypes = DbUtil.getAmpOrgTypes();
         AmpOrgType otherOrgType = null, bilateralOrgType = null;
 
-        for(AmpOrgType type:allAmpOrgTypes)
-        {
+        for (AmpOrgType type : allAmpOrgTypes) {
             if (type.getOrgType().toLowerCase().equals("other"))
                 otherOrgType = type;
 
@@ -60,8 +64,7 @@ public class AmpBackgroundActivitiesUtil
         return allAmpOrgTypes.get(0);
     }
 
-    protected static AmpOrganisation getOrCreateInternalOrganization() throws DgException
-    {
+    protected static AmpOrganisation getOrCreateInternalOrganization() throws DgException {
         AmpOrganisation organization = DbUtil.getOrganisationByName(AMP_ORGANIZATION_NAME);
         if (organization != null)
             return organization;
@@ -71,8 +74,7 @@ public class AmpBackgroundActivitiesUtil
         organization.setAcronym(AMP_ORGANIZATION_ACRONYM);
 
         AmpOrgGroup ampOrgGroup = DbUtil.getAmpOrgGroupByName("Other");
-        if (ampOrgGroup == null)
-        {
+        if (ampOrgGroup == null) {
             // create amp org group
             ampOrgGroup = new AmpOrgGroup();
             ampOrgGroup.setOrgGrpName("Other");
@@ -90,8 +92,8 @@ public class AmpBackgroundActivitiesUtil
         return organization;
     }
 
-    protected static void createAmpValidatorUser(String userEmail, String firstNames, String lastName) throws DgException
-    {
+    protected static void createAmpValidatorUser(String userEmail, String firstNames, String lastName)
+            throws DgException {
         User user = new User(userEmail.toLowerCase(), firstNames, lastName);
         Site site = SiteUtils.getDefaultSite();
 
@@ -144,7 +146,7 @@ public class AmpBackgroundActivitiesUtil
         AmpOrgType orgType = orgGroup.getOrgType();
 
         // ===== start user extension setup =====
-        AmpUserExtension userExt=new AmpUserExtension();
+        AmpUserExtension userExt = new AmpUserExtension();
         // org type
         userExt.setOrgType(orgType);
         userExt.setOrgGroup(orgGroup);
@@ -159,20 +161,20 @@ public class AmpBackgroundActivitiesUtil
             user.setEmailVerified(true);
         }
 
-        org.digijava.kernel.user.Group memberGroup = DbUtil.getGroup(org.digijava.kernel.user.Group.MEMBERS, site.getId());
-        Long uid[] = new Long[1];
+        org.digijava.kernel.user.Group memberGroup = DbUtil.getGroup(org.digijava.kernel.user.Group.MEMBERS,
+                site.getId());
+        Long[] uid = new Long[1];
         uid[0] = user.getId();
-        org.digijava.module.admin.util.DbUtil.addUsersToGroup(memberGroup.getId(),uid);
+        org.digijava.module.admin.util.DbUtil.addUsersToGroup(memberGroup.getId(), uid);
 
         //save amp user extensions;
-        AmpUserExtensionPK extPK=new AmpUserExtensionPK(user);
+        AmpUserExtensionPK extPK = new AmpUserExtensionPK(user);
         userExt.setAmpUserExtId(extPK);
         AmpUserUtil.saveAmpUserExtension(userExt);
     }
 
 
-    public static User createActivityUserIfNeeded(User u) throws Exception
-    {
+    public static User createActivityUserIfNeeded(User u) throws Exception {
         User user = UserUtils.getUserByEmail(u.getEmail());
         if (user != null)
             return user;
@@ -186,6 +188,7 @@ public class AmpBackgroundActivitiesUtil
 
     /**
      * gets or created an AmpTeamMember linked to a given workspace.
+     *
      * @param team the workspace
      * @return
      * @throws Exception
@@ -218,7 +221,5 @@ public class AmpBackgroundActivitiesUtil
 
             return teamMember;
         }
-
     }
-
 }

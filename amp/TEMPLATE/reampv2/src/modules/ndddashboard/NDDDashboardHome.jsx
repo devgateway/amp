@@ -13,7 +13,9 @@ import loadDashboardSettings from './actions/loadDashboardSettings';
 class NDDDashboardHome extends Component {
   constructor(props) {
     super(props);
-    this.state = { filters: undefined, filtersWithModels: undefined, dashboardId: undefined };
+    this.state = {
+      filters: undefined, filtersWithModels: undefined, dashboardId: undefined, fundingType: undefined
+    };
   }
 
   componentDidMount() {
@@ -32,12 +34,20 @@ class NDDDashboardHome extends Component {
 
   onApplyFilters = (data, dataWithModels) => {
     const { callReport } = this.props;
+    const { fundingType } = this.state;
     this.setState({ filters: data, filtersWithModels: dataWithModels });
-    callReport(null, data);
+    callReport(fundingType, data);
+  }
+
+  onChangeFundingType = (value) => {
+    const { callReport } = this.props;
+    const { filters } = this.state;
+    this.setState({ fundingType: value });
+    callReport(value, filters);
   }
 
   render() {
-    const { filters, dashboardId } = this.state;
+    const { filters, dashboardId, fundingType } = this.state;
     const {
       error, ndd, nddLoadingPending, nddLoaded, dashboardSettings
     } = this.props;
@@ -52,7 +62,9 @@ class NDDDashboardHome extends Component {
             ndd={ndd}
             nddLoaded={nddLoaded}
             nddLoadingPending={nddLoadingPending}
-            dashboardSettings={dashboardSettings} />
+            dashboardSettings={dashboardSettings}
+            onChangeFundingType={this.onChangeFundingType}
+            fundingType={fundingType} />
         </Row>
       </Container>
     );

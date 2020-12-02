@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { getShareLink } from '../actions/generateShareLink';
+import { TRN_PREFIX } from '../utils/constants';
 
 const getLink = (id) => window.location + id;
 
@@ -20,7 +21,7 @@ class Share extends Component {
    handleShow = () => this.prepareDataToSave().then(() => this.setState({ show: true }));
 
    prepareDataToSave = () => {
-     // TODO: prepare data from filters and chart settings.
+     // TODO: prepare data chart settings.
      // eslint-disable-next-line no-shadow
      const { getShareLink, filters } = this.props;
      return getShareLink(filters ? filters.filters : null);
@@ -28,19 +29,19 @@ class Share extends Component {
 
    generateModal() {
      const { show } = this.state;
-     const { shareLink } = this.props;
+     const { shareLink, translations } = this.props;
      return (
        <Modal show={show} onHide={this.handleClose}>
          <Modal.Header closeButton>
-           <Modal.Title>Copy this link to share the dashboard</Modal.Title>
+           <Modal.Title>{translations[`${TRN_PREFIX}share-copy-link`]}</Modal.Title>
          </Modal.Header>
          <Modal.Body>
-           <span className="label-bold">Link</span>
+           <span className="label-bold">{` ${translations[`${TRN_PREFIX}share-link`]}`}</span>
            <Form.Control type="text" value={shareLink ? getLink(shareLink.id) : null} />
          </Modal.Body>
          <Modal.Footer>
            <Button variant="secondary" onClick={this.handleClose}>
-             Close
+             {translations[`${TRN_PREFIX}close`]}
            </Button>
          </Modal.Footer>
        </Modal>
@@ -48,11 +49,12 @@ class Share extends Component {
    }
 
    render() {
+     const { translations } = this.props;
      return (
        <Col md={3}>
          <div className="panel">
            <div className="panel-body">
-             <h3 className="inline-heading">Share</h3>
+             <h3 className="inline-heading">{translations[`${TRN_PREFIX}share`]}</h3>
              <button
                onClick={this.handleShow}
                type="button"
@@ -71,7 +73,8 @@ class Share extends Component {
 }
 
 const mapStateToProps = state => ({
-  shareLink: state.shareLinkReducer.shareLink
+  shareLink: state.shareLinkReducer.shareLink,
+  translations: state.translationsReducer.translations
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -82,5 +85,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(Share);
 
 Share.propTypes = {
   getShareLink: PropTypes.func.isRequired,
-  filters: PropTypes.object
+  filters: PropTypes.object,
+  translations: PropTypes.array.isRequired
 };

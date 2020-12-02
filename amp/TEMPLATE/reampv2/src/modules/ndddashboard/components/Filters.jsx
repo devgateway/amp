@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import FilterOutputItem from './FilterOutputItem';
 import { getSharedData } from '../actions/getSharedData';
+import { TRN_PREFIX } from '../utils/constants';
 
 const Filter = require('../../../../../ampTemplate/node_modules/amp-filter/dist/amp-filter');
 
@@ -92,18 +93,22 @@ class Filters extends Component {
 
   render() {
     const { show, filtersWithModels, showFiltersList } = this.state;
+    const { translations } = this.props;
     return (
       <Col md={6}>
         <div className="panel">
           <div className="panel-body">
-            <h3 className="inline-heading" style={{ float: 'left' }}>Filters</h3>
+            <h3 className="inline-heading" style={{ float: 'left' }}>{translations[`${TRN_PREFIX}filters`]}</h3>
             <button
               type="button"
               className="btn btn-sm btn-default filter-button"
               onClick={this.showFilterWidget}
               style={{ float: 'right' }}>
               <span className="glyphicon glyphicon-edit" />
-              <span>Edit filters</span>
+              <span>
+                {' '}
+                {translations[`${TRN_PREFIX}edit-filters`]}
+              </span>
             </button>
             <button
               type="button"
@@ -111,7 +116,11 @@ class Filters extends Component {
               onClick={this.toggleAppliedFilters}
               style={{ float: 'left' }}>
               <span className="glyphicon glyphicon-eye-open" />
-              <span>{!showFiltersList ? ' Show filter settings ' : ' Hide filter settings '}</span>
+              <span>
+                {!showFiltersList
+                  ? ` ${translations[`${TRN_PREFIX}show-filter-settings`]} `
+                  : ` ${translations[`${TRN_PREFIX}hide-filter-settings`]} `}
+              </span>
               (
               <b>{filtersWithModels ? Object.keys(filtersWithModels.filters).length : 0}</b>
               )
@@ -135,6 +144,7 @@ const mapStateToProps = state => ({
   sharedDataPending: state.sharedDataReducer.sharedDataPending,
   sharedDataLoaded: state.sharedDataReducer.sharedDataLoaded,
   sharedData: state.sharedDataReducer.sharedData,
+  translations: state.translationsReducer.translations
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -145,5 +155,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(Filters);
 
 Filters.propTypes = {
   onApplyFilters: PropTypes.func.isRequired,
-  dashboardId: PropTypes.number
+  dashboardId: PropTypes.number,
+  translations: PropTypes.array.isRequired
 };

@@ -5,9 +5,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { getShareLink } from '../actions/generateShareLink';
-import { SHARE_LINK } from '../utils/constants';
 
-const getLink = (id) => window.location + SHARE_LINK + id;
+const getLink = (id) => window.location + id;
 
 class Share extends Component {
   constructor(props) {

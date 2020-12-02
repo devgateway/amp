@@ -32,14 +32,16 @@ class Filters extends Component {
     } = this.props;
     const { loadedSavedData } = this.state;
     if (dashboardId) {
-      if (!sharedDataPending && !sharedDataLoaded) {
-        getSharedData(dashboardId);
-      }
-      if (sharedDataPending === false && sharedDataLoaded === true && !loadedSavedData) {
-        this.setState({ loadedSavedData: true });
-        // Note: no need to explicitly call applyFilters when deserializing (unless you use silent: true).
-        filter.deserialize(JSON.parse(sharedData.stateBlob));
-      }
+      filter.loaded.done(() => {
+        if (!sharedDataPending && !sharedDataLoaded) {
+          getSharedData(dashboardId);
+        }
+        if (sharedDataPending === false && sharedDataLoaded === true && !loadedSavedData) {
+          this.setState({ loadedSavedData: true });
+          // Note: no need to explicitly call applyFilters when deserializing (unless you use silent: true).
+          filter.deserialize(JSON.parse(sharedData.stateBlob));
+        }
+      });
     }
   }
 

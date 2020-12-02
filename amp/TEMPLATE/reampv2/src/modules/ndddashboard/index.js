@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import rootReducer from './reducers/rootReducer';
 import Startup from './components/StartUp';
 import NDDDashboardRouter from './components/NDDDashboard.router';
+import defaultTrnPack from './config/initialTranslations.json';
 
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -17,7 +18,7 @@ class NDDDashboardApp extends Component {
   render() {
     return (
       <Provider store={this.store}>
-        <Startup>
+        <Startup defaultTrnPack={defaultTrnPack}>
           <NDDDashboardRouter />
         </Startup>
       </Provider>

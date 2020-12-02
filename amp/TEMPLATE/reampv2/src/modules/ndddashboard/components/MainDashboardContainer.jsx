@@ -167,7 +167,9 @@ class MainDashboardContainer extends Component {
   }
 }
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+  translations: state.translationsReducer.translations
+});
 
 const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
 

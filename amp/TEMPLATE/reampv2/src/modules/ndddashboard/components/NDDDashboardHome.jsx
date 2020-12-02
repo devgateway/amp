@@ -3,12 +3,12 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { NDDTranslationContext } from './components/StartUp';
-import MainDashboardContainer from './components/MainDashboardContainer';
-import HeaderContainer from './components/HeaderContainer';
-import { callReport } from './actions/callReports';
-import { FUNDING_TYPE } from './utils/constants';
-import loadDashboardSettings from './actions/loadDashboardSettings';
+import { NDDTranslationContext } from './StartUp';
+import MainDashboardContainer from './MainDashboardContainer';
+import HeaderContainer from './HeaderContainer';
+import { callReport } from '../actions/callReports';
+import { FUNDING_TYPE } from '../utils/constants';
+import loadDashboardSettings from '../actions/loadDashboardSettings';
 
 class NDDDashboardHome extends Component {
   constructor(props) {
@@ -51,6 +51,7 @@ class NDDDashboardHome extends Component {
     const {
       error, ndd, nddLoadingPending, nddLoaded, dashboardSettings
     } = this.props;
+    const { translations } = this.context;
     return (
       <Container fluid className="main-container">
         <Row>
@@ -77,6 +78,7 @@ const mapStateToProps = state => ({
   nddLoaded: state.reportsReducer.nddLoaded,
   nddLoadingPending: state.reportsReducer.nddLoadingPending,
   dashboardSettings: state.dashboardSettingsReducer.dashboardSettings,
+  translations: state.translationsReducer.translations
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -90,7 +92,8 @@ NDDDashboardHome.propTypes = {
   nddLoadingPending: PropTypes.bool.isRequired,
   nddLoaded: PropTypes.bool.isRequired,
   dashboardSettings: PropTypes.object,
-  loadDashboardSettings: PropTypes.func.isRequired
+  loadDashboardSettings: PropTypes.func.isRequired,
+  translations: PropTypes.array.isRequired
 };
 
 NDDDashboardHome.defaultProps = {

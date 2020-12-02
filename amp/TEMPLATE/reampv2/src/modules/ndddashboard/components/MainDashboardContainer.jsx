@@ -4,11 +4,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Col } from 'react-bootstrap';
 import NestedDonutsProgramChart from './NestedDonutsProgramChart';
-import { callReport } from '../actions/callReports';
-import loadDashboardSettings from '../actions/loadDashboardSettings';
 import FundingTypeSelector from './FundingTypeSelector';
 import {
-  FUNDING_TYPE,
   CHART_COLOR_MAP,
   INDIRECT_PROGRAMS,
   PROGRAMLVL1, DIRECT, AVAILABLE_COLORS
@@ -20,14 +17,7 @@ import { getCustomColor, getGradient } from '../utils/Utils';
 class MainDashboardContainer extends Component {
   constructor(props) {
     super(props);
-    this.onChangeFundingType = this.onChangeFundingType.bind(this);
-    this.state = { fundingType: null, selectedDirectProgram: null, filters: null };
-  }
-
-  componentDidMount() {
-    const { loadDashboardSettings, callReport } = this.props;
-    loadDashboardSettings()
-      .then(settings => callReport(settings.payload.find(i => i.id === FUNDING_TYPE).value.defaultId), null);
+    this.state = { selectedDirectProgram: null };
   }
 
   handleOuterChartClick(event, outerData) {
@@ -39,26 +29,6 @@ class MainDashboardContainer extends Component {
         this.setState({ selectedDirectProgram: null });
       }
     }
-  }
-
-  shouldComponentUpdate(nextProps, nextState, nextContext) {
-    const { filters, callReport } = this.props;
-    const { fundingType } = this.state;
-    if (nextProps.filters !== filters) {
-      this.setState({ filters: nextProps.filters, selectedDirectProgram: null });
-      callReport(fundingType, nextProps.filters);
-      return true;
-    } else if (nextProps !== this.props || nextState !== this.state || nextContext !== this.context) {
-      return true;
-    }
-    return false;
-  }
-
-  onChangeFundingType(value) {
-    const { callReport } = this.props;
-    const { filters } = this.state;
-    this.setState({ fundingType: value });
-    callReport(value, filters);
   }
 
   getProgramLegend() {
@@ -114,9 +84,9 @@ class MainDashboardContainer extends Component {
 
   render() {
     const {
-      error, ndd, nddLoadingPending, nddLoaded, dashboardSettings
+      error, ndd, nddLoadingPending, nddLoaded, dashboardSettings, onChangeFundingType, fundingType
     } = this.props;
-    const { fundingType, selectedDirectProgram } = this.state;
+    const { selectedDirectProgram } = this.state;
     const formatter = new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
@@ -149,7 +119,7 @@ class MainDashboardContainer extends Component {
                   {dashboardSettings
                     ? (
                       <FundingTypeSelector
-                        onChange={this.onChangeFundingType}
+                        onChange={onChangeFundingType}
                         defaultValue={fundingType} />
                     ) : null}
                 </div>
@@ -197,34 +167,25 @@ class MainDashboardContainer extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  ndd: state.reportsReducer.ndd,
-  dashboardSettings: state.dashboardSettingsReducer.dashboardSettings,
-  error: state.reportsReducer.error,
-  nddLoaded: state.reportsReducer.nddLoaded,
-  nddLoadingPending: state.reportsReducer.nddLoadingPending,
-});
+const mapStateToProps = state => ({});
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-  callReport,
-  loadDashboardSettings
-}, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainDashboardContainer);
 
 MainDashboardContainer.propTypes = {
-  callReport: PropTypes.func.isRequired,
+  filters: PropTypes.object,
+  dashboardId: PropTypes.number,
   error: PropTypes.object,
   loadDashboardSettings: PropTypes.func.isRequired,
   ndd: PropTypes.array.isRequired,
   nddLoadingPending: PropTypes.bool.isRequired,
   nddLoaded: PropTypes.bool.isRequired,
   dashboardSettings: PropTypes.object,
-  filters: PropTypes.object
+  onChangeFundingType: PropTypes.func.isRequired,
+  fundingType: PropTypes.object
 };
 
 MainDashboardContainer.defaultProps = {
-  error: undefined,
-  dashboardSettings: undefined,
   filters: undefined
 };

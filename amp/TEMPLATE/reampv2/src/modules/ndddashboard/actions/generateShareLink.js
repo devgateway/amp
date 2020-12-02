@@ -4,11 +4,11 @@ import {
 import { fetchApiData } from '../../../utils/loadTranslations';
 import { SHARING_EP } from '../utils/constants';
 
-export const getShareLink = (data) => dispatch => {
+export const getShareLink = (filters) => dispatch => {
   dispatch(fetchShareLinkPending());
   return fetchApiData({
     url: SHARING_EP,
-    body: { data }
+    body: { title: '', description: '', stateBlob: JSON.stringify({ filters, settings: null }) }
   })
     .then(payload => dispatch(fetchShareLinkSuccess(payload)))
     .catch(error => dispatch(fetchShareLinkError(error)));

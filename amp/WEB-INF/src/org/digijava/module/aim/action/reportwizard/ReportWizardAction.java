@@ -114,7 +114,7 @@ public class ReportWizardAction extends MultiAction {
      * controls the visibility of 'Region' column from donor reports and 'Regional Region' from regional reports.
      */
     private static final Map<String, String> COLUMN_TO_FM_FIELD_MAP = new ImmutableMap.Builder<String, String>()
-            .put(ColumnConstants.REGIONAL_REGION, ColumnConstants.REGION)
+            .put(ColumnConstants.REGIONAL_REGION, ColumnConstants.LOCATION_ADM_LEVEL_1)
             .build();
 
     private static Set<String> COLUMNS_IGNORED_IN_REPORT_WIZARD = new HashSet<>(Arrays.asList(ColumnConstants.EXPENDITURE_CLASS));
@@ -922,7 +922,7 @@ public class ReportWizardAction extends MultiAction {
 
             if (type == ArConstants.PLEDGES_TYPE)
             {
-                // TODO-CONSTANTIN: looks stupid, should be moved out of the loop completely
+                // TODO-CONSTANTIN: should be moved out of the loop completely
                 for(AmpColumnsOrder aco:ampColumnsOrder)
                     if (aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_COLUMNS) ||
                             aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_CONTACTS_1)||aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_CONTACTS_2))

@@ -21,7 +21,7 @@
 		<!--   <property name="fieldType" column="field_type" type="long" /> -->
 
 		<set name="usedValues" table="AMP_CATEGORY_VALUES_USED" lazy="false">
-			<cache usage="read-write"/>
+			<cache usage="read-write" />
 			<key column="value_id"/>
 			<many-to-many column="used_value_id" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" />
 		</set>

@@ -20,8 +20,8 @@ import org.digijava.module.aim.util.SoftDeletable;
 
 
 @TranslatableClass (displayName = "Sector")
-public class AmpSector implements Serializable, Comparable<AmpSector>, Identifiable,
-        ARDimensionable, HierarchyListable, AmpAutoCompleteDisplayable,
+public class AmpSector implements Serializable, Identifiable,
+        ARDimensionable, HierarchyListable, AmpAutoCompleteDisplayable<AmpSector>,
         SoftDeletable, Cloneable, OrgProfileValue, NameableOrIdentifiable {
 
     @PossibleValueId

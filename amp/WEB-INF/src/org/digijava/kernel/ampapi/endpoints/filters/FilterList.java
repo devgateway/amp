@@ -4,10 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class FilterList {
     
-    private List<FilterListDefinition> listDefinitions = new ArrayList<>(); 
+    @ApiModelProperty(value = "Filter list definitions")
+    private List<FilterListDefinition> listDefinitions = new ArrayList<>();
     
+    @ApiModelProperty(value = "Items needed for building the filter tree")
     private Map<String, List<FilterListTreeNode>> items;
     
     public FilterList() { }

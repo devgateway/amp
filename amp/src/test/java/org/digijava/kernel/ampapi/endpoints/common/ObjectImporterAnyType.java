@@ -1,7 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.common;
 
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
-import org.digijava.kernel.ampapi.endpoints.activity.TestValueConverter;
+import org.digijava.kernel.persistence.InMemoryValueConverter;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorProcessor;
@@ -15,9 +15,9 @@ import org.digijava.kernel.request.TLSUtils;
 public class ObjectImporterAnyType extends ObjectImporter<Object> {
 
     public ObjectImporterAnyType(InputValidatorProcessor formatValidator,
-            InputValidatorProcessor businessRulesValidator, TranslationSettings plainEnglish, APIField apiField,
-            TestValueConverter valueConverter) {
-        super(formatValidator, businessRulesValidator, plainEnglish, apiField, TLSUtils.getSite(), valueConverter);
+            TranslationSettings plainEnglish, APIField apiField,
+            InMemoryValueConverter valueConverter) {
+        super(formatValidator, plainEnglish, apiField, TLSUtils.getSite(), valueConverter);
     }
 
     @Override

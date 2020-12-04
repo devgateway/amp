@@ -13,6 +13,7 @@ import {
 import CustomLegend from '../../../utils/components/CustomLegend';
 import './legends/legends.css';
 import { getCustomColor, getGradient } from '../utils/Utils';
+import FundingByYearChart from './FundingByYearChart';
 
 class MainDashboardContainer extends Component {
   constructor(props) {
@@ -160,6 +161,9 @@ class MainDashboardContainer extends Component {
                 )}
               </div>
             ) : null}
+          </Col>
+          <Col md={12}>
+            {nddLoaded && !nddLoadingPending ? <FundingByYearChart data={ndd} /> : <div className="loading" />}
           </Col>
         </div>
       );

@@ -106,7 +106,6 @@ class FundingByYearChart extends Component {
         }
       }
     ] : [];
-    // Note: Remove prop 'key' if you want to disable the fade effect after clicking the outer ring.
     return (
       <Plot
         key="fundingByYearChart"
@@ -114,12 +113,13 @@ class FundingByYearChart extends Component {
             directData.map(i => ({
               x: i.values.map(j => Object.keys(j)[0]),
               y: i.values.map(j => j[Object.keys(j)[0]]),
-              name: i.code,
+              name: `${i[CODE]}: ${i.name}`,
               type: 'scatter',
               mode: 'lines+markers',
               line: {
                 dash: 'solid',
-                width: 3
+                width: 3,
+                color: getCustomColor(i, PROGRAMLVL1)
               }
             }))
           }
@@ -129,7 +129,7 @@ class FundingByYearChart extends Component {
           width: '100%',
           height: 400,
           title: '',
-          showlegend: true,
+          showlegend: false,
           transition,
           margin: {
             l: 50,
@@ -141,7 +141,6 @@ class FundingByYearChart extends Component {
           annotations
         }}
         config={{ displaylogo: false }}
-        onClick={event => this.handleOuterChartClick(event, directData)}
         />
     );
   }
@@ -149,7 +148,6 @@ class FundingByYearChart extends Component {
 
 FundingByYearChart.propTypes = {
   data: PropTypes.array.isRequired,
-  handleOuterChartClick: PropTypes.func.isRequired,
   selectedDirectProgram: PropTypes.object.isRequired
 };
 

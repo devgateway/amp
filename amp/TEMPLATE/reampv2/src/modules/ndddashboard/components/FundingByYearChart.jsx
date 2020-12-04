@@ -43,6 +43,9 @@ class FundingByYearChart extends Component {
           });
         }
       });
+      ret.forEach(i => {
+        i.values = this.sortAmountsByYear(this.fillGapsInYears(i.values));
+      });
     }
     console.info(ret);
     return ret;
@@ -62,7 +65,7 @@ class FundingByYearChart extends Component {
         current[i][key] = value + newValue[key];
       }
     });
-    values.forEach((item, i) => {
+    values.forEach(item => {
       const key = Object.keys(item)[0];
       const value = item[key];
       const currValue = current.find(item2 => item2[key]);
@@ -73,18 +76,15 @@ class FundingByYearChart extends Component {
     return ret;
   }
 
-  fillGapsInYears(currentList, values) {
-    const ret = [];
-    const currentMin = Math.min(currentList);
-    const currentMax = Math.max(currentList);
-    const valuesMin = Math.min(...Object.keys(values).map(i => parseInt(i, 10)));
-    const valuesMax = Math.max(...Object.keys(values).map(i => parseInt(i, 10)));
-    const min = currentMin > 0 && currentMin <= valuesMin ? currentMin : valuesMin;
-    const max = currentMax > 0 && currentMax >= valuesMax ? currentMax : valuesMax;
+  fillGapsInYears(values) {
+    const ret = values;
+    const min = Math.min(...values.map(i => parseInt(Object.keys(i)[0], 10)));
+    const max = Math.max(...values.map(i => parseInt(Object.keys(i)[0], 10)));
     for (let i = min; i <= max; i++) {
-      ret.push({ year: i, amount: values[i] });
+      if (!values.find(j => Object.keys(j)[0] === i.toString())) {
+        values.push({ [i]: 0 });
+      }
     }
-    debugger;
     return ret;
   }
 

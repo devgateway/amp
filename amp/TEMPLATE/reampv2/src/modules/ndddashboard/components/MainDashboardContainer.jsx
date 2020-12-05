@@ -163,7 +163,15 @@ class MainDashboardContainer extends Component {
             ) : null}
           </Col>
           <Col md={12}>
-            {nddLoaded && !nddLoadingPending ? <FundingByYearChart data={ndd} /> : <div className="loading" />}
+            <div className="chart-container">
+              <div className="chart">
+                {nddLoaded && !nddLoadingPending ? (
+                  <FundingByYearChart
+                    selectedDirectProgram={selectedDirectProgram}
+                    data={ndd} />
+                ) : <div className="loading" />}
+              </div>
+            </div>
           </Col>
         </div>
       );

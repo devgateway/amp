@@ -28,8 +28,10 @@ class FundingByYearChart extends Component {
     const ret = [];
     const { data } = this.props;
     if (data && data.length > 0) {
-      data.forEach(i => {
-        const directProgram = i[DIRECT_PROGRAM][PROGRAMLVL1];
+      const filteredData = !selectedDirectProgram ? data
+        : (data.filter(i => i[DIRECT_PROGRAM][PROGRAMLVL1][CODE] === selectedDirectProgram[CODE]));
+      filteredData.forEach(i => {
+        const directProgram = !selectedDirectProgram ? i[DIRECT_PROGRAM][PROGRAMLVL1] : i[DIRECT_PROGRAM][PROGRAMLVL2];
         const item = ret.find(j => j[CODE] === directProgram[CODE]);
         const auxAmounts = i[DIRECT_PROGRAM].amountsByYear;
         if (item) {
@@ -51,10 +53,12 @@ class FundingByYearChart extends Component {
     return ret;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   sortAmountsByYear(values) {
     return values.sort((i, j) => (Object.keys(i)[0] > Object.keys(j)[0]));
   }
 
+  // eslint-disable-next-line class-methods-use-this
   addAmountsByYear(current, values) {
     const ret = current;
     current.forEach((item, i) => {
@@ -76,6 +80,7 @@ class FundingByYearChart extends Component {
     return ret;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   fillGapsInYears(values) {
     const ret = values;
     const min = Math.min(...values.map(i => parseInt(Object.keys(i)[0], 10)));
@@ -89,7 +94,6 @@ class FundingByYearChart extends Component {
   }
 
   render() {
-    const { selectedDirectProgram } = this.props;
     const directData = this.getDirectValues();
     const transition = {
       duration: 2000,
@@ -126,7 +130,6 @@ class FundingByYearChart extends Component {
         layout={{
           autosize: true,
           paper_bgcolor: 'rgba(0,0,0,0)',
-          width: '100%',
           height: 400,
           title: '',
           showlegend: false,
@@ -138,9 +141,22 @@ class FundingByYearChart extends Component {
             t: 20,
             pad: 10
           },
-          annotations
+          annotations,
+          xaxis: {
+            showgrid: false,
+            showline: false,
+            autotick: false,
+            showticklabels: true,
+            automargin: true,
+            tickangle: 45,
+          },
+          yaxis: {
+            automargin: true,
+          }
         }}
-        config={{ displaylogo: false }}
+        config={{ displaylogo: false, responsive: true }}
+        useResizeHandler
+        style={{ width: '100%', height: '100%' }}
         />
     );
   }

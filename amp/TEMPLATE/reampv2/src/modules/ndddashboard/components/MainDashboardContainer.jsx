@@ -107,6 +107,9 @@ class MainDashboardContainer extends Component {
             <div>
               <div className="chart-container">
                 <div className="chart">
+                  <div className="section_title">
+                    <span>PNSD and NDD Funding</span>
+                  </div>
                   {nddLoaded && !nddLoadingPending
                     ? (
                       <NestedDonutsProgramChart
@@ -128,6 +131,9 @@ class MainDashboardContainer extends Component {
             </div>
           </Col>
           <Col md={6}>
+            <div className="section_title">
+              <span>Legends</span>
+            </div>
             {programLegend ? (
               <div className="legends-container">
                 <div className="legend-title">
@@ -162,9 +168,13 @@ class MainDashboardContainer extends Component {
               </div>
             ) : null}
           </Col>
+          <div className="separator" />
           <Col md={12}>
             <div className="chart-container">
               <div className="chart">
+                <div className="section_title">
+                  <span>Funding Over Time</span>
+                </div>
                 {nddLoaded && !nddLoadingPending ? (
                   <FundingByYearChart
                     selectedDirectProgram={selectedDirectProgram}

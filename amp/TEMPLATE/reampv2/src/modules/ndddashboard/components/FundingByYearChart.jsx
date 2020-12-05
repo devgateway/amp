@@ -118,13 +118,23 @@ class FundingByYearChart extends Component {
             directData.map(i => ({
               x: i.values.map(j => Object.keys(j)[0]),
               y: i.values.map(j => j[Object.keys(j)[0]]),
-              name: `${i[CODE]}: ${i.name}`,
+              text: (`${i[CODE]}: ${i.name}`).substr(0, 50),
+              name: '',
               type: 'scatter',
               mode: 'lines+markers',
               line: {
+                shape: 'spline',
+                smoothing: 0.5,
                 dash: 'solid',
                 width: 3,
                 color: !selectedDirectProgram ? getCustomColor(i, PROGRAMLVL1) : getCustomColor(i, INDIRECT_PROGRAMS)
+              },
+              marker: {
+                size: 7.5,
+                line: {
+                  color: !selectedDirectProgram ? getCustomColor(i, PROGRAMLVL1) : getCustomColor(i, INDIRECT_PROGRAMS),
+                  width: 1,
+                }
               }
             }))
           }

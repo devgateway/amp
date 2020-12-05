@@ -94,6 +94,7 @@ class FundingByYearChart extends Component {
   }
 
   render() {
+    const { selectedDirectProgram } = this.props;
     const directData = this.getDirectValues();
     const transition = {
       duration: 2000,
@@ -123,7 +124,7 @@ class FundingByYearChart extends Component {
               line: {
                 dash: 'solid',
                 width: 3,
-                color: getCustomColor(i, PROGRAMLVL1)
+                color: !selectedDirectProgram ? getCustomColor(i, PROGRAMLVL1) : getCustomColor(i, INDIRECT_PROGRAMS)
               }
             }))
           }
@@ -136,8 +137,8 @@ class FundingByYearChart extends Component {
           transition,
           margin: {
             l: 50,
-            r: 10,
-            b: 30,
+            r: 30,
+            b: 50,
             t: 20,
             pad: 10
           },
@@ -146,12 +147,10 @@ class FundingByYearChart extends Component {
             showgrid: false,
             showline: false,
             autotick: false,
-            showticklabels: true,
-            automargin: true,
             tickangle: 45,
           },
           yaxis: {
-            automargin: true,
+            automargin: false,
           }
         }}
         config={{ displaylogo: false, responsive: true }}

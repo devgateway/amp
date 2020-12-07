@@ -11,5 +11,6 @@
   "amp.ndd.dashboard:share-link": "Link",
   "amp.ndd.dashboard:share": "Share",
   "amp.ndd.dashboard:fy-direct": "Show Direct Data",
-  "amp.ndd.dashboard:fy-indirect": "Show Indirect Data"
+  "amp.ndd.dashboard:fy-indirect": "Show Indirect Data",
+  "amp.ndd.dashboard:no-data": "No matching data found"
 }

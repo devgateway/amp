@@ -17,23 +17,38 @@ import styles from './styles.css';
 
 const Plot = createPlotlyComponent(Plotly);
 
+const SRC_DIRECT = '0';
+const SRC_INDIRECT = '1';
+
 class FundingByYearChart extends Component {
   constructor(props) {
     super(props);
-    this.getDirectValues = this.getDirectValues.bind(this);
+    this.getValues = this.getValues.bind(this);
+    this.state = {
+      source: SRC_DIRECT
+    };
   }
 
-  getDirectValues() {
+  onChangeSource = (value) => {
+    this.setState({ source: value.target.value });
+  }
+
+  getValues() {
     const { selectedDirectProgram } = this.props;
+    const { source } = this.state;
     const ret = [];
     const { data } = this.props;
     if (data && data.length > 0) {
-      const filteredData = !selectedDirectProgram ? data
-        : (data.filter(i => i[DIRECT_PROGRAM][PROGRAMLVL1][CODE] === selectedDirectProgram[CODE]));
+      const sourceData = (source === SRC_DIRECT
+        ? data.map(i => i[DIRECT_PROGRAM])
+        : data.map(i => i[INDIRECT_PROGRAMS]).flat());
+      const filteredData = !selectedDirectProgram ? sourceData
+        // TODO: maybe we can show the indirect funding for the selected direct program.
+        : (sourceData.filter(i => i[PROGRAMLVL1][CODE] === selectedDirectProgram[CODE]));
       filteredData.forEach(i => {
-        const directProgram = !selectedDirectProgram ? i[DIRECT_PROGRAM][PROGRAMLVL1] : i[DIRECT_PROGRAM][PROGRAMLVL2];
+        const directProgram = !selectedDirectProgram ? i[PROGRAMLVL1] : i[PROGRAMLVL2];
         const item = ret.find(j => j[CODE] === directProgram[CODE]);
-        const auxAmounts = i[DIRECT_PROGRAM].amountsByYear;
+        const auxAmounts = i.amountsByYear;
         if (item) {
           item.values = this.sortAmountsByYear(this.addAmountsByYear(item.values, Object.keys(auxAmounts)
             .map(j => ({ [j]: auxAmounts[j] }))));
@@ -95,14 +110,15 @@ class FundingByYearChart extends Component {
 
   render() {
     const { selectedDirectProgram, translations } = this.props;
-    const directData = this.getDirectValues();
+    const { source } = this.state;
+    const directData = this.getValues();
     const transition = {
       duration: 2000,
       easing: 'cubic-in-out'
     };
     const annotations = directData.length === 0 ? [
       {
-        text: 'No matching data found',
+        text: translations[`${TRN_PREFIX}no-data`],
         xref: 'paper',
         yref: 'paper',
         showarrow: false,
@@ -114,11 +130,23 @@ class FundingByYearChart extends Component {
     return (
       <div>
         <div>
-          <input type="radio" id="fy-direct" />
+          <input
+            type="radio"
+            id="fy-direct"
+            name="fy-source"
+            value="0"
+            checked={source === SRC_DIRECT ? 'checked' : null}
+            onChange={this.onChangeSource} />
           <label htmlFor="fy-direct">
             {translations[`${TRN_PREFIX}fy-direct`]}
           </label>
-          <input type="radio" id="fy-indirect" />
+          <input
+            type="radio"
+            id="fy-indirect"
+            name="fy-source"
+            value="1"
+            checked={source === SRC_INDIRECT ? 'checked' : null}
+            onChange={this.onChangeSource} />
           <label htmlFor="fy-indirect">
             {translations[`${TRN_PREFIX}fy-indirect`]}
           </label>

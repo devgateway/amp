@@ -36,7 +36,7 @@ public class AmpActivityProgramSettingsAction
                         //Load programs settings
                         ampActivityProgramSettingsForm.setProgramList(ProgramUtil.getAllThemes());
                         // Remove from the list of available themes the one used as indirect program.
-                        AmpTheme indirectProgram = NDDService.getDstProgramRoot();
+                        AmpTheme indirectProgram = NDDService.getDstIndirectProgramRoot();
                         if (indirectProgram != null) {
                                 ampActivityProgramSettingsForm.getProgramList().remove(indirectProgram);
                         }

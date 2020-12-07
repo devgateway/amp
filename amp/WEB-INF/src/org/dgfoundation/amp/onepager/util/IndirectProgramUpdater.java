@@ -4,6 +4,7 @@ import static java.util.Collections.emptySet;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.mapping;
 import static java.util.stream.Collectors.toCollection;
+import static org.digijava.kernel.ampapi.endpoints.ndd.NDDService.INDIRECT_MAPPING_LEVEL;
 
 import java.math.BigDecimal;
 import java.util.ArrayDeque;
@@ -26,11 +27,6 @@ import org.hibernate.Session;
  * @author Octavian Ciubotaru
  */
 public class IndirectProgramUpdater {
-
-    /**
-     * Level at which we have explicit indirect program mappings defined.
-     */
-    public static final int INDIRECT_MAPPING_LEVEL = 3;
 
     public void updateIndirectPrograms(AmpActivityVersion activity, Session session) {
         Map<AmpTheme, Set<AmpTheme>> mapping = loadMapping(session);

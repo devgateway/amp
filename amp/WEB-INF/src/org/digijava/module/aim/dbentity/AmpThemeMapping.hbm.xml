@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.aim.dbentity.AmpThemeMapping" table="AMP_THEME_MAPPING" lazy="false">
+
+		<cache usage="read-write" />
+
+		<id name="id" column="id" type="java.lang.Long">
+			<generator class="native">
+				<param name="sequence">AMP_THEME_MAPPING_SEQ</param>
+			</generator>
+		</id>
+
+		<many-to-one name="srcTheme" column="src_theme_id"
+					 class="org.digijava.module.aim.dbentity.AmpTheme"
+					 cascade="none" not-null="true" unique-key='uniqueThemeMapping' />
+
+		<many-to-one name="dstTheme" column="dst_theme_id"
+					 class="org.digijava.module.aim.dbentity.AmpTheme"
+					 cascade="none" not-null="true" unique-key='uniqueThemeMapping' />
+
+	</class>
+</hibernate-mapping>

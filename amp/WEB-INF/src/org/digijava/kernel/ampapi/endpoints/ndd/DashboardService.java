@@ -42,7 +42,7 @@ public final class DashboardService {
         spec.setDisplayEmptyFundingRows(false);
         spec.setDisplayEmptyFundingRowsWhenFilteringByTransactionHierarchy(false);
 
-        AmpTheme directProgram = NDDService.getSrcProgramRoot();
+        AmpTheme directProgram = NDDService.getSrcIndirectProgramRoot();
         Set<AmpActivityProgramSettings> programSettings = directProgram.getProgramSettings();
         if (programSettings == null || programSettings.size() != 1) {
             throw new RuntimeException("Cant determine the first column of the report.");

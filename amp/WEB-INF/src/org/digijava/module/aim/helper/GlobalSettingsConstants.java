@@ -213,6 +213,9 @@ public class GlobalSettingsConstants {
 
     public static final String INDIRECT_PROGRAM = "Indirect program";
     public static final String PRIMARY_PROGRAM = "NPD Default Primary Program";
+
+    public static final String SDG_SOURCE_PROGRAM = "SDG Source Program";
+    public static final String SDG_DESTINATION_PROGRAM = "SDG Destination Program";
     
     // TODO will be removed once the new activity preview is finished
     public static final String USE_NEW_ACTIVITY_PREVIEW = "Use new activity preview";

@@ -226,7 +226,7 @@ class NestedDonutsProgramChart extends Component {
           layout={{
             autosize: false,
             paper_bgcolor: 'rgba(0,0,0,0)',
-            width: 500,
+            width: 400,
             height: 400,
             title: '',
             showlegend: false,

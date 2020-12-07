@@ -8,7 +8,7 @@ import Plotly from 'plotly.js';
 import createPlotlyComponent from 'react-plotly.js/factory';
 import {
   DIRECT_PROGRAM, INDIRECT_PROGRAMS, PROGRAMLVL1, AMOUNT, CODE, DIRECT, INDIRECT,
-  TRANSITIONS, PROGRAMLVL2, AVAILABLE_COLORS
+  TRANSITIONS, PROGRAMLVL2, AVAILABLE_COLORS, TRN_PREFIX
 } from '../utils/constants';
 import {
   addAlpha, getCustomColor, getGradient
@@ -94,7 +94,7 @@ class FundingByYearChart extends Component {
   }
 
   render() {
-    const { selectedDirectProgram } = this.props;
+    const { selectedDirectProgram, translations } = this.props;
     const directData = this.getDirectValues();
     const transition = {
       duration: 2000,
@@ -112,9 +112,20 @@ class FundingByYearChart extends Component {
       }
     ] : [];
     return (
-      <Plot
-        key="fundingByYearChart"
-        data={
+      <div>
+        <div>
+          <input type="radio" id="fy-direct" />
+          <label htmlFor="fy-direct">
+            {translations[`${TRN_PREFIX}fy-direct`]}
+          </label>
+          <input type="radio" id="fy-indirect" />
+          <label htmlFor="fy-indirect">
+            {translations[`${TRN_PREFIX}fy-indirect`]}
+          </label>
+        </div>
+        <Plot
+          key="fundingByYearChart"
+          data={
             directData.map(i => ({
               x: i.values.map(j => Object.keys(j)[0]),
               y: i.values.map(j => j[Object.keys(j)[0]]),
@@ -138,45 +149,49 @@ class FundingByYearChart extends Component {
               }
             }))
           }
-        layout={{
-          autosize: true,
-          paper_bgcolor: 'rgba(0,0,0,0)',
-          height: 400,
-          title: '',
-          showlegend: false,
-          transition,
-          margin: {
-            l: 50,
-            r: 30,
-            b: 50,
-            t: 20,
-            pad: 10
-          },
-          annotations,
-          xaxis: {
-            showgrid: false,
-            showline: false,
-            autotick: false,
-            tickangle: 45,
-          },
-          yaxis: {
-            automargin: false,
-          }
-        }}
-        config={{ displaylogo: false, responsive: true }}
-        useResizeHandler
-        style={{ width: '100%', height: '100%' }}
+          layout={{
+            autosize: true,
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            height: 400,
+            title: '',
+            showlegend: false,
+            transition,
+            margin: {
+              l: 50,
+              r: 30,
+              b: 50,
+              t: 20,
+              pad: 10
+            },
+            annotations,
+            xaxis: {
+              showgrid: false,
+              showline: false,
+              autotick: false,
+              tickangle: 45,
+            },
+            yaxis: {
+              automargin: false,
+            }
+          }}
+          config={{ displaylogo: false, responsive: true }}
+          useResizeHandler
+          style={{ width: '100%', height: '100%' }}
         />
+      </div>
     );
   }
 }
 
 FundingByYearChart.propTypes = {
   data: PropTypes.array.isRequired,
-  selectedDirectProgram: PropTypes.object.isRequired
+  selectedDirectProgram: PropTypes.object.isRequired,
+  translations: PropTypes.array.isRequired
 };
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+  translations: state.translationsReducer.translations
+});
 
 const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
 

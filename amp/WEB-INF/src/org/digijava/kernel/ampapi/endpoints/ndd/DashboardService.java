@@ -22,13 +22,18 @@ import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.util.ProgramUtil;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public final class DashboardService {
+
+    private static Pattern numberPattern = Pattern.compile("\\d{4}");
 
     private DashboardService() {
     }
@@ -36,7 +41,7 @@ public final class DashboardService {
     public static List<NDDSolarChartData> generateDirectIndirectReport(SettingsAndFiltersParameters params) {
         ReportSpecificationImpl spec = new ReportSpecificationImpl("DirectIndirect", ArConstants.DONOR_TYPE);
         spec.setSummaryReport(true);
-        spec.setGroupingCriteria(GroupingCriteria.GROUPING_TOTALS_ONLY);
+        spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
         spec.setEmptyOutputForUnspecifiedData(true);
         spec.setDisplayEmptyFundingColumns(false);
         spec.setDisplayEmptyFundingRows(false);
@@ -78,7 +83,8 @@ public final class DashboardService {
         List<NDDSolarChartData> list = new ArrayList<>();
         ReportOutputColumn directColumn = report.leafHeaders.get(0);
         ReportOutputColumn indirectColumn = report.leafHeaders.get(1);
-        ReportOutputColumn totalColumn = report.leafHeaders.get(2);
+        ReportOutputColumn totalColumn = report.leafHeaders.get(report.leafHeaders.size() - 1);
+
         if (report.reportContents != null && report.reportContents.getChildren() != null) {
             report.reportContents.getChildren().stream().forEach(children -> {
                 if (children.getChildren() != null && children.getChildren().size() > 0) {
@@ -93,19 +99,37 @@ public final class DashboardService {
                             add.set(true);
                             AmpTheme indirect = ProgramUtil.getTheme(((TextCell) programCell).entityId);
                             BigDecimal amount = ((AmountCell) content2.get(totalColumn)).extractValue();
+                            Map<String, BigDecimal> amountsByYear = extractAmountsByYear(content2);
                             nddSolarChartData.getIndirectPrograms().add(new NDDSolarChartData.ProgramData(indirect,
-                                    amount));
+                                    amount, amountsByYear));
                         }
                     });
                     if (add.get()) {
                         AmpTheme direct = ProgramUtil.getTheme(((TextCell) content.get(directColumn)).entityId);
                         BigDecimal amount = ((AmountCell) content.get(totalColumn)).extractValue();
-                        nddSolarChartData.setDirectProgram(new NDDSolarChartData.ProgramData(direct, amount));
+                        Map<String, BigDecimal> amountsByYear = extractAmountsByYear(content);
+                        nddSolarChartData.setDirectProgram(new NDDSolarChartData.ProgramData(direct, amount,
+                                amountsByYear));
                         list.add(nddSolarChartData);
                     }
                 }
             });
         }
         return list;
+    }
+
+    private static Map<String, BigDecimal> extractAmountsByYear(Map<ReportOutputColumn, ReportCell> content) {
+        Map<String, BigDecimal> amountsByYear = new HashMap<>();
+        content.entrySet().forEach(entry -> {
+            // Ignore columns from report that are not funding by year.
+            Matcher m = numberPattern.matcher(entry.getKey().toString());
+            if (m.find()) {
+                BigDecimal amount = ((AmountCell) entry.getValue()).extractValue();
+                if (amount.doubleValue() > 0) {
+                    amountsByYear.put(m.group(), amount);
+                }
+            }
+        });
+        return amountsByYear;
     }
 }

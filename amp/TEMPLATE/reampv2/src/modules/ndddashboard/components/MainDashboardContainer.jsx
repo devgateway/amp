@@ -14,6 +14,8 @@ import CustomLegend from '../../../utils/components/CustomLegend';
 import './legends/legends.css';
 import { getCustomColor, getGradient } from '../utils/Utils';
 import TopChart from './TopChart';
+import FundingByYearChart from './FundingByYearChart';
+import { callTopReport } from "../actions/callReports";
 
 class MainDashboardContainer extends Component {
   constructor(props) {
@@ -88,7 +90,8 @@ class MainDashboardContainer extends Component {
   render() {
     const {
       error, ndd, nddLoadingPending, nddLoaded, dashboardSettings, onChangeFundingType, fundingType, topLoaded,
-      topLoadingPending, top } = this.props;
+      topLoadingPending, top
+    } = this.props;
     const { selectedDirectProgram } = this.state;
     const formatter = new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -109,6 +112,9 @@ class MainDashboardContainer extends Component {
             <div>
               <div className="chart-container">
                 <div className="chart">
+                  <div className="section_title">
+                    <span>PNSD and NDD Funding</span>
+                  </div>
                   {nddLoaded && !nddLoadingPending
                     ? (
                       <NestedDonutsProgramChart
@@ -129,7 +135,10 @@ class MainDashboardContainer extends Component {
               </div>
             </div>
           </Col>
-          <Col md={6} className="middle">
+          <Col md={6}>
+            <div className="section_title">
+              <span>Legends</span>
+            </div>
             {programLegend ? (
               <div className="legends-container">
                 <div className={`even-${selectedDirectProgram ? 'third' : 'middle'}`}>
@@ -181,6 +190,21 @@ class MainDashboardContainer extends Component {
               </div>
             ) : <div className="loading" />}
           </Col>
+          <div className="separator" />
+          <Col md={12}>
+            <div className="chart-container">
+              <div className="chart">
+                <div className="section_title">
+                  <span>Funding Over Time</span>
+                </div>
+                {nddLoaded && !nddLoadingPending ? (
+                  <FundingByYearChart
+                    selectedDirectProgram={selectedDirectProgram}
+                    data={ndd} />
+                ) : <div className="loading" />}
+              </div>
+            </div>
+          </Col>
         </div>
       );
     }
@@ -194,7 +218,7 @@ const mapStateToProps = state => ({
   topLoadingPending: state.reportsReducer.topLoadingPending,
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ callTopReport }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainDashboardContainer);
 

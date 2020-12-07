@@ -130,26 +130,30 @@ class FundingByYearChart extends Component {
     return (
       <div>
         <div>
-          <input
-            type="radio"
-            id="fy-direct"
-            name="fy-source"
-            value="0"
-            checked={source === SRC_DIRECT ? 'checked' : null}
-            onChange={this.onChangeSource} />
-          <label htmlFor="fy-direct">
-            {translations[`${TRN_PREFIX}fy-direct`]}
-          </label>
-          <input
-            type="radio"
-            id="fy-indirect"
-            name="fy-source"
-            value="1"
-            checked={source === SRC_INDIRECT ? 'checked' : null}
-            onChange={this.onChangeSource} />
-          <label htmlFor="fy-indirect">
-            {translations[`${TRN_PREFIX}fy-indirect`]}
-          </label>
+          <div className="radio-fy-source">
+            <input
+              type="radio"
+              id="fy-direct"
+              name="fy-source"
+              value="0"
+              checked={source === SRC_DIRECT ? 'checked' : null}
+              onChange={this.onChangeSource} />
+            <label htmlFor="fy-direct">
+              {translations[`${TRN_PREFIX}fy-direct`]}
+            </label>
+          </div>
+          <div className="radio-fy-source">
+            <input
+              type="radio"
+              id="fy-indirect"
+              name="fy-source"
+              value="1"
+              checked={source === SRC_INDIRECT ? 'checked' : null}
+              onChange={this.onChangeSource} />
+            <label htmlFor="fy-indirect">
+              {translations[`${TRN_PREFIX}fy-indirect`]}
+            </label>
+          </div>
         </div>
         <Plot
           key="fundingByYearChart"

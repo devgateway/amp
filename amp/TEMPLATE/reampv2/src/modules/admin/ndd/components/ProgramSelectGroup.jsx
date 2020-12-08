@@ -11,11 +11,11 @@ import {
   THIRD_LEVEL,
   STATE_LEVEL_FIELD,
   ALL_PROGRAMS
-} from '../constants/Constants'
-import * as Constants from "../constants/Constants";
+} from '../constants/Constants';
+import * as Constants from '../constants/Constants';
 import '../../../../../node_modules/react-bootstrap-typeahead/css/Typeahead.min.css';
 import './css/style.css';
-import ProgramSelect from "./ProgramSelect";
+import ProgramSelect from './ProgramSelect';
 import * as Utils from '../utils/Utils';
 
 class ProgramSelectGroup extends Component {
@@ -58,7 +58,7 @@ class ProgramSelectGroup extends Component {
     switch (lvl) {
       case FIRST_LEVEL:
         if (id && value) {
-          level1 = { id: id, value: value };
+          level1 = { id, value };
           this.setState({ [STATE_LEVEL_FIELD + FIRST_LEVEL]: level1 });
         } else {
           level1 = undefined;
@@ -71,7 +71,7 @@ class ProgramSelectGroup extends Component {
         break;
       case SECOND_LEVEL:
         if (id && value) {
-          level2 = { id: id, value: value };
+          level2 = { id, value };
           this.setState({ [STATE_LEVEL_FIELD + SECOND_LEVEL]: level2 });
         } else {
           level2 = undefined;
@@ -82,7 +82,7 @@ class ProgramSelectGroup extends Component {
         break;
       case THIRD_LEVEL:
         if (id && value) {
-          level3 = { id, value }
+          level3 = { id, value };
           this.setState({ [STATE_LEVEL_FIELD + THIRD_LEVEL]: level3 });
         } else {
           level3 = undefined;
@@ -101,9 +101,7 @@ class ProgramSelectGroup extends Component {
     switch (level) {
       case FIRST_LEVEL:
         if (tree) {
-          options = tree[CHILDREN].map(i => {
-            return { id: i.id, value: i.value }
-          });
+          options = tree[CHILDREN].map(i => ({ id: i.id, value: i.value }));
         }
         break;
       case SECOND_LEVEL:
@@ -171,31 +169,33 @@ class ProgramSelectGroup extends Component {
   render() {
     const { translations } = this.context;
     const { type } = this.props;
-    return (<div>
-      <div style={{ width: '100%' }}>
-        <ProgramSelect
-          placeholder={translations[Constants.TRN_PREFIX + 'choose-' + type + '-lvl-' + FIRST_LEVEL]}
-          label={translations[Constants.TRN_PREFIX + type + '-program-lvl-' + FIRST_LEVEL]}
-          options={this.getOptionsForLevel(FIRST_LEVEL)}
-          selected={this.getSelectedForLevel(FIRST_LEVEL)}
-          onChange={this.onSelectChange}
-          level={FIRST_LEVEL} />
-        <ProgramSelect
-          placeholder={translations[Constants.TRN_PREFIX + 'choose-' + type + '-lvl-' + SECOND_LEVEL]}
-          label={translations[Constants.TRN_PREFIX + type + '-program-lvl-' + SECOND_LEVEL]}
-          options={this.getOptionsForLevel(SECOND_LEVEL)}
-          selected={this.getSelectedForLevel(SECOND_LEVEL)}
-          onChange={this.onSelectChange}
-          level={SECOND_LEVEL} />
-        <ProgramSelect
-          placeholder={translations[Constants.TRN_PREFIX + 'choose-' + type + '-lvl-' + THIRD_LEVEL]}
-          label={translations[Constants.TRN_PREFIX + type + '-program-lvl-' + THIRD_LEVEL]}
-          options={this.getOptionsForLevel(THIRD_LEVEL)}
-          selected={this.getSelectedForLevel(THIRD_LEVEL)}
-          onChange={this.onSelectChange}
-          level={THIRD_LEVEL} />
+    return (
+      <div>
+        <div style={{ width: '100%' }}>
+          <ProgramSelect
+            placeholder={translations[`${Constants.TRN_PREFIX}choose-${type}-lvl-${FIRST_LEVEL}`]}
+            label={translations[`${Constants.TRN_PREFIX + type}-program-lvl-${FIRST_LEVEL}`]}
+            options={this.getOptionsForLevel(FIRST_LEVEL)}
+            selected={this.getSelectedForLevel(FIRST_LEVEL)}
+            onChange={this.onSelectChange}
+            level={FIRST_LEVEL} />
+          <ProgramSelect
+            placeholder={translations[`${Constants.TRN_PREFIX}choose-${type}-lvl-${SECOND_LEVEL}`]}
+            label={translations[`${Constants.TRN_PREFIX + type}-program-lvl-${SECOND_LEVEL}`]}
+            options={this.getOptionsForLevel(SECOND_LEVEL)}
+            selected={this.getSelectedForLevel(SECOND_LEVEL)}
+            onChange={this.onSelectChange}
+            level={SECOND_LEVEL} />
+          <ProgramSelect
+            placeholder={translations[`${Constants.TRN_PREFIX}choose-${type}-lvl-${THIRD_LEVEL}`]}
+            label={translations[`${Constants.TRN_PREFIX + type}-program-lvl-${THIRD_LEVEL}`]}
+            options={this.getOptionsForLevel(THIRD_LEVEL)}
+            selected={this.getSelectedForLevel(THIRD_LEVEL)}
+            onChange={this.onSelectChange}
+            level={THIRD_LEVEL} />
+        </div>
       </div>
-    </div>);
+    );
   }
 }
 
@@ -205,9 +205,9 @@ ProgramSelectGroup.propTypes = {
   onChange: PropTypes.func.isRequired,
   src: PropTypes.object,
   dst: PropTypes.object
-}
+};
 
 ProgramSelectGroup.contextType = NDDContext;
 const mapStateToProps = state => ({});
-const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
 export default connect(mapStateToProps, mapDispatchToProps)(ProgramSelectGroup);

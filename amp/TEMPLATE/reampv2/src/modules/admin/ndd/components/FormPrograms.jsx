@@ -84,6 +84,7 @@ class FormPrograms extends Component {
         id: Math.random() * -1
       };
       data.push(pair);
+      setTimeout(() => (window.scrollTo(0, document.body.scrollHeight)), 500);
       return { data };
     });
   }

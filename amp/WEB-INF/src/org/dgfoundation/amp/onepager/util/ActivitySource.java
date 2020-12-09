@@ -17,5 +17,10 @@ public enum ActivitySource {
     /**
      * Change performed by a background job.
      */
-    JOB
+    JOB,
+
+    /**
+     * Change performed by a background PATCH.
+     */
+    PATCH
 }

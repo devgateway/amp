@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>AMP-29885</jira>
+    <author>vchihai</author>
+    <description>Add new GS for sdg programs</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres"><![CDATA[
+                ALTER TABLE amp_theme_mapping
+					DROP CONSTRAINT IF EXISTS uniqueampthememapping;
+
+				ALTER TABLE amp_theme_mapping
+					ADD CONSTRAINT uniqueampthememapping
+						unique (src_theme_id, dst_theme_id) INITIALLY DEFERRED;
+
+				INSERT INTO amp_global_settings(id, settingsname, settingsvalue, possiblevalues, description, section, value_translatable, internal)
+				VALUES (nextval('amp_global_settings_seq'), 'SDG Source Program', null, 'v_amp_theme', 'Program that is the source in mappings for SDG.', 'user', null, TRUE);
+
+				INSERT INTO amp_global_settings(id, settingsname, settingsvalue, possiblevalues, description, section, value_translatable, internal)
+				VALUES (nextval('amp_global_settings_seq'), 'SDG Destination Program', null, 'v_amp_theme', 'Program that is the destination in mappings for SDG.', 'user', null, TRUE);
+
+			]]></lang>
+        </script>
+    </apply>
+</tns:patch>

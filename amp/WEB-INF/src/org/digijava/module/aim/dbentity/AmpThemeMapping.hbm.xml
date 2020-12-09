@@ -13,11 +13,11 @@
 
 		<many-to-one name="srcTheme" column="src_theme_id"
 					 class="org.digijava.module.aim.dbentity.AmpTheme"
-					 cascade="none" not-null="true" unique-key='uniqueThemeMapping' />
+					 cascade="none" not-null="true" unique-key='uniqueAmpThemeMapping' />
 
 		<many-to-one name="dstTheme" column="dst_theme_id"
 					 class="org.digijava.module.aim.dbentity.AmpTheme"
-					 cascade="none" not-null="true" unique-key='uniqueThemeMapping' />
+					 cascade="none" not-null="true" unique-key='uniqueAmpThemeMapping' />
 
 	</class>
 </hibernate-mapping>

@@ -93,10 +93,6 @@ public class NDDService {
             PossibleValue pv = convert(ampTheme, SDG_MAPPING_LEVEL);
             allPrograms.add(pv);
         });
-        getAvailablePrograms(false).forEach(ampTheme -> {
-            PossibleValue pv = convert(ampTheme, SDG_MAPPING_LEVEL);
-            allPrograms.add(pv);
-        });
 
         List<AmpThemeMapping> mapping = loadMapping();
 
@@ -255,10 +251,10 @@ public class NDDService {
         boolean hasInvalidMappings = mapping.stream().anyMatch(
                 m -> m.getSrcTheme() == null
                         || m.getDstTheme() == null
+                        || !m.getSrcTheme().getIndlevel().equals(SDG_MAPPING_LEVEL)
                         || !m.getDstTheme().getIndlevel().equals(SDG_MAPPING_LEVEL)
-                        || !m.getDstTheme().getIndlevel().equals(SDG_MAPPING_LEVEL)
-                        || !getRoot(m.getDstTheme()).equals(srcProgramRoot)
-                        || !getRoot(m.getSrcTheme()).equals(dstProgramRoot));
+                        || !getRoot(m.getSrcTheme()).equals(srcProgramRoot)
+                        || !getRoot(m.getDstTheme()).equals(dstProgramRoot));
 
         if (!hasInvalidMappings) {
             long distinctCount = mapping.stream().map(m -> Pair.of(m.getDstTheme(), m.getSrcTheme()))

@@ -69,6 +69,7 @@ public class ProgramUtil {
     public static final String PRIMARY_PROGRAM = "Primary Program";
     public static final String SECONDARY_PROGRAM = "Secondary Program";
     public static final String TERTIARY_PROGRAM = "Tertiary Program";
+    public static final String INDIRECT_PRIMARY_PROGRAM = "Indirect Primary Program";
     public static final int NATIONAL_PLAN_OBJECTIVE_KEY = 1;
     public static final int PRIMARY_PROGRAM_KEY = 2;
     public static final int SECONDARY_PROGRAM_KEY = 3;
@@ -79,6 +80,7 @@ public class ProgramUtil {
         put(PRIMARY_PROGRAM, ColumnConstants.PRIMARY_PROGRAM_LEVEL_1);
         put(SECONDARY_PROGRAM, ColumnConstants.SECONDARY_PROGRAM_LEVEL_1);
         put(TERTIARY_PROGRAM, ColumnConstants.TERTIARY_PROGRAM_LEVEL_1);
+        put(INDIRECT_PRIMARY_PROGRAM, ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_1);
     }};
     
     public static final ImmutableList<String> PROGRAM_NAMES = ImmutableList.of(NATIONAL_PLANNING_OBJECTIVES,

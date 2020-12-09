@@ -29,6 +29,7 @@ import com.google.common.collect.ImmutableMap;
 public class ProgramFilterListManager implements FilterListManager {
     
     public static final String NATIONAL_PLANNING_OBJECTIVES_ITEMS_NAME = "nationalPlanningObjectives";
+    public static final String INDIRECT_PRIMARY_PROGRAM_ITEMS_NAME = "indirectPrimaryPrograms";
     public static final String PRIMARY_PROGRAM_ITEMS_NAME = "primaryPrograms";
     public static final String SECONDARY_PROGRAM_COLUMNS_BY_LEVEL_ITEMS_NAME = "secondaryPrograms";
     public static final String TERTIARY_PROGRAM_COLUMNS_BY_LEVEL_ITEMS_NAME = "tertiaryPrograms";
@@ -39,6 +40,7 @@ public class ProgramFilterListManager implements FilterListManager {
                     .put(ProgramUtil.PRIMARY_PROGRAM, PRIMARY_PROGRAM_ITEMS_NAME)
                     .put(ProgramUtil.SECONDARY_PROGRAM, SECONDARY_PROGRAM_COLUMNS_BY_LEVEL_ITEMS_NAME)
                     .put(ProgramUtil.TERTIARY_PROGRAM, TERTIARY_PROGRAM_COLUMNS_BY_LEVEL_ITEMS_NAME)
+                    .put(ProgramUtil.INDIRECT_PRIMARY_PROGRAM, INDIRECT_PRIMARY_PROGRAM_ITEMS_NAME)
                     .build();
     
     private static ProgramFilterListManager programFilterListManager;

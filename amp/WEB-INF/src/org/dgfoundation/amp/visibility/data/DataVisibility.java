@@ -28,6 +28,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
  * 
  * @author Nadejda Mandrescu
  */
+
 public abstract class DataVisibility {
     protected enum DataMapType {
         MODULES,
@@ -116,7 +117,7 @@ public abstract class DataVisibility {
                 }
             }
         }
-        
+
         // check 1 - any dependency
         Map<String, Collection<String>> anyDependencyMap = getDependancyMapTypeAny();
         if (anyDependencyMap != null && anyDependencyMap.size() > 0) {

@@ -20,11 +20,11 @@ export const calNddlReport = (fundingType, filters) => dispatch => {
     .then(payload => dispatch(fetchIndirectReportSuccess(payload)))
     .catch(error => dispatch(fetchIndirectReportError(error)));
 };
-export const callTopReport = (reportType) => dispatch => {
+export const callTopReport = (filters, fundingType) => dispatch => {
   const params = {
     filters: { date: { start: '2000-01-01', end: '' } },
     'include-location-children': true,
-    settings: { 'currency-code': 'USD', 'funding-type': 'Actual Commitments' }
+    settings: { 'currency-code': 'USD', [FUNDING_TYPE]: 'Actual Commitments' }
   };
   dispatch(fetchTopReportPending());
   return fetchApiData({

@@ -19,7 +19,7 @@ public class AmpActivityProgramDiscriminatorConfigurer implements Discrimination
 
     private Map<String, AmpActivityProgramSettings> loadProgramSettings() {
         Map<String, AmpActivityProgramSettings> programSettings = new HashMap<>();
-        for (AmpActivityProgramSettings setting : ProgramUtil.getAmpActivityProgramSettingsList()) {
+        for (AmpActivityProgramSettings setting : ProgramUtil.getAmpActivityProgramSettingsList(true)) {
             programSettings.put(setting.getName(), setting);
         }
         return programSettings;

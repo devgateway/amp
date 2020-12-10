@@ -28,6 +28,8 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.criterion.SimpleExpression;
 
+import static org.digijava.module.aim.util.ProgramUtil.INDIRECT_PRIMARY_PROGRAM;
+
 /**
  * @author aartimon@dginternational.org since Oct 22, 2010
  */
@@ -51,7 +53,12 @@ public class AmpThemeSearchModel extends AbstractAmpAutoCompleteModel<AmpTheme> 
             List<AmpTheme> ret = new ArrayList<AmpTheme>();
             Session session = null;
             try {
-                String indirectProgram = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.INDIRECT_PROGRAM);
+                AmpActivityProgramSettings indirectProgramSetting =
+                        ProgramUtil.getAmpActivityProgramSettings(INDIRECT_PRIMARY_PROGRAM);
+                Long indirectProgram = null;
+                if (indirectProgramSetting != null) {
+                    indirectProgram = indirectProgramSetting.getDefaultHierarchyId();
+                }
 
                 session = PersistenceManager.getRequestDBSession();
                 String pType = (String) getParams().get(PARAM.PROGRAM_TYPE);
@@ -90,7 +97,7 @@ public class AmpThemeSearchModel extends AbstractAmpAutoCompleteModel<AmpTheme> 
                             sameProgramThemes.add(theme);
                             // Indirect Programs cant be used in the AF.
                             if (indirectProgram != null
-                                    && !parentTheme.getAmpThemeId().equals(Long.valueOf(indirectProgram))) {
+                                    && !parentTheme.getAmpThemeId().equals(indirectProgram)) {
                                 sameProgramThemes.add(theme);
                             }
                         }

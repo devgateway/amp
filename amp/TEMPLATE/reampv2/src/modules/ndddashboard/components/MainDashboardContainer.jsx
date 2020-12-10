@@ -88,6 +88,7 @@ class MainDashboardContainer extends Component {
   }
 
   render() {
+
     const {
       error, ndd, nddLoadingPending, nddLoaded, dashboardSettings, onChangeFundingType, fundingType, topLoaded,
       topLoadingPending, top
@@ -108,7 +109,7 @@ class MainDashboardContainer extends Component {
       const programLegend = nddLoaded && !nddLoadingPending ? this.getProgramLegend() : null;
       return (
         <div>
-          <Col md={6} className="middle">
+          <Col md={5}>
             <div>
               <div className="chart-container">
                 <div className="chart">
@@ -135,7 +136,7 @@ class MainDashboardContainer extends Component {
               </div>
             </div>
           </Col>
-          <Col md={6}>
+          <Col md={7}>
             <div className="section_title">
               <span>Legends</span>
             </div>

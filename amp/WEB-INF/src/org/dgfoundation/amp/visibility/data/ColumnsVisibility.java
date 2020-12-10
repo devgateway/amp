@@ -62,8 +62,13 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
     }
     
     public static Set<String> getVisibleColumns(Long templateId) {
-        return FMSettingsMediator.getEnabledSettings(FMSettingsMediator.FMGROUP_COLUMNS, templateId)
-                .stream().filter(z -> !fakeColumns.contains(z)).collect(Collectors.toSet());
+        Set<String> set = new HashSet<>();
+        for (String z : FMSettingsMediator.getEnabledSettings(FMSettingsMediator.FMGROUP_COLUMNS, templateId)) {
+            if (!fakeColumns.contains(z)) {
+                set.add(z);
+            }
+        }
+        return set;
     }
     
     public static Set<String> getConfigurableColumns() {
@@ -417,7 +422,7 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
 
             // replicating the same approach as in the ReportWizard (until AMP-20480 is considered)
             String[] colPrefixList = new String[] {"National Planning Objectives Level ", "Primary Program Level ",
-                    "Secondary Program Level ", "Tertiary Program Level "};
+                    "Secondary Program Level ", "Tertiary Program Level ","Indirect Primary Program Level "};
             for (String colPrefix : colPrefixList) {
                 for (int i = 1; i <= PROGRAM_LEVEL_COUNT; i++) {
                     String level = colPrefix + i;

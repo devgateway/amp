@@ -91,8 +91,8 @@ public final class DashboardService {
                     Map<ReportOutputColumn, ReportCell> content = children.getContents();
                     NDDSolarChartData nddSolarChartData = new NDDSolarChartData(null, new ArrayList<>());
                     AtomicBoolean add = new AtomicBoolean();
+                    add.set(false);
                     children.getChildren().forEach(children2 -> {
-                        add.set(false);
                         Map<ReportOutputColumn, ReportCell> content2 = children2.getContents();
                         ReportCell programCell = children2.getContents().get(indirectColumn);
                         if (((TextCell) programCell).entityId > -1) {

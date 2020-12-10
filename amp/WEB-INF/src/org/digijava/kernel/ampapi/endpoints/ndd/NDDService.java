@@ -9,23 +9,26 @@ import javax.validation.ValidationException;
 
 import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.log4j.Logger;
 import org.dgfoundation.amp.onepager.util.IndirectProgramUpdater;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpIndirectTheme;
 import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 
-import static org.digijava.module.aim.helper.GlobalSettingsConstants.INDIRECT_PROGRAM;
 import static org.digijava.module.aim.helper.GlobalSettingsConstants.PRIMARY_PROGRAM;
+import static org.digijava.module.aim.util.ProgramUtil.INDIRECT_PRIMARY_PROGRAM;
 
 /**
  * @author Octavian Ciubotaru
  */
 public class NDDService {
+    private static final Logger LOGGER = Logger.getLogger(NDDService.class);
 
     static class SingleProgramData implements Serializable {
         private Long id;
@@ -92,7 +95,7 @@ public class NDDService {
     public List<SingleProgramData> getSinglePrograms() {
         List<SingleProgramData> availablePrograms = new ArrayList<>();
         List<AmpTheme> src = getAvailablePrograms(false);
-        List<AmpTheme> dst = getAvailablePrograms(false);
+        List<AmpTheme> dst = getAvailablePrograms(true);
         availablePrograms.addAll(src.stream().map(p -> new SingleProgramData(p.getAmpThemeId(), p.getName(), false))
                 .collect(Collectors.toList()));
         availablePrograms.addAll(dst.stream().map(p -> new SingleProgramData(p.getAmpThemeId(), p.getName(), true))
@@ -115,6 +118,10 @@ public class NDDService {
         PersistenceManager.getSession().createCriteria(AmpIndirectTheme.class).setCacheable(true).list()
                 .forEach(PersistenceManager.getSession()::delete);
 
+        // TODO: Add param in UI to decide if we want to clear current activity mappings or not.
+        /* PersistenceManager.getSession().createCriteria(AmpActivityIndirectProgram.class).setCacheable(true).list()
+                .forEach(PersistenceManager.getSession()::delete); */
+
         mapping.forEach(PersistenceManager.getSession()::save);
     }
 
@@ -124,15 +131,26 @@ public class NDDService {
      * @param mapping
      */
     public void updateMainProgramsMapping(AmpIndirectTheme mapping) {
-        if (mapping.getNewTheme() != null && mapping.getOldTheme() != null
-                && !mapping.getNewTheme().getAmpThemeId().equals(mapping.getOldTheme().getAmpThemeId())) {
-            AmpGlobalSettings srcGS = FeaturesUtil.getGlobalSetting(PRIMARY_PROGRAM);
-            srcGS.setGlobalSettingsValue(mapping.getOldTheme().getAmpThemeId().toString());
-            FeaturesUtil.updateGlobalSetting(srcGS);
-            AmpGlobalSettings dstGS = FeaturesUtil.getGlobalSetting(INDIRECT_PROGRAM);
-            dstGS.setGlobalSettingsValue(mapping.getNewTheme().getAmpThemeId().toString());
-            FeaturesUtil.updateGlobalSetting(dstGS);
+        try {
+            if (mapping.getNewTheme() != null && mapping.getOldTheme() != null
+                    && !mapping.getNewTheme().getAmpThemeId().equals(mapping.getOldTheme().getAmpThemeId())) {
+                AmpGlobalSettings srcGS = FeaturesUtil.getGlobalSetting(PRIMARY_PROGRAM);
+                srcGS.setGlobalSettingsValue(mapping.getOldTheme().getAmpThemeId().toString());
+                FeaturesUtil.updateGlobalSetting(srcGS);
+                AmpActivityProgramSettings indirectProgramSetting =
+                        ProgramUtil.getAmpActivityProgramSettings(INDIRECT_PRIMARY_PROGRAM);
+
+                if (indirectProgramSetting == null) {
+                    indirectProgramSetting = new AmpActivityProgramSettings(INDIRECT_PRIMARY_PROGRAM);
+
+                }
+                indirectProgramSetting.setDefaultHierarchy(mapping.getNewTheme());
+                PersistenceManager.getSession().saveOrUpdate(indirectProgramSetting);
+            }
+        } catch (DgException e) {
+            throw new RuntimeException("Cannot save mapping", e);
         }
+
     }
 
     /**
@@ -187,15 +205,23 @@ public class NDDService {
     }
 
     /**
-     * Returns the root of the indirect program. Configured by {@link GlobalSettingsConstants#INDIRECT_PROGRAM}
+     * Returns the root of the indirect program. Configured by as Indirect program configuration
      * Global Setting.
      */
     public static AmpTheme getDstProgramRoot() {
-        String indirectProgram = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.INDIRECT_PROGRAM);
-        if (indirectProgram == null) {
+        try {
+            AmpActivityProgramSettings indirectProgramSetting =
+                    ProgramUtil.getAmpActivityProgramSettings(INDIRECT_PRIMARY_PROGRAM);
+
+            if (indirectProgramSetting != null) {
+                return indirectProgramSetting.getDefaultHierarchy();
+            } else {
+                return null;
+            }
+        } catch (DgException e) {
+            LOGGER.error("getDstProgramRoot", e);
             return null;
         }
-        return ProgramUtil.getTheme(Long.valueOf(indirectProgram));
     }
 
     public static AmpTheme getSrcProgramRoot() {

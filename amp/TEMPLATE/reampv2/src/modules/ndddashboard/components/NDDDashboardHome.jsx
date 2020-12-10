@@ -51,6 +51,8 @@ class NDDDashboardHome extends Component {
     const {
       error, ndd, nddLoadingPending, nddLoaded, dashboardSettings
     } = this.props;
+    console.log(JSON.stringify(filters));
+    console.log('laala');
     const { translations } = this.context;
     return (
       <Container fluid className="main-container">

@@ -112,12 +112,12 @@ public class ProgramFilterListManager implements FilterListManager {
     protected List<AmpActivityProgramSettings> getProgramSettings() {
         Set<String> visibleCols = ColumnsVisibility.getVisibleColumns();
         Session session = PersistenceManager.getSession();
-        List<AmpActivityProgramSettings> allSettings = session.createCriteria(AmpActivityProgramSettings.class).list();
+        List<AmpActivityProgramSettings> allSettings = ProgramUtil.getAmpActivityProgramSettingsList(false);
         List<AmpActivityProgramSettings> programSettings = allSettings.stream()
                 .filter(setting -> visibleCols.contains(getColumnName(setting.getName())))
                 .filter(setting -> setting.getDefaultHierarchy() != null)
                 .collect(Collectors.toList());
-        
+
         return programSettings;
     }
     

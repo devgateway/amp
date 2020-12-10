@@ -262,10 +262,18 @@ public class ProgramUtil {
          * @return
          */
         @SuppressWarnings("unchecked")
-        public static List<AmpTheme> getConfiguredParentThemes(){
+        public static List<AmpTheme> getConfiguredParentThemes(boolean excludeIndirect ){
             try{
-                String queryString = "select aaps.defaultHierarchy from " + AmpActivityProgramSettings.class.getName() + " aaps WHERE aaps.defaultHierarchy IS NOT NULL"; 
+                String queryString = "select aaps.defaultHierarchy from "
+                        + AmpActivityProgramSettings.class.getName() + " aaps WHERE aaps.defaultHierarchy IS NOT NULL ";
+                if(excludeIndirect){
+                    queryString +=" where ap.name <> :indirectName";
+                }
                 Query qry = PersistenceManager.getRequestDBSession().createQuery(queryString);
+                if(excludeIndirect){
+                    qry.setString("indirectName", INDIRECT_PRIMARY_PROGRAM);
+                }
+
                 List<AmpTheme> themes = qry.list();
                 return themes;
             }
@@ -1462,10 +1470,16 @@ public class ProgramUtil {
             return programSettings;
     }
 
-
-      public static List<AmpActivityProgramSettings> getAmpActivityProgramSettingsList() {
+      public static List<AmpActivityProgramSettings> getAmpActivityProgramSettingsList(boolean excludeIndirect) {
           String queryString = "select ap from " + AmpActivityProgramSettings.class.getName() + " ap";
+          if(excludeIndirect){
+              queryString +=" where ap.name <> :indirectName";
+          }
           Query qry = PersistenceManager.getSession().createQuery(queryString);
+          if(excludeIndirect){
+              qry.setString("indirectName", INDIRECT_PRIMARY_PROGRAM);
+          }
+
           List<AmpActivityProgramSettings> programSettings = qry.list();
           if (programSettings.isEmpty()) {
               programSettings = createDefaultAmpActivityProgramSettingsList();

@@ -41,7 +41,8 @@ public class AmpActivityProgramSettingsAction
                                 ampActivityProgramSettingsForm.getProgramList().remove(indirectProgram);
                         }
 
-                        ampActivityProgramSettingsForm.setSettingsList(ProgramUtil.getAmpActivityProgramSettingsList());
+                        ampActivityProgramSettingsForm.setSettingsList
+                                (ProgramUtil.getAmpActivityProgramSettingsList(true));
                         return mapping.findForward("forward");
 
                 }

@@ -41,12 +41,12 @@ public class NDDEndpoints {
     }
 
     @GET
-    @Path("sdg-programs-mapping-config")
+    @Path("programs-mapping-config")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "getSDGProgramsMappingConfiguration")
+    @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "getProgramsMappingConfiguration")
     @ApiOperation("Returns configuration for mapping programs.")
-    public ProgramMappingConfiguration getSDGProgramsMappingConfiguration() {
-        return nddService.getSDGProgramMappingConfiguration();
+    public ProgramMappingConfiguration getProgramsMappingConfiguration() {
+        return nddService.getProgramMappingConfiguration();
     }
 
     @POST
@@ -58,11 +58,11 @@ public class NDDEndpoints {
     }
 
     @POST
-    @Path("sdg-programs-mapping")
-    @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "updateSDGProgramsMapping")
-    @ApiOperation("Update SDG programs mapping.")
-    public void updateSDGProgramsMapping(List<AmpThemeMapping> mapping) {
-        nddService.updateSDGProgramsMapping(mapping);
+    @Path("programs-mapping")
+    @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "updateProgramsMapping")
+    @ApiOperation("Update programs mapping.")
+    public void updateProgramsMapping(List<AmpThemeMapping> mapping) {
+        nddService.updateProgramsMapping(mapping);
     }
 
     @POST
@@ -74,11 +74,11 @@ public class NDDEndpoints {
     }
 
     @POST
-    @Path("update-source-destination-sdg-programs")
-    @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "updateSrcDstSDGPrograms")
-    @ApiOperation("Update the Source Program and Destination SDG Program in GS.")
-    public void updateSrcDstSDGPrograms(AmpThemeMapping mapping) {
-        nddService.updateMainSDGProgramsMapping(mapping);
+    @Path("update-source-destination-programs")
+    @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "updateSrcDstPrograms")
+    @ApiOperation("Update the Source Program and Destination Program in GS.")
+    public void updateSrcDstPrograms(AmpThemeMapping mapping) {
+        nddService.updateMainProgramsMapping(mapping);
     }
 
     @GET
@@ -91,10 +91,10 @@ public class NDDEndpoints {
     }
 
     @GET
-    @Path("available-sdg-programs")
+    @Path("available-programs")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "getAvailableSDGPrograms")
-    @ApiOperation("Returns the list of programs we can use as source and destination SDG.")
+    @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "getAvailablePrograms")
+    @ApiOperation("Returns the list of programs we can use as source and destination for mapping.")
     public List<NDDService.SingleProgramData> getAvailablePrograms() {
         return nddService.getSinglePrograms(false);
     }

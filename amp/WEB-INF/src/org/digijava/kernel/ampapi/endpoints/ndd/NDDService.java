@@ -18,7 +18,6 @@ import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpIndirectTheme;
 import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 
@@ -96,7 +95,7 @@ public class NDDService {
     public List<SingleProgramData> getSinglePrograms() {
         List<SingleProgramData> availablePrograms = new ArrayList<>();
         List<AmpTheme> src = getAvailablePrograms(false);
-        List<AmpTheme> dst = getAvailablePrograms(false);
+        List<AmpTheme> dst = getAvailablePrograms(true);
         availablePrograms.addAll(src.stream().map(p -> new SingleProgramData(p.getAmpThemeId(), p.getName(), false))
                 .collect(Collectors.toList()));
         availablePrograms.addAll(dst.stream().map(p -> new SingleProgramData(p.getAmpThemeId(), p.getName(), true))
@@ -118,6 +117,10 @@ public class NDDService {
 
         PersistenceManager.getSession().createCriteria(AmpIndirectTheme.class).setCacheable(true).list()
                 .forEach(PersistenceManager.getSession()::delete);
+
+        // TODO: Add param in UI to decide if we want to clear current activity mappings or not.
+        /* PersistenceManager.getSession().createCriteria(AmpActivityIndirectProgram.class).setCacheable(true).list()
+                .forEach(PersistenceManager.getSession()::delete); */
 
         mapping.forEach(PersistenceManager.getSession()::save);
     }

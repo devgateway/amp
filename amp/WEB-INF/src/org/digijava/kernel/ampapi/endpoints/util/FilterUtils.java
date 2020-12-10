@@ -201,6 +201,26 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.PRIMARY_PROGRAM_LEVEL_6, ColumnConstants.PRIMARY_PROGRAM_LEVEL_6);
         mapSimpleColumn(FiltersConstants.PRIMARY_PROGRAM_LEVEL_7, ColumnConstants.PRIMARY_PROGRAM_LEVEL_7);
         mapSimpleColumn(FiltersConstants.PRIMARY_PROGRAM_LEVEL_8, ColumnConstants.PRIMARY_PROGRAM_LEVEL_8);
+
+        mapSimpleColumn(FiltersConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_0,
+                ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_0);
+        mapSimpleColumn(FiltersConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_1,
+                ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_1);
+        mapSimpleColumn(FiltersConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_2,
+                ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_2);
+        mapSimpleColumn(FiltersConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_3,
+                ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_3);
+        mapSimpleColumn(FiltersConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_4,
+                ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_4);
+        mapSimpleColumn(FiltersConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_5,
+                ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_5);
+        mapSimpleColumn(FiltersConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_6,
+                ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_6);
+        mapSimpleColumn(FiltersConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_7,
+                ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_7);
+        mapSimpleColumn(FiltersConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_8,
+                ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_8);
+
         mapSimpleColumn(FiltersConstants.PRIMARY_SECTOR, ColumnConstants.PRIMARY_SECTOR);
         mapSimpleColumn(FiltersConstants.PRIMARY_SECTOR_SUB_SECTOR, ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR);
         mapSimpleColumn(FiltersConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR);

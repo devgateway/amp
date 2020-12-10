@@ -10,12 +10,12 @@ import org.digijava.module.aim.util.ProgramUtil;
 import com.google.common.collect.ImmutableMap;
 
 public class AmpActivityProgramSettings implements Serializable, Identifiable {
-    
+
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -2140430282705711013L;
-    
+
     private static final int LEVEL_0 = 0;
     private static final int LEVEL_1 = 1;
     private static final int LEVEL_2 = 2;
@@ -25,7 +25,7 @@ public class AmpActivityProgramSettings implements Serializable, Identifiable {
     private static final int LEVEL_6 = 6;
     private static final int LEVEL_7 = 7;
     private static final int LEVEL_8 = 8;
-    
+
     private static final Map<Integer, String> NATIONAL_PLANNING_OBJECTIVES_COLUMNS_BY_LEVEL =
             new ImmutableMap.Builder<Integer, String>()
                     .put(LEVEL_0, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_0)
@@ -37,6 +37,18 @@ public class AmpActivityProgramSettings implements Serializable, Identifiable {
                     .put(LEVEL_6, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_6)
                     .put(LEVEL_7, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_7)
                     .put(LEVEL_8, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_8)
+                    .build();
+    private static final Map<Integer, String> INDIRECT_PRIMARY_PROGRAM_COLUMNS_BY_LEVEL =
+            new ImmutableMap.Builder<Integer, String>()
+                    .put(LEVEL_0, ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_0)
+                    .put(LEVEL_1, ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_1)
+                    .put(LEVEL_2, ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_2)
+                    .put(LEVEL_3, ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_3)
+                    .put(LEVEL_4, ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_4)
+                    .put(LEVEL_5, ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_5)
+                    .put(LEVEL_6, ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_6)
+                    .put(LEVEL_7, ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_7)
+                    .put(LEVEL_8, ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_8)
                     .build();
 
     private static final Map<Integer, String> PRIMARY_PROGRAM_COLUMNS_BY_LEVEL =
@@ -51,7 +63,7 @@ public class AmpActivityProgramSettings implements Serializable, Identifiable {
                     .put(LEVEL_7, ColumnConstants.PRIMARY_PROGRAM_LEVEL_7)
                     .put(LEVEL_8, ColumnConstants.PRIMARY_PROGRAM_LEVEL_8)
                     .build();
-    
+
     private static final Map<Integer, String> SECONDARY_PROGRAM_COLUMNS_BY_LEVEL =
             new ImmutableMap.Builder<Integer, String>()
                     .put(LEVEL_0, ColumnConstants.SECONDARY_PROGRAM_LEVEL_0)
@@ -64,7 +76,7 @@ public class AmpActivityProgramSettings implements Serializable, Identifiable {
                     .put(LEVEL_7, ColumnConstants.SECONDARY_PROGRAM_LEVEL_7)
                     .put(LEVEL_8, ColumnConstants.SECONDARY_PROGRAM_LEVEL_8)
                     .build();
-    
+
     private static final Map<Integer, String> TERTIARY_PROGRAM_COLUMNS_BY_LEVEL =
             new ImmutableMap.Builder<Integer, String>()
                     .put(LEVEL_0, ColumnConstants.TERTIARY_PROGRAM_LEVEL_0)
@@ -84,6 +96,7 @@ public class AmpActivityProgramSettings implements Serializable, Identifiable {
                     .put(ProgramUtil.PRIMARY_PROGRAM, PRIMARY_PROGRAM_COLUMNS_BY_LEVEL)
                     .put(ProgramUtil.SECONDARY_PROGRAM, SECONDARY_PROGRAM_COLUMNS_BY_LEVEL)
                     .put(ProgramUtil.TERTIARY_PROGRAM, TERTIARY_PROGRAM_COLUMNS_BY_LEVEL)
+                    .put(ProgramUtil.INDIRECT_PRIMARY_PROGRAM, INDIRECT_PRIMARY_PROGRAM_COLUMNS_BY_LEVEL)
                     .build();
 
         private AmpTheme defaultHierarchy;
@@ -132,7 +145,7 @@ public class AmpActivityProgramSettings implements Serializable, Identifiable {
 
         public void setDefaultHierarchyId(Long id) {
                 if (id != null && id != new Long( -1)) {
-                        this.defaultHierarchy = ProgramUtil.getThemeById(id);                       
+                        this.defaultHierarchy = ProgramUtil.getThemeById(id);
                 }
                 else {
                         this.defaultHierarchy = null;

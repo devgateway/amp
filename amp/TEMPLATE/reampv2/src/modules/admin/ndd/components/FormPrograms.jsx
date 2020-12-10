@@ -11,14 +11,12 @@ import {
     PROGRAM_MAPPING,
     SRC_PROGRAM,
     TYPE_SRC,
-    TYPE_DST,
-    TRN_PREFIX, VALUE
+    TYPE_DST
 } from "../constants/Constants";
 import * as Utils from "../utils/Utils";
 import {sendNDDError, sendNDDPending} from "../reducers/saveNDDReducer";
 import saveNDD from "../actions/saveNDD";
 import Notifications from "./Notifications";
-import * as Constants from "../constants/Constants";
 import ProgramsHeader from "./ProgramsHeader";
 
 class FormPrograms extends Component {
@@ -100,8 +98,8 @@ class FormPrograms extends Component {
     }
 
     remove(row) {
-        const {translations} = this.context;
-        if (window.confirm(translations[TRN_PREFIX + 'confirm-remove-row'])) {
+        const {translations, trnPrefix} = this.context;
+        if (window.confirm(translations[trnPrefix + 'confirm-remove-row'])) {
             this.setState(previousState => {
                 const data = [...previousState.data];
                 data.splice(data.findIndex(i => i.id === row.id), 1);
@@ -117,6 +115,7 @@ class FormPrograms extends Component {
     saveAll() {
         const {data, src, dst} = this.state;
         const {saveNDD, translations} = this.props;
+        const {api, trnPrefix} = this.context;
         const validateMappings = Utils.validate(data);
         if (validateMappings === 0) {
             const validateMain = Utils.validateMainPrograms(src, dst);
@@ -128,24 +127,24 @@ class FormPrograms extends Component {
                         [DST_PROGRAM]: pair[DST_PROGRAM].lvl3.id,
                     });
                 });
-                saveNDD(src, dst, mappings);
+                saveNDD(src, dst, mappings, api.programsSave, api.mappingSave);
                 this.clearMessages();
             } else {
-                this.setState({validationErrors: translations[TRN_PREFIX + 'validation_error_' + validateMain]});
+                this.setState({validationErrors: translations[trnPrefix + 'validation_error_' + validateMain]});
             }
         } else {
-            this.setState({validationErrors: translations[TRN_PREFIX + 'validation_error_' + validateMappings]});
+            this.setState({validationErrors: translations[trnPrefix + 'validation_error_' + validateMappings]});
         }
     }
 
     onChangeMainProgram(type, program) {
-        const {translations} = this.context;
+        const {translations, trnPrefix} = this.context;
         const {data} = this.state;
         const newProgram = (program && program.length > 0) ? program[0] : {};
         const oldProgram = (this.state[type] ? this.state[type] : {});
         if (oldProgram.id !== newProgram.id) {
             if (oldProgram.id !== undefined) {
-                if (data.length === 0 || window.confirm(translations[TRN_PREFIX + 'warning_on_change_main_programs'])) {
+                if (data.length === 0 || window.confirm(translations[trnPrefix + 'warning_on_change_main_programs'])) {
                     if (newProgram.id !== undefined) {
                         // Old Program -> New Program.
                         this.setState(previousState => {

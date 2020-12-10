@@ -1,10 +1,9 @@
 import { saveNDDSuccess, saveNDDPending, saveNDDError } from './saveAction';
-import { SAVE_CONFIG, SAVE_MAIN_PROGRAMS } from '../constants/Constants';
 
-function saveNDD(src, dst, mappings) {
+function saveNDD(src, dst, mappings, urlSavePrograms, urlSaveConfig) {
   return dispatch => {
     dispatch(saveNDDPending());
-    fetch(SAVE_MAIN_PROGRAMS, {
+    fetch(urlSavePrograms, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ 'src-program': src.id, 'dst-program': dst.id })
@@ -12,7 +11,7 @@ function saveNDD(src, dst, mappings) {
       if (res.error) {
         throw (res.error);
       }
-      fetch(SAVE_CONFIG, {
+      fetch(urlSaveConfig, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(mappings)

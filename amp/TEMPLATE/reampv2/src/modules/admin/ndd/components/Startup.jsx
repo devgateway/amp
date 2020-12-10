@@ -3,10 +3,9 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import PropTypes from 'prop-types';
 import fetchTranslations from '../../../../utils/actions/fetchTranslations';
-import defaultTrnPack from '../config/initialTranslations';
 import {Loading} from '../../../../utils/components/Loading';
 
-export const NDDContext = React.createContext({translations: defaultTrnPack});
+export const NDDContext = React.createContext();
 
 /**
  * Component used to load everything we need before launching the APP
@@ -15,17 +14,18 @@ export const NDDContext = React.createContext({translations: defaultTrnPack});
 class Startup extends Component {
     static propTypes = {
         translationPending: PropTypes.bool,
-        translations: PropTypes.object
+        translations: PropTypes.object,
+        api: PropTypes.object
     };
 
     componentDidMount() {
-        this.props.fetchTranslations(defaultTrnPack);
+        this.props.fetchTranslations(this.props.defaultTrnPack);
     }
 
     render() {
         return this.props.translationPending
             ? (<Loading/>) :
-            <NDDContext.Provider value={{translations: this.props.translations}}>
+            <NDDContext.Provider value={{translations: this.props.translations, api: this.props.api}}>
                 {this.props.children}
             </NDDContext.Provider>;
     }

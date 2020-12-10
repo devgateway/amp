@@ -29,7 +29,7 @@ import static org.digijava.module.aim.util.ProgramUtil.INDIRECT_PRIMARY_PROGRAM;
  * @author Octavian Ciubotaru
  */
 public class NDDService {
-    private static Logger LOGGER = Logger.getLogger(NDDService.class);
+    private static final Logger LOGGER = Logger.getLogger(NDDService.class);
 
     static class SingleProgramData implements Serializable {
         private Long id;
@@ -210,13 +210,13 @@ public class NDDService {
             AmpActivityProgramSettings indirectProgramSetting =
                     ProgramUtil.getAmpActivityProgramSettings(INDIRECT_PRIMARY_PROGRAM);
 
-        if(indirectProgramSetting!=null){
-            return indirectProgramSetting.getDefaultHierarchy();
-        }else{
-            return null;
-        }
+            if (indirectProgramSetting != null) {
+                return indirectProgramSetting.getDefaultHierarchy();
+            } else {
+                return null;
+            }
         } catch (DgException e) {
-            LOGGER.error("getDstProgramRoot",e);
+            LOGGER.error("getDstProgramRoot", e);
             return null;
         }
     }

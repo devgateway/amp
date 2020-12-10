@@ -417,7 +417,7 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
 
             // replicating the same approach as in the ReportWizard (until AMP-20480 is considered)
             String[] colPrefixList = new String[] {"National Planning Objectives Level ", "Primary Program Level ",
-                    "Secondary Program Level ", "Tertiary Program Level "};
+                    "Secondary Program Level ", "Tertiary Program Level ", "Indirect Primary Program Level "};
             for (String colPrefix : colPrefixList) {
                 for (int i = 1; i <= PROGRAM_LEVEL_COUNT; i++) {
                     String level = colPrefix + i;

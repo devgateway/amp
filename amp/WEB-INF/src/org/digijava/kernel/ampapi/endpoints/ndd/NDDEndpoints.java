@@ -18,6 +18,7 @@ import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.module.aim.dbentity.AmpIndirectTheme;
+import org.digijava.module.aim.dbentity.AmpThemeMapping;
 import org.digijava.module.esrigis.dbentity.AmpApiState;
 import org.digijava.module.esrigis.dbentity.ApiStateType;
 
@@ -31,37 +32,71 @@ public class NDDEndpoints {
     private final NDDService nddService = new NDDService();
 
     @GET
-    @Path("mapping-config")
+    @Path("indirect-programs-mapping-config")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "getMappingConfiguration")
+    @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "getIndirectProgramsMappingConfiguration")
     @ApiOperation("Returns configuration for mapping indirect programs.")
-    public MappingConfiguration getMappingConfiguration() {
-        return nddService.getMappingConfiguration();
+    public IndirectProgramMappingConfiguration getIndirectProgramsMappingConfiguration() {
+        return nddService.getIndirectProgramMappingConfiguration();
+    }
+
+    @GET
+    @Path("programs-mapping-config")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "getProgramsMappingConfiguration")
+    @ApiOperation("Returns configuration for mapping programs.")
+    public ProgramMappingConfiguration getProgramsMappingConfiguration() {
+        return nddService.getProgramMappingConfiguration();
     }
 
     @POST
-    @Path("mapping")
-    @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "updateMapping")
-    @ApiOperation("Update indirect program mapping.")
-    public void updateMapping(List<AmpIndirectTheme> mapping) {
-        nddService.updateMapping(mapping);
+    @Path("indirect-programs-mapping")
+    @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "updateIndirectProgramsMapping")
+    @ApiOperation("Update indirect programs mapping.")
+    public void updateIndirectProgramsMapping(List<AmpIndirectTheme> mapping) {
+        nddService.updateIndirectProgramsMapping(mapping);
+    }
+
+    @POST
+    @Path("programs-mapping")
+    @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "updateProgramsMapping")
+    @ApiOperation("Update programs mapping.")
+    public void updateProgramsMapping(List<AmpThemeMapping> mapping) {
+        nddService.updateProgramsMapping(mapping);
+    }
+
+    @POST
+    @Path("update-source-destination-indirect-programs")
+    @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "updateSrcDstIndirectPrograms")
+    @ApiOperation("Update the Primary Program (source) and Indirect Program (destination) in GS.")
+    public void updateSrcDstIndirectPrograms(AmpIndirectTheme mapping) {
+        nddService.updateMainIndirectProgramsMapping(mapping);
     }
 
     @POST
     @Path("update-source-destination-programs")
     @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "updateSrcDstPrograms")
-    @ApiOperation("Update the Primary Program (source) and Indirect Program (destination) in GS.")
-    public void updateSrcDstPrograms(AmpIndirectTheme mapping) {
+    @ApiOperation("Update the Source Program and Destination Program in GS.")
+    public void updateSrcDstPrograms(AmpThemeMapping mapping) {
         nddService.updateMainProgramsMapping(mapping);
+    }
+
+    @GET
+    @Path("available-indirect-programs")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "getAvailableIndirectPrograms")
+    @ApiOperation("Returns the list of programs we can use as Primary and Indirect.")
+    public List<NDDService.SingleProgramData> getAvailableIndirectPrograms() {
+        return nddService.getSinglePrograms(true);
     }
 
     @GET
     @Path("available-programs")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "getAvailablePrograms")
-    @ApiOperation("Returns the list of programs we can use as Primary and Indirect.")
+    @ApiOperation("Returns the list of programs we can use as source and destination for mapping.")
     public List<NDDService.SingleProgramData> getAvailablePrograms() {
-        return nddService.getSinglePrograms();
+        return nddService.getSinglePrograms(false);
     }
 
     @POST

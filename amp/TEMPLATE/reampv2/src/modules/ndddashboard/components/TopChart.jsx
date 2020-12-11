@@ -7,9 +7,9 @@ import { AMOUNT, CODE, DIRECT_PROGRAM } from '../utils/constants';
 const Plot = createPlotlyComponent(Plotly);
 
 class TopChart extends Component {
-  texto(value) {
-    console.log(value);
-    return 'hola';
+  onHover(data, data2) {
+    console.log(data);
+    console.log(data2);
   }
 
   render() {
@@ -30,8 +30,8 @@ class TopChart extends Component {
 
       displayModeBar: false,
       displaylogo: false,
-      showTips: false,
-      staticPlot: true
+      showTips: true,
+      staticPlot: false
     };
     const others = data.total - data.values.reduce((acc, cur) => (acc + cur.amount), 0);
     const xValue = data.values.map(v => v.name);
@@ -63,17 +63,22 @@ class TopChart extends Component {
     };
     const theLayout = {
       barmode: 'stack',
-      width: 553,
+      margin: {
+        l: 10, r: 10, t: 30, b: 20
+      },
+      width: 650,
       height: 300,
       xaxis: {
         showgrid: false,
         zeroline: false,
         visible: false,
+        fixedrange: true
       },
       yaxis: {
         showgrid: false,
         zeroline: false,
         visible: false,
+        fixedrange: true
       }
     };
     return (
@@ -81,12 +86,15 @@ class TopChart extends Component {
         data={[trace1]}
         layout={theLayout}
         config={defaultPlotlyConfiguration}
+        onHover={event => {
+          console.log(event);
+        }}
       />
     );
   }
 }
 
 TopChart.propTypes = {
-  data: PropTypes.array.isRequired
+  data: PropTypes.object.isRequired
 };
 export default TopChart;

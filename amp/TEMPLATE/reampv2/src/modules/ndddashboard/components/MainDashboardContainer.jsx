@@ -229,7 +229,7 @@ MainDashboardContainer.propTypes = {
   error: PropTypes.object,
   loadDashboardSettings: PropTypes.func.isRequired,
   ndd: PropTypes.array.isRequired,
-  top: PropTypes.array.isRequired,
+  top: PropTypes.object.isRequired,
   nddLoadingPending: PropTypes.bool.isRequired,
   nddLoaded: PropTypes.bool.isRequired,
   topLoadingPending: PropTypes.bool.isRequired,

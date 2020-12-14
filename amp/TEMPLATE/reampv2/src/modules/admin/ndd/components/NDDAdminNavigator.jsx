@@ -12,10 +12,10 @@ class NDDAdminNavigator extends Component {
       <>
           <Nav activeKey="#/ndd/indirect" as="ul" variant="pills">
               <Nav.Item as="li">
-                  <Nav.Link href={`${getRootUrl()}/ndd/indirect`}><b>{translations[trnPrefix + "menu-item-indirect-programs"]}</b></Nav.Link>
+                  <Nav.Link href={`${getRootUrl()}/ndd/indirect-programs`}><b>{translations[trnPrefix + "menu-item-indirect-programs-mapping"]}</b></Nav.Link>
               </Nav.Item>
               <Nav.Item as="li">
-                  <Nav.Link href={`${getRootUrl()}/ndd/sdg`}><b>{translations[trnPrefix + "menu-item-sdg-programs"]}</b></Nav.Link>
+                  <Nav.Link href={`${getRootUrl()}/ndd/programs`}><b>{translations[trnPrefix + "menu-item-programs-mapping"]}</b></Nav.Link>
               </Nav.Item>
           </Nav>
       </>

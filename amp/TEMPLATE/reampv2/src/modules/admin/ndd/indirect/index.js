@@ -18,7 +18,7 @@ const API = {
   programsSave: '/rest/ndd/update-source-destination-indirect-programs',
 }
 
-const TRN_PREFIX = 'amp.admin.ndd:';
+const TRN_PREFIX = 'amp.admin.ndd.indirect:';
 
 class AdminNDDIndirectProgramApp extends Component {
   constructor(props) {

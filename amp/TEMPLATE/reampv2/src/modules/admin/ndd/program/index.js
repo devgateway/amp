@@ -11,15 +11,15 @@ import Startup from '../components/Startup';
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const API = {
-  mappingConfig: '/rest/ndd/sdg-programs-mapping-config',
-  mappingSave: '/rest/ndd/sdg-programs-mapping',
-  programs: '/rest/ndd/available-sdg-programs',
-  programsSave: '/rest/ndd/update-source-destination-sdg-programs',
+  mappingConfig: '/rest/ndd/programs-mapping-config',
+  mappingSave: '/rest/ndd/programs-mapping',
+  programs: '/rest/ndd/available-programs',
+  programsSave: '/rest/ndd/update-source-destination-programs',
 }
 
-const TRN_PREFIX = 'amp.admin.ndd.sdg:';
+const TRN_PREFIX = 'amp.admin.ndd.program:';
 
-class AdminNDDSDGProgramApp extends Component {
+class AdminNDDProgramApp extends Component {
   constructor(props) {
     super(props);
     this.store = createStore(rootReducer, composeEnhancer(applyMiddleware(thunk)));
@@ -36,4 +36,4 @@ class AdminNDDSDGProgramApp extends Component {
   }
 }
 
-export default AdminNDDSDGProgramApp;
+export default AdminNDDProgramApp;

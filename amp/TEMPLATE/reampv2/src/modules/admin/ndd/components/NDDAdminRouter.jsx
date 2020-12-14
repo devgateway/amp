@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { Route } from 'react-router-dom';
 import AdminNDDIndirectProgramApp from "../indirect";
-import AdminNDDSDGProgramApp from "../sdg";
+import AdminNDDProgramApp from "../program";
 import Switch from "react-bootstrap/Switch";
 
 class NDDAdminRouter extends Component {
@@ -9,8 +9,8 @@ class NDDAdminRouter extends Component {
     return (
       <>
           <Switch>
-              <Route path="/ndd/indirect" component={AdminNDDIndirectProgramApp} />
-              <Route path="/ndd/sdg" component={AdminNDDSDGProgramApp} />
+              <Route path="/ndd/indirect-programs" component={AdminNDDIndirectProgramApp} />
+              <Route path="/ndd/programs" component={AdminNDDProgramApp} />
           </Switch>
       </>
     );

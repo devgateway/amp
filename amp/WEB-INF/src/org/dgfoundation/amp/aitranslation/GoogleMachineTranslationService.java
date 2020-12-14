@@ -191,7 +191,7 @@ public class GoogleMachineTranslationService implements MachineTranslationServic
 
         Map<String, String> translated = new HashMap<>();
         for (int i = 0; i < contents.size(); i++) {
-            translated.put(contents.get(0), response.getTranslations(i).getTranslatedText());
+            translated.put(contents.get(i), response.getTranslations(i).getTranslatedText());
         }
         return translated;
     }

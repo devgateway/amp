@@ -1,11 +1,7 @@
 package org.digijava.module.aim.util;
 
-import java.sql.Connection;
-import java.sql.Statement;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.hibernate.Session;
 
 public class RepairDbUtil {
@@ -64,22 +60,21 @@ public class RepairDbUtil {
 //  }
     
     public static void repairBannedUsersAreStillInATeam() {
-        Session session = null;
-        String qryStr = null;
-        
-        try{
-            session             = PersistenceManager.getSession();
-            qryStr              = "UPDATE dg_user SET banned=FALSE WHERE banned=TRUE  AND dg_user.id in (select amp_team_member.user_ from amp_team_member)" ;
-            int result          =  session.createSQLQuery(qryStr).executeUpdate();
-                
+        try {
+            Session session = PersistenceManager.getSession();
+            String qryStr = "UPDATE dg_user SET banned = false WHERE banned = TRUE "
+                    + "AND dg_user.id IN (SELECT amp_team_member.user_ FROM amp_team_member WHERE deleted is not true)";
+
+            int result = session.createSQLQuery(qryStr).executeUpdate();
+
             if (result > 0) {
-                logger.error ("There was an error with banned users still appearing in teams --- updated " + result + "rows" );
+                logger.error("There was an error with banned users still appearing in teams --- updated "
+                        + result + "rows");
             }
         }
         
         catch (Exception ex) {
-            logger.error("Exception : " + ex.getMessage());
-            ex.printStackTrace(System.out);
+            logger.error("Failed to repair banned users that are still in a team : " + ex.getMessage(), ex);
         }
     }
     

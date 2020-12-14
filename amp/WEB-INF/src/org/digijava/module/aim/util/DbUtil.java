@@ -19,7 +19,6 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
@@ -91,10 +90,11 @@ import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
 import org.digijava.module.aim.util.caching.AmpCaching;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
 import org.hibernate.JDBCException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.jdbc.Work;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.LongType;
@@ -622,27 +622,6 @@ public class DbUtil {
 
     public static AmpFiscalCalendar getAmpFiscalCalendar(Long ampFisCalId) {
         return (AmpFiscalCalendar) PersistenceManager.getSession().get(AmpFiscalCalendar.class, ampFisCalId);
-    }
-
-    public static User getUser(String email) {
-        Session session = null;
-        Query qry = null;
-        User user = null;
-
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            String queryString = "select u from " + User.class.getName() + " u where (u.email=:email)";
-            qry = session.createQuery(queryString);
-            qry.setParameter("email", StringUtils.lowerCase(email), StringType.INSTANCE);
-            Iterator itr = qry.list().iterator();
-            if (itr.hasNext()) {
-                user = (User) itr.next();
-            }
-        } catch (Exception e) {
-            logger.error("Unable to get user");
-            logger.debug("Exceptiion " + e);
-        }
-        return user;
     }
 
     public static User getUser(Long userId) {
@@ -3154,20 +3133,14 @@ public class DbUtil {
     }
 
     /*
-     * Get all agreements with the specified code
+     * Count agreements with the specified code.
      */
-    public static List<AmpAgreement> getAgreementsByCode(String agreementCode) {
-        List<AmpAgreement> agreements = new ArrayList<AmpAgreement>();
-        try {
-            agreements = PersistenceManager.getSession()
-                    .createQuery("select agr from " + AmpAgreement.class.getName()
-                            + " agr where (trim(agr.code) =:agreementCode) ")
-                    .setParameter("agreementCode", StringEscapeUtils.escapeSql(agreementCode)).list();
-        } catch (HibernateException e) {
-            logger.error("Unable to get agreements", e);
-        }
-
-        return agreements;
+    public static Integer countAgreementsByCode(String agreementCode) {
+        return (Integer) PersistenceManager.getSession()
+                .createCriteria(AmpAgreement.class)
+                .setProjection(Projections.count("id"))
+                .add(Restrictions.sqlRestriction("trim({alias}.code) = ?", agreementCode, StringType.INSTANCE))
+                .uniqueResult();
     }
     
     public static boolean hasDonorRole(Long id){

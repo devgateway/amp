@@ -16,6 +16,8 @@ import java.util.Set;
 import org.dgfoundation.amp.activity.builder.ActivityBuilder;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
+import org.digijava.kernel.persistence.InMemoryCategoryValuesManager;
+import org.digijava.kernel.persistence.InMemoryLocationManager;
 import org.digijava.kernel.validation.ConstraintViolation;
 import org.digijava.kernel.validators.ValidatorUtil;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -31,14 +33,14 @@ import org.junit.Test;
 public class RegionLocationValidatorTest {
 
     private static APIField activityField;
-    private static HardcodedCategoryValues categoryValues;
-    private static HardcodedLocations locations;
+    private static InMemoryCategoryValuesManager categoryValues;
+    private static InMemoryLocationManager locations;
 
     @BeforeClass
     public static void setUp() {
         activityField = ValidatorUtil.getMetaData();
-        categoryValues = new HardcodedCategoryValues();
-        locations = new HardcodedLocations(categoryValues);
+        categoryValues =InMemoryCategoryValuesManager.getInstance();
+        locations = InMemoryLocationManager.getInstance();
     }
 
     @Test

@@ -40,7 +40,7 @@
 			<many-to-one name="sector" column="sector_id"
 				class="org.digijava.module.aim.dbentity.AmpSector" cascade="none" />
 			<many-to-one name="location" column="location_id"
-				class="org.digijava.module.aim.dbentity.AmpLocation" />
+				class="org.digijava.module.aim.dbentity.AmpLocation" cascade="none"/>
 		</subclass>
 
 

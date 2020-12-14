@@ -86,7 +86,7 @@ class MainDashboardContainer extends Component {
 
   render() {
     const {
-      error, ndd, nddLoadingPending, nddLoaded, dashboardSettings, onChangeFundingType, fundingType
+      error, ndd, nddLoadingPending, nddLoaded, dashboardSettings, onChangeFundingType, fundingType, mapping
     } = this.props;
     const { selectedDirectProgram } = this.state;
     const formatter = new Intl.NumberFormat('en-US', {
@@ -119,7 +119,8 @@ class MainDashboardContainer extends Component {
                             ? (
                               <PieChartTypeSelector
                                 onChange={onChangeFundingType}
-                                defaultValue={fundingType} />
+                                defaultValue={fundingType}
+                                mapping={mapping} />
                             ) : null}
                         </div>
                         <NestedDonutsProgramChart
@@ -218,7 +219,8 @@ MainDashboardContainer.propTypes = {
   nddLoaded: PropTypes.bool.isRequired,
   dashboardSettings: PropTypes.object,
   onChangeFundingType: PropTypes.func.isRequired,
-  fundingType: PropTypes.object
+  fundingType: PropTypes.object,
+  mapping: PropTypes.object
 };
 
 MainDashboardContainer.defaultProps = {

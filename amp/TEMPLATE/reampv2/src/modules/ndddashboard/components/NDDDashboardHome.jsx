@@ -49,7 +49,7 @@ class NDDDashboardHome extends Component {
   render() {
     const { filters, dashboardId, fundingType } = this.state;
     const {
-      error, ndd, nddLoadingPending, nddLoaded, dashboardSettings
+      error, ndd, nddLoadingPending, nddLoaded, dashboardSettings, mapping
     } = this.props;
     const { translations } = this.context;
     return (
@@ -65,7 +65,8 @@ class NDDDashboardHome extends Component {
             nddLoadingPending={nddLoadingPending}
             dashboardSettings={dashboardSettings}
             onChangeFundingType={this.onChangeFundingType}
-            fundingType={fundingType} />
+            fundingType={fundingType}
+            mapping={mapping} />
         </Row>
       </Container>
     );
@@ -78,7 +79,8 @@ const mapStateToProps = state => ({
   nddLoaded: state.reportsReducer.nddLoaded,
   nddLoadingPending: state.reportsReducer.nddLoadingPending,
   dashboardSettings: state.dashboardSettingsReducer.dashboardSettings,
-  translations: state.translationsReducer.translations
+  translations: state.translationsReducer.translations,
+  mapping: state.reportsReducer.mapping
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

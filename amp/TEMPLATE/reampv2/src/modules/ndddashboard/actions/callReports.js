@@ -14,6 +14,6 @@ export const callReport = (fundingType, filters) => dispatch => {
     }
   }), fetchApiData({
     url: MAPPING_CONFIG
-  })]).then((data) => dispatch(fetchIndirectReportSuccess(data[0])))
+  })]).then((data) => dispatch(fetchIndirectReportSuccess(data[0], data[1])))
     .catch(error => dispatch(fetchIndirectReportError(error)));
 };

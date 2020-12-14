@@ -28,7 +28,7 @@ class FundingTypeSelector extends Component {
   render() {
     return (
       <div className="panel-footer clearfix">
-        <div className="pull-right">
+        {/* <div className="pull-right">
           <div className="btn-group">
             <a
               data-toggle="tooltip"
@@ -46,7 +46,7 @@ class FundingTypeSelector extends Component {
               <span className="glyphicon glyphicon-fullscreen" />
             </button>
           </div>
-        </div>
+        </div> */}
         {this.generateDropdown()}
       </div>
     );

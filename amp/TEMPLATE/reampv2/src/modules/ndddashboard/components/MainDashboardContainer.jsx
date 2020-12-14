@@ -14,6 +14,7 @@ import CustomLegend from '../../../utils/components/CustomLegend';
 import './legends/legends.css';
 import { getCustomColor, getGradient } from '../utils/Utils';
 import FundingByYearChart from './FundingByYearChart';
+import PieChartTypeSelector from './PieChartTypeSelector';
 
 class MainDashboardContainer extends Component {
   constructor(props) {
@@ -112,10 +113,20 @@ class MainDashboardContainer extends Component {
                   </div>
                   {nddLoaded && !nddLoadingPending
                     ? (
-                      <NestedDonutsProgramChart
-                        data={ndd}
-                        selectedDirectProgram={selectedDirectProgram}
-                        handleOuterChartClick={this.handleOuterChartClick.bind(this)} />
+                      <div>
+                        <div>
+                          {dashboardSettings
+                            ? (
+                              <PieChartTypeSelector
+                                onChange={onChangeFundingType}
+                                defaultValue={fundingType} />
+                            ) : null}
+                        </div>
+                        <NestedDonutsProgramChart
+                          data={ndd}
+                          selectedDirectProgram={selectedDirectProgram}
+                          handleOuterChartClick={this.handleOuterChartClick.bind(this)} />
+                      </div>
                     )
                     : <div className="loading" />}
                 </div>

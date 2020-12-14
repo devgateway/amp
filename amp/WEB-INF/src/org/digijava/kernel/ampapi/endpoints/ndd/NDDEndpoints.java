@@ -33,7 +33,7 @@ public class NDDEndpoints {
     @GET
     @Path("mapping-config")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "getMappingConfiguration")
+    @ApiMethod(id = "getMappingConfiguration")
     @ApiOperation("Returns configuration for mapping indirect programs.")
     public MappingConfiguration getMappingConfiguration() {
         return nddService.getMappingConfiguration();

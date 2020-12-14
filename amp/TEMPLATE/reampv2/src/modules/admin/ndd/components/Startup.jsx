@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import fetchTranslations from '../../../../utils/actions/fetchTranslations';
-import defaultTrnPack from '../config/initialTranslations';
+import defaultTrnPack from '../config/initialTranslations.json';
 import { Loading } from '../../../../utils/components/Loading';
 
 export const NDDContext = React.createContext({ translations: defaultTrnPack });
@@ -13,24 +13,28 @@ export const NDDContext = React.createContext({ translations: defaultTrnPack });
  * TODO check if we should abstract it to a Load Translations component to avoid copy ^
  */
 class Startup extends Component {
-    static propTypes = {
-      translationPending: PropTypes.bool,
-      translations: PropTypes.object
-    };
+  static propTypes = {
+    translationPending: PropTypes.bool,
+    translations: PropTypes.object
+  };
 
-    componentDidMount() {
-      this.props.fetchTranslations(defaultTrnPack);
-    }
+  componentDidMount() {
+    this.props.fetchTranslations(defaultTrnPack);
+  }
 
-    render() {
-      return this.props.translationPending
-        ? (<Loading />)
-        : (
-          <NDDContext.Provider value={{ translations: this.props.translations }}>
-            {this.props.children}
-          </NDDContext.Provider>
-        );
+  render() {
+    const { children, translations, translationPending } = this.props;
+    if (translationPending) {
+      return (<Loading />);
+    } else {
+      document.title = translations['amp.admin.ndd:page-title'];
+      return (
+        <NDDContext.Provider value={{ translations }}>
+          {children}
+        </NDDContext.Provider>
+      );
     }
+  }
 }
 
 const mapStateToProps = state => ({
@@ -41,3 +45,10 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => bindActionCreators({ fetchTranslations }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Startup);
+
+Startup.propTypes = {
+  translationPending: PropTypes.bool.isRequired,
+  translations: PropTypes.object.isRequired,
+  children: PropTypes.object.isRequired,
+  fetchTranslations: PropTypes.func.isRequired
+};

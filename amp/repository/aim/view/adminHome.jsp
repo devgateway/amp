@@ -368,7 +368,7 @@
                               <c:set var="translation">
                                 <digi:trn key="aim:clickToViewNDDMappingManager" invisibleLinks="true">Click here to view the Indirect Programs Mapping for NDD Dashboard</digi:trn>
                               </c:set>
-                              <a href="/TEMPLATE/reamp/modules/admin/currency/deflator/index.html"
+                              <a href="/TEMPLATE/reampv2/build/index.html#/ndd"
                                  title="${translation}">
                                 <digi:trn key="aim:nddMappingManager">NDD Mappings Manager</digi:trn>
                               </a>

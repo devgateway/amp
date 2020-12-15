@@ -519,6 +519,18 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                 .uniqueResult();
     }
 
+
+    public static List<AmpActivityVersion> getLastActivitiesVersionByAmpIds(List<String> ampIds) {
+        String queryString = "select a from "
+                + AmpActivityVersion.class.getName()
+                + " a where a.ampId in (:ampIds) "
+                + " and a.ampActivityId =( select av.ampActivityId from " + AmpActivity.class.getName() + " av where av"
+                + ".ampId = a.ampId)";
+        return PersistenceManager.getSession().createQuery(queryString)
+                .setParameterList("ampIds", ampIds)
+                .list();
+    }
+
     public static List<AmpActivityVersion> getActivitiesByAmpIds(List<String> ampIds) {
         String queryString = "select a from "
                 + AmpActivity.class.getName()
@@ -2013,10 +2025,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
      * @return List<Long> with the editable activity Ids
      */
     public static List<Long> getEditableActivityIdsNoSession(TeamMember tm) {
-        AmpTeamMember ampTeamMember = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
-        AmpARFilter ampARFilter = FilterUtil.buildFilterFromSource(ampTeamMember.getAmpTeam());
-        ampARFilter.generateFilterQuery(tm);
-        String query = ampARFilter.getGeneratedFilterQuery();
+        String query = WorkspaceFilter.generateWorkspaceFilterQuery(tm);
         return ActivityUtil.getEditableActivityIds(tm, query);
     }
 

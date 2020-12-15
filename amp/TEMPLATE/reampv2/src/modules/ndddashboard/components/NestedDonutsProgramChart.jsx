@@ -9,7 +9,7 @@ import Plotly from 'plotly.js';
 import createPlotlyComponent from 'react-plotly.js/factory';
 import {
   DIRECT_PROGRAM, INDIRECT_PROGRAMS, PROGRAMLVL1, AMOUNT, CODE, DIRECT, INDIRECT,
-  TRANSITIONS, PROGRAMLVL2, AVAILABLE_COLORS
+  TRANSITIONS, PROGRAMLVL2, AVAILABLE_COLORS, TRN_PREFIX
 } from '../utils/constants';
 import {
   addAlpha, getCustomColor, getGradient
@@ -135,7 +135,7 @@ class NestedDonutsProgramChart extends Component {
   }
 
   render() {
-    const { selectedDirectProgram } = this.props;
+    const { selectedDirectProgram, translations } = this.props;
     const outerData = this.extractOuterData(false);
     const outerDataLvl2 = selectedDirectProgram ? this.extractOuterData(true) : this.extractOuterData(false);
     const innerData = this.extractInnerData(outerData);
@@ -151,7 +151,7 @@ class NestedDonutsProgramChart extends Component {
     };
     const annotations = outerData.length === 0 ? [
       {
-        text: 'No matching data found',
+        text: translations[`${TRN_PREFIX}no-data`],
         xref: 'paper',
         yref: 'paper',
         showarrow: false,
@@ -226,7 +226,7 @@ class NestedDonutsProgramChart extends Component {
           layout={{
             autosize: false,
             paper_bgcolor: 'rgba(0,0,0,0)',
-            width: 500,
+            width: 400,
             height: 400,
             title: '',
             showlegend: false,
@@ -251,10 +251,13 @@ class NestedDonutsProgramChart extends Component {
 NestedDonutsProgramChart.propTypes = {
   data: PropTypes.array.isRequired,
   handleOuterChartClick: PropTypes.func.isRequired,
-  selectedDirectProgram: PropTypes.object.isRequired
+  selectedDirectProgram: PropTypes.object.isRequired,
+  translations: PropTypes.array.isRequired
 };
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+  translations: state.translationsReducer.translations
+});
 
 const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
 

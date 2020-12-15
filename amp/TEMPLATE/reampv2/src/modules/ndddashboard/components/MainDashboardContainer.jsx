@@ -13,6 +13,7 @@ import {
 import CustomLegend from '../../../utils/components/CustomLegend';
 import './legends/legends.css';
 import { getCustomColor, getGradient } from '../utils/Utils';
+import FundingByYearChart from './FundingByYearChart';
 
 class MainDashboardContainer extends Component {
   constructor(props) {
@@ -102,10 +103,13 @@ class MainDashboardContainer extends Component {
       const programLegend = nddLoaded && !nddLoadingPending ? this.getProgramLegend() : null;
       return (
         <div>
-          <Col md={6}>
+          <Col md={5}>
             <div>
               <div className="chart-container">
                 <div className="chart">
+                  <div className="section_title">
+                    <span>PNSD and NDD Funding</span>
+                  </div>
                   {nddLoaded && !nddLoadingPending
                     ? (
                       <NestedDonutsProgramChart
@@ -126,7 +130,10 @@ class MainDashboardContainer extends Component {
               </div>
             </div>
           </Col>
-          <Col md={6}>
+          <Col md={7}>
+            <div className="section_title">
+              <span>Legends</span>
+            </div>
             {programLegend ? (
               <div className="legends-container">
                 <div className="legend-title">
@@ -160,6 +167,21 @@ class MainDashboardContainer extends Component {
                 )}
               </div>
             ) : null}
+          </Col>
+          <div className="separator" />
+          <Col md={12}>
+            <div className="chart-container">
+              <div className="chart">
+                <div className="section_title">
+                  <span>Funding Over Time</span>
+                </div>
+                {nddLoaded && !nddLoadingPending ? (
+                  <FundingByYearChart
+                    selectedDirectProgram={selectedDirectProgram}
+                    data={ndd} />
+                ) : <div className="loading" />}
+              </div>
+            </div>
           </Col>
         </div>
       );

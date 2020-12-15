@@ -1,5 +1,6 @@
 {
   "amp.ndd.dashboard:Home-Page": "Dashboard Home",
+  "amp.ndd.dashboard:page-title": "Aid Management Platform - NDD Dashboard",
   "amp.ndd.dashboard:filters": "Filters",
   "amp.ndd.dashboard:edit-filters": "Edit Filters",
   "amp.ndd.dashboard:show-filter-settings": "Show Filter Settings",
@@ -9,5 +10,8 @@
   "amp.ndd.dashboard:close": "Close",
   "amp.ndd.dashboard:share-copy-link": "Copy this link to share the dashboard",
   "amp.ndd.dashboard:share-link": "Link",
-  "amp.ndd.dashboard:share": "Share"
+  "amp.ndd.dashboard:share": "Share",
+  "amp.ndd.dashboard:fy-direct": "Show Direct Data",
+  "amp.ndd.dashboard:fy-indirect": "Show Indirect Data",
+  "amp.ndd.dashboard:no-data": "No matching data found"
 }

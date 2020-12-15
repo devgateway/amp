@@ -211,7 +211,7 @@ public class GlobalSettingsConstants {
     public static final String WS_PREFIX_SSC = "Workspace prefix for SSC Workspaces";
 
 
-    public static final String INDIRECT_PROGRAM = "Indirect program";
+
     public static final String PRIMARY_PROGRAM = "NPD Default Primary Program";
 
     public static final String MAPPING_SOURCE_PROGRAM = "Mapping Source Program";

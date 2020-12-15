@@ -1,52 +1,64 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
-import {NDDContext} from './Startup';
+import { NDDContext } from './Startup';
 import './css/style.css';
 
 class Header extends Component {
-    constructor(props) {
-        super(props);
-    }
+  render() {
+    const {
+      translations, onAddRow, onSaveAll, onRevertAll, disabled
+    } = this.props;
+    const { trnPrefix } = this.context;
+    return (
+      <div>
+        <div className="panel panel-default">
+          <div className="panel-body custom-panel">
+            <span className="glyphicon glyphicon-plus clickable" onClick={onAddRow} />
+            <span
+              onClick={onAddRow}
+              className="add-new-text clickable">
+              {translations[`${trnPrefix}add-new`]}
+              {' '}
 
-    render() {
-        const {translations, onAddRow, onSaveAll, onRevertAll, disabled} = this.props;
-        const {trnPrefix} = this.context;
-        return (<div>
-            <div className="panel panel-default">
-                <div className="panel-body custom-panel">
-                    <span className="glyphicon glyphicon-plus clickable" onClick={onAddRow}/>
-                    <span onClick={onAddRow}
-                          className="add-new-text clickable">{translations[trnPrefix + 'add-new']} </span>
-                    <span className="insert-data-text">{translations[trnPrefix + 'insert-data']}</span>
-                    <span className="float-right button-wrapper">
-                        <button type="button" onClick={onSaveAll}
-                                className="btn btn-success margin_2" disabled={disabled}>
-                            {translations[trnPrefix + 'button-save-all-edits']}
-                        </button>
-                        <button type="button" onClick={onRevertAll}
-                                className="btn btn-danger margin_2" disabled={disabled}>
-                            {translations[trnPrefix + 'button-revert-all-edits']}
-                        </button>
-                    </span>
-                </div>
-            </div>
-        </div>);
-    }
+            </span>
+            <span className="insert-data-text">{translations[`${trnPrefix}insert-data`]}</span>
+            <span className="float-right button-wrapper">
+              <button
+                type="button"
+                onClick={onSaveAll}
+                className="btn btn-success margin_2"
+                disabled={disabled}>
+                {translations[`${trnPrefix}button-save-all-edits`]}
+              </button>
+              <button
+                type="button"
+                onClick={onRevertAll}
+                className="btn btn-danger margin_2"
+                disabled={disabled}>
+                {translations[`${trnPrefix}button-revert-all-edits`]}
+              </button>
+            </span>
+          </div>
+        </div>
+      </div>
+    );
+  }
 }
 
 Header.contextType = NDDContext;
 
 Header.propTypes = {
-    onAddRow: PropTypes.func.isRequired,
-    onSaveAll: PropTypes.func.isRequired,
-    onRevertAll: PropTypes.func.isRequired,
-    disabled: PropTypes.bool
-}
+  onAddRow: PropTypes.func.isRequired,
+  onSaveAll: PropTypes.func.isRequired,
+  onRevertAll: PropTypes.func.isRequired,
+  disabled: PropTypes.bool.isRequired,
+  translations: PropTypes.bool.isRequired
+};
 
 const mapStateToProps = state => ({
-    translations: state.translationsReducer.translations
+  translations: state.translationsReducer.translations
 });
-const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

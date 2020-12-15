@@ -26,8 +26,8 @@ public class AmpActivityProgramSettingsAction
 
                 AmpActivityProgramSettingsForm ampActivityProgramSettingsForm = (AmpActivityProgramSettingsForm) form;
 
-                
-                if (request.getParameter("save")!=null) {
+
+                if (request.getParameter("save") != null) {
                         ProgramUtil.saveAmpActivityProgramSettings(ampActivityProgramSettingsForm.getSettingsList());
                         ampActivityProgramSettingsForm.setEvent(null);
                         return mapping.findForward("forward");
@@ -41,7 +41,8 @@ public class AmpActivityProgramSettingsAction
                                 ampActivityProgramSettingsForm.getProgramList().remove(indirectProgram);
                         }
 
-                        ampActivityProgramSettingsForm.setSettingsList(ProgramUtil.getAmpActivityProgramSettingsList());
+                        ampActivityProgramSettingsForm.
+                                setSettingsList(ProgramUtil.getAmpActivityProgramSettingsList(true));
                         return mapping.findForward("forward");
 
                 }

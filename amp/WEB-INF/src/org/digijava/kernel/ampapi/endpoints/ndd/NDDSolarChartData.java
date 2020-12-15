@@ -5,6 +5,7 @@ import org.digijava.module.aim.dbentity.AmpTheme;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 public class NDDSolarChartData {
 
@@ -37,19 +38,22 @@ public class NDDSolarChartData {
 
         private final BigDecimal amount;
 
+        private final Map<String, BigDecimal> amountsByYear;
+
         /**
          * Convert an AmpTheme tree into a plain structure.
          *
          * @param program
          * @param amount
          */
-        public ProgramData(AmpTheme program, BigDecimal amount) {
+        public ProgramData(AmpTheme program, BigDecimal amount, Map<String, BigDecimal> amountsByYear) {
             this.programLvl3 = new Program(program.getThemeCode(), program.getName());
             this.programLvl2 = new Program(program.getParentThemeId().getThemeCode(),
                     program.getParentThemeId().getName());
             this.programLvl1 = new Program(program.getParentThemeId().getParentThemeId().getThemeCode(),
                     program.getParentThemeId().getParentThemeId().getName());
             this.amount = amount;
+            this.amountsByYear = amountsByYear;
         }
 
         public BigDecimal getAmount() {
@@ -66,6 +70,10 @@ public class NDDSolarChartData {
 
         public Program getProgramLvl3() {
             return programLvl3;
+        }
+
+        public Map<String, BigDecimal> getAmountsByYear() {
+            return amountsByYear;
         }
     }
 

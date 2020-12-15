@@ -39,8 +39,6 @@
 								 JOIN amp_activity_indirect_program ip ON a.amp_activity_program_id = ip.amp_activity_program_id
 								 JOIN ni_all_programs_with_levels apl ON ip.amp_program_id = apl.amp_theme_id
 								 LEFT JOIN amp_theme level ON level.amp_theme_id = apl.id4
-								 JOIN amp_program_settings aps ON aps.amp_program_settings_id = a.program_setting
-						WHERE aps.name = 'Primary Program'
 						GROUP BY a.amp_activity_id, level.name, apl.id4
 					) v ON aav.amp_activity_id = v.amp_activity_id;
 

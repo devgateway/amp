@@ -368,9 +368,10 @@
                               <c:set var="translation">
                                 <digi:trn key="aim:clickToViewNDDMappingManager" invisibleLinks="true">Click here to view the Indirect Programs Mapping for NDD Dashboard</digi:trn>
                               </c:set>
-                              <digi:link href="/TEMPLATE/reampv2/build/index.html#/ndd" title="${translation}">
+                              <a href="/TEMPLATE/reampv2/build/index.html#/ndd"
+                                 title="${translation}">
                                 <digi:trn key="aim:nddMappingManager">NDD Mappings Manager</digi:trn>
-                              </digi:link>
+                              </a>
                             </td>
                           </tr>
                         </module:display>

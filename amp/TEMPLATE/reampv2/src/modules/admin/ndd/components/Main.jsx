@@ -1,20 +1,17 @@
 import React, {Component} from 'react';
 import './css/style.css';
 import {NDDContext} from './Startup';
-import * as Constants from "../constants/Constants";
 import {
     getNDD,
     getNDDError,
     getNDDPending,
     getPrograms,
-    getProgramsError,
     getProgramsPending
 } from "../reducers/startupReducer";
 import {bindActionCreators} from "redux";
 import fetchNDD from "../actions/fetchNDD";
 import fetchPrograms from "../actions/fetchAvailablePrograms";
 import {connect} from "react-redux";
-import {SRC_PROGRAM, VALUE, DST_PROGRAM} from "../constants/Constants";
 import FormPrograms from "./FormPrograms";
 
 class Main extends Component {
@@ -25,9 +22,10 @@ class Main extends Component {
     }
 
     componentDidMount() {
-        const {fetchNDD, fetchPrograms} = this.props;
-        fetchNDD();
-        fetchPrograms();
+        const {fetchNDD, fetchPrograms, api} = this.props;
+
+        fetchNDD(api.mappingConfig);
+        fetchPrograms(api.programs);
     }
 
     shouldComponentRender() {
@@ -36,17 +34,17 @@ class Main extends Component {
     }
 
     render() {
-        const {ndd, programs} = this.props;
+        const {ndd, programs, api, trnPrefix, isIndirect} = this.props;
         const {translations} = this.context;
 
         if (!this.shouldComponentRender() || ndd.length === 0) {
             return <div>loading...</div>
         } else {
             return (<div className="ndd-container">
-                <NDDContext.Provider value={{ndd: ndd, translations: translations, programs: programs}}>
+                <NDDContext.Provider value={{ndd: ndd, translations: translations, programs: programs, api: api, trnPrefix: trnPrefix, isIndirect: isIndirect}}>
                     <div className='col-md-12'>
                         <div>
-                            <h2 className="title">{translations[Constants.TRN_PREFIX + 'title']}</h2>
+                            <h2 className="title">{translations[trnPrefix + 'title']}</h2>
                             <FormPrograms/>
                         </div>
                     </div>
@@ -64,10 +62,10 @@ const mapStateToProps = state => ({
     programs: getPrograms(state.startupReducer),
     pendingNDD: getNDDPending(state.startupReducer),
     pendingPrograms: getProgramsPending(state.startupReducer),
-    translations: state.translationsReducer.translations
+    translations: state.translationsReducer.translations,
 });
 const mapDispatchToProps = dispatch => bindActionCreators({
     fetchNDD: fetchNDD,
-    fetchPrograms: fetchPrograms
+    fetchPrograms: fetchPrograms,
 }, dispatch)
 export default connect(mapStateToProps, mapDispatchToProps)(Main);

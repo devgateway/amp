@@ -1,10 +1,9 @@
 import { fetchNDDSuccess, fetchNDDPending, fetchNDDError } from './startupAction';
-import { MAPPING_CONFIG } from '../constants/Constants';
 
-function fetchNDD() {
+function fetchNDD(url) {
   return dispatch => {
     dispatch(fetchNDDPending());
-    fetch(MAPPING_CONFIG)
+    fetch(url)
       .then(res => res.json())
       .then(res => {
         if (res.error) {

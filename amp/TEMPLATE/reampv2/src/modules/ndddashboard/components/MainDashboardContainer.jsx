@@ -12,7 +12,7 @@ import {
 } from '../utils/constants';
 import CustomLegend from '../../../utils/components/CustomLegend';
 import './legends/legends.css';
-import { getCustomColor, getGradient } from '../utils/Utils';
+import { getCustomColor, getGradient, extractPrograms } from '../utils/Utils';
 import FundingByYearChart from './FundingByYearChart';
 import PieChartTypeSelector from './PieChartTypeSelector';
 
@@ -86,7 +86,8 @@ class MainDashboardContainer extends Component {
 
   render() {
     const {
-      error, ndd, nddLoadingPending, nddLoaded, dashboardSettings, onChangeFundingType, fundingType, mapping
+      error, ndd, nddLoadingPending, nddLoaded, dashboardSettings, onChangeFundingType, fundingType, mapping,
+      onChangeProgram, selectedPrograms
     } = this.props;
     const { selectedDirectProgram } = this.state;
     const formatter = new Intl.NumberFormat('en-US', {
@@ -100,6 +101,7 @@ class MainDashboardContainer extends Component {
       // TODO proper error handling
       return (<div>ERROR</div>);
     } else {
+      const programs = extractPrograms(mapping);
       this.generate2LevelColors();
       const programLegend = nddLoaded && !nddLoadingPending ? this.getProgramLegend() : null;
       return (
@@ -109,7 +111,11 @@ class MainDashboardContainer extends Component {
               <div className="chart-container">
                 <div className="chart">
                   <div className="section_title">
-                    <span>PNSD and NDD Funding</span>
+                    <span>
+                      {programs.direct
+                        ? (`${programs.direct.value} and ${programs.indirect1.value}`)
+                        : 'Loading...'}
+                    </span>
                   </div>
                   {nddLoaded && !nddLoadingPending
                     ? (
@@ -118,7 +124,7 @@ class MainDashboardContainer extends Component {
                           {dashboardSettings
                             ? (
                               <PieChartTypeSelector
-                                onChange={onChangeFundingType}
+                                onChange={onChangeProgram}
                                 defaultValue={fundingType}
                                 mapping={mapping} />
                             ) : null}
@@ -220,7 +226,9 @@ MainDashboardContainer.propTypes = {
   dashboardSettings: PropTypes.object,
   onChangeFundingType: PropTypes.func.isRequired,
   fundingType: PropTypes.object,
-  mapping: PropTypes.object
+  mapping: PropTypes.object,
+  onChangeProgram: PropTypes.func.isRequired,
+  selectedPrograms: PropTypes.object.isRequired
 };
 
 MainDashboardContainer.defaultProps = {

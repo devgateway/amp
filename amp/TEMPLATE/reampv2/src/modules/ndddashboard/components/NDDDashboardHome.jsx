@@ -14,7 +14,8 @@ class NDDDashboardHome extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      filters: undefined, filtersWithModels: undefined, dashboardId: undefined, fundingType: undefined
+      filters: undefined, filtersWithModels: undefined, dashboardId: undefined, fundingType: undefined,
+      selectedPrograms: undefined
     };
   }
 
@@ -46,10 +47,22 @@ class NDDDashboardHome extends Component {
     callReport(value, filters);
   }
 
+  onChangeProgram = (value) => {
+    // TODO: volver a llamar a callReport con los filtros y parametros para q sepa q EP usar.
+    alert(value);
+    if (value.indexOf('-') > -1) {
+      const ids = value.split('-');
+      // TODO: always call EP.
+    } else {
+      // TODO: check if we can use the current ndd data.
+
+    }
+  }
+
   render() {
     const { filters, dashboardId, fundingType } = this.state;
     const {
-      error, ndd, nddLoadingPending, nddLoaded, dashboardSettings, mapping
+      error, ndd, nddLoadingPending, nddLoaded, dashboardSettings, mapping, selectedPrograms
     } = this.props;
     const { translations } = this.context;
     return (
@@ -65,7 +78,9 @@ class NDDDashboardHome extends Component {
             nddLoadingPending={nddLoadingPending}
             dashboardSettings={dashboardSettings}
             onChangeFundingType={this.onChangeFundingType}
+            onChangeProgram={this.onChangeProgram}
             fundingType={fundingType}
+            selectedPrograms={selectedPrograms}
             mapping={mapping} />
         </Row>
       </Container>

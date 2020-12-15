@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { ALL_PROGRAMS, DST_PROGRAM, PROGRAM_MAPPING, SRC_PROGRAM } from '../../admin/ndd/constants/Constants';
+import { extractPrograms } from '../utils/Utils';
 
 class PieChartTypeSelector extends Component {
   constructor(props) {
@@ -10,37 +10,23 @@ class PieChartTypeSelector extends Component {
     this.generateDropdown = this.generateDropdown.bind(this);
   }
 
-  extractPrograms = () => {
-    const { mapping } = this.props;
-    const ret = { direct: undefined, indirect1: undefined, indirect2: undefined };
-    if (mapping && mapping[PROGRAM_MAPPING]) {
-      ret.direct = mapping[ALL_PROGRAMS].find(i => i.children
-        .find(j => j.children && j.children
-          .find(k => k.children && k.children
-            .find(l => l.id === mapping[PROGRAM_MAPPING][0][SRC_PROGRAM]))));
-      ret.indirect1 = mapping[ALL_PROGRAMS].find(i => i.children
-        .find(j => j.children && j.children
-          .find(k => k.children && k.children
-            .find(l => l.id === mapping[PROGRAM_MAPPING][0][DST_PROGRAM]))));
-      ret.indirect2 = { value: 'TODO' };
-    }
-    // TODO: same code for indirect2.
-    return ret;
-  }
-
   generateDropdown() {
-    const { onChange } = this.props;
-    const programs = this.extractPrograms();
+    const { onChange, mapping } = this.props;
+    const programs = extractPrograms(mapping);
     const options = [`${programs.direct.value} + ${programs.indirect1.value}`,
       `${programs.direct.value} + ${programs.indirect2.value}`,
       programs.indirect1.value,
       programs.indirect2.value];
+    const ids = [`${programs.direct.id}-${programs.indirect1.id}`,
+      `${programs.direct.id}-${programs.indirect2.id}`,
+      programs.indirect1.id,
+      programs.indirect2.id];
     return (
       <form className="form-inline dash-form dash-adj-type" role="form">
         <select
           className="form-control like-btn-sm ftype-options"
           onChange={(e) => onChange(e.target.value)}>
-          {options.map(i => (<option key={i} value={i}>{i}</option>))}
+          {options.map((i, j) => (<option key={ids[j]} value={ids[j]}>{i}</option>))}
         </select>
         <span className="cheat-lineheight" />
       </form>

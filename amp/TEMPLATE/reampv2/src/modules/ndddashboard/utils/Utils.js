@@ -1,6 +1,7 @@
 /* eslint-disable  no-bitwise */
 import Gradient from 'javascript-color-gradient';
 import { CHART_COLOR_MAP, AVAILABLE_COLORS } from './constants';
+import { ALL_PROGRAMS, DST_PROGRAM, PROGRAM_MAPPING, SRC_PROGRAM } from '../../admin/ndd/constants/Constants';
 
 export function hashCode(str) { // java String#hashCode
   let hash = 0;
@@ -49,4 +50,21 @@ export function getGradient(colorFrom, colorTwo) {
 
   colorGradient.setGradient(colorFrom, colorTwo);
   return colorGradient.getArray();
+}
+
+export function extractPrograms(mapping) {
+  const ret = { direct: undefined, indirect1: undefined, indirect2: undefined };
+  if (mapping && mapping[PROGRAM_MAPPING]) {
+    ret.direct = mapping[ALL_PROGRAMS].find(i => i.children
+      .find(j => j.children && j.children
+        .find(k => k.children && k.children
+          .find(l => l.id === mapping[PROGRAM_MAPPING][0][SRC_PROGRAM]))));
+    ret.indirect1 = mapping[ALL_PROGRAMS].find(i => i.children
+      .find(j => j.children && j.children
+        .find(k => k.children && k.children
+          .find(l => l.id === mapping[PROGRAM_MAPPING][0][DST_PROGRAM]))));
+    ret.indirect2 = { value: 'TO DO', id: 0 };
+  }
+  // TODO: same code for indirect2.
+  return ret;
 }

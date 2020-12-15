@@ -1,5 +1,6 @@
 {
   "amp.ndd.dashboard:Home-Page": "Dashboard Home",
+  "amp.ndd.dashboard:page-title": "Aid Management Platform - NDD Dashboard",
   "amp.ndd.dashboard:filters": "Filters",
   "amp.ndd.dashboard:edit-filters": "Edit Filters",
   "amp.ndd.dashboard:show-filter-settings": "Show Filter Settings",

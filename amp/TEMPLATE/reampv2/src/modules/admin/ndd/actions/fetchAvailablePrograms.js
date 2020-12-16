@@ -1,10 +1,9 @@
 import { fetchProgramsSuccess, fetchProgramsPending, fetchProgramsError } from './startupAction';
-import { AVAILABLE_PROGRAMS } from '../constants/Constants';
 
-function fetchPrograms() {
+function fetchPrograms(url) {
   return dispatch => {
     dispatch(fetchProgramsPending());
-    fetch(AVAILABLE_PROGRAMS)
+    fetch(url)
       .then(res => res.json())
       .then(res => {
         if (res.error) {

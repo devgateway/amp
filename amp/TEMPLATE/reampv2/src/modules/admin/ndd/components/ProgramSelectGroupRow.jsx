@@ -8,10 +8,6 @@ import ProgramSelectGroup from './ProgramSelectGroup';
 import { TYPE_DST, TYPE_SRC } from '../constants/Constants';
 
 class ProgramSelectGroupRow extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const {
       rowData, onChange, remove, src, dst

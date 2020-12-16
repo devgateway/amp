@@ -268,6 +268,7 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.MachineTranslationCharactersUsed</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpIndirectTheme</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityIndirectProgram</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpThemeMapping</hibernate-class>
 
 	</hibernate-classes>
 	<!-- AIM classes End-->

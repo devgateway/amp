@@ -3,33 +3,30 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import fetchTranslations from '../../../../utils/actions/fetchTranslations';
-import defaultTrnPack from '../config/initialTranslations.json';
 import { Loading } from '../../../../utils/components/Loading';
 
-export const NDDContext = React.createContext({ translations: defaultTrnPack });
+export const NDDContext = React.createContext();
 
 /**
  * Component used to load everything we need before launching the APP
  * TODO check if we should abstract it to a Load Translations component to avoid copy ^
  */
 class Startup extends Component {
-  static propTypes = {
-    translationPending: PropTypes.bool,
-    translations: PropTypes.object
-  };
-
   componentDidMount() {
-    this.props.fetchTranslations(defaultTrnPack);
+    const { defaultTrnPack, fetchTranslations } = this.props;
+    fetchTranslations(defaultTrnPack);
   }
 
   render() {
-    const { children, translations, translationPending } = this.props;
+    const {
+      children, translations, translationPending, api
+    } = this.props;
     if (translationPending) {
       return (<Loading />);
     } else {
       document.title = translations['amp.admin.ndd:page-title'];
       return (
-        <NDDContext.Provider value={{ translations }}>
+        <NDDContext.Provider value={{ translations, api }}>
           {children}
         </NDDContext.Provider>
       );
@@ -50,5 +47,7 @@ Startup.propTypes = {
   translationPending: PropTypes.bool.isRequired,
   translations: PropTypes.object.isRequired,
   children: PropTypes.object.isRequired,
-  fetchTranslations: PropTypes.func.isRequired
+  fetchTranslations: PropTypes.func.isRequired,
+  api: PropTypes.object.isRequired,
+  defaultTrnPack: PropTypes.object.isRequired,
 };

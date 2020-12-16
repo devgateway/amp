@@ -109,8 +109,6 @@
       </feature:display>
 		</div>
 		<form action="/aim/index.do" id="selectWorkspaceForm" method="post">
-			<input type="hidden" id="generateToken" name="generateToken" /> <input
-				type="hidden" id="callbackUrl" name="callbackUrl" />
 		</form>
 
 	</logic:notPresent>

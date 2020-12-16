@@ -23,8 +23,8 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 import java.util.TreeSet;
 @TranslatableClass (displayName = "Theme")
-public class AmpTheme implements Serializable, Comparable<AmpTheme>, SoftDeletable, Identifiable, ARDimensionable, HierarchyListable,  AmpAutoCompleteDisplayable, NameableOrIdentifiable
-{
+public class AmpTheme implements Serializable, SoftDeletable, Identifiable, ARDimensionable, HierarchyListable,
+        AmpAutoCompleteDisplayable<AmpTheme>, NameableOrIdentifiable {
 
     private static final long serialVersionUID = 1L;
     @PossibleValueId

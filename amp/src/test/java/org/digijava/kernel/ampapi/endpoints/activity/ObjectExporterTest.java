@@ -101,7 +101,7 @@ public class ObjectExporterTest {
         private AmpActivityGroup activityGroup;
 
         @Interchangeable(fieldTitle = "List Of Integers")
-        private List<Integer> listOfIntegers;
+        private List<Integer> listOfIntegers = new ArrayList<>();
 
         @Interchangeable(fieldTitle = "Simple Value With PV")
         @PossibleValues(OnePV.class)

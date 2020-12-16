@@ -149,7 +149,8 @@ public class AddNewLocation extends Action {
                         LocationUtil.saveLocation(location, false);
                     }
 
-                    if (CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(location.getParentCategoryValue())) {
+                    if (CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.equalsCategoryValue(
+                            location.getParentCategoryValue())) {
                         DynLocationManagerUtil.synchronizeCountries();
                     }
                 }

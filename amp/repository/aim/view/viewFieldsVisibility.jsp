@@ -47,7 +47,7 @@
 		<logic:iterate name="aimVisibilityManagerForm" property="allModules" id="module"
 			type="org.digijava.module.aim.dbentity.AmpModulesVisibility">
 			<tr>
-				<td align="left" class="inside"><digi:trn key="<%="fm:"+module.getNameTrimmed() %>"><bean:write name="module" property="name"/></digi:trn></td>
+				<td align="left" class="inside"><digi:trn key="<%=\"fm:\" + module.getNameTrimmed() %>"><bean:write name="module" property="name"/></digi:trn></td>
 				<c:set target="${urlParamsDelModule}" property="action" value="deleteFFM"/>
 				<c:set target="${urlParamsDelModule}" property="moduleId" value="<%=module.getId()%>"/>
 				<td class="inside" align=center>
@@ -89,14 +89,14 @@
 			type="org.digijava.module.aim.dbentity.AmpFeaturesVisibility">
 			<tr>
 				<td align="left" class="inside">
-				<digi:trn key="<%="fm:"+feature.getNameTrimmed()%>">
+				<digi:trn key='<%="fm:" + feature.getNameTrimmed()%>'>
 					<bean:write name="feature" property="name"/>
 				</digi:trn>
 				</td>
 				<td class="inside" align=center>
 					<i>
 					<%if(feature.getParent() != null){%>
-						<digi:trn key="<%="fm:"+feature.getParent().getNameTrimmed()%>">
+						<digi:trn key='<%="fm:"+feature.getParent().getNameTrimmed()%>'>
 						<bean:write name="module" property="name"/> 
 						</digi:trn>
 					<%}%>
@@ -147,19 +147,19 @@
 				<bean:define id="feature" name="field" property="parent" type="org.digijava.module.aim.dbentity.AmpFeaturesVisibility"/>
 				<bean:define id="module" name="feature" property="parent" type="org.digijava.module.aim.dbentity.AmpModulesVisibility"/>
 				<td align="left" class="inside">
-					<digi:trn key="<%="fm:"+field.getNameTrimmed() %>">
+					<digi:trn key='<%="fm:"+field.getNameTrimmed() %>'>
 						<bean:write name="field" property="name"/>
 					</digi:trn></td>
 				<td class="inside" align=center>
 					<i>
-					<digi:trn key="<%="fm:"+feature.getNameTrimmed()%>">
+					<digi:trn key='<%="fm:" + feature.getNameTrimmed()%>'>
 						<bean:write name="feature" property="name"/>
 					</digi:trn>
 					</i>
 				</td>
 				<td class="inside" align=center>
 					<i>
-					<digi:trn key="<%="fm:"+module.getNameTrimmed()%>">
+					<digi:trn key='<%="fm:"+module.getNameTrimmed()%>'>
 						<bean:write name="module" property="name"/>
 					</digi:trn>
 					</i>

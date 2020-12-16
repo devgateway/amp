@@ -85,6 +85,9 @@ class NestedDonutsProgramChart extends Component {
                 name: k[PROGRAMLVL1].name,
                 directProgramCode: j[DIRECT_PROGRAM][PROGRAMLVL1][CODE]
               });
+            } else {
+              const program = innerSubGroup.find(l => l[CODE] === k[PROGRAMLVL1][CODE]);
+              program.originalAmount += k[AMOUNT];
             }
           });
         });

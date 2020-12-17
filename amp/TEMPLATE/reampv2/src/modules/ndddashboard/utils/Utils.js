@@ -52,9 +52,9 @@ export function getGradient(colorFrom, colorTwo) {
   return colorGradient.getArray();
 }
 
-export function extractPrograms(mapping) {
+export function extractPrograms(mapping, noIndirectMapping) {
   const ret = { direct: undefined, indirect1: undefined, indirect2: undefined };
-  if (mapping && mapping[PROGRAM_MAPPING]) {
+  if (mapping && mapping[PROGRAM_MAPPING] && noIndirectMapping) {
     ret.direct = mapping[ALL_PROGRAMS].find(i => i.children
       .find(j => j.children && j.children
         .find(k => k.children && k.children
@@ -63,8 +63,10 @@ export function extractPrograms(mapping) {
       .find(j => j.children && j.children
         .find(k => k.children && k.children
           .find(l => l.id === mapping[PROGRAM_MAPPING][0][DST_PROGRAM]))));
-    ret.indirect2 = { value: 'TO DO', id: 0 };
+    ret.indirect2 = mapping[ALL_PROGRAMS].find(i => i.children
+      .find(j => j.children && j.children
+        .find(k => k.children && k.children
+          .find(l => l.id === noIndirectMapping[PROGRAM_MAPPING][0][DST_PROGRAM]))));
   }
-  // TODO: same code for indirect2.
   return ret;
 }

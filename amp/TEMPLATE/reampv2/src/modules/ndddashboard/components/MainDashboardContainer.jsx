@@ -87,7 +87,7 @@ class MainDashboardContainer extends Component {
   render() {
     const {
       error, ndd, nddLoadingPending, nddLoaded, dashboardSettings, onChangeFundingType, fundingType, mapping,
-      onChangeProgram, selectedPrograms
+      onChangeProgram, selectedPrograms, noIndirectMapping
     } = this.props;
     const { selectedDirectProgram } = this.state;
     const formatter = new Intl.NumberFormat('en-US', {
@@ -101,7 +101,7 @@ class MainDashboardContainer extends Component {
       // TODO proper error handling
       return (<div>ERROR</div>);
     } else {
-      const programs = extractPrograms(mapping);
+      const programs = extractPrograms(mapping, noIndirectMapping);
       this.generate2LevelColors();
       const programLegend = nddLoaded && !nddLoadingPending ? this.getProgramLegend() : null;
       return (
@@ -126,7 +126,9 @@ class MainDashboardContainer extends Component {
                               <PieChartTypeSelector
                                 onChange={onChangeProgram}
                                 defaultValue={fundingType}
-                                mapping={mapping} />
+                                mapping={mapping}
+                                noIndirectMapping={noIndirectMapping}
+                                selectedPrograms={selectedPrograms} />
                             ) : null}
                         </div>
                         <NestedDonutsProgramChart
@@ -142,7 +144,8 @@ class MainDashboardContainer extends Component {
                     ? (
                       <FundingTypeSelector
                         onChange={onChangeFundingType}
-                        defaultValue={fundingType} />
+                        defaultValue={fundingType}
+                        noIndirectMapping={noIndirectMapping} />
                     ) : null}
                 </div>
               </div>
@@ -228,7 +231,8 @@ MainDashboardContainer.propTypes = {
   fundingType: PropTypes.object,
   mapping: PropTypes.object,
   onChangeProgram: PropTypes.func.isRequired,
-  selectedPrograms: PropTypes.object.isRequired
+  noIndirectMapping: PropTypes.object,
+  selectedPrograms: PropTypes.array
 };
 
 MainDashboardContainer.defaultProps = {

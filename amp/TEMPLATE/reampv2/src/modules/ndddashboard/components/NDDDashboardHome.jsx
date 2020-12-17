@@ -7,14 +7,17 @@ import { NDDTranslationContext } from './StartUp';
 import MainDashboardContainer from './MainDashboardContainer';
 import HeaderContainer from './HeaderContainer';
 import { callReport } from '../actions/callReports';
-import { FUNDING_TYPE } from '../utils/constants';
+import { FUNDING_TYPE, REPORT_TYPE_HIDDEN_INDIRECT } from '../utils/constants';
 import loadDashboardSettings from '../actions/loadDashboardSettings';
 
 class NDDDashboardHome extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      filters: undefined, filtersWithModels: undefined, dashboardId: undefined, fundingType: undefined,
+      filters: undefined,
+      filtersWithModels: undefined,
+      dashboardId: undefined,
+      fundingType: undefined,
       selectedPrograms: undefined
     };
   }
@@ -27,7 +30,8 @@ class NDDDashboardHome extends Component {
     // This is not a saved dashboard we can load the report without filters.
     if (!id) {
       loadDashboardSettings()
-        .then(settings => callReport(settings.payload.find(i => i.id === FUNDING_TYPE).value.defaultId), null);
+        .then(settings => callReport(settings.payload.find(i => i.id === FUNDING_TYPE).value.defaultId), null,
+          REPORT_TYPE_HIDDEN_INDIRECT);
     } else {
       loadDashboardSettings();
     }
@@ -35,34 +39,36 @@ class NDDDashboardHome extends Component {
 
   onApplyFilters = (data, dataWithModels) => {
     const { callReport } = this.props;
-    const { fundingType } = this.state;
+    const { fundingType, selectedPrograms } = this.state;
     this.setState({ filters: data, filtersWithModels: dataWithModels });
-    callReport(fundingType, data);
+    callReport(fundingType, data, selectedPrograms);
   }
 
   onChangeFundingType = (value) => {
     const { callReport } = this.props;
-    const { filters } = this.state;
+    const { filters, selectedPrograms } = this.state;
     this.setState({ fundingType: value });
-    callReport(value, filters);
+    callReport(value, filters, selectedPrograms);
   }
 
   onChangeProgram = (value) => {
-    // TODO: volver a llamar a callReport con los filtros y parametros para q sepa q EP usar.
-    alert(value);
-    if (value.indexOf('-') > -1) {
-      const ids = value.split('-');
-      // TODO: always call EP.
+    const { callReport } = this.props;
+    const { filters, fundingType } = this.state;
+    const selectedPrograms = value.split('-');
+    this.setState({ selectedPrograms });
+    if (selectedPrograms.length > 1) {
+      callReport(fundingType, filters, selectedPrograms);
     } else {
       // TODO: check if we can use the current ndd data.
-
     }
   }
 
   render() {
-    const { filters, dashboardId, fundingType } = this.state;
     const {
-      error, ndd, nddLoadingPending, nddLoaded, dashboardSettings, mapping, selectedPrograms
+      filters, dashboardId, fundingType, selectedPrograms
+    } = this.state;
+    const {
+      error, ndd, nddLoadingPending, nddLoaded, dashboardSettings, mapping, noIndirectMapping
     } = this.props;
     const { translations } = this.context;
     return (
@@ -81,7 +87,8 @@ class NDDDashboardHome extends Component {
             onChangeProgram={this.onChangeProgram}
             fundingType={fundingType}
             selectedPrograms={selectedPrograms}
-            mapping={mapping} />
+            mapping={mapping}
+            noIndirectMapping={noIndirectMapping} />
         </Row>
       </Container>
     );
@@ -95,7 +102,8 @@ const mapStateToProps = state => ({
   nddLoadingPending: state.reportsReducer.nddLoadingPending,
   dashboardSettings: state.dashboardSettingsReducer.dashboardSettings,
   translations: state.translationsReducer.translations,
-  mapping: state.reportsReducer.mapping
+  mapping: state.reportsReducer.mapping,
+  noIndirectMapping: state.reportsReducer.noIndirectMapping
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

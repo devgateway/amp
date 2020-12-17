@@ -12,8 +12,9 @@ import {
 } from '../utils/constants';
 import CustomLegend from '../../../utils/components/CustomLegend';
 import './legends/legends.css';
-import { getCustomColor, getGradient } from '../utils/Utils';
+import { getCustomColor, getGradient, extractPrograms } from '../utils/Utils';
 import FundingByYearChart from './FundingByYearChart';
+import PieChartTypeSelector from './PieChartTypeSelector';
 
 class MainDashboardContainer extends Component {
   constructor(props) {
@@ -85,7 +86,8 @@ class MainDashboardContainer extends Component {
 
   render() {
     const {
-      error, ndd, nddLoadingPending, nddLoaded, dashboardSettings, onChangeFundingType, fundingType
+      error, ndd, nddLoadingPending, nddLoaded, dashboardSettings, onChangeFundingType, fundingType, mapping,
+      onChangeProgram, selectedPrograms, noIndirectMapping
     } = this.props;
     const { selectedDirectProgram } = this.state;
     const formatter = new Intl.NumberFormat('en-US', {
@@ -99,6 +101,7 @@ class MainDashboardContainer extends Component {
       // TODO proper error handling
       return (<div>ERROR</div>);
     } else {
+      const programs = extractPrograms(mapping, noIndirectMapping);
       this.generate2LevelColors();
       const programLegend = nddLoaded && !nddLoadingPending ? this.getProgramLegend() : null;
       return (
@@ -108,14 +111,31 @@ class MainDashboardContainer extends Component {
               <div className="chart-container">
                 <div className="chart">
                   <div className="section_title">
-                    <span>PNSD and NDD Funding</span>
+                    <span>
+                      {programs.direct
+                        ? (`${programs.direct.value} and ${programs.indirect1.value}`)
+                        : 'Loading...'}
+                    </span>
                   </div>
                   {nddLoaded && !nddLoadingPending
                     ? (
-                      <NestedDonutsProgramChart
-                        data={ndd}
-                        selectedDirectProgram={selectedDirectProgram}
-                        handleOuterChartClick={this.handleOuterChartClick.bind(this)} />
+                      <div>
+                        <div>
+                          {dashboardSettings
+                            ? (
+                              <PieChartTypeSelector
+                                onChange={onChangeProgram}
+                                defaultValue={fundingType}
+                                mapping={mapping}
+                                noIndirectMapping={noIndirectMapping}
+                                selectedPrograms={selectedPrograms} />
+                            ) : null}
+                        </div>
+                        <NestedDonutsProgramChart
+                          data={ndd}
+                          selectedDirectProgram={selectedDirectProgram}
+                          handleOuterChartClick={this.handleOuterChartClick.bind(this)} />
+                      </div>
                     )
                     : <div className="loading" />}
                 </div>
@@ -124,7 +144,8 @@ class MainDashboardContainer extends Component {
                     ? (
                       <FundingTypeSelector
                         onChange={onChangeFundingType}
-                        defaultValue={fundingType} />
+                        defaultValue={fundingType}
+                        noIndirectMapping={noIndirectMapping} />
                     ) : null}
                 </div>
               </div>
@@ -207,7 +228,11 @@ MainDashboardContainer.propTypes = {
   nddLoaded: PropTypes.bool.isRequired,
   dashboardSettings: PropTypes.object,
   onChangeFundingType: PropTypes.func.isRequired,
-  fundingType: PropTypes.object
+  fundingType: PropTypes.object,
+  mapping: PropTypes.object,
+  onChangeProgram: PropTypes.func.isRequired,
+  noIndirectMapping: PropTypes.object,
+  selectedPrograms: PropTypes.array
 };
 
 MainDashboardContainer.defaultProps = {

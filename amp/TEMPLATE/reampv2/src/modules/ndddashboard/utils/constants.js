@@ -1,5 +1,7 @@
 export const TRN_PREFIX = 'amp.ndd.dashboard:';
 export const DIRECT_INDIRECT_REPORT = '/rest/ndd/direct-indirect-report';
+export const INDIRECT_MAPPING_CONFIG = '/rest/ndd/indirect-programs-mapping-config';
+export const MAPPING_CONFIG_NO_INDIRECT = '/rest/ndd/programs-mapping-config';
 export const DIRECT_PROGRAM = 'directProgram';
 export const INDIRECT_PROGRAMS = 'indirectPrograms';
 export const PROGRAMLVL1 = 'programLvl1';
@@ -14,6 +16,8 @@ export const SETTINGS_EP = '/rest/settings-definitions/dashboards';
 export const SHARING_EP = '/rest/ndd/save-charts';
 export const GET_SHARED_EP = '/rest/ndd/saved-charts/';
 export const FUNDING_TYPE = 'funding-type';
+export const REPORT_TYPE_HIDDEN_INDIRECT = 1;
+export const REPORT_TYPE_NO_INDIRECT = 2;
 
 const PROGRAMLVL1_COLOR = ['#1f5177',
   '#a42727',

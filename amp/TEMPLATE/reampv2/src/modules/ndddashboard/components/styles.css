@@ -140,3 +140,7 @@
 .radio-fy-source label {
     cursor: pointer;
 }
+
+.pie-chart-selector {
+    padding: 10px;
+}

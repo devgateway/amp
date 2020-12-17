@@ -34,7 +34,7 @@ public class NDDEndpoints {
     @GET
     @Path("indirect-programs-mapping-config")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "getIndirectProgramsMappingConfiguration")
+    @ApiMethod(id = "getIndirectProgramsMappingConfiguration")
     @ApiOperation("Returns configuration for mapping indirect programs.")
     public IndirectProgramMappingConfiguration getIndirectProgramsMappingConfiguration() {
         return nddService.getIndirectProgramMappingConfiguration();
@@ -43,7 +43,7 @@ public class NDDEndpoints {
     @GET
     @Path("programs-mapping-config")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "getProgramsMappingConfiguration")
+    @ApiMethod(id = "getProgramsMappingConfiguration")
     @ApiOperation("Returns configuration for mapping programs.")
     public ProgramMappingConfiguration getProgramsMappingConfiguration() {
         return nddService.getProgramMappingConfiguration();
@@ -84,7 +84,7 @@ public class NDDEndpoints {
     @GET
     @Path("available-indirect-programs")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "getAvailableIndirectPrograms")
+    @ApiMethod(id = "getAvailableIndirectPrograms")
     @ApiOperation("Returns the list of programs we can use as Primary and Indirect.")
     public List<NDDService.SingleProgramData> getAvailableIndirectPrograms() {
         return nddService.getSinglePrograms(true);
@@ -93,7 +93,7 @@ public class NDDEndpoints {
     @GET
     @Path("available-programs")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "getAvailablePrograms")
+    @ApiMethod(id = "getAvailablePrograms")
     @ApiOperation("Returns the list of programs we can use as source and destination for mapping.")
     public List<NDDService.SingleProgramData> getAvailablePrograms() {
         return nddService.getSinglePrograms(false);

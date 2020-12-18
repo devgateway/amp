@@ -34,6 +34,7 @@ import java.util.regex.Pattern;
 public final class DashboardService {
 
     private static Pattern numberPattern = Pattern.compile("\\d{4}");
+    private static final NDDService nddService = new NDDService();
 
     private DashboardService() {
     }
@@ -49,10 +50,6 @@ public final class DashboardService {
         spec.setDisplayEmptyFundingRowsWhenFilteringByTransactionHierarchy(false);
 
         spec.addColumn(column);
-
-        // TODO: REMOVE THIS.
-        spec.addColumn(new ReportColumn(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_3));
-
         spec.addMeasure(measure);
         spec.setHierarchies(spec.getColumns());
 
@@ -76,8 +73,11 @@ public final class DashboardService {
             return new ReportColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_3);
         } else if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.TERTIARY_PROGRAM)) {
             return new ReportColumn(ColumnConstants.TERTIARY_PROGRAM_LEVEL_3);
-        } else if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES)) {
+        } else if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES) ||
+                singleProgramSetting.getName().equalsIgnoreCase(ProgramUtil.NATIONAL_PLAN_OBJECTIVE)) {
             return new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_3);
+        } else if (singleProgramSetting.getName().equalsIgnoreCase(ProgramUtil.INDIRECT_PRIMARY_PROGRAM)) {
+            return new ReportColumn(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_3);
         }
         return null;
     }
@@ -101,32 +101,39 @@ public final class DashboardService {
     public static List<NDDSolarChartData> generateDirectIndirectReport(SettingsAndFiltersParameters params) {
         List<NDDSolarChartData> list = new ArrayList<>();
 
-        GeneratedReport report = null;
+        GeneratedReport outerReport = null;
+        GeneratedReport innerReport = null;
 
         List<String> ids = (ArrayList<String>) params.getSettings().get("programIds");
         if (ids == null) {
             return list;
         }
+        AmpReportFilters filters = getFiltersFromParams(params.getFilters());
         if (ids.size() == 2) {
             AmpTheme outerProgram = ProgramUtil.getTheme(Long.valueOf(ids.get(0)));
             ReportColumn outerColumn = getColumnFromProgram(outerProgram);
             ReportMeasure outerMeasure = getMeasureFromParams(params.getSettings());
-            AmpReportFilters filters = getFiltersFromParams(params.getFilters());
-            report = createReport(outerColumn, outerMeasure, filters);
+            outerReport = createReport(outerColumn, outerMeasure, filters);
+
+            AmpTheme innerProgram = ProgramUtil.getTheme(Long.valueOf(ids.get(1)));
+            ReportColumn innerColumn = getColumnFromProgram(innerProgram);
+            ReportMeasure innerMeasure = outerMeasure;
+            innerReport = createReport(innerColumn, innerMeasure, filters);
+
+            MappingConfiguration indirectMapping = nddService.getIndirectProgramMappingConfiguration();
+            MappingConfiguration regularMapping = nddService.getProgramMappingConfiguration();
         } else if (ids.size() == 1) {
 
         } else {
             throw new RuntimeException("Error number of ids in settings parameter.");
         }
 
-        // spec.addColumn(new ReportColumn(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_3));
+        ReportOutputColumn directColumn = outerReport.leafHeaders.get(0);
+        ReportOutputColumn indirectColumn = outerReport.leafHeaders.get(1);
+        ReportOutputColumn totalColumn = outerReport.leafHeaders.get(outerReport.leafHeaders.size() - 1);
 
-        ReportOutputColumn directColumn = report.leafHeaders.get(0);
-        ReportOutputColumn indirectColumn = report.leafHeaders.get(1);
-        ReportOutputColumn totalColumn = report.leafHeaders.get(report.leafHeaders.size() - 1);
-
-        if (report.reportContents != null && report.reportContents.getChildren() != null) {
-            report.reportContents.getChildren().stream().forEach(children -> {
+        if (outerReport.reportContents != null && outerReport.reportContents.getChildren() != null) {
+            outerReport.reportContents.getChildren().stream().forEach(children -> {
                 if (children.getChildren() != null && children.getChildren().size() > 0) {
                     Map<ReportOutputColumn, ReportCell> content = children.getContents();
                     NDDSolarChartData nddSolarChartData = new NDDSolarChartData(null, new ArrayList<>());

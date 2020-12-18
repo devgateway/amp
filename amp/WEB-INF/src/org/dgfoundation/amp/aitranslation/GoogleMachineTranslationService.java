@@ -46,6 +46,7 @@ import com.google.cloud.translate.v3.TranslateTextResponse;
 import com.google.cloud.translate.v3.TranslationServiceClient;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.http.HttpStatus;
 import org.dgfoundation.amp.nireports.NiUtils;
 
@@ -191,7 +192,8 @@ public class GoogleMachineTranslationService implements MachineTranslationServic
 
         Map<String, String> translated = new HashMap<>();
         for (int i = 0; i < contents.size(); i++) {
-            translated.put(contents.get(i), response.getTranslations(i).getTranslatedText());
+            translated.put(contents.get(i),
+                    StringEscapeUtils.unescapeHtml4(response.getTranslations(i).getTranslatedText()));
         }
         return translated;
     }

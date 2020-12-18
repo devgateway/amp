@@ -38,8 +38,9 @@ public final class DashboardService {
     private DashboardService() {
     }
 
-    public static List<NDDSolarChartData> generateDirectIndirectReport(SettingsAndFiltersParameters params) {
-        ReportSpecificationImpl spec = new ReportSpecificationImpl("DirectIndirect", ArConstants.DONOR_TYPE);
+    private static GeneratedReport createReport(ReportColumn column, ReportMeasure measure,
+                                                AmpReportFilters filterRules) {
+        ReportSpecificationImpl spec = new ReportSpecificationImpl("" + Math.random(), ArConstants.DONOR_TYPE);
         spec.setSummaryReport(true);
         spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
         spec.setEmptyOutputForUnspecifiedData(true);
@@ -47,40 +48,79 @@ public final class DashboardService {
         spec.setDisplayEmptyFundingRows(false);
         spec.setDisplayEmptyFundingRowsWhenFilteringByTransactionHierarchy(false);
 
-        AmpTheme directProgram = NDDService.getSrcIndirectProgramRoot();
-        Set<AmpActivityProgramSettings> programSettings = directProgram.getProgramSettings();
+        spec.addColumn(column);
+
+        // TODO: REMOVE THIS.
+        spec.addColumn(new ReportColumn(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_3));
+
+        spec.addMeasure(measure);
+        spec.setHierarchies(spec.getColumns());
+
+        if (filterRules != null) {
+            spec.setFilters(filterRules);
+        }
+
+        GeneratedReport report = EndpointUtils.runReport(spec);
+        return report;
+    }
+
+    private static ReportColumn getColumnFromProgram(AmpTheme program) {
+        Set<AmpActivityProgramSettings> programSettings = program.getProgramSettings();
         if (programSettings == null || programSettings.size() != 1) {
             throw new RuntimeException("Cant determine the first column of the report.");
         }
         AmpActivityProgramSettings singleProgramSetting = ((AmpActivityProgramSettings) programSettings.toArray()[0]);
         if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.PRIMARY_PROGRAM)) {
-            spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_3));
+            return new ReportColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_3);
         } else if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.SECONDARY_PROGRAM)) {
-            spec.addColumn(new ReportColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_3));
+            return new ReportColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_3);
         } else if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.TERTIARY_PROGRAM)) {
-            spec.addColumn(new ReportColumn(ColumnConstants.TERTIARY_PROGRAM_LEVEL_3));
+            return new ReportColumn(ColumnConstants.TERTIARY_PROGRAM_LEVEL_3);
         } else if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES)) {
-            spec.addColumn(new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_3));
+            return new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_3);
         }
-        spec.addColumn(new ReportColumn(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_3));
-        spec.setHierarchies(spec.getColumns());
+        return null;
+    }
 
-        if (params.getSettings() != null && params.getSettings().get(SettingsConstants.FUNDING_TYPE_ID) != null) {
-            spec.addMeasure(new ReportMeasure(params.getSettings().get(SettingsConstants.FUNDING_TYPE_ID).toString()));
+    private static ReportMeasure getMeasureFromParams(Map<String, Object> settings) {
+        if (settings != null && settings.get(SettingsConstants.FUNDING_TYPE_ID) != null) {
+            return new ReportMeasure(settings.get(SettingsConstants.FUNDING_TYPE_ID).toString());
         } else {
-            spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
+            return new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS);
         }
+    }
 
-        if (params.getFilters() != null) {
-            AmpReportFilters filterRules = FilterUtils.getFilterRules(params.getFilters(), null);
-            if (filterRules != null) {
-                spec.setFilters(filterRules);
-            }
+    private static AmpReportFilters getFiltersFromParams(Map<String, Object> filters) {
+        AmpReportFilters filterRules = null;
+        if (filters != null) {
+            filterRules = FilterUtils.getFilterRules(filters, null);
         }
+        return filterRules;
+    }
 
-        GeneratedReport report = EndpointUtils.runReport(spec);
-
+    public static List<NDDSolarChartData> generateDirectIndirectReport(SettingsAndFiltersParameters params) {
         List<NDDSolarChartData> list = new ArrayList<>();
+
+        GeneratedReport report = null;
+
+        List<String> ids = (ArrayList<String>) params.getSettings().get("programIds");
+        if (ids == null) {
+            return list;
+        }
+        if (ids.size() == 2) {
+            AmpTheme outerProgram = ProgramUtil.getTheme(Long.valueOf(ids.get(0)));
+            ReportColumn outerColumn = getColumnFromProgram(outerProgram);
+            ReportMeasure outerMeasure = getMeasureFromParams(params.getSettings());
+            AmpReportFilters filters = getFiltersFromParams(params.getFilters());
+            report = createReport(outerColumn, outerMeasure, filters);
+        } else if (ids.size() == 1) {
+
+        } else {
+            throw new RuntimeException("Error number of ids in settings parameter.");
+        }
+
+        // spec.addColumn(new ReportColumn(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_3));
+
         ReportOutputColumn directColumn = report.leafHeaders.get(0);
         ReportOutputColumn indirectColumn = report.leafHeaders.get(1);
         ReportOutputColumn totalColumn = report.leafHeaders.get(report.leafHeaders.size() - 1);

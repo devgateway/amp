@@ -16,8 +16,6 @@ export const SETTINGS_EP = '/rest/settings-definitions/dashboards';
 export const SHARING_EP = '/rest/ndd/save-charts';
 export const GET_SHARED_EP = '/rest/ndd/saved-charts/';
 export const FUNDING_TYPE = 'funding-type';
-export const REPORT_TYPE_HIDDEN_INDIRECT = 1;
-export const REPORT_TYPE_NO_INDIRECT = 2;
 
 const PROGRAMLVL1_COLOR = ['#1f5177',
   '#a42727',

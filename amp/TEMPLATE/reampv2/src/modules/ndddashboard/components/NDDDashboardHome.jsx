@@ -7,8 +7,9 @@ import { NDDTranslationContext } from './StartUp';
 import MainDashboardContainer from './MainDashboardContainer';
 import HeaderContainer from './HeaderContainer';
 import { callReport } from '../actions/callReports';
-import { FUNDING_TYPE, REPORT_TYPE_HIDDEN_INDIRECT } from '../utils/constants';
+import { FUNDING_TYPE } from '../utils/constants';
 import loadDashboardSettings from '../actions/loadDashboardSettings';
+import { getMappings } from '../actions/getMappings';
 
 class NDDDashboardHome extends Component {
   constructor(props) {
@@ -23,15 +24,16 @@ class NDDDashboardHome extends Component {
   }
 
   componentDidMount() {
-    const { loadDashboardSettings, callReport } = this.props;
+    const { loadDashboardSettings, callReport, getMappings } = this.props;
+    const { selectedPrograms } = this.state;
     // eslint-disable-next-line react/destructuring-assignment,react/prop-types
     const { id } = this.props.match.params;
     this.setState({ dashboardId: id });
     // This is not a saved dashboard we can load the report without filters.
     if (!id) {
-      loadDashboardSettings()
-        .then(settings => callReport(settings.payload.find(i => i.id === FUNDING_TYPE).value.defaultId), null,
-          REPORT_TYPE_HIDDEN_INDIRECT);
+      return Promise.all([loadDashboardSettings(), getMappings()])
+        .then(data => callReport(data[0].payload.find(i => i.id === FUNDING_TYPE).value.defaultId),
+          selectedPrograms, null);
     } else {
       loadDashboardSettings();
     }
@@ -102,12 +104,12 @@ const mapStateToProps = state => ({
   nddLoadingPending: state.reportsReducer.nddLoadingPending,
   dashboardSettings: state.dashboardSettingsReducer.dashboardSettings,
   translations: state.translationsReducer.translations,
-  mapping: state.reportsReducer.mapping,
-  noIndirectMapping: state.reportsReducer.noIndirectMapping
+  mapping: state.mappingsReducer.mapping,
+  noIndirectMapping: state.mappingsReducer.noIndirectMapping
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  callReport, loadDashboardSettings
+  callReport, loadDashboardSettings, getMappings
 }, dispatch);
 
 NDDDashboardHome.propTypes = {
@@ -118,6 +120,7 @@ NDDDashboardHome.propTypes = {
   nddLoaded: PropTypes.bool.isRequired,
   dashboardSettings: PropTypes.object,
   loadDashboardSettings: PropTypes.func.isRequired,
+  getMappings: PropTypes.func.isRequired,
   translations: PropTypes.array.isRequired
 };
 

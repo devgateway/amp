@@ -1,5 +1,5 @@
 export const FETCH_MAPPINGS_PENDING = 'FETCH_MAPPINGS_PENDING';
-export const FETCH_MAPPINGS_SUCCESS = 'F FETCH_MAPPINGS_SUCCESS';
+export const FETCH_MAPPINGS_SUCCESS = 'FETCH_MAPPINGS_SUCCESS';
 export const FETCH_MAPPINGS_ERROR = ' FETCH_MAPPINGS_ERROR';
 
 export function fetchDashboardSettingsPending() {

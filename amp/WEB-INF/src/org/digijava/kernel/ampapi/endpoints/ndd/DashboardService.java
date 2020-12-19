@@ -158,19 +158,7 @@ public final class DashboardService {
                 AtomicBoolean add = new AtomicBoolean();
                 add.set(false);
 
-                List mapped = null;
-                if (finalIsIndirect) {
-                    mapped = ((IndirectProgramMappingConfiguration) finalMapping).getProgramMapping().stream()
-                            .filter(i -> {
-                                return i.getOldTheme().getName()
-                                        .equalsIgnoreCase(outerContent.get(outerReportProgramColumn).displayedValue);
-                            }).collect(Collectors.toList());
-                } else {
-                    mapped = ((ProgramMappingConfiguration) finalMapping).getProgramMapping().stream().filter(i -> {
-                        return i.getSrcTheme().getName().equalsIgnoreCase(outerContent.get(outerReportProgramColumn)
-                                .displayedValue);
-                    }).collect(Collectors.toList());
-                }
+                List mapped = getMapped(finalIsIndirect, finalMapping, outerContent, outerReportProgramColumn);
                 if (mapped.size() > 0) {
                     mapped.forEach(m -> {
                         AmpTheme newTheme = finalIsIndirect ?
@@ -206,6 +194,24 @@ public final class DashboardService {
             });
         }
         return list;
+    }
+
+    private static List getMapped(boolean isIndirect, MappingConfiguration mapping, Map<ReportOutputColumn,
+            ReportCell> outerContent, ReportOutputColumn outerReportProgramColumn) {
+        List mapped = null;
+        if (isIndirect) {
+            mapped = ((IndirectProgramMappingConfiguration) mapping).getProgramMapping().stream()
+                    .filter(i -> {
+                        return i.getOldTheme().getName()
+                                .equalsIgnoreCase(outerContent.get(outerReportProgramColumn).displayedValue);
+                    }).collect(Collectors.toList());
+        } else {
+            mapped = ((ProgramMappingConfiguration) mapping).getProgramMapping().stream().filter(i -> {
+                return i.getSrcTheme().getName().equalsIgnoreCase(outerContent.get(outerReportProgramColumn)
+                        .displayedValue);
+            }).collect(Collectors.toList());
+        }
+        return mapped;
     }
 
     private static Map<String, BigDecimal> extractAmountsByYear(Map<ReportOutputColumn, ReportCell> content) {

@@ -20,6 +20,7 @@ import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpIndirectTheme;
 import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.dbentity.AmpThemeMapping;
 import org.digijava.module.aim.util.ProgramUtil;
 
 import java.math.BigDecimal;
@@ -146,11 +147,6 @@ public final class DashboardService {
         ReportOutputColumn outerReportTotalColumn = outerReport.leafHeaders.get(outerReport.leafHeaders.size() - 1);
         ReportOutputColumn innerReportTotalColumn = innerReport.leafHeaders.get(innerReport.leafHeaders.size() - 1);
 
-        /*
-         TODO: for each program entry in outerReport find its mapped programs (process undefined later).
-            -> luego busco los indirect del mapping en innerReport.
-                -> guardo el outer program y los inner programs dentro de la estructura usando los montos de cada reporte.
-        */
         if (outerReport.reportContents != null && outerReport.reportContents.getChildren() != null
                 && innerReport.reportContents != null && innerReport.reportContents.getChildren() != null) {
             MappingConfiguration finalMapping = mapping;
@@ -162,33 +158,45 @@ public final class DashboardService {
                 AtomicBoolean add = new AtomicBoolean();
                 add.set(false);
 
+                List mapped = null;
                 if (finalIsIndirect) {
-                    List<AmpIndirectTheme> mapped = ((IndirectProgramMappingConfiguration) finalMapping).getProgramMapping().stream().filter(i -> {
-                        return i.getOldTheme().getName().equalsIgnoreCase(outerContent.get(outerReportProgramColumn).displayedValue);
+                    mapped = ((IndirectProgramMappingConfiguration) finalMapping).getProgramMapping().stream()
+                            .filter(i -> {
+                                return i.getOldTheme().getName()
+                                        .equalsIgnoreCase(outerContent.get(outerReportProgramColumn).displayedValue);
+                            }).collect(Collectors.toList());
+                } else {
+                    mapped = ((ProgramMappingConfiguration) finalMapping).getProgramMapping().stream().filter(i -> {
+                        return i.getSrcTheme().getName().equalsIgnoreCase(outerContent.get(outerReportProgramColumn)
+                                .displayedValue);
                     }).collect(Collectors.toList());
-                    if (mapped.size() > 0) {
-                        mapped.forEach(m -> {
-                            AmpTheme newTheme = m.getNewTheme();
-                            finalInnerReport.reportContents.getChildren().stream().forEach(children2 -> {
-                                Map<ReportOutputColumn, ReportCell> innerContent = children2.getContents();
-                                ReportCell innerCell = innerContent.get(innerReportProgramColumn);
-                                AmpTheme innerTheme = ProgramUtil.getTheme(((TextCell) innerCell).entityId);
-                                if (innerTheme != null && newTheme.getAmpThemeId().equals(innerTheme.getAmpThemeId())) {
-                                    add.set(true);
-                                    BigDecimal amount = ((AmountCell) innerContent.get(innerReportTotalColumn)).extractValue();
-                                    Map<String, BigDecimal> amountsByYear = extractAmountsByYear(innerContent);
-                                    nddSolarChartData.getIndirectPrograms().add(new NDDSolarChartData.ProgramData(innerTheme,
-                                            amount, amountsByYear));
-                                }
-                            });
+                }
+                if (mapped.size() > 0) {
+                    mapped.forEach(m -> {
+                        AmpTheme newTheme = finalIsIndirect ?
+                                ((AmpIndirectTheme) m).getNewTheme() :
+                                ((AmpThemeMapping) m).getDstTheme();
+                        finalInnerReport.reportContents.getChildren().stream().forEach(children2 -> {
+                            Map<ReportOutputColumn, ReportCell> innerContent = children2.getContents();
+                            ReportCell innerCell = innerContent.get(innerReportProgramColumn);
+                            AmpTheme innerTheme = ProgramUtil.getTheme(((TextCell) innerCell).entityId);
+                            if (innerTheme != null && newTheme.getAmpThemeId().equals(innerTheme.getAmpThemeId())) {
+                                add.set(true);
+                                BigDecimal amount = ((AmountCell) innerContent.get(innerReportTotalColumn))
+                                        .extractValue();
+                                Map<String, BigDecimal> amountsByYear = extractAmountsByYear(innerContent);
+                                nddSolarChartData.getIndirectPrograms()
+                                        .add(new NDDSolarChartData.ProgramData(innerTheme, amount, amountsByYear));
+                            }
                         });
-                    } else {
-                        // TODO: add not mapped outer as undefined only if the outer itself is not an undefined row.
-                    }
+                    });
+                } else {
+                    // TODO: add not mapped outer as undefined only if the outer itself is not an undefined row.
                 }
 
                 if (add.get()) {
-                    AmpTheme direct = ProgramUtil.getTheme(((TextCell) outerContent.get(outerReportProgramColumn)).entityId);
+                    AmpTheme direct = ProgramUtil.getTheme(((TextCell) outerContent.get(outerReportProgramColumn))
+                            .entityId);
                     BigDecimal amount = ((AmountCell) outerContent.get(outerReportTotalColumn)).extractValue();
                     Map<String, BigDecimal> amountsByYear = extractAmountsByYear(outerContent);
                     nddSolarChartData.setDirectProgram(new NDDSolarChartData.ProgramData(direct, amount,

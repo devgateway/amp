@@ -36,8 +36,8 @@ import java.util.stream.Collectors;
 
 public final class DashboardService {
 
-    protected final static Pattern numberPattern = Pattern.compile("\\d{4}");
-    protected final static NDDService nddService = new NDDService();
+    protected static final Pattern numberPattern = Pattern.compile("\\d{4}");
+    protected static final NDDService nddService = new NDDService();
 
     private DashboardService() {
     }

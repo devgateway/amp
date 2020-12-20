@@ -36,8 +36,8 @@ import java.util.stream.Collectors;
 
 public final class DashboardService {
 
-    private static Pattern numberPattern = Pattern.compile("\\d{4}");
-    private static final NDDService nddService = new NDDService();
+    protected final static Pattern numberPattern = Pattern.compile("\\d{4}");
+    protected final static NDDService nddService = new NDDService();
 
     private DashboardService() {
     }
@@ -76,8 +76,8 @@ public final class DashboardService {
             return new ReportColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_3);
         } else if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.TERTIARY_PROGRAM)) {
             return new ReportColumn(ColumnConstants.TERTIARY_PROGRAM_LEVEL_3);
-        } else if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES) ||
-                singleProgramSetting.getName().equalsIgnoreCase(ProgramUtil.NATIONAL_PLAN_OBJECTIVE)) {
+        } else if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES)
+                || singleProgramSetting.getName().equalsIgnoreCase(ProgramUtil.NATIONAL_PLAN_OBJECTIVE)) {
             return new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_3);
         } else if (singleProgramSetting.getName().equalsIgnoreCase(ProgramUtil.INDIRECT_PRIMARY_PROGRAM)) {
             return new ReportColumn(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_3);
@@ -128,8 +128,8 @@ public final class DashboardService {
             // TODO: maybe do a "normalization" here to get the common programMapping.
             MappingConfiguration indirectMapping = nddService.getIndirectProgramMappingConfiguration();
             MappingConfiguration regularMapping = nddService.getProgramMappingConfiguration();
-            if (innerProgram.getAmpThemeId().equals(indirectMapping.getDstProgram().getId()) &&
-                    indirectMapping.getDstProgram().isIndirect()) {
+            if (innerProgram.getAmpThemeId().equals(indirectMapping.getDstProgram().getId())
+                    && indirectMapping.getDstProgram().isIndirect()) {
                 mapping = indirectMapping;
                 isIndirect = true;
             } else {
@@ -137,7 +137,8 @@ public final class DashboardService {
                 isIndirect = false;
             }
         } else if (ids.size() == 1) {
-
+            // TODO: to be implemented.
+            System.out.println("To be implemented");
         } else {
             throw new RuntimeException("Error number of ids in settings parameter.");
         }
@@ -161,9 +162,9 @@ public final class DashboardService {
                 List mapped = getMapped(finalIsIndirect, finalMapping, outerContent, outerReportProgramColumn);
                 if (mapped.size() > 0) {
                     mapped.forEach(m -> {
-                        AmpTheme newTheme = finalIsIndirect ?
-                                ((AmpIndirectTheme) m).getNewTheme() :
-                                ((AmpThemeMapping) m).getDstTheme();
+                        AmpTheme newTheme = finalIsIndirect
+                                ? ((AmpIndirectTheme) m).getNewTheme()
+                                : ((AmpThemeMapping) m).getDstTheme();
                         finalInnerReport.reportContents.getChildren().stream().forEach(children2 -> {
                             Map<ReportOutputColumn, ReportCell> innerContent = children2.getContents();
                             ReportCell innerCell = innerContent.get(innerReportProgramColumn);
@@ -180,6 +181,7 @@ public final class DashboardService {
                     });
                 } else {
                     // TODO: add not mapped outer as undefined only if the outer itself is not an undefined row.
+                    System.out.println("To be implemented");
                 }
 
                 if (add.get()) {

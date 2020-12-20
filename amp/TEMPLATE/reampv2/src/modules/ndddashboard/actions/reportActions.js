@@ -9,12 +9,10 @@ export function fetchIndirectReportPending() {
 }
 
 // rest/ndd/direct-indirect-report
-export function fetchIndirectReportSuccess(payload, mapping, noIndirectMapping) {
+export function fetchIndirectReportSuccess(payload) {
   return {
     type: FETCH_DIRECT_INDIRECT_NDD_SUCCESS,
-    payload,
-    mapping,
-    noIndirectMapping
+    payload
   };
 }
 

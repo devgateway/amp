@@ -20,13 +20,14 @@ class NDDDashboardHome extends Component {
       filtersWithModels: undefined,
       dashboardId: undefined,
       fundingType: undefined,
-      selectedPrograms: undefined
+      selectedPrograms: undefined,
+      settings: undefined
     };
   }
 
   componentDidMount() {
     const { loadDashboardSettings, callReport, getMappings } = this.props;
-    const { selectedPrograms } = this.state;
+    const { selectedPrograms, settings } = this.state;
     // eslint-disable-next-line react/destructuring-assignment,react/prop-types
     const { id } = this.props.match.params;
     this.setState({ dashboardId: id });
@@ -36,33 +37,40 @@ class NDDDashboardHome extends Component {
         .then(data => {
           const ids = [`${data[1].payload[SRC_PROGRAM].id}`, `${data[1].payload[DST_PROGRAM].id}`];
           this.setState({ selectedPrograms: ids });
-          return callReport(data[0].payload.find(i => i.id === FUNDING_TYPE).value.defaultId, null, ids);
+          return callReport(data[0].payload.find(i => i.id === FUNDING_TYPE).value.defaultId, null, ids, settings);
         });
     } else {
       loadDashboardSettings();
     }
   }
 
+  onApplySettings = (data) => {
+    const { callReport } = this.props;
+    const { fundingType, selectedPrograms, filters } = this.state;
+    this.setState({ settings: data });
+    callReport(fundingType, filters, selectedPrograms, data);
+  }
+
   onApplyFilters = (data, dataWithModels) => {
     const { callReport } = this.props;
-    const { fundingType, selectedPrograms } = this.state;
+    const { fundingType, selectedPrograms, settings } = this.state;
     this.setState({ filters: data, filtersWithModels: dataWithModels });
-    callReport(fundingType, data, selectedPrograms);
+    callReport(fundingType, data, selectedPrograms, settings);
   }
 
   onChangeFundingType = (value) => {
     const { callReport } = this.props;
-    const { filters, selectedPrograms } = this.state;
+    const { filters, selectedPrograms, settings } = this.state;
     this.setState({ fundingType: value });
-    callReport(value, filters, selectedPrograms);
+    callReport(value, filters, selectedPrograms, settings);
   }
 
   onChangeProgram = (value) => {
     const { callReport } = this.props;
-    const { filters, fundingType } = this.state;
+    const { filters, fundingType, settings } = this.state;
     const selectedPrograms = value.split('-');
     this.setState({ selectedPrograms });
-    callReport(fundingType, filters, selectedPrograms);
+    callReport(fundingType, filters, selectedPrograms, settings);
   }
 
   render() {
@@ -76,7 +84,11 @@ class NDDDashboardHome extends Component {
     return (
       <Container fluid className="main-container">
         <Row>
-          <HeaderContainer onApplyFilters={this.onApplyFilters} filters={filters} dashboardId={dashboardId} />
+          <HeaderContainer
+            onApplySettings={this.onApplySettings}
+            onApplyFilters={this.onApplyFilters}
+            filters={filters}
+            dashboardId={dashboardId} />
         </Row>
         <Row>
           <MainDashboardContainer

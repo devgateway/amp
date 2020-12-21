@@ -16,6 +16,7 @@ import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
+import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpIndirectTheme;
@@ -43,7 +44,7 @@ public final class DashboardService {
     }
 
     private static GeneratedReport createReport(ReportColumn column, ReportMeasure measure,
-                                                AmpReportFilters filterRules) {
+                                                AmpReportFilters filterRules, Map<String, Object> settings) {
         ReportSpecificationImpl spec = new ReportSpecificationImpl("" + Math.random(), ArConstants.DONOR_TYPE);
         spec.setSummaryReport(true);
         spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
@@ -58,6 +59,10 @@ public final class DashboardService {
 
         if (filterRules != null) {
             spec.setFilters(filterRules);
+        }
+
+        if (settings != null) {
+            SettingsUtils.applyExtendedSettings(spec, settings);
         }
 
         GeneratedReport report = EndpointUtils.runReport(spec);
@@ -186,7 +191,7 @@ public final class DashboardService {
 
     public static List<NDDSolarChartData> generateDirectIndirectReport(SettingsAndFiltersParameters params) {
         List<NDDSolarChartData> list = new ArrayList<>();
-        MappingConfiguration mapping = null;
+        MappingConfiguration mapping;
         boolean isIndirect = false;
 
         GeneratedReport outerReport;
@@ -201,12 +206,12 @@ public final class DashboardService {
             AmpTheme outerProgram = ProgramUtil.getTheme(Long.valueOf(ids.get(0)));
             ReportColumn outerColumn = getColumnFromProgram(outerProgram);
             ReportMeasure outerMeasure = getMeasureFromParams(params.getSettings());
-            outerReport = createReport(outerColumn, outerMeasure, filters);
+            outerReport = createReport(outerColumn, outerMeasure, filters, params.getSettings());
 
             AmpTheme innerProgram = ProgramUtil.getTheme(Long.valueOf(ids.get(1)));
             ReportColumn innerColumn = getColumnFromProgram(innerProgram);
             ReportMeasure innerMeasure = outerMeasure;
-            innerReport = createReport(innerColumn, innerMeasure, filters);
+            innerReport = createReport(innerColumn, innerMeasure, filters, params.getSettings());
 
             // TODO: maybe do a "normalization" here to get the common programMapping.
             MappingConfiguration indirectMapping = nddService.getIndirectProgramMappingConfiguration();
@@ -223,7 +228,7 @@ public final class DashboardService {
             AmpTheme outerProgram = ProgramUtil.getTheme(Long.valueOf(ids.get(0)));
             ReportColumn outerColumn = getColumnFromProgram(outerProgram);
             ReportMeasure outerMeasure = getMeasureFromParams(params.getSettings());
-            outerReport = createReport(outerColumn, outerMeasure, filters);
+            outerReport = createReport(outerColumn, outerMeasure, filters, params.getSettings());
             return processOne(outerReport);
         } else {
             throw new RuntimeException("Error number of ids in settings parameter.");
@@ -232,7 +237,7 @@ public final class DashboardService {
 
     private static List getMapped(boolean isIndirect, MappingConfiguration mapping, Map<ReportOutputColumn,
             ReportCell> outerContent, ReportOutputColumn outerReportProgramColumn) {
-        List mapped = null;
+        List mapped;
         if (isIndirect) {
             mapped = ((IndirectProgramMappingConfiguration) mapping).getProgramMapping().stream()
                     .filter(i -> {

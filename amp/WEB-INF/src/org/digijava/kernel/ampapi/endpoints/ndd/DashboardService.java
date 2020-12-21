@@ -189,8 +189,8 @@ public final class DashboardService {
         MappingConfiguration mapping = null;
         boolean isIndirect = false;
 
-        GeneratedReport outerReport = null;
-        GeneratedReport innerReport = null;
+        GeneratedReport outerReport;
+        GeneratedReport innerReport;
 
         List<String> ids = (ArrayList<String>) params.getSettings().get("programIds");
         if (ids == null) {
@@ -217,7 +217,6 @@ public final class DashboardService {
                 isIndirect = true;
             } else {
                 mapping = regularMapping;
-                isIndirect = false;
             }
             return processTwo(outerReport, innerReport, isIndirect, mapping);
         } else if (ids.size() == 1) {

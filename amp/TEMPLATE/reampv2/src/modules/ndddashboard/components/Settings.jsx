@@ -26,9 +26,23 @@ class Settings extends Component {
 
   componentDidMount() {
     widget.setElement(this.refs.settingsPopup);
+    widget.on('applySettings', this.applySettings);
+    widget.on('close', this.hideSettings);
   }
 
   componentWillUnmount() {
+    window.removeEventListener('applySettings', this.applySettings);
+    window.removeEventListener('close', this.hideSettings);
+  }
+
+  applySettings = (data) => {
+    const { onApplySettings } = this.props;
+    onApplySettings(data);
+    this.hideSettings();
+  }
+
+  hideSettings = () => {
+    this.setState({ show: false });
   }
 
   toggleSettings = () => {

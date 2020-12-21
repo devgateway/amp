@@ -101,48 +101,11 @@ public final class DashboardService {
         return filterRules;
     }
 
-    public static List<NDDSolarChartData> generateDirectIndirectReport(SettingsAndFiltersParameters params) {
+    private static List<NDDSolarChartData> processTwo(final GeneratedReport outerReport,
+                                                      final GeneratedReport innerReport,
+                                                      final boolean isIndirect,
+                                                      final MappingConfiguration mapping) {
         List<NDDSolarChartData> list = new ArrayList<>();
-        MappingConfiguration mapping = null;
-        boolean isIndirect = false;
-
-        GeneratedReport outerReport = null;
-        GeneratedReport innerReport = null;
-
-        List<String> ids = (ArrayList<String>) params.getSettings().get("programIds");
-        if (ids == null) {
-            return list;
-        }
-        AmpReportFilters filters = getFiltersFromParams(params.getFilters());
-        if (ids.size() == 2) {
-            AmpTheme outerProgram = ProgramUtil.getTheme(Long.valueOf(ids.get(0)));
-            ReportColumn outerColumn = getColumnFromProgram(outerProgram);
-            ReportMeasure outerMeasure = getMeasureFromParams(params.getSettings());
-            outerReport = createReport(outerColumn, outerMeasure, filters);
-
-            AmpTheme innerProgram = ProgramUtil.getTheme(Long.valueOf(ids.get(1)));
-            ReportColumn innerColumn = getColumnFromProgram(innerProgram);
-            ReportMeasure innerMeasure = outerMeasure;
-            innerReport = createReport(innerColumn, innerMeasure, filters);
-
-            // TODO: maybe do a "normalization" here to get the common programMapping.
-            MappingConfiguration indirectMapping = nddService.getIndirectProgramMappingConfiguration();
-            MappingConfiguration regularMapping = nddService.getProgramMappingConfiguration();
-            if (innerProgram.getAmpThemeId().equals(indirectMapping.getDstProgram().getId())
-                    && indirectMapping.getDstProgram().isIndirect()) {
-                mapping = indirectMapping;
-                isIndirect = true;
-            } else {
-                mapping = regularMapping;
-                isIndirect = false;
-            }
-        } else if (ids.size() == 1) {
-            // TODO: to be implemented.
-            System.out.println("To be implemented");
-        } else {
-            throw new RuntimeException("Error number of ids in settings parameter.");
-        }
-
         ReportOutputColumn outerReportProgramColumn = outerReport.leafHeaders.get(0);
         ReportOutputColumn innerReportProgramColumn = innerReport.leafHeaders.get(0);
         ReportOutputColumn outerReportTotalColumn = outerReport.leafHeaders.get(outerReport.leafHeaders.size() - 1);
@@ -150,22 +113,19 @@ public final class DashboardService {
 
         if (outerReport.reportContents != null && outerReport.reportContents.getChildren() != null
                 && innerReport.reportContents != null && innerReport.reportContents.getChildren() != null) {
-            MappingConfiguration finalMapping = mapping;
-            boolean finalIsIndirect = isIndirect;
-            GeneratedReport finalInnerReport = innerReport;
             outerReport.reportContents.getChildren().stream().forEach(children -> {
                 Map<ReportOutputColumn, ReportCell> outerContent = children.getContents();
                 NDDSolarChartData nddSolarChartData = new NDDSolarChartData(null, new ArrayList<>());
                 AtomicBoolean add = new AtomicBoolean();
                 add.set(false);
 
-                List mapped = getMapped(finalIsIndirect, finalMapping, outerContent, outerReportProgramColumn);
+                List mapped = getMapped(isIndirect, mapping, outerContent, outerReportProgramColumn);
                 if (mapped.size() > 0) {
                     mapped.forEach(m -> {
-                        AmpTheme newTheme = finalIsIndirect
+                        AmpTheme newTheme = isIndirect
                                 ? ((AmpIndirectTheme) m).getNewTheme()
                                 : ((AmpThemeMapping) m).getDstTheme();
-                        finalInnerReport.reportContents.getChildren().stream().forEach(children2 -> {
+                        innerReport.reportContents.getChildren().stream().forEach(children2 -> {
                             Map<ReportOutputColumn, ReportCell> innerContent = children2.getContents();
                             ReportCell innerCell = innerContent.get(innerReportProgramColumn);
                             AmpTheme innerTheme = ProgramUtil.getTheme(((TextCell) innerCell).entityId);
@@ -196,6 +156,78 @@ public final class DashboardService {
             });
         }
         return list;
+    }
+
+    private static List<NDDSolarChartData> processOne(final GeneratedReport outerReport) {
+        List<NDDSolarChartData> list = new ArrayList<>();
+        ReportOutputColumn outerReportProgramColumn = outerReport.leafHeaders.get(0);
+        ReportOutputColumn outerReportTotalColumn = outerReport.leafHeaders.get(outerReport.leafHeaders.size() - 1);
+
+        if (outerReport.reportContents != null && outerReport.reportContents.getChildren() != null) {
+            outerReport.reportContents.getChildren().stream().forEach(children -> {
+                Map<ReportOutputColumn, ReportCell> outerContent = children.getContents();
+                NDDSolarChartData nddSolarChartData = new NDDSolarChartData(null, new ArrayList<>());
+                AmpTheme direct = ProgramUtil.getTheme(((TextCell) outerContent.get(outerReportProgramColumn))
+                        .entityId);
+                if (direct != null) {
+                    BigDecimal amount = ((AmountCell) outerContent.get(outerReportTotalColumn)).extractValue();
+                    Map<String, BigDecimal> amountsByYear = extractAmountsByYear(outerContent);
+                    nddSolarChartData.setDirectProgram(new NDDSolarChartData.ProgramData(direct, amount,
+                            amountsByYear));
+                    list.add(nddSolarChartData);
+                } else {
+                    // TODO: implement for undefined row.
+                    System.out.println("To be implemented");
+                }
+            });
+        }
+        return list;
+    }
+
+    public static List<NDDSolarChartData> generateDirectIndirectReport(SettingsAndFiltersParameters params) {
+        List<NDDSolarChartData> list = new ArrayList<>();
+        MappingConfiguration mapping = null;
+        boolean isIndirect = false;
+
+        GeneratedReport outerReport;
+        GeneratedReport innerReport;
+
+        List<String> ids = (ArrayList<String>) params.getSettings().get("programIds");
+        if (ids == null) {
+            return list;
+        }
+        AmpReportFilters filters = getFiltersFromParams(params.getFilters());
+        if (ids.size() == 2) {
+            AmpTheme outerProgram = ProgramUtil.getTheme(Long.valueOf(ids.get(0)));
+            ReportColumn outerColumn = getColumnFromProgram(outerProgram);
+            ReportMeasure outerMeasure = getMeasureFromParams(params.getSettings());
+            outerReport = createReport(outerColumn, outerMeasure, filters);
+
+            AmpTheme innerProgram = ProgramUtil.getTheme(Long.valueOf(ids.get(1)));
+            ReportColumn innerColumn = getColumnFromProgram(innerProgram);
+            ReportMeasure innerMeasure = outerMeasure;
+            innerReport = createReport(innerColumn, innerMeasure, filters);
+
+            // TODO: maybe do a "normalization" here to get the common programMapping.
+            MappingConfiguration indirectMapping = nddService.getIndirectProgramMappingConfiguration();
+            MappingConfiguration regularMapping = nddService.getProgramMappingConfiguration();
+            if (innerProgram.getAmpThemeId().equals(indirectMapping.getDstProgram().getId())
+                    && indirectMapping.getDstProgram().isIndirect()) {
+                mapping = indirectMapping;
+                isIndirect = true;
+            } else {
+                mapping = regularMapping;
+            }
+            return processTwo(outerReport, innerReport, isIndirect, mapping);
+        } else if (ids.size() == 1) {
+            AmpTheme outerProgram = ProgramUtil.getTheme(Long.valueOf(ids.get(0)));
+            ReportColumn outerColumn = getColumnFromProgram(outerProgram);
+            ReportMeasure outerMeasure = getMeasureFromParams(params.getSettings());
+            outerReport = createReport(outerColumn, outerMeasure, filters);
+            return processOne(outerReport);
+        } else {
+            throw new RuntimeException("Error number of ids in settings parameter.");
+        }
     }
 
     private static List getMapped(boolean isIndirect, MappingConfiguration mapping, Map<ReportOutputColumn,

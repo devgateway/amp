@@ -17,10 +17,12 @@ class PieChartTypeSelector extends Component {
     const programs = extractPrograms(mapping, noIndirectMapping);
     const options = [`${programs.direct.value} + ${programs.indirect1.value}`,
       `${programs.direct.value} + ${programs.indirect2.value}`,
+      programs.direct.value,
       programs.indirect1.value,
       programs.indirect2.value];
     const ids = [`${programs.direct.id}-${programs.indirect1.id}`,
       `${programs.direct.id}-${programs.indirect2.id}`,
+      programs.direct.id,
       programs.indirect1.id,
       programs.indirect2.id];
     let defaultValue = '';

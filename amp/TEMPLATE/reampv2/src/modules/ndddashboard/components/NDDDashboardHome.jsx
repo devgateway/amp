@@ -62,11 +62,7 @@ class NDDDashboardHome extends Component {
     const { filters, fundingType } = this.state;
     const selectedPrograms = value.split('-');
     this.setState({ selectedPrograms });
-    if (selectedPrograms.length > 1) {
-      callReport(fundingType, filters, selectedPrograms);
-    } else {
-      // TODO: check if we can use the current ndd data.
-    }
+    callReport(fundingType, filters, selectedPrograms);
   }
 
   render() {

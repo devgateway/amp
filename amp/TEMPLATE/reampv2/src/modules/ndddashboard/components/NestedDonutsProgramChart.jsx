@@ -209,7 +209,7 @@ class NestedDonutsProgramChart extends Component {
               name: DIRECT,
               hoverinfo: 'skip',
               textposition: 'inside',
-              hole: 0.7,
+              hole: innerDataForChart.length > 0 ? 0.7 : 0.36,
               type: 'pie',
               sort: false,
               direction: 'clockwise',

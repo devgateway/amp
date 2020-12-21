@@ -6,11 +6,13 @@ import Share from './Share';
 
 export default class HeaderContainer extends Component {
   render() {
-    const { onApplyFilters, filters, dashboardId } = this.props;
+    const {
+      onApplyFilters, filters, dashboardId, onApplySettings
+    } = this.props;
     return (
       <div>
         <Filters onApplyFilters={onApplyFilters} dashboardId={dashboardId} />
-        <Settings />
+        <Settings onApplySettings={onApplySettings} />
         <Share filters={filters} />
       </div>
     );
@@ -20,5 +22,6 @@ export default class HeaderContainer extends Component {
 HeaderContainer.propTypes = {
   onApplyFilters: PropTypes.func.isRequired,
   filters: PropTypes.object,
-  dashboardId: PropTypes.number
+  dashboardId: PropTypes.number,
+  onApplySettings: PropTypes.func.isRequired
 };

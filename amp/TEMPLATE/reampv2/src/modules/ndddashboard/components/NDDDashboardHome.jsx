@@ -43,6 +43,10 @@ class NDDDashboardHome extends Component {
     }
   }
 
+  onApplySettings = (data) => {
+    alert(data);
+  }
+
   onApplyFilters = (data, dataWithModels) => {
     const { callReport } = this.props;
     const { fundingType, selectedPrograms } = this.state;
@@ -76,7 +80,11 @@ class NDDDashboardHome extends Component {
     return (
       <Container fluid className="main-container">
         <Row>
-          <HeaderContainer onApplyFilters={this.onApplyFilters} filters={filters} dashboardId={dashboardId} />
+          <HeaderContainer
+            onApplySettings={this.onApplySettings}
+            onApplyFilters={this.onApplyFilters}
+            filters={filters}
+            dashboardId={dashboardId} />
         </Row>
         <Row>
           <MainDashboardContainer

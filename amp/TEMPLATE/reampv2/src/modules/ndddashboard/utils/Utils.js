@@ -1,7 +1,9 @@
 /* eslint-disable  no-bitwise */
 import Gradient from 'javascript-color-gradient';
 import { CHART_COLOR_MAP, AVAILABLE_COLORS } from './constants';
-import { ALL_PROGRAMS, DST_PROGRAM, PROGRAM_MAPPING, SRC_PROGRAM } from '../../admin/ndd/constants/Constants';
+import {
+  ALL_PROGRAMS, DST_PROGRAM, PROGRAM_MAPPING, SRC_PROGRAM
+} from '../../admin/ndd/constants/Constants';
 
 export function hashCode(str) { // java String#hashCode
   let hash = 0;
@@ -54,7 +56,7 @@ export function getGradient(colorFrom, colorTwo) {
 
 export function extractPrograms(mapping, noIndirectMapping) {
   const ret = { direct: undefined, indirect1: undefined, indirect2: undefined };
-  if (mapping && mapping[PROGRAM_MAPPING] && noIndirectMapping) {
+  if (mapping && mapping[PROGRAM_MAPPING] && mapping[PROGRAM_MAPPING].length > 0) {
     ret.direct = mapping[ALL_PROGRAMS].find(i => i.children
       .find(j => j.children && j.children
         .find(k => k.children && k.children
@@ -63,7 +65,9 @@ export function extractPrograms(mapping, noIndirectMapping) {
       .find(j => j.children && j.children
         .find(k => k.children && k.children
           .find(l => l.id === mapping[PROGRAM_MAPPING][0][DST_PROGRAM]))));
-    ret.indirect2 = mapping[ALL_PROGRAMS].find(i => i.children
+  }
+  if (noIndirectMapping && noIndirectMapping[PROGRAM_MAPPING] && noIndirectMapping[PROGRAM_MAPPING].length > 0) {
+    ret.indirect2 = noIndirectMapping[ALL_PROGRAMS].find(i => i.children
       .find(j => j.children && j.children
         .find(k => k.children && k.children
           .find(l => l.id === noIndirectMapping[PROGRAM_MAPPING][0][DST_PROGRAM]))));

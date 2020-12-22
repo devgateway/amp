@@ -15,16 +15,28 @@ class PieChartTypeSelector extends Component {
       onChange, mapping, noIndirectMapping, selectedPrograms
     } = this.props;
     const programs = extractPrograms(mapping, noIndirectMapping);
-    const options = [`${programs.direct.value} + ${programs.indirect1.value}`,
-      `${programs.direct.value} + ${programs.indirect2.value}`,
-      programs.direct.value,
-      programs.indirect1.value,
-      programs.indirect2.value];
-    const ids = [`${programs.direct.id}-${programs.indirect1.id}`,
-      `${programs.direct.id}-${programs.indirect2.id}`,
-      programs.direct.id,
-      programs.indirect1.id,
-      programs.indirect2.id];
+    const options = [];
+    const ids = [];
+    if (programs.direct) {
+      if (programs.indirect1) {
+        options.push(`${programs.direct.value} + ${programs.indirect1.value}`);
+        ids.push(`${programs.direct.id}-${programs.indirect1.id}`);
+      }
+      if (programs.indirect2) {
+        options.push(`${programs.direct.value} + ${programs.indirect2.value}`);
+        ids.push(`${programs.direct.id}-${programs.indirect2.id}`);
+      }
+      options.push(programs.direct.value);
+      ids.push(programs.direct.id);
+      if (programs.indirect1) {
+        options.push(programs.indirect1.value);
+        ids.push(programs.indirect1.id);
+      }
+      if (programs.indirect2) {
+        options.push(programs.indirect2.value);
+        ids.push(programs.indirect2.id);
+      }
+    }
     let defaultValue = '';
     if (selectedPrograms && selectedPrograms.length === 2) {
       defaultValue = `${selectedPrograms[0]}-${selectedPrograms[1]}`;

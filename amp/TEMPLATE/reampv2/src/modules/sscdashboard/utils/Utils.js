@@ -76,14 +76,6 @@ export function getCountryFlag(name) {
     FALLBACK_FLAG];
 }
 
-export function getRootUrl() {
-  if (process.env.NODE_ENV === DEVELOPMENT) {
-    return '/#';
-  } else {
-    return `${process.env.PUBLIC_URL}/index.html#`;
-  }
-}
-
 export function calculateUpdatedValuesForDropDowns(ipSelectedFilter, selectedOptions) {
   let updatedSelectedOptions;
   if (selectedOptions.includes(ipSelectedFilter)) {

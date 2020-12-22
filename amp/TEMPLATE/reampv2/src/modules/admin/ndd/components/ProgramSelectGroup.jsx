@@ -3,16 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import { NDDContext } from './Startup';
-import {
-  CHILDREN,
-  PROGRAM,
-  FIRST_LEVEL,
-  SECOND_LEVEL,
-  THIRD_LEVEL,
-  STATE_LEVEL_FIELD,
-  ALL_PROGRAMS
-} from '../constants/Constants';
-import * as Constants from '../constants/Constants';
+import { CHILDREN, FIRST_LEVEL, PROGRAM, SECOND_LEVEL, STATE_LEVEL_FIELD, THIRD_LEVEL } from '../constants/Constants';
 import '../../../../../node_modules/react-bootstrap-typeahead/css/Typeahead.min.css';
 import './css/style.css';
 import ProgramSelect from './ProgramSelect';
@@ -127,28 +118,29 @@ class ProgramSelectGroup extends Component {
 
   getSelectedForLevel(level) {
     const selected = [];
+    const { state } = this;
     switch (level) {
       case FIRST_LEVEL:
-        if (this.state[STATE_LEVEL_FIELD + FIRST_LEVEL]) {
+        if (state[STATE_LEVEL_FIELD + FIRST_LEVEL]) {
           selected.push({
-            id: this.state[STATE_LEVEL_FIELD + FIRST_LEVEL].id,
-            value: this.state[STATE_LEVEL_FIELD + FIRST_LEVEL].value
+            id: state[STATE_LEVEL_FIELD + FIRST_LEVEL].id,
+            value: state[STATE_LEVEL_FIELD + FIRST_LEVEL].value
           });
         }
         break;
       case SECOND_LEVEL:
-        if (this.state[STATE_LEVEL_FIELD + SECOND_LEVEL]) {
+        if (state[STATE_LEVEL_FIELD + SECOND_LEVEL]) {
           selected.push({
-            id: this.state[STATE_LEVEL_FIELD + SECOND_LEVEL].id,
-            value: this.state[STATE_LEVEL_FIELD + SECOND_LEVEL].value
+            id: state[STATE_LEVEL_FIELD + SECOND_LEVEL].id,
+            value: state[STATE_LEVEL_FIELD + SECOND_LEVEL].value
           });
         }
         break;
       case THIRD_LEVEL:
-        if (this.state[STATE_LEVEL_FIELD + THIRD_LEVEL]) {
+        if (state[STATE_LEVEL_FIELD + THIRD_LEVEL]) {
           selected.push({
-            id: this.state[STATE_LEVEL_FIELD + THIRD_LEVEL].id,
-            value: this.state[STATE_LEVEL_FIELD + THIRD_LEVEL].value
+            id: state[STATE_LEVEL_FIELD + THIRD_LEVEL].id,
+            value: state[STATE_LEVEL_FIELD + THIRD_LEVEL].value
           });
         } else {
           // Auto-select when there is only 1 option available.
@@ -167,28 +159,28 @@ class ProgramSelectGroup extends Component {
   }
 
   render() {
-    const { translations } = this.context;
+    const { translations, trnPrefix } = this.context;
     const { type } = this.props;
     return (
       <div>
         <div style={{ width: '100%' }}>
           <ProgramSelect
-            placeholder={translations[`${Constants.TRN_PREFIX}choose-${type}-lvl-${FIRST_LEVEL}`]}
-            label={translations[`${Constants.TRN_PREFIX + type}-program-lvl-${FIRST_LEVEL}`]}
+            placeholder={translations[`${trnPrefix}choose-${type}-lvl-${FIRST_LEVEL}`]}
+            label={translations[`${trnPrefix + type}-program-lvl-${FIRST_LEVEL}`]}
             options={this.getOptionsForLevel(FIRST_LEVEL)}
             selected={this.getSelectedForLevel(FIRST_LEVEL)}
             onChange={this.onSelectChange}
             level={FIRST_LEVEL} />
           <ProgramSelect
-            placeholder={translations[`${Constants.TRN_PREFIX}choose-${type}-lvl-${SECOND_LEVEL}`]}
-            label={translations[`${Constants.TRN_PREFIX + type}-program-lvl-${SECOND_LEVEL}`]}
+            placeholder={translations[`${trnPrefix}choose-${type}-lvl-${SECOND_LEVEL}`]}
+            label={translations[`${trnPrefix + type}-program-lvl-${SECOND_LEVEL}`]}
             options={this.getOptionsForLevel(SECOND_LEVEL)}
             selected={this.getSelectedForLevel(SECOND_LEVEL)}
             onChange={this.onSelectChange}
             level={SECOND_LEVEL} />
           <ProgramSelect
-            placeholder={translations[`${Constants.TRN_PREFIX}choose-${type}-lvl-${THIRD_LEVEL}`]}
-            label={translations[`${Constants.TRN_PREFIX + type}-program-lvl-${THIRD_LEVEL}`]}
+            placeholder={translations[`${trnPrefix}choose-${type}-lvl-${THIRD_LEVEL}`]}
+            label={translations[`${trnPrefix + type}-program-lvl-${THIRD_LEVEL}`]}
             options={this.getOptionsForLevel(THIRD_LEVEL)}
             selected={this.getSelectedForLevel(THIRD_LEVEL)}
             onChange={this.onSelectChange}

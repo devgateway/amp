@@ -4,14 +4,14 @@ import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import { NDDContext } from './Startup';
 import './css/style.css';
-import * as Constants from '../constants/Constants';
-import ProgramSelectGroupRow from './ProgramSelectGroupRow.jsx';
+import ProgramSelectGroupRow from './ProgramSelectGroupRow';
 
 class ProgramSelectGroupList extends Component {
   render() {
     const {
       list, translations, onChange, remove, dst, src
     } = this.props;
+    const { trnPrefix } = this.context;
     return (
       <div>
         <table className="table table-striped">
@@ -20,18 +20,18 @@ class ProgramSelectGroupList extends Component {
               <td>
                 <span data-field="srcProgramSelectGroup">
                   <span className="error-color">*&nbsp;</span>
-                  {translations[`${Constants.TRN_PREFIX}src-programs-title`]}
+                  {translations[`${trnPrefix}src-programs-title`]}
 &nbsp;
                 </span>
               </td>
               <td>
                 <span data-field="dstProgramSelectGroup">
                   <span className="error-color">*&nbsp;</span>
-                  {translations[`${Constants.TRN_PREFIX}dst-programs-title`]}
+                  {translations[`${trnPrefix}dst-programs-title`]}
 &nbsp;
                 </span>
               </td>
-              <td className="actions-column">{translations[`${Constants.TRN_PREFIX}action`]}</td>
+              <td className="actions-column">{translations[`${trnPrefix}action`]}</td>
             </tr>
           </thead>
           <tbody>

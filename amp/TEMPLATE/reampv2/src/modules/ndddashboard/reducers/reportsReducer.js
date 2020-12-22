@@ -29,7 +29,7 @@ export default (state = initialState, action) => {
         ...state,
         nddLoadingPending: false,
         nddLoaded: true,
-        ndd: action.payload,
+        ndd: action.payload
       };
     }
     case FETCH_TOP_SUCCESS: {

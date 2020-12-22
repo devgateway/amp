@@ -2,7 +2,6 @@ export const ZERO = 0;
 export const ONE = 1;
 export const NEGATIVE_ONE = -1;
 export const FLAGS_DIRECTORY = '/assets/img/flags/';
-export const DEVELOPMENT = 'development';
 
 export const DASHBOARD_DEFAULT_MIN_YEAR_RANGE = 'dashboard-default-min-year-range';
 export const DASHBOARD_DEFAULT_MAX_YEAR_RANGE = 'dashboard-default-max-year-range';

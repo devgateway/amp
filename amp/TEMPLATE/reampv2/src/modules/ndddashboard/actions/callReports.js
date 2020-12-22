@@ -6,18 +6,20 @@ import {
   fetchTopReportSuccess, fetchTopReportError
 } from './reportActions';
 import { fetchApiData } from '../../../utils/loadTranslations';
-import { DIRECT_INDIRECT_REPORT, FUNDING_TYPE,TOP_DONOR_REPORT } from '../utils/constants';
+import {
+  DIRECT_INDIRECT_REPORT, FUNDING_TYPE, TOP_DONOR_REPORT
+} from '../utils/constants';
 
-export const calNddlReport = (fundingType, filters) => dispatch => {
+export const callReport = (fundingType, filters, programIds, settings) => dispatch => {
   dispatch(fetchIndirectReportPending());
-  return fetchApiData({
+  const newSettings = { [FUNDING_TYPE]: fundingType, programIds, ...settings };
+  return Promise.all([fetchApiData({
     url: DIRECT_INDIRECT_REPORT,
     body: {
-      settings: { [FUNDING_TYPE]: fundingType },
+      settings: newSettings,
       filters: (filters ? filters.filters : null)
     }
-  })
-    .then(payload => dispatch(fetchIndirectReportSuccess(payload)))
+  })]).then((data) => dispatch(fetchIndirectReportSuccess(data[0])))
     .catch(error => dispatch(fetchIndirectReportError(error)));
 };
 export const callTopReport = (filters, fundingType) => dispatch => {

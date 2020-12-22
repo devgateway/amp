@@ -36,7 +36,7 @@
 }
 
 .loading {
-    background-image: url("/assets/loading.gif");
+    background-image: url("/TEMPLATE/reampv2/public/assets/loading.gif");
     background-size: contain;
     background-repeat: no-repeat;
     height: 100px;

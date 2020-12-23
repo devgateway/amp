@@ -83,11 +83,13 @@ public class ProgramFilterListManager implements FilterListManager {
     }
 
     protected List<String> getProgramFilterIds(AmpActivityProgramSettings setting) {
-        
-        List<String> filterIds = AmpActivityProgramSettings.NAME_TO_COLUMN_AND_LEVEL.get(setting.getName())
-            .values().stream()
-            .map(col -> FilterUtils.INSTANCE.idFromColumnName(col))
-            .collect(Collectors.toList());
+
+        List<String> filterIds = new ArrayList<>();
+        for (String col : AmpActivityProgramSettings.NAME_TO_COLUMN_AND_LEVEL.get(setting.getName())
+                .values()) {
+            String s = FilterUtils.INSTANCE.idFromColumnName(col);
+            filterIds.add(s);
+        }
 
         return filterIds;
     }

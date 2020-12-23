@@ -144,3 +144,10 @@
 .pie-chart-selector {
     padding: 10px;
 }
+
+.pie-lengend-wrapper {
+    position: absolute;
+    background-color: #0b58a2;
+    z-index: 9999;
+    width: auto;
+}

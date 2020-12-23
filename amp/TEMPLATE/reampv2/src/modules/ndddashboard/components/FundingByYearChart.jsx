@@ -64,13 +64,12 @@ class FundingByYearChart extends Component {
         i.values = this.sortAmountsByYear(this.fillGapsInYears(i.values));
       });
     }
-    console.info(ret);
     return ret;
   }
 
   // eslint-disable-next-line class-methods-use-this
   sortAmountsByYear(values) {
-    return values.sort((i, j) => (Object.keys(i)[0] > Object.keys(j)[0]));
+    return values.sort((i, j) => (Object.keys(i)[0] - Object.keys(j)[0]));
   }
 
   // eslint-disable-next-line class-methods-use-this

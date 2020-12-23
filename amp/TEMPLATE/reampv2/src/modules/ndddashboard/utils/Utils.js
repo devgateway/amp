@@ -1,5 +1,7 @@
 /* eslint-disable  no-bitwise */
 import Gradient from 'javascript-color-gradient';
+import { format } from 'd3-format';
+
 import { CHART_COLOR_MAP, AVAILABLE_COLORS } from './constants';
 import {
   ALL_PROGRAMS, DST_PROGRAM, PROGRAM_MAPPING, SRC_PROGRAM
@@ -73,4 +75,17 @@ export function extractPrograms(mapping, noIndirectMapping) {
           .find(l => l.id === noIndirectMapping[PROGRAM_MAPPING][0][DST_PROGRAM]))));
   }
   return ret;
+}
+
+export function formatKMB(translations, precision, decimalSeparator) {
+  const formatSI = format(`.${precision || 3}s`);
+  decimalSeparator = decimalSeparator || '.';
+  return (value) => formatSI(value)
+    .replace('k', translations['amp.dashboard:chart-thousand'])
+    .replace('M', translations['amp.dashboard:chart-million'])
+    .replace('G', translations['amp.dashboard:chart-billion']) // now just need to convert G Gigia -> B Billion
+    .replace('T', translations['amp.dashboard:chart-trillion'])
+    .replace('P', translations['amp.dashboard:chart-peta'])
+    .replace('E', translations['amp.dashboard:chart-exa'])
+    .replace('.', decimalSeparator);
 }

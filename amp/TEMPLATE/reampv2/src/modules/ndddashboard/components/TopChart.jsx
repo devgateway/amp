@@ -1,100 +1,104 @@
 import React, { Component } from 'react';
-import Plotly from 'plotly.js';
-import createPlotlyComponent from 'react-plotly.js/factory';
+import { ResponsiveBar } from '@nivo/bar';
 import PropTypes from 'prop-types';
-import { AMOUNT, CODE, DIRECT_PROGRAM } from '../utils/constants';
+import { NDDTranslationContext } from './StartUp';
+import ToolTip from './tooltips/ToolTip';
+import { formatKMB } from '../utils/Utils';
 
-const Plot = createPlotlyComponent(Plotly);
+
+const styles = {
+  fontFamily: 'sans-serif',
+  textAlign: 'center',
+};
 
 class TopChart extends Component {
-  onHover(data, data2) {
-    console.log(data);
-    console.log(data2);
+
+  getColor(item) {
+    console.log(JSON.stringify(item));
+    return colors[item.index];
+  }
+
+  getLabel(item) {
+    const { translations } = this.context;
+    const formatter = formatKMB(translations);
+    return formatter(item.data.value);
+  }
+
+  getOthers(o) {
+    return {
+      id: -9999,
+      name: 'others',
+      value: o,
+    };
   }
 
   render() {
     const { data } = this.props;
-    //  Modebar Buttons names at https://github.com/plotly/plotly.js/blob/master/src/components/modebar/buttons.js
-    /* modeBarButtonsToRemove: ['sendDataToCloud', 'autoScale2d', 'hoverClosestCartesian', 'hoverCompareCartesian',
-        'lasso2d', 'zoom2d', 'pan2d', 'select2d', 'zoomIn2d', 'zoomOut2d',
-        'resetScale2d', 'toImage', 'toggleSpikelines'], */
-    /* modeBarButtonsToAdd: [
-      {
-        name: 'color toggler',
-        icon: icon1,
-        click: function(gd) {
-          var newColor = colors[Math.floor(3 * Math.random())]
-          Plotly.restyle(gd, 'line.color', newColor)
-        }} */
-    const defaultPlotlyConfiguration = {
 
-      displayModeBar: false,
-      displaylogo: false,
-      showTips: true,
-      staticPlot: false
-    };
-    const others = data.total - data.values.reduce((acc, cur) => (acc + cur.amount), 0);
-    const xValue = data.values.map(v => v.name);
-    xValue.push('others');
-    const yValue = data.values.map(v => v.amount);
-    yValue.push(others);
-    const trace1 = {
-      x: xValue,
-      y: yValue,
-      type: 'bar',
-      texttemplate: '%{y:.3s}',
-      textposition: 'outside',
-      hoverinfo: 'none',
-      marker: {
-        color: ['rgba(90, 153, 199, 1)',
-          'rgba(195, 214, 238, 1)',
-          'rgba(255, 160, 87, 1)',
-          'rgba(255, 204, 154, 1)',
-          'rgba(99, 184, 99, 1)',
-          'rgba(151, 219, 152, 1)',
-          'rgba(153, 153, 153, 1)',
-          'rgba(217, 91, 95, 1)',
-          'rgba(253, 170, 170, 1)',
-          'rgba(166, 133, 196, 1)',
-          'rgba(206, 189, 218, 1)',
+    const transformedData =
+      data.values.slice(0, 5).map(v => {
+        return {
+          id: v.id.toString(),
+          label: v.formattedAmount,
+          name: v.name,
+          value: v.amount,
+        };
+      });
 
-        ]
-      }
-    };
-    const theLayout = {
-      barmode: 'stack',
-      margin: {
-        l: 10, r: 10, t: 30, b: 20
-      },
-      width: 650,
-      height: 300,
-      xaxis: {
-        showgrid: false,
-        zeroline: false,
-        visible: false,
-        fixedrange: true
-      },
-      yaxis: {
-        showgrid: false,
-        zeroline: false,
-        visible: false,
-        fixedrange: true
-      }
-    };
+    const others = data.total - data.values.reduce((acc, cur) => {
+      return (acc + cur.amount);
+    }, 0);
+    if (others > 0) {
+      transformedData.push(this.getOthers(others))
+    }
     return (
-      <Plot
-        data={[trace1]}
-        layout={theLayout}
-        config={defaultPlotlyConfiguration}
-        onHover={event => {
-          console.log(event);
-        }}
-      />
+      <div style={styles}>
+        <h1>legends</h1>
+        <div style={{ height: '300px' }}>
+          <ResponsiveBar
+            data={transformedData}
+            colors={this.getColor.bind(this)}
+            label={this.getLabel.bind(this)}
+            enableGridY={false}
+            labelFormat={d => {
+              console.log(d);
+              return (<tspan y={0}>{`${d}%}`}</tspan>);
+            }
+            }
+            tooltip={(e) => {
+              return (
+                <ToolTip
+                  color={e.color}
+                  titleLabel={e.data.name}
+                  formattedValue={e.data.formattedAmount}
+                  value={e.data.value}
+                  total={data.total}
+                  id={e.data.id}
+                />
+              );
+            }}
+          />
+        </div>
+      </div>
     );
   }
 }
 
+const colors = ['rgba(90, 153, 199, 1)',
+  'rgba(195, 214, 238, 1)',
+  'rgba(255, 160, 87, 1)',
+  'rgba(255, 204, 154, 1)',
+  'rgba(99, 184, 99, 1)',
+  'rgba(153, 153, 153, 1)',
+  'rgba(217, 91, 95, 1)',
+  'rgba(253, 170, 170, 1)',
+  'rgba(166, 133, 196, 1)',
+  'rgba(206, 189, 218, 1)',
+
+];
+TopChart.contextType = NDDTranslationContext;
+
 TopChart.propTypes = {
-  data: PropTypes.object.isRequired
+  data: PropTypes.object.isRequired,
 };
 export default TopChart;

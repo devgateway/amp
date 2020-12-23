@@ -60,11 +60,12 @@ public class AmpRegionalFundingFormSectionFeature extends
                 Set<AmpCategoryValueLocations> s = new HashSet<AmpCategoryValueLocations>();
                 if (locationModel.getObject() == null)
                     locationModel.setObject(new HashSet());
-                for (AmpActivityLocation location : locationModel.getObject())
-                    if (CategoryConstants.IMPLEMENTATION_LOCATION_REGION.equalsCategoryValue(location
-                            .getLocation()
-                            .getParentCategoryValue()))
+                for (AmpActivityLocation location : locationModel.getObject()) {
+                    if (CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1.equalsCategoryValue(
+                            location.getLocation().getParentCategoryValue())) {
                         s.add(location.getLocation());
+                    }
+                }
                 return new ArrayList<AmpCategoryValueLocations>(s);
             }
         };

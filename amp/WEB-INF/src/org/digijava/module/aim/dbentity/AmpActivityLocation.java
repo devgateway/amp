@@ -12,7 +12,9 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableBackRefere
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
+import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
 import org.digijava.module.aim.util.Output;
+import org.digijava.module.aim.util.TreeNodeAware;
 
 /**
  * Connection between Activity and Location.
@@ -20,7 +22,9 @@ import org.digijava.module.aim.util.Output;
  * @author Irakli Kobiashvili
  *
  */
-public class AmpActivityLocation implements Versionable, Serializable, Cloneable {
+public class AmpActivityLocation implements Versionable, Serializable, Cloneable,
+        TreeNodeAware<AmpCategoryValueLocations> {
+
     //IATI-check: should be exported.
     @InterchangeableId
     @Interchangeable(fieldTitle = "Id")
@@ -131,4 +135,8 @@ public class AmpActivityLocation implements Versionable, Serializable, Cloneable
         return super.clone();
     }
 
+    @Override
+    public AmpAutoCompleteDisplayable<AmpCategoryValueLocations> getTreeNode() {
+        return location;
+    }
 }

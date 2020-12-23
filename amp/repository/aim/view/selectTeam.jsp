@@ -45,16 +45,7 @@
 												<c:set target="${urlParams}" property="id">
 													<c:out value="${members.ampTeamMemId}"/>
 												</c:set>
-												<c:if test="${aimLoginForm.generateToken}" >
-													<c:set target="${urlParams}" property="generateToken">
-														<c:out value="${aimLoginForm.generateToken}"/>
-													</c:set>
-													<c:set target="${urlParams}" property="callbackUrl">	
-														<c:out value="${aimLoginForm.callbackUrl}"/>
-													</c:set>
-
-															</c:if>																
-												<digi:link href="/selectTeam.do" name="urlParams" friendlyUrl="false">
+												<digi:link href="/selectTeam.do" name="urlParams">
 													<c:out value="${members.ampTeam.name}"/>
 												</digi:link>
 											</div>

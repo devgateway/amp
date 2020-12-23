@@ -2,24 +2,33 @@ package org.digijava.kernel.ampapi.endpoints.filters;
 
 import java.util.List;
 
+
 import com.fasterxml.jackson.annotation.JsonInclude;
+import io.swagger.annotations.ApiModelProperty;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FilterListDefinition {
-
+    
+    @ApiModelProperty(value = "The id of the filter definition if there are more than one", example = "1")
     private Long id;
     
+    @ApiModelProperty(value = "The name of the filter", example = "Primary Program")
     private String name;
     
+    @ApiModelProperty(value = "The translated name of the filter", example = "Primary Program")
     private String displayName;
     
+    @ApiModelProperty(value = "What filterId should be associated to the each tree item on each level")
     private List<String> filterIds;
     
+    @ApiModelProperty(value = "If the tree should be built dynamically. ")
     private boolean filtered;
     
+    @ApiModelProperty(value = "The name of the object from which the values should be fetched")
     private String items;
     
+    @ApiModelProperty(value = "Under which tab should be shown the filter tree")
     private String tab = EPConstants.TAB_UNASSIGNED;
     
     public Long getId() {

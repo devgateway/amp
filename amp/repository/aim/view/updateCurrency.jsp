@@ -148,7 +148,7 @@ function unload() {
                     <tr bgcolor="#f4f4f2">
                       <td align="right" valign="middle" width="50%">
                         <FONT color=red>*</FONT>
-                        <digi:trn key="aim:country">Country</digi:trn>&nbsp;
+                        <digi:trn key="aim:country">Administrative Level 0</digi:trn>&nbsp;
                       </td>
                       <td align="left" valign="middle">
                         <html:select property="countryId" styleId="lstCountry" styleClass="inp-text" style="width:250px;">

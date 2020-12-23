@@ -8,6 +8,7 @@ import static org.digijava.kernel.util.SiteUtils.DEFAULT_SITE_ID;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -40,6 +41,7 @@ import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.validation.ConstraintDescriptor;
 import org.digijava.kernel.validation.ConstraintDescriptors;
+import org.digijava.kernel.validators.activity.TreeCollectionValidator;
 import org.digijava.kernel.validators.common.TotalPercentageValidator;
 import org.digijava.kernel.validators.common.RegexValidator;
 import org.digijava.kernel.validators.activity.UniqueValidator;
@@ -103,6 +105,7 @@ public class FieldsEnumerator {
         apiField.setId(field.isAnnotationPresent(InterchangeableId.class));
 
         APIType apiType = getApiType(field, context, interchangeable);
+
         apiField.setApiType(apiType);
 
         boolean isList = apiType.getFieldType().isList();
@@ -140,10 +143,7 @@ public class FieldsEnumerator {
             }
             if (isList) {
                 String uniqueConstraint = getUniqueConstraint(apiField, field, context);
-                if (hasTreeCollectionValidatorEnabled(context)) {
-                    apiField.setTreeCollectionConstraint(true);
-                    apiField.setUniqueConstraint(uniqueConstraint);
-                } else if (hasUniqueValidatorEnabled(context)) {
+                if (hasUniqueValidatorEnabled(context)) {
                     apiField.setUniqueConstraint(uniqueConstraint);
                 }
             }
@@ -159,6 +159,16 @@ public class FieldsEnumerator {
         }
 
         addProgramConstraints(fieldConstraintDescriptors, apiType, context);
+
+        fieldConstraintDescriptors.addAll(findFieldConstraints(interchangeable.interValidators(), context));
+
+        apiField.setTreeCollectionConstraint(hasTreeValidator(fieldConstraintDescriptors));
+
+        // see AMP-27095 AMP-29028
+        if (apiField.getTreeCollectionConstraint() && apiField.getUniqueConstraint() == null) {
+            String uniqueConstraint = getUniqueConstraint(apiField, field, context);
+            apiField.setUniqueConstraint(uniqueConstraint);
+        }
 
         if (apiField.getUniqueConstraint() != null) {
             Map<String, String> args = ImmutableMap.of("field", apiField.getUniqueConstraint());
@@ -205,7 +215,6 @@ public class FieldsEnumerator {
                 findBeanConstraints(apiField.getApiType().getType(), context);
         apiField.setBeanConstraints(new ConstraintDescriptors(beanConstraintDescriptors));
 
-        fieldConstraintDescriptors.addAll(findFieldConstraints(interchangeable.interValidators(), context));
         apiField.setFieldConstraints(new ConstraintDescriptors(fieldConstraintDescriptors));
 
         apiField.setRegexPattern(findRegexPattern(fieldConstraintDescriptors));
@@ -257,6 +266,11 @@ public class FieldsEnumerator {
     private boolean hasTotalPercentageConstraint(List<ConstraintDescriptor> descriptors) {
         return descriptors.stream()
                 .anyMatch(d -> d.getConstraintValidatorClass().equals(TotalPercentageValidator.class));
+    }
+
+    private boolean hasTreeValidator(List<ConstraintDescriptor> descriptors) {
+        return descriptors.stream()
+                .anyMatch(d -> d.getConstraintValidatorClass().equals(TreeCollectionValidator.class));
     }
 
     /**
@@ -404,7 +418,7 @@ public class FieldsEnumerator {
                 context.getIntchStack().push(interchangeable);
                 if (isFieldVisible(context)) {
                     APIField descr = describeField(field, context);
-                    descr.setFieldAccessor(new SimpleFieldAccessor(field.getName()));
+                    descr.setFieldAccessor(new SimpleFieldAccessor(field));
                     result.add(descr);
                 }
                 context.getIntchStack().pop();
@@ -412,14 +426,20 @@ public class FieldsEnumerator {
             InterchangeableDiscriminator discriminator = field.getAnnotation(InterchangeableDiscriminator.class);
             if (discriminator != null) {
                 Interchangeable[] settings = discriminator.settings();
+                Set<String> discriminatorOptions = new HashSet<>();
                 for (int i = 0; i < settings.length; i++) {
                     context.getDiscriminationInfoStack().push(getDiscriminationInfo(field, settings[i]));
                     context.getIntchStack().push(settings[i]);
                     if (isFieldVisible(context)) {
+                        String discriminatorOption = settings[i].discriminatorOption();
+                        if (!discriminatorOptions.add(discriminatorOption)) {
+                            throw new RuntimeException("Discriminator option " + discriminatorOption
+                                    + " must be unique.");
+                        }
                         APIField descr = describeField(field, context);
                         descr.setDiscriminatorField(discriminator.discriminatorField());
                         descr.setDiscriminationConfigurer(discriminator.configurer());
-                        descr.setFieldAccessor(new DiscriminatedFieldAccessor(new SimpleFieldAccessor(field.getName()),
+                        descr.setFieldAccessor(new DiscriminatedFieldAccessor(new SimpleFieldAccessor(field),
                                 discriminator.discriminatorField(), settings[i].discriminatorOption(),
                                 settings[i].multipleValues()));
                         result.add(descr);
@@ -572,16 +592,6 @@ public class FieldsEnumerator {
     }
 
     /**
-     * Determine if the field contains tree collection validator
-     *
-     * @param context current context
-     * @return boolean if the field contains tree collection validator
-     */
-    private boolean hasTreeCollectionValidatorEnabled(FEContext context) {
-        return hasValidatorEnabled(context, ActivityEPConstants.TREE_COLLECTION_VALIDATOR_NAME);
-    }
-
-    /**
      * If current field is for programs and at most one program is allowed then add this constraint to the list.
      *
      * FIXME This hack can be removed once AMP-29247 is solved.
@@ -620,8 +630,6 @@ public class FieldsEnumerator {
 
         if (ActivityEPConstants.UNIQUE_VALIDATOR_NAME.equals(validatorName)) {
             validatorFmPath = validators.unique();
-        } else if (ActivityEPConstants.TREE_COLLECTION_VALIDATOR_NAME.equals(validatorName)) {
-            validatorFmPath = validators.treeCollection();
         }
 
         if (StringUtils.isNotBlank(validatorFmPath)) {

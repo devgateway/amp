@@ -96,7 +96,7 @@ var loginFailed = function(data, status) {
                 <c:set var="title">
 						<digi:trn>Click here to change your password</digi:trn>
 					</c:set>
-				<a href="/aim/showChangePassword.do" id="changePassword" title="${title}">&raquo;&nbsp;<digi:trn>Change Password</digi:trn></a>
+				<a href="/aim/showChangePassword.do" id="changePasswTord" title="${title}">&raquo;&nbsp;<digi:trn>Change Password</digi:trn></a>
 				<digi:link href="/showEmailForm.do" module="aim" styleId="trouble" title="${trn1}">&raquo;&nbsp;<digi:trn key="aim:forgotPassword">Trouble signing in?</digi:trn></digi:link>
 				</div>
 				<feature:display name="Enable New User Registration"
@@ -109,8 +109,6 @@ var loginFailed = function(data, status) {
 				</feature:display>
 				</form>
           <form action="/aim/index.do" id="selectWorkspaceForm" method="post">
-	          	<input type="hidden" id="generateToken" name="generateToken"/>
-	          	<input type="hidden" id="callbackUrl" name="callbackUrl"/>
 		</form>
         <div>
 

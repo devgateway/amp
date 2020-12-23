@@ -12,8 +12,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
-import org.digijava.kernel.ampapi.endpoints.util.AmpApiToken;
-import org.digijava.kernel.ampapi.endpoints.util.SecurityUtil;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.security.DgSecurityManager;
 import org.digijava.kernel.security.ResourcePermission;
@@ -43,9 +41,6 @@ public class SelectTeam extends Action {
             throws java.lang.Exception {
 
         HttpSession session = request.getSession();
-        SimpleUrlLogoutSuccessHandler  l;
-        
-        AmpApiToken sessionToken = SecurityUtil.getTokenFromSession();
         
         //Removing attributes from previous session (East Timor. Aug.2011)
         ReportContextData.clearSession();
@@ -103,7 +98,6 @@ public class SelectTeam extends Action {
             session.removeAttribute(Constants.MY_REPORTS_PER_PAGE);
             session.removeAttribute(Constants.LAST_VIEWED_REPORTS);
             session.removeAttribute(Constants.UNASSIGNED_ACTIVITY_LIST);
-            //TODO remove token if the user changed the workspace?
 
             //See if current workspace has a FM Template attached to it
             AmpTeam currentTeam = member.getAmpTeam();
@@ -117,23 +111,10 @@ public class SelectTeam extends Action {
             AmpTreeVisibility ampTreeVisibility = new AmpTreeVisibility();
             ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
             FeaturesUtil.setAmpTreeVisibility(request.getServletContext(), session,ampTreeVisibility);
-            
-            if (sessionToken != null && sessionToken.getTeamMember() != tm) {
-                SecurityUtil.generateToken();
-            }
-
         } catch (Exception e) {
-            e.printStackTrace(System.out);
+            throw new RuntimeException(e);
         }
 
-        //once we have selected the team we have to check if we need to generate the token
-        if("true".equals(request.getParameter("generateToken"))){
-            AmpApiToken token = SecurityUtil.generateToken();
-            response.sendRedirect(request.getParameter("callbackUrl") + "?amp_api_token="+token.getToken());
-            return null;
-        }
-        
-        
         return mapping.findForward("forward");
     }
 }

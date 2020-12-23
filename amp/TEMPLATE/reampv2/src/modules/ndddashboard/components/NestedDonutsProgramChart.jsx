@@ -26,6 +26,7 @@ class NestedDonutsProgramChart extends Component {
     this.extractInnerData = this.extractInnerData.bind(this);
     this.handleOuterChartClick = handleOuterChartClick;
     this.calculateOpacity = this.calculateOpacity.bind(this);
+    this.state = { showLegend: false, legendTop: 0, legendLeft: 0 };
   }
 
   /**
@@ -140,7 +141,6 @@ class NestedDonutsProgramChart extends Component {
         });
       });
     }
-    console.log(ret);
     return ret;
   }
 
@@ -163,8 +163,24 @@ class NestedDonutsProgramChart extends Component {
     return newColors;
   }
 
+  onHover = (data) => {
+    console.log(data);
+    this.setState({ showLegend: true, legendTop: data.event.pageY - 200, legendLeft: data.event.pageX - 360 });
+  }
+
+  onUnHover = () => {
+    this.setState({ showLegend: false });
+  }
+
+  onClick = (event, outerData) => {
+    const { handleOuterChartClick } = this.props;
+    this.setState({ showLegend: false });
+    handleOuterChartClick(event, outerData);
+  }
+
   render() {
     const { selectedDirectProgram, translations } = this.props;
+    const { showLegend, legendTop, legendLeft } = this.state;
     const outerData = this.extractOuterData(false);
     const outerDataLvl2 = selectedDirectProgram ? this.extractOuterData(true) : this.extractOuterData(false);
     const innerData = this.extractInnerData(outerData);
@@ -214,7 +230,7 @@ class NestedDonutsProgramChart extends Component {
               textposition: 'inside',
               direction: 'clockwise',
               name: INDIRECT,
-              hoverinfo: 'label+text',
+              hoverinfo: 'skip',
               hole: 0.5,
               type: 'pie',
               sort: false,
@@ -234,7 +250,7 @@ class NestedDonutsProgramChart extends Component {
               labels: outerDataLvl2.map(i => i[CODE]),
               text: outerDataLvl2.map(i => i[AMOUNT]),
               name: DIRECT,
-              hoverinfo: 'label+text',
+              hoverinfo: 'skip',
               textposition: 'inside',
               hole: innerDataForChart.length > 0 ? 0.7 : 0.36,
               type: 'pie',
@@ -271,8 +287,19 @@ class NestedDonutsProgramChart extends Component {
             annotations
           }}
           config={{ displaylogo: false }}
-          onClick={event => this.handleOuterChartClick(event, outerData)}
+          onClick={event => this.onClick(event, outerData)}
+          onHover={event => this.onHover(event)}
+          onUnhover={() => this.onUnHover()}
         />
+        <div
+          style={{
+            display: (!showLegend ? 'none' : 'block'),
+            top: legendTop,
+            left: legendLeft
+          }}
+          className="pie-lengend-wrapper" >
+          aca estaria el contenido del tooltip.
+        </div>
       </CSSTransitionGroup>
     );
   }

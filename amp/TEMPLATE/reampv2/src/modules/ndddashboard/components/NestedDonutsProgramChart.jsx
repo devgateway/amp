@@ -55,11 +55,33 @@ class NestedDonutsProgramChart extends Component {
             neverFade: this.isSubProgram(i, selectedDirectProgram)
           };
           item.percentageInTotal = (item[AMOUNT] / totalAmount) * 100;
+          item.normalizedPercentage = item.percentageInTotal;
           ret.push(item);
         }
       });
     }
-    return ret;
+    const normalized = this.normalizePieData(ret);
+    return normalized;
+  }
+
+  /**
+   * If at least one section of the pie data is too small to be drawn then we make it bigger at the expense
+   * of the biggest section.
+   */
+  // eslint-disable-next-line class-methods-use-this
+  normalizePieData(data) {
+    const MINIMUM_PERCENTAGE = 1;
+    if (data.find(i => i.percentageInTotal < MINIMUM_PERCENTAGE)) {
+      const biggest = data.sort((i, j) => j.percentageInTotal - i.percentageInTotal)[0];
+      let minusPercentage = 0;
+      data.filter(i => i.percentageInTotal < MINIMUM_PERCENTAGE).forEach(cat => {
+        const localMinusPercentage = MINIMUM_PERCENTAGE - cat.percentageInTotal;
+        minusPercentage += localMinusPercentage;
+        cat.normalizedPercentage = MINIMUM_PERCENTAGE;
+      });
+      biggest.normalizedPercentage = biggest.percentageInTotal - minusPercentage;
+    }
+    return data;
   }
 
   isSubProgram(i, selectedDirectProgram) {
@@ -106,15 +128,19 @@ class NestedDonutsProgramChart extends Component {
     if (data) {
       data.forEach(i => {
         i.forEach(j => {
-          const parentPercentage = outerData.find(k => k[CODE] === j.directProgramCode).percentageInTotal;
+          // Notice we use now normalizedPercentage instead of percentageInTotal to 1) match the outer rings and
+          // 2) show categories that are too small.
+          const parentPercentage = outerData.find(k => k[CODE] === j.directProgramCode).normalizedPercentage;
           ret.push({
             [CODE]: j[CODE],
             name: j.name,
-            [AMOUNT]: (j.percentageInSubGroup / 100) * parentPercentage
+            [AMOUNT]: (j.percentageInSubGroup / 100) * parentPercentage,
+            originalAmount: j.originalAmount
           });
         });
       });
     }
+    console.log(ret);
     return ret;
   }
 
@@ -180,7 +206,7 @@ class NestedDonutsProgramChart extends Component {
             [{
               values: innerDataForChart.map(i => i[AMOUNT]),
               labels: innerDataForChart.map(i => i[CODE]),
-              text: INDIRECT,
+              text: innerDataForChart.map(i => i.originalAmount),
               domain: {
                 x: [0.15, 0.85],
                 y: [0.15, 0.85]
@@ -188,7 +214,7 @@ class NestedDonutsProgramChart extends Component {
               textposition: 'inside',
               direction: 'clockwise',
               name: INDIRECT,
-              hoverinfo: 'label',
+              hoverinfo: 'label+text',
               hole: 0.5,
               type: 'pie',
               sort: false,
@@ -204,10 +230,11 @@ class NestedDonutsProgramChart extends Component {
                 color: 'white'
               }
             }, {
-              values: outerDataLvl2.map(i => i[AMOUNT]),
+              values: outerDataLvl2.map(i => i.normalizedPercentage),
               labels: outerDataLvl2.map(i => i[CODE]),
+              text: outerDataLvl2.map(i => i[AMOUNT]),
               name: DIRECT,
-              hoverinfo: 'skip',
+              hoverinfo: 'label+text',
               textposition: 'inside',
               hole: innerDataForChart.length > 0 ? 0.7 : 0.36,
               type: 'pie',

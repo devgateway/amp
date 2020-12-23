@@ -15,7 +15,7 @@ import org.digijava.module.aim.dbentity.AmpActivityGroup;
  */
 public final class ActivityValidatorUtil {
 
-    private static class DummyActivityTitleDAO implements UniqueActivityTitleValidator.ActivityTitleDAO {
+    public static class DummyActivityTitleDAO implements UniqueActivityTitleValidator.ActivityTitleDAO {
 
         private boolean unique;
 

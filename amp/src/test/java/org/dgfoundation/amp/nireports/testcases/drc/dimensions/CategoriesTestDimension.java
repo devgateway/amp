@@ -65,7 +65,7 @@ public class CategoriesTestDimension extends HardcodedNiDimension {
             element(73, "Multilateral" ), 
             element(130, "Autre" ) ), 
         element(10, "Implementation Location", 
-            element(76, "Country" ), 
+            element(76, "Country" ),
             element(77, "Region" ), 
             element(78, "Zone" ), 
             element(79, "District" ), 

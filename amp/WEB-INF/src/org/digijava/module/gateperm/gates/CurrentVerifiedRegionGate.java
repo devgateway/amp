@@ -38,7 +38,8 @@ public class CurrentVerifiedRegionGate extends Gate {
         AmpCategoryValueLocations currentLocation = (AmpCategoryValueLocations) scope.get(GatePermConst.ScopeKeys.CURRENT_REGION);
         AmpCategoryValueLocations parentRegion = null;
         if (currentLocation != null)
-            parentRegion = DynLocationManagerUtil.getAncestorByLayer(currentLocation, CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
+            parentRegion = DynLocationManagerUtil.getAncestorByLayer(
+                    currentLocation, CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1);
         return currentLocation != null && user.getRegion() != null &&
                 (currentLocation.getId().equals(user.getRegion().getId()) || 
                 (parentRegion != null && user.getRegion().getId().equals(parentRegion.getId())));

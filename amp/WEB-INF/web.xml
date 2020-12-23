@@ -203,6 +203,15 @@
 		<url-pattern>/rest/*</url-pattern>
 	</filter-mapping>
 
+	<filter>
+		<filter-name>asyncDetector</filter-name>
+		<filter-class>org.digijava.kernel.ampapi.filters.AsyncFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>asyncDetector</filter-name>
+		<url-pattern>/rest/activity/async/*</url-pattern>
+	</filter-mapping>
+
 	<!-- Jersey Servlet  -->
 	<servlet>
 		<servlet-name>AMP API End Points</servlet-name>

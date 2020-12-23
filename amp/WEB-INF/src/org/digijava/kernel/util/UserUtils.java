@@ -38,13 +38,8 @@ import java.util.stream.Stream;
 import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletRequest;
 
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.hibernate.ObjectNotFoundException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.error.AMPUncheckedException;
 import org.digijava.kernel.entity.UserLangPreferences;
 import org.digijava.kernel.entity.UserPreferences;
 import org.digijava.kernel.entity.UserPreferencesPK;
@@ -58,7 +53,10 @@ import org.digijava.kernel.security.principal.GroupPrincipal;
 import org.digijava.kernel.security.principal.UserPrincipal;
 import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
-
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.hibernate.ObjectNotFoundException;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
 /**
@@ -453,6 +451,7 @@ public class UserUtils {
         }
 
         return userList;
+        
     }
 
     /**
@@ -500,73 +499,18 @@ public class UserUtils {
     }
 
     /**
-     * Searches user object by email and returns it. If such user does not
-     * exists, returns null
-     * <p>The sole purpose of this function is to handle checked DgException by converting it to
-     * unchecked exception.</p>
-     * @param email String User email
-     * @return User object
-     * @throws AMPUncheckedException if error occurs
-     */
-    public static User getUserByEmailRt(String email) {
-        try {
-            return UserUtils.getUserByEmail(email);
-        } catch (DgException e) {
-            throw new AMPUncheckedException(e);
-        }
-    }
-
-    /**
-     * Searches user object by email and returns it. If such user does not
-     * exists, returns null
-     * @deprecated use {@link #getUserByEmailAddress()} method
-     * @param email String User email
-     * @return User object
-     * @throws DgException if error occurs
-     */
-    public static User getUserByEmail(String email) throws DgException {
-        User user = null;
-        Session sess = null;
-        try {
-            sess = PersistenceManager.getRequestDBSession();
-            
-            Query query = sess.createQuery("from " + User.class.getName() + " rs where rs.email = :email ");
-            query.setString("email", email);
-            query.setCacheable(true);
-
-            Iterator iter = query.iterate();
-            while (iter.hasNext()) {
-                user = (User) iter.next();
-                ProxyHelper.initializeObject(user);
-                break;
-            }
-
-        }
-        catch (Exception ex0) {
-            logger.debug("Unable to get user from database", ex0);
-            throw new DgException(
-                    "Unable to get user information from database", ex0);
-        }
-
-        return user;
-    }
-    
-    /**
-     * Get user by email. 
-     * Use this method instead of {@link #getUserByEmail()}
-     * 
+     * Get user by email address.
+     *
      * @param email
      * @return user
      */
     public static User getUserByEmailAddress(String email) {
-        String queryString = "SELECT u FROM " + User.class.getName() + " u where u.email = :email";
-        
-        User u = (User) PersistenceManager.getSession()
-                .createQuery(queryString)
-                .setString("email", email)
+        String trimmedLowercasedEmail = StringUtils.trimToEmpty(StringUtils.lowerCase(email));
+        return (User) PersistenceManager.getSession()
+                .createCriteria(User.class)
+                .setCacheable(true)
+                .add(Restrictions.eq("email", trimmedLowercasedEmail).ignoreCase())
                 .uniqueResult();
-        
-        return u;
     }
 
     /**

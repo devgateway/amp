@@ -169,6 +169,7 @@
 }
 .funding-sources-title .amount{
     text-align: right;
+    font-size: 18px!important;
 }
 .funding-sources-title >div{
     text-transform: uppercase;

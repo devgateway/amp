@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { NDDTranslationContext } from './StartUp';
 import ToolTip from './tooltips/ToolTip';
 import { formatKMB } from '../utils/Utils';
-
+import SimpleLegend from '../../../utils/components/SimpleLegend';
 
 const styles = {
   fontFamily: 'sans-serif',
@@ -12,9 +12,7 @@ const styles = {
 };
 
 class TopChart extends Component {
-
   getColor(item) {
-    console.log(JSON.stringify(item));
     return colors[item.index];
   }
 
@@ -34,26 +32,23 @@ class TopChart extends Component {
 
   render() {
     const { data } = this.props;
+    const transformedData = data.values.slice(0, 5).map(v => ({
+      id: v.id.toString(),
+      formattedAmount: v.formattedAmount,
+      name: v.name,
+      value: v.amount,
+    }));
 
-    const transformedData =
-      data.values.slice(0, 5).map(v => {
-        return {
-          id: v.id.toString(),
-          label: v.formattedAmount,
-          name: v.name,
-          value: v.amount,
-        };
-      });
-
-    const others = data.total - data.values.reduce((acc, cur) => {
-      return (acc + cur.amount);
-    }, 0);
+    const others = data.total - data.values.reduce((acc, cur) => (acc + cur.amount), 0);
     if (others > 0) {
-      transformedData.push(this.getOthers(others))
+      transformedData.push(this.getOthers(others));
     }
     return (
       <div style={styles}>
-        <h1>legends</h1>
+        <SimpleLegend
+          data={data.values}
+          getColor={this.getColor.bind(this)}
+        />
         <div style={{ height: '300px' }}>
           <ResponsiveBar
             data={transformedData}
@@ -61,22 +56,19 @@ class TopChart extends Component {
             label={this.getLabel.bind(this)}
             enableGridY={false}
             labelFormat={d => {
-              console.log(d);
               return (<tspan y={0}>{`${d}%}`}</tspan>);
-            }
-            }
-            tooltip={(e) => {
-              return (
-                <ToolTip
-                  color={e.color}
-                  titleLabel={e.data.name}
-                  formattedValue={e.data.formattedAmount}
-                  value={e.data.value}
-                  total={data.total}
-                  id={e.data.id}
-                />
-              );
             }}
+            tooltip={(e) => (
+              <ToolTip
+                color={e.color}
+                titleLabel={e.data.name}
+                formattedValue={e.data.formattedAmount}
+                value={e.data.value}
+                total={data.total}
+                id={e.data.id}
+                currencyCode={data.currency}
+              />
+            )}
           />
         </div>
       </div>
@@ -100,5 +92,6 @@ TopChart.contextType = NDDTranslationContext;
 
 TopChart.propTypes = {
   data: PropTypes.object.isRequired,
+  formatter: PropTypes.object.isRequired,
 };
 export default TopChart;

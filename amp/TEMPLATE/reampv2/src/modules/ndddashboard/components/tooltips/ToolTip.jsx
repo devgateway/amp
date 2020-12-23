@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import PropTypes, { number } from 'prop-types';
 import './ToolTip.css';
 import { NDDTranslationContext } from '../StartUp';
+
 class ToolTip extends Component {
   render() {
-    const { titleLabel, color, value, formattedValue, id, total } = this.props;
+    const {
+      titleLabel, color, value, formattedValue, currencyCode, total
+    } = this.props;
     const { translations } = this.context;
     const percentage = (value * 100) / total;
     const headerStyle = { backgroundColor: color };
@@ -14,11 +17,12 @@ class ToolTip extends Component {
           {titleLabel}
         </div>
         <div className="inner">
-          <div className="row" key={id}>
-            <div className="col-md-12">
-              {formattedValue}
+          <div className="" >
+            <div className="element">
+              <span className="formattedValue">{formattedValue}</span>
+              <span className="currency">{currencyCode}</span>
             </div>
-            <div className="col-md-12">
+            <div className="element grey">
               {`${percentage.toFixed(2)} % ${translations['amp.ndd.dashboard:of-total']}`}
             </div>
           </div>
@@ -32,7 +36,9 @@ ToolTip.propTypes = {
   titleLabel: PropTypes.string.isRequired,
   color: PropTypes.string.isRequired,
   value: PropTypes.number.isRequired,
-  formattedValue: PropTypes.string.isRequired
+  formattedValue: PropTypes.string.isRequired,
+  currencyCode: PropTypes.string.isRequired,
+  total: PropTypes.number.isRequired
 };
 ToolTip.contextType = NDDTranslationContext;
 

@@ -205,7 +205,8 @@ class MainDashboardContainer extends Component {
                         {`${top.sumarizedTotal} ${top.currency}`}
                       </div>
                     </div>
-                    {topLoaded && !topLoadingPending ? (<TopChart data={top} />) : (<div className="loading" />)}
+                    {topLoaded && !topLoadingPending ? (<TopChart data={top}  />) : (
+                      <div className="loading" />)}
 
                   </div>
                 )}

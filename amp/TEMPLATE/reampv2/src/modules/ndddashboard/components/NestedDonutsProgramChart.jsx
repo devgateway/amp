@@ -14,6 +14,7 @@ import {
 import {
   addAlpha, getCustomColor, getGradient
 } from '../utils/Utils';
+import ToolTip from './tooltips/ToolTip';
 import styles from './styles.css';
 
 const Plot = createPlotlyComponent(Plotly);
@@ -26,7 +27,9 @@ class NestedDonutsProgramChart extends Component {
     this.extractInnerData = this.extractInnerData.bind(this);
     this.handleOuterChartClick = handleOuterChartClick;
     this.calculateOpacity = this.calculateOpacity.bind(this);
-    this.state = { showLegend: false, legendTop: 0, legendLeft: 0 };
+    this.state = {
+      showLegend: false, legendTop: 0, legendLeft: 0, tooltipData: null
+    };
   }
 
   /**
@@ -164,18 +167,38 @@ class NestedDonutsProgramChart extends Component {
   }
 
   onHover = (data) => {
-    console.log(data);
-    this.setState({ showLegend: true, legendTop: data.event.pageY - 200, legendLeft: data.event.pageX - 360 });
+    this.setState({
+      showLegend: true, legendTop: data.event.pageY - 200, legendLeft: data.event.pageX - 360, tooltipData: data
+    });
   }
 
   onUnHover = () => {
-    this.setState({ showLegend: false });
+    this.setState({ showLegend: false, tooltipData: null });
   }
 
   onClick = (event, outerData) => {
     const { handleOuterChartClick } = this.props;
     this.setState({ showLegend: false });
     handleOuterChartClick(event, outerData);
+  }
+
+  createTooltip = () => {
+    const { tooltipData } = this.state;
+    if (tooltipData) {
+      console.log(tooltipData);
+      const program = tooltipData.points[0].data.extraData[tooltipData.points[0].i];
+      const totalAmount = tooltipData.points[0].data.extraData.reduce((i, j) => (i.amount + j.amount));
+      return (
+        <ToolTip
+          color={tooltipData.points[0].color}
+          currencyCode="USD"
+          formattedValue={`${program.amount}`}
+          titleLabel={`${program.code} - ${program.name}`}
+          total={totalAmount}
+          value={program.amount} />
+      );
+    }
+    return null;
   }
 
   render() {
@@ -223,6 +246,7 @@ class NestedDonutsProgramChart extends Component {
               values: innerDataForChart.map(i => i[AMOUNT]),
               labels: innerDataForChart.map(i => i[CODE]),
               text: innerDataForChart.map(i => i.originalAmount),
+              extraData: innerDataForChart,
               domain: {
                 x: [0.15, 0.85],
                 y: [0.15, 0.85]
@@ -249,6 +273,7 @@ class NestedDonutsProgramChart extends Component {
               values: outerDataLvl2.map(i => i.normalizedPercentage),
               labels: outerDataLvl2.map(i => i[CODE]),
               text: outerDataLvl2.map(i => i[AMOUNT]),
+              extraData: outerDataLvl2,
               name: DIRECT,
               hoverinfo: 'skip',
               textposition: 'inside',
@@ -298,7 +323,7 @@ class NestedDonutsProgramChart extends Component {
             left: legendLeft
           }}
           className="pie-lengend-wrapper" >
-          aca estaria el contenido del tooltip.
+          {this.createTooltip()}
         </div>
       </CSSTransitionGroup>
     );

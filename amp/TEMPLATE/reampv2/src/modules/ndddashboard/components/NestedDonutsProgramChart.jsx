@@ -12,7 +12,7 @@ import {
   TRANSITIONS, PROGRAMLVL2, AVAILABLE_COLORS, TRN_PREFIX, CURRENCY_CODE
 } from '../utils/constants';
 import {
-  addAlpha, getCustomColor, getGradient
+  addAlpha, formatKMB, getCustomColor, getGradient
 } from '../utils/Utils';
 import ToolTip from './tooltips/ToolTip';
 import styles from './styles.css';
@@ -184,16 +184,16 @@ class NestedDonutsProgramChart extends Component {
 
   createTooltip = () => {
     const { tooltipData } = this.state;
-    const { settings } = this.props;
+    const { settings, translations } = this.props;
     if (tooltipData) {
-      console.log(tooltipData);
+      const formatter = formatKMB(translations); // TODO: get precision and separator from GS.
       const program = tooltipData.points[0].data.extraData[tooltipData.points[0].i];
       const totalAmount = tooltipData.points[0].data.extraData.reduce((i, j) => (i.amount + j.amount));
       return (
         <ToolTip
           color={tooltipData.points[0].color}
           currencyCode={settings[CURRENCY_CODE]}
-          formattedValue={`${program.amount}`}
+          formattedValue={formatter(program.amount)}
           titleLabel={`${program.code} - ${program.name}`}
           total={totalAmount}
           value={program.amount} />

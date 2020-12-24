@@ -9,7 +9,7 @@ import Plotly from 'plotly.js';
 import createPlotlyComponent from 'react-plotly.js/factory';
 import {
   DIRECT_PROGRAM, INDIRECT_PROGRAMS, PROGRAMLVL1, AMOUNT, CODE, DIRECT, INDIRECT,
-  TRANSITIONS, PROGRAMLVL2, AVAILABLE_COLORS, TRN_PREFIX
+  TRANSITIONS, PROGRAMLVL2, AVAILABLE_COLORS, TRN_PREFIX, CURRENCY_CODE
 } from '../utils/constants';
 import {
   addAlpha, getCustomColor, getGradient
@@ -184,6 +184,7 @@ class NestedDonutsProgramChart extends Component {
 
   createTooltip = () => {
     const { tooltipData } = this.state;
+    const { settings } = this.props;
     if (tooltipData) {
       console.log(tooltipData);
       const program = tooltipData.points[0].data.extraData[tooltipData.points[0].i];
@@ -191,7 +192,7 @@ class NestedDonutsProgramChart extends Component {
       return (
         <ToolTip
           color={tooltipData.points[0].color}
-          currencyCode="USD"
+          currencyCode={settings[CURRENCY_CODE]}
           formattedValue={`${program.amount}`}
           titleLabel={`${program.code} - ${program.name}`}
           total={totalAmount}
@@ -333,7 +334,8 @@ NestedDonutsProgramChart.propTypes = {
   data: PropTypes.array.isRequired,
   handleOuterChartClick: PropTypes.func.isRequired,
   selectedDirectProgram: PropTypes.object.isRequired,
-  translations: PropTypes.array.isRequired
+  translations: PropTypes.array.isRequired,
+  settings: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({

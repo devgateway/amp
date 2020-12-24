@@ -91,7 +91,7 @@ class MainDashboardContainer extends Component {
   render() {
     const {
       error, ndd, nddLoadingPending, nddLoaded, dashboardSettings, onChangeFundingType, fundingType, mapping,
-      onChangeProgram, selectedPrograms, noIndirectMapping, topLoaded, topLoadingPending, top
+      onChangeProgram, selectedPrograms, noIndirectMapping, topLoaded, topLoadingPending, top, settings
     } = this.props;
     const { translations } = this.context;
     const { selectedDirectProgram } = this.state;
@@ -139,6 +139,7 @@ class MainDashboardContainer extends Component {
                         </div>
                         <NestedDonutsProgramChart
                           data={ndd}
+                          settings={settings}
                           selectedDirectProgram={selectedDirectProgram}
                           handleOuterChartClick={this.handleOuterChartClick.bind(this)} />
                       </div>
@@ -264,7 +265,8 @@ MainDashboardContainer.propTypes = {
   onChangeProgram: PropTypes.func.isRequired,
   noIndirectMapping: PropTypes.object,
   selectedPrograms: PropTypes.array,
-  callTopReport: PropTypes.func.isRequired
+  callTopReport: PropTypes.func.isRequired,
+  settings: PropTypes.object.isRequired
 };
 
 MainDashboardContainer.defaultProps = {

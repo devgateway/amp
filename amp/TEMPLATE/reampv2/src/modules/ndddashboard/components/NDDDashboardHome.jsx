@@ -7,7 +7,7 @@ import { NDDTranslationContext } from './StartUp';
 import MainDashboardContainer from './MainDashboardContainer';
 import HeaderContainer from './HeaderContainer';
 import { callReport } from '../actions/callReports';
-import { FUNDING_TYPE } from '../utils/constants';
+import { CURRENCY_CODE, FUNDING_TYPE } from '../utils/constants';
 import loadDashboardSettings from '../actions/loadDashboardSettings';
 import { getMappings } from '../actions/getMappings';
 import { DST_PROGRAM, SRC_PROGRAM } from '../../admin/ndd/constants/Constants';
@@ -27,17 +27,20 @@ class NDDDashboardHome extends Component {
 
   componentDidMount() {
     const { loadDashboardSettings, callReport, getMappings } = this.props;
-    const { selectedPrograms, settings } = this.state;
     // eslint-disable-next-line react/destructuring-assignment,react/prop-types
     const { id } = this.props.match.params;
     this.setState({ dashboardId: id });
-    // This is not a saved dashboard we can load the report without filters.
+    // This is not a saved dashboard, we can load the report without filters.
     if (!id) {
       return Promise.all([loadDashboardSettings(), getMappings()])
         .then(data => {
+          const tempSettings = {
+            [CURRENCY_CODE]: data[0].payload[Object.keys(data[0].payload)
+              .find(i => data[0].payload[i].id === CURRENCY_CODE)].value.defaultId
+          };
           const ids = [`${data[1].payload[SRC_PROGRAM].id}`, `${data[1].payload[DST_PROGRAM].id}`];
-          this.setState({ selectedPrograms: ids });
-          return callReport(data[0].payload.find(i => i.id === FUNDING_TYPE).value.defaultId, null, ids, settings);
+          this.setState({ selectedPrograms: ids, settings: tempSettings });
+          return callReport(data[0].payload.find(i => i.id === FUNDING_TYPE).value.defaultId, null, ids, tempSettings);
         });
     } else {
       loadDashboardSettings();
@@ -75,7 +78,7 @@ class NDDDashboardHome extends Component {
 
   render() {
     const {
-      filters, dashboardId, fundingType, selectedPrograms
+      filters, dashboardId, fundingType, selectedPrograms, settings
     } = this.state;
     const {
       error, ndd, nddLoadingPending, nddLoaded, dashboardSettings, mapping, noIndirectMapping
@@ -102,6 +105,7 @@ class NDDDashboardHome extends Component {
             fundingType={fundingType}
             selectedPrograms={selectedPrograms}
             mapping={mapping}
+            settings={settings}
             noIndirectMapping={noIndirectMapping} />
         </Row>
       </Container>

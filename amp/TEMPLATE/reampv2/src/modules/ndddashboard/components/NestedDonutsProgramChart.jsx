@@ -138,8 +138,8 @@ class NestedDonutsProgramChart extends Component {
           ret.push({
             [CODE]: j[CODE],
             name: j.name,
-            [AMOUNT]: (j.percentageInSubGroup / 100) * parentPercentage,
-            originalAmount: j.originalAmount
+            percentage: (j.percentageInSubGroup / 100) * parentPercentage,
+            amount: j.originalAmount
           });
         });
       });
@@ -243,9 +243,8 @@ class NestedDonutsProgramChart extends Component {
           key="solarChart"
           data={
             [{
-              values: innerDataForChart.map(i => i[AMOUNT]),
+              values: innerDataForChart.map(i => i.percentage),
               labels: innerDataForChart.map(i => i[CODE]),
-              text: innerDataForChart.map(i => i.originalAmount),
               extraData: innerDataForChart,
               domain: {
                 x: [0.15, 0.85],

@@ -62,8 +62,13 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
     }
     
     public static Set<String> getVisibleColumns(Long templateId) {
-        return FMSettingsMediator.getEnabledSettings(FMSettingsMediator.FMGROUP_COLUMNS, templateId)
-                .stream().filter(z -> !fakeColumns.contains(z)).collect(Collectors.toSet());
+        Set<String> set = new HashSet<>();
+        for (String z : FMSettingsMediator.getEnabledSettings(FMSettingsMediator.FMGROUP_COLUMNS, templateId)) {
+            if (!fakeColumns.contains(z)) {
+                set.add(z);
+            }
+        }
+        return set;
     }
     
     public static Set<String> getConfigurableColumns() {

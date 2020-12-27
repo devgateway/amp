@@ -1,9 +1,13 @@
 import {
-  fetchIndirectReportPending, fetchIndirectReportError, fetchIndirectReportSuccess
+  fetchIndirectReportPending,
+  fetchIndirectReportError,
+  fetchIndirectReportSuccess,
+  fetchTopReportPending,
+  fetchTopReportSuccess, fetchTopReportError
 } from './reportActions';
 import { fetchApiData } from '../../../utils/loadTranslations';
 import {
-  DIRECT_INDIRECT_REPORT, FUNDING_TYPE
+  DIRECT_INDIRECT_REPORT, FUNDING_TYPE, TOP_DONOR_REPORT
 } from '../utils/constants';
 
 export const callReport = (fundingType, filters, programIds, settings) => dispatch => {
@@ -17,4 +21,18 @@ export const callReport = (fundingType, filters, programIds, settings) => dispat
     }
   })]).then((data) => dispatch(fetchIndirectReportSuccess(data[0])))
     .catch(error => dispatch(fetchIndirectReportError(error)));
+};
+export const callTopReport = (filters, fundingType) => dispatch => {
+  const params = {
+    filters: { date: { start: '2000-01-01', end: '' } },
+    'include-location-children': true,
+    settings: { 'currency-code': 'USD', [FUNDING_TYPE]: 'Actual Commitments' }
+  };
+  dispatch(fetchTopReportPending());
+  return fetchApiData({
+    url: TOP_DONOR_REPORT,
+    body: params
+  })
+    .then(payload => dispatch(fetchTopReportSuccess(payload)))
+    .catch(error => dispatch(fetchTopReportError(error)));
 };

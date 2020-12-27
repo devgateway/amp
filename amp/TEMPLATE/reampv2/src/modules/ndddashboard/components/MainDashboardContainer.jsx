@@ -13,8 +13,11 @@ import {
 import CustomLegend from '../../../utils/components/CustomLegend';
 import './legends/legends.css';
 import { getCustomColor, getGradient, extractPrograms } from '../utils/Utils';
+import TopChart from './TopChart';
+import { callTopReport } from '../actions/callReports';
 import FundingByYearChart from './FundingByYearChart';
 import PieChartTypeSelector from './PieChartTypeSelector';
+import { NDDTranslationContext } from './StartUp';
 
 class MainDashboardContainer extends Component {
   constructor(props) {
@@ -27,6 +30,8 @@ class MainDashboardContainer extends Component {
     if (event.points[0].data.name === DIRECT) {
       if (!selectedDirectProgram) {
         this.setState({ selectedDirectProgram: outerData[event.points[0].i] });
+        const { callTopReport } = this.props;
+        callTopReport();
       } else {
         this.setState({ selectedDirectProgram: null });
       }
@@ -55,10 +60,9 @@ class MainDashboardContainer extends Component {
           += this.generateLegend(idp, 1, indirectLegend, INDIRECT_PROGRAMS));
       }
     });
-
     legends.push({ total: directTotal, legends: [...directLegend.values()] });
     legends.push({ total: indirectTotal, legends: [...indirectLegend.values()] });
-    return legends;
+    return legends
   }
 
   generateLegend(program, level, legend, programColor) {
@@ -87,12 +91,14 @@ class MainDashboardContainer extends Component {
   render() {
     const {
       error, ndd, nddLoadingPending, nddLoaded, dashboardSettings, onChangeFundingType, fundingType, mapping,
-      onChangeProgram, selectedPrograms, noIndirectMapping
+      onChangeProgram, selectedPrograms, noIndirectMapping, topLoaded, topLoadingPending, top, settings
     } = this.props;
+    const { translations } = this.context;
     const { selectedDirectProgram } = this.state;
+    console.log(top);
     const formatter = new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD',
+      currency: top.currency ? top.currency : 'USD',
       // These options are needed to round to whole numbers if that's what you want.
       // minimumFractionDigits: 0,
       // maximumFractionDigits: 0,
@@ -133,6 +139,7 @@ class MainDashboardContainer extends Component {
                         </div>
                         <NestedDonutsProgramChart
                           data={ndd}
+                          settings={settings}
                           selectedDirectProgram={selectedDirectProgram}
                           handleOuterChartClick={this.handleOuterChartClick.bind(this)} />
                       </div>
@@ -157,22 +164,24 @@ class MainDashboardContainer extends Component {
             </div>
             {programLegend ? (
               <div className="legends-container">
-                <div className="legend-title">
-                  {selectedDirectProgram ? selectedDirectProgram.name : 'PNSD'}
-                  :
-                  <span
-                    className="amount">
-                    {formatter.format(programLegend[0].total)}
-                  </span>
+                <div className={`even-${selectedDirectProgram ? 'third' : 'middle'}`}>
+                  <div className="legend-title">
+                    {selectedDirectProgram ? selectedDirectProgram.name : 'PNSD'}
+                    :
+                    <span
+                      className="amount">
+                      {formatter.format(programLegend[0].total)}
+                    </span>
+                  </div>
+                  <CustomLegend
+                    formatter={formatter}
+                    data={programLegend[0].legends}
+                    colorMap={CHART_COLOR_MAP.get(selectedDirectProgram ? `${PROGRAMLVL1}_${selectedDirectProgram.code}`
+                      : PROGRAMLVL1)} />
                 </div>
-                <CustomLegend
-                  formatter={formatter}
-                  data={programLegend[0].legends}
-                  colorMap={CHART_COLOR_MAP.get(selectedDirectProgram ? `${PROGRAMLVL1}_${selectedDirectProgram.code}`
-                    : PROGRAMLVL1)} />
                 {selectedDirectProgram === null
                 && (
-                  <div>
+                  <div className="even-middle">
                     <div className="legend-title">
                       New Deal
                       <span
@@ -186,8 +195,25 @@ class MainDashboardContainer extends Component {
                       colorMap={CHART_COLOR_MAP.get(INDIRECT_PROGRAMS)} />
                   </div>
                 )}
+                {selectedDirectProgram !== null
+                && (
+                  <div className="even-sixth">
+                    <div className="legend-title row funding-sources-title">
+                      <div className="col-md-8">
+                        {translations['amp.ndd.dashboard:top-donor-agencies']}
+                      </div>
+                      <div className="amount col-md-4">
+                        {`${top.sumarizedTotal} ${top.currency}`}
+                      </div>
+                    </div>
+                    {topLoaded && !topLoadingPending ? (<TopChart data={top}  />) : (
+                      <div className="loading" />)}
+
+                  </div>
+                )}
+
               </div>
-            ) : null}
+            ) : <div className="loading" />}
           </Col>
           <div className="separator" />
           <Col md={12}>
@@ -211,10 +237,13 @@ class MainDashboardContainer extends Component {
 }
 
 const mapStateToProps = state => ({
-  translations: state.translationsReducer.translations
+  top: state.reportsReducer.top,
+  translations: state.translationsReducer.translations,
+  topLoaded: state.reportsReducer.topLoaded,
+  topLoadingPending: state.reportsReducer.topLoadingPending,
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ callTopReport }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainDashboardContainer);
 
@@ -224,17 +253,24 @@ MainDashboardContainer.propTypes = {
   error: PropTypes.object,
   loadDashboardSettings: PropTypes.func.isRequired,
   ndd: PropTypes.array.isRequired,
+  top: PropTypes.object.isRequired,
   nddLoadingPending: PropTypes.bool.isRequired,
   nddLoaded: PropTypes.bool.isRequired,
+  topLoadingPending: PropTypes.bool.isRequired,
+  topLoaded: PropTypes.bool.isRequired,
   dashboardSettings: PropTypes.object,
   onChangeFundingType: PropTypes.func.isRequired,
   fundingType: PropTypes.object,
   mapping: PropTypes.object,
   onChangeProgram: PropTypes.func.isRequired,
   noIndirectMapping: PropTypes.object,
-  selectedPrograms: PropTypes.array
+  selectedPrograms: PropTypes.array,
+  callTopReport: PropTypes.func.isRequired,
+  settings: PropTypes.object.isRequired
 };
 
 MainDashboardContainer.defaultProps = {
   filters: undefined
 };
+
+MainDashboardContainer.contextType = NDDTranslationContext;

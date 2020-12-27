@@ -9,11 +9,12 @@ import Plotly from 'plotly.js';
 import createPlotlyComponent from 'react-plotly.js/factory';
 import {
   DIRECT_PROGRAM, INDIRECT_PROGRAMS, PROGRAMLVL1, AMOUNT, CODE, DIRECT, INDIRECT,
-  TRANSITIONS, PROGRAMLVL2, AVAILABLE_COLORS, TRN_PREFIX
+  TRANSITIONS, PROGRAMLVL2, AVAILABLE_COLORS, TRN_PREFIX, CURRENCY_CODE
 } from '../utils/constants';
 import {
-  addAlpha, getCustomColor, getGradient
+  addAlpha, formatKMB, getCustomColor, getGradient
 } from '../utils/Utils';
+import ToolTip from './tooltips/ToolTip';
 import styles from './styles.css';
 
 const Plot = createPlotlyComponent(Plotly);
@@ -26,6 +27,9 @@ class NestedDonutsProgramChart extends Component {
     this.extractInnerData = this.extractInnerData.bind(this);
     this.handleOuterChartClick = handleOuterChartClick;
     this.calculateOpacity = this.calculateOpacity.bind(this);
+    this.state = {
+      showLegend: false, legendTop: 0, legendLeft: 0, tooltipData: null
+    };
   }
 
   /**
@@ -134,13 +138,12 @@ class NestedDonutsProgramChart extends Component {
           ret.push({
             [CODE]: j[CODE],
             name: j.name,
-            [AMOUNT]: (j.percentageInSubGroup / 100) * parentPercentage,
-            originalAmount: j.originalAmount
+            percentage: (j.percentageInSubGroup / 100) * parentPercentage,
+            amount: j.originalAmount
           });
         });
       });
     }
-    console.log(ret);
     return ret;
   }
 
@@ -163,8 +166,45 @@ class NestedDonutsProgramChart extends Component {
     return newColors;
   }
 
+  onHover = (data) => {
+    this.setState({
+      showLegend: true, legendTop: data.event.pageY - 200, legendLeft: data.event.pageX - 360, tooltipData: data
+    });
+  }
+
+  onUnHover = () => {
+    this.setState({ showLegend: false, tooltipData: null });
+  }
+
+  onClick = (event, outerData) => {
+    const { handleOuterChartClick } = this.props;
+    this.setState({ showLegend: false });
+    handleOuterChartClick(event, outerData);
+  }
+
+  createTooltip = () => {
+    const { tooltipData } = this.state;
+    const { settings, translations } = this.props;
+    if (tooltipData) {
+      const formatter = formatKMB(translations); // TODO: get precision and separator from GS.
+      const program = tooltipData.points[0].data.extraData[tooltipData.points[0].i];
+      const totalAmount = tooltipData.points[0].data.extraData.reduce((i, j) => (i.amount + j.amount));
+      return (
+        <ToolTip
+          color={tooltipData.points[0].color}
+          currencyCode={settings[CURRENCY_CODE]}
+          formattedValue={formatter(program.amount)}
+          titleLabel={`${program.code} - ${program.name}`}
+          total={totalAmount}
+          value={program.amount} />
+      );
+    }
+    return null;
+  }
+
   render() {
     const { selectedDirectProgram, translations } = this.props;
+    const { showLegend, legendTop, legendLeft } = this.state;
     const outerData = this.extractOuterData(false);
     const outerDataLvl2 = selectedDirectProgram ? this.extractOuterData(true) : this.extractOuterData(false);
     const innerData = this.extractInnerData(outerData);
@@ -204,9 +244,9 @@ class NestedDonutsProgramChart extends Component {
           key="solarChart"
           data={
             [{
-              values: innerDataForChart.map(i => i[AMOUNT]),
+              values: innerDataForChart.map(i => i.percentage),
               labels: innerDataForChart.map(i => i[CODE]),
-              text: innerDataForChart.map(i => i.originalAmount),
+              extraData: innerDataForChart,
               domain: {
                 x: [0.15, 0.85],
                 y: [0.15, 0.85]
@@ -214,7 +254,7 @@ class NestedDonutsProgramChart extends Component {
               textposition: 'inside',
               direction: 'clockwise',
               name: INDIRECT,
-              hoverinfo: 'label+text',
+              hoverinfo: 'skip',
               hole: 0.5,
               type: 'pie',
               sort: false,
@@ -233,8 +273,9 @@ class NestedDonutsProgramChart extends Component {
               values: outerDataLvl2.map(i => i.normalizedPercentage),
               labels: outerDataLvl2.map(i => i[CODE]),
               text: outerDataLvl2.map(i => i[AMOUNT]),
+              extraData: outerDataLvl2,
               name: DIRECT,
-              hoverinfo: 'label+text',
+              hoverinfo: 'skip',
               textposition: 'inside',
               hole: innerDataForChart.length > 0 ? 0.7 : 0.36,
               type: 'pie',
@@ -271,8 +312,19 @@ class NestedDonutsProgramChart extends Component {
             annotations
           }}
           config={{ displaylogo: false }}
-          onClick={event => this.handleOuterChartClick(event, outerData)}
+          onClick={event => this.onClick(event, outerData)}
+          onHover={event => this.onHover(event)}
+          onUnhover={() => this.onUnHover()}
         />
+        <div
+          style={{
+            display: (!showLegend ? 'none' : 'block'),
+            top: legendTop,
+            left: legendLeft
+          }}
+          className="pie-lengend-wrapper" >
+          {this.createTooltip()}
+        </div>
       </CSSTransitionGroup>
     );
   }
@@ -282,7 +334,8 @@ NestedDonutsProgramChart.propTypes = {
   data: PropTypes.array.isRequired,
   handleOuterChartClick: PropTypes.func.isRequired,
   selectedDirectProgram: PropTypes.object.isRequired,
-  translations: PropTypes.array.isRequired
+  translations: PropTypes.array.isRequired,
+  settings: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({

@@ -162,15 +162,24 @@
     padding: 10px;
 }
 
+.pie-lengend-wrapper {
+    position: absolute;
+    background-color: #0b58a2;
+    z-index: 9999;
+    width: auto;
+}
+
 .funding-sources-title {
     padding-left: 5px;
     padding-right: 5px;
-    font-size: 18px!important;
+    font-size: 18px !important;
 }
-.funding-sources-title .amount{
+
+.funding-sources-title .amount {
     text-align: right;
-    font-size: 18px!important;
+    font-size: 18px !important;
 }
-.funding-sources-title >div{
+
+.funding-sources-title > div {
     text-transform: uppercase;
 }

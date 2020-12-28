@@ -61,13 +61,18 @@ public class NDDSolarChartData {
          */
         public ProgramData(AmpTheme program, BigDecimal amount, Map<String, BigDecimal> amountsByYear) {
             String configurationName =
-                    program.getParentThemeId().getParentThemeId().getParentThemeId().getProgramSettings().stream().findAny().get().getName();
-            this.programLvl3 = new Program(program.getThemeCode(), program.getName(), FilterUtils.INSTANCE.idFromColumnName(configurationName + " Level 3"),
+                    program.getParentThemeId().getParentThemeId().getParentThemeId().getProgramSettings()
+                            .stream().findAny().get().getName();
+            this.programLvl3 = new Program(program.getThemeCode(), program.getName(),
+                    FilterUtils.INSTANCE.idFromColumnName(configurationName + " Level 3"),
                     program.getAmpThemeId());
             this.programLvl2 = new Program(program.getParentThemeId().getThemeCode(),
-                    program.getParentThemeId().getName(), FilterUtils.INSTANCE.idFromColumnName(configurationName + " Level 2"), program.getParentThemeId().getAmpThemeId());
+                    program.getParentThemeId().getName(), FilterUtils.
+                    INSTANCE.idFromColumnName(configurationName + " Level 2"),
+                    program.getParentThemeId().getAmpThemeId());
             this.programLvl1 = new Program(program.getParentThemeId().getParentThemeId().getThemeCode(),
-                    program.getParentThemeId().getParentThemeId().getName(), FilterUtils.INSTANCE.idFromColumnName(configurationName + " Level 1"),
+                    program.getParentThemeId().getParentThemeId().getName(), FilterUtils.INSTANCE.
+                    idFromColumnName(configurationName + " Level 1"),
                     program.getParentThemeId().getParentThemeId().getAmpThemeId());
             this.amount = amount;
             this.amountsByYear = amountsByYear;

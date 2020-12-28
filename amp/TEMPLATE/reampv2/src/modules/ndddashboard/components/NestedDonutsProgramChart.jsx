@@ -49,6 +49,8 @@ class NestedDonutsProgramChart extends Component {
         if (ret.filter(d => d[CODE] === directProgram[CODE]).length === 0) {
           const item = {
             [CODE]: directProgram[CODE],
+            filterColumnName: directProgram.filterColumnName,
+            objectId: directProgram.objectId,
             name: directProgram.name,
             [AMOUNT]: data.filter(d2 => ((calculateLvl2 && this.isSubProgram(i, selectedDirectProgram))
               ? d2[DIRECT_PROGRAM][PROGRAMLVL2][CODE] === directProgram[CODE]
@@ -167,9 +169,16 @@ class NestedDonutsProgramChart extends Component {
   }
 
   onHover = (data) => {
-    this.setState({
-      showLegend: true, legendTop: data.event.pageY - 200, legendLeft: data.event.pageX - 360, tooltipData: data
-    });
+    const { selectedDirectProgram } = this.props;
+    if (selectedDirectProgram === null || data.points[0].data.name === DIRECT) {
+      // Disable tooltip when outer ring is selected
+      this.setState({
+        showLegend: true,
+        legendTop: data.event.pageY - 200,
+        legendLeft: data.event.pageX - 360,
+        tooltipData: data
+      });
+    }
   }
 
   onUnHover = () => {
@@ -188,13 +197,13 @@ class NestedDonutsProgramChart extends Component {
     if (tooltipData) {
       const formatter = formatKMB(translations); // TODO: get precision and separator from GS.
       const program = tooltipData.points[0].data.extraData[tooltipData.points[0].i];
-      const totalAmount = tooltipData.points[0].data.extraData.reduce((i, j) => (i.amount + j.amount));
+      const totalAmount = tooltipData.points[0].data.extraData.reduce((i, j) => (i + j.amount), 0);
       return (
         <ToolTip
           color={tooltipData.points[0].color}
           currencyCode={settings[CURRENCY_CODE]}
           formattedValue={formatter(program.amount)}
-          titleLabel={`${program.code} - ${program.name}`}
+          titleLabel={`${program.code}`} // TODO use program name until we define what to do with long name
           total={totalAmount}
           value={program.amount} />
       );
@@ -212,8 +221,9 @@ class NestedDonutsProgramChart extends Component {
     const innerColors = this.calculateOpacity(innerDataForChart.map(i => getCustomColor(i, INDIRECT_PROGRAMS)),
       innerDataForChart);
     const outerColors = this.calculateOpacity(outerDataLvl2
-      .map(o => getCustomColor(o, o.neverFade ? `${PROGRAMLVL1}_${selectedDirectProgram.code}` : PROGRAMLVL1)),
-    outerDataLvl2);
+        .map(o => getCustomColor(o, o.neverFade ? `${PROGRAMLVL1}_${selectedDirectProgram.code}`
+          : PROGRAMLVL1)),
+      outerDataLvl2);
     const transition = {
       duration: 2000,
       easing: 'cubic-in-out'
@@ -322,7 +332,7 @@ class NestedDonutsProgramChart extends Component {
             top: legendTop,
             left: legendLeft
           }}
-          className="pie-lengend-wrapper" >
+          className="pie-lengend-wrapper">
           {this.createTooltip()}
         </div>
       </CSSTransitionGroup>

@@ -23,9 +23,10 @@ class TopChart extends Component {
   }
 
   getOthers(o) {
+    const { translations } = this.context;
     return {
       id: -9999,
-      name: 'others',
+      name: translations['amp.ndd.dashboard:others'],
       value: o,
     };
   }
@@ -55,9 +56,14 @@ class TopChart extends Component {
             colors={this.getColor.bind(this)}
             label={this.getLabel.bind(this)}
             enableGridY={false}
-            labelFormat={d => {
-              return (<tspan y={0}>{`${d}%}`}</tspan>);
+            axisTop={null}
+            axisRight={null}
+            axisBottom={null}
+            axisLeft={null}
+            margin={{
+              top: 20, right: 10, bottom: 0, left: 10
             }}
+            labelFormat={d => (<tspan y={-5}>{`${d}`}</tspan>)}
             tooltip={(e) => (
               <ToolTip
                 color={e.color}
@@ -69,6 +75,16 @@ class TopChart extends Component {
                 currencyCode={data.currency}
               />
             )}
+            theme={{
+              tooltip: {
+                container: {
+                  padding: '1px',
+                  borderRadius: '5px',
+                  boxShadow: '0 1px 2px rgba(0, 0, 0, 0.25)'
+                },
+
+              }
+            }}
           />
         </div>
       </div>

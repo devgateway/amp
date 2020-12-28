@@ -17,13 +17,15 @@ class ToolTip extends Component {
           {titleLabel}
         </div>
         <div className="inner">
-          <div className="" >
+          <div className="">
             <div className="element">
               <span className="formattedValue">{formattedValue}</span>
               <span className="currency">{currencyCode}</span>
             </div>
             <div className="element grey">
-              {`${percentage.toFixed(2)} % ${translations['amp.ndd.dashboard:of-total']}`}
+              <span className="of-total">
+                {`${percentage.toFixed(2)} % ${translations['amp.ndd.dashboard:of-total']}`}
+              </span>
             </div>
           </div>
         </div>

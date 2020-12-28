@@ -14,7 +14,6 @@ import fetchNDD from '../actions/fetchNDD';
 import fetchPrograms from '../actions/fetchAvailablePrograms';
 import fetchLayout from '../actions/fetchLayout';
 import FormPrograms from './FormPrograms';
-import { getRootUrl } from '../../../../utils/Utils';
 
 class Main extends Component {
   constructor(props) {

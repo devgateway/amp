@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import PropTypes from 'prop-types';
 import { NDDContext } from './Startup';
 import './css/style.css';
 import ProgramSelectGroupList from './ProgramSelectGroupList';
@@ -23,7 +24,7 @@ class FormPrograms extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: [], validationErrors: undefined, src: undefined, dst: undefined, programs: undefined
+      data: [], validationErrors: undefined, src: undefined, dst: undefined, programs: undefined, saved: false
     };
     this.addRow = this.addRow.bind(this);
     this.saveAll = this.saveAll.bind(this);
@@ -74,6 +75,7 @@ class FormPrograms extends Component {
   }
 
   addRow() {
+    this.clearMessages();
     this.setState(previousState => {
       const data = [...previousState.data];
       const pair = {
@@ -89,6 +91,7 @@ class FormPrograms extends Component {
 
   onRowChange(level1, level2, level3, type, id) {
     const { data } = this.state;
+    this.clearMessages();
     // Find and remove.
     const pair = data.splice(data.findIndex(i => i[type + PROGRAM].id === id), 1);
     pair[0][type + PROGRAM].lvl1 = level1;
@@ -101,6 +104,7 @@ class FormPrograms extends Component {
   remove(row) {
     const { translations, trnPrefix } = this.context;
     if (window.confirm(translations[`${trnPrefix}confirm-remove-row`])) {
+      this.clearMessages();
       this.setState(previousState => {
         const data = [...previousState.data];
         data.splice(data.findIndex(i => i.id === row.id), 1);
@@ -110,7 +114,7 @@ class FormPrograms extends Component {
   }
 
   clearMessages() {
-    this.setState({ validationErrors: undefined });
+    this.setState({ validationErrors: undefined, saved: false });
   }
 
   saveAll() {
@@ -130,11 +134,18 @@ class FormPrograms extends Component {
         });
         saveNDD(src, dst, mappings, api.programsSave, api.mappingSave);
         this.clearMessages();
+        this.setState({ saved: true });
       } else {
-        this.setState({ validationErrors: translations[`${trnPrefix}validation_error_${validateMain}`] });
+        this.setState({
+          validationErrors: translations[`${trnPrefix}validation_error_${validateMain}`],
+          saved: false
+        });
       }
     } else {
-      this.setState({ validationErrors: translations[`${trnPrefix}validation_error_${validateMappings}`] });
+      this.setState({
+        validationErrors: translations[`${trnPrefix}validation_error_${validateMappings}`],
+        saved: false
+      });
     }
   }
 
@@ -178,15 +189,19 @@ class FormPrograms extends Component {
 
   render() {
     const {
-      data, validationErrors, src, dst
+      data, validationErrors, src, dst, saved
     } = this.state;
-    const { error, pending } = this.props;
+    const { error, pending, translations } = this.props;
+    const { trnPrefix } = this.context;
     const messages = [];
     if (error) {
       messages.push({ isError: true, text: error.toString() });
     }
     if (validationErrors) {
       messages.push({ isError: true, text: validationErrors });
+    }
+    if (saved) {
+      messages.push({ isError: false, text: translations[`${trnPrefix}notification-saved-ok`] });
     }
     return (
       <div className="form-container">
@@ -205,7 +220,9 @@ class FormPrograms extends Component {
 
 FormPrograms.contextType = NDDContext;
 
-FormPrograms.propTypes = {};
+FormPrograms.propTypes = {
+  translations: PropTypes.array.isRequired
+};
 
 const mapStateToProps = state => ({
   translations: state.translationsReducer.translations,

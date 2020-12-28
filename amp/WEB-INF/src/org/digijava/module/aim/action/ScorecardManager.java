@@ -1,6 +1,7 @@
 package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -12,8 +13,6 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.ampapi.endpoints.scorecard.service.ScorecardService;
-import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpScorecardSettings;
 import org.digijava.module.aim.dbentity.AmpScorecardSettingsCategoryValue;
 import org.digijava.module.aim.form.ScorecardManagerForm;
@@ -36,6 +35,7 @@ public class ScorecardManager extends Action {
         }
         
         scorecardSettingsForm.setCategoryValues(allCategoryValues);
+        scorecardSettingsForm.setQuarters(Arrays.asList("Q1", "Q2", "Q3", "Q4"));
         
         List<AmpScorecardSettings> scorecardSettingsList = (List<AmpScorecardSettings>) DbUtil.getAll(AmpScorecardSettings.class);
         AmpScorecardSettings settings = scorecardSettingsList.isEmpty() ? new AmpScorecardSettings() : scorecardSettingsList.get(0);
@@ -48,12 +48,13 @@ public class ScorecardManager extends Action {
                     scorecardSettingsForm.setValidationTime(settings.getValidationTime());
                     scorecardSettingsForm.setPercentageThreshold(settings.getPercentageThreshold());
                     scorecardSettingsForm.setSelectedCategoryValues(getSelectedClosedStatuses(settings.getClosedStatuses()));
+                    scorecardSettingsForm.setSelectedQuarters((String[]) settings.getQuartersAsList().toArray());
             }
             
             return mapping.findForward("forward");
         }
     }
-    
+
     String[] getSelectedClosedStatuses(Set<AmpScorecardSettingsCategoryValue> categoryValues) {
         ArrayList<String> selectedStatuses = new ArrayList<String>();
         

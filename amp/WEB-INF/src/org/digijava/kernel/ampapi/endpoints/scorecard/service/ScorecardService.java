@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -278,8 +279,9 @@ public class ScorecardService {
      * @return List<Quarter>, the list of the quarters that will represent the
      *         headers of the donor scorecard file.
      */
-    public List<Quarter> getQuarters() {
+    public List<Quarter> getQuarters(String filteredQuartersAsString) {
         final List<Quarter> quarters = new ArrayList<Quarter>();
+        List<String> filteredQuarters = Arrays.asList(filteredQuartersAsString.split(","));
         int startYear = getDefaultStartYear();
         int endYear = getDefaultEndYear();
         
@@ -294,7 +296,9 @@ public class ScorecardService {
                 for (int i = 1; i <= 4; i++) {
                     worker.setTime(new Date(currentTime));
                     Quarter quarter = new Quarter(fiscalCalendar, i, worker.getYear());
-                    quarters.add(quarter);
+                    if (filteredQuarters.contains(quarter.getLabel())) {
+                        quarters.add(quarter);
+                    }
                     Calendar cal = Calendar.getInstance();
                     cal.setTimeInMillis(startTime);
                     cal.add(Calendar.MONTH, 3 * i);
@@ -309,6 +313,14 @@ public class ScorecardService {
 
         return quarters;
     }
+
+    public List<Quarter> getSettingsQuarters() {
+        return getQuarters(settings.getQuarters());
+    }
+
+    private List<Quarter> getAllQuarters() {
+        return getQuarters(null);
+    }
     
     /**
      * Returns the last past quarter
@@ -316,7 +328,7 @@ public class ScorecardService {
      * @return Quarter, the last past quarter
      */
     public Quarter getPastQuarter() {
-        List<Quarter> quarters = getQuarters();
+        List<Quarter> quarters = getAllQuarters();
         Quarter quarter = null;
         
         int i = 0;
@@ -377,7 +389,7 @@ public class ScorecardService {
             closedStatuses = closedStatuses.substring(0, closedStatuses.length() - 1);
         }
         final String status = closedStatuses;
-        List<Quarter> quarters = getQuarters();
+        List<Quarter> quarters = getSettingsQuarters();
 
         for (final Quarter quarter : quarters) {
             PersistenceManager.getSession().doWork(new Work() {
@@ -543,16 +555,17 @@ public class ScorecardService {
         for (ActivityUpdate activityUpdate : activityUpdates) {
             Long donorId = activityUpdate.getDonorId();
             Quarter quarter = new Quarter(fiscalCalendar, activityUpdate.getModifyDate());
-            ColoredCell cell = data.get(donorId).get(quarter.toString());
-            logger.info("Quarter" + quarter);
-            if (isUpdateOnGracePeriod(activityUpdate.getModifyDate())) {
-                Quarter previousQuarter = quarter.getPreviousQuarter();
-                ColoredCell previousQuarterCell = data.get(donorId).get(previousQuarter.toString());
-                if (!isFirstQuarterOfPeriod(previousQuarterCell)) {
-                    previousQuarterCell.getUpdatedActivitiesOnGracePeriod().add(activityUpdate.getActivityId());
+            if (settings.getQuartersAsList().contains(quarter.getLabel())) {
+                ColoredCell cell = data.get(donorId).get(quarter.toString());
+                if (isUpdateOnGracePeriod(activityUpdate.getModifyDate())) {
+                    Quarter previousQuarter = quarter.getPreviousQuarter();
+                    ColoredCell previousQuarterCell = data.get(donorId).get(previousQuarter.toString());
+                    if (!isFirstQuarterOfPeriod(previousQuarterCell)) {
+                        previousQuarterCell.getUpdatedActivitiesOnGracePeriod().add(activityUpdate.getActivityId());
+                    }
                 }
+                cell.getUpdatedActivites().add(activityUpdate.getActivityId());
             }
-            cell.getUpdatedActivites().add(activityUpdate.getActivityId());
         }
         return data;
     }
@@ -602,7 +615,7 @@ public class ScorecardService {
      */
     private Map<Long, Map<String, ColoredCell>> initializeScorecardCellData() {
         Map<Long, Map<String, ColoredCell>> data = new HashMap<Long, Map<String, ColoredCell>>();
-        List<Quarter> quarters = getQuarters();
+        List<Quarter> quarters = getSettingsQuarters();
         List<Org> donors = QueryUtil.getDonors(true);
         for (Org donor : donors) {
             Long donorId = donor.getId();

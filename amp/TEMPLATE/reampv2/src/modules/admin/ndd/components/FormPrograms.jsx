@@ -73,8 +73,30 @@ class FormPrograms extends Component {
           data.push(pair);
         });
       }
-      return { data };
+      return { data: this.sortPrograms(data) };
     });
+  }
+
+  /**
+   * Sort by SRC lvl1->lvl2->lvl3 plus DST lvl1->lvl2->lvl3 if needed.
+   * @param data
+   * @returns {*[]|*}
+   */
+  sortPrograms(data) {
+    if (data.length > 0) {
+      const sortedData = data.sort((a, b) => {
+        const compare = (a[SRC_PROGRAM].lvl1.value + a[SRC_PROGRAM].lvl2.value + a[SRC_PROGRAM].lvl3.value)
+          .localeCompare(b[SRC_PROGRAM].lvl1.value + b[SRC_PROGRAM].lvl2.value + b[SRC_PROGRAM].lvl3.value);
+        if (compare === 0) {
+          const compare2 = (a[DST_PROGRAM].lvl1.value + a[DST_PROGRAM].lvl2.value + a[DST_PROGRAM].lvl3.value)
+            .localeCompare(b[DST_PROGRAM].lvl1.value + b[DST_PROGRAM].lvl2.value + b[DST_PROGRAM].lvl3.value);
+          return compare2;
+        }
+        return compare;
+      });
+      return sortedData;
+    }
+    return [];
   }
 
   addRow() {

@@ -36,7 +36,10 @@ class FormPrograms extends Component {
   }
 
   componentDidMount() {
-    const { ndd, programs } = this.context;
+    const {
+      ndd, programs, translations, trnPrefix
+    } = this.context;
+    document.title = translations[`${trnPrefix}page-title`];
     // Load main programs.
     this.setState(previousState => {
       if (ndd[SRC_PROGRAM]) {

@@ -16,7 +16,7 @@
   "amp.admin.ndd.indirect:choose-dst-lvl-4": "Choose a Indirect Program Level 3",
   "amp.admin.ndd.indirect:src-programs-title": "Direct Programs",
   "amp.admin.ndd.indirect:dst-programs-title": "Indirect Programs",
-  "amp.admin.ndd.indirect:action": "Action",
+  "amp.admin.ndd.indirect:actions": "Actions",
   "amp.admin.ndd.indirect:add-new": "Add New",
   "amp.admin.ndd.indirect:button-save-all-edits": "Save all edits",
   "amp.admin.ndd.indirect:button-revert-all-edits": "Revert all changes",

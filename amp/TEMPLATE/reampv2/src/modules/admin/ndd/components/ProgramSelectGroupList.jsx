@@ -31,7 +31,7 @@ class ProgramSelectGroupList extends Component {
 &nbsp;
                 </span>
               </td>
-              <td className="actions-column">{translations[`${trnPrefix}action`]}</td>
+              <td className="actions-column">{translations[`${trnPrefix}actions`]}</td>
             </tr>
           </thead>
           <tbody>

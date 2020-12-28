@@ -83,7 +83,7 @@ class FormPrograms extends Component {
    * @returns {*[]|*}
    */
   sortPrograms(data) {
-    if (data.length > 0) {
+    if (data && data.length > 0) {
       const sortedData = data.sort((a, b) => {
         const compare = (a[SRC_PROGRAM].lvl1.value + a[SRC_PROGRAM].lvl2.value + a[SRC_PROGRAM].lvl3.value)
           .localeCompare(b[SRC_PROGRAM].lvl1.value + b[SRC_PROGRAM].lvl2.value + b[SRC_PROGRAM].lvl3.value);

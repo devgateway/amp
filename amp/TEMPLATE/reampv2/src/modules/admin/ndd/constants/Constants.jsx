@@ -11,3 +11,4 @@ export const THIRD_LEVEL = 4;
 export const STATE_LEVEL_FIELD = 'srcLvl';
 export const TYPE_SRC = 'src';
 export const TYPE_DST = 'dst';
+export const LAYOUT_EP = '/rest/security/layout';

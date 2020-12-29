@@ -8,22 +8,25 @@ import './css/style.css';
 class Header extends Component {
   render() {
     const {
-      translations, onAddRow, onSaveAll, onRevertAll, disabled
+      translations, onAddRow, onSaveAll, onRevertAll, disabled, src, dst
     } = this.props;
     const { trnPrefix } = this.context;
     return (
       <div>
         <div className="panel panel-default">
           <div className="panel-body custom-panel">
-            <span className="glyphicon glyphicon-plus clickable" onClick={onAddRow} />
-            <span
-              onClick={onAddRow}
-              className="add-new-text clickable">
-              {translations[`${trnPrefix}add-new`]}
-              {' '}
-
-            </span>
-            <span className="insert-data-text">{translations[`${trnPrefix}insert-data`]}</span>
+            {(src && dst) ? (
+              <>
+                <span className="glyphicon glyphicon-plus clickable" onClick={onAddRow} />
+                <span
+                  onClick={onAddRow}
+                  className="add-new-text clickable">
+                  {translations[`${trnPrefix}add-new`]}
+                  {' '}
+                </span>
+                <span className="insert-data-text">{translations[`${trnPrefix}insert-data`]}</span>
+              </>
+            ) : null}
             <span className="float-right button-wrapper">
               <button
                 type="button"
@@ -54,7 +57,9 @@ Header.propTypes = {
   onSaveAll: PropTypes.func.isRequired,
   onRevertAll: PropTypes.func.isRequired,
   disabled: PropTypes.bool.isRequired,
-  translations: PropTypes.bool.isRequired
+  translations: PropTypes.bool.isRequired,
+  src: PropTypes.object,
+  dst: PropTypes.object
 };
 
 const mapStateToProps = state => ({

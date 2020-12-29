@@ -247,7 +247,9 @@ class FormPrograms extends Component {
           onAddRow={this.addRow}
           onSaveAll={this.saveAll}
           onRevertAll={this.revertAllChanges}
-          disabled={pending} />
+          disabled={pending}
+          src={src}
+          dst={dst} />
         <Notifications messages={messages} />
         <ProgramSelectGroupList list={data} onChange={this.onRowChange} remove={this.remove} src={src} dst={dst} />
       </div>

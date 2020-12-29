@@ -44,7 +44,7 @@ export const callTopReport = (fundingType, settings, filterParam, selectedProgra
       params.filters[selectedProgram.filterColumnName].push(selectedProgram.objectId);
     }
   }
-  params.settings = { ...settings, FUNDING_TYPE: fundingType };
+  params.settings = { ...settings, [FUNDING_TYPE]: fundingType };
   if (!params.settings[CURRENCY_CODE]) {
     params.settings[CURRENCY_CODE] = DEFAULT_CURRENCY;
   }

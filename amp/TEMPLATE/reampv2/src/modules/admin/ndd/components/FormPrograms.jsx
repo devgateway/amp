@@ -176,18 +176,24 @@ class FormPrograms extends Component {
 
   onChangeMainProgram(type, program) {
     const { translations, trnPrefix } = this.context;
-    const { data } = this.state;
+    const { data, src, dst } = this.state;
+    this.src_ = src;
+    this.dst_ = dst;
     const newProgram = (program && program.length > 0) ? program[0] : {};
     const oldProgram = (this.state[type] ? this.state[type] : {});
+    let autoAddRow = false;
     if (oldProgram.id !== newProgram.id) {
       if (oldProgram.id !== undefined) {
         if (data.length === 0 || window.confirm(translations[`${trnPrefix}warning_on_change_main_programs`])) {
           if (newProgram.id !== undefined) {
             // Old Program -> New Program.
             this.setState(previousState => ({ [type]: newProgram }));
+            this[`${type}_`] = newProgram;
+            autoAddRow = true;
           } else {
             // Old Program -> Nothing.
             this.setState(previousState => ({ [type]: undefined }));
+            this[`${type}_`] = undefined;
           }
           this.clearAll();
         } else {
@@ -198,7 +204,13 @@ class FormPrograms extends Component {
       } else {
         // Nothing -> Program.
         this.setState(previousState => ({ [type]: newProgram }));
+        this[`${type}_`] = newProgram;
+        autoAddRow = true;
       }
+    }
+    // Note src_ and dst_ because setState() is not immediate.
+    if (this.src_ && this.dst_ && autoAddRow) {
+      this.addRow();
     }
   }
 

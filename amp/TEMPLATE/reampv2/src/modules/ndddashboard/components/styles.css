@@ -77,12 +77,12 @@
     border: 1px solid transparent;
     border-radius: 4px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
-    padding: 0px 12px;
+    padding: 0px 0px;
 }
 
 .panel .inline-heading, .applied-filters {
     display: inline-block;
-    margin: 0 20px 0 0;
+    margin: 0 7px 0 0;
     position: relative;
     top: 0px;
     /*min-width: 150px;*/

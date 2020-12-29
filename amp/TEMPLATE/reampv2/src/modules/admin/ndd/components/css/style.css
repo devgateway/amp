@@ -41,10 +41,12 @@
 
 .success-color {
     color: #5CB85C;
+    font-weight: bold;
 }
 
 .error-color {
     color: #ff0000;
+    font-weight: bold;
 }
 
 .notifications {

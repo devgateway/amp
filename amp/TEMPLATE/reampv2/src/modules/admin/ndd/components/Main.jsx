@@ -12,6 +12,7 @@ import {
 } from '../reducers/startupReducer';
 import fetchNDD from '../actions/fetchNDD';
 import fetchPrograms from '../actions/fetchAvailablePrograms';
+import fetchLayout from '../actions/fetchLayout';
 import FormPrograms from './FormPrograms';
 
 class Main extends Component {
@@ -21,10 +22,17 @@ class Main extends Component {
   }
 
   componentDidMount() {
-    const { fetchNDD, fetchPrograms, api } = this.props;
-
-    fetchNDD(api.mappingConfig);
-    fetchPrograms(api.programs);
+    const {
+      fetchNDD, fetchPrograms, api, fetchLayout
+    } = this.props;
+    fetchLayout().then((layout) => {
+      if (layout && layout.logged) {
+        fetchNDD(api.mappingConfig);
+        fetchPrograms(api.programs);
+      } else {
+        window.location.replace('/login.do');
+      }
+    });
   }
 
   shouldComponentRender() {
@@ -71,6 +79,7 @@ const mapStateToProps = state => ({
 });
 const mapDispatchToProps = dispatch => bindActionCreators({
   fetchNDD,
-  fetchPrograms
+  fetchPrograms,
+  fetchLayout
 }, dispatch);
 export default connect(mapStateToProps, mapDispatchToProps)(Main);

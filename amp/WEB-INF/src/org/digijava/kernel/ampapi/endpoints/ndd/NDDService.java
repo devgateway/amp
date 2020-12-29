@@ -23,6 +23,7 @@ import org.digijava.module.aim.dbentity.AmpThemeMapping;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.ProgramUtil;
+
 import static org.digijava.module.aim.util.ProgramUtil.INDIRECT_PRIMARY_PROGRAM;
 import static org.digijava.module.aim.helper.GlobalSettingsConstants.PRIMARY_PROGRAM;
 import static org.digijava.module.aim.helper.GlobalSettingsConstants.MAPPING_DESTINATION_PROGRAM;
@@ -119,6 +120,7 @@ public class NDDService {
 
     /**
      * Returns a list of programs available for mapping classified by direct/indirect (src/dst).
+     *
      * @return
      */
     public List<SingleProgramData> getSinglePrograms(final boolean includeIndirectPrograms) {
@@ -293,8 +295,9 @@ public class NDDService {
      */
     private PossibleValue convert(AmpTheme theme, int level) {
         List<PossibleValue> children;
-        if (theme.getIndlevel() < level) {
+        if (theme.getIndlevel() < level && !theme.isSoftDeleted()) {
             children = theme.getSiblings().stream()
+                    .filter(p -> !p.isSoftDeleted())
                     .map(p -> convert(p, level))
                     .collect(Collectors.toList());
         } else {

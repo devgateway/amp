@@ -16,7 +16,7 @@
   "amp.admin.ndd.indirect:choose-dst-lvl-4": "Choose a Indirect Program Level 3",
   "amp.admin.ndd.indirect:src-programs-title": "Direct Programs",
   "amp.admin.ndd.indirect:dst-programs-title": "Indirect Programs",
-  "amp.admin.ndd.indirect:action": "Action",
+  "amp.admin.ndd.indirect:actions": "Actions",
   "amp.admin.ndd.indirect:add-new": "Add New",
   "amp.admin.ndd.indirect:button-save-all-edits": "Save all edits",
   "amp.admin.ndd.indirect:button-revert-all-edits": "Revert all changes",
@@ -32,5 +32,7 @@
   "amp.admin.ndd.indirect:validation_error_4": "Error: Indirect Program not selected.",
   "amp.admin.ndd.indirect:validation_error_5": "Error: Primary Program and Indirect Program must be different.",
   "amp.admin.ndd.indirect:warning_on_change_destination_program": "Warning: The new Indirect Program will be removes from all activities.",
-  "amp.admin.ndd.indirect:confirm-change-destination-program": "Are you sure you want to : The new Indirect Program will be removes from all activities."
+  "amp.admin.ndd.indirect:confirm-change-destination-program": "Are you sure you want to : The new Indirect Program will be removes from all activities.",
+  "amp.admin.ndd.indirect:notification-saved-ok": "All mappings saved correctly.",
+  "amp.admin.ndd.indirect:page-title": "Aid Management Platform - NDD Mappings Manager"
 }

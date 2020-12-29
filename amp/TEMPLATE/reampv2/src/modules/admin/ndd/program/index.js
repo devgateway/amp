@@ -15,7 +15,7 @@ const API = {
   mappingSave: '/rest/ndd/programs-mapping',
   programs: '/rest/ndd/available-programs',
   programsSave: '/rest/ndd/update-source-destination-programs',
-}
+};
 
 const TRN_PREFIX = 'amp.admin.ndd.program:';
 
@@ -29,7 +29,7 @@ class AdminNDDProgramApp extends Component {
     return (
       <Provider store={this.store}>
         <Startup defaultTrnPack={defaultTrnPack}>
-          <Main api={API} trnPrefix={TRN_PREFIX} isIndirect={false}/>
+          <Main api={API} trnPrefix={TRN_PREFIX} isIndirect={false} />
         </Startup>
       </Provider>
     );

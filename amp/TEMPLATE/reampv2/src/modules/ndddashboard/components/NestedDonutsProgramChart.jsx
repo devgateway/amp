@@ -203,9 +203,11 @@ class NestedDonutsProgramChart extends Component {
           color={tooltipData.points[0].color}
           currencyCode={settings[CURRENCY_CODE]}
           formattedValue={formatter(program.amount)}
-          titleLabel={`${program.code}`} // TODO use program name until we define what to do with long name
+          titleLabel={`${program.name}`}
           total={totalAmount}
-          value={program.amount} />
+          value={program.amount}
+          minWidth="400px"
+        />
       );
     }
     return null;

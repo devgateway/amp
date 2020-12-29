@@ -221,9 +221,9 @@ class NestedDonutsProgramChart extends Component {
     const innerColors = this.calculateOpacity(innerDataForChart.map(i => getCustomColor(i, INDIRECT_PROGRAMS)),
       innerDataForChart);
     const outerColors = this.calculateOpacity(outerDataLvl2
-        .map(o => getCustomColor(o, o.neverFade ? `${PROGRAMLVL1}_${selectedDirectProgram.code}`
-          : PROGRAMLVL1)),
-      outerDataLvl2);
+      .map(o => getCustomColor(o, o.neverFade ? `${PROGRAMLVL1}_${selectedDirectProgram.code}`
+        : PROGRAMLVL1)),
+    outerDataLvl2);
     const transition = {
       duration: 2000,
       easing: 'cubic-in-out'
@@ -273,7 +273,7 @@ class NestedDonutsProgramChart extends Component {
                 colors: innerColors,
                 line: {
                   color: 'white',
-                  width: 2
+                  width: 3
                 }
               },
               textfont: {
@@ -296,7 +296,7 @@ class NestedDonutsProgramChart extends Component {
                 colors: outerColors,
                 line: {
                   color: 'white',
-                  width: 2
+                  width: 3
                 }
               },
               textfont: {

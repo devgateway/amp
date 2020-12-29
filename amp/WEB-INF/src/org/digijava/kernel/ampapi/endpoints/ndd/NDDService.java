@@ -119,7 +119,7 @@ public class NDDService {
         }
         AmpActivityProgramSettings finalIndirectProgramSetting = indirectProgramSetting;
         List<AmpTheme> programs = ProgramUtil.getAllPrograms()
-                .stream().filter(p -> p.getIndlevel().equals(0))
+                .stream().filter(p -> p.getIndlevel().equals(0) && !p.isSoftDeleted())
                 .filter(p -> {
                     if (indirect) {
                         return p.getProgramSettings().size() == 0

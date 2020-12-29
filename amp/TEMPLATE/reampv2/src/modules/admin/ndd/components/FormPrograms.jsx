@@ -69,8 +69,11 @@ class FormPrograms extends Component {
           const pair = {};
           pair[SRC_PROGRAM] = fullTreeSrc;
           pair[DST_PROGRAM] = fullTreeDst;
-          pair.id = `${pair[SRC_PROGRAM].lvl3.id}${pair[DST_PROGRAM].lvl3.id}`;
-          data.push(pair);
+          // Extra validation.
+          if (pair[SRC_PROGRAM] && pair[SRC_PROGRAM].lvl3 && pair[DST_PROGRAM] && pair[DST_PROGRAM].lvl3) {
+            pair.id = `${pair[SRC_PROGRAM].lvl3.id}${pair[DST_PROGRAM].lvl3.id}`;
+            data.push(pair);
+          }
         });
       }
       return { data: this.sortPrograms(data) };

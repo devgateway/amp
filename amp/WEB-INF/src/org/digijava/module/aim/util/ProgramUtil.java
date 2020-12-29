@@ -477,6 +477,7 @@ public class ProgramUtil {
                 session = PersistenceManager.getRequestDBSession();
                 String queryString = " from " + AmpTheme.class.getName() + " th";
                 qry = session.createQuery(queryString);
+                qry.setCacheable(false);
                 colPrg = qry.list();
             } catch(Exception ex) {
                 logger.error("Unable to get all the Themes");
@@ -1460,7 +1461,7 @@ public class ProgramUtil {
                                     + "where ap.name=:name";
                     Query qry = session.createQuery(queryString);
                     qry.setString("name", name);
-                    qry.setCacheable(true);
+                    qry.setCacheable(false);
                     programSettings=(AmpActivityProgramSettings)qry.uniqueResult();
 
 

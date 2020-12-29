@@ -111,9 +111,25 @@ public class NDDService {
      * Returns a list of first level programs.
      */
     public List<AmpTheme> getAvailablePrograms(boolean indirect) {
+        AmpActivityProgramSettings indirectProgramSetting = null;
+        try {
+            indirectProgramSetting = ProgramUtil.getAmpActivityProgramSettings(INDIRECT_PRIMARY_PROGRAM);
+        } catch (DgException e) {
+            e.printStackTrace();
+        }
+        AmpActivityProgramSettings finalIndirectProgramSetting = indirectProgramSetting;
         List<AmpTheme> programs = ProgramUtil.getAllPrograms()
-                .stream().filter(p -> p.getIndlevel().equals(0)
-                        && (indirect ? p.getProgramSettings().size() == 0 : p.getProgramSettings().size() > 0))
+                .stream().filter(p -> p.getIndlevel().equals(0))
+                .filter(p -> {
+                    if (indirect) {
+                        return p.getProgramSettings().size() == 0
+                                || (p.getProgramSettings().size() == 1
+                                && p.getProgramSettings().contains(finalIndirectProgramSetting));
+                    } else {
+                        return p.getProgramSettings().size() > 0
+                                && !p.getProgramSettings().contains(finalIndirectProgramSetting);
+                    }
+                })
                 .collect(Collectors.toList());
         return programs;
     }

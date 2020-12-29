@@ -1,7 +1,7 @@
 import {
   FETCH_DIRECT_INDIRECT_NDD_ERROR,
   FETCH_DIRECT_INDIRECT_NDD_PENDING,
-  FETCH_DIRECT_INDIRECT_NDD_SUCCESS, FETCH_TOP_ERROR, FETCH_TOP_PENDING, FETCH_TOP_SUCCESS
+  FETCH_DIRECT_INDIRECT_NDD_SUCCESS, FETCH_TOP_ERROR, FETCH_TOP_PENDING, FETCH_TOP_SUCCESS, RESET_TOP
 } from '../actions/reportActions';
 
 const initialState = {
@@ -10,7 +10,7 @@ const initialState = {
   topLoaded: false,
   topLoadingPending: false,
   error: null,
-  top: []
+  top: undefined
 };
 export default (state = initialState, action) => {
   switch (action.type) {
@@ -53,6 +53,13 @@ export default (state = initialState, action) => {
         topLoaded: false,
         topLoadingPending: false,
         error: action.error
+      };
+    case RESET_TOP:
+      return {
+        ...state,
+        topLoaded: false,
+        topLoadingPending: false,
+        top: undefined
       };
     default:
       return state;

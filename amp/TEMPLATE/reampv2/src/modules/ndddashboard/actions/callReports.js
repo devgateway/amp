@@ -3,11 +3,14 @@ import {
   fetchIndirectReportError,
   fetchIndirectReportSuccess,
   fetchTopReportPending,
-  fetchTopReportSuccess, fetchTopReportError
+  fetchTopReportSuccess, fetchTopReportError,
+  resetTopReport
 } from './reportActions';
 import { fetchApiData } from '../../../utils/loadTranslations';
 import {
-  DIRECT_INDIRECT_REPORT, FUNDING_TYPE, TOP_DONOR_REPORT
+  CURRENCY_CODE, DEFAULT_CURRENCY,
+  DEFAULT_FUNDING_TYPE,
+  DIRECT_INDIRECT_REPORT, FUNDING_TYPE, INCLUDE_LOCATIONS_WITH_CHILDREN, TOP_DONOR_REPORT
 } from '../utils/constants';
 
 export const callReport = (fundingType, filters, programIds, settings) => dispatch => {
@@ -22,12 +25,28 @@ export const callReport = (fundingType, filters, programIds, settings) => dispat
   })]).then((data) => dispatch(fetchIndirectReportSuccess(data[0])))
     .catch(error => dispatch(fetchIndirectReportError(error)));
 };
-export const callTopReport = (filters, fundingType) => dispatch => {
-  const params = {
-    filters: { date: { start: '2000-01-01', end: '' } },
-    'include-location-children': true,
-    settings: { 'currency-code': 'USD', [FUNDING_TYPE]: 'Actual Commitments' }
-  };
+
+export const clearTopReport = () => dispatch => {
+  dispatch(resetTopReport());
+};
+
+export const callTopReport = (fundingType, settings, filterParam, selectedProgram) => dispatch => {
+  const params = { ...filterParam };
+  if (!params.filters) {
+    params.filters = {};
+    params[INCLUDE_LOCATIONS_WITH_CHILDREN] = true;
+  }
+  if (!params.filters[selectedProgram.filterColumnName]) {
+    params.filters[selectedProgram.filterColumnName] = [];
+  }
+  if (!params.filters[selectedProgram.filterColumnName].find(v => v === selectedProgram.objectId)) {
+    params.filters[selectedProgram.filterColumnName].push(selectedProgram.objectId);
+  }
+  params.settings = { ...settings, FUNDING_TYPE: fundingType };
+  if (!params.settings[CURRENCY_CODE]) {
+    params.settings[CURRENCY_CODE] = DEFAULT_CURRENCY;
+  }
+
   dispatch(fetchTopReportPending());
   return fetchApiData({
     url: TOP_DONOR_REPORT,

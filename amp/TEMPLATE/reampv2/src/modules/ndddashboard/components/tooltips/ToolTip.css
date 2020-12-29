@@ -3,15 +3,11 @@
     -webkit-box-shadow: 0 0 7px 2px rgba(204, 204, 204, 0.38);
     box-shadow: 0 0 7px 2px rgba(204, 204, 204, 0.38);
     border: 1px solid #e6eaee;
+    border-radius: 5px;
     background-color: #ffffff;
     padding: 0px;
     width: 180px;
     text-align: left !important;
-}
-
-.generic-tooltip .inner .percentage {
-    font-weight: 600;
-    padding-left: 10px;
 }
 
 .generic-tooltip .formattedValue .generic-tooltip .currency {
@@ -23,9 +19,15 @@
 
 .generic-tooltip .formattedValue {
     font-weight: bold;
+    margin-left: 10px;
+}
+.generic-tooltip .of-total{
+    margin-left: 10px;
 }
 
 .generic-tooltip .tooltip-header {
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
     color: #FFFFFF;
     font-size: 16px;
     font-weight: bold;
@@ -34,6 +36,8 @@
 
 .generic-tooltip .grey {
     background-color: lightgrey;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
 }
 
 .generic-tooltip .inner {

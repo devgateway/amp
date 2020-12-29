@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row } from 'react-bootstrap';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { NDDTranslationContext } from './StartUp';
 import MainDashboardContainer from './MainDashboardContainer';
 import HeaderContainer from './HeaderContainer';
-import { callReport } from '../actions/callReports';
-import { CURRENCY_CODE, FUNDING_TYPE } from '../utils/constants';
+import { callReport, callTopReport, clearTopReport } from '../actions/callReports';
+import { CURRENCY_CODE, DIRECT, FUNDING_TYPE } from '../utils/constants';
 import loadDashboardSettings from '../actions/loadDashboardSettings';
 import { getMappings } from '../actions/getMappings';
 import { DST_PROGRAM, SRC_PROGRAM } from '../../admin/ndd/constants/Constants';
@@ -21,18 +21,20 @@ class NDDDashboardHome extends Component {
       dashboardId: undefined,
       fundingType: undefined,
       selectedPrograms: undefined,
-      settings: undefined
+      settings: undefined,
+      selectedDirectProgram: null
     };
   }
 
   componentDidMount() {
-    const { loadDashboardSettings, callReport, getMappings } = this.props;
+    const { _loadDashboardSettings, _callReport, _getMappings } = this.props;
     // eslint-disable-next-line react/destructuring-assignment,react/prop-types
     const { id } = this.props.match.params;
+    // eslint-disable-next-line react/no-did-mount-set-state
     this.setState({ dashboardId: id });
     // This is not a saved dashboard, we can load the report without filters.
     if (!id) {
-      return Promise.all([loadDashboardSettings(), getMappings()])
+      return Promise.all([_loadDashboardSettings(), _getMappings()])
         .then(data => {
           const tempSettings = {
             [CURRENCY_CODE]: data[0].payload[Object.keys(data[0].payload)
@@ -40,50 +42,82 @@ class NDDDashboardHome extends Component {
           };
           const ids = [`${data[1].payload[SRC_PROGRAM].id}`, `${data[1].payload[DST_PROGRAM].id}`];
           this.setState({ selectedPrograms: ids, settings: tempSettings });
-          return callReport(data[0].payload.find(i => i.id === FUNDING_TYPE).value.defaultId, null, ids, tempSettings);
+          return _callReport(data[0].payload.find(i => i.id === FUNDING_TYPE).value.defaultId, null, ids, tempSettings);
         });
     } else {
-      loadDashboardSettings();
+      _loadDashboardSettings();
     }
   }
 
-  onApplySettings = (data) => {
-    const { callReport } = this.props;
-    const { fundingType, selectedPrograms, filters } = this.state;
-    this.setState({ settings: data });
-    callReport(fundingType, filters, selectedPrograms, data);
+  handleOuterChartClick(event, outerData) {
+    const {
+      selectedDirectProgram, filters, settings, fundingType
+    } = this.state;
+    const { dashboardSettings } = this.props;
+    if (event.points[0].data.name === DIRECT) {
+      if (!selectedDirectProgram) {
+        this.setState({ selectedDirectProgram: outerData[event.points[0].i] });
+        const { _callTopReport } = this.props;
+        _callTopReport(fundingType || dashboardSettings.find(i => i.id === FUNDING_TYPE).value.defaultId,
+          settings, filters, outerData[event.points[0].i]);
+      } else {
+        const { _clearTopReport } = this.props;
+        _clearTopReport();
+        this.setState({ selectedDirectProgram: null });
+      }
+    }
   }
 
   onApplyFilters = (data, dataWithModels) => {
-    const { callReport } = this.props;
-    const { fundingType, selectedPrograms, settings } = this.state;
+    const { _callReport, _callTopReport } = this.props;
+    const {
+      fundingType, selectedDirectProgram, settings, selectedPrograms
+    } = this.state;
     this.setState({ filters: data, filtersWithModels: dataWithModels });
-    callReport(fundingType, data, selectedPrograms, settings);
+    _callReport(fundingType, data, selectedPrograms, settings);
+    if (selectedDirectProgram !== null) {
+      _callTopReport(fundingType, settings, data, selectedDirectProgram);
+    }
   }
 
   onChangeFundingType = (value) => {
-    const { callReport } = this.props;
-    const { filters, selectedPrograms, settings } = this.state;
+    const { _callReport, _callTopReport } = this.props;
+    const {
+      filters, selectedPrograms, settings, selectedDirectProgram
+    } = this.state;
     this.setState({ fundingType: value });
-    callReport(value, filters, selectedPrograms, settings);
+    _callTopReport(value, settings, filters, selectedDirectProgram);
+
+    _callReport(value, filters, selectedPrograms, settings);
   }
 
   onChangeProgram = (value) => {
-    const { callReport } = this.props;
+    const { _callReport } = this.props;
     const { filters, fundingType, settings } = this.state;
     const selectedPrograms = value.split('-');
     this.setState({ selectedPrograms });
-    callReport(fundingType, filters, selectedPrograms, settings);
+    _callReport(fundingType, filters, selectedPrograms, settings);
+  }
+
+  onApplySettings = (data) => {
+    const { _callReport, _callTopReport } = this.props;
+    const {
+      fundingType, selectedPrograms, filters, selectedDirectProgram
+    } = this.state;
+    this.setState({ settings: data });
+    _callReport(fundingType, filters, selectedPrograms, data);
+    if (selectedDirectProgram !== null) {
+      _callTopReport(fundingType, data, filters, selectedDirectProgram);
+    }
   }
 
   render() {
     const {
-      filters, dashboardId, fundingType, selectedPrograms, settings
+      filters, dashboardId, fundingType, selectedPrograms, settings, selectedDirectProgram
     } = this.state;
     const {
-      error, ndd, nddLoadingPending, nddLoaded, dashboardSettings, mapping, noIndirectMapping
+      ndd, nddLoadingPending, nddLoaded, dashboardSettings, mapping, noIndirectMapping
     } = this.props;
-    const { translations } = this.context;
     return (
       <Container fluid className="main-container">
         <Row>
@@ -95,6 +129,8 @@ class NDDDashboardHome extends Component {
         </Row>
         <Row>
           <MainDashboardContainer
+            handleOuterChartClick={this.handleOuterChartClick.bind(this)}
+            selectedDirectProgram={selectedDirectProgram}
             filters={filters}
             ndd={ndd}
             nddLoaded={nddLoaded}
@@ -113,37 +149,45 @@ class NDDDashboardHome extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  ndd: state.reportsReducer.ndd,
-  error: state.reportsReducer.error,
-  nddLoaded: state.reportsReducer.nddLoaded,
-  nddLoadingPending: state.reportsReducer.nddLoadingPending,
-  dashboardSettings: state.dashboardSettingsReducer.dashboardSettings,
-  translations: state.translationsReducer.translations,
-  mapping: state.mappingsReducer.mapping,
-  noIndirectMapping: state.mappingsReducer.noIndirectMapping
-});
+const
+  mapStateToProps = state => ({
+    ndd: state.reportsReducer.ndd,
+    error: state.reportsReducer.error,
+    nddLoaded: state.reportsReducer.nddLoaded,
+    nddLoadingPending: state.reportsReducer.nddLoadingPending,
+    dashboardSettings: state.dashboardSettingsReducer.dashboardSettings,
+    translations: state.translationsReducer.translations,
+    mapping: state.mappingsReducer.mapping,
+    noIndirectMapping: state.mappingsReducer.noIndirectMapping
+  });
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-  callReport, loadDashboardSettings, getMappings
-}, dispatch);
+const
+  mapDispatchToProps = dispatch => bindActionCreators({
+    _callReport: callReport,
+    _loadDashboardSettings: loadDashboardSettings,
+    _getMappings: getMappings,
+    _callTopReport: callTopReport,
+    _clearTopReport: clearTopReport
+  }, dispatch);
 
 NDDDashboardHome.propTypes = {
-  callReport: PropTypes.func.isRequired,
-  error: PropTypes.object,
+  _callReport: PropTypes.func.isRequired,
+  mapping: PropTypes.object.isRequired,
   ndd: PropTypes.array.isRequired,
   nddLoadingPending: PropTypes.bool.isRequired,
   nddLoaded: PropTypes.bool.isRequired,
-  dashboardSettings: PropTypes.object,
-  loadDashboardSettings: PropTypes.func.isRequired,
-  getMappings: PropTypes.func.isRequired,
-  translations: PropTypes.array.isRequired
+  dashboardSettings: PropTypes.array,
+  _loadDashboardSettings: PropTypes.func.isRequired,
+  _getMappings: PropTypes.func.isRequired,
+  _callTopReport: PropTypes.func.isRequired,
+  _clearTopReport: PropTypes.func.isRequired,
+  noIndirectMapping: PropTypes.object.isRequired
 };
 
 NDDDashboardHome.defaultProps = {
   dashboardSettings: undefined,
-  error: undefined,
 };
 
-NDDDashboardHome.contextType = NDDTranslationContext;
+NDDDashboardHome
+  .contextType = NDDTranslationContext;
 export default connect(mapStateToProps, mapDispatchToProps)(NDDDashboardHome);

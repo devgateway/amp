@@ -36,11 +36,13 @@ export const callTopReport = (fundingType, settings, filterParam, selectedProgra
     params.filters = {};
     params[INCLUDE_LOCATIONS_WITH_CHILDREN] = true;
   }
-  if (!params.filters[selectedProgram.filterColumnName]) {
-    params.filters[selectedProgram.filterColumnName] = [];
-  }
-  if (!params.filters[selectedProgram.filterColumnName].find(v => v === selectedProgram.objectId)) {
-    params.filters[selectedProgram.filterColumnName].push(selectedProgram.objectId);
+  if (selectedProgram !== null) {
+    if (!params.filters[selectedProgram.filterColumnName]) {
+      params.filters[selectedProgram.filterColumnName] = [];
+    }
+    if (!params.filters[selectedProgram.filterColumnName].find(v => v === selectedProgram.objectId)) {
+      params.filters[selectedProgram.filterColumnName].push(selectedProgram.objectId);
+    }
   }
   params.settings = { ...settings, FUNDING_TYPE: fundingType };
   if (!params.settings[CURRENCY_CODE]) {

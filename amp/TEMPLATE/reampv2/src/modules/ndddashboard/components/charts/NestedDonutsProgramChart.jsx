@@ -10,12 +10,12 @@ import createPlotlyComponent from 'react-plotly.js/factory';
 import {
   DIRECT_PROGRAM, INDIRECT_PROGRAMS, PROGRAMLVL1, AMOUNT, CODE, DIRECT, INDIRECT,
   TRANSITIONS, PROGRAMLVL2, AVAILABLE_COLORS, TRN_PREFIX, CURRENCY_CODE
-} from '../utils/constants';
+} from '../../utils/constants';
 import {
   addAlpha, formatKMB, getCustomColor, getGradient
-} from '../utils/Utils';
-import ToolTip from './tooltips/ToolTip';
-import styles from './styles.css';
+} from '../../utils/Utils';
+import ToolTip from '../tooltips/ToolTip';
+import styles from '../styles.css';
 
 const Plot = createPlotlyComponent(Plotly);
 

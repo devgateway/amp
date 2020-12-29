@@ -9,11 +9,11 @@ import createPlotlyComponent from 'react-plotly.js/factory';
 import {
   DIRECT_PROGRAM, INDIRECT_PROGRAMS, PROGRAMLVL1, AMOUNT, CODE, DIRECT, INDIRECT,
   TRANSITIONS, PROGRAMLVL2, AVAILABLE_COLORS, TRN_PREFIX
-} from '../utils/constants';
+} from '../../utils/constants';
 import {
   addAlpha, getCustomColor, getGradient
-} from '../utils/Utils';
-import styles from './styles.css';
+} from '../../utils/Utils';
+import styles from '../styles.css';
 
 const Plot = createPlotlyComponent(Plotly);
 
@@ -161,6 +161,7 @@ class FundingByYearChart extends Component {
               x: i.values.map(j => Object.keys(j)[0]),
               y: i.values.map(j => j[Object.keys(j)[0]]),
               text: (`${i[CODE]}: ${i.name}`).substr(0, 50),
+              hoverinfo: 'skip',
               name: '',
               type: 'scatter',
               mode: 'lines+markers',
@@ -168,14 +169,15 @@ class FundingByYearChart extends Component {
                 shape: 'spline',
                 smoothing: 0.5,
                 dash: 'solid',
-                width: 3,
+                width: 2,
                 color: !selectedDirectProgram ? getCustomColor(i, PROGRAMLVL1) : getCustomColor(i, INDIRECT_PROGRAMS)
               },
               marker: {
-                size: 7.5,
+                size: 7,
+                color: 'white',
                 line: {
                   color: !selectedDirectProgram ? getCustomColor(i, PROGRAMLVL1) : getCustomColor(i, INDIRECT_PROGRAMS),
-                  width: 1,
+                  width: 2,
                 }
               }
             }))

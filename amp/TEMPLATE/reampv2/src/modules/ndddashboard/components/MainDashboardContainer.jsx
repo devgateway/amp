@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Col } from 'react-bootstrap';
-import NestedDonutsProgramChart from './NestedDonutsProgramChart';
+import NestedDonutsProgramChart from './charts/NestedDonutsProgramChart';
 import FundingTypeSelector from './FundingTypeSelector';
 import {
   CHART_COLOR_MAP,
@@ -15,7 +15,7 @@ import './legends/legends.css';
 import { getCustomColor, getGradient, extractPrograms } from '../utils/Utils';
 import TopChart from './TopChart';
 import { callTopReport } from '../actions/callReports';
-import FundingByYearChart from './FundingByYearChart';
+import FundingByYearChart from './charts/FundingByYearChart';
 import PieChartTypeSelector from './PieChartTypeSelector';
 import { NDDTranslationContext } from './StartUp';
 

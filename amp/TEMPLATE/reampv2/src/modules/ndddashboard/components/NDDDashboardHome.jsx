@@ -86,8 +86,9 @@ class NDDDashboardHome extends Component {
       filters, selectedPrograms, settings, selectedDirectProgram
     } = this.state;
     this.setState({ fundingType: value });
-    _callTopReport(value, settings, filters, selectedDirectProgram);
-
+    if (selectedDirectProgram != null) {
+      _callTopReport(value, settings, filters, selectedDirectProgram);
+    }
     _callReport(value, filters, selectedPrograms, settings);
   }
 

@@ -1,17 +1,17 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
-import AdminNDDIndirectProgramApp from "../indirect";
-import AdminNDDProgramApp from "../program";
-import Switch from "react-bootstrap/Switch";
+import Switch from 'react-bootstrap/Switch';
+import AdminNDDIndirectProgramApp from '../indirect';
+import AdminNDDProgramApp from '../program';
 
 class NDDAdminRouter extends Component {
   render() {
     return (
       <>
-          <Switch>
-              <Route path="/ndd/indirect-programs" component={AdminNDDIndirectProgramApp} />
-              <Route path="/ndd/programs" component={AdminNDDProgramApp} />
-          </Switch>
+        <Switch>
+          <Route path="/ndd/indirect-programs" component={AdminNDDIndirectProgramApp} />
+          <Route path="/ndd/programs" component={AdminNDDProgramApp} />
+        </Switch>
       </>
     );
   }

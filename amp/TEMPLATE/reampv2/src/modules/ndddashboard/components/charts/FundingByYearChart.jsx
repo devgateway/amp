@@ -133,10 +133,11 @@ class FundingByYearChart extends Component {
           color={tooltipData.points[0].data.line.color}
           currencyCode="USD"
           formattedValue={formatter(`${tooltipData.points[0].y}`)}
-          titleLabel={tooltipData.points[0].data.text}
+          titleLabel={`${year} ${tooltipData.points[0].data.text}`}
           total={tooltipData.points[0].data.extraData.reduce((a, b) => (a + b.values.find(i => i[year])[year]), 0)}
           value={tooltipData.points[0].y}
           minWidth="400px"
+          isYearTotal
         />
       );
     }

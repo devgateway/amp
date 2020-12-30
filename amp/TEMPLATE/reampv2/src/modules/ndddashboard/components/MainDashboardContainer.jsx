@@ -215,6 +215,7 @@ class MainDashboardContainer extends Component {
                 {nddLoaded && !nddLoadingPending ? (
                   <FundingByYearChart
                     selectedDirectProgram={selectedDirectProgram}
+                    settings={settings}
                     data={ndd} />
                 ) : <div className="loading" />}
               </div>

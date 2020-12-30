@@ -131,7 +131,7 @@ class FundingByYearChart extends Component {
       return (
         <ToolTip
           color={tooltipData.points[0].data.line.color}
-          currencyCode="USD"
+          currencyCode={settings[CURRENCY_CODE]}
           formattedValue={formatter(`${tooltipData.points[0].y}`)}
           titleLabel={`${year} ${tooltipData.points[0].data.text}`}
           total={tooltipData.points[0].data.extraData
@@ -256,10 +256,11 @@ class FundingByYearChart extends Component {
               showline: true,
               autotick: false,
               tickangle: 45,
-              fixedrange: true
+              fixedrange: true,
+              automargin: true
             },
             yaxis: {
-              automargin: false,
+              automargin: true,
               fixedrange: true
             },
             hovermode: 'closest'
@@ -287,7 +288,8 @@ class FundingByYearChart extends Component {
 FundingByYearChart.propTypes = {
   data: PropTypes.array.isRequired,
   selectedDirectProgram: PropTypes.object.isRequired,
-  translations: PropTypes.array.isRequired
+  translations: PropTypes.array.isRequired,
+  settings: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({

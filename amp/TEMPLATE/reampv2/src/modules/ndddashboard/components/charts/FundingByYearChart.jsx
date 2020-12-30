@@ -144,8 +144,21 @@ class FundingByYearChart extends Component {
     return null;
   }
 
+  getColor(source, i) {
+    const { selectedDirectProgram } = this.props;
+    if (source === SRC_DIRECT) {
+      if (selectedDirectProgram == null) {
+        return getCustomColor(i, PROGRAMLVL1);
+      } else {
+        return getCustomColor(i, `${PROGRAMLVL1}_${selectedDirectProgram.code}`);
+      }
+    } else {
+      return getCustomColor(i, INDIRECT_PROGRAMS);
+    }
+  }
+
   render() {
-    const { selectedDirectProgram, translations } = this.props;
+    const { translations } = this.props;
     const {
       source, showLegend, legendTop, legendLeft
     } = this.state;
@@ -210,13 +223,13 @@ class FundingByYearChart extends Component {
                 smoothing: 0.5,
                 dash: 'solid',
                 width: 2,
-                color: source === SRC_DIRECT ? getCustomColor(i, PROGRAMLVL1) : getCustomColor(i, INDIRECT_PROGRAMS)
+                color: this.getColor(source, i),
               },
               marker: {
                 size: 7,
                 color: 'white',
                 line: {
-                  color: source === SRC_DIRECT ? getCustomColor(i, PROGRAMLVL1) : getCustomColor(i, INDIRECT_PROGRAMS),
+                  color: this.getColor(source, i),
                   width: 2,
                 }
               }

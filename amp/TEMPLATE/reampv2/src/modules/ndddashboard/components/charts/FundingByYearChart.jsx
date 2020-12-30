@@ -110,7 +110,6 @@ class FundingByYearChart extends Component {
 
   onHover = (data) => {
     console.log(data);
-    // Disable tooltip when outer ring is selected
     this.setState({
       showLegend: true,
       legendTop: data.event.pointerY - 25,
@@ -128,16 +127,15 @@ class FundingByYearChart extends Component {
     const { settings, translations } = this.props;
     if (tooltipData) {
       const formatter = formatKMB(translations); // TODO: get precision and separator from GS.
-      const program = 'test'; /* tooltipData.points[0].data.extraData[tooltipData.points[0].i]; */
-      const totalAmount = 51515; /* tooltipData.points[0].data.extraData.reduce((i, j) => (i + j.amount), 0); */
+      const year = tooltipData.points[0].x;
       return (
         <ToolTip
-          color={tooltipData.points[0].color}
+          color={tooltipData.points[0].data.line.color}
           currencyCode="USD"
-          formattedValue={formatter('21548')}
-          titleLabel="titulo"
-          total={5000}
-          value={150}
+          formattedValue={formatter(`${tooltipData.points[0].y}`)}
+          titleLabel={tooltipData.points[0].data.text}
+          total={tooltipData.points[0].data.extraData.reduce((a, b) => (a + b.values.find(i => i[year])[year]), 0)}
+          value={tooltipData.points[0].y}
           minWidth="400px"
         />
       );
@@ -200,8 +198,8 @@ class FundingByYearChart extends Component {
             directData.map(i => ({
               x: i.values.map(j => Object.keys(j)[0]),
               y: i.values.map(j => j[Object.keys(j)[0]]),
-              text: (`${i[CODE]}: ${i.name}`).substr(0, 50),
-              extraData: i,
+              text: i.name,
+              extraData: directData,
               hoverinfo: 'none',
               name: '',
               type: 'scatter',
@@ -243,15 +241,17 @@ class FundingByYearChart extends Component {
               showline: true,
               autotick: false,
               tickangle: 45,
+              fixedrange: true
             },
             yaxis: {
               automargin: false,
+              fixedrange: true
             },
             hovermode: 'closest'
           }}
-          config={{ displaylogo: false, responsive: true }}
+          config={{ displaylogo: false, responsive: true, displayModeBar: false }}
           useResizeHandler
-          style={{ width: '100%', height: '100%' }}
+          style={{ width: '100%', height: '100%', cursor: 'pointer' }}
           onHover={event => this.onHover(event)}
           onUnhover={() => this.onUnHover()}
         />

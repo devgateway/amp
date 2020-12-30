@@ -22,7 +22,6 @@
 <bean:define id="myForm" toScope="request" name="crDocTabManagerForm" />
 
 <%@include file="../documentManagerJsHelper.jsp" %>
-<digi:ref href="css/tabview.css" type="text/css" rel="stylesheet" />
 
 <script type="text/javascript">
 	var replaceableTabObject = null;

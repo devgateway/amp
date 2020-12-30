@@ -230,12 +230,10 @@ public class ProgramUtil {
          * @return
          * @throws DgException
          */
-        public static AmpTheme getThemeById(Long ampThemeId)
-        {
+        public static AmpTheme getThemeById(Long ampThemeId) {
             try {
                 return (AmpTheme) PersistenceManager.getRequestDBSession().load(AmpTheme.class, ampThemeId);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 throw new RuntimeException("Cannot load AmpTheme with id " + ampThemeId, e);
             }
         }
@@ -481,66 +479,67 @@ public class ProgramUtil {
         }
 
 
-        public static List<AmpTheme> getAllPrograms() {
-            Session session = null;
-            Query qry = null;
-            List<AmpTheme> colPrg = new ArrayList<AmpTheme>();
+    public static List<AmpTheme> getAllPrograms() {
+        Session session = null;
+        Query qry = null;
+        List<AmpTheme> colPrg = new ArrayList<AmpTheme>();
 
-            try  {
-                session = PersistenceManager.getRequestDBSession();
-                String queryString = " from " + AmpTheme.class.getName() + " th";
-                qry = session.createQuery(queryString);
-                qry.setCacheable(false);
-                colPrg = qry.list();
-            } catch(Exception ex) {
-                logger.error("Unable to get all the Themes");
-                logger.debug("Exception " + ex);
-                throw new RuntimeException("Cannot get programs, ", ex);
-            }
-
-            return colPrg;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = " from " + AmpTheme.class.getName() + " th";
+            qry = session.createQuery(queryString);
+            qry.setCacheable(false);
+            colPrg = qry.list();
+        } catch (Exception ex) {
+            logger.error("Unable to get all the Themes");
+            logger.debug("Exception " + ex);
+            throw new RuntimeException("Cannot get programs, ", ex);
         }
 
-        public static AmpTheme getAmpThemesAndSubThemesHierarchy(AmpTheme parent) {
+        return colPrg;
+    }
 
-            try {
+    public static AmpTheme getAmpThemesAndSubThemesHierarchy(AmpTheme parent) {
+
+        try {
                 /*
                 We must create new program object because if you modify the name of program
                 the changes will be saved in db even though you don't save collection, strange issue....
                 */
-                AmpTheme parentWithNewName=new AmpTheme();
-                parentWithNewName.setName(parent.getName().toUpperCase());
-                parentWithNewName.setAmpThemeId(parent.getAmpThemeId());
+            AmpTheme parentWithNewName = new AmpTheme();
+            parentWithNewName.setName(parent.getName().toUpperCase());
+            parentWithNewName.setAmpThemeId(parent.getAmpThemeId());
 
-                List<AmpTheme> dbChildrenReturnSet = (List<AmpTheme>) ProgramUtil.getAllSubThemesByParentIdWihtChildren(parent.getAmpThemeId());
-                parent.getChildren().addAll( dbChildrenReturnSet );
+            List<AmpTheme> dbChildrenReturnSet =
+                    (List<AmpTheme>) ProgramUtil.getAllSubThemesByParentIdWihtChildren(parent.getAmpThemeId());
+            parent.getChildren().addAll(dbChildrenReturnSet);
 
-            } catch (DgException e) {
-                e.printStackTrace();
-            }
-            return parent;
+        } catch (DgException e) {
+            e.printStackTrace();
+        }
+        return parent;
+    }
+
+    public static String getHierarchyName(AmpTheme prog) {
+        String result = "";
+        List<AmpTheme> progs = new ArrayList<AmpTheme>();
+        AmpTheme curProg = prog;
+        while (curProg.getParentThemeId() != null) {
+            curProg = curProg.getParentThemeId();
+            progs.add(curProg);
         }
 
-        public static String getHierarchyName(AmpTheme prog){
-            String result="";
-            List<AmpTheme> progs=new ArrayList<AmpTheme>();
-            AmpTheme curProg = prog;
-            while (curProg.getParentThemeId()!=null) {
-                curProg = curProg.getParentThemeId();
-                progs.add(curProg);
-            }
 
+        Collections.reverse(progs);
 
-            Collections.reverse(progs);
-
-            for (ListIterator<AmpTheme> iterator = progs.listIterator(); iterator.hasNext();) {
-                AmpTheme p = (AmpTheme) iterator.next();
-                result += p.getName() + " > ";
-            }
-
-            result += prog.getName();
-            return result;
+        for (ListIterator<AmpTheme> iterator = progs.listIterator(); iterator.hasNext(); ) {
+            AmpTheme p = (AmpTheme) iterator.next();
+            result += p.getName() + " > ";
         }
+
+        result += prog.getName();
+        return result;
+    }
 
         public static Collection getSectorIndicator(Long themeIndicatorId)
         {
@@ -608,7 +607,7 @@ public class ProgramUtil {
             return themeInd;
         }
 
-      public static Collection getProgramIndicators(Long programId)
+    public static Collection getProgramIndicators(Long programId)
             throws DgException {
         Set indicators = new HashSet();
         ArrayList programs = (ArrayList) getRelatedThemes(programId);
@@ -997,26 +996,27 @@ public class ProgramUtil {
     }
 
 
-                /**
-                 * Return all subchildren of the parent program
-                 * Recursively iterates on all child programs till the end of the branch using {@link #getAmpThemesAndSubThemes(AmpTheme parent)} .
-                 * The method is used for better presentation purpose only
-                 * @param parentThemes collection of  parent programs
-                 * @return collection of AmpTheme beans
-                 * @throws AimException if anything goes wrong
-                 */
-        public static List getAllSubThemesFor(Collection parentThemes) throws AimException
-        {
-                    List<AmpTheme> programs=new ArrayList();
+    /**
+     * Return all subchildren of the parent program
+     * Recursively iterates on all child programs till the end of the branch using
+     * {@link #getAmpThemesAndSubThemes(AmpTheme parent)} .
+     * The method is used for better presentation purpose only
+     *
+     * @param parentThemes collection of  parent programs
+     * @return collection of AmpTheme beans
+     * @throws AimException if anything goes wrong
+     */
+    public static List getAllSubThemesFor(Collection parentThemes) throws AimException {
+        List<AmpTheme> programs = new ArrayList();
 
-                    Iterator <AmpTheme> programsIter=parentThemes.iterator();
-                    while(programsIter.hasNext()){
-                        AmpTheme program=programsIter.next();
-                        programs.addAll(getAmpThemesAndSubThemes(program));
-                    }
-                    return programs;
-
+        Iterator<AmpTheme> programsIter = parentThemes.iterator();
+        while (programsIter.hasNext()) {
+            AmpTheme program = programsIter.next();
+            programs.addAll(getAmpThemesAndSubThemes(program));
         }
+        return programs;
+
+    }
 
         /**
          * @deprecated use {@link IndicatorUtil} methods.
@@ -1607,8 +1607,9 @@ public class ProgramUtil {
          //requirements for translation purposes
          TranslatorWorker translator = TranslatorWorker.getInstance();
          String translatedText = TranslatorWorker.translateText("No Programs present");
-         if (themes == null || themes.size() == 0)
-            return "<center><b>"+translatedText+"</b></<center>";
+        if (themes == null || themes.size() == 0) {
+            return "<center><b>" + translatedText + "</b></<center>";
+        }
          String retVal;
         retVal = "<table width=\"100%\" cellPadding=\"0\" cellSpacing=\"0\" valign=\"top\" align=\"left\" bgcolor=\"#ffffff\" border=\"0\" style=\"border-collapse: collapse;\">\n";
         Iterator iter = themes.iterator();
@@ -1743,14 +1744,12 @@ public class ProgramUtil {
     }
 
 
-
-
     public static HashMap<Long, AmpTheme> prepareStructure(Collection<AmpTheme> col) {
-        HashMap<Long, AmpTheme> ret     = new HashMap<Long, AmpTheme>();
-        if ( col != null && col.size() > 0 ) {
+        HashMap<Long, AmpTheme> ret = new HashMap<Long, AmpTheme>();
+        if (col != null && col.size() > 0) {
             for (AmpTheme prog : col) {
                 AmpTheme parent = prog.getParentThemeId();
-                if ( parent != null)
+                if (parent != null)
                     parent.getChildren().add(prog);
                 ret.put(prog.getAmpThemeId(), prog);
             }
@@ -1760,12 +1759,13 @@ public class ProgramUtil {
     }
 
     /**
-     *
-     * @param userSelection collection of AmpTheme objects corresponding to the filters selected by the user
-     * @param activityFilterCol this collection will contain the selected objects and their descendants (this collection will be used to filter the activities)
-     * @param columnDataCol this collection will contain the selected objects, their descendants and their ancestors (this collection will be used to filter out column data).
-     * One needs the information about ancestors in multi-level hierarchy reports otherwise the report engine won't know to which higher level hierarchy an activity belongs to.
-     *
+     * @param userSelection     collection of AmpTheme objects corresponding to the filters selected by the user
+     * @param activityFilterCol this collection will contain the selected objects and their descendants (this
+     *                          collection will be used to filter the activities)
+     * @param columnDataCol     this collection will contain the selected objects, their descendants and their
+     *                          ancestors (this collection will be used to filter out column data).
+     *                          One needs the information about ancestors in multi-level hierarchy reports otherwise
+     *                          the report engine won't know to which higher level hierarchy an activity belongs to.
      * @throws DgException
      */
     public static void collectFilteringInformation(Collection<AmpTheme> userSelection, Collection<AmpTheme> activityFilterCol, Set<AmpTheme> columnDataCol)

@@ -88,14 +88,14 @@ class Filters extends Component {
           ret.push(<FilterOutputItem filters={filtersWithModels.filters} i={i} />);
         });
     }
-    return <div>{ret}</div>;
+    return <div style={{ paddingLeft: '10px' }}>{ret}</div>;
   }
 
   render() {
     const { show, filtersWithModels, showFiltersList } = this.state;
     const { translations } = this.props;
     return (
-      <Col md={6}>
+      <Col md={5}>
         <div className="panel">
           <div className="panel-body">
             <h3 className="inline-heading" style={{ float: 'left' }}>{translations[`${TRN_PREFIX}filters`]}</h3>

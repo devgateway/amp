@@ -6,13 +6,17 @@ import { NDDTranslationContext } from '../StartUp';
 class ToolTip extends Component {
   render() {
     const {
-      titleLabel, color, value, formattedValue, currencyCode, total
+      titleLabel, color, value, formattedValue, currencyCode, total, minWidth, isYearTotal
     } = this.props;
     const { translations } = this.context;
     const percentage = (value * 100) / total;
     const headerStyle = { backgroundColor: color };
+    const containerStyle = {};
+    if (minWidth) {
+      containerStyle.minWidth = minWidth;
+    }
     return (
-      <div className="generic-tooltip">
+      <div className="generic-tooltip" style={containerStyle}>
         <div className="tooltip-header" style={headerStyle}>
           {titleLabel}
         </div>
@@ -24,7 +28,10 @@ class ToolTip extends Component {
             </div>
             <div className="element grey">
               <span className="of-total">
-                {`${percentage.toFixed(2)} % ${translations['amp.ndd.dashboard:of-total']}`}
+                <b>{`${percentage.toFixed(2)}% `}</b>
+                {isYearTotal
+                  ? translations['amp.ndd.dashboard:of-year-total']
+                  : translations['amp.ndd.dashboard:of-total']}
               </span>
             </div>
           </div>
@@ -40,7 +47,9 @@ ToolTip.propTypes = {
   value: PropTypes.number.isRequired,
   formattedValue: PropTypes.string.isRequired,
   currencyCode: PropTypes.string.isRequired,
-  total: PropTypes.number.isRequired
+  total: PropTypes.number.isRequired,
+  minWidth: PropTypes.string,
+  isYearTotal: PropTypes.bool
 };
 ToolTip.contextType = NDDTranslationContext;
 

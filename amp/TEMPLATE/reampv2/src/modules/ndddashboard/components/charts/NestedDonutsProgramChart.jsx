@@ -10,12 +10,12 @@ import createPlotlyComponent from 'react-plotly.js/factory';
 import {
   DIRECT_PROGRAM, INDIRECT_PROGRAMS, PROGRAMLVL1, AMOUNT, CODE, DIRECT, INDIRECT,
   TRANSITIONS, PROGRAMLVL2, AVAILABLE_COLORS, TRN_PREFIX, CURRENCY_CODE
-} from '../utils/constants';
+} from '../../utils/constants';
 import {
   addAlpha, formatKMB, getCustomColor, getGradient
-} from '../utils/Utils';
-import ToolTip from './tooltips/ToolTip';
-import styles from './styles.css';
+} from '../../utils/Utils';
+import ToolTip from '../tooltips/ToolTip';
+import styles from '../styles.css';
 
 const Plot = createPlotlyComponent(Plotly);
 
@@ -203,9 +203,11 @@ class NestedDonutsProgramChart extends Component {
           color={tooltipData.points[0].color}
           currencyCode={settings[CURRENCY_CODE]}
           formattedValue={formatter(program.amount)}
-          titleLabel={`${program.code}`} // TODO use program name until we define what to do with long name
+          titleLabel={`${program.name}`}
           total={totalAmount}
-          value={program.amount} />
+          value={program.amount}
+          minWidth="400px"
+        />
       );
     }
     return null;
@@ -221,9 +223,9 @@ class NestedDonutsProgramChart extends Component {
     const innerColors = this.calculateOpacity(innerDataForChart.map(i => getCustomColor(i, INDIRECT_PROGRAMS)),
       innerDataForChart);
     const outerColors = this.calculateOpacity(outerDataLvl2
-        .map(o => getCustomColor(o, o.neverFade ? `${PROGRAMLVL1}_${selectedDirectProgram.code}`
-          : PROGRAMLVL1)),
-      outerDataLvl2);
+      .map(o => getCustomColor(o, o.neverFade ? `${PROGRAMLVL1}_${selectedDirectProgram.code}`
+        : PROGRAMLVL1)),
+    outerDataLvl2);
     const transition = {
       duration: 2000,
       easing: 'cubic-in-out'
@@ -273,7 +275,7 @@ class NestedDonutsProgramChart extends Component {
                 colors: innerColors,
                 line: {
                   color: 'white',
-                  width: 2
+                  width: 3
                 }
               },
               textfont: {
@@ -296,7 +298,7 @@ class NestedDonutsProgramChart extends Component {
                 colors: outerColors,
                 line: {
                   color: 'white',
-                  width: 2
+                  width: 3
                 }
               },
               textfont: {
@@ -332,7 +334,7 @@ class NestedDonutsProgramChart extends Component {
             top: legendTop,
             left: legendLeft
           }}
-          className="pie-lengend-wrapper">
+          className="pie-legend-wrapper">
           {this.createTooltip()}
         </div>
       </CSSTransitionGroup>

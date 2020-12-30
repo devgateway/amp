@@ -56,7 +56,7 @@ class Settings extends Component {
     const { translations } = this.context;
     const { show } = this.state;
     return (
-      <Col md={3}>
+      <Col md={4}>
         <div className="panel">
           <div className="panel-body">
             <h3 className="inline-heading">{translations['amp.dashboard:settings']}</h3>

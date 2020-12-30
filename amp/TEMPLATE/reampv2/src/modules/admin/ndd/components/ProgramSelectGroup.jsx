@@ -93,12 +93,12 @@ class ProgramSelectGroup extends Component {
     const tree = Utils.findFullProgramTree(ndd, type, src, dst);
     switch (level) {
       case FIRST_LEVEL:
-        if (tree) {
+        if (tree && tree[CHILDREN]) {
           options = tree[CHILDREN].map(i => ({ id: i.id, value: i.value }));
         }
         break;
       case SECOND_LEVEL:
-        if (tree) {
+        if (tree && tree[CHILDREN]) {
           if (this.state[STATE_LEVEL_FIELD + FIRST_LEVEL]) {
             options = tree[CHILDREN]
               .find(i => i.id === this.state[STATE_LEVEL_FIELD + FIRST_LEVEL].id)[CHILDREN];
@@ -106,7 +106,7 @@ class ProgramSelectGroup extends Component {
         }
         break;
       case THIRD_LEVEL:
-        if (tree) {
+        if (tree && tree[CHILDREN]) {
           if (this.state[STATE_LEVEL_FIELD + SECOND_LEVEL]) {
             options = tree[CHILDREN]
               .find(i => i.id === this.state[STATE_LEVEL_FIELD + FIRST_LEVEL].id)[CHILDREN]

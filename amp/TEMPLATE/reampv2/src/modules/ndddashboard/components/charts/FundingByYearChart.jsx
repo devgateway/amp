@@ -210,13 +210,13 @@ class FundingByYearChart extends Component {
                 smoothing: 0.5,
                 dash: 'solid',
                 width: 2,
-                color: !selectedDirectProgram ? getCustomColor(i, PROGRAMLVL1) : getCustomColor(i, INDIRECT_PROGRAMS)
+                color: source === SRC_DIRECT ? getCustomColor(i, PROGRAMLVL1) : getCustomColor(i, INDIRECT_PROGRAMS)
               },
               marker: {
                 size: 7,
                 color: 'white',
                 line: {
-                  color: !selectedDirectProgram ? getCustomColor(i, PROGRAMLVL1) : getCustomColor(i, INDIRECT_PROGRAMS),
+                  color: source === SRC_DIRECT ? getCustomColor(i, PROGRAMLVL1) : getCustomColor(i, INDIRECT_PROGRAMS),
                   width: 2,
                 }
               }

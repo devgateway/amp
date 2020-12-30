@@ -94,6 +94,7 @@ class MainDashboardContainer extends Component {
       error, ndd, nddLoadingPending, nddLoaded, dashboardSettings, onChangeFundingType, fundingType, mapping,
       onChangeProgram, selectedPrograms, noIndirectMapping, top, settings, selectedDirectProgram, handleOuterChartClick
     } = this.props;
+    const { translations } = this.context;
     const formatter = new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: top && top.currency ? top.currency : 'USD',
@@ -208,7 +209,7 @@ class MainDashboardContainer extends Component {
             <div className="chart-container">
               <div className="chart">
                 <div className="section_title">
-                  <span>Funding Over Time</span>
+                  <span>{translations['amp.dashboard:funding-over-time']}</span>
                 </div>
                 {nddLoaded && !nddLoadingPending ? (
                   <FundingByYearChart

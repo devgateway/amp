@@ -2,13 +2,14 @@
   "amp.ndd.dashboard:Home-Page": "Dashboard Home",
   "amp.ndd.dashboard:page-title": "Aid Management Platform - NDD Dashboard",
   "amp.ndd.dashboard:filters": "Filters",
-  "amp.ndd.dashboard:edit-filters": "Edit Filters",
+  "amp.ndd.dashboard:Link": "Link",
+  "amp.ndd.dashboard:edit-filters": "edit filters",
   "amp.ndd.dashboard:show-filter-settings": "Show Filter Settings",
   "amp.ndd.dashboard:hide-filter-settings": "Hide Filter Settings",
   "amp.ndd.dashboard:settings": "Settings",
   "amp.ndd.dashboard:edit-settings": "Edit Settings",
   "amp.ndd.dashboard:close": "Close",
-  "amp.ndd.dashboard:share-copy-link": "Copy this link to share the dashboard",
+  "amp.ndd.dashboard:share-copy-link": "Share this dashboard view",
   "amp.ndd.dashboard:share-link": "Link",
   "amp.ndd.dashboard:share": "Share",
   "amp.ndd.dashboard:fy-direct": "Show Direct Data",
@@ -22,5 +23,7 @@
   "amp.dashboard:chart-billion": "B",
   "amp.dashboard:chart-trillion": "T",
   "amp.dashboard:chart-peta": "P",
-  "amp.dashboard:chart-exa": "E"
+  "amp.dashboard:chart-exa": "E",
+  "amp.dashboard:settings": "Settings",
+  "amp.dashboard:funding-over-time":"Funding Over Time"
 }

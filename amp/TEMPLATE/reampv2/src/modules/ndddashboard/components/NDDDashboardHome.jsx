@@ -81,15 +81,11 @@ class NDDDashboardHome extends Component {
   }
 
   onChangeFundingType = (value) => {
-    const { _callReport, _callTopReport } = this.props;
-    const {
-      filters, selectedPrograms, settings, selectedDirectProgram
-    } = this.state;
-    this.setState({ fundingType: value });
-    if (selectedDirectProgram != null) {
-      _callTopReport(value, settings, filters, selectedDirectProgram);
-    }
+    const { _callReport, _clearTopReport } = this.props;
+    const {filters, selectedPrograms, settings } = this.state;
+    this.setState({ fundingType: value, selectedDirectProgram: null });
     _callReport(value, filters, selectedPrograms, settings);
+    _clearTopReport();
   }
 
   onChangeProgram = (value) => {
@@ -128,7 +124,9 @@ class NDDDashboardHome extends Component {
             filters={filters}
             dashboardId={dashboardId} />
         </Row>
-        <Row><Col md={12}><div><br /></div></Col></Row>
+        <Row><Col md={12}>
+          <div><br /></div>
+        </Col></Row>
         <Row style={{ marginRight: '-30px', marginLeft: '-30px' }}>
           <MainDashboardContainer
             handleOuterChartClick={this.handleOuterChartClick.bind(this)}

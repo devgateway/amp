@@ -92,7 +92,8 @@ class MainDashboardContainer extends Component {
   render() {
     const {
       error, ndd, nddLoadingPending, nddLoaded, dashboardSettings, onChangeFundingType, fundingType, mapping,
-      onChangeProgram, selectedPrograms, noIndirectMapping, top, settings, selectedDirectProgram, handleOuterChartClick
+      onChangeProgram, selectedPrograms, noIndirectMapping, top, settings, selectedDirectProgram, handleOuterChartClick,
+      globalSettings
     } = this.props;
     const { translations } = this.context;
     const formatter = new Intl.NumberFormat('en-US', {
@@ -228,6 +229,7 @@ class MainDashboardContainer extends Component {
 const mapStateToProps = state => ({
   top: state.reportsReducer.top,
   translations: state.translationsReducer.translations,
+  globalSettings: state.dashboardSettingsReducer.globalSettings,
   topLoaded: state.reportsReducer.topLoaded,
   topLoadingPending: state.reportsReducer.topLoadingPending,
   dashboardSettings: state.dashboardSettingsReducer.dashboardSettings
@@ -258,7 +260,8 @@ MainDashboardContainer.propTypes = {
   callTopReport: PropTypes.func.isRequired,
   settings: PropTypes.object,
   selectedDirectProgram: PropTypes.object,
-  handleOuterChartClick: PropTypes.func.isRequired
+  handleOuterChartClick: PropTypes.func.isRequired,
+  globalSettings: PropTypes.object
 };
 
 MainDashboardContainer.defaultProps = {

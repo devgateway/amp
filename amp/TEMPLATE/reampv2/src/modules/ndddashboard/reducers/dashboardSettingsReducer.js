@@ -21,7 +21,8 @@ export default (state = initialState, action) => {
         ...state,
         dashboardSettingsLoadingPending: false,
         dashboardSettingsLoaded: true,
-        dashboardSettings: action.payload
+        dashboardSettings: action.payload,
+        globalSettings: action.gs
       };
     }
     case FETCH_DASHBOARD_SETTINGS_ERROR:

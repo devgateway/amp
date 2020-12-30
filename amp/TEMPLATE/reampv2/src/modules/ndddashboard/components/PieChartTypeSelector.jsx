@@ -47,7 +47,7 @@ class PieChartTypeSelector extends Component {
       <form className="form-inline dash-form dash-adj-type" role="form">
         <select
           defaultValue={defaultValue}
-          className="form-control like-btn-sm ftype-options"
+          className="form-control like-btn-sm ftype-options programs-dropdown"
           onChange={(e) => onChange(e.target.value)}>
           {options.map((i, j) => (<option key={ids[j]} value={ids[j]}>{i}</option>))}
         </select>

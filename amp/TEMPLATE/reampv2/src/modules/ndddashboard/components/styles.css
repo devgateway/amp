@@ -184,3 +184,7 @@
 .funding-sources-title > div {
     text-transform: uppercase;
 }
+
+.programs-dropdown {
+    max-width: 435px;
+}

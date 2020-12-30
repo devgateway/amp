@@ -60,7 +60,7 @@ class Share extends Component {
                type="button"
                className="btn btn-sm btn-default pull-right dash-share-button">
                <span className="glyphicon glyphicon-link" />
-               <span>link</span>
+               <span>{translations['amp.ndd.dashboard:Link']}</span>
              </button>
            </div>
          </div>

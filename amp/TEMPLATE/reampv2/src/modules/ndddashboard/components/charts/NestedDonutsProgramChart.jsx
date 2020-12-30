@@ -207,7 +207,7 @@ class NestedDonutsProgramChart extends Component {
           titleLabel={`${program.name}`}
           total={totalAmount}
           value={program.amount}
-          minWidth="400px"
+          minWidth={400}
         />
       );
     }

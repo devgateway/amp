@@ -137,7 +137,7 @@ class FundingByYearChart extends Component {
           total={tooltipData.points[0].data.extraData
             .reduce((a, b) => (a + (b.values.find(i => i[year]) ? b.values.find(i => i[year])[year] : 0)), 0)}
           value={tooltipData.points[0].y}
-          minWidth="400px"
+          minWidth={400}
           isYearTotal
         />
       );

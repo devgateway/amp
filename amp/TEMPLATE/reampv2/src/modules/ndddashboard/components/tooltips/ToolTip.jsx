@@ -4,6 +4,16 @@ import './ToolTip.css';
 import { NDDTranslationContext } from '../StartUp';
 
 class ToolTip extends Component {
+  getActualWidth(inputText) {
+    const font = '16px times new roman';
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    context.font = font;
+    const { width } = context.measureText(inputText);
+    const formattedWidth = Math.ceil(width);
+    return formattedWidth;
+  }
+
   render() {
     const {
       titleLabel, color, value, formattedValue, currencyCode, total, minWidth, isYearTotal
@@ -12,7 +22,8 @@ class ToolTip extends Component {
     const percentage = total > 0 ? (value * 100) / total : 0;
     const headerStyle = { backgroundColor: color };
     const containerStyle = {};
-    if (minWidth) {
+    // Dont make it wider if the content doesnt need it.
+    if (minWidth && this.getActualWidth(titleLabel) > minWidth) {
       containerStyle.minWidth = minWidth;
     }
     return (

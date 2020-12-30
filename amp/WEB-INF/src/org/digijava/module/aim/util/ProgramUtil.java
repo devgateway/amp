@@ -1975,7 +1975,8 @@ public class ProgramUtil {
         if (setting != null) {
             String dstProgram = FeaturesUtil.getGlobalSettingValue(mappedProgramGS);
             if (StringUtils.isNotBlank(dstProgram)) {
-                return setting.getDefaultHierarchy().getAmpThemeId().equals(Long.valueOf(dstProgram));
+                return setting.getDefaultHierarchy() != null &&
+                        setting.getDefaultHierarchy().getAmpThemeId().equals(Long.valueOf(dstProgram));
             }
         }
 

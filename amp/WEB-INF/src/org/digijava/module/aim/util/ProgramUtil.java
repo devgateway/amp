@@ -2025,4 +2025,18 @@ public class ProgramUtil {
         return new TreeSet<>(Comparator.comparing(AmpTheme::getAmpThemeId));
     }
 
+    public static Set<AmpTheme> getProgramsIncludingAncestors(Set<AmpTheme> programs) {
+        Set<AmpTheme> dstThemes = new HashSet<>();
+        for (AmpTheme p : programs) {
+            dstThemes.add(p);
+            AmpTheme parent = p.getParentThemeId();
+            while (parent != null) {
+                dstThemes.add(parent);
+                parent = parent.getParentThemeId();
+            }
+        }
+
+        return dstThemes;
+    }
+
 }

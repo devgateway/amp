@@ -20,7 +20,6 @@ import static org.digijava.module.aim.util.ProgramUtil.INDIRECT_PRIMARY_PROGRAM;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -113,7 +112,7 @@ public class AmpThemeSearchModel extends AbstractAmpAutoCompleteModel<AmpTheme> 
             return activityProgramsModel.getObject().stream()
                     .map(AmpActivityProgram::getProgram)
                     .filter(p -> mapping.containsKey(p))
-                    .map(p -> getProgramsIncludingAncestors(mapping.get(p)))
+                    .map(p -> ProgramUtil.getProgramsIncludingAncestors(mapping.get(p)))
                     .flatMap(Set::stream)
                     .collect(Collectors.toSet());
         }
@@ -121,17 +120,4 @@ public class AmpThemeSearchModel extends AbstractAmpAutoCompleteModel<AmpTheme> 
         return null;
     }
 
-    private Set<AmpTheme> getProgramsIncludingAncestors(Set<AmpTheme> programs) {
-        Set<AmpTheme> dstThemes = new HashSet<>();
-        for (AmpTheme p : programs) {
-            dstThemes.add(p);
-            AmpTheme parent = p.getParentThemeId();
-            while (parent != null) {
-                dstThemes.add(parent);
-                parent = parent.getParentThemeId();
-            }
-        }
-
-        return dstThemes;
-    }
 }

@@ -17,6 +17,7 @@ import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.dbentity.AmpThemeMapping;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.criterion.Restrictions;
@@ -239,5 +240,13 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
     @Override
     public boolean isIndicatorValid(Long id) {
         return InterchangeUtils.getSessionWithPendingChanges().get(AmpIndicator.class, id) != null;
+    }
+
+    @Override
+    public List<AmpThemeMapping> getMappedThemes() {
+        return PersistenceManager.getRequestDBSession()
+                .createCriteria(AmpThemeMapping.class)
+                .setCacheable(true)
+                .list();
     }
 }

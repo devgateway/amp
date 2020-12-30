@@ -334,7 +334,7 @@ class NestedDonutsProgramChart extends Component {
             top: legendTop,
             left: legendLeft
           }}
-          className="pie-lengend-wrapper">
+          className="pie-legend-wrapper">
           {this.createTooltip()}
         </div>
       </CSSTransitionGroup>

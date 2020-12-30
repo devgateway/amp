@@ -180,12 +180,21 @@ body {
     padding: 10px;
 }
 
-.pie-lengend-wrapper {
+.pie-legend-wrapper {
     position: absolute;
     background-color: #0b58a2;
     border-radius: 5px;
     z-index: 9999;
     width: auto;
+}
+
+.line-legend-wrapper {
+    position: absolute;
+    background-color: #0b58a2;
+    border-radius: 5px;
+    z-index: 9999;
+    width: auto;
+    pointer-events: none;
 }
 
 .funding-sources-title {

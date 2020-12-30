@@ -110,16 +110,13 @@ class FundingByYearChart extends Component {
 
   onHover = (data) => {
     console.log(data);
-    /*const { selectedDirectProgram } = this.props;
-    if (selectedDirectProgram === null || data.points[0].data.name === DIRECT) {
-      // Disable tooltip when outer ring is selected
-      this.setState({
-        showLegend: true,
-        legendTop: data.event.pageY - 200,
-        legendLeft: data.event.pageX - 360,
-        tooltipData: data
-      });
-    }*/
+    // Disable tooltip when outer ring is selected
+    this.setState({
+      showLegend: true,
+      legendTop: data.event.pointerY - 25,
+      legendLeft: data.event.pointerX - 100,
+      tooltipData: data
+    });
   }
 
   onUnHover = () => {
@@ -131,16 +128,16 @@ class FundingByYearChart extends Component {
     const { settings, translations } = this.props;
     if (tooltipData) {
       const formatter = formatKMB(translations); // TODO: get precision and separator from GS.
-      const program = tooltipData.points[0].data.extraData[tooltipData.points[0].i];
-      const totalAmount = tooltipData.points[0].data.extraData.reduce((i, j) => (i + j.amount), 0);
+      const program = 'test'; /* tooltipData.points[0].data.extraData[tooltipData.points[0].i]; */
+      const totalAmount = 51515; /* tooltipData.points[0].data.extraData.reduce((i, j) => (i + j.amount), 0); */
       return (
         <ToolTip
           color={tooltipData.points[0].color}
-          currencyCode={settings[CURRENCY_CODE]}
-          formattedValue={formatter(program.amount)}
-          titleLabel={`${program.name}`}
-          total={totalAmount}
-          value={program.amount}
+          currencyCode="USD"
+          formattedValue={formatter('21548')}
+          titleLabel="titulo"
+          total={5000}
+          value={150}
           minWidth="400px"
         />
       );
@@ -264,7 +261,7 @@ class FundingByYearChart extends Component {
             top: legendTop,
             left: legendLeft
           }}
-          className="pie-lengend-wrapper">
+          className="line-legend-wrapper">
           {this.createTooltip()}
         </div>
       </div>

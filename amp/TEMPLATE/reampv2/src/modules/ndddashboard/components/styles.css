@@ -195,6 +195,7 @@ body {
     z-index: 9999;
     width: auto;
     pointer-events: none;
+    opacity: 0.90;
 }
 
 .funding-sources-title {

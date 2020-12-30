@@ -9,7 +9,7 @@ class ToolTip extends Component {
       titleLabel, color, value, formattedValue, currencyCode, total, minWidth, isYearTotal
     } = this.props;
     const { translations } = this.context;
-    const percentage = (value * 100) / total;
+    const percentage = total > 0 ? (value * 100) / total : 0;
     const headerStyle = { backgroundColor: color };
     const containerStyle = {};
     if (minWidth) {
@@ -26,14 +26,16 @@ class ToolTip extends Component {
               <span className="formattedValue">{formattedValue}</span>
               <span className="currency">{currencyCode}</span>
             </div>
-            <div className="element grey">
-              <span className="of-total">
-                <b>{`${percentage.toFixed(2)}% `}</b>
-                {isYearTotal
-                  ? translations['amp.ndd.dashboard:of-year-total']
-                  : translations['amp.ndd.dashboard:of-total']}
-              </span>
-            </div>
+            {percentage > 0 ? (
+              <div className="element grey">
+                <span className="of-total">
+                  <b>{`${percentage.toFixed(2)}% `}</b>
+                  {isYearTotal
+                    ? translations['amp.ndd.dashboard:of-year-total']
+                    : translations['amp.ndd.dashboard:of-total']}
+                </span>
+              </div>
+            ) : null}
           </div>
         </div>
       </div>

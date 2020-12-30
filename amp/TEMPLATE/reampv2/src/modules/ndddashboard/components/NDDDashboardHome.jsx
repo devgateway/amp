@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Row } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -121,14 +121,15 @@ class NDDDashboardHome extends Component {
     } = this.props;
     return (
       <Container fluid className="main-container">
-        <Row>
+        <Row style={{ backgroundColor: '#f6f6f6', paddingTop: '15px' }}>
           <HeaderContainer
             onApplySettings={this.onApplySettings}
             onApplyFilters={this.onApplyFilters}
             filters={filters}
             dashboardId={dashboardId} />
         </Row>
-        <Row>
+        <Row><Col md={12}><div><br /></div></Col></Row>
+        <Row style={{ marginRight: '-30px', marginLeft: '-30px' }}>
           <MainDashboardContainer
             handleOuterChartClick={this.handleOuterChartClick.bind(this)}
             selectedDirectProgram={selectedDirectProgram}

@@ -48,7 +48,9 @@ public class ScorecardManager extends Action {
                     scorecardSettingsForm.setValidationTime(settings.getValidationTime());
                     scorecardSettingsForm.setPercentageThreshold(settings.getPercentageThreshold());
                     scorecardSettingsForm.setSelectedCategoryValues(getSelectedClosedStatuses(settings.getClosedStatuses()));
-                    scorecardSettingsForm.setSelectedQuarters((String[]) settings.getQuartersAsList().toArray());
+                    if (!settings.getQuartersAsList().isEmpty()) {
+                        scorecardSettingsForm.setSelectedQuarters((String[]) settings.getQuartersAsList().toArray());
+                    }
             }
             
             return mapping.findForward("forward");

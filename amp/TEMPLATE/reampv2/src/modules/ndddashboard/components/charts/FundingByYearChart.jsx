@@ -8,12 +8,13 @@ import Plotly from 'plotly.js';
 import createPlotlyComponent from 'react-plotly.js/factory';
 import {
   DIRECT_PROGRAM, INDIRECT_PROGRAMS, PROGRAMLVL1, AMOUNT, CODE, DIRECT, INDIRECT,
-  TRANSITIONS, PROGRAMLVL2, AVAILABLE_COLORS, TRN_PREFIX
+  TRANSITIONS, PROGRAMLVL2, AVAILABLE_COLORS, TRN_PREFIX, CURRENCY_CODE
 } from '../../utils/constants';
 import {
-  addAlpha, getCustomColor, getGradient
+  addAlpha, formatKMB, getCustomColor, getGradient
 } from '../../utils/Utils';
 import styles from '../styles.css';
+import ToolTip from '../tooltips/ToolTip';
 
 const Plot = createPlotlyComponent(Plotly);
 
@@ -25,7 +26,7 @@ class FundingByYearChart extends Component {
     super(props);
     this.getValues = this.getValues.bind(this);
     this.state = {
-      source: SRC_DIRECT
+      source: SRC_DIRECT, showLegend: false, legendTop: 0, legendLeft: 0, tooltipData: null
     };
   }
 
@@ -107,9 +108,49 @@ class FundingByYearChart extends Component {
     return ret;
   }
 
+  onHover = (data) => {
+    debugger
+    const { selectedDirectProgram } = this.props;
+    if (selectedDirectProgram === null || data.points[0].data.name === DIRECT) {
+      // Disable tooltip when outer ring is selected
+      this.setState({
+        showLegend: true,
+        legendTop: data.event.pageY - 200,
+        legendLeft: data.event.pageX - 360,
+        tooltipData: data
+      });
+    }
+  }
+
+  onUnHover = () => {
+    this.setState({ showLegend: false, tooltipData: null });
+  }
+
+  createTooltip = () => {
+    const { tooltipData } = this.state;
+    const { settings, translations } = this.props;
+    if (tooltipData) {
+      const formatter = formatKMB(translations); // TODO: get precision and separator from GS.
+      const program = tooltipData.points[0].data.extraData[tooltipData.points[0].i];
+      const totalAmount = tooltipData.points[0].data.extraData.reduce((i, j) => (i + j.amount), 0);
+      return (
+        <ToolTip
+          color={tooltipData.points[0].color}
+          currencyCode={settings[CURRENCY_CODE]}
+          formattedValue={formatter(program.amount)}
+          titleLabel={`${program.name}`}
+          total={totalAmount}
+          value={program.amount}
+          minWidth="400px"
+        />
+      );
+    }
+    return null;
+  }
+
   render() {
     const { selectedDirectProgram, translations } = this.props;
-    const { source } = this.state;
+    const { source, showLegend, legendTop, legendLeft } = this.state;
     const directData = this.getValues();
     const transition = {
       duration: 2000,
@@ -161,7 +202,6 @@ class FundingByYearChart extends Component {
               x: i.values.map(j => Object.keys(j)[0]),
               y: i.values.map(j => j[Object.keys(j)[0]]),
               text: (`${i[CODE]}: ${i.name}`).substr(0, 50),
-              hoverinfo: 'skip',
               name: '',
               type: 'scatter',
               mode: 'lines+markers',
@@ -210,7 +250,18 @@ class FundingByYearChart extends Component {
           config={{ displaylogo: false, responsive: true }}
           useResizeHandler
           style={{ width: '100%', height: '100%' }}
+          onHover={event => this.onHover(event)}
+          onUnhover={() => this.onUnHover()}
         />
+        <div
+          style={{
+            display: (!showLegend ? 'none' : 'block'),
+            top: legendTop,
+            left: legendLeft
+          }}
+          className="pie-lengend-wrapper">
+          {this.createTooltip()}
+        </div>
       </div>
     );
   }

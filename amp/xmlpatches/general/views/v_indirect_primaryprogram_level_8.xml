@@ -40,7 +40,6 @@
 								 JOIN ni_all_programs_with_levels apl ON ip.amp_program_id = apl.amp_theme_id
 								 JOIN amp_program_settings aps on aps.default_hierarchy = apl.id0
 								 LEFT JOIN amp_theme level ON level.amp_theme_id = apl.id8
-								 JOIN amp_program_settings aps ON aps.amp_program_settings_id = a.program_setting
 						WHERE aps.name = 'Primary Program'
 						GROUP BY a.amp_activity_id, level.name, apl.id8
 					) v ON aav.amp_activity_id = v.amp_activity_id;

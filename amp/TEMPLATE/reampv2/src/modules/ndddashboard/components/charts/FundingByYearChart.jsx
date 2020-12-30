@@ -109,8 +109,8 @@ class FundingByYearChart extends Component {
   }
 
   onHover = (data) => {
-    debugger
-    const { selectedDirectProgram } = this.props;
+    console.log(data);
+    /*const { selectedDirectProgram } = this.props;
     if (selectedDirectProgram === null || data.points[0].data.name === DIRECT) {
       // Disable tooltip when outer ring is selected
       this.setState({
@@ -119,7 +119,7 @@ class FundingByYearChart extends Component {
         legendLeft: data.event.pageX - 360,
         tooltipData: data
       });
-    }
+    }*/
   }
 
   onUnHover = () => {
@@ -150,7 +150,9 @@ class FundingByYearChart extends Component {
 
   render() {
     const { selectedDirectProgram, translations } = this.props;
-    const { source, showLegend, legendTop, legendLeft } = this.state;
+    const {
+      source, showLegend, legendTop, legendLeft
+    } = this.state;
     const directData = this.getValues();
     const transition = {
       duration: 2000,
@@ -202,6 +204,8 @@ class FundingByYearChart extends Component {
               x: i.values.map(j => Object.keys(j)[0]),
               y: i.values.map(j => j[Object.keys(j)[0]]),
               text: (`${i[CODE]}: ${i.name}`).substr(0, 50),
+              extraData: i,
+              hoverinfo: 'none',
               name: '',
               type: 'scatter',
               mode: 'lines+markers',
@@ -239,13 +243,14 @@ class FundingByYearChart extends Component {
             annotations,
             xaxis: {
               showgrid: false,
-              showline: false,
+              showline: true,
               autotick: false,
               tickangle: 45,
             },
             yaxis: {
               automargin: false,
-            }
+            },
+            hovermode: 'closest'
           }}
           config={{ displaylogo: false, responsive: true }}
           useResizeHandler

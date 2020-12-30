@@ -4,11 +4,13 @@
 
 package org.digijava.module.aim.util;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -16,10 +18,13 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 
 import com.google.common.collect.ImmutableList;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.util.LabelValueBean;
 import org.dgfoundation.amp.algo.AlgoUtils;
@@ -39,6 +44,7 @@ import org.digijava.module.aim.dbentity.AmpIndicatorSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.AmpThemeIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpThemeIndicators;
+import org.digijava.module.aim.dbentity.AmpThemeMapping;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.ActivitySector;
@@ -59,6 +65,13 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
+
+import static java.util.Collections.emptySet;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.mapping;
+import static java.util.stream.Collectors.toCollection;
+import static org.digijava.module.aim.helper.GlobalSettingsConstants.MAPPING_DESTINATION_PROGRAM;
+import static org.digijava.module.aim.helper.GlobalSettingsConstants.MAPPING_SOURCE_PROGRAM;
 
 public class ProgramUtil {
     private static Logger logger = Logger.getLogger(ProgramUtil.class);
@@ -1948,4 +1961,68 @@ public class ProgramUtil {
         }
         return program;
     }
+
+    public static boolean isSourceMappedProgram(final AmpActivityProgramSettings setting) {
+        return isSettingMappedProgram(setting, MAPPING_SOURCE_PROGRAM);
+    }
+
+    public static boolean isDestinationMappedProgram(final AmpActivityProgramSettings setting) {
+        return isSettingMappedProgram(setting, MAPPING_DESTINATION_PROGRAM);
+    }
+
+    private static boolean isSettingMappedProgram(final AmpActivityProgramSettings setting,
+                                                  final String mappedProgramGS) {
+        if (setting != null) {
+            String dstProgram = FeaturesUtil.getGlobalSettingValue(mappedProgramGS);
+            if (StringUtils.isNotBlank(dstProgram)) {
+                return setting.getDefaultHierarchy().getAmpThemeId().equals(Long.valueOf(dstProgram));
+            }
+        }
+
+        return false;
+    }
+
+    public static Map<AmpTheme, Set<AmpTheme>> loadProgramMappings() {
+        List<AmpThemeMapping> list = PersistenceManager.getRequestDBSession()
+                .createCriteria(AmpThemeMapping.class)
+                .setCacheable(true)
+                .list();
+
+        TreeMap<AmpTheme, Set<AmpTheme>> mappedPrograms = list.stream().collect(groupingBy(
+                AmpThemeMapping::getSrcTheme,
+                () -> new TreeMap<>(Comparator.comparing(AmpTheme::getAmpThemeId)),
+                mapping(AmpThemeMapping::getDstTheme, toCollection(ProgramUtil::newSetComparingById))));
+
+        includeAncestors(mappedPrograms);
+
+        return mappedPrograms;
+    }
+
+    private static void includeAncestors(Map<AmpTheme, Set<AmpTheme>> mapping) {
+        Set<AmpTheme> queued = newSetComparingById();
+        Deque<AmpTheme> queue = new ArrayDeque<>(mapping.keySet());
+
+        while (!queue.isEmpty()) {
+            AmpTheme srcProgram = queue.removeFirst();
+            AmpTheme srcParentProgram = srcProgram.getParentThemeId();
+
+            if (srcParentProgram != null) {
+                Set<AmpTheme> dstParentPrograms = mapping.computeIfAbsent(srcParentProgram, p -> newSetComparingById());
+
+                mapping.getOrDefault(srcProgram, emptySet()).stream()
+                        .map(AmpTheme::getParentThemeId)
+                        .forEach(dstParentPrograms::add);
+
+                if (!queued.contains(srcParentProgram)) {
+                    queued.add(srcParentProgram);
+                    queue.add(srcParentProgram);
+                }
+            }
+        }
+    }
+
+    private static Set<AmpTheme> newSetComparingById() {
+        return new TreeSet<>(Comparator.comparing(AmpTheme::getAmpThemeId));
+    }
+
 }

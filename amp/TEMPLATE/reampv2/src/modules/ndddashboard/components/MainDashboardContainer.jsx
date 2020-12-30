@@ -140,6 +140,7 @@ class MainDashboardContainer extends Component {
                         <NestedDonutsProgramChart
                           data={ndd}
                           settings={settings}
+                          globalSettings={globalSettings}
                           selectedDirectProgram={selectedDirectProgram}
                           handleOuterChartClick={handleOuterChartClick} />
                       </div>
@@ -216,6 +217,7 @@ class MainDashboardContainer extends Component {
                   <FundingByYearChart
                     selectedDirectProgram={selectedDirectProgram}
                     settings={settings}
+                    globalSettings={globalSettings}
                     data={ndd} />
                 ) : <div className="loading" />}
               </div>

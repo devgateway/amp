@@ -11,7 +11,7 @@ import {
   TRANSITIONS, PROGRAMLVL2, AVAILABLE_COLORS, TRN_PREFIX, CURRENCY_CODE
 } from '../../utils/constants';
 import {
-  addAlpha, formatKMB, getCustomColor, getGradient
+  addAlpha, formatNumberWithSettings, getCustomColor, getGradient
 } from '../../utils/Utils';
 import styles from '../styles.css';
 import ToolTip from '../tooltips/ToolTip';
@@ -124,15 +124,14 @@ class FundingByYearChart extends Component {
 
   createTooltip = () => {
     const { tooltipData } = this.state;
-    const { settings, translations } = this.props;
+    const { settings, translations, globalSettings } = this.props;
     if (tooltipData) {
-      const formatter = formatKMB(translations); // TODO: get precision and separator from GS.
       const year = tooltipData.points[0].x;
       return (
         <ToolTip
           color={tooltipData.points[0].data.line.color}
           currencyCode={settings[CURRENCY_CODE]}
-          formattedValue={formatter(`${tooltipData.points[0].y}`)}
+          formattedValue={formatNumberWithSettings(globalSettings, tooltipData.points[0].y)}
           titleLabel={`${year} ${tooltipData.points[0].data.text}`}
           total={tooltipData.points[0].data.extraData
             .reduce((a, b) => (a + (b.values.find(i => i[year]) ? b.values.find(i => i[year])[year] : 0)), 0)}
@@ -289,7 +288,8 @@ FundingByYearChart.propTypes = {
   data: PropTypes.array.isRequired,
   selectedDirectProgram: PropTypes.object.isRequired,
   translations: PropTypes.array.isRequired,
-  settings: PropTypes.object.isRequired
+  settings: PropTypes.object.isRequired,
+  globalSettings: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({

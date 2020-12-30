@@ -12,7 +12,7 @@ import {
   TRANSITIONS, PROGRAMLVL2, AVAILABLE_COLORS, TRN_PREFIX, CURRENCY_CODE
 } from '../../utils/constants';
 import {
-  addAlpha, formatKMB, getCustomColor, getGradient
+  addAlpha, formatNumberWithSettings, getCustomColor, getGradient
 } from '../../utils/Utils';
 import ToolTip from '../tooltips/ToolTip';
 import styles from '../styles.css';
@@ -194,16 +194,16 @@ class NestedDonutsProgramChart extends Component {
 
   createTooltip = () => {
     const { tooltipData } = this.state;
-    const { settings, translations } = this.props;
+    const { settings, globalSettings } = this.props;
     if (tooltipData) {
-      const formatter = formatKMB(translations); // TODO: get precision and separator from GS.
       const program = tooltipData.points[0].data.extraData[tooltipData.points[0].i];
+      const val = formatNumberWithSettings(globalSettings, program.amount);
       const totalAmount = tooltipData.points[0].data.extraData.reduce((i, j) => (i + j.amount), 0);
       return (
         <ToolTip
           color={tooltipData.points[0].color}
           currencyCode={settings[CURRENCY_CODE]}
-          formattedValue={formatter(program.amount)}
+          formattedValue={val}
           titleLabel={`${program.name}`}
           total={totalAmount}
           value={program.amount}
@@ -350,7 +350,8 @@ NestedDonutsProgramChart.propTypes = {
   handleOuterChartClick: PropTypes.func.isRequired,
   selectedDirectProgram: PropTypes.object.isRequired,
   translations: PropTypes.array.isRequired,
-  settings: PropTypes.object.isRequired
+  settings: PropTypes.object.isRequired,
+  globalSettings: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({

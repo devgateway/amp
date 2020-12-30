@@ -40,6 +40,10 @@ export default (state = initialState, action) => {
 const extractNumberSettings = (gs) => {
   const format = {};
   format.numberFormat = gs['number-format'] || '#,#.#';
+  format.precision = 0;
+  if (format.numberFormat.indexOf('.') !== -1) {
+    format.precision = format.numberFormat.length - format.numberFormat.indexOf('.') - 1;
+  }
   if (format.numberFormat.indexOf(',') !== -1) {
     format.groupSeparator = gs['number-group-separator'] || ',';
   } else {

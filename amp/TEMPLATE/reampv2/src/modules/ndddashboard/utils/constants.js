@@ -21,7 +21,7 @@ export const FUNDING_TYPE = 'funding-type';
 export const CURRENCY_CODE = 'currency-code';
 export const DEFAULT_FUNDING_TYPE = 'Actual Commitments';
 export const INCLUDE_LOCATIONS_WITH_CHILDREN = 'include-location-children';
-export const DEFAULT_CURRENCY='USD';
+export const DEFAULT_CURRENCY = 'USD';
 
 const PROGRAMLVL1_COLOR = ['#1f5177',
   '#a42727',

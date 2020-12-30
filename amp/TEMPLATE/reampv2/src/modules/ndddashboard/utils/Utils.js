@@ -89,3 +89,12 @@ export function formatKMB(translations, precision, decimalSeparator) {
     .replace('E', translations['amp.dashboard:chart-exa'])
     .replace('.', decimalSeparator);
 }
+
+export function formatNumber(precision, decimalSeparator, groupSeparator, value) {
+  const formatString = `${decimalSeparator}.${precision}f`;
+  return format(formatString)(value).replaceAll(',', groupSeparator).replace('.', decimalSeparator);
+}
+
+export function formatNumberWithSettings(settings, value) {
+  return formatNumber(settings.precision, settings.decimalSeparator, settings.groupSeparator, value);
+}

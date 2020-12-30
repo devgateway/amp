@@ -63,7 +63,7 @@ export function extractPrograms(mapping, noIndirectMapping) {
       .find(j => j.children && j.children
         .find(k => k.children && k.children
           .find(l => l.id === mapping[PROGRAM_MAPPING][0][SRC_PROGRAM]))));
-    ret.indirect1 = mapping[ALL_PROGRAMS].find(i => i.children
+    ret.indirect1 = mapping[ALL_PROGRAMS].find(i => i.children && i.children
       .find(j => j.children && j.children
         .find(k => k.children && k.children
           .find(l => l.id === mapping[PROGRAM_MAPPING][0][DST_PROGRAM]))));

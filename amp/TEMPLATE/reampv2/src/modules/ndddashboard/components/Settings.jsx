@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import { TRN_PREFIX } from '../utils/constants';
 import styles from '../../../../../ampTemplate/node_modules/amp-settings/dist/amp-settings.css';
+import { NDDTranslationContext } from "./StartUp";
 
 const SettingsWidget = require('../../../../../ampTemplate/node_modules/amp-settings/dist/amp-settings');
 
@@ -52,13 +53,13 @@ class Settings extends Component {
   }
 
   render() {
-    const { translations, onApplySettings } = this.props;
+    const { translations } = this.context;
     const { show } = this.state;
     return (
       <Col md={4}>
         <div className="panel">
           <div className="panel-body">
-            <h3 className="inline-heading">Settings</h3>
+            <h3 className="inline-heading">{translations['amp.dashboard:settings']}</h3>
             <button
               type="button"
               className="btn btn-sm btn-default pull-right dash-settings-button"
@@ -89,5 +90,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
 Settings.propTypes = {
   onApplySettings: PropTypes.func.isRequired
 };
+Settings
+  .contextType = NDDTranslationContext;
 
 export default connect(mapStateToProps, mapDispatchToProps)(Settings);

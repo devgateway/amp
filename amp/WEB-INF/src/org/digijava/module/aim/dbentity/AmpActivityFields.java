@@ -29,6 +29,7 @@ import org.digijava.kernel.validators.activity.ComponentFundingOrgRoleValidator;
 import org.digijava.kernel.validators.activity.ImplementationLevelValidator;
 import org.digijava.kernel.validators.activity.MultiStakeholderPartnershipValidator;
 import org.digijava.kernel.validators.activity.OnBudgetValidator;
+import org.digijava.kernel.validators.activity.ProgramMappingValidator;
 import org.digijava.kernel.validators.activity.RegionLocationValidator;
 import org.digijava.kernel.validators.activity.TreeCollectionValidator;
 import org.digijava.kernel.validators.activity.UniqueActivityTitleValidator;
@@ -68,6 +69,7 @@ import org.hibernate.Session;
 @InterchangeableValidator(UniqueActivityTitleValidator.class)
 @InterchangeableValidator(ComponentFundingOrgRoleValidator.class)
 @InterchangeableValidator(ImplementationLevelValidator.class)
+@InterchangeableValidator(ProgramMappingValidator.class)
 @InterchangeableValidator(value = OnBudgetValidator.class, groups = Submit.class, attributes = "required=ND")
 @InterchangeableValidator(value = MultiStakeholderPartnershipValidator.class, groups = Submit.class,
         attributes = "required=ND")

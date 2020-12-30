@@ -158,7 +158,7 @@ class FundingByYearChart extends Component {
   }
 
   render() {
-    const { translations } = this.props;
+    const { translations, globalSettings } = this.props;
     const {
       source, showLegend, legendTop, legendLeft
     } = this.state;
@@ -262,7 +262,8 @@ class FundingByYearChart extends Component {
               automargin: true,
               fixedrange: true
             },
-            hovermode: 'closest'
+            hovermode: 'closest',
+            separators: globalSettings.decimalSeparator + globalSettings.groupSeparator
           }}
           config={{ displaylogo: false, responsive: true, displayModeBar: false }}
           useResizeHandler

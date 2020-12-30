@@ -170,7 +170,8 @@ class NestedDonutsProgramChart extends Component {
 
   onHover = (data) => {
     const { selectedDirectProgram } = this.props;
-    if (selectedDirectProgram === null || data.points[0].data.name === DIRECT) {
+    if (selectedDirectProgram === null
+      || (selectedDirectProgram !== null && data.points[0].data.extraData[data.points[0].i].neverFade)) {
       // Disable tooltip when outer ring is selected
       this.setState({
         showLegend: true,
@@ -258,6 +259,7 @@ class NestedDonutsProgramChart extends Component {
             [{
               values: innerDataForChart.map(i => i.percentage),
               labels: innerDataForChart.map(i => i[CODE]),
+              neverFade: innerDataForChart.map(i => i.neverFade),
               extraData: innerDataForChart,
               domain: {
                 x: [0.15, 0.85],
@@ -285,6 +287,7 @@ class NestedDonutsProgramChart extends Component {
               values: outerDataLvl2.map(i => i.normalizedPercentage),
               labels: outerDataLvl2.map(i => i[CODE]),
               text: outerDataLvl2.map(i => i[AMOUNT]),
+              neverFade: outerDataLvl2.map(i => i.neverFade),
               extraData: outerDataLvl2,
               name: DIRECT,
               hoverinfo: 'skip',

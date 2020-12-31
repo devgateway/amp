@@ -26,5 +26,9 @@
   "amp.dashboard:chart-peta": "P",
   "amp.dashboard:chart-exa": "E",
   "amp.dashboard:settings": "Settings",
-  "amp.dashboard:funding-over-time":"Funding Over Time"
+  "amp.dashboard:funding-over-time":"Funding Over Time",
+  "amp.ndd.dashboard:chart-tops-inunits": "In units",
+  "amp.ndd.dashboard:chart-tops-inthousands": "In thousands",
+  "amp.ndd.dashboard:chart-tops-inmillions": "In millions",
+  "amp.ndd.dashboard:chart-tops-inbillions": "In billions"
 }

@@ -20,7 +20,6 @@ import PieChartTypeSelector from './PieChartTypeSelector';
 import { NDDTranslationContext } from './StartUp';
 
 class MainDashboardContainer extends Component {
-
   getProgramLegend() {
     const { ndd } = this.props;
     const { selectedDirectProgram } = this.props;
@@ -57,7 +56,7 @@ class MainDashboardContainer extends Component {
   }
 
   getTopChart() {
-    const { topLoaded, topLoadingPending, top } = this.props;
+    const { topLoaded, topLoadingPending, top, globalSettings } = this.props;
     const { translations } = this.context;
     return topLoaded && !topLoadingPending ? (
       <div>
@@ -70,7 +69,7 @@ class MainDashboardContainer extends Component {
               {`${top.sumarizedTotal} ${top.currency}`}
             </div>
           </div>
-          <TopChart data={top} />
+          <TopChart data={top} globalSettings={globalSettings} />
         </div>
       </div>
     ) : <div className="loading" />;
@@ -107,7 +106,8 @@ class MainDashboardContainer extends Component {
       top,
       settings,
       selectedDirectProgram,
-      handleOuterChartClick
+      handleOuterChartClick,
+      globalSettings
     } = this.props;
     const { translations } = this.context;
     const formatter = new Intl.NumberFormat('en-US', {
@@ -154,6 +154,7 @@ class MainDashboardContainer extends Component {
                         <NestedDonutsProgramChart
                           data={ndd}
                           settings={settings}
+                          globalSettings={globalSettings}
                           selectedDirectProgram={selectedDirectProgram}
                           handleOuterChartClick={handleOuterChartClick} />
                       </div>
@@ -234,6 +235,8 @@ class MainDashboardContainer extends Component {
                 {nddLoaded && !nddLoadingPending ? (
                   <FundingByYearChart
                     selectedDirectProgram={selectedDirectProgram}
+                    settings={settings}
+                    globalSettings={globalSettings}
                     data={ndd} />
                 ) : <div className="loading" />}
               </div>
@@ -248,6 +251,7 @@ class MainDashboardContainer extends Component {
 const mapStateToProps = state => ({
   top: state.reportsReducer.top,
   translations: state.translationsReducer.translations,
+  globalSettings: state.dashboardSettingsReducer.globalSettings,
   topLoaded: state.reportsReducer.topLoaded,
   topLoadingPending: state.reportsReducer.topLoadingPending,
   dashboardSettings: state.dashboardSettingsReducer.dashboardSettings
@@ -278,7 +282,8 @@ MainDashboardContainer.propTypes = {
   callTopReport: PropTypes.func.isRequired,
   settings: PropTypes.object,
   selectedDirectProgram: PropTypes.object,
-  handleOuterChartClick: PropTypes.func.isRequired
+  handleOuterChartClick: PropTypes.func.isRequired,
+  globalSettings: PropTypes.object
 };
 
 MainDashboardContainer.defaultProps = {

@@ -3,7 +3,7 @@ import { ResponsiveBar } from '@nivo/bar';
 import PropTypes from 'prop-types';
 import { NDDTranslationContext } from './StartUp';
 import ToolTip from './tooltips/ToolTip';
-import { formatKMB } from '../utils/Utils';
+import { formatKMB, formatNumberWithSettings } from '../utils/Utils';
 import SimpleLegend from '../../../utils/components/SimpleLegend';
 
 const styles = {
@@ -12,23 +12,26 @@ const styles = {
 };
 
 class TopChart extends Component {
+
   getColor(item) {
     return colors[item.index];
   }
 
   getLabel(item) {
     const { translations } = this.context;
-    const formatter = formatKMB(translations);
+    const { globalSettings } = this.props;
+    const formatter = formatKMB(translations, globalSettings.precision, globalSettings.decimalSeparator);
     return formatter(item.data.value);
   }
 
   getOthers(o) {
     const { translations } = this.context;
+    const { globalSettings } = this.props;
     return {
       id: '-9999',
       name: translations['amp.ndd.dashboard:others'],
       value: o,
-      formattedAmount: o
+      formattedAmount: formatNumberWithSettings(globalSettings, o)
     };
     // TODO apply format from global settings
   }
@@ -113,7 +116,6 @@ TopChart.contextType = NDDTranslationContext;
 
 TopChart.propTypes = {
   data: PropTypes.object.isRequired,
-  formatter: PropTypes.object.isRequired,
   globalSettings: PropTypes.object.isRequired
 };
 export default TopChart;

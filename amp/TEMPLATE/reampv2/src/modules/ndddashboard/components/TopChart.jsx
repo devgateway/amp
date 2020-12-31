@@ -31,7 +31,7 @@ class TopChart extends Component {
       id: '-9999',
       name: translations['amp.ndd.dashboard:others'],
       value: o,
-      formattedAmount: formatNumberWithSettings(globalSettings, o)
+      formattedAmount: formatNumberWithSettings(translations, globalSettings, o, true)
     };
     // TODO apply format from global settings
   }

@@ -81,11 +81,16 @@ class Filters extends Component {
 
   generateFilterOutput = () => {
     const { filtersWithModels } = this.state;
+    const { translations, globalSettings } = this.props;
     const ret = [];
     if (filtersWithModels && filtersWithModels.filters) {
       Object.keys(filtersWithModels.filters)
         .forEach(i => {
-          ret.push(<FilterOutputItem filters={filtersWithModels.filters} i={i} />);
+          ret.push(<FilterOutputItem
+            filters={filtersWithModels.filters}
+            i={i}
+            translations={translations}
+            globalSettings={globalSettings} />);
         });
     }
     return <div style={{ paddingLeft: '10px' }}>{ret}</div>;
@@ -156,5 +161,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(Filters);
 Filters.propTypes = {
   onApplyFilters: PropTypes.func.isRequired,
   dashboardId: PropTypes.number,
-  translations: PropTypes.array.isRequired
+  translations: PropTypes.array.isRequired,
+  globalSettings: PropTypes.object.isRequired
 };

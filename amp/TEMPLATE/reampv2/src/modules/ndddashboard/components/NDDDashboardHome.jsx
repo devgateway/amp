@@ -122,11 +122,14 @@ class NDDDashboardHome extends Component {
             onApplySettings={this.onApplySettings}
             onApplyFilters={this.onApplyFilters}
             filters={filters}
+            globalSettings={globalSettings}
             dashboardId={dashboardId} />
         </Row>
-        <Row><Col md={12}>
+        <Row>
+          <Col md={12}>
           <div><br /></div>
-        </Col></Row>
+          </Col>
+        </Row>
         <Row style={{ marginRight: '-30px', marginLeft: '-30px' }}>
           <MainDashboardContainer
             handleOuterChartClick={this.handleOuterChartClick.bind(this)}

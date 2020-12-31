@@ -135,6 +135,14 @@ body {
     top: 0px;
 }
 
+#filter-popup {
+    border: 1px solid #337ab7;
+}
+
+#filter-popup .btn-success {
+    font-family: inherit;
+}
+
 .legends-container {
     background-color: white;
     border: 1px solid #ddd;

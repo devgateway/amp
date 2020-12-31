@@ -25,10 +25,12 @@ class TopChart extends Component {
   getOthers(o) {
     const { translations } = this.context;
     return {
-      id: -9999,
+      id: '-9999',
       name: translations['amp.ndd.dashboard:others'],
       value: o,
+      formattedAmount: o
     };
+    // TODO apply format from global settings
   }
 
   render() {
@@ -41,8 +43,11 @@ class TopChart extends Component {
     }));
 
     const others = data.total - data.values.reduce((acc, cur) => (acc + cur.amount), 0);
+
     if (others > 0) {
-      transformedData.push(this.getOthers(others));
+      const o = this.getOthers(others);
+      transformedData.push(o);
+      data.values.push(o);
     }
     return (
       <div style={styles}>

@@ -1,11 +1,13 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.both;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.emptyIterable;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
@@ -27,6 +29,8 @@ import java.util.StringJoiner;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import org.dgfoundation.amp.testutils.TransactionUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldInfoProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldsEnumerator;
@@ -34,6 +38,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.validators.InputValidatorPr
 import org.digijava.kernel.ampapi.endpoints.common.ObjectImporterAnyType;
 import org.digijava.kernel.ampapi.endpoints.common.TestTranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
+import org.digijava.kernel.persistence.InMemoryValueConverter;
 import org.digijava.module.aim.annotations.interchange.Independent;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
@@ -46,6 +51,27 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
+ * Important cases to test.
+ * <p>
+ * By field type:
+ * <ul><li>primitive
+ * <li>pick id only
+ * <li>object
+ * <li>discriminated object
+ * <li>discriminated pick id only
+ * <li>list of primitives
+ * <li>list of pick id only (not supported yet)
+ * <li>list of objects
+ * <li>list of discriminated objects
+ * <li>list of discriminated pick id only (not supported yet)</ul>
+ * <p>
+ * By action:
+ * <ul><li>field can be cleared (had a value, and with null or [] in json we're able to clear the field)
+ * <li>field can be set (value was null or empty and changed to new value)
+ * <li>field can be modified (one value can be replaced with another value)
+ * <li>field is not modified (null or empty value is kept)
+ * <li>read only field cannot be modified</ul>
+ *
  * @author Octavian Ciubotaru
  */
 public class ObjectImporterTest {
@@ -55,12 +81,24 @@ public class ObjectImporterTest {
         @Interchangeable(fieldTitle = "Children", importable = true)
         private List<Child> children = new ArrayList<>();
 
+        @Interchangeable(fieldTitle = "Read Only Children")
+        private List<Child> readOnlyChildren = new ArrayList<>();
+
         @Interchangeable(fieldTitle = "Adopted Children", importable = true)
         private Set<Child> adoptedChildren = new HashSet<>();
 
+        @Interchangeable(fieldTitle = "Years", importable = true)
+        private Set<Integer> years = new HashSet<>();
+
+        @Interchangeable(fieldTitle = "Read Only Years")
+        private Set<Integer> readOnlyYears = new HashSet<>();
+
         @Interchangeable(fieldTitle = "Name", importable = true)
         private String name;
-    
+
+        @Interchangeable(fieldTitle = "Read Only Name")
+        private String readOnlyName;
+
         private Integer age;
 
         @Interchangeable(fieldTitle = "Gender")
@@ -69,11 +107,14 @@ public class ObjectImporterTest {
         @InterchangeableDiscriminator(discriminatorField = "type", settings = {
                 @Interchangeable(fieldTitle = "Home", discriminatorOption = "H", importable = true),
                 @Interchangeable(fieldTitle = "Work", discriminatorOption = "W", importable = true,
-                        fmPath = TestFMService.HIDDEN_FM_PATH)})
+                        fmPath = TestFMService.HIDDEN_FM_PATH),
+                @Interchangeable(fieldTitle = "Read Only Address", discriminatorOption = "R")})
         private Set<Address> addresses = new HashSet<>();
 
         @InterchangeableDiscriminator(discriminatorField = "type", settings = {
                 @Interchangeable(fieldTitle = "Home Phone", importable = true, discriminatorOption = "H",
+                        multipleValues = false),
+                @Interchangeable(fieldTitle = "Read Only Phone", discriminatorOption = "R",
                         multipleValues = false),
                 @Interchangeable(fieldTitle = "Work Phone", importable = true, discriminatorOption = "W",
                         multipleValues = false)})
@@ -84,9 +125,28 @@ public class ObjectImporterTest {
                         multipleValues = false, pickIdOnly = true),
                 @Interchangeable(fieldTitle = "Height", discriminatorOption = "Height", importable = true,
                         multipleValues = false, pickIdOnly = true),
+                @Interchangeable(fieldTitle = "Read Only Intelligence", discriminatorOption = "Intelligence",
+                        multipleValues = false, pickIdOnly = true),
                 @Interchangeable(fieldTitle = "Character", discriminatorOption = "Character", importable = true,
-                        pickIdOnly = true)})
+                        multipleValues = true, pickIdOnly = true)})
+/*                @Interchangeable(fieldTitle = "Character", discriminatorOption = "Character", importable = true,
+                        pickIdOnly = true)})*/
         private Set<PersonAttribute> attributes = new HashSet<>();
+
+        @InterchangeableDiscriminator(discriminatorField = "type", settings = {
+                @Interchangeable(fieldTitle = "Emails", discriminatorOption = "E", importable = true,
+                        type = Email.class),
+                @Interchangeable(fieldTitle = "Web Sites", discriminatorOption = "W", importable = true,
+                        type = WebSite.class)})
+        private Set<ContactAttribute> contactAttributes = new HashSet<>();
+
+        @Interchangeable(fieldTitle = "Favorite Color", discriminatorOption = "Color",
+                importable = true, pickIdOnly = true)
+        private PersonAttribute color;
+
+        @Interchangeable(fieldTitle = "Read Only Favorite Color", discriminatorOption = "Color",
+                pickIdOnly = true)
+        private PersonAttribute readOnlyColor;
 
         @Independent
         @Interchangeable(fieldTitle = "Agreement", importable = true)
@@ -94,6 +154,9 @@ public class ObjectImporterTest {
 
         @Interchangeable(fieldTitle = "Details", importable = true)
         private ParentDetails details;
+
+        @Interchangeable(fieldTitle = "Read Only Details")
+        private ParentDetails readOnlyDetails;
 
         @Interchangeable(fieldTitle = "Status", importable = true, pickIdOnly = true)
         private Long status;
@@ -173,6 +236,14 @@ public class ObjectImporterTest {
             this.attributes = attributes;
         }
 
+        public PersonAttribute getColor() {
+            return color;
+        }
+
+        public void setColor(PersonAttribute color) {
+            this.color = color;
+        }
+
         void addPhone(Phone phone) {
             phones.add(phone);
         }
@@ -209,6 +280,38 @@ public class ObjectImporterTest {
             this.details = details;
         }
 
+        public Set<Integer> getYears() {
+            return years;
+        }
+
+        public void setYears(Set<Integer> years) {
+            this.years = years;
+        }
+
+        public void addYear(Integer year) {
+            years.add(year);
+        }
+
+        public List<Child> getReadOnlyChildren() {
+            return readOnlyChildren;
+        }
+
+        public String getReadOnlyName() {
+            return readOnlyName;
+        }
+
+        public PersonAttribute getReadOnlyColor() {
+            return readOnlyColor;
+        }
+
+        public ParentDetails getReadOnlyDetails() {
+            return readOnlyDetails;
+        }
+
+        public Set<Integer> getReadOnlyYears() {
+            return readOnlyYears;
+        }
+
         public void setStatus(Long status) {
             this.status = status;
         }
@@ -224,9 +327,51 @@ public class ObjectImporterTest {
         public void setStatuses(Set<Long> statuses) {
             this.statuses = statuses;
         }
+
+        public Set<? extends ContactAttribute> getContactAttributes() {
+            return contactAttributes;
+        }
+    }
+
+    public abstract static class ContactAttribute {
+
+        @InterchangeableId
+        @Interchangeable(fieldTitle = "Id")
+        private Long id;
+
+        private String type;
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+    }
+
+    public static class Email extends ContactAttribute {
+
+        @Interchangeable(fieldTitle = "Value", importable = true)
+        private String value;
+
+        public String getValue() {
+            return value;
+        }
+    }
+
+    public static class WebSite extends ContactAttribute {
+
+        @Interchangeable(fieldTitle = "Value", importable = true)
+        private String value;
+
+        public String getValue() {
+            return value;
+        }
     }
 
     public static class ParentDetails {
+
 
         @InterchangeableId
         @Interchangeable(fieldTitle = "Id")
@@ -506,7 +651,7 @@ public class ObjectImporterTest {
     public static class PersonAttribute {
 
         @PossibleValueId
-        private String id;
+        private Long id; // string ids not really supported
 
         private String type; // Hair, Height
 
@@ -516,17 +661,17 @@ public class ObjectImporterTest {
         public PersonAttribute() {
         }
 
-        public PersonAttribute(String id, String type, String value) {
+        public PersonAttribute(Long id, String type, String value) {
             this.id = id;
             this.type = type;
             this.value = value;
         }
 
-        public String getId() {
+        public Long getId() {
             return id;
         }
 
-        public void setId(String id) {
+        public void setId(Long id) {
             this.id = id;
         }
 
@@ -565,12 +710,14 @@ public class ObjectImporterTest {
 
     @Before
     public void setUp() throws IOException {
+        TransactionUtil.setUpWorkspaceEmptyPrefixes();
+
         createObjectImporter();
         readJsonExamples();
     }
 
     private void createObjectImporter() {
-        FMService fmService = new TestFMService();
+        FeatureManagerService fmService = new TestFMService();
         FieldInfoProvider provider = new TestFieldInfoProvider();
         TranslatorService translatorService = new TestTranslatorService();
 
@@ -579,14 +726,12 @@ public class ObjectImporterTest {
         APIField apiField = fe.getMetaModel(Parent.class);
 
         InputValidatorProcessor formatValidator = new InputValidatorProcessor(Collections.emptyList());
-        InputValidatorProcessor businessRulesValidator = new InputValidatorProcessor(Collections.emptyList());
 
-        TestValueConverter valueConverter = new TestValueConverter();
+        InMemoryValueConverter valueConverter = new InMemoryValueConverter();
 
         TranslationSettings plainEnglish = new TranslationSettings("en", "en", Collections.singleton("en"), false);
 
-        importer = new ObjectImporterAnyType(formatValidator, businessRulesValidator, plainEnglish, apiField,
-                valueConverter);
+        importer = new ObjectImporterAnyType(formatValidator, plainEnglish, apiField, valueConverter);
     }
 
     private void readJsonExamples() throws IOException {
@@ -650,14 +795,14 @@ public class ObjectImporterTest {
     @Test
     public void testNoOverwriteCollection() {
         Map<String, Object> json = (Map<String, Object>) examples.get("no-overwrite");
-        
+
         Parent parent = new Parent("Leonidas", 45);
         parent.addChild(new Child(1L, "Alexios", "Defender"));
         parent.addChild(new Child(2L, "Herodotus", "Historian"));
         parent.addChild(new Child(null, "Persian", null));
-        
+
         importer.validateAndImport(parent, json);
-        
+
         assertThat(importer.errors.size(), is(0));
         assertThat(parent, parentWithChildren("Wise Leonidas", 45,
                 containsInAnyOrder(
@@ -665,7 +810,7 @@ public class ObjectImporterTest {
                         child(null, "Persian", null),
                         child(2L, "Herodotus", "Historian"))));
     }
-    
+
     @Test
     public void testNoOverwriteInSet() {
         Map<String, Object> json = (Map<String, Object>) examples.get("no-overwrite-in-set");
@@ -794,15 +939,15 @@ public class ObjectImporterTest {
         Map<String, Object> json = (Map<String, Object>) examples.get("match-discriminated-id-only");
 
         Parent parent = new Parent();
-        parent.addAttribute(new PersonAttribute("1", "Hair", "Blond"));
-        parent.addAttribute(new PersonAttribute("2", "Height", "Tall"));
+        parent.addAttribute(new PersonAttribute(1L, "Hair", "Blond"));
+        parent.addAttribute(new PersonAttribute(2L, "Height", "Tall"));
 
         importer.validateAndImport(parent, json);
 
         assertThat(importer.errors.size(), is(0));
         assertThat(parent, parentWithAttributes(null, null, containsInAnyOrder(
-                attribute("Hair", "1", "Blond"),
-                attribute("Height", "10", "Small"))));
+                attribute("Hair", 1L, "Blond"),
+                attribute("Height", 10L, "Small"))));
     }
 
     /**
@@ -896,33 +1041,33 @@ public class ObjectImporterTest {
         assertThat(importer.errors.size(), is(0));
         assertThat(parent, hasProperty("agreement", agreement(1L, "x")));
     }
-    
+
     @Test
     public void testDiscriminatorMissing() {
         Parent parent = new Parent();
         parent.addPhone(new Phone("H", "123", "no soliciting"));
         parent.addPhone(new Phone("W", "678", "9-16 only"));
-    
+
         importer.validateAndImport(parent, new HashMap<>());
-    
+
         assertThat(importer.errors.size(), is(0));
         assertThat(parent, parentWithPhones(null, null, containsInAnyOrder(
                 phone("H", "123", "no soliciting"),
                 phone("W", "678", "9-16 only"))));
     }
-    
+
     @Test
     public void testDiscriminatorIdOnly() {
         Parent parent = new Parent();
-        parent.addAttribute(new PersonAttribute("1", "Hair", "Blond"));
-        parent.addAttribute(new PersonAttribute("2", "Height", "Tall"));
-    
+        parent.addAttribute(new PersonAttribute(1L, "Hair", "Blond"));
+        parent.addAttribute(new PersonAttribute(2L, "Height", "Tall"));
+
         importer.validateAndImport(parent, new HashMap<>());
-    
+
         assertThat(importer.errors.size(), is(0));
         assertThat(parent, parentWithAttributes(null, null, containsInAnyOrder(
-                attribute("Hair", "1", "Blond"),
-                attribute("Height", "2", "Tall"))));
+                attribute("Hair", 1L, "Blond"),
+                attribute("Height", 2L, "Tall"))));
     }
 
     @Test
@@ -1004,6 +1149,391 @@ public class ObjectImporterTest {
         assertThat(parent, hasProperty("details", detail(null, "Detail A")));
     }
 
+    // primitive tests
+
+    @Test
+    public void testClearPrimitive() {
+        Parent parent = new Parent();
+        parent.setName("name");
+
+        importer.validateAndImport(parent, Collections.singletonMap("name", null));
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent.getName(), is(nullValue()));
+    }
+
+    @Test
+    public void testReplacePrimitive() {
+        Parent parent = new Parent();
+        parent.setName("One");
+
+        importer.validateAndImport(parent, Collections.singletonMap("name", "Two"));
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent.getName(), is("Two"));
+    }
+
+    @Test
+    public void testPutPrimitive() {
+        Parent parent = new Parent();
+        parent.setName(null);
+
+        importer.validateAndImport(parent, Collections.singletonMap("name", "X"));
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent.getName(), is("X"));
+    }
+
+    // non discriminated object tests
+    @Test
+    public void testInsertNonDiscriminatedObject() {
+        Parent parent = new Parent();
+
+        importer.validateAndImport(parent, ImmutableMap.of("details", ImmutableMap.of("detail", "X")));
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent.getDetails(), detail(null, "X"));
+    }
+
+    @Test
+    public void testClearNonDiscriminatedObject() {
+        Parent parent = new Parent();
+        parent.setDetails(new ParentDetails());
+
+        importer.validateAndImport(parent, Collections.singletonMap("details", null));
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent.getDetails(), is(nullValue()));
+    }
+
+    @Test
+    public void testNotCreatedNonDiscriminatedObject() {
+        Parent parent = new Parent();
+
+        importer.validateAndImport(parent, Collections.singletonMap("details", null));
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent.getDetails(), is(nullValue()));
+    }
+
+    @Test
+    public void testReplaceNonDiscriminatedObject() {
+        Parent parent = new Parent();
+        ParentDetails details = new ParentDetails(1L, "X");
+        parent.setDetails(details);
+
+        importer.validateAndImport(parent, ImmutableMap.of("details", ImmutableMap.of("detail", "Y")));
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent.getDetails(), allOf(detail(1L, "Y"), sameInstance(details)));
+    }
+
+    @Test
+    public void testReplace2NonDiscriminatedObject() {
+        Parent parent = new Parent();
+        ParentDetails details = new ParentDetails(1L, "X");
+        parent.setDetails(details);
+
+        importer.validateAndImport(parent,
+                ImmutableMap.of("details",
+                        ImmutableMap.of("id", 2L, "detail", "Y")));
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent.getDetails(), allOf(detail(1L, "Y"), sameInstance(details)));
+    }
+
+    // discriminated object tests
+
+    @Test
+    public void testClearDiscriminatedSingleValueObject() {
+        Parent parent = new Parent();
+        parent.addPhone(new Phone("H", "123", null));
+
+        importer.validateAndImport(parent, Collections.singletonMap("home_phone", null));
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent.getPhones(), emptyIterable());
+    }
+
+    @Test
+    public void testSetDiscriminatedSingleValueObject() {
+        Parent parent = new Parent();
+
+        importer.validateAndImport(parent, ImmutableMap.of("home_phone", ImmutableMap.of("number", "12345")));
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent.getPhones(), contains(phone("H", "12345", null)));
+    }
+
+    @Test
+    public void testReplaceDiscriminatedSingleValueObject() {
+        Parent parent = new Parent();
+        Phone phone = new Phone("H", "123", null);
+        parent.addPhone(phone);
+
+        importer.validateAndImport(parent, ImmutableMap.of("home_phone", ImmutableMap.of("number", "12345")));
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent.getPhones(), contains(
+                both(phone("H", "12345", null))
+                        .and(sameInstance(phone))));
+    }
+
+    // non discriminated pick id only
+
+    @Test
+    public void testClearNonDiscriminatedPickIdOnly() {
+        Parent parent = new Parent();
+        parent.setColor(new PersonAttribute(5L, "Color", "Green"));
+
+        importer.validateAndImport(parent, Collections.singletonMap("favorite_color", null));
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent.getColor(), is(nullValue()));
+    }
+
+    @Test
+    public void testPutNonDiscriminatedPickIdOnly() {
+        Parent parent = new Parent();
+
+        importer.validateAndImport(parent, Collections.singletonMap("favorite_color", 1));
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent.getColor(), attribute("Color", 1L, "Yellow"));
+    }
+
+    @Test
+    public void testReplaceNonDiscriminatedPickIdOnly() {
+        Parent parent = new Parent();
+        parent.setColor(new PersonAttribute(1L, "Color", "Yellow"));
+
+        importer.validateAndImport(parent, Collections.singletonMap("favorite_color", 2));
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent.getColor(), attribute("Color", 2L, "Red"));
+    }
+
+    // discriminated pick id only
+
+    @Test
+    public void testClearDiscriminatedPickIdOnly() {
+        Parent parent = new Parent();
+        parent.addAttribute(new PersonAttribute(1L, "Hair", "Blond"));
+
+        importer.validateAndImport(parent, Collections.singletonMap("hair_color", null));
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent.getAttributes(), emptyIterable());
+    }
+
+    @Test
+    public void testPutDiscriminatedPickIdOnly() {
+        Parent parent = new Parent();
+
+        importer.validateAndImport(parent, ImmutableMap.of("height", 10));
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent.getAttributes(), contains(attribute("Height", 10L, "Small")));
+    }
+
+    @Test
+    public void testReplaceDiscriminatedPickIdOnly() {
+        Parent parent = new Parent();
+        parent.addAttribute(new PersonAttribute(2L, "Height", "Tall"));
+
+        importer.validateAndImport(parent, ImmutableMap.of("height", 10));
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent.getAttributes(), contains(attribute("Height", 10L, "Small")));
+    }
+
+    // list of primitives
+
+    @Test
+    public void testClearListOfPrimitivesWithNull() {
+        Parent parent = new Parent();
+        parent.addYear(2000);
+
+        importer.validateAndImport(parent, Collections.singletonMap("years", null));
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent.getYears(), emptyIterable());
+    }
+
+    @Test
+    public void testClearListOfPrimitivesWithEmpty() {
+        Parent parent = new Parent();
+        parent.addYear(2000);
+
+        importer.validateAndImport(parent, Collections.singletonMap("years", Collections.emptyList()));
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent.getYears(), emptyIterable());
+    }
+
+    @Test
+    public void testReplaceListOfPrimitives() {
+        Parent parent = new Parent();
+        parent.addYear(2000);
+
+        importer.validateAndImport(parent, Collections.singletonMap("years", Collections.singletonList(2001)));
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent.getYears(), contains(2001));
+    }
+
+    @Test
+    public void testPutListOfPrimitives() {
+        Parent parent = new Parent();
+
+        importer.validateAndImport(parent, Collections.singletonMap("years", ImmutableList.of(2000, 2001)));
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent.getYears(), containsInAnyOrder(2000, 2001));
+    }
+
+    // list of non discriminated objects
+
+    @Test
+    public void testClearNonDiscriminatedListOfObjectsWithNull() {
+        Parent parent = new Parent();
+        parent.addChild(new Child(2L, "Herodotus", "Historian"));
+
+        importer.validateAndImport(parent, Collections.singletonMap("children", null));
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent.getChildren(), emptyIterable());
+    }
+
+    @Test
+    public void testClearNonDiscriminatedListOfObjectsWithEmpty() {
+        Parent parent = new Parent();
+        parent.addChild(new Child(2L, "Herodotus", "Historian"));
+
+        importer.validateAndImport(parent, Collections.singletonMap("children", Collections.emptyList()));
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent.getChildren(), emptyIterable());
+    }
+
+    @Test
+    public void testPutNonDiscriminatedListOfObjects() {
+        Parent parent = new Parent();
+
+        importer.validateAndImport(parent, ImmutableMap.of("children", ImmutableList.of(
+                ImmutableMap.of("name", "Herodotus")
+        )));
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent.getChildren(), contains(child(null, "Herodotus", null)));
+    }
+
+    @Test
+    public void testReplaceNonDiscriminatedListOfObjects() {
+        Parent parent = new Parent();
+        parent.addChild(new Child(2L, "Herodotus", "Historian"));
+
+        importer.validateAndImport(parent, ImmutableMap.of("children", ImmutableList.of(
+                ImmutableMap.of("name", "Archimedes")
+        )));
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent.getChildren(), contains(child(null, "Archimedes", null)));
+    }
+
+    // list of discriminated objects
+
+    @Test
+    public void testClearDiscriminatedListOfObjectsWithNull() {
+        Parent parent = new Parent();
+        parent.addAddress(new Address(1L, "H", "Home", "123"));
+
+        importer.validateAndImport(parent, Collections.singletonMap("home", null));
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent.getAddresses(), emptyIterable());
+    }
+
+    @Test
+    public void testClearDiscriminatedListOfObjectsWithEmpty() {
+        Parent parent = new Parent();
+        parent.addAddress(new Address(1L, "H", "Home", "123"));
+
+        importer.validateAndImport(parent, Collections.singletonMap("home", Collections.emptyList()));
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent.getAddresses(), emptyIterable());
+    }
+
+    @Test
+    public void testPutDiscriminatedListOfObjects() {
+        Parent parent = new Parent();
+
+        importer.validateAndImport(parent, ImmutableMap.of("home", ImmutableList.of(
+                ImmutableMap.of("address", "X"))));
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent.getAddresses(), contains(address(null, "H", "X", null)));
+    }
+
+    @Test
+    public void testReplaceDiscriminatedListOfObjects() {
+        Parent parent = new Parent();
+        parent.addAddress(new Address(1L, "H", "Home", "123"));
+
+        importer.validateAndImport(parent, ImmutableMap.of("home", ImmutableList.of(
+                ImmutableMap.of("address", "X"))));
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent.getAddresses(), contains(address(null, "H", "X", null)));
+    }
+
+    @Test
+    public void testReadOnlyFieldsAreNotImported() {
+        Parent parent = new Parent();
+
+        importer.validateAndImport(parent, (Map<String, Object>) examples.get("read-only-fields"));
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent, allOf(
+                hasProperty("readOnlyName", nullValue()), // primitive
+                hasProperty("readOnlyColor", nullValue()), // pick id only
+                hasProperty("readOnlyDetails", nullValue()), // object
+                hasProperty("addresses", emptyIterable()), // list of discriminated objects
+                hasProperty("phones", emptyIterable()), // discriminated object
+                hasProperty("attributes", emptyIterable()), // discriminated pick id only
+                hasProperty("readOnlyYears", emptyIterable()), // list of primitives
+                hasProperty("readOnlyChildren", emptyIterable()) // list of objects
+        ));
+    }
+
+    // contact tests for simple field accessor
+
+    @Test
+    public void testDiscriminationWithDifferentClasses() {
+        Parent parent = new Parent();
+
+        importer.validateAndImport(parent, ImmutableMap.of(
+                "emails", ImmutableList.of(ImmutableMap.of("value", "admin@dg.org")),
+                "web_sites", ImmutableList.of(ImmutableMap.of("value", "https://dg.org/"))));
+
+        assertThat(importer.errors.size(), is(0));
+        assertThat(parent.getContactAttributes(),
+                containsInAnyOrder(email("admin@dg.org"), website("https://dg.org/")));
+    }
+
+    private Matcher email(String value) {
+        return allOf(hasProperty("type", equalTo("E")),
+                hasProperty("value", equalTo(value)),
+                instanceOf(Email.class));
+    }
+
+    private Matcher website(String value) {
+        return allOf(hasProperty("type", equalTo("W")),
+                hasProperty("value", equalTo(value)),
+                instanceOf(WebSite.class));
+    }
+
     @Test
     public void testListOfPickIdOnly() {
         Map<String, Object> json = (Map<String, Object>) examples.get("list-of-pick-id-only");
@@ -1015,9 +1545,10 @@ public class ObjectImporterTest {
         assertThat(importer.errors.size(), is(0));
         assertThat(parent, parentWithAttributes("Leonidas", 45,
                 containsInAnyOrder(
-                        attribute("Character", "55", "ch1"),
-                        attribute("Character", "56", "ch2"),
-                        attribute("Character", "57", "ch3"))));
+                        attribute("Character", 55L, "ch1"),
+                        attribute("Character", 56L, "ch2"),
+                        attribute("Character", 57L, "ch3")
+                )));
     }
 
     @Test
@@ -1070,29 +1601,29 @@ public class ObjectImporterTest {
     }
 
     private Matcher<Parent> parentWithAddresses(String name, Integer age,
-            Matcher<Iterable<? extends Address>> addresses) {
+                                                Matcher<Iterable<? extends Address>> addresses) {
         return parent(name, age, emptyIterable(), addresses, emptyIterable());
     }
 
     private Matcher<Parent> parentWithChildren(String name, Integer age,
-            Matcher<Iterable<? extends Child>> children) {
+                                               Matcher<Iterable<? extends Child>> children) {
         return parent(name, age, children, emptyIterable(), emptyIterable());
     }
 
     private Matcher<Parent> parentWithPhones(String name, Integer age,
-            Matcher<Iterable<? extends Phone>> phones) {
+                                             Matcher<Iterable<? extends Phone>> phones) {
         return parent(name, age, emptyIterable(), emptyIterable(), phones);
     }
 
     private Matcher<Parent> parentWithAttributes(String name, Integer age,
-            Matcher<Iterable<? extends PersonAttribute>> attributes) {
+                                                 Matcher<Iterable<? extends PersonAttribute>> attributes) {
         return parent(name, age, emptyIterable(), emptyIterable(), emptyIterable(), attributes);
     }
 
     private Matcher<Parent> parent(String name, Integer age,
-            Matcher<Iterable<? extends Child>> children,
-            Matcher<Iterable<? extends Address>> addresses,
-            Matcher<Iterable<? extends Phone>> phones) {
+                                   Matcher<Iterable<? extends Child>> children,
+                                   Matcher<Iterable<? extends Address>> addresses,
+                                   Matcher<Iterable<? extends Phone>> phones) {
         return allOf(
                 hasProperty("name", is(name)),
                 hasProperty("age", is(age)),
@@ -1103,10 +1634,10 @@ public class ObjectImporterTest {
     }
 
     private Matcher<Parent> parent(String name, Integer age,
-            Matcher<Iterable<? extends Child>> children,
-            Matcher<Iterable<? extends Address>> addresses,
-            Matcher<Iterable<? extends Phone>> phones,
-            Matcher<Iterable<? extends PersonAttribute>> attributes) {
+                                   Matcher<Iterable<? extends Child>> children,
+                                   Matcher<Iterable<? extends Address>> addresses,
+                                   Matcher<Iterable<? extends Phone>> phones,
+                                   Matcher<Iterable<? extends PersonAttribute>> attributes) {
         return allOf(
                 hasProperty("name", is(name)),
                 hasProperty("age", is(age)),
@@ -1122,7 +1653,7 @@ public class ObjectImporterTest {
     }
 
     private Matcher<Child> child(Long id, String name, String desc,
-            Matcher<Iterable<? extends GrandChild>> grandChildren) {
+                                 Matcher<Iterable<? extends GrandChild>> grandChildren) {
         return allOf(
                 hasProperty("id", is(id)),
                 hasProperty("name", is(name)),
@@ -1152,7 +1683,7 @@ public class ObjectImporterTest {
                 hasProperty("extraInfo", is(extraInfo)));
     }
 
-    private Matcher<PersonAttribute> attribute(String type, String id, String value) {
+    private Matcher<PersonAttribute> attribute(String type, Long id, String value) {
         return allOf(
                 hasProperty("id", is(id)),
                 hasProperty("type", is(type)),

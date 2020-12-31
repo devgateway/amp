@@ -8,7 +8,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.collect.ImmutableList;
 
 import org.digijava.kernel.ampapi.discriminators.DiscriminationConfigurer;
@@ -17,6 +16,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.FieldAccessor;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.dto.UnwrappedTranslations;
+import org.digijava.kernel.ampapi.endpoints.dto.UnwrappedTranslationsByWorkspacePrefix;
 import org.digijava.kernel.validation.ConstraintDescriptors;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -41,7 +41,7 @@ public class APIField {
 
     @JsonProperty(ActivityEPConstants.FIELD_LABEL)
     @ApiModelProperty(dataType = "org.digijava.kernel.ampapi.swagger.types.MultilingualLabelPH")
-    private UnwrappedTranslations fieldLabel;
+    private UnwrappedTranslationsByWorkspacePrefix fieldLabel;
 
     @JsonIgnore
     private String fieldNameInternal;
@@ -71,7 +71,7 @@ public class APIField {
     private String dependencyRequired;
 
     @JsonProperty(ActivityEPConstants.ID_ONLY)
-    @JsonSerialize(include = JsonSerialize.Inclusion.NON_DEFAULT)
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean idOnly;
 
     @JsonProperty(ActivityEPConstants.IMPORTABLE)
@@ -90,7 +90,8 @@ public class APIField {
     private String percentageConstraint;
 
     @JsonProperty(ActivityEPConstants.TREE_COLLECTION_CONSTRAINT)
-    private Boolean treeCollectionConstraint;
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private boolean treeCollectionConstraint;
 
     @JsonProperty(ActivityEPConstants.FIELD_LENGTH)
     private Integer fieldLength;
@@ -225,11 +226,11 @@ public class APIField {
         this.independent = independent;
     }
 
-    public UnwrappedTranslations getFieldLabel() {
+    public UnwrappedTranslationsByWorkspacePrefix getFieldLabel() {
         return fieldLabel;
     }
 
-    public void setFieldLabel(UnwrappedTranslations fieldLabel) {
+    public void setFieldLabel(UnwrappedTranslationsByWorkspacePrefix fieldLabel) {
         this.fieldLabel = fieldLabel;
     }
 
@@ -306,11 +307,11 @@ public class APIField {
         this.percentageConstraint = percentageConstraint;
     }
 
-    public Boolean getTreeCollectionConstraint() {
+    public boolean getTreeCollectionConstraint() {
         return treeCollectionConstraint;
     }
 
-    public void setTreeCollectionConstraint(Boolean treeCollectionConstraint) {
+    public void setTreeCollectionConstraint(boolean treeCollectionConstraint) {
         this.treeCollectionConstraint = treeCollectionConstraint;
     }
 
@@ -397,11 +398,6 @@ public class APIField {
 
     public void setCommonPossibleValuesPath(String commonPossibleValuesPath) {
         this.commonPossibleValuesPath = commonPossibleValuesPath;
-    }
-
-    @JsonIgnore
-    public boolean isDiscriminatedObject() {
-        return apiType.getFieldType().isObject() && discriminationConfigurer != null;
     }
 
     @JsonIgnore

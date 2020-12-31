@@ -232,6 +232,7 @@ public class ActivityUtil {
         //this is not a valid use case but a possible due to the flexibility of the configurations in FM mode
         if (af != null && Hibernate.isInitialized(af)) {
             updateFundingDetails(af);
+            updateFundingProjectResults(af);
         }
 
         if (ContentTranslationUtil.multilingualIsEnabled())
@@ -296,7 +297,7 @@ public class ActivityUtil {
         }
 
         a.setAmpActivityGroup(group);
-
+        updateMultiStakeholderField(a);
         if (isActivityForm) {
             saveActivityResources(a, session);
             saveActivityGPINiResources(a, session);
@@ -330,11 +331,23 @@ public class ActivityUtil {
             session.update(a);
         }
 
+        updateIndirectPrograms(a, session);
+
         logAudit(ampCurrentMember, a, newActivity);
 
         return a;
     }
-    
+
+    private static void updateMultiStakeholderField(AmpActivityVersion a) {
+        if (!Boolean.TRUE.equals(a.getMultiStakeholderPartnership())) {
+            a.setMultiStakeholderPartners(null);
+        }
+    }
+
+    private static void updateIndirectPrograms(AmpActivityVersion a, Session session) {
+        new IndirectProgramUpdater().updateIndirectPrograms(a, session);
+    }
+
     public static boolean detectDraftChange(AmpActivityVersion a, boolean draft) {
         return Boolean.TRUE.equals(a.getDraft()) != draft;
     }
@@ -445,29 +458,6 @@ public class ActivityUtil {
     }
 
     /**
-     * Checks if the activity is stale. Used only for the case when new activity versions are created.
-     */
-    public static boolean isActivityStale(Long ampActivityId, Long activityGroupVersion) {
-        Number activityCount = (Number) PersistenceManager.getSession().createCriteria(AmpActivityVersion.class)
-                .add(Restrictions.eq("ampActivityId", ampActivityId))
-                .setProjection(Projections.count("ampActivityId"))
-                .uniqueResult();
-        if (activityCount.longValue() == 0) {
-            return false;
-        }
-
-        Number latestActivityCount = (Number) PersistenceManager.getSession().createCriteria(AmpActivityGroup.class)
-                .createAlias("ampActivityLastVersion", "a")
-                .add(Restrictions.and(
-                        Restrictions.eq("a.ampActivityId", ampActivityId),
-                        Restrictions.eq("version", activityGroupVersion)))
-                .setProjection(Projections.count("a.ampActivityId"))
-                .uniqueResult();
-
-        return latestActivityCount.longValue() == 0;
-    }
-
-    /**
      * Remove funding items with null amount (that means that the form is missconfigured)
      * Set updateDate for modified records. Set the parent funding for funding details
      *
@@ -494,6 +484,14 @@ public class ActivityUtil {
                     }
                     afm.setAmpFunding(ampFunding);
                 }
+            }
+        }
+    }
+
+    private static void updateFundingProjectResults(Set<AmpFunding> fundings) {
+        for (AmpFunding funding : fundings) {
+            if (!Boolean.TRUE.equals(funding.getProjectResultsAvailable())) {
+                funding.setProjectResultsLink(null);
             }
         }
     }
@@ -653,7 +651,7 @@ public class ActivityUtil {
      */
     private static boolean isApprover(AmpTeamMember atm) {
         AmpTeamMemberRoles role = atm.getAmpMemberRole();
-        return role.getTeamHead() || role.isApprover();
+        return role != null && (role.getTeamHead() || role.isApprover());
     }
 
     public static boolean canApproveWith(ApprovalStatus approvalStatus, AmpTeamMember atm, boolean isNewActivity,

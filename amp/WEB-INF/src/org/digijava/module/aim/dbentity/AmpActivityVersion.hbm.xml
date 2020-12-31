@@ -95,6 +95,10 @@
 		<property name="jointCriteria" column="jointCriteria" type="java.lang.Boolean" />
 		<property name="humanitarianAid" column="humanitarianAid" type="java.lang.Boolean" />
 		<property name="archived" column="archived" type="java.lang.Boolean" />
+		<property name="multiStakeholderPartnership" column="multi_stakeholder_partnership"
+			type="java.lang.Boolean" />
+		<property name="multiStakeholderPartners" column="multi_stakeholder_partners"
+			type="java.lang.String" />
 
 			
 		<many-to-one name="team" column="amp_team_id"

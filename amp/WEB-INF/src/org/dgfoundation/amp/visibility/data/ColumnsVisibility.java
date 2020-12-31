@@ -50,7 +50,7 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
      */
     synchronized
     public static Set<String> getVisibleColumnsWithFakeOnes() {
-        return FMSettingsMediator.getEnabledSettings(FMSettingsMediator.FMGROUP_COLUMNS);
+        return FMSettingsMediator.getEnabledSettings(FMSettingsMediator.FMGROUP_COLUMNS, null);
     }
 
     /**
@@ -58,12 +58,25 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
      */
     synchronized
     public static Set<String> getVisibleColumns() {
-        return FMSettingsMediator.getEnabledSettings(FMSettingsMediator.FMGROUP_COLUMNS)
-                .stream().filter(z -> !fakeColumns.contains(z)).collect(Collectors.toSet());
+        return getVisibleColumns(null);
+    }
+    
+    public static Set<String> getVisibleColumns(Long templateId) {
+        Set<String> set = new HashSet<>();
+        for (String z : FMSettingsMediator.getEnabledSettings(FMSettingsMediator.FMGROUP_COLUMNS, templateId)) {
+            if (!fakeColumns.contains(z)) {
+                set.add(z);
+            }
+        }
+        return set;
     }
     
     public static Set<String> getConfigurableColumns() {
-        Set<String> configurableColumns = new HashSet<String>(getVisibleColumns());
+        return getConfigurableColumns(null);
+    }
+    
+    public static Set<String> getConfigurableColumns(Long templateId) {
+        Set<String> configurableColumns = new HashSet<String>(getVisibleColumns(templateId));
         configurableColumns.retainAll(AmpReportsSchema.getInstance().getColumns().keySet());
         return configurableColumns;
     }
@@ -72,8 +85,8 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
     }
     
     @Override
-    public Set<String> getEnabledSettings() {
-        return getCurrentVisibleData();
+    public Set<String> getEnabledSettings(Long templateId) {
+        return getVisibleData(templateId);
     }
     
     @Override
@@ -118,10 +131,10 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
      ***************/
     private static final String DONOR_ORAGNIZATION = "Donor Organization";
     private static final String SEARCH_DONOR_ORAGNIZATION = "Search Donor Organization";
-    private static final String IMPLEMENTATION_LOCATION_COUNTRY = "IMPLEMENTATION_LOCATION_COUNTRY";
-    private static final String IMPLEMENTATION_LOCATION_REGION = "IMPLEMENTATION_LOCATION_REGION";
-    private static final String IMPLEMENTATION_LOCATION_ZONE = "IMPLEMENTATION_LOCATION_ZONE";
-    private static final String IMPLEMENTATION_LOCATION_DISTRICT = "IMPLEMENTATION_LOCATION_DISTRICT";
+    private static final String IMPLEMENTATION_LOCATION_ADM_LEVEL_0 = "IMPLEMENTATION_LOCATION_ADM_LEVEL_0";
+    private static final String IMPLEMENTATION_LOCATION_ADM_LEVEL_1 = "IMPLEMENTATION_LOCATION_ADM_LEVEL_1";
+    private static final String IMPLEMENTATION_LOCATION_ADM_LEVEL_2 = "IMPLEMENTATION_LOCATION_ADM_LEVEL_2";
+    private static final String IMPLEMENTATION_LOCATION_ADM_LEVEL_3 = "IMPLEMENTATION_LOCATION_ADM_LEVEL_3";
     
     //Note: mappings are manually retrieved, because no certain way exists to map them 
     @SuppressWarnings("serial")
@@ -233,6 +246,7 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
         put(ColumnConstants.DONOR_GROUP, ColumnConstants.DONOR_AGENCY);
         put(ColumnConstants.DONOR_TYPE, ColumnConstants.DONOR_AGENCY);
         put(ColumnConstants.DONOR_BUDGET_CODE, ColumnConstants.DONOR_AGENCY);
+        put(ColumnConstants.DONOR_COUNTRY, ColumnConstants.DONOR_AGENCY);
         put(ColumnConstants.DONOR_COMMITMENT_DATE, ColumnConstants.DONOR_AGENCY);
         put(ColumnConstants.RESPONSIBLE_ORGANIZATION_DEPARTMENT_DIVISION, ColumnConstants.RESPONSIBLE_ORGANIZATION);
         put(ColumnConstants.RESPONSIBLE_ORGANIZATION_GROUPS, ColumnConstants.RESPONSIBLE_ORGANIZATION);
@@ -240,12 +254,14 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
         put(ColumnConstants.EXECUTING_AGENCY_DEPARTMENT_DIVISION, ColumnConstants.EXECUTING_AGENCY);
         put(ColumnConstants.EXECUTING_AGENCY_GROUPS, ColumnConstants.EXECUTING_AGENCY);
         put(ColumnConstants.EXECUTING_AGENCY_TYPE, ColumnConstants.EXECUTING_AGENCY);
+        put(ColumnConstants.EXECUTING_AGENCY_COUNTRY, ColumnConstants.EXECUTING_AGENCY);
         put(ColumnConstants.IMPLEMENTING_AGENCY_DEPARTMENT_DIVISION, ColumnConstants.IMPLEMENTING_AGENCY);
         put(ColumnConstants.IMPLEMENTING_AGENCY_GROUPS, ColumnConstants.IMPLEMENTING_AGENCY);
         put(ColumnConstants.IMPLEMENTING_AGENCY_TYPE, ColumnConstants.IMPLEMENTING_AGENCY);
         put(ColumnConstants.BENEFICIARY_AGENCY__DEPARTMENT_DIVISION, ColumnConstants.BENEFICIARY_AGENCY);
         put(ColumnConstants.BENEFICIARY_AGENCY_GROUPS, ColumnConstants.BENEFICIARY_AGENCY);
         put(ColumnConstants.BENEFICIARY_AGENCY_TYPE, ColumnConstants.BENEFICIARY_AGENCY);
+        put(ColumnConstants.BENEFICIARY_AGENCY_COUNTRY, ColumnConstants.BENEFICIARY_AGENCY);
         put(ColumnConstants.CONTRACTING_AGENCY_ACRONYM, ColumnConstants.CONTRACTING_AGENCY);
         put(ColumnConstants.CONTRACTING_AGENCY_DEPARTMENT_DIVISION, ColumnConstants.CONTRACTING_AGENCY);
         put(ColumnConstants.CONTRACTING_AGENCY_GROUPS, ColumnConstants.CONTRACTING_AGENCY);
@@ -334,13 +350,14 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
             put("Payment Capital - Recurrent", ColumnConstants.PAYMENT_CAPITAL___RECURRENT);
             put("Performance Alert Level", ColumnConstants.PERFORMANCE_ALERT_LEVEL);
             put("Performance Alert Type", ColumnConstants.PERFORMANCE_ALERT_TYPE);
+            put("Pledges Administrative Level 0", ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_0);
+            put("Pledges Administrative Level 1", ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_1);
+            put("Pledges Administrative Level 2", ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_2);
+            put("Pledges Administrative Level 3", ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_3);
+            put("Pledges Administrative Level 4", ColumnConstants.PLEDGES_LOCATION_ADM_LEVEL_4);
             put("Pledges Aid Modality", ColumnConstants.PLEDGES_AID_MODALITY);
             put("Pledge Contact 1 - Organization", ColumnConstants.PLEDGE_CONTACT_1___MINISTRY);
             put("Pledge Contact 2 - Organization", ColumnConstants.PLEDGE_CONTACT_2___MINISTRY);
-            put("Pledges Countries", ColumnConstants.PLEDGES_DISTRICTS);
-            put("Pledges Districts", ColumnConstants.PLEDGES_DISTRICTS);
-            put("Pledges Regions", ColumnConstants.PLEDGES_REGIONS);
-            put("Pledges Zones", ColumnConstants.PLEDGES_ZONES);
             put("Pledges Detail Date Range", ColumnConstants.PLEDGES_DETAIL_DATE_RANGE);
             put("Pledges Detail End Date", ColumnConstants.PLEDGES_DETAIL_END_DATE);
             put("Pledges Detail Start Date", ColumnConstants.PLEDGES_DETAIL_START_DATE);
@@ -404,11 +421,11 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
             put("Disaster Response Marker", ColumnConstants.DISASTER_RESPONSE_MARKER);
 
             // replicating the same approach as in the ReportWizard (until AMP-20480 is considered)
-            String[] colPrefixList = new String[] {"National Planning Objectives Level ", "Primary Program Level ", 
-                    "Secondary Program Level ", "Tertiary Program Level "};
+            String[] colPrefixList = new String[] {"National Planning Objectives Level ", "Primary Program Level ",
+                    "Secondary Program Level ", "Tertiary Program Level ", "Indirect Primary Program Level "};
             for (String colPrefix : colPrefixList) {
                 for (int i = 1; i <= PROGRAM_LEVEL_COUNT; i++) {
-                    String level = colPrefix + i; 
+                    String level = colPrefix + i;
                     put(level, level);
             }
 
@@ -453,17 +470,21 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
      */
     @SuppressWarnings("serial")
     protected static final Map<String, HardCodedCategoryValue> categoryValueDependency = new HashMap<String, HardCodedCategoryValue>() {{
-        put(IMPLEMENTATION_LOCATION_COUNTRY, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
-        put(IMPLEMENTATION_LOCATION_REGION, CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
-        put(IMPLEMENTATION_LOCATION_ZONE, CategoryConstants.IMPLEMENTATION_LOCATION_ZONE);
-        put(IMPLEMENTATION_LOCATION_DISTRICT, CategoryConstants.IMPLEMENTATION_LOCATION_DISTRICT);
+        put(IMPLEMENTATION_LOCATION_ADM_LEVEL_0, CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0);
+        put(IMPLEMENTATION_LOCATION_ADM_LEVEL_1, CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1);
+        put(IMPLEMENTATION_LOCATION_ADM_LEVEL_2, CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_2);
+        put(IMPLEMENTATION_LOCATION_ADM_LEVEL_3, CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_3);
     }};
     
     
     protected static final Map<String, Collection<String>> dependencyTypeAll = new HashMap<String, Collection<String>>() {{
-        put(ColumnConstants.COUNTRY, Arrays.asList(ColumnConstants.LOCATION, IMPLEMENTATION_LOCATION_COUNTRY));
-        put(ColumnConstants.REGION, Arrays.asList(ColumnConstants.LOCATION, IMPLEMENTATION_LOCATION_REGION));
-        put(ColumnConstants.ZONE, Arrays.asList(ColumnConstants.LOCATION, IMPLEMENTATION_LOCATION_ZONE));
-        put(ColumnConstants.DISTRICT, Arrays.asList(ColumnConstants.LOCATION, IMPLEMENTATION_LOCATION_DISTRICT));
+        put(ColumnConstants.LOCATION_ADM_LEVEL_0,
+                Arrays.asList(ColumnConstants.LOCATION, IMPLEMENTATION_LOCATION_ADM_LEVEL_0));
+        put(ColumnConstants.LOCATION_ADM_LEVEL_1,
+                Arrays.asList(ColumnConstants.LOCATION, IMPLEMENTATION_LOCATION_ADM_LEVEL_1));
+        put(ColumnConstants.LOCATION_ADM_LEVEL_2,
+                Arrays.asList(ColumnConstants.LOCATION, IMPLEMENTATION_LOCATION_ADM_LEVEL_2));
+        put(ColumnConstants.LOCATION_ADM_LEVEL_3,
+                Arrays.asList(ColumnConstants.LOCATION, IMPLEMENTATION_LOCATION_ADM_LEVEL_3));
     }};
 }

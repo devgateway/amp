@@ -21,13 +21,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -35,6 +29,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableSet;
 
+import org.dgfoundation.amp.testutils.TransactionUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIType;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldInfoProvider;
@@ -46,12 +41,14 @@ import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.kernel.ampapi.endpoints.common.values.ValueConverter;
 import org.digijava.kernel.ampapi.endpoints.dto.UnwrappedTranslations;
+import org.digijava.kernel.ampapi.endpoints.dto.UnwrappedTranslationsByWorkspacePrefix;
 import org.digijava.kernel.ampapi.endpoints.resource.dto.AmpResource;
 import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.kernel.ampapi.filters.ClientMode;
-import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.services.sync.model.SyncConstants;
+import org.digijava.kernel.translator.util.TrnUtil;
 import org.digijava.kernel.validators.ValidatorUtil;
+import org.digijava.kernel.validators.activity.TreeCollectionValidator;
 import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.kernel.validators.common.SizeValidator;
 import org.digijava.kernel.validators.common.TotalPercentageValidator;
@@ -81,7 +78,7 @@ public class FieldsEnumeratorTest {
     private static final int SIZE_LIMIT = 3;
 
     private TranslatorService translatorService;
-    private FMService fmService;
+    private FeatureManagerService fmService;
     private FieldInfoProvider provider;
 
     @Rule public MockitoRule rule = MockitoJUnit.rule();
@@ -102,7 +99,9 @@ public class FieldsEnumeratorTest {
         fmService = new TestFMService();
         provider = new TestFieldInfoProvider();
 
-        when(throwingTranslatorService.getAllTranslationOfBody(any(), any())).thenThrow(new WorkerException());
+        TransactionUtil.setUpWorkspaceEmptyPrefixes();
+
+        when(throwingTranslatorService.getAllTranslationOfBody(any(), any())).thenThrow(new RuntimeException());
 
         when(emptyTranslatorService.getAllTranslationOfBody(any(), any())).thenReturn(Collections.emptyList());
 
@@ -272,7 +271,7 @@ public class FieldsEnumeratorTest {
 
     @Test
     public void testInvisibleField() {
-        FMService invisibleFmService = mock(FMService.class);
+        FeatureManagerService invisibleFmService = mock(FeatureManagerService.class);
 
         when(invisibleFmService.isVisible(any())).thenReturn(false);
 
@@ -484,7 +483,7 @@ public class FieldsEnumeratorTest {
         @Interchangeable(fieldTitle = "8", validators = @Validators(unique = "uniqueFmName"), uniqueConstraint = true)
         private Collection<Integer> field8;
 
-        @Interchangeable(fieldTitle = "5", validators = @Validators(treeCollection = "treeCollectionFmName"))
+        @Interchangeable(fieldTitle = "5", interValidators = @InterchangeableValidator(TreeCollectionValidator.class))
         private Collection<ObjWithId> field5;
 
         @Interchangeable(fieldTitle = "6",
@@ -659,21 +658,21 @@ public class FieldsEnumeratorTest {
                 .getAllAvailableFields(OneFieldClass.class);
 
         assertEquals(1, fields.size());
-        assertEquals("One Field", fields.get(0).getFieldLabel().get("EN"));
+        assertEquals("One Field", fields.get(0).getFieldLabel().get(TrnUtil.DEFAULT, "en"));
     }
 
     @Test
     public void testNonEmptyChildren() {
         String originalJson = "[{\"field_name\":\"field\"," +
                 "\"field_type\":\"object\"," +
-                "\"field_label\":{\"en\":\"field en\",\"fr\":\"field fr\"}," +
+                "\"field_label\":{\"default\":{\"en\":\"field en\",\"fr\":\"field fr\"}}," +
                 "\"required\":\"N\"," +
                 "\"importable\":false," +
                 "\"id\":false," +
                 "\"children\":[{" +
                     "\"field_name\":\"field\"," +
                     "\"field_type\":\"long\"," +
-                    "\"field_label\":{\"en\":\"field en\",\"fr\":\"field fr\"}," +
+                    "\"field_label\":{\"default\":{\"en\":\"field en\",\"fr\":\"field fr\"}}," +
                     "\"required\":\"N\"," +
                     "\"importable\":false," +
                     "\"id\":false" +
@@ -692,7 +691,7 @@ public class FieldsEnumeratorTest {
     public void testEmptyChildren() {
         String originalJson = "[{\"field_name\":\"field\"" +
                 ",\"field_type\":\"long\"," +
-                "\"field_label\":{\"en\":\"field en\",\"fr\":\"field fr\"}," +
+                "\"field_label\":{\"default\":{\"en\":\"field en\",\"fr\":\"field fr\"}}," +
                 "\"required\":\"N\"," +
                 "\"importable\":false," +
                 "\"id\":false}]";
@@ -841,6 +840,64 @@ public class FieldsEnumeratorTest {
 
 
     @Test
+    public void testActivityCollectionFields() {
+        APIField apiField = fieldsEnumerator.getMetaModel(AmpActivityFields.class);
+        List<APIField> nullableAPIFields = getAPIFieldWithNullCollections(new AmpActivityVersion(), apiField);
+        assertEquals(nullableAPIFields, Collections.emptyList());
+    }
+
+    @Test
+    public void testContactCollectionFields() {
+        APIField apiField = fieldsEnumerator.getMetaModel(AmpContact.class);
+        List<APIField> nullableAPIFields = getAPIFieldWithNullCollections(new AmpContact(), apiField);
+        assertEquals(nullableAPIFields, Collections.emptyList());
+    }
+
+    @Test
+    public void testResourceCollectionFields() {
+        APIField apiField = fieldsEnumerator.getMetaModel(AmpResource.class);
+        List<APIField> nullableAPIFields = getAPIFieldWithNullCollections(new AmpResource(), apiField);
+        assertEquals(nullableAPIFields, Collections.emptyList());
+    }
+
+    private List<APIField> getAPIFieldWithNullCollections(Object object, APIField field) {
+        List<APIField> nullableAPIFields = new ArrayList<>();
+        for (APIField subField : field.getChildren()) {
+            try {
+                // will trigger an exception if underlying collection was not initialized properly
+                subField.getFieldAccessor().get(object);
+            } catch (RuntimeException e) {
+                nullableAPIFields.add(subField);
+            }
+            if (subField.getApiType().getFieldType() == FieldType.OBJECT ||
+                    (subField.getApiType().getFieldType() == FieldType.LIST &&
+                            subField.getApiType().getItemType() == FieldType.OBJECT)) {
+                nullableAPIFields.addAll(
+                        getAPIFieldWithNullCollections(instantiate(subField), subField));
+            }
+        }
+
+        return nullableAPIFields;
+    }
+
+    /**
+     * Copy of {@link ValueConverter#instantiate(APIField)} but without configuring the field by which objects are
+     * being discriminated. This method can be removed once discrimination configurers are made to work without a real
+     * database.
+     *
+     * @param field
+     * @return
+     */
+    private Object instantiate(APIField field) {
+        try {
+            Object newInstance = field.getApiType().getType().newInstance();
+            return newInstance;
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    /*2w34
+    @Test
     public void testActivityFieldAccessorsDontFail() {
         invokeAccessorGet(AmpActivityVersion.class, fieldsFor(AmpActivityFields.class));
     }
@@ -854,8 +911,7 @@ public class FieldsEnumeratorTest {
                 invokeAccessorGet(apiField.getApiType().getType(), apiField.getChildren());
             }
         }
-    }
-
+    }*/
     @Test
     public void testTreeValidatorVisibleAndUniqueValidatorHidden() {
         APIField apiField = ValidatorUtil.getMetaData(AmpActivityFields.class,
@@ -877,7 +933,7 @@ public class FieldsEnumeratorTest {
         assertThat(apiField.getChildren(), hasItem(allOf(
                 hasProperty("fieldName", equalTo("primary_sectors")),
                 hasProperty("uniqueConstraint", nullValue()),
-                hasProperty("treeCollectionConstraint", nullValue())
+                hasProperty("treeCollectionConstraint", equalTo(false))
         )));
     }
 
@@ -984,10 +1040,12 @@ public class FieldsEnumeratorTest {
                 actual.stream().map(this::digest).collect(Collectors.toList()));
     }
 
-    private UnwrappedTranslations fieldLabelFor(String baseText) {
-        return new UnwrappedTranslations()
+    private UnwrappedTranslationsByWorkspacePrefix fieldLabelFor(String baseText) {
+        UnwrappedTranslationsByWorkspacePrefix trn = new UnwrappedTranslationsByWorkspacePrefix();
+        trn.set(TrnUtil.DEFAULT, new UnwrappedTranslations()
                 .set("en", baseText + " en")
-                .set("fr", baseText + " fr");
+                .set("fr", baseText + " fr"));
+        return trn;
     }
 
     private <T> String digest(T obj) {

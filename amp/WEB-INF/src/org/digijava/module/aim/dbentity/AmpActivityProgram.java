@@ -2,6 +2,8 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.digijava.kernel.ampapi.endpoints.common.values.providers.ThemePossibleValuesProvider;
 import org.digijava.kernel.validators.common.RequiredValidator;
@@ -10,10 +12,12 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableBackRefere
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
+import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.aim.util.TreeNodeAware;
 
-public class AmpActivityProgram implements Versionable, Serializable, Cloneable {
+public class AmpActivityProgram implements Versionable, Serializable, Cloneable, TreeNodeAware<AmpTheme> {
 
     @InterchangeableId
     @Interchangeable(fieldTitle = "Id")
@@ -27,10 +31,28 @@ public class AmpActivityProgram implements Versionable, Serializable, Cloneable 
         @Interchangeable(fieldTitle = "Program", importable = true, pickIdOnly = true, uniqueConstraint = true,
                 interValidators = @InterchangeableValidator(RequiredValidator.class))
         private AmpTheme program;
+
+    @Interchangeable(fieldTitle = "Indirect Programs")
+    private Set<AmpActivityIndirectProgram> indirectPrograms = new HashSet<>();
+
         @InterchangeableBackReference
         private AmpActivityVersion activity;
         private AmpActivityProgramSettings programSetting;
-        public Long getAmpActivityProgramId() {
+
+    public Set<AmpActivityIndirectProgram> getIndirectPrograms() {
+        return indirectPrograms;
+    }
+
+    public void setIndirectPrograms(Set<AmpActivityIndirectProgram> indirectPrograms) {
+        this.indirectPrograms = indirectPrograms;
+    }
+
+    public void addIndirectProgram(AmpActivityIndirectProgram indirectProgram) {
+        indirectProgram.setActivityProgram(this);
+        indirectPrograms.add(indirectProgram);
+    }
+
+    public Long getAmpActivityProgramId() {
                 return ampActivityProgramId;
         }
 
@@ -111,6 +133,14 @@ public class AmpActivityProgram implements Versionable, Serializable, Cloneable 
     public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
         AmpActivityProgram aux = (AmpActivityProgram) clone();
         aux.activity = newActivity;
+
+        aux.setIndirectPrograms(new HashSet<>());
+        for (AmpActivityIndirectProgram indirectProgram : indirectPrograms) {
+            AmpActivityIndirectProgram clonedIp = (AmpActivityIndirectProgram) indirectProgram.clone();
+            clonedIp.setId(null);
+            aux.addIndirectProgram(clonedIp);
+        }
+
         aux.ampActivityProgramId = null;
         
         return aux;
@@ -120,5 +150,9 @@ public class AmpActivityProgram implements Versionable, Serializable, Cloneable 
     protected Object clone() throws CloneNotSupportedException {
     return super.clone();
     }
-    
+
+    @Override
+    public AmpAutoCompleteDisplayable<AmpTheme> getTreeNode() {
+        return program;
+    }
 }

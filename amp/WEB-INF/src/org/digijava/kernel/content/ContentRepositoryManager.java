@@ -2,22 +2,30 @@ package org.digijava.kernel.content;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.jcr.NamespaceException;
 import javax.jcr.NamespaceRegistry;
+import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.SimpleCredentials;
 import javax.jcr.Workspace;
 import javax.jcr.observation.Event;
 import javax.jcr.observation.ObservationManager;
+import javax.jcr.query.Query;
+import javax.jcr.query.QueryManager;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.jackrabbit.core.RepositoryImpl;
 import org.apache.jackrabbit.core.config.RepositoryConfig;
 import org.apache.log4j.Logger;
+import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.util.ExpiringMemoizer;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.listeners.NodeRemovalListener;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
@@ -38,12 +46,19 @@ public final class ContentRepositoryManager {
     
     private static final String JCR_WRITE_SESSION = "jcr-write-session";
     private static final String JCR_READ_SESSION = "jcr-read-session";
-    
-    
+
+    private static final int EVENT_ALL_TYPES = 0x7f;
+
     private static RepositoryImpl repository;
-    
+
+    private static ExpiringMemoizer<Set<String>> privateResources =
+            new ExpiringMemoizer<>(() -> getUuidsFromPath("private"));
+
+    private static ExpiringMemoizer<Set<String>> teamResourcesCache =
+            new ExpiringMemoizer<>(() -> getUuidsFromPath("team"));
+
     private ContentRepositoryManager() { }
-    
+
     /**
      * Get the jackrabbit repository instance.
      * 
@@ -218,9 +233,42 @@ public final class ContentRepositoryManager {
                     new NodeRemovalListener(NodeRemovalListener.PRIVATE_RESOURCE_PATH_DEPTH);
             observationManager.addEventListener(privateListener, Event.NODE_REMOVED, "/private",
                     true, null, null, false);
+
+            observationManager.addEventListener(e -> privateResources.invalidate(), EVENT_ALL_TYPES,
+                    "/private", true, null, null, false);
+
+            observationManager.addEventListener(e -> teamResourcesCache.invalidate(), EVENT_ALL_TYPES,
+                    "/team", true, null, null, false);
         } catch (RepositoryException e) {
             throw new RuntimeException("Failed to register observers.", e);
         }
     }
-    
+
+    public static Set<String> getPrivateUuids() {
+        return privateResources.get();
+    }
+
+    public static Set<String> getTeamUuids() {
+        return teamResourcesCache.get();
+    }
+
+    private static Set<String> getUuidsFromPath(String path) {
+        Session session = DocumentManagerUtil.getReadSession(TLSUtils.getRequest());
+        Set<String> uuids = new HashSet<>();
+        try {
+            QueryManager queryManager = session.getWorkspace().getQueryManager();
+
+            Query query = queryManager.createQuery(String.format("SELECT * FROM nt:base WHERE %s IS NOT NULL "
+                    + "AND ampdoc:cmDocType IS NOT NULL "
+                    + "AND jcr:path LIKE '/%s/%%/'", CrConstants.PROPERTY_CREATOR, path), Query.SQL);
+            NodeIterator nodes = query.execute().getNodes();
+            while (nodes.hasNext()) {
+                uuids.add(nodes.nextNode().getIdentifier());
+            }
+        } catch (RepositoryException e) {
+            throw new RuntimeException(e);
+        }
+
+        return uuids;
+    }
 }

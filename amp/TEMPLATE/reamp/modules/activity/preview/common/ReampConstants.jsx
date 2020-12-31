@@ -30,6 +30,7 @@ export const FUNDING_INFORMATION = 'funding_information';
 export const TRANSACTION_ID = 'transaction_id';
 
 export const ACTIVITY_FORM_URL = '/wicket/onepager/activity';
+export const ACTIVITY_FORM_URL_SSC = '/wicket/onepager/ssc';
 export const ACTIVITY_PREVIEW_URL = '/aim/viewActivityPreview.do~activityId=';
 
 export const VERSION_HISTORY_URL = '/aim/viewActivityHistory.do';

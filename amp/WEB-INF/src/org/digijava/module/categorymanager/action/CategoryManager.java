@@ -253,7 +253,7 @@ public class CategoryManager extends Action {
      * @param categoryId set to null if you want to load all categories
      * @return all the categories from the database or just one if categoryId is not null
      */
-    private Collection<AmpCategoryClass> loadCategories(Long categoryId) {
+    public Collection<AmpCategoryClass> loadCategories(Long categoryId) {
         logger.info("Getting category with id " + categoryId);
         Collection<AmpCategoryClass> returnCollection = null;
         try {
@@ -473,7 +473,14 @@ public class CategoryManager extends Action {
                 
                 else {
                     if (myForm.getEditedCategoryId() == null) {
-                        dbSession.saveOrUpdate( dbCategory );
+                        // AMP-29782
+                        if (dbCategory.getPossibleValues() != null && dbCategory.getPossibleValues().size() > 0) {
+                            dbCategory.getPossibleValues().forEach(value -> {
+                                dbSession.saveOrUpdate(value);
+                            });
+                        }
+
+                        dbSession.saveOrUpdate(dbCategory);
                     }
                     else{
                         dbSession.flush();

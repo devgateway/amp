@@ -1,8 +1,15 @@
 package org.digijava.kernel.ampapi.endpoints.filters;
 
+import static org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0;
+import static org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_1;
+import static org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_2;
+import static org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_3;
+import static org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_4;
+
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -25,10 +32,11 @@ public final class PledgesLocationFilterListManager extends LocationFilterListMa
     
     public static final Map<String, String> LOCATION_FILTER_ID_TO_PLEDGE_FILTER_ID =
             new ImmutableMap.Builder<String, String>()
-                    .put(FiltersConstants.COUNTRY, FiltersConstants.PLEDGES_COUNTRIES)
-                    .put(FiltersConstants.DISTRICT, FiltersConstants.PLEDGES_DISTRICTS)
-                    .put(FiltersConstants.REGION, FiltersConstants.PLEDGES_REGIONS)
-                    .put(FiltersConstants.ZONE, FiltersConstants.PLEDGES_ZONES)
+                    .put(IMPLEMENTATION_LOCATION_ADM_LEVEL_0.getValueKey(), FiltersConstants.PLEDGES_ADM_LEVEL_0)
+                    .put(IMPLEMENTATION_LOCATION_ADM_LEVEL_1.getValueKey(), FiltersConstants.PLEDGES_ADM_LEVEL_1)
+                    .put(IMPLEMENTATION_LOCATION_ADM_LEVEL_2.getValueKey(), FiltersConstants.PLEDGES_ADM_LEVEL_2)
+                    .put(IMPLEMENTATION_LOCATION_ADM_LEVEL_3.getValueKey(), FiltersConstants.PLEDGES_ADM_LEVEL_3)
+                    .put(IMPLEMENTATION_LOCATION_ADM_LEVEL_4.getValueKey(), FiltersConstants.PLEDGES_ADM_LEVEL_4)
                     .build();
     
     
@@ -49,7 +57,8 @@ public final class PledgesLocationFilterListManager extends LocationFilterListMa
                 .getAmpCategoryValueCollectionByKeyExcludeDeleted(CategoryConstants.IMPLEMENTATION_LOCATION_KEY)
                 .stream()
                 .sorted(Comparator.comparingInt(AmpCategoryValue::getIndex))
-                .map(acv -> LOCATION_FILTER_ID_TO_PLEDGE_FILTER_ID.get(acv.getValue().toLowerCase()))
+                .map(acv -> LOCATION_FILTER_ID_TO_PLEDGE_FILTER_ID.get(acv.getValue()))
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
         return filterIds;
     }

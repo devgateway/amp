@@ -14,8 +14,11 @@ import com.google.common.collect.ImmutableSet;
 import org.dgfoundation.amp.activity.builder.ActivityBuilder;
 import org.dgfoundation.amp.activity.builder.FundingBuilder;
 import org.dgfoundation.amp.activity.builder.TransactionBuilder;
+import org.dgfoundation.amp.testutils.TransactionUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.persistence.InMemoryCategoryValuesManager;
+import org.digijava.kernel.persistence.InMemoryOrganisationManager;
 import org.digijava.kernel.validation.ConstraintViolation;
 import org.digijava.kernel.validators.ValidatorUtil;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -33,19 +36,20 @@ public class PledgeOrgValidatorTest {
 
     private static APIField activityField;
     private static FundingPledges usaidPledge;
-    private static HardcodedOrgs orgs;
-    private static HardcodedCategoryValues categoryValues;
+    private static InMemoryOrganisationManager organisationManager;
+    private static InMemoryCategoryValuesManager categoryValues;
 
     @BeforeClass
     public static void setUp() {
+        TransactionUtil.setUpWorkspaceEmptyPrefixes();
         activityField = ValidatorUtil.getMetaData();
 
-        orgs = new HardcodedOrgs();
-        categoryValues = new HardcodedCategoryValues();
+        organisationManager = InMemoryOrganisationManager.getInstance();
+        categoryValues = InMemoryCategoryValuesManager.getInstance();
 
         usaidPledge = new FundingPledges();
         usaidPledge.setId(100L);
-        usaidPledge.setOrganizationGroup(orgs.getUsaidGroup());
+        usaidPledge.setOrganizationGroup(organisationManager.getUsaidGroup());
     }
 
     @Test
@@ -63,7 +67,7 @@ public class PledgeOrgValidatorTest {
     public void testDonorMatches() {
         AmpActivityVersion activity = new ActivityBuilder()
                 .addFunding(new FundingBuilder()
-                        .withDonor(orgs.getUsaid())
+                        .withDonor(organisationManager.getUsaid())
                         .withTypeOfAssistance(categoryValues.getTypeOfAssistanceValues().getGrant())
                         .withFinancingInstrument(categoryValues.getFinancingInstruments().getDebtRelief())
                         .addTransaction(new TransactionBuilder()
@@ -82,7 +86,7 @@ public class PledgeOrgValidatorTest {
     public void testDonorDoesNotMatch() {
         AmpActivityVersion activity = new ActivityBuilder()
                 .addFunding(new FundingBuilder()
-                        .withDonor(orgs.getWorldBank())
+                        .withDonor(organisationManager.getWorldBank())
                         .withTypeOfAssistance(categoryValues.getTypeOfAssistanceValues().getGrant())
                         .withFinancingInstrument(categoryValues.getFinancingInstruments().getDebtRelief())
                         .addTransaction(new TransactionBuilder()
@@ -95,7 +99,7 @@ public class PledgeOrgValidatorTest {
         Set<ConstraintViolation> violations = getConstraintViolations(activity);
 
         assertThat(violations, contains(violation(
-                orgs.getWorldBank().getOrgGrpId().getAmpOrgGrpId(),
+                organisationManager.getWorldBank().getOrgGrpId().getAmpOrgGrpId(),
                 usaidPledge.getId())));
     }
 
@@ -103,7 +107,7 @@ public class PledgeOrgValidatorTest {
     public void testDonorDoesNotMatchOneViolation() {
         AmpActivityVersion activity = new ActivityBuilder()
                 .addFunding(new FundingBuilder()
-                        .withDonor(orgs.getWorldBank())
+                        .withDonor(organisationManager.getWorldBank())
                         .withTypeOfAssistance(categoryValues.getTypeOfAssistanceValues().getGrant())
                         .withFinancingInstrument(categoryValues.getFinancingInstruments().getDebtRelief())
                         .addTransaction(new TransactionBuilder()
@@ -112,7 +116,7 @@ public class PledgeOrgValidatorTest {
                                 .getTransaction())
                         .getFunding())
                 .addFunding(new FundingBuilder()
-                        .withDonor(orgs.getWorldBank())
+                        .withDonor(organisationManager.getWorldBank())
                         .withTypeOfAssistance(categoryValues.getTypeOfAssistanceValues().getGrant())
                         .withFinancingInstrument(categoryValues.getFinancingInstruments().getDebtRelief())
                         .addTransaction(new TransactionBuilder()
@@ -125,7 +129,7 @@ public class PledgeOrgValidatorTest {
         Set<ConstraintViolation> violations = getConstraintViolations(activity);
 
         assertThat(violations, contains(violation(
-                orgs.getWorldBank().getOrgGrpId().getAmpOrgGrpId(),
+                organisationManager.getWorldBank().getOrgGrpId().getAmpOrgGrpId(),
                 usaidPledge.getId())));
     }
 
@@ -133,7 +137,7 @@ public class PledgeOrgValidatorTest {
     public void testDonorDoesNotMatchTwoViolations() {
         AmpActivityVersion activity = new ActivityBuilder()
                 .addFunding(new FundingBuilder()
-                        .withDonor(orgs.getWorldBank())
+                        .withDonor(organisationManager.getWorldBank())
                         .withTypeOfAssistance(categoryValues.getTypeOfAssistanceValues().getGrant())
                         .withFinancingInstrument(categoryValues.getFinancingInstruments().getDebtRelief())
                         .addTransaction(new TransactionBuilder()
@@ -142,7 +146,7 @@ public class PledgeOrgValidatorTest {
                                 .getTransaction())
                         .getFunding())
                 .addFunding(new FundingBuilder()
-                        .withDonor(orgs.getBelgium())
+                        .withDonor(organisationManager.getBelgium())
                         .withTypeOfAssistance(categoryValues.getTypeOfAssistanceValues().getGrant())
                         .withFinancingInstrument(categoryValues.getFinancingInstruments().getDebtRelief())
                         .addTransaction(new TransactionBuilder()
@@ -156,10 +160,10 @@ public class PledgeOrgValidatorTest {
 
         assertThat(violations, containsInAnyOrder(
                 violation(
-                        orgs.getWbGroup().getAmpOrgGrpId(),
+                        organisationManager.getWbGroup().getAmpOrgGrpId(),
                         usaidPledge.getId()),
                 violation(
-                        orgs.getBelgiumGroup().getAmpOrgGrpId(),
+                        organisationManager.getBelgiumGroup().getAmpOrgGrpId(),
                         usaidPledge.getId())));
     }
 
@@ -167,7 +171,7 @@ public class PledgeOrgValidatorTest {
     public void testDisabledPledges() {
         AmpActivityVersion activity = new ActivityBuilder()
                 .addFunding(new FundingBuilder()
-                        .withDonor(orgs.getWorldBank())
+                        .withDonor(organisationManager.getWorldBank())
                         .withTypeOfAssistance(categoryValues.getTypeOfAssistanceValues().getGrant())
                         .withFinancingInstrument(categoryValues.getFinancingInstruments().getDebtRelief())
                         .addTransaction(new TransactionBuilder()

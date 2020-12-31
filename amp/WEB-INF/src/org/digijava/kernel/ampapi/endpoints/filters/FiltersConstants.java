@@ -44,7 +44,7 @@ public class FiltersConstants {
     public static final String BENEFICIARY_AGENCY = "beneficiary-agency";
     public static final String BENEFICIARY_AGENCY_GROUP = "beneficiary-agency-group";
     public static final String BENEFICIARY_AGENCY_TYPE = "beneficiary-agency-type";
-    public static final String COMMUNAL_SECTION = "communal-section";
+    public static final String BENEFICIARY_AGENCY_COUNTRY = "beneficiary-agency-country";
     public static final String COMPONENT_FUNDING_ORGANIZATION = "component-funding-organization";
     public static final String COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION = "component-second-responsible-organization";
     public static final String COMPUTED_YEAR = "computed-year";
@@ -52,15 +52,20 @@ public class FiltersConstants {
     public static final String CONTRACTING_AGENCY = "contracting-agency";
     public static final String CONTRACTING_AGENCY_GROUP = "contracting-agency-group";
     public static final String CONTRACTING_AGENCY_TYPE = "contracting-agency-type";
-    public static final String COUNTRY = "country";
+    public static final String ADMINISTRATIVE_LEVEL_0 = "administrative-level-0";
+    public static final String ADMINISTRATIVE_LEVEL_1 = "administrative-level-1";
+    public static final String ADMINISTRATIVE_LEVEL_2 = "administrative-level-2";
+    public static final String ADMINISTRATIVE_LEVEL_3 = "administrative-level-3";
+    public static final String ADMINISTRATIVE_LEVEL_4 = "administrative-level-4";
     public static final String DISASTER_RESPONSE_MARKER = "disaster-response-marker";
-    public static final String DISTRICT = "district";
     public static final String DONOR_AGENCY = "donor-agency";
     public static final String DONOR_GROUP = "donor-group";
     public static final String DONOR_TYPE = "donor-type";
+    public static final String DONOR_AGENCY_COUNTRY = "donor-agency-country";
     public static final String EXECUTING_AGENCY = "executing-agency";
     public static final String EXECUTING_AGENCY_GROUP = "executing-agency-group";
     public static final String EXECUTING_AGENCY_TYPE = "executing-agency-type";
+    public static final String EXECUTING_AGENCY_COUNTRY = "executing-agency-country";
     public static final String EXPENDITURE_CLASS = "expenditure-class";
     public static final String FINANCING_INSTRUMENT = "financing-instrument";
     public static final String FUNDING_STATUS = "funding-status";
@@ -73,6 +78,7 @@ public class FiltersConstants {
     public static final String LOCATION = "location";
     public static final String RAW_LOCATION = "raw-location";
     public static final String MODE_OF_PAYMENT = "mode-of-payment";
+    public static final String MODALITIES = "modalities";
     public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_0 = "national-planning-objectives-level-0";
     public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_1 = "national-planning-objectives-level-1";
     public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_2 = "national-planning-objectives-level-2";
@@ -86,10 +92,13 @@ public class FiltersConstants {
     public static final String PERFORMANCE_ALERT_LEVEL = "performance-alert-level";
     public static final String PERFORMANCE_ALERT_TYPE = "performance-alert-type";
     public static final String PLEDGES_AID_MODALITY = "pledges-aid-modality";
-    public static final String PLEDGES_COUNTRIES = "pledges-countries";
     public static final String PLEDGES_DETAIL_START_DATE = "pledges-detail-start-date";
     public static final String PLEDGES_DETAIL_END_DATE = "pledges-detail-end-date";
-    public static final String PLEDGES_DISTRICTS = "pledges-districts";
+    public static final String PLEDGES_ADM_LEVEL_0 = "pledges-administrative-level-0";
+    public static final String PLEDGES_ADM_LEVEL_1 = "pledges-administrative-level-1";
+    public static final String PLEDGES_ADM_LEVEL_2 = "pledges-administrative-level-2";
+    public static final String PLEDGES_ADM_LEVEL_3 = "pledges-administrative-level-3";
+    public static final String PLEDGES_ADM_LEVEL_4 = "pledges-administrative-level-4";
     public static final String PLEDGES_DONOR_GROUP = "pledges-donor-group";
     public static final String PLEDGES_DONOR_TYPE = "pledges-donor-type";
     public static final String PLEDGES_NATIONAL_PLAN_OBJECTIVES = "pledges-national-plan-objectives";
@@ -128,12 +137,9 @@ public class FiltersConstants {
     public static final String PLEDGES_QUINARY_SECTORS = "pledges-quinary-sectors";
     public static final String PLEDGES_QUINARY_SECTORS_SUB_SECTORS = "pledges-quinary-sectors-sub-sectors";
     public static final String PLEDGES_QUINARY_SECTORS_SUB_SUB_SECTORS = "pledges-quinary-sectors-sub-sub-sectors";
-    public static final String PLEDGES_REGIONS = "pledges-regions";
     public static final String PLEDGES_STATUS = "pledges-status";
     public static final String PLEDGES_TITLES = "pledges-titles";
     public static final String PLEDGES_TYPE_OF_ASSISTANCE = "pledges-type-of-assistance";
-    public static final String PLEDGES_ZONES = "pledges-zones";
-    public static final String PLEDGES_COMMUNAL_SECTION = "pledges-communal-section";
     public static final String PRIMARY_PROGRAM_LEVEL_0 = "primary-program-level-0";
     public static final String PRIMARY_PROGRAM_LEVEL_1 = "primary-program-level-1";
     public static final String PRIMARY_PROGRAM_LEVEL_2 = "primary-program-level-2";
@@ -143,12 +149,22 @@ public class FiltersConstants {
     public static final String PRIMARY_PROGRAM_LEVEL_6 = "primary-program-level-6";
     public static final String PRIMARY_PROGRAM_LEVEL_7 = "primary-program-level-7";
     public static final String PRIMARY_PROGRAM_LEVEL_8 = "primary-program-level-8";
+    public static final String INDIRECT_PRIMARY_PROGRAM_LEVEL = "primary-program-level";
+
+    public static final String INDIRECT_PRIMARY_PROGRAM_LEVEL_0 = INDIRECT_PRIMARY_PROGRAM_LEVEL + "-0";
+    public static final String INDIRECT_PRIMARY_PROGRAM_LEVEL_1 = INDIRECT_PRIMARY_PROGRAM_LEVEL + "-1";
+    public static final String INDIRECT_PRIMARY_PROGRAM_LEVEL_2 = INDIRECT_PRIMARY_PROGRAM_LEVEL + "-2";
+    public static final String INDIRECT_PRIMARY_PROGRAM_LEVEL_3 = INDIRECT_PRIMARY_PROGRAM_LEVEL + "-3";
+    public static final String INDIRECT_PRIMARY_PROGRAM_LEVEL_4 = INDIRECT_PRIMARY_PROGRAM_LEVEL + "-4";
+    public static final String INDIRECT_PRIMARY_PROGRAM_LEVEL_5 = INDIRECT_PRIMARY_PROGRAM_LEVEL + "-5";
+    public static final String INDIRECT_PRIMARY_PROGRAM_LEVEL_6 = INDIRECT_PRIMARY_PROGRAM_LEVEL + "-6";
+    public static final String INDIRECT_PRIMARY_PROGRAM_LEVEL_7 = INDIRECT_PRIMARY_PROGRAM_LEVEL + "-7";
+    public static final String INDIRECT_PRIMARY_PROGRAM_LEVEL_8 = INDIRECT_PRIMARY_PROGRAM_LEVEL + "-8";
     public static final String PRIMARY_SECTOR = "primary-sector";
     public static final String PRIMARY_SECTOR_SUB_SECTOR = "primary-sector-sub-sector";
     public static final String PRIMARY_SECTOR_SUB_SUB_SECTOR = "primary-sector-sub-sub-sector";
     public static final String PROCUREMENT_SYSTEM = "procurement-system";
     public static final String PROJECT_IMPLEMENTING_UNIT = "project-implementing-unit";
-    public static final String REGION = "region";
     public static final String RESPONSIBLE_ORGANIZATION = "responsible-organization";
     public static final String RESPONSIBLE_ORGANIZATION_GROUP = "responsible-organization-group";
     public static final String RESPONSIBLE_ORGANIZATION_TYPE = "responsible-organization-type";
@@ -187,8 +203,7 @@ public class FiltersConstants {
     public static final String QUINARY_SECTOR_SUB_SUB_SECTOR = "quinary-sector-sub-sub-sector";
     public static final String TYPE_OF_ASSISTANCE = "type-of-assistance";
     public static final String WORKSPACES = "workspaces";
-    public static final String ZONE = "zone";
-    
+
     /** filters IDs to Name mapping */
     public static final Map<String, String> ID_NAME_MAP = Collections.unmodifiableMap(new HashMap<String, String>() {{
         put(COMPUTED_YEAR, "Computed Year");

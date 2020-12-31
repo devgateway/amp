@@ -38,6 +38,9 @@ public class SyncConstants {
         public static final String FEATURE_MANAGER = "feature manager";
         public static final String MAP_TILES = "map_tiles";
         public static final String LOCATORS = "locators";
+        public static final String COLLECTION_TYPE_ACTIVITY = "activity-fields";
+        public static final String COLLECTION_TYPE_CONTACT = "contact-fields";
+        public static final String COLLECTION_TYPE_RESOURCE = "resource-fields";
         public static final String INDICATOR = "indicator";
         public static final String INDICATOR_RISK_RATING = "indicator risk rating";
     }

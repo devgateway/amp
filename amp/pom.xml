@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.devgateway</groupId>
     <artifactId>amp</artifactId>
-    <version>3.4.3</version>
+    <version>3.5</version>
     <packaging>war</packaging>
     <name>Aid Management Platform</name>
     <properties>
@@ -1100,6 +1100,8 @@
                                 <exclude>TEMPLATE/ampTemplate/node_modules/amp-state/node_modules/**</exclude>
                                 <exclude>TEMPLATE/reamp/node/**</exclude>
                                 <exclude>TEMPLATE/reamp/node_modules/**</exclude>
+                                <exclude>TEMPLATE/reampv2/node/**</exclude>
+                                <exclude>TEMPLATE/reampv2/node_modules/**</exclude>
                                 <exclude>src/**</exclude>
                                 <exclude>target/**</exclude>
                             </excludes>
@@ -1475,7 +1477,40 @@
                				<workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>
                         </configuration>
                     </execution>
-                    <!-- Installing node and npm  for reamp-->
+                    <!-- Installing node and npm  for reampv2-->
+                    <execution>
+                        <id>install node and npm for reampv2</id>
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+                        <phase>process-resources</phase>
+                        <configuration>
+                             <workingDirectory>${project.basedir}/TEMPLATE/reampv2</workingDirectory>
+                            <nodeVersion>v12.16.2</nodeVersion>
+                        </configuration>
+                    </execution>
+					 <execution>
+                        <id>npm install for reampv2</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <phase>process-resources</phase>
+                        <configuration>
+                            <arguments>install</arguments>
+               			    <workingDirectory>${project.basedir}/TEMPLATE/reampv2</workingDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+	                   <id>npm run build reampv2</id>
+	                       <goals>
+		                       <goal>npm</goal>
+	                        </goals>
+	                    <phase>process-resources</phase>
+	                    <configuration>
+		                   <arguments>run build</arguments>
+		                <workingDirectory>${project.basedir}/TEMPLATE/reampv2</workingDirectory>
+	                    </configuration>
+                  </execution>
                     <execution>
                         <!-- optional: you don't really need execution ids, but it looks nice in your build log. -->
                         <id>install node and npm for reamp</id>

@@ -4,15 +4,17 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.activity.field.CachingFieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
+import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.dbentity.ApprovalStatus;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.common.util.DateTimeUtil;
 
@@ -21,10 +23,21 @@ import org.digijava.module.common.util.DateTimeUtil;
  */
 public class ObjectExporter<T> {
 
-    private final List<APIField> apiFields;
+    private List<APIField> apiFields;
+    private Map<Long, CachingFieldsEnumerator> enumerators;
 
-    private final TranslatedFieldReader translatedFieldReader;
+    private TranslatedFieldReader translatedFieldReader;
 
+    public ObjectExporter(TranslatedFieldReader translatedFieldReader, Map<Long, CachingFieldsEnumerator> enumerators) {
+        this.translatedFieldReader = translatedFieldReader;
+        this.enumerators = enumerators;
+    }
+
+    /**
+     * This constructor is for special cases like Contacts and Resources that are not tied to a specific/custom FM tree.
+     * @param translatedFieldReader
+     * @param apiFields
+     */
     public ObjectExporter(TranslatedFieldReader translatedFieldReader, List<APIField> apiFields) {
         this.translatedFieldReader = translatedFieldReader;
         this.apiFields = apiFields;
@@ -34,8 +47,24 @@ public class ObjectExporter<T> {
         return apiFields;
     }
 
+    public List<APIField> getApiFields(Long id) {
+        if (id != null) {
+            return this.enumerators.get(id).getActivityFields();
+        }
+        AmpTemplatesVisibility defaultTemplate = FeaturesUtil.getDefaultAmpTemplateVisibility();
+        return this.enumerators.get(defaultTemplate.getId()).getActivityFields();
+    }
+
     public Map<String, Object> export(T object) {
         return getObjectJson(object, apiFields, null);
+    }
+
+    public Map<String, Object> export(T object, Long id) {
+        if (id == null) {
+            AmpTemplatesVisibility defaultTemplate = FeaturesUtil.getDefaultAmpTemplateVisibility();
+            return getObjectJson(object, this.enumerators.get(defaultTemplate.getId()).getActivityFields(), null);
+        }
+        return getObjectJson(object, this.enumerators.get(id).getActivityFields(), null);
     }
 
     /**
@@ -73,14 +102,9 @@ public class ObjectExporter<T> {
         Object fieldValue = field.getFieldAccessor().get(object);
         boolean isList = field.getApiType().getFieldType().isList();
 
-        if (field.getApiType().getFieldType().isObject()) {
-            if (fieldValue != null && Collection.class.isAssignableFrom(fieldValue.getClass())) {
-                Collection<?> col = (Collection<?>) fieldValue;
-                if (col.size() > 1) {
-                    throw new RuntimeException("Multiple values found for an object field");
-                }
-                fieldValue = col.size() == 1 ? col.iterator().next() : null;
-            }
+        if (field.isIdOnly() && !(isList && field.getApiType().isSimpleItemType())) {
+            jsonValue = readFieldWithPossibleValues(field, fieldValue);
+        } else if (field.getApiType().getFieldType().isObject()) {
             jsonValue = (fieldValue == null) ? null : getObjectJson(fieldValue, field.getChildren(), fieldPath);
         } else if (isList) {
             jsonValue = readCollection(field, fieldPath, object, (Collection<?>) fieldValue);
@@ -93,42 +117,19 @@ public class ObjectExporter<T> {
 
     /**
      * Read value for a field that has possible values API.
-     * <p>When a field is discriminated, then value is list. In this case the value is expected to be a collection
-     * with one item.
      * <p>If the value is {@link Identifiable} then it's id is returned.
      */
     private Object readFieldWithPossibleValues(APIField field, Object value) {
-        Object singleValue = getSingleValue(value);
         if (ApprovalStatus.class.isAssignableFrom(field.getApiType().getType())) {
             return value == null ? null : ((ApprovalStatus) value).getId();
         } else if (Identifiable.class.isAssignableFrom(field.getApiType().getType())) {
-            return singleValue == null ? null : ((Identifiable) singleValue).getIdentifier();
+            return value == null ? null : ((Identifiable) value).getIdentifier();
         } else if (InterchangeUtils.isSimpleType(field.getApiType().getType())) {
-            return singleValue;
+            return value;
         } else {
             throw new RuntimeException("Invalid field mapping. Must be either of simple type or identifiable. "
                     + "Field: " + field.getFieldName());
         }
-    }
-
-    /**
-     * <p>When a field is discriminated, then value is list. In this case the value is expected to be a collection
-     * with one item.
-     */
-    private Object getSingleValue(Object value) {
-        Object singleValue = null;
-        if (value instanceof Collection) {
-            Iterator<?> iterator = ((Collection<?>) value).iterator();
-            if (iterator.hasNext()) {
-                singleValue = iterator.next();
-            }
-            if (iterator.hasNext()) {
-                throw new RuntimeException("Value is a collection with more than one element.");
-            }
-        } else {
-            singleValue = value;
-        }
-        return singleValue;
     }
 
     /**

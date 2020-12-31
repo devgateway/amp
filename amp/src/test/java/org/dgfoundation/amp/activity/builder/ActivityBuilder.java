@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
+import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
@@ -13,8 +14,11 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.dbentity.AmpRole;
+import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.ApprovalStatus;
+import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 /**
@@ -127,8 +131,34 @@ public class ActivityBuilder {
         activity.setDraft(draft);
         return this;
     }
+    
+    public ActivityBuilder withGroup(AmpActivityGroup group) {
+        activity.setAmpActivityGroup(group);
+        return this;
+    }
+    
+    public ActivityBuilder withActivityCreator(AmpTeamMember creator) {
+        activity.setActivityCreator(creator);
+        return this;
+    }
+    
+    
+    public ActivityBuilder withApprovalStatus(ApprovalStatus approvalStatus) {
+        activity.setApprovalStatus(approvalStatus);
+        return this;
+    }
+    
+    public ActivityBuilder withTeam(AmpTeam ampTeam) {
+        activity.setTeam(ampTeam);
+        return this;
+    }
 
-    public ActivityBuilder addRegionalFunding(int transactionType, AmpCategoryValue adjustmentType,
+    public ActivityBuilder withMultiStakeholderPartnership(boolean multiStakeholderPartnership) {
+        activity.setMultiStakeholderPartnership(multiStakeholderPartnership);
+        return this;
+    }
+
+	public ActivityBuilder addRegionalFunding(int transactionType, AmpCategoryValue adjustmentType,
             Date transactionDate, Double transactionAmount, AmpCurrency currency, AmpCategoryValueLocations location) {
 
         AmpRegionalFunding funding = new AmpRegionalFunding();
@@ -140,7 +170,6 @@ public class ActivityBuilder {
         funding.setRegionLocation(location);
 
         activity.getRegionalFundings().add(funding);
-
         return this;
     }
 }

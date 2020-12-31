@@ -122,6 +122,9 @@ public class CategoryConstants {
     
     public static final String CONCESSIONALITY_LEVEL_NAME   = "Concessionality Level";
     public static final String CONCESSIONALITY_LEVEL_KEY    = "concessionality_level";
+
+    public static final String VULNERABLE_GROUP_LEVEL_NAME   = "Vulnerable Group";
+    public static final String VULNERABLE_GROUP_LEVEL_KEY    = "vulnerable_group";
     
     
     //--- IPA Contracting Step 13
@@ -180,16 +183,16 @@ public class CategoryConstants {
     public static final HardCodedCategoryValue FIN_INSTR_BUDGET_SUPPORT = 
         new CategoryConstants.HardCodedCategoryValue("financing_instrument","Budget Support", false);
     
-    public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_COUNTRY  = 
-        new CategoryConstants.HardCodedCategoryValue("implementation_location", "Country", true);
-    public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_REGION   = 
-        new CategoryConstants.HardCodedCategoryValue("implementation_location", "Region", true);
-    public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_ZONE = 
-        new CategoryConstants.HardCodedCategoryValue("implementation_location", "Zone", true);
-    public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_DISTRICT = 
-        new CategoryConstants.HardCodedCategoryValue("implementation_location", "District", true);
-    public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_COMMUNAL_SECTION =
-        new CategoryConstants.HardCodedCategoryValue("implementation_location", "Communal section", true);
+    public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_ADM_LEVEL_0 =
+        new CategoryConstants.HardCodedCategoryValue("implementation_location", "Administrative Level 0", true);
+    public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_ADM_LEVEL_1 =
+        new CategoryConstants.HardCodedCategoryValue("implementation_location", "Administrative Level 1", true);
+    public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_ADM_LEVEL_2 =
+        new CategoryConstants.HardCodedCategoryValue("implementation_location", "Administrative Level 2", true);
+    public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_ADM_LEVEL_3 =
+        new CategoryConstants.HardCodedCategoryValue("implementation_location", "Administrative Level 3", true);
+    public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_ADM_LEVEL_4 =
+        new CategoryConstants.HardCodedCategoryValue("implementation_location", "Administrative Level 4", true);
     public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_ALL  =
             new CategoryConstants.HardCodedCategoryValue("implementation_location", "All", true);
     

@@ -1,5 +1,9 @@
 package org.digijava.kernel.request;
 
+import static org.digijava.module.aim.helper.Constants.CURRENT_MEMBER;
+import static org.digijava.module.aim.helper.Constants.CURRENT_USER;
+import static org.digijava.module.aim.util.FeaturesUtil.AMP_TREE_VISIBILITY_ATTR;
+
 import java.nio.file.Paths;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -11,6 +15,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.Constants;
+import org.digijava.kernel.ampapi.endpoints.activity.ApiContext;
+import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.RequestUtils;
@@ -78,7 +84,7 @@ public class TLSUtils {
             return "en";
         }
     }
-
+    
     public void setForcedSSCWorkspace(Boolean forcedSSCWorkspace) {
         this.forcedSSCWorkspace = forcedSSCWorkspace;
     }
@@ -195,7 +201,6 @@ public class TLSUtils {
         HttpServletRequest mockRequest = Mockito.mock(HttpServletRequest.class);
         HttpSession mockSession = Mockito.mock(HttpSession.class);
         
-        
         ServletContext mockServletContext=Mockito.mock(ServletContext.class);
         
         Mockito.when(mockRequest.getSession()).thenReturn(mockSession);
@@ -211,6 +216,7 @@ public class TLSUtils {
 
         
         Mockito.when(mockRequest.getServletContext()).thenReturn(mockServletContext);
+        Mockito.when(mockSession.getServletContext()).thenReturn(mockServletContext);
         final Map<String, Object> servletContextAttributes = new ConcurrentHashMap<String, Object>();
 
         
@@ -233,6 +239,35 @@ public class TLSUtils {
         populateMockSiteDomain(mockRequest, "/");
         populate(mockRequest);
 
+    }
+    
+    /**
+     * This method is used while executing api process outside the request context
+     * @param apiContext
+     */
+    public static void populateMockTlsUtilsWithApiContext(ApiContext apiContext) {
+        populateMockTlsUtils();
+        
+        HttpServletRequest threadRequest = TLSUtils.getRequest();
+        HttpSession threadSession = threadRequest.getSession();
+        ServletContext servletContext = threadRequest.getServletContext();
+        
+        threadSession.setAttribute(CURRENT_USER, apiContext.getUser());
+        threadSession.setAttribute(CURRENT_MEMBER, apiContext.getTeamMember());
+        threadSession.setAttribute(AMP_TREE_VISIBILITY_ATTR,
+                apiContext.getAmpTreeVisibility());
+        threadSession.setAttribute("ampTreeVisibilityModificationDate",
+                apiContext.getAmpTreeVisibilityModificationDate());
+        threadSession.getServletContext().setAttribute(AMP_TREE_VISIBILITY_ATTR,
+                apiContext.getSessionServletContext().getAttribute(AMP_TREE_VISIBILITY_ATTR));
+        threadSession.getServletContext().setAttribute("templateVisibilityChangeDate",
+                apiContext.getSessionServletContext().getAttribute("templateVisibilityChangeDate"));
+    
+        AmpClientModeHolder.setClientMode(apiContext.getClientMode());
+        
+        Mockito.when(servletContext.getRealPath("/")).thenReturn(apiContext.getRootPath());
+        TLSUtils.getRequest().getServletContext().getRealPath("/");
+        Mockito.when(threadRequest.getRequestURL()).thenReturn(apiContext.getRequestURL());
     }
 
     private static void populateMockSiteDomain(HttpServletRequest httpRequest, String mainPath) {

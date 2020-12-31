@@ -2,6 +2,9 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.AMP_ID_FIELD_NAME;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.MAX_BULK_ACTIVITIES_ALLOWED;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,7 +27,13 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import com.fasterxml.jackson.annotation.JsonView;
-
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.Example;
+import io.swagger.annotations.ExampleProperty;
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivityInformation;
 import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivitySummary;
@@ -37,8 +46,13 @@ import org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewActivityServ
 import org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewWorkspace;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.AmpMediaType;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.ApiCompat;
+import org.digijava.kernel.ampapi.endpoints.async.AsyncApiService;
+import org.digijava.kernel.ampapi.endpoints.async.AsyncResult;
+import org.digijava.kernel.ampapi.endpoints.async.AsyncResultCacher;
+import org.digijava.kernel.ampapi.endpoints.async.AsyncStatus;
 import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
@@ -47,13 +61,8 @@ import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import io.swagger.annotations.Example;
-import io.swagger.annotations.ExampleProperty;
+import org.digijava.module.aim.util.ActivityUtil;
+import org.springframework.security.web.util.UrlUtils;
 
 
 /**
@@ -96,6 +105,27 @@ public class InterchangeEndpoints {
         return Response.ok(possibleValues, responseType).build();
     }
 
+    // TODO TO be removed after AMP-29486 is merged into FUTURE.
+    // Restored so the new preview works until AMP-29486 is done. 
+    @GET
+    @Path("fields-no-workspace/{id}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "getDefaultFields", ui = false)
+    public List<APIField> getAvailableFieldsBasedOnDefaultFM(@ApiParam(value = "FM id", required = false)
+                                                             @PathParam("id") Long id) {
+        return getAvailableFields(id);
+    }
+
+    // TODO TO be removed after AMP-29486 is merged into FUTURE.
+    // Restored so the new preview works until AMP-29486 is done.
+    @GET
+    @Path("fields-no-workspace")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "getDefaultFields", ui = false)
+    public List<APIField> getAvailableFieldsBasedOnDefaultFM() {
+        return getAvailableFields(null);
+    }
+
     @POST
     @Path("field/values")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8", AmpMediaType.POSSIBLE_VALUES_V2_JSON})
@@ -110,12 +140,14 @@ public class InterchangeEndpoints {
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "list of possible values grouped by field"))
     public Response getValues(
             @ApiParam(value = "List of fully qualified activity fields.")
-            List<String> fields) {
+                    List<String> fields) {
         Map<String, List<PossibleValue>> response;
         if (fields == null) {
             response = Collections.emptyMap();
         } else {
+            ActivityUtil.loadWorkspacePrefixesIntoRequest();
             List<APIField> apiFields = AmpFieldsEnumerator.getEnumerator().getActivityFields();
+
             response = fields.stream()
                     .filter(Objects::nonNull)
                     .distinct()
@@ -162,9 +194,29 @@ public class InterchangeEndpoints {
             notes = "For fields like locations, sectors, programs the object contains the ancestor values.")
     public Map<String, List<FieldIdValue>> getFieldValuesById(
             @ApiParam("List of fully qualified activity fields with list of ids.") Map<String, List<Long>> fieldIds) {
-        List<APIField> apiFields = AmpFieldsEnumerator.getEnumerator().getActivityFields();
-        Map<String, List<FieldIdValue>> response = InterchangeUtils.getIdValues(fieldIds, apiFields);
+        return getFieldValues(null, fieldIds);
+    }
 
+    @POST
+    @Path("field/id-values/{fmId}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "getIdValues", ui = false)
+    @ApiOperation(value = "Returns a list of values for all id of requested fields.",
+            notes = "For fields like locations, sectors, programs the object contains the ancestor values.")
+    public Map<String, List<FieldIdValue>> getFieldValuesByIdWithFM(
+            @ApiParam(value = "FM id", required = true) @PathParam("fmId") Long id,
+            @ApiParam("List of fully qualified activity fields with list of ids.") Map<String, List<Long>> fieldIds) {
+        return getFieldValues(id, fieldIds);
+    }
+
+    private Map<String, List<FieldIdValue>> getFieldValues(Long id, Map<String, List<Long>> fieldIds) {
+        List<APIField> apiFields = null;
+        if (id != null) {
+            apiFields = AmpFieldsEnumerator.getEnumerator(id).getActivityFields();
+        } else {
+            apiFields = AmpFieldsEnumerator.getEnumerator().getActivityFields();
+        }
+        Map<String, List<FieldIdValue>> response = InterchangeUtils.getIdValues(fieldIds, apiFields);
         return response;
     }
 
@@ -173,19 +225,30 @@ public class InterchangeEndpoints {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "getFields", ui = false)
     @ApiOperation(value = "Returns the full list of activity fields.",
-    notes = "Provides full set of available fields and their settings/rules in a hierarchical structure.\n\n"
-            + "See [Fields Enumeration Wiki](https://wiki.dgfoundation.org/display/AMPDOC/Fields+enumeration)")
-    public List<APIField> getAvailableFields() {
+            notes = "Provides full set of available fields and their settings/rules in a hierarchical structure.\n\n"
+                    + "See [Fields Enumeration Wiki](https://wiki.dgfoundation.org/display/AMPDOC/Fields+enumeration)")
+    public List<APIField> getAvailableFields(@ApiParam(value = "FM id", required = false) Long id) {
+        if (id != null) {
+            return AmpFieldsEnumerator.getEnumerator(id).getActivityFields();
+        }
         return AmpFieldsEnumerator.getEnumerator().getActivityFields();
     }
 
-    // TODO remove it as part of AMP-25568
-    @GET
-    @Path("fields-no-workspace")
+    /**
+     * Provides full set of available fields and their settings/rules in a hierarchical structure
+     * grouped by workspace member id
+     *
+     * @param wsMemberIds
+     * @return JSON with fields information grouped by ws-member-ids
+     * @see <a href="https://wiki.dgfoundation.org/display/AMPDOC/Fields+enumeration">Fields Enumeration Wiki<a/>
+     */
+    @POST
+    @Path("ws-member-fields")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = "getDefaultFields", ui = false)
-    public List<APIField> getAvailableFieldsBasedOnDefaultFM() {
-        return getAvailableFields();
+    @ApiMethod(id = "getAvailableFieldsBasedOnWs", ui = false)
+    public List<APIWorkspaceMemberFieldList>
+    getAvailableFieldsBasedOnWs(@ApiParam(value = "List of WS ids", required = true) List<Long> ids) {
+        return AmpFieldsEnumerator.getAvailableFieldsBasedOnWs(ids, AmpFieldsEnumerator.TYPE_ACTIVITY);
     }
 
     @GET
@@ -198,8 +261,8 @@ public class InterchangeEndpoints {
             notes = "If the user can view the project, the 'view' property of the project is set to true. "
                     + "False otherwise. If the user can edit the project, the 'edit' property of the project "
                     + "on the JSON is set to true. False otherwise. Pagination can be used if the parameters "
-                            + "are sent on the request.\nIf not parameters are sent, the full list of projects is "
-                            + "returned.")
+                    + "are sent on the request.\nIf not parameters are sent, the full list of projects is "
+                    + "returned.")
     @JsonView(ActivityView.List.class)
     public Collection<ActivitySummary> getProjects(
             @ApiParam("Current pagination request reference (random id). It acts as a key for a LRU caching "
@@ -228,7 +291,7 @@ public class InterchangeEndpoints {
     @ApiMethod(id = "getProject", ui = false)
     @ApiOperation("Provides full activity information.")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, response = SwaggerActivity.class,
-    message = "activity with full set of configured fields and their values"))
+            message = "activity with full set of configured fields and their values"))
     public SwaggerActivity getProject(@ApiParam("project id") @PathParam("projectId") Long projectId) {
         Map<String, Object> activity = ActivityInterchangeUtils.getActivity(projectId);
         return new SwaggerActivity(activity);
@@ -240,7 +303,7 @@ public class InterchangeEndpoints {
     @ApiMethod(authTypes = AuthRule.VIEW_ACTIVITY, id = "getProjectsFilter", ui = false)
     @ApiOperation("Provides activity information based on requested fields.")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK,
-    message = "activity with requested fields and their values"))
+            message = "activity with requested fields and their values"))
     public Map<String, Object> getProject(
             @ApiParam("activity id") @PathParam("projectId") Long projectId,
             @ApiParam("List of fields that will be displayed") Map<String, Object> filter) {
@@ -263,7 +326,7 @@ public class InterchangeEndpoints {
     @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getProjectByAmpId", ui = false)
     @ApiOperation("Retrieve activity by AMP Id.")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, response = SwaggerActivity.class,
-    message = "activity with full set of configured fields and their values"))
+            message = "activity with full set of configured fields and their values"))
     public SwaggerActivity getProjectByAmpId(@ApiParam("AMP Id") @QueryParam("amp-id") String ampId) {
         Map<String, Object> activity = ActivityInterchangeUtils.getActivityByAmpId(ampId);
         return new SwaggerActivity(activity);
@@ -275,8 +338,8 @@ public class InterchangeEndpoints {
     @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getProjectsByAmpIds", ui = false)
     @ApiOperation("Retrieve activities by AMP Ids.")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK,
-    message = "A list of projects with full set of configured fields and their values. For each amp_id that is "
-            + "invalid or its export failed, the entry will provide only the 'amp_id' and the 'error'",
+            message = "A list of projects with full set of configured fields and their values. For each amp_id that is "
+                    + "invalid or its export failed, the entry will provide only the 'amp_id' and the 'error'",
             examples =
             @Example(value = {
                     @ExampleProperty(
@@ -304,10 +367,10 @@ public class InterchangeEndpoints {
                     + "will be saved as draft if can-downgrade-to-draft is true. Otherwise will be rejected.\n\n"
                     + "Request to process approval fields only if you know how to properly handle them.")
     @ApiResponses({
-        @ApiResponse(code = HttpServletResponse.SC_OK, reference = "ActivitySummary_Import",
-                message = "the latest project short overview"),
-        @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse_Import",
-        message = "error if invalid configuration is received")})
+            @ApiResponse(code = HttpServletResponse.SC_OK, reference = "ActivitySummary_Import",
+                    message = "the latest project short overview"),
+            @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse_Import",
+                    message = "error if invalid configuration is received")})
     @JsonView(ActivityView.Import.class)
     public JsonApiResponse<ActivitySummary> addProject(
             @ApiParam("can downgrade to draft") @QueryParam("can-downgrade-to-draft") @DefaultValue("false")
@@ -338,10 +401,10 @@ public class InterchangeEndpoints {
                     + "on activity id and activity_group.version.\n"
                     + "The activity will be optimistically locked during the update process.")
     @ApiResponses({
-        @ApiResponse(code = HttpServletResponse.SC_OK, reference = "ActivitySummary_Import",
-                message = "latest project overview"),
-        @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse_Import",
-        message = "error if invalid configuration is received")})
+            @ApiResponse(code = HttpServletResponse.SC_OK, reference = "ActivitySummary_Import",
+                    message = "latest project overview"),
+            @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse_Import",
+                    message = "error if invalid configuration is received")})
     @JsonView(ActivityView.Import.class)
     public JsonApiResponse<ActivitySummary> updateProject(
             @ApiParam("the id of the activity which should be updated") @PathParam("projectId") Long projectId,
@@ -369,6 +432,7 @@ public class InterchangeEndpoints {
         ActivityImportRules rules = new ActivityImportRules(canDowngradeToDraft, isProcessApprovalFields,
                 isTrackEditors);
 
+        ActivityUtil.loadWorkspacePrefixesIntoRequest();
         return ActivityInterchangeUtils.importActivity(newJson.getMap(), true, rules, uri.getBaseUri() + "activity");
     }
 
@@ -377,10 +441,10 @@ public class InterchangeEndpoints {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "getPreviewFundings", ui = false)
     @ApiOperation(value = "Retrieve activity fundings with converted amounts and totals.",
-    notes = "This endpoint is used for fetching information about activity funding.\n"
-            + "The transactions are grouped by transaction type and adjustment type.\n"
-            + "All the transactions amounts are converted in the specified currency.\n"
-            + "The response includes subtotals and totals.")
+            notes = "This endpoint is used for fetching information about activity funding.\n"
+                    + "The transactions are grouped by transaction type and adjustment type.\n"
+                    + "All the transactions amounts are converted in the specified currency.\n"
+                    + "The response includes subtotals and totals.")
     public PreviewActivityFunding getPreviewFundingInformation(
             @ApiParam("the id of the activity")
             @PathParam("projectId") Long projectId,
@@ -398,6 +462,82 @@ public class InterchangeEndpoints {
             @ApiParam("the id of the activity")
             @PathParam("projectId") Long projectId) {
         return PreviewActivityService.getInstance().getWorkspaces(projectId);
+    }
+
+    
+    @POST
+    @Path("/async/bulk")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_OPTIONAL}, id = "importProjects")
+    @ApiOperation(
+            value = "Imports asynchronous a list of activities.",
+            notes = "The input body is an array of activity objects."
+                    + "The format of activity object matches the existing format used by post / and POST /{projectId}."
+                    + "If the header Prefer: respond-async is not present, "
+                    + "then the endpoint will respond with a list of import/update result."
+                    + "If the header Prefer: respond-async is present then an immediate response will be returned."
+                    + "The response will contain in headers (location) the url where the results can be retrieved"
+                    + "If the size is bigger than 20, the request will be rejected.")
+    public Response importProjects(@QueryParam("can-downgrade-to-draft") @DefaultValue("false")
+                                               boolean canDowngradeToDraft,
+                                   @QueryParam("process-approval-fields") @DefaultValue("false")
+                                           boolean isProcessApprovalFields,
+                                   @QueryParam("track-editors") @DefaultValue("false") boolean isTrackEditors,
+                                   @ApiParam("activity configuration") List<SwaggerActivity> activitiesJson) {
+    
+        String resultId = (String) TLSUtils.getRequest().getAttribute("result-id");
+        if (activitiesJson != null || !activitiesJson.isEmpty()) {
+            if (activitiesJson.size() > MAX_BULK_ACTIVITIES_ALLOWED) {
+                ApiErrorResponseService.reportError(BAD_REQUEST, ActivityErrors.BULK_TO_BIG
+                        .withDetails("Maximum activities allowed: " + MAX_BULK_ACTIVITIES_ALLOWED));
+            }
+            
+            ActivityImportRules rules = new ActivityImportRules(canDowngradeToDraft, isProcessApprovalFields,
+                    isTrackEditors);
+            if (resultId != null) {
+                AsyncApiService.getInstance().importActivities(rules, resultId, activitiesJson, uri.getBaseUri());
+            } else {
+                List<JsonApiResponse<ActivitySummary>> results = new ArrayList<>();
+            
+                for (SwaggerActivity act : activitiesJson) {
+                    boolean toUpdate = act.getMap().containsKey(AMP_ID_FIELD_NAME);
+                    results.add(ActivityInterchangeUtils.importActivity(act.getMap(), toUpdate, rules,
+                            uri.getBaseUri() + "activity"));
+                }
+            
+                return Response.ok(results).build();
+            }
+        }
+        String location = String.format("%s/result/%s", UrlUtils.buildFullRequestUrl(TLSUtils.getRequest()), resultId);
+        return Response.ok()
+                .header("location", location)
+                .build();
+    }
+    
+    @GET
+    @Path("/async/bulk/result/{result-id}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_OPTIONAL}, id = "getAsyncResult")
+    @ApiOperation(
+            value = "Return the results generated by /async/bulk endpoint.")
+    public Response getAsyncResult(@PathParam("result-id") String resultId) {
+        
+        AsyncResult asyncResult = AsyncResultCacher.getAsyncResult(resultId);
+    
+        if (asyncResult == null) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .header("X-Async-Status", AsyncStatus.NOT_FOUND)
+                    .type(MediaType.APPLICATION_JSON).build();
+        }
+    
+        Response.ResponseBuilder responseBuilder = Response.status(Response.Status.OK)
+                .type(MediaType.APPLICATION_JSON);
+        
+        if (asyncResult.getStatus() == AsyncStatus.RUNNING) {
+            responseBuilder.header("X-Async-Status", AsyncStatus.RUNNING);
+        }
+        
+        return responseBuilder.entity(asyncResult.getResults()).build();
     }
 
 }

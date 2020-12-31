@@ -17,6 +17,7 @@ import java.util.Set;
 import com.google.common.collect.ImmutableList;
 
 import org.dgfoundation.amp.reports.converters.HardcodedThemes;
+import org.dgfoundation.amp.testutils.TransactionUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldsEnumerator;
 import org.digijava.kernel.ampapi.endpoints.common.TestTranslatorService;
@@ -39,6 +40,8 @@ public class ActivityExporterTest {
     @Before
     public void setUp() {
         TestTranslatorService translatorService = new TestTranslatorService();
+
+        TransactionUtil.setUpWorkspaceEmptyPrefixes();
 
         FieldsEnumerator enumerator = new FieldsEnumerator(
                 new TestFieldInfoProvider(),

@@ -25,12 +25,15 @@ import org.digijava.kernel.ampapi.endpoints.activity.values.FiscalYearPossibleVa
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
-import org.digijava.kernel.validators.activity.RegionLocationValidator;
-import org.digijava.kernel.validators.activity.UniqueActivityTitleValidator;
 import org.digijava.kernel.validators.activity.ComponentFundingOrgRoleValidator;
 import org.digijava.kernel.validators.activity.ImplementationLevelValidator;
-import org.digijava.kernel.validators.common.TotalPercentageValidator;
+import org.digijava.kernel.validators.activity.MultiStakeholderPartnershipValidator;
 import org.digijava.kernel.validators.activity.OnBudgetValidator;
+import org.digijava.kernel.validators.activity.ProgramMappingValidator;
+import org.digijava.kernel.validators.activity.RegionLocationValidator;
+import org.digijava.kernel.validators.activity.TreeCollectionValidator;
+import org.digijava.kernel.validators.activity.UniqueActivityTitleValidator;
+import org.digijava.kernel.validators.common.TotalPercentageValidator;
 import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.kernel.validators.common.SizeValidator;
 import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
@@ -66,6 +69,10 @@ import org.hibernate.Session;
 @InterchangeableValidator(UniqueActivityTitleValidator.class)
 @InterchangeableValidator(ComponentFundingOrgRoleValidator.class)
 @InterchangeableValidator(ImplementationLevelValidator.class)
+@InterchangeableValidator(ProgramMappingValidator.class)
+@InterchangeableValidator(value = OnBudgetValidator.class, groups = Submit.class, attributes = "required=ND")
+@InterchangeableValidator(value = MultiStakeholderPartnershipValidator.class, groups = Submit.class,
+        attributes = "required=ND")
 @InterchangeableValidator(RegionLocationValidator.class)
 @InterchangeableValidator(value = OnBudgetValidator.class, groups = Submit.class, attributes = "required=ND")
 public abstract class AmpActivityFields extends Permissible implements Comparable<AmpActivityVersion>, Serializable,
@@ -247,10 +254,13 @@ LoggerIdentifiable, Cloneable {
                                     fmPath = "/Activity Form/Sectors/Primary Sectors/minSizeSectorsValidator"),
                             @InterchangeableValidator(
                                     value = TotalPercentageValidator.class,
-                                    fmPath = FMVisibility.PARENT_FM + "/sectorPercentageTotal")},
+                                    fmPath = FMVisibility.PARENT_FM + "/sectorPercentageTotal"),
+                            @InterchangeableValidator(
+                                    value = TreeCollectionValidator.class,
+                                    fmPath = FMVisibility.PARENT_FM + "/treeSectorsValidator")
+                    },
                     validators = @Validators(
-                            unique = "/Activity Form/Sectors/Primary Sectors/uniqueSectorsValidator",
-                            treeCollection = "/Activity Form/Sectors/Primary Sectors/treeSectorsValidator")),
+                            unique = "/Activity Form/Sectors/Primary Sectors/uniqueSectorsValidator")),
             @Interchangeable(fieldTitle = ActivityFieldsConstants.SECONDARY_SECTORS,
                     discriminatorOption = "Secondary", importable = true,
                     fmPath = "/Activity Form/Sectors/Secondary Sectors",
@@ -259,10 +269,12 @@ LoggerIdentifiable, Cloneable {
                                     fmPath = "/Activity Form/Sectors/Secondary Sectors/minSizeSectorsValidator"),
                             @InterchangeableValidator(
                                     value = TotalPercentageValidator.class,
-                                    fmPath = FMVisibility.PARENT_FM + "/sectorPercentageTotal")},
+                                    fmPath = FMVisibility.PARENT_FM + "/sectorPercentageTotal"),
+                            @InterchangeableValidator(
+                                    value = TreeCollectionValidator.class,
+                                    fmPath = FMVisibility.PARENT_FM + "/treeSectorsValidator")},
                     validators = @Validators(
-                            unique = "/Activity Form/Sectors/Secondary Sectors/uniqueSectorsValidator",
-                            treeCollection = "/Activity Form/Sectors/Secondary Sectors/treeSectorsValidator")),
+                            unique = "/Activity Form/Sectors/Secondary Sectors/uniqueSectorsValidator")),
             @Interchangeable(fieldTitle = ActivityFieldsConstants.TERTIARY_SECTORS,
                     discriminatorOption = "Tertiary", importable = true,
                     fmPath = "/Activity Form/Sectors/Tertiary Sectors",
@@ -271,10 +283,12 @@ LoggerIdentifiable, Cloneable {
                                     fmPath = "/Activity Form/Sectors/Tertiary Sectors/minSizeSectorsValidator"),
                             @InterchangeableValidator(
                                     value = TotalPercentageValidator.class,
-                                    fmPath = FMVisibility.PARENT_FM + "/sectorPercentageTotal")},
+                                    fmPath = FMVisibility.PARENT_FM + "/sectorPercentageTotal"),
+                            @InterchangeableValidator(
+                                    value = TreeCollectionValidator.class,
+                                    fmPath = FMVisibility.PARENT_FM + "/treeSectorsValidator")},
                     validators = @Validators(
-                            unique = "/Activity Form/Sectors/Tertiary Sectors/uniqueSectorsValidator",
-                            treeCollection = "/Activity Form/Sectors/Secondary Sectors/treeSectorsValidator")),
+                            unique = "/Activity Form/Sectors/Tertiary Sectors/uniqueSectorsValidator")),
             @Interchangeable(fieldTitle = ActivityFieldsConstants.TAG_SECTORS,
                     discriminatorOption = "Tag", importable = true,
                     fmPath = "/Activity Form/Sectors/Tag Sectors",
@@ -283,10 +297,12 @@ LoggerIdentifiable, Cloneable {
                                     fmPath = "/Activity Form/Sectors/Tag Sectors/minSizeSectorsValidator"),
                             @InterchangeableValidator(
                                     value = TotalPercentageValidator.class,
-                                    fmPath = FMVisibility.PARENT_FM + "/sectorPercentageTotal")},
+                                    fmPath = FMVisibility.PARENT_FM + "/sectorPercentageTotal"),
+                            @InterchangeableValidator(
+                                    value = TreeCollectionValidator.class,
+                                    fmPath = FMVisibility.PARENT_FM + "/treeSectorsValidator")},
                     validators = @Validators(
-                            unique = "/Activity Form/Sectors/Tag Sectors/uniqueSectorsValidator",
-                            treeCollection = "/Activity Form/Sectors/Tag Sectors/treeSectorsValidator"))
+                            unique = "/Activity Form/Sectors/Tag Sectors/uniqueSectorsValidator"))
     })
     protected Set<AmpActivitySector> sectors = new HashSet<>();
     
@@ -302,10 +318,12 @@ LoggerIdentifiable, Cloneable {
                             fmPath = "/Activity Form/Location/Locations/Location required validator"),
                     @InterchangeableValidator(
                             value = TotalPercentageValidator.class,
-                            fmPath = "/Activity Form/Location/Locations/locationPercentageTotal")},
+                            fmPath = "/Activity Form/Location/Locations/locationPercentageTotal"),
+                    @InterchangeableValidator(
+                            value = TreeCollectionValidator.class,
+                            fmPath = "/Activity Form/Location/Locations/Tree Validator")},
             validators = @Validators(
-                    unique = "/Activity Form/Location/Locations/uniqueLocationsValidator",
-                    treeCollection = "/Activity Form/Location/Locations/Tree Validator"))
+                    unique = "/Activity Form/Location/Locations/uniqueLocationsValidator"))
     @VersionableCollection(fieldTitle = ActivityFieldsConstants.LOCATIONS)
     protected Set<AmpActivityLocation> locations = new HashSet<>();
     
@@ -783,7 +801,7 @@ LoggerIdentifiable, Cloneable {
                 discriminatorOption = CategoryConstants.IMPLEMENTATION_LOCATION_KEY,
                 dependencies = {ImplementationLevelValidator.IMPLEMENTATION_LOCATION_VALID_KEY},
                 fmPath = "/Activity Form/Location/Implementation Location", pickIdOnly = true),
-        @Interchangeable(fieldTitle = "Financial Instrument", importable=true, multipleValues=true, 
+        @Interchangeable(fieldTitle = "Financial Instrument", importable = true, multipleValues = true,
                 discriminatorOption = CategoryConstants.FINANCIAL_INSTRUMENT_KEY, fmPath="/Activity Form/Identification/Financial Instrument", pickIdOnly=true)
     })
     @VersionableCollection(fieldTitle = "Categories")
@@ -869,7 +887,21 @@ LoggerIdentifiable, Cloneable {
     @Interchangeable(fieldTitle = "Joint Criteria", importable = true, fmPath = "/Activity Form/Identification/Joint Criteria")
     @VersionableFieldSimple(fieldTitle = "Joint Criteria")
     protected Boolean jointCriteria;
-    
+
+    @Interchangeable(fieldTitle = "Multi Stakeholder Partnership", importable = true,
+            fmPath = "/Activity Form/Identification/Multi Stakeholder Partnership",
+            interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
+                    fmPath = "/Activity Form/Identification/Required Validator for Multi Stakeholder Partnership"))
+    @VersionableFieldSimple(fieldTitle = "Multi Stakeholder Partnership")
+    protected Boolean multiStakeholderPartnership;
+
+    @Interchangeable(fieldTitle = "Multi Stakeholder Partners", importable = true,
+            fmPath = "/Activity Form/Identification/Multi Stakeholder Partners",
+            requiredDependencies = MultiStakeholderPartnershipValidator.MULTI_STAKEHOLDER_PARTNERSHIP_KEY,
+            dependencyRequired = SUBMIT)
+    @VersionableFieldSimple(fieldTitle = "Multi Stakeholder Partners")
+    protected String multiStakeholderPartners;
+
     @Interchangeable(fieldTitle = "Humanitarian Aid", importable = true,
             fmPath = "/Activity Form/Identification/Humanitarian Aid",
             interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
@@ -889,10 +921,12 @@ LoggerIdentifiable, Cloneable {
                                     fmPath = "/Activity Form/Program/National Plan Objective/minSizeProgramValidator"),
                             @InterchangeableValidator(
                                     value = TotalPercentageValidator.class,
-                                    fmPath = FMVisibility.PARENT_FM + "/programPercentageTotal")},
+                                    fmPath = FMVisibility.PARENT_FM + "/programPercentageTotal"),
+                            @InterchangeableValidator(
+                                    value = TreeCollectionValidator.class,
+                                    fmPath = FMVisibility.PARENT_FM + "/Tree Validator")},
                     validators = @Validators(
-                            unique = "/Activity Form/Program/National Plan Objective/uniqueProgramsValidator",
-                            treeCollection = "/Activity Form/Program/National Plan Objective/Tree Validator")),
+                            unique = "/Activity Form/Program/National Plan Objective/uniqueProgramsValidator")),
             @Interchangeable(fieldTitle = ActivityFieldsConstants.PRIMARY_PROGRAMS,
                     discriminatorOption = "Primary Program", importable = true,
                     fmPath = "/Activity Form/Program/Primary Programs",
@@ -901,10 +935,12 @@ LoggerIdentifiable, Cloneable {
                                     fmPath = "/Activity Form/Program/Primary Programs/minSizeProgramValidator"),
                             @InterchangeableValidator(
                                     value = TotalPercentageValidator.class,
-                                    fmPath = FMVisibility.PARENT_FM + "/programPercentageTotal")},
+                                    fmPath = FMVisibility.PARENT_FM + "/programPercentageTotal"),
+                            @InterchangeableValidator(
+                                    value = TreeCollectionValidator.class,
+                                    fmPath = FMVisibility.PARENT_FM + "/Tree Validator")},
                     validators = @Validators(
-                            unique = "/Activity Form/Program/Primary Programs/uniqueProgramsValidator",
-                            treeCollection = "/Activity Form/Program/Primary Programs/Tree Validator")),
+                            unique = "/Activity Form/Program/Primary Programs/uniqueProgramsValidator")),
             @Interchangeable(fieldTitle = ActivityFieldsConstants.SECONDARY_PROGRAMS,
                     discriminatorOption = "Secondary Program", importable = true,
                     fmPath = "/Activity Form/Program/Secondary Programs",
@@ -913,10 +949,12 @@ LoggerIdentifiable, Cloneable {
                                     fmPath = "/Activity Form/Program/Secondary Programs/minSizeProgramValidator"),
                             @InterchangeableValidator(
                                     value = TotalPercentageValidator.class,
-                                    fmPath = FMVisibility.PARENT_FM + "/programPercentageTotal")},
+                                    fmPath = FMVisibility.PARENT_FM + "/programPercentageTotal"),
+                            @InterchangeableValidator(
+                                    value = TreeCollectionValidator.class,
+                                    fmPath = FMVisibility.PARENT_FM + "/Tree Validator")},
                     validators = @Validators(
-                            unique = "/Activity Form/Program/Secondary Programs/uniqueProgramsValidator",
-                            treeCollection = "/Activity Form/Program/Secondary Programs/Tree Validator")),
+                            unique = "/Activity Form/Program/Secondary Programs/uniqueProgramsValidator")),
             @Interchangeable(fieldTitle = ActivityFieldsConstants.TERTIARY_PROGRAMS,
                     discriminatorOption = "Tertiary Program", importable = true,
                     fmPath = "/Activity Form/Program/Tertiary Programs",
@@ -925,10 +963,12 @@ LoggerIdentifiable, Cloneable {
                                     fmPath = "/Activity Form/Program/Tertiary Programs/minSizeProgramValidator"),
                             @InterchangeableValidator(
                                     value = TotalPercentageValidator.class,
-                                    fmPath = FMVisibility.PARENT_FM + "/programPercentageTotal")},
+                                    fmPath = FMVisibility.PARENT_FM + "/programPercentageTotal"),
+                            @InterchangeableValidator(
+                                    value = TreeCollectionValidator.class,
+                                    fmPath = FMVisibility.PARENT_FM + "/Tree Validator")},
                     validators = @Validators(
-                            unique = "/Activity Form/Program/Tertiary Programs/uniqueProgramsValidator",
-                            treeCollection = "/Activity Form/Program/Tertiary Programs/Tree Validator"))})
+                            unique = "/Activity Form/Program/Tertiary Programs/uniqueProgramsValidator"))})
     protected Set<AmpActivityProgram> actPrograms = new HashSet<>();
 
     @VersionableCollection(fieldTitle = "Act. Budget Structure")
@@ -964,6 +1004,8 @@ LoggerIdentifiable, Cloneable {
     /**
      * whether this is a PROJECT or a South-South Cooperation
      */
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.ACTIVITY_TYPE, pickIdOnly = true,
+            label = "Activity Type", importable = false)
     protected Long activityType = org.dgfoundation.amp.onepager.util.ActivityUtil.ACTIVITY_TYPE_PROJECT; //default type
 
     @Interchangeable(fieldTitle = "PPC Annual Budgets", importable = true, fmPath = "/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost")
@@ -1247,14 +1289,14 @@ LoggerIdentifiable, Cloneable {
         }
 
         /**
-         * @param string
+         * @param progress
          */
         public void setProgress(Set progress) {
             this.progress = progress;
         }
 
         /**
-         * @param string
+         * @param documents
          */
         public void setDocuments(Set documents) {
             this.documents = documents;
@@ -1581,8 +1623,8 @@ LoggerIdentifiable, Cloneable {
             return approvalStatus;
         }
         /**
-         * @param approval_status
-         *            The approval_status to set.
+         * @param approvalStatus
+         *            The approvalStatus to set.
          */
         public void setApprovalStatus(ApprovalStatus approvalStatus) {
             this.approvalStatus = approvalStatus;
@@ -1844,7 +1886,7 @@ LoggerIdentifiable, Cloneable {
             return draft;
         }
 
-        public Set getActPrograms() {
+        public Set<AmpActivityProgram> getActPrograms() {
             return actPrograms;
         }
         
@@ -1888,12 +1930,28 @@ LoggerIdentifiable, Cloneable {
             this.lastImportedBy = lastImportedBy;
         }
 
-        public void setActPrograms(Set actPrograms) {
+        public void setActPrograms(Set<AmpActivityProgram> actPrograms) {
             this.actPrograms = actPrograms;
         }
 
         public Boolean getGovernmentApprovalProcedures() {
             return governmentApprovalProcedures;
+        }
+
+        public Boolean getMultiStakeholderPartnership() {
+            return multiStakeholderPartnership;
+        }
+
+        public void setMultiStakeholderPartnership(Boolean multiStakeholderPartnership) {
+            this.multiStakeholderPartnership = multiStakeholderPartnership;
+        }
+
+        public String getMultiStakeholderPartners() {
+            return multiStakeholderPartners;
+        }
+
+        public void setMultiStakeholderPartners(String multiStakeholderPartners) {
+            this.multiStakeholderPartners = multiStakeholderPartners;
         }
 
         public Boolean getJointCriteria() {

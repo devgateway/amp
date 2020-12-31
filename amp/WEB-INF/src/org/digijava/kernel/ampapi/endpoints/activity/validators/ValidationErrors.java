@@ -73,5 +73,11 @@ public final class ValidationErrors {
     public static final ApiErrorMessage LOCATION_NOT_DECLARED =
             new ApiErrorMessage(ERROR_CLASS_VALIDATION_ID, 20, "Location is not declared.");
 
+    public static final ApiErrorMessage PROGRAM_MAPPING_DOESNT_MATCH =
+            new ApiErrorMessage(ERROR_CLASS_VALIDATION_ID, 21, "Doesn't match with mapped program");
+
+    public static final ApiErrorMessage FIELD_SOURCE_PROGRAM_NOT_SPECIFIED =
+            new ApiErrorMessage(ERROR_CLASS_VALIDATION_ID, 22, "The source program mapping is missing");
+
     private ValidationErrors() { }
 }

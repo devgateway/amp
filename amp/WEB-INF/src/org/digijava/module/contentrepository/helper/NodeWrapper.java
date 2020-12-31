@@ -1,31 +1,5 @@
 package org.digijava.module.contentrepository.helper;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import javax.jcr.Node;
-import javax.jcr.NodeIterator;
-import javax.jcr.PathNotFoundException;
-import javax.jcr.Property;
-import javax.jcr.PropertyIterator;
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
-import javax.jcr.Workspace;
-import javax.jcr.version.Version;
-import javax.jcr.version.VersionHistory;
-import javax.jcr.version.VersionIterator;
-import javax.jcr.version.VersionManager;
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.jackrabbit.core.PropertyImpl;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessage;
@@ -44,6 +18,31 @@ import org.digijava.module.contentrepository.helper.template.WordOrPdfFileHelper
 import org.digijava.module.contentrepository.jcrentity.Label;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
+
+import javax.jcr.Node;
+import javax.jcr.NodeIterator;
+import javax.jcr.PathNotFoundException;
+import javax.jcr.Property;
+import javax.jcr.PropertyIterator;
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
+import javax.jcr.Workspace;
+import javax.jcr.version.Version;
+import javax.jcr.version.VersionHistory;
+import javax.jcr.version.VersionIterator;
+import javax.jcr.version.VersionManager;
+import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * a class wrapping a javax.jcr.Node instance for convenience reasons mainly (nice getters / setters which would otherwise be a soup of hardcoded strings and exception handling) 
@@ -1007,9 +1006,9 @@ public class NodeWrapper{
         String value = null;
         if (ContentTranslationUtil.multilingualIsEnabled()) {
             try {
-                if (node.hasNode(fieldName)) {
-                    Node fieldNode = node.getNode(fieldName);
-                    PropertyIterator iterator = fieldNode.getProperties();
+                Node titleNode = node.getNode(fieldName);
+                if (titleNode != null) {
+                    PropertyIterator  iterator = titleNode.getProperties();
                     while (iterator.hasNext()) {
                         PropertyImpl property = (PropertyImpl) iterator.next();
                         if (property.getName().equals(language)) {
@@ -1029,17 +1028,17 @@ public class NodeWrapper{
         
         return value;
     }
-    
-    private Map <String,String> getTranslatedNode (String fieldName) {
+
+    private Map<String, String> getTranslatedNode(String fieldName) {
         Map <String, String> translatedField = new HashMap<String,String> ();
         try {
-            if (node.hasNode(fieldName)) {
-                Node fieldNode = node.getNode(fieldName);
-                PropertyIterator iterator = fieldNode.getProperties();
+            Node titleNode = node.getNode(fieldName);
+            if (titleNode != null) {
+                PropertyIterator  iterator = titleNode.getProperties();
                 while (iterator.hasNext()) {
                     PropertyImpl property = (PropertyImpl) iterator.next();
                     translatedField.put(property.getName(), property.getString());
-
+                        
                 }
             }
         } catch (PathNotFoundException e) {

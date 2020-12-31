@@ -1,0 +1,14 @@
+export const SRC_PROGRAM = 'src-program';
+export const DST_PROGRAM = 'dst-program';
+export const ALL_PROGRAMS = 'all-programs';
+export const PROGRAM_MAPPING = 'program-mapping';
+export const PROGRAM = '-program';
+export const VALUE = 'value';
+export const CHILDREN = 'children';
+export const FIRST_LEVEL = 2;
+export const SECOND_LEVEL = 3;
+export const THIRD_LEVEL = 4;
+export const STATE_LEVEL_FIELD = 'srcLvl';
+export const TYPE_SRC = 'src';
+export const TYPE_DST = 'dst';
+export const LAYOUT_EP = '/rest/security/layout';

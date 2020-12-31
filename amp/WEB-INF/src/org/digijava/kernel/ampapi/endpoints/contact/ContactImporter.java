@@ -22,8 +22,7 @@ public class ContactImporter extends ObjectImporter<AmpContact> {
     private AmpContact contact;
 
     public ContactImporter() {
-        super(new InputValidatorProcessor(InputValidatorProcessor.getContactFormatValidators()),
-                new InputValidatorProcessor(InputValidatorProcessor.getContactBusinessRulesValidators()),
+        super(new InputValidatorProcessor(InputValidatorProcessor.getFormatValidators()),
                 AmpFieldsEnumerator.getEnumerator().getContactField(),
                 TLSUtils.getSite());
     }

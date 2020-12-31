@@ -56,6 +56,9 @@ public final class ActivityInterchangeUtils {
 
     private static final Logger logger = Logger.getLogger(ActivityInterchangeUtils.class);
 
+    public static final String WORKSPACE_PREFIX = "workspacePrefix";
+    public static final String ACTIVITY_FM_ID = "activityFMId";
+
     private ActivityInterchangeUtils() {
     }
 
@@ -71,9 +74,10 @@ public final class ActivityInterchangeUtils {
     public static JsonApiResponse<ActivitySummary> importActivity(Map<String, Object> newJson, boolean update,
             ActivityImportRules rules, String endpointContextPath) {
         APIField activityField = AmpFieldsEnumerator.getEnumerator().getActivityField();
+        StringBuffer sourceURL = TLSUtils.getRequest().getRequestURL();
 
         return new ActivityImporter(activityField, rules)
-                .importOrUpdate(newJson, update, endpointContextPath)
+                .importOrUpdate(newJson, update, endpointContextPath, sourceURL.toString())
                 .getResult();
     }
 
@@ -113,25 +117,6 @@ public final class ActivityInterchangeUtils {
         String message = "Invalid filter. The usage should be {\"" + ActivityEPConstants.FILTER_FIELDS
                 + "\" : [\"field1\", \"field2\", ..., \"fieldn\"]}";
         return ApiError.toError(message);
-    }
-
-    /**
-     * @param teamMember    team member
-     * @param activityId    activity id
-     * @return true if team member can edit the activity
-     */
-    public static boolean isEditableActivity(TeamMember teamMember, Long activityId) {
-        // we reuse the same approach as the one done by Project List EP
-        return activityId != null && ActivityUtil.getEditableActivityIdsNoSession(teamMember).contains(activityId);
-    }
-
-    /**
-     * @return true if add activity is allowed
-     */
-    public static boolean addActivityAllowed(TeamMember tm) {
-        return tm != null && Boolean.TRUE.equals(tm.getAddActivity())
-                && (FeaturesUtil.isVisibleField("Add Activity Button")
-                        || FeaturesUtil.isVisibleField("Add SSC Button"));
     }
 
     /**
@@ -234,12 +219,21 @@ public final class ActivityInterchangeUtils {
                 String ampId = activity.getAmpId();
                 Map<String, Object> result = new LinkedHashMap<>();
                 try {
+
+                    // AMPOFFLINE-1528
+                    ActivityUtil.setCurrentWorkspacePrefixIntoRequest(activity);
+
                     ActivityUtil.initializeForApi(activity);
-                    result = exporter.export(activity);
+                    Long fmId = activity.getTeam().getFmTemplate() != null
+                            ? activity.getTeam().getFmTemplate().getId()
+                            : null;
+                    result = exporter.export(activity, fmId);
                 } catch (Exception e) {
                     result.put(EPConstants.ERROR, ApiError.toError(
                             GenericErrors.INTERNAL_ERROR.withDetails(e.getMessage())).getErrors());
                     result.put(ActivityEPConstants.AMP_ID_FIELD_NAME, ampId);
+                    logger.error(e.getMessage());
+                    e.printStackTrace();
                 } finally {
                     PersistenceManager.getSession().evict(activity);
                 }
@@ -322,8 +316,8 @@ public final class ActivityInterchangeUtils {
     public static Map<String, Object> getActivity(AmpActivityVersion activity, Map<String, Object> filter) {
         try {
             ActivityExporter exporter = new ActivityExporter(filter);
-
-            return exporter.export(activity);
+            Long fmId = activity.getTeam().getFmTemplate() != null ? activity.getTeam().getFmTemplate().getId() : null;
+            return exporter.export(activity, fmId);
         } catch (Exception e) {
             logger.error("Error in loading activity. " + e.getMessage());
             throw new RuntimeException(e);

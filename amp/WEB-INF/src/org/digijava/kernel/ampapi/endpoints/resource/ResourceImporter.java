@@ -50,8 +50,7 @@ public class ResourceImporter extends ObjectImporter<AmpResource> {
     private AmpResource resource;
 
     public ResourceImporter() {
-        super(new InputValidatorProcessor(InputValidatorProcessor.getResourceFormatValidators()),
-                new InputValidatorProcessor(InputValidatorProcessor.getResourceBusinessRulesValidators()),
+        super(new InputValidatorProcessor(InputValidatorProcessor.getFormatValidators()),
                 AmpFieldsEnumerator.getEnumerator().getResourceField(),
                 TLSUtils.getSite());
     }
@@ -69,7 +68,7 @@ public class ResourceImporter extends ObjectImporter<AmpResource> {
     /**
      * Create a web link or document resource.
      *
-     * @param newJson json description of the resource
+     * @param newJson  json description of the resource
      * @param formFile file for document resource, may be null for web link resources
      * @return ResourceImporter instance
      */

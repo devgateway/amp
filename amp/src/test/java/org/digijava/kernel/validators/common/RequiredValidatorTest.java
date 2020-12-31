@@ -18,6 +18,7 @@ import java.util.stream.Stream;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.dgfoundation.amp.onepager.helper.EditorStore;
+import org.dgfoundation.amp.testutils.TransactionUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.TestFieldInfoProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
@@ -74,7 +75,7 @@ public class RequiredValidatorTest {
 
         @Interchangeable(fieldTitle = "bars", fmPath = "bars",
                 interValidators = @InterchangeableValidator(RequiredValidator.class))
-        private Set<Bar> bars;
+        private Set<Bar> bars = new HashSet<>();
 
         @Interchangeable(fieldTitle = "bar", fmPath = "bar",
                 interValidators = @InterchangeableValidator(RequiredValidator.class))
@@ -121,6 +122,7 @@ public class RequiredValidatorTest {
 
     @BeforeClass
     public static void setUp() {
+        TransactionUtil.setUpWorkspaceEmptyPrefixes();
         titleField = ValidatorUtil.getMetaData(Foo.class, getAllTestFmPathsExcept("title"));
         toggleField = ValidatorUtil.getMetaData(Foo.class, getAllTestFmPathsExcept("toggle"));
         numberField = ValidatorUtil.getMetaData(Foo.class, getAllTestFmPathsExcept("number"));
@@ -217,18 +219,8 @@ public class RequiredValidatorTest {
     }
 
     @Test
-    public void test_bars_null() {
-        Foo foo = new Foo();
-
-        Set<ConstraintViolation> violations = getConstraintViolations(barsField, foo);
-
-        assertThat(violations, contains(violation("bars")));
-    }
-
-    @Test
     public void test_bars_empty() {
         Foo foo = new Foo();
-        foo.bars = ImmutableSet.of();
 
         Set<ConstraintViolation> violations = getConstraintViolations(barsField, foo);
 

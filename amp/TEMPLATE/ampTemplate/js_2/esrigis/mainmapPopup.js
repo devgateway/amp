@@ -236,7 +236,6 @@ function isBlank(str) {
  * @returns {*}
  */
 function getRowElement(row, elementName) {
-	debugger;
 	var elements = row.getElementsByTagName("INPUT");
 	var result;
 	for (var i = 0; i < elements.length; i++) {

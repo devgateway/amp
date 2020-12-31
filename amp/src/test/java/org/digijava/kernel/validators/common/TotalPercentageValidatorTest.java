@@ -6,9 +6,11 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.emptyIterable;
 import static org.junit.Assert.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
+import org.dgfoundation.amp.testutils.TransactionUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
@@ -35,7 +37,7 @@ public class TotalPercentageValidatorTest {
                 interValidators = @InterchangeableValidator(
                         value = TotalPercentageValidator.class,
                         fmPath = "/totalPercentageConstraint"))
-        private Set<Item> items;
+        private Set<Item> items = new HashSet<>();
     }
 
     public static class Item {
@@ -57,22 +59,13 @@ public class TotalPercentageValidatorTest {
 
     @BeforeClass
     public static void setUp() {
+        TransactionUtil.setUpWorkspaceEmptyPrefixes();
         objField = ValidatorUtil.getMetaData(Obj.class);
-    }
-
-    @Test
-    public void testNull() {
-        Obj obj = new Obj();
-
-        Set<ConstraintViolation> violations = getConstraintViolations(objField, obj);
-
-        assertThat(violations, emptyIterable());
     }
 
     @Test
     public void testEmpty() {
         Obj obj = new Obj();
-        obj.items = ImmutableSet.of();
 
         Set<ConstraintViolation> violations = getConstraintViolations(objField, obj);
 

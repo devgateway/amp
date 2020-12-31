@@ -52,6 +52,7 @@ export const initialTranslations = {
          'amp.data-freezing:invalid-open-period': 'Invalid Data Open Period. Please enter both the Data Open Period Start and the Data Open Period End',
          'amp.data-freezing:no-records': 'No records to show',
          'amp.data-freezing:loading-message': 'Loading...',
-         'amp.data-freezing:saving-message': 'Saving'
-
+         'amp.data-freezing:saving-message': 'Saving',
+         'amp.data-freezing:tooltip-edit': 'Edit',
+         'amp.data-freezing:tooltip-delete': 'Delete'
 };

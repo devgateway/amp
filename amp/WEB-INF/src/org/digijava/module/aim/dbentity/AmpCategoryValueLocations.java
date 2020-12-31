@@ -17,12 +17,12 @@ import org.digijava.module.aim.util.NameableOrIdentifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 /**
- * 
  * @author medea
  */
-@TranslatableClass (displayName = "Location")
-public class AmpCategoryValueLocations implements Identifiable, Comparable<AmpCategoryValueLocations>, 
-        HierarchyListable, ARDimensionable, Serializable, AmpAutoCompleteDisplayable,OrgProfileValue, NameableOrIdentifiable {
+@TranslatableClass(displayName = "Location")
+public class AmpCategoryValueLocations implements Identifiable,
+        HierarchyListable, ARDimensionable, Serializable, AmpAutoCompleteDisplayable<AmpCategoryValueLocations>,
+        OrgProfileValue, NameableOrIdentifiable {
     //IATI-check: this is not to be ignored, but not importable, since it's obtained from possible values
     private Long id;
     @TranslatableField
@@ -30,6 +30,7 @@ public class AmpCategoryValueLocations implements Identifiable, Comparable<AmpCa
     private AmpCategoryValue parentCategoryValue;
     private AmpCategoryValueLocations parentLocation;
     private Set<AmpCategoryValueLocations> childLocations = new HashSet<>();
+    private AmpCategoryValueLocations group;
     private String description;
     private String gsLat;
     private String gsLong;
@@ -37,13 +38,22 @@ public class AmpCategoryValueLocations implements Identifiable, Comparable<AmpCa
     private String code;
     private String iso3;
     private String fullName;
-    
+
     private Boolean deleted;
-    
-    private boolean translateable   = false;
+
+    private boolean translateable = false;
     private String iso;
-    
-    
+
+    private AmpTemplatesVisibility template;
+
+    public AmpTemplatesVisibility getTemplate() {
+        return template;
+    }
+
+    public void setTemplate(AmpTemplatesVisibility template) {
+        this.template = template;
+    }
+
     public String getFullName() {
         return fullName;
     }
@@ -51,7 +61,7 @@ public class AmpCategoryValueLocations implements Identifiable, Comparable<AmpCa
     public void setFullName(String fullName) {
         this.fullName = fullName;
     }
-    
+
     public String getCode() {
         return code;
     }
@@ -148,6 +158,14 @@ public class AmpCategoryValueLocations implements Identifiable, Comparable<AmpCa
         this.childLocations = childLocations;
     }
 
+    public AmpCategoryValueLocations getGroup() {
+        return group;
+    }
+
+    public void setGroup(AmpCategoryValueLocations group) {
+        this.group = group;
+    }
+
     @Override
     public String toString() {
         return name;
@@ -189,20 +207,23 @@ public class AmpCategoryValueLocations implements Identifiable, Comparable<AmpCa
         }
         return ret;
     }
+
     @Override
     public String getLabel() {
         return this.name;
     }
+
     @Override
     public String getAutoCompleteLabel() {
         return getFormattedLocationName(this);
     }
+
     protected String getFormattedLocationName(AmpCategoryValueLocations l) {
         return getFormattedLocationName(new StringBuffer(), l).toString();
     }
 
     protected StringBuffer getFormattedLocationName(StringBuffer output,
-            AmpCategoryValueLocations l) {
+                                                    AmpCategoryValueLocations l) {
         if (l.getParentLocation() != null)
             getFormattedLocationName(output, l.getParentLocation());
         return output.append("[").append(l.getName()).append("] ");
@@ -212,7 +233,7 @@ public class AmpCategoryValueLocations implements Identifiable, Comparable<AmpCa
     public String getUniqueId() {
         return String.valueOf(this.id.longValue());
     }
-    
+
     @Override
     public boolean getTranslateable() {
         return translateable;
@@ -222,15 +243,15 @@ public class AmpCategoryValueLocations implements Identifiable, Comparable<AmpCa
     public void setTranslateable(boolean translateable) {
         this.translateable = translateable;
     }
-    
+
     public Boolean getDeleted() {
         return deleted;
     }
-    
+
     public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
     }
-    
+
     public boolean isSoftDeleted() {
         return Boolean.TRUE.equals(deleted);
     }
@@ -261,11 +282,11 @@ public class AmpCategoryValueLocations implements Identifiable, Comparable<AmpCa
     public String getAdditionalSearchString() {
         return this.code;
     }
-    
+
     @Override
-    public List<ValueTranslatabePair> getValuesForOrgReport(){
-        List<ValueTranslatabePair> values=new ArrayList<ValueTranslatabePair>();
-        ValueTranslatabePair value=new ValueTranslatabePair(Arrays.asList(new String[]{getName()}),false);
+    public List<ValueTranslatabePair> getValuesForOrgReport() {
+        List<ValueTranslatabePair> values = new ArrayList<ValueTranslatabePair>();
+        ValueTranslatabePair value = new ValueTranslatabePair(Arrays.asList(new String[]{getName()}), false);
         values.add(value);
         return values;
     }
@@ -280,21 +301,20 @@ public class AmpCategoryValueLocations implements Identifiable, Comparable<AmpCa
     public int compareTo(AmpCategoryValueLocations o) {
         return id.compareTo(o.getId());
     }
-    
+
     /**
      * computes the name of the ACVL in the form [Country][Region]...[Location]
+     *
      * @return
      */
-    public String getHierarchicalName()
-    {
+    public String getHierarchicalName() {
         String myName = "[" + this.getName() + "]";
         if (this.getParentLocation() == null)
             return myName;
         return getParentLocation().getHierarchicalName() + myName;
     }
-    
-    public static String hqlStringForName(String idSource)
-    {
+
+    public static String hqlStringForName(String idSource) {
         return InternationalizedModelDescription.getForProperty(AmpCategoryValueLocations.class, "name").getSQLFunctionCall(idSource + ".id");
     }
 }

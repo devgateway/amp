@@ -22,6 +22,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.resource.dto.AmpResource;
 import org.digijava.kernel.ampapi.filters.ClientMode;
+import org.digijava.kernel.content.ContentRepositoryManager;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -64,6 +65,7 @@ public class ResourceService {
         } catch (RepositoryException e) {
             return new JsonApiResponse(ApiError.toError(ResourceErrors.RESOURCE_ERROR));
         }
+
         boolean isMultilingual = ContentTranslationUtil.multilingualIsEnabled();
 
         NodeWrapper nodeWrapper = new NodeWrapper(readNode);
@@ -153,8 +155,8 @@ public class ResourceService {
      */
     public List<String> getAllNodeUuids() {
         List<String> nodeUuids = new ArrayList<>();
-        nodeUuids.addAll(getPrivateUuids());
-        nodeUuids.addAll(getTeamUuids());
+        nodeUuids.addAll(ContentRepositoryManager.getPrivateUuids());
+        nodeUuids.addAll(ContentRepositoryManager.getTeamUuids());
 
         return nodeUuids;
     }

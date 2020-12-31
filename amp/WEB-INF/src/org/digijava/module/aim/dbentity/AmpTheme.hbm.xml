@@ -40,17 +40,17 @@
 		<!-- <many-to-one name="activityId" column="amp_activity_id"
 			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" not-null="false" />
 			-->
-		<set name="indicators" lazy="true" cascade="delete-orphan" inverse="true">
+		<set name="indicators" lazy="false" cascade="delete-orphan" inverse="true">
 			<key column="theme_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.IndicatorTheme" />
 		</set>
 		<set name="programSettings" lazy="false">
-			<cache usage="read-write" />
 			<key column="default_hierarchy" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityProgramSettings" />
 		</set>
 		<set name="siblings" table="AMP_THEME" lazy="true" inverse="true" cascade="none">
-			<key column="parent_theme_id"/>      
+			<cache usage="read-write" />
+			<key column="parent_theme_id"/>
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpTheme"/>
 		</set>
 		<property name="isbudgetprogram" column="is_budget_program" type="java.lang.Integer" />

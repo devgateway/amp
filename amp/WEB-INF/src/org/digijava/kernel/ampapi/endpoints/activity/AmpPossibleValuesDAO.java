@@ -17,6 +17,8 @@ import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.dbentity.AmpThemeMapping;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.criterion.Restrictions;
 
@@ -29,12 +31,37 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
 
     private static final int LOC_QUERY_COL_NUM = 8;
 
+
+    /**
+     * If there are workspace prefixes then look for the main category (ie: "modalities") and the related
+     * categories (ie: SSC_modalities).
+     * @param discriminatorOption
+     * @return
+     */
     @Override
     public List<Object[]> getCategoryValues(String discriminatorOption) {
-        String queryString = "SELECT acv.id, acv.value, acv.deleted, acv.index from "
-                + AmpCategoryValue.class.getName() + " acv "
-                + "WHERE acv.ampCategoryClass.keyName ='" + discriminatorOption + "' ORDER BY acv.id";
-        return query(queryString);
+        String queryString = "SELECT acv.id, acv.value, acv.deleted, acv.index, acv.ampCategoryClass.keyName from "
+                + AmpCategoryValue.class.getName() + " acv ";
+        List<String> prefixes = ActivityUtil.getWorkspacePrefixesFromRequest();
+        if (prefixes == null) {
+            prefixes = ActivityUtil.loadWorkspacePrefixesIntoRequest();
+        }
+        if (prefixes != null && prefixes.size() > 0) {
+            queryString += " WHERE acv.ampCategoryClass.keyName IN (";
+            for (String prefix : prefixes) {
+                queryString += "'" + prefix + discriminatorOption + "', ";
+            }
+            queryString += "'" + discriminatorOption + "') ORDER BY acv.id";
+            List<Object[]> result = query(queryString);
+            result.forEach(row -> {
+                String value = row[CategoryValueExtraInfo.EXTRA_INFO_PREFIX_INDEX].toString();
+                row[CategoryValueExtraInfo.EXTRA_INFO_PREFIX_INDEX] = value.replace(discriminatorOption, "");
+            });
+            return result;
+        } else {
+            queryString += " WHERE acv.ampCategoryClass.keyName LIKE '" + discriminatorOption + "' ORDER BY acv.id";
+            return query(queryString);
+        }
     }
 
     @Override
@@ -213,5 +240,13 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
     @Override
     public boolean isIndicatorValid(Long id) {
         return InterchangeUtils.getSessionWithPendingChanges().get(AmpIndicator.class, id) != null;
+    }
+
+    @Override
+    public List<AmpThemeMapping> getMappedThemes() {
+        return PersistenceManager.getRequestDBSession()
+                .createCriteria(AmpThemeMapping.class)
+                .setCacheable(true)
+                .list();
     }
 }

@@ -6,11 +6,14 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.emptyIterable;
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import org.dgfoundation.amp.testutils.TransactionUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
@@ -39,7 +42,7 @@ public class UniqueValidatorTest {
                 fieldTitle = "list_of_ints",
                 validators = @Validators(unique = "/IntegersUniqueValidator"),
                 uniqueConstraint = true)
-        private List<Integer> listOfInts;
+        private List<Integer> listOfInts = new ArrayList<>();
     }
 
     public static class DummyObj {
@@ -47,7 +50,7 @@ public class UniqueValidatorTest {
         @Interchangeable(
                 fieldTitle = "list_of_objs",
                 validators = @Validators(unique = "/ObjectsUniqueValidator"))
-        private Set<SubDummyObj> listOfObjs;
+        private Set<SubDummyObj> listOfObjs = new HashSet<>();
     }
 
     public static class SubDummyObj {
@@ -72,6 +75,7 @@ public class UniqueValidatorTest {
 
     @BeforeClass
     public static void setUp() {
+        TransactionUtil.setUpWorkspaceEmptyPrefixes();
         dummyIntField = ValidatorUtil.getMetaData(DummyInt.class);
         dummyObjField = ValidatorUtil.getMetaData(DummyObj.class);
     }
@@ -99,37 +103,15 @@ public class UniqueValidatorTest {
     @Test
     public void testIntsEmpty() {
         DummyInt dummy = new DummyInt();
-        dummy.listOfInts = ImmutableList.of();
 
         Set<ConstraintViolation> violations = getConstraintViolations(dummyIntField, dummy);
-
-        assertThat(violations, emptyIterable());
-    }
-
-    @Test
-    public void testIntsNull() {
-        DummyInt dummy = new DummyInt();
-
-        Set<ConstraintViolation> violations = getConstraintViolations(dummyIntField, dummy);
-
-        assertThat(violations, emptyIterable());
-    }
-
-    @Test
-    public void testObjsNull() {
-
-        DummyObj dummy = new DummyObj();
-
-        Set<ConstraintViolation> violations = getConstraintViolations(dummyObjField, dummy);
 
         assertThat(violations, emptyIterable());
     }
 
     @Test
     public void testObjsEmpty() {
-
         DummyObj dummy = new DummyObj();
-        dummy.listOfObjs = ImmutableSet.of();
 
         Set<ConstraintViolation> violations = getConstraintViolations(dummyObjField, dummy);
 

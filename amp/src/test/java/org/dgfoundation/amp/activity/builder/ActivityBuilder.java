@@ -152,6 +152,12 @@ public class ActivityBuilder {
         activity.setTeam(ampTeam);
         return this;
     }
+
+    public ActivityBuilder withMultiStakeholderPartnership(boolean multiStakeholderPartnership) {
+        activity.setMultiStakeholderPartnership(multiStakeholderPartnership);
+        return this;
+    }
+
 	public ActivityBuilder addRegionalFunding(int transactionType, AmpCategoryValue adjustmentType,
             Date transactionDate, Double transactionAmount, AmpCurrency currency, AmpCategoryValueLocations location) {
 
@@ -164,7 +170,6 @@ public class ActivityBuilder {
         funding.setRegionLocation(location);
 
         activity.getRegionalFundings().add(funding);
-
         return this;
     }
 }

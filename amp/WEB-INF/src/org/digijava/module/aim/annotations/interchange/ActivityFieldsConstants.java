@@ -33,6 +33,7 @@ public class ActivityFieldsConstants {
     public static final String APPROVAL_DATE = "Approval Date";
     public static final String APPROVAL_STATUS = "Approval Status";
     public static final String MODIFIED_BY = "Modified By";
+    public static final String ACTIVITY_TYPE = "Activity Type";
     public static final String DONOR_CONTACT = "Donor Contact Information";
     public static final String PROJECT_COORDINATOR_CONTACT = "Project Coordinator Contact Information";
     public static final String SECTOR_MINISTRY_CONTACT = "Sector Ministry Contact Information";
@@ -90,6 +91,13 @@ public class ActivityFieldsConstants {
         }
 
         public static final String LOCATION = "Location";
+    }
+
+    public static final class Programs {
+        private Programs() {
+        }
+
+        public static final String PROGRAM = "Program";
     }
 
     public static final class Funding {

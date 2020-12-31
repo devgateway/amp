@@ -682,3 +682,6 @@ input[disabled], select[disabled]{
     background: #ededed;
 }
 
+.top-padding-10 {
+    padding-top: 10px;
+}

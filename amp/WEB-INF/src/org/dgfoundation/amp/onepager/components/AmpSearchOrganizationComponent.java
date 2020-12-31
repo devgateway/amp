@@ -20,6 +20,7 @@ import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.util.DbUtil;
 
 
@@ -89,6 +90,10 @@ public class AmpSearchOrganizationComponent<T> extends AmpComponentPanel<T>  imp
     public void setDefaultOrgGroup (AmpOrgGroup value) {
         orgGroupPanel.getChoiceContainer().setDefaultModelObject(value);
         autocompletePanel.getModelParams().put(AmpOrganisationSearchModel.PARAM.GROUP_FILTER,value);
+    }
+
+    public void setTemplateFilter(AmpTemplatesVisibility template) {
+        autocompletePanel.getModelParams().put(AmpOrganisationSearchModel.PARAM.TEMPLATE_FILTER, template);
     }
     
     /**

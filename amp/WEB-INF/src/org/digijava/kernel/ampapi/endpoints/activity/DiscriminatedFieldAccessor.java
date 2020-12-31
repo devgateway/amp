@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.TreeSet;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.digijava.kernel.request.TLSUtils;
+
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils.WORKSPACE_PREFIX;
 
 /**
  * On read will return a list of objects that satisfy discrimination condition. Changes to this list are not propagated
@@ -33,7 +36,7 @@ public class DiscriminatedFieldAccessor implements FieldAccessor {
     private final boolean multipleValues;
 
     public DiscriminatedFieldAccessor(FieldAccessor targetField, String discriminatorField, String discriminatorValue,
-            boolean multipleValues) {
+                                      boolean multipleValues) {
         this.targetField = targetField;
         this.discriminatorField = discriminatorField;
         this.discriminatorValue = discriminatorValue;
@@ -43,17 +46,20 @@ public class DiscriminatedFieldAccessor implements FieldAccessor {
     @Override
     public <T> T get(Object targetObject) {
         Collection<?> collection = getWrappedCollection(targetObject);
+        String prefix = "" + TLSUtils.getRequest().getAttribute(WORKSPACE_PREFIX);
         if (multipleValues) {
-            return (T) getList(collection);
+            return (T) getList(collection, prefix);
         } else {
-            return (T) getObject(collection);
+            return (T) getObject(collection, prefix);
         }
     }
 
-    private Object getObject(Collection<?> collection) {
+    private Object getObject(Collection<?> collection, String prefix) {
         Object filteredItem = null;
         for (Object item : collection) {
-            if (getDiscriminationValue(item).equals(discriminatorValue)) {
+            // AMPOFFLINE-1528
+            if (getDiscriminationValue(item).equals(discriminatorValue)
+                    || getDiscriminationValue(item).equals(prefix + discriminatorValue)) {
                 if (filteredItem != null) {
                     throw new RuntimeException(
                             "MultipleValues is false but the underlying collection contains two items.");
@@ -64,10 +70,12 @@ public class DiscriminatedFieldAccessor implements FieldAccessor {
         return filteredItem;
     }
 
-    private Object getList(Collection<?> collection) {
+    private Object getList(Collection<?> collection, String prefix) {
         List<Object> filteredItems = new ArrayList<>();
         for (Object item : collection) {
-            if (getDiscriminationValue(item).equals(discriminatorValue)) {
+            // AMPOFFLINE-1528
+            if (getDiscriminationValue(item).equals(discriminatorValue)
+                    || getDiscriminationValue(item).equals(prefix + discriminatorValue)) {
                 filteredItems.add(item);
             }
         }
@@ -77,23 +85,26 @@ public class DiscriminatedFieldAccessor implements FieldAccessor {
     @Override
     public void set(Object targetObject, Object value) {
         Collection targetCollection = getWrappedCollection(targetObject);
+        String prefix = "" + TLSUtils.getRequest().getAttribute(WORKSPACE_PREFIX);
 
         if (multipleValues) {
-            setList(targetCollection, (Collection) value);
+            setList(targetCollection, (Collection) value, prefix);
         } else {
-            setObject(targetCollection, value);
+            setObject(targetCollection, value, prefix);
         }
 
         targetField.set(targetObject, targetCollection);
     }
 
-    private void setObject(Collection targetCollection, Object value) {
+    private void setObject(Collection targetCollection, Object value, String prefix) {
         Iterator<?> it = targetCollection.iterator();
         boolean refPresent = false;
         boolean found = false;
         while (it.hasNext()) {
             Object item = it.next();
-            if (getDiscriminationValue(item).equals(discriminatorValue)) {
+            // AMPOFFLINE-1528
+            if (getDiscriminationValue(item).equals(discriminatorValue)
+                    || getDiscriminationValue(item).equals(prefix + discriminatorValue)) {
                 if (found) {
                     throw newMultipleValuesException();
                 }
@@ -110,14 +121,16 @@ public class DiscriminatedFieldAccessor implements FieldAccessor {
         }
     }
 
-    private void setList(Collection targetCollection, Collection values) {
+    private void setList(Collection targetCollection, Collection values, String prefix) {
         TreeSet<Object> newItems = new TreeSet<>(Comparator.comparingInt(System::identityHashCode));
         newItems.addAll(values);
 
         Iterator<?> it = targetCollection.iterator();
         while (it.hasNext()) {
             Object item = it.next();
-            if (getDiscriminationValue(item).equals(discriminatorValue)) {
+            // AMPOFFLINE-1528
+            if (getDiscriminationValue(item).equals(discriminatorValue)
+                    || getDiscriminationValue(item).equals(prefix + discriminatorValue)) {
                 boolean removed = newItems.remove(item);
                 if (!removed) {
                     it.remove();

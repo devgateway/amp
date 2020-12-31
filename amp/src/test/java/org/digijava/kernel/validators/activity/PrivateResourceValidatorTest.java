@@ -9,6 +9,7 @@ import static org.junit.Assert.*;
 import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
+import org.dgfoundation.amp.testutils.TransactionUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.validation.ConstraintViolation;
@@ -28,6 +29,7 @@ public class PrivateResourceValidatorTest {
 
     @BeforeClass
     public static void setUp() {
+        TransactionUtil.setUpWorkspaceEmptyPrefixes();
         docField = ValidatorUtil.getMetaData(AmpActivityDocument.class);
         dao = new PrivateResourceValidator.InMemoryResourceDAO(ImmutableSet.of("def"));
     }

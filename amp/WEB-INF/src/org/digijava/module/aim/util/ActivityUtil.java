@@ -37,6 +37,7 @@ import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.admin.helper.AmpActivityFake;
@@ -99,6 +100,10 @@ import org.hibernate.type.LongType;
 import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.type.StringType;
 import org.joda.time.Period;
+
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils.ACTIVITY_FM_ID;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils.WORKSPACE_PREFIX;
+import static org.digijava.kernel.translator.util.TrnUtil.PREFIXES;
 
 public class ActivityUtil {
 
@@ -465,7 +470,10 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                 Hibernate.initialize(str.getType());
                 Hibernate.initialize(str.getCoordinates());
             }
-            
+
+            // AMPOFFLINE-1528
+            ActivityUtil.setCurrentWorkspacePrefixIntoRequest(result);
+
             ActivityUtil.initializeForApi(result);
             
         } catch (ObjectNotFoundException e) {
@@ -2118,5 +2126,40 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
     public static boolean isAutomaticValidationEnabled() {
         return (QuartzJobUtils.getJobByClassFullname(Constants.AUTOMATIC_VALIDATION_JOB_CLASS_NAME) == null
                 ? false : true);
+    }
+
+    public static List<String> loadWorkspacePrefixesIntoRequest() {
+        List<String> prefixes = TranslatorWorker.getAllPrefixes();
+        TLSUtils.getRequest().setAttribute(PREFIXES, prefixes);
+        return prefixes;
+    }
+
+    public static List<String> getWorkspacePrefixesFromRequest() {
+        return (List<String>) TLSUtils.getRequest().getAttribute(PREFIXES);
+    }
+
+    /**
+     * Set the workspace prefix (if any) and the FM id of the activity into request scope.
+     * @param activity
+     */
+    public static void setCurrentWorkspacePrefixIntoRequest(AmpActivityVersion activity) {
+        if (activity.getTeam() != null) {
+            if (activity.getTeam().getWorkspacePrefix() != null) {
+                TLSUtils.getRequest().setAttribute(WORKSPACE_PREFIX,
+                        activity.getTeam().getWorkspacePrefix().getLabel());
+            } else {
+                TLSUtils.getRequest().setAttribute(WORKSPACE_PREFIX, "");
+            }
+            if (activity.getTeam().getFmTemplate() != null) {
+                TLSUtils.getRequest().setAttribute(ACTIVITY_FM_ID, activity.getTeam().getFmTemplate().getId());
+            }
+        }
+    }
+
+    public static Long getCurrentFMId() {
+        if (TLSUtils.getRequest().getAttribute(ACTIVITY_FM_ID) != null) {
+            return Long.getLong(TLSUtils.getRequest().getAttribute(ACTIVITY_FM_ID).toString());
+        }
+        return null;
     }
 }

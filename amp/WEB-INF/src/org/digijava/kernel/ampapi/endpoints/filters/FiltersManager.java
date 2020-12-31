@@ -36,8 +36,8 @@ public final class FiltersManager {
         return SectorFilterListManager.getInstance().getFilterList();
     }
 
-    public FilterList getLocationFilterList() {
-        return LocationFilterListManager.getInstance().getFilterList();
+    public FilterList getLocationFilterList(boolean showAllCountries, boolean firstLevelOnly) {
+        return LocationFilterListManager.getInstance().getFilterList(showAllCountries, firstLevelOnly);
     }
 
     public FilterList getProgramFilterList() {

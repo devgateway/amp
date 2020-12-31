@@ -13,9 +13,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
 import org.slf4j.Logger;
@@ -35,7 +35,7 @@ public class AmpOrganisationSearchModel extends AbstractAmpAutoCompleteModel<Amp
     private static final Logger logger = LoggerFactory.getLogger(AmpOrganisationSearchModel.class);
 
     public enum PARAM implements AmpAutoCompleteModelParam {
-    TYPE_FILTER, GROUP_FILTER
+    TYPE_FILTER, GROUP_FILTER, TEMPLATE_FILTER
     };
 
     public AmpOrganisationSearchModel(String input, String language, Map<AmpAutoCompleteModelParam, Object> params) {
@@ -60,7 +60,9 @@ public class AmpOrganisationSearchModel extends AbstractAmpAutoCompleteModel<Amp
             ArrayList<FilterParam> params = new ArrayList<FilterParam>();
             boolean multilingualEnabled = ContentTranslationUtil.multilingualIsEnabled();
             if (multilingualEnabled) {
-               sqlQuery = "SELECT org.amp_org_id, org.name, org.acronym, org.org_type, orgname.translation  from amp_organisation org LEFT OUTER JOIN amp_content_translation orgname ON org.amp_org_id = orgname.object_id"
+                sqlQuery = "SELECT org.amp_org_id, org.name, org.acronym, org.org_type, orgname.translation  "
+                        + "from amp_organisation org LEFT OUTER JOIN amp_content_translation orgname ON "
+                        + " org.amp_org_id = orgname.object_id "
                         + " AND orgname.field_name = ? "
                         + " AND orgname.object_class =? "
                         + " AND orgname.locale = ?" ;
@@ -72,7 +74,9 @@ public class AmpOrganisationSearchModel extends AbstractAmpAutoCompleteModel<Amp
             else {
                 sqlQuery = "SELECT org.amp_org_id, org.name, org.acronym, org.org_type from amp_organisation org";
             }
-            sqlQuery+= " WHERE (org.deleted IS NULL OR org.deleted = ?)";
+            sqlQuery += " left outer join amp_category_value_location acvl ON"
+                    + "  org.amp_country_id = acvl.id"
+                    + " WHERE (org.deleted IS NULL OR org.deleted = ?)";
             AmpOrgGroup orgroup =null;
 
             if (getParams()!=null && getParams().get(PARAM.GROUP_FILTER) != null) {
@@ -95,6 +99,10 @@ public class AmpOrganisationSearchModel extends AbstractAmpAutoCompleteModel<Amp
             sqlQuery = sqlQuery + " AND org_grp_id in( "+
                     " select  amp_org_grp_id from amp_org_group where org_type=?)";
             }
+
+            if (getParams() != null && getParams().get(PARAM.TEMPLATE_FILTER) != null) {
+                sqlQuery = sqlQuery + " AND acvl.template_id = ?";
+            }
             
             Integer maxResults = (Integer) getParams().get(AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS);
             if (maxResults != null && maxResults.intValue() != 0) {
@@ -113,7 +121,12 @@ public class AmpOrganisationSearchModel extends AbstractAmpAutoCompleteModel<Amp
             if (getParams() != null && getParams().get(PARAM.TYPE_FILTER) != null) {
                 params.add(new FilterParam(orgtype.getIdentifier(), java.sql.Types.BIGINT));
             }
-            
+
+            if (getParams() != null && getParams().get(PARAM.TEMPLATE_FILTER) != null) {
+                AmpTemplatesVisibility template = (AmpTemplatesVisibility) getParams().get(PARAM.TEMPLATE_FILTER);
+                params.add(new FilterParam(template.getIdentifier(), java.sql.Types.BIGINT));
+            }
+
             RsInfo rsi = SQLUtils.rawRunQuery(connection, sqlQuery, params);
             ResultSet rs = rsi.rs;
             while (rs.next()) {

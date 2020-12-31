@@ -9,13 +9,13 @@ import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
-import org.apache.struts.mock.MockHttpServletRequest;
-import org.apache.struts.mock.MockHttpSession;
+import org.dgfoundation.amp.testutils.TransactionUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldInfoProvider;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldsEnumerator;
@@ -24,14 +24,11 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
-import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.request.SiteDomain;
-import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -56,20 +53,11 @@ public class PossibleValuesEnumeratorTest {
     @Mock private TranslatorService translatorService;
 
     @Mock private FieldInfoProvider provider;
-    @Mock private FMService fmService;
+    @Mock private FeatureManagerService fmService;
 
     @Before
     public void setup() throws WorkerException {
-        MockHttpServletRequest mockRequest = new MockHttpServletRequest(new MockHttpSession());
-
-        Site site = new Site("Test Site", "1");
-        site.setDefaultLanguage(new Locale("en", "English"));
-
-        SiteDomain siteDomain = new SiteDomain();
-        siteDomain.setSite(site);
-        siteDomain.setDefaultDomain(true);
-
-        TLSUtils.populate(mockRequest, siteDomain);
+        TransactionUtil.setUpWorkspaceEmptyPrefixes();
 
         when(provider.getType(any())).thenAnswer(invocation -> {
             Field f = (Field) invocation.getArguments()[0];
@@ -87,6 +75,7 @@ public class PossibleValuesEnumeratorTest {
             String s = (String) invocation.getArguments()[0];
             return Arrays.asList(msg("en", s + " en"), msg("fr", s + " fr"));
         });
+        FeaturesUtil.buildGlobalSettingsCache(new ArrayList<>());
     }
 
     private Message msg(String locale, String text) {
@@ -214,14 +203,14 @@ public class PossibleValuesEnumeratorTest {
         when(translatorService.translateLabel(any())).thenReturn(ImmutableMap.of("en", "en value", "fr", "fr value"));
 
         when(possibleValuesDAO.getCategoryValues(any())).thenReturn(Arrays.asList(
-                values(1, "Planned", false, 1),
-                values(2, "Canceled", true, 2)
+                values(1, "Planned", false, 1, ""),
+                values(2, "Canceled", true, 2, "")
         ));
 
         assertJsonEquals(possibleValuesFor("activity_status"),
                 "[{\"id\":1,\"value\":\"Planned\","
                         + "\"translated-value\":{\"en\":\"en value\",\"fr\":\"fr value\"},"
-                        + "\"extra_info\":{\"index\":1}}]");
+                        + "\"extra_info\":{\"index\":1,\"workspace-prefix\":\"\"}}]");
     }
 
     @Test
@@ -253,8 +242,9 @@ public class PossibleValuesEnumeratorTest {
                 ));
         assertJsonEquals(possibleValuesFor("primary_programs~program"),
                 "[{\"id\":1,\"value\":\"Theme 1\","
-                        + "\"children\":[{\"id\":2,\"value\":\"Theme 1.2\",\"extra_info\":{\"parent-program-id\":1}}],"
-                        + "\"extra_info\":{\"parent-program-id\":null}}]");
+                        + "\"children\":[{\"id\":2,\"value\":\"Theme 1.2\","
+                        + "\"extra_info\":{\"parent-program-id\":1,\"mapped-program-id\":null}}],"
+                        + "\"extra_info\":{\"parent-program-id\":null,\"mapped-program-id\":null}}]");
     }
 
     @Test

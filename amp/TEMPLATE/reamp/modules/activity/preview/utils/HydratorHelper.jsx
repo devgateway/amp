@@ -28,6 +28,7 @@ export default class HydratorHelper {
                     fieldToHydrate = parent + "~";
                 }
                 fieldToHydrate = fieldToHydrate + objectField;
+                if (fieldsManager.getFieldDef(fieldToHydrate)) {
                 if (fieldsManager.getFieldDef(fieldToHydrate)['id_only'] === true) {
                     if (objectToHydrate[objectField]) {
                         if (!valuesForHydration) {
@@ -50,6 +51,9 @@ export default class HydratorHelper {
                             objectToHydrate[objectField]['translated-value'] = objectToHydrate[objectField].translatedValue;
                         }
                     }
+                }
+                } else {
+                    console.warn('no field def: ' + fieldToHydrate);
                 }
             }
         });

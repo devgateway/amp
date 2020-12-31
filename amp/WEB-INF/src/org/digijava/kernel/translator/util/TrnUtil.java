@@ -76,6 +76,10 @@ public class TrnUtil {
 
     public static final Comparator countryNameComparator;
     public static final Comparator localeNameComparator;
+
+    public static final String PREFIX = "prefix";
+    public static final String DEFAULT = "default";
+    public static final String PREFIXES = "prefixes";
     
     /**
      * These are languages that has its own weight for sorting
@@ -849,6 +853,9 @@ public class TrnUtil {
                     String prefix = trnPrefix.getValue();
                     return prefix;
                 }
+            } else {
+                Object prefix = TLSUtils.getRequest().getAttribute(PREFIX);
+                return prefix != null ? prefix.toString() : null;
             }
         }
         return null;

@@ -19,6 +19,7 @@ public final class InterchangeableClassMapper {
         .put(java.lang.Long.class, FieldType.LONG)
         .put(java.lang.Float.class, FieldType.FLOAT)
         .put(java.lang.Enum.class, FieldType.STRING)
+        .put(java.math.BigDecimal.class, FieldType.FLOAT)
         .put(MultilingualContent.class, FieldType.STRING)
         .build();
 

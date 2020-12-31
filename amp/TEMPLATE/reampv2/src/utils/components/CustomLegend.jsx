@@ -13,8 +13,8 @@ export default class CustomLegend extends Component {
           <ul className={data.length > 3 && shouldSplitBig ? 'two-rows' : ''}>
             {data.map(d => (
               <li key={colorMap.get(d.code)}>
-                <div className="row">
-                  <div className="col-md-1 col-xs-1">
+                <div className="row row-eq-height" >
+                  <div className="col-md-1 col-xs-1 symbol-container">
                     <span
                       className="symbol"
                       style={{
@@ -22,7 +22,7 @@ export default class CustomLegend extends Component {
                         backgroundColor: `${colorMap.get(d.code)}`
                       }} />
                   </div>
-                  <div className="col-md-11 col-xs-11 label">
+                  <div className="col-md-9 col-xs-9 label">
                     <EllipsisText
                       text={d.simpleLabel}
                       length={100}
@@ -34,14 +34,16 @@ export default class CustomLegend extends Component {
                         {`${d.percentage}%`}
                       </span>
                     )}
-                    {d.amount
-                    && (
+                  </div>
+                  {d.amount
+                  && (
+                    <div className="col-md-2 col-xs-2 label vertical-center">
                       <span
                         className="label amount">
                         {formatter ? formatter.format(d.amount) : d.amount}
                       </span>
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </div>
               </li>
             ))}

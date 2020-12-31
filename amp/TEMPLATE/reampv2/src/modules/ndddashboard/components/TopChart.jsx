@@ -50,7 +50,7 @@ class TopChart extends Component {
           data={data.values}
           getColor={this.getColor.bind(this)}
         />
-        <div style={{ height: '300px' }}>
+        <div style={{ height: '335px' }}>
           <ResponsiveBar
             data={transformedData}
             colors={this.getColor.bind(this)}
@@ -81,8 +81,7 @@ class TopChart extends Component {
                   padding: '1px',
                   borderRadius: '5px',
                   boxShadow: '0 1px 2px rgba(0, 0, 0, 0.25)'
-                },
-
+                }
               }
             }}
           />

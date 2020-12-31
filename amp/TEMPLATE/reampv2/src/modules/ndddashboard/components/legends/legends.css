@@ -21,8 +21,21 @@
     margin-bottom: 15px;
 }
 
+.legend-title {
+    border-bottom: 1px solid #ddd;
+}
+
 .custom-legend .row {
     border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
+
+.custom-legend .row,
+.funding-sources-title .row {
+
+    margin-left: 0;
+    margin-right: 0;
 }
 
 .custom-legend ul li {
@@ -31,8 +44,8 @@
 
 .custom-legend ul li .label {
     white-space: normal;
-    font-size: 10px;
-    font-weight: 500;
+    font-size: 14px;
+    font-weight: normal;
     padding-left: 4px;
     padding-right: 2px;
     text-align: left;
@@ -47,13 +60,8 @@
     border: 1px solid #ddd;
 }
 
-.legend-title {
-    border-bottom: 1px solid #ddd;
-}
 
-.custom-legend .label.amount,
-.legend-title .amount {
-    font-size: 12px;
+.custom-legend .label.amount {
     font-weight: bold;
 }
 
@@ -64,11 +72,29 @@
     height: 12px;
     margin-top: 3px;
     width: 12px;
+    margin-left: 5px;
 }
 
 .chart-legend {
     height: 110px;
 }
-.legends-container{
+
+.legends-container {
     height: 100%;
+    min-height: 513px;
+    font-size: 18px;
+}
+
+
+.legends-container .legend-title {
+    padding-left: 10px;
+}
+
+.legend-title .amount {
+    font-weight: bold;
+    padding-left: 10px;
+}
+
+.custom-legend-inner .symbol-container {
+    padding-left: 25px;
 }

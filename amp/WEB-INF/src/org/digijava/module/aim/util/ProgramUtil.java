@@ -532,7 +532,7 @@ public class ProgramUtil {
 
         Collections.reverse(progs);
 
-        for (ListIterator<AmpTheme> iterator = progs.listIterator(); iterator.hasNext(); ) {
+        for (ListIterator<AmpTheme> iterator = progs.listIterator(); iterator.hasNext();) {
             AmpTheme p = (AmpTheme) iterator.next();
             result += p.getName() + " > ";
         }
@@ -835,8 +835,7 @@ public class ProgramUtil {
          * @param parentThemeId
          * @return
          */
-        public static List<AmpTheme> getSubThemes(Long parentThemeId) throws DgException
-        {
+        public static List<AmpTheme> getSubThemes(Long parentThemeId) throws DgException {
             try {
                 String queryString = "from " + AmpTheme.class.getName() +
                     " subT where subT.parentThemeId.ampThemeId=:parentThemeId";
@@ -1176,7 +1175,7 @@ public class ProgramUtil {
                    ampThemeInd.setSectors(new HashSet());
                 }
 
-                    Long sectorIds[]= tempPrgInd.getSector();
+                Long[] sectorIds = tempPrgInd.getSector();
                     Set sectors = new HashSet();
                    Collection sect=tempPrgInd.getIndSectores();
                    if(sect!=null&&sect.size()>0){
@@ -1475,7 +1474,7 @@ public class ProgramUtil {
                     Query qry = session.createQuery(queryString);
                     qry.setString("name", name);
                     qry.setCacheable(false);
-                    programSettings=(AmpActivityProgramSettings)qry.uniqueResult();
+                programSettings = (AmpActivityProgramSettings) qry.uniqueResult();
 
 
             } catch (Exception ex) {
@@ -1603,7 +1602,7 @@ public class ProgramUtil {
 
 
 
-    public static String renderLevel(Collection themes,int level,HttpServletRequest request) {
+    public static String renderLevel(Collection themes, int level, HttpServletRequest request) {
          //requirements for translation purposes
          TranslatorWorker translator = TranslatorWorker.getInstance();
          String translatedText = TranslatorWorker.translateText("No Programs present");
@@ -1669,7 +1668,7 @@ public class ProgramUtil {
         return retVal;
     }
 
-    public static String getLevelImage(int level){
+    public static String getLevelImage(int level) {
         switch (level) {
         case 0:
             return "../ampTemplate/images/arrow_right.gif";
@@ -1721,7 +1720,7 @@ public class ProgramUtil {
                 result  += "'" + aaps.getName() + "'" + ", ";
         }
         if ( result.length() > 0 )
-            return result.substring(0, result.length()-2);
+            return result.substring(0, result.length() - 2);
         else
             return null;
     }
@@ -1838,7 +1837,8 @@ public class ProgramUtil {
         public static Set<Long> getRecursiveAscendantsOfPrograms(Collection<Long> inIds)
         {
             return AlgoUtils.runWave(inIds,
-                    new DatabaseWaver("SELECT DISTINCT(parent_theme_id) FROM amp_theme WHERE (parent_theme_id IS NOT NULL) AND (amp_theme_id IN ($))"));
+                    new DatabaseWaver("SELECT DISTINCT(parent_theme_id) FROM amp_theme WHERE (parent_theme_id "
+                            + "IS NOT NULL) AND (amp_theme_id IN ($))"));
         }
 
         /**
@@ -1975,8 +1975,8 @@ public class ProgramUtil {
         if (setting != null) {
             String dstProgram = FeaturesUtil.getGlobalSettingValue(mappedProgramGS);
             if (StringUtils.isNotBlank(dstProgram)) {
-                return setting.getDefaultHierarchy() != null &&
-                        setting.getDefaultHierarchy().getAmpThemeId().equals(Long.valueOf(dstProgram));
+                return setting.getDefaultHierarchy() != null
+                        && setting.getDefaultHierarchy().getAmpThemeId().equals(Long.valueOf(dstProgram));
             }
         }
 

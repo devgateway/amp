@@ -56,7 +56,7 @@ class MainDashboardContainer extends Component {
   }
 
   getTopChart() {
-    const { topLoaded, topLoadingPending, top } = this.props;
+    const { topLoaded, topLoadingPending, top, globalSettings } = this.props;
     const { translations } = this.context;
     return topLoaded && !topLoadingPending ? (
       <div>
@@ -69,7 +69,7 @@ class MainDashboardContainer extends Component {
               {`${top.sumarizedTotal} ${top.currency}`}
             </div>
           </div>
-          <TopChart data={top} />
+          <TopChart data={top} globalSettings={globalSettings} />
         </div>
       </div>
     ) : <div className="loading" />;

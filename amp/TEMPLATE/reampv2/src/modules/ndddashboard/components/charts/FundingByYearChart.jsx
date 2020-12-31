@@ -138,6 +138,7 @@ class FundingByYearChart extends Component {
           value={tooltipData.points[0].y}
           minWidth={400}
           isYearTotal
+          globalSettings={globalSettings}
         />
       );
     }
@@ -252,7 +253,7 @@ class FundingByYearChart extends Component {
             annotations,
             xaxis: {
               showgrid: false,
-              showline: true,
+              showline: false,
               autotick: false,
               tickangle: 45,
               fixedrange: true,

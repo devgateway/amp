@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes, { number } from 'prop-types';
 import './ToolTip.css';
 import { NDDTranslationContext } from '../StartUp';
+import { formatNumberWithSettings } from '../../utils/Utils';
 
 class ToolTip extends Component {
   getActualWidth(inputText) {
@@ -16,7 +17,7 @@ class ToolTip extends Component {
 
   render() {
     const {
-      titleLabel, color, value, formattedValue, currencyCode, total, minWidth, isYearTotal
+      titleLabel, color, value, formattedValue, currencyCode, total, minWidth, isYearTotal, globalSettings
     } = this.props;
     const { translations } = this.context;
     const percentage = total > 0 ? (value * 100) / total : 0;
@@ -40,7 +41,7 @@ class ToolTip extends Component {
             {percentage > 0 ? (
               <div className="element grey">
                 <span className="of-total">
-                  <b>{`${percentage.toFixed(2)}% `}</b>
+                  <b>{`${formatNumberWithSettings(globalSettings, percentage)}% `}</b>
                   {isYearTotal
                     ? translations['amp.ndd.dashboard:of-year-total']
                     : translations['amp.ndd.dashboard:of-total']}
@@ -62,7 +63,8 @@ ToolTip.propTypes = {
   currencyCode: PropTypes.string.isRequired,
   total: PropTypes.number.isRequired,
   minWidth: PropTypes.string,
-  isYearTotal: PropTypes.bool
+  isYearTotal: PropTypes.bool,
+  globalSettings: PropTypes.object.isRequired
 };
 ToolTip.contextType = NDDTranslationContext;
 

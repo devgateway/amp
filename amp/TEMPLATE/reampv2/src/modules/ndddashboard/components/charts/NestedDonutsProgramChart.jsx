@@ -208,6 +208,7 @@ class NestedDonutsProgramChart extends Component {
           total={totalAmount}
           value={program.amount}
           minWidth={400}
+          globalSettings={globalSettings}
         />
       );
     }

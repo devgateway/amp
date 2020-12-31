@@ -22,7 +22,7 @@ export default (state = initialState, action) => {
         dashboardSettingsLoadingPending: false,
         dashboardSettingsLoaded: true,
         dashboardSettings: action.payload,
-        globalSettings: extractNumberSettings(action.gs)
+        globalSettings: extractSettings(action.gs)
       };
     }
     case FETCH_DASHBOARD_SETTINGS_ERROR:
@@ -37,7 +37,7 @@ export default (state = initialState, action) => {
   }
 };
 
-const extractNumberSettings = (gs) => {
+const extractSettings = (gs) => {
   const format = {};
   format.numberFormat = gs['number-format'] || '#,#.#';
   format.precision = 0;
@@ -51,8 +51,6 @@ const extractNumberSettings = (gs) => {
   }
   format.decimalSeparator = gs['number-decimal-separator'] || '.';
   format.numberDivider = gs['number-divider'];
-
-  // TODO: Add translation keys.
   if (format.numberDivider === 1) {
     format.numberDividerDescriptionKey = 'amp.ndd.dashboard:chart-tops-inunits';
   } else if (format.numberDivider === 1000) {
@@ -62,5 +60,9 @@ const extractNumberSettings = (gs) => {
   } else if (format.numberDivider === 1000000000) {
     format.numberDividerDescriptionKey = 'amp.ndd.dashboard:chart-tops-inbillions';
   }
+
+  format.dateFormat = gs['default-date-format'];
+  format.defaultMinDate = gs['dashboard-default-min-date'];
+  format.defaultMaxDate = gs['dashboard-default-max-date'];
   return format;
 };

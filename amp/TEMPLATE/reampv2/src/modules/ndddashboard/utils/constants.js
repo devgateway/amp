@@ -14,13 +14,14 @@ export const DIRECT = 'DIRECT';
 export const INDIRECT = 'INDIRECT';
 export const TRANSITIONS = 100;
 export const SETTINGS_EP = '/rest/settings-definitions/dashboards';
+export const GS_EP = '/rest/amp/settings';
 export const SHARING_EP = '/rest/ndd/save-charts';
 export const GET_SHARED_EP = '/rest/ndd/saved-charts/';
 export const FUNDING_TYPE = 'funding-type';
 export const CURRENCY_CODE = 'currency-code';
 export const DEFAULT_FUNDING_TYPE = 'Actual Commitments';
 export const INCLUDE_LOCATIONS_WITH_CHILDREN = 'include-location-children';
-export const DEFAULT_CURRENCY='USD';
+export const DEFAULT_CURRENCY = 'USD';
 
 const PROGRAMLVL1_COLOR = ['#1f5177',
   '#a42727',

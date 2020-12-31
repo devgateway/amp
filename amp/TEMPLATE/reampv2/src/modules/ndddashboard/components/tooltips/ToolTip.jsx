@@ -2,17 +2,29 @@ import React, { Component } from 'react';
 import PropTypes, { number } from 'prop-types';
 import './ToolTip.css';
 import { NDDTranslationContext } from '../StartUp';
+import { formatNumberWithSettings } from '../../utils/Utils';
 
 class ToolTip extends Component {
+  getActualWidth(inputText) {
+    const font = '16px times new roman';
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    context.font = font;
+    const { width } = context.measureText(inputText);
+    const formattedWidth = Math.ceil(width);
+    return formattedWidth;
+  }
+
   render() {
     const {
-      titleLabel, color, value, formattedValue, currencyCode, total, minWidth, isYearTotal
+      titleLabel, color, value, formattedValue, currencyCode, total, minWidth, isYearTotal, globalSettings
     } = this.props;
     const { translations } = this.context;
     const percentage = total > 0 ? (value * 100) / total : 0;
     const headerStyle = { backgroundColor: color };
     const containerStyle = {};
-    if (minWidth) {
+    // Dont make it wider if the content doesnt need it.
+    if (minWidth && this.getActualWidth(titleLabel) > minWidth) {
       containerStyle.minWidth = minWidth;
     }
     return (
@@ -29,7 +41,7 @@ class ToolTip extends Component {
             {percentage > 0 ? (
               <div className="element grey">
                 <span className="of-total">
-                  <b>{`${percentage.toFixed(2)}% `}</b>
+                  <b>{`${formatNumberWithSettings(globalSettings, percentage)}% `}</b>
                   {isYearTotal
                     ? translations['amp.ndd.dashboard:of-year-total']
                     : translations['amp.ndd.dashboard:of-total']}
@@ -51,7 +63,8 @@ ToolTip.propTypes = {
   currencyCode: PropTypes.string.isRequired,
   total: PropTypes.number.isRequired,
   minWidth: PropTypes.string,
-  isYearTotal: PropTypes.bool
+  isYearTotal: PropTypes.bool,
+  globalSettings: PropTypes.object.isRequired
 };
 ToolTip.contextType = NDDTranslationContext;
 

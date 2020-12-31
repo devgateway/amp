@@ -113,7 +113,7 @@ class NDDDashboardHome extends Component {
       filters, dashboardId, fundingType, selectedPrograms, settings, selectedDirectProgram
     } = this.state;
     const {
-      ndd, nddLoadingPending, nddLoaded, dashboardSettings, mapping, noIndirectMapping
+      ndd, nddLoadingPending, nddLoaded, dashboardSettings, mapping, noIndirectMapping, globalSettings
     } = this.props;
     return (
       <Container fluid className="main-container">
@@ -142,6 +142,7 @@ class NDDDashboardHome extends Component {
             selectedPrograms={selectedPrograms}
             mapping={mapping}
             settings={settings}
+            globalSettings={globalSettings}
             noIndirectMapping={noIndirectMapping} />
         </Row>
       </Container>
@@ -156,6 +157,7 @@ const
     nddLoaded: state.reportsReducer.nddLoaded,
     nddLoadingPending: state.reportsReducer.nddLoadingPending,
     dashboardSettings: state.dashboardSettingsReducer.dashboardSettings,
+    globalSettings: state.dashboardSettingsReducer.globalSettings,
     translations: state.translationsReducer.translations,
     mapping: state.mappingsReducer.mapping,
     noIndirectMapping: state.mappingsReducer.noIndirectMapping

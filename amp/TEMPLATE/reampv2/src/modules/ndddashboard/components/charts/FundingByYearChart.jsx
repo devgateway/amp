@@ -11,7 +11,7 @@ import {
   TRANSITIONS, PROGRAMLVL2, AVAILABLE_COLORS, TRN_PREFIX, CURRENCY_CODE
 } from '../../utils/constants';
 import {
-  addAlpha, formatKMB, getCustomColor, getGradient
+  addAlpha, formatNumberWithSettings, getCustomColor, getGradient
 } from '../../utils/Utils';
 import styles from '../styles.css';
 import ToolTip from '../tooltips/ToolTip';
@@ -124,21 +124,21 @@ class FundingByYearChart extends Component {
 
   createTooltip = () => {
     const { tooltipData } = this.state;
-    const { settings, translations } = this.props;
+    const { settings, translations, globalSettings } = this.props;
     if (tooltipData) {
-      const formatter = formatKMB(translations); // TODO: get precision and separator from GS.
       const year = tooltipData.points[0].x;
       return (
         <ToolTip
           color={tooltipData.points[0].data.line.color}
-          currencyCode="USD"
-          formattedValue={formatter(`${tooltipData.points[0].y}`)}
+          currencyCode={settings[CURRENCY_CODE]}
+          formattedValue={formatNumberWithSettings(globalSettings, tooltipData.points[0].y)}
           titleLabel={`${year} ${tooltipData.points[0].data.text}`}
           total={tooltipData.points[0].data.extraData
             .reduce((a, b) => (a + (b.values.find(i => i[year]) ? b.values.find(i => i[year])[year] : 0)), 0)}
           value={tooltipData.points[0].y}
-          minWidth="400px"
+          minWidth={400}
           isYearTotal
+          globalSettings={globalSettings}
         />
       );
     }
@@ -159,7 +159,7 @@ class FundingByYearChart extends Component {
   }
 
   render() {
-    const { translations } = this.props;
+    const { translations, globalSettings } = this.props;
     const {
       source, showLegend, legendTop, legendLeft
     } = this.state;
@@ -253,16 +253,18 @@ class FundingByYearChart extends Component {
             annotations,
             xaxis: {
               showgrid: false,
-              showline: true,
+              showline: false,
               autotick: false,
               tickangle: 45,
-              fixedrange: true
+              fixedrange: true,
+              automargin: true
             },
             yaxis: {
-              automargin: false,
+              automargin: true,
               fixedrange: true
             },
-            hovermode: 'closest'
+            hovermode: 'closest',
+            separators: globalSettings.decimalSeparator + globalSettings.groupSeparator
           }}
           config={{ displaylogo: false, responsive: true, displayModeBar: false }}
           useResizeHandler
@@ -287,7 +289,9 @@ class FundingByYearChart extends Component {
 FundingByYearChart.propTypes = {
   data: PropTypes.array.isRequired,
   selectedDirectProgram: PropTypes.object.isRequired,
-  translations: PropTypes.array.isRequired
+  translations: PropTypes.array.isRequired,
+  settings: PropTypes.object.isRequired,
+  globalSettings: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({

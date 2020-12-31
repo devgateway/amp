@@ -34,7 +34,7 @@ class TopChart extends Component {
   }
 
   render() {
-    const { data } = this.props;
+    const { data, globalSettings } = this.props;
     const transformedData = data.values.slice(0, 5).map(v => ({
       id: v.id.toString(),
       formattedAmount: v.formattedAmount,
@@ -78,6 +78,7 @@ class TopChart extends Component {
                 total={data.total}
                 id={e.data.id}
                 currencyCode={data.currency}
+                globalSettings={globalSettings}
               />
             )}
             theme={{
@@ -113,5 +114,6 @@ TopChart.contextType = NDDTranslationContext;
 TopChart.propTypes = {
   data: PropTypes.object.isRequired,
   formatter: PropTypes.object.isRequired,
+  globalSettings: PropTypes.object.isRequired
 };
 export default TopChart;

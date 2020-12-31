@@ -8,10 +8,11 @@ export function fetchDashboardSettingsPending() {
   };
 }
 
-export function fetchDashboardSettingsSuccess(payload) {
+export function fetchDashboardSettingsSuccess(payload, payloadGS) {
   return {
     type: FETCH_DASHBOARD_SETTINGS_SUCCESS,
-    payload
+    payload,
+    gs: payloadGS
   };
 }
 

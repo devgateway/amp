@@ -8,7 +8,7 @@ import FundingTypeSelector from './FundingTypeSelector';
 import {
   CHART_COLOR_MAP,
   INDIRECT_PROGRAMS,
-  PROGRAMLVL1, DIRECT, AVAILABLE_COLORS, FUNDING_TYPE
+  PROGRAMLVL1, AVAILABLE_COLORS
 } from '../utils/constants';
 import CustomLegend from '../../../utils/components/CustomLegend';
 import './legends/legends.css';
@@ -20,7 +20,6 @@ import PieChartTypeSelector from './PieChartTypeSelector';
 import { NDDTranslationContext } from './StartUp';
 
 class MainDashboardContainer extends Component {
-
   getProgramLegend() {
     const { ndd } = this.props;
     const { selectedDirectProgram } = this.props;
@@ -61,15 +60,17 @@ class MainDashboardContainer extends Component {
     const { translations } = this.context;
     return topLoaded && !topLoadingPending ? (
       <div>
-        <div className="legend-title row funding-sources-title">
-          <div className="col-md-8">
-            {translations['amp.ndd.dashboard:top-donor-agencies']}
+        <div className="funding-sources-title">
+          <div className="row">
+            <div className="col-md-8">
+              {translations['amp.ndd.dashboard:top-donor-agencies']}
+            </div>
+            <div className="amount col-md-4">
+              {`${top.sumarizedTotal} ${top.currency}`}
+            </div>
           </div>
-          <div className="amount col-md-4">
-            {`${top.sumarizedTotal} ${top.currency}`}
-          </div>
+          <TopChart data={top} />
         </div>
-        <TopChart data={top} />
       </div>
     ) : <div className="loading" />;
   }
@@ -91,8 +92,21 @@ class MainDashboardContainer extends Component {
 
   render() {
     const {
-      error, ndd, nddLoadingPending, nddLoaded, dashboardSettings, onChangeFundingType, fundingType, mapping,
-      onChangeProgram, selectedPrograms, noIndirectMapping, top, settings, selectedDirectProgram, handleOuterChartClick,
+      error,
+      ndd,
+      nddLoadingPending,
+      nddLoaded,
+      dashboardSettings,
+      onChangeFundingType,
+      fundingType,
+      mapping,
+      onChangeProgram,
+      selectedPrograms,
+      noIndirectMapping,
+      top,
+      settings,
+      selectedDirectProgram,
+      handleOuterChartClick,
       globalSettings
     } = this.props;
     const { translations } = this.context;
@@ -167,7 +181,9 @@ class MainDashboardContainer extends Component {
               <div className="legends-container">
                 <div className={`even-${selectedDirectProgram ? 'third' : 'middle'}`}>
                   <div className="legend-title">
-                    {selectedDirectProgram ? selectedDirectProgram.name : 'PNSD'}
+                    {programs.direct
+                      ? (`${programs.direct.value}`)
+                      : 'Loading...'}
                     :
                     <span
                       className="amount">
@@ -184,7 +200,10 @@ class MainDashboardContainer extends Component {
                 && (
                   <div className="even-middle">
                     <div className="legend-title">
-                      New Deal
+                      {programs.direct
+                        ? (`${programs.indirect1.value}`)
+                        : 'Loading...'}
+                      :
                       <span
                         className="amount">
                         {formatter.format(programLegend[1].total)}

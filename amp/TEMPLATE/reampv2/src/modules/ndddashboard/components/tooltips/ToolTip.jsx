@@ -41,7 +41,7 @@ class ToolTip extends Component {
             {percentage > 0 ? (
               <div className="element grey">
                 <span className="of-total">
-                  <b>{`${formatNumberWithSettings(globalSettings, percentage)}% `}</b>
+                  <b>{`${formatNumberWithSettings(translations, globalSettings, percentage, false)}% `}</b>
                   {isYearTotal
                     ? translations['amp.ndd.dashboard:of-year-total']
                     : translations['amp.ndd.dashboard:of-total']}

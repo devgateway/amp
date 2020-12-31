@@ -90,11 +90,21 @@ export function formatKMB(translations, precision, decimalSeparator) {
     .replace('.', decimalSeparator);
 }
 
-export function formatNumber(precision, decimalSeparator, groupSeparator, value) {
+export function formatNumber(translations, value, precision, decimalSeparator, groupSeparator, numberDivider,
+  numberDividerDescriptionKey) {
   const formatString = `${decimalSeparator}.${precision}f`;
-  return format(formatString)(value).replaceAll(',', groupSeparator).replace('.', decimalSeparator);
+  const dividedValue = (numberDivider && numberDividerDescriptionKey) ? value / numberDivider : value;
+  let txtVal = format(formatString)(dividedValue).replaceAll(',', groupSeparator).replace('.', decimalSeparator);
+  if (numberDivider && numberDividerDescriptionKey) {
+    txtVal += ` (${translations[numberDividerDescriptionKey]})`;
+  }
+  return txtVal;
 }
 
-export function formatNumberWithSettings(settings, value) {
-  return formatNumber(settings.precision, settings.decimalSeparator, settings.groupSeparator, value);
+export function formatNumberWithSettings(translations, settings, value, useUnits) {
+  if (useUnits) {
+    return formatNumber(translations, value, settings.precision, settings.decimalSeparator, settings.groupSeparator,
+      settings.numberDivider, settings.numberDividerDescriptionKey);
+  }
+  return formatNumber(translations, value, settings.precision, settings.decimalSeparator, settings.groupSeparator);
 }

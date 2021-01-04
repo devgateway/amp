@@ -26,7 +26,7 @@ class Main extends Component {
       fetchNDD, fetchPrograms, api, fetchLayout
     } = this.props;
     fetchLayout().then((layout) => {
-      if (layout && layout.logged) {
+      if (layout && layout.logged && layout.administratorMode === true) {
         fetchNDD(api.mappingConfig);
         fetchPrograms(api.programs);
       } else {

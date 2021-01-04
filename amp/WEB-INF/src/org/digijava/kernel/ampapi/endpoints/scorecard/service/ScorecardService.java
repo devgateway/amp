@@ -651,8 +651,11 @@ public class ScorecardService {
 
         for (AmpScorecardOrganisation noUpdateDonor : noUpdateDonors) {
             Quarter quarter = new Quarter(fiscalCalendar, noUpdateDonor.getModifyDate());
-            ColoredCell noUpdateCell = data.get(noUpdateDonor.getAmpDonorId()).get(quarter.toString());
-            noUpdateCell.setColor(Colors.GRAY);
+            Map<String, ColoredCell> donorQuarterCellMap = data.get(noUpdateDonor.getAmpDonorId());
+            if (donorQuarterCellMap.containsKey(quarter.toString())) {
+                ColoredCell noUpdateCell = donorQuarterCellMap.get(quarter.toString());
+                noUpdateCell.setColor(Colors.GRAY);
+            }
         }
         return data;
     }

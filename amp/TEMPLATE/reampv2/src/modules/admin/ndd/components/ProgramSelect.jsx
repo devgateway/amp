@@ -21,12 +21,13 @@ class ProgramSelect extends Component {
   drawSelector() {
     const { options, placeholder, selected } = this.props;
     const isValid = (selected && selected.length === 1);
+    const sortedOptions = options ? options.sort((a, b) => a.value.localeCompare(b.value)) : [];
     return (
       <Typeahead
         id="basic-typeahead-single"
         labelKey="value"
         className={!isValid ? 'is-invalid' : ''}
-        options={options || []}
+        options={sortedOptions || []}
         clearButton
         onChange={this.onChangeSelect.bind(this)}
         selected={selected}

@@ -24,9 +24,13 @@ class Header extends Component {
                   {translations[`${trnPrefix}add-new`]}
                   {' '}
                 </span>
-                <span className="insert-data-text">{translations[`${trnPrefix}insert-data`]}</span>
+                <span className="insert-data-text clickable" onClick={onAddRow}>
+                  {translations[`${trnPrefix}insert-data`]}
+                </span>
               </>
             ) : null}
+            <span> / </span>
+            <span className="required-fields">{`* ${translations[`${trnPrefix}required-fields`]}`}</span>
             <span className="float-right button-wrapper">
               <button
                 type="button"

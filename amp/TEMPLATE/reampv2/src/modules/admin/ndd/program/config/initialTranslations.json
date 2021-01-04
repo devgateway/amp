@@ -34,5 +34,6 @@
   "amp.admin.ndd.program:warning_on_change_destination_program": "Warning: The new Destination Program will be removes from all activities.",
   "amp.admin.ndd.program:confirm-change-destination-program": "Are you sure you want to : The new Destination Program will be removes from all activities.",
   "amp.admin.ndd.program:notification-saved-ok": "All mappings saved correctly.",
-  "amp.admin.ndd.program:page-title": "Aid Management Platform - NDD Mappings Manager"
+  "amp.admin.ndd.program:page-title": "Aid Management Platform - NDD Mappings Manager",
+  "amp.admin.ndd.program:required-fields": "Required Fields"
 }

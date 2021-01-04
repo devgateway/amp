@@ -97,3 +97,15 @@
 .margin_2 {
     margin: 2px;
 }
+
+.insert-data-text {
+    color: green;
+}
+
+.add-new-text {
+    padding-left: 5px;
+}
+
+.required-fields {
+    color: red;
+}

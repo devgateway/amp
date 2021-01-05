@@ -29,6 +29,7 @@ import com.google.common.collect.ImmutableMap;
 public class ProgramFilterListManager implements FilterListManager {
     
     public static final String NATIONAL_PLANNING_OBJECTIVES_ITEMS_NAME = "nationalPlanningObjectives";
+    public static final String INDIRECT_PRIMARY_PROGRAM_ITEMS_NAME = "indirectPrimaryPrograms";
     public static final String PRIMARY_PROGRAM_ITEMS_NAME = "primaryPrograms";
     public static final String SECONDARY_PROGRAM_COLUMNS_BY_LEVEL_ITEMS_NAME = "secondaryPrograms";
     public static final String TERTIARY_PROGRAM_COLUMNS_BY_LEVEL_ITEMS_NAME = "tertiaryPrograms";
@@ -39,6 +40,7 @@ public class ProgramFilterListManager implements FilterListManager {
                     .put(ProgramUtil.PRIMARY_PROGRAM, PRIMARY_PROGRAM_ITEMS_NAME)
                     .put(ProgramUtil.SECONDARY_PROGRAM, SECONDARY_PROGRAM_COLUMNS_BY_LEVEL_ITEMS_NAME)
                     .put(ProgramUtil.TERTIARY_PROGRAM, TERTIARY_PROGRAM_COLUMNS_BY_LEVEL_ITEMS_NAME)
+                    .put(ProgramUtil.INDIRECT_PRIMARY_PROGRAM, INDIRECT_PRIMARY_PROGRAM_ITEMS_NAME)
                     .build();
     
     private static ProgramFilterListManager programFilterListManager;
@@ -81,11 +83,13 @@ public class ProgramFilterListManager implements FilterListManager {
     }
 
     protected List<String> getProgramFilterIds(AmpActivityProgramSettings setting) {
-        
-        List<String> filterIds = AmpActivityProgramSettings.NAME_TO_COLUMN_AND_LEVEL.get(setting.getName())
-            .values().stream()
-            .map(col -> FilterUtils.INSTANCE.idFromColumnName(col))
-            .collect(Collectors.toList());
+
+        List<String> filterIds = new ArrayList<>();
+        for (String col : AmpActivityProgramSettings.NAME_TO_COLUMN_AND_LEVEL.get(setting.getName())
+                .values()) {
+            String s = FilterUtils.INSTANCE.idFromColumnName(col);
+            filterIds.add(s);
+        }
 
         return filterIds;
     }
@@ -110,12 +114,12 @@ public class ProgramFilterListManager implements FilterListManager {
     protected List<AmpActivityProgramSettings> getProgramSettings() {
         Set<String> visibleCols = ColumnsVisibility.getVisibleColumns();
         Session session = PersistenceManager.getSession();
-        List<AmpActivityProgramSettings> allSettings = session.createCriteria(AmpActivityProgramSettings.class).list();
+        List<AmpActivityProgramSettings> allSettings = ProgramUtil.getAmpActivityProgramSettingsList(false);
         List<AmpActivityProgramSettings> programSettings = allSettings.stream()
                 .filter(setting -> visibleCols.contains(getColumnName(setting.getName())))
                 .filter(setting -> setting.getDefaultHierarchy() != null)
                 .collect(Collectors.toList());
-        
+
         return programSettings;
     }
     

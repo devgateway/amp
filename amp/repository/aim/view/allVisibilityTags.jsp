@@ -56,6 +56,7 @@
 <feature:display name="Sector Fragmentation" module="/Dashboards"/>
 <feature:display name="Location Fragmentation" module="/Dashboards"/>
 <feature:display name="Program Fragmentation" module="/Dashboards"/>
+<feature:display name="NDD Dashboard" module="/Dashboards"/>
 
 <module:display name="HELP"></module:display> 
 <module:display name="Issues" parentModule="PROJECT MANAGEMENT"></module:display> 
@@ -107,6 +108,7 @@
 <module:display name="Structure Types Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Aid Effectiveness Indicators Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Indicator Layer Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
+<module:display name="NDD Mappings Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 
 <module:display name="Aid Effectiveness" parentModule="PROJECT MANAGEMENT"></module:display>
 
@@ -324,7 +326,14 @@
 <field:display feature="Funding Information" name="Effective Funding Date"></field:display>
 <field:display feature="Funding Information" name="Funding Closing Date"></field:display>
 <field:display feature="Funding Information" name="Concessionality Level"></field:display>
-<field:display feature="Government Contact Information" name="Government Email"></field:display> 
+<field:display feature="Funding Information" name="Project Results Available"></field:display>
+<field:display feature="Funding Information" name="Vulnerable Group"></field:display>
+<field:display feature="Funding Information" name="Project Results Link"></field:display>
+<field:display feature="Funding Information" name="Project Joint Decision"></field:display>
+<field:display feature="Funding Information" name="Project Monitoring"></field:display>
+<field:display feature="Funding Information" name="Project Sustainability"></field:display>
+<field:display feature="Funding Information" name="Project Problems"></field:display>
+<field:display feature="Government Contact Information" name="Government Email"></field:display>
 <field:display feature="Government Contact Information" name="Government First Name"></field:display> 
 <field:display feature="Identification" name="AMP ID"></field:display> 
 <field:display feature="Identification" name="Data Source"></field:display> 
@@ -345,7 +354,9 @@
 <field:display feature="Identification" name="Only show projects related to pledges"></field:display>
 <field:display feature="Identification" name="Purpose"></field:display> 
 <field:display feature="Identification" name="Results"></field:display> 
-<field:display feature="Issues" name="Issue Date"></field:display> 
+<field:display feature="Identification" name="Multi Stakeholder Partners"></field:display>
+<field:display feature="Identification" name="Multi Stakeholder Partnership"></field:display>
+<field:display feature="Issues" name="Issue Date"></field:display>
 <field:display feature="Issues" name="Measures Taken"></field:display> 
 <field:display feature="MTEF Projections" name="MTEFProjections"></field:display> 
 <field:display feature="Planning" name="Line Ministry Rank"></field:display> 
@@ -631,6 +642,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Donor Group" feature="Funding Information"></field:display>
 <field:display name="Donor Type" feature="Funding Information"></field:display>
 <field:display name="Donor Budget Code" feature="Funding Information"></field:display>
+<field:display name="Donor Country" feature="Funding Information"></field:display>
 <field:display name="Donor Last Name" feature="Donor Contact Information"></field:display> 
 <field:display name="Donor Objective" feature="Funding Information"></field:display> 
 <field:display name="Donor Organization" feature="Donor Contact Information"></field:display> 
@@ -746,6 +758,15 @@ deleted 6 fields, do not reinsert
 <field:display name="Primary Program Level 6" feature="NPD Programs"></field:display> 
 <field:display name="Primary Program Level 7" feature="NPD Programs"></field:display> 
 <field:display name="Primary Program Level 8" feature="NPD Programs"></field:display> 
+
+<field:display name="Indirect Primary Program Level 1" feature="NPD Programs"></field:display>
+<field:display name="Indirect Primary Program Level 2" feature="NPD Programs"></field:display>
+<field:display name="Indirect Primary Program Level 3" feature="NPD Programs"></field:display>
+<field:display name="Indirect Primary Program Level 4" feature="NPD Programs"></field:display>
+<field:display name="Indirect Primary Program Level 5" feature="NPD Programs"></field:display>
+<field:display name="Indirect Primary Program Level 6" feature="NPD Programs"></field:display>
+<field:display name="Indirect Primary Program Level 7" feature="NPD Programs"></field:display>
+<field:display name="Indirect Primary Program Level 8" feature="NPD Programs"></field:display>
 
 <field:display name="Secondary Program Level 1" feature="NPD Programs"></field:display> 
 <field:display name="Secondary Program Level 2" feature="NPD Programs"></field:display> 
@@ -936,7 +957,9 @@ deleted 6 fields, do not reinsert
 <field:display name="Total Funding Disbursements of Contract" feature="Contracting"></field:display> 
 <field:display name="Total Ordered" feature="Disbursement Orders"></field:display> 
 <field:display name="Total Private Contribution" feature="Contracting"></field:display> 
-<field:display name="Type Of Assistance" feature="Funding Information"></field:display> 
+<field:display name="Type Of Assistance" feature="Funding Information"></field:display>
+<field:display name="SSC Modalities" feature="Funding Information"></field:display>
+<field:display name="Modalities" feature="Funding Information"></field:display>
 <field:display name="Type" feature="Admin - Component"></field:display> 
 <field:display name="Uncommitted Cumulative Balance" feature="Funding Information"></field:display> 
 <field:display name="Undisbursed Cumulative Balance" feature="Funding Information"></field:display> 
@@ -991,6 +1014,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Beneficiary Agency Groups" feature="Beneficiary Agency"></field:display> 
 <field:display name="Beneficiary Agency  Department/Division"  feature="Beneficiary Agency"></field:display>
 <field:display name="Beneficiary Agency Type" feature="Beneficiary Agency"></field:display>
+<field:display name="Beneficiary Agency Country" feature="Beneficiary Agency"></field:display>
 <field:display name="Contracting Agency Department/Division"  feature="Contracting Agency"></field:display>
 <field:display name="Contracting Agency Groups" feature="Contracting Agency"></field:display>
 <field:display name="Contracting Agency Acronym"  feature="Contracting Agency"></field:display>
@@ -998,6 +1022,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Executing Agency Groups" feature="Executing Agency"></field:display>
 <field:display name="Executing Agency Type" feature="Executing Agency"></field:display>
 <field:display name="Executing Agency Department/Division" feature="Executing Agency"></field:display>
+<field:display name="Executing Agency Country" feature="Executing Agency"></field:display>
 <field:display name="Implementing Agency Groups" feature="Implementing Agency"></field:display>
 <field:display name="Implementing Agency Type" feature="Implementing Agency"></field:display>  
 <field:display name="Implementing Agency Department/Division"  feature="Implementing Agency"></field:display> 

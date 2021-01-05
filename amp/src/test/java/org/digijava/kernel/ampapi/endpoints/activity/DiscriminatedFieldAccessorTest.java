@@ -1,5 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils.WORKSPACE_PREFIX;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -15,6 +16,8 @@ import java.util.List;
 import java.util.Set;
 
 import com.google.common.collect.ImmutableList;
+import org.dgfoundation.amp.testutils.TransactionUtil;
+import org.digijava.kernel.request.TLSUtils;
 import org.hamcrest.Matcher;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -56,6 +59,9 @@ public class DiscriminatedFieldAccessorTest {
 
     @BeforeClass
     public static void setUp() throws Exception {
+        TransactionUtil.setUpWorkspaceEmptyPrefixes();
+        TLSUtils.getRequest().setAttribute(WORKSPACE_PREFIX, "");
+        
         attributes = Obj.class.getDeclaredField("attributes");
         categories = Obj.class.getDeclaredField("categories");
     }

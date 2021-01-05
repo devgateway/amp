@@ -50,7 +50,12 @@
         <property name="gracePeriod" column="grace_period" type="java.lang.Integer" />
         <property name="interestRate" column="interest_rate" type="java.lang.Float" />
         <property name="maturity" column="maturity" type="java.util.Date" />
-		
+		<property name="projectResultsAvailable" column="project_results_available" type="java.lang.Boolean" />
+		<property name="projectResultsLink" column="project_results_link" type="java.lang.String" />
+		<property name="projectJointDecision" column="project_joint_decision" type="java.lang.String" />
+		<property name="projectMonitoring" column="project_monitoring" type="java.lang.String" />
+		<property name="projectSustainability" column="project_sustainability" type="java.lang.String" />
+		<property name="projectProblems" column="project_problems" type="java.lang.String" />
 
 		<many-to-one name="ampDonorOrgId" column="amp_donor_org_id"
 			class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" />
@@ -78,6 +83,8 @@
 			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 		<many-to-one name="concessionalityLevel" column="concessionality_level_va"
 			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
+		<many-to-one name="vulnerableGroup" column="vulnerable_group_va"
+					 class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 		<!--
 			<set name="survey" cascade="save-update" table="amp_ahsurvey" inverse="true">
 			<cache usage="read-write"/>

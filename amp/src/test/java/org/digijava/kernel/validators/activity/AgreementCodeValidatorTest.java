@@ -8,7 +8,7 @@ import static org.junit.Assert.*;
 
 import java.util.Set;
 
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
+import org.dgfoundation.amp.testutils.TransactionUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.validation.ConstraintViolation;
@@ -27,6 +27,7 @@ public class AgreementCodeValidatorTest {
 
     @BeforeClass
     public static void setUp() {
+        TransactionUtil.setUpWorkspaceEmptyPrefixes();
         agreementField = ValidatorUtil.getMetaData(AmpAgreement.class);
     }
 

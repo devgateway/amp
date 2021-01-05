@@ -1,0 +1,34 @@
+.country-popup-wrapper .simple-popup {
+    background-color: #273142;
+    border-radius: 5px;
+    color: #ffffff;
+    /*margin-right: 10px;*/
+    padding: 20px;
+    margin: auto;
+    position: absolute;
+    left: 30%;
+    top: 40%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+.simple-popup .x-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 4px 4px 0 0;
+    border: none;
+    text-align: center;
+    width: 18px;
+    height: 14px;
+    font: 16px/14px Tahoma, Verdana, sans-serif;
+    color: #c3c3c3;
+    text-decoration: none;
+    font-weight: bold;
+    background: transparent;
+    cursor: pointer;
+}
+
+.country-popup-wrapper .simple-popup:last-of-type {
+    margin-right: 0;
+}

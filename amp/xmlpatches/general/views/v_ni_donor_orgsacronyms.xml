@@ -15,7 +15,7 @@
 			</script>
  			<test>val.equalsIgnoreCase("true")</test>
 		</condition>
-	</trigger> 
+	</trigger>
 	<apply>
 		<script> <!-- v_donors: all donors which are mentioned in amp_funding with:
 		  - a src-role of DN 
@@ -23,6 +23,7 @@
 		  - containing amp_funding_details with an adjustment_type::category_class:key of "SSC_adjustment_type"   
 		   -->
 			<lang delimiter=";" type="postgres"><![CDATA[
+				DROP VIEW IF EXISTS v_ni_donor_orgsacronyms;
 				CREATE OR REPLACE VIEW v_ni_donor_orgsacronyms AS
 				  SELECT d.amp_activity_id, orgs.org_acronym AS org_acronym, orgs.org_id AS org_id,
 					d.terms_assist_id,
@@ -31,7 +32,10 @@
 					d.mode_of_payment_id,
 					d.funding_status_id,
 					d.agreement_id,
-					d.funding_id
+					d.funding_id,
+					d.vulnerable_group_id,
+					d.project_results_available_id,
+					d.donor_org_country_id
 				  FROM v_ni_donor_orgs d JOIN ni_all_orgs_dimension orgs ON orgs.org_id = d.org_id;
 			]]></lang>
 		</script>

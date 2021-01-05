@@ -64,6 +64,7 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.BENEFICIARY_AGENCY, ColumnConstants.BENEFICIARY_AGENCY);
         mapSimpleColumn(FiltersConstants.BENEFICIARY_AGENCY_GROUP, ColumnConstants.BENEFICIARY_AGENCY_GROUPS);
         mapSimpleColumn(FiltersConstants.BENEFICIARY_AGENCY_TYPE, ColumnConstants.BENEFICIARY_AGENCY_TYPE);
+        mapSimpleColumn(FiltersConstants.BENEFICIARY_AGENCY_COUNTRY, ColumnConstants.BENEFICIARY_AGENCY_COUNTRY);
         mapSimpleColumn(FiltersConstants.ADMINISTRATIVE_LEVEL_4, ColumnConstants.LOCATION_ADM_LEVEL_4);
         mapSimpleColumn(FiltersConstants.COMPONENT_FUNDING_ORGANIZATION,
                 ColumnConstants.COMPONENT_FUNDING_ORGANIZATION);
@@ -80,9 +81,11 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.DONOR_AGENCY, ColumnConstants.DONOR_AGENCY);
         mapSimpleColumn(FiltersConstants.DONOR_GROUP, ColumnConstants.DONOR_GROUP);
         mapSimpleColumn(FiltersConstants.DONOR_TYPE, ColumnConstants.DONOR_TYPE);
+        mapSimpleColumn(FiltersConstants.DONOR_AGENCY_COUNTRY, ColumnConstants.DONOR_COUNTRY);
         mapSimpleColumn(FiltersConstants.EXECUTING_AGENCY, ColumnConstants.EXECUTING_AGENCY);
         mapSimpleColumn(FiltersConstants.EXECUTING_AGENCY_GROUP, ColumnConstants.EXECUTING_AGENCY_GROUPS);
         mapSimpleColumn(FiltersConstants.EXECUTING_AGENCY_TYPE, ColumnConstants.EXECUTING_AGENCY_TYPE);
+        mapSimpleColumn(FiltersConstants.EXECUTING_AGENCY_COUNTRY, ColumnConstants.EXECUTING_AGENCY_COUNTRY);
         mapSimpleColumn(FiltersConstants.EXPENDITURE_CLASS, ColumnConstants.EXPENDITURE_CLASS);
         mapSimpleColumn(FiltersConstants.FINANCING_INSTRUMENT, ColumnConstants.FINANCING_INSTRUMENT);
         mapSimpleColumn(FiltersConstants.FUNDING_STATUS, ColumnConstants.FUNDING_STATUS);
@@ -198,6 +201,26 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.PRIMARY_PROGRAM_LEVEL_6, ColumnConstants.PRIMARY_PROGRAM_LEVEL_6);
         mapSimpleColumn(FiltersConstants.PRIMARY_PROGRAM_LEVEL_7, ColumnConstants.PRIMARY_PROGRAM_LEVEL_7);
         mapSimpleColumn(FiltersConstants.PRIMARY_PROGRAM_LEVEL_8, ColumnConstants.PRIMARY_PROGRAM_LEVEL_8);
+
+        mapSimpleColumn(FiltersConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_0,
+                ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_0);
+        mapSimpleColumn(FiltersConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_1,
+                ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_1);
+        mapSimpleColumn(FiltersConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_2,
+                ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_2);
+        mapSimpleColumn(FiltersConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_3,
+                ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_3);
+        mapSimpleColumn(FiltersConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_4,
+                ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_4);
+        mapSimpleColumn(FiltersConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_5,
+                ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_5);
+        mapSimpleColumn(FiltersConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_6,
+                ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_6);
+        mapSimpleColumn(FiltersConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_7,
+                ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_7);
+        mapSimpleColumn(FiltersConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_8,
+                ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_8);
+
         mapSimpleColumn(FiltersConstants.PRIMARY_SECTOR, ColumnConstants.PRIMARY_SECTOR);
         mapSimpleColumn(FiltersConstants.PRIMARY_SECTOR_SUB_SECTOR, ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR);
         mapSimpleColumn(FiltersConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR, ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR);

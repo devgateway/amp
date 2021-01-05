@@ -1,7 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.config;
 
-import static javax.servlet.http.HttpServletResponse.SC_OK;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,8 +17,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import org.digijava.kernel.ampapi.endpoints.AmpEndpoint;
 import org.digijava.kernel.ampapi.endpoints.config.utils.ConfigHelper;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;

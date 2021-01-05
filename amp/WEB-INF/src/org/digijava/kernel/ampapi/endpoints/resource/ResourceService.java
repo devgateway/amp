@@ -65,6 +65,7 @@ public class ResourceService {
         } catch (RepositoryException e) {
             return new JsonApiResponse(ApiError.toError(ResourceErrors.RESOURCE_ERROR));
         }
+
         boolean isMultilingual = ContentTranslationUtil.multilingualIsEnabled();
 
         NodeWrapper nodeWrapper = new NodeWrapper(readNode);

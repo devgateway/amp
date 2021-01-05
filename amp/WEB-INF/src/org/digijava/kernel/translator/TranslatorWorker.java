@@ -261,7 +261,8 @@ public class TranslatorWorker {
     }
 
     private static boolean isOriginalMsgKeyIncorrect(Message message) {
-        return !TranslatorWorker.generateTrnKey(message.getOriginalMessage()).equals(message.getKey());
+        return (!TranslatorWorker.generateTrnKey(message.getOriginalMessage()).equals(message.getKey())
+                && !TranslatorWorker.generateTrnKey(message.getOriginalMessage(), true).equals(message.getKey()));
     }
 
     private static boolean isAmpOfflineMessage(Message message) {
@@ -451,8 +452,14 @@ public class TranslatorWorker {
     }
 
     public Message getByBody(String originalText, String keyWords, String local, Long siteId) {
-        String hashCode = generateTrnKey(originalText);
-        return getByKey(hashCode,originalText, keyWords,local,siteId);
+        // try first using prefix.
+        String hashCode = generateTrnKey(originalText, true);
+        Message msg = getByKey(hashCode, originalText, keyWords, local, siteId);
+        if (msg == null) {
+            hashCode = generateTrnKey(originalText);
+            msg = getByKey(hashCode, originalText, keyWords, local, siteId);
+        }
+        return msg;
     }
     
     public Message getByKey(String key, String locale, Long siteId) {
@@ -564,6 +571,14 @@ public class TranslatorWorker {
             logger.l7dlog(Level.ERROR, errKey, params, he);
             throw new WorkerException(he.getMessage(), he);
         }
+    }
+
+    public static List<String> getAllPrefixes() {
+        String query = "select distinct message.prefix from org.digijava.kernel.entity.Message "
+                + "where message.prefix is not null";
+        Session session = PersistenceManager.getSession();
+        Query q = session.createQuery(query);
+        return (List<String>) q.list();
     }
 
     private Map<String, Message> getMessagesForCriteria(
@@ -1067,9 +1082,12 @@ public class TranslatorWorker {
      * @return key for translation, actually it is hash code of the text.
      */
     public static String generateTrnKey(String text) {
+        return generateTrnKey(text, false);
+    }
 
+    public static String generateTrnKey(String text, boolean usePrefix) {
         if (text != null) {
-            String trnPrefix = TrnUtil.getTrnPrefix();
+            String trnPrefix = usePrefix ? TrnUtil.getTrnPrefix() : "";
             return Integer.toString(((trnPrefix != null ? trnPrefix : "") + text).trim().toLowerCase().hashCode());
         } else {
             return "";

@@ -49,7 +49,7 @@ public class MenuVisibility extends RuleBasedVisibility {
     }
     
     @Override
-    public synchronized Set<String> getEnabledSettings() {
+    public synchronized Set<String> getEnabledSettings(Long templateId) {
         if (atomicVisibilityChanged.get()) {
             visibleDataPerView = new TreeMap<AmpView, Set<String>>();
         }
@@ -59,7 +59,7 @@ public class MenuVisibility extends RuleBasedVisibility {
         if (visibleData == null) {
             logger.error("visibleData for MenuVisibility is null!");
             // rebuild visibleData for the current view or use cached on from visibleDataPerView 
-            super.getEnabledSettings();
+            super.getEnabledSettings(templateId);
             // keep only the 1st FM option for priority lists
             selectFirstPriorityOnly();
         }

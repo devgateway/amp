@@ -44,6 +44,7 @@ public class FiltersConstants {
     public static final String BENEFICIARY_AGENCY = "beneficiary-agency";
     public static final String BENEFICIARY_AGENCY_GROUP = "beneficiary-agency-group";
     public static final String BENEFICIARY_AGENCY_TYPE = "beneficiary-agency-type";
+    public static final String BENEFICIARY_AGENCY_COUNTRY = "beneficiary-agency-country";
     public static final String COMPONENT_FUNDING_ORGANIZATION = "component-funding-organization";
     public static final String COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION = "component-second-responsible-organization";
     public static final String COMPUTED_YEAR = "computed-year";
@@ -60,9 +61,11 @@ public class FiltersConstants {
     public static final String DONOR_AGENCY = "donor-agency";
     public static final String DONOR_GROUP = "donor-group";
     public static final String DONOR_TYPE = "donor-type";
+    public static final String DONOR_AGENCY_COUNTRY = "donor-agency-country";
     public static final String EXECUTING_AGENCY = "executing-agency";
     public static final String EXECUTING_AGENCY_GROUP = "executing-agency-group";
     public static final String EXECUTING_AGENCY_TYPE = "executing-agency-type";
+    public static final String EXECUTING_AGENCY_COUNTRY = "executing-agency-country";
     public static final String EXPENDITURE_CLASS = "expenditure-class";
     public static final String FINANCING_INSTRUMENT = "financing-instrument";
     public static final String FUNDING_STATUS = "funding-status";
@@ -75,6 +78,7 @@ public class FiltersConstants {
     public static final String LOCATION = "location";
     public static final String RAW_LOCATION = "raw-location";
     public static final String MODE_OF_PAYMENT = "mode-of-payment";
+    public static final String MODALITIES = "modalities";
     public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_0 = "national-planning-objectives-level-0";
     public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_1 = "national-planning-objectives-level-1";
     public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_2 = "national-planning-objectives-level-2";
@@ -145,6 +149,17 @@ public class FiltersConstants {
     public static final String PRIMARY_PROGRAM_LEVEL_6 = "primary-program-level-6";
     public static final String PRIMARY_PROGRAM_LEVEL_7 = "primary-program-level-7";
     public static final String PRIMARY_PROGRAM_LEVEL_8 = "primary-program-level-8";
+    public static final String INDIRECT_PRIMARY_PROGRAM_LEVEL = "primary-program-level";
+
+    public static final String INDIRECT_PRIMARY_PROGRAM_LEVEL_0 = INDIRECT_PRIMARY_PROGRAM_LEVEL + "-0";
+    public static final String INDIRECT_PRIMARY_PROGRAM_LEVEL_1 = INDIRECT_PRIMARY_PROGRAM_LEVEL + "-1";
+    public static final String INDIRECT_PRIMARY_PROGRAM_LEVEL_2 = INDIRECT_PRIMARY_PROGRAM_LEVEL + "-2";
+    public static final String INDIRECT_PRIMARY_PROGRAM_LEVEL_3 = INDIRECT_PRIMARY_PROGRAM_LEVEL + "-3";
+    public static final String INDIRECT_PRIMARY_PROGRAM_LEVEL_4 = INDIRECT_PRIMARY_PROGRAM_LEVEL + "-4";
+    public static final String INDIRECT_PRIMARY_PROGRAM_LEVEL_5 = INDIRECT_PRIMARY_PROGRAM_LEVEL + "-5";
+    public static final String INDIRECT_PRIMARY_PROGRAM_LEVEL_6 = INDIRECT_PRIMARY_PROGRAM_LEVEL + "-6";
+    public static final String INDIRECT_PRIMARY_PROGRAM_LEVEL_7 = INDIRECT_PRIMARY_PROGRAM_LEVEL + "-7";
+    public static final String INDIRECT_PRIMARY_PROGRAM_LEVEL_8 = INDIRECT_PRIMARY_PROGRAM_LEVEL + "-8";
     public static final String PRIMARY_SECTOR = "primary-sector";
     public static final String PRIMARY_SECTOR_SUB_SECTOR = "primary-sector-sub-sector";
     public static final String PRIMARY_SECTOR_SUB_SUB_SECTOR = "primary-sector-sub-sub-sector";

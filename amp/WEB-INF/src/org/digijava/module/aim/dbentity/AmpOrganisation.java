@@ -116,7 +116,7 @@ public class AmpOrganisation implements Comparable<AmpOrganisation>, Identifiabl
     private String  lineMinRegNumber;
     
     private boolean translateable   = true;
-    
+
     @OrganizationReportColumn(columnName="Line Ministry Registration Number",propertyType=PropertyType.NGO)
     public String getLineMinRegNumber() {
         return lineMinRegNumber;

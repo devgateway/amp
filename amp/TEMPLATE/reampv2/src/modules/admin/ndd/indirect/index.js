@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import { applyMiddleware, compose, createStore } from 'redux';
+import {
+  applyMiddleware, bindActionCreators, compose, createStore
+} from 'redux';
 import thunk from 'redux-thunk';
-import { Provider } from 'react-redux';
+import { connect, Provider } from 'react-redux';
 
-import Nav from 'react-bootstrap/Nav';
 import Main from '../components/Main';
 import rootReducer from '../reducers/rootReducer';
 import defaultTrnPack from './config/initialTranslations.json';
-import Startup from '../components/Startup';
+import Startup, { NDDContext } from '../components/Startup';
 
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -27,9 +28,11 @@ class AdminNDDIndirectProgramApp extends Component {
   }
 
   render() {
+    const { translations } = this.context;
     return (
       <Provider store={this.store}>
         <Startup defaultTrnPack={defaultTrnPack} >
+          <h2 className="title">{translations[`${TRN_PREFIX}title`]}</h2>
           <Main api={API} trnPrefix={TRN_PREFIX} isIndirect />
         </Startup>
       </Provider>
@@ -37,4 +40,10 @@ class AdminNDDIndirectProgramApp extends Component {
   }
 }
 
-export default AdminNDDIndirectProgramApp;
+AdminNDDIndirectProgramApp.contextType = NDDContext;
+
+const mapStateToProps = state => ({
+  translations: state.translationsReducer.translations
+});
+const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+export default connect(mapStateToProps, mapDispatchToProps)(AdminNDDIndirectProgramApp);

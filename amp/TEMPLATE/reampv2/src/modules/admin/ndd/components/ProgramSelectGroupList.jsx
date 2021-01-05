@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 import { NDDContext } from './Startup';
 import './css/style.css';
 import ProgramSelectGroupRow from './ProgramSelectGroupRow';
+import RequiredMark from './common/RequiredMark';
+import HelpTooltip from './common/HelpTooltip';
 
 class ProgramSelectGroupList extends Component {
   render() {
@@ -17,20 +19,16 @@ class ProgramSelectGroupList extends Component {
         <table className="table table-striped">
           <thead>
             <tr>
-              <td>
-                <span data-field="srcProgramSelectGroup">
-                  <span className="error-color">*&nbsp;</span>
-                  {translations[`${trnPrefix}src-programs-title`]}
-&nbsp;
-                </span>
-              </td>
-              <td>
-                <span data-field="dstProgramSelectGroup">
-                  <span className="error-color">*&nbsp;</span>
-                  {translations[`${trnPrefix}dst-programs-title`]}
-&nbsp;
-                </span>
-              </td>
+              <th>
+                <HelpTooltip labelKey="tooltip-direct-programs-list" />
+                <span data-field="srcProgramSelectGroup">{translations[`${trnPrefix}src-programs-title`]}</span>
+                <RequiredMark />
+              </th>
+              <th>
+                <HelpTooltip labelKey="tooltip-direct-programs-list" />
+                <span data-field="dstProgramSelectGroup">{translations[`${trnPrefix}dst-programs-title`]}</span>
+                <RequiredMark />
+              </th>
               <td className="actions-column">{translations[`${trnPrefix}actions`]}</td>
             </tr>
           </thead>
@@ -58,7 +56,8 @@ ProgramSelectGroupList.propTypes = {
   onChange: PropTypes.func.isRequired,
   remove: PropTypes.func.isRequired,
   src: PropTypes.object,
-  dst: PropTypes.object
+  dst: PropTypes.object,
+  translations: PropTypes.array.isRequired
 };
 
 const mapStateToProps = state => ({

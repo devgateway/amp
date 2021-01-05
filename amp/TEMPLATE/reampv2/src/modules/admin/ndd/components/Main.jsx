@@ -56,7 +56,6 @@ class Main extends Component {
           }}>
             <div className="col-md-12">
               <div>
-                <h2 className="title">{translations[`${trnPrefix}title`]}</h2>
                 <FormPrograms />
               </div>
             </div>

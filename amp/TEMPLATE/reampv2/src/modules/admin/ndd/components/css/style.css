@@ -1,3 +1,16 @@
+body {
+    background-color: white;
+}
+
+th {
+    color: grey;
+    font-weight: normal;
+}
+
+#main-container {
+    background-color: white;
+}
+
 .dropdown-item {
     display: block;
     width: 100%;
@@ -122,7 +135,8 @@
 
 .nav-link {
     display: block;
-    padding: .5rem 1rem
+    padding: .5rem 1rem;
+    background-color: #dee2e6;
 }
 
 .nav-link:focus, .nav-link:hover {
@@ -136,11 +150,11 @@
 }
 
 .nav-tabs {
-    border-bottom: 1px solid #dee2e6
+    border-bottom: none;
 }
 
 .nav-tabs .nav-item {
-    margin-bottom: -1px
+    margin-bottom: -2px
 }
 
 .nav-tabs .nav-link {
@@ -160,7 +174,7 @@
 }
 
 .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
-    color: #495057;
+    color: black;
     background-color: #fff;
     border-color: #dee2e6 #dee2e6 #fff
 }
@@ -182,4 +196,23 @@
 
 .tooltip {
     opacity: 1;
+}
+
+.tab-content {
+    border: 1px solid #dee2e6;
+    display: grid;
+}
+
+.tab-pane {
+    margin-bottom: 20px;
+}
+
+.loading {
+    margin: 25px;
+    font-size: 2em;
+    color: #6c757d;
+}
+
+.actions-column {
+    width: 5%;
 }

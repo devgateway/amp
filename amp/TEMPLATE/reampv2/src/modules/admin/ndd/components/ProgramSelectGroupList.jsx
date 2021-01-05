@@ -19,16 +19,16 @@ class ProgramSelectGroupList extends Component {
         <table className="table table-striped">
           <thead>
             <tr>
-              <td>
+              <th>
                 <HelpTooltip labelKey="tooltip-direct-programs-list" />
                 <span data-field="srcProgramSelectGroup">{translations[`${trnPrefix}src-programs-title`]}</span>
                 <RequiredMark />
-              </td>
-              <td>
+              </th>
+              <th>
                 <HelpTooltip labelKey="tooltip-direct-programs-list" />
                 <span data-field="dstProgramSelectGroup">{translations[`${trnPrefix}dst-programs-title`]}</span>
                 <RequiredMark />
-              </td>
+              </th>
               <td className="actions-column">{translations[`${trnPrefix}actions`]}</td>
             </tr>
           </thead>

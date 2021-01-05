@@ -47,7 +47,7 @@ class Main extends Component {
     const { translations } = this.context;
 
     if (!this.shouldComponentRender() || ndd.length === 0) {
-      return <div>loading...</div>;
+      return <div className="loading">{translations[`${trnPrefix}loading`]}</div>;
     } else {
       return (
         <div className="ndd-container">

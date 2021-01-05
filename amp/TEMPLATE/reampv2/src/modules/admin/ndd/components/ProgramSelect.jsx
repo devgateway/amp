@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import { NDDContext } from './Startup';
 import './css/Typeahead.css';
 import './css/style.css';
+import RequiredMark from './common/RequiredMark';
 
 class ProgramSelect extends Component {
   constructor(props) {
@@ -40,6 +41,7 @@ class ProgramSelect extends Component {
     return (
       <div>
         <span>{label}</span>
+        <RequiredMark />
         {this.drawSelector()}
       </div>
     );

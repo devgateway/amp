@@ -3,7 +3,6 @@ import { applyMiddleware, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 
-import Nav from 'react-bootstrap/Nav';
 import Main from '../components/Main';
 import rootReducer from '../reducers/rootReducer';
 import defaultTrnPack from './config/initialTranslations.json';

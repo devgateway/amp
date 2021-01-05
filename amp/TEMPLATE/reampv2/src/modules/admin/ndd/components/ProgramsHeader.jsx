@@ -6,6 +6,7 @@ import { NDDContext } from './Startup';
 import './css/style.css';
 import { TYPE_SRC, TYPE_DST } from '../constants/Constants';
 import ProgramSelect from './ProgramSelect';
+import HelpTooltip from './common/HelpTooltip';
 
 class ProgramsHeader extends Component {
   render() {
@@ -19,6 +20,7 @@ class ProgramsHeader extends Component {
           <tbody>
             <tr>
               <td>
+                <HelpTooltip labelKey="tooltip-direct-programs" />
                 <ProgramSelect
                   placeholder={translations[`${trnPrefix}choose_main_src_program`]}
                   label={translations[`${trnPrefix}src-program-lvl-1`]}
@@ -28,6 +30,7 @@ class ProgramsHeader extends Component {
                   level={0} />
               </td>
               <td>
+                <HelpTooltip labelKey="tooltip-indirect-programs" />
                 <ProgramSelect
                   placeholder={translations[`${trnPrefix}choose_main_dst_program`]}
                   label={translations[`${trnPrefix}dst-program-lvl-1`]}

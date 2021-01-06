@@ -1,12 +1,9 @@
 import React, {Component} from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import Alert from "react-bootstrap/Alert";
 import {TranslationContext} from "../../../AppContext";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
-import AlertError from "../AlertError";
-import {Loading} from "../../../../../../utils/components/Loading";
 import {runSearch} from "../../../../actions/geocodingAction";
 
 class RunSearchButton extends Component {

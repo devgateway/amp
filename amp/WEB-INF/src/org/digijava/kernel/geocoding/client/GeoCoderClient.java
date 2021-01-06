@@ -1,10 +1,9 @@
 package org.digijava.kernel.geocoding.client;
 
-import static java.util.stream.Collectors.toList;
-
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -22,7 +21,6 @@ import com.sun.jersey.api.client.UniformInterfaceException;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
@@ -105,7 +103,7 @@ public class GeoCoderClient {
                     .accept(MediaType.APPLICATION_JSON_TYPE)
                     .get(new GenericType<GeoCodingOperation>() { });
 
-            if (operation.state.equals("PENDING")) {
+            if (operation.state.equals("PENDING") || operation.state.equals("PROCESSING")) {
                 throw new GeoCodingNotProcessedException();
             }
 
@@ -175,8 +173,10 @@ public class GeoCoderClient {
         @JsonProperty("text")
         private String value;
 
-        @JsonProperty("amp_location_id")
-        private Set<Long> acvlIds;
+        @JsonProperty("location")
+        private GeoCodingLocation location;
+
+        private Set<Long> acvlIds = new HashSet<>();
 
         public String getField() {
             return field;
@@ -194,44 +194,102 @@ public class GeoCoderClient {
             this.value = value;
         }
 
+        public GeoCodingLocation getLocation() {
+            return location;
+        }
+
+        public void setLocation(final GeoCodingLocation location) {
+            this.location = location;
+        }
+
+        public void setAcvlIds(final Set<Long> acvlIds) {
+            this.acvlIds = acvlIds;
+        }
+
         public Set<Long> getAcvlIds() {
             return acvlIds;
         }
-
-        public void setAcvlIds(Set<Long> acvlIds) {
-            this.acvlIds = acvlIds;
-        }
     }
 
-    public void sendLocations(List<AmpCategoryValueLocations> acvLocations) {
-        List<Map<?, ?>> locations = acvLocations.stream()
-                .map(this::toGeoCoderLocation)
-                .collect(toList());
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class GeoCodingLocation {
 
-        client.resource(UriBuilder.fromUri(getBaseUrl()).path(PATH_AMP_LOCATIONS).build())
-                .type(MediaType.APPLICATION_JSON_TYPE)
-                .put(locations);
-    }
+        @JsonProperty("id")
+        private Long id;
 
-    private Map<?, ?> toGeoCoderLocation(AmpCategoryValueLocations acvl) {
-        Map<Object, Object> loc = new HashMap<>();
+        @JsonProperty("name")
+        private String name;
 
-        loc.put("amp_location_id", acvl.getId());
-        loc.put("name", acvl.getName());
+        @JsonProperty("geoname_id")
+        private Long geoCode;
 
-        int lvl = 0;
-        AmpCategoryValueLocations i = acvl;
-        while (i.getParentLocation() != null) {
-            i = i.getParentLocation();
-            lvl++;
+        @JsonProperty("lat")
+        private Double lat;
+
+        @JsonProperty("long")
+        private Double lng;
+
+        @JsonProperty("fcode")
+        private String levelCode;
+
+        public Long getId() {
+            return id;
         }
-        loc.put("admin_level_code", "ADM" + lvl);
 
-        loc.put("description", acvl.getDescription());
-        loc.put("geo_code", acvl.getGeoCode());
-        loc.put("gs_lat", acvl.getGsLat() != null ? Double.parseDouble(acvl.getGsLat()) : null);
-        loc.put("gs_long", acvl.getGsLong() != null ? Double.parseDouble(acvl.getGsLong()) : null);
+        public void setId(Long id) {
+            this.id = id;
+        }
 
-        return loc;
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public Long getGeoCode() {
+            return geoCode;
+        }
+
+        public void setGeoCode(Long geoCode) {
+            this.geoCode = geoCode;
+        }
+
+        public Double getLat() {
+            return lat;
+        }
+
+        public void setLat(Double lat) {
+            this.lat = lat;
+        }
+
+        public Double getLng() {
+            return lng;
+        }
+
+        public void setLng(Double lng) {
+            this.lng = lng;
+        }
+
+        public String getLevelCode() {
+            return levelCode;
+        }
+
+        public void setLevelCode(String levelCode) {
+            this.levelCode = levelCode;
+        }
+
+        @Override
+        public String toString() {
+            return "GeoCodingLocation{"
+                    + "id=" + id
+                    + ", name='" + name + '\''
+                    + ", geoCode=" + geoCode
+                    + ", lat=" + lat
+                    + ", lng=" + lng
+                    + ", levelCode='" + levelCode + '\''
+                    + '}';
+        }
     }
 }

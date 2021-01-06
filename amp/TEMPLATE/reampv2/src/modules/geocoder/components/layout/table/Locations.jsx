@@ -21,7 +21,6 @@ class Locations extends Component {
         return this.props.activities.filter(activity => activity.activity_id === activityId)[0].locations;
     }
 
-
     constructor(props) {
         super(props);
 
@@ -32,15 +31,12 @@ class Locations extends Component {
         this.props.geocodeLocation(this.props.activityId, locationId, true)
 
         e.preventDefault();
-        console.log('User clicked accepted:', this);
-
     };
 
     handleRejectLocation = (e, locationId) => {
         this.props.geocodeLocation(this.props.activityId, locationId, false);
 
         e.preventDefault();
-        console.log('User clicked reject:', this);
     };
 
     render() {

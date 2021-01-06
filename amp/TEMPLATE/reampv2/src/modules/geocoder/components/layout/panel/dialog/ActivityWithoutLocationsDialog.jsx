@@ -4,17 +4,18 @@ import Modal from "react-bootstrap/Modal";
 import {TranslationContext} from "../../../AppContext";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
-import {resetAllLocationStatuses} from "../../../../actions/geocodingAction";
+import AlertError from "../AlertError";
+import {Loading} from "../../../../../../utils/components/Loading";
+import {cancelGeocoding, resetAllLocationStatuses} from "../../../../actions/geocodingAction";
 
-class ResetAllButton extends Component {
+class ActivityWithoutLocationsDialog extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {show: false};
+        this.state = {show: true};
 
         this.handleClose = this.handleClose.bind(this);
-        this.handleShow = this.handleShow.bind(this);
-        this.onResetAll = this.onResetAll.bind(this);
+        this.onDiscardChanges = this.onDiscardChanges.bind(this);
 
     }
 
@@ -22,12 +23,8 @@ class ResetAllButton extends Component {
         this.setState({show: false});
     }
 
-    handleShow() {
-        this.setState({show: true});
-    }
-
-    onResetAll = (e) => {
-        this.props.resetAllActivities();
+    onDiscardChanges = (e) => {
+        this.props.cancelGeocoding();
         this.handleClose();
     };
 
@@ -36,20 +33,20 @@ class ResetAllButton extends Component {
 
         return (
             <>
-                <Button variant="primary" onClick={this.handleShow}>{this.props.title}</Button>
-
                 <Modal show={this.state.show} onHide={this.handleClose} animation={false}>
                     <Modal.Header closeButton>
                         <Modal.Title>{this.props.title}</Modal.Title>
                     </Modal.Header>
-                    <Modal.Body>All the geocoded locations would be reset.</Modal.Body>
+                    <Modal.Body>{translations['amp.geocoder:discardGeocodingText']}</Modal.Body>
                     <Modal.Footer>
                         <Button variant="secondary" onClick={this.handleClose}>
                             {translations['amp.geocoder:cancel']}
                         </Button>
-                        <Button variant="primary" className={'button-header'} onClick={this.onResetAll}>
+                        <Button variant="primary" className={'button-header'} onClick={this.onDiscardChanges}>
                             {this.props.title}
                         </Button>
+                        {this.props.geocoding.pending && <Loading/>}
+                        {this.props.geocoding.error && <AlertError error={this.props.geocoding.error}/>}
                     </Modal.Footer>
                 </Modal>
             </>
@@ -57,7 +54,7 @@ class ResetAllButton extends Component {
     }
 }
 
-ResetAllButton.contextType = TranslationContext;
+ActivityWithoutLocationsDialog.contextType = TranslationContext;
 
 const mapStateToProps = state => {
     return {
@@ -66,7 +63,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-    resetAllActivities: resetAllLocationStatuses,
+    cancelGeocoding: cancelGeocoding,
 }, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(ResetAllButton);
+export default connect(mapStateToProps, mapDispatchToProps)(ActivityWithoutLocationsDialog);

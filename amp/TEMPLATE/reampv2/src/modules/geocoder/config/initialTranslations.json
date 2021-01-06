@@ -10,5 +10,7 @@
   "amp.geocoder:runSearch": "Run Search",
   "amp.geocoder:running": "Geocoding is still running",
   "amp.geocoder:cancel": "Cancel",
-  "amp.geocoder:noLocations": "No locations"
+  "amp.geocoder:noLocations": "No locations",
+  "amp.geocoder:discardGeocodingButton": "Discard Geocoding",
+  "amp.geocoder:discardGeocodingText": "There is no geocoded location found. You can cancel the geocoding process."
 }

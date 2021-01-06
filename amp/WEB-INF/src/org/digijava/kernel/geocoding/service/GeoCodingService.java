@@ -66,9 +66,6 @@ public class GeoCodingService {
             PersistenceManager.getSession().save(geoCodingProcess);
         }
 
-        // TODO update locations only if changed
-        client.sendLocations(LocationUtil.getAllVisibleLocations());
-
         List<AmpActivityVersion> activities = new ArrayList<>();
         for (Long activityId : activityIds) {
             try {
@@ -153,6 +150,8 @@ public class GeoCodingService {
         try {
             List<GeoCoderClient.GeoCodingResult> geoCodingResults = client.getGeoCodingResults(activity.getQueueId());
 
+            populateGeoCodingResultsWithAmpLocations(geoCodingResults);
+
             for (Long acvlId : getAcvlIds(geoCodingResults)) {
                 AmpCategoryValueLocations acvl = getAcvl(acvlId);
                 if (acvl == null) {
@@ -191,6 +190,31 @@ public class GeoCodingService {
                 acvlIds.addAll(geoCodingResult.getAcvlIds());
             }
         }
+        return acvlIds;
+    }
+
+    private void populateGeoCodingResultsWithAmpLocations(List<GeoCoderClient.GeoCodingResult> geoCodingResults) {
+        List<AmpCategoryValueLocations> allVisibleLocations = LocationUtil.getAllVisibleLocations();
+        for (GeoCoderClient.GeoCodingResult geoCodingResult : geoCodingResults) {
+            if (geoCodingResult.getLocation() != null) {
+                geoCodingResult.setAcvlIds(matchAmpLocations(allVisibleLocations, geoCodingResult.getLocation()));
+            }
+        }
+    }
+
+    private Set<Long> matchAmpLocations(final List<AmpCategoryValueLocations> allVisibleLocations,
+                                        final GeoCoderClient.GeoCodingLocation location) {
+        Set<Long> acvlIds = new HashSet<>();
+        for (AmpCategoryValueLocations ampLocation : allVisibleLocations) {
+            if (GeoCodingLocationMatcher.match(ampLocation, location)) {
+                acvlIds.add(ampLocation.getId());
+            }
+        }
+
+        if (acvlIds.isEmpty()) {
+            logger.info(String.format("----- No Location Matched for [%s]", location));
+        }
+
         return acvlIds;
     }
 

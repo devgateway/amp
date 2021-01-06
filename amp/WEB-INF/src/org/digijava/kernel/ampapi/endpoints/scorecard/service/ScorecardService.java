@@ -138,11 +138,6 @@ public class ScorecardService {
                         + " AND (a.draft = false OR a.draft is null) AND a.deleted is false  " + " ) t "
                         + " where t.row=1 ";
 
-                
-                if (allowedStatuses != null && !allowedStatuses.isEmpty()) {
-                    String status = StringUtils.join(allowedStatuses, ",");
-                    query += " AND approval_status IN (" + status + ") ";
-                }
                 query += "ORDER BY organisation , modifydate ";
 
                 try (RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
@@ -319,7 +314,7 @@ public class ScorecardService {
     }
 
     private List<Quarter> getAllQuarters() {
-        return getQuarters(null);
+        return getQuarters("Q1,Q2,Q3,Q4");
     }
     
     /**
@@ -389,7 +384,7 @@ public class ScorecardService {
             closedStatuses = closedStatuses.substring(0, closedStatuses.length() - 1);
         }
         final String status = closedStatuses;
-        List<Quarter> quarters = getSettingsQuarters();
+        List<Quarter> quarters = getAllQuarters();
 
         for (final Quarter quarter : quarters) {
             PersistenceManager.getSession().doWork(new Work() {
@@ -555,17 +550,15 @@ public class ScorecardService {
         for (ActivityUpdate activityUpdate : activityUpdates) {
             Long donorId = activityUpdate.getDonorId();
             Quarter quarter = new Quarter(fiscalCalendar, activityUpdate.getModifyDate());
-            if (settings.getQuartersAsList().contains(quarter.getLabel())) {
-                ColoredCell cell = data.get(donorId).get(quarter.toString());
-                if (isUpdateOnGracePeriod(activityUpdate.getModifyDate())) {
-                    Quarter previousQuarter = quarter.getPreviousQuarter();
-                    ColoredCell previousQuarterCell = data.get(donorId).get(previousQuarter.toString());
-                    if (!isFirstQuarterOfPeriod(previousQuarterCell)) {
-                        previousQuarterCell.getUpdatedActivitiesOnGracePeriod().add(activityUpdate.getActivityId());
-                    }
+            ColoredCell cell = data.get(donorId).get(quarter.toString());
+            if (isUpdateOnGracePeriod(activityUpdate.getModifyDate())) {
+                Quarter previousQuarter = quarter.getPreviousQuarter();
+                ColoredCell previousQuarterCell = data.get(donorId).get(previousQuarter.toString());
+                if (!isFirstQuarterOfPeriod(previousQuarterCell)) {
+                    previousQuarterCell.getUpdatedActivitiesOnGracePeriod().add(activityUpdate.getActivityId());
                 }
-                cell.getUpdatedActivites().add(activityUpdate.getActivityId());
             }
+            cell.getUpdatedActivites().add(activityUpdate.getActivityId());
         }
         return data;
     }
@@ -615,13 +608,12 @@ public class ScorecardService {
      */
     private Map<Long, Map<String, ColoredCell>> initializeScorecardCellData() {
         Map<Long, Map<String, ColoredCell>> data = new HashMap<Long, Map<String, ColoredCell>>();
-        List<Quarter> quarters = getSettingsQuarters();
+        List<Quarter> quarters = getAllQuarters();
         List<Org> donors = QueryUtil.getDonors(true);
         for (Org donor : donors) {
             Long donorId = donor.getId();
             Map<String, ColoredCell> quarterCellMap = new HashMap<String, ColoredCell>();
             for (Quarter quarter : quarters) {
-
                 ColoredCell cell = new ColoredCell();
                 cell.setDonorId(donorId);
                 cell.setQuarter(quarter);

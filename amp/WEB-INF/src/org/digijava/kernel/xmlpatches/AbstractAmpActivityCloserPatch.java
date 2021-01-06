@@ -13,14 +13,14 @@ import java.util.List;
 public abstract class AbstractAmpActivityCloserPatch {
     private static final  Logger LOGGER = Logger.getLogger(AbstractAmpActivityCloserPatch.class);
 
-    public void closeActivities() {
-        this.doCloseActivities();
+    public void closeActivities(Integer index) {
+        this.doCloseActivities(index);
     }
 
-    public abstract List<String> getAmpIds();
+    public abstract List<String> getAmpIds(Integer index);
 
-    private void doCloseActivities() {
-        List<AmpActivityVersion> activitiesToClose = ActivityUtil.getLastActivitiesVersionByAmpIds(this.getAmpIds());
+    private void doCloseActivities(Integer index) {
+        List<AmpActivityVersion> activitiesToClose = ActivityUtil.getLastActivitiesVersionByAmpIds(this.getAmpIds(index));
         try {
             Long closedCategoryValue =
                     FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.CLOSED_ACTIVITY_VALUE);

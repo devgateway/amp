@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-29890</jira>
+    <author>Julian de Anquin</author>
+    <description>close DRC activities.</description>
+    <trigger type="all">
+        <condition type="custom">
+            <script returnVar="country">
+                <lang type="sql">
+                    select settingsvalue from amp_global_settings where settingsname = 'Default Country';
+                </lang>
+            </script>
+            <test>country.equalsIgnoreCase("cd")</test>
+        </condition>
+    </trigger>
+    <apply>
+        <script>
+            <lang delimiter=";" type="bsh">
+                org.digijava.kernel.xmlpatches.CloseDrcActivities.run(6);
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

@@ -1,21 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.scorecard.service;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.view.xls.IntWrapper;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
@@ -46,6 +30,22 @@ import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
+
+import java.math.BigInteger;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Service class for Scorecard generation
@@ -393,34 +393,38 @@ public class ScorecardService {
                     if (threshold == null) {
                         threshold = DEFAULT_THRESHOLD;
                     }
-                    String quarterEndDate = new SimpleDateFormat("yyyy-MM-dd").format(getGregorianDate(quarter.getQuarterEndDate()));
+                    String quarterEndDate = new SimpleDateFormat("yyyy-MM-dd")
+                            .format(getGregorianDate(quarter.getQuarterEndDate()));
                     //Get total (not completed nor deleted) activities  by donor at the end of a given quarter
-                    Object [] activityIds = getLatestActivityIdsByDate(quarterEndDate, status);
-                    String query = "select count (distinct (a.amp_id)) as total_activities,r.organisation as donor_id "
-                            + "from amp_activity_version a, amp_org_role r,amp_organisation o,amp_activities_categoryvalues c,amp_category_value v "+
-                            " WHERE  r.activity=a.amp_activity_id  AND a.amp_activity_id = c.amp_activity_id "+
-                            "AND c.amp_categoryvalue_id = v.id "+
-                            "AND v.amp_category_class_id = (select id from amp_category_class where keyname='activity_status') " +
-                            "AND a.amp_team_id NOT IN (SELECT amp_team_id from amp_team where isolated = true) ";
-                    if (!status.equals("")) {
-                        query += "AND c.amp_categoryvalue_id in (" + status + " ) ";
-                    }
-                    query += "AND o.amp_org_id = r.organisation " + "AND ( o.deleted IS NULL OR o.deleted = false ) "
-                            + "AND    (EXISTS  (SELECT af.amp_donor_org_id " + " FROM   amp_funding af,amp_activity_version v "
-                            + " WHERE  r.organisation = af.amp_donor_org_id "
-                            +"  AND a.amp_activity_id = v.amp_activity_id "
-                            + " AND v.amp_activity_id = af.amp_activity_id "
-                            + " AND (v.draft = false OR v.draft is null) "
-                            + " AND v.deleted is false " 
-                            + " AND    (( af.source_role_id IS NULL) "
-                            + " OR     af.source_role_id =( SELECT amp_role_id         FROM   amp_role "
-                            + " WHERE  role_code='DN')))) " + " and date_created <= '" + quarterEndDate + "' "
-                            + " AND a.deleted is false AND (a.draft = false OR a.draft is null)";
-                    if (activityIds.length > 0) {
-                        query += "AND a.amp_activity_id in (" + StringUtils.join(activityIds, ",") + ") ";
-                    }
-                    query += "AND r.organisation NOT IN (SELECT amp_donor_id FROM amp_scorecard_organisation WHERE to_exclude = true)";
-                    query += " group by r.organisation; ";
+
+                    String query = "SELECT COUNT(DISTINCT (a.amp_id)) AS total_activities, r.organisation as donor_id"
+                            + " FROM amp_activity_version a, amp_org_role r, amp_organisation o, "
+                            + " amp_activities_categoryvalues c, amp_category_value v"
+                            + " WHERE r.activity = a.amp_activity_id "
+                            + " AND a.amp_team_id NOT IN (SELECT amp_team_id FROM amp_team where isolated = true)"
+                            + " AND o.amp_org_id = r.organisation " + "AND (o.deleted IS NULL OR o.deleted = false)"
+                            + " AND (EXISTS (SELECT af.amp_donor_org_id" + " FROM amp_funding af,amp_activity_version v"
+                            + " WHERE r.organisation = af.amp_donor_org_id"
+                            + " AND a.amp_activity_id = v.amp_activity_id"
+                            + " AND v.amp_activity_id = af.amp_activity_id"
+                            + " AND (v.draft = false OR v.draft is null)"
+                            + " AND v.deleted is false"
+                            + " AND ((af.source_role_id IS NULL)"
+                            + " OR af.source_role_id =(SELECT amp_role_id FROM  amp_role"
+                            + " WHERE role_code='DN')))) " + " AND date_created <= '" + quarterEndDate + "' "
+                            + " AND a.deleted is false AND (a.draft = false OR a.draft is null) "
+                            + " AND a.amp_activity_id = c.amp_activity_id"
+                            + " AND c.amp_categoryvalue_id = v.id"
+                            + " AND v.amp_category_class_id = (SELECT id "
+                                + " FROM amp_category_class WHERE keyname='activity_status')";
+                            if (!status.equals("")) {
+                                query += " AND c.amp_categoryvalue_id NOT IN (" + status + " ) ";
+                            }
+                            query += " AND a.amp_activity_id IN ("
+                            + getLatestActivityIdsByDateQuery(quarterEndDate) + ") "
+                            + " AND r.organisation NOT IN ("
+                            + " SELECT amp_donor_id FROM amp_scorecard_organisation WHERE to_exclude = true)"
+                            + " GROUP by r.organisation;";
 
                     try (RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
                         ResultSet rs = rsi.rs;
@@ -448,12 +452,15 @@ public class ScorecardService {
                             Integer totalUpdatedActivitiesOnGracePeriod = cell.getUpdatedActivitiesOnGracePeriod()
                                     .size();
                             //we don't process process cells for no update donors
+
                             if (cell.getColor().equals(Colors.GRAY)) {
                                 continue;
                             }
-                            if (totalUpdatedActivities >= (totalActivities * (threshold / 100))) {
+
+                            double thresholdAct = totalActivities * (threshold / BigInteger.TEN.pow(2).doubleValue());
+                            if (totalUpdatedActivities >= thresholdAct) {
                                 cell.setColor(Colors.GREEN);
-                            } else if ((totalUpdatedActivities + totalUpdatedActivitiesOnGracePeriod) >= (totalActivities * (threshold / 100))) {
+                            } else if ((totalUpdatedActivities + totalUpdatedActivitiesOnGracePeriod) >= thresholdAct) {
                                 cell.setColor(Colors.YELLOW);
                             }
                         }
@@ -498,39 +505,14 @@ public class ScorecardService {
      * before the quarter end and we should also omit updates and versions that happened after the end of the quarter.
      *   
      * @param endPeriodDate, the end date of a quarter
-     * @param status, the list of status to be filtered
-     * @return Object [] with the ids of the latest versions of an activity for the quarter
+     * @return String query with the latest versions of activities
      */
-    public Object [] getLatestActivityIdsByDate (final String endPeriodDate,final String status) {
-        final List<Long> activityIds = new ArrayList<Long>();
-        PersistenceManager.getSession().doWork(new Work() {
-            public void execute(Connection conn) throws SQLException {
-                String query = "select max(a.amp_activity_id) as amp_activity_id,amp_id  from amp_activity_version a," +
-                        "amp_activities_categoryvalues c,amp_category_value v  "
-                        + "where a.deleted is false and date_updated <= '"+endPeriodDate+"' "
-                        + "AND a.amp_activity_id = c.amp_activity_id "
-                        + "AND (a.draft = false OR a.draft is null) "
-                        + "AND c.amp_categoryvalue_id = v.id "
-                        + "AND  v.amp_category_class_id = (select id from amp_category_class where "
-                        + " keyname='activity_status') "
-                        + "AND a.amp_team_id NOT IN (SELECT amp_team_id from amp_team where isolated = true) ";
-                if (!status.equals("")) {
-                    query += "AND c.amp_categoryvalue_id in (" + status + " ) ";
-                }
-                query += "group by amp_id";
-                try (RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
-                    ResultSet rs = rsi.rs;
-                    while (rs.next()) {
-                        activityIds.add(rs.getLong("amp_activity_id"));
-                    }
-                    rsi.close();
-
-                }
-
-            }
-        });
-        return activityIds.toArray();
-        
+    public String getLatestActivityIdsByDateQuery(final String endPeriodDate) {
+        String query = "SELECT max(a.amp_activity_id) AS last_activity_id"
+                        + " FROM amp_activity_version a"
+                        + " WHERE date_updated <= '" + endPeriodDate + "' "
+                        + " GROUP BY amp_id";
+        return query;
     }
 
     /**

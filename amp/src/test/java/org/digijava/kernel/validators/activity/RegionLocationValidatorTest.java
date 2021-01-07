@@ -14,6 +14,7 @@ import static org.junit.Assert.assertThat;
 import java.util.Set;
 
 import org.dgfoundation.amp.activity.builder.ActivityBuilder;
+import org.dgfoundation.amp.testutils.TransactionUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.persistence.InMemoryCategoryValuesManager;
@@ -38,6 +39,7 @@ public class RegionLocationValidatorTest {
 
     @BeforeClass
     public static void setUp() {
+        TransactionUtil.setUpWorkspaceEmptyPrefixes();
         activityField = ValidatorUtil.getMetaData();
         categoryValues =InMemoryCategoryValuesManager.getInstance();
         locations = InMemoryLocationManager.getInstance();

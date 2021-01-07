@@ -42,30 +42,7 @@ export function fetchActivitiesError(error) {
     }
 }
 
-export function selectActivityForGeocoding(currentSelectedActivities, isSelected, activityId) {
-    let selectedActivities = Array.from(currentSelectedActivities);
-
-    if (isSelected) {
-        selectedActivities.push(activityId);
-    } else {
-        selectedActivities = selectedActivities.filter(id => id !== activityId);
-    }
-
-    return {
-        type: SELECT_ACTIVITY_FOR_GEOCODING,
-        payload: selectedActivities
-    }
-}
-
-export function selectAllActivitiesForGeocoding(currentSelectedActivities, isSelected, activityIds) {
-    let selectedActivities = Array.from(currentSelectedActivities);
-
-    if (isSelected) {
-        activityIds.forEach(activityId => selectedActivities.push(activityId));
-    } else {
-        selectedActivities = selectedActivities.filter(id => !activityIds.includes(id));
-    }
-
+export function selectActivitiesForGeocoding(selectedActivities) {
     return {
         type: SELECT_ACTIVITY_FOR_GEOCODING,
         payload: selectedActivities

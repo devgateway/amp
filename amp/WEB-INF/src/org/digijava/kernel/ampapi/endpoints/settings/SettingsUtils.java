@@ -400,6 +400,7 @@ public class SettingsUtils {
                 FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DECIMAL_SEPARATOR));
 
         settings.setNumberDivider(AmountsUnits.getDefaultValue().divider);
+        settings.setAmountInThousands(AmountsUnits.getDefaultValue().code);
 
         settings.setLanguage(TLSUtils.getEffectiveLangCode());
     

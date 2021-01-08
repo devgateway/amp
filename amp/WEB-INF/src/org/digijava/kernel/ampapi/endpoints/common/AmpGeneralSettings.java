@@ -29,6 +29,9 @@ public class AmpGeneralSettings {
     @JsonProperty("number-divider")
     private Integer numberDivider;
 
+    @JsonProperty("amount-in-thousands")
+    private Integer amountInThousands;
+
     @JsonProperty("language")
     private String language;
 
@@ -183,6 +186,14 @@ public class AmpGeneralSettings {
 
     public void setNumberDivider(Integer numberDivider) {
         this.numberDivider = numberDivider;
+    }
+
+    public Integer getAmountInThousands() {
+        return amountInThousands;
+    }
+
+    public void setAmountInThousands(Integer amountInThousands) {
+        this.amountInThousands = amountInThousands;
     }
 
     public String getLanguage() {

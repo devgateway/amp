@@ -4,45 +4,28 @@
  */
 package org.dgfoundation.amp.onepager.components.features.tables;
 
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.util.convert.IConverter;
-import org.apache.wicket.util.convert.converter.DoubleConverter;
+import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpMinSizeCollectionValidationField;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageCollectionValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
-import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTreeCollectionValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpUniqueCollectionValidatorField;
-import org.dgfoundation.amp.onepager.events.TotalBudgetStructureUpdateEvent;
-import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel;
-import org.dgfoundation.amp.onepager.models.AmpBudgetStructureModel;
 import org.dgfoundation.amp.onepager.models.AmpSectorSearchModel;
 import org.dgfoundation.amp.onepager.util.AmpDividePercentageField;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
-import org.digijava.module.aim.dbentity.AmpActivityBudgetStructure;
-import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
@@ -50,6 +33,16 @@ import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
 import org.digijava.module.aim.util.DbUtil;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.MAXIMUM_PERCENTAGE;
 
 /**
  * @author mpostelnicu@dgateway.org since Oct 20, 2010
@@ -110,6 +103,12 @@ public class AmpSectorsFormTableFeature extends
         add(wmc);
         AjaxIndicatorAppender iValidator = new AjaxIndicatorAppender();
         wmc.add(iValidator);
+
+        final AmpComponentPanel sectorPercentageRequired =
+                new AmpComponentPanel("sectorPercentageRequired", "Sector percentage required") {
+                };
+        add(sectorPercentageRequired);
+
         final AmpPercentageCollectionValidatorField<AmpActivitySector> percentageValidationField = new AmpPercentageCollectionValidatorField<AmpActivitySector>(
                 "sectorPercentageTotal", listModel, "sectorPercentageTotal") {
             @Override
@@ -125,7 +124,8 @@ public class AmpSectorsFormTableFeature extends
                 for(AmpActivitySector a:listModel.getObject())
                     if (a.getSectorPercentage() != null)
                         total += a.getSectorPercentage();
-                return Double.toString(total);
+                DecimalFormat decimalFormat = FormatHelper.getPercentageDefaultFormat(true);
+                return decimalFormat.format(total);
             }
         });
         totalLabel.setOutputMarkupId(true);
@@ -175,7 +175,7 @@ public class AmpSectorsFormTableFeature extends
 
                 AmpPercentageTextField percentageField = new AmpPercentageTextField(
                         "percentage", percModel, "sectorPercentage",
-                        percentageValidationField){
+                        percentageValidationField, sectorPercentageRequired.isVisible()) {
                     @Override
                     protected void onAjaxOnUpdate(
                             AjaxRequestTarget target) {
@@ -247,10 +247,11 @@ public class AmpSectorsFormTableFeature extends
                 AmpActivitySector activitySector = new AmpActivitySector();
                 activitySector.setSectorId(choice);
                 activitySector.setActivityId(am.getObject());
-                if(list.size()>0)
-                    activitySector.setSectorPercentage(0f);
-                else 
-                    activitySector.setSectorPercentage(100f); 
+
+                if (list.size() == 0) {
+                    activitySector.setSectorPercentage(MAXIMUM_PERCENTAGE.floatValue());
+                }
+
                 activitySector.setClassificationConfig(sectorClassification);
                 if(setModel.getObject()  == null)
                     setModel.setObject(new HashSet<AmpActivitySector>());

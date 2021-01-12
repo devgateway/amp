@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>AMP-29963</jira>
+    <keyword>percentage required</keyword>
+    <author>vchihai</author>
+    <description>Add percentage required fm path</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres"><![CDATA[
+
+                INSERT INTO amp_modules_visibility VALUES
+                    (nextval('amp_modules_visibility_seq'),
+                    '/Activity Form/Program/National Plan Objective/Program percentage required',
+                    null,
+                    true,
+                    (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/Program/National Plan Objective'));
+
+                INSERT INTO amp_modules_templates (template, module)
+                    SELECT
+                        (SELECT cast(settingsvalue AS int) AS template FROM amp_global_settings WHERE settingsname = 'Visibility Template'),
+                        (SELECT id AS module FROM amp_modules_visibility WHERE name = '/Activity Form/Program/National Plan Objective/Program percentage required')
+                    WHERE NOT EXISTS (
+                        SELECT template FROM amp_modules_templates
+                        WHERE template = (SELECT cast(settingsvalue AS int) AS template FROM amp_global_settings WHERE settingsname = 'Visibility Template')
+                        AND module = (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/Program/National Plan Objective/Program percentage required')
+                        );
+
+                INSERT INTO amp_modules_visibility VALUES
+                    (nextval('amp_modules_visibility_seq'),
+                    '/Activity Form/Program/Primary Programs/Program percentage required',
+                    null,
+                    true,
+                    (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/Program/Primary Programs'));
+
+                INSERT INTO amp_modules_templates (template, module)
+                    SELECT
+                        (SELECT cast(settingsvalue AS int) AS template FROM amp_global_settings WHERE settingsname = 'Visibility Template'),
+                        (SELECT id AS module FROM amp_modules_visibility WHERE name = '/Activity Form/Program/Primary Programs/Program percentage required')
+                    WHERE NOT EXISTS (
+                        SELECT template FROM amp_modules_templates
+                        WHERE template = (SELECT cast(settingsvalue AS int) AS template FROM amp_global_settings WHERE settingsname = 'Visibility Template')
+                        AND module = (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/Program/Primary Programs/Program percentage required')
+                        );
+
+                INSERT INTO amp_modules_visibility VALUES
+                    (nextval('amp_modules_visibility_seq'),
+                    '/Activity Form/Program/Secondary Programs/Program percentage required',
+                    null,
+                    true,
+                    (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/Program/Secondary Programs'));
+
+                INSERT INTO amp_modules_templates (template, module)
+                    SELECT
+                        (SELECT cast(settingsvalue AS int) AS template FROM amp_global_settings WHERE settingsname = 'Visibility Template'),
+                        (SELECT id AS module FROM amp_modules_visibility WHERE name = '/Activity Form/Program/Secondary Programs/Program percentage required')
+                    WHERE NOT EXISTS (
+                        SELECT template FROM amp_modules_templates
+                        WHERE template = (SELECT cast(settingsvalue AS int) AS template FROM amp_global_settings WHERE settingsname = 'Visibility Template')
+                        AND module = (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/Program/Secondary Programs/Program percentage required')
+                        );
+
+                INSERT INTO amp_modules_visibility VALUES
+                    (nextval('amp_modules_visibility_seq'),
+                    '/Activity Form/Program/Tertiary Programs/Program percentage required',
+                    null,
+                    true,
+                    (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/Program/Tertiary Programs'));
+
+                INSERT INTO amp_modules_templates (template, module)
+                    SELECT
+                        (SELECT cast(settingsvalue AS int) AS template FROM amp_global_settings WHERE settingsname = 'Visibility Template'),
+                        (SELECT id AS module FROM amp_modules_visibility WHERE name = '/Activity Form/Program/Tertiary Programs/Program percentage required')
+                    WHERE NOT EXISTS (
+                        SELECT template FROM amp_modules_templates
+                        WHERE template = (SELECT cast(settingsvalue AS int) AS template FROM amp_global_settings WHERE settingsname = 'Visibility Template')
+                        AND module = (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/Program/Tertiary Programs/Program percentage required')
+                        );
+
+                INSERT INTO amp_modules_visibility VALUES
+                    (nextval('amp_modules_visibility_seq'),
+                    '/Activity Form/Sectors/Primary Sectors/Sector percentage required',
+                    null,
+                    true,
+                    (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/Sectors/Primary Sectors'));
+
+                INSERT INTO amp_modules_templates (template, module)
+                    SELECT
+                        (SELECT cast(settingsvalue AS int) AS template FROM amp_global_settings WHERE settingsname = 'Visibility Template'),
+                        (SELECT id AS module FROM amp_modules_visibility WHERE name = '/Activity Form/Sectors/Primary Sectors/Sector percentage required')
+                    WHERE NOT EXISTS (
+                        SELECT template FROM amp_modules_templates
+                        WHERE template = (SELECT cast(settingsvalue AS int) AS template FROM amp_global_settings WHERE settingsname = 'Visibility Template')
+                        AND module = (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/Sectors/Primary Sectors/Sector percentage required')
+                        );
+
+                INSERT INTO amp_modules_visibility VALUES
+                    (nextval('amp_modules_visibility_seq'),
+                    '/Activity Form/Sectors/Secondary Sectors/Sector percentage required',
+                    null,
+                    true,
+                    (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/Sectors/Secondary Sectors'));
+
+                INSERT INTO amp_modules_templates (template, module)
+                    SELECT
+                        (SELECT cast(settingsvalue AS int) AS template FROM amp_global_settings WHERE settingsname = 'Visibility Template'),
+                        (SELECT id AS module FROM amp_modules_visibility WHERE name = '/Activity Form/Sectors/Secondary Sectors/Sector percentage required')
+                    WHERE NOT EXISTS (
+                        SELECT template FROM amp_modules_templates
+                        WHERE template = (SELECT cast(settingsvalue AS int) AS template FROM amp_global_settings WHERE settingsname = 'Visibility Template')
+                        AND module = (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/Sectors/Secondary Sectors/Sector percentage required')
+                        );
+
+                 INSERT INTO amp_modules_visibility VALUES
+                    (nextval('amp_modules_visibility_seq'),
+                    '/Activity Form/Sectors/Tertiary Sectors/Sector percentage required',
+                    null,
+                    true,
+                    (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/Sectors/Tertiary Sectors'));
+
+                INSERT INTO amp_modules_templates (template, module)
+                    SELECT
+                        (SELECT cast(settingsvalue AS int) AS template FROM amp_global_settings WHERE settingsname = 'Visibility Template'),
+                        (SELECT id AS module FROM amp_modules_visibility WHERE name = '/Activity Form/Sectors/Tertiary Sectors/Sector percentage required')
+                    WHERE NOT EXISTS (
+                        SELECT template FROM amp_modules_templates
+                        WHERE template = (SELECT cast(settingsvalue AS int) AS template FROM amp_global_settings WHERE settingsname = 'Visibility Template')
+                        AND module = (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/Sectors/Tertiary Sectors/Sector percentage required')
+                        );
+
+            ]]></lang>
+        </script>
+    </apply>
+</tns:patch>

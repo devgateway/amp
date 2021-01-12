@@ -1,5 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.MAXIMUM_PERCENTAGE;
 import static org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils.getDoubleFromJsonNumber;
 import static org.digijava.kernel.ampapi.endpoints.activity.InterchangeUtils.getLongOrNullOnError;
 import static org.digijava.kernel.ampapi.endpoints.activity.SaveMode.DRAFT;
@@ -23,8 +24,6 @@ import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
  * @author Nadejda Mandrescu
  */
 public class ValueValidator extends InputValidator {
-
-    private static final double MAXIMUM_PERCENTAGE = 100;
 
     private boolean isValidLength = true;
     private boolean isValidPercentage = true;

@@ -31,7 +31,8 @@ public class AmpActivitySector implements Versionable, Serializable, Cloneable, 
     
     @Interchangeable(fieldTitle="Sector Percentage", importable = true, percentageConstraint = true, 
             fmPath = FMVisibility.PARENT_FM + "/sectorPercentage",
-            interValidators = @InterchangeableValidator(RequiredValidator.class))
+            interValidators = @InterchangeableValidator(value = RequiredValidator.class,
+                    fmPath = FMVisibility.PARENT_FM + "/Sector percentage required"))
     private Float sectorPercentage;
 
     private AmpClassificationConfiguration classificationConfig;

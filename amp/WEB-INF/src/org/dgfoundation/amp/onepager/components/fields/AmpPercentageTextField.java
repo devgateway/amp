@@ -15,6 +15,9 @@ import org.apache.wicket.util.convert.converter.DoubleConverter;
 import org.apache.wicket.validation.validator.RangeValidator;
 import org.digijava.module.aim.helper.FormatHelper;
 
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.EPSILON;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.MAXIMUM_PERCENTAGE;
+
 /**
  * This wraps an {@link AmpTextFieldPanel} to encapsulate a Percentage field
  * used to capture percentages for locations, sectors, etc... This is always a
@@ -42,11 +45,10 @@ public class AmpPercentageTextField extends AmpTextFieldPanel<Double> {
         this.validationHiddenField = validationHiddenField;
         textContainer.setType(Double.class);
         textContainer.setRequired(true);
-        textContainer.add(new RangeValidator<Double>(0.1d, null));
+        textContainer.add(new RangeValidator<>(EPSILON, MAXIMUM_PERCENTAGE));
         textContainer.add(new AttributeModifier("style", "width: 40px;"));
     }
     
-    //constructor added so we can include 0 value in range validator
     public AmpPercentageTextField(String id, IModel<Double> model,
             String fmName,
             AmpPercentageCollectionValidatorField<?> validationHiddenField,boolean required) {
@@ -54,7 +56,7 @@ public class AmpPercentageTextField extends AmpTextFieldPanel<Double> {
         this.validationHiddenField = validationHiddenField;
         textContainer.setType(Double.class);
         textContainer.setRequired(required);
-        textContainer.add(new RangeValidator<Double>(0.0d, null));
+        textContainer.add(new RangeValidator<Double>(EPSILON, MAXIMUM_PERCENTAGE));
         textContainer.add(new AttributeModifier("style", "width: 40px;"));
     }
     

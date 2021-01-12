@@ -227,9 +227,9 @@ public class InterchangeEndpoints {
     @ApiOperation(value = "Returns the full list of activity fields.",
             notes = "Provides full set of available fields and their settings/rules in a hierarchical structure.\n\n"
                     + "See [Fields Enumeration Wiki](https://wiki.dgfoundation.org/display/AMPDOC/Fields+enumeration)")
-    public List<APIField> getAvailableFields(@ApiParam(value = "FM id", required = false) Long id) {
-        if (id != null) {
-            return AmpFieldsEnumerator.getEnumerator(id).getActivityFields();
+    public List<APIField> getAvailableFields(@ApiParam(value = "FM id") @QueryParam("fmId") Long fmId) {
+        if (fmId != null) {
+            return AmpFieldsEnumerator.getEnumerator(fmId).getActivityFields();
         }
         return AmpFieldsEnumerator.getEnumerator().getActivityFields();
     }
@@ -238,7 +238,7 @@ public class InterchangeEndpoints {
      * Provides full set of available fields and their settings/rules in a hierarchical structure
      * grouped by workspace member id
      *
-     * @param wsMemberIds
+     * @param ids
      * @return JSON with fields information grouped by ws-member-ids
      * @see <a href="https://wiki.dgfoundation.org/display/AMPDOC/Fields+enumeration">Fields Enumeration Wiki<a/>
      */

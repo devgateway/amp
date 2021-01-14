@@ -143,7 +143,7 @@ export function loadActivityForActivityPreview(activityId) {
             gsDefaultGroupSeparator: settings['number-group-separator'],
             gsDefaultDecimalSeparator: settings['number-decimal-separator'],
             gsDefaultNumberFormat: settings['gs-number-format'],
-            gsAmountInThousands: settings['number-divider'] + '',
+            gsAmountInThousands: settings['amount-in-thousands'] + '',
             Translate: translate,
             Logger,
             shouldForceUnits: true

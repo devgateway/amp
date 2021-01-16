@@ -13,7 +13,9 @@ class ProgramsHeader extends Component {
     const {
       translations, programs, trnPrefix, isIndirect
     } = this.context;
-    const { src, dst, onChange, busy } = this.props;
+    const {
+      src, dst, onChange, busy
+    } = this.props;
     if (programs) {
       return (
         <table className="programs-table">
@@ -30,7 +32,7 @@ class ProgramsHeader extends Component {
                   onChange={onChange.bind(null, TYPE_SRC)}
                   level={0} />
               </td>
-              <td>
+              <td style={{ paddingRight: '0%' }}>
                 <HelpTooltip labelKey="tooltip-indirect-programs" />
                 <ProgramSelect
                   disabled={busy}

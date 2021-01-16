@@ -8,7 +8,7 @@ import './css/style.css';
 class Header extends Component {
   render() {
     const {
-      translations, onAddRow, onSaveAll, onRevertAll, disabled, src, dst, onUpdateActivities
+      translations, onAddRow, onSaveAll, onRevertAll, src, dst, onUpdateActivities, busy
     } = this.props;
     const { trnPrefix } = this.context;
     return (
@@ -36,20 +36,21 @@ class Header extends Component {
                 type="button"
                 onClick={onSaveAll}
                 className="btn btn-success margin_2"
-                disabled={disabled}>
+                disabled={busy}>
                 {translations[`${trnPrefix}button-save-all-edits`]}
               </button>
               <button
                 type="button"
                 onClick={onRevertAll}
                 className="btn btn-danger margin_2"
-                disabled={disabled}>
+                disabled={busy}>
                 {translations[`${trnPrefix}button-revert-all-edits`]}
               </button>
               <button
                 type="button"
                 onClick={onUpdateActivities}
-                className="btn btn-primary">
+                className="btn btn-primary"
+                disabled={busy}>
                 {translations[`${trnPrefix}button-update-activities`]}
               </button>
             </span>
@@ -66,11 +67,11 @@ Header.propTypes = {
   onAddRow: PropTypes.func.isRequired,
   onSaveAll: PropTypes.func.isRequired,
   onRevertAll: PropTypes.func.isRequired,
-  disabled: PropTypes.bool.isRequired,
   translations: PropTypes.bool.isRequired,
   onUpdateActivities: PropTypes.func.isRequired,
   src: PropTypes.object,
-  dst: PropTypes.object
+  dst: PropTypes.object,
+  busy: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({

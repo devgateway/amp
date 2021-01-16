@@ -6,7 +6,6 @@ import { Container, Col, Row } from 'react-bootstrap';
 import rootReducer from './reducers/rootReducer';
 import defaultTrnPack from './config/initialTranslations.json';
 import Startup from './components/Startup';
-import NDDAdminRouter from './components/NDDAdminRouter';
 import NDDAdminNavigator from './components/NDDAdminNavigator';
 // eslint-disable-next-line no-unused-vars
 import style from './components/css/style.css';
@@ -27,7 +26,6 @@ class AdminNDDApp extends Component {
             <Row>
               <Col md={12}>
                 <NDDAdminNavigator />
-                <NDDAdminRouter />
               </Col>
             </Row>
           </Container>

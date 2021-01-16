@@ -279,13 +279,13 @@ class FormPrograms extends Component {
     if (updating) {
       messages.push({
         isError: false,
-        text: 'Updating activities...'
+        text: translations[`${trnPrefix}update-activities-wait`]
       });
     }
     if (errorUpdating) {
       messages.push({
         isError: true,
-        text: 'Error updating activities...'
+        text: translations[`${trnPrefix}update-activities-error`]
       });
     }
 
@@ -297,10 +297,9 @@ class FormPrograms extends Component {
           onSaveAll={this.saveAll}
           onRevertAll={this.revertAllChanges}
           onUpdateActivities={this.onUpdateActivities}
-          disabled={pending}
           src={src}
           dst={dst}
-          busy />
+          busy={updating || pending} />
         <Notifications messages={messages} />
         <ProgramSelectGroupList
           list={data}

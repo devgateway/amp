@@ -39,5 +39,7 @@
   "amp.admin.ndd.indirect:loading": "Loading...",
   "amp.admin.ndd.indirect:button-update-activities": "Update All Activities",
   "amp.admin.ndd.indirect:button-update-activities-confirmation": "Are you sure you want to update all activities with the current mappings?",
-  "amp.admin.ndd.indirect:update-activities-successful": "Activities where successfully updated"
+  "amp.admin.ndd.indirect:update-activities-successful": "Activities where successfully updated",
+  "amp.admin.ndd.indirect:update-activities-wait": "Updating activities, please wait...",
+  "amp.admin.ndd.indirect:update-activities-error": "Error updating activities."
 }

@@ -39,5 +39,7 @@
   "amp.admin.ndd.program:loading": "Loading...",
   "amp.admin.ndd.program:button-update-activities": "Update All Activities",
   "amp.admin.ndd.program:button-update-activities-confirmation": "Are you sure you want to update all activities with the current mappings?",
-  "amp.admin.ndd.program:update-activities-successful": "Activities where successfully updated"
+  "amp.admin.ndd.program:update-activities-successful": "Activities where successfully updated",
+  "amp.admin.ndd.program:update-activities-wait": "Updating activities, please wait...",
+  "amp.admin.ndd.program:update-activities-error": "Error updating activities."
 }

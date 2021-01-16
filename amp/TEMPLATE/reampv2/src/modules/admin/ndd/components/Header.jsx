@@ -8,7 +8,7 @@ import './css/style.css';
 class Header extends Component {
   render() {
     const {
-      translations, onAddRow, onSaveAll, onRevertAll, disabled, src, dst
+      translations, onAddRow, onSaveAll, onRevertAll, disabled, src, dst, onUpdateActivities
     } = this.props;
     const { trnPrefix } = this.context;
     return (
@@ -46,6 +46,12 @@ class Header extends Component {
                 disabled={disabled}>
                 {translations[`${trnPrefix}button-revert-all-edits`]}
               </button>
+              <button
+                type="button"
+                onClick={onUpdateActivities}
+                className="btn btn-primary">
+                {translations[`${trnPrefix}button-update-activities`]}
+              </button>
             </span>
           </div>
         </div>
@@ -62,6 +68,7 @@ Header.propTypes = {
   onRevertAll: PropTypes.func.isRequired,
   disabled: PropTypes.bool.isRequired,
   translations: PropTypes.bool.isRequired,
+  onUpdateActivities: PropTypes.func.isRequired,
   src: PropTypes.object,
   dst: PropTypes.object
 };

@@ -11,7 +11,7 @@ import HelpTooltip from './common/HelpTooltip';
 class ProgramSelectGroupList extends Component {
   render() {
     const {
-      list, translations, onChange, remove, dst, src
+      list, translations, onChange, remove, dst, src, busy
     } = this.props;
     const { trnPrefix } = this.context;
     return (
@@ -40,7 +40,8 @@ class ProgramSelectGroupList extends Component {
                 onChange={onChange}
                 remove={remove}
                 dst={dst}
-                src={src} />
+                src={src}
+                disabled={busy} />
             ))}
           </tbody>
         </table>
@@ -57,7 +58,8 @@ ProgramSelectGroupList.propTypes = {
   remove: PropTypes.func.isRequired,
   src: PropTypes.object,
   dst: PropTypes.object,
-  translations: PropTypes.array.isRequired
+  translations: PropTypes.array.isRequired,
+  busy: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({

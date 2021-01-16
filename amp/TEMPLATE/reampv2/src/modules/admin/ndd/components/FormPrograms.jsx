@@ -16,7 +16,9 @@ import {
 } from '../constants/Constants';
 import * as Utils from '../utils/Utils';
 import { sendNDDError, sendNDDPending } from '../reducers/saveNDDReducer';
+import { updateActivitiesError, updateActivitiesPending } from '../reducers/updateActivitiesReducer';
 import saveNDD from '../actions/saveNDD';
+import updateActivities from '../actions/updateActivities';
 import Notifications from './Notifications';
 import ProgramsHeader from './ProgramsHeader';
 
@@ -24,7 +26,14 @@ class FormPrograms extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: [], validationErrors: undefined, src: undefined, dst: undefined, programs: undefined, saved: false
+      data: [],
+      validationErrors: undefined,
+      src: undefined,
+      dst: undefined,
+      programs: undefined,
+      saved: false,
+      updatedActivities: false,
+      blockUI: false
     };
     this.addRow = this.addRow.bind(this);
     this.saveAll = this.saveAll.bind(this);
@@ -78,6 +87,9 @@ class FormPrograms extends Component {
       }
       return { data: this.sortPrograms(data) };
     });
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
   }
 
   /**
@@ -142,7 +154,20 @@ class FormPrograms extends Component {
   }
 
   clearMessages() {
-    this.setState({ validationErrors: undefined, saved: false });
+    this.setState({
+      validationErrors: undefined, saved: false, updatedActivities: false, blockUI: false
+    });
+  }
+
+  onUpdateActivities = () => {
+    const { translations, updateActivities } = this.props;
+    const { trnPrefix } = this.context;
+    this.clearMessages();
+    // TODO: block UI until it finishes.
+    this.setState({
+      blockUI: true
+    });
+    updateActivities();
   }
 
   saveAll() {
@@ -229,9 +254,11 @@ class FormPrograms extends Component {
 
   render() {
     const {
-      data, validationErrors, src, dst, saved
+      data, validationErrors, src, dst, saved, updatedActivities
     } = this.state;
-    const { error, pending, translations } = this.props;
+    const {
+      error, pending, translations, updating, errorUpdating
+    } = this.props;
     const { trnPrefix } = this.context;
     const messages = [];
     if (error) {
@@ -243,18 +270,45 @@ class FormPrograms extends Component {
     if (saved) {
       messages.push({ isError: false, text: translations[`${trnPrefix}notification-saved-ok`] });
     }
+    if (updatedActivities) {
+      messages.push({
+        isError: false,
+        text: translations[`${trnPrefix}update-activities-successful`]
+      });
+    }
+    if (updating) {
+      messages.push({
+        isError: false,
+        text: 'Updating activities...'
+      });
+    }
+    if (errorUpdating) {
+      messages.push({
+        isError: true,
+        text: 'Error updating activities...'
+      });
+    }
+
     return (
       <div className="form-container">
-        <ProgramsHeader onChange={this.onChangeMainProgram} src={src} dst={dst} key={Math.random()} />
+        <ProgramsHeader onChange={this.onChangeMainProgram} src={src} dst={dst} key={Math.random()} busy={updating} />
         <Header
           onAddRow={this.addRow}
           onSaveAll={this.saveAll}
           onRevertAll={this.revertAllChanges}
+          onUpdateActivities={this.onUpdateActivities}
           disabled={pending}
           src={src}
-          dst={dst} />
+          dst={dst}
+          busy />
         <Notifications messages={messages} />
-        <ProgramSelectGroupList list={data} onChange={this.onRowChange} remove={this.remove} src={src} dst={dst} />
+        <ProgramSelectGroupList
+          list={data}
+          onChange={this.onRowChange}
+          remove={this.remove}
+          src={src}
+          dst={dst}
+          busy={updating} />
       </div>
     );
   }
@@ -270,6 +324,8 @@ const mapStateToProps = state => ({
   translations: state.translationsReducer.translations,
   error: sendNDDError(state.saveNDDReducer),
   pending: sendNDDPending(state.saveNDDReducer),
+  updating: updateActivitiesPending(state.updateActivitiesReducer),
+  errorUpdating: updateActivitiesError(state.updateActivitiesReducer)
 });
-const mapDispatchToProps = dispatch => bindActionCreators({ saveNDD }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ saveNDD, updateActivities }, dispatch);
 export default connect(mapStateToProps, mapDispatchToProps)(FormPrograms);

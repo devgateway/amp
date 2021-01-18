@@ -1,6 +1,7 @@
 package org.digijava.module.aim.form;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.struts.action.ActionForm;
@@ -18,6 +19,10 @@ public class ScorecardManagerForm extends ActionForm {
     private String[] selectedCategoryValues;
     private Collection<AmpCategoryValue> categoryValues = null;
     private Set<AmpScorecardSettingsCategoryValue> closedStatuses;
+
+    private List<String> quarters;
+
+    private String[] selectedQuarters;
     
     public Boolean getValidationPeriod() {
         return validationPeriod;
@@ -73,5 +78,21 @@ public class ScorecardManagerForm extends ActionForm {
 
     public void setSelectedCategoryValues(String[] selectedCategoryValues) {
         this.selectedCategoryValues = selectedCategoryValues;
+    }
+
+    public List<String> getQuarters() {
+        return quarters;
+    }
+
+    public void setQuarters(List<String> quarters) {
+        this.quarters = quarters;
+    }
+
+    public String[] getSelectedQuarters() {
+        return selectedQuarters;
+    }
+
+    public void setSelectedQuarters(String[] selectedQuarters) {
+        this.selectedQuarters = selectedQuarters;
     }
 }

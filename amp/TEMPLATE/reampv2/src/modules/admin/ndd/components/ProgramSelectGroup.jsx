@@ -162,7 +162,7 @@ class ProgramSelectGroup extends Component {
 
   render() {
     const { translations, trnPrefix } = this.context;
-    const { type } = this.props;
+    const { type, disabled } = this.props;
     return (
       <div>
         <div style={{ width: '100%' }}>
@@ -172,21 +172,24 @@ class ProgramSelectGroup extends Component {
             options={this.getOptionsForLevel(FIRST_LEVEL)}
             selected={this.getSelectedForLevel(FIRST_LEVEL)}
             onChange={this.onSelectChange}
-            level={FIRST_LEVEL} />
+            level={FIRST_LEVEL}
+            disabled={disabled} />
           <ProgramSelect
             placeholder={translations[`${trnPrefix}choose-${type}-lvl-${SECOND_LEVEL}`]}
             label={translations[`${trnPrefix + type}-program-lvl-${SECOND_LEVEL}`]}
             options={this.getOptionsForLevel(SECOND_LEVEL)}
             selected={this.getSelectedForLevel(SECOND_LEVEL)}
             onChange={this.onSelectChange}
-            level={SECOND_LEVEL} />
+            level={SECOND_LEVEL}
+            disabled={disabled} />
           <ProgramSelect
             placeholder={translations[`${trnPrefix}choose-${type}-lvl-${THIRD_LEVEL}`]}
             label={translations[`${trnPrefix + type}-program-lvl-${THIRD_LEVEL}`]}
             options={this.getOptionsForLevel(THIRD_LEVEL)}
             selected={this.getSelectedForLevel(THIRD_LEVEL)}
             onChange={this.onSelectChange}
-            level={THIRD_LEVEL} />
+            level={THIRD_LEVEL}
+            disabled={disabled} />
         </div>
       </div>
     );
@@ -198,7 +201,8 @@ ProgramSelectGroup.propTypes = {
   data: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
   src: PropTypes.object,
-  dst: PropTypes.object
+  dst: PropTypes.object,
+  disabled: PropTypes.bool.isRequired
 };
 
 ProgramSelectGroup.contextType = NDDContext;

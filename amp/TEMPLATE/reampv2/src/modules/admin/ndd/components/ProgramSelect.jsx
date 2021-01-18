@@ -20,7 +20,9 @@ class ProgramSelect extends Component {
   }
 
   drawSelector() {
-    const { options, placeholder, selected } = this.props;
+    const {
+      options, placeholder, selected, disabled
+    } = this.props;
     const isValid = (selected && selected.length === 1);
     const sortedOptions = options ? options.sort((a, b) => a.value.localeCompare(b.value)) : [];
     return (
@@ -32,7 +34,9 @@ class ProgramSelect extends Component {
         clearButton
         onChange={this.onChangeSelect.bind(this)}
         selected={selected}
-        placeholder={placeholder} />
+        placeholder={placeholder}
+        disabled={disabled}
+      />
     );
   }
 
@@ -56,7 +60,8 @@ ProgramSelect.propTypes = {
   placeholder: PropTypes.string.isRequired,
   selected: PropTypes.array,
   onChange: PropTypes.func.isRequired,
-  level: PropTypes.number.isRequired
+  level: PropTypes.number.isRequired,
+  disabled: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({

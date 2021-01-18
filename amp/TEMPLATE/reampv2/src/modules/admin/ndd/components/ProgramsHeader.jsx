@@ -13,7 +13,9 @@ class ProgramsHeader extends Component {
     const {
       translations, programs, trnPrefix, isIndirect
     } = this.context;
-    const { src, dst, onChange } = this.props;
+    const {
+      src, dst, onChange, busy
+    } = this.props;
     if (programs) {
       return (
         <table className="programs-table">
@@ -22,6 +24,7 @@ class ProgramsHeader extends Component {
               <td>
                 <HelpTooltip labelKey="tooltip-direct-programs" />
                 <ProgramSelect
+                  disabled={busy}
                   placeholder={translations[`${trnPrefix}choose_main_src_program`]}
                   label={translations[`${trnPrefix}src-program-lvl-1`]}
                   options={programs.filter(p => p.indirect === false)}
@@ -29,9 +32,10 @@ class ProgramsHeader extends Component {
                   onChange={onChange.bind(null, TYPE_SRC)}
                   level={0} />
               </td>
-              <td>
+              <td style={{ paddingRight: '0%' }}>
                 <HelpTooltip labelKey="tooltip-indirect-programs" />
                 <ProgramSelect
+                  disabled={busy}
                   placeholder={translations[`${trnPrefix}choose_main_dst_program`]}
                   label={translations[`${trnPrefix}dst-program-lvl-1`]}
                   options={programs.filter(p => p.indirect === isIndirect)}
@@ -53,7 +57,8 @@ ProgramsHeader.contextType = NDDContext;
 ProgramsHeader.propTypes = {
   onChange: PropTypes.func.isRequired,
   src: PropTypes.object,
-  dst: PropTypes.object
+  dst: PropTypes.object,
+  busy: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({

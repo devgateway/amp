@@ -298,3 +298,16 @@ table thead tr th {
 .modal-header .close {
     margin-top: -24px;
 }
+
+.status-header {
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.status-error {
+    color: #FF0000;
+}
+
+.status-ok {
+    color: #00FF00;
+}

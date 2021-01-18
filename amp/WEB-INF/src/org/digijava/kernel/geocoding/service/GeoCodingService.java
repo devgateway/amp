@@ -263,23 +263,24 @@ public class GeoCodingService {
         }
     }
 
-    public void saveActivities() {
+    public void saveActivity(Long activityId) {
         Session session = PersistenceManager.getSession();
         session.setFlushMode(FlushMode.MANUAL);
 
         GeoCodingProcess geoCoding = getGeoCodingProcess();
         if (geoCoding != null) {
-            Iterator<GeoCodedActivity> iterator = geoCoding.getActivities().iterator();
-            while (iterator.hasNext()) {
-                GeoCodedActivity activity = iterator.next();
-                if (allLocationsHaveStatusSet(activity)) {
-                    if (acceptedLocationsExist(activity)) {
-                        updateActivity(activity);
-                    }
-                    iterator.remove();
+            GeoCodedActivity geoCodedActivity = geoCoding.getActivities().stream()
+                    .filter(g -> g.getActivity().getAmpActivityId().equals(activityId))
+                    .findFirst().orElse(null);
+
+            if (geoCodedActivity != null && allLocationsHaveStatusSet(geoCodedActivity)) {
+                if (acceptedLocationsExist(geoCodedActivity)) {
+                    updateActivity(geoCodedActivity);
                 }
+                geoCoding.getActivities().remove(geoCodedActivity);
             }
         }
+
     }
 
     private boolean acceptedLocationsExist(GeoCodedActivity activity) {
@@ -354,11 +355,13 @@ public class GeoCodingService {
     private AmpCategoryValue getImplementationLocation(GeoCodedActivity geoCodedActivity) {
         AmpCategoryValue implementationLocation = null;
         for (GeoCodedLocation location : geoCodedActivity.getLocations()) {
-            AmpCategoryValue cat = location.getLocation().getParentCategoryValue();
-            if (implementationLocation == null) {
-                implementationLocation = cat;
-            } else if (!implementationLocation.equals(cat)) {
-                throw new GeneralGeoCodingException("Different implementation levels selected");
+            if (Boolean.TRUE.equals(location.getAccepted())) {
+                AmpCategoryValue cat = location.getLocation().getParentCategoryValue();
+                if (implementationLocation == null) {
+                    implementationLocation = cat;
+                } else if (!implementationLocation.equals(cat)) {
+                    throw new GeneralGeoCodingException("Different implementation levels selected");
+                }
             }
         }
         return implementationLocation;

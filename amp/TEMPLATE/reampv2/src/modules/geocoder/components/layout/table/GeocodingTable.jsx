@@ -11,6 +11,7 @@ import {Loading} from "../panel/Loading";
 import {loadGeocoding} from "../../../actions/geocodingAction";
 import {TranslationContext} from "../../AppContext";
 import ActivityWithoutLocationsDialog from "../panel/dialog/ActivityWithoutLocationsDialog";
+import ActivitySaveResultsDialog from "../panel/dialog/ActivitySaveResultsDialog";
 
 class GeocodingTable extends Component {
     constructor(props) {
@@ -36,6 +37,10 @@ class GeocodingTable extends Component {
 
     existLocationsInGeocoding = () => {
         return this.props.activities.some(activity => activity.locations.length > 0);
+    }
+
+    existSaveResults = () => {
+        return this.props.save_activities_result && this.props.save_activities_result.length > 0;
     }
 
     componentDidMount() {
@@ -174,6 +179,7 @@ class GeocodingTable extends Component {
             </div>
 
                 {!this.existLocationsInGeocoding() && <ActivityWithoutLocationsDialog title={translations['amp.geocoder:discardGeocodingButton']}/>}
+                {this.existSaveResults() && <ActivitySaveResultsDialog title={translations['amp.geocoder:discardGeocodingButton']}/>}
             </>
 
     );
@@ -186,6 +192,7 @@ const mapStateToProps = state => {
     return {
         geocodingPending: state.geocodingReducer.pending,
         activities: state.geocodingReducer.activities,
+        save_activities_result: state.geocodingReducer.save_activities_result,
         geocodeShouldRun: state.geocodingReducer.geocodeShouldRun,
     };
 };

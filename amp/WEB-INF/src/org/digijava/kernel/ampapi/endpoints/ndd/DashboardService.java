@@ -131,7 +131,7 @@ public final class DashboardService {
     }
 
     private static AmpReportFilters getFiltersFromParams(Map<String, Object> filters) {
-        AmpReportFilters filterRules = null;
+        AmpReportFilters filterRules = new AmpReportFilters();
         if (filters != null) {
             filterRules = FilterUtils.getFilterRules(filters, null);
         }

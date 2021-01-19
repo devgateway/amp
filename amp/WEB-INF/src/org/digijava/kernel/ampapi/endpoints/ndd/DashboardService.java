@@ -69,6 +69,32 @@ public final class DashboardService {
         return report;
     }
 
+    /**
+     * Add the program as a new filter option to the correct category (primary program, secondary program, etc).
+     *
+     * @param program
+     * @param filters
+     */
+    private static void addFilterFromProgram(final AmpTheme program, AmpReportFilters filters) {
+        Set<AmpActivityProgramSettings> programSettings = program.getParentThemeId().getProgramSettings();
+        if (programSettings == null || programSettings.size() != 1) {
+            throw new RuntimeException("Cant determine the filter for the report.");
+        }
+        AmpActivityProgramSettings singleProgramSetting = ((AmpActivityProgramSettings) programSettings.toArray()[0]);
+        if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.PRIMARY_PROGRAM)) {
+            // return new ReportColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_3);
+        } else if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.SECONDARY_PROGRAM)) {
+            // return new ReportColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_3);
+        } else if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.TERTIARY_PROGRAM)) {
+            // return new ReportColumn(ColumnConstants.TERTIARY_PROGRAM_LEVEL_3);
+        } else if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES)
+                || singleProgramSetting.getName().equalsIgnoreCase(ProgramUtil.NATIONAL_PLAN_OBJECTIVE)) {
+            // return new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_3);
+        } else if (singleProgramSetting.getName().equalsIgnoreCase(ProgramUtil.INDIRECT_PRIMARY_PROGRAM)) {
+            // return new ReportColumn(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_3);
+        }
+    }
+
     private static ReportColumn getColumnFromProgram(AmpTheme program) {
         Set<AmpActivityProgramSettings> programSettings = program.getProgramSettings();
         if (programSettings == null || programSettings.size() != 1) {
@@ -190,7 +216,22 @@ public final class DashboardService {
     }
 
     private static List<DetailByYear> processDetail(final GeneratedReport report, int year) {
-        return null;
+        List<DetailByYear> list = new ArrayList<>();
+        ReportOutputColumn outerReportProgramColumn = report.leafHeaders.get(0);
+        ReportOutputColumn outerReportTotalColumn = report.leafHeaders.get(report.leafHeaders.size() - 1);
+
+        if (report.reportContents != null && report.reportContents.getChildren() != null) {
+            report.reportContents.getChildren().stream().forEach(children -> {
+                Map<ReportOutputColumn, ReportCell> outerContent = children.getContents();
+                TextCell cell = ((TextCell) outerContent.get(outerReportProgramColumn));
+                BigDecimal amount = extractAmountsByYear(outerContent).get("" + year);
+                if (amount != null) {
+                    DetailByYear detailRecord = new DetailByYear(cell.entityId, cell.displayedValue, amount);
+                    list.add(detailRecord);
+                }
+            });
+        }
+        return list;
     }
 
     public static List<NDDSolarChartData> generateDirectIndirectReport(SettingsAndFiltersParameters params) {
@@ -279,6 +320,7 @@ public final class DashboardService {
         String programIdString = params.getSettings().get("id").toString();
         AmpReportFilters filters = getFiltersFromParams(params.getFilters());
         AmpTheme program = ProgramUtil.getTheme(Long.valueOf(programIdString));
+        addFilterFromProgram(program, filters);
         ReportColumn projectTitleColumn = new ReportColumn(ColumnConstants.PROJECT_TITLE);
 
         // TODO: filter by program (primary, secondary, etc) clicked.

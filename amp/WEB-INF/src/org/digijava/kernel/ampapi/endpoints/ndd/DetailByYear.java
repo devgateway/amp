@@ -4,12 +4,14 @@ import java.math.BigDecimal;
 
 public class DetailByYear {
 
+    private final Long id;
     private final String projectTitle;
     private final BigDecimal amount;
 
-    public DetailByYear(String projectTitle, BigDecimal amount) {
+    public DetailByYear(Long id, String projectTitle, BigDecimal amount) {
         this.projectTitle = projectTitle;
         this.amount = amount;
+        this.id = id;
     }
 
     public String getProjectTitle() {
@@ -18,5 +20,9 @@ public class DetailByYear {
 
     public BigDecimal getAmount() {
         return amount;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

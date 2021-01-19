@@ -186,5 +186,6 @@ public class ActivityEPConstants {
             "Sustainability: what happens when the project/action ends?";
     public static final String FUNDING_PROJECT_PROBLEMS_LABEL = "What problems were encountered in this project?";
 
+    public static final Integer SECONDS_TO_SLEEP = 5;
 
 }

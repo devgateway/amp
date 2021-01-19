@@ -5,6 +5,7 @@ import static java.util.stream.Collectors.toMap;
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.AMP_ID_FIELD_NAME;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.MAX_BULK_ACTIVITIES_ALLOWED;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.SECONDS_TO_SLEEP;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -547,7 +548,7 @@ public class InterchangeEndpoints {
     @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "updateMappings", ui = false)
     public Response updateMappings() {
         try {
-            TimeUnit.SECONDS.sleep(5);
+            TimeUnit.SECONDS.sleep(SECONDS_TO_SLEEP);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

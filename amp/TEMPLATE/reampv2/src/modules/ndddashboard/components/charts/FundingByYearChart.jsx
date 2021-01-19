@@ -59,7 +59,8 @@ class FundingByYearChart extends Component {
           ret.push({
             [CODE]: directProgram[CODE],
             name: directProgram.name,
-            values: Object.keys(auxAmounts).map(j => ({ [j]: auxAmounts[j] }))
+            values: Object.keys(auxAmounts).map(j => ({ [j]: auxAmounts[j] })),
+            id: directProgram.objectId
           });
         }
       });
@@ -128,8 +129,14 @@ class FundingByYearChart extends Component {
 
   onClick = (event) => {
     console.log(event);
-    const { _callYearDetailReport } = this.props;
-    return _callYearDetailReport('Planned Commitments', null, "1", 2020, {});
+    const {
+      _callYearDetailReport, settings, filters, fundingType
+    } = this.props;
+    return _callYearDetailReport(fundingType,
+      filters,
+      event.points[0].data.extraData.find(i => i.name === event.points[0].data.text).id,
+      event.points[0].x,
+      settings);
   }
 
   createTooltip = () => {
@@ -303,7 +310,9 @@ FundingByYearChart.propTypes = {
   translations: PropTypes.array.isRequired,
   settings: PropTypes.object.isRequired,
   globalSettings: PropTypes.object.isRequired,
-  _callYearDetailReport: PropTypes.func.isRequired
+  _callYearDetailReport: PropTypes.func.isRequired,
+  fundingType: PropTypes.object.isRequired,
+  filters: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({

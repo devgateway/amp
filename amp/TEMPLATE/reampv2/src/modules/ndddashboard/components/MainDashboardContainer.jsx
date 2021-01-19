@@ -107,7 +107,8 @@ class MainDashboardContainer extends Component {
       settings,
       selectedDirectProgram,
       handleOuterChartClick,
-      globalSettings
+      globalSettings,
+      filters
     } = this.props;
     const { translations } = this.context;
     const formatter = new Intl.NumberFormat('en-US', {
@@ -236,6 +237,8 @@ class MainDashboardContainer extends Component {
                   <FundingByYearChart
                     selectedDirectProgram={selectedDirectProgram}
                     settings={settings}
+                    filters={filters}
+                    fundingType={fundingType}
                     globalSettings={globalSettings}
                     data={ndd} />
                 ) : <div className="loading" />}

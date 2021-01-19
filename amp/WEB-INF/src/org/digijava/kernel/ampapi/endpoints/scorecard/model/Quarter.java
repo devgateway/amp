@@ -128,4 +128,8 @@ public class Quarter {
     public void setYearCode(String yearCode) {
         this.yearCode = yearCode;
     }
+
+    public String getLabel() {
+        return "Q" + quarterNumber;
+    }
 }

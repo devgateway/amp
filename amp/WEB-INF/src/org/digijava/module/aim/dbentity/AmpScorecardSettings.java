@@ -1,7 +1,10 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class AmpScorecardSettings implements Serializable {
@@ -15,6 +18,8 @@ public class AmpScorecardSettings implements Serializable {
     private Integer validationTime;
     private Double percentageThreshold;
     private Set<AmpScorecardSettingsCategoryValue> closedStatuses = new HashSet<AmpScorecardSettingsCategoryValue>();
+
+    private String quarters;
 
     public Long getAmpScorecardSettingsId() {
         return ampScorecardSettingsId;
@@ -56,4 +61,15 @@ public class AmpScorecardSettings implements Serializable {
         this.percentageThreshold = percentageThreshold;
     }
 
+    public String getQuarters() {
+        return quarters;
+    }
+
+    public void setQuarters(String quarters) {
+        this.quarters = quarters;
+    }
+
+    public List<String> getQuartersAsList() {
+        return quarters == null ? new ArrayList<>() : Arrays.asList(quarters.split(","));
+    }
 }

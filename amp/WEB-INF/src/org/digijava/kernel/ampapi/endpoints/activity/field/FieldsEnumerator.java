@@ -5,7 +5,6 @@ import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.SUBMIT;
 import static org.digijava.kernel.translator.util.TrnUtil.DEFAULT;
 import static org.digijava.kernel.translator.util.TrnUtil.PREFIX;
-import static org.digijava.kernel.translator.util.TrnUtil.PREFIXES;
 import static org.digijava.kernel.util.SiteUtils.DEFAULT_SITE_ID;
 
 import java.lang.reflect.Field;

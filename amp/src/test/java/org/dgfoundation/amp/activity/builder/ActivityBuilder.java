@@ -170,7 +170,6 @@ public class ActivityBuilder {
         funding.setRegionLocation(location);
 
         activity.getRegionalFundings().add(funding);
-
         return this;
     }
 }

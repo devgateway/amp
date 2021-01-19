@@ -1036,8 +1036,8 @@ public class NodeWrapper{
             if (titleNode != null) {
                 PropertyIterator  iterator = titleNode.getProperties();
                 while (iterator.hasNext()) {
-                    PropertyImpl property = (PropertyImpl)iterator.next();
-                    translatedField.put(property.getName(),property.getString());
+                    PropertyImpl property = (PropertyImpl) iterator.next();
+                    translatedField.put(property.getName(), property.getString());
                         
                 }
             }

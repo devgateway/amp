@@ -9,8 +9,8 @@ import {
 } from '../../../../utils/constants';
 import { toCamelCase } from '../../../../utils/Utils';
 import Tooltip from '../../../utils/GenericTooltip';
-import CustomLegend from '../../../utils/CustomLegend';
-
+import CustomLegend from '../../../../../../utils/components/CustomLegend';
+import '../../../utils/customLegend.css';
 class CountryPopupChart extends Component {
   constructor(props) {
     super(props);

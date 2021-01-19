@@ -775,7 +775,7 @@ public class ShowActivityPrintPreview
                     
                     
                   //load programs by type
-                    if(ProgramUtil.getAmpActivityProgramSettingsList()!=null){
+                if (ProgramUtil.getAmpActivityProgramSettingsList(true) != null) {
                                  List activityNPO=ActivityUtil.getActivityProgramsByProgramType(activity.getAmpActivityId(),ProgramUtil.NATIONAL_PLAN_OBJECTIVE);
                                  List activityPP=ActivityUtil.getActivityProgramsByProgramType(activity.getAmpActivityId(),ProgramUtil.PRIMARY_PROGRAM);
                                  List activitySP=ActivityUtil.getActivityProgramsByProgramType(activity.getAmpActivityId(),ProgramUtil.SECONDARY_PROGRAM);
@@ -789,31 +789,6 @@ public class ShowActivityPrintPreview
                     
                     //get all possible refdoc names from categories
                     Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.REFERENCE_DOCS_KEY,false);
-
-//                  if (catValues!=null && eaForm.getDocuments().getReferenceDocs()==null){
-//                      List<ReferenceDoc> refDocs=new ArrayList<ReferenceDoc>();
-//                      Collection<AmpActivityReferenceDoc> activityRefDocs=null;
-//                      Map<Long, AmpActivityReferenceDoc> categoryRefDocMap=null;
-//
-//                      if (activity.getAmpActivityId()!=null){
-//                          //get list of ref docs for activity
-//                          activityRefDocs=ActivityUtil.getReferenceDocumentsFor(activity.getAmpActivityId());
-//                          //create map where keys are category value ids.
-//                          categoryRefDocMap = AmpCollectionUtils.createMap(
-//                                  activityRefDocs,
-//                                  new ActivityUtil.CategoryIdRefDocMapBuilder());
-//                      }
-//                      if(refDocs.size()>0){
-//                          ReferenceDoc[] myrefDoc = (ReferenceDoc[]) refDocs.toArray(new ReferenceDoc[0]);
-//                          eaForm.getDocuments().setReferenceDocs(myrefDoc);
-//                      }
-//                      else{
-//                          eaForm.getDocuments().setReferenceDocs(null);
-//                      }
-//
-//                  }
-                        
-                        
                 //allComments
                         List<AmpComments> colAux    = null;
                         Collection ampFields            = DbUtil.getAmpFields();

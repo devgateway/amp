@@ -36,7 +36,7 @@ public class DiscriminatedFieldAccessor implements FieldAccessor {
     private final boolean multipleValues;
 
     public DiscriminatedFieldAccessor(FieldAccessor targetField, String discriminatorField, String discriminatorValue,
-            boolean multipleValues) {
+                                      boolean multipleValues) {
         this.targetField = targetField;
         this.discriminatorField = discriminatorField;
         this.discriminatorValue = discriminatorValue;

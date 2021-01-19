@@ -59,7 +59,6 @@ import org.digijava.module.aim.dbentity.AmpFundingAmount;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIssues;
-import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRole;
@@ -1614,6 +1613,11 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
     public static ArrayList<AmpActivityFake> getAllActivitiesAdmin(String searchTerm, Set<Long> frozenActivityIds, ActivityForm.DataFreezeFilter dataFreezeFilter) {
        try {
             Session session = PersistenceManager.getSession();
+
+           if (ActivityForm.DataFreezeFilter.FROZEN.equals(dataFreezeFilter)
+                   && (frozenActivityIds == null || frozenActivityIds.isEmpty())) {
+                return new ArrayList<>();
+           }
             
             boolean isSearchByName = searchTerm != null && (!searchTerm.trim().isEmpty());
             String activityName = AmpActivityVersion.hqlStringForName("f");
@@ -1633,11 +1637,11 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             }
 
            String dataFreezeQuery = "";
-            if (frozenActivityIds != null && frozenActivityIds.size() > 0) {
-                if (ActivityForm.DataFreezeFilter.FROZEN.equals(dataFreezeFilter)) {
-                   dataFreezeQuery = " and f.ampActivityId in (:frozenActivityIds) ";
-                } else if (ActivityForm.DataFreezeFilter.UNFROZEN.equals(dataFreezeFilter)) {
-                   dataFreezeQuery = " and f.ampActivityId not in (:frozenActivityIds) ";
+           if (frozenActivityIds != null && frozenActivityIds.size() > 0) {
+               if (ActivityForm.DataFreezeFilter.FROZEN.equals(dataFreezeFilter)) {
+                   dataFreezeQuery = " AND f.ampActivityId IN (:frozenActivityIds) ";
+               } else if (ActivityForm.DataFreezeFilter.UNFROZEN.equals(dataFreezeFilter)) {
+                   dataFreezeQuery = " AND f.ampActivityId not in (:frozenActivityIds) ";
                }
            }
 

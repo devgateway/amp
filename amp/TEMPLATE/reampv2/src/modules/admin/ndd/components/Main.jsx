@@ -26,7 +26,7 @@ class Main extends Component {
       fetchNDD, fetchPrograms, api, fetchLayout
     } = this.props;
     fetchLayout().then((layout) => {
-      if (layout && layout.logged) {
+      if (layout && layout.logged && layout.administratorMode === true) {
         fetchNDD(api.mappingConfig);
         fetchPrograms(api.programs);
       } else {
@@ -47,7 +47,7 @@ class Main extends Component {
     const { translations } = this.context;
 
     if (!this.shouldComponentRender() || ndd.length === 0) {
-      return <div>loading...</div>;
+      return <div className="loading">{translations[`${trnPrefix}loading`]}</div>;
     } else {
       return (
         <div className="ndd-container">
@@ -56,7 +56,6 @@ class Main extends Component {
           }}>
             <div className="col-md-12">
               <div>
-                <h2 className="title">{translations[`${trnPrefix}title`]}</h2>
                 <FormPrograms />
               </div>
             </div>

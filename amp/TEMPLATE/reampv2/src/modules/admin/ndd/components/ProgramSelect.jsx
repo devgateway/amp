@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import { NDDContext } from './Startup';
 import './css/Typeahead.css';
 import './css/style.css';
+import RequiredMark from './common/RequiredMark';
 
 class ProgramSelect extends Component {
   constructor(props) {
@@ -19,18 +20,23 @@ class ProgramSelect extends Component {
   }
 
   drawSelector() {
-    const { options, placeholder, selected } = this.props;
+    const {
+      options, placeholder, selected, disabled
+    } = this.props;
     const isValid = (selected && selected.length === 1);
+    const sortedOptions = options ? options.sort((a, b) => a.value.localeCompare(b.value)) : [];
     return (
       <Typeahead
         id="basic-typeahead-single"
         labelKey="value"
         className={!isValid ? 'is-invalid' : ''}
-        options={options || []}
+        options={sortedOptions || []}
         clearButton
         onChange={this.onChangeSelect.bind(this)}
         selected={selected}
-        placeholder={placeholder} />
+        placeholder={placeholder}
+        disabled={disabled}
+      />
     );
   }
 
@@ -39,6 +45,7 @@ class ProgramSelect extends Component {
     return (
       <div>
         <span>{label}</span>
+        <RequiredMark />
         {this.drawSelector()}
       </div>
     );
@@ -53,7 +60,8 @@ ProgramSelect.propTypes = {
   placeholder: PropTypes.string.isRequired,
   selected: PropTypes.array,
   onChange: PropTypes.func.isRequired,
-  level: PropTypes.number.isRequired
+  level: PropTypes.number.isRequired,
+  disabled: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({

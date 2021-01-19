@@ -1,5 +1,8 @@
 {
   "amp.admin.ndd:page-title": "Aid Management Platform - NDD Mappings Manager",
   "amp.admin.ndd:menu-item-indirect-programs-mapping": "Indirect Programs Mapping",
-  "amp.admin.ndd:menu-item-programs-mapping": "Programs Mapping"
+  "amp.admin.ndd:menu-item-programs-mapping": "Programs Mapping",
+  "amp.admin.ndd:mappings-manager": "NDD Mappings Manager",
+  "amp.admin.ndd.indirect:title": "NDD Indirect Program Manager",
+  "amp.admin.ndd.program:title": "NDD Program Manager"
 }

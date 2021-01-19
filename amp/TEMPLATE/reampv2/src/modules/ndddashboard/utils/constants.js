@@ -1,5 +1,6 @@
 export const TRN_PREFIX = 'amp.ndd.dashboard:';
 export const DIRECT_INDIRECT_REPORT = '/rest/ndd/direct-indirect-report';
+export const ACTIVITY_DETAIL_REPORT = '/rest/ndd/activity-detail-report';
 export const INDIRECT_MAPPING_CONFIG = '/rest/ndd/indirect-programs-mapping-config';
 export const MAPPING_CONFIG_NO_INDIRECT = '/rest/ndd/programs-mapping-config';
 export const TOP_DONOR_REPORT = '/rest/dashboard/tops/do?limit=5';

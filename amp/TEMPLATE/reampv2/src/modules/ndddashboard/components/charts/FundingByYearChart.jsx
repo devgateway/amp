@@ -6,13 +6,15 @@ import { bindActionCreators } from 'redux';
 // Dont use react-plotly directly: https://github.com/plotly/react-plotly.js/issues/135#issuecomment-501398125
 import Plotly from 'plotly.js';
 import createPlotlyComponent from 'react-plotly.js/factory';
+import { callYearDetailReport } from '../../actions/callReports';
 import {
-  DIRECT_PROGRAM, INDIRECT_PROGRAMS, PROGRAMLVL1, AMOUNT, CODE, DIRECT, INDIRECT,
-  TRANSITIONS, PROGRAMLVL2, AVAILABLE_COLORS, TRN_PREFIX, CURRENCY_CODE
+  DIRECT_PROGRAM, INDIRECT_PROGRAMS, PROGRAMLVL1, CODE,
+  PROGRAMLVL2, TRN_PREFIX, CURRENCY_CODE
 } from '../../utils/constants';
 import {
-  addAlpha, formatNumberWithSettings, getCustomColor, getGradient
+  formatNumberWithSettings, getCustomColor
 } from '../../utils/Utils';
+// eslint-disable-next-line no-unused-vars
 import styles from '../styles.css';
 import ToolTip from '../tooltips/ToolTip';
 
@@ -68,7 +70,7 @@ class FundingByYearChart extends Component {
     return ret;
   }
 
-  // eslint-disable-next-line class-methods-use-this
+  // eslint-disable-next-line class-methods-use-this,react/sort-comp
   sortAmountsByYear(values) {
     return values.sort((i, j) => (Object.keys(i)[0] - Object.keys(j)[0]));
   }
@@ -122,6 +124,12 @@ class FundingByYearChart extends Component {
 
   onUnHover = () => {
     this.setState({ showLegend: false, tooltipData: null });
+  }
+
+  onClick = (event) => {
+    console.log(event);
+    const { _callYearDetailReport } = this.props;
+    return _callYearDetailReport('Planned Commitments', null, "1", 2020, {});
   }
 
   createTooltip = () => {
@@ -273,6 +281,7 @@ class FundingByYearChart extends Component {
           style={{ width: '100%', height: '100%', cursor: 'pointer' }}
           onHover={event => this.onHover(event)}
           onUnhover={() => this.onUnHover()}
+          onClick={(event) => this.onClick(event)}
         />
         <div
           style={{
@@ -293,13 +302,16 @@ FundingByYearChart.propTypes = {
   selectedDirectProgram: PropTypes.object.isRequired,
   translations: PropTypes.array.isRequired,
   settings: PropTypes.object.isRequired,
-  globalSettings: PropTypes.object.isRequired
+  globalSettings: PropTypes.object.isRequired,
+  _callYearDetailReport: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   translations: state.translationsReducer.translations
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({
+  _callYearDetailReport: callYearDetailReport
+}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(FundingByYearChart);

@@ -189,6 +189,10 @@ public final class DashboardService {
         return list;
     }
 
+    private static List<DetailByYear> processDetail(final GeneratedReport report, int year) {
+        return null;
+    }
+
     public static List<NDDSolarChartData> generateDirectIndirectReport(SettingsAndFiltersParameters params) {
         List<NDDSolarChartData> list = new ArrayList<>();
         MappingConfiguration mapping;
@@ -266,5 +270,21 @@ public final class DashboardService {
             }
         });
         return amountsByYear;
+    }
+
+    public static List getActivityDetailReport(SettingsAndFiltersParameters params) {
+        GeneratedReport report;
+        List list = new ArrayList();
+        int yearString = Integer.parseInt(params.getSettings().get("year").toString());
+        String programIdString = params.getSettings().get("id").toString();
+        AmpReportFilters filters = getFiltersFromParams(params.getFilters());
+        AmpTheme program = ProgramUtil.getTheme(Long.valueOf(programIdString));
+        ReportColumn projectTitleColumn = new ReportColumn(ColumnConstants.PROJECT_TITLE);
+
+        // TODO: filter by program (primary, secondary, etc) clicked.
+        // ReportColumn outerColumn = getColumnFromProgram(program);
+        ReportMeasure outerMeasure = getMeasureFromParams(params.getSettings());
+        report = createReport(projectTitleColumn, outerMeasure, filters, params.getSettings());
+        return processDetail(report, yearString);
     }
 }

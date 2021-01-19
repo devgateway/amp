@@ -1,7 +1,12 @@
 import {
   FETCH_DIRECT_INDIRECT_NDD_ERROR,
   FETCH_DIRECT_INDIRECT_NDD_PENDING,
-  FETCH_DIRECT_INDIRECT_NDD_SUCCESS, FETCH_TOP_ERROR, FETCH_TOP_PENDING, FETCH_TOP_SUCCESS, RESET_TOP
+  FETCH_DIRECT_INDIRECT_NDD_SUCCESS,
+  FETCH_TOP_ERROR,
+  FETCH_TOP_PENDING,
+  FETCH_TOP_SUCCESS, FETCH_YEAR_DETAIL_ERROR, FETCH_YEAR_DETAIL_PENDING,
+  FETCH_YEAR_DETAIL_SUCCESS,
+  RESET_TOP
 } from '../actions/reportActions';
 
 const initialState = {
@@ -10,7 +15,10 @@ const initialState = {
   topLoaded: false,
   topLoadingPending: false,
   error: null,
-  top: undefined
+  top: undefined,
+  yearDetail: undefined,
+  yearDetailLoaded: false,
+  yearDetailPending: false,
 };
 export default (state = initialState, action) => {
   switch (action.type) {
@@ -60,6 +68,25 @@ export default (state = initialState, action) => {
         topLoaded: false,
         topLoadingPending: false,
         top: undefined
+      };
+    case FETCH_YEAR_DETAIL_SUCCESS:
+      return {
+        ...state,
+        yearDetailPending: false,
+        yearDetailLoaded: true,
+        yearDetail: action.payload,
+      };
+    case FETCH_YEAR_DETAIL_PENDING:
+      return {
+        ...state,
+        yearDetailPending: true
+      };
+    case FETCH_YEAR_DETAIL_ERROR:
+      return {
+        ...state,
+        yearDetailLoaded: false,
+        yearDetailPending: false,
+        error: action.error
       };
     default:
       return state;

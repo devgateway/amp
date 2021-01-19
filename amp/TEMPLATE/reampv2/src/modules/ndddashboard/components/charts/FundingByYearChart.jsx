@@ -110,9 +110,11 @@ class FundingByYearChart extends Component {
 
   onHover = (data) => {
     console.log(data);
+    const { text } = data.points[0].data;
+    const lines = Math.ceil(text.length / 30);
     this.setState({
       showLegend: true,
-      legendTop: data.event.pointerY - 25,
+      legendTop: data.event.pointerY - 20 - (lines * 25),
       legendLeft: data.event.pointerX - 100,
       tooltipData: data
     });

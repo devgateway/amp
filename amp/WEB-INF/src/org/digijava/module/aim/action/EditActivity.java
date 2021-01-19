@@ -810,7 +810,7 @@ public class EditActivity extends Action {
             
 
           // load programs by type
-          if(ProgramUtil.getAmpActivityProgramSettingsList()!=null){
+            if (ProgramUtil.getAmpActivityProgramSettingsList(true) != null) {
                        List activityNPO=ActivityUtil.getActivityProgramsByProgramType(activityId,ProgramUtil.NATIONAL_PLAN_OBJECTIVE);
                        List activityPP=ActivityUtil.getActivityProgramsByProgramType(activityId,ProgramUtil.PRIMARY_PROGRAM);
                        List activitySP=ActivityUtil.getActivityProgramsByProgramType(activityId,ProgramUtil.SECONDARY_PROGRAM);

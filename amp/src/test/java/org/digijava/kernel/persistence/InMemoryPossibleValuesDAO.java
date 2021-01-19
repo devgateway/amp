@@ -44,6 +44,11 @@ public class InMemoryPossibleValuesDAO implements PossibleValuesDAO {
     public List<Object[]> getThemes(String configType) {
         return null;
     }
+
+    @Override
+    public List<AmpThemeMapping> getMappedThemes() {
+        return null;
+    }
     
     @Override
     public boolean isThemeValid(String configType, Long id) {

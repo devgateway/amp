@@ -474,7 +474,9 @@ public class PledgeForm extends ActionForm implements Serializable {
      * @return
      */
     public List<DisableableKeyValue> getAllRootPrograms() {
-        return mergeLists(DISABLEABLE_KV_PLEASE_SELECT, Lists.transform(ProgramUtil.getConfiguredParentThemes(), theme -> new DisableableKeyValue(theme.getAmpThemeId(), theme.getName(), true)));
+        return mergeLists(DISABLEABLE_KV_PLEASE_SELECT,
+                Lists.transform(ProgramUtil.getConfiguredParentThemes(false),
+                        theme -> new DisableableKeyValue(theme.getAmpThemeId(), theme.getName(), true)));
     }
     
     /**

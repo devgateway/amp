@@ -4,11 +4,13 @@
 
 package org.digijava.module.aim.util;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -16,10 +18,13 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 
 import com.google.common.collect.ImmutableList;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.util.LabelValueBean;
 import org.dgfoundation.amp.algo.AlgoUtils;
@@ -39,6 +44,7 @@ import org.digijava.module.aim.dbentity.AmpIndicatorSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.AmpThemeIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpThemeIndicators;
+import org.digijava.module.aim.dbentity.AmpThemeMapping;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.ActivitySector;
@@ -52,12 +58,20 @@ import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.IndicatorsBean;
 import org.digijava.module.aim.helper.TreeItem;
+import org.hibernate.CacheMode;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
+
+import static java.util.Collections.emptySet;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.mapping;
+import static java.util.stream.Collectors.toCollection;
+import static org.digijava.module.aim.helper.GlobalSettingsConstants.MAPPING_DESTINATION_PROGRAM;
+import static org.digijava.module.aim.helper.GlobalSettingsConstants.MAPPING_SOURCE_PROGRAM;
 
 public class ProgramUtil {
     private static Logger logger = Logger.getLogger(ProgramUtil.class);
@@ -69,21 +83,23 @@ public class ProgramUtil {
     public static final String PRIMARY_PROGRAM = "Primary Program";
     public static final String SECONDARY_PROGRAM = "Secondary Program";
     public static final String TERTIARY_PROGRAM = "Tertiary Program";
+    public static final String INDIRECT_PRIMARY_PROGRAM = "Indirect Primary Program";
     public static final int NATIONAL_PLAN_OBJECTIVE_KEY = 1;
     public static final int PRIMARY_PROGRAM_KEY = 2;
     public static final int SECONDARY_PROGRAM_KEY = 3;
-                
+
     @SuppressWarnings("serial")
     public static final Map<String, String> NAME_TO_COLUMN_MAP = new HashMap<String, String>() {{
         put(NATIONAL_PLAN_OBJECTIVE, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1);
         put(PRIMARY_PROGRAM, ColumnConstants.PRIMARY_PROGRAM_LEVEL_1);
         put(SECONDARY_PROGRAM, ColumnConstants.SECONDARY_PROGRAM_LEVEL_1);
         put(TERTIARY_PROGRAM, ColumnConstants.TERTIARY_PROGRAM_LEVEL_1);
+        put(INDIRECT_PRIMARY_PROGRAM, ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_1);
     }};
-    
+
     public static final ImmutableList<String> PROGRAM_NAMES = ImmutableList.of(NATIONAL_PLANNING_OBJECTIVES,
             PRIMARY_PROGRAM, SECONDARY_PROGRAM, TERTIARY_PROGRAM);
-    
+
 
         public static Collection getAllIndicatorsFromPrograms(Collection programs) throws AimException{
             try {
@@ -120,7 +136,7 @@ public class ProgramUtil {
             }
 
         }
-        
+
         /**
          * Gets a theme/program by code
          * @param code theme code
@@ -143,22 +159,34 @@ public class ProgramUtil {
             } catch (Exception e) {
                 logger.error("Exception from getTheme()");
                 logger.error(e.getMessage());
-            } 
+            }
             return theme;
         }
 
-
         public static AmpTheme getTheme(String name) {
+            return getTheme(name, null);
+        }
+
+        public static AmpTheme getTheme(Long id) {
+            return getTheme(null, id);
+        }
+
+        public static AmpTheme getTheme(String name, Long id) {
             Session session = null;
             AmpTheme theme = null;
 
             try {
                 session = PersistenceManager.getRequestDBSession();
                 String themeNameHql = AmpTheme.hqlStringForName("theme");
-                String qryStr = "select theme from " + AmpTheme.class.getName()
-                        + " theme where (" + themeNameHql + "=:name)";
+                String qryStr = "select theme from " + AmpTheme.class.getName() + " theme "
+                        + ((id != null) ? " where (ampThemeId=:id)" : " where (" + themeNameHql + "=:name)");
                 Query qry = session.createQuery(qryStr);
-                qry.setParameter("name", name, StringType.INSTANCE);
+                if (id != null) {
+                    qry.setParameter("id", id);
+                } else {
+                    qry.setParameter("name", name, StringType.INSTANCE);
+                }
+                session.setCacheMode(CacheMode.IGNORE);
                 Iterator itr = qry.list().iterator();
                 if (itr.hasNext()) {
                     theme = (AmpTheme) itr.next();
@@ -166,7 +194,7 @@ public class ProgramUtil {
             } catch (Exception e) {
                 logger.error("Exception from getTheme()");
                 logger.error(e.getMessage());
-            } 
+            }
             return theme;
         }
 
@@ -175,7 +203,7 @@ public class ProgramUtil {
          * @param keyword String -
          * @return Coll AmpThemeIndicators
          */
-    
+
         @Deprecated
         public static Collection getThemeindicators(String keyword) {
             Session session = null;
@@ -192,26 +220,24 @@ public class ProgramUtil {
             } catch (Exception e) {
                 logger.error("Unable to get all themes : "+e);
                 logger.debug("Exceptiion " + e);
-            } 
+            }
             return ThemeIndicators;
         }
-        
+
         /**
          * Load theme by ID.
          * @param ampThemeId
          * @return
          * @throws DgException
          */
-        public static AmpTheme getThemeById(Long ampThemeId)
-        {   
+        public static AmpTheme getThemeById(Long ampThemeId) {
             try {
                 return (AmpTheme) PersistenceManager.getRequestDBSession().load(AmpTheme.class, ampThemeId);
-            } 
-            catch (Exception e) {
+            } catch (Exception e) {
                 throw new RuntimeException("Cannot load AmpTheme with id " + ampThemeId, e);
             }
         }
-        
+
         public static Collection<AmpTheme> getAncestorThemes(AmpTheme theme) throws DgException {
             HashSet<AmpTheme> returnSet     = new HashSet<AmpTheme>();
             AmpTheme temp                           = getThemeById(theme.getAmpThemeId());
@@ -243,20 +269,27 @@ public class ProgramUtil {
                 throw new RuntimeException("Cannot search parent themes", e);
             }
         }
-        
+
         /**
          * returns list of of all parent themes which are configured
          * @return
          */
         @SuppressWarnings("unchecked")
-        public static List<AmpTheme> getConfiguredParentThemes(){
-            try{
-                String queryString = "select aaps.defaultHierarchy from " + AmpActivityProgramSettings.class.getName() + " aaps WHERE aaps.defaultHierarchy IS NOT NULL"; 
+        public static List<AmpTheme> getConfiguredParentThemes(boolean excludeIndirect) {
+            try {
+                String queryString = "select aaps.defaultHierarchy from "
+                        + AmpActivityProgramSettings.class.getName() + " aaps WHERE aaps.defaultHierarchy IS NOT NULL ";
+                if (excludeIndirect) {
+                    queryString += " where ap.name <> :indirectName";
+                }
                 Query qry = PersistenceManager.getRequestDBSession().createQuery(queryString);
+                if (excludeIndirect) {
+                    qry.setString("indirectName", INDIRECT_PRIMARY_PROGRAM);
+                }
+
                 List<AmpTheme> themes = qry.list();
                 return themes;
-            }
-            catch(Exception e){
+            } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }
@@ -277,12 +310,12 @@ public class ProgramUtil {
             Map<Long, AmpThemeSkeleton> themes = AmpThemeSkeleton.populateThemesTree(-1);
             return themes;
         }
-        
-        
+
+
         public static List<AmpTheme> getAllThemes(boolean includeSubThemes) throws DgException {
             return getAllThemes(includeSubThemes, false);
         }
-        
+
         /**
          * Returns All AmpThemes including sub Themes if parameter is true.
          * @param includeSubThemes boolean false - only top level Themes, true - all themes
@@ -302,7 +335,7 @@ public class ProgramUtil {
                 if (!getInvisible) {
                     queryString += " and ((t.deleted is null) OR (t.deleted = false))";
                 }
-                
+
                 if (!includeSubThemes) {
                     queryString += " and t.parentThemeId is null ";
                 }
@@ -446,66 +479,68 @@ public class ProgramUtil {
         }
 
 
-        public static List<AmpTheme> getAllPrograms() {
-            Session session = null;
-            Query qry = null;
-            List<AmpTheme> colPrg = new ArrayList<AmpTheme>();
-            
-            try  {
-                session = PersistenceManager.getRequestDBSession();
-                String queryString = " from " + AmpTheme.class.getName() + " th";
-                qry = session.createQuery(queryString);
-                colPrg = qry.list();
-            } catch(Exception ex) {
-                logger.error("Unable to get all the Themes");
-                logger.debug("Exception " + ex);
-                throw new RuntimeException("Cannot get programs, ", ex);
-            }
-            
-            return colPrg;
+    public static List<AmpTheme> getAllPrograms() {
+        Session session = null;
+        Query qry = null;
+        List<AmpTheme> colPrg = new ArrayList<AmpTheme>();
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = " from " + AmpTheme.class.getName() + " th";
+            qry = session.createQuery(queryString);
+            qry.setCacheable(false);
+            colPrg = qry.list();
+        } catch (Exception ex) {
+            logger.error("Unable to get all the Themes");
+            logger.debug("Exception " + ex);
+            throw new RuntimeException("Cannot get programs, ", ex);
         }
 
-        public static AmpTheme getAmpThemesAndSubThemesHierarchy(AmpTheme parent) {
-            
-            try {
+        return colPrg;
+    }
+
+    public static AmpTheme getAmpThemesAndSubThemesHierarchy(AmpTheme parent) {
+
+        try {
                 /*
                 We must create new program object because if you modify the name of program
                 the changes will be saved in db even though you don't save collection, strange issue....
                 */
-                AmpTheme parentWithNewName=new AmpTheme();
-                parentWithNewName.setName(parent.getName().toUpperCase());
-                parentWithNewName.setAmpThemeId(parent.getAmpThemeId());
-                
-                List<AmpTheme> dbChildrenReturnSet = (List<AmpTheme>) ProgramUtil.getAllSubThemesByParentIdWihtChildren(parent.getAmpThemeId());
-                parent.getChildren().addAll( dbChildrenReturnSet );
-            
-            } catch (DgException e) {
-                e.printStackTrace();
-            }
-            return parent;
+            AmpTheme parentWithNewName = new AmpTheme();
+            parentWithNewName.setName(parent.getName().toUpperCase());
+            parentWithNewName.setAmpThemeId(parent.getAmpThemeId());
+
+            List<AmpTheme> dbChildrenReturnSet =
+                    (List<AmpTheme>) ProgramUtil.getAllSubThemesByParentIdWihtChildren(parent.getAmpThemeId());
+            parent.getChildren().addAll(dbChildrenReturnSet);
+
+        } catch (DgException e) {
+            e.printStackTrace();
         }
-        
-        public static String getHierarchyName(AmpTheme prog){
-            String result="";
-            List<AmpTheme> progs=new ArrayList<AmpTheme>();
-            AmpTheme curProg = prog;
-            while (curProg.getParentThemeId()!=null) {
-                curProg = curProg.getParentThemeId();
-                progs.add(curProg);
-            }
+        return parent;
+    }
 
-
-            Collections.reverse(progs);
-
-            for (ListIterator<AmpTheme> iterator = progs.listIterator(); iterator.hasNext();) {
-                AmpTheme p = (AmpTheme) iterator.next();
-                result += p.getName() + " > ";
-            }
-
-            result += prog.getName();
-            return result;
+    public static String getHierarchyName(AmpTheme prog) {
+        String result = "";
+        List<AmpTheme> progs = new ArrayList<AmpTheme>();
+        AmpTheme curProg = prog;
+        while (curProg.getParentThemeId() != null) {
+            curProg = curProg.getParentThemeId();
+            progs.add(curProg);
         }
-        
+
+
+        Collections.reverse(progs);
+
+        for (ListIterator<AmpTheme> iterator = progs.listIterator(); iterator.hasNext();) {
+            AmpTheme p = (AmpTheme) iterator.next();
+            result += p.getName() + " > ";
+        }
+
+        result += prog.getName();
+        return result;
+    }
+
         public static Collection getSectorIndicator(Long themeIndicatorId)
         {
             Session session = null;
@@ -571,8 +606,8 @@ public class ProgramUtil {
             }
             return themeInd;
         }
-                
-      public static Collection getProgramIndicators(Long programId)
+
+    public static Collection getProgramIndicators(Long programId)
             throws DgException {
         Set indicators = new HashSet();
         ArrayList programs = (ArrayList) getRelatedThemes(programId);
@@ -588,7 +623,7 @@ public class ProgramUtil {
         }
         return indicators;
     }
-                
+
         @Deprecated
         public static Collection getThemeIndicatorValues(Long themeIndicatorId)
         {
@@ -643,7 +678,7 @@ public class ProgramUtil {
                 return col;
         }
 
-        //WWWTTTFFFF!!!!????!!!   
+        //WWWTTTFFFF!!!!????!!!
         public static Collection getAllSubThemes(Long parentThemeId)
         {
             Session session = null;
@@ -800,8 +835,7 @@ public class ProgramUtil {
          * @param parentThemeId
          * @return
          */
-        public static List<AmpTheme> getSubThemes(Long parentThemeId) throws DgException
-        {           
+        public static List<AmpTheme> getSubThemes(Long parentThemeId) throws DgException {
             try {
                 String queryString = "from " + AmpTheme.class.getName() +
                     " subT where subT.parentThemeId.ampThemeId=:parentThemeId";
@@ -844,8 +878,8 @@ public class ProgramUtil {
             }
             return subThemes;
         }
-                
-                
+
+
          /**
          * Returns all subchildren in the tree
          * Recursively iterates on all children programs till the end of the branch.
@@ -853,7 +887,7 @@ public class ProgramUtil {
                  * Use the method only for better presentation purpose
          * @param parentThemeId db ID of the parent program
                  * @param depth specified the level of program in hierarchy.
-                 * e.i. 0 means first level program, 1 second level, etc. 
+                 * e.i. 0 means first level program, 1 second level, etc.
                  * We use it to add "--" to the name of program for better presentation.
          * @return collection of AmpTheme beans
          * @throws AimException if anything goes wrong
@@ -877,7 +911,7 @@ public class ProgramUtil {
                                                 childWithNewName.setName(name+"--"+child.getName());
                                                 childWithNewName.setAmpThemeId(child.getAmpThemeId());
                         List col = getAllSubThemesByParentId(child.getAmpThemeId(),depth+1);
-                                                Collections.reverse(col);        
+                                                Collections.reverse(col);
                                                 col.add(childWithNewName);
                                                 Collections.reverse(col);
                         subThemes.addAll(col);
@@ -890,10 +924,10 @@ public class ProgramUtil {
                 logger.debug("Exception : "+e1);
                 throw new AimException("Cannot get sub themes for "+parentThemeId,e1);
             }
-                        
+
             return subThemes;
         }
-        
+
         /**
          * Returns all subchildren in the tree
          * @param parentThemeId db ID of the parent program
@@ -921,26 +955,26 @@ public class ProgramUtil {
                 logger.debug("Exception : "+e1);
                 throw new AimException("Cannot get sub themes for "+parentThemeId,e1);
             }
-                        
+
             return progs;
-        }       
-                
+        }
+
     /**
      * Returns List of programs and sub-programs using {@link #getAllSubThemesByParentId(Long parentThemeId, int depth) } method.
-     *  The names of the programs are embellished 
-     * (The main parent program will be in upper case and  dashes will be added to children programs) 
-     *  for better presentation. 
-     *  
+     *  The names of the programs are embellished
+     * (The main parent program will be in upper case and  dashes will be added to children programs)
+     *  for better presentation.
+     *
      * @param parent parent program
      * @return collection of AmpTheme beans
-     * 
+     *
      */
     public static List<AmpTheme> getAmpThemesAndSubThemes(AmpTheme parent) {
         List<AmpTheme> ret = new ArrayList<AmpTheme>();
 
         try {
-            /* 
-             We must create new program object because if you modify the name of program 
+            /*
+             We must create new program object because if you modify the name of program
              the changes will be saved in db even though you don't save collection, strange issue....
             */
             AmpTheme parentWithNewName=new AmpTheme();
@@ -951,7 +985,7 @@ public class ProgramUtil {
                 ProgramUtil.getAllSubThemesByParentId(parent.getAmpThemeId(),0);
       //  Collections.reverse(dbChildrenReturnSet);
         ret.addAll(dbChildrenReturnSet);
-    
+
         } catch (DgException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -960,30 +994,31 @@ public class ProgramUtil {
         return ret;
     }
 
-                
-                /**
-                 * Return all subchildren of the parent program
-                 * Recursively iterates on all child programs till the end of the branch using {@link #getAmpThemesAndSubThemes(AmpTheme parent)} .
-                 * The method is used for better presentation purpose only
-                 * @param parentThemes collection of  parent programs
-                 * @return collection of AmpTheme beans
-                 * @throws AimException if anything goes wrong
-                 */
-        public static List getAllSubThemesFor(Collection parentThemes) throws AimException
-        {
-                    List<AmpTheme> programs=new ArrayList();
-                    
-                    Iterator <AmpTheme> programsIter=parentThemes.iterator();
-                    while(programsIter.hasNext()){
-                        AmpTheme program=programsIter.next();
-                        programs.addAll(getAmpThemesAndSubThemes(program));
-                    }
-                    return programs;
-            
+
+    /**
+     * Return all subchildren of the parent program
+     * Recursively iterates on all child programs till the end of the branch using
+     * {@link #getAmpThemesAndSubThemes(AmpTheme parent)} .
+     * The method is used for better presentation purpose only
+     *
+     * @param parentThemes collection of  parent programs
+     * @return collection of AmpTheme beans
+     * @throws AimException if anything goes wrong
+     */
+    public static List getAllSubThemesFor(Collection parentThemes) throws AimException {
+        List<AmpTheme> programs = new ArrayList();
+
+        Iterator<AmpTheme> programsIter = parentThemes.iterator();
+        while (programsIter.hasNext()) {
+            AmpTheme program = programsIter.next();
+            programs.addAll(getAmpThemesAndSubThemes(program));
         }
+        return programs;
+
+    }
 
         /**
-         * @deprecated use {@link IndicatorUtil} methods. 
+         * @deprecated use {@link IndicatorUtil} methods.
          * @param allPrgInd
          * @param ampThemeId
          */
@@ -1104,9 +1139,9 @@ public class ProgramUtil {
                         trbf.printStackTrace(System.out);
                     }
                 }
-            }           
+            }
         }
-        
+
         /**
          * This was saving theme indicator but deprecated now.
          * @deprecated there are no Theme Indicators any more. use {@link IndicatorUtil} methods.
@@ -1139,8 +1174,8 @@ public class ProgramUtil {
                 if(ampThemeInd.getSectors()==null){
                    ampThemeInd.setSectors(new HashSet());
                 }
-                
-                    Long sectorIds[]= tempPrgInd.getSector();
+
+                Long[] sectorIds = tempPrgInd.getSector();
                     Set sectors = new HashSet();
                    Collection sect=tempPrgInd.getIndSectores();
                    if(sect!=null&&sect.size()>0){
@@ -1155,7 +1190,7 @@ public class ProgramUtil {
                           }
                        }
                    }
-              
+
                 Set ampThemeSet = new HashSet();
                 ampThemeSet.add(tempAmpTheme);
                 ampThemeInd.setThemes(ampThemeSet);
@@ -1234,7 +1269,7 @@ public class ProgramUtil {
                 tempPrgInd.setCategory(tempInd.getCategory());
                 tempPrgInd.setNpIndicator(tempInd.isNpIndicator());
                 tempPrgInd.setThemes(tempInd.getThemes());
-                tempPrgInd.setSector(getSectorIndicator(indId)); 
+                tempPrgInd.setSector(getSectorIndicator(indId));
 //session.flush();
             }
             catch(Exception e){
@@ -1308,7 +1343,7 @@ public class ProgramUtil {
                         trbf.printStackTrace(System.out);
                     }
                 }
-            }           
+            }
         }
 
         /**
@@ -1330,7 +1365,7 @@ public class ProgramUtil {
             logger.error("Unable to delete the themes");
             logger.debug("Exception : "+e);
         }
-    }       
+    }
 
         public static void updateTheme(AmpTheme editeTheme)
         {
@@ -1359,7 +1394,7 @@ public class ProgramUtil {
                 tempAmpTheme.setInternalFinancing(editeTheme.getInternalFinancing());
                 tempAmpTheme.setTotalFinancing(editeTheme.getTotalFinancing());
                 tempAmpTheme.setShowInRMFilters(editeTheme.getShowInRMFilters());
-                
+
 //beginTransaction();
                 session.update(tempAmpTheme);
                 //tx.commit();
@@ -1380,10 +1415,10 @@ public class ProgramUtil {
                         trbf.printStackTrace(System.out);
                     }
                 }
-            }           
+            }
         }
-        
-        
+
+
         public static Collection getRelatedThemes(Long id) throws DgException
         {
             AmpTheme ampThemetemp = new AmpTheme();
@@ -1438,7 +1473,8 @@ public class ProgramUtil {
                                     + "where ap.name=:name";
                     Query qry = session.createQuery(queryString);
                     qry.setString("name", name);
-                    programSettings=(AmpActivityProgramSettings)qry.uniqueResult();
+                    qry.setCacheable(false);
+                programSettings = (AmpActivityProgramSettings) qry.uniqueResult();
 
 
             } catch (Exception ex) {
@@ -1448,10 +1484,16 @@ public class ProgramUtil {
             return programSettings;
     }
 
-
-      public static List<AmpActivityProgramSettings> getAmpActivityProgramSettingsList() {
+      public static List<AmpActivityProgramSettings> getAmpActivityProgramSettingsList(boolean excludeIndirect) {
           String queryString = "select ap from " + AmpActivityProgramSettings.class.getName() + " ap";
+          if (excludeIndirect) {
+              queryString += " where ap.name <> :indirectName";
+          }
           Query qry = PersistenceManager.getSession().createQuery(queryString);
+          if (excludeIndirect) {
+              qry.setString("indirectName", INDIRECT_PRIMARY_PROGRAM);
+          }
+
           List<AmpActivityProgramSettings> programSettings = qry.list();
           if (programSettings.isEmpty()) {
               programSettings = createDefaultAmpActivityProgramSettingsList();
@@ -1480,7 +1522,7 @@ public class ProgramUtil {
     public static String printHierarchyNames(AmpTheme child) {
         return printHierarchyNames(child, false);
     }
-    
+
     public static String printHierarchyNames(AmpTheme child, boolean insertNewLine) {
         Session session = null;
         Transaction tx = null;
@@ -1489,7 +1531,7 @@ public class ProgramUtil {
             session = PersistenceManager.getRequestDBSession();
 //beginTransaction();
             session.refresh(child);
-        
+
             AmpTheme parent = child.getParentThemeId();
             if (parent == null) {
                     return names;
@@ -1533,7 +1575,7 @@ public class ProgramUtil {
                                         session.update(oldSetting);
                                     }
 
-                            } 
+                            }
                             //tx.commit();
 
                     }
@@ -1559,13 +1601,14 @@ public class ProgramUtil {
     }
 
 
-    
-    public static String renderLevel(Collection themes,int level,HttpServletRequest request) {
+
+    public static String renderLevel(Collection themes, int level, HttpServletRequest request) {
          //requirements for translation purposes
          TranslatorWorker translator = TranslatorWorker.getInstance();
          String translatedText = TranslatorWorker.translateText("No Programs present");
-         if (themes == null || themes.size() == 0)
-            return "<center><b>"+translatedText+"</b></<center>";       
+        if (themes == null || themes.size() == 0) {
+            return "<center><b>" + translatedText + "</b></<center>";
+        }
          String retVal;
         retVal = "<table width=\"100%\" cellPadding=\"0\" cellSpacing=\"0\" valign=\"top\" align=\"left\" bgcolor=\"#ffffff\" border=\"0\" style=\"border-collapse: collapse;\">\n";
         Iterator iter = themes.iterator();
@@ -1575,7 +1618,7 @@ public class ProgramUtil {
             AmpTheme theme = (AmpTheme) item.getMember();
             retVal += "<tr><td>&nbsp;</td><td width=\"100%\">\n";
 
-            
+
             // visible div start
             retVal += "<div>";// id=\"div_theme_"+theme.getAmpThemeId()+"\"";
             retVal += " <table class=\"inside\" width=\"100%\" border=\"0\" style=\"margin-bottom:1px\">";
@@ -1611,7 +1654,7 @@ public class ProgramUtil {
             retVal += "   </td>";
             retVal += " </tr></table>";
             retVal += "</div>\n";
-    
+
             // hidden div start
             retVal += "<div id=\"div_theme_" + theme.getAmpThemeId()+ "\" style=\"display : none;\">\n";
             if (item.getChildren() != null || item.getChildren().size() > 0) {
@@ -1624,8 +1667,8 @@ public class ProgramUtil {
         retVal += "</table>\n";
         return retVal;
     }
-     
-    public static String getLevelImage(int level){
+
+    public static String getLevelImage(int level) {
         switch (level) {
         case 0:
             return "../ampTemplate/images/arrow_right.gif";
@@ -1648,8 +1691,8 @@ public class ProgramUtil {
         }
         return "../ampTemplate/images/arrow_right.gif";
     }
-    
-    
+
+
     /**
      * Fetches the names of last version of activities that have a specific program
      * @param programId the program id to be selected
@@ -1665,10 +1708,10 @@ public class ProgramUtil {
             return SQLUtils.fetchAsList(conn, query, 1);
         });
     }
-    
-    public static String getNameOfProgramSettingsUsed(Long programId) { 
+
+    public static String getNameOfProgramSettingsUsed(Long programId) {
         Collection programSettings                  = getProgramSetttingsUsed(programId);
-        
+
         Iterator iter   = programSettings.iterator();
         String result   = "";
         while ( iter.hasNext() ) {
@@ -1676,12 +1719,12 @@ public class ProgramUtil {
             if ( aaps.getName() != null )
                 result  += "'" + aaps.getName() + "'" + ", ";
         }
-        if ( result.length() > 0 ) 
-            return result.substring(0, result.length()-2);
+        if ( result.length() > 0 )
+            return result.substring(0, result.length() - 2);
         else
             return null;
     }
-    
+
     public static Collection getProgramSetttingsUsed(Long programId) {
         Session sess                        = null;
         try {
@@ -1700,29 +1743,28 @@ public class ProgramUtil {
     }
 
 
-    
-    
     public static HashMap<Long, AmpTheme> prepareStructure(Collection<AmpTheme> col) {
-        HashMap<Long, AmpTheme> ret     = new HashMap<Long, AmpTheme>();
-        if ( col != null && col.size() > 0 ) {
+        HashMap<Long, AmpTheme> ret = new HashMap<Long, AmpTheme>();
+        if (col != null && col.size() > 0) {
             for (AmpTheme prog : col) {
                 AmpTheme parent = prog.getParentThemeId();
-                if ( parent != null)
+                if (parent != null)
                     parent.getChildren().add(prog);
                 ret.put(prog.getAmpThemeId(), prog);
             }
         }
-        
+
         return ret;
     }
-    
+
     /**
-     * 
-     * @param userSelection collection of AmpTheme objects corresponding to the filters selected by the user
-     * @param activityFilterCol this collection will contain the selected objects and their descendants (this collection will be used to filter the activities) 
-     * @param columnDataCol this collection will contain the selected objects, their descendants and their ancestors (this collection will be used to filter out column data).
-     * One needs the information about ancestors in multi-level hierarchy reports otherwise the report engine won't know to which higher level hierarchy an activity belongs to.
-     *  
+     * @param userSelection     collection of AmpTheme objects corresponding to the filters selected by the user
+     * @param activityFilterCol this collection will contain the selected objects and their descendants (this
+     *                          collection will be used to filter the activities)
+     * @param columnDataCol     this collection will contain the selected objects, their descendants and their
+     *                          ancestors (this collection will be used to filter out column data).
+     *                          One needs the information about ancestors in multi-level hierarchy reports otherwise
+     *                          the report engine won't know to which higher level hierarchy an activity belongs to.
      * @throws DgException
      */
     public static void collectFilteringInformation(Collection<AmpTheme> userSelection, Collection<AmpTheme> activityFilterCol, Set<AmpTheme> columnDataCol)
@@ -1794,10 +1836,11 @@ public class ProgramUtil {
          */
         public static Set<Long> getRecursiveAscendantsOfPrograms(Collection<Long> inIds)
         {
-            return AlgoUtils.runWave(inIds, 
-                    new DatabaseWaver("SELECT DISTINCT(parent_theme_id) FROM amp_theme WHERE (parent_theme_id IS NOT NULL) AND (amp_theme_id IN ($))"));
+            return AlgoUtils.runWave(inIds,
+                    new DatabaseWaver("SELECT DISTINCT(parent_theme_id) FROM amp_theme WHERE (parent_theme_id "
+                            + "IS NOT NULL) AND (amp_theme_id IN ($))"));
         }
-            
+
         /**
          * recursively get all children of a set of AmpCategoryValueLocations, by a wave algorithm
          * @param inIds
@@ -1805,11 +1848,11 @@ public class ProgramUtil {
          */
         public static Set<Long> getRecursiveChildrenOfPrograms(Collection<Long> inIds)
         {
-            return AlgoUtils.runWave(inIds, 
+            return AlgoUtils.runWave(inIds,
                     new DatabaseWaver("SELECT DISTINCT amp_theme_id FROM amp_theme WHERE parent_theme_id IN ($)"));
         }
 
- 
+
          /**
          * Used to sort indicators by name
          */
@@ -1865,7 +1908,7 @@ public class ProgramUtil {
                 return indic1.getName().toLowerCase().compareTo(indic2.getName().toLowerCase());
             }
         }
-        
+
         public static class HelperAllIndicatorBeanNameDescendingComparator implements Comparator<IndicatorsBean> {
             public int compare(IndicatorsBean obj1, IndicatorsBean obj2) {
                 return -obj1.getName().toLowerCase().compareTo(obj2.getName().toLowerCase());
@@ -1885,7 +1928,7 @@ public class ProgramUtil {
                 return -obj1.getSectorName().toLowerCase().compareTo(obj2.getSectorName().toLowerCase());
             }
         }
-        
+
         public static class HelperAllIndicatorBeanTypeComparator
             implements Comparator {
             public int compare(Object obj1, Object obj2) {
@@ -1918,4 +1961,83 @@ public class ProgramUtil {
         }
         return program;
     }
+
+    public static boolean isSourceMappedProgram(final AmpActivityProgramSettings setting) {
+        return isSettingMappedProgram(setting, MAPPING_SOURCE_PROGRAM);
+    }
+
+    public static boolean isDestinationMappedProgram(final AmpActivityProgramSettings setting) {
+        return isSettingMappedProgram(setting, MAPPING_DESTINATION_PROGRAM);
+    }
+
+    private static boolean isSettingMappedProgram(final AmpActivityProgramSettings setting,
+                                                  final String mappedProgramGS) {
+        if (setting != null) {
+            String dstProgram = FeaturesUtil.getGlobalSettingValue(mappedProgramGS);
+            if (StringUtils.isNotBlank(dstProgram)) {
+                return setting.getDefaultHierarchy() != null
+                        && setting.getDefaultHierarchy().getAmpThemeId().equals(Long.valueOf(dstProgram));
+            }
+        }
+
+        return false;
+    }
+
+    public static Map<AmpTheme, Set<AmpTheme>> loadProgramMappings() {
+        List<AmpThemeMapping> list = PersistenceManager.getRequestDBSession()
+                .createCriteria(AmpThemeMapping.class)
+                .setCacheable(true)
+                .list();
+
+        TreeMap<AmpTheme, Set<AmpTheme>> mappedPrograms = list.stream().collect(groupingBy(
+                AmpThemeMapping::getSrcTheme,
+                () -> new TreeMap<>(Comparator.comparing(AmpTheme::getAmpThemeId)),
+                mapping(AmpThemeMapping::getDstTheme, toCollection(ProgramUtil::newSetComparingById))));
+
+        includeAncestors(mappedPrograms);
+
+        return mappedPrograms;
+    }
+
+    private static void includeAncestors(Map<AmpTheme, Set<AmpTheme>> mapping) {
+        Set<AmpTheme> queued = newSetComparingById();
+        Deque<AmpTheme> queue = new ArrayDeque<>(mapping.keySet());
+
+        while (!queue.isEmpty()) {
+            AmpTheme srcProgram = queue.removeFirst();
+            AmpTheme srcParentProgram = srcProgram.getParentThemeId();
+
+            if (srcParentProgram != null) {
+                Set<AmpTheme> dstParentPrograms = mapping.computeIfAbsent(srcParentProgram, p -> newSetComparingById());
+
+                mapping.getOrDefault(srcProgram, emptySet()).stream()
+                        .map(AmpTheme::getParentThemeId)
+                        .forEach(dstParentPrograms::add);
+
+                if (!queued.contains(srcParentProgram)) {
+                    queued.add(srcParentProgram);
+                    queue.add(srcParentProgram);
+                }
+            }
+        }
+    }
+
+    private static Set<AmpTheme> newSetComparingById() {
+        return new TreeSet<>(Comparator.comparing(AmpTheme::getAmpThemeId));
+    }
+
+    public static Set<AmpTheme> getProgramsIncludingAncestors(Set<AmpTheme> programs) {
+        Set<AmpTheme> dstThemes = new HashSet<>();
+        for (AmpTheme p : programs) {
+            dstThemes.add(p);
+            AmpTheme parent = p.getParentThemeId();
+            while (parent != null) {
+                dstThemes.add(parent);
+                parent = parent.getParentThemeId();
+            }
+        }
+
+        return dstThemes;
+    }
+
 }

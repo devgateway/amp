@@ -868,28 +868,16 @@ public class TeamUtil {
      */
     public static AmpTeam getAmpTeam(Long id) {
 
-        if (id == null)
+        if (id == null) {
             return null;
-        Session session = null;
-        AmpTeam team = null;
-
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            team = (AmpTeam) session.load(AmpTeam.class, id);
-        } catch(Exception e) {
-            throw new RuntimeException(e);
-
-        } 
-        return team;
+        }
+        return (AmpTeam) PersistenceManager.getRequestDBSession().load(AmpTeam.class, id);
     }
 
     public static List<AmpTeamMember> getAmpTeamMembers(List<Long> teamMemberIds) {
-        Session session = null;
-        session = PersistenceManager.getRequestDBSession();
         String qryStr = "select tm from " + AmpTeamMember.class.getName() + " tm"
                 + " where tm.ampTeamMemId in (:ids)";
-
-        Query qry = session.createQuery(qryStr);
+        Query qry = PersistenceManager.getRequestDBSession().createQuery(qryStr);
         qry.setParameterList("ids", teamMemberIds);
         return qry.list();
     }

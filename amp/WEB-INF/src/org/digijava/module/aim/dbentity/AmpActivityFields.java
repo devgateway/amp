@@ -25,11 +25,12 @@ import org.digijava.kernel.ampapi.endpoints.activity.values.FiscalYearPossibleVa
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
-import org.digijava.kernel.validators.activity.RegionLocationValidator;
 import org.digijava.kernel.validators.activity.ComponentFundingOrgRoleValidator;
 import org.digijava.kernel.validators.activity.ImplementationLevelValidator;
 import org.digijava.kernel.validators.activity.MultiStakeholderPartnershipValidator;
 import org.digijava.kernel.validators.activity.OnBudgetValidator;
+import org.digijava.kernel.validators.activity.ProgramMappingValidator;
+import org.digijava.kernel.validators.activity.RegionLocationValidator;
 import org.digijava.kernel.validators.activity.TreeCollectionValidator;
 import org.digijava.kernel.validators.activity.UniqueActivityTitleValidator;
 import org.digijava.kernel.validators.common.TotalPercentageValidator;
@@ -68,6 +69,7 @@ import org.hibernate.Session;
 @InterchangeableValidator(UniqueActivityTitleValidator.class)
 @InterchangeableValidator(ComponentFundingOrgRoleValidator.class)
 @InterchangeableValidator(ImplementationLevelValidator.class)
+@InterchangeableValidator(ProgramMappingValidator.class)
 @InterchangeableValidator(value = OnBudgetValidator.class, groups = Submit.class, attributes = "required=ND")
 @InterchangeableValidator(value = MultiStakeholderPartnershipValidator.class, groups = Submit.class,
         attributes = "required=ND")
@@ -1287,14 +1289,14 @@ LoggerIdentifiable, Cloneable {
         }
 
         /**
-         * @param string
+         * @param progress
          */
         public void setProgress(Set progress) {
             this.progress = progress;
         }
 
         /**
-         * @param string
+         * @param documents
          */
         public void setDocuments(Set documents) {
             this.documents = documents;
@@ -1621,8 +1623,8 @@ LoggerIdentifiable, Cloneable {
             return approvalStatus;
         }
         /**
-         * @param approval_status
-         *            The approval_status to set.
+         * @param approvalStatus
+         *            The approvalStatus to set.
          */
         public void setApprovalStatus(ApprovalStatus approvalStatus) {
             this.approvalStatus = approvalStatus;
@@ -1884,7 +1886,7 @@ LoggerIdentifiable, Cloneable {
             return draft;
         }
 
-        public Set getActPrograms() {
+        public Set<AmpActivityProgram> getActPrograms() {
             return actPrograms;
         }
         
@@ -1928,7 +1930,7 @@ LoggerIdentifiable, Cloneable {
             this.lastImportedBy = lastImportedBy;
         }
 
-        public void setActPrograms(Set actPrograms) {
+        public void setActPrograms(Set<AmpActivityProgram> actPrograms) {
             this.actPrograms = actPrograms;
         }
 

@@ -331,6 +331,8 @@ public class ActivityUtil {
             session.update(a);
         }
 
+        updateIndirectPrograms(a, session);
+
         logAudit(ampCurrentMember, a, newActivity);
 
         return a;
@@ -340,6 +342,10 @@ public class ActivityUtil {
         if (!Boolean.TRUE.equals(a.getMultiStakeholderPartnership())) {
             a.setMultiStakeholderPartners(null);
         }
+    }
+
+    private static void updateIndirectPrograms(AmpActivityVersion a, Session session) {
+        new IndirectProgramUpdater().updateIndirectPrograms(a, session);
     }
 
     public static boolean detectDraftChange(AmpActivityVersion a, boolean draft) {

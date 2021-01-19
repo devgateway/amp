@@ -13,7 +13,7 @@ import {
 import CustomLegend from '../../../utils/components/CustomLegend';
 import './legends/legends.css';
 import { getCustomColor, getGradient, extractPrograms } from '../utils/Utils';
-import TopChart from './TopChart';
+import TopChart from './charts/TopChart';
 import { callTopReport } from '../actions/callReports';
 import FundingByYearChart from './charts/FundingByYearChart';
 import PieChartTypeSelector from './PieChartTypeSelector';

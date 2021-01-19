@@ -17,6 +17,7 @@ import {
 // eslint-disable-next-line no-unused-vars
 import styles from '../styles.css';
 import ToolTip from '../tooltips/ToolTip';
+import YearDetail from './YearDetail';
 
 const Plot = createPlotlyComponent(Plotly);
 
@@ -28,7 +29,7 @@ class FundingByYearChart extends Component {
     super(props);
     this.getValues = this.getValues.bind(this);
     this.state = {
-      source: SRC_DIRECT, showLegend: false, legendTop: 0, legendLeft: 0, tooltipData: null
+      source: SRC_DIRECT, showLegend: false, legendTop: 0, legendLeft: 0, tooltipData: null, showDetail: false
     };
   }
 
@@ -132,11 +133,28 @@ class FundingByYearChart extends Component {
     const {
       _callYearDetailReport, settings, filters, fundingType
     } = this.props;
-    return _callYearDetailReport(fundingType,
+    this.setState({ showDetail: true });
+    _callYearDetailReport(fundingType,
       filters,
       event.points[0].data.extraData.find(i => i.name === event.points[0].data.text).id,
       event.points[0].x,
       settings);
+  }
+
+  createModalWindow = () => {
+    const {
+      translations, yearDetailPending, yearDetail, error
+    } = this.props;
+    const { showDetail } = this.state;
+    return (
+      <YearDetail
+        translations={translations}
+        show={showDetail}
+        handleClose={() => { this.setState({ showDetail: false }); }}
+        data={yearDetail}
+        loading={yearDetailPending}
+        error={error} />
+    );
   }
 
   createTooltip = () => {
@@ -299,6 +317,7 @@ class FundingByYearChart extends Component {
           className="line-legend-wrapper">
           {this.createTooltip()}
         </div>
+        {this.createModalWindow()}
       </div>
     );
   }
@@ -312,11 +331,19 @@ FundingByYearChart.propTypes = {
   globalSettings: PropTypes.object.isRequired,
   _callYearDetailReport: PropTypes.func.isRequired,
   fundingType: PropTypes.object.isRequired,
-  filters: PropTypes.object.isRequired
+  filters: PropTypes.object.isRequired,
+  yearDetailPending: PropTypes.bool.isRequired,
+  yearDetailLoaded: PropTypes.bool.isRequired,
+  yearDetail: PropTypes.array.isRequired,
+  error: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({
-  translations: state.translationsReducer.translations
+  translations: state.translationsReducer.translations,
+  yearDetailPending: state.reportsReducer.yearDetailPending,
+  yearDetailLoaded: state.reportsReducer.yearDetailLoaded,
+  yearDetail: state.reportsReducer.yearDetail,
+  error: state.reportsReducer.error
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

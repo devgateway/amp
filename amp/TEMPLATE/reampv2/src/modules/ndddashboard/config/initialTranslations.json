@@ -31,5 +31,6 @@
   "amp.ndd.dashboard:chart-tops-inthousands": "In thousands",
   "amp.ndd.dashboard:chart-tops-inmillions": "In millions",
   "amp.ndd.dashboard:chart-tops-inbillions": "In billions",
-  "amp.ndd.dashboard:no-data-short": "No Data"
+  "amp.ndd.dashboard:no-data-short": "No Data",
+  "amp.ndd.dashboard:modal-details-title": "Activities Detail"
 }

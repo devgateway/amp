@@ -79,6 +79,7 @@ public final class DashboardService {
     private static void addFilterFromProgram(final AmpTheme program, AmpReportFilters filters) {
         Set<AmpActivityProgramSettings> programSettings = program.getParentThemeId().getProgramSettings();
         if (programSettings == null || programSettings.size() != 1) {
+            // TODO: modify to work with programs lvl 2 (the columns constants should concatenate indLevel).
             throw new RuntimeException("Cant determine the filter for the report.");
         }
         AmpActivityProgramSettings singleProgramSetting = ((AmpActivityProgramSettings) programSettings.toArray()[0]);

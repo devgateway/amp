@@ -200,7 +200,7 @@ body {
     position: absolute;
     background-color: #0b58a2;
     border-radius: 5px;
-    z-index: 9999;
+    z-index: 10;
     width: auto;
     pointer-events: none;
     opacity: 0.90;
@@ -227,4 +227,9 @@ body {
 
 .programs-dropdown {
     max-width: 435px;
+}
+
+.error {
+    color: red;
+    font-weight: bold;
 }

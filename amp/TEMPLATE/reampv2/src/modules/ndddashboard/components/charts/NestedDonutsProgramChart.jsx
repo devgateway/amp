@@ -350,7 +350,7 @@ NestedDonutsProgramChart.propTypes = {
   data: PropTypes.array.isRequired,
   handleOuterChartClick: PropTypes.func.isRequired,
   selectedDirectProgram: PropTypes.object.isRequired,
-  translations: PropTypes.array.isRequired,
+  translations: PropTypes.object.isRequired,
   settings: PropTypes.object.isRequired,
   globalSettings: PropTypes.object.isRequired
 };

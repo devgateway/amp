@@ -143,7 +143,7 @@ class FundingByYearChart extends Component {
 
   createModalWindow = () => {
     const {
-      translations, yearDetailPending, yearDetail, error, fundingType
+      translations, yearDetailPending, yearDetail, error, fundingType, settings, globalSettings
     } = this.props;
     const { showDetail } = this.state;
     return (
@@ -154,7 +154,9 @@ class FundingByYearChart extends Component {
         data={yearDetail}
         loading={yearDetailPending}
         error={error}
-        fundingType={fundingType} />
+        fundingType={fundingType}
+        currencyCode={settings[CURRENCY_CODE]}
+        globalSettings={globalSettings} />
     );
   }
 
@@ -327,7 +329,7 @@ class FundingByYearChart extends Component {
 FundingByYearChart.propTypes = {
   data: PropTypes.array.isRequired,
   selectedDirectProgram: PropTypes.object.isRequired,
-  translations: PropTypes.array.isRequired,
+  translations: PropTypes.object.isRequired,
   settings: PropTypes.object.isRequired,
   globalSettings: PropTypes.object.isRequired,
   _callYearDetailReport: PropTypes.func.isRequired,

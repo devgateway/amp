@@ -55,6 +55,6 @@ export default class FilterOutputItem extends Component {
 FilterOutputItem.propTypes = {
   filters: PropTypes.object.isRequired,
   i: PropTypes.string.isRequired,
-  translations: PropTypes.array.isRequired,
+  translations: PropTypes.object.isRequired,
   globalSettings: PropTypes.object.isRequired
 };

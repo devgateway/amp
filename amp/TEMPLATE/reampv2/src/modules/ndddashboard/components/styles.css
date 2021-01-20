@@ -233,3 +233,24 @@ body {
     color: red;
     font-weight: bold;
 }
+
+.amount-column {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.table {
+    font-size: 12px;
+}
+
+.header-row {
+    color: #7f8fa4;
+    font-weight: 800;
+    font-size: 12px;
+}
+
+.detail-table-container {
+    overflow-y: auto;
+    max-height: 350px;
+    padding: 5px;
+}

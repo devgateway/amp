@@ -3,10 +3,13 @@ import { Button } from 'react-bootstrap';
 import Modal from 'react-bootstrap-modal';
 import PropTypes from 'prop-types';
 import { TRN_PREFIX } from '../../utils/constants';
+import { formatNumberWithSettings } from '../../utils/Utils';
 
 export default class YearDetail extends Component {
   createTable = () => {
-    const { data, translations, fundingType } = this.props;
+    const {
+      data, translations, fundingType, currencyCode, globalSettings
+    } = this.props;
     const rows = [];
     data.forEach(i => {
       rows.push(
@@ -19,17 +22,23 @@ export default class YearDetail extends Component {
               {i.projectTitle}
             </a>
           </td>
-          <td>{i.amount}</td>
+          <td className="amount-column">
+            {formatNumberWithSettings(translations, globalSettings, i.amount, false)}
+          </td>
         </tr>
       );
     });
 
     return (
-      <table>
+      <table className="table table-striped">
         <thead>
           <tr>
             <th className="header-row"><span>{translations[`${TRN_PREFIX}project-title`]}</span></th>
-            <th className="header-row"><span>{fundingType}</span></th>
+            <th className="header-row">
+              <span>
+                {`${fundingType} (${translations[globalSettings.numberDividerDescriptionKey]} ${currencyCode})`}
+              </span>
+            </th>
           </tr>
         </thead>
         <tbody>{rows}</tbody>
@@ -50,8 +59,10 @@ export default class YearDetail extends Component {
           {loading
             ? <div className="loading" style={{ top: '5%', marginTop: '5px' }} />
             : null}
-          {!loading && !data && !error ? <span>No Data</span> : null}
-          {data ? this.createTable() : null}
+          {!loading && (!data || data.length === 0) && !error
+            ? <span>{translations[`${TRN_PREFIX}no-data`]}</span>
+            : null}
+          {data && data.length > 0 ? <div className="detail-table-container">{this.createTable()}</div> : null}
           {error ? <span className="error">{JSON.stringify(error)}</span> : null}
         </Modal.Body>
         <Modal.Footer>
@@ -65,11 +76,13 @@ export default class YearDetail extends Component {
 }
 
 YearDetail.propTypes = {
-  translations: PropTypes.array.isRequired,
+  translations: PropTypes.object.isRequired,
   show: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
   data: PropTypes.array.isRequired,
   loading: PropTypes.bool.isRequired,
   error: PropTypes.object.isRequired,
-  fundingType: PropTypes.string.isRequired
+  fundingType: PropTypes.string.isRequired,
+  currencyCode: PropTypes.string.isRequired,
+  globalSettings: PropTypes.object.isRequired
 };

@@ -77,29 +77,50 @@ public final class DashboardService {
      * @param filters
      */
     private static void addFilterFromProgram(final AmpTheme program, AmpReportFilters filters) {
-        Set<AmpActivityProgramSettings> programSettings = program.getParentThemeId().getProgramSettings();
+        Set<AmpActivityProgramSettings> programSettings = null;
+        if (program.getIndlevel() == 1) {
+            programSettings = program.getParentThemeId().getProgramSettings();
+        } else {
+            programSettings = program.getParentThemeId().getParentThemeId().getProgramSettings();
+        }
         if (programSettings == null || programSettings.size() != 1) {
-            // TODO: modify to work with programs lvl 2 (the columns constants should concatenate indLevel).
             throw new RuntimeException("Cant determine the filter for the report.");
         }
         AmpActivityProgramSettings singleProgramSetting = ((AmpActivityProgramSettings) programSettings.toArray()[0]);
+        ReportColumn column = null;
         if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.PRIMARY_PROGRAM)) {
-            filters.addFilterRule(new ReportColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1),
-                    new FilterRule(program.getAmpThemeId().toString(), true));
+            if (program.getIndlevel() == 1) {
+                column = new ReportColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1);
+            } else {
+                column = new ReportColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_2);
+            }
         } else if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.SECONDARY_PROGRAM)) {
-            filters.addFilterRule(new ReportColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_1),
-                    new FilterRule(program.getAmpThemeId().toString(), true));
+            if (program.getIndlevel() == 1) {
+                column = new ReportColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_1);
+            } else {
+                column = new ReportColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_2);
+            }
         } else if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.TERTIARY_PROGRAM)) {
-            filters.addFilterRule(new ReportColumn(ColumnConstants.TERTIARY_PROGRAM_LEVEL_1),
-                    new FilterRule(program.getAmpThemeId().toString(), true));
+            if (program.getIndlevel() == 1) {
+                column = new ReportColumn(ColumnConstants.TERTIARY_PROGRAM_LEVEL_1);
+            } else {
+                column = new ReportColumn(ColumnConstants.TERTIARY_PROGRAM_LEVEL_2);
+            }
         } else if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES)
                 || singleProgramSetting.getName().equalsIgnoreCase(ProgramUtil.NATIONAL_PLAN_OBJECTIVE)) {
-            filters.addFilterRule(new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1),
-                    new FilterRule(program.getAmpThemeId().toString(), true));
+            if (program.getIndlevel() == 1) {
+                column = new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1);
+            } else {
+                column = new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_2);
+            }
         } else if (singleProgramSetting.getName().equalsIgnoreCase(ProgramUtil.INDIRECT_PRIMARY_PROGRAM)) {
-            filters.addFilterRule(new ReportColumn(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_1),
-                    new FilterRule(program.getAmpThemeId().toString(), true));
+            if (program.getIndlevel() == 1) {
+                column = new ReportColumn(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_1);
+            } else {
+                column = new ReportColumn(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_2);
+            }
         }
+        filters.addFilterRule(column, new FilterRule(program.getAmpThemeId().toString(), true));
     }
 
     private static ReportColumn getColumnFromProgram(AmpTheme program) {

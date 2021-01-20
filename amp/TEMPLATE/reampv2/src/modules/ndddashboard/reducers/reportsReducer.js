@@ -75,15 +75,20 @@ export default (state = initialState, action) => {
         yearDetailPending: false,
         yearDetailLoaded: true,
         yearDetail: action.payload,
+        error: null
       };
     case FETCH_YEAR_DETAIL_PENDING:
       return {
         ...state,
-        yearDetailPending: true
+        yearDetail: null,
+        yearDetailLoaded: false,
+        yearDetailPending: true,
+        error: null
       };
     case FETCH_YEAR_DETAIL_ERROR:
       return {
         ...state,
+        yearDetail: null,
         yearDetailLoaded: false,
         yearDetailPending: false,
         error: action.error

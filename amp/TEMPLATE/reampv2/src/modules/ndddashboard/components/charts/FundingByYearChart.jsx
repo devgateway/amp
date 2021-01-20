@@ -335,7 +335,7 @@ FundingByYearChart.propTypes = {
   yearDetailPending: PropTypes.bool.isRequired,
   yearDetailLoaded: PropTypes.bool.isRequired,
   yearDetail: PropTypes.array.isRequired,
-  error: PropTypes.bool.isRequired
+  error: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({

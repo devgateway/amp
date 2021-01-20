@@ -17,8 +17,10 @@ export default class YearDetail extends Component {
         <Modal.Body>
           {loading
             ? <div className="loading" style={{ top: '5%', marginTop: '5px' }} />
-            : <span>{JSON.stringify(data)}</span>}
-          {error ? <span className="error">{error}</span> : null}
+            : null}
+          {!loading && !data && !error ? <span>No Data</span> : null}
+          {data ? <span>{JSON.stringify(data)}</span> : null}
+          {error ? <span className="error">{JSON.stringify(error)}</span> : null}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="primary" onClick={handleClose}>
@@ -36,5 +38,5 @@ YearDetail.propTypes = {
   handleClose: PropTypes.func.isRequired,
   data: PropTypes.array.isRequired,
   loading: PropTypes.bool.isRequired,
-  error: PropTypes.bool.isRequired
+  error: PropTypes.object.isRequired
 };

@@ -113,7 +113,6 @@ class FundingByYearChart extends Component {
   }
 
   onHover = (data) => {
-    console.log(data);
     const { text } = data.points[0].data;
     const lines = Math.ceil(text.length / 30);
     this.setState({
@@ -129,7 +128,6 @@ class FundingByYearChart extends Component {
   }
 
   onClick = (event) => {
-    console.log(event);
     const {
       _callYearDetailReport, settings, filters, fundingType
     } = this.props;

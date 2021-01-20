@@ -143,7 +143,7 @@ class FundingByYearChart extends Component {
 
   createModalWindow = () => {
     const {
-      translations, yearDetailPending, yearDetail, error
+      translations, yearDetailPending, yearDetail, error, fundingType
     } = this.props;
     const { showDetail } = this.state;
     return (
@@ -153,7 +153,8 @@ class FundingByYearChart extends Component {
         handleClose={() => { this.setState({ showDetail: false }); }}
         data={yearDetail}
         loading={yearDetailPending}
-        error={error} />
+        error={error}
+        fundingType={fundingType} />
     );
   }
 

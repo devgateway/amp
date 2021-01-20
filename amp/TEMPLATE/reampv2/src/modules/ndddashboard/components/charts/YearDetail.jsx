@@ -5,6 +5,38 @@ import PropTypes from 'prop-types';
 import { TRN_PREFIX } from '../../utils/constants';
 
 export default class YearDetail extends Component {
+  createTable = () => {
+    const { data, translations, fundingType } = this.props;
+    const rows = [];
+    data.forEach(i => {
+      rows.push(
+        <tr>
+          <td>
+            <a
+              target="_blank"
+              title={i.projectTitle}
+              href={`/aim/viewActivityPreview.do~activityId=${i.id}`}>
+              {i.projectTitle}
+            </a>
+          </td>
+          <td>{i.amount}</td>
+        </tr>
+      );
+    });
+
+    return (
+      <table>
+        <thead>
+          <tr>
+            <th className="header-row"><span>{translations[`${TRN_PREFIX}project-title`]}</span></th>
+            <th className="header-row"><span>{fundingType}</span></th>
+          </tr>
+        </thead>
+        <tbody>{rows}</tbody>
+      </table>
+    );
+  }
+
   render() {
     const {
       translations, show, handleClose, data, loading, error
@@ -19,7 +51,7 @@ export default class YearDetail extends Component {
             ? <div className="loading" style={{ top: '5%', marginTop: '5px' }} />
             : null}
           {!loading && !data && !error ? <span>No Data</span> : null}
-          {data ? <span>{JSON.stringify(data)}</span> : null}
+          {data ? this.createTable() : null}
           {error ? <span className="error">{JSON.stringify(error)}</span> : null}
         </Modal.Body>
         <Modal.Footer>
@@ -38,5 +70,6 @@ YearDetail.propTypes = {
   handleClose: PropTypes.func.isRequired,
   data: PropTypes.array.isRequired,
   loading: PropTypes.bool.isRequired,
-  error: PropTypes.object.isRequired
+  error: PropTypes.object.isRequired,
+  fundingType: PropTypes.string.isRequired
 };

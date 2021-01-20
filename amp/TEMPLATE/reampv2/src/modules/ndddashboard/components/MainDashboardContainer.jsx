@@ -163,7 +163,7 @@ class MainDashboardContainer extends Component {
                     : <div className="loading" />}
                 </div>
                 <div className="buttons">
-                  {dashboardSettings
+                  {dashboardSettings && !nddLoadingPending
                     ? (
                       <FundingTypeSelector
                         onChange={onChangeFundingType}

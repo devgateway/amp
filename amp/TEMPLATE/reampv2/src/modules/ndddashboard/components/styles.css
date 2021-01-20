@@ -254,3 +254,8 @@ body {
     max-height: 350px;
     padding: 5px;
 }
+
+.invisible-row {
+    display: none;
+    visibility: hidden;
+}

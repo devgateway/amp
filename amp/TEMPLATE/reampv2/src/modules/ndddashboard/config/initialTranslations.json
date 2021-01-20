@@ -33,5 +33,6 @@
   "amp.ndd.dashboard:chart-tops-inbillions": "In billions",
   "amp.ndd.dashboard:no-data-short": "No Data",
   "amp.ndd.dashboard:modal-details-title": "Activities Detail",
-  "amp.ndd.dashboard:project-title": "Project Title"
+  "amp.ndd.dashboard:project-title": "Project Title",
+  "amp.ndd.dashboard:load-more": "Load more"
 }

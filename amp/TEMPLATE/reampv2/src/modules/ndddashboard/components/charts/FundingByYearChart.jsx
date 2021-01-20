@@ -133,7 +133,7 @@ class FundingByYearChart extends Component {
     const {
       _callYearDetailReport, settings, filters, fundingType
     } = this.props;
-    this.setState({ showDetail: true });
+    this.setState({ showDetail: true, year: event.points[0].x, programName: event.points[0].data.text });
     _callYearDetailReport(fundingType,
       filters,
       event.points[0].data.extraData.find(i => i.name === event.points[0].data.text).id,
@@ -145,7 +145,7 @@ class FundingByYearChart extends Component {
     const {
       translations, yearDetailPending, yearDetail, error, fundingType, settings, globalSettings
     } = this.props;
-    const { showDetail } = this.state;
+    const { showDetail, year, programName } = this.state;
     return (
       <YearDetail
         translations={translations}
@@ -156,7 +156,8 @@ class FundingByYearChart extends Component {
         error={error}
         fundingType={fundingType}
         currencyCode={settings[CURRENCY_CODE]}
-        globalSettings={globalSettings} />
+        globalSettings={globalSettings}
+        title={`${year} ${programName}`} />
     );
   }
 
@@ -336,7 +337,6 @@ FundingByYearChart.propTypes = {
   fundingType: PropTypes.object.isRequired,
   filters: PropTypes.object.isRequired,
   yearDetailPending: PropTypes.bool.isRequired,
-  yearDetailLoaded: PropTypes.bool.isRequired,
   yearDetail: PropTypes.array.isRequired,
   error: PropTypes.object.isRequired
 };
@@ -344,7 +344,6 @@ FundingByYearChart.propTypes = {
 const mapStateToProps = state => ({
   translations: state.translationsReducer.translations,
   yearDetailPending: state.reportsReducer.yearDetailPending,
-  yearDetailLoaded: state.reportsReducer.yearDetailLoaded,
   yearDetail: state.reportsReducer.yearDetail,
   error: state.reportsReducer.error
 });

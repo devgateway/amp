@@ -5,18 +5,27 @@ import PropTypes from 'prop-types';
 import { TRN_PREFIX } from '../../utils/constants';
 import { formatNumberWithSettings } from '../../utils/Utils';
 
+const MAX_RECORDS = 50;
+
 export default class YearDetail extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { recordsVisible: MAX_RECORDS };
+  }
+
   createTable = () => {
     const {
       data, translations, fundingType, currencyCode, globalSettings
     } = this.props;
+    const { recordsVisible } = this.state;
     const rows = [];
-    data.forEach(i => {
+    data.forEach((i, j) => {
       rows.push(
-        <tr>
+        <tr className={j >= recordsVisible ? 'invisible-row' : ''}>
           <td>
             <a
               target="_blank"
+              rel="noreferrer noopener"
               title={i.projectTitle}
               href={`/aim/viewActivityPreview.do~activityId=${i.id}`}>
               {i.projectTitle}
@@ -30,30 +39,50 @@ export default class YearDetail extends Component {
     });
 
     return (
-      <table className="table table-striped">
-        <thead>
-          <tr>
-            <th className="header-row"><span>{translations[`${TRN_PREFIX}project-title`]}</span></th>
-            <th className="header-row">
-              <span>
-                {`${fundingType} (${translations[globalSettings.numberDividerDescriptionKey]} ${currencyCode})`}
-              </span>
-            </th>
-          </tr>
-        </thead>
-        <tbody>{rows}</tbody>
-      </table>
+      <div>
+        <table className="table table-striped">
+          <thead>
+            <tr>
+              <th className="header-row"><span>{translations[`${TRN_PREFIX}project-title`]}</span></th>
+              <th className="header-row">
+                <span>
+                  {`${fundingType} (${translations[globalSettings.numberDividerDescriptionKey]} ${currencyCode})`}
+                </span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>{rows}</tbody>
+        </table>
+        {recordsVisible < rows.length
+          ? (
+            <Button variant="success" onClick={this.loadMore}>
+              {`${`${translations[`${TRN_PREFIX}load-more`]} ${recordsVisible}`}/${rows.length}`}
+            </Button>
+          )
+          : null}
+      </div>
     );
+  }
+
+  loadMore = () => {
+    const { recordsVisible } = this.state;
+    this.setState({ recordsVisible: recordsVisible + MAX_RECORDS });
+  }
+
+  handleClose = () => {
+    const { handleClose } = this.props;
+    this.setState({ recordsVisible: MAX_RECORDS });
+    handleClose();
   }
 
   render() {
     const {
-      translations, show, handleClose, data, loading, error
+      translations, show, data, loading, error, title
     } = this.props;
     return (
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={show} onHide={this.handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>{translations[`${TRN_PREFIX}modal-details-title`]}</Modal.Title>
+          <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {loading
@@ -66,7 +95,7 @@ export default class YearDetail extends Component {
           {error ? <span className="error">{JSON.stringify(error)}</span> : null}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={handleClose}>
+          <Button variant="primary" onClick={this.handleClose}>
             {translations[`${TRN_PREFIX}close`]}
           </Button>
         </Modal.Footer>
@@ -84,5 +113,6 @@ YearDetail.propTypes = {
   error: PropTypes.object.isRequired,
   fundingType: PropTypes.string.isRequired,
   currencyCode: PropTypes.string.isRequired,
-  globalSettings: PropTypes.object.isRequired
+  globalSettings: PropTypes.object.isRequired,
+  title: PropTypes.string.isRequired
 };

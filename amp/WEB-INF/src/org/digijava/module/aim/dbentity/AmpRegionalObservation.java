@@ -8,22 +8,29 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.digijava.kernel.validators.common.RequiredValidator;
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableId;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.Output;
-@TranslatableClass (displayName = "Regional Observation")
+
+@TranslatableClass(displayName = "Regional Observation")
 public class AmpRegionalObservation implements Serializable, Versionable, Cloneable {
 
-    //IATI-check: to be ignored
-//  @Interchangeable(fieldTitle="ID")
+    @InterchangeableId
+    @Interchangeable(fieldTitle = "ID")
     private Long ampRegionalObservationId;
-//  @Interchangeable(fieldTitle="Name")
+    @Interchangeable(fieldTitle = "Name", importable = true,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
     @TranslatableField
     private String name;
     private AmpActivityVersion activity;
-//  @Interchangeable(fieldTitle="Regional Observation Measures",fmPath="/Activity Form/Regional Observations/Observation/Measure")
+    @Interchangeable(fieldTitle = "Measures", fmPath = "/Activity Form/Regional "
+            + "Observations/Observation/Measure")
     private Set<AmpRegionalObservationMeasure> regionalObservationMeasures;
-//  @Interchangeable(fieldTitle="Observation Date",fmPath="/Activity Form/Regional Observations/Observation/Date")
+    @Interchangeable(fieldTitle = "Date", fmPath = "/Activity Form/Regional Observations/Observation/Date")
     private Date observationDate;
 
     public String getName() {
@@ -82,42 +89,43 @@ public class AmpRegionalObservation implements Serializable, Versionable, Clonea
         Output out = new Output();
         out.setOutputs(new ArrayList<Output>());
         out.getOutputs().add(
-                new Output(null, new String[] { "Name" }, new Object[] { this.name != null ? this.name
-                        : "" }));
+                new Output(null, new String[]{"Name"}, new Object[]{this.name != null ? this.name
+                        : ""}));
         if (this.observationDate != null) {
-            out.getOutputs().add(new Output(null, new String[] { "Date" }, new Object[] { this.observationDate }));
+            out.getOutputs().add(new Output(null, new String[]{"Date"}, new Object[]{this.observationDate}));
         }
-        
-        if (this.regionalObservationMeasures != null){
-            Output outs = new Output(new ArrayList<Output>(), new String[] {"Measures" }, new Object[] { "" });
+
+        if (this.regionalObservationMeasures != null) {
+            Output outs = new Output(new ArrayList<Output>(), new String[]{"Measures"}, new Object[]{""});
             outs.setOutputs(new ArrayList<Output>());
-            
+
             Iterator<AmpRegionalObservationMeasure> it1 = this.regionalObservationMeasures.iterator();
             while (it1.hasNext()) {
                 AmpRegionalObservationMeasure measure = (AmpRegionalObservationMeasure) it1.next();
-                outs.getOutputs().add(new Output(null, new String[] {"Name"}, new Object[] {measure.getName() != null ? measure.getName() : ""}));
-                
-                if (measure.getActors() != null && measure.getActors().size() > 0){
+                outs.getOutputs().add(new Output(null, new String[]{"Name"},
+                        new Object[]{measure.getName() != null ? measure.getName() : ""}));
+
+                if (measure.getActors() != null && measure.getActors().size() > 0) {
                     String[] actors = new String[measure.getActors().size()];
                     Iterator<AmpRegionalObservationActor> it2 = measure.getActors().iterator();
                     int i = 0;
                     while (it2.hasNext()) {
                         AmpRegionalObservationActor actor = (AmpRegionalObservationActor) it2.next();
-                        if (actor.getName() != null){
+                        if (actor.getName() != null) {
                             actors[i] = actor.getName();
                             if (it2.hasNext())
                                 actors[i] += ", ";
                             i++;
                         }
                     }
-                    Output out1 = new Output(new ArrayList<Output>(), new String[] {"Actors"}, actors);
-                    
+                    Output out1 = new Output(new ArrayList<Output>(), new String[]{"Actors"}, actors);
+
                     outs.getOutputs().add(out1);
                 }
             }
             out.getOutputs().add(outs);
         }
-        
+
         return out;
     }
 
@@ -128,14 +136,14 @@ public class AmpRegionalObservation implements Serializable, Versionable, Clonea
             value += name;
         if (observationDate != null)
             value += observationDate;
-        
-        if (regionalObservationMeasures != null){
+
+        if (regionalObservationMeasures != null) {
             Iterator<AmpRegionalObservationMeasure> it1 = regionalObservationMeasures.iterator();
             while (it1.hasNext()) {
                 AmpRegionalObservationMeasure m = (AmpRegionalObservationMeasure) it1.next();
                 if (m.getName() != null)
                     value += m.getName();
-                if (m.getActors() != null){
+                if (m.getActors() != null) {
                     Iterator<AmpRegionalObservationActor> it2 = m.getActors().iterator();
                     while (it2.hasNext()) {
                         AmpRegionalObservationActor a = (AmpRegionalObservationActor) it2.next();
@@ -145,7 +153,7 @@ public class AmpRegionalObservation implements Serializable, Versionable, Clonea
                 }
             }
         }
-        
+
         return value;
     }
 
@@ -155,7 +163,7 @@ public class AmpRegionalObservation implements Serializable, Versionable, Clonea
         aux.activity = newActivity;
         aux.ampRegionalObservationId = null;
 
-        if (aux.regionalObservationMeasures != null && aux.regionalObservationMeasures.size() > 0){
+        if (aux.regionalObservationMeasures != null && aux.regionalObservationMeasures.size() > 0) {
             Set<AmpRegionalObservationMeasure> set = new HashSet<AmpRegionalObservationMeasure>();
             Iterator<AmpRegionalObservationMeasure> i = aux.regionalObservationMeasures.iterator();
             while (i.hasNext()) {
@@ -165,10 +173,9 @@ public class AmpRegionalObservation implements Serializable, Versionable, Clonea
                 set.add(newMeasure);
             }
             aux.regionalObservationMeasures = set;
+        } else {
+            aux.regionalObservationMeasures = null;
         }
-        else
-            aux.regionalObservationMeasures = null;     
-        
         return aux;
     }
 
@@ -181,22 +188,24 @@ public class AmpRegionalObservation implements Serializable, Versionable, Clonea
     public static class RegionalObservationComparator implements Comparator<AmpRegionalObservation>, Serializable {
 
         /**
-         * 
+         *
          */
         private static final long serialVersionUID = 1L;
 
         @Override
         public int compare(AmpRegionalObservation arg0, AmpRegionalObservation arg1) {
-            if(arg0.getObservationDate()!=null && arg1.getObservationDate()!=null) 
+            if (arg0.getObservationDate() != null && arg1.getObservationDate() != null) {
                 return arg0.getObservationDate().compareTo(arg1.getObservationDate());
-            if(arg0.getAmpRegionalObservationId()!=null && arg1.getAmpRegionalObservationId()!=null) 
+            } else if (arg0.getAmpRegionalObservationId() != null && arg1.getAmpRegionalObservationId() != null) {
                 return arg0.getAmpRegionalObservationId().compareTo(arg1.getAmpRegionalObservationId());
-            if(arg0.getAmpRegionalObservationId()!=null && arg1.getAmpRegionalObservationId()==null) 
+            } else if (arg0.getAmpRegionalObservationId() != null && arg1.getAmpRegionalObservationId() == null) {
                 return -1;
-            if(arg0.getAmpRegionalObservationId()==null && arg1.getAmpRegionalObservationId()!=null) 
+            } else if (arg0.getAmpRegionalObservationId() == null && arg1.getAmpRegionalObservationId() != null) {
                 return 1;
-            return arg0.hashCode()-arg1.hashCode();
+            } else {
+                return arg0.hashCode() - arg1.hashCode();
+            }
         }
-        
+
     }
 }

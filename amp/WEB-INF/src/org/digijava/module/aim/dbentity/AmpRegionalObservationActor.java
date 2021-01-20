@@ -2,20 +2,26 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 
+import org.digijava.kernel.validators.common.RequiredValidator;
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.annotations.interchange.InterchangeableId;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
-@TranslatableClass (displayName = "Regional Observation Actor")
-public class AmpRegionalObservationActor implements Serializable, Cloneable {
 
-    //IATI-check: to be ignored
-//  @Interchangeable(fieldTitle="ID")
+@TranslatableClass(displayName = "Regional Observation Actor")
+public class AmpRegionalObservationActor implements Serializable, Cloneable {
+    @InterchangeableId
+    @Interchangeable(fieldTitle = "ID")
     private Long ampRegionalObservationActorId;
     @TranslatableField
-//  @Interchangeable(fieldTitle="Name")
+
+    @Interchangeable(fieldTitle = "Name", importable = true,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
     private String name;
-//  @Interchangeable(fieldTitle="Name Trimmed")
     private String nameTrimmed;
-//  @Interchangeable(fieldTitle="Measure")
+    @InterchangeableBackReference
     private AmpRegionalObservationMeasure measure;
 
     public String getName() {
@@ -49,7 +55,7 @@ public class AmpRegionalObservationActor implements Serializable, Cloneable {
     public void setMeasure(AmpRegionalObservationMeasure measure) {
         this.measure = measure;
     }
-    
+
     @Override
     protected Object clone() throws CloneNotSupportedException {
         // TODO Auto-generated method stub

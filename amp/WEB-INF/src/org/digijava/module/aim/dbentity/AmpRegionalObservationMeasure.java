@@ -5,18 +5,24 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.digijava.kernel.validators.common.RequiredValidator;
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableId;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
-@TranslatableClass (displayName = "Regional Observation Measure")
+
+@TranslatableClass(displayName = "Regional Observation Measure")
 public class AmpRegionalObservationMeasure implements Serializable, Cloneable {
-    //IATI-check: to be ignored
-//  @Interchangeable(fieldTitle="ID")
+    @InterchangeableId
+    @Interchangeable(fieldTitle = "ID")
     private Long ampRegionalObservationMeasureId;
-//  @Interchangeable(fieldTitle="Name")
+    @Interchangeable(fieldTitle = "Name", importable = true,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
     @TranslatableField
     private String name;
     private AmpRegionalObservation regionalObservation;
-//  @Interchangeable(fieldTitle="Actors",fmPath="/Activity Form/Regional Observations/Observation/Measure/Actor")
+    @Interchangeable(fieldTitle = "Actors", fmPath = "/Activity Form/Regional Observations/Observation/Measure/Actor")
     private Set<AmpRegionalObservationActor> actors;
 
 
@@ -51,13 +57,13 @@ public class AmpRegionalObservationMeasure implements Serializable, Cloneable {
     public void setRegionalObservation(AmpRegionalObservation regionalObservation) {
         this.regionalObservation = regionalObservation;
     }
-    
+
     @Override
     protected Object clone() throws CloneNotSupportedException {
         AmpRegionalObservationMeasure aux = (AmpRegionalObservationMeasure) super.clone();
         aux.setAmpRegionalObservationMeasureId(null);
-        
-        if (aux.actors != null && aux.actors.size() > 0){
+
+        if (aux.actors != null && aux.actors.size() > 0) {
             Set<AmpRegionalObservationActor> set = new HashSet<AmpRegionalObservationActor>();
             Iterator<AmpRegionalObservationActor> i = aux.actors.iterator();
             while (i.hasNext()) {
@@ -67,11 +73,10 @@ public class AmpRegionalObservationMeasure implements Serializable, Cloneable {
                 set.add(newActor);
             }
             aux.actors = set;
-        }
-        else
+        } else {
             aux.actors = null;
-        
+        }
         return aux;
     }
-    
+
 }

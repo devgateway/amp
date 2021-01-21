@@ -83,8 +83,25 @@ class NDDDashboardHome extends Component {
       } else {
         const { _clearTopReport } = this.props;
         _clearTopReport();
-        this.setState({ selectedDirectProgram: null });
+        this.resetChartAfterUnClick();
       }
+    }
+  }
+
+  resetChartAfterUnClick = () => {
+    const { selectedDirectProgram, filters } = this.state;
+    if (selectedDirectProgram) {
+      // Remove the filter manually or it will keep affecting the chart.
+      filters.filters[selectedDirectProgram.filterColumnName]
+        .splice(filters.filters[selectedDirectProgram.filterColumnName]
+          .findIndex(i => i === selectedDirectProgram.objectId), 1);
+      if (filters.filters[selectedDirectProgram.filterColumnName].length === 0) {
+        filters.filters[selectedDirectProgram.filterColumnName] = null;
+      }
+      this.setState(() => ({
+        selectedDirectProgram: null,
+        filters
+      }));
     }
   }
 
@@ -103,7 +120,8 @@ class NDDDashboardHome extends Component {
   onChangeFundingType = (value) => {
     const { _callReport, _clearTopReport } = this.props;
     const { filters, selectedPrograms, settings } = this.state;
-    this.setState({ fundingType: value, selectedDirectProgram: null });
+    this.resetChartAfterUnClick();
+    this.setState({ fundingType: value });
     _callReport(value, filters, selectedPrograms, settings);
     _clearTopReport();
   }

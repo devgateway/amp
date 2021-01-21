@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import EllipsisText from 'react-ellipsis-text';
-import PropTypes, { bool } from 'prop-types';
+import PropTypes from 'prop-types';
+import { formatNumberWithSettings } from '../../modules/ndddashboard/utils/Utils';
 
 export default class CustomLegend extends Component {
   render() {
     const {
-      data, colorMap, shouldSplitBig, formatter
+      data, colorMap, shouldSplitBig, formatter, translations, settings
     } = this.props;
     return (
       <div className="custom-legend">
@@ -40,7 +41,12 @@ export default class CustomLegend extends Component {
                     <div className="col-md-2 col-xs-2 label vertical-center">
                       <span
                         className="label amount">
-                        {formatter ? formatter.format(d.amount) : d.amount}
+                        {/* eslint-disable-next-line no-nested-ternary */}
+                        {translations && settings
+                          ? formatNumberWithSettings(translations, settings, d.amount, false)
+                          : formatter
+                            ? formatter.format(d.amount)
+                            : d.amount}
                       </span>
                     </div>
                   )}
@@ -56,8 +62,15 @@ export default class CustomLegend extends Component {
 CustomLegend.propTypes = {
   data: PropTypes.array.isRequired,
   colorMap: PropTypes.object.isRequired,
-  shouldSplitBig: PropTypes.bool
+  shouldSplitBig: PropTypes.bool,
+  formatter: PropTypes.object,
+  translations: PropTypes.object,
+  settings: PropTypes.object
 };
+
 CustomLegend.defaultProps = {
-  shouldSplitBig: false
+  shouldSplitBig: false,
+  formatter: null,
+  translations: null,
+  settings: null
 };

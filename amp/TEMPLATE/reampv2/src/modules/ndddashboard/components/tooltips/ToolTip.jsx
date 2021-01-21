@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import PropTypes, { number } from 'prop-types';
+import PropTypes from 'prop-types';
 import './ToolTip.css';
 import { NDDTranslationContext } from '../StartUp';
 import { formatNumberWithSettings } from '../../utils/Utils';
 
 class ToolTip extends Component {
+  // eslint-disable-next-line class-methods-use-this
   getActualWidth(inputText) {
     const font = '16px times new roman';
     const canvas = document.createElement('canvas');
@@ -66,6 +67,12 @@ ToolTip.propTypes = {
   isYearTotal: PropTypes.bool,
   globalSettings: PropTypes.object.isRequired
 };
+
+ToolTip.defaultProps = {
+  minWidth: null,
+  isYearTotal: false,
+};
+
 ToolTip.contextType = NDDTranslationContext;
 
 export default ToolTip;

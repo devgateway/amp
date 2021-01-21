@@ -74,7 +74,7 @@ class MainDashboardContainer extends Component {
               {`${top.sumarizedTotal} ${top.currency}`}
             </div>
           </div>
-          <TopChart data={top} globalSettings={globalSettings} />
+          <TopChart data={top} globalSettings={globalSettings} translations={translations} />
         </div>
       </div>
     ) : <div className="loading" />;

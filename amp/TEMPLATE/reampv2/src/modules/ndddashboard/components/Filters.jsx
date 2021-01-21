@@ -27,20 +27,21 @@ class Filters extends Component {
     filter.on('cancel', this.hideFilters);
   }
 
+  // eslint-disable-next-line no-unused-vars
   componentDidUpdate(prevProps, prevState, snapshot) {
     const {
-      dashboardId, sharedData, sharedDataPending, sharedDataLoaded, getSharedData
+      dashboardId, _sharedData, _sharedDataPending, _sharedDataLoaded,
     } = this.props;
     const { loadedSavedData } = this.state;
     if (dashboardId) {
       filter.loaded.done(() => {
-        if (!sharedDataPending && !sharedDataLoaded) {
+        if (!_sharedDataPending && !_sharedDataLoaded) {
           getSharedData(dashboardId);
         }
-        if (sharedDataPending === false && sharedDataLoaded === true && !loadedSavedData) {
+        if (_sharedDataPending === false && _sharedDataLoaded === true && !loadedSavedData) {
           this.setState({ loadedSavedData: true });
           // Note: no need to explicitly call applyFilters when deserializing (unless you use silent: true).
-          filter.deserialize(JSON.parse(sharedData.stateBlob));
+          filter.deserialize(JSON.parse(_sharedData.stateBlob));
         }
       });
     }
@@ -56,6 +57,7 @@ class Filters extends Component {
     if (filter && !show) {
       this.setState({ show: true });
       return filter.loaded.then(() => {
+        // eslint-disable-next-line react/no-string-refs
         filter.setElement(this.refs.filterPopup);
         return filter.showFilters();
       });
@@ -139,6 +141,7 @@ class Filters extends Component {
             ) : null}
           </div>
         </div>
+        {/* eslint-disable-next-line react/no-string-refs */}
         <div id="filter-popup" ref="filterPopup" style={{ display: (!show ? 'none' : 'block') }} />
       </Col>
     );
@@ -146,9 +149,9 @@ class Filters extends Component {
 }
 
 const mapStateToProps = state => ({
-  sharedDataPending: state.sharedDataReducer.sharedDataPending,
-  sharedDataLoaded: state.sharedDataReducer.sharedDataLoaded,
-  sharedData: state.sharedDataReducer.sharedData,
+  _sharedDataPending: state.sharedDataReducer.sharedDataPending,
+  _sharedDataLoaded: state.sharedDataReducer.sharedDataLoaded,
+  _sharedData: state.sharedDataReducer.sharedData,
   translations: state.translationsReducer.translations
 });
 
@@ -162,5 +165,12 @@ Filters.propTypes = {
   onApplyFilters: PropTypes.func.isRequired,
   dashboardId: PropTypes.number,
   translations: PropTypes.object.isRequired,
-  globalSettings: PropTypes.object.isRequired
+  globalSettings: PropTypes.object.isRequired,
+  _sharedDataPending: PropTypes.bool.isRequired,
+  _sharedDataLoaded: PropTypes.bool.isRequired,
+  _sharedData: PropTypes.object.isRequired,
+};
+
+Filters.defaultProps = {
+  dashboardId: null
 };

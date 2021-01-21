@@ -17,6 +17,7 @@ class NDDDashboardHome extends Component {
     super(props);
     this.state = {
       filters: undefined,
+      // eslint-disable-next-line react/no-unused-state
       filtersWithModels: undefined,
       dashboardId: undefined,
       fundingType: undefined,
@@ -40,13 +41,28 @@ class NDDDashboardHome extends Component {
             [CURRENCY_CODE]: data[0].payload[Object.keys(data[0].payload)
               .find(i => data[0].payload[i].id === CURRENCY_CODE)].value.defaultId
           };
+
+          const defaultFilters = { filters: {} };
+          const date = {};
+          if (data[0].gs.defaultMinDate || data[0].gs.defaultMaxDate) {
+            if (data[0].gs.defaultMinDate) {
+              date.start = data[0].gs.defaultMinDate;
+            }
+            if (data[0].gs.defaultMaxDate) {
+              date.end = data[0].gs.defaultMaxDate;
+            }
+            defaultFilters.filters.date = date;
+          }
+
           const ids = [`${data[1].payload[SRC_PROGRAM].id}`, `${data[1].payload[DST_PROGRAM].id}`];
           this.setState({
             selectedPrograms: ids,
             settings: tempSettings,
-            fundingType: data[0].payload.find(i => i.id === FUNDING_TYPE).value.defaultId
+            fundingType: data[0].payload.find(i => i.id === FUNDING_TYPE).value.defaultId,
+            filters: defaultFilters
           });
-          return _callReport(data[0].payload.find(i => i.id === FUNDING_TYPE).value.defaultId, null, ids, tempSettings);
+          return _callReport(data[0].payload.find(i => i.id === FUNDING_TYPE).value.defaultId, defaultFilters,
+            ids, tempSettings);
         });
     } else {
       _loadDashboardSettings();
@@ -77,6 +93,7 @@ class NDDDashboardHome extends Component {
     const {
       fundingType, selectedDirectProgram, settings, selectedPrograms
     } = this.state;
+    // eslint-disable-next-line react/no-unused-state
     this.setState({ filters: data, filtersWithModels: dataWithModels });
     _callReport(fundingType, data, selectedPrograms, settings);
     if (selectedDirectProgram !== null) {
@@ -190,7 +207,8 @@ NDDDashboardHome.propTypes = {
   _getMappings: PropTypes.func.isRequired,
   _callTopReport: PropTypes.func.isRequired,
   _clearTopReport: PropTypes.func.isRequired,
-  noIndirectMapping: PropTypes.object.isRequired
+  noIndirectMapping: PropTypes.object.isRequired,
+  globalSettings: PropTypes.object.isRequired
 };
 
 NDDDashboardHome.defaultProps = {

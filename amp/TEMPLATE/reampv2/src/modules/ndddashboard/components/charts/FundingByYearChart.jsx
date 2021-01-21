@@ -6,15 +6,18 @@ import { bindActionCreators } from 'redux';
 // Dont use react-plotly directly: https://github.com/plotly/react-plotly.js/issues/135#issuecomment-501398125
 import Plotly from 'plotly.js';
 import createPlotlyComponent from 'react-plotly.js/factory';
+import { callYearDetailReport } from '../../actions/callReports';
 import {
-  DIRECT_PROGRAM, INDIRECT_PROGRAMS, PROGRAMLVL1, AMOUNT, CODE, DIRECT, INDIRECT,
-  TRANSITIONS, PROGRAMLVL2, AVAILABLE_COLORS, TRN_PREFIX, CURRENCY_CODE
+  DIRECT_PROGRAM, INDIRECT_PROGRAMS, PROGRAMLVL1, CODE,
+  PROGRAMLVL2, TRN_PREFIX, CURRENCY_CODE
 } from '../../utils/constants';
 import {
-  addAlpha, formatNumberWithSettings, getCustomColor, getGradient
+  formatNumberWithSettings, getCustomColor
 } from '../../utils/Utils';
+// eslint-disable-next-line no-unused-vars
 import styles from '../styles.css';
 import ToolTip from '../tooltips/ToolTip';
+import YearDetail from './YearDetail';
 
 const Plot = createPlotlyComponent(Plotly);
 
@@ -26,7 +29,7 @@ class FundingByYearChart extends Component {
     super(props);
     this.getValues = this.getValues.bind(this);
     this.state = {
-      source: SRC_DIRECT, showLegend: false, legendTop: 0, legendLeft: 0, tooltipData: null
+      source: SRC_DIRECT, showLegend: false, legendTop: 0, legendLeft: 0, tooltipData: null, showDetail: false
     };
   }
 
@@ -57,7 +60,8 @@ class FundingByYearChart extends Component {
           ret.push({
             [CODE]: directProgram[CODE],
             name: directProgram.name,
-            values: Object.keys(auxAmounts).map(j => ({ [j]: auxAmounts[j] }))
+            values: Object.keys(auxAmounts).map(j => ({ [j]: auxAmounts[j] })),
+            id: directProgram.objectId
           });
         }
       });
@@ -68,7 +72,7 @@ class FundingByYearChart extends Component {
     return ret;
   }
 
-  // eslint-disable-next-line class-methods-use-this
+  // eslint-disable-next-line class-methods-use-this,react/sort-comp
   sortAmountsByYear(values) {
     return values.sort((i, j) => (Object.keys(i)[0] - Object.keys(j)[0]));
   }
@@ -109,10 +113,11 @@ class FundingByYearChart extends Component {
   }
 
   onHover = (data) => {
-    console.log(data);
+    const { text } = data.points[0].data;
+    const lines = Math.ceil(text.length / 30);
     this.setState({
       showLegend: true,
-      legendTop: data.event.pointerY - 25,
+      legendTop: data.event.pointerY - 20 - (lines * 25),
       legendLeft: data.event.pointerX - 100,
       tooltipData: data
     });
@@ -120,6 +125,38 @@ class FundingByYearChart extends Component {
 
   onUnHover = () => {
     this.setState({ showLegend: false, tooltipData: null });
+  }
+
+  onClick = (event) => {
+    const {
+      _callYearDetailReport, settings, filters, fundingType
+    } = this.props;
+    this.setState({ showDetail: true, year: event.points[0].x, programName: event.points[0].data.text });
+    _callYearDetailReport(fundingType,
+      filters,
+      event.points[0].data.extraData.find(i => i.name === event.points[0].data.text).id,
+      event.points[0].x,
+      settings);
+  }
+
+  createModalWindow = () => {
+    const {
+      translations, yearDetailPending, yearDetail, error, fundingType, settings, globalSettings
+    } = this.props;
+    const { showDetail, year, programName } = this.state;
+    return (
+      <YearDetail
+        translations={translations}
+        show={showDetail}
+        handleClose={() => { this.setState({ showDetail: false }); }}
+        data={yearDetail}
+        loading={yearDetailPending}
+        error={error}
+        fundingType={fundingType}
+        currencyCode={settings[CURRENCY_CODE]}
+        globalSettings={globalSettings}
+        title={`${year} ${programName}`} />
+    );
   }
 
   createTooltip = () => {
@@ -271,6 +308,7 @@ class FundingByYearChart extends Component {
           style={{ width: '100%', height: '100%', cursor: 'pointer' }}
           onHover={event => this.onHover(event)}
           onUnhover={() => this.onUnHover()}
+          onClick={(event) => this.onClick(event)}
         />
         <div
           style={{
@@ -281,6 +319,7 @@ class FundingByYearChart extends Component {
           className="line-legend-wrapper">
           {this.createTooltip()}
         </div>
+        {this.createModalWindow()}
       </div>
     );
   }
@@ -289,15 +328,26 @@ class FundingByYearChart extends Component {
 FundingByYearChart.propTypes = {
   data: PropTypes.array.isRequired,
   selectedDirectProgram: PropTypes.object.isRequired,
-  translations: PropTypes.array.isRequired,
+  translations: PropTypes.object.isRequired,
   settings: PropTypes.object.isRequired,
-  globalSettings: PropTypes.object.isRequired
+  globalSettings: PropTypes.object.isRequired,
+  _callYearDetailReport: PropTypes.func.isRequired,
+  fundingType: PropTypes.object.isRequired,
+  filters: PropTypes.object.isRequired,
+  yearDetailPending: PropTypes.bool.isRequired,
+  yearDetail: PropTypes.array.isRequired,
+  error: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  translations: state.translationsReducer.translations
+  translations: state.translationsReducer.translations,
+  yearDetailPending: state.reportsReducer.yearDetailPending,
+  yearDetail: state.reportsReducer.yearDetail,
+  error: state.reportsReducer.error
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({
+  _callYearDetailReport: callYearDetailReport
+}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(FundingByYearChart);

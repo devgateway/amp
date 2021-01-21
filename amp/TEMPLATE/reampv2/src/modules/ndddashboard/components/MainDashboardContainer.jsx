@@ -13,7 +13,7 @@ import {
 import CustomLegend from '../../../utils/components/CustomLegend';
 import './legends/legends.css';
 import { getCustomColor, getGradient, extractPrograms } from '../utils/Utils';
-import TopChart from './TopChart';
+import TopChart from './charts/TopChart';
 import { callTopReport } from '../actions/callReports';
 import FundingByYearChart from './charts/FundingByYearChart';
 import PieChartTypeSelector from './PieChartTypeSelector';
@@ -107,7 +107,8 @@ class MainDashboardContainer extends Component {
       settings,
       selectedDirectProgram,
       handleOuterChartClick,
-      globalSettings
+      globalSettings,
+      filters
     } = this.props;
     const { translations } = this.context;
     const formatter = new Intl.NumberFormat('en-US', {
@@ -162,7 +163,7 @@ class MainDashboardContainer extends Component {
                     : <div className="loading" />}
                 </div>
                 <div className="buttons">
-                  {dashboardSettings
+                  {dashboardSettings && !nddLoadingPending
                     ? (
                       <FundingTypeSelector
                         onChange={onChangeFundingType}
@@ -236,6 +237,8 @@ class MainDashboardContainer extends Component {
                   <FundingByYearChart
                     selectedDirectProgram={selectedDirectProgram}
                     settings={settings}
+                    filters={filters}
+                    fundingType={fundingType}
                     globalSettings={globalSettings}
                     data={ndd} />
                 ) : <div className="loading" />}

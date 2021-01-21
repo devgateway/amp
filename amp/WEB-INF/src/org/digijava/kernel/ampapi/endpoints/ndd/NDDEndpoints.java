@@ -126,4 +126,13 @@ public class NDDEndpoints {
     public AmpApiState savedChart(@ApiParam("Property value") @PathParam("id") Long id) {
         return EndpointUtils.getApiState(id, ApiStateType.NDD);
     }
+
+    @POST
+    @Path("activity-detail-report")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "getActivityDetailReport")
+    @ApiOperation("")
+    public List<DetailByYear> getActivityDetailReport(SettingsAndFiltersParameters params) {
+        return DashboardService.getActivityDetailReport(params);
+    }
 }

@@ -161,6 +161,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(Filters);
 Filters.propTypes = {
   onApplyFilters: PropTypes.func.isRequired,
   dashboardId: PropTypes.number,
-  translations: PropTypes.array.isRequired,
+  translations: PropTypes.object.isRequired,
   globalSettings: PropTypes.object.isRequired
 };

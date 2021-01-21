@@ -4,13 +4,14 @@ import {
   fetchIndirectReportSuccess,
   fetchTopReportPending,
   fetchTopReportSuccess, fetchTopReportError,
-  resetTopReport
+  resetTopReport,
+  fetchYearDetailSuccess, fetchYearDetailPending, fetchYearDetailError
 } from './reportActions';
 import { fetchApiData } from '../../../utils/loadTranslations';
 import {
   CURRENCY_CODE, DEFAULT_CURRENCY,
-  DEFAULT_FUNDING_TYPE,
-  DIRECT_INDIRECT_REPORT, FUNDING_TYPE, INCLUDE_LOCATIONS_WITH_CHILDREN, TOP_DONOR_REPORT
+  DIRECT_INDIRECT_REPORT, FUNDING_TYPE, INCLUDE_LOCATIONS_WITH_CHILDREN, TOP_DONOR_REPORT,
+  ACTIVITY_DETAIL_REPORT
 } from '../utils/constants';
 
 export const callReport = (fundingType, filters, programIds, settings) => dispatch => {
@@ -56,4 +57,19 @@ export const callTopReport = (fundingType, settings, filterParam, selectedProgra
   })
     .then(payload => dispatch(fetchTopReportSuccess(payload)))
     .catch(error => dispatch(fetchTopReportError(error)));
+};
+
+export const callYearDetailReport = (fundingType, filters, programId, year, settings) => dispatch => {
+  dispatch(fetchYearDetailPending());
+  const newSettings = {
+    [FUNDING_TYPE]: fundingType, id: programId, year, ...settings
+  };
+  return Promise.all([fetchApiData({
+    url: ACTIVITY_DETAIL_REPORT,
+    body: {
+      settings: newSettings,
+      filters: (filters ? filters.filters : null)
+    }
+  })]).then((data) => dispatch(fetchYearDetailSuccess(data[0])))
+    .catch(error => dispatch(fetchYearDetailError(error)));
 };

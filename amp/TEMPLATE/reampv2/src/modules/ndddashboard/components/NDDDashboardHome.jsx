@@ -41,7 +41,11 @@ class NDDDashboardHome extends Component {
               .find(i => data[0].payload[i].id === CURRENCY_CODE)].value.defaultId
           };
           const ids = [`${data[1].payload[SRC_PROGRAM].id}`, `${data[1].payload[DST_PROGRAM].id}`];
-          this.setState({ selectedPrograms: ids, settings: tempSettings });
+          this.setState({
+            selectedPrograms: ids,
+            settings: tempSettings,
+            fundingType: data[0].payload.find(i => i.id === FUNDING_TYPE).value.defaultId
+          });
           return _callReport(data[0].payload.find(i => i.id === FUNDING_TYPE).value.defaultId, null, ids, tempSettings);
         });
     } else {
@@ -82,7 +86,7 @@ class NDDDashboardHome extends Component {
 
   onChangeFundingType = (value) => {
     const { _callReport, _clearTopReport } = this.props;
-    const {filters, selectedPrograms, settings } = this.state;
+    const { filters, selectedPrograms, settings } = this.state;
     this.setState({ fundingType: value, selectedDirectProgram: null });
     _callReport(value, filters, selectedPrograms, settings);
     _clearTopReport();
@@ -127,7 +131,7 @@ class NDDDashboardHome extends Component {
         </Row>
         <Row>
           <Col md={12}>
-          <div><br /></div>
+            <div><br /></div>
           </Col>
         </Row>
         <Row style={{ marginRight: '-30px', marginLeft: '-30px' }}>

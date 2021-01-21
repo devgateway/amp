@@ -86,5 +86,5 @@ export default connect(mapStateToProps, mapDispatchToProps)(Share);
 Share.propTypes = {
   getShareLink: PropTypes.func.isRequired,
   filters: PropTypes.object,
-  translations: PropTypes.array.isRequired
+  translations: PropTypes.object.isRequired
 };

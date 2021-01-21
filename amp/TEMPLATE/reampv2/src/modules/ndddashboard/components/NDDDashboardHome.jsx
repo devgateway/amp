@@ -17,8 +17,6 @@ class NDDDashboardHome extends Component {
     super(props);
     this.state = {
       filters: undefined,
-      // eslint-disable-next-line react/no-unused-state
-      filtersWithModels: undefined,
       dashboardId: undefined,
       fundingType: undefined,
       selectedPrograms: undefined,
@@ -42,6 +40,8 @@ class NDDDashboardHome extends Component {
               .find(i => data[0].payload[i].id === CURRENCY_CODE)].value.defaultId
           };
 
+          /* TODO: evaluate if is not better to refactor the code to always call applyFilters() instead of running
+                   _callReport directly. */
           const defaultFilters = { filters: {} };
           const date = {};
           if (data[0].gs.defaultMinDate || data[0].gs.defaultMaxDate) {
@@ -88,13 +88,12 @@ class NDDDashboardHome extends Component {
     }
   }
 
-  onApplyFilters = (data, dataWithModels) => {
+  onApplyFilters = (data) => {
     const { _callReport, _callTopReport } = this.props;
     const {
       fundingType, selectedDirectProgram, settings, selectedPrograms
     } = this.state;
-    // eslint-disable-next-line react/no-unused-state
-    this.setState({ filters: data, filtersWithModels: dataWithModels });
+    this.setState({ filters: data });
     _callReport(fundingType, data, selectedPrograms, settings);
     if (selectedDirectProgram !== null) {
       _callTopReport(fundingType, settings, data, selectedDirectProgram);

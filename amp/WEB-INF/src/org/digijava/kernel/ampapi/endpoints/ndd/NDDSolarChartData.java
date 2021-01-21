@@ -2,6 +2,7 @@ package org.digijava.kernel.ampapi.endpoints.ndd;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
+import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpTheme;
 
 import java.math.BigDecimal;
@@ -60,9 +61,13 @@ public class NDDSolarChartData {
          * @param amount
          */
         public ProgramData(AmpTheme program, BigDecimal amount, Map<String, BigDecimal> amountsByYear) {
-            String configurationName =
-                    program.getParentThemeId().getParentThemeId().getParentThemeId().getProgramSettings()
-                            .stream().findAny().get().getName();
+            String configurationName = null;
+            AmpActivityProgramSettings activityProgramSettings = program.getParentThemeId()
+                    .getParentThemeId().getParentThemeId().getProgramSettings()
+                    .stream().findAny().orElse(null);
+            if (activityProgramSettings != null) {
+                configurationName = activityProgramSettings.getName();
+            }
             this.programLvl3 = new Program(program.getThemeCode(), program.getName(),
                     FilterUtils.INSTANCE.idFromColumnName(configurationName + " Level 3"),
                     program.getAmpThemeId());

@@ -36,6 +36,7 @@ class NestedDonutsProgramChart extends Component {
    * Create an array with each unique Direct Program Level 1 adding the amounts when it has multiple children.
    * @returns {[]}
    */
+  // eslint-disable-next-line react/sort-comp
   extractOuterData(calculateLvl2) {
     const { selectedDirectProgram } = this.props;
     const ret = [];
@@ -90,6 +91,7 @@ class NestedDonutsProgramChart extends Component {
     return data;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   isSubProgram(i, selectedDirectProgram) {
     if (selectedDirectProgram) {
       return i[DIRECT_PROGRAM][PROGRAMLVL1][CODE] === selectedDirectProgram[CODE];
@@ -129,6 +131,7 @@ class NestedDonutsProgramChart extends Component {
     return ret;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   innerDataToChartValues(data, outerData) {
     const ret = [];
     if (data) {
@@ -154,7 +157,7 @@ class NestedDonutsProgramChart extends Component {
     let newColors = [];
     if (selectedDirectProgram) {
       colors.forEach((c, i) => {
-        const index = data.findIndex(i => i[CODE] === selectedDirectProgram[CODE]);
+        const index = data.findIndex(j => j[CODE] === selectedDirectProgram[CODE]);
         if (i !== index && data[i].neverFade !== true) {
           c = addAlpha(c, 0.15);
           newColors.push(c);

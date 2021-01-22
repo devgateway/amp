@@ -14,10 +14,11 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
+import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.Output;
 
 @TranslatableClass(displayName = "Regional Observation")
-public class AmpRegionalObservation implements Serializable, Versionable, Cloneable {
+public class AmpRegionalObservation implements Serializable, Versionable, Cloneable, Identifiable {
 
     @InterchangeableId
     @Interchangeable(fieldTitle = "ID")
@@ -28,8 +29,8 @@ public class AmpRegionalObservation implements Serializable, Versionable, Clonea
     private String name;
     private AmpActivityVersion activity;
     @Interchangeable(fieldTitle = "Measures", fmPath = "/Activity Form/Regional "
-            + "Observations/Observation/Measure")
-    private Set<AmpRegionalObservationMeasure> regionalObservationMeasures;
+            + "Observations/Observation/Measure", importable = true)
+    private Set<AmpRegionalObservationMeasure> regionalObservationMeasures = new HashSet<>();
     @Interchangeable(fieldTitle = "Date", fmPath = "/Activity Form/Regional Observations/Observation/Date")
     private Date observationDate;
 
@@ -183,6 +184,11 @@ public class AmpRegionalObservation implements Serializable, Versionable, Clonea
     public Object clone() throws CloneNotSupportedException {
         // TODO Auto-generated method stub
         return super.clone();
+    }
+
+    @Override
+    public Object getIdentifier() {
+        return ampRegionalObservationId;
     }
 
     public static class RegionalObservationComparator implements Comparator<AmpRegionalObservation>, Serializable {

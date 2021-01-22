@@ -9,14 +9,13 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
+import org.digijava.module.aim.util.Identifiable;
 
 @TranslatableClass(displayName = "Regional Observation Actor")
-public class AmpRegionalObservationActor implements Serializable, Cloneable {
+public class AmpRegionalObservationActor implements Serializable, Cloneable, Identifiable {
     @InterchangeableId
     @Interchangeable(fieldTitle = "ID")
     private Long ampRegionalObservationActorId;
-    @TranslatableField
-
     @Interchangeable(fieldTitle = "Name", importable = true,
             interValidators = @InterchangeableValidator(RequiredValidator.class))
     private String name;
@@ -62,4 +61,8 @@ public class AmpRegionalObservationActor implements Serializable, Cloneable {
         return super.clone();
     }
 
+    @Override
+    public Object getIdentifier() {
+        return ampRegionalObservationActorId;
+    }
 }

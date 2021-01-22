@@ -11,9 +11,10 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
+import org.digijava.module.aim.util.Identifiable;
 
 @TranslatableClass(displayName = "Regional Observation Measure")
-public class AmpRegionalObservationMeasure implements Serializable, Cloneable {
+public class AmpRegionalObservationMeasure implements Serializable, Cloneable, Identifiable {
     @InterchangeableId
     @Interchangeable(fieldTitle = "ID")
     private Long ampRegionalObservationMeasureId;
@@ -22,8 +23,9 @@ public class AmpRegionalObservationMeasure implements Serializable, Cloneable {
     @TranslatableField
     private String name;
     private AmpRegionalObservation regionalObservation;
-    @Interchangeable(fieldTitle = "Actors", fmPath = "/Activity Form/Regional Observations/Observation/Measure/Actor")
-    private Set<AmpRegionalObservationActor> actors;
+    @Interchangeable(fieldTitle = "Actors", fmPath = "/Activity Form/Regional Observations/Observation/Measure/Actor"
+            , importable = true)
+    private Set<AmpRegionalObservationActor> actors = new HashSet<>();
 
 
     public String getName() {
@@ -79,4 +81,8 @@ public class AmpRegionalObservationMeasure implements Serializable, Cloneable {
         return aux;
     }
 
+    @Override
+    public Object getIdentifier() {
+        return ampRegionalObservationMeasureId;
+    }
 }

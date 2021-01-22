@@ -89,6 +89,7 @@ class Filters extends Component {
       Object.keys(filtersWithModels.filters)
         .forEach(i => {
           ret.push(<FilterOutputItem
+            key={Math.random()}
             filters={filtersWithModels.filters}
             i={i}
             translations={translations}
@@ -168,9 +169,10 @@ Filters.propTypes = {
   globalSettings: PropTypes.object.isRequired,
   _sharedDataPending: PropTypes.bool.isRequired,
   _sharedDataLoaded: PropTypes.bool.isRequired,
-  _sharedData: PropTypes.object.isRequired,
+  _sharedData: PropTypes.object,
 };
 
 Filters.defaultProps = {
-  dashboardId: null
+  dashboardId: null,
+  _sharedData: undefined
 };

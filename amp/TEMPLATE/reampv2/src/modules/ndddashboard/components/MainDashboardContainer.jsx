@@ -109,7 +109,6 @@ class MainDashboardContainer extends Component {
       onChangeProgram,
       selectedPrograms,
       noIndirectMapping,
-      top,
       settings,
       selectedDirectProgram,
       handleOuterChartClick,
@@ -117,13 +116,6 @@ class MainDashboardContainer extends Component {
       filters
     } = this.props;
     const { translations } = this.context;
-    const formatter = new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: top && top.currency ? top.currency : 'USD',
-      // These options are needed to round to whole numbers if that's what you want.
-      // minimumFractionDigits: 0,
-      // maximumFractionDigits: 0,
-    });
     if (error) {
       // TODO proper error handling
       return (<div>ERROR</div>);
@@ -275,15 +267,15 @@ export default connect(mapStateToProps, mapDispatchToProps)(MainDashboardContain
 MainDashboardContainer.propTypes = {
   filters: PropTypes.object,
   error: PropTypes.object,
-  ndd: PropTypes.array.isRequired,
-  top: PropTypes.object.isRequired,
+  ndd: PropTypes.array,
+  top: PropTypes.object,
   nddLoadingPending: PropTypes.bool.isRequired,
   nddLoaded: PropTypes.bool.isRequired,
   topLoadingPending: PropTypes.bool.isRequired,
   topLoaded: PropTypes.bool.isRequired,
-  dashboardSettings: PropTypes.array.isRequired,
+  dashboardSettings: PropTypes.array,
   onChangeFundingType: PropTypes.func.isRequired,
-  fundingType: PropTypes.object,
+  fundingType: PropTypes.string,
   mapping: PropTypes.object,
   onChangeProgram: PropTypes.func.isRequired,
   noIndirectMapping: PropTypes.object,
@@ -303,7 +295,10 @@ MainDashboardContainer.defaultProps = {
   mapping: null,
   noIndirectMapping: null,
   selectedPrograms: null,
-  globalSettings: null
+  globalSettings: null,
+  ndd: null,
+  top: undefined,
+  dashboardSettings: null
 };
 
 MainDashboardContainer.contextType = NDDTranslationContext;

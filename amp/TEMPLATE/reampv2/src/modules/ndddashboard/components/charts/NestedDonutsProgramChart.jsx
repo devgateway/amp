@@ -352,10 +352,14 @@ class NestedDonutsProgramChart extends Component {
 NestedDonutsProgramChart.propTypes = {
   data: PropTypes.array.isRequired,
   handleOuterChartClick: PropTypes.func.isRequired,
-  selectedDirectProgram: PropTypes.object.isRequired,
+  selectedDirectProgram: PropTypes.object,
   translations: PropTypes.object.isRequired,
   settings: PropTypes.object.isRequired,
   globalSettings: PropTypes.object.isRequired
+};
+
+NestedDonutsProgramChart.defaultProps = {
+  selectedDirectProgram: undefined
 };
 
 const mapStateToProps = state => ({

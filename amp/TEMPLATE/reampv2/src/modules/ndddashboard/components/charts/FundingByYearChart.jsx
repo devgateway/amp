@@ -327,16 +327,23 @@ class FundingByYearChart extends Component {
 
 FundingByYearChart.propTypes = {
   data: PropTypes.array.isRequired,
-  selectedDirectProgram: PropTypes.object.isRequired,
+  selectedDirectProgram: PropTypes.object,
   translations: PropTypes.object.isRequired,
   settings: PropTypes.object.isRequired,
   globalSettings: PropTypes.object.isRequired,
   _callYearDetailReport: PropTypes.func.isRequired,
-  fundingType: PropTypes.object.isRequired,
+  fundingType: PropTypes.string,
   filters: PropTypes.object.isRequired,
   yearDetailPending: PropTypes.bool.isRequired,
-  yearDetail: PropTypes.array.isRequired,
-  error: PropTypes.object.isRequired
+  yearDetail: PropTypes.array,
+  error: PropTypes.object
+};
+
+FundingByYearChart.defaultProps = {
+  selectedDirectProgram: undefined,
+  fundingType: undefined,
+  yearDetail: null,
+  error: undefined
 };
 
 const mapStateToProps = state => ({

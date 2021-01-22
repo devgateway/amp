@@ -63,7 +63,7 @@ ToolTip.propTypes = {
   formattedValue: PropTypes.string.isRequired,
   currencyCode: PropTypes.string.isRequired,
   total: PropTypes.number.isRequired,
-  minWidth: PropTypes.string,
+  minWidth: PropTypes.number,
   isYearTotal: PropTypes.bool,
   globalSettings: PropTypes.object.isRequired
 };

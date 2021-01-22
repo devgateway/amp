@@ -215,8 +215,8 @@ const
 
 NDDDashboardHome.propTypes = {
   _callReport: PropTypes.func.isRequired,
-  mapping: PropTypes.object.isRequired,
-  ndd: PropTypes.array.isRequired,
+  mapping: PropTypes.object,
+  ndd: PropTypes.array,
   nddLoadingPending: PropTypes.bool.isRequired,
   nddLoaded: PropTypes.bool.isRequired,
   dashboardSettings: PropTypes.array,
@@ -224,12 +224,16 @@ NDDDashboardHome.propTypes = {
   _getMappings: PropTypes.func.isRequired,
   _callTopReport: PropTypes.func.isRequired,
   _clearTopReport: PropTypes.func.isRequired,
-  noIndirectMapping: PropTypes.object.isRequired,
-  globalSettings: PropTypes.object.isRequired
+  noIndirectMapping: PropTypes.object,
+  globalSettings: PropTypes.object
 };
 
 NDDDashboardHome.defaultProps = {
   dashboardSettings: undefined,
+  mapping: undefined,
+  ndd: null,
+  noIndirectMapping: undefined,
+  globalSettings: undefined
 };
 
 NDDDashboardHome

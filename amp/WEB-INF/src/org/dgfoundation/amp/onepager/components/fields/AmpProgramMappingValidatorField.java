@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.dgfoundation.amp.onepager.components.fields;
 
@@ -66,7 +66,8 @@ public abstract class AmpProgramMappingValidatorField<T extends AmpActivityProgr
                 String destProgram = FeaturesUtil.
                         getGlobalSettingValue(GlobalSettingsConstants.MAPPING_DESTINATION_PROGRAM);
 
-                if (destProgram != null && getCurrentRootTheme().getAmpThemeId().equals(Long.valueOf(destProgram))) {
+                if (destProgram != null && getCurrentRootTheme() != null
+                        && getCurrentRootTheme().getAmpThemeId().equals(Long.valueOf(destProgram))) {
                     Set<AmpTheme> mappedDirectPrograms = ProgramUtil.loadProgramMappings()
                             .values().stream().flatMap(Collection::stream).collect(toSet());
                     for (T t : collectionModel.getObject()) {
@@ -97,5 +98,5 @@ public abstract class AmpProgramMappingValidatorField<T extends AmpActivityProgr
             throw new RuntimeException(e);
         }
     }
-    
+
 }

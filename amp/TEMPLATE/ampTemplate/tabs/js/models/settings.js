@@ -14,7 +14,7 @@ define([ 'underscore', 'backbone', 'translationManager' ], function(_, Backbone,
 					_self.teamLead = collection.get('team-lead');
 					_self.validator = collection.get('team-validator');
 					_self.crossTeamEnable = collection.get('cross_team_validation');
-					_self.accessType = collection.get('workspace_type');
+					_self.accessType = collection.get('workspace-type');
 					_self.workspacePrefix = collection.get('workspace-prefix');
 				}
 			});

@@ -26,47 +26,28 @@ class NDDDashboardHome extends Component {
   }
 
   componentDidMount() {
-    const { _loadDashboardSettings, _callReport, _getMappings } = this.props;
+    const { _loadDashboardSettings, _getMappings } = this.props;
     // eslint-disable-next-line react/destructuring-assignment,react/prop-types
     const { id } = this.props.match.params;
     // eslint-disable-next-line react/no-did-mount-set-state
     this.setState({ dashboardId: id });
-    // This is not a saved dashboard, we can load the report without filters.
-    if (!id) {
-      return Promise.all([_loadDashboardSettings(), _getMappings()])
-        .then(data => {
-          const tempSettings = {
-            [CURRENCY_CODE]: data[0].payload[Object.keys(data[0].payload)
-              .find(i => data[0].payload[i].id === CURRENCY_CODE)].value.defaultId
-          };
-
-          /* TODO: evaluate if is not better to refactor the code to always call applyFilters() instead of running
-                   _callReport directly. */
-          const defaultFilters = { filters: {} };
-          const date = {};
-          if (data[0].gs.defaultMinDate || data[0].gs.defaultMaxDate) {
-            if (data[0].gs.defaultMinDate) {
-              date.start = data[0].gs.defaultMinDate;
-            }
-            if (data[0].gs.defaultMaxDate) {
-              date.end = data[0].gs.defaultMaxDate;
-            }
-            defaultFilters.filters.date = date;
-          }
-
-          const ids = [`${data[1].payload[SRC_PROGRAM].id}`, `${data[1].payload[DST_PROGRAM].id}`];
-          this.setState({
-            selectedPrograms: ids,
-            settings: tempSettings,
-            fundingType: data[0].payload.find(i => i.id === FUNDING_TYPE).value.defaultId,
-            filters: defaultFilters
-          });
-          return _callReport(data[0].payload.find(i => i.id === FUNDING_TYPE).value.defaultId, defaultFilters,
-            ids, tempSettings);
+    // Load settings and mappings but dont call _callReport directly, Filters.jsx will do the call.
+    return Promise.all([_loadDashboardSettings(), _getMappings()])
+      .then(data => {
+        const tempSettings = {
+          [CURRENCY_CODE]: data[0].payload[Object.keys(data[0].payload)
+            .find(i => data[0].payload[i].id === CURRENCY_CODE)].value.defaultId
+        };
+        const ids = [`${data[1].payload[SRC_PROGRAM].id}`, `${data[1].payload[DST_PROGRAM].id}`];
+        this.setState({
+          selectedPrograms: ids,
+          settings: tempSettings,
+          fundingType: data[0].payload.find(i => i.id === FUNDING_TYPE).value.defaultId
         });
-    } else {
-      _loadDashboardSettings();
-    }
+        /* Notice we dont need to define this.state.filters here, we will get it from onApplyFilters. Apparently
+        the filter widget takes date.start and date.end automatically from dashboard settings EP. */
+        return data;
+      });
   }
 
   handleOuterChartClick(event, outerData) {
@@ -156,12 +137,14 @@ class NDDDashboardHome extends Component {
     return (
       <Container fluid className="main-container">
         <Row style={{ backgroundColor: '#f6f6f6', paddingTop: '15px' }}>
-          <HeaderContainer
-            onApplySettings={this.onApplySettings}
-            onApplyFilters={this.onApplyFilters}
-            filters={filters}
-            globalSettings={globalSettings}
-            dashboardId={dashboardId} />
+          {mapping && settings && globalSettings && selectedPrograms ? (
+            <HeaderContainer
+              onApplySettings={this.onApplySettings}
+              onApplyFilters={this.onApplyFilters}
+              filters={filters}
+              globalSettings={globalSettings}
+              dashboardId={dashboardId} />
+          ) : null}
         </Row>
         <Row>
           <Col md={12}>

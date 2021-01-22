@@ -25,16 +25,13 @@ class Filters extends Component {
   componentDidMount() {
     filter.on('apply', this.applyFilters);
     filter.on('cancel', this.hideFilters);
-  }
 
-  // eslint-disable-next-line no-unused-vars
-  componentDidUpdate(prevProps, prevState, snapshot) {
     const {
       dashboardId, _sharedData, _sharedDataPending, _sharedDataLoaded,
     } = this.props;
     const { loadedSavedData } = this.state;
-    if (dashboardId) {
-      filter.loaded.done(() => {
+    filter.loaded.done(() => {
+      if (dashboardId) {
         if (!_sharedDataPending && !_sharedDataLoaded) {
           getSharedData(dashboardId);
         }
@@ -43,8 +40,12 @@ class Filters extends Component {
           // Note: no need to explicitly call applyFilters when deserializing (unless you use silent: true).
           filter.deserialize(JSON.parse(_sharedData.stateBlob));
         }
-      });
-    }
+      } else {
+        /* Notice we dont need to define this.state.filters here, we will get it from onApplyFilters. Apparently
+        the filter widget takes date.start and date.end automatically from dashboard settings EP. */
+        filter.deserialize({});
+      }
+    });
   }
 
   componentWillUnmount() {

@@ -478,7 +478,7 @@ LoggerIdentifiable, Cloneable {
     @Interchangeable(fieldTitle = "Regional Observations", importable = true,
             fmPath = "/Activity Form/Regional Observations")
     @VersionableCollection(fieldTitle = "Regional Observations")
-    protected Set<AmpRegionalObservation> regionalObservations;
+    protected Set<AmpRegionalObservation> regionalObservations = new HashSet<>();
 
     @Interchangeable(fieldTitle = "Line Ministry Observations", importable = true,
             fmPath = "/Activity Form/Line Ministry Observations")

@@ -3,7 +3,9 @@ import {
 } from '../constants/Constants';
 
 export function findProgramInTree(lvl3Id, ndd, type) {
-  const lvl1 = {}; const lvl2 = {}; let
+  const lvl1 = {};
+  const lvl2 = {};
+  let
     lvl3;
   ndd[ALL_PROGRAMS].forEach(p => {
     if (p[CHILDREN]) {
@@ -48,9 +50,6 @@ export function validate(data) {
       if (!pair[SRC_PROGRAM].lvl3 || !pair[DST_PROGRAM].lvl3) {
         ret = 1; // missing value error.
       } else {
-        if (dstPairs.find(p => p === pair[DST_PROGRAM].lvl3.id)) {
-          ret = 2; // duplicated dst value error.
-        }
         dstPairs.push(pair[DST_PROGRAM].lvl3.id);
       }
     });

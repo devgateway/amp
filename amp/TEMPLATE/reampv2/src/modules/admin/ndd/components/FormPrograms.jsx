@@ -172,7 +172,7 @@ class FormPrograms extends Component {
 
   saveAll() {
     const { data, src, dst } = this.state;
-    const { saveNDD, translations } = this.props;
+    const { _saveNDD, translations } = this.props;
     const { api, trnPrefix } = this.context;
     const validateMappings = Utils.validate(data);
     if (validateMappings === 0) {
@@ -185,7 +185,7 @@ class FormPrograms extends Component {
             [DST_PROGRAM]: pair[DST_PROGRAM].lvl3.id,
           });
         });
-        saveNDD(src, dst, mappings, api.programsSave, api.mappingSave);
+        _saveNDD(src, dst, mappings, api.programsSave, api.mappingSave);
         this.clearMessages();
         this.setState({ saved: true });
       } else {
@@ -316,7 +316,8 @@ class FormPrograms extends Component {
 FormPrograms.contextType = NDDContext;
 
 FormPrograms.propTypes = {
-  translations: PropTypes.array.isRequired
+  translations: PropTypes.array.isRequired,
+  _saveNDD: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -326,5 +327,5 @@ const mapStateToProps = state => ({
   updating: updateActivitiesPending(state.updateActivitiesReducer),
   errorUpdating: updateActivitiesError(state.updateActivitiesReducer)
 });
-const mapDispatchToProps = dispatch => bindActionCreators({ saveNDD, updateActivities }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ _saveNDD: saveNDD, updateActivities }, dispatch);
 export default connect(mapStateToProps, mapDispatchToProps)(FormPrograms);

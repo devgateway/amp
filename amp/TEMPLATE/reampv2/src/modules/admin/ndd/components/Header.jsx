@@ -8,7 +8,7 @@ import './css/style.css';
 class Header extends Component {
   render() {
     const {
-      translations, onAddRow, onSaveAll, onRevertAll, src, dst, onUpdateActivities, busy
+      translations, onAddRow, onSaveAll, onRevertAll, src, dst, onUpdateActivities, busy, dataPresent, unsavedChanges
     } = this.props;
     const { trnPrefix } = this.context;
     return (
@@ -50,7 +50,7 @@ class Header extends Component {
                 type="button"
                 onClick={onUpdateActivities}
                 className="btn btn-primary"
-                disabled={busy}>
+                disabled={busy || !dataPresent || unsavedChanges}>
                 {translations[`${trnPrefix}button-update-activities`]}
               </button>
             </span>
@@ -71,11 +71,21 @@ Header.propTypes = {
   onUpdateActivities: PropTypes.func.isRequired,
   src: PropTypes.object,
   dst: PropTypes.object,
-  busy: PropTypes.bool.isRequired
+  busy: PropTypes.bool.isRequired,
+  dataPresent: PropTypes.bool,
+  unsavedChanges: PropTypes.bool.isRequired
+};
+
+Header.defaultProps = {
+  src: undefined,
+  dst: undefined,
+  dataPresent: false
 };
 
 const mapStateToProps = state => ({
   translations: state.translationsReducer.translations
 });
+
 const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

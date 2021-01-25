@@ -21,6 +21,8 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 import java.util.List;
 
+import static org.digijava.module.aim.util.activity.GenericUserHelper.getAmpTeamMemberModifier;
+
 public class ActivityCloser {
     public static final String AMP_MODIFIER_USER_EMAIL = "amp_modifier@amp.org";
     public static final String AMP_MODIFIER_FIRST_NAME = "AMP";
@@ -52,8 +54,8 @@ public class ActivityCloser {
                             ? "<null>" : Long.toString(oldActivityStatus.getId()), closedCategoryValue,
                     ver.getApprovalStatus(), newStatus));
 
-            AmpTeamMember ampClosingMember =
-                    AmpBackgroundActivitiesUtil.createActivityTeamMemberIfNeeded(ver.getTeam(), user);
+            AmpTeamMember ampClosingMember = getAmpTeamMemberModifier(ver.getTeam());
+
             AmpActivityVersion newVer = this.cloneActivity(ampClosingMember, ver, newStatus,
                     closedCategoryValue, saveContext);
 

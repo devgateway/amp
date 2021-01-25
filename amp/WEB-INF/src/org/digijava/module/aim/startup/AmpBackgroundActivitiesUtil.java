@@ -194,8 +194,7 @@ public final class AmpBackgroundActivitiesUtil {
      * @return
      * @throws Exception
      */
-    public static AmpTeamMember createActivityTeamMemberIfNeeded(AmpTeam team, User u) throws Exception {
-        User user = createActivityUserIfNeeded(u);
+    public static AmpTeamMember createActivityTeamMemberIfNeeded(AmpTeam team, User user) {
 
         AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMemberByUserByTeam(user, team);
         if (teamMember != null && !teamMember.isSoftDeleted()) {

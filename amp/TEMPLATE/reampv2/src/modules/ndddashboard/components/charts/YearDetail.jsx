@@ -21,7 +21,7 @@ export default class YearDetail extends Component {
     const rows = [];
     data.forEach((i, j) => {
       rows.push(
-        <tr className={j >= recordsVisible ? 'invisible-row' : ''}>
+        <tr className={j >= recordsVisible ? 'invisible-row' : ''} key={Math.random()}>
           <td>
             <a
               target="_blank"
@@ -42,7 +42,7 @@ export default class YearDetail extends Component {
       <div>
         <table className="table table-striped">
           <thead>
-            <tr>
+            <tr key={Math.random()}>
               <th className="header-row"><span>{translations[`${TRN_PREFIX}project-title`]}</span></th>
               <th className="header-row">
                 <span>
@@ -108,11 +108,16 @@ YearDetail.propTypes = {
   translations: PropTypes.object.isRequired,
   show: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
-  data: PropTypes.array.isRequired,
+  data: PropTypes.array,
   loading: PropTypes.bool.isRequired,
-  error: PropTypes.object.isRequired,
+  error: PropTypes.object,
   fundingType: PropTypes.string.isRequired,
   currencyCode: PropTypes.string.isRequired,
   globalSettings: PropTypes.object.isRequired,
   title: PropTypes.string.isRequired
+};
+
+YearDetail.defaultProps = {
+  error: undefined,
+  data: null
 };

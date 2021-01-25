@@ -18,31 +18,37 @@ class Filters extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show: false, filtersWithModels: null, showFiltersList: false, loadedSavedData: false
+      show: false, filtersWithModels: null, showFiltersList: false, savedDashboardLoaded: false
     };
   }
 
   componentDidMount() {
     filter.on('apply', this.applyFilters);
     filter.on('cancel', this.hideFilters);
+
+    const { dashboardId, _getSharedData } = this.props;
+    filter.loaded.done(() => {
+      if (dashboardId) {
+        _getSharedData(dashboardId);
+      } else {
+        /* Notice we dont need to define this.state.filters here, we will get it from onApplyFilters. Apparently
+        the filter widget takes date.start and date.end automatically from dashboard settings EP. */
+        filter.deserialize({});
+      }
+    });
   }
 
+  // eslint-disable-next-line no-unused-vars
   componentDidUpdate(prevProps, prevState, snapshot) {
     const {
-      dashboardId, sharedData, sharedDataPending, sharedDataLoaded, getSharedData
+      dashboardId, _sharedData, _sharedDataPending, _sharedDataLoaded,
     } = this.props;
-    const { loadedSavedData } = this.state;
-    if (dashboardId) {
-      filter.loaded.done(() => {
-        if (!sharedDataPending && !sharedDataLoaded) {
-          getSharedData(dashboardId);
-        }
-        if (sharedDataPending === false && sharedDataLoaded === true && !loadedSavedData) {
-          this.setState({ loadedSavedData: true });
-          // Note: no need to explicitly call applyFilters when deserializing (unless you use silent: true).
-          filter.deserialize(JSON.parse(sharedData.stateBlob));
-        }
-      });
+    const { savedDashboardLoaded } = this.state;
+    if (dashboardId && _sharedDataPending === false && _sharedDataLoaded === true && savedDashboardLoaded === false) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ savedDashboardLoaded: true });
+      // Note: no need to explicitly call applyFilters when deserializing (unless you use silent: true).
+      filter.deserialize(JSON.parse(_sharedData.stateBlob));
     }
   }
 
@@ -56,6 +62,7 @@ class Filters extends Component {
     if (filter && !show) {
       this.setState({ show: true });
       return filter.loaded.then(() => {
+        // eslint-disable-next-line react/no-string-refs
         filter.setElement(this.refs.filterPopup);
         return filter.showFilters();
       });
@@ -87,6 +94,7 @@ class Filters extends Component {
       Object.keys(filtersWithModels.filters)
         .forEach(i => {
           ret.push(<FilterOutputItem
+            key={Math.random()}
             filters={filtersWithModels.filters}
             i={i}
             translations={translations}
@@ -139,6 +147,7 @@ class Filters extends Component {
             ) : null}
           </div>
         </div>
+        {/* eslint-disable-next-line react/no-string-refs */}
         <div id="filter-popup" ref="filterPopup" style={{ display: (!show ? 'none' : 'block') }} />
       </Col>
     );
@@ -146,14 +155,14 @@ class Filters extends Component {
 }
 
 const mapStateToProps = state => ({
-  sharedDataPending: state.sharedDataReducer.sharedDataPending,
-  sharedDataLoaded: state.sharedDataReducer.sharedDataLoaded,
-  sharedData: state.sharedDataReducer.sharedData,
+  _sharedDataPending: state.sharedDataReducer.sharedDataPending,
+  _sharedDataLoaded: state.sharedDataReducer.sharedDataLoaded,
+  _sharedData: state.sharedDataReducer.sharedData,
   translations: state.translationsReducer.translations
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  getSharedData,
+  _getSharedData: getSharedData,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Filters);
@@ -162,5 +171,14 @@ Filters.propTypes = {
   onApplyFilters: PropTypes.func.isRequired,
   dashboardId: PropTypes.number,
   translations: PropTypes.object.isRequired,
-  globalSettings: PropTypes.object.isRequired
+  globalSettings: PropTypes.object.isRequired,
+  _sharedDataPending: PropTypes.bool.isRequired,
+  _sharedDataLoaded: PropTypes.bool.isRequired,
+  _sharedData: PropTypes.object,
+  _getSharedData: PropTypes.func.isRequired
+};
+
+Filters.defaultProps = {
+  dashboardId: null,
+  _sharedData: undefined
 };

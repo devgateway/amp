@@ -2,6 +2,7 @@ package org.digijava.kernel.ampapi.endpoints.ndd;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
+import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpTheme;
 
 import java.math.BigDecimal;
@@ -60,22 +61,32 @@ public class NDDSolarChartData {
          * @param amount
          */
         public ProgramData(AmpTheme program, BigDecimal amount, Map<String, BigDecimal> amountsByYear) {
-            String configurationName =
-                    program.getParentThemeId().getParentThemeId().getParentThemeId().getProgramSettings()
-                            .stream().findAny().get().getName();
-            this.programLvl3 = new Program(program.getThemeCode(), program.getName(),
-                    FilterUtils.INSTANCE.idFromColumnName(configurationName + " Level 3"),
-                    program.getAmpThemeId());
-            this.programLvl2 = new Program(program.getParentThemeId().getThemeCode(),
-                    program.getParentThemeId().getName(), FilterUtils.
-                    INSTANCE.idFromColumnName(configurationName + " Level 2"),
-                    program.getParentThemeId().getAmpThemeId());
-            this.programLvl1 = new Program(program.getParentThemeId().getParentThemeId().getThemeCode(),
-                    program.getParentThemeId().getParentThemeId().getName(), FilterUtils.INSTANCE.
-                    idFromColumnName(configurationName + " Level 1"),
-                    program.getParentThemeId().getParentThemeId().getAmpThemeId());
-            this.amount = amount;
-            this.amountsByYear = amountsByYear;
+            String configurationName = null;
+            AmpActivityProgramSettings activityProgramSettings = program.getParentThemeId()
+                    .getParentThemeId().getParentThemeId().getProgramSettings()
+                    .stream().findAny().orElse(null);
+            if (activityProgramSettings != null) {
+                configurationName = activityProgramSettings.getName();
+                this.programLvl3 = new Program(program.getThemeCode(), program.getName(),
+                        FilterUtils.INSTANCE.idFromColumnName(configurationName + " Level 3"),
+                        program.getAmpThemeId());
+                this.programLvl2 = new Program(program.getParentThemeId().getThemeCode(),
+                        program.getParentThemeId().getName(), FilterUtils.
+                        INSTANCE.idFromColumnName(configurationName + " Level 2"),
+                        program.getParentThemeId().getAmpThemeId());
+                this.programLvl1 = new Program(program.getParentThemeId().getParentThemeId().getThemeCode(),
+                        program.getParentThemeId().getParentThemeId().getName(), FilterUtils.INSTANCE.
+                        idFromColumnName(configurationName + " Level 1"),
+                        program.getParentThemeId().getParentThemeId().getAmpThemeId());
+                this.amount = amount;
+                this.amountsByYear = amountsByYear;
+            } else {
+                this.amountsByYear = null;
+                this.programLvl1 = null;
+                this.programLvl2 = null;
+                this.programLvl3 = null;
+                this.amount = null;
+            }
         }
 
         public BigDecimal getAmount() {

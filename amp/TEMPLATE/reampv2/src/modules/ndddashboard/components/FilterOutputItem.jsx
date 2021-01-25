@@ -4,7 +4,7 @@ import dateformat from 'dateformat';
 import { TRN_PREFIX } from '../utils/constants';
 
 export default class FilterOutputItem extends Component {
-  generateChildren = (items, i) => {
+  generateChildren = (items) => {
     const { translations } = this.props;
     const ret = [];
     if (items.length > 0) {
@@ -22,7 +22,7 @@ export default class FilterOutputItem extends Component {
     } else if (items.modelType === 'YEAR-SINGLE-VALUE') {
       ret.push(<li key={Math.random()}>{items.year}</li>);
     }
-    return <ul>{ret}</ul>;
+    return <ul key={Math.random()}>{ret}</ul>;
   }
 
   formatDate = (dateString) => {
@@ -38,11 +38,11 @@ export default class FilterOutputItem extends Component {
     if (filters && filters[i]) {
       let parent = null;
       if (filters[i].filterName) {
-        parent = <h5>{filters[i].filterName}</h5>;
+        parent = <h5 key={Math.random()}>{filters[i].filterName}</h5>;
       } else if (filters[i].displayName) {
-        parent = <h5>{filters[i].displayName}</h5>;
+        parent = <h5 key={Math.random()}>{filters[i].displayName}</h5>;
       } else {
-        parent = <h5>{i.replaceAll('-', ' ')}</h5>;
+        parent = <h5 key={Math.random()}>{i.replaceAll('-', ' ')}</h5>;
       }
       ret.push(parent);
       const children = this.generateChildren(filters[i], i);

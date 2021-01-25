@@ -231,9 +231,13 @@ public final class DashboardService {
                 if (direct != null) {
                     BigDecimal amount = ((AmountCell) outerContent.get(outerReportTotalColumn)).extractValue();
                     Map<String, BigDecimal> amountsByYear = extractAmountsByYear(outerContent);
-                    nddSolarChartData.setDirectProgram(new NDDSolarChartData.ProgramData(direct, amount,
-                            amountsByYear));
-                    list.add(nddSolarChartData);
+                    NDDSolarChartData.ProgramData programData = new NDDSolarChartData.ProgramData(direct, amount,
+                            amountsByYear);
+                    // Ignore programs we dont want to show.
+                    if (programData.getAmount() != null) {
+                        nddSolarChartData.setDirectProgram(programData);
+                        list.add(nddSolarChartData);
+                    }
                 } else {
                     // TODO: implement for undefined row.
                     System.out.println("To be implemented");

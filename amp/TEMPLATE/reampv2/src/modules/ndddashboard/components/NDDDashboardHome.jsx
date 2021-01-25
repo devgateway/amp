@@ -17,7 +17,6 @@ class NDDDashboardHome extends Component {
     super(props);
     this.state = {
       filters: undefined,
-      filtersWithModels: undefined,
       dashboardId: undefined,
       fundingType: undefined,
       selectedPrograms: undefined,
@@ -27,30 +26,28 @@ class NDDDashboardHome extends Component {
   }
 
   componentDidMount() {
-    const { _loadDashboardSettings, _callReport, _getMappings } = this.props;
+    const { _loadDashboardSettings, _getMappings } = this.props;
     // eslint-disable-next-line react/destructuring-assignment,react/prop-types
     const { id } = this.props.match.params;
     // eslint-disable-next-line react/no-did-mount-set-state
     this.setState({ dashboardId: id });
-    // This is not a saved dashboard, we can load the report without filters.
-    if (!id) {
-      return Promise.all([_loadDashboardSettings(), _getMappings()])
-        .then(data => {
-          const tempSettings = {
-            [CURRENCY_CODE]: data[0].payload[Object.keys(data[0].payload)
-              .find(i => data[0].payload[i].id === CURRENCY_CODE)].value.defaultId
-          };
-          const ids = [`${data[1].payload[SRC_PROGRAM].id}`, `${data[1].payload[DST_PROGRAM].id}`];
-          this.setState({
-            selectedPrograms: ids,
-            settings: tempSettings,
-            fundingType: data[0].payload.find(i => i.id === FUNDING_TYPE).value.defaultId
-          });
-          return _callReport(data[0].payload.find(i => i.id === FUNDING_TYPE).value.defaultId, null, ids, tempSettings);
+    // Load settings and mappings but dont call _callReport directly, Filters.jsx will do the call.
+    return Promise.all([_loadDashboardSettings(), _getMappings()])
+      .then(data => {
+        const tempSettings = {
+          [CURRENCY_CODE]: data[0].payload[Object.keys(data[0].payload)
+            .find(i => data[0].payload[i].id === CURRENCY_CODE)].value.defaultId
+        };
+        const ids = [`${data[1].payload[SRC_PROGRAM].id}`, `${data[1].payload[DST_PROGRAM].id}`];
+        this.setState({
+          selectedPrograms: ids,
+          settings: tempSettings,
+          fundingType: data[0].payload.find(i => i.id === FUNDING_TYPE).value.defaultId
         });
-    } else {
-      _loadDashboardSettings();
-    }
+        /* Notice we dont need to define this.state.filters here, we will get it from onApplyFilters. Apparently
+        the filter widget takes date.start and date.end automatically from dashboard settings EP. */
+        return data;
+      });
   }
 
   handleOuterChartClick(event, outerData) {
@@ -67,17 +64,34 @@ class NDDDashboardHome extends Component {
       } else {
         const { _clearTopReport } = this.props;
         _clearTopReport();
-        this.setState({ selectedDirectProgram: null });
+        this.resetChartAfterUnClick();
       }
     }
   }
 
-  onApplyFilters = (data, dataWithModels) => {
+  resetChartAfterUnClick = () => {
+    const { selectedDirectProgram, filters } = this.state;
+    if (selectedDirectProgram) {
+      // Remove the filter manually or it will keep affecting the chart.
+      filters.filters[selectedDirectProgram.filterColumnName]
+        .splice(filters.filters[selectedDirectProgram.filterColumnName]
+          .findIndex(i => i === selectedDirectProgram.objectId), 1);
+      if (filters.filters[selectedDirectProgram.filterColumnName].length === 0) {
+        filters.filters[selectedDirectProgram.filterColumnName] = null;
+      }
+      this.setState(() => ({
+        selectedDirectProgram: null,
+        filters
+      }));
+    }
+  }
+
+  onApplyFilters = (data) => {
     const { _callReport, _callTopReport } = this.props;
     const {
       fundingType, selectedDirectProgram, settings, selectedPrograms
     } = this.state;
-    this.setState({ filters: data, filtersWithModels: dataWithModels });
+    this.setState({ filters: data });
     _callReport(fundingType, data, selectedPrograms, settings);
     if (selectedDirectProgram !== null) {
       _callTopReport(fundingType, settings, data, selectedDirectProgram);
@@ -87,7 +101,8 @@ class NDDDashboardHome extends Component {
   onChangeFundingType = (value) => {
     const { _callReport, _clearTopReport } = this.props;
     const { filters, selectedPrograms, settings } = this.state;
-    this.setState({ fundingType: value, selectedDirectProgram: null });
+    this.resetChartAfterUnClick();
+    this.setState({ fundingType: value });
     _callReport(value, filters, selectedPrograms, settings);
     _clearTopReport();
   }
@@ -122,12 +137,14 @@ class NDDDashboardHome extends Component {
     return (
       <Container fluid className="main-container">
         <Row style={{ backgroundColor: '#f6f6f6', paddingTop: '15px' }}>
-          <HeaderContainer
-            onApplySettings={this.onApplySettings}
-            onApplyFilters={this.onApplyFilters}
-            filters={filters}
-            globalSettings={globalSettings}
-            dashboardId={dashboardId} />
+          {mapping && settings && globalSettings && selectedPrograms ? (
+            <HeaderContainer
+              onApplySettings={this.onApplySettings}
+              onApplyFilters={this.onApplyFilters}
+              filters={filters}
+              globalSettings={globalSettings}
+              dashboardId={dashboardId} />
+          ) : null}
         </Row>
         <Row>
           <Col md={12}>
@@ -181,8 +198,8 @@ const
 
 NDDDashboardHome.propTypes = {
   _callReport: PropTypes.func.isRequired,
-  mapping: PropTypes.object.isRequired,
-  ndd: PropTypes.array.isRequired,
+  mapping: PropTypes.object,
+  ndd: PropTypes.array,
   nddLoadingPending: PropTypes.bool.isRequired,
   nddLoaded: PropTypes.bool.isRequired,
   dashboardSettings: PropTypes.array,
@@ -190,11 +207,16 @@ NDDDashboardHome.propTypes = {
   _getMappings: PropTypes.func.isRequired,
   _callTopReport: PropTypes.func.isRequired,
   _clearTopReport: PropTypes.func.isRequired,
-  noIndirectMapping: PropTypes.object.isRequired
+  noIndirectMapping: PropTypes.object,
+  globalSettings: PropTypes.object
 };
 
 NDDDashboardHome.defaultProps = {
   dashboardSettings: undefined,
+  mapping: undefined,
+  ndd: null,
+  noIndirectMapping: undefined,
+  globalSettings: undefined
 };
 
 NDDDashboardHome

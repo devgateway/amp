@@ -34,5 +34,7 @@
   "amp.ndd.dashboard:no-data-short": "No Data",
   "amp.ndd.dashboard:modal-details-title": "Activities Detail",
   "amp.ndd.dashboard:project-title": "Project Title",
-  "amp.ndd.dashboard:load-more": "Load more"
+  "amp.ndd.dashboard:load-more": "Load more",
+  "amp.ndd.dashboard:legends": "Legends",
+  "amp.ndd.dashboard:loading": "Loading"
 }

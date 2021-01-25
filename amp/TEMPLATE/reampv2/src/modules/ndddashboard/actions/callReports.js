@@ -17,12 +17,11 @@ import {
 export const callReport = (fundingType, filters, programIds, settings) => dispatch => {
   dispatch(fetchIndirectReportPending());
   const newSettings = { [FUNDING_TYPE]: fundingType, programIds, ...settings };
+  const body = { ...filters };
+  body.settings = newSettings;
   return Promise.all([fetchApiData({
     url: DIRECT_INDIRECT_REPORT,
-    body: {
-      settings: newSettings,
-      filters: (filters ? filters.filters : null)
-    }
+    body
   })]).then((data) => dispatch(fetchIndirectReportSuccess(data[0])))
     .catch(error => dispatch(fetchIndirectReportError(error)));
 };

@@ -28,10 +28,8 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAuditLogger;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.startup.AmpBackgroundActivitiesUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -39,7 +37,6 @@ import org.hibernate.Transaction;
 import org.hibernate.type.DateType;
 import org.hibernate.type.StringType;
 
-import static org.digijava.module.aim.util.activity.GenericUserHelper.getAmpTeamMemberModifier;
 import static org.digijava.module.aim.util.activity.GenericUserHelper.getAmpUserModifier;
 
 /**

@@ -20,7 +20,8 @@ public abstract class AbstractAmpActivityCloserPatch {
     public abstract List<String> getAmpIds(Integer index);
 
     private void doCloseActivities(Integer index) {
-        List<AmpActivityVersion> activitiesToClose = ActivityUtil.getLastActivitiesVersionByAmpIds(this.getAmpIds(index));
+        List<AmpActivityVersion> activitiesToClose =
+                ActivityUtil.getLastActivitiesVersionByAmpIds(this.getAmpIds(index));
         try {
             Long closedCategoryValue =
                     FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.CLOSED_ACTIVITY_VALUE);

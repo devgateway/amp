@@ -7,7 +7,18 @@ import PropTypes from 'prop-types';
 import { getShareLink } from '../actions/generateShareLink';
 import { TRN_PREFIX } from '../utils/constants';
 
-const getLink = (id) => window.location + id;
+const getLink = (id) => {
+  const regex = /\/\d+$/;
+  const url = window.location.toString();
+  const match = url.toString().match(regex);
+  if (match) {
+    return `${url.substring(0, match.index)}/${id}`;
+  }
+  if (!url.endsWith('/')) {
+    return `${url}/${id}`;
+  }
+  return url + id;
+};
 
 class Share extends Component {
   constructor(props) {
@@ -86,5 +97,11 @@ export default connect(mapStateToProps, mapDispatchToProps)(Share);
 Share.propTypes = {
   getShareLink: PropTypes.func.isRequired,
   filters: PropTypes.object,
-  translations: PropTypes.object.isRequired
+  translations: PropTypes.object.isRequired,
+  shareLink: PropTypes.object
+};
+
+Share.defaultProps = {
+  filters: undefined,
+  shareLink: undefined
 };

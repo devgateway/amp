@@ -24,16 +24,15 @@ public class AmpActivityProgram implements Versionable, Serializable, Cloneable,
     @Interchangeable(fieldTitle = "Id")
     private Long ampActivityProgramId;
 
-    @Interchangeable(fieldTitle = "Program Percentage", importable = true, percentageConstraint = true,
-            fmPath = FMVisibility.PARENT_FM + "/programPercentage",
-            interValidators = @InterchangeableValidator(value = RequiredValidator.class,
-                    fmPath = FMVisibility.PARENT_FM + "/Program percentage required"))
-    private Float programPercentage;
+        @Interchangeable(fieldTitle = "Program Percentage", importable = true, percentageConstraint = true,
+                fmPath = FMVisibility.PARENT_FM + "/programPercentage",
+                interValidators = @InterchangeableValidator(RequiredValidator.class))
+        private Float programPercentage;
 
-    @PossibleValues(ThemePossibleValuesProvider.class)
-    @Interchangeable(fieldTitle = "Program", importable = true, pickIdOnly = true, uniqueConstraint = true,
-            interValidators = @InterchangeableValidator(RequiredValidator.class))
-    private AmpTheme program;
+        @PossibleValues(ThemePossibleValuesProvider.class)
+        @Interchangeable(fieldTitle = "Program", importable = true, pickIdOnly = true, uniqueConstraint = true,
+                interValidators = @InterchangeableValidator(RequiredValidator.class))
+        private AmpTheme program;
 
     @Interchangeable(fieldTitle = "Indirect Programs")
     private Set<AmpActivityIndirectProgram> indirectPrograms = new HashSet<>();

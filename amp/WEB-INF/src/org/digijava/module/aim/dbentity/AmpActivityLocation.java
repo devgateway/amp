@@ -3,7 +3,6 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.values.providers.LocationPossibleValuesProvider;
 import org.digijava.kernel.validators.activity.ImplementationLevelValidator;
 import org.digijava.kernel.validators.common.RequiredValidator;
@@ -47,11 +46,10 @@ public class AmpActivityLocation implements Versionable, Serializable, Cloneable
 
     @Interchangeable(fieldTitle = "Location Percentage",
             interValidators = @InterchangeableValidator(value = RequiredValidator.class,
-                    fmPath = FMVisibility.PARENT_FM + "/Location percentage required"),
-            fmPath = FMVisibility.PARENT_FM + "/Location Item/locationPercentage",
+                    fmPath = "/Activity Form/Location/Locations/Location percentage required"),
+            fmPath = "/Activity Form/Location/Locations/Location Item/locationPercentage",
             percentageConstraint = true, importable = true)
     private Float locationPercentage;
-
     @Interchangeable(fieldTitle = "Latitude", fmPath = "/Activity Form/Location/Locations/Location Item/Latitude", importable = true)
     private String latitude;
     @Interchangeable(fieldTitle = "Longitude", fmPath = "/Activity Form/Location/Locations/Location Item/Logitude", importable = true)

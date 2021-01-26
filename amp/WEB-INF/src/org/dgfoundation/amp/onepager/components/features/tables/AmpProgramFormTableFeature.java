@@ -19,16 +19,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerMessages;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
-import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
-import org.dgfoundation.amp.onepager.components.fields.AmpLabelFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpMaxSizeCollectionValidationField;
-import org.dgfoundation.amp.onepager.components.fields.AmpMinSizeCollectionValidationField;
-import org.dgfoundation.amp.onepager.components.fields.AmpPercentageCollectionValidatorField;
-import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
-import org.dgfoundation.amp.onepager.components.fields.AmpProgramMappingValidatorField;
-import org.dgfoundation.amp.onepager.components.fields.AmpTreeCollectionValidatorField;
-import org.dgfoundation.amp.onepager.components.fields.AmpUniqueCollectionValidatorField;
+import org.dgfoundation.amp.onepager.components.fields.*;
 import org.dgfoundation.amp.onepager.events.DirectProgramMappingUpdateEvent;
 import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.dgfoundation.amp.onepager.models.AmpThemeSearchModel;
@@ -108,11 +99,6 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
         add(wmc);
         AjaxIndicatorAppender iValidator = new AjaxIndicatorAppender();
         wmc.add(iValidator);
-
-        final AmpComponentPanel programPercentageRequired =
-                new AmpComponentPanel("programPercentageRequired", "Program percentage required") {
-                };
-        add(programPercentageRequired);
         
         final AmpPercentageCollectionValidatorField<AmpActivityProgram> percentageValidationField = new AmpPercentageCollectionValidatorField<AmpActivityProgram>(
                 "programPercentageTotal", listModel, "programPercentageTotal") {
@@ -174,6 +160,7 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
         programMappingValidatorField.setIndicatorAppender(iValidator);
         add(programMappingValidatorField);
 
+
         AmpLabelFieldPanel l = new AmpLabelFieldPanel("program", new Model(""),
                 TranslatorUtil.getTranslatedText("Program"));
         this.getTableHeading().add(l);
@@ -185,10 +172,10 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
                 
                 PropertyModel<Double> percModel = new PropertyModel<Double>(
                         item.getModel(), "programPercentage");
-                AmpPercentageTextField percentageField = new AmpPercentageTextField("percent", percModel,
-                        "programPercentage", percentageValidationField, programPercentageRequired.isVisible());
+                AmpPercentageTextField percentageField = new AmpPercentageTextField("percent", percModel, "programPercentage",percentageValidationField);
                 percentageField.getTextContainer().add(new AttributeModifier("style", "width: 40px;"));
                 item.add(percentageField);
+                
                 item.add(new Label("name", item.getModelObject().getHierarchyNames(true)).setEscapeModelStrings(false));
                 
                 AmpDeleteLinkField delProgram = new AmpDeleteLinkField(

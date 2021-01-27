@@ -34,6 +34,8 @@ public class SettingsBean {
 
     private List<CategoryValue> categoryValues;
 
+    private List<String> quarters;
+
     public Integer getValidationTime() {
         return validationTime;
     }
@@ -64,5 +66,13 @@ public class SettingsBean {
 
     public void setCategoryValues(List<CategoryValue> categoryValues) {
         this.categoryValues = categoryValues;
+    }
+
+    public List<String> getQuarters() {
+        return quarters;
+    }
+
+    public void setQuarters(List<String> quarters) {
+        this.quarters = quarters;
     }
 }

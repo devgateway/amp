@@ -21,6 +21,7 @@ import java.util.Set;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.digijava.kernel.ampapi.endpoints.common.model.Org;
 import org.digijava.kernel.ampapi.endpoints.common.model.OrgGroup;
@@ -59,6 +60,8 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 @Api("scorecard")
 public class DonorScorecard {
 
+    private static final Logger logger = Logger.getLogger(DonorScorecard.class);
+
     @GET
     @Path("/export")
     @Produces("application/vnd.ms-excel")
@@ -74,13 +77,14 @@ public class DonorScorecard {
         return new StreamingOutput() {
             public void write(OutputStream output) throws IOException, WebApplicationException {
                 try {
-                    ScorecardService service = new ScorecardService ();
-                    List<Quarter> quarters = service.getQuarters ();
+                    ScorecardService service = new ScorecardService();
+                    List<Quarter> quarters = service.getSettingsQuarters();
                     ScorecardExcelExporter exporter = new ScorecardExcelExporter();
                     HSSFWorkbook wb = exporter.generateExcel(service.getFilteredDonors(), quarters,
                             service.getOrderedScorecardCells(service.getDonorActivityUpdates()));
                     wb.write(output);
                 } catch (Exception e) {
+                    logger.error(e.getMessage(), e);
                     throw new WebApplicationException(e);
                 }
             }
@@ -137,7 +141,7 @@ public class DonorScorecard {
             }
         }   
         
-        
+        settings.setQuarters(String.join(",", settingsBean.getQuarters()));
         settings.getClosedStatuses().clear();
         settings.getClosedStatuses().addAll(closedStatuses);
 

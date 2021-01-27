@@ -20,8 +20,12 @@ function validate(){
 		alert(alertValidationPeriod);
 		return false;
 	}
-	
+
 	if (!validatePercentage()) {
+		return false;
+	}
+
+	if (!validateQuarters()) {
 		return false;
 	}
 	
@@ -45,12 +49,21 @@ function handleValidationTimeChange(select) {
 function validatePercentage() {
 	var percentage = $('input[name="percentageThreshold"]').val();
 	var floatValue = parseFloat(percentage);
-	
+
 	if (isNaN(floatValue) || (floatValue <= 0) || (floatValue > 100)) {
 		alert(alertValidationPercentage);
 		return false;
 	}
-	
+
+	return true;
+}
+
+function validateQuarters() {
+	if ($('select[name=selectedQuarters] :selected').size() < 1) {
+		alert(alertValidationQuarter);
+		return false;
+	}
+
 	return true;
 }
 
@@ -59,12 +72,18 @@ function saveScorecardSetting() {
     $('select[name=selectedCategoryValues] :selected').each(function() {
     	categoryValues.push({ "id" : $(this).val()});
     });
-    
+
+	var quarters = [];
+	$('select[name=selectedQuarters] :selected').each(function() {
+		quarters.push($(this).val());
+	});
+
     var jsonSettings = {
     		validationPeriod: $('input[name="validationPeriod"]').prop('checked'), 
     		percentageThreshold: parseFloat($('input[name="percentageThreshold"]').val()), 
     		validationTime: $('select[name="validationTime"]').val(), 
-    		categoryValues: categoryValues
+    		categoryValues: categoryValues,
+		    quarters: quarters
     };
     
     var jsonString = JSON.stringify(jsonSettings);
@@ -248,7 +267,12 @@ function loadFinalReview() {
     	$('#validationTime').text('');
     	$('#validationNone').show();
     }
-    
+
+	var summaryQuarters = $('#summaryQuarters');
+	summaryQuarters.empty();
+	var selQuarters = $('select[name="selectedQuarters"]').find(':selected').map(function() {return $(this).text();}).get();
+	summaryQuarters.text(selQuarters.join(", "));
+
     var summaryAcitivityStatus = $('#summaryAcitivityStatus');
     var activityStautus = $('select[name="selectedCategoryValues"]');
     // Copy rows from selectSource to selectDestination from bottom to top

@@ -97,7 +97,8 @@ public class ViewAmp
        
         lForm.setMembers(members);
 
-        Collection<AmpCategoryValue> workspaceGroups = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.WORKSPACE_GROUP_KEY);
+        Collection<AmpCategoryValue> workspaceGroups = CategoryManagerUtil
+                .getAmpCategoryValueCollectionByKeyExcludeDeleted(CategoryConstants.WORKSPACE_GROUP_KEY, true);
         lForm.setWorkspaceGroups(workspaceGroups);
 
        

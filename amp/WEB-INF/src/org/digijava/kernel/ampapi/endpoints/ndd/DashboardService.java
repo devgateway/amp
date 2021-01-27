@@ -87,61 +87,77 @@ public final class DashboardService {
             throw new RuntimeException("Cant determine the filter for the report.");
         }
 
-        boolean isIndirect = false;
-        MappingConfiguration mapping = null;
-        MappingConfiguration indirectMapping = nddService.getIndirectProgramMappingConfiguration();
-        MappingConfiguration regularMapping = nddService.getProgramMappingConfiguration();
-        AmpTheme rootProgram = getRootProgram(program);
+        boolean isIndirect;
+        IndirectProgramMappingConfiguration indirectMapping = nddService.getIndirectProgramMappingConfiguration();
+        ProgramMappingConfiguration regularMapping = nddService.getProgramMappingConfiguration();
+        AmpTheme rootProgram = getProgramByLvl(program, 0);
         if ((rootProgram.getAmpThemeId().equals(indirectMapping.getDstProgram().getId()) ||
                 rootProgram.getAmpThemeId().equals(indirectMapping.getSrcProgram().getId()))
                 && indirectMapping.getDstProgram().isIndirect()) {
-            mapping = indirectMapping;
             isIndirect = true;
         } else {
-            mapping = regularMapping;
             isIndirect = false;
         }
 
         AmpActivityProgramSettings singleProgramSetting = ((AmpActivityProgramSettings) programSettings.toArray()[0]);
-        ReportColumn column = null;
+        ReportColumn mainFilterColumn = null;
+        ReportColumn fromMappingFilterColumn = null;
         if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.PRIMARY_PROGRAM)) {
             if (program.getIndlevel() == 1) {
-                column = new ReportColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1);
+                mainFilterColumn = new ReportColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1);
             } else {
-                column = new ReportColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_2);
+                mainFilterColumn = new ReportColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_2);
             }
         } else if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.SECONDARY_PROGRAM)) {
             if (program.getIndlevel() == 1) {
-                column = new ReportColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_1);
+                mainFilterColumn = new ReportColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_1);
             } else {
-                column = new ReportColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_2);
+                mainFilterColumn = new ReportColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_2);
             }
         } else if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.TERTIARY_PROGRAM)) {
             if (program.getIndlevel() == 1) {
-                column = new ReportColumn(ColumnConstants.TERTIARY_PROGRAM_LEVEL_1);
+                mainFilterColumn = new ReportColumn(ColumnConstants.TERTIARY_PROGRAM_LEVEL_1);
             } else {
-                column = new ReportColumn(ColumnConstants.TERTIARY_PROGRAM_LEVEL_2);
+                mainFilterColumn = new ReportColumn(ColumnConstants.TERTIARY_PROGRAM_LEVEL_2);
             }
         } else if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES)
                 || singleProgramSetting.getName().equalsIgnoreCase(ProgramUtil.NATIONAL_PLAN_OBJECTIVE)) {
             if (program.getIndlevel() == 1) {
-                column = new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1);
+                mainFilterColumn = new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1);
+                fromMappingFilterColumn = new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_3);
             } else {
-                column = new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_2);
+                mainFilterColumn = new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_2);
             }
         } else if (singleProgramSetting.getName().equalsIgnoreCase(ProgramUtil.INDIRECT_PRIMARY_PROGRAM)) {
             if (program.getIndlevel() == 1) {
-                column = new ReportColumn(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_1);
+                mainFilterColumn = new ReportColumn(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_1);
             } else {
-                column = new ReportColumn(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_2);
+                mainFilterColumn = new ReportColumn(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_2);
             }
         }
-        filters.addFilterRule(column, new FilterRule(program.getAmpThemeId().toString(), true));
+        // filters.addFilterRule(mainFilterColumn, new FilterRule(program.getAmpThemeId().toString(), true));
+
+        // Add filter by Program Lvl3 with ids from NDD mapping. Only add ids from clicked program.
+        List<String> fromMappingIds = new ArrayList<>();
+        if (isIndirect) {
+            indirectMapping.getProgramMapping().forEach(item -> {
+                if (getProgramByLvl(item.getOldTheme(), 1).getAmpThemeId().equals(program.getAmpThemeId())) {
+                    fromMappingIds.add(item.getOldTheme().getAmpThemeId().toString());
+                }
+            });
+        } else {
+            regularMapping.getProgramMapping().forEach(item -> {
+                if (getProgramByLvl(item.getSrcTheme(), 1).getAmpThemeId().equals(program.getAmpThemeId())) {
+                    fromMappingIds.add(item.getSrcTheme().getAmpThemeId().toString());
+                }
+            });
+        }
+        filters.addFilterRule(fromMappingFilterColumn, new FilterRule(fromMappingIds, true));
     }
 
-    private static AmpTheme getRootProgram(AmpTheme program) {
+    private static AmpTheme getProgramByLvl(AmpTheme program, int lvl) {
         AmpTheme root = program;
-        while(root.getIndlevel() > 0) {
+        while (root.getIndlevel() > lvl) {
             root = root.getParentThemeId();
         }
         return root;
@@ -276,7 +292,7 @@ public final class DashboardService {
         ReportOutputColumn projectColumn = report.leafHeaders.get(0);
 
         if (report.reportContents != null && report.reportContents.getChildren() != null) {
-            report.reportContents.getChildren().stream().forEach(children -> {
+            report.reportContents.getChildren().forEach(children -> {
                 Map<ReportOutputColumn, ReportCell> contents = children.getContents();
                 TextCell cell = ((TextCell) contents.get(projectColumn));
                 BigDecimal amount = extractAmountsByYear(contents).get("" + year);
@@ -360,8 +376,11 @@ public final class DashboardService {
             Matcher m = numberPattern.matcher(entry.getKey().toString());
             if (m.find()) {
                 BigDecimal amount = ((AmountCell) entry.getValue()).extractValue();
-                if (amount.doubleValue() > 0) {
+                // Note: dont compare ">0" because there are negative funding :|
+                if (amount.doubleValue() != 0) {
                     amountsByYear.put(m.group(), amount);
+                } else {
+                    System.out.println(amount.toPlainString());
                 }
             }
         });

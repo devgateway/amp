@@ -64,9 +64,10 @@ export function fetchYearDetailPending() {
 }
 
 export function fetchYearDetailSuccess(payload) {
+  const sorted = payload ? payload.sort((a, b) => a.amount < b.amount) : [];
   return {
     type: FETCH_YEAR_DETAIL_SUCCESS,
-    payload
+    payload: sorted
   };
 }
 

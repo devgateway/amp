@@ -94,11 +94,6 @@ export default class YearDetail extends Component {
           {data && data.length > 0 ? <div className="detail-table-container">{this.createTable()}</div> : null}
           {error ? <span className="error">{JSON.stringify(error)}</span> : null}
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="primary" onClick={this.handleClose}>
-            {translations[`${TRN_PREFIX}close`]}
-          </Button>
-        </Modal.Footer>
       </Modal>
     );
   }

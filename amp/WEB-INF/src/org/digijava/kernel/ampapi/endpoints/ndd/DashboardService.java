@@ -156,7 +156,9 @@ public final class DashboardService {
                 }
             });
         }
+        if (fromMappingFilterColumn != null) {
         filters.addFilterRule(fromMappingFilterColumn, new FilterRule(fromMappingIds, true));
+    }
     }
 
     private static AmpTheme getProgramByLvl(AmpTheme program, int lvl) {
@@ -383,8 +385,6 @@ public final class DashboardService {
                 // Note: dont compare ">0" because there are negative funding :|
                 if (amount.doubleValue() != 0) {
                     amountsByYear.put(m.group(), amount);
-                } else {
-                    System.out.println(amount.toPlainString());
                 }
             }
         });

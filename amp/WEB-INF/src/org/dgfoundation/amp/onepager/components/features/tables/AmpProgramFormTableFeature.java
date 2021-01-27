@@ -4,15 +4,10 @@
 */
 package org.dgfoundation.amp.onepager.components.features.tables;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -22,22 +17,31 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.dgfoundation.amp.onepager.OnePagerMessages;
+import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.fields.*;
+import org.dgfoundation.amp.onepager.events.DirectProgramMappingUpdateEvent;
+import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.dgfoundation.amp.onepager.models.AmpThemeSearchModel;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpDividePercentageField;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.kernel.exception.DgException;
-import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
-import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.ProgramUtil;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author aartimon@dginternational.org
@@ -131,10 +135,8 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
         boolean programAllowsMultiple = (programSettings != null) && (!programSettings.getObject().isAllowMultiple());
         maxSizeCollectionValidationField.setVisibilityAllowed(programAllowsMultiple);
         maxSizeCollectionValidationField.setOutputMarkupPlaceholderTag(true);
-       add(maxSizeCollectionValidationField);
-        
-        
-        
+        add(maxSizeCollectionValidationField);
+
         final AmpTreeCollectionValidatorField<AmpActivityProgram> treeCollectionValidatorField = new AmpTreeCollectionValidatorField<AmpActivityProgram>("treeValidator", listModel, "Tree Validator") {
             @Override
             public AmpAutoCompleteDisplayable getItem(AmpActivityProgram t) {
@@ -143,7 +145,21 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
         };
         treeCollectionValidatorField.setIndicatorAppender(iValidator);
         add(treeCollectionValidatorField);
-        AmpLabelFieldPanel l=new AmpLabelFieldPanel("progam",new Model(""),TranslatorUtil.getTranslatedText("Program"));
+
+        final AmpProgramMappingValidatorField<AmpActivityProgram> programMappingValidatorField =
+                new AmpProgramMappingValidatorField<AmpActivityProgram>("programsMappingValidator", setModel,
+                        listModel, programSettingsString, "Program Mapping Validator") {
+                    @Override
+                    public AmpAutoCompleteDisplayable getItem(AmpActivityProgram t) {
+                        return t.getProgram();
+                    }
+                };
+        programMappingValidatorField.setIndicatorAppender(iValidator);
+        add(programMappingValidatorField);
+
+
+        AmpLabelFieldPanel l = new AmpLabelFieldPanel("program", new Model(""),
+                TranslatorUtil.getTranslatedText("Program"));
         this.getTableHeading().add(l);
         list = new ListView<AmpActivityProgram>("listProgs", listModel) {
             private static final long serialVersionUID = 7218457979728871528L;
@@ -163,6 +179,16 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
                         "delProgram", "Delete Program") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
+                        if (ProgramUtil.isSourceMappedProgram(setting)) {
+                            if (hasMappedPrograms(setModel.getObject(), item.getModelObject())) {
+                                String message = TranslatorUtil.getTranslation(
+                                        OnePagerMessages.HAS_MAPPED_PROGRAMS_ALERT_MSG);
+                                target.appendJavaScript(OnePagerUtil.createJSAlert(message));
+                                return;
+                            }
+                            send(AmpProgramFormTableFeature.this.getPage(),
+                                    Broadcast.BREADTH, new DirectProgramMappingUpdateEvent(target));
+                        }
                         setModel.getObject().remove(item.getModelObject());
                         target.add(listParent);
                         list.removeAll();
@@ -171,6 +197,7 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
                         minSizeCollectionValidationField.reloadValidationField(target);
                         treeCollectionValidatorField.reloadValidationField(target);
                         maxSizeCollectionValidationField.reloadValidationField(target);
+                        programMappingValidatorField.reloadValidationField(target);
                     }
                 };
                 item.add(delProgram);
@@ -255,7 +282,11 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
                 minSizeCollectionValidationField.reloadValidationField(target);
                 treeCollectionValidatorField.reloadValidationField(target);
                 maxSizeCollectionValidationField.reloadValidationField(target);
-                
+                programMappingValidatorField.reloadValidationField(target);
+
+                if (ProgramUtil.isSourceMappedProgram(setting)) {
+                    send(getPage(), Broadcast.BREADTH, new DirectProgramMappingUpdateEvent(target));
+                }
             }
 
             @Override
@@ -270,9 +301,27 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 
             }
         };
-        
-        searchThemes.getModelParams().put(AmpThemeSearchModel.PARAM.PROGRAM_TYPE, programSettingsString);       
+
+        if (ProgramUtil.isDestinationMappedProgram(setting)) {
+            searchThemes.add(UpdateEventBehavior.of(DirectProgramMappingUpdateEvent.class));
+        }
+
+        searchThemes.getModelParams().put(AmpThemeSearchModel.PARAM.PROGRAM_TYPE, programSettingsString);
+        searchThemes.getModelParams().put(AmpThemeSearchModel.PARAM.ACTIVITY_PROGRAMS, setModel);
+
         add(searchThemes);
+    }
+
+    private boolean hasMappedPrograms(Set<AmpActivityProgram> activityPrograms, AmpActivityProgram ap) {
+        AmpTheme sourceProgram = ap.getProgram();
+        Map<AmpTheme, Set<AmpTheme>> programMappingMap = ProgramUtil.loadProgramMappings();
+        if (programMappingMap.containsKey(sourceProgram)) {
+            return activityPrograms.stream()
+                    .filter(p -> programMappingMap.get(sourceProgram)
+                    .contains(p.getProgram())).findAny().isPresent();
+        }
+
+        return false;
     }
 
 }

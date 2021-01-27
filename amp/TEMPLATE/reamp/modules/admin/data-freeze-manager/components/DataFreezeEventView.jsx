@@ -14,6 +14,7 @@ import * as dataFreezeActions from '../actions/DataFreezeActions';
 import AppliedFilters from './AppliedFilters';
 import moment from 'moment';
 import * as Constants from '../common/Constants';
+import {OverlayTrigger, Tooltip} from "react-bootstrap";
 require('../styles/less/main.less');
 class DataFreezeEventView extends Component {
     constructor(props, context) {
@@ -72,6 +73,15 @@ class DataFreezeEventView extends Component {
         return filters;
     }
 
+    showButtonWithTooltip(button, cssIcon, event) {
+        let tooltip = <Tooltip id={button + '-icon-tooltip'}>{this.props.translations['amp.data-freezing:tooltip-' + button]}</Tooltip>;
+        return (
+            <OverlayTrigger trigger={['hover', 'focus']} placement="top" overlay={tooltip}>
+                <span className={'glyphicon glyphicon-custom ' + cssIcon} onClick={event}></span>
+            </OverlayTrigger>
+        )
+    }
+
     render() {
         if (this.props.context === Constants.UNFREEZE_ALL) {
             return (
@@ -111,13 +121,15 @@ class DataFreezeEventView extends Component {
                     <td className="action-column">
                     {this.props.dataFreezeEvent.executed != true &&
                         <div>
-                         <span className="glyphicon glyphicon-custom glyphicon-pencil" onClick={this.props.edit}></span> <span className="glyphicon glyphicon-custom glyphicon-trash" onClick={this.deleteDataFreezeEvent}></span>
+                            {this.showButtonWithTooltip("edit", "glyphicon-pencil", this.props.edit)}
+                            {this.showButtonWithTooltip("delete", "glyphicon-trash", this.deleteDataFreezeEvent)}
                         </div>
                     }
 
                     {this.props.dataFreezeEvent.executed == true &&
                         <div>
-                        <span className="glyphicon glyphicon-custom glyphicon-pencil" style={{color: '#ccc'}} ></span> <span className="glyphicon glyphicon-custom glyphicon-trash" style={{color: '#ccc'}}></span>
+                            {this.showButtonWithTooltip("edit", "glyphicon-pencil glyphicon-disabled", this.props.edit)}
+                            {this.showButtonWithTooltip("delete", "glyphicon-trash glyphicon-disabled", this.deleteDataFreezeEvent)}
                        </div>
                     }
                     </td>

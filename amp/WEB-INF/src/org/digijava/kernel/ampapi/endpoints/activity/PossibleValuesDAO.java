@@ -6,6 +6,7 @@ import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpThemeMapping;
 
 /**
  * @author Octavian Ciubotaru
@@ -53,4 +54,6 @@ public interface PossibleValuesDAO {
     List<AmpIndicator> getIndicators();
 
     boolean isIndicatorValid(Long id);
+
+    List<AmpThemeMapping> getMappedThemes();
 }

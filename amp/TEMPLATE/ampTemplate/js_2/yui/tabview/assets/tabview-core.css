@@ -132,3 +132,11 @@ z-index:1;
 
 .yui-navset .yui-navset-right .yui-nav,
 .yui-navset-right .yui-nav { right:0; left:auto; }
+
+.yui-skin-sam .yui-navset .yui-content, .yui-skin-sam .yui-navset .yui-navset-top .yui-content {
+    padding: 10px;
+}
+
+.yui-pg-pages {
+    margin-left: 7px;
+}

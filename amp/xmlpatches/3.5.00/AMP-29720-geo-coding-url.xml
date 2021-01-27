@@ -14,7 +14,7 @@
                 VALUES (
                     nextval('amp_global_settings_seq'), 'Geo coder URL',
                     'http://localhost:5000/',
-                    '', 'Geo coder service URL', '', true
+                    '', 'Geo coder service URL', 'general', true
                 );
                 
             </lang>

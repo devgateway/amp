@@ -13,5 +13,9 @@ public enum ApiStateType {
     /**
      * G - Maps (used in GIS)
      */
-    G
+    G,
+    /**
+     * NDD - Charts used in NDD Dashboard
+     */
+    NDD
 }

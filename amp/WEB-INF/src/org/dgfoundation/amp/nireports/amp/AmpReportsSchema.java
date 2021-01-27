@@ -265,6 +265,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
     
     // the programs-based NiDimensionUsage's
     public final static NiDimensionUsage PP_DIM_USG = progsDimension.getDimensionUsage("Primary Program");
+    public static final NiDimensionUsage IPP_DIM_USG = progsDimension.getDimensionUsage("Indirect Primary Program");
     public final static NiDimensionUsage SP_DIM_USG = progsDimension.getDimensionUsage("Secondary Program");    
     public final static NiDimensionUsage TP_DIM_USG = progsDimension.getDimensionUsage("Tertiary Program");
     public final static NiDimensionUsage NPO_DIM_USG = progsDimension.getDimensionUsage("National Plan Objective");
@@ -639,7 +640,26 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         with_percentage(ColumnConstants.PRIMARY_PROGRAM_LEVEL_6, "v_primaryprogram_level_6", PP_DIM_USG, LEVEL_6);
         with_percentage(ColumnConstants.PRIMARY_PROGRAM_LEVEL_7, "v_primaryprogram_level_7", PP_DIM_USG, LEVEL_7);
         with_percentage(ColumnConstants.PRIMARY_PROGRAM_LEVEL_8, "v_primaryprogram_level_8", PP_DIM_USG, LEVEL_8);
-    
+
+        with_percentage(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_0, "v_indirect_primaryprogram_level_0",
+                IPP_DIM_USG, LEVEL_0);
+        with_percentage(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_1, "v_indirect_primaryprogram_level_1",
+                IPP_DIM_USG, LEVEL_1);
+        with_percentage(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_2, "v_indirect_primaryprogram_level_2",
+                IPP_DIM_USG, LEVEL_2);
+        with_percentage(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_3, "v_indirect_primaryprogram_level_3",
+                IPP_DIM_USG, LEVEL_3);
+        with_percentage(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_4, "v_indirect_primaryprogram_level_4",
+                IPP_DIM_USG, LEVEL_4);
+        with_percentage(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_5, "v_indirect_primaryprogram_level_5",
+                IPP_DIM_USG, LEVEL_5);
+        with_percentage(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_6, "v_indirect_primaryprogram_level_6",
+                IPP_DIM_USG, LEVEL_6);
+        with_percentage(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_7, "v_indirect_primaryprogram_level_7",
+                IPP_DIM_USG, LEVEL_7);
+        with_percentage(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_8, "v_indirect_primaryprogram_level_8",
+                IPP_DIM_USG, LEVEL_8);
+
         with_percentage(ColumnConstants.SECONDARY_PROGRAM_LEVEL_0, "v_secondaryprogram_level_0", SP_DIM_USG, LEVEL_0);
         with_percentage(ColumnConstants.SECONDARY_PROGRAM_LEVEL_1, "v_secondaryprogram_level_1", SP_DIM_USG, LEVEL_1);
         with_percentage(ColumnConstants.SECONDARY_PROGRAM_LEVEL_2, "v_secondaryprogram_level_2", SP_DIM_USG, LEVEL_2);

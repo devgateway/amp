@@ -9,7 +9,7 @@ import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import java.util.ArrayList;
 import java.util.List;
 
-import  org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.ArConstants;
 
 /**
  * Activity Endpoint related constants
@@ -102,7 +102,7 @@ public class ActivityEPConstants {
 
     // floating comparison constant
     public static final Double EPSILON = 0.0001;
-    
+
     public static final Integer MAX_BULK_ACTIVITIES_ALLOWED = 20;
 
     /*
@@ -129,8 +129,8 @@ public class ActivityEPConstants {
     public static final String EXPENDITURES_TABLE_FM_PATH = FUNDING_ITEM_FM_PATH
             + "/Expenditures/Expenditures Table";
     public static final String FUNDING_ITEM_CLASSIFICATION_FM_PATH = FUNDING_ITEM_FM_PATH + "/Funding Classification";
-    
-    public static final String REGIONAL_FUNDING_FM_PATH =  "/Activity Form/Regional Funding";
+
+    public static final String REGIONAL_FUNDING_FM_PATH = "/Activity Form/Regional Funding";
     private static final String REGIONAL_FUNDING_ITEM_FM_PATH = REGIONAL_FUNDING_FM_PATH + "/Region Item";
     public static final String REGIONAL_COMMITMENTS_FM_PATH =
             REGIONAL_FUNDING_ITEM_FM_PATH + "/Commitments/Commitments Table";

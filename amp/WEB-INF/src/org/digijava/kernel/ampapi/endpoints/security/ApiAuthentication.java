@@ -1,5 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.security;
 
+import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
@@ -26,11 +27,15 @@ import java.util.List;
  */
 public final class ApiAuthentication {
 
+    protected static Logger logger = Logger.getLogger(ApiAuthentication.class);
+
     public static ApiErrorMessage login(final User currentUser, final HttpServletRequest request) {
         ApiErrorMessage errorMessage = performSecurityChecks(currentUser, request);
 
         if (errorMessage != null) {
             SecurityContextHolder.getContext().setAuthentication(null);
+            logger.warn(String.format("User '%s' failed to login. Cause: '%s'.",
+                    currentUser.getEmail(), errorMessage.description));
             return errorMessage;
         }
 

@@ -1,16 +1,13 @@
-import { fetchApiData, getRequestOptions } from './apiOperations';
+import { getRequestOptions } from './apiOperations';
 
-export function loadTranslations(trnPack, lang) {
-    return new Promise((resolve, reject) => {
-        return fetch('/rest/translations/label-translations', getRequestOptions(trnPack))
-            .then(response => {
-                return response.json();
-            })
-            .then(data => {
-                if (data.error) {
-                    throw new Error(data.error);
-                }
-                return resolve(data);
-            });
-    })
+// TODO to move api route to a constant.
+export function loadTranslations(trnPack) {
+  return new Promise((resolve) => fetch('/rest/translations/label-translations', getRequestOptions(trnPack))
+    .then(response => response.json())
+    .then(data => {
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      return resolve(data);
+    }));
 }

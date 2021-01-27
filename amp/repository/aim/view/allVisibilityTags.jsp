@@ -38,6 +38,7 @@
 <module:display name="Funding" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Pledges" parentModule="PROJECT MANAGEMENT"/>
 <module:display name="AMP Offline" parentModule="PROJECT MANAGEMENT"/>
+<module:display name="AMP GeoCoder" parentModule="PROJECT MANAGEMENT"/>
 <module:display name="/GIS"></module:display>
 
 <module:display  name="/Dashboards"></module:display>
@@ -56,6 +57,7 @@
 <feature:display name="Sector Fragmentation" module="/Dashboards"/>
 <feature:display name="Location Fragmentation" module="/Dashboards"/>
 <feature:display name="Program Fragmentation" module="/Dashboards"/>
+<feature:display name="NDD Dashboard" module="/Dashboards"/>
 
 <module:display name="HELP"></module:display> 
 <module:display name="Issues" parentModule="PROJECT MANAGEMENT"></module:display> 
@@ -107,6 +109,7 @@
 <module:display name="Structure Types Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Aid Effectiveness Indicators Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Indicator Layer Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
+<module:display name="NDD Mappings Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 
 <module:display name="Aid Effectiveness" parentModule="PROJECT MANAGEMENT"></module:display>
 
@@ -756,6 +759,15 @@ deleted 6 fields, do not reinsert
 <field:display name="Primary Program Level 6" feature="NPD Programs"></field:display> 
 <field:display name="Primary Program Level 7" feature="NPD Programs"></field:display> 
 <field:display name="Primary Program Level 8" feature="NPD Programs"></field:display> 
+
+<field:display name="Indirect Primary Program Level 1" feature="NPD Programs"></field:display>
+<field:display name="Indirect Primary Program Level 2" feature="NPD Programs"></field:display>
+<field:display name="Indirect Primary Program Level 3" feature="NPD Programs"></field:display>
+<field:display name="Indirect Primary Program Level 4" feature="NPD Programs"></field:display>
+<field:display name="Indirect Primary Program Level 5" feature="NPD Programs"></field:display>
+<field:display name="Indirect Primary Program Level 6" feature="NPD Programs"></field:display>
+<field:display name="Indirect Primary Program Level 7" feature="NPD Programs"></field:display>
+<field:display name="Indirect Primary Program Level 8" feature="NPD Programs"></field:display>
 
 <field:display name="Secondary Program Level 1" feature="NPD Programs"></field:display> 
 <field:display name="Secondary Program Level 2" feature="NPD Programs"></field:display> 

@@ -7,15 +7,10 @@ import './css/style.css';
 import ProgramSelectGroupList from './ProgramSelectGroupList';
 import Header from './Header';
 import {
-  DST_PROGRAM,
-  PROGRAM,
-  PROGRAM_MAPPING,
-  SRC_PROGRAM,
-  TYPE_SRC,
-  TYPE_DST
+  DST_PROGRAM, PROGRAM, PROGRAM_MAPPING, SRC_PROGRAM, TYPE_DST, TYPE_SRC
 } from '../constants/Constants';
 import * as Utils from '../utils/Utils';
-import { sendNDDError, sendNDDPending } from '../reducers/saveNDDReducer';
+import { sendNDDError, sendNDDPending, sendNDDSaving } from '../reducers/saveNDDReducer';
 import { updateActivitiesError, updateActivitiesPending } from '../reducers/updateActivitiesReducer';
 import saveNDD from '../actions/saveNDD';
 import updateActivities from '../actions/updateActivities';
@@ -31,10 +26,10 @@ class FormPrograms extends Component {
       src: undefined,
       dst: undefined,
       programs: undefined,
-      saved: false,
       updatedActivities: false,
       blockUI: false,
-      unsavedChanges: false
+      unsavedChanges: false,
+      saved: false
     };
     this.addRow = this.addRow.bind(this);
     this.saveAll = this.saveAll.bind(this);
@@ -94,6 +89,19 @@ class FormPrograms extends Component {
     });
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps !== this.props) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState(previousState => {
+        if (!previousState.saved) {
+          return { saved: true };
+        } else {
+          return null;
+        }
+      });
+    }
+  }
+
   /**
    * Sort by SRC lvl1->lvl2->lvl3 plus DST lvl1->lvl2->lvl3 if needed.
    * @param data
@@ -102,17 +110,15 @@ class FormPrograms extends Component {
   // eslint-disable-next-line react/sort-comp,class-methods-use-this
   sortPrograms(data) {
     if (data && data.length > 0) {
-      const sortedData = data.sort((a, b) => {
+      return data.sort((a, b) => {
         const compare = (a[SRC_PROGRAM].lvl1.value + a[SRC_PROGRAM].lvl2.value + a[SRC_PROGRAM].lvl3.value)
           .localeCompare(b[SRC_PROGRAM].lvl1.value + b[SRC_PROGRAM].lvl2.value + b[SRC_PROGRAM].lvl3.value);
         if (compare === 0) {
-          const compare2 = (a[DST_PROGRAM].lvl1.value + a[DST_PROGRAM].lvl2.value + a[DST_PROGRAM].lvl3.value)
+          return (a[DST_PROGRAM].lvl1.value + a[DST_PROGRAM].lvl2.value + a[DST_PROGRAM].lvl3.value)
             .localeCompare(b[DST_PROGRAM].lvl1.value + b[DST_PROGRAM].lvl2.value + b[DST_PROGRAM].lvl3.value);
-          return compare2;
         }
         return compare;
       });
-      return sortedData;
     }
     return [];
   }
@@ -128,7 +134,7 @@ class FormPrograms extends Component {
       };
       data.push(pair);
       setTimeout(() => (window.scrollTo(0, document.body.scrollHeight)), 500);
-      return { data, unsavedChanges: true };
+      return { data, unsavedChanges: true, adding: true };
     });
   }
 
@@ -160,7 +166,7 @@ class FormPrograms extends Component {
 
   clearMessages() {
     this.setState({
-      validationErrors: undefined, saved: false, updatedActivities: false, blockUI: false
+      validationErrors: undefined, updatedActivities: false, blockUI: false
     });
   }
 
@@ -198,18 +204,16 @@ class FormPrograms extends Component {
           });
         });
         _saveNDD(src, dst, mappings, api.programsSave, api.mappingSave);
+        this.setState({ unsavedChanges: false });
         this.clearMessages();
-        this.setState({ saved: true, unsavedChanges: false });
       } else {
         this.setState({
           validationErrors: translations[`${trnPrefix}validation_error_${validateMain}`],
-          saved: false
         });
       }
     } else {
       this.setState({
         validationErrors: translations[`${trnPrefix}validation_error_${validateMappings}`],
-        saved: false
       });
     }
   }
@@ -271,10 +275,10 @@ class FormPrograms extends Component {
 
   render() {
     const {
-      data, validationErrors, src, dst, saved, updatedActivities, unsavedChanges
+      data, validationErrors, src, dst, updatedActivities, unsavedChanges, saved
     } = this.state;
     const {
-      error, pending, translations, updating, errorUpdating
+      error, pending, translations, updating, errorUpdating, saving
     } = this.props;
     const { trnPrefix } = this.context;
     const messages = [];
@@ -284,7 +288,7 @@ class FormPrograms extends Component {
     if (validationErrors) {
       messages.push({ isError: true, text: validationErrors });
     }
-    if (saved) {
+    if (!saving && !error && !unsavedChanges && saved) {
       messages.push({ isError: false, text: translations[`${trnPrefix}notification-saved-ok`] });
     }
     if (updatedActivities) {
@@ -341,7 +345,8 @@ FormPrograms.propTypes = {
   updating: PropTypes.bool,
   errorUpdating: PropTypes.bool,
   _saveNDD: PropTypes.func.isRequired,
-  _updateActivities: PropTypes.func.isRequired
+  _updateActivities: PropTypes.func.isRequired,
+  saving: PropTypes.bool.isRequired
 };
 
 FormPrograms.defaultProps = {
@@ -354,6 +359,7 @@ FormPrograms.defaultProps = {
 const mapStateToProps = state => ({
   translations: state.translationsReducer.translations,
   error: sendNDDError(state.saveNDDReducer),
+  saving: sendNDDSaving(state.saveNDDReducer),
   pending: sendNDDPending(state.saveNDDReducer),
   updating: updateActivitiesPending(state.updateActivitiesReducer),
   errorUpdating: updateActivitiesError(state.updateActivitiesReducer)

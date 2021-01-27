@@ -47,11 +47,12 @@ export const initialTranslations = {
          'amp.data-freezing:tooltip-notification-days': 'The number of days before the freezing date when the email notification will be sent out. Default is 7 days.',
          'amp.data-freezing:invalid-grace-period': 'Invalid Grace Period. Grace period can be 0 or a positive whole number',
          'amp.data-freezing:notification-days': 'Notify (Days)',
-         'amp.data-freezing:server-errors-0001': 'Freezing events cannot be repeated.',
-         'amp.data-freezing:server-errors-0002': 'The open period range cannot overlap with other freezing events.',
+         'amp.data-freezing:server-errors-1400': 'Freezing events cannot be repeated.',
+         'amp.data-freezing:server-errors-1401': 'The open period range cannot overlap with other freezing events.',
          'amp.data-freezing:invalid-open-period': 'Invalid Data Open Period. Please enter both the Data Open Period Start and the Data Open Period End',
          'amp.data-freezing:no-records': 'No records to show',
          'amp.data-freezing:loading-message': 'Loading...',
-         'amp.data-freezing:saving-message': 'Saving'
-
+         'amp.data-freezing:saving-message': 'Saving',
+         'amp.data-freezing:tooltip-edit': 'Edit',
+         'amp.data-freezing:tooltip-delete': 'Delete'
 };

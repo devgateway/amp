@@ -19,13 +19,10 @@
 	margin: 0 auto;
 }
 
-.scorecard-container fieldset {
-	height: 280px;
-}
-
 .step-container {
 	display:none;
-	height: 300px;
+	min-height: 300px;
+	margin-bottom: 10px;
 }
 
 .settings-left {
@@ -72,6 +69,7 @@
 	var alertValidationTime = '<digi:trn jsFriendly="true">Please select validation time</digi:trn>';
 	var alertValidationPeriod = '<digi:trn jsFriendly="true">Please check Validation Period if you have selected Validation Time</digi:trn>';
 	var alertValidationPercentage = '<digi:trn jsFriendly="true">Please enter a valid percentage (0.01 - 100.00)</digi:trn>';
+	var alertValidationQuarter = '<digi:trn jsFriendly="true">Please select at least one Quarter</digi:trn>';
 </script>
 
 <digi:instance property="aimScorecardManagerForm" />
@@ -125,6 +123,14 @@
 							<input id="btnUnselect" type="button" class="dr-menu" name="actUnselect" onclick="unselectAllActivities()" value="<digi:trn>Unselect All</digi:trn>"/>
   						</div>
   					</div>
+					<div class="settings-blocks">
+						<div class="settings-left"><digi:trn>Quarters</digi:trn></div>
+						<div class="settings-right"><br/>
+							<html:select property="selectedQuarters" multiple="true">
+								<html:options name="aimScorecardManagerForm" property="quarters" />
+							</html:select>
+						</div>
+					</div>
   				</div>
 			</fieldset>
 		</div>
@@ -184,6 +190,11 @@
 						</div>
 						<div class="settings-right">
 							<digi:trn>Percentage Threshold</digi:trn>: <b><span id="percentageThreshold"></span></b>
+						</div>
+					</div>
+					<div class="settings-blocks">
+						<div class="settings-left summary-text-left">
+							<digi:trn>Quarters</digi:trn>: <b><span id="summaryQuarters"></span></b>
 						</div>
 					</div>
 					<div class="settings-blocks summary-text-left">

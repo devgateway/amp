@@ -4,8 +4,6 @@ import Modal from "react-bootstrap/Modal";
 import {TranslationContext} from "../../../AppContext";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
-import AlertError from "../AlertError";
-import {Loading} from "../../../../../../utils/components/Loading";
 import {resetAllLocationStatuses} from "../../../../actions/geocodingAction";
 
 class ResetAllButton extends Component {

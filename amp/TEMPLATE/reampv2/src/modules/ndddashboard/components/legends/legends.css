@@ -1,0 +1,100 @@
+.custom-legend {
+    display: inline-block;
+    width: 100%;
+}
+
+.custom-legend ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.custom-legend .two-rows {
+    columns: 2;
+    -webkit-columns: 2;
+    -moz-columns: 2;
+}
+
+.custom-legend {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.legend-title {
+    border-bottom: 1px solid #ddd;
+}
+
+.custom-legend .row {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
+
+.custom-legend .row,
+.funding-sources-title .row {
+
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.custom-legend ul li {
+    display: block;
+}
+
+.custom-legend ul li .label {
+    white-space: normal;
+    font-size: 14px;
+    font-weight: normal;
+    padding-left: 4px;
+    padding-right: 2px;
+    text-align: left;
+    line-height: 15px;
+}
+
+.custom-legend .label {
+    color: #000000;
+}
+
+.legend-container {
+    border: 1px solid #ddd;
+}
+
+
+.custom-legend .label.amount {
+    font-weight: bold;
+}
+
+.custom-legend ul li .symbol {
+    display: inline-block;
+    border-radius: 100%;
+    background-clip: padding-box;
+    height: 12px;
+    margin-top: 3px;
+    width: 12px;
+    margin-left: 5px;
+}
+
+.chart-legend {
+    height: 110px;
+}
+
+.legends-container {
+    height: 100%;
+    min-height: 513px;
+    font-size: 18px;
+}
+
+
+.legends-container .legend-title {
+    padding-left: 10px;
+}
+
+.legend-title .amount {
+    font-weight: bold;
+    padding-left: 10px;
+}
+
+.custom-legend-inner .symbol-container {
+    padding-left: 25px;
+}

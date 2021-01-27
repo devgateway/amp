@@ -701,4 +701,8 @@ a:hover {
   height: 16px;
   margin-right: 5px;
  }
+
+.glyphicon-disabled {
+  color: #ccc;
+}
  

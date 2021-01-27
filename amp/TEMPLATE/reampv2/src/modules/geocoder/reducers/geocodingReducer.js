@@ -11,11 +11,13 @@ import {
     GEOCODING_RESET_ALL_ERROR,
     GEOCODING_RESET_ALL_PENDING,
     GEOCODING_RESET_ALL_SUCCESS,
-    GEOCODING_RUN_SEARCH_ERROR,
-    GEOCODING_RUN_SEARCH_PENDING,
-    GEOCODING_RUN_SEARCH_SUCCESS, GEOCODING_SAVE_ALL_EDITS_ERROR,
+    GEOCODING_RUN_SEARCH_SUCCESS,
+    GEOCODING_SAVE_ALL_EDITS_ERROR,
     GEOCODING_SAVE_ALL_EDITS_PENDING,
-    GEOCODING_SAVE_ALL_EDITS_SUCCESS
+    GEOCODING_SAVE_ALL_EDITS_SUCCESS,
+    GEOCODING_SAVE_ACTIVITY_ERROR,
+    GEOCODING_SAVE_ACTIVITY_PENDING,
+    GEOCODING_SAVE_ACTIVITY_SUCCESS, GEOCODING_RESET_SAVE_RESULTS
 } from '../actions/geocodingAction';
 
 const initialState = {
@@ -26,6 +28,8 @@ const initialState = {
     creator: null,
     workspace: null,
     activities : [],
+    save_activities_result: [],
+    save_pending: false,
     error: null,
     reset_error: null,
     geocodeShouldRun: false
@@ -123,20 +127,44 @@ export default function geocodingReducer(state = initialState, action) {
             return {
                 ...state,
                 pending: true,
+                save_pending: true,
                 error: null
             };
         case GEOCODING_SAVE_ALL_EDITS_SUCCESS:
             return {
                 ...state,
                 error: null,
+                save_pending: false,
                 pending: false,
                 geocodeShouldRun: true,
             };
         case GEOCODING_SAVE_ALL_EDITS_ERROR:
             return {
                 ...state,
+                save_pending: false,
                 error: action.error,
                 geocodeShouldRun: true,
+            };
+        case GEOCODING_SAVE_ACTIVITY_PENDING:
+            return {
+                ...state,
+                save_activities_result: updateActivitySaveStatus(state.save_activities_result, action.payload, true, null),
+            };
+        case GEOCODING_SAVE_ACTIVITY_SUCCESS:
+            return {
+                ...state,
+                save_activities_result: updateActivitySaveStatus(state.save_activities_result, action.payload, false, null),
+                activities: removeSavedActivity(state.activities, action.payload)
+            };
+        case GEOCODING_SAVE_ACTIVITY_ERROR:
+            return {
+                ...state,
+                save_activities_result: updateActivitySaveStatus(state.save_activities_result, action.payload, false, action.error),
+            };
+        case GEOCODING_RESET_SAVE_RESULTS:
+            return {
+                ...state,
+                save_activities_result: [],
             };
         default:
             return state;
@@ -187,4 +215,30 @@ function resetLocations(locations) {
             pending: false
         };
     });
+}
+
+function updateActivitySaveStatus(activities, activityId, pending, error) {
+    if (!activities.find(item => item.activity_id === activityId)) {
+        activities.push({
+            activity_id : activityId,
+            pending: pending,
+            error: error
+        });
+        return activities;
+    }
+
+    return activities.map((item, id) => {
+        if(item.activity_id === activityId) {
+            return {
+                ...item,
+                pending: pending,
+                error: error
+            };
+        }
+        return item;
+    });
+}
+
+function removeSavedActivity(activities, activityId) {
+    return activities.filter(item => item.activity_id != activityId);
 }

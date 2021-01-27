@@ -173,8 +173,9 @@ public abstract class AbstractAmpAutoCompleteModel<T> extends
         Set<AmpAutoCompleteDisplayable> root = new TreeSet<AmpAutoCompleteDisplayable>(new AmpAutoCompleteDisplayable.AmpAutoCompleteComparator());
         for (Object o : l)
             addToRootTree(root, (AmpAutoCompleteDisplayable) o, true);
-        for (Object o : root)
+        for (Object o : root) {
             addToRootList(ret, (AmpAutoCompleteDisplayable) o);
+        }
 
         return ret;
     }

@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.devgateway</groupId>
     <artifactId>amp</artifactId>
-    <version>3.5-SNAPSHOT</version>
+    <version>3.5.2-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>Aid Management Platform</name>
     <properties>
@@ -1012,6 +1012,11 @@
         <dependency>
             <groupId>com.google.cloud</groupId>
             <artifactId>google-cloud-storage</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>1.9</version>
         </dependency>
     </dependencies>
 

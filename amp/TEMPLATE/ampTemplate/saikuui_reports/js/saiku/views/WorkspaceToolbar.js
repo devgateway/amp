@@ -182,10 +182,10 @@ var WorkspaceToolbar = Backbone.View.extend({
         }
 
         this.reflect_properties();
-        if(_.isUndefined(_.findWhere(enabledASFM.get('ADMINISTRATIVE SECTION'), '/ADMINISTRATIVE SECTION/Currency deflator'))) {
-          $(this.el).find('a.export_dual_currency').hide();
+        if(this.is_dual_currency_enabled()) {
+            $(this.el).find('a.export_dual_currency').css('display', 'block');
         } else {
-          $(this.el).find('a.export_dual_currency').css('display', 'block');
+            $(this.el).find('a.export_dual_currency').hide();
         }
     },
     hideEditableFormatsPublicView: function(){
@@ -502,8 +502,14 @@ var WorkspaceToolbar = Backbone.View.extend({
     	enabledGisFM.models[0].get('fm-settings') &&
         enabledGisFM.models[0].get('fm-settings')["GIS"] &&
     	this.workspace.query.attributes.report_type != 5;
-    }
+    },
 
+    is_dual_currency_enabled : function() {
+        return enabledASFM &&
+            enabledASFM.get('fm-settings') &&
+            enabledASFM.get('fm-settings')['ADMINISTRATIVE SECTION'] &&
+            enabledASFM.get('fm-settings')['ADMINISTRATIVE SECTION'].includes('/ADMINISTRATIVE SECTION/Currency deflator');
+    }
 });
 
 $.postDownload = function (path, params, method) {

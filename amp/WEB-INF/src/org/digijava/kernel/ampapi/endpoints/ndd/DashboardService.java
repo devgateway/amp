@@ -86,6 +86,22 @@ public final class DashboardService {
         if (programSettings == null || programSettings.size() != 1) {
             throw new RuntimeException("Cant determine the filter for the report.");
         }
+
+        boolean isIndirect = false;
+        MappingConfiguration mapping = null;
+        MappingConfiguration indirectMapping = nddService.getIndirectProgramMappingConfiguration();
+        MappingConfiguration regularMapping = nddService.getProgramMappingConfiguration();
+        AmpTheme rootProgram = getRootProgram(program);
+        if ((rootProgram.getAmpThemeId().equals(indirectMapping.getDstProgram().getId()) ||
+                rootProgram.getAmpThemeId().equals(indirectMapping.getSrcProgram().getId()))
+                && indirectMapping.getDstProgram().isIndirect()) {
+            mapping = indirectMapping;
+            isIndirect = true;
+        } else {
+            mapping = regularMapping;
+            isIndirect = false;
+        }
+
         AmpActivityProgramSettings singleProgramSetting = ((AmpActivityProgramSettings) programSettings.toArray()[0]);
         ReportColumn column = null;
         if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.PRIMARY_PROGRAM)) {
@@ -121,6 +137,14 @@ public final class DashboardService {
             }
         }
         filters.addFilterRule(column, new FilterRule(program.getAmpThemeId().toString(), true));
+    }
+
+    private static AmpTheme getRootProgram(AmpTheme program) {
+        AmpTheme root = program;
+        while(root.getIndlevel() > 0) {
+            root = root.getParentThemeId();
+        }
+        return root;
     }
 
     private static ReportColumn getColumnFromProgram(AmpTheme program) {

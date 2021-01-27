@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,6 +28,7 @@ import org.digijava.kernel.user.User;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -73,6 +75,7 @@ public class PossibleValuesEnumeratorTest {
             String s = (String) invocation.getArguments()[0];
             return Arrays.asList(msg("en", s + " en"), msg("fr", s + " fr"));
         });
+        FeaturesUtil.buildGlobalSettingsCache(new ArrayList<>());
     }
 
     private Message msg(String locale, String text) {
@@ -239,8 +242,9 @@ public class PossibleValuesEnumeratorTest {
                 ));
         assertJsonEquals(possibleValuesFor("primary_programs~program"),
                 "[{\"id\":1,\"value\":\"Theme 1\","
-                        + "\"children\":[{\"id\":2,\"value\":\"Theme 1.2\",\"extra_info\":{\"parent-program-id\":1}}],"
-                        + "\"extra_info\":{\"parent-program-id\":null}}]");
+                        + "\"children\":[{\"id\":2,\"value\":\"Theme 1.2\","
+                        + "\"extra_info\":{\"parent-program-id\":1,\"mapped-program-id\":null}}],"
+                        + "\"extra_info\":{\"parent-program-id\":null,\"mapped-program-id\":null}}]");
     }
 
     @Test

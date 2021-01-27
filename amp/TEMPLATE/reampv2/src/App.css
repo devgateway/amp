@@ -15,11 +15,31 @@
     margin: 0;
 }
 
-.footer {
-    bottom: 0;
-    position: absolute;
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+#amp-footer {
+    flex-shrink: 0;
+    margin-top: 15px;
     width: 100%;
     z-index: 1;
+}
+
+.footer {
+    /*bottom: 0;
+    position: absolute;*/
+    /*width: 100%;
+    z-index: 1;*/
+}
+
+#main-container {
+    flex: 1 0 auto;
 }
 
 .dgf_footer {

@@ -93,6 +93,13 @@ public class ActivityFieldsConstants {
         public static final String LOCATION = "Location";
     }
 
+    public static final class Programs {
+        private Programs() {
+        }
+
+        public static final String PROGRAM = "Program";
+    }
+
     public static final class Funding {
         private Funding() {
         }

@@ -59,7 +59,6 @@ import org.digijava.module.aim.dbentity.AmpFundingAmount;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIssues;
-import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRole;
@@ -517,6 +516,18 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         return (Long) session.createQuery("select ampActivityId from AmpActivity where ampId=:ampId")
                 .setParameter("ampId", ampId)
                 .uniqueResult();
+    }
+
+
+    public static List<AmpActivityVersion> getLastActivitiesVersionByAmpIds(List<String> ampIds) {
+        String queryString = "select a from "
+                + AmpActivityVersion.class.getName()
+                + " a where a.ampId in (:ampIds) "
+                + " and a.ampActivityId =( select av.ampActivityId from " + AmpActivity.class.getName() + " av where av"
+                + ".ampId = a.ampId)";
+        return PersistenceManager.getSession().createQuery(queryString)
+                .setParameterList("ampIds", ampIds)
+                .list();
     }
 
     public static List<AmpActivityVersion> getActivitiesByAmpIds(List<String> ampIds) {
@@ -1602,6 +1613,11 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
     public static ArrayList<AmpActivityFake> getAllActivitiesAdmin(String searchTerm, Set<Long> frozenActivityIds, ActivityForm.DataFreezeFilter dataFreezeFilter) {
        try {
             Session session = PersistenceManager.getSession();
+
+           if (ActivityForm.DataFreezeFilter.FROZEN.equals(dataFreezeFilter)
+                   && (frozenActivityIds == null || frozenActivityIds.isEmpty())) {
+                return new ArrayList<>();
+           }
             
             boolean isSearchByName = searchTerm != null && (!searchTerm.trim().isEmpty());
             String activityName = AmpActivityVersion.hqlStringForName("f");
@@ -1621,11 +1637,11 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             }
 
            String dataFreezeQuery = "";
-            if (frozenActivityIds != null && frozenActivityIds.size() > 0) {
-                if (ActivityForm.DataFreezeFilter.FROZEN.equals(dataFreezeFilter)) {
-                   dataFreezeQuery = " and f.ampActivityId in (:frozenActivityIds) ";
-                } else if (ActivityForm.DataFreezeFilter.UNFROZEN.equals(dataFreezeFilter)) {
-                   dataFreezeQuery = " and f.ampActivityId not in (:frozenActivityIds) ";
+           if (frozenActivityIds != null && frozenActivityIds.size() > 0) {
+               if (ActivityForm.DataFreezeFilter.FROZEN.equals(dataFreezeFilter)) {
+                   dataFreezeQuery = " AND f.ampActivityId IN (:frozenActivityIds) ";
+               } else if (ActivityForm.DataFreezeFilter.UNFROZEN.equals(dataFreezeFilter)) {
+                   dataFreezeQuery = " AND f.ampActivityId not in (:frozenActivityIds) ";
                }
            }
 
@@ -2013,10 +2029,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
      * @return List<Long> with the editable activity Ids
      */
     public static List<Long> getEditableActivityIdsNoSession(TeamMember tm) {
-        AmpTeamMember ampTeamMember = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
-        AmpARFilter ampARFilter = FilterUtil.buildFilterFromSource(ampTeamMember.getAmpTeam());
-        ampARFilter.generateFilterQuery(tm);
-        String query = ampARFilter.getGeneratedFilterQuery();
+        String query = WorkspaceFilter.generateWorkspaceFilterQuery(tm);
         return ActivityUtil.getEditableActivityIds(tm, query);
     }
 

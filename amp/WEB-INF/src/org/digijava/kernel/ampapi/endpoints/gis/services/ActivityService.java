@@ -1,5 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.gis.services;
 
+import static org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants.UNDEFINED_NAME;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -134,6 +136,8 @@ public class ActivityService {
         }
         Integer count = report.reportContents.getChildren().size();
 
+        String undefinedName = TranslatorWorker.translateText(UNDEFINED_NAME);
+
         for (ReportArea reportArea : ll) {
             GisActivity activity = new GisActivity();
             Map<String, Object> matchesFilters = new HashMap<>();
@@ -176,13 +180,18 @@ public class ActivityService {
                     if (columnName.equals(ColumnConstants.PRIMARY_SECTOR)) {
                         List<FilterValue> sectors = new ArrayList<>();
                         for (Long id : ids) {
-                            AmpSector ampSector = SectorUtil.getAmpSector(id);
                             FilterValue sector = new FilterValue();
-                            sector.setId(ampSector.getAmpSectorId());
-                            sector.setCode(ampSector.getSectorCodeOfficial());
-                            sector.setName(ampSector.getName());
+                            sector.setId(id);
+                            if (id > 0) {
+                                AmpSector ampSector = SectorUtil.getAmpSector(id);
+                                sector.setCode(ampSector.getSectorCodeOfficial());
+                                sector.setName(ampSector.getName());
+                            } else {
+                                sector.setName(undefinedName);
+                            }
                             sectors.add(sector);
-                        }
+
+                        }                       
                         matchesFilters.put(columnName, sectors);
                     } else {
                         matchesFilters.put(columnName, ids);

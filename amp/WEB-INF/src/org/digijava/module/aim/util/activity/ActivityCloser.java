@@ -43,7 +43,7 @@ public class ActivityCloser {
             }
 
             AmpCategoryValue oldActivityStatus =
-                    CategoryManagerUtil.getAmpCategoryValueFromList(CategoryConstants.ACTIVITY_STATUS_NAME,
+                    CategoryManagerUtil.getAmpCategoryValueFromList(CategoryConstants.ACTIVITY_STATUS_KEY,
                             ver.getCategories());
 
             LOGGER.info(String.format("\t%s activity %d, changing status ID from %s to %d and approvalStatus from "
@@ -57,7 +57,7 @@ public class ActivityCloser {
             AmpTeamMember ampClosingMember = getAmpTeamMemberModifier(ver.getTeam());
 
             AmpActivityVersion newVer = this.cloneActivity(ampClosingMember, ver, newStatus,
-                    closedCategoryValue, saveContext);
+                    closedCategoryValue, saveContext,oldActivityStatus);
 
             LOGGER.info(String.format("... done, new amp_activity_id=%d\n", newVer.getAmpActivityId()));
             PersistenceManager.getSession().flush();
@@ -74,13 +74,12 @@ public class ActivityCloser {
      */
     private AmpActivityVersion cloneActivity(AmpTeamMember member, AmpActivityVersion oldActivity,
                                              ApprovalStatus newStatus, Long closedProjectStatusCategoryValue,
-                                             SaveContext saveContext) throws Exception {
+                                             SaveContext saveContext, AmpCategoryValue oldActivityStatus) throws Exception {
         AmpActivityVersion prevVersion = oldActivity.getAmpActivityGroup().getAmpActivityLastVersion();
         oldActivity.getAmpActivityGroup().setAutoClosedOnExpiration(true);
 
         oldActivity.setApprovalStatus(newStatus);
-        oldActivity.getCategories().remove(CategoryManagerUtil.
-                getAmpCategoryValueFromList(CategoryConstants.ACTIVITY_STATUS_NAME, oldActivity.getCategories()));
+        oldActivity.getCategories().remove(oldActivityStatus);
         oldActivity.getCategories().add(CategoryManagerUtil.
                 getAmpCategoryValueFromDb(closedProjectStatusCategoryValue));
 

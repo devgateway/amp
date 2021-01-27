@@ -48,9 +48,6 @@ export function validate(data) {
       if (!pair[SRC_PROGRAM].lvl3 || !pair[DST_PROGRAM].lvl3) {
         ret = 1; // missing value error.
       } else {
-        if (dstPairs.find(p => p === pair[DST_PROGRAM].lvl3.id)) {
-          ret = 2; // duplicated dst value error.
-        }
         dstPairs.push(pair[DST_PROGRAM].lvl3.id);
       }
     });

@@ -23,7 +23,7 @@ export default class CustomLegend extends Component {
                         backgroundColor: `${colorMap.get(d.code)}`
                       }} />
                   </div>
-                  <div className="col-md-9 col-xs-9 label">
+                  <div className="col-md-7 col-xs-7 label">
                     <EllipsisText
                       text={d.simpleLabel}
                       length={100}
@@ -38,12 +38,12 @@ export default class CustomLegend extends Component {
                   </div>
                   {d.amount
                   && (
-                    <div className="col-md-2 col-xs-2 label vertical-center">
+                    <div className="col-md-4 col-xs-4 label vertical-center" style={{ textAlign: 'right' }}>
                       <span
                         className="label amount">
                         {/* eslint-disable-next-line no-nested-ternary */}
                         {translations && settings
-                          ? formatNumberWithSettings(translations, settings, d.amount, false)
+                          ? formatNumberWithSettings(translations, settings, d.amount, true)
                           : formatter
                             ? formatter.format(d.amount)
                             : d.amount}

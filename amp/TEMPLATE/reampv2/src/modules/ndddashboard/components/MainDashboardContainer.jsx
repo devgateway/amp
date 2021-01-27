@@ -180,10 +180,11 @@ class MainDashboardContainer extends Component {
               <div className="legends-container">
                 <div className={`even-${selectedDirectProgram ? 'third' : 'middle'}`}>
                   <div className="legend-title">
-                    {programs.direct
-                      ? (`${programs.direct.value}`)
-                      : translations['amp.ndd.dashboard:loading']}
-                    :
+                    <span>
+                      {programs.direct
+                        ? (`${programs.direct.value}`)
+                        : translations['amp.ndd.dashboard:loading']}
+                    </span>
                     <span className="amount">
                       {formatNumberWithSettings(translations, globalSettings, programLegend[0].total, true)}
                       {` ${settings[CURRENCY_CODE]}`}
@@ -200,12 +201,13 @@ class MainDashboardContainer extends Component {
                 && (
                   <div className="even-middle">
                     <div className="legend-title">
-                      {programs.direct
-                        ? (`${programs.indirect1.value}`)
-                        : translations['amp.ndd.dashboard:loading']}
-                      :
+                      <span>
+                        {programs.direct
+                          ? (`${programs.indirect1.value}`)
+                          : translations['amp.ndd.dashboard:loading']}
+                      </span>
                       <span className="amount">
-                        {formatNumberWithSettings(translations, globalSettings, programLegend[0].total, true)}
+                        {formatNumberWithSettings(translations, globalSettings, programLegend[1].total, true)}
                         {` ${settings[CURRENCY_CODE]}`}
                       </span>
                     </div>

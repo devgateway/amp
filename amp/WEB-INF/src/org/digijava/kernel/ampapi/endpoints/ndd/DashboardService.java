@@ -85,6 +85,7 @@ public final class DashboardService {
 
     /**
      * Add the program as a new filter option to the correct category (primary program, secondary program, etc).
+     * Note: for simplicity we assume "program" can be of level 1 or 2 only.
      *
      * @param program
      * @param filters
@@ -114,30 +115,14 @@ public final class DashboardService {
         AmpActivityProgramSettings singleProgramSetting = ((AmpActivityProgramSettings) programSettings.toArray()[0]);
         ReportColumn fromMappingFilterColumn = null;
         if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.PRIMARY_PROGRAM)) {
-            if (program.getIndlevel() == 1) {
-                fromMappingFilterColumn = new ReportColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_3);
-            } else {
-
-            }
+            fromMappingFilterColumn = new ReportColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_3);
         } else if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.SECONDARY_PROGRAM)) {
-            if (program.getIndlevel() == 1) {
-                fromMappingFilterColumn = new ReportColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_3);
-            } else {
-
-            }
+            fromMappingFilterColumn = new ReportColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_3);
         } else if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.TERTIARY_PROGRAM)) {
-            if (program.getIndlevel() == 1) {
-                fromMappingFilterColumn = new ReportColumn(ColumnConstants.TERTIARY_PROGRAM_LEVEL_3);
-            } else {
-
-            }
+            fromMappingFilterColumn = new ReportColumn(ColumnConstants.TERTIARY_PROGRAM_LEVEL_3);
         } else if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES)
                 || singleProgramSetting.getName().equalsIgnoreCase(ProgramUtil.NATIONAL_PLAN_OBJECTIVE)) {
-            if (program.getIndlevel() == 1) {
-                fromMappingFilterColumn = new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_3);
-            } else {
-
-            }
+            fromMappingFilterColumn = new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_3);
         } else if (singleProgramSetting.getName().equalsIgnoreCase(ProgramUtil.INDIRECT_PRIMARY_PROGRAM)) {
             if (program.getIndlevel() == 1) {
                 ReportColumn mainFilterColumn = new ReportColumn(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_1);
@@ -148,12 +133,21 @@ public final class DashboardService {
             }
         }
 
-        // Add filter by Program Lvl3 with ids from NDD mapping. Only add ids from clicked program.
+        // Add filter by Program with ids from NDD mapping. Only add ids from clicked program.
         List<String> fromMappingIds = new ArrayList<>();
         if (isIndirect) {
             indirectMapping.getProgramMapping().forEach(item -> {
-                if (getProgramByLvl(item.getOldTheme(), 1).getAmpThemeId().equals(program.getAmpThemeId())) {
-                    fromMappingIds.add(item.getOldTheme().getAmpThemeId().toString());
+                if (program.getIndlevel() == 1) {
+                    if (getProgramByLvl(item.getOldTheme(), 1).getAmpThemeId().equals(program.getAmpThemeId())) {
+                        fromMappingIds.add(item.getOldTheme().getAmpThemeId().toString());
+                    }
+                } else {
+                    if (getProgramByLvl(item.getOldTheme(), 1).getAmpThemeId()
+                            .equals(getProgramByLvl(program, 1).getAmpThemeId())) {
+                        if (getProgramByLvl(item.getOldTheme(), 2).getAmpThemeId().equals(program.getAmpThemeId())) {
+                            fromMappingIds.add(item.getOldTheme().getAmpThemeId().toString());
+                        }
+                    }
                 }
             });
         } else {
@@ -481,6 +475,7 @@ public final class DashboardService {
 
     /**
      * Return detail with list of activities for a given program.
+     *
      * @param params
      * @return
      */
@@ -490,12 +485,12 @@ public final class DashboardService {
         String programIdString = params.getSettings().get("id").toString();
         AmpReportFilters filters = getFiltersFromParams(params.getFilters());
         AmpTheme program = ProgramUtil.getTheme(Long.valueOf(programIdString));
-        AmpTheme rootProgram = getProgramByLvl(program, 0);
         ReportColumn projectTitleColumn = new ReportColumn(ColumnConstants.PROJECT_TITLE);
         if (params.getSettings().get("isShowIndirectDataForActivitiesDetail").toString().equals("true")) {
             MappingConfiguration indirectMapping = nddService.getIndirectProgramMappingConfiguration();
             AmpTheme directProgram = ProgramUtil.getTheme(indirectMapping.getSrcProgram().getId());
             ReportColumn outerColumn = getColumnFromProgram(directProgram);
+            AmpTheme rootProgram = getProgramByLvl(program, 0);
             ReportColumn innerColumn = getColumnFromProgram(rootProgram);
             ReportMeasure innerMeasure = getMeasureFromParams(params.getSettings());
             ReportColumn[] columns = {outerColumn, innerColumn, projectTitleColumn};

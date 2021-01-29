@@ -353,33 +353,43 @@ public final class DashboardService {
 
         if (report.reportContents != null && report.reportContents.getChildren() != null) {
             report.reportContents.getChildren().forEach(children -> {
-                Map<ReportOutputColumn, ReportCell> contents = children.getContents();
+                Map<ReportOutputColumn, ReportCell> contentsCol1 = children.getContents();
                 children.getChildren().forEach(children2 -> {
-                    Map<ReportOutputColumn, ReportCell> contents2 = children2.getContents();
-                    children2.getChildren().forEach(children3 -> {
-                        List mapped = getMapped(true, indirectMapping, contents, directColumn);
-                        if (mapped.size() > 0) {
-                            List mappedForThisProgram = (List) mapped.stream().filter(m -> {
-                                AmpIndirectTheme ampIndirectTheme = (AmpIndirectTheme) m;
-                                return getProgramByLvl(ampIndirectTheme.getNewTheme(), 1).getAmpThemeId()
-                                        .equals(program.getAmpThemeId());
-                            }).collect(Collectors.toList());
-                            if (mappedForThisProgram.size() > 0) {
-                                if (mappedForThisProgram.stream().filter(m -> {
-                                    AmpIndirectTheme ampIndirectTheme = (AmpIndirectTheme) m;
-                                    return ampIndirectTheme.getOldTheme().getName().equals(contents.get(directColumn).displayedValue);
-                                }).toArray().length > 0) {
-                                    Map<ReportOutputColumn, ReportCell> contents3 = children3.getContents();
-                                    TextCell cell = ((TextCell) contents3.get(projectColumn));
-                                    BigDecimal amount = extractAmountsByYear(contents3).get("" + year);
-                                    if (amount != null) {
-                                        DetailByYear detailRecord = new DetailByYear(cell.entityId, cell.displayedValue, amount);
-                                        list.add(detailRecord);
+                    Map<ReportOutputColumn, ReportCell> contentsCol2 = children2.getContents();
+                    TextCell cellProgram = (TextCell) contentsCol2.get(indirectColumn);
+                    AmpTheme auxProgram = ProgramUtil.getTheme(cellProgram.entityId);
+                    if (auxProgram != null) {
+                        AmpTheme auxRootProgram = getProgramByLvl(auxProgram, 1);
+                        if (program.getAmpThemeId().equals(auxRootProgram.getAmpThemeId())) {
+                            children2.getChildren().forEach(children3 -> {
+                                List mapped = getMapped(true, indirectMapping, contentsCol1, directColumn);
+                                if (mapped.size() == 1) {
+                                    // TODO: check if line this works for ndd 2nd tab (program mapping).
+                                    List mappedForThisProgram = (List) mapped.stream().filter(m -> {
+                                        AmpIndirectTheme ampIndirectTheme = (AmpIndirectTheme) m;
+                                        return getProgramByLvl(ampIndirectTheme.getNewTheme(), 1).getAmpThemeId()
+                                                .equals(program.getAmpThemeId());
+                                    }).collect(Collectors.toList());
+                                    if (mappedForThisProgram.size() > 0) {
+                                        if (mappedForThisProgram.stream().filter(m -> {
+                                            AmpIndirectTheme ampIndirectTheme = (AmpIndirectTheme) m;
+                                            return ampIndirectTheme.getOldTheme().getName()
+                                                    .equals(contentsCol1.get(directColumn).displayedValue);
+                                        }).toArray().length > 0) {
+                                            Map<ReportOutputColumn, ReportCell> contents3 = children3.getContents();
+                                            TextCell cell = ((TextCell) contents3.get(projectColumn));
+                                            BigDecimal amount = extractAmountsByYear(contents3).get("" + year);
+                                            if (amount != null) {
+                                                DetailByYear detailRecord = new DetailByYear(cell.entityId,
+                                                        cell.displayedValue, amount);
+                                                list.add(detailRecord);
+                                            }
+                                        }
                                     }
                                 }
-                            }
+                            });
                         }
-                    });
+                    }
                 });
             });
         }
@@ -469,6 +479,11 @@ public final class DashboardService {
         return amountsByYear;
     }
 
+    /**
+     * Return detail with list of activities for a given program.
+     * @param params
+     * @return
+     */
     public static List getActivityDetailReport(SettingsAndFiltersParameters params) {
         GeneratedReport report;
         int yearString = Integer.parseInt(params.getSettings().get("year").toString());

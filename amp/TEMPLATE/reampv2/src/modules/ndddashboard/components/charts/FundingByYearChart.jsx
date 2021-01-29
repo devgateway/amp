@@ -201,10 +201,10 @@ class FundingByYearChart extends Component {
       source, showLegend, legendTop, legendLeft
     } = this.state;
     const directData = this.getValues();
-    const transition = {
+    /* const transition = {
       duration: 2000,
       easing: 'cubic-in-out'
-    };
+    }; */
     const annotations = directData.length === 0 ? [
       {
         text: translations[`${TRN_PREFIX}no-data`],
@@ -279,7 +279,7 @@ class FundingByYearChart extends Component {
             height: 400,
             title: '',
             showlegend: false,
-            transition,
+            /* transition, */
             margin: {
               l: 50,
               r: 30,

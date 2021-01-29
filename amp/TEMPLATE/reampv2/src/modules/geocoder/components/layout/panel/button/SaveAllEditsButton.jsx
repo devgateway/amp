@@ -34,14 +34,25 @@ class SaveAllEditsButton extends Component {
         this.handleClose();
     }
 
+    hasActivityAcceptedOrRejectedAllLocations(activity) {
+        if (activity.locations.length == 0) {
+            return false;
+        }
+
+        return activity.locations.filter(loc => loc.accepted == null).length == 0;
+    }
+
     render() {
         const {translations} = this.context;
+
+        const isEnabled = this.props.geocoding.activities
+            .filter(activity => this.hasActivityAcceptedOrRejectedAllLocations(activity)).length > 0;
 
         return (
             <>
                 <Button variant="success"
                         className={'pull-right button-header'}
-                        disabled={false} onClick={this.handleShow}>{this.props.title}
+                        disabled={!isEnabled} onClick={this.handleShow}>{this.props.title}
                 </Button>
 
                 <Modal show={this.state.show} onHide={this.handleClose} animation={false}>

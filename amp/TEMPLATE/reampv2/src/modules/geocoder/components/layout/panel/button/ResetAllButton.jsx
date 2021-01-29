@@ -31,12 +31,25 @@ class ResetAllButton extends Component {
         this.handleClose();
     };
 
+    hasActivityAcceptedOrRejectedLocations(activity) {
+        if (activity.locations.length == 0) {
+            return false;
+        }
+
+        return activity.locations.filter(loc => loc.accepted != null).length > 0;
+    }
+
     render() {
         const {translations} = this.context;
 
+        const isEnabled = this.props.geocoding.activities
+            .filter(activity => this.hasActivityAcceptedOrRejectedLocations(activity)).length > 0;
+
         return (
             <>
-                <Button variant="primary" onClick={this.handleShow}>{this.props.title}</Button>
+                <Button variant="primary" onClick={this.handleShow} disabled={!isEnabled}>
+                    {this.props.title}
+                </Button>
 
                 <Modal show={this.state.show} onHide={this.handleClose} animation={false}>
                     <Modal.Header closeButton>

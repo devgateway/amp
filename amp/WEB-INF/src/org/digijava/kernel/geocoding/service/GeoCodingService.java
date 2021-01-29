@@ -350,6 +350,10 @@ public class GeoCodingService {
     }
 
     private AmpCategoryValue getImplementationLevel(AmpCategoryValue implementationLocation) {
+        if (implementationLocation.getDefaultUsedValue() != null) {
+            return implementationLocation.getDefaultUsedValue();
+        }
+
         Iterator<AmpCategoryValue> iterator = implementationLocation.getUsedValues().iterator();
         if (iterator.hasNext()) {
             return iterator.next();

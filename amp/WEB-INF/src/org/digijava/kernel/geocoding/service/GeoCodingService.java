@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.dgfoundation.amp.onepager.util.PercentagesUtil;
 import org.dgfoundation.amp.onepager.util.SaveContext;
@@ -65,9 +66,6 @@ public class GeoCodingService {
             geoCodingProcess = new GeoCodingProcess(principal);
             PersistenceManager.getSession().save(geoCodingProcess);
         }
-
-        // TODO update locations only if changed
-        client.sendLocations(LocationUtil.getAllVisibleLocations());
 
         List<AmpActivityVersion> activities = new ArrayList<>();
         for (Long activityId : activityIds) {
@@ -141,7 +139,7 @@ public class GeoCodingService {
      */
     private void syncGeoCodedActivities(GeoCodingProcess geoCodingProcess) {
         for (GeoCodedActivity activity : geoCodingProcess.getActivities()) {
-            if (activity.getStatus() == GeoCodedActivity.Status.RUNNING) {
+            if (activity != null && activity.getStatus() == GeoCodedActivity.Status.RUNNING) {
                 syncGeoCodedActivity(activity);
             }
         }
@@ -152,6 +150,8 @@ public class GeoCodingService {
     private void syncGeoCodedActivity(GeoCodedActivity activity) {
         try {
             List<GeoCoderClient.GeoCodingResult> geoCodingResults = client.getGeoCodingResults(activity.getQueueId());
+
+            populateGeoCodingResultsWithAmpLocations(geoCodingResults);
 
             for (Long acvlId : getAcvlIds(geoCodingResults)) {
                 AmpCategoryValueLocations acvl = getAcvl(acvlId);
@@ -170,8 +170,12 @@ public class GeoCodingService {
             }
         } catch (GeoCoderClient.GeoCodingNotProcessedException e) {
             // ok, do nothing
+            activity.setStatus(GeoCodedActivity.Status.RUNNING);
         } catch (GeoCoderClient.GeoCodingNotFoundException e) {
             logger.error("Geo coding not found", e);
+            activity.setStatus(GeoCodedActivity.Status.ERROR);
+        } catch (GeoCoderClient.GeoCodingErrorException e) {
+            logger.error("Error occurred during the geo coding", e);
             activity.setStatus(GeoCodedActivity.Status.ERROR);
         }
     }
@@ -187,6 +191,31 @@ public class GeoCodingService {
                 acvlIds.addAll(geoCodingResult.getAcvlIds());
             }
         }
+        return acvlIds;
+    }
+
+    private void populateGeoCodingResultsWithAmpLocations(List<GeoCoderClient.GeoCodingResult> geoCodingResults) {
+        List<AmpCategoryValueLocations> allVisibleLocations = LocationUtil.getAllVisibleLocations();
+        for (GeoCoderClient.GeoCodingResult geoCodingResult : geoCodingResults) {
+            if (geoCodingResult.getLocation() != null) {
+                geoCodingResult.setAcvlIds(matchAmpLocations(allVisibleLocations, geoCodingResult.getLocation()));
+            }
+        }
+    }
+
+    private Set<Long> matchAmpLocations(final List<AmpCategoryValueLocations> allVisibleLocations,
+                                        final GeoCoderClient.GeoCodingLocation location) {
+        Set<Long> acvlIds = new HashSet<>();
+        for (AmpCategoryValueLocations ampLocation : allVisibleLocations) {
+            if (GeoCodingLocationMatcher.match(ampLocation, location)) {
+                acvlIds.add(ampLocation.getId());
+            }
+        }
+
+        if (acvlIds.isEmpty()) {
+            logger.info(String.format("----- No Location Matched for [%s]", location));
+        }
+
         return acvlIds;
     }
 
@@ -235,23 +264,24 @@ public class GeoCodingService {
         }
     }
 
-    public void saveActivities() {
+    public void saveActivity(Long activityId) {
         Session session = PersistenceManager.getSession();
         session.setFlushMode(FlushMode.MANUAL);
 
         GeoCodingProcess geoCoding = getGeoCodingProcess();
         if (geoCoding != null) {
-            Iterator<GeoCodedActivity> iterator = geoCoding.getActivities().iterator();
-            while (iterator.hasNext()) {
-                GeoCodedActivity activity = iterator.next();
-                if (allLocationsHaveStatusSet(activity)) {
-                    if (acceptedLocationsExist(activity)) {
-                        updateActivity(activity);
-                    }
-                    iterator.remove();
+            GeoCodedActivity geoCodedActivity = geoCoding.getActivities().stream()
+                    .filter(g -> g.getActivity().getAmpActivityId().equals(activityId))
+                    .findFirst().orElse(null);
+
+            if (geoCodedActivity != null && allLocationsHaveStatusSet(geoCodedActivity)) {
+                if (acceptedLocationsExist(geoCodedActivity)) {
+                    updateActivity(geoCodedActivity);
                 }
+                geoCoding.getActivities().remove(geoCodedActivity);
             }
         }
+
     }
 
     private boolean acceptedLocationsExist(GeoCodedActivity activity) {
@@ -259,7 +289,8 @@ public class GeoCodingService {
     }
 
     private boolean allLocationsHaveStatusSet(GeoCodedActivity activity) {
-        return activity.getLocations().stream().allMatch(l -> l.getAccepted() != null);
+        return activity.getLocations().size() > 0
+                && activity.getLocations().stream().allMatch(l -> l.getAccepted() != null);
     }
 
     private void updateActivity(GeoCodedActivity geoCodedActivity) {
@@ -277,6 +308,10 @@ public class GeoCodingService {
         org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivity(activity, null, getPrincipal(),
                 SiteUtils.getDefaultSite(), new java.util.Locale("en"),
                 AMPStartupListener.SERVLET_CONTEXT_ROOT_REAL_PATH, activity.getDraft(), SaveContext.job());
+        String locations = geoCodedActivity.getLocations().stream().filter(GeoCodedLocation::getAccepted)
+                .map(loc -> loc.getLocation().getName()).collect(Collectors.joining(","));
+        logger.info(String.format("Activity with amp_id = %s was updated with [%s] locations",
+                geoCodedActivity.getActivity().getAmpId(), locations));
     }
 
     private void updateLocations(GeoCodedActivity geoCodedActivity, AmpActivityVersion activity) {
@@ -315,6 +350,10 @@ public class GeoCodingService {
     }
 
     private AmpCategoryValue getImplementationLevel(AmpCategoryValue implementationLocation) {
+        if (implementationLocation.getDefaultUsedValue() != null) {
+            return implementationLocation.getDefaultUsedValue();
+        }
+
         Iterator<AmpCategoryValue> iterator = implementationLocation.getUsedValues().iterator();
         if (iterator.hasNext()) {
             return iterator.next();
@@ -326,11 +365,13 @@ public class GeoCodingService {
     private AmpCategoryValue getImplementationLocation(GeoCodedActivity geoCodedActivity) {
         AmpCategoryValue implementationLocation = null;
         for (GeoCodedLocation location : geoCodedActivity.getLocations()) {
-            AmpCategoryValue cat = location.getLocation().getParentCategoryValue();
-            if (implementationLocation == null) {
-                implementationLocation = cat;
-            } else if (!implementationLocation.equals(cat)) {
-                throw new GeneralGeoCodingException("Different implementation levels selected");
+            if (Boolean.TRUE.equals(location.getAccepted())) {
+                AmpCategoryValue cat = location.getLocation().getParentCategoryValue();
+                if (implementationLocation == null) {
+                    implementationLocation = cat;
+                } else if (!implementationLocation.equals(cat)) {
+                    throw new GeneralGeoCodingException("Different implementation levels selected");
+                }
             }
         }
         return implementationLocation;

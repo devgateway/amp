@@ -3,33 +3,23 @@ import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
-import TableActions from "./ActivityActions";
 
 import './table.css';
-import GeocodedActivity from "./LocationsTabel";
+import {loadActivities} from "../../../actions/activitiesAction";
+import {Loading} from "../panel/Loading";
 
 class ActivityTable extends Component {
     constructor(props) {
         super(props);
-        this.state = { selectedRowAction: null };
 
-        this.handleActionsClick = this.handleActionsClick.bind(this);
         this.wrapper = React.createRef();
     }
 
-    handleActionsClick = selectedRowId => {
-        this.setState({ selectedRowAction: selectedRowId });
-    };
-
+    componentDidMount() {
+        this.props.loadActivities();
+    }
 
     render() {
-        let expandRow = {
-            onlyOneExpanding: true,
-            renderer: row => (
-                <GeocodedActivity/>
-            )
-        };
-
         let options = {
 
             page: 1,
@@ -42,7 +32,7 @@ class ActivityTable extends Component {
             }],
             sizePerPage: 10,
             pageStartIndex: 1,
-            paginationSize: 5,
+            paginationSize: 15,
             prePage: 'Prev',
             nextPage: 'Next',
             firstPage: 'First',
@@ -51,8 +41,11 @@ class ActivityTable extends Component {
 
         let selectRow = {
             mode: 'checkbox',
-            clickToExpand: true,
-            style: { background: '#F2FFF8' }
+            style: { background: '#F2FFF8' },
+            onSelect: (row, isSelected, rowIndex, e) => {
+                this.props.onSelectActivity(isSelected, row.id);
+            },
+            onSelectAll: this.props.onSelectAllActivities
         };
 
         let columns = [
@@ -87,51 +80,40 @@ class ActivityTable extends Component {
                     return { width: "15%" };
                 },
                 sort:true
-            },
-            {
-                dataField: "actions",
-                text: "Actions",
-                formatExtraData: this.state.selectedRowAction,
-                formatter: (cell, row, rowIndex, formatExtraData) => {
-                    console.log(formatExtraData); // nothing happens when
-                    return (
-                        <TableActions
-                            isOpen={formatExtraData === row.id ? true : false}
-                            onActionClick={this.handleActionsClick}
-                            rowId={row.id}
-                        />
-                    );
-                },
-                headerStyle: () => {
-                    return { width: "5%" };
-                },
             }
         ];
 
         return (
             <div className="activity-table">
-                <BootstrapTable
-                    keyField="id"
-                    scrollY
-                    data={this.props.activities}
-                    maxHeight="200px"
-                    columns={columns}
-                    classes="table-striped"
-                    expandRow={expandRow}
-                    selectRow={selectRow}
-                    pagination={paginationFactory(options)}
-                />
-            </div>
-        );
+                {this.props.activitiesPending
+                    ? <Loading/>
+                    : <>
+                        <BootstrapTable
+                            ref={n => this.node = n}
+                            keyField="id"
+                            scrollY
+                            data={this.props.activities}
+                            maxHeight="200px"
+                            columns={columns}
+                            classes="table-striped"
+                            selectRow={selectRow}
+                            pagination={paginationFactory(options)}
+                        />
+                        </>}
+               </div>
+          );
     }
 }
 
 const mapStateToProps = state => {
     return {
-        activities: state.activitiesReducer.activities
+        activitiesPending: state.activitiesReducer.pending,
+        activities: state.activitiesReducer.activities,
     };
 };
 
-const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({
+    loadActivities: loadActivities,
+}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ActivityTable);

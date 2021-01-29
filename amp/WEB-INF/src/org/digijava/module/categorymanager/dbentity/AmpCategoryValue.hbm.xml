@@ -30,5 +30,7 @@
 			<key column="used_value_id"/>
 			<many-to-many column="value_id" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" />
 		</set>
+		<many-to-one name="defaultUsedValue" column="default_used_value"
+					 class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 	</class>
 </hibernate-mapping>

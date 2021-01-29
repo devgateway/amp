@@ -7,6 +7,7 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
@@ -99,16 +100,23 @@ public class GeoCoderEndpoint {
         return Response.noContent().build();
     }
 
-    @ApiOperation(value = "Apply changes to activities",
-            notes = "Changes are applied only to activities for which all locations were either accepted or rejected "
+    @ApiOperation(value = "Apply changes to activity",
+            notes = "Changes are applied to activity identified by id "
+                    + "for which all locations were either accepted or rejected "
                     + "after which the activity is removed from geo coding process.")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_NO_CONTENT, message = "success"))
-    @ApiMethod(id = "saveActivities", authTypes = AuthRule.IN_WORKSPACE)
+    @ApiMethod(id = "saveActivity", authTypes = AuthRule.IN_WORKSPACE)
     @POST
-    @Path("save-activities")
+    @Path("activity/save/{activityId}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    public Response saveActivities() {
-        service.saveActivities();
+    public Response saveActivity(@ApiParam("activity id") @PathParam("activityId") Long activityId) {
+        try {
+            service.saveActivity(activityId);
+        } catch (Exception e) {
+            ApiErrorResponse apiErrorResponse = ApiError.toError(
+                    GeoCoderEndpointErrors.GEO_CODING_ACT_SAVE_ERROR.withDetails(e.getMessage()));
+            throw new ApiRuntimeException(Response.Status.BAD_REQUEST, apiErrorResponse);
+        }
         return Response.noContent().build();
     }
 

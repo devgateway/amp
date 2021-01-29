@@ -6,7 +6,7 @@ import {
   fetchTopReportSuccess, fetchTopReportError,
   resetTopReport
 } from './reportActions';
-import { fetchApiData } from '../../../utils/loadTranslations';
+import { fetchApiData } from '../../../utils/apiOperations';
 import {
   CURRENCY_CODE, DEFAULT_CURRENCY,
   DEFAULT_FUNDING_TYPE,

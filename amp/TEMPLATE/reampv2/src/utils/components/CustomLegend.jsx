@@ -6,7 +6,7 @@ import { formatNumberWithSettings } from '../../modules/ndddashboard/utils/Utils
 export default class CustomLegend extends Component {
   render() {
     const {
-      data, colorMap, shouldSplitBig, formatter, translations, settings
+      data, colorMap, shouldSplitBig, formatter, translations, settings, currency
     } = this.props;
     return (
       <div className="custom-legend">
@@ -42,8 +42,8 @@ export default class CustomLegend extends Component {
                       <span
                         className="label amount">
                         {/* eslint-disable-next-line no-nested-ternary */}
-                        {translations && settings
-                          ? formatNumberWithSettings(translations, settings, d.amount, true)
+                        {translations && settings && currency
+                          ? formatNumberWithSettings(currency, translations, settings, d.amount, true)
                           : formatter
                             ? formatter.format(d.amount)
                             : d.amount}
@@ -65,12 +65,14 @@ CustomLegend.propTypes = {
   shouldSplitBig: PropTypes.bool,
   formatter: PropTypes.object,
   translations: PropTypes.object,
-  settings: PropTypes.object
+  settings: PropTypes.object,
+  currency: PropTypes.string
 };
 
 CustomLegend.defaultProps = {
   shouldSplitBig: false,
   formatter: null,
   translations: null,
-  settings: null
+  settings: null,
+  currency: null
 };

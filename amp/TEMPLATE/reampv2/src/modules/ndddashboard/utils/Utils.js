@@ -1,4 +1,6 @@
 /* eslint-disable  no-bitwise */
+// eslint-disable-next-line no-unused-vars
+import React from 'react';
 import Gradient from 'javascript-color-gradient';
 import { format } from 'd3-format';
 
@@ -90,21 +92,47 @@ export function formatKMB(translations, precision, decimalSeparator) {
     .replace('.', decimalSeparator);
 }
 
-export function formatNumber(translations, value, precision, decimalSeparator, groupSeparator, numberDivider,
+export function formatNumber(currency, translations, value, precision, decimalSeparator, groupSeparator, numberDivider,
   numberDividerDescriptionKey) {
   const formatString = `${decimalSeparator}.${precision}f`;
   const dividedValue = (numberDivider && numberDividerDescriptionKey) ? value / numberDivider : value;
-  let txtVal = format(formatString)(dividedValue).replaceAll(',', groupSeparator).replace('.', decimalSeparator);
-  if (numberDivider && numberDividerDescriptionKey) {
-    txtVal += ` (${translations[numberDividerDescriptionKey]})`;
-  }
-  return txtVal;
+  // eslint-disable-next-line max-len
+  const txtVal = <b>{format(formatString)(dividedValue).replaceAll(',', groupSeparator).replace('.', decimalSeparator)}</b>;
+  return (
+    <>
+      {txtVal}
+      {' '}
+      {currency}
+      {numberDivider && numberDividerDescriptionKey
+        ? ` (${translations[`amp.ndd.dashboard:${numberDividerDescriptionKey}`]})`
+        : null}
+    </>
+  );
 }
 
-export function formatNumberWithSettings(translations, settings, value, useUnits) {
+export function formatNumberWithSettings(currency, translations, settings, value, useUnits) {
   if (useUnits) {
-    return formatNumber(translations, value, settings.precision, settings.decimalSeparator, settings.groupSeparator,
-      settings.numberDivider, settings.numberDividerDescriptionKey);
+    return formatNumber(currency, translations, value, settings.precision, settings.decimalSeparator,
+      settings.groupSeparator, settings.numberDivider, settings.numberDividerDescriptionKey);
   }
-  return formatNumber(translations, value, settings.precision, settings.decimalSeparator, settings.groupSeparator);
+  return formatNumber(currency, translations, value, settings.precision, settings.decimalSeparator,
+    settings.groupSeparator);
+}
+
+// TODO: Unify with formatNumber();
+export function formatOnlyNumber(settings, value) {
+  const formatString = `${settings.decimalSeparator}.${settings.precision}f`;
+  const dividedValue = (settings.numberDivider && settings.numberDividerDescriptionKey)
+    ? value / settings.numberDivider
+    : value;
+  return format(formatString)(dividedValue)
+    .replaceAll(',', settings.groupSeparator)
+    .replace('.', settings.decimalSeparator);
+}
+
+export function getAmountsInWord(translations, settings) {
+  if (settings.numberDivider > 1) {
+    return translations[`amp.ndd.dashboard:${settings.numberDividerDescriptionKey}-amounts`];
+  }
+  return '';
 }

@@ -201,7 +201,7 @@ class NestedDonutsProgramChart extends Component {
     const { settings, globalSettings, translations } = this.props;
     if (tooltipData) {
       const program = tooltipData.points[0].data.extraData[tooltipData.points[0].i];
-      const val = formatNumberWithSettings(translations, globalSettings, program.amount, true);
+      const val = formatNumberWithSettings(settings[CURRENCY_CODE], translations, globalSettings, program.amount, true);
       const totalAmount = tooltipData.points[0].data.extraData.reduce((i, j) => (i + j.amount), 0);
       return (
         <ToolTip

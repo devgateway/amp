@@ -90,7 +90,7 @@ public final class DashboardService {
      * @param program
      * @param filters
      */
-    private static void addFilterFromProgram(final AmpTheme program, AmpReportFilters filters) {
+    private static void addFilterFromProgram(final AmpTheme program, AmpReportFilters filters, boolean dontUseMapping) {
         Set<AmpActivityProgramSettings> programSettings = null;
         if (program.getIndlevel() == 1) {
             programSettings = program.getParentThemeId().getProgramSettings();
@@ -122,7 +122,12 @@ public final class DashboardService {
             fromMappingFilterColumn = new ReportColumn(ColumnConstants.TERTIARY_PROGRAM_LEVEL_3);
         } else if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES)
                 || singleProgramSetting.getName().equalsIgnoreCase(ProgramUtil.NATIONAL_PLAN_OBJECTIVE)) {
-            fromMappingFilterColumn = new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_3);
+            if (dontUseMapping) {
+                ReportColumn mainFilterColumn = new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1);
+                filters.addFilterRule(mainFilterColumn, new FilterRule(program.getAmpThemeId().toString(), true));
+            } else {
+                fromMappingFilterColumn = new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_3);
+            }
         } else if (singleProgramSetting.getName().equalsIgnoreCase(ProgramUtil.INDIRECT_PRIMARY_PROGRAM)) {
             if (program.getIndlevel() == 1) {
                 ReportColumn mainFilterColumn = new ReportColumn(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_1);
@@ -157,6 +162,7 @@ public final class DashboardService {
                 }
             });
         }
+
         if (fromMappingFilterColumn != null) {
             if (fromMappingIds.size() == 0) {
                 throw new RuntimeException("Filter ids cant be empty.");
@@ -497,7 +503,8 @@ public final class DashboardService {
             report = createReport(columns, innerMeasure, filters, params.getSettings(), false);
             return processDetailForIndirectData(report, yearString, program);
         } else {
-            addFilterFromProgram(program, filters);
+            boolean dontUseMapping = params.getSettings().get("dontUseMapping").toString().equals("true");
+            addFilterFromProgram(program, filters, dontUseMapping);
             ReportMeasure outerMeasure = getMeasureFromParams(params.getSettings());
             report = createReport(new ReportColumn[]{projectTitleColumn}, outerMeasure,
                     filters, params.getSettings(), true);

@@ -238,6 +238,7 @@ class MainDashboardContainer extends Component {
                 {nddLoaded && !nddLoadingPending ? (
                   <FundingByYearChart
                     selectedDirectProgram={selectedDirectProgram}
+                    selectedPrograms={selectedPrograms}
                     settings={settings}
                     filters={filters}
                     fundingType={fundingType}

@@ -129,16 +129,13 @@ class FundingByYearChart extends Component {
 
   onClick = (event) => {
     const {
-      _callYearDetailReport, settings, filters, fundingType
+      _callYearDetailReport, settings, filters, fundingType, selectedPrograms
     } = this.props;
     const { source } = this.state;
     this.setState({ showDetail: true, year: event.points[0].x, programName: event.points[0].data.text });
-    const newSettings = settings;
-    if (source === SRC_INDIRECT) {
-      newSettings.isShowIndirectDataForActivitiesDetail = true;
-    } else {
-      newSettings.isShowIndirectDataForActivitiesDetail = false;
-    }
+    const newSettings = { ...settings };
+    newSettings.isShowIndirectDataForActivitiesDetail = (source === SRC_INDIRECT);
+    newSettings.dontUseMapping = (selectedPrograms && selectedPrograms.length === 1);
     _callYearDetailReport(fundingType,
       filters,
       event.points[0].data.extraData.find(i => i.name === event.points[0].data.text).id,
@@ -351,7 +348,8 @@ FundingByYearChart.propTypes = {
   filters: PropTypes.object.isRequired,
   yearDetailPending: PropTypes.bool.isRequired,
   yearDetail: PropTypes.array,
-  error: PropTypes.object
+  error: PropTypes.object,
+  selectedPrograms: PropTypes.array.isRequired
 };
 
 FundingByYearChart.defaultProps = {

@@ -78,7 +78,7 @@ class NestedDonutsProgramChart extends Component {
    */
   // eslint-disable-next-line class-methods-use-this
   normalizePieData(data) {
-    const MINIMUM_PERCENTAGE = 1;
+    const MINIMUM_PERCENTAGE = 2;
     if (data.find(i => i.percentageInTotal < MINIMUM_PERCENTAGE)) {
       const biggest = data.sort((i, j) => j.percentageInTotal - i.percentageInTotal)[0];
       let minusPercentage = 0;

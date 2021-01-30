@@ -50,18 +50,18 @@ class FundingByYearChart extends Component {
         // TODO: maybe we can show the indirect funding for the selected direct program.
         : (sourceData.filter(i => i[PROGRAMLVL1][CODE] === selectedDirectProgram[CODE]));
       filteredData.forEach(i => {
-        const directProgram = !selectedDirectProgram ? i[PROGRAMLVL1] : i[PROGRAMLVL2];
-        const item = ret.find(j => j[CODE] === directProgram[CODE]);
+        const program = !selectedDirectProgram ? i[PROGRAMLVL1] : i[PROGRAMLVL2];
+        const item = ret.find(j => j[CODE] === program[CODE]);
         const auxAmounts = i.amountsByYear;
         if (item) {
           item.values = this.sortAmountsByYear(this.addAmountsByYear(item.values, Object.keys(auxAmounts)
             .map(j => ({ [j]: auxAmounts[j] }))));
         } else {
           ret.push({
-            [CODE]: directProgram[CODE],
-            name: directProgram.name,
+            [CODE]: program[CODE],
+            name: program.name,
             values: Object.keys(auxAmounts).map(j => ({ [j]: auxAmounts[j] })),
-            id: directProgram.objectId
+            id: program.objectId
           });
         }
       });
@@ -131,12 +131,19 @@ class FundingByYearChart extends Component {
     const {
       _callYearDetailReport, settings, filters, fundingType
     } = this.props;
+    const { source } = this.state;
     this.setState({ showDetail: true, year: event.points[0].x, programName: event.points[0].data.text });
+    const newSettings = settings;
+    if (source === SRC_INDIRECT) {
+      newSettings.isShowIndirectDataForActivitiesDetail = true;
+    } else {
+      newSettings.isShowIndirectDataForActivitiesDetail = false;
+    }
     _callYearDetailReport(fundingType,
       filters,
       event.points[0].data.extraData.find(i => i.name === event.points[0].data.text).id,
       event.points[0].x,
-      settings);
+      newSettings);
   }
 
   createModalWindow = () => {
@@ -195,6 +202,12 @@ class FundingByYearChart extends Component {
     }
   }
 
+  canEnableShowIndirectDataOption = () => {
+    const { data, selectedDirectProgram } = this.props;
+    const ret = data.find(d => d.indirectPrograms.length > 0) && !selectedDirectProgram;
+    return ret;
+  }
+
   render() {
     const { translations, globalSettings } = this.props;
     const {
@@ -231,18 +244,20 @@ class FundingByYearChart extends Component {
               {translations[`${TRN_PREFIX}fy-direct`]}
             </label>
           </div>
-          <div className="radio-fy-source">
-            <input
-              type="radio"
-              id="fy-indirect"
-              name="fy-source"
-              value="1"
-              checked={source === SRC_INDIRECT ? 'checked' : null}
-              onChange={this.onChangeSource} />
-            <label htmlFor="fy-indirect">
-              {translations[`${TRN_PREFIX}fy-indirect`]}
-            </label>
-          </div>
+          {this.canEnableShowIndirectDataOption() ? (
+            <div className="radio-fy-source">
+              <input
+                type="radio"
+                id="fy-indirect"
+                name="fy-source"
+                value="1"
+                checked={source === SRC_INDIRECT ? 'checked' : null}
+                onChange={this.onChangeSource} />
+              <label htmlFor="fy-indirect">
+                {translations[`${TRN_PREFIX}fy-indirect`]}
+              </label>
+            </div>
+          ) : null }
         </div>
         <Plot
           key="fundingByYearChart"

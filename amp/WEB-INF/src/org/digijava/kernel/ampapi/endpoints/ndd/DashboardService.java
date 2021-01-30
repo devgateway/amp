@@ -83,94 +83,6 @@ public final class DashboardService {
         return report;
     }
 
-    /**
-     * Add the program as a new filter option to the correct category (primary program, secondary program, etc).
-     * Note: for simplicity we assume "program" can be of level 1 or 2 only.
-     *
-     * @param program
-     * @param filters
-     */
-    private static void addFilterFromProgram(final AmpTheme program, AmpReportFilters filters, boolean dontUseMapping) {
-        Set<AmpActivityProgramSettings> programSettings = null;
-        if (program.getIndlevel() == 1) {
-            programSettings = program.getParentThemeId().getProgramSettings();
-        } else {
-            programSettings = program.getParentThemeId().getParentThemeId().getProgramSettings();
-        }
-        if (programSettings == null || programSettings.size() != 1) {
-            throw new RuntimeException("Cant determine the filter for the report.");
-        }
-
-        boolean isIndirect;
-        IndirectProgramMappingConfiguration indirectMapping = nddService.getIndirectProgramMappingConfiguration();
-        ProgramMappingConfiguration regularMapping = nddService.getProgramMappingConfiguration();
-        AmpTheme rootProgram = getProgramByLvl(program, 0);
-        if ((rootProgram.getAmpThemeId().equals(indirectMapping.getDstProgram().getId()) ||
-                rootProgram.getAmpThemeId().equals(indirectMapping.getSrcProgram().getId()))
-                && indirectMapping.getDstProgram().isIndirect()) {
-            isIndirect = true;
-        } else {
-            isIndirect = false;
-        }
-        AmpActivityProgramSettings singleProgramSetting = ((AmpActivityProgramSettings) programSettings.toArray()[0]);
-        ReportColumn fromMappingFilterColumn = null;
-        if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.PRIMARY_PROGRAM)) {
-            fromMappingFilterColumn = new ReportColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_3);
-        } else if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.SECONDARY_PROGRAM)) {
-            fromMappingFilterColumn = new ReportColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_3);
-        } else if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.TERTIARY_PROGRAM)) {
-            fromMappingFilterColumn = new ReportColumn(ColumnConstants.TERTIARY_PROGRAM_LEVEL_3);
-        } else if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES)
-                || singleProgramSetting.getName().equalsIgnoreCase(ProgramUtil.NATIONAL_PLAN_OBJECTIVE)) {
-            if (dontUseMapping) {
-                ReportColumn mainFilterColumn = new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1);
-                filters.addFilterRule(mainFilterColumn, new FilterRule(program.getAmpThemeId().toString(), true));
-            } else {
-                fromMappingFilterColumn = new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_3);
-            }
-        } else if (singleProgramSetting.getName().equalsIgnoreCase(ProgramUtil.INDIRECT_PRIMARY_PROGRAM)) {
-            if (program.getIndlevel() == 1) {
-                ReportColumn mainFilterColumn = new ReportColumn(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_1);
-                filters.addFilterRule(mainFilterColumn, new FilterRule(program.getAmpThemeId().toString(), true));
-            } else {
-                ReportColumn mainFilterColumn = new ReportColumn(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_2);
-                filters.addFilterRule(mainFilterColumn, new FilterRule(program.getAmpThemeId().toString(), true));
-            }
-        }
-
-        // Add filter by Program with ids from NDD mapping. Only add ids from clicked program.
-        List<String> fromMappingIds = new ArrayList<>();
-        if (isIndirect) {
-            indirectMapping.getProgramMapping().forEach(item -> {
-                if (program.getIndlevel() == 1) {
-                    if (getProgramByLvl(item.getOldTheme(), 1).getAmpThemeId().equals(program.getAmpThemeId())) {
-                        fromMappingIds.add(item.getOldTheme().getAmpThemeId().toString());
-                    }
-                } else {
-                    if (getProgramByLvl(item.getOldTheme(), 1).getAmpThemeId()
-                            .equals(getProgramByLvl(program, 1).getAmpThemeId())) {
-                        if (getProgramByLvl(item.getOldTheme(), 2).getAmpThemeId().equals(program.getAmpThemeId())) {
-                            fromMappingIds.add(item.getOldTheme().getAmpThemeId().toString());
-                        }
-                    }
-                }
-            });
-        } else {
-            regularMapping.getProgramMapping().forEach(item -> {
-                if (getProgramByLvl(item.getSrcTheme(), 1).getAmpThemeId().equals(program.getAmpThemeId())) {
-                    fromMappingIds.add(item.getSrcTheme().getAmpThemeId().toString());
-                }
-            });
-        }
-
-        if (fromMappingFilterColumn != null) {
-            if (fromMappingIds.size() == 0) {
-                throw new RuntimeException("Filter ids cant be empty.");
-            }
-            filters.addFilterRule(fromMappingFilterColumn, new FilterRule(fromMappingIds, true));
-        }
-    }
-
     private static AmpTheme getProgramByLvl(AmpTheme program, int lvl) {
         AmpTheme root = program;
         while (root.getIndlevel() > lvl) {
@@ -509,6 +421,109 @@ public final class DashboardService {
             report = createReport(new ReportColumn[]{projectTitleColumn}, outerMeasure,
                     filters, params.getSettings(), true);
             return processDetailForDirectData(report, yearString);
+        }
+    }
+
+    /**
+     * Add the program as a new filter option to the correct category (primary program, secondary program, etc).
+     * Note: for simplicity we assume "program" can be of level 1 or 2 only.
+     *
+     * @param program
+     * @param filters
+     */
+    private static void addFilterFromProgram(final AmpTheme program, AmpReportFilters filters, boolean dontUseMapping) {
+        Set<AmpActivityProgramSettings> programSettings = null;
+        if (program.getIndlevel() == 1) {
+            programSettings = program.getParentThemeId().getProgramSettings();
+        } else {
+            programSettings = program.getParentThemeId().getParentThemeId().getProgramSettings();
+        }
+        if (programSettings == null || programSettings.size() != 1) {
+            throw new RuntimeException("Cant determine the filter for the report.");
+        }
+
+        boolean isIndirect;
+        IndirectProgramMappingConfiguration indirectMapping = nddService.getIndirectProgramMappingConfiguration();
+        ProgramMappingConfiguration regularMapping = nddService.getProgramMappingConfiguration();
+        AmpTheme rootProgram = getProgramByLvl(program, 0);
+        if ((rootProgram.getAmpThemeId().equals(indirectMapping.getDstProgram().getId()) ||
+                rootProgram.getAmpThemeId().equals(indirectMapping.getSrcProgram().getId()))
+                && indirectMapping.getDstProgram().isIndirect()) {
+            isIndirect = true;
+        } else {
+            isIndirect = false;
+        }
+        AmpActivityProgramSettings singleProgramSetting = ((AmpActivityProgramSettings) programSettings.toArray()[0]);
+        ReportColumn fromMappingFilterColumn = null;
+        if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.PRIMARY_PROGRAM)) {
+            if (dontUseMapping) {
+                ReportColumn mainFilterColumn = new ReportColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1);
+                filters.addFilterRule(mainFilterColumn, new FilterRule(program.getAmpThemeId().toString(), true));
+            } else {
+                fromMappingFilterColumn = new ReportColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_3);
+            }
+        } else if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.SECONDARY_PROGRAM)) {
+            if (dontUseMapping) {
+                ReportColumn mainFilterColumn = new ReportColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_1);
+                filters.addFilterRule(mainFilterColumn, new FilterRule(program.getAmpThemeId().toString(), true));
+            } else {
+                fromMappingFilterColumn = new ReportColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_3);
+            }
+        } else if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.TERTIARY_PROGRAM)) {
+            if (dontUseMapping) {
+                ReportColumn mainFilterColumn = new ReportColumn(ColumnConstants.TERTIARY_PROGRAM_LEVEL_1);
+                filters.addFilterRule(mainFilterColumn, new FilterRule(program.getAmpThemeId().toString(), true));
+            } else {
+                fromMappingFilterColumn = new ReportColumn(ColumnConstants.TERTIARY_PROGRAM_LEVEL_3);
+            }
+        } else if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES)
+                || singleProgramSetting.getName().equalsIgnoreCase(ProgramUtil.NATIONAL_PLAN_OBJECTIVE)) {
+            if (dontUseMapping) {
+                ReportColumn mainFilterColumn = new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1);
+                filters.addFilterRule(mainFilterColumn, new FilterRule(program.getAmpThemeId().toString(), true));
+            } else {
+                fromMappingFilterColumn = new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_3);
+            }
+        } else if (singleProgramSetting.getName().equalsIgnoreCase(ProgramUtil.INDIRECT_PRIMARY_PROGRAM)) {
+            if (program.getIndlevel() == 1) {
+                ReportColumn mainFilterColumn = new ReportColumn(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_1);
+                filters.addFilterRule(mainFilterColumn, new FilterRule(program.getAmpThemeId().toString(), true));
+            } else {
+                ReportColumn mainFilterColumn = new ReportColumn(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_2);
+                filters.addFilterRule(mainFilterColumn, new FilterRule(program.getAmpThemeId().toString(), true));
+            }
+        }
+
+        // Add filter by Program with ids from NDD mapping. Only add ids from clicked program.
+        List<String> fromMappingIds = new ArrayList<>();
+        if (isIndirect) {
+            indirectMapping.getProgramMapping().forEach(item -> {
+                if (program.getIndlevel() == 1) {
+                    if (getProgramByLvl(item.getOldTheme(), 1).getAmpThemeId().equals(program.getAmpThemeId())) {
+                        fromMappingIds.add(item.getOldTheme().getAmpThemeId().toString());
+                    }
+                } else {
+                    if (getProgramByLvl(item.getOldTheme(), 1).getAmpThemeId()
+                            .equals(getProgramByLvl(program, 1).getAmpThemeId())) {
+                        if (getProgramByLvl(item.getOldTheme(), 2).getAmpThemeId().equals(program.getAmpThemeId())) {
+                            fromMappingIds.add(item.getOldTheme().getAmpThemeId().toString());
+                        }
+                    }
+                }
+            });
+        } else {
+            regularMapping.getProgramMapping().forEach(item -> {
+                if (getProgramByLvl(item.getSrcTheme(), 1).getAmpThemeId().equals(program.getAmpThemeId())) {
+                    fromMappingIds.add(item.getSrcTheme().getAmpThemeId().toString());
+                }
+            });
+        }
+
+        if (fromMappingFilterColumn != null) {
+            if (fromMappingIds.size() == 0) {
+                throw new RuntimeException("Filter ids cant be empty.");
+            }
+            filters.addFilterRule(fromMappingFilterColumn, new FilterRule(fromMappingIds, true));
         }
     }
 }

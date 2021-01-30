@@ -49,21 +49,22 @@ public class AmpThemeSearchModel extends AbstractAmpAutoCompleteModel<AmpTheme> 
                     ProgramUtil.getAmpActivityProgramSettings(INDIRECT_PRIMARY_PROGRAM);
             Long indProgram = indirectProgramSetting != null ? indirectProgramSetting.getDefaultHierarchyId() : null;
             AmpTheme def = getCurrentRootTheme();
-            Set<AmpTheme> mappedPrograms = getMappedDirectPrograms();
+            if (def != null) {
+                Set<AmpTheme> mappedPrograms = getMappedDirectPrograms();
 
-            List<AmpTheme> filteredPrograms = getAllPrograms().stream()
-                    .filter(p -> p.getRootTheme() != null)
-                    .filter(p -> p.getRootTheme().getAmpThemeId().equals(def.getAmpThemeId()))
-                    .filter(p -> mappedPrograms == null || mappedPrograms.contains(p))
-                    .filter(p -> indProgram == null || !p.getRootTheme().getAmpThemeId().equals(indProgram))
-                    .collect(Collectors.toList());
+                List<AmpTheme> filteredPrograms = getAllPrograms().stream()
+                        .filter(p -> p.getRootTheme() != null)
+                        .filter(p -> p.getRootTheme().getAmpThemeId().equals(def.getAmpThemeId()))
+                        .filter(p -> mappedPrograms == null || mappedPrograms.contains(p))
+                        .filter(p -> indProgram == null || !p.getRootTheme().getAmpThemeId().equals(indProgram))
+                        .collect(Collectors.toList());
 
-            if (mappedPrograms != null) {
-                ret.addAll(filteredPrograms);
-            } else {
-                ret.addAll((Collection<? extends AmpTheme>) createTreeView(filteredPrograms));
+                if (mappedPrograms != null) {
+                    ret.addAll(filteredPrograms);
+                } else {
+                    ret.addAll((Collection<? extends AmpTheme>) createTreeView(filteredPrograms));
+                }
             }
-
         } catch (Exception e) {
             throw new RuntimeException("Cannot retrieve all themes from db", e);
         }

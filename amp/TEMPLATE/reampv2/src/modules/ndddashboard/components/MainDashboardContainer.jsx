@@ -176,46 +176,50 @@ class MainDashboardContainer extends Component {
             <div className="section_title">
               <span>{translations['amp.ndd.dashboard:legends']}</span>
             </div>
-            {programLegend ? (
+            {programLegend && programLegend[0].total ? (
               <div className="legends-container">
                 <div className={`even-${selectedDirectProgram ? 'third' : 'middle'}`}>
                   <div className="legend-title">
-                    {programs.direct
-                      ? (`${programs.direct.value}`)
-                      : translations['amp.ndd.dashboard:loading']}
-                    :
+                    <span>
+                      {programs.direct
+                        ? (`${programs.direct.value}`)
+                        : translations['amp.ndd.dashboard:loading']}
+                    </span>
                     <span className="amount">
-                      {formatNumberWithSettings(translations, globalSettings, programLegend[0].total, true)}
-                      {` ${settings[CURRENCY_CODE]}`}
+                      {formatNumberWithSettings(settings[CURRENCY_CODE], translations, globalSettings,
+                        programLegend[0].total, true)}
                     </span>
                   </div>
                   <CustomLegend
                     settings={globalSettings}
                     translations={translations}
+                    currency={settings[CURRENCY_CODE]}
                     data={programLegend[0].legends.sort((a, b) => b.amount - a.amount)}
                     colorMap={CHART_COLOR_MAP.get(selectedDirectProgram ? `${PROGRAMLVL1}_${selectedDirectProgram.code}`
                       : PROGRAMLVL1)} />
                 </div>
-                {selectedDirectProgram === null
-                && (
-                  <div className="even-middle">
-                    <div className="legend-title">
-                      {programs.direct
-                        ? (`${programs.indirect1.value}`)
-                        : translations['amp.ndd.dashboard:loading']}
-                      :
-                      <span className="amount">
-                        {formatNumberWithSettings(translations, globalSettings, programLegend[0].total, true)}
-                        {` ${settings[CURRENCY_CODE]}`}
-                      </span>
+                {selectedDirectProgram === null && programLegend[1].total
+                  ? (
+                    <div className="even-middle">
+                      <div className="legend-title">
+                        <span>
+                          {programs.indirect1
+                            ? (`${programs.indirect1.value}`)
+                            : translations['amp.ndd.dashboard:loading']}
+                        </span>
+                        <span className="amount">
+                          {formatNumberWithSettings(settings[CURRENCY_CODE], translations, globalSettings,
+                            programLegend[1].total, true)}
+                        </span>
+                      </div>
+                      <CustomLegend
+                        settings={globalSettings}
+                        translations={translations}
+                        currency={settings[CURRENCY_CODE]}
+                        data={programLegend[1].legends.sort((a, b) => b.amount - a.amount)}
+                        colorMap={CHART_COLOR_MAP.get(INDIRECT_PROGRAMS)} />
                     </div>
-                    <CustomLegend
-                      settings={globalSettings}
-                      translations={translations}
-                      data={programLegend[1].legends.sort((a, b) => b.amount - a.amount)}
-                      colorMap={CHART_COLOR_MAP.get(INDIRECT_PROGRAMS)} />
-                  </div>
-                )}
+                  ) : null}
                 {selectedDirectProgram !== null
                 && (
                   <div className="even-sixth">
@@ -236,6 +240,7 @@ class MainDashboardContainer extends Component {
                 {nddLoaded && !nddLoadingPending ? (
                   <FundingByYearChart
                     selectedDirectProgram={selectedDirectProgram}
+                    selectedPrograms={selectedPrograms}
                     settings={settings}
                     filters={filters}
                     fundingType={fundingType}

@@ -92,9 +92,11 @@
 
 .legend-title .amount {
     font-weight: bold;
-    padding-left: 10px;
+    display: block;
+    width: max-content;
+    color: gray;
 }
 
 .custom-legend-inner .symbol-container {
-    padding-left: 25px;
+    padding-left: 15px;
 }

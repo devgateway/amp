@@ -12,7 +12,6 @@ const styles = {
 };
 
 class TopChart extends Component {
-
   getColor(item) {
     return colors[item.index];
   }
@@ -31,7 +30,7 @@ class TopChart extends Component {
       id: '-9999',
       name: translations['amp.ndd.dashboard:others'],
       value: o,
-      formattedAmount: formatNumberWithSettings(translations, globalSettings, o, true)
+      formattedAmount: formatNumberWithSettings('', translations, globalSettings, o, true)
     };
     // TODO apply format from global settings
   }
@@ -40,7 +39,7 @@ class TopChart extends Component {
     const { data, globalSettings, translations } = this.props;
     const transformedData = data.values.slice(0, 5).map(v => ({
       id: v.id.toString(),
-      formattedAmount: formatNumberWithSettings(translations, globalSettings, v.amount, true),
+      formattedAmount: formatNumberWithSettings('', translations, globalSettings, v.amount, true),
       name: v.name,
       value: v.amount,
     }));

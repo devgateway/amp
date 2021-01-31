@@ -3,7 +3,7 @@ import { Button } from 'react-bootstrap';
 import Modal from 'react-bootstrap-modal';
 import PropTypes from 'prop-types';
 import { TRN_PREFIX } from '../../utils/constants';
-import { formatNumberWithSettings } from '../../utils/Utils';
+import { formatOnlyNumber, getAmountsInWord } from '../../utils/Utils';
 
 const MAX_RECORDS = 50;
 
@@ -32,7 +32,7 @@ export default class YearDetail extends Component {
             </a>
           </td>
           <td className="amount-column">
-            {formatNumberWithSettings(translations, globalSettings, i.amount, false)}
+            {formatOnlyNumber(globalSettings, i.amount)}
           </td>
         </tr>
       );
@@ -40,13 +40,16 @@ export default class YearDetail extends Component {
 
     return (
       <div>
+        <span style={{ fontWeight: 'bold' }}>
+          {getAmountsInWord(translations, globalSettings)}
+        </span>
         <table className="table table-striped">
           <thead>
             <tr key={Math.random()}>
               <th className="header-row"><span>{translations[`${TRN_PREFIX}project-title`]}</span></th>
               <th className="header-row">
                 <span>
-                  {`${fundingType} (${translations[globalSettings.numberDividerDescriptionKey]} ${currencyCode})`}
+                  {`${fundingType} (${currencyCode})`}
                 </span>
               </th>
             </tr>
@@ -94,11 +97,6 @@ export default class YearDetail extends Component {
           {data && data.length > 0 ? <div className="detail-table-container">{this.createTable()}</div> : null}
           {error ? <span className="error">{JSON.stringify(error)}</span> : null}
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="primary" onClick={this.handleClose}>
-            {translations[`${TRN_PREFIX}close`]}
-          </Button>
-        </Modal.Footer>
       </Modal>
     );
   }

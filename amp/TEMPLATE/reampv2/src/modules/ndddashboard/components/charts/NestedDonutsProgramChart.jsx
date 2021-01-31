@@ -9,12 +9,13 @@ import Plotly from 'plotly.js';
 import createPlotlyComponent from 'react-plotly.js/factory';
 import {
   DIRECT_PROGRAM, INDIRECT_PROGRAMS, PROGRAMLVL1, AMOUNT, CODE, DIRECT, INDIRECT,
-  TRANSITIONS, PROGRAMLVL2, AVAILABLE_COLORS, TRN_PREFIX, CURRENCY_CODE
+  TRANSITIONS, PROGRAMLVL2, TRN_PREFIX, CURRENCY_CODE
 } from '../../utils/constants';
 import {
-  addAlpha, formatNumberWithSettings, getCustomColor, getGradient
+  addAlpha, formatNumberWithSettings, getCustomColor
 } from '../../utils/Utils';
 import ToolTip from '../tooltips/ToolTip';
+// eslint-disable-next-line no-unused-vars
 import styles from '../styles.css';
 
 const Plot = createPlotlyComponent(Plotly);
@@ -77,7 +78,7 @@ class NestedDonutsProgramChart extends Component {
    */
   // eslint-disable-next-line class-methods-use-this
   normalizePieData(data) {
-    const MINIMUM_PERCENTAGE = 1;
+    const MINIMUM_PERCENTAGE = 2;
     if (data.find(i => i.percentageInTotal < MINIMUM_PERCENTAGE)) {
       const biggest = data.sort((i, j) => j.percentageInTotal - i.percentageInTotal)[0];
       let minusPercentage = 0;
@@ -103,14 +104,14 @@ class NestedDonutsProgramChart extends Component {
     const ret = [];
     const { data } = this.props;
     if (data && data.length > 0) {
-      outerData.forEach((i, index) => {
+      outerData.forEach(i => {
         const innerSubGroup = [];
         const subProgramsData = data.filter(j => j[DIRECT_PROGRAM][PROGRAMLVL1][CODE] === i[CODE]);
         subProgramsData.forEach(j => {
           j[INDIRECT_PROGRAMS].forEach(k => {
             if (innerSubGroup.filter(l => l[CODE] === k[PROGRAMLVL1][CODE]).length === 0) {
               innerSubGroup.push({
-                [CODE]: k[PROGRAMLVL1][CODE] + Array(index).fill(' ').join(''),
+                [CODE]: k[PROGRAMLVL1][CODE],
                 originalAmount: k[AMOUNT],
                 name: k[PROGRAMLVL1].name,
                 directProgramCode: j[DIRECT_PROGRAM][PROGRAMLVL1][CODE]
@@ -200,7 +201,7 @@ class NestedDonutsProgramChart extends Component {
     const { settings, globalSettings, translations } = this.props;
     if (tooltipData) {
       const program = tooltipData.points[0].data.extraData[tooltipData.points[0].i];
-      const val = formatNumberWithSettings(translations, globalSettings, program.amount, true);
+      const val = formatNumberWithSettings(settings[CURRENCY_CODE], translations, globalSettings, program.amount, true);
       const totalAmount = tooltipData.points[0].data.extraData.reduce((i, j) => (i + j.amount), 0);
       return (
         <ToolTip
@@ -212,7 +213,7 @@ class NestedDonutsProgramChart extends Component {
           value={program.amount}
           minWidth={400}
           globalSettings={globalSettings}
-        />
+          />
       );
     }
     return null;

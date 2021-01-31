@@ -6,22 +6,24 @@
     border-radius: 5px;
     background-color: #ffffff;
     padding: 0px;
-    width: 180px;
+    width: 250px;
     text-align: left !important;
 }
 
 .generic-tooltip .formattedValue .generic-tooltip .currency {
     font-size: 14px;
 }
+
 .generic-tooltip .currency {
     margin-left: 5px;
 }
 
 .generic-tooltip .formattedValue {
-    font-weight: bold;
     margin-left: 10px;
+    /*color: #163f66;*/
 }
-.generic-tooltip .of-total{
+
+.generic-tooltip .of-total {
     margin-left: 10px;
 }
 
@@ -44,6 +46,7 @@
     color: black;
     font-size: 14px;
 }
-.generic-tooltip .element{
+
+.generic-tooltip .element {
     padding: 5px;
 }

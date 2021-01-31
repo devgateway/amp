@@ -22,7 +22,7 @@ class ProgramsHeader extends Component {
           <tbody>
             <tr>
               <td>
-                <HelpTooltip labelKey="tooltip-direct-programs" />
+                <HelpTooltip labelKey={`${trnPrefix}tooltip-direct-programs`} />
                 <ProgramSelect
                   disabled={busy}
                   placeholder={translations[`${trnPrefix}choose_main_src_program`]}
@@ -33,7 +33,7 @@ class ProgramsHeader extends Component {
                   level={0} />
               </td>
               <td style={{ paddingRight: '0%' }}>
-                <HelpTooltip labelKey="tooltip-indirect-programs" />
+                <HelpTooltip labelKey={`${trnPrefix}tooltip-indirect-programs`} />
                 <ProgramSelect
                   disabled={busy}
                   placeholder={translations[`${trnPrefix}choose_main_dst_program`]}

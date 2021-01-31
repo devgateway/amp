@@ -34,12 +34,16 @@
   "amp.admin.ndd.indirect:warning_on_change_destination_program": "Warning: The new Indirect Program will be removes from all activities.",
   "amp.admin.ndd.indirect:confirm-change-destination-program": "Are you sure you want to : The new Indirect Program will be removes from all activities.",
   "amp.admin.ndd.indirect:notification-saved-ok": "All mappings saved correctly.",
-  "amp.admin.ndd.indirect:page-title": "Aid Management Platform - NDD Mappings Manager",
+  "amp.admin.ndd.indirect:page-title": "Aid Management Platform - Program Mapping Manager",
   "amp.admin.ndd.indirect:required-fields": "Required Fields",
   "amp.admin.ndd.indirect:loading": "Loading...",
   "amp.admin.ndd.indirect:button-update-activities": "Update All Activities",
   "amp.admin.ndd.indirect:button-update-activities-confirmation": "Are you sure you want to update all activities with the current mappings? (This process could take several minutes)",
   "amp.admin.ndd.indirect:update-activities-successful": "Activities where successfully updated",
   "amp.admin.ndd.indirect:update-activities-wait": "Updating activities, please wait...",
-  "amp.admin.ndd.indirect:update-activities-error": "Error updating activities."
+  "amp.admin.ndd.indirect:update-activities-error": "Error updating activities.",
+  "amp.admin.ndd.indirect:tooltip-direct-programs": "The direct program is defined as your reference program for your mapping. Generally, it is your national development strategy but you can choose to swap the order and make an international program your referring point. Please note that the direct program will be displayed in the outer ring of the dashboard.",
+  "amp.admin.ndd.indirect:tooltip-indirect-programs": "The indirect program is mapped against your reference program. If your reference program is your national development strategy, the indirect program could be any regional/international strategy (ex. SDGs, New Deal, etc.) or vice-versa. Please note that the indirect program will be displayed in the inner ring of the dashboard. The assigned percentage will be automatically distributed. This program will not be seen in the activity form.",
+  "amp.admin.ndd.indirect:tooltip-direct-programs-list": "Please specify the current levels of your source program to begin the mapping exercise. Note that you will have to select up to the level defined in the Multi Program Manager.",
+  "amp.admin.ndd.indirect:tooltip-indirect-programs-list": "Please define the corresponding destination program levels. Note that you will have to select up to the level defined in the Multi Program Manager."
 }

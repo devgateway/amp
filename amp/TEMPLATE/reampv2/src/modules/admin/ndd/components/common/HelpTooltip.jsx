@@ -13,8 +13,7 @@ class HelpTooltip extends Component {
     const { translations, labelKey } = this.props;
     const tooltip = (
       <Tooltip id={`${labelKey}-icon-tooltip`}>
-        Insert text here
-        {translations[`amp.data-freezing:tooltip-${labelKey}`]}
+        {translations[labelKey]}
       </Tooltip>
     );
     return (

@@ -20,12 +20,12 @@ class ProgramSelectGroupList extends Component {
           <thead>
             <tr>
               <th>
-                <HelpTooltip labelKey="tooltip-direct-programs-list" />
+                <HelpTooltip labelKey={`${trnPrefix}tooltip-direct-programs-list`} />
                 <span data-field="srcProgramSelectGroup">{translations[`${trnPrefix}src-programs-title`]}</span>
                 <RequiredMark />
               </th>
               <th>
-                <HelpTooltip labelKey="tooltip-direct-programs-list" />
+                <HelpTooltip labelKey={`${trnPrefix}tooltip-indirect-programs-list`} />
                 <span data-field="dstProgramSelectGroup">{translations[`${trnPrefix}dst-programs-title`]}</span>
                 <RequiredMark />
               </th>

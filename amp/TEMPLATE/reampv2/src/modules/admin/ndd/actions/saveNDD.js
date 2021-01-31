@@ -10,8 +10,8 @@ function saveNDD(src, dst, mappings, urlSavePrograms, urlSaveConfig) {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            'src-program': src.id,
-            'dst-program': dst.id
+            'src-program': src ? src.id : null,
+            'dst-program': dst ? dst.id : null
           })
         }).then(res => {
           processResponse(res);
@@ -36,6 +36,8 @@ function saveNDD(src, dst, mappings, urlSavePrograms, urlSaveConfig) {
         window.location.replace('/login.do');
         dispatch(saveNDDError({ error: 'not logged' }));
       }
+    }).catch(error => {
+      dispatch(saveNDDError(error));
     });
   };
 }

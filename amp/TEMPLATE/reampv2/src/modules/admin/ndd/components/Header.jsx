@@ -67,7 +67,7 @@ Header.propTypes = {
   onAddRow: PropTypes.func.isRequired,
   onSaveAll: PropTypes.func.isRequired,
   onRevertAll: PropTypes.func.isRequired,
-  translations: PropTypes.bool.isRequired,
+  translations: PropTypes.object.isRequired,
   onUpdateActivities: PropTypes.func.isRequired,
   src: PropTypes.object,
   dst: PropTypes.object,

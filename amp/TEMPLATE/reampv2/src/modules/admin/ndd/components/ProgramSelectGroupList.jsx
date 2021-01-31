@@ -58,8 +58,13 @@ ProgramSelectGroupList.propTypes = {
   remove: PropTypes.func.isRequired,
   src: PropTypes.object,
   dst: PropTypes.object,
-  translations: PropTypes.array.isRequired,
+  translations: PropTypes.object.isRequired,
   busy: PropTypes.bool.isRequired
+};
+
+ProgramSelectGroupList.defaultProps = {
+  src: null,
+  dst: null,
 };
 
 const mapStateToProps = state => ({

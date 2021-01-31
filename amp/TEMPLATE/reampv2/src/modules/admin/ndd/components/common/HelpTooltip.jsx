@@ -30,7 +30,7 @@ class HelpTooltip extends Component {
 HelpTooltip.contextType = NDDContext;
 
 HelpTooltip.propTypes = {
-  translations: PropTypes.array.isRequired,
+  translations: PropTypes.object.isRequired,
   labelKey: PropTypes.string.isRequired
 };
 

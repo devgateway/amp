@@ -20,12 +20,12 @@ class ProgramSelectGroupList extends Component {
           <thead>
             <tr>
               <th>
-                <HelpTooltip labelKey="tooltip-direct-programs-list" />
+                <HelpTooltip labelKey={`${trnPrefix}tooltip-direct-programs-list`} />
                 <span data-field="srcProgramSelectGroup">{translations[`${trnPrefix}src-programs-title`]}</span>
                 <RequiredMark />
               </th>
               <th>
-                <HelpTooltip labelKey="tooltip-direct-programs-list" />
+                <HelpTooltip labelKey={`${trnPrefix}tooltip-indirect-programs-list`} />
                 <span data-field="dstProgramSelectGroup">{translations[`${trnPrefix}dst-programs-title`]}</span>
                 <RequiredMark />
               </th>
@@ -58,8 +58,13 @@ ProgramSelectGroupList.propTypes = {
   remove: PropTypes.func.isRequired,
   src: PropTypes.object,
   dst: PropTypes.object,
-  translations: PropTypes.array.isRequired,
+  translations: PropTypes.object.isRequired,
   busy: PropTypes.bool.isRequired
+};
+
+ProgramSelectGroupList.defaultProps = {
+  src: null,
+  dst: null,
 };
 
 const mapStateToProps = state => ({

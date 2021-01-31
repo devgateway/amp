@@ -31,7 +31,7 @@ const mapStateToProps = state => ({
 });
 
 NDDAdminNavigator.propTypes = {
-  translations: PropTypes.array.isRequired
+  translations: PropTypes.object.isRequired
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);

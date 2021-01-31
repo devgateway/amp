@@ -339,7 +339,7 @@ class FormPrograms extends Component {
 FormPrograms.contextType = NDDContext;
 
 FormPrograms.propTypes = {
-  translations: PropTypes.array.isRequired,
+  translations: PropTypes.object.isRequired,
   error: PropTypes.object,
   pending: PropTypes.bool,
   updating: PropTypes.bool,

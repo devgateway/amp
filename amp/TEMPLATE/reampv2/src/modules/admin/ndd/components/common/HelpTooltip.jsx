@@ -13,8 +13,7 @@ class HelpTooltip extends Component {
     const { translations, labelKey } = this.props;
     const tooltip = (
       <Tooltip id={`${labelKey}-icon-tooltip`}>
-        Insert text here
-        {translations[`amp.data-freezing:tooltip-${labelKey}`]}
+        {translations[labelKey]}
       </Tooltip>
     );
     return (
@@ -31,7 +30,7 @@ class HelpTooltip extends Component {
 HelpTooltip.contextType = NDDContext;
 
 HelpTooltip.propTypes = {
-  translations: PropTypes.array.isRequired,
+  translations: PropTypes.object.isRequired,
   labelKey: PropTypes.string.isRequired
 };
 

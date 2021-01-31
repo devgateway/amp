@@ -446,8 +446,8 @@ public final class DashboardService {
         IndirectProgramMappingConfiguration indirectMapping = nddService.getIndirectProgramMappingConfiguration();
         ProgramMappingConfiguration regularMapping = nddService.getProgramMappingConfiguration();
         AmpTheme rootProgram = getProgramByLvl(program, 0);
-        if ((rootProgram.getAmpThemeId().equals(indirectMapping.getDstProgram().getId()) ||
-                rootProgram.getAmpThemeId().equals(indirectMapping.getSrcProgram().getId()))
+        if ((rootProgram.getAmpThemeId().equals(indirectMapping.getDstProgram().getId())
+                || rootProgram.getAmpThemeId().equals(indirectMapping.getSrcProgram().getId()))
                 && indirectMapping.getDstProgram().isIndirect()) {
             isIndirect = true;
         } else {

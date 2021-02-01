@@ -23,6 +23,7 @@ class ProgramSelect extends Component {
     const {
       options, placeholder, selected, disabled
     } = this.props;
+    const { translations, trnPrefix } = this.context;
     const isValid = (selected && selected.length === 1);
     const sortedOptions = options ? options.sort((a, b) => a.value.localeCompare(b.value)) : [];
     return (
@@ -36,6 +37,7 @@ class ProgramSelect extends Component {
         selected={selected}
         placeholder={placeholder}
         disabled={disabled}
+        emptyLabel={translations[`${trnPrefix}no-matches-found`]}
       />
     );
   }

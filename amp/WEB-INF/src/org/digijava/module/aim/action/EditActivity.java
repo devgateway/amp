@@ -612,7 +612,7 @@ public class EditActivity extends Action {
         /* Insert Categories */
           Set<AmpCategoryValue> categories=activity.getCategories();
         AmpCategoryValue ampCategoryValue = CategoryManagerUtil.
-            getAmpCategoryValueFromList(CategoryConstants.ACCHAPTER_NAME, categories);
+            getAmpCategoryValueFromList(CategoryConstants.ACCHAPTER_KEY, categories);
 
         if (ampCategoryValue != null)
             eaForm.getIdentification().setAcChapter(new Long(ampCategoryValue.getId()));
@@ -623,22 +623,22 @@ public class EditActivity extends Action {
           eaForm.getIdentification().setProcurementSystem(new Long(ampCategoryValue.getId()));
 
         ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromList(
-            CategoryConstants.REPORTING_SYSTEM_NAME, activity.getCategories());
+            CategoryConstants.REPORTING_SYSTEM_KEY, activity.getCategories());
         if (ampCategoryValue != null)
           eaForm.getIdentification().setReportingSystem(new Long(ampCategoryValue.getId()));
 
         ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromList(
-            CategoryConstants.AUDIT_SYSTEM_NAME, activity.getCategories());
+            CategoryConstants.AUDIT_SYSTEM_KEY, activity.getCategories());
         if (ampCategoryValue != null)
           eaForm.getIdentification().setAuditSystem(new Long(ampCategoryValue.getId()));
 
         ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromList(
-            CategoryConstants.INSTITUTIONS_NAME, activity.getCategories());
+            CategoryConstants.INSTITUTIONS_KEY, activity.getCategories());
         if (ampCategoryValue != null)
           eaForm.getIdentification().setInstitutions(new Long(ampCategoryValue.getId()));
 
         ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromList(
-            CategoryConstants.ACCESSION_INSTRUMENT_NAME, activity.getCategories());
+            CategoryConstants.ACCESSION_INSTRUMENT_KEY, activity.getCategories());
         if (ampCategoryValue != null)
           eaForm.getIdentification().setAccessionInstrument(new Long(ampCategoryValue.getId()));
 

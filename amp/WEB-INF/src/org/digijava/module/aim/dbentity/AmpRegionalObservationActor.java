@@ -18,6 +18,7 @@ public class AmpRegionalObservationActor implements Serializable, Cloneable, Ide
     private Long ampRegionalObservationActorId;
     @Interchangeable(fieldTitle = "Name", importable = true,
             interValidators = @InterchangeableValidator(RequiredValidator.class))
+    @TranslatableField
     private String name;
     private String nameTrimmed;
     @InterchangeableBackReference

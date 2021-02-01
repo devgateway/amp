@@ -45,5 +45,6 @@
   "amp.admin.ndd.program:tooltip-direct-programs": "The main program in use. What is selected in the Activity Form for the Source Program will limit what options are available in the Destination Program drop down.",
   "amp.admin.ndd.program:tooltip-indirect-programs": "In the Activity Form, the drop down options for this program will be limited based on what the user selects in the Source Program.",
   "amp.admin.ndd.program:tooltip-direct-programs-list": "Please specify the current levels of your source program to begin the mapping exercise. Note that you will have to select up to to level defined in the Multi Program Manager.",
-  "amp.admin.ndd.program:tooltip-indirect-programs-list": "Please define the corresponding destination program levels. Note that you will have to select up to level defined in the Multi Program Manager."
+  "amp.admin.ndd.program:tooltip-indirect-programs-list": "Please define the corresponding destination program levels. Note that you will have to select up to level defined in the Multi Program Manager.",
+  "amp.admin.ndd.program:no-matches-found": "No matches found"
 }

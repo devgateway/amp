@@ -1032,13 +1032,15 @@ public class NodeWrapper{
     private Map<String, String> getTranslatedNode(String fieldName) {
         Map <String, String> translatedField = new HashMap<String,String> ();
         try {
-            Node titleNode = node.getNode(fieldName);
-            if (titleNode != null) {
-                PropertyIterator  iterator = titleNode.getProperties();
-                while (iterator.hasNext()) {
-                    PropertyImpl property = (PropertyImpl) iterator.next();
-                    translatedField.put(property.getName(), property.getString());
-                        
+            if (node.hasNode(fieldName)) {
+                Node titleNode = node.getNode(fieldName);
+                if (titleNode != null) {
+                    PropertyIterator iterator = titleNode.getProperties();
+                    while (iterator.hasNext()) {
+                        PropertyImpl property = (PropertyImpl) iterator.next();
+                        translatedField.put(property.getName(), property.getString());
+
+                    }
                 }
             }
         } catch (PathNotFoundException e) {

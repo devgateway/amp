@@ -57,7 +57,7 @@ public class ActivityCloser {
             AmpTeamMember ampClosingMember = getAmpTeamMemberModifier(ver.getTeam());
 
             AmpActivityVersion newVer = this.cloneActivity(ampClosingMember, ver, newStatus,
-                    closedCategoryValue, saveContext,oldActivityStatus);
+                    closedCategoryValue, saveContext, oldActivityStatus);
 
             LOGGER.info(String.format("... done, new amp_activity_id=%d\n", newVer.getAmpActivityId()));
             PersistenceManager.getSession().flush();
@@ -74,7 +74,8 @@ public class ActivityCloser {
      */
     private AmpActivityVersion cloneActivity(AmpTeamMember member, AmpActivityVersion oldActivity,
                                              ApprovalStatus newStatus, Long closedProjectStatusCategoryValue,
-                                             SaveContext saveContext, AmpCategoryValue oldActivityStatus) throws Exception {
+                                             SaveContext saveContext, AmpCategoryValue oldActivityStatus)
+            throws Exception {
         AmpActivityVersion prevVersion = oldActivity.getAmpActivityGroup().getAmpActivityLastVersion();
         oldActivity.getAmpActivityGroup().setAutoClosedOnExpiration(true);
 

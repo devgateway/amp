@@ -143,6 +143,9 @@ class NDDDashboardHome extends Component {
               onApplyFilters={this.onApplyFilters}
               filters={filters}
               globalSettings={globalSettings}
+              settings={settings}
+              fundingType={fundingType}
+              selectedPrograms={selectedPrograms}
               dashboardId={dashboardId} />
           ) : null}
         </Row>

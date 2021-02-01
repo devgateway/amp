@@ -34,8 +34,10 @@ class Share extends Component {
    prepareDataToSave = () => {
      // TODO: prepare data chart settings.
      // eslint-disable-next-line no-shadow
-     const { getShareLink, filters } = this.props;
-     return getShareLink(filters ? filters.filters : null);
+     const {
+       _getShareLink, filters, settings, fundingType, selectedPrograms
+     } = this.props;
+     return _getShareLink(filters ? filters.filters : null, settings, fundingType, selectedPrograms);
    }
 
    generateModal() {
@@ -89,19 +91,23 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  getShareLink
+  _getShareLink: getShareLink
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Share);
 
 Share.propTypes = {
-  getShareLink: PropTypes.func.isRequired,
+  _getShareLink: PropTypes.func.isRequired,
   filters: PropTypes.object,
   translations: PropTypes.object.isRequired,
-  shareLink: PropTypes.object
+  shareLink: PropTypes.object,
+  settings: PropTypes.object,
+  fundingType: PropTypes.string.isRequired,
+  selectedPrograms: PropTypes.array.isRequired
 };
 
 Share.defaultProps = {
   filters: undefined,
-  shareLink: undefined
+  shareLink: undefined,
+  settings: undefined
 };

@@ -198,22 +198,29 @@ public class NDDService {
      */
     public void updateMainIndirectProgramsMapping(AmpIndirectTheme mapping) {
         try {
-            if (mapping.getNewTheme() != null && mapping.getOldTheme() != null
-                    && !mapping.getNewTheme().getAmpThemeId().equals(mapping.getOldTheme().getAmpThemeId())) {
-                AmpGlobalSettings srcGS = FeaturesUtil.getGlobalSetting(PRIMARY_PROGRAM);
-                srcGS.setGlobalSettingsValue(mapping.getOldTheme().getAmpThemeId().toString());
-                FeaturesUtil.updateGlobalSetting(srcGS);
-                AmpActivityProgramSettings indirectProgramSetting =
-                        ProgramUtil.getAmpActivityProgramSettings(INDIRECT_PRIMARY_PROGRAM);
+            AmpGlobalSettings srcGS = FeaturesUtil.getGlobalSetting(PRIMARY_PROGRAM);
+            AmpActivityProgramSettings indirectProgramSetting =
+                    ProgramUtil.getAmpActivityProgramSettings(INDIRECT_PRIMARY_PROGRAM);
+            if (mapping.getNewTheme() != null && mapping.getOldTheme() != null) {
+                if (!mapping.getNewTheme().getAmpThemeId().equals(mapping.getOldTheme().getAmpThemeId())) {
+                    srcGS.setGlobalSettingsValue(mapping.getOldTheme().getAmpThemeId().toString());
+                    FeaturesUtil.updateGlobalSetting(srcGS);
 
-                if (indirectProgramSetting == null) {
-                    indirectProgramSetting = new AmpActivityProgramSettings(INDIRECT_PRIMARY_PROGRAM);
+                    if (indirectProgramSetting == null) {
+                        indirectProgramSetting = new AmpActivityProgramSettings(INDIRECT_PRIMARY_PROGRAM);
 
+                    }
+                    indirectProgramSetting.setDefaultHierarchy(mapping.getNewTheme());
+                    PersistenceManager.getSession().saveOrUpdate(indirectProgramSetting);
                 }
-                indirectProgramSetting.setDefaultHierarchy(mapping.getNewTheme());
-                PersistenceManager.getSession().saveOrUpdate(indirectProgramSetting);
+            } else {
+                srcGS.setGlobalSettingsValue(null);
+                FeaturesUtil.updateGlobalSetting(srcGS);
+                if (indirectProgramSetting != null) {
+                    PersistenceManager.getSession().delete(indirectProgramSetting);
+                }
             }
-        } catch (DgException e) {
+        } catch (Exception e) {
             throw new RuntimeException("Cannot save mapping", e);
         }
 
@@ -225,13 +232,19 @@ public class NDDService {
      * @param mapping
      */
     public void updateMainProgramsMapping(final AmpThemeMapping mapping) {
-        if (mapping.getSrcTheme() != null && mapping.getDstTheme() != null
-                && !mapping.getSrcTheme().getAmpThemeId().equals(mapping.getDstTheme().getAmpThemeId())) {
-            AmpGlobalSettings srcGS = FeaturesUtil.getGlobalSetting(MAPPING_SOURCE_PROGRAM);
-            srcGS.setGlobalSettingsValue(mapping.getSrcTheme().getAmpThemeId().toString());
+        AmpGlobalSettings srcGS = FeaturesUtil.getGlobalSetting(MAPPING_SOURCE_PROGRAM);
+        AmpGlobalSettings dstGS = FeaturesUtil.getGlobalSetting(MAPPING_DESTINATION_PROGRAM);
+        if (mapping.getSrcTheme() != null && mapping.getDstTheme() != null) {
+            if (!mapping.getSrcTheme().getAmpThemeId().equals(mapping.getDstTheme().getAmpThemeId())) {
+                srcGS.setGlobalSettingsValue(mapping.getSrcTheme().getAmpThemeId().toString());
+                FeaturesUtil.updateGlobalSetting(srcGS);
+                dstGS.setGlobalSettingsValue(mapping.getDstTheme().getAmpThemeId().toString());
+                FeaturesUtil.updateGlobalSetting(dstGS);
+            }
+        } else {
+            srcGS.setGlobalSettingsValue(null);
             FeaturesUtil.updateGlobalSetting(srcGS);
-            AmpGlobalSettings dstGS = FeaturesUtil.getGlobalSetting(MAPPING_DESTINATION_PROGRAM);
-            dstGS.setGlobalSettingsValue(mapping.getDstTheme().getAmpThemeId().toString());
+            dstGS.setGlobalSettingsValue(null);
             FeaturesUtil.updateGlobalSetting(dstGS);
         }
     }

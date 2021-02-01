@@ -59,12 +59,14 @@ export function validate(data) {
 
 export function validateMainPrograms(src, dst) {
   let ret = 0;
-  if (!src) {
-    ret = 3;
-  } else if (!dst) {
-    ret = 4;
-  } else if (src.id === dst.id) {
-    ret = 5;
+  if (src || dst) {
+    if (!src) {
+      ret = 3;
+    } else if (!dst) {
+      ret = 4;
+    } else if (src.id === dst.id) {
+      ret = 5;
+    }
   }
   return ret;
 }

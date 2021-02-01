@@ -48,7 +48,7 @@ class Filters extends Component {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ savedDashboardLoaded: true });
       // Note: no need to explicitly call applyFilters when deserializing (unless you use silent: true).
-      filter.deserialize(JSON.parse(_sharedData.stateBlob));
+      filter.deserialize(JSON.parse(_sharedData.stateBlob), { dontSetDefaultDates: true });
     }
   }
 

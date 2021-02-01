@@ -22,7 +22,12 @@ export default class HeaderContainer extends Component {
 HeaderContainer.propTypes = {
   onApplyFilters: PropTypes.func.isRequired,
   filters: PropTypes.object,
-  dashboardId: PropTypes.number,
+  dashboardId: PropTypes.string,
   onApplySettings: PropTypes.func.isRequired,
   globalSettings: PropTypes.object.isRequired
+};
+
+HeaderContainer.defaultProps = {
+  filters: undefined,
+  dashboardId: undefined,
 };

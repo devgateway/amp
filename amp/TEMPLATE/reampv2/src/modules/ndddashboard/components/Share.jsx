@@ -45,7 +45,11 @@ class Share extends Component {
      const { shareLink, translations } = this.props;
      return (
        <Modal show={show} onHide={this.handleClose}>
-         <Modal.Header closeButton>
+         <Modal.Header
+           closeButton
+           style={{
+             backgroundColor: '#337ab7', paddingTop: '8px', paddingBottom: '8px', color: 'white'
+           }}>
            <Modal.Title>{translations[`${TRN_PREFIX}share-copy-link`]}</Modal.Title>
          </Modal.Header>
          <Modal.Body>
@@ -53,7 +57,7 @@ class Share extends Component {
            <Form.Control type="text" value={shareLink ? getLink(shareLink.id) : null} />
          </Modal.Body>
          <Modal.Footer>
-           <Button variant="secondary" onClick={this.handleClose}>
+           <Button variant="primary" onClick={this.handleClose}>
              {translations[`${TRN_PREFIX}close`]}
            </Button>
          </Modal.Footer>

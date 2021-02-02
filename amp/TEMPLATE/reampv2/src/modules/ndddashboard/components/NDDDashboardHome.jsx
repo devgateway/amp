@@ -163,7 +163,7 @@ class NDDDashboardHome extends Component {
     } = this.props;
     return (
       <Container fluid className="main-container">
-        <Row style={{ backgroundColor: '#f6f6f6', paddingTop: '15px' }}>
+        <Row style={{ marginRight: '-30px', marginLeft: '-30px' }}>
           {mapping && settings && globalSettings && selectedPrograms ? (
             <HeaderContainer
               onApplySettings={this.onApplySettings}
@@ -175,11 +175,6 @@ class NDDDashboardHome extends Component {
               selectedPrograms={selectedPrograms}
               dashboardId={dashboardId} />
           ) : null}
-        </Row>
-        <Row>
-          <Col md={12}>
-            <div><br /></div>
-          </Col>
         </Row>
         <Row style={{ marginRight: '-30px', marginLeft: '-30px' }}>
           <MainDashboardContainer

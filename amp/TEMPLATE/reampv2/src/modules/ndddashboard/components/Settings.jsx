@@ -4,8 +4,9 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import { TRN_PREFIX } from '../utils/constants';
+// eslint-disable-next-line no-unused-vars
 import styles from '../../../../../ampTemplate/node_modules/amp-settings/dist/amp-settings.css';
-import { NDDTranslationContext } from "./StartUp";
+import { NDDTranslationContext } from './StartUp';
 
 const SettingsWidget = require('../../../../../ampTemplate/node_modules/amp-settings/dist/amp-settings');
 
@@ -26,6 +27,7 @@ class Settings extends Component {
   }
 
   componentDidMount() {
+    // eslint-disable-next-line react/no-string-refs
     widget.setElement(this.refs.settingsPopup);
     widget.on('applySettings', this.applySettings);
     widget.on('close', this.hideSettings);

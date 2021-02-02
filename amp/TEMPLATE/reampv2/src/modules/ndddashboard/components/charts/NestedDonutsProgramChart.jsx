@@ -179,7 +179,7 @@ class NestedDonutsProgramChart extends Component {
       // Disable tooltip when outer ring is selected
       this.setState({
         showLegend: true,
-        legendTop: data.event.pageY - 200,
+        legendTop: data.event.pageY - 180,
         legendLeft: data.event.pageX - 360,
         tooltipData: data
       });

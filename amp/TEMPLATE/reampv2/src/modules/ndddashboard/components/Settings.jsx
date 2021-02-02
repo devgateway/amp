@@ -27,6 +27,8 @@ class Settings extends Component {
   }
 
   componentDidMount() {
+    const { settings } = this.props;
+    widget.restoreFromSaved(settings);
     // eslint-disable-next-line react/no-string-refs
     widget.setElement(this.refs.settingsPopup);
     widget.on('applySettings', this.applySettings);
@@ -90,9 +92,14 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
 
 Settings.propTypes = {
-  onApplySettings: PropTypes.func.isRequired
+  onApplySettings: PropTypes.func.isRequired,
+  settings: PropTypes.object
 };
-Settings
-  .contextType = NDDTranslationContext;
+
+Settings.defaultProps = {
+  settings: null
+};
+
+Settings.contextType = NDDTranslationContext;
 
 export default connect(mapStateToProps, mapDispatchToProps)(Settings);

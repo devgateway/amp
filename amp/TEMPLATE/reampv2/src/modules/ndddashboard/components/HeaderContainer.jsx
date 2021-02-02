@@ -12,7 +12,7 @@ export default class HeaderContainer extends Component {
     return (
       <div>
         <Filters onApplyFilters={onApplyFilters} dashboardId={dashboardId} globalSettings={globalSettings} />
-        <Settings onApplySettings={onApplySettings} />
+        <Settings onApplySettings={onApplySettings} settings={settings} />
         <Share filters={filters} settings={settings} fundingType={fundingType} selectedPrograms={selectedPrograms} />
       </div>
     );

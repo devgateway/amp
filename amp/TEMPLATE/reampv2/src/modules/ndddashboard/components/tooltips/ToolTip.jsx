@@ -28,6 +28,10 @@ class ToolTip extends Component {
     if (minWidth && this.getActualWidth(titleLabel) > minWidth) {
       containerStyle.minWidth = minWidth;
     }
+    // Never cut the amounts.
+    if (this.getActualWidth(formattedValue) > containerStyle.minWidth) {
+      containerStyle.minWidth = this.getActualWidth(formattedValue);
+    }
     return (
       <div className="generic-tooltip" style={containerStyle}>
         <div className="tooltip-header" style={headerStyle}>
@@ -63,7 +67,7 @@ ToolTip.propTypes = {
   titleLabel: PropTypes.string.isRequired,
   color: PropTypes.string.isRequired,
   value: PropTypes.number.isRequired,
-  formattedValue: PropTypes.string.isRequired,
+  formattedValue: PropTypes.object.isRequired,
   total: PropTypes.number.isRequired,
   minWidth: PropTypes.number,
   isYearTotal: PropTypes.bool,

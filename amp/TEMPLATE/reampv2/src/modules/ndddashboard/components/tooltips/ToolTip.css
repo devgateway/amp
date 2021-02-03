@@ -2,12 +2,12 @@
 .generic-tooltip {
     -webkit-box-shadow: 0 0 7px 2px rgba(204, 204, 204, 0.38);
     box-shadow: 0 0 7px 2px rgba(204, 204, 204, 0.38);
-    border: 1px solid #e6eaee;
     border-radius: 5px;
     background-color: #ffffff;
     padding: 0px;
     width: 250px;
     text-align: left !important;
+    border: 1px solid #DDD;
 }
 
 .generic-tooltip .formattedValue .generic-tooltip .currency {
@@ -37,14 +37,16 @@
 }
 
 .generic-tooltip .grey {
-    background-color: lightgrey;
+    background-color: #F5F5F5;
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
+    border-top: 1px solid #DDD;
 }
 
 .generic-tooltip .inner {
     color: black;
     font-size: 14px;
+    line-height: 2.2em;
 }
 
 .generic-tooltip .element {

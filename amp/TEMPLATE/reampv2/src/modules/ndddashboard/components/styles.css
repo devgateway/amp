@@ -136,7 +136,6 @@ h3 {
 .filter-button {
     position: relative;
     top: 0px;
-    line-height: 1.1px;
 }
 
 #filter-popup {
@@ -151,6 +150,10 @@ h3 {
     background-color: white;
     border: 1px solid #ddd;
     border-radius: 0;
+}
+
+.custom-legend-inner {
+    padding-right: 10px;
 }
 
 .separator {

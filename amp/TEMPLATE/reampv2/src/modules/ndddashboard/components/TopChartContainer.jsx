@@ -100,9 +100,9 @@ export default class TopChartContainer extends Component {
       const programLegend = nddLoaded && !nddLoadingPending ? this.getProgramLegend() : null;
       return (
         <div>
-          <div className="section_title">
+          {/*<div className="section_title">
             <span>{translations['amp.ndd.dashboard:legends']}</span>
-          </div>
+          </div>*/}
           {programLegend && programLegend[0].total ? (
             <div className="legends-container">
               <div className={`even-${selectedDirectProgram ? 'third' : 'middle'}`}>

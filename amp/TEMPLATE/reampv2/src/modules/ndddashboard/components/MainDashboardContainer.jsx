@@ -7,13 +7,14 @@ import NestedDonutsProgramChart from './charts/NestedDonutsProgramChart';
 import FundingTypeSelector from './FundingTypeSelector';
 import './legends/legends.css';
 import {
-  extractPrograms, getCustomColor, getGradient
+  getCustomColor, getGradient
 } from '../utils/Utils';
 import FundingByYearChart from './charts/FundingByYearChart';
 import PieChartTypeSelector from './PieChartTypeSelector';
 import { NDDTranslationContext } from './StartUp';
 import TopChartContainer from './TopChartContainer';
 import { AVAILABLE_COLORS, PROGRAMLVL1 } from '../utils/constants';
+import { ALL_PROGRAMS } from '../../admin/ndd/constants/Constants';
 
 class MainDashboardContainer extends Component {
   // eslint-disable-next-line react/sort-comp
@@ -23,6 +24,21 @@ class MainDashboardContainer extends Component {
       const colors = getGradient(getCustomColor(selectedDirectProgram, PROGRAMLVL1), '#FFFFFF');
       AVAILABLE_COLORS.set(`${PROGRAMLVL1}_${selectedDirectProgram.code}`, colors);
     }
+  }
+
+  generateSectionTitle = () => {
+    const {
+      mapping,
+      selectedPrograms
+    } = this.props;
+    let title = '';
+    if (mapping && selectedPrograms) {
+      title = mapping[ALL_PROGRAMS].find(i => `${i.id}` === selectedPrograms[0]).value;
+      if (selectedPrograms[1]) {
+        title += ` / ${mapping[ALL_PROGRAMS].find(i => `${i.id}` === selectedPrograms[1]).value}`;
+      }
+    }
+    return title;
   }
 
   render() {
@@ -52,41 +68,35 @@ class MainDashboardContainer extends Component {
       // TODO proper error handling
       return (<div>ERROR</div>);
     } else {
-      const programs = extractPrograms(mapping, noIndirectMapping);
       this.generate2LevelColors();
       return (
         <>
-          <Col md={5}>
+          <Col md={12}>
+            <div className="section_title">
+              <span>
+                {this.generateSectionTitle()}
+              </span>
+            </div>
+          </Col>
+          <Col md={5} style={{ paddingRight: 0 }}>
             <div className="chart-container">
               <div className="chart">
-                <div className="section_title">
-                  <span>
-                    {programs.direct
-                      ? (`${programs.direct.value} and ${programs.indirect1.value}`)
-                      : translations['amp.ndd.dashboard:loading']}
-                  </span>
-                </div>
                 {nddLoaded && !nddLoadingPending
                   ? (
-                    <div>
-                      <div>
-                        {dashboardSettings
-                          ? (
-                            <PieChartTypeSelector
-                              onChange={onChangeProgram}
-                              defaultValue={fundingType}
-                              mapping={mapping}
-                              noIndirectMapping={noIndirectMapping}
-                              selectedPrograms={selectedPrograms} />
-                          ) : null}
-                      </div>
+                    <>
+                      <PieChartTypeSelector
+                        onChange={onChangeProgram}
+                        defaultValue={fundingType}
+                        mapping={mapping}
+                        noIndirectMapping={noIndirectMapping}
+                        selectedPrograms={selectedPrograms} />
                       <NestedDonutsProgramChart
                         data={ndd}
                         settings={settings}
                         globalSettings={globalSettings}
                         selectedDirectProgram={selectedDirectProgram}
                         handleOuterChartClick={handleOuterChartClick} />
-                    </div>
+                    </>
                   )
                   : <div className="loading" />}
               </div>
@@ -101,7 +111,7 @@ class MainDashboardContainer extends Component {
               </div>
             </div>
           </Col>
-          <Col md={7}>
+          <Col md={7} style={{ paddingLeft: 0 }}>
             <TopChartContainer
               noIndirectMapping={noIndirectMapping}
               ndd={ndd}

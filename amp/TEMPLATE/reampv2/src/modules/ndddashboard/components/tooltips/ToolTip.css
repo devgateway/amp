@@ -5,7 +5,8 @@
     border-radius: 5px;
     background-color: #ffffff;
     padding: 0px;
-    width: 250px;
+    max-width: 400px;
+    min-width: max-content;
     text-align: left !important;
     border: 1px solid #DDD;
 }
@@ -20,6 +21,7 @@
 
 .generic-tooltip .formattedValue {
     margin-left: 10px;
+    margin-right: 10px;
     /*color: #163f66;*/
 }
 

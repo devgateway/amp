@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Col } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import NestedDonutsProgramChart from './charts/NestedDonutsProgramChart';
 import FundingTypeSelector from './FundingTypeSelector';
 import './legends/legends.css';
@@ -71,80 +71,88 @@ class MainDashboardContainer extends Component {
       this.generate2LevelColors();
       return (
         <>
-          <Col md={12}>
-            <div className="section_title">
-              <span>
-                {this.generateSectionTitle()}
-              </span>
-            </div>
-          </Col>
-          <Col md={5} style={{ paddingRight: 0 }}>
-            <div className="chart-container">
-              <div className="chart">
-                {nddLoaded && !nddLoadingPending
-                  ? (
-                    <>
-                      <PieChartTypeSelector
-                        onChange={onChangeProgram}
-                        defaultValue={fundingType}
-                        mapping={mapping}
-                        noIndirectMapping={noIndirectMapping}
-                        selectedPrograms={selectedPrograms} />
-                      <NestedDonutsProgramChart
-                        data={ndd}
-                        settings={settings}
-                        globalSettings={globalSettings}
-                        selectedDirectProgram={selectedDirectProgram}
-                        handleOuterChartClick={handleOuterChartClick} />
-                    </>
-                  )
-                  : <div className="loading" />}
+          <Row style={{ marginRight: '-15px', marginLeft: '-15px', border: '1px solid #ddd' }}>
+            <Col md={12} style={{ paddingRight: 0, paddingLeft: 0 }}>
+              <div className="section_title">
+                <span>
+                  {this.generateSectionTitle()}
+                </span>
               </div>
-              <div className="buttons">
-                {dashboardSettings && !nddLoadingPending
-                  ? (
-                    <FundingTypeSelector
-                      onChange={onChangeFundingType}
-                      defaultValue={fundingType}
-                      noIndirectMapping={noIndirectMapping} />
-                  ) : null}
-              </div>
-            </div>
-          </Col>
-          <Col md={7} style={{ paddingLeft: 0 }}>
-            <TopChartContainer
-              noIndirectMapping={noIndirectMapping}
-              ndd={ndd}
-              globalSettings={globalSettings}
-              mapping={mapping}
-              settings={settings}
-              top={top}
-              topLoaded={topLoaded}
-              topLoadingPending={topLoadingPending}
-              selectedDirectProgram={selectedDirectProgram}
-              nddLoaded={nddLoaded}
-              nddLoadingPending={nddLoadingPending} />
-          </Col>
-          <div className="separator" />
-          <Col md={12}>
-            <div className="chart-container">
-              <div className="chart">
-                <div className="section_title">
-                  <span>{translations['amp.dashboard:funding-over-time']}</span>
+            </Col>
+            <Col md={5} style={{ paddingRight: 0, paddingLeft: 0 }}>
+              <div className="chart-container">
+                <div className="chart">
+                  {nddLoaded && !nddLoadingPending
+                    ? (
+                      <>
+                        <PieChartTypeSelector
+                          onChange={onChangeProgram}
+                          defaultValue={fundingType}
+                          mapping={mapping}
+                          noIndirectMapping={noIndirectMapping}
+                          selectedPrograms={selectedPrograms} />
+                        <NestedDonutsProgramChart
+                          data={ndd}
+                          settings={settings}
+                          globalSettings={globalSettings}
+                          selectedDirectProgram={selectedDirectProgram}
+                          handleOuterChartClick={handleOuterChartClick} />
+                      </>
+                    )
+                    : <div className="loading" />}
                 </div>
-                {nddLoaded && !nddLoadingPending ? (
-                  <FundingByYearChart
-                    selectedDirectProgram={selectedDirectProgram}
-                    selectedPrograms={selectedPrograms}
-                    settings={settings}
-                    filters={filters}
-                    fundingType={fundingType}
-                    globalSettings={globalSettings}
-                    data={ndd} />
-                ) : <div className="loading" />}
+                <div className="buttons">
+                  {dashboardSettings && !nddLoadingPending
+                    ? (
+                      <FundingTypeSelector
+                        onChange={onChangeFundingType}
+                        defaultValue={fundingType}
+                        noIndirectMapping={noIndirectMapping} />
+                    ) : null}
+                </div>
               </div>
-            </div>
-          </Col>
+            </Col>
+            <Col md={7} style={{ paddingLeft: 0, paddingRight: 0 }}>
+              <TopChartContainer
+                noIndirectMapping={noIndirectMapping}
+                ndd={ndd}
+                globalSettings={globalSettings}
+                mapping={mapping}
+                settings={settings}
+                top={top}
+                topLoaded={topLoaded}
+                topLoadingPending={topLoadingPending}
+                selectedDirectProgram={selectedDirectProgram}
+                nddLoaded={nddLoaded}
+                nddLoadingPending={nddLoadingPending} />
+            </Col>
+          </Row>
+          <Row>
+            <Col md={12}>
+              <div className="separator" />
+            </Col>
+          </Row>
+          <Row style={{ marginRight: '-15px', marginLeft: '-15px', border: '1px solid #ddd' }}>
+            <Col md={12} style={{ paddingLeft: 0, paddingRight: 0 }}>
+              <div className="chart-container">
+                <div className="chart">
+                  <div className="section_title">
+                    <span>{translations['amp.dashboard:funding-over-time']}</span>
+                  </div>
+                  {nddLoaded && !nddLoadingPending ? (
+                    <FundingByYearChart
+                      selectedDirectProgram={selectedDirectProgram}
+                      selectedPrograms={selectedPrograms}
+                      settings={settings}
+                      filters={filters}
+                      fundingType={fundingType}
+                      globalSettings={globalSettings}
+                      data={ndd} />
+                  ) : <div className="loading" />}
+                </div>
+              </div>
+            </Col>
+          </Row>
         </>
       );
     }

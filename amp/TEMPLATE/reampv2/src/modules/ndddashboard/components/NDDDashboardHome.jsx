@@ -176,24 +176,22 @@ class NDDDashboardHome extends Component {
               dashboardId={dashboardId} />
           ) : null}
         </Row>
-        <Row style={{ marginRight: '-30px', marginLeft: '-30px' }}>
-          <MainDashboardContainer
-            handleOuterChartClick={this.handleOuterChartClick.bind(this)}
-            selectedDirectProgram={selectedDirectProgram}
-            filters={filters}
-            ndd={ndd}
-            nddLoaded={nddLoaded}
-            nddLoadingPending={nddLoadingPending}
-            dashboardSettings={dashboardSettings}
-            onChangeFundingType={this.onChangeFundingType}
-            onChangeProgram={this.onChangeProgram}
-            fundingType={fundingType}
-            selectedPrograms={selectedPrograms}
-            mapping={mapping}
-            settings={settings}
-            globalSettings={globalSettings}
-            noIndirectMapping={noIndirectMapping} />
-        </Row>
+        <MainDashboardContainer
+          handleOuterChartClick={this.handleOuterChartClick.bind(this)}
+          selectedDirectProgram={selectedDirectProgram}
+          filters={filters}
+          ndd={ndd}
+          nddLoaded={nddLoaded}
+          nddLoadingPending={nddLoadingPending}
+          dashboardSettings={dashboardSettings}
+          onChangeFundingType={this.onChangeFundingType}
+          onChangeProgram={this.onChangeProgram}
+          fundingType={fundingType}
+          selectedPrograms={selectedPrograms}
+          mapping={mapping}
+          settings={settings}
+          globalSettings={globalSettings}
+          noIndirectMapping={noIndirectMapping} />
       </Container>
     );
   }

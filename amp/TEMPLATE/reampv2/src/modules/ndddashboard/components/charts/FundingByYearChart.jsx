@@ -223,7 +223,7 @@ class FundingByYearChart extends Component {
         yref: 'paper',
         showarrow: false,
         font: {
-          size: 28
+          size: 20
         }
       }
     ] : [];

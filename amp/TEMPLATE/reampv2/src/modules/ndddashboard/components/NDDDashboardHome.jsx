@@ -139,6 +139,7 @@ class NDDDashboardHome extends Component {
     const { filters, fundingType, settings } = this.state;
     const selectedPrograms = value.split('-');
     this.setState({ selectedPrograms });
+    this.resetChartAfterUnClick();
     _callReport(fundingType, filters, selectedPrograms, settings);
   }
 

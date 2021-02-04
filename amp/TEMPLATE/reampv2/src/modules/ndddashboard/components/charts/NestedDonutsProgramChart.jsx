@@ -45,9 +45,8 @@ class NestedDonutsProgramChart extends Component {
     if (data && data.length > 0) {
       const totalAmount = data.reduce((acc, cur) => (acc + cur[DIRECT_PROGRAM][AMOUNT]), 0);
       data.forEach(i => {
-        const directProgram = (calculateLvl2 && this.isSubProgram(i, selectedDirectProgram))
-          ? i[DIRECT_PROGRAM][PROGRAMLVL2]
-          : i[DIRECT_PROGRAM][PROGRAMLVL1];
+        const isSubProgramElement = (calculateLvl2 && this.isSubProgram(i, selectedDirectProgram));
+        const directProgram = isSubProgramElement ? i[DIRECT_PROGRAM][PROGRAMLVL2] : i[DIRECT_PROGRAM][PROGRAMLVL1];
         if (ret.filter(d => d[CODE] === directProgram[CODE]).length === 0) {
           const item = {
             [CODE]: directProgram[CODE],
@@ -60,7 +59,8 @@ class NestedDonutsProgramChart extends Component {
               .reduce((accumulator, currentValue) => (
                 accumulator + currentValue[DIRECT_PROGRAM][AMOUNT]
               ), 0),
-            neverFade: this.isSubProgram(i, selectedDirectProgram)
+            neverFade: this.isSubProgram(i, selectedDirectProgram),
+            parent: i[DIRECT_PROGRAM][PROGRAMLVL1].objectId
           };
           item.percentageInTotal = (item[AMOUNT] / totalAmount) * 100;
           item.normalizedPercentage = item.percentageInTotal;
@@ -69,6 +69,16 @@ class NestedDonutsProgramChart extends Component {
       });
     }
     const normalized = this.normalizePieData(ret);
+
+    // If we are showing the lvl 2 we need to sort the results to match the place of the parent area.
+    if (calculateLvl2) {
+      const sorted = [];
+      const parents = this.extractOuterData(false);
+      parents.forEach(p => {
+        normalized.filter(c => c.parent === p.objectId).forEach(i => sorted.push(i));
+      });
+      return sorted;
+    }
     return normalized;
   }
 

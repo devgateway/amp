@@ -63,7 +63,7 @@ ToolTip.propTypes = {
   titleLabel: PropTypes.string.isRequired,
   color: PropTypes.string.isRequired,
   value: PropTypes.number.isRequired,
-  formattedValue: PropTypes.string.isRequired,
+  formattedValue: PropTypes.object.isRequired,
   total: PropTypes.number.isRequired,
   minWidth: PropTypes.number,
   isYearTotal: PropTypes.bool,

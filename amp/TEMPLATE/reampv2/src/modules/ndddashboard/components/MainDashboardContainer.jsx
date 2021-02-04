@@ -83,7 +83,12 @@ class MainDashboardContainer extends Component {
             </Col>
           </Row>
           <Row style={{
-            marginRight: '-15px', marginLeft: '-15px', border: '1px solid #ddd', display: 'flex'
+            marginRight: '-15px',
+            marginLeft: '-15px',
+            border: '1px solid #ddd',
+            display: 'flex',
+            borderTop: 'none',
+            backgroundColor: 'white'
           }}>
             <Col md={5} style={{ paddingRight: 0, paddingLeft: 0, backgroundColor: 'white' }}>
               <div className="chart-container">
@@ -130,6 +135,7 @@ class MainDashboardContainer extends Component {
                 topLoadingPending={topLoadingPending}
                 selectedDirectProgram={selectedDirectProgram}
                 nddLoaded={nddLoaded}
+                selectedPrograms={selectedPrograms}
                 nddLoadingPending={nddLoadingPending} />
             </Col>
           </Row>

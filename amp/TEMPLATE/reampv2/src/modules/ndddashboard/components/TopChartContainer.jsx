@@ -3,15 +3,16 @@ import PropTypes from 'prop-types';
 import {
   CHART_COLOR_MAP,
   INDIRECT_PROGRAMS,
-  PROGRAMLVL1, AVAILABLE_COLORS, CURRENCY_CODE
+  PROGRAMLVL1, CURRENCY_CODE
 } from '../utils/constants';
 import CustomLegend from '../../../utils/components/CustomLegend';
 import './legends/legends.css';
 import {
-  getCustomColor, getGradient, extractPrograms, formatNumberWithSettings
+  getCustomColor, formatNumberWithSettings
 } from '../utils/Utils';
 import TopChart from './charts/TopChart';
 import { NDDTranslationContext } from './StartUp';
+import { ALL_PROGRAMS } from '../../admin/ndd/constants/Constants';
 
 export default class TopChartContainer extends Component {
   getProgramLegend() {
@@ -61,10 +62,10 @@ export default class TopChartContainer extends Component {
           <TopChart data={top} globalSettings={globalSettings} translations={translations} />
         </div>
       </div>
-    ) : <div className="loading" />;
+    ) : <div style={{ position: 'relative', top: '10px' }} className="loading" />;
   }
 
-  // eslint-disable-next-line class-methods-use-this
+  // eslint-disable-next-line class-methods-use-this,react/sort-comp
   generateLegend(program, level, legend, programColor) {
     const programLevel = program[`programLvl${level}`];
     let prog = legend.get(programLevel.code.trim());
@@ -80,38 +81,41 @@ export default class TopChartContainer extends Component {
     return program.amount;
   }
 
+  getTitles = () => {
+    const { selectedPrograms, mapping } = this.props;
+    const titles = [];
+    if (mapping && selectedPrograms) {
+      titles[0] = mapping[ALL_PROGRAMS].find(i => `${i.id}` === selectedPrograms[0]).value;
+      if (selectedPrograms[1]) {
+        titles[1] = mapping[ALL_PROGRAMS].find(i => `${i.id}` === selectedPrograms[1]).value;
+      }
+    }
+    return titles;
+  }
+
   render() {
     const {
       error,
       nddLoadingPending,
       nddLoaded,
-      mapping,
-      noIndirectMapping,
       settings,
       selectedDirectProgram,
-      globalSettings,
+      globalSettings
     } = this.props;
     const { translations } = this.context;
     if (error) {
       // TODO proper error handling
       return (<div>ERROR</div>);
     } else {
-      const programs = extractPrograms(mapping, noIndirectMapping);
       const programLegend = nddLoaded && !nddLoadingPending ? this.getProgramLegend() : null;
+      const titles = this.getTitles();
       return (
         <div>
-          {/*<div className="section_title">
-            <span>{translations['amp.ndd.dashboard:legends']}</span>
-          </div>*/}
           {programLegend && programLegend[0].total ? (
             <div className="legends-container">
               <div className={`even-${selectedDirectProgram ? 'third' : 'middle'}`}>
                 <div className="legend-title">
-                  <span>
-                    {programs.direct
-                      ? (`${programs.direct.value}`)
-                      : translations['amp.ndd.dashboard:loading']}
-                  </span>
+                  <span>{titles[0]}</span>
                   <span className="amount">
                     {formatNumberWithSettings(settings[CURRENCY_CODE], translations, globalSettings,
                       programLegend[0].total, true)}
@@ -130,9 +134,7 @@ export default class TopChartContainer extends Component {
                   <div className="even-middle">
                     <div className="legend-title">
                       <span>
-                        {programs.indirect1
-                          ? (`${programs.indirect1.value}`)
-                          : translations['amp.ndd.dashboard:loading']}
+                        {titles[1] ? titles[1] : null}
                       </span>
                       <span className="amount">
                         {formatNumberWithSettings(settings[CURRENCY_CODE], translations, globalSettings,
@@ -156,7 +158,6 @@ export default class TopChartContainer extends Component {
 
             </div>
           ) : null}
-          { nddLoadingPending ? <div className="loading" /> : null}
         </div>
       );
     }
@@ -172,10 +173,10 @@ TopChartContainer.propTypes = {
   topLoadingPending: PropTypes.bool.isRequired,
   topLoaded: PropTypes.bool.isRequired,
   mapping: PropTypes.object,
-  noIndirectMapping: PropTypes.object,
   settings: PropTypes.object,
   selectedDirectProgram: PropTypes.object,
   globalSettings: PropTypes.object,
+  selectedPrograms: PropTypes.array
 };
 
 TopChartContainer.defaultProps = {
@@ -183,10 +184,10 @@ TopChartContainer.defaultProps = {
   settings: undefined,
   error: null,
   mapping: null,
-  noIndirectMapping: null,
   globalSettings: null,
   ndd: null,
-  top: undefined
+  top: undefined,
+  selectedPrograms: null
 };
 
 TopChartContainer.contextType = NDDTranslationContext;

@@ -71,7 +71,9 @@ class MainDashboardContainer extends Component {
       this.generate2LevelColors();
       return (
         <>
-          <Row style={{ marginRight: '-15px', marginLeft: '-15px', border: '1px solid #ddd' }}>
+          <Row style={{
+            marginRight: '-15px', marginLeft: '-15px', border: '1px solid #ddd', borderBottom: 'none'
+          }}>
             <Col md={12} style={{ paddingRight: 0, paddingLeft: 0 }}>
               <div className="section_title">
                 <span>
@@ -79,7 +81,11 @@ class MainDashboardContainer extends Component {
                 </span>
               </div>
             </Col>
-            <Col md={5} style={{ paddingRight: 0, paddingLeft: 0 }}>
+          </Row>
+          <Row style={{
+            marginRight: '-15px', marginLeft: '-15px', border: '1px solid #ddd', display: 'flex'
+          }}>
+            <Col md={5} style={{ paddingRight: 0, paddingLeft: 0, backgroundColor: 'white' }}>
               <div className="chart-container">
                 <div className="chart">
                   {nddLoaded && !nddLoadingPending
@@ -101,7 +107,7 @@ class MainDashboardContainer extends Component {
                     )
                     : <div className="loading" />}
                 </div>
-                <div className="buttons">
+                <div className="buttons" style={{ position: 'absolute', bottom: 0 }}>
                   {dashboardSettings && !nddLoadingPending
                     ? (
                       <FundingTypeSelector

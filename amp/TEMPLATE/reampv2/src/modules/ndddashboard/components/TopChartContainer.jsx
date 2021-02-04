@@ -45,7 +45,7 @@ export default class TopChartContainer extends Component {
 
   getTopChart() {
     const {
-      topLoaded, topLoadingPending, top, globalSettings
+      topLoaded, topLoadingPending, top, globalSettings, settings
     } = this.props;
     const { translations } = this.context;
     return topLoaded && !topLoadingPending ? (
@@ -59,7 +59,7 @@ export default class TopChartContainer extends Component {
               {`${top.sumarizedTotal} ${top.currency}`}
             </div>
           </div>
-          <TopChart data={top} globalSettings={globalSettings} translations={translations} />
+          <TopChart data={top} globalSettings={globalSettings} translations={translations} settings={settings} />
         </div>
       </div>
     ) : <div style={{ position: 'relative', top: '10px' }} className="loading" />;

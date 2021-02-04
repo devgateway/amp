@@ -224,7 +224,7 @@ h3 {
 }
 
 .funding-sources-title > div {
-    text-transform: uppercase;
+    /*text-transform: uppercase;*/
 }
 
 .funding-sources-title .row {

@@ -11,6 +11,7 @@ import { CURRENCY_CODE, DIRECT, FUNDING_TYPE } from '../utils/constants';
 import loadDashboardSettings from '../actions/loadDashboardSettings';
 import { getMappings } from '../actions/getMappings';
 import { DST_PROGRAM, SRC_PROGRAM } from '../../admin/ndd/constants/Constants';
+import { getSharedData } from '../actions/getSharedData';
 
 class NDDDashboardHome extends Component {
   constructor(props) {
@@ -25,6 +26,15 @@ class NDDDashboardHome extends Component {
     };
   }
 
+  // eslint-disable-next-line react/sort-comp
+  getSharedDataOrResolve = (id) => {
+    const { _getSharedData } = this.props;
+    if (id) {
+      return _getSharedData(id);
+    }
+    return Promise.resolve();
+  }
+
   componentDidMount() {
     const { _loadDashboardSettings, _getMappings } = this.props;
     // eslint-disable-next-line react/destructuring-assignment,react/prop-types
@@ -32,17 +42,34 @@ class NDDDashboardHome extends Component {
     // eslint-disable-next-line react/no-did-mount-set-state
     this.setState({ dashboardId: id });
     // Load settings and mappings but dont call _callReport directly, Filters.jsx will do the call.
-    return Promise.all([_loadDashboardSettings(), _getMappings()])
+    return Promise.all([_loadDashboardSettings(), _getMappings(), this.getSharedDataOrResolve(id)])
       .then(data => {
         const tempSettings = {
           [CURRENCY_CODE]: data[0].payload[Object.keys(data[0].payload)
             .find(i => data[0].payload[i].id === CURRENCY_CODE)].value.defaultId
         };
-        const ids = [`${data[1].payload[SRC_PROGRAM].id}`, `${data[1].payload[DST_PROGRAM].id}`];
+        let ids = [`${data[1].payload[SRC_PROGRAM].id}`, `${data[1].payload[DST_PROGRAM].id}`];
+        let fundingType = data[0].payload.find(i => i.id === FUNDING_TYPE).value.defaultId;
+
+        if (id) {
+          const savedData = JSON.parse(data[2].payload.stateBlob);
+          if (savedData && savedData.settings) {
+            if (savedData.settings[CURRENCY_CODE]) {
+              tempSettings[CURRENCY_CODE] = savedData.settings[CURRENCY_CODE];
+            }
+          }
+          if (savedData && savedData.fundingType) {
+            fundingType = savedData.fundingType;
+          }
+          if (savedData && savedData.selectedPrograms) {
+            ids = savedData.selectedPrograms;
+          }
+        }
+
         this.setState({
           selectedPrograms: ids,
           settings: tempSettings,
-          fundingType: data[0].payload.find(i => i.id === FUNDING_TYPE).value.defaultId
+          fundingType
         });
         /* Notice we dont need to define this.state.filters here, we will get it from onApplyFilters. Apparently
         the filter widget takes date.start and date.end automatically from dashboard settings EP. */
@@ -143,6 +170,9 @@ class NDDDashboardHome extends Component {
               onApplyFilters={this.onApplyFilters}
               filters={filters}
               globalSettings={globalSettings}
+              settings={settings}
+              fundingType={fundingType}
+              selectedPrograms={selectedPrograms}
               dashboardId={dashboardId} />
           ) : null}
         </Row>
@@ -193,7 +223,8 @@ const
     _loadDashboardSettings: loadDashboardSettings,
     _getMappings: getMappings,
     _callTopReport: callTopReport,
-    _clearTopReport: clearTopReport
+    _clearTopReport: clearTopReport,
+    _getSharedData: getSharedData,
   }, dispatch);
 
 NDDDashboardHome.propTypes = {
@@ -208,7 +239,8 @@ NDDDashboardHome.propTypes = {
   _callTopReport: PropTypes.func.isRequired,
   _clearTopReport: PropTypes.func.isRequired,
   noIndirectMapping: PropTypes.object,
-  globalSettings: PropTypes.object
+  globalSettings: PropTypes.object,
+  _getSharedData: PropTypes.func.isRequired
 };
 
 NDDDashboardHome.defaultProps = {

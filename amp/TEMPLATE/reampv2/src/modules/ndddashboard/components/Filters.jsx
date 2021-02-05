@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import FilterOutputItem from './FilterOutputItem';
-import { getSharedData } from '../actions/getSharedData';
 import { TRN_PREFIX } from '../utils/constants';
 
 const Filter = require('../../../../../ampTemplate/node_modules/amp-filter/dist/amp-filter');
@@ -26,30 +25,22 @@ class Filters extends Component {
     filter.on('apply', this.applyFilters);
     filter.on('cancel', this.hideFilters);
 
-    const { dashboardId, _getSharedData } = this.props;
+    const {
+      dashboardId, _sharedData, _sharedDataPending, _sharedDataLoaded,
+    } = this.props;
+    const { savedDashboardLoaded } = this.state;
     filter.loaded.done(() => {
-      if (dashboardId) {
-        _getSharedData(dashboardId);
+      if (dashboardId && _sharedDataPending === false && _sharedDataLoaded === true && savedDashboardLoaded === false) {
+        // eslint-disable-next-line react/no-did-update-set-state
+        this.setState({ savedDashboardLoaded: true });
+        // Note: no need to explicitly call applyFilters when deserializing (unless you use silent: true).
+        filter.deserialize(JSON.parse(_sharedData.stateBlob), { dontSetDefaultDates: true });
       } else {
         /* Notice we dont need to define this.state.filters here, we will get it from onApplyFilters. Apparently
         the filter widget takes date.start and date.end automatically from dashboard settings EP. */
         filter.deserialize({});
       }
     });
-  }
-
-  // eslint-disable-next-line no-unused-vars
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    const {
-      dashboardId, _sharedData, _sharedDataPending, _sharedDataLoaded,
-    } = this.props;
-    const { savedDashboardLoaded } = this.state;
-    if (dashboardId && _sharedDataPending === false && _sharedDataLoaded === true && savedDashboardLoaded === false) {
-      // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({ savedDashboardLoaded: true });
-      // Note: no need to explicitly call applyFilters when deserializing (unless you use silent: true).
-      filter.deserialize(JSON.parse(_sharedData.stateBlob));
-    }
   }
 
   componentWillUnmount() {
@@ -161,9 +152,7 @@ const mapStateToProps = state => ({
   translations: state.translationsReducer.translations
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-  _getSharedData: getSharedData,
-}, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Filters);
 
@@ -174,8 +163,7 @@ Filters.propTypes = {
   globalSettings: PropTypes.object.isRequired,
   _sharedDataPending: PropTypes.bool.isRequired,
   _sharedDataLoaded: PropTypes.bool.isRequired,
-  _sharedData: PropTypes.object,
-  _getSharedData: PropTypes.func.isRequired
+  _sharedData: PropTypes.object
 };
 
 Filters.defaultProps = {

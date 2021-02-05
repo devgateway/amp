@@ -34,8 +34,10 @@ class Share extends Component {
    prepareDataToSave = () => {
      // TODO: prepare data chart settings.
      // eslint-disable-next-line no-shadow
-     const { getShareLink, filters } = this.props;
-     return getShareLink(filters ? filters.filters : null);
+     const {
+       _getShareLink, filters, settings, fundingType, selectedPrograms
+     } = this.props;
+     return _getShareLink(filters ? filters.filters : null, settings, fundingType, selectedPrograms);
    }
 
    generateModal() {
@@ -43,7 +45,11 @@ class Share extends Component {
      const { shareLink, translations } = this.props;
      return (
        <Modal show={show} onHide={this.handleClose}>
-         <Modal.Header closeButton>
+         <Modal.Header
+           closeButton
+           style={{
+             backgroundColor: '#337ab7', paddingTop: '8px', paddingBottom: '8px', color: 'white'
+           }}>
            <Modal.Title>{translations[`${TRN_PREFIX}share-copy-link`]}</Modal.Title>
          </Modal.Header>
          <Modal.Body>
@@ -51,7 +57,7 @@ class Share extends Component {
            <Form.Control type="text" value={shareLink ? getLink(shareLink.id) : null} />
          </Modal.Body>
          <Modal.Footer>
-           <Button variant="secondary" onClick={this.handleClose}>
+           <Button variant="primary" onClick={this.handleClose}>
              {translations[`${TRN_PREFIX}close`]}
            </Button>
          </Modal.Footer>
@@ -89,19 +95,23 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  getShareLink
+  _getShareLink: getShareLink
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Share);
 
 Share.propTypes = {
-  getShareLink: PropTypes.func.isRequired,
+  _getShareLink: PropTypes.func.isRequired,
   filters: PropTypes.object,
   translations: PropTypes.object.isRequired,
-  shareLink: PropTypes.object
+  shareLink: PropTypes.object,
+  settings: PropTypes.object,
+  fundingType: PropTypes.string.isRequired,
+  selectedPrograms: PropTypes.array.isRequired
 };
 
 Share.defaultProps = {
   filters: undefined,
-  shareLink: undefined
+  shareLink: undefined,
+  settings: undefined
 };

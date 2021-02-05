@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row } from 'react-bootstrap';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -139,6 +139,7 @@ class NDDDashboardHome extends Component {
     const { filters, fundingType, settings } = this.state;
     const selectedPrograms = value.split('-');
     this.setState({ selectedPrograms });
+    this.resetChartAfterUnClick();
     _callReport(fundingType, filters, selectedPrograms, settings);
   }
 
@@ -163,7 +164,7 @@ class NDDDashboardHome extends Component {
     } = this.props;
     return (
       <Container fluid className="main-container">
-        <Row style={{ backgroundColor: '#f6f6f6', paddingTop: '15px' }}>
+        <Row style={{ marginRight: '-30px', marginLeft: '-30px' }}>
           {mapping && settings && globalSettings && selectedPrograms ? (
             <HeaderContainer
               onApplySettings={this.onApplySettings}
@@ -176,29 +177,22 @@ class NDDDashboardHome extends Component {
               dashboardId={dashboardId} />
           ) : null}
         </Row>
-        <Row>
-          <Col md={12}>
-            <div><br /></div>
-          </Col>
-        </Row>
-        <Row style={{ marginRight: '-30px', marginLeft: '-30px' }}>
-          <MainDashboardContainer
-            handleOuterChartClick={this.handleOuterChartClick.bind(this)}
-            selectedDirectProgram={selectedDirectProgram}
-            filters={filters}
-            ndd={ndd}
-            nddLoaded={nddLoaded}
-            nddLoadingPending={nddLoadingPending}
-            dashboardSettings={dashboardSettings}
-            onChangeFundingType={this.onChangeFundingType}
-            onChangeProgram={this.onChangeProgram}
-            fundingType={fundingType}
-            selectedPrograms={selectedPrograms}
-            mapping={mapping}
-            settings={settings}
-            globalSettings={globalSettings}
-            noIndirectMapping={noIndirectMapping} />
-        </Row>
+        <MainDashboardContainer
+          handleOuterChartClick={this.handleOuterChartClick.bind(this)}
+          selectedDirectProgram={selectedDirectProgram}
+          filters={filters}
+          ndd={ndd}
+          nddLoaded={nddLoaded}
+          nddLoadingPending={nddLoadingPending}
+          dashboardSettings={dashboardSettings}
+          onChangeFundingType={this.onChangeFundingType}
+          onChangeProgram={this.onChangeProgram}
+          fundingType={fundingType}
+          selectedPrograms={selectedPrograms}
+          mapping={mapping}
+          settings={settings}
+          globalSettings={globalSettings}
+          noIndirectMapping={noIndirectMapping} />
       </Container>
     );
   }

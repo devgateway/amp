@@ -7,11 +7,11 @@ public class CloseChadActivities extends AbstractAmpActivityCloserPatch {
     /*Static method called from xml patcher. Acts as a main method.*/
 
     public static void run() {
-        new CloseChadActivities().closeActivities();
+        new CloseChadActivities().closeActivities(null);
     }
 
     @Override
-    public List<String> getAmpIds() {
+    public List<String> getAmpIds(Integer index) {
         return Arrays.asList("8728331203", "872833417", "872833422", "872833120", "872833312", "872833254",
                 "872833102", "872833307", "872833270", "872833241", "872833305", "872833317", "872833287", "872833290",
                 "872833294", "872833295", "872833296", "872833298", "872833300", "872833301", "872833303",

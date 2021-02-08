@@ -62,7 +62,7 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
             return result;
         } else {
             where = " WHERE acv.ampCategoryClass.keyName LIKE '" + discriminatorOption + "' ORDER BY acv.id";
-            select += ", null as keyName ";
+            select += ", '' ";
             return query(select + from + where);
         }
     }

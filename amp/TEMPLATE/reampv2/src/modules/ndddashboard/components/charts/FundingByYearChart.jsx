@@ -12,7 +12,7 @@ import {
   PROGRAMLVL2, TRN_PREFIX, CURRENCY_CODE
 } from '../../utils/constants';
 import {
-  formatNumberWithSettings, getCustomColor
+  formatNumberWithSettings, getCustomColor, formatKMB
 } from '../../utils/Utils';
 // eslint-disable-next-line no-unused-vars
 import styles from '../styles.css';
@@ -206,6 +206,47 @@ class FundingByYearChart extends Component {
     return ret;
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  calculateYAxisAbbreviations = (annotations, directData) => {
+    const { translations, globalSettings } = this.props;
+    const newAnnotations = annotations;
+    let biggest = 0;
+    directData.forEach(i => {
+      if (i.values) {
+        i.values.forEach(j => {
+          Object.keys(j).forEach(k => {
+            const amount = Number.parseFloat(j[k]);
+            if (amount > biggest) {
+              biggest = amount;
+            }
+          });
+        });
+      }
+    });
+    if (biggest) {
+      const formatter = formatKMB(translations, globalSettings.precision, globalSettings.decimalSeparator, false);
+      for (let i = 25; i <= 100; i += 25) {
+        newAnnotations.push({
+          text: formatter(this.getTickValue(biggest, i)),
+          align: 'right',
+          xref: 'paper',
+          x: 0,
+          xanchor: 'right',
+          xshift: 25,
+          yref: 'y',
+          y: this.getTickValue(biggest, i),
+          yanchor: 'auto',
+          yshift: 0,
+          showarrow: false
+        });
+      }
+    }
+    return newAnnotations;
+  }
+
+  // eslint-disable-next-line no-mixed-operators
+  getTickValue = (total, i) => (total * i / 100)
+
   render() {
     const { translations, globalSettings } = this.props;
     const {
@@ -216,7 +257,7 @@ class FundingByYearChart extends Component {
       duration: 2000,
       easing: 'cubic-in-out'
     }; */
-    const annotations = directData.length === 0 ? [
+    let annotations = directData.length === 0 ? [
       {
         text: translations[`${TRN_PREFIX}no-data`],
         xref: 'paper',
@@ -227,6 +268,7 @@ class FundingByYearChart extends Component {
         }
       }
     ] : [];
+    annotations = this.calculateYAxisAbbreviations(annotations, directData);
     return (
       <div>
         <div>
@@ -294,7 +336,7 @@ class FundingByYearChart extends Component {
             showlegend: false,
             /* transition, */
             margin: {
-              l: 50,
+              l: 60,
               r: 30,
               b: 50,
               t: 20,
@@ -311,7 +353,10 @@ class FundingByYearChart extends Component {
             },
             yaxis: {
               automargin: true,
-              fixedrange: true
+              fixedrange: true,
+              visible: true,
+              showline: false,
+              showticklabels: false
             },
             hovermode: 'closest',
             separators: globalSettings.decimalSeparator + globalSettings.groupSeparator

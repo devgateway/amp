@@ -3,6 +3,7 @@ package org.digijava.kernel.ampapi.endpoints.dashboards.services;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,8 @@ import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.amp.OutputSettings;
 import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.dgfoundation.amp.reports.ReportUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
+import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.dashboards.DashboardFormParameters;
 import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
@@ -44,13 +47,17 @@ import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.DashboardConstants;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+
+import static org.digijava.kernel.ampapi.endpoints.common.EPConstants.TRANSLATIONS;
 
 /**
  * 
@@ -591,8 +598,41 @@ public class DashboardsService {
             formatted = formatted.substring(0, formatted.length() - 2);
         }
         if (addSufix) {
-            formatted = formatted + "kMBTPE".charAt(exp - 1);
+            String currentLang = RequestUtils.getNavigationLanguage(TLSUtils.getRequest()).getCode();
+            formatted = formatted + getKMB(currentLang, exp);
         }
         return formatted;
+    }
+
+    private static String getKMB(String lang, int exp) {
+        String ret = "";
+        if (lang.equals("en") || lang.equals("sp")) {
+            ret = "kMBTPE".charAt(exp - 1) + "";
+        } else if (lang.equals("fr")) {
+            switch (exp) {
+                case 1:
+                    ret = "m";
+                    break;
+                case 2:
+                    ret = "M";
+                    break;
+                case 3:
+                    ret = "MM";
+                    break;
+                case 4:
+                    ret = "T";
+                    break;
+                case 5:
+                    ret = "P";
+                    break;
+                case 6:
+                    ret = "E";
+                    break;
+                default:
+                    ret = "";
+                    break;
+            }
+        }
+        return ret;
     }
 }

@@ -79,17 +79,48 @@ export function extractPrograms(mapping, noIndirectMapping) {
   return ret;
 }
 
-export function formatKMB(translations, precision, decimalSeparator) {
+export function formatKMB(translations, precision, decimalSeparator, summary, lang) {
   const formatSI = format(`.${precision || 3}s`);
   decimalSeparator = decimalSeparator || '.';
+  if (summary) {
+    return (value) => formatSI(value)
+      .replace('k', getSuffixForLang('k', lang))
+      .replace('G', getSuffixForLang('G', lang))
+      .replace('.', decimalSeparator);
+  }
   return (value) => formatSI(value)
-    .replace('k', translations['amp.dashboard:chart-thousand'])
-    .replace('M', translations['amp.dashboard:chart-million'])
-    .replace('G', translations['amp.dashboard:chart-billion']) // now just need to convert G Gigia -> B Billion
-    .replace('T', translations['amp.dashboard:chart-trillion'])
-    .replace('P', translations['amp.dashboard:chart-peta'])
-    .replace('E', translations['amp.dashboard:chart-exa'])
+    .replace('k', ` ${translations['amp.dashboard:chart-thousand']}`)
+    .replace('M', ` ${translations['amp.dashboard:chart-million']}`)
+    .replace('G', ` ${translations['amp.dashboard:chart-billion']}`) // now just need to convert G Gigia -> B Billion
+    .replace('T', ` ${translations['amp.dashboard:chart-trillion']}`)
+    .replace('P', ` ${translations['amp.dashboard:chart-peta']}`)
+    .replace('E', ` ${translations['amp.dashboard:chart-exa']}`)
     .replace('.', decimalSeparator);
+}
+
+function getSuffixForLang(prefix, lang) {
+  // eslint-disable-next-line default-case
+  switch (lang) {
+    case 'en':
+      return prefix;
+    case 'fr':
+      // eslint-disable-next-line default-case
+      switch (prefix) {
+        case 'k':
+          return 'm';
+        case 'G':
+          return 'MM';
+      }
+      break;
+    case 'sp':
+      // eslint-disable-next-line default-case
+      switch (prefix) {
+        case 'G':
+          return 'B';
+      }
+      break;
+  }
+  return prefix;
 }
 
 export function formatNumber(currency, translations, value, precision, decimalSeparator, groupSeparator, numberDivider,

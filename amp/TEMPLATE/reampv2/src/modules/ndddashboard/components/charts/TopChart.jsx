@@ -13,6 +13,7 @@ const styles = {
 };
 
 class TopChart extends Component {
+  // eslint-disable-next-line class-methods-use-this
   getColor(item) {
     return colors[item.index];
   }
@@ -20,7 +21,7 @@ class TopChart extends Component {
   getLabel(item) {
     const { translations } = this.context;
     const { globalSettings } = this.props;
-    const formatter = formatKMB(translations, globalSettings.precision, globalSettings.decimalSeparator);
+    const formatter = formatKMB(translations, globalSettings.precision, globalSettings.decimalSeparator, false, null);
     return formatter(item.data.value);
   }
 
@@ -37,7 +38,9 @@ class TopChart extends Component {
   }
 
   render() {
-    const { data, globalSettings, translations, settings } = this.props;
+    const {
+      data, globalSettings, translations, settings
+    } = this.props;
     const transformedData = data.values.slice(0, 5).map(v => ({
       id: v.id.toString(),
       formattedAmount: formatNumberWithSettings(settings[CURRENCY_CODE], translations, globalSettings, v.amount, true),

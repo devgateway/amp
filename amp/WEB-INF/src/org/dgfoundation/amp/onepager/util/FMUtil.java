@@ -627,4 +627,17 @@ public final class FMUtil {
         }
         return ret;
     }
+
+    public static boolean isVisibleChildWithFmName(Component c, String fmName) {
+        try {
+            LinkedList<FMInfo> path = FMUtil.getFmPath(c);
+            path.add(new FMInfo(AmpFMTypes.MODULE, fmName));
+            String pathString = FMUtil.getFmPathString(path);
+            return FMUtil.isFmVisible(pathString, AmpFMTypes.MODULE);
+        } catch (PathException e) {
+            logger.error(e.getMessage(), e);
+        }
+
+        return false;
+    }
 }

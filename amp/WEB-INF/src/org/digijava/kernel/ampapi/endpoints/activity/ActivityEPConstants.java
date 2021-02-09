@@ -102,6 +102,7 @@ public class ActivityEPConstants {
 
     // floating comparison constant
     public static final Double EPSILON = 0.0001;
+    public static final Double MAXIMUM_PERCENTAGE = 100d;
 
     public static final Integer MAX_BULK_ACTIVITIES_ALLOWED = 20;
 

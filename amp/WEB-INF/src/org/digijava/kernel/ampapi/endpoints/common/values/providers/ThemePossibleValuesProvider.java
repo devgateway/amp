@@ -42,14 +42,14 @@ public class ThemePossibleValuesProvider extends AbstractPossibleValuesDAOProvid
     protected Map<Long, Long> getMappedPrograms() {
         List<AmpThemeMapping> list = possibleValuesDAO.getMappedThemes();
         if (list != null) {
-            Map<Long, Long> srcToDst = list.stream()
+            /* Map<Long, Long> srcToDst = list.stream()
                     .collect(Collectors.toMap(atm -> atm.getSrcTheme().getAmpThemeId(),
-                            atm -> atm.getDstTheme().getAmpThemeId()));
+                            atm -> atm.getDstTheme().getAmpThemeId())); */
             Map<Long, Long> dstToSrc = list.stream()
                     .collect(Collectors.toMap(atm -> atm.getDstTheme().getAmpThemeId(),
                             atm -> atm.getSrcTheme().getAmpThemeId()));
-            srcToDst.putAll(dstToSrc);
-            return srcToDst;
+            // srcToDst.putAll(dstToSrc);
+            return dstToSrc;
         }
         return new HashMap<>();
     }

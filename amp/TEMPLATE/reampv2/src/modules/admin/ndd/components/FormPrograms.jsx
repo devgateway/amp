@@ -306,7 +306,7 @@ class FormPrograms extends Component {
     if (errorUpdating) {
       messages.push({
         isError: true,
-        text: translations[`${trnPrefix}update-activities-error`]
+        text: errorUpdating
       });
     }
 
@@ -343,7 +343,7 @@ FormPrograms.propTypes = {
   error: PropTypes.object,
   pending: PropTypes.bool,
   updating: PropTypes.bool,
-  errorUpdating: PropTypes.bool,
+  errorUpdating: PropTypes.string,
   _saveNDD: PropTypes.func.isRequired,
   _updateActivities: PropTypes.func.isRequired,
   saving: PropTypes.bool.isRequired
@@ -353,7 +353,7 @@ FormPrograms.defaultProps = {
   error: undefined,
   pending: false,
   updating: false,
-  errorUpdating: false
+  errorUpdating: null
 };
 
 const mapStateToProps = state => ({
@@ -361,7 +361,7 @@ const mapStateToProps = state => ({
   error: sendNDDError(state.saveNDDReducer),
   saving: sendNDDSaving(state.saveNDDReducer),
   pending: sendNDDPending(state.saveNDDReducer),
-  updating: updateActivitiesPending(state.updateActivitiesReducer),
+  updating: (state.updateActivitiesReducer),
   errorUpdating: updateActivitiesError(state.updateActivitiesReducer)
 });
 const mapDispatchToProps = dispatch => bindActionCreators({

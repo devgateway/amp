@@ -12,7 +12,6 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.startup.AMPStartupListener;
-import org.digijava.module.aim.startup.AmpBackgroundActivitiesUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -56,12 +55,20 @@ public class ActivityCloser {
 
             AmpTeamMember ampClosingMember = getAmpTeamMemberModifier(ver.getTeam());
 
-            AmpActivityVersion newVer = this.cloneActivity(ampClosingMember, ver, newStatus,
+            AmpActivityVersion newVer = this.cloneAndCloseActivity(ampClosingMember, ver, newStatus,
                     closedCategoryValue, saveContext, oldActivityStatus);
 
             LOGGER.info(String.format("... done, new amp_activity_id=%d\n", newVer.getAmpActivityId()));
             PersistenceManager.getSession().flush();
         }
+    }
+
+    private AmpActivityVersion cloneAndCloseActivity(AmpTeamMember member, AmpActivityVersion oldActivity,
+                                                     ApprovalStatus newStatus, Long closedProjectStatusCategoryValue,
+                                                     SaveContext saveContext, AmpCategoryValue oldActivityStatus)
+            throws Exception {
+        modifyProjectStatus(oldActivity, newStatus, closedProjectStatusCategoryValue, oldActivityStatus);
+        return cloneActivity(member, oldActivity, saveContext);
     }
 
     /**
@@ -72,23 +79,15 @@ public class ActivityCloser {
      * @return
      * @throws CloneNotSupportedException
      */
-    private AmpActivityVersion cloneActivity(AmpTeamMember member, AmpActivityVersion oldActivity,
-                                             ApprovalStatus newStatus, Long closedProjectStatusCategoryValue,
-                                             SaveContext saveContext, AmpCategoryValue oldActivityStatus)
+    public static  AmpActivityVersion cloneActivity(AmpTeamMember member, AmpActivityVersion oldActivity,
+                                             SaveContext saveContext)
             throws Exception {
+
         AmpActivityVersion prevVersion = oldActivity.getAmpActivityGroup().getAmpActivityLastVersion();
-        oldActivity.getAmpActivityGroup().setAutoClosedOnExpiration(true);
-
-        oldActivity.setApprovalStatus(newStatus);
-        oldActivity.getCategories().remove(oldActivityStatus);
-        oldActivity.getCategories().add(CategoryManagerUtil.
-                getAmpCategoryValueFromDb(closedProjectStatusCategoryValue));
-
         EditorStore editorStore = new EditorStore();
         Site site = SiteUtils.getDefaultSite();
 
         AmpActivityVersion auxActivity = null;
-
         auxActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(oldActivity, null,
                 member, oldActivity.getDraft(), PersistenceManager.getSession(), saveContext, editorStore, site);
         java.util.Locale javaLocale = new java.util.Locale("en");
@@ -96,5 +95,14 @@ public class ActivityCloser {
                 SiteUtils.getDefaultSite(), javaLocale,
                 auxActivity, prevVersion);
         return auxActivity;
+    }
+
+    private void modifyProjectStatus(AmpActivityVersion oldActivity, ApprovalStatus newStatus,
+                                     Long closedProjectStatusCategoryValue, AmpCategoryValue oldActivityStatus) {
+        oldActivity.getAmpActivityGroup().setAutoClosedOnExpiration(true);
+        oldActivity.setApprovalStatus(newStatus);
+        oldActivity.getCategories().remove(oldActivityStatus);
+        oldActivity.getCategories().add(CategoryManagerUtil.
+                getAmpCategoryValueFromDb(closedProjectStatusCategoryValue));
     }
 }

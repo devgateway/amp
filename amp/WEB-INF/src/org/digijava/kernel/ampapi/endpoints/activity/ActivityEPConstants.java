@@ -3,13 +3,12 @@
  */
 package org.digijava.kernel.ampapi.endpoints.activity;
 
+import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.dgfoundation.amp.ar.ArConstants;
 
 /**
  * Activity Endpoint related constants
@@ -24,6 +23,8 @@ public class ActivityEPConstants {
         ALWAYS
     }
 
+    public static final String X_ASYNC_STATUS = "X-Async-Status";
+    public static final String X_ASYNC_RESULT_ID = "result-id";
     // JSON fields
     public static final String ACTIVITY = "activity";
     public static final String FIELD_NAME = "field_name";

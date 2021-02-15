@@ -14,6 +14,7 @@ import fetchNDD from '../actions/fetchNDD';
 import fetchPrograms from '../actions/fetchAvailablePrograms';
 import fetchLayout from '../actions/fetchLayout';
 import FormPrograms from './FormPrograms';
+import BlockUI from './common/BlockUI';
 
 class Main extends Component {
   constructor(props) {
@@ -42,10 +43,9 @@ class Main extends Component {
 
   render() {
     const {
-      ndd, programs, api, trnPrefix, isIndirect
+      ndd, programs, api, trnPrefix, isIndirect, indirectProgramUpdatePending
     } = this.props;
     const { translations } = this.context;
-
     if (!this.shouldComponentRender() || ndd.length === 0) {
       return <div className="loading">{translations[`${trnPrefix}loading`]}</div>;
     } else {
@@ -59,6 +59,7 @@ class Main extends Component {
                 <FormPrograms />
               </div>
             </div>
+            <BlockUI blocking={indirectProgramUpdatePending} />
           </NDDContext.Provider>
         </div>
       );
@@ -74,7 +75,8 @@ const mapStateToProps = state => ({
   programs: getPrograms(state.startupReducer),
   pendingNDD: getNDDPending(state.startupReducer),
   pendingPrograms: getProgramsPending(state.startupReducer),
-  translations: state.translationsReducer.translations
+  translations: state.translationsReducer.translations,
+  indirectProgramUpdatePending: state.updateActivitiesReducer.indirectProgramUpdatePending
 });
 const mapDispatchToProps = dispatch => bindActionCreators({
   fetchNDD,

@@ -1,24 +1,12 @@
 package org.digijava.kernel.request;
 
-import static org.digijava.module.aim.helper.Constants.CURRENT_MEMBER;
-import static org.digijava.module.aim.helper.Constants.CURRENT_USER;
-import static org.digijava.module.aim.util.FeaturesUtil.AMP_TREE_VISIBILITY_ATTR;
-
-import java.nio.file.Paths;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.Constants;
 import org.digijava.kernel.ampapi.endpoints.activity.ApiContext;
 import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.translator.util.TrnUtil;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.util.SiteUtils;
@@ -30,6 +18,19 @@ import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.Stubber;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import static org.digijava.module.aim.helper.Constants.CURRENT_MEMBER;
+import static org.digijava.module.aim.helper.Constants.CURRENT_USER;
+import static org.digijava.module.aim.util.FeaturesUtil.AMP_TREE_VISIBILITY_ATTR;
 
 /**
  * Thread-local storage utils: data stored per-current-request in the TLS area, to avoid carrying HttpServletRequest deep inside the stack
@@ -251,7 +252,8 @@ public class TLSUtils {
         HttpServletRequest threadRequest = TLSUtils.getRequest();
         HttpSession threadSession = threadRequest.getSession();
         ServletContext servletContext = threadRequest.getServletContext();
-        
+
+        threadRequest.setAttribute(TrnUtil.PREFIXES, new ArrayList<>());
         threadSession.setAttribute(CURRENT_USER, apiContext.getUser());
         threadSession.setAttribute(CURRENT_MEMBER, apiContext.getTeamMember());
         threadSession.setAttribute(AMP_TREE_VISIBILITY_ATTR,

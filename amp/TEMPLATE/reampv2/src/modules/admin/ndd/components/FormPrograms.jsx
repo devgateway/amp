@@ -361,7 +361,7 @@ const mapStateToProps = state => ({
   error: sendNDDError(state.saveNDDReducer),
   saving: sendNDDSaving(state.saveNDDReducer),
   pending: sendNDDPending(state.saveNDDReducer),
-  updating: (state.updateActivitiesReducer),
+  updating: updateActivitiesPending(state.updateActivitiesReducer),
   errorUpdating: updateActivitiesError(state.updateActivitiesReducer)
 });
 const mapDispatchToProps = dispatch => bindActionCreators({

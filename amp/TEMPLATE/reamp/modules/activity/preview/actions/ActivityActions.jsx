@@ -211,7 +211,7 @@ export function loadActivityForActivityPreview(activityId) {
             reorderFundingItemId: settings[REORDER_FUNDING_ITEM],
             rtlDirection: settings[RTL_DIRECTION],
             showActivityWorkspaces: settings[SHOW_ACTIVITY_WORKSPACES],
-            hideContacts: !settings[TEAM_ID] && settings[HIDE_CONTACTS_PUBLIC_VIEW],
+            hideContacts: !settings[TEAM_ID] && sshowChangeSummaryettings[HIDE_CONTACTS_PUBLIC_VIEW],
             validation: {
                 status: activityInfo['validation-status'],
                 daysToAutomaticValidation: activityInfo['days-for-automatic-validation'],
@@ -220,7 +220,7 @@ export function loadActivityForActivityPreview(activityId) {
                 versionHistory: activityInfo['version-history'],
                 activityLastVersionId: activityInfo['amp-activity-last-version-id'],
                 updateCurrentVersion: activityInfo['update-current-version'],
-                showChangeSummary: settings[TEAM_ID] || settings[PUBLIC_CHANGE_SUMMARY],
+                showChangeSummary: activityInfo['show-change-summary'],
                 showVersionHistory: settings[TEAM_ID] || settings[PUBLIC_VERSION_HISTORY],
             },
             hideEditableExportFormatsPublicView: settings['hide-editable-export-formats-public-view']

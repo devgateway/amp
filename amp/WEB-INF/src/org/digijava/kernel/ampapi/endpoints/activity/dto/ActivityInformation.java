@@ -40,6 +40,9 @@ public class ActivityInformation {
     @JsonProperty(ActivityEPConstants.ACTIVITY_TEAM_LEAD_DATA)
     private String activityWorkspaceLeadData;
 
+    @JsonProperty(ActivityEPConstants.SHOW_CHANGE_SUMMARY)
+    private boolean showChangeSummary;
+
     public ActivityInformation(Long ampActivityId) {
         this.ampActivityId = ampActivityId;
         this.validationStatus = ValidationStatus.UNKNOWN;
@@ -118,6 +121,11 @@ public class ActivityInformation {
         this.activityWorkspaceLeadData = activityWorkspaceLeadData;
     }
 
+    public boolean isShowChangeSummary() {
+        return showChangeSummary;
+    }
 
-
+    public void setShowChangeSummary(boolean showChangeSummary) {
+        this.showChangeSummary = showChangeSummary;
+    }
 }

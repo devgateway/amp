@@ -45,11 +45,13 @@ public class NDDService {
         private Long id;
         private String value;
         private boolean isIndirect;
+        private int levels;
 
-        SingleProgramData(Long id, String value, boolean isIndirect) {
+        SingleProgramData(Long id, String value, boolean isIndirect, int levels) {
             this.id = id;
             this.value = value;
             this.isIndirect = isIndirect;
+            this.levels = levels;
         }
 
         public Long getId() {
@@ -62,6 +64,10 @@ public class NDDService {
 
         public boolean isIndirect() {
             return isIndirect;
+        }
+
+        public int getLevels() {
+            return levels;
         }
     }
 
@@ -83,8 +89,8 @@ public class NDDService {
 
         List<AmpIndirectTheme> mapping = loadIndirectMapping();
 
-        SingleProgramData srcSPD = srcPV != null ? new SingleProgramData(srcPV.getId(), srcPV.getValue(), false) : null;
-        SingleProgramData dstSPD = dstPV != null ? new SingleProgramData(dstPV.getId(), dstPV.getValue(), true) : null;
+        SingleProgramData srcSPD = srcPV != null ? new SingleProgramData(srcPV.getId(), srcPV.getValue(), false, 0) : null;
+        SingleProgramData dstSPD = dstPV != null ? new SingleProgramData(dstPV.getId(), dstPV.getValue(), true, 0) : null;
         return new IndirectProgramMappingConfiguration(mapping, srcSPD, dstSPD, allPrograms);
     }
 
@@ -102,8 +108,8 @@ public class NDDService {
 
         List<AmpThemeMapping> mapping = loadMapping();
 
-        SingleProgramData srcSPD = srcPV != null ? new SingleProgramData(srcPV.getId(), srcPV.getValue(), false) : null;
-        SingleProgramData dstSPD = dstPV != null ? new SingleProgramData(dstPV.getId(), dstPV.getValue(), false) : null;
+        SingleProgramData srcSPD = srcPV != null ? new SingleProgramData(srcPV.getId(), srcPV.getValue(), false, 0) : null;
+        SingleProgramData dstSPD = dstPV != null ? new SingleProgramData(dstPV.getId(), dstPV.getValue(), false, 0) : null;
         return new ProgramMappingConfiguration(mapping, srcSPD, dstSPD, allPrograms);
     }
 
@@ -143,10 +149,12 @@ public class NDDService {
         List<SingleProgramData> availablePrograms = new ArrayList<>();
         List<AmpTheme> src = getAvailablePrograms(false);
         List<AmpTheme> dst = getAvailablePrograms(true);
-        availablePrograms.addAll(src.stream().map(p -> new SingleProgramData(p.getAmpThemeId(), p.getName(), false))
+        availablePrograms.addAll(src.stream().map(p -> new SingleProgramData(p.getAmpThemeId(), p.getName(), false,
+                ProgramUtil.getMaxDepth(p, null)))
                 .collect(Collectors.toList()));
         if (includeIndirectPrograms) {
-            availablePrograms.addAll(dst.stream().map(p -> new SingleProgramData(p.getAmpThemeId(), p.getName(), true))
+            availablePrograms.addAll(dst.stream().map(p -> new SingleProgramData(p.getAmpThemeId(), p.getName(), true,
+                    ProgramUtil.getMaxDepth(p, null)))
                     .collect(Collectors.toList()));
         }
         return availablePrograms;

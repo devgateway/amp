@@ -2045,4 +2045,18 @@ public class ProgramUtil {
         return dstThemes;
     }
 
+    public static Integer getMaxDepth(AmpTheme program, Integer currentLevel) {
+        if (currentLevel == null || program.getIndlevel() > currentLevel) {
+            currentLevel = program.getIndlevel();
+        }
+        if (program.getSiblings() != null) {
+            Iterator<AmpTheme> iterator = program.getSiblings().iterator();
+            while(iterator.hasNext()) {
+                AmpTheme child = iterator.next();
+                currentLevel = getMaxDepth(child, currentLevel);
+            }
+        }
+        return currentLevel;
+    }
+
 }

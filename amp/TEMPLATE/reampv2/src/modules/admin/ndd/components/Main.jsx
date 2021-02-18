@@ -14,6 +14,7 @@ import {
 import fetchNDD from '../actions/fetchNDD';
 import fetchPrograms from '../actions/fetchAvailablePrograms';
 import fetchLayout from '../actions/fetchLayout';
+import fetchSettings from '../actions/fetchSettings';
 import FormPrograms from './FormPrograms';
 import BlockUI from './common/BlockUI';
 
@@ -26,16 +27,18 @@ class Main extends Component {
 
   componentDidMount() {
     const {
-      _fetchNDD, _fetchPrograms, api, _fetchLayout
+      _fetchNDD, _fetchPrograms, api, _fetchLayout, _fetchSettings
     } = this.props;
-    _fetchLayout().then((layout) => {
-      if (layout && layout.logged && layout.administratorMode === true) {
-        _fetchNDD(api.mappingConfig);
-        _fetchPrograms(api.programs);
-        this.setState({ isSuperAdmin: layout.email.indexOf('super') === 0 });
-      } else {
-        window.location.replace('/login.do');
-      }
+    _fetchSettings().then(settings => {
+      _fetchLayout().then((layout) => {
+        if (layout && layout.logged && layout.administratorMode === true) {
+          _fetchNDD(api.mappingConfig);
+          _fetchPrograms(api.programs);
+          this.setState({ isSuperAdmin: layout.email.indexOf('super') === 0, settings });
+        } else {
+          window.location.replace('/login.do');
+        }
+      }).catch(e => console.error(e));
     }).catch(e => console.error(e));
   }
 
@@ -49,14 +52,14 @@ class Main extends Component {
       ndd, programs, api, trnPrefix, isIndirect, indirectProgramUpdatePending
     } = this.props;
     const { translations } = this.context;
-    const { isSuperAdmin } = this.state;
+    const { isSuperAdmin, settings } = this.state;
     if (!this.shouldComponentRender() || ndd.length === 0) {
       return <div className="loading">{translations[`${trnPrefix}loading`]}</div>;
     } else {
       return (
         <div className="ndd-container">
           <NDDContext.Provider value={{
-            ndd, translations, programs, api, trnPrefix, isIndirect, isSuperAdmin
+            ndd, translations, programs, api, trnPrefix, isIndirect, isSuperAdmin, settings
           }}>
             <div className="col-md-12">
               <div>
@@ -77,6 +80,7 @@ Main.propTypes = {
   _fetchNDD: PropTypes.func.isRequired,
   _fetchPrograms: PropTypes.func.isRequired,
   _fetchLayout: PropTypes.func.isRequired,
+  _fetchSettings: PropTypes.func.isRequired,
   api: PropTypes.object.isRequired
 };
 
@@ -93,7 +97,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => bindActionCreators({
   _fetchNDD: fetchNDD,
   _fetchPrograms: fetchPrograms,
-  _fetchLayout: fetchLayout
+  _fetchLayout: fetchLayout,
+  _fetchSettings: fetchSettings
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);

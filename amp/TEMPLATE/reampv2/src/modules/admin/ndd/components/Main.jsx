@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './css/style.css';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { NDDContext } from './Startup';
 import {
   getNDD,
@@ -20,20 +21,22 @@ class Main extends Component {
   constructor(props) {
     super(props);
     this.shouldComponentRender = this.shouldComponentRender.bind(this);
+    this.state = {};
   }
 
   componentDidMount() {
     const {
-      fetchNDD, fetchPrograms, api, fetchLayout
+      _fetchNDD, _fetchPrograms, api, _fetchLayout
     } = this.props;
-    fetchLayout().then((layout) => {
+    _fetchLayout().then((layout) => {
       if (layout && layout.logged && layout.administratorMode === true) {
-        fetchNDD(api.mappingConfig);
-        fetchPrograms(api.programs);
+        _fetchNDD(api.mappingConfig);
+        _fetchPrograms(api.programs);
+        this.setState({ isSuperAdmin: layout.email.indexOf('super') === 0 });
       } else {
         window.location.replace('/login.do');
       }
-    });
+    }).catch(e => console.error(e));
   }
 
   shouldComponentRender() {
@@ -46,13 +49,14 @@ class Main extends Component {
       ndd, programs, api, trnPrefix, isIndirect, indirectProgramUpdatePending
     } = this.props;
     const { translations } = this.context;
+    const { isSuperAdmin } = this.state;
     if (!this.shouldComponentRender() || ndd.length === 0) {
       return <div className="loading">{translations[`${trnPrefix}loading`]}</div>;
     } else {
       return (
         <div className="ndd-container">
           <NDDContext.Provider value={{
-            ndd, translations, programs, api, trnPrefix, isIndirect
+            ndd, translations, programs, api, trnPrefix, isIndirect, isSuperAdmin
           }}>
             <div className="col-md-12">
               <div>
@@ -69,6 +73,13 @@ class Main extends Component {
 
 Main.contextType = NDDContext;
 
+Main.propTypes = {
+  _fetchNDD: PropTypes.func.isRequired,
+  _fetchPrograms: PropTypes.func.isRequired,
+  _fetchLayout: PropTypes.func.isRequired,
+  api: PropTypes.object.isRequired
+};
+
 const mapStateToProps = state => ({
   error: getNDDError(state.startupReducer),
   ndd: getNDD(state.startupReducer),
@@ -78,9 +89,11 @@ const mapStateToProps = state => ({
   translations: state.translationsReducer.translations,
   indirectProgramUpdatePending: state.updateActivitiesReducer.indirectProgramUpdatePending
 });
+
 const mapDispatchToProps = dispatch => bindActionCreators({
-  fetchNDD,
-  fetchPrograms,
-  fetchLayout
+  _fetchNDD: fetchNDD,
+  _fetchPrograms: fetchPrograms,
+  _fetchLayout: fetchLayout
 }, dispatch);
+
 export default connect(mapStateToProps, mapDispatchToProps)(Main);

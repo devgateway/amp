@@ -94,6 +94,18 @@ public class AmpGeneralSettings {
     @JsonProperty("workspace-prefix")
     private String workspacePrefix;
 
+    @JsonProperty("ndd-mapping-indirect-direct-level")
+    private Integer nddMappingIndirectDirectLevel;
+
+    @JsonProperty("ndd-mapping-indirect-indirect-level")
+    private Integer nddMappingIndirectIndirectLevel;
+
+    @JsonProperty("ndd-mapping-program-source-level")
+    private Integer nddMappingProgramSourceLevel;
+
+    @JsonProperty("ndd-mapping-program-destination-level")
+    private Integer nddMappingProgramDestinationLevel;
+
     @JsonProperty(SettingsConstants.CALENDAR_TYPE_ID)
     private Long calendarId;
 
@@ -442,5 +454,37 @@ public class AmpGeneralSettings {
 
     public void setHideContactsPublicView(Boolean hideContactsPublicView) {
         this.hideContactsPublicView = hideContactsPublicView;
+    }
+
+    public Integer getNddMappingIndirectDirectLevel() {
+        return nddMappingIndirectDirectLevel;
+    }
+
+    public void setNddMappingIndirectDirectLevel(Integer nddMappingIndirectDirectLevel) {
+        this.nddMappingIndirectDirectLevel = nddMappingIndirectDirectLevel;
+    }
+
+    public Integer getNddMappingIndirectIndirectLevel() {
+        return nddMappingIndirectIndirectLevel;
+    }
+
+    public void setNddMappingIndirectIndirectLevel(Integer nddMappingIndirectIndirectLevel) {
+        this.nddMappingIndirectIndirectLevel = nddMappingIndirectIndirectLevel;
+    }
+
+    public Integer getNddMappingProgramSourceLevel() {
+        return nddMappingProgramSourceLevel;
+    }
+
+    public void setNddMappingProgramSourceLevel(Integer nddMappingProgramSourceLevel) {
+        this.nddMappingProgramSourceLevel = nddMappingProgramSourceLevel;
+    }
+
+    public Integer getNddMappingProgramDestinationLevel() {
+        return nddMappingProgramDestinationLevel;
+    }
+
+    public void setNddMappingProgramDestinationLevel(Integer nddMappingProgramDestinationLevel) {
+        this.nddMappingProgramDestinationLevel = nddMappingProgramDestinationLevel;
     }
 }

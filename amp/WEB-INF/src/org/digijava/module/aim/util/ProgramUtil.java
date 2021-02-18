@@ -2050,9 +2050,7 @@ public class ProgramUtil {
             currentLevel = program.getIndlevel();
         }
         if (program.getSiblings() != null) {
-            Iterator<AmpTheme> iterator = program.getSiblings().iterator();
-            while(iterator.hasNext()) {
-                AmpTheme child = iterator.next();
+            for (AmpTheme child : program.getSiblings()) {
                 currentLevel = getMaxDepth(child, currentLevel);
             }
         }

@@ -1,6 +1,5 @@
 /**
  * Copyright (c) 2010 Development Gateway (www.developmentgateway.org)
- *
  */
 package org.dgfoundation.amp.onepager.models;
 
@@ -16,14 +15,15 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.criterion.SimpleExpression;
 
-import static org.digijava.module.aim.util.ProgramUtil.INDIRECT_PRIMARY_PROGRAM;
-
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static org.digijava.module.aim.util.ProgramUtil.INDIRECT_PRIMARY_PROGRAM;
 
 /**
  * @author aartimon@dginternational.org since Oct 22, 2010
@@ -39,7 +39,9 @@ public class AmpThemeSearchModel extends AbstractAmpAutoCompleteModel<AmpTheme> 
 
     public enum PARAM implements AmpAutoCompleteModelParam {
         PROGRAM_TYPE, ACTIVITY_PROGRAMS
-    };
+    }
+
+    ;
 
     @Override
     protected Collection<AmpTheme> load() {
@@ -60,6 +62,7 @@ public class AmpThemeSearchModel extends AbstractAmpAutoCompleteModel<AmpTheme> 
                         .collect(Collectors.toList());
 
                 if (mappedPrograms != null) {
+                    filteredPrograms.sort(Comparator.comparing(AmpTheme::getIndlevel));
                     ret.addAll(filteredPrograms);
                 } else {
                     ret.addAll((Collection<? extends AmpTheme>) createTreeView(filteredPrograms));

@@ -16,10 +16,10 @@
 						unique (src_theme_id, dst_theme_id) INITIALLY DEFERRED;
 
 				INSERT INTO amp_global_settings(id, settingsname, settingsvalue, possiblevalues, description, section, value_translatable, internal)
-				VALUES (nextval('amp_global_settings_seq'), 'Mapping Source Program', null, 'v_amp_theme', 'Source root program used in mapping programs', 'user', null, TRUE);
+				VALUES (nextval('amp_global_settings_seq'), 'Mapping Source Program', null, 'v_amp_theme', 'Source root program used in mapping programs', null, null, TRUE);
 
 				INSERT INTO amp_global_settings(id, settingsname, settingsvalue, possiblevalues, description, section, value_translatable, internal)
-				VALUES (nextval('amp_global_settings_seq'), 'Mapping Destination Program', null, 'v_amp_theme', 'Destination root program used in mapping programs', 'user', null, TRUE);
+				VALUES (nextval('amp_global_settings_seq'), 'Mapping Destination Program', null, 'v_amp_theme', 'Destination root program used in mapping programs', null, null, TRUE);
 
 			]]></lang>
         </script>

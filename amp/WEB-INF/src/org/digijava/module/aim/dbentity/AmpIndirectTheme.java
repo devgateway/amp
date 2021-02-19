@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import io.swagger.models.auth.In;
 
 /**
  * @author Octavian Ciubotaru
@@ -26,12 +27,20 @@ public class AmpIndirectTheme {
     @JsonProperty("dst-program")
     private AmpTheme newTheme;
 
+    @JsonProperty("levelSrc")
+    private Integer levelSrc;
+
+    @JsonProperty("levelDst")
+    private Integer levelDst;
+
     public AmpIndirectTheme() {
     }
 
-    public AmpIndirectTheme(AmpTheme oldTheme, AmpTheme newTheme) {
+    public AmpIndirectTheme(AmpTheme oldTheme, AmpTheme newTheme, Integer levelSrc, Integer levelDst) {
         this.oldTheme = oldTheme;
         this.newTheme = newTheme;
+        this.levelSrc = levelSrc;
+        this.levelDst = levelDst;
     }
 
     public Long getId() {
@@ -56,5 +65,21 @@ public class AmpIndirectTheme {
 
     public void setNewTheme(AmpTheme newTheme) {
         this.newTheme = newTheme;
+    }
+
+    public Integer getLevelSrc() {
+        return levelSrc;
+    }
+
+    public void setLevelSrc(Integer levelSrc) {
+        this.levelSrc = levelSrc;
+    }
+
+    public Integer getLevelDst() {
+        return levelDst;
+    }
+
+    public void setLevelDst(Integer levelDst) {
+        this.levelDst = levelDst;
     }
 }

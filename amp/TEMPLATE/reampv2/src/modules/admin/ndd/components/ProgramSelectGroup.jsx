@@ -8,7 +8,7 @@ import {
 } from '../constants/Constants';
 import '../../../../../node_modules/react-bootstrap-typeahead/css/Typeahead.min.css';
 import './css/style.css';
-import ProgramSelect from './ProgramSelect';
+import Select from './Select';
 import * as Utils from '../utils/Utils';
 
 class ProgramSelectGroup extends Component {
@@ -166,7 +166,7 @@ class ProgramSelectGroup extends Component {
     return (
       <div>
         <div style={{ width: '100%' }}>
-          <ProgramSelect
+          <Select
             placeholder={translations[`${trnPrefix}choose-${type}-lvl-${FIRST_LEVEL}`]}
             label={translations[`${trnPrefix + type}-program-lvl-${FIRST_LEVEL}`]}
             options={this.getOptionsForLevel(FIRST_LEVEL)}
@@ -174,7 +174,7 @@ class ProgramSelectGroup extends Component {
             onChange={this.onSelectChange}
             level={FIRST_LEVEL}
             disabled={disabled} />
-          <ProgramSelect
+          <Select
             placeholder={translations[`${trnPrefix}choose-${type}-lvl-${SECOND_LEVEL}`]}
             label={translations[`${trnPrefix + type}-program-lvl-${SECOND_LEVEL}`]}
             options={this.getOptionsForLevel(SECOND_LEVEL)}
@@ -182,7 +182,7 @@ class ProgramSelectGroup extends Component {
             onChange={this.onSelectChange}
             level={SECOND_LEVEL}
             disabled={disabled} />
-          <ProgramSelect
+          <Select
             placeholder={translations[`${trnPrefix}choose-${type}-lvl-${THIRD_LEVEL}`]}
             label={translations[`${trnPrefix + type}-program-lvl-${THIRD_LEVEL}`]}
             options={this.getOptionsForLevel(THIRD_LEVEL)}

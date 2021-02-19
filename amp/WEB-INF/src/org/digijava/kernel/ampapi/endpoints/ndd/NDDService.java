@@ -24,6 +24,10 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 
+import static org.digijava.module.aim.helper.GlobalSettingsConstants.MAPPING_INDIRECT_DIRECT_LEVEL;
+import static org.digijava.module.aim.helper.GlobalSettingsConstants.MAPPING_INDIRECT_INDIRECT_LEVEL;
+import static org.digijava.module.aim.helper.GlobalSettingsConstants.MAPPING_PROGRAM_DESTINATION_LEVEL;
+import static org.digijava.module.aim.helper.GlobalSettingsConstants.MAPPING_PROGRAM_SOURCE_LEVEL;
 import static org.digijava.module.aim.util.ProgramUtil.INDIRECT_PRIMARY_PROGRAM;
 import static org.digijava.module.aim.helper.GlobalSettingsConstants.PRIMARY_PROGRAM;
 import static org.digijava.module.aim.helper.GlobalSettingsConstants.MAPPING_DESTINATION_PROGRAM;
@@ -209,6 +213,8 @@ public class NDDService {
             AmpGlobalSettings srcGS = FeaturesUtil.getGlobalSetting(PRIMARY_PROGRAM);
             AmpActivityProgramSettings indirectProgramSetting =
                     ProgramUtil.getAmpActivityProgramSettings(INDIRECT_PRIMARY_PROGRAM);
+            AmpGlobalSettings levelSrc = FeaturesUtil.getGlobalSetting(MAPPING_INDIRECT_DIRECT_LEVEL);
+            AmpGlobalSettings levelDst = FeaturesUtil.getGlobalSetting(MAPPING_INDIRECT_INDIRECT_LEVEL);
             if (mapping.getNewTheme() != null && mapping.getOldTheme() != null) {
                 if (!mapping.getNewTheme().getAmpThemeId().equals(mapping.getOldTheme().getAmpThemeId())) {
                     srcGS.setGlobalSettingsValue(mapping.getOldTheme().getAmpThemeId().toString());
@@ -220,6 +226,11 @@ public class NDDService {
                     }
                     indirectProgramSetting.setDefaultHierarchy(mapping.getNewTheme());
                     PersistenceManager.getSession().saveOrUpdate(indirectProgramSetting);
+
+                    levelSrc.setGlobalSettingsValue(mapping.getLevelSrc().toString());
+                    FeaturesUtil.updateGlobalSetting(levelSrc);
+                    levelDst.setGlobalSettingsValue(mapping.getLevelDst().toString());
+                    FeaturesUtil.updateGlobalSetting(levelDst);
                 }
             } else {
                 srcGS.setGlobalSettingsValue(null);
@@ -227,11 +238,14 @@ public class NDDService {
                 if (indirectProgramSetting != null) {
                     PersistenceManager.getSession().delete(indirectProgramSetting);
                 }
+                levelSrc.setGlobalSettingsValue("0");
+                FeaturesUtil.updateGlobalSetting(levelSrc);
+                levelDst.setGlobalSettingsValue("0");
+                FeaturesUtil.updateGlobalSetting(levelDst);
             }
         } catch (Exception e) {
             throw new RuntimeException("Cannot save mapping", e);
         }
-
     }
 
     /**
@@ -242,18 +256,30 @@ public class NDDService {
     public void updateMainProgramsMapping(final AmpThemeMapping mapping) {
         AmpGlobalSettings srcGS = FeaturesUtil.getGlobalSetting(MAPPING_SOURCE_PROGRAM);
         AmpGlobalSettings dstGS = FeaturesUtil.getGlobalSetting(MAPPING_DESTINATION_PROGRAM);
+        AmpGlobalSettings levelSrc = FeaturesUtil.getGlobalSetting(MAPPING_PROGRAM_SOURCE_LEVEL);
+        AmpGlobalSettings levelDst = FeaturesUtil.getGlobalSetting(MAPPING_PROGRAM_DESTINATION_LEVEL);
         if (mapping.getSrcTheme() != null && mapping.getDstTheme() != null) {
             if (!mapping.getSrcTheme().getAmpThemeId().equals(mapping.getDstTheme().getAmpThemeId())) {
                 srcGS.setGlobalSettingsValue(mapping.getSrcTheme().getAmpThemeId().toString());
                 FeaturesUtil.updateGlobalSetting(srcGS);
                 dstGS.setGlobalSettingsValue(mapping.getDstTheme().getAmpThemeId().toString());
                 FeaturesUtil.updateGlobalSetting(dstGS);
+
+                levelSrc.setGlobalSettingsValue(mapping.getLevelSrc().toString());
+                FeaturesUtil.updateGlobalSetting(levelSrc);
+                levelDst.setGlobalSettingsValue(mapping.getLevelDst().toString());
+                FeaturesUtil.updateGlobalSetting(levelDst);
             }
         } else {
             srcGS.setGlobalSettingsValue(null);
             FeaturesUtil.updateGlobalSetting(srcGS);
             dstGS.setGlobalSettingsValue(null);
             FeaturesUtil.updateGlobalSetting(dstGS);
+
+            levelSrc.setGlobalSettingsValue("0");
+            FeaturesUtil.updateGlobalSetting(levelSrc);
+            levelDst.setGlobalSettingsValue("0");
+            FeaturesUtil.updateGlobalSetting(levelDst);
         }
     }
 

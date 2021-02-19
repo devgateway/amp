@@ -5,17 +5,17 @@ import PropTypes from 'prop-types';
 import { NDDContext } from './Startup';
 import './css/style.css';
 import { TYPE_SRC, TYPE_DST } from '../constants/Constants';
-import ProgramSelect from './ProgramSelect';
+import Select from './Select';
 import HelpTooltip from './common/HelpTooltip';
-import LevelSelect from './LevelSelect';
 
 class ProgramsHeader extends Component {
+  // eslint-disable-next-line react/sort-comp
   render() {
     const {
-      translations, programs, trnPrefix, isIndirect, isSuperAdmin, settings
+      translations, programs, trnPrefix, isIndirect, isSuperAdmin
     } = this.context;
     const {
-      src, dst, onChange, busy
+      src, dst, onChange, busy, onChangeLevel, levelDst, levelSrc
     } = this.props;
     if (programs) {
       // Load levels defined in GS and max depth for each program.
@@ -27,22 +27,15 @@ class ProgramsHeader extends Component {
       if (dst) {
         depthRight = this.levelsToArray(programs.find(i => i.id === dst.id).levels);
       }
-      let levelSelectedRight;
-      let levelSelectedLeft;
-      if (isIndirect) {
-        levelSelectedLeft = settings['ndd-mapping-indirect-direct-level'];
-        levelSelectedRight = settings['ndd-mapping-indirect-direct-level'];
-      } else {
-        levelSelectedLeft = settings['ndd-mapping-program-source-level'];
-        levelSelectedRight = settings['ndd-mapping-program-destination-level'];
-      }
+      const levelSelectedRight = levelDst > 0 ? [{ id: levelDst, value: `${levelDst}` }] : null;
+      const levelSelectedLeft = levelSrc > 0 ? [{ id: levelSrc, value: `${levelSrc}` }] : null;
       return (
         <table className="programs-table">
           <tbody>
             <tr>
-              <td>
+              <td style={{ width: '35%' }}>
                 <HelpTooltip labelKey={`${trnPrefix}tooltip-direct-programs`} />
-                <ProgramSelect
+                <Select
                   disabled={busy}
                   placeholder={translations[`${trnPrefix}choose_main_src_program`]}
                   label={translations[`${trnPrefix}src-program-lvl-1`]}
@@ -51,17 +44,18 @@ class ProgramsHeader extends Component {
                   onChange={onChange.bind(null, TYPE_SRC)}
                   level={0} />
               </td>
-              <td>
-                <LevelSelect
+              <td style={{ width: '15%' }}>
+                <Select
                   isIndirect={isIndirect}
                   disabled={busy || !isSuperAdmin}
                   label={translations[`${trnPrefix}max-level`]}
                   options={depthLeft}
+                  onChange={onChangeLevel.bind(null, 'levelSrc')}
                   selected={levelSelectedLeft} />
               </td>
-              <td style={{ paddingRight: '0%' }}>
+              <td style={{ width: '35%' }}>
                 <HelpTooltip labelKey={`${trnPrefix}tooltip-indirect-programs`} />
-                <ProgramSelect
+                <Select
                   disabled={busy}
                   placeholder={translations[`${trnPrefix}choose_main_dst_program`]}
                   label={translations[`${trnPrefix}dst-program-lvl-1`]}
@@ -70,12 +64,13 @@ class ProgramsHeader extends Component {
                   onChange={onChange.bind(null, TYPE_DST)}
                   level={0} />
               </td>
-              <td>
-                <LevelSelect
+              <td style={{ width: '15%' }}>
+                <Select
                   isIndirect={isIndirect}
                   disabled={busy || !isSuperAdmin}
                   label={translations[`${trnPrefix}max-level`]}
                   options={depthRight}
+                  onChange={onChangeLevel.bind(null, 'levelDst')}
                   selected={levelSelectedRight} />
               </td>
             </tr>
@@ -101,12 +96,17 @@ ProgramsHeader.propTypes = {
   onChange: PropTypes.func.isRequired,
   src: PropTypes.object,
   dst: PropTypes.object,
-  busy: PropTypes.bool.isRequired
+  busy: PropTypes.bool.isRequired,
+  onChangeLevel: PropTypes.func.isRequired,
+  levelDst: PropTypes.number,
+  levelSrc: PropTypes.number
 };
 
 ProgramsHeader.defaultProps = {
   src: undefined,
-  dst: undefined
+  dst: undefined,
+  levelDst: -1,
+  levelSrc: -1
 };
 
 const mapStateToProps = state => ({

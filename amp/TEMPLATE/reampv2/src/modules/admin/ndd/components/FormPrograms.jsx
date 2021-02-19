@@ -29,7 +29,9 @@ class FormPrograms extends Component {
       updatedActivities: false,
       blockUI: false,
       unsavedChanges: false,
-      saved: false
+      saved: false,
+      levelSrc: 0,
+      levelDst: 0
     };
     this.addRow = this.addRow.bind(this);
     this.saveAll = this.saveAll.bind(this);
@@ -42,7 +44,7 @@ class FormPrograms extends Component {
 
   componentDidMount() {
     const {
-      ndd, programs, translations, trnPrefix
+      ndd, programs, translations, trnPrefix, settings, isIndirect
     } = this.context;
     document.title = translations[`${trnPrefix}page-title`];
     // Load main programs.
@@ -87,6 +89,20 @@ class FormPrograms extends Component {
       }
       return { data: this.sortPrograms(data) };
     });
+
+    if (settings) {
+      if (isIndirect) {
+        // eslint-disable-next-line react/no-did-mount-set-state
+        this.setState({ levelSrc: settings['ndd-mapping-indirect-direct-level'] });
+        // eslint-disable-next-line react/no-did-mount-set-state
+        this.setState({ levelDst: settings['ndd-mapping-indirect-indirect-level'] });
+      } else {
+        // eslint-disable-next-line react/no-did-mount-set-state
+        this.setState({ levelSrc: settings['ndd-mapping-program-source-level'] });
+        // eslint-disable-next-line react/no-did-mount-set-state
+        this.setState({ levelDst: settings['ndd-mapping-program-destination-level'] });
+      }
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -189,12 +205,14 @@ class FormPrograms extends Component {
   }
 
   saveAll() {
-    const { data, src, dst } = this.state;
+    const {
+      data, src, dst, levelSrc, levelDst
+    } = this.state;
     const { _saveNDD, translations } = this.props;
     const { api, trnPrefix } = this.context;
     const validateMappings = Utils.validate(data);
     if (validateMappings === 0) {
-      const validateMain = Utils.validateMainPrograms(src, dst);
+      const validateMain = Utils.validateMainPrograms(src, dst, levelSrc, levelDst);
       if (validateMain === 0) {
         const mappings = [];
         data.forEach(pair => {
@@ -203,7 +221,7 @@ class FormPrograms extends Component {
             [DST_PROGRAM]: pair[DST_PROGRAM].lvl3.id,
           });
         });
-        _saveNDD(src, dst, mappings, api.programsSave, api.mappingSave);
+        _saveNDD(src, dst, mappings, api.programsSave, api.mappingSave, levelSrc, levelDst);
         this.setState({ unsavedChanges: false });
         this.clearMessages();
       } else {
@@ -215,6 +233,14 @@ class FormPrograms extends Component {
       this.setState({
         validationErrors: translations[`${trnPrefix}validation_error_${validateMappings}`],
       });
+    }
+  }
+
+  onChangeProgramLevel = (type, level) => {
+    if (level && level.length > 0) {
+      this.setState({ [type]: level[0].id });
+    } else {
+      this.setState({ [type]: 0 });
     }
   }
 
@@ -275,7 +301,7 @@ class FormPrograms extends Component {
 
   render() {
     const {
-      data, validationErrors, src, dst, updatedActivities, unsavedChanges, saved
+      data, validationErrors, src, dst, updatedActivities, unsavedChanges, saved, levelSrc, levelDst
     } = this.state;
     const {
       error, pending, translations, updating, errorUpdating, saving
@@ -312,7 +338,15 @@ class FormPrograms extends Component {
 
     return (
       <div className="form-container">
-        <ProgramsHeader onChange={this.onChangeMainProgram} src={src} dst={dst} key={Math.random()} busy={updating} />
+        <ProgramsHeader
+          onChange={this.onChangeMainProgram}
+          src={src}
+          dst={dst}
+          key={Math.random()}
+          busy={updating}
+          levelSrc={levelSrc}
+          levelDst={levelDst}
+          onChangeLevel={this.onChangeProgramLevel} />
         <Header
           onAddRow={this.addRow}
           onSaveAll={this.saveAll}

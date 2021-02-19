@@ -57,7 +57,7 @@ export function validate(data) {
   return ret;
 }
 
-export function validateMainPrograms(src, dst) {
+export function validateMainPrograms(src, dst, levelSrc, levelDst) {
   let ret = 0;
   if (src || dst) {
     if (!src) {
@@ -67,6 +67,12 @@ export function validateMainPrograms(src, dst) {
     } else if (src.id === dst.id) {
       ret = 5;
     }
+  }
+  if (levelSrc <= 0 || Number.isNaN(levelSrc)) {
+    ret = 6;
+  }
+  if (levelDst <= 0 || Number.isNaN(levelDst)) {
+    ret = 6;
   }
   return ret;
 }

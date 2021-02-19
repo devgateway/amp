@@ -152,7 +152,9 @@ class FundingByYearChart extends Component {
       <YearDetail
         translations={translations}
         show={showDetail}
-        handleClose={() => { this.setState({ showDetail: false }); }}
+        handleClose={() => {
+          this.setState({ showDetail: false });
+        }}
         data={yearDetail}
         loading={yearDetailPending}
         error={error}
@@ -188,15 +190,15 @@ class FundingByYearChart extends Component {
   }
 
   getColor(source, i) {
-    const { selectedDirectProgram } = this.props;
+    const { selectedDirectProgram, selectedPrograms } = this.props;
     if (source === SRC_DIRECT) {
       if (selectedDirectProgram == null) {
-        return getCustomColor(i, PROGRAMLVL1);
+        return getCustomColor(i, selectedPrograms[0]);
       } else {
-        return getCustomColor(i, `${PROGRAMLVL1}_${selectedDirectProgram.code}`);
+        return getCustomColor(i, `${selectedPrograms[0]}_${selectedDirectProgram.code}`);
       }
     } else {
-      return getCustomColor(i, INDIRECT_PROGRAMS);
+      return getCustomColor(i, selectedPrograms[1]);
     }
   }
 
@@ -297,7 +299,7 @@ class FundingByYearChart extends Component {
                 {translations[`${TRN_PREFIX}fy-indirect`]}
               </label>
             </div>
-          ) : null }
+          ) : null}
         </div>
         <Plot
           key="fundingByYearChart"

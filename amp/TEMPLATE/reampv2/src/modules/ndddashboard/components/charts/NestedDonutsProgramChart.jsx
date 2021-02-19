@@ -223,24 +223,26 @@ class NestedDonutsProgramChart extends Component {
           value={program.amount}
           minWidth={400}
           globalSettings={globalSettings}
-          />
+        />
       );
     }
     return null;
   }
 
   render() {
-    const { selectedDirectProgram, translations } = this.props;
+    const { selectedDirectProgram, translations, selectedPrograms } = this.props;
+    console.log(selectedPrograms);
     const { showLegend, legendTop, legendLeft } = this.state;
     const outerData = this.extractOuterData(false);
     const outerDataLvl2 = selectedDirectProgram ? this.extractOuterData(true) : this.extractOuterData(false);
     const innerData = this.extractInnerData(outerData);
     const innerDataForChart = this.innerDataToChartValues(innerData, outerData);
-    const innerColors = this.calculateOpacity(innerDataForChart.map(i => getCustomColor(i, INDIRECT_PROGRAMS)),
+    console.log(innerDataForChart);
+    const innerColors = this.calculateOpacity(innerDataForChart.map(i => getCustomColor(i, selectedPrograms[1])),
       innerDataForChart);
     const outerColors = this.calculateOpacity(outerDataLvl2
-      .map(o => getCustomColor(o, o.neverFade ? `${PROGRAMLVL1}_${selectedDirectProgram.code}`
-        : PROGRAMLVL1)),
+      .map(o => getCustomColor(o, o.neverFade ? `${selectedPrograms[0]}_${selectedDirectProgram.code}`
+        : selectedPrograms[0])),
     outerDataLvl2);
     const transition = {
       duration: 2000,
@@ -366,7 +368,8 @@ NestedDonutsProgramChart.propTypes = {
   selectedDirectProgram: PropTypes.object,
   translations: PropTypes.object.isRequired,
   settings: PropTypes.object.isRequired,
-  globalSettings: PropTypes.object.isRequired
+  globalSettings: PropTypes.object.isRequired,
+  selectedPrograms: PropTypes.array.isRequired
 };
 
 NestedDonutsProgramChart.defaultProps = {

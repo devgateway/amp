@@ -4,7 +4,9 @@ import React from 'react';
 import Gradient from 'javascript-color-gradient';
 import { format } from 'd3-format';
 
-import { CHART_COLOR_MAP, AVAILABLE_COLORS } from './constants';
+import {
+  CHART_COLOR_MAP, AVAILABLE_COLORS, SELECTED_COLORS, MAX_GRADIENTS
+} from './constants';
 import {
   ALL_PROGRAMS, DST_PROGRAM, PROGRAM_MAPPING, SRC_PROGRAM
 } from '../../admin/ndd/constants/Constants';
@@ -41,9 +43,14 @@ export function getCustomColor(item, program) {
   }
   color = colorMap.get(item.code.trim());
   if (!color) {
-    let CHART_COLORS = AVAILABLE_COLORS.get(program);
+    let CHART_COLORS = SELECTED_COLORS.get(program);
     if (!CHART_COLORS) {
-      CHART_COLORS = ['#00ff00', '#aa00bb']; // TODO: define colors for lvl2.
+      if (AVAILABLE_COLORS.length > 0) {
+        CHART_COLORS = AVAILABLE_COLORS.shift();
+        SELECTED_COLORS.set(program, CHART_COLORS);
+      } else {
+        CHART_COLORS = ['#00ff00', '#aa00bb']; // TODO: This shouldn't be needed but leaving just in case
+      }
     }
     color = CHART_COLORS.shift();
     colorMap.set(item.code, color);
@@ -52,7 +59,7 @@ export function getCustomColor(item, program) {
 }
 
 export function getGradient(colorFrom, colorTwo) {
-  const colorGradient = new Gradient();
+  const colorGradient = new Gradient('', MAX_GRADIENTS);
 
   colorGradient.setGradient(colorFrom, colorTwo);
   return colorGradient.getArray();

@@ -42,15 +42,12 @@ export function findFullProgramTree(ndd, type, src, dst) {
   return tree;
 }
 
-export function validate(data) {
+export function validate(data, levelSrc, levelDst) {
   let ret = 0;
-  const dstPairs = [];
   if (data && data.length > 0) {
     data.forEach(pair => {
-      if (!pair[SRC_PROGRAM].lvl3 || !pair[DST_PROGRAM].lvl3) {
+      if (!pair[SRC_PROGRAM][`lvl${levelSrc}`] || !pair[DST_PROGRAM][`lvl${levelDst}`]) {
         ret = 1; // missing value error.
-      } else {
-        dstPairs.push(pair[DST_PROGRAM].lvl3.id);
       }
     });
   }

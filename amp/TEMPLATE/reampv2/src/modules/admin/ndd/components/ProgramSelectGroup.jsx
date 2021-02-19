@@ -33,6 +33,7 @@ class ProgramSelectGroup extends Component {
         [STATE_LEVEL_FIELD + SECOND_LEVEL]: data[type + PROGRAM].lvl2,
         [STATE_LEVEL_FIELD + THIRD_LEVEL]: data[type + PROGRAM].lvl3
       };
+      // eslint-disable-next-line react/no-did-mount-set-state
       this.setState(newState);
     }
   }
@@ -45,9 +46,13 @@ class ProgramSelectGroup extends Component {
       id = selected[0].id;
       value = selected[0].value;
     }
+    // eslint-disable-next-line react/destructuring-assignment
     let level1 = this.state[STATE_LEVEL_FIELD + FIRST_LEVEL];
+    // eslint-disable-next-line react/destructuring-assignment
     let level2 = this.state[STATE_LEVEL_FIELD + SECOND_LEVEL];
+    // eslint-disable-next-line react/destructuring-assignment
     let level3 = this.state[STATE_LEVEL_FIELD + THIRD_LEVEL];
+    // eslint-disable-next-line default-case
     switch (lvl) {
       case FIRST_LEVEL:
         if (id && value) {
@@ -91,6 +96,7 @@ class ProgramSelectGroup extends Component {
     const { type, src, dst } = this.props;
     let options = [];
     const tree = Utils.findFullProgramTree(ndd, type, src, dst);
+    // eslint-disable-next-line default-case
     switch (level) {
       case FIRST_LEVEL:
         if (tree && tree[CHILDREN]) {
@@ -99,17 +105,22 @@ class ProgramSelectGroup extends Component {
         break;
       case SECOND_LEVEL:
         if (tree && tree[CHILDREN]) {
+          // eslint-disable-next-line react/destructuring-assignment
           if (this.state[STATE_LEVEL_FIELD + FIRST_LEVEL]) {
             options = tree[CHILDREN]
+              // eslint-disable-next-line react/destructuring-assignment
               .find(i => i.id === this.state[STATE_LEVEL_FIELD + FIRST_LEVEL].id)[CHILDREN];
           }
         }
         break;
       case THIRD_LEVEL:
         if (tree && tree[CHILDREN]) {
+          // eslint-disable-next-line react/destructuring-assignment
           if (this.state[STATE_LEVEL_FIELD + SECOND_LEVEL]) {
             options = tree[CHILDREN]
+              // eslint-disable-next-line react/destructuring-assignment
               .find(i => i.id === this.state[STATE_LEVEL_FIELD + FIRST_LEVEL].id)[CHILDREN]
+              // eslint-disable-next-line react/destructuring-assignment
               .find(i => i.id === this.state[STATE_LEVEL_FIELD + SECOND_LEVEL].id)[CHILDREN];
           }
         }
@@ -121,6 +132,7 @@ class ProgramSelectGroup extends Component {
   getSelectedForLevel(level) {
     const selected = [];
     const { state } = this;
+    // eslint-disable-next-line default-case
     switch (level) {
       case FIRST_LEVEL:
         if (state[STATE_LEVEL_FIELD + FIRST_LEVEL]) {
@@ -162,34 +174,40 @@ class ProgramSelectGroup extends Component {
 
   render() {
     const { translations, trnPrefix } = this.context;
-    const { type, disabled } = this.props;
+    const { type, disabled, level } = this.props;
     return (
       <div>
         <div style={{ width: '100%' }}>
-          <Select
-            placeholder={translations[`${trnPrefix}choose-${type}-lvl-${FIRST_LEVEL}`]}
-            label={translations[`${trnPrefix + type}-program-lvl-${FIRST_LEVEL}`]}
-            options={this.getOptionsForLevel(FIRST_LEVEL)}
-            selected={this.getSelectedForLevel(FIRST_LEVEL)}
-            onChange={this.onSelectChange}
-            level={FIRST_LEVEL}
-            disabled={disabled} />
-          <Select
-            placeholder={translations[`${trnPrefix}choose-${type}-lvl-${SECOND_LEVEL}`]}
-            label={translations[`${trnPrefix + type}-program-lvl-${SECOND_LEVEL}`]}
-            options={this.getOptionsForLevel(SECOND_LEVEL)}
-            selected={this.getSelectedForLevel(SECOND_LEVEL)}
-            onChange={this.onSelectChange}
-            level={SECOND_LEVEL}
-            disabled={disabled} />
-          <Select
-            placeholder={translations[`${trnPrefix}choose-${type}-lvl-${THIRD_LEVEL}`]}
-            label={translations[`${trnPrefix + type}-program-lvl-${THIRD_LEVEL}`]}
-            options={this.getOptionsForLevel(THIRD_LEVEL)}
-            selected={this.getSelectedForLevel(THIRD_LEVEL)}
-            onChange={this.onSelectChange}
-            level={THIRD_LEVEL}
-            disabled={disabled} />
+          {level >= 1 ? (
+            <Select
+              placeholder={translations[`${trnPrefix}choose-${type}-lvl-${FIRST_LEVEL}`]}
+              label={translations[`${trnPrefix + type}-program-lvl-${FIRST_LEVEL}`]}
+              options={this.getOptionsForLevel(FIRST_LEVEL)}
+              selected={this.getSelectedForLevel(FIRST_LEVEL)}
+              onChange={this.onSelectChange}
+              level={FIRST_LEVEL}
+              disabled={disabled} />
+          ) : null}
+          {level >= 2 ? (
+            <Select
+              placeholder={translations[`${trnPrefix}choose-${type}-lvl-${SECOND_LEVEL}`]}
+              label={translations[`${trnPrefix + type}-program-lvl-${SECOND_LEVEL}`]}
+              options={this.getOptionsForLevel(SECOND_LEVEL)}
+              selected={this.getSelectedForLevel(SECOND_LEVEL)}
+              onChange={this.onSelectChange}
+              level={SECOND_LEVEL}
+              disabled={disabled} />
+          ) : null}
+          {level >= 3 ? (
+            <Select
+              placeholder={translations[`${trnPrefix}choose-${type}-lvl-${THIRD_LEVEL}`]}
+              label={translations[`${trnPrefix + type}-program-lvl-${THIRD_LEVEL}`]}
+              options={this.getOptionsForLevel(THIRD_LEVEL)}
+              selected={this.getSelectedForLevel(THIRD_LEVEL)}
+              onChange={this.onSelectChange}
+              level={THIRD_LEVEL}
+              disabled={disabled} />
+          ) : null}
         </div>
       </div>
     );
@@ -202,10 +220,17 @@ ProgramSelectGroup.propTypes = {
   onChange: PropTypes.func.isRequired,
   src: PropTypes.object,
   dst: PropTypes.object,
-  disabled: PropTypes.bool.isRequired
+  disabled: PropTypes.bool.isRequired,
+  level: PropTypes.number.isRequired
+};
+
+ProgramSelectGroup.defaultProps = {
+  src: undefined,
+  dst: undefined
 };
 
 ProgramSelectGroup.contextType = NDDContext;
+// eslint-disable-next-line no-unused-vars
 const mapStateToProps = state => ({});
 const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
 export default connect(mapStateToProps, mapDispatchToProps)(ProgramSelectGroup);

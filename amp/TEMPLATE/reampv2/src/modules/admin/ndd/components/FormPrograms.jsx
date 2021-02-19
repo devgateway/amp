@@ -69,39 +69,42 @@ class FormPrograms extends Component {
     // eslint-disable-next-line react/no-did-mount-set-state,no-unused-vars
     this.setState(previousState => ({ programs }));
 
-    // Load saved mapping.
-    // eslint-disable-next-line react/no-did-mount-set-state
-    this.setState(previousState => {
-      const data = [...previousState.data];
-      if (ndd[PROGRAM_MAPPING]) {
-        ndd[PROGRAM_MAPPING].forEach(pm => {
-          const fullTreeSrc = Utils.findProgramInTree(pm[SRC_PROGRAM], ndd, TYPE_SRC);
-          const fullTreeDst = Utils.findProgramInTree(pm[DST_PROGRAM], ndd, TYPE_DST);
-          const pair = {};
-          pair[SRC_PROGRAM] = fullTreeSrc;
-          pair[DST_PROGRAM] = fullTreeDst;
-          // Extra validation.
-          if (pair[SRC_PROGRAM] && pair[SRC_PROGRAM].lvl3 && pair[DST_PROGRAM] && pair[DST_PROGRAM].lvl3) {
-            pair.id = `${pair[SRC_PROGRAM].lvl3.id}${pair[DST_PROGRAM].lvl3.id}`;
-            data.push(pair);
-          }
-        });
-      }
-      return { data: this.sortPrograms(data) };
-    });
-
     if (settings) {
-      if (isIndirect) {
-        // eslint-disable-next-line react/no-did-mount-set-state
-        this.setState({ levelSrc: settings['ndd-mapping-indirect-direct-level'] });
-        // eslint-disable-next-line react/no-did-mount-set-state
-        this.setState({ levelDst: settings['ndd-mapping-indirect-indirect-level'] });
-      } else {
-        // eslint-disable-next-line react/no-did-mount-set-state
-        this.setState({ levelSrc: settings['ndd-mapping-program-source-level'] });
-        // eslint-disable-next-line react/no-did-mount-set-state
-        this.setState({ levelDst: settings['ndd-mapping-program-destination-level'] });
-      }
+      let levelSrc;
+      let levelDst;
+      // eslint-disable-next-line no-unused-vars,react/no-did-mount-set-state
+      this.setState(previousState => {
+        if (isIndirect) {
+          levelSrc = settings['ndd-mapping-indirect-direct-level'];
+          levelDst = settings['ndd-mapping-indirect-indirect-level'];
+        } else {
+          levelSrc = settings['ndd-mapping-program-source-level'];
+          levelDst = settings['ndd-mapping-program-destination-level'];
+        }
+        return { levelSrc, levelDst };
+      });
+
+      // Load saved mapping.
+      // eslint-disable-next-line react/no-did-mount-set-state
+      this.setState(previousState => {
+        const data = [...previousState.data];
+        if (ndd[PROGRAM_MAPPING]) {
+          ndd[PROGRAM_MAPPING].forEach(pm => {
+            const fullTreeSrc = Utils.findProgramInTree(pm[SRC_PROGRAM], ndd, TYPE_SRC);
+            const fullTreeDst = Utils.findProgramInTree(pm[DST_PROGRAM], ndd, TYPE_DST);
+            const pair = {};
+            pair[SRC_PROGRAM] = fullTreeSrc;
+            pair[DST_PROGRAM] = fullTreeDst;
+            // Extra validation.
+            if (pair[SRC_PROGRAM] && pair[SRC_PROGRAM][`lvl${levelSrc}`]
+              && pair[DST_PROGRAM] && pair[DST_PROGRAM][`lvl${levelDst}`]) {
+              pair.id = `${pair[SRC_PROGRAM][`lvl${levelSrc}`].id}${pair[DST_PROGRAM][`lvl${levelDst}`].id}`;
+              data.push(pair);
+            }
+          });
+        }
+        return { data: this.sortPrograms(data, levelSrc, levelDst) };
+      });
     }
   }
 
@@ -124,7 +127,7 @@ class FormPrograms extends Component {
    * @returns {*[]|*}
    */
   // eslint-disable-next-line react/sort-comp,class-methods-use-this
-  sortPrograms(data) {
+  sortPrograms(data, levelSrc, levelDst) {
     if (data && data.length > 0) {
       return data.sort((a, b) => {
         const compare = (a[SRC_PROGRAM].lvl1.value + a[SRC_PROGRAM].lvl2.value + a[SRC_PROGRAM].lvl3.value)
@@ -210,15 +213,15 @@ class FormPrograms extends Component {
     } = this.state;
     const { _saveNDD, translations } = this.props;
     const { api, trnPrefix } = this.context;
-    const validateMappings = Utils.validate(data);
+    const validateMappings = Utils.validate(data, levelSrc, levelDst);
     if (validateMappings === 0) {
       const validateMain = Utils.validateMainPrograms(src, dst, levelSrc, levelDst);
       if (validateMain === 0) {
         const mappings = [];
         data.forEach(pair => {
           mappings.push({
-            [SRC_PROGRAM]: pair[SRC_PROGRAM].lvl3.id,
-            [DST_PROGRAM]: pair[DST_PROGRAM].lvl3.id,
+            [SRC_PROGRAM]: pair[SRC_PROGRAM][`lvl${levelSrc}`].id,
+            [DST_PROGRAM]: pair[DST_PROGRAM][`lvl${levelDst}`].id,
           });
         });
         _saveNDD(src, dst, mappings, api.programsSave, api.mappingSave, levelSrc, levelDst);
@@ -377,6 +380,8 @@ class FormPrograms extends Component {
           remove={this.remove}
           src={src}
           dst={dst}
+          levelSrc={levelSrc}
+          levelDst={levelDst}
           busy={updating} />
       </div>
     );

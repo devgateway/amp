@@ -45,6 +45,7 @@ class ProgramsHeader extends Component {
                   level={0} />
               </td>
               <td style={{ width: '15%' }}>
+                <HelpTooltip labelKey={`${trnPrefix}tooltip-max-depth`} />
                 <Select
                   isIndirect={isIndirect}
                   disabled={busy || !isSuperAdmin}
@@ -65,6 +66,7 @@ class ProgramsHeader extends Component {
                   level={0} />
               </td>
               <td style={{ width: '15%' }}>
+                <HelpTooltip labelKey={`${trnPrefix}tooltip-max-depth`} />
                 <Select
                   isIndirect={isIndirect}
                   disabled={busy || !isSuperAdmin}

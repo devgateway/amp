@@ -2049,6 +2049,10 @@ public class ProgramUtil {
         if (currentLevel == null || program.getIndlevel() > currentLevel) {
             currentLevel = program.getIndlevel();
         }
+        if (currentLevel == 3) {
+            // TODO: to allow more levels we need to refactor backend and frontend.
+            return currentLevel;
+        }
         if (program.getSiblings() != null) {
             for (AmpTheme child : program.getSiblings()) {
                 currentLevel = getMaxDepth(child, currentLevel);

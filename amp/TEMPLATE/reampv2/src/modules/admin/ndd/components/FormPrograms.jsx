@@ -237,10 +237,23 @@ class FormPrograms extends Component {
   }
 
   onChangeProgramLevel = (type, level) => {
-    if (level && level.length > 0) {
-      this.setState({ [type]: level[0].id });
-    } else {
-      this.setState({ [type]: 0 });
+    const { translations, trnPrefix } = this.context;
+    // eslint-disable-next-line react/destructuring-assignment
+    if (this.state[type] !== level) {
+      let confirmed = true;
+      if (!level || level.length === 0) {
+        confirmed = window.confirm(translations[`${trnPrefix}warning_on_change_levels`]);
+      }
+      if (confirmed) {
+        if (level && level.length > 0) {
+          this.setState({ [type]: level[0].id });
+        } else {
+          this.setState({ [type]: 0 });
+        }
+        this.clearAll();
+      } else {
+        this.setState(previousState => previousState);
+      }
     }
   }
 

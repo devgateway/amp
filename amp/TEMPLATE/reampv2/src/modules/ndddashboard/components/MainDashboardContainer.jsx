@@ -13,16 +13,17 @@ import FundingByYearChart from './charts/FundingByYearChart';
 import PieChartTypeSelector from './PieChartTypeSelector';
 import { NDDTranslationContext } from './StartUp';
 import TopChartContainer from './TopChartContainer';
-import { AVAILABLE_COLORS, PROGRAMLVL1 } from '../utils/constants';
+import { SELECTED_COLORS } from '../utils/constants';
 import { ALL_PROGRAMS } from '../../admin/ndd/constants/Constants';
 
 class MainDashboardContainer extends Component {
   // eslint-disable-next-line react/sort-comp
   generate2LevelColors() {
-    const { selectedDirectProgram } = this.props;
-    if (selectedDirectProgram && !AVAILABLE_COLORS.get(`${PROGRAMLVL1}_${selectedDirectProgram.code}`)) {
-      const colors = getGradient(getCustomColor(selectedDirectProgram, PROGRAMLVL1), '#FFFFFF');
-      AVAILABLE_COLORS.set(`${PROGRAMLVL1}_${selectedDirectProgram.code}`, colors);
+    const { selectedDirectProgram, selectedPrograms } = this.props;
+    if (selectedPrograms && selectedDirectProgram
+      && !SELECTED_COLORS.get(`${selectedPrograms[0]}_${selectedDirectProgram.code}`)) {
+      const colors = getGradient(getCustomColor(selectedDirectProgram, selectedPrograms[0]), '#FFFFFF');
+      SELECTED_COLORS.set(`${selectedPrograms[0]}_${selectedDirectProgram.code}`, colors);
     }
   }
 
@@ -107,7 +108,9 @@ class MainDashboardContainer extends Component {
                           settings={settings}
                           globalSettings={globalSettings}
                           selectedDirectProgram={selectedDirectProgram}
-                          handleOuterChartClick={handleOuterChartClick} />
+                          handleOuterChartClick={handleOuterChartClick}
+                          selectedPrograms={selectedPrograms}
+                        />
                       </>
                     )
                     : <div className="loading" />}
@@ -180,7 +183,7 @@ const mapStateToProps = state => ({
   dashboardSettings: state.dashboardSettingsReducer.dashboardSettings
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({ }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainDashboardContainer);
 

@@ -41,8 +41,6 @@ public class AmpThemeSearchModel extends AbstractAmpAutoCompleteModel<AmpTheme> 
         PROGRAM_TYPE, ACTIVITY_PROGRAMS
     }
 
-    ;
-
     @Override
     protected Collection<AmpTheme> load() {
         List<AmpTheme> ret = new ArrayList<>();

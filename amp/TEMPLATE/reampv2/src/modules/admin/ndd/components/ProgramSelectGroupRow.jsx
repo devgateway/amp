@@ -6,7 +6,6 @@ import { NDDContext } from './Startup';
 import './css/style.css';
 import ProgramSelectGroup from './ProgramSelectGroup';
 import { TYPE_DST, TYPE_SRC } from '../constants/Constants';
-import ProgramSelectGroupList from './ProgramSelectGroupList';
 
 class ProgramSelectGroupRow extends Component {
   render() {

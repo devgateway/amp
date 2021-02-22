@@ -1,3 +1,4 @@
+/* eslint-disable react/destructuring-assignment */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -46,11 +47,8 @@ class ProgramSelectGroup extends Component {
       id = selected[0].id;
       value = selected[0].value;
     }
-    // eslint-disable-next-line react/destructuring-assignment
     let level1 = this.state[STATE_LEVEL_FIELD + FIRST_LEVEL];
-    // eslint-disable-next-line react/destructuring-assignment
     let level2 = this.state[STATE_LEVEL_FIELD + SECOND_LEVEL];
-    // eslint-disable-next-line react/destructuring-assignment
     let level3 = this.state[STATE_LEVEL_FIELD + THIRD_LEVEL];
     // eslint-disable-next-line default-case
     switch (lvl) {
@@ -105,23 +103,24 @@ class ProgramSelectGroup extends Component {
         break;
       case SECOND_LEVEL:
         if (tree && tree[CHILDREN]) {
-          // eslint-disable-next-line react/destructuring-assignment
-          if (this.state[STATE_LEVEL_FIELD + FIRST_LEVEL]) {
-            options = tree[CHILDREN]
-              // eslint-disable-next-line react/destructuring-assignment
-              .find(i => i.id === this.state[STATE_LEVEL_FIELD + FIRST_LEVEL].id)[CHILDREN];
+          if (this.state[STATE_LEVEL_FIELD + FIRST_LEVEL] && tree[CHILDREN]) {
+            const obj = tree[CHILDREN]
+              .find(i => this.state[STATE_LEVEL_FIELD + FIRST_LEVEL]
+                && i.id === this.state[STATE_LEVEL_FIELD + FIRST_LEVEL].id);
+            if (obj) {
+              options = obj[CHILDREN];
+            }
           }
         }
         break;
       case THIRD_LEVEL:
         if (tree && tree[CHILDREN]) {
-          // eslint-disable-next-line react/destructuring-assignment
-          if (this.state[STATE_LEVEL_FIELD + SECOND_LEVEL]) {
+          if (this.state[STATE_LEVEL_FIELD + SECOND_LEVEL] && tree[CHILDREN]) {
             options = tree[CHILDREN]
-              // eslint-disable-next-line react/destructuring-assignment
-              .find(i => i.id === this.state[STATE_LEVEL_FIELD + FIRST_LEVEL].id)[CHILDREN]
-              // eslint-disable-next-line react/destructuring-assignment
-              .find(i => i.id === this.state[STATE_LEVEL_FIELD + SECOND_LEVEL].id)[CHILDREN];
+              .find(i => this.state[STATE_LEVEL_FIELD + FIRST_LEVEL]
+                && i.id === this.state[STATE_LEVEL_FIELD + FIRST_LEVEL].id)[CHILDREN]
+              .find(i => this.state[STATE_LEVEL_FIELD + SECOND_LEVEL]
+                && i.id === this.state[STATE_LEVEL_FIELD + SECOND_LEVEL].id)[CHILDREN];
           }
         }
         break;

@@ -90,8 +90,8 @@ class FormPrograms extends Component {
         const data = [...previousState.data];
         if (ndd[PROGRAM_MAPPING]) {
           ndd[PROGRAM_MAPPING].forEach(pm => {
-            const fullTreeSrc = Utils.findProgramInTree(pm[SRC_PROGRAM], ndd, TYPE_SRC);
-            const fullTreeDst = Utils.findProgramInTree(pm[DST_PROGRAM], ndd, TYPE_DST);
+            const fullTreeSrc = Utils.findProgramInTree(pm[SRC_PROGRAM], ndd, levelSrc);
+            const fullTreeDst = Utils.findProgramInTree(pm[DST_PROGRAM], ndd, levelDst);
             const pair = {};
             pair[SRC_PROGRAM] = fullTreeSrc;
             pair[DST_PROGRAM] = fullTreeDst;

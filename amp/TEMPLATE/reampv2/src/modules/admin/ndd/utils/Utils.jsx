@@ -12,54 +12,44 @@ export function findProgramInTree(id, ndd, level) {
   const lvl1 = {};
   const lvl2 = {};
   let lvl3 = {};
-  if (level === 3) {
-    ndd[ALL_PROGRAMS].forEach(p => {
-      if (p[CHILDREN]) {
-        p[CHILDREN].forEach(l1 => {
-          if (l1[CHILDREN]) {
-            l1[CHILDREN].forEach(l2 => {
-              if (l2[CHILDREN]) {
-                const l3 = l2[CHILDREN].find(l4 => l4.id === id);
-                if (l3) {
-                  lvl3 = l3;
-                  lvl2.id = l2.id;
-                  lvl2.value = l2.value;
-                  lvl1.id = l1.id;
-                  lvl1.value = l1.value;
-                }
-              }
-            });
-          }
-        });
-      }
-    });
-  } else if (level === 2) {
-    ndd[ALL_PROGRAMS].forEach(p => {
-      if (p[CHILDREN]) {
-        p[CHILDREN].forEach(l1 => {
-          if (l1[CHILDREN]) {
-            const l2 = l1[CHILDREN].find(l3 => l3.id === id);
-            if (l2) {
-              lvl2.id = l2.id;
-              lvl2.value = l2.value;
-              lvl1.id = l1.id;
-              lvl1.value = l1.value;
-            }
-          }
-        });
-      }
-    });
-  } else if (level === 1) {
-    ndd[ALL_PROGRAMS].forEach(p => {
-      if (p[CHILDREN]) {
+  ndd[ALL_PROGRAMS].forEach(p => {
+    if (p[CHILDREN]) {
+      if (level === 1) {
         const l1 = p[CHILDREN].find(l2 => l2.id === id);
         if (l1) {
           lvl1.id = l1.id;
           lvl1.value = l1.value;
         }
+      } else {
+        p[CHILDREN].forEach(l1 => {
+          if (l1[CHILDREN]) {
+            if (level === 2) {
+              const l2 = l1[CHILDREN].find(l3 => l3.id === id);
+              if (l2) {
+                lvl2.id = l2.id;
+                lvl2.value = l2.value;
+                lvl1.id = l1.id;
+                lvl1.value = l1.value;
+              }
+            } else {
+              l1[CHILDREN].forEach(l2 => {
+                if (l2[CHILDREN]) {
+                  const l3 = l2[CHILDREN].find(l4 => l4.id === id);
+                  if (l3) {
+                    lvl3 = l3;
+                    lvl2.id = l2.id;
+                    lvl2.value = l2.value;
+                    lvl1.id = l1.id;
+                    lvl1.value = l1.value;
+                  }
+                }
+              });
+            }
+          }
+        });
       }
-    });
-  }
+    }
+  });
   return { lvl1, lvl2, lvl3 };
 }
 

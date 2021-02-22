@@ -220,7 +220,7 @@ export function loadActivityForActivityPreview(activityId) {
                 versionHistory: activityInfo['version-history'],
                 activityLastVersionId: activityInfo['amp-activity-last-version-id'],
                 updateCurrentVersion: activityInfo['update-current-version'],
-                showChangeSummary: settings[TEAM_ID] || settings[PUBLIC_CHANGE_SUMMARY],
+                showChangeSummary: activityInfo['show-change-summary'],
                 showVersionHistory: settings[TEAM_ID] || settings[PUBLIC_VERSION_HISTORY],
             },
             hideEditableExportFormatsPublicView: settings['hide-editable-export-formats-public-view']

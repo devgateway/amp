@@ -43,7 +43,6 @@ public class NDDService {
      * Level at which we have explicit indirect program mappings defined.
      */
     public static final int INDIRECT_PROGRAM_MAPPING_LEVEL = 3;
-    public static final int PROGRAM_MAPPING_LEVEL = 3;
 
     static class SingleProgramData implements Serializable {
         private Long id;
@@ -78,16 +77,20 @@ public class NDDService {
     public IndirectProgramMappingConfiguration getIndirectProgramMappingConfiguration() {
         AmpTheme src = getSrcIndirectProgramRoot();
         AmpTheme dst = getDstIndirectProgramRoot();
-        PossibleValue srcPV = src != null ? convert(src, INDIRECT_PROGRAM_MAPPING_LEVEL) : null;
-        PossibleValue dstPV = dst != null ? convert(dst, INDIRECT_PROGRAM_MAPPING_LEVEL) : null;
+        int srcLevel = Integer.parseInt(FeaturesUtil.getGlobalSetting(MAPPING_INDIRECT_DIRECT_LEVEL)
+                .getGlobalSettingsValue());
+        int dstLevel = Integer.parseInt(FeaturesUtil.getGlobalSetting(MAPPING_INDIRECT_INDIRECT_LEVEL)
+                .getGlobalSettingsValue());
+        PossibleValue srcPV = src != null ? convert(src, srcLevel) : null;
+        PossibleValue dstPV = dst != null ? convert(dst, dstLevel) : null;
 
         List<PossibleValue> allPrograms = new ArrayList<>();
         getAvailablePrograms(false).forEach(ampTheme -> {
-            PossibleValue pv = convert(ampTheme, INDIRECT_PROGRAM_MAPPING_LEVEL);
+            PossibleValue pv = convert(ampTheme, srcLevel);
             allPrograms.add(pv);
         });
         getAvailablePrograms(true).forEach(ampTheme -> {
-            PossibleValue pv = convert(ampTheme, INDIRECT_PROGRAM_MAPPING_LEVEL);
+            PossibleValue pv = convert(ampTheme, dstLevel);
             allPrograms.add(pv);
         });
 
@@ -101,12 +104,16 @@ public class NDDService {
     public ProgramMappingConfiguration getProgramMappingConfiguration() {
         AmpTheme src = getSrcProgramRoot();
         AmpTheme dst = getDstProgramRoot();
-        PossibleValue srcPV = src != null ? convert(src, PROGRAM_MAPPING_LEVEL) : null;
-        PossibleValue dstPV = dst != null ? convert(dst, PROGRAM_MAPPING_LEVEL) : null;
+        int levelSrc = Integer.parseInt(FeaturesUtil.getGlobalSetting(MAPPING_PROGRAM_SOURCE_LEVEL)
+                .getGlobalSettingsValue());
+        int levelDst = Integer.parseInt(FeaturesUtil.getGlobalSetting(MAPPING_PROGRAM_DESTINATION_LEVEL)
+                .getGlobalSettingsValue());
+        PossibleValue srcPV = src != null ? convert(src, levelSrc) : null;
+        PossibleValue dstPV = dst != null ? convert(dst, levelDst) : null;
 
         List<PossibleValue> allPrograms = new ArrayList<>();
         getAvailablePrograms(false).forEach(ampTheme -> {
-            PossibleValue pv = convert(ampTheme, PROGRAM_MAPPING_LEVEL);
+            PossibleValue pv = convert(ampTheme, levelSrc);
             allPrograms.add(pv);
         });
 
@@ -287,7 +294,7 @@ public class NDDService {
      * Validate the mapping.
      * <p>Mapping is considered valid when:</p>
      * <ul><li>all source and destination programs are specified</li>
-     * <li>source and destination programs are for level {@link #INDIRECT_PROGRAM_MAPPING_LEVEL}</li>
+     * <li>source and destination programs are for level 3 or less</li>
      * <li>source program root is the one returned by {@link #getSrcIndirectProgramRoot()}</li>
      * <li>destination program root is the one returned by {@link #getDstIndirectProgramRoot()}</li>
      * <li>the same source and destination program appear only once in the mapping</li></ul>
@@ -301,8 +308,8 @@ public class NDDService {
         boolean hasInvalidMappings = mapping.stream().anyMatch(
                 m -> m.getNewTheme() == null
                         || m.getOldTheme() == null
-                        || !m.getOldTheme().getIndlevel().equals(INDIRECT_PROGRAM_MAPPING_LEVEL)
-                        || !m.getNewTheme().getIndlevel().equals(INDIRECT_PROGRAM_MAPPING_LEVEL)
+                        || !m.getOldTheme().getIndlevel().equals(m.getLevelSrc())
+                        || !m.getNewTheme().getIndlevel().equals(m.getLevelDst())
                         || !getRoot(m.getOldTheme()).equals(srcProgramRoot)
                         || !getRoot(m.getNewTheme()).equals(dstProgramRoot));
 
@@ -336,8 +343,8 @@ public class NDDService {
         boolean hasInvalidMappings = mapping.stream().anyMatch(
                 m -> m.getSrcTheme() == null
                         || m.getDstTheme() == null
-                        || !m.getSrcTheme().getIndlevel().equals(PROGRAM_MAPPING_LEVEL)
-                        || !m.getDstTheme().getIndlevel().equals(PROGRAM_MAPPING_LEVEL)
+                        || !m.getSrcTheme().getIndlevel().equals(m.getLevelSrc())
+                        || !m.getDstTheme().getIndlevel().equals(m.getLevelDst())
                         || !getRoot(m.getSrcTheme()).equals(srcProgramRoot)
                         || !getRoot(m.getDstTheme()).equals(dstProgramRoot));
 

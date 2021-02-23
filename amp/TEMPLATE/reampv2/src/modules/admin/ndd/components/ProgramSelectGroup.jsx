@@ -116,11 +116,15 @@ class ProgramSelectGroup extends Component {
       case THIRD_LEVEL:
         if (tree && tree[CHILDREN]) {
           if (this.state[STATE_LEVEL_FIELD + SECOND_LEVEL] && tree[CHILDREN]) {
-            options = tree[CHILDREN]
-              .find(i => this.state[STATE_LEVEL_FIELD + FIRST_LEVEL]
-                && i.id === this.state[STATE_LEVEL_FIELD + FIRST_LEVEL].id)[CHILDREN]
-              .find(i => this.state[STATE_LEVEL_FIELD + SECOND_LEVEL]
-                && i.id === this.state[STATE_LEVEL_FIELD + SECOND_LEVEL].id)[CHILDREN];
+            const obj1 = tree[CHILDREN].find(i => this.state[STATE_LEVEL_FIELD + FIRST_LEVEL]
+                && i.id === this.state[STATE_LEVEL_FIELD + FIRST_LEVEL].id);
+            if (obj1) {
+              const obj2 = obj1[CHILDREN].find(i => this.state[STATE_LEVEL_FIELD + SECOND_LEVEL]
+                && i.id === this.state[STATE_LEVEL_FIELD + SECOND_LEVEL].id);
+              if (obj2) {
+                options = obj2[CHILDREN];
+              }
+            }
           }
         }
         break;
@@ -147,7 +151,7 @@ class ProgramSelectGroup extends Component {
             id: state[STATE_LEVEL_FIELD + SECOND_LEVEL].id,
             value: state[STATE_LEVEL_FIELD + SECOND_LEVEL].value
           });
-        }
+        }// todo: ver q pasa cuando el level es 3 pero solo tengo 2 niveles.
         break;
       case THIRD_LEVEL:
         if (state[STATE_LEVEL_FIELD + THIRD_LEVEL]) {

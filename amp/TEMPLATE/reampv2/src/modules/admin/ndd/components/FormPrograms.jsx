@@ -222,6 +222,8 @@ class FormPrograms extends Component {
           mappings.push({
             [SRC_PROGRAM]: pair[SRC_PROGRAM][`lvl${levelSrc}`].id,
             [DST_PROGRAM]: pair[DST_PROGRAM][`lvl${levelDst}`].id,
+            levelSrc,
+            levelDst
           });
         });
         _saveNDD(src, dst, mappings, api.programsSave, api.mappingSave, levelSrc, levelDst);

@@ -5,6 +5,7 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
+import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
@@ -168,26 +169,70 @@ public final class DashboardService {
                                                       final boolean isIndirect,
                                                       final MappingConfiguration mapping) {
         List<NDDSolarChartData> list = new ArrayList<>();
-        ReportOutputColumn outerReportProgramColumn = outerReport.leafHeaders.get(0);
-        ReportOutputColumn innerReportProgramColumn = innerReport.leafHeaders.get(0);
-        ReportOutputColumn outerReportTotalColumn = outerReport.leafHeaders.get(outerReport.leafHeaders.size() - 1);
-        ReportOutputColumn innerReportTotalColumn = innerReport.leafHeaders.get(innerReport.leafHeaders.size() - 1);
+        ReportOutputColumn orColLvl1 = outerReport.leafHeaders.get(0);
+        ReportOutputColumn orColLvl2 = outerReport.leafHeaders.get(1);
+        ReportOutputColumn orColLvl3 = outerReport.leafHeaders.get(2);
+        ReportOutputColumn irColLvl1 = innerReport.leafHeaders.get(0);
+        ReportOutputColumn irColLvl2 = innerReport.leafHeaders.get(1);
+        ReportOutputColumn irColLvl3 = innerReport.leafHeaders.get(2);
+        ReportOutputColumn orTotalCol = outerReport.leafHeaders.get(outerReport.leafHeaders.size() - 1);
+        ReportOutputColumn irTotalCol = innerReport.leafHeaders.get(innerReport.leafHeaders.size() - 1);
 
         if (outerReport.reportContents != null && outerReport.reportContents.getChildren() != null
                 && innerReport.reportContents != null && innerReport.reportContents.getChildren() != null) {
-            outerReport.reportContents.getChildren().forEach(children -> {
-                Map<ReportOutputColumn, ReportCell> outerContent = children.getContents();
-                NDDSolarChartData nddSolarChartData = new NDDSolarChartData(null, new ArrayList<>());
+            outerReport.reportContents.getChildren().forEach(orChild1 -> {
+                Map<ReportOutputColumn, ReportCell> orProgLvl1 = orChild1.getContents();
                 AtomicBoolean add = new AtomicBoolean();
                 add.set(false);
+                /* Outer ring: If the cell is a valid level 3 program then add it to the list, if is undefined then
+                 * go up to the level 2 parent and if is a valid program then add it to the list, if not then is a
+                 * level 1 program. In all cases the amount is always the one from the level 3 cell. */
+                orChild1.getChildren().forEach(orChild2 -> {
+                    Map<ReportOutputColumn, ReportCell> orProgLvl2 = orChild2.getContents();
+                    orChild2.getChildren().forEach(orChild3 -> {
+                        NDDSolarChartData nddSolarChartData = new NDDSolarChartData(null, new ArrayList<>());
+                        Map<ReportOutputColumn, ReportCell> orProgLvl3 = orChild3.getContents();
+                        TextCell cell = (TextCell) orProgLvl3.get(orColLvl3);
+                        AmpTheme direct = ProgramUtil.getTheme(cell.entityId);
+                        if (direct != null) {
+                            BigDecimal amount = ((AmountCell) orProgLvl3.get(orTotalCol)).extractValue();
+                            Map<String, BigDecimal> amountsByYear = extractAmountsByYear(orProgLvl3);
+                            nddSolarChartData.setDirectProgram(new NDDSolarChartData.ProgramData(direct, amount,
+                                    amountsByYear));
+                            add.set(true);
+                        } else {
+                            cell = (TextCell) orProgLvl2.get(orColLvl2);
+                            direct = ProgramUtil.getTheme(cell.entityId);
+                            if (direct != null) {
+                                BigDecimal amount = ((AmountCell) orProgLvl3.get(orTotalCol)).extractValue();
+                                Map<String, BigDecimal> amountsByYear = extractAmountsByYear(orProgLvl3);
+                                nddSolarChartData.setDirectProgram(new NDDSolarChartData.ProgramData(direct, amount,
+                                        amountsByYear));
+                                add.set(true);
+                            } else {
+                                cell = (TextCell) orProgLvl1.get(orColLvl1);
+                                direct = ProgramUtil.getTheme(cell.entityId);
+                                BigDecimal amount = ((AmountCell) orProgLvl3.get(orTotalCol)).extractValue();
+                                Map<String, BigDecimal> amountsByYear = extractAmountsByYear(orProgLvl3);
+                                nddSolarChartData.setDirectProgram(new NDDSolarChartData.ProgramData(direct, amount,
+                                        amountsByYear));
+                                add.set(true);
+                            }
+                        }
+                        if (add.get()) {
+                            list.add(nddSolarChartData);
+                        }
+                    });
+                });
 
-                innerReport.reportContents.getChildren().forEach(children2 -> {
+                // old code to be deleted.
+                /* innerReport.reportContents.getChildren().forEach(children2 -> {
                     Map<ReportOutputColumn, ReportCell> innerContentFirstColumn = children2.getContents();
                     children2.getChildren().forEach(children3 -> {
                         Map<ReportOutputColumn, ReportCell> innerContentSecondColumn = children3.getContents();
-                        if (outerContent.get(outerReportProgramColumn).displayedValue
-                                .equals(innerContentSecondColumn.get(outerReportProgramColumn).displayedValue)) {
-                            List mapped = getMapped(isIndirect, mapping, outerContent, outerReportProgramColumn);
+                        if (orProgLvl1.get(orColLvl1).displayedValue
+                                .equals(innerContentSecondColumn.get(orColLvl1).displayedValue)) {
+                            List mapped = getMapped(isIndirect, mapping, orProgLvl1, orColLvl1);
                             if (mapped.size() == 1) {
                                 AmpTheme oldTheme = isIndirect
                                         ? ((AmpIndirectTheme) mapped.get(0)).getOldTheme()
@@ -195,16 +240,16 @@ public final class DashboardService {
                                 AmpTheme newTheme = isIndirect
                                         ? ((AmpIndirectTheme) mapped.get(0)).getNewTheme()
                                         : ((AmpThemeMapping) mapped.get(0)).getDstTheme();
-                                if (innerContentFirstColumn.get(innerReportProgramColumn).displayedValue
+                                if (innerContentFirstColumn.get(irColLvl1).displayedValue
                                         .equals(newTheme.getName())
-                                        && innerContentSecondColumn.get(outerReportProgramColumn).displayedValue
+                                        && innerContentSecondColumn.get(orColLvl1).displayedValue
                                         .equals(oldTheme.getName())) {
                                     add.set(true);
                                     BigDecimal amount = ((AmountCell) innerContentSecondColumn
-                                            .get(innerReportTotalColumn)).extractValue();
+                                            .get(irTotalCol)).extractValue();
                                     Map<String, BigDecimal> amountsByYear =
                                             extractAmountsByYear(innerContentSecondColumn);
-                                    ReportCell innerCell = innerContentFirstColumn.get(innerReportProgramColumn);
+                                    ReportCell innerCell = innerContentFirstColumn.get(irColLvl1);
                                     AmpTheme innerTheme = ProgramUtil.getTheme(((TextCell) innerCell).entityId);
                                     nddSolarChartData.getIndirectPrograms()
                                             .add(new NDDSolarChartData.ProgramData(innerTheme, amount, amountsByYear));
@@ -212,17 +257,7 @@ public final class DashboardService {
                             }
                         }
                     });
-                });
-
-                if (add.get()) {
-                    AmpTheme direct = ProgramUtil.getTheme(((TextCell) outerContent.get(outerReportProgramColumn))
-                            .entityId);
-                    BigDecimal amount = ((AmountCell) outerContent.get(outerReportTotalColumn)).extractValue();
-                    Map<String, BigDecimal> amountsByYear = extractAmountsByYear(outerContent);
-                    nddSolarChartData.setDirectProgram(new NDDSolarChartData.ProgramData(direct, amount,
-                            amountsByYear));
-                    list.add(nddSolarChartData);
-                }
+                }); */
             });
         }
         return list;

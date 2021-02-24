@@ -91,12 +91,12 @@ class MainDashboardContainer extends Component {
             borderTop: 'none',
             backgroundColor: 'white'
           }}>
-            <Col md={5} style={{ paddingRight: 0, paddingLeft: 0, backgroundColor: 'white' }}>
-              <div className="chart-container">
-                <div className="chart">
-                  {nddLoaded && !nddLoadingPending
-                    ? (
-                      <>
+            {nddLoaded && !nddLoadingPending
+              ? (
+                <>
+                  <Col md={5} style={{ paddingRight: 0, paddingLeft: 0, backgroundColor: 'white' }}>
+                    <div className="chart-container">
+                      <div className="chart">
                         <PieChartTypeSelector
                           onChange={onChangeProgram}
                           defaultValue={fundingType}
@@ -111,36 +111,39 @@ class MainDashboardContainer extends Component {
                           handleOuterChartClick={handleOuterChartClick}
                           selectedPrograms={selectedPrograms}
                         />
-                      </>
-                    )
-                    : <div className="loading" />}
-                </div>
-                <div className="buttons" style={{ position: 'absolute', bottom: 0 }}>
-                  {dashboardSettings && !nddLoadingPending
-                    ? (
-                      <FundingTypeSelector
-                        onChange={onChangeFundingType}
-                        defaultValue={fundingType}
-                        noIndirectMapping={noIndirectMapping} />
-                    ) : null}
-                </div>
-              </div>
-            </Col>
-            <Col md={7} style={{ paddingLeft: 0, paddingRight: 0 }}>
-              <TopChartContainer
-                noIndirectMapping={noIndirectMapping}
-                ndd={ndd}
-                globalSettings={globalSettings}
-                mapping={mapping}
-                settings={settings}
-                top={top}
-                topLoaded={topLoaded}
-                topLoadingPending={topLoadingPending}
-                selectedDirectProgram={selectedDirectProgram}
-                nddLoaded={nddLoaded}
-                selectedPrograms={selectedPrograms}
-                nddLoadingPending={nddLoadingPending} />
-            </Col>
+                      </div>
+                      <div className="buttons" style={{ position: 'absolute', bottom: 0 }}>
+                        {dashboardSettings && !nddLoadingPending
+                          ? (
+                            <FundingTypeSelector
+                              onChange={onChangeFundingType}
+                              defaultValue={fundingType}
+                              noIndirectMapping={noIndirectMapping} />
+                          ) : null}
+                      </div>
+                    </div>
+                  </Col>
+                  <Col md={7} style={{ paddingLeft: 0, paddingRight: 0 }}>
+                    <TopChartContainer
+                      noIndirectMapping={noIndirectMapping}
+                      ndd={ndd}
+                      globalSettings={globalSettings}
+                      mapping={mapping}
+                      settings={settings}
+                      top={top}
+                      topLoaded={topLoaded}
+                      topLoadingPending={topLoadingPending}
+                      selectedDirectProgram={selectedDirectProgram}
+                      nddLoaded={nddLoaded}
+                      selectedPrograms={selectedPrograms}
+                      nddLoadingPending={nddLoadingPending} />
+                  </Col>
+                </>
+              ) : (
+                <Col md={12} style={{ paddingRight: 0, paddingLeft: 0, backgroundColor: 'white' ,height:400}}>
+                  <div className="loading loading-absolute" />
+                </Col>
+              )}
           </Row>
           <Row>
             <Col md={12}>
@@ -174,54 +177,90 @@ class MainDashboardContainer extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  top: state.reportsReducer.top,
-  translations: state.translationsReducer.translations,
-  globalSettings: state.dashboardSettingsReducer.globalSettings,
-  topLoaded: state.reportsReducer.topLoaded,
-  topLoadingPending: state.reportsReducer.topLoadingPending,
-  dashboardSettings: state.dashboardSettingsReducer.dashboardSettings
-});
-
-const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+const mapStateToProps = state => (
+  {
+    top: state.reportsReducer.top,
+    translations:
+    state.translationsReducer.translations,
+    globalSettings:
+    state.dashboardSettingsReducer.globalSettings,
+    topLoaded:
+    state.reportsReducer.topLoaded,
+    topLoadingPending:
+    state.reportsReducer.topLoadingPending,
+    dashboardSettings:
+    state.dashboardSettingsReducer.dashboardSettings
+  }
+);
+const mapDispatchToProps = dispatch => bindActionCreators(
+  {},
+  dispatch
+);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainDashboardContainer);
 
 MainDashboardContainer.propTypes = {
   filters: PropTypes.object,
-  error: PropTypes.object,
-  ndd: PropTypes.array,
-  top: PropTypes.object,
-  nddLoadingPending: PropTypes.bool.isRequired,
-  nddLoaded: PropTypes.bool.isRequired,
-  topLoadingPending: PropTypes.bool.isRequired,
-  topLoaded: PropTypes.bool.isRequired,
-  dashboardSettings: PropTypes.array,
-  onChangeFundingType: PropTypes.func.isRequired,
-  fundingType: PropTypes.string,
-  mapping: PropTypes.object,
-  onChangeProgram: PropTypes.func.isRequired,
-  noIndirectMapping: PropTypes.object,
-  selectedPrograms: PropTypes.array,
-  settings: PropTypes.object,
-  selectedDirectProgram: PropTypes.object,
-  handleOuterChartClick: PropTypes.func.isRequired,
-  globalSettings: PropTypes.object
+  error:
+  PropTypes.object,
+  ndd:
+  PropTypes.array,
+  top:
+  PropTypes.object,
+  nddLoadingPending:
+  PropTypes.bool.isRequired,
+  nddLoaded:
+  PropTypes.bool.isRequired,
+  topLoadingPending:
+  PropTypes.bool.isRequired,
+  topLoaded:
+  PropTypes.bool.isRequired,
+  dashboardSettings:
+  PropTypes.array,
+  onChangeFundingType:
+  PropTypes.func.isRequired,
+  fundingType:
+  PropTypes.string,
+  mapping:
+  PropTypes.object,
+  onChangeProgram:
+  PropTypes.func.isRequired,
+  noIndirectMapping:
+  PropTypes.object,
+  selectedPrograms:
+  PropTypes.array,
+  settings:
+  PropTypes.object,
+  selectedDirectProgram:
+  PropTypes.object,
+  handleOuterChartClick:
+  PropTypes.func.isRequired,
+  globalSettings:
+  PropTypes.object
 };
-
 MainDashboardContainer.defaultProps = {
   filters: undefined,
-  selectedDirectProgram: null,
-  settings: undefined,
-  error: null,
-  fundingType: null,
-  mapping: null,
-  noIndirectMapping: null,
-  selectedPrograms: null,
-  globalSettings: null,
-  ndd: null,
-  top: undefined,
-  dashboardSettings: null
+  selectedDirectProgram:
+    null,
+  settings:
+  undefined,
+  error:
+    null,
+  fundingType:
+    null,
+  mapping:
+    null,
+  noIndirectMapping:
+    null,
+  selectedPrograms:
+    null,
+  globalSettings:
+    null,
+  ndd:
+    null,
+  top:
+  undefined,
+  dashboardSettings:
+    null
 };
-
 MainDashboardContainer.contextType = NDDTranslationContext;

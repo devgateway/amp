@@ -62,7 +62,8 @@ class MainDashboardContainer extends Component {
       filters,
       top,
       topLoaded,
-      topLoadingPending
+      topLoadingPending,
+      downloadImage
     } = this.props;
     const { translations } = this.context;
     if (error) {
@@ -80,6 +81,14 @@ class MainDashboardContainer extends Component {
                 <span>
                   {this.generateSectionTitle()}
                 </span>
+                <div className="export-wrapper">
+                  <img
+                    alt=""
+                    className="download-image"
+                    src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDIzLjAuNiwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IgoJIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA1MTIgNTEyOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+CjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+Cgkuc3Qwe2ZpbGw6IzAwMDAwMDt9Cjwvc3R5bGU+CjxjaXJjbGUgY2xhc3M9InN0MCIgY3g9IjI1NiIgY3k9IjI3NSIgcj0iNTcuNSIvPgo8cGF0aCBjbGFzcz0ic3QwIiBkPSJNNDE3LjUsMTYwSDM2M2MtNC42LDAtOC45LTItMTItNS40Yy0yOC40LTMxLjgtMzkuMS00Mi42LTUwLjctNDIuNmgtODUuNWMtMTEuNywwLTIzLjIsMTAuOC01MS43LDQyLjcKCWMtMywzLjQtNy40LDUuMy0xMS45LDUuM2gtNC4xdi04YzAtNC40LTMuNi04LTgtOGgtMjZjLTQuNCwwLTgsMy42LTgsOHY4aC03LjVDNzkuOSwxNjAsNjQsMTczLjIsNjQsMTkwLjd2MTc2CgljMCwxNy41LDE1LjksMzMuMywzMy41LDMzLjNoMzIwYzE3LjYsMCwzMC41LTE1LjgsMzAuNS0zMy4zdi0xNzZDNDQ4LDE3My4yLDQzNS4xLDE2MCw0MTcuNSwxNjBMNDE3LjUsMTYweiBNMjYwLDM2MC40CgljLTUwLjMsMi4zLTkxLjctMzkuMS04OS40LTg5LjRjMi00My45LDM3LjUtNzkuNCw4MS40LTgxLjRjNTAuMy0yLjMsOTEuNywzOS4xLDg5LjQsODkuNEMzMzkuNCwzMjIuOSwzMDMuOSwzNTguNCwyNjAsMzYwLjR6CgkgTTM1MiwyMThjLTcuMiwwLTEzLTUuOC0xMy0xM3M1LjgtMTMsMTMtMTNzMTMsNS44LDEzLDEzUzM1OS4yLDIxOCwzNTIsMjE4eiIvPgo8L3N2Zz4K"
+                    onClick={() => downloadImage()}
+                  />
+                </div>
               </div>
             </Col>
           </Row>
@@ -206,7 +215,8 @@ MainDashboardContainer.propTypes = {
   settings: PropTypes.object,
   selectedDirectProgram: PropTypes.object,
   handleOuterChartClick: PropTypes.func.isRequired,
-  globalSettings: PropTypes.object
+  globalSettings: PropTypes.object,
+  downloadImage: PropTypes.func.isRequired
 };
 
 MainDashboardContainer.defaultProps = {

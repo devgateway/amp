@@ -1,0 +1,26 @@
+
+#print-dummy, #print-simple-dummy {
+    position: absolute;
+    //top: -20000px;
+    left: 50px;
+}
+
+#print-simple-dummy-container .main-container .header,
+#print-simple-dummy-container .main-container .funding-by-year-radios,
+#print-simple-dummy-container .download-image {
+    display: none;
+}
+
+#print-simple-dummy-container .main-container .dash-form {
+    visibility: hidden;
+}
+#print-simple-dummy-container .print-title{
+    font-size: 24px;
+    font-weight: 600;
+    padding: 10px;
+}
+
+#print-dummy {
+    top: -10000px;
+    border: 1px solid black;
+}

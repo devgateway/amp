@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Row } from 'react-bootstrap';
+import { Button, Container } from 'react-bootstrap';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -12,6 +12,10 @@ import loadDashboardSettings from '../actions/loadDashboardSettings';
 import { getMappings } from '../actions/getMappings';
 import { DST_PROGRAM, SRC_PROGRAM } from '../../admin/ndd/constants/Constants';
 import { getSharedData } from '../actions/getSharedData';
+import PrintDummy from '../../sscdashboard/utils/PrintDummy';
+import { printChart } from '../../sscdashboard/utils/PrintUtils';
+import './print.css';
+import { PNG_FORMAT } from "../../sscdashboard/utils/constants";
 
 class NDDDashboardHome extends Component {
   constructor(props) {
@@ -155,6 +159,12 @@ class NDDDashboardHome extends Component {
     }
   }
 
+  downloadImage() {
+    const { translations } = this.context;
+    printChart(translations['amp.ndd.dashboard:page-title'], 'ndd-main-container',
+      [], 'png', false, 'print-simple-dummy-container');
+  }
+
   render() {
     const {
       filters, dashboardId, fundingType, selectedPrograms, settings, selectedDirectProgram
@@ -163,8 +173,8 @@ class NDDDashboardHome extends Component {
       ndd, nddLoadingPending, nddLoaded, dashboardSettings, mapping, noIndirectMapping, globalSettings
     } = this.props;
     return (
-      <Container fluid className="main-container">
-        <Row style={{ marginRight: '-30px', marginLeft: '-30px' }}>
+      <Container fluid className="main-container" id="ndd-main-container">
+        <div className="row header" style={{ marginRight: '-30px', marginLeft: '-30px' }}>
           {mapping && settings && globalSettings && selectedPrograms ? (
             <HeaderContainer
               onApplySettings={this.onApplySettings}
@@ -176,7 +186,7 @@ class NDDDashboardHome extends Component {
               selectedPrograms={selectedPrograms}
               dashboardId={dashboardId} />
           ) : null}
-        </Row>
+        </div>
         <MainDashboardContainer
           handleOuterChartClick={this.handleOuterChartClick.bind(this)}
           selectedDirectProgram={selectedDirectProgram}
@@ -192,7 +202,9 @@ class NDDDashboardHome extends Component {
           mapping={mapping}
           settings={settings}
           globalSettings={globalSettings}
-          noIndirectMapping={noIndirectMapping} />
+          noIndirectMapping={noIndirectMapping}
+          downloadImage={this.downloadImage.bind(this)} />
+        <PrintDummy />
       </Container>
     );
   }

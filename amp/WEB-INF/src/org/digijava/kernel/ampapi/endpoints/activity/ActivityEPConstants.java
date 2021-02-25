@@ -93,6 +93,7 @@ public class ActivityEPConstants {
     public static final String MODIFIED_BY = "modified-by";
     public static final String MODIFIED_DATE = "modified-date";
     public static final String UPDATE_CURRENT_VERSION = "update-current-version";
+    public static final String SHOW_CHANGE_SUMMARY = "show-change-summary";
 
     // max length constants
     public static final String TYPE_VARCHAR = "character varying";

@@ -140,7 +140,7 @@ class MainDashboardContainer extends Component {
                   </Col>
                 </>
               ) : (
-                <Col md={12} style={{ paddingRight: 0, paddingLeft: 0, backgroundColor: 'white' ,height:400}}>
+                <Col md={12} style={{ paddingRight: 0, paddingLeft: 0, backgroundColor: 'white', height: 400 }}>
                   <div className="loading loading-absolute" />
                 </Col>
               )}
@@ -201,66 +201,37 @@ export default connect(mapStateToProps, mapDispatchToProps)(MainDashboardContain
 
 MainDashboardContainer.propTypes = {
   filters: PropTypes.object,
-  error:
-  PropTypes.object,
-  ndd:
-  PropTypes.array,
-  top:
-  PropTypes.object,
-  nddLoadingPending:
-  PropTypes.bool.isRequired,
-  nddLoaded:
-  PropTypes.bool.isRequired,
-  topLoadingPending:
-  PropTypes.bool.isRequired,
-  topLoaded:
-  PropTypes.bool.isRequired,
-  dashboardSettings:
-  PropTypes.array,
-  onChangeFundingType:
-  PropTypes.func.isRequired,
-  fundingType:
-  PropTypes.string,
-  mapping:
-  PropTypes.object,
-  onChangeProgram:
-  PropTypes.func.isRequired,
-  noIndirectMapping:
-  PropTypes.object,
-  selectedPrograms:
-  PropTypes.array,
-  settings:
-  PropTypes.object,
-  selectedDirectProgram:
-  PropTypes.object,
-  handleOuterChartClick:
-  PropTypes.func.isRequired,
-  globalSettings:
-  PropTypes.object
+  error: PropTypes.object,
+  ndd: PropTypes.array,
+  top: PropTypes.object,
+  nddLoadingPending: PropTypes.bool.isRequired,
+  nddLoaded: PropTypes.bool.isRequired,
+  topLoadingPending: PropTypes.bool.isRequired,
+  topLoaded: PropTypes.bool.isRequired,
+  dashboardSettings: PropTypes.array,
+  onChangeFundingType: PropTypes.func.isRequired,
+  fundingType: PropTypes.string,
+  mapping: PropTypes.object,
+  onChangeProgram: PropTypes.func.isRequired,
+  noIndirectMapping: PropTypes.object,
+  selectedPrograms: PropTypes.array,
+  settings: PropTypes.object,
+  selectedDirectProgram: PropTypes.object,
+  handleOuterChartClick: PropTypes.func.isRequired,
+  globalSettings: PropTypes.object
 };
 MainDashboardContainer.defaultProps = {
   filters: undefined,
-  selectedDirectProgram:
-    null,
-  settings:
-  undefined,
-  error:
-    null,
-  fundingType:
-    null,
-  mapping:
-    null,
-  noIndirectMapping:
-    null,
-  selectedPrograms:
-    null,
-  globalSettings:
-    null,
-  ndd:
-    null,
-  top:
-  undefined,
-  dashboardSettings:
-    null
+  selectedDirectProgram: null,
+  settings: undefined,
+  error: null,
+  fundingType: null,
+  mapping: null,
+  noIndirectMapping: null,
+  selectedPrograms: null,
+  globalSettings: null,
+  ndd: null,
+  top: undefined,
+  dashboardSettings: null
 };
 MainDashboardContainer.contextType = NDDTranslationContext;

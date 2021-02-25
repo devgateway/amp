@@ -63,7 +63,9 @@ h3 {
     opacity: 1;
     transition: opacity .5s ease-in;
 }
-
+.loading-absolute{
+    position: static;
+}
 .loading {
     background-image: url("/TEMPLATE/reampv2/public/assets/loading.gif");
     background-size: contain;
@@ -73,6 +75,7 @@ h3 {
     top: 151px;
     background-position: center;
 }
+
 
 /* To fix the modal library. */
 .modal {

@@ -63,7 +63,8 @@ class MainDashboardContainer extends Component {
       top,
       topLoaded,
       topLoadingPending,
-      downloadImage
+      downloadImage,
+      embedded
     } = this.props;
     const { translations } = this.context;
     if (error) {
@@ -147,37 +148,45 @@ class MainDashboardContainer extends Component {
                   </Col>
                 </>
               ) : (
-                <Col md={12} style={{ paddingRight: 0, paddingLeft: 0, backgroundColor: 'white', height: 400 }}>
+                <Col
+                  md={12}
+                  style={{
+                    paddingRight: 0, paddingLeft: 0, backgroundColor: 'white', height: 400
+                  }}>
                   <div className="loading loading-absolute" />
                 </Col>
               )}
           </Row>
-          <Row>
-            <Col md={12}>
-              <div className="separator" />
-            </Col>
-          </Row>
-          <Row style={{ marginRight: '-15px', marginLeft: '-15px', border: '1px solid #ddd' }}>
-            <Col md={12} style={{ paddingLeft: 0, paddingRight: 0 }}>
-              <div className="chart-container">
-                <div className="chart">
-                  <div className="section_title">
-                    <span>{translations['amp.dashboard:funding-over-time']}</span>
+          {!embedded ? (
+            <>
+              <Row>
+                <Col md={12}>
+                  <div className="separator" />
+                </Col>
+              </Row>
+              <Row style={{ marginRight: '-15px', marginLeft: '-15px', border: '1px solid #ddd' }}>
+                <Col md={12} style={{ paddingLeft: 0, paddingRight: 0 }}>
+                  <div className="chart-container">
+                    <div className="chart">
+                      <div className="section_title">
+                        <span>{translations['amp.dashboard:funding-over-time']}</span>
+                      </div>
+                      {nddLoaded && !nddLoadingPending ? (
+                        <FundingByYearChart
+                          selectedDirectProgram={selectedDirectProgram}
+                          selectedPrograms={selectedPrograms}
+                          settings={settings}
+                          filters={filters}
+                          fundingType={fundingType}
+                          globalSettings={globalSettings}
+                          data={ndd} />
+                      ) : <div className="loading" />}
+                    </div>
                   </div>
-                  {nddLoaded && !nddLoadingPending ? (
-                    <FundingByYearChart
-                      selectedDirectProgram={selectedDirectProgram}
-                      selectedPrograms={selectedPrograms}
-                      settings={settings}
-                      filters={filters}
-                      fundingType={fundingType}
-                      globalSettings={globalSettings}
-                      data={ndd} />
-                  ) : <div className="loading" />}
-                </div>
-              </div>
-            </Col>
-          </Row>
+                </Col>
+              </Row>
+            </>
+          ) : (null)}
         </>
       );
     }

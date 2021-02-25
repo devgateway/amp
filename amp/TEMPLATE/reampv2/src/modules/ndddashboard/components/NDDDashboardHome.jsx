@@ -15,18 +15,21 @@ import { getSharedData } from '../actions/getSharedData';
 import PrintDummy from '../../sscdashboard/utils/PrintDummy';
 import { printChart } from '../../sscdashboard/utils/PrintUtils';
 import './print.css';
-import { PNG_FORMAT } from "../../sscdashboard/utils/constants";
+
+const queryString = require('query-string');
 
 class NDDDashboardHome extends Component {
   constructor(props) {
     super(props);
+    const params = queryString.parse(props.location.search);
     this.state = {
       filters: undefined,
       dashboardId: undefined,
       fundingType: undefined,
       selectedPrograms: undefined,
       settings: undefined,
-      selectedDirectProgram: null
+      selectedDirectProgram: null,
+      embedded: params.embedded
     };
   }
 
@@ -167,7 +170,7 @@ class NDDDashboardHome extends Component {
 
   render() {
     const {
-      filters, dashboardId, fundingType, selectedPrograms, settings, selectedDirectProgram
+      filters, dashboardId, fundingType, selectedPrograms, settings, selectedDirectProgram, embedded
     } = this.state;
     const {
       ndd, nddLoadingPending, nddLoaded, dashboardSettings, mapping, noIndirectMapping, globalSettings
@@ -175,7 +178,7 @@ class NDDDashboardHome extends Component {
     return (
       <Container fluid className="main-container" id="ndd-main-container">
         <div className="row header" style={{ marginRight: '-30px', marginLeft: '-30px' }}>
-          {mapping && settings && globalSettings && selectedPrograms ? (
+          {mapping && settings && globalSettings && selectedPrograms && !embedded ? (
             <HeaderContainer
               onApplySettings={this.onApplySettings}
               onApplyFilters={this.onApplyFilters}
@@ -203,7 +206,9 @@ class NDDDashboardHome extends Component {
           settings={settings}
           globalSettings={globalSettings}
           noIndirectMapping={noIndirectMapping}
-          downloadImage={this.downloadImage.bind(this)} />
+          downloadImage={this.downloadImage.bind(this)}
+          embedded={embedded}
+        />
         <PrintDummy />
       </Container>
     );

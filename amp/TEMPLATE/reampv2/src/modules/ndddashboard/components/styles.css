@@ -270,3 +270,18 @@ h3 {
     display: none;
     visibility: hidden;
 }
+
+.modebar {
+    display: none !important;
+}
+
+.download-image {
+    width: 25px;
+    height: 25px;
+}
+
+.export-wrapper {
+    float: right;
+}
+
+}

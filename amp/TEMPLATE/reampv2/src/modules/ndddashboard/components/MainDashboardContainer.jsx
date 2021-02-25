@@ -62,7 +62,8 @@ class MainDashboardContainer extends Component {
       filters,
       top,
       topLoaded,
-      topLoadingPending
+      topLoadingPending,
+      downloadImage
     } = this.props;
     const { translations } = this.context;
     if (error) {
@@ -80,6 +81,12 @@ class MainDashboardContainer extends Component {
                 <span>
                   {this.generateSectionTitle()}
                 </span>
+                <div className="export-wrapper">
+                  <div
+                    className="download-image-test"
+                    onClick={() => downloadImage()}
+                  />
+                </div>
               </div>
             </Col>
           </Row>
@@ -209,7 +216,8 @@ MainDashboardContainer.propTypes = {
   settings: PropTypes.object,
   selectedDirectProgram: PropTypes.object,
   handleOuterChartClick: PropTypes.func.isRequired,
-  globalSettings: PropTypes.object
+  globalSettings: PropTypes.object,
+  downloadImage: PropTypes.func.isRequired
 };
 MainDashboardContainer.defaultProps = {
   filters: undefined,

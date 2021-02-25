@@ -231,13 +231,11 @@ class NestedDonutsProgramChart extends Component {
 
   render() {
     const { selectedDirectProgram, translations, selectedPrograms } = this.props;
-    console.log(selectedPrograms);
     const { showLegend, legendTop, legendLeft } = this.state;
     const outerData = this.extractOuterData(false);
     const outerDataLvl2 = selectedDirectProgram ? this.extractOuterData(true) : this.extractOuterData(false);
     const innerData = this.extractInnerData(outerData);
     const innerDataForChart = this.innerDataToChartValues(innerData, outerData);
-    console.log(innerDataForChart);
     const innerColors = this.calculateOpacity(innerDataForChart.map(i => getCustomColor(i, selectedPrograms[1])),
       innerDataForChart);
     const outerColors = this.calculateOpacity(outerDataLvl2
@@ -259,7 +257,6 @@ class NestedDonutsProgramChart extends Component {
         }
       }
     ] : [];
-    // Note: Remove prop 'key' if you want to disable the fade effect after clicking the outer ring.
     return (
       <CSSTransitionGroup
         /* key={selectedDirectProgram} */

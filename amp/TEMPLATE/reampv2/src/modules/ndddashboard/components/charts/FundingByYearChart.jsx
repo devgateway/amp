@@ -273,7 +273,7 @@ class FundingByYearChart extends Component {
     annotations = this.calculateYAxisAbbreviations(annotations, directData);
     return (
       <div>
-        <div>
+        <div className="funding-by-year-radios">
           <div className="radio-fy-source">
             <input
               type="radio"

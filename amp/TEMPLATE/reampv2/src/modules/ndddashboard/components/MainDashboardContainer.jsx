@@ -83,7 +83,7 @@ class MainDashboardContainer extends Component {
                 </span>
                 <div className="export-wrapper">
                   <div
-                    className="download-image-test"
+                    className="download-image"
                     onClick={() => downloadImage()}
                   />
                 </div>

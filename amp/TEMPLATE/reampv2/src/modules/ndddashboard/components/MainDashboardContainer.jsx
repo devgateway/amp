@@ -177,25 +177,16 @@ class MainDashboardContainer extends Component {
   }
 }
 
-const mapStateToProps = state => (
-  {
-    top: state.reportsReducer.top,
-    translations:
-    state.translationsReducer.translations,
-    globalSettings:
-    state.dashboardSettingsReducer.globalSettings,
-    topLoaded:
-    state.reportsReducer.topLoaded,
-    topLoadingPending:
-    state.reportsReducer.topLoadingPending,
-    dashboardSettings:
-    state.dashboardSettingsReducer.dashboardSettings
-  }
-);
-const mapDispatchToProps = dispatch => bindActionCreators(
-  {},
-  dispatch
-);
+const mapStateToProps = state => ({
+  top: state.reportsReducer.top,
+  translations: state.translationsReducer.translations,
+  globalSettings: state.dashboardSettingsReducer.globalSettings,
+  topLoaded: state.reportsReducer.topLoaded,
+  topLoadingPending: state.reportsReducer.topLoadingPending,
+  dashboardSettings: state.dashboardSettingsReducer.dashboardSettings
+});
+
+const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainDashboardContainer);
 

@@ -62,7 +62,8 @@ class MainDashboardContainer extends Component {
       filters,
       top,
       topLoaded,
-      topLoadingPending
+      topLoadingPending,
+      downloadImage
     } = this.props;
     const { translations } = this.context;
     if (error) {
@@ -80,6 +81,12 @@ class MainDashboardContainer extends Component {
                 <span>
                   {this.generateSectionTitle()}
                 </span>
+                <div className="export-wrapper">
+                  <div
+                    className="download-image"
+                    onClick={() => downloadImage()}
+                  />
+                </div>
               </div>
             </Col>
           </Row>
@@ -91,12 +98,12 @@ class MainDashboardContainer extends Component {
             borderTop: 'none',
             backgroundColor: 'white'
           }}>
-            <Col md={5} style={{ paddingRight: 0, paddingLeft: 0, backgroundColor: 'white' }}>
-              <div className="chart-container">
-                <div className="chart">
-                  {nddLoaded && !nddLoadingPending
-                    ? (
-                      <>
+            {nddLoaded && !nddLoadingPending
+              ? (
+                <>
+                  <Col md={5} style={{ paddingRight: 0, paddingLeft: 0, backgroundColor: 'white' }}>
+                    <div className="chart-container">
+                      <div className="chart">
                         <PieChartTypeSelector
                           onChange={onChangeProgram}
                           defaultValue={fundingType}
@@ -111,36 +118,39 @@ class MainDashboardContainer extends Component {
                           handleOuterChartClick={handleOuterChartClick}
                           selectedPrograms={selectedPrograms}
                         />
-                      </>
-                    )
-                    : <div className="loading" />}
-                </div>
-                <div className="buttons" style={{ position: 'absolute', bottom: 0 }}>
-                  {dashboardSettings && !nddLoadingPending
-                    ? (
-                      <FundingTypeSelector
-                        onChange={onChangeFundingType}
-                        defaultValue={fundingType}
-                        noIndirectMapping={noIndirectMapping} />
-                    ) : null}
-                </div>
-              </div>
-            </Col>
-            <Col md={7} style={{ paddingLeft: 0, paddingRight: 0 }}>
-              <TopChartContainer
-                noIndirectMapping={noIndirectMapping}
-                ndd={ndd}
-                globalSettings={globalSettings}
-                mapping={mapping}
-                settings={settings}
-                top={top}
-                topLoaded={topLoaded}
-                topLoadingPending={topLoadingPending}
-                selectedDirectProgram={selectedDirectProgram}
-                nddLoaded={nddLoaded}
-                selectedPrograms={selectedPrograms}
-                nddLoadingPending={nddLoadingPending} />
-            </Col>
+                      </div>
+                      <div className="buttons" style={{ position: 'absolute', bottom: 0 }}>
+                        {dashboardSettings && !nddLoadingPending
+                          ? (
+                            <FundingTypeSelector
+                              onChange={onChangeFundingType}
+                              defaultValue={fundingType}
+                              noIndirectMapping={noIndirectMapping} />
+                          ) : null}
+                      </div>
+                    </div>
+                  </Col>
+                  <Col md={7} style={{ paddingLeft: 0, paddingRight: 0 }}>
+                    <TopChartContainer
+                      noIndirectMapping={noIndirectMapping}
+                      ndd={ndd}
+                      globalSettings={globalSettings}
+                      mapping={mapping}
+                      settings={settings}
+                      top={top}
+                      topLoaded={topLoaded}
+                      topLoadingPending={topLoadingPending}
+                      selectedDirectProgram={selectedDirectProgram}
+                      nddLoaded={nddLoaded}
+                      selectedPrograms={selectedPrograms}
+                      nddLoadingPending={nddLoadingPending} />
+                  </Col>
+                </>
+              ) : (
+                <Col md={12} style={{ paddingRight: 0, paddingLeft: 0, backgroundColor: 'white', height: 400 }}>
+                  <div className="loading loading-absolute" />
+                </Col>
+              )}
           </Row>
           <Row>
             <Col md={12}>
@@ -206,9 +216,9 @@ MainDashboardContainer.propTypes = {
   settings: PropTypes.object,
   selectedDirectProgram: PropTypes.object,
   handleOuterChartClick: PropTypes.func.isRequired,
-  globalSettings: PropTypes.object
+  globalSettings: PropTypes.object,
+  downloadImage: PropTypes.func.isRequired
 };
-
 MainDashboardContainer.defaultProps = {
   filters: undefined,
   selectedDirectProgram: null,
@@ -223,5 +233,4 @@ MainDashboardContainer.defaultProps = {
   top: undefined,
   dashboardSettings: null
 };
-
 MainDashboardContainer.contextType = NDDTranslationContext;

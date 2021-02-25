@@ -4,5 +4,7 @@
   "amp.admin.ndd:menu-item-programs-mapping": "Programs Mapping",
   "amp.admin.ndd:mappings-manager": "Program Mapping Manager",
   "amp.admin.ndd.indirect:title": "Indirect Programs Mapping",
-  "amp.admin.ndd.program:title": "Programs Mapping"
+  "amp.admin.ndd.program:title": "Programs Mapping",
+  "amp.admin.ndd.indirect:sub-title": "This module manages the programs that will be displayed in the inner and outer rings of the NDD Dashboard. (PNSD vs New Deal)",
+  "amp.admin.ndd.program:sub-title": "This module manages the programs that will be displayed in the inner and outer rings of the NDD Dashboard.(PNDS vs SDG) and  the options displayed in the Program step of the activity form (SDG program)"
 }

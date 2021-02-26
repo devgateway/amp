@@ -82,12 +82,14 @@ class MainDashboardContainer extends Component {
                 <span>
                   {this.generateSectionTitle()}
                 </span>
-                <div className="export-wrapper">
-                  <div
-                    className="download-image"
-                    onClick={() => downloadImage()}
-                  />
-                </div>
+                {!embedded ? (
+                  <div className="export-wrapper">
+                    <div
+                      className="download-image"
+                      onClick={() => downloadImage()}
+                    />
+                  </div>
+                ) : (null)}
               </div>
             </Col>
           </Row>
@@ -226,7 +228,8 @@ MainDashboardContainer.propTypes = {
   selectedDirectProgram: PropTypes.object,
   handleOuterChartClick: PropTypes.func.isRequired,
   globalSettings: PropTypes.object,
-  downloadImage: PropTypes.func.isRequired
+  downloadImage: PropTypes.func.isRequired,
+  embedded: PropTypes.bool
 };
 MainDashboardContainer.defaultProps = {
   filters: undefined,
@@ -240,6 +243,7 @@ MainDashboardContainer.defaultProps = {
   globalSettings: null,
   ndd: null,
   top: undefined,
-  dashboardSettings: null
+  dashboardSettings: null,
+  embedded: false
 };
 MainDashboardContainer.contextType = NDDTranslationContext;

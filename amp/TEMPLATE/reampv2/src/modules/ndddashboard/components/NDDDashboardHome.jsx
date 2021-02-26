@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Container } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -29,7 +29,7 @@ class NDDDashboardHome extends Component {
       selectedPrograms: undefined,
       settings: undefined,
       selectedDirectProgram: null,
-      embedded: params.embedded
+      embedded: !!params.embedded
     };
   }
 
@@ -44,6 +44,7 @@ class NDDDashboardHome extends Component {
 
   componentDidMount() {
     const { _loadDashboardSettings, _getMappings } = this.props;
+    const { embedded } = this.state;
     // eslint-disable-next-line react/destructuring-assignment,react/prop-types
     const { id } = this.props.match.params;
     // eslint-disable-next-line react/no-did-mount-set-state
@@ -81,6 +82,12 @@ class NDDDashboardHome extends Component {
         /* Notice we dont need to define this.state.filters here, we will get it from onApplyFilters. Apparently
         the filter widget takes date.start and date.end automatically from dashboard settings EP. */
         return data;
+      }).finally(() => {
+        if (embedded) {
+          const { _callReport } = this.props;
+          const { fundingType, settings, selectedPrograms } = this.state;
+          _callReport(fundingType, {}, selectedPrograms, settings);
+        }
       });
   }
 

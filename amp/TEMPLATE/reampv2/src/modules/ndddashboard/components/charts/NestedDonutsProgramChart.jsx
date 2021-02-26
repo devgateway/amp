@@ -47,15 +47,15 @@ class NestedDonutsProgramChart extends Component {
       data.forEach(i => {
         const isSubProgramElement = (calculateLvl2 && this.isSubProgram(i, selectedDirectProgram));
         const directProgram = isSubProgramElement ? i[DIRECT_PROGRAM][PROGRAMLVL2] : i[DIRECT_PROGRAM][PROGRAMLVL1];
-        if (ret.filter(d => d[CODE] === directProgram[CODE]).length === 0) {
+        if (directProgram && ret.filter(d => d[CODE] === directProgram[CODE]).length === 0) {
           const item = {
             [CODE]: directProgram[CODE],
             filterColumnName: directProgram.filterColumnName,
             objectId: directProgram.objectId,
             name: directProgram.name,
             [AMOUNT]: data.filter(d2 => ((calculateLvl2 && this.isSubProgram(i, selectedDirectProgram))
-              ? d2[DIRECT_PROGRAM][PROGRAMLVL2][CODE] === directProgram[CODE]
-              : d2[DIRECT_PROGRAM][PROGRAMLVL1][CODE] === directProgram[CODE]))
+              ? d2[DIRECT_PROGRAM][PROGRAMLVL2] && d2[DIRECT_PROGRAM][PROGRAMLVL2][CODE] === directProgram[CODE]
+              : d2[DIRECT_PROGRAM][PROGRAMLVL1] && d2[DIRECT_PROGRAM][PROGRAMLVL1][CODE] === directProgram[CODE]))
               .reduce((accumulator, currentValue) => (
                 accumulator + currentValue[DIRECT_PROGRAM][AMOUNT]
               ), 0),

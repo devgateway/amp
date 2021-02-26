@@ -271,9 +271,15 @@ public final class DashboardService {
                                                             Map<String, BigDecimal> amountsByYear_ =
                                                                     extractAmountsByYear(irProgLvl6);
                                                             ReportCell innerCell = irProgLvl1.get(irColLvl1);
-                                                            AmpTheme innerTheme = ProgramUtil.getTheme(((TextCell) innerCell).entityId);
+                                                            AmpTheme auxTheme = ProgramUtil.getTheme(((TextCell) innerCell).entityId);
+                                                            AmpTheme fakeTheme = new AmpTheme();
+                                                            fakeTheme.setThemeCode("Undef");
+                                                            fakeTheme.setName("Undefined");
+                                                            fakeTheme.setAmpThemeId(-1l);
+                                                            fakeTheme.setIndlevel(auxTheme.getIndlevel());
+                                                            fakeTheme.setParentThemeId(auxTheme.getParentThemeId());
                                                             nddSolarChartData.getIndirectPrograms()
-                                                                    .add(new NDDSolarChartData.ProgramData(innerTheme, amount_, amountsByYear_));
+                                                                    .add(new NDDSolarChartData.ProgramData(fakeTheme, amount_, amountsByYear_));
                                                         }
                                                     }
                                                 }
@@ -281,38 +287,8 @@ public final class DashboardService {
                                         });
                                     });
                                 });
-
-                                // old code
-                                /* if (orProgLvl1.get(orColLvl1).displayedValue
-                                        .equals(irProgLvl2.get(orColLvl1).displayedValue)) {
-                                    List mapped = getMapped(isIndirect, mapping, orProgLvl1, orColLvl1);
-                                    if (mapped.size() == 1) {
-                                        AmpTheme oldTheme = isIndirect
-                                                ? ((AmpIndirectTheme) mapped.get(0)).getOldTheme()
-                                                : ((AmpThemeMapping) mapped.get(0)).getSrcTheme();
-                                        AmpTheme newTheme = isIndirect
-                                                ? ((AmpIndirectTheme) mapped.get(0)).getNewTheme()
-                                                : ((AmpThemeMapping) mapped.get(0)).getDstTheme();
-                                        if (irProgLvl1.get(irColLvl1).displayedValue
-                                                .equals(newTheme.getName())
-                                                && irProgLvl2.get(orColLvl1).displayedValue
-                                                .equals(oldTheme.getName())) {
-                                            add.set(true);
-                                            BigDecimal amount = ((AmountCell) irProgLvl2
-                                                    .get(irTotalCol)).extractValue();
-                                            Map<String, BigDecimal> amountsByYear =
-                                                    extractAmountsByYear(irProgLvl2);
-                                            ReportCell innerCell = irProgLvl1.get(irColLvl1);
-                                            AmpTheme innerTheme = ProgramUtil.getTheme(((TextCell) innerCell).entityId);
-                                            nddSolarChartData.getIndirectPrograms()
-                                                    .add(new NDDSolarChartData.ProgramData(innerTheme, amount, amountsByYear));
-                                        }
-                                    }
-                                } */
                             });
                         });
-
-
                         if (add.get()) {
                             list.add(nddSolarChartData);
                         }

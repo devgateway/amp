@@ -6,7 +6,6 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
-import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
@@ -283,8 +282,7 @@ public final class DashboardService {
                                                                 fakeTheme.setAmpThemeId(-1l);
                                                                 fakeTheme.setIndlevel(auxTheme.getIndlevel());
                                                                 fakeTheme.setParentThemeId(auxTheme.getParentThemeId());
-                                                                nddSolarChartData.getIndirectPrograms()
-                                                                        .add(new NDDSolarChartData.ProgramData(fakeTheme, amount_, amountsByYear_));
+                                                                addAndMergeUndefinedPrograms(nddSolarChartData, fakeTheme, amount_, amountsByYear_);
                                                             } else {
                                                                 System.out.println("Ignore program with undefined level 0.");
                                                             }
@@ -305,6 +303,33 @@ public final class DashboardService {
             });
         }
         return list;
+    }
+
+    private static void addAndMergeUndefinedPrograms(NDDSolarChartData nddSolarChartData, AmpTheme ampTheme,
+                                                     BigDecimal amount, Map<String, BigDecimal> amountsByYear) {
+        NDDSolarChartData.ProgramData programData = new NDDSolarChartData.ProgramData(ampTheme, amount, amountsByYear);
+        if (nddSolarChartData.getIndirectPrograms().size() > 0) {
+            AtomicBoolean add = new AtomicBoolean(true);
+            nddSolarChartData.getIndirectPrograms().forEach(i -> {
+                if (i.equals(programData)) {
+                    add.set(false);
+                    i.setAmount(i.getAmount().add(programData.getAmount()));
+                    i.getAmountsByYear().forEach((j, val) -> {
+                        programData.getAmountsByYear().forEach((k, val2) -> {
+                            if (j.equals(k)) {
+                                BigDecimal sum = val.add(val2);
+                                i.getAmountsByYear().put(j, sum);
+                            }
+                        });
+                    });
+                }
+            });
+            if (add.get()) {
+                nddSolarChartData.getIndirectPrograms().add(programData);
+            }
+        } else {
+            nddSolarChartData.getIndirectPrograms().add(programData);
+        }
     }
 
     private static List<NDDSolarChartData> processOne(final GeneratedReport outerReport) {

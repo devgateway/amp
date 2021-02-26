@@ -8,6 +8,7 @@ import org.digijava.module.aim.dbentity.AmpTheme;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class NDDSolarChartData {
 
@@ -40,6 +41,22 @@ public class NDDSolarChartData {
         public Long getObjectId() {
             return objectId;
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Program program = (Program) o;
+            return Objects.equals(code, program.code)
+                    && Objects.equals(name, program.name)
+                    && Objects.equals(filterColumnName, program.filterColumnName)
+                    && Objects.equals(objectId, program.objectId);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(code, name, filterColumnName, objectId);
+        }
     }
 
     public static class ProgramData {
@@ -50,9 +67,9 @@ public class NDDSolarChartData {
 
         private final Program programLvl3;
 
-        private final BigDecimal amount;
+        private BigDecimal amount;
 
-        private final Map<String, BigDecimal> amountsByYear;
+        private Map<String, BigDecimal> amountsByYear;
 
         /**
          * Convert an AmpTheme tree into a plain structure.
@@ -166,6 +183,29 @@ public class NDDSolarChartData {
 
         public Map<String, BigDecimal> getAmountsByYear() {
             return amountsByYear;
+        }
+
+        public void setAmount(BigDecimal amount) {
+            this.amount = amount;
+        }
+
+        public void setAmountsByYear(Map<String, BigDecimal> amountsByYear) {
+            this.amountsByYear = amountsByYear;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            ProgramData p2 = (ProgramData) o;
+            return ((programLvl1 == null && p2.programLvl1 == null) || Objects.equals(programLvl1, p2.programLvl1))
+                    && ((programLvl2 == null && p2.programLvl2 == null) || Objects.equals(programLvl2, p2.programLvl2))
+                    && ((programLvl3 == null && p2.programLvl3 == null) || Objects.equals(programLvl3, p2.programLvl3));
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(programLvl1, programLvl2, programLvl3, amount, amountsByYear);
         }
     }
 

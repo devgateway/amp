@@ -275,17 +275,16 @@ public final class DashboardService {
                                                                     extractAmountsByYear(irProgLvl6);
                                                             ReportCell innerCell = irProgLvl1.get(irColLvl1);
                                                             AmpTheme auxTheme = ProgramUtil.getTheme(((TextCell) innerCell).entityId);
-                                                            if (auxTheme != null) {
-                                                                AmpTheme fakeTheme = new AmpTheme();
-                                                                fakeTheme.setThemeCode("Undef");
-                                                                fakeTheme.setName("Undefined");
-                                                                fakeTheme.setAmpThemeId(-1l);
-                                                                fakeTheme.setIndlevel(auxTheme.getIndlevel());
-                                                                fakeTheme.setParentThemeId(auxTheme.getParentThemeId());
-                                                                addAndMergeUndefinedPrograms(nddSolarChartData, fakeTheme, amount_, amountsByYear_);
-                                                            } else {
-                                                                System.out.println("Ignore program with undefined level 0.");
+                                                            if (auxTheme == null) {
+                                                                auxTheme = new AmpTheme();
                                                             }
+                                                            AmpTheme fakeTheme = new AmpTheme();
+                                                            fakeTheme.setThemeCode("Undef");
+                                                            fakeTheme.setName("Undefined");
+                                                            fakeTheme.setAmpThemeId(-1l);
+                                                            fakeTheme.setIndlevel(-1);
+                                                            fakeTheme.setParentThemeId(auxTheme.getParentThemeId());
+                                                            addAndMergeUndefinedPrograms(nddSolarChartData, fakeTheme, amount_, amountsByYear_);
                                                         }
                                                     }
                                                 }

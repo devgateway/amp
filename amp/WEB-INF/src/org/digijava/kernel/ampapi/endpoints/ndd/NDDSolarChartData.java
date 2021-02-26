@@ -155,6 +155,16 @@ public class NDDSolarChartData {
                         this.amountsByYear = null;
                     }
                     break;
+                case -1:
+                    // Special case for undefined program.
+                    this.programLvl1 = new Program(program.getThemeCode(),
+                            program.getName(), null,
+                            program.getAmpThemeId());
+                    this.programLvl2 = null;
+                    this.programLvl3 = null;
+                    this.amount = amount;
+                    this.amountsByYear = amountsByYear;
+                    break;
                 default:
                     this.programLvl1 = null;
                     this.programLvl2 = null;

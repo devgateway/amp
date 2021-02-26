@@ -209,11 +209,15 @@ public final class DashboardService {
                                 outerProgram = ProgramUtil.getTheme(cell.entityId);
                             }
                         }
-                        BigDecimal amount = ((AmountCell) orProgLvl3.get(orTotalCol)).extractValue();
-                        Map<String, BigDecimal> amountsByYear = extractAmountsByYear(orProgLvl3);
-                        nddSolarChartData.setDirectProgram(new NDDSolarChartData.ProgramData(outerProgram, amount,
-                                amountsByYear));
-                        add.set(true);
+                        if (outerProgram != null) {
+                            BigDecimal amount = ((AmountCell) orProgLvl3.get(orTotalCol)).extractValue();
+                            Map<String, BigDecimal> amountsByYear = extractAmountsByYear(orProgLvl3);
+                            nddSolarChartData.setDirectProgram(new NDDSolarChartData.ProgramData(outerProgram, amount,
+                                    amountsByYear));
+                            add.set(true);
+                        } else {
+                            System.out.println("Ignore undefined outer program.");
+                        }
 
                         /* Inner ring: go to the 6th hierarchy level, if is a valid level 3 program and is
                         equal to the current outer program then check if is mapped and add as an indirect program. */
@@ -265,21 +269,25 @@ public final class DashboardService {
                                                         }
                                                     } else {
                                                         // todo: se q hace falta un if para saber a quien corresponde el "National Planning Objectives Level 3: Undefined" y no duplicar.
-                                                        if (finalOuterProgram.equals(innerProgram)) {
+                                                        if (finalOuterProgram != null && finalOuterProgram.equals(innerProgram)) {
                                                             BigDecimal amount_ = ((AmountCell) irProgLvl6
                                                                     .get(irTotalCol)).extractValue();
                                                             Map<String, BigDecimal> amountsByYear_ =
                                                                     extractAmountsByYear(irProgLvl6);
                                                             ReportCell innerCell = irProgLvl1.get(irColLvl1);
                                                             AmpTheme auxTheme = ProgramUtil.getTheme(((TextCell) innerCell).entityId);
-                                                            AmpTheme fakeTheme = new AmpTheme();
-                                                            fakeTheme.setThemeCode("Undef");
-                                                            fakeTheme.setName("Undefined");
-                                                            fakeTheme.setAmpThemeId(-1l);
-                                                            fakeTheme.setIndlevel(auxTheme.getIndlevel());
-                                                            fakeTheme.setParentThemeId(auxTheme.getParentThemeId());
-                                                            nddSolarChartData.getIndirectPrograms()
-                                                                    .add(new NDDSolarChartData.ProgramData(fakeTheme, amount_, amountsByYear_));
+                                                            if (auxTheme != null) {
+                                                                AmpTheme fakeTheme = new AmpTheme();
+                                                                fakeTheme.setThemeCode("Undef");
+                                                                fakeTheme.setName("Undefined");
+                                                                fakeTheme.setAmpThemeId(-1l);
+                                                                fakeTheme.setIndlevel(auxTheme.getIndlevel());
+                                                                fakeTheme.setParentThemeId(auxTheme.getParentThemeId());
+                                                                nddSolarChartData.getIndirectPrograms()
+                                                                        .add(new NDDSolarChartData.ProgramData(fakeTheme, amount_, amountsByYear_));
+                                                            } else {
+                                                                System.out.println("Ignore program with undefined level 0.");
+                                                            }
                                                         }
                                                     }
                                                 }

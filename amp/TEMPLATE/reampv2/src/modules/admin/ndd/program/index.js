@@ -30,7 +30,8 @@ class AdminNDDProgramApp extends Component {
     return (
       <Provider store={this.store}>
         <Startup defaultTrnPack={defaultTrnPack}>
-          <h2 className="title">{translations[`${TRN_PREFIX}title`]}</h2>
+          <h2 className="section-title">{translations[`${TRN_PREFIX}title`]}</h2>
+          <div className="section-sub-title">{translations[`${TRN_PREFIX}sub-title`]}</div>
           <Main api={API} trnPrefix={TRN_PREFIX} isIndirect={false} />
         </Startup>
       </Provider>

@@ -172,7 +172,7 @@ class NDDDashboardHome extends Component {
   downloadImage() {
     const { translations } = this.context;
     printChart(translations['amp.ndd.dashboard:page-title'], 'ndd-main-container',
-      [], 'png', false, 'print-simple-dummy-container');
+      [], 'png', false, 'print-simple-dummy-container',false);
   }
 
   render() {

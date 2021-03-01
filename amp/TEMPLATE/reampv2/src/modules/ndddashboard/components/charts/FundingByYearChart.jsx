@@ -274,6 +274,10 @@ class FundingByYearChart extends Component {
     return (
       <div>
         <div className="funding-by-year-radios">
+          <div className="title-fy-source">
+            {source === SRC_DIRECT ? translations[`${TRN_PREFIX}direct`]
+              : translations[`${TRN_PREFIX}indirect`]}
+          </div>
           <div className="radio-fy-source">
             <input
               type="radio"

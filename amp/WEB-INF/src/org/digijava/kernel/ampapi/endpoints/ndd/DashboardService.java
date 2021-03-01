@@ -235,6 +235,10 @@ public final class DashboardService {
                                                 Map<ReportOutputColumn, ReportCell> irProgLvl6 = irChild6.getContents();
                                                 TextCell cell_ = (TextCell) irProgLvl6.get(irColLvl6);
                                                 AmpTheme outerPgrmInInnerReport = ProgramUtil.getTheme(cell_.entityId);
+
+                                                //TODO: yo tengo q mirar siempre el finalOuterProgram porque el outerReport es el q manda, de hecho ese program podria ser lvl2 o lvl1 en lugar de lvl3
+                                                // y hay que tenerlo en cuenta para q no se pierda en el inner (en ese caso capaz va como undefined).
+
                                                 if (outerPgrmInInnerReport == null) {
                                                     // Go up until we have a valid program.
                                                     cell_ = (TextCell) irProgLvl5.get(irColLvl5);
@@ -244,38 +248,40 @@ public final class DashboardService {
                                                         outerPgrmInInnerReport = ProgramUtil.getTheme(cell_.entityId);
                                                     }
                                                 }
-                                                if (orProgLvl3.get(orColLvl3).displayedValue.equals(irProgLvl6.get(irColLvl6).displayedValue)) {
-                                                    AmpTheme innerTheme = ProgramUtil.getTheme(((TextCell) irProgLvl3.get(irColLvl3)).entityId);
-                                                    if (innerTheme == null) {
-                                                        innerTheme = ProgramUtil.getTheme(((TextCell) irProgLvl2.get(irColLvl2)).entityId);
+                                                if (finalOuterProgram != null && outerPgrmInInnerReport != null) {
+                                                    if (finalOuterProgram.getAmpThemeId().equals(outerPgrmInInnerReport.getAmpThemeId())) {
+                                                        AmpTheme innerTheme = ProgramUtil.getTheme(((TextCell) irProgLvl3.get(irColLvl3)).entityId);
                                                         if (innerTheme == null) {
-                                                            innerTheme = ProgramUtil.getTheme(((TextCell) irProgLvl1.get(irColLvl1)).entityId);
+                                                            innerTheme = ProgramUtil.getTheme(((TextCell) irProgLvl2.get(irColLvl2)).entityId);
+                                                            if (innerTheme == null) {
+                                                                innerTheme = ProgramUtil.getTheme(((TextCell) irProgLvl1.get(irColLvl1)).entityId);
+                                                            }
                                                         }
-                                                    }
-                                                    if (innerTheme != null) {
-                                                        BigDecimal amount_ = ((AmountCell) irProgLvl6
-                                                                .get(irTotalCol)).extractValue();
-                                                        Map<String, BigDecimal> amountsByYear_ =
-                                                                extractAmountsByYear(irProgLvl6);
-                                                        nddSolarChartData.getIndirectPrograms()
-                                                                .add(new NDDSolarChartData.ProgramData(innerTheme, amount_, amountsByYear_));
-                                                    } else {
-                                                        BigDecimal amount_ = ((AmountCell) irProgLvl6
-                                                                .get(irTotalCol)).extractValue();
-                                                        Map<String, BigDecimal> amountsByYear_ =
-                                                                extractAmountsByYear(irProgLvl6);
-                                                        ReportCell innerCell = irProgLvl1.get(irColLvl1);
-                                                        AmpTheme auxTheme = ProgramUtil.getTheme(((TextCell) innerCell).entityId);
-                                                        if (auxTheme == null) {
-                                                            auxTheme = new AmpTheme();
+                                                        if (innerTheme != null) {
+                                                            BigDecimal amount_ = ((AmountCell) irProgLvl6
+                                                                    .get(irTotalCol)).extractValue();
+                                                            Map<String, BigDecimal> amountsByYear_ =
+                                                                    extractAmountsByYear(irProgLvl6);
+                                                            nddSolarChartData.getIndirectPrograms()
+                                                                    .add(new NDDSolarChartData.ProgramData(innerTheme, amount_, amountsByYear_));
+                                                        } else {
+                                                            BigDecimal amount_ = ((AmountCell) irProgLvl6
+                                                                    .get(irTotalCol)).extractValue();
+                                                            Map<String, BigDecimal> amountsByYear_ =
+                                                                    extractAmountsByYear(irProgLvl6);
+                                                            ReportCell innerCell = irProgLvl1.get(irColLvl1);
+                                                            AmpTheme auxTheme = ProgramUtil.getTheme(((TextCell) innerCell).entityId);
+                                                            if (auxTheme == null) {
+                                                                auxTheme = new AmpTheme();
+                                                            }
+                                                            AmpTheme fakeTheme = new AmpTheme();
+                                                            fakeTheme.setThemeCode("Undef");
+                                                            fakeTheme.setName("Undefined");
+                                                            fakeTheme.setAmpThemeId(-1l);
+                                                            fakeTheme.setIndlevel(-1);
+                                                            fakeTheme.setParentThemeId(auxTheme.getParentThemeId());
+                                                            addAndMergeUndefinedPrograms(nddSolarChartData, fakeTheme, amount_, amountsByYear_);
                                                         }
-                                                        AmpTheme fakeTheme = new AmpTheme();
-                                                        fakeTheme.setThemeCode("Undef");
-                                                        fakeTheme.setName("Undefined");
-                                                        fakeTheme.setAmpThemeId(-1l);
-                                                        fakeTheme.setIndlevel(-1);
-                                                        fakeTheme.setParentThemeId(auxTheme.getParentThemeId());
-                                                        addAndMergeUndefinedPrograms(nddSolarChartData, fakeTheme, amount_, amountsByYear_);
                                                     }
                                                 }
                                             });

@@ -198,14 +198,14 @@ public final class DashboardService {
                         NDDSolarChartData nddSolarChartData = new NDDSolarChartData(null, new ArrayList<>());
                         Map<ReportOutputColumn, ReportCell> orProgLvl3 = orChild3.getContents();
                         TextCell cell = (TextCell) orProgLvl3.get(orColLvl3);
-                        AmpTheme outerProgram = ProgramUtil.getTheme(cell.entityId);
+                        AmpTheme outerProgram = getThemeById(cell.entityId);
                         // Go up until we have a valid program.
                         if (outerProgram == null) {
                             cell = (TextCell) orProgLvl2.get(orColLvl2);
-                            outerProgram = ProgramUtil.getTheme(cell.entityId);
+                            outerProgram = getThemeById(cell.entityId);
                             if (outerProgram == null) {
                                 cell = (TextCell) orProgLvl1.get(orColLvl1);
-                                outerProgram = ProgramUtil.getTheme(cell.entityId);
+                                outerProgram = getThemeById(cell.entityId);
                             }
                         }
                         if (outerProgram != null) {
@@ -234,27 +234,23 @@ public final class DashboardService {
                                             irChild5.getChildren().forEach(irChild6 -> {
                                                 Map<ReportOutputColumn, ReportCell> irProgLvl6 = irChild6.getContents();
                                                 TextCell cell_ = (TextCell) irProgLvl6.get(irColLvl6);
-                                                AmpTheme outerPgrmInInnerReport = ProgramUtil.getTheme(cell_.entityId);
-
-                                                //TODO: yo tengo q mirar siempre el finalOuterProgram porque el outerReport es el q manda, de hecho ese program podria ser lvl2 o lvl1 en lugar de lvl3
-                                                // y hay que tenerlo en cuenta para q no se pierda en el inner (en ese caso capaz va como undefined).
-
+                                                AmpTheme outerPgrmInInnerReport = getThemeById(cell_.entityId);
                                                 if (outerPgrmInInnerReport == null) {
                                                     // Go up until we have a valid program.
                                                     cell_ = (TextCell) irProgLvl5.get(irColLvl5);
-                                                    outerPgrmInInnerReport = ProgramUtil.getTheme(cell_.entityId);
+                                                    outerPgrmInInnerReport = getThemeById(cell_.entityId);
                                                     if (outerPgrmInInnerReport == null) {
                                                         cell_ = (TextCell) irProgLvl4.get(irColLvl4);
-                                                        outerPgrmInInnerReport = ProgramUtil.getTheme(cell_.entityId);
+                                                        outerPgrmInInnerReport = getThemeById(cell_.entityId);
                                                     }
                                                 }
                                                 if (finalOuterProgram != null && outerPgrmInInnerReport != null) {
                                                     if (finalOuterProgram.getAmpThemeId().equals(outerPgrmInInnerReport.getAmpThemeId())) {
-                                                        AmpTheme innerTheme = ProgramUtil.getTheme(((TextCell) irProgLvl3.get(irColLvl3)).entityId);
+                                                        AmpTheme innerTheme = getThemeById(((TextCell) irProgLvl3.get(irColLvl3)).entityId);
                                                         if (innerTheme == null) {
-                                                            innerTheme = ProgramUtil.getTheme(((TextCell) irProgLvl2.get(irColLvl2)).entityId);
+                                                            innerTheme = getThemeById(((TextCell) irProgLvl2.get(irColLvl2)).entityId);
                                                             if (innerTheme == null) {
-                                                                innerTheme = ProgramUtil.getTheme(((TextCell) irProgLvl1.get(irColLvl1)).entityId);
+                                                                innerTheme = getThemeById(((TextCell) irProgLvl1.get(irColLvl1)).entityId);
                                                             }
                                                         }
                                                         if (innerTheme != null) {
@@ -270,7 +266,7 @@ public final class DashboardService {
                                                             Map<String, BigDecimal> amountsByYear_ =
                                                                     extractAmountsByYear(irProgLvl6);
                                                             ReportCell innerCell = irProgLvl1.get(irColLvl1);
-                                                            AmpTheme auxTheme = ProgramUtil.getTheme(((TextCell) innerCell).entityId);
+                                                            AmpTheme auxTheme = getThemeById(((TextCell) innerCell).entityId);
                                                             if (auxTheme == null) {
                                                                 auxTheme = new AmpTheme();
                                                             }
@@ -298,6 +294,24 @@ public final class DashboardService {
             });
         }
         return list;
+    }
+
+    /**
+     * This function is way faster than ProgramUtil.getTheme().
+     *
+     * @param id
+     * @return
+     */
+    private static AmpTheme getThemeById(Long id) {
+        try {
+            if (id > 0) {
+                return ProgramUtil.getThemeById(id);
+            }
+            return null;
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+        }
+        return null;
     }
 
     private static void addAndMergeUndefinedPrograms(NDDSolarChartData nddSolarChartData, AmpTheme ampTheme,
@@ -336,7 +350,7 @@ public final class DashboardService {
             outerReport.reportContents.getChildren().stream().forEach(children -> {
                 Map<ReportOutputColumn, ReportCell> outerContent = children.getContents();
                 NDDSolarChartData nddSolarChartData = new NDDSolarChartData(null, new ArrayList<>());
-                AmpTheme direct = ProgramUtil.getTheme(((TextCell) outerContent.get(outerReportProgramColumn))
+                AmpTheme direct = getThemeById(((TextCell) outerContent.get(outerReportProgramColumn))
                         .entityId);
                 if (direct != null) {
                     BigDecimal amount = ((AmountCell) outerContent.get(outerReportTotalColumn)).extractValue();
@@ -391,7 +405,7 @@ public final class DashboardService {
                 children.getChildren().forEach(children2 -> {
                     Map<ReportOutputColumn, ReportCell> contentsCol2 = children2.getContents();
                     TextCell cellProgram = (TextCell) contentsCol2.get(indirectColumn);
-                    AmpTheme auxProgram = ProgramUtil.getTheme(cellProgram.entityId);
+                    AmpTheme auxProgram = getThemeById(cellProgram.entityId);
                     if (auxProgram != null) {
                         AmpTheme auxRootProgram = getProgramByLvl(auxProgram, 1);
                         if (program.getAmpThemeId().equals(auxRootProgram.getAmpThemeId())) {
@@ -444,13 +458,13 @@ public final class DashboardService {
         }
         AmpReportFilters filters = getFiltersFromParams(params.getFilters());
         if (ids.size() == 2) {
-            AmpTheme outerProgram = ProgramUtil.getTheme(Long.valueOf(ids.get(0)));
+            AmpTheme outerProgram = getThemeById(Long.valueOf(ids.get(0)));
             List<ReportColumn> outerColumns = getColumnsFromProgram(outerProgram, false);
             ReportMeasure outerMeasure = getMeasureFromParams(params.getSettings());
             outerReport = createReport(outerColumns, outerMeasure, filters,
                     params.getSettings(), true);
 
-            AmpTheme innerProgram = ProgramUtil.getTheme(Long.valueOf(ids.get(1)));
+            AmpTheme innerProgram = getThemeById(Long.valueOf(ids.get(1)));
             List<ReportColumn> innerColumns = getColumnsFromProgram(innerProgram, false);
             innerColumns.addAll(outerColumns);
             ReportMeasure innerMeasure = outerMeasure;
@@ -469,7 +483,7 @@ public final class DashboardService {
             }
             return processTwo(outerReport, innerReport, isIndirect, mapping);
         } else if (ids.size() == 1) {
-            AmpTheme outerProgram = ProgramUtil.getTheme(Long.valueOf(ids.get(0)));
+            AmpTheme outerProgram = getThemeById(Long.valueOf(ids.get(0)));
             List<ReportColumn> outerColumns = getColumnsFromProgram(outerProgram, true);
             ReportMeasure outerMeasure = getMeasureFromParams(params.getSettings());
             outerReport = createReport(outerColumns, outerMeasure, filters,
@@ -525,11 +539,11 @@ public final class DashboardService {
         int yearString = Integer.parseInt(params.getSettings().get("year").toString());
         String programIdString = params.getSettings().get("id").toString();
         AmpReportFilters filters = getFiltersFromParams(params.getFilters());
-        AmpTheme program = ProgramUtil.getTheme(Long.valueOf(programIdString));
+        AmpTheme program = getThemeById(Long.valueOf(programIdString));
         ReportColumn projectTitleColumn = new ReportColumn(ColumnConstants.PROJECT_TITLE);
         if (params.getSettings().get("isShowIndirectDataForActivitiesDetail").toString().equals("true")) {
             MappingConfiguration indirectMapping = nddService.getIndirectProgramMappingConfiguration();
-            AmpTheme directProgram = ProgramUtil.getTheme(indirectMapping.getSrcProgram().getId());
+            AmpTheme directProgram = getThemeById(indirectMapping.getSrcProgram().getId());
             List<ReportColumn> outerColumns = getColumnsFromProgram(directProgram, false);
             AmpTheme rootProgram = getProgramByLvl(program, 0);
             List<ReportColumn> innerColumns = getColumnsFromProgram(rootProgram, false);

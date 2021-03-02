@@ -58,8 +58,8 @@ export function getCustomColor(item, program) {
   return color;
 }
 
-export function getGradient(colorFrom, colorTwo) {
-  const colorGradient = new Gradient('', MAX_GRADIENTS);
+export function getGradient(colorFrom, colorTwo, maxGradient = MAX_GRADIENTS) {
+  const colorGradient = new Gradient('', maxGradient);
 
   colorGradient.setGradient(colorFrom, colorTwo);
   return colorGradient.getArray();
@@ -131,11 +131,12 @@ function getSuffixForLang(prefix, lang) {
 }
 
 export function formatNumber(currency, translations, value, precision, decimalSeparator, groupSeparator, numberDivider,
-  numberDividerDescriptionKey) {
+                             numberDividerDescriptionKey) {
   const formatString = `${decimalSeparator}.${precision}f`;
   const dividedValue = (numberDivider && numberDividerDescriptionKey) ? value / numberDivider : value;
   // eslint-disable-next-line max-len
-  const txtVal = <b>{format(formatString)(dividedValue).replaceAll(',', groupSeparator).replace('.', decimalSeparator)}</b>;
+  const txtVal =
+    <b>{format(formatString)(dividedValue).replaceAll(',', groupSeparator).replace('.', decimalSeparator)}</b>;
   return (
     <>
       {txtVal}

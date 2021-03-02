@@ -82,12 +82,15 @@ class MainDashboardContainer extends Component {
                 <span>
                   {this.generateSectionTitle()}
                 </span>
-                {!embedded ? (
+                {!embedded && nddLoaded && !nddLoadingPending ? (
                   <div className="export-wrapper">
                     <div
                       className="download-image"
-                      onClick={() => downloadImage()}
-                    />
+                    >
+                      <span
+                        className="glyphicon glyphicon-cloud-download download-image-img "
+                        onClick={() => downloadImage()} />
+                    </div>
                   </div>
                 ) : (null)}
               </div>

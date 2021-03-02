@@ -29,6 +29,7 @@ import org.digijava.module.aim.util.ProgramUtil;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -65,8 +66,8 @@ public final class DashboardService {
         if (isSummary) {
             spec.setHierarchies(spec.getColumns());
         } else {
-            List newList = (List) columns.remove(columns.size() - 1);
-            Set<ReportColumn> hierarchies = new HashSet<ReportColumn>(newList);
+            ((List) columns).remove(columns.size() - 1);
+            Set<ReportColumn> hierarchies = new LinkedHashSet<ReportColumn>(columns);
             spec.setHierarchies(hierarchies);
         }
 
@@ -82,6 +83,13 @@ public final class DashboardService {
         return report;
     }
 
+    /**
+     * Given a program get its parent from level @lvl.
+     *
+     * @param program
+     * @param lvl
+     * @return
+     */
     private static AmpTheme getProgramByLvl(AmpTheme program, int lvl) {
         AmpTheme root = program;
         while (root.getIndlevel() > lvl) {
@@ -213,7 +221,9 @@ public final class DashboardService {
                             Map<String, BigDecimal> amountsByYear = extractAmountsByYear(orProgLvl3);
                             nddSolarChartData.setDirectProgram(new NDDSolarChartData.ProgramData(outerProgram, amount,
                                     amountsByYear));
-                            add.set(true);
+                            if (nddSolarChartData.getDirectProgram().getProgramLvl1() != null) {
+                                add.set(true);
+                            }
                         } else {
                             System.out.println("Ignore undefined outer program.");
                         }
@@ -358,7 +368,7 @@ public final class DashboardService {
                     NDDSolarChartData.ProgramData programData = new NDDSolarChartData.ProgramData(direct, amount,
                             amountsByYear);
                     // Ignore programs we dont want to show.
-                    if (programData.getAmount() != null) {
+                    if (programData.getAmount() != null && programData.getProgramLvl1() != null) {
                         nddSolarChartData.setDirectProgram(programData);
                         list.add(nddSolarChartData);
                     }
@@ -396,46 +406,44 @@ public final class DashboardService {
         ReportOutputColumn indirectColumn = report.leafHeaders.get(1);
         ReportOutputColumn projectColumn = report.leafHeaders.get(2);
 
-        MappingConfiguration indirectMapping = nddService.getIndirectProgramMappingConfiguration();
-        MappingConfiguration regularMapping = nddService.getProgramMappingConfiguration();
-
         if (report.reportContents != null && report.reportContents.getChildren() != null) {
-            report.reportContents.getChildren().forEach(children -> {
-                Map<ReportOutputColumn, ReportCell> contentsCol1 = children.getContents();
-                children.getChildren().forEach(children2 -> {
-                    Map<ReportOutputColumn, ReportCell> contentsCol2 = children2.getContents();
-                    TextCell cellProgram = (TextCell) contentsCol2.get(indirectColumn);
-                    AmpTheme auxProgram = getThemeById(cellProgram.entityId);
-                    if (auxProgram != null) {
-                        AmpTheme auxRootProgram = getProgramByLvl(auxProgram, 1);
-                        if (program.getAmpThemeId().equals(auxRootProgram.getAmpThemeId())) {
-                            children2.getChildren().forEach(children3 -> {
-                                List mapped = getMapped(true, indirectMapping, contentsCol1, directColumn);
-                                if (mapped.size() == 1) {
-                                    // TODO: check if line this works for ndd 2nd tab (program mapping).
-                                    List mappedForThisProgram = (List) mapped.stream().filter(m -> {
-                                        AmpIndirectTheme ampIndirectTheme = (AmpIndirectTheme) m;
-                                        return getProgramByLvl(ampIndirectTheme.getNewTheme(), 1).getAmpThemeId()
-                                                .equals(program.getAmpThemeId());
-                                    }).collect(Collectors.toList());
-                                    if (mappedForThisProgram.size() > 0) {
-                                        if (mappedForThisProgram.stream().filter(m -> {
-                                            AmpIndirectTheme ampIndirectTheme = (AmpIndirectTheme) m;
-                                            return ampIndirectTheme.getOldTheme().getName()
-                                                    .equals(contentsCol1.get(directColumn).displayedValue);
-                                        }).toArray().length > 0) {
-                                            Map<ReportOutputColumn, ReportCell> contents3 = children3.getContents();
-                                            TextCell cell = ((TextCell) contents3.get(projectColumn));
-                                            BigDecimal amount = extractAmountsByYear(contents3).get("" + year);
-                                            if (amount != null) {
-                                                DetailByYear detailRecord = new DetailByYear(cell.entityId,
-                                                        cell.displayedValue, amount);
-                                                list.add(detailRecord);
-                                            }
-                                        }
+            report.reportContents.getChildren().forEach(children1 -> {
+                Map<ReportOutputColumn, ReportCell> directCol = children1.getContents();
+                TextCell directProgram = (TextCell) directCol.get(directColumn);
+                children1.getChildren().forEach(children2 -> {
+                    Map<ReportOutputColumn, ReportCell> indirectCol = children2.getContents();
+                    TextCell indirectProgram = (TextCell) indirectCol.get(indirectColumn);
+                    AmpTheme auxProgram = getThemeById(indirectProgram.entityId);
+                    if (program != null) {
+                        if (auxProgram != null) {
+                            if (program.getAmpThemeId().equals(auxProgram.getAmpThemeId())) {
+                                children2.getChildren().forEach(children3 -> {
+                                    Map<ReportOutputColumn, ReportCell> projectCol = children3.getContents();
+                                    TextCell cell = ((TextCell) projectCol.get(projectColumn));
+                                    BigDecimal amount = extractAmountsByYear(projectCol).get("" + year);
+                                    if (amount != null) {
+                                        DetailByYear detailRecord = new DetailByYear(cell.entityId,
+                                                cell.displayedValue, amount);
+                                        list.add(detailRecord);
                                     }
-                                }
-                            });
+                                });
+                            }
+                        }
+                    } else {
+                        // TODO: This is for undefined programs.
+                        if (auxProgram != null) {
+                            if (program.getAmpThemeId().equals(auxProgram.getAmpThemeId())) {
+                                children2.getChildren().forEach(children3 -> {
+                                    Map<ReportOutputColumn, ReportCell> projectCol = children3.getContents();
+                                    TextCell cell = ((TextCell) projectCol.get(projectColumn));
+                                    BigDecimal amount = extractAmountsByYear(projectCol).get("" + year);
+                                    if (amount != null) {
+                                        DetailByYear detailRecord = new DetailByYear(cell.entityId,
+                                                cell.displayedValue, amount);
+                                        list.add(detailRecord);
+                                    }
+                                });
+                            }
                         }
                     }
                 });
@@ -545,12 +553,17 @@ public final class DashboardService {
             MappingConfiguration indirectMapping = nddService.getIndirectProgramMappingConfiguration();
             AmpTheme directProgram = getThemeById(indirectMapping.getSrcProgram().getId());
             List<ReportColumn> outerColumns = getColumnsFromProgram(directProgram, false);
+            outerColumns.remove(2);
+            outerColumns.remove(1);
+            ReportMeasure innerMeasure = getMeasureFromParams(params.getSettings());
             AmpTheme rootProgram = getProgramByLvl(program, 0);
             List<ReportColumn> innerColumns = getColumnsFromProgram(rootProgram, false);
-            ReportMeasure innerMeasure = getMeasureFromParams(params.getSettings());
-            outerColumns.addAll(innerColumns);
-            outerColumns.add(projectTitleColumn);
-            report = createReport(outerColumns, innerMeasure, filters,
+            innerColumns.remove(2);
+            innerColumns.remove(1);
+            List<ReportColumn> columns = outerColumns;
+            columns.add(innerColumns.get(0));
+            columns.add(projectTitleColumn);
+            report = createReport(columns, innerMeasure, filters,
                     params.getSettings(), false);
             return processDetailForIndirectData(report, yearString, program);
         } else {

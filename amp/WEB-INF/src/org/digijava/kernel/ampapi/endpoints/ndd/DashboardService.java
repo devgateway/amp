@@ -6,6 +6,7 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
+import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
@@ -21,14 +22,11 @@ import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
-import org.digijava.module.aim.dbentity.AmpIndirectTheme;
 import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.dbentity.AmpThemeMapping;
 import org.digijava.module.aim.util.ProgramUtil;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -98,6 +96,14 @@ public final class DashboardService {
         return root;
     }
 
+    /**
+     * Given a @program with level 0 (main root) return the report columns (one if @onlyLvl3 == true)
+     * linked to the program in the MultiProgram Configuration Manager (ie: PP, SP, NPO, etc).
+     *
+     * @param program
+     * @param onlyLvl3
+     * @return
+     */
     private static List<ReportColumn> getColumnsFromProgram(AmpTheme program, boolean onlyLvl3) {
         List<ReportColumn> list = new ArrayList<>();
         Set<AmpActivityProgramSettings> programSettings = program.getProgramSettings();
@@ -387,13 +393,7 @@ public final class DashboardService {
 
         if (report.reportContents != null && report.reportContents.getChildren() != null) {
             report.reportContents.getChildren().forEach(children -> {
-                Map<ReportOutputColumn, ReportCell> contents = children.getContents();
-                TextCell cell = ((TextCell) contents.get(projectColumn));
-                BigDecimal amount = extractAmountsByYear(contents).get("" + year);
-                if (amount != null) {
-                    DetailByYear detailRecord = new DetailByYear(cell.entityId, cell.displayedValue, amount);
-                    list.add(detailRecord);
-                }
+                createDetailRecord(children, projectColumn, year, list);
             });
         }
         return list;
@@ -409,47 +409,44 @@ public final class DashboardService {
         if (report.reportContents != null && report.reportContents.getChildren() != null) {
             report.reportContents.getChildren().forEach(children1 -> {
                 Map<ReportOutputColumn, ReportCell> directCol = children1.getContents();
-                TextCell directProgram = (TextCell) directCol.get(directColumn);
-                children1.getChildren().forEach(children2 -> {
-                    Map<ReportOutputColumn, ReportCell> indirectCol = children2.getContents();
-                    TextCell indirectProgram = (TextCell) indirectCol.get(indirectColumn);
-                    AmpTheme auxProgram = getThemeById(indirectProgram.entityId);
-                    if (program != null) {
-                        if (auxProgram != null) {
-                            if (program.getAmpThemeId().equals(auxProgram.getAmpThemeId())) {
-                                children2.getChildren().forEach(children3 -> {
-                                    Map<ReportOutputColumn, ReportCell> projectCol = children3.getContents();
-                                    TextCell cell = ((TextCell) projectCol.get(projectColumn));
-                                    BigDecimal amount = extractAmountsByYear(projectCol).get("" + year);
-                                    if (amount != null) {
-                                        DetailByYear detailRecord = new DetailByYear(cell.entityId,
-                                                cell.displayedValue, amount);
-                                        list.add(detailRecord);
-                                    }
-                                });
+                TextCell directCell = (TextCell) directCol.get(directColumn);
+                AmpTheme directProgram = getThemeById(directCell.entityId);
+                if (directProgram != null) {
+                    children1.getChildren().forEach(children2 -> {
+                        Map<ReportOutputColumn, ReportCell> indirectCol = children2.getContents();
+                        TextCell indirectProgram = (TextCell) indirectCol.get(indirectColumn);
+                        AmpTheme auxProgram = getThemeById(indirectProgram.entityId);
+                        if (program != null) {
+                            if (auxProgram != null) {
+                                if (program.getAmpThemeId().equals(auxProgram.getAmpThemeId())) {
+                                    children2.getChildren().forEach(children3 -> {
+                                        createDetailRecord(children3, projectColumn, year, list);
+                                    });
+                                }
                             }
+                        } else {
+                            // This is for undefined programs.
+                            children2.getChildren().forEach(children3 -> {
+                                createDetailRecord(children3, projectColumn, year, list);
+                            });
                         }
-                    } else {
-                        // TODO: This is for undefined programs.
-                        if (auxProgram != null) {
-                            if (program.getAmpThemeId().equals(auxProgram.getAmpThemeId())) {
-                                children2.getChildren().forEach(children3 -> {
-                                    Map<ReportOutputColumn, ReportCell> projectCol = children3.getContents();
-                                    TextCell cell = ((TextCell) projectCol.get(projectColumn));
-                                    BigDecimal amount = extractAmountsByYear(projectCol).get("" + year);
-                                    if (amount != null) {
-                                        DetailByYear detailRecord = new DetailByYear(cell.entityId,
-                                                cell.displayedValue, amount);
-                                        list.add(detailRecord);
-                                    }
-                                });
-                            }
-                        }
-                    }
-                });
+                    });
+                }
             });
         }
         return list;
+    }
+
+    private static void createDetailRecord(ReportArea children, ReportOutputColumn column, int year,
+                                           List<DetailByYear> list) {
+        Map<ReportOutputColumn, ReportCell> projectCol = children.getContents();
+        TextCell cell = ((TextCell) projectCol.get(column));
+        BigDecimal amount = extractAmountsByYear(projectCol).get("" + year);
+        if (amount != null) {
+            DetailByYear detailRecord = new DetailByYear(cell.entityId,
+                    cell.displayedValue, amount);
+            list.add(detailRecord);
+        }
     }
 
     public static List<NDDSolarChartData> generateDirectIndirectReport(SettingsAndFiltersParameters params) {
@@ -556,7 +553,12 @@ public final class DashboardService {
             outerColumns.remove(2);
             outerColumns.remove(1);
             ReportMeasure innerMeasure = getMeasureFromParams(params.getSettings());
-            AmpTheme rootProgram = getProgramByLvl(program, 0);
+            AmpTheme rootProgram;
+            if (program != null) {
+                rootProgram = getProgramByLvl(program, 0);
+            } else {
+                rootProgram = NDDService.getDstIndirectProgramRoot();
+            }
             List<ReportColumn> innerColumns = getColumnsFromProgram(rootProgram, false);
             innerColumns.remove(2);
             innerColumns.remove(1);

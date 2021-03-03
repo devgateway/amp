@@ -620,7 +620,11 @@ public final class DashboardService {
                 }
                 filters.addFilterRule(mainFilterColumn, new FilterRule(program.getAmpThemeId().toString(), true));
             } else {
-                fromMappingFilterColumn = new ReportColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1);
+                if (program.getIndlevel() == 1) {
+                    fromMappingFilterColumn = new ReportColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1);
+                } else {
+                    fromMappingFilterColumn = new ReportColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_2);
+                }
             }
         } else if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.SECONDARY_PROGRAM)) {
             if (dontUseMapping) {
@@ -632,7 +636,11 @@ public final class DashboardService {
                 }
                 filters.addFilterRule(mainFilterColumn, new FilterRule(program.getAmpThemeId().toString(), true));
             } else {
-                fromMappingFilterColumn = new ReportColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_1);
+                if (program.getIndlevel() == 1) {
+                    fromMappingFilterColumn = new ReportColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_1);
+                } else {
+                    fromMappingFilterColumn = new ReportColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_2);
+                }
             }
         } else if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.TERTIARY_PROGRAM)) {
             if (dontUseMapping) {
@@ -645,7 +653,11 @@ public final class DashboardService {
                 filters.addFilterRule(mainFilterColumn, new FilterRule(program.getAmpThemeId().toString(), true));
 
             } else {
-                fromMappingFilterColumn = new ReportColumn(ColumnConstants.TERTIARY_PROGRAM_LEVEL_1);
+                if (program.getIndlevel() == 1) {
+                    fromMappingFilterColumn = new ReportColumn(ColumnConstants.TERTIARY_PROGRAM_LEVEL_1);
+                } else {
+                    fromMappingFilterColumn = new ReportColumn(ColumnConstants.TERTIARY_PROGRAM_LEVEL_2);
+                }
             }
         } else if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES)
                 || singleProgramSetting.getName().equalsIgnoreCase(ProgramUtil.NATIONAL_PLAN_OBJECTIVE)) {
@@ -658,7 +670,11 @@ public final class DashboardService {
                 }
                 filters.addFilterRule(mainFilterColumn, new FilterRule(program.getAmpThemeId().toString(), true));
             } else {
-                fromMappingFilterColumn = new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1);
+                if (program.getIndlevel() == 1) {
+                    fromMappingFilterColumn = new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1);
+                } else {
+                    fromMappingFilterColumn = new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_2);
+                }
             }
         } else if (singleProgramSetting.getName().equalsIgnoreCase(ProgramUtil.INDIRECT_PRIMARY_PROGRAM)) {
             if (program.getIndlevel() == 1) {

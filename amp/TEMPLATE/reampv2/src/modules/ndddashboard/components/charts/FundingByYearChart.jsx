@@ -9,7 +9,7 @@ import createPlotlyComponent from 'react-plotly.js/factory';
 import { callYearDetailReport } from '../../actions/callReports';
 import {
   DIRECT_PROGRAM, INDIRECT_PROGRAMS, PROGRAMLVL1, CODE,
-  PROGRAMLVL2, TRN_PREFIX, CURRENCY_CODE
+  PROGRAMLVL2, TRN_PREFIX, CURRENCY_CODE, FUNDING_TYPE
 } from '../../utils/constants';
 import {
   formatNumberWithSettings, getCustomColor, formatKMB
@@ -145,8 +145,10 @@ class FundingByYearChart extends Component {
 
   createModalWindow = () => {
     const {
-      translations, yearDetailPending, yearDetail, error, fundingType, settings, globalSettings
+      translations, yearDetailPending, yearDetail, error, fundingType, settings, globalSettings, dashboardSettings
     } = this.props;
+    const fundingTypeDescription = dashboardSettings.find(i => i.id === FUNDING_TYPE).value.options
+      .find(ft => ft.id === fundingType);
     const { showDetail, year, programName } = this.state;
     return (
       <YearDetail
@@ -158,7 +160,7 @@ class FundingByYearChart extends Component {
         data={yearDetail}
         loading={yearDetailPending}
         error={error}
-        fundingType={fundingType}
+        fundingTypeDescription={fundingTypeDescription.name}
         currencyCode={settings[CURRENCY_CODE]}
         globalSettings={globalSettings}
         title={`${year} ${programName}`} />
@@ -401,7 +403,8 @@ FundingByYearChart.propTypes = {
   yearDetailPending: PropTypes.bool.isRequired,
   yearDetail: PropTypes.array,
   error: PropTypes.object,
-  selectedPrograms: PropTypes.array.isRequired
+  selectedPrograms: PropTypes.array.isRequired,
+  dashboardSettings: PropTypes.array.isRequired
 };
 
 FundingByYearChart.defaultProps = {
@@ -415,7 +418,8 @@ const mapStateToProps = state => ({
   translations: state.translationsReducer.translations,
   yearDetailPending: state.reportsReducer.yearDetailPending,
   yearDetail: state.reportsReducer.yearDetail,
-  error: state.reportsReducer.error
+  error: state.reportsReducer.error,
+  dashboardSettings: state.dashboardSettingsReducer.dashboardSettings,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import static org.digijava.module.aim.dbentity.AmpActivityProgramSettings.NAME_TO_COLUMN;
+
 public class NDDSolarChartData {
 
     public static class Program {
@@ -86,7 +88,7 @@ public class NDDSolarChartData {
                             .getParentThemeId().getParentThemeId().getProgramSettings()
                             .stream().findAny().orElse(null);
                     if (activityProgramSettings != null) {
-                        configurationName = activityProgramSettings.getName();
+                        configurationName = NAME_TO_COLUMN.get(activityProgramSettings.getName());
                         this.programLvl1 = new Program(program.getParentThemeId().getParentThemeId().getThemeCode(),
                                 program.getParentThemeId().getParentThemeId().getName(), FilterUtils.INSTANCE.
                                 idFromColumnName(configurationName + " Level 1"),

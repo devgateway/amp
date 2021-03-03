@@ -19,11 +19,15 @@ import { ALL_PROGRAMS } from '../../admin/ndd/constants/Constants';
 class MainDashboardContainer extends Component {
   // eslint-disable-next-line react/sort-comp
   generate2LevelColors() {
-    const { selectedDirectProgram, selectedPrograms } = this.props;
-    if (selectedPrograms && selectedDirectProgram
-      && !SELECTED_COLORS.get(`${selectedPrograms[0]}_${selectedDirectProgram.code}`)) {
-      const colors = getGradient(getCustomColor(selectedDirectProgram, selectedPrograms[0]), '#FFFFFF');
-      SELECTED_COLORS.set(`${selectedPrograms[0]}_${selectedDirectProgram.code}`, colors);
+    const { selectedDirectProgram, selectedPrograms, ndd } = this.props;
+    if (selectedPrograms && selectedDirectProgram) {
+      const subColors = SELECTED_COLORS.get(`${selectedPrograms[0]}_${selectedDirectProgram.code}`);
+      const countArray = ndd.filter(p => p.directProgram.programLvl1.code === selectedDirectProgram.code);
+      if (!subColors || subColors.length !== countArray.length) {
+        const colors = getGradient(getCustomColor(selectedDirectProgram,
+          selectedPrograms[0]), '#FFFFFF', countArray.length);
+        SELECTED_COLORS.set(`${selectedPrograms[0]}_${selectedDirectProgram.code}`, colors);
+      }
     }
   }
 

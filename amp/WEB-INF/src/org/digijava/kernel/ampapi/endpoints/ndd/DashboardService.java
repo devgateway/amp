@@ -1,6 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.ndd;
 
-import org.apache.commons.logging.Log;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
@@ -39,7 +38,6 @@ import java.util.stream.Collectors;
 
 public final class DashboardService {
 
-    private static Log log;
     private static Pattern numberPattern = Pattern.compile("\\d{4}");
     private static NDDService nddService = new NDDService();
 
@@ -231,7 +229,7 @@ public final class DashboardService {
                                 add.set(true);
                             }
                         } else {
-                            System.out.println("Ignore undefined outer program.");
+                            // Ignore undefined outer program
                         }
 
                         /* Inner ring: go to the 6th hierarchy level, if is a valid level 3 program and is
@@ -332,7 +330,7 @@ public final class DashboardService {
             }
             return null;
         } catch (Exception e) {
-            System.out.println(e.getLocalizedMessage());
+            e.printStackTrace();
         }
         return null;
     }
@@ -387,7 +385,7 @@ public final class DashboardService {
                     }
                 } else {
                     // TODO: implement for undefined row.
-                    System.out.println("To be implemented");
+                    // System.out.println("To be implemented");
                 }
             });
         }

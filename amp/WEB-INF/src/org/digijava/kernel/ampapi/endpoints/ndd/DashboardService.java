@@ -261,12 +261,16 @@ public final class DashboardService {
                                                     }
                                                 }
                                                 if (finalOuterProgram != null && outerPgrmInInnerReport != null) {
-                                                    if (finalOuterProgram.getAmpThemeId().equals(outerPgrmInInnerReport.getAmpThemeId())) {
-                                                        AmpTheme innerTheme = getThemeById(((TextCell) irProgLvl3.get(irColLvl3)).entityId);
+                                                    if (finalOuterProgram.getAmpThemeId()
+                                                            .equals(outerPgrmInInnerReport.getAmpThemeId())) {
+                                                        AmpTheme innerTheme = getThemeById(((TextCell) irProgLvl3
+                                                                .get(irColLvl3)).entityId);
                                                         if (innerTheme == null) {
-                                                            innerTheme = getThemeById(((TextCell) irProgLvl2.get(irColLvl2)).entityId);
+                                                            innerTheme = getThemeById(((TextCell) irProgLvl2
+                                                                    .get(irColLvl2)).entityId);
                                                             if (innerTheme == null) {
-                                                                innerTheme = getThemeById(((TextCell) irProgLvl1.get(irColLvl1)).entityId);
+                                                                innerTheme = getThemeById(((TextCell) irProgLvl1
+                                                                        .get(irColLvl1)).entityId);
                                                             }
                                                         }
                                                         if (innerTheme != null) {
@@ -275,14 +279,16 @@ public final class DashboardService {
                                                             Map<String, BigDecimal> amountsByYear_ =
                                                                     extractAmountsByYear(irProgLvl6);
                                                             nddSolarChartData.getIndirectPrograms()
-                                                                    .add(new NDDSolarChartData.ProgramData(innerTheme, amount_, amountsByYear_));
+                                                                    .add(new NDDSolarChartData.ProgramData(innerTheme,
+                                                                            amount_, amountsByYear_));
                                                         } else {
                                                             BigDecimal amount_ = ((AmountCell) irProgLvl6
                                                                     .get(irTotalCol)).extractValue();
                                                             Map<String, BigDecimal> amountsByYear_ =
                                                                     extractAmountsByYear(irProgLvl6);
                                                             ReportCell innerCell = irProgLvl1.get(irColLvl1);
-                                                            AmpTheme auxTheme = getThemeById(((TextCell) innerCell).entityId);
+                                                            AmpTheme auxTheme = getThemeById(((TextCell) innerCell)
+                                                                    .entityId);
                                                             if (auxTheme == null) {
                                                                 auxTheme = new AmpTheme();
                                                             }
@@ -292,7 +298,8 @@ public final class DashboardService {
                                                             fakeTheme.setAmpThemeId(-1l);
                                                             fakeTheme.setIndlevel(-1);
                                                             fakeTheme.setParentThemeId(auxTheme.getParentThemeId());
-                                                            addAndMergeUndefinedPrograms(nddSolarChartData, fakeTheme, amount_, amountsByYear_);
+                                                            addAndMergeUndefinedPrograms(nddSolarChartData, fakeTheme,
+                                                                    amount_, amountsByYear_);
                                                         }
                                                     }
                                                 }
@@ -489,7 +496,7 @@ public final class DashboardService {
             return processTwo(outerReport, innerReport, isIndirect, mapping);
         } else if (ids.size() == 1) {
             AmpTheme outerProgram = getThemeById(Long.valueOf(ids.get(0)));
-            List<ReportColumn> outerColumns = getColumnsFromProgram(outerProgram, true);
+            List<ReportColumn> outerColumns = getColumnsFromProgram(outerProgram, false);
             ReportMeasure outerMeasure = getMeasureFromParams(params.getSettings());
             outerReport = createReport(outerColumns, outerMeasure, filters,
                     params.getSettings(), true);
@@ -620,7 +627,11 @@ public final class DashboardService {
                 }
                 filters.addFilterRule(mainFilterColumn, new FilterRule(program.getAmpThemeId().toString(), true));
             } else {
-                fromMappingFilterColumn = new ReportColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_3);
+                if (program.getIndlevel() == 1) {
+                    fromMappingFilterColumn = new ReportColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1);
+                } else {
+                    fromMappingFilterColumn = new ReportColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_2);
+                }
             }
         } else if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.SECONDARY_PROGRAM)) {
             if (dontUseMapping) {
@@ -632,7 +643,11 @@ public final class DashboardService {
                 }
                 filters.addFilterRule(mainFilterColumn, new FilterRule(program.getAmpThemeId().toString(), true));
             } else {
-                fromMappingFilterColumn = new ReportColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_3);
+                if (program.getIndlevel() == 1) {
+                    fromMappingFilterColumn = new ReportColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_1);
+                } else {
+                    fromMappingFilterColumn = new ReportColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_2);
+                }
             }
         } else if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.TERTIARY_PROGRAM)) {
             if (dontUseMapping) {
@@ -645,7 +660,11 @@ public final class DashboardService {
                 filters.addFilterRule(mainFilterColumn, new FilterRule(program.getAmpThemeId().toString(), true));
 
             } else {
-                fromMappingFilterColumn = new ReportColumn(ColumnConstants.TERTIARY_PROGRAM_LEVEL_3);
+                if (program.getIndlevel() == 1) {
+                    fromMappingFilterColumn = new ReportColumn(ColumnConstants.TERTIARY_PROGRAM_LEVEL_1);
+                } else {
+                    fromMappingFilterColumn = new ReportColumn(ColumnConstants.TERTIARY_PROGRAM_LEVEL_2);
+                }
             }
         } else if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES)
                 || singleProgramSetting.getName().equalsIgnoreCase(ProgramUtil.NATIONAL_PLAN_OBJECTIVE)) {
@@ -658,7 +677,11 @@ public final class DashboardService {
                 }
                 filters.addFilterRule(mainFilterColumn, new FilterRule(program.getAmpThemeId().toString(), true));
             } else {
-                fromMappingFilterColumn = new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_3);
+                if (program.getIndlevel() == 1) {
+                    fromMappingFilterColumn = new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1);
+                } else {
+                    fromMappingFilterColumn = new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_2);
+                }
             }
         } else if (singleProgramSetting.getName().equalsIgnoreCase(ProgramUtil.INDIRECT_PRIMARY_PROGRAM)) {
             if (program.getIndlevel() == 1) {
@@ -673,20 +696,7 @@ public final class DashboardService {
         // Add filter by Program with ids from NDD mapping. Only add ids from clicked program.
         List<String> fromMappingIds = new ArrayList<>();
         if (isIndirect) {
-            indirectMapping.getProgramMapping().forEach(item -> {
-                if (program.getIndlevel() == 1) {
-                    if (getProgramByLvl(item.getOldTheme(), 1).getAmpThemeId().equals(program.getAmpThemeId())) {
-                        fromMappingIds.add(item.getOldTheme().getAmpThemeId().toString());
-                    }
-                } else {
-                    if (getProgramByLvl(item.getOldTheme(), 1).getAmpThemeId()
-                            .equals(getProgramByLvl(program, 1).getAmpThemeId())) {
-                        if (getProgramByLvl(item.getOldTheme(), 2).getAmpThemeId().equals(program.getAmpThemeId())) {
-                            fromMappingIds.add(item.getOldTheme().getAmpThemeId().toString());
-                        }
-                    }
-                }
-            });
+            fromMappingIds.add(program.getAmpThemeId().toString());
         } else {
             regularMapping.getProgramMapping().forEach(item -> {
                 if (getProgramByLvl(item.getSrcTheme(), 1).getAmpThemeId().equals(program.getAmpThemeId())) {

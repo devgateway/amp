@@ -261,12 +261,16 @@ public final class DashboardService {
                                                     }
                                                 }
                                                 if (finalOuterProgram != null && outerPgrmInInnerReport != null) {
-                                                    if (finalOuterProgram.getAmpThemeId().equals(outerPgrmInInnerReport.getAmpThemeId())) {
-                                                        AmpTheme innerTheme = getThemeById(((TextCell) irProgLvl3.get(irColLvl3)).entityId);
+                                                    if (finalOuterProgram.getAmpThemeId()
+                                                            .equals(outerPgrmInInnerReport.getAmpThemeId())) {
+                                                        AmpTheme innerTheme = getThemeById(((TextCell) irProgLvl3
+                                                                .get(irColLvl3)).entityId);
                                                         if (innerTheme == null) {
-                                                            innerTheme = getThemeById(((TextCell) irProgLvl2.get(irColLvl2)).entityId);
+                                                            innerTheme = getThemeById(((TextCell) irProgLvl2
+                                                                    .get(irColLvl2)).entityId);
                                                             if (innerTheme == null) {
-                                                                innerTheme = getThemeById(((TextCell) irProgLvl1.get(irColLvl1)).entityId);
+                                                                innerTheme = getThemeById(((TextCell) irProgLvl1
+                                                                        .get(irColLvl1)).entityId);
                                                             }
                                                         }
                                                         if (innerTheme != null) {
@@ -275,14 +279,16 @@ public final class DashboardService {
                                                             Map<String, BigDecimal> amountsByYear_ =
                                                                     extractAmountsByYear(irProgLvl6);
                                                             nddSolarChartData.getIndirectPrograms()
-                                                                    .add(new NDDSolarChartData.ProgramData(innerTheme, amount_, amountsByYear_));
+                                                                    .add(new NDDSolarChartData.ProgramData(innerTheme,
+                                                                            amount_, amountsByYear_));
                                                         } else {
                                                             BigDecimal amount_ = ((AmountCell) irProgLvl6
                                                                     .get(irTotalCol)).extractValue();
                                                             Map<String, BigDecimal> amountsByYear_ =
                                                                     extractAmountsByYear(irProgLvl6);
                                                             ReportCell innerCell = irProgLvl1.get(irColLvl1);
-                                                            AmpTheme auxTheme = getThemeById(((TextCell) innerCell).entityId);
+                                                            AmpTheme auxTheme = getThemeById(((TextCell) innerCell)
+                                                                    .entityId);
                                                             if (auxTheme == null) {
                                                                 auxTheme = new AmpTheme();
                                                             }
@@ -292,7 +298,8 @@ public final class DashboardService {
                                                             fakeTheme.setAmpThemeId(-1l);
                                                             fakeTheme.setIndlevel(-1);
                                                             fakeTheme.setParentThemeId(auxTheme.getParentThemeId());
-                                                            addAndMergeUndefinedPrograms(nddSolarChartData, fakeTheme, amount_, amountsByYear_);
+                                                            addAndMergeUndefinedPrograms(nddSolarChartData, fakeTheme,
+                                                                    amount_, amountsByYear_);
                                                         }
                                                     }
                                                 }

@@ -489,7 +489,7 @@ public final class DashboardService {
             return processTwo(outerReport, innerReport, isIndirect, mapping);
         } else if (ids.size() == 1) {
             AmpTheme outerProgram = getThemeById(Long.valueOf(ids.get(0)));
-            List<ReportColumn> outerColumns = getColumnsFromProgram(outerProgram, true);
+            List<ReportColumn> outerColumns = getColumnsFromProgram(outerProgram, false);
             ReportMeasure outerMeasure = getMeasureFromParams(params.getSettings());
             outerReport = createReport(outerColumns, outerMeasure, filters,
                     params.getSettings(), true);

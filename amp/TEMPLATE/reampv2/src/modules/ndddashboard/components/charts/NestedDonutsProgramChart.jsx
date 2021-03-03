@@ -47,15 +47,15 @@ class NestedDonutsProgramChart extends Component {
       data.forEach(i => {
         const isSubProgramElement = (calculateLvl2 && this.isSubProgram(i, selectedDirectProgram));
         const directProgram = isSubProgramElement ? i[DIRECT_PROGRAM][PROGRAMLVL2] : i[DIRECT_PROGRAM][PROGRAMLVL1];
-        if (ret.filter(d => d[CODE] === directProgram[CODE]).length === 0) {
+        if (directProgram && ret.filter(d => d[CODE] === directProgram[CODE]).length === 0) {
           const item = {
             [CODE]: directProgram[CODE],
             filterColumnName: directProgram.filterColumnName,
             objectId: directProgram.objectId,
             name: directProgram.name,
             [AMOUNT]: data.filter(d2 => ((calculateLvl2 && this.isSubProgram(i, selectedDirectProgram))
-              ? d2[DIRECT_PROGRAM][PROGRAMLVL2][CODE] === directProgram[CODE]
-              : d2[DIRECT_PROGRAM][PROGRAMLVL1][CODE] === directProgram[CODE]))
+              ? d2[DIRECT_PROGRAM][PROGRAMLVL2] && d2[DIRECT_PROGRAM][PROGRAMLVL2][CODE] === directProgram[CODE]
+              : d2[DIRECT_PROGRAM][PROGRAMLVL1] && d2[DIRECT_PROGRAM][PROGRAMLVL1][CODE] === directProgram[CODE]))
               .reduce((accumulator, currentValue) => (
                 accumulator + currentValue[DIRECT_PROGRAM][AMOUNT]
               ), 0),
@@ -151,8 +151,10 @@ class NestedDonutsProgramChart extends Component {
           // Notice we use now normalizedPercentage instead of percentageInTotal to 1) match the outer rings and
           // 2) show categories that are too small.
           const parentPercentage = outerData.find(k => k[CODE] === j.directProgramCode).normalizedPercentage;
+          // Dont merge inner categories from different outer categories.
           ret.push({
             [CODE]: j[CODE],
+            innerCode: j[CODE] + j.directProgramCode,
             name: j.name,
             percentage: (j.percentageInSubGroup / 100) * parentPercentage,
             amount: j.originalAmount
@@ -272,7 +274,8 @@ class NestedDonutsProgramChart extends Component {
           data={
             [{
               values: innerDataForChart.map(i => i.percentage),
-              labels: innerDataForChart.map(i => i[CODE]),
+              labels: innerDataForChart.map(i => i.innerCode),
+              text: innerDataForChart.map(i => i[CODE]),
               neverFade: innerDataForChart.map(i => i.neverFade),
               extraData: innerDataForChart,
               domain: {
@@ -286,7 +289,7 @@ class NestedDonutsProgramChart extends Component {
               hole: 0.5,
               type: 'pie',
               sort: false,
-              textinfo: 'label',
+              textinfo: 'text',
               marker: {
                 colors: innerColors,
                 line: {

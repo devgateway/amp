@@ -51,18 +51,21 @@ class FundingByYearChart extends Component {
         : (sourceData.filter(i => i[PROGRAMLVL1][CODE] === selectedDirectProgram[CODE]));
       filteredData.forEach(i => {
         const program = !selectedDirectProgram ? i[PROGRAMLVL1] : i[PROGRAMLVL2];
-        const item = ret.find(j => j[CODE] === program[CODE]);
-        const auxAmounts = i.amountsByYear;
-        if (item) {
-          item.values = this.sortAmountsByYear(this.addAmountsByYear(item.values, Object.keys(auxAmounts)
-            .map(j => ({ [j]: auxAmounts[j] }))));
-        } else {
-          ret.push({
-            [CODE]: program[CODE],
-            name: program.name,
-            values: Object.keys(auxAmounts).map(j => ({ [j]: auxAmounts[j] })),
-            id: program.objectId
-          });
+        if (program) {
+          const item = ret.find(j => j[CODE] === program[CODE]);
+          const auxAmounts = i.amountsByYear;
+          if (item) {
+            item.values = this.sortAmountsByYear(this.addAmountsByYear(item.values, Object.keys(auxAmounts)
+              .map(j => ({ [j]: auxAmounts[j] }))));
+          } else {
+            ret.push({
+              [CODE]: program[CODE],
+              name: program.name,
+              values: Object.keys(auxAmounts)
+                .map(j => ({ [j]: auxAmounts[j] })),
+              id: program.objectId
+            });
+          }
         }
       });
       ret.forEach(i => {

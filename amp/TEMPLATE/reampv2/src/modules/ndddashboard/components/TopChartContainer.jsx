@@ -66,6 +66,9 @@ export default class TopChartContainer extends Component {
   // eslint-disable-next-line class-methods-use-this,react/sort-comp
   generateLegend(program, level, legend, programColor) {
     const programLevel = program[`programLvl${level}`];
+    if (!programLevel) {
+      return 0;
+    }
     let prog = legend.get(programLevel.code.trim());
     if (!prog) {
       prog = {};

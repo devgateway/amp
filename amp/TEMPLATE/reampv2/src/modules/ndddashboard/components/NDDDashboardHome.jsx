@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Container } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -15,18 +15,21 @@ import { getSharedData } from '../actions/getSharedData';
 import PrintDummy from '../../sscdashboard/utils/PrintDummy';
 import { printChart } from '../../sscdashboard/utils/PrintUtils';
 import './print.css';
-import { PNG_FORMAT } from "../../sscdashboard/utils/constants";
+
+const queryString = require('query-string');
 
 class NDDDashboardHome extends Component {
   constructor(props) {
     super(props);
+    const params = queryString.parse(props.location.search);
     this.state = {
       filters: undefined,
       dashboardId: undefined,
       fundingType: undefined,
       selectedPrograms: undefined,
       settings: undefined,
-      selectedDirectProgram: null
+      selectedDirectProgram: null,
+      embedded: !!params.embedded
     };
   }
 
@@ -41,6 +44,7 @@ class NDDDashboardHome extends Component {
 
   componentDidMount() {
     const { _loadDashboardSettings, _getMappings } = this.props;
+    const { embedded } = this.state;
     // eslint-disable-next-line react/destructuring-assignment,react/prop-types
     const { id } = this.props.match.params;
     // eslint-disable-next-line react/no-did-mount-set-state
@@ -78,6 +82,12 @@ class NDDDashboardHome extends Component {
         /* Notice we dont need to define this.state.filters here, we will get it from onApplyFilters. Apparently
         the filter widget takes date.start and date.end automatically from dashboard settings EP. */
         return data;
+      }).finally(() => {
+        if (embedded) {
+          const { _callReport } = this.props;
+          const { fundingType, settings, selectedPrograms } = this.state;
+          _callReport(fundingType, {}, selectedPrograms, settings);
+        }
       });
   }
 
@@ -162,12 +172,12 @@ class NDDDashboardHome extends Component {
   downloadImage() {
     const { translations } = this.context;
     printChart(translations['amp.ndd.dashboard:page-title'], 'ndd-main-container',
-      [], 'png', false, 'print-simple-dummy-container');
+      [], 'png', false, 'print-simple-dummy-container',false);
   }
 
   render() {
     const {
-      filters, dashboardId, fundingType, selectedPrograms, settings, selectedDirectProgram
+      filters, dashboardId, fundingType, selectedPrograms, settings, selectedDirectProgram, embedded
     } = this.state;
     const {
       ndd, nddLoadingPending, nddLoaded, dashboardSettings, mapping, noIndirectMapping, globalSettings
@@ -175,7 +185,7 @@ class NDDDashboardHome extends Component {
     return (
       <Container fluid className="main-container" id="ndd-main-container">
         <div className="row header" style={{ marginRight: '-30px', marginLeft: '-30px' }}>
-          {mapping && settings && globalSettings && selectedPrograms ? (
+          {mapping && settings && globalSettings && selectedPrograms && !embedded ? (
             <HeaderContainer
               onApplySettings={this.onApplySettings}
               onApplyFilters={this.onApplyFilters}
@@ -203,7 +213,9 @@ class NDDDashboardHome extends Component {
           settings={settings}
           globalSettings={globalSettings}
           noIndirectMapping={noIndirectMapping}
-          downloadImage={this.downloadImage.bind(this)} />
+          downloadImage={this.downloadImage.bind(this)}
+          embedded={embedded}
+        />
         <PrintDummy />
       </Container>
     );

@@ -19,11 +19,15 @@ import { ALL_PROGRAMS } from '../../admin/ndd/constants/Constants';
 class MainDashboardContainer extends Component {
   // eslint-disable-next-line react/sort-comp
   generate2LevelColors() {
-    const { selectedDirectProgram, selectedPrograms } = this.props;
-    if (selectedPrograms && selectedDirectProgram
-      && !SELECTED_COLORS.get(`${selectedPrograms[0]}_${selectedDirectProgram.code}`)) {
-      const colors = getGradient(getCustomColor(selectedDirectProgram, selectedPrograms[0]), '#FFFFFF');
-      SELECTED_COLORS.set(`${selectedPrograms[0]}_${selectedDirectProgram.code}`, colors);
+    const { selectedDirectProgram, selectedPrograms, ndd } = this.props;
+    if (selectedPrograms && selectedDirectProgram) {
+      const subColors = SELECTED_COLORS.get(`${selectedPrograms[0]}_${selectedDirectProgram.code}`);
+      const countArray = ndd.filter(p => p.directProgram.programLvl1.code === selectedDirectProgram.code);
+      if (!subColors || subColors.length !== countArray.length) {
+        const colors = getGradient(getCustomColor(selectedDirectProgram,
+          selectedPrograms[0]), '#FFFFFF', countArray.length);
+        SELECTED_COLORS.set(`${selectedPrograms[0]}_${selectedDirectProgram.code}`, colors);
+      }
     }
   }
 
@@ -63,7 +67,8 @@ class MainDashboardContainer extends Component {
       top,
       topLoaded,
       topLoadingPending,
-      downloadImage
+      downloadImage,
+      embedded
     } = this.props;
     const { translations } = this.context;
     if (error) {
@@ -81,12 +86,17 @@ class MainDashboardContainer extends Component {
                 <span>
                   {this.generateSectionTitle()}
                 </span>
-                <div className="export-wrapper">
-                  <div
-                    className="download-image"
-                    onClick={() => downloadImage()}
-                  />
-                </div>
+                {!embedded && nddLoaded && !nddLoadingPending ? (
+                  <div className="export-wrapper">
+                    <div
+                      className="download-image"
+                    >
+                      <span
+                        className="glyphicon glyphicon-cloud-download download-image-img "
+                        onClick={() => downloadImage()} />
+                    </div>
+                  </div>
+                ) : (null)}
               </div>
             </Col>
           </Row>
@@ -147,37 +157,45 @@ class MainDashboardContainer extends Component {
                   </Col>
                 </>
               ) : (
-                <Col md={12} style={{ paddingRight: 0, paddingLeft: 0, backgroundColor: 'white', height: 400 }}>
+                <Col
+                  md={12}
+                  style={{
+                    paddingRight: 0, paddingLeft: 0, backgroundColor: 'white', height: 400
+                  }}>
                   <div className="loading loading-absolute" />
                 </Col>
               )}
           </Row>
-          <Row>
-            <Col md={12}>
-              <div className="separator" />
-            </Col>
-          </Row>
-          <Row style={{ marginRight: '-15px', marginLeft: '-15px', border: '1px solid #ddd' }}>
-            <Col md={12} style={{ paddingLeft: 0, paddingRight: 0 }}>
-              <div className="chart-container">
-                <div className="chart">
-                  <div className="section_title">
-                    <span>{translations['amp.dashboard:funding-over-time']}</span>
+          {!embedded ? (
+            <>
+              <Row>
+                <Col md={12}>
+                  <div className="separator" />
+                </Col>
+              </Row>
+              <Row style={{ marginRight: '-15px', marginLeft: '-15px', border: '1px solid #ddd' }}>
+                <Col md={12} style={{ paddingLeft: 0, paddingRight: 0 }}>
+                  <div className="chart-container">
+                    <div className="chart">
+                      <div className="section_title">
+                        <span>{translations['amp.dashboard:funding-over-time']}</span>
+                      </div>
+                      {nddLoaded && !nddLoadingPending ? (
+                        <FundingByYearChart
+                          selectedDirectProgram={selectedDirectProgram}
+                          selectedPrograms={selectedPrograms}
+                          settings={settings}
+                          filters={filters}
+                          fundingType={fundingType}
+                          globalSettings={globalSettings}
+                          data={ndd} />
+                      ) : <div className="loading" />}
+                    </div>
                   </div>
-                  {nddLoaded && !nddLoadingPending ? (
-                    <FundingByYearChart
-                      selectedDirectProgram={selectedDirectProgram}
-                      selectedPrograms={selectedPrograms}
-                      settings={settings}
-                      filters={filters}
-                      fundingType={fundingType}
-                      globalSettings={globalSettings}
-                      data={ndd} />
-                  ) : <div className="loading" />}
-                </div>
-              </div>
-            </Col>
-          </Row>
+                </Col>
+              </Row>
+            </>
+          ) : (null)}
         </>
       );
     }
@@ -217,7 +235,8 @@ MainDashboardContainer.propTypes = {
   selectedDirectProgram: PropTypes.object,
   handleOuterChartClick: PropTypes.func.isRequired,
   globalSettings: PropTypes.object,
-  downloadImage: PropTypes.func.isRequired
+  downloadImage: PropTypes.func.isRequired,
+  embedded: PropTypes.bool
 };
 MainDashboardContainer.defaultProps = {
   filters: undefined,
@@ -231,6 +250,7 @@ MainDashboardContainer.defaultProps = {
   globalSettings: null,
   ndd: null,
   top: undefined,
-  dashboardSettings: null
+  dashboardSettings: null,
+  embedded: false
 };
 MainDashboardContainer.contextType = NDDTranslationContext;

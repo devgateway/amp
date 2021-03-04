@@ -1,0 +1,36 @@
+
+#print-dummy, #print-simple-dummy {
+    position: absolute;
+    //top: -20000px;
+    left: 50px;
+}
+
+#print-simple-dummy-container .main-container .header,
+#print-simple-dummy-container .main-container .funding-by-year-radios .radio-fy-source,
+#print-simple-dummy-container .download-image {
+    display: none;
+}
+
+#print-simple-dummy-container .main-container .dash-form select {
+    -moz-appearance:none; /* Firefox */
+    -webkit-appearance:none; /* Safari and Chrome */
+    appearance:none;
+}
+#print-simple-dummy-container .print-title{
+    font-size: 24px;
+    font-weight: 600;
+    padding: 10px;
+}
+
+#print-dummy {
+    top: -10000px;
+    border: 1px solid black;
+}
+
+
+#print-simple-dummy-container .main-container .title-fy-source {
+    display: inline-block;
+    padding-left: 25px;
+    padding-top: 20px;
+    font-weight: 600;
+}

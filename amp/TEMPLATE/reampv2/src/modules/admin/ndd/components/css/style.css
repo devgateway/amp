@@ -97,7 +97,17 @@ th {
     text-align: center;
     padding-bottom: 30px;
 }
+.section-title {
+    text-align: center;
+}
 
+.section-sub-title {
+    text-align: center;
+    padding-bottom: 10px;
+    font-size: 20px;
+    margin: auto;
+    width: 70%;
+}
 .programs-table {
     width: 100%;
 }

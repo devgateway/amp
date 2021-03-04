@@ -9,7 +9,7 @@ import createPlotlyComponent from 'react-plotly.js/factory';
 import { callYearDetailReport } from '../../actions/callReports';
 import {
   DIRECT_PROGRAM, INDIRECT_PROGRAMS, PROGRAMLVL1, CODE,
-  PROGRAMLVL2, TRN_PREFIX, CURRENCY_CODE
+  PROGRAMLVL2, TRN_PREFIX, CURRENCY_CODE, FUNDING_TYPE
 } from '../../utils/constants';
 import {
   formatNumberWithSettings, getCustomColor, formatKMB
@@ -51,18 +51,21 @@ class FundingByYearChart extends Component {
         : (sourceData.filter(i => i[PROGRAMLVL1][CODE] === selectedDirectProgram[CODE]));
       filteredData.forEach(i => {
         const program = !selectedDirectProgram ? i[PROGRAMLVL1] : i[PROGRAMLVL2];
-        const item = ret.find(j => j[CODE] === program[CODE]);
-        const auxAmounts = i.amountsByYear;
-        if (item) {
-          item.values = this.sortAmountsByYear(this.addAmountsByYear(item.values, Object.keys(auxAmounts)
-            .map(j => ({ [j]: auxAmounts[j] }))));
-        } else {
-          ret.push({
-            [CODE]: program[CODE],
-            name: program.name,
-            values: Object.keys(auxAmounts).map(j => ({ [j]: auxAmounts[j] })),
-            id: program.objectId
-          });
+        if (program) {
+          const item = ret.find(j => j[CODE] === program[CODE]);
+          const auxAmounts = i.amountsByYear;
+          if (item) {
+            item.values = this.sortAmountsByYear(this.addAmountsByYear(item.values, Object.keys(auxAmounts)
+              .map(j => ({ [j]: auxAmounts[j] }))));
+          } else {
+            ret.push({
+              [CODE]: program[CODE],
+              name: program.name,
+              values: Object.keys(auxAmounts)
+                .map(j => ({ [j]: auxAmounts[j] })),
+              id: program.objectId
+            });
+          }
         }
       });
       ret.forEach(i => {
@@ -145,18 +148,22 @@ class FundingByYearChart extends Component {
 
   createModalWindow = () => {
     const {
-      translations, yearDetailPending, yearDetail, error, fundingType, settings, globalSettings
+      translations, yearDetailPending, yearDetail, error, fundingType, settings, globalSettings, dashboardSettings
     } = this.props;
+    const fundingTypeDescription = dashboardSettings.find(i => i.id === FUNDING_TYPE).value.options
+      .find(ft => ft.id === fundingType);
     const { showDetail, year, programName } = this.state;
     return (
       <YearDetail
         translations={translations}
         show={showDetail}
-        handleClose={() => { this.setState({ showDetail: false }); }}
+        handleClose={() => {
+          this.setState({ showDetail: false });
+        }}
         data={yearDetail}
         loading={yearDetailPending}
         error={error}
-        fundingType={fundingType}
+        fundingTypeDescription={fundingTypeDescription.name}
         currencyCode={settings[CURRENCY_CODE]}
         globalSettings={globalSettings}
         title={`${year} ${programName}`} />
@@ -188,15 +195,15 @@ class FundingByYearChart extends Component {
   }
 
   getColor(source, i) {
-    const { selectedDirectProgram } = this.props;
+    const { selectedDirectProgram, selectedPrograms } = this.props;
     if (source === SRC_DIRECT) {
       if (selectedDirectProgram == null) {
-        return getCustomColor(i, PROGRAMLVL1);
+        return getCustomColor(i, selectedPrograms[0]);
       } else {
-        return getCustomColor(i, `${PROGRAMLVL1}_${selectedDirectProgram.code}`);
+        return getCustomColor(i, `${selectedPrograms[0]}_${selectedDirectProgram.code}`);
       }
     } else {
-      return getCustomColor(i, INDIRECT_PROGRAMS);
+      return getCustomColor(i, selectedPrograms[1]);
     }
   }
 
@@ -271,7 +278,11 @@ class FundingByYearChart extends Component {
     annotations = this.calculateYAxisAbbreviations(annotations, directData);
     return (
       <div>
-        <div>
+        <div className="funding-by-year-radios">
+          <div className="title-fy-source">
+            {source === SRC_DIRECT ? translations[`${TRN_PREFIX}direct`]
+              : translations[`${TRN_PREFIX}indirect`]}
+          </div>
           <div className="radio-fy-source">
             <input
               type="radio"
@@ -297,7 +308,7 @@ class FundingByYearChart extends Component {
                 {translations[`${TRN_PREFIX}fy-indirect`]}
               </label>
             </div>
-          ) : null }
+          ) : null}
         </div>
         <Plot
           key="fundingByYearChart"
@@ -395,7 +406,8 @@ FundingByYearChart.propTypes = {
   yearDetailPending: PropTypes.bool.isRequired,
   yearDetail: PropTypes.array,
   error: PropTypes.object,
-  selectedPrograms: PropTypes.array.isRequired
+  selectedPrograms: PropTypes.array.isRequired,
+  dashboardSettings: PropTypes.array.isRequired
 };
 
 FundingByYearChart.defaultProps = {
@@ -409,7 +421,8 @@ const mapStateToProps = state => ({
   translations: state.translationsReducer.translations,
   yearDetailPending: state.reportsReducer.yearDetailPending,
   yearDetail: state.reportsReducer.yearDetail,
-  error: state.reportsReducer.error
+  error: state.reportsReducer.error,
+  dashboardSettings: state.dashboardSettingsReducer.dashboardSettings,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

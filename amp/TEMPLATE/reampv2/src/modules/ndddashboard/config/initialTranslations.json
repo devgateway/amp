@@ -14,6 +14,8 @@
   "amp.ndd.dashboard:share": "Share",
   "amp.ndd.dashboard:fy-direct": "Show Direct Data",
   "amp.ndd.dashboard:fy-indirect": "Show Indirect Data",
+  "amp.ndd.dashboard:direct": "Direct Data",
+  "amp.ndd.dashboard:indirect": "Indirect Data",
   "amp.ndd.dashboard:no-data": "No Data Available",
   "amp.ndd.dashboard:of-total": "of Total",
   "amp.ndd.dashboard:of-year-total": "of Year Total",

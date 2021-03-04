@@ -15,7 +15,7 @@ export default class YearDetail extends Component {
 
   createTable = () => {
     const {
-      data, translations, fundingType, currencyCode, globalSettings
+      data, translations, fundingTypeDescription, currencyCode, globalSettings
     } = this.props;
     const { recordsVisible } = this.state;
     const rows = [];
@@ -37,7 +37,6 @@ export default class YearDetail extends Component {
         </tr>
       );
     });
-
     return (
       <div>
         <span style={{ fontWeight: 'bold' }}>
@@ -49,7 +48,7 @@ export default class YearDetail extends Component {
               <th className="header-row"><span>{translations[`${TRN_PREFIX}project-title`]}</span></th>
               <th className="header-row">
                 <span>
-                  {`${fundingType} (${currencyCode})`}
+                  {`${fundingTypeDescription} (${currencyCode})`}
                 </span>
               </th>
             </tr>
@@ -109,7 +108,7 @@ YearDetail.propTypes = {
   data: PropTypes.array,
   loading: PropTypes.bool.isRequired,
   error: PropTypes.object,
-  fundingType: PropTypes.string.isRequired,
+  fundingTypeDescription: PropTypes.string.isRequired,
   currencyCode: PropTypes.string.isRequired,
   globalSettings: PropTypes.object.isRequired,
   title: PropTypes.string.isRequired

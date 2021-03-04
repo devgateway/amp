@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
-  CHART_COLOR_MAP,
-  INDIRECT_PROGRAMS,
-  PROGRAMLVL1, CURRENCY_CODE
+  CHART_COLOR_MAP, CURRENCY_CODE
 } from '../utils/constants';
 import CustomLegend from '../../../utils/components/CustomLegend';
 import './legends/legends.css';
@@ -17,7 +15,7 @@ import { ALL_PROGRAMS } from '../../admin/ndd/constants/Constants';
 export default class TopChartContainer extends Component {
   getProgramLegend() {
     const { ndd } = this.props;
-    const { selectedDirectProgram } = this.props;
+    const { selectedDirectProgram, selectedPrograms } = this.props;
     const legends = [];
     const directLegend = new Map();
     const indirectLegend = new Map();
@@ -27,14 +25,14 @@ export default class TopChartContainer extends Component {
       if (selectedDirectProgram) {
         if (dp.directProgram.programLvl1.code === selectedDirectProgram.code) {
           directTotal += this.generateLegend(dp.directProgram, 2, directLegend,
-            `${PROGRAMLVL1}_${selectedDirectProgram.code}`, directTotal);
+            `${selectedPrograms[0]}_${selectedDirectProgram.code}`, directTotal);
         }
       } else {
-        directTotal += this.generateLegend(dp.directProgram, 1, directLegend, PROGRAMLVL1);
+        directTotal += this.generateLegend(dp.directProgram, 1, directLegend, selectedPrograms[0]);
       }
       if (!selectedDirectProgram) { // We only need indirect if no direct is selected
         dp.indirectPrograms.forEach(idp => {
-          indirectTotal += this.generateLegend(idp, 1, indirectLegend, INDIRECT_PROGRAMS);
+          indirectTotal += this.generateLegend(idp, 1, indirectLegend, selectedPrograms[1]);
         });
       }
     });
@@ -68,6 +66,9 @@ export default class TopChartContainer extends Component {
   // eslint-disable-next-line class-methods-use-this,react/sort-comp
   generateLegend(program, level, legend, programColor) {
     const programLevel = program[`programLvl${level}`];
+    if (!programLevel) {
+      return 0;
+    }
     let prog = legend.get(programLevel.code.trim());
     if (!prog) {
       prog = {};
@@ -100,7 +101,8 @@ export default class TopChartContainer extends Component {
       nddLoaded,
       settings,
       selectedDirectProgram,
-      globalSettings
+      globalSettings,
+      selectedPrograms
     } = this.props;
     const { translations } = this.context;
     if (error) {
@@ -126,8 +128,9 @@ export default class TopChartContainer extends Component {
                   translations={translations}
                   currency={settings[CURRENCY_CODE]}
                   data={programLegend[0].legends.sort((a, b) => b.amount - a.amount)}
-                  colorMap={CHART_COLOR_MAP.get(selectedDirectProgram ? `${PROGRAMLVL1}_${selectedDirectProgram.code}`
-                    : PROGRAMLVL1)} />
+                  colorMap={CHART_COLOR_MAP
+                    .get(selectedDirectProgram ? `${selectedPrograms[0]}_${selectedDirectProgram.code}`
+                      : selectedPrograms[0])} />
               </div>
               {selectedDirectProgram === null && programLegend[1].total
                 ? (
@@ -146,15 +149,15 @@ export default class TopChartContainer extends Component {
                       translations={translations}
                       currency={settings[CURRENCY_CODE]}
                       data={programLegend[1].legends.sort((a, b) => b.amount - a.amount)}
-                      colorMap={CHART_COLOR_MAP.get(INDIRECT_PROGRAMS)} />
+                      colorMap={CHART_COLOR_MAP.get(selectedPrograms[1])} />
                   </div>
                 ) : null}
               {selectedDirectProgram !== null
-                && (
-                  <div className="even-sixth">
-                    {this.getTopChart()}
-                  </div>
-                )}
+              && (
+                <div className="even-sixth">
+                  {this.getTopChart()}
+                </div>
+              )}
 
             </div>
           ) : null}

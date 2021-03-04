@@ -1,19 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.PathSegment;
-
 import com.sun.jersey.spi.container.ContainerRequest;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
@@ -48,6 +35,17 @@ import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.aim.util.ValidationStatus;
 import org.hibernate.CacheMode;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.PathSegment;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Octavian Ciubotaru
@@ -144,7 +142,7 @@ public final class ActivityInterchangeUtils {
 
     public static ActivityInformation getActivityInformation(Long projectId) {
         AmpActivityVersion project = loadActivity(projectId);
-
+        AmpActivityVersion previousActivity = ActivityUtil.getPreviousVersion(projectId);
         ActivityInformation activityInformation = new ActivityInformation(projectId);
         TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
         if (project.getTeam().getTeamLead() != null) {
@@ -174,6 +172,7 @@ public final class ActivityInterchangeUtils {
             if (activityInformation.getValidationStatus() == ValidationStatus.AUTOMATIC_VALIDATION) {
                 activityInformation.setDaysForAutomaticValidation(ActivityUtil.daysToValidation(project));
             }
+            activityInformation.setShowChangeSummary(previousActivity != null);
         } else {
             // if not logged in but the show version history in public preview is on, then we should show
             // version history information
@@ -181,6 +180,9 @@ public final class ActivityInterchangeUtils {
                 activityInformation.setVersionHistory(ActivityUtil.getActivityHistories(projectId));
                 activityInformation.setUpdateCurrentVersion(false);
             }
+            activityInformation.setShowChangeSummary(previousActivity != null
+                    && FeaturesUtil.isVisibleField("Show Change Summary"));
+
         }
 
         activityInformation.setAmpActiviylastVersionId(ActivityVersionUtil.getLastVersionForVersion(projectId));

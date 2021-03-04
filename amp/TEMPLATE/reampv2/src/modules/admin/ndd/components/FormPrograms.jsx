@@ -192,8 +192,8 @@ class FormPrograms extends Component {
   onUpdateActivities = () => {
     const { _updateActivities, translations } = this.props;
     const { trnPrefix } = this.context;
-    const { data } = this.state;
-    const validateMappings = Utils.validate(data);
+    const { data, levelSrc, levelDst } = this.state;
+    const validateMappings = Utils.validate(data, levelSrc, levelDst);
     if (validateMappings === 0) {
       if (window.confirm(translations[`${trnPrefix}button-update-activities-confirmation`])) {
         this.clearMessages();

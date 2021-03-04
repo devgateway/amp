@@ -22,10 +22,14 @@ class ProgramsHeader extends Component {
       let depthLeft;
       let depthRight;
       if (src) {
-        depthLeft = this.levelsToArray(programs.find(i => i.id === src.id).levels);
+        if (programs.find(i => i.id === src.id)) {
+          depthLeft = this.levelsToArray(programs.find(i => i.id === src.id).levels);
+        }
       }
       if (dst) {
-        depthRight = this.levelsToArray(programs.find(i => i.id === dst.id).levels);
+        if (programs.find(i => i.id === dst.id)) {
+          depthRight = this.levelsToArray(programs.find(i => i.id === dst.id).levels);
+        }
       }
       const levelSelectedRight = levelDst > 0 ? [{ id: levelDst, value: `${levelDst}` }] : null;
       const levelSelectedLeft = levelSrc > 0 ? [{ id: levelSrc, value: `${levelSrc}` }] : null;

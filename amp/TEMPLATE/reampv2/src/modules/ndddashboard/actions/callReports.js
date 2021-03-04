@@ -13,6 +13,7 @@ import {
   DIRECT_INDIRECT_REPORT, FUNDING_TYPE, INCLUDE_LOCATIONS_WITH_CHILDREN, TOP_DONOR_REPORT,
   ACTIVITY_DETAIL_REPORT
 } from '../utils/constants';
+import { removeFilter } from '../utils/Utils';
 
 export const callReport = (fundingType, filters, programIds, settings) => dispatch => {
   dispatch(fetchIndirectReportPending());
@@ -31,7 +32,7 @@ export const clearTopReport = () => dispatch => {
 };
 
 export const callTopReport = (fundingType, settings, filterParam, selectedProgram) => dispatch => {
-  const params = { ...filterParam };
+  let params = { ...filterParam };
   if (!params.filters) {
     params.filters = {};
     params[INCLUDE_LOCATIONS_WITH_CHILDREN] = true;
@@ -48,14 +49,20 @@ export const callTopReport = (fundingType, settings, filterParam, selectedProgra
   if (!params.settings[CURRENCY_CODE]) {
     params.settings[CURRENCY_CODE] = DEFAULT_CURRENCY;
   }
-
   dispatch(fetchTopReportPending());
   return fetchApiData({
     url: TOP_DONOR_REPORT,
     body: params
   })
     .then(payload => dispatch(fetchTopReportSuccess(payload)))
-    .catch(error => dispatch(fetchTopReportError(error)));
+    .catch(error => dispatch(fetchTopReportError(error)))
+    .finally(() => {
+      // We need to revert the extra param added for TopChart or it will affect other calls to the BE (like
+      // detail of activities).
+      if (selectedProgram !== null) {
+        params = removeFilter(params, selectedProgram);
+      }
+    });
 };
 
 export const callYearDetailReport = (fundingType, filters, programId, year, settings) => dispatch => {

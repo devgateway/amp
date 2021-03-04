@@ -115,6 +115,7 @@ class NDDDashboardHome extends Component {
   resetChartAfterUnClick = () => {
     const { selectedDirectProgram, filters } = this.state;
     if (selectedDirectProgram) {
+      // Remove the filter manually or it will keep affecting the chart.
       const fixedFilters = removeFilter(filters, selectedDirectProgram);
       this.setState(() => ({
         selectedDirectProgram: null,

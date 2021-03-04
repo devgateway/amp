@@ -20,7 +20,6 @@ export function hashCode(str) { // java String#hashCode
 }
 
 export function removeFilter(filters, selectedDirectProgram) {
-  // Remove the filter manually or it will keep affecting the chart.
   if (filters && filters.filters && filters.filters[selectedDirectProgram.filterColumnName]) {
     filters.filters[selectedDirectProgram.filterColumnName]
       .splice(filters.filters[selectedDirectProgram.filterColumnName]

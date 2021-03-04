@@ -15,12 +15,14 @@ import { getSharedData } from '../actions/getSharedData';
 import PrintDummy from '../../sscdashboard/utils/PrintDummy';
 import { printChart } from '../../sscdashboard/utils/PrintUtils';
 import './print.css';
+import { removeFilter } from '../utils/Utils';
 
 const queryString = require('query-string');
 
 class NDDDashboardHome extends Component {
   constructor(props) {
     super(props);
+    // eslint-disable-next-line react/prop-types
     const params = queryString.parse(props.location.search);
     this.state = {
       filters: undefined,
@@ -114,15 +116,10 @@ class NDDDashboardHome extends Component {
     const { selectedDirectProgram, filters } = this.state;
     if (selectedDirectProgram) {
       // Remove the filter manually or it will keep affecting the chart.
-      filters.filters[selectedDirectProgram.filterColumnName]
-        .splice(filters.filters[selectedDirectProgram.filterColumnName]
-          .findIndex(i => i === selectedDirectProgram.objectId), 1);
-      if (filters.filters[selectedDirectProgram.filterColumnName].length === 0) {
-        filters.filters[selectedDirectProgram.filterColumnName] = null;
-      }
+      const fixedFilters = removeFilter(filters, selectedDirectProgram);
       this.setState(() => ({
         selectedDirectProgram: null,
-        filters
+        filters: fixedFilters
       }));
     }
   }
@@ -172,7 +169,7 @@ class NDDDashboardHome extends Component {
   downloadImage() {
     const { translations } = this.context;
     printChart(translations['amp.ndd.dashboard:page-title'], 'ndd-main-container',
-      [], 'png', false, 'print-simple-dummy-container',false);
+      [], 'png', false, 'print-simple-dummy-container', false);
   }
 
   render() {

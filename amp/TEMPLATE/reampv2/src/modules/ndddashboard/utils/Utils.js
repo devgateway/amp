@@ -19,6 +19,19 @@ export function hashCode(str) { // java String#hashCode
   return hash;
 }
 
+export function removeFilter(filters, selectedDirectProgram) {
+  // Remove the filter manually or it will keep affecting the chart.
+  if (filters && filters.filters && filters.filters[selectedDirectProgram.filterColumnName]) {
+    filters.filters[selectedDirectProgram.filterColumnName]
+      .splice(filters.filters[selectedDirectProgram.filterColumnName]
+        .findIndex(i => i === selectedDirectProgram.objectId), 1);
+    if (filters.filters[selectedDirectProgram.filterColumnName].length === 0) {
+      filters.filters[selectedDirectProgram.filterColumnName] = null;
+    }
+  }
+  return filters;
+}
+
 export function intToRGB(i) {
   const c = (i & 0x00FFFFFF)
     .toString(16)

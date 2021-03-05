@@ -46,8 +46,12 @@ public class NDDSolarChartData {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
             Program program = (Program) o;
             return Objects.equals(code, program.code)
                     && Objects.equals(name, program.name)
@@ -62,6 +66,11 @@ public class NDDSolarChartData {
     }
 
     public static class ProgramData {
+
+        public static final int LEVEL_3 = 3;
+        public static final int LEVEL_2 = 2;
+        public static final int LEVEL_1 = 1;
+
 
         private final Program programLvl1;
 
@@ -83,7 +92,7 @@ public class NDDSolarChartData {
             String configurationName = null;
             AmpActivityProgramSettings activityProgramSettings = null;
             switch (program.getIndlevel()) {
-                case 3:
+                case LEVEL_3:
                     activityProgramSettings = program.getParentThemeId()
                             .getParentThemeId().getParentThemeId().getProgramSettings()
                             .stream().findAny().orElse(null);
@@ -110,7 +119,7 @@ public class NDDSolarChartData {
                         this.amountsByYear = null;
                     }
                     break;
-                case 2:
+                case LEVEL_2:
                     activityProgramSettings = program
                             .getParentThemeId().getParentThemeId().getProgramSettings()
                             .stream().findAny().orElse(null);
@@ -135,7 +144,7 @@ public class NDDSolarChartData {
                         this.amountsByYear = null;
                     }
                     break;
-                case 1:
+                case LEVEL_1:
                     activityProgramSettings = program.getParentThemeId()
                             .getProgramSettings()
                             .stream().findAny().orElse(null);
@@ -207,8 +216,12 @@ public class NDDSolarChartData {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
             ProgramData p2 = (ProgramData) o;
             return ((programLvl1 == null && p2.programLvl1 == null) || Objects.equals(programLvl1, p2.programLvl1))
                     && ((programLvl2 == null && p2.programLvl2 == null) || Objects.equals(programLvl2, p2.programLvl2))

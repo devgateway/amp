@@ -1,5 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.ndd;
 
+import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
@@ -37,9 +38,16 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public final class DashboardService {
+    private static Logger logger = Logger.getLogger(DashboardService.class);
 
     private static Pattern numberPattern = Pattern.compile("\\d{4}");
     private static NDDService nddService = new NDDService();
+    public static final Integer COLUMN_0 = 0;
+    public static final Integer COLUMN_1 = 1;
+    public static final Integer COLUMN_2 = 2;
+    public static final Integer COLUMN_3 = 3;
+    public static final Integer COLUMN_4 = 4;
+    public static final Integer COLUMN_5 = 5;
 
     private DashboardService() {
     }
@@ -182,15 +190,15 @@ public final class DashboardService {
                                                       final boolean isIndirect,
                                                       final MappingConfiguration mapping) {
         List<NDDSolarChartData> list = new ArrayList<>();
-        ReportOutputColumn orColLvl1 = outerReport.leafHeaders.get(0);
-        ReportOutputColumn orColLvl2 = outerReport.leafHeaders.get(1);
-        ReportOutputColumn orColLvl3 = outerReport.leafHeaders.get(2);
-        ReportOutputColumn irColLvl1 = innerReport.leafHeaders.get(0);
-        ReportOutputColumn irColLvl2 = innerReport.leafHeaders.get(1);
-        ReportOutputColumn irColLvl3 = innerReport.leafHeaders.get(2);
-        ReportOutputColumn irColLvl4 = innerReport.leafHeaders.get(3);
-        ReportOutputColumn irColLvl5 = innerReport.leafHeaders.get(4);
-        ReportOutputColumn irColLvl6 = innerReport.leafHeaders.get(5);
+        ReportOutputColumn orColLvl1 = outerReport.leafHeaders.get(COLUMN_0);
+        ReportOutputColumn orColLvl2 = outerReport.leafHeaders.get(COLUMN_1);
+        ReportOutputColumn orColLvl3 = outerReport.leafHeaders.get(COLUMN_2);
+        ReportOutputColumn irColLvl1 = innerReport.leafHeaders.get(COLUMN_0);
+        ReportOutputColumn irColLvl2 = innerReport.leafHeaders.get(COLUMN_1);
+        ReportOutputColumn irColLvl3 = innerReport.leafHeaders.get(COLUMN_2);
+        ReportOutputColumn irColLvl4 = innerReport.leafHeaders.get(COLUMN_3);
+        ReportOutputColumn irColLvl5 = innerReport.leafHeaders.get(COLUMN_4);
+        ReportOutputColumn irColLvl6 = innerReport.leafHeaders.get(COLUMN_5);
         ReportOutputColumn orTotalCol = outerReport.leafHeaders.get(outerReport.leafHeaders.size() - 1);
         ReportOutputColumn irTotalCol = innerReport.leafHeaders.get(innerReport.leafHeaders.size() - 1);
 
@@ -229,7 +237,7 @@ public final class DashboardService {
                                 add.set(true);
                             }
                         } else {
-                            // Ignore undefined outer program
+                            logger.debug("Ignore undefined outer program");
                         }
 
                         /* Inner ring: go to the 6th hierarchy level, if is a valid level 3 program and is
@@ -247,15 +255,15 @@ public final class DashboardService {
                                             Map<ReportOutputColumn, ReportCell> irProgLvl5 = irChild5.getContents();
                                             irChild5.getChildren().forEach(irChild6 -> {
                                                 Map<ReportOutputColumn, ReportCell> irProgLvl6 = irChild6.getContents();
-                                                TextCell cell_ = (TextCell) irProgLvl6.get(irColLvl6);
-                                                AmpTheme outerPgrmInInnerReport = getThemeById(cell_.entityId);
+                                                TextCell cellLvl6 = (TextCell) irProgLvl6.get(irColLvl6);
+                                                AmpTheme outerPgrmInInnerReport = getThemeById(cellLvl6.entityId);
                                                 if (outerPgrmInInnerReport == null) {
                                                     // Go up until we have a valid program.
-                                                    cell_ = (TextCell) irProgLvl5.get(irColLvl5);
-                                                    outerPgrmInInnerReport = getThemeById(cell_.entityId);
+                                                    cellLvl6 = (TextCell) irProgLvl5.get(irColLvl5);
+                                                    outerPgrmInInnerReport = getThemeById(cellLvl6.entityId);
                                                     if (outerPgrmInInnerReport == null) {
-                                                        cell_ = (TextCell) irProgLvl4.get(irColLvl4);
-                                                        outerPgrmInInnerReport = getThemeById(cell_.entityId);
+                                                        cellLvl6 = (TextCell) irProgLvl4.get(irColLvl4);
+                                                        outerPgrmInInnerReport = getThemeById(cellLvl6.entityId);
                                                     }
                                                 }
                                                 if (finalOuterProgram != null && outerPgrmInInnerReport != null) {
@@ -272,17 +280,17 @@ public final class DashboardService {
                                                             }
                                                         }
                                                         if (innerTheme != null) {
-                                                            BigDecimal amount_ = ((AmountCell) irProgLvl6
+                                                            BigDecimal amountLvl6 = ((AmountCell) irProgLvl6
                                                                     .get(irTotalCol)).extractValue();
-                                                            Map<String, BigDecimal> amountsByYear_ =
+                                                            Map<String, BigDecimal> amountsByYearLvl6 =
                                                                     extractAmountsByYear(irProgLvl6);
                                                             nddSolarChartData.getIndirectPrograms()
                                                                     .add(new NDDSolarChartData.ProgramData(innerTheme,
-                                                                            amount_, amountsByYear_));
+                                                                            amountLvl6, amountsByYearLvl6));
                                                         } else {
-                                                            BigDecimal amount_ = ((AmountCell) irProgLvl6
+                                                            BigDecimal amountLvl6 = ((AmountCell) irProgLvl6
                                                                     .get(irTotalCol)).extractValue();
-                                                            Map<String, BigDecimal> amountsByYear_ =
+                                                            Map<String, BigDecimal> amountsByYearLvl6 =
                                                                     extractAmountsByYear(irProgLvl6);
                                                             ReportCell innerCell = irProgLvl1.get(irColLvl1);
                                                             AmpTheme auxTheme = getThemeById(((TextCell) innerCell)
@@ -293,11 +301,11 @@ public final class DashboardService {
                                                             AmpTheme fakeTheme = new AmpTheme();
                                                             fakeTheme.setThemeCode("Undef");
                                                             fakeTheme.setName("Undefined");
-                                                            fakeTheme.setAmpThemeId(-1l);
+                                                            fakeTheme.setAmpThemeId(-1L);
                                                             fakeTheme.setIndlevel(-1);
                                                             fakeTheme.setParentThemeId(auxTheme.getParentThemeId());
                                                             addAndMergeUndefinedPrograms(nddSolarChartData, fakeTheme,
-                                                                    amount_, amountsByYear_);
+                                                                    amountLvl6, amountsByYearLvl6);
                                                         }
                                                     }
                                                 }

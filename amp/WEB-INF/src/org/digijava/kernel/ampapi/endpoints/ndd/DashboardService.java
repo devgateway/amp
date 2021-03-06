@@ -18,6 +18,7 @@ import org.dgfoundation.amp.newreports.AmountCell;
 import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
+import org.digijava.kernel.ampapi.endpoints.ndd.utils.FlattenProgramRecord;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
@@ -177,6 +178,7 @@ public final class DashboardService {
      */
     private static void flattenOneColumnReport(GeneratedReport report, List<FlattenProgramRecord> list,
                                                AmpTheme program, int level, ReportArea area, int maxLevels) {
+        ReportOutputColumn totalCol = report.leafHeaders.get(report.leafHeaders.size() - 1);
         if (area.getChildren() != null && level < maxLevels) {
             for (ReportArea child : area.getChildren()) {
                 Map<ReportOutputColumn, ReportCell> content = child.getContents();
@@ -187,7 +189,7 @@ public final class DashboardService {
                 } else {
                     if (program != null && level == 0) {
                         // Reset program or we could add an extra row for undefined as last record
-                        // but with the previous program name.
+                        // but with the previous program name (wrong).
                         program = null;
                     }
                 }
@@ -201,8 +203,8 @@ public final class DashboardService {
                 if (auxProg == null) {
                     auxProg = program;
                 }
-                // todo: falta guardar el amount.
-                list.add(new FlattenProgramRecord(auxProg, extractAmountsByYear(content)));
+                BigDecimal amount = ((AmountCell) content.get(totalCol)).extractValue();
+                list.add(new FlattenProgramRecord(auxProg, amount, extractAmountsByYear(content)));
             }
         }
     }

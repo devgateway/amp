@@ -74,13 +74,15 @@ public class NDDService {
         }
     }
 
+    public static int getMappingLevel(String gs) {
+        return Integer.parseInt(FeaturesUtil.getGlobalSetting(gs).getGlobalSettingsValue());
+    }
+
     public IndirectProgramMappingConfiguration getIndirectProgramMappingConfiguration() {
         AmpTheme src = getSrcIndirectProgramRoot();
         AmpTheme dst = getDstIndirectProgramRoot();
-        int srcLevel = Integer.parseInt(FeaturesUtil.getGlobalSetting(MAPPING_INDIRECT_DIRECT_LEVEL)
-                .getGlobalSettingsValue());
-        int dstLevel = Integer.parseInt(FeaturesUtil.getGlobalSetting(MAPPING_INDIRECT_INDIRECT_LEVEL)
-                .getGlobalSettingsValue());
+        int srcLevel = getMappingLevel(MAPPING_INDIRECT_DIRECT_LEVEL);
+        int dstLevel = getMappingLevel(MAPPING_INDIRECT_INDIRECT_LEVEL);
         PossibleValue srcPV = src != null ? convert(src, srcLevel) : null;
         PossibleValue dstPV = dst != null ? convert(dst, dstLevel) : null;
 
@@ -96,18 +98,18 @@ public class NDDService {
 
         List<AmpIndirectTheme> mapping = loadIndirectMapping();
 
-        SingleProgramData srcSPD = srcPV != null ? new SingleProgramData(srcPV.getId(), srcPV.getValue(), false, 0) : null;
-        SingleProgramData dstSPD = dstPV != null ? new SingleProgramData(dstPV.getId(), dstPV.getValue(), true, 0) : null;
+        SingleProgramData srcSPD = srcPV != null ? new SingleProgramData(srcPV.getId(), srcPV.getValue(), false,
+                srcLevel) : null;
+        SingleProgramData dstSPD = dstPV != null ? new SingleProgramData(dstPV.getId(), dstPV.getValue(), true,
+                dstLevel) : null;
         return new IndirectProgramMappingConfiguration(mapping, srcSPD, dstSPD, allPrograms);
     }
 
     public ProgramMappingConfiguration getProgramMappingConfiguration() {
         AmpTheme src = getSrcProgramRoot();
         AmpTheme dst = getDstProgramRoot();
-        int levelSrc = Integer.parseInt(FeaturesUtil.getGlobalSetting(MAPPING_PROGRAM_SOURCE_LEVEL)
-                .getGlobalSettingsValue());
-        int levelDst = Integer.parseInt(FeaturesUtil.getGlobalSetting(MAPPING_PROGRAM_DESTINATION_LEVEL)
-                .getGlobalSettingsValue());
+        int levelSrc = getMappingLevel(MAPPING_PROGRAM_SOURCE_LEVEL);
+        int levelDst = getMappingLevel(MAPPING_PROGRAM_DESTINATION_LEVEL);
         PossibleValue srcPV = src != null ? convert(src, levelSrc) : null;
         PossibleValue dstPV = dst != null ? convert(dst, levelDst) : null;
 
@@ -119,8 +121,10 @@ public class NDDService {
 
         List<AmpThemeMapping> mapping = loadMapping();
 
-        SingleProgramData srcSPD = srcPV != null ? new SingleProgramData(srcPV.getId(), srcPV.getValue(), false, 0) : null;
-        SingleProgramData dstSPD = dstPV != null ? new SingleProgramData(dstPV.getId(), dstPV.getValue(), false, 0) : null;
+        SingleProgramData srcSPD = srcPV != null ? new SingleProgramData(srcPV.getId(), srcPV.getValue(), false,
+                levelSrc) : null;
+        SingleProgramData dstSPD = dstPV != null ? new SingleProgramData(dstPV.getId(), dstPV.getValue(), false,
+                levelDst) : null;
         return new ProgramMappingConfiguration(mapping, srcSPD, dstSPD, allPrograms);
     }
 

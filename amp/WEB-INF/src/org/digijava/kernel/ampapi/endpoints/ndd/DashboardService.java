@@ -469,17 +469,7 @@ public final class DashboardService {
         AmpReportFilters filters = getFiltersFromParams(params.getFilters());
         if (ids.size() == 2) {
             AmpTheme outerProgram = getThemeById(Long.valueOf(ids.get(0)));
-            List<ReportColumn> outerColumns = getColumnsFromProgram(outerProgram, 3);
-            ReportMeasure outerMeasure = getMeasureFromParams(params.getSettings());
-            outerReport = createReport(outerColumns, outerMeasure, filters,
-                    params.getSettings(), true);
-
             AmpTheme innerProgram = getThemeById(Long.valueOf(ids.get(1)));
-            List<ReportColumn> innerColumns = getColumnsFromProgram(innerProgram, 3);
-            innerColumns.addAll(outerColumns);
-            ReportMeasure innerMeasure = outerMeasure;
-            innerReport = createReport(innerColumns, outerMeasure, filters,
-                    params.getSettings(), true);
 
             // TODO: maybe do a "normalization" here to get the common programMapping.
             MappingConfiguration indirectMapping = nddService.getIndirectProgramMappingConfiguration();
@@ -491,6 +481,18 @@ public final class DashboardService {
             } else {
                 mapping = regularMapping;
             }
+
+            List<ReportColumn> outerColumns = getColumnsFromProgram(outerProgram, mapping.getSrcProgram().getLevels());
+            ReportMeasure outerMeasure = getMeasureFromParams(params.getSettings());
+            outerReport = createReport(outerColumns, outerMeasure, filters,
+                    params.getSettings(), true);
+
+            List<ReportColumn> innerColumns = getColumnsFromProgram(innerProgram, mapping.getDstProgram().getLevels());
+            innerColumns.addAll(outerColumns);
+            ReportMeasure innerMeasure = outerMeasure;
+            innerReport = createReport(innerColumns, outerMeasure, filters,
+                    params.getSettings(), true);
+
             return processTwo(outerReport, innerReport, isIndirect, mapping);
         } else if (ids.size() == 1) {
             AmpTheme outerProgram = getThemeById(Long.valueOf(ids.get(0)));

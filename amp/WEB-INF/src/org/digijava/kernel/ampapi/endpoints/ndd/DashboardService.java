@@ -25,6 +25,7 @@ import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.util.ProgramUtil;
 
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -102,56 +103,47 @@ public final class DashboardService {
         return root;
     }
 
+    private static String getProgramConstant(String prefix, int index) {
+        try {
+            Field field = ColumnConstants.class.getField(prefix + index);
+            return field.get(null).toString();
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            logger.error(e.getLocalizedMessage());
+        }
+        return null;
+    }
+
     /**
-     * Given a @program with level 0 (main root) return the report columns (one if @onlyLvl3 == true)
+     * Given a @program with level 0 (main root) return the report columns
      * linked to the program in the MultiProgram Configuration Manager (ie: PP, SP, NPO, etc).
      *
      * @param program
-     * @param onlyLvl3
      * @return
      */
-    private static List<ReportColumn> getColumnsFromProgram(AmpTheme program, boolean onlyLvl3) {
+    private static List<ReportColumn> getColumnsFromProgram(AmpTheme program, int levels) {
         List<ReportColumn> list = new ArrayList<>();
         Set<AmpActivityProgramSettings> programSettings = program.getProgramSettings();
         if (programSettings == null || programSettings.size() != 1) {
             throw new RuntimeException("Cant determine the first column of the report.");
         }
         AmpActivityProgramSettings singleProgramSetting = ((AmpActivityProgramSettings) programSettings.toArray()[0]);
+        String prefix = null;
         if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.PRIMARY_PROGRAM)) {
-            if (!onlyLvl3) {
-                list.add(new ReportColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1));
-                list.add(new ReportColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_2));
-            }
-            list.add(new ReportColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_3));
-            return list;
+            prefix = "PRIMARY_PROGRAM_LEVEL_";
         } else if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.SECONDARY_PROGRAM)) {
-            if (!onlyLvl3) {
-                list.add(new ReportColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_1));
-                list.add(new ReportColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_2));
-            }
-            list.add(new ReportColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_3));
-            return list;
+            prefix = "SECONDARY_PROGRAM_LEVEL_";
         } else if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.TERTIARY_PROGRAM)) {
-            if (!onlyLvl3) {
-                list.add(new ReportColumn(ColumnConstants.TERTIARY_PROGRAM_LEVEL_1));
-                list.add(new ReportColumn(ColumnConstants.TERTIARY_PROGRAM_LEVEL_2));
-            }
-            list.add(new ReportColumn(ColumnConstants.TERTIARY_PROGRAM_LEVEL_3));
-            return list;
+            prefix = "TERTIARY_PROGRAM_LEVEL_";
         } else if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES)
                 || singleProgramSetting.getName().equalsIgnoreCase(ProgramUtil.NATIONAL_PLAN_OBJECTIVE)) {
-            if (!onlyLvl3) {
-                list.add(new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1));
-                list.add(new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_2));
-            }
-            list.add(new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_3));
-            return list;
+            prefix = "NATIONAL_PLANNING_OBJECTIVES_LEVEL_";
         } else if (singleProgramSetting.getName().equalsIgnoreCase(ProgramUtil.INDIRECT_PRIMARY_PROGRAM)) {
-            if (!onlyLvl3) {
-                list.add(new ReportColumn(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_1));
-                list.add(new ReportColumn(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_2));
+            prefix = "INDIRECT_PRIMARY_PROGRAM_LEVEL_";
+        }
+        if (prefix != null) {
+            for (int i = 1; i <= levels; i++) {
+                list.add(new ReportColumn(getProgramConstant(prefix, i)));
             }
-            list.add(new ReportColumn(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_3));
             return list;
         }
         return null;
@@ -477,16 +469,16 @@ public final class DashboardService {
         AmpReportFilters filters = getFiltersFromParams(params.getFilters());
         if (ids.size() == 2) {
             AmpTheme outerProgram = getThemeById(Long.valueOf(ids.get(0)));
-            List<ReportColumn> outerColumns = getColumnsFromProgram(outerProgram, false);
+            List<ReportColumn> outerColumns = getColumnsFromProgram(outerProgram, 3);
             ReportMeasure outerMeasure = getMeasureFromParams(params.getSettings());
             outerReport = createReport(outerColumns, outerMeasure, filters,
                     params.getSettings(), true);
 
             AmpTheme innerProgram = getThemeById(Long.valueOf(ids.get(1)));
-            List<ReportColumn> innerColumns = getColumnsFromProgram(innerProgram, false);
+            List<ReportColumn> innerColumns = getColumnsFromProgram(innerProgram, 3);
             innerColumns.addAll(outerColumns);
             ReportMeasure innerMeasure = outerMeasure;
-            innerReport = createReport(innerColumns, innerMeasure, filters,
+            innerReport = createReport(innerColumns, outerMeasure, filters,
                     params.getSettings(), true);
 
             // TODO: maybe do a "normalization" here to get the common programMapping.
@@ -502,7 +494,7 @@ public final class DashboardService {
             return processTwo(outerReport, innerReport, isIndirect, mapping);
         } else if (ids.size() == 1) {
             AmpTheme outerProgram = getThemeById(Long.valueOf(ids.get(0)));
-            List<ReportColumn> outerColumns = getColumnsFromProgram(outerProgram, false);
+            List<ReportColumn> outerColumns = getColumnsFromProgram(outerProgram, 3);
             ReportMeasure outerMeasure = getMeasureFromParams(params.getSettings());
             outerReport = createReport(outerColumns, outerMeasure, filters,
                     params.getSettings(), true);
@@ -562,9 +554,7 @@ public final class DashboardService {
         if (params.getSettings().get("isShowIndirectDataForActivitiesDetail").toString().equals("true")) {
             MappingConfiguration indirectMapping = nddService.getIndirectProgramMappingConfiguration();
             AmpTheme directProgram = getThemeById(indirectMapping.getSrcProgram().getId());
-            List<ReportColumn> outerColumns = getColumnsFromProgram(directProgram, false);
-            outerColumns.remove(2);
-            outerColumns.remove(1);
+            List<ReportColumn> outerColumns = getColumnsFromProgram(directProgram, 1);
             ReportMeasure innerMeasure = getMeasureFromParams(params.getSettings());
             AmpTheme rootProgram;
             if (program != null) {
@@ -572,9 +562,7 @@ public final class DashboardService {
             } else {
                 rootProgram = NDDService.getDstIndirectProgramRoot();
             }
-            List<ReportColumn> innerColumns = getColumnsFromProgram(rootProgram, false);
-            innerColumns.remove(2);
-            innerColumns.remove(1);
+            List<ReportColumn> innerColumns = getColumnsFromProgram(rootProgram, 1);
             List<ReportColumn> columns = outerColumns;
             columns.add(innerColumns.get(0));
             columns.add(projectTitleColumn);

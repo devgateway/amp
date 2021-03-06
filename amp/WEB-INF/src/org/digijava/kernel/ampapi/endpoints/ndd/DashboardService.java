@@ -166,6 +166,48 @@ public final class DashboardService {
     }
 
     /**
+     * Convert a report with N programs (of the same type) and amounts by year to a flat structure with just
+     * one program (the lowest level AmpTheme thats not Undefined) and the amounts.
+     * @param report
+     * @param list
+     * @param program
+     * @param level
+     * @param area
+     * @param maxLevels
+     */
+    private static void flattenOneColumnReport(GeneratedReport report, List<FlattenProgramRecord> list,
+                                               AmpTheme program, int level, ReportArea area, int maxLevels) {
+        if (area.getChildren() != null && level < maxLevels) {
+            for (ReportArea child : area.getChildren()) {
+                Map<ReportOutputColumn, ReportCell> content = child.getContents();
+                TextCell cell = (TextCell) content.get(report.leafHeaders.get(level));
+                AmpTheme auxProg = getThemeById(cell.entityId);
+                if (auxProg != null && auxProg.getIndlevel() < maxLevels) {
+                    program = auxProg;
+                } else {
+                    if (program != null && level == 0) {
+                        // Reset program or we could add an extra row for undefined as last record
+                        // but with the previous program name.
+                        program = null;
+                    }
+                }
+                flattenOneColumnReport(report, list, program, level + 1, child, maxLevels);
+            }
+        } else {
+            if (program != null) {
+                Map<ReportOutputColumn, ReportCell> content = area.getContents();
+                TextCell cell = (TextCell) content.get(report.leafHeaders.get(level - 1));
+                AmpTheme auxProg = getThemeById(cell.entityId);
+                if (auxProg == null) {
+                    auxProg = program;
+                }
+                // todo: falta guardar el amount.
+                list.add(new FlattenProgramRecord(auxProg, extractAmountsByYear(content)));
+            }
+        }
+    }
+
+    /**
      * Iterate outerReport and innerReport to match 1 direct object with N indirect objects.
      * Since "indirect" programs are hidden on the AF we rely on the NDD mapping to manage them each time an activity
      * is saved, but NDD mapping can change over time and activities could be out of sync so here we will also check

@@ -11,12 +11,14 @@ public class FlattenTwoProgramsRecord {
     private AmpTheme outerProgram;
     private AmpTheme innerProgram;
     private Map<String, BigDecimal> amountsByYear;
+    private BigDecimal amount;
 
     public FlattenTwoProgramsRecord(AmpTheme innerProgram, AmpTheme outerProgram,
-                                    Map<String, BigDecimal> amountsByYear) {
+                                    Map<String, BigDecimal> amountsByYear, BigDecimal amount) {
         this.innerProgram = innerProgram;
         this.outerProgram = outerProgram;
         this.amountsByYear = amountsByYear;
+        this.amount = amount;
     }
 
     public FlattenTwoProgramsRecord() {
@@ -46,18 +48,27 @@ public class FlattenTwoProgramsRecord {
         this.innerProgram = innerProgram;
     }
 
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         FlattenTwoProgramsRecord that = (FlattenTwoProgramsRecord) o;
-        return outerProgram.equals(that.outerProgram)
-                && innerProgram.equals(that.innerProgram)
-                && amountsByYear.equals(that.amountsByYear);
+        return Objects.equals(outerProgram, that.outerProgram)
+                && Objects.equals(innerProgram, that.innerProgram)
+                && Objects.equals(amountsByYear, that.amountsByYear)
+                && Objects.equals(amount, that.amount);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(outerProgram, innerProgram, amountsByYear);
+        return Objects.hash(outerProgram, innerProgram, amountsByYear, amount);
     }
 }

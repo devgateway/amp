@@ -168,8 +168,8 @@ public final class DashboardService {
     }
 
     /**
-     * Convert a report with N programs (of the same type) and amounts by year to a flat structure with just
-     * one program (the lowest level AmpTheme thats not Undefined) and the amounts.
+     * Convert a report with N levels of programs (of the same type) and amounts by year to a flat structure with just
+     * one program (the lowest level AmpTheme that's not Undefined) and the amounts.
      *
      * @param report
      * @param list

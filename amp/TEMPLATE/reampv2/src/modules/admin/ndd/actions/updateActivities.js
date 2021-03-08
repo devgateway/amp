@@ -61,7 +61,7 @@ function updateActivities() {
         scheduleTimer(result, dispatch);
         // TODO better process generic errors coming from the API
       } else if (result.error['0212']) {
-        const msg = result.error['0212'][0]['PROCESS_ALREADY_RUNNING'][0];
+        const msg = result.error['0212'][0].PROCESS_ALREADY_RUNNING[0];
         dispatch(updateActivitiesError({ msg }));
       } else {
         dispatch(updateActivitiesError({ msg: 'result false' }));

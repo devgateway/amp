@@ -143,12 +143,11 @@ function getSuffixForLang(prefix, lang) {
 }
 
 export function formatNumber(currency, translations, value, precision, decimalSeparator, groupSeparator, numberDivider,
-                             numberDividerDescriptionKey) {
+  numberDividerDescriptionKey) {
   const formatString = `${decimalSeparator}.${precision}f`;
   const dividedValue = (numberDivider && numberDividerDescriptionKey) ? value / numberDivider : value;
   // eslint-disable-next-line max-len
-  const txtVal =
-    <b>{format(formatString)(dividedValue).replaceAll(',', groupSeparator).replace('.', decimalSeparator)}</b>;
+  const txtVal = <b>{format(formatString)(dividedValue).replace(/[,]+/g, groupSeparator).replace(/[.]+/g, decimalSeparator)}</b>;
   return (
     <>
       {txtVal}
@@ -177,7 +176,7 @@ export function formatOnlyNumber(settings, value) {
     ? value / settings.numberDivider
     : value;
   return format(formatString)(dividedValue)
-    .replaceAll(',', settings.groupSeparator)
+    .replace(/[,]+/g, settings.groupSeparator)
     .replace('.', settings.decimalSeparator);
 }
 

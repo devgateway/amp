@@ -25,7 +25,7 @@ class MainDashboardContainer extends Component {
       const countArray = ndd.filter(p => p.directProgram.programLvl1.code === selectedDirectProgram.code);
       if (!subColors || subColors.length !== countArray.length) {
         const colors = getGradient(getCustomColor(selectedDirectProgram,
-          selectedPrograms[0]), '#FFFFFF', countArray.length);
+          selectedPrograms[0]), '#FFFFFF', countArray.length + 1);
         SELECTED_COLORS.set(`${selectedPrograms[0]}_${selectedDirectProgram.code}`, colors);
       }
     }

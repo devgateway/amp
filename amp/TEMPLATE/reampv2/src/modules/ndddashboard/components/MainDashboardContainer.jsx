@@ -68,7 +68,9 @@ class MainDashboardContainer extends Component {
       topLoaded,
       topLoadingPending,
       downloadImage,
-      embedded
+      embedded,
+      onChangeSource,
+      fundingByYearSource
     } = this.props;
     const { translations } = this.context;
     if (error) {
@@ -188,7 +190,10 @@ class MainDashboardContainer extends Component {
                           filters={filters}
                           fundingType={fundingType}
                           globalSettings={globalSettings}
-                          data={ndd} />
+                          data={ndd}
+                          onChangeSource={onChangeSource}
+                          fundingByYearSource={fundingByYearSource}
+                        />
                       ) : <div className="loading" />}
                     </div>
                   </div>
@@ -236,7 +241,9 @@ MainDashboardContainer.propTypes = {
   handleOuterChartClick: PropTypes.func.isRequired,
   globalSettings: PropTypes.object,
   downloadImage: PropTypes.func.isRequired,
-  embedded: PropTypes.bool
+  embedded: PropTypes.bool,
+  onChangeSource: PropTypes.func.isRequired,
+  fundingByYearSource: PropTypes.string.isRequired
 };
 MainDashboardContainer.defaultProps = {
   filters: undefined,

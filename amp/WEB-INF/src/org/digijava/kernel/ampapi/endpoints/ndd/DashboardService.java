@@ -185,9 +185,10 @@ public final class DashboardService {
             for (ReportArea child : area.getChildren()) {
                 Map<ReportOutputColumn, ReportCell> content = child.getContents();
                 TextCell cell = (TextCell) content.get(report.leafHeaders.get(level));
-                AmpTheme auxProg = getThemeById(cell.entityId);
-                if (auxProg != null && auxProg.getIndlevel() < maxLevels) {
-                    program = auxProg;
+                AmpTheme auxPrg = getThemeById(cell.entityId);
+                if (auxPrg != null
+                        && (auxPrg.getIndlevel() < maxLevels || auxPrg.getIndlevel() == maxLevels && maxLevels == 1)) {
+                    program = auxPrg;
                 } else {
                     if (program != null && level == 0) {
                         // Reset program or we could add an extra row for undefined as last record
@@ -305,8 +306,8 @@ public final class DashboardService {
                 AmpTheme outerProgram = outer.getProgram();
                 NDDSolarChartData nddSolarChartData = new NDDSolarChartData(null, new ArrayList<>());
                 if (outerProgram != null) {
-                    nddSolarChartData.setDirectProgram(new NDDSolarChartData.ProgramData(outerProgram, outer.getAmount(),
-                            outer.getAmountsByYear()));
+                    nddSolarChartData.setDirectProgram(new NDDSolarChartData.ProgramData(outerProgram,
+                            outer.getAmount(), outer.getAmountsByYear()));
                     if (nddSolarChartData.getDirectProgram().getProgramLvl1() != null) {
                         add.set(true);
                     }
@@ -314,24 +315,31 @@ public final class DashboardService {
                     logger.debug("Ignore undefined outer program");
                 }
 
-                /* Inner ring: go to the 6th hierarchy level, if is a valid level 3 program and is
-                equal to the current outer program then check if is mapped and add as an indirect program. */
+                /* Inner ring: try to match the outer program of innerReport with the outer program of outer report */
                 flatInnerReport.forEach(inner -> {
-                    if (inner.getOuterProgram() != null) {
+                    if (add.get() && inner.getOuterProgram() != null) {
                         if (outerProgram.getAmpThemeId().equals(inner.getOuterProgram().getAmpThemeId())) {
-                            if (inner.getInnerProgram() != null) {
-                                nddSolarChartData.getIndirectPrograms()
-                                        .add(new NDDSolarChartData.ProgramData(inner.getInnerProgram(),
-                                                inner.getAmount(), inner.getAmountsByYear()));
+                            if (isIndirect) {
+                                if (inner.getInnerProgram() != null) {
+                                    nddSolarChartData.getIndirectPrograms()
+                                            .add(new NDDSolarChartData.ProgramData(inner.getInnerProgram(),
+                                                    inner.getAmount(), inner.getAmountsByYear()));
+                                } else {
+                                    addFakeProgram(nddSolarChartData, inner);
+                                }
                             } else {
-                                AmpTheme fakeTheme = new AmpTheme();
-                                fakeTheme.setThemeCode("Undef");
-                                fakeTheme.setName("Undefined");
-                                fakeTheme.setAmpThemeId(-1L);
-                                fakeTheme.setIndlevel(-1);
-                                fakeTheme.setParentThemeId(inner.getOuterProgram().getParentThemeId());
-                                addAndMergeUndefinedPrograms(nddSolarChartData, fakeTheme,
-                                        inner.getAmount(), inner.getAmountsByYear());
+                                // Also match with mapping data.
+                                if (isMapped(mapping, outerProgram, inner.getInnerProgram())) {
+                                    if (inner.getInnerProgram() != null) {
+                                        nddSolarChartData.getIndirectPrograms()
+                                                .add(new NDDSolarChartData.ProgramData(inner.getInnerProgram(),
+                                                        inner.getAmount(), inner.getAmountsByYear()));
+                                    } else {
+                                        addFakeProgram(nddSolarChartData, inner);
+                                    }
+                                } else {
+                                    addFakeProgram(nddSolarChartData, inner);
+                                }
                             }
                         }
                     }
@@ -343,6 +351,17 @@ public final class DashboardService {
             });
         }
         return list;
+    }
+
+    private static void addFakeProgram(NDDSolarChartData nddSolarChartData, FlattenTwoProgramsRecord flatRecord) {
+        AmpTheme fakeTheme = new AmpTheme();
+        fakeTheme.setThemeCode("Undef");
+        fakeTheme.setName("Undefined");
+        fakeTheme.setAmpThemeId(-1L);
+        fakeTheme.setIndlevel(-1);
+        fakeTheme.setParentThemeId(flatRecord.getOuterProgram().getParentThemeId());
+        addAndMergeUndefinedPrograms(nddSolarChartData, fakeTheme,
+                flatRecord.getAmount(), flatRecord.getAmountsByYear());
     }
 
     /**
@@ -534,22 +553,16 @@ public final class DashboardService {
         }
     }
 
-    private static List getMapped(boolean isIndirect, MappingConfiguration mapping, Map<ReportOutputColumn,
-            ReportCell> outerContent, ReportOutputColumn outerReportProgramColumn) {
-        List mapped;
-        if (isIndirect) {
-            mapped = ((IndirectProgramMappingConfiguration) mapping).getProgramMapping().stream()
-                    .filter(i -> {
-                        return i.getOldTheme().getName()
-                                .equalsIgnoreCase(outerContent.get(outerReportProgramColumn).displayedValue);
-                    }).collect(Collectors.toList());
-        } else {
-            mapped = ((ProgramMappingConfiguration) mapping).getProgramMapping().stream().filter(i -> {
-                return i.getSrcTheme().getName().equalsIgnoreCase(outerContent.get(outerReportProgramColumn)
-                        .displayedValue);
-            }).collect(Collectors.toList());
+    private static boolean isMapped(MappingConfiguration mapping, AmpTheme outer, AmpTheme inner) {
+        boolean ret = false;
+        if (outer != null && inner != null
+                && ((ProgramMappingConfiguration) mapping).getProgramMapping().stream().filter(i -> {
+            return i.getSrcTheme().getAmpThemeId().equals(outer.getAmpThemeId())
+                    && i.getDstTheme().getAmpThemeId().equals(inner.getAmpThemeId());
+        }).collect(Collectors.toList()).size() > 0) {
+            ret = true;
         }
-        return mapped;
+        return ret;
     }
 
     private static Map<String, BigDecimal> extractAmountsByYear(Map<ReportOutputColumn, ReportCell> content) {

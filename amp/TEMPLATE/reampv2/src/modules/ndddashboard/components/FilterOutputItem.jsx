@@ -28,7 +28,7 @@ export default class FilterOutputItem extends Component {
   formatDate = (dateString) => {
     const { globalSettings } = this.props;
     const date = new Date(`${dateString}T00:00`);
-    const format = globalSettings.dateFormat.replaceAll('MM', 'mm');
+    const format = globalSettings.dateFormat.replace(/M{2}/gm, 'mm');
     return dateformat(date, format);
   }
 
@@ -42,7 +42,7 @@ export default class FilterOutputItem extends Component {
       } else if (filters[i].displayName) {
         parent = <h5 key={Math.random()}>{filters[i].displayName}</h5>;
       } else {
-        parent = <h5 key={Math.random()}>{i.replaceAll('-', ' ')}</h5>;
+        parent = <h5 key={Math.random()}>{i.replace(/[-]+/g, ' ')}</h5>;
       }
       ret.push(parent);
       const children = this.generateChildren(filters[i], i);

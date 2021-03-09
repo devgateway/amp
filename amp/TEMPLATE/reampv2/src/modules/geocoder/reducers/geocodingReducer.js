@@ -50,7 +50,8 @@ export default function geocodingReducer(state = initialState, action) {
                 status: action.status,
                 pending: action.pending,
                 geocodeShouldRun: action.geocodeShouldRun,
-                error: null
+                error: null,
+                errorCode: null
             };
         case FETCH_GEOCODING_ERROR:
             return {
@@ -59,6 +60,7 @@ export default function geocodingReducer(state = initialState, action) {
                 error: action.error,
                 geocodeShouldRun: false,
                 status : action.status,
+                errorCode: action.errorCode
             };
         case GEOCODING_RUN_SEARCH_SUCCESS:
             return {

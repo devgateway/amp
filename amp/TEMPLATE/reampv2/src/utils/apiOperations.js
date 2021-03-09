@@ -56,7 +56,9 @@ export const fetchApiDataWithStatus = ({body, url}) => {
                 })
             ).then(response => {
                 if (!response.ok) {
-                    return reject({status: response.status, message: extractErrorMessageFromResponse(response)});
+                    return reject({status: response.status,
+                        message: extractErrorMessageFromResponse(response),
+                        code: extractErrorCodeFromResponse(response)});
                 }
 
                 return resolve(response);
@@ -65,11 +67,17 @@ export const fetchApiDataWithStatus = ({body, url}) => {
 };
 
 export function extractErrorMessageFromResponse(response) {
-    let errorMessage = response.status + ": ";
+    let errorMessage = "";
 
     for(let k in response.data.error) {
-        errorMessage += response.data.error[k][0] + "\n";
+        errorMessage += JSON.stringify(response.data.error[k]);
     };
 
     return errorMessage;
+}
+
+export function extractErrorCodeFromResponse(response) {
+    for(let k in response.data.error) {
+        return k;
+    };
 }

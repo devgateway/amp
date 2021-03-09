@@ -20,5 +20,9 @@ public final class GeoCoderEndpointErrors {
             "Geo coding process not started");
     public static final ApiErrorMessage GEO_CODING_ACT_SAVE_ERROR = new ApiErrorMessage(ERROR_CLASS_GEO_CODER_ID, 3,
             "Activity not saved");
+    public static final ApiErrorMessage GEO_CODING_INVALID_USER = new ApiErrorMessage(ERROR_CLASS_GEO_CODER_ID, 4,
+            "Invalid User");
+    public static final ApiErrorMessage GEO_CODING_INVALID_WORKSPACE = new ApiErrorMessage(ERROR_CLASS_GEO_CODER_ID, 5,
+            "Invalid Workspace");
 
 }

@@ -12,7 +12,6 @@ export const store = configureStore();
 const history = syncHistoryWithStore(hashHistory, store);
 
 function hashLinkScroll() {
-    debugger;
     const {hash} = window.location;
     if (hash !== '') {
         // Push onto callback queue so it runs after the DOM is updated,

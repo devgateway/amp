@@ -80,20 +80,11 @@ export function getGradient(colorFrom, colorTwo, maxGradient = MAX_GRADIENTS) {
 export function extractPrograms(mapping, noIndirectMapping) {
   const ret = { direct: undefined, indirect1: undefined, indirect2: undefined };
   if (mapping && mapping[PROGRAM_MAPPING] && mapping[PROGRAM_MAPPING].length > 0) {
-    ret.direct = mapping[ALL_PROGRAMS].find(i => i.children
-      .find(j => j.children && j.children
-        .find(k => k.children && k.children
-          .find(l => l.id === mapping[PROGRAM_MAPPING][0][SRC_PROGRAM]))));
-    ret.indirect1 = mapping[ALL_PROGRAMS].find(i => i.children && i.children
-      .find(j => j.children && j.children
-        .find(k => k.children && k.children
-          .find(l => l.id === mapping[PROGRAM_MAPPING][0][DST_PROGRAM]))));
+    ret.direct = mapping[ALL_PROGRAMS].find(i => i.id === mapping[SRC_PROGRAM].id);
+    ret.indirect1 = mapping[ALL_PROGRAMS].find(i => i.id === mapping[DST_PROGRAM].id);
   }
   if (noIndirectMapping && noIndirectMapping[PROGRAM_MAPPING] && noIndirectMapping[PROGRAM_MAPPING].length > 0) {
-    ret.indirect2 = noIndirectMapping[ALL_PROGRAMS].find(i => i.children
-      .find(j => j.children && j.children
-        .find(k => k.children && k.children
-          .find(l => l.id === noIndirectMapping[PROGRAM_MAPPING][0][DST_PROGRAM]))));
+    ret.indirect2 = noIndirectMapping[ALL_PROGRAMS].find(i => i.id === noIndirectMapping[DST_PROGRAM].id);
   }
   return ret;
 }

@@ -18,6 +18,7 @@ import org.dgfoundation.amp.newreports.AmountCell;
 import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
+import org.digijava.kernel.ampapi.endpoints.ndd.utils.DashboardUtils;
 import org.digijava.kernel.ampapi.endpoints.ndd.utils.FlattenProgramRecord;
 import org.digijava.kernel.ampapi.endpoints.ndd.utils.FlattenTwoProgramsRecord;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
@@ -45,12 +46,6 @@ public final class DashboardService {
 
     private static Pattern numberPattern = Pattern.compile("\\d{4}");
     private static NDDService nddService = new NDDService();
-    public static final Integer COLUMN_0 = 0;
-    public static final Integer COLUMN_1 = 1;
-    public static final Integer COLUMN_2 = 2;
-    public static final Integer COLUMN_3 = 3;
-    public static final Integer COLUMN_4 = 4;
-    public static final Integer COLUMN_5 = 5;
 
     private DashboardService() {
     }
@@ -88,21 +83,6 @@ public final class DashboardService {
 
         GeneratedReport report = EndpointUtils.runReport(spec);
         return report;
-    }
-
-    /**
-     * Given a program get its parent from level @lvl.
-     *
-     * @param program
-     * @param lvl
-     * @return
-     */
-    private static AmpTheme getProgramByLvl(AmpTheme program, int lvl) {
-        AmpTheme root = program;
-        while (root.getIndlevel() > lvl) {
-            root = root.getParentThemeId();
-        }
-        return root;
     }
 
     private static String getProgramConstant(String prefix, int index) {
@@ -179,16 +159,19 @@ public final class DashboardService {
      * @param maxLevels
      */
     private static void flattenOneColumnReport(GeneratedReport report, List<FlattenProgramRecord> list,
-                                               AmpTheme program, int level, ReportArea area, int maxLevels) {
+                                               AmpTheme program, int level, ReportArea area, int maxLevels,
+                                               Set<AmpActivityProgramSettings> settings) {
         ReportOutputColumn totalCol = report.leafHeaders.get(report.leafHeaders.size() - 1);
         if (area.getChildren() != null && level < maxLevels) {
             for (ReportArea child : area.getChildren()) {
                 Map<ReportOutputColumn, ReportCell> content = child.getContents();
                 TextCell cell = (TextCell) content.get(report.leafHeaders.get(level));
-                AmpTheme auxPrg = getThemeById(cell.entityId);
+                AmpTheme auxPrg = DashboardUtils.getThemeById(cell.entityId);
                 if (auxPrg != null
-                        && (auxPrg.getIndlevel() < maxLevels || auxPrg.getIndlevel() == maxLevels && maxLevels == 1)) {
-                    program = auxPrg;
+                        && (auxPrg.getIndlevel() < maxLevels || (auxPrg.getIndlevel() == maxLevels && maxLevels == 1))) {
+                    if (DashboardUtils.isProgramValid(auxPrg, settings)) {
+                        program = auxPrg;
+                    }
                 } else {
                     if (program != null && level == 0) {
                         // Reset program or we could add an extra row for undefined as last record
@@ -196,13 +179,13 @@ public final class DashboardService {
                         program = null;
                     }
                 }
-                flattenOneColumnReport(report, list, program, level + 1, child, maxLevels);
+                flattenOneColumnReport(report, list, program, level + 1, child, maxLevels, settings);
             }
         } else {
             if (program != null) {
                 Map<ReportOutputColumn, ReportCell> content = area.getContents();
                 TextCell cell = (TextCell) content.get(report.leafHeaders.get(level - 1));
-                AmpTheme auxProg = getThemeById(cell.entityId);
+                AmpTheme auxProg = DashboardUtils.getThemeById(cell.entityId);
                 if (auxProg == null) {
                     auxProg = program;
                 }
@@ -214,21 +197,21 @@ public final class DashboardService {
 
     private static void flattenTwoColumnReport(GeneratedReport report, List<FlattenTwoProgramsRecord> list,
                                                AmpTheme leftProgram, AmpTheme rightProgram, int level, ReportArea area,
-                                               int srcMaxLevels, int dstMaxLevels) {
+                                               int srcMaxLevels, int dstMaxLevels,
+                                               Set<AmpActivityProgramSettings> settings) {
         ReportOutputColumn totalCol = report.leafHeaders.get(report.leafHeaders.size() - 1);
         int totalLevels = srcMaxLevels + dstMaxLevels;
         if (area.getChildren() != null && level < srcMaxLevels) {
             for (ReportArea child : area.getChildren()) {
                 Map<ReportOutputColumn, ReportCell> content = child.getContents();
                 TextCell cell = (TextCell) content.get(report.leafHeaders.get(level));
-                AmpTheme auxProg = getThemeById(cell.entityId);
+                AmpTheme auxProg = DashboardUtils.getThemeById(cell.entityId);
                 boolean continueProcess = true;
                 if (auxProg != null
                         && auxProg.getIndlevel() <= srcMaxLevels
                         && auxProg.getIndlevel() < totalLevels) {
-
                     // TODO: Add extra check to know if auxProg is the correct type.
-                    if (getProgramByLvl(auxProg, 0).getProgramSettings().size() > 0) {
+                    if (DashboardUtils.getProgramByLvl(auxProg, 0).getProgramSettings().size() > 0) {
                         leftProgram = auxProg;
                     } else {
                         leftProgram = null;
@@ -243,7 +226,7 @@ public final class DashboardService {
                 }
                 if (continueProcess) {
                     flattenTwoColumnReport(report, list, leftProgram, null, level + 1, child, srcMaxLevels,
-                            dstMaxLevels);
+                            dstMaxLevels, settings);
                 }
             }
         } else if (area.getChildren() != null && level < totalLevels) {
@@ -254,10 +237,10 @@ public final class DashboardService {
                 boolean continueProcess = true;
                 Map<ReportOutputColumn, ReportCell> content = child.getContents();
                 TextCell cell = (TextCell) content.get(report.leafHeaders.get(level));
-                AmpTheme auxProg = getThemeById(cell.entityId);
+                AmpTheme auxProg = DashboardUtils.getThemeById(cell.entityId);
                 if (auxProg != null) {
                     // TODO: Add extra check to know if auxProg is the correct type.
-                    if (getProgramByLvl(auxProg, 0).getProgramSettings().size() > 0) {
+                    if (DashboardUtils.getProgramByLvl(auxProg, 0).getProgramSettings().size() > 0) {
                         rightProgram = auxProg;
                     } else {
                         continueProcess = false;
@@ -272,7 +255,7 @@ public final class DashboardService {
                 }
                 if (continueProcess) {
                     flattenTwoColumnReport(report, list, leftProgram, rightProgram, level + 1, child, srcMaxLevels,
-                            dstMaxLevels);
+                            dstMaxLevels, settings);
                 }
             }
         } else {
@@ -280,7 +263,7 @@ public final class DashboardService {
                 Map<ReportOutputColumn, ReportCell> content = area.getContents();
                 // TODO: This could be necessary if last level is undefined, please check.
                 /* TextCell cell = (TextCell) content.get(report.leafHeaders.get(level - 1));
-                AmpTheme auxProg = getThemeById(cell.entityId);
+                AmpTheme auxProg = DashboardUtils.getThemeById(cell.entityId);
                 if (auxProg == null) {
                     auxProg = leftProgram;
                 } */
@@ -310,14 +293,18 @@ public final class DashboardService {
         if (outerReport.reportContents != null && outerReport.reportContents.getChildren() != null
                 && innerReport.reportContents != null && innerReport.reportContents.getChildren() != null) {
 
+            Set<AmpActivityProgramSettings> settings = DashboardUtils.getThemeById(mapping.getSrcProgram().getId()).getProgramSettings();
             List<FlattenProgramRecord> flatOuterReport = new ArrayList<FlattenProgramRecord>();
             flattenOneColumnReport(outerReport, flatOuterReport, null, 0, outerReport.reportContents,
-                    mapping.getSrcProgram().getLevels());
+                    mapping.getSrcProgram().getLevels(), settings);
 
             List<FlattenTwoProgramsRecord> flatInnerReport = new ArrayList<FlattenTwoProgramsRecord>();
             flattenTwoColumnReport(innerReport, flatInnerReport, null, null, 0,
                     innerReport.reportContents, mapping.getSrcProgram().getLevels(),
-                    mapping.getDstProgram().getLevels());
+                    mapping.getDstProgram().getLevels(), settings);
+
+            logger.debug(flatInnerReport);
+            logger.debug(flatOuterReport);
 
             flatOuterReport.forEach(outer -> {
                 AtomicBoolean add = new AtomicBoolean();
@@ -348,7 +335,7 @@ public final class DashboardService {
                                 }
                             } else {
                                 // Also match with mapping data.
-                                if (isMapped(mapping, outerProgram, inner.getInnerProgram())) {
+                                if (DashboardUtils.isMapped(mapping, outerProgram, inner.getInnerProgram())) {
                                     if (inner.getInnerProgram() != null) {
                                         nddSolarChartData.getIndirectPrograms()
                                                 .add(new NDDSolarChartData.ProgramData(inner.getInnerProgram(),
@@ -381,24 +368,6 @@ public final class DashboardService {
         fakeTheme.setParentThemeId(flatRecord.getOuterProgram().getParentThemeId());
         addAndMergeUndefinedPrograms(nddSolarChartData, fakeTheme,
                 flatRecord.getAmount(), flatRecord.getAmountsByYear());
-    }
-
-    /**
-     * This function is way faster than ProgramUtil.getTheme().
-     *
-     * @param id
-     * @return
-     */
-    private static AmpTheme getThemeById(Long id) {
-        try {
-            if (id > 0) {
-                return ProgramUtil.getThemeById(id);
-            }
-            return null;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     private static void addAndMergeUndefinedPrograms(NDDSolarChartData nddSolarChartData, AmpTheme ampTheme,
@@ -437,7 +406,7 @@ public final class DashboardService {
             outerReport.reportContents.getChildren().stream().forEach(children -> {
                 Map<ReportOutputColumn, ReportCell> outerContent = children.getContents();
                 NDDSolarChartData nddSolarChartData = new NDDSolarChartData(null, new ArrayList<>());
-                AmpTheme direct = getThemeById(((TextCell) outerContent.get(outerReportProgramColumn))
+                AmpTheme direct = DashboardUtils.getThemeById(((TextCell) outerContent.get(outerReportProgramColumn))
                         .entityId);
                 if (direct != null) {
                     BigDecimal amount = ((AmountCell) outerContent.get(outerReportTotalColumn)).extractValue();
@@ -481,12 +450,12 @@ public final class DashboardService {
             report.reportContents.getChildren().forEach(children1 -> {
                 Map<ReportOutputColumn, ReportCell> directCol = children1.getContents();
                 TextCell directCell = (TextCell) directCol.get(directColumn);
-                AmpTheme directProgram = getThemeById(directCell.entityId);
+                AmpTheme directProgram = DashboardUtils.getThemeById(directCell.entityId);
                 if (directProgram != null) {
                     children1.getChildren().forEach(children2 -> {
                         Map<ReportOutputColumn, ReportCell> indirectCol = children2.getContents();
                         TextCell indirectProgram = (TextCell) indirectCol.get(indirectColumn);
-                        AmpTheme auxProgram = getThemeById(indirectProgram.entityId);
+                        AmpTheme auxProgram = DashboardUtils.getThemeById(indirectProgram.entityId);
                         if (program != null) {
                             if (auxProgram != null) {
                                 if (program.getAmpThemeId().equals(auxProgram.getAmpThemeId())) {
@@ -534,8 +503,8 @@ public final class DashboardService {
         }
         AmpReportFilters filters = getFiltersFromParams(params.getFilters());
         if (ids.size() == 2) {
-            AmpTheme outerProgram = getThemeById(Long.valueOf(ids.get(0)));
-            AmpTheme innerProgram = getThemeById(Long.valueOf(ids.get(1)));
+            AmpTheme outerProgram = DashboardUtils.getThemeById(Long.valueOf(ids.get(0)));
+            AmpTheme innerProgram = DashboardUtils.getThemeById(Long.valueOf(ids.get(1)));
 
             // TODO: maybe do a "normalization" here to get the common programMapping.
             MappingConfiguration indirectMapping = nddService.getIndirectProgramMappingConfiguration();
@@ -561,7 +530,7 @@ public final class DashboardService {
 
             return processTwo(outerReport, innerReport, isIndirect, mapping);
         } else if (ids.size() == 1) {
-            AmpTheme outerProgram = getThemeById(Long.valueOf(ids.get(0)));
+            AmpTheme outerProgram = DashboardUtils.getThemeById(Long.valueOf(ids.get(0)));
             List<ReportColumn> outerColumns = getColumnsFromProgram(outerProgram, 3);
             ReportMeasure outerMeasure = getMeasureFromParams(params.getSettings());
             outerReport = createReport(outerColumns, outerMeasure, filters,
@@ -570,18 +539,6 @@ public final class DashboardService {
         } else {
             throw new RuntimeException("Error number of ids in settings parameter.");
         }
-    }
-
-    private static boolean isMapped(MappingConfiguration mapping, AmpTheme outer, AmpTheme inner) {
-        boolean ret = false;
-        if (outer != null && inner != null
-                && ((ProgramMappingConfiguration) mapping).getProgramMapping().stream().filter(i -> {
-            return i.getSrcTheme().getAmpThemeId().equals(outer.getAmpThemeId())
-                    && i.getDstTheme().getAmpThemeId().equals(inner.getAmpThemeId());
-        }).collect(Collectors.toList()).size() > 0) {
-            ret = true;
-        }
-        return ret;
     }
 
     private static Map<String, BigDecimal> extractAmountsByYear(Map<ReportOutputColumn, ReportCell> content) {
@@ -611,16 +568,16 @@ public final class DashboardService {
         int yearString = Integer.parseInt(params.getSettings().get("year").toString());
         String programIdString = params.getSettings().get("id").toString();
         AmpReportFilters filters = getFiltersFromParams(params.getFilters());
-        AmpTheme program = getThemeById(Long.valueOf(programIdString));
+        AmpTheme program = DashboardUtils.getThemeById(Long.valueOf(programIdString));
         ReportColumn projectTitleColumn = new ReportColumn(ColumnConstants.PROJECT_TITLE);
         if (params.getSettings().get("isShowIndirectDataForActivitiesDetail").toString().equals("true")) {
             MappingConfiguration indirectMapping = nddService.getIndirectProgramMappingConfiguration();
-            AmpTheme directProgram = getThemeById(indirectMapping.getSrcProgram().getId());
+            AmpTheme directProgram = DashboardUtils.getThemeById(indirectMapping.getSrcProgram().getId());
             List<ReportColumn> outerColumns = getColumnsFromProgram(directProgram, 1);
             ReportMeasure innerMeasure = getMeasureFromParams(params.getSettings());
             AmpTheme rootProgram;
             if (program != null) {
-                rootProgram = getProgramByLvl(program, 0);
+                rootProgram = DashboardUtils.getProgramByLvl(program, 0);
             } else {
                 rootProgram = NDDService.getDstIndirectProgramRoot();
             }
@@ -663,7 +620,7 @@ public final class DashboardService {
         boolean isIndirect;
         IndirectProgramMappingConfiguration indirectMapping = nddService.getIndirectProgramMappingConfiguration();
         ProgramMappingConfiguration regularMapping = nddService.getProgramMappingConfiguration();
-        AmpTheme rootProgram = getProgramByLvl(program, 0);
+        AmpTheme rootProgram = DashboardUtils.getProgramByLvl(program, 0);
         if ((rootProgram.getAmpThemeId().equals(indirectMapping.getDstProgram().getId())
                 || rootProgram.getAmpThemeId().equals(indirectMapping.getSrcProgram().getId()))
                 && indirectMapping.getDstProgram().isIndirect()) {
@@ -755,7 +712,7 @@ public final class DashboardService {
             fromMappingIds.add(program.getAmpThemeId().toString());
         } else {
             regularMapping.getProgramMapping().forEach(item -> {
-                if (getProgramByLvl(item.getSrcTheme(), 1).getAmpThemeId().equals(program.getAmpThemeId())) {
+                if (DashboardUtils.getProgramByLvl(item.getSrcTheme(), 1).getAmpThemeId().equals(program.getAmpThemeId())) {
                     fromMappingIds.add(item.getSrcTheme().getAmpThemeId().toString());
                 }
             });

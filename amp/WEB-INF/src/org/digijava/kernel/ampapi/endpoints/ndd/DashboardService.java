@@ -222,10 +222,18 @@ public final class DashboardService {
                 Map<ReportOutputColumn, ReportCell> content = child.getContents();
                 TextCell cell = (TextCell) content.get(report.leafHeaders.get(level));
                 AmpTheme auxProg = getThemeById(cell.entityId);
+                boolean continueProcess = true;
                 if (auxProg != null
                         && auxProg.getIndlevel() <= srcMaxLevels
                         && auxProg.getIndlevel() < totalLevels) {
-                    leftProgram = auxProg;
+
+                    // TODO: Add extra check to know if auxProg is the correct type.
+                    if (getProgramByLvl(auxProg, 0).getProgramSettings().size() > 0) {
+                        leftProgram = auxProg;
+                    } else {
+                        leftProgram = null;
+                        continueProcess = false;
+                    }
                 } else {
                     if (leftProgram != null && level == 0) {
                         // Reset program or we could add an extra row for undefined as last record
@@ -233,19 +241,28 @@ public final class DashboardService {
                         leftProgram = null;
                     }
                 }
-                flattenTwoColumnReport(report, list, leftProgram, null, level + 1, child, srcMaxLevels,
-                        dstMaxLevels);
+                if (continueProcess) {
+                    flattenTwoColumnReport(report, list, leftProgram, null, level + 1, child, srcMaxLevels,
+                            dstMaxLevels);
+                }
             }
         } else if (area.getChildren() != null && level < totalLevels) {
             if (level == srcMaxLevels) {
                 rightProgram = null;
             }
             for (ReportArea child : area.getChildren()) {
+                boolean continueProcess = true;
                 Map<ReportOutputColumn, ReportCell> content = child.getContents();
                 TextCell cell = (TextCell) content.get(report.leafHeaders.get(level));
                 AmpTheme auxProg = getThemeById(cell.entityId);
                 if (auxProg != null) {
-                    rightProgram = auxProg;
+                    // TODO: Add extra check to know if auxProg is the correct type.
+                    if (getProgramByLvl(auxProg, 0).getProgramSettings().size() > 0) {
+                        rightProgram = auxProg;
+                    } else {
+                        continueProcess = false;
+                        rightProgram = null;
+                    }
                 } else {
                     if (rightProgram != null && level == srcMaxLevels - 1) {
                         // Reset program or we could add an extra row for undefined as last record
@@ -253,8 +270,10 @@ public final class DashboardService {
                         rightProgram = null;
                     }
                 }
-                flattenTwoColumnReport(report, list, leftProgram, rightProgram, level + 1, child, srcMaxLevels,
-                        dstMaxLevels);
+                if (continueProcess) {
+                    flattenTwoColumnReport(report, list, leftProgram, rightProgram, level + 1, child, srcMaxLevels,
+                            dstMaxLevels);
+                }
             }
         } else {
             if (rightProgram != null) {

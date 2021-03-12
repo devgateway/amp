@@ -9,8 +9,7 @@ import {
 } from '../../../../utils/constants';
 import { toCamelCase } from '../../../../utils/Utils';
 import Tooltip from '../../../utils/GenericTooltip';
-import CustomLegend from '../../../../../../utils/components/CustomLegend';
-import '../../../utils/customLegend.css';
+import SscCustomLegend from "../../../../utils/customLegend/SscCustomLegend";
 class CountryPopupChart extends Component {
   constructor(props) {
     super(props);
@@ -68,7 +67,7 @@ class CountryPopupChart extends Component {
       />
 
     );
-    chartComponents.legend = <CustomLegend data={data} chartSelected={chartSelected}/>;
+    chartComponents.legend = <SscCustomLegend data={data} chartSelected={chartSelected}/>;
     return chartComponents;
   }
 

@@ -42,9 +42,9 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public final class DashboardService {
+
     private static Logger logger = Logger.getLogger(DashboardService.class);
 
-    private static Pattern numberPattern = Pattern.compile("\\d{4}");
     private static NDDService nddService = new NDDService();
 
     private DashboardService() {
@@ -85,16 +85,6 @@ public final class DashboardService {
         return report;
     }
 
-    private static String getProgramConstant(String prefix, int index) {
-        try {
-            Field field = ColumnConstants.class.getField(prefix + index);
-            return field.get(null).toString();
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            logger.error(e.getLocalizedMessage());
-        }
-        return null;
-    }
-
     /**
      * Given a @program with level 0 (main root) return the report columns
      * linked to the program in the MultiProgram Configuration Manager (ie: PP, SP, NPO, etc).
@@ -124,7 +114,7 @@ public final class DashboardService {
         }
         if (prefix != null) {
             for (int i = 1; i <= levels; i++) {
-                list.add(new ReportColumn(getProgramConstant(prefix, i)));
+                list.add(new ReportColumn(DashboardUtils.getProgramConstant(prefix, i)));
             }
             return list;
         }
@@ -168,7 +158,8 @@ public final class DashboardService {
                 TextCell cell = (TextCell) content.get(report.leafHeaders.get(level));
                 AmpTheme auxPrg = DashboardUtils.getThemeById(cell.entityId);
                 if (auxPrg != null
-                        && (auxPrg.getIndlevel() < maxLevels || (auxPrg.getIndlevel() == maxLevels && maxLevels == 1))) {
+                        && (auxPrg.getIndlevel() < maxLevels
+                        || (auxPrg.getIndlevel() == maxLevels && maxLevels == 1))) {
                     if (DashboardUtils.isProgramValid(auxPrg, settings)) {
                         program = auxPrg;
                     }
@@ -190,7 +181,7 @@ public final class DashboardService {
                     auxProg = program;
                 }
                 BigDecimal amount = ((AmountCell) content.get(totalCol)).extractValue();
-                list.add(new FlattenProgramRecord(auxProg, amount, extractAmountsByYear(content)));
+                list.add(new FlattenProgramRecord(auxProg, amount, DashboardUtils.extractAmountsByYear(content)));
             }
         }
     }
@@ -198,7 +189,8 @@ public final class DashboardService {
     private static void flattenTwoColumnReport(GeneratedReport report, List<FlattenTwoProgramsRecord> list,
                                                AmpTheme leftProgram, AmpTheme rightProgram, int level, ReportArea area,
                                                int srcMaxLevels, int dstMaxLevels,
-                                               Set<AmpActivityProgramSettings> settings) {
+                                               Set<AmpActivityProgramSettings> srcSettings,
+                                               Set<AmpActivityProgramSettings> dstSettings) {
         ReportOutputColumn totalCol = report.leafHeaders.get(report.leafHeaders.size() - 1);
         int totalLevels = srcMaxLevels + dstMaxLevels;
         if (area.getChildren() != null && level < srcMaxLevels) {
@@ -209,8 +201,7 @@ public final class DashboardService {
                 if (auxProg != null
                         && auxProg.getIndlevel() <= srcMaxLevels
                         && auxProg.getIndlevel() < totalLevels) {
-                    // TODO: Add extra check to know if auxProg is the correct type.
-                    if (DashboardUtils.getProgramByLvl(auxProg, 0).getProgramSettings().size() > 0) {
+                    if (DashboardUtils.isProgramValid(auxProg, dstSettings)) {
                         leftProgram = auxProg;
                     } else {
                         leftProgram = null;
@@ -223,7 +214,7 @@ public final class DashboardService {
                     }
                 }
                 flattenTwoColumnReport(report, list, leftProgram, null, level + 1, child, srcMaxLevels,
-                        dstMaxLevels, settings);
+                        dstMaxLevels, srcSettings, dstSettings);
             }
         } else if (area.getChildren() != null && level < totalLevels) {
             if (level == srcMaxLevels) {
@@ -235,8 +226,7 @@ public final class DashboardService {
                 TextCell cell = (TextCell) content.get(report.leafHeaders.get(level));
                 AmpTheme auxProg = DashboardUtils.getThemeById(cell.entityId);
                 if (auxProg != null) {
-                    // TODO: Add extra check to know if auxProg is the correct type.
-                    if (DashboardUtils.getProgramByLvl(auxProg, 0).getProgramSettings().size() > 0) {
+                    if (DashboardUtils.isProgramValid(auxProg, srcSettings)) {
                         rightProgram = auxProg;
                     } else {
                         continueProcess = false;
@@ -251,14 +241,15 @@ public final class DashboardService {
                 }
                 if (continueProcess) {
                     flattenTwoColumnReport(report, list, leftProgram, rightProgram, level + 1, child, srcMaxLevels,
-                            dstMaxLevels, settings);
+                            dstMaxLevels, srcSettings, dstSettings);
                 }
             }
         } else {
             if (rightProgram != null) {
                 Map<ReportOutputColumn, ReportCell> content = area.getContents();
                 BigDecimal amount = ((AmountCell) content.get(totalCol)).extractValue();
-                list.add(new FlattenTwoProgramsRecord(leftProgram, rightProgram, extractAmountsByYear(content), amount));
+                list.add(new FlattenTwoProgramsRecord(leftProgram, rightProgram,
+                        DashboardUtils.extractAmountsByYear(content), amount));
             }
         }
     }
@@ -294,7 +285,7 @@ public final class DashboardService {
             List<FlattenTwoProgramsRecord> flatInnerReport = new ArrayList<FlattenTwoProgramsRecord>();
             flattenTwoColumnReport(innerReport, flatInnerReport, null, null, 0,
                     innerReport.reportContents, mapping.getSrcProgram().getLevels(),
-                    mapping.getDstProgram().getLevels(), srcSettings);
+                    mapping.getDstProgram().getLevels(), srcSettings, dstSettings);
 
             flatOuterReport.forEach(outer -> {
                 AtomicBoolean add = new AtomicBoolean();
@@ -321,7 +312,7 @@ public final class DashboardService {
                                             .add(new NDDSolarChartData.ProgramData(inner.getInnerProgram(),
                                                     inner.getAmount(), inner.getAmountsByYear()));
                                 } else {
-                                    addFakeProgram(nddSolarChartData, inner);
+                                    DashboardUtils.addFakeProgram(nddSolarChartData, inner);
                                 }
                             } else {
                                 // Also match with mapping data.
@@ -331,10 +322,10 @@ public final class DashboardService {
                                                 .add(new NDDSolarChartData.ProgramData(inner.getInnerProgram(),
                                                         inner.getAmount(), inner.getAmountsByYear()));
                                     } else {
-                                        addFakeProgram(nddSolarChartData, inner);
+                                        DashboardUtils.addFakeProgram(nddSolarChartData, inner);
                                     }
                                 } else {
-                                    addFakeProgram(nddSolarChartData, inner);
+                                    DashboardUtils.addFakeProgram(nddSolarChartData, inner);
                                 }
                             }
                         }
@@ -347,44 +338,6 @@ public final class DashboardService {
             });
         }
         return list;
-    }
-
-    private static void addFakeProgram(NDDSolarChartData nddSolarChartData, FlattenTwoProgramsRecord flatRecord) {
-        AmpTheme fakeTheme = new AmpTheme();
-        fakeTheme.setThemeCode("Undef");
-        fakeTheme.setName("Undefined");
-        fakeTheme.setAmpThemeId(-1L);
-        fakeTheme.setIndlevel(-1);
-        fakeTheme.setParentThemeId(flatRecord.getOuterProgram().getParentThemeId());
-        addAndMergeUndefinedPrograms(nddSolarChartData, fakeTheme,
-                flatRecord.getAmount(), flatRecord.getAmountsByYear());
-    }
-
-    private static void addAndMergeUndefinedPrograms(NDDSolarChartData nddSolarChartData, AmpTheme ampTheme,
-                                                     BigDecimal amount, Map<String, BigDecimal> amountsByYear) {
-        NDDSolarChartData.ProgramData programData = new NDDSolarChartData.ProgramData(ampTheme, amount, amountsByYear);
-        if (nddSolarChartData.getIndirectPrograms().size() > 0) {
-            AtomicBoolean add = new AtomicBoolean(true);
-            nddSolarChartData.getIndirectPrograms().forEach(i -> {
-                if (i.equals(programData)) {
-                    add.set(false);
-                    i.setAmount(i.getAmount().add(programData.getAmount()));
-                    i.getAmountsByYear().forEach((j, val) -> {
-                        programData.getAmountsByYear().forEach((k, val2) -> {
-                            if (j.equals(k)) {
-                                BigDecimal sum = val.add(val2);
-                                i.getAmountsByYear().put(j, sum);
-                            }
-                        });
-                    });
-                }
-            });
-            if (add.get()) {
-                nddSolarChartData.getIndirectPrograms().add(programData);
-            }
-        } else {
-            nddSolarChartData.getIndirectPrograms().add(programData);
-        }
     }
 
     private static List<NDDSolarChartData> processOne(final GeneratedReport outerReport) {
@@ -400,7 +353,7 @@ public final class DashboardService {
                         .entityId);
                 if (direct != null) {
                     BigDecimal amount = ((AmountCell) outerContent.get(outerReportTotalColumn)).extractValue();
-                    Map<String, BigDecimal> amountsByYear = extractAmountsByYear(outerContent);
+                    Map<String, BigDecimal> amountsByYear = DashboardUtils.extractAmountsByYear(outerContent);
                     NDDSolarChartData.ProgramData programData = new NDDSolarChartData.ProgramData(direct, amount,
                             amountsByYear);
                     // Ignore programs we dont want to show.
@@ -410,7 +363,7 @@ public final class DashboardService {
                     }
                 } else {
                     // TODO: implement for undefined row.
-                    // System.out.println("To be implemented");
+                    logger.info("To be implemented");
                 }
             });
         }
@@ -471,7 +424,7 @@ public final class DashboardService {
                                            List<DetailByYear> list) {
         Map<ReportOutputColumn, ReportCell> projectCol = children.getContents();
         TextCell cell = ((TextCell) projectCol.get(column));
-        BigDecimal amount = extractAmountsByYear(projectCol).get("" + year);
+        BigDecimal amount = DashboardUtils.extractAmountsByYear(projectCol).get("" + year);
         if (amount != null) {
             DetailByYear detailRecord = new DetailByYear(cell.entityId,
                     cell.displayedValue, amount);
@@ -529,22 +482,6 @@ public final class DashboardService {
         } else {
             throw new RuntimeException("Error number of ids in settings parameter.");
         }
-    }
-
-    private static Map<String, BigDecimal> extractAmountsByYear(Map<ReportOutputColumn, ReportCell> content) {
-        Map<String, BigDecimal> amountsByYear = new HashMap<>();
-        content.entrySet().forEach(entry -> {
-            // Ignore columns from report that are not funding by year.
-            Matcher m = numberPattern.matcher(entry.getKey().toString());
-            if (m.find()) {
-                BigDecimal amount = ((AmountCell) entry.getValue()).extractValue();
-                // Note: dont compare ">0" because there are negative funding :|
-                if (amount.doubleValue() != 0) {
-                    amountsByYear.put(m.group(), amount);
-                }
-            }
-        });
-        return amountsByYear;
     }
 
     /**
@@ -702,7 +639,8 @@ public final class DashboardService {
             fromMappingIds.add(program.getAmpThemeId().toString());
         } else {
             regularMapping.getProgramMapping().forEach(item -> {
-                if (DashboardUtils.getProgramByLvl(item.getSrcTheme(), 1).getAmpThemeId().equals(program.getAmpThemeId())) {
+                if (DashboardUtils.getProgramByLvl(item.getSrcTheme(), 1).getAmpThemeId()
+                        .equals(program.getAmpThemeId())) {
                     fromMappingIds.add(item.getSrcTheme().getAmpThemeId().toString());
                 }
             });

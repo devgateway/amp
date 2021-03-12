@@ -1,16 +1,32 @@
 package org.digijava.kernel.ampapi.endpoints.ndd.utils;
 
+import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.newreports.AmountCell;
+import org.dgfoundation.amp.newreports.ReportCell;
+import org.dgfoundation.amp.newreports.ReportOutputColumn;
+import org.digijava.kernel.ampapi.endpoints.ndd.DashboardService;
 import org.digijava.kernel.ampapi.endpoints.ndd.MappingConfiguration;
+import org.digijava.kernel.ampapi.endpoints.ndd.NDDSolarChartData;
 import org.digijava.kernel.ampapi.endpoints.ndd.ProgramMappingConfiguration;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.util.ProgramUtil;
 
+import java.lang.reflect.Field;
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class DashboardUtils {
+
+    private static Pattern numberPattern = Pattern.compile("\\d{4}");
+    private static Logger logger = Logger.getLogger(DashboardUtils.class);
 
     /**
      * Given a program get its parent from level @lvl.
@@ -66,6 +82,14 @@ public class DashboardUtils {
         return null;
     }
 
+    /**
+     * Return true if 2 programs have been mapped together in the NDD admin.
+     *
+     * @param mapping
+     * @param outer
+     * @param inner
+     * @return
+     */
     public static boolean isMapped(MappingConfiguration mapping, AmpTheme outer, AmpTheme inner) {
         boolean ret = false;
         if (outer != null && inner != null
@@ -76,5 +100,95 @@ public class DashboardUtils {
             ret = true;
         }
         return ret;
+    }
+
+    /**
+     * Return an array of {year | amount} given some report's content data (yearly).
+     *
+     * @param content
+     * @return
+     */
+    public static Map<String, BigDecimal> extractAmountsByYear(Map<ReportOutputColumn, ReportCell> content) {
+        Map<String, BigDecimal> amountsByYear = new HashMap<>();
+        content.entrySet().forEach(entry -> {
+            // Ignore columns from report that are not funding by year.
+            Matcher m = numberPattern.matcher(entry.getKey().toString());
+            if (m.find()) {
+                BigDecimal amount = ((AmountCell) entry.getValue()).extractValue();
+                // Note: dont compare ">0" because there are negative funding :|
+                if (amount.doubleValue() != 0) {
+                    amountsByYear.put(m.group(), amount);
+                }
+            }
+        });
+        return amountsByYear;
+    }
+
+    /**
+     * Create a fake "undefined" program and add it to the NDDSolarChartData object.
+     *
+     * @param nddSolarChartData
+     * @param flatRecord
+     */
+    public static void addFakeProgram(NDDSolarChartData nddSolarChartData, FlattenTwoProgramsRecord flatRecord) {
+        AmpTheme fakeTheme = new AmpTheme();
+        fakeTheme.setThemeCode("Undef");
+        fakeTheme.setName("Undefined");
+        fakeTheme.setAmpThemeId(-1L);
+        fakeTheme.setIndlevel(-1);
+        fakeTheme.setParentThemeId(flatRecord.getOuterProgram().getParentThemeId());
+        addAndMergeUndefinedPrograms(nddSolarChartData, fakeTheme,
+                flatRecord.getAmount(), flatRecord.getAmountsByYear());
+    }
+
+    /**
+     * Consolidate N fake programs into a single one to simplify the processing in the UI.
+     * @param nddSolarChartData
+     * @param ampTheme
+     * @param amount
+     * @param amountsByYear
+     */
+    private static void addAndMergeUndefinedPrograms(NDDSolarChartData nddSolarChartData, AmpTheme ampTheme,
+                                                     BigDecimal amount, Map<String, BigDecimal> amountsByYear) {
+        NDDSolarChartData.ProgramData programData = new NDDSolarChartData.ProgramData(ampTheme, amount, amountsByYear);
+        if (nddSolarChartData.getIndirectPrograms().size() > 0) {
+            AtomicBoolean add = new AtomicBoolean(true);
+            nddSolarChartData.getIndirectPrograms().forEach(i -> {
+                if (i.equals(programData)) {
+                    add.set(false);
+                    i.setAmount(i.getAmount().add(programData.getAmount()));
+                    i.getAmountsByYear().forEach((j, val) -> {
+                        programData.getAmountsByYear().forEach((k, val2) -> {
+                            if (j.equals(k)) {
+                                BigDecimal sum = val.add(val2);
+                                i.getAmountsByYear().put(j, sum);
+                            }
+                        });
+                    });
+                }
+            });
+            if (add.get()) {
+                nddSolarChartData.getIndirectPrograms().add(programData);
+            }
+        } else {
+            nddSolarChartData.getIndirectPrograms().add(programData);
+        }
+    }
+
+    /**
+     * Use reflection to get column constant fields dynamically.
+     *
+     * @param prefix
+     * @param index
+     * @return
+     */
+    public static String getProgramConstant(String prefix, int index) {
+        try {
+            Field field = ColumnConstants.class.getField(prefix + index);
+            return field.get(null).toString();
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            logger.error(e.getLocalizedMessage());
+        }
+        return null;
     }
 }

@@ -206,7 +206,6 @@ public final class DashboardService {
                 Map<ReportOutputColumn, ReportCell> content = child.getContents();
                 TextCell cell = (TextCell) content.get(report.leafHeaders.get(level));
                 AmpTheme auxProg = DashboardUtils.getThemeById(cell.entityId);
-                boolean continueProcess = true;
                 if (auxProg != null
                         && auxProg.getIndlevel() <= srcMaxLevels
                         && auxProg.getIndlevel() < totalLevels) {
@@ -215,7 +214,6 @@ public final class DashboardService {
                         leftProgram = auxProg;
                     } else {
                         leftProgram = null;
-                        continueProcess = false;
                     }
                 } else {
                     if (leftProgram != null && level == 0) {
@@ -224,10 +222,8 @@ public final class DashboardService {
                         leftProgram = null;
                     }
                 }
-                if (continueProcess) {
-                    flattenTwoColumnReport(report, list, leftProgram, null, level + 1, child, srcMaxLevels,
-                            dstMaxLevels, settings);
-                }
+                flattenTwoColumnReport(report, list, leftProgram, null, level + 1, child, srcMaxLevels,
+                        dstMaxLevels, settings);
             }
         } else if (area.getChildren() != null && level < totalLevels) {
             if (level == srcMaxLevels) {
@@ -247,7 +243,7 @@ public final class DashboardService {
                         rightProgram = null;
                     }
                 } else {
-                    if (rightProgram != null && level == srcMaxLevels - 1) {
+                    if (rightProgram != null && level == srcMaxLevels) {
                         // Reset program or we could add an extra row for undefined as last record
                         // but with the previous program name (wrong).
                         rightProgram = null;
@@ -261,12 +257,6 @@ public final class DashboardService {
         } else {
             if (rightProgram != null) {
                 Map<ReportOutputColumn, ReportCell> content = area.getContents();
-                // TODO: This could be necessary if last level is undefined, please check.
-                /* TextCell cell = (TextCell) content.get(report.leafHeaders.get(level - 1));
-                AmpTheme auxProg = DashboardUtils.getThemeById(cell.entityId);
-                if (auxProg == null) {
-                    auxProg = leftProgram;
-                } */
                 BigDecimal amount = ((AmountCell) content.get(totalCol)).extractValue();
                 list.add(new FlattenTwoProgramsRecord(leftProgram, rightProgram, extractAmountsByYear(content), amount));
             }
@@ -293,18 +283,18 @@ public final class DashboardService {
         if (outerReport.reportContents != null && outerReport.reportContents.getChildren() != null
                 && innerReport.reportContents != null && innerReport.reportContents.getChildren() != null) {
 
-            Set<AmpActivityProgramSettings> settings = DashboardUtils.getThemeById(mapping.getSrcProgram().getId()).getProgramSettings();
+            Set<AmpActivityProgramSettings> srcSettings = DashboardUtils.getThemeById(mapping.getSrcProgram().getId())
+                    .getProgramSettings();
+            Set<AmpActivityProgramSettings> dstSettings = DashboardUtils.getThemeById(mapping.getDstProgram().getId())
+                    .getProgramSettings();
             List<FlattenProgramRecord> flatOuterReport = new ArrayList<FlattenProgramRecord>();
             flattenOneColumnReport(outerReport, flatOuterReport, null, 0, outerReport.reportContents,
-                    mapping.getSrcProgram().getLevels(), settings);
+                    mapping.getSrcProgram().getLevels(), srcSettings);
 
             List<FlattenTwoProgramsRecord> flatInnerReport = new ArrayList<FlattenTwoProgramsRecord>();
             flattenTwoColumnReport(innerReport, flatInnerReport, null, null, 0,
                     innerReport.reportContents, mapping.getSrcProgram().getLevels(),
-                    mapping.getDstProgram().getLevels(), settings);
-
-            logger.debug(flatInnerReport);
-            logger.debug(flatOuterReport);
+                    mapping.getDstProgram().getLevels(), srcSettings);
 
             flatOuterReport.forEach(outer -> {
                 AtomicBoolean add = new AtomicBoolean();

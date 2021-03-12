@@ -1,5 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.geocoding;
 
+import com.sun.jersey.api.client.ClientHandlerException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -57,6 +58,10 @@ public class GeoCoderEndpoint {
         } catch (GeneralGeoCodingException e) {
             ApiErrorResponse apiErrorResponse = ApiError.toError(
                     GeoCoderEndpointErrors.GEO_CODING_GENERAL_ERROR.withDetails(e.getMessage()));
+            throw new ApiRuntimeException(Response.Status.BAD_REQUEST, apiErrorResponse);
+        } catch (ClientHandlerException e) {
+            ApiErrorResponse apiErrorResponse = ApiError.toError(
+                    GeoCoderEndpointErrors.GEO_CODING_CLIENT_ERROR.withDetails(e.getMessage()));
             throw new ApiRuntimeException(Response.Status.BAD_REQUEST, apiErrorResponse);
         }
         return Response.noContent().build();

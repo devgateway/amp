@@ -7,6 +7,7 @@ import {connect} from "react-redux";
 import './table.css';
 import {loadActivities} from "../../../actions/activitiesAction";
 import {Loading} from "../panel/Loading";
+import {TranslationContext} from "../../AppContext";
 
 class ActivityTable extends Component {
     constructor(props) {
@@ -20,6 +21,8 @@ class ActivityTable extends Component {
     }
 
     render() {
+        const {translations} = this.context;
+
         let options = {
 
             page: 1,
@@ -49,6 +52,11 @@ class ActivityTable extends Component {
         };
 
         let columns = [
+            {
+                dataField: "id",
+                text: "ID",
+                hidden: true
+            },
             {
                 dataField: "col1",
                 text: "Date",
@@ -98,12 +106,15 @@ class ActivityTable extends Component {
                             classes="table-striped"
                             selectRow={selectRow}
                             pagination={paginationFactory(options)}
+                            noDataIndication={() => translations['amp.geocoder:noActivities']}
                         />
                         </>}
                </div>
           );
     }
 }
+
+ActivityTable.contextType = TranslationContext;
 
 const mapStateToProps = state => {
     return {

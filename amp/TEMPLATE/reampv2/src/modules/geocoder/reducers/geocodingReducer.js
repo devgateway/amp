@@ -17,7 +17,7 @@ import {
     GEOCODING_SAVE_ALL_EDITS_SUCCESS,
     GEOCODING_SAVE_ACTIVITY_ERROR,
     GEOCODING_SAVE_ACTIVITY_PENDING,
-    GEOCODING_SAVE_ACTIVITY_SUCCESS, GEOCODING_RESET_SAVE_RESULTS
+    GEOCODING_SAVE_ACTIVITY_SUCCESS, GEOCODING_RESET_SAVE_RESULTS, GEOCODING_RUN_SEARCH_ERROR
 } from '../actions/geocodingAction';
 
 const initialState = {
@@ -167,6 +167,13 @@ export default function geocodingReducer(state = initialState, action) {
             return {
                 ...state,
                 save_activities_result: [],
+            };
+        case GEOCODING_RUN_SEARCH_ERROR:
+            return {
+                ...state,
+                pending: false,
+                error: action.error,
+                errorCode: action.errorCode
             };
         default:
             return state;

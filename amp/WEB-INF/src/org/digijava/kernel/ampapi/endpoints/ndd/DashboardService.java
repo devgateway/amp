@@ -409,9 +409,11 @@ public final class DashboardService {
                             }
                         } else {
                             // This is for undefined programs.
-                            children2.getChildren().forEach(children3 -> {
-                                createDetailRecord(children3, projectColumn, year, list);
-                            });
+                            if (auxProgram == null) {
+                                children2.getChildren().forEach(children3 -> {
+                                    createDetailRecord(children3, projectColumn, year, list);
+                                });
+                            }
                         }
                     });
                 }

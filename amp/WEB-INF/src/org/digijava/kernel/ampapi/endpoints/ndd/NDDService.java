@@ -44,7 +44,7 @@ public class NDDService {
      */
     public static final int INDIRECT_PROGRAM_MAPPING_LEVEL = 3;
 
-    static class SingleProgramData implements Serializable {
+    public static class SingleProgramData implements Serializable {
         private Long id;
         private String value;
         private boolean isIndirect;

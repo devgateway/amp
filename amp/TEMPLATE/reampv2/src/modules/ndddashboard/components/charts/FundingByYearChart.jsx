@@ -133,6 +133,7 @@ class FundingByYearChart extends Component {
     const newSettings = { ...settings };
     newSettings.isShowIndirectDataForActivitiesDetail = (fundingByYearSource === SRC_INDIRECT);
     newSettings.dontUseMapping = (selectedPrograms && selectedPrograms.length === 1);
+    newSettings.selectedPrograms = selectedPrograms;
     _callYearDetailReport(fundingType,
       filters,
       event.points[0].data.extraData.find(i => i.name === event.points[0].data.text).id,

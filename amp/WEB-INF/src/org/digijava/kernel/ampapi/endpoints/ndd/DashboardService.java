@@ -383,7 +383,7 @@ public final class DashboardService {
     }
 
     private static List<DetailByYear> processDetailForIndirectData(final GeneratedReport report, final int year,
-                                                                   final AmpTheme program) {
+                                                                   final AmpTheme program, boolean isIndirect) {
         List<DetailByYear> list = new ArrayList<>();
         ReportOutputColumn directColumn = report.leafHeaders.get(0);
         ReportOutputColumn indirectColumn = report.leafHeaders.get(1);
@@ -508,15 +508,17 @@ public final class DashboardService {
             if (program != null) {
                 rootProgram = DashboardUtils.getProgramByLvl(program, 0);
             } else {
-                rootProgram = NDDService.getDstIndirectProgramRoot();
+                List<String> selectedPrograms = (List<String>) params.getSettings().get("selectedPrograms");
+                rootProgram = DashboardUtils.getThemeById(Long.valueOf(selectedPrograms.get(1)));
             }
+            boolean isIndirect = DashboardUtils.isIndirect(rootProgram);
             List<ReportColumn> innerColumns = getColumnsFromProgram(rootProgram, 1);
             List<ReportColumn> columns = outerColumns;
             columns.add(innerColumns.get(0));
             columns.add(projectTitleColumn);
             report = createReport(columns, innerMeasure, filters,
                     params.getSettings(), false);
-            return processDetailForIndirectData(report, yearString, program);
+            return processDetailForIndirectData(report, yearString, program, isIndirect);
         } else {
             boolean dontUseMapping = params.getSettings().get("dontUseMapping").toString().equals("true");
             addFilterFromProgram(program, filters, dontUseMapping);
@@ -546,17 +548,9 @@ public final class DashboardService {
             throw new RuntimeException("Cant determine the filter for the report.");
         }
 
-        boolean isIndirect;
-        IndirectProgramMappingConfiguration indirectMapping = nddService.getIndirectProgramMappingConfiguration();
         ProgramMappingConfiguration regularMapping = nddService.getProgramMappingConfiguration();
         AmpTheme rootProgram = DashboardUtils.getProgramByLvl(program, 0);
-        if ((rootProgram.getAmpThemeId().equals(indirectMapping.getDstProgram().getId())
-                || rootProgram.getAmpThemeId().equals(indirectMapping.getSrcProgram().getId()))
-                && indirectMapping.getDstProgram().isIndirect()) {
-            isIndirect = true;
-        } else {
-            isIndirect = false;
-        }
+        boolean isIndirect = DashboardUtils.isIndirect(rootProgram);
         AmpActivityProgramSettings singleProgramSetting = ((AmpActivityProgramSettings) programSettings.toArray()[0]);
         ReportColumn fromMappingFilterColumn = null;
         if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.PRIMARY_PROGRAM)) {

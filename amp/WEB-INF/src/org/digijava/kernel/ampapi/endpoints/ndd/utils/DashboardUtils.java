@@ -6,7 +6,9 @@ import org.dgfoundation.amp.newreports.AmountCell;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.digijava.kernel.ampapi.endpoints.ndd.DashboardService;
+import org.digijava.kernel.ampapi.endpoints.ndd.IndirectProgramMappingConfiguration;
 import org.digijava.kernel.ampapi.endpoints.ndd.MappingConfiguration;
+import org.digijava.kernel.ampapi.endpoints.ndd.NDDService;
 import org.digijava.kernel.ampapi.endpoints.ndd.NDDSolarChartData;
 import org.digijava.kernel.ampapi.endpoints.ndd.ProgramMappingConfiguration;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
@@ -27,6 +29,7 @@ public class DashboardUtils {
 
     private static Pattern numberPattern = Pattern.compile("\\d{4}");
     private static Logger logger = Logger.getLogger(DashboardUtils.class);
+    private static NDDService nddService = new NDDService();
 
     /**
      * Given a program get its parent from level @lvl.
@@ -143,6 +146,7 @@ public class DashboardUtils {
 
     /**
      * Consolidate N fake programs into a single one to simplify the processing in the UI.
+     *
      * @param nddSolarChartData
      * @param ampTheme
      * @param amount
@@ -153,20 +157,20 @@ public class DashboardUtils {
         NDDSolarChartData.ProgramData programData = new NDDSolarChartData.ProgramData(ampTheme, amount, amountsByYear);
         if (nddSolarChartData.getIndirectPrograms().size() > 0) {
             AtomicBoolean add = new AtomicBoolean(true);
-            nddSolarChartData.getIndirectPrograms().forEach(i -> {
-                if (i.equals(programData)) {
+            for (NDDSolarChartData.ProgramData i : nddSolarChartData.getIndirectPrograms()) {
+                if (i.getProgramLvl1().getObjectId() == -1) {
                     add.set(false);
                     i.setAmount(i.getAmount().add(programData.getAmount()));
-                    i.getAmountsByYear().forEach((j, val) -> {
-                        programData.getAmountsByYear().forEach((k, val2) -> {
-                            if (j.equals(k)) {
-                                BigDecimal sum = val.add(val2);
-                                i.getAmountsByYear().put(j, sum);
-                            }
-                        });
+                    programData.getAmountsByYear().forEach((year, val) -> {
+                        if (i.getAmountsByYear().containsKey(year)) {
+                            BigDecimal sum = val.add(i.getAmountsByYear().get(year));
+                            i.getAmountsByYear().put(year, sum);
+                        } else {
+                            i.getAmountsByYear().put(year, val);
+                        }
                     });
                 }
-            });
+            }
             if (add.get()) {
                 nddSolarChartData.getIndirectPrograms().add(programData);
             }
@@ -190,5 +194,24 @@ public class DashboardUtils {
             logger.error(e.getLocalizedMessage());
         }
         return null;
+    }
+
+    /**
+     * Returns true if this program has been mapped as indirect (first tab of NDD).
+     *
+     * @param rootProgram
+     * @return
+     */
+    public static boolean isIndirect(AmpTheme rootProgram) {
+        IndirectProgramMappingConfiguration indirectMapping = nddService.getIndirectProgramMappingConfiguration();
+        boolean isIndirect;
+        if ((rootProgram.getAmpThemeId().equals(indirectMapping.getDstProgram().getId())
+                || rootProgram.getAmpThemeId().equals(indirectMapping.getSrcProgram().getId()))
+                && indirectMapping.getDstProgram().isIndirect()) {
+            isIndirect = true;
+        } else {
+            isIndirect = false;
+        }
+        return isIndirect;
     }
 }

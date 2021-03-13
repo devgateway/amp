@@ -16,7 +16,7 @@ import PrintDummy from '../../sscdashboard/utils/PrintDummy';
 import { printChart } from '../../sscdashboard/utils/PrintUtils';
 import './print.css';
 import { removeFilter } from '../utils/Utils';
-import { SRC_DIRECT } from "./charts/FundingByYearChart";
+import { SRC_DIRECT } from './charts/FundingByYearChart';
 
 const queryString = require('query-string');
 

@@ -422,17 +422,27 @@ public final class DashboardService {
                             }
                         } else {
                             // This is for undefined programs.
-                            if (innerProgram != null) {
-                                children2.getChildren().forEach(children3 -> {
-                                    if (!DashboardUtils.isMapped(mapping, outerProgram, innerProgram)) {
+                            if (!isIndirect) {
+                                // Check mapping.
+                                if (innerProgram != null) {
+                                    children2.getChildren().forEach(children3 -> {
+                                        if (!DashboardUtils.isMapped(mapping, outerProgram, innerProgram)) {
+                                            createDetailRecord(children3, projectColumn, year, list);
+                                        }
+                                    });
+                                } else if (outerProgram != null) {
+                                    // Add the rows when inner is null (undefined) and outer is not.
+                                    children2.getChildren().forEach(children3 -> {
                                         createDetailRecord(children3, projectColumn, year, list);
-                                    }
-                                });
-                            } else if (outerProgram != null) {
-                                // Add the rows when inner is null (undefined) and outer is not.
-                                children2.getChildren().forEach(children3 -> {
-                                    createDetailRecord(children3, projectColumn, year, list);
-                                });
+                                    });
+                                }
+                            } else {
+                                // No need to check the mapping.
+                                if (innerProgram == null) {
+                                    children2.getChildren().forEach(children3 -> {
+                                        createDetailRecord(children3, projectColumn, year, list);
+                                    });
+                                }
                             }
                         }
                     });

@@ -1,20 +1,24 @@
 package org.digijava.kernel.ampapi.endpoints.common.values.providers;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesDAO;
 import org.digijava.kernel.ampapi.endpoints.activity.ProgramExtraInfo;
 import org.digijava.module.aim.dbentity.AmpThemeMapping;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.mapping;
+import static java.util.stream.Collectors.toSet;
 
 /**
  * @author Nadejda Mandrescu
  */
 public class ThemePossibleValuesProvider extends AbstractPossibleValuesDAOProvider {
 
-    private Map<Long, Long> mappedPrograms;
+    private Map<Long, Set<Long>> mappedPrograms;
 
     public ThemePossibleValuesProvider(String discriminatorValue) {
         super(discriminatorValue, false);
@@ -39,13 +43,13 @@ public class ThemePossibleValuesProvider extends AbstractPossibleValuesDAOProvid
         return possibleValuesDAO.isThemeValid(discriminatorValue, id);
     }
 
-    protected Map<Long, Long> getMappedPrograms() {
+    protected Map<Long, Set<Long>> getMappedPrograms() {
         List<AmpThemeMapping> list = possibleValuesDAO.getMappedThemes();
         if (list != null) {
-            return list.stream()
-                    .collect(Collectors.toMap(atm -> atm.getSrcTheme().getAmpThemeId(),
-                            atm -> atm.getDstTheme().getAmpThemeId()));
+            return list.stream().collect(groupingBy(atm -> atm.getSrcTheme().getAmpThemeId(),
+                    mapping(atm -> atm.getDstTheme().getAmpThemeId(), toSet())));
         }
+
 
         return new HashMap<>();
     }

@@ -383,7 +383,8 @@ public final class DashboardService {
     }
 
     private static List<DetailByYear> processDetailForIndirectData(final GeneratedReport report, final int year,
-                                                                   final AmpTheme program, boolean isIndirect) {
+                                                                   final AmpTheme filterProgram, boolean isIndirect,
+                                                                   MappingConfiguration mapping) {
         List<DetailByYear> list = new ArrayList<>();
         ReportOutputColumn directColumn = report.leafHeaders.get(0);
         ReportOutputColumn indirectColumn = report.leafHeaders.get(1);
@@ -393,15 +394,27 @@ public final class DashboardService {
             report.reportContents.getChildren().forEach(children1 -> {
                 Map<ReportOutputColumn, ReportCell> directCol = children1.getContents();
                 TextCell directCell = (TextCell) directCol.get(directColumn);
-                AmpTheme directProgram = DashboardUtils.getThemeById(directCell.entityId);
-                if (directProgram != null) {
+                AmpTheme outerProgram = DashboardUtils.getThemeById(directCell.entityId);
+                if (outerProgram != null) {
                     children1.getChildren().forEach(children2 -> {
                         Map<ReportOutputColumn, ReportCell> indirectCol = children2.getContents();
                         TextCell indirectProgram = (TextCell) indirectCol.get(indirectColumn);
-                        AmpTheme auxProgram = DashboardUtils.getThemeById(indirectProgram.entityId);
-                        if (program != null) {
-                            if (auxProgram != null) {
-                                if (program.getAmpThemeId().equals(auxProgram.getAmpThemeId())) {
+                        AmpTheme innerProgram = DashboardUtils.getThemeById(indirectProgram.entityId);
+                        // Check if we are filtering by a program.
+                        if (filterProgram != null) {
+                            if (isIndirect) {
+                                if (innerProgram != null) {
+                                    if (filterProgram.getAmpThemeId().equals(innerProgram.getAmpThemeId())) {
+                                        children2.getChildren().forEach(children3 -> {
+                                            createDetailRecord(children3, projectColumn, year, list);
+                                        });
+                                    }
+                                }
+                            } else {
+                                // Check mapping.
+                                if (innerProgram != null
+                                        && filterProgram.getAmpThemeId().equals(innerProgram.getAmpThemeId())
+                                        && DashboardUtils.isMapped(mapping, outerProgram, innerProgram)) {
                                     children2.getChildren().forEach(children3 -> {
                                         createDetailRecord(children3, projectColumn, year, list);
                                     });
@@ -409,7 +422,14 @@ public final class DashboardService {
                             }
                         } else {
                             // This is for undefined programs.
-                            if (auxProgram == null) {
+                            if (innerProgram != null) {
+                                children2.getChildren().forEach(children3 -> {
+                                    if (!DashboardUtils.isMapped(mapping, outerProgram, innerProgram)) {
+                                        createDetailRecord(children3, projectColumn, year, list);
+                                    }
+                                });
+                            } else if (outerProgram != null) {
+                                // Add the rows when inner is null (undefined) and outer is not.
                                 children2.getChildren().forEach(children3 -> {
                                     createDetailRecord(children3, projectColumn, year, list);
                                 });
@@ -499,7 +519,9 @@ public final class DashboardService {
         AmpReportFilters filters = getFiltersFromParams(params.getFilters());
         AmpTheme program = DashboardUtils.getThemeById(Long.valueOf(programIdString));
         ReportColumn projectTitleColumn = new ReportColumn(ColumnConstants.PROJECT_TITLE);
-        if (params.getSettings().get("isShowIndirectDataForActivitiesDetail").toString().equals("true")) {
+        if (params.getSettings().get("isShowInnerChartDataForActivitiesDetail").toString().equals("true")) {
+            // Option "Show Indirect Data".
+            List<String> selectedPrograms = (List<String>) params.getSettings().get("selectedPrograms");
             MappingConfiguration indirectMapping = nddService.getIndirectProgramMappingConfiguration();
             AmpTheme directProgram = DashboardUtils.getThemeById(indirectMapping.getSrcProgram().getId());
             List<ReportColumn> outerColumns = getColumnsFromProgram(directProgram, 1);
@@ -508,7 +530,6 @@ public final class DashboardService {
             if (program != null) {
                 rootProgram = DashboardUtils.getProgramByLvl(program, 0);
             } else {
-                List<String> selectedPrograms = (List<String>) params.getSettings().get("selectedPrograms");
                 rootProgram = DashboardUtils.getThemeById(Long.valueOf(selectedPrograms.get(1)));
             }
             boolean isIndirect = DashboardUtils.isIndirect(rootProgram);
@@ -518,8 +539,12 @@ public final class DashboardService {
             columns.add(projectTitleColumn);
             report = createReport(columns, innerMeasure, filters,
                     params.getSettings(), false);
-            return processDetailForIndirectData(report, yearString, program, isIndirect);
+            MappingConfiguration mapping =
+                    DashboardUtils.getMappingConfig(DashboardUtils.getThemeById(Long.valueOf(selectedPrograms.get(0))),
+                            DashboardUtils.getThemeById(Long.valueOf(selectedPrograms.get(1))));
+            return processDetailForIndirectData(report, yearString, program, isIndirect, mapping);
         } else {
+            // Option "Show Direct Data"
             boolean dontUseMapping = params.getSettings().get("dontUseMapping").toString().equals("true");
             addFilterFromProgram(program, filters, dontUseMapping);
             ReportMeasure outerMeasure = getMeasureFromParams(params.getSettings());

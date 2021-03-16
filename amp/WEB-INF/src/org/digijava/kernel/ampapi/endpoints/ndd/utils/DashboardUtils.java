@@ -214,4 +214,17 @@ public class DashboardUtils {
         }
         return isIndirect;
     }
+
+    public static MappingConfiguration getMappingConfig(AmpTheme left, AmpTheme right) {
+        MappingConfiguration mapping = null;
+        MappingConfiguration indirectMapping = nddService.getIndirectProgramMappingConfiguration();
+        MappingConfiguration regularMapping = nddService.getProgramMappingConfiguration();
+        if (left.getAmpThemeId().equals(indirectMapping.getSrcProgram().getId())
+                && right.getAmpThemeId().equals(indirectMapping.getDstProgram().getId())) {
+            mapping = indirectMapping;
+        } else {
+            mapping = regularMapping;
+        }
+        return mapping;
+    }
 }

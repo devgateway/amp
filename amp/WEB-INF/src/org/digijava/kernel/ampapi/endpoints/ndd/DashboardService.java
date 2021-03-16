@@ -39,7 +39,7 @@ public final class DashboardService {
 
     private static NDDService nddService = new NDDService();
 
-    public static int MAX_LEVELS = 3;
+    public static final int MAX_LEVELS = 3;
 
     private DashboardService() {
     }

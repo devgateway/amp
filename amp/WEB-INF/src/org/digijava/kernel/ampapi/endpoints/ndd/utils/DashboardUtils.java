@@ -2,22 +2,29 @@ package org.digijava.kernel.ampapi.endpoints.ndd.utils;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.newreports.AmountCell;
+import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.ReportCell;
+import org.dgfoundation.amp.newreports.ReportColumn;
+import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
-import org.digijava.kernel.ampapi.endpoints.ndd.DashboardService;
 import org.digijava.kernel.ampapi.endpoints.ndd.IndirectProgramMappingConfiguration;
 import org.digijava.kernel.ampapi.endpoints.ndd.MappingConfiguration;
 import org.digijava.kernel.ampapi.endpoints.ndd.NDDService;
 import org.digijava.kernel.ampapi.endpoints.ndd.NDDSolarChartData;
 import org.digijava.kernel.ampapi.endpoints.ndd.ProgramMappingConfiguration;
+import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
+import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.util.ProgramUtil;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -226,5 +233,57 @@ public class DashboardUtils {
             mapping = regularMapping;
         }
         return mapping;
+    }
+
+    /**
+     * Given a @program with level 0 (main root) return the report columns
+     * linked to the program in the MultiProgram Configuration Manager (ie: PP, SP, NPO, etc).
+     *
+     * @param program
+     * @return
+     */
+    public static List<ReportColumn> getColumnsFromProgram(AmpTheme program, int levels) {
+        List<ReportColumn> list = new ArrayList<>();
+        Set<AmpActivityProgramSettings> programSettings = program.getProgramSettings();
+        if (programSettings == null || programSettings.size() != 1) {
+            throw new RuntimeException("Cant determine the first column of the report.");
+        }
+        AmpActivityProgramSettings singleProgramSetting = ((AmpActivityProgramSettings) programSettings.toArray()[0]);
+        String prefix = null;
+        if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.PRIMARY_PROGRAM)) {
+            prefix = "PRIMARY_PROGRAM_LEVEL_";
+        } else if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.SECONDARY_PROGRAM)) {
+            prefix = "SECONDARY_PROGRAM_LEVEL_";
+        } else if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.TERTIARY_PROGRAM)) {
+            prefix = "TERTIARY_PROGRAM_LEVEL_";
+        } else if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES)
+                || singleProgramSetting.getName().equalsIgnoreCase(ProgramUtil.NATIONAL_PLAN_OBJECTIVE)) {
+            prefix = "NATIONAL_PLANNING_OBJECTIVES_LEVEL_";
+        } else if (singleProgramSetting.getName().equalsIgnoreCase(ProgramUtil.INDIRECT_PRIMARY_PROGRAM)) {
+            prefix = "INDIRECT_PRIMARY_PROGRAM_LEVEL_";
+        }
+        if (prefix != null) {
+            for (int i = 1; i <= levels; i++) {
+                list.add(new ReportColumn(DashboardUtils.getProgramConstant(prefix, i)));
+            }
+            return list;
+        }
+        return null;
+    }
+
+    public static ReportMeasure getMeasureFromParams(Map<String, Object> settings) {
+        if (settings != null && settings.get(SettingsConstants.FUNDING_TYPE_ID) != null) {
+            return new ReportMeasure(settings.get(SettingsConstants.FUNDING_TYPE_ID).toString());
+        } else {
+            return new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS);
+        }
+    }
+
+    public static AmpReportFilters getFiltersFromParams(Map<String, Object> filters) {
+        AmpReportFilters filterRules = new AmpReportFilters();
+        if (filters != null) {
+            filterRules = FilterUtils.getFilterRules(filters, null);
+        }
+        return filterRules;
     }
 }

@@ -3,7 +3,6 @@ package org.digijava.kernel.ampapi.endpoints.ndd;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportArea;
@@ -21,25 +20,18 @@ import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
 import org.digijava.kernel.ampapi.endpoints.ndd.utils.DashboardUtils;
 import org.digijava.kernel.ampapi.endpoints.ndd.utils.FlattenProgramRecord;
 import org.digijava.kernel.ampapi.endpoints.ndd.utils.FlattenTwoProgramsRecord;
-import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
-import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.util.ProgramUtil;
 
-import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public final class DashboardService {
 
@@ -83,58 +75,6 @@ public final class DashboardService {
 
         GeneratedReport report = EndpointUtils.runReport(spec);
         return report;
-    }
-
-    /**
-     * Given a @program with level 0 (main root) return the report columns
-     * linked to the program in the MultiProgram Configuration Manager (ie: PP, SP, NPO, etc).
-     *
-     * @param program
-     * @return
-     */
-    private static List<ReportColumn> getColumnsFromProgram(AmpTheme program, int levels) {
-        List<ReportColumn> list = new ArrayList<>();
-        Set<AmpActivityProgramSettings> programSettings = program.getProgramSettings();
-        if (programSettings == null || programSettings.size() != 1) {
-            throw new RuntimeException("Cant determine the first column of the report.");
-        }
-        AmpActivityProgramSettings singleProgramSetting = ((AmpActivityProgramSettings) programSettings.toArray()[0]);
-        String prefix = null;
-        if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.PRIMARY_PROGRAM)) {
-            prefix = "PRIMARY_PROGRAM_LEVEL_";
-        } else if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.SECONDARY_PROGRAM)) {
-            prefix = "SECONDARY_PROGRAM_LEVEL_";
-        } else if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.TERTIARY_PROGRAM)) {
-            prefix = "TERTIARY_PROGRAM_LEVEL_";
-        } else if (singleProgramSetting.getName().equalsIgnoreCase(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES)
-                || singleProgramSetting.getName().equalsIgnoreCase(ProgramUtil.NATIONAL_PLAN_OBJECTIVE)) {
-            prefix = "NATIONAL_PLANNING_OBJECTIVES_LEVEL_";
-        } else if (singleProgramSetting.getName().equalsIgnoreCase(ProgramUtil.INDIRECT_PRIMARY_PROGRAM)) {
-            prefix = "INDIRECT_PRIMARY_PROGRAM_LEVEL_";
-        }
-        if (prefix != null) {
-            for (int i = 1; i <= levels; i++) {
-                list.add(new ReportColumn(DashboardUtils.getProgramConstant(prefix, i)));
-            }
-            return list;
-        }
-        return null;
-    }
-
-    private static ReportMeasure getMeasureFromParams(Map<String, Object> settings) {
-        if (settings != null && settings.get(SettingsConstants.FUNDING_TYPE_ID) != null) {
-            return new ReportMeasure(settings.get(SettingsConstants.FUNDING_TYPE_ID).toString());
-        } else {
-            return new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS);
-        }
-    }
-
-    private static AmpReportFilters getFiltersFromParams(Map<String, Object> filters) {
-        AmpReportFilters filterRules = new AmpReportFilters();
-        if (filters != null) {
-            filterRules = FilterUtils.getFilterRules(filters, null);
-        }
-        return filterRules;
     }
 
     /**
@@ -363,7 +303,7 @@ public final class DashboardService {
                     }
                 } else {
                     // TODO: implement for undefined row.
-                    logger.info("To be implemented");
+                    logger.debug("To be implemented");
                 }
             });
         }
@@ -430,7 +370,7 @@ public final class DashboardService {
                                             createDetailRecord(children3, projectColumn, year, list);
                                         }
                                     });
-                                } else if (outerProgram != null) {
+                                } else {
                                     // Add the rows when inner is null (undefined) and outer is not.
                                     children2.getChildren().forEach(children3 -> {
                                         createDetailRecord(children3, projectColumn, year, list);
@@ -476,7 +416,7 @@ public final class DashboardService {
         if (ids == null) {
             return list;
         }
-        AmpReportFilters filters = getFiltersFromParams(params.getFilters());
+        AmpReportFilters filters = DashboardUtils.getFiltersFromParams(params.getFilters());
         if (ids.size() == 2) {
             AmpTheme outerProgram = DashboardUtils.getThemeById(Long.valueOf(ids.get(0)));
             AmpTheme innerProgram = DashboardUtils.getThemeById(Long.valueOf(ids.get(1)));
@@ -492,12 +432,14 @@ public final class DashboardService {
                 mapping = regularMapping;
             }
 
-            List<ReportColumn> outerColumns = getColumnsFromProgram(outerProgram, mapping.getSrcProgram().getLevels());
-            ReportMeasure outerMeasure = getMeasureFromParams(params.getSettings());
+            List<ReportColumn> outerColumns = DashboardUtils.getColumnsFromProgram(outerProgram,
+                    mapping.getSrcProgram().getLevels());
+            ReportMeasure outerMeasure = DashboardUtils.getMeasureFromParams(params.getSettings());
             outerReport = createReport(outerColumns, outerMeasure, filters,
                     params.getSettings(), true);
 
-            List<ReportColumn> innerColumns = getColumnsFromProgram(innerProgram, mapping.getDstProgram().getLevels());
+            List<ReportColumn> innerColumns = DashboardUtils.getColumnsFromProgram(innerProgram,
+                    mapping.getDstProgram().getLevels());
             innerColumns.addAll(outerColumns);
             ReportMeasure innerMeasure = outerMeasure;
             innerReport = createReport(innerColumns, outerMeasure, filters,
@@ -506,8 +448,8 @@ public final class DashboardService {
             return processTwo(outerReport, innerReport, isIndirect, mapping);
         } else if (ids.size() == 1) {
             AmpTheme outerProgram = DashboardUtils.getThemeById(Long.valueOf(ids.get(0)));
-            List<ReportColumn> outerColumns = getColumnsFromProgram(outerProgram, 3);
-            ReportMeasure outerMeasure = getMeasureFromParams(params.getSettings());
+            List<ReportColumn> outerColumns = DashboardUtils.getColumnsFromProgram(outerProgram, 3);
+            ReportMeasure outerMeasure = DashboardUtils.getMeasureFromParams(params.getSettings());
             outerReport = createReport(outerColumns, outerMeasure, filters,
                     params.getSettings(), true);
             return processOne(outerReport);
@@ -526,7 +468,7 @@ public final class DashboardService {
         GeneratedReport report;
         int yearString = Integer.parseInt(params.getSettings().get("year").toString());
         String programIdString = params.getSettings().get("id").toString();
-        AmpReportFilters filters = getFiltersFromParams(params.getFilters());
+        AmpReportFilters filters = DashboardUtils.getFiltersFromParams(params.getFilters());
         AmpTheme program = DashboardUtils.getThemeById(Long.valueOf(programIdString));
         ReportColumn projectTitleColumn = new ReportColumn(ColumnConstants.PROJECT_TITLE);
         if (params.getSettings().get("isShowInnerChartDataForActivitiesDetail").toString().equals("true")) {
@@ -534,8 +476,8 @@ public final class DashboardService {
             List<String> selectedPrograms = (List<String>) params.getSettings().get("selectedPrograms");
             MappingConfiguration indirectMapping = nddService.getIndirectProgramMappingConfiguration();
             AmpTheme directProgram = DashboardUtils.getThemeById(indirectMapping.getSrcProgram().getId());
-            List<ReportColumn> outerColumns = getColumnsFromProgram(directProgram, 1);
-            ReportMeasure innerMeasure = getMeasureFromParams(params.getSettings());
+            List<ReportColumn> outerColumns = DashboardUtils.getColumnsFromProgram(directProgram, 1);
+            ReportMeasure innerMeasure = DashboardUtils.getMeasureFromParams(params.getSettings());
             AmpTheme rootProgram;
             if (program != null) {
                 rootProgram = DashboardUtils.getProgramByLvl(program, 0);
@@ -543,7 +485,7 @@ public final class DashboardService {
                 rootProgram = DashboardUtils.getThemeById(Long.valueOf(selectedPrograms.get(1)));
             }
             boolean isIndirect = DashboardUtils.isIndirect(rootProgram);
-            List<ReportColumn> innerColumns = getColumnsFromProgram(rootProgram, 1);
+            List<ReportColumn> innerColumns = DashboardUtils.getColumnsFromProgram(rootProgram, 1);
             List<ReportColumn> columns = outerColumns;
             columns.add(innerColumns.get(0));
             columns.add(projectTitleColumn);
@@ -557,7 +499,7 @@ public final class DashboardService {
             // Option "Show Direct Data"
             boolean dontUseMapping = params.getSettings().get("dontUseMapping").toString().equals("true");
             addFilterFromProgram(program, filters, dontUseMapping);
-            ReportMeasure outerMeasure = getMeasureFromParams(params.getSettings());
+            ReportMeasure outerMeasure = DashboardUtils.getMeasureFromParams(params.getSettings());
             List<ReportColumn> columns = new ArrayList<>();
             columns.add(projectTitleColumn);
             report = createReport(columns, outerMeasure, filters, params.getSettings(), true);

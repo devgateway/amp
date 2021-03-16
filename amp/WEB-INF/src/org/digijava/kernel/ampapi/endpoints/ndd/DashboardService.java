@@ -39,6 +39,8 @@ public final class DashboardService {
 
     private static NDDService nddService = new NDDService();
 
+    public static int MAX_LEVELS = 3;
+
     private DashboardService() {
     }
 
@@ -441,14 +443,13 @@ public final class DashboardService {
             List<ReportColumn> innerColumns = DashboardUtils.getColumnsFromProgram(innerProgram,
                     mapping.getDstProgram().getLevels());
             innerColumns.addAll(outerColumns);
-            ReportMeasure innerMeasure = outerMeasure;
             innerReport = createReport(innerColumns, outerMeasure, filters,
                     params.getSettings(), true);
 
             return processTwo(outerReport, innerReport, isIndirect, mapping);
         } else if (ids.size() == 1) {
             AmpTheme outerProgram = DashboardUtils.getThemeById(Long.valueOf(ids.get(0)));
-            List<ReportColumn> outerColumns = DashboardUtils.getColumnsFromProgram(outerProgram, 3);
+            List<ReportColumn> outerColumns = DashboardUtils.getColumnsFromProgram(outerProgram, MAX_LEVELS);
             ReportMeasure outerMeasure = DashboardUtils.getMeasureFromParams(params.getSettings());
             outerReport = createReport(outerColumns, outerMeasure, filters,
                     params.getSettings(), true);

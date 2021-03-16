@@ -32,11 +32,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class DashboardUtils {
+public final class DashboardUtils {
 
     private static Pattern numberPattern = Pattern.compile("\\d{4}");
     private static Logger logger = Logger.getLogger(DashboardUtils.class);
     private static NDDService nddService = new NDDService();
+
+    private DashboardUtils() {
+        
+    }
 
     /**
      * Given a program get its parent from level @lvl.

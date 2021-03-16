@@ -58,8 +58,12 @@ public class FlattenTwoProgramsRecord {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        } ;
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        } ;
         FlattenTwoProgramsRecord that = (FlattenTwoProgramsRecord) o;
         return Objects.equals(outerProgram, that.outerProgram)
                 && Objects.equals(innerProgram, that.innerProgram)

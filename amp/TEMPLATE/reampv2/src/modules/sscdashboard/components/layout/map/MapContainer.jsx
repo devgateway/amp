@@ -83,8 +83,8 @@ class MapContainer extends Component {
           projectsByGrouping = generateStructureBasedOnModalitiesProjectCount(p);
           chartData = getChartData(projectsByGrouping, modalities, true);
         } else {
-          chartData = getChartData(projectsByGrouping, sectors, true);
           projectsByGrouping = generateStructureBasedOnSectorProjectCount(p);
+          chartData = getChartData(projectsByGrouping, sectors, true);
         }
         chartData.forEach(cd => {
           const row = {};
@@ -92,7 +92,8 @@ class MapContainer extends Component {
           row[isModalities ? 'modality' : 'sector'] = cd.simpleLabel;
           row.percentage = cd.percentage;
           row.count = cd.value;
-          row.activities = [...cd.activities].map(a => activitiesDetails.activities.find(ad => ad[ACTIVITY_ID] === a)[PROJECT_TITLE]).join('|');
+          row.activities = [...cd.activities].map(a => activitiesDetails.activities
+            .find(ad => ad[ACTIVITY_ID] === a)[PROJECT_TITLE]).join('|');
           exportData.rows.push(row);
         });
       }
@@ -158,12 +159,12 @@ class MapContainer extends Component {
           chartSelected={chartSelected}
 
         />
-        <MapHome filteredProjects={filteredProjects} countries={countries}/>
+        <MapHome filteredProjects={filteredProjects} countries={countries} />
         {/* TODO refactor country popup in next story */}
         <PopupOverlay show={showEmptyProjects}>
           <SimplePopup
             message={translations['amp.ssc.dashboard:no-data']}
-            onClose={onNoProjectsModalClose}/>
+            onClose={onNoProjectsModalClose} />
         </PopupOverlay>
         <CountryPopupOverlay
           show={showLargeCountryPopin}

@@ -7,4 +7,5 @@
     <suppress files="ReportTypesResolver\.java" checks="MagicNumber"/>
     <suppress files="ApiError\.java" checks="MagicNumber"/>
     <suppress files="SwaggerContact\.java" checks="MagicNumber"/>
+    <suppress files="DashboardService\.java" checks="ParameterNumber"/>
 </suppressions>

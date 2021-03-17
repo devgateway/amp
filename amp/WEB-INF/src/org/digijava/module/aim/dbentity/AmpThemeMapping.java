@@ -26,12 +26,20 @@ public class AmpThemeMapping {
     @JsonProperty("dst-program")
     private AmpTheme dstTheme;
 
+    @JsonProperty("levelSrc")
+    private Integer levelSrc;
+
+    @JsonProperty("levelDst")
+    private Integer levelDst;
+
     public AmpThemeMapping() {
     }
 
-    public AmpThemeMapping(AmpTheme srcTheme, AmpTheme dstTheme) {
+    public AmpThemeMapping(AmpTheme srcTheme, AmpTheme dstTheme, Integer levelSrc, Integer levelDst) {
         this.srcTheme = srcTheme;
         this.dstTheme = dstTheme;
+        this.levelSrc = levelSrc;
+        this.levelDst = levelDst;
     }
 
     public Long getId() {
@@ -56,5 +64,21 @@ public class AmpThemeMapping {
 
     public void setDstTheme(AmpTheme dstTheme) {
         this.dstTheme = dstTheme;
+    }
+
+    public Integer getLevelSrc() {
+        return levelSrc;
+    }
+
+    public void setLevelSrc(Integer levelSrc) {
+        this.levelSrc = levelSrc;
+    }
+
+    public Integer getLevelDst() {
+        return levelDst;
+    }
+
+    public void setLevelDst(Integer levelDst) {
+        this.levelDst = levelDst;
     }
 }

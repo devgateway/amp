@@ -31,6 +31,7 @@
   "amp.admin.ndd.program:validation_error_3": "Error: Source Program not selected.",
   "amp.admin.ndd.program:validation_error_4": "Error: Destination Program not selected.",
   "amp.admin.ndd.program:validation_error_5": "Error: Source Program and Destination Program must be different.",
+  "amp.admin.ndd.program:validation_error_6": "Error: Max Levels is not valid.",
   "amp.admin.ndd.program:warning_on_change_destination_program": "Warning: The new Destination Program will be removes from all activities.",
   "amp.admin.ndd.program:confirm-change-destination-program": "Are you sure you want to : The new Destination Program will be removes from all activities.",
   "amp.admin.ndd.program:notification-saved-ok": "All mappings saved correctly.",
@@ -46,5 +47,8 @@
   "amp.admin.ndd.program:tooltip-indirect-programs": "In the Activity Form, the drop down options for this program will be limited based on what the user selects in the Source Program.",
   "amp.admin.ndd.program:tooltip-direct-programs-list": "Please specify the current levels of your source program to begin the mapping exercise. Note that you will have to select up to to level defined in the Multi Program Manager.",
   "amp.admin.ndd.program:tooltip-indirect-programs-list": "Please define the corresponding destination program levels. Note that you will have to select up to level defined in the Multi Program Manager.",
-  "amp.admin.ndd.program:no-matches-found": "No matches found"
+  "amp.admin.ndd.program:no-matches-found": "No matches found",
+  "amp.admin.ndd.program:max-level": "Max levels",
+  "amp.admin.ndd.program:tooltip-max-depth": "This can be set by the superadmin only.",
+  "amp.admin.ndd.program:warning_on_change_levels": "If you change the Max Depth Level then the existing mappings will be deleted, are you sure you want to continue?"
 }

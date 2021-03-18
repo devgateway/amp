@@ -15,6 +15,7 @@ if (BRANCH_NAME ==~ /feature\/AMP-\d+.*/) {
 def branch = env.CHANGE_ID == null ? BRANCH_NAME : null
 def pr = env.CHANGE_ID
 def registryKey = env.AMP_REGISTRY_PRIVATE_KEY
+def geocoderUrl = env.AMP_GEOCODER_URL
 def changePretty = (pr != null) ? "pull request ${pr}" : "branch ${branch}"
 
 println "Branch: ${branch}"
@@ -166,7 +167,7 @@ stage('Build') {
                     sh "cd amp && mvn -T 4 clean compile war:exploded ${legacyMvnOptions} -DskipTests -DbuildSource=${tag} -e"
 
                     // Build Docker images & push it
-                    sh "docker build -q -t phosphorus:5000/amp-webapp:${tag} --build-arg AMP_EXPLODED_WAR=target/amp --build-arg AMP_PULL_REQUEST='${pr}' --build-arg AMP_BRANCH='${branch}' --build-arg AMP_REGISTRY_PRIVATE_KEY='${registryKey}' --label git-hash='${hash}' amp"
+                    sh "docker build -q -t phosphorus:5000/amp-webapp:${tag} --build-arg AMP_EXPLODED_WAR=target/amp --build-arg AMP_PULL_REQUEST='${pr}' --build-arg AMP_BRANCH='${branch}' --build-arg AMP_REGISTRY_PRIVATE_KEY='${registryKey}' --build-arg AMP_GEOCODER_URL='${geocoderUrl}' --label git-hash='${hash}' amp"
                     sh "docker push phosphorus:5000/amp-webapp:${tag} > /dev/null"
                 } finally {
 

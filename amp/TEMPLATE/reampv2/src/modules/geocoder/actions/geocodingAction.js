@@ -203,7 +203,8 @@ export function runSearchSuccess(geocoding) {
 export function runSearchError(error) {
     return {
         type: GEOCODING_RUN_SEARCH_ERROR,
-        error: error
+        error: error.message,
+        errorCode: error.code
     }
 }
 
@@ -231,7 +232,7 @@ export const runSearch = (activityIds) => {
                 return dispatch(runSearchSuccess(geocoding));
             })
             .catch(error => {
-                return dispatch(runSearchError(error.message))
+                return dispatch(runSearchError(error))
             });
     }
 };

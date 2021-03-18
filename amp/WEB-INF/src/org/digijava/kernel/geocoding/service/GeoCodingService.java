@@ -62,11 +62,6 @@ public class GeoCodingService {
             throw new GeoCodingNotAvailableException(geoCodingProcess.getTeamMember());
         }
 
-        if (geoCodingProcess == null) {
-            geoCodingProcess = new GeoCodingProcess(principal);
-            PersistenceManager.getSession().save(geoCodingProcess);
-        }
-
         List<AmpActivityVersion> activities = new ArrayList<>();
         for (Long activityId : activityIds) {
             try {
@@ -82,6 +77,11 @@ public class GeoCodingService {
         }
 
         List<Long> queueIds = client.processActivities(activities);
+
+        if (geoCodingProcess == null) {
+            geoCodingProcess = new GeoCodingProcess(principal);
+            PersistenceManager.getSession().save(geoCodingProcess);
+        }
 
         for (int i = 0; i < activities.size(); i++) {
             Long queueId = queueIds.get(i);

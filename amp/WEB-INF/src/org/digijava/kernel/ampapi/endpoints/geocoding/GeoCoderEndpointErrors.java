@@ -24,5 +24,7 @@ public final class GeoCoderEndpointErrors {
             "Invalid User");
     public static final ApiErrorMessage GEO_CODING_INVALID_WORKSPACE = new ApiErrorMessage(ERROR_CLASS_GEO_CODER_ID, 5,
             "Invalid Workspace");
+    public static final ApiErrorMessage GEO_CODING_CLIENT_ERROR = new ApiErrorMessage(ERROR_CLASS_GEO_CODER_ID, 6,
+            "Geo coding client error");
 
 }

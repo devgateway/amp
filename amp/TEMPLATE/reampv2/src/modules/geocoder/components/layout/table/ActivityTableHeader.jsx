@@ -31,7 +31,7 @@ class ActivityTableHeader extends Component {
                                             size={this.props.activities.length} />
                 <RunSearchButton title={translations['amp.geocoder:runSearch']}
                          selectedActivities={this.props.selectedActivities}
-                         onRunSearch={this.onRunSearch}/>
+                         onRunSearch={this.onRunSearch} />
             </div>);
     }
 }

@@ -1,18 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.geocoding;
 
-import java.util.Set;
-
-import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -27,6 +14,20 @@ import org.digijava.kernel.entity.geocoding.GeoCodingProcess;
 import org.digijava.kernel.geocoding.service.GeneralGeoCodingException;
 import org.digijava.kernel.geocoding.service.GeoCodingNotAvailableException;
 import org.digijava.kernel.geocoding.service.GeoCodingService;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.util.TeamUtil;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.util.Set;
 
 /**
  * @author Octavian Ciubotaru
@@ -82,9 +83,20 @@ public class GeoCoderEndpoint {
             }
             return process;
         } catch (GeoCodingNotAvailableException e) {
-            ApiErrorResponse apiErrorResponse = ApiError.toError(
-                    GeoCoderEndpointErrors.GEO_CODING_NOT_AVAILABLE.withDetails(e.getTeamMember().toString()));
-            throw new ApiRuntimeException(Response.Status.BAD_REQUEST, apiErrorResponse);
+            AmpTeamMember currentTM = TeamUtil.getCurrentAmpTeamMember();
+            AmpTeamMember geocoderTM = e.getTeamMember();
+
+            if (!currentTM.getUser().getId().equals(geocoderTM.getUser().getId())) {
+                throw new ApiRuntimeException(Response.Status.BAD_REQUEST, ApiError.toError(
+                        GeoCoderEndpointErrors.GEO_CODING_INVALID_USER.withDetails(geocoderTM.getUser().getName())));
+            } else if (!currentTM.getAmpTeam().getAmpTeamId().equals(geocoderTM.getAmpTeam().getAmpTeamId())) {
+                throw new ApiRuntimeException(Response.Status.BAD_REQUEST, ApiError.toError(
+                        GeoCoderEndpointErrors.GEO_CODING_INVALID_WORKSPACE
+                                .withDetails(geocoderTM.getAmpTeam().getName())));
+            }
+
+            throw new ApiRuntimeException(Response.Status.BAD_REQUEST, ApiError.toError(
+                    GeoCoderEndpointErrors.GEO_CODING_NOT_AVAILABLE));
         }
     }
 

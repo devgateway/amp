@@ -60,10 +60,15 @@ export function fetchGeocodingNotFound(geocoding) {
 
 
 export function fetchGeocodingError(error, status) {
+    return fetchGeocodingErrorWithCode(error, status, null);
+}
+
+export function fetchGeocodingErrorWithCode(error, status, code) {
     return {
         type: FETCH_GEOCODING_ERROR,
         error: error,
-        status: status
+        status: status,
+        errorCode: code
     }
 }
 
@@ -213,7 +218,7 @@ export const loadGeocoding = () => {
                 if(isGeocodingNotFound(error)) {
                     return dispatch(fetchGeocodingNotFound(null));
                 }
-                return dispatch(fetchGeocodingError(error.message, "NOT_AVAILABLE"))
+                return dispatch(fetchGeocodingErrorWithCode(error.message, "NOT_AVAILABLE", error.code))
             });
     }
 };

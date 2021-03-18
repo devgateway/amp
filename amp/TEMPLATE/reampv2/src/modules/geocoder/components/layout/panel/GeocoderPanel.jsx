@@ -72,7 +72,7 @@ class GeocoderPanel extends Component {
             <div>
             {/*{isGeocodingNotAvailable && <GeocodingNotAvailable user={this.props.geocoding.creator} workspace={this.props.geocoding.workspace}/>}*/}
                 {this.props.geocoding.error
-                    ?  <AlertError error={this.props.geocoding.error}/>
+                    ?  <AlertError error={this.props.geocoding.error} errorCode={this.props.geocoding.errorCode}/>
                     : <div>
                         <ProjectList title={title}/>
                         <div className='panel panel-default'>

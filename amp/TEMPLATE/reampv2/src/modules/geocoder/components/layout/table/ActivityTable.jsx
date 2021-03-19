@@ -6,6 +6,7 @@ import {connect} from "react-redux";
 
 import './table.css';
 import {loadActivities} from "../../../actions/activitiesAction";
+import {orderDates} from "../../../utils/utils";
 import {Loading} from "../panel/Loading";
 import {TranslationContext} from "../../AppContext";
 
@@ -51,6 +52,12 @@ class ActivityTable extends Component {
             onSelectAll: this.props.onSelectAllActivities
         };
 
+        let col1Text = translations['amp.geocoder:lastUpdatedDate'];
+        let col2Text = translations['amp.geocoder:ampId'];
+        let col3Text = translations['amp.geocoder:projectName'];
+        let col4Text = translations['amp.geocoder:location'];
+
+
         let columns = [
             {
                 dataField: "id",
@@ -59,15 +66,18 @@ class ActivityTable extends Component {
             },
             {
                 dataField: "col1",
-                text: "Date",
+                text: col1Text,
                 sort: true,
+                sortFunc: (a, b, order) => {
+                    return orderDates(a, b, order);
+                },
                 headerStyle: () => {
                     return { width: "10%" };
                 }
             },
             {
                 dataField: "col2",
-                text: "Project Number",
+                text: col2Text,
                 headerStyle: () => {
                     return { width: "20%" };
                 },
@@ -75,7 +85,7 @@ class ActivityTable extends Component {
             },
             {
                 dataField: "col3",
-                text: "Project Name",
+                text: col3Text,
                 headerStyle: () => {
                     return { width: "50%" };
                 },
@@ -83,7 +93,7 @@ class ActivityTable extends Component {
             },
             {
                 dataField: "col4",
-                text: "Location",
+                text: col4Text,
                 headerStyle: () => {
                     return { width: "15%" };
                 },

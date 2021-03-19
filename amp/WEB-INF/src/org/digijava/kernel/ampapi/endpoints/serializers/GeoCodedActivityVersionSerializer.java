@@ -14,8 +14,6 @@ import org.digijava.module.editor.util.DbUtil;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * GeoCoded Activity json serializer
@@ -32,18 +30,14 @@ public class GeoCodedActivityVersionSerializer extends JsonSerializer<AmpActivit
     public void serialize(AmpActivityVersion activity, JsonGenerator jgen, SerializerProvider provider)
             throws IOException {
 
-        List<String> projectNumberIds = activity.getInternalIds()
-                .stream().map(id -> id.getInternalId())
-                .collect(Collectors.toList());
-
         Site site = TLSUtils.getSite();
         String lang = TLSUtils.getLangCode();
 
         jgen.writeNumberField("activity_id", activity.getAmpActivityId());
         jgen.writeStringField("project_title", activity.getName());
-        jgen.writeStringField("project_number", String.join(",", projectNumberIds));
-        jgen.writeStringField("project_date",
-                DateTimeUtil.formatISO8601DateTimestamp(activity.getCreatedDate(), false));
+        jgen.writeStringField("amp_id", activity.getAmpId());
+        jgen.writeStringField("updated_date",
+                DateTimeUtil.formatISO8601DateTimestamp(activity.getUpdatedDate(), false));
         try {
             jgen.writeStringField("description", DbUtil.getEditorBody(site, activity.getDescription(), lang));
         } catch (EditorException e) {

@@ -12,6 +12,7 @@ import {loadGeocoding} from "../../../actions/geocodingAction";
 import {TranslationContext} from "../../AppContext";
 import ActivityWithoutLocationsDialog from "../panel/dialog/ActivityWithoutLocationsDialog";
 import ActivitySaveResultsDialog from "../panel/dialog/ActivitySaveResultsDialog";
+import {orderDates} from "../../../utils/utils";
 
 class GeocodingTable extends Component {
     constructor(props) {
@@ -122,18 +123,26 @@ class GeocodingTable extends Component {
             lastPage: 'Last',
         };
 
+        let col1Text = translations['amp.geocoder:lastUpdatedDate'];
+        let col2Text = translations['amp.geocoder:ampId'];
+        let col3Text = translations['amp.geocoder:projectName'];
+        let col4Text = translations['amp.geocoder:location'];
+
         let columns = [
             {
-                dataField: "project_date",
-                text: "Date",
+                dataField: "updated_date",
+                text: col1Text,
                 sort: true,
+                sortFunc: (a, b, order) => {
+                    return orderDates(a, b, order);
+                },
                 headerStyle: () => {
                     return { width: "10%" };
                 }
             },
             {
-                dataField: "project_number",
-                text: "Project Number",
+                dataField: "amp_id",
+                text: col2Text,
                 headerStyle: () => {
                     return { width: "20%" };
                 },
@@ -141,7 +150,7 @@ class GeocodingTable extends Component {
             },
             {
                 dataField: "project_title",
-                text: "Project Name",
+                text: col3Text,
                 headerStyle: () => {
                     return { width: "45%" };
                 },
@@ -149,7 +158,7 @@ class GeocodingTable extends Component {
             },
             {
                 dataField: "location",
-                text: "Location",
+                text: col4Text,
                 headerStyle: () => {
                     return { width: "15%" };
                 },

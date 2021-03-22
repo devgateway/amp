@@ -45,10 +45,12 @@ class RunSearchButton extends Component {
                         <Modal.Title>{this.props.title}</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        Activities to be geocoded:
+                        {translations['amp.geocoder:runSearchText']}:
                         <div className="modal-activities">
-                            {this.props.selectedActivities.map((value) => {
-                                return <div>{value}</div>
+                            {this.props.activities
+                                .filter(act => this.props.selectedActivities.includes(act.id))
+                                .map((value) => {
+                                return <div>{value.col2}</div>
                             })}
                         </div>
                         </Modal.Body>
@@ -72,6 +74,7 @@ const mapStateToProps = state => {
     return {
         geocoding: state.geocodingReducer,
         activitiesPending: state.activitiesReducer.pending,
+        activities: state.activitiesReducer.activities
     };
 };
 

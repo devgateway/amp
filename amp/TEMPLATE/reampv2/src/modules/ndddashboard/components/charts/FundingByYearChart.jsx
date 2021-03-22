@@ -9,7 +9,7 @@ import createPlotlyComponent from 'react-plotly.js/factory';
 import { callYearDetailReport } from '../../actions/callReports';
 import {
   DIRECT_PROGRAM, INDIRECT_PROGRAMS, PROGRAMLVL1, CODE,
-  PROGRAMLVL2, TRN_PREFIX, CURRENCY_CODE
+  PROGRAMLVL2, TRN_PREFIX, CURRENCY_CODE, FUNDING_TYPE
 } from '../../utils/constants';
 import {
   formatNumberWithSettings, getCustomColor, formatKMB
@@ -21,7 +21,7 @@ import YearDetail from './YearDetail';
 
 const Plot = createPlotlyComponent(Plotly);
 
-const SRC_DIRECT = '0';
+export const SRC_DIRECT = '0';
 const SRC_INDIRECT = '1';
 
 class FundingByYearChart extends Component {
@@ -29,21 +29,16 @@ class FundingByYearChart extends Component {
     super(props);
     this.getValues = this.getValues.bind(this);
     this.state = {
-      source: SRC_DIRECT, showLegend: false, legendTop: 0, legendLeft: 0, tooltipData: null, showDetail: false
+      showLegend: false, legendTop: 0, legendLeft: 0, tooltipData: null, showDetail: false
     };
   }
 
-  onChangeSource = (value) => {
-    this.setState({ source: value.target.value });
-  }
-
   getValues() {
-    const { selectedDirectProgram } = this.props;
-    const { source } = this.state;
+    const { selectedDirectProgram, fundingByYearSource } = this.props;
     const ret = [];
     const { data } = this.props;
     if (data && data.length > 0) {
-      const sourceData = (source === SRC_DIRECT
+      const sourceData = (fundingByYearSource === SRC_DIRECT
         ? data.map(i => i[DIRECT_PROGRAM])
         : data.map(i => i[INDIRECT_PROGRAMS]).flat());
       const filteredData = !selectedDirectProgram ? sourceData
@@ -51,18 +46,21 @@ class FundingByYearChart extends Component {
         : (sourceData.filter(i => i[PROGRAMLVL1][CODE] === selectedDirectProgram[CODE]));
       filteredData.forEach(i => {
         const program = !selectedDirectProgram ? i[PROGRAMLVL1] : i[PROGRAMLVL2];
-        const item = ret.find(j => j[CODE] === program[CODE]);
-        const auxAmounts = i.amountsByYear;
-        if (item) {
-          item.values = this.sortAmountsByYear(this.addAmountsByYear(item.values, Object.keys(auxAmounts)
-            .map(j => ({ [j]: auxAmounts[j] }))));
-        } else {
-          ret.push({
-            [CODE]: program[CODE],
-            name: program.name,
-            values: Object.keys(auxAmounts).map(j => ({ [j]: auxAmounts[j] })),
-            id: program.objectId
-          });
+        if (program) {
+          const item = ret.find(j => j[CODE] === program[CODE]);
+          const auxAmounts = i.amountsByYear;
+          if (item) {
+            item.values = this.sortAmountsByYear(this.addAmountsByYear(item.values, Object.keys(auxAmounts)
+              .map(j => ({ [j]: auxAmounts[j] }))));
+          } else {
+            ret.push({
+              [CODE]: program[CODE],
+              name: program.name,
+              values: Object.keys(auxAmounts)
+                .map(j => ({ [j]: auxAmounts[j] })),
+              id: program.objectId
+            });
+          }
         }
       });
       ret.forEach(i => {
@@ -129,13 +127,13 @@ class FundingByYearChart extends Component {
 
   onClick = (event) => {
     const {
-      _callYearDetailReport, settings, filters, fundingType, selectedPrograms
+      _callYearDetailReport, settings, filters, fundingType, selectedPrograms, fundingByYearSource
     } = this.props;
-    const { source } = this.state;
     this.setState({ showDetail: true, year: event.points[0].x, programName: event.points[0].data.text });
     const newSettings = { ...settings };
-    newSettings.isShowIndirectDataForActivitiesDetail = (source === SRC_INDIRECT);
+    newSettings.isShowInnerChartDataForActivitiesDetail = (fundingByYearSource === SRC_INDIRECT);
     newSettings.dontUseMapping = (selectedPrograms && selectedPrograms.length === 1);
+    newSettings.selectedPrograms = selectedPrograms;
     _callYearDetailReport(fundingType,
       filters,
       event.points[0].data.extraData.find(i => i.name === event.points[0].data.text).id,
@@ -145,18 +143,22 @@ class FundingByYearChart extends Component {
 
   createModalWindow = () => {
     const {
-      translations, yearDetailPending, yearDetail, error, fundingType, settings, globalSettings
+      translations, yearDetailPending, yearDetail, error, fundingType, settings, globalSettings, dashboardSettings
     } = this.props;
+    const fundingTypeDescription = dashboardSettings.find(i => i.id === FUNDING_TYPE).value.options
+      .find(ft => ft.id === fundingType);
     const { showDetail, year, programName } = this.state;
     return (
       <YearDetail
         translations={translations}
         show={showDetail}
-        handleClose={() => { this.setState({ showDetail: false }); }}
+        handleClose={() => {
+          this.setState({ showDetail: false });
+        }}
         data={yearDetail}
         loading={yearDetailPending}
         error={error}
-        fundingType={fundingType}
+        fundingTypeDescription={fundingTypeDescription.name}
         currencyCode={settings[CURRENCY_CODE]}
         globalSettings={globalSettings}
         title={`${year} ${programName}`} />
@@ -188,15 +190,15 @@ class FundingByYearChart extends Component {
   }
 
   getColor(source, i) {
-    const { selectedDirectProgram } = this.props;
+    const { selectedDirectProgram, selectedPrograms } = this.props;
     if (source === SRC_DIRECT) {
       if (selectedDirectProgram == null) {
-        return getCustomColor(i, PROGRAMLVL1);
+        return getCustomColor(i, selectedPrograms[0]);
       } else {
-        return getCustomColor(i, `${PROGRAMLVL1}_${selectedDirectProgram.code}`);
+        return getCustomColor(i, `${selectedPrograms[0]}_${selectedDirectProgram.code}`);
       }
     } else {
-      return getCustomColor(i, INDIRECT_PROGRAMS);
+      return getCustomColor(i, selectedPrograms[1]);
     }
   }
 
@@ -248,9 +250,11 @@ class FundingByYearChart extends Component {
   getTickValue = (total, i) => (total * i / 100)
 
   render() {
-    const { translations, globalSettings } = this.props;
     const {
-      source, showLegend, legendTop, legendLeft
+      translations, globalSettings, onChangeSource, fundingByYearSource
+    } = this.props;
+    const {
+      showLegend, legendTop, legendLeft
     } = this.state;
     const directData = this.getValues();
     /* const transition = {
@@ -271,15 +275,19 @@ class FundingByYearChart extends Component {
     annotations = this.calculateYAxisAbbreviations(annotations, directData);
     return (
       <div>
-        <div>
+        <div className="funding-by-year-radios">
+          <div className="title-fy-source">
+            {fundingByYearSource === SRC_DIRECT ? translations[`${TRN_PREFIX}direct`]
+              : translations[`${TRN_PREFIX}indirect`]}
+          </div>
           <div className="radio-fy-source">
             <input
               type="radio"
               id="fy-direct"
               name="fy-source"
               value="0"
-              checked={source === SRC_DIRECT ? 'checked' : null}
-              onChange={this.onChangeSource} />
+              checked={fundingByYearSource === SRC_DIRECT ? 'checked' : null}
+              onChange={onChangeSource} />
             <label htmlFor="fy-direct">
               {translations[`${TRN_PREFIX}fy-direct`]}
             </label>
@@ -291,13 +299,13 @@ class FundingByYearChart extends Component {
                 id="fy-indirect"
                 name="fy-source"
                 value="1"
-                checked={source === SRC_INDIRECT ? 'checked' : null}
-                onChange={this.onChangeSource} />
+                checked={fundingByYearSource === SRC_INDIRECT ? 'checked' : null}
+                onChange={onChangeSource} />
               <label htmlFor="fy-indirect">
                 {translations[`${TRN_PREFIX}fy-indirect`]}
               </label>
             </div>
-          ) : null }
+          ) : null}
         </div>
         <Plot
           key="fundingByYearChart"
@@ -316,13 +324,13 @@ class FundingByYearChart extends Component {
                 smoothing: 0.5,
                 dash: 'solid',
                 width: 2,
-                color: this.getColor(source, i),
+                color: this.getColor(fundingByYearSource, i),
               },
               marker: {
                 size: 7,
                 color: 'white',
                 line: {
-                  color: this.getColor(source, i),
+                  color: this.getColor(fundingByYearSource, i),
                   width: 2,
                 }
               }
@@ -395,7 +403,10 @@ FundingByYearChart.propTypes = {
   yearDetailPending: PropTypes.bool.isRequired,
   yearDetail: PropTypes.array,
   error: PropTypes.object,
-  selectedPrograms: PropTypes.array.isRequired
+  selectedPrograms: PropTypes.array.isRequired,
+  dashboardSettings: PropTypes.array.isRequired,
+  fundingByYearSource: PropTypes.string.isRequired,
+  onChangeSource: PropTypes.func.isRequired
 };
 
 FundingByYearChart.defaultProps = {
@@ -409,7 +420,8 @@ const mapStateToProps = state => ({
   translations: state.translationsReducer.translations,
   yearDetailPending: state.reportsReducer.yearDetailPending,
   yearDetail: state.reportsReducer.yearDetail,
-  error: state.reportsReducer.error
+  error: state.reportsReducer.error,
+  dashboardSettings: state.dashboardSettingsReducer.dashboardSettings,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

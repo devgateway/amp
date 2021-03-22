@@ -8,6 +8,9 @@ import org.digijava.module.aim.dbentity.AmpTheme;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+
+import static org.digijava.module.aim.dbentity.AmpActivityProgramSettings.NAME_TO_COLUMN;
 
 public class NDDSolarChartData {
 
@@ -40,19 +43,44 @@ public class NDDSolarChartData {
         public Long getObjectId() {
             return objectId;
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            Program program = (Program) o;
+            return Objects.equals(code, program.code)
+                    && Objects.equals(name, program.name)
+                    && Objects.equals(filterColumnName, program.filterColumnName)
+                    && Objects.equals(objectId, program.objectId);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(code, name, filterColumnName, objectId);
+        }
     }
 
     public static class ProgramData {
 
+        public static final int LEVEL_3 = 3;
+        public static final int LEVEL_2 = 2;
+        public static final int LEVEL_1 = 1;
+
+
         private final Program programLvl1;
 
-        private final Program programLvl2;
+        private Program programLvl2;
 
-        private final Program programLvl3;
+        private Program programLvl3;
 
-        private final BigDecimal amount;
+        private BigDecimal amount;
 
-        private final Map<String, BigDecimal> amountsByYear;
+        private Map<String, BigDecimal> amountsByYear;
 
         /**
          * Convert an AmpTheme tree into a plain structure.
@@ -62,30 +90,111 @@ public class NDDSolarChartData {
          */
         public ProgramData(AmpTheme program, BigDecimal amount, Map<String, BigDecimal> amountsByYear) {
             String configurationName = null;
-            AmpActivityProgramSettings activityProgramSettings = program.getParentThemeId()
-                    .getParentThemeId().getParentThemeId().getProgramSettings()
-                    .stream().findAny().orElse(null);
-            if (activityProgramSettings != null) {
-                configurationName = activityProgramSettings.getName();
-                this.programLvl3 = new Program(program.getThemeCode(), program.getName(),
-                        FilterUtils.INSTANCE.idFromColumnName(configurationName + " Level 3"),
-                        program.getAmpThemeId());
-                this.programLvl2 = new Program(program.getParentThemeId().getThemeCode(),
-                        program.getParentThemeId().getName(), FilterUtils.
-                        INSTANCE.idFromColumnName(configurationName + " Level 2"),
-                        program.getParentThemeId().getAmpThemeId());
-                this.programLvl1 = new Program(program.getParentThemeId().getParentThemeId().getThemeCode(),
-                        program.getParentThemeId().getParentThemeId().getName(), FilterUtils.INSTANCE.
-                        idFromColumnName(configurationName + " Level 1"),
-                        program.getParentThemeId().getParentThemeId().getAmpThemeId());
-                this.amount = amount;
-                this.amountsByYear = amountsByYear;
-            } else {
-                this.amountsByYear = null;
-                this.programLvl1 = null;
-                this.programLvl2 = null;
-                this.programLvl3 = null;
-                this.amount = null;
+            AmpActivityProgramSettings activityProgramSettings = null;
+            switch (program.getIndlevel()) {
+                case LEVEL_3:
+                    activityProgramSettings = program.getParentThemeId()
+                            .getParentThemeId().getParentThemeId().getProgramSettings()
+                            .stream().findAny().orElse(null);
+                    if (activityProgramSettings != null) {
+                        configurationName = NAME_TO_COLUMN.get(activityProgramSettings.getName());
+                        this.programLvl1 = new Program(program.getParentThemeId().getParentThemeId().getThemeCode(),
+                                program.getParentThemeId().getParentThemeId().getName(), FilterUtils.INSTANCE.
+                                idFromColumnName(configurationName + " Level 1"),
+                                program.getParentThemeId().getParentThemeId().getAmpThemeId());
+                        this.programLvl2 = new Program(program.getParentThemeId().getThemeCode(),
+                                program.getParentThemeId().getName(), FilterUtils.
+                                INSTANCE.idFromColumnName(configurationName + " Level 2"),
+                                program.getParentThemeId().getAmpThemeId());
+                        this.programLvl3 = new Program(program.getThemeCode(), program.getName(),
+                                FilterUtils.INSTANCE.idFromColumnName(configurationName + " Level 3"),
+                                program.getAmpThemeId());
+                        this.amount = amount;
+                        this.amountsByYear = amountsByYear;
+                    } else {
+                        this.programLvl1 = null;
+                        this.programLvl2 = null;
+                        this.programLvl3 = null;
+                        this.amount = null;
+                        this.amountsByYear = null;
+                    }
+                    break;
+                case LEVEL_2:
+                    activityProgramSettings = program
+                            .getParentThemeId().getParentThemeId().getProgramSettings()
+                            .stream().findAny().orElse(null);
+                    if (activityProgramSettings != null) {
+                        configurationName = activityProgramSettings.getName();
+                        this.programLvl1 = new Program(program.getParentThemeId().getThemeCode(),
+                                program.getParentThemeId().getName(), FilterUtils.INSTANCE.
+                                idFromColumnName(configurationName + " Level 1"),
+                                program.getParentThemeId().getAmpThemeId());
+                        this.programLvl2 = new Program(program.getThemeCode(),
+                                program.getName(), FilterUtils.
+                                INSTANCE.idFromColumnName(configurationName + " Level 2"),
+                                program.getAmpThemeId());
+                        this.programLvl3 = null;
+                        this.amount = amount;
+                        this.amountsByYear = amountsByYear;
+                    } else {
+                        this.programLvl1 = null;
+                        this.programLvl2 = null;
+                        this.programLvl3 = null;
+                        this.amount = null;
+                        this.amountsByYear = null;
+                    }
+                    break;
+                case LEVEL_1:
+                    activityProgramSettings = program.getParentThemeId()
+                            .getProgramSettings()
+                            .stream().findAny().orElse(null);
+                    if (activityProgramSettings != null) {
+                        configurationName = activityProgramSettings.getName();
+                        this.programLvl1 = new Program(program.getThemeCode(),
+                                program.getName(), FilterUtils.INSTANCE.
+                                idFromColumnName(configurationName + " Level 1"),
+                                program.getAmpThemeId());
+                        this.programLvl2 = null;
+                        this.programLvl3 = null;
+                        this.amount = amount;
+                        this.amountsByYear = amountsByYear;
+                    } else {
+                        this.programLvl1 = null;
+                        this.programLvl2 = null;
+                        this.programLvl3 = null;
+                        this.amount = null;
+                        this.amountsByYear = null;
+                    }
+                    break;
+                case -1:
+                    // Special case for undefined program.
+                    this.programLvl1 = new Program(program.getThemeCode(),
+                            program.getName(), null,
+                            program.getAmpThemeId());
+                    this.programLvl2 = null;
+                    this.programLvl3 = null;
+                    this.amount = amount;
+                    this.amountsByYear = amountsByYear;
+                    break;
+                default:
+                    this.programLvl1 = null;
+                    this.programLvl2 = null;
+                    this.programLvl3 = null;
+                    this.amount = null;
+                    this.amountsByYear = null;
+                    break;
+            }
+
+            // Added to always return data to the FE.
+            if (this.programLvl3 == null) {
+                if (this.programLvl2 != null) {
+                    this.programLvl3 = this.programLvl2;
+                } else {
+                    this.programLvl3 = this.programLvl1;
+                }
+            }
+            if (this.programLvl2 == null) {
+                this.programLvl2 = this.programLvl1;
             }
         }
 
@@ -108,6 +217,33 @@ public class NDDSolarChartData {
         public Map<String, BigDecimal> getAmountsByYear() {
             return amountsByYear;
         }
+
+        public void setAmount(BigDecimal amount) {
+            this.amount = amount;
+        }
+
+        public void setAmountsByYear(Map<String, BigDecimal> amountsByYear) {
+            this.amountsByYear = amountsByYear;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            ProgramData p2 = (ProgramData) o;
+            return ((programLvl1 == null && p2.programLvl1 == null) || Objects.equals(programLvl1, p2.programLvl1))
+                    && ((programLvl2 == null && p2.programLvl2 == null) || Objects.equals(programLvl2, p2.programLvl2))
+                    && ((programLvl3 == null && p2.programLvl3 == null) || Objects.equals(programLvl3, p2.programLvl3));
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(programLvl1, programLvl2, programLvl3, amount, amountsByYear);
+        }
     }
 
     @JsonProperty("directProgram")
@@ -119,9 +255,6 @@ public class NDDSolarChartData {
     public NDDSolarChartData(ProgramData directProgram, List<ProgramData> indirectPrograms) {
         this.directProgram = directProgram;
         this.indirectPrograms = indirectPrograms;
-    }
-
-    public NDDSolarChartData() {
     }
 
     public ProgramData getDirectProgram() {

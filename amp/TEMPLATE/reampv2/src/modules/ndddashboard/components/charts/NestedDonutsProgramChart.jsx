@@ -47,15 +47,15 @@ class NestedDonutsProgramChart extends Component {
       data.forEach(i => {
         const isSubProgramElement = (calculateLvl2 && this.isSubProgram(i, selectedDirectProgram));
         const directProgram = isSubProgramElement ? i[DIRECT_PROGRAM][PROGRAMLVL2] : i[DIRECT_PROGRAM][PROGRAMLVL1];
-        if (ret.filter(d => d[CODE] === directProgram[CODE]).length === 0) {
+        if (directProgram && ret.filter(d => d[CODE] === directProgram[CODE]).length === 0) {
           const item = {
             [CODE]: directProgram[CODE],
             filterColumnName: directProgram.filterColumnName,
             objectId: directProgram.objectId,
             name: directProgram.name,
             [AMOUNT]: data.filter(d2 => ((calculateLvl2 && this.isSubProgram(i, selectedDirectProgram))
-              ? d2[DIRECT_PROGRAM][PROGRAMLVL2][CODE] === directProgram[CODE]
-              : d2[DIRECT_PROGRAM][PROGRAMLVL1][CODE] === directProgram[CODE]))
+              ? d2[DIRECT_PROGRAM][PROGRAMLVL2] && d2[DIRECT_PROGRAM][PROGRAMLVL2][CODE] === directProgram[CODE]
+              : d2[DIRECT_PROGRAM][PROGRAMLVL1] && d2[DIRECT_PROGRAM][PROGRAMLVL1][CODE] === directProgram[CODE]))
               .reduce((accumulator, currentValue) => (
                 accumulator + currentValue[DIRECT_PROGRAM][AMOUNT]
               ), 0),
@@ -151,8 +151,10 @@ class NestedDonutsProgramChart extends Component {
           // Notice we use now normalizedPercentage instead of percentageInTotal to 1) match the outer rings and
           // 2) show categories that are too small.
           const parentPercentage = outerData.find(k => k[CODE] === j.directProgramCode).normalizedPercentage;
+          // Dont merge inner categories from different outer categories.
           ret.push({
             [CODE]: j[CODE],
+            innerCode: j[CODE] + j.directProgramCode,
             name: j.name,
             percentage: (j.percentageInSubGroup / 100) * parentPercentage,
             amount: j.originalAmount
@@ -189,8 +191,8 @@ class NestedDonutsProgramChart extends Component {
       // Disable tooltip when outer ring is selected
       this.setState({
         showLegend: true,
-        legendTop: data.event.pageY - 180,
-        legendLeft: data.event.pageX - 360,
+        legendTop: data.event.layerY,
+        legendLeft: data.event.layerX + 15, /* extra pixels to avoid CSS jitter on Chrome. */
         tooltipData: data
       });
     }
@@ -223,24 +225,24 @@ class NestedDonutsProgramChart extends Component {
           value={program.amount}
           minWidth={400}
           globalSettings={globalSettings}
-          />
+        />
       );
     }
     return null;
   }
 
   render() {
-    const { selectedDirectProgram, translations } = this.props;
+    const { selectedDirectProgram, translations, selectedPrograms } = this.props;
     const { showLegend, legendTop, legendLeft } = this.state;
     const outerData = this.extractOuterData(false);
     const outerDataLvl2 = selectedDirectProgram ? this.extractOuterData(true) : this.extractOuterData(false);
     const innerData = this.extractInnerData(outerData);
     const innerDataForChart = this.innerDataToChartValues(innerData, outerData);
-    const innerColors = this.calculateOpacity(innerDataForChart.map(i => getCustomColor(i, INDIRECT_PROGRAMS)),
+    const innerColors = this.calculateOpacity(innerDataForChart.map(i => getCustomColor(i, selectedPrograms[1])),
       innerDataForChart);
     const outerColors = this.calculateOpacity(outerDataLvl2
-      .map(o => getCustomColor(o, o.neverFade ? `${PROGRAMLVL1}_${selectedDirectProgram.code}`
-        : PROGRAMLVL1)),
+      .map(o => getCustomColor(o, o.neverFade ? `${selectedPrograms[0]}_${selectedDirectProgram.code}`
+        : selectedPrograms[0])),
     outerDataLvl2);
     const transition = {
       duration: 2000,
@@ -257,7 +259,6 @@ class NestedDonutsProgramChart extends Component {
         }
       }
     ] : [];
-    // Note: Remove prop 'key' if you want to disable the fade effect after clicking the outer ring.
     return (
       <CSSTransitionGroup
         /* key={selectedDirectProgram} */
@@ -273,7 +274,8 @@ class NestedDonutsProgramChart extends Component {
           data={
             [{
               values: innerDataForChart.map(i => i.percentage),
-              labels: innerDataForChart.map(i => i[CODE]),
+              labels: innerDataForChart.map(i => i.innerCode),
+              text: innerDataForChart.map(i => i[CODE]),
               neverFade: innerDataForChart.map(i => i.neverFade),
               extraData: innerDataForChart,
               domain: {
@@ -287,7 +289,7 @@ class NestedDonutsProgramChart extends Component {
               hole: 0.5,
               type: 'pie',
               sort: false,
-              textinfo: 'label',
+              textinfo: 'text',
               marker: {
                 colors: innerColors,
                 line: {
@@ -366,7 +368,8 @@ NestedDonutsProgramChart.propTypes = {
   selectedDirectProgram: PropTypes.object,
   translations: PropTypes.object.isRequired,
   settings: PropTypes.object.isRequired,
-  globalSettings: PropTypes.object.isRequired
+  globalSettings: PropTypes.object.isRequired,
+  selectedPrograms: PropTypes.array.isRequired
 };
 
 NestedDonutsProgramChart.defaultProps = {

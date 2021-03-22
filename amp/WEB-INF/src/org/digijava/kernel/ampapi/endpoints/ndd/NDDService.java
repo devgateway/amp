@@ -24,6 +24,10 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 
+import static org.digijava.module.aim.helper.GlobalSettingsConstants.MAPPING_INDIRECT_DIRECT_LEVEL;
+import static org.digijava.module.aim.helper.GlobalSettingsConstants.MAPPING_INDIRECT_INDIRECT_LEVEL;
+import static org.digijava.module.aim.helper.GlobalSettingsConstants.MAPPING_PROGRAM_DESTINATION_LEVEL;
+import static org.digijava.module.aim.helper.GlobalSettingsConstants.MAPPING_PROGRAM_SOURCE_LEVEL;
 import static org.digijava.module.aim.util.ProgramUtil.INDIRECT_PRIMARY_PROGRAM;
 import static org.digijava.module.aim.helper.GlobalSettingsConstants.PRIMARY_PROGRAM;
 import static org.digijava.module.aim.helper.GlobalSettingsConstants.MAPPING_DESTINATION_PROGRAM;
@@ -39,17 +43,18 @@ public class NDDService {
      * Level at which we have explicit indirect program mappings defined.
      */
     public static final int INDIRECT_PROGRAM_MAPPING_LEVEL = 3;
-    public static final int PROGRAM_MAPPING_LEVEL = 3;
 
-    static class SingleProgramData implements Serializable {
+    public static class SingleProgramData implements Serializable {
         private Long id;
         private String value;
         private boolean isIndirect;
+        private int levels;
 
-        SingleProgramData(Long id, String value, boolean isIndirect) {
+        SingleProgramData(Long id, String value, boolean isIndirect, int levels) {
             this.id = id;
             this.value = value;
             this.isIndirect = isIndirect;
+            this.levels = levels;
         }
 
         public Long getId() {
@@ -63,47 +68,63 @@ public class NDDService {
         public boolean isIndirect() {
             return isIndirect;
         }
+
+        public int getLevels() {
+            return levels;
+        }
+    }
+
+    public static int getMappingLevel(String gs) {
+        return Integer.parseInt(FeaturesUtil.getGlobalSetting(gs).getGlobalSettingsValue());
     }
 
     public IndirectProgramMappingConfiguration getIndirectProgramMappingConfiguration() {
         AmpTheme src = getSrcIndirectProgramRoot();
         AmpTheme dst = getDstIndirectProgramRoot();
-        PossibleValue srcPV = src != null ? convert(src, INDIRECT_PROGRAM_MAPPING_LEVEL) : null;
-        PossibleValue dstPV = dst != null ? convert(dst, INDIRECT_PROGRAM_MAPPING_LEVEL) : null;
+        int srcLevel = getMappingLevel(MAPPING_INDIRECT_DIRECT_LEVEL);
+        int dstLevel = getMappingLevel(MAPPING_INDIRECT_INDIRECT_LEVEL);
+        PossibleValue srcPV = src != null ? convert(src, srcLevel) : null;
+        PossibleValue dstPV = dst != null ? convert(dst, dstLevel) : null;
 
         List<PossibleValue> allPrograms = new ArrayList<>();
         getAvailablePrograms(false).forEach(ampTheme -> {
-            PossibleValue pv = convert(ampTheme, INDIRECT_PROGRAM_MAPPING_LEVEL);
+            PossibleValue pv = convert(ampTheme, srcLevel);
             allPrograms.add(pv);
         });
         getAvailablePrograms(true).forEach(ampTheme -> {
-            PossibleValue pv = convert(ampTheme, INDIRECT_PROGRAM_MAPPING_LEVEL);
+            PossibleValue pv = convert(ampTheme, dstLevel);
             allPrograms.add(pv);
         });
 
         List<AmpIndirectTheme> mapping = loadIndirectMapping();
 
-        SingleProgramData srcSPD = srcPV != null ? new SingleProgramData(srcPV.getId(), srcPV.getValue(), false) : null;
-        SingleProgramData dstSPD = dstPV != null ? new SingleProgramData(dstPV.getId(), dstPV.getValue(), true) : null;
+        SingleProgramData srcSPD = srcPV != null ? new SingleProgramData(srcPV.getId(), srcPV.getValue(), false,
+                srcLevel) : null;
+        SingleProgramData dstSPD = dstPV != null ? new SingleProgramData(dstPV.getId(), dstPV.getValue(), true,
+                dstLevel) : null;
         return new IndirectProgramMappingConfiguration(mapping, srcSPD, dstSPD, allPrograms);
     }
 
     public ProgramMappingConfiguration getProgramMappingConfiguration() {
         AmpTheme src = getSrcProgramRoot();
         AmpTheme dst = getDstProgramRoot();
-        PossibleValue srcPV = src != null ? convert(src, PROGRAM_MAPPING_LEVEL) : null;
-        PossibleValue dstPV = dst != null ? convert(dst, PROGRAM_MAPPING_LEVEL) : null;
+        int levelSrc = getMappingLevel(MAPPING_PROGRAM_SOURCE_LEVEL);
+        int levelDst = getMappingLevel(MAPPING_PROGRAM_DESTINATION_LEVEL);
+        PossibleValue srcPV = src != null ? convert(src, levelSrc) : null;
+        PossibleValue dstPV = dst != null ? convert(dst, levelDst) : null;
 
         List<PossibleValue> allPrograms = new ArrayList<>();
         getAvailablePrograms(false).forEach(ampTheme -> {
-            PossibleValue pv = convert(ampTheme, PROGRAM_MAPPING_LEVEL);
+            PossibleValue pv = convert(ampTheme, levelSrc);
             allPrograms.add(pv);
         });
 
         List<AmpThemeMapping> mapping = loadMapping();
 
-        SingleProgramData srcSPD = srcPV != null ? new SingleProgramData(srcPV.getId(), srcPV.getValue(), false) : null;
-        SingleProgramData dstSPD = dstPV != null ? new SingleProgramData(dstPV.getId(), dstPV.getValue(), false) : null;
+        SingleProgramData srcSPD = srcPV != null ? new SingleProgramData(srcPV.getId(), srcPV.getValue(), false,
+                levelSrc) : null;
+        SingleProgramData dstSPD = dstPV != null ? new SingleProgramData(dstPV.getId(), dstPV.getValue(), false,
+                levelDst) : null;
         return new ProgramMappingConfiguration(mapping, srcSPD, dstSPD, allPrograms);
     }
 
@@ -143,10 +164,12 @@ public class NDDService {
         List<SingleProgramData> availablePrograms = new ArrayList<>();
         List<AmpTheme> src = getAvailablePrograms(false);
         List<AmpTheme> dst = getAvailablePrograms(true);
-        availablePrograms.addAll(src.stream().map(p -> new SingleProgramData(p.getAmpThemeId(), p.getName(), false))
+        availablePrograms.addAll(src.stream().map(p -> new SingleProgramData(p.getAmpThemeId(), p.getName(), false,
+                ProgramUtil.getMaxDepth(p, null)))
                 .collect(Collectors.toList()));
         if (includeIndirectPrograms) {
-            availablePrograms.addAll(dst.stream().map(p -> new SingleProgramData(p.getAmpThemeId(), p.getName(), true))
+            availablePrograms.addAll(dst.stream().map(p -> new SingleProgramData(p.getAmpThemeId(), p.getName(), true,
+                    ProgramUtil.getMaxDepth(p, null)))
                     .collect(Collectors.toList()));
         }
         return availablePrograms;
@@ -201,6 +224,8 @@ public class NDDService {
             AmpGlobalSettings srcGS = FeaturesUtil.getGlobalSetting(PRIMARY_PROGRAM);
             AmpActivityProgramSettings indirectProgramSetting =
                     ProgramUtil.getAmpActivityProgramSettings(INDIRECT_PRIMARY_PROGRAM);
+            AmpGlobalSettings levelSrc = FeaturesUtil.getGlobalSetting(MAPPING_INDIRECT_DIRECT_LEVEL);
+            AmpGlobalSettings levelDst = FeaturesUtil.getGlobalSetting(MAPPING_INDIRECT_INDIRECT_LEVEL);
             if (mapping.getNewTheme() != null && mapping.getOldTheme() != null) {
                 if (!mapping.getNewTheme().getAmpThemeId().equals(mapping.getOldTheme().getAmpThemeId())) {
                     srcGS.setGlobalSettingsValue(mapping.getOldTheme().getAmpThemeId().toString());
@@ -212,6 +237,11 @@ public class NDDService {
                     }
                     indirectProgramSetting.setDefaultHierarchy(mapping.getNewTheme());
                     PersistenceManager.getSession().saveOrUpdate(indirectProgramSetting);
+
+                    levelSrc.setGlobalSettingsValue(mapping.getLevelSrc().toString());
+                    FeaturesUtil.updateGlobalSetting(levelSrc);
+                    levelDst.setGlobalSettingsValue(mapping.getLevelDst().toString());
+                    FeaturesUtil.updateGlobalSetting(levelDst);
                 }
             } else {
                 srcGS.setGlobalSettingsValue(null);
@@ -219,11 +249,14 @@ public class NDDService {
                 if (indirectProgramSetting != null) {
                     PersistenceManager.getSession().delete(indirectProgramSetting);
                 }
+                levelSrc.setGlobalSettingsValue("0");
+                FeaturesUtil.updateGlobalSetting(levelSrc);
+                levelDst.setGlobalSettingsValue("0");
+                FeaturesUtil.updateGlobalSetting(levelDst);
             }
         } catch (Exception e) {
             throw new RuntimeException("Cannot save mapping", e);
         }
-
     }
 
     /**
@@ -234,18 +267,30 @@ public class NDDService {
     public void updateMainProgramsMapping(final AmpThemeMapping mapping) {
         AmpGlobalSettings srcGS = FeaturesUtil.getGlobalSetting(MAPPING_SOURCE_PROGRAM);
         AmpGlobalSettings dstGS = FeaturesUtil.getGlobalSetting(MAPPING_DESTINATION_PROGRAM);
+        AmpGlobalSettings levelSrc = FeaturesUtil.getGlobalSetting(MAPPING_PROGRAM_SOURCE_LEVEL);
+        AmpGlobalSettings levelDst = FeaturesUtil.getGlobalSetting(MAPPING_PROGRAM_DESTINATION_LEVEL);
         if (mapping.getSrcTheme() != null && mapping.getDstTheme() != null) {
             if (!mapping.getSrcTheme().getAmpThemeId().equals(mapping.getDstTheme().getAmpThemeId())) {
                 srcGS.setGlobalSettingsValue(mapping.getSrcTheme().getAmpThemeId().toString());
                 FeaturesUtil.updateGlobalSetting(srcGS);
                 dstGS.setGlobalSettingsValue(mapping.getDstTheme().getAmpThemeId().toString());
                 FeaturesUtil.updateGlobalSetting(dstGS);
+
+                levelSrc.setGlobalSettingsValue(mapping.getLevelSrc().toString());
+                FeaturesUtil.updateGlobalSetting(levelSrc);
+                levelDst.setGlobalSettingsValue(mapping.getLevelDst().toString());
+                FeaturesUtil.updateGlobalSetting(levelDst);
             }
         } else {
             srcGS.setGlobalSettingsValue(null);
             FeaturesUtil.updateGlobalSetting(srcGS);
             dstGS.setGlobalSettingsValue(null);
             FeaturesUtil.updateGlobalSetting(dstGS);
+
+            levelSrc.setGlobalSettingsValue("0");
+            FeaturesUtil.updateGlobalSetting(levelSrc);
+            levelDst.setGlobalSettingsValue("0");
+            FeaturesUtil.updateGlobalSetting(levelDst);
         }
     }
 
@@ -253,7 +298,7 @@ public class NDDService {
      * Validate the mapping.
      * <p>Mapping is considered valid when:</p>
      * <ul><li>all source and destination programs are specified</li>
-     * <li>source and destination programs are for level {@link #INDIRECT_PROGRAM_MAPPING_LEVEL}</li>
+     * <li>source and destination programs are for level 3 or less</li>
      * <li>source program root is the one returned by {@link #getSrcIndirectProgramRoot()}</li>
      * <li>destination program root is the one returned by {@link #getDstIndirectProgramRoot()}</li>
      * <li>the same source and destination program appear only once in the mapping</li></ul>
@@ -267,8 +312,8 @@ public class NDDService {
         boolean hasInvalidMappings = mapping.stream().anyMatch(
                 m -> m.getNewTheme() == null
                         || m.getOldTheme() == null
-                        || !m.getOldTheme().getIndlevel().equals(INDIRECT_PROGRAM_MAPPING_LEVEL)
-                        || !m.getNewTheme().getIndlevel().equals(INDIRECT_PROGRAM_MAPPING_LEVEL)
+                        || !m.getOldTheme().getIndlevel().equals(m.getLevelSrc())
+                        || !m.getNewTheme().getIndlevel().equals(m.getLevelDst())
                         || !getRoot(m.getOldTheme()).equals(srcProgramRoot)
                         || !getRoot(m.getNewTheme()).equals(dstProgramRoot));
 
@@ -302,8 +347,8 @@ public class NDDService {
         boolean hasInvalidMappings = mapping.stream().anyMatch(
                 m -> m.getSrcTheme() == null
                         || m.getDstTheme() == null
-                        || !m.getSrcTheme().getIndlevel().equals(PROGRAM_MAPPING_LEVEL)
-                        || !m.getDstTheme().getIndlevel().equals(PROGRAM_MAPPING_LEVEL)
+                        || !m.getSrcTheme().getIndlevel().equals(m.getLevelSrc())
+                        || !m.getDstTheme().getIndlevel().equals(m.getLevelDst())
                         || !getRoot(m.getSrcTheme()).equals(srcProgramRoot)
                         || !getRoot(m.getDstTheme()).equals(dstProgramRoot));
 

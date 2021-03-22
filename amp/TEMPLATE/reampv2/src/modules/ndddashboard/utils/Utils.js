@@ -4,7 +4,9 @@ import React from 'react';
 import Gradient from 'javascript-color-gradient';
 import { format } from 'd3-format';
 
-import { CHART_COLOR_MAP, AVAILABLE_COLORS } from './constants';
+import {
+  CHART_COLOR_MAP, AVAILABLE_COLORS, SELECTED_COLORS, MAX_GRADIENTS
+} from './constants';
 import {
   ALL_PROGRAMS, DST_PROGRAM, PROGRAM_MAPPING, SRC_PROGRAM
 } from '../../admin/ndd/constants/Constants';
@@ -15,6 +17,18 @@ export function hashCode(str) { // java String#hashCode
     hash = str.charCodeAt(i) + ((hash << 5) - hash);
   }
   return hash;
+}
+
+export function removeFilter(filters, selectedDirectProgram) {
+  if (filters && filters.filters && filters.filters[selectedDirectProgram.filterColumnName]) {
+    filters.filters[selectedDirectProgram.filterColumnName]
+      .splice(filters.filters[selectedDirectProgram.filterColumnName]
+        .findIndex(i => i === selectedDirectProgram.objectId), 1);
+    if (filters.filters[selectedDirectProgram.filterColumnName].length === 0) {
+      filters.filters[selectedDirectProgram.filterColumnName] = null;
+    }
+  }
+  return filters;
 }
 
 export function intToRGB(i) {
@@ -41,9 +55,14 @@ export function getCustomColor(item, program) {
   }
   color = colorMap.get(item.code.trim());
   if (!color) {
-    let CHART_COLORS = AVAILABLE_COLORS.get(program);
+    let CHART_COLORS = SELECTED_COLORS.get(program);
     if (!CHART_COLORS) {
-      CHART_COLORS = ['#00ff00', '#aa00bb']; // TODO: define colors for lvl2.
+      if (AVAILABLE_COLORS.length > 0) {
+        CHART_COLORS = AVAILABLE_COLORS.shift();
+        SELECTED_COLORS.set(program, CHART_COLORS);
+      } else {
+        CHART_COLORS = ['#00ff00', '#aa00bb']; // TODO: This shouldn't be needed but leaving just in case
+      }
     }
     color = CHART_COLORS.shift();
     colorMap.set(item.code, color);
@@ -51,8 +70,8 @@ export function getCustomColor(item, program) {
   return color;
 }
 
-export function getGradient(colorFrom, colorTwo) {
-  const colorGradient = new Gradient();
+export function getGradient(colorFrom, colorTwo, maxGradient = MAX_GRADIENTS) {
+  const colorGradient = new Gradient('', maxGradient);
 
   colorGradient.setGradient(colorFrom, colorTwo);
   return colorGradient.getArray();
@@ -61,20 +80,11 @@ export function getGradient(colorFrom, colorTwo) {
 export function extractPrograms(mapping, noIndirectMapping) {
   const ret = { direct: undefined, indirect1: undefined, indirect2: undefined };
   if (mapping && mapping[PROGRAM_MAPPING] && mapping[PROGRAM_MAPPING].length > 0) {
-    ret.direct = mapping[ALL_PROGRAMS].find(i => i.children
-      .find(j => j.children && j.children
-        .find(k => k.children && k.children
-          .find(l => l.id === mapping[PROGRAM_MAPPING][0][SRC_PROGRAM]))));
-    ret.indirect1 = mapping[ALL_PROGRAMS].find(i => i.children && i.children
-      .find(j => j.children && j.children
-        .find(k => k.children && k.children
-          .find(l => l.id === mapping[PROGRAM_MAPPING][0][DST_PROGRAM]))));
+    ret.direct = mapping[ALL_PROGRAMS].find(i => i.id === mapping[SRC_PROGRAM].id);
+    ret.indirect1 = mapping[ALL_PROGRAMS].find(i => i.id === mapping[DST_PROGRAM].id);
   }
   if (noIndirectMapping && noIndirectMapping[PROGRAM_MAPPING] && noIndirectMapping[PROGRAM_MAPPING].length > 0) {
-    ret.indirect2 = noIndirectMapping[ALL_PROGRAMS].find(i => i.children
-      .find(j => j.children && j.children
-        .find(k => k.children && k.children
-          .find(l => l.id === noIndirectMapping[PROGRAM_MAPPING][0][DST_PROGRAM]))));
+    ret.indirect2 = noIndirectMapping[ALL_PROGRAMS].find(i => i.id === noIndirectMapping[DST_PROGRAM].id);
   }
   return ret;
 }
@@ -128,7 +138,7 @@ export function formatNumber(currency, translations, value, precision, decimalSe
   const formatString = `${decimalSeparator}.${precision}f`;
   const dividedValue = (numberDivider && numberDividerDescriptionKey) ? value / numberDivider : value;
   // eslint-disable-next-line max-len
-  const txtVal = <b>{format(formatString)(dividedValue).replaceAll(',', groupSeparator).replace('.', decimalSeparator)}</b>;
+  const txtVal = <b>{format(formatString)(dividedValue).replace(/[,]+/g, groupSeparator).replace(/[.]+/g, decimalSeparator)}</b>;
   return (
     <>
       {txtVal}
@@ -157,7 +167,7 @@ export function formatOnlyNumber(settings, value) {
     ? value / settings.numberDivider
     : value;
   return format(formatString)(dividedValue)
-    .replaceAll(',', settings.groupSeparator)
+    .replace(/[,]+/g, settings.groupSeparator)
     .replace('.', settings.decimalSeparator);
 }
 

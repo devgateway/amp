@@ -14,8 +14,20 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
+function getParameterByName(name, url = window.location.href) {
+  name = name.replace(/[\[\]]/g, '\\$&');
+  const regex = new RegExp(`[?&]${name}(=([^&#]*)|&|#|$)`);
+  const results = regex.exec(url);
+  if (!results) return null;
+  if (!results[2]) return '';
+  return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
-new boilerplate.layout({});
+if (!getParameterByName('embedded')) {
+  new boilerplate.layout({});
+}
+
 serviceWorker.unregister();

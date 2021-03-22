@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Row } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -12,17 +12,28 @@ import loadDashboardSettings from '../actions/loadDashboardSettings';
 import { getMappings } from '../actions/getMappings';
 import { DST_PROGRAM, SRC_PROGRAM } from '../../admin/ndd/constants/Constants';
 import { getSharedData } from '../actions/getSharedData';
+import PrintDummy from '../../sscdashboard/utils/PrintDummy';
+import { printChart } from '../../sscdashboard/utils/PrintUtils';
+import './print.css';
+import { removeFilter } from '../utils/Utils';
+import { SRC_DIRECT } from './charts/FundingByYearChart';
+
+const queryString = require('query-string');
 
 class NDDDashboardHome extends Component {
   constructor(props) {
     super(props);
+    // eslint-disable-next-line react/prop-types
+    const params = queryString.parse(props.location.search);
     this.state = {
       filters: undefined,
       dashboardId: undefined,
       fundingType: undefined,
       selectedPrograms: undefined,
       settings: undefined,
-      selectedDirectProgram: null
+      selectedDirectProgram: null,
+      embedded: !!params.embedded,
+      fundingByYearSource: SRC_DIRECT
     };
   }
 
@@ -37,6 +48,7 @@ class NDDDashboardHome extends Component {
 
   componentDidMount() {
     const { _loadDashboardSettings, _getMappings } = this.props;
+    const { embedded } = this.state;
     // eslint-disable-next-line react/destructuring-assignment,react/prop-types
     const { id } = this.props.match.params;
     // eslint-disable-next-line react/no-did-mount-set-state
@@ -74,6 +86,12 @@ class NDDDashboardHome extends Component {
         /* Notice we dont need to define this.state.filters here, we will get it from onApplyFilters. Apparently
         the filter widget takes date.start and date.end automatically from dashboard settings EP. */
         return data;
+      }).finally(() => {
+        if (embedded) {
+          const { _callReport } = this.props;
+          const { fundingType, settings, selectedPrograms } = this.state;
+          _callReport(fundingType, {}, selectedPrograms, settings);
+        }
       });
   }
 
@@ -84,7 +102,7 @@ class NDDDashboardHome extends Component {
     const { dashboardSettings } = this.props;
     if (event.points[0].data.name === DIRECT) {
       if (!selectedDirectProgram) {
-        this.setState({ selectedDirectProgram: outerData[event.points[0].i] });
+        this.setState({ selectedDirectProgram: outerData[event.points[0].i], fundingByYearSource: SRC_DIRECT });
         const { _callTopReport } = this.props;
         _callTopReport(fundingType || dashboardSettings.find(i => i.id === FUNDING_TYPE).value.defaultId,
           settings, filters, outerData[event.points[0].i]);
@@ -96,20 +114,25 @@ class NDDDashboardHome extends Component {
     }
   }
 
+  onChangeSource(value) {
+    this.setState({ fundingByYearSource: value.target.value });
+  }
+
   resetChartAfterUnClick = () => {
-    const { selectedDirectProgram, filters } = this.state;
+    const { selectedDirectProgram, filters, embedded } = this.state;
     if (selectedDirectProgram) {
-      // Remove the filter manually or it will keep affecting the chart.
-      filters.filters[selectedDirectProgram.filterColumnName]
-        .splice(filters.filters[selectedDirectProgram.filterColumnName]
-          .findIndex(i => i === selectedDirectProgram.objectId), 1);
-      if (filters.filters[selectedDirectProgram.filterColumnName].length === 0) {
-        filters.filters[selectedDirectProgram.filterColumnName] = null;
+      if (!embedded) {
+        // Remove the filter manually or it will keep affecting the chart.
+        const fixedFilters = removeFilter(filters, selectedDirectProgram);
+        this.setState(() => ({
+          selectedDirectProgram: null,
+          filters: fixedFilters
+        }));
+      } else {
+        this.setState(() => ({
+          selectedDirectProgram: null,
+        }));
       }
-      this.setState(() => ({
-        selectedDirectProgram: null,
-        filters
-      }));
     }
   }
 
@@ -155,17 +178,30 @@ class NDDDashboardHome extends Component {
     }
   }
 
+  downloadImage() {
+    const { translations } = this.context;
+    printChart(translations['amp.ndd.dashboard:page-title'], 'ndd-main-container',
+      [], 'png', false, 'print-simple-dummy-container', false);
+  }
+
   render() {
     const {
-      filters, dashboardId, fundingType, selectedPrograms, settings, selectedDirectProgram
+      filters,
+      dashboardId,
+      fundingType,
+      selectedPrograms,
+      settings,
+      selectedDirectProgram,
+      embedded,
+      fundingByYearSource
     } = this.state;
     const {
       ndd, nddLoadingPending, nddLoaded, dashboardSettings, mapping, noIndirectMapping, globalSettings
     } = this.props;
     return (
-      <Container fluid className="main-container">
-        <Row style={{ marginRight: '-30px', marginLeft: '-30px' }}>
-          {mapping && settings && globalSettings && selectedPrograms ? (
+      <Container fluid className="main-container" id="ndd-main-container">
+        <div className="row header" style={{ marginRight: '-30px', marginLeft: '-30px' }}>
+          {mapping && settings && globalSettings && selectedPrograms && !embedded ? (
             <HeaderContainer
               onApplySettings={this.onApplySettings}
               onApplyFilters={this.onApplyFilters}
@@ -176,7 +212,7 @@ class NDDDashboardHome extends Component {
               selectedPrograms={selectedPrograms}
               dashboardId={dashboardId} />
           ) : null}
-        </Row>
+        </div>
         <MainDashboardContainer
           handleOuterChartClick={this.handleOuterChartClick.bind(this)}
           selectedDirectProgram={selectedDirectProgram}
@@ -192,7 +228,13 @@ class NDDDashboardHome extends Component {
           mapping={mapping}
           settings={settings}
           globalSettings={globalSettings}
-          noIndirectMapping={noIndirectMapping} />
+          noIndirectMapping={noIndirectMapping}
+          downloadImage={this.downloadImage.bind(this)}
+          embedded={embedded}
+          onChangeSource={this.onChangeSource.bind(this)}
+          fundingByYearSource={fundingByYearSource}
+        />
+        <PrintDummy />
       </Container>
     );
   }

@@ -66,12 +66,32 @@ export function findFullProgramTree(ndd, type, src, dst) {
 }
 
 export function validate(data, levelSrc, levelDst) {
+  // TODO add levellsrc and leveldst should be the same number
   let ret = 0;
   if (data && data.length > 0) {
-    data.forEach(pair => {
+    data.every(pair => {
       if (!pair[SRC_PROGRAM][`lvl${levelSrc}`] || !pair[DST_PROGRAM][`lvl${levelDst}`]) {
         ret = 1; // missing value error.
+        return false;
+      } else {
+        const arrayFound = data.filter(toFind => (
+          (toFind[SRC_PROGRAM].lvl1.id === pair[SRC_PROGRAM].lvl1.id
+            && toFind[DST_PROGRAM].lvl1.id === pair[DST_PROGRAM].lvl1.id)
+          && (
+            levelSrc === 1 ? true
+              : (toFind[SRC_PROGRAM].lvl2.id === pair[SRC_PROGRAM].lvl2.id
+              && toFind[DST_PROGRAM].lvl2.id === pair[DST_PROGRAM].lvl2.id))
+          && (
+            levelSrc < 3 ? true
+              : (toFind[SRC_PROGRAM].lvl3.id === pair[SRC_PROGRAM].lvl3.id
+              && toFind[DST_PROGRAM].lvl3.id === pair[DST_PROGRAM].lvl3.id))
+        ));
+        if (arrayFound.length > 1) {
+          ret = 7;
+          return false;
+        }
       }
+      return true;
     });
   }
   return ret;

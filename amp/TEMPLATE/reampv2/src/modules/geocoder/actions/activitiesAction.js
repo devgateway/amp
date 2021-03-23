@@ -2,7 +2,7 @@ import {fetchApiData} from "../../../utils/apiOperations";
 import {
     API_REPORTS_URL,
     FIELD_ACTIVITY_DATE, FIELD_LOCATION, FIELD_PROJECT_DESCRIPTION,
-    FIELD_PROJECT_NUMBER,
+    FIELD_AMP_ID,
     FIELD_PROJECT_TITLE
 } from "../utils/geocoder-constants";
 
@@ -23,7 +23,7 @@ export function fetchActivitiesSuccess(activities) {
         return {
             id: activity.contents['[' + FIELD_PROJECT_TITLE + ']'].entityId,
             col1: activity.contents['[' + FIELD_ACTIVITY_DATE + ']'] ? activity.contents['[' + FIELD_ACTIVITY_DATE + ']'].displayedValue : "",
-            col2: activity.contents['[' + FIELD_PROJECT_NUMBER + ']'] ? activity.contents['[' + FIELD_PROJECT_NUMBER + ']'].displayedValue : "",
+            col2: activity.contents['[' + FIELD_AMP_ID + ']'] ? activity.contents['[' + FIELD_AMP_ID + ']'].displayedValue : "",
             col3: activity.contents['[' + FIELD_PROJECT_TITLE + ']'].displayedValue,
             col4: activity.contents['[' + FIELD_LOCATION + ']'].displayedValue ? activity.contents['[' + FIELD_LOCATION + ']'].displayedValue : "---"
         };
@@ -55,12 +55,18 @@ export const loadActivities = () => {
         add_columns : [
             FIELD_PROJECT_TITLE,
             FIELD_ACTIVITY_DATE,
-            FIELD_PROJECT_NUMBER,
+            FIELD_AMP_ID,
             FIELD_LOCATION,
             FIELD_PROJECT_DESCRIPTION],
         filters : {
             'administrative-level-0': [96, -999999999]
         },
+        sorting : [
+            {
+                columns: [FIELD_AMP_ID],
+                asc: true
+            }
+        ],
         recordsPerPage : -1,
         'include-location-children': false
     }

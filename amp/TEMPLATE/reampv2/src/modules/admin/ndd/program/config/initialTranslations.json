@@ -32,6 +32,7 @@
   "amp.admin.ndd.program:validation_error_4": "Error: Destination Program not selected.",
   "amp.admin.ndd.program:validation_error_5": "Error: Source Program and Destination Program must be different.",
   "amp.admin.ndd.program:validation_error_6": "Error: Max Levels is not valid.",
+  "amp.admin.ndd.program:validation_error_7": "Error: Duplicate values found in mapping.",
   "amp.admin.ndd.program:warning_on_change_destination_program": "Warning: The new Destination Program will be removes from all activities.",
   "amp.admin.ndd.program:confirm-change-destination-program": "Are you sure you want to : The new Destination Program will be removes from all activities.",
   "amp.admin.ndd.program:notification-saved-ok": "All mappings saved correctly.",

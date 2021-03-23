@@ -1,8 +1,6 @@
 package org.digijava.kernel.entity.geocoding;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -10,6 +8,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModelProperty;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Represents the geocoding process.
@@ -27,6 +29,7 @@ public class GeoCodingProcess {
     @JsonProperty("amp_team_member_id")
     private AmpTeamMember teamMember;
 
+    @JsonIgnore
     private List<GeoCodedActivity> activities = new ArrayList<>();
 
     public GeoCodingProcess() {
@@ -54,6 +57,11 @@ public class GeoCodingProcess {
 
     public List<GeoCodedActivity> getActivities() {
         return activities;
+    }
+
+    @JsonGetter(value = "activities")
+    public List<GeoCodedActivity> getNonNullActivities() {
+        return activities.stream().filter(act -> act != null).collect(Collectors.toList());
     }
 
     public void setActivities(List<GeoCodedActivity> activities) {

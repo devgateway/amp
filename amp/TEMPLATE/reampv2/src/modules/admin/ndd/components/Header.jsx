@@ -43,7 +43,7 @@ class Header extends Component {
                 type="button"
                 onClick={onRevertAll}
                 className="btn btn-danger margin_2"
-                disabled={busy}>
+                disabled={busy || !unsavedChanges}>
                 {translations[`${trnPrefix}button-revert-all-edits`]}
               </button>
               {isIndirect ? (

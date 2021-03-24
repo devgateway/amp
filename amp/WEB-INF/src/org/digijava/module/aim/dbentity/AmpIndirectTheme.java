@@ -26,20 +26,15 @@ public class AmpIndirectTheme {
     @JsonProperty("dst-program")
     private AmpTheme newTheme;
 
-    @JsonProperty("levelSrc")
-    private Integer levelSrc;
-
-    @JsonProperty("levelDst")
-    private Integer levelDst;
-
+    @JsonProperty("level")
+    private Integer level;
     public AmpIndirectTheme() {
     }
 
-    public AmpIndirectTheme(AmpTheme oldTheme, AmpTheme newTheme, Integer levelSrc, Integer levelDst) {
+    public AmpIndirectTheme(AmpTheme oldTheme, AmpTheme newTheme, Integer level) {
         this.oldTheme = oldTheme;
         this.newTheme = newTheme;
-        this.levelSrc = levelSrc;
-        this.levelDst = levelDst;
+        this.level = level;
     }
 
     public Long getId() {
@@ -66,19 +61,11 @@ public class AmpIndirectTheme {
         this.newTheme = newTheme;
     }
 
-    public Integer getLevelSrc() {
-        return levelSrc;
+    public Integer getLevel() {
+        return level;
     }
 
-    public void setLevelSrc(Integer levelSrc) {
-        this.levelSrc = levelSrc;
-    }
-
-    public Integer getLevelDst() {
-        return levelDst;
-    }
-
-    public void setLevelDst(Integer levelDst) {
-        this.levelDst = levelDst;
+    public void setLevel(Integer level) {
+        this.level = level;
     }
 }

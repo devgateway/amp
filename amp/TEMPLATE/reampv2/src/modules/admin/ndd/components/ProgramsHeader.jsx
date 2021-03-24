@@ -15,29 +15,22 @@ class ProgramsHeader extends Component {
       translations, programs, trnPrefix, isIndirect, isSuperAdmin
     } = this.context;
     const {
-      src, dst, onChange, busy, onChangeLevel, levelDst, levelSrc
+      src, dst, onChange, busy, onChangeLevel, level
     } = this.props;
     if (programs) {
       // Load levels defined in GS and max depth for each program.
-      let depthLeft;
       let depthRight;
-      if (src) {
-        if (programs.find(i => i.id === src.id)) {
-          depthLeft = this.levelsToArray(programs.find(i => i.id === src.id).levels);
-        }
-      }
       if (dst) {
         if (programs.find(i => i.id === dst.id)) {
           depthRight = this.levelsToArray(programs.find(i => i.id === dst.id).levels);
         }
       }
-      const levelSelectedRight = levelDst > 0 ? [{ id: levelDst, value: `${levelDst}` }] : null;
-      const levelSelectedLeft = levelSrc > 0 ? [{ id: levelSrc, value: `${levelSrc}` }] : null;
+      const levelSelected = level > 0 ? [{ id: level, value: `${level}` }] : null;
       return (
         <table className="programs-table">
           <tbody>
             <tr>
-              <td style={{ width: '35%' }}>
+              <td style={{ width: '40%' }}>
                 <HelpTooltip labelKey={`${trnPrefix}tooltip-direct-programs`} />
                 <Select
                   disabled={busy}
@@ -48,17 +41,7 @@ class ProgramsHeader extends Component {
                   onChange={onChange.bind(null, TYPE_SRC)}
                   level={0} />
               </td>
-              <td style={{ width: '15%' }}>
-                <HelpTooltip labelKey={`${trnPrefix}tooltip-max-depth`} />
-                <Select
-                  isIndirect={isIndirect}
-                  disabled={busy || !isSuperAdmin}
-                  label={translations[`${trnPrefix}max-level`]}
-                  options={depthLeft}
-                  onChange={onChangeLevel.bind(null, 'levelSrc')}
-                  selected={levelSelectedLeft} />
-              </td>
-              <td style={{ width: '35%' }}>
+              <td style={{ width: '40%' }}>
                 <HelpTooltip labelKey={`${trnPrefix}tooltip-indirect-programs`} />
                 <Select
                   disabled={busy}
@@ -69,15 +52,15 @@ class ProgramsHeader extends Component {
                   onChange={onChange.bind(null, TYPE_DST)}
                   level={0} />
               </td>
-              <td style={{ width: '15%' }}>
+              <td style={{ width: '20%' }}>
                 <HelpTooltip labelKey={`${trnPrefix}tooltip-max-depth`} />
                 <Select
                   isIndirect={isIndirect}
                   disabled={busy || !isSuperAdmin}
                   label={translations[`${trnPrefix}max-level`]}
                   options={depthRight}
-                  onChange={onChangeLevel.bind(null, 'levelDst')}
-                  selected={levelSelectedRight} />
+                  onChange={onChangeLevel.bind(null, 'level')}
+                  selected={levelSelected} />
               </td>
             </tr>
           </tbody>
@@ -104,15 +87,13 @@ ProgramsHeader.propTypes = {
   dst: PropTypes.object,
   busy: PropTypes.bool.isRequired,
   onChangeLevel: PropTypes.func.isRequired,
-  levelDst: PropTypes.number,
-  levelSrc: PropTypes.number
+  level: PropTypes.number
 };
 
 ProgramsHeader.defaultProps = {
   src: undefined,
   dst: undefined,
-  levelDst: -1,
-  levelSrc: -1
+  level: -1
 };
 
 const mapStateToProps = state => ({

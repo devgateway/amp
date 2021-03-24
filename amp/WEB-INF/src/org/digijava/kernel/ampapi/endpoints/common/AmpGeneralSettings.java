@@ -94,17 +94,11 @@ public class AmpGeneralSettings {
     @JsonProperty("workspace-prefix")
     private String workspacePrefix;
 
-    @JsonProperty("ndd-mapping-indirect-direct-level")
-    private Integer nddMappingIndirectDirectLevel;
+    @JsonProperty("ndd-mapping-indirect-level")
+    private Integer nddMappingIndirectLevel;
 
-    @JsonProperty("ndd-mapping-indirect-indirect-level")
-    private Integer nddMappingIndirectIndirectLevel;
-
-    @JsonProperty("ndd-mapping-program-source-level")
-    private Integer nddMappingProgramSourceLevel;
-
-    @JsonProperty("ndd-mapping-program-destination-level")
-    private Integer nddMappingProgramDestinationLevel;
+    @JsonProperty("ndd-mapping-program-level")
+    private Integer nddMappingProgramLevel;
 
     @JsonProperty(SettingsConstants.CALENDAR_TYPE_ID)
     private Long calendarId;
@@ -456,35 +450,19 @@ public class AmpGeneralSettings {
         this.hideContactsPublicView = hideContactsPublicView;
     }
 
-    public Integer getNddMappingIndirectDirectLevel() {
-        return nddMappingIndirectDirectLevel;
+    public Integer getNddMappingIndirectLevel() {
+        return nddMappingIndirectLevel;
     }
 
-    public void setNddMappingIndirectDirectLevel(Integer nddMappingIndirectDirectLevel) {
-        this.nddMappingIndirectDirectLevel = nddMappingIndirectDirectLevel;
+    public void setNddMappingIndirectLevel(Integer nddMappingIndirectLevel) {
+        this.nddMappingIndirectLevel = nddMappingIndirectLevel;
     }
 
-    public Integer getNddMappingIndirectIndirectLevel() {
-        return nddMappingIndirectIndirectLevel;
+    public Integer getNddMappingProgramLevel() {
+        return nddMappingProgramLevel;
     }
 
-    public void setNddMappingIndirectIndirectLevel(Integer nddMappingIndirectIndirectLevel) {
-        this.nddMappingIndirectIndirectLevel = nddMappingIndirectIndirectLevel;
-    }
-
-    public Integer getNddMappingProgramSourceLevel() {
-        return nddMappingProgramSourceLevel;
-    }
-
-    public void setNddMappingProgramSourceLevel(Integer nddMappingProgramSourceLevel) {
-        this.nddMappingProgramSourceLevel = nddMappingProgramSourceLevel;
-    }
-
-    public Integer getNddMappingProgramDestinationLevel() {
-        return nddMappingProgramDestinationLevel;
-    }
-
-    public void setNddMappingProgramDestinationLevel(Integer nddMappingProgramDestinationLevel) {
-        this.nddMappingProgramDestinationLevel = nddMappingProgramDestinationLevel;
+    public void setNddMappingProgramLevel(Integer nddMappingProgramLevel) {
+        this.nddMappingProgramLevel = nddMappingProgramLevel;
     }
 }

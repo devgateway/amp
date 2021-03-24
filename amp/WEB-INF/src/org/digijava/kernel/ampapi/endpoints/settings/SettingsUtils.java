@@ -1,15 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.settings;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.log4j.Logger;
@@ -49,6 +39,16 @@ import org.digijava.module.aim.util.ResourceManagerSettingsUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Utility class for amp settings handling
@@ -431,14 +431,11 @@ public class SettingsUtils {
         AmpCurrency effCurrency = CurrencyUtil.getEffectiveCurrency();
         settings.setEffectiveCurrency(new CurrencySettings(effCurrency.getId(), effCurrency.getCurrencyCode()));
 
-        settings.setNddMappingIndirectDirectLevel(FeaturesUtil
-                .getGlobalSettingValueInteger(GlobalSettingsConstants.MAPPING_INDIRECT_DIRECT_LEVEL));
-        settings.setNddMappingIndirectIndirectLevel(FeaturesUtil
-                .getGlobalSettingValueInteger(GlobalSettingsConstants.MAPPING_INDIRECT_INDIRECT_LEVEL));
-        settings.setNddMappingProgramSourceLevel(FeaturesUtil
-                .getGlobalSettingValueInteger(GlobalSettingsConstants.MAPPING_PROGRAM_SOURCE_LEVEL));
-        settings.setNddMappingProgramDestinationLevel(FeaturesUtil
-                .getGlobalSettingValueInteger(GlobalSettingsConstants.MAPPING_PROGRAM_DESTINATION_LEVEL));
+        settings.setNddMappingIndirectLevel(FeaturesUtil
+                .getGlobalSettingValueInteger(GlobalSettingsConstants.MAPPING_INDIRECT_LEVEL));
+
+        settings.setNddMappingProgramLevel(FeaturesUtil
+                .getGlobalSettingValueInteger(GlobalSettingsConstants.MAPPING_PROGRAM_LEVEL));
 
         if (MenuUtils.getCurrentView() == AmpView.TEAM) {
             addWorkspaceSettings(settings);

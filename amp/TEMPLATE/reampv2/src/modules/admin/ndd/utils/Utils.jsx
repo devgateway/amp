@@ -6,6 +6,7 @@ import {
  * id can be lvl1, lvl2 or lvl3.
  * @param id
  * @param ndd
+ * @level level
  * @returns {{lvl2: {}, lvl3, lvl1: {}}}
  */
 export function findProgramInTree(id, ndd, level) {
@@ -65,12 +66,12 @@ export function findFullProgramTree(ndd, type, src, dst) {
   return tree;
 }
 
-export function validate(data, levelSrc, levelDst) {
+export function validate(data, level) {
   // TODO add levellsrc and leveldst should be the same number
   let ret = 0;
   if (data && data.length > 0) {
     data.every(pair => {
-      if (!pair[SRC_PROGRAM][`lvl${levelSrc}`] || !pair[DST_PROGRAM][`lvl${levelDst}`]) {
+      if (!pair[SRC_PROGRAM][`lvl${level}`] || !pair[DST_PROGRAM][`lvl${level}`]) {
         ret = 1; // missing value error.
         return false;
       } else {
@@ -78,11 +79,11 @@ export function validate(data, levelSrc, levelDst) {
           (toFind[SRC_PROGRAM].lvl1.id === pair[SRC_PROGRAM].lvl1.id
             && toFind[DST_PROGRAM].lvl1.id === pair[DST_PROGRAM].lvl1.id)
           && (
-            levelSrc === 1 ? true
+            level === 1 ? true
               : (toFind[SRC_PROGRAM].lvl2.id === pair[SRC_PROGRAM].lvl2.id
               && toFind[DST_PROGRAM].lvl2.id === pair[DST_PROGRAM].lvl2.id))
           && (
-            levelSrc < 3 ? true
+            level < 3 ? true
               : (toFind[SRC_PROGRAM].lvl3.id === pair[SRC_PROGRAM].lvl3.id
               && toFind[DST_PROGRAM].lvl3.id === pair[DST_PROGRAM].lvl3.id))
         ));
@@ -97,7 +98,7 @@ export function validate(data, levelSrc, levelDst) {
   return ret;
 }
 
-export function validateMainPrograms(src, dst, levelSrc, levelDst) {
+export function validateMainPrograms(src, dst, level) {
   let ret = 0;
   if (src || dst) {
     if (!src) {
@@ -108,10 +109,7 @@ export function validateMainPrograms(src, dst, levelSrc, levelDst) {
       ret = 5;
     }
   }
-  if (levelSrc <= 0 || Number.isNaN(levelSrc)) {
-    ret = 6;
-  }
-  if (levelDst <= 0 || Number.isNaN(levelDst)) {
+  if (level <= 0 || Number.isNaN(level)) {
     ret = 6;
   }
   return ret;

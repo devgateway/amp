@@ -220,10 +220,9 @@ public class GlobalSettingsConstants {
     public static final String MAPPING_SOURCE_PROGRAM = "Mapping Source Program";
     public static final String MAPPING_DESTINATION_PROGRAM = "Mapping Destination Program";
 
-    public static final String MAPPING_INDIRECT_DIRECT_LEVEL = "NDD Mapping Indirect-Direct Level";
-    public static final String MAPPING_INDIRECT_INDIRECT_LEVEL = "NDD Mapping Indirect-Indirect Level";
-    public static final String MAPPING_PROGRAM_SOURCE_LEVEL = "NDD Mapping Program-Source Level";
-    public static final String MAPPING_PROGRAM_DESTINATION_LEVEL = "NDD Mapping Program-Destination Level";
+    public static final String MAPPING_INDIRECT_LEVEL = "NDD Mapping Indirect Level";
+    public static final String MAPPING_PROGRAM_LEVEL = "NDD Mapping Program Level";
+
 
     // TODO will be removed once the new activity preview is finished
     public static final String USE_NEW_ACTIVITY_PREVIEW = "Use new activity preview";

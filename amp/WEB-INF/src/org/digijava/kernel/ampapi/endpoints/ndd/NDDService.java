@@ -1,15 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.ndd;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.validation.ValidationException;
-
 import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.tuple.Pair;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.common.values.ValueConverter;
@@ -24,14 +16,18 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 
-import static org.digijava.module.aim.helper.GlobalSettingsConstants.MAPPING_INDIRECT_DIRECT_LEVEL;
-import static org.digijava.module.aim.helper.GlobalSettingsConstants.MAPPING_INDIRECT_INDIRECT_LEVEL;
-import static org.digijava.module.aim.helper.GlobalSettingsConstants.MAPPING_PROGRAM_DESTINATION_LEVEL;
-import static org.digijava.module.aim.helper.GlobalSettingsConstants.MAPPING_PROGRAM_SOURCE_LEVEL;
-import static org.digijava.module.aim.util.ProgramUtil.INDIRECT_PRIMARY_PROGRAM;
-import static org.digijava.module.aim.helper.GlobalSettingsConstants.PRIMARY_PROGRAM;
+import javax.validation.ValidationException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static org.digijava.module.aim.helper.GlobalSettingsConstants.MAPPING_DESTINATION_PROGRAM;
+import static org.digijava.module.aim.helper.GlobalSettingsConstants.MAPPING_INDIRECT_LEVEL;
+import static org.digijava.module.aim.helper.GlobalSettingsConstants.MAPPING_PROGRAM_LEVEL;
 import static org.digijava.module.aim.helper.GlobalSettingsConstants.MAPPING_SOURCE_PROGRAM;
+import static org.digijava.module.aim.helper.GlobalSettingsConstants.PRIMARY_PROGRAM;
+import static org.digijava.module.aim.util.ProgramUtil.INDIRECT_PRIMARY_PROGRAM;
 
 /**
  * @author Octavian Ciubotaru
@@ -81,8 +77,8 @@ public class NDDService {
     public IndirectProgramMappingConfiguration getIndirectProgramMappingConfiguration() {
         AmpTheme src = getSrcIndirectProgramRoot();
         AmpTheme dst = getDstIndirectProgramRoot();
-        int srcLevel = getMappingLevel(MAPPING_INDIRECT_DIRECT_LEVEL);
-        int dstLevel = getMappingLevel(MAPPING_INDIRECT_INDIRECT_LEVEL);
+        int srcLevel = getMappingLevel(MAPPING_INDIRECT_LEVEL);
+        int dstLevel = srcLevel;
         PossibleValue srcPV = src != null ? convert(src, srcLevel) : null;
         PossibleValue dstPV = dst != null ? convert(dst, dstLevel) : null;
 
@@ -108,8 +104,8 @@ public class NDDService {
     public ProgramMappingConfiguration getProgramMappingConfiguration() {
         AmpTheme src = getSrcProgramRoot();
         AmpTheme dst = getDstProgramRoot();
-        int levelSrc = getMappingLevel(MAPPING_PROGRAM_SOURCE_LEVEL);
-        int levelDst = getMappingLevel(MAPPING_PROGRAM_DESTINATION_LEVEL);
+        int levelSrc = getMappingLevel(MAPPING_PROGRAM_LEVEL);
+        int levelDst = levelSrc;
         PossibleValue srcPV = src != null ? convert(src, levelSrc) : null;
         PossibleValue dstPV = dst != null ? convert(dst, levelDst) : null;
 
@@ -224,8 +220,7 @@ public class NDDService {
             AmpGlobalSettings srcGS = FeaturesUtil.getGlobalSetting(PRIMARY_PROGRAM);
             AmpActivityProgramSettings indirectProgramSetting =
                     ProgramUtil.getAmpActivityProgramSettings(INDIRECT_PRIMARY_PROGRAM);
-            AmpGlobalSettings levelSrc = FeaturesUtil.getGlobalSetting(MAPPING_INDIRECT_DIRECT_LEVEL);
-            AmpGlobalSettings levelDst = FeaturesUtil.getGlobalSetting(MAPPING_INDIRECT_INDIRECT_LEVEL);
+            AmpGlobalSettings level = FeaturesUtil.getGlobalSetting(MAPPING_INDIRECT_LEVEL);
             if (mapping.getNewTheme() != null && mapping.getOldTheme() != null) {
                 if (!mapping.getNewTheme().getAmpThemeId().equals(mapping.getOldTheme().getAmpThemeId())) {
                     srcGS.setGlobalSettingsValue(mapping.getOldTheme().getAmpThemeId().toString());
@@ -238,10 +233,8 @@ public class NDDService {
                     indirectProgramSetting.setDefaultHierarchy(mapping.getNewTheme());
                     PersistenceManager.getSession().saveOrUpdate(indirectProgramSetting);
 
-                    levelSrc.setGlobalSettingsValue(mapping.getLevelSrc().toString());
-                    FeaturesUtil.updateGlobalSetting(levelSrc);
-                    levelDst.setGlobalSettingsValue(mapping.getLevelDst().toString());
-                    FeaturesUtil.updateGlobalSetting(levelDst);
+                    level.setGlobalSettingsValue(mapping.getLevel().toString());
+                    FeaturesUtil.updateGlobalSetting(level);
                 }
             } else {
                 srcGS.setGlobalSettingsValue(null);
@@ -249,10 +242,8 @@ public class NDDService {
                 if (indirectProgramSetting != null) {
                     PersistenceManager.getSession().delete(indirectProgramSetting);
                 }
-                levelSrc.setGlobalSettingsValue("0");
-                FeaturesUtil.updateGlobalSetting(levelSrc);
-                levelDst.setGlobalSettingsValue("0");
-                FeaturesUtil.updateGlobalSetting(levelDst);
+                level.setGlobalSettingsValue("0");
+                FeaturesUtil.updateGlobalSetting(level);
             }
         } catch (Exception e) {
             throw new RuntimeException("Cannot save mapping", e);
@@ -267,8 +258,8 @@ public class NDDService {
     public void updateMainProgramsMapping(final AmpThemeMapping mapping) {
         AmpGlobalSettings srcGS = FeaturesUtil.getGlobalSetting(MAPPING_SOURCE_PROGRAM);
         AmpGlobalSettings dstGS = FeaturesUtil.getGlobalSetting(MAPPING_DESTINATION_PROGRAM);
-        AmpGlobalSettings levelSrc = FeaturesUtil.getGlobalSetting(MAPPING_PROGRAM_SOURCE_LEVEL);
-        AmpGlobalSettings levelDst = FeaturesUtil.getGlobalSetting(MAPPING_PROGRAM_DESTINATION_LEVEL);
+        AmpGlobalSettings level = FeaturesUtil.getGlobalSetting(MAPPING_PROGRAM_LEVEL);
+
         if (mapping.getSrcTheme() != null && mapping.getDstTheme() != null) {
             if (!mapping.getSrcTheme().getAmpThemeId().equals(mapping.getDstTheme().getAmpThemeId())) {
                 srcGS.setGlobalSettingsValue(mapping.getSrcTheme().getAmpThemeId().toString());
@@ -276,10 +267,8 @@ public class NDDService {
                 dstGS.setGlobalSettingsValue(mapping.getDstTheme().getAmpThemeId().toString());
                 FeaturesUtil.updateGlobalSetting(dstGS);
 
-                levelSrc.setGlobalSettingsValue(mapping.getLevelSrc().toString());
-                FeaturesUtil.updateGlobalSetting(levelSrc);
-                levelDst.setGlobalSettingsValue(mapping.getLevelDst().toString());
-                FeaturesUtil.updateGlobalSetting(levelDst);
+                level.setGlobalSettingsValue(mapping.getLevel().toString());
+                FeaturesUtil.updateGlobalSetting(level);
             }
         } else {
             srcGS.setGlobalSettingsValue(null);
@@ -287,10 +276,8 @@ public class NDDService {
             dstGS.setGlobalSettingsValue(null);
             FeaturesUtil.updateGlobalSetting(dstGS);
 
-            levelSrc.setGlobalSettingsValue("0");
-            FeaturesUtil.updateGlobalSetting(levelSrc);
-            levelDst.setGlobalSettingsValue("0");
-            FeaturesUtil.updateGlobalSetting(levelDst);
+            level.setGlobalSettingsValue("0");
+            FeaturesUtil.updateGlobalSetting(level);
         }
     }
 
@@ -312,8 +299,8 @@ public class NDDService {
         boolean hasInvalidMappings = mapping.stream().anyMatch(
                 m -> m.getNewTheme() == null
                         || m.getOldTheme() == null
-                        || !m.getOldTheme().getIndlevel().equals(m.getLevelSrc())
-                        || !m.getNewTheme().getIndlevel().equals(m.getLevelDst())
+                        || !m.getOldTheme().getIndlevel().equals(m.getLevel())
+                        || !m.getNewTheme().getIndlevel().equals(m.getLevel())
                         || !getRoot(m.getOldTheme()).equals(srcProgramRoot)
                         || !getRoot(m.getNewTheme()).equals(dstProgramRoot));
 
@@ -333,7 +320,7 @@ public class NDDService {
      * Validate the mapping.
      * <p>Consider mapping valid when:</p>
      * <ul><li>all source and destination programs are specified</li>
-     * <li>source and destination programs are for level {@link #PROGRAM_MAPPING_LEVEL}</li>
+     * <li>source and destination programs are for configured level </li>
      * <li>source program root is the one returned by {@link #getSrcProgramRoot()}</li>
      * <li>destination program root is the one returned by {@link #getDstProgramRoot()}</li>
      * <li>the same source and destination program appear only once in the mapping</li></ul>
@@ -347,8 +334,8 @@ public class NDDService {
         boolean hasInvalidMappings = mapping.stream().anyMatch(
                 m -> m.getSrcTheme() == null
                         || m.getDstTheme() == null
-                        || !m.getSrcTheme().getIndlevel().equals(m.getLevelSrc())
-                        || !m.getDstTheme().getIndlevel().equals(m.getLevelDst())
+                        || !m.getSrcTheme().getIndlevel().equals(m.getLevel())
+                        || !m.getDstTheme().getIndlevel().equals(m.getLevel())
                         || !getRoot(m.getSrcTheme()).equals(srcProgramRoot)
                         || !getRoot(m.getDstTheme()).equals(dstProgramRoot));
 

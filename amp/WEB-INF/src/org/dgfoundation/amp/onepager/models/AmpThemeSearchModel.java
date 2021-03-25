@@ -60,7 +60,7 @@ public class AmpThemeSearchModel extends AbstractAmpAutoCompleteModel<AmpTheme> 
                         .collect(Collectors.toList());
 
                 if (mappedPrograms != null) {
-                    filteredPrograms.sort(Comparator.comparing(AmpTheme::getIndlevel));
+                    filteredPrograms.sort(Comparator.comparing(AmpTheme::getHierarchicalName));
                     ret.addAll(filteredPrograms);
                 } else {
                     ret.addAll((Collection<? extends AmpTheme>) createTreeView(filteredPrograms));

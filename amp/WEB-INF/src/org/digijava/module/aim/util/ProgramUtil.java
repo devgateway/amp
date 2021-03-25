@@ -70,6 +70,7 @@ import static java.util.Collections.emptySet;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.mapping;
 import static java.util.stream.Collectors.toCollection;
+import static org.digijava.kernel.ampapi.endpoints.ndd.DashboardService.MAX_LEVELS;
 import static org.digijava.module.aim.helper.GlobalSettingsConstants.MAPPING_DESTINATION_PROGRAM;
 import static org.digijava.module.aim.helper.GlobalSettingsConstants.MAPPING_SOURCE_PROGRAM;
 
@@ -186,7 +187,8 @@ public class ProgramUtil {
                 } else {
                     qry.setParameter("name", name, StringType.INSTANCE);
                 }
-                session.setCacheMode(CacheMode.IGNORE);
+                qry.setCacheable(false);
+                session.setCacheMode(CacheMode.REFRESH);
                 Iterator itr = qry.list().iterator();
                 if (itr.hasNext()) {
                     theme = (AmpTheme) itr.next();
@@ -263,6 +265,7 @@ public class ProgramUtil {
                 String queryString = "select t from " + AmpTheme.class.getName()
                         + " t where t.parentThemeId is null";
                 Query qry = PersistenceManager.getRequestDBSession().createQuery(queryString);
+                qry.setCacheable(false);
                 List<AmpTheme> themes = qry.list();
                 return themes;
             } catch (Exception e) {
@@ -340,6 +343,8 @@ public class ProgramUtil {
                     queryString += " and t.parentThemeId is null ";
                 }
                 qry = session.createQuery(queryString);
+                session.setCacheMode(CacheMode.REFRESH);
+                qry.setCacheable(false);
                 themes = qry.list();
                 Collections.sort(themes, new Comparator<AmpTheme>() {
                     public int compare(AmpTheme a, AmpTheme b)
@@ -486,6 +491,7 @@ public class ProgramUtil {
 
         try {
             session = PersistenceManager.getRequestDBSession();
+            session.setCacheMode(CacheMode.REFRESH);
             String queryString = " from " + AmpTheme.class.getName() + " th";
             qry = session.createQuery(queryString);
             qry.setCacheable(false);
@@ -1986,7 +1992,7 @@ public class ProgramUtil {
     public static Map<AmpTheme, Set<AmpTheme>> loadProgramMappings() {
         List<AmpThemeMapping> list = PersistenceManager.getRequestDBSession()
                 .createCriteria(AmpThemeMapping.class)
-                .setCacheable(true)
+                    .setCacheable(false)
                 .list();
 
         TreeMap<AmpTheme, Set<AmpTheme>> mappedPrograms = list.stream().collect(groupingBy(
@@ -2038,6 +2044,22 @@ public class ProgramUtil {
         }
 
         return dstThemes;
+    }
+
+    public static Integer getMaxDepth(AmpTheme program, Integer currentLevel) {
+        if (currentLevel == null || program.getIndlevel() > currentLevel) {
+            currentLevel = program.getIndlevel();
+        }
+        if (currentLevel == MAX_LEVELS) {
+            // TODO: to allow more levels we need to refactor backend and frontend.
+            return currentLevel;
+        }
+        if (program.getSiblings() != null) {
+            for (AmpTheme child : program.getSiblings()) {
+                currentLevel = getMaxDepth(child, currentLevel);
+            }
+        }
+        return currentLevel;
     }
 
 }

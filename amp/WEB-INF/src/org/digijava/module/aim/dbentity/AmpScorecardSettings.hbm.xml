@@ -12,6 +12,7 @@
 		<property name="validationPeriod" column="validation_period" type="java.lang.Boolean" />
 		<property name="validationTime" column="validation_time" type="java.lang.Integer" />
 		<property name="percentageThreshold" column="percentage_threshold" type="java.lang.Double" />
+		<property name="quarters" column="quarters" type="java.lang.String" />
 
 		<set name="closedStatuses" table="AMP_SCORECARD_SETTINGS_CATEGORY_VALUE"
 			inverse="true" lazy="true" fetch="select" cascade="save-update, all-delete-orphan">

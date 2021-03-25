@@ -1,13 +1,12 @@
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-import java.util.Map;
-
+import com.google.common.collect.ImmutableMap;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.ProgramUtil;
 
-import com.google.common.collect.ImmutableMap;
+import java.io.Serializable;
+import java.util.Map;
 
 public class AmpActivityProgramSettings implements Serializable, Identifiable {
 
@@ -88,6 +87,19 @@ public class AmpActivityProgramSettings implements Serializable, Identifiable {
                     .put(LEVEL_6, ColumnConstants.TERTIARY_PROGRAM_LEVEL_6)
                     .put(LEVEL_7, ColumnConstants.TERTIARY_PROGRAM_LEVEL_7)
                     .put(LEVEL_8, ColumnConstants.TERTIARY_PROGRAM_LEVEL_8)
+                    .build();
+
+    public static final Map<String, String> NAME_TO_COLUMN =
+            new ImmutableMap.Builder<String, String>().put(ProgramUtil.NATIONAL_PLAN_OBJECTIVE,
+                    ProgramUtil.NATIONAL_PLANNING_OBJECTIVES)
+                    .put(ProgramUtil.PRIMARY_PROGRAM,
+                            ProgramUtil.PRIMARY_PROGRAM)
+                    .put(ProgramUtil.SECONDARY_PROGRAM,
+                            ProgramUtil.SECONDARY_PROGRAM)
+                    .put(ProgramUtil.TERTIARY_PROGRAM,
+                            ProgramUtil.TERTIARY_PROGRAM)
+                    .put(ProgramUtil.INDIRECT_PRIMARY_PROGRAM,
+                            ProgramUtil.INDIRECT_PRIMARY_PROGRAM)
                     .build();
 
     public static final Map<String, Map<Integer, String>> NAME_TO_COLUMN_AND_LEVEL =

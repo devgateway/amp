@@ -108,7 +108,7 @@
 <module:display name="Structure Types Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Aid Effectiveness Indicators Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Indicator Layer Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
-<module:display name="NDD Mappings Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
+<module:display name="Program Mapping Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 
 <module:display name="Aid Effectiveness" parentModule="PROJECT MANAGEMENT"></module:display>
 

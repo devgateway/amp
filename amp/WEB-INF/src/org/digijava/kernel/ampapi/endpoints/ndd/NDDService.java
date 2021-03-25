@@ -1,5 +1,13 @@
 package org.digijava.kernel.ampapi.endpoints.ndd;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.validation.ValidationException;
+
 import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
@@ -7,20 +15,16 @@ import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.common.values.ValueConverter;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.services.sync.model.SyncConstants;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpIndirectTheme;
+import org.digijava.module.aim.dbentity.AmpOfflineChangelog;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.AmpThemeMapping;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.ProgramUtil;
-
-import javax.validation.ValidationException;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.digijava.module.aim.helper.GlobalSettingsConstants.MAPPING_DESTINATION_PROGRAM;
 import static org.digijava.module.aim.helper.GlobalSettingsConstants.MAPPING_INDIRECT_LEVEL;
@@ -208,6 +212,20 @@ public class NDDService {
                 .forEach(PersistenceManager.getSession()::delete);
 
         mapping.forEach(PersistenceManager.getSession()::save);
+
+        // Update changelog to force a sync in offline.
+        try {
+            ProgramUtil.getAllThemes(true).forEach(p -> {
+                AmpOfflineChangelog changelog = new AmpOfflineChangelog();
+                changelog.setEntityId(p.getAmpThemeId().toString());
+                changelog.setEntityName(SyncConstants.Entities.THEME);
+                changelog.setOperationName(SyncConstants.Ops.UPDATED);
+                changelog.setOperationTime(new Date());
+                PersistenceManager.getSession().save(changelog);
+            });
+        } catch (DgException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

@@ -1,35 +1,35 @@
 package org.digijava.kernel.jobs;
 
-import static java.util.stream.Collectors.toSet;
-
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.servlet.ServletContext;
-
 import com.sun.jersey.api.client.UniformInterfaceException;
 import org.digijava.kernel.ampregistry.AmpRegistryService;
-import org.digijava.module.aim.dbentity.AmpOfflineRelease;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.services.AmpOfflineService;
 import org.digijava.kernel.services.AmpVersionService;
 import org.digijava.kernel.util.SpringUtil;
+import org.digijava.module.aim.dbentity.AmpOfflineRelease;
 import org.digijava.module.aim.dbentity.AmpQuartzJobClass;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.QuartzJobForm;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.QuartzJobClassUtils;
 import org.digijava.module.aim.util.QuartzJobUtils;
-import org.digijava.module.message.jobs.ConnectionCleaningJob;
 import org.digijava.module.message.jobs.NonConcurrentJob;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.SchedulerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.servlet.ServletContext;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toSet;
 
 /**
  * Downloads new AMP Offline releases. Will keep only releases that are compatible with this AMP.
@@ -53,33 +53,49 @@ public class DownloadAmpOfflineReleasesJob extends NonConcurrentJob {
     @Override
     public void executeNonConcurrentInternal(JobExecutionContext context) throws JobExecutionException {
         if (FeaturesUtil.isAmpOfflineEnabled()) {
-            initialize(context);
+            Set<AmpOfflineRelease> newReleases = new HashSet<>();
+            PersistenceManager.inTransaction(() -> {
+                try {
+                    initialize(context);
+                    removeInvalidAmpOfflineReleases();
+                    newReleases.addAll(getReleasesForDownload());
+                } catch (JobExecutionException e) {
+                    throw new RuntimeException(e);
+                }
+            });
 
-            removeInvalidAmpOfflineReleases();
+            newReleases.forEach(release -> persistRelease(release));
 
-            downloadNewReleases();
-
+            saveReleasesInDb(newReleases);
             removeIncompatibleReleases();
         }
+    }
+
+    private void saveReleasesInDb(Set<AmpOfflineRelease> releasesForDownload) {
+        PersistenceManager.inTransaction(() -> {
+            releasesForDownload.forEach(release -> ampOfflineService.persistReleaseInDb(release));
+        });
     }
 
     /**
      * Download all new and compatible AMPOfflineReleases.
      */
-    private void downloadNewReleases() {
-        ampRegistryService.getReleases()
+    private Set<AmpOfflineRelease> getReleasesForDownload() {
+        return ampRegistryService.getReleases()
                 .stream()
                 .filter(this::isNewAndCompatibleRelease)
-                .forEach(this::persistRelease);
+                .collect(Collectors.toSet());
     }
 
     /**
      * Removes AMPOfflineReleases which are no longer compatible with this AMP release.
      */
     private void removeIncompatibleReleases() {
-        existingReleases.stream()
-                .filter(r -> !ampVersionService.isAmpOfflineCompatible(r.getVersion()))
-                .forEach(r -> ampOfflineService.deleteRelease(r));
+        PersistenceManager.inTransaction(() -> {
+            existingReleases.stream()
+                    .filter(r -> !ampVersionService.isAmpOfflineCompatible(r.getVersion()))
+                    .forEach(r -> ampOfflineService.deleteRelease(r));
+        });
     }
 
     /**
@@ -127,8 +143,7 @@ public class DownloadAmpOfflineReleasesJob extends NonConcurrentJob {
      */
     private void persistRelease(AmpOfflineRelease release) {
         try {
-            ampOfflineService.addRelease(release, ampRegistryService.releaseFileSupplier(release));
-
+            ampOfflineService.saveToDisk(release, ampRegistryService.releaseFileSupplier(release));
             existingReleases.add(release);
         } catch (IOException | UniformInterfaceException e) {
             logger.warn(e.getClass().getSimpleName() + ": " + e.getMessage());
@@ -159,5 +174,10 @@ public class DownloadAmpOfflineReleasesJob extends NonConcurrentJob {
         jobForm.setStartM(new SimpleDateFormat("mm").format(startDate));
 
         QuartzJobUtils.addJob(jobForm);
+    }
+
+    @Override
+    public boolean shouldExecuteInTransaction() {
+        return false;
     }
 }

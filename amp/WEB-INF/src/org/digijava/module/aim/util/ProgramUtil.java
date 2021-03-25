@@ -70,6 +70,7 @@ import static java.util.Collections.emptySet;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.mapping;
 import static java.util.stream.Collectors.toCollection;
+import static org.digijava.kernel.ampapi.endpoints.ndd.DashboardService.MAX_LEVELS;
 import static org.digijava.module.aim.helper.GlobalSettingsConstants.MAPPING_DESTINATION_PROGRAM;
 import static org.digijava.module.aim.helper.GlobalSettingsConstants.MAPPING_SOURCE_PROGRAM;
 
@@ -2043,6 +2044,22 @@ public class ProgramUtil {
         }
 
         return dstThemes;
+    }
+
+    public static Integer getMaxDepth(AmpTheme program, Integer currentLevel) {
+        if (currentLevel == null || program.getIndlevel() > currentLevel) {
+            currentLevel = program.getIndlevel();
+        }
+        if (currentLevel == MAX_LEVELS) {
+            // TODO: to allow more levels we need to refactor backend and frontend.
+            return currentLevel;
+        }
+        if (program.getSiblings() != null) {
+            for (AmpTheme child : program.getSiblings()) {
+                currentLevel = getMaxDepth(child, currentLevel);
+            }
+        }
+        return currentLevel;
     }
 
 }

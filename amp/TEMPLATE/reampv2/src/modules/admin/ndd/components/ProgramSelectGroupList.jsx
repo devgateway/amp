@@ -5,11 +5,13 @@ import PropTypes from 'prop-types';
 import { NDDContext } from './Startup';
 import './css/style.css';
 import ProgramSelectGroupRow from './ProgramSelectGroupRow';
+import RequiredMark from './common/RequiredMark';
+import HelpTooltip from './common/HelpTooltip';
 
 class ProgramSelectGroupList extends Component {
   render() {
     const {
-      list, translations, onChange, remove, dst, src
+      list, translations, onChange, remove, dst, src, busy, level
     } = this.props;
     const { trnPrefix } = this.context;
     return (
@@ -17,20 +19,16 @@ class ProgramSelectGroupList extends Component {
         <table className="table table-striped">
           <thead>
             <tr>
-              <td>
-                <span data-field="srcProgramSelectGroup">
-                  <span className="error-color">*&nbsp;</span>
-                  {translations[`${trnPrefix}src-programs-title`]}
-&nbsp;
-                </span>
-              </td>
-              <td>
-                <span data-field="dstProgramSelectGroup">
-                  <span className="error-color">*&nbsp;</span>
-                  {translations[`${trnPrefix}dst-programs-title`]}
-&nbsp;
-                </span>
-              </td>
+              <th>
+                <HelpTooltip labelKey={`${trnPrefix}tooltip-direct-programs-list`} />
+                <span data-field="srcProgramSelectGroup">{translations[`${trnPrefix}src-programs-title`]}</span>
+                <RequiredMark />
+              </th>
+              <th>
+                <HelpTooltip labelKey={`${trnPrefix}tooltip-indirect-programs-list`} />
+                <span data-field="dstProgramSelectGroup">{translations[`${trnPrefix}dst-programs-title`]}</span>
+                <RequiredMark />
+              </th>
               <td className="actions-column">{translations[`${trnPrefix}actions`]}</td>
             </tr>
           </thead>
@@ -42,7 +40,9 @@ class ProgramSelectGroupList extends Component {
                 onChange={onChange}
                 remove={remove}
                 dst={dst}
-                src={src} />
+                src={src}
+                level={level}
+                disabled={busy} />
             ))}
           </tbody>
         </table>
@@ -58,7 +58,16 @@ ProgramSelectGroupList.propTypes = {
   onChange: PropTypes.func.isRequired,
   remove: PropTypes.func.isRequired,
   src: PropTypes.object,
-  dst: PropTypes.object
+  dst: PropTypes.object,
+  translations: PropTypes.object.isRequired,
+  busy: PropTypes.bool.isRequired,
+  level: PropTypes.number,
+};
+
+ProgramSelectGroupList.defaultProps = {
+  src: undefined,
+  dst: undefined,
+  level: undefined
 };
 
 const mapStateToProps = state => ({

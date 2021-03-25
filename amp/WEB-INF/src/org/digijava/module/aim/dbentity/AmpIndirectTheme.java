@@ -26,12 +26,15 @@ public class AmpIndirectTheme {
     @JsonProperty("dst-program")
     private AmpTheme newTheme;
 
+    @JsonProperty("level")
+    private Integer level;
     public AmpIndirectTheme() {
     }
 
-    public AmpIndirectTheme(AmpTheme oldTheme, AmpTheme newTheme) {
+    public AmpIndirectTheme(AmpTheme oldTheme, AmpTheme newTheme, Integer level) {
         this.oldTheme = oldTheme;
         this.newTheme = newTheme;
+        this.level = level;
     }
 
     public Long getId() {
@@ -56,5 +59,13 @@ public class AmpIndirectTheme {
 
     public void setNewTheme(AmpTheme newTheme) {
         this.newTheme = newTheme;
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
     }
 }

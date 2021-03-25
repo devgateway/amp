@@ -8,9 +8,9 @@ import './css/style.css';
 class Header extends Component {
   render() {
     const {
-      translations, onAddRow, onSaveAll, onRevertAll, disabled, src, dst
+      translations, onAddRow, onSaveAll, onRevertAll, src, dst, onUpdateActivities, busy, dataPresent, unsavedChanges
     } = this.props;
-    const { trnPrefix } = this.context;
+    const { trnPrefix, isIndirect } = this.context;
     return (
       <div>
         <div className="panel panel-default">
@@ -24,24 +24,37 @@ class Header extends Component {
                   {translations[`${trnPrefix}add-new`]}
                   {' '}
                 </span>
-                <span className="insert-data-text">{translations[`${trnPrefix}insert-data`]}</span>
+                <span className="insert-data-text clickable" onClick={onAddRow}>
+                  {translations[`${trnPrefix}insert-data`]}
+                </span>
               </>
             ) : null}
+            <span> / </span>
+            <span className="required-fields">{`* ${translations[`${trnPrefix}required-fields`]}`}</span>
             <span className="float-right button-wrapper">
               <button
                 type="button"
                 onClick={onSaveAll}
                 className="btn btn-success margin_2"
-                disabled={disabled}>
+                disabled={busy}>
                 {translations[`${trnPrefix}button-save-all-edits`]}
               </button>
               <button
                 type="button"
                 onClick={onRevertAll}
                 className="btn btn-danger margin_2"
-                disabled={disabled}>
+                disabled={busy || !unsavedChanges}>
                 {translations[`${trnPrefix}button-revert-all-edits`]}
               </button>
+              {isIndirect ? (
+                <button
+                  type="button"
+                  onClick={onUpdateActivities}
+                  className="btn btn-primary"
+                  disabled={busy || !dataPresent || unsavedChanges}>
+                  {translations[`${trnPrefix}button-update-activities`]}
+                </button>
+              ) : null}
             </span>
           </div>
         </div>
@@ -56,14 +69,25 @@ Header.propTypes = {
   onAddRow: PropTypes.func.isRequired,
   onSaveAll: PropTypes.func.isRequired,
   onRevertAll: PropTypes.func.isRequired,
-  disabled: PropTypes.bool.isRequired,
-  translations: PropTypes.bool.isRequired,
+  translations: PropTypes.object.isRequired,
+  onUpdateActivities: PropTypes.func.isRequired,
   src: PropTypes.object,
-  dst: PropTypes.object
+  dst: PropTypes.object,
+  busy: PropTypes.bool.isRequired,
+  dataPresent: PropTypes.bool,
+  unsavedChanges: PropTypes.bool.isRequired
+};
+
+Header.defaultProps = {
+  src: undefined,
+  dst: undefined,
+  dataPresent: false
 };
 
 const mapStateToProps = state => ({
   translations: state.translationsReducer.translations
 });
+
 const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

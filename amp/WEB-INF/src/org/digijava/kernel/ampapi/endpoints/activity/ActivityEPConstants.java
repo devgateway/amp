@@ -23,6 +23,8 @@ public class ActivityEPConstants {
         ALWAYS
     }
 
+    public static final String X_ASYNC_STATUS = "X-Async-Status";
+    public static final String X_ASYNC_RESULT_ID = "result-id";
     // JSON fields
     public static final String ACTIVITY = "activity";
     public static final String FIELD_NAME = "field_name";
@@ -187,5 +189,6 @@ public class ActivityEPConstants {
             "Sustainability: what happens when the project/action ends?";
     public static final String FUNDING_PROJECT_PROBLEMS_LABEL = "What problems were encountered in this project?";
 
+    public static final Integer SECONDS_TO_SLEEP = 5;
 
 }

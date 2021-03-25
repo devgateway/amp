@@ -1,27 +1,9 @@
 package org.digijava.kernel.ampapi.endpoints.activity.field;
 
-import static java.util.stream.Collectors.toList;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.NONE;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.SUBMIT;
-import static org.digijava.kernel.translator.util.TrnUtil.DEFAULT;
-import static org.digijava.kernel.translator.util.TrnUtil.PREFIX;
-import static org.digijava.kernel.util.SiteUtils.DEFAULT_SITE_ID;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.function.Predicate;
-
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
@@ -45,11 +27,11 @@ import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.validation.ConstraintDescriptor;
 import org.digijava.kernel.validation.ConstraintDescriptors;
 import org.digijava.kernel.validators.activity.TreeCollectionValidator;
-import org.digijava.kernel.validators.common.TotalPercentageValidator;
-import org.digijava.kernel.validators.common.RegexValidator;
 import org.digijava.kernel.validators.activity.UniqueValidator;
+import org.digijava.kernel.validators.common.RegexValidator;
 import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.kernel.validators.common.SizeValidator;
+import org.digijava.kernel.validators.common.TotalPercentageValidator;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Independent;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
@@ -62,6 +44,23 @@ import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.validator.groups.Submit;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.function.Predicate;
+
+import static java.util.stream.Collectors.toList;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.NONE;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.SUBMIT;
+import static org.digijava.kernel.translator.util.TrnUtil.DEFAULT;
+import static org.digijava.kernel.translator.util.TrnUtil.PREFIX;
+import static org.digijava.kernel.util.SiteUtils.DEFAULT_SITE_ID;
 
 /**
  * Enumerate & describe all fields of an object used for import / export in API.
@@ -472,7 +471,7 @@ public class FieldsEnumerator {
         UnwrappedTranslationsByWorkspacePrefix translations = new UnwrappedTranslationsByWorkspacePrefix();
         List<String> prefixes = ActivityUtil.getWorkspacePrefixesFromRequest();
         try {
-            TLSUtils.getRequest().setAttribute(PREFIX, null);
+            TLSUtils.getRequest().removeAttribute(PREFIX);
             Collection<Message> defaultMessages = translatorService.getAllTranslationOfBody(label, DEFAULT_SITE_ID);
             for (Message m : defaultMessages) {
                 translations.set(DEFAULT, m.getLocale(), m.getMessage());

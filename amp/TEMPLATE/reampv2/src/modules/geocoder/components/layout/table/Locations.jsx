@@ -28,13 +28,13 @@ class Locations extends Component {
     }
 
     handleAcceptLocation = (e, locationId) => {
-        this.props.geocodeLocation(this.props.activityId, locationId, true)
+        this.props.geocodeLocation(this.props.ampId, locationId, true)
 
         e.preventDefault();
     };
 
     handleRejectLocation = (e, locationId) => {
-        this.props.geocodeLocation(this.props.activityId, locationId, false);
+        this.props.geocodeLocation(this.props.ampId, locationId, false);
 
         e.preventDefault();
     };

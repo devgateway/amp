@@ -38,7 +38,7 @@ public class GeoCodedActivity {
     private List<GeoCodedLocation> locations = new ArrayList<>();
 
     public enum Status {
-        RUNNING, COMPLETED, ERROR;
+        RUNNING, COMPLETED, ERROR, SAVED;
 
         public String getName() {
             return name();

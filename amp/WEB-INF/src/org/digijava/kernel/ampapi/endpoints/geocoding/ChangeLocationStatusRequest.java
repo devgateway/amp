@@ -8,9 +8,9 @@ import io.swagger.annotations.ApiModelProperty;
  */
 public class ChangeLocationStatusRequest {
 
-    @ApiModelProperty("Activity Id")
-    @JsonProperty("amp_activity_id")
-    private Long ampActivityId;
+    @ApiModelProperty("Amp Id")
+    @JsonProperty("amp_id")
+    private String ampId;
 
     @ApiModelProperty("Location Id")
     @JsonProperty("amp_category_value_location_id")
@@ -19,12 +19,12 @@ public class ChangeLocationStatusRequest {
     @ApiModelProperty("Location status. True if location was accepted, false if rejected, null if unknown.")
     private Boolean accepted;
 
-    public Long getAmpActivityId() {
-        return ampActivityId;
+    public String getAmpId() {
+        return ampId;
     }
 
-    public void setAmpActivityId(Long ampActivityId) {
-        this.ampActivityId = ampActivityId;
+    public void setAmpActivityId(String ampId) {
+        this.ampId = ampId;
     }
 
     public Long getAcvlId() {

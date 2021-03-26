@@ -5,21 +5,9 @@ import ActivityTable from "../table/ActivityTable";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import GeocodingTable from "../table/GeocodingTable";
-import Modal from "react-bootstrap/Modal";
 import AlertError from "./AlertError";
 import ActivityTableHeader from "../table/ActivityTableHeader";
 import {selectActivitiesForGeocoding} from "../../../actions/activitiesAction";
-
-const GeocodingNotAvailable = ({user, workspace}) =>
-    <h4>Geocoding process not available. User {user} is owner of the process in '{workspace}' workspace</h4>;
-
-const GeocodingRunning = ({message, running}) => {
-    return (
-        <Modal show={running} animation={false}>
-            <Modal.Body>{message}</Modal.Body>
-        </Modal>
-    )
-}
 
 const ProjectList = ({title}) => <h3>{title}</h3>;
 
@@ -51,7 +39,7 @@ class GeocoderPanel extends Component {
     render() {
         const {translations} = this.context;
 
-        const isGeocoding = this.props.geocoding && this.props.geocoding.status != 'NOT_STARTED';
+        const isGeocoding = this.props.geocoding && this.props.geocoding.status !== 'NOT_STARTED';
 
         let title = translations['amp.geocoder:projectList'];
         let table;
@@ -67,10 +55,8 @@ class GeocoderPanel extends Component {
                                    onSelectAllActivities={this.onSelectAllActivities.bind(this)}/>
         }
 
-
         return (
             <div>
-            {/*{isGeocodingNotAvailable && <GeocodingNotAvailable user={this.props.geocoding.creator} workspace={this.props.geocoding.workspace}/>}*/}
                 {this.props.geocoding.error
                     ?  <AlertError error={this.props.geocoding.error} errorCode={this.props.geocoding.errorCode}/>
                     : <div>

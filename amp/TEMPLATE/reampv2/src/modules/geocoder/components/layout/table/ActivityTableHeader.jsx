@@ -18,10 +18,6 @@ const SelectedActivitiesMessage = ({title, selectedSize, size}) =>  {
 
 class ActivityTableHeader extends Component {
 
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         const {translations} = this.context;
         return (

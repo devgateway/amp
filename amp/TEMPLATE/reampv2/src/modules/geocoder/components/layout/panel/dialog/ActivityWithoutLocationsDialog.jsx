@@ -6,7 +6,7 @@ import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import AlertError from "../AlertError";
 import {Loading} from "../../../../../../utils/components/Loading";
-import {cancelGeocoding, resetAllLocationStatuses} from "../../../../actions/geocodingAction";
+import {cancelGeocoding} from "../../../../actions/geocodingAction";
 
 class ActivityWithoutLocationsDialog extends Component {
 

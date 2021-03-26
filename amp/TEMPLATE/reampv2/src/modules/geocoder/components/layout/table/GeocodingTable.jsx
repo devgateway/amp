@@ -91,7 +91,7 @@ class GeocodingTable extends Component {
         let expandRow = {
             onlyOneExpanding: true,
             renderer: row => (
-                <Locations activityId={row.activity_id}/>
+                <Locations activityId={row.activity_id} ampId={row.amp_id}/>
             ),
             nonExpandable: this.getNonExpandableIds(),
             showExpandColumn: true,
@@ -172,7 +172,7 @@ class GeocodingTable extends Component {
                 <BootstrapTable
                     keyField="activity_id"
                     scrollY
-                    data={this.props.activities}
+                    data={data}
                     maxHeight="200px"
                     columns={columns}
                     classes="table-striped"
@@ -186,9 +186,9 @@ class GeocodingTable extends Component {
                         columnWidth: '200px'
                     }}/>
             </div>
-
-                {!this.existLocationsInGeocoding() && <ActivityWithoutLocationsDialog title={translations['amp.geocoder:discardGeocodingButton']}/>}
-                {this.existSaveResults() && <ActivitySaveResultsDialog title={translations['amp.geocoder:discardGeocodingButton']}/>}
+                {this.existSaveResults() ? <ActivitySaveResultsDialog title={translations['amp.geocoder:saveResults']}/>
+                    : !this.existLocationsInGeocoding() && <ActivityWithoutLocationsDialog title={translations['amp.geocoder:discardGeocodingButton']}/>
+                }
             </>
 
     );

@@ -81,16 +81,16 @@ public class NDDService {
         AmpTheme src = getSrcIndirectProgramRoot();
         AmpTheme dst = getDstIndirectProgramRoot();
         int level = getMappingLevel(MAPPING_INDIRECT_LEVEL);
-        PossibleValue srcPV = src != null ? convert(src, MAX_MAPPING_LEVEL) : null;
-        PossibleValue dstPV = dst != null ? convert(dst, MAX_MAPPING_LEVEL) : null;
+        PossibleValue srcPV = src != null ? convert(src, level) : null;
+        PossibleValue dstPV = dst != null ? convert(dst, level) : null;
 
         List<PossibleValue> allPrograms = new ArrayList<>();
         getAvailablePrograms(false).forEach(ampTheme -> {
-            PossibleValue pv = convert(ampTheme, level);
+            PossibleValue pv = convert(ampTheme, MAX_MAPPING_LEVEL);
             allPrograms.add(pv);
         });
         getAvailablePrograms(true).forEach(ampTheme -> {
-            PossibleValue pv = convert(ampTheme, level);
+            PossibleValue pv = convert(ampTheme, MAX_MAPPING_LEVEL);
             allPrograms.add(pv);
         });
 
@@ -107,12 +107,12 @@ public class NDDService {
         AmpTheme src = getSrcProgramRoot();
         AmpTheme dst = getDstProgramRoot();
         int level = getMappingLevel(MAPPING_PROGRAM_LEVEL);
-        PossibleValue srcPV = src != null ? convert(src, MAX_MAPPING_LEVEL) : null;
-        PossibleValue dstPV = dst != null ? convert(dst, MAX_MAPPING_LEVEL) : null;
+        PossibleValue srcPV = src != null ? convert(src, level) : null;
+        PossibleValue dstPV = dst != null ? convert(dst, level) : null;
 
         List<PossibleValue> allPrograms = new ArrayList<>();
         getAvailablePrograms(false).forEach(ampTheme -> {
-            PossibleValue pv = convert(ampTheme, level);
+            PossibleValue pv = convert(ampTheme, MAX_MAPPING_LEVEL);
             allPrograms.add(pv);
         });
 

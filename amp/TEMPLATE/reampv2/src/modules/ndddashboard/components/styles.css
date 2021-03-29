@@ -1,15 +1,18 @@
-
 body {
     margin: 0;
     font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background: white;
+    background: #EEE;
+}
+
+h3 {
+    font-size: 20px;
 }
 
 .chart-container {
-    border: 1px solid #ddd;
-    border-radius: 5px;
+    border: none; /*1px solid #ddd;*/
+    /*border-radius: 5px;*/
     background-color: white;
 }
 
@@ -19,7 +22,7 @@ body {
 
 .even-middle {
     height: 50%;
-    margin-top: 10px;
+    /*margin-top: 10px;*/
 }
 
 .even-third {
@@ -61,6 +64,10 @@ body {
     transition: opacity .5s ease-in;
 }
 
+.loading-absolute {
+    position: static;
+}
+
 .loading {
     background-image: url("/TEMPLATE/reampv2/public/assets/loading.gif");
     background-size: contain;
@@ -70,6 +77,7 @@ body {
     top: 151px;
     background-position: center;
 }
+
 
 /* To fix the modal library. */
 .modal {
@@ -145,8 +153,13 @@ body {
 
 .legends-container {
     background-color: white;
-    border: 1px solid #ddd;
-    border-radius: 0;
+    /*border: 1px solid #ddd;
+    border-radius: 0;*/
+    padding: 10px;
+}
+
+.custom-legend-inner {
+    padding-right: 10px;
 }
 
 .separator {
@@ -158,7 +171,7 @@ body {
 
 .section_title {
     background-color: #f6f6f6;
-    border: 1px solid #f6f6f6;
+    /*border: 1px solid #f6f6f6;*/
     color: #423f3f;
     /*font-weight: 600;*/
     font-size: 21px;
@@ -168,7 +181,9 @@ body {
 .section_title span {
     padding: 10px;
 }
-
+.main-container .title-fy-source{
+    display: none;
+}
 .radio-fy-source {
     display: inline-block;
     padding-left: 5px;
@@ -200,10 +215,10 @@ body {
     position: absolute;
     background-color: #0b58a2;
     border-radius: 5px;
-    z-index: 9999;
+    z-index: 10;
     width: auto;
     pointer-events: none;
-    opacity: 0.90;
+    opacity: 1;
 }
 
 .funding-sources-title {
@@ -216,7 +231,7 @@ body {
 }
 
 .funding-sources-title > div {
-    text-transform: uppercase;
+    /*text-transform: uppercase;*/
 }
 
 .funding-sources-title .row {
@@ -228,3 +243,53 @@ body {
 .programs-dropdown {
     max-width: 435px;
 }
+
+.error {
+    color: red;
+    font-weight: bold;
+}
+
+.amount-column {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.table {
+    font-size: 12px;
+}
+
+.header-row {
+    color: #7f8fa4;
+    font-weight: 800;
+    font-size: 12px;
+}
+
+.detail-table-container {
+    overflow-y: auto;
+    max-height: 350px;
+    padding: 5px;
+}
+
+.invisible-row {
+    display: none;
+    visibility: hidden;
+}
+
+.modebar {
+    display: none !important;
+}
+
+.download-image-img {
+    width: 25px;
+    height: 25px;
+    padding: 0px!important;
+}
+
+.download-image {
+    cursor: pointer;
+}
+
+.export-wrapper {
+    float: right;
+}
+

@@ -1,10 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import java.math.BigInteger;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.lang3.StringUtils;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
@@ -21,6 +16,11 @@ import org.digijava.module.aim.dbentity.AmpThemeMapping;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.criterion.Restrictions;
+
+import java.math.BigInteger;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Octavian Ciubotaru
@@ -40,27 +40,30 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
      */
     @Override
     public List<Object[]> getCategoryValues(String discriminatorOption) {
-        String queryString = "SELECT acv.id, acv.value, acv.deleted, acv.index, acv.ampCategoryClass.keyName from "
-                + AmpCategoryValue.class.getName() + " acv ";
+        String select = "SELECT acv.id, acv.value, acv.deleted, acv.index ";
+        String from = "from " + AmpCategoryValue.class.getName() + " acv ";
+        String where;
         List<String> prefixes = ActivityUtil.getWorkspacePrefixesFromRequest();
         if (prefixes == null) {
             prefixes = ActivityUtil.loadWorkspacePrefixesIntoRequest();
         }
         if (prefixes != null && prefixes.size() > 0) {
-            queryString += " WHERE acv.ampCategoryClass.keyName IN (";
+            where = " WHERE acv.ampCategoryClass.keyName IN (";
             for (String prefix : prefixes) {
-                queryString += "'" + prefix + discriminatorOption + "', ";
+                where += "'" + prefix + discriminatorOption + "', ";
             }
-            queryString += "'" + discriminatorOption + "') ORDER BY acv.id";
-            List<Object[]> result = query(queryString);
+            where += "'" + discriminatorOption + "') ORDER BY acv.id";
+            select += ", acv.ampCategoryClass.keyName ";
+            List<Object[]> result = query(select + from + where);
             result.forEach(row -> {
                 String value = row[CategoryValueExtraInfo.EXTRA_INFO_PREFIX_INDEX].toString();
                 row[CategoryValueExtraInfo.EXTRA_INFO_PREFIX_INDEX] = value.replace(discriminatorOption, "");
             });
             return result;
         } else {
-            queryString += " WHERE acv.ampCategoryClass.keyName LIKE '" + discriminatorOption + "' ORDER BY acv.id";
-            return query(queryString);
+            where = " WHERE acv.ampCategoryClass.keyName LIKE '" + discriminatorOption + "' ORDER BY acv.id";
+            select += ", '' ";
+            return query(select + from + where);
         }
     }
 

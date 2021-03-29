@@ -3,11 +3,10 @@
  */
 package org.digijava.kernel.ampapi.endpoints.async;
 
+import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivitySummary;
-import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
 
 /**
  * Request Data to be stored in the cache
@@ -19,7 +18,7 @@ public class AsyncResult {
     
     private AsyncStatus status = AsyncStatus.RUNNING;
     
-    private List<JsonApiResponse<ActivitySummary>> results = new ArrayList<>();
+    private List<JsonApiResponse> results = new ArrayList<>();
     
     public AsyncResult(String resultId) {
         this.resultId = resultId;
@@ -29,7 +28,7 @@ public class AsyncResult {
         return resultId;
     }
     
-    public List<JsonApiResponse<ActivitySummary>> getResults() {
+    public List<JsonApiResponse> getResults() {
         return results;
     }
     

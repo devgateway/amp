@@ -22,5 +22,9 @@ public enum ActivitySource {
     /**
      * Change performed by a background PATCH.
      */
-    PATCH
+    PATCH,
+    /**
+     * Change performed by a background ADMIN.
+     */
+    ADMIN,
 }

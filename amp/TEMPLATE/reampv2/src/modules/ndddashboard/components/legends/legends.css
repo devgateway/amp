@@ -58,6 +58,7 @@
 
 .legend-container {
     border: 1px solid #ddd;
+    padding: 15px;
 }
 
 
@@ -81,7 +82,7 @@
 
 .legends-container {
     height: 100%;
-    min-height: 513px;
+    min-height: 512px;
     font-size: 18px;
 }
 
@@ -92,9 +93,11 @@
 
 .legend-title .amount {
     font-weight: bold;
-    padding-left: 10px;
+    display: block;
+    width: max-content;
+    color: gray;
 }
 
 .custom-legend-inner .symbol-container {
-    padding-left: 25px;
+    padding-left: 15px;
 }

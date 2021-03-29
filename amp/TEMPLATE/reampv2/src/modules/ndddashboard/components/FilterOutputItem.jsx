@@ -4,7 +4,7 @@ import dateformat from 'dateformat';
 import { TRN_PREFIX } from '../utils/constants';
 
 export default class FilterOutputItem extends Component {
-  generateChildren = (items, i) => {
+  generateChildren = (items) => {
     const { translations } = this.props;
     const ret = [];
     if (items.length > 0) {
@@ -22,13 +22,13 @@ export default class FilterOutputItem extends Component {
     } else if (items.modelType === 'YEAR-SINGLE-VALUE') {
       ret.push(<li key={Math.random()}>{items.year}</li>);
     }
-    return <ul>{ret}</ul>;
+    return <ul key={Math.random()}>{ret}</ul>;
   }
 
   formatDate = (dateString) => {
     const { globalSettings } = this.props;
     const date = new Date(`${dateString}T00:00`);
-    const format = globalSettings.dateFormat.replaceAll('MM', 'mm');
+    const format = globalSettings.dateFormat.replace(/M{2}/gm, 'mm');
     return dateformat(date, format);
   }
 
@@ -38,11 +38,11 @@ export default class FilterOutputItem extends Component {
     if (filters && filters[i]) {
       let parent = null;
       if (filters[i].filterName) {
-        parent = <h5>{filters[i].filterName}</h5>;
+        parent = <h5 key={Math.random()}>{filters[i].filterName}</h5>;
       } else if (filters[i].displayName) {
-        parent = <h5>{filters[i].displayName}</h5>;
+        parent = <h5 key={Math.random()}>{filters[i].displayName}</h5>;
       } else {
-        parent = <h5>{i.replaceAll('-', ' ')}</h5>;
+        parent = <h5 key={Math.random()}>{i.replace(/[-]+/g, ' ')}</h5>;
       }
       ret.push(parent);
       const children = this.generateChildren(filters[i], i);
@@ -55,6 +55,6 @@ export default class FilterOutputItem extends Component {
 FilterOutputItem.propTypes = {
   filters: PropTypes.object.isRequired,
   i: PropTypes.string.isRequired,
-  translations: PropTypes.array.isRequired,
+  translations: PropTypes.object.isRequired,
   globalSettings: PropTypes.object.isRequired
 };

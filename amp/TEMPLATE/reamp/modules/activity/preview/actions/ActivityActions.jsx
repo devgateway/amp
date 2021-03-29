@@ -18,7 +18,9 @@ import {
     PUBLIC_VERSION_HISTORY,
     HIDE_CONTACTS_PUBLIC_VIEW,
     ACTIVITY_FORM_URL_SSC,
-    REGIONAL_FUNDINGS
+    REGIONAL_FUNDINGS,
+    WORKSPACE_TYPE_MANAGEMENT,
+    WORKSPACE_TYPE
 } from '../common/ReampConstants.jsx';
 import DateUtils from '../utils/DateUtils.jsx';
 import HydratorHelper from '../utils/HydratorHelper.jsx';
@@ -199,6 +201,7 @@ export function loadActivityForActivityPreview(activityId) {
 
     function _getActivityContext(settings, activityInfo, activity) {
         const activityContext = {
+            canEditActivities: settings[WORKSPACE_TYPE] !== WORKSPACE_TYPE_MANAGEMENT,
             activityStatus: CommonActivityHelper.getActivityStatus(activity),
             activityWorkspace: activityInfo.activityWorkspace,
             calendar: {id: settings[CALENDAR_ID], [IS_FISCAL]: settings[CALENDAR_IS_FISCAL]},
@@ -217,7 +220,7 @@ export function loadActivityForActivityPreview(activityId) {
                 versionHistory: activityInfo['version-history'],
                 activityLastVersionId: activityInfo['amp-activity-last-version-id'],
                 updateCurrentVersion: activityInfo['update-current-version'],
-                showChangeSummary: settings[TEAM_ID] || settings[PUBLIC_CHANGE_SUMMARY],
+                showChangeSummary: activityInfo['show-change-summary'],
                 showVersionHistory: settings[TEAM_ID] || settings[PUBLIC_VERSION_HISTORY],
             },
             hideEditableExportFormatsPublicView: settings['hide-editable-export-formats-public-view']

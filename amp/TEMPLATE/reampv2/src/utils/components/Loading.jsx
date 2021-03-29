@@ -10,7 +10,7 @@ export const Loading = () => (
         aria-valuemin="0"
         aria-valuemax="100"
         style={{ width: '100%' }}>
-        Loading...
+        ...
       </div>
     </div>
   </div>

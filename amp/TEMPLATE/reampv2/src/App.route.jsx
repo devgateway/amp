@@ -13,7 +13,7 @@ class AppRoute extends Component {
   render() {
     return (
       <Router history={createHashHistory()}>
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<div />}>
           <Route path="/ssc" component={SSCDashboardApp} />
           <Route path="/ampofflinedownload" component={AMPOfflineDownloadApp} />
           <Route path="/ndd" component={AdminNDDApp} />

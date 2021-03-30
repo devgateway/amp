@@ -104,23 +104,25 @@ class GeocodingTable extends Component {
             )
         };
 
+        let customTotal = (from, to, size) => (
+            <span className="react-bootstrap-table-pagination-total">
+                {from} to {to} of {size} projects
+            </span>
+        );
+
         let options = {
 
             page: 1,
-            sizePerPageList: [{
-                text: '10', value: 10
-            }, {
-                text: '50', value: 50
-            }, {
-                text: 'All', value: this.props.activities.length
-            }],
-            sizePerPage: 10,
+            sizePerPage: this.props.settings['workspace-default-records-per-page'],
             pageStartIndex: 1,
             paginationSize: 5,
             prePage: 'Prev',
             nextPage: 'Next',
             firstPage: 'First',
             lastPage: 'Last',
+            hideSizePerPage: true,
+            showTotal: true,
+            paginationTotalRenderer: customTotal
         };
 
         let col1Text = translations['amp.geocoder:lastUpdatedDate'];
@@ -203,6 +205,7 @@ const mapStateToProps = state => {
         activities: state.geocodingReducer.activities,
         save_activities_result: state.geocodingReducer.save_activities_result,
         geocodeShouldRun: state.geocodingReducer.geocodeShouldRun,
+        settings: state.settingsReducer.settings
     };
 };
 

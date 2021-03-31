@@ -60,8 +60,8 @@ public class AmpActivityProgramSettingsAction
         ActionMessages errors = new ActionMessages();
         settingsList.stream().forEach((setting) -> {
             AmpActivityProgramSettings oldSetting =
-                    (AmpActivityProgramSettings) PersistenceManager.getSession().get(AmpActivityProgramSettings.class
-                            , setting.getAmpProgramSettingsId());
+                    (AmpActivityProgramSettings) PersistenceManager.getSession().get(AmpActivityProgramSettings.class,
+                            setting.getAmpProgramSettingsId());
             if (oldSetting.getDefaultHierarchy() != null && setting.getDefaultHierarchy().getAmpThemeId() == -1) {
                 // we are removing
                 errors.add(ActionMessages.GLOBAL_MESSAGE,

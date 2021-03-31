@@ -1566,8 +1566,10 @@ public class ProgramUtil {
                 Iterator settingsIter = settings.iterator();
                 while (settingsIter.hasNext()) {
                     AmpActivityProgramSettings setting = (AmpActivityProgramSettings) settingsIter.next();
-                    if (setting.getDefaultHierarchy() != null && setting.getDefaultHierarchy().getAmpThemeId() != null) {
-                        AmpActivityProgramSettings oldSetting = (AmpActivityProgramSettings) session.get(AmpActivityProgramSettings.class, setting.getAmpProgramSettingsId());
+                    if (setting.getDefaultHierarchy() != null
+                            && setting.getDefaultHierarchy().getAmpThemeId() != null) {
+                        AmpActivityProgramSettings oldSetting = (AmpActivityProgramSettings) session.
+                                get(AmpActivityProgramSettings.class, setting.getAmpProgramSettingsId());
                         oldSetting.setAllowMultiple(setting.isAllowMultiple());
                         if (setting.getDefaultHierarchy().getAmpThemeId() != -1) {
                             oldSetting.setDefaultHierarchy(setting.getDefaultHierarchy());

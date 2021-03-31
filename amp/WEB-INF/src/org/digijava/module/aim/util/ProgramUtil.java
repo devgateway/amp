@@ -4,25 +4,6 @@
 
 package org.digijava.module.aim.util;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
-
-import javax.servlet.http.HttpServletRequest;
-
 import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -65,6 +46,24 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import static java.util.Collections.emptySet;
 import static java.util.stream.Collectors.groupingBy;
@@ -1556,53 +1555,37 @@ public class ProgramUtil {
         return names;
     }
 
-    //save new settings
     public static void saveAmpActivityProgramSettings(List settings) throws
         DgException {
-            Session session = null;
-            Transaction tx = null;
+        Session session = null;
+        Transaction tx = null;
 
-            try {
-                    session = PersistenceManager.getRequestDBSession();
-                    if (settings != null) {
-                            Iterator settingsIter = settings.iterator();
-//beginTransaction();
-                            while (settingsIter.hasNext()) {
-                                    AmpActivityProgramSettings setting = (AmpActivityProgramSettings)settingsIter.next();
-                                    if(setting.getDefaultHierarchy() != null && setting.getDefaultHierarchy().getAmpThemeId() != null  )
-                                    {
-                                        AmpActivityProgramSettings oldSetting = (AmpActivityProgramSettings) session.get(AmpActivityProgramSettings.class,setting.getAmpProgramSettingsId());
-                                        oldSetting.setAllowMultiple(setting.isAllowMultiple());
-                                        if (setting.getDefaultHierarchy().getAmpThemeId() != -1){
-                                            oldSetting.setDefaultHierarchy(setting.getDefaultHierarchy());
-                                        }else{
-                                            oldSetting.setDefaultHierarchy(null);
-                                        }
-                                        session.update(oldSetting);
-                                    }
-
-                            }
-                            //tx.commit();
-
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            if (settings != null) {
+                Iterator settingsIter = settings.iterator();
+                while (settingsIter.hasNext()) {
+                    AmpActivityProgramSettings setting = (AmpActivityProgramSettings) settingsIter.next();
+                    if (setting.getDefaultHierarchy() != null
+                            && setting.getDefaultHierarchy().getAmpThemeId() != null) {
+                        AmpActivityProgramSettings oldSetting = (AmpActivityProgramSettings) session.
+                                get(AmpActivityProgramSettings.class, setting.getAmpProgramSettingsId());
+                        oldSetting.setAllowMultiple(setting.isAllowMultiple());
+                        if (setting.getDefaultHierarchy().getAmpThemeId() != -1) {
+                            oldSetting.setDefaultHierarchy(setting.getDefaultHierarchy());
+                        } else {
+                            oldSetting.setDefaultHierarchy(null);
+                        }
+                        session.update(oldSetting);
                     }
 
+                }
             }
-            catch (Exception ex) {
-                    logger.error("Unable to save program Setting  " + ex);
-                    if (tx != null) {
-                            try {
-                                    tx.rollback();
-                            }
-                            catch (Exception extx) {
-                                    logger.error(
-                                        "Transaction roll back failed : " +
-                                        extx.getMessage());
 
-                            }
-                    }
-
-                    throw new DgException(ex);
-            }
+        } catch (Exception ex) {
+            logger.error("Unable to save program Setting  " + ex);
+            throw new DgException(ex);
+        }
 
     }
 

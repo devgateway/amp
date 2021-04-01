@@ -99,7 +99,6 @@ export function validate(data, level) {
 }
 
 export function validateMainPrograms(src, dst, level) {
-  debugger;
   let ret = 0;
   if (src || dst) {
     if (!src) {

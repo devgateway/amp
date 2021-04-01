@@ -6,19 +6,22 @@ import { bindActionCreators } from 'redux';
 // Dont use react-plotly directly: https://github.com/plotly/react-plotly.js/issues/135#issuecomment-501398125
 import Plotly from 'plotly.js';
 import createPlotlyComponent from 'react-plotly.js/factory';
+import { callYearDetailReport } from '../../actions/callReports';
 import {
-  DIRECT_PROGRAM, INDIRECT_PROGRAMS, PROGRAMLVL1, AMOUNT, CODE, DIRECT, INDIRECT,
-  TRANSITIONS, PROGRAMLVL2, AVAILABLE_COLORS, TRN_PREFIX, CURRENCY_CODE
+  DIRECT_PROGRAM, INDIRECT_PROGRAMS, PROGRAMLVL1, CODE,
+  PROGRAMLVL2, TRN_PREFIX, CURRENCY_CODE, FUNDING_TYPE
 } from '../../utils/constants';
 import {
-  addAlpha, formatNumberWithSettings, getCustomColor, getGradient
+  formatNumberWithSettings, getCustomColor, formatKMB
 } from '../../utils/Utils';
+// eslint-disable-next-line no-unused-vars
 import styles from '../styles.css';
 import ToolTip from '../tooltips/ToolTip';
+import YearDetail from './YearDetail';
 
 const Plot = createPlotlyComponent(Plotly);
 
-const SRC_DIRECT = '0';
+export const SRC_DIRECT = '0';
 const SRC_INDIRECT = '1';
 
 class FundingByYearChart extends Component {
@@ -26,39 +29,38 @@ class FundingByYearChart extends Component {
     super(props);
     this.getValues = this.getValues.bind(this);
     this.state = {
-      source: SRC_DIRECT, showLegend: false, legendTop: 0, legendLeft: 0, tooltipData: null
+      showLegend: false, legendTop: 0, legendLeft: 0, tooltipData: null, showDetail: false
     };
   }
 
-  onChangeSource = (value) => {
-    this.setState({ source: value.target.value });
-  }
-
   getValues() {
-    const { selectedDirectProgram } = this.props;
-    const { source } = this.state;
+    const { selectedDirectProgram, fundingByYearSource } = this.props;
     const ret = [];
     const { data } = this.props;
     if (data && data.length > 0) {
-      const sourceData = (source === SRC_DIRECT
+      const sourceData = (fundingByYearSource === SRC_DIRECT
         ? data.map(i => i[DIRECT_PROGRAM])
         : data.map(i => i[INDIRECT_PROGRAMS]).flat());
       const filteredData = !selectedDirectProgram ? sourceData
         // TODO: maybe we can show the indirect funding for the selected direct program.
         : (sourceData.filter(i => i[PROGRAMLVL1][CODE] === selectedDirectProgram[CODE]));
       filteredData.forEach(i => {
-        const directProgram = !selectedDirectProgram ? i[PROGRAMLVL1] : i[PROGRAMLVL2];
-        const item = ret.find(j => j[CODE] === directProgram[CODE]);
-        const auxAmounts = i.amountsByYear;
-        if (item) {
-          item.values = this.sortAmountsByYear(this.addAmountsByYear(item.values, Object.keys(auxAmounts)
-            .map(j => ({ [j]: auxAmounts[j] }))));
-        } else {
-          ret.push({
-            [CODE]: directProgram[CODE],
-            name: directProgram.name,
-            values: Object.keys(auxAmounts).map(j => ({ [j]: auxAmounts[j] }))
-          });
+        const program = !selectedDirectProgram ? i[PROGRAMLVL1] : i[PROGRAMLVL2];
+        if (program) {
+          const item = ret.find(j => j[CODE] === program[CODE]);
+          const auxAmounts = i.amountsByYear;
+          if (item) {
+            item.values = this.sortAmountsByYear(this.addAmountsByYear(item.values, Object.keys(auxAmounts)
+              .map(j => ({ [j]: auxAmounts[j] }))));
+          } else {
+            ret.push({
+              [CODE]: program[CODE],
+              name: program.name,
+              values: Object.keys(auxAmounts)
+                .map(j => ({ [j]: auxAmounts[j] })),
+              id: program.objectId
+            });
+          }
         }
       });
       ret.forEach(i => {
@@ -68,7 +70,7 @@ class FundingByYearChart extends Component {
     return ret;
   }
 
-  // eslint-disable-next-line class-methods-use-this
+  // eslint-disable-next-line class-methods-use-this,react/sort-comp
   sortAmountsByYear(values) {
     return values.sort((i, j) => (Object.keys(i)[0] - Object.keys(j)[0]));
   }
@@ -109,10 +111,11 @@ class FundingByYearChart extends Component {
   }
 
   onHover = (data) => {
-    console.log(data);
+    const { text } = data.points[0].data;
+    const lines = Math.ceil(text.length / 30);
     this.setState({
       showLegend: true,
-      legendTop: data.event.pointerY - 25,
+      legendTop: data.event.pointerY - 20 - (lines * 25),
       legendLeft: data.event.pointerX - 100,
       tooltipData: data
     });
@@ -120,6 +123,46 @@ class FundingByYearChart extends Component {
 
   onUnHover = () => {
     this.setState({ showLegend: false, tooltipData: null });
+  }
+
+  onClick = (event) => {
+    const {
+      _callYearDetailReport, settings, filters, fundingType, selectedPrograms, fundingByYearSource
+    } = this.props;
+    this.setState({ showDetail: true, year: event.points[0].x, programName: event.points[0].data.text });
+    const newSettings = { ...settings };
+    newSettings.isShowInnerChartDataForActivitiesDetail = (fundingByYearSource === SRC_INDIRECT);
+    newSettings.dontUseMapping = (selectedPrograms && selectedPrograms.length === 1);
+    newSettings.selectedPrograms = selectedPrograms;
+    _callYearDetailReport(fundingType,
+      filters,
+      event.points[0].data.extraData.find(i => i.name === event.points[0].data.text).id,
+      event.points[0].x,
+      newSettings);
+  }
+
+  createModalWindow = () => {
+    const {
+      translations, yearDetailPending, yearDetail, error, fundingType, settings, globalSettings, dashboardSettings
+    } = this.props;
+    const fundingTypeDescription = dashboardSettings.find(i => i.id === FUNDING_TYPE).value.options
+      .find(ft => ft.id === fundingType);
+    const { showDetail, year, programName } = this.state;
+    return (
+      <YearDetail
+        translations={translations}
+        show={showDetail}
+        handleClose={() => {
+          this.setState({ showDetail: false });
+        }}
+        data={yearDetail}
+        loading={yearDetailPending}
+        error={error}
+        fundingTypeDescription={fundingTypeDescription.name}
+        currencyCode={settings[CURRENCY_CODE]}
+        globalSettings={globalSettings}
+        title={`${year} ${programName}`} />
+    );
   }
 
   createTooltip = () => {
@@ -131,7 +174,8 @@ class FundingByYearChart extends Component {
         <ToolTip
           color={tooltipData.points[0].data.line.color}
           currencyCode={settings[CURRENCY_CODE]}
-          formattedValue={formatNumberWithSettings(translations, globalSettings, tooltipData.points[0].y, true)}
+          formattedValue={formatNumberWithSettings(settings[CURRENCY_CODE], translations, globalSettings,
+            tooltipData.points[0].y, true)}
           titleLabel={`${year} ${tooltipData.points[0].data.text}`}
           total={tooltipData.points[0].data.extraData
             .reduce((a, b) => (a + (b.values.find(i => i[year]) ? b.values.find(i => i[year])[year] : 0)), 0)}
@@ -146,66 +190,122 @@ class FundingByYearChart extends Component {
   }
 
   getColor(source, i) {
-    const { selectedDirectProgram } = this.props;
+    const { selectedDirectProgram, selectedPrograms } = this.props;
     if (source === SRC_DIRECT) {
       if (selectedDirectProgram == null) {
-        return getCustomColor(i, PROGRAMLVL1);
+        return getCustomColor(i, selectedPrograms[0]);
       } else {
-        return getCustomColor(i, `${PROGRAMLVL1}_${selectedDirectProgram.code}`);
+        return getCustomColor(i, `${selectedPrograms[0]}_${selectedDirectProgram.code}`);
       }
     } else {
-      return getCustomColor(i, INDIRECT_PROGRAMS);
+      return getCustomColor(i, selectedPrograms[1]);
     }
   }
 
-  render() {
+  canEnableShowIndirectDataOption = () => {
+    const { data, selectedDirectProgram } = this.props;
+    const ret = data.find(d => d.indirectPrograms.length > 0) && !selectedDirectProgram;
+    return ret;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  calculateYAxisAbbreviations = (annotations, directData) => {
     const { translations, globalSettings } = this.props;
+    const newAnnotations = annotations;
+    let biggest = 0;
+    directData.forEach(i => {
+      if (i.values) {
+        i.values.forEach(j => {
+          Object.keys(j).forEach(k => {
+            const amount = Number.parseFloat(j[k]);
+            if (amount > biggest) {
+              biggest = amount;
+            }
+          });
+        });
+      }
+    });
+    if (biggest) {
+      const formatter = formatKMB(translations, globalSettings.precision, globalSettings.decimalSeparator, false);
+      for (let i = 25; i <= 100; i += 25) {
+        newAnnotations.push({
+          text: formatter(this.getTickValue(biggest, i)),
+          align: 'right',
+          xref: 'paper',
+          x: 0,
+          xanchor: 'right',
+          xshift: 25,
+          yref: 'y',
+          y: this.getTickValue(biggest, i),
+          yanchor: 'auto',
+          yshift: 0,
+          showarrow: false
+        });
+      }
+    }
+    return newAnnotations;
+  }
+
+  // eslint-disable-next-line no-mixed-operators
+  getTickValue = (total, i) => (total * i / 100)
+
+  render() {
     const {
-      source, showLegend, legendTop, legendLeft
+      translations, globalSettings, onChangeSource, fundingByYearSource
+    } = this.props;
+    const {
+      showLegend, legendTop, legendLeft
     } = this.state;
     const directData = this.getValues();
-    const transition = {
+    /* const transition = {
       duration: 2000,
       easing: 'cubic-in-out'
-    };
-    const annotations = directData.length === 0 ? [
+    }; */
+    let annotations = directData.length === 0 ? [
       {
         text: translations[`${TRN_PREFIX}no-data`],
         xref: 'paper',
         yref: 'paper',
         showarrow: false,
         font: {
-          size: 28
+          size: 20
         }
       }
     ] : [];
+    annotations = this.calculateYAxisAbbreviations(annotations, directData);
     return (
       <div>
-        <div>
+        <div className="funding-by-year-radios">
+          <div className="title-fy-source">
+            {fundingByYearSource === SRC_DIRECT ? translations[`${TRN_PREFIX}direct`]
+              : translations[`${TRN_PREFIX}indirect`]}
+          </div>
           <div className="radio-fy-source">
             <input
               type="radio"
               id="fy-direct"
               name="fy-source"
               value="0"
-              checked={source === SRC_DIRECT ? 'checked' : null}
-              onChange={this.onChangeSource} />
+              checked={fundingByYearSource === SRC_DIRECT ? 'checked' : null}
+              onChange={onChangeSource} />
             <label htmlFor="fy-direct">
               {translations[`${TRN_PREFIX}fy-direct`]}
             </label>
           </div>
-          <div className="radio-fy-source">
-            <input
-              type="radio"
-              id="fy-indirect"
-              name="fy-source"
-              value="1"
-              checked={source === SRC_INDIRECT ? 'checked' : null}
-              onChange={this.onChangeSource} />
-            <label htmlFor="fy-indirect">
-              {translations[`${TRN_PREFIX}fy-indirect`]}
-            </label>
-          </div>
+          {this.canEnableShowIndirectDataOption() ? (
+            <div className="radio-fy-source">
+              <input
+                type="radio"
+                id="fy-indirect"
+                name="fy-source"
+                value="1"
+                checked={fundingByYearSource === SRC_INDIRECT ? 'checked' : null}
+                onChange={onChangeSource} />
+              <label htmlFor="fy-indirect">
+                {translations[`${TRN_PREFIX}fy-indirect`]}
+              </label>
+            </div>
+          ) : null}
         </div>
         <Plot
           key="fundingByYearChart"
@@ -224,13 +324,13 @@ class FundingByYearChart extends Component {
                 smoothing: 0.5,
                 dash: 'solid',
                 width: 2,
-                color: this.getColor(source, i),
+                color: this.getColor(fundingByYearSource, i),
               },
               marker: {
                 size: 7,
                 color: 'white',
                 line: {
-                  color: this.getColor(source, i),
+                  color: this.getColor(fundingByYearSource, i),
                   width: 2,
                 }
               }
@@ -242,9 +342,9 @@ class FundingByYearChart extends Component {
             height: 400,
             title: '',
             showlegend: false,
-            transition,
+            /* transition, */
             margin: {
-              l: 50,
+              l: 60,
               r: 30,
               b: 50,
               t: 20,
@@ -261,7 +361,10 @@ class FundingByYearChart extends Component {
             },
             yaxis: {
               automargin: true,
-              fixedrange: true
+              fixedrange: true,
+              visible: true,
+              showline: false,
+              showticklabels: false
             },
             hovermode: 'closest',
             separators: globalSettings.decimalSeparator + globalSettings.groupSeparator
@@ -271,6 +374,7 @@ class FundingByYearChart extends Component {
           style={{ width: '100%', height: '100%', cursor: 'pointer' }}
           onHover={event => this.onHover(event)}
           onUnhover={() => this.onUnHover()}
+          onClick={(event) => this.onClick(event)}
         />
         <div
           style={{
@@ -281,6 +385,7 @@ class FundingByYearChart extends Component {
           className="line-legend-wrapper">
           {this.createTooltip()}
         </div>
+        {this.createModalWindow()}
       </div>
     );
   }
@@ -288,16 +393,39 @@ class FundingByYearChart extends Component {
 
 FundingByYearChart.propTypes = {
   data: PropTypes.array.isRequired,
-  selectedDirectProgram: PropTypes.object.isRequired,
-  translations: PropTypes.array.isRequired,
+  selectedDirectProgram: PropTypes.object,
+  translations: PropTypes.object.isRequired,
   settings: PropTypes.object.isRequired,
-  globalSettings: PropTypes.object.isRequired
+  globalSettings: PropTypes.object.isRequired,
+  _callYearDetailReport: PropTypes.func.isRequired,
+  fundingType: PropTypes.string,
+  filters: PropTypes.object.isRequired,
+  yearDetailPending: PropTypes.bool.isRequired,
+  yearDetail: PropTypes.array,
+  error: PropTypes.object,
+  selectedPrograms: PropTypes.array.isRequired,
+  dashboardSettings: PropTypes.array.isRequired,
+  fundingByYearSource: PropTypes.string.isRequired,
+  onChangeSource: PropTypes.func.isRequired
+};
+
+FundingByYearChart.defaultProps = {
+  selectedDirectProgram: undefined,
+  fundingType: undefined,
+  yearDetail: null,
+  error: undefined
 };
 
 const mapStateToProps = state => ({
-  translations: state.translationsReducer.translations
+  translations: state.translationsReducer.translations,
+  yearDetailPending: state.reportsReducer.yearDetailPending,
+  yearDetail: state.reportsReducer.yearDetail,
+  error: state.reportsReducer.error,
+  dashboardSettings: state.dashboardSettingsReducer.dashboardSettings,
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({
+  _callYearDetailReport: callYearDetailReport
+}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(FundingByYearChart);

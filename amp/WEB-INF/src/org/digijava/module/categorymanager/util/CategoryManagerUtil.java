@@ -142,14 +142,14 @@ public class CategoryManagerUtil {
      * @return The AmpCategoryValue object witch belongs to the AmpCategoryClass with name=categoryName
      * or null if the object is not in the set.
      */
-    public static AmpCategoryValue getAmpCategoryValueFromList(String categoryName, Set<AmpCategoryValue> values) {
-        if ( categoryName == null || values == null) {
+    public static AmpCategoryValue getAmpCategoryValueFromList(String categoryKey, Set<AmpCategoryValue> values) {
+        if (categoryKey == null || values == null) {
             logger.info("Couldn't get AmpCategoryValue because one of the parameters is null");
             return null;
         }
         
         for(AmpCategoryValue ampCategoryValue:values) {
-            if ( ampCategoryValue.getAmpCategoryClass().getName().equalsIgnoreCase(categoryName) ) {
+            if (ampCategoryValue.getAmpCategoryClass().getKeyName().equalsIgnoreCase(categoryKey)) {
                 return ampCategoryValue;
             }
         }

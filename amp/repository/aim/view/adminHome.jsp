@@ -361,7 +361,7 @@
                           </tr>
                         </module:display>
 
-                        <module:display name="NDD Mappings Manager" parentModule="ADMINISTRATIVE SECTION">
+                        <module:display name="Program Mapping Manager" parentModule="ADMINISTRATIVE SECTION">
                           <tr>
                             <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
                             <td class="admin_box_label">
@@ -370,7 +370,7 @@
                               </c:set>
                               <a href="/TEMPLATE/reampv2/build/index.html#/ndd"
                                  title="${translation}">
-                                <digi:trn key="aim:nddMappingManager">NDD Mappings Manager</digi:trn>
+                                <digi:trn key="aim:nddMappingManager">Program Mapping Manager</digi:trn>
                               </a>
                             </td>
                           </tr>

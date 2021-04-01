@@ -3,13 +3,12 @@
  */
 package org.digijava.kernel.ampapi.endpoints.activity;
 
+import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.dgfoundation.amp.ar.ArConstants;
 
 /**
  * Activity Endpoint related constants
@@ -24,6 +23,8 @@ public class ActivityEPConstants {
         ALWAYS
     }
 
+    public static final String X_ASYNC_STATUS = "X-Async-Status";
+    public static final String X_ASYNC_RESULT_ID = "result-id";
     // JSON fields
     public static final String ACTIVITY = "activity";
     public static final String FIELD_NAME = "field_name";
@@ -92,6 +93,7 @@ public class ActivityEPConstants {
     public static final String MODIFIED_BY = "modified-by";
     public static final String MODIFIED_DATE = "modified-date";
     public static final String UPDATE_CURRENT_VERSION = "update-current-version";
+    public static final String SHOW_CHANGE_SUMMARY = "show-change-summary";
 
     // max length constants
     public static final String TYPE_VARCHAR = "character varying";
@@ -102,6 +104,7 @@ public class ActivityEPConstants {
 
     // floating comparison constant
     public static final Double EPSILON = 0.0001;
+    public static final Double MAXIMUM_PERCENTAGE = 100d;
 
     public static final Integer MAX_BULK_ACTIVITIES_ALLOWED = 20;
 
@@ -186,5 +189,6 @@ public class ActivityEPConstants {
             "Sustainability: what happens when the project/action ends?";
     public static final String FUNDING_PROJECT_PROBLEMS_LABEL = "What problems were encountered in this project?";
 
+    public static final Integer SECONDS_TO_SLEEP = 5;
 
 }

@@ -210,6 +210,7 @@
 	<filter-mapping>
 		<filter-name>asyncDetector</filter-name>
 		<url-pattern>/rest/activity/async/*</url-pattern>
+		<url-pattern>/rest/activity/updateMappings/async/*</url-pattern>
 	</filter-mapping>
 
 	<!-- Jersey Servlet  -->

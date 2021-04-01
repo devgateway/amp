@@ -1,23 +1,21 @@
 package org.digijava.kernel.ampapi.endpoints.common;
 
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
-
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
+
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * A generic EP Response that can be used to store commonly reported errors and warnings in the same format by all
  * AMP EPs, as well as any additional generic details or concrete class with response content.
- *
+ * <p>
  * Note that details/content will be reported unwrapped for convenience.
  *
  * @author Nadejda Mandrescu
@@ -40,21 +38,26 @@ public class JsonApiResponse<T> extends ApiErrorResponse {
     private Map<String, Object> details;
 
     public JsonApiResponse(ApiErrorResponse apiErrorResponse) {
-        this(apiErrorResponse.getErrors(), null, null, null);
+        this(apiErrorResponse, null);
+    }
+
+    public JsonApiResponse(ApiErrorResponse apiErrorResponse, Map<String, Object> details) {
+        this(apiErrorResponse.getErrors(), null, details, null);
+
     }
 
     public JsonApiResponse(Map<String, Collection<Object>> errors, Map<String, Collection<Object>> warnings,
-            Map<String, Object> details) {
+                           Map<String, Object> details) {
         this(errors, warnings, details, null);
     }
 
     public JsonApiResponse(Map<String, Collection<Object>> errors, Map<String, Collection<Object>> warnings,
-            T content) {
+                           T content) {
         this(errors, warnings, null, content);
     }
 
     public JsonApiResponse(Map<String, Collection<Object>> errors, Map<String, Collection<Object>> warnings,
-            Map<String, Object> details, T content) {
+                           Map<String, Object> details, T content) {
         super(errors);
         this.warnings = warnings;
         this.details = details;
@@ -94,6 +97,7 @@ public class JsonApiResponse<T> extends ApiErrorResponse {
     /**
      * Sets a generic Map with details of the response, that you cannot build in a concrete class.
      * If you can have a concrete class, then please define it and store in content instead.
+     *
      * @param details
      */
     public void setDetails(Map<String, Object> details) {

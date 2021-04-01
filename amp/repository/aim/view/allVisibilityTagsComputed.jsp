@@ -96,7 +96,7 @@
 <module:display name="Structure Types Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Aid Effectiveness Indicators Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Indicator Layer Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
-<module:display name="NDD Mappings Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
+<module:display name="Program Mapping Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <feature:display module="Activity Costing" name="Costing"></feature:display> 
 <feature:display module="Contact Information" name="Government Contact Information"></feature:display> 
 <feature:display module="Contracting" name="Contracting"></feature:display> 

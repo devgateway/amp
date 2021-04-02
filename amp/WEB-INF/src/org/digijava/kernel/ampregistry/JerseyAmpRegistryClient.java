@@ -1,17 +1,19 @@
 package org.digijava.kernel.ampregistry;
 
-import java.io.InputStream;
-import java.util.List;
-
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.UriBuilder;
-
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.GenericType;
+import com.sun.jersey.api.client.config.ClientConfig;
+import com.sun.jersey.api.client.config.DefaultClientConfig;
+import com.sun.jersey.api.json.JSONConfiguration;
 import org.apache.log4j.Logger;
 import org.digijava.module.aim.dbentity.AmpOfflineRelease;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
+
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriBuilder;
+import java.io.InputStream;
+import java.util.List;
 
 import static com.sun.jersey.api.client.config.ClientConfig.PROPERTY_CONNECT_TIMEOUT;
 import static com.sun.jersey.api.client.config.ClientConfig.PROPERTY_READ_TIMEOUT;
@@ -35,7 +37,8 @@ public class JerseyAmpRegistryClient implements AmpRegistryClient {
     private String baseUrl;
 
     public JerseyAmpRegistryClient() {
-
+        ClientConfig clientConfig = new DefaultClientConfig();
+        clientConfig.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
         if (JERSEY_CONNECT_TIMEOUT != null) {
             clientConfig.getProperties().put(PROPERTY_CONNECT_TIMEOUT, JERSEY_CONNECT_TIMEOUT);
         }
@@ -43,7 +46,7 @@ public class JerseyAmpRegistryClient implements AmpRegistryClient {
         if (JERSEY_READ_TIMEOUT != null) {
             clientConfig.getProperties().put(PROPERTY_READ_TIMEOUT, JERSEY_READ_TIMEOUT);
         }
-        client = Client.create();
+        client = Client.create(clientConfig);
 
         baseUrl = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMP_REGISTRY_URL);
     }

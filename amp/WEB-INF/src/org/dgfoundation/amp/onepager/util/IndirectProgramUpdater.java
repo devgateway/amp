@@ -26,7 +26,8 @@ import static java.util.Collections.emptySet;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.mapping;
 import static java.util.stream.Collectors.toCollection;
-import static org.digijava.kernel.ampapi.endpoints.ndd.NDDService.INDIRECT_PROGRAM_MAPPING_LEVEL;
+import static org.digijava.kernel.ampapi.endpoints.ndd.NDDService.getMappingLevel;
+import static org.digijava.module.aim.helper.GlobalSettingsConstants.MAPPING_PROGRAM_LEVEL;
 
 /**
  * @author Octavian Ciubotaru
@@ -123,7 +124,7 @@ public class IndirectProgramUpdater {
     }
 
     private List<AmpTheme> getIndirectPrograms(Map<AmpTheme, Set<AmpTheme>> themeMapping, AmpTheme program) {
-        while (program.getIndlevel() > INDIRECT_PROGRAM_MAPPING_LEVEL) {
+        while (program.getIndlevel() > getMappingLevel(MAPPING_PROGRAM_LEVEL)) {
             program = program.getParentThemeId();
         }
 

@@ -13,24 +13,24 @@ const ProjectList = ({title}) => <h3>{title}</h3>;
 
 class GeocoderPanel extends Component {
 
-    onSelectActivity = (isSelected, activityId) => {
+    onSelectActivity = (isSelected, ampId) => {
         let selectedActivities = Array.from(this.props.selectedActivities);
         if (isSelected) {
-            selectedActivities.push(activityId);
+            selectedActivities.push(ampId);
         } else {
-            selectedActivities = selectedActivities.filter(id => id !== activityId);
+            selectedActivities = selectedActivities.filter(id => id !== ampId);
         }
         this.props.selectActivitiesForGeocoding(selectedActivities);
     }
 
     onSelectAllActivities = (isSelected, rows) => {
         let selectedActivities = Array.from(this.props.selectedActivities);
-        let activityIds = rows.map(r => r.id);
+        let ampIds = rows.map(r => r.id);
 
         if (isSelected) {
-            activityIds.forEach(activityId => selectedActivities.push(activityId));
+            ampIds.forEach(ampId => selectedActivities.push(ampId));
         } else {
-            selectedActivities = selectedActivities.filter(id => !activityIds.includes(id));
+            selectedActivities = selectedActivities.filter(id => !ampIds.includes(id));
         }
 
         this.props.selectActivitiesForGeocoding(selectedActivities);

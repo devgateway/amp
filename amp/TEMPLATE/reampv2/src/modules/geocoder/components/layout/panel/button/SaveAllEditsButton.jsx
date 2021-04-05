@@ -26,11 +26,11 @@ class SaveAllEditsButton extends Component {
     }
 
     onSaveAllEdits = () => {
-        const activityIds = this.props.geocoding.activities
+        const ampIds = this.props.geocoding.activities
             .filter(activity => activity.locations.length > 0)
             .filter(activity => activity.locations.filter(loc => loc.accepted !== false && loc.accepted !== true).length < 1)
             .map(act => act.amp_id);
-        this.props.saveAllEdits(activityIds);
+        this.props.saveAllEdits(ampIds);
         this.handleClose();
     }
 

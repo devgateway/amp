@@ -9,6 +9,7 @@ import {loadActivities} from "../../../actions/activitiesAction";
 import {orderDates} from "../../../utils/utils";
 import {Loading} from "../panel/Loading";
 import {TranslationContext} from "../../AppContext";
+import {PaginationTotal} from "./PaginationTotal";
 
 class ActivityTable extends Component {
     constructor(props) {
@@ -24,12 +25,6 @@ class ActivityTable extends Component {
     render() {
         const {translations} = this.context;
 
-        let customTotal = (from, to, size) => (
-            <span className="react-bootstrap-table-pagination-total">
-                {from} to {to} of {size} projects
-            </span>
-        );
-
         let options = {
             page: 1,
             sizePerPage: this.props.settings['workspace-default-records-per-page'],
@@ -41,7 +36,7 @@ class ActivityTable extends Component {
             lastPage: 'Last',
             hideSizePerPage: true,
             showTotal: true,
-            paginationTotalRenderer: customTotal
+            paginationTotalRenderer: (from, to, size) => PaginationTotal(from, to, size)
         };
 
         let selectRow = {

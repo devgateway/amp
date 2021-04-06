@@ -13,6 +13,7 @@ import {TranslationContext} from "../../AppContext";
 import ActivityWithoutLocationsDialog from "../panel/dialog/ActivityWithoutLocationsDialog";
 import ActivitySaveResultsDialog from "../panel/dialog/ActivitySaveResultsDialog";
 import {orderDates} from "../../../utils/utils";
+import {PaginationTotal} from "./PaginationTotal";
 
 class GeocodingTable extends Component {
     constructor(props) {
@@ -104,14 +105,7 @@ class GeocodingTable extends Component {
             )
         };
 
-        let customTotal = (from, to, size) => (
-            <span className="react-bootstrap-table-pagination-total">
-                {from} to {to} of {size} projects
-            </span>
-        );
-
         let options = {
-
             page: 1,
             sizePerPage: this.props.settings['workspace-default-records-per-page'],
             pageStartIndex: 1,
@@ -122,7 +116,7 @@ class GeocodingTable extends Component {
             lastPage: 'Last',
             hideSizePerPage: true,
             showTotal: true,
-            paginationTotalRenderer: customTotal
+            paginationTotalRenderer: (from, to, size) => PaginationTotal(from, to, size)
         };
 
         let col1Text = translations['amp.geocoder:lastUpdatedDate'];

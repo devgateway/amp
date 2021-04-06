@@ -60,7 +60,7 @@ public class AmpThemeSearchModel extends AbstractAmpAutoCompleteModel<AmpTheme> 
                         .collect(Collectors.toList());
 
                 if (mappedPrograms != null) {
-                    filteredPrograms.sort(Comparator.comparing(AmpTheme::getIndlevel));
+                    filteredPrograms.sort(Comparator.comparing(AmpTheme::getHierarchicalName));
                     ret.addAll(filteredPrograms);
                 } else {
                     ret.addAll((Collection<? extends AmpTheme>) createTreeView(filteredPrograms));
@@ -75,7 +75,7 @@ public class AmpThemeSearchModel extends AbstractAmpAutoCompleteModel<AmpTheme> 
 
     private List<AmpTheme> getAllPrograms() {
         Criteria crit = PersistenceManager.getRequestDBSession().createCriteria(AmpTheme.class);
-        crit.setCacheable(true);
+        crit.setCacheable(false);
         if (input.trim().length() > 0) {
             Object o = getTextCriterion("name", input);
             if (o instanceof SimpleExpression) {

@@ -53,7 +53,7 @@ class GeocodingTable extends Component {
 
     componentDidUpdate() {
         if(this.props.geocodeShouldRun) {
-            this.props.loadGeocoding();
+            setTimeout(() => this.props.loadGeocoding(), 5000);
         }
     }
 
@@ -162,7 +162,7 @@ class GeocodingTable extends Component {
             },
         ];
 
-        let data = this.props.activities.filter(act => act.status !== 'SAVED');
+        let data = this.props.activities.filter(act => act.locations.length > 0 && act.status !== 'SAVED');
 
         return (
             <>
@@ -170,7 +170,7 @@ class GeocodingTable extends Component {
                 <BootstrapTable
                     keyField="amp_id"
                     scrollY
-                    data={this.props.activities}
+                    data={data}
                     maxHeight="200px"
                     columns={columns}
                     classes="table-striped"

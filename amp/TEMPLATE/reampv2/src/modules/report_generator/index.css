@@ -22,3 +22,8 @@
     position: relative;
     margin-left: 5px;
 }
+
+.filters_segment {
+    min-height: 4rem !important;
+    background-color: #e7f1fd !important;
+}

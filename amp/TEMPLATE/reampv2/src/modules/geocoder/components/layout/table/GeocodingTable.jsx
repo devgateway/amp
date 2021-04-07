@@ -170,7 +170,7 @@ class GeocodingTable extends Component {
                 <BootstrapTable
                     keyField="amp_id"
                     scrollY
-                    data={activitiesWithLocations}
+                    data={data}
                     maxHeight="200px"
                     columns={columns}
                     classes="table-striped"

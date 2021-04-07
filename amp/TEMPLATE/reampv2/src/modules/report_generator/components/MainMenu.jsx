@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import { Menu } from 'semantic-ui-react';
+import {
+  Button, Header, Item, Menu
+} from 'semantic-ui-react';
 import './MainMenu.css';
 
 export default class MainMenu extends Component {
   constructor() {
     super();
-    this.state = { activeItem: 'Reporting Details' };
+    this.state = { activeItem: 'details' };
   }
 
   handleItemClick = (e, { name }) => this.setState({ activeItem: name })
@@ -16,20 +18,27 @@ export default class MainMenu extends Component {
       <>
         <Menu fluid vertical>
           <Menu.Item
-            name="Reporting Details"
-            active={activeItem === 'Reporting Details'}
+            name="details"
+            content="Reporting Details"
+            active={activeItem === 'details'}
             onClick={this.handleItemClick}
               />
           <Menu.Item
-            name="Columns"
-            active={activeItem === 'Columns'}
+            name="columns"
+            content="Columns"
+            active={activeItem === 'columns'}
             onClick={this.handleItemClick}
               />
           <Menu.Item
-            name="Measures"
-            active={activeItem === 'Measures'}
+            name="measures"
+            content="Measures"
+            active={activeItem === 'measures'}
             onClick={this.handleItemClick}
               />
+          <Item className="save_buttons_item">
+            <Button color="green">Save</Button>
+            <Button color="orange">Save As</Button>
+          </Item>
         </Menu>
       </>
     );

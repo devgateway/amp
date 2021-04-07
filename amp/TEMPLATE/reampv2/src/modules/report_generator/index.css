@@ -1,0 +1,24 @@
+.green_text {
+    color: green;
+}
+
+.red_text {
+    color: #c30606;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.info-icon {
+    height: 15px;
+    width: 15px;
+    margin-right: 3px;
+    top: -1px;
+    position: relative;
+    margin-left: 5px;
+}

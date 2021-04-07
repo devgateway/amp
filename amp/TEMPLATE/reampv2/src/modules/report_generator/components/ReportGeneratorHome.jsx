@@ -1,18 +1,15 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Container, Header, Loader } from 'semantic-ui-react';
+import { Container } from 'semantic-ui-react';
 import { ReportGeneratorContext } from './StartUp';
+import MainHeader from './MainHeader';
 
 class ReportGeneratorHome extends Component {
   render() {
     return (
       <Container>
-        <Header>
-          Fomantic-UI & Semantic-UI-React
-          <Loader active inline className="slow red" />
-          <Loader active inline className="fast green" />
-        </Header>
+        <MainHeader />
       </Container>
     );
   }

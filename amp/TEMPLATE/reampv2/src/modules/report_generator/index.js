@@ -9,6 +9,7 @@ import defaultTrnPack from './config/initialTranslations.json';
 import 'fomantic-ui-css/semantic.css';
 import '../ndddashboard/index.css';
 import '../ndddashboard/open-sans.css';
+import './index.css';
 
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 

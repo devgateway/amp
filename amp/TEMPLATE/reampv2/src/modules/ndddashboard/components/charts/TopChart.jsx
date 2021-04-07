@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { ResponsiveBar } from '@nivo/bar';
 import PropTypes from 'prop-types';
-import { NDDTranslationContext } from './StartUp';
-import ToolTip from './tooltips/ToolTip';
-import { formatKMB, formatNumberWithSettings } from '../utils/Utils';
-import SimpleLegend from '../../../utils/components/SimpleLegend';
+import { NDDTranslationContext } from '../StartUp';
+import ToolTip from '../tooltips/ToolTip';
+import { formatKMB, formatNumberWithSettings } from '../../utils/Utils';
+import SimpleLegend from '../../../../utils/components/SimpleLegend';
+import { CURRENCY_CODE } from '../../utils/constants';
 
 const styles = {
   fontFamily: 'sans-serif',
@@ -12,7 +13,7 @@ const styles = {
 };
 
 class TopChart extends Component {
-
+  // eslint-disable-next-line class-methods-use-this
   getColor(item) {
     return colors[item.index];
   }
@@ -20,27 +21,29 @@ class TopChart extends Component {
   getLabel(item) {
     const { translations } = this.context;
     const { globalSettings } = this.props;
-    const formatter = formatKMB(translations, globalSettings.precision, globalSettings.decimalSeparator);
+    const formatter = formatKMB(translations, globalSettings.precision, globalSettings.decimalSeparator, false, null);
     return formatter(item.data.value);
   }
 
   getOthers(o) {
     const { translations } = this.context;
-    const { globalSettings } = this.props;
+    const { globalSettings, settings } = this.props;
     return {
       id: '-9999',
       name: translations['amp.ndd.dashboard:others'],
       value: o,
-      formattedAmount: formatNumberWithSettings(translations, globalSettings, o, true)
+      formattedAmount: formatNumberWithSettings(settings[CURRENCY_CODE], translations, globalSettings, o, true)
     };
     // TODO apply format from global settings
   }
 
   render() {
-    const { data, globalSettings } = this.props;
+    const {
+      data, globalSettings, translations, settings
+    } = this.props;
     const transformedData = data.values.slice(0, 5).map(v => ({
       id: v.id.toString(),
-      formattedAmount: v.formattedAmount,
+      formattedAmount: formatNumberWithSettings(settings[CURRENCY_CODE], translations, globalSettings, v.amount, true),
       name: v.name,
       value: v.amount,
     }));
@@ -116,6 +119,8 @@ TopChart.contextType = NDDTranslationContext;
 
 TopChart.propTypes = {
   data: PropTypes.object.isRequired,
-  globalSettings: PropTypes.object.isRequired
+  globalSettings: PropTypes.object.isRequired,
+  translations: PropTypes.object.isRequired,
+  settings: PropTypes.object.isRequired
 };
 export default TopChart;

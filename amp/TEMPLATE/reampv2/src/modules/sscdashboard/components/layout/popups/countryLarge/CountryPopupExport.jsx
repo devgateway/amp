@@ -14,7 +14,7 @@ class CountryPopupExport extends Component {
       printTitle, printChartId, printFilters, countriesForExport, onlyOneCountry
     } = this.props;
     if (countriesForExport.length === 0 || onlyOneCountry) {
-      printChart(printTitle, printChartId, printFilters, printFormat, true, 'print-dummy-container').then(() => {
+      printChart(printTitle, printChartId, printFilters, printFormat, true, 'print-dummy-container', true).then(() => {
       }).catch(e => {
         alert('Error while printing');
       });
@@ -48,19 +48,19 @@ class CountryPopupExport extends Component {
             onClick={this.exportChartToXls.bind(this)}>
             xls
           </li>
-          <PrintCountryCharts countriesForExport={countriesForExport}/>
+          <PrintCountryCharts countriesForExport={countriesForExport} />
           <li className="return-link" onClick={() => this.props.closeLargeCountryPopinAndClearFilter()}>X</li>
         </ul>
         <ReactTooltip
           place="bottom"
           multiline
           id="download-png"
-          className="download-checkbox-tooltip"/>
+          className="download-checkbox-tooltip" />
         <ReactTooltip
           place="bottom"
           multiline
           id="download-xls"
-          className="download-checkbox-tooltip"/>
+          className="download-checkbox-tooltip" />
       </div>
     );
   }

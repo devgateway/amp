@@ -1,3 +1,4 @@
+/* eslint-disable react/destructuring-assignment */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -8,7 +9,7 @@ import {
 } from '../constants/Constants';
 import '../../../../../node_modules/react-bootstrap-typeahead/css/Typeahead.min.css';
 import './css/style.css';
-import ProgramSelect from './ProgramSelect';
+import Select from './Select';
 import * as Utils from '../utils/Utils';
 
 class ProgramSelectGroup extends Component {
@@ -33,6 +34,7 @@ class ProgramSelectGroup extends Component {
         [STATE_LEVEL_FIELD + SECOND_LEVEL]: data[type + PROGRAM].lvl2,
         [STATE_LEVEL_FIELD + THIRD_LEVEL]: data[type + PROGRAM].lvl3
       };
+      // eslint-disable-next-line react/no-did-mount-set-state
       this.setState(newState);
     }
   }
@@ -48,6 +50,7 @@ class ProgramSelectGroup extends Component {
     let level1 = this.state[STATE_LEVEL_FIELD + FIRST_LEVEL];
     let level2 = this.state[STATE_LEVEL_FIELD + SECOND_LEVEL];
     let level3 = this.state[STATE_LEVEL_FIELD + THIRD_LEVEL];
+    // eslint-disable-next-line default-case
     switch (lvl) {
       case FIRST_LEVEL:
         if (id && value) {
@@ -91,6 +94,7 @@ class ProgramSelectGroup extends Component {
     const { type, src, dst } = this.props;
     let options = [];
     const tree = Utils.findFullProgramTree(ndd, type, src, dst);
+    // eslint-disable-next-line default-case
     switch (level) {
       case FIRST_LEVEL:
         if (tree && tree[CHILDREN]) {
@@ -99,18 +103,28 @@ class ProgramSelectGroup extends Component {
         break;
       case SECOND_LEVEL:
         if (tree && tree[CHILDREN]) {
-          if (this.state[STATE_LEVEL_FIELD + FIRST_LEVEL]) {
-            options = tree[CHILDREN]
-              .find(i => i.id === this.state[STATE_LEVEL_FIELD + FIRST_LEVEL].id)[CHILDREN];
+          if (this.state[STATE_LEVEL_FIELD + FIRST_LEVEL] && tree[CHILDREN]) {
+            const obj = tree[CHILDREN]
+              .find(i => this.state[STATE_LEVEL_FIELD + FIRST_LEVEL]
+                && i.id === this.state[STATE_LEVEL_FIELD + FIRST_LEVEL].id);
+            if (obj) {
+              options = obj[CHILDREN];
+            }
           }
         }
         break;
       case THIRD_LEVEL:
         if (tree && tree[CHILDREN]) {
-          if (this.state[STATE_LEVEL_FIELD + SECOND_LEVEL]) {
-            options = tree[CHILDREN]
-              .find(i => i.id === this.state[STATE_LEVEL_FIELD + FIRST_LEVEL].id)[CHILDREN]
-              .find(i => i.id === this.state[STATE_LEVEL_FIELD + SECOND_LEVEL].id)[CHILDREN];
+          if (this.state[STATE_LEVEL_FIELD + SECOND_LEVEL] && tree[CHILDREN]) {
+            const obj1 = tree[CHILDREN].find(i => this.state[STATE_LEVEL_FIELD + FIRST_LEVEL]
+                && i.id === this.state[STATE_LEVEL_FIELD + FIRST_LEVEL].id);
+            if (obj1) {
+              const obj2 = obj1[CHILDREN].find(i => this.state[STATE_LEVEL_FIELD + SECOND_LEVEL]
+                && i.id === this.state[STATE_LEVEL_FIELD + SECOND_LEVEL].id);
+              if (obj2) {
+                options = obj2[CHILDREN];
+              }
+            }
           }
         }
         break;
@@ -121,6 +135,7 @@ class ProgramSelectGroup extends Component {
   getSelectedForLevel(level) {
     const selected = [];
     const { state } = this;
+    // eslint-disable-next-line default-case
     switch (level) {
       case FIRST_LEVEL:
         if (state[STATE_LEVEL_FIELD + FIRST_LEVEL]) {
@@ -136,7 +151,7 @@ class ProgramSelectGroup extends Component {
             id: state[STATE_LEVEL_FIELD + SECOND_LEVEL].id,
             value: state[STATE_LEVEL_FIELD + SECOND_LEVEL].value
           });
-        }
+        }// todo: ver q pasa cuando el level es 3 pero solo tengo 2 niveles.
         break;
       case THIRD_LEVEL:
         if (state[STATE_LEVEL_FIELD + THIRD_LEVEL]) {
@@ -162,31 +177,40 @@ class ProgramSelectGroup extends Component {
 
   render() {
     const { translations, trnPrefix } = this.context;
-    const { type } = this.props;
+    const { type, disabled, level } = this.props;
     return (
       <div>
         <div style={{ width: '100%' }}>
-          <ProgramSelect
-            placeholder={translations[`${trnPrefix}choose-${type}-lvl-${FIRST_LEVEL}`]}
-            label={translations[`${trnPrefix + type}-program-lvl-${FIRST_LEVEL}`]}
-            options={this.getOptionsForLevel(FIRST_LEVEL)}
-            selected={this.getSelectedForLevel(FIRST_LEVEL)}
-            onChange={this.onSelectChange}
-            level={FIRST_LEVEL} />
-          <ProgramSelect
-            placeholder={translations[`${trnPrefix}choose-${type}-lvl-${SECOND_LEVEL}`]}
-            label={translations[`${trnPrefix + type}-program-lvl-${SECOND_LEVEL}`]}
-            options={this.getOptionsForLevel(SECOND_LEVEL)}
-            selected={this.getSelectedForLevel(SECOND_LEVEL)}
-            onChange={this.onSelectChange}
-            level={SECOND_LEVEL} />
-          <ProgramSelect
-            placeholder={translations[`${trnPrefix}choose-${type}-lvl-${THIRD_LEVEL}`]}
-            label={translations[`${trnPrefix + type}-program-lvl-${THIRD_LEVEL}`]}
-            options={this.getOptionsForLevel(THIRD_LEVEL)}
-            selected={this.getSelectedForLevel(THIRD_LEVEL)}
-            onChange={this.onSelectChange}
-            level={THIRD_LEVEL} />
+          {level >= 1 ? (
+            <Select
+              placeholder={translations[`${trnPrefix}choose-${type}-lvl-${FIRST_LEVEL}`]}
+              label={translations[`${trnPrefix + type}-program-lvl-${FIRST_LEVEL}`]}
+              options={this.getOptionsForLevel(FIRST_LEVEL)}
+              selected={this.getSelectedForLevel(FIRST_LEVEL)}
+              onChange={this.onSelectChange}
+              level={FIRST_LEVEL}
+              disabled={disabled} />
+          ) : null}
+          {level >= 2 ? (
+            <Select
+              placeholder={translations[`${trnPrefix}choose-${type}-lvl-${SECOND_LEVEL}`]}
+              label={translations[`${trnPrefix + type}-program-lvl-${SECOND_LEVEL}`]}
+              options={this.getOptionsForLevel(SECOND_LEVEL)}
+              selected={this.getSelectedForLevel(SECOND_LEVEL)}
+              onChange={this.onSelectChange}
+              level={SECOND_LEVEL}
+              disabled={disabled} />
+          ) : null}
+          {level >= 3 ? (
+            <Select
+              placeholder={translations[`${trnPrefix}choose-${type}-lvl-${THIRD_LEVEL}`]}
+              label={translations[`${trnPrefix + type}-program-lvl-${THIRD_LEVEL}`]}
+              options={this.getOptionsForLevel(THIRD_LEVEL)}
+              selected={this.getSelectedForLevel(THIRD_LEVEL)}
+              onChange={this.onSelectChange}
+              level={THIRD_LEVEL}
+              disabled={disabled} />
+          ) : null}
         </div>
       </div>
     );
@@ -198,10 +222,18 @@ ProgramSelectGroup.propTypes = {
   data: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
   src: PropTypes.object,
-  dst: PropTypes.object
+  dst: PropTypes.object,
+  disabled: PropTypes.bool.isRequired,
+  level: PropTypes.number.isRequired
+};
+
+ProgramSelectGroup.defaultProps = {
+  src: undefined,
+  dst: undefined
 };
 
 ProgramSelectGroup.contextType = NDDContext;
+// eslint-disable-next-line no-unused-vars
 const mapStateToProps = state => ({});
 const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
 export default connect(mapStateToProps, mapDispatchToProps)(ProgramSelectGroup);

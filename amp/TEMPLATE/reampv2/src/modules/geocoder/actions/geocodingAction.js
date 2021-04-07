@@ -75,22 +75,14 @@ export function fetchGeocodingErrorWithCode(error, status, code) {
 export function geocodeLocationPending(amp_id, location_id, accepted) {
     return {
         type: GEOCODING_LOCATION_PENDING,
-        payload: {
-            amp_id: amp_id,
-            location_id: location_id,
-            accepted: accepted
-        }
+        payload: {amp_id, location_id, accepted}
     }
 }
 
 export function geocodeLocationSuccess(amp_id, location_id, accepted) {
     return {
         type: GEOCODING_LOCATION_SUCCESS,
-        payload: {
-            activity_id: amp_id,
-            location_id: location_id,
-            accepted: accepted
-        }
+        payload: {amp_id, location_id, accepted}
     }
 }
 
@@ -224,10 +216,10 @@ export const loadGeocoding = () => {
     }
 };
 
-export const runSearch = (activityIds) => {
+export const runSearch = (ampIds) => {
     return dispatch => {
         dispatch(runSearchPending());
-        return fetchApiDataWithStatus({body: activityIds, url: '/rest/geo-coder/process'})
+        return fetchApiDataWithStatus({body: ampIds, url: '/rest/geo-coder/process'})
             .then(geocoding => {
                 return dispatch(runSearchSuccess(geocoding));
             })

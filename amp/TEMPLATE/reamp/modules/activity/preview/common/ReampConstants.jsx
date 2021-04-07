@@ -28,6 +28,8 @@ export const TEAM_ID = 'team-id';
 export const REORDER_FUNDING_ITEM = 'reorder-funding-item';
 export const FUNDING_INFORMATION = 'funding_information';
 export const TRANSACTION_ID = 'transaction_id';
+export const WORKSPACE_TYPE = 'workspace-type';
+export const WORKSPACE_TYPE_MANAGEMENT = 'Management';
 
 export const ACTIVITY_FORM_URL = '/wicket/onepager/activity';
 export const ACTIVITY_FORM_URL_SSC = '/wicket/onepager/ssc';

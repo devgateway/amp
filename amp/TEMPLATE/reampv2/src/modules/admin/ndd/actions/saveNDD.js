@@ -1,7 +1,7 @@
 import { saveNDDSuccess, saveNDDPending, saveNDDError } from './saveAction';
 import { LAYOUT_EP } from '../constants/Constants';
 
-function saveNDD(src, dst, mappings, urlSavePrograms, urlSaveConfig) {
+function saveNDD(src, dst, mappings, urlSavePrograms, urlSaveConfig, level) {
   return dispatch => {
     dispatch(saveNDDPending());
     fetch(LAYOUT_EP).then(layoutRes => layoutRes.json()).then(data => {
@@ -10,24 +10,21 @@ function saveNDD(src, dst, mappings, urlSavePrograms, urlSaveConfig) {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            'src-program': src.id,
-            'dst-program': dst.id
+            'src-program': src ? src.id : null,
+            'dst-program': dst ? dst.id : null,
+            level
           })
         }).then(res => {
-          if (res.error) {
-            throw (res.error);
-          }
-          fetch(urlSaveConfig, {
+          processResponse(res);
+          return fetch(urlSaveConfig, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(mappings)
           })
-            .then(res => {
-              if (res.error) {
-                throw (res.error);
-              }
-              dispatch(saveNDDSuccess(res));
-              return res;
+            .then(response => {
+              processResponse(response);
+              dispatch(saveNDDSuccess(response));
+              return response;
             })
             .catch(error => {
               dispatch(saveNDDError(error));
@@ -40,8 +37,20 @@ function saveNDD(src, dst, mappings, urlSavePrograms, urlSaveConfig) {
         window.location.replace('/login.do');
         dispatch(saveNDDError({ error: 'not logged' }));
       }
+    }).catch(error => {
+      dispatch(saveNDDError(error));
     });
   };
+}
+
+function processResponse(response) {
+  if (response.status === 500 || response.error) {
+    if (response.error) {
+      throw (response.error);
+    } else {
+      throw (response.statusText);
+    }
+  }
 }
 
 export default saveNDD;

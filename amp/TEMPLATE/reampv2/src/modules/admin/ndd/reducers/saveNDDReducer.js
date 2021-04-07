@@ -33,3 +33,5 @@ export default function sendNDDReducer(state = initialState, action) {
 export const sendNDD = state => state.data;
 export const sendNDDPending = state => state.saving;
 export const sendNDDError = state => state.error;
+export const sendNDDSaving = state => state.saving;
+

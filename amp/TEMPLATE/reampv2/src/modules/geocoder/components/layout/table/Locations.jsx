@@ -17,8 +17,8 @@ function LocationFields({fields}) {
 
 class Locations extends Component {
 
-    selectLocations = (activityId) => {
-        return this.props.activities.filter(activity => activity.activity_id === activityId)[0].locations;
+    selectLocations = (ampId) => {
+        return this.props.activities.filter(activity => activity.amp_id === ampId)[0].locations;
     }
 
     constructor(props) {
@@ -40,7 +40,7 @@ class Locations extends Component {
     };
 
     render() {
-        let locations = this.selectLocations(this.props.activityId);
+        let locations = this.selectLocations(this.props.ampId);
 
         const handleLocation = {
             handleAcceptLocation: this.handleAcceptLocation.bind(this),

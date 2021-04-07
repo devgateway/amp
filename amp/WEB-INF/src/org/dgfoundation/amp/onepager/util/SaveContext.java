@@ -7,7 +7,7 @@ public final class SaveContext {
 
     private static final SaveContext JOB_CONTEXT = new SaveContext(ActivitySource.JOB, false, null, true);
     private static final SaveContext PATCH_CONTEXT = new SaveContext(ActivitySource.PATCH, false, null, true);
-
+    private static final SaveContext ADMIN_CONTEXT = new SaveContext(ActivitySource.ADMIN, false, null, true);
     private final ActivitySource source;
     private final boolean updateActivityStatus;
     private final Boolean rejected;
@@ -31,6 +31,10 @@ public final class SaveContext {
 
     public static SaveContext patch() {
         return PATCH_CONTEXT;
+    }
+
+    public static SaveContext admin() {
+        return ADMIN_CONTEXT;
     }
 
     private SaveContext(ActivitySource source, boolean updateActivityStatus, Boolean rejected, boolean prepareToSave) {

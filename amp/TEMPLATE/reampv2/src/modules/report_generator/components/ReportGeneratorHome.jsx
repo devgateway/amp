@@ -5,6 +5,7 @@ import { Container } from 'semantic-ui-react';
 import { ReportGeneratorContext } from './StartUp';
 import MainHeader from './MainHeader';
 import Filters from './Filters';
+import MainContent from './MainContent';
 
 class ReportGeneratorHome extends Component {
   render() {
@@ -12,6 +13,7 @@ class ReportGeneratorHome extends Component {
       <Container>
         <MainHeader />
         <Filters />
+        <MainContent />
       </Container>
     );
   }

@@ -166,6 +166,8 @@ class GeocodingTable extends Component {
             },
         ];
 
+        let data = this.props.activities.filter(act => act.status !== 'SAVED');
+
         return (
             <>
             <div className="activity-table">

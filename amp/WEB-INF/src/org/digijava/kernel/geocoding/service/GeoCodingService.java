@@ -34,6 +34,8 @@ import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static org.digijava.kernel.entity.geocoding.GeoCodedActivity.Status.SAVED;
+
 /**
  * @author Octavian Ciubotaru
  */
@@ -278,10 +280,9 @@ public class GeoCodingService {
                 if (acceptedLocationsExist(geoCodedActivity)) {
                     updateActivity(geoCodedActivity);
                 }
-                geoCoding.getActivities().remove(geoCodedActivity);
+                geoCodedActivity.setStatus(SAVED);
             }
         }
-
     }
 
     private boolean acceptedLocationsExist(GeoCodedActivity activity) {

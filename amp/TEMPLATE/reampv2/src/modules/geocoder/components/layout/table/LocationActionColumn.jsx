@@ -5,11 +5,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default class LocationActionColumn extends Component {
 
-    constructor(props) {
-        super(props);
-
-    }
-
     render() {
 
         const {

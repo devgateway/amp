@@ -9,10 +9,6 @@ import SaveAllEditsButton from "../panel/button/SaveAllEditsButton";
 
 class GeocodingTableHeader extends Component {
 
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         const {translations} = this.context;
 

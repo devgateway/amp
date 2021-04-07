@@ -9,28 +9,27 @@ import {
     resetSaveResults
 } from "../../../../actions/geocodingAction";
 
-function ActivitySaveResults({activities}) {
+function ActivitySaveResults(props) {
     const results = [];
-    const activitiesWithoutErrors = activities.filter(activity => !activity.error);
-    debugger;
-    const activitiesWithErrors = activities.filter(activity => activity.error);
+    const activitiesWithoutErrors = props.activities.filter(activity => !activity.error);
+    const activitiesWithErrors = props.activities.filter(activity => activity.error);
     if (activitiesWithoutErrors.length > 0) {
-        results.push(<div className={'status-header'}>Activities saved without errors:</div>)
+        results.push(<div className={'status-header'}>{props.saveResultsText}:</div>)
         results.push(
             activitiesWithoutErrors.map((activity) =>
                 <>
-                    <div>Activity id: {activity.activity_id}</div>
+                    <div>{props.fieldLabel}: {activity.amp_id}</div>
                 </>
             )
         );
     }
     if (activitiesWithErrors.length > 0) {
         results.push(<br/>);
-        results.push(<div className={'status-header'}>Activities not saved due to errors:</div>)
+        results.push(<div className={'status-header'}>{props.saveResultsErrorText}:</div>)
         results.push(
             activitiesWithErrors.map((activity) =>
                 <>
-                    <div>Activity id: {activity.activity_id}</div>
+                    <div>{props.fieldLabel}: {activity.amp_id}</div>
                     <div className={'status-error'}>Error: {activity.error}</div>
                     <br/>
                 </>
@@ -66,7 +65,10 @@ class ActivitySaveResultsDialog extends Component {
                         <Modal.Title>{this.props.title}</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                            <ActivitySaveResults activities={this.props.geocoding.save_activities_result}/>
+                            <ActivitySaveResults activities={this.props.geocoding.save_activities_result}
+                                                 saveResultsText={translations['amp.geocoder:saveResultsText']}
+                                                 saveResultsErrorText={translations['amp.geocoder:saveResultsErrorText']}
+                                                 fieldLabel={translations['amp.geocoder:ampId']}/>
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="primary" onClick={this.handleClose}>

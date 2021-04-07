@@ -113,7 +113,7 @@ public class GeoCoderEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public Response changeLocationStatus(
             @ApiParam("Save location status request") ChangeLocationStatusRequest request) {
-        service.changeLocationStatus(request.getAmpActivityId(), request.getAcvlId(), request.getAccepted());
+        service.changeLocationStatus(request.getAmpId(), request.getAcvlId(), request.getAccepted());
         return Response.noContent().build();
     }
 
@@ -124,11 +124,11 @@ public class GeoCoderEndpoint {
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_NO_CONTENT, message = "success"))
     @ApiMethod(id = "saveActivity", authTypes = AuthRule.IN_WORKSPACE)
     @POST
-    @Path("activity/save/{activityId}")
+    @Path("activity/save/{ampId}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    public Response saveActivity(@ApiParam("activity id") @PathParam("activityId") Long activityId) {
+    public Response saveActivity(@ApiParam("amp id") @PathParam("ampId") String ampId) {
         try {
-            service.saveActivity(activityId);
+            service.saveActivity(ampId);
         } catch (Exception e) {
             ApiErrorResponse apiErrorResponse = ApiError.toError(
                     GeoCoderEndpointErrors.GEO_CODING_ACT_SAVE_ERROR.withDetails(e.getMessage()));

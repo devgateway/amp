@@ -34,6 +34,8 @@ import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static org.digijava.kernel.entity.geocoding.GeoCodedActivity.Status.SAVED;
+
 /**
  * @author Octavian Ciubotaru
  */
@@ -253,35 +255,34 @@ public class GeoCodingService {
         return TeamUtil.getCurrentAmpTeamMember();
     }
 
-    public void changeLocationStatus(Long ampActivityId, Long acvlId, Boolean accepted) {
+    public void changeLocationStatus(String ampId, Long acvlId, Boolean accepted) {
         GeoCodingProcess geoCoding = getGeoCodingProcess();
         if (geoCoding != null && geoCoding.getTeamMember().equals(getPrincipal())) {
             geoCoding.getActivities().stream()
-                    .filter(a -> a.getActivity().getAmpActivityId().equals(ampActivityId))
+                    .filter(a -> a.getActivity().getAmpId().equals(ampId))
                     .flatMap(a -> a.getLocations().stream())
                     .filter(l -> l.getLocation().getId().equals(acvlId))
                     .forEach(l -> l.setAccepted(accepted));
         }
     }
 
-    public void saveActivity(Long activityId) {
+    public void saveActivity(String ampId) {
         Session session = PersistenceManager.getSession();
         session.setFlushMode(FlushMode.MANUAL);
 
         GeoCodingProcess geoCoding = getGeoCodingProcess();
         if (geoCoding != null) {
             GeoCodedActivity geoCodedActivity = geoCoding.getActivities().stream()
-                    .filter(g -> g.getActivity().getAmpActivityId().equals(activityId))
+                    .filter(g -> g.getActivity().getAmpId().equals(ampId))
                     .findFirst().orElse(null);
 
             if (geoCodedActivity != null && allLocationsHaveStatusSet(geoCodedActivity)) {
                 if (acceptedLocationsExist(geoCodedActivity)) {
                     updateActivity(geoCodedActivity);
                 }
-                geoCoding.getActivities().remove(geoCodedActivity);
+                geoCodedActivity.setStatus(SAVED);
             }
         }
-
     }
 
     private boolean acceptedLocationsExist(GeoCodedActivity activity) {

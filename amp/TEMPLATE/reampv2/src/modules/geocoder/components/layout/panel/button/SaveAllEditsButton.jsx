@@ -26,20 +26,20 @@ class SaveAllEditsButton extends Component {
     }
 
     onSaveAllEdits = () => {
-        const activityIds = this.props.geocoding.activities
+        const ampIds = this.props.geocoding.activities
             .filter(activity => activity.locations.length > 0)
-            .filter(activity => activity.locations.filter(loc => loc.accepted != false && loc.accepted != true).length < 1)
-            .map(act => act.activity_id);
-        this.props.saveAllEdits(activityIds);
+            .filter(activity => activity.locations.filter(loc => loc.accepted !== false && loc.accepted !== true).length < 1)
+            .map(act => act.amp_id);
+        this.props.saveAllEdits(ampIds);
         this.handleClose();
     }
 
     hasActivityAcceptedOrRejectedAllLocations(activity) {
-        if (activity.locations.length == 0) {
+        if (activity.locations.length === 0) {
             return false;
         }
 
-        return activity.locations.filter(loc => loc.accepted == null).length == 0;
+        return activity.locations.filter(loc => loc.accepted === null).length === 0;
     }
 
     render() {
@@ -59,7 +59,7 @@ class SaveAllEditsButton extends Component {
                     <Modal.Header closeButton>
                         <Modal.Title>{this.props.title}</Modal.Title>
                     </Modal.Header>
-                    <Modal.Body>Save All Edits made in activities?</Modal.Body>
+                    <Modal.Body>{translations['amp.geocoder:saveAllEditsConfirmation']}</Modal.Body>
                     <Modal.Footer>
                         <Button variant="secondary" onClick={this.handleClose}>
                             {translations['amp.geocoder:cancel']}

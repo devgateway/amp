@@ -29,12 +29,12 @@ class GeocodingTable extends Component {
         this.setState({ selectedRowAction: selectedRowId });
     };
 
-    hasLocations = activityId => {
-        return this.props.activities.filter(activity => activity.activity_id === activityId)[0].locations.length > 0;
+    hasLocations = ampId => {
+        return this.props.activities.filter(activity => activity.amp_id === ampId)[0].locations.length > 0;
     }
 
     getNonExpandableIds = () => {
-        return this.props.activities.filter(activity => activity.locations.length < 1).map(act => act.activity_id);
+        return this.props.activities.filter(activity => activity.locations.length < 1).map(act => act.amp_id);
     }
 
     existLocationsInGeocoding = () => {
@@ -92,7 +92,7 @@ class GeocodingTable extends Component {
         let expandRow = {
             onlyOneExpanding: true,
             renderer: row => (
-                <Locations activityId={row.activity_id}/>
+                <Locations ampId={row.amp_id}/>
             ),
             nonExpandable: this.getNonExpandableIds(),
             showExpandColumn: true,
@@ -100,7 +100,7 @@ class GeocodingTable extends Component {
             expandColumnPosition: 'right',
             expandColumnRenderer: ({ expanded, rowKey, expandable }) => (
                 <GeocodingActionColumn
-                    activityId={rowKey} enabled={this.hasLocations(rowKey)} message={translations['amp.geocoder:noLocations']}
+                    ampId={rowKey} enabled={this.hasLocations(rowKey)} message={translations['amp.geocoder:noLocations']}
                 />
             )
         };
@@ -162,11 +162,13 @@ class GeocodingTable extends Component {
             },
         ];
 
+        let data = this.props.activities.filter(act => act.status !== 'SAVED');
+
         return (
             <>
             <div className="activity-table">
                 <BootstrapTable
-                    keyField="activity_id"
+                    keyField="amp_id"
                     scrollY
                     data={this.props.activities}
                     maxHeight="200px"
@@ -182,9 +184,9 @@ class GeocodingTable extends Component {
                         columnWidth: '200px'
                     }}/>
             </div>
-
-                {!this.existLocationsInGeocoding() && <ActivityWithoutLocationsDialog title={translations['amp.geocoder:discardGeocodingButton']}/>}
-                {this.existSaveResults() && <ActivitySaveResultsDialog title={translations['amp.geocoder:discardGeocodingButton']}/>}
+                {this.existSaveResults() ? <ActivitySaveResultsDialog title={translations['amp.geocoder:saveResults']}/>
+                    : !this.existLocationsInGeocoding() && <ActivityWithoutLocationsDialog title={translations['amp.geocoder:discardGeocodingButton']}/>
+                }
             </>
 
     );

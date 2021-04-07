@@ -32,7 +32,7 @@ class ResetAllButton extends Component {
     };
 
     hasActivityAcceptedOrRejectedLocations(activity) {
-        if (activity.locations.length == 0) {
+        if (activity.locations.length === 0) {
             return false;
         }
 

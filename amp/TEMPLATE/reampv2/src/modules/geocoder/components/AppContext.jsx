@@ -6,6 +6,7 @@ import fetchTranslations from '../../../utils/actions/fetchTranslations';
 import defaultTrnPack from '../config/initialTranslations.json';
 import {Loading} from '../../../utils/components/Loading';
 import {loadGeocoding} from "../actions/geocodingAction";
+import fetchSettings from "../../admin/ndd/actions/fetchSettings";
 
 
 export const TranslationContext = React.createContext({translations: defaultTrnPack});
@@ -17,12 +18,18 @@ export const TranslationContext = React.createContext({translations: defaultTrnP
 class AppContext extends Component {
     static propTypes = {
         translationPending: PropTypes.bool,
-        translations: PropTypes.object
+        translations: PropTypes.object,
+        settings: PropTypes.object
     };
 
     componentDidMount() {
-        this.props.fetchTranslations(defaultTrnPack);
-        this.props.loadGeocoding();
+        const {
+            _fetchTranslations, _loadGeocoding, _fetchSettings
+        } = this.props;
+
+        _fetchTranslations(defaultTrnPack);
+        _loadGeocoding();
+        _fetchSettings();
     }
 
     render() {
@@ -37,6 +44,12 @@ class AppContext extends Component {
     }
 }
 
+AppContext.propTypes = {
+    _fetchTranslations: PropTypes.func.isRequired,
+    _loadGeocoding: PropTypes.func.isRequired,
+    _fetchSettings: PropTypes.func.isRequired
+};
+
 const mapStateToProps = state => {
     return {
         translationPending: state.translationsReducer.pending,
@@ -46,8 +59,9 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-    fetchTranslations: fetchTranslations,
-    loadGeocoding: loadGeocoding
+    _fetchTranslations: fetchTranslations,
+    _loadGeocoding: loadGeocoding,
+    _fetchSettings: fetchSettings
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppContext);

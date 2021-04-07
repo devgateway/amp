@@ -38,7 +38,7 @@ export function fetchGeocodingPending() {
 
 export function fetchGeocodingSuccess(geocoding) {
     function geocodeShouldRun(data) {
-        return data.activities && data.activities.filter(act => act.status == 'RUNNING').length > 0;
+        return data.activities && data.activities.filter(act => act.status === 'RUNNING').length > 0;
     }
 
     return {
@@ -72,25 +72,17 @@ export function fetchGeocodingErrorWithCode(error, status, code) {
     }
 }
 
-export function geocodeLocationPending(activity_id, location_id, accepted) {
+export function geocodeLocationPending(amp_id, location_id, accepted) {
     return {
         type: GEOCODING_LOCATION_PENDING,
-        payload: {
-            activity_id: activity_id,
-            location_id: location_id,
-            accepted: accepted
-        }
+        payload: {amp_id, location_id, accepted}
     }
 }
 
-export function geocodeLocationSuccess(activity_id, location_id, accepted) {
+export function geocodeLocationSuccess(amp_id, location_id, accepted) {
     return {
         type: GEOCODING_LOCATION_SUCCESS,
-        payload: {
-            activity_id: activity_id,
-            location_id: location_id,
-            accepted: accepted
-        }
+        payload: {amp_id, location_id, accepted}
     }
 }
 
@@ -157,25 +149,25 @@ export function saveAllEditsError(error) {
     }
 }
 
-export function saveActivityPending(activityId) {
+export function saveActivityPending(ampId) {
     return {
         type: GEOCODING_SAVE_ACTIVITY_PENDING,
-        payload: activityId
+        payload: ampId
     }
 }
 
-export function saveActivitySuccess(activityId) {
+export function saveActivitySuccess(ampId) {
     return {
         type: GEOCODING_SAVE_ACTIVITY_SUCCESS,
-        payload: activityId
+        payload: ampId
     }
 }
 
-export function saveActivityError(activityId, error) {
+export function saveActivityError(ampId, error) {
     return {
         type: GEOCODING_SAVE_ACTIVITY_ERROR,
         error: error,
-        payload: activityId
+        payload: ampId
     }
 }
 
@@ -224,10 +216,10 @@ export const loadGeocoding = () => {
     }
 };
 
-export const runSearch = (activityIds) => {
+export const runSearch = (ampIds) => {
     return dispatch => {
         dispatch(runSearchPending());
-        return fetchApiDataWithStatus({body: activityIds, url: '/rest/geo-coder/process'})
+        return fetchApiDataWithStatus({body: ampIds, url: '/rest/geo-coder/process'})
             .then(geocoding => {
                 return dispatch(runSearchSuccess(geocoding));
             })
@@ -237,18 +229,18 @@ export const runSearch = (activityIds) => {
     }
 };
 
-export const geocodeLocation = (activityId, locationId, accepted) => {
+export const geocodeLocation = (ampId, locationId, accepted) => {
     const locationStatusRequest = {
-        amp_activity_id: activityId,
+        amp_id: ampId,
         amp_category_value_location_id : locationId,
         accepted: accepted
     }
 
     return dispatch => {
-        dispatch(geocodeLocationPending(activityId, locationId, accepted));
+        dispatch(geocodeLocationPending(ampId, locationId, accepted));
         return fetchApiDataWithStatus({url: '/rest/geo-coder/location-status', body: locationStatusRequest})
             .then(() => {
-                return dispatch(geocodeLocationSuccess(activityId, locationId, accepted));
+                return dispatch(geocodeLocationSuccess(ampId, locationId, accepted));
             })
             .catch(error => {
                 return dispatch(geocodeLocationError(error.message))
@@ -282,23 +274,23 @@ export const cancelGeocoding = () => {
     }
 };
 
-export const saveAllEdits = (activityIds) => {
+export const saveAllEdits = (ampIds) => {
     return dispatch => {
         dispatch(saveAllEditsPending());
-        activityIds.forEach(activityId => dispatch(saveActivity(activityId)));
+        ampIds.forEach(ampId => dispatch(saveActivity(ampId)));
         return dispatch(saveAllEditsSuccess());
     }
 };
 
-export const saveActivity = (activityId) => {
+export const saveActivity = (ampId) => {
     return dispatch => {
-        dispatch(saveActivityPending(activityId));
-        return fetchApiDataWithStatus({body: {}, url: '/rest/geo-coder/activity/save/' + activityId})
+        dispatch(saveActivityPending(ampId));
+        return fetchApiDataWithStatus({body: {}, url: '/rest/geo-coder/activity/save/' + ampId})
             .then(result => {
-                return dispatch(saveActivitySuccess(activityId));
+                return dispatch(saveActivitySuccess(ampId));
             })
             .catch(error => {
-                return dispatch(saveActivityError(activityId, error.message))
+                return dispatch(saveActivityError(ampId, error.message))
             });
     }
 };
@@ -308,5 +300,5 @@ export const resetSaveResults = () => {
 };
 
 function isGeocodingNotFound(errorObject) {
-    return errorObject.status == 404;
+    return errorObject.status === 404;
 }

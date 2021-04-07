@@ -181,8 +181,8 @@ export default function geocodingReducer(state = initialState, action) {
 }
 
 function updateActivity(activities, action) {
-    return activities.map( (item, id) => {
-        if(item.activity_id === action.payload.activity_id) {
+    return activities.map((item, id) => {
+        if(item.amp_id === action.payload.amp_id) {
             return {
                 ...item,
                 locations: updateLocation(item.locations, action)
@@ -226,10 +226,10 @@ function resetLocations(locations) {
     });
 }
 
-function updateActivitySaveStatus(activities, activityId, pending, error) {
-    if (!activities.find(item => item.activity_id === activityId)) {
+function updateActivitySaveStatus(activities, ampId, pending, error) {
+    if (!activities.find(item => item.amp_id === ampId)) {
         activities.push({
-            activity_id : activityId,
+            amp_id : ampId,
             pending: pending,
             error: error
         });
@@ -237,7 +237,7 @@ function updateActivitySaveStatus(activities, activityId, pending, error) {
     }
 
     return activities.map((item, id) => {
-        if(item.activity_id === activityId) {
+        if(item.amp_id === ampId) {
             return {
                 ...item,
                 pending: pending,
@@ -248,6 +248,6 @@ function updateActivitySaveStatus(activities, activityId, pending, error) {
     });
 }
 
-function removeSavedActivity(activities, activityId) {
-    return activities.filter(item => item.activity_id != activityId);
+function removeSavedActivity(activities, ampId) {
+    return activities.filter(item => item.amp_id !== ampId);
 }

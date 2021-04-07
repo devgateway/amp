@@ -9,6 +9,7 @@ import {loadActivities} from "../../../actions/activitiesAction";
 import {orderDates} from "../../../utils/utils";
 import {Loading} from "../panel/Loading";
 import {TranslationContext} from "../../AppContext";
+import {PaginationTotal} from "./PaginationTotal";
 
 class ActivityTable extends Component {
     constructor(props) {
@@ -25,22 +26,17 @@ class ActivityTable extends Component {
         const {translations} = this.context;
 
         let options = {
-
             page: 1,
-            sizePerPageList: [{
-                text: '10', value: 10
-            }, {
-                text: '50', value: 50
-            }, {
-                text: 'All', value: this.props.activities.length
-            }],
-            sizePerPage: 10,
+            sizePerPage: this.props.settings['workspace-default-records-per-page'],
             pageStartIndex: 1,
             paginationSize: 15,
             prePage: 'Prev',
             nextPage: 'Next',
             firstPage: 'First',
             lastPage: 'Last',
+            hideSizePerPage: true,
+            showTotal: true,
+            paginationTotalRenderer: (from, to, size) => PaginationTotal(from, to, size)
         };
 
         let selectRow = {
@@ -130,6 +126,7 @@ const mapStateToProps = state => {
     return {
         activitiesPending: state.activitiesReducer.pending,
         activities: state.activitiesReducer.activities,
+        settings: state.settingsReducer.settings
     };
 };
 

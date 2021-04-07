@@ -13,6 +13,7 @@ import {TranslationContext} from "../../AppContext";
 import ActivityWithoutLocationsDialog from "../panel/dialog/ActivityWithoutLocationsDialog";
 import ActivitySaveResultsDialog from "../panel/dialog/ActivitySaveResultsDialog";
 import {orderDates} from "../../../utils/utils";
+import {PaginationTotal} from "./PaginationTotal";
 
 class GeocodingTable extends Component {
     constructor(props) {
@@ -105,22 +106,17 @@ class GeocodingTable extends Component {
         };
 
         let options = {
-
             page: 1,
-            sizePerPageList: [{
-                text: '10', value: 10
-            }, {
-                text: '50', value: 50
-            }, {
-                text: 'All', value: this.props.activities.length
-            }],
-            sizePerPage: 10,
+            sizePerPage: this.props.settings['workspace-default-records-per-page'],
             pageStartIndex: 1,
             paginationSize: 5,
             prePage: 'Prev',
             nextPage: 'Next',
             firstPage: 'First',
             lastPage: 'Last',
+            hideSizePerPage: true,
+            showTotal: true,
+            paginationTotalRenderer: (from, to, size) => PaginationTotal(from, to, size)
         };
 
         let col1Text = translations['amp.geocoder:lastUpdatedDate'];
@@ -205,6 +201,7 @@ const mapStateToProps = state => {
         activities: state.geocodingReducer.activities,
         save_activities_result: state.geocodingReducer.save_activities_result,
         geocodeShouldRun: state.geocodingReducer.geocodeShouldRun,
+        settings: state.settingsReducer.settings
     };
 };
 

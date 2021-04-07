@@ -1,8 +1,5 @@
 package org.digijava.kernel.ampapi.filters;
 
-import java.io.IOException;
-import java.util.UUID;
-
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -11,6 +8,10 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.UUID;
+
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.X_ASYNC_RESULT_ID;
 
 /**
  * Detects whenever a request was issued by AMP Offline or IATI Importer.
@@ -29,7 +30,7 @@ public class AsyncFilter implements Filter {
         String preferHeader = request.getHeader("Prefer");
         if (preferHeader != null && preferHeader.contains("respond-async")) {
             String resultId = UUID.randomUUID().toString();
-            servletRequest.setAttribute("result-id", resultId);
+            servletRequest.setAttribute(X_ASYNC_RESULT_ID, resultId);
         }
         
         filterChain.doFilter(servletRequest, servletResponse);

@@ -2,92 +2,48 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Col } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import NestedDonutsProgramChart from './charts/NestedDonutsProgramChart';
 import FundingTypeSelector from './FundingTypeSelector';
-import {
-  CHART_COLOR_MAP,
-  INDIRECT_PROGRAMS,
-  PROGRAMLVL1, AVAILABLE_COLORS
-} from '../utils/constants';
-import CustomLegend from '../../../utils/components/CustomLegend';
 import './legends/legends.css';
-import { getCustomColor, getGradient, extractPrograms } from '../utils/Utils';
-import TopChart from './TopChart';
-import { callTopReport } from '../actions/callReports';
+import {
+  getCustomColor, getGradient
+} from '../utils/Utils';
 import FundingByYearChart from './charts/FundingByYearChart';
 import PieChartTypeSelector from './PieChartTypeSelector';
 import { NDDTranslationContext } from './StartUp';
+import TopChartContainer from './TopChartContainer';
+import { SELECTED_COLORS } from '../utils/constants';
+import { ALL_PROGRAMS } from '../../admin/ndd/constants/Constants';
 
 class MainDashboardContainer extends Component {
-  getProgramLegend() {
-    const { ndd } = this.props;
-    const { selectedDirectProgram } = this.props;
-    const legends = [];
-    const directLegend = new Map();
-    const indirectLegend = new Map();
-    let directTotal = 0;
-    let indirectTotal = 0;
-    ndd.forEach(dp => {
-      if (selectedDirectProgram) {
-        if (dp.directProgram.programLvl1.code === selectedDirectProgram.code) {
-          directTotal += this.generateLegend(dp.directProgram, 2, directLegend,
-            `${PROGRAMLVL1}_${selectedDirectProgram.code}`, directTotal);
-        }
-      } else {
-        directTotal += this.generateLegend(dp.directProgram, 1, directLegend, PROGRAMLVL1);
-      }
-      if (!selectedDirectProgram) { // We only need indirect if no direct is selected
-        dp.indirectPrograms.forEach(idp => indirectTotal
-          += this.generateLegend(idp, 1, indirectLegend, INDIRECT_PROGRAMS));
-      }
-    });
-    legends.push({ total: directTotal, legends: [...directLegend.values()] });
-    legends.push({ total: indirectTotal, legends: [...indirectLegend.values()] });
-    return legends;
-  }
-
+  // eslint-disable-next-line react/sort-comp
   generate2LevelColors() {
-    const { selectedDirectProgram } = this.props;
-    if (selectedDirectProgram && !AVAILABLE_COLORS.get(`${PROGRAMLVL1}_${selectedDirectProgram.code}`)) {
-      const colors = getGradient(getCustomColor(selectedDirectProgram, PROGRAMLVL1), '#FFFFFF');
-      AVAILABLE_COLORS.set(`${PROGRAMLVL1}_${selectedDirectProgram.code}`, colors);
+    const { selectedDirectProgram, selectedPrograms, ndd } = this.props;
+    if (selectedPrograms && selectedDirectProgram) {
+      const subColors = SELECTED_COLORS.get(`${selectedPrograms[0]}_${selectedDirectProgram.code}`);
+      const countArray = ndd.filter(p => p.directProgram.programLvl1.code === selectedDirectProgram.code);
+      if (!subColors || subColors.length !== countArray.length) {
+        const colors = getGradient(getCustomColor(selectedDirectProgram,
+          selectedPrograms[0]), '#FFFFFF', countArray.length + 1);
+        SELECTED_COLORS.set(`${selectedPrograms[0]}_${selectedDirectProgram.code}`, colors);
+      }
     }
   }
 
-  getTopChart() {
-    const { topLoaded, topLoadingPending, top, globalSettings } = this.props;
-    const { translations } = this.context;
-    return topLoaded && !topLoadingPending ? (
-      <div>
-        <div className="funding-sources-title">
-          <div className="row">
-            <div className="col-md-8">
-              {translations['amp.ndd.dashboard:top-donor-agencies']}
-            </div>
-            <div className="amount col-md-4">
-              {`${top.sumarizedTotal} ${top.currency}`}
-            </div>
-          </div>
-          <TopChart data={top} globalSettings={globalSettings} />
-        </div>
-      </div>
-    ) : <div className="loading" />;
-  }
-
-  generateLegend(program, level, legend, programColor) {
-    const programLevel = program[`programLvl${level}`];
-    let prog = legend.get(programLevel.code.trim());
-    if (!prog) {
-      prog = {};
-      prog.amount = 0;
-      prog.code = programLevel.code.trim();
-      prog.simpleLabel = `${programLevel.code}:${programLevel.name}`;
+  generateSectionTitle = () => {
+    const {
+      mapping,
+      selectedPrograms
+    } = this.props;
+    let title = '';
+    if (mapping && selectedPrograms) {
+      title = mapping[ALL_PROGRAMS].find(i => `${i.id}` === selectedPrograms[0]).value;
+      if (selectedPrograms[1]) {
+        title += ` / ${mapping[ALL_PROGRAMS].find(i => `${i.id}` === selectedPrograms[1]).value}`;
+      }
     }
-    prog.amount += program.amount;
-    getCustomColor(prog, programColor);
-    legend.set(prog.code, prog);
-    return program.amount;
+    return title;
   }
 
   render() {
@@ -103,146 +59,149 @@ class MainDashboardContainer extends Component {
       onChangeProgram,
       selectedPrograms,
       noIndirectMapping,
-      top,
       settings,
       selectedDirectProgram,
       handleOuterChartClick,
-      globalSettings
+      globalSettings,
+      filters,
+      top,
+      topLoaded,
+      topLoadingPending,
+      downloadImage,
+      embedded,
+      onChangeSource,
+      fundingByYearSource
     } = this.props;
     const { translations } = this.context;
-    const formatter = new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: top && top.currency ? top.currency : 'USD',
-      // These options are needed to round to whole numbers if that's what you want.
-      // minimumFractionDigits: 0,
-      // maximumFractionDigits: 0,
-    });
     if (error) {
       // TODO proper error handling
       return (<div>ERROR</div>);
     } else {
-      const programs = extractPrograms(mapping, noIndirectMapping);
       this.generate2LevelColors();
-      const programLegend = nddLoaded && !nddLoadingPending ? this.getProgramLegend() : null;
       return (
-        <div>
-          <Col md={5}>
-            <div>
-              <div className="chart-container">
-                <div className="chart">
-                  <div className="section_title">
-                    <span>
-                      {programs.direct
-                        ? (`${programs.direct.value} and ${programs.indirect1.value}`)
-                        : 'Loading...'}
-                    </span>
+        <>
+          <Row style={{
+            marginRight: '-15px', marginLeft: '-15px', border: '1px solid #ddd', borderBottom: 'none'
+          }}>
+            <Col md={12} style={{ paddingRight: 0, paddingLeft: 0 }}>
+              <div className="section_title">
+                <span>
+                  {this.generateSectionTitle()}
+                </span>
+                {!embedded && nddLoaded && !nddLoadingPending ? (
+                  <div className="export-wrapper">
+                    <div
+                      className="download-image"
+                    >
+                      <span
+                        className="glyphicon glyphicon-cloud-download download-image-img "
+                        onClick={() => downloadImage()} />
+                    </div>
                   </div>
-                  {nddLoaded && !nddLoadingPending
-                    ? (
-                      <div>
-                        <div>
-                          {dashboardSettings
-                            ? (
-                              <PieChartTypeSelector
-                                onChange={onChangeProgram}
-                                defaultValue={fundingType}
-                                mapping={mapping}
-                                noIndirectMapping={noIndirectMapping}
-                                selectedPrograms={selectedPrograms} />
-                            ) : null}
-                        </div>
+                ) : (null)}
+              </div>
+            </Col>
+          </Row>
+          <Row style={{
+            marginRight: '-15px',
+            marginLeft: '-15px',
+            border: '1px solid #ddd',
+            display: 'flex',
+            borderTop: 'none',
+            backgroundColor: 'white'
+          }}>
+            {nddLoaded && !nddLoadingPending
+              ? (
+                <>
+                  <Col md={5} style={{ paddingRight: 0, paddingLeft: 0, backgroundColor: 'white' }}>
+                    <div className="chart-container">
+                      <div className="chart">
+                        <PieChartTypeSelector
+                          onChange={onChangeProgram}
+                          defaultValue={fundingType}
+                          mapping={mapping}
+                          noIndirectMapping={noIndirectMapping}
+                          selectedPrograms={selectedPrograms} />
                         <NestedDonutsProgramChart
                           data={ndd}
                           settings={settings}
                           globalSettings={globalSettings}
                           selectedDirectProgram={selectedDirectProgram}
-                          handleOuterChartClick={handleOuterChartClick} />
+                          handleOuterChartClick={handleOuterChartClick}
+                          selectedPrograms={selectedPrograms}
+                        />
                       </div>
-                    )
-                    : <div className="loading" />}
-                </div>
-                <div className="buttons">
-                  {dashboardSettings
-                    ? (
-                      <FundingTypeSelector
-                        onChange={onChangeFundingType}
-                        defaultValue={fundingType}
-                        noIndirectMapping={noIndirectMapping} />
-                    ) : null}
-                </div>
-              </div>
-            </div>
-          </Col>
-          <Col md={7}>
-            <div className="section_title">
-              <span>Legends</span>
-            </div>
-            {programLegend ? (
-              <div className="legends-container">
-                <div className={`even-${selectedDirectProgram ? 'third' : 'middle'}`}>
-                  <div className="legend-title">
-                    {programs.direct
-                      ? (`${programs.direct.value}`)
-                      : 'Loading...'}
-                    :
-                    <span
-                      className="amount">
-                      {formatter.format(programLegend[0].total)}
-                    </span>
-                  </div>
-                  <CustomLegend
-                    formatter={formatter}
-                    data={programLegend[0].legends}
-                    colorMap={CHART_COLOR_MAP.get(selectedDirectProgram ? `${PROGRAMLVL1}_${selectedDirectProgram.code}`
-                      : PROGRAMLVL1)} />
-                </div>
-                {selectedDirectProgram === null
-                && (
-                  <div className="even-middle">
-                    <div className="legend-title">
-                      {programs.direct
-                        ? (`${programs.indirect1.value}`)
-                        : 'Loading...'}
-                      :
-                      <span
-                        className="amount">
-                        {formatter.format(programLegend[1].total)}
-                      </span>
+                      <div className="buttons" style={{ position: 'absolute', bottom: 0 }}>
+                        {dashboardSettings && !nddLoadingPending
+                          ? (
+                            <FundingTypeSelector
+                              onChange={onChangeFundingType}
+                              defaultValue={fundingType}
+                              noIndirectMapping={noIndirectMapping} />
+                          ) : null}
+                      </div>
                     </div>
-                    <CustomLegend
-                      formatter={formatter}
-                      data={programLegend[1].legends}
-                      colorMap={CHART_COLOR_MAP.get(INDIRECT_PROGRAMS)} />
+                  </Col>
+                  <Col md={7} style={{ paddingLeft: 0, paddingRight: 0 }}>
+                    <TopChartContainer
+                      noIndirectMapping={noIndirectMapping}
+                      ndd={ndd}
+                      globalSettings={globalSettings}
+                      mapping={mapping}
+                      settings={settings}
+                      top={top}
+                      topLoaded={topLoaded}
+                      topLoadingPending={topLoadingPending}
+                      selectedDirectProgram={selectedDirectProgram}
+                      nddLoaded={nddLoaded}
+                      selectedPrograms={selectedPrograms}
+                      nddLoadingPending={nddLoadingPending} />
+                  </Col>
+                </>
+              ) : (
+                <Col
+                  md={12}
+                  style={{
+                    paddingRight: 0, paddingLeft: 0, backgroundColor: 'white', height: 400
+                  }}>
+                  <div className="loading loading-absolute" />
+                </Col>
+              )}
+          </Row>
+          {!embedded ? (
+            <>
+              <Row>
+                <Col md={12}>
+                  <div className="separator" />
+                </Col>
+              </Row>
+              <Row style={{ marginRight: '-15px', marginLeft: '-15px', border: '1px solid #ddd' }}>
+                <Col md={12} style={{ paddingLeft: 0, paddingRight: 0 }}>
+                  <div className="chart-container">
+                    <div className="chart">
+                      <div className="section_title">
+                        <span>{translations['amp.dashboard:funding-over-time']}</span>
+                      </div>
+                      {nddLoaded && !nddLoadingPending ? (
+                        <FundingByYearChart
+                          selectedDirectProgram={selectedDirectProgram}
+                          selectedPrograms={selectedPrograms}
+                          settings={settings}
+                          filters={filters}
+                          fundingType={fundingType}
+                          globalSettings={globalSettings}
+                          data={ndd}
+                          onChangeSource={onChangeSource}
+                          fundingByYearSource={fundingByYearSource}
+                        />
+                      ) : <div className="loading" />}
+                    </div>
                   </div>
-                )}
-                {selectedDirectProgram !== null
-                && (
-                  <div className="even-sixth">
-                    {this.getTopChart()}
-                  </div>
-                )}
-
-              </div>
-            ) : <div className="loading" />}
-          </Col>
-          <div className="separator" />
-          <Col md={12}>
-            <div className="chart-container">
-              <div className="chart">
-                <div className="section_title">
-                  <span>{translations['amp.dashboard:funding-over-time']}</span>
-                </div>
-                {nddLoaded && !nddLoadingPending ? (
-                  <FundingByYearChart
-                    selectedDirectProgram={selectedDirectProgram}
-                    settings={settings}
-                    globalSettings={globalSettings}
-                    data={ndd} />
-                ) : <div className="loading" />}
-              </div>
-            </div>
-          </Col>
-        </div>
+                </Col>
+              </Row>
+            </>
+          ) : (null)}
+        </>
       );
     }
   }
@@ -257,39 +216,48 @@ const mapStateToProps = state => ({
   dashboardSettings: state.dashboardSettingsReducer.dashboardSettings
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({ callTopReport }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainDashboardContainer);
 
 MainDashboardContainer.propTypes = {
   filters: PropTypes.object,
-  dashboardId: PropTypes.number,
   error: PropTypes.object,
-  loadDashboardSettings: PropTypes.func.isRequired,
-  ndd: PropTypes.array.isRequired,
-  top: PropTypes.object.isRequired,
+  ndd: PropTypes.array,
+  top: PropTypes.object,
   nddLoadingPending: PropTypes.bool.isRequired,
   nddLoaded: PropTypes.bool.isRequired,
   topLoadingPending: PropTypes.bool.isRequired,
   topLoaded: PropTypes.bool.isRequired,
-  dashboardSettings: PropTypes.array.isRequired,
+  dashboardSettings: PropTypes.array,
   onChangeFundingType: PropTypes.func.isRequired,
-  fundingType: PropTypes.object,
+  fundingType: PropTypes.string,
   mapping: PropTypes.object,
   onChangeProgram: PropTypes.func.isRequired,
   noIndirectMapping: PropTypes.object,
   selectedPrograms: PropTypes.array,
-  callTopReport: PropTypes.func.isRequired,
   settings: PropTypes.object,
   selectedDirectProgram: PropTypes.object,
   handleOuterChartClick: PropTypes.func.isRequired,
-  globalSettings: PropTypes.object
+  globalSettings: PropTypes.object,
+  downloadImage: PropTypes.func.isRequired,
+  embedded: PropTypes.bool,
+  onChangeSource: PropTypes.func.isRequired,
+  fundingByYearSource: PropTypes.string.isRequired
 };
-
 MainDashboardContainer.defaultProps = {
   filters: undefined,
   selectedDirectProgram: null,
-  settings: undefined
+  settings: undefined,
+  error: null,
+  fundingType: null,
+  mapping: null,
+  noIndirectMapping: null,
+  selectedPrograms: null,
+  globalSettings: null,
+  ndd: null,
+  top: undefined,
+  dashboardSettings: null,
+  embedded: false
 };
-
 MainDashboardContainer.contextType = NDDTranslationContext;

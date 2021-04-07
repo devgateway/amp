@@ -2,6 +2,8 @@ package org.digijava.kernel.ampapi.endpoints.activity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Set;
+
 /**
  * @author Viorel Chihai
  */
@@ -11,9 +13,9 @@ public class ProgramExtraInfo implements ParentExtraInfo {
     private final Long parentProgramId;
 
     @JsonProperty("mapped-program-id")
-    private final Long mappedPogramId;
+    private final Set<Long> mappedPogramId;
 
-    public ProgramExtraInfo(Long parentProgramId, Long mappedProgramId) {
+    public ProgramExtraInfo(Long parentProgramId, Set<Long> mappedProgramId) {
         this.parentProgramId = parentProgramId;
         this.mappedPogramId = mappedProgramId;
     }
@@ -27,7 +29,7 @@ public class ProgramExtraInfo implements ParentExtraInfo {
         return parentProgramId;
     }
 
-    public Long getMappedPogramId() {
+    public Set<Long> getMappedPogramId() {
         return mappedPogramId;
     }
 }

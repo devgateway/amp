@@ -71,7 +71,7 @@ public class TeamMemberUtil {
         return (AmpTeamMember) PersistenceManager.getSession()
                 .createCriteria(AmpTeamMember.class)
                 .setCacheable(true)
-                .add(Property.forName("userId").eq(userId))
+                .add(Property.forName("user.id").eq(userId))
                 .add(getNotDeletedTeamMemberRestriction())
                 .addOrder(Order.desc("ampTeamMemId"))
                 .setMaxResults(1)

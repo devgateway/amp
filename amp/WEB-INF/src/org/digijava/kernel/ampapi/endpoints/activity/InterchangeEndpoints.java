@@ -1,31 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import static java.util.function.Function.identity;
-import static java.util.stream.Collectors.toMap;
-import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.AMP_ID_FIELD_NAME;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.MAX_BULK_ACTIVITIES_ALLOWED;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-
-import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
-
 import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -46,6 +20,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewActivityServ
 import org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewWorkspace;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.AmpMediaType;
 import org.digijava.kernel.ampapi.endpoints.activity.utils.ApiCompat;
+import org.digijava.kernel.ampapi.endpoints.async.AsyncActivityIndirectProgramUpdaterService;
 import org.digijava.kernel.ampapi.endpoints.async.AsyncApiService;
 import org.digijava.kernel.ampapi.endpoints.async.AsyncResult;
 import org.digijava.kernel.ampapi.endpoints.async.AsyncResultCacher;
@@ -60,9 +35,36 @@ import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
-
 import org.digijava.module.aim.util.ActivityUtil;
 import org.springframework.security.web.util.UrlUtils;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.DefaultValue;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toMap;
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.AMP_ID_FIELD_NAME;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.MAX_BULK_ACTIVITIES_ALLOWED;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.X_ASYNC_RESULT_ID;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.X_ASYNC_STATUS;
+import static org.digijava.kernel.ampapi.endpoints.async.AsyncActivityIndirectProgramUpdaterService.PROGRAM_UPDATER_KEY;
 
 
 /**
@@ -106,7 +108,7 @@ public class InterchangeEndpoints {
     }
 
     // TODO TO be removed after AMP-29486 is merged into FUTURE.
-    // Restored so the new preview works until AMP-29486 is done. 
+    // Restored so the new preview works until AMP-29486 is done.
     @GET
     @Path("fields-no-workspace/{id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -464,7 +466,7 @@ public class InterchangeEndpoints {
         return PreviewActivityService.getInstance().getWorkspaces(projectId);
     }
 
-    
+
     @POST
     @Path("/async/bulk")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -479,32 +481,32 @@ public class InterchangeEndpoints {
                     + "The response will contain in headers (location) the url where the results can be retrieved"
                     + "If the size is bigger than 20, the request will be rejected.")
     public Response importProjects(@QueryParam("can-downgrade-to-draft") @DefaultValue("false")
-                                               boolean canDowngradeToDraft,
+                                           boolean canDowngradeToDraft,
                                    @QueryParam("process-approval-fields") @DefaultValue("false")
                                            boolean isProcessApprovalFields,
                                    @QueryParam("track-editors") @DefaultValue("false") boolean isTrackEditors,
                                    @ApiParam("activity configuration") List<SwaggerActivity> activitiesJson) {
-    
+
         String resultId = (String) TLSUtils.getRequest().getAttribute("result-id");
         if (activitiesJson != null || !activitiesJson.isEmpty()) {
             if (activitiesJson.size() > MAX_BULK_ACTIVITIES_ALLOWED) {
                 ApiErrorResponseService.reportError(BAD_REQUEST, ActivityErrors.BULK_TO_BIG
                         .withDetails("Maximum activities allowed: " + MAX_BULK_ACTIVITIES_ALLOWED));
             }
-            
+
             ActivityImportRules rules = new ActivityImportRules(canDowngradeToDraft, isProcessApprovalFields,
                     isTrackEditors);
             if (resultId != null) {
                 AsyncApiService.getInstance().importActivities(rules, resultId, activitiesJson, uri.getBaseUri());
             } else {
                 List<JsonApiResponse<ActivitySummary>> results = new ArrayList<>();
-            
+
                 for (SwaggerActivity act : activitiesJson) {
                     boolean toUpdate = act.getMap().containsKey(AMP_ID_FIELD_NAME);
                     results.add(ActivityInterchangeUtils.importActivity(act.getMap(), toUpdate, rules,
                             uri.getBaseUri() + "activity"));
                 }
-            
+
                 return Response.ok(results).build();
             }
         }
@@ -513,7 +515,7 @@ public class InterchangeEndpoints {
                 .header("location", location)
                 .build();
     }
-    
+
     @GET
     @Path("/async/bulk/result/{result-id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -521,23 +523,59 @@ public class InterchangeEndpoints {
     @ApiOperation(
             value = "Return the results generated by /async/bulk endpoint.")
     public Response getAsyncResult(@PathParam("result-id") String resultId) {
-        
-        AsyncResult asyncResult = AsyncResultCacher.getAsyncResult(resultId);
-    
-        if (asyncResult == null) {
-            return Response.status(Response.Status.NOT_FOUND)
-                    .header("X-Async-Status", AsyncStatus.NOT_FOUND)
-                    .type(MediaType.APPLICATION_JSON).build();
-        }
-    
-        Response.ResponseBuilder responseBuilder = Response.status(Response.Status.OK)
-                .type(MediaType.APPLICATION_JSON);
-        
-        if (asyncResult.getStatus() == AsyncStatus.RUNNING) {
-            responseBuilder.header("X-Async-Status", AsyncStatus.RUNNING);
-        }
-        
-        return responseBuilder.entity(asyncResult.getResults()).build();
+
+        return buildResultId(resultId);
     }
 
+    @GET
+    @Path("/updateMappings/async")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "updateMappings", ui = false)
+    public Response updateMappings() {
+
+        String resultId = (String) TLSUtils.getRequest().getAttribute(X_ASYNC_RESULT_ID);
+        if (resultId == null) {
+            ApiErrorResponseService.reportError(BAD_REQUEST, ActivityErrors.ONLY_SYNC
+                    .withDetails("Only sync process is allowed"));
+        }
+        if (!AsyncResultCacher.canAddAnotherUnique(PROGRAM_UPDATER_KEY)) {
+            ApiErrorResponseService.reportError(BAD_REQUEST, ActivityErrors.PROCESS_ALREADY_RUNNING
+                    .withDetails("Only one process at a time is allowed"));
+        } else {
+            // Start the process
+            AsyncActivityIndirectProgramUpdaterService.getInstance().
+                    updateIndirectPrograms(PROGRAM_UPDATER_KEY + resultId);
+        }
+        String location = String.format("%s/result/%s", UrlUtils.buildRequestUrl(TLSUtils.getRequest()), resultId);
+        return Response.ok()
+                .header("location", location)
+                .build();
+    }
+
+    @GET
+    @Path("/updateMappings/async/result/{result-id}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "updateMappings", ui = false)
+    public Response getUpdateMappingsResult(@PathParam("result-id") String resultId) {
+        return buildResultId(PROGRAM_UPDATER_KEY + resultId);
+    }
+
+    private Response buildResultId(String resultId) {
+        AsyncResult asyncResult = AsyncResultCacher.getAsyncResult(resultId);
+
+        if (asyncResult == null) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .header(X_ASYNC_STATUS, AsyncStatus.NOT_FOUND)
+                    .type(MediaType.APPLICATION_JSON).build();
+        }
+
+        Response.ResponseBuilder responseBuilder = Response.status(Response.Status.OK)
+                .type(MediaType.APPLICATION_JSON);
+
+        if (asyncResult.getStatus() == AsyncStatus.RUNNING) {
+            responseBuilder.header(X_ASYNC_STATUS, AsyncStatus.RUNNING);
+        }
+
+        return responseBuilder.entity(asyncResult.getResults()).build();
+    }
 }

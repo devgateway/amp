@@ -12,3 +12,5 @@ export const getSharedData = (id) => dispatch => {
     .then(payload => dispatch(getSharedDataSuccess(payload)))
     .catch(error => dispatch(getSharedDataError(error)));
 };
+
+export default getSharedData;

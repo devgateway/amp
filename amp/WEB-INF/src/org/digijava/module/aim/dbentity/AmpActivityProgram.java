@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.values.providers.ThemePossibleValuesProvider;
 import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
@@ -24,6 +25,7 @@ public class AmpActivityProgram implements Versionable, Serializable, Cloneable,
     private Long ampActivityProgramId;
 
         @Interchangeable(fieldTitle = "Program Percentage", importable = true, percentageConstraint = true,
+                fmPath = FMVisibility.PARENT_FM + "/programPercentage",
                 interValidators = @InterchangeableValidator(RequiredValidator.class))
         private Float programPercentage;
 

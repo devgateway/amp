@@ -12,7 +12,6 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.startup.AMPStartupListener;
-import org.digijava.module.aim.startup.AmpBackgroundActivitiesUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -20,6 +19,8 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 import java.util.List;
+
+import static org.digijava.module.aim.util.activity.GenericUserHelper.getAmpTeamMemberModifier;
 
 public class ActivityCloser {
     public static final String AMP_MODIFIER_USER_EMAIL = "amp_modifier@amp.org";
@@ -41,7 +42,7 @@ public class ActivityCloser {
             }
 
             AmpCategoryValue oldActivityStatus =
-                    CategoryManagerUtil.getAmpCategoryValueFromList(CategoryConstants.ACTIVITY_STATUS_NAME,
+                    CategoryManagerUtil.getAmpCategoryValueFromList(CategoryConstants.ACTIVITY_STATUS_KEY,
                             ver.getCategories());
 
             LOGGER.info(String.format("\t%s activity %d, changing status ID from %s to %d and approvalStatus from "
@@ -52,14 +53,22 @@ public class ActivityCloser {
                             ? "<null>" : Long.toString(oldActivityStatus.getId()), closedCategoryValue,
                     ver.getApprovalStatus(), newStatus));
 
-            AmpTeamMember ampClosingMember =
-                    AmpBackgroundActivitiesUtil.createActivityTeamMemberIfNeeded(ver.getTeam(), user);
-            AmpActivityVersion newVer = this.cloneActivity(ampClosingMember, ver, newStatus,
-                    closedCategoryValue, saveContext);
+            AmpTeamMember ampClosingMember = getAmpTeamMemberModifier(ver.getTeam());
+
+            AmpActivityVersion newVer = this.cloneAndCloseActivity(ampClosingMember, ver, newStatus,
+                    closedCategoryValue, saveContext, oldActivityStatus);
 
             LOGGER.info(String.format("... done, new amp_activity_id=%d\n", newVer.getAmpActivityId()));
             PersistenceManager.getSession().flush();
         }
+    }
+
+    private AmpActivityVersion cloneAndCloseActivity(AmpTeamMember member, AmpActivityVersion oldActivity,
+                                                     ApprovalStatus newStatus, Long closedProjectStatusCategoryValue,
+                                                     SaveContext saveContext, AmpCategoryValue oldActivityStatus)
+            throws Exception {
+        modifyProjectStatus(oldActivity, newStatus, closedProjectStatusCategoryValue, oldActivityStatus);
+        return cloneActivity(member, oldActivity, saveContext);
     }
 
     /**
@@ -70,23 +79,15 @@ public class ActivityCloser {
      * @return
      * @throws CloneNotSupportedException
      */
-    private AmpActivityVersion cloneActivity(AmpTeamMember member, AmpActivityVersion oldActivity,
-                                             ApprovalStatus newStatus, Long closedProjectStatusCategoryValue,
-                                             SaveContext saveContext) throws Exception {
+    public static  AmpActivityVersion cloneActivity(AmpTeamMember member, AmpActivityVersion oldActivity,
+                                             SaveContext saveContext)
+            throws Exception {
+
         AmpActivityVersion prevVersion = oldActivity.getAmpActivityGroup().getAmpActivityLastVersion();
-        oldActivity.getAmpActivityGroup().setAutoClosedOnExpiration(true);
-
-        oldActivity.setApprovalStatus(newStatus);
-        oldActivity.getCategories().remove(CategoryManagerUtil.
-                getAmpCategoryValueFromList(CategoryConstants.ACTIVITY_STATUS_NAME, oldActivity.getCategories()));
-        oldActivity.getCategories().add(CategoryManagerUtil.
-                getAmpCategoryValueFromDb(closedProjectStatusCategoryValue));
-
         EditorStore editorStore = new EditorStore();
         Site site = SiteUtils.getDefaultSite();
 
         AmpActivityVersion auxActivity = null;
-
         auxActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(oldActivity, null,
                 member, oldActivity.getDraft(), PersistenceManager.getSession(), saveContext, editorStore, site);
         java.util.Locale javaLocale = new java.util.Locale("en");
@@ -94,5 +95,14 @@ public class ActivityCloser {
                 SiteUtils.getDefaultSite(), javaLocale,
                 auxActivity, prevVersion);
         return auxActivity;
+    }
+
+    private void modifyProjectStatus(AmpActivityVersion oldActivity, ApprovalStatus newStatus,
+                                     Long closedProjectStatusCategoryValue, AmpCategoryValue oldActivityStatus) {
+        oldActivity.getAmpActivityGroup().setAutoClosedOnExpiration(true);
+        oldActivity.setApprovalStatus(newStatus);
+        oldActivity.getCategories().remove(oldActivityStatus);
+        oldActivity.getCategories().add(CategoryManagerUtil.
+                getAmpCategoryValueFromDb(closedProjectStatusCategoryValue));
     }
 }

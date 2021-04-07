@@ -41,10 +41,11 @@ class PieChartTypeSelector extends Component {
     if (selectedPrograms && selectedPrograms.length === 2) {
       defaultValue = `${selectedPrograms[0]}-${selectedPrograms[1]}`;
     } else if (selectedPrograms && selectedPrograms.length === 1) {
+      // eslint-disable-next-line prefer-destructuring
       defaultValue = selectedPrograms[0];
     }
     return (
-      <form className="form-inline dash-form dash-adj-type" role="form">
+      <form className="form-inline dash-form dash-adj-type">
         <select
           defaultValue={defaultValue}
           className="form-control like-btn-sm ftype-options programs-dropdown"
@@ -65,6 +66,7 @@ class PieChartTypeSelector extends Component {
   }
 }
 
+// eslint-disable-next-line no-unused-vars
 const mapStateToProps = state => ({});
 const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
 
@@ -72,8 +74,13 @@ export default connect(mapStateToProps, mapDispatchToProps)(PieChartTypeSelector
 
 PieChartTypeSelector.propTypes = {
   onChange: PropTypes.func.isRequired,
+  // eslint-disable-next-line react/no-unused-prop-types
   defaultValue: PropTypes.string.isRequired,
   mapping: PropTypes.object.isRequired,
   noIndirectMapping: PropTypes.object.isRequired,
   selectedPrograms: PropTypes.array
+};
+
+PieChartTypeSelector.defaultProps = {
+  selectedPrograms: undefined
 };

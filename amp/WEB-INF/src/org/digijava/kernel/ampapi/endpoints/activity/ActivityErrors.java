@@ -1,8 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import static org.digijava.kernel.ampapi.endpoints.errors.ApiError.ERROR_CLASS_ACTIVITY_ID;
-
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+
+import static org.digijava.kernel.ampapi.endpoints.errors.ApiError.ERROR_CLASS_ACTIVITY_ID;
 
 /**
  * Defines errors used by Activity API. Please define concrete errors, normally is an invalid request input. <br>
@@ -53,5 +53,10 @@ public class ActivityErrors {
     
     public static final ApiErrorMessage BULK_TO_BIG =
             new ApiErrorMessage(ERROR_CLASS_ACTIVITY_ID, 11, "Too many activities found in the request");
-    
+
+    public static final ApiErrorMessage PROCESS_ALREADY_RUNNING =
+            new ApiErrorMessage(ERROR_CLASS_ACTIVITY_ID, 12, "PROCESS_ALREADY_RUNNING");
+    public static final ApiErrorMessage ONLY_SYNC =
+            new ApiErrorMessage(ERROR_CLASS_ACTIVITY_ID, 13, "Only sync is allowed.");
+
 }

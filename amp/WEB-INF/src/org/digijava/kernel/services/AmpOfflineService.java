@@ -112,13 +112,11 @@ public class AmpOfflineService {
                 .list();
     }
 
-    public void addRelease(AmpOfflineRelease release, Supplier<InputStream> inputStreamSupplier) throws IOException {
-        saveToDisk(release, inputStreamSupplier);
-
+    public void persistReleaseInDb(AmpOfflineRelease release) {
         PersistenceManager.getSession().save(release);
     }
 
-    private void saveToDisk(AmpOfflineRelease release, Supplier<InputStream> inputStreamSupplier)
+    public void saveToDisk(AmpOfflineRelease release, Supplier<InputStream> inputStreamSupplier)
             throws IOException {
         File file = getReleaseFile(release);
 

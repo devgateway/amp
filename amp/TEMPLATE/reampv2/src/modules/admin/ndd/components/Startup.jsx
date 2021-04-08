@@ -13,8 +13,8 @@ export const NDDContext = React.createContext();
  */
 class Startup extends Component {
   componentDidMount() {
-    const { defaultTrnPack, fetchTranslations } = this.props;
-    fetchTranslations(defaultTrnPack);
+    const { defaultTrnPack, _fetchTranslations } = this.props;
+    _fetchTranslations(defaultTrnPack);
   }
 
   render() {
@@ -39,7 +39,7 @@ const mapStateToProps = state => ({
   translations: state.translationsReducer.translations
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({ fetchTranslations }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ _fetchTranslations: fetchTranslations }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Startup);
 
@@ -47,7 +47,7 @@ Startup.propTypes = {
   translationPending: PropTypes.bool.isRequired,
   translations: PropTypes.object.isRequired,
   children: PropTypes.object.isRequired,
-  fetchTranslations: PropTypes.func.isRequired,
+  _fetchTranslations: PropTypes.func.isRequired,
   api: PropTypes.object.isRequired,
   defaultTrnPack: PropTypes.object.isRequired,
 };

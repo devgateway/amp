@@ -10,7 +10,7 @@ import { TYPE_DST, TYPE_SRC } from '../constants/Constants';
 class ProgramSelectGroupRow extends Component {
   render() {
     const {
-      rowData, onChange, remove, src, dst, disabled
+      rowData, onChange, remove, src, dst, disabled, level
     } = this.props;
     return (
       <tr>
@@ -21,6 +21,7 @@ class ProgramSelectGroupRow extends Component {
             onChange={onChange}
             src={src}
             dst={dst}
+            level={level}
             disabled={disabled} />
         </td>
         <td>
@@ -30,6 +31,7 @@ class ProgramSelectGroupRow extends Component {
             onChange={onChange}
             src={src}
             dst={dst}
+            level={level}
             disabled={disabled} />
         </td>
         <td className="actions-column">
@@ -52,7 +54,14 @@ ProgramSelectGroupRow.propTypes = {
   remove: PropTypes.func.isRequired,
   src: PropTypes.object,
   dst: PropTypes.object,
-  disabled: PropTypes.bool.isRequired
+  disabled: PropTypes.bool.isRequired,
+  level: PropTypes.number
+};
+
+ProgramSelectGroupRow.defaultProps = {
+  src: undefined,
+  dst: undefined,
+  level: undefined
 };
 
 const mapStateToProps = state => ({

@@ -1,7 +1,7 @@
 import { saveNDDSuccess, saveNDDPending, saveNDDError } from './saveAction';
 import { LAYOUT_EP } from '../constants/Constants';
 
-function saveNDD(src, dst, mappings, urlSavePrograms, urlSaveConfig) {
+function saveNDD(src, dst, mappings, urlSavePrograms, urlSaveConfig, level) {
   return dispatch => {
     dispatch(saveNDDPending());
     fetch(LAYOUT_EP).then(layoutRes => layoutRes.json()).then(data => {
@@ -11,7 +11,8 @@ function saveNDD(src, dst, mappings, urlSavePrograms, urlSaveConfig) {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             'src-program': src ? src.id : null,
-            'dst-program': dst ? dst.id : null
+            'dst-program': dst ? dst.id : null,
+            level
           })
         }).then(res => {
           processResponse(res);

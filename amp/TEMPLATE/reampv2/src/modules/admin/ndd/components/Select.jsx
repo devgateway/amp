@@ -8,7 +8,7 @@ import './css/Typeahead.css';
 import './css/style.css';
 import RequiredMark from './common/RequiredMark';
 
-class ProgramSelect extends Component {
+class Select extends Component {
   constructor(props) {
     super(props);
     this.drawSelector = this.drawSelector.bind(this);
@@ -54,9 +54,9 @@ class ProgramSelect extends Component {
   }
 }
 
-ProgramSelect.contextType = NDDContext;
+Select.contextType = NDDContext;
 
-ProgramSelect.propTypes = {
+Select.propTypes = {
   options: PropTypes.array.isRequired,
   label: PropTypes.string.isRequired,
   placeholder: PropTypes.string.isRequired,
@@ -70,4 +70,4 @@ const mapStateToProps = state => ({
   translations: state.translationsReducer.translations
 });
 const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
-export default connect(mapStateToProps, mapDispatchToProps)(ProgramSelect);
+export default connect(mapStateToProps, mapDispatchToProps)(Select);

@@ -7,7 +7,7 @@ import './css/style.css';
 import ProgramSelectGroupList from './ProgramSelectGroupList';
 import Header from './Header';
 import {
-  DST_PROGRAM, PROGRAM, PROGRAM_MAPPING, SRC_PROGRAM, TYPE_DST, TYPE_SRC
+  DST_PROGRAM, PROGRAM, PROGRAM_MAPPING, SRC_PROGRAM
 } from '../constants/Constants';
 import * as Utils from '../utils/Utils';
 import { sendNDDError, sendNDDPending, sendNDDSaving } from '../reducers/saveNDDReducer';
@@ -29,7 +29,8 @@ class FormPrograms extends Component {
       updatedActivities: false,
       blockUI: false,
       unsavedChanges: false,
-      saved: false
+      saved: false,
+      level: 0
     };
     this.addRow = this.addRow.bind(this);
     this.saveAll = this.saveAll.bind(this);
@@ -42,12 +43,12 @@ class FormPrograms extends Component {
 
   componentDidMount() {
     const {
-      ndd, programs, translations, trnPrefix
+      ndd, programs, translations, trnPrefix, settings, isIndirect
     } = this.context;
     document.title = translations[`${trnPrefix}page-title`];
     // Load main programs.
     // eslint-disable-next-line no-unused-vars,react/no-did-mount-set-state
-    this.setState(previousState => {
+    this.setState(() => {
       if (ndd[SRC_PROGRAM]) {
         const src = { id: ndd[SRC_PROGRAM].id, value: ndd[SRC_PROGRAM].value };
         return { src };
@@ -55,7 +56,7 @@ class FormPrograms extends Component {
       return { src: undefined };
     });
     // eslint-disable-next-line no-unused-vars,react/no-did-mount-set-state
-    this.setState(previousState => {
+    this.setState(() => {
       if (ndd[DST_PROGRAM]) {
         const dst = { id: ndd[DST_PROGRAM].id, value: ndd[DST_PROGRAM].value };
         return { dst };
@@ -65,28 +66,42 @@ class FormPrograms extends Component {
 
     // Available programs.
     // eslint-disable-next-line react/no-did-mount-set-state,no-unused-vars
-    this.setState(previousState => ({ programs }));
+    this.setState(() => ({ programs }));
 
-    // Load saved mapping.
-    // eslint-disable-next-line react/no-did-mount-set-state
-    this.setState(previousState => {
-      const data = [...previousState.data];
-      if (ndd[PROGRAM_MAPPING]) {
-        ndd[PROGRAM_MAPPING].forEach(pm => {
-          const fullTreeSrc = Utils.findProgramInTree(pm[SRC_PROGRAM], ndd, TYPE_SRC);
-          const fullTreeDst = Utils.findProgramInTree(pm[DST_PROGRAM], ndd, TYPE_DST);
-          const pair = {};
-          pair[SRC_PROGRAM] = fullTreeSrc;
-          pair[DST_PROGRAM] = fullTreeDst;
-          // Extra validation.
-          if (pair[SRC_PROGRAM] && pair[SRC_PROGRAM].lvl3 && pair[DST_PROGRAM] && pair[DST_PROGRAM].lvl3) {
-            pair.id = `${pair[SRC_PROGRAM].lvl3.id}${pair[DST_PROGRAM].lvl3.id}`;
-            data.push(pair);
-          }
-        });
-      }
-      return { data: this.sortPrograms(data) };
-    });
+    if (settings) {
+      let level;
+      // eslint-disable-next-line no-unused-vars,react/no-did-mount-set-state
+      this.setState(() => {
+        if (isIndirect) {
+          level = settings['ndd-mapping-indirect-level'];
+        } else {
+          level = settings['ndd-mapping-program-level'];
+        }
+        return { level };
+      });
+
+      // Load saved mapping.
+      // eslint-disable-next-line react/no-did-mount-set-state
+      this.setState(previousState => {
+        const data = [...previousState.data];
+        if (ndd[PROGRAM_MAPPING]) {
+          ndd[PROGRAM_MAPPING].forEach(pm => {
+            const fullTreeSrc = Utils.findProgramInTree(pm[SRC_PROGRAM], ndd, level);
+            const fullTreeDst = Utils.findProgramInTree(pm[DST_PROGRAM], ndd, level);
+            const pair = {};
+            pair[SRC_PROGRAM] = fullTreeSrc;
+            pair[DST_PROGRAM] = fullTreeDst;
+            // Extra validation.
+            if (pair[SRC_PROGRAM] && pair[SRC_PROGRAM][`lvl${level}`]
+              && pair[DST_PROGRAM] && pair[DST_PROGRAM][`lvl${level}`]) {
+              pair.id = `${pair[SRC_PROGRAM][`lvl${level}`].id}${pair[DST_PROGRAM][`lvl${level}`].id}`;
+              data.push(pair);
+            }
+          });
+        }
+        return { data: this.sortPrograms(data) };
+      });
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -153,6 +168,7 @@ class FormPrograms extends Component {
 
   remove(row) {
     const { translations, trnPrefix } = this.context;
+    // eslint-disable-next-line no-alert
     if (window.confirm(translations[`${trnPrefix}confirm-remove-row`])) {
       this.clearMessages();
       this.setState(previousState => {
@@ -173,8 +189,8 @@ class FormPrograms extends Component {
   onUpdateActivities = () => {
     const { _updateActivities, translations } = this.props;
     const { trnPrefix } = this.context;
-    const { data } = this.state;
-    const validateMappings = Utils.validate(data);
+    const { data, level } = this.state;
+    const validateMappings = Utils.validate(data, level);
     if (validateMappings === 0) {
       if (window.confirm(translations[`${trnPrefix}button-update-activities-confirmation`])) {
         this.clearMessages();
@@ -189,21 +205,25 @@ class FormPrograms extends Component {
   }
 
   saveAll() {
-    const { data, src, dst } = this.state;
+    const {
+      data, src, dst, level
+    } = this.state;
     const { _saveNDD, translations } = this.props;
     const { api, trnPrefix } = this.context;
-    const validateMappings = Utils.validate(data);
+    const validateMappings = Utils.validate(data, level);
     if (validateMappings === 0) {
-      const validateMain = Utils.validateMainPrograms(src, dst);
+      const validateMain = Utils.validateMainPrograms(src, dst, level);
       if (validateMain === 0) {
         const mappings = [];
         data.forEach(pair => {
+          // see if we can only have level
           mappings.push({
-            [SRC_PROGRAM]: pair[SRC_PROGRAM].lvl3.id,
-            [DST_PROGRAM]: pair[DST_PROGRAM].lvl3.id,
+            [SRC_PROGRAM]: pair[SRC_PROGRAM][`lvl${level}`].id,
+            [DST_PROGRAM]: pair[DST_PROGRAM][`lvl${level}`].id,
+            level
           });
         });
-        _saveNDD(src, dst, mappings, api.programsSave, api.mappingSave);
+        _saveNDD(src, dst, mappings, api.programsSave, api.mappingSave, level);
         this.setState({ unsavedChanges: false });
         this.clearMessages();
       } else {
@@ -215,6 +235,27 @@ class FormPrograms extends Component {
       this.setState({
         validationErrors: translations[`${trnPrefix}validation_error_${validateMappings}`],
       });
+    }
+  }
+
+  onChangeProgramLevel = (type, level) => {
+    const { translations, trnPrefix } = this.context;
+    // eslint-disable-next-line react/destructuring-assignment
+    if (this.state[type] !== level) {
+      let confirmed = true;
+      if (!level || level.length === 0) {
+        confirmed = window.confirm(translations[`${trnPrefix}warning_on_change_levels`]);
+      }
+      if (confirmed) {
+        if (level && level.length > 0) {
+          this.setState({ [type]: level[0].id });
+        } else {
+          this.setState({ [type]: 0 });
+        }
+        this.clearAll();
+      } else {
+        this.setState(previousState => previousState);
+      }
     }
   }
 
@@ -275,7 +316,7 @@ class FormPrograms extends Component {
 
   render() {
     const {
-      data, validationErrors, src, dst, updatedActivities, unsavedChanges, saved
+      data, validationErrors, src, dst, updatedActivities, unsavedChanges, saved, level
     } = this.state;
     const {
       error, pending, translations, updating, errorUpdating, saving
@@ -312,7 +353,14 @@ class FormPrograms extends Component {
 
     return (
       <div className="form-container">
-        <ProgramsHeader onChange={this.onChangeMainProgram} src={src} dst={dst} key={Math.random()} busy={updating} />
+        <ProgramsHeader
+          onChange={this.onChangeMainProgram}
+          src={src}
+          dst={dst}
+          key={Math.random()}
+          busy={updating}
+          level={level}
+          onChangeLevel={this.onChangeProgramLevel} />
         <Header
           onAddRow={this.addRow}
           onSaveAll={this.saveAll}
@@ -330,6 +378,7 @@ class FormPrograms extends Component {
           remove={this.remove}
           src={src}
           dst={dst}
+          level={level}
           busy={updating} />
       </div>
     );

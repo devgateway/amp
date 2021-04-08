@@ -192,7 +192,7 @@ class NestedDonutsProgramChart extends Component {
       this.setState({
         showLegend: true,
         legendTop: data.event.layerY,
-        legendLeft: data.event.layerX,
+        legendLeft: data.event.layerX + 15, /* extra pixels to avoid CSS jitter on Chrome. */
         tooltipData: data
       });
     }
@@ -241,9 +241,9 @@ class NestedDonutsProgramChart extends Component {
     const innerColors = this.calculateOpacity(innerDataForChart.map(i => getCustomColor(i, selectedPrograms[1])),
       innerDataForChart);
     const outerColors = this.calculateOpacity(outerDataLvl2
-        .map(o => getCustomColor(o, o.neverFade ? `${selectedPrograms[0]}_${selectedDirectProgram.code}`
-          : selectedPrograms[0])),
-      outerDataLvl2);
+      .map(o => getCustomColor(o, o.neverFade ? `${selectedPrograms[0]}_${selectedDirectProgram.code}`
+        : selectedPrograms[0])),
+    outerDataLvl2);
     const transition = {
       duration: 2000,
       easing: 'cubic-in-out'

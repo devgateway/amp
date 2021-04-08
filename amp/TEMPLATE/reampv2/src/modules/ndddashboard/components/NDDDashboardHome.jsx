@@ -16,6 +16,7 @@ import PrintDummy from '../../sscdashboard/utils/PrintDummy';
 import { printChart } from '../../sscdashboard/utils/PrintUtils';
 import './print.css';
 import { removeFilter } from '../utils/Utils';
+import { SRC_DIRECT } from './charts/FundingByYearChart';
 
 const queryString = require('query-string');
 
@@ -31,7 +32,8 @@ class NDDDashboardHome extends Component {
       selectedPrograms: undefined,
       settings: undefined,
       selectedDirectProgram: null,
-      embedded: !!params.embedded
+      embedded: !!params.embedded,
+      fundingByYearSource: SRC_DIRECT
     };
   }
 
@@ -100,7 +102,7 @@ class NDDDashboardHome extends Component {
     const { dashboardSettings } = this.props;
     if (event.points[0].data.name === DIRECT) {
       if (!selectedDirectProgram) {
-        this.setState({ selectedDirectProgram: outerData[event.points[0].i] });
+        this.setState({ selectedDirectProgram: outerData[event.points[0].i], fundingByYearSource: SRC_DIRECT });
         const { _callTopReport } = this.props;
         _callTopReport(fundingType || dashboardSettings.find(i => i.id === FUNDING_TYPE).value.defaultId,
           settings, filters, outerData[event.points[0].i]);
@@ -110,6 +112,10 @@ class NDDDashboardHome extends Component {
         this.resetChartAfterUnClick();
       }
     }
+  }
+
+  onChangeSource(value) {
+    this.setState({ fundingByYearSource: value.target.value });
   }
 
   resetChartAfterUnClick = () => {
@@ -180,7 +186,14 @@ class NDDDashboardHome extends Component {
 
   render() {
     const {
-      filters, dashboardId, fundingType, selectedPrograms, settings, selectedDirectProgram, embedded
+      filters,
+      dashboardId,
+      fundingType,
+      selectedPrograms,
+      settings,
+      selectedDirectProgram,
+      embedded,
+      fundingByYearSource
     } = this.state;
     const {
       ndd, nddLoadingPending, nddLoaded, dashboardSettings, mapping, noIndirectMapping, globalSettings
@@ -218,6 +231,8 @@ class NDDDashboardHome extends Component {
           noIndirectMapping={noIndirectMapping}
           downloadImage={this.downloadImage.bind(this)}
           embedded={embedded}
+          onChangeSource={this.onChangeSource.bind(this)}
+          fundingByYearSource={fundingByYearSource}
         />
         <PrintDummy />
       </Container>

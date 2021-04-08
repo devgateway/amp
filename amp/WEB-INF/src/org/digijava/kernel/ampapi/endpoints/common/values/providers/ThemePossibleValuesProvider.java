@@ -46,11 +46,10 @@ public class ThemePossibleValuesProvider extends AbstractPossibleValuesDAOProvid
     protected Map<Long, Set<Long>> getMappedPrograms() {
         List<AmpThemeMapping> list = possibleValuesDAO.getMappedThemes();
         if (list != null) {
-            return list.stream().collect(groupingBy(atm -> atm.getSrcTheme().getAmpThemeId(),
+            Map<Long, Set<Long>> srcToDst = list.stream().collect(groupingBy(atm -> atm.getSrcTheme().getAmpThemeId(),
                     mapping(atm -> atm.getDstTheme().getAmpThemeId(), toSet())));
+            return srcToDst;
         }
-
-
         return new HashMap<>();
     }
 

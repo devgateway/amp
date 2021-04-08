@@ -21,7 +21,7 @@ import YearDetail from './YearDetail';
 
 const Plot = createPlotlyComponent(Plotly);
 
-const SRC_DIRECT = '0';
+export const SRC_DIRECT = '0';
 const SRC_INDIRECT = '1';
 
 class FundingByYearChart extends Component {
@@ -29,21 +29,16 @@ class FundingByYearChart extends Component {
     super(props);
     this.getValues = this.getValues.bind(this);
     this.state = {
-      source: SRC_DIRECT, showLegend: false, legendTop: 0, legendLeft: 0, tooltipData: null, showDetail: false
+      showLegend: false, legendTop: 0, legendLeft: 0, tooltipData: null, showDetail: false
     };
   }
 
-  onChangeSource = (value) => {
-    this.setState({ source: value.target.value });
-  }
-
   getValues() {
-    const { selectedDirectProgram } = this.props;
-    const { source } = this.state;
+    const { selectedDirectProgram, fundingByYearSource } = this.props;
     const ret = [];
     const { data } = this.props;
     if (data && data.length > 0) {
-      const sourceData = (source === SRC_DIRECT
+      const sourceData = (fundingByYearSource === SRC_DIRECT
         ? data.map(i => i[DIRECT_PROGRAM])
         : data.map(i => i[INDIRECT_PROGRAMS]).flat());
       const filteredData = !selectedDirectProgram ? sourceData
@@ -132,13 +127,13 @@ class FundingByYearChart extends Component {
 
   onClick = (event) => {
     const {
-      _callYearDetailReport, settings, filters, fundingType, selectedPrograms
+      _callYearDetailReport, settings, filters, fundingType, selectedPrograms, fundingByYearSource
     } = this.props;
-    const { source } = this.state;
     this.setState({ showDetail: true, year: event.points[0].x, programName: event.points[0].data.text });
     const newSettings = { ...settings };
-    newSettings.isShowIndirectDataForActivitiesDetail = (source === SRC_INDIRECT);
+    newSettings.isShowInnerChartDataForActivitiesDetail = (fundingByYearSource === SRC_INDIRECT);
     newSettings.dontUseMapping = (selectedPrograms && selectedPrograms.length === 1);
+    newSettings.selectedPrograms = selectedPrograms;
     _callYearDetailReport(fundingType,
       filters,
       event.points[0].data.extraData.find(i => i.name === event.points[0].data.text).id,
@@ -255,9 +250,11 @@ class FundingByYearChart extends Component {
   getTickValue = (total, i) => (total * i / 100)
 
   render() {
-    const { translations, globalSettings } = this.props;
     const {
-      source, showLegend, legendTop, legendLeft
+      translations, globalSettings, onChangeSource, fundingByYearSource
+    } = this.props;
+    const {
+      showLegend, legendTop, legendLeft
     } = this.state;
     const directData = this.getValues();
     /* const transition = {
@@ -280,7 +277,7 @@ class FundingByYearChart extends Component {
       <div>
         <div className="funding-by-year-radios">
           <div className="title-fy-source">
-            {source === SRC_DIRECT ? translations[`${TRN_PREFIX}direct`]
+            {fundingByYearSource === SRC_DIRECT ? translations[`${TRN_PREFIX}direct`]
               : translations[`${TRN_PREFIX}indirect`]}
           </div>
           <div className="radio-fy-source">
@@ -289,8 +286,8 @@ class FundingByYearChart extends Component {
               id="fy-direct"
               name="fy-source"
               value="0"
-              checked={source === SRC_DIRECT ? 'checked' : null}
-              onChange={this.onChangeSource} />
+              checked={fundingByYearSource === SRC_DIRECT ? 'checked' : null}
+              onChange={onChangeSource} />
             <label htmlFor="fy-direct">
               {translations[`${TRN_PREFIX}fy-direct`]}
             </label>
@@ -302,8 +299,8 @@ class FundingByYearChart extends Component {
                 id="fy-indirect"
                 name="fy-source"
                 value="1"
-                checked={source === SRC_INDIRECT ? 'checked' : null}
-                onChange={this.onChangeSource} />
+                checked={fundingByYearSource === SRC_INDIRECT ? 'checked' : null}
+                onChange={onChangeSource} />
               <label htmlFor="fy-indirect">
                 {translations[`${TRN_PREFIX}fy-indirect`]}
               </label>
@@ -327,13 +324,13 @@ class FundingByYearChart extends Component {
                 smoothing: 0.5,
                 dash: 'solid',
                 width: 2,
-                color: this.getColor(source, i),
+                color: this.getColor(fundingByYearSource, i),
               },
               marker: {
                 size: 7,
                 color: 'white',
                 line: {
-                  color: this.getColor(source, i),
+                  color: this.getColor(fundingByYearSource, i),
                   width: 2,
                 }
               }
@@ -407,7 +404,9 @@ FundingByYearChart.propTypes = {
   yearDetail: PropTypes.array,
   error: PropTypes.object,
   selectedPrograms: PropTypes.array.isRequired,
-  dashboardSettings: PropTypes.array.isRequired
+  dashboardSettings: PropTypes.array.isRequired,
+  fundingByYearSource: PropTypes.string.isRequired,
+  onChangeSource: PropTypes.func.isRequired
 };
 
 FundingByYearChart.defaultProps = {

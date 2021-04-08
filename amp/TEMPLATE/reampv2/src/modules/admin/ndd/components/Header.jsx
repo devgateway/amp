@@ -10,7 +10,7 @@ class Header extends Component {
     const {
       translations, onAddRow, onSaveAll, onRevertAll, src, dst, onUpdateActivities, busy, dataPresent, unsavedChanges
     } = this.props;
-    const { trnPrefix } = this.context;
+    const { trnPrefix, isIndirect } = this.context;
     return (
       <div>
         <div className="panel panel-default">
@@ -43,16 +43,18 @@ class Header extends Component {
                 type="button"
                 onClick={onRevertAll}
                 className="btn btn-danger margin_2"
-                disabled={busy}>
+                disabled={busy || !unsavedChanges}>
                 {translations[`${trnPrefix}button-revert-all-edits`]}
               </button>
-              <button
-                type="button"
-                onClick={onUpdateActivities}
-                className="btn btn-primary"
-                disabled={busy || !dataPresent || unsavedChanges}>
-                {translations[`${trnPrefix}button-update-activities`]}
-              </button>
+              {isIndirect ? (
+                <button
+                  type="button"
+                  onClick={onUpdateActivities}
+                  className="btn btn-primary"
+                  disabled={busy || !dataPresent || unsavedChanges}>
+                  {translations[`${trnPrefix}button-update-activities`]}
+                </button>
+              ) : null}
             </span>
           </div>
         </div>

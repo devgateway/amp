@@ -74,9 +74,9 @@ public class NDDSolarChartData {
 
         private final Program programLvl1;
 
-        private final Program programLvl2;
+        private Program programLvl2;
 
-        private final Program programLvl3;
+        private Program programLvl3;
 
         private BigDecimal amount;
 
@@ -183,6 +183,18 @@ public class NDDSolarChartData {
                     this.amount = null;
                     this.amountsByYear = null;
                     break;
+            }
+
+            // Added to always return data to the FE.
+            if (this.programLvl3 == null) {
+                if (this.programLvl2 != null) {
+                    this.programLvl3 = this.programLvl2;
+                } else {
+                    this.programLvl3 = this.programLvl1;
+                }
+            }
+            if (this.programLvl2 == null) {
+                this.programLvl2 = this.programLvl1;
             }
         }
 

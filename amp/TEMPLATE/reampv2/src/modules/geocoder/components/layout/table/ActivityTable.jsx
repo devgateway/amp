@@ -3,6 +3,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
+import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 
 import './table.css';
 import {loadActivities} from "../../../actions/activitiesAction";
@@ -48,11 +49,10 @@ class ActivityTable extends Component {
             onSelectAll: this.props.onSelectAllActivities
         };
 
-        let col1Text = translations['amp.geocoder:lastUpdatedDate'];
-        let col2Text = translations['amp.geocoder:ampId'];
-        let col3Text = translations['amp.geocoder:projectName'];
-        let col4Text = translations['amp.geocoder:location'];
-
+        let lastUpdatedHeaderText = translations['amp.geocoder:lastUpdatedDate'];
+        let ampIdHeaderText = translations['amp.geocoder:ampId'];
+        let projectNameHeaderText = translations['amp.geocoder:projectName'];
+        let locationHeaderText = translations['amp.geocoder:location'];
 
         let columns = [
             {
@@ -62,34 +62,40 @@ class ActivityTable extends Component {
             },
             {
                 dataField: "col1",
-                text: col1Text,
+                text: lastUpdatedHeaderText,
                 sort: true,
                 sortFunc: (a, b, order) => {
                     return orderDates(a, b, order);
                 },
                 headerStyle: () => {
-                    return { width: "10%" };
+                    return { width: "15%" };
                 }
             },
             {
                 dataField: "col2",
-                text: col2Text,
+                text: ampIdHeaderText,
                 headerStyle: () => {
                     return { width: "20%" };
                 },
-                sort:true
+                sort:true,
+                filter: textFilter({
+                    placeholder: translations['amp.geocoder:select'] + ' ' + ampIdHeaderText
+                })
             },
             {
                 dataField: "col3",
-                text: col3Text,
+                text: projectNameHeaderText,
                 headerStyle: () => {
-                    return { width: "50%" };
+                    return { width: "45%" };
                 },
+                filter: textFilter({
+                    placeholder: translations['amp.geocoder:select'] + ' ' + projectNameHeaderText
+                }),
                 sort:true
             },
             {
                 dataField: "col4",
-                text: col4Text,
+                text: locationHeaderText,
                 headerStyle: () => {
                     return { width: "15%" };
                 },
@@ -113,6 +119,7 @@ class ActivityTable extends Component {
                             selectRow={selectRow}
                             pagination={paginationFactory(options)}
                             noDataIndication={() => translations['amp.geocoder:noActivities']}
+                            filter={filterFactory()}
                         />
                         </>}
                </div>

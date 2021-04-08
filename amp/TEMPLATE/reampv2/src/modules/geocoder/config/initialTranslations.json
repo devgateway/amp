@@ -3,6 +3,7 @@
   "amp.geocoder:projectList": "Project List",
   "amp.geocoder:geocodedSelection": "GeoCoded Selection",
   "amp.geocoder:selectProjects": "Select Projects",
+  "amp.geocoder:select": "Select",
   "amp.geocoder:settings": "Settings",
   "amp.geocoder:resetAll": "Reset All",
   "amp.geocoder:cancelGeocoding": "Cancel Geocoding",

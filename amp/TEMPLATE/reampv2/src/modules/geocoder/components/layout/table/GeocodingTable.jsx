@@ -4,6 +4,7 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import GeocodingActionColumn from "./GeocodingActionColumn";
+import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 
 import './table.css';
 import Locations from "./Locations";
@@ -119,42 +120,48 @@ class GeocodingTable extends Component {
             paginationTotalRenderer: (from, to, size) => PaginationTotal(from, to, size)
         };
 
-        let col1Text = translations['amp.geocoder:lastUpdatedDate'];
-        let col2Text = translations['amp.geocoder:ampId'];
-        let col3Text = translations['amp.geocoder:projectName'];
-        let col4Text = translations['amp.geocoder:location'];
+        let lastUpdatedHeaderText = translations['amp.geocoder:lastUpdatedDate'];
+        let ampIdHeaderText = translations['amp.geocoder:ampId'];
+        let projectNameHeaderText = translations['amp.geocoder:projectName'];
+        let locationHeaderText = translations['amp.geocoder:location'];
 
         let columns = [
             {
                 dataField: "updated_date",
-                text: col1Text,
+                text: lastUpdatedHeaderText,
                 sort: true,
                 sortFunc: (a, b, order) => {
                     return orderDates(a, b, order);
                 },
                 headerStyle: () => {
-                    return { width: "10%" };
+                    return { width: "15%" };
                 }
             },
             {
                 dataField: "amp_id",
-                text: col2Text,
+                text: ampIdHeaderText,
                 headerStyle: () => {
                     return { width: "20%" };
                 },
+                filter: textFilter({
+                    placeholder: translations['amp.geocoder:select'] + ' ' + ampIdHeaderText
+                }),
                 sort:true
             },
             {
                 dataField: "project_title",
-                text: col3Text,
+                text: projectNameHeaderText,
                 headerStyle: () => {
                     return { width: "45%" };
                 },
+                filter: textFilter({
+                    placeholder: translations['amp.geocoder:select'] + ' ' + projectNameHeaderText
+                }),
                 sort:true
             },
             {
                 dataField: "location",
-                text: col4Text,
+                text: locationHeaderText,
                 headerStyle: () => {
                     return { width: "15%" };
                 },
@@ -178,6 +185,7 @@ class GeocodingTable extends Component {
                     expandableRow={ this.isExpandableRow }
                     expandComponent={ this.expandComponent }
                     pagination={paginationFactory(options)}
+                    filter={filterFactory()}
                     expandColumnOptions={{
                         expandColumnVisible: true,
                         expandColumnComponent: this.expandColumnComponent,

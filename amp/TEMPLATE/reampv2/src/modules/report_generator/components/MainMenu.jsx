@@ -40,6 +40,9 @@ export default class MainMenu extends Component {
             <Button color="orange">Save As</Button>
           </Item>
         </Menu>
+        <Item>
+          <Button disabled size="huge" fluid color="grey">+ Run Report</Button>
+        </Item>
       </>
     );
   }

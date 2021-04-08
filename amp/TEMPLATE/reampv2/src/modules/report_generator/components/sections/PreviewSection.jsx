@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-export default class Preview extends Component {
+export default class PreviewSection extends Component {
   render() {
     return <div>Preview</div>;
   }

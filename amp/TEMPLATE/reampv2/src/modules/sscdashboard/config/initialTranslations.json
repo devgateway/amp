@@ -33,6 +33,7 @@
   "amp.ssc.dashboard:select-all": "Select all",
   "amp.ssc.dashboard:select-none": "Select none",
   "amp.ssc.dashboard:center-map": "Center map",
-  "amp.ssc.dashboard:project-xls": "Project/s (pipe separated)"
-
+  "amp.ssc.dashboard:project-xls": "Project/s (pipe separated)",
+  "amp.ssc.dashboard:zoom-in": "Zoom in",
+  "amp.ssc.dashboard:zoom-out": "Zoom Out"
 }

@@ -33,11 +33,11 @@ class SscDashboardHome extends Component {
 
   componentDidMount() {
     const {
-      loadSectorsFilters, loadCountriesFilters, loadModalitiesFilters, projects
+      loadSectorsFilters_, loadCountriesFilters_, loadModalitiesFilters_, projects
     } = this.props;
-    loadSectorsFilters();
-    loadCountriesFilters();
-    loadModalitiesFilters();
+    loadSectorsFilters_();
+    loadCountriesFilters_();
+    loadModalitiesFilters_();
 
     if (projects.activitiesLoaded) {
       this.getProjectsData();
@@ -78,8 +78,8 @@ class SscDashboardHome extends Component {
   }
 
   getProjectsData() {
-    const { loadActivitiesDetails, projects } = this.props;
-    loadActivitiesDetails(projects.activities.activitiesId);
+    const { loadActivitiesDetails_, projects } = this.props;
+    loadActivitiesDetails_(projects.activities.activitiesId);
   }
 
   getFilteredProjects() {
@@ -261,20 +261,20 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  loadActivitiesDetails: CallReports.loadActivitiesDetails,
-  loadSectorsFilters: LoadFilters.loadSectorsFilters,
-  loadCountriesFilters: LoadFilters.loadCountriesFilters,
-  loadModalitiesFilters: LoadFilters.loadModalitiesFilters
+  loadActivitiesDetails_: CallReports.loadActivitiesDetails,
+  loadSectorsFilters_: LoadFilters.loadSectorsFilters,
+  loadCountriesFilters_: LoadFilters.loadCountriesFilters,
+  loadModalitiesFilters_: LoadFilters.loadModalitiesFilters
 }, dispatch);
 
 SscDashboardHome.contextType = SSCTranslationContext;
 
 SscDashboardHome.propTypes = {
   projects: PropTypes.object.isRequired,
-  loadSectorsFilters: PropTypes.func.isRequired,
-  loadCountriesFilters: PropTypes.func.isRequired,
-  loadModalitiesFilters: PropTypes.func.isRequired,
-  loadActivitiesDetails: PropTypes.func.isRequired,
+  loadSectorsFilters_: PropTypes.func.isRequired,
+  loadCountriesFilters_: PropTypes.func.isRequired,
+  loadModalitiesFilters_: PropTypes.func.isRequired,
+  loadActivitiesDetails_: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SscDashboardHome);

@@ -33,6 +33,7 @@ export const DEFAULT_SCREEN_SIZE = 1920;
 export const DEFAULT_ELLIPSIS = 145;
 export const SECTOR_MODALITY_MIN_SIZE = 2;
 export const SECTOR_MODALITY_LEADING_LEFT = '0';
+export const WS_PREFIX = 'SSC_';
 
 export const HOME_CHART = 'home';
 export const SECTORS_CHART = 'sector';

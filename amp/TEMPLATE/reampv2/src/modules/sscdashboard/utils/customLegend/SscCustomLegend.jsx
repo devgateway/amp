@@ -1,5 +1,6 @@
 import React from 'react';
 import './sscCustomLegend.css';
+import EllipsisText from 'react-ellipsis-text';
 import PropTypes from 'prop-types';
 import { COLOR_MAP } from '../constants';
 
@@ -16,7 +17,10 @@ const SscCustomLegend = ({ data, chartSelected }) => (
                   style={{ border: `2px solid ${COLOR_MAP.get(chartSelected).get(d.code)}` }} />
               </div>
               <div className="col-md-9 col-xs-9 label">
-                {d.simpleLabel}
+                <EllipsisText
+                  text={d.simpleLabel}
+                  length={50}
+                  tail="" />
                 <span
                   className="label percentage">
                   {`${d.percentage}%`}

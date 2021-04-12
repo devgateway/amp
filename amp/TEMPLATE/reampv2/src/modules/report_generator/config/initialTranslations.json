@@ -1,0 +1,9 @@
+{
+  "amp.reportGenerator:Home-Page": "Dashboard Home",
+  "amp.reportGenerator:page-title": "Aid Management Platform - NDD Dashboard",
+  "amp.reportGenerator:filters": "Filters",
+  "amp.reportGenerator:settings": "Settings",
+  "amp.reportGenerator:close": "Close",
+  "amp.reportGenerator:no-data-short": "No Data",
+  "amp.reportGenerator:loading": "Loading"
+}

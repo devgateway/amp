@@ -1,0 +1,26 @@
+.ui.menu {
+    font-size: 1.2rem !important;
+}
+
+.ui.menu .item {
+    line-height: 2;
+}
+
+.ui.vertical.menu .active.item {
+    background-color: #2480c6 !important;
+    color: white !important;
+}
+
+.ui.vertical.menu .item {
+    background-color: #e7f1fd !important;
+    font-weight: bold !important;
+    color: #0b3e6f !important;
+}
+
+.save_buttons_item {
+    padding-left: 12% !important;
+}
+
+.save_buttons_item button {
+    width: 45%;
+}

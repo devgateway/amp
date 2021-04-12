@@ -7,6 +7,7 @@ const SSCDashboardApp = lazy(() => import('./modules/sscdashboard'));
 const AMPOfflineDownloadApp = lazy(() => import('./modules/ampoffline/Download'));
 const AdminNDDApp = lazy(() => import('./modules/admin/ndd'));
 const NDDDashboardApp = lazy(() => import('./modules/ndddashboard'));
+const ReportGeneratorApp = lazy(() => import('./modules/report_generator'));
 
 class AppRoute extends Component {
   render() {
@@ -17,6 +18,7 @@ class AppRoute extends Component {
           <Route path="/ampofflinedownload" component={AMPOfflineDownloadApp} />
           <Route path="/ndd" component={AdminNDDApp} />
           <Route path="/ndddashboard" component={NDDDashboardApp} />
+          <Route path="/report_generator" component={ReportGeneratorApp} />
         </Suspense>
       </Router>
     );

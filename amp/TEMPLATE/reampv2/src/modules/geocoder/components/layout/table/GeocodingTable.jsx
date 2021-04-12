@@ -101,7 +101,9 @@ class GeocodingTable extends Component {
             expandColumnPosition: 'right',
             expandColumnRenderer: ({ expanded, rowKey, expandable }) => (
                 <GeocodingActionColumn
-                    ampId={rowKey} enabled={this.hasLocations(rowKey)} message={translations['amp.geocoder:noLocations']}
+                    ampId={rowKey} enabled={this.hasLocations(rowKey)}
+                    message={translations['amp.geocoder:noLocations']}
+                    tooltip={translations['amp.geocoder:editActionTooltip']}
                 />
             )
         };

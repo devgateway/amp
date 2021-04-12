@@ -25,7 +25,7 @@ class ActivityTableHeader extends Component {
                 <SelectedActivitiesMessage title={translations['amp.geocoder:selectProjects']}
                                             selectedSize={this.props.selectedActivities.length}
                                             size={this.props.activities.length} />
-                <RunSearchButton title={translations['amp.geocoder:runSearch']}
+                <RunSearchButton title={translations['amp.geocoder:runSearch']} tooltip={translations['amp.geocoder:runSearchTooltip']}
                          selectedActivities={this.props.selectedActivities}
                          onRunSearch={this.onRunSearch} />
             </div>);

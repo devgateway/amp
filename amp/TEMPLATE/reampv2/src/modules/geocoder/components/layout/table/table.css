@@ -156,6 +156,10 @@ table thead tr th {
     padding:10px;
 }
 
+.location-action span {
+    text-transform: lowercase;
+}
+
 .location-action a .fa-check-circle{
     color: #5cb85c;
 }
@@ -320,4 +324,9 @@ table thead tr th {
 
 .table > thead > tr > th  {
     vertical-align: middle;
+}
+
+.tooltip {
+    opacity: 1;
+    margin-bottom: 5px;
 }

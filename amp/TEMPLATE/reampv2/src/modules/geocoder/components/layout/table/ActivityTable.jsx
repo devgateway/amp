@@ -4,6 +4,8 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
+import Tooltip from "react-bootstrap/Tooltip";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 
 import './table.css';
 import {loadActivities} from "../../../actions/activitiesAction";
@@ -26,6 +28,10 @@ class ActivityTable extends Component {
     render() {
         const {translations} = this.context;
 
+        const renderSelectAllTooltip = props => (
+            <Tooltip {...props}>{translations['amp.geocoder:selectAllTooltip']}</Tooltip>
+        );
+
         let options = {
             page: 1,
             sizePerPage: this.props.settings['workspace-default-records-per-page'],
@@ -46,6 +52,11 @@ class ActivityTable extends Component {
             onSelect: (row, isSelected, rowIndex, e) => {
                 this.props.onSelectActivity(isSelected, row.id);
             },
+            selectionHeaderRenderer: ({mode, checked}) => (
+                <OverlayTrigger placement="top" overlay={renderSelectAllTooltip}>
+                    <input type={mode} checked={checked}/>
+                </OverlayTrigger>
+            ),
             onSelectAll: this.props.onSelectAllActivities
         };
 

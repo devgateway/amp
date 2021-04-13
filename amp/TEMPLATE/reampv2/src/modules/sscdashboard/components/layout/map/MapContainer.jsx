@@ -58,8 +58,10 @@ class MapContainer extends Component {
         width: 30
       });
     }
+    const title = translations['amp.ssc.dashboard:project-percentage']
+      .replace('{filter}', translations[`amp.ssc.dashboard:${isModalities}` ? 'Modality' : 'Sector']);
     exportData.columns.push({
-      headerTitle: translations[`amp.ssc.dashboard:${isModalities ? 'modality' : 'sector'}-project-percentage`],
+      headerTitle: title,
       key: 'percentage',
       width: 30
     });
@@ -76,7 +78,6 @@ class MapContainer extends Component {
     exportData.rows = [];
     filteredProjects.forEach(p => {
       if (countriesForExport.length === 0 || countriesForExport.includes(p.id)) {
-
         let chartData;
         let projectsByGrouping;
         if (isModalities) {
@@ -220,10 +221,13 @@ MapContainer.propTypes = {
   filteredProjects: PropTypes.array,
   closeLargeCountryPopinAndClearFilter: PropTypes.func.isRequired,
   showEmptyProjects: PropTypes.bool.isRequired,
-  onNoProjectsModalClose: PropTypes.func.isRequired
+  onNoProjectsModalClose: PropTypes.func.isRequired,
+  countriesForExport: PropTypes.array,
+  countriesForExportChanged: PropTypes.func.isRequired
 };
 
 MapContainer.defaultProps = {
   chartSelected: HOME_CHART,
-  filteredProjects: []
+  filteredProjects: [],
+  countriesForExport: []
 };

@@ -4,12 +4,13 @@ import '../popups.css';
 import { ResponsivePie } from '@nivo/pie';
 import { SSCTranslationContext } from '../../../StartUp';
 import {
-  SECTOR_COLOR_MAP, OTHERS_CODE, SECTORS_LIMIT_CHART,
-  SECTORS_OTHERS_ID_CHART, SECTORS_CHART, COLOR_MAP, COLOR_MAP_CUSTOM
+  OTHERS_CODE, SECTORS_LIMIT_CHART,
+  SECTORS_OTHERS_ID_CHART, COLOR_MAP
 } from '../../../../utils/constants';
 import { toCamelCase } from '../../../../utils/Utils';
 import Tooltip from '../../../utils/GenericTooltip';
-import SscCustomLegend from "../../../../utils/customLegend/SscCustomLegend";
+import SscCustomLegend from '../../../../utils/customLegend/SscCustomLegend';
+
 class CountryPopupChart extends Component {
   constructor(props) {
     super(props);
@@ -67,7 +68,7 @@ class CountryPopupChart extends Component {
       />
 
     );
-    chartComponents.legend = <SscCustomLegend data={data} chartSelected={chartSelected}/>;
+    chartComponents.legend = <SscCustomLegend data={data} chartSelected={chartSelected} />;
     return chartComponents;
   }
 

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { Tabs, Tab } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -9,22 +9,25 @@ import AdminNDDProgramApp from '../program';
 // eslint-disable-next-line no-unused-vars
 import styles from './css/style.css';
 
-class NDDAdminNavigator extends Component {
-  render() {
-    const { translations } = this.props;
-    const trnPrefix = 'amp.admin.ndd:';
-    return (
-      <Tabs defaultActiveKey="indirect" transition={false}>
-        <Tab eventKey="indirect" title={translations[`${trnPrefix}menu-item-indirect-programs-mapping`]}>
-          <AdminNDDIndirectProgramApp />
-        </Tab>
-        <Tab eventKey="program" title={translations[`${trnPrefix}menu-item-programs-mapping`]}>
-          <AdminNDDProgramApp />
-        </Tab>
-      </Tabs>
-    );
-  }
-}
+const NDDAdminNavigator = ({ translations }) => {
+  const [key, setKey] = useState('indirect');
+  const trnPrefix = 'amp.admin.ndd:';
+  return (
+    <Tabs
+      id="programs-tab"
+      activeKey={key}
+      transition={false}
+      onSelect={(k) => setKey(k)}
+    >
+      <Tab eventKey="indirect" title={translations[`${trnPrefix}menu-item-indirect-programs-mapping`]}>
+        <AdminNDDIndirectProgramApp selected={key === 'indirect'} />
+      </Tab>
+      <Tab eventKey="program" title={translations[`${trnPrefix}menu-item-programs-mapping`]}>
+        <AdminNDDProgramApp selected={key === 'program'} />
+      </Tab>
+    </Tabs>
+  );
+};
 
 const mapStateToProps = state => ({
   translations: state.translationsReducer.translations,

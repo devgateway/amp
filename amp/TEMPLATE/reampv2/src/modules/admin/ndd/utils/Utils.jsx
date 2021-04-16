@@ -109,7 +109,7 @@ export function validateMainPrograms(src, dst, level) {
       ret = 5;
     }
   }
-  if (level <= 0 || Number.isNaN(level)) {
+  if ((level <= 0 || Number.isNaN(level)) && (src || dst)) {
     ret = 6;
   }
   return ret;

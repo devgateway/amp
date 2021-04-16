@@ -1,13 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.ndd;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.validation.ValidationException;
-
 import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
@@ -26,6 +18,13 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 
+import javax.validation.ValidationException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static org.digijava.module.aim.helper.GlobalSettingsConstants.MAPPING_DESTINATION_PROGRAM;
 import static org.digijava.module.aim.helper.GlobalSettingsConstants.MAPPING_INDIRECT_LEVEL;
 import static org.digijava.module.aim.helper.GlobalSettingsConstants.MAPPING_PROGRAM_LEVEL;
@@ -42,7 +41,7 @@ public class NDDService {
     /**
      * Level at which we have explicit indirect program mappings defined.
      */
-    public static final int INDIRECT_PROGRAM_MAPPING_LEVEL = 3;
+    public static final int MAX_MAPPING_LEVEL = 3;
 
     public static class SingleProgramData implements Serializable {
         private Long id;
@@ -81,50 +80,48 @@ public class NDDService {
     public IndirectProgramMappingConfiguration getIndirectProgramMappingConfiguration() {
         AmpTheme src = getSrcIndirectProgramRoot();
         AmpTheme dst = getDstIndirectProgramRoot();
-        int srcLevel = getMappingLevel(MAPPING_INDIRECT_LEVEL);
-        int dstLevel = srcLevel;
-        PossibleValue srcPV = src != null ? convert(src, srcLevel) : null;
-        PossibleValue dstPV = dst != null ? convert(dst, dstLevel) : null;
+        int level = getMappingLevel(MAPPING_INDIRECT_LEVEL);
+        PossibleValue srcPV = src != null ? convert(src, level) : null;
+        PossibleValue dstPV = dst != null ? convert(dst, level) : null;
 
         List<PossibleValue> allPrograms = new ArrayList<>();
         getAvailablePrograms(false).forEach(ampTheme -> {
-            PossibleValue pv = convert(ampTheme, srcLevel);
+            PossibleValue pv = convert(ampTheme, MAX_MAPPING_LEVEL);
             allPrograms.add(pv);
         });
         getAvailablePrograms(true).forEach(ampTheme -> {
-            PossibleValue pv = convert(ampTheme, dstLevel);
+            PossibleValue pv = convert(ampTheme, MAX_MAPPING_LEVEL);
             allPrograms.add(pv);
         });
 
         List<AmpIndirectTheme> mapping = loadIndirectMapping();
 
         SingleProgramData srcSPD = srcPV != null ? new SingleProgramData(srcPV.getId(), srcPV.getValue(), false,
-                srcLevel) : null;
+                level) : null;
         SingleProgramData dstSPD = dstPV != null ? new SingleProgramData(dstPV.getId(), dstPV.getValue(), true,
-                dstLevel) : null;
+                level) : null;
         return new IndirectProgramMappingConfiguration(mapping, srcSPD, dstSPD, allPrograms);
     }
 
     public ProgramMappingConfiguration getProgramMappingConfiguration() {
         AmpTheme src = getSrcProgramRoot();
         AmpTheme dst = getDstProgramRoot();
-        int levelSrc = getMappingLevel(MAPPING_PROGRAM_LEVEL);
-        int levelDst = levelSrc;
-        PossibleValue srcPV = src != null ? convert(src, levelSrc) : null;
-        PossibleValue dstPV = dst != null ? convert(dst, levelDst) : null;
+        int level = getMappingLevel(MAPPING_PROGRAM_LEVEL);
+        PossibleValue srcPV = src != null ? convert(src, level) : null;
+        PossibleValue dstPV = dst != null ? convert(dst, level) : null;
 
         List<PossibleValue> allPrograms = new ArrayList<>();
         getAvailablePrograms(false).forEach(ampTheme -> {
-            PossibleValue pv = convert(ampTheme, levelSrc);
+            PossibleValue pv = convert(ampTheme, MAX_MAPPING_LEVEL);
             allPrograms.add(pv);
         });
 
         List<AmpThemeMapping> mapping = loadMapping();
 
         SingleProgramData srcSPD = srcPV != null ? new SingleProgramData(srcPV.getId(), srcPV.getValue(), false,
-                levelSrc) : null;
+                level) : null;
         SingleProgramData dstSPD = dstPV != null ? new SingleProgramData(dstPV.getId(), dstPV.getValue(), false,
-                levelDst) : null;
+                level) : null;
         return new ProgramMappingConfiguration(mapping, srcSPD, dstSPD, allPrograms);
     }
 

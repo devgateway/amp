@@ -386,4 +386,21 @@ public class GeoCodingService {
                     .forEach(l -> l.setAccepted(null));
         }
     }
+
+    public void removeActivity(String ampId) {
+        GeoCodingProcess geoCodingProcess = getGeoCodingProcess();
+        if (geoCodingProcess != null) {
+            List<GeoCodedActivity> geoCodedActivities = geoCodingProcess.getActivities().stream()
+                    .filter(g -> g.getActivity().getAmpId().equals(ampId))
+                    .collect(Collectors.toList());
+
+            if (geoCodedActivities.isEmpty()) {
+                throw new GeneralGeoCodingException("No activity found with ampId = " + ampId);
+            } else if (geoCodedActivities.size() > 1) {
+                throw new GeneralGeoCodingException("Multiple activities found with ampId = " + ampId);
+            } else {
+                geoCodingProcess.getActivities().remove(geoCodedActivities.get(0));
+            }
+        }
+    }
 }

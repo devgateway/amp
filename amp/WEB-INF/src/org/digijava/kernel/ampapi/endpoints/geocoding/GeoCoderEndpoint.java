@@ -137,6 +137,17 @@ public class GeoCoderEndpoint {
         return Response.noContent().build();
     }
 
+    @ApiOperation("Remove activity from geo coding process")
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_NO_CONTENT, message = "success"))
+    @ApiMethod(id = "removeActivity", authTypes = AuthRule.IN_WORKSPACE)
+    @POST
+    @Path("activity/remove/{ampId}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    public Response removeActivity(@ApiParam("amp id") @PathParam("ampId") String ampId) {
+        service.removeActivity(ampId);
+        return Response.noContent().build();
+    }
+
     @ApiOperation("Reset location statuses")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_NO_CONTENT, message = "success"))
     @ApiMethod(id = "resetLocationStatuses", authTypes = AuthRule.IN_WORKSPACE)

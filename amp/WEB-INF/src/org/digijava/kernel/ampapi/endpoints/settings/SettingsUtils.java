@@ -1,15 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.settings;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.log4j.Logger;
@@ -33,6 +23,7 @@ import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.SiteUtils;
+import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -50,13 +41,23 @@ import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 /**
  * Utility class for amp settings handling
- * 
+ *
  * @author Nadejda Mandrescu
  */
 public class SettingsUtils {
-    
+
     protected static final Logger logger = Logger.getLogger(SettingsUtils.class);
 
     /**
@@ -380,12 +381,12 @@ public class SettingsUtils {
      */
     public static AmpGeneralSettings getGeneralSettings() {
         AmpGeneralSettings settings = new AmpGeneralSettings();
-        
+
         settings.setUseIconsForSectorsInProjectList(
                 FeaturesUtil.isVisibleFeature(GisConstants.USE_ICONS_FOR_SECTORS_IN_PROJECT_LIST));
-        
+
         settings.setProjectSites(FeaturesUtil.isVisibleFeature(GisConstants.PROJECT_SITES));
-        
+
         settings.setMaxLocationsIcons(
                 FeaturesUtil.getGlobalSettingValueInteger(GlobalSettingsConstants.MAX_LOCATIONS_ICONS));
 
@@ -403,11 +404,11 @@ public class SettingsUtils {
         settings.setAmountInThousands(AmountsUnits.getDefaultValue().code);
 
         settings.setLanguage(TLSUtils.getEffectiveLangCode());
-    
+
         settings.setDefaultLanguage(TLSUtils.getSite().getDefaultLanguage().getCode());
-    
+
         settings.setMultilingual(ContentTranslationUtil.multilingualIsEnabled());
-        
+
         settings.setRtlDirection(SiteUtils.isEffectiveLangRTL());
 
         settings.setDefaultDateFormat(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT));
@@ -419,17 +420,23 @@ public class SettingsUtils {
         settings.setGapAnalysisMap(FeaturesUtil.isVisibleFeature("Gap Analysis Map"));
 
         settings.setHasSscWorkspaces(!TeamUtil.getAllSSCWorkspaces().isEmpty());
-    
+
         settings.setReorderFundingItemId(
                 FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.REORDER_FUNDING_ITEMS));
-    
+
         settings.setPublicVersionHistory(FeaturesUtil.isVisibleFeature("Version History"));
-    
+
         settings.setPublicChangeSummary(FeaturesUtil.isVisibleField("Show Change Summary"));
-    
+
         settings.setHideContactsPublicView(!FeaturesUtil.isVisibleFeature("Contacts"));
         AmpCurrency effCurrency = CurrencyUtil.getEffectiveCurrency();
         settings.setEffectiveCurrency(new CurrencySettings(effCurrency.getId(), effCurrency.getCurrencyCode()));
+
+        settings.setNddMappingIndirectLevel(FeaturesUtil
+                .getGlobalSettingValueInteger(GlobalSettingsConstants.MAPPING_INDIRECT_LEVEL));
+
+        settings.setNddMappingProgramLevel(FeaturesUtil
+                .getGlobalSettingValueInteger(GlobalSettingsConstants.MAPPING_PROGRAM_LEVEL));
 
         if (MenuUtils.getCurrentView() == AmpView.TEAM) {
             addWorkspaceSettings(settings);
@@ -464,6 +471,11 @@ public class SettingsUtils {
         if (ampTeam.getWorkspacePrefix() != null) {
             settings.setWorkspacePrefix(ampTeam.getWorkspacePrefix().getValue());
         }
+
+        AmpApplicationSettings appSettings = EndpointUtils.getAppSettings();
+        if (appSettings != null) {
+            settings.setWorkspaceDefaultRecordsPerPage(appSettings.getDefaultRecordsPerPage());
+        }
     }
 
     private static void addDateRangeSettingsForDashboardsAndGis(AmpGeneralSettings settings) {
@@ -489,7 +501,7 @@ public class SettingsUtils {
             String yearSettingsName, AmpFiscalCalendar gsCalendar, AmpFiscalCalendar currentCalendar, boolean yearEnd) {
 
         String yearNumber = FeaturesUtil.getGlobalSettingValue(globalSettingsName);
-        
+
         if (yearSettingsName.equals(SettingsConstants.DASHBOARD_DEFAULT_MAX_YEAR_RANGE)) {
             settings.setDashboardDefaultMaxYearRange(yearNumber);
         } else if (yearSettingsName.equals(SettingsConstants.DASHBOARD_DEFAULT_MIN_YEAR_RANGE)) {
@@ -512,7 +524,7 @@ public class SettingsUtils {
              * gsDate, currentCalendar);
              */
             String formattedDate = DateTimeUtil.formatDateForPicker2(gsDate, Constants.CALENDAR_DATE_PICKER);
-            
+
             if (dateSettingsName.equals(SettingsConstants.DASHBOARD_DEFAULT_MAX_DATE)) {
                 settings.setDashboardDefaultMaxDate(formattedDate);
             } else if (dateSettingsName.equals(SettingsConstants.DASHBOARD_DEFAULT_MIN_DATE)) {
@@ -689,7 +701,7 @@ public class SettingsUtils {
     }
 
     /**
-     * 
+     *
      * @param reportSettings
      * @param settings
      * @param setDefaults
@@ -708,7 +720,7 @@ public class SettingsUtils {
 
     /**
      * Configures year range setting
-     * 
+     *
      * @param reportSettings
      * @param settings
      * @param setDefaults:

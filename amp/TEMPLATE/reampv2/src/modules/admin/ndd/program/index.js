@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
-import { createStore, applyMiddleware, compose } from 'redux';
+import {
+  createStore, applyMiddleware, compose, bindActionCreators
+} from 'redux';
 import thunk from 'redux-thunk';
-import { Provider } from 'react-redux';
+import { connect, Provider } from 'react-redux';
 
+import PropTypes from 'prop-types';
 import Main from '../components/Main';
 import rootReducer from '../reducers/rootReducer';
 import defaultTrnPack from './config/initialTranslations.json';
-import Startup from '../components/Startup';
+import Startup, { NDDContext } from '../components/Startup';
 
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -26,14 +29,29 @@ class AdminNDDProgramApp extends Component {
   }
 
   render() {
+    const { translations } = this.context;
+    const { selected } = this.props;
     return (
-      <Provider store={this.store}>
-        <Startup defaultTrnPack={defaultTrnPack}>
-          <Main api={API} trnPrefix={TRN_PREFIX} isIndirect={false} />
-        </Startup>
-      </Provider>
+      selected ? (
+        <Provider store={this.store}>
+          <Startup defaultTrnPack={defaultTrnPack}>
+            <h2 className="section-title">{translations[`${TRN_PREFIX}title`]}</h2>
+            <div className="section-sub-title">{translations[`${TRN_PREFIX}sub-title`]}</div>
+            <Main api={API} trnPrefix={TRN_PREFIX} isIndirect={false} />
+          </Startup>
+        </Provider>
+      ) : null
     );
   }
 }
 
-export default AdminNDDProgramApp;
+AdminNDDProgramApp.contextType = NDDContext;
+
+AdminNDDProgramApp.propTypes = {
+  selected: PropTypes.bool.isRequired
+};
+const mapStateToProps = state => ({
+  translations: state.translationsReducer.translations
+});
+const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+export default connect(mapStateToProps, mapDispatchToProps)(AdminNDDProgramApp);

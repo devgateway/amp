@@ -3,10 +3,16 @@ import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
+import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
+import Tooltip from "react-bootstrap/Tooltip";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 
 import './table.css';
 import {loadActivities} from "../../../actions/activitiesAction";
+import {orderDates} from "../../../utils/utils";
 import {Loading} from "../panel/Loading";
+import {TranslationContext} from "../../AppContext";
+import {PaginationTotal} from "./PaginationTotal";
 
 class ActivityTable extends Component {
     constructor(props) {
@@ -20,23 +26,24 @@ class ActivityTable extends Component {
     }
 
     render() {
-        let options = {
+        const {translations} = this.context;
 
+        const renderSelectAllTooltip = props => (
+            <Tooltip {...props}>{translations['amp.geocoder:selectAllTooltip']}</Tooltip>
+        );
+
+        let options = {
             page: 1,
-            sizePerPageList: [{
-                text: '10', value: 10
-            }, {
-                text: '50', value: 50
-            }, {
-                text: 'All', value: this.props.activities.length
-            }],
-            sizePerPage: 10,
+            sizePerPage: this.props.settings['workspace-default-records-per-page'],
             pageStartIndex: 1,
             paginationSize: 15,
             prePage: 'Prev',
             nextPage: 'Next',
             firstPage: 'First',
             lastPage: 'Last',
+            hideSizePerPage: true,
+            showTotal: true,
+            paginationTotalRenderer: (from, to, size) => PaginationTotal(from, to, size)
         };
 
         let selectRow = {
@@ -45,37 +52,61 @@ class ActivityTable extends Component {
             onSelect: (row, isSelected, rowIndex, e) => {
                 this.props.onSelectActivity(isSelected, row.id);
             },
+            selectionHeaderRenderer: ({mode, checked}) => (
+                <OverlayTrigger placement="top" overlay={renderSelectAllTooltip}>
+                    <input type={mode} checked={checked}/>
+                </OverlayTrigger>
+            ),
             onSelectAll: this.props.onSelectAllActivities
         };
 
+        let lastUpdatedHeaderText = translations['amp.geocoder:lastUpdatedDate'];
+        let ampIdHeaderText = translations['amp.geocoder:ampId'];
+        let projectNameHeaderText = translations['amp.geocoder:projectName'];
+        let locationHeaderText = translations['amp.geocoder:location'];
+
         let columns = [
             {
+                dataField: "id",
+                text: "ID",
+                hidden: true
+            },
+            {
                 dataField: "col1",
-                text: "Date",
+                text: lastUpdatedHeaderText,
                 sort: true,
+                sortFunc: (a, b, order) => {
+                    return orderDates(a, b, order);
+                },
                 headerStyle: () => {
-                    return { width: "10%" };
+                    return { width: "15%" };
                 }
             },
             {
                 dataField: "col2",
-                text: "Project Number",
+                text: ampIdHeaderText,
                 headerStyle: () => {
                     return { width: "20%" };
                 },
-                sort:true
+                sort:true,
+                filter: textFilter({
+                    placeholder: translations['amp.geocoder:select'] + ' ' + ampIdHeaderText
+                })
             },
             {
                 dataField: "col3",
-                text: "Project Name",
+                text: projectNameHeaderText,
                 headerStyle: () => {
-                    return { width: "50%" };
+                    return { width: "45%" };
                 },
+                filter: textFilter({
+                    placeholder: translations['amp.geocoder:select'] + ' ' + projectNameHeaderText
+                }),
                 sort:true
             },
             {
                 dataField: "col4",
-                text: "Location",
+                text: locationHeaderText,
                 headerStyle: () => {
                     return { width: "15%" };
                 },
@@ -98,6 +129,8 @@ class ActivityTable extends Component {
                             classes="table-striped"
                             selectRow={selectRow}
                             pagination={paginationFactory(options)}
+                            noDataIndication={() => translations['amp.geocoder:noActivities']}
+                            filter={filterFactory()}
                         />
                         </>}
                </div>
@@ -105,10 +138,13 @@ class ActivityTable extends Component {
     }
 }
 
+ActivityTable.contextType = TranslationContext;
+
 const mapStateToProps = state => {
     return {
         activitiesPending: state.activitiesReducer.pending,
         activities: state.activitiesReducer.activities,
+        settings: state.settingsReducer.settings
     };
 };
 

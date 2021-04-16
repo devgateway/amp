@@ -1,6 +1,8 @@
 import React, {Component} from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import Tooltip from "react-bootstrap/Tooltip";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import {TranslationContext} from "../../../AppContext";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
@@ -26,20 +28,20 @@ class SaveAllEditsButton extends Component {
     }
 
     onSaveAllEdits = () => {
-        const activityIds = this.props.geocoding.activities
+        const ampIds = this.props.geocoding.activities
             .filter(activity => activity.locations.length > 0)
-            .filter(activity => activity.locations.filter(loc => loc.accepted != false && loc.accepted != true).length < 1)
-            .map(act => act.activity_id);
-        this.props.saveAllEdits(activityIds);
+            .filter(activity => activity.locations.filter(loc => loc.accepted !== false && loc.accepted !== true).length < 1)
+            .map(act => act.amp_id);
+        this.props.saveAllEdits(ampIds);
         this.handleClose();
     }
 
     hasActivityAcceptedOrRejectedAllLocations(activity) {
-        if (activity.locations.length == 0) {
+        if (activity.locations.length === 0) {
             return false;
         }
 
-        return activity.locations.filter(loc => loc.accepted == null).length == 0;
+        return activity.locations.filter(loc => loc.accepted === null).length === 0;
     }
 
     render() {
@@ -48,18 +50,25 @@ class SaveAllEditsButton extends Component {
         const isEnabled = this.props.geocoding.activities
             .filter(activity => this.hasActivityAcceptedOrRejectedAllLocations(activity)).length > 0;
 
+        let renderTooltip = props => (
+            <Tooltip {...props}>{this.props.tooltip}</Tooltip>
+        );
+
         return (
             <>
-                <Button variant="success"
-                        className={'pull-right button-header'}
-                        disabled={!isEnabled} onClick={this.handleShow}>{this.props.title}
-                </Button>
+
+                <OverlayTrigger placement="top" overlay={renderTooltip}>
+                    <Button variant="success"
+                            className={'pull-right button-header'}
+                            disabled={!isEnabled} onClick={this.handleShow}>{this.props.title}
+                    </Button>
+                </OverlayTrigger>
 
                 <Modal show={this.state.show} onHide={this.handleClose} animation={false}>
                     <Modal.Header closeButton>
                         <Modal.Title>{this.props.title}</Modal.Title>
                     </Modal.Header>
-                    <Modal.Body>Save All Edits made in activities?</Modal.Body>
+                    <Modal.Body>{translations['amp.geocoder:saveAllEditsConfirmation']}</Modal.Body>
                     <Modal.Footer>
                         <Button variant="secondary" onClick={this.handleClose}>
                             {translations['amp.geocoder:cancel']}

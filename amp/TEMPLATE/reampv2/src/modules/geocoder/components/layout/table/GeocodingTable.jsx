@@ -4,6 +4,7 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import GeocodingActionColumn from "./GeocodingActionColumn";
+import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 
 import './table.css';
 import Locations from "./Locations";
@@ -12,6 +13,8 @@ import {loadGeocoding} from "../../../actions/geocodingAction";
 import {TranslationContext} from "../../AppContext";
 import ActivityWithoutLocationsDialog from "../panel/dialog/ActivityWithoutLocationsDialog";
 import ActivitySaveResultsDialog from "../panel/dialog/ActivitySaveResultsDialog";
+import {orderDates} from "../../../utils/utils";
+import {PaginationTotal} from "./PaginationTotal";
 
 class GeocodingTable extends Component {
     constructor(props) {
@@ -27,12 +30,12 @@ class GeocodingTable extends Component {
         this.setState({ selectedRowAction: selectedRowId });
     };
 
-    hasLocations = activityId => {
-        return this.props.activities.filter(activity => activity.activity_id === activityId)[0].locations.length > 0;
+    hasLocations = ampId => {
+        return this.props.activities.filter(activity => activity.amp_id === ampId)[0].locations.length > 0;
     }
 
     getNonExpandableIds = () => {
-        return this.props.activities.filter(activity => activity.locations.length < 1).map(act => act.activity_id);
+        return this.props.activities.filter(activity => activity.locations.length < 1).map(act => act.amp_id);
     }
 
     existLocationsInGeocoding = () => {
@@ -51,7 +54,7 @@ class GeocodingTable extends Component {
 
     componentDidUpdate() {
         if(this.props.geocodeShouldRun) {
-            this.props.loadGeocoding();
+            setTimeout(() => this.props.loadGeocoding(), 5000);
         }
     }
 
@@ -90,7 +93,7 @@ class GeocodingTable extends Component {
         let expandRow = {
             onlyOneExpanding: true,
             renderer: row => (
-                <Locations activityId={row.activity_id}/>
+                <Locations ampId={row.amp_id}/>
             ),
             nonExpandable: this.getNonExpandableIds(),
             showExpandColumn: true,
@@ -98,58 +101,69 @@ class GeocodingTable extends Component {
             expandColumnPosition: 'right',
             expandColumnRenderer: ({ expanded, rowKey, expandable }) => (
                 <GeocodingActionColumn
-                    activityId={rowKey} enabled={this.hasLocations(rowKey)} message={translations['amp.geocoder:noLocations']}
+                    ampId={rowKey} enabled={this.hasLocations(rowKey)}
+                    message={translations['amp.geocoder:noLocations']}
+                    tooltip={translations['amp.geocoder:editActionTooltip']}
                 />
             )
         };
 
         let options = {
-
             page: 1,
-            sizePerPageList: [{
-                text: '10', value: 10
-            }, {
-                text: '50', value: 50
-            }, {
-                text: 'All', value: this.props.activities.length
-            }],
-            sizePerPage: 10,
+            sizePerPage: this.props.settings['workspace-default-records-per-page'],
             pageStartIndex: 1,
             paginationSize: 5,
             prePage: 'Prev',
             nextPage: 'Next',
             firstPage: 'First',
             lastPage: 'Last',
+            hideSizePerPage: true,
+            showTotal: true,
+            paginationTotalRenderer: (from, to, size) => PaginationTotal(from, to, size)
         };
+
+        let lastUpdatedHeaderText = translations['amp.geocoder:lastUpdatedDate'];
+        let ampIdHeaderText = translations['amp.geocoder:ampId'];
+        let projectNameHeaderText = translations['amp.geocoder:projectName'];
+        let locationHeaderText = translations['amp.geocoder:location'];
 
         let columns = [
             {
-                dataField: "project_date",
-                text: "Date",
+                dataField: "updated_date",
+                text: lastUpdatedHeaderText,
                 sort: true,
+                sortFunc: (a, b, order) => {
+                    return orderDates(a, b, order);
+                },
                 headerStyle: () => {
-                    return { width: "10%" };
+                    return { width: "15%" };
                 }
             },
             {
-                dataField: "project_number",
-                text: "Project Number",
+                dataField: "amp_id",
+                text: ampIdHeaderText,
                 headerStyle: () => {
                     return { width: "20%" };
                 },
+                filter: textFilter({
+                    placeholder: translations['amp.geocoder:select'] + ' ' + ampIdHeaderText
+                }),
                 sort:true
             },
             {
                 dataField: "project_title",
-                text: "Project Name",
+                text: projectNameHeaderText,
                 headerStyle: () => {
                     return { width: "45%" };
                 },
+                filter: textFilter({
+                    placeholder: translations['amp.geocoder:select'] + ' ' + projectNameHeaderText
+                }),
                 sort:true
             },
             {
                 dataField: "location",
-                text: "Location",
+                text: locationHeaderText,
                 headerStyle: () => {
                     return { width: "15%" };
                 },
@@ -157,13 +171,15 @@ class GeocodingTable extends Component {
             },
         ];
 
+        let data = this.props.activities.filter(act => act.locations.length > 0 && act.status !== 'SAVED');
+
         return (
             <>
             <div className="activity-table">
                 <BootstrapTable
-                    keyField="activity_id"
+                    keyField="amp_id"
                     scrollY
-                    data={this.props.activities}
+                    data={data}
                     maxHeight="200px"
                     columns={columns}
                     classes="table-striped"
@@ -171,15 +187,16 @@ class GeocodingTable extends Component {
                     expandableRow={ this.isExpandableRow }
                     expandComponent={ this.expandComponent }
                     pagination={paginationFactory(options)}
+                    filter={filterFactory()}
                     expandColumnOptions={{
                         expandColumnVisible: true,
                         expandColumnComponent: this.expandColumnComponent,
                         columnWidth: '200px'
                     }}/>
             </div>
-
-                {!this.existLocationsInGeocoding() && <ActivityWithoutLocationsDialog title={translations['amp.geocoder:discardGeocodingButton']}/>}
-                {this.existSaveResults() && <ActivitySaveResultsDialog title={translations['amp.geocoder:discardGeocodingButton']}/>}
+                {this.existSaveResults() ? <ActivitySaveResultsDialog title={translations['amp.geocoder:saveResults']}/>
+                    : !this.existLocationsInGeocoding() && <ActivityWithoutLocationsDialog title={translations['amp.geocoder:discardGeocodingButton']}/>
+                }
             </>
 
     );
@@ -194,6 +211,7 @@ const mapStateToProps = state => {
         activities: state.geocodingReducer.activities,
         save_activities_result: state.geocodingReducer.save_activities_result,
         geocodeShouldRun: state.geocodingReducer.geocodeShouldRun,
+        settings: state.settingsReducer.settings
     };
 };
 

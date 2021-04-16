@@ -34,6 +34,8 @@ import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static org.digijava.kernel.entity.geocoding.GeoCodedActivity.Status.SAVED;
+
 /**
  * @author Octavian Ciubotaru
  */
@@ -62,11 +64,6 @@ public class GeoCodingService {
             throw new GeoCodingNotAvailableException(geoCodingProcess.getTeamMember());
         }
 
-        if (geoCodingProcess == null) {
-            geoCodingProcess = new GeoCodingProcess(principal);
-            PersistenceManager.getSession().save(geoCodingProcess);
-        }
-
         List<AmpActivityVersion> activities = new ArrayList<>();
         for (Long activityId : activityIds) {
             try {
@@ -82,6 +79,11 @@ public class GeoCodingService {
         }
 
         List<Long> queueIds = client.processActivities(activities);
+
+        if (geoCodingProcess == null) {
+            geoCodingProcess = new GeoCodingProcess(principal);
+            PersistenceManager.getSession().save(geoCodingProcess);
+        }
 
         for (int i = 0; i < activities.size(); i++) {
             Long queueId = queueIds.get(i);
@@ -253,35 +255,34 @@ public class GeoCodingService {
         return TeamUtil.getCurrentAmpTeamMember();
     }
 
-    public void changeLocationStatus(Long ampActivityId, Long acvlId, Boolean accepted) {
+    public void changeLocationStatus(String ampId, Long acvlId, Boolean accepted) {
         GeoCodingProcess geoCoding = getGeoCodingProcess();
         if (geoCoding != null && geoCoding.getTeamMember().equals(getPrincipal())) {
             geoCoding.getActivities().stream()
-                    .filter(a -> a.getActivity().getAmpActivityId().equals(ampActivityId))
+                    .filter(a -> a.getActivity().getAmpId().equals(ampId))
                     .flatMap(a -> a.getLocations().stream())
                     .filter(l -> l.getLocation().getId().equals(acvlId))
                     .forEach(l -> l.setAccepted(accepted));
         }
     }
 
-    public void saveActivity(Long activityId) {
+    public void saveActivity(String ampId) {
         Session session = PersistenceManager.getSession();
         session.setFlushMode(FlushMode.MANUAL);
 
         GeoCodingProcess geoCoding = getGeoCodingProcess();
         if (geoCoding != null) {
             GeoCodedActivity geoCodedActivity = geoCoding.getActivities().stream()
-                    .filter(g -> g.getActivity().getAmpActivityId().equals(activityId))
+                    .filter(g -> g.getActivity().getAmpId().equals(ampId))
                     .findFirst().orElse(null);
 
             if (geoCodedActivity != null && allLocationsHaveStatusSet(geoCodedActivity)) {
                 if (acceptedLocationsExist(geoCodedActivity)) {
                     updateActivity(geoCodedActivity);
                 }
-                geoCoding.getActivities().remove(geoCodedActivity);
+                geoCodedActivity.setStatus(SAVED);
             }
         }
-
     }
 
     private boolean acceptedLocationsExist(GeoCodedActivity activity) {
@@ -383,6 +384,23 @@ public class GeoCodingService {
             geoCodingProcess.getActivities().stream()
                     .flatMap(a -> a.getLocations().stream())
                     .forEach(l -> l.setAccepted(null));
+        }
+    }
+
+    public void removeActivity(String ampId) {
+        GeoCodingProcess geoCodingProcess = getGeoCodingProcess();
+        if (geoCodingProcess != null) {
+            List<GeoCodedActivity> geoCodedActivities = geoCodingProcess.getActivities().stream()
+                    .filter(g -> g.getActivity().getAmpId().equals(ampId))
+                    .collect(Collectors.toList());
+
+            if (geoCodedActivities.isEmpty()) {
+                throw new GeneralGeoCodingException("No activity found with ampId = " + ampId);
+            } else if (geoCodedActivities.size() > 1) {
+                throw new GeneralGeoCodingException("Multiple activities found with ampId = " + ampId);
+            } else {
+                geoCodingProcess.getActivities().remove(geoCodedActivities.get(0));
+            }
         }
     }
 }

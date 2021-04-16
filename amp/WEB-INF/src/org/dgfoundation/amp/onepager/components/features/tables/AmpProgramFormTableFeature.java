@@ -19,13 +19,22 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerMessages;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
-import org.dgfoundation.amp.onepager.components.fields.*;
+import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
+import org.dgfoundation.amp.onepager.components.fields.AmpLabelFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpMaxSizeCollectionValidationField;
+import org.dgfoundation.amp.onepager.components.fields.AmpMinSizeCollectionValidationField;
+import org.dgfoundation.amp.onepager.components.fields.AmpPercentageCollectionValidatorField;
+import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
+import org.dgfoundation.amp.onepager.components.fields.AmpProgramMappingValidatorField;
+import org.dgfoundation.amp.onepager.components.fields.AmpTreeCollectionValidatorField;
+import org.dgfoundation.amp.onepager.components.fields.AmpUniqueCollectionValidatorField;
 import org.dgfoundation.amp.onepager.events.DirectProgramMappingUpdateEvent;
 import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.dgfoundation.amp.onepager.models.AmpThemeSearchModel;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpDividePercentageField;
+import org.dgfoundation.amp.onepager.util.FMUtil;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
@@ -42,6 +51,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.MAXIMUM_PERCENTAGE;
 
 /**
  * @author aartimon@dginternational.org
@@ -265,11 +276,12 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
                 aap.setActivity(am.getObject());
                 aap.setProgram(choice);
                 aap.setProgramSetting(programSettings.getObject());
-                
-                if(list.size()>0)
-                    aap.setProgramPercentage(0f);
-                else 
-                    aap.setProgramPercentage(100f); 
+
+                if (FMUtil.isVisibleChildWithFmName(this.getParent(), "programPercentage")) {
+                    if (list.size() == 1) {
+                        aap.setProgramPercentage(MAXIMUM_PERCENTAGE.floatValue());
+                    }
+                }
                 
                 if (setModel.getObject() == null)
                     setModel.setObject(new HashSet<AmpActivityProgram>());

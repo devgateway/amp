@@ -17,7 +17,10 @@ import {
     GEOCODING_SAVE_ALL_EDITS_SUCCESS,
     GEOCODING_SAVE_ACTIVITY_ERROR,
     GEOCODING_SAVE_ACTIVITY_PENDING,
-    GEOCODING_SAVE_ACTIVITY_SUCCESS, GEOCODING_RESET_SAVE_RESULTS
+    GEOCODING_SAVE_ACTIVITY_SUCCESS,
+    GEOCODING_RESET_SAVE_RESULTS,
+    GEOCODING_RUN_SEARCH_ERROR,
+    GEOCODING_REMOVE_PROJECT_PENDING, GEOCODING_REMOVE_PROJECT_SUCCESS, GEOCODING_REMOVE_PROJECT_ERROR
 } from '../actions/geocodingAction';
 
 const initialState = {
@@ -50,7 +53,8 @@ export default function geocodingReducer(state = initialState, action) {
                 status: action.status,
                 pending: action.pending,
                 geocodeShouldRun: action.geocodeShouldRun,
-                error: null
+                error: null,
+                errorCode: null
             };
         case FETCH_GEOCODING_ERROR:
             return {
@@ -59,6 +63,7 @@ export default function geocodingReducer(state = initialState, action) {
                 error: action.error,
                 geocodeShouldRun: false,
                 status : action.status,
+                errorCode: action.errorCode
             };
         case GEOCODING_RUN_SEARCH_SUCCESS:
             return {
@@ -154,7 +159,7 @@ export default function geocodingReducer(state = initialState, action) {
             return {
                 ...state,
                 save_activities_result: updateActivitySaveStatus(state.save_activities_result, action.payload, false, null),
-                activities: removeSavedActivity(state.activities, action.payload)
+                activities: removeProject(state.activities, action.payload)
             };
         case GEOCODING_SAVE_ACTIVITY_ERROR:
             return {
@@ -166,14 +171,40 @@ export default function geocodingReducer(state = initialState, action) {
                 ...state,
                 save_activities_result: [],
             };
+        case GEOCODING_RUN_SEARCH_ERROR:
+            return {
+                ...state,
+                pending: false,
+                error: action.error,
+                errorCode: action.errorCode
+            };
+        case GEOCODING_REMOVE_PROJECT_PENDING:
+            return {
+                ...state,
+                pending: true,
+                error: null
+            };
+        case GEOCODING_REMOVE_PROJECT_SUCCESS:
+            return {
+                ...state,
+                pending: false,
+                activities: removeProject(state.activities, action.payload),
+            };
+        case GEOCODING_REMOVE_PROJECT_ERROR:
+            return {
+                ...state,
+                pending: false,
+                error: action.error,
+                errorCode: action.errorCode
+            };
         default:
             return state;
     }
 }
 
 function updateActivity(activities, action) {
-    return activities.map( (item, id) => {
-        if(item.activity_id === action.payload.activity_id) {
+    return activities.map((item, id) => {
+        if(item.amp_id === action.payload.amp_id) {
             return {
                 ...item,
                 locations: updateLocation(item.locations, action)
@@ -217,10 +248,10 @@ function resetLocations(locations) {
     });
 }
 
-function updateActivitySaveStatus(activities, activityId, pending, error) {
-    if (!activities.find(item => item.activity_id === activityId)) {
+function updateActivitySaveStatus(activities, ampId, pending, error) {
+    if (!activities.find(item => item.amp_id === ampId)) {
         activities.push({
-            activity_id : activityId,
+            amp_id : ampId,
             pending: pending,
             error: error
         });
@@ -228,7 +259,7 @@ function updateActivitySaveStatus(activities, activityId, pending, error) {
     }
 
     return activities.map((item, id) => {
-        if(item.activity_id === activityId) {
+        if(item.amp_id === ampId) {
             return {
                 ...item,
                 pending: pending,
@@ -239,6 +270,6 @@ function updateActivitySaveStatus(activities, activityId, pending, error) {
     });
 }
 
-function removeSavedActivity(activities, activityId) {
-    return activities.filter(item => item.activity_id != activityId);
+function removeProject(activities, ampId) {
+    return activities.filter(item => item.amp_id !== ampId);
 }

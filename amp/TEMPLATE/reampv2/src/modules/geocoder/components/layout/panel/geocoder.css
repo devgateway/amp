@@ -1,6 +1,5 @@
 .geocoder-header {
     background-color: #F5F8FA;
-    font-weight: bold;
     vertical-align: center;
     font-size: 16px;
     color: #111111;
@@ -14,7 +13,18 @@
 
 .text-header {
     padding-top: 5px;
+    font-weight: bold;
+    white-space: nowrap;
 }
+
+.react-bootstrap-table th {
+    white-space: nowrap;
+}
+
+.form-control {
+    width: unset;
+}
+
 
 .title-container {
     margin-bottom: 20px;

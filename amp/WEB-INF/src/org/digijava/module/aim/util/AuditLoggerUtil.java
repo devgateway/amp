@@ -36,6 +36,9 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.type.DateType;
 import org.hibernate.type.StringType;
+
+import static org.digijava.module.aim.util.activity.GenericUserHelper.getAmpUserModifier;
+
 /**
  * ActivityUtil is the persister class for all activity related
  * entities
@@ -252,8 +255,17 @@ public class AuditLoggerUtil {
                 message.append(detail+" ");
             }
                 AmpAuditLogger aal = new AmpAuditLogger();
-                aal.setAuthorEmail(activity.getActivityCreator().getUser().getEmail());
-                aal.setAuthorName(activity.getActivityCreator().getUser().getName());
+            User activityCreator;
+            if (activity.getActivityCreator() != null) {
+                activityCreator = activity.getActivityCreator().getUser();
+            } else {
+                activityCreator = getAmpUserModifier();
+            }
+            aal.setAuthorEmail(activityCreator.getEmail());
+            aal.setAuthorName(activityCreator.getName());
+
+
+
                 aal.setLoggedDate(new Timestamp(activity.getCreatedDate().getTime()));
                 aal.setUserid(UserUtils.getUserByEmailAddress(tm.getEmail()).getId());
                 aal.setEditorEmail(tm.getEmail());

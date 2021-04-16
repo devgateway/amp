@@ -1,10 +1,15 @@
 package org.dgfoundation.amp.onepager.util;
 
-import static java.util.Collections.emptySet;
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.mapping;
-import static java.util.stream.Collectors.toCollection;
-import static org.digijava.kernel.ampapi.endpoints.ndd.NDDService.INDIRECT_PROGRAM_MAPPING_LEVEL;
+import org.apache.log4j.Logger;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpActivityIndirectProgram;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpIndirectTheme;
+import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.activity.ActivityCloser;
+import org.digijava.module.aim.util.activity.GenericUserHelper;
+import org.hibernate.Session;
 
 import java.math.BigDecimal;
 import java.util.ArrayDeque;
@@ -17,21 +22,37 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import org.digijava.module.aim.dbentity.AmpActivityIndirectProgram;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpIndirectTheme;
-import org.digijava.module.aim.dbentity.AmpTheme;
-import org.hibernate.Session;
+import static java.util.Collections.emptySet;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.mapping;
+import static java.util.stream.Collectors.toCollection;
+import static org.digijava.kernel.ampapi.endpoints.ndd.NDDService.getMappingLevel;
+import static org.digijava.module.aim.helper.GlobalSettingsConstants.MAPPING_PROGRAM_LEVEL;
 
 /**
  * @author Octavian Ciubotaru
  */
 public class IndirectProgramUpdater {
+    private static final Logger LOGGER = Logger.getLogger(IndirectProgramUpdater.class);
 
-    public void updateIndirectPrograms(AmpActivityVersion activity, Session session) {
+    public AmpActivityVersion updateIndirectPrograms(AmpActivityVersion activity, Session session) {
         Map<AmpTheme, Set<AmpTheme>> mapping = loadMapping(session);
         includeAncestors(mapping);
         updateIndirectPrograms(activity, mapping);
+        return activity;
+    }
+
+    public void updateIndirectProgramMapping(Long ampActivityId) {
+        PersistenceManager.inTransaction(() -> {
+            try {
+                AmpActivityVersion o = ActivityUtil.loadActivity(ampActivityId);
+                ActivityCloser.cloneActivity(GenericUserHelper.getAmpTeamMemberModifier(o.getTeam()),
+                        o, SaveContext.admin());
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     @SuppressWarnings("unchecked")
@@ -103,7 +124,7 @@ public class IndirectProgramUpdater {
     }
 
     private List<AmpTheme> getIndirectPrograms(Map<AmpTheme, Set<AmpTheme>> themeMapping, AmpTheme program) {
-        while (program.getIndlevel() > INDIRECT_PROGRAM_MAPPING_LEVEL) {
+        while (program.getIndlevel() > getMappingLevel(MAPPING_PROGRAM_LEVEL)) {
             program = program.getParentThemeId();
         }
 

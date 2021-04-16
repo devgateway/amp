@@ -38,13 +38,13 @@ const extractSettings = (gs) => {
   format.decimalSeparator = gs['number-decimal-separator'] || '.';
   format.numberDivider = gs['number-divider'];
   if (format.numberDivider === 1) {
-    format.numberDividerDescriptionKey = 'amp.ndd.dashboard:chart-tops-inunits';
+    format.numberDividerDescriptionKey = 'inunits';
   } else if (format.numberDivider === 1000) {
-    format.numberDividerDescriptionKey = 'amp.ndd.dashboard:chart-tops-inthousands';
+    format.numberDividerDescriptionKey = 'inthousands';
   } else if (format.numberDivider === 1000000) {
-    format.numberDividerDescriptionKey = 'amp.ndd.dashboard:chart-tops-inmillions';
+    format.numberDividerDescriptionKey = 'inmillions';
   } else if (format.numberDivider === 1000000000) {
-    format.numberDividerDescriptionKey = 'amp.ndd.dashboard:chart-tops-inbillions';
+    format.numberDividerDescriptionKey = 'inbillions';
   }
 
   format.dateFormat = gs['default-date-format'];

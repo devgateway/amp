@@ -38,7 +38,7 @@
 
 
 
-<digi:errors/>
+
 
 
 <!--  AMP Admin Logo -->

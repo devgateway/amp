@@ -9,6 +9,7 @@ import org.digijava.kernel.validation.ConstraintValidator;
 import org.digijava.kernel.validation.ConstraintValidatorContext;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
+import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.ProgramUtil;
@@ -136,13 +137,17 @@ public class ProgramMappingValidator implements ConstraintValidator {
     }
 
     private String getMappingProgramFieldName(final String gsName) {
+        String mappingProgramFieldName = null;
         String rootProgramId = FeaturesUtil.getGlobalSettingValue(gsName);
         if (StringUtils.isNotBlank(rootProgramId)) {
             AmpTheme rootProgram = ProgramUtil.getThemeById(Long.valueOf(rootProgramId));
-            String settingsName = rootProgram.getProgramSettings().stream().findAny().get().getName();
-            return SETTINGS_NAME_TO_ACTIVITY_FIELD_MAP.get(settingsName);
+            AmpActivityProgramSettings s = rootProgram.getProgramSettings().stream().findAny().orElse(null);
+            if (s != null) {
+                String settingsName = s.getName();
+                mappingProgramFieldName = SETTINGS_NAME_TO_ACTIVITY_FIELD_MAP.get(settingsName);
+            }
         }
-        return null;
+        return mappingProgramFieldName;
     }
 
     @Override

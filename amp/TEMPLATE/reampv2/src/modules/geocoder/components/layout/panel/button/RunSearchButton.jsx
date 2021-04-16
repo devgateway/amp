@@ -1,5 +1,7 @@
 import React, {Component} from "react";
 import Button from "react-bootstrap/Button";
+import Tooltip from "react-bootstrap/Tooltip";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Modal from "react-bootstrap/Modal";
 import {TranslationContext} from "../../../AppContext";
 import {bindActionCreators} from "redux";
@@ -33,22 +35,30 @@ class RunSearchButton extends Component {
     render() {
         const {translations} = this.context;
 
+        let renderTooltip = props => (
+            <Tooltip {...props}>{this.props.tooltip}</Tooltip>
+        );
+
         return (
             <>
-                <Button variant="success"
-                        className={'pull-right button-header'}
-                        disabled={this.props.selectedActivities.length < 1 || this.props.activitiesPending} onClick={this.handleShow}>{this.props.title}
-                </Button>
+                <OverlayTrigger placement="top" overlay={renderTooltip}>
+                    <Button variant="success"
+                            className={'pull-right button-header'}
+                            disabled={this.props.selectedActivities.length < 1 || this.props.activitiesPending} onClick={this.handleShow}>{this.props.title}
+                    </Button>
+                </OverlayTrigger>
 
                 <Modal show={this.state.show} onHide={this.handleClose} animation={false}>
                     <Modal.Header closeButton>
                         <Modal.Title>{this.props.title}</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        Activities to be geocoded:
+                        {translations['amp.geocoder:runSearchText']}:
                         <div className="modal-activities">
-                            {this.props.selectedActivities.map((value) => {
-                                return <div>{value}</div>
+                            {this.props.activities
+                                .filter(act => this.props.selectedActivities.includes(act.id))
+                                .map((value) => {
+                                return <div key={value.col2}>{value.col2}</div>
                             })}
                         </div>
                         </Modal.Body>
@@ -72,6 +82,7 @@ const mapStateToProps = state => {
     return {
         geocoding: state.geocodingReducer,
         activitiesPending: state.activitiesReducer.pending,
+        activities: state.activitiesReducer.activities
     };
 };
 

@@ -44,7 +44,9 @@ import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.DashboardConstants;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
@@ -53,20 +55,26 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 /**
- * 
+ *
  * @author Diego Dimunzio
- * 
+ *
  */
 
 public class DashboardsService {
 
     private static final int RECORDS_PER_PAGE = 50;
+    private static final int EXP_1 = 1;
+    private static final int EXP_2 = 2;
+    private static final int EXP_3 = 3;
+    private static final int EXP_4 = 4;
+    private static final int EXP_5 = 5;
+    private static final int EXP_6 = 6;
 
     /**
      * Return a list of the available top __ for the dashboard charts Note -- I
      * (Phil) hacked this in, so it probably could use a review Also, I
      * hard-coded the names ("Donor Agency" etc.) but they should be translated
-     * 
+     *
      * @return
      */
     public static List<TopDescription> getTopsList() {
@@ -76,7 +84,7 @@ public class DashboardsService {
         tops.add(new TopDescription("ps", "Primary Sector"));
         return tops;
     }
-    
+
     public static int getOffset(DashboardFormParameters config) {
         return EndpointUtils.getSingleValue(config.getOffset(), 0);
     }
@@ -100,16 +108,16 @@ public class DashboardsService {
         return filterObject;
     }
 
-    protected static void postProcess(GeneratedReport report, ReportSpecificationImpl spec, OutputSettings outSettings, 
+    protected static void postProcess(GeneratedReport report, ReportSpecificationImpl spec, OutputSettings outSettings,
             TopChartType type) {
         if (type == TopChartType.RE) {
             postProcessRE(report, spec, outSettings);
         }
     }
-    
+
     /**
      * Replace "Undefined" region with "International", "National" and actual "Undefined" region
-     * (this is one of the workaround solutions)   
+     * (this is one of the workaround solutions)
      * @param report
      * @param spec
      * @param outSettings
@@ -117,7 +125,7 @@ public class DashboardsService {
     protected static void postProcessRE(GeneratedReport report, ReportSpecificationImpl spec, OutputSettings outSettings) {
         final DecimalFormat formatter = ReportsUtil.getDecimalFormatOrDefault(spec);
         final AmountsUnits amountsUnits = ReportsUtil.getAmountsUnitsOrDefault(spec);
-        
+
         List<ReportArea> undefinedAreas = new ArrayList<>();
         for (ReportArea ra : report.reportContents.getChildren()) {
             // detect those undefined for countries, but skip those that are really undefined for regions
@@ -130,21 +138,21 @@ public class DashboardsService {
         if (undefinedAreas.isEmpty()) {
             return;
         }
-        
+
         ReportOutputColumn regionCol = report.leafHeaders.get(0);
         ReportOutputColumn amountCol = report.leafHeaders.get(1);
         AmpCategoryValueLocations currentCountry = DynLocationManagerUtil.getDefaultCountry();
-        
+
         // collect other countries under International
         final Map<Long, String> internationalEntitiesIdsValues = new TreeMap<>();
         List<ReportArea> intlChildren = new ArrayList<>();
         long intlAnyCountryId = 0;
         ReportArea intlUndefined = null;
         BigDecimal intlAmount = null;
-        
+
         for (ReportArea undefined : undefinedAreas) {
             IdentifiedReportCell uRegionCell = (IdentifiedReportCell) undefined.getContents().get(regionCol);
-            
+
             if (uRegionCell.entityId == -currentCountry.getId()) {
                 // national
                 updateUndefinedEntry(undefined, regionCol, DashboardConstants.NATIONAL, uRegionCell.entityId,
@@ -156,7 +164,7 @@ public class DashboardsService {
                     // reuse only the 1st country that we'll transformed to international later
                     intlUndefined = undefined;
                     intlAnyCountryId = uRegionCell.entityId; // not relevant for this EP
-                    intlAmount = otherCountryAmount; 
+                    intlAmount = otherCountryAmount;
                 } else {
                     report.reportContents.getChildren().remove(undefined);
                     intlAmount = intlAmount.add(otherCountryAmount);
@@ -168,7 +176,7 @@ public class DashboardsService {
                 intlChildren.addAll(undefined.getChildren());
             }
         }
-        
+
         if (intlUndefined != null) {
             // repeating Reports behavior: divide only formatted amount
             BigDecimal scaledAmount = intlAmount.divide(BigDecimal.valueOf(amountsUnits.divider));
@@ -177,13 +185,13 @@ public class DashboardsService {
                     internationalEntitiesIdsValues, intlChildren);
         }
     }
-    
+
     private static void updateUndefinedEntry(ReportArea undefined, ReportOutputColumn regionCol,
             String name, long id, Map<Long, String> entitiesIdsValues, List<ReportArea> children) {
         // recreate the cell to have a correct name for the undefined area
         TextCell uRegionCell = new TextCell(TranslatorWorker.translateText(name), id, entitiesIdsValues);
         undefined.getContents().put(regionCol, uRegionCell);
-        
+
         for (ReportArea child : undefined.getChildren()) {
             child.getContents().put(regionCol, uRegionCell);
         }
@@ -471,7 +479,7 @@ public class DashboardsService {
         // applies settings, including funding type as a measure
         SettingsUtils.applyExtendedSettings(spec, config.getSettings());
         spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), false));
-        
+
         LinkedHashMap<String, Object> filters;
         filters = (LinkedHashMap<String, Object>) config.getFilters();
         if (filters == null) {
@@ -503,7 +511,7 @@ public class DashboardsService {
         // AMP-18740: For dashboards we need to use the default number formatting and leave the rest of the settings
         // configurable (calendar, currency, etc).
         setCustomSettings(config, spec);
-        
+
         GeneratedReport report = EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
         return buildPaginateJsonBean(report, getOffset(config));
     }
@@ -591,8 +599,41 @@ public class DashboardsService {
             formatted = formatted.substring(0, formatted.length() - 2);
         }
         if (addSufix) {
-            formatted = formatted + "kMBTPE".charAt(exp - 1);
+            String currentLang = RequestUtils.getNavigationLanguage(TLSUtils.getRequest()).getCode();
+            formatted = formatted + getKMB(currentLang, exp);
         }
         return formatted;
+    }
+
+    private static String getKMB(String lang, int exp) {
+        String ret = "";
+        if (lang.equals("en") || lang.equals("sp")) {
+            ret = "kMBTPE".charAt(exp - 1) + "";
+        } else if (lang.equals("fr")) {
+            switch (exp) {
+                case EXP_1:
+                    ret = "m";
+                    break;
+                case EXP_2:
+                    ret = "M";
+                    break;
+                case EXP_3:
+                    ret = "MM";
+                    break;
+                case EXP_4:
+                    ret = "T";
+                    break;
+                case EXP_5:
+                    ret = "P";
+                    break;
+                case EXP_6:
+                    ret = "E";
+                    break;
+                default:
+                    ret = "";
+                    break;
+            }
+        }
+        return ret;
     }
 }

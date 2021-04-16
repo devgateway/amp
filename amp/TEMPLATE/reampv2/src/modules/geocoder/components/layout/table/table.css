@@ -34,8 +34,8 @@ table thead tr th {
     z-index: 5;
     top: 0;
     color: #8492B4;
-    font-size: 13px;
-    font-weight: normal;
+    font-size: 14px;
+    font-weight: 600;
 }
 
 .table > thead {
@@ -154,6 +154,10 @@ table thead tr th {
     height:100%;
     display:block;
     padding:10px;
+}
+
+.location-action span {
+    text-transform: lowercase;
 }
 
 .location-action a .fa-check-circle{
@@ -310,4 +314,19 @@ table thead tr th {
 
 .status-ok {
     color: #00FF00;
+}
+
+.filter-label {
+    margin-left: 10px;
+    margin-bottom: 0px;
+    font-weight: normal;
+}
+
+.table > thead > tr > th  {
+    vertical-align: middle;
+}
+
+.tooltip {
+    opacity: 1;
+    margin-bottom: 5px;
 }

@@ -99,7 +99,7 @@ export const printChartPrinter = (title, chartId, printContainer, iframe, countr
  * @param calculateChildren
  * @param printContainer
  */
-export const printChart = (title, chartId, filtersObject, format, calculateChildren, printContainer) => {
+export const printChart = (title, chartId, filtersObject, format, calculateChildren, printContainer, useTitle) => {
   try {
     const printElement = document.getElementById(printContainer);
 
@@ -116,7 +116,7 @@ export const printChart = (title, chartId, filtersObject, format, calculateChild
     chartElement.style.width = `${document.getElementById(chartId).clientWidth}px`;
 
     let titleElement;
-    if (title) {
+    if (title && useTitle) {
       titleElement = document.createElement('div');
       titleElement.className = 'print-title';
       titleElement.appendChild(document.createTextNode(title));

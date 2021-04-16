@@ -10,20 +10,36 @@ import { TYPE_DST, TYPE_SRC } from '../constants/Constants';
 class ProgramSelectGroupRow extends Component {
   render() {
     const {
-      rowData, onChange, remove, src, dst
+      rowData, onChange, remove, src, dst, disabled, level
     } = this.props;
     return (
       <tr>
         <td>
-          <ProgramSelectGroup type={TYPE_SRC} data={rowData} onChange={onChange} src={src} dst={dst} />
+          <ProgramSelectGroup
+            type={TYPE_SRC}
+            data={rowData}
+            onChange={onChange}
+            src={src}
+            dst={dst}
+            level={level}
+            disabled={disabled} />
         </td>
         <td>
-          <ProgramSelectGroup type={TYPE_DST} data={rowData} onChange={onChange} src={src} dst={dst} />
+          <ProgramSelectGroup
+            type={TYPE_DST}
+            data={rowData}
+            onChange={onChange}
+            src={src}
+            dst={dst}
+            level={level}
+            disabled={disabled} />
         </td>
         <td className="actions-column">
-          <span
-            className="glyphicon glyphicon-custom glyphicon-remove-sign clickable"
-            onClick={() => remove(rowData)} />
+          {!disabled ? (
+            <span
+              className="glyphicon glyphicon-custom glyphicon-remove-sign clickable"
+              onClick={() => remove(rowData)} />
+          ) : null}
         </td>
       </tr>
     );
@@ -37,7 +53,15 @@ ProgramSelectGroupRow.propTypes = {
   onChange: PropTypes.func.isRequired,
   remove: PropTypes.func.isRequired,
   src: PropTypes.object,
-  dst: PropTypes.object
+  dst: PropTypes.object,
+  disabled: PropTypes.bool.isRequired,
+  level: PropTypes.number
+};
+
+ProgramSelectGroupRow.defaultProps = {
+  src: undefined,
+  dst: undefined,
+  level: undefined
 };
 
 const mapStateToProps = state => ({

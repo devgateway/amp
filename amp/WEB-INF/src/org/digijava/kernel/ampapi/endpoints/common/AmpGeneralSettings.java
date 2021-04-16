@@ -94,6 +94,15 @@ public class AmpGeneralSettings {
     @JsonProperty("workspace-prefix")
     private String workspacePrefix;
 
+    @JsonProperty("workspace-default-records-per-page")
+    private Integer workspaceDefaultRecordsPerPage;
+
+    @JsonProperty("ndd-mapping-indirect-level")
+    private Integer nddMappingIndirectLevel;
+
+    @JsonProperty("ndd-mapping-program-level")
+    private Integer nddMappingProgramLevel;
+
     @JsonProperty(SettingsConstants.CALENDAR_TYPE_ID)
     private Long calendarId;
 
@@ -348,6 +357,14 @@ public class AmpGeneralSettings {
         this.workspacePrefix = workspacePrefix;
     }
 
+    public Integer getWorkspaceDefaultRecordsPerPage() {
+        return workspaceDefaultRecordsPerPage;
+    }
+
+    public void setWorkspaceDefaultRecordsPerPage(final Integer workspaceDefaultRecordsPerPage) {
+        this.workspaceDefaultRecordsPerPage = workspaceDefaultRecordsPerPage;
+    }
+
     public String getDashboardDefaultMaxDate() {
         return dashboardDefaultMaxDate;
     }
@@ -442,5 +459,21 @@ public class AmpGeneralSettings {
 
     public void setHideContactsPublicView(Boolean hideContactsPublicView) {
         this.hideContactsPublicView = hideContactsPublicView;
+    }
+
+    public Integer getNddMappingIndirectLevel() {
+        return nddMappingIndirectLevel;
+    }
+
+    public void setNddMappingIndirectLevel(Integer nddMappingIndirectLevel) {
+        this.nddMappingIndirectLevel = nddMappingIndirectLevel;
+    }
+
+    public Integer getNddMappingProgramLevel() {
+        return nddMappingProgramLevel;
+    }
+
+    public void setNddMappingProgramLevel(Integer nddMappingProgramLevel) {
+        this.nddMappingProgramLevel = nddMappingProgramLevel;
     }
 }

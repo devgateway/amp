@@ -37,6 +37,7 @@
   "amp.geocoder:noActivities": "No activities found for Geocoding",
   "amp.geocoder:discardGeocodingButton": "Discard Geocoding",
   "amp.geocoder:discardGeocodingText": "There is no geocoded location found. You can cancel the geocoding process.",
+  "amp.geocoder:error.0001": "Unexpected error has happened. Please contact the administrator to get more details.",
   "amp.geocoder:error.1704": "The Current Geocoding process was created by user '{0}' and is not available. Please contact them to get more details. Once that process is done another one will be able to be launched.",
   "amp.geocoder:error.1705": "The current Geocoding process was created in the '{0}' workspace and it is available only in that workspace. Please login to that workspace to see the geocoding process status.",
   "amp.geocoder:error.1706": "Geocoding client error. Please contact the administrator to get more details."

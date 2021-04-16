@@ -4,6 +4,7 @@ import {faPencilAlt} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import Tooltip from "react-bootstrap/Tooltip";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import RemoveProjectButton from "../panel/button/RemoveProjectButton";
 
 export default class GeocodingActionColumn extends Component {
 
@@ -14,12 +15,16 @@ export default class GeocodingActionColumn extends Component {
 
         if (this.props.enabled) {
             return (
-                <OverlayTrigger placement="top" overlay={renderTooltip}>
-                    <FontAwesomeIcon className={'fa-icon fa-lg'} icon={faPencilAlt}/>
-                </OverlayTrigger>
+                <>
+                    <OverlayTrigger placement="top" overlay={renderTooltip}>
+                        <FontAwesomeIcon className={'fa-icon fa-lg'} icon={faPencilAlt}/>
+                    </OverlayTrigger>
+
+                    <RemoveProjectButton ampId={this.props.ampId} />
+                </>
             );
         }
 
-        return (<div className={'no-locations'}>{this.props.message}</div>)
+        return (<div className={'no-locations'}>{this.props.message}</div>);
     }
 }

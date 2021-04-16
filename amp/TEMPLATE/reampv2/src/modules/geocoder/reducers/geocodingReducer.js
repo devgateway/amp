@@ -17,7 +17,10 @@ import {
     GEOCODING_SAVE_ALL_EDITS_SUCCESS,
     GEOCODING_SAVE_ACTIVITY_ERROR,
     GEOCODING_SAVE_ACTIVITY_PENDING,
-    GEOCODING_SAVE_ACTIVITY_SUCCESS, GEOCODING_RESET_SAVE_RESULTS, GEOCODING_RUN_SEARCH_ERROR
+    GEOCODING_SAVE_ACTIVITY_SUCCESS,
+    GEOCODING_RESET_SAVE_RESULTS,
+    GEOCODING_RUN_SEARCH_ERROR,
+    GEOCODING_REMOVE_PROJECT_PENDING, GEOCODING_REMOVE_PROJECT_SUCCESS, GEOCODING_REMOVE_PROJECT_ERROR
 } from '../actions/geocodingAction';
 
 const initialState = {
@@ -156,7 +159,7 @@ export default function geocodingReducer(state = initialState, action) {
             return {
                 ...state,
                 save_activities_result: updateActivitySaveStatus(state.save_activities_result, action.payload, false, null),
-                activities: removeSavedActivity(state.activities, action.payload)
+                activities: removeProject(state.activities, action.payload)
             };
         case GEOCODING_SAVE_ACTIVITY_ERROR:
             return {
@@ -169,6 +172,25 @@ export default function geocodingReducer(state = initialState, action) {
                 save_activities_result: [],
             };
         case GEOCODING_RUN_SEARCH_ERROR:
+            return {
+                ...state,
+                pending: false,
+                error: action.error,
+                errorCode: action.errorCode
+            };
+        case GEOCODING_REMOVE_PROJECT_PENDING:
+            return {
+                ...state,
+                pending: true,
+                error: null
+            };
+        case GEOCODING_REMOVE_PROJECT_SUCCESS:
+            return {
+                ...state,
+                pending: false,
+                activities: removeProject(state.activities, action.payload),
+            };
+        case GEOCODING_REMOVE_PROJECT_ERROR:
             return {
                 ...state,
                 pending: false,
@@ -248,6 +270,6 @@ function updateActivitySaveStatus(activities, ampId, pending, error) {
     });
 }
 
-function removeSavedActivity(activities, ampId) {
+function removeProject(activities, ampId) {
     return activities.filter(item => item.amp_id !== ampId);
 }

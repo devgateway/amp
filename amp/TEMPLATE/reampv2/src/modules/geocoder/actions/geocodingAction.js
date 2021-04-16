@@ -28,6 +28,10 @@ export const GEOCODING_SAVE_ACTIVITY_PENDING = 'GEOCODING_SAVE_ACTIVITY_PENDING'
 export const GEOCODING_SAVE_ACTIVITY_SUCCESS = 'GEOCODING_SAVE_ACTIVITY_SUCCESS';
 export const GEOCODING_SAVE_ACTIVITY_ERROR = 'GEOCODING_SAVE_ACTIVITY_ERROR';
 
+export const GEOCODING_REMOVE_PROJECT_PENDING = 'GEOCODING_REMOVE_PROJECT_PENDING';
+export const GEOCODING_REMOVE_PROJECT_SUCCESS = 'GEOCODING_REMOVE_PROJECT_SUCCESS';
+export const GEOCODING_REMOVE_PROJECT_ERROR = 'GEOCODING_REMOVE_PROJECT_ERROR';
+
 export const GEOCODING_RESET_SAVE_RESULTS = 'GEOCODING_RESET_SAVE_RESULTS';
 
 export function fetchGeocodingPending() {
@@ -171,6 +175,27 @@ export function saveActivityError(ampId, error) {
     }
 }
 
+export function removeProjectPending(ampId) {
+    return {
+        type: GEOCODING_REMOVE_PROJECT_PENDING,
+        payload: ampId
+    }
+}
+
+export function removeProjectSuccess(ampId) {
+    return {
+        type: GEOCODING_REMOVE_PROJECT_SUCCESS,
+        payload: ampId
+    }
+}
+
+export function removeProjectError(error) {
+    return {
+        type: GEOCODING_REMOVE_PROJECT_ERROR,
+        error: error
+    }
+}
+
 export function resetSaveActivitiesResults() {
     return {
         type: GEOCODING_RESET_SAVE_RESULTS,
@@ -291,6 +316,19 @@ export const saveActivity = (ampId) => {
             })
             .catch(error => {
                 return dispatch(saveActivityError(ampId, error.message))
+            });
+    }
+};
+
+export const removeProject = (ampId) => {
+    return dispatch => {
+        dispatch(removeProjectPending(ampId));
+        return fetchApiDataWithStatus({body: {}, url: '/rest/geo-coder/activity/remove/' + ampId})
+            .then(result => {
+                return dispatch(removeProjectSuccess(ampId));
+            })
+            .catch(error => {
+                return dispatch(removeProjectError(error.message))
             });
     }
 };

@@ -20,6 +20,11 @@ class ActivityTableHeader extends Component {
 
     render() {
         const {translations} = this.context;
+
+        if (this.props.activitiesPending) {
+            return <></>
+        }
+
         return (
             <div className='panel-body custom-panel geocoder-header'>
                 <SelectedActivitiesMessage title={translations['amp.geocoder:selectProjects']}
@@ -37,6 +42,7 @@ ActivityTableHeader.contextType = TranslationContext;
 const mapStateToProps = state => {
     return {
         activities: state.activitiesReducer.activities,
+        activitiesPending: state.activitiesReducer.pending
     };
 };
 

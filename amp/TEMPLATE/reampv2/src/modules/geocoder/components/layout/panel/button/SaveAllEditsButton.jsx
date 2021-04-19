@@ -6,7 +6,7 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import {TranslationContext} from "../../../AppContext";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
-import {saveAllEdits} from "../../../../actions/geocodingAction";
+import {resetSaveResults, saveAllEdits} from "../../../../actions/geocodingAction";
 
 class SaveAllEditsButton extends Component {
 
@@ -31,8 +31,10 @@ class SaveAllEditsButton extends Component {
         const ampIds = this.props.geocoding.activities
             .filter(activity => activity.locations.length > 0)
             .filter(activity => activity.locations.filter(loc => loc.accepted !== false && loc.accepted !== true).length < 1)
+            .filter(activity => activity.status !== 'SAVED')
             .map(act => act.amp_id);
-        this.props.saveAllEdits(ampIds);
+        this.props._resetSaveResults();
+        this.props._saveAllEdits(ampIds);
         this.handleClose();
     }
 
@@ -48,7 +50,8 @@ class SaveAllEditsButton extends Component {
         const {translations} = this.context;
 
         const isEnabled = this.props.geocoding.activities
-            .filter(activity => this.hasActivityAcceptedOrRejectedAllLocations(activity)).length > 0;
+            .filter(activity => this.hasActivityAcceptedOrRejectedAllLocations(activity) && activity.status !== 'SAVED').length > 0;
+
 
         let renderTooltip = props => (
             <Tooltip {...props}>{this.props.tooltip}</Tooltip>
@@ -92,7 +95,8 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-    saveAllEdits: saveAllEdits,
+    _resetSaveResults: resetSaveResults,
+    _saveAllEdits: saveAllEdits,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(SaveAllEditsButton);

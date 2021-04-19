@@ -45,11 +45,15 @@ class GeocoderPanel extends Component {
         let table;
         let tableHeader;
 
+        let pending;
+
         if (isGeocoding) {
+            pending = this.props.geocoding.pending || this.props.geocoding.geocodeShouldRun;
             title = title +  ' - ' + translations['amp.geocoder:geocodedSelection'];
             tableHeader =  <GeocodingTableHeader/>;
             table = <GeocodingTable/>;
         } else {
+            pending = this.props.activitiesPending;
             tableHeader =  <ActivityTableHeader selectedActivities={this.props.selectedActivities}/>;
             table = <ActivityTable onSelectActivity={this.onSelectActivity.bind(this)}
                                    onSelectAllActivities={this.onSelectAllActivities.bind(this)}/>
@@ -60,7 +64,7 @@ class GeocoderPanel extends Component {
                 {this.props.geocoding.error
                     ?  <AlertError error={this.props.geocoding.error} errorCode={this.props.geocoding.errorCode}/>
                     : <div>
-                        <ProjectList title={title}/>
+                        {!pending && <ProjectList title={title}/>}
                         <div className='panel panel-default'>
                             {tableHeader}
                             {table}

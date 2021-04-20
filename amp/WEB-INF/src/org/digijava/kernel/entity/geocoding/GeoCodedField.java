@@ -19,12 +19,15 @@ public class GeoCodedField {
 
     private String value;
 
+    private String entity;
+
     public GeoCodedField() {
     }
 
-    public GeoCodedField(String name, String value) {
+    public GeoCodedField(String name, String value, String entity) {
         this.name = name;
         this.value = value;
+        this.entity = entity;
     }
 
     public Long getId() {
@@ -57,5 +60,13 @@ public class GeoCodedField {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public String getEntity() {
+        return entity;
+    }
+
+    public void setEntity(final String entity) {
+        this.entity = entity;
     }
 }

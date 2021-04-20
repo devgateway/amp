@@ -86,9 +86,7 @@ class Filters extends Component {
     const { show } = this.state;
     return (
       <>
-        <Segment placeholder textAlign="left" className="filters_segment">
           <Header size="small"><span onClick={this.showFilterWidget}>Filters</span></Header>
-        </Segment>
         {/* eslint-disable-next-line react/no-string-refs */}
         <div id="filter-popup" ref="filterPopup" style={{ display: (!show ? 'none' : 'block') }} />
       </>

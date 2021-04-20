@@ -4,15 +4,15 @@ import { connect } from 'react-redux';
 import { Container } from 'semantic-ui-react';
 import { ReportGeneratorContext } from './StartUp';
 import MainHeader from './MainHeader';
-import Filters from './Filters';
 import MainContent from './MainContent';
+import FiltersAndSettings from './FiltersAndSettings';
 
 class ReportGeneratorHome extends Component {
   render() {
     return (
       <Container>
         <MainHeader />
-        <Filters />
+        <FiltersAndSettings />
         <MainContent />
       </Container>
     );

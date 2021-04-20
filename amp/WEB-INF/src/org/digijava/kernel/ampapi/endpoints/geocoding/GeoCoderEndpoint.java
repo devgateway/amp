@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
@@ -37,6 +38,8 @@ import java.util.Set;
 @Api("geo-coder")
 public class GeoCoderEndpoint {
 
+    private static Logger logger = Logger.getLogger(GeoCoderEndpoint.class);
+
     private final GeoCodingService service = new GeoCodingService();
 
     @ApiOperation(value = "Add activities to current geo coding process",
@@ -60,6 +63,7 @@ public class GeoCoderEndpoint {
                     GeoCoderEndpointErrors.GEO_CODING_GENERAL_ERROR.withDetails(e.getMessage()));
             throw new ApiRuntimeException(Response.Status.BAD_REQUEST, apiErrorResponse);
         } catch (ClientHandlerException e) {
+            logger.error(e.getMessage(), e);
             ApiErrorResponse apiErrorResponse = ApiError.toError(
                     GeoCoderEndpointErrors.GEO_CODING_CLIENT_ERROR.withDetails(e.getMessage()));
             throw new ApiRuntimeException(Response.Status.BAD_REQUEST, apiErrorResponse);
@@ -130,6 +134,7 @@ public class GeoCoderEndpoint {
         try {
             service.saveActivity(ampId);
         } catch (Exception e) {
+            logger.error(e.getMessage(), e);
             ApiErrorResponse apiErrorResponse = ApiError.toError(
                     GeoCoderEndpointErrors.GEO_CODING_ACT_SAVE_ERROR.withDetails(e.getMessage()));
             throw new ApiRuntimeException(Response.Status.BAD_REQUEST, apiErrorResponse);

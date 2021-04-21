@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   Button, Header, Item, Menu
 } from 'semantic-ui-react';
@@ -10,7 +11,24 @@ export default class MainMenu extends Component {
     this.state = { activeItem: 'details' };
   }
 
-  handleItemClick = (e, { name }) => this.setState({ activeItem: name })
+  handleItemClick = (e, { name }) => {
+    const { onClick } = this.props;
+    this.setState({ activeItem: name });
+    let index = -1;
+    // eslint-disable-next-line default-case
+    switch (name) {
+      case 'details':
+        index = 0;
+        break;
+      case 'columns':
+        index = 1;
+        break;
+      case 'measures':
+        index = 2;
+        break;
+    }
+    onClick(index);
+  }
 
   render() {
     const { activeItem } = this.state;
@@ -47,3 +65,7 @@ export default class MainMenu extends Component {
     );
   }
 }
+
+MainMenu.propTypes = {
+  onClick: PropTypes.func.isRequired,
+};

@@ -1,9 +1,20 @@
 {
-  "amp.reportGenerator:Home-Page": "Dashboard Home",
-  "amp.reportGenerator:page-title": "Aid Management Platform - NDD Dashboard",
+  "amp.reportGenerator:Home-Page": "Report Generator",
+  "amp.reportGenerator:page-title": "Aid Management Platform - Report Generator",
   "amp.reportGenerator:filters": "Filters",
   "amp.reportGenerator:settings": "Settings",
   "amp.reportGenerator:close": "Close",
   "amp.reportGenerator:no-data-short": "No Data",
-  "amp.reportGenerator:loading": "Loading"
+  "amp.reportGenerator:loading": "Loading",
+  "amp.reportGenerator:back": "Back",
+  "amp.reportGenerator:next": "Next",
+  "amp.reportGenerator:reportingDetails": "Reporting Details",
+  "amp.reportGenerator:columns": "Columns",
+  "amp.reportGenerator:measures": "Measures",
+  "amp.reportGenerator:plusRunReport": "+ Run Report",
+  "amp.reportGenerator:resetAll": "Reset All",
+  "amp.reportGenerator:cancel": "Cancel",
+  "amp.reportGenerator:reportGenerator": "Report Generator",
+  "amp.reportGenerator:save": "Save",
+  "amp.reportGenerator:saveAs": "Save As"
 }

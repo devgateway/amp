@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { Col } from 'react-bootstrap';
 import FilterOutputItem from '../../ndddashboard/components/FilterOutputItem';
 import { ReportGeneratorContext } from './StartUp';
+import { TRN_PREFIX } from '../utils/constants';
 
 const Filter = require('../../../../../ampTemplate/node_modules/amp-filter/dist/amp-filter');
 
@@ -84,9 +85,12 @@ class Filters extends Component {
 
   render() {
     const { show } = this.state;
+    const { translations } = this.props;
     return (
       <>
-          <Header size="small"><span onClick={this.showFilterWidget}>Filters</span></Header>
+        <Header size="small">
+          <span onClick={this.showFilterWidget}>{translations[`${TRN_PREFIX}filters`]}</span>
+        </Header>
         {/* eslint-disable-next-line react/no-string-refs */}
         <div id="filter-popup" ref="filterPopup" style={{ display: (!show ? 'none' : 'block') }} />
       </>

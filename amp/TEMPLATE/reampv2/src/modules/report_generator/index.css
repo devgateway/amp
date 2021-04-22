@@ -57,6 +57,16 @@
     background-color: #21C11C;
 }
 
+.ui.radio.checkbox label::before {
+    content: '';
+    transform: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 500rem;
+    top: -2px;
+    left: -1px;
+}
+
 .ui.radio.checkbox label::after {
     border: none;
     content: '' !important;

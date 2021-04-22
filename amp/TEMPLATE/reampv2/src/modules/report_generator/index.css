@@ -32,3 +32,43 @@
     display: none;
     visibility: hidden;
 }
+
+.option-list-content {
+    border: 1px solid #d3d3d3;
+    background-color: #D3D3D31C;
+    padding: 10px;
+}
+
+.fields-vertical {
+    flex-direction: column !important;
+}
+
+.fields-vertical .radio,.checkbox{
+    margin-top: 0px !important;
+}
+
+.field span {
+    position: relative;
+    top: -16px;
+    right: -10px;
+}
+
+.ui.radio.checkbox input:checked ~ label::after {
+    background-color: #21C11C;
+}
+
+.ui.radio.checkbox label::after {
+    border: none;
+    content: '' !important;
+    line-height: 25px;
+    top: -12px;
+    left: -11px;
+    width: 40px;
+    height: 40px;
+    border-radius: 500rem;
+    transform: scale(0.46666667);
+}
+
+.ui.toggle.checkbox input:checked ~ label::before {
+    background-color: #21C11C !important;
+}

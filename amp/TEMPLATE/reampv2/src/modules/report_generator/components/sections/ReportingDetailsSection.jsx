@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import OptionsList from './OptionsList';
 import { ReportGeneratorContext } from '../StartUp';
 import { TRN_PREFIX } from '../../utils/constants';
+import OptionsContent from './OptionsContent';
 
 class ReportingDetailSection extends Component {
   render() {
@@ -16,7 +17,7 @@ class ReportingDetailSection extends Component {
           <GridRow>
             <GridColumn width="8">
               <OptionsList title={translations[`${TRN_PREFIX}totalGrouping`]} isRequired tooltip="tooltip 1" >
-                content
+                <OptionsContent />
               </OptionsList>
             </GridColumn>
             <GridColumn width="8">

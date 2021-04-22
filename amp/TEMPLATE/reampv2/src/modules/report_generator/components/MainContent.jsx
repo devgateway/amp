@@ -21,19 +21,17 @@ export default class MainContent extends Component {
     return (
       <>
         <Grid>
-          <GridColumn width="4">
-            <MainMenu onClick={this.handleMenuClick} />
-          </GridColumn>
-          <GridColumn width="12">
-            <GridRow>
+          <GridRow>
+            <GridColumn width="4">
+              <MainMenu onClick={this.handleMenuClick} />
+            </GridColumn>
+            <GridColumn width="12">
               <ReportingDetailSection visible={visibleTab === 0} />
               <ColumnsSection visible={visibleTab === 1} />
               <MeasuresSection visible={visibleTab === 2} />
-            </GridRow>
-            <GridRow>
               <NavigationButtons />
-            </GridRow>
-          </GridColumn>
+            </GridColumn>
+          </GridRow>
         </Grid>
       </>
     );

@@ -16,5 +16,10 @@
   "amp.reportGenerator:cancel": "Cancel",
   "amp.reportGenerator:reportGenerator": "Report Generator",
   "amp.reportGenerator:save": "Save",
-  "amp.reportGenerator:saveAs": "Save As"
+  "amp.reportGenerator:saveAs": "Save As",
+  "amp.reportGenerator:totalGrouping": "Total Grouping",
+  "amp.reportGenerator:options": "Options",
+  "amp.reportGenerator:fundingGroup": "Funding Group",
+  "amp.reportGenerator:preview": "Preview",
+  "amp.reportGenerator:mustSelect": "A selection must be made"
 }

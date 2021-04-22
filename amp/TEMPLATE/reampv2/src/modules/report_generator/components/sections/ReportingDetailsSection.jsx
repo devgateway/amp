@@ -15,7 +15,9 @@ class ReportingDetailSection extends Component {
         <Grid>
           <GridRow>
             <GridColumn width="8">
-              <OptionsList title={translations[`${TRN_PREFIX}totalGrouping`]} isRequired tooltip="tooltip 1" />
+              <OptionsList title={translations[`${TRN_PREFIX}totalGrouping`]} isRequired tooltip="tooltip 1" >
+                content
+              </OptionsList>
             </GridColumn>
             <GridColumn width="8">
               <OptionsList title={translations[`${TRN_PREFIX}options`]} isRequired tooltip="tooltip 2" />

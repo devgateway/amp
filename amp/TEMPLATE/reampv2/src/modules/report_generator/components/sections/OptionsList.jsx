@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 
 export default class OptionsList extends Component {
   render() {
-    const { title, tooltip, isRequired } = this.props;
+    const {
+      title, tooltip, isRequired, children
+    } = this.props;
     return (
       <div>
         <div className="option-list-title">
@@ -17,7 +19,7 @@ export default class OptionsList extends Component {
           ) : null}
         </div>
         <div className="option-list-content">
-          content here.
+          {children}
         </div>
       </div>
     );
@@ -28,9 +30,11 @@ OptionsList.propTypes = {
   title: PropTypes.string.isRequired,
   isRequired: PropTypes.bool,
   tooltip: PropTypes.string,
+  children: PropTypes.object,
 };
 
 OptionsList.defaultProps = {
   isRequired: false,
   tooltip: null,
+  children: undefined
 };

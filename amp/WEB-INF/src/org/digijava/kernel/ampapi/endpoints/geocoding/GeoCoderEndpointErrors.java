@@ -1,8 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.geocoding;
 
-import static org.digijava.kernel.ampapi.endpoints.errors.ApiError.ERROR_CLASS_GEO_CODER_ID;
-
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+
+import static org.digijava.kernel.ampapi.endpoints.errors.ApiError.ERROR_CLASS_GEO_CODER_ID;
 
 /**
  * @author Octavian Ciubotaru
@@ -26,5 +26,7 @@ public final class GeoCoderEndpointErrors {
             "Invalid Workspace");
     public static final ApiErrorMessage GEO_CODING_CLIENT_ERROR = new ApiErrorMessage(ERROR_CLASS_GEO_CODER_ID, 6,
             "Geo coding client error");
+    public static final ApiErrorMessage GEO_CODING_CLIENT_NOT_AVAILABLE =
+            new ApiErrorMessage(ERROR_CLASS_GEO_CODER_ID, 7, "Geo coding client is not available");
 
 }

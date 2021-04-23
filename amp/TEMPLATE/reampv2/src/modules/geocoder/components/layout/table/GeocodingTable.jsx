@@ -43,7 +43,8 @@ class GeocodingTable extends Component {
     }
 
     existLocationsInGeocoding = () => {
-        return this.props.activities.some(activity => activity.status === 'ERROR' || activity.locations.length > 0);
+        return this.props.activities.some(activity => activity.status === 'ERROR' 
+                                          || (activity.locations.length > 0 && activity.status !== 'SAVED'));
     }
 
     existSaveResults = () => {

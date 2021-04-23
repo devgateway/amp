@@ -6,11 +6,16 @@ import {connect} from "react-redux";
 import ResetAllButton from "../panel/button/ResetAllButton";
 import CancelGeocodingButton from "../panel/button/CancelGeocodingButton";
 import SaveAllEditsButton from "../panel/button/SaveAllEditsButton";
+import {Loading} from "../panel/Loading";
 
 class GeocodingTableHeader extends Component {
 
     render() {
         const {translations} = this.context;
+
+        if (this.props.geocoding.pending || this.props.geocoding.geocodeShouldRun) {
+            return <></>
+        }
 
         return (
             <div className='panel-body custom-panel geocoder-header'>

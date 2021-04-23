@@ -65,7 +65,7 @@ public class GeoCoderEndpoint {
         } catch (ClientHandlerException e) {
             logger.error(e.getMessage(), e);
             ApiErrorResponse apiErrorResponse = ApiError.toError(
-                    GeoCoderEndpointErrors.GEO_CODING_CLIENT_ERROR.withDetails(e.getMessage()));
+                    GeoCoderEndpointErrors.GEO_CODING_CLIENT_NOT_AVAILABLE.withDetails(e.getMessage()));
             throw new ApiRuntimeException(Response.Status.BAD_REQUEST, apiErrorResponse);
         }
         return Response.noContent().build();

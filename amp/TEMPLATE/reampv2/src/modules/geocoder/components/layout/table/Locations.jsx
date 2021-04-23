@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
+import Highlighter from "react-highlight-words";
 import LocationActionColumn from "./LocationActionColumn";
 import {geocodeLocation} from "../../../actions/geocodingAction";
 
@@ -9,7 +10,15 @@ function LocationFields({fields}) {
     return (
         fields.map((field) =>
             <>
-            <div> / <b>{field.name}</b> | {field.value}</div>
+            <div> / <b>{field.name}</b> |
+                <span className={'location-text'}>
+                    <Highlighter
+                        searchWords={[field.entity]}
+                        autoEscape={true}
+                        textToHighlight={field.value}
+                    />
+                </span>
+            </div>
             </>
         )
     );

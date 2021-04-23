@@ -173,6 +173,9 @@ public class GeoCoderClient {
         @JsonProperty("text")
         private String value;
 
+        @JsonProperty("entity")
+        private String entity;
+
         @JsonProperty("location")
         private GeoCodingLocation location;
 
@@ -208,6 +211,14 @@ public class GeoCoderClient {
 
         public Set<Long> getAcvlIds() {
             return acvlIds;
+        }
+
+        public String getEntity() {
+            return entity;
+        }
+
+        public void setEntity(final String entity) {
+            this.entity = entity;
         }
     }
 

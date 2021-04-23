@@ -39,6 +39,7 @@
     "react-dom": "^16.13.1",
     "react-ellipsis-text": "^1.2.1",
     "react-fontawesome": "^1.7.1",
+    "react-highlight-words": "^0.17.0",
     "react-image": "^4.0.3",
     "react-leaf-carousel": "git@github.com:jdeanquin-dg/react-infinite-carousel.git#master",
     "react-leaflet": "^2.6.3",

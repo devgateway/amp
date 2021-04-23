@@ -223,6 +223,10 @@ table thead tr th {
     line-height: 25px;
 }
 
+.location-text {
+    margin-left: 5px;
+}
+
 .col-10 {
     width: 15%;
 }
@@ -302,6 +306,7 @@ table thead tr th {
 .no-locations {
     color: #FF0000;
     font-weight: bold;
+    white-space: nowrap;
 }
 
 .modal-header .close {

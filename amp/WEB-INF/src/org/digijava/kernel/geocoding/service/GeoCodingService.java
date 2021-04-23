@@ -226,7 +226,7 @@ public class GeoCodingService {
         GeoCodedLocation l = new GeoCodedLocation(acvl);
         for (GeoCoderClient.GeoCodingResult r : geoCodingResults) {
             if (r.getAcvlIds() != null && r.getAcvlIds().contains(acvl.getId())) {
-                l.addField(new GeoCodedField(r.getField(), r.getValue()));
+                l.addField(new GeoCodedField(r.getField(), r.getValue(), r.getEntity()));
             }
         }
         return l;

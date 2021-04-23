@@ -53,6 +53,10 @@
     right: -10px;
 }
 
+.show,.tooltip {
+    opacity: 1;
+}
+
 .ui.radio.checkbox input:checked ~ label::after {
     background-color: #21C11C;
 }

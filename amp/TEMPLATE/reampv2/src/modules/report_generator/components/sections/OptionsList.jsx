@@ -1,21 +1,29 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 export default class OptionsList extends Component {
   render() {
     const {
       title, tooltip, isRequired, children
     } = this.props;
+    const tooltipText = tooltip ? (
+      <Tooltip id={tooltip}>
+        {tooltip}
+      </Tooltip>
+    ) : null;
     return (
       <div>
         <div className="option-list-title">
           {isRequired ? <span className="red_text">* </span> : null}
           <span>{title}</span>
           {tooltip ? (
-            <img
-              alt="info-icon"
-              className="info-icon"
-              src="/TEMPLATE/reamp/modules/admin/data-freeze-manager/styles/images/icon-information.svg" />
+            <OverlayTrigger trigger={['hover', 'focus']} overlay={tooltipText}>
+              <img
+                alt="info-icon"
+                className="info-icon"
+                src="/TEMPLATE/reamp/modules/admin/data-freeze-manager/styles/images/icon-information.svg" />
+            </OverlayTrigger>
           ) : null}
         </div>
         <div className="option-list-content">

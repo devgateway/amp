@@ -13,7 +13,7 @@ export default class OptionsList extends Component {
       </Tooltip>
     ) : null;
     return (
-      <div>
+      <>
         <div className="option-list-title">
           {isRequired ? <span className="red_text">* </span> : null}
           <span>{title}</span>
@@ -29,7 +29,7 @@ export default class OptionsList extends Component {
         <div className="option-list-content">
           {children}
         </div>
-      </div>
+      </>
     );
   }
 }

@@ -37,6 +37,11 @@
     border: 1px solid #d3d3d3;
     background-color: #D3D3D31C;
     padding: 10px;
+    height: 85%;
+}
+
+.option-list-title {
+    height: 15%;
 }
 
 .fields-vertical {

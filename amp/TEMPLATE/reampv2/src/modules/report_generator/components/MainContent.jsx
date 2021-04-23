@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { Grid, GridColumn, GridRow } from 'semantic-ui-react';
+import {
+  Divider, Grid, GridColumn, GridRow
+} from 'semantic-ui-react';
 import MainMenu from './MainMenu';
 import ColumnsSection from './sections/ColumnsSection';
 import ReportingDetailSection from './sections/ReportingDetailsSection';
@@ -29,6 +31,7 @@ export default class MainContent extends Component {
               <ReportingDetailSection visible={visibleTab === 0} />
               <ColumnsSection visible={visibleTab === 1} />
               <MeasuresSection visible={visibleTab === 2} />
+              <Divider />
               <NavigationButtons />
             </GridColumn>
           </GridRow>

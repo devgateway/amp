@@ -13,5 +13,6 @@
 					 not-null="true" />
 		<property name="name" type="string" length="255" not-null="true" />
 		<property name="value" type="text" not-null="true" />
+		<property name="entity" type="string" length="255" />
 	</class>
 </hibernate-mapping>

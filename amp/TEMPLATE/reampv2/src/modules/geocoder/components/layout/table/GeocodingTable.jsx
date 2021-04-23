@@ -34,12 +34,17 @@ class GeocodingTable extends Component {
         return this.props.activities.filter(activity => activity.amp_id === ampId)[0].locations.length > 0;
     }
 
+    hasError = ampId => {
+        return this.props.activities.filter(activity => activity.amp_id === ampId)[0].status === 'ERROR';
+    }
+
     getNonExpandableIds = () => {
         return this.props.activities.filter(activity => activity.locations.length < 1).map(act => act.amp_id);
     }
 
     existLocationsInGeocoding = () => {
-        return this.props.activities.some(activity => activity.locations.length > 0 && activity.status !== 'SAVED');
+        return this.props.activities.some(activity => activity.status === 'ERROR' 
+                                          || (activity.locations.length > 0 && activity.status !== 'SAVED'));
     }
 
     existSaveResults = () => {
@@ -102,7 +107,7 @@ class GeocodingTable extends Component {
             expandColumnRenderer: ({ expanded, rowKey, expandable }) => (
                 <GeocodingActionColumn
                     ampId={rowKey} enabled={this.hasLocations(rowKey)}
-                    message={translations['amp.geocoder:noLocations']}
+                    message={this.hasError(rowKey) ? translations['amp.geocoder:errorGeocoding'] : translations['amp.geocoder:noLocations']}
                     tooltip={translations['amp.geocoder:editActionTooltip']}
                 />
             )
@@ -171,7 +176,8 @@ class GeocodingTable extends Component {
             },
         ];
 
-        let data = this.props.activities.filter(act => act.locations.length > 0 && act.status !== 'SAVED');
+        let data = this.props.activities
+                .filter(act => act.status === 'ERROR' || (act.locations.length > 0 && act.status !== 'SAVED'));
 
         return (
             <>

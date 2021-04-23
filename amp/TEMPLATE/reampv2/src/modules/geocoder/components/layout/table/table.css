@@ -53,6 +53,10 @@ table thead tr th {
     padding: 5px 10px 15px 15px;
 }
 
+.expand-cell {
+    white-space: nowrap;
+}
+
 .pagination > .active > a,
 .pagination > .active > a:focus,
 .pagination > .active > a:hover,

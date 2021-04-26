@@ -13,21 +13,21 @@ export default class OptionsContent extends Component {
       <>
         <Form>
           <Form.Group className="fields-vertical">
-            {radioList.map((item, i) => (
+            {radioList.map((item) => (
               <Form.Radio
                 label={item}
                 value={item}
-                checked={i === selectedRadio}
+                checked={item === selectedRadio}
                 onChange={changeRadioList}
               />
             ))}
           </Form.Group>
-          {checkList.map((item, i) => (
+          {checkList.map((item) => (
             <FormField>
               <Checkbox
                 toggle
                 onChange={changeCheckList}
-                checked={selectedCheckboxes.length === checkList.length && selectedCheckboxes[i]} />
+                checked={selectedCheckboxes && selectedCheckboxes.item} />
               <span>{item}</span>
             </FormField>
           ))}
@@ -40,8 +40,8 @@ export default class OptionsContent extends Component {
 OptionsContent.propTypes = {
   radioList: PropTypes.array,
   checkList: PropTypes.array,
-  selectedRadio: PropTypes.number,
-  selectedCheckboxes: PropTypes.array,
+  selectedRadio: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  selectedCheckboxes: PropTypes.object,
   changeRadioList: PropTypes.func.isRequired,
   changeCheckList: PropTypes.func.isRequired,
 };
@@ -49,6 +49,6 @@ OptionsContent.propTypes = {
 OptionsContent.defaultProps = {
   radioList: [],
   checkList: [],
-  selectedRadio: -1,
-  selectedCheckboxes: [],
+  selectedRadio: undefined,
+  selectedCheckboxes: undefined,
 };

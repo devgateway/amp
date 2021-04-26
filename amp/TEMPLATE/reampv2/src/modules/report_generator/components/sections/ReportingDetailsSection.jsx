@@ -10,10 +10,23 @@ import OptionsList from './OptionsList';
 import { ReportGeneratorContext } from '../StartUp';
 import { TRN_PREFIX } from '../../utils/constants';
 import OptionsContent from './OptionsContent';
+import { updateReportDetailsTotalGrouping, updateReportDetailsTotalsOnly } from '../../actions/stateUIActions';
 
 class ReportingDetailSection extends Component {
+  selectTotalGrouping = (e, { value }) => {
+    const { _updateReportDetailsTotalGrouping } = this.props;
+    _updateReportDetailsTotalGrouping(value);
+  };
+
+  selectTotalsOnly = () => {
+    const { _updateReportDetailsTotalsOnly, selectedTotalsOnly } = this.props;
+    _updateReportDetailsTotalsOnly(!selectedTotalsOnly);
+  }
+
   render() {
-    const { visible, translations } = this.props;
+    const {
+      visible, translations, selectedTotalGrouping, selectedTotalsOnly
+    } = this.props;
 
     const fakeReportTypesRadio = ['Summary Report', 'Annual Report', 'Quarterly Report', 'Monthly Report'];
     const fakeReportTypesCheck = ['Totals Only'];
@@ -29,7 +42,13 @@ class ReportingDetailSection extends Component {
           <GridRow>
             <GridColumn width="8">
               <OptionsList title={translations[`${TRN_PREFIX}totalGrouping`]} isRequired tooltip="tooltip 1" >
-                <OptionsContent radioList={fakeReportTypesRadio} checkList={fakeReportTypesCheck} selectedRadio={0} />
+                <OptionsContent
+                  radioList={fakeReportTypesRadio}
+                  checkList={fakeReportTypesCheck}
+                  selectedRadio={selectedTotalGrouping}
+                  selectedCheckboxes={{ selectedTotalsOnly }}
+                  changeCheckList={this.selectTotalsOnly}
+                  changeRadioList={this.selectTotalGrouping} />
               </OptionsList>
             </GridColumn>
             <GridColumn width="8">
@@ -58,17 +77,32 @@ class ReportingDetailSection extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  translations: state.translationsReducer.translations
+const mapStateToProps = (state) => ({
+  translations: state.translationsReducer.translations,
+  selectedTotalGrouping: state.uiReducer.reportDetails.selectedTotalGrouping,
+  selectedTotalsOnly: state.uiReducer.reportDetails.selectedTotalsOnly,
+  reportDetails: state.uiReducer.reportDetails,
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({
+  _updateReportDetailsTotalGrouping: (data) => dispatch(updateReportDetailsTotalGrouping(data)),
+  _updateReportDetailsTotalsOnly: (data) => dispatch(updateReportDetailsTotalsOnly(data)),
+}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReportingDetailSection);
 
 ReportingDetailSection.propTypes = {
   translations: PropTypes.object.isRequired,
   visible: PropTypes.bool.isRequired,
+  selectedTotalGrouping: PropTypes.string,
+  _updateReportDetailsTotalGrouping: PropTypes.func.isRequired,
+  selectedTotalsOnly: PropTypes.bool,
+  _updateReportDetailsTotalsOnly: PropTypes.func.isRequired,
+};
+
+ReportingDetailSection.defaultProps = {
+  selectedTotalGrouping: undefined,
+  selectedTotalsOnly: false,
 };
 
 ReportingDetailSection.contextType = ReportGeneratorContext;

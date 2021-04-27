@@ -22,11 +22,11 @@ export default class OptionsContent extends Component {
               />
             ))}
           </Form.Group>
-          {checkList.map((item) => (
+          {checkList.map((item, i) => (
             <FormField>
               <Checkbox
                 toggle
-                onChange={changeCheckList}
+                onChange={changeCheckList ? changeCheckList[i] : {}}
                 checked={selectedCheckboxes && selectedCheckboxes.item} />
               <span>{item}</span>
             </FormField>
@@ -43,12 +43,12 @@ OptionsContent.propTypes = {
   selectedRadio: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   selectedCheckboxes: PropTypes.object,
   changeRadioList: PropTypes.func.isRequired,
-  changeCheckList: PropTypes.func.isRequired,
+  changeCheckList: PropTypes.array.isRequired,
 };
 
 OptionsContent.defaultProps = {
   radioList: [],
   checkList: [],
   selectedRadio: undefined,
-  selectedCheckboxes: undefined,
+  selectedCheckboxes: [],
 };

@@ -10,7 +10,12 @@ import OptionsList from './OptionsList';
 import { ReportGeneratorContext } from '../StartUp';
 import { TRN_PREFIX } from '../../utils/constants';
 import OptionsContent from './OptionsContent';
-import { updateReportDetailsTotalGrouping, updateReportDetailsTotalsOnly } from '../../actions/stateUIActions';
+import {
+  updateReportDetailsTotalGrouping, updateReportDetailsTotalsOnly,
+  updateReportDetailsFundingGrouping, updateReportDetailsAllowEmptyFundingColumns,
+  updateReportDetailsSplitByFunding,
+  updateReportDetailsShowOriginalCurrencies
+} from '../../actions/stateUIActions';
 
 class ReportingDetailSection extends Component {
   selectTotalGrouping = (e, { value }) => {
@@ -23,9 +28,30 @@ class ReportingDetailSection extends Component {
     _updateReportDetailsTotalsOnly(!selectedTotalsOnly);
   }
 
+  selectFundingGrouping = (e, { value }) => {
+    const { _updateReportDetailsFundingGrouping } = this.props;
+    _updateReportDetailsFundingGrouping(value);
+  }
+
+  selectAllowEmptyFundingColumns = () => {
+    const { _updateReportDetailsAllowEmptyFundingColumns, selectedAllowEmptyFundingColumns } = this.props;
+    _updateReportDetailsAllowEmptyFundingColumns(!selectedAllowEmptyFundingColumns);
+  }
+
+  selectSplitByFunding = () => {
+    const { _updateReportDetailsSplitByFunding, selectedSplitByFunding } = this.props;
+    _updateReportDetailsSplitByFunding(!selectedSplitByFunding);
+  }
+
+  selectShowOriginalCurrencies = () => {
+    const { _updateReportDetailsShowOriginalCurrencies, selectedShowOriginalCurrencies } = this.props;
+    _updateReportDetailsShowOriginalCurrencies(!selectedShowOriginalCurrencies);
+  }
+
   render() {
     const {
-      visible, translations, selectedTotalGrouping, selectedTotalsOnly
+      visible, translations, selectedTotalGrouping, selectedTotalsOnly, selectedFundingGrouping,
+      selectedAllowEmptyFundingColumns, selectedSplitByFunding, selectedShowOriginalCurrencies
     } = this.props;
 
     const fakeReportTypesRadio = ['Summary Report', 'Annual Report', 'Quarterly Report', 'Monthly Report'];
@@ -47,7 +73,7 @@ class ReportingDetailSection extends Component {
                   checkList={fakeReportTypesCheck}
                   selectedRadio={selectedTotalGrouping}
                   selectedCheckboxes={{ selectedTotalsOnly }}
-                  changeCheckList={this.selectTotalsOnly}
+                  changeCheckList={[this.selectTotalsOnly]}
                   changeRadioList={this.selectTotalGrouping} />
               </OptionsList>
             </GridColumn>
@@ -62,12 +88,21 @@ class ReportingDetailSection extends Component {
           <GridRow>
             <GridColumn width="8">
               <OptionsList title={translations[`${TRN_PREFIX}fundingGroup`]} tooltip="tooltip 3" >
-                <OptionsContent radioList={fakeFundingGrouping} />
+                <OptionsContent
+                  radioList={fakeFundingGrouping}
+                  changeRadioList={this.selectFundingGrouping}
+                  selectedRadio={selectedFundingGrouping}
+                />
               </OptionsList>
             </GridColumn>
             <GridColumn width="8">
               <OptionsList title={translations[`${TRN_PREFIX}options`]} tooltip="tooltip 4" >
-                <OptionsContent checkList={fakeOptions} />
+                <OptionsContent
+                  checkList={fakeOptions}
+                  selectedCheckboxes={[selectedAllowEmptyFundingColumns, selectedSplitByFunding,
+                    selectedShowOriginalCurrencies]}
+                  changeCheckList={[this.selectAllowEmptyFundingColumns, this.selectSplitByFunding,
+                    this.selectShowOriginalCurrencies]} />
               </OptionsList>
             </GridColumn>
           </GridRow>
@@ -82,11 +117,19 @@ const mapStateToProps = (state) => ({
   selectedTotalGrouping: state.uiReducer.reportDetails.selectedTotalGrouping,
   selectedTotalsOnly: state.uiReducer.reportDetails.selectedTotalsOnly,
   reportDetails: state.uiReducer.reportDetails,
+  selectedFundingGrouping: state.uiReducer.reportDetails.selectedFundingGrouping,
+  selectedAllowEmptyFundingColumns: state.uiReducer.reportDetails.selectedAllowEmptyFundingColumns,
+  selectedSplitByFunding: state.uiReducer.reportDetails.selectedSplitByFunding,
+  selectedShowOriginalCurrencies: state.uiReducer.reportDetails.selectedShowOriginalCurrencies,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   _updateReportDetailsTotalGrouping: (data) => dispatch(updateReportDetailsTotalGrouping(data)),
   _updateReportDetailsTotalsOnly: (data) => dispatch(updateReportDetailsTotalsOnly(data)),
+  _updateReportDetailsFundingGrouping: (data) => dispatch(updateReportDetailsFundingGrouping(data)),
+  _updateReportDetailsAllowEmptyFundingColumns: (data) => dispatch(updateReportDetailsAllowEmptyFundingColumns(data)),
+  _updateReportDetailsSplitByFunding: (data) => dispatch(updateReportDetailsSplitByFunding(data)),
+  _updateReportDetailsShowOriginalCurrencies: (data) => dispatch(updateReportDetailsShowOriginalCurrencies(data)),
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReportingDetailSection);
@@ -98,11 +141,23 @@ ReportingDetailSection.propTypes = {
   _updateReportDetailsTotalGrouping: PropTypes.func.isRequired,
   selectedTotalsOnly: PropTypes.bool,
   _updateReportDetailsTotalsOnly: PropTypes.func.isRequired,
+  _updateReportDetailsFundingGrouping: PropTypes.func.isRequired,
+  selectedFundingGrouping: PropTypes.string,
+  _updateReportDetailsAllowEmptyFundingColumns: PropTypes.func.isRequired,
+  _updateReportDetailsSplitByFunding: PropTypes.func.isRequired,
+  _updateReportDetailsShowOriginalCurrencies: PropTypes.func.isRequired,
+  selectedAllowEmptyFundingColumns: PropTypes.bool,
+  selectedSplitByFunding: PropTypes.bool,
+  selectedShowOriginalCurrencies: PropTypes.bool,
 };
 
 ReportingDetailSection.defaultProps = {
   selectedTotalGrouping: undefined,
   selectedTotalsOnly: false,
+  selectedFundingGrouping: undefined,
+  selectedAllowEmptyFundingColumns: false,
+  selectedSplitByFunding: false,
+  selectedShowOriginalCurrencies: false,
 };
 
 ReportingDetailSection.contextType = ReportGeneratorContext;

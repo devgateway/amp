@@ -18,8 +18,58 @@ const initialState = {
     selectedShowOriginalCurrencies: false,
     description: null,
   },
-  columns: {},
-  measures: {}
+  columns: {
+    available: [
+      {
+        id: 256,
+        name: 'Project Title',
+        label: 'Project Title',
+        description: 'The Project Title tooltip',
+        category: 'Identification',
+        'is-hierarchy': true,
+        'is-amount': false
+      },
+      {
+        id: 257,
+        name: 'AMP ID',
+        label: 'AMP ID',
+        description: 'The AMP ID tooltip',
+        category: 'Identification',
+        'is-hierarchy': true,
+        'is-amount': false
+      },
+      {
+        id: 532,
+        name: 'Donor Agency',
+        label: 'Donor Agency',
+        description: 'The Donor Agency tooltip',
+        category: 'Funding Information',
+        'is-hierarchy': true,
+        'is-amount': false
+      },
+      {
+        id: 533,
+        name: 'Primary Sector',
+        label: 'Primary Sector',
+        description: 'blablabla',
+        category: 'Sectors',
+        'is-hierarchy': true,
+        'is-amount': false
+      },
+      {
+        id: 534,
+        name: 'Primary Sector Sub-Sector',
+        label: 'Primary Sector Sub-Sector',
+        description: 'blablablafasdf',
+        category: 'Sectors',
+        'is-hierarchy': true,
+        'is-amount': false
+      }
+    ],
+    selected: [],
+  },
+  measures: {},
+  activeStep: 0,
 };
 
 export default (state = initialState, action) => {

@@ -53,8 +53,8 @@
 }
 
 .option-list-title {
-    height: 15%;
     font-weight: bold;
+    margin-bottom: 10px;
 }
 
 .fields-vertical {

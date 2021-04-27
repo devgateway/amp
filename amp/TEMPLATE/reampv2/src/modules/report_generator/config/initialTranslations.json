@@ -22,5 +22,10 @@
   "amp.reportGenerator:fundingGroup": "Funding Grouping",
   "amp.reportGenerator:reportDescription": "Report Description",
   "amp.reportGenerator:preview": "Preview",
-  "amp.reportGenerator:mustSelect": "A selection must be made"
+  "amp.reportGenerator:mustSelect": "A selection must be made",
+  "amp.reportGenerator:availableColumns": "Available Columns",
+  "amp.reportGenerator:selectedColumns": "Selected Columns",
+  "amp.reportGenerator:hierarchies": "Hierarchies",
+  "amp.reportGenerator:search": "Search",
+  "amp.reportGenerator:resetColumns": "Reset Columns"
 }

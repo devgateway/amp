@@ -33,6 +33,10 @@
     visibility: hidden;
 }
 
+.navigation-buttons {
+    padding-top: 50px;
+}
+
 .option-list-content {
     border: 1px solid #d3d3d3;
     background-color: #D3D3D31C;
@@ -40,8 +44,17 @@
     height: 85%;
 }
 
+.option-list-content,form {
+    height: 100%;
+}
+
+.option-list-content,form,textarea {
+    height: 100%;
+}
+
 .option-list-title {
     height: 15%;
+    font-weight: bold;
 }
 
 .fields-vertical {

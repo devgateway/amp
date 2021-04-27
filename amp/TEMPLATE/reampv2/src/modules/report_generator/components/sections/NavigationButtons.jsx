@@ -29,7 +29,7 @@ class NavigationButtons extends Component {
     const { nextEnabled, backEnabled } = this.state;
     const { translations } = this.props;
     return (
-      <ButtonGroup>
+      <ButtonGroup className="navigation-buttons">
         <Button positive={backEnabled} disabled={!backEnabled}>{translations[`${TRN_PREFIX}back`]}</Button>
         <Button positive={nextEnabled} disabled={!nextEnabled}>{translations[`${TRN_PREFIX}next`]}</Button>
       </ButtonGroup>

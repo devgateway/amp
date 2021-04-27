@@ -31,7 +31,6 @@ export default class MainContent extends Component {
               <ReportingDetailSection visible={visibleTab === 0} />
               <ColumnsSection visible={visibleTab === 1} />
               <MeasuresSection visible={visibleTab === 2} />
-              <Divider />
               <NavigationButtons />
             </GridColumn>
           </GridRow>

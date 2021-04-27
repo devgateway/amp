@@ -14,7 +14,8 @@ import {
   updateReportDetailsTotalGrouping, updateReportDetailsTotalsOnly,
   updateReportDetailsFundingGrouping, updateReportDetailsAllowEmptyFundingColumns,
   updateReportDetailsSplitByFunding,
-  updateReportDetailsShowOriginalCurrencies
+  updateReportDetailsShowOriginalCurrencies,
+  updateReportDetailsDescription
 } from '../../actions/stateUIActions';
 
 class ReportingDetailSection extends Component {
@@ -48,10 +49,16 @@ class ReportingDetailSection extends Component {
     _updateReportDetailsShowOriginalCurrencies(!selectedShowOriginalCurrencies);
   }
 
+  changeDescription = (e, { value }) => {
+    const { _updateReportDetailsDescription } = this.props;
+    _updateReportDetailsDescription(value);
+  }
+
   render() {
     const {
       visible, translations, selectedTotalGrouping, selectedTotalsOnly, selectedFundingGrouping,
-      selectedAllowEmptyFundingColumns, selectedSplitByFunding, selectedShowOriginalCurrencies
+      selectedAllowEmptyFundingColumns, selectedSplitByFunding, selectedShowOriginalCurrencies,
+      description
     } = this.props;
 
     const fakeReportTypesRadio = ['Summary Report', 'Annual Report', 'Quarterly Report', 'Monthly Report'];
@@ -80,11 +87,12 @@ class ReportingDetailSection extends Component {
             <GridColumn width="8">
               <OptionsList title={translations[`${TRN_PREFIX}reportDescription`]} isRequired tooltip="tooltip 2" >
                 <Form>
-                  <TextArea />
+                  <TextArea value={description} onChange={this.changeDescription} />
                 </Form>
               </OptionsList>
             </GridColumn>
           </GridRow>
+          <GridRow />
           <GridRow>
             <GridColumn width="8">
               <OptionsList title={translations[`${TRN_PREFIX}fundingGroup`]} tooltip="tooltip 3" >
@@ -121,6 +129,7 @@ const mapStateToProps = (state) => ({
   selectedAllowEmptyFundingColumns: state.uiReducer.reportDetails.selectedAllowEmptyFundingColumns,
   selectedSplitByFunding: state.uiReducer.reportDetails.selectedSplitByFunding,
   selectedShowOriginalCurrencies: state.uiReducer.reportDetails.selectedShowOriginalCurrencies,
+  description: state.uiReducer.reportDetails.description,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -130,6 +139,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   _updateReportDetailsAllowEmptyFundingColumns: (data) => dispatch(updateReportDetailsAllowEmptyFundingColumns(data)),
   _updateReportDetailsSplitByFunding: (data) => dispatch(updateReportDetailsSplitByFunding(data)),
   _updateReportDetailsShowOriginalCurrencies: (data) => dispatch(updateReportDetailsShowOriginalCurrencies(data)),
+  _updateReportDetailsDescription: (data) => dispatch(updateReportDetailsDescription(data)),
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReportingDetailSection);
@@ -149,6 +159,8 @@ ReportingDetailSection.propTypes = {
   selectedAllowEmptyFundingColumns: PropTypes.bool,
   selectedSplitByFunding: PropTypes.bool,
   selectedShowOriginalCurrencies: PropTypes.bool,
+  description: PropTypes.string,
+  _updateReportDetailsDescription: PropTypes.func.isRequired,
 };
 
 ReportingDetailSection.defaultProps = {
@@ -158,6 +170,7 @@ ReportingDetailSection.defaultProps = {
   selectedAllowEmptyFundingColumns: false,
   selectedSplitByFunding: false,
   selectedShowOriginalCurrencies: false,
+  description: undefined,
 };
 
 ReportingDetailSection.contextType = ReportGeneratorContext;

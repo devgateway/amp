@@ -1,7 +1,7 @@
 import {
   UPDATE_COLUMNS,
   UPDATE_MEASURES,
-  UPDATE_REPORT_DETAILS_ALLOW_EMPTY_FUNDING_COLUMNS,
+  UPDATE_REPORT_DETAILS_ALLOW_EMPTY_FUNDING_COLUMNS, UPDATE_REPORT_DETAILS_DESCRIPTION,
   UPDATE_REPORT_DETAILS_FUNDING_GROUPING, UPDATE_REPORT_DETAILS_SHOW_ORIGINAL_CURRENCIES,
   UPDATE_REPORT_DETAILS_SPLIT_BY_FUNDING,
   UPDATE_REPORT_DETAILS_TOTAL_GROUPING,
@@ -16,6 +16,7 @@ const initialState = {
     selectedAllowEmptyFundingColumns: false,
     selectedSplitByFunding: false,
     selectedShowOriginalCurrencies: false,
+    description: null,
   },
   columns: {},
   measures: {}
@@ -69,6 +70,14 @@ export default (state = initialState, action) => {
         reportDetails: {
           ...state.reportDetails,
           selectedShowOriginalCurrencies: action.payload
+        }
+      };
+    case UPDATE_REPORT_DETAILS_DESCRIPTION:
+      return {
+        ...state,
+        reportDetails: {
+          ...state.reportDetails,
+          description: action.payload
         }
       };
     case UPDATE_COLUMNS: {

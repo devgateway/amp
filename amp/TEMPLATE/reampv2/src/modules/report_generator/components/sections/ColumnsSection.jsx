@@ -9,7 +9,7 @@ import { TRN_PREFIX } from '../../utils/constants';
 import OptionsList from './OptionsList';
 import { ReportGeneratorContext } from '../StartUp';
 import ColumnsSelector from './ColumnsSelector';
-import { updateColumnsSelected } from '../../actions/stateUIActions';
+import { updateColumnsSelected, updateColumnsSorting } from '../../actions/stateUIActions';
 import ColumnSorter from './ColumnsSorter';
 
 class ColumnsSection extends Component {
@@ -23,6 +23,11 @@ class ColumnsSection extends Component {
     }
     _updateColumnsSelected(selectedColumns);
     this.forceUpdate();
+  }
+
+  handleColumnSort = (data) => {
+    const { _updateColumnsSorting } = this.props;
+    _updateColumnsSorting(data);
   }
 
   render() {
@@ -49,7 +54,7 @@ class ColumnsSection extends Component {
             </Grid.Column>
             <Grid.Column>
               <OptionsList title={translations[`${TRN_PREFIX}selectedColumns`]} isRequired tooltip="tooltip 2" >
-                <ColumnSorter columns={columns} selected={selectedColumns} />
+                <ColumnSorter columns={columns} selected={selectedColumns} onColumnSortChange={this.handleColumnSort} />
               </OptionsList>
             </Grid.Column>
             <Grid.Column>
@@ -71,7 +76,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  _updateColumnsSelected: (data) => dispatch(updateColumnsSelected(data))
+  _updateColumnsSelected: (data) => dispatch(updateColumnsSelected(data)),
+  _updateColumnsSorting: (data) => dispatch(updateColumnsSorting(data)),
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ColumnsSection);
@@ -82,6 +88,7 @@ ColumnsSection.propTypes = {
   columns: PropTypes.array,
   selectedColumns: PropTypes.array,
   _updateColumnsSelected: PropTypes.func.isRequired,
+  _updateColumnsSorting: PropTypes.func.isRequired,
 };
 
 ColumnsSection.defaultProps = {

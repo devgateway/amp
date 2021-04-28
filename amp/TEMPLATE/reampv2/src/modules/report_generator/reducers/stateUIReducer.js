@@ -5,7 +5,7 @@ import {
   UPDATE_REPORT_DETAILS_SPLIT_BY_FUNDING,
   UPDATE_REPORT_DETAILS_TOTAL_GROUPING,
   UPDATE_REPORT_DETAILS_TOTALS_ONLY,
-  UPDATE_COLUMNS_SELECTED_COLUMN,
+  UPDATE_COLUMNS_SELECTED_COLUMN, UPDATE_COLUMNS_SORT_COLUMN,
 } from '../actions/stateUIActions';
 
 const initialState = {
@@ -140,6 +140,14 @@ export default (state = initialState, action) => {
         }
       };
     case UPDATE_COLUMNS_SELECTED_COLUMN:
+      return {
+        ...state,
+        columns: {
+          ...state.columns,
+          selected: action.payload
+        }
+      };
+    case UPDATE_COLUMNS_SORT_COLUMN:
       return {
         ...state,
         columns: {

@@ -4,33 +4,55 @@ import Modal from "react-bootstrap/Modal";
 import {TranslationContext} from "../../../AppContext";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
-import {
-    loadGeocoding,
-    resetSaveResults
-} from "../../../../actions/geocodingAction";
+import {loadGeocoding, resetSaveResults} from "../../../../actions/geocodingAction";
 
 function ActivitySaveResults(props) {
     const results = [];
     const activitiesWithoutErrors = props.activities.filter(activity => !activity.error);
     const activitiesWithErrors = props.activities.filter(activity => activity.error);
+
     if (activitiesWithoutErrors.length > 0) {
-        results.push(<div className={'status-header'}>{props.saveResultsText}:</div>)
+        results.push(<div className={'status-header'}>{props.translations['amp.geocoder:saveResultsText']}:</div>)
         results.push(
             activitiesWithoutErrors.map((activity) =>
                 <>
-                    <div>{props.fieldLabel}: {activity.amp_id}</div>
+                    <div>{props.translations['amp.geocoder:ampId']}: {activity.amp_id}</div>
                 </>
             )
         );
     }
+
+    function deepFlatten(array) {
+        return array.reduce(function (r, e) {
+            return Array.isArray(e) ? r.push(...deepFlatten(e)) : r.push(e), r
+        }, [])
+    };
+
+    function translateErrorMessage(message) {
+        if (message === "Different implementation levels selected") {
+            return props.translations['amp.geocoder:error.differentImplementationLevels'];
+        }
+        return message;
+    };
+
+    function getUserFriendlyErrorMessage(error) {
+        let messages = Object.values(JSON.parse(error))
+            .map(x => Object.values(x))
+            .flat();
+
+        return deepFlatten(messages)
+            .map(translateErrorMessage)
+            .join("; ");
+    }
+
     if (activitiesWithErrors.length > 0) {
         results.push(<br/>);
-        results.push(<div className={'status-header'}>{props.saveResultsErrorText}:</div>)
+        results.push(<div className={'status-header'}>{props.translations['amp.geocoder:saveResultsErrorText']}:</div>)
         results.push(
             activitiesWithErrors.map((activity) =>
                 <>
-                    <div>{props.fieldLabel}: {activity.amp_id}</div>
-                    <div className={'status-error'}>Error: {activity.error}</div>
+                    <div>{props.translations['amp.geocoder:ampId']}: {activity.amp_id}</div>
+                    <div className={'status-error'}>{getUserFriendlyErrorMessage(activity.error)}</div>
                     <br/>
                 </>
             )
@@ -65,10 +87,8 @@ class ActivitySaveResultsDialog extends Component {
                         <Modal.Title>{this.props.title}</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                            <ActivitySaveResults activities={this.props.geocoding.save_activities_result}
-                                                 saveResultsText={translations['amp.geocoder:saveResultsText']}
-                                                 saveResultsErrorText={translations['amp.geocoder:saveResultsErrorText']}
-                                                 fieldLabel={translations['amp.geocoder:ampId']}/>
+                            <ActivitySaveResults translations={translations}
+                                                 activities={this.props.geocoding.save_activities_result} />
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="primary" onClick={this.handleClose}>

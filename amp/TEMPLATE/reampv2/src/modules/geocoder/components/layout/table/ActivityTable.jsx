@@ -22,7 +22,7 @@ class ActivityTable extends Component {
     }
 
     componentDidMount() {
-        this.props.loadActivities();
+        this.props._loadActivities();
     }
 
     render() {
@@ -149,7 +149,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-    loadActivities: loadActivities,
+    _loadActivities: loadActivities,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ActivityTable);

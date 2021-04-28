@@ -1,16 +1,21 @@
 import {
-    FETCH_ACTIVITIES_ERROR, FETCH_ACTIVITIES_PENDING, FETCH_ACTIVITIES_SUCCESS, SELECT_ACTIVITY_FOR_GEOCODING
+    FETCH_ACTIVITIES_ERROR,
+    FETCH_ACTIVITIES_PENDING,
+    FETCH_ACTIVITIES_SUCCESS,
+    SELECT_ACTIVITY_FOR_GEOCODING,
+    TOGGLE_NATIONAL_PROJECTS
 } from '../actions/activitiesAction';
 import {
     GEOCODING_RUN_SEARCH_ERROR,
     GEOCODING_RUN_SEARCH_PENDING,
-    GEOCODING_RUN_SEARCH_SUCCESS
+    GEOCODING_RUN_SEARCH_SUCCESS,
 } from "../actions/geocodingAction";
 
 const initialState = {
     pending: false,
     activities: [],
     selectedActivities: [],
+    includeNationalProjects: false,
     error: null
 };
 
@@ -57,6 +62,11 @@ export default function activitiesReducer(state = initialState, action) {
                 ...state,
                 selectedActivities: action.payload
             };
+        case TOGGLE_NATIONAL_PROJECTS:
+            return {
+                ...state,
+                includeNationalProjects: !state.includeNationalProjects
+            }
         default:
             return state;
     }

@@ -75,6 +75,10 @@
     opacity: 1;
 }
 
+.column-item {
+    width: 100%;
+}
+
 .ui.radio.checkbox input:checked ~ label::after {
     background-color: #21C11C;
 }

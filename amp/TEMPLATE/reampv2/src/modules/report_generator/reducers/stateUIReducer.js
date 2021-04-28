@@ -1,11 +1,11 @@
 import {
-  UPDATE_COLUMNS,
   UPDATE_MEASURES,
   UPDATE_REPORT_DETAILS_ALLOW_EMPTY_FUNDING_COLUMNS, UPDATE_REPORT_DETAILS_DESCRIPTION,
   UPDATE_REPORT_DETAILS_FUNDING_GROUPING, UPDATE_REPORT_DETAILS_SHOW_ORIGINAL_CURRENCIES,
   UPDATE_REPORT_DETAILS_SPLIT_BY_FUNDING,
   UPDATE_REPORT_DETAILS_TOTAL_GROUPING,
-  UPDATE_REPORT_DETAILS_TOTALS_ONLY
+  UPDATE_REPORT_DETAILS_TOTALS_ONLY,
+  UPDATE_COLUMNS_SELECTED_COLUMN,
 } from '../actions/stateUIActions';
 
 const initialState = {
@@ -130,12 +130,14 @@ export default (state = initialState, action) => {
           description: action.payload
         }
       };
-    case UPDATE_COLUMNS: {
+    case UPDATE_COLUMNS_SELECTED_COLUMN:
       return {
         ...state,
-        columns: action.payload
+        columns: {
+          ...state.columns,
+          selected: action.payload
+        }
       };
-    }
     case UPDATE_MEASURES:
       return {
         ...state,

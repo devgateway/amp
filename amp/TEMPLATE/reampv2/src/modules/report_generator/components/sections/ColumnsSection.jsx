@@ -9,10 +9,25 @@ import { TRN_PREFIX } from '../../utils/constants';
 import OptionsList from './OptionsList';
 import { ReportGeneratorContext } from '../StartUp';
 import ColumnsSelector from './ColumnsSelector';
+import { updateColumnsSelected } from '../../actions/stateUIActions';
 
 class ColumnsSection extends Component {
+  handleColumnSelection = (id) => {
+    const { selectedColumns, _updateColumnsSelected } = this.props;
+    const index = selectedColumns.indexOf(id);
+    if (index > -1) {
+      selectedColumns.splice(index, 1);
+    } else {
+      selectedColumns.push(id);
+    }
+    _updateColumnsSelected(selectedColumns);
+    this.forceUpdate();
+  }
+
   render() {
-    const { visible, translations, columns } = this.props;
+    const {
+      visible, translations, columns, selectedColumns
+    } = this.props;
     return (
       <div className={!visible ? 'invisible-tab' : ''}>
         <Grid columns={3} divided>
@@ -24,7 +39,11 @@ class ColumnsSection extends Component {
           <GridRow>
             <Grid.Column>
               <OptionsList title={translations[`${TRN_PREFIX}availableColumns`]} tooltip="tooltip 1" >
-                <ColumnsSelector columns={columns} />
+                <ColumnsSelector
+                  columns={columns}
+                  selected={selectedColumns}
+                  showLoadingWhenEmpty
+                  onColumnSelectionChange={this.handleColumnSelection} />
               </OptionsList>
             </Grid.Column>
             <Grid.Column>
@@ -46,10 +65,12 @@ class ColumnsSection extends Component {
 
 const mapStateToProps = (state) => ({
   translations: state.translationsReducer.translations,
-  columns: state.uiReducer.columns.available
+  columns: state.uiReducer.columns.available,
+  selectedColumns: state.uiReducer.columns.selected
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
+  _updateColumnsSelected: (data) => dispatch(updateColumnsSelected(data))
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ColumnsSection);
@@ -57,11 +78,14 @@ export default connect(mapStateToProps, mapDispatchToProps)(ColumnsSection);
 ColumnsSection.propTypes = {
   visible: PropTypes.bool.isRequired,
   translations: PropTypes.object.isRequired,
-  columns: PropTypes.array
+  columns: PropTypes.array,
+  selectedColumns: PropTypes.array,
+  _updateColumnsSelected: PropTypes.func.isRequired,
 };
 
 ColumnsSection.defaultProps = {
-  columns: []
+  columns: [],
+  selectedColumns: []
 };
 
 ColumnsSection.contextType = ReportGeneratorContext;

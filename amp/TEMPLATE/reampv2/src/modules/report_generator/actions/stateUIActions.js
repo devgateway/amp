@@ -5,7 +5,7 @@ export const UPDATE_REPORT_DETAILS_ALLOW_EMPTY_FUNDING_COLUMNS = 'UPDATE_REPORT_
 export const UPDATE_REPORT_DETAILS_SPLIT_BY_FUNDING = 'UPDATE_REPORT_DETAILS_SPLIT_BY_FUNDING';
 export const UPDATE_REPORT_DETAILS_SHOW_ORIGINAL_CURRENCIES = 'UPDATE_REPORT_DETAILS_SHOW_ORIGINAL_CURRENCIES';
 export const UPDATE_REPORT_DETAILS_DESCRIPTION = 'UPDATE_REPORT_DETAILS_DESCRIPTION';
-export const UPDATE_COLUMNS = 'UPDATE_COLUMNS';
+export const UPDATE_COLUMNS_SELECTED_COLUMN = 'UPDATE_COLUMNS_SELECTED_COLUMN';
 export const UPDATE_MEASURES = 'UPDATE_MEASURES';
 
 export function updateReportDetailsTotalGrouping(payload) {
@@ -57,9 +57,9 @@ export function updateReportDetailsDescription(payload) {
   };
 }
 
-export function updateColumns(payload) {
+export function updateColumnsSelected(payload) {
   return {
-    type: UPDATE_COLUMNS,
+    type: UPDATE_COLUMNS_SELECTED_COLUMN,
     payload
   };
 }

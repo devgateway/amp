@@ -7,14 +7,20 @@ import {
 export default class ColumnsSelector extends Component {
   constructor() {
     super();
-    this.state = { activeIndex: -1 };
+    this.state = { activeIndex: -1 }; // No need to keep this in Redux's store.
   }
 
-  handleClick = (e, titleProps) => {
+  handleHeaderClick = (e, titleProps) => {
     const { index } = titleProps;
     const { activeIndex } = this.state;
     const newIndex = activeIndex === index ? -1 : index;
     this.setState({ activeIndex: newIndex });
+  }
+
+  onItemClick = (obj) => {
+    const { onColumnSelectionChange } = this.props;
+    const id = Number.parseInt(obj.target.value, 10);
+    onColumnSelectionChange(id);
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -27,7 +33,9 @@ export default class ColumnsSelector extends Component {
   }
 
   render() {
-    const { columns } = this.props;
+    const {
+      columns, showLoadingWhenEmpty, selected
+    } = this.props;
     const { activeIndex } = this.state;
     if (columns.length > 0) {
       const categories = this.extractCategories(columns);
@@ -36,16 +44,21 @@ export default class ColumnsSelector extends Component {
           <Accordion fluid styled>
             {categories.map((cat, i) => (
               <>
-                <Accordion.Title index={i} active={activeIndex === i} onClick={this.handleClick}>
+                <Accordion.Title index={i} active={activeIndex === i} onClick={this.handleHeaderClick}>
                   <Icon name="dropdown" />
                   {cat}
                 </Accordion.Title>
                 <Accordion.Content active={activeIndex === i}>
                   {columns.filter(col => (col.category === cat)).map(col => (
-                    <>
-                      <Checkbox />
+                    <div className="column-item">
+                      <Checkbox
+                        radio
+                        onClick={this.onItemClick}
+                        id={col.id}
+                        value={col.id}
+                        checked={selected.find(j => j === col.id) !== undefined} />
                       <span>{col.label}</span>
-                    </>
+                    </div>
                   ))}
                 </Accordion.Content>
               </>
@@ -53,17 +66,23 @@ export default class ColumnsSelector extends Component {
           </Accordion>
         </Form>
       );
-    } else {
+    } else if (showLoadingWhenEmpty) {
       return <Image src="https://react.semantic-ui.com/images/wireframe/media-paragraph.png" />;
+    } else {
+      return null;
     }
   }
 }
 
 ColumnsSelector.propTypes = {
   columns: PropTypes.array,
-  onColumnChange: PropTypes.func.isRequired,
+  selected: PropTypes.array,
+  onColumnSelectionChange: PropTypes.func.isRequired,
+  showLoadingWhenEmpty: PropTypes.bool
 };
 
 ColumnsSelector.defaultProps = {
-  columns: []
+  columns: [],
+  selected: [],
+  showLoadingWhenEmpty: false,
 };

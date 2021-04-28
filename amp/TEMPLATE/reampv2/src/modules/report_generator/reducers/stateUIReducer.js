@@ -65,7 +65,16 @@ const initialState = {
         'is-hierarchy': true,
         'is-amount': false
       }
-    ],
+,
+      {
+        id: 535,
+        name: 'Primary Sector Sub-Sub-Sector',
+        label: 'Primary Sector Sub-Sub-Sector',
+        description: 'blablablafasdf asdfasdf asd',
+        category: 'Sectors',
+        'is-hierarchy': true,
+        'is-amount': false
+      }],
     selected: [],
   },
   measures: {},

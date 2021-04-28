@@ -10,6 +10,7 @@ import OptionsList from './OptionsList';
 import { ReportGeneratorContext } from '../StartUp';
 import ColumnsSelector from './ColumnsSelector';
 import { updateColumnsSelected } from '../../actions/stateUIActions';
+import ColumnSorter from './ColumnsSorter';
 
 class ColumnsSection extends Component {
   handleColumnSelection = (id) => {
@@ -48,7 +49,7 @@ class ColumnsSection extends Component {
             </Grid.Column>
             <Grid.Column>
               <OptionsList title={translations[`${TRN_PREFIX}selectedColumns`]} isRequired tooltip="tooltip 2" >
-                <Image src="https://react.semantic-ui.com/images/wireframe/media-paragraph.png" />
+                <ColumnSorter columns={columns} selected={selectedColumns} />
               </OptionsList>
             </Grid.Column>
             <Grid.Column>

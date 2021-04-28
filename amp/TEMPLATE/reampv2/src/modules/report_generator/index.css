@@ -79,6 +79,28 @@
     width: 100%;
 }
 
+.column-item radio,checkbox {
+    margin: 0;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-right: 5px;
+}
+
+.column-item span {
+    vertical-align: top;
+    padding-left: 8px;
+    top: -2px;
+    position: relative;
+    font-weight: bold;
+}
+
+.sort-column-item {
+    /*border: 1px solid #d3d3d3;*/
+    padding: 8px;
+    margin-bottom: 2px;
+    font-weight: bold;
+}
+
 .ui.radio.checkbox input:checked ~ label::after {
     background-color: #21C11C;
 }

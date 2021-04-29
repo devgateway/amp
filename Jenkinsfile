@@ -149,7 +149,11 @@ stage('Build') {
     ampUrl = "http://amp-${country}-${tag}-tc9.ampsite.net/"
 
     node {
+        Date startCheckoutScm = new Date()
         checkout scm
+        Date stopCheckoutScm = new Date()
+        groovy.time.TimeDuration td = groovy.time.TimeCategory.minus( stop, start )
+        println "elapsed time to checkout code : ${td}"
 
         def format = branch != null ? "%H" : "%P"
         def hash = sh(returnStdout: true, script: "git log --pretty=${format} -n 1").trim()

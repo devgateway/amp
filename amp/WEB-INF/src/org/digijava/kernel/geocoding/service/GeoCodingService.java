@@ -243,7 +243,7 @@ public class GeoCodingService {
         }
     }
 
-    private GeoCodingProcess getCurrentGeoCoding() {
+    public GeoCodingProcess getCurrentGeoCoding() {
         List<GeoCodingProcess> geoCodingProcesses = PersistenceManager.getSession()
                 .createCriteria(GeoCodingProcess.class)
                 .list();

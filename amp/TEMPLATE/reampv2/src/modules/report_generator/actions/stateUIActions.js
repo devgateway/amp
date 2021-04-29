@@ -7,7 +7,10 @@ export const UPDATE_REPORT_DETAILS_SHOW_ORIGINAL_CURRENCIES = 'UPDATE_REPORT_DET
 export const UPDATE_REPORT_DETAILS_DESCRIPTION = 'UPDATE_REPORT_DETAILS_DESCRIPTION';
 export const UPDATE_COLUMNS_SELECTED_COLUMN = 'UPDATE_COLUMNS_SELECTED_COLUMN';
 export const UPDATE_COLUMNS_SORT_COLUMN = 'UPDATE_COLUMNS_SORT_COLUMN';
-export const UPDATE_MEASURES = 'UPDATE_MEASURES';
+export const UPDATE_MEASURES_SORT_COLUMN = 'UPDATE_MEASURES_SORT_COLUMN';
+export const UPDATE_MEASURES_SELECTED_COLUMN = 'UPDATE_MEASURES_SELECTED_COLUMN';
+export const UPDATE_HIERARCHIES_SORT_COLUMN = 'UPDATE_HIERARCHIES_SORT_COLUMN';
+export const UPDATE_HIERARCHIES_SELECTED_COLUMN = 'UPDATE_HIERARCHIES_SELECTED_COLUMN';
 
 export function updateReportDetailsTotalGrouping(payload) {
   return {
@@ -72,9 +75,16 @@ export function updateColumnsSorting(payload) {
   };
 }
 
-export function updateMeasures(payload) {
+export function updateMeasuresSelected(payload) {
   return {
-    type: UPDATE_MEASURES,
+    type: UPDATE_MEASURES_SELECTED_COLUMN,
+    payload
+  };
+}
+
+export function updateMeasuresSorting(payload) {
+  return {
+    type: UPDATE_MEASURES_SORT_COLUMN,
     payload
   };
 }

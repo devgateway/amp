@@ -44,15 +44,19 @@
     height: 85%;
 }
 
-.option-list-content,form {
+.option-list-content, form {
     height: 100%;
 }
 
-.option-list-content,form,textarea {
+.option-list-content, form, textarea {
     height: 100%;
 }
 
 .option-list-content .sortable-item {
+    font-weight: bold;
+}
+
+.sortable-item label {
     font-weight: bold;
 }
 
@@ -65,7 +69,7 @@
     flex-direction: column !important;
 }
 
-.fields-vertical .radio,.checkbox{
+.fields-vertical .radio, .checkbox {
     margin-top: 0px !important;
 }
 
@@ -75,7 +79,7 @@
     right: -10px;
 }
 
-.show,.tooltip {
+.show, .tooltip {
     opacity: 1;
 }
 
@@ -83,7 +87,7 @@
     width: 100%;
 }
 
-.column-item radio,checkbox {
+.column-item radio, checkbox {
     margin: 0;
     margin-top: 0px;
     margin-right: 0px;
@@ -136,7 +140,17 @@
     background-color: #21C11C !important;
 }
 
-i .icon,.right {
+.ui.checkbox input:checked ~ label::before {
+    background-color: #21C11C;
+}
+
+.ui.checkbox input:checked ~ label::after {
+    opacity: 1;
+    color: rgba(255, 255, 255, 1);
+    font-weight: lighter;
+}
+
+i .icon, .right {
     position: absolute;
     right: 8%;
 }

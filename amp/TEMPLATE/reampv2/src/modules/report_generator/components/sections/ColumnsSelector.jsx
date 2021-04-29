@@ -34,7 +34,7 @@ export default class ColumnsSelector extends Component {
 
   render() {
     const {
-      columns, showLoadingWhenEmpty, selected
+      columns, showLoadingWhenEmpty, selected, radio
     } = this.props;
     const { activeIndex } = this.state;
     if (columns.length > 0) {
@@ -52,7 +52,7 @@ export default class ColumnsSelector extends Component {
                   {columns.filter(col => (col.category === cat)).map(col => (
                     <div className="column-item">
                       <Checkbox
-                        radio
+                        radio={radio}
                         onClick={this.onItemClick}
                         id={col.id}
                         value={col.id}
@@ -78,11 +78,13 @@ ColumnsSelector.propTypes = {
   columns: PropTypes.array,
   selected: PropTypes.array,
   onColumnSelectionChange: PropTypes.func.isRequired,
-  showLoadingWhenEmpty: PropTypes.bool
+  showLoadingWhenEmpty: PropTypes.bool,
+  radio: PropTypes.bool,
 };
 
 ColumnsSelector.defaultProps = {
   columns: [],
   selected: [],
   showLoadingWhenEmpty: false,
+  radio: false,
 };

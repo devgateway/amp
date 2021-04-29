@@ -34,6 +34,8 @@ class ColumnsSection extends Component {
     const {
       visible, translations, columns, selectedColumns
     } = this.props;
+    const hierarchies = columns.filter(i => i['is-hierarchy']).filter(i => selectedColumns.find(j => j === i.id));
+    const selectedHierarchies = hierarchies.map(i => i.id);
     return (
       <div className={!visible ? 'invisible-tab' : ''}>
         <Grid columns={3} divided>
@@ -59,7 +61,10 @@ class ColumnsSection extends Component {
             </Grid.Column>
             <Grid.Column>
               <OptionsList title={translations[`${TRN_PREFIX}hierarchies`]} tooltip="tooltip 3" >
-                <Image src="https://react.semantic-ui.com/images/wireframe/media-paragraph.png" />
+                <ColumnSorter
+                  checkbox
+                  columns={hierarchies}
+                  selected={selectedHierarchies} />
               </OptionsList>
             </Grid.Column>
           </GridRow>

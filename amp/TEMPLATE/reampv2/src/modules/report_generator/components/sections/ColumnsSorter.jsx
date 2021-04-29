@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
-import { Icon } from 'semantic-ui-react';
+import { Checkbox, Icon } from 'semantic-ui-react';
 
 // a little function to help us with reordering the result
 const reorder = (list, startIndex, endIndex) => {
@@ -63,7 +63,7 @@ export default class ColumnSorter extends Component {
   }
 
   render() {
-    const { columns, selected } = this.props;
+    const { columns, selected, checkbox } = this.props;
     if (selected.length > 0) {
       return (
         <>
@@ -88,7 +88,9 @@ export default class ColumnSorter extends Component {
                             provided_.draggableProps.style
                           )}
                         >
-                          {columns.find(i => i.id === item).label}
+                          {checkbox
+                            ? <Checkbox color="green" id={item.id} label={columns.find(i => i.id === item).label} />
+                            : columns.find(i => i.id === item).label }
                           <Icon name="sort alternate vertical right" color="blue" />
                         </div>
                       )}
@@ -111,9 +113,11 @@ ColumnSorter.propTypes = {
   columns: PropTypes.array,
   selected: PropTypes.array,
   onColumnSortChange: PropTypes.func.isRequired,
+  checkbox: PropTypes.bool,
 };
 
 ColumnSorter.defaultProps = {
   columns: [],
   selected: [],
+  checkbox: false,
 };

@@ -1,11 +1,12 @@
 import {
-  UPDATE_MEASURES,
   UPDATE_REPORT_DETAILS_ALLOW_EMPTY_FUNDING_COLUMNS, UPDATE_REPORT_DETAILS_DESCRIPTION,
   UPDATE_REPORT_DETAILS_FUNDING_GROUPING, UPDATE_REPORT_DETAILS_SHOW_ORIGINAL_CURRENCIES,
   UPDATE_REPORT_DETAILS_SPLIT_BY_FUNDING,
   UPDATE_REPORT_DETAILS_TOTAL_GROUPING,
   UPDATE_REPORT_DETAILS_TOTALS_ONLY,
   UPDATE_COLUMNS_SELECTED_COLUMN, UPDATE_COLUMNS_SORT_COLUMN,
+  UPDATE_MEASURES_SELECTED_COLUMN, UPDATE_MEASURES_SORT_COLUMN,
+  UPDATE_HIERARCHIES_SELECTED_COLUMN, UPDATE_HIERARCHIES_SORT_COLUMN
 } from '../actions/stateUIActions';
 
 const initialState = {
@@ -35,7 +36,7 @@ const initialState = {
         label: 'AMP ID',
         description: 'The AMP ID tooltip',
         category: 'Identification',
-        'is-hierarchy': true,
+        'is-hierarchy': false,
         'is-amount': false
       },
       {
@@ -64,8 +65,7 @@ const initialState = {
         category: 'Sectors',
         'is-hierarchy': true,
         'is-amount': false
-      }
-,
+      },
       {
         id: 535,
         name: 'Primary Sector Sub-Sub-Sector',
@@ -77,7 +77,41 @@ const initialState = {
       }],
     selected: [],
   },
-  measures: {},
+  hierarchies: {
+    available: [],
+    selected: [],
+  },
+  measures: {
+    available: [{
+      id: 365,
+      name: 'Actual Commitments',
+      label: 'Actual Commitments',
+      description: null,
+      type: 'A'
+    },
+    {
+      id: 333,
+      name: 'Actual Pledge',
+      label: 'Actual Pledge',
+      description: null,
+      type: 'P'
+    },
+    {
+      id: 345,
+      name: 'Forecast Execution Rate',
+      label: 'Forecast Execution Rate',
+      description: 'Sum of Actual Disbursements / Sum (Most recent of (Pipeline MTEF for the year, Projection MTEF for the year)).',
+      type: 'D'
+    },
+    {
+      id: 456,
+      name: 'Previous Month Disbursements',
+      label: 'Previous Month Disbursements',
+      description: 'Actual Disbursements Of Previous Month',
+      type: 'A'
+    }],
+    selected: [],
+  },
   activeStep: 0,
 };
 
@@ -155,10 +189,37 @@ export default (state = initialState, action) => {
           selected: action.payload
         }
       };
-    case UPDATE_MEASURES:
+    case UPDATE_HIERARCHIES_SELECTED_COLUMN:
       return {
         ...state,
-        measures: action.payload
+        hierarchies: {
+          ...state.columns,
+          selected: action.payload
+        }
+      };
+    case UPDATE_HIERARCHIES_SORT_COLUMN:
+      return {
+        ...state,
+        hierarchies: {
+          ...state.columns,
+          selected: action.payload
+        }
+      };
+    case UPDATE_MEASURES_SELECTED_COLUMN:
+      return {
+        ...state,
+        measures: {
+          ...state.columns,
+          selected: action.payload
+        }
+      };
+    case UPDATE_MEASURES_SORT_COLUMN:
+      return {
+        ...state,
+        measures: {
+          ...state.columns,
+          selected: action.payload
+        }
       };
     default:
       return state;

@@ -3,13 +3,19 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {
-  Grid, GridColumn, GridRow, Image, Input
+  Grid, GridColumn, GridRow, Input
 } from 'semantic-ui-react';
 import { TRN_PREFIX } from '../../utils/constants';
 import OptionsList from './OptionsList';
 import { ReportGeneratorContext } from '../StartUp';
 import ColumnsSelector from './ColumnsSelector';
-import { updateColumnsSelected, updateColumnsSorting } from '../../actions/stateUIActions';
+import {
+  updateColumnsSelected,
+  updateColumnsSorting,
+  updateHierarchiesSelected,
+  updateHierarchiesSorting,
+  updateHierarchiesAvailable
+} from '../../actions/stateUIActions';
 import ColumnSorter from './ColumnsSorter';
 
 class ColumnsSection extends Component {
@@ -22,6 +28,7 @@ class ColumnsSection extends Component {
       selectedColumns.push(id);
     }
     _updateColumnsSelected(selectedColumns);
+    this.handleAvailableHierarchiesChange(selectedColumns);
     this.forceUpdate();
   }
 
@@ -30,12 +37,26 @@ class ColumnsSection extends Component {
     _updateColumnsSorting(data);
   }
 
+  handleAvailableHierarchiesChange = (data) => {
+    const { _updateHierarchiesAvailable, columns } = this.props;
+    const hierarchies = columns.filter(i => i['is-hierarchy']).filter(i => data.find(j => j === i.id));
+    _updateHierarchiesAvailable(hierarchies);
+    this.handleHierarchySort(hierarchies.map(i => i.id));
+  }
+
+  handleHierarchySelection = (id) => {
+    const { _updateHierarchiesSelected } = this.props;
+  }
+
+  handleHierarchySort = (data) => {
+    const { _updateHierarchiesSorting } = this.props;
+    _updateHierarchiesSorting(data);
+  }
+
   render() {
     const {
-      visible, translations, columns, selectedColumns
+      visible, translations, columns, selectedColumns, hierarchies, selectedHierarchies, hierarchiesOrder
     } = this.props;
-    const hierarchies = columns.filter(i => i['is-hierarchy']).filter(i => selectedColumns.find(j => j === i.id));
-    const selectedHierarchies = hierarchies.map(i => i.id);
     return (
       <div className={!visible ? 'invisible-tab' : ''}>
         <Grid columns={3} divided>
@@ -56,15 +77,22 @@ class ColumnsSection extends Component {
             </Grid.Column>
             <Grid.Column>
               <OptionsList title={translations[`${TRN_PREFIX}selectedColumns`]} isRequired tooltip="tooltip 2" >
-                <ColumnSorter columns={columns} selected={selectedColumns} onColumnSortChange={this.handleColumnSort} />
+                <ColumnSorter
+                  keyPrefix="columns"
+                  columns={columns.filter(i => selectedColumns.find(j => j === i.id))}
+                  order={selectedColumns}
+                  onColumnSortChange={this.handleColumnSort} />
               </OptionsList>
             </Grid.Column>
             <Grid.Column>
               <OptionsList title={translations[`${TRN_PREFIX}hierarchies`]} tooltip="tooltip 3" >
                 <ColumnSorter
+                  keyPrefix="hierarchies"
                   checkbox
                   columns={hierarchies}
-                  selected={selectedHierarchies} />
+                  order={hierarchiesOrder}
+                  onColumnSelectionChange={this.handleHierarchySelection}
+                  onColumnSortChange={this.handleHierarchySort} />
               </OptionsList>
             </Grid.Column>
           </GridRow>
@@ -77,12 +105,18 @@ class ColumnsSection extends Component {
 const mapStateToProps = (state) => ({
   translations: state.translationsReducer.translations,
   columns: state.uiReducer.columns.available,
-  selectedColumns: state.uiReducer.columns.selected
+  selectedColumns: state.uiReducer.columns.selected,
+  hierarchies: state.uiReducer.hierarchies.available,
+  selectedHierarchies: state.uiReducer.hierarchies.selected,
+  hierarchiesOrder: state.uiReducer.hierarchies.order
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   _updateColumnsSelected: (data) => dispatch(updateColumnsSelected(data)),
   _updateColumnsSorting: (data) => dispatch(updateColumnsSorting(data)),
+  _updateHierarchiesSelected: (data) => dispatch(updateHierarchiesSelected(data)),
+  _updateHierarchiesSorting: (data) => dispatch(updateHierarchiesSorting(data)),
+  _updateHierarchiesAvailable: (data) => dispatch(updateHierarchiesAvailable(data)),
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ColumnsSection);
@@ -94,11 +128,19 @@ ColumnsSection.propTypes = {
   selectedColumns: PropTypes.array,
   _updateColumnsSelected: PropTypes.func.isRequired,
   _updateColumnsSorting: PropTypes.func.isRequired,
+  hierarchies: PropTypes.array,
+  selectedHierarchies: PropTypes.array,
+  _updateHierarchiesAvailable: PropTypes.func.isRequired,
+  hierarchiesOrder: PropTypes.array,
+  _updateHierarchiesSorting: PropTypes.func.isRequired,
 };
 
 ColumnsSection.defaultProps = {
   columns: [],
-  selectedColumns: []
+  selectedColumns: [],
+  hierarchies: [],
+  selectedHierarchies: [],
+  hierarchiesOrder: [],
 };
 
 ColumnsSection.contextType = ReportGeneratorContext;

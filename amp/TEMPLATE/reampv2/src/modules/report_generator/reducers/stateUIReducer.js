@@ -6,7 +6,7 @@ import {
   UPDATE_REPORT_DETAILS_TOTALS_ONLY,
   UPDATE_COLUMNS_SELECTED_COLUMN, UPDATE_COLUMNS_SORT_COLUMN,
   UPDATE_MEASURES_SELECTED_COLUMN, UPDATE_MEASURES_SORT_COLUMN,
-  UPDATE_HIERARCHIES_SELECTED_COLUMN, UPDATE_HIERARCHIES_SORT_COLUMN
+  UPDATE_HIERARCHIES_SELECTED_COLUMN, UPDATE_HIERARCHIES_SORT_COLUMN, UPDATE_HIERARCHIES_LIST
 } from '../actions/stateUIActions';
 
 const initialState = {
@@ -80,6 +80,7 @@ const initialState = {
   hierarchies: {
     available: [],
     selected: [],
+    order: []
   },
   measures: {
     available: [{
@@ -189,11 +190,19 @@ export default (state = initialState, action) => {
           selected: action.payload
         }
       };
+    case UPDATE_HIERARCHIES_LIST:
+      return {
+        ...state,
+        hierarchies: {
+          ...state.hierarchies,
+          available: action.payload
+        }
+      };
     case UPDATE_HIERARCHIES_SELECTED_COLUMN:
       return {
         ...state,
         hierarchies: {
-          ...state.columns,
+          ...state.hierarchies,
           selected: action.payload
         }
       };
@@ -201,8 +210,8 @@ export default (state = initialState, action) => {
       return {
         ...state,
         hierarchies: {
-          ...state.columns,
-          selected: action.payload
+          ...state.hierarchies,
+          order: action.payload
         }
       };
     case UPDATE_MEASURES_SELECTED_COLUMN:

@@ -11,6 +11,7 @@ export const UPDATE_MEASURES_SORT_COLUMN = 'UPDATE_MEASURES_SORT_COLUMN';
 export const UPDATE_MEASURES_SELECTED_COLUMN = 'UPDATE_MEASURES_SELECTED_COLUMN';
 export const UPDATE_HIERARCHIES_SORT_COLUMN = 'UPDATE_HIERARCHIES_SORT_COLUMN';
 export const UPDATE_HIERARCHIES_SELECTED_COLUMN = 'UPDATE_HIERARCHIES_SELECTED_COLUMN';
+export const UPDATE_HIERARCHIES_LIST = 'UPDATE_HIERARCHIES_LIST';
 
 export function updateReportDetailsTotalGrouping(payload) {
   return {
@@ -71,6 +72,27 @@ export function updateColumnsSelected(payload) {
 export function updateColumnsSorting(payload) {
   return {
     type: UPDATE_COLUMNS_SORT_COLUMN,
+    payload
+  };
+}
+
+export function updateHierarchiesAvailable(payload) {
+  return {
+    type: UPDATE_HIERARCHIES_LIST,
+    payload
+  };
+}
+
+export function updateHierarchiesSelected(payload) {
+  return {
+    type: UPDATE_HIERARCHIES_SELECTED_COLUMN,
+    payload
+  };
+}
+
+export function updateHierarchiesSorting(payload) {
+  return {
+    type: UPDATE_HIERARCHIES_SORT_COLUMN,
     payload
   };
 }

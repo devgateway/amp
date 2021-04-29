@@ -4,45 +4,41 @@ import PropTypes from 'prop-types';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import { Checkbox, Icon } from 'semantic-ui-react';
 
-// a little function to help us with reordering the result
-const reorder = (list, startIndex, endIndex) => {
-  const result = Array.from(list);
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
-
-  return result;
-};
-
-const grid = 6;
-
-const getListStyle = isDraggingOver => ({
-  background: isDraggingOver ? 'transparent' : 'transparent',
-  padding: '5px',
-});
-
-const getItemStyle = (isDragging, draggableStyle) => ({
-  userSelect: 'none',
-  padding: '5px',
-  margin: `0 0 ${grid}px 0`,
-  background: isDragging ? 'transparent' : 'transparent',
-  // styles we need to apply on draggables
-  ...draggableStyle
-});
-
 export default class ColumnSorter extends Component {
   constructor(props) {
     super(props);
     this.onDragEnd = this.onDragEnd.bind(this);
   }
 
+  reorder = (list, startIndex, endIndex) => {
+    const result = Array.from(list);
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
+    return result;
+  };
+
+  getListStyle = isDraggingOver => ({
+    background: isDraggingOver ? 'transparent' : 'transparent',
+    padding: '5px',
+  });
+
+  getItemStyle = (isDragging, draggableStyle) => ({
+    userSelect: 'none',
+    padding: '5px',
+    margin: '0 0 6px 0',
+    background: isDragging ? 'transparent' : 'transparent',
+    // styles we need to apply on draggables
+    ...draggableStyle
+  });
+
   onDragEnd = (result) => {
-    const { selected, onColumnSortChange } = this.props;
+    const { order, onColumnSortChange } = this.props;
     // dropped outside the list
     if (!result.destination) {
       return;
     }
-    const items = reorder(
-      selected,
+    const items = this.reorder(
+      order,
       result.source.index,
       result.destination.index
     );
@@ -57,40 +53,55 @@ export default class ColumnSorter extends Component {
   }
 
   onItemClick = (obj) => {
-    const { onColumnSortChange } = this.props;
+    const { onColumnSelectionChange } = this.props;
     const id = Number.parseInt(obj.target.value, 10);
-    onColumnSortChange(id);
+    onColumnSelectionChange(id);
   }
 
   render() {
-    const { columns, selected, checkbox } = this.props;
-    if (selected.length > 0) {
+    const {
+      columns, order, checkbox, onColumnSelectionChange, keyPrefix
+    } = this.props;
+    if (columns.length > 0) {
+      let sortedColumns = columns;
+      if (order.length > 0) {
+        sortedColumns = [];
+        order.forEach(i => {
+          sortedColumns.push(columns.find(j => j.id === i));
+        });
+      }
       return (
         <>
           <DragDropContext onDragEnd={this.onDragEnd}>
-            <Droppable droppableId="droppable">
+            <Droppable droppableId={`${keyPrefix}_droppable`}>
               {(provided, snapshot) => (
                 <div
                   {...provided.droppableProps}
                   ref={provided.innerRef}
-                  style={getListStyle(snapshot.isDraggingOver)}
+                  style={this.getListStyle(snapshot.isDraggingOver)}
                 >
-                  {selected.map((item, index) => (
-                    <Draggable key={item} draggableId={`${item}`} index={index}>
+                  {sortedColumns.map((item, index) => (
+                    <Draggable key={item.id} draggableId={`${item.id}`} index={index}>
                       {(provided_, snapshot_) => (
                         <div
                           className="sortable-item"
                           ref={provided_.innerRef}
                           {...provided_.draggableProps}
                           {...provided_.dragHandleProps}
-                          style={getItemStyle(
+                          style={this.getItemStyle(
                             snapshot_.isDragging,
                             provided_.draggableProps.style
                           )}
                         >
                           {checkbox
-                            ? <Checkbox color="green" id={item.id} label={columns.find(i => i.id === item).label} />
-                            : columns.find(i => i.id === item).label }
+                            ? (
+                              <Checkbox
+                                color="green"
+                                id={keyPrefix + item.id}
+                                label={item.label}
+                                onChange={this.onItemClick} />
+                            )
+                            : item.label }
                           <Icon name="sort alternate vertical right" color="blue" />
                         </div>
                       )}
@@ -111,13 +122,16 @@ export default class ColumnSorter extends Component {
 
 ColumnSorter.propTypes = {
   columns: PropTypes.array,
-  selected: PropTypes.array,
+  order: PropTypes.array,
   onColumnSortChange: PropTypes.func.isRequired,
   checkbox: PropTypes.bool,
+  onColumnSelectionChange: PropTypes.func,
+  keyPrefix: PropTypes.string.isRequired,
 };
 
 ColumnSorter.defaultProps = {
   columns: [],
-  selected: [],
+  order: [],
   checkbox: false,
+  onColumnSelectionChange: undefined,
 };

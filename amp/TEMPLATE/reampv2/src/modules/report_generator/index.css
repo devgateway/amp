@@ -52,6 +52,10 @@
     height: 100%;
 }
 
+.option-list-content .sortable-item {
+    font-weight: bold;
+}
+
 .option-list-title {
     font-weight: bold;
     margin-bottom: 10px;
@@ -86,12 +90,13 @@
     margin-right: 5px;
 }
 
-.column-item span {
+.column-item label {
     vertical-align: top;
     padding-left: 8px;
     top: -2px;
     position: relative;
     font-weight: bold;
+    cursor: pointer;
 }
 
 .sort-column-item {
@@ -129,4 +134,9 @@
 
 .ui.toggle.checkbox input:checked ~ label::before {
     background-color: #21C11C !important;
+}
+
+i .icon,.right {
+    position: absolute;
+    right: 8%;
 }

@@ -56,8 +56,8 @@ export default class ColumnsSelector extends Component {
                         onClick={this.onItemClick}
                         id={col.id}
                         value={col.id}
-                        checked={selected.find(j => j === col.id) !== undefined} />
-                      <span>{col.label}</span>
+                        checked={selected.find(j => j === col.id) !== undefined}
+                        label={col.label} />
                     </div>
                   ))}
                 </Accordion.Content>

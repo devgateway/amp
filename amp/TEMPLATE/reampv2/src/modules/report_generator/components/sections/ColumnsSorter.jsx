@@ -1,6 +1,8 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import { Icon } from 'semantic-ui-react';
 
 // a little function to help us with reordering the result
 const reorder = (list, startIndex, endIndex) => {
@@ -11,23 +13,18 @@ const reorder = (list, startIndex, endIndex) => {
   return result;
 };
 
-const grid = 8;
+const grid = 6;
 
 const getListStyle = isDraggingOver => ({
-  background: isDraggingOver ? 'lightblue' : 'lightgrey',
-  padding: grid,
-  width: 250
+  background: isDraggingOver ? 'transparent' : 'transparent',
+  padding: '5px',
 });
 
 const getItemStyle = (isDragging, draggableStyle) => ({
-  // some basic styles to make the items look a bit nicer
   userSelect: 'none',
-  padding: grid * 2,
+  padding: '5px',
   margin: `0 0 ${grid}px 0`,
-
-  // change background colour if dragging
-  background: isDragging ? 'lightgreen' : 'grey',
-
+  background: isDragging ? 'transparent' : 'transparent',
   // styles we need to apply on draggables
   ...draggableStyle
 });
@@ -80,17 +77,19 @@ export default class ColumnSorter extends Component {
                 >
                   {selected.map((item, index) => (
                     <Draggable key={item} draggableId={`${item}`} index={index}>
-                      {(provided, snapshot) => (
+                      {(provided_, snapshot_) => (
                         <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
+                          className="sortable-item"
+                          ref={provided_.innerRef}
+                          {...provided_.draggableProps}
+                          {...provided_.dragHandleProps}
                           style={getItemStyle(
-                            snapshot.isDragging,
-                            provided.draggableProps.style
+                            snapshot_.isDragging,
+                            provided_.draggableProps.style
                           )}
                         >
                           {columns.find(i => i.id === item).label}
+                          <Icon name="sort alternate vertical right" color="blue" />
                         </div>
                       )}
                     </Draggable>

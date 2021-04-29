@@ -21,8 +21,7 @@ export const GEOCODING_RUN_SEARCH_SUCCESS = 'GEOCODING_RUN_SEARCH_SUCCESS';
 export const GEOCODING_RUN_SEARCH_ERROR = 'GEOCODING_RUN_SEARCH_ERROR';
 
 export const GEOCODING_SAVE_ALL_EDITS_PENDING = 'GEOCODING_SAVE_ALL_EDITS_PENDING';
-export const GEOCODING_SAVE_ALL_EDITS_SUCCESS = 'GEOCODING_SAVE_ALL_EDITS_SUCCESS';
-export const GEOCODING_SAVE_ALL_EDITS_ERROR = 'GEOCODING_SAVE_ALL_EDITS_ERROR';
+export const GEOCODING_SAVE_ALL_EDITS_CHECK = 'GEOCODING_SAVE_ALL_EDITS_CHECK'
 
 export const GEOCODING_SAVE_ACTIVITY_PENDING = 'GEOCODING_SAVE_ACTIVITY_PENDING';
 export const GEOCODING_SAVE_ACTIVITY_SUCCESS = 'GEOCODING_SAVE_ACTIVITY_SUCCESS';
@@ -141,15 +140,9 @@ export function saveAllEditsPending() {
     }
 }
 
-export function saveAllEditsSuccess() {
+export function saveAllEditsCheck() {
     return {
-        type: GEOCODING_SAVE_ALL_EDITS_SUCCESS,
-    }
-}
-
-export function saveAllEditsError(error) {
-    return {
-        type: GEOCODING_SAVE_ALL_EDITS_ERROR,
+        type: GEOCODING_SAVE_ALL_EDITS_CHECK,
     }
 }
 
@@ -303,7 +296,6 @@ export const saveAllEdits = (ampIds) => {
     return dispatch => {
         dispatch(saveAllEditsPending());
         ampIds.forEach(ampId => dispatch(saveActivity(ampId)));
-        return dispatch(saveAllEditsSuccess());
     }
 };
 
@@ -312,10 +304,12 @@ export const saveActivity = (ampId) => {
         dispatch(saveActivityPending(ampId));
         return fetchApiDataWithStatus({body: {}, url: '/rest/geo-coder/activity/save/' + ampId})
             .then(result => {
-                return dispatch(saveActivitySuccess(ampId));
+                dispatch(saveActivitySuccess(ampId));
+                return dispatch(saveAllEditsCheck());
             })
             .catch(error => {
-                return dispatch(saveActivityError(ampId, error.message))
+                dispatch(saveActivityError(ampId, error.message))
+                return dispatch(saveAllEditsCheck());
             });
     }
 };

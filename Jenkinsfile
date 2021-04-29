@@ -149,6 +149,7 @@ stage('Build') {
     ampUrl = "http://amp-${country}-${tag}-tc9.ampsite.net/"
 
     node {
+      
         checkout scm
 
         def format = branch != null ? "%H" : "%P"

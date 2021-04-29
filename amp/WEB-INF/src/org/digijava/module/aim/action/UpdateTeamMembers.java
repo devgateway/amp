@@ -1,20 +1,14 @@
 package org.digijava.module.aim.action;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+import org.digijava.kernel.entity.geocoding.GeoCodingProcess;
+import org.digijava.kernel.geocoding.service.GeoCodingService;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -27,6 +21,13 @@ import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.helper.CrConstants;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 public class UpdateTeamMembers extends Action {
 
@@ -144,7 +145,21 @@ public class UpdateTeamMembers extends Action {
             }
         } else if (upForm.getAction() != null
                    && upForm.getAction().trim().equals("delete")) {
+
             logger.debug("In delete team member");
+
+            GeoCodingProcess geoCodingProcess = new GeoCodingService().getCurrentGeoCoding();
+            if (geoCodingProcess != null
+                    && geoCodingProcess.getTeamMember().getAmpTeamMemId().equals(upForm.getTeamMemberId())) {
+                upForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
+                upForm.setTeamName(ampTeam.getName());
+                errors = new ActionMessages();
+                errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.geocodingExistForTeam",
+                        geoCodingProcess.getTeamMember().getAmpTeam().getName()));
+                saveErrors(request, errors);
+                return mapping.findForward("forward");
+            }
+
             Long selMembers[] = new Long[1];
             selMembers[0] = upForm.getTeamMemberId();
             TeamMemberUtil.removeTeamMembers(selMembers);

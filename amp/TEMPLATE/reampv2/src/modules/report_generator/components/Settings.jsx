@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 // eslint-disable-next-line no-unused-vars
 import styles from '../../../../../ampTemplate/node_modules/amp-settings/dist/amp-settings.css';
 import { ReportGeneratorContext } from './StartUp';
+import { TRN_PREFIX } from '../utils/constants';
 
 const SettingsWidget = require('../../../../../ampTemplate/node_modules/amp-settings/dist/amp-settings');
 
@@ -56,9 +57,10 @@ class Settings extends Component {
 
   render() {
     const { show } = this.state;
+    const { translations } = this.props;
     return (
       <>
-        <span onClick={this.toggleSettings}>Settings</span>
+        <span onClick={this.toggleSettings}>{translations[`${TRN_PREFIX}settings`]}</span>
         <div
           id="settings-popup"
           ref="settingsPopup"
@@ -79,7 +81,8 @@ const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
 
 Settings.propTypes = {
   onApplySettings: PropTypes.func.isRequired,
-  settings: PropTypes.object
+  settings: PropTypes.object,
+  translations: PropTypes.object.isRequired,
 };
 
 Settings.defaultProps = {

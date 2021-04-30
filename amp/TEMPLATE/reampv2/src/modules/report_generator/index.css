@@ -27,3 +27,8 @@
     min-height: 4rem !important;
     background-color: #e7f1fd !important;
 }
+
+.invisible-tab {
+    display: none;
+    visibility: hidden;
+}

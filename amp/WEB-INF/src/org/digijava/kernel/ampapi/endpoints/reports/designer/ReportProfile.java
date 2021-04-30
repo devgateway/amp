@@ -39,4 +39,12 @@ public enum ReportProfile {
         throw new IllegalArgumentException("Unknown ReportProfile: " + value);
     }
 
+    public boolean isReport() {
+        return this.equals(REPORT);
+    }
+
+    public boolean isTab() {
+        return this.equals(TAB);
+    }
+
 }

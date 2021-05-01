@@ -79,7 +79,7 @@ class ReportingDetailSection extends Component {
                   radioList={fakeReportTypesRadio}
                   checkList={fakeReportTypesCheck}
                   selectedRadio={selectedTotalGrouping}
-                  selectedCheckboxes={{ selectedTotalsOnly }}
+                  selectedCheckboxes={[selectedTotalsOnly]}
                   changeCheckList={[this.selectTotalsOnly]}
                   changeRadioList={this.selectTotalGrouping} />
               </OptionsList>

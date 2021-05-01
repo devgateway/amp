@@ -17,18 +17,20 @@ export default class OptionsContent extends Component {
               <Form.Radio
                 label={item}
                 value={item}
+                key={item}
                 checked={item === selectedRadio}
                 onChange={changeRadioList}
               />
             ))}
           </Form.Group>
           {checkList.map((item, i) => (
-            <FormField>
+            <FormField key={`form_field_${item}`}>
               <Checkbox
                 toggle
+                key={item}
                 onChange={changeCheckList ? changeCheckList[i] : {}}
-                checked={selectedCheckboxes && selectedCheckboxes.item} />
-              <span>{item}</span>
+                checked={selectedCheckboxes && selectedCheckboxes.item}
+                label={item} />
             </FormField>
           ))}
         </Form>
@@ -41,7 +43,7 @@ OptionsContent.propTypes = {
   radioList: PropTypes.array,
   checkList: PropTypes.array,
   selectedRadio: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  selectedCheckboxes: PropTypes.object,
+  selectedCheckboxes: PropTypes.array,
   changeRadioList: PropTypes.func.isRequired,
   changeCheckList: PropTypes.array.isRequired,
 };

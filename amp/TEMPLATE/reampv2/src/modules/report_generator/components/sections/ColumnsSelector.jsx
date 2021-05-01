@@ -43,15 +43,16 @@ export default class ColumnsSelector extends Component {
         <Form>
           <Accordion fluid styled>
             {categories.map((cat, i) => (
-              <>
+              <div key={Math.random()}>
                 <Accordion.Title index={i} active={activeIndex === i} onClick={this.handleHeaderClick}>
                   <Icon name="dropdown" />
                   {cat}
                 </Accordion.Title>
                 <Accordion.Content active={activeIndex === i}>
                   {columns.filter(col => (col.category === cat)).map(col => (
-                    <div className="column-item">
+                    <div className="column-item" key={Math.random()}>
                       <Checkbox
+                        key={Math.random()}
                         radio={radio}
                         onClick={this.onItemClick}
                         id={col.id}
@@ -61,7 +62,7 @@ export default class ColumnsSelector extends Component {
                     </div>
                   ))}
                 </Accordion.Content>
-              </>
+              </div>
             ))}
           </Accordion>
         </Form>

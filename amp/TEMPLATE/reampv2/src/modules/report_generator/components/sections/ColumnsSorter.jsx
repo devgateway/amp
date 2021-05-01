@@ -52,9 +52,8 @@ export default class ColumnSorter extends Component {
     this.setState({ activeIndex: newIndex });
   }
 
-  onItemClick = (obj) => {
+  onItemClick = (id) => {
     const { onColumnSelectionChange } = this.props;
-    const id = Number.parseInt(obj.target.value, 10);
     onColumnSelectionChange(id);
   }
 
@@ -99,7 +98,7 @@ export default class ColumnSorter extends Component {
                                 color="green"
                                 id={keyPrefix + item.id}
                                 label={item.label}
-                                onChange={this.onItemClick} />
+                                onChange={this.onItemClick.bind(null, item.id)} />
                             )
                             : item.label }
                           <Icon name="sort alternate vertical right" color="blue" />

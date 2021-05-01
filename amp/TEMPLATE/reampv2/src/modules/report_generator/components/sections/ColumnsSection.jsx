@@ -50,7 +50,7 @@ class ColumnsSection extends Component {
           added = i;
         }
       });
-      if (columns.find(i => i.id === added)['is-hierarchy']) {
+      if (added && columns.find(i => i.id === added)['is-hierarchy']) {
         _hierarchies.push(columns.find(i => i.id === added));
         _updateHierarchiesAvailable(_hierarchies);
         hierarchiesOrder.push(added);
@@ -71,12 +71,19 @@ class ColumnsSection extends Component {
         hierarchiesOrder.splice(index, 1);
         _updateHierarchiesAvailable(hierarchies);
         this.handleHierarchySort(hierarchiesOrder);
+        this.handleHierarchySelection(deleted);
       }
     }
   }
 
   handleHierarchySelection = (id) => {
-    const { _updateHierarchiesSelected } = this.props;
+    const { _updateHierarchiesSelected, selectedHierarchies } = this.props;
+    if (selectedHierarchies.includes(id)) {
+      selectedHierarchies.splice(selectedHierarchies.findIndex(i => i === id), 1);
+    } else {
+      selectedHierarchies.push(id);
+    }
+    _updateHierarchiesSelected(selectedHierarchies);
   }
 
   handleHierarchySort = (data) => {
@@ -86,7 +93,7 @@ class ColumnsSection extends Component {
 
   render() {
     const {
-      visible, translations, columns, selectedColumns, hierarchies, selectedHierarchies, hierarchiesOrder
+      visible, translations, columns, selectedColumns, hierarchies, hierarchiesOrder
     } = this.props;
     return (
       <div className={!visible ? 'invisible-tab' : ''}>
@@ -164,6 +171,7 @@ ColumnsSection.propTypes = {
   _updateHierarchiesAvailable: PropTypes.func.isRequired,
   hierarchiesOrder: PropTypes.array,
   _updateHierarchiesSorting: PropTypes.func.isRequired,
+  _updateHierarchiesSelected: PropTypes.func.isRequired,
 };
 
 ColumnsSection.defaultProps = {

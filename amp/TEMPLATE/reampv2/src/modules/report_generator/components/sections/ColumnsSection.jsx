@@ -117,6 +117,7 @@ class ColumnsSection extends Component {
               <OptionsList title={translations[`${TRN_PREFIX}selectedColumns`]} isRequired tooltip="tooltip 2" >
                 <ColumnSorter
                   keyPrefix="columns"
+                  translations={translations}
                   columns={columns.filter(i => selectedColumns.find(j => j === i.id))}
                   order={selectedColumns}
                   onColumnSortChange={this.handleColumnSort} />
@@ -127,6 +128,7 @@ class ColumnsSection extends Component {
                 <ColumnSorter
                   keyPrefix="hierarchies"
                   checkbox
+                  translations={translations}
                   columns={hierarchies}
                   order={hierarchiesOrder}
                   onColumnSelectionChange={this.handleHierarchySelection}

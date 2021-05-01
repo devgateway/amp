@@ -150,7 +150,13 @@
     font-weight: lighter;
 }
 
-i .icon, .right {
-    position: absolute;
-    right: 8%;
+i, i.arrow {
+    font-size: 0.8em;
+    float: right;
+    cursor: pointer;
+}
+
+.disabled {
+    opacity: 0.35;
+    pointer-events: none;
 }

@@ -27,5 +27,7 @@
   "amp.reportGenerator:selectedColumns": "Selected Columns",
   "amp.reportGenerator:hierarchies": "Hierarchies",
   "amp.reportGenerator:search": "Search",
-  "amp.reportGenerator:resetColumns": "Reset Columns"
+  "amp.reportGenerator:resetColumns": "Reset Columns",
+  "amp.reportGenerator:moveUp": "Move Up",
+  "amp.reportGenerator:moveDown": "Move Down"
 }

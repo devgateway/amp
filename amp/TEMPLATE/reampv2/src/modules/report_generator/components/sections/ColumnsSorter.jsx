@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import { Checkbox, Icon } from 'semantic-ui-react';
+import { TRN_PREFIX } from '../../utils/constants';
 
 export default class ColumnSorter extends Component {
   constructor(props) {
@@ -16,6 +17,18 @@ export default class ColumnSorter extends Component {
     result.splice(endIndex, 0, removed);
     return result;
   };
+
+  moveUp = (index) => {
+    const { order, onColumnSortChange } = this.props;
+    const items = this.reorder(order, index, index - 1);
+    onColumnSortChange(items);
+  }
+
+  moveDown = (index) => {
+    const { order, onColumnSortChange } = this.props;
+    const items = this.reorder(order, index, index + 1);
+    onColumnSortChange(items);
+  }
 
   getListStyle = isDraggingOver => ({
     background: isDraggingOver ? 'transparent' : 'transparent',
@@ -59,7 +72,7 @@ export default class ColumnSorter extends Component {
 
   render() {
     const {
-      columns, order, checkbox, onColumnSelectionChange, keyPrefix
+      columns, order, checkbox, keyPrefix, translations
     } = this.props;
     if (columns.length > 0) {
       let sortedColumns = columns;
@@ -100,8 +113,21 @@ export default class ColumnSorter extends Component {
                                 label={item.label}
                                 onChange={this.onItemClick.bind(null, item.id)} />
                             )
-                            : item.label }
-                          <Icon name="sort alternate vertical right" color="blue" />
+                            : <span>{item.label}</span> }
+                          <div>
+                            <span
+                              className={index === 0 ? 'disabled' : ''}
+                              title={translations[`${TRN_PREFIX}moveUp`]}
+                              onClick={this.moveUp.bind(null, index)}>
+                              <Icon name="arrow up" color="blue" />
+                            </span>
+                            <span
+                              className={index === sortedColumns.length - 1 ? 'disabled' : ''}
+                              title={translations[`${TRN_PREFIX}moveDown`]}
+                              onClick={this.moveDown.bind(null, index)}>
+                              <Icon name="arrow down" color="blue" />
+                            </span>
+                          </div>
                         </div>
                       )}
                     </Draggable>
@@ -126,6 +152,7 @@ ColumnSorter.propTypes = {
   checkbox: PropTypes.bool,
   onColumnSelectionChange: PropTypes.func,
   keyPrefix: PropTypes.string.isRequired,
+  translations: PropTypes.object.isRequired,
 };
 
 ColumnSorter.defaultProps = {

@@ -38,10 +38,41 @@ class ColumnsSection extends Component {
   }
 
   handleAvailableHierarchiesChange = (data) => {
-    const { _updateHierarchiesAvailable, columns } = this.props;
-    const hierarchies = columns.filter(i => i['is-hierarchy']).filter(i => data.find(j => j === i.id));
-    _updateHierarchiesAvailable(hierarchies);
-    this.handleHierarchySort(hierarchies.map(i => i.id));
+    const {
+      _updateHierarchiesAvailable, columns, hierarchies, hierarchiesOrder, selectedColumns
+    } = this.props;
+    const _hierarchies = hierarchies;
+    if (data.length > _hierarchies.length) {
+      // We selected a new column.
+      let added = null;
+      data.forEach(i => {
+        if (!selectedColumns.find(j => j.id === i)) {
+          added = i;
+        }
+      });
+      if (columns.find(i => i.id === added)['is-hierarchy']) {
+        _hierarchies.push(columns.find(i => i.id === added));
+        _updateHierarchiesAvailable(_hierarchies);
+        hierarchiesOrder.push(added);
+        this.handleHierarchySort(hierarchiesOrder);
+      }
+    } else {
+      // We removed a column.
+      let deleted = null;
+      hierarchies.forEach(i => {
+        if (!data.includes(i.id)) {
+          deleted = i.id;
+        }
+      });
+      if (deleted) {
+        let index = hierarchies.findIndex(i => i.id === deleted);
+        hierarchies.splice(index, 1);
+        index = hierarchiesOrder.findIndex(i => i === deleted);
+        hierarchiesOrder.splice(index, 1);
+        _updateHierarchiesAvailable(hierarchies);
+        this.handleHierarchySort(hierarchiesOrder);
+      }
+    }
   }
 
   handleHierarchySelection = (id) => {

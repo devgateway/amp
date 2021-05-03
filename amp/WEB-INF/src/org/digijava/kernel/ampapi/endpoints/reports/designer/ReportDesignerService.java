@@ -15,8 +15,11 @@ public class ReportDesignerService {
 
     private final ReportOptionProvider reportOptionProvider;
 
+    private final ReportMeasureProvider reportMeasureProvider;
+
     public ReportDesignerService() {
         this.reportOptionProvider = new ReportOptionProvider(AMPTranslatorService.INSTANCE);
+        this.reportMeasureProvider = new ReportMeasureProvider(AMPTranslatorService.INSTANCE);
     }
 
     public ReportDesigner getReportDesigner(final ReportProfile profile, final ReportType type) {
@@ -24,7 +27,7 @@ public class ReportDesignerService {
                 .withProfile(profile)
                 .withType(type)
                 .withColumns(getColumns(profile, type))
-                .withMeasures(getMeasures(profile, type))
+                .withMeasures(getMeasures(type))
                 .withOptions(getOptions(profile, type))
                 .build();
     }
@@ -33,8 +36,8 @@ public class ReportDesignerService {
         return new ArrayList<>();
     }
 
-    private List<ReportMeasure> getMeasures(final ReportProfile profile, final ReportType type) {
-        return new ArrayList<>();
+    private List<ReportMeasure> getMeasures(final ReportType type) {
+        return reportMeasureProvider.getMeasures(type);
     }
 
     private List<ReportOption> getOptions(final ReportProfile profile, final ReportType type) {

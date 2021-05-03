@@ -63,4 +63,8 @@ public enum ReportType {
     public boolean isPledge() {
         return this.equals(PLEDGE);
     }
+
+    public boolean isDonor() {
+        return this.equals(DONOR);
+    }
 }

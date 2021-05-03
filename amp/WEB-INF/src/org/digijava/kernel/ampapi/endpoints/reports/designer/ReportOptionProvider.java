@@ -13,6 +13,8 @@ import java.util.stream.Collectors;
 /**
  *  Enumerate all options of report designer depending on report profile (tab/report), report type
  *  and team member access type
+ *
+ * @author Viorel Chihai
  */
 public class ReportOptionProvider {
 
@@ -77,11 +79,11 @@ public class ReportOptionProvider {
             "funding-contribution", "funding-component", "summary-report", "annual-report", "quarterly-report",
             "monthly-report", "totals-only", "show-pledges", "empty-funding-columns");
 
+    private TranslatorService translatorService;
+
     public ReportOptionProvider(final TranslatorService translatorService) {
         this.translatorService = translatorService;
     }
-
-    private TranslatorService translatorService;
 
     public List<ReportOption> getOptions(final ReportProfile reportProfile, final ReportType reportType) {
         return reportProfile.isReport() ? getReportOptions(reportType) : getTabOptions();

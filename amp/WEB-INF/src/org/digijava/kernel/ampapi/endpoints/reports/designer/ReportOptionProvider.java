@@ -66,6 +66,10 @@ public class ReportOptionProvider {
                 "Public View Checkbox", "Report and Tab Options")
     );
 
+    public static final List<ReportOptionConfiguration> ALL_PROFILE_OPTIONS = ImmutableList.of(
+            new ReportOptionConfiguration("use-filters", "Use Above Filters")
+    );
+
     public static final List<String> PLEDGES_OPTION_NAMES = ImmutableList.of("funding-pledges", "summary-report",
             "annual-report", "totals-only", "empty-funding-columns");
 
@@ -96,6 +100,7 @@ public class ReportOptionProvider {
         if (isCurrentMemberManager()) {
             options.addAll(getManagementOptions());
         }
+        options.addAll(getAllProfileOptions());
 
         return options;
     }
@@ -111,6 +116,7 @@ public class ReportOptionProvider {
             options.addAll(getManagementOptions());
             options.addAll(getManagementOrReportProfileOptions());
         }
+        options.addAll(getAllProfileOptions());
 
         return options;
     }
@@ -123,6 +129,12 @@ public class ReportOptionProvider {
 
     private List<ReportOption> getManagementOptions() {
         return MANAGEMENT_OPTIONS.stream()
+                .map(r -> getOptionFromConfiguration(r))
+                .collect(Collectors.toList());
+    }
+
+    private List<ReportOption> getAllProfileOptions() {
+        return ALL_PROFILE_OPTIONS.stream()
                 .map(r -> getOptionFromConfiguration(r))
                 .collect(Collectors.toList());
     }

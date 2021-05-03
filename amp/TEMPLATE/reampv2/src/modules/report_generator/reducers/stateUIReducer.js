@@ -110,8 +110,44 @@ const initialState = {
       label: 'Previous Month Disbursements',
       description: 'Actual Disbursements Of Previous Month',
       type: 'A'
+    },
+    {
+      id: 457,
+      name: 'Previous Month Disbursements',
+      label: 'Previous Month Disbursements',
+      description: 'Actual Disbursements Of Previous Month',
+      type: 'A'
+    },
+    {
+      id: 458,
+      name: 'Previous Month Disbursements',
+      label: 'Previous Month Disbursements',
+      description: 'Actual Disbursements Of Previous Month',
+      type: 'A'
+    },
+    {
+      id: 459,
+      name: 'Previous Month Disbursements',
+      label: 'Previous Month Disbursements',
+      description: 'Actual Disbursements Of Previous Month',
+      type: 'A'
+    },
+    {
+      id: 460,
+      name: 'Previous Month Disbursements',
+      label: 'Previous Month Disbursements',
+      description: 'Actual Disbursements Of Previous Month',
+      type: 'A'
+    },
+    {
+      id: 461,
+      name: 'Previous Month Disbursements',
+      label: 'Previous Month Disbursements',
+      description: 'Actual Disbursements Of Previous Month',
+      type: 'A'
     }],
     selected: [],
+    order: [],
   },
   activeStep: 0,
 };

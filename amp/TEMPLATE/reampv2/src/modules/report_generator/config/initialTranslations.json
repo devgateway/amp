@@ -29,5 +29,9 @@
   "amp.reportGenerator:search": "Search",
   "amp.reportGenerator:resetColumns": "Reset Columns",
   "amp.reportGenerator:moveUp": "Move Up",
-  "amp.reportGenerator:moveDown": "Move Down"
+  "amp.reportGenerator:moveDown": "Move Down",
+  "amp.reportGenerator:mustSelectOneColumn": "Must select at least one column",
+  "amp.reportGenerator:mustSelectOneMeasure": "Must select at least one measure",
+  "amp.reportGenerator:availableFinancialMeasures": "Available Financial Measures",
+  "amp.reportGenerator:orderSelectedFinancialMeasures": "Order Selected Financial Measures"
 }

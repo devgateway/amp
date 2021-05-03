@@ -1,8 +1,10 @@
+/* eslint-disable max-len */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
   Accordion, Checkbox, Form, Icon, Image
 } from 'semantic-ui-react';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 export default class ColumnsSelector extends Component {
   constructor() {
@@ -34,39 +36,71 @@ export default class ColumnsSelector extends Component {
 
   render() {
     const {
-      columns, showLoadingWhenEmpty, selected, radio
+      columns, showLoadingWhenEmpty, selected, radio, noCategories
     } = this.props;
     const { activeIndex } = this.state;
     if (columns.length > 0) {
-      const categories = this.extractCategories(columns);
-      return (
-        <Form>
-          <Accordion fluid styled>
-            {categories.map((cat, i) => (
-              <div key={Math.random()}>
-                <Accordion.Title index={i} active={activeIndex === i} onClick={this.handleHeaderClick}>
-                  <Icon name="dropdown" />
-                  {cat}
-                </Accordion.Title>
-                <Accordion.Content active={activeIndex === i}>
-                  {columns.filter(col => (col.category === cat)).map(col => (
-                    <div className="column-item" key={Math.random()}>
-                      <Checkbox
-                        key={Math.random()}
-                        radio={radio}
-                        onClick={this.onItemClick}
-                        id={col.id}
-                        value={col.id}
-                        checked={selected.find(j => j === col.id) !== undefined}
-                        label={col.label} />
-                    </div>
-                  ))}
-                </Accordion.Content>
-              </div>
-            ))}
-          </Accordion>
-        </Form>
-      );
+      if (!noCategories) {
+        const categories = this.extractCategories(columns);
+        return (
+          <Form>
+            <Accordion fluid styled>
+              {categories.map((cat, i) => (
+                <div key={Math.random()}>
+                  <Accordion.Title index={i} active={activeIndex === i} onClick={this.handleHeaderClick}>
+                    <Icon name="dropdown" />
+                    {cat}
+                  </Accordion.Title>
+                  <Accordion.Content active={activeIndex === i}>
+                    {columns.filter(col => (col.category === cat))
+                      .map(col => (
+                        <div className="column-item" key={Math.random()}>
+                          <Checkbox
+                            key={Math.random()}
+                            radio={radio}
+                            onClick={this.onItemClick}
+                            id={col.id}
+                            value={col.id}
+                            checked={selected.find(j => j === col.id) !== undefined}
+                            label={col.label} />
+                        </div>
+                      ))}
+                  </Accordion.Content>
+                </div>
+              ))}
+            </Accordion>
+          </Form>
+        );
+      } else {
+        return (
+          <Form>
+            {columns.map((col, i) => {
+              const tooltipText = col.description ? (
+                <Tooltip id={col.description}>
+                  {col.description}
+                </Tooltip>
+              ) : null;
+              return (
+                <div className="column-item" key={Math.random()}>
+                  <Checkbox
+                    color="green"
+                    id={Math.random()}
+                    label={col.label}
+                    onChange={this.onItemClick.bind(null, col.id)} />
+                  {col.description ? (
+                    <OverlayTrigger trigger={['hover', 'focus']} overlay={tooltipText}>
+                      <img
+                        alt="info-icon"
+                        className="info-icon"
+                        src="/TEMPLATE/reamp/modules/admin/data-freeze-manager/styles/images/icon-information.svg" />
+                    </OverlayTrigger>
+                  ) : null}
+                </div>
+              );
+            })}
+          </Form>
+        );
+      }
     } else if (showLoadingWhenEmpty) {
       return <Image src="https://react.semantic-ui.com/images/wireframe/media-paragraph.png" />;
     } else {
@@ -81,6 +115,7 @@ ColumnsSelector.propTypes = {
   onColumnSelectionChange: PropTypes.func.isRequired,
   showLoadingWhenEmpty: PropTypes.bool,
   radio: PropTypes.bool,
+  noCategories: PropTypes.bool,
 };
 
 ColumnsSelector.defaultProps = {
@@ -88,4 +123,5 @@ ColumnsSelector.defaultProps = {
   selected: [],
   showLoadingWhenEmpty: false,
   radio: false,
+  noCategories: false
 };

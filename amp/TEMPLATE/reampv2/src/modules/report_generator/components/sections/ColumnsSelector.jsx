@@ -19,9 +19,8 @@ export default class ColumnsSelector extends Component {
     this.setState({ activeIndex: newIndex });
   }
 
-  onItemClick = (obj) => {
+  onItemClick = (id) => {
     const { onColumnSelectionChange } = this.props;
-    const id = Number.parseInt(obj.target.value, 10);
     onColumnSelectionChange(id);
   }
 
@@ -58,7 +57,7 @@ export default class ColumnsSelector extends Component {
                           <Checkbox
                             key={Math.random()}
                             radio={radio}
-                            onClick={this.onItemClick}
+                            onClick={this.onItemClick.bind(null, col.id)}
                             id={col.id}
                             value={col.id}
                             checked={selected.find(j => j === col.id) !== undefined}
@@ -86,6 +85,7 @@ export default class ColumnsSelector extends Component {
                     color="green"
                     id={Math.random()}
                     label={col.label}
+                    checked={selected.find(j => j === col.id) !== undefined}
                     onChange={this.onItemClick.bind(null, col.id)} />
                   {col.description ? (
                     <OverlayTrigger trigger={['hover', 'focus']} overlay={tooltipText}>

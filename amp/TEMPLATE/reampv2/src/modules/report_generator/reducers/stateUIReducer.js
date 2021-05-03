@@ -254,7 +254,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         measures: {
-          ...state.columns,
+          ...state.measures,
           selected: action.payload
         }
       };
@@ -262,8 +262,8 @@ export default (state = initialState, action) => {
       return {
         ...state,
         measures: {
-          ...state.columns,
-          selected: action.payload
+          ...state.measures,
+          order: action.payload
         }
       };
     default:

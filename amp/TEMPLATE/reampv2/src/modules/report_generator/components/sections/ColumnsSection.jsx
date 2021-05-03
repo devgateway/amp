@@ -17,6 +17,7 @@ import {
   updateHierarchiesAvailable
 } from '../../actions/stateUIActions';
 import ColumnSorter from './ColumnsSorter';
+import ErrorMessage from '../ErrorMessage';
 
 class ColumnsSection extends Component {
   handleColumnSelection = (id) => {
@@ -136,6 +137,15 @@ class ColumnsSection extends Component {
               </OptionsList>
             </Grid.Column>
           </GridRow>
+          {selectedColumns.length === 0
+            ? (
+              <GridRow>
+                <Grid.Column width={8}>
+                  <ErrorMessage visible message={translations[`${TRN_PREFIX}mustSelectOneColumn`]} />
+                </Grid.Column>
+              </GridRow>
+            )
+            : null }
         </Grid>
       </div>
     );

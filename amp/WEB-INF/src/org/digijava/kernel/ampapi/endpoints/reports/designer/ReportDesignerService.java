@@ -5,13 +5,9 @@ import org.digijava.kernel.ampapi.endpoints.reports.designer.builder.ReportDesig
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiPredicate;
-
-import static org.digijava.kernel.ampapi.endpoints.reports.designer.ReportProfile.TAB;
-import static org.digijava.kernel.ampapi.endpoints.reports.designer.ReportType.DONOR;
 
 /**
- * Reports service to
+ * Service used by report designer
  *
  * @author Viorel Chihai
  */
@@ -29,7 +25,7 @@ public class ReportDesignerService {
                 .withType(type)
                 .withColumns(getColumns(profile, type))
                 .withMeasures(getMeasures(profile, type))
-                .withOptions(reportOptionProvider.getAvailableOptions(profile, type))
+                .withOptions(getOptions(profile, type))
                 .build();
     }
 
@@ -42,25 +38,7 @@ public class ReportDesignerService {
     }
 
     private List<ReportOption> getOptions(final ReportProfile profile, final ReportType type) {
-        List<ReportOption> options = new ArrayList<>();
-
-        BiPredicate<ReportProfile, ReportType> isVisible =
-                (p, t) -> p.equals(TAB) && t.equals(DONOR);
-
-        options.add(new ReportOption("summary", "Summary Report", "Description 1"));
-        options.add(new ReportOption("funding-donor", "Summary Report", "Description 1"));
-        options.add(new ReportOption("funding-regional", "Summary Report", "Description 1"));
-        options.add(new ReportOption("funding-component", "Summary Report", "Description 1"));
-        options.add(new ReportOption("funding-contribution", "Summary Report", "Description 1"));
-        options.add(new ReportOption("public-view", "Summary Report", "Description 1"));
-        options.add(new ReportOption("workspace-linked", "Summary Report", "Description 1"));
-        options.add(new ReportOption("show-pledges", "Summary Report", "Description 1"));
-        options.add(new ReportOption("use-filters", "Summary Report", "Description 1"));
-        options.add(new ReportOption("empty-funding-columns", "Summary Report", "Description 1"));
-        options.add(new ReportOption("split-by-funding", "Summary Report", "Description 1"));
-        options.add(new ReportOption("show-original-currency", "Summary Report", "Description 1"));
-
-        return options;
+        return reportOptionProvider.getOptions(profile, type);
     }
 
 }

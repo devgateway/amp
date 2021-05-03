@@ -83,7 +83,7 @@ public class ReportOptionProvider {
 
     private TranslatorService translatorService;
 
-    public List<ReportOption> getAvailableOptions(final ReportProfile reportProfile, final ReportType reportType) {
+    public List<ReportOption> getOptions(final ReportProfile reportProfile, final ReportType reportType) {
         return reportProfile.isReport() ? getReportOptions(reportType) : getTabOptions();
     }
 

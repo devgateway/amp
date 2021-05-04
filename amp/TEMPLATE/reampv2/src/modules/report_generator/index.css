@@ -56,6 +56,11 @@
     font-weight: bold;
 }
 
+.smallHeight {
+    max-height: 80%;
+    overflow-y: auto;
+}
+
 .sortable-tr label {
     font-weight: bold;
 }

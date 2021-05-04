@@ -106,7 +106,10 @@ class ColumnsSection extends Component {
           </GridRow>
           <GridRow>
             <Grid.Column>
-              <OptionsList title={translations[`${TRN_PREFIX}availableColumns`]} tooltip="tooltip 1" >
+              <OptionsList
+                title={translations[`${TRN_PREFIX}availableColumns`]}
+                tooltip="tooltip 1"
+                className="smallHeight" >
                 <ColumnsSelector
                   columns={columns}
                   selected={selectedColumns}
@@ -115,7 +118,11 @@ class ColumnsSection extends Component {
               </OptionsList>
             </Grid.Column>
             <Grid.Column>
-              <OptionsList title={translations[`${TRN_PREFIX}selectedColumns`]} isRequired tooltip="tooltip 2" >
+              <OptionsList
+                title={translations[`${TRN_PREFIX}selectedColumns`]}
+                isRequired
+                tooltip="tooltip 2"
+                className="smallHeight" >
                 <ColumnSorter
                   keyPrefix="columns"
                   translations={translations}
@@ -125,7 +132,10 @@ class ColumnsSection extends Component {
               </OptionsList>
             </Grid.Column>
             <Grid.Column>
-              <OptionsList title={translations[`${TRN_PREFIX}hierarchies`]} tooltip="tooltip 3" >
+              <OptionsList
+                title={translations[`${TRN_PREFIX}hierarchies`]}
+                tooltip="tooltip 3"
+                className="smallHeight" >
                 <ColumnSorter
                   keyPrefix="hierarchies"
                   checkbox

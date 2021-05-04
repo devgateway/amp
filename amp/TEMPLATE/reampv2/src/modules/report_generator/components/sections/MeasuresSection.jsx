@@ -72,7 +72,10 @@ class MeasuresSection extends Component {
         <Grid divided>
           <GridRow>
             <Grid.Column width={8}>
-              <OptionsList title={translations[`${TRN_PREFIX}availableFinancialMeasures`]} tooltip="tooltip 1" >
+              <OptionsList
+                title={translations[`${TRN_PREFIX}availableFinancialMeasures`]}
+                tooltip="tooltip 1"
+                className="smallHeight">
                 <ColumnsSelector
                   columns={measures}
                   selected={selectedMeasures}
@@ -82,7 +85,10 @@ class MeasuresSection extends Component {
               </OptionsList>
             </Grid.Column>
             <Grid.Column width={8}>
-              <OptionsList title={translations[`${TRN_PREFIX}orderSelectedFinancialMeasures`]} tooltip="tooltip 1" >
+              <OptionsList
+                className="smallHeight"
+                title={translations[`${TRN_PREFIX}orderSelectedFinancialMeasures`]}
+                tooltip="tooltip 1" >
                 <ColumnSorter
                   keyPrefix="measures"
                   translations={translations}

@@ -5,7 +5,7 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 export default class OptionsList extends Component {
   render() {
     const {
-      title, tooltip, isRequired, children
+      title, tooltip, isRequired, children, className
     } = this.props;
     const tooltipText = tooltip ? (
       <Tooltip id={tooltip}>
@@ -26,7 +26,7 @@ export default class OptionsList extends Component {
             </OverlayTrigger>
           ) : null}
         </div>
-        <div className="option-list-content">
+        <div className={`option-list-content ${className || ''}`}>
           {children}
         </div>
       </>
@@ -39,10 +39,12 @@ OptionsList.propTypes = {
   isRequired: PropTypes.bool,
   tooltip: PropTypes.string,
   children: PropTypes.object,
+  className: PropTypes.string,
 };
 
 OptionsList.defaultProps = {
   isRequired: false,
   tooltip: null,
-  children: undefined
+  children: undefined,
+  className: null,
 };

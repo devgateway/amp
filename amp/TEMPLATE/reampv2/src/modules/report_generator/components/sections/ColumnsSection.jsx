@@ -20,6 +20,11 @@ import ColumnSorter from './ColumnsSorter';
 import ErrorMessage from '../ErrorMessage';
 
 class ColumnsSection extends Component {
+  constructor() {
+    super();
+    this.state = { search: null };
+  }
+
   handleColumnSelection = (id) => {
     const { selectedColumns, _updateColumnsSelected } = this.props;
     const index = selectedColumns.indexOf(id);
@@ -92,16 +97,22 @@ class ColumnsSection extends Component {
     _updateHierarchiesSorting(data);
   }
 
+  handleSearch = (event) => {
+    this.setState({ search: event.target.value });
+  }
+
   render() {
     const {
       visible, translations, columns, selectedColumns, hierarchies, hierarchiesOrder
     } = this.props;
+    const { search } = this.state;
+    const _columns = search ? columns.filter(i => i.name.toLowerCase().indexOf(search.toLowerCase()) > -1) : columns;
     return (
       <div className={!visible ? 'invisible-tab' : ''}>
         <Grid columns={3} divided>
           <GridRow>
             <GridColumn width="16">
-              <Input icon="search" placeholder={translations[`${TRN_PREFIX}search`]} />
+              <Input icon="search" placeholder={translations[`${TRN_PREFIX}search`]} onChange={this.handleSearch} />
             </GridColumn>
           </GridRow>
           <GridRow>
@@ -111,7 +122,7 @@ class ColumnsSection extends Component {
                 tooltip="tooltip 1"
                 className="smallHeight" >
                 <ColumnsSelector
-                  columns={columns}
+                  columns={_columns}
                   selected={selectedColumns}
                   showLoadingWhenEmpty
                   onColumnSelectionChange={this.handleColumnSelection} />

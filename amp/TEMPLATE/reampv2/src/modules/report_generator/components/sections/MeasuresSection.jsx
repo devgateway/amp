@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Grid, GridRow } from 'semantic-ui-react';
+import {
+  Grid, GridColumn, GridRow, Input
+} from 'semantic-ui-react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { TRN_PREFIX } from '../../utils/constants';
@@ -15,6 +17,11 @@ import ErrorMessage from '../ErrorMessage';
 import ColumnSorter from './ColumnsSorter';
 
 class MeasuresSection extends Component {
+  constructor() {
+    super();
+    this.state = { search: null };
+  }
+
   handleMeasureSelection = (id) => {
     const { _updateMeasuresSelected, selectedMeasures } = this.props;
     const index = selectedMeasures.indexOf(id);
@@ -31,6 +38,10 @@ class MeasuresSection extends Component {
   handleMeasureSort = (data) => {
     const { _updateMeasuresSorting } = this.props;
     _updateMeasuresSorting(data);
+  }
+
+  handleSearch = (event) => {
+    this.setState({ search: event.target.value });
   }
 
   handleAvailableMeasuresChange(data) {
@@ -67,9 +78,16 @@ class MeasuresSection extends Component {
     const {
       visible, translations, measures, selectedMeasures, measuresOrder
     } = this.props;
+    const { search } = this.state;
+    const _measures = search ? measures.filter(i => i.name.toLowerCase().indexOf(search.toLowerCase()) > -1) : measures;
     return (
       <div className={!visible ? 'invisible-tab' : ''}>
         <Grid divided>
+          <GridRow>
+            <GridColumn width="16">
+              <Input icon="search" placeholder={translations[`${TRN_PREFIX}search`]} onChange={this.handleSearch} />
+            </GridColumn>
+          </GridRow>
           <GridRow>
             <Grid.Column width={8}>
               <OptionsList
@@ -77,7 +95,7 @@ class MeasuresSection extends Component {
                 tooltip="tooltip 1"
                 className="smallHeight">
                 <ColumnsSelector
-                  columns={measures}
+                  columns={_measures}
                   selected={selectedMeasures}
                   showLoadingWhenEmpty
                   noCategories

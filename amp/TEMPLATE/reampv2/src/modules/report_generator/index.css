@@ -59,6 +59,8 @@
 .smallHeight {
     max-height: 80%;
     overflow-y: auto;
+    scrollbar-color: #3e98dc #acc8dc;
+    scrollbar-width: thin;
 }
 
 .sortable-tr label {

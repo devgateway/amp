@@ -1,3 +1,6 @@
+import { fetchApiData } from '../../../utils/loadTranslations';
+import { URL_METADATA } from '../utils/constants';
+
 export const UPDATE_REPORT_DETAILS_TOTAL_GROUPING = 'UPDATE_REPORT_DETAILS_TOTAL_GROUPING';
 export const UPDATE_REPORT_DETAILS_TOTALS_ONLY = 'UPDATE_REPORT_DETAILS_TOTALS_ONLY';
 export const UPDATE_REPORT_DETAILS_FUNDING_GROUPING = 'UPDATE_REPORT_DETAILS_FUNDING_GROUPING';
@@ -12,6 +15,10 @@ export const UPDATE_MEASURES_SELECTED_COLUMN = 'UPDATE_MEASURES_SELECTED_COLUMN'
 export const UPDATE_HIERARCHIES_SORT_COLUMN = 'UPDATE_HIERARCHIES_SORT_COLUMN';
 export const UPDATE_HIERARCHIES_SELECTED_COLUMN = 'UPDATE_HIERARCHIES_SELECTED_COLUMN';
 export const UPDATE_HIERARCHIES_LIST = 'UPDATE_HIERARCHIES_LIST';
+
+export const FETCH_METADATA_PENDING = 'FETCH_METADATA_PENDING';
+export const FETCH_METADATA_SUCCESS = 'FETCH_METADATA_SUCCESS';
+export const FETCH_METADATA_ERROR = ' FETCH_METADATA_ERROR';
 
 export function updateReportDetailsTotalGrouping(payload) {
   return {
@@ -110,3 +117,31 @@ export function updateMeasuresSorting(payload) {
     payload
   };
 }
+
+export function fetchMetaDataPending() {
+  return {
+    type: FETCH_METADATA_PENDING
+  };
+}
+
+export function fetchMetaDataSuccess(payload) {
+  return {
+    type: FETCH_METADATA_SUCCESS,
+    payload
+  };
+}
+
+export function fetchMetaDataError(error) {
+  return {
+    type: FETCH_METADATA_ERROR,
+    error
+  };
+}
+
+export const getMetadata = () => dispatch => {
+  dispatch(fetchMetaDataPending());
+  return Promise.all([fetchApiData({
+    url: URL_METADATA
+  })]).then((data) => dispatch(fetchMetaDataSuccess(data[0])))
+    .catch(error => dispatch(fetchMetaDataError(error)));
+};

@@ -1,12 +1,18 @@
 import {
-  UPDATE_REPORT_DETAILS_ALLOW_EMPTY_FUNDING_COLUMNS, UPDATE_REPORT_DETAILS_DESCRIPTION,
-  UPDATE_REPORT_DETAILS_FUNDING_GROUPING, UPDATE_REPORT_DETAILS_SHOW_ORIGINAL_CURRENCIES,
+  UPDATE_REPORT_DETAILS_ALLOW_EMPTY_FUNDING_COLUMNS,
+  UPDATE_REPORT_DETAILS_DESCRIPTION,
+  UPDATE_REPORT_DETAILS_FUNDING_GROUPING,
+  UPDATE_REPORT_DETAILS_SHOW_ORIGINAL_CURRENCIES,
   UPDATE_REPORT_DETAILS_SPLIT_BY_FUNDING,
   UPDATE_REPORT_DETAILS_TOTAL_GROUPING,
   UPDATE_REPORT_DETAILS_TOTALS_ONLY,
-  UPDATE_COLUMNS_SELECTED_COLUMN, UPDATE_COLUMNS_SORT_COLUMN,
-  UPDATE_MEASURES_SELECTED_COLUMN, UPDATE_MEASURES_SORT_COLUMN,
-  UPDATE_HIERARCHIES_SELECTED_COLUMN, UPDATE_HIERARCHIES_SORT_COLUMN, UPDATE_HIERARCHIES_LIST
+  UPDATE_COLUMNS_SELECTED_COLUMN,
+  UPDATE_COLUMNS_SORT_COLUMN,
+  UPDATE_MEASURES_SELECTED_COLUMN,
+  UPDATE_MEASURES_SORT_COLUMN,
+  UPDATE_HIERARCHIES_SELECTED_COLUMN,
+  UPDATE_HIERARCHIES_SORT_COLUMN,
+  UPDATE_HIERARCHIES_LIST, FETCH_METADATA_PENDING, FETCH_METADATA_SUCCESS, FETCH_METADATA_ERROR,
 } from '../actions/stateUIActions';
 
 const initialState = {
@@ -83,73 +89,14 @@ const initialState = {
     order: []
   },
   measures: {
-    available: [{
-      id: 365,
-      name: 'Actual Commitments',
-      label: 'Actual Commitments',
-      description: null,
-      type: 'A'
-    },
-    {
-      id: 333,
-      name: 'Actual Pledge',
-      label: 'Actual Pledge',
-      description: null,
-      type: 'P'
-    },
-    {
-      id: 345,
-      name: 'Forecast Execution Rate',
-      label: 'Forecast Execution Rate',
-      description: 'Sum of Actual Disbursements / Sum (Most recent of (Pipeline MTEF for the year, Projection MTEF for the year)).',
-      type: 'D'
-    },
-    {
-      id: 456,
-      name: 'Previous Month Disbursements',
-      label: 'Previous Month Disbursements',
-      description: 'Actual Disbursements Of Previous Month',
-      type: 'A'
-    },
-    {
-      id: 457,
-      name: 'Previous Month Disbursements',
-      label: 'Previous Month Disbursements',
-      description: 'Actual Disbursements Of Previous Month',
-      type: 'A'
-    },
-    {
-      id: 458,
-      name: 'Previous Month Disbursements',
-      label: 'Previous Month Disbursements',
-      description: 'Actual Disbursements Of Previous Month',
-      type: 'A'
-    },
-    {
-      id: 459,
-      name: 'Previous Month Disbursements',
-      label: 'Previous Month Disbursements',
-      description: 'Actual Disbursements Of Previous Month',
-      type: 'A'
-    },
-    {
-      id: 460,
-      name: 'Previous Month Disbursements',
-      label: 'Previous Month Disbursements',
-      description: 'Actual Disbursements Of Previous Month',
-      type: 'A'
-    },
-    {
-      id: 461,
-      name: 'Previous Month Disbursements',
-      label: 'Previous Month Disbursements',
-      description: 'Actual Disbursements Of Previous Month',
-      type: 'A'
-    }],
+    available: [],
     selected: [],
     order: [],
   },
   activeStep: 0,
+  metaDataLoaded: false,
+  metaDataPending: false,
+  error: null
 };
 
 export default (state = initialState, action) => {
@@ -265,6 +212,31 @@ export default (state = initialState, action) => {
           ...state.measures,
           order: action.payload
         }
+      };
+    case FETCH_METADATA_PENDING:
+      return {
+        ...state,
+        metaDataPending: true
+      };
+    case FETCH_METADATA_SUCCESS: {
+      return {
+        ...state,
+        metaDataPending: false,
+        metaDataLoaded: true,
+        measures: {
+          available: action.payload.measures
+        },
+        /* hierarchies: action.payload.hierarchies, */
+        /* columns: action.payload.column, */
+        options: action.payload.options,
+      };
+    }
+    case FETCH_METADATA_ERROR:
+      return {
+        ...state,
+        metaDataLoaded: false,
+        metaDataPending: false,
+        error: action.error
       };
     default:
       return state;

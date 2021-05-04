@@ -61,7 +61,7 @@ export default class ColumnsSelector extends Component {
                             id={col.id}
                             value={col.id}
                             checked={selected.find(j => j === col.id) !== undefined}
-                            label={col.label} />
+                            label={col.label ? col.label : col.name} />
                         </div>
                       ))}
                   </Accordion.Content>
@@ -84,7 +84,7 @@ export default class ColumnsSelector extends Component {
                   <Checkbox
                     color="green"
                     id={Math.random()}
-                    label={col.label}
+                    label={col.label ? col.label : col.name}
                     checked={selected.find(j => j === col.id) !== undefined}
                     onChange={this.onItemClick.bind(null, col.id)} />
                   {col.description ? (

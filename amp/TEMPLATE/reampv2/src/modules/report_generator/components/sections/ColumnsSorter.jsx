@@ -111,10 +111,10 @@ export default class ColumnSorter extends Component {
                                 <Checkbox
                                   color="green"
                                   id={keyPrefix + item.id}
-                                  label={item.label}
+                                  label={item.label ? item.label : item.name}
                                   onChange={this.onItemClick.bind(null, item.id)} />
                               )
-                              : <span>{item.label}</span> }
+                              : <span>{item.label ? item.label : item.name}</span> }
                           </td>
                           <td className="sortable-td td-arrows">
                             <span

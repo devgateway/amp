@@ -9,6 +9,7 @@ import { TRN_PREFIX } from '../../utils/constants';
 import {
   updateMeasuresSelected,
   updateMeasuresSorting,
+  getMetadata
 } from '../../actions/stateUIActions';
 import { ReportGeneratorContext } from '../StartUp';
 import OptionsList from './OptionsList';
@@ -20,6 +21,11 @@ class MeasuresSection extends Component {
   constructor() {
     super();
     this.state = { search: null };
+  }
+
+  componentDidMount() {
+    const { _getMetadata } = this.props;
+    _getMetadata();
   }
 
   handleMeasureSelection = (id) => {
@@ -142,6 +148,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = dispatch => bindActionCreators({
   _updateMeasuresSelected: (data) => dispatch(updateMeasuresSelected(data)),
   _updateMeasuresSorting: (data) => dispatch(updateMeasuresSorting(data)),
+  _getMetadata: (data) => getMetadata(data),
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MeasuresSection);
@@ -154,6 +161,7 @@ MeasuresSection.propTypes = {
   measuresOrder: PropTypes.array,
   _updateMeasuresSelected: PropTypes.func.isRequired,
   _updateMeasuresSorting: PropTypes.func.isRequired,
+  _getMetadata: PropTypes.func.isRequired,
 };
 
 MeasuresSection.defaultProps = {

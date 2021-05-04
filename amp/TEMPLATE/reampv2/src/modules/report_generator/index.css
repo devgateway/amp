@@ -32,3 +32,75 @@
     display: none;
     visibility: hidden;
 }
+
+.navigation-buttons {
+    padding-top: 50px;
+}
+
+.option-list-content {
+    border: 1px solid #d3d3d3;
+    background-color: #D3D3D31C;
+    padding: 10px;
+    height: 85%;
+}
+
+.option-list-content,form {
+    height: 100%;
+}
+
+.option-list-content,form,textarea {
+    height: 100%;
+}
+
+.option-list-title {
+    height: 15%;
+    font-weight: bold;
+}
+
+.fields-vertical {
+    flex-direction: column !important;
+}
+
+.fields-vertical .radio,.checkbox{
+    margin-top: 0px !important;
+}
+
+.field span {
+    position: relative;
+    top: -16px;
+    right: -10px;
+}
+
+.show,.tooltip {
+    opacity: 1;
+}
+
+.ui.radio.checkbox input:checked ~ label::after {
+    background-color: #21C11C;
+}
+
+.ui.radio.checkbox label::before {
+    content: '';
+    transform: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 500rem;
+    top: -2px;
+    left: -1px;
+}
+
+.ui.radio.checkbox label::after {
+    border: none;
+    content: '' !important;
+    line-height: 25px;
+    top: -12px;
+    left: -11px;
+    width: 40px;
+    height: 40px;
+    border-radius: 500rem;
+    transform: scale(0.46666667);
+}
+
+.ui.toggle.checkbox input:checked ~ label::before {
+    background-color: #21C11C !important;
+}

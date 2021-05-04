@@ -1,23 +1,33 @@
 package org.digijava.kernel.ampapi.endpoints.reports.designer;
 
+import org.digijava.kernel.ampapi.endpoints.common.AMPTranslatorService;
 import org.digijava.kernel.ampapi.endpoints.reports.designer.builder.ReportDesignerBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Reports service to
+ * Service used by report designer
  *
  * @author Viorel Chihai
  */
 public class ReportDesignerService {
+
+    private final ReportOptionProvider reportOptionProvider;
+
+    private final ReportMeasureProvider reportMeasureProvider;
+
+    public ReportDesignerService() {
+        this.reportOptionProvider = new ReportOptionProvider(AMPTranslatorService.INSTANCE);
+        this.reportMeasureProvider = new ReportMeasureProvider(AMPTranslatorService.INSTANCE);
+    }
 
     public ReportDesigner getReportDesigner(final ReportProfile profile, final ReportType type) {
         return new ReportDesignerBuilder()
                 .withProfile(profile)
                 .withType(type)
                 .withColumns(getColumns(profile, type))
-                .withMeasures(getMeasures(profile, type))
+                .withMeasures(getMeasures(type))
                 .withOptions(getOptions(profile, type))
                 .build();
     }
@@ -26,12 +36,12 @@ public class ReportDesignerService {
         return new ArrayList<>();
     }
 
-    private List<ReportMeasure> getMeasures(final ReportProfile profile, final ReportType type) {
-        return new ArrayList<>();
+    private List<ReportMeasure> getMeasures(final ReportType type) {
+        return reportMeasureProvider.getMeasures(type);
     }
 
     private List<ReportOption> getOptions(final ReportProfile profile, final ReportType type) {
-        return new ArrayList<>();
+        return reportOptionProvider.getOptions(profile, type);
     }
 
 }

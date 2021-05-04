@@ -59,4 +59,12 @@ public enum ReportType {
 
         throw new IllegalArgumentException("Unknown ReportType: " + value);
     }
+
+    public boolean isPledge() {
+        return this.equals(PLEDGE);
+    }
+
+    public boolean isDonor() {
+        return this.equals(DONOR);
+    }
 }

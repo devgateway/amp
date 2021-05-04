@@ -42,4 +42,8 @@ public enum ReportMeasureType {
         throw new IllegalArgumentException("Unknown ReportMeasureType: " + value);
     }
 
+    public String getValue() {
+        return this.value;
+    }
+
 }

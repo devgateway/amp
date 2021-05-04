@@ -29,9 +29,9 @@ class ReportingDetailSection extends Component {
     _updateReportDetailsTotalGrouping(value);
   };
 
-  selectTotalsOnly = () => {
-    const { _updateReportDetailsTotalsOnly, selectedTotalsOnly } = this.props;
-    _updateReportDetailsTotalsOnly(!selectedTotalsOnly);
+  selectSummaryReport = () => {
+    const { _updateReportDetailsTotalsOnly, selectedSummaryReport } = this.props;
+    _updateReportDetailsTotalsOnly(!selectedSummaryReport);
   }
 
   selectFundingGrouping = (e, { value }) => {
@@ -77,7 +77,7 @@ class ReportingDetailSection extends Component {
 
   render() {
     const {
-      visible, translations, selectedTotalGrouping, selectedTotalsOnly, selectedFundingGrouping,
+      visible, translations, selectedTotalGrouping, selectedSummaryReport, selectedFundingGrouping,
       selectedAllowEmptyFundingColumns, selectedSplitByFunding, selectedShowOriginalCurrencies,
       description
     } = this.props;
@@ -92,8 +92,8 @@ class ReportingDetailSection extends Component {
                   radioList={this.getOptions(TOTAL_GROUPING_RADIO_OPTIONS)}
                   checkList={this.getOptions(TOTAL_GROUPING_CHECKBOX_OPTIONS)}
                   selectedRadio={selectedTotalGrouping}
-                  selectedCheckboxes={[selectedTotalsOnly]}
-                  changeCheckList={[this.selectTotalsOnly]}
+                  selectedCheckboxes={[selectedSummaryReport]}
+                  changeCheckList={[this.selectSummaryReport]}
                   changeRadioList={this.selectTotalGrouping} />
               </OptionsList>
             </GridColumn>
@@ -136,7 +136,7 @@ class ReportingDetailSection extends Component {
 const mapStateToProps = (state) => ({
   translations: state.translationsReducer.translations,
   selectedTotalGrouping: state.uiReducer.reportDetails.selectedTotalGrouping,
-  selectedTotalsOnly: state.uiReducer.reportDetails.selectedTotalsOnly,
+  selectedSummaryReport: state.uiReducer.reportDetails.selectedSummaryReport,
   reportDetails: state.uiReducer.reportDetails,
   selectedFundingGrouping: state.uiReducer.reportDetails.selectedFundingGrouping,
   selectedAllowEmptyFundingColumns: state.uiReducer.reportDetails.selectedAllowEmptyFundingColumns,
@@ -163,7 +163,7 @@ ReportingDetailSection.propTypes = {
   visible: PropTypes.bool.isRequired,
   selectedTotalGrouping: PropTypes.string,
   _updateReportDetailsTotalGrouping: PropTypes.func.isRequired,
-  selectedTotalsOnly: PropTypes.bool,
+  selectedSummaryReport: PropTypes.bool,
   _updateReportDetailsTotalsOnly: PropTypes.func.isRequired,
   _updateReportDetailsFundingGrouping: PropTypes.func.isRequired,
   selectedFundingGrouping: PropTypes.string,
@@ -180,7 +180,7 @@ ReportingDetailSection.propTypes = {
 
 ReportingDetailSection.defaultProps = {
   selectedTotalGrouping: undefined,
-  selectedTotalsOnly: false,
+  selectedSummaryReport: false,
   selectedFundingGrouping: undefined,
   selectedAllowEmptyFundingColumns: false,
   selectedSplitByFunding: false,

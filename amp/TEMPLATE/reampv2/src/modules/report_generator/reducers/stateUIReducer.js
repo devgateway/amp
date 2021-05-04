@@ -18,7 +18,7 @@ import {
 const initialState = {
   reportDetails: {
     selectedTotalGrouping: null,
-    selectedTotalsOnly: false,
+    selectedSummaryReport: false,
     selectedFundingGrouping: null,
     selectedAllowEmptyFundingColumns: false,
     selectedSplitByFunding: false,
@@ -114,7 +114,7 @@ export default (state = initialState, action) => {
         ...state,
         reportDetails: {
           ...state.reportDetails,
-          selectedTotalsOnly: action.payload
+          selectedSummaryReport: action.payload
         }
       };
     case UPDATE_REPORT_DETAILS_FUNDING_GROUPING:

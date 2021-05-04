@@ -90,6 +90,7 @@ class ColumnsSection extends Component {
       selectedHierarchies.push(id);
     }
     _updateHierarchiesSelected(selectedHierarchies);
+    this.forceUpdate();
   }
 
   handleHierarchySort = (data) => {
@@ -103,7 +104,8 @@ class ColumnsSection extends Component {
 
   render() {
     const {
-      visible, translations, columns, selectedColumns, hierarchies, hierarchiesOrder
+      visible, translations, columns, selectedColumns, hierarchies, hierarchiesOrder, selectedHierarchies,
+      selectedSummaryReport
     } = this.props;
     const { search } = this.state;
     const _columns = search ? columns.filter(i => i.name.toLowerCase().indexOf(search.toLowerCase()) > -1) : columns;
@@ -167,6 +169,15 @@ class ColumnsSection extends Component {
               </GridRow>
             )
             : null }
+          {selectedColumns.length > 0 && selectedColumns.length === selectedHierarchies.length && !selectedSummaryReport
+            ? (
+              <GridRow>
+                <Grid.Column width={8}>
+                  <ErrorMessage visible message={translations[`${TRN_PREFIX}needMoreHierarchies`]} />
+                </Grid.Column>
+              </GridRow>
+            )
+            : null }
         </Grid>
       </div>
     );
@@ -179,7 +190,8 @@ const mapStateToProps = (state) => ({
   selectedColumns: state.uiReducer.columns.selected,
   hierarchies: state.uiReducer.hierarchies.available,
   selectedHierarchies: state.uiReducer.hierarchies.selected,
-  hierarchiesOrder: state.uiReducer.hierarchies.order
+  hierarchiesOrder: state.uiReducer.hierarchies.order,
+  selectedSummaryReport: state.uiReducer.reportDetails.selectedSummaryReport,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -205,6 +217,7 @@ ColumnsSection.propTypes = {
   hierarchiesOrder: PropTypes.array,
   _updateHierarchiesSorting: PropTypes.func.isRequired,
   _updateHierarchiesSelected: PropTypes.func.isRequired,
+  selectedSummaryReport: PropTypes.bool,
 };
 
 ColumnsSection.defaultProps = {
@@ -213,6 +226,7 @@ ColumnsSection.defaultProps = {
   hierarchies: [],
   selectedHierarchies: [],
   hierarchiesOrder: [],
+  selectedSummaryReport: false,
 };
 
 ColumnsSection.contextType = ReportGeneratorContext;

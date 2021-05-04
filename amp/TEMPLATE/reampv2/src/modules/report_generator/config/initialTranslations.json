@@ -33,5 +33,6 @@
   "amp.reportGenerator:mustSelectOneColumn": "Must select at least one column",
   "amp.reportGenerator:mustSelectOneMeasure": "Must select at least one measure",
   "amp.reportGenerator:availableFinancialMeasures": "Available Financial Measures",
-  "amp.reportGenerator:orderSelectedFinancialMeasures": "Order Selected Financial Measures"
+  "amp.reportGenerator:orderSelectedFinancialMeasures": "Order Selected Financial Measures",
+  "amp.reportGenerator:needMoreHierarchies": "Only in summary reports can all columns be hierarchies"
 }

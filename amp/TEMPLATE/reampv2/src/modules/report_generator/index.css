@@ -57,7 +57,8 @@
 }
 
 .smallHeight {
-    max-height: 80%;
+    max-height: 400px;
+    min-height: 400px;
     overflow-y: auto;
     scrollbar-color: #3e98dc #acc8dc;
     scrollbar-width: thin;
@@ -165,6 +166,10 @@
     opacity: 1;
     color: rgba(255, 255, 255, 1);
     font-weight: lighter;
+}
+
+.ui.fluid.accordion {
+    height: 100%;
 }
 
 i, i.arrow {

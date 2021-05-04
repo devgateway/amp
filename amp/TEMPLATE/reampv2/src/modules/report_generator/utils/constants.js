@@ -5,10 +5,9 @@ export const SUMMARY_REPORT = 'summary-report';
 export const ANNUAL_REPORT = 'annual-report';
 export const QUARTERLY_REPORT = 'quarterly-report';
 export const MONTHLY_REPORT = 'monthly-report';
-export const TOTAL_GROUPING_RADIO_OPTIONS = [SUMMARY_REPORT, ANNUAL_REPORT, QUARTERLY_REPORT, MONTHLY_REPORT];
-
 export const TOTALS_ONLY = 'totals-only';
-export const TOTAL_GROUPING_CHECKBOX_OPTIONS = [TOTALS_ONLY];
+export const TOTAL_GROUPING_RADIO_OPTIONS = [ANNUAL_REPORT, QUARTERLY_REPORT, MONTHLY_REPORT, TOTALS_ONLY];
+export const TOTAL_GROUPING_CHECKBOX_OPTIONS = [SUMMARY_REPORT];
 
 export const FUNDING_DONOR = 'funding-donor';
 export const REGIONAL_REPORT = 'funding-component';

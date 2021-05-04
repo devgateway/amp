@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Divider, Grid, GridColumn, GridRow
+  Grid, GridColumn, GridRow
 } from 'semantic-ui-react';
 import MainMenu from './MainMenu';
 import ColumnsSection from './sections/ColumnsSection';

@@ -22,5 +22,17 @@
   "amp.reportGenerator:fundingGroup": "Funding Grouping",
   "amp.reportGenerator:reportDescription": "Report Description",
   "amp.reportGenerator:preview": "Preview",
-  "amp.reportGenerator:mustSelect": "A selection must be made"
+  "amp.reportGenerator:mustSelect": "A selection must be made",
+  "amp.reportGenerator:availableColumns": "Available Columns",
+  "amp.reportGenerator:selectedColumns": "Selected Columns",
+  "amp.reportGenerator:hierarchies": "Hierarchies",
+  "amp.reportGenerator:search": "Search",
+  "amp.reportGenerator:resetColumns": "Reset Columns",
+  "amp.reportGenerator:moveUp": "Move Up",
+  "amp.reportGenerator:moveDown": "Move Down",
+  "amp.reportGenerator:mustSelectOneColumn": "Must select at least one column",
+  "amp.reportGenerator:mustSelectOneMeasure": "Must select at least one measure",
+  "amp.reportGenerator:availableFinancialMeasures": "Available Financial Measures",
+  "amp.reportGenerator:orderSelectedFinancialMeasures": "Order Selected Financial Measures",
+  "amp.reportGenerator:needMoreHierarchies": "Only in summary reports can all columns be hierarchies"
 }

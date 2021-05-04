@@ -14,6 +14,20 @@
     cursor: pointer;
 }
 
+.save_buttons_item .button {
+    min-width: 48%;
+    width: 48%;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.narrowRow {
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+}
+
 .info-icon {
     height: 15px;
     width: 15px;
@@ -44,24 +58,46 @@
     height: 85%;
 }
 
-.option-list-content,form {
+textarea {
     height: 100%;
 }
 
-.option-list-content,form,textarea {
-    height: 100%;
+.option-list-content .sortable-tr {
+    font-weight: bold;
+}
+
+.smallHeight {
+    max-height: 400px;
+    min-height: 400px;
+    overflow-y: auto;
+    scrollbar-color: #3e98dc #acc8dc;
+    scrollbar-width: thin;
+}
+
+.sortable-tr label {
+    font-weight: bold;
+}
+
+.sortable-td {
+    padding-top: 7px;
+    padding-bottom: 7px;
+    width: 100%;
+}
+
+.td-arrows {
+    max-width: 25px;
 }
 
 .option-list-title {
-    height: 15%;
     font-weight: bold;
+    margin-bottom: 10px;
 }
 
 .fields-vertical {
     flex-direction: column !important;
 }
 
-.fields-vertical .radio,.checkbox{
+.fields-vertical .radio, .checkbox {
     margin-top: 0px !important;
 }
 
@@ -71,8 +107,35 @@
     right: -10px;
 }
 
-.show,.tooltip {
+.show, .tooltip {
     opacity: 1;
+}
+
+.column-item {
+    width: 100%;
+}
+
+.column-item radio, checkbox {
+    margin: 0;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-right: 5px;
+}
+
+.column-item label {
+    vertical-align: top;
+    padding-left: 8px;
+    top: -2px;
+    position: relative;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.sort-column-item {
+    /*border: 1px solid #d3d3d3;*/
+    padding: 8px;
+    margin-bottom: 2px;
+    font-weight: bold;
 }
 
 .ui.radio.checkbox input:checked ~ label::after {
@@ -103,4 +166,33 @@
 
 .ui.toggle.checkbox input:checked ~ label::before {
     background-color: #21C11C !important;
+}
+
+.ui.checkbox input:checked ~ label::before {
+    background-color: #21C11C;
+}
+
+.ui.checkbox input:checked ~ label::after {
+    opacity: 1;
+    color: rgba(255, 255, 255, 1);
+    font-weight: lighter;
+}
+
+.ui.fluid.accordion {
+    height: 100%;
+}
+
+.ui.form {
+    height: 100%;
+}
+
+i, i.arrow {
+    font-size: 0.8em;
+    float: right;
+    cursor: pointer;
+}
+
+.disabled {
+    opacity: 0.35;
+    pointer-events: none;
 }

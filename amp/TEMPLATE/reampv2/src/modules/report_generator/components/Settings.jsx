@@ -60,7 +60,7 @@ class Settings extends Component {
     const { translations } = this.props;
     return (
       <>
-        <span onClick={this.toggleSettings}>{translations[`${TRN_PREFIX}settings`]}</span>
+        <span className="pointer" onClick={this.toggleSettings}>{translations[`${TRN_PREFIX}settings`]}</span>
         <div
           id="settings-popup"
           ref="settingsPopup"

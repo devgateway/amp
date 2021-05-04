@@ -89,7 +89,7 @@ class Filters extends Component {
     return (
       <>
         <Header size="small">
-          <span onClick={this.showFilterWidget}>{translations[`${TRN_PREFIX}filters`]}</span>
+          <span className="pointer" onClick={this.showFilterWidget}>{translations[`${TRN_PREFIX}filters`]}</span>
         </Header>
         {/* eslint-disable-next-line react/no-string-refs */}
         <div id="filter-popup" ref="filterPopup" style={{ display: (!show ? 'none' : 'block') }} />

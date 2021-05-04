@@ -15,10 +15,10 @@ export default class OptionsContent extends Component {
           <Form.Group className="fields-vertical">
             {radioList.map((item) => (
               <Form.Radio
-                label={item}
-                value={item}
-                key={item}
-                checked={item === selectedRadio}
+                label={item.label}
+                value={item.label}
+                key={item.name}
+                checked={item.label === selectedRadio}
                 onChange={changeRadioList}
               />
             ))}
@@ -27,10 +27,10 @@ export default class OptionsContent extends Component {
             <FormField key={`form_field_${item}`}>
               <Checkbox
                 toggle
-                key={item}
+                key={item.name}
                 onChange={changeCheckList ? changeCheckList[i] : {}}
                 checked={selectedCheckboxes && selectedCheckboxes.item}
-                label={item} />
+                label={item.label} />
             </FormField>
           ))}
         </Form>

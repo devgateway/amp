@@ -8,7 +8,12 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import OptionsList from './OptionsList';
 import { ReportGeneratorContext } from '../StartUp';
-import { TRN_PREFIX } from '../../utils/constants';
+import {
+  FUNDING_GROUPING_RADIO_OPTIONS, OPTIONS_CHECKBOX_OPTIONS,
+  TOTAL_GROUPING_CHECKBOX_OPTIONS,
+  TOTAL_GROUPING_RADIO_OPTIONS,
+  TRN_PREFIX
+} from '../../utils/constants';
 import OptionsContent from './OptionsContent';
 import {
   updateReportDetailsTotalGrouping, updateReportDetailsTotalsOnly,
@@ -54,20 +59,28 @@ class ReportingDetailSection extends Component {
     _updateReportDetailsDescription(value);
   }
 
+  getOptions = (group) => {
+    const { options } = this.props;
+    const radios = [];
+    if (options) {
+      group.forEach(i => {
+        if (options.find(j => j.name === i).visible) {
+          radios.push({
+            name: i,
+            label: options.find(j => j.name === i).label
+          });
+        }
+      });
+    }
+    return radios;
+  }
+
   render() {
     const {
       visible, translations, selectedTotalGrouping, selectedTotalsOnly, selectedFundingGrouping,
       selectedAllowEmptyFundingColumns, selectedSplitByFunding, selectedShowOriginalCurrencies,
       description
     } = this.props;
-
-    const fakeReportTypesRadio = ['Summary Report', 'Annual Report', 'Quarterly Report', 'Monthly Report'];
-    const fakeReportTypesCheck = ['Totals Only'];
-    const fakeFundingGrouping = ['Donor Report (Donor Funding)', 'Regional Report (Regional Funding)',
-      'Component Report (Component Funding)'];
-    const fakeOptions = ['Allow empty funding columns for year, quarter and month',
-      'Split by funding',
-      'Show Original reporting currencies'];
 
     return (
       <div className={!visible ? 'invisible-tab' : ''}>
@@ -76,8 +89,8 @@ class ReportingDetailSection extends Component {
             <GridColumn width="8">
               <OptionsList title={translations[`${TRN_PREFIX}totalGrouping`]} isRequired tooltip="tooltip 1" >
                 <OptionsContent
-                  radioList={fakeReportTypesRadio}
-                  checkList={fakeReportTypesCheck}
+                  radioList={this.getOptions(TOTAL_GROUPING_RADIO_OPTIONS)}
+                  checkList={this.getOptions(TOTAL_GROUPING_CHECKBOX_OPTIONS)}
                   selectedRadio={selectedTotalGrouping}
                   selectedCheckboxes={[selectedTotalsOnly]}
                   changeCheckList={[this.selectTotalsOnly]}
@@ -97,7 +110,7 @@ class ReportingDetailSection extends Component {
             <GridColumn width="8">
               <OptionsList title={translations[`${TRN_PREFIX}fundingGroup`]} tooltip="tooltip 3" >
                 <OptionsContent
-                  radioList={fakeFundingGrouping}
+                  radioList={this.getOptions(FUNDING_GROUPING_RADIO_OPTIONS)}
                   changeRadioList={this.selectFundingGrouping}
                   selectedRadio={selectedFundingGrouping}
                 />
@@ -106,7 +119,7 @@ class ReportingDetailSection extends Component {
             <GridColumn width="8">
               <OptionsList title={translations[`${TRN_PREFIX}options`]} tooltip="tooltip 4" >
                 <OptionsContent
-                  checkList={fakeOptions}
+                  checkList={this.getOptions(OPTIONS_CHECKBOX_OPTIONS)}
                   selectedCheckboxes={[selectedAllowEmptyFundingColumns, selectedSplitByFunding,
                     selectedShowOriginalCurrencies]}
                   changeCheckList={[this.selectAllowEmptyFundingColumns, this.selectSplitByFunding,
@@ -130,6 +143,7 @@ const mapStateToProps = (state) => ({
   selectedSplitByFunding: state.uiReducer.reportDetails.selectedSplitByFunding,
   selectedShowOriginalCurrencies: state.uiReducer.reportDetails.selectedShowOriginalCurrencies,
   description: state.uiReducer.reportDetails.description,
+  options: state.uiReducer.options,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -161,6 +175,7 @@ ReportingDetailSection.propTypes = {
   selectedShowOriginalCurrencies: PropTypes.bool,
   description: PropTypes.string,
   _updateReportDetailsDescription: PropTypes.func.isRequired,
+  options: PropTypes.object,
 };
 
 ReportingDetailSection.defaultProps = {
@@ -171,6 +186,7 @@ ReportingDetailSection.defaultProps = {
   selectedSplitByFunding: false,
   selectedShowOriginalCurrencies: false,
   description: undefined,
+  options: undefined,
 };
 
 ReportingDetailSection.contextType = ReportGeneratorContext;

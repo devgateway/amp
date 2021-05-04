@@ -119,7 +119,7 @@ class MeasuresSection extends Component {
           </GridRow>
           {selectedMeasures.length === 0
             ? (
-              <GridRow>
+              <GridRow className="narrowRow">
                 <Grid.Column width={8}>
                   <ErrorMessage visible message={translations[`${TRN_PREFIX}mustSelectOneMeasure`]} />
                 </Grid.Column>

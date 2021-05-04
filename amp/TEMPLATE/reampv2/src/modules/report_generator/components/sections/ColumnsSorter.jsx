@@ -72,7 +72,7 @@ export default class ColumnSorter extends Component {
 
   render() {
     const {
-      columns, order, checkbox, keyPrefix, translations
+      columns, order, checkbox, keyPrefix, translations, selected
     } = this.props;
     if (columns.length > 0) {
       let sortedColumns = columns;
@@ -112,6 +112,7 @@ export default class ColumnSorter extends Component {
                                   color="green"
                                   id={keyPrefix + item.id}
                                   label={item.label ? item.label : item.name}
+                                  checked={selected.find(j => j === item.id) !== undefined}
                                   onChange={this.onItemClick.bind(null, item.id)} />
                               )
                               : <span>{item.label ? item.label : item.name}</span> }
@@ -155,6 +156,7 @@ ColumnSorter.propTypes = {
   onColumnSelectionChange: PropTypes.func,
   keyPrefix: PropTypes.string.isRequired,
   translations: PropTypes.object.isRequired,
+  selected: PropTypes.array,
 };
 
 ColumnSorter.defaultProps = {
@@ -162,4 +164,5 @@ ColumnSorter.defaultProps = {
   order: [],
   checkbox: false,
   onColumnSelectionChange: undefined,
+  selected: [],
 };

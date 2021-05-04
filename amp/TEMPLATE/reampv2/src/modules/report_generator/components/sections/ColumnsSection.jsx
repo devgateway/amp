@@ -152,6 +152,7 @@ class ColumnsSection extends Component {
                 <ColumnSorter
                   keyPrefix="hierarchies"
                   checkbox
+                  selected={selectedHierarchies}
                   translations={translations}
                   columns={hierarchies}
                   order={hierarchiesOrder}
@@ -162,7 +163,7 @@ class ColumnsSection extends Component {
           </GridRow>
           {selectedColumns.length === 0
             ? (
-              <GridRow>
+              <GridRow className="narrowRow">
                 <Grid.Column width={8}>
                   <ErrorMessage visible message={translations[`${TRN_PREFIX}mustSelectOneColumn`]} />
                 </Grid.Column>
@@ -171,7 +172,7 @@ class ColumnsSection extends Component {
             : null }
           {selectedColumns.length > 0 && selectedColumns.length === selectedHierarchies.length && !selectedSummaryReport
             ? (
-              <GridRow>
+              <GridRow className="narrowRow">
                 <Grid.Column width={8}>
                   <ErrorMessage visible message={translations[`${TRN_PREFIX}needMoreHierarchies`]} />
                 </Grid.Column>

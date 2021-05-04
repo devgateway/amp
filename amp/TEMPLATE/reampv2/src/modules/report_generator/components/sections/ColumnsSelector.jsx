@@ -9,14 +9,18 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 export default class ColumnsSelector extends Component {
   constructor() {
     super();
-    this.state = { activeIndex: -1 }; // No need to keep this in Redux's store.
+    this.state = { activeIndex: [] }; // No need to keep this in Redux's store.
   }
 
   handleHeaderClick = (e, titleProps) => {
     const { index } = titleProps;
     const { activeIndex } = this.state;
-    const newIndex = activeIndex === index ? -1 : index;
-    this.setState({ activeIndex: newIndex });
+    if (activeIndex.includes(index)) {
+      activeIndex.splice(activeIndex.findIndex(i => i === index));
+    } else {
+      activeIndex.push(index);
+    }
+    this.setState({ activeIndex });
   }
 
   onItemClick = (id) => {
@@ -43,14 +47,14 @@ export default class ColumnsSelector extends Component {
         const categories = this.extractCategories(columns);
         return (
           <Form>
-            <Accordion fluid styled>
+            <Accordion fluid styled exclusive={false}>
               {categories.map((cat, i) => (
                 <div key={Math.random()}>
-                  <Accordion.Title index={i} active={activeIndex === i} onClick={this.handleHeaderClick}>
+                  <Accordion.Title index={i} active={activeIndex.includes(i)} onClick={this.handleHeaderClick}>
                     <Icon name="dropdown" />
                     {cat}
                   </Accordion.Title>
-                  <Accordion.Content active={activeIndex === i}>
+                  <Accordion.Content active={activeIndex.includes(i)}>
                     {columns.filter(col => (col.category === cat))
                       .map(col => (
                         <div className="column-item" key={Math.random()}>
@@ -73,7 +77,7 @@ export default class ColumnsSelector extends Component {
       } else {
         return (
           <Form>
-            {columns.map((col, i) => {
+            {columns.map((col) => {
               const tooltipText = col.description ? (
                 <Tooltip id={col.description}>
                   {col.description}

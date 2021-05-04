@@ -52,12 +52,22 @@
     height: 100%;
 }
 
-.option-list-content .sortable-item {
+.option-list-content .sortable-tr {
     font-weight: bold;
 }
 
-.sortable-item label {
+.sortable-tr label {
     font-weight: bold;
+}
+
+.sortable-td {
+    padding-top: 7px;
+    padding-bottom: 7px;
+    width: 100%;
+}
+
+.td-arrows {
+    max-width: 25px;
 }
 
 .option-list-title {

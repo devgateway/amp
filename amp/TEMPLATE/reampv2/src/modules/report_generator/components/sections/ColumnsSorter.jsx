@@ -87,7 +87,7 @@ export default class ColumnSorter extends Component {
           <DragDropContext onDragEnd={this.onDragEnd}>
             <Droppable droppableId={`${keyPrefix}_droppable`}>
               {(provided, snapshot) => (
-                <div
+                <table
                   {...provided.droppableProps}
                   ref={provided.innerRef}
                   style={this.getListStyle(snapshot.isDraggingOver)}
@@ -95,8 +95,8 @@ export default class ColumnSorter extends Component {
                   {sortedColumns.map((item, index) => (
                     <Draggable key={item.id} draggableId={`${item.id}`} index={index}>
                       {(provided_, snapshot_) => (
-                        <div
-                          className="sortable-item"
+                        <tr
+                          className="sortable-tr"
                           ref={provided_.innerRef}
                           {...provided_.draggableProps}
                           {...provided_.dragHandleProps}
@@ -105,16 +105,18 @@ export default class ColumnSorter extends Component {
                             provided_.draggableProps.style
                           )}
                         >
-                          {checkbox
-                            ? (
-                              <Checkbox
-                                color="green"
-                                id={keyPrefix + item.id}
-                                label={item.label}
-                                onChange={this.onItemClick.bind(null, item.id)} />
-                            )
-                            : <span>{item.label}</span> }
-                          <div>
+                          <td className="sortable-td">
+                            {checkbox
+                              ? (
+                                <Checkbox
+                                  color="green"
+                                  id={keyPrefix + item.id}
+                                  label={item.label}
+                                  onChange={this.onItemClick.bind(null, item.id)} />
+                              )
+                              : <span>{item.label}</span> }
+                          </td>
+                          <td className="sortable-td td-arrows">
                             <span
                               className={index === 0 ? 'disabled' : ''}
                               title={translations[`${TRN_PREFIX}moveUp`]}
@@ -127,13 +129,13 @@ export default class ColumnSorter extends Component {
                               onClick={this.moveDown.bind(null, index)}>
                               <Icon name="arrow down" color="blue" />
                             </span>
-                          </div>
-                        </div>
+                          </td>
+                        </tr>
                       )}
                     </Draggable>
                   ))}
                   {provided.placeholder}
-                </div>
+                </table>
               )}
             </Droppable>
           </DragDropContext>

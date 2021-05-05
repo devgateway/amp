@@ -24,6 +24,26 @@ import {
 } from '../../actions/stateUIActions';
 
 class ReportingDetailSection extends Component {
+  // eslint-disable-next-line no-unused-vars
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    const { selectedTotalGrouping, selectedFundingGrouping } = this.props;
+    // In the old report generator some options are pre-filled to a default value.
+    let options = this.getOptions(TOTAL_GROUPING_RADIO_OPTIONS);
+    if (selectedTotalGrouping === null && options.length > 0) {
+      const value = options[0] ? options[0].label : null;
+      if (value) {
+        this.selectTotalGrouping(null, { value });
+      }
+    }
+    options = this.getOptions(FUNDING_GROUPING_RADIO_OPTIONS);
+    if (selectedFundingGrouping === null && options.length > 0) {
+      const value = options[0] ? options[0].label : null;
+      if (value) {
+        this.selectFundingGrouping(null, { value });
+      }
+    }
+  }
+
   selectTotalGrouping = (e, { value }) => {
     const { _updateReportDetailsTotalGrouping } = this.props;
     _updateReportDetailsTotalGrouping(value);
@@ -79,7 +99,7 @@ class ReportingDetailSection extends Component {
     const {
       visible, translations, selectedTotalGrouping, selectedSummaryReport, selectedFundingGrouping,
       selectedAllowEmptyFundingColumns, selectedSplitByFunding, selectedShowOriginalCurrencies,
-      description
+      description, loading
     } = this.props;
 
     return (
@@ -94,7 +114,8 @@ class ReportingDetailSection extends Component {
                   selectedRadio={selectedTotalGrouping}
                   selectedCheckboxes={[selectedSummaryReport]}
                   changeCheckList={[this.selectSummaryReport]}
-                  changeRadioList={this.selectTotalGrouping} />
+                  changeRadioList={this.selectTotalGrouping}
+                  loading={loading} />
               </OptionsList>
             </GridColumn>
             <GridColumn width="8">
@@ -108,11 +129,12 @@ class ReportingDetailSection extends Component {
           <GridRow />
           <GridRow>
             <GridColumn width="8">
-              <OptionsList title={translations[`${TRN_PREFIX}fundingGroup`]} tooltip="tooltip 3" >
+              <OptionsList title={translations[`${TRN_PREFIX}fundingGroup`]} tooltip="tooltip 3" isRequired >
                 <OptionsContent
                   radioList={this.getOptions(FUNDING_GROUPING_RADIO_OPTIONS)}
                   changeRadioList={this.selectFundingGrouping}
                   selectedRadio={selectedFundingGrouping}
+                  loading={loading}
                 />
               </OptionsList>
             </GridColumn>
@@ -123,7 +145,8 @@ class ReportingDetailSection extends Component {
                   selectedCheckboxes={[selectedAllowEmptyFundingColumns, selectedSplitByFunding,
                     selectedShowOriginalCurrencies]}
                   changeCheckList={[this.selectAllowEmptyFundingColumns, this.selectSplitByFunding,
-                    this.selectShowOriginalCurrencies]} />
+                    this.selectShowOriginalCurrencies]}
+                  loading={loading} />
               </OptionsList>
             </GridColumn>
           </GridRow>
@@ -144,6 +167,7 @@ const mapStateToProps = (state) => ({
   selectedShowOriginalCurrencies: state.uiReducer.reportDetails.selectedShowOriginalCurrencies,
   description: state.uiReducer.reportDetails.description,
   options: state.uiReducer.options,
+  loading: state.uiReducer.metaDataPending,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -176,6 +200,7 @@ ReportingDetailSection.propTypes = {
   description: PropTypes.string,
   _updateReportDetailsDescription: PropTypes.func.isRequired,
   options: PropTypes.object,
+  loading: PropTypes.bool,
 };
 
 ReportingDetailSection.defaultProps = {
@@ -187,6 +212,7 @@ ReportingDetailSection.defaultProps = {
   selectedShowOriginalCurrencies: false,
   description: undefined,
   options: undefined,
+  loading: false,
 };
 
 ReportingDetailSection.contextType = ReportGeneratorContext;

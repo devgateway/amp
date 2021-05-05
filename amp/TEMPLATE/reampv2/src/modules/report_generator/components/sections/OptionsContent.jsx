@@ -7,11 +7,11 @@ import {
 export default class OptionsContent extends Component {
   render() {
     const {
-      radioList, checkList, changeRadioList, changeCheckList, selectedRadio, selectedCheckboxes
+      radioList, checkList, changeRadioList, changeCheckList, selectedRadio, selectedCheckboxes, loading
     } = this.props;
     return (
       <>
-        <Form>
+        <Form loading={loading}>
           <Form.Group className="fields-vertical">
             {radioList.map((item) => (
               <Form.Radio
@@ -46,6 +46,7 @@ OptionsContent.propTypes = {
   selectedCheckboxes: PropTypes.array,
   changeRadioList: PropTypes.func.isRequired,
   changeCheckList: PropTypes.array.isRequired,
+  loading: PropTypes.bool,
 };
 
 OptionsContent.defaultProps = {
@@ -53,4 +54,5 @@ OptionsContent.defaultProps = {
   checkList: [],
   selectedRadio: undefined,
   selectedCheckboxes: [],
+  loading: false,
 };

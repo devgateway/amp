@@ -78,6 +78,13 @@ textarea {
     font-weight: bold;
 }
 
+.reset-text {
+    position: absolute;
+    bottom: 10px;
+    width: max-content;
+    right: 0;
+}
+
 .sortable-td {
     padding-top: 7px;
     padding-bottom: 7px;
@@ -170,6 +177,7 @@ textarea {
 
 .ui.checkbox input:checked ~ label::before {
     background-color: #21C11C;
+    border-color: transparent;
 }
 
 .ui.checkbox input:checked ~ label::after {
@@ -184,6 +192,15 @@ textarea {
 
 .ui.form {
     height: 100%;
+}
+
+.ui.loading.form {
+    background-color: #D3D3D31C;
+    min-height: 75px;
+}
+
+.ui.loading.form::before {
+    background-color: #fafafa;
 }
 
 i, i.arrow {

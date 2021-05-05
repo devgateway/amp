@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Divider, Grid, GridColumn, GridRow, Header, Segment
+  Grid, GridColumn, GridRow, Header, Segment
 } from 'semantic-ui-react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -10,7 +10,12 @@ import { TRN_PREFIX } from '../utils/constants';
 
 class MainHeader extends Component {
   handleResetAll = () => {
-    alert('to be implemented');
+    const { translations } = this.props;
+    // eslint-disable-next-line no-restricted-globals
+    if (confirm(translations[`${TRN_PREFIX}confirmResetAll`])) {
+      // eslint-disable-next-line no-restricted-globals
+      location.reload();
+    }
   }
 
   handleCancel = () => {

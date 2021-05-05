@@ -14,7 +14,8 @@ import {
   updateColumnsSorting,
   updateHierarchiesSelected,
   updateHierarchiesSorting,
-  updateHierarchiesAvailable
+  updateHierarchiesAvailable,
+  resetColumnsSelected
 } from '../../actions/stateUIActions';
 import ColumnSorter from './ColumnsSorter';
 import ErrorMessage from '../ErrorMessage';
@@ -102,6 +103,11 @@ class ColumnsSection extends Component {
     this.setState({ search: event.target.value });
   }
 
+  handleReset = () => {
+    const { _resetColumnsSelected } = this.props;
+    _resetColumnsSelected();
+  }
+
   render() {
     const {
       visible, translations, columns, selectedColumns, hierarchies, hierarchiesOrder, selectedHierarchies,
@@ -111,10 +117,15 @@ class ColumnsSection extends Component {
     const _columns = search ? columns.filter(i => i.name.toLowerCase().indexOf(search.toLowerCase()) > -1) : columns;
     return (
       <div className={!visible ? 'invisible-tab' : ''}>
-        <Grid columns={3} divided>
+        <Grid columns={3}>
           <GridRow>
-            <GridColumn width="16">
+            <GridColumn width="8">
               <Input icon="search" placeholder={translations[`${TRN_PREFIX}search`]} onChange={this.handleSearch} />
+            </GridColumn>
+            <GridColumn width="8" textAlign="right">
+              <span className="green_text bold pointer reset-text" onClick={this.handleReset}>
+                {translations[`${TRN_PREFIX}resetColumns`]}
+              </span>
             </GridColumn>
           </GridRow>
           <GridRow>
@@ -201,6 +212,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   _updateHierarchiesSelected: (data) => dispatch(updateHierarchiesSelected(data)),
   _updateHierarchiesSorting: (data) => dispatch(updateHierarchiesSorting(data)),
   _updateHierarchiesAvailable: (data) => dispatch(updateHierarchiesAvailable(data)),
+  _resetColumnsSelected: () => dispatch(resetColumnsSelected()),
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ColumnsSection);
@@ -219,6 +231,7 @@ ColumnsSection.propTypes = {
   _updateHierarchiesSorting: PropTypes.func.isRequired,
   _updateHierarchiesSelected: PropTypes.func.isRequired,
   selectedSummaryReport: PropTypes.bool,
+  _resetColumnsSelected: PropTypes.func.isRequired,
 };
 
 ColumnsSection.defaultProps = {

@@ -12,7 +12,11 @@ import {
   UPDATE_MEASURES_SORT_COLUMN,
   UPDATE_HIERARCHIES_SELECTED_COLUMN,
   UPDATE_HIERARCHIES_SORT_COLUMN,
-  UPDATE_HIERARCHIES_LIST, FETCH_METADATA_PENDING, FETCH_METADATA_SUCCESS, FETCH_METADATA_ERROR,
+  UPDATE_HIERARCHIES_LIST,
+  FETCH_METADATA_PENDING,
+  FETCH_METADATA_SUCCESS,
+  FETCH_METADATA_ERROR,
+  RESET_MEASURES_SELECTED_COLUMN, RESET_COLUMNS_SELECTED_COLUMN,
 } from '../actions/stateUIActions';
 
 const initialState = {
@@ -173,6 +177,20 @@ export default (state = initialState, action) => {
           selected: action.payload
         }
       };
+    case RESET_COLUMNS_SELECTED_COLUMN:
+      return {
+        ...state,
+        columns: {
+          ...state.columns,
+          selected: [],
+          order: [],
+        },
+        hierarchies: {
+          available: [],
+          selected: [],
+          order: []
+        }
+      };
     case UPDATE_HIERARCHIES_LIST:
       return {
         ...state,
@@ -211,6 +229,15 @@ export default (state = initialState, action) => {
         measures: {
           ...state.measures,
           order: action.payload
+        }
+      };
+    case RESET_MEASURES_SELECTED_COLUMN:
+      return {
+        ...state,
+        measures: {
+          ...state.measures,
+          selected: [],
+          order: [],
         }
       };
     case FETCH_METADATA_PENDING:

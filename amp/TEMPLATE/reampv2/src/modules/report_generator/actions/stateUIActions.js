@@ -10,8 +10,10 @@ export const UPDATE_REPORT_DETAILS_SHOW_ORIGINAL_CURRENCIES = 'UPDATE_REPORT_DET
 export const UPDATE_REPORT_DETAILS_DESCRIPTION = 'UPDATE_REPORT_DETAILS_DESCRIPTION';
 export const UPDATE_COLUMNS_SELECTED_COLUMN = 'UPDATE_COLUMNS_SELECTED_COLUMN';
 export const UPDATE_COLUMNS_SORT_COLUMN = 'UPDATE_COLUMNS_SORT_COLUMN';
+export const RESET_COLUMNS_SELECTED_COLUMN = 'RESET_COLUMNS_SELECTED_COLUMN';
 export const UPDATE_MEASURES_SORT_COLUMN = 'UPDATE_MEASURES_SORT_COLUMN';
 export const UPDATE_MEASURES_SELECTED_COLUMN = 'UPDATE_MEASURES_SELECTED_COLUMN';
+export const RESET_MEASURES_SELECTED_COLUMN = 'RESET_MEASURES_SELECTED_COLUMN';
 export const UPDATE_HIERARCHIES_SORT_COLUMN = 'UPDATE_HIERARCHIES_SORT_COLUMN';
 export const UPDATE_HIERARCHIES_SELECTED_COLUMN = 'UPDATE_HIERARCHIES_SELECTED_COLUMN';
 export const UPDATE_HIERARCHIES_LIST = 'UPDATE_HIERARCHIES_LIST';
@@ -83,6 +85,12 @@ export function updateColumnsSorting(payload) {
   };
 }
 
+export function resetColumnsSelected() {
+  return {
+    type: RESET_COLUMNS_SELECTED_COLUMN
+  };
+}
+
 export function updateHierarchiesAvailable(payload) {
   return {
     type: UPDATE_HIERARCHIES_LIST,
@@ -115,6 +123,12 @@ export function updateMeasuresSorting(payload) {
   return {
     type: UPDATE_MEASURES_SORT_COLUMN,
     payload
+  };
+}
+
+export function resetMeasuresSelected() {
+  return {
+    type: RESET_MEASURES_SELECTED_COLUMN
   };
 }
 

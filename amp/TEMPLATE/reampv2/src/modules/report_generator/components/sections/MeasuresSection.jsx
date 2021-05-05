@@ -9,6 +9,7 @@ import { TRN_PREFIX } from '../../utils/constants';
 import {
   updateMeasuresSelected,
   updateMeasuresSorting,
+  resetMeasuresSelected,
 } from '../../actions/stateUIActions';
 import { ReportGeneratorContext } from '../StartUp';
 import OptionsList from './OptionsList';
@@ -74,6 +75,11 @@ class MeasuresSection extends Component {
     }
   }
 
+  handleReset = () => {
+    const { _resetMeasuresSelected } = this.props;
+    _resetMeasuresSelected();
+  }
+
   render() {
     const {
       visible, translations, measures, selectedMeasures, measuresOrder
@@ -82,10 +88,15 @@ class MeasuresSection extends Component {
     const _measures = search ? measures.filter(i => i.name.toLowerCase().indexOf(search.toLowerCase()) > -1) : measures;
     return (
       <div className={!visible ? 'invisible-tab' : ''}>
-        <Grid divided>
+        <Grid>
           <GridRow>
-            <GridColumn width="16">
+            <GridColumn width="8">
               <Input icon="search" placeholder={translations[`${TRN_PREFIX}search`]} onChange={this.handleSearch} />
+            </GridColumn>
+            <GridColumn width="8" textAlign="right">
+              <span className="green_text bold pointer reset-text" onClick={this.handleReset}>
+                {translations[`${TRN_PREFIX}resetMeasures`]}
+              </span>
             </GridColumn>
           </GridRow>
           <GridRow>
@@ -142,6 +153,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = dispatch => bindActionCreators({
   _updateMeasuresSelected: (data) => dispatch(updateMeasuresSelected(data)),
   _updateMeasuresSorting: (data) => dispatch(updateMeasuresSorting(data)),
+  _resetMeasuresSelected: () => dispatch(resetMeasuresSelected),
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MeasuresSection);
@@ -154,6 +166,7 @@ MeasuresSection.propTypes = {
   measuresOrder: PropTypes.array,
   _updateMeasuresSelected: PropTypes.func.isRequired,
   _updateMeasuresSorting: PropTypes.func.isRequired,
+  _resetMeasuresSelected: PropTypes.func.isRequired,
 };
 
 MeasuresSection.defaultProps = {

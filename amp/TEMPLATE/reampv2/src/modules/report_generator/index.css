@@ -80,9 +80,9 @@ textarea {
 
 .reset-text {
     position: absolute;
-    bottom: 10px;
+    bottom: 1.5em;
     width: max-content;
-    right: 0;
+    right: 4%;
 }
 
 .sortable-td {

@@ -105,51 +105,46 @@ class ReportingDetailSection extends Component {
     return (
       <div className={!visible ? 'invisible-tab' : ''}>
         <Grid>
-          <GridRow>
-            <GridColumn width="8">
-              <OptionsList title={translations[`${TRN_PREFIX}totalGrouping`]} isRequired tooltip="tooltip 1" >
-                <OptionsContent
-                  radioList={this.getOptions(TOTAL_GROUPING_RADIO_OPTIONS)}
-                  checkList={this.getOptions(TOTAL_GROUPING_CHECKBOX_OPTIONS)}
-                  selectedRadio={selectedTotalGrouping}
-                  selectedCheckboxes={[selectedSummaryReport]}
-                  changeCheckList={[this.selectSummaryReport]}
-                  changeRadioList={this.selectTotalGrouping}
-                  loading={loading} />
-              </OptionsList>
-            </GridColumn>
-            <GridColumn width="8">
-              <OptionsList title={translations[`${TRN_PREFIX}reportDescription`]} isRequired tooltip="tooltip 2" >
-                <Form>
-                  <TextArea value={description} onChange={this.changeDescription} />
-                </Form>
-              </OptionsList>
-            </GridColumn>
-          </GridRow>
-          <GridRow />
-          <GridRow>
-            <GridColumn width="8">
-              <OptionsList title={translations[`${TRN_PREFIX}fundingGroup`]} tooltip="tooltip 3" isRequired >
-                <OptionsContent
-                  radioList={this.getOptions(FUNDING_GROUPING_RADIO_OPTIONS)}
-                  changeRadioList={this.selectFundingGrouping}
-                  selectedRadio={selectedFundingGrouping}
-                  loading={loading}
+          <GridColumn computer="8" tablet="16">
+            <OptionsList title={translations[`${TRN_PREFIX}totalGrouping`]} isRequired tooltip="tooltip 1" >
+              <OptionsContent
+                radioList={this.getOptions(TOTAL_GROUPING_RADIO_OPTIONS)}
+                checkList={this.getOptions(TOTAL_GROUPING_CHECKBOX_OPTIONS)}
+                selectedRadio={selectedTotalGrouping}
+                selectedCheckboxes={[selectedSummaryReport]}
+                changeCheckList={[this.selectSummaryReport]}
+                changeRadioList={this.selectTotalGrouping}
+                loading={loading} />
+            </OptionsList>
+          </GridColumn>
+          <GridColumn computer="8" tablet="16">
+            <OptionsList title={translations[`${TRN_PREFIX}reportDescription`]} isRequired tooltip="tooltip 2" >
+              <Form>
+                <TextArea value={description} onChange={this.changeDescription} />
+              </Form>
+            </OptionsList>
+          </GridColumn>
+          <GridColumn computer="8" tablet="16">
+            <OptionsList title={translations[`${TRN_PREFIX}fundingGroup`]} tooltip="tooltip 3" isRequired >
+              <OptionsContent
+                radioList={this.getOptions(FUNDING_GROUPING_RADIO_OPTIONS)}
+                changeRadioList={this.selectFundingGrouping}
+                selectedRadio={selectedFundingGrouping}
+                loading={loading}
                 />
-              </OptionsList>
-            </GridColumn>
-            <GridColumn width="8">
-              <OptionsList title={translations[`${TRN_PREFIX}options`]} tooltip="tooltip 4" >
-                <OptionsContent
-                  checkList={this.getOptions(OPTIONS_CHECKBOX_OPTIONS)}
-                  selectedCheckboxes={[selectedAllowEmptyFundingColumns, selectedSplitByFunding,
-                    selectedShowOriginalCurrencies]}
-                  changeCheckList={[this.selectAllowEmptyFundingColumns, this.selectSplitByFunding,
-                    this.selectShowOriginalCurrencies]}
-                  loading={loading} />
-              </OptionsList>
-            </GridColumn>
-          </GridRow>
+            </OptionsList>
+          </GridColumn>
+          <GridColumn computer="8" tablet="16">
+            <OptionsList title={translations[`${TRN_PREFIX}options`]} tooltip="tooltip 4" >
+              <OptionsContent
+                checkList={this.getOptions(OPTIONS_CHECKBOX_OPTIONS)}
+                selectedCheckboxes={[selectedAllowEmptyFundingColumns, selectedSplitByFunding,
+                  selectedShowOriginalCurrencies]}
+                changeCheckList={[this.selectAllowEmptyFundingColumns, this.selectSplitByFunding,
+                  this.selectShowOriginalCurrencies]}
+                loading={loading} />
+            </OptionsList>
+          </GridColumn>
         </Grid>
       </div>
     );

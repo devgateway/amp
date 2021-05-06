@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Button, Item, Menu
+  Button, Item, Menu, Modal
 } from 'semantic-ui-react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -33,6 +33,18 @@ class MainMenu extends Component {
     onClick(index);
   }
 
+  generateSaveModal = (button) => {
+    const { translations } = this.props;
+    return (
+      <Modal
+        trigger={button}
+        header={translations[`${TRN_PREFIX}enterReportTitle`]}
+        content="asdfasdfasdf"
+        actions={[{ key: 'done', content: 'Done', positive: true }]}
+    />
+    );
+  }
+
   render() {
     const { activeItem } = this.state;
     const { translations } = this.props;
@@ -58,8 +70,8 @@ class MainMenu extends Component {
             onClick={this.handleItemClick}
               />
           <Item className="save_buttons_item">
-            <Button color="green">{translations[`${TRN_PREFIX}save`]}</Button>
-            <Button color="orange">{translations[`${TRN_PREFIX}saveAs`]}</Button>
+            {this.generateSaveModal(<Button color="green">{translations[`${TRN_PREFIX}save`]}</Button>)}
+            {this.generateSaveModal(<Button color="orange">{translations[`${TRN_PREFIX}saveAs`]}</Button>)}
           </Item>
         </Menu>
         <Item>

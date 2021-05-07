@@ -1,6 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.reports.designer;
 
-import org.dgfoundation.amp.ar.MeasureConstants;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpMeasures;
@@ -22,7 +21,7 @@ import static org.digijava.kernel.ampapi.endpoints.reports.designer.ReportMeasur
  *
  * @author Viorel Chihai
  */
-public class ReportMeasureProvider {
+public class ReportMeasureProvider extends ReportEntityProvider {
 
     public static final String MODULE_MEASURE_NAME = "Measures";
 
@@ -71,17 +70,6 @@ public class ReportMeasureProvider {
                 .setCacheable(true)
                 .addOrder(Order.asc("measureName"))
                 .list();
-    }
-
-    private boolean isMTEFName(String name) {
-        String regex = "^(" + MeasureConstants.MTEF
-                + "|" + MeasureConstants.REAL_MTEF
-                + "|" + MeasureConstants.MTEF_PROJECTIONS
-                + "|" + MeasureConstants.PIPELINE_MTEF_PROJECTIONS
-                + "|" + MeasureConstants.PROJECTION_MTEF_PROJECTIONS
-                + ").*$";
-
-        return name.matches(regex);
     }
 
     private boolean isAmpMeasureVisible(AmpMeasures m) {

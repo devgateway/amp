@@ -57,7 +57,7 @@ class ColumnsSection extends Component {
           added = i;
         }
       });
-      if (added && columns.find(i => i.id === added)['is-hierarchy']) {
+      if (added && columns.find(i => i.id === added).hierarchy) {
         _hierarchies.push(columns.find(i => i.id === added));
         _updateHierarchiesAvailable(_hierarchies);
         hierarchiesOrder.push(added);

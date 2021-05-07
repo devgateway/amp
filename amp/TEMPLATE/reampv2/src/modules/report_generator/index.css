@@ -191,7 +191,8 @@ textarea {
 }
 
 .ui.form {
-    height: 100%;
+    height: max-content;
+    padding-bottom: 10px;
 }
 
 .ui.loading.form {

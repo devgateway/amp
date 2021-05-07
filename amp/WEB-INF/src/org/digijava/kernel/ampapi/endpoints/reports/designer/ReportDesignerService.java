@@ -3,7 +3,6 @@ package org.digijava.kernel.ampapi.endpoints.reports.designer;
 import org.digijava.kernel.ampapi.endpoints.common.AMPTranslatorService;
 import org.digijava.kernel.ampapi.endpoints.reports.designer.builder.ReportDesignerBuilder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,10 +14,13 @@ public class ReportDesignerService {
 
     private final ReportOptionProvider reportOptionProvider;
 
+    private final ReportColumnProvider reportColumnProvider;
+
     private final ReportMeasureProvider reportMeasureProvider;
 
     public ReportDesignerService() {
         this.reportOptionProvider = new ReportOptionProvider(AMPTranslatorService.INSTANCE);
+        this.reportColumnProvider = new ReportColumnProvider(AMPTranslatorService.INSTANCE);
         this.reportMeasureProvider = new ReportMeasureProvider(AMPTranslatorService.INSTANCE);
     }
 
@@ -33,7 +35,7 @@ public class ReportDesignerService {
     }
 
     private List<ReportColumn> getColumns(final ReportProfile profile, final ReportType type) {
-        return new ArrayList<>();
+        return reportColumnProvider.getColumns(profile, type);
     }
 
     private List<ReportMeasure> getMeasures(final ReportType type) {

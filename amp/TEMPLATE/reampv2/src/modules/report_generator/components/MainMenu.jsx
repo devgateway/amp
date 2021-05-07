@@ -1,17 +1,20 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Button, Item, Menu
+  Button, Item, Menu,
 } from 'semantic-ui-react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { TRN_PREFIX } from '../utils/constants';
 import './MainMenu.css';
+import SaveModal from './SaveModal';
 
 class MainMenu extends Component {
   constructor() {
     super();
-    this.state = { activeItem: 'details' };
+    this.state = {
+      activeItem: 'details', modalSaveError: null, saveModalOpen: false, isNewReport: false
+    };
   }
 
   handleItemClick = (e, { name }) => {
@@ -33,8 +36,18 @@ class MainMenu extends Component {
     onClick(index);
   }
 
+  setSaveModalOpen = (open, isNew) => {
+    this.setState({ saveModalOpen: open, isNewReport: isNew });
+  }
+
+  saveReport = (title) => {
+    alert(title);
+  }
+
   render() {
-    const { activeItem } = this.state;
+    const {
+      activeItem, modalSaveError, saveModalOpen, isNewReport
+    } = this.state;
     const { translations } = this.props;
     return (
       <>
@@ -58,16 +71,26 @@ class MainMenu extends Component {
             onClick={this.handleItemClick}
               />
           <Item className="save_buttons_item">
-            <Button color="green">{translations[`${TRN_PREFIX}save`]}</Button>
-            <Button color="orange">{translations[`${TRN_PREFIX}saveAs`]}</Button>
+            <Button color="green" onClick={() => this.setSaveModalOpen(true, false)}>
+              {translations[`${TRN_PREFIX}save`]}
+            </Button>
+            <Button color="orange" onClick={() => this.setSaveModalOpen(true, true)}>
+              {translations[`${TRN_PREFIX}saveAs`]}
+            </Button>
           </Item>
         </Menu>
         <Item>
           <Button disabled size="huge" fluid color="grey">{translations[`${TRN_PREFIX}plusRunReport`]}</Button>
         </Item>
+        <SaveModal
+          open={saveModalOpen}
+          modalSaveError={modalSaveError}
+          isNewReport={isNewReport}
+          save={this.saveReport}
+          close={() => this.setSaveModalOpen(false)} />
       </>
     );
-  }
+  } /* TODO: dispatch the title and send as props. */
 }
 
 const mapStateToProps = state => ({

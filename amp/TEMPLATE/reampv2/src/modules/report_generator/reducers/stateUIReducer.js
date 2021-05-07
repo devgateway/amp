@@ -12,7 +12,11 @@ import {
   UPDATE_MEASURES_SORT_COLUMN,
   UPDATE_HIERARCHIES_SELECTED_COLUMN,
   UPDATE_HIERARCHIES_SORT_COLUMN,
-  UPDATE_HIERARCHIES_LIST, FETCH_METADATA_PENDING, FETCH_METADATA_SUCCESS, FETCH_METADATA_ERROR,
+  UPDATE_HIERARCHIES_LIST,
+  FETCH_METADATA_PENDING,
+  FETCH_METADATA_SUCCESS,
+  FETCH_METADATA_ERROR,
+  RESET_MEASURES_SELECTED_COLUMN, RESET_COLUMNS_SELECTED_COLUMN,
 } from '../actions/stateUIActions';
 
 const initialState = {
@@ -26,61 +30,7 @@ const initialState = {
     description: null,
   },
   columns: {
-    available: [
-      {
-        id: 256,
-        name: 'Project Title',
-        label: 'Project Title',
-        description: 'The Project Title tooltip',
-        category: 'Identification',
-        'is-hierarchy': true,
-        'is-amount': false
-      },
-      {
-        id: 257,
-        name: 'AMP ID',
-        label: 'AMP ID',
-        description: 'The AMP ID tooltip',
-        category: 'Identification',
-        'is-hierarchy': false,
-        'is-amount': false
-      },
-      {
-        id: 532,
-        name: 'Donor Agency',
-        label: 'Donor Agency',
-        description: 'The Donor Agency tooltip',
-        category: 'Funding Information',
-        'is-hierarchy': true,
-        'is-amount': false
-      },
-      {
-        id: 533,
-        name: 'Primary Sector',
-        label: 'Primary Sector',
-        description: 'blablabla',
-        category: 'Sectors',
-        'is-hierarchy': true,
-        'is-amount': false
-      },
-      {
-        id: 534,
-        name: 'Primary Sector Sub-Sector',
-        label: 'Primary Sector Sub-Sector',
-        description: 'blablablafasdf',
-        category: 'Sectors',
-        'is-hierarchy': true,
-        'is-amount': false
-      },
-      {
-        id: 535,
-        name: 'Primary Sector Sub-Sub-Sector',
-        label: 'Primary Sector Sub-Sub-Sector',
-        description: 'blablablafasdf asdfasdf asd',
-        category: 'Sectors',
-        'is-hierarchy': true,
-        'is-amount': false
-      }],
+    available: [],
     selected: [],
   },
   hierarchies: {
@@ -173,6 +123,20 @@ export default (state = initialState, action) => {
           selected: action.payload
         }
       };
+    case RESET_COLUMNS_SELECTED_COLUMN:
+      return {
+        ...state,
+        columns: {
+          ...state.columns,
+          selected: [],
+          order: [],
+        },
+        hierarchies: {
+          available: [],
+          selected: [],
+          order: []
+        }
+      };
     case UPDATE_HIERARCHIES_LIST:
       return {
         ...state,
@@ -213,6 +177,15 @@ export default (state = initialState, action) => {
           order: action.payload
         }
       };
+    case RESET_MEASURES_SELECTED_COLUMN:
+      return {
+        ...state,
+        measures: {
+          ...state.measures,
+          selected: [],
+          order: [],
+        }
+      };
     case FETCH_METADATA_PENDING:
       return {
         ...state,
@@ -226,8 +199,9 @@ export default (state = initialState, action) => {
         measures: {
           available: action.payload.measures
         },
-        /* hierarchies: action.payload.hierarchies, */
-        /* columns: action.payload.column, */
+        columns: {
+          available: action.payload.columns
+        },
         options: action.payload.options,
       };
     }

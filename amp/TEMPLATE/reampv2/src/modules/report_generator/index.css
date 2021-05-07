@@ -78,6 +78,13 @@ textarea {
     font-weight: bold;
 }
 
+.reset-text {
+    position: absolute;
+    bottom: 1.5em;
+    width: max-content;
+    right: 4%;
+}
+
 .sortable-td {
     padding-top: 7px;
     padding-bottom: 7px;
@@ -170,6 +177,7 @@ textarea {
 
 .ui.checkbox input:checked ~ label::before {
     background-color: #21C11C;
+    border-color: transparent;
 }
 
 .ui.checkbox input:checked ~ label::after {
@@ -183,16 +191,49 @@ textarea {
 }
 
 .ui.form {
-    height: 100%;
+    height: max-content;
+    padding-bottom: 10px;
 }
 
-i, i.arrow {
+.ui.loading.form {
+    background-color: #D3D3D31C;
+    min-height: 75px;
+}
+
+.ui.loading.form::before {
+    background-color: #fafafa;
+}
+
+.ui.modal > .header {
+    padding: 0.75rem 1rem;
+}
+
+.ui > .modal > .form {
+    padding: 1em;
+}
+
+.ui > .content > .form > .field > .label {
+    background-color: white;
+}
+
+i.arrow {
     font-size: 0.8em;
     float: right;
     cursor: pointer;
 }
 
+.ui.dimmer {
+    background: rgba(0, 0, 0, 0.50);
+}
+
 .disabled {
     opacity: 0.35;
     pointer-events: none;
+}
+
+.save-modal {
+    height: max-content;
+    top: 25%;
+    left: 35%;
+    width: 30% !important;
 }

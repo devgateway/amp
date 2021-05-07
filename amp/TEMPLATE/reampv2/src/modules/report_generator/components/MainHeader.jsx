@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Divider, Grid, GridColumn, GridRow, Header, Segment
+  Grid, GridColumn, GridRow, Header, Segment
 } from 'semantic-ui-react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -10,7 +10,12 @@ import { TRN_PREFIX } from '../utils/constants';
 
 class MainHeader extends Component {
   handleResetAll = () => {
-    alert('to be implemented');
+    const { translations } = this.props;
+    // eslint-disable-next-line no-restricted-globals
+    if (confirm(translations[`${TRN_PREFIX}confirmResetAll`])) {
+      // eslint-disable-next-line no-restricted-globals
+      location.reload();
+    }
   }
 
   handleCancel = () => {
@@ -45,7 +50,7 @@ class MainHeader extends Component {
           </GridRow>
           <GridRow>
             {/* eslint-disable-next-line max-len */}
-            <Segment basic>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</Segment>
+            <Segment basic>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</Segment>
           </GridRow>
         </Grid>
       </>

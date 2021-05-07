@@ -14,7 +14,8 @@ import {
   updateColumnsSorting,
   updateHierarchiesSelected,
   updateHierarchiesSorting,
-  updateHierarchiesAvailable
+  updateHierarchiesAvailable,
+  resetColumnsSelected
 } from '../../actions/stateUIActions';
 import ColumnSorter from './ColumnsSorter';
 import ErrorMessage from '../ErrorMessage';
@@ -56,7 +57,7 @@ class ColumnsSection extends Component {
           added = i;
         }
       });
-      if (added && columns.find(i => i.id === added)['is-hierarchy']) {
+      if (added && columns.find(i => i.id === added).hierarchy) {
         _hierarchies.push(columns.find(i => i.id === added));
         _updateHierarchiesAvailable(_hierarchies);
         hierarchiesOrder.push(added);
@@ -102,81 +103,83 @@ class ColumnsSection extends Component {
     this.setState({ search: event.target.value });
   }
 
+  handleReset = () => {
+    const { _resetColumnsSelected } = this.props;
+    _resetColumnsSelected();
+  }
+
   render() {
     const {
       visible, translations, columns, selectedColumns, hierarchies, hierarchiesOrder, selectedHierarchies,
       selectedSummaryReport
     } = this.props;
     const { search } = this.state;
-    const _columns = search ? columns.filter(i => i.name.toLowerCase().indexOf(search.toLowerCase()) > -1) : columns;
+    const _columns = search ? columns.filter(i => i.label.toLowerCase().indexOf(search.toLowerCase()) > -1) : columns;
     return (
       <div className={!visible ? 'invisible-tab' : ''}>
-        <Grid columns={3} divided>
-          <GridRow>
-            <GridColumn width="16">
-              <Input icon="search" placeholder={translations[`${TRN_PREFIX}search`]} onChange={this.handleSearch} />
-            </GridColumn>
-          </GridRow>
-          <GridRow>
-            <Grid.Column>
-              <OptionsList
-                title={translations[`${TRN_PREFIX}availableColumns`]}
-                tooltip="tooltip 1"
-                className="smallHeight" >
-                <ColumnsSelector
-                  columns={_columns}
-                  selected={selectedColumns}
-                  showLoadingWhenEmpty
-                  onColumnSelectionChange={this.handleColumnSelection} />
-              </OptionsList>
-            </Grid.Column>
-            <Grid.Column>
-              <OptionsList
-                title={translations[`${TRN_PREFIX}selectedColumns`]}
-                isRequired
-                tooltip="tooltip 2"
-                className="smallHeight" >
-                <ColumnSorter
-                  keyPrefix="columns"
-                  translations={translations}
-                  columns={columns.filter(i => selectedColumns.find(j => j === i.id))}
-                  order={selectedColumns}
-                  onColumnSortChange={this.handleColumnSort} />
-              </OptionsList>
-            </Grid.Column>
-            <Grid.Column>
-              <OptionsList
-                title={translations[`${TRN_PREFIX}hierarchies`]}
-                tooltip="tooltip 3"
-                className="smallHeight" >
-                <ColumnSorter
-                  keyPrefix="hierarchies"
-                  checkbox
-                  selected={selectedHierarchies}
-                  translations={translations}
-                  columns={hierarchies}
-                  order={hierarchiesOrder}
-                  onColumnSelectionChange={this.handleHierarchySelection}
-                  onColumnSortChange={this.handleHierarchySort} />
-              </OptionsList>
-            </Grid.Column>
-          </GridRow>
+        <Grid columns={3}>
+          <GridColumn computer="8" tablet="16">
+            <Input icon="search" placeholder={translations[`${TRN_PREFIX}search`]} onChange={this.handleSearch} />
+          </GridColumn>
+          <GridColumn computer="8" textAlign="right" tablet="16">
+            <span className="green_text bold pointer reset-text" onClick={this.handleReset}>
+              {translations[`${TRN_PREFIX}resetColumns`]}
+            </span>
+          </GridColumn>
+          <Grid.Column computer="6" tablet="16">
+            <OptionsList
+              title={translations[`${TRN_PREFIX}availableColumns`]}
+              tooltip="tooltip 1"
+              className="smallHeight" >
+              <ColumnsSelector
+                columns={_columns}
+                selected={selectedColumns}
+                showLoadingWhenEmpty
+                onColumnSelectionChange={this.handleColumnSelection} />
+            </OptionsList>
+          </Grid.Column>
+          <Grid.Column computer="5" tablet="16">
+            <OptionsList
+              title={translations[`${TRN_PREFIX}selectedColumns`]}
+              isRequired
+              tooltip="tooltip 2"
+              className="smallHeight" >
+              <ColumnSorter
+                keyPrefix="columns"
+                translations={translations}
+                columns={columns.filter(i => selectedColumns.find(j => j === i.id))}
+                order={selectedColumns}
+                onColumnSortChange={this.handleColumnSort} />
+            </OptionsList>
+          </Grid.Column>
+          <Grid.Column computer="5" tablet="16">
+            <OptionsList
+              title={translations[`${TRN_PREFIX}hierarchies`]}
+              tooltip="tooltip 3"
+              className="smallHeight" >
+              <ColumnSorter
+                keyPrefix="hierarchies"
+                checkbox
+                selected={selectedHierarchies}
+                translations={translations}
+                columns={hierarchies}
+                order={hierarchiesOrder}
+                onColumnSelectionChange={this.handleHierarchySelection}
+                onColumnSortChange={this.handleHierarchySort} />
+            </OptionsList>
+          </Grid.Column>
           {selectedColumns.length === 0
             ? (
-              <GridRow className="narrowRow">
-                <Grid.Column width={8}>
-                  <ErrorMessage visible message={translations[`${TRN_PREFIX}mustSelectOneColumn`]} />
-                </Grid.Column>
-              </GridRow>
+              <Grid.Column computer={16} className="narrowRow">
+                <ErrorMessage visible message={translations[`${TRN_PREFIX}mustSelectOneColumn`]} />
+              </Grid.Column>
             )
             : null }
           {selectedColumns.length > 0 && selectedColumns.length === selectedHierarchies.length && !selectedSummaryReport
             ? (
-              <GridRow className="narrowRow">
-                <Grid.Column width={8}>
-                  <ErrorMessage visible message={translations[`${TRN_PREFIX}needMoreHierarchies`]} />
-                </Grid.Column>
-              </GridRow>
+              <Grid.Column computer={16} className="narrowRow">
+                <ErrorMessage visible message={translations[`${TRN_PREFIX}needMoreHierarchies`]} />
+              </Grid.Column>
             )
             : null }
         </Grid>
@@ -201,6 +204,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   _updateHierarchiesSelected: (data) => dispatch(updateHierarchiesSelected(data)),
   _updateHierarchiesSorting: (data) => dispatch(updateHierarchiesSorting(data)),
   _updateHierarchiesAvailable: (data) => dispatch(updateHierarchiesAvailable(data)),
+  _resetColumnsSelected: () => dispatch(resetColumnsSelected()),
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ColumnsSection);
@@ -219,6 +223,7 @@ ColumnsSection.propTypes = {
   _updateHierarchiesSorting: PropTypes.func.isRequired,
   _updateHierarchiesSelected: PropTypes.func.isRequired,
   selectedSummaryReport: PropTypes.bool,
+  _resetColumnsSelected: PropTypes.func.isRequired,
 };
 
 ColumnsSection.defaultProps = {

@@ -9,6 +9,7 @@ import { TRN_PREFIX } from '../../utils/constants';
 import {
   updateMeasuresSelected,
   updateMeasuresSorting,
+  resetMeasuresSelected,
 } from '../../actions/stateUIActions';
 import { ReportGeneratorContext } from '../StartUp';
 import OptionsList from './OptionsList';
@@ -74,56 +75,61 @@ class MeasuresSection extends Component {
     }
   }
 
+  handleReset = () => {
+    const { _resetMeasuresSelected } = this.props;
+    _resetMeasuresSelected();
+  }
+
   render() {
     const {
       visible, translations, measures, selectedMeasures, measuresOrder
     } = this.props;
     const { search } = this.state;
-    const _measures = search ? measures.filter(i => i.name.toLowerCase().indexOf(search.toLowerCase()) > -1) : measures;
+    const _measures = search ? measures.filter(i => i.label.toLowerCase().indexOf(search.toLowerCase()) > -1)
+      : measures;
     return (
       <div className={!visible ? 'invisible-tab' : ''}>
-        <Grid divided>
-          <GridRow>
-            <GridColumn width="16">
-              <Input icon="search" placeholder={translations[`${TRN_PREFIX}search`]} onChange={this.handleSearch} />
-            </GridColumn>
-          </GridRow>
-          <GridRow>
-            <Grid.Column width={8}>
-              <OptionsList
-                title={translations[`${TRN_PREFIX}availableFinancialMeasures`]}
-                tooltip="tooltip 1"
-                className="smallHeight">
-                <ColumnsSelector
-                  columns={_measures}
-                  selected={selectedMeasures}
-                  showLoadingWhenEmpty
-                  noCategories
-                  onColumnSelectionChange={this.handleMeasureSelection} />
-              </OptionsList>
-            </Grid.Column>
-            <Grid.Column width={8}>
-              <OptionsList
-                className="smallHeight"
-                title={translations[`${TRN_PREFIX}orderSelectedFinancialMeasures`]}
-                tooltip="tooltip 1" >
-                <ColumnSorter
-                  keyPrefix="measures"
-                  translations={translations}
-                  columns={measures.filter(i => selectedMeasures.find(j => j === i.id))}
-                  order={measuresOrder}
-                  onColumnSelectionChange={this.handleHierarchySelection}
-                  onColumnSortChange={this.handleMeasureSort} />
-              </OptionsList>
-            </Grid.Column>
-          </GridRow>
+        <Grid>
+          <GridColumn computer="8">
+            <Input icon="search" placeholder={translations[`${TRN_PREFIX}search`]} onChange={this.handleSearch} />
+          </GridColumn>
+          <GridColumn computer="8" textAlign="right">
+            <span className="green_text bold pointer reset-text" onClick={this.handleReset}>
+              {translations[`${TRN_PREFIX}resetMeasures`]}
+            </span>
+          </GridColumn>
+          <Grid.Column computer="8" tablet="16">
+            <OptionsList
+              title={translations[`${TRN_PREFIX}availableFinancialMeasures`]}
+              tooltip="tooltip 1"
+              className="smallHeight">
+              <ColumnsSelector
+                columns={_measures}
+                selected={selectedMeasures}
+                showLoadingWhenEmpty
+                noCategories
+                onColumnSelectionChange={this.handleMeasureSelection} />
+            </OptionsList>
+          </Grid.Column>
+          <Grid.Column computer="8" tablet="16">
+            <OptionsList
+              className="smallHeight"
+              title={translations[`${TRN_PREFIX}orderSelectedFinancialMeasures`]}
+              tooltip="tooltip 1" >
+              <ColumnSorter
+                keyPrefix="measures"
+                translations={translations}
+                columns={measures.filter(i => selectedMeasures.find(j => j === i.id))}
+                order={measuresOrder}
+                onColumnSelectionChange={this.handleHierarchySelection}
+                onColumnSortChange={this.handleMeasureSort} />
+            </OptionsList>
+          </Grid.Column>
           {selectedMeasures.length === 0
             ? (
-              <GridRow className="narrowRow">
-                <Grid.Column width={8}>
-                  <ErrorMessage visible message={translations[`${TRN_PREFIX}mustSelectOneMeasure`]} />
-                </Grid.Column>
-              </GridRow>
+              <Grid.Column computer={16} className="narrowRow">
+                <ErrorMessage visible message={translations[`${TRN_PREFIX}mustSelectOneMeasure`]} />
+              </Grid.Column>
             )
             : null }
         </Grid>
@@ -142,6 +148,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = dispatch => bindActionCreators({
   _updateMeasuresSelected: (data) => dispatch(updateMeasuresSelected(data)),
   _updateMeasuresSorting: (data) => dispatch(updateMeasuresSorting(data)),
+  _resetMeasuresSelected: () => dispatch(resetMeasuresSelected),
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MeasuresSection);
@@ -154,6 +161,7 @@ MeasuresSection.propTypes = {
   measuresOrder: PropTypes.array,
   _updateMeasuresSelected: PropTypes.func.isRequired,
   _updateMeasuresSorting: PropTypes.func.isRequired,
+  _resetMeasuresSelected: PropTypes.func.isRequired,
 };
 
 MeasuresSection.defaultProps = {

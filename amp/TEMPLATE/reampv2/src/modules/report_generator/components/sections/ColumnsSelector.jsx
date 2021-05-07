@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Accordion, Checkbox, Form, Icon, Image
+  Accordion, Checkbox, Form, Icon, Image, Item
 } from 'semantic-ui-react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
@@ -106,7 +106,9 @@ export default class ColumnsSelector extends Component {
         );
       }
     } else if (showLoadingWhenEmpty) {
-      return <Image src="https://react.semantic-ui.com/images/wireframe/media-paragraph.png" />;
+      return (
+        <Form loading />
+      );
     } else {
       return null;
     }

@@ -58,6 +58,11 @@
     height: 85%;
 }
 
+.description {
+    height: 100% !important;
+    padding-bottom: 0px !important;
+}
+
 textarea {
     height: 100%;
 }
@@ -190,6 +195,14 @@ textarea {
     height: 100%;
 }
 
+.accordion .title:hover {
+    color: #2480c6 !important;
+}
+
+.ui.checkbox label:hover {
+    color: #2480c6 !important;
+}
+
 .ui.form {
     height: max-content;
     padding-bottom: 10px;
@@ -225,6 +238,14 @@ i.arrow {
 .ui.dimmer {
     background: rgba(0, 0, 0, 0.50);
 }
+
+.ui.styled.accordion .title {
+    color: black;
+}
+
+/* .ui.styled.accordion :hover {
+    background-color: rgba(92, 153, 199, 0.55);
+} */
 
 .disabled {
     opacity: 0.35;

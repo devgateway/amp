@@ -27,7 +27,7 @@ class ColumnsSection extends Component {
   }
 
   handleColumnSelection = (id) => {
-    const { selectedColumns, _updateColumnsSelected } = this.props;
+    const { selectedColumns, _updateColumnsSelected, columns } = this.props;
     const index = selectedColumns.indexOf(id);
     if (index > -1) {
       selectedColumns.splice(index, 1);
@@ -35,7 +35,8 @@ class ColumnsSection extends Component {
       selectedColumns.push(id);
     }
     _updateColumnsSelected(selectedColumns);
-    this.handleAvailableHierarchiesChange(selectedColumns);
+    // Update the hierarchies only with the selected columns that are a hierarchy.
+    this.handleAvailableHierarchiesChange(selectedColumns.filter(i => columns.find(j => j.hierarchy && j.id === i)));
     this.forceUpdate();
   }
 
@@ -57,7 +58,7 @@ class ColumnsSection extends Component {
           added = i;
         }
       });
-      if (added && columns.find(i => i.id === added).hierarchy) {
+      if (added) {
         _hierarchies.push(columns.find(i => i.id === added));
         _updateHierarchiesAvailable(_hierarchies);
         hierarchiesOrder.push(added);
@@ -78,15 +79,20 @@ class ColumnsSection extends Component {
         hierarchiesOrder.splice(index, 1);
         _updateHierarchiesAvailable(hierarchies);
         this.handleHierarchySort(hierarchiesOrder);
-        this.handleHierarchySelection(deleted);
+        this.handleHierarchySelection(deleted, true);
       }
     }
   }
 
-  handleHierarchySelection = (id) => {
+  handleHierarchySelection = (id, deleted) => {
     const { _updateHierarchiesSelected, selectedHierarchies } = this.props;
-    if (selectedHierarchies.includes(id)) {
-      selectedHierarchies.splice(selectedHierarchies.findIndex(i => i === id), 1);
+    const index = selectedHierarchies.findIndex(i => i === id);
+    if (deleted) {
+      if (index > -1) {
+        selectedHierarchies.splice(index, 1);
+      }
+    } else if (selectedHierarchies.includes(id)) {
+      selectedHierarchies.splice(index, 1);
     } else {
       selectedHierarchies.push(id);
     }

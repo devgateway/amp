@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Accordion, Checkbox, Form, Icon, Image, Item
+  Accordion, Checkbox, Form, Icon
 } from 'semantic-ui-react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
@@ -48,15 +48,16 @@ export default class ColumnsSelector extends Component {
         return (
           <Form>
             <Accordion fluid styled exclusive={false}>
-              {categories.map((cat, i) => (
-                <div key={Math.random()}>
-                  <Accordion.Title index={i} active={activeIndex.includes(i)} onClick={this.handleHeaderClick}>
-                    <Icon name="dropdown" />
-                    {cat}
-                  </Accordion.Title>
-                  <Accordion.Content active={activeIndex.includes(i)}>
-                    {columns.filter(col => (col.category === cat))
-                      .map(col => (
+              {categories.map((cat, i) => {
+                const subList = columns.filter(col => (col.category === cat));
+                return (
+                  <div key={Math.random()}>
+                    <Accordion.Title index={i} active={activeIndex.includes(i)} onClick={this.handleHeaderClick}>
+                      <Icon name="dropdown" />
+                      {`${cat} (${selected.filter(j => subList.find(k => k.id === j)).length}/${subList.length})`}
+                    </Accordion.Title>
+                    <Accordion.Content active={activeIndex.includes(i)}>
+                      {subList.map(col => (
                         <div className="column-item" key={Math.random()}>
                           <Checkbox
                             key={Math.random()}
@@ -68,9 +69,10 @@ export default class ColumnsSelector extends Component {
                             label={col.label ? col.label : col.name} />
                         </div>
                       ))}
-                  </Accordion.Content>
-                </div>
-              ))}
+                    </Accordion.Content>
+                  </div>
+                );
+              })}
             </Accordion>
           </Form>
         );

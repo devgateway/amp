@@ -12,15 +12,16 @@ import {
     GEOCODING_RESET_ALL_PENDING,
     GEOCODING_RESET_ALL_SUCCESS,
     GEOCODING_RUN_SEARCH_SUCCESS,
-    GEOCODING_SAVE_ALL_EDITS_ERROR,
     GEOCODING_SAVE_ALL_EDITS_PENDING,
-    GEOCODING_SAVE_ALL_EDITS_SUCCESS,
     GEOCODING_SAVE_ACTIVITY_ERROR,
     GEOCODING_SAVE_ACTIVITY_PENDING,
     GEOCODING_SAVE_ACTIVITY_SUCCESS,
     GEOCODING_RESET_SAVE_RESULTS,
     GEOCODING_RUN_SEARCH_ERROR,
-    GEOCODING_REMOVE_PROJECT_PENDING, GEOCODING_REMOVE_PROJECT_SUCCESS, GEOCODING_REMOVE_PROJECT_ERROR
+    GEOCODING_REMOVE_PROJECT_PENDING,
+    GEOCODING_REMOVE_PROJECT_SUCCESS,
+    GEOCODING_REMOVE_PROJECT_ERROR,
+    GEOCODING_SAVE_ALL_EDITS_CHECK
 } from '../actions/geocodingAction';
 
 const initialState = {
@@ -133,22 +134,16 @@ export default function geocodingReducer(state = initialState, action) {
                 ...state,
                 pending: true,
                 save_pending: true,
-                error: null
+                geocodeShouldRun: false,
             };
-        case GEOCODING_SAVE_ALL_EDITS_SUCCESS:
+        case GEOCODING_SAVE_ALL_EDITS_CHECK:
+            let pending = getActivitySavePendingStatus(state.save_activities_result);
             return {
                 ...state,
                 error: null,
-                save_pending: false,
-                pending: false,
-                geocodeShouldRun: true,
-            };
-        case GEOCODING_SAVE_ALL_EDITS_ERROR:
-            return {
-                ...state,
-                save_pending: false,
-                error: action.error,
-                geocodeShouldRun: true,
+                save_pending: pending,
+                pending: pending,
+                geocodeShouldRun: !pending,
             };
         case GEOCODING_SAVE_ACTIVITY_PENDING:
             return {
@@ -159,7 +154,7 @@ export default function geocodingReducer(state = initialState, action) {
             return {
                 ...state,
                 save_activities_result: updateActivitySaveStatus(state.save_activities_result, action.payload, false, null),
-                activities: removeProject(state.activities, action.payload)
+                activities: removeProject(state.activities, action.payload),
             };
         case GEOCODING_SAVE_ACTIVITY_ERROR:
             return {
@@ -268,6 +263,14 @@ function updateActivitySaveStatus(activities, ampId, pending, error) {
         }
         return item;
     });
+}
+
+function getActivitySavePendingStatus(activities) {
+    if (activities.find(item => item.pending == true)) {
+        return true;
+    }
+
+    return false;
 }
 
 function removeProject(activities, ampId) {

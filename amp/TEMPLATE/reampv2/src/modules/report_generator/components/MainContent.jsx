@@ -7,6 +7,7 @@ import ColumnsSection from './sections/ColumnsSection';
 import ReportingDetailSection from './sections/ReportingDetailsSection';
 import MeasuresSection from './sections/MeasuresSection';
 import NavigationButtons from './sections/NavigationButtons';
+import PreviewSection from './sections/PreviewSection';
 
 export default class MainContent extends Component {
   constructor() {
@@ -32,6 +33,7 @@ export default class MainContent extends Component {
               <ColumnsSection visible={visibleTab === 1} />
               <MeasuresSection visible={visibleTab === 2} />
               <NavigationButtons />
+              <PreviewSection />
             </GridColumn>
           </GridRow>
         </Grid>

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {
-  Grid, GridColumn, GridRow, Input
+  Grid, GridColumn, Input
 } from 'semantic-ui-react';
 import { TRN_PREFIX } from '../../utils/constants';
 import OptionsList from './OptionsList';

@@ -39,6 +39,9 @@ public class PagedReportResult {
 
     private boolean rowTotals;
 
+    @JsonProperty(EPConstants.ID)
+    private Long id;
+
     public JSONReportPage getPage() {
         return page;
     }
@@ -109,5 +112,13 @@ public class PagedReportResult {
 
     public void setRowTotals(boolean rowTotals) {
         this.rowTotals = rowTotals;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

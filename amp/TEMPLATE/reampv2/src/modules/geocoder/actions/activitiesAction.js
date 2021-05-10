@@ -12,6 +12,8 @@ export const FETCH_ACTIVITIES_ERROR = 'FETCH_ACTIVITIES_ERROR';
 
 export const SELECT_ACTIVITY_FOR_GEOCODING = 'SELECT_ACTIVITY_FOR_GEOCODING';
 
+export const TOGGLE_NATIONAL_PROJECTS = 'TOGGLE_NATIONAL_PROJECTS';
+
 export function fetchActivitiesPending() {
     return {
         type: FETCH_ACTIVITIES_PENDING
@@ -49,7 +51,29 @@ export function selectActivitiesForGeocoding(selectedActivities) {
     }
 }
 
-export const loadActivities = () => {
+export function toggleNationalProjects() {
+    return {
+        type: TOGGLE_NATIONAL_PROJECTS
+    }
+}
+
+export const switchNationalProjects = () => {
+    return dispatch => {
+        dispatch(toggleNationalProjects());
+    }
+}
+
+export const loadActivities = (includeNationalProjects) => {
+    let locationFilter = [-999999999];
+    let sortedColumns = [];
+
+    if (includeNationalProjects) {
+        locationFilter.push(96)
+        sortedColumns.push(FIELD_LOCATION);
+    } else {
+        sortedColumns.push(FIELD_AMP_ID);
+    }
+
     let queryModel = {
         name: "Geocoding",
         add_columns : [
@@ -59,12 +83,12 @@ export const loadActivities = () => {
             FIELD_LOCATION,
             FIELD_PROJECT_DESCRIPTION],
         filters : {
-            'administrative-level-0': [96, -999999999]
+            'administrative-level-0': locationFilter
         },
         sorting : [
             {
-                columns: [FIELD_AMP_ID],
-                asc: true
+                columns: sortedColumns,
+                asc: false
             }
         ],
         recordsPerPage : -1,

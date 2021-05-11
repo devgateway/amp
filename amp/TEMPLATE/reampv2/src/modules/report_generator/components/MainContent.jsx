@@ -34,36 +34,25 @@ class MainContent extends Component {
       delete _reportDetails.description;
       const merged = {
         ..._reportDetails,
-        ...columns.selected,
-        ...columns.order,
-        ...measures.selected,
-        ...measures.order,
-        ...hierarchies.selected,
-        ...hierarchies.order
+        columns: columns.selected,
+        measures: {
+          selected: measures.selected,
+          order: measures.order
+        },
+        hierarchies: {
+          selected: hierarchies.selected,
+          order: hierarchies.order
+        }
       };
       const name = md5(JSON.stringify(merged));
       const newId = javaHashCode(name);
       // Avoid calling again the preview EP if not needed.
       if (newId !== prevProps.lastReportId) {
         _updatePreviewId(newId, name);
-        const cols = columns.available.map(i => {
-          if (columns.selected.includes(i.id)) {
-            return i.name;
-          }
-          return undefined;
-        }).filter(i => i);
-        const _measures = measures.available.map(i => {
-          if (measures.selected.includes(i.id)) {
-            return i.name;
-          }
-          return undefined;
-        }).filter(i => i);
-        const _hierarchies = hierarchies.available.map(i => {
-          if (hierarchies.selected.includes(i.id)) {
-            return i.name;
-          }
-          return undefined;
-        }).filter(i => i);
+        const _columns = columns.selected.map(i => columns.available.find(j => j.id === i).name);
+        const _measures = measures.order.map(i => measures.available.find(j => j.id === i).name);
+        const _hierarchies = hierarchies.order.filter(i => hierarchies.selected.includes(i))
+          .map(i => hierarchies.available.find(j => j.id === i).name);
         const year = (new Date()).getFullYear();
         const dateFilter = {
           date: {
@@ -72,7 +61,7 @@ class MainContent extends Component {
           }
         };
         _getPreview({
-          add_columns: cols,
+          add_columns: _columns,
           add_measures: _measures,
           page: 1,
           recordsPerPage: 10,

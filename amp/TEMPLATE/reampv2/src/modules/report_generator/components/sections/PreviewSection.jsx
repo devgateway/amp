@@ -17,7 +17,7 @@ import ErrorMessage from '../ErrorMessage';
  * produced by older requests (notice that the latest request could return after an older one).
  */
 class PreviewSection extends Component {
-  renderReport = (results) => <div dangerouslySetInnerHTML={{ __html: results }} />
+  renderReport = (results) => <div className="preview-container" dangerouslySetInnerHTML={{ __html: results }} />
 
   render() {
     const {
@@ -31,7 +31,7 @@ class PreviewSection extends Component {
       return (
         <Grid>
           <Grid.Row>
-            <GridColumn>
+            <GridColumn width={16}>
               {this.renderReport(results)}
             </GridColumn>
           </Grid.Row>

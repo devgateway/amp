@@ -258,3 +258,44 @@ i.arrow {
     left: 35%;
     width: 30% !important;
 }
+
+.preview-container {
+    width: 100%;
+    height: 400px;
+    overflow: scroll;
+    background-color: white;
+}
+
+.preview-container th.col {
+    border: 1px solid #D5D5D5;
+    background: #CCE2FF none repeat scroll 0% 0%;
+    text-align: center;
+    font-size: 0.9em;
+    padding: 0 5px;
+}
+
+.preview-container td.text {
+    vertical-align: center;
+    font-size: 0.8em;
+    padding-bottom: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border: 1px solid #D5D5D5;
+}
+
+.preview-container td.measure {
+    border-left: 1px solid #D5D5D5;
+    border-top: 1px solid #D5D5D5;
+    text-align: right;
+    font-size: 0.8em;
+    padding-right: 5px;
+}
+
+.preview-container td.total {
+    background: #C7C7C7 none repeat scroll 0% 0%;
+    font-weight: bold;
+    text-align: right;
+    white-space: nowrap;
+    font-size: 0.8em;
+    padding-right: 5px;
+}

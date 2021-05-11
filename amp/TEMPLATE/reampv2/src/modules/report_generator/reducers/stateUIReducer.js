@@ -129,7 +129,6 @@ export default (state = initialState, action) => {
         columns: {
           ...state.columns,
           selected: [],
-          order: [],
         },
         hierarchies: {
           available: [],
@@ -199,6 +198,7 @@ export default (state = initialState, action) => {
         measures: {
           available: action.payload.measures,
           selected: [],
+          order: [],
         },
         columns: {
           available: action.payload.columns,

@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModelProperty;
-import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.newreports.ReportFilters;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.Settings;
@@ -61,7 +60,7 @@ public class Report {
     @ApiModelProperty(value = "Allow empty funding columns for year, quarter and month.")
     private Boolean allowEmptyFundingColumns;
 
-    @ApiModelProperty(value = "Allow empty funding columns for year, quarter and month.")
+    @ApiModelProperty(value = "Split by funding.")
     private Boolean splitByFunding;
 
     @ApiModelProperty(value = "Report category id.")
@@ -89,8 +88,6 @@ public class Report {
     @JsonProperty(EPConstants.FILTERS)
     @ApiModelProperty(dataType = "org.digijava.kernel.ampapi.swagger.types.FiltersPH")
     private ReportFilters filters;
-
-    private Set<AmpFilterData> filterDataSet;
 
     public Long getId() {
         return id;

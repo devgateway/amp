@@ -197,10 +197,12 @@ export default (state = initialState, action) => {
         metaDataPending: false,
         metaDataLoaded: true,
         measures: {
-          available: action.payload.measures
+          available: action.payload.measures,
+          selected: [],
         },
         columns: {
-          available: action.payload.columns
+          available: action.payload.columns,
+          selected: [],
         },
         options: action.payload.options,
       };

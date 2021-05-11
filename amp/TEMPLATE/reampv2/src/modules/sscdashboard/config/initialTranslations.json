@@ -1,6 +1,8 @@
 {
   "amp.ssc.dashboard:Home-Page": "Dashboard Home",
   "amp.ssc.dashboard:Download-Page": "Data",
+  "amp.ssc.dashboard:download-title":"SSC_DATA_EXPORT",
+  "amp.ssc.dashboard:Download": "Download",
   "amp.ssc.dashboard:Year": "Year",
   "amp.ssc.dashboard:Sector": "Sector",
   "amp.ssc.dashboard:Sectors": "Sectors",

@@ -11,9 +11,6 @@ const Flag = ({ countryName }) => {
   return (<img src={src} alt={countryName} />);
 };
 const CountryFlag = ({ countryName }) => {
-  if (countryName.indexOf('ongo') > 0) {
-    console.log(countryName);
-  }
   return (
     <Suspense fallback={<img alt="loading" src={FALLBACK_FLAG} />}>
       <Flag countryName={countryName} />

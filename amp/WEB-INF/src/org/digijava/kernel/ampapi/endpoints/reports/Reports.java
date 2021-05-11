@@ -744,7 +744,7 @@ public class Reports {
 
     private Response generateXlsReport(GeneratedReport generatedReport, String type) {
         SaikuBasedQuery queryObject = new SaikuBasedQuery();
-        AmpReports ampReport=new AmpReports();
+        AmpReports ampReport = new AmpReports();
         ampReport.setName("sscDataDownload");
         return getExportAsResponse(ampReport, type, generatedReport, queryObject);
     }
@@ -1029,8 +1029,9 @@ public class Reports {
         if (in == null)
             return null;
         List<ReportRenderWarningEx> res = new ArrayList<>();
-        for (ReportRenderWarning z : in)
+        for (ReportRenderWarning z : in) {
             res.add(new ReportRenderWarningEx(z));
+        }
         return res;
     }
 }

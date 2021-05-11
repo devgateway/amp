@@ -27,7 +27,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class SscDashboardService {
+public final class SscDashboardService {
+    private SscDashboardService() {
+
+    }
 
     public static SscDashboardXlsResult getSscDashboardXlsResult(ReportFormParameters formParameters) {
         SscDashboardXlsResult result = new SscDashboardXlsResult();

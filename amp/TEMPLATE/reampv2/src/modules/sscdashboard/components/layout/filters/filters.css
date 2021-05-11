@@ -24,9 +24,7 @@
 .panel-heading.selected .panel-title {
     color: white;
 }
-.filter-list .collapse .in{
-    border: 2px dotted purple;
-}
+
 .panel-title > a {
     text-decoration: none;
 }
@@ -551,4 +549,15 @@ ul.elements-list li:before {
     display: inline;
     height: 100%;
     vertical-align: middle;
+}
+
+#ddYear .elements-list {
+    -webkit-column-count: 2;
+    -moz-column-count: 2;
+    column-count: 2;
+}
+
+.disable-filter {
+    pointer-events: none;
+    opacity: 0.5;
 }

@@ -1,11 +1,19 @@
-import { DEVELOPMENT, FALLBACK_FLAG, FLAGS_DIRECTORY } from './constants';
+import {
+  DASHBOARD_DEFAULT_MAX_YEAR_RANGE,
+  DASHBOARD_DEFAULT_MIN_YEAR_RANGE,
+  FALLBACK_FLAG,
+  FLAGS_DIRECTORY
+} from './constants';
+import { EXTRA_INFO, GROUP_ID } from './FieldsConstants';
 
 export function splitArray(a, n, balanced) {
   if (n < 2) return [a];
 
-  const len = a.length; const
+  const len = a.length;
+  const
     out = [];
-  let i = 0; let
+  let i = 0;
+  let
     size;
   if (len % n === 0) {
     size = Math.floor(len / n);
@@ -34,9 +42,12 @@ export function splitArray(a, n, balanced) {
 export function compareArrayNumber(a, b) {
   a.sort((c, d) => c - d);
   b.sort((c, d) => c - d);
-  const left = []; const both = []; const
+  const left = [];
+  const both = [];
+  const
     right = [];
-  let i = 0; let
+  let i = 0;
+  let
     j = 0;
   while (i < a.length && j < b.length) {
     if (a[i] < b[j]) {
@@ -106,4 +117,23 @@ export function calculateColumnCount(length) {
       break;
   }
   return columnCount;
+}
+
+export function getCategoryForCountry(country) {
+  if (country && country[EXTRA_INFO]) {
+    return country[EXTRA_INFO][GROUP_ID];
+  } else {
+    return null;
+  }
+}
+
+export function generateYearsFilters(years, settingsParam) {
+  const { settings, settingsLoaded } = settingsParam;
+  if (settingsLoaded) {
+    const minYear = parseInt(settings[DASHBOARD_DEFAULT_MIN_YEAR_RANGE], 10);
+    const maxYear = parseInt(settings[DASHBOARD_DEFAULT_MAX_YEAR_RANGE], 10);
+    for (let i = maxYear; i >= minYear; i--) {
+      years.push({ id: i, name: i });
+    }
+  }
 }

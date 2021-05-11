@@ -11,7 +11,7 @@ export const API_FILTERS_COUNTRIES_URL = '/rest/filters/locations?firstLevelOnly
 export const API_AMP_SETTINGS_URL = '/rest/amp/settings';
 export const API_FILTERS_MODALITIES_URL = '/rest/filters/modalities?sscWorkspace=true';
 export const API_SSC_DASHBOARD_URL = '/rest/gis/sscdashboard';
-
+export const API_XLS_REPORT_URL = '/rest/gis/sscdashboard/xsl';
 export const API_REPORTS_ACTIVITY_DETAIL_URL = '/rest/gis/activities';
 
 export const BOOTSTRAP_COLUMNS_COUNT = 12;
@@ -43,6 +43,7 @@ export const COUNTRY_COLUMN = 'country-column';
 // eslint-disable-next-line max-len
 export const FALLBACK_FLAG = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAbCAQAAACkGQXlAAAAI0lEQVR42mP8L8lAVcA4auCogaMGjho4auCogaMGjhpINAAAOBcdpLw/CDsAAAAASUVORK5CYII=';
 export const OTHERS_CODE = '000';
+export const INVALID_COLUMN_ERROR_CODE = '0602';
 
 export const SECTOR_COLOR_MAP = new Map([
   ['110', '#d46453'], ['120', '#f5a15d'], ['130', '#ffcf8e'], ['140', '#ff7a7d'], ['150', '#ff417d'],

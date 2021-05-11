@@ -74,6 +74,7 @@ export default class CountryCarousel extends Component {
       options.length > ZERO
         ? (
           <InfiniteCarousel
+            className="disable-filter"
             breakpoints={[
               {
                 breakpoint: 500,

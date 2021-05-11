@@ -1,0 +1,151 @@
+.data-download .nav {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+    background: transparent;
+}
+
+.nav-link {
+    font-weight: bold;
+    font-size: 14px;
+    display: block;
+    padding: .5rem 1rem;
+    background-color: #223f67;
+    border-color: #223f67;
+    width: 212px;
+    height: 40px;
+    color: #647692;
+}
+
+.nav-link:focus, .nav-link:hover {
+    text-decoration: none;
+    color: #647692;
+}
+
+.nav-link.disabled {
+    color: #6c757d;
+    pointer-events: none;
+    cursor: default
+}
+
+.nav-tabs {
+    border-bottom: none;
+}
+
+.nav-tabs .nav-item {
+    margin-bottom: -2px
+}
+
+.nav-tabs .nav-link {
+    border: 1px solid transparent;
+    /*border-top-left-radius: .25rem;
+    border-top-right-radius: .25rem;
+    */
+    text-align: center;
+}
+
+.nav-tabs .nav-link:focus, .nav-tabs .nav-link:hover {
+    border-color: #223f67;
+    background-color: #223f67;
+}
+
+.nav-tabs .nav-link.disabled {
+    color: #6c757d;
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    background-color: #22569e;
+    border-color: #22569e;
+}
+
+.nav-tabs .dropdown-menu {
+    margin-top: -1px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0
+}
+
+.download-content {
+    background: white;
+    height: 280px;
+    overflow: hidden;
+}
+
+.download-content .elements-list {
+    -webkit-column-count: 3;
+    -moz-column-count: 3;
+    column-count: 3;
+}
+
+.download-content .well {
+    background: #FFFFFF;
+    height: 285px;
+
+}
+
+.download-content .panel, .download-content .well {
+    border: unset;
+}
+
+.data-download {
+    height: 360px;
+    width: 848px;
+    background: #FFFFFF;
+    margin-top: 20px;
+}
+
+.data-download-wrapper .export-wrapper {
+    margin-right: 60px;
+    font-weight: bold;
+}
+
+.data-download-title {
+    margin-top: 20px
+}
+
+.data-download-title > h4 {
+    color: #FFFFFF;
+}
+
+.download-content .filter-content {
+    overflow-x: hidden;
+    overflow-y: auto;
+    max-height: 90px;
+    min-height: 90px;
+}
+
+.download-content .horizontal-filter .filter-list .well {
+    padding: 10px 30px;
+}
+
+.download-content .autocomplete-box {
+    width: 480px;
+}
+
+.download-link {
+    float: right !important;
+    margin-right: 30px;
+    color: #60b42d;
+    font-weight: bold;
+    background: #FFFFFF;
+    line-height: 35px;
+}
+
+.download-content .horizontal-filter .selected .title {
+    border-bottom: 1px solid #e6eaee;
+
+}
+
+.download-content .horizontal-filter .selected .title,
+.download-content .horizontal-filter .unselected .title {
+    font-weight: bold;
+    font-size: 11px;
+}

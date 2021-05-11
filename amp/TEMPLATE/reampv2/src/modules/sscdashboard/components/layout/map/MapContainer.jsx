@@ -17,18 +17,20 @@ import {
 } from '../../../utils/ProjectUtils';
 import { ACTIVITY_ID, PROJECT_TITLE } from '../../../utils/FieldsConstants';
 import { HOME_CHART, MODALITY_CHART } from '../../../utils/constants';
+import DataDownloadContainer from '../../dataDownload/DataDownloadContainer';
+import { populateFilters } from '../../../utils/exportUtils';
 
 class MapContainer extends Component {
   getExportData() {
     const { translations } = this.context;
     const {
-      filteredProjects, countriesForExport, chartSelected
+      filteredProjects, countriesForExport, chartSelected, filters, projects, selectedFilters
     } = this.props;
-    const { sectors } = this.props.filters.sectors;
-    const { modalities } = this.props.filters.modalities;
+    const { sectors } = filters.sectors;
+    const { modalities } = filters.modalities;
 
-    const { countries } = this.props.filters.countries;
-    const { activitiesDetails } = this.props.projects;
+    const { countries } = filters.countries;
+    const { activitiesDetails } = projects;
 
     const isModalities = chartSelected === MODALITY_CHART;
     const exportData = {};
@@ -38,7 +40,7 @@ class MapContainer extends Component {
       exportData.title = translations['amp.ssc.dashboard:Sector-Analysis'];
     }
     exportData.source = translations['amp.ssc.dashboard:page-title'];
-    exportData.filters = this.populateFilters();
+    exportData.filters = populateFilters(translations, filters, selectedFilters);
     exportData.columns = [];
     exportData.columns.push({
       headerTitle: translations['amp.ssc.dashboard:Country'],
@@ -102,54 +104,18 @@ class MapContainer extends Component {
     return exportData;
   }
 
-  populateFilters() {
-    const selectedFiltersForExport = [];
-    const { translations } = this.context;
-    const { filters, selectedFilters } = this.props;
+
+  render() {
+    const {
+      filters, projects, countriesForExport, countriesForExportChanged, selectedFilters, filtersRestrictions,
+      handleSelectedFiltersChange, chartSelected, showLargeCountryPopin, closeLargeCountryPopinAndClearFilter,
+      filteredProjects, showEmptyProjects, onNoProjectsModalClose, showDataDownload, settings, toggleDataDownload
+    } = this.props;
     const { countries } = filters.countries;
     const { sectors } = filters.sectors;
     const { modalities } = filters.modalities;
-    const {
-      selectedCountries, selectedYears, selectedSectors, selectedModalities
-    } = selectedFilters;
-    if (selectedCountries && selectedCountries.length > 0) {
-      selectedFiltersForExport.push({
-        name: translations['amp.ssc.dashboard:Country'],
-        values: selectedCountries.map(sc => countries.find(c => c.id === sc).name).join(' | ')
-      });
-    }
-    if (selectedYears && selectedYears.length > 0) {
-      selectedFiltersForExport.push({
-        name: translations['amp.ssc.dashboard:Year'],
-        values: selectedYears.join(' | ')
-      });
-    }
-    if (selectedSectors && selectedSectors.length > 0) {
-      selectedFiltersForExport.push({
-        name: translations['amp.ssc.dashboard:Sector'],
-        values: selectedSectors.map(sc => sectors.find(c => c.id === sc).name).join(' | ')
-      });
-    }
-    if (selectedModalities && selectedModalities.length > 0) {
-      selectedFiltersForExport.push({
-        name: translations['amp.ssc.dashboard:Modalities'],
-        values: selectedModalities.map(sc => modalities.find(c => c.id === sc).name).join(' | ')
-      });
-    }
+    const { activitiesDetails } = projects;
 
-    return selectedFiltersForExport;
-  }
-
-  render() {
-    const { countries } = this.props.filters.countries;
-    const { sectors } = this.props.filters.sectors;
-    const { modalities } = this.props.filters.modalities;
-    const { activitiesDetails } = this.props.projects;
-    const {
-      countriesForExport, countriesForExportChanged, selectedFilters, filtersRestrictions,
-      handleSelectedFiltersChange, chartSelected, showLargeCountryPopin, closeLargeCountryPopinAndClearFilter,
-      filteredProjects, showEmptyProjects, onNoProjectsModalClose
-    } = this.props;
     const { translations } = this.context;
     return (
       <div className="col-md-10 col-md-offset-2 map-wrapper">
@@ -161,11 +127,15 @@ class MapContainer extends Component {
 
         />
         <MapHome filteredProjects={filteredProjects} countries={countries} />
-        {/* TODO refactor country popup in next story */}
-        <PopupOverlay show={showEmptyProjects}>
-          <SimplePopup
-            message={translations['amp.ssc.dashboard:no-data']}
-            onClose={onNoProjectsModalClose} />
+        <PopupOverlay show={showDataDownload}>
+          <DataDownloadContainer
+            selectedFilters={selectedFilters}
+            filtersRestrictions={filtersRestrictions}
+            chartSelected={chartSelected}
+            filters={filters}
+            settings={settings}
+            toggleDataDownload={toggleDataDownload}
+          />
         </PopupOverlay>
         <CountryPopupOverlay
           show={showLargeCountryPopin}
@@ -179,15 +149,23 @@ class MapContainer extends Component {
           countries={countries}
           getExportData={this.getExportData.bind(this)}
           chartSelected={chartSelected}
-
         />
 
+        <PopupOverlay show={showEmptyProjects}>
+          <SimplePopup
+            message={translations['amp.ssc.dashboard:no-data']}
+            onClose={onNoProjectsModalClose} />
+        </PopupOverlay>
       </div>
     );
   }
 }
 
 const mapStateToProps = state => ({
+  settings: {
+    settings: state.startupReducer.settings,
+    settingsLoaded: state.startupReducer.settingsLoaded
+  },
   filters: {
     sectors: {
       sectors: state.filtersReducer.sectors,
@@ -223,11 +201,31 @@ MapContainer.propTypes = {
   showEmptyProjects: PropTypes.bool.isRequired,
   onNoProjectsModalClose: PropTypes.func.isRequired,
   countriesForExport: PropTypes.array,
-  countriesForExportChanged: PropTypes.func.isRequired
+  projects: PropTypes.object.isRequired,
+  countriesForExportChanged: PropTypes.func.isRequired,
+  handleSelectedFiltersChange: PropTypes.object.isRequired,
+  filters: PropTypes.object.isRequired,
+  settings: PropTypes.object.isRequired,
+  selectedFilters: PropTypes.shape({
+    selectedYears: PropTypes.array,
+    selectedCountries: PropTypes.array,
+    selectedSectors: PropTypes.array,
+    selectedModalities: PropTypes.array,
+  }),
+  filtersRestrictions: PropTypes.object.isRequired,
+  showDataDownload: PropTypes.bool,
+  toggleDataDownload: PropTypes.func.isRequired
 };
 
 MapContainer.defaultProps = {
   chartSelected: HOME_CHART,
   filteredProjects: [],
-  countriesForExport: []
+  countriesForExport: [],
+  selectedFilters: {
+    selectedYears: [],
+    selectedCountries: [],
+    selectedSectors: [],
+    selectedModalities: [],
+  },
+  showDataDownload: false
 };

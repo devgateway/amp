@@ -18,6 +18,7 @@ class SscDashboardHome extends Component {
     super(props);
     this.countriesWithData = [];
     this.state = {
+      showDataDownload: false,
       countriesForExport: [],
       chartSelected: HOME_CHART,
       showEmptyProjects: false,
@@ -64,6 +65,35 @@ class SscDashboardHome extends Component {
         });
       }
     }
+  }
+
+  handleSelectedYearChanged(pSelectedYears) {
+    this.updateFilterState('selectedYears', pSelectedYears);
+  }
+
+  handleSelectedCountryChanged(pSelectedCountries) {
+    // we only keep for export the countries that are selected
+    this.setState(previousState => {
+      const countriesForExport = [...previousState.countriesForExport].filter(c => pSelectedCountries.includes(c));
+      return { countriesForExport };
+    });
+    const { chartSelected } = this.state;
+    if ((chartSelected === SECTORS_CHART || chartSelected === MODALITY_CHART)
+      && pSelectedCountries && pSelectedCountries.length >= 1) {
+      // currently we open large popin, in next tickets we will open also the popin for 2/3 countries selected
+      this.setState({ showLargeCountryPopin: true });
+    } else {
+      this.closeLargeCountryPopin();
+    }
+    this.updateFilterState('selectedCountries', pSelectedCountries);
+  }
+
+  handleSelectedModalityChanged(pSelectedModalities) {
+    this.updateFilterState('selectedModalities', pSelectedModalities);
+  }
+
+  handleSelectedSectorChanged(pSelectedSectors) {
+    this.updateFilterState('selectedSectors', pSelectedSectors);
   }
 
   onChangeChartSelected(chartSelected) {
@@ -164,31 +194,6 @@ class SscDashboardHome extends Component {
     }, this.getFilteredProjects);
   }
 
-  handleSelectedYearChanged(pSelectedYears) {
-    this.updateFilterState('selectedYears', pSelectedYears);
-  }
-
-  handleSelectedCountryChanged(pSelectedCountries) {
-    // we only keep for export the countries that are selected
-    this.setState(previousState => {
-      const countriesForExport = [...previousState.countriesForExport].filter(c => pSelectedCountries.includes(c));
-      return { countriesForExport };
-    });
-    const { chartSelected } = this.state;
-    if ((chartSelected === SECTORS_CHART || chartSelected === MODALITY_CHART)
-        && pSelectedCountries && pSelectedCountries.length >= 1) {
-      // currently we open large popin, in next tickets we will open also the popin for 2/3 countries selected
-      this.setState({ showLargeCountryPopin: true });
-    } else {
-      this.closeLargeCountryPopin();
-    }
-    this.updateFilterState('selectedCountries', pSelectedCountries);
-  }
-
-  handleSelectedModalityChanged(pSelectedModalities) {
-    this.updateFilterState('selectedModalities', pSelectedModalities);
-  }
-
   closeLargeCountryPopinAndClearFilter() {
     this.handleSelectedCountryChanged([]);
   }
@@ -197,8 +202,8 @@ class SscDashboardHome extends Component {
     this.setState({ showLargeCountryPopin: false });
   }
 
-  handleSelectedSectorChanged(pSelectedSectors) {
-    this.updateFilterState('selectedSectors', pSelectedSectors);
+  toggleDataDownload() {
+    this.setState(previousSate => ({ showDataDownload: !previousSate.showDataDownload }));
   }
 
   render() {
@@ -211,33 +216,44 @@ class SscDashboardHome extends Component {
       handleSelectedSectorChanged: this.handleSelectedSectorChanged.bind(this)
     };
     const {
-      chartSelected, selectedFilters, filteredProjects, showEmptyProjects, showLargeCountryPopin, countriesForExport
+      chartSelected,
+      selectedFilters,
+      filteredProjects,
+      showEmptyProjects,
+      showLargeCountryPopin,
+      countriesForExport,
+      showDataDownload
     } = this.state;
     return (
-      <div className="container-fluid content-wrapper">
-        <div className="row">
-          <Sidebar
-            chartSelected={chartSelected}
-            onChangeChartSelected={this.onChangeChartSelected.bind(this)}
-            selectedFilters={selectedFilters}
-            handleSelectedFiltersChange={handleSelectedFiltersChange}
-                    />
-          <MapContainer
-            chartSelected={chartSelected}
-            selectedFilters={selectedFilters}
-            handleSelectedFiltersChange={handleSelectedFiltersChange}
-            filteredProjects={filteredProjects}
-            filtersRestrictions={filtersRestrictions}
-            showEmptyProjects={showEmptyProjects}
-            showLargeCountryPopin={showLargeCountryPopin}
-            closeLargeCountryPopinAndClearFilter={this.closeLargeCountryPopinAndClearFilter.bind(this)}
-            onNoProjectsModalClose={this.onNoProjectsModalClose.bind(this)}
-            countriesForExport={countriesForExport}
-            countriesForExportChanged={this.countriesForExportChanged.bind(this)}
-                    />
+      <>
+        <div className="container-fluid content-wrapper">
+          <div className="row">
+            <Sidebar
+              chartSelected={chartSelected}
+              toggleDataDownload={this.toggleDataDownload.bind(this)}
+              onChangeChartSelected={this.onChangeChartSelected.bind(this)}
+              selectedFilters={selectedFilters}
+              handleSelectedFiltersChange={handleSelectedFiltersChange}
+            />
+            <MapContainer
+              showDataDownload={showDataDownload}
+              toggleDataDownload={this.toggleDataDownload.bind(this)}
+              chartSelected={chartSelected}
+              selectedFilters={selectedFilters}
+              handleSelectedFiltersChange={handleSelectedFiltersChange}
+              filteredProjects={filteredProjects}
+              filtersRestrictions={filtersRestrictions}
+              showEmptyProjects={showEmptyProjects}
+              showLargeCountryPopin={showLargeCountryPopin}
+              closeLargeCountryPopinAndClearFilter={this.closeLargeCountryPopinAndClearFilter.bind(this)}
+              onNoProjectsModalClose={this.onNoProjectsModalClose.bind(this)}
+              countriesForExport={countriesForExport}
+              countriesForExportChanged={this.countriesForExportChanged.bind(this)}
+            />
+          </div>
+          <PrintDummy />
         </div>
-        <PrintDummy />
-      </div>
+      </>
     );
   }
 }

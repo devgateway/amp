@@ -35,6 +35,7 @@ class MainContent extends Component {
       const merged = {
         ..._reportDetails,
         ...columns.selected,
+        ...columns.order,
         ...measures.selected,
         ...measures.order,
         ...hierarchies.selected,
@@ -57,8 +58,27 @@ class MainContent extends Component {
           }
           return undefined;
         }).filter(i => i);
+        const _hierarchies = hierarchies.available.map(i => {
+          if (hierarchies.selected.includes(i.id)) {
+            return i.name;
+          }
+          return undefined;
+        }).filter(i => i);
+        const year = (new Date()).getFullYear();
+        const dateFilter = {
+          date: {
+            start: `${year - 2}-01-01`,
+            end: `${year}-12-31`
+          }
+        };
         _getPreview({
-          name, add_columns: cols, add_measures: _measures, page: 0, recordsPerPage: 10, id: newId
+          add_columns: cols,
+          add_measures: _measures,
+          page: 1,
+          recordsPerPage: 10,
+          add_hierarchies: _hierarchies,
+          groupingOption: 'A', /* TODO: get actual value. */
+          filters: dateFilter
         });
       }
     } else {
@@ -113,10 +133,6 @@ class MainContent extends Component {
 
 const mapStateToProps = (state) => ({
   lastReportId: state.previewReducer.lastReportId,
-  lastReportName: state.previewReducer.lastReportName,
-  previewLoading: state.previewReducer.pending,
-  previewLoaded: state.previewReducer.loaded,
-  previewError: state.previewReducer.error,
   results: state.previewReducer.results,
   reportDetails: state.uiReducer.reportDetails,
   columns: state.uiReducer.columns,
@@ -133,11 +149,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(MainContent);
 
 MainContent.propTypes = {
   lastReportId: PropTypes.number,
-  lastReportName: PropTypes.string,
-  previewLoading: PropTypes.bool,
-  previewLoaded: PropTypes.bool,
-  previewError: PropTypes.bool,
-  results: PropTypes.object,
   reportDetails: PropTypes.object,
   columns: PropTypes.object,
   measures: PropTypes.object,
@@ -148,11 +159,6 @@ MainContent.propTypes = {
 
 MainContent.defaultProps = {
   lastReportId: -1,
-  lastReportName: undefined,
-  previewLoading: false,
-  previewLoaded: false,
-  previewError: false,
-  results: undefined,
   reportDetails: undefined,
   columns: undefined,
   measures: undefined,

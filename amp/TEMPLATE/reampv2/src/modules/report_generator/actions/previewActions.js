@@ -37,9 +37,10 @@ export function updatePreviewId(id, name) {
 // TODO: keep a cache of previous calls.
 export const getPreview = (body) => dispatch => {
   dispatch(fetchPreviewPending());
-  return Promise.all([fetchApiData({
+  return fetchApiData({
     url: URL_PREVIEW,
-    body
-  })]).then((data) => dispatch(fetchPreviewSuccess(data[0])))
+    body,
+    headers: { 'Content-Type': 'application/json', Accept: 'text/html' }
+  }).then((data) => dispatch(fetchPreviewSuccess(data)))
     .catch(error => dispatch(fetchPreviewError(error)));
 };

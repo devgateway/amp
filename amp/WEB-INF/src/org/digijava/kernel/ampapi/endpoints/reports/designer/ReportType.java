@@ -60,6 +60,16 @@ public enum ReportType {
         throw new IllegalArgumentException("Unknown ReportType: " + value);
     }
 
+    public static ReportType fromLong(final Long id) {
+        for (ReportType type : values()) {
+            if (type.id.equals(id)) {
+                return type;
+            }
+        }
+
+        throw new IllegalArgumentException("Unknown ReportType with id : " + id);
+    }
+
     public boolean isPledge() {
         return this.equals(PLEDGE);
     }

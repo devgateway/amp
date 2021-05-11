@@ -39,7 +39,7 @@ public class ReportOptionProvider {
             "Also show pledges checkbox", "Report and Tab Options"),
         new ReportOptionConfiguration("empty-funding-columns",
                 "Allow empty funding columns for year, quarter and month"),
-            new ReportOptionConfiguration("reportCategory","Please select a category from below", null,
+            new ReportOptionConfiguration("reportCategory", "Please select a category from below", null,
                     "Reports classification", "Report Generator")
     );
 

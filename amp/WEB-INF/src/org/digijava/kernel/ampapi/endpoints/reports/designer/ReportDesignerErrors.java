@@ -22,4 +22,7 @@ public final class ReportDesignerErrors {
     public static final ApiErrorMessage REPORT_TYPE_INVALID =
             new ApiErrorMessage(ERROR_CLASS_REPORT_DESIGNER_ID, 1, "Invalid report type");
 
+    public static final ApiErrorMessage REPORT_NOT_FOUND = new ApiErrorMessage(ERROR_CLASS_REPORT_DESIGNER_ID, 2,
+            "Report not found");
+
 }

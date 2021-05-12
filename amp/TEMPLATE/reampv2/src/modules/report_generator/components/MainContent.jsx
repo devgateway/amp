@@ -15,7 +15,7 @@ import PreviewSection from './sections/PreviewSection';
 import { getPreview, updatePreviewId } from '../actions/previewActions';
 import { ReportGeneratorContext } from './StartUp';
 
-import { javaHashCode } from '../utils/Utils';
+import { convertReportType, convertTotalGrouping, javaHashCode } from '../utils/Utils';
 
 class MainContent extends Component {
   constructor() {
@@ -68,7 +68,8 @@ class MainContent extends Component {
           page: 1,
           recordsPerPage: 10,
           add_hierarchies: _hierarchies,
-          groupingOption: 'A', /* TODO: get actual value. */
+          groupingOption: convertTotalGrouping(reportDetails.selectedTotalGrouping),
+          reportType: convertReportType(reportDetails.selectedFundingGrouping),
           filters: dateFilter
         });
       }

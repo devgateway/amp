@@ -30,14 +30,14 @@ class ReportingDetailSection extends Component {
     // In the old report generator some options are pre-filled to a default value.
     let options = this.getOptions(TOTAL_GROUPING_RADIO_OPTIONS);
     if (selectedTotalGrouping === null && options.length > 0) {
-      const value = options[0] ? options[0].label : null;
+      const value = options[0] ? options[0].name : null;
       if (value) {
         this.selectTotalGrouping(null, { value });
       }
     }
     options = this.getOptions(FUNDING_GROUPING_RADIO_OPTIONS);
     if (selectedFundingGrouping === null && options.length > 0) {
-      const value = options[0] ? options[0].label : null;
+      const value = options[0] ? options[0].name : null;
       if (value) {
         this.selectFundingGrouping(null, { value });
       }

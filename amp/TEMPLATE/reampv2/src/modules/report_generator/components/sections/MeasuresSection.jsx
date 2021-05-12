@@ -102,6 +102,7 @@ class MeasuresSection extends Component {
             <OptionsList
               title={translations[`${TRN_PREFIX}availableFinancialMeasures`]}
               tooltip="tooltip 1"
+              isRequired
               className="smallHeight">
               <ColumnsSelector
                 columns={_measures}

@@ -1,6 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.reports;
 
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
+import static org.digijava.kernel.ampapi.endpoints.common.EPConstants.REPORT_TYPE_ID_MAP;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -96,7 +97,7 @@ import org.springframework.util.ReflectionUtils;
 @Path("data")
 @Api("data")
 public class Reports {
-    
+
     private static final String IN_MEMORY = "IN_MEMORY";
     private static final String SAVED = "SAVED";
 
@@ -133,8 +134,8 @@ public class Reports {
         report.getReportMetadata().setReportType(IN_MEMORY);
         report.getReportMetadata().setReportIdentifier(reportToken.toString());
         return report;
-    }   
-    
+    }
+
     private JSONResult getReport(AmpReports ampReport) {
         // TODO: for now we do not translate other types of reports than Donor
         // Type reports (hide icons for non-donor-type reports?)
@@ -157,21 +158,21 @@ public class Reports {
         metadata.setSettings(SettingsUtils.getReportSettings(spec));
         metadata.setName(ampReport.getName());
         metadata.setRecordsPerPage(ReportPaginationUtils.getRecordsNumberPerPage());
-        
+
         result.setReportMetadata(metadata);
-        
+
         //Translate column names.
-        /*Set<ReportColumn> translatedColumns = new LinkedHashSet<ReportColumn>();  
+        /*Set<ReportColumn> translatedColumns = new LinkedHashSet<ReportColumn>();
         Iterator<ReportColumn> iCols = metadata.getReportSpec().getColumns().iterator();
         while(iCols.hasNext()) {
             ReportColumn auxCol = iCols.next();
             String translatedName = TranslatorWorker.translateText(auxCol.getEntityName());
             auxCol = new ReportColumn(translatedName, auxCol.getEntityType());
-            translatedColumns.add(auxCol);          
+            translatedColumns.add(auxCol);
         }
         metadata.getReportSpec().setColumns(translatedColumns);
-        
-        List<ReportMeasure> translatedMeasures = new ArrayList<ReportMeasure>(); 
+
+        List<ReportMeasure> translatedMeasures = new ArrayList<ReportMeasure>();
         Iterator<ReportMeasure> iMs = metadata.getReportSpec().getMeasures().iterator();
         while(iMs.hasNext()) {
             ReportMeasure auxMeasure = iMs.next();
@@ -182,7 +183,7 @@ public class Reports {
         metadata.getReportSpec().setMeasures(translatedMeasures);*/
         return result;
     }
-    
+
     @GET
     @Path("/nireport/{report_id}")
     @Produces(MediaType.TEXT_HTML + ";charset=utf-8")
@@ -191,7 +192,7 @@ public class Reports {
         ReportSpecificationImpl spec = ReportsUtil.getReport(reportId);
         return AmpReportsSchema.getRenderedReport(spec);
     }
-    
+
     /**
      * Provides a report preview.
      * </br>
@@ -285,16 +286,20 @@ public class Reports {
     @ApiOperation("Render a report preview in HTML format.")
     public final String getReportResult(
             @ApiParam("a JSON object with the report's parameters") ReportFormParameters formParams) {
-        ReportSpecificationImpl spec = new ReportSpecificationImpl("preview report", ArConstants.DONOR_TYPE);
+        int reportType = ArConstants.DONOR_TYPE;
+        if (formParams.getReportType() != null) {
+            reportType = REPORT_TYPE_ID_MAP.get(formParams.getReportType());
+        }
+        ReportSpecificationImpl spec = new ReportSpecificationImpl("preview report", reportType);
         String groupingOption = formParams.getGroupingOption();
         ReportsUtil.setGroupingCriteria(spec, groupingOption);
-        ReportsUtil.update(spec,formParams);
+        ReportsUtil.update(spec, formParams);
         SettingsUtils.applySettings(spec, formParams.getSettings(), true);
         FilterUtils.applyFilterRules(formParams.getFilters(), spec, null);
         GeneratedReport report = EndpointUtils.runReport(spec);
-        SaikuReportHtmlRenderer htmlRenederer = new SaikuReportHtmlRenderer(report);
+        SaikuReportHtmlRenderer htmlRenderer = new SaikuReportHtmlRenderer(report);
 
-        return htmlRenederer.renderTable().toString();
+        return htmlRenderer.renderTable().toString();
     }
 
     /**
@@ -316,7 +321,7 @@ public class Reports {
         formParams.setCustom(true);
         return Response.ok(getReportResultByPage(formParams, reportId)).build();
     }
-    
+
     @POST
     @Path("/report/custom")
     @Consumes(MediaType.APPLICATION_XML)
@@ -335,7 +340,7 @@ public class Reports {
             @PathParam("report_id") Long reportId) {
         return ReportsUtil.getReportResultByPage(reportId, formParams);
     }
-    
+
     @POST
     @Path("/report/{report_id}")
     @Consumes(MediaType.APPLICATION_XML)
@@ -367,10 +372,10 @@ public class Reports {
         if (formParams.getSidx() != null) {
             formParams.setSorting(convertJQgridSortingParams(formParams.getSidx(), formParams.getSord()));
         }
-        
+
         return getReportResultByPage(formParams, reportId);
     }
-    
+
     @GET
     @Path("/tabs")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -384,7 +389,7 @@ public class Reports {
                 return getDefaultTabs(ampTeamMember);
             }
         }
-        
+
         return getPublicTabs();
     }
 
@@ -474,7 +479,7 @@ public class Reports {
 
         SaikuPagedReportResult saikuResult = new SaikuPagedReportResult();
         ReflectionUtils.shallowCopyFieldState(result, saikuResult);
-        
+
         // Add data needed on Saiku UI.
         // TODO: Make a mayor refactoring on the js code so it doesnt need these extra parameters to work properly.
         Map<String, List<String>> queryProperties = new HashMap<>();
@@ -483,21 +488,21 @@ public class Reports {
         List<String> cellset = new ArrayList<String>();
         cellset.add("dummy");
         saikuResult.setCellset(cellset);
-        
+
         // Add some missing metadata when running through Rhino.
         saikuResult.setColumns(spec.getColumns());
         saikuResult.setHierarchies(spec.getHierarchies());
 
         saikuResult.setColorSettings(getColorSettings(spec.getColumns()));
-        
+
         // In caseIf this is a summarized report without hierarchies then we need to change the word 'constant' for 'Report
         // Totals' (translated).
         saikuResult.setReportTotalsString(TranslatorWorker.translateText("Report Totals"));
         ReportsUtil.addLastViewedReport(httpRequest.getSession(), reportId);
-        
+
         return saikuResult;
     }
-    
+
     @POST
     @Path("/saikureport/run/{report_token}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -508,8 +513,8 @@ public class Reports {
         //here we fetch the report by reportToken from session session
         formParams.setDinamic(true);
         return getSaikuReport(formParams, new Long(reportToken));
-    }   
-    
+    }
+
     @POST
     @Path("/saikureport/export/xls/{report_id}")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -535,7 +540,7 @@ public class Reports {
             @FormParam("query") SaikuBasedQuery query,
             @PathParam("report_token") Integer reportToken) {
         return exportInMemorySaikuReport(query,reportToken,AMPReportExportConstants.XLSX);
-    }   
+    }
 
     @POST
     @Path("/saikureport/export/csv/{report_id}")
@@ -562,7 +567,7 @@ public class Reports {
             @PathParam("report_token") Integer reportToken) {
         return exportInMemorySaikuReport(query, reportToken, AMPReportExportConstants.CSV);
     }
-    
+
     @POST
     @Path("/saikureport/export/xml/{report_id}")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -617,7 +622,7 @@ public class Reports {
             @PathParam("report_token") Integer reportToken) {
         return exportInMemorySaikuReport(query, reportToken, AMPReportExportConstants.PDF);
     }
-    
+
     private Response exportInMemorySaikuReport(SaikuBasedQuery query, Integer reportToken, String reportType) {
         AmpReports ampReport=ReportsUtil.getAmpReportFromSession(reportToken);
         ampReport.setAmpReportId(reportToken.longValue());
@@ -626,7 +631,7 @@ public class Reports {
 
     private GeneratedReport getDualCurrencyReport(SaikuBasedQuery queryObject, long reportId, String ampCurrencyCode) {
         SaikuBasedQuery newQueryObject = updateCurrency(queryObject, ampCurrencyCode);
-        
+
         return ReportsUtil.getGeneratedReport(reportId, ReportsUtil.convertSaikuParamsToReports(newQueryObject));
     }
 
@@ -644,45 +649,45 @@ public class Reports {
         newSettings.put(SettingsConstants.CURRENCY_ID, ampCurrencyCode);
         newQueryModel.setSettings(newSettings);
         newQueryObject.setQueryModel(newQueryModel);
-        
+
         return newQueryObject;
     }
 
     private Response exportSaikuReport(SaikuBasedQuery queryObject, AmpReports ampReport, String type,
                                        Boolean isDinamic, Boolean isPublic) {
-        
+
         logger.info("Starting export to " + type);
-    
+
         GeneratedReport generatedReport = null;
         if (isPublic) {
             queryObject = new SaikuBasedQuery();
             generatedReport = EndpointUtils.runReport(AmpReportsToReportSpecification.convert(ampReport));
         } else {
             QueryModel queryModel = queryObject.getQueryModel();
-    
+
             queryModel.setPage(0);
             queryModel.setRecordsPerPage(-1);
             if (isDinamic) {
                 queryObject.setDinamic(true);
             }
-    
+
             generatedReport = ReportsUtil.getGeneratedReport(ampReport.getAmpReportId(),
                     ReportsUtil.convertSaikuParamsToReports(queryObject));
         }
 
-        
+
         return getExportAsResponse(ampReport, type, generatedReport, queryObject);
     }
-    
+
     public Response getExportAsResponse(AmpReports ampReport, String type, GeneratedReport report,
             SaikuBasedQuery queryObject) {
         String fileName = getExportFileName(ampReport, type);
         try {
             byte[] doc = exportNiReport(report, ampReport.getAmpReportId(), queryObject, type);
-            
+
             if (doc != null) {
                 logger.info("Send export data to browser...");
-    
+
                 MediaType mediaType = EndpointUtils.getMediaType(type);
 
                 return Response.ok(doc, mediaType)
@@ -699,7 +704,7 @@ public class Reports {
     }
 
     public String getExportFileName(AmpReports ampReport, String type) {
-        
+
         String filename = ampReport != null ? StringUtils.trim(ampReport.getName()) : "export";
         filename = String.format("%s", filename.replaceAll(" ", "_"));
 
@@ -710,11 +715,11 @@ public class Reports {
         }
 
         filename += "." + type;
-        
+
         return filename;
     }
-    
-    /** Method used for exporting a NiReport. 
+
+    /** Method used for exporting a NiReport.
      * @param report
      * @param reportId
      * @param queryObject
@@ -724,10 +729,10 @@ public class Reports {
      */
     private byte[] exportNiReport(GeneratedReport report, Long reportId, SaikuBasedQuery queryObject,
             String type) throws Exception {
-        
+
         SaikuReportExportType exporter = null;
         GeneratedReport dualReport = null;
-        
+
         switch (type) {
             case AMPReportExportConstants.XLSX: {
                 QueryModel queryModel = queryObject.getQueryModel();
@@ -736,16 +741,16 @@ public class Reports {
                 } else {
                     exporter = SaikuReportExportType.XLSX;
                 }
-                            
+
                 String secondCurrencyCode = queryModel != null ? queryModel.getSecondCurrency() : null;
-                
+
                 if (secondCurrencyCode != null) {
                     logger.info(String.format("secondCurrency=%s", secondCurrencyCode));
                     dualReport = getDualCurrencyReport(queryObject, reportId, secondCurrencyCode);
                 }
                 break;
             }
-            case AMPReportExportConstants.CSV: 
+            case AMPReportExportConstants.CSV:
                 exporter = SaikuReportExportType.CSV;
                 break;
             case AMPReportExportConstants.PDF:
@@ -755,7 +760,7 @@ public class Reports {
                 exporter = SaikuReportExportType.XML;
                 break;
         }
-        
+
         return exporter.executor.newInstance().exportReport(report, dualReport);
     }
 
@@ -769,10 +774,10 @@ public class Reports {
         for (String originalColumnName : configurableColumns) {
             columnToDisplayName.put(originalColumnName, TranslatorWorker.translateText(originalColumnName));
         }
-        
+
         return columnToDisplayName;
     }
-    
+
     @GET
     @Path("/report/measures")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -783,11 +788,11 @@ public class Reports {
         for (String originalMeasureName : configurableMeasures) {
             measuresToDisplayName.put(originalMeasureName, TranslatorWorker.translateText(originalMeasureName));
         }
-        
+
         return measuresToDisplayName;
     }
-    
-    
+
+
     @POST
     @Path("/report/saveTab/{report_id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -832,7 +837,7 @@ public class Reports {
                     newFilters.setCurrency(CurrencyUtil.getAmpcurrency(currency));
                     newFilters.setCalendarType(FiscalCalendarUtil.getAmpFiscalCalendar(new Long(calendar)));
                 }
-                
+
                 if (formParams.getIncludeLocationChildren() != null) {
                     newFilters.setIncludeLocationChildren(formParams.getIncludeLocationChildren());
                 }
@@ -847,8 +852,8 @@ public class Reports {
                     report.getFilterDataSet().addAll(fdSet);
                 }
             }
-            
-            Session session = PersistenceManager.getSession();          
+
+            Session session = PersistenceManager.getSession();
             List<Map<String, String>> reportData = formParams.getReportData();
             boolean emptyDefaultName = true;
             String defaultLang = TLSUtils.getEffectiveLangCode();
@@ -858,7 +863,7 @@ public class Reports {
                 }
             }
             if(!emptyDefaultName) {
-                Map<String, AmpContentTranslation> translations = populateContentTranslations(reportData, reportId);            
+                Map<String, AmpContentTranslation> translations = populateContentTranslations(reportData, reportId);
                 MultilingualInputFieldValues.serialize(report, "name", session, translations);
                 logger.info(report);
             } else {
@@ -869,7 +874,7 @@ public class Reports {
         }
         return message;
     }
-    
+
     /**
      * a front end for {@link MultilingualInputFieldValues#readTranslationsFromRequest(Class, long, String, String, HttpServletRequest)}
      * co-evolve the two routines!
@@ -884,7 +889,7 @@ public class Reports {
                 String locale = langAndName.get("lang");
                 rawData.add(Pair.of(locale, langAndName.get("name")));
             }
-            
+
         }
         return MultilingualInputFieldValues.populateContentTranslations(rawData, AmpReports.class, reportId, "name");
     }
@@ -899,9 +904,9 @@ public class Reports {
             @PathParam("report_id") Long reportId) {
         return ReportsUtil.exportToMap(config, reportId);
     }
-    
+
     public Map<String, Object> getColorSettings(Set<ReportColumn> reportColumns) {
-        
+
         // columns that will be used for coloring and should be hidden in saiku if are not present in report specification
         Set<String> hiddenColumnNames = new HashSet<String>();
         hiddenColumnNames.add(ColumnConstants.APPROVAL_STATUS);
@@ -912,27 +917,27 @@ public class Reports {
         }
 
         Map<String, Object> colorSettings = new HashMap<String, Object>();
-        
+
         Set<Integer> validatedStatuses = new HashSet<Integer>();
         for (ApprovalStatus s : AmpARFilter.VALIDATED_ACTIVITY_STATUS) {
             validatedStatuses.add(s.getId());
         }
-        
+
         Set<Integer> unvalidatedStatuses = new HashSet<Integer>();
         for (ApprovalStatus s : AmpARFilter.UNVALIDATED_ACTIVITY_STATUS) {
             unvalidatedStatuses.add(s.getId());
         }
-        
+
         Map<String, Set<Integer>> activityStatusCodes = new HashMap<String, Set<Integer>>();
         activityStatusCodes.put("validated", validatedStatuses);
         activityStatusCodes.put("unvalidated", unvalidatedStatuses);
-        
+
         colorSettings.put("hiddenColumnNames", hiddenColumnNames);
         colorSettings.put("activityStatusCodes", activityStatusCodes);
-        
+
         return colorSettings;
     }
-    
+
     private List<SortParam> convertJQgridSortingParams(String sidx, String sord) {
         List<SortParam> sorting = new ArrayList<>();
         // Convert jqgrid sorting params into ReportUtils sorting params.
@@ -954,7 +959,7 @@ public class Reports {
                     listOfColumns.add(auxColumns[i].trim());
                     sort.setColumns(listOfColumns);
                     sort.setAsc(asc);
-                    
+
                     // TODO: Testing what happens if we use only the last column
                     // coming from jqgrid (specially on hierarchical reports).
                     //if (i == auxColumns.length - 1) {
@@ -965,7 +970,7 @@ public class Reports {
         }
         return sorting;
     }
-        
+
     @GET
     @Path("/checkConsistency")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -984,7 +989,7 @@ public class Reports {
 //      res.put("CHECK_TIME", delta);
         return res;
     }
-    
+
     protected static List<ReportRenderWarningEx> remap(List<ReportRenderWarning> in) {
         if (in == null)
             return null;

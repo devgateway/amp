@@ -13,23 +13,22 @@ class MainMenu extends Component {
   constructor() {
     super();
     this.state = {
-      activeItem: 'details', modalSaveError: null, saveModalOpen: false, isNewReport: false
+      modalSaveError: null, saveModalOpen: false, isNewReport: false
     };
   }
 
   handleItemClick = (e, { name }) => {
     const { onClick } = this.props;
-    this.setState({ activeItem: name });
     let index = -1;
     // eslint-disable-next-line default-case
     switch (name) {
-      case 'details':
+      case 'menu0':
         index = 0;
         break;
-      case 'columns':
+      case 'menu1':
         index = 1;
         break;
-      case 'measures':
+      case 'menu2':
         index = 2;
         break;
     }
@@ -46,28 +45,28 @@ class MainMenu extends Component {
 
   render() {
     const {
-      activeItem, modalSaveError, saveModalOpen, isNewReport
+      modalSaveError, saveModalOpen, isNewReport
     } = this.state;
-    const { translations } = this.props;
+    const { translations, tab } = this.props;
     return (
       <>
         <Menu fluid vertical>
           <Menu.Item
-            name="details"
+            name="menu0"
             content={translations[`${TRN_PREFIX}reportingDetails`]}
-            active={activeItem === 'details'}
+            active={tab === 0}
             onClick={this.handleItemClick}
               />
           <Menu.Item
-            name="columns"
+            name="menu1"
             content={translations[`${TRN_PREFIX}columns`]}
-            active={activeItem === 'columns'}
+            active={tab === 1}
             onClick={this.handleItemClick}
               />
           <Menu.Item
-            name="measures"
+            name="menu2"
             content={translations[`${TRN_PREFIX}measures`]}
-            active={activeItem === 'measures'}
+            active={tab === 2}
             onClick={this.handleItemClick}
               />
           <Item className="save_buttons_item">
@@ -104,4 +103,5 @@ export default connect(mapStateToProps, mapDispatchToProps)(MainMenu);
 MainMenu.propTypes = {
   onClick: PropTypes.func.isRequired,
   translations: PropTypes.object.isRequired,
+  tab: PropTypes.number.isRequired,
 };

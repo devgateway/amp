@@ -117,7 +117,7 @@ class MainContent extends Component {
         <Grid>
           <GridRow>
             <GridColumn width="4">
-              <MainMenu onClick={this.handleMenuClick} />
+              <MainMenu onClick={this.handleMenuClick} tab={visibleTab} />
             </GridColumn>
             <GridColumn width="12">
               <ReportingDetailSection visible={visibleTab === 0} />

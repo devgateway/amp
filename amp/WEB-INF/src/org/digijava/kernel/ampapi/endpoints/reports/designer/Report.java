@@ -30,13 +30,13 @@ public class Report {
 
     private String description;
 
-    @ApiModelProperty(value = "Can be on of \"D\" (Donor), \"C\" (Component), \"P\" (Pledge). "
-            + "Default is \"D\" if not provided.", allowableValues = "D,C,P,R,G")
+    @ApiModelProperty(value = "Can be on of \"D\" (Donor), \"C\" (Component), \"P\" (Pledge), \"R\" (Regional),"
+            + " \"G\" (GPI). Default is \"D\" if not provided.", allowableValues = "D,C,P,R,G")
     private ReportType type;
 
     @ApiModelProperty(value = "Time frame by which to group funding data in the report. If not specified only totals "
-            + "will be computed.\n* A - Anually\n* Q - Quarterly\n* M - Monthly",
-            example = "A", allowableValues = "A, Q, M")
+            + "will be computed.\n* A - Anually\n* Q - Quarterly\n* M - Monthly\n* N - Totals Only",
+            example = "A", allowableValues = "A, Q, M, N")
     private String groupingOption;
 
     @ApiModelProperty(value = "To hide or not the activities in the report.")

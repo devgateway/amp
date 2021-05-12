@@ -29,13 +29,14 @@ class PreviewSection extends Component {
       return <ErrorMessage visible message={translations[`${TRN_PREFIX}previewError`]} />;
     } else if (previewLoaded && lastReportId !== -1) {
       return (
-        <Grid>
-          <Grid.Row>
+        <>
+          <hr />
+          <Grid>
             <GridColumn width={16}>
               {this.renderReport(results)}
             </GridColumn>
-          </Grid.Row>
-        </Grid>
+          </Grid>
+        </>
       );
     } else if (lastReportId === -1) {
       return null;

@@ -1,7 +1,7 @@
 import {
   FETCH_PREVIEW_ERROR,
   FETCH_PREVIEW_PENDING,
-  FETCH_PREVIEW_SUCCESS,
+  FETCH_PREVIEW_SUCCESS, IGNORE_PREVIEW,
   UPDATE_PREVIEW_ID
 } from '../actions/previewActions';
 
@@ -40,7 +40,14 @@ export default (state = initialState, action) => {
       return {
         ...state,
         lastReportId: action.id,
-        lastReportName: action.name
+        lastReportName: action.name,
+        loaded: false,
+        pending: false,
+        error: false
+      };
+    case IGNORE_PREVIEW:
+      return {
+        ...state,
       };
     default:
       return state;

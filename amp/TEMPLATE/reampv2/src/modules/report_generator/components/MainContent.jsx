@@ -60,7 +60,9 @@ class MainContent extends Component {
             end: `${year}-12-31`
           }
         };
+        console.log(`latest preview id: ${newId}`);
         _getPreview({
+          id: newId,
           add_columns: _columns,
           add_measures: _measures,
           page: 1,

@@ -27,7 +27,7 @@ class PreviewSection extends Component {
       return <Form loading />;
     } else if (previewError) {
       return <ErrorMessage visible message={translations[`${TRN_PREFIX}previewError`]} />;
-    } else if (previewLoaded) {
+    } else if (previewLoaded && lastReportId !== -1) {
       return (
         <Grid>
           <Grid.Row>
@@ -37,7 +37,7 @@ class PreviewSection extends Component {
           </Grid.Row>
         </Grid>
       );
-    } else if (lastReportId <= 0) {
+    } else if (lastReportId === -1) {
       return null;
     } else {
       return <span>{translations[`${TRN_PREFIX}no-data-short`]}</span>;

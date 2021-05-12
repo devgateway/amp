@@ -56,7 +56,7 @@ class MainContent extends Component {
         const year = (new Date()).getFullYear();
         const dateFilter = {
           date: {
-            start: `${year - 2}-01-01`,
+            start: `${year - 1}-01-01`,
             end: `${year}-12-31`
           }
         };

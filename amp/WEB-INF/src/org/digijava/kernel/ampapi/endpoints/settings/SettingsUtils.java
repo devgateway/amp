@@ -10,6 +10,7 @@ import org.dgfoundation.amp.menu.AmpView;
 import org.dgfoundation.amp.menu.MenuUtils;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.ReportMeasure;
+import org.dgfoundation.amp.newreports.ReportSettings;
 import org.dgfoundation.amp.newreports.ReportSettingsImpl;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
@@ -164,26 +165,31 @@ public class SettingsUtils {
      * @return settings in a structure to be used in UI, with all options
      */
     public static Settings getReportSettings(ReportSpecification spec) {
-        if (spec == null || spec.getSettings() == null)
+        if (spec == null || spec.getSettings() == null) {
             return null;
+        }
 
+        return getReportSettings(spec.getSettings());
+    }
+
+    public static Settings getReportSettings(final ReportSettings reportSettings) {
         Settings settings = new Settings();
 
-        settings.setCurrencyCode(getReportCurrencyCode(spec));
-        settings.setCalendarId(getReportCalendarId(spec));
-        settings.setYearRange(getReportYearRange(spec));
-        settings.setAmountFormat(getReportAmountFormat(spec));
+        settings.setCurrencyCode(getReportCurrencyCode(reportSettings));
+        settings.setCalendarId(getReportCalendarId(reportSettings));
+        settings.setYearRange(getReportYearRange(reportSettings));
+        settings.setAmountFormat(getReportAmountFormat(reportSettings));
 
         return settings;
     }
 
-    private static Settings.AmountFormat getReportAmountFormat(ReportSpecification spec) {
-        DecimalFormat decimalFormat = spec.getSettings().getCurrencyFormat();
+    private static Settings.AmountFormat getReportAmountFormat(final ReportSettings settings) {
+        DecimalFormat decimalFormat = settings.getCurrencyFormat();
         if (decimalFormat == null) {
             return null;
         }
         Settings.AmountFormat amountFormat = new Settings.AmountFormat();
-        AmountsUnits unitsOption = spec.getSettings().getUnitsOption();
+        AmountsUnits unitsOption = settings.getUnitsOption();
         if (unitsOption != null) {
             amountFormat.setNumberDivider(unitsOption.divider);
         }
@@ -192,37 +198,37 @@ public class SettingsUtils {
         amountFormat.setUseGrouping(decimalFormat.isGroupingUsed());
         amountFormat.setGroupSize(decimalFormat.getGroupingSize());
         amountFormat.setGroupSeparator(decimalFormat.getDecimalFormatSymbols().getGroupingSeparator());
+
         return amountFormat;
     }
 
-    private static String getReportCurrencyCode(ReportSpecification spec) {
-        String selectedId = null;
-        if (spec.getSettings() != null && spec.getSettings().getCurrencyCode() != null) {
-            selectedId = spec.getSettings().getCurrencyCode();
+    private static String getReportCurrencyCode(final ReportSettings settings) {
+        if (settings.getCurrencyCode() != null) {
+            return settings.getCurrencyCode();
         }
-        return selectedId;
+
+        return null;
     }
 
-    private static String getReportCalendarId(ReportSpecification spec) {
-        String selectedId = null;
-        if (spec.getSettings() != null && spec.getSettings().getCalendar() != null) {
-            selectedId = spec.getSettings().getCalendar().getIdentifier().toString();
+    private static String getReportCalendarId(final ReportSettings settings) {
+        if (settings.getCurrencyCode() != null) {
+            return settings.getCalendar().getIdentifier().toString();
         }
-        return selectedId;
+
+        return null;
     }
 
-    private static SettingRange getReportYearRange(ReportSpecification spec) {
-        SettingRange yearRange = null;
-
-        if (spec != null && spec.getSettings() != null && spec.getSettings().getYearRangeFilter() != null) {
-            yearRange = new SettingRange(SettingRange.Type.INT_VALUE);
-            yearRange.setFrom(getReportYear(spec.getSettings().getYearRangeFilter().min));
-            yearRange.setTo(getReportYear(spec.getSettings().getYearRangeFilter().max));
+    private static SettingRange getReportYearRange(final ReportSettings settings) {
+        if (settings.getYearRangeFilter() != null) {
+            SettingRange yearRange = new SettingRange(SettingRange.Type.INT_VALUE);
+            yearRange.setFrom(getReportYear(settings.getYearRangeFilter().min));
+            yearRange.setTo(getReportYear(settings.getYearRangeFilter().max));
             yearRange.setRangeFrom(EndpointUtils.getRangeStartYear());
             yearRange.setRangeTo(EndpointUtils.getRangeEndYear());
+            return yearRange;
         }
 
-        return yearRange;
+        return null;
     }
 
     static SettingField getCalendarCurrenciesField() {
@@ -337,7 +343,9 @@ public class SettingsUtils {
      */
     static SettingField getReportYearRangeField(ReportSpecification spec) {
 
-        SettingRange range = getReportYearRange(spec);
+        SettingRange range = spec != null && spec.getSettings() != null
+                ? getReportYearRange(spec.getSettings()) : null;
+
         if (range == null) {
             range = new SettingRange(SettingRange.Type.INT_VALUE);
             range.setFrom(EndpointUtils.getDefaultReportStartYear());

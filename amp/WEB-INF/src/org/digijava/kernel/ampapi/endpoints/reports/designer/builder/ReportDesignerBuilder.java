@@ -1,5 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.reports.designer.builder;
 
+import org.digijava.kernel.ampapi.endpoints.common.CategoryValueLabel;
 import org.digijava.kernel.ampapi.endpoints.reports.designer.ReportColumn;
 import org.digijava.kernel.ampapi.endpoints.reports.designer.ReportDesigner;
 import org.digijava.kernel.ampapi.endpoints.reports.designer.ReportMeasure;
@@ -46,6 +47,12 @@ public class ReportDesignerBuilder {
 
     public ReportDesignerBuilder withOptions(final List<ReportOption> options) {
         reportDesigner.setOptions(options);
+
+        return this;
+    }
+
+    public ReportDesignerBuilder withReportCategories(final List<CategoryValueLabel> reportCategories) {
+        reportDesigner.setReportCategories(reportCategories);
 
         return this;
     }

@@ -38,7 +38,9 @@ public class ReportOptionProvider {
                     + "being displayed as Actual Commitments",
             "Also show pledges checkbox", "Report and Tab Options"),
         new ReportOptionConfiguration("empty-funding-columns",
-                "Allow empty funding columns for year, quarter and month")
+                "Allow empty funding columns for year, quarter and month"),
+            new ReportOptionConfiguration("reportCategory", "Please select a category from below", null,
+                    "Reports classification", "Report Generator")
     );
 
     public static final List<ReportOptionConfiguration> TAB_PROFILE_OPTIONS = ImmutableList.of(

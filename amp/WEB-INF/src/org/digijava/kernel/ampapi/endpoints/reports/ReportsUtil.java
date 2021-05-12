@@ -197,6 +197,7 @@ public class ReportsUtil {
         
         processRawValues(formParams);
         result.setReportWarnings(cachedReportData.report.reportWarnings);
+        result.setId(reportId);
         
         return result;
     }

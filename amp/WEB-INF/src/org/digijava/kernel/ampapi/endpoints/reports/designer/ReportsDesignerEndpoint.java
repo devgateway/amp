@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -36,6 +37,17 @@ public class ReportsDesignerEndpoint {
     public final ReportDesigner getReport(@QueryParam("profile") @DefaultValue("R") String profile,
                                           @QueryParam("type") @DefaultValue("D") String type) {
         return reportDesignerService.getReportDesigner(getReportProfile(profile), getReportType(type));
+    }
+
+    @ApiOperation("Retrieve the report by specifying the id")
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "report",
+            response = ReportDesigner.class))
+    @ApiMethod(id = "getReport", authTypes = AuthRule.IN_WORKSPACE)
+    @GET
+    @Path("/{reportId}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    public final Report getReport(@PathParam("reportId") Long reportId) {
+        return reportDesignerService.getReport(reportId);
     }
 
     private ReportProfile getReportProfile(final String profile) {

@@ -1,6 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.reports.designer;
 
 import io.swagger.annotations.ApiModelProperty;
+import org.digijava.kernel.ampapi.endpoints.common.CategoryValueLabel;
 
 import java.util.List;
 
@@ -23,6 +24,9 @@ public class ReportDesigner {
 
     @ApiModelProperty(value = "The list contains all the available options for the selected profile and report type.")
     private List<ReportOption> options;
+
+    @ApiModelProperty(value = "The list contains all the available report categories.")
+    private List<CategoryValueLabel> reportCategories;
 
     public ReportProfile getProfile() {
         return profile;
@@ -62,5 +66,13 @@ public class ReportDesigner {
 
     public void setOptions(final List<ReportOption> options) {
         this.options = options;
+    }
+
+    public List<CategoryValueLabel> getReportCategories() {
+        return reportCategories;
+    }
+
+    public void setReportCategories(final List<CategoryValueLabel> reportCategories) {
+        this.reportCategories = reportCategories;
     }
 }

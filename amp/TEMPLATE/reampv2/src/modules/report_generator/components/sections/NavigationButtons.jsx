@@ -1,38 +1,45 @@
 import React, { Component } from 'react';
-import { Button, ButtonGroup } from 'semantic-ui-react';
+import {
+  Button, ButtonGroup, Grid, GridColumn, GridRow
+} from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { TRN_PREFIX } from '../../utils/constants';
 
 class NavigationButtons extends Component {
-  constructor() {
-    super();
-    this.state = { nextEnabled: false, backEnabled: false };
-  }
-
   setEnabledOrDisabledButtons = () => {
-    // TODO: Logic to enable/disable each button.
-  }
-
-  handleBackClick = () => {
-    const { backClick } = this.props;
-    backClick();
-  }
-
-  handleNextClick=() => {
-    const { nextClick } = this.props;
-    nextClick();
+    const { tab } = this.props;
+    // eslint-disable-next-line default-case
+    switch (tab) {
+      case 0:
+        return [false, true];
+      case 1:
+        return [true, true];
+      case 2:
+        return [true, false];
+    }
   }
 
   render() {
-    const { nextEnabled, backEnabled } = this.state;
-    const { translations } = this.props;
+    const { translations, backClick, nextClick } = this.props;
+    const status = this.setEnabledOrDisabledButtons();
     return (
-      <ButtonGroup className="navigation-buttons">
-        <Button positive={backEnabled} disabled={!backEnabled}>{translations[`${TRN_PREFIX}back`]}</Button>
-        <Button positive={nextEnabled} disabled={!nextEnabled}>{translations[`${TRN_PREFIX}next`]}</Button>
-      </ButtonGroup>
+      <Grid>
+        <GridRow>
+          <GridColumn width="16">
+            <ButtonGroup className="navigation-buttons" floated="right">
+              <Button positive={status[0]} disabled={!status[0]} onClick={backClick}>
+                {`<< ${translations[`${TRN_PREFIX}back`]}`}
+              </Button>
+              <div className="separator" />
+              <Button positive={status[1]} disabled={!status[1]} onClick={nextClick}>
+                {`${translations[`${TRN_PREFIX}next`]} >>`}
+              </Button>
+            </ButtonGroup>
+          </GridColumn>
+        </GridRow>
+      </Grid>
     );
   }
 }
@@ -49,4 +56,5 @@ NavigationButtons.propTypes = {
   backClick: PropTypes.func.isRequired,
   nextClick: PropTypes.func.isRequired,
   translations: PropTypes.object.isRequired,
+  tab: PropTypes.number.isRequired,
 };

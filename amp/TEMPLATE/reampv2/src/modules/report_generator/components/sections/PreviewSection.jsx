@@ -6,6 +6,7 @@ import {
   Form,
   Grid, GridColumn
 } from 'semantic-ui-react';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { TRN_PREFIX } from '../../utils/constants';
 import { ReportGeneratorContext } from '../StartUp';
 import ErrorMessage from '../ErrorMessage';
@@ -23,6 +24,11 @@ class PreviewSection extends Component {
     const {
       lastReportId, previewLoading, previewLoaded, previewError, results, translations
     } = this.props;
+    const tooltipText = (
+      <Tooltip id={Math.random()}>
+        {translations[`${TRN_PREFIX}previewTooltip`]}
+      </Tooltip>
+    );
     if (previewLoading) {
       return <Form loading />;
     } else if (previewError) {
@@ -30,9 +36,17 @@ class PreviewSection extends Component {
     } else if (previewLoaded && lastReportId !== -1) {
       return (
         <>
-          <hr />
           <Grid>
             <GridColumn width={16}>
+              <div className="option-list-title">
+                <span>{translations[`${TRN_PREFIX}preview`]}</span>
+                <OverlayTrigger trigger={['hover', 'focus']} overlay={tooltipText}>
+                  <img
+                    alt="info-icon"
+                    className="info-icon"
+                    src="/TEMPLATE/reamp/modules/admin/data-freeze-manager/styles/images/icon-information.svg" />
+                </OverlayTrigger>
+              </div>
               {this.renderReport(results)}
             </GridColumn>
           </Grid>
@@ -41,7 +55,7 @@ class PreviewSection extends Component {
     } else if (lastReportId === -1) {
       return null;
     } else {
-      return <span>{translations[`${TRN_PREFIX}no-data-short`]}</span>;
+      return null;
     }
   }
 }

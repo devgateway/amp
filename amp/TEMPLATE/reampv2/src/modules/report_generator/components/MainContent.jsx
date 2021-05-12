@@ -99,6 +99,16 @@ class MainContent extends Component {
     this.setState({ visibleTab: index });
   }
 
+  handleNavButtonBack = () => {
+    const { visibleTab } = this.state;
+    this.setState({ visibleTab: visibleTab - 1 });
+  }
+
+  handleNavButtonNext = () => {
+    const { visibleTab } = this.state;
+    this.setState({ visibleTab: visibleTab + 1 });
+  }
+
   render() {
     const { visibleTab } = this.state;
     return (
@@ -112,7 +122,10 @@ class MainContent extends Component {
               <ReportingDetailSection visible={visibleTab === 0} />
               <ColumnsSection visible={visibleTab === 1} />
               <MeasuresSection visible={visibleTab === 2} />
-              <NavigationButtons />
+              <NavigationButtons
+                tab={visibleTab}
+                backClick={this.handleNavButtonBack}
+                nextClick={this.handleNavButtonNext} />
               <PreviewSection />
             </GridColumn>
           </GridRow>

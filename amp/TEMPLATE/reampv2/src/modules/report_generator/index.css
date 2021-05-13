@@ -48,7 +48,11 @@
 }
 
 .navigation-buttons {
-    padding-top: 50px;
+    padding-top: 25px;
+}
+
+.separator {
+    width: 10px;
 }
 
 .option-list-content {
@@ -56,6 +60,11 @@
     background-color: #D3D3D31C;
     padding: 10px;
     height: 85%;
+}
+
+.description {
+    height: 100% !important;
+    padding-bottom: 0px !important;
 }
 
 textarea {
@@ -125,7 +134,6 @@ textarea {
 .column-item radio, checkbox {
     margin: 0;
     margin-top: 0px;
-    margin-right: 0px;
     margin-right: 5px;
 }
 
@@ -190,6 +198,14 @@ textarea {
     height: 100%;
 }
 
+.accordion .title:hover {
+    color: #2480c6 !important;
+}
+
+.ui.checkbox label:hover {
+    color: #2480c6 !important;
+}
+
 .ui.form {
     height: max-content;
     padding-bottom: 10px;
@@ -226,6 +242,14 @@ i.arrow {
     background: rgba(0, 0, 0, 0.50);
 }
 
+.ui.styled.accordion .title {
+    color: black;
+}
+
+/* .ui.styled.accordion :hover {
+    background-color: rgba(92, 153, 199, 0.55);
+} */
+
 .disabled {
     opacity: 0.35;
     pointer-events: none;
@@ -236,4 +260,50 @@ i.arrow {
     top: 25%;
     left: 35%;
     width: 30% !important;
+}
+
+.preview-container {
+    width: 100%;
+    height: 400px;
+    overflow: scroll;
+    background-color: white;
+    font-size: 0.8em;
+}
+
+.preview-container td {
+    border-bottom: 1px solid #D5D5D5;
+}
+
+.preview-container th.col {
+    border: 1px solid #D5D5D5;
+    background: #d6e7fd none repeat scroll 0% 0%;
+    text-align: center;
+    font-size: 1em;
+    padding: 0 5px;
+}
+
+.preview-container td.text {
+    vertical-align: center;
+    font-size: 0.8em;
+    padding-bottom: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border: 1px solid #D5D5D5;
+}
+
+.preview-container td.measure {
+    border-left: 1px solid #D5D5D5;
+    border-top: 1px solid #D5D5D5;
+    text-align: right;
+    font-size: 0.8em;
+    padding-right: 5px;
+}
+
+.preview-container td.total {
+    background: #d6e7fd none repeat scroll 0% 0%;
+    font-weight: bold;
+    text-align: right;
+    white-space: nowrap;
+    font-size: 0.8em;
+    padding-right: 5px;
 }

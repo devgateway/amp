@@ -9,27 +9,28 @@ import { TRN_PREFIX } from '../utils/constants';
 import './MainMenu.css';
 import SaveModal from './SaveModal';
 
+const MENU = 'menu';
+
 class MainMenu extends Component {
   constructor() {
     super();
     this.state = {
-      activeItem: 'details', modalSaveError: null, saveModalOpen: false, isNewReport: false
+      modalSaveError: null, saveModalOpen: false, isNewReport: false
     };
   }
 
   handleItemClick = (e, { name }) => {
     const { onClick } = this.props;
-    this.setState({ activeItem: name });
     let index = -1;
     // eslint-disable-next-line default-case
     switch (name) {
-      case 'details':
+      case MENU + 0:
         index = 0;
         break;
-      case 'columns':
+      case MENU + 1:
         index = 1;
         break;
-      case 'measures':
+      case MENU + 2:
         index = 2;
         break;
     }
@@ -46,28 +47,28 @@ class MainMenu extends Component {
 
   render() {
     const {
-      activeItem, modalSaveError, saveModalOpen, isNewReport
+      modalSaveError, saveModalOpen, isNewReport
     } = this.state;
-    const { translations } = this.props;
+    const { translations, tab } = this.props;
     return (
       <>
         <Menu fluid vertical>
           <Menu.Item
-            name="details"
+            name={MENU + 0}
             content={translations[`${TRN_PREFIX}reportingDetails`]}
-            active={activeItem === 'details'}
+            active={tab === 0}
             onClick={this.handleItemClick}
               />
           <Menu.Item
-            name="columns"
+            name={MENU + 1}
             content={translations[`${TRN_PREFIX}columns`]}
-            active={activeItem === 'columns'}
+            active={tab === 1}
             onClick={this.handleItemClick}
               />
           <Menu.Item
-            name="measures"
+            name={MENU + 2}
             content={translations[`${TRN_PREFIX}measures`]}
-            active={activeItem === 'measures'}
+            active={tab === 2}
             onClick={this.handleItemClick}
               />
           <Item className="save_buttons_item">
@@ -104,4 +105,5 @@ export default connect(mapStateToProps, mapDispatchToProps)(MainMenu);
 MainMenu.propTypes = {
   onClick: PropTypes.func.isRequired,
   translations: PropTypes.object.isRequired,
+  tab: PropTypes.number.isRequired,
 };

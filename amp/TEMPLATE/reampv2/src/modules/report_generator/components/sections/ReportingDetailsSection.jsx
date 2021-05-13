@@ -30,14 +30,14 @@ class ReportingDetailSection extends Component {
     // In the old report generator some options are pre-filled to a default value.
     let options = this.getOptions(TOTAL_GROUPING_RADIO_OPTIONS);
     if (selectedTotalGrouping === null && options.length > 0) {
-      const value = options[0] ? options[0].label : null;
+      const value = options[0] ? options[0].name : null;
       if (value) {
         this.selectTotalGrouping(null, { value });
       }
     }
     options = this.getOptions(FUNDING_GROUPING_RADIO_OPTIONS);
     if (selectedFundingGrouping === null && options.length > 0) {
-      const value = options[0] ? options[0].label : null;
+      const value = options[0] ? options[0].name : null;
       if (value) {
         this.selectFundingGrouping(null, { value });
       }
@@ -119,7 +119,7 @@ class ReportingDetailSection extends Component {
           </GridColumn>
           <GridColumn computer="8" tablet="16">
             <OptionsList title={translations[`${TRN_PREFIX}reportDescription`]} isRequired tooltip="tooltip 2" >
-              <Form>
+              <Form className="description">
                 <TextArea value={description} onChange={this.changeDescription} />
               </Form>
             </OptionsList>

@@ -129,7 +129,6 @@ export default (state = initialState, action) => {
         columns: {
           ...state.columns,
           selected: [],
-          order: [],
         },
         hierarchies: {
           available: [],
@@ -197,10 +196,13 @@ export default (state = initialState, action) => {
         metaDataPending: false,
         metaDataLoaded: true,
         measures: {
-          available: action.payload.measures
+          available: action.payload.measures,
+          selected: [],
+          order: [],
         },
         columns: {
-          available: action.payload.columns
+          available: action.payload.columns,
+          selected: [],
         },
         options: action.payload.options,
       };

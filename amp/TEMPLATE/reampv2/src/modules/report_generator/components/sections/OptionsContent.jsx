@@ -16,9 +16,9 @@ export default class OptionsContent extends Component {
             {radioList.map((item) => (
               <Form.Radio
                 label={item.label}
-                value={item.label}
+                value={item.name}
                 key={item.name}
-                checked={item.label === selectedRadio}
+                checked={item.name === selectedRadio}
                 onChange={changeRadioList}
               />
             ))}

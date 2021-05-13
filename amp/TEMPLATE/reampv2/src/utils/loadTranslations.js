@@ -1,10 +1,10 @@
 const POST = 'POST';
 const GET = 'GET';
 
-function getRequestOptions(body) {
+function getRequestOptions(body, headers) {
   const requestOptions = {
     method: body ? POST : GET,
-    headers: { 'Content-Type': 'application/json', Accept: 'application/json' }
+    headers: headers || { 'Content-Type': 'application/json', Accept: 'application/json' }
   };
   if (body) {
     requestOptions.body = JSON.stringify(body);
@@ -12,8 +12,9 @@ function getRequestOptions(body) {
   return requestOptions;
 }
 
-export const fetchApiData = ({ body, url }) => new Promise((resolve, reject) => fetch(url, getRequestOptions(body))
-  .then(response => response.json())
+export const fetchApiData = ({ body, url, headers }) => new Promise((resolve, reject) => fetch(url,
+  getRequestOptions(body, headers))
+  .then(response => (headers && headers.Accept === 'text/html' ? response.text() : response.json()))
   .then(data => {
     if (data.error) {
       return reject(data.error);

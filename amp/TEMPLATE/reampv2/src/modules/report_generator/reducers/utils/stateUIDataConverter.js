@@ -27,7 +27,8 @@ export function convertHierarchies(hierarchies, data, columns) {
   const _hierarchies = { ...hierarchies };
   _hierarchies.available = columns.available.filter(i => data.hierarchies.find(j => j.id === i.id));
   _hierarchies.selected = data.hierarchies.sort((i, j) => i.levelId > j.levelId).map(i => i.id);
-  _hierarchies.order = _hierarchies.selected;
+  // Note: Dont do _hierarchies.order = _hierarchies.selected because it will break the hierarchies selection.
+  _hierarchies.order = data.hierarchies.sort((i, j) => i.levelId > j.levelId).map(i => i.id);
   return _hierarchies;
 }
 

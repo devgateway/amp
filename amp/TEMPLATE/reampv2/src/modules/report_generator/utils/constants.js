@@ -1,6 +1,7 @@
 export const TRN_PREFIX = 'amp.reportGenerator:';
 export const URL_METADATA = '/rest/reports/designer';
 export const URL_PREVIEW = '/rest/data/report/preview';
+export const URL_GET_REPORT = '/rest/reports/{reportId}';
 
 export const SUMMARY_REPORT = 'summary-report';
 export const ANNUAL_REPORT = 'annual-report';

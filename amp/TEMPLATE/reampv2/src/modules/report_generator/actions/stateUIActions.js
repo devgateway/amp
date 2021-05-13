@@ -1,5 +1,5 @@
 import { fetchApiData } from '../../../utils/loadTranslations';
-import { URL_METADATA } from '../utils/constants';
+import { URL_GET_REPORT, URL_METADATA } from '../utils/constants';
 
 export const UPDATE_REPORT_DETAILS_TOTAL_GROUPING = 'UPDATE_REPORT_DETAILS_TOTAL_GROUPING';
 export const UPDATE_REPORT_DETAILS_TOTALS_ONLY = 'UPDATE_REPORT_DETAILS_TOTALS_ONLY';
@@ -21,6 +21,10 @@ export const UPDATE_HIERARCHIES_LIST = 'UPDATE_HIERARCHIES_LIST';
 export const FETCH_METADATA_PENDING = 'FETCH_METADATA_PENDING';
 export const FETCH_METADATA_SUCCESS = 'FETCH_METADATA_SUCCESS';
 export const FETCH_METADATA_ERROR = ' FETCH_METADATA_ERROR';
+
+export const FETCH_REPORT_PENDING = 'FETCH_REPORT_PENDING';
+export const FETCH_REPORT_SUCCESS = 'FETCH_REPORT_SUCCESS';
+export const FETCH_REPORT_ERROR = ' FETCH_REPORT_ERROR';
 
 export function updateReportDetailsTotalGrouping(payload) {
   return {
@@ -152,10 +156,38 @@ export function fetchMetaDataError(error) {
   };
 }
 
+export function fetchReportPending() {
+  return {
+    type: FETCH_REPORT_PENDING
+  };
+}
+
+export function fetchReportSuccess(payload) {
+  return {
+    type: FETCH_REPORT_SUCCESS,
+    payload
+  };
+}
+
+export function fetchReportError(error) {
+  return {
+    type: FETCH_REPORT_ERROR,
+    error
+  };
+}
+
 export const getMetadata = () => dispatch => {
   dispatch(fetchMetaDataPending());
   return Promise.all([fetchApiData({
     url: URL_METADATA
   })]).then((data) => dispatch(fetchMetaDataSuccess(data[0])))
     .catch(error => dispatch(fetchMetaDataError(error)));
+};
+
+export const fetchReport = (id) => dispatch => {
+  dispatch(fetchReportPending());
+  return fetchApiData({
+    url: URL_GET_REPORT.replace('{reportId}', id)
+  }).then((data) => dispatch(fetchReportSuccess(data)))
+    .catch(error => dispatch(fetchReportError(error)));
 };

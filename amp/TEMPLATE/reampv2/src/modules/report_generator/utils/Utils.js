@@ -29,6 +29,21 @@ export function convertTotalGrouping(value) {
   }
 }
 
+export function revertTotalGrouping(value) {
+  switch (value) {
+    case 'A':
+      return 'annual-report';
+    case 'Q':
+      return 'quarterly-report';
+    case 'M':
+      return 'monthly-report';
+    case 'T':
+      return 'totals-only';
+    default:
+      return null;
+  }
+}
+
 export function convertReportType(value) {
   switch (value) {
     case 'funding-donor':

@@ -29,7 +29,7 @@ export default class OptionsContent extends Component {
                 toggle
                 key={item.name}
                 onChange={changeCheckList ? changeCheckList[i] : {}}
-                checked={selectedCheckboxes && selectedCheckboxes.item}
+                checked={selectedCheckboxes && selectedCheckboxes[i]}
                 label={item.label} />
             </FormField>
           ))}

@@ -8,13 +8,19 @@ import MainHeader from './MainHeader';
 import MainContent from './MainContent';
 import FiltersAndSettings from './FiltersAndSettings';
 import {
-  getMetadata
+  getMetadata, fetchReport
 } from '../actions/stateUIActions';
 
 class ReportGeneratorHome extends Component {
   componentDidMount() {
-    const { _getMetadata } = this.props;
-    _getMetadata();
+    const { _getMetadata, _fetchReport } = this.props;
+    // eslint-disable-next-line react/destructuring-assignment,react/prop-types
+    const { id } = this.props.match.params;
+    if (id) {
+      return _getMetadata().then(() => _fetchReport(id));
+    } else {
+      _getMetadata();
+    }
   }
 
   render() {
@@ -34,10 +40,12 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   _getMetadata: (data) => getMetadata(data),
+  _fetchReport: (id) => fetchReport(id),
 }, dispatch);
 
 ReportGeneratorHome.propTypes = {
   _getMetadata: PropTypes.func.isRequired,
+  _fetchReport: PropTypes.func.isRequired,
 };
 
 ReportGeneratorHome.defaultProps = {};

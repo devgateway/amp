@@ -16,8 +16,14 @@ import {
   FETCH_METADATA_PENDING,
   FETCH_METADATA_SUCCESS,
   FETCH_METADATA_ERROR,
-  RESET_MEASURES_SELECTED_COLUMN, RESET_COLUMNS_SELECTED_COLUMN,
+  RESET_MEASURES_SELECTED_COLUMN, RESET_COLUMNS_SELECTED_COLUMN, FETCH_REPORT_SUCCESS,
 } from '../actions/stateUIActions';
+import {
+  convertColumns,
+  convertHierarchies,
+  convertMeasures,
+  convertReportDetails
+} from './utils/stateUIDataConverter';
 
 const initialState = {
   reportDetails: {
@@ -213,6 +219,14 @@ export default (state = initialState, action) => {
         metaDataLoaded: false,
         metaDataPending: false,
         error: action.error
+      };
+    case FETCH_REPORT_SUCCESS:
+      return {
+        ...state,
+        reportDetails: convertReportDetails(state.reportDetails, action.payload),
+        columns: convertColumns(state.columns, action.payload),
+        hierarchies: convertHierarchies(state.hierarchies, action.payload, state.columns),
+        measures: convertMeasures(state.measures, action.payload)
       };
     default:
       return state;

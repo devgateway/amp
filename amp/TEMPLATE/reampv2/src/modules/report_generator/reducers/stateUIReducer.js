@@ -16,7 +16,10 @@ import {
   FETCH_METADATA_PENDING,
   FETCH_METADATA_SUCCESS,
   FETCH_METADATA_ERROR,
-  RESET_MEASURES_SELECTED_COLUMN, RESET_COLUMNS_SELECTED_COLUMN, FETCH_REPORT_SUCCESS,
+  RESET_MEASURES_SELECTED_COLUMN,
+  RESET_COLUMNS_SELECTED_COLUMN,
+  FETCH_REPORT_SUCCESS,
+  UPDATE_REPORT_DETAILS_ALSO_SHOW_PLEDGES,
 } from '../actions/stateUIActions';
 import {
   convertColumns,
@@ -33,6 +36,7 @@ const initialState = {
     selectedAllowEmptyFundingColumns: false,
     selectedSplitByFunding: false,
     selectedShowOriginalCurrencies: false,
+    selectedAlsoShowPledges: false,
     description: null,
   },
   columns: {
@@ -103,6 +107,14 @@ export default (state = initialState, action) => {
         reportDetails: {
           ...state.reportDetails,
           selectedShowOriginalCurrencies: action.payload
+        }
+      };
+    case UPDATE_REPORT_DETAILS_ALSO_SHOW_PLEDGES:
+      return {
+        ...state,
+        reportDetails: {
+          ...state.reportDetails,
+          selectedAlsoShowPledges: action.payload
         }
       };
     case UPDATE_REPORT_DETAILS_DESCRIPTION:

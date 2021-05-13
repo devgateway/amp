@@ -14,6 +14,7 @@ export function convertReportDetails(reportDetails, data) {
   _reportDetails.selectedSummaryReport = data.summary;
   _reportDetails.selectedSplitByFunding = data.splitByFunding;
   _reportDetails.selectedAllowEmptyFundingColumns = data.allowEmptyFundingColumns;
+  _reportDetails.selectedAlsoShowPledges = data.alsoShowPledges;
   return _reportDetails;
 }
 

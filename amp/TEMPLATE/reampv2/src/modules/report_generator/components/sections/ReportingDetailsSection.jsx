@@ -20,7 +20,8 @@ import {
   updateReportDetailsFundingGrouping, updateReportDetailsAllowEmptyFundingColumns,
   updateReportDetailsSplitByFunding,
   updateReportDetailsShowOriginalCurrencies,
-  updateReportDetailsDescription
+  updateReportDetailsDescription,
+  updateReportDetailsAlsoShowPledges
 } from '../../actions/stateUIActions';
 
 class ReportingDetailSection extends Component {
@@ -74,6 +75,11 @@ class ReportingDetailSection extends Component {
     _updateReportDetailsShowOriginalCurrencies(!selectedShowOriginalCurrencies);
   }
 
+  selectAlsoShowPledges = () => {
+    const { _updateReportDetailsAlsoShowPledges, selectedAlsoShowPledges } = this.props;
+    _updateReportDetailsAlsoShowPledges(!selectedAlsoShowPledges);
+  }
+
   changeDescription = (e, { value }) => {
     const { _updateReportDetailsDescription } = this.props;
     _updateReportDetailsDescription(value);
@@ -99,7 +105,7 @@ class ReportingDetailSection extends Component {
     const {
       visible, translations, selectedTotalGrouping, selectedSummaryReport, selectedFundingGrouping,
       selectedAllowEmptyFundingColumns, selectedSplitByFunding, selectedShowOriginalCurrencies,
-      description, loading
+      description, loading, selectedAlsoShowPledges
     } = this.props;
 
     return (
@@ -139,9 +145,9 @@ class ReportingDetailSection extends Component {
               <OptionsContent
                 checkList={this.getOptions(OPTIONS_CHECKBOX_OPTIONS)}
                 selectedCheckboxes={[selectedAllowEmptyFundingColumns, selectedSplitByFunding,
-                  selectedShowOriginalCurrencies]}
+                  selectedShowOriginalCurrencies, selectedAlsoShowPledges]}
                 changeCheckList={[this.selectAllowEmptyFundingColumns, this.selectSplitByFunding,
-                  this.selectShowOriginalCurrencies]}
+                  this.selectShowOriginalCurrencies, this.selectAlsoShowPledges]}
                 loading={loading} />
             </OptionsList>
           </GridColumn>
@@ -160,6 +166,7 @@ const mapStateToProps = (state) => ({
   selectedAllowEmptyFundingColumns: state.uiReducer.reportDetails.selectedAllowEmptyFundingColumns,
   selectedSplitByFunding: state.uiReducer.reportDetails.selectedSplitByFunding,
   selectedShowOriginalCurrencies: state.uiReducer.reportDetails.selectedShowOriginalCurrencies,
+  selectedAlsoShowPledges: state.uiReducer.reportDetails.selectedAlsoShowPledges,
   description: state.uiReducer.reportDetails.description,
   options: state.uiReducer.options,
   loading: state.uiReducer.metaDataPending,
@@ -173,6 +180,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   _updateReportDetailsSplitByFunding: (data) => dispatch(updateReportDetailsSplitByFunding(data)),
   _updateReportDetailsShowOriginalCurrencies: (data) => dispatch(updateReportDetailsShowOriginalCurrencies(data)),
   _updateReportDetailsDescription: (data) => dispatch(updateReportDetailsDescription(data)),
+  _updateReportDetailsAlsoShowPledges: (data) => dispatch(updateReportDetailsAlsoShowPledges(data))
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReportingDetailSection);
@@ -192,10 +200,12 @@ ReportingDetailSection.propTypes = {
   selectedAllowEmptyFundingColumns: PropTypes.bool,
   selectedSplitByFunding: PropTypes.bool,
   selectedShowOriginalCurrencies: PropTypes.bool,
+  selectedAlsoShowPledges: PropTypes.bool,
   description: PropTypes.string,
   _updateReportDetailsDescription: PropTypes.func.isRequired,
   options: PropTypes.array,
   loading: PropTypes.bool,
+  _updateReportDetailsAlsoShowPledges: PropTypes.func.isRequired,
 };
 
 ReportingDetailSection.defaultProps = {
@@ -205,6 +215,7 @@ ReportingDetailSection.defaultProps = {
   selectedAllowEmptyFundingColumns: false,
   selectedSplitByFunding: false,
   selectedShowOriginalCurrencies: false,
+  selectedAlsoShowPledges: false,
   description: undefined,
   options: undefined,
   loading: false,

@@ -79,7 +79,7 @@ PreviewSection.propTypes = {
   previewLoading: PropTypes.bool,
   previewLoaded: PropTypes.bool,
   previewError: PropTypes.bool,
-  results: PropTypes.object,
+  results: PropTypes.string,
 };
 
 PreviewSection.defaultProps = {

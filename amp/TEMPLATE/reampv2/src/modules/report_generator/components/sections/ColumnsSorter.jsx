@@ -92,50 +92,52 @@ export default class ColumnSorter extends Component {
                   ref={provided.innerRef}
                   style={this.getListStyle(snapshot.isDraggingOver)}
                 >
-                  {sortedColumns.map((item, index) => (
-                    <Draggable key={item.id} draggableId={`${item.id}`} index={index}>
-                      {(provided_, snapshot_) => (
-                        <tr
-                          className="sortable-tr"
-                          ref={provided_.innerRef}
-                          {...provided_.draggableProps}
-                          {...provided_.dragHandleProps}
-                          style={this.getItemStyle(
-                            snapshot_.isDragging,
-                            provided_.draggableProps.style
-                          )}
+                  <tbody>
+                    {sortedColumns.map((item, index) => (
+                      <Draggable key={item.id} draggableId={`${keyPrefix + item.id}`} index={index}>
+                        {(provided_, snapshot_) => (
+                          <tr
+                            className="sortable-tr"
+                            ref={provided_.innerRef}
+                            {...provided_.draggableProps}
+                            {...provided_.dragHandleProps}
+                            style={this.getItemStyle(
+                              snapshot_.isDragging,
+                              provided_.draggableProps.style
+                            )}
                         >
-                          <td className="sortable-td">
-                            {checkbox
-                              ? (
-                                <Checkbox
-                                  color="green"
-                                  id={keyPrefix + item.id}
-                                  label={item.label ? item.label : item.name}
-                                  checked={selected.find(j => j === item.id) !== undefined}
-                                  onChange={this.onItemClick.bind(null, item.id)} />
-                              )
-                              : <span>{item.label ? item.label : item.name}</span> }
-                          </td>
-                          <td className="sortable-td td-arrows">
-                            <span
-                              className={index === 0 ? 'disabled' : ''}
-                              title={translations[`${TRN_PREFIX}moveUp`]}
-                              onClick={this.moveUp.bind(null, index)}>
-                              <Icon name="arrow up" color="blue" />
-                            </span>
-                            <span
-                              className={index === sortedColumns.length - 1 ? 'disabled' : ''}
-                              title={translations[`${TRN_PREFIX}moveDown`]}
-                              onClick={this.moveDown.bind(null, index)}>
-                              <Icon name="arrow down" color="blue" />
-                            </span>
-                          </td>
-                        </tr>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
+                            <td className="sortable-td">
+                              {checkbox
+                                ? (
+                                  <Checkbox
+                                    color="green"
+                                    id={keyPrefix + item.id}
+                                    label={item.label ? item.label : item.name}
+                                    checked={selected.find(j => j === item.id) !== undefined}
+                                    onChange={this.onItemClick.bind(null, item.id)} />
+                                )
+                                : <span>{item.label ? item.label : item.name}</span> }
+                            </td>
+                            <td className="sortable-td td-arrows">
+                              <span
+                                className={index === 0 ? 'disabled' : ''}
+                                title={translations[`${TRN_PREFIX}moveUp`]}
+                                onClick={this.moveUp.bind(null, index)}>
+                                <Icon name="arrow up" color="blue" />
+                              </span>
+                              <span
+                                className={index === sortedColumns.length - 1 ? 'disabled' : ''}
+                                title={translations[`${TRN_PREFIX}moveDown`]}
+                                onClick={this.moveDown.bind(null, index)}>
+                                <Icon name="arrow down" color="blue" />
+                              </span>
+                            </td>
+                          </tr>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </tbody>
                 </table>
               )}
             </Droppable>

@@ -194,7 +194,7 @@ ReportingDetailSection.propTypes = {
   selectedShowOriginalCurrencies: PropTypes.bool,
   description: PropTypes.string,
   _updateReportDetailsDescription: PropTypes.func.isRequired,
-  options: PropTypes.object,
+  options: PropTypes.array,
   loading: PropTypes.bool,
 };
 

@@ -9,6 +9,8 @@ import { TRN_PREFIX } from '../utils/constants';
 import './MainMenu.css';
 import SaveModal from './SaveModal';
 
+const MENU = 'menu';
+
 class MainMenu extends Component {
   constructor() {
     super();
@@ -22,13 +24,13 @@ class MainMenu extends Component {
     let index = -1;
     // eslint-disable-next-line default-case
     switch (name) {
-      case 'menu0':
+      case MENU + 0:
         index = 0;
         break;
-      case 'menu1':
+      case MENU + 1:
         index = 1;
         break;
-      case 'menu2':
+      case MENU + 2:
         index = 2;
         break;
     }
@@ -52,19 +54,19 @@ class MainMenu extends Component {
       <>
         <Menu fluid vertical>
           <Menu.Item
-            name="menu0"
+            name={MENU + 0}
             content={translations[`${TRN_PREFIX}reportingDetails`]}
             active={tab === 0}
             onClick={this.handleItemClick}
               />
           <Menu.Item
-            name="menu1"
+            name={MENU + 1}
             content={translations[`${TRN_PREFIX}columns`]}
             active={tab === 1}
             onClick={this.handleItemClick}
               />
           <Menu.Item
-            name="menu2"
+            name={MENU + 2}
             content={translations[`${TRN_PREFIX}measures`]}
             active={tab === 2}
             onClick={this.handleItemClick}

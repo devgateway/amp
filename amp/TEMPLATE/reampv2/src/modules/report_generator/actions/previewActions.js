@@ -56,10 +56,8 @@ export const getPreview = (body) => (dispatch, getState) => {
   }).then((data) => {
     const state = getState();
     if (state.previewReducer.lastReportId === body.id) {
-      console.log(`accepted: ${body.id}`);
       return dispatch(fetchPreviewSuccess(data));
     }
-    console.log(`rejected: ${body.id}`);
     return dispatch(ignorePreview());
   }).catch(error => dispatch(fetchPreviewError(error)));
 };

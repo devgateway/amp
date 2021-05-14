@@ -57,7 +57,9 @@ const initialState = {
   activeStep: 0,
   metaDataLoaded: false,
   metaDataPending: false,
-  error: null
+  error: null,
+  filters: null,
+  settings: null,
 };
 
 export default (state = initialState, action) => {

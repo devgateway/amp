@@ -9,6 +9,7 @@ import { revertTotalGrouping } from '../../utils/Utils';
 export function convertReportDetails(reportDetails, data) {
   const _reportDetails = { ...reportDetails };
   _reportDetails.description = data.description;
+  _reportDetails.name = data.name;
   _reportDetails.selectedShowOriginalCurrencies = data.showOriginalCurrency;
   _reportDetails.selectedTotalGrouping = revertTotalGrouping(data.groupingOption);
   _reportDetails.selectedSummaryReport = data.summary;

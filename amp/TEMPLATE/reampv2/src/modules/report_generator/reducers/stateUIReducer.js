@@ -38,6 +38,7 @@ const initialState = {
     selectedShowOriginalCurrencies: false,
     selectedAlsoShowPledges: false,
     description: null,
+    name: null
   },
   columns: {
     available: [],

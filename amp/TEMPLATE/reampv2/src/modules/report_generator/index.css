@@ -177,6 +177,7 @@ textarea {
     height: 40px;
     border-radius: 500rem;
     transform: scale(0.46666667);
+    background-color: transparent;
 }
 
 .ui.toggle.checkbox input:checked ~ label::before {

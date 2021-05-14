@@ -19,7 +19,11 @@ class MainHeader extends Component {
   }
 
   handleCancel = () => {
-    alert('to be implemented');
+    const { translations } = this.props;
+    // eslint-disable-next-line no-restricted-globals
+    if (confirm(translations[`${TRN_PREFIX}confirmCancel`])) {
+      window.location.href = '/viewTeamReports.do?tabs=false&reset=true';
+    }
   }
 
   render() {

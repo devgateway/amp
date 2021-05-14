@@ -90,7 +90,8 @@ class ReportingDetailSection extends Component {
     const radios = [];
     if (options) {
       group.forEach(i => {
-        if (options.find(j => j.name === i).visible) {
+        const option = options.find(j => j.name === i);
+        if (option && option.visible) {
           radios.push({
             name: i,
             label: options.find(j => j.name === i).label

@@ -184,10 +184,11 @@ export function fetchReportError(error) {
   };
 }
 
-export const getMetadata = () => dispatch => {
+export const getMetadata = (type) => dispatch => {
   dispatch(fetchMetaDataPending());
+  const url = type ? `${URL_METADATA}?type=${type}` : URL_METADATA;
   return Promise.all([fetchApiData({
-    url: URL_METADATA
+    url
   })]).then((data) => dispatch(fetchMetaDataSuccess(data[0])))
     .catch(error => dispatch(fetchMetaDataError(error)));
 };

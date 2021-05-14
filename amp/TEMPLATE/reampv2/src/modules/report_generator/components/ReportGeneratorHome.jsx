@@ -13,13 +13,14 @@ import {
 
 class ReportGeneratorHome extends Component {
   componentDidMount() {
-    const { _getMetadata, _fetchReport } = this.props;
+    const { _getMetadata, _fetchReport, location } = this.props;
     // eslint-disable-next-line react/destructuring-assignment,react/prop-types
     const { id } = this.props.match.params;
+    const type = new URLSearchParams(location.search).get('type');
     if (id) {
-      return _getMetadata().then(() => _fetchReport(id));
+      return _getMetadata(type).then(() => _fetchReport(id));
     } else {
-      _getMetadata();
+      _getMetadata(type);
     }
   }
 
@@ -46,6 +47,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({
 ReportGeneratorHome.propTypes = {
   _getMetadata: PropTypes.func.isRequired,
   _fetchReport: PropTypes.func.isRequired,
+  location: PropTypes.object.isRequired,
 };
 
 ReportGeneratorHome.defaultProps = {};

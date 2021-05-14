@@ -8,37 +8,38 @@ import { connect } from 'react-redux';
 import { TRN_PREFIX } from '../utils/constants';
 import ErrorMessage from './ErrorMessage';
 import { validateSaveModal } from '../utils/Utils';
+import { updateReportDetailsName } from '../actions/stateUIActions';
 
 class SaveModal extends Component {
   constructor(props) {
     super(props);
-    this.state = { title: '', modalSaveError: null };
+    this.state = { modalSaveError: null };
   }
 
   shouldComponentUpdate(nextProps, nextState, nextContext) {
     const { open } = this.props;
     if (open !== nextProps.open) {
-      this.setState({ title: '', modalSaveError: null });
+      this.setState({ modalSaveError: null });
     }
     return (this.props !== nextProps || this.state !== nextState || this.context !== nextContext);
   }
 
   validateAndSave = () => {
-    const { title } = this.state;
-    const { save, close } = this.props;
-    const msg = validateSaveModal(title);
+    const { save, close, name } = this.props;
+    const msg = validateSaveModal(name);
     if (msg !== null) {
       this.setState({ modalSaveError: msg });
     } else {
-      save(title);
+      save(name);
       close();
     }
   }
 
   generateSaveModal = () => {
     const {
-      translations, open, isNewReport, close
+      translations, open, isNewReport, close, reportPending, metaDataPending
     } = this.props;
+    const loading = reportPending || metaDataPending;
     return (
       <Modal
         className="save-modal"
@@ -51,7 +52,7 @@ class SaveModal extends Component {
           {this.generateSaveModalContent()}
         </Modal.Content>
         <Modal.Actions>
-          <Button color="green" onClick={this.validateAndSave}>
+          <Button color="green" onClick={this.validateAndSave} loading={loading} disabled={loading}>
             <Icon name="save" />
             {translations[`${TRN_PREFIX}saveReport`]}
           </Button>
@@ -65,22 +66,32 @@ class SaveModal extends Component {
   }
 
   generateSaveModalContent = () => {
-    const { translations } = this.props;
+    const {
+      translations, reportPending, name, metaDataPending
+    } = this.props;
     const { modalSaveError } = this.state;
+    const loading = reportPending || metaDataPending;
     return (
-      <Form>
-        <Form.Field>
-          <Label>{translations[`${TRN_PREFIX}enterReportTitle`]}</Label>
-          <Input focus onChange={(event) => this.setState({ title: event.target.value })} />
-          {modalSaveError ? (
-            <>
-              <Divider />
-              <ErrorMessage visible message={translations[TRN_PREFIX + modalSaveError]} />
-            </>
-          ) : null}
-        </Form.Field>
+      <Form loading={loading}>
+        {!loading ? (
+          <Form.Field>
+            <Label>{translations[`${TRN_PREFIX}enterReportTitle`]}</Label>
+            <Input defaultValue={name} focus onChange={(event) => this.handleChangeName(event.target.value)} />
+            {modalSaveError ? (
+              <>
+                <Divider />
+                <ErrorMessage visible message={translations[TRN_PREFIX + modalSaveError]} />
+              </>
+            ) : null}
+          </Form.Field>
+        ) : null}
       </Form>
     );
+  }
+
+  handleChangeName = (val) => {
+    const { _updateReportDetailsName } = this.props;
+    _updateReportDetailsName(val);
   }
 
   render() {
@@ -93,10 +104,15 @@ class SaveModal extends Component {
 }
 
 const mapStateToProps = state => ({
-  translations: state.translationsReducer.translations
+  translations: state.translationsReducer.translations,
+  reportPending: state.uiReducer.reportPending,
+  name: state.uiReducer.reportDetails.name,
+  metaDataPending: state.uiReducer.metaDataPending,
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({
+  _updateReportDetailsName: (data) => dispatch(updateReportDetailsName(data)),
+}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(SaveModal);
 
@@ -107,8 +123,15 @@ SaveModal.propTypes = {
   isNewReport: PropTypes.bool.isRequired,
   close: PropTypes.func.isRequired,
   save: PropTypes.func.isRequired,
+  reportPending: PropTypes.bool,
+  metaDataPending: PropTypes.bool,
+  name: PropTypes.string,
+  _updateReportDetailsName: PropTypes.func.isRequired,
 };
 
 SaveModal.defaultProps = {
   modalSaveError: null,
+  reportPending: false,
+  metaDataPending: false,
+  name: undefined,
 };

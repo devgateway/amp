@@ -19,7 +19,7 @@ import {
   RESET_MEASURES_SELECTED_COLUMN,
   RESET_COLUMNS_SELECTED_COLUMN,
   FETCH_REPORT_SUCCESS,
-  UPDATE_REPORT_DETAILS_ALSO_SHOW_PLEDGES,
+  UPDATE_REPORT_DETAILS_ALSO_SHOW_PLEDGES, FETCH_REPORT_PENDING, FETCH_REPORT_ERROR, UPDATE_REPORT_DETAILS_NAME,
 } from '../actions/stateUIActions';
 import {
   convertColumns,
@@ -38,7 +38,10 @@ const initialState = {
     selectedShowOriginalCurrencies: false,
     selectedAlsoShowPledges: false,
     description: null,
-    name: null
+    name: null,
+    isTab: false,
+    publicView: false,
+    workspaceLinked: false
   },
   columns: {
     available: [],
@@ -60,6 +63,9 @@ const initialState = {
   error: null,
   filters: null,
   settings: null,
+  reportCategories: [],
+  reportLoaded: false,
+  reportPending: false
 };
 
 export default (state = initialState, action) => {
@@ -126,6 +132,14 @@ export default (state = initialState, action) => {
         reportDetails: {
           ...state.reportDetails,
           description: action.payload
+        }
+      };
+    case UPDATE_REPORT_DETAILS_NAME:
+      return {
+        ...state,
+        reportDetails: {
+          ...state.reportDetails,
+          name: action.payload
         }
       };
     case UPDATE_COLUMNS_SELECTED_COLUMN:
@@ -241,7 +255,23 @@ export default (state = initialState, action) => {
         reportDetails: convertReportDetails(state.reportDetails, action.payload),
         columns: convertColumns(state.columns, action.payload),
         hierarchies: convertHierarchies(state.hierarchies, action.payload, state.columns),
-        measures: convertMeasures(state.measures, action.payload)
+        measures: convertMeasures(state.measures, action.payload),
+        settings: action.payload.settings,
+        filters: action.payload.filters,
+        reportLoaded: true,
+        reportPending: false
+      };
+    case FETCH_REPORT_PENDING:
+      return {
+        ...state,
+        reportLoaded: false,
+        reportPending: true
+      };
+    case FETCH_REPORT_ERROR:
+      return {
+        ...state,
+        reportLoaded: false,
+        reportPending: false
       };
     default:
       return state;

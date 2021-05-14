@@ -16,6 +16,9 @@ export function convertReportDetails(reportDetails, data) {
   _reportDetails.selectedSplitByFunding = data.splitByFunding;
   _reportDetails.selectedAllowEmptyFundingColumns = data.allowEmptyFundingColumns;
   _reportDetails.selectedAlsoShowPledges = data.alsoShowPledges;
+  _reportDetails.isTab = data.tab;
+  _reportDetails.publicView = data.publicView;
+  _reportDetails.workspaceLinked = data.workspaceLinked;
   return _reportDetails;
 }
 

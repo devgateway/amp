@@ -19,7 +19,11 @@ import {
   RESET_MEASURES_SELECTED_COLUMN,
   RESET_COLUMNS_SELECTED_COLUMN,
   FETCH_REPORT_SUCCESS,
-  UPDATE_REPORT_DETAILS_ALSO_SHOW_PLEDGES, FETCH_REPORT_PENDING, FETCH_REPORT_ERROR, UPDATE_REPORT_DETAILS_NAME,
+  UPDATE_REPORT_DETAILS_ALSO_SHOW_PLEDGES,
+  FETCH_REPORT_PENDING,
+  FETCH_REPORT_ERROR,
+  UPDATE_REPORT_DETAILS_NAME,
+  UPDATE_REPORT_DETAILS_REPORT_CATEGORY,
 } from '../actions/stateUIActions';
 import {
   convertColumns,
@@ -41,7 +45,8 @@ const initialState = {
     name: null,
     isTab: false,
     publicView: false,
-    workspaceLinked: false
+    workspaceLinked: false,
+    selectedReportCategory: null,
   },
   columns: {
     available: [],
@@ -142,6 +147,14 @@ export default (state = initialState, action) => {
           name: action.payload
         }
       };
+    case UPDATE_REPORT_DETAILS_REPORT_CATEGORY:
+      return {
+        ...state,
+        reportDetails: {
+          ...state.reportDetails,
+          selectedReportCategory: action.payload
+        }
+      };
     case UPDATE_COLUMNS_SELECTED_COLUMN:
       return {
         ...state,
@@ -240,6 +253,7 @@ export default (state = initialState, action) => {
           selected: [],
         },
         options: action.payload.options,
+        reportCategories: action.payload.reportCategories,
       };
     }
     case FETCH_METADATA_ERROR:
@@ -259,7 +273,7 @@ export default (state = initialState, action) => {
         settings: action.payload.settings,
         filters: action.payload.filters,
         reportLoaded: true,
-        reportPending: false
+        reportPending: false,
       };
     case FETCH_REPORT_PENDING:
       return {

@@ -43,5 +43,7 @@
   "amp.reportGenerator:saveReport":"Save Report",
   "amp.reportGenerator:missingTitle":"Missing title",
   "amp.reportGenerator:previewError":"There was an error generating the preview.",
-  "amp.reportGenerator:previewTooltip": "tooltip 1"
+  "amp.reportGenerator:previewTooltip": "tooltip 1",
+  "amp.reportGenerator:selectCategory": "Please select a category from below",
+  "amp.reportGenerator:appDescription": "The Report Generator allows you to create customized reports that fit your needs, based on data in the AMP. Starting with Report Details, click through each step to create your own report."
 }

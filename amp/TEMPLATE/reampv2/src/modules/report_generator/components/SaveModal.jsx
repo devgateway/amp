@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Button, Divider, Form, Header, Icon, Input, Label, Modal
+  Button, Divider, Dropdown, Form, Header, Icon, Input, Label, Modal
 } from 'semantic-ui-react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { TRN_PREFIX } from '../utils/constants';
 import ErrorMessage from './ErrorMessage';
 import { validateSaveModal } from '../utils/Utils';
-import { updateReportDetailsName } from '../actions/stateUIActions';
+import { updateReportDetailsName, updateReportDetailsNameReportCategory } from '../actions/stateUIActions';
 
 class SaveModal extends Component {
   constructor(props) {
@@ -27,7 +27,7 @@ class SaveModal extends Component {
   validateAndSave = () => {
     const { save, close, name } = this.props;
     const msg = validateSaveModal(name);
-    if (msg !== null) {
+    if (msg) {
       this.setState({ modalSaveError: msg });
     } else {
       save(name);
@@ -67,16 +67,28 @@ class SaveModal extends Component {
 
   generateSaveModalContent = () => {
     const {
-      translations, reportPending, name, metaDataPending
+      translations, reportPending, name, metaDataPending, selectedReportCategory, reportCategories,
+      _updateReportDetailsNameReportCategory
     } = this.props;
     const { modalSaveError } = this.state;
     const loading = reportPending || metaDataPending;
+    const options = reportCategories ? reportCategories.map(i => ({ key: i.id, text: i.label, value: i.id })) : [];
     return (
       <Form loading={loading}>
         {!loading ? (
           <Form.Field>
             <Label>{translations[`${TRN_PREFIX}enterReportTitle`]}</Label>
             <Input defaultValue={name} focus onChange={(event) => this.handleChangeName(event.target.value)} />
+            {reportCategories ? (
+              <Dropdown
+                placeholder={translations[`${TRN_PREFIX}selectCategory`]}
+                fluid
+                selection
+                options={options}
+                defaultValue={selectedReportCategory}
+                onChange={_updateReportDetailsNameReportCategory}
+            />
+            ) : null}
             {modalSaveError ? (
               <>
                 <Divider />
@@ -108,10 +120,13 @@ const mapStateToProps = state => ({
   reportPending: state.uiReducer.reportPending,
   name: state.uiReducer.reportDetails.name,
   metaDataPending: state.uiReducer.metaDataPending,
+  selectedReportCategory: state.uiReducer.reportDetails.selectedReportCategory,
+  reportCategories: state.uiReducer.reportCategories,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   _updateReportDetailsName: (data) => dispatch(updateReportDetailsName(data)),
+  _updateReportDetailsNameReportCategory: (data) => dispatch(updateReportDetailsNameReportCategory(data)),
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(SaveModal);
@@ -127,6 +142,9 @@ SaveModal.propTypes = {
   metaDataPending: PropTypes.bool,
   name: PropTypes.string,
   _updateReportDetailsName: PropTypes.func.isRequired,
+  _updateReportDetailsNameReportCategory: PropTypes.func.isRequired,
+  selectedReportCategory: PropTypes.number,
+  reportCategories: PropTypes.array,
 };
 
 SaveModal.defaultProps = {
@@ -134,4 +152,6 @@ SaveModal.defaultProps = {
   reportPending: false,
   metaDataPending: false,
   name: undefined,
+  selectedReportCategory: null,
+  reportCategories: []
 };

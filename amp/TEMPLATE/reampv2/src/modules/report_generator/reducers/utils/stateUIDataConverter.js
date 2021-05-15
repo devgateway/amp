@@ -19,6 +19,7 @@ export function convertReportDetails(reportDetails, data) {
   _reportDetails.isTab = data.tab;
   _reportDetails.publicView = data.publicView;
   _reportDetails.workspaceLinked = data.workspaceLinked;
+  _reportDetails.selectedReportCategory = data.reportCategory;
   return _reportDetails;
 }
 

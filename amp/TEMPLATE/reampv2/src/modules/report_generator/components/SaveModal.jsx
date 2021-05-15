@@ -35,6 +35,11 @@ class SaveModal extends Component {
     }
   }
 
+  handleCategoryChange = (e, { value }) => {
+    const { _updateReportDetailsNameReportCategory } = this.props;
+    _updateReportDetailsNameReportCategory(value);
+  }
+
   generateSaveModal = () => {
     const {
       translations, open, isNewReport, close, reportPending, metaDataPending
@@ -67,8 +72,7 @@ class SaveModal extends Component {
 
   generateSaveModalContent = () => {
     const {
-      translations, reportPending, name, metaDataPending, selectedReportCategory, reportCategories,
-      _updateReportDetailsNameReportCategory
+      translations, reportPending, name, metaDataPending, selectedReportCategory, reportCategories
     } = this.props;
     const { modalSaveError } = this.state;
     const loading = reportPending || metaDataPending;
@@ -90,7 +94,7 @@ class SaveModal extends Component {
                   selection
                   options={options}
                   defaultValue={selectedReportCategory}
-                  onChange={_updateReportDetailsNameReportCategory}
+                  onChange={this.handleCategoryChange}
             />
               </Form.Field>
             ) : null}

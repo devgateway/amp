@@ -76,18 +76,23 @@ class SaveModal extends Component {
     return (
       <Form loading={loading}>
         {!loading ? (
-          <Form.Field>
-            <Label>{translations[`${TRN_PREFIX}enterReportTitle`]}</Label>
-            <Input defaultValue={name} focus onChange={(event) => this.handleChangeName(event.target.value)} />
+          <>
+            <Form.Field>
+              <Label>{translations[`${TRN_PREFIX}enterReportTitle`]}</Label>
+              <Input defaultValue={name} focus onChange={(event) => this.handleChangeName(event.target.value)} />
+            </Form.Field>
             {reportCategories ? (
-              <Dropdown
-                placeholder={translations[`${TRN_PREFIX}selectCategory`]}
-                fluid
-                selection
-                options={options}
-                defaultValue={selectedReportCategory}
-                onChange={_updateReportDetailsNameReportCategory}
+              <Form.Field>
+                <Label>{translations[`${TRN_PREFIX}category`]}</Label>
+                <Dropdown
+                  className="category-dropdown"
+                  placeholder={translations[`${TRN_PREFIX}selectCategory`]}
+                  selection
+                  options={options}
+                  defaultValue={selectedReportCategory}
+                  onChange={_updateReportDetailsNameReportCategory}
             />
+              </Form.Field>
             ) : null}
             {modalSaveError ? (
               <>
@@ -95,7 +100,7 @@ class SaveModal extends Component {
                 <ErrorMessage visible message={translations[TRN_PREFIX + modalSaveError]} />
               </>
             ) : null}
-          </Form.Field>
+          </>
         ) : null}
       </Form>
     );

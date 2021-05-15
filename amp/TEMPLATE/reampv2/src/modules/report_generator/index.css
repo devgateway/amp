@@ -221,6 +221,10 @@ textarea {
     background-color: #fafafa;
 }
 
+.ui.modal {
+    overflow: initial;
+}
+
 .ui.modal > .header {
     padding: 0.75rem 1rem;
 }
@@ -307,4 +311,8 @@ i.arrow {
     white-space: nowrap;
     font-size: 0.8em;
     padding-right: 5px;
+}
+
+.category-dropdown span {
+    position: static !important;
 }

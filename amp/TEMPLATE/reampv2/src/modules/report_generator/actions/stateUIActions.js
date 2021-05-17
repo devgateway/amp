@@ -20,6 +20,8 @@ export const RESET_MEASURES_SELECTED_COLUMN = 'RESET_MEASURES_SELECTED_COLUMN';
 export const UPDATE_HIERARCHIES_SORT_COLUMN = 'UPDATE_HIERARCHIES_SORT_COLUMN';
 export const UPDATE_HIERARCHIES_SELECTED_COLUMN = 'UPDATE_HIERARCHIES_SELECTED_COLUMN';
 export const UPDATE_HIERARCHIES_LIST = 'UPDATE_HIERARCHIES_LIST';
+export const UPDATE_APPLIED_FILTERS = 'UPDATE_APPLIED_FILTERS';
+export const UPDATE_APPLIED_SETTINGS = 'UPDATE_APPLIED_SETTINGS';
 
 export const FETCH_METADATA_PENDING = 'FETCH_METADATA_PENDING';
 export const FETCH_METADATA_SUCCESS = 'FETCH_METADATA_SUCCESS';
@@ -197,6 +199,20 @@ export function fetchReportError(error) {
   return {
     type: FETCH_REPORT_ERROR,
     error
+  };
+}
+
+export function updateAppliedFilters(payload) {
+  return {
+    type: UPDATE_APPLIED_FILTERS,
+    payload
+  };
+}
+
+export function updateAppliedSettings(payload) {
+  return {
+    type: UPDATE_APPLIED_SETTINGS,
+    payload
   };
 }
 

@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { Header, Segment } from 'semantic-ui-react';
+import { Header } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Col } from 'react-bootstrap';
-import FilterOutputItem from '../../ndddashboard/components/FilterOutputItem';
 import { ReportGeneratorContext } from './StartUp';
 import { TRN_PREFIX } from '../utils/constants';
+import { updateAppliedFilters } from '../actions/stateUIActions';
+import { toggleIcon } from '../utils/appliedFiltersExtenalCode';
 
 const Filter = require('../../../../../ampTemplate/node_modules/amp-filter/dist/amp-filter');
 
@@ -19,13 +19,23 @@ class Filters extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show: false, filtersWithModels: null, showFiltersList: false
+      show: false, showFiltersList: false
     };
   }
 
   componentDidMount() {
+    const { filters } = this.props;
     filter.on('apply', this.applyFilters);
     filter.on('cancel', this.hideFilters);
+
+    return filter.loaded.then(() => {
+      // eslint-disable-next-line react/no-string-refs
+      filter.setElement(this.refs.filterPopup);
+      if (filters) {
+        filter.deserialize({ filters });
+      }
+      return true;
+    });
   }
 
   componentWillUnmount() {
@@ -37,11 +47,7 @@ class Filters extends Component {
     const { show } = this.state;
     if (filter && !show) {
       this.setState({ show: true });
-      return filter.loaded.then(() => {
-        // eslint-disable-next-line react/no-string-refs
-        filter.setElement(this.refs.filterPopup);
-        return filter.showFilters();
-      });
+      return filter.loaded.then(() => filter.showFilters());
     }
   };
 
@@ -50,12 +56,13 @@ class Filters extends Component {
   };
 
   applyFilters = () => {
-    // untested code.
-    const { onApplyFilters } = this.props;
+    const { onApplyFilters, _updateAppliedFilters } = this.props;
     this.hideFilters();
-    const serializeWithModels = filter.serializeToModels();
-    this.setState({ filtersWithModels: serializeWithModels });
-    onApplyFilters(filter.serialize(), serializeWithModels);
+    const serialized = filter.serialize();
+    _updateAppliedFilters(serialized.filters);
+    onApplyFilters(serialized.filters);
+    console.log(serialized.filters);
+    toggleIcon();
   };
 
   toggleAppliedFilters = () => {
@@ -64,32 +71,27 @@ class Filters extends Component {
     this.setState({ showFiltersList: !showFiltersList });
   };
 
-  generateFilterOutput = () => {
-    // untested code.
-    const { filtersWithModels } = this.state;
-    const { translations, globalSettings } = this.props;
-    const ret = [];
-    if (filtersWithModels && filtersWithModels.filters) {
-      Object.keys(filtersWithModels.filters)
-        .forEach(i => {
-          ret.push(<FilterOutputItem
-            key={Math.random()}
-            filters={filtersWithModels.filters}
-            i={i}
-            translations={translations}
-            globalSettings={globalSettings} />);
-        });
+  generateAppliedFilters = () => {
+    const { reportLoaded, reportPending, filters } = this.props;
+    if (filters && (reportLoaded || !reportPending)) {
+      const html = filter.getAppliedFilters({ returnHTML: true });
+      console.log('generateAppliedFilters');
+      return <div dangerouslySetInnerHTML={{ __html: html }} />;
     }
-    return <div style={{ paddingLeft: '10px' }}>{ret}</div>;
+    return null;
   }
 
   render() {
+    console.log('render');
     const { show } = this.state;
     const { translations } = this.props;
     return (
       <>
         <Header size="small">
           <span className="pointer" onClick={this.showFilterWidget}>{translations[`${TRN_PREFIX}filters`]}</span>
+          <div className="applied-filters">
+            {this.generateAppliedFilters()}
+          </div>
         </Header>
         {/* eslint-disable-next-line react/no-string-refs */}
         <div id="filter-popup" ref="filterPopup" style={{ display: (!show ? 'none' : 'block') }} />
@@ -99,19 +101,31 @@ class Filters extends Component {
 }
 
 const mapStateToProps = state => ({
-  translations: state.translationsReducer.translations
+  translations: state.translationsReducer.translations,
+  reportLoaded: state.uiReducer.reportLoaded,
+  reportPending: state.uiReducer.reportPending,
+  filters: state.uiReducer.filters
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({
+  _updateAppliedFilters: (data) => dispatch(updateAppliedFilters(data)),
+}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Filters);
 
 Filters.propTypes = {
   onApplyFilters: PropTypes.func.isRequired,
   translations: PropTypes.object.isRequired,
-  globalSettings: PropTypes.object.isRequired,
+  _updateAppliedFilters: PropTypes.func.isRequired,
+  reportLoaded: PropTypes.bool,
+  reportPending: PropTypes.bool,
+  filters: PropTypes.object
 };
 
-Filters.defaultProps = {};
+Filters.defaultProps = {
+  reportLoaded: false,
+  reportPending: false,
+  filters: null,
+};
 
 Filters.contextType = ReportGeneratorContext;

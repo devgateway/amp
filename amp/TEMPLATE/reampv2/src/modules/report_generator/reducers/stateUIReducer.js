@@ -23,7 +23,7 @@ import {
   FETCH_REPORT_PENDING,
   FETCH_REPORT_ERROR,
   UPDATE_REPORT_DETAILS_NAME,
-  UPDATE_REPORT_DETAILS_REPORT_CATEGORY,
+  UPDATE_REPORT_DETAILS_REPORT_CATEGORY, UPDATE_APPLIED_FILTERS, UPDATE_APPLIED_SETTINGS,
 } from '../actions/stateUIActions';
 import {
   convertColumns,
@@ -232,6 +232,16 @@ export default (state = initialState, action) => {
           selected: [],
           order: [],
         }
+      };
+    case UPDATE_APPLIED_FILTERS:
+      return {
+        ...state,
+        filters: action.payload
+      };
+    case UPDATE_APPLIED_SETTINGS:
+      return {
+        ...state,
+        settings: action.payload
       };
     case FETCH_METADATA_PENDING:
       return {

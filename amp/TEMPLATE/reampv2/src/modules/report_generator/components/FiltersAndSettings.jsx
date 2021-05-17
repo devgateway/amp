@@ -8,7 +8,7 @@ export default class FiltersAndSettings extends Component {
     return (
       <>
         <Segment placeholder textAlign="left" className="filters_segment">
-          <Filters />
+          <Filters onApplyFilters={() => {}} />
           <Settings />
         </Segment>
       </>

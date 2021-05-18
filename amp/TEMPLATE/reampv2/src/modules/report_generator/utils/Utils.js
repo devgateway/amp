@@ -58,3 +58,7 @@ export function convertReportType(value) {
       return null;
   }
 }
+
+export function hasFilters(filters) {
+  return filters && Object.keys(filters).length > 0;
+}

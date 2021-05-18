@@ -7,6 +7,7 @@ import { ReportGeneratorContext } from './StartUp';
 import { TRN_PREFIX } from '../utils/constants';
 import { updateAppliedFilters, updateReportDetailsUseAboveFilters } from '../actions/stateUIActions';
 import { toggleIcon } from '../utils/appliedFiltersExtenalCode';
+import { hasFilters } from '../utils/Utils';
 
 const Filter = require('../../../../../ampTemplate/node_modules/amp-filter/dist/amp-filter');
 
@@ -68,7 +69,7 @@ class Filters extends Component {
     const serialized = filter.serialize();
     const html = filter.getAppliedFilters({ returnHTML: true });
     _updateAppliedFilters(serialized.filters, html);
-    if (serialized.filters && Object.keys(serialized.filters).length > 0) {
+    if (hasFilters(serialized.filters)) {
       _updateReportDetailsUseAboveFilters(true);
     } else {
       _updateReportDetailsUseAboveFilters(false);

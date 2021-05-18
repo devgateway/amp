@@ -23,6 +23,7 @@ import {
   updateReportDetailsDescription,
   updateReportDetailsAlsoShowPledges, updateReportDetailsUseAboveFilters
 } from '../../actions/stateUIActions';
+import { hasFilters } from '../../utils/Utils';
 
 class ReportingDetailSection extends Component {
   // eslint-disable-next-line no-unused-vars
@@ -82,7 +83,7 @@ class ReportingDetailSection extends Component {
 
   selectUseAboveFilters = () => {
     const { _updateReportDetailsUseAboveFilters, selectedUseAboveFilters, filters } = this.props;
-    if (filters && Object.keys(filters).length > 0) {
+    if (hasFilters(filters)) {
       _updateReportDetailsUseAboveFilters(!selectedUseAboveFilters);
     } else {
       _updateReportDetailsUseAboveFilters(false);

@@ -98,16 +98,26 @@ class Filters extends Component {
   }
 
   render() {
-    const { show } = this.state;
+    const { show, appliedFiltersOpen } = this.state;
     const { translations } = this.props;
     return (
       <>
-        <Header size="small">
-          <span className="pointer" onClick={this.showFilterWidget}>{translations[`${TRN_PREFIX}filters`]}</span>
-          <div className="applied-filters">
-            {this.generateAppliedFilters()}
+        <Header size="filter-title">
+          <div className="filter-title" onClick={this.showFilterWidget}>
+            {translations[`${TRN_PREFIX}filters`]}
+&nbsp;
+          </div>
+          <div
+            className="filter-title"
+            style={{ color: 'green', fontWeight: 'normal', fontSize: '0.9em' }}
+            onClick={() => { this.setState({ appliedFiltersOpen: !appliedFiltersOpen }); }}>
+            {appliedFiltersOpen
+              ? translations[`${TRN_PREFIX}hideAppliedFilters`] : translations[`${TRN_PREFIX}showAppliedFilters`]}
           </div>
         </Header>
+        <div className={!appliedFiltersOpen ? 'invisible-applied-filters' : 'applied-filters'}>
+          {this.generateAppliedFilters()}
+        </div>
         {/* eslint-disable-next-line react/no-string-refs */}
         <div id="filter-popup" ref="filterPopup" style={{ display: (!show ? 'none' : 'block') }} />
       </>

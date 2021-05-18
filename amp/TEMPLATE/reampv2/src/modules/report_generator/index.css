@@ -47,6 +47,10 @@
     visibility: hidden;
 }
 
+.max-content {
+    width: max-content;
+}
+
 .navigation-buttons {
     padding-top: 25px;
 }
@@ -315,4 +319,29 @@ i.arrow {
 
 .category-dropdown span {
     position: static !important;
+}
+
+.filter-title {
+    float: left;
+    width: max-content;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.invisible-applied-filters {
+    visibility: hidden;
+    display: none;
+}
+
+.applied-filters {
+    float: left;
+    width: max-content;
+}
+
+#previsualization_tree {
+    /*top: 20px;
+    position: relative;
+    left: 10px;
+    width: max-content;*/
+    font-size: 0.9em;
 }

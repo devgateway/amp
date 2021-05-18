@@ -202,10 +202,11 @@ export function fetchReportError(error) {
   };
 }
 
-export function updateAppliedFilters(payload) {
+export function updateAppliedFilters(payload, html) {
   return {
     type: UPDATE_APPLIED_FILTERS,
-    payload
+    payload,
+    html
   };
 }
 

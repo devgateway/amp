@@ -32,7 +32,8 @@ class Filters extends Component {
       // eslint-disable-next-line react/no-string-refs
       filter.setElement(this.refs.filterPopup);
       if (filters) {
-        filter.deserialize({ filters });
+        // Load saved filters into the widget.
+        filter.deserialize({ filters, silent: true });
       }
       return true;
     });
@@ -59,7 +60,8 @@ class Filters extends Component {
     const { onApplyFilters, _updateAppliedFilters } = this.props;
     this.hideFilters();
     const serialized = filter.serialize();
-    _updateAppliedFilters(serialized.filters);
+    const html = filter.getAppliedFilters({ returnHTML: true });
+    _updateAppliedFilters(serialized.filters, html);
     onApplyFilters(serialized.filters);
     console.log(serialized.filters);
     toggleIcon();
@@ -72,9 +74,17 @@ class Filters extends Component {
   };
 
   generateAppliedFilters = () => {
-    const { reportLoaded, reportPending, filters } = this.props;
-    if (filters && (reportLoaded || !reportPending)) {
-      const html = filter.getAppliedFilters({ returnHTML: true });
+    const {
+      filters, html, _updateAppliedFilters
+    } = this.props;
+    // If this is a saved report we might need to create the html for the first time.
+    if (html === null && filters) {
+      const html_ = filter.getAppliedFilters({ returnHTML: true });
+      _updateAppliedFilters(filters, html_);
+      console.log('first time');
+      console.log(filters);
+      return <div dangerouslySetInnerHTML={{ __html: html_ }} />;
+    } else if (filters) {
       console.log('generateAppliedFilters');
       return <div dangerouslySetInnerHTML={{ __html: html }} />;
     }
@@ -104,11 +114,12 @@ const mapStateToProps = state => ({
   translations: state.translationsReducer.translations,
   reportLoaded: state.uiReducer.reportLoaded,
   reportPending: state.uiReducer.reportPending,
-  filters: state.uiReducer.filters
+  filters: state.uiReducer.filters,
+  html: state.uiReducer.appliedFilters,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  _updateAppliedFilters: (data) => dispatch(updateAppliedFilters(data)),
+  _updateAppliedFilters: (data, html) => dispatch(updateAppliedFilters(data, html)),
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Filters);
@@ -119,13 +130,15 @@ Filters.propTypes = {
   _updateAppliedFilters: PropTypes.func.isRequired,
   reportLoaded: PropTypes.bool,
   reportPending: PropTypes.bool,
-  filters: PropTypes.object
+  filters: PropTypes.object,
+  html: PropTypes.string,
 };
 
 Filters.defaultProps = {
   reportLoaded: false,
   reportPending: false,
   filters: null,
+  html: null,
 };
 
 Filters.contextType = ReportGeneratorContext;

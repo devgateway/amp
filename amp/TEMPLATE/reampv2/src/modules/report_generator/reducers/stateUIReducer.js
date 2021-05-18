@@ -67,6 +67,7 @@ const initialState = {
   metaDataPending: false,
   error: null,
   filters: null,
+  appliedFilters: null,
   settings: null,
   reportCategories: [],
   reportLoaded: false,
@@ -236,7 +237,8 @@ export default (state = initialState, action) => {
     case UPDATE_APPLIED_FILTERS:
       return {
         ...state,
-        filters: action.payload
+        filters: action.payload,
+        appliedFilters: action.html
       };
     case UPDATE_APPLIED_SETTINGS:
       return {
@@ -282,6 +284,7 @@ export default (state = initialState, action) => {
         measures: convertMeasures(state.measures, action.payload),
         settings: action.payload.settings,
         filters: action.payload.filters,
+        appliedFilters: null,
         reportLoaded: true,
         reportPending: false,
       };

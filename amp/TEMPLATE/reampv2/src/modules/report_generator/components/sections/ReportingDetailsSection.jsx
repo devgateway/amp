@@ -21,7 +21,7 @@ import {
   updateReportDetailsSplitByFunding,
   updateReportDetailsShowOriginalCurrencies,
   updateReportDetailsDescription,
-  updateReportDetailsAlsoShowPledges
+  updateReportDetailsAlsoShowPledges, updateReportDetailsUseAboveFilters
 } from '../../actions/stateUIActions';
 
 class ReportingDetailSection extends Component {
@@ -80,6 +80,15 @@ class ReportingDetailSection extends Component {
     _updateReportDetailsAlsoShowPledges(!selectedAlsoShowPledges);
   }
 
+  selectUseAboveFilters = () => {
+    const { _updateReportDetailsUseAboveFilters, selectedUseAboveFilters, filters } = this.props;
+    if (filters && Object.keys(filters).length > 0) {
+      _updateReportDetailsUseAboveFilters(!selectedUseAboveFilters);
+    } else {
+      _updateReportDetailsUseAboveFilters(false);
+    }
+  }
+
   changeDescription = (e, { value }) => {
     const { _updateReportDetailsDescription } = this.props;
     _updateReportDetailsDescription(value);
@@ -106,7 +115,7 @@ class ReportingDetailSection extends Component {
     const {
       visible, translations, selectedTotalGrouping, selectedSummaryReport, selectedFundingGrouping,
       selectedAllowEmptyFundingColumns, selectedSplitByFunding, selectedShowOriginalCurrencies,
-      description, loading, selectedAlsoShowPledges
+      description, loading, selectedAlsoShowPledges, selectedUseAboveFilters
     } = this.props;
 
     return (
@@ -146,9 +155,9 @@ class ReportingDetailSection extends Component {
               <OptionsContent
                 checkList={this.getOptions(OPTIONS_CHECKBOX_OPTIONS)}
                 selectedCheckboxes={[selectedAllowEmptyFundingColumns, selectedSplitByFunding,
-                  selectedShowOriginalCurrencies, selectedAlsoShowPledges]}
+                  selectedShowOriginalCurrencies, selectedAlsoShowPledges, selectedUseAboveFilters]}
                 changeCheckList={[this.selectAllowEmptyFundingColumns, this.selectSplitByFunding,
-                  this.selectShowOriginalCurrencies, this.selectAlsoShowPledges]}
+                  this.selectShowOriginalCurrencies, this.selectAlsoShowPledges, this.selectUseAboveFilters]}
                 loading={loading} />
             </OptionsList>
           </GridColumn>
@@ -168,9 +177,11 @@ const mapStateToProps = (state) => ({
   selectedSplitByFunding: state.uiReducer.reportDetails.selectedSplitByFunding,
   selectedShowOriginalCurrencies: state.uiReducer.reportDetails.selectedShowOriginalCurrencies,
   selectedAlsoShowPledges: state.uiReducer.reportDetails.selectedAlsoShowPledges,
+  selectedUseAboveFilters: state.uiReducer.reportDetails.selectedUseAboveFilters,
   description: state.uiReducer.reportDetails.description,
   options: state.uiReducer.options,
   loading: state.uiReducer.metaDataPending,
+  filters: state.uiReducer.filters,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -181,7 +192,8 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   _updateReportDetailsSplitByFunding: (data) => dispatch(updateReportDetailsSplitByFunding(data)),
   _updateReportDetailsShowOriginalCurrencies: (data) => dispatch(updateReportDetailsShowOriginalCurrencies(data)),
   _updateReportDetailsDescription: (data) => dispatch(updateReportDetailsDescription(data)),
-  _updateReportDetailsAlsoShowPledges: (data) => dispatch(updateReportDetailsAlsoShowPledges(data))
+  _updateReportDetailsAlsoShowPledges: (data) => dispatch(updateReportDetailsAlsoShowPledges(data)),
+  _updateReportDetailsUseAboveFilters: (data) => dispatch(updateReportDetailsUseAboveFilters(data)),
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReportingDetailSection);
@@ -202,11 +214,14 @@ ReportingDetailSection.propTypes = {
   selectedSplitByFunding: PropTypes.bool,
   selectedShowOriginalCurrencies: PropTypes.bool,
   selectedAlsoShowPledges: PropTypes.bool,
+  selectedUseAboveFilters: PropTypes.bool,
   description: PropTypes.string,
   _updateReportDetailsDescription: PropTypes.func.isRequired,
   options: PropTypes.array,
   loading: PropTypes.bool,
   _updateReportDetailsAlsoShowPledges: PropTypes.func.isRequired,
+  _updateReportDetailsUseAboveFilters: PropTypes.func.isRequired,
+  filters: PropTypes.object,
 };
 
 ReportingDetailSection.defaultProps = {
@@ -217,9 +232,11 @@ ReportingDetailSection.defaultProps = {
   selectedSplitByFunding: false,
   selectedShowOriginalCurrencies: false,
   selectedAlsoShowPledges: false,
+  selectedUseAboveFilters: false,
   description: undefined,
   options: undefined,
   loading: false,
+  filters: null,
 };
 
 ReportingDetailSection.contextType = ReportGeneratorContext;

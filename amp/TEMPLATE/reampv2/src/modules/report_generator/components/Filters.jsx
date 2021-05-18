@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { ReportGeneratorContext } from './StartUp';
 import { TRN_PREFIX } from '../utils/constants';
-import { updateAppliedFilters } from '../actions/stateUIActions';
+import { updateAppliedFilters, updateReportDetailsUseAboveFilters } from '../actions/stateUIActions';
 import { toggleIcon } from '../utils/appliedFiltersExtenalCode';
 
 const Filter = require('../../../../../ampTemplate/node_modules/amp-filter/dist/amp-filter');
@@ -63,16 +63,20 @@ class Filters extends Component {
   };
 
   applyFilters = () => {
-    const { onApplyFilters, _updateAppliedFilters } = this.props;
+    const { onApplyFilters, _updateAppliedFilters, _updateReportDetailsUseAboveFilters } = this.props;
     this.hideFilters();
     const serialized = filter.serialize();
     const html = filter.getAppliedFilters({ returnHTML: true });
     _updateAppliedFilters(serialized.filters, html);
+    if (serialized.filters && Object.keys(serialized.filters).length > 0) {
+      _updateReportDetailsUseAboveFilters(true);
+    } else {
+      _updateReportDetailsUseAboveFilters(false);
+    }
     onApplyFilters(serialized.filters);
   };
 
   toggleAppliedFilters = () => {
-    // untested code.
     const { showFiltersList } = this.state;
     this.setState({ showFiltersList: !showFiltersList });
   };
@@ -111,6 +115,7 @@ class Filters extends Component {
 
   // eslint-disable-next-line react/sort-comp,no-unused-vars
   componentDidUpdate(prevProps, prevState, snapshot) {
+    // The js code that animates the applied filters tree has to be re-implemented and re-run.
     toggleIcon();
   }
 }
@@ -125,6 +130,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   _updateAppliedFilters: (data, html) => dispatch(updateAppliedFilters(data, html)),
+  _updateReportDetailsUseAboveFilters: (data) => dispatch(updateReportDetailsUseAboveFilters(data)),
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Filters);
@@ -133,6 +139,7 @@ Filters.propTypes = {
   onApplyFilters: PropTypes.func.isRequired,
   translations: PropTypes.object.isRequired,
   _updateAppliedFilters: PropTypes.func.isRequired,
+  _updateReportDetailsUseAboveFilters: PropTypes.func.isRequired,
   filters: PropTypes.object,
   html: PropTypes.string,
 };

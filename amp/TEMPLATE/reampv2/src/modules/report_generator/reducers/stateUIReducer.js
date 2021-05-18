@@ -23,7 +23,10 @@ import {
   FETCH_REPORT_PENDING,
   FETCH_REPORT_ERROR,
   UPDATE_REPORT_DETAILS_NAME,
-  UPDATE_REPORT_DETAILS_REPORT_CATEGORY, UPDATE_APPLIED_FILTERS, UPDATE_APPLIED_SETTINGS,
+  UPDATE_REPORT_DETAILS_REPORT_CATEGORY,
+  UPDATE_APPLIED_FILTERS,
+  UPDATE_APPLIED_SETTINGS,
+  UPDATE_REPORT_DETAILS_USE_ABOVE_FILTERS,
 } from '../actions/stateUIActions';
 import {
   convertColumns,
@@ -41,6 +44,7 @@ const initialState = {
     selectedSplitByFunding: false,
     selectedShowOriginalCurrencies: false,
     selectedAlsoShowPledges: false,
+    selectedUseAboveFilters: false,
     description: null,
     name: null,
     isTab: false,
@@ -130,6 +134,14 @@ export default (state = initialState, action) => {
         reportDetails: {
           ...state.reportDetails,
           selectedAlsoShowPledges: action.payload
+        }
+      };
+    case UPDATE_REPORT_DETAILS_USE_ABOVE_FILTERS:
+      return {
+        ...state,
+        reportDetails: {
+          ...state.reportDetails,
+          selectedUseAboveFilters: action.payload
         }
       };
     case UPDATE_REPORT_DETAILS_DESCRIPTION:
@@ -238,7 +250,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         filters: action.payload,
-        appliedFilters: action.html
+        appliedFilters: action.html,
       };
     case UPDATE_APPLIED_SETTINGS:
       return {

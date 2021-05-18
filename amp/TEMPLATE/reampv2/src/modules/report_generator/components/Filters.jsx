@@ -19,24 +19,30 @@ class Filters extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show: false, showFiltersList: false
+      show: false, showFiltersList: false,
     };
   }
 
   componentDidMount() {
-    const { filters } = this.props;
     filter.on('apply', this.applyFilters);
     filter.on('cancel', this.hideFilters);
 
     return filter.loaded.then(() => {
       // eslint-disable-next-line react/no-string-refs
       filter.setElement(this.refs.filterPopup);
-      if (filters) {
-        // Load saved filters into the widget.
-        filter.deserialize({ filters, silent: true });
-      }
       return true;
     });
+  }
+
+  shouldComponentUpdate(nextProps, nextState, nextContext) {
+    const { filters, html, _updateAppliedFilters } = this.props;
+    // Load saved filters (only one time).
+    if (filters && html === null) {
+      filter.deserialize({ filters, silent: true });
+      const html_ = filter.getAppliedFilters({ returnHTML: true });
+      _updateAppliedFilters(filters, html_);
+    }
+    return (nextProps !== this.props || nextState !== this.state || nextContext !== this.context);
   }
 
   componentWillUnmount() {
@@ -63,8 +69,6 @@ class Filters extends Component {
     const html = filter.getAppliedFilters({ returnHTML: true });
     _updateAppliedFilters(serialized.filters, html);
     onApplyFilters(serialized.filters);
-    console.log(serialized.filters);
-    toggleIcon();
   };
 
   toggleAppliedFilters = () => {
@@ -81,18 +85,14 @@ class Filters extends Component {
     if (html === null && filters) {
       const html_ = filter.getAppliedFilters({ returnHTML: true });
       _updateAppliedFilters(filters, html_);
-      console.log('first time');
-      console.log(filters);
       return <div dangerouslySetInnerHTML={{ __html: html_ }} />;
     } else if (filters) {
-      console.log('generateAppliedFilters');
       return <div dangerouslySetInnerHTML={{ __html: html }} />;
     }
     return null;
   }
 
   render() {
-    console.log('render');
     const { show } = this.state;
     const { translations } = this.props;
     return (
@@ -107,6 +107,11 @@ class Filters extends Component {
         <div id="filter-popup" ref="filterPopup" style={{ display: (!show ? 'none' : 'block') }} />
       </>
     );
+  }
+
+  // eslint-disable-next-line react/sort-comp,no-unused-vars
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    toggleIcon();
   }
 }
 
@@ -128,15 +133,11 @@ Filters.propTypes = {
   onApplyFilters: PropTypes.func.isRequired,
   translations: PropTypes.object.isRequired,
   _updateAppliedFilters: PropTypes.func.isRequired,
-  reportLoaded: PropTypes.bool,
-  reportPending: PropTypes.bool,
   filters: PropTypes.object,
   html: PropTypes.string,
 };
 
 Filters.defaultProps = {
-  reportLoaded: false,
-  reportPending: false,
   filters: null,
   html: null,
 };

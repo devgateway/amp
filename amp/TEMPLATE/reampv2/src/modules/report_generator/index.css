@@ -325,7 +325,15 @@ i.arrow {
     float: left;
     width: max-content;
     cursor: pointer;
-    font-size: 1em;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+.settings-title {
+    float: right;
+    position: absolute;
+    right: 15px;
+    margin-top: 0;
 }
 
 .invisible-applied-filters {
@@ -344,4 +352,9 @@ i.arrow {
     left: 10px;
     width: max-content;*/
     font-size: 0.9em;
+}
+
+#previsualization_tree ul {
+    list-style-type: none;
+    padding-left: 10px;
 }

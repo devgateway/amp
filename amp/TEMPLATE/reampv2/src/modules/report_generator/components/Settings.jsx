@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 // eslint-disable-next-line no-unused-vars
-import { Header } from 'semantic-ui-react';
 import styles from '../../../../../ampTemplate/node_modules/amp-settings/dist/amp-settings.css';
 import { ReportGeneratorContext } from './StartUp';
 import { TRN_PREFIX } from '../utils/constants';

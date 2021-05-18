@@ -6,24 +6,18 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModelProperty;
-import org.dgfoundation.amp.newreports.ReportFilters;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
-import org.digijava.kernel.ampapi.endpoints.settings.Settings;
-import org.digijava.module.aim.dbentity.AmpReportColumn;
-import org.digijava.module.aim.dbentity.AmpReportHierarchy;
-import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.EntityResolver;
 
-import java.util.Set;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Viorel Chihai
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Report {
-
-    private Long id;
+public class ReportRequest {
 
     @ApiModelProperty("Mandatory to be provided for reports.")
     private String name;
@@ -32,7 +26,7 @@ public class Report {
 
     @ApiModelProperty(value = "Can be on of \"D\" (Donor), \"C\" (Component), \"P\" (Pledge), \"R\" (Regional),"
             + " \"G\" (GPI). Default is \"D\" if not provided.", allowableValues = "D,C,P,R,G")
-    private ReportType type;
+    private String type;
 
     @ApiModelProperty(value = "Time frame by which to group funding data in the report. If not specified only totals "
             + "will be computed.\n* A - Anually\n* Q - Quarterly\n* M - Monthly\n* N - Totals Only",
@@ -72,33 +66,27 @@ public class Report {
     @ApiModelProperty(value = "The member that created the report.")
     private AmpTeamMember ownerId;
 
-    @ApiModelProperty(value = "Report columns.")
-    private Set<AmpReportColumn> columns;
-
-    @ApiModelProperty(value = "Report hierarchies.")
-    private Set<AmpReportHierarchy> hierarchies;
-
-    @ApiModelProperty(value = "Report measures.")
-    private Set<AmpReportMeasures> measures;
-
-    @JsonProperty(EPConstants.SETTINGS)
-    @ApiModelProperty(value = "Report settings.")
-    private Settings settings;
-
-    @JsonProperty(EPConstants.FILTERS)
-    @ApiModelProperty(dataType = "org.digijava.kernel.ampapi.swagger.types.FiltersPH")
-    private ReportFilters filters;
-
     @ApiModelProperty(value = "Include location children.")
     private Boolean includeLocationChildren;
 
-    public Long getId() {
-        return id;
-    }
+    @ApiModelProperty(value = "Report column ids.")
+    private List<Long> columns;
 
-    public void setId(final Long id) {
-        this.id = id;
-    }
+    @ApiModelProperty(value = "Report hierarchies.")
+    private List<Long> hierarchies;
+
+    @ApiModelProperty(value = "Report measures.")
+    private List<Long> measures;
+
+    @JsonProperty(EPConstants.FILTERS)
+    @ApiModelProperty(dataType = "org.digijava.kernel.ampapi.swagger.types.FiltersPH")
+    private Map<String, Object> filters;
+
+    @JsonProperty(EPConstants.SETTINGS)
+    @ApiModelProperty(dataType = "org.digijava.kernel.ampapi.swagger.types.SettingsPH")
+    private Map<String, Object> settings;
+
+    private List<Map<String, String>> reportData;
 
     public String getName() {
         return name;
@@ -116,23 +104,31 @@ public class Report {
         this.description = description;
     }
 
-    public ReportType getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(final ReportType type) {
+    public void setType(final String type) {
         this.type = type;
     }
 
-    public Boolean isSummary() {
+    public String getGroupingOption() {
+        return groupingOption;
+    }
+
+    public void setGroupingOption(final String groupingOption) {
+        this.groupingOption = groupingOption;
+    }
+
+    public Boolean getSummary() {
         return summary;
     }
 
-    public void setSummary(Boolean summary) {
+    public void setSummary(final Boolean summary) {
         this.summary = summary;
     }
 
-    public Boolean isTab() {
+    public Boolean getTab() {
         return tab;
     }
 
@@ -140,7 +136,7 @@ public class Report {
         this.tab = tab;
     }
 
-    public Boolean isPublicView() {
+    public Boolean getPublicView() {
         return publicView;
     }
 
@@ -148,7 +144,7 @@ public class Report {
         this.publicView = publicView;
     }
 
-    public Boolean isWorkspaceLinked() {
+    public Boolean getWorkspaceLinked() {
         return workspaceLinked;
     }
 
@@ -156,7 +152,7 @@ public class Report {
         this.workspaceLinked = workspaceLinked;
     }
 
-    public Boolean isAlsoShowPledges() {
+    public Boolean getAlsoShowPledges() {
         return alsoShowPledges;
     }
 
@@ -164,15 +160,15 @@ public class Report {
         this.alsoShowPledges = alsoShowPledges;
     }
 
-    public Boolean isShowOriginalCurrency() {
+    public Boolean getShowOriginalCurrency() {
         return showOriginalCurrency;
     }
 
-    public void setShowOriginalCurrency(Boolean showOriginalCurrency) {
+    public void setShowOriginalCurrency(final Boolean showOriginalCurrency) {
         this.showOriginalCurrency = showOriginalCurrency;
     }
 
-    public Boolean isAllowEmptyFundingColumns() {
+    public Boolean getAllowEmptyFundingColumns() {
         return allowEmptyFundingColumns;
     }
 
@@ -180,7 +176,7 @@ public class Report {
         this.allowEmptyFundingColumns = allowEmptyFundingColumns;
     }
 
-    public Boolean isSplitByFunding() {
+    public Boolean getSplitByFunding() {
         return splitByFunding;
     }
 
@@ -204,52 +200,52 @@ public class Report {
         this.ownerId = ownerId;
     }
 
-    public String getGroupingOption() {
-        return groupingOption;
-    }
-
-    public void setGroupingOption(String groupingOption) {
-        this.groupingOption = groupingOption;
-    }
-
-    public ReportFilters getFilters() {
-        return filters;
-    }
-
-    public void setFilters(ReportFilters filters) {
-        this.filters = filters;
-    }
-
-    public Settings getSettings() {
-        return settings;
-    }
-
-    public void setSettings(final Settings settings) {
-        this.settings = settings;
-    }
-
-    public Set<AmpReportColumn> getColumns() {
+    public List<Long> getColumns() {
         return columns;
     }
 
-    public void setColumns(final Set<AmpReportColumn> columns) {
+    public void setColumns(final List<Long> columns) {
         this.columns = columns;
     }
 
-    public Set<AmpReportHierarchy> getHierarchies() {
+    public List<Long> getHierarchies() {
         return hierarchies;
     }
 
-    public void setHierarchies(final Set<AmpReportHierarchy> hierarchies) {
+    public void setHierarchies(final List<Long> hierarchies) {
         this.hierarchies = hierarchies;
     }
 
-    public Set<AmpReportMeasures> getMeasures() {
+    public List<Long> getMeasures() {
         return measures;
     }
 
-    public void setMeasures(final Set<AmpReportMeasures> measures) {
+    public void setMeasures(final List<Long> measures) {
         this.measures = measures;
+    }
+
+    public Map<String, Object> getFilters() {
+        return filters;
+    }
+
+    public void setFilters(final Map<String, Object> filters) {
+        this.filters = filters;
+    }
+
+    public Map<String, Object> getSettings() {
+        return settings;
+    }
+
+    public void setSettings(final Map<String, Object> settings) {
+        this.settings = settings;
+    }
+
+    public List<Map<String, String>> getReportData() {
+        return reportData;
+    }
+
+    public void setReportData(final List<Map<String, String>> reportData) {
+        this.reportData = reportData;
     }
 
     public Boolean isIncludeLocationChildren() {

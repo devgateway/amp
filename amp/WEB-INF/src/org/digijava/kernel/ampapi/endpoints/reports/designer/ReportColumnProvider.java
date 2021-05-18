@@ -1,6 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.reports.designer;
 
-import com.google.common.base.Stopwatch;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
@@ -34,10 +33,7 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import static org.dgfoundation.amp.ar.ColumnConstants.*;
-import static org.digijava.kernel.ampapi.endpoints.reports.designer.ReportType.COMPONENT;
-import static org.digijava.kernel.ampapi.endpoints.reports.designer.ReportType.DONOR;
-import static org.digijava.kernel.ampapi.endpoints.reports.designer.ReportType.PLEDGE;
-import static org.digijava.kernel.ampapi.endpoints.reports.designer.ReportType.REGIONAL;
+import static org.digijava.kernel.ampapi.endpoints.reports.designer.ReportType.*;
 
 /**
  * Fetch the amp columns from the system and provide the needed list based on the report type
@@ -152,8 +148,7 @@ public class ReportColumnProvider extends ReportEntityProvider {
     }
 
     public List<ReportColumn> getColumns(final ReportProfile profile, final ReportType type) {
-        Stopwatch stopwatch = Stopwatch.createStarted();
-        List<AmpColumns> ampColumns = fetchAmpColumns(type);
+        List<AmpColumns> ampColumns = fetchAmpColumns();
         Map<String, List<AmpColumns>> stringListMap = buildAmpTreeColumnSimple(ampColumns, type);
 
         List<ReportColumn> reportColumns = new ArrayList<>();
@@ -165,13 +160,8 @@ public class ReportColumnProvider extends ReportEntityProvider {
                             .collect(Collectors.toList())
             );
         }
-        System.out.println("Time taken by getColumns: " + stopwatch.stop());
 
         return reportColumns;
-    }
-
-    private List<AmpColumns> fetchAmpColumns(final ReportType type) {
-       return fetchAmpColumns();
     }
 
     public List<AmpColumns> fetchAmpColumns() {

@@ -25,4 +25,13 @@ public final class ReportDesignerErrors {
     public static final ApiErrorMessage REPORT_NOT_FOUND = new ApiErrorMessage(ERROR_CLASS_REPORT_DESIGNER_ID, 2,
             "Report not found");
 
+    public static final ApiErrorMessage REPORT_NAME_REQUIRED = new ApiErrorMessage(ERROR_CLASS_REPORT_DESIGNER_ID, 3,
+            "Report name required");
+
+    public static final ApiErrorMessage REPORT_TYPE_REQUIRED = new ApiErrorMessage(ERROR_CLASS_REPORT_DESIGNER_ID, 4,
+            "Report type required");
+
+    public static final ApiErrorMessage REPORT_NAME_DUPLICATED = new ApiErrorMessage(ERROR_CLASS_REPORT_DESIGNER_ID, 5,
+            "Report name is not unique");
+
 }

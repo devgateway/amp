@@ -47,5 +47,6 @@
   "amp.geocoder:error.1705": "The Current Geocoding process was created in the '{0}' workspace and it is available only in that workspace. Please login to that workspace to see the geocoding process status.",
   "amp.geocoder:error.1706": "Geocoding client error. Please contact the administrator to get more details.",
   "amp.geocoder:error.1707": "The connection to the geocoding service has failed. Please contact the administrator to get more details.",
+  "amp.geocoder:error.0512": "You are not authenticated or your session has been expired.",
   "amp.geocoder:error.differentImplementationLevels" : "You cannot save activities with different implementation levels at the same time."
 }

@@ -23,6 +23,8 @@ export const UPDATE_HIERARCHIES_SELECTED_COLUMN = 'UPDATE_HIERARCHIES_SELECTED_C
 export const UPDATE_HIERARCHIES_LIST = 'UPDATE_HIERARCHIES_LIST';
 export const UPDATE_APPLIED_FILTERS = 'UPDATE_APPLIED_FILTERS';
 export const UPDATE_APPLIED_SETTINGS = 'UPDATE_APPLIED_SETTINGS';
+export const UPDATE_PROFILE = 'UPDATE_PROFILE';
+export const UPDATE_ID = 'UPDATE_ID';
 
 export const FETCH_METADATA_PENDING = 'FETCH_METADATA_PENDING';
 export const FETCH_METADATA_SUCCESS = 'FETCH_METADATA_SUCCESS';
@@ -221,6 +223,20 @@ export function updateAppliedFilters(payload, html) {
 export function updateAppliedSettings(payload) {
   return {
     type: UPDATE_APPLIED_SETTINGS,
+    payload
+  };
+}
+
+export function updateProfile(payload) {
+  return {
+    type: UPDATE_PROFILE,
+    payload
+  };
+}
+
+export function updateId(payload) {
+  return {
+    type: UPDATE_ID,
     payload
   };
 }

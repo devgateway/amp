@@ -26,7 +26,7 @@ import {
   UPDATE_REPORT_DETAILS_REPORT_CATEGORY,
   UPDATE_APPLIED_FILTERS,
   UPDATE_APPLIED_SETTINGS,
-  UPDATE_REPORT_DETAILS_USE_ABOVE_FILTERS,
+  UPDATE_REPORT_DETAILS_USE_ABOVE_FILTERS, UPDATE_PROFILE, UPDATE_ID,
 } from '../actions/stateUIActions';
 import {
   convertColumns,
@@ -79,7 +79,8 @@ const initialState = {
   reportLoaded: false,
   reportPending: false,
   type: null,
-  profile: PROFILE_REPORT
+  profile: null,
+  id: null
 };
 
 export default (state = initialState, action) => {
@@ -304,7 +305,8 @@ export default (state = initialState, action) => {
         reportLoaded: true,
         reportPending: false,
         type: action.payload.type,
-        profile: getProfileFromReport(action.payload)
+        profile: getProfileFromReport(action.payload),
+        id: action.payload.id
       };
     case FETCH_REPORT_PENDING:
       return {
@@ -317,6 +319,16 @@ export default (state = initialState, action) => {
         ...state,
         reportLoaded: false,
         reportPending: false
+      };
+    case UPDATE_PROFILE:
+      return {
+        ...state,
+        profile: action.payload,
+      };
+    case UPDATE_ID:
+      return {
+        ...state,
+        id: action.payload,
       };
     default:
       return state;

@@ -10,17 +10,23 @@ import FiltersAndSettings from './FiltersAndSettings';
 import {
   getMetadata, fetchReport
 } from '../actions/stateUIActions';
+import { getProfileFromReport } from '../utils/Utils';
 
 class ReportGeneratorHome extends Component {
   componentDidMount() {
     const { _getMetadata, _fetchReport, location } = this.props;
     // eslint-disable-next-line react/destructuring-assignment,react/prop-types
     const { id } = this.props.match.params;
-    const type = new URLSearchParams(location.search).get('type');
+    const typeFromURL = new URLSearchParams(location.search).get('type');
+    const profileFromURL = new URLSearchParams(location.search).get('profile');
+    // If this is a saved report then ignore type and profile params from the URL.
     if (id) {
-      return _getMetadata(type).then(() => _fetchReport(id));
+      return _fetchReport(id).then((action) => {
+        const profile = getProfileFromReport(action.payload);
+        return _getMetadata(action.payload.type, profile);
+      });
     } else {
-      _getMetadata(type);
+      _getMetadata(typeFromURL, profileFromURL);
     }
   }
 
@@ -40,7 +46,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  _getMetadata: (data) => getMetadata(data),
+  _getMetadata: (type, profile) => getMetadata(type, profile),
   _fetchReport: (id) => fetchReport(id),
 }, dispatch);
 

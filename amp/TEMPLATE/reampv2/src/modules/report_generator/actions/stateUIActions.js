@@ -225,9 +225,9 @@ export function updateAppliedSettings(payload) {
   };
 }
 
-export const getMetadata = (type) => dispatch => {
+export const getMetadata = (type, profile) => dispatch => {
   dispatch(fetchMetaDataPending());
-  const url = type ? `${URL_METADATA}?type=${type}` : URL_METADATA;
+  const url = type ? `${URL_METADATA}?type=${type}&profile=${profile}` : URL_METADATA;
   return Promise.all([fetchApiData({
     url
   })]).then((data) => dispatch(fetchMetaDataSuccess(data[0])))

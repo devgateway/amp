@@ -5,16 +5,19 @@ import PropTypes from 'prop-types';
 // eslint-disable-next-line no-unused-vars
 import styles from '../../../../../ampTemplate/node_modules/amp-settings/dist/amp-settings.css';
 import { ReportGeneratorContext } from './StartUp';
-import { TRN_PREFIX } from '../utils/constants';
+import {
+  // eslint-disable-next-line no-unused-vars
+  TABS, TRN_PREFIX, URL_SETTINGS_TABS, URL_SETTINGS_REPORTS, REPORTS
+} from '../utils/constants';
 
 const SettingsWidget = require('../../../../../ampTemplate/node_modules/amp-settings/dist/amp-settings');
 
 const widget = new SettingsWidget.SettingsWidget({
   el: 'settings-popup',
   draggable: true,
-  caller: 'TABS',
+  caller: TABS,
   isPopup: true,
-  definitionUrl: '/rest/settings-definitions/tabs'
+  definitionUrl: URL_SETTINGS_TABS
 });
 
 class Settings extends Component {

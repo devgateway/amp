@@ -34,6 +34,8 @@ import {
   convertMeasures,
   convertReportDetails
 } from './utils/stateUIDataConverter';
+import { PROFILE_REPORT, PROFILE_TAB } from '../utils/constants';
+import { getProfileFromReport } from '../utils/Utils';
 
 const initialState = {
   reportDetails: {
@@ -75,7 +77,9 @@ const initialState = {
   settings: null,
   reportCategories: [],
   reportLoaded: false,
-  reportPending: false
+  reportPending: false,
+  type: null,
+  profile: PROFILE_REPORT
 };
 
 export default (state = initialState, action) => {
@@ -299,6 +303,8 @@ export default (state = initialState, action) => {
         appliedFilters: null,
         reportLoaded: true,
         reportPending: false,
+        type: action.payload.type,
+        profile: getProfileFromReport(action.payload)
       };
     case FETCH_REPORT_PENDING:
       return {

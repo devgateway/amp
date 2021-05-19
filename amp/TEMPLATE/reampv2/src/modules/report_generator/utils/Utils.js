@@ -1,3 +1,5 @@
+import { PROFILE_REPORT, PROFILE_TAB } from './constants';
+
 export function validateSaveModal(title) {
   if (title === null || title === undefined || title.toString().trim().length === 0) {
     return 'missingTitle';
@@ -61,4 +63,16 @@ export function convertReportType(value) {
 
 export function hasFilters(filters) {
   return filters && Object.keys(filters).length > 0;
+}
+
+/**
+ * Note: Always a pure function.
+ * @param data
+ * @returns {string}
+ */
+export function getProfileFromReport(data) {
+  if (data && data.tab === true) {
+    return PROFILE_TAB;
+  }
+  return PROFILE_REPORT;
 }

@@ -82,7 +82,7 @@ class MainContent extends Component {
     const {
       columns, measures, hierarchies, reportDetails
     } = this.props;
-    if (columns && measures && hierarchies && reportDetails) {
+    if (columns && measures && hierarchies && reportDetails && columns.available && columns.available.length > 0) {
       if (columns.selected.length > 0 && measures.selected.length > 0) {
         const selectedSummaryReport = reportDetails && reportDetails.selectedSummaryReport;
         if (columns.selected.length === hierarchies.selected.length && !selectedSummaryReport) {

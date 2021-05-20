@@ -26,7 +26,12 @@ import {
   UPDATE_REPORT_DETAILS_REPORT_CATEGORY,
   UPDATE_APPLIED_FILTERS,
   UPDATE_APPLIED_SETTINGS,
-  UPDATE_REPORT_DETAILS_USE_ABOVE_FILTERS, UPDATE_PROFILE, UPDATE_ID,
+  UPDATE_REPORT_DETAILS_USE_ABOVE_FILTERS,
+  UPDATE_PROFILE,
+  UPDATE_ID,
+  SAVE_NEW_REPORT_PENDING,
+  SAVE_NEW_REPORT_SUCCESS,
+  SAVE_NEW_REPORT_ERROR,
 } from '../actions/stateUIActions';
 import {
   convertColumns,
@@ -52,6 +57,8 @@ const initialState = {
     publicView: false,
     workspaceLinked: false,
     selectedReportCategory: null,
+    ownerId: null,
+    includeLocationChildren: true
   },
   columns: {
     available: [],
@@ -79,7 +86,10 @@ const initialState = {
   reportPending: false,
   type: null,
   profile: null,
-  id: null
+  id: null,
+  reportSaving: false,
+  reportSaved: false,
+  reportSaveError: null
 };
 
 export default (state = initialState, action) => {
@@ -272,13 +282,12 @@ export default (state = initialState, action) => {
         metaDataPending: false,
         metaDataLoaded: true,
         measures: {
+          ...state.measures,
           available: action.payload.measures,
-          selected: [],
-          order: [],
         },
         columns: {
+          ...state.columns,
           available: action.payload.columns,
-          selected: [],
         },
         options: action.payload.options,
         reportCategories: action.payload.reportCategories
@@ -295,9 +304,18 @@ export default (state = initialState, action) => {
       return {
         ...state,
         reportDetails: convertReportDetails(state.reportDetails, action.payload),
-        columns: convertColumns(state.columns, action.payload),
-        hierarchies: convertHierarchies(state.hierarchies, action.payload, state.columns),
-        measures: convertMeasures(state.measures, action.payload),
+        columns: {
+          selected: action.payload.columns.map(i => i.id)
+        },
+        hierarchies: {
+          available: action.payload.hierarchies,
+          selected: action.payload.hierarchies.map(i => i.id),
+          order: action.payload.hierarchies.map(i => i.id)
+        },
+        measures: {
+          selected: action.payload.measures.map(i => i.id),
+          order: action.payload.measures.map(i => i.id)
+        },
         settings: action.payload.settings,
         filters: action.payload.filters,
         appliedFilters: null,
@@ -328,6 +346,30 @@ export default (state = initialState, action) => {
       return {
         ...state,
         id: action.payload,
+      };
+    case SAVE_NEW_REPORT_PENDING:
+      return {
+        ...state,
+        id: null,
+        reportSaving: true,
+        reportSaved: false,
+        reportSaveError: null
+      };
+    case SAVE_NEW_REPORT_SUCCESS:
+      return {
+        ...state,
+        id: action.payload.id,
+        reportSaving: false,
+        reportSaved: true,
+        reportSaveError: null
+      };
+    case SAVE_NEW_REPORT_ERROR:
+      return {
+        ...state,
+        id: null,
+        reportSaving: false,
+        reportSaved: false,
+        reportSaveError: action.payload
       };
     default:
       return state;

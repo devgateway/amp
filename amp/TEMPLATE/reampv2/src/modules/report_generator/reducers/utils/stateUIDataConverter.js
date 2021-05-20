@@ -20,6 +20,8 @@ export function convertReportDetails(reportDetails, data) {
   _reportDetails.publicView = data.publicView;
   _reportDetails.workspaceLinked = data.workspaceLinked;
   _reportDetails.selectedReportCategory = data.reportCategory;
+  _reportDetails.ownerId = data.ownerId;
+  _reportDetails.includeLocationChildren = data.includeLocationChildren;
   return _reportDetails;
 }
 

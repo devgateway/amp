@@ -8,6 +8,8 @@ import { connect } from 'react-redux';
 import { TRN_PREFIX } from '../utils/constants';
 import './MainMenu.css';
 import SaveModal from './SaveModal';
+import { saveNew } from '../actions/stateUIActions';
+import { convertTotalGrouping } from '../utils/Utils';
 
 const MENU = 'menu';
 
@@ -41,8 +43,35 @@ class MainMenu extends Component {
     this.setState({ saveModalOpen: open, isNewReport: isNew });
   }
 
-  saveReport = (title) => {
-    alert(title);
+  saveReport = () => {
+  }
+
+  saveNewReport = () => {
+    const { uiReducer, _saveNew } = this.props;
+    const body = {
+      id: null,
+      name: uiReducer.reportDetails.name,
+      description: uiReducer.reportDetails.description,
+      type: uiReducer.type,
+      groupingOption: convertTotalGrouping(uiReducer.reportDetails.selectedTotalGrouping),
+      summary: uiReducer.reportDetails.selectedSummaryReport,
+      tab: uiReducer.reportDetails.isTab,
+      publicView: uiReducer.reportDetails.publicView,
+      workspaceLinked: uiReducer.reportDetails.workspaceLinked,
+      alsoShowPledges: uiReducer.reportDetails.selectedAlsoShowPledges,
+      showOriginalCurrency: uiReducer.reportDetails.selectedShowOriginalCurrencies,
+      allowEmptyFundingColumns: uiReducer.reportDetails.selectedAllowEmptyFundingColumns,
+      splitByFunding: uiReducer.reportDetails.selectedSplitByFunding,
+      reportCategory: uiReducer.reportDetails.selectedReportCategory,
+      ownerId: uiReducer.reportDetails.ownerId,
+      includeLocationChildren: uiReducer.reportDetails.includeLocationChildren,
+      columns: uiReducer.columns.selected,
+      hierarchies: uiReducer.hierarchies.selected, /* TODO: sort this collection. */
+      measures: uiReducer.measures.selected, /* IDEM */
+      filters: uiReducer.filters,
+      settings: uiReducer.settings,
+    };
+    _saveNew(body);
   }
 
   render() {
@@ -87,7 +116,7 @@ class MainMenu extends Component {
           open={saveModalOpen}
           modalSaveError={modalSaveError}
           isNewReport={isNewReport}
-          save={this.saveReport}
+          save={isNewReport ? this.saveNewReport : this.saveReport}
           close={() => this.setSaveModalOpen(false)} />
       </>
     );
@@ -95,10 +124,15 @@ class MainMenu extends Component {
 }
 
 const mapStateToProps = state => ({
-  translations: state.translationsReducer.translations
+  translations: state.translationsReducer.translations,
+  uiReducer: state.uiReducer,
+  description: state.uiReducer.reportDetails.description,
+  selectedReportCategory: state.uiReducer.reportDetails.selectedReportCategory,
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({
+  _saveNew: (data) => saveNew(data),
+}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainMenu);
 
@@ -106,4 +140,9 @@ MainMenu.propTypes = {
   onClick: PropTypes.func.isRequired,
   translations: PropTypes.object.isRequired,
   tab: PropTypes.number.isRequired,
+  _saveNew: PropTypes.func.isRequired,
+  uiReducer: PropTypes.object.isRequired,
+};
+
+MainMenu.defaultProps = {
 };

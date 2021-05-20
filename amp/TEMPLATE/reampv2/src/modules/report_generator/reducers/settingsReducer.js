@@ -3,7 +3,6 @@ import {
   FETCH_GLOBAL_SETTINGS_PENDING,
   FETCH_GLOBAL_SETTINGS_SUCCESS
 } from '../actions/settingsActions';
-import { extractSettings } from './utils/settingsDataConverter';
 
 const initialState = {
   pending: false,

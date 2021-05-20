@@ -13,7 +13,7 @@ export default class FiltersAndSettings extends Component {
           {!loading ? (
             <>
               <Filters onApplyFilters={() => {}} />
-              <Settings />
+              <Settings onApplySettings={() => {}} />
             </>
           ) : null}
         </Segment>

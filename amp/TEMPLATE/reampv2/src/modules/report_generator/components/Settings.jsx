@@ -11,6 +11,7 @@ import {
 } from '../utils/constants';
 import { fetchGlobalSettings } from '../actions/settingsActions';
 import { extractSettings } from '../reducers/utils/settingsDataConverter';
+import { updateAppliedSettings } from '../actions/stateUIActions';
 
 const SettingsWidget = require('../../../../../ampTemplate/node_modules/amp-settings/dist/amp-settings');
 
@@ -53,7 +54,8 @@ class Settings extends Component {
   }
 
   applySettings = (data) => {
-    const { onApplySettings } = this.props;
+    const { onApplySettings, _updateAppliedSettings } = this.props;
+    _updateAppliedSettings(data);
     onApplySettings(data);
     this.hideSettings();
   }
@@ -94,7 +96,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  _fetchGlobalSettings: () => fetchGlobalSettings()
+  _fetchGlobalSettings: () => fetchGlobalSettings(),
+  _updateAppliedSettings: (data) => dispatch(updateAppliedSettings(data)),
 }, dispatch);
 
 Settings.propTypes = {
@@ -103,6 +106,7 @@ Settings.propTypes = {
   translations: PropTypes.object.isRequired,
   profile: PropTypes.string,
   _fetchGlobalSettings: PropTypes.func.isRequired,
+  _updateAppliedSettings: PropTypes.func.isRequired,
 };
 
 Settings.defaultProps = {

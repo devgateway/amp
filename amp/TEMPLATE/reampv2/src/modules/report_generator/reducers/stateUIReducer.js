@@ -16,8 +16,25 @@ import {
   FETCH_METADATA_PENDING,
   FETCH_METADATA_SUCCESS,
   FETCH_METADATA_ERROR,
-  RESET_MEASURES_SELECTED_COLUMN, RESET_COLUMNS_SELECTED_COLUMN,
+  RESET_MEASURES_SELECTED_COLUMN,
+  RESET_COLUMNS_SELECTED_COLUMN,
+  FETCH_REPORT_SUCCESS,
+  UPDATE_REPORT_DETAILS_ALSO_SHOW_PLEDGES,
+  FETCH_REPORT_PENDING,
+  FETCH_REPORT_ERROR,
+  UPDATE_REPORT_DETAILS_NAME,
+  UPDATE_REPORT_DETAILS_REPORT_CATEGORY,
+  UPDATE_APPLIED_FILTERS,
+  UPDATE_APPLIED_SETTINGS,
+  UPDATE_REPORT_DETAILS_USE_ABOVE_FILTERS, UPDATE_PROFILE, UPDATE_ID,
 } from '../actions/stateUIActions';
+import {
+  convertColumns,
+  convertHierarchies,
+  convertMeasures,
+  convertReportDetails
+} from './utils/stateUIDataConverter';
+import { getProfileFromReport } from '../utils/Utils';
 
 const initialState = {
   reportDetails: {
@@ -27,7 +44,14 @@ const initialState = {
     selectedAllowEmptyFundingColumns: false,
     selectedSplitByFunding: false,
     selectedShowOriginalCurrencies: false,
+    selectedAlsoShowPledges: false,
+    selectedUseAboveFilters: false,
     description: null,
+    name: null,
+    isTab: false,
+    publicView: false,
+    workspaceLinked: false,
+    selectedReportCategory: null,
   },
   columns: {
     available: [],
@@ -46,7 +70,18 @@ const initialState = {
   activeStep: 0,
   metaDataLoaded: false,
   metaDataPending: false,
-  error: null
+  error: null,
+  filters: null,
+  appliedFilters: null,
+  settings: {
+    'amount-format': {} /* JUST BECAUSE THE WIDGET FAILS. */
+  },
+  reportCategories: [],
+  reportLoaded: false,
+  reportPending: false,
+  type: null,
+  profile: null,
+  id: null
 };
 
 export default (state = initialState, action) => {
@@ -99,12 +134,44 @@ export default (state = initialState, action) => {
           selectedShowOriginalCurrencies: action.payload
         }
       };
+    case UPDATE_REPORT_DETAILS_ALSO_SHOW_PLEDGES:
+      return {
+        ...state,
+        reportDetails: {
+          ...state.reportDetails,
+          selectedAlsoShowPledges: action.payload
+        }
+      };
+    case UPDATE_REPORT_DETAILS_USE_ABOVE_FILTERS:
+      return {
+        ...state,
+        reportDetails: {
+          ...state.reportDetails,
+          selectedUseAboveFilters: action.payload
+        }
+      };
     case UPDATE_REPORT_DETAILS_DESCRIPTION:
       return {
         ...state,
         reportDetails: {
           ...state.reportDetails,
           description: action.payload
+        }
+      };
+    case UPDATE_REPORT_DETAILS_NAME:
+      return {
+        ...state,
+        reportDetails: {
+          ...state.reportDetails,
+          name: action.payload
+        }
+      };
+    case UPDATE_REPORT_DETAILS_REPORT_CATEGORY:
+      return {
+        ...state,
+        reportDetails: {
+          ...state.reportDetails,
+          selectedReportCategory: action.payload
         }
       };
     case UPDATE_COLUMNS_SELECTED_COLUMN:
@@ -185,6 +252,17 @@ export default (state = initialState, action) => {
           order: [],
         }
       };
+    case UPDATE_APPLIED_FILTERS:
+      return {
+        ...state,
+        filters: action.payload,
+        appliedFilters: action.html,
+      };
+    case UPDATE_APPLIED_SETTINGS:
+      return {
+        ...state,
+        settings: action.payload
+      };
     case FETCH_METADATA_PENDING:
       return {
         ...state,
@@ -205,6 +283,7 @@ export default (state = initialState, action) => {
           selected: [],
         },
         options: action.payload.options,
+        reportCategories: action.payload.reportCategories
       };
     }
     case FETCH_METADATA_ERROR:
@@ -213,6 +292,44 @@ export default (state = initialState, action) => {
         metaDataLoaded: false,
         metaDataPending: false,
         error: action.error
+      };
+    case FETCH_REPORT_SUCCESS:
+      return {
+        ...state,
+        reportDetails: convertReportDetails(state.reportDetails, action.payload),
+        columns: convertColumns(state.columns, action.payload),
+        hierarchies: convertHierarchies(state.hierarchies, action.payload, state.columns),
+        measures: convertMeasures(state.measures, action.payload),
+        settings: action.payload.settings,
+        filters: action.payload.filters,
+        appliedFilters: null,
+        reportLoaded: true,
+        reportPending: false,
+        type: action.payload.type,
+        profile: getProfileFromReport(action.payload),
+        id: action.payload.id
+      };
+    case FETCH_REPORT_PENDING:
+      return {
+        ...state,
+        reportLoaded: false,
+        reportPending: true
+      };
+    case FETCH_REPORT_ERROR:
+      return {
+        ...state,
+        reportLoaded: false,
+        reportPending: false
+      };
+    case UPDATE_PROFILE:
+      return {
+        ...state,
+        profile: action.payload,
+      };
+    case UPDATE_ID:
+      return {
+        ...state,
+        id: action.payload,
       };
     default:
       return state;

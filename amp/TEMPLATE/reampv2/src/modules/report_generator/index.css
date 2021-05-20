@@ -40,11 +40,16 @@
 .filters_segment {
     min-height: 4rem !important;
     background-color: #e7f1fd !important;
+    margin-right: 2rem !important;
 }
 
 .invisible-tab {
     display: none;
     visibility: hidden;
+}
+
+.max-content {
+    width: max-content;
 }
 
 .navigation-buttons {
@@ -177,6 +182,7 @@ textarea {
     height: 40px;
     border-radius: 500rem;
     transform: scale(0.46666667);
+    background-color: transparent;
 }
 
 .ui.toggle.checkbox input:checked ~ label::before {
@@ -218,6 +224,10 @@ textarea {
 
 .ui.loading.form::before {
     background-color: #fafafa;
+}
+
+.ui.modal {
+    overflow: initial;
 }
 
 .ui.modal > .header {
@@ -306,4 +316,46 @@ i.arrow {
     white-space: nowrap;
     font-size: 0.8em;
     padding-right: 5px;
+}
+
+.category-dropdown span {
+    position: static !important;
+}
+
+.filter-title {
+    float: left;
+    width: max-content;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+.settings-title {
+    float: right;
+    position: absolute;
+    right: 15px;
+    margin-top: 0;
+}
+
+.invisible-applied-filters {
+    visibility: hidden;
+    display: none;
+}
+
+.applied-filters {
+    float: left;
+    width: max-content;
+}
+
+#previsualization_tree {
+    /*top: 20px;
+    position: relative;
+    left: 10px;
+    width: max-content;*/
+    font-size: 0.9em;
+}
+
+#previsualization_tree ul {
+    list-style-type: none;
+    padding-left: 10px;
 }

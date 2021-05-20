@@ -36,11 +36,17 @@
   "amp.reportGenerator:orderSelectedFinancialMeasures": "Order Selected Financial Measures",
   "amp.reportGenerator:needMoreHierarchies": "Only in summary reports can all columns be hierarchies",
   "amp.reportGenerator:confirmResetAll": "Are you sure you want to reset all changes done?",
+  "amp.reportGenerator:confirmCancel": "Are you sure you want to exit the report generator?",
   "amp.reportGenerator:resetMeasures": "Reset Measures",
   "amp.reportGenerator:enterReportTitle": "Please enter a title for this report:",
   "amp.reportGenerator:enterReportName":"Please enter a report name.",
   "amp.reportGenerator:saveReport":"Save Report",
   "amp.reportGenerator:missingTitle":"Missing title",
   "amp.reportGenerator:previewError":"There was an error generating the preview.",
-  "amp.reportGenerator:previewTooltip": "tooltip 1"
+  "amp.reportGenerator:previewTooltip": "tooltip 1",
+  "amp.reportGenerator:selectCategory": "Please select a category from below",
+  "amp.reportGenerator:category": "Category",
+  "amp.reportGenerator:appDescription": "The Report Generator allows you to create customized reports that fit your needs, based on data in the AMP. Starting with Report Details, click through each step to create your own report.",
+  "amp.reportGenerator:hideAppliedFilters": "(Hide applied filters)",
+  "amp.reportGenerator:showAppliedFilters": "(Show applied filters)"
 }

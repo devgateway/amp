@@ -30,7 +30,7 @@ class MainContent extends Component {
     } = this.props;
     if (this.areEnoughDataForPreview()) {
       // Convert input data to a String then Number.
-      const _reportDetails = reportDetails;
+      const _reportDetails = { ...reportDetails };
       delete _reportDetails.description;
       const merged = {
         ..._reportDetails,
@@ -60,7 +60,6 @@ class MainContent extends Component {
             end: `${year}-12-31`
           }
         };
-        console.log(`latest preview id: ${newId}`);
         _getPreview({
           id: newId,
           add_columns: _columns,
@@ -83,7 +82,7 @@ class MainContent extends Component {
     const {
       columns, measures, hierarchies, reportDetails
     } = this.props;
-    if (columns && measures && hierarchies && reportDetails) {
+    if (columns && measures && hierarchies && reportDetails && columns.available && columns.available.length > 0) {
       if (columns.selected.length > 0 && measures.selected.length > 0) {
         const selectedSummaryReport = reportDetails && reportDetails.selectedSummaryReport;
         if (columns.selected.length === hierarchies.selected.length && !selectedSummaryReport) {

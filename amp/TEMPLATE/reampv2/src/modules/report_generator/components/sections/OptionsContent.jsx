@@ -24,12 +24,12 @@ export default class OptionsContent extends Component {
             ))}
           </Form.Group>
           {checkList.map((item, i) => (
-            <FormField key={`form_field_${item}`}>
+            <FormField key={`form_field_${item.name}`}>
               <Checkbox
                 toggle
                 key={item.name}
                 onChange={changeCheckList ? changeCheckList[i] : {}}
-                checked={selectedCheckboxes && selectedCheckboxes.item}
+                checked={selectedCheckboxes && selectedCheckboxes[i]}
                 label={item.label} />
             </FormField>
           ))}

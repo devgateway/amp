@@ -81,6 +81,7 @@ class Settings extends Component {
 const mapStateToProps = state => ({
   translations: state.translationsReducer.translations,
   profile: state.uiReducer.profile,
+  settings: state.uiReducer.settings,
 });
 const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
 

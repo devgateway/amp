@@ -47,7 +47,7 @@ class ReportGeneratorHome extends Component {
     return (
       <Container>
         <MainHeader />
-        {canLoadChildren ? <FiltersAndSettings /> : null}
+        <FiltersAndSettings loading={!canLoadChildren} />
         <MainContent />
       </Container>
     );

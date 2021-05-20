@@ -34,7 +34,6 @@ import {
   convertMeasures,
   convertReportDetails
 } from './utils/stateUIDataConverter';
-import { PROFILE_REPORT, PROFILE_TAB } from '../utils/constants';
 import { getProfileFromReport } from '../utils/Utils';
 
 const initialState = {
@@ -74,7 +73,9 @@ const initialState = {
   error: null,
   filters: null,
   appliedFilters: null,
-  settings: null,
+  settings: {
+    'amount-format': {} /* JUST BECAUSE THE WIDGET FAILS. */
+  },
   reportCategories: [],
   reportLoaded: false,
   reportPending: false,
@@ -282,7 +283,7 @@ export default (state = initialState, action) => {
           selected: [],
         },
         options: action.payload.options,
-        reportCategories: action.payload.reportCategories,
+        reportCategories: action.payload.reportCategories
       };
     }
     case FETCH_METADATA_ERROR:

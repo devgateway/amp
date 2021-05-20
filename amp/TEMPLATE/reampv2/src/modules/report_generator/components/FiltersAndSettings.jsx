@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import { Segment } from 'semantic-ui-react';
+import PropTypes from 'prop-types';
 import Filters from './Filters';
 import Settings from './Settings';
 
 export default class FiltersAndSettings extends Component {
   render() {
+    const { loading } = this.props;
     return (
       <>
-        <Segment placeholder textAlign="left" className="filters_segment">
+        <Segment loading={loading} placeholder textAlign="left" className="filters_segment">
           <Filters onApplyFilters={() => {}} />
           <Settings />
         </Segment>
@@ -15,3 +17,11 @@ export default class FiltersAndSettings extends Component {
     );
   }
 }
+
+FiltersAndSettings.propTypes = {
+  loading: PropTypes.bool
+};
+
+FiltersAndSettings.defaultProps = {
+  loading: false
+};

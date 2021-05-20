@@ -73,9 +73,7 @@ const initialState = {
   error: null,
   filters: null,
   appliedFilters: null,
-  settings: {
-    'amount-format': {} /* JUST BECAUSE THE WIDGET FAILS. */
-  },
+  settings: null,
   reportCategories: [],
   reportLoaded: false,
   reportPending: false,

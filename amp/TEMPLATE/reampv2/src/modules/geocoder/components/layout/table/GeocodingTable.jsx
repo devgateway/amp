@@ -104,13 +104,15 @@ class GeocodingTable extends Component {
             showExpandColumn: true,
             expandByColumnOnly: true,
             expandColumnPosition: 'right',
-            expandColumnRenderer: ({ expanded, rowKey, expandable }) => (
-                <GeocodingActionColumn
-                    ampId={rowKey} enabled={this.hasLocations(rowKey)}
-                    message={this.hasError(rowKey) ? translations['amp.geocoder:errorGeocoding'] : translations['amp.geocoder:noLocations']}
-                    tooltip={translations['amp.geocoder:editActionTooltip']}
+            expandColumnRenderer: ({ expanded, rowKey, expandable }) => {
+                let containsError = this.hasError(rowKey);
+                let containsLocations = this.hasLocations(rowKey);
+                return <GeocodingActionColumn
+                    ampId={rowKey} enabled={containsLocations} tooltipEnabled={containsLocations || containsError}
+                    message={containsError ? translations['amp.geocoder:errorGeocoding'] : translations['amp.geocoder:noLocations']}
+                    tooltip={containsError ? translations['amp.geocoder:errorGeocodingTooltip'] : translations['amp.geocoder:editActionTooltip']}
                 />
-            )
+            }
         };
 
         let options = {

@@ -130,13 +130,18 @@
     width: 480px;
 }
 
-.download-link {
-    float: right !important;
-    margin-right: 30px;
+.data-link {
     color: #60b42d;
     font-weight: bold;
-    background: #FFFFFF;
     line-height: 35px;
+}
+
+.download-link {
+    text-align: right;
+}
+
+.data-link span {
+    cursor: pointer;
 }
 
 .download-content .horizontal-filter .selected .title {
@@ -148,4 +153,8 @@
 .download-content .horizontal-filter .unselected .title {
     font-weight: bold;
     font-size: 11px;
+}
+
+.country-popup-wrapper .container-fluid {
+    margin-top: 25px;
 }

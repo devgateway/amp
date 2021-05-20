@@ -8,7 +8,6 @@ import './dataDownloadContainer.css';
 import MultiSelectionDropDown from '../layout/filters/MultiSelectionDropDown';
 import { generateYearsFilters } from '../../utils/Utils';
 import { downloadData, dataDownloaded } from '../../actions/downloadData';
-import { ACTIVITY_ID, PROJECT_TITLE } from '../../utils/FieldsConstants';
 import { exportToXLS, populateFilters } from '../../utils/exportUtils';
 
 class DataDownloadContainer extends Component {
@@ -26,11 +25,7 @@ class DataDownloadContainer extends Component {
   }
 
   componentDidMount() {
-    const { selectedFilters } = this.props;
-    if (selectedFilters) {
-      // eslint-disable-next-line react/no-did-mount-set-state
-      this.setState({ selectedFilters });
-    }
+    this.resetFilters();
   }
 
   componentDidUpdate() {
@@ -98,6 +93,14 @@ class DataDownloadContainer extends Component {
     this.setState({ key });
   }
 
+  resetFilters() {
+    const { selectedFilters } = this.props;
+    if (selectedFilters) {
+      // eslint-disable-next-line react/no-did-mount-set-state
+      this.setState({ selectedFilters });
+    }
+  }
+
   updateFilterState(filterSelector, updatedSelectedFilters) {
     this.setState((currentState) => {
       const selectedFilters = { ...currentState.selectedFilters };
@@ -125,9 +128,7 @@ class DataDownloadContainer extends Component {
     generateYearsFilters(years, settings);
     return (
       <div className="data-download-wrapper">
-        <div className="data-download-title">
-          <h4>{translations['amp.ssc.dashboard:Download-Page']}</h4>
-        </div>
+
         <div className="export-wrapper">
           <ul>
             <li className="return-link" onClick={() => toggleDataDownload()}>X</li>
@@ -142,7 +143,7 @@ class DataDownloadContainer extends Component {
           >
             <Tab
               eventKey="Country"
-              title={`${translations['amp.ssc.dashboard:Country']} (${selectedCountries.length}/${countries.length}`}>
+              title={`${translations['amp.ssc.dashboard:Country']} (${selectedCountries.length}/${countries.length})`}>
               <div className="download-content">
                 <MultiSelectionDropDown
                   options={countries}
@@ -156,7 +157,7 @@ class DataDownloadContainer extends Component {
             </Tab>
             <Tab
               eventKey="sector"
-              title={`${translations['amp.ssc.dashboard:Sector']} (${selectedSectors.length}/${sectors.length}`}>
+              title={`${translations['amp.ssc.dashboard:Sector']} (${selectedSectors.length}/${sectors.length})`}>
               <div className="download-content">
                 <MultiSelectionDropDown
                   options={sectors}
@@ -170,7 +171,7 @@ class DataDownloadContainer extends Component {
             </Tab>
             <Tab
               eventKey="modality"
-              title={`${translations['amp.ssc.dashboard:Modality']} (${selectedModalities.length}/${modalities.length}`}>
+              title={`${translations['amp.ssc.dashboard:Modality']} (${selectedModalities.length}/${modalities.length})`}>
               <div className="download-content">
                 <MultiSelectionDropDown
                   key="2222"
@@ -185,7 +186,7 @@ class DataDownloadContainer extends Component {
             </Tab>
             <Tab
               eventKey="year"
-              title={`${translations['amp.ssc.dashboard:Year']} (${selectedYears.length}/${years.length}`}>
+              title={`${translations['amp.ssc.dashboard:Year']} (${selectedYears.length}/${years.length})`}>
               <div className="download-content">
                 <MultiSelectionDropDown
                   options={years}
@@ -199,13 +200,20 @@ class DataDownloadContainer extends Component {
             </Tab>
           </Tabs>
           {error && <div>{error}</div>}
-          <div
-            className="download-link"
-          >
-            <span
-              onClick={() => _downloadData(selectedFilters)}>
-              {translations['amp.ssc.dashboard:Download']}
-            </span>
+          <div className="row">
+            <div className="col-md-6 reset-link data-link">
+              <span
+                onClick={() => this.resetFilters()}>
+                {translations['amp.ssc.dashboard:reset']}
+              </span>
+            </div>
+            <div className="col-md-6 download-link data-link">
+              {' '}
+              <span
+                onClick={() => _downloadData(selectedFilters)}>
+                {translations['amp.ssc.dashboard:Download']}
+              </span>
+            </div>
           </div>
         </div>
       </div>

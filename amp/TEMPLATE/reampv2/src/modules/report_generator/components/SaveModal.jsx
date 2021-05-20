@@ -30,7 +30,7 @@ class SaveModal extends Component {
     if (msg) {
       this.setState({ modalSaveError: msg });
     } else {
-      save(name);
+      save();
       close();
     }
   }
@@ -59,7 +59,7 @@ class SaveModal extends Component {
         <Modal.Actions>
           <Button color="green" onClick={this.validateAndSave} loading={loading} disabled={loading}>
             <Icon name="save" />
-            {translations[`${TRN_PREFIX}saveReport`]}
+            {isNewReport ? translations[`${TRN_PREFIX}saveNewReport`] : translations[`${TRN_PREFIX}saveReport`]}
           </Button>
           <Button color="red" onClick={close}>
             <Icon name="cancel" />
@@ -143,7 +143,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(SaveModal);
 SaveModal.propTypes = {
   translations: PropTypes.object.isRequired,
   open: PropTypes.bool.isRequired,
-  modalSaveError: PropTypes.string,
   isNewReport: PropTypes.bool.isRequired,
   close: PropTypes.func.isRequired,
   save: PropTypes.func.isRequired,
@@ -157,7 +156,6 @@ SaveModal.propTypes = {
 };
 
 SaveModal.defaultProps = {
-  modalSaveError: null,
   reportPending: false,
   metaDataPending: false,
   name: undefined,

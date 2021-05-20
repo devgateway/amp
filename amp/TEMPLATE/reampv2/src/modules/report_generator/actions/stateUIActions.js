@@ -1,5 +1,5 @@
 import { fetchApiData } from '../../../utils/loadTranslations';
-import { URL_GET_REPORT, URL_METADATA } from '../utils/constants';
+import { URL_GET_REPORT, URL_METADATA, URL_SAVE_NEW } from '../utils/constants';
 
 export const UPDATE_REPORT_DETAILS_TOTAL_GROUPING = 'UPDATE_REPORT_DETAILS_TOTAL_GROUPING';
 export const UPDATE_REPORT_DETAILS_TOTALS_ONLY = 'UPDATE_REPORT_DETAILS_TOTALS_ONLY';
@@ -32,7 +32,11 @@ export const FETCH_METADATA_ERROR = ' FETCH_METADATA_ERROR';
 
 export const FETCH_REPORT_PENDING = 'FETCH_REPORT_PENDING';
 export const FETCH_REPORT_SUCCESS = 'FETCH_REPORT_SUCCESS';
-export const FETCH_REPORT_ERROR = ' FETCH_REPORT_ERROR';
+export const FETCH_REPORT_ERROR = 'FETCH_REPORT_ERROR';
+
+export const SAVE_NEW_REPORT_PENDING = 'SAVE_NEW_REPORT_PENDING';
+export const SAVE_NEW_REPORT_SUCCESS = 'SAVE_NEW_REPORT_SUCCESS';
+export const SAVE_NEW_REPORT_ERROR = 'SAVE_NEW_REPORT_ERROR';
 
 export function updateReportDetailsTotalGrouping(payload) {
   return {
@@ -241,6 +245,26 @@ export function updateId(payload) {
   };
 }
 
+export function saveNewReportPending() {
+  return {
+    type: SAVE_NEW_REPORT_PENDING
+  };
+}
+
+export function saveNewReportSuccess(payload) {
+  return {
+    type: SAVE_NEW_REPORT_SUCCESS,
+    payload
+  };
+}
+
+export function saveNewReportError(error) {
+  return {
+    type: SAVE_NEW_REPORT_ERROR,
+    error
+  };
+}
+
 export const getMetadata = (type, profile) => dispatch => {
   dispatch(fetchMetaDataPending());
   const url = type ? `${URL_METADATA}?type=${type}&profile=${profile}` : URL_METADATA;
@@ -256,4 +280,13 @@ export const fetchReport = (id) => dispatch => {
     url: URL_GET_REPORT.replace('{reportId}', id)
   }).then((data) => dispatch(fetchReportSuccess(data)))
     .catch(error => dispatch(fetchReportError(error)));
+};
+
+export const saveNew = (data) => dispatch => {
+  dispatch(saveNewReportPending());
+  return fetchApiData({
+    url: `${URL_SAVE_NEW}?reportId=null`,
+    body: data
+  }).then((result) => dispatch(saveNewReportSuccess(result)))
+    .catch(error => dispatch(saveNewReportError(error)));
 };

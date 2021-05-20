@@ -9,6 +9,8 @@ import {
   // eslint-disable-next-line no-unused-vars
   TABS, TRN_PREFIX, URL_SETTINGS_TABS, URL_SETTINGS_REPORTS, REPORTS, PROFILE_TAB
 } from '../utils/constants';
+import { fetchGlobalSettings } from '../actions/settingsActions';
+import { extractSettings } from '../reducers/utils/settingsDataConverter';
 
 const SettingsWidget = require('../../../../../ampTemplate/node_modules/amp-settings/dist/amp-settings');
 
@@ -23,7 +25,7 @@ class Settings extends Component {
   }
 
   componentDidMount() {
-    const { settings, profile } = this.props;
+    const { settings, profile, _fetchGlobalSettings } = this.props;
     widget = new SettingsWidget.SettingsWidget({
       el: 'settings-popup',
       draggable: true,
@@ -31,7 +33,14 @@ class Settings extends Component {
       isPopup: true,
       definitionUrl: profile === PROFILE_TAB ? URL_SETTINGS_TABS : URL_SETTINGS_REPORTS
     });
-    widget.restoreFromSaved(settings);
+    if (settings === null) {
+      _fetchGlobalSettings().then((action) => {
+        const gs = extractSettings(action.payload);
+        return widget.restoreFromSaved(gs);
+      });
+    } else {
+      widget.restoreFromSaved(settings);
+    }
     // eslint-disable-next-line react/no-string-refs
     widget.setElement(this.refs.settingsPopup);
     widget.on('applySettings', this.applySettings);
@@ -83,13 +92,17 @@ const mapStateToProps = state => ({
   profile: state.uiReducer.profile,
   settings: state.uiReducer.settings,
 });
-const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+  _fetchGlobalSettings: () => fetchGlobalSettings()
+}, dispatch);
 
 Settings.propTypes = {
   onApplySettings: PropTypes.func.isRequired,
   settings: PropTypes.object,
   translations: PropTypes.object.isRequired,
   profile: PropTypes.string,
+  _fetchGlobalSettings: PropTypes.func.isRequired,
 };
 
 Settings.defaultProps = {

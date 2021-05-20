@@ -4,6 +4,7 @@ export const URL_PREVIEW = '/rest/data/report/preview';
 export const URL_GET_REPORT = '/rest/reports/{reportId}';
 export const URL_SETTINGS_REPORTS = '/rest/settings-definitions/reports';
 export const URL_SETTINGS_TABS = '/rest/settings-definitions/tabs';
+export const URL_GLOBAL_SETTINGS = '/rest/amp/settings';
 export const REPORTS = 'REPORTS';
 export const TABS = 'TABS';
 export const PROFILE_TAB = 'T';

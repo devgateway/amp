@@ -10,8 +10,12 @@ export default class FiltersAndSettings extends Component {
     return (
       <>
         <Segment loading={loading} placeholder textAlign="left" className="filters_segment">
-          <Filters onApplyFilters={() => {}} />
-          <Settings />
+          {!loading ? (
+            <>
+              <Filters onApplyFilters={() => {}} />
+              <Settings />
+            </>
+          ) : null}
         </Segment>
       </>
     );

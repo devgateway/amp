@@ -227,6 +227,9 @@ public class AmpDonorFundingFormSectionFeature extends
             send(getPage(), Broadcast.BREADTH, new GPINiSurveyListUpdateEvent(target));
         }
     }
+    public  void setTemplateFilter(AmpTemplatesVisibility template) {
+        searchOrganizationComponent.setTemplateFilter(template);
+    }
 
     /**
      * @param id
@@ -426,6 +429,10 @@ public class AmpDonorFundingFormSectionFeature extends
                 "Search Funding Organizations", searchOrgs, null);
         add(searchOrganizationComponent);
 
+        Consumer<AmpTemplatesVisibility> setTemplateFilterConsumer = this::setTemplateFilter;
+
+        this.configureTemplate("DN", setTemplateFilterConsumer);
+
         orgRoleSelector = new AmpOrgRoleSelectorComponent("orgRoleSelector", am, getRoleFilter());
         add(orgRoleSelector);
 
@@ -533,28 +540,24 @@ public class AmpDonorFundingFormSectionFeature extends
     public void addToOrganisationSection(AmpOrganisation org) {
         // check if org has been added with the selected role to the Related
         // Organisation section, if not then add it
-        // Only for non-ssc activities
         AmpRole selectedRole = getSelectedAmpRole();
         if (selectedRole != null) {
             String roleCode = selectedRole.getRoleCode();
-            // Constants.FUNDING_AGENCY;
-            if (!ActivityUtil.ACTIVITY_TYPE_SSC.equals(((AmpAuthWebSession) getSession()).getFormType())) {
-                boolean found = false;
-                Set<AmpOrgRole> orgRoles = orgRoleModel.getObject();
-                for (AmpOrgRole role : orgRoles) {
-                    if (role.getRole().getRoleCode().equals(roleCode)
-                            && role.getOrganisation().getAmpOrgId().equals(org.getAmpOrgId())) {
-                        found = true;
-                        break;
-                    }
+            boolean found = false;
+            Set<AmpOrgRole> orgRoles = orgRoleModel.getObject();
+            for (AmpOrgRole role : orgRoles) {
+                if (role.getRole().getRoleCode().equals(roleCode)
+                        && role.getOrganisation().getAmpOrgId().equals(org.getAmpOrgId())) {
+                    found = true;
+                    break;
                 }
-                if (!found) {
-                    AmpOrgRole role = new AmpOrgRole();
-                    role.setOrganisation(org);
-                    role.setActivity(am.getObject());
-                    role.setRole(DbUtil.getAmpRole(roleCode));
-                    orgRoles.add(role);
-                }
+            }
+            if (!found) {
+                AmpOrgRole role = new AmpOrgRole();
+                role.setOrganisation(org);
+                role.setActivity(am.getObject());
+                role.setRole(DbUtil.getAmpRole(roleCode));
+                orgRoles.add(role);
             }
         }
 
@@ -640,8 +643,11 @@ public class AmpDonorFundingFormSectionFeature extends
     public boolean isTabsView() {
         return isTabsView;
     }
-    
-    public void setSearchOrgsComponentVisibility(boolean visible) {
+
+    public void setSearchOrgsComponentVisibility(boolean visible, AjaxRequestTarget target) {
         this.searchOrganizationComponent.setVisibilityAllowed(visible);
+        if (target != null) {
+            target.add(this.searchOrganizationComponent.getParent());
+        }
     }
 }

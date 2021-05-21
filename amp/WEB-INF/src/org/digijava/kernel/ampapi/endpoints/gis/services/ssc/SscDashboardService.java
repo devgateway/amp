@@ -23,6 +23,7 @@ import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.module.common.util.DateTimeUtil;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -95,6 +96,10 @@ public final class SscDashboardService {
             }
 
         }
+
+        result.getSscDashboardXlsResultRows()
+                .sort(Comparator.comparing(SscDashboardXlsResultRow::getYear).reversed()
+                        .thenComparing(SscDashboardXlsResultRow::getSector));
         return result;
     }
 

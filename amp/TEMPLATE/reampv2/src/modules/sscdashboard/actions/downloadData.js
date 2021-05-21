@@ -5,7 +5,12 @@ import {
   fetchXlsReportPending,
   fetchXlsReportSuccess
 } from './downloadDataActions';
-import { API_XLS_REPORT_URL } from '../utils/constants';
+import {
+  API_XLS_REPORT_URL,
+  FILTER_DONOR_AGENCY_COUNTRY,
+  FILTER_PRIMARY_SECTOR,
+  FILTER_SSC_MODALITIES
+} from '../utils/constants';
 
 const report = {
   settings: {
@@ -16,18 +21,19 @@ const report = {
 };
 export const dataDownloaded = () => dispatch => {
   dispatch(fetchXlsReportDone());
-}
+};
+
 export const downloadData = (selectedFilters) => dispatch => {
   dispatch(fetchXlsReportPending());
   // selectedYears
   if (selectedFilters.selectedSectors.length > 0) {
-    report.filters['primary-sector'] = selectedFilters.selectedSectors;
+    report.filters[FILTER_PRIMARY_SECTOR] = selectedFilters.selectedSectors;
   }
   if (selectedFilters.selectedModalities.length > 0) {
-    report.filters.modalities = selectedFilters.selectedModalities;
+    report.filters[FILTER_SSC_MODALITIES] = selectedFilters.selectedModalities;
   }
   if (selectedFilters.selectedCountries.length > 0) {
-    report.filters['donor-agency-country'] = selectedFilters.selectedCountries;
+    report.filters[FILTER_DONOR_AGENCY_COUNTRY] = selectedFilters.selectedCountries;
   }
   if (selectedFilters.selectedYears) {
     report.years = selectedFilters.selectedYears;

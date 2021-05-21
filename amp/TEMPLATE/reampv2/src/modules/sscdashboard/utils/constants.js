@@ -44,6 +44,10 @@ export const COUNTRY_COLUMN = 'country-column';
 export const FALLBACK_FLAG = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAbCAQAAACkGQXlAAAAI0lEQVR42mP8L8lAVcA4auCogaMGjho4auCogaMGjhpINAAAOBcdpLw/CDsAAAAASUVORK5CYII=';
 export const OTHERS_CODE = '000';
 export const INVALID_COLUMN_ERROR_CODE = '0602';
+export const FILTER_PRIMARY_SECTOR = 'primary-sector';
+export const FILTER_SSC_MODALITIES = 'ssc-modalities';
+export const FILTER_DONOR_AGENCY_COUNTRY = 'donor-agency-country';
+
 
 export const SECTOR_COLOR_MAP = new Map([
   ['110', '#d46453'], ['120', '#f5a15d'], ['130', '#ffcf8e'], ['140', '#ff7a7d'], ['150', '#ff417d'],

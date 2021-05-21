@@ -57,7 +57,7 @@ class SscDashboardHome extends Component {
         const initialData = this.getFilteredData();
         this.countriesWithData = initialData.map(c => c.id);
         const selectedYears = [];
-        // selectedYears.push(projects.activities.mostRecentYear);
+        selectedYears.push(projects.activities.mostRecentYear);
         this.handleSelectedYearChanged(selectedYears);
         // eslint-disable-next-line react/no-did-update-set-state
         this.setState({

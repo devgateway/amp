@@ -141,6 +141,8 @@ public class ReportColumnProvider extends ReportEntityProvider {
 
     private TranslatorService translatorService;
 
+    private Map<ReportType, Map<String, List<AmpColumns>>> ampTreeColumnsMapByType = new HashMap<>();
+
     private AmpTreeVisibility ampTreeVisibility;
 
     public ReportColumnProvider(final TranslatorService translatorService) {
@@ -148,20 +150,30 @@ public class ReportColumnProvider extends ReportEntityProvider {
     }
 
     public List<ReportColumn> getColumns(final ReportProfile profile, final ReportType type) {
-        List<AmpColumns> ampColumns = fetchAmpColumns();
-        Map<String, List<AmpColumns>> stringListMap = buildAmpTreeColumnSimple(ampColumns, type);
+        Map<String, List<AmpColumns>> stringListMap = getAmpTreeColumnByType(type);
 
         List<ReportColumn> reportColumns = new ArrayList<>();
 
         for (Map.Entry<String, List<AmpColumns>> entry : stringListMap.entrySet()) {
             String category = entry.getKey();
             reportColumns.addAll(entry.getValue().stream()
-                            .map(column -> convertAmpColumnToReportColumn(column, category, profile, type))
-                            .collect(Collectors.toList())
+                    .map(column -> convertAmpColumnToReportColumn(column, category, profile, type))
+                    .collect(Collectors.toList())
             );
         }
 
         return reportColumns;
+    }
+
+    private Map<String, List<AmpColumns>> getAmpTreeColumnByType(final ReportType type) {
+        if (ampTreeColumnsMapByType.containsKey(type)) {
+            return ampTreeColumnsMapByType.get(type);
+        }
+
+        List<AmpColumns> ampColumns = fetchAmpColumns();
+        ampTreeColumnsMapByType.put(type, buildAmpTreeColumnSimple(ampColumns, type));
+
+        return ampTreeColumnsMapByType.get(type);
     }
 
     public List<AmpColumns> fetchAmpColumns() {
@@ -186,7 +198,6 @@ public class ReportColumnProvider extends ReportEntityProvider {
 
     private Map<String, List<AmpColumns>> buildAmpTreeColumnSimple(List<AmpColumns> ampColumns, ReportType type) {
         ArrayList<AmpColumnsVisibility> visibleAmpColumns = new ArrayList<>();
-
 
         HttpSession session = TLSUtils.getRequest().getSession();
         ServletContext context = session.getServletContext();
@@ -280,7 +291,7 @@ public class ReportColumnProvider extends ReportEntityProvider {
             return false;
         }
 
-        //skip build columns with no rights
+        // skip build columns with no rights
         Map scope = PermissionUtil.getScope(TLSUtils.getRequest().getSession());
         if (ampFieldVisibility.getPermission(false) != null
                 && !ampFieldVisibility.canDo(GatePermConst.Actions.VIEW, scope)) {
@@ -332,5 +343,17 @@ public class ReportColumnProvider extends ReportEntityProvider {
         return PROPOSED_PROJECT_AMOUNT.equalsIgnoreCase(columnName)
                 || REVISED_PROJECT_AMOUNT.equalsIgnoreCase(columnName)
                 || isMTEFName(columnName);
+    }
+
+    public List<AmpColumns> getMeasurelessColumns() {
+        return fetchAmpColumns().stream()
+                .filter(c -> MEASURELESS_ONLY_HIERARCHIES.contains(c.getColumnName()))
+                .collect(Collectors.toList());
+    }
+
+    public List<AmpColumns> getAmountColumns() {
+        return fetchAmpColumns().stream()
+                .filter(c -> isAmountColumn(c.getColumnName()))
+                .collect(Collectors.toList());
     }
 }

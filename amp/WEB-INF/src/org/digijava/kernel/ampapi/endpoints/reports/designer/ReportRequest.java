@@ -13,6 +13,8 @@ import org.digijava.module.aim.dbentity.EntityResolver;
 import java.util.List;
 import java.util.Map;
 
+import static java.lang.Boolean.TRUE;
+
 /**
  * @author Viorel Chihai
  */
@@ -124,12 +126,20 @@ public class ReportRequest {
         return summary;
     }
 
+    public Boolean isSummary() {
+        return TRUE.equals(summary);
+    }
+
     public void setSummary(final Boolean summary) {
         this.summary = summary;
     }
 
     public Boolean getTab() {
         return tab;
+    }
+
+    public Boolean isTab() {
+        return TRUE.equals(tab);
     }
 
     public void setTab(final Boolean tab) {

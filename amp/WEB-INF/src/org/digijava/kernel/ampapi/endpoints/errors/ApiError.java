@@ -64,7 +64,7 @@ public class ApiError {
     public static final int ERROR_CLASS_DATAFREEZE_ID = 14;
     public static final int ERROR_CLASS_PERFORMANCERULE_ID = 15;
     public static final int ERROR_CLASS_MACHINE_TRANSLATION_ID = 16;
-    public static final int ERROR_CLASS_REPORT_DESIGNER_ID = 17;
+    public static final int ERROR_CLASS_REPORT_DESIGNER_ID = 18;
 
     public static final int ERROR_CLASS_TEST_ID = 99;
 

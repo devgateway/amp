@@ -49,5 +49,6 @@
   "amp.reportGenerator:category": "Category",
   "amp.reportGenerator:appDescription": "The Report Generator allows you to create customized reports that fit your needs, based on data in the AMP. Starting with Report Details, click through each step to create your own report.",
   "amp.reportGenerator:hideAppliedFilters": "(Hide applied filters)",
-  "amp.reportGenerator:showAppliedFilters": "(Show applied filters)"
+  "amp.reportGenerator:showAppliedFilters": "(Show applied filters)",
+  "amp.reportGenerator:notLoggedInError": "ERROR: Not logged in"
 }

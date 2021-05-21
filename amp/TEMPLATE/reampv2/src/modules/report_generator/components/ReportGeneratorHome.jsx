@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Container } from 'semantic-ui-react';
+import { Container, Segment } from 'semantic-ui-react';
 import { ReportGeneratorContext } from './StartUp';
 import MainHeader from './MainHeader';
 import MainContent from './MainContent';
@@ -11,11 +11,13 @@ import {
   getMetadata, fetchReport, updateProfile, updateId
 } from '../actions/stateUIActions';
 import { getProfileFromReport } from '../utils/Utils';
+import ErrorMessage from './ErrorMessage';
+import { TRN_PREFIX } from '../utils/constants';
 
 class ReportGeneratorHome extends Component {
   constructor() {
     super();
-    this.state = { showChildren: false };
+    this.state = { showChildren: false, error: false };
   }
 
   componentDidMount() {
@@ -32,7 +34,11 @@ class ReportGeneratorHome extends Component {
       return _fetchReport(id).then((action) => {
         const profile = getProfileFromReport(action.payload);
         _updateProfile(profile);
-        return _getMetadata(action.payload.type, profile).then(() => this.setState({ showChildren: true }));
+        if (action.payload) {
+          return _getMetadata(action.payload.type, profile).then(() => this.setState({ showChildren: true }));
+        } else {
+          return this.setState({ error: true });
+        }
       });
     } else {
       _updateProfile(profileFromURL);
@@ -43,11 +49,17 @@ class ReportGeneratorHome extends Component {
   }
 
   render() {
-    const { showChildren: canLoadChildren } = this.state;
+    const { showChildren: canLoadChildren, error } = this.state;
+    const { translations } = this.props;
     return (
       <Container>
         <MainHeader />
         <FiltersAndSettings loading={!canLoadChildren} />
+        {error ? (
+          <Segment>
+            <ErrorMessage visible message={translations[`${TRN_PREFIX}notLoggedInError`]} />
+          </Segment>
+        ) : null}
         <MainContent />
       </Container>
     );
@@ -71,6 +83,7 @@ ReportGeneratorHome.propTypes = {
   _updateProfile: PropTypes.func.isRequired,
   _updateId: PropTypes.func.isRequired,
   location: PropTypes.object.isRequired,
+  translations: PropTypes.object.isRequired,
 };
 
 ReportGeneratorHome.defaultProps = {};

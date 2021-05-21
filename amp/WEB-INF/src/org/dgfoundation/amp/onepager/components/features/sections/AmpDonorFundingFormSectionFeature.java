@@ -4,16 +4,6 @@
  */
 package org.dgfoundation.amp.onepager.components.features.sections;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -56,6 +46,7 @@ import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRole;
+import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -66,6 +57,17 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.function.Consumer;
 
 /**
  * The donor funding section of the activity form. Includes selecting an org,
@@ -155,7 +157,7 @@ public class AmpDonorFundingFormSectionFeature extends
     /**
      * Removes an item from a list editor 
      * @param listEditor
-     * @param itemToDelete
+     * @param orgRole
      * @param target
      * @return true if item was deleted
      */
@@ -430,8 +432,7 @@ public class AmpDonorFundingFormSectionFeature extends
         add(searchOrganizationComponent);
 
         Consumer<AmpTemplatesVisibility> setTemplateFilterConsumer = this::setTemplateFilter;
-
-        this.configureTemplate("DN", setTemplateFilterConsumer);
+        this.configureTemplate(Constants.FUNDING_AGENCY, setTemplateFilterConsumer);
 
         orgRoleSelector = new AmpOrgRoleSelectorComponent("orgRoleSelector", am, getRoleFilter());
         add(orgRoleSelector);

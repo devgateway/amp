@@ -124,7 +124,7 @@ class HorizontalFilters extends Component {
                   filterName="amp.ssc.dashboard:Country"
                   filterId="ddCountry"
                   parentId="accordion-filter"
-                  categoryFetcher={this.getCategoryForCountry}
+                  categoryFetcher={getCategoryForCountry}
                   sortData
                   categoriesSelection={categoriesSelection}
                   selectedOptions={selectedCountries}

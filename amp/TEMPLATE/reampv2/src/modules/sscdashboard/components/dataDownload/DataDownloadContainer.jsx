@@ -149,6 +149,7 @@ class DataDownloadContainer extends Component {
                   options={countries}
                   filterName="amp.ssc.dashboard:Country-download"
                   filterId="ddCountryDownload"
+                  sortData
                   selectedOptions={selectedCountries}
                   label="amp.ssc.dashboard:Sector"
                   onChange={this.handleSelectedCountryDataDownloadChanged.bind(this)}

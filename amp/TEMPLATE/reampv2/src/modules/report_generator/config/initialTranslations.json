@@ -50,5 +50,6 @@
   "amp.reportGenerator:appDescription": "The Report Generator allows you to create customized reports that fit your needs, based on data in the AMP. Starting with Report Details, click through each step to create your own report.",
   "amp.reportGenerator:hideAppliedFilters": "(Hide applied filters)",
   "amp.reportGenerator:showAppliedFilters": "(Show applied filters)",
-  "amp.reportGenerator:notLoggedInError": "ERROR: Not logged in"
+  "amp.reportGenerator:errorLoadingReport": "ERROR: Cant load report data.",
+  "amp.reportGenerator:errorDuplicatedName": "There is already a report with the same name. Please choose a different one."
 }

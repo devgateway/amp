@@ -37,3 +37,7 @@ export const SHOW_ORIGINAL_CURRENCY = 'show-original-currency';
 export const USE_FILTERS = 'use-filters';
 export const OPTIONS_CHECKBOX_OPTIONS = [EMPTY_FUNDING_COLUMNS, SPLIT_BY_FUNDING, SHOW_ORIGINAL_CURRENCY, SHOW_PLEDGES,
   USE_FILTERS];
+
+// Section with constants for the API errors, MUST MATCH ApiError.java and the ids assigned to each API error.
+export const ERROR_CLASS_REPORT_DESIGNER_ID = '17';
+export const API_ERROR_DUPLICATED_NAME = '05';

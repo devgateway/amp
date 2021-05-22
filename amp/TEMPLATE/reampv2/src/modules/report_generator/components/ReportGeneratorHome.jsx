@@ -57,7 +57,7 @@ class ReportGeneratorHome extends Component {
         <FiltersAndSettings loading={!canLoadChildren} />
         {error ? (
           <Segment>
-            <ErrorMessage visible message={translations[`${TRN_PREFIX}notLoggedInError`]} />
+            <ErrorMessage visible message={translations[`${TRN_PREFIX}errorLoadingReport`]} />
           </Segment>
         ) : null}
         <MainContent />

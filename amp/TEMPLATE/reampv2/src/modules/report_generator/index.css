@@ -275,7 +275,7 @@ i.arrow {
 .preview-container {
     width: 100%;
     height: 400px;
-    overflow: scroll;
+    overflow: auto;
     background-color: white;
     font-size: 0.8em;
 }

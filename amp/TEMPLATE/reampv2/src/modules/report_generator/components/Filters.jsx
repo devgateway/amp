@@ -4,16 +4,13 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { ReportGeneratorContext } from './StartUp';
 import { TRN_PREFIX } from '../utils/constants';
-import { updateAppliedFilters, updateReportDetailsUseAboveFilters } from '../actions/stateUIActions';
+import { getMetadata, updateAppliedFilters, updateReportDetailsUseAboveFilters } from '../actions/stateUIActions';
 import { toggleIcon } from '../utils/appliedFiltersExtenalCode';
 import { hasFilters } from '../utils/Utils';
 
 const Filter = require('../../../../../ampTemplate/node_modules/amp-filter/dist/amp-filter');
 
-const filter = new Filter({
-  draggable: true,
-  caller: 'DASHBOARD'
-});
+let filter = null;
 
 class Filters extends Component {
   constructor(props) {
@@ -24,13 +21,24 @@ class Filters extends Component {
   }
 
   componentDidMount() {
-    filter.on('apply', this.applyFilters);
-    filter.on('cancel', this.hideFilters);
+    const { _getMetadata } = this.props;
 
-    return filter.loaded.then(() => {
-      // eslint-disable-next-line react/no-string-refs
-      filter.setElement(this.refs.filterPopup);
-      return true;
+    /* NOTICE WE DONT SEND ANY PARAM HERE BECAUSE WE JUST WANT THE PROMISE */
+    return _getMetadata().then((action) => {
+      filter = new Filter({
+        draggable: true,
+        caller: 'REPORTS',
+        reportType: action.payload.type
+      });
+
+      filter.on('apply', this.applyFilters);
+      filter.on('cancel', this.hideFilters);
+
+      return filter.loaded.then(() => {
+        // eslint-disable-next-line react/no-string-refs
+        filter.setElement(this.refs.filterPopup);
+        return true;
+      });
     });
   }
 
@@ -86,7 +94,7 @@ class Filters extends Component {
       filters, html, _updateAppliedFilters
     } = this.props;
     // If this is a saved report we might need to create the html for the first time.
-    if (html === null && filters) {
+    if (html === null && filters && filter) {
       const html_ = filter.getAppliedFilters({ returnHTML: true });
       _updateAppliedFilters(filters, html_);
       return <div dangerouslySetInnerHTML={{ __html: html_ }} />;
@@ -138,11 +146,13 @@ const mapStateToProps = state => ({
   reportPending: state.uiReducer.reportPending,
   filters: state.uiReducer.filters,
   html: state.uiReducer.appliedFilters,
+  type: state.type,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   _updateAppliedFilters: (data, html) => dispatch(updateAppliedFilters(data, html)),
   _updateReportDetailsUseAboveFilters: (data) => dispatch(updateReportDetailsUseAboveFilters(data)),
+  _getMetadata: () => getMetadata(),
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Filters);
@@ -154,6 +164,8 @@ Filters.propTypes = {
   _updateReportDetailsUseAboveFilters: PropTypes.func.isRequired,
   filters: PropTypes.object,
   html: PropTypes.string,
+  type: PropTypes.string.isRequired,
+  _getMetadata: PropTypes.func.isRequired,
 };
 
 Filters.defaultProps = {

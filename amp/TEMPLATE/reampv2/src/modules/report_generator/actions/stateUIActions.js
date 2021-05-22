@@ -28,7 +28,8 @@ export const UPDATE_ID = 'UPDATE_ID';
 
 export const FETCH_METADATA_PENDING = 'FETCH_METADATA_PENDING';
 export const FETCH_METADATA_SUCCESS = 'FETCH_METADATA_SUCCESS';
-export const FETCH_METADATA_ERROR = ' FETCH_METADATA_ERROR';
+export const FETCH_METADATA_ERROR = 'FETCH_METADATA_ERROR';
+export const FETCH_METADATA_IGNORE = 'FETCH_METADATA_IGNORE';
 
 export const FETCH_REPORT_PENDING = 'FETCH_REPORT_PENDING';
 export const FETCH_REPORT_SUCCESS = 'FETCH_REPORT_SUCCESS';
@@ -196,6 +197,12 @@ export function fetchMetaDataError(error) {
   };
 }
 
+export function fetchMetaDataIgnore() {
+  return {
+    type: FETCH_METADATA_IGNORE,
+  };
+}
+
 export function fetchReportPending() {
   return {
     type: FETCH_REPORT_PENDING
@@ -265,13 +272,22 @@ export function saveNewReportError(error) {
   };
 }
 
-export const getMetadata = (type, profile) => dispatch => {
-  dispatch(fetchMetaDataPending());
-  const url = type ? `${URL_METADATA}?type=${type}&profile=${profile}` : URL_METADATA;
-  return Promise.all([fetchApiData({
-    url
-  })]).then((data) => dispatch(fetchMetaDataSuccess(data[0])))
-    .catch(error => dispatch(fetchMetaDataError(error)));
+let getMetadataPromise = null;
+export const getMetadata = (type, profile) => (dispatch, getState) => {
+  const state = getState();
+  if (state.uiReducer.metaDataPending || state.uiReducer.metaDataLoaded || state.uiReducer.error) {
+    dispatch(fetchMetaDataIgnore());
+    return getMetadataPromise;
+  } else {
+    dispatch(fetchMetaDataPending());
+    const url = type ? `${URL_METADATA}?type=${type}&profile=${profile}` : URL_METADATA;
+    getMetadataPromise = Promise.all([fetchApiData({
+      url
+    })])
+      .then((data) => dispatch(fetchMetaDataSuccess(data[0])))
+      .catch(error => dispatch(fetchMetaDataError(error)));
+    return getMetadataPromise;
+  }
 };
 
 export const fetchReport = (id) => dispatch => {

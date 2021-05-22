@@ -62,7 +62,7 @@ export function convertReportType(value) {
 }
 
 export function hasFilters(filters) {
-  return filters && Object.keys(filters).length > 0;
+  return filters && Object.keys(filters).length > 0 && Object.keys(filters).some(i => filters[i]);
 }
 
 /**

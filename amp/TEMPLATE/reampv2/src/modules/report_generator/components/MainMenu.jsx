@@ -66,8 +66,8 @@ class MainMenu extends Component {
       ownerId: uiReducer.reportDetails.ownerId,
       includeLocationChildren: uiReducer.reportDetails.includeLocationChildren,
       columns: uiReducer.columns.selected,
-      hierarchies: uiReducer.hierarchies.selected, /* TODO: sort this collection. */
-      measures: uiReducer.measures.selected, /* IDEM */
+      hierarchies: uiReducer.hierarchies.order.filter(i => uiReducer.hierarchies.selected.find(j => j === i)),
+      measures: uiReducer.measures.order.filter(i => uiReducer.measures.selected.find(j => j === i)),
       filters: uiReducer.filters,
       settings: uiReducer.settings,
     };

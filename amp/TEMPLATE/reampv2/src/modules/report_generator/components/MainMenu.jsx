@@ -41,9 +41,6 @@ class MainMenu extends Component {
     this.setState({ saveModalOpen: open, isNewReport: isNew });
   }
 
-  saveReport = () => {
-  }
-
   render() {
     const {
       modalSaveError, saveModalOpen, isNewReport

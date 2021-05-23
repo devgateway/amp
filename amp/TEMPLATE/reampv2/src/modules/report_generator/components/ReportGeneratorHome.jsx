@@ -10,7 +10,7 @@ import FiltersAndSettings from './FiltersAndSettings';
 import {
   getMetadata, fetchReport, updateProfile, updateId, saveNew, save
 } from '../actions/stateUIActions';
-import { convertTotalGrouping, getProfileFromReport } from '../utils/Utils';
+import { convertTotalGrouping, getProfileFromReport, hasFilters } from '../utils/Utils';
 import ErrorMessage from './ErrorMessage';
 import { TRN_PREFIX } from '../utils/constants';
 
@@ -71,9 +71,17 @@ class ReportGeneratorHome extends Component {
       columns: uiReducer.columns.selected,
       hierarchies: uiReducer.hierarchies.order.filter(i => uiReducer.hierarchies.selected.find(j => j === i)),
       measures: uiReducer.measures.order.filter(i => uiReducer.measures.selected.find(j => j === i)),
-      filters: uiReducer.filters,
       settings: uiReducer.settings,
     };
+    // Cleanup filters.
+    if (hasFilters(uiReducer.filters)) {
+      body.filters = uiReducer.filters;
+      Object.keys(uiReducer.filters).forEach(key => {
+        if (uiReducer.filters[key] === null) {
+          delete uiReducer.filters[key];
+        }
+      });
+    }
     return body;
   }
 

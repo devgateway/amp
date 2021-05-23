@@ -8,7 +8,7 @@ import MainHeader from './MainHeader';
 import MainContent from './MainContent';
 import FiltersAndSettings from './FiltersAndSettings';
 import {
-  getMetadata, fetchReport, updateProfile, updateId, saveNew
+  getMetadata, fetchReport, updateProfile, updateId, saveNew, save
 } from '../actions/stateUIActions';
 import { convertTotalGrouping, getProfileFromReport } from '../utils/Utils';
 import ErrorMessage from './ErrorMessage';
@@ -49,10 +49,10 @@ class ReportGeneratorHome extends Component {
     }
   }
 
-  saveNewReport = () => {
-    const { uiReducer, _saveNew, translations } = this.props;
+  commonReport = (isNew) => {
+    const { uiReducer } = this.props;
     const body = {
-      id: null,
+      id: isNew ? null : uiReducer.id,
       name: uiReducer.reportDetails.name,
       description: uiReducer.reportDetails.description,
       type: uiReducer.type,
@@ -74,21 +74,37 @@ class ReportGeneratorHome extends Component {
       filters: uiReducer.filters,
       settings: uiReducer.settings,
     };
+    return body;
+  }
 
-    return _saveNew(body).then(response => {
-      if (response.error) {
-        const errors = [];
-        Object.keys(response.error).forEach(i => {
-          const trnLabel = translations[`${TRN_PREFIX}apiError${i}`];
-          errors.push({ id: i, label: trnLabel || response.error[i] });
-        });
-        if (errors.length > 0) {
-          this.setState({ errors: errors.map(i => <ErrorMessage key={i.id} visible message={i.label} />) });
-          return null;
-        }
+  saveReport = () => {
+    const { _save, uiReducer } = this.props;
+    const body = this.commonReport(false);
+    return _save(uiReducer.id, body).then(response => this.processAfterSave(response));
+  }
+
+  saveNewReport = () => {
+    const { _saveNew } = this.props;
+    const body = this.commonReport(true);
+    return _saveNew(body).then(response => this.processAfterSave(response));
+  }
+
+  processAfterSave = (response) => {
+    const { translations } = this.props;
+    if (response.error) {
+      const errors = [];
+      Object.keys(response.error).forEach(i => {
+        const trnLabel = translations[`${TRN_PREFIX}apiError${i}`];
+        errors.push({ id: i, label: trnLabel || response.error[i] });
+      });
+      if (errors.length > 0) {
+        this.setState({ errors: errors.map(i => <ErrorMessage key={i.id} visible message={i.label} />) });
+        return null;
       }
-      return null;
-    });
+    }
+    // TODO: Maybe we need to save the url we are coming from.
+    window.location.href = '/viewTeamReports.do?tabs=false&reset=true';
+    return null;
   }
 
   render() {
@@ -102,7 +118,7 @@ class ReportGeneratorHome extends Component {
             {errors}
           </Segment>
         ) : null}
-        <MainContent saveNewReport={this.saveNewReport} />
+        <MainContent saveNewReport={this.saveNewReport} saveReport={this.saveReport} />
       </Container>
     );
   }
@@ -119,6 +135,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   _updateProfile: (data) => updateProfile(data),
   _updateId: (data) => updateId(data),
   _saveNew: (data) => saveNew(data),
+  _save: (id, data) => save(id, data),
 }, dispatch);
 
 ReportGeneratorHome.propTypes = {
@@ -129,6 +146,7 @@ ReportGeneratorHome.propTypes = {
   location: PropTypes.object.isRequired,
   translations: PropTypes.object.isRequired,
   _saveNew: PropTypes.func.isRequired,
+  _save: PropTypes.func.isRequired,
   uiReducer: PropTypes.object.isRequired,
 };
 

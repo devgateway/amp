@@ -48,7 +48,7 @@ class MainMenu extends Component {
     const {
       modalSaveError, saveModalOpen, isNewReport
     } = this.state;
-    const { translations, tab, saveNewReport } = this.props;
+    const { translations, tab, saveNewReport, saveReport } = this.props;
     return (
       <>
         <Menu fluid vertical>
@@ -86,7 +86,7 @@ class MainMenu extends Component {
           open={saveModalOpen}
           modalSaveError={modalSaveError}
           isNewReport={isNewReport}
-          save={isNewReport ? saveNewReport : this.saveReport}
+          save={isNewReport ? saveNewReport : saveReport}
           close={() => this.setSaveModalOpen(false)} />
       </>
     );
@@ -108,6 +108,7 @@ MainMenu.propTypes = {
   translations: PropTypes.object.isRequired,
   tab: PropTypes.number.isRequired,
   saveNewReport: PropTypes.func.isRequired,
+  saveReport: PropTypes.func.isRequired,
 };
 
 MainMenu.defaultProps = {

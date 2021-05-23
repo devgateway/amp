@@ -8,21 +8,21 @@ import MainHeader from './MainHeader';
 import MainContent from './MainContent';
 import FiltersAndSettings from './FiltersAndSettings';
 import {
-  getMetadata, fetchReport, updateProfile, updateId
+  getMetadata, fetchReport, updateProfile, updateId, saveNew
 } from '../actions/stateUIActions';
-import { getProfileFromReport } from '../utils/Utils';
+import { convertTotalGrouping, getProfileFromReport } from '../utils/Utils';
 import ErrorMessage from './ErrorMessage';
 import { TRN_PREFIX } from '../utils/constants';
 
 class ReportGeneratorHome extends Component {
   constructor() {
     super();
-    this.state = { showChildren: false, error: false };
+    this.state = { showChildren: false, errors: null };
   }
 
   componentDidMount() {
     const {
-      _getMetadata, _fetchReport, location, _updateProfile, _updateId
+      _getMetadata, _fetchReport, location, _updateProfile, _updateId, translations
     } = this.props;
     // eslint-disable-next-line react/destructuring-assignment,react/prop-types
     const { id } = this.props.match.params;
@@ -37,7 +37,8 @@ class ReportGeneratorHome extends Component {
         if (action.payload) {
           return _getMetadata(action.payload.type, profile).then(() => this.setState({ showChildren: true }));
         } else {
-          return this.setState({ error: true });
+          // eslint-disable-next-line max-len
+          return this.setState({ errors: [<ErrorMessage visible message={translations[`${TRN_PREFIX}errorLoadingReport`]} />] });
         }
       });
     } else {
@@ -48,26 +49,68 @@ class ReportGeneratorHome extends Component {
     }
   }
 
+  saveNewReport = () => {
+    const { uiReducer, _saveNew, translations } = this.props;
+    const body = {
+      id: null,
+      name: uiReducer.reportDetails.name,
+      description: uiReducer.reportDetails.description,
+      type: uiReducer.type,
+      groupingOption: convertTotalGrouping(uiReducer.reportDetails.selectedTotalGrouping),
+      summary: uiReducer.reportDetails.selectedSummaryReport,
+      tab: uiReducer.reportDetails.isTab,
+      publicView: uiReducer.reportDetails.publicView,
+      workspaceLinked: uiReducer.reportDetails.workspaceLinked,
+      alsoShowPledges: uiReducer.reportDetails.selectedAlsoShowPledges,
+      showOriginalCurrency: uiReducer.reportDetails.selectedShowOriginalCurrencies,
+      allowEmptyFundingColumns: uiReducer.reportDetails.selectedAllowEmptyFundingColumns,
+      splitByFunding: uiReducer.reportDetails.selectedSplitByFunding,
+      reportCategory: uiReducer.reportDetails.selectedReportCategory,
+      ownerId: uiReducer.reportDetails.ownerId,
+      includeLocationChildren: uiReducer.reportDetails.includeLocationChildren,
+      columns: uiReducer.columns.selected,
+      hierarchies: uiReducer.hierarchies.order.filter(i => uiReducer.hierarchies.selected.find(j => j === i)),
+      measures: uiReducer.measures.order.filter(i => uiReducer.measures.selected.find(j => j === i)),
+      filters: uiReducer.filters,
+      settings: uiReducer.settings,
+    };
+
+    return _saveNew(body).then(response => {
+      if (response.error) {
+        const errors = [];
+        Object.keys(response.error).forEach(i => {
+          const trnLabel = translations[`${TRN_PREFIX}apiError${i}`];
+          errors.push({ id: i, label: trnLabel || response.error[i] });
+        });
+        if (errors.length > 0) {
+          this.setState({ errors: errors.map(i => <ErrorMessage key={i.id} visible message={i.label} />) });
+          return null;
+        }
+      }
+      return null;
+    });
+  }
+
   render() {
-    const { showChildren: canLoadChildren, error } = this.state;
-    const { translations } = this.props;
+    const { showChildren: canLoadChildren, errors } = this.state;
     return (
       <Container>
         <MainHeader />
         <FiltersAndSettings loading={!canLoadChildren} />
-        {error ? (
+        {errors ? (
           <Segment>
-            <ErrorMessage visible message={translations[`${TRN_PREFIX}errorLoadingReport`]} />
+            {errors}
           </Segment>
         ) : null}
-        <MainContent />
+        <MainContent saveNewReport={this.saveNewReport} />
       </Container>
     );
   }
 }
 
 const mapStateToProps = state => ({
-  translations: state.translationsReducer.translations
+  translations: state.translationsReducer.translations,
+  uiReducer: state.uiReducer,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -75,6 +118,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   _fetchReport: (id) => fetchReport(id),
   _updateProfile: (data) => updateProfile(data),
   _updateId: (data) => updateId(data),
+  _saveNew: (data) => saveNew(data),
 }, dispatch);
 
 ReportGeneratorHome.propTypes = {
@@ -84,6 +128,8 @@ ReportGeneratorHome.propTypes = {
   _updateId: PropTypes.func.isRequired,
   location: PropTypes.object.isRequired,
   translations: PropTypes.object.isRequired,
+  _saveNew: PropTypes.func.isRequired,
+  uiReducer: PropTypes.object.isRequired,
 };
 
 ReportGeneratorHome.defaultProps = {};

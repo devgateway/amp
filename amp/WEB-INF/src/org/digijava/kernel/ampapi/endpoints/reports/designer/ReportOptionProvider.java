@@ -165,7 +165,11 @@ public class ReportOptionProvider {
 
     private boolean isCurrentMemberManager() {
         TeamMember currentMember = TeamUtil.getCurrentMember();
-        return currentMember.getTeamHead() && currentMember.getTeamAccessType().equals("Management");
+        if (currentMember != null) {
+            return currentMember.getTeamHead() && currentMember.getTeamAccessType().equals("Management");
+        }
+
+        return false;
     }
 
     private static class ReportOptionConfiguration {

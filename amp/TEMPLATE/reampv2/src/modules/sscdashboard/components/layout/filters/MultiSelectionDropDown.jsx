@@ -138,7 +138,7 @@ class MultiSelectionDropDown extends Component {
       categoriesSelection, categoryFetcher, chartName, chartSelected, onChangeChartSelected, parentId, filterId,
       filterName, label, disabled
     } = this.props;
-    const showQuickSelectionLinks = parentId !== null;
+    const showQuickSelectionLinks = true; //parentId !== null;
     const showSelectAll = true;
     return (
       <div className={`horizontal-filter dropdown panel ${disabled ? ' disable-filter' : ''}`}>

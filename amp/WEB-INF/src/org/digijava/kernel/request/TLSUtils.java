@@ -3,6 +3,7 @@ package org.digijava.kernel.request;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.Constants;
 import org.digijava.kernel.ampapi.endpoints.activity.ApiContext;
+import org.digijava.kernel.ampapi.endpoints.util.MaxSizeLinkedHashMap;
 import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -10,6 +11,7 @@ import org.digijava.kernel.translator.util.TrnUtil;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.util.SiteUtils;
+import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamUtil;
 import org.mockito.Mockito;
@@ -28,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static org.digijava.kernel.ampapi.endpoints.util.ReportConstants.REPORT_STACK_ATTR;
 import static org.digijava.module.aim.helper.Constants.CURRENT_MEMBER;
 import static org.digijava.module.aim.helper.Constants.CURRENT_USER;
 import static org.digijava.module.aim.util.FeaturesUtil.AMP_TREE_VISIBILITY_ATTR;
@@ -315,6 +318,14 @@ public class TLSUtils {
                     TLSUtils.getThreadLocalInstance().site.getDefaultLanguage().getCode());
         }
 
+    }
+
+    public static MaxSizeLinkedHashMap<Integer, AmpReports> getReportStack() {
+        return (MaxSizeLinkedHashMap<Integer, AmpReports>) getRequest().getSession().getAttribute(REPORT_STACK_ATTR);
+    }
+
+    public static void updateReportStack(MaxSizeLinkedHashMap<Integer, AmpReports> reportStack) {
+        getRequest().getSession().setAttribute(REPORT_STACK_ATTR, reportStack);
     }
 
 }

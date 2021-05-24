@@ -33,7 +33,7 @@ public class ReportsDesignerEndpoint {
     @ApiOperation("Retrieve the information needed for the report designer")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "report designer info",
                     response = ReportDesigner.class))
-    @ApiMethod(id = "designer", authTypes = AuthRule.IN_WORKSPACE)
+    @ApiMethod(id = "designer")
     @GET
     @Path("/designer")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -54,7 +54,7 @@ public class ReportsDesignerEndpoint {
     }
 
     @ApiOperation(value = "Creates a report.")
-    @ApiMethod(id = "createReport", authTypes = AuthRule.IN_WORKSPACE)
+    @ApiMethod(id = "createReport")
     @ApiResponses({
             @ApiResponse(code = HttpServletResponse.SC_OK, reference = "JsonApiResponse",
                     message = "latest project overview"),
@@ -63,8 +63,9 @@ public class ReportsDesignerEndpoint {
     @POST
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    public final JsonApiResponse<Report> createReport(@ApiParam("reportId") ReportRequest reportRequest) {
-        return reportDesignerService.createReport(reportRequest);
+    public final JsonApiResponse<Report> createReport(@ApiParam("reportId") ReportRequest reportRequest,
+                                                  @QueryParam("isDynamic") @DefaultValue("false") Boolean isDynamic) {
+        return reportDesignerService.createReport(reportRequest, isDynamic);
     }
 
     @ApiOperation(value = "Updates a report.")

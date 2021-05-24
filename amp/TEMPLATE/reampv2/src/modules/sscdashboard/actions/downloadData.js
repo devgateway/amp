@@ -36,7 +36,7 @@ export const downloadData = (selectedFilters) => dispatch => {
     report.filters[FILTER_DONOR_AGENCY_COUNTRY] = selectedFilters.selectedCountries;
   }
   if (selectedFilters.selectedYears) {
-    report.years = selectedFilters.selectedYears;
+    report.info = selectedFilters.selectedYears;
   }
   const url = `${API_XLS_REPORT_URL}`;
   return fetchApiData({ url, body: report })

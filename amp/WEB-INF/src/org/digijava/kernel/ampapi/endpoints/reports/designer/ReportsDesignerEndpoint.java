@@ -33,7 +33,7 @@ public class ReportsDesignerEndpoint {
     @ApiOperation("Retrieve the information needed for the report designer")
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "report designer info",
                     response = ReportDesigner.class))
-    @ApiMethod(id = "designer", authTypes = AuthRule.IN_WORKSPACE)
+    @ApiMethod(id = "designer")
     @GET
     @Path("/designer")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")

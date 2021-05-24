@@ -31,7 +31,7 @@
 
 .sidebar-filter-wrapper .well {
     background-color: #FFFFFF;
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 .sidebar-filter-wrapper .selected .title,
@@ -324,7 +324,7 @@
     content: ' ';
     position: absolute;
     background-color: transparent;
-    border: 10px solid #273142;
+    border: 10px solid;
     border-color: #273142 transparent transparent #273142;
     top: -12px;
     left: 15px;
@@ -334,7 +334,7 @@
     content: ' ';
     position: absolute;
     background-color: transparent;
-    border: 10px solid #273142;
+    border: 10px solid;
     border-color: #273142 transparent transparent #273142;
     top: -11px;
     left: 0;
@@ -560,4 +560,8 @@ ul.elements-list li:before {
 .disable-filter {
     pointer-events: none;
     opacity: 0.5;
+}
+
+.label-bold {
+    font-weight: bold;
 }

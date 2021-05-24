@@ -52,7 +52,7 @@ class MainMenu extends Component {
       modalSaveError, saveModalOpen, isNewReport
     } = this.state;
     const {
-      translations, tab, saveNewReport, saveReport, loaded, results
+      translations, tab, saveNewReport, saveReport, loaded, results, runReport
     } = this.props;
     return (
       <>
@@ -88,7 +88,9 @@ class MainMenu extends Component {
         </Menu>
         {loaded && !results.logged ? (
           <Item>
-            <Button size="huge" fluid color="grey">{translations[`${TRN_PREFIX}plusRunReport`]}</Button>
+            <Button size="huge" fluid color="grey" onClick={runReport}>
+              {translations[`${TRN_PREFIX}plusRunReport`]}
+            </Button>
           </Item>
         ) : null }
         <SaveModal
@@ -125,6 +127,7 @@ MainMenu.propTypes = {
   loaded: PropTypes.bool,
   results: PropTypes.object,
   _getLayout: PropTypes.func.isRequired,
+  runReport: PropTypes.func.isRequired,
 };
 
 MainMenu.defaultProps = {

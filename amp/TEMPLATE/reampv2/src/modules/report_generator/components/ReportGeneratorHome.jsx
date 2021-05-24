@@ -115,6 +115,10 @@ class ReportGeneratorHome extends Component {
     return null;
   }
 
+  runReport = () => {
+
+  }
+
   render() {
     const { showChildren: canLoadChildren, errors } = this.state;
     return (
@@ -126,7 +130,7 @@ class ReportGeneratorHome extends Component {
             {errors}
           </Segment>
         ) : null}
-        <MainContent saveNewReport={this.saveNewReport} saveReport={this.saveReport} />
+        <MainContent saveNewReport={this.saveNewReport} saveReport={this.saveReport} runReport={this.runReport} />
       </Container>
     );
   }

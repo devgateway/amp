@@ -111,7 +111,7 @@ class MainContent extends Component {
 
   render() {
     const { visibleTab } = this.state;
-    const { saveNewReport, saveReport } = this.props;
+    const { saveNewReport, saveReport, runReport } = this.props;
     return (
       <>
         <Grid>
@@ -121,7 +121,8 @@ class MainContent extends Component {
                 onClick={this.handleMenuClick}
                 tab={visibleTab}
                 saveNewReport={saveNewReport}
-                saveReport={saveReport} />
+                saveReport={saveReport}
+                runReport={runReport} />
             </GridColumn>
             <GridColumn width="12">
               <ReportingDetailSection visible={visibleTab === 0} />
@@ -166,6 +167,7 @@ MainContent.propTypes = {
   _getPreview: PropTypes.func.isRequired,
   saveNewReport: PropTypes.func.isRequired,
   saveReport: PropTypes.func.isRequired,
+  runReport: PropTypes.func.isRequired,
 };
 
 MainContent.defaultProps = {

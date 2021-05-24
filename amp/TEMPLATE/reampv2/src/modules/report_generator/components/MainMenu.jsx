@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { TRN_PREFIX } from '../utils/constants';
 import './MainMenu.css';
 import SaveModal from './SaveModal';
+import { getLayout } from '../actions/layoutActions';
 
 const MENU = 'menu';
 
@@ -17,6 +18,11 @@ class MainMenu extends Component {
     this.state = {
       modalSaveError: null, saveModalOpen: false, isNewReport: false
     };
+  }
+
+  componentDidMount() {
+    const { _getLayout } = this.props;
+    _getLayout();
   }
 
   handleItemClick = (e, { name }) => {
@@ -45,7 +51,9 @@ class MainMenu extends Component {
     const {
       modalSaveError, saveModalOpen, isNewReport
     } = this.state;
-    const { translations, tab, saveNewReport, saveReport } = this.props;
+    const {
+      translations, tab, saveNewReport, saveReport, loaded, results
+    } = this.props;
     return (
       <>
         <Menu fluid vertical>
@@ -67,18 +75,22 @@ class MainMenu extends Component {
             active={tab === 2}
             onClick={this.handleItemClick}
               />
-          <Item className="save_buttons_item">
-            <Button color="green" onClick={() => this.setSaveModalOpen(true, false)}>
-              {translations[`${TRN_PREFIX}save`]}
-            </Button>
-            <Button color="orange" onClick={() => this.setSaveModalOpen(true, true)}>
-              {translations[`${TRN_PREFIX}saveAs`]}
-            </Button>
-          </Item>
+          {loaded && results.logged ? (
+            <Item className="save_buttons_item">
+              <Button color="green" onClick={() => this.setSaveModalOpen(true, false)}>
+                {translations[`${TRN_PREFIX}save`]}
+              </Button>
+              <Button color="orange" onClick={() => this.setSaveModalOpen(true, true)}>
+                {translations[`${TRN_PREFIX}saveAs`]}
+              </Button>
+            </Item>
+          ) : null }
         </Menu>
-        <Item>
-          <Button disabled size="huge" fluid color="grey">{translations[`${TRN_PREFIX}plusRunReport`]}</Button>
-        </Item>
+        {loaded && !results.logged ? (
+          <Item>
+            <Button size="huge" fluid color="grey">{translations[`${TRN_PREFIX}plusRunReport`]}</Button>
+          </Item>
+        ) : null }
         <SaveModal
           open={saveModalOpen}
           modalSaveError={modalSaveError}
@@ -94,9 +106,13 @@ const mapStateToProps = state => ({
   translations: state.translationsReducer.translations,
   description: state.uiReducer.reportDetails.description,
   selectedReportCategory: state.uiReducer.reportDetails.selectedReportCategory,
+  loaded: state.layoutReducer.loaded,
+  results: state.layoutReducer.results,
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({
+  _getLayout: () => getLayout()
+}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainMenu);
 
@@ -106,7 +122,12 @@ MainMenu.propTypes = {
   tab: PropTypes.number.isRequired,
   saveNewReport: PropTypes.func.isRequired,
   saveReport: PropTypes.func.isRequired,
+  loaded: PropTypes.bool,
+  results: PropTypes.object,
+  _getLayout: PropTypes.func.isRequired,
 };
 
 MainMenu.defaultProps = {
+  loaded: false,
+  results: undefined,
 };

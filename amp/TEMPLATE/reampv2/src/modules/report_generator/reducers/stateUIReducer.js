@@ -34,9 +34,6 @@ import {
   SAVE_NEW_REPORT_ERROR,
 } from '../actions/stateUIActions';
 import {
-  convertColumns,
-  convertHierarchies,
-  convertMeasures,
   convertReportDetails
 } from './utils/stateUIDataConverter';
 import { getProfileFromReport } from '../utils/Utils';

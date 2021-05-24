@@ -1,5 +1,5 @@
 import { fetchApiData } from '../../../utils/loadTranslations';
-import { URL_GET_REPORT, URL_METADATA, URL_SAVE_NEW } from '../utils/constants';
+import { URL_GET_REPORT, URL_METADATA, URL_SAVE, URL_SAVE_NEW } from '../utils/constants';
 
 export const UPDATE_REPORT_DETAILS_TOTAL_GROUPING = 'UPDATE_REPORT_DETAILS_TOTAL_GROUPING';
 export const UPDATE_REPORT_DETAILS_TOTALS_ONLY = 'UPDATE_REPORT_DETAILS_TOTALS_ONLY';
@@ -28,7 +28,8 @@ export const UPDATE_ID = 'UPDATE_ID';
 
 export const FETCH_METADATA_PENDING = 'FETCH_METADATA_PENDING';
 export const FETCH_METADATA_SUCCESS = 'FETCH_METADATA_SUCCESS';
-export const FETCH_METADATA_ERROR = ' FETCH_METADATA_ERROR';
+export const FETCH_METADATA_ERROR = 'FETCH_METADATA_ERROR';
+export const FETCH_METADATA_IGNORE = 'FETCH_METADATA_IGNORE';
 
 export const FETCH_REPORT_PENDING = 'FETCH_REPORT_PENDING';
 export const FETCH_REPORT_SUCCESS = 'FETCH_REPORT_SUCCESS';
@@ -37,6 +38,9 @@ export const FETCH_REPORT_ERROR = 'FETCH_REPORT_ERROR';
 export const SAVE_NEW_REPORT_PENDING = 'SAVE_NEW_REPORT_PENDING';
 export const SAVE_NEW_REPORT_SUCCESS = 'SAVE_NEW_REPORT_SUCCESS';
 export const SAVE_NEW_REPORT_ERROR = 'SAVE_NEW_REPORT_ERROR';
+export const SAVE_REPORT_PENDING = 'SAVE_REPORT_PENDING';
+export const SAVE_REPORT_SUCCESS = 'SAVE_REPORT_SUCCESS';
+export const SAVE_REPORT_ERROR = 'SAVE_REPORT_ERROR';
 
 export function updateReportDetailsTotalGrouping(payload) {
   return {
@@ -196,6 +200,12 @@ export function fetchMetaDataError(error) {
   };
 }
 
+export function fetchMetaDataIgnore() {
+  return {
+    type: FETCH_METADATA_IGNORE,
+  };
+}
+
 export function fetchReportPending() {
   return {
     type: FETCH_REPORT_PENDING
@@ -265,13 +275,42 @@ export function saveNewReportError(error) {
   };
 }
 
-export const getMetadata = (type, profile) => dispatch => {
-  dispatch(fetchMetaDataPending());
-  const url = type ? `${URL_METADATA}?type=${type}&profile=${profile}` : URL_METADATA;
-  return Promise.all([fetchApiData({
-    url
-  })]).then((data) => dispatch(fetchMetaDataSuccess(data[0])))
-    .catch(error => dispatch(fetchMetaDataError(error)));
+export function saveReportPending() {
+  return {
+    type: SAVE_REPORT_PENDING
+  };
+}
+
+export function saveReportSuccess(payload) {
+  return {
+    type: SAVE_REPORT_SUCCESS,
+    payload
+  };
+}
+
+export function saveReportError(error) {
+  return {
+    type: SAVE_REPORT_ERROR,
+    error
+  };
+}
+
+let getMetadataPromise = null;
+export const getMetadata = (type, profile) => (dispatch, getState) => {
+  const state = getState();
+  if (state.uiReducer.metaDataPending || state.uiReducer.metaDataLoaded || state.uiReducer.error) {
+    dispatch(fetchMetaDataIgnore());
+    return getMetadataPromise;
+  } else {
+    dispatch(fetchMetaDataPending());
+    const url = type ? `${URL_METADATA}?type=${type}&profile=${profile}` : URL_METADATA;
+    getMetadataPromise = Promise.all([fetchApiData({
+      url
+    })])
+      .then((data) => dispatch(fetchMetaDataSuccess(data[0])))
+      .catch(error => dispatch(fetchMetaDataError(error)));
+    return getMetadataPromise;
+  }
 };
 
 export const fetchReport = (id) => dispatch => {
@@ -289,4 +328,13 @@ export const saveNew = (data) => dispatch => {
     body: data
   }).then((result) => dispatch(saveNewReportSuccess(result)))
     .catch(error => dispatch(saveNewReportError(error)));
+};
+
+export const save = (id, data) => dispatch => {
+  dispatch(saveReportPending());
+  return fetchApiData({
+    url: `${URL_SAVE}${id}`,
+    body: data
+  }).then((result) => dispatch(saveReportSuccess(result)))
+    .catch(error => dispatch(saveReportError(error)));
 };

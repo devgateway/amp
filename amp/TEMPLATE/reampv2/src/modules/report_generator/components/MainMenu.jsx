@@ -52,7 +52,7 @@ class MainMenu extends Component {
       modalSaveError, saveModalOpen, isNewReport
     } = this.state;
     const {
-      translations, tab, saveNewReport, saveReport, loaded, results, runReport
+      translations, tab, saveNewReport, saveReport, loaded, results, runReport, id
     } = this.props;
     return (
       <>
@@ -86,7 +86,7 @@ class MainMenu extends Component {
             </Item>
           ) : null }
         </Menu>
-        {loaded && !results.logged ? (
+        {loaded && !results.logged && !id ? (
           <Item>
             <Button size="huge" fluid color="grey" onClick={runReport}>
               {translations[`${TRN_PREFIX}plusRunReport`]}
@@ -110,6 +110,7 @@ const mapStateToProps = state => ({
   selectedReportCategory: state.uiReducer.reportDetails.selectedReportCategory,
   loaded: state.layoutReducer.loaded,
   results: state.layoutReducer.results,
+  id: state.uiReducer.id,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -128,9 +129,11 @@ MainMenu.propTypes = {
   results: PropTypes.object,
   _getLayout: PropTypes.func.isRequired,
   runReport: PropTypes.func.isRequired,
+  id: PropTypes.number
 };
 
 MainMenu.defaultProps = {
   loaded: false,
   results: undefined,
+  id: undefined
 };

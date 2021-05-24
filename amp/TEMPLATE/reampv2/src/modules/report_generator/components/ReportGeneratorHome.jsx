@@ -8,7 +8,7 @@ import MainHeader from './MainHeader';
 import MainContent from './MainContent';
 import FiltersAndSettings from './FiltersAndSettings';
 import {
-  getMetadata, fetchReport, updateProfile, updateId, saveNew, save
+  getMetadata, fetchReport, updateProfile, updateId, saveNew, save, runReport
 } from '../actions/stateUIActions';
 import { convertTotalGrouping, getProfileFromReport, hasFilters } from '../utils/Utils';
 import ErrorMessage from './ErrorMessage';
@@ -49,11 +49,11 @@ class ReportGeneratorHome extends Component {
     }
   }
 
-  commonReport = (isNew) => {
+  commonReport = (isNew, isDynamic) => {
     const { uiReducer } = this.props;
     const body = {
       id: isNew ? null : uiReducer.id,
-      name: uiReducer.reportDetails.name,
+      name: !isDynamic ? uiReducer.reportDetails.name : `runReport${Math.random()}`,
       description: uiReducer.reportDetails.description,
       type: uiReducer.type,
       groupingOption: convertTotalGrouping(uiReducer.reportDetails.selectedTotalGrouping),
@@ -87,14 +87,20 @@ class ReportGeneratorHome extends Component {
 
   saveReport = () => {
     const { _save, uiReducer } = this.props;
-    const body = this.commonReport(false);
+    const body = this.commonReport(false, false);
     return _save(uiReducer.id, body).then(response => this.processAfterSave(response));
   }
 
   saveNewReport = () => {
     const { _saveNew } = this.props;
-    const body = this.commonReport(true);
+    const body = this.commonReport(true, false);
     return _saveNew(body).then(response => this.processAfterSave(response));
+  }
+
+  runReport = () => {
+    const { _runReport } = this.props;
+    const body = this.commonReport(true, true);
+    return _runReport(body).then(response => this.processAfterSave(response));
   }
 
   processAfterSave = (response) => {
@@ -110,13 +116,13 @@ class ReportGeneratorHome extends Component {
         return null;
       }
     }
-    // TODO: Maybe we need to save the url we are coming from.
-    window.location.href = '/viewTeamReports.do?tabs=false&reset=true';
+    if (response.payload.id < 0) {
+      window.open(`TEMPLATE/ampTemplate/saikuui_reports/index_reports.html#report/run/${response.payload.id}`);
+    } else {
+      // TODO: Maybe we need to save the url we are coming from.
+      window.location.href = '/viewTeamReports.do?tabs=false&reset=true';
+    }
     return null;
-  }
-
-  runReport = () => {
-
   }
 
   render() {
@@ -126,7 +132,7 @@ class ReportGeneratorHome extends Component {
         <MainHeader />
         <FiltersAndSettings loading={!canLoadChildren} />
         {errors ? (
-          <Segment>
+          <Segment className="errors_segment">
             {errors}
           </Segment>
         ) : null}
@@ -148,6 +154,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   _updateId: (data) => updateId(data),
   _saveNew: (data) => saveNew(data),
   _save: (id, data) => save(id, data),
+  _runReport: (data) => runReport(data),
 }, dispatch);
 
 ReportGeneratorHome.propTypes = {
@@ -160,6 +167,7 @@ ReportGeneratorHome.propTypes = {
   _saveNew: PropTypes.func.isRequired,
   _save: PropTypes.func.isRequired,
   uiReducer: PropTypes.object.isRequired,
+  _runReport: PropTypes.func.isRequired,
 };
 
 ReportGeneratorHome.defaultProps = {};

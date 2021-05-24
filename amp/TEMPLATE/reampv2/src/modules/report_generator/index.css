@@ -43,6 +43,14 @@
     margin-right: 2rem !important;
 }
 
+.errors_segment {
+    min-height: 4rem !important;
+    background-color: white !important;
+    margin-right: 2rem !important;
+    font-weight: bold;
+    border-color: #c20000 !important;
+}
+
 .invisible-tab {
     display: none;
     visibility: hidden;
@@ -278,15 +286,20 @@ i.arrow {
     overflow: auto;
     background-color: white;
     font-size: 0.8em;
+    font-weight: bold;
+    border: 1px solid #e7e6e6;
+    border-top: none;
+    scrollbar-color: #21C11C #e7e7e7;
+    scrollbar-width: thin;
 }
 
 .preview-container td {
-    border-bottom: 1px solid #D5D5D5;
+    border-bottom: 1px solid #e7e6e6;
 }
 
 .preview-container th.col {
-    border: 1px solid #D5D5D5;
-    background: #d6e7fd none repeat scroll 0% 0%;
+    border: 1px solid #e7e6e6;
+    /*background: #d6e7fd none repeat scroll 0% 0%;*/
     text-align: center;
     font-size: 1em;
     padding: 0 5px;
@@ -298,19 +311,19 @@ i.arrow {
     padding-bottom: 5px;
     padding-left: 5px;
     padding-right: 5px;
-    border: 1px solid #D5D5D5;
+    border: 1px solid #e7e6e6;
 }
 
 .preview-container td.measure {
-    border-left: 1px solid #D5D5D5;
-    border-top: 1px solid #D5D5D5;
+    border-left: 1px solid #e7e6e6;
+    border-top: 1px solid #e7e6e6;
     text-align: right;
     font-size: 0.8em;
     padding-right: 5px;
 }
 
 .preview-container td.total {
-    background: #d6e7fd none repeat scroll 0% 0%;
+    background: #eef4fc none repeat scroll 0% 0%;
     font-weight: bold;
     text-align: right;
     white-space: nowrap;

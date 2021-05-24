@@ -60,14 +60,14 @@ public class ReportDesignerService {
                 .getReport(reportId);
     }
 
-    public JsonApiResponse<Report> createReport(final ReportRequest reportRequest) {
+    public JsonApiResponse<Report> createReport(final ReportRequest reportRequest, final Boolean isDynamic) {
         return new ReportManager(reportColumnProvider, reportMeasureProvider)
-                .createOrUpdateReport(reportRequest, null).getResult();
+                .createOrUpdateReport(reportRequest, null, isDynamic).getResult();
     }
 
     public JsonApiResponse<Report> updateReport(final ReportRequest reportRequest, final Long reportId) {
         return new ReportManager(reportColumnProvider, reportMeasureProvider)
-                .createOrUpdateReport(reportRequest, reportId).getResult();
+                .createOrUpdateReport(reportRequest, reportId, false).getResult();
     }
 
 }

@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import {
-  Grid, GridColumn, GridRow, Header, Segment
+  Grid, GridColumn, GridRow, Header
 } from 'semantic-ui-react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { ReportGeneratorContext } from './StartUp';
 import { TRN_PREFIX } from '../utils/constants';
+import InfoIcon from '../static/images/icon-information.svg';
 
 class MainHeader extends Component {
   handleResetAll = () => {
@@ -42,10 +43,7 @@ class MainHeader extends Component {
               <span className="green_text bold pointer" onClick={this.handleResetAll}>
                 {translations[`${TRN_PREFIX}resetAll`]}
               </span>
-              {/* eslint-disable-next-line jsx-a11y/alt-text */}
-              <img
-                className="info-icon"
-                src="/TEMPLATE/reamp/modules/admin/data-freeze-manager/styles/images/icon-information.svg" />
+              <img className="info-icon" src={InfoIcon} alt="info-icon" />
 &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
               <span className="red_text bold pointer" onClick={this.handleCancel}>
                 {translations[`${TRN_PREFIX}cancel`]}

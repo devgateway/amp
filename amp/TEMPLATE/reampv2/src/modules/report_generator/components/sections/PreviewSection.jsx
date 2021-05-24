@@ -10,6 +10,7 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { TRN_PREFIX } from '../../utils/constants';
 import { ReportGeneratorContext } from '../StartUp';
 import ErrorMessage from '../ErrorMessage';
+import InfoIcon from '../../static/images/icon-information.svg';
 
 /**
  * This component will check (almost) all values selected by the user and fetch a new report preview if necessary.
@@ -41,10 +42,7 @@ class PreviewSection extends Component {
               <div className="option-list-title">
                 <span>{translations[`${TRN_PREFIX}preview`]}</span>
                 <OverlayTrigger trigger={['hover', 'focus']} overlay={tooltipText}>
-                  <img
-                    alt="info-icon"
-                    className="info-icon"
-                    src="/TEMPLATE/reamp/modules/admin/data-freeze-manager/styles/images/icon-information.svg" />
+                  <img className="info-icon" src={InfoIcon} alt="info-icon" />
                 </OverlayTrigger>
               </div>
               {this.renderReport(results)}

@@ -5,6 +5,7 @@ import {
   Accordion, Checkbox, Form, Icon
 } from 'semantic-ui-react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import InfoIcon from '../../static/images/icon-information.svg';
 
 export default class ColumnsSelector extends Component {
   constructor() {
@@ -95,10 +96,7 @@ export default class ColumnsSelector extends Component {
                     onChange={this.onItemClick.bind(null, col.id)} />
                   {col.description ? (
                     <OverlayTrigger trigger={['hover', 'focus']} overlay={tooltipText}>
-                      <img
-                        alt="info-icon"
-                        className="info-icon"
-                        src="/TEMPLATE/reamp/modules/admin/data-freeze-manager/styles/images/icon-information.svg" />
+                      <img className="info-icon" src={InfoIcon} alt="info-icon" />
                     </OverlayTrigger>
                   ) : null}
                 </div>

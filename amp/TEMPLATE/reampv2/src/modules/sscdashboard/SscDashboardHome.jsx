@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import Sidebar from './components/layout/sidebar/sidebar';
 import MapContainer from './components/layout/map/MapContainer';
 import { SSCTranslationContext } from './components/StartUp';
-import { HOME_CHART, MODALITY_CHART, SECTORS_CHART } from './utils/constants';
+import { DOWNLOAD_CHART, HOME_CHART, MODALITY_CHART, SECTORS_CHART } from './utils/constants';
 import { DONOR_COUNTRY, MODALITIES, PRIMARY_SECTOR } from './utils/FieldsConstants';
 import * as CallReports from './actions/callReports';
 
@@ -100,6 +100,9 @@ class SscDashboardHome extends Component {
     this.setState({ chartSelected });
     if (chartSelected !== SECTORS_CHART) {
       this.closeLargeCountryPopin();
+    }
+    if (chartSelected !== DOWNLOAD_CHART) {
+      this.setState({ showDataDownload: false });
     }
   }
 
@@ -236,7 +239,7 @@ class SscDashboardHome extends Component {
               handleSelectedFiltersChange={handleSelectedFiltersChange}
             />
             <MapContainer
-              showDataDownload={showDataDownload}
+              showDataDownload={showDataDownload && ! showEmptyProjects}
               toggleDataDownload={this.toggleDataDownload.bind(this)}
               chartSelected={chartSelected}
               selectedFilters={selectedFilters}

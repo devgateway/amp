@@ -303,7 +303,7 @@ table thead tr th {
     margin-bottom: 20px;
 }
 
-.no-locations {
+.red-bold-message {
     color: #FF0000;
     font-weight: bold;
     white-space: nowrap;

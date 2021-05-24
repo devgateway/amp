@@ -39,6 +39,7 @@
   "amp.geocoder:locationRejectTooltip": "Confirm that the location label for the project is not correct. When you click \"Save All Edits\" the location of the project will not be changed. ",
   "amp.geocoder:noLocations": "No locations",
   "amp.geocoder:errorGeocoding": "Error in Geocoding",
+  "amp.geocoder:errorGeocodingTooltip": "There has been an error in the geocoding process. Contact the administrator for further investigation.",
   "amp.geocoder:noActivities": "No activities found for Geocoding",
   "amp.geocoder:discardGeocodingButton": "Discard Geocoding",
   "amp.geocoder:discardGeocodingText": "There is no geocoded location found. You can cancel the geocoding process.",

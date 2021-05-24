@@ -25,6 +25,16 @@ export default class GeocodingActionColumn extends Component {
             );
         }
 
-        return (<div className={'no-locations'}>{this.props.message}</div>);
+        if (this.props.tooltipEnabled) {
+            return (
+                <>
+                    <OverlayTrigger placement="top" overlay={renderTooltip}>
+                        <div className={'red-bold-message'}>{this.props.message}</div>
+                    </OverlayTrigger>
+                </>
+            );
+        }
+
+        return (<div className={'red-bold-message'}>{this.props.message}</div>);
     }
 }

@@ -97,11 +97,12 @@ class DataDownloadContainer extends Component {
 
   getMessage() {
     const { dataDownload, dataDownloadLoaded, error } = this.props;
+    const { translations } = this.context;
     let message = null;
     if (dataDownload) {
       const { sscDashboardXlsResultRows } = dataDownload;
-      if (dataDownloadLoaded && sscDashboardXlsResultRows.length >= 0) {
-        message = ' no hay datos para bajar';
+      if (dataDownloadLoaded && sscDashboardXlsResultRows.length === 0) {
+        message = translations['amp.ssc.dashboard:no-data-xls'];
       }
     }
     if (error) {
@@ -223,17 +224,17 @@ class DataDownloadContainer extends Component {
             </Tab>
           </Tabs>
           <div className="row">
-            <div className="col-md-3 reset-link data-link">
+            <div className="col-md-2 reset-link data-link">
               <span
                 onClick={() => this.resetFilters()}>
                 {translations['amp.ssc.dashboard:reset']}
               </span>
             </div>
-            <div className="col-md-6 download-error">
+            <div className="col-md-8 download-error">
               {' '}
               {this.getMessage()}
             </div>
-            <div className="col-md-3 download-link data-link">
+            <div className="col-md-2 download-link data-link">
               {' '}
               <span
                 onClick={() => _downloadData(selectedFilters)}>

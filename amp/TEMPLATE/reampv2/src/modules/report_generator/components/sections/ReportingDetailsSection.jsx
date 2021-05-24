@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
   Form,
-  Grid, GridColumn, GridRow, TextArea
+  Grid, GridColumn, TextArea
 } from 'semantic-ui-react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -141,16 +141,18 @@ class ReportingDetailSection extends Component {
               </Form>
             </OptionsList>
           </GridColumn>
-          <GridColumn computer="8" tablet="16">
-            <OptionsList title={translations[`${TRN_PREFIX}fundingGroup`]} tooltip="tooltip 3" isRequired >
-              <OptionsContent
-                radioList={this.getOptions(FUNDING_GROUPING_RADIO_OPTIONS)}
-                changeRadioList={this.selectFundingGrouping}
-                selectedRadio={selectedFundingGrouping}
-                loading={loading}
+          {this.getOptions(FUNDING_GROUPING_RADIO_OPTIONS).length !== 1 ? (
+            <GridColumn computer="8" tablet="16">
+              <OptionsList title={translations[`${TRN_PREFIX}fundingGroup`]} tooltip="tooltip 3" isRequired >
+                <OptionsContent
+                  radioList={this.getOptions(FUNDING_GROUPING_RADIO_OPTIONS)}
+                  changeRadioList={this.selectFundingGrouping}
+                  selectedRadio={selectedFundingGrouping}
+                  loading={loading}
                 />
-            </OptionsList>
-          </GridColumn>
+              </OptionsList>
+            </GridColumn>
+          ) : null}
           <GridColumn computer="8" tablet="16">
             <OptionsList title={translations[`${TRN_PREFIX}options`]} tooltip="tooltip 4" >
               <OptionsContent

@@ -16,6 +16,7 @@ import { getPreview, updatePreviewId } from '../actions/previewActions';
 import { ReportGeneratorContext } from './StartUp';
 
 import { convertReportType, convertTotalGrouping, javaHashCode } from '../utils/Utils';
+import { IS_MEASURELESS_REPORT } from '../utils/constants';
 
 class MainContent extends Component {
   constructor() {
@@ -83,7 +84,7 @@ class MainContent extends Component {
       columns, measures, hierarchies, reportDetails
     } = this.props;
     if (columns && measures && hierarchies && reportDetails && columns.available && columns.available.length > 0) {
-      if (columns.selected.length > 0 && measures.selected.length > 0) {
+      if (columns.selected.length > 0 && (IS_MEASURELESS_REPORT || measures.selected.length > 0)) {
         const selectedSummaryReport = reportDetails && reportDetails.selectedSummaryReport;
         if (columns.selected.length === hierarchies.selected.length && !selectedSummaryReport) {
           return false;

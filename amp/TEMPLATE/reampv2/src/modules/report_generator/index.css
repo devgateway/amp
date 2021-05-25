@@ -287,8 +287,8 @@ i.arrow {
     background-color: white;
     font-size: 0.8em;
     font-weight: bold;
-    border: 1px solid #e7e6e6;
-    border-top: none;
+    /*border: 1px solid #e7e6e6;
+    border-top: none;*/
     scrollbar-color: #21C11C #e7e7e7;
     scrollbar-width: thin;
 }

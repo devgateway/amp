@@ -133,6 +133,13 @@ class MeasuresSection extends Component {
               </Grid.Column>
             )
             : null }
+          {selectedMeasures.length > 3
+            ? (
+              <Grid.Column computer={16} className="narrowRow">
+                <ErrorMessage visible message={translations[`${TRN_PREFIX}moreThan3Hierarchies`]} warning />
+              </Grid.Column>
+            )
+            : null}
         </Grid>
       </div>
     );

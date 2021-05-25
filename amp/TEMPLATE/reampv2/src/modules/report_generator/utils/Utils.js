@@ -1,8 +1,11 @@
 import { PROFILE_REPORT, PROFILE_TAB } from './constants';
 
-export function validateSaveModal(title) {
+export function validateSaveModal(title, columns) {
   if (title === null || title === undefined || title.toString().trim().length === 0) {
     return 'missingTitle';
+  }
+  if (!columns || columns.length === 0) {
+    return 'missingColumns';
   }
   return null;
 }

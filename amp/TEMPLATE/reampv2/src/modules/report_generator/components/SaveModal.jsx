@@ -25,8 +25,10 @@ class SaveModal extends Component {
   }
 
   validateAndSave = () => {
-    const { save, close, name } = this.props;
-    const msg = validateSaveModal(name);
+    const {
+      save, close, name, columns
+    } = this.props;
+    const msg = validateSaveModal(name, columns);
     if (msg) {
       this.setState({ modalSaveError: msg });
     } else {
@@ -128,6 +130,7 @@ const mapStateToProps = state => ({
   translations: state.translationsReducer.translations,
   reportPending: state.uiReducer.reportPending,
   name: state.uiReducer.reportDetails.name,
+  columns: state.uiReducer.columns.selected,
   metaDataPending: state.uiReducer.metaDataPending,
   selectedReportCategory: state.uiReducer.reportDetails.selectedReportCategory,
   reportCategories: state.uiReducer.reportCategories,
@@ -153,6 +156,7 @@ SaveModal.propTypes = {
   _updateReportDetailsNameReportCategory: PropTypes.func.isRequired,
   selectedReportCategory: PropTypes.number,
   reportCategories: PropTypes.array,
+  columns: PropTypes.array,
 };
 
 SaveModal.defaultProps = {
@@ -160,5 +164,6 @@ SaveModal.defaultProps = {
   metaDataPending: false,
   name: undefined,
   selectedReportCategory: null,
-  reportCategories: []
+  reportCategories: [],
+  columns: []
 };

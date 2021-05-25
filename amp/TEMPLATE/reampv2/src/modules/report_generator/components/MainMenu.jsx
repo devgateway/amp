@@ -77,7 +77,7 @@ class MainMenu extends Component {
               />
           {loaded && results.logged ? (
             <Item className="save_buttons_item">
-              <Button color="green" onClick={() => this.setSaveModalOpen(true, false)}>
+              <Button color="green" onClick={() => this.setSaveModalOpen(true, !id)}>
                 {translations[`${TRN_PREFIX}save`]}
               </Button>
               <Button color="orange" onClick={() => this.setSaveModalOpen(true, true)}>

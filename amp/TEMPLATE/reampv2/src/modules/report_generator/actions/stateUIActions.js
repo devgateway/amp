@@ -1,5 +1,7 @@
 import { fetchApiData } from '../../../utils/loadTranslations';
-import { URL_GET_REPORT, URL_METADATA, URL_SAVE, URL_SAVE_NEW } from '../utils/constants';
+import {
+  URL_GET_REPORT, URL_METADATA, URL_SAVE, URL_SAVE_NEW
+} from '../utils/constants';
 
 export const UPDATE_REPORT_DETAILS_TOTAL_GROUPING = 'UPDATE_REPORT_DETAILS_TOTAL_GROUPING';
 export const UPDATE_REPORT_DETAILS_TOTALS_ONLY = 'UPDATE_REPORT_DETAILS_TOTALS_ONLY';
@@ -41,6 +43,9 @@ export const SAVE_NEW_REPORT_ERROR = 'SAVE_NEW_REPORT_ERROR';
 export const SAVE_REPORT_PENDING = 'SAVE_REPORT_PENDING';
 export const SAVE_REPORT_SUCCESS = 'SAVE_REPORT_SUCCESS';
 export const SAVE_REPORT_ERROR = 'SAVE_REPORT_ERROR';
+export const RUN_REPORT_PENDING = 'RUN_REPORT_PENDING';
+export const RUN_REPORT_SUCCESS = 'RUN_REPORT_SUCCESS';
+export const RUN_REPORT_ERROR = 'RUN_REPORT_ERROR';
 
 export function updateReportDetailsTotalGrouping(payload) {
   return {
@@ -295,6 +300,26 @@ export function saveReportError(error) {
   };
 }
 
+export function runReportPending() {
+  return {
+    type: RUN_REPORT_PENDING
+  };
+}
+
+export function runReportSuccess(payload) {
+  return {
+    type: RUN_REPORT_SUCCESS,
+    payload
+  };
+}
+
+export function runReportError(error) {
+  return {
+    type: RUN_REPORT_ERROR,
+    error
+  };
+}
+
 let getMetadataPromise = null;
 export const getMetadata = (type, profile) => (dispatch, getState) => {
   const state = getState();
@@ -337,4 +362,13 @@ export const save = (id, data) => dispatch => {
     body: data
   }).then((result) => dispatch(saveReportSuccess(result)))
     .catch(error => dispatch(saveReportError(error)));
+};
+
+export const runReport = (data) => dispatch => {
+  dispatch(runReportPending());
+  return fetchApiData({
+    url: `${URL_SAVE_NEW}?isDynamic=true`,
+    body: data
+  }).then((result) => dispatch(runReportSuccess(result)))
+    .catch(error => dispatch(runReportError(error)));
 };

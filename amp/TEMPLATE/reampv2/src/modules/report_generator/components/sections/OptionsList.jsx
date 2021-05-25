@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import InfoIcon from '../../static/images/icon-information.svg';
 
 export default class OptionsList extends Component {
   render() {
@@ -19,10 +20,7 @@ export default class OptionsList extends Component {
           <span>{title}</span>
           {tooltip ? (
             <OverlayTrigger trigger={['hover', 'focus']} overlay={tooltipText}>
-              <img
-                alt="info-icon"
-                className="info-icon"
-                src="/TEMPLATE/reamp/modules/admin/data-freeze-manager/styles/images/icon-information.svg" />
+              <img className="info-icon" src={InfoIcon} alt="info-icon" />
             </OverlayTrigger>
           ) : null}
         </div>

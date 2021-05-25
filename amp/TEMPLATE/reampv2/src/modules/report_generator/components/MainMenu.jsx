@@ -71,7 +71,7 @@ class MainMenu extends Component {
               />
           <Menu.Item
             name={MENU + 2}
-            content={translations[`${TRN_PREFIX}measures`]}
+            content={translations[`${TRN_PREFIX}financialMeasures`]}
             active={tab === 2}
             onClick={this.handleItemClick}
               />

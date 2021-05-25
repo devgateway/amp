@@ -24,15 +24,19 @@ import org.digijava.kernel.ampapi.endpoints.reports.designer.validators.ReportTa
 import org.digijava.kernel.ampapi.endpoints.reports.designer.validators.ReportTypeValidator;
 import org.digijava.kernel.ampapi.endpoints.reports.designer.validators.ReportUniqueNameValidator;
 import org.digijava.kernel.ampapi.endpoints.reports.designer.validators.ReportValidator;
+import org.digijava.kernel.ampapi.endpoints.security.SecurityErrors;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
+import org.digijava.kernel.ampapi.endpoints.util.MaxSizeLinkedHashMap;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -48,8 +52,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.UUID;
 
 import static java.lang.Boolean.TRUE;
 import static org.dgfoundation.amp.ar.ColumnConstants.PROJECT_TITLE;
@@ -66,6 +72,8 @@ public class ReportManager {
 
     public static final String REPORT = "report";
 
+    public static final String PUBLIC_REPORT_GENERATOR_MODULE_NAME = "Public Report Generator";
+
     private static final Logger logger = Logger.getLogger(ReportManager.class);
 
     protected Map<Integer, ApiErrorMessage> errors = new HashMap<>();
@@ -73,6 +81,8 @@ public class ReportManager {
     private ReportRequest reportRequest;
 
     private AmpReports report;
+
+    private Integer reportToken;
 
     private final ReportColumnProvider columnProvider;
 
@@ -87,7 +97,10 @@ public class ReportManager {
         this.measureProvider = measureProvider;
     }
 
-    public ReportManager createOrUpdateReport(ReportRequest reportRequest, final Long reportId) {
+    public ReportManager createOrUpdateReport(ReportRequest reportRequest, final Long reportId,
+                                              final Boolean isDynamic) {
+        authorize(isDynamic);
+
         this.reportRequest = reportRequest;
         this.report = reportId == null ? new AmpReports() : getReportById(reportId);
 
@@ -96,7 +109,11 @@ public class ReportManager {
 
         if (errors.isEmpty()) {
             convertReportRequestToAmpReport();
-            persistReport();
+            if (isDynamic) {
+                persistDynamicReport();
+            } else {
+                persistReport();
+            }
         }
 
         return this;
@@ -134,10 +151,51 @@ public class ReportManager {
         }
     }
 
+    private void authorize(final Boolean isDynamic) {
+        if (TeamUtil.getCurrentMember() == null && !isDynamic) {
+            ApiErrorResponseService.reportUnauthorisedAccess(SecurityErrors.NOT_AUTHENTICATED);
+        }
+
+        if (isDynamic && !FeaturesUtil.isVisibleModule(PUBLIC_REPORT_GENERATOR_MODULE_NAME)) {
+            ApiErrorResponseService.reportForbiddenAccess(GenericErrors.UNAUTHORIZED);
+        }
+    }
+
+    /**
+     *  Persist the current report with a generated negative hash code number in session's LinkedHashMap
+     *  The list is limited to {@link#Constants.MAX_REPORTS_IN_SESSION}
+     */
+    private void persistDynamicReport() {
+        reportToken = generateReportToken();
+
+        MaxSizeLinkedHashMap<Integer, AmpReports> reportsList = Optional.ofNullable(TLSUtils.getReportStack())
+                .orElse(new MaxSizeLinkedHashMap<>(Constants.MAX_REPORTS_IN_SESSION));
+        report.setAmpReportId(Long.valueOf(reportToken));
+        reportsList.put(reportToken, report);
+
+        TLSUtils.updateReportStack(reportsList);
+    }
+
+    /**
+     * Save current report in the database
+     */
     private void persistReport() {
         TeamMember tm = TeamUtil.getCurrentMember();
         AdvancedReportUtil.saveReport(report, tm.getTeamId(), tm.getMemberId(), tm.getTeamHead());
         logger.info("The report was saved with id = " + report.getAmpReportId());
+    }
+
+    /**
+     * Generate a negative hash number used for storing dynamic reports in session
+     * @return
+     */
+    private Integer generateReportToken() {
+        Integer reportToken = UUID.randomUUID().toString().hashCode();
+        if (reportToken > 0) {
+            return reportToken * (-1);
+        }
+
+        return reportToken;
     }
 
     private void convertReportRequestToAmpReport() {

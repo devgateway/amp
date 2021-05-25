@@ -20,8 +20,10 @@ import {
   updateReportDetailsFundingGrouping, updateReportDetailsAllowEmptyFundingColumns,
   updateReportDetailsSplitByFunding,
   updateReportDetailsShowOriginalCurrencies,
-  updateReportDetailsDescription
+  updateReportDetailsDescription,
+  updateReportDetailsAlsoShowPledges, updateReportDetailsUseAboveFilters
 } from '../../actions/stateUIActions';
+import { hasFilters } from '../../utils/Utils';
 
 class ReportingDetailSection extends Component {
   // eslint-disable-next-line no-unused-vars
@@ -74,6 +76,20 @@ class ReportingDetailSection extends Component {
     _updateReportDetailsShowOriginalCurrencies(!selectedShowOriginalCurrencies);
   }
 
+  selectAlsoShowPledges = () => {
+    const { _updateReportDetailsAlsoShowPledges, selectedAlsoShowPledges } = this.props;
+    _updateReportDetailsAlsoShowPledges(!selectedAlsoShowPledges);
+  }
+
+  selectUseAboveFilters = () => {
+    const { _updateReportDetailsUseAboveFilters, selectedUseAboveFilters, filters } = this.props;
+    if (hasFilters(filters)) {
+      _updateReportDetailsUseAboveFilters(!selectedUseAboveFilters);
+    } else {
+      _updateReportDetailsUseAboveFilters(false);
+    }
+  }
+
   changeDescription = (e, { value }) => {
     const { _updateReportDetailsDescription } = this.props;
     _updateReportDetailsDescription(value);
@@ -84,7 +100,8 @@ class ReportingDetailSection extends Component {
     const radios = [];
     if (options) {
       group.forEach(i => {
-        if (options.find(j => j.name === i).visible) {
+        const option = options.find(j => j.name === i);
+        if (option && option.visible) {
           radios.push({
             name: i,
             label: options.find(j => j.name === i).label
@@ -99,7 +116,7 @@ class ReportingDetailSection extends Component {
     const {
       visible, translations, selectedTotalGrouping, selectedSummaryReport, selectedFundingGrouping,
       selectedAllowEmptyFundingColumns, selectedSplitByFunding, selectedShowOriginalCurrencies,
-      description, loading
+      description, loading, selectedAlsoShowPledges, selectedUseAboveFilters
     } = this.props;
 
     return (
@@ -139,9 +156,9 @@ class ReportingDetailSection extends Component {
               <OptionsContent
                 checkList={this.getOptions(OPTIONS_CHECKBOX_OPTIONS)}
                 selectedCheckboxes={[selectedAllowEmptyFundingColumns, selectedSplitByFunding,
-                  selectedShowOriginalCurrencies]}
+                  selectedShowOriginalCurrencies, selectedAlsoShowPledges, selectedUseAboveFilters]}
                 changeCheckList={[this.selectAllowEmptyFundingColumns, this.selectSplitByFunding,
-                  this.selectShowOriginalCurrencies]}
+                  this.selectShowOriginalCurrencies, this.selectAlsoShowPledges, this.selectUseAboveFilters]}
                 loading={loading} />
             </OptionsList>
           </GridColumn>
@@ -160,9 +177,12 @@ const mapStateToProps = (state) => ({
   selectedAllowEmptyFundingColumns: state.uiReducer.reportDetails.selectedAllowEmptyFundingColumns,
   selectedSplitByFunding: state.uiReducer.reportDetails.selectedSplitByFunding,
   selectedShowOriginalCurrencies: state.uiReducer.reportDetails.selectedShowOriginalCurrencies,
+  selectedAlsoShowPledges: state.uiReducer.reportDetails.selectedAlsoShowPledges,
+  selectedUseAboveFilters: state.uiReducer.reportDetails.selectedUseAboveFilters,
   description: state.uiReducer.reportDetails.description,
   options: state.uiReducer.options,
   loading: state.uiReducer.metaDataPending,
+  filters: state.uiReducer.filters,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -173,6 +193,8 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   _updateReportDetailsSplitByFunding: (data) => dispatch(updateReportDetailsSplitByFunding(data)),
   _updateReportDetailsShowOriginalCurrencies: (data) => dispatch(updateReportDetailsShowOriginalCurrencies(data)),
   _updateReportDetailsDescription: (data) => dispatch(updateReportDetailsDescription(data)),
+  _updateReportDetailsAlsoShowPledges: (data) => dispatch(updateReportDetailsAlsoShowPledges(data)),
+  _updateReportDetailsUseAboveFilters: (data) => dispatch(updateReportDetailsUseAboveFilters(data)),
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReportingDetailSection);
@@ -192,10 +214,15 @@ ReportingDetailSection.propTypes = {
   selectedAllowEmptyFundingColumns: PropTypes.bool,
   selectedSplitByFunding: PropTypes.bool,
   selectedShowOriginalCurrencies: PropTypes.bool,
+  selectedAlsoShowPledges: PropTypes.bool,
+  selectedUseAboveFilters: PropTypes.bool,
   description: PropTypes.string,
   _updateReportDetailsDescription: PropTypes.func.isRequired,
-  options: PropTypes.object,
+  options: PropTypes.array,
   loading: PropTypes.bool,
+  _updateReportDetailsAlsoShowPledges: PropTypes.func.isRequired,
+  _updateReportDetailsUseAboveFilters: PropTypes.func.isRequired,
+  filters: PropTypes.object,
 };
 
 ReportingDetailSection.defaultProps = {
@@ -205,9 +232,12 @@ ReportingDetailSection.defaultProps = {
   selectedAllowEmptyFundingColumns: false,
   selectedSplitByFunding: false,
   selectedShowOriginalCurrencies: false,
+  selectedAlsoShowPledges: false,
+  selectedUseAboveFilters: false,
   description: undefined,
   options: undefined,
   loading: false,
+  filters: null,
 };
 
 ReportingDetailSection.contextType = ReportGeneratorContext;

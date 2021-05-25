@@ -41,15 +41,11 @@ class MainMenu extends Component {
     this.setState({ saveModalOpen: open, isNewReport: isNew });
   }
 
-  saveReport = (title) => {
-    alert(title);
-  }
-
   render() {
     const {
       modalSaveError, saveModalOpen, isNewReport
     } = this.state;
-    const { translations, tab } = this.props;
+    const { translations, tab, saveNewReport, saveReport } = this.props;
     return (
       <>
         <Menu fluid vertical>
@@ -87,15 +83,17 @@ class MainMenu extends Component {
           open={saveModalOpen}
           modalSaveError={modalSaveError}
           isNewReport={isNewReport}
-          save={this.saveReport}
+          save={isNewReport ? saveNewReport : saveReport}
           close={() => this.setSaveModalOpen(false)} />
       </>
     );
-  } /* TODO: dispatch the title and send as props. */
+  }
 }
 
 const mapStateToProps = state => ({
-  translations: state.translationsReducer.translations
+  translations: state.translationsReducer.translations,
+  description: state.uiReducer.reportDetails.description,
+  selectedReportCategory: state.uiReducer.reportDetails.selectedReportCategory,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
@@ -106,4 +104,9 @@ MainMenu.propTypes = {
   onClick: PropTypes.func.isRequired,
   translations: PropTypes.object.isRequired,
   tab: PropTypes.number.isRequired,
+  saveNewReport: PropTypes.func.isRequired,
+  saveReport: PropTypes.func.isRequired,
+};
+
+MainMenu.defaultProps = {
 };

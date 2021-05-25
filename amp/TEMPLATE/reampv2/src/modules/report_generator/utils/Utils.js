@@ -1,3 +1,5 @@
+import { PROFILE_REPORT, PROFILE_TAB } from './constants';
+
 export function validateSaveModal(title) {
   if (title === null || title === undefined || title.toString().trim().length === 0) {
     return 'missingTitle';
@@ -29,6 +31,21 @@ export function convertTotalGrouping(value) {
   }
 }
 
+export function revertTotalGrouping(value) {
+  switch (value) {
+    case 'A':
+      return 'annual-report';
+    case 'Q':
+      return 'quarterly-report';
+    case 'M':
+      return 'monthly-report';
+    case 'T':
+      return 'totals-only';
+    default:
+      return null;
+  }
+}
+
 export function convertReportType(value) {
   switch (value) {
     case 'funding-donor':
@@ -42,4 +59,20 @@ export function convertReportType(value) {
     default:
       return null;
   }
+}
+
+export function hasFilters(filters) {
+  return filters && Object.keys(filters).length > 0 && Object.keys(filters).some(i => filters[i]);
+}
+
+/**
+ * Note: Always a pure function.
+ * @param data
+ * @returns {string}
+ */
+export function getProfileFromReport(data) {
+  if (data && data.tab === true) {
+    return PROFILE_TAB;
+  }
+  return PROFILE_REPORT;
 }

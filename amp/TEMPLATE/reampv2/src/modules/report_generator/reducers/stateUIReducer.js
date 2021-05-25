@@ -16,8 +16,27 @@ import {
   FETCH_METADATA_PENDING,
   FETCH_METADATA_SUCCESS,
   FETCH_METADATA_ERROR,
-  RESET_MEASURES_SELECTED_COLUMN, RESET_COLUMNS_SELECTED_COLUMN,
+  RESET_MEASURES_SELECTED_COLUMN,
+  RESET_COLUMNS_SELECTED_COLUMN,
+  FETCH_REPORT_SUCCESS,
+  UPDATE_REPORT_DETAILS_ALSO_SHOW_PLEDGES,
+  FETCH_REPORT_PENDING,
+  FETCH_REPORT_ERROR,
+  UPDATE_REPORT_DETAILS_NAME,
+  UPDATE_REPORT_DETAILS_REPORT_CATEGORY,
+  UPDATE_APPLIED_FILTERS,
+  UPDATE_APPLIED_SETTINGS,
+  UPDATE_REPORT_DETAILS_USE_ABOVE_FILTERS,
+  UPDATE_PROFILE,
+  UPDATE_ID,
+  SAVE_NEW_REPORT_PENDING,
+  SAVE_NEW_REPORT_SUCCESS,
+  SAVE_NEW_REPORT_ERROR,
 } from '../actions/stateUIActions';
+import {
+  convertReportDetails
+} from './utils/stateUIDataConverter';
+import { getProfileFromReport } from '../utils/Utils';
 
 const initialState = {
   reportDetails: {
@@ -27,7 +46,16 @@ const initialState = {
     selectedAllowEmptyFundingColumns: false,
     selectedSplitByFunding: false,
     selectedShowOriginalCurrencies: false,
+    selectedAlsoShowPledges: false,
+    selectedUseAboveFilters: false,
     description: null,
+    name: null,
+    isTab: false,
+    publicView: false,
+    workspaceLinked: false,
+    selectedReportCategory: null,
+    ownerId: null,
+    includeLocationChildren: true
   },
   columns: {
     available: [],
@@ -46,7 +74,19 @@ const initialState = {
   activeStep: 0,
   metaDataLoaded: false,
   metaDataPending: false,
-  error: null
+  error: null,
+  filters: null,
+  appliedFilters: null,
+  settings: null,
+  reportCategories: [],
+  reportLoaded: false,
+  reportPending: false,
+  type: null,
+  profile: null,
+  id: null,
+  reportSaving: false,
+  reportSaved: false,
+  reportSaveError: null
 };
 
 export default (state = initialState, action) => {
@@ -99,12 +139,44 @@ export default (state = initialState, action) => {
           selectedShowOriginalCurrencies: action.payload
         }
       };
+    case UPDATE_REPORT_DETAILS_ALSO_SHOW_PLEDGES:
+      return {
+        ...state,
+        reportDetails: {
+          ...state.reportDetails,
+          selectedAlsoShowPledges: action.payload
+        }
+      };
+    case UPDATE_REPORT_DETAILS_USE_ABOVE_FILTERS:
+      return {
+        ...state,
+        reportDetails: {
+          ...state.reportDetails,
+          selectedUseAboveFilters: action.payload
+        }
+      };
     case UPDATE_REPORT_DETAILS_DESCRIPTION:
       return {
         ...state,
         reportDetails: {
           ...state.reportDetails,
           description: action.payload
+        }
+      };
+    case UPDATE_REPORT_DETAILS_NAME:
+      return {
+        ...state,
+        reportDetails: {
+          ...state.reportDetails,
+          name: action.payload
+        }
+      };
+    case UPDATE_REPORT_DETAILS_REPORT_CATEGORY:
+      return {
+        ...state,
+        reportDetails: {
+          ...state.reportDetails,
+          selectedReportCategory: action.payload
         }
       };
     case UPDATE_COLUMNS_SELECTED_COLUMN:
@@ -185,6 +257,17 @@ export default (state = initialState, action) => {
           order: [],
         }
       };
+    case UPDATE_APPLIED_FILTERS:
+      return {
+        ...state,
+        filters: action.payload,
+        appliedFilters: action.html,
+      };
+    case UPDATE_APPLIED_SETTINGS:
+      return {
+        ...state,
+        settings: action.payload
+      };
     case FETCH_METADATA_PENDING:
       return {
         ...state,
@@ -196,15 +279,15 @@ export default (state = initialState, action) => {
         metaDataPending: false,
         metaDataLoaded: true,
         measures: {
+          ...state.measures,
           available: action.payload.measures,
-          selected: [],
-          order: [],
         },
         columns: {
+          ...state.columns,
           available: action.payload.columns,
-          selected: [],
         },
         options: action.payload.options,
+        reportCategories: action.payload.reportCategories
       };
     }
     case FETCH_METADATA_ERROR:
@@ -213,6 +296,77 @@ export default (state = initialState, action) => {
         metaDataLoaded: false,
         metaDataPending: false,
         error: action.error
+      };
+    case FETCH_REPORT_SUCCESS:
+      return {
+        ...state,
+        reportDetails: convertReportDetails(state.reportDetails, action.payload),
+        columns: {
+          selected: action.payload.columns.map(i => i.id)
+        },
+        hierarchies: {
+          available: action.payload.hierarchies,
+          selected: action.payload.hierarchies.map(i => i.id),
+          order: action.payload.hierarchies.map(i => i.id)
+        },
+        measures: {
+          selected: action.payload.measures.map(i => i.id),
+          order: action.payload.measures.map(i => i.id)
+        },
+        settings: action.payload.settings,
+        filters: action.payload.filters,
+        appliedFilters: null,
+        reportLoaded: true,
+        reportPending: false,
+        type: action.payload.type,
+        profile: getProfileFromReport(action.payload),
+        id: action.payload.id
+      };
+    case FETCH_REPORT_PENDING:
+      return {
+        ...state,
+        reportLoaded: false,
+        reportPending: true
+      };
+    case FETCH_REPORT_ERROR:
+      return {
+        ...state,
+        reportLoaded: false,
+        reportPending: false
+      };
+    case UPDATE_PROFILE:
+      return {
+        ...state,
+        profile: action.payload,
+      };
+    case UPDATE_ID:
+      return {
+        ...state,
+        id: action.payload,
+      };
+    case SAVE_NEW_REPORT_PENDING:
+      return {
+        ...state,
+        id: null,
+        reportSaving: true,
+        reportSaved: false,
+        reportSaveError: null
+      };
+    case SAVE_NEW_REPORT_SUCCESS:
+      return {
+        ...state,
+        id: action.payload.id,
+        reportSaving: false,
+        reportSaved: true,
+        reportSaveError: null
+      };
+    case SAVE_NEW_REPORT_ERROR:
+      return {
+        ...state,
+        id: null,
+        reportSaving: false,
+        reportSaved: false,
+        reportSaveError: action.payload
       };
     default:
       return state;

@@ -19,7 +19,11 @@ class MainHeader extends Component {
   }
 
   handleCancel = () => {
-    alert('to be implemented');
+    const { translations } = this.props;
+    // eslint-disable-next-line no-restricted-globals
+    if (confirm(translations[`${TRN_PREFIX}confirmCancel`])) {
+      window.location.href = '/viewTeamReports.do?tabs=false&reset=true';
+    }
   }
 
   render() {
@@ -49,8 +53,7 @@ class MainHeader extends Component {
             </GridColumn>
           </GridRow>
           <GridRow>
-            {/* eslint-disable-next-line max-len */}
-            <Segment basic>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</Segment>
+            <GridColumn>{translations[`${TRN_PREFIX}appDescription`]}</GridColumn>
           </GridRow>
         </Grid>
       </>

@@ -30,7 +30,7 @@ class MainContent extends Component {
     } = this.props;
     if (this.areEnoughDataForPreview()) {
       // Convert input data to a String then Number.
-      const _reportDetails = reportDetails;
+      const _reportDetails = { ...reportDetails };
       delete _reportDetails.description;
       const merged = {
         ..._reportDetails,
@@ -60,7 +60,6 @@ class MainContent extends Component {
             end: `${year}-12-31`
           }
         };
-        console.log(`latest preview id: ${newId}`);
         _getPreview({
           id: newId,
           add_columns: _columns,
@@ -83,7 +82,7 @@ class MainContent extends Component {
     const {
       columns, measures, hierarchies, reportDetails
     } = this.props;
-    if (columns && measures && hierarchies && reportDetails) {
+    if (columns && measures && hierarchies && reportDetails && columns.available && columns.available.length > 0) {
       if (columns.selected.length > 0 && measures.selected.length > 0) {
         const selectedSummaryReport = reportDetails && reportDetails.selectedSummaryReport;
         if (columns.selected.length === hierarchies.selected.length && !selectedSummaryReport) {
@@ -112,12 +111,17 @@ class MainContent extends Component {
 
   render() {
     const { visibleTab } = this.state;
+    const { saveNewReport, saveReport } = this.props;
     return (
       <>
         <Grid>
           <GridRow>
             <GridColumn width="4">
-              <MainMenu onClick={this.handleMenuClick} tab={visibleTab} />
+              <MainMenu
+                onClick={this.handleMenuClick}
+                tab={visibleTab}
+                saveNewReport={saveNewReport}
+                saveReport={saveReport} />
             </GridColumn>
             <GridColumn width="12">
               <ReportingDetailSection visible={visibleTab === 0} />
@@ -160,6 +164,8 @@ MainContent.propTypes = {
   hierarchies: PropTypes.object,
   _updatePreviewId: PropTypes.func.isRequired,
   _getPreview: PropTypes.func.isRequired,
+  saveNewReport: PropTypes.func.isRequired,
+  saveReport: PropTypes.func.isRequired,
 };
 
 MainContent.defaultProps = {

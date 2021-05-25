@@ -309,12 +309,6 @@
     width: 100%;
 }
 
-.country-year-search-wrapper .horizontal-filter .well {
-    border-radius: 0;
-    height: calc(100vh - 180px);
-}
-
-
 .country-year-search-wrapper .panel {
     background-color: inherit;
     border: 0;
@@ -374,10 +368,9 @@
 
 .country-year-search-wrapper .horizontal-filter .filter-list .well .well-inner {
     min-height: 80px;
-    max-height: 45%;
+    max-height: 100px;
     overflow-y: auto;
     overflow-x: hidden;
-    /*width: 100%;*/
 }
 
 .InfiniteCarousel {
@@ -551,7 +544,8 @@ ul.elements-list li:before {
     vertical-align: middle;
 }
 
-#ddYear .elements-list {
+#ddYear .elements-list,
+#ddYearCarousel  .elements-list{
     -webkit-column-count: 2;
     -moz-column-count: 2;
     column-count: 2;

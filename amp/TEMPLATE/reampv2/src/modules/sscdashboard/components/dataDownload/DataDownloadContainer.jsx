@@ -34,42 +34,44 @@ class DataDownloadContainer extends Component {
     } = this.props;
     if (dataDownloadLoaded) {
       const { sscDashboardXlsResultRows } = dataDownload;
-      const { selectedFilters } = this.state;
-      const { translations } = this.context;
-      const sscXlsData = {};
-      sscXlsData.columns = [];
-      sscXlsData.source = translations['amp.ssc.dashboard:page-title'];
-      sscXlsData.title = translations['amp.ssc.dashboard:download-title'];
-      sscXlsData.filters = [];
-      sscXlsData.columns.push({
-        headerTitle: translations['amp.ssc.dashboard:sectors-project'],
-        key: 'activity',
-        width: 100
-      });
-      sscXlsData.columns.push({
-        headerTitle: translations['amp.ssc.dashboard:Sector'],
-        key: 'sector',
-        width: 50
-      });
-      sscXlsData.columns.push({
-        headerTitle: translations['amp.ssc.dashboard:Modality'],
-        key: 'modality',
-        width: 50
-      });
-      sscXlsData.columns.push({
-        headerTitle: translations['amp.ssc.dashboard:Country'],
-        key: 'country',
-        width: 50
-      });
-      sscXlsData.columns.push({
-        headerTitle: translations['amp.ssc.dashboard:Year'],
-        key: 'year',
-        width: 30
-      });
-      sscXlsData.rows = sscDashboardXlsResultRows;
-      sscXlsData.filters = populateFilters(translations, filters, selectedFilters);
-      exportToXLS(sscXlsData);
-      _dataDownloaded();
+      if (sscDashboardXlsResultRows.length > 0) {
+        const { selectedFilters } = this.state;
+        const { translations } = this.context;
+        const sscXlsData = {};
+        sscXlsData.columns = [];
+        sscXlsData.source = translations['amp.ssc.dashboard:page-title'];
+        sscXlsData.title = translations['amp.ssc.dashboard:download-title'];
+        sscXlsData.filters = [];
+        sscXlsData.columns.push({
+          headerTitle: translations['amp.ssc.dashboard:sectors-project'],
+          key: 'activity',
+          width: 100
+        });
+        sscXlsData.columns.push({
+          headerTitle: translations['amp.ssc.dashboard:Sector'],
+          key: 'sector',
+          width: 50
+        });
+        sscXlsData.columns.push({
+          headerTitle: translations['amp.ssc.dashboard:Modality'],
+          key: 'modality',
+          width: 50
+        });
+        sscXlsData.columns.push({
+          headerTitle: translations['amp.ssc.dashboard:Country'],
+          key: 'country',
+          width: 50
+        });
+        sscXlsData.columns.push({
+          headerTitle: translations['amp.ssc.dashboard:Year'],
+          key: 'year',
+          width: 30
+        });
+        sscXlsData.rows = sscDashboardXlsResultRows;
+        sscXlsData.filters = populateFilters(translations, filters, selectedFilters);
+        exportToXLS(sscXlsData);
+        _dataDownloaded();
+      }
     }
   }
 
@@ -93,6 +95,27 @@ class DataDownloadContainer extends Component {
     this.setState({ key });
   }
 
+  getMessage() {
+    const { dataDownload, dataDownloadLoaded, error } = this.props;
+    const { translations } = this.context;
+    let message = null;
+    if (dataDownload) {
+      const { sscDashboardXlsResultRows } = dataDownload;
+      if (dataDownloadLoaded && sscDashboardXlsResultRows.length === 0) {
+        message = translations['amp.ssc.dashboard:no-data-xls'];
+      }
+    }
+    if (error) {
+      message = +' error';
+    }
+    return message;
+  }
+
+  getTitle(message, selected, available) {
+    const { translations } = this.context;
+    return `${translations[message]} (${selected.length}/${available.length})`;
+  }
+
   resetFilters() {
     const { selectedFilters } = this.props;
     if (selectedFilters) {
@@ -111,7 +134,7 @@ class DataDownloadContainer extends Component {
 
   render() {
     const {
-      filters, filtersRestrictions, settings, toggleDataDownload, _downloadData, error
+      filters, filtersRestrictions, settings, toggleDataDownload, _downloadData
     } = this.props;
     const { translations } = this.context;
     const { key, selectedFilters } = this.state;
@@ -143,7 +166,7 @@ class DataDownloadContainer extends Component {
           >
             <Tab
               eventKey="Country"
-              title={`${translations['amp.ssc.dashboard:Country']} (${selectedCountries.length}/${countries.length})`}>
+              title={this.getTitle('amp.ssc.dashboard:Country', selectedCountries, countries)}>
               <div className="download-content">
                 <MultiSelectionDropDown
                   options={countries}
@@ -158,7 +181,7 @@ class DataDownloadContainer extends Component {
             </Tab>
             <Tab
               eventKey="sector"
-              title={`${translations['amp.ssc.dashboard:Sector']} (${selectedSectors.length}/${sectors.length})`}>
+              title={this.getTitle('amp.ssc.dashboard:Sector', selectedSectors, sectors)}>
               <div className="download-content">
                 <MultiSelectionDropDown
                   options={sectors}
@@ -172,7 +195,7 @@ class DataDownloadContainer extends Component {
             </Tab>
             <Tab
               eventKey="modality"
-              title={`${translations['amp.ssc.dashboard:Modality']} (${selectedModalities.length}/${modalities.length})`}>
+              title={this.getTitle('amp.ssc.dashboard:Modality', selectedModalities, modalities)}>
               <div className="download-content">
                 <MultiSelectionDropDown
                   key="2222"
@@ -187,7 +210,7 @@ class DataDownloadContainer extends Component {
             </Tab>
             <Tab
               eventKey="year"
-              title={`${translations['amp.ssc.dashboard:Year']} (${selectedYears.length}/${years.length})`}>
+              title={this.getTitle('amp.ssc.dashboard:Year', selectedYears, years)}>
               <div className="download-content">
                 <MultiSelectionDropDown
                   options={years}
@@ -200,15 +223,18 @@ class DataDownloadContainer extends Component {
               </div>
             </Tab>
           </Tabs>
-          {error && <div>{error}</div>}
           <div className="row">
-            <div className="col-md-6 reset-link data-link">
+            <div className="col-md-2 reset-link data-link">
               <span
                 onClick={() => this.resetFilters()}>
                 {translations['amp.ssc.dashboard:reset']}
               </span>
             </div>
-            <div className="col-md-6 download-link data-link">
+            <div className="col-md-8 download-error">
+              {' '}
+              {this.getMessage()}
+            </div>
+            <div className="col-md-2 download-link data-link">
               {' '}
               <span
                 onClick={() => _downloadData(selectedFilters)}>

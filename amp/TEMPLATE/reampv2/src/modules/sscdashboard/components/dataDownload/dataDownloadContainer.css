@@ -136,6 +136,13 @@
     line-height: 35px;
 }
 
+.download-error {
+    line-height: 35px;
+    text-align: center;
+    color: red;
+    font-weight: bold;
+}
+
 .download-link {
     text-align: right;
 }

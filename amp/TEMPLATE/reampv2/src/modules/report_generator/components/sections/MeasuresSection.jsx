@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Grid, GridColumn, GridRow, Input
+  Grid, GridColumn, Input
 } from 'semantic-ui-react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { TRN_PREFIX } from '../../utils/constants';
+import { IS_MEASURELESS_REPORT, TRN_PREFIX } from '../../utils/constants';
 import {
   updateMeasuresSelected,
   updateMeasuresSorting,
@@ -126,7 +126,7 @@ class MeasuresSection extends Component {
                 onColumnSortChange={this.handleMeasureSort} />
             </OptionsList>
           </Grid.Column>
-          {selectedMeasures.length === 0
+          {!IS_MEASURELESS_REPORT && selectedMeasures.length === 0
             ? (
               <Grid.Column computer={16} className="narrowRow">
                 <ErrorMessage visible message={translations[`${TRN_PREFIX}mustSelectOneMeasure`]} />

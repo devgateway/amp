@@ -43,3 +43,5 @@ export const OPTIONS_CHECKBOX_OPTIONS = [EMPTY_FUNDING_COLUMNS, SPLIT_BY_FUNDING
 // Section with constants for the API errors, MUST MATCH ApiError.java and the ids assigned to each API error.
 export const ERROR_CLASS_REPORT_DESIGNER_ID = '17';
 export const API_ERROR_DUPLICATED_NAME = '05';
+
+export const IS_MEASURELESS_REPORT = true; // One day this could be a GS/FM setting.

@@ -43,6 +43,7 @@
   "amp.reportGenerator:saveReport":"Save Report",
   "amp.reportGenerator:saveNewReport":"Save New Report",
   "amp.reportGenerator:missingTitle":"Missing title",
+  "amp.reportGenerator:missingColumns": "Please select at least one column",
   "amp.reportGenerator:previewError":"There was an error generating the preview.",
   "amp.reportGenerator:previewTooltip": "tooltip 1",
   "amp.reportGenerator:selectCategory": "Please select a category from below",

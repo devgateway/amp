@@ -5,7 +5,7 @@ export default class ErrorMessage extends Component {
   render() {
     const { visible, message, warning } = this.props;
     return (
-      <div className={!visible ? 'invisible-tab' : 'red_text'} style={warning ? { color: 'blue' } : null}>
+      <div className={!visible ? 'invisible-tab' : 'red_text'} style={warning ? { color: '#2480c6' } : null}>
         {message}
       </div>
     );

@@ -73,7 +73,7 @@ export default class ColumnsSelector extends Component {
                 return (
                   <div key={Math.random()}>
                     <Accordion.Title index={i} active={activeIndex.includes(i)} onClick={this.handleHeaderClick}>
-                      <div className="ui checkbox general-checkbox" style={{ zIndex: 9999 }}>
+                      <div className="ui checkbox general-checkbox">
                         <input
                           className="hidden"
                           id={`${i}_cat`}

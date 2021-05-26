@@ -166,6 +166,10 @@ textarea {
     font-weight: bold;
 }
 
+.dropdown-right {
+    float: right !important;
+}
+
 .ui.radio.checkbox input:checked ~ label::after {
     background-color: #21C11C;
 }
@@ -262,6 +266,28 @@ i.arrow {
 
 .ui.styled.accordion .title {
     color: black;
+}
+
+.ui.styled.accordion .content {
+    margin-left: 1em;
+}
+
+.general-checkbox input:checked ~ label::before {
+    background-color: #f2711c !important;
+    border-color: rgba(34, 36, 38, 0.35);
+}
+
+.general-checkbox {
+    margin-bottom: 0;
+}
+
+.category-title {
+    position: relative;
+    top: -6px;
+}
+
+.active.title {
+    padding-bottom: 0 !important;
 }
 
 /* .ui.styled.accordion :hover {

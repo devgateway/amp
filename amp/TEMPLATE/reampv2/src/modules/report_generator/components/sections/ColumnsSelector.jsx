@@ -29,6 +29,17 @@ export default class ColumnsSelector extends Component {
     onColumnSelectionChange(id);
   }
 
+  handleCategoryTitleClick = (i, event) => {
+    const { columns } = this.props;
+    const categories = this.extractCategories(columns);
+    const ids = columns.filter(j => j.category === categories[i]);
+    ids.forEach(j => {
+      this.onItemClick(j.id);
+    });
+    event.stopPropagation();
+    event.preventDefault();
+  }
+
   // eslint-disable-next-line class-methods-use-this
   extractCategories(columns) {
     const categories = new Set();
@@ -51,11 +62,25 @@ export default class ColumnsSelector extends Component {
             <Accordion fluid styled exclusive={false}>
               {categories.map((cat, i) => {
                 const subList = columns.filter(col => (col.category === cat));
+                const subSelectedList = selected.filter(j => subList.find(k => k.id === j));
                 return (
                   <div key={Math.random()}>
                     <Accordion.Title index={i} active={activeIndex.includes(i)} onClick={this.handleHeaderClick}>
-                      <Icon name="dropdown" />
-                      {`${cat} (${selected.filter(j => subList.find(k => k.id === j)).length}/${subList.length})`}
+                      <div className="ui checkbox general-checkbox" style={{ zIndex: 9999 }}>
+                        <input
+                          className="hidden"
+                          id={`${i}_cat`}
+                          type="checkbox"
+                          checked={subSelectedList.length === subList.length} />
+                        <label
+                          className="general-label"
+                          htmlFor={`${i}_cat`}
+                          onClick={this.handleCategoryTitleClick.bind(null, i)} />
+                      </div>
+                      <Icon name="dropdown" className="dropdown-right" />
+                      <span className="category-title">
+                        {`${cat} (${subSelectedList.length}/${subList.length})`}
+                      </span>
                     </Accordion.Title>
                     <Accordion.Content active={activeIndex.includes(i)}>
                       {subList.map(col => (

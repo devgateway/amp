@@ -35,7 +35,7 @@
   "amp.reportGenerator:availableFinancialMeasures": "Available Financial Measures",
   "amp.reportGenerator:orderSelectedFinancialMeasures": "Order Selected Financial Measures",
   "amp.reportGenerator:needMoreHierarchies": "Only in summary reports can all columns be hierarchies",
-  "amp.reportGenerator:confirmResetAll": "Are you sure you want to reset all changes done?",
+  "amp.reportGenerator:confirmResetAll": "Are you sure you want to clear all elements you have selected?",
   "amp.reportGenerator:confirmCancel": "Are you sure you want to exit the report generator?",
   "amp.reportGenerator:resetMeasures": "Reset Financial Measures",
   "amp.reportGenerator:enterReportTitle": "Please enter a title for this report:",

@@ -29,12 +29,18 @@ export default class ColumnsSelector extends Component {
     onColumnSelectionChange(id);
   }
 
-  handleCategoryTitleClick = (i, event) => {
-    const { columns } = this.props;
+  handleCategoryTitleClick = (i, wasChecked, event) => {
+    const { columns, selected } = this.props;
     const categories = this.extractCategories(columns);
     const ids = columns.filter(j => j.category === categories[i]);
     ids.forEach(j => {
-      this.onItemClick(j.id);
+      if (wasChecked) {
+        if (selected.find(k => k === j.id)) {
+          this.onItemClick(j.id);
+        }
+      } else if (!selected.find(k => k === j.id)) {
+        this.onItemClick(j.id);
+      }
     });
     event.stopPropagation();
     event.preventDefault();
@@ -63,6 +69,7 @@ export default class ColumnsSelector extends Component {
               {categories.map((cat, i) => {
                 const subList = columns.filter(col => (col.category === cat));
                 const subSelectedList = selected.filter(j => subList.find(k => k.id === j));
+                const isChecked = subSelectedList.length === subList.length;
                 return (
                   <div key={Math.random()}>
                     <Accordion.Title index={i} active={activeIndex.includes(i)} onClick={this.handleHeaderClick}>
@@ -71,11 +78,11 @@ export default class ColumnsSelector extends Component {
                           className="hidden"
                           id={`${i}_cat`}
                           type="checkbox"
-                          checked={subSelectedList.length === subList.length} />
+                          checked={isChecked} />
                         <label
                           className="general-label"
                           htmlFor={`${i}_cat`}
-                          onClick={this.handleCategoryTitleClick.bind(null, i)} />
+                          onClick={this.handleCategoryTitleClick.bind(null, i, isChecked)} />
                       </div>
                       <Icon name="dropdown" className="dropdown-right" />
                       <span className="category-title">

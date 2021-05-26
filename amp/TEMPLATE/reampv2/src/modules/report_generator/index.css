@@ -384,6 +384,16 @@ i.arrow {
 .applied-filters {
     float: left;
     width: max-content;
+    font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif
+}
+
+.applied-filters > div > ul > li > span {
+    color: #428bca;
+    font-weight: bold;
+}
+
+.applied-filters > div > ul > li {
+    padding-left: 1em;
 }
 
 #previsualization_tree {
@@ -391,10 +401,14 @@ i.arrow {
     position: relative;
     left: 10px;
     width: max-content;*/
-    font-size: 0.9em;
+    font-size: 1em;
 }
 
 #previsualization_tree ul {
     list-style-type: none;
-    padding-left: 10px;
+    padding-left: 18px;
+}
+
+#previsualization_tree .prev_caret::before {
+    font-size: 0.8em;
 }

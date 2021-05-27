@@ -151,7 +151,7 @@ public class InterchangeUtils {
                 String fieldName = field.getKey();
                 List<Long> ids = field.getValue();
 
-                List<PossibleValue> allValues = possibleValuesFor(fieldName, apiFields).stream()
+                List<PossibleValue> allValues = possibleValuesCachedFor(fieldName, apiFields).stream()
                         .map(PossibleValue::flattenPossibleValues)
                         .flatMap(List::stream)
                         .collect(Collectors.toList());
@@ -180,6 +180,10 @@ public class InterchangeUtils {
 
     public static List<PossibleValue> possibleValuesFor(String fieldName, List<APIField> apiFields) {
         return PossibleValuesEnumerator.INSTANCE.getPossibleValuesForField(fieldName, apiFields);
+    }
+
+    public static List<PossibleValue> possibleValuesCachedFor(String fieldName, List<APIField> apiFields) {
+        return PossibleValuesEnumerator.INSTANCE.getPossibleValuesCachedForField(fieldName, apiFields);
     }
 
     public static List<Field> getFieldsAnnotatedWith(Class<?> cls, Class<? extends Annotation> annotationCls1,

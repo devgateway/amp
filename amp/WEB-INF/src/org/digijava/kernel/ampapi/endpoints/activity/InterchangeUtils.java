@@ -172,10 +172,27 @@ public class InterchangeUtils {
     private static FieldIdValue getIdValue(Long id, Map<Object, PossibleValue> allValuesMap) {
         if (allValuesMap.containsKey(id)) {
             PossibleValue pv = allValuesMap.get(id);
-            return new FieldIdValue((Long) pv.getId(), pv.getValue(), pv.getTranslatedValues(), pv.getExtraInfo());
+            return new FieldIdValue((Long) pv.getId(), pv.getValue(), pv.getTranslatedValues(), pv.getExtraInfo(),
+                    getAncestorValues(allValuesMap, pv.getId(), new ArrayList<>()));
         }
 
         return new FieldIdValue(id);
+    }
+
+    private static List<String> getAncestorValues(Map<Object, PossibleValue> allValuesMap, Object id,
+                                                  List<String> values) {
+        PossibleValue obj = allValuesMap.get(id);
+        List<String> ancestorValues = new ArrayList<>(values);
+        if (obj.getExtraInfo() instanceof ParentExtraInfo) {
+            ParentExtraInfo parentExtraInfo = (ParentExtraInfo) obj.getExtraInfo();
+            if (parentExtraInfo.getParentId() != null) {
+                ancestorValues.addAll(getAncestorValues(allValuesMap, parentExtraInfo.getParentId(), ancestorValues));
+            }
+            ancestorValues.add(obj.getValue());
+            return ancestorValues;
+        }
+
+        return null;
     }
 
     public static List<PossibleValue> possibleValuesFor(String fieldName, List<APIField> apiFields) {

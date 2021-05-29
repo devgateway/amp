@@ -186,12 +186,14 @@ public class InterchangeUtils {
         if (obj.getExtraInfo() instanceof ParentExtraInfo) {
             ParentExtraInfo parentExtraInfo = (ParentExtraInfo) obj.getExtraInfo();
             if (parentExtraInfo.getParentId() != null) {
-                ancestorValues.addAll(getAncestorValues(allValuesMap, parentExtraInfo.getParentId(), ancestorValues));
+                List<String> newValues = getAncestorValues(allValuesMap, parentExtraInfo.getParentId(), ancestorValues);
+                if (newValues != null) {
+                    ancestorValues.addAll(newValues);
+                }
             }
             ancestorValues.add(obj.getValue());
             return ancestorValues;
         }
-
         return null;
     }
 

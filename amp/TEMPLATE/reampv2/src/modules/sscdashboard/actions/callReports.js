@@ -6,7 +6,7 @@ import {
   fetchActivitiesPending,
   fetchActivitiesSuccess
 } from './reportsActions';
-import { fetchApiData } from '../../../utils/loadTranslations';
+import { fetchApiData } from '../../../utils/apiOperations.js';
 import { API_REPORTS_ACTIVITY_DETAIL_URL, API_SSC_DASHBOARD_URL } from '../utils/constants';
 
 export const loadActivitiesDetails = (activitiesId) => dispatch => {

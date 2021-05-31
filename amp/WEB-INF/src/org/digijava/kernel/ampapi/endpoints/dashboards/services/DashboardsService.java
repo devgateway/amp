@@ -1,14 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.dashboards.services;
 
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.TreeMap;
-
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import org.apache.commons.lang3.StringUtils;
@@ -37,8 +28,8 @@ import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.dgfoundation.amp.reports.ReportUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.dashboards.DashboardFormParameters;
-import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
 import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
+import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
@@ -53,6 +44,20 @@ import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+
+import javax.ws.rs.core.Response;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.TreeMap;
+
+import static org.digijava.kernel.ampapi.endpoints.util.ApiConstants.ACCESS_CONTROL_ALLOW_HEADERS;
+import static org.digijava.kernel.ampapi.endpoints.util.ApiConstants.ACCESS_CONTROL_ALLOW_METHODS;
+import static org.digijava.kernel.ampapi.endpoints.util.ApiConstants.ACCESS_CONTROL_ALLOW_ORIGIN;
 
 /**
  *
@@ -635,5 +640,15 @@ public class DashboardsService {
             }
         }
         return ret;
+    }
+
+    public static Response buildOkResponseWithOriginHeaders(Object entity) {
+        return Response
+                .ok()
+                .header(ACCESS_CONTROL_ALLOW_ORIGIN, "*")
+                .header(ACCESS_CONTROL_ALLOW_HEADERS, "*")
+                .header(ACCESS_CONTROL_ALLOW_METHODS, "*")
+                .entity(entity)
+                .build();
     }
 }

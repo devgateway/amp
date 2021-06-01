@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModelProperty;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
+import org.digijava.kernel.ampapi.endpoints.dto.MultilingualContent;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.EntityResolver;
 
@@ -22,7 +23,7 @@ import static java.lang.Boolean.TRUE;
 public class ReportRequest {
 
     @ApiModelProperty("Mandatory to be provided for reports.")
-    private String name;
+    private MultilingualContent name;
 
     private String description;
 
@@ -90,11 +91,11 @@ public class ReportRequest {
 
     private List<Map<String, String>> reportData;
 
-    public String getName() {
+    public MultilingualContent getName() {
         return name;
     }
 
-    public void setName(final String name) {
+    public void setName(final MultilingualContent name) {
         this.name = name;
     }
 

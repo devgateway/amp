@@ -27,20 +27,21 @@ public class ReportUniqueNameValidator implements ReportValidator {
 
     public boolean isValid(Object value) {
         ReportRequest reportRequest = (ReportRequest) value;
-        if (StringUtils.isNotBlank(reportRequest.getName())) {
+
+        if (StringUtils.isNotBlank(reportRequest.getName().getOrBuildText())) {
             boolean nameIsUpdated = report.getAmpReportId() == null ? true
-                    : !StringUtils.equalsIgnoreCase(report.getName(), reportRequest.getName());
+                    : !StringUtils.equalsIgnoreCase(report.getName(), reportRequest.getName().getOrBuildText());
 
             if (nameIsUpdated) {
-                name = reportRequest.getName();
+                name = reportRequest.getName().getOrBuildText();
                 String queryStr = "select r FROM " + AmpReports.class.getName() + " r where "
                         + AmpReports.hqlStringForName("r") + "=:reportName";
                 List<AmpReports> conflicts = PersistenceManager.getSession()
                         .createQuery(queryStr)
-                        .setString("reportName", reportRequest.getName())
+                        .setString("reportName", reportRequest.getName().getOrBuildText())
                         .list();
 
-                return conflicts.stream()
+                return !conflicts.stream()
                         .filter(r -> report.getAmpReportId() == null
                                 || !report.getAmpReportId().equals(r.getAmpReportId()))
                         .findAny().isPresent();

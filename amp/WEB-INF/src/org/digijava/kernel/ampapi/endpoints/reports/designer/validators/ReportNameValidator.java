@@ -17,7 +17,7 @@ public class ReportNameValidator implements ReportValidator {
 
     public boolean isValid(Object value) {
         ReportRequest reportRequest = (ReportRequest) value;
-        return StringUtils.isNotBlank(reportRequest.getName());
+        return StringUtils.isNotBlank(reportRequest.getName().getOrBuildText());
     }
 
     public ApiErrorMessage getErrorMessage() {

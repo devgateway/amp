@@ -1,12 +1,20 @@
 package org.digijava.kernel.ampapi.endpoints.reports.designer;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.reports.converters.AmpARFilterConverter;
 import org.dgfoundation.amp.reports.converters.AmpReportFiltersConverter;
+import org.digijava.kernel.ampapi.endpoints.activity.DefaultTranslatedFieldReader;
+import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
+import org.digijava.kernel.ampapi.endpoints.common.AMPTranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
+import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
+import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
+import org.digijava.kernel.ampapi.endpoints.dto.MultilingualContent;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
@@ -31,6 +39,7 @@ import org.digijava.kernel.ampapi.endpoints.util.MaxSizeLinkedHashMap;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpColumns;
+import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
@@ -45,8 +54,10 @@ import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -73,6 +84,8 @@ public class ReportManager {
     public static final String REPORT = "report";
 
     public static final String PUBLIC_REPORT_GENERATOR_MODULE_NAME = "Public Report Generator";
+
+    private static TranslatorService translatorService = AMPTranslatorService.INSTANCE;
 
     private static final Logger logger = Logger.getLogger(ReportManager.class);
 
@@ -182,6 +195,11 @@ public class ReportManager {
     private void persistReport() {
         TeamMember tm = TeamUtil.getCurrentMember();
         AdvancedReportUtil.saveReport(report, tm.getTeamId(), tm.getMemberId(), tm.getTeamHead());
+
+        if (ContentTranslationUtil.multilingualIsEnabled()) {
+            PersistenceManager.getSession().flush();
+            persistContentTranslations();
+        }
         logger.info("The report was saved with id = " + report.getAmpReportId());
     }
 
@@ -199,7 +217,7 @@ public class ReportManager {
     }
 
     private void convertReportRequestToAmpReport() {
-        report.setName(reportRequest.getName());
+        report.setName(reportRequest.getName().getOrBuildText());
 
         // Set the report type and profile only for the new reports
         if (report.getId() == null) {
@@ -409,8 +427,8 @@ public class ReportManager {
 
     private Report convertAmpReportsToReport(final AmpReports ampReport) {
         Report report = new Report();
+        report.setName(getNameInMultilingualContent(ampReport));
         report.setId(ampReport.getAmpReportId());
-        report.setName(ampReport.getName());
         report.setDescription(ampReport.getReportDescription());
         report.setType(ReportType.fromLong(ampReport.getType()));
         report.setGroupingOption(ampReport.getOptions());
@@ -440,6 +458,19 @@ public class ReportManager {
         return report;
     }
 
+    private MultilingualContent getNameInMultilingualContent(final AmpReports ampReport) {
+        boolean isMultilingual = TranslationSettings.getCurrent().isMultilingual();
+        Map<String, String> translations = new HashMap<>();
+        if (isMultilingual) {
+            DefaultTranslatedFieldReader reader = new DefaultTranslatedFieldReader();
+            Field nameField = FieldUtils.getField(AmpReports.class, "name", true);
+            translations = (Map<String, String>)
+                    reader.get(nameField, AmpReports.class, ampReport.getName(), ampReport);
+        }
+
+        return MultilingualContent.build(isMultilingual, ampReport.getName(), translations);
+    }
+
     private AmpReports getReportById(final Long reportId) {
         AmpReports ampReport = (AmpReports) PersistenceManager.getSession().get(AmpReports.class, reportId);
         if (ampReport == null) {
@@ -454,4 +485,40 @@ public class ReportManager {
         return columnProvider.getColumns(reportProfile, ReportType.fromLong(report.getType()));
     }
 
+    /**
+     * Stores all provided translations
+     *
+     * @return value to be stored in the base table
+     */
+    protected void persistContentTranslations() {
+        List<AmpContentTranslation> trnList =
+                translatorService.loadFieldTranslations(AmpReports.class.getName(), report.getAmpReportId(), "name");
+        // process translations
+        for (Map.Entry<String, String> trn : reportRequest.getName().getOrBuildTranslations().entrySet()) {
+            String langCode = trn.getKey();
+            String translation = trn.getValue();
+            AmpContentTranslation act = null;
+            if (trn.equals(TLSUtils.getEffectiveLangCode())) {
+                break;
+            }
+            for (AmpContentTranslation existingAct : trnList) {
+                if (langCode.equalsIgnoreCase(existingAct.getLocale())) {
+                    act = existingAct;
+                    break;
+                }
+            }
+            // if translation to be removed
+            if (StringUtils.isBlank(trn.getValue())) {
+                trnList.remove(act);
+            } else if (act == null) {
+                act = new AmpContentTranslation(AmpReports.class.getName(), report.getAmpReportId(), "name",
+                        langCode, trn.getValue().trim());
+                trnList.add(act);
+            } else {
+                act.setTranslation(translation.trim());
+            }
+        }
+
+        TranslationUtil.serialize(report, "name", trnList);
+    }
 }

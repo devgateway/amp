@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.digijava.kernel.ampapi.endpoints.reports.designer.ReportManager.PUBLIC_REPORT_GENERATOR_MODULE_NAME;
+
 /**
  *  Enumerate all options of report designer depending on report profile (tab/report), report type
  *  and team member access type
@@ -88,7 +90,13 @@ public class ReportOptionProvider {
     }
 
     public List<ReportOption> getOptions(final ReportProfile reportProfile, final ReportType reportType) {
-        return reportProfile.isReport() ? getReportOptions(reportType) : getTabOptions();
+        List<ReportOption> reportOptions = reportProfile.isReport() ? getReportOptions(reportType) : getTabOptions();
+
+        Boolean publicReportEnabled = FeaturesUtil.isVisibleModule(PUBLIC_REPORT_GENERATOR_MODULE_NAME);
+        ReportOption option = new ReportOption("fm-is-public-report-enabled", "", null);
+        option.setVisible(publicReportEnabled);
+        reportOptions.add(option);
+        return reportOptions;
     }
 
     private List<ReportOption> getReportOptions(final ReportType reportType) {

@@ -84,7 +84,10 @@ class SaveModal extends Component {
         {!loading ? (
           <>
             <Form.Field>
-              <Label>{translations[`${TRN_PREFIX}enterReportTitle`]}</Label>
+              <Label>
+                <div className="red_text" style={{ float: 'left', paddingRight: '5px' }}>* </div>
+                <div>{translations[`${TRN_PREFIX}enterReportTitle`]}</div>
+              </Label>
               <Input defaultValue={name} focus onChange={(event) => this.handleChangeName(event.target.value)} />
             </Form.Field>
             {reportCategories ? (

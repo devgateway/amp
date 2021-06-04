@@ -45,3 +45,4 @@ export const ERROR_CLASS_REPORT_DESIGNER_ID = '17';
 export const API_ERROR_DUPLICATED_NAME = '05';
 
 export const IS_MEASURELESS_REPORT = true; // One day this could be a GS/FM setting.
+export const FM_IS_PUBLIC_REPORT_ENABLED = 'fm-is-public-report-enabled';

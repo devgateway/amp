@@ -5,7 +5,7 @@ import {
 } from 'semantic-ui-react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { TRN_PREFIX } from '../utils/constants';
+import { FM_IS_PUBLIC_REPORT_ENABLED, TRN_PREFIX } from '../utils/constants';
 import './MainMenu.css';
 import SaveModal from './SaveModal';
 import { getLayout } from '../actions/layoutActions';
@@ -52,7 +52,7 @@ class MainMenu extends Component {
       modalSaveError, saveModalOpen, isNewReport
     } = this.state;
     const {
-      translations, tab, saveNewReport, saveReport, loaded, results, runReport, id
+      translations, tab, saveNewReport, saveReport, loaded, results, runReport, id, options
     } = this.props;
     return (
       <>
@@ -86,13 +86,14 @@ class MainMenu extends Component {
             </Item>
           ) : null }
         </Menu>
-        {loaded && !results.logged && !id ? (
-          <Item>
-            <Button size="huge" fluid color="grey" onClick={runReport}>
-              {translations[`${TRN_PREFIX}plusRunReport`]}
-            </Button>
-          </Item>
-        ) : null }
+        {(loaded && !results.logged && !id
+          && options && options.find(i => i.name === FM_IS_PUBLIC_REPORT_ENABLED).visible) ? (
+            <Item>
+              <Button size="huge" fluid color="green" onClick={runReport}>
+                {translations[`${TRN_PREFIX}plusRunReport`]}
+              </Button>
+            </Item>
+          ) : null }
         <SaveModal
           open={saveModalOpen}
           modalSaveError={modalSaveError}
@@ -111,6 +112,7 @@ const mapStateToProps = state => ({
   loaded: state.layoutReducer.loaded,
   results: state.layoutReducer.results,
   id: state.uiReducer.id,
+  options: state.uiReducer.options,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -129,11 +131,13 @@ MainMenu.propTypes = {
   results: PropTypes.object,
   _getLayout: PropTypes.func.isRequired,
   runReport: PropTypes.func.isRequired,
-  id: PropTypes.number
+  id: PropTypes.number,
+  options: PropTypes.object
 };
 
 MainMenu.defaultProps = {
   loaded: false,
   results: undefined,
-  id: undefined
+  id: undefined,
+  options: undefined,
 };

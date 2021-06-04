@@ -117,7 +117,7 @@ class ReportGeneratorHome extends Component {
       }
     }
     if (response.payload.id < 0) {
-      window.open(`TEMPLATE/ampTemplate/saikuui_reports/index_reports.html#report/run/${response.payload.id}`);
+      window.open(`/TEMPLATE/ampTemplate/saikuui_reports/index_reports.html#report/run/${response.payload.id}`);
     } else {
       // TODO: Maybe we need to save the url we are coming from.
       window.location.href = '/viewTeamReports.do?tabs=false&reset=true';

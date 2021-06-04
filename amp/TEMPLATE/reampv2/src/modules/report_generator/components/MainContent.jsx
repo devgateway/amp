@@ -32,7 +32,10 @@ class MainContent extends Component {
     if (this.areEnoughDataForPreview()) {
       // Convert input data to a String then Number.
       const _reportDetails = { ...reportDetails };
+      // Remove fields that would make the preview flicker.
       delete _reportDetails.description;
+      delete _reportDetails.name;
+      delete _reportDetails.selectedReportCategory;
       const merged = {
         ..._reportDetails,
         columns: columns.selected,

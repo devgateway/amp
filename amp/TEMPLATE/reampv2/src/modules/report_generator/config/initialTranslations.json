@@ -53,5 +53,6 @@
   "amp.reportGenerator:showAppliedFilters": "(Show applied filters)",
   "amp.reportGenerator:errorLoadingReport": "ERROR: Cant load report data.",
   "amp.reportGenerator:apiError1705": "There is already a report with the same name. Please choose a different one.",
-  "amp.reportGenerator:moreThan3Hierarchies": "For better user experience, it is recommended to use up to three hierarchies."
+  "amp.reportGenerator:moreThan3Hierarchies": "For better user experience, it is recommended to use up to three hierarchies.",
+  "amp.reportGenerator:summaryReportWithoutMeasuresAndHierarchies": "Summary reports without hierarchies and measures are not supported."
 }

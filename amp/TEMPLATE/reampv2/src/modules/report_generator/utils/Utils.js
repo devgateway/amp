@@ -1,11 +1,14 @@
 import { PROFILE_REPORT, PROFILE_TAB } from './constants';
 
-export function validateSaveModal(title, columns) {
+export function validateSaveModal(title, columns, reportDetails, hierarchies, measures) {
   if (title === null || title === undefined || title.toString().trim().length === 0) {
     return 'missingTitle';
   }
   if (!columns || columns.length === 0) {
     return 'missingColumns';
+  }
+  if (reportDetails.selectedSummaryReport && hierarchies.selected.length === 0 && measures.selected.length === 0) {
+    return 'summaryReportWithoutMeasuresAndHierarchies';
   }
   return null;
 }

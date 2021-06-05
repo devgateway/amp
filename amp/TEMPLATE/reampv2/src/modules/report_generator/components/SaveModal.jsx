@@ -26,9 +26,9 @@ class SaveModal extends Component {
 
   validateAndSave = () => {
     const {
-      save, close, name, columns
+      save, close, name, columns, reportDetails, hierarchies, measures
     } = this.props;
-    const msg = validateSaveModal(name, columns);
+    const msg = validateSaveModal(name, columns, reportDetails, hierarchies, measures);
     if (msg) {
       this.setState({ modalSaveError: msg });
     } else {
@@ -137,6 +137,9 @@ const mapStateToProps = state => ({
   metaDataPending: state.uiReducer.metaDataPending,
   selectedReportCategory: state.uiReducer.reportDetails.selectedReportCategory,
   reportCategories: state.uiReducer.reportCategories,
+  reportDetails: state.uiReducer.reportDetails,
+  hierarchies: state.uiReducer.hierarchies,
+  measures: state.uiReducer.measures,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -160,6 +163,9 @@ SaveModal.propTypes = {
   selectedReportCategory: PropTypes.number,
   reportCategories: PropTypes.array,
   columns: PropTypes.array,
+  reportDetails: PropTypes.object,
+  hierarchies: PropTypes.object,
+  measures: PropTypes.object,
 };
 
 SaveModal.defaultProps = {
@@ -168,5 +174,8 @@ SaveModal.defaultProps = {
   name: undefined,
   selectedReportCategory: null,
   reportCategories: [],
-  columns: []
+  columns: [],
+  reportDetails: undefined,
+  hierarchies: undefined,
+  measures: undefined,
 };

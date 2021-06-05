@@ -317,6 +317,12 @@ public class ReportColumnProvider extends ReportEntityProvider {
     }
 
     private boolean isHierarchyColumn(final String columnName, final ReportProfile profile, final ReportType type) {
+        if (columnName.equals(ArConstants.COLUMN_PROJECT_TITLE)
+                && FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PROJECT_TITLE_HIRARCHY)
+                .equalsIgnoreCase("true")) {
+            return true;
+        }
+        
         if (profile.isTab() && MEASURELESS_ONLY_HIERARCHIES.contains(columnName)) {
             return false;
         }

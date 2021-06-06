@@ -144,6 +144,29 @@ public class EndPoints {
         return DashboardsService.buildOkResponseWithOriginHeaders(DashboardsService.getFundingTypeChartData(config));
     }
 
+    @OPTIONS
+    @Path("/finstrument")
+    @ApiOperation(
+            value = "Describe options for endpoint",
+            notes = "Enables Cross-Origin Resource Sharing for endpoint")
+    public Response describeFinancingInstrument() {
+        return DashboardsService.buildOkResponseWithOriginHeaders("");
+    }
+
+    @POST
+    @Path("/finstrument")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "ftype")
+    @ApiOperation("Get financing instrument chart data")
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "Funding istrumet chart data",
+            response = FundingTypeChartData.class))
+    public Response getFinancingInstrument(SettingsAndFiltersParameters config) {
+        return DashboardsService.buildOkResponseWithOriginHeaders(DashboardsService.getFinancingInstrumentChartData(config));
+    }
+
+
+
+
     @POST
     @Path("/ftype/{year}/{id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")

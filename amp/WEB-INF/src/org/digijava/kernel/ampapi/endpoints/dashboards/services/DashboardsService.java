@@ -400,7 +400,7 @@ public class DashboardsService {
         if (reportType == 1) {
             retlist.setName(DashboardConstants.FUNDING_TYPE);
             retlist.setTitle(TranslatorWorker.translateText(DashboardConstants.FUNDING_TYPE));
-        }else{
+        } else {
             retlist.setName(DashboardConstants.FINANCING_INSTRUMENT);
             retlist.setTitle(TranslatorWorker.translateText(DashboardConstants.FINANCING_INSTRUMENT));
         }

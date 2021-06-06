@@ -161,10 +161,9 @@ public class EndPoints {
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "Funding istrumet chart data",
             response = FundingTypeChartData.class))
     public Response getFinancingInstrument(SettingsAndFiltersParameters config) {
-        return DashboardsService.buildOkResponseWithOriginHeaders(DashboardsService.getFinancingInstrumentChartData(config));
+        return DashboardsService.buildOkResponseWithOriginHeaders(
+                DashboardsService.getFinancingInstrumentChartData(config));
     }
-
-
 
 
     @POST

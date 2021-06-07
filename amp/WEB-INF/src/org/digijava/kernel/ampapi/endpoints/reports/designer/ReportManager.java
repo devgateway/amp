@@ -22,7 +22,6 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.errors.GenericErrors;
 import org.digijava.kernel.ampapi.endpoints.reports.designer.validators.ReportColumnValidator;
 import org.digijava.kernel.ampapi.endpoints.reports.designer.validators.ReportHierarchyValidator;
-import org.digijava.kernel.ampapi.endpoints.reports.designer.validators.ReportMaxHierarchiesSizeValidator;
 import org.digijava.kernel.ampapi.endpoints.reports.designer.validators.ReportMeasureValidator;
 import org.digijava.kernel.ampapi.endpoints.reports.designer.validators.ReportMeasurelessHierarchiesAmountColumnsValidator;
 import org.digijava.kernel.ampapi.endpoints.reports.designer.validators.ReportMeasurelessHierarchiesValidator;
@@ -144,7 +143,6 @@ public class ReportManager {
         fieldsValidators.add(new ReportHierarchyValidator(columnProvider));
 
         reportValidators.add(new ReportSummaryValidator());
-        reportValidators.add(new ReportMaxHierarchiesSizeValidator());
         reportValidators.add(new ReportNonSummaryColumnsHierarchiesValidator());
         reportValidators.add(new ReportTabMaxMeasuresSizeValidator());
         reportValidators.add(new ReportMeasurelessHierarchiesValidator(columnProvider));

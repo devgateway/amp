@@ -73,7 +73,7 @@ export default class ColumnsSelector extends Component {
                 return (
                   <div key={Math.random()}>
                     <Accordion.Title index={i} active={activeIndex.includes(i)} onClick={this.handleHeaderClick}>
-                      <div className="ui checkbox general-checkbox">
+                      <div className={`ui checkbox general-checkbox${!isChecked && subSelectedList.length > 0 ? ' partial' : ''}`}>
                         <input
                           className="hidden"
                           id={`${i}_cat`}

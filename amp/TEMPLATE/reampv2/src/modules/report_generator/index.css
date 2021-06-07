@@ -277,6 +277,11 @@ i.arrow {
     border-color: rgba(34, 36, 38, 0.35);
 }
 
+.general-checkbox.partial input ~ label::before {
+    background-color: #f2711c !important;
+    border-color: rgba(34, 36, 38, 0.35);
+}
+
 .general-checkbox {
     margin-bottom: 0;
 }

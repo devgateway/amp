@@ -135,7 +135,7 @@ class ReportingDetailSection extends Component {
             </OptionsList>
           </GridColumn>
           <GridColumn computer="8" tablet="16">
-            <OptionsList title={translations[`${TRN_PREFIX}reportDescription`]} isRequired tooltip="tooltip 2" >
+            <OptionsList title={translations[`${TRN_PREFIX}reportDescription`]} tooltip="tooltip 2" >
               <Form className="description">
                 <TextArea value={description} onChange={this.changeDescription} />
               </Form>

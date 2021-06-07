@@ -11,10 +11,11 @@ export function fetchGlobalSettingsPending() {
   };
 }
 
-export function fetchGlobalSettingsSuccess(payload) {
+export function fetchGlobalSettingsSuccess(payload, payload2) {
   return {
     type: FETCH_GLOBAL_SETTINGS_SUCCESS,
-    payload
+    payload,
+    payload2
   };
 }
 
@@ -25,10 +26,12 @@ export function fetchGlobalSettingsError(error) {
   };
 }
 
-export const fetchGlobalSettings = () => dispatch => {
+export const fetchGlobalSettings = (settingsURL) => dispatch => {
   dispatch(fetchGlobalSettingsPending());
-  return fetchApiData({
+  return Promise.all([fetchApiData({
     url: URL_GLOBAL_SETTINGS
-  }).then((data) => dispatch(fetchGlobalSettingsSuccess(data)))
+  }), fetchApiData({
+    url: settingsURL
+  })]).then((data) => dispatch(fetchGlobalSettingsSuccess(data[0], data[1])))
     .catch(error => dispatch(fetchGlobalSettingsError(error)));
 };

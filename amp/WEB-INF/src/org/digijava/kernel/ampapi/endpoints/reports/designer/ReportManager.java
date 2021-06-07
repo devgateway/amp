@@ -1,6 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.reports.designer;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
@@ -8,11 +9,30 @@ import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.reports.converters.AmpARFilterConverter;
 import org.dgfoundation.amp.reports.converters.AmpReportFiltersConverter;
+import org.digijava.kernel.ampapi.endpoints.activity.DefaultTranslatedFieldReader;
+import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
+import org.digijava.kernel.ampapi.endpoints.common.AMPTranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
+import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
+import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
+import org.digijava.kernel.ampapi.endpoints.dto.MultilingualContent;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.errors.GenericErrors;
+import org.digijava.kernel.ampapi.endpoints.reports.designer.validators.ReportColumnValidator;
+import org.digijava.kernel.ampapi.endpoints.reports.designer.validators.ReportHierarchyValidator;
+import org.digijava.kernel.ampapi.endpoints.reports.designer.validators.ReportMaxHierarchiesSizeValidator;
+import org.digijava.kernel.ampapi.endpoints.reports.designer.validators.ReportMeasureValidator;
+import org.digijava.kernel.ampapi.endpoints.reports.designer.validators.ReportMeasurelessHierarchiesAmountColumnsValidator;
+import org.digijava.kernel.ampapi.endpoints.reports.designer.validators.ReportMeasurelessHierarchiesValidator;
+import org.digijava.kernel.ampapi.endpoints.reports.designer.validators.ReportNameValidator;
+import org.digijava.kernel.ampapi.endpoints.reports.designer.validators.ReportNonSummaryColumnsHierarchiesValidator;
+import org.digijava.kernel.ampapi.endpoints.reports.designer.validators.ReportSummaryValidator;
+import org.digijava.kernel.ampapi.endpoints.reports.designer.validators.ReportTabMaxMeasuresSizeValidator;
+import org.digijava.kernel.ampapi.endpoints.reports.designer.validators.ReportTypeValidator;
+import org.digijava.kernel.ampapi.endpoints.reports.designer.validators.ReportUniqueNameValidator;
+import org.digijava.kernel.ampapi.endpoints.reports.designer.validators.ReportValidator;
 import org.digijava.kernel.ampapi.endpoints.security.SecurityErrors;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
@@ -20,6 +40,7 @@ import org.digijava.kernel.ampapi.endpoints.util.MaxSizeLinkedHashMap;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpColumns;
+import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
@@ -34,8 +55,11 @@ import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -61,10 +85,9 @@ public class ReportManager {
 
     public static final String REPORT = "report";
 
-    public static final String REPORT_NAME = "name";
-    public static final String REPORT_TYPE = "type";
-
     public static final String PUBLIC_REPORT_GENERATOR_MODULE_NAME = "Public Report Generator";
+
+    private static TranslatorService translatorService = AMPTranslatorService.INSTANCE;
 
     private static final Logger logger = Logger.getLogger(ReportManager.class);
 
@@ -77,7 +100,12 @@ public class ReportManager {
     private Integer reportToken;
 
     private final ReportColumnProvider columnProvider;
+
     private final ReportMeasureProvider measureProvider;
+
+    private List<ReportValidator> fieldsValidators = new ArrayList<>();
+
+    private List<ReportValidator> reportValidators = new ArrayList<>();
 
     public ReportManager(final ReportColumnProvider columnProvider, final ReportMeasureProvider measureProvider) {
         this.columnProvider = columnProvider;
@@ -91,7 +119,8 @@ public class ReportManager {
         this.reportRequest = reportRequest;
         this.report = reportId == null ? new AmpReports() : getReportById(reportId);
 
-        validateReportRequestFields();
+        initValidators();
+        validate();
 
         convertReportRequestToAmpReport();
 
@@ -104,6 +133,38 @@ public class ReportManager {
         }
 
         return this;
+    }
+
+    public void initValidators() {
+        fieldsValidators.add(new ReportNameValidator());
+        fieldsValidators.add(new ReportUniqueNameValidator(report));
+        fieldsValidators.add(new ReportTypeValidator());
+        fieldsValidators.add(new ReportColumnValidator(columnProvider));
+        fieldsValidators.add(new ReportMeasureValidator(measureProvider));
+        fieldsValidators.add(new ReportHierarchyValidator(columnProvider));
+
+        reportValidators.add(new ReportSummaryValidator());
+        reportValidators.add(new ReportMaxHierarchiesSizeValidator());
+        reportValidators.add(new ReportNonSummaryColumnsHierarchiesValidator());
+        reportValidators.add(new ReportTabMaxMeasuresSizeValidator());
+        reportValidators.add(new ReportMeasurelessHierarchiesValidator(columnProvider));
+        reportValidators.add(new ReportMeasurelessHierarchiesAmountColumnsValidator(columnProvider));
+    }
+
+    private void validate() {
+        validate(fieldsValidators);
+
+        if (errors.isEmpty()) {
+            validate(reportValidators);
+        }
+    }
+
+    private void validate(List<ReportValidator> validators) {
+        for (ReportValidator validator : validators) {
+            if (!validator.isValid(reportRequest)) {
+                addError(validator.getErrorMessage());
+            }
+        }
     }
 
     private void authorize(final Boolean isDynamic) {
@@ -132,11 +193,16 @@ public class ReportManager {
     }
 
     /**
-     *  Save current report in the database
+     * Save current report in the database
      */
     private void persistReport() {
         TeamMember tm = TeamUtil.getCurrentMember();
         AdvancedReportUtil.saveReport(report, tm.getTeamId(), tm.getMemberId(), tm.getTeamHead());
+
+        if (ContentTranslationUtil.multilingualIsEnabled()) {
+            PersistenceManager.getSession().flush();
+            persistContentTranslations();
+        }
         logger.info("The report was saved with id = " + report.getAmpReportId());
     }
 
@@ -153,41 +219,8 @@ public class ReportManager {
         return reportToken;
     }
 
-    private void validateReportRequestFields() {
-        if (StringUtils.isBlank(reportRequest.getName())) {
-            addError(ReportDesignerErrors.REPORT_NAME_REQUIRED.withDetails(REPORT_NAME));
-        } else if (isReportNameDuplicated()) {
-            addError(ReportDesignerErrors.REPORT_NAME_DUPLICATED.withDetails(reportRequest.getName()));
-        }
-
-        if (StringUtils.isBlank(reportRequest.getType())) {
-            addError(ReportDesignerErrors.REPORT_TYPE_REQUIRED.withDetails(REPORT_TYPE));
-        }
-    }
-
-    private boolean isReportNameDuplicated() {
-        boolean nameIsUpdated = report.getAmpReportId() == null ? true
-                : !StringUtils.equalsIgnoreCase(report.getName(), reportRequest.getName());
-
-        if (nameIsUpdated) {
-            String queryStr = "select r FROM " + AmpReports.class.getName() + " r where "
-                    + AmpReports.hqlStringForName("r") + "=:reportName";
-            List<AmpReports> conflicts = PersistenceManager.getSession()
-                    .createQuery(queryStr)
-                    .setString("reportName", reportRequest.getName())
-                    .list();
-
-            return conflicts.stream()
-                    .filter(r -> report.getAmpReportId() == null || !report.getAmpReportId().equals(r.getAmpReportId()))
-                    .findAny().isPresent();
-        }
-
-        return false;
-    }
-
-
     private void convertReportRequestToAmpReport() {
-        report.setName(reportRequest.getName());
+        report.setName(reportRequest.getName().getOrBuildText());
 
         // Set the report type and profile only for the new reports
         if (report.getId() == null) {
@@ -288,7 +321,7 @@ public class ReportManager {
                     && !TRUE.equals(report.getHideActivities())) {
                 if (report.getColumnNames().contains(PROJECT_TITLE)) {
                     if (!FeaturesUtil.getGlobalSettingValueBoolean(PROJECT_TITLE_HIRARCHY)) {
-                            report.getHierarchies().removeIf(h -> h.getColumn().getColumnName().equals(PROJECT_TITLE));
+                        report.getHierarchies().removeIf(h -> h.getColumn().getColumnName().equals(PROJECT_TITLE));
                     }
                 } else {
                     ReportColumn titleAmpColumn = getAvailableColumns().stream()
@@ -380,8 +413,8 @@ public class ReportManager {
         Report report = errors.isEmpty() ? getImportResult() : null;
 
         if (report == null) {
-                details = new HashMap<>();
-                details.put(REPORT, reportRequest);
+            details = new HashMap<>();
+            details.put(REPORT, reportRequest);
             if (errors.isEmpty()) {
                 addError(GenericErrors.UNKNOWN_ERROR);
             }
@@ -407,8 +440,8 @@ public class ReportManager {
 
     private Report convertAmpReportsToReport(final AmpReports ampReport) {
         Report report = new Report();
+        report.setName(getNameInMultilingualContent(ampReport));
         report.setId(ampReport.getAmpReportId());
-        report.setName(ampReport.getName());
         report.setDescription(ampReport.getReportDescription());
         report.setType(ReportType.fromLong(ampReport.getType()));
         report.setGroupingOption(ampReport.getOptions());
@@ -438,6 +471,19 @@ public class ReportManager {
         return report;
     }
 
+    private MultilingualContent getNameInMultilingualContent(final AmpReports ampReport) {
+        boolean isMultilingual = TranslationSettings.getCurrent().isMultilingual();
+        Map<String, String> translations = new HashMap<>();
+        if (isMultilingual) {
+            DefaultTranslatedFieldReader reader = new DefaultTranslatedFieldReader();
+            Field nameField = FieldUtils.getField(AmpReports.class, "name", true);
+            translations = (Map<String, String>)
+                    reader.get(nameField, AmpReports.class, ampReport.getName(), ampReport);
+        }
+
+        return MultilingualContent.build(isMultilingual, ampReport.getName(), translations);
+    }
+
     private AmpReports getReportById(final Long reportId) {
         AmpReports ampReport = (AmpReports) PersistenceManager.getSession().get(AmpReports.class, reportId);
         if (ampReport == null) {
@@ -452,4 +498,40 @@ public class ReportManager {
         return columnProvider.getColumns(reportProfile, ReportType.fromLong(report.getType()));
     }
 
+    /**
+     * Stores all provided translations
+     *
+     * @return value to be stored in the base table
+     */
+    protected void persistContentTranslations() {
+        List<AmpContentTranslation> trnList =
+                translatorService.loadFieldTranslations(AmpReports.class.getName(), report.getAmpReportId(), "name");
+        // process translations
+        for (Map.Entry<String, String> trn : reportRequest.getName().getOrBuildTranslations().entrySet()) {
+            String langCode = trn.getKey();
+            String translation = trn.getValue();
+            AmpContentTranslation act = null;
+            if (trn.equals(TLSUtils.getEffectiveLangCode())) {
+                break;
+            }
+            for (AmpContentTranslation existingAct : trnList) {
+                if (langCode.equalsIgnoreCase(existingAct.getLocale())) {
+                    act = existingAct;
+                    break;
+                }
+            }
+            // if translation to be removed
+            if (StringUtils.isBlank(trn.getValue())) {
+                trnList.remove(act);
+            } else if (act == null) {
+                act = new AmpContentTranslation(AmpReports.class.getName(), report.getAmpReportId(), "name",
+                        langCode, trn.getValue().trim());
+                trnList.add(act);
+            } else {
+                act.setTranslation(translation.trim());
+            }
+        }
+
+        TranslationUtil.serialize(report, "name", trnList);
+    }
 }

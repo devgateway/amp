@@ -18,7 +18,7 @@ public final class ReportDesignerErrors {
 
     public static final ApiErrorMessage REPORT_PROFILE_INVALID =
             new ApiErrorMessage(ERROR_CLASS_REPORT_DESIGNER_ID, 0, "Invalid report profile");
-    
+
     public static final ApiErrorMessage REPORT_TYPE_INVALID =
             new ApiErrorMessage(ERROR_CLASS_REPORT_DESIGNER_ID, 1, "Invalid report type");
 
@@ -33,5 +33,37 @@ public final class ReportDesignerErrors {
 
     public static final ApiErrorMessage REPORT_NAME_DUPLICATED = new ApiErrorMessage(ERROR_CLASS_REPORT_DESIGNER_ID, 5,
             "Report name is not unique");
+
+    public static final ApiErrorMessage REPORT_SUMMARY_WITHOUT_HIERS_OR_MEASURES = new ApiErrorMessage(
+            ERROR_CLASS_REPORT_DESIGNER_ID, 6, "Summary reports should have at least one measure or hierarchy");
+
+    public static final ApiErrorMessage REPORT_MAX_HIERARCHY_SIZE_EXCEEDED = new ApiErrorMessage(
+            ERROR_CLASS_REPORT_DESIGNER_ID, 7, "The maximum hierarchies size exceeded");
+
+    public static final ApiErrorMessage REPORT_NON_SUMMARY_COLUMNS_HIERARCHIES = new ApiErrorMessage(
+            ERROR_CLASS_REPORT_DESIGNER_ID, 8, "Only in summary reports all columns can be hierarchies");
+
+    public static final ApiErrorMessage REPORT_MAX_MEASURES_SIZE_EXCEEDED = new ApiErrorMessage(
+            ERROR_CLASS_REPORT_DESIGNER_ID, 9, "The maximum measures size exceeded for a tab");
+
+    public static final ApiErrorMessage REPORT_MEASURELESS_HIERARCHIES = new ApiErrorMessage(
+            ERROR_CLASS_REPORT_DESIGNER_ID, 10,
+            "There are hierarchies that can be used only in reports without measures");
+
+    public static final ApiErrorMessage REPORT_MEASURELESS_HIERARCHIES_AMOUNT_COLUMNS = new ApiErrorMessage(
+            ERROR_CLASS_REPORT_DESIGNER_ID, 11,
+            "There are hierarchies that can be used only in reports without amount and MTEF columns");
+
+    public static final ApiErrorMessage REPORT_INVALID_COLUMNS = new ApiErrorMessage(
+            ERROR_CLASS_REPORT_DESIGNER_ID, 12, "Invalid columns");
+
+    public static final ApiErrorMessage REPORT_INVALID_MEASURES = new ApiErrorMessage(
+            ERROR_CLASS_REPORT_DESIGNER_ID, 13, "Invalid measures");
+
+    public static final ApiErrorMessage REPORT_INVALID_HIERARCHIES = new ApiErrorMessage(
+            ERROR_CLASS_REPORT_DESIGNER_ID, 14, "Invalid hierarchies");
+
+    public static final ApiErrorMessage REPORT_FIELD_REQUIRED = new ApiErrorMessage(ERROR_CLASS_REPORT_DESIGNER_ID, 15,
+            "Field required");
 
 }

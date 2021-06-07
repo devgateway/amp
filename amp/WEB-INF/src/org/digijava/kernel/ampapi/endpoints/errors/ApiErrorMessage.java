@@ -124,7 +124,7 @@ public class ApiErrorMessage {
             newValues.addAll(values);
         }
         newValues.addAll(details);
-        return new ApiErrorMessage(id, typeId, description, prefix, newValues, isGeneric);
+        return new ApiErrorMessage(typeId, id, description, prefix, newValues, isGeneric);
     }
     
     public String getErrorId() {

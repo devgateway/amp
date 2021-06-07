@@ -8,7 +8,8 @@ const initialState = {
   pending: false,
   loaded: false,
   error: false,
-  globalSettings: undefined
+  globalSettings: undefined,
+  reportGlobalSettings: undefined,
 };
 
 export default (state = initialState, action) => {
@@ -24,6 +25,7 @@ export default (state = initialState, action) => {
         pending: false,
         loaded: true,
         globalSettings: action.payload,
+        reportGlobalSettings: action.payload2
       };
     }
     case FETCH_GLOBAL_SETTINGS_ERROR:

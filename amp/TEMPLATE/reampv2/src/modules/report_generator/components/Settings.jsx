@@ -27,16 +27,17 @@ class Settings extends Component {
 
   componentDidMount() {
     const { settings, profile, _fetchGlobalSettings } = this.props;
+    const settingsURL = (profile === PROFILE_TAB) ? URL_SETTINGS_TABS : URL_SETTINGS_REPORTS;
     widget = new SettingsWidget.SettingsWidget({
       el: 'settings-popup',
       draggable: true,
       caller: profile === PROFILE_TAB ? TABS : REPORTS,
       isPopup: true,
-      definitionUrl: profile === PROFILE_TAB ? URL_SETTINGS_TABS : URL_SETTINGS_REPORTS
+      definitionUrl: settingsURL
     });
     if (settings === null) {
-      _fetchGlobalSettings().then((action) => {
-        const gs = extractSettings(action.payload);
+      _fetchGlobalSettings(settingsURL).then((action) => {
+        const gs = extractSettings(action.payload, action.payload2);
         return widget.restoreFromSaved(gs);
       });
     } else {
@@ -96,7 +97,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  _fetchGlobalSettings: () => fetchGlobalSettings(),
+  _fetchGlobalSettings: (url) => fetchGlobalSettings(url),
   _updateAppliedSettings: (data) => dispatch(updateAppliedSettings(data)),
 }, dispatch);
 

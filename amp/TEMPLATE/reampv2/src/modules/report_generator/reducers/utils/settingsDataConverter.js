@@ -1,4 +1,4 @@
-export function extractSettings(gs) {
+export function extractSettings(gs, reportGs) {
   const settings = {
     'amount-format': {},
     'calendar-id': null,
@@ -26,5 +26,14 @@ export function extractSettings(gs) {
   settings['year-range'].type = 'INT_VALUE';
   settings['year-range'].from = `${Math.floor((Number(settings['year-range'].to)
     - Number(settings['year-range'].rangeFrom)) / 2) + Number(settings['year-range'].rangeFrom)}`;
+  if (reportGs) {
+    const yearRange = reportGs.find(i => i.id === 'year-range');
+    if (yearRange) {
+      settings['year-range'].rangeFrom = Number(yearRange.value.from);
+      settings['year-range'].from = Number(yearRange.value.from);
+      settings['year-range'].rangeTo = Number(yearRange.value.to);
+      settings['year-range'].to = Number(yearRange.value.to);
+    }
+  }
   return settings;
 }

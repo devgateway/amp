@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
+import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.reports.converters.AmpARFilterConverter;
 import org.dgfoundation.amp.reports.converters.AmpReportFiltersConverter;
@@ -46,6 +47,7 @@ import java.util.UUID;
 
 import static java.lang.Boolean.TRUE;
 import static org.dgfoundation.amp.ar.ColumnConstants.PROJECT_TITLE;
+import static org.dgfoundation.amp.newreports.AmountsUnits.getAmountCode;
 import static org.digijava.kernel.ampapi.endpoints.reports.designer.ReportDesignerErrors.REPORT_NOT_FOUND;
 import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getReportSettings;
 import static org.digijava.module.aim.ar.util.FilterUtil.buildFilterFromSource;
@@ -91,8 +93,9 @@ public class ReportManager {
 
         validateReportRequestFields();
 
+        convertReportRequestToAmpReport();
+
         if (errors.isEmpty()) {
-            convertReportRequestToAmpReport();
             if (isDynamic) {
                 persistDynamicReport();
             } else {
@@ -238,13 +241,15 @@ public class ReportManager {
                     filter.setIncludeLocationChildren(reportRequest.isIncludeLocationChildren());
                 }
 
+                int divider = getAmountCode(AmountsUnits.getDefaultValue().divider);
+
                 if (reportRequest.getSettings() != null) {
                     String currency = reportRequest.getSettings().get(SettingsConstants.CURRENCY_ID).toString();
                     String calendar = reportRequest.getSettings().get(SettingsConstants.CALENDAR_TYPE_ID).toString();
                     filter.setCurrency(CurrencyUtil.getAmpcurrency(currency));
                     filter.setCalendarType(FiscalCalendarUtil.getAmpFiscalCalendar(new Long(calendar)));
-                    if (reportRequest.getSettings() != null
-                            && reportRequest.getSettings().get(SettingsConstants.YEAR_RANGE_ID) != null) {
+
+                    if (reportRequest.getSettings().get(SettingsConstants.YEAR_RANGE_ID) != null) {
                         Map<String, Object> yearRange = (Map<String, Object>)
                                 reportRequest.getSettings().get(SettingsConstants.YEAR_RANGE_ID);
                         if (yearRange.get(SettingsConstants.YEAR_FROM) != null) {
@@ -256,7 +261,15 @@ public class ReportManager {
                                     Integer.valueOf((String) yearRange.get(SettingsConstants.YEAR_TO)));
                         }
                     }
+
+                    if (reportRequest.getSettings().get(SettingsConstants.AMOUNT_UNITS) != null) {
+                        divider = getAmountCode(PersistenceManager.getInteger(
+                                reportRequest.getSettings().get(SettingsConstants.AMOUNT_UNITS)));
+                    }
                 }
+
+                filter.setAmountinthousand(divider);
+
                 Set<AmpFilterData> fdSet = AmpFilterData.createFilterDataSet(report, filter);
 
                 if (report.getFilterDataSet() == null) {

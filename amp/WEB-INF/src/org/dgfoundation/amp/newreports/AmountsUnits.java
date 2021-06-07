@@ -89,4 +89,8 @@ public enum AmountsUnits {
     public static int getAmountDivider(int code) {
         return AmountsUnits.getForValue(code).divider;
     }
+
+    public static int getAmountCode(final int divider) {
+        return AmountsUnits.getForDivider(divider).code;
+    }
 }

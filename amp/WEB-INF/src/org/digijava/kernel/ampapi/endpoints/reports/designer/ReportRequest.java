@@ -10,6 +10,7 @@ import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.EntityResolver;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -80,7 +81,7 @@ public class ReportRequest {
 
     @JsonProperty(EPConstants.FILTERS)
     @ApiModelProperty(dataType = "org.digijava.kernel.ampapi.swagger.types.FiltersPH")
-    private Map<String, Object> filters;
+    private Map<String, Object> filters = new HashMap<>();
 
     @JsonProperty(EPConstants.SETTINGS)
     @ApiModelProperty(dataType = "org.digijava.kernel.ampapi.swagger.types.SettingsPH")

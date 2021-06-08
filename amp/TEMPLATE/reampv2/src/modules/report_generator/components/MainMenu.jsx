@@ -9,6 +9,7 @@ import { FM_IS_PUBLIC_REPORT_ENABLED, TRN_PREFIX } from '../utils/constants';
 import './MainMenu.css';
 import SaveModal from './SaveModal';
 import { getLayout } from '../actions/layoutActions';
+import { areEnoughDataForPreview } from '../utils/Utils';
 
 const MENU = 'menu';
 
@@ -52,7 +53,8 @@ class MainMenu extends Component {
       modalSaveError, saveModalOpen, isNewReport
     } = this.state;
     const {
-      translations, tab, saveNewReport, saveReport, loaded, results, runReport, id, options
+      translations, tab, saveNewReport, saveReport, loaded, results, runReport, id, options,
+      columns, measures, hierarchies, reportDetails
     } = this.props;
     return (
       <>
@@ -89,7 +91,12 @@ class MainMenu extends Component {
         {(loaded && !results.logged && !id
           && options && options.find(i => i.name === FM_IS_PUBLIC_REPORT_ENABLED).visible) ? (
             <Item>
-              <Button size="huge" fluid color="green" onClick={runReport}>
+              <Button
+                size="huge"
+                fluid
+                color="green"
+                onClick={runReport}
+                disabled={!areEnoughDataForPreview(columns, measures, hierarchies, reportDetails)}>
                 {translations[`${TRN_PREFIX}plusRunReport`]}
               </Button>
             </Item>
@@ -113,6 +120,10 @@ const mapStateToProps = state => ({
   results: state.layoutReducer.results,
   id: state.uiReducer.id,
   options: state.uiReducer.options,
+  reportDetails: state.uiReducer.reportDetails,
+  columns: state.uiReducer.columns,
+  measures: state.uiReducer.measures,
+  hierarchies: state.uiReducer.hierarchies,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -132,7 +143,11 @@ MainMenu.propTypes = {
   _getLayout: PropTypes.func.isRequired,
   runReport: PropTypes.func.isRequired,
   id: PropTypes.number,
-  options: PropTypes.object
+  options: PropTypes.object,
+  reportDetails: PropTypes.object,
+  columns: PropTypes.object,
+  measures: PropTypes.object,
+  hierarchies: PropTypes.object,
 };
 
 MainMenu.defaultProps = {
@@ -140,4 +155,8 @@ MainMenu.defaultProps = {
   results: undefined,
   id: undefined,
   options: undefined,
+  reportDetails: undefined,
+  columns: undefined,
+  measures: undefined,
+  hierarchies: undefined,
 };

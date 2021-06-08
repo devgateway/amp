@@ -15,8 +15,9 @@ import PreviewSection from './sections/PreviewSection';
 import { getPreview, updatePreviewId } from '../actions/previewActions';
 import { ReportGeneratorContext } from './StartUp';
 
-import { convertReportType, convertTotalGrouping, javaHashCode } from '../utils/Utils';
-import { IS_MEASURELESS_REPORT } from '../utils/constants';
+import {
+  convertReportType, convertTotalGrouping, javaHashCode, areEnoughDataForPreview
+} from '../utils/Utils';
 
 class MainContent extends Component {
   constructor() {
@@ -29,7 +30,7 @@ class MainContent extends Component {
     const {
       _updatePreviewId, _getPreview, columns, measures, hierarchies, reportDetails
     } = this.props;
-    if (this.areEnoughDataForPreview()) {
+    if (areEnoughDataForPreview(columns, measures, hierarchies, reportDetails)) {
       // Convert input data to a String then Number.
       const _reportDetails = { ...reportDetails };
       // Remove fields that would make the preview flicker.
@@ -80,23 +81,6 @@ class MainContent extends Component {
       // With current user input we cant generate a valid preview.
       _updatePreviewId(-1, undefined);
     }
-  }
-
-  areEnoughDataForPreview = () => {
-    const {
-      columns, measures, hierarchies, reportDetails
-    } = this.props;
-    if (columns && measures && hierarchies && reportDetails && columns.available && columns.available.length > 0) {
-      if (columns.selected.length > 0 && (IS_MEASURELESS_REPORT || measures.selected.length > 0)) {
-        const selectedSummaryReport = reportDetails && reportDetails.selectedSummaryReport;
-        if (columns.selected.length === hierarchies.selected.length && !selectedSummaryReport) {
-          return false;
-        }
-        // TODO: check if this can be generalized when we implement the saving report functionality.
-        return true;
-      }
-    }
-    return false;
   }
 
   handleMenuClick = (index) => {

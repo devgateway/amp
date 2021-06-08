@@ -7,7 +7,7 @@ import {
   resetTopReport,
   fetchYearDetailSuccess, fetchYearDetailPending, fetchYearDetailError
 } from './reportActions';
-import { fetchApiData } from '../../../utils/loadTranslations';
+import { fetchApiData } from '../../../utils/apiOperations';
 import {
   CURRENCY_CODE, DEFAULT_CURRENCY,
   DIRECT_INDIRECT_REPORT, FUNDING_TYPE, INCLUDE_LOCATIONS_WITH_CHILDREN, TOP_DONOR_REPORT,

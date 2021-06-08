@@ -9,7 +9,7 @@ import {
   fetchModalitiesPending,
   fetchModalitiesSuccess
 } from './filtersActions';
-import { fetchApiData } from '../../../utils/loadTranslations';
+import { fetchApiData } from '../../../utils/apiOperations';
 import { API_FILTERS_SECTORS_URL, API_FILTERS_COUNTRIES_URL, API_FILTERS_MODALITIES_URL } from '../utils/constants';
 
 export const loadSectorsFilters = () => dispatch => {

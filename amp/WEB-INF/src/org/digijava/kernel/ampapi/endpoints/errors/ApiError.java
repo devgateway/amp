@@ -3,7 +3,6 @@ package org.digijava.kernel.ampapi.endpoints.errors;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -16,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Joiner;
+import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang.StringUtils;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
@@ -28,6 +28,7 @@ import org.digijava.kernel.ampapi.endpoints.contact.ContactErrors;
 import org.digijava.kernel.ampapi.endpoints.currency.CurrencyErrors;
 import org.digijava.kernel.ampapi.endpoints.dashboards.DashboardErrors;
 import org.digijava.kernel.ampapi.endpoints.datafreeze.DataFreezeErrors;
+import org.digijava.kernel.ampapi.endpoints.geocoding.GeoCoderEndpoint;
 import org.digijava.kernel.ampapi.endpoints.gpi.GPIErrors;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorErrors;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRulesErrors;
@@ -63,6 +64,7 @@ public class ApiError {
     public static final int ERROR_CLASS_DATAFREEZE_ID = 14;
     public static final int ERROR_CLASS_PERFORMANCERULE_ID = 15;
     public static final int ERROR_CLASS_MACHINE_TRANSLATION_ID = 16;
+    public static final int ERROR_CLASS_GEO_CODER_ID = 17;
 
     public static final int ERROR_CLASS_TEST_ID = 99;
 
@@ -104,7 +106,7 @@ public class ApiError {
     }
 
     private final static Set<String> COMPONENTS_WITH_NEW_ERROR_FORMAT = new HashSet<>(
-            Collections.singletonList(InterchangeEndpoints.class.getName()));
+            ImmutableList.of(InterchangeEndpoints.class.getName(), GeoCoderEndpoint.class.getName()));
 
     /**
      * Returns an ApiErrorResponse object with a single error message

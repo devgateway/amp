@@ -261,7 +261,9 @@ public class ReportManager {
         }
 
         Map<String, Object> filterMap = reportRequest.getFilters();
-        if (filterMap != null) {
+        boolean containsFilters = filterMap != null || reportRequest.isIncludeLocationChildren() != null
+                || reportRequest.getSettings() != null;
+        if (containsFilters) {
             AmpReportFilters reportFilters = FilterUtils.getFilters(filterMap, new AmpReportFilters());
 
             // Transform back to legacy AmpARFilters.
@@ -272,9 +274,9 @@ public class ReportManager {
                     filter.setIncludeLocationChildren(reportRequest.isIncludeLocationChildren());
                 }
 
-                int divider = getAmountCode(AmountsUnits.getDefaultValue().divider);
-
                 if (reportRequest.getSettings() != null) {
+                    int divider = getAmountCode(AmountsUnits.getDefaultValue().divider);
+
                     String currency = reportRequest.getSettings().get(SettingsConstants.CURRENCY_ID).toString();
                     String calendar = reportRequest.getSettings().get(SettingsConstants.CALENDAR_TYPE_ID).toString();
                     filter.setCurrency(CurrencyUtil.getAmpcurrency(currency));
@@ -297,9 +299,9 @@ public class ReportManager {
                         divider = getAmountCode(PersistenceManager.getInteger(
                                 reportRequest.getSettings().get(SettingsConstants.AMOUNT_UNITS)));
                     }
-                }
 
-                filter.setAmountinthousand(divider);
+                    filter.setAmountinthousand(divider);
+                }
 
                 Set<AmpFilterData> fdSet = AmpFilterData.createFilterDataSet(report, filter);
 

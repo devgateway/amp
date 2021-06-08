@@ -9,6 +9,8 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Criterion;
@@ -113,13 +115,26 @@ public class AmpThemeSearchModel extends AbstractAmpAutoCompleteModel<AmpTheme> 
 
             return activityProgramsModel.getObject().stream()
                     .map(AmpActivityProgram::getProgram)
-                    .filter(p -> mapping.containsKey(p))
-                    .map(p -> ProgramUtil.getProgramsIncludingAncestors(mapping.get(p)))
+                    .filter(p -> mapping.containsKey(getAdjustedLevel(p)))
+                    .map(p -> ProgramUtil.getProgramsIncludingAncestors(mapping.get(getAdjustedLevel(p))))
                     .flatMap(Set::stream)
                     .collect(Collectors.toSet());
         }
 
         return null;
+    }
+
+    private AmpTheme getAdjustedLevel(AmpTheme p) {
+        Integer level = FeaturesUtil.getGlobalSettingValueInteger(GlobalSettingsConstants.MAPPING_PROGRAM_LEVEL);
+        if (p.getIndlevel() == level) {
+            return p;
+        } else {
+            if (p.getIndlevel() > level) {
+                return getAdjustedLevel(p.getParentThemeId());
+            } else {
+                return null;
+            }
+        }
     }
 
 }

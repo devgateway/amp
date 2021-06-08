@@ -23,6 +23,7 @@ export const fetchApiData = ({ body, url, headers }) => new Promise((resolve, re
     return resolve(data);
   }));
 
+
 // TODO to move api route to a constant.
 export function loadTranslations(trnPack) {
   return new Promise((resolve) => fetch('/rest/translations/label-translations', getRequestOptions(trnPack))

@@ -24,6 +24,7 @@ import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.SiteUtils;
+import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -477,6 +478,11 @@ public class SettingsUtils {
 
         if (ampTeam.getWorkspacePrefix() != null) {
             settings.setWorkspacePrefix(ampTeam.getWorkspacePrefix().getValue());
+        }
+
+        AmpApplicationSettings appSettings = EndpointUtils.getAppSettings();
+        if (appSettings != null) {
+            settings.setWorkspaceDefaultRecordsPerPage(appSettings.getDefaultRecordsPerPage());
         }
     }
 

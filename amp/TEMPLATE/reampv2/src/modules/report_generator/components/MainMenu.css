@@ -26,3 +26,9 @@
 .save_buttons_item button {
     width: 45%;
 }
+
+.ui.green.disabled.button {
+    background-color: grey;
+    pointer-events: all;
+    cursor: not-allowed;
+}

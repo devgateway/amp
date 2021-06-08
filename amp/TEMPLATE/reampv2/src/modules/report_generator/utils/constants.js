@@ -17,6 +17,7 @@ export const TYPE_PLEDGE = 'P';
 export const TYPE_COMPONENT = 'C';
 export const TYPE_REGIONAL = 'R';
 export const TYPE_GPI = 'G';
+export const SETTINGS_YEAR_RANGE = 'year-range';
 
 export const SUMMARY_REPORT = 'summary-report';
 export const ANNUAL_REPORT = 'annual-report';

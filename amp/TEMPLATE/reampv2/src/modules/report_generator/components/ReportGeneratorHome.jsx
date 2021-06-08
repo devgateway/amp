@@ -12,7 +12,7 @@ import {
 } from '../actions/stateUIActions';
 import { convertTotalGrouping, getProfileFromReport, hasFilters } from '../utils/Utils';
 import ErrorMessage from './ErrorMessage';
-import { TRN_PREFIX } from '../utils/constants';
+import { SETTINGS_YEAR_RANGE, TRN_PREFIX } from '../utils/constants';
 
 class ReportGeneratorHome extends Component {
   constructor() {
@@ -82,6 +82,13 @@ class ReportGeneratorHome extends Component {
         }
       });
     }
+    // Cleanup settings.
+    if (body.settings && body.settings[SETTINGS_YEAR_RANGE]) {
+      Object.keys(body.settings[SETTINGS_YEAR_RANGE]).forEach(i => {
+        body.settings[SETTINGS_YEAR_RANGE][i] = `${body.settings[SETTINGS_YEAR_RANGE][i]}`;
+      });
+    }
+
     return body;
   }
 

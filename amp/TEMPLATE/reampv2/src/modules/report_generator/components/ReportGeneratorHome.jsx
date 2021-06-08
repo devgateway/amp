@@ -81,7 +81,10 @@ class ReportGeneratorHome extends Component {
           delete uiReducer.filters[key];
         }
       });
+    } else {
+      delete body.includeLocationChildren;
     }
+
     // Cleanup settings.
     if (body.settings && body.settings[SETTINGS_YEAR_RANGE]) {
       Object.keys(body.settings[SETTINGS_YEAR_RANGE]).forEach(i => {

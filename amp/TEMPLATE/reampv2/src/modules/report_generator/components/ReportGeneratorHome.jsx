@@ -12,7 +12,7 @@ import {
 } from '../actions/stateUIActions';
 import { convertTotalGrouping, getProfileFromReport, hasFilters } from '../utils/Utils';
 import ErrorMessage from './ErrorMessage';
-import { SETTINGS_YEAR_RANGE, TRN_PREFIX } from '../utils/constants';
+import { RUN_REPORT_NAME, SETTINGS_YEAR_RANGE, TRN_PREFIX } from '../utils/constants';
 
 class ReportGeneratorHome extends Component {
   constructor() {
@@ -53,7 +53,7 @@ class ReportGeneratorHome extends Component {
     const { uiReducer } = this.props;
     const body = {
       id: isNew ? null : uiReducer.id,
-      name: !isDynamic ? uiReducer.reportDetails.name : `runReport${Math.random()}`,
+      name: !isDynamic ? uiReducer.reportDetails.name : RUN_REPORT_NAME,
       description: uiReducer.reportDetails.description,
       type: uiReducer.type,
       groupingOption: convertTotalGrouping(uiReducer.reportDetails.selectedTotalGrouping),

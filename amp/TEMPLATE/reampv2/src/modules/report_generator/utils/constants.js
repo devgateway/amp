@@ -18,6 +18,7 @@ export const TYPE_COMPONENT = 'C';
 export const TYPE_REGIONAL = 'R';
 export const TYPE_GPI = 'G';
 export const SETTINGS_YEAR_RANGE = 'year-range';
+export const RUN_REPORT_NAME = 'Dynamic Report';
 
 export const SUMMARY_REPORT = 'summary-report';
 export const ANNUAL_REPORT = 'annual-report';

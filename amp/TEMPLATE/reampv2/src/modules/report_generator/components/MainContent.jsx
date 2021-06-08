@@ -18,7 +18,6 @@ import { ReportGeneratorContext } from './StartUp';
 import {
   convertReportType, convertTotalGrouping, javaHashCode, areEnoughDataForPreview
 } from '../utils/Utils';
-import { IS_MEASURELESS_REPORT } from '../utils/constants';
 
 class MainContent extends Component {
   constructor() {

@@ -12,7 +12,9 @@ import {
 } from '../actions/stateUIActions';
 import { convertTotalGrouping, getProfileFromReport, hasFilters } from '../utils/Utils';
 import ErrorMessage from './ErrorMessage';
-import { RUN_REPORT_NAME, SETTINGS_YEAR_RANGE, TRN_PREFIX } from '../utils/constants';
+import {
+  PROFILE_TAB, RUN_REPORT_NAME, SETTINGS_YEAR_RANGE, TRN_PREFIX
+} from '../utils/constants';
 
 class ReportGeneratorHome extends Component {
   constructor() {
@@ -58,7 +60,7 @@ class ReportGeneratorHome extends Component {
       type: uiReducer.type,
       groupingOption: convertTotalGrouping(uiReducer.reportDetails.selectedTotalGrouping),
       summary: uiReducer.reportDetails.selectedSummaryReport,
-      tab: uiReducer.reportDetails.isTab,
+      tab: (uiReducer.profile === PROFILE_TAB),
       publicView: uiReducer.reportDetails.publicView,
       workspaceLinked: uiReducer.reportDetails.workspaceLinked,
       alsoShowPledges: uiReducer.reportDetails.selectedAlsoShowPledges,

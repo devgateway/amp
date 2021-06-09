@@ -1,5 +1,7 @@
 import { fetchApiData } from '../../../utils/loadTranslations';
 import {
+  PROFILE_REPORT,
+  TYPE_DONOR,
   URL_GET_REPORT, URL_METADATA, URL_SAVE, URL_SAVE_NEW
 } from '../utils/constants';
 
@@ -328,7 +330,9 @@ export const getMetadata = (type, profile) => (dispatch, getState) => {
     return getMetadataPromise;
   } else {
     dispatch(fetchMetaDataPending());
-    const url = type ? `${URL_METADATA}?type=${type}&profile=${profile}` : URL_METADATA;
+    let url = URL_METADATA;
+    url += type ? `?type=${type}` : `?type=${TYPE_DONOR}`;
+    url += profile ? `&profile=${profile}` : `&type=${PROFILE_REPORT}`;
     getMetadataPromise = Promise.all([fetchApiData({
       url
     })])

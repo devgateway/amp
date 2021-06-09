@@ -289,6 +289,7 @@ export default (state = initialState, action) => {
         options: action.payload.options,
         reportCategories: action.payload.reportCategories,
         type: action.payload.type,
+        profile: action.payload.profile,
       };
     }
     case FETCH_METADATA_ERROR:

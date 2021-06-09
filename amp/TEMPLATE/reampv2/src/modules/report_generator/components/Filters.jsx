@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { Loader } from 'semantic-ui-react';
 import { ReportGeneratorContext } from './StartUp';
 import { TRN_PREFIX } from '../utils/constants';
 import { getMetadata, updateAppliedFilters, updateReportDetailsUseAboveFilters } from '../actions/stateUIActions';
@@ -16,7 +17,7 @@ class Filters extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show: false, showFiltersList: false,
+      show: false, showFiltersList: false, filterLoaded: false
     };
   }
 
@@ -37,6 +38,7 @@ class Filters extends Component {
       return filter.loaded.then(() => {
         // eslint-disable-next-line react/no-string-refs
         filter.setElement(this.refs.filterPopup);
+        this.setState({ filterLoaded: true });
         return true;
       });
     });
@@ -61,8 +63,10 @@ class Filters extends Component {
   showFilterWidget = () => {
     const { show } = this.state;
     if (filter && !show) {
-      this.setState({ show: true });
-      return filter.loaded.then(() => filter.showFilters());
+      return filter.loaded.then(() => {
+        this.setState({ show: true });
+        return filter.showFilters();
+      });
     }
   };
 
@@ -105,25 +109,27 @@ class Filters extends Component {
   }
 
   render() {
-    const { show, appliedFiltersOpen } = this.state;
+    const { show, appliedFiltersOpen, filterLoaded } = this.state;
     const { translations, filters } = this.props;
     return (
       <>
-        <div className="filter-title">
-          <div className="filter-title" onClick={this.showFilterWidget}>
-            {translations[`${TRN_PREFIX}filters`]}
+        {filterLoaded ? (
+          <div className="filter-title">
+            <div className="filter-title" onClick={this.showFilterWidget}>
+              {translations[`${TRN_PREFIX}filters`]}
 &nbsp;
-          </div>
-          {hasFilters(filters) ? (
-            <div
-              className="filter-title"
-              style={{ color: 'green', fontWeight: 'normal', fontSize: '0.9em' }}
-              onClick={() => { this.setState({ appliedFiltersOpen: !appliedFiltersOpen }); }}>
-              {appliedFiltersOpen
-                ? translations[`${TRN_PREFIX}hideAppliedFilters`] : translations[`${TRN_PREFIX}showAppliedFilters`]}
             </div>
-          ) : null}
-        </div>
+            {hasFilters(filters) ? (
+              <div
+                className="filter-title"
+                style={{ color: 'green', fontWeight: 'normal', fontSize: '0.9em' }}
+                onClick={() => { this.setState({ appliedFiltersOpen: !appliedFiltersOpen }); }}>
+                {appliedFiltersOpen
+                  ? translations[`${TRN_PREFIX}hideAppliedFilters`] : translations[`${TRN_PREFIX}showAppliedFilters`]}
+              </div>
+            ) : null}
+          </div>
+        ) : <div style={{ float: 'left' }}><Loader active inline /></div>}
         <div className={!appliedFiltersOpen ? 'invisible-applied-filters' : 'applied-filters'}>
           {this.generateAppliedFilters()}
         </div>

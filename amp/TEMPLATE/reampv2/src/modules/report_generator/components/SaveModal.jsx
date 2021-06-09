@@ -5,7 +5,7 @@ import {
 } from 'semantic-ui-react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { TRN_PREFIX } from '../utils/constants';
+import { PROFILE_TAB, TRN_PREFIX } from '../utils/constants';
 import ErrorMessage from './ErrorMessage';
 import { validateSaveModal } from '../utils/Utils';
 import { updateReportDetailsName, updateReportDetailsNameReportCategory } from '../actions/stateUIActions';
@@ -44,9 +44,10 @@ class SaveModal extends Component {
 
   generateSaveModal = () => {
     const {
-      translations, open, isNewReport, close, reportPending, metaDataPending
+      translations, open, isNewReport, close, reportPending, metaDataPending, isTab, profile
     } = this.props;
     const loading = reportPending || metaDataPending;
+    const trnSufix = isTab || profile === PROFILE_TAB ? 'Tab' : 'Report';
     return (
       <Modal
         className="save-modal"
@@ -61,7 +62,9 @@ class SaveModal extends Component {
         <Modal.Actions>
           <Button color="green" onClick={this.validateAndSave} loading={loading} disabled={loading}>
             <Icon name="save" />
-            {isNewReport ? translations[`${TRN_PREFIX}saveNewReport`] : translations[`${TRN_PREFIX}saveReport`]}
+            {isNewReport
+              ? translations[`${TRN_PREFIX}saveNew${trnSufix}`]
+              : translations[`${TRN_PREFIX}save${trnSufix}`]}
           </Button>
           <Button color="red" onClick={close}>
             <Icon name="cancel" />
@@ -140,6 +143,8 @@ const mapStateToProps = state => ({
   reportDetails: state.uiReducer.reportDetails,
   hierarchies: state.uiReducer.hierarchies,
   measures: state.uiReducer.measures,
+  isTab: state.uiReducer.isTab,
+  profile: state.uiReducer.profile,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -166,6 +171,8 @@ SaveModal.propTypes = {
   reportDetails: PropTypes.object,
   hierarchies: PropTypes.object,
   measures: PropTypes.object,
+  isTab: PropTypes.bool,
+  profile: PropTypes.string,
 };
 
 SaveModal.defaultProps = {
@@ -178,4 +185,6 @@ SaveModal.defaultProps = {
   reportDetails: undefined,
   hierarchies: undefined,
   measures: undefined,
+  isTab: false,
+  profile: undefined,
 };

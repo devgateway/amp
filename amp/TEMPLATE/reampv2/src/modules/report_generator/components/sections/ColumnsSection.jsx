@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import {
   Grid, GridColumn, Input
 } from 'semantic-ui-react';
-import { TRN_PREFIX } from '../../utils/constants';
+import { PROFILE_TAB, TRN_PREFIX } from '../../utils/constants';
 import OptionsList from './OptionsList';
 import { ReportGeneratorContext } from '../StartUp';
 import ColumnsSelector from './ColumnsSelector';
@@ -117,7 +117,7 @@ class ColumnsSection extends Component {
   render() {
     const {
       visible, translations, columns, selectedColumns, hierarchies, hierarchiesOrder, selectedHierarchies,
-      selectedSummaryReport
+      selectedSummaryReport, profile
     } = this.props;
     const { search } = this.state;
     const _columns = search ? columns.filter(i => i.label.toLowerCase().indexOf(search.toLowerCase()) > -1) : columns;
@@ -195,6 +195,13 @@ class ColumnsSection extends Component {
               </Grid.Column>
             )
             : null}
+          {selectedColumns.length > 3 && profile === PROFILE_TAB
+            ? (
+              <Grid.Column computer={16} className="narrowRow">
+                <ErrorMessage visible message={translations[`${TRN_PREFIX}noMoreThan3ColumnsInTabs`]} />
+              </Grid.Column>
+            )
+            : null }
         </Grid>
       </div>
     );
@@ -209,6 +216,7 @@ const mapStateToProps = (state) => ({
   selectedHierarchies: state.uiReducer.hierarchies.selected,
   hierarchiesOrder: state.uiReducer.hierarchies.order,
   selectedSummaryReport: state.uiReducer.reportDetails.selectedSummaryReport,
+  profile: state.uiReducer.profile,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -237,6 +245,7 @@ ColumnsSection.propTypes = {
   _updateHierarchiesSelected: PropTypes.func.isRequired,
   selectedSummaryReport: PropTypes.bool,
   _resetColumnsSelected: PropTypes.func.isRequired,
+  profile: PropTypes.string,
 };
 
 ColumnsSection.defaultProps = {
@@ -246,6 +255,7 @@ ColumnsSection.defaultProps = {
   selectedHierarchies: [],
   hierarchiesOrder: [],
   selectedSummaryReport: false,
+  profile: undefined
 };
 
 ColumnsSection.contextType = ReportGeneratorContext;

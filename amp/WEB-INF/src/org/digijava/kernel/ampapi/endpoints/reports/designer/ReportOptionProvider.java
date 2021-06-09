@@ -46,14 +46,15 @@ public class ReportOptionProvider {
     );
 
     public static final List<ReportOptionConfiguration> TAB_PROFILE_OPTIONS = ImmutableList.of(
-       new ReportOptionConfiguration("funding-donor", "Donor Tab (Donor Funding)", null,
-               "Donor Report", "Report Types"),
-       new ReportOptionConfiguration("funding-component", "Regional Tab (Regional Funding)", null,
-               "Regional Report", "Report Types"),
-       new ReportOptionConfiguration("funding-contribution", "Component Tab (Component Funding)", null,
-               "Component Report", "Report Types"),
-       new ReportOptionConfiguration("funding-component", "Contribution Tab (Activity Contributions)", null,
-               "Contribution Report", "Report Types")
+            new ReportOptionConfiguration("funding-donor", "Donor Tab (Donor Funding)", null,
+                    "Donor Report", "Report Types"),
+            new ReportOptionConfiguration("funding-component", "Regional Tab (Regional Funding)", null,
+                    "Regional Report", "Report Types"),
+            new ReportOptionConfiguration("funding-contribution", "Component Tab (Component Funding)", null,
+                    "Component Report", "Report Types"),
+            new ReportOptionConfiguration("funding-component", "Contribution Tab (Activity Contributions)", null,
+                    "Contribution Report", "Report Types"),
+            new ReportOptionConfiguration("totals-only", "Totals Only")
     );
 
     public static final List<ReportOptionConfiguration> MANAGEMENT_OR_REPORT_PROFILE_OPTIONS = ImmutableList.of(

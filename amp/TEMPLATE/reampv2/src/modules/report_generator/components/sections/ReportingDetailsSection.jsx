@@ -122,18 +122,21 @@ class ReportingDetailSection extends Component {
     return (
       <div className={!visible ? 'invisible-tab' : ''}>
         <Grid>
-          <GridColumn computer="8" tablet="16">
-            <OptionsList title={translations[`${TRN_PREFIX}totalGrouping`]} isRequired tooltip="tooltip 1" >
-              <OptionsContent
-                radioList={this.getOptions(TOTAL_GROUPING_RADIO_OPTIONS)}
-                checkList={this.getOptions(TOTAL_GROUPING_CHECKBOX_OPTIONS)}
-                selectedRadio={selectedTotalGrouping}
-                selectedCheckboxes={[selectedSummaryReport]}
-                changeCheckList={[this.selectSummaryReport]}
-                changeRadioList={this.selectTotalGrouping}
-                loading={loading} />
-            </OptionsList>
-          </GridColumn>
+          {(this.getOptions(TOTAL_GROUPING_RADIO_OPTIONS).length !== 1
+            || this.getOptions(TOTAL_GROUPING_CHECKBOX_OPTIONS).length !== 0) ? (
+              <GridColumn computer="8" tablet="16">
+                <OptionsList title={translations[`${TRN_PREFIX}totalGrouping`]} isRequired tooltip="tooltip 1" >
+                  <OptionsContent
+                    radioList={this.getOptions(TOTAL_GROUPING_RADIO_OPTIONS)}
+                    checkList={this.getOptions(TOTAL_GROUPING_CHECKBOX_OPTIONS)}
+                    selectedRadio={selectedTotalGrouping}
+                    selectedCheckboxes={[selectedSummaryReport]}
+                    changeCheckList={[this.selectSummaryReport]}
+                    changeRadioList={this.selectTotalGrouping}
+                    loading={loading} />
+                </OptionsList>
+              </GridColumn>
+            ) : null}
           <GridColumn computer="8" tablet="16">
             <OptionsList title={translations[`${TRN_PREFIX}reportDescription`]} tooltip="tooltip 2" >
               <Form className="description">
@@ -153,17 +156,19 @@ class ReportingDetailSection extends Component {
               </OptionsList>
             </GridColumn>
           ) : null}
-          <GridColumn computer="8" tablet="16">
-            <OptionsList title={translations[`${TRN_PREFIX}options`]} tooltip="tooltip 4" >
-              <OptionsContent
-                checkList={this.getOptions(OPTIONS_CHECKBOX_OPTIONS)}
-                selectedCheckboxes={[selectedAllowEmptyFundingColumns, selectedSplitByFunding,
-                  selectedShowOriginalCurrencies, selectedAlsoShowPledges, selectedUseAboveFilters]}
-                changeCheckList={[this.selectAllowEmptyFundingColumns, this.selectSplitByFunding,
-                  this.selectShowOriginalCurrencies, this.selectAlsoShowPledges, this.selectUseAboveFilters]}
-                loading={loading} />
-            </OptionsList>
-          </GridColumn>
+          {this.getOptions(OPTIONS_CHECKBOX_OPTIONS).length !== 0 ? (
+            <GridColumn computer="8" tablet="16">
+              <OptionsList title={translations[`${TRN_PREFIX}options`]} tooltip="tooltip 4" >
+                <OptionsContent
+                  checkList={this.getOptions(OPTIONS_CHECKBOX_OPTIONS)}
+                  selectedCheckboxes={[selectedAllowEmptyFundingColumns, selectedSplitByFunding,
+                    selectedShowOriginalCurrencies, selectedAlsoShowPledges, selectedUseAboveFilters]}
+                  changeCheckList={[this.selectAllowEmptyFundingColumns, this.selectSplitByFunding,
+                    this.selectShowOriginalCurrencies, this.selectAlsoShowPledges, this.selectUseAboveFilters]}
+                  loading={loading} />
+              </OptionsList>
+            </GridColumn>
+          ) : null}
         </Grid>
       </div>
     );

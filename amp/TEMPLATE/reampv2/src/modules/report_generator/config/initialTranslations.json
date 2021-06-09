@@ -41,7 +41,9 @@
   "amp.reportGenerator:enterReportTitle": "Please enter a title for this report:",
   "amp.reportGenerator:enterReportName":"Please enter a report name.",
   "amp.reportGenerator:saveReport":"Save Report",
+  "amp.reportGenerator:saveTab":"Save Tab",
   "amp.reportGenerator:saveNewReport":"Save New Report",
+  "amp.reportGenerator:saveNewTab":"Save New Tab",
   "amp.reportGenerator:missingTitle":"Missing title",
   "amp.reportGenerator:missingColumns": "Please select at least one column",
   "amp.reportGenerator:previewError":"There was an error generating the preview.",
@@ -55,5 +57,8 @@
   "amp.reportGenerator:apiError1705": "There is already a report with the same name. Please choose a different one.",
   "amp.reportGenerator:apiError0512": "To perform the selected action you need to be authenticated",
   "amp.reportGenerator:moreThan3Hierarchies": "For better user experience, it is recommended to use up to three hierarchies.",
-  "amp.reportGenerator:summaryReportWithoutMeasuresAndHierarchies": "Summary reports without hierarchies and measures are not supported."
+  "amp.reportGenerator:summaryReportWithoutMeasuresAndHierarchies": "Summary reports without hierarchies and measures are not supported.",
+  "amp.reportGenerator:noMoreThan3ColumnsInTabs": "You cannot select more than 3 columns in a desktop tab",
+  "amp.reportGenerator:noMoreThan2MeasuresInTabs":"You cannot select more than 2 measures in a desktop tab",
+  "amp.reportGenerator:mustHave1MeasuresInTabs": "Must select at least one measure"
 }

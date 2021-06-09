@@ -5,7 +5,7 @@ import {
 } from 'semantic-ui-react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { IS_MEASURELESS_REPORT, TRN_PREFIX } from '../../utils/constants';
+import { IS_MEASURELESS_REPORT, PROFILE_TAB, TRN_PREFIX } from '../../utils/constants';
 import {
   updateMeasuresSelected,
   updateMeasuresSorting,
@@ -82,7 +82,7 @@ class MeasuresSection extends Component {
 
   render() {
     const {
-      visible, translations, measures, selectedMeasures, measuresOrder
+      visible, translations, measures, selectedMeasures, measuresOrder, profile
     } = this.props;
     const { search } = this.state;
     const _measures = search ? measures.filter(i => i.label.toLowerCase().indexOf(search.toLowerCase()) > -1)
@@ -133,6 +133,13 @@ class MeasuresSection extends Component {
               </Grid.Column>
             )
             : null }
+          {selectedMeasures.length > 2 && profile === PROFILE_TAB
+            ? (
+              <Grid.Column computer={16} className="narrowRow">
+                <ErrorMessage visible message={translations[`${TRN_PREFIX}noMoreThan2MeasuresInTabs`]} />
+              </Grid.Column>
+            )
+            : null }
         </Grid>
       </div>
     );
@@ -144,6 +151,7 @@ const mapStateToProps = (state) => ({
   measures: state.uiReducer.measures.available,
   selectedMeasures: state.uiReducer.measures.selected,
   measuresOrder: state.uiReducer.measures.order,
+  profile: state.uiReducer.profile,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -163,12 +171,14 @@ MeasuresSection.propTypes = {
   _updateMeasuresSelected: PropTypes.func.isRequired,
   _updateMeasuresSorting: PropTypes.func.isRequired,
   _resetMeasuresSelected: PropTypes.func.isRequired,
+  profile: PropTypes.string,
 };
 
 MeasuresSection.defaultProps = {
   measures: [],
   selectedMeasures: [],
   measuresOrder: [],
+  profile: undefined
 };
 
 MeasuresSection.contextType = ReportGeneratorContext;

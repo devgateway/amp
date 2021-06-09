@@ -116,7 +116,7 @@ class ReportGeneratorHome extends Component {
   }
 
   processAfterSave = (response) => {
-    const { translations } = this.props;
+    const { translations, uiReducer } = this.props;
     if (response.error) {
       const errors = [];
       Object.keys(response.error).forEach(i => {
@@ -130,8 +130,9 @@ class ReportGeneratorHome extends Component {
     }
     if (response.payload.id < 0) {
       window.open(`/TEMPLATE/ampTemplate/saikuui_reports/index_reports.html#report/run/${response.payload.id}`);
+    } else if (uiReducer.profile === PROFILE_TAB) {
+      window.location.href = '/viewTeamReports.do?tabs=true&reset=true';
     } else {
-      // TODO: Maybe we need to save the url we are coming from.
       window.location.href = '/viewTeamReports.do?tabs=false&reset=true';
     }
     return null;

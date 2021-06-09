@@ -140,6 +140,13 @@ class MeasuresSection extends Component {
               </Grid.Column>
             )
             : null }
+          {selectedMeasures.length === 0 && profile === PROFILE_TAB
+            ? (
+              <Grid.Column computer={16} className="narrowRow">
+                <ErrorMessage visible message={translations[`${TRN_PREFIX}mustHave1MeasuresInTabs`]} />
+              </Grid.Column>
+            )
+            : null }
         </Grid>
       </div>
     );

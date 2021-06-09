@@ -161,21 +161,13 @@ class GeocodingTable extends Component {
                 dataField: "project_title",
                 text: projectNameHeaderText,
                 headerStyle: () => {
-                    return { width: "45%" };
+                    return { width: "58%" };
                 },
                 filter: textFilter({
                     placeholder: translations['amp.geocoder:select'] + ' ' + projectNameHeaderText
                 }),
                 sort:true
-            },
-            {
-                dataField: "location",
-                text: locationHeaderText,
-                headerStyle: () => {
-                    return { width: "15%" };
-                },
-                sort:true
-            },
+            }
         ];
 
         let data = this.props.activities

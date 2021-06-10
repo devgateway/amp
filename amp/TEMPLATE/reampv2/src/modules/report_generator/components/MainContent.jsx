@@ -28,7 +28,7 @@ class MainContent extends Component {
   // eslint-disable-next-line no-unused-vars
   componentDidUpdate(prevProps, prevState, snapshot) {
     const {
-      _updatePreviewId, _getPreview, columns, measures, hierarchies, reportDetails
+      _updatePreviewId, _getPreview, columns, measures, hierarchies, reportDetails, lastReportId
     } = this.props;
     if (areEnoughDataForPreview(columns, measures, hierarchies, reportDetails)) {
       // Convert input data to a String then Number.
@@ -52,7 +52,7 @@ class MainContent extends Component {
       const name = md5(JSON.stringify(merged));
       const newId = javaHashCode(name);
       // Avoid calling again the preview EP if not needed.
-      if (newId !== prevProps.lastReportId) {
+      if (newId !== lastReportId) {
         _updatePreviewId(newId, name);
         const _columns = columns.selected.map(i => columns.available.find(j => j.id === i).name);
         const _measures = measures.order.map(i => measures.available.find(j => j.id === i).name);
@@ -74,7 +74,10 @@ class MainContent extends Component {
           add_hierarchies: _hierarchies,
           groupingOption: convertTotalGrouping(reportDetails.selectedTotalGrouping),
           reportType: convertReportType(reportDetails.selectedFundingGrouping),
-          filters: dateFilter
+          filters: dateFilter,
+          show_empty_rows: true,
+          show_original_currency: reportDetails.selectedShowOriginalCurrencies,
+          summary: reportDetails.selectedSummaryReport
         });
       }
     } else {
@@ -139,7 +142,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  _updatePreviewId: (id, name) => dispatch(updatePreviewId(id, name)),
+  _updatePreviewId: (id, name) => updatePreviewId(id, name),
   _getPreview: (body) => getPreview(body),
 }, dispatch);
 

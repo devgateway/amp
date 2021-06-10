@@ -220,12 +220,12 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  _updateColumnsSelected: (data) => dispatch(updateColumnsSelected(data)),
-  _updateColumnsSorting: (data) => dispatch(updateColumnsSorting(data)),
-  _updateHierarchiesSelected: (data) => dispatch(updateHierarchiesSelected(data)),
-  _updateHierarchiesSorting: (data) => dispatch(updateHierarchiesSorting(data)),
-  _updateHierarchiesAvailable: (data) => dispatch(updateHierarchiesAvailable(data)),
-  _resetColumnsSelected: () => dispatch(resetColumnsSelected()),
+  _updateColumnsSelected: (data) => updateColumnsSelected(data),
+  _updateColumnsSorting: (data) => updateColumnsSorting(data),
+  _updateHierarchiesSelected: (data) => updateHierarchiesSelected(data),
+  _updateHierarchiesSorting: (data) => updateHierarchiesSorting(data),
+  _updateHierarchiesAvailable: (data) => updateHierarchiesAvailable(data),
+  _resetColumnsSelected: () => resetColumnsSelected(),
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ColumnsSection);

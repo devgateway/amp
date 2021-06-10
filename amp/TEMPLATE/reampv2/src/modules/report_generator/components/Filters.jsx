@@ -114,15 +114,14 @@ class Filters extends Component {
     return (
       <>
         {filterLoaded ? (
-          <div className="filter-title">
+          <div className="filter-title-wrapper">
             <div className="filter-title" onClick={this.showFilterWidget}>
               {translations[`${TRN_PREFIX}filters`]}
 &nbsp;
             </div>
             {hasFilters(filters) ? (
               <div
-                className="filter-title"
-                style={{ color: 'green', fontWeight: 'normal', fontSize: '0.9em' }}
+                className="filter-title applied-filters-label"
                 onClick={() => { this.setState({ appliedFiltersOpen: !appliedFiltersOpen }); }}>
                 {appliedFiltersOpen
                   ? translations[`${TRN_PREFIX}hideAppliedFilters`] : translations[`${TRN_PREFIX}showAppliedFilters`]}
@@ -130,8 +129,11 @@ class Filters extends Component {
             ) : null}
           </div>
         ) : <div style={{ float: 'left' }}><Loader active inline /></div>}
+
+        <div className="applied-filters-wrapper">
         <div className={!appliedFiltersOpen ? 'invisible-applied-filters' : 'applied-filters'}>
           {this.generateAppliedFilters()}
+        </div>
         </div>
         {/* eslint-disable-next-line react/no-string-refs */}
         <div id="filter-popup" ref="filterPopup" style={{ display: (!show ? 'none' : 'block') }} />

@@ -42,7 +42,15 @@
     background-color: #e7f1fd !important;
     margin-right: 2rem !important;
 }
-
+.ui.placeholder.segment.filters_segment{
+  background-color: #ffffff !important;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  margin-bottom: 40px;
+  margin-left: -15px;
+  padding: 0;
+}
 .errors_segment {
     min-height: 4rem !important;
     background-color: white !important;
@@ -365,20 +373,63 @@ i.arrow {
 .category-dropdown span {
     position: static !important;
 }
-
+.filter-title-wrapper{
+  background-color: #f5faff;
+  color: #21587b;
+  margin-bottom: 5px;
+  padding: 15px;
+}
+.filter-title-wrapper > .filter-title:hover{
+  color: green;
+}
 .filter-title {
     float: left;
     width: max-content;
     cursor: pointer;
     font-size: 1.1em;
     font-weight: bold;
+    /* line-height: 90%; */
 }
-
+.filter-title.applied-filters-label{
+  color: green;
+  font-weight: normal;
+  margin-left: 5px;
+  margin-top:1px;
+}
+.filter-title.applied-filters-label:after{
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 6px solid #3a84b3;
+  content: "";
+  display: block;
+  float: right;
+  margin-left: 7px;
+  margin-top: 8px;
+  width: 5px;
+}
+.filter-title.applied-filters-label.expanded:after{
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-bottom: 6px solid #3a84b3;
+  border-top: none;
+  content: "";
+}
+.applied-filters-wrapper{
+  background-color: #e7f1fd;
+}
 .settings-title {
-    float: right;
-    position: absolute;
-    right: 15px;
-    margin-top: 0;
+  border-left: 2px solid #898989;
+  color: #21587b;
+  font-size: 14px;
+  height: 13px;
+  left: 260px;
+  line-height: 95%;
+  padding-left: 40px;
+  position: absolute;
+  top: 20px;
+}
+.settings-title:hover{
+  color: green;
 }
 
 .invisible-applied-filters {
@@ -401,12 +452,9 @@ i.arrow {
     padding-left: 1em;
 }
 
-#previsualization_tree {
-    /*top: 20px;
-    position: relative;
-    left: 10px;
-    width: max-content;*/
+ul#previsualization_tree {
     font-size: 1em;
+    padding: 15px;
 }
 
 #previsualization_tree ul {

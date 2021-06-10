@@ -291,6 +291,7 @@ public class Reports {
             reportType = REPORT_TYPE_ID_MAP.get(formParams.getReportType());
         }
         ReportSpecificationImpl spec = new ReportSpecificationImpl("preview report", reportType);
+        spec.setSummaryReport(Boolean.TRUE.equals(formParams.getSummary()));
         String groupingOption = formParams.getGroupingOption();
         ReportsUtil.setGroupingCriteria(spec, groupingOption);
         ReportsUtil.update(spec,formParams);

@@ -77,6 +77,7 @@ class MainContent extends Component {
           filters: dateFilter,
           show_empty_rows: true,
           show_original_currency: reportDetails.selectedShowOriginalCurrencies,
+          summary: reportDetails.selectedSummaryReport
         });
       }
     } else {

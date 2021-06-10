@@ -5,7 +5,7 @@ import {
 } from 'semantic-ui-react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { FM_IS_PUBLIC_REPORT_ENABLED, TRN_PREFIX } from '../utils/constants';
+import { FM_IS_PUBLIC_REPORT_ENABLED, PROFILE_TAB, TRN_PREFIX } from '../utils/constants';
 import './MainMenu.css';
 import SaveModal from './SaveModal';
 import { getLayout } from '../actions/layoutActions';
@@ -54,7 +54,7 @@ class MainMenu extends Component {
     } = this.state;
     const {
       translations, tab, saveNewReport, saveReport, loaded, results, runReport, id, options,
-      columns, measures, hierarchies, reportDetails
+      columns, measures, hierarchies, reportDetails, profile
     } = this.props;
     return (
       <>
@@ -89,7 +89,8 @@ class MainMenu extends Component {
           ) : null }
         </Menu>
         {(loaded && !results.logged && !id
-          && options && options.find(i => i.name === FM_IS_PUBLIC_REPORT_ENABLED).visible) ? (
+          && options && options.find(i => i.name === FM_IS_PUBLIC_REPORT_ENABLED).visible
+          && profile !== PROFILE_TAB) ? (
             <Item>
               <Button
                 size="huge"
@@ -124,6 +125,7 @@ const mapStateToProps = state => ({
   columns: state.uiReducer.columns,
   measures: state.uiReducer.measures,
   hierarchies: state.uiReducer.hierarchies,
+  profile: state.uiReducer.profile,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -148,6 +150,7 @@ MainMenu.propTypes = {
   columns: PropTypes.object,
   measures: PropTypes.object,
   hierarchies: PropTypes.object,
+  profile: PropTypes.string,
 };
 
 MainMenu.defaultProps = {
@@ -159,4 +162,5 @@ MainMenu.defaultProps = {
   columns: undefined,
   measures: undefined,
   hierarchies: undefined,
+  profile: undefined
 };

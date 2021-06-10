@@ -148,8 +148,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  _updateReportDetailsName: (data) => dispatch(updateReportDetailsName(data)),
-  _updateReportDetailsNameReportCategory: (data) => dispatch(updateReportDetailsNameReportCategory(data)),
+  _updateReportDetailsName: (data) => updateReportDetailsName(data),
+  _updateReportDetailsNameReportCategory: (data) => updateReportDetailsNameReportCategory(data),
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(SaveModal);

@@ -98,7 +98,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   _fetchGlobalSettings: (url) => fetchGlobalSettings(url),
-  _updateAppliedSettings: (data) => dispatch(updateAppliedSettings(data)),
+  _updateAppliedSettings: (data) => updateAppliedSettings(data),
 }, dispatch);
 
 Settings.propTypes = {

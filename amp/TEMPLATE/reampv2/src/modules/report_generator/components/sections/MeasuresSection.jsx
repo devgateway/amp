@@ -162,9 +162,9 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  _updateMeasuresSelected: (data) => dispatch(updateMeasuresSelected(data)),
-  _updateMeasuresSorting: (data) => dispatch(updateMeasuresSorting(data)),
-  _resetMeasuresSelected: () => dispatch(resetMeasuresSelected),
+  _updateMeasuresSelected: (data) => updateMeasuresSelected(data),
+  _updateMeasuresSorting: (data) => updateMeasuresSorting(data),
+  _resetMeasuresSelected: () => resetMeasuresSelected,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MeasuresSection);

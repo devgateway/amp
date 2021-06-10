@@ -139,7 +139,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  _updatePreviewId: (id, name) => dispatch(updatePreviewId(id, name)),
+  _updatePreviewId: (id, name) => updatePreviewId(id, name),
   _getPreview: (body) => getPreview(body),
 }, dispatch);
 

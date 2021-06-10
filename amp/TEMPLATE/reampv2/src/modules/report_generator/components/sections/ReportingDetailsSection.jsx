@@ -193,15 +193,15 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  _updateReportDetailsTotalGrouping: (data) => dispatch(updateReportDetailsTotalGrouping(data)),
-  _updateReportDetailsTotalsOnly: (data) => dispatch(updateReportDetailsTotalsOnly(data)),
-  _updateReportDetailsFundingGrouping: (data) => dispatch(updateReportDetailsFundingGrouping(data)),
-  _updateReportDetailsAllowEmptyFundingColumns: (data) => dispatch(updateReportDetailsAllowEmptyFundingColumns(data)),
-  _updateReportDetailsSplitByFunding: (data) => dispatch(updateReportDetailsSplitByFunding(data)),
-  _updateReportDetailsShowOriginalCurrencies: (data) => dispatch(updateReportDetailsShowOriginalCurrencies(data)),
-  _updateReportDetailsDescription: (data) => dispatch(updateReportDetailsDescription(data)),
-  _updateReportDetailsAlsoShowPledges: (data) => dispatch(updateReportDetailsAlsoShowPledges(data)),
-  _updateReportDetailsUseAboveFilters: (data) => dispatch(updateReportDetailsUseAboveFilters(data)),
+  _updateReportDetailsTotalGrouping: (data) => updateReportDetailsTotalGrouping(data),
+  _updateReportDetailsTotalsOnly: (data) => updateReportDetailsTotalsOnly(data),
+  _updateReportDetailsFundingGrouping: (data) => updateReportDetailsFundingGrouping(data),
+  _updateReportDetailsAllowEmptyFundingColumns: (data) => updateReportDetailsAllowEmptyFundingColumns(data),
+  _updateReportDetailsSplitByFunding: (data) => updateReportDetailsSplitByFunding(data),
+  _updateReportDetailsShowOriginalCurrencies: (data) => updateReportDetailsShowOriginalCurrencies(data),
+  _updateReportDetailsDescription: (data) => updateReportDetailsDescription(data),
+  _updateReportDetailsAlsoShowPledges: (data) => updateReportDetailsAlsoShowPledges(data),
+  _updateReportDetailsUseAboveFilters: (data) => updateReportDetailsUseAboveFilters(data),
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReportingDetailSection);

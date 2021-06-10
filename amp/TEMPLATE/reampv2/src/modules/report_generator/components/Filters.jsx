@@ -156,8 +156,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  _updateAppliedFilters: (data, html) => dispatch(updateAppliedFilters(data, html)),
-  _updateReportDetailsUseAboveFilters: (data) => dispatch(updateReportDetailsUseAboveFilters(data)),
+  _updateAppliedFilters: (data, html) => updateAppliedFilters(data, html),
+  _updateReportDetailsUseAboveFilters: (data) => updateReportDetailsUseAboveFilters(data),
   _getMetadata: () => getMetadata(),
 }, dispatch);
 

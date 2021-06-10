@@ -407,6 +407,13 @@ i.arrow {
   margin-top: 8px;
   width: 5px;
 }
+.filter-title.applied-filters-label.expanded:after{
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-bottom: 6px solid #3a84b3;
+  border-top: none;
+  content: "";
+}
 .applied-filters-wrapper{
   background-color: #e7f1fd;
 }

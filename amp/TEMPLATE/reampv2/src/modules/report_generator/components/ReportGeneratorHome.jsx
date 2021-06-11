@@ -140,6 +140,13 @@ class ReportGeneratorHome extends Component {
 
   render() {
     const { showChildren: canLoadChildren, errors } = this.state;
+    const { layoutLoaded, results, profile } = this.props;
+
+    // Only logged users can use the tab generator.
+    if (layoutLoaded && results.logged !== true && profile === PROFILE_TAB) {
+      window.location.href = '/';
+    }
+
     return (
       <Container>
         <MainHeader />
@@ -158,6 +165,9 @@ class ReportGeneratorHome extends Component {
 const mapStateToProps = state => ({
   translations: state.translationsReducer.translations,
   uiReducer: state.uiReducer,
+  profile: state.uiReducer.profile,
+  layoutLoaded: state.layoutReducer.loaded,
+  results: state.layoutReducer.results,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -181,9 +191,16 @@ ReportGeneratorHome.propTypes = {
   _save: PropTypes.func.isRequired,
   uiReducer: PropTypes.object.isRequired,
   _runReport: PropTypes.func.isRequired,
+  profile: PropTypes.string,
+  layoutLoaded: PropTypes.bool,
+  results: PropTypes.object,
 };
 
-ReportGeneratorHome.defaultProps = {};
+ReportGeneratorHome.defaultProps = {
+  profile: undefined,
+  layoutLoaded: false,
+  results: undefined,
+};
 
 ReportGeneratorHome.contextType = ReportGeneratorContext;
 

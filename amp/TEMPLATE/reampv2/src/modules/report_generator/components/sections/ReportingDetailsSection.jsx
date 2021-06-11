@@ -151,6 +151,13 @@ class ReportingDetailSection extends Component {
               </OptionsList>
             </GridColumn>
           ) : null}
+          <GridColumn computer="8" tablet="16">
+            <OptionsList title={translate('reportDescription', profile, translations)} tooltip="tooltip 2" >
+              <Form className="description">
+                <TextArea value={description} onChange={this.changeDescription} />
+              </Form>
+            </OptionsList>
+          </GridColumn>
           {this.getOptions(OPTIONS_CHECKBOX_OPTIONS).length !== 0 ? (
             <GridColumn computer="8" tablet="16">
               <OptionsList title={translate('options', profile, translations)} tooltip="tooltip 4" >
@@ -164,13 +171,6 @@ class ReportingDetailSection extends Component {
               </OptionsList>
             </GridColumn>
           ) : null}
-          <GridColumn computer="8" tablet="16">
-            <OptionsList title={translate('reportDescription', profile, translations)} tooltip="tooltip 2" >
-              <Form className="description">
-                <TextArea value={description} onChange={this.changeDescription} />
-              </Form>
-            </OptionsList>
-          </GridColumn>
         </Grid>
       </div>
     );

@@ -10,10 +10,12 @@ import FiltersAndSettings from './FiltersAndSettings';
 import {
   getMetadata, fetchReport, updateProfile, updateId, saveNew, save, runReport
 } from '../actions/stateUIActions';
-import { convertTotalGrouping, getProfileFromReport, hasFilters } from '../utils/Utils';
+import {
+  convertTotalGrouping, getProfileFromReport, translate, hasFilters
+} from '../utils/Utils';
 import ErrorMessage from './ErrorMessage';
 import {
-  PROFILE_TAB, RUN_REPORT_NAME, SETTINGS_YEAR_RANGE, TRN_PREFIX
+  PROFILE_TAB, RUN_REPORT_NAME, SETTINGS_YEAR_RANGE
 } from '../utils/constants';
 
 class ReportGeneratorHome extends Component {
@@ -40,7 +42,7 @@ class ReportGeneratorHome extends Component {
           return _getMetadata(action.payload.type, profile).then(() => this.setState({ showChildren: true }));
         } else {
           // eslint-disable-next-line max-len
-          return this.setState({ errors: [<ErrorMessage visible message={translations[`${TRN_PREFIX}errorLoadingReport`]} />] });
+          return this.setState({ errors: [<ErrorMessage visible message={translate('errorLoadingReport', profile, translations)} />] });
         }
       });
     } else {
@@ -116,11 +118,11 @@ class ReportGeneratorHome extends Component {
   }
 
   processAfterSave = (response) => {
-    const { translations, uiReducer } = this.props;
+    const { translations, uiReducer, profile } = this.props;
     if (response.error) {
       const errors = [];
       Object.keys(response.error).forEach(i => {
-        const trnLabel = translations[`${TRN_PREFIX}apiError${i}`];
+        const trnLabel = translate(`apiError${i}`, profile, translations);
         errors.push({ id: i, label: trnLabel || response.error[i] });
       });
       if (errors.length > 0) {

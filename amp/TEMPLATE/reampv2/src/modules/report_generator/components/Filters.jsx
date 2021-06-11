@@ -4,10 +4,9 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Loader } from 'semantic-ui-react';
 import { ReportGeneratorContext } from './StartUp';
-import { TRN_PREFIX } from '../utils/constants';
 import { getMetadata, updateAppliedFilters, updateReportDetailsUseAboveFilters } from '../actions/stateUIActions';
 import { toggleIcon } from '../utils/appliedFiltersExtenalCode';
-import { hasFilters } from '../utils/Utils';
+import { translate, hasFilters } from '../utils/Utils';
 
 const Filter = require('../../../../../ampTemplate/node_modules/amp-filter/dist/amp-filter');
 
@@ -110,13 +109,13 @@ class Filters extends Component {
 
   render() {
     const { show, appliedFiltersOpen, filterLoaded } = this.state;
-    const { translations, filters } = this.props;
+    const { translations, filters, profile } = this.props;
     return (
       <>
         {filterLoaded ? (
           <div className="filter-title-wrapper">
             <div className="filter-title" onClick={this.showFilterWidget}>
-              {translations[`${TRN_PREFIX}filters`]}
+              {translate('filters', profile, translations)}
 &nbsp;
             </div>
             {hasFilters(filters) ? (
@@ -124,7 +123,8 @@ class Filters extends Component {
                 className={`filter-title applied-filters-label${appliedFiltersOpen ? ' expanded' : ''}`}
                 onClick={() => { this.setState({ appliedFiltersOpen: !appliedFiltersOpen }); }}>
                 {appliedFiltersOpen
-                  ? translations[`${TRN_PREFIX}hideAppliedFilters`] : translations[`${TRN_PREFIX}showAppliedFilters`]}
+                  ? translate('hideAppliedFilters', profile, translations)
+                  : translate('showAppliedFilters', profile, translations)}
               </div>
             ) : null}
           </div>
@@ -155,6 +155,7 @@ const mapStateToProps = state => ({
   filters: state.uiReducer.filters,
   html: state.uiReducer.appliedFilters,
   type: state.type,
+  profile: state.uiReducer.profile
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -174,11 +175,13 @@ Filters.propTypes = {
   html: PropTypes.string,
   type: PropTypes.string.isRequired,
   _getMetadata: PropTypes.func.isRequired,
+  profile: PropTypes.string,
 };
 
 Filters.defaultProps = {
   filters: null,
   html: null,
+  profile: undefined
 };
 
 Filters.contextType = ReportGeneratorContext;

@@ -7,10 +7,10 @@ import {
   Grid, GridColumn
 } from 'semantic-ui-react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { TRN_PREFIX } from '../../utils/constants';
 import { ReportGeneratorContext } from '../StartUp';
 import ErrorMessage from '../ErrorMessage';
 import InfoIcon from '../../static/images/icon-information.svg';
+import { translate } from '../../utils/Utils';
 
 /**
  * This component will check (almost) all values selected by the user and fetch a new report preview if necessary.
@@ -23,24 +23,24 @@ class PreviewSection extends Component {
 
   render() {
     const {
-      lastReportId, previewLoading, previewLoaded, previewError, results, translations
+      lastReportId, previewLoading, previewLoaded, previewError, results, translations, profile
     } = this.props;
     const tooltipText = (
       <Tooltip id={Math.random()}>
-        {translations[`${TRN_PREFIX}previewTooltip`]}
+        {translate('previewTooltip', profile, translations)}
       </Tooltip>
     );
     if (previewLoading) {
       return <Form loading />;
     } else if (previewError) {
-      return <ErrorMessage visible message={translations[`${TRN_PREFIX}previewError`]} />;
+      return <ErrorMessage visible message={translate('previewError', profile, translations)} />;
     } else if (previewLoaded && lastReportId !== -1) {
       return (
         <>
           <Grid>
             <GridColumn width={16}>
               <div className="option-list-title">
-                <span>{translations[`${TRN_PREFIX}preview`]}</span>
+                <span>{translate('preview', profile, translations)}</span>
                 <OverlayTrigger trigger={['hover', 'focus']} overlay={tooltipText}>
                   <img className="info-icon" src={InfoIcon} alt="info-icon" />
                 </OverlayTrigger>
@@ -65,6 +65,7 @@ const mapStateToProps = (state) => ({
   previewLoaded: state.previewReducer.loaded,
   previewError: state.previewReducer.error,
   results: state.previewReducer.results,
+  profile: state.uiReducer.profile,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
@@ -78,6 +79,7 @@ PreviewSection.propTypes = {
   previewLoaded: PropTypes.bool,
   previewError: PropTypes.bool,
   results: PropTypes.string,
+  profile: PropTypes.string,
 };
 
 PreviewSection.defaultProps = {
@@ -86,6 +88,7 @@ PreviewSection.defaultProps = {
   previewLoaded: false,
   previewError: false,
   results: undefined,
+  profile: undefined
 };
 
 PreviewSection.contextType = ReportGeneratorContext;

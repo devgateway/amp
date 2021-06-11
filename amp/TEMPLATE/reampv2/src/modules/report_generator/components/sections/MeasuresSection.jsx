@@ -5,7 +5,7 @@ import {
 } from 'semantic-ui-react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { IS_MEASURELESS_REPORT, PROFILE_TAB, TRN_PREFIX } from '../../utils/constants';
+import { IS_MEASURELESS_REPORT, PROFILE_TAB } from '../../utils/constants';
 import {
   updateMeasuresSelected,
   updateMeasuresSorting,
@@ -16,6 +16,7 @@ import OptionsList from './OptionsList';
 import ColumnsSelector from './ColumnsSelector';
 import ErrorMessage from '../ErrorMessage';
 import ColumnSorter from './ColumnsSorter';
+import { translate } from '../../utils/Utils';
 
 class MeasuresSection extends Component {
   constructor() {
@@ -91,16 +92,19 @@ class MeasuresSection extends Component {
       <div className={!visible ? 'invisible-tab' : ''}>
         <Grid>
           <GridColumn computer="8">
-            <Input icon="search" placeholder={translations[`${TRN_PREFIX}search`]} onChange={this.handleSearch} />
+            <Input
+              icon="search"
+              placeholder={translate('search', profile, translations)}
+              onChange={this.handleSearch} />
           </GridColumn>
           <GridColumn computer="8" textAlign="right">
             <span className="green_text bold pointer reset-text" onClick={this.handleReset}>
-              {translations[`${TRN_PREFIX}resetMeasures`]}
+              {translate('resetMeasures', profile, translations)}
             </span>
           </GridColumn>
           <Grid.Column computer="8" tablet="16">
             <OptionsList
-              title={translations[`${TRN_PREFIX}availableFinancialMeasures`]}
+              title={translate('availableFinancialMeasures', profile, translations)}
               tooltip="tooltip 1"
               isRequired
               className="smallHeight">
@@ -115,7 +119,7 @@ class MeasuresSection extends Component {
           <Grid.Column computer="8" tablet="16">
             <OptionsList
               className="smallHeight"
-              title={translations[`${TRN_PREFIX}orderSelectedFinancialMeasures`]}
+              title={translate('orderSelectedFinancialMeasures', profile, translations)}
               tooltip="tooltip 1" >
               <ColumnSorter
                 keyPrefix="measures"
@@ -123,27 +127,28 @@ class MeasuresSection extends Component {
                 columns={measures.filter(i => selectedMeasures.find(j => j === i.id))}
                 order={measuresOrder}
                 onColumnSelectionChange={this.handleHierarchySelection}
-                onColumnSortChange={this.handleMeasureSort} />
+                onColumnSortChange={this.handleMeasureSort}
+                profile={profile} />
             </OptionsList>
           </Grid.Column>
           {!IS_MEASURELESS_REPORT && selectedMeasures.length === 0
             ? (
               <Grid.Column computer={16} className="narrowRow">
-                <ErrorMessage visible message={translations[`${TRN_PREFIX}mustSelectOneMeasure`]} />
+                <ErrorMessage visible message={translate('mustSelectOneMeasure', profile, translations)} />
               </Grid.Column>
             )
             : null }
           {selectedMeasures.length > 2 && profile === PROFILE_TAB
             ? (
               <Grid.Column computer={16} className="narrowRow">
-                <ErrorMessage visible message={translations[`${TRN_PREFIX}noMoreThan2MeasuresInTabs`]} />
+                <ErrorMessage visible message={translate('noMoreThan2MeasuresInTabs', profile, translations)} />
               </Grid.Column>
             )
             : null }
           {selectedMeasures.length === 0 && profile === PROFILE_TAB
             ? (
               <Grid.Column computer={16} className="narrowRow">
-                <ErrorMessage visible message={translations[`${TRN_PREFIX}mustHave1MeasuresInTabs`]} />
+                <ErrorMessage visible message={translate('mustHave1MeasuresInTabs', profile, translations)} />
               </Grid.Column>
             )
             : null }

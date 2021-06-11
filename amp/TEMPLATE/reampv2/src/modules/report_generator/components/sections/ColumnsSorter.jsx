@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import { Checkbox, Icon } from 'semantic-ui-react';
-import { TRN_PREFIX } from '../../utils/constants';
+import { translate } from '../../utils/Utils';
 
 export default class ColumnSorter extends Component {
   constructor(props) {
@@ -72,7 +72,7 @@ export default class ColumnSorter extends Component {
 
   render() {
     const {
-      columns, order, checkbox, keyPrefix, translations, selected
+      columns, order, checkbox, keyPrefix, translations, selected, profile
     } = this.props;
     if (columns.length > 0) {
       let sortedColumns = columns;
@@ -121,13 +121,13 @@ export default class ColumnSorter extends Component {
                             <td className="sortable-td td-arrows">
                               <span
                                 className={index === 0 ? 'disabled' : ''}
-                                title={translations[`${TRN_PREFIX}moveUp`]}
+                                title={translate('moveUp', profile, translations)}
                                 onClick={this.moveUp.bind(null, index)}>
                                 <Icon name="arrow up" color="blue" />
                               </span>
                               <span
                                 className={index === sortedColumns.length - 1 ? 'disabled' : ''}
-                                title={translations[`${TRN_PREFIX}moveDown`]}
+                                title={translate('moveDown', profile, translations)}
                                 onClick={this.moveDown.bind(null, index)}>
                                 <Icon name="arrow down" color="blue" />
                               </span>
@@ -159,6 +159,7 @@ ColumnSorter.propTypes = {
   keyPrefix: PropTypes.string.isRequired,
   translations: PropTypes.object.isRequired,
   selected: PropTypes.array,
+  profile: PropTypes.string.isRequired,
 };
 
 ColumnSorter.defaultProps = {
@@ -166,5 +167,5 @@ ColumnSorter.defaultProps = {
   order: [],
   checkbox: false,
   onColumnSelectionChange: undefined,
-  selected: [],
+  selected: []
 };

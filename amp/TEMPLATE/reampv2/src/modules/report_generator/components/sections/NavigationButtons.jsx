@@ -5,7 +5,7 @@ import {
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { TRN_PREFIX } from '../../utils/constants';
+import { translate } from '../../utils/Utils';
 
 class NavigationButtons extends Component {
   setEnabledOrDisabledButtons = () => {
@@ -22,7 +22,9 @@ class NavigationButtons extends Component {
   }
 
   render() {
-    const { translations, backClick, nextClick } = this.props;
+    const {
+      translations, backClick, nextClick, profile
+    } = this.props;
     const status = this.setEnabledOrDisabledButtons();
     return (
       <Grid>
@@ -30,11 +32,11 @@ class NavigationButtons extends Component {
           <GridColumn width="16">
             <ButtonGroup className="navigation-buttons" floated="right">
               <Button positive={status[0]} disabled={!status[0]} onClick={backClick}>
-                {`<< ${translations[`${TRN_PREFIX}back`]}`}
+                {`<< ${translate('back', profile, translations)}`}
               </Button>
               <div className="separator" />
               <Button positive={status[1]} disabled={!status[1]} onClick={nextClick}>
-                {`${translations[`${TRN_PREFIX}next`]} >>`}
+                {`${translate('next', profile, translations)} >>`}
               </Button>
             </ButtonGroup>
           </GridColumn>
@@ -57,4 +59,5 @@ NavigationButtons.propTypes = {
   nextClick: PropTypes.func.isRequired,
   translations: PropTypes.object.isRequired,
   tab: PropTypes.number.isRequired,
+  profile: PropTypes.string.isRequired,
 };

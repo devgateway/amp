@@ -11,8 +11,7 @@ import { ReportGeneratorContext } from '../StartUp';
 import {
   FUNDING_GROUPING_RADIO_OPTIONS, OPTIONS_CHECKBOX_OPTIONS,
   TOTAL_GROUPING_CHECKBOX_OPTIONS,
-  TOTAL_GROUPING_RADIO_OPTIONS,
-  TRN_PREFIX
+  TOTAL_GROUPING_RADIO_OPTIONS
 } from '../../utils/constants';
 import OptionsContent from './OptionsContent';
 import {
@@ -23,7 +22,7 @@ import {
   updateReportDetailsDescription,
   updateReportDetailsAlsoShowPledges, updateReportDetailsUseAboveFilters
 } from '../../actions/stateUIActions';
-import { hasFilters } from '../../utils/Utils';
+import { hasFilters, translate } from '../../utils/Utils';
 
 class ReportingDetailSection extends Component {
   // eslint-disable-next-line no-unused-vars
@@ -116,7 +115,7 @@ class ReportingDetailSection extends Component {
     const {
       visible, translations, selectedTotalGrouping, selectedSummaryReport, selectedFundingGrouping,
       selectedAllowEmptyFundingColumns, selectedSplitByFunding, selectedShowOriginalCurrencies,
-      description, loading, selectedAlsoShowPledges, selectedUseAboveFilters
+      description, loading, selectedAlsoShowPledges, selectedUseAboveFilters, profile
     } = this.props;
 
     return (
@@ -125,7 +124,10 @@ class ReportingDetailSection extends Component {
           {(this.getOptions(TOTAL_GROUPING_RADIO_OPTIONS).length !== 1
             || this.getOptions(TOTAL_GROUPING_CHECKBOX_OPTIONS).length !== 0) ? (
               <GridColumn computer="8" tablet="16">
-                <OptionsList title={translations[`${TRN_PREFIX}totalGrouping`]} isRequired tooltip="tooltip 1" >
+                <OptionsList
+                  title={translate('totalGrouping', profile, translations)}
+                  isRequired
+                  tooltip="tooltip 1" >
                   <OptionsContent
                     radioList={this.getOptions(TOTAL_GROUPING_RADIO_OPTIONS)}
                     checkList={this.getOptions(TOTAL_GROUPING_CHECKBOX_OPTIONS)}
@@ -137,16 +139,9 @@ class ReportingDetailSection extends Component {
                 </OptionsList>
               </GridColumn>
             ) : null}
-          <GridColumn computer="8" tablet="16">
-            <OptionsList title={translations[`${TRN_PREFIX}reportDescription`]} tooltip="tooltip 2" >
-              <Form className="description">
-                <TextArea value={description} onChange={this.changeDescription} />
-              </Form>
-            </OptionsList>
-          </GridColumn>
           {this.getOptions(FUNDING_GROUPING_RADIO_OPTIONS).length !== 1 ? (
             <GridColumn computer="8" tablet="16">
-              <OptionsList title={translations[`${TRN_PREFIX}fundingGroup`]} tooltip="tooltip 3" isRequired >
+              <OptionsList title={translate('fundingGroup', profile, translations)} tooltip="tooltip 3" isRequired >
                 <OptionsContent
                   radioList={this.getOptions(FUNDING_GROUPING_RADIO_OPTIONS)}
                   changeRadioList={this.selectFundingGrouping}
@@ -158,7 +153,7 @@ class ReportingDetailSection extends Component {
           ) : null}
           {this.getOptions(OPTIONS_CHECKBOX_OPTIONS).length !== 0 ? (
             <GridColumn computer="8" tablet="16">
-              <OptionsList title={translations[`${TRN_PREFIX}options`]} tooltip="tooltip 4" >
+              <OptionsList title={translate('options', profile, translations)} tooltip="tooltip 4" >
                 <OptionsContent
                   checkList={this.getOptions(OPTIONS_CHECKBOX_OPTIONS)}
                   selectedCheckboxes={[selectedAllowEmptyFundingColumns, selectedSplitByFunding,
@@ -169,6 +164,13 @@ class ReportingDetailSection extends Component {
               </OptionsList>
             </GridColumn>
           ) : null}
+          <GridColumn computer="8" tablet="16">
+            <OptionsList title={translate('reportDescription', profile, translations)} tooltip="tooltip 2" >
+              <Form className="description">
+                <TextArea value={description} onChange={this.changeDescription} />
+              </Form>
+            </OptionsList>
+          </GridColumn>
         </Grid>
       </div>
     );
@@ -190,6 +192,7 @@ const mapStateToProps = (state) => ({
   options: state.uiReducer.options,
   loading: state.uiReducer.metaDataPending,
   filters: state.uiReducer.filters,
+  profile: state.uiReducer.profile,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -230,6 +233,7 @@ ReportingDetailSection.propTypes = {
   _updateReportDetailsAlsoShowPledges: PropTypes.func.isRequired,
   _updateReportDetailsUseAboveFilters: PropTypes.func.isRequired,
   filters: PropTypes.object,
+  profile: PropTypes.string,
 };
 
 ReportingDetailSection.defaultProps = {
@@ -245,6 +249,7 @@ ReportingDetailSection.defaultProps = {
   options: undefined,
   loading: false,
   filters: null,
+  profile: undefined
 };
 
 ReportingDetailSection.contextType = ReportGeneratorContext;

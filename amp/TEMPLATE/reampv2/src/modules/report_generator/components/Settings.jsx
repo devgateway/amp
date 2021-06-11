@@ -26,12 +26,12 @@ class Settings extends Component {
   }
 
   componentDidMount() {
-    const { settings, profile, _fetchGlobalSettings } = this.props;
-    const settingsURL = (profile === PROFILE_TAB) ? URL_SETTINGS_TABS : URL_SETTINGS_REPORTS;
+    const { settings, _fetchGlobalSettings } = this.props;
+    const settingsURL = URL_SETTINGS_REPORTS;
     widget = new SettingsWidget.SettingsWidget({
       el: 'settings-popup',
       draggable: true,
-      caller: profile === PROFILE_TAB ? TABS : REPORTS,
+      caller: REPORTS,
       isPopup: true,
       definitionUrl: settingsURL
     });
@@ -105,14 +105,12 @@ Settings.propTypes = {
   onApplySettings: PropTypes.func.isRequired,
   settings: PropTypes.object,
   translations: PropTypes.object.isRequired,
-  profile: PropTypes.string,
   _fetchGlobalSettings: PropTypes.func.isRequired,
   _updateAppliedSettings: PropTypes.func.isRequired,
 };
 
 Settings.defaultProps = {
   settings: null,
-  profile: null,
 };
 
 Settings.contextType = ReportGeneratorContext;

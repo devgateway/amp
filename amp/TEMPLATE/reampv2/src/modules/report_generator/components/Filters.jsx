@@ -121,7 +121,7 @@ class Filters extends Component {
             </div>
             {hasFilters(filters) ? (
               <div
-                className="filter-title applied-filters-label"
+                className={`filter-title applied-filters-label${appliedFiltersOpen ? ' expanded' : ''}`}
                 onClick={() => { this.setState({ appliedFiltersOpen: !appliedFiltersOpen }); }}>
                 {appliedFiltersOpen
                   ? translations[`${TRN_PREFIX}hideAppliedFilters`] : translations[`${TRN_PREFIX}showAppliedFilters`]}
@@ -131,9 +131,9 @@ class Filters extends Component {
         ) : <div style={{ float: 'left' }}><Loader active inline /></div>}
 
         <div className="applied-filters-wrapper">
-        <div className={!appliedFiltersOpen ? 'invisible-applied-filters' : 'applied-filters'}>
-          {this.generateAppliedFilters()}
-        </div>
+          <div className={!appliedFiltersOpen ? 'invisible-applied-filters' : 'applied-filters'}>
+            {this.generateAppliedFilters()}
+          </div>
         </div>
         {/* eslint-disable-next-line react/no-string-refs */}
         <div id="filter-popup" ref="filterPopup" style={{ display: (!show ? 'none' : 'block') }} />

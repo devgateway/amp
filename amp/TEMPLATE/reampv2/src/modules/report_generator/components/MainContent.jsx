@@ -102,7 +102,7 @@ class MainContent extends Component {
 
   render() {
     const { visibleTab } = this.state;
-    const { saveNewReport, saveReport, runReport } = this.props;
+    const { saveNewReport, saveReport, runReport, profile } = this.props;
     return (
       <>
         <Grid>
@@ -122,7 +122,8 @@ class MainContent extends Component {
               <NavigationButtons
                 tab={visibleTab}
                 backClick={this.handleNavButtonBack}
-                nextClick={this.handleNavButtonNext} />
+                nextClick={this.handleNavButtonNext}
+                profile={profile} />
               <PreviewSection />
             </GridColumn>
           </GridRow>
@@ -139,6 +140,7 @@ const mapStateToProps = (state) => ({
   columns: state.uiReducer.columns,
   measures: state.uiReducer.measures,
   hierarchies: state.uiReducer.hierarchies,
+  profile: state.uiReducer.profile,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -159,6 +161,7 @@ MainContent.propTypes = {
   saveNewReport: PropTypes.func.isRequired,
   saveReport: PropTypes.func.isRequired,
   runReport: PropTypes.func.isRequired,
+  profile: PropTypes.string,
 };
 
 MainContent.defaultProps = {
@@ -167,6 +170,7 @@ MainContent.defaultProps = {
   columns: undefined,
   measures: undefined,
   hierarchies: undefined,
+  profile: undefined
 };
 
 MainContent.contextType = ReportGeneratorContext;

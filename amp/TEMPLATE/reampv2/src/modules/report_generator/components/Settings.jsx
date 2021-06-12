@@ -7,11 +7,12 @@ import styles from '../../../../../ampTemplate/node_modules/amp-settings/dist/am
 import { ReportGeneratorContext } from './StartUp';
 import {
   // eslint-disable-next-line no-unused-vars
-  TABS, TRN_PREFIX, URL_SETTINGS_TABS, URL_SETTINGS_REPORTS, REPORTS, PROFILE_TAB
+  TABS, URL_SETTINGS_TABS, URL_SETTINGS_REPORTS, REPORTS, PROFILE_TAB
 } from '../utils/constants';
 import { fetchGlobalSettings } from '../actions/settingsActions';
 import { extractSettings } from '../reducers/utils/settingsDataConverter';
 import { updateAppliedSettings } from '../actions/stateUIActions';
+import { translate } from '../utils/Utils';
 
 const SettingsWidget = require('../../../../../ampTemplate/node_modules/amp-settings/dist/amp-settings');
 
@@ -73,10 +74,12 @@ class Settings extends Component {
 
   render() {
     const { show } = this.state;
-    const { translations } = this.props;
+    const { translations, profile } = this.props;
     return (
       <div className="filter-title settings-title">
-        <span className="filter-title" onClick={this.toggleSettings}>{translations[`${TRN_PREFIX}settings`]}</span>
+        <span className="filter-title" onClick={this.toggleSettings}>
+          {translate('settings', profile, translations)}
+        </span>
         <div
           id="settings-popup"
           ref="settingsPopup"
@@ -107,10 +110,12 @@ Settings.propTypes = {
   translations: PropTypes.object.isRequired,
   _fetchGlobalSettings: PropTypes.func.isRequired,
   _updateAppliedSettings: PropTypes.func.isRequired,
+  profile: PropTypes.string,
 };
 
 Settings.defaultProps = {
   settings: null,
+  profile: undefined
 };
 
 Settings.contextType = ReportGeneratorContext;

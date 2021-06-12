@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import {
   Grid, GridColumn, Input
 } from 'semantic-ui-react';
-import { PROFILE_TAB, TRN_PREFIX } from '../../utils/constants';
+import { PROFILE_TAB } from '../../utils/constants';
 import OptionsList from './OptionsList';
 import { ReportGeneratorContext } from '../StartUp';
 import ColumnsSelector from './ColumnsSelector';
@@ -19,6 +19,7 @@ import {
 } from '../../actions/stateUIActions';
 import ColumnSorter from './ColumnsSorter';
 import ErrorMessage from '../ErrorMessage';
+import { translate } from '../../utils/Utils';
 
 class ColumnsSection extends Component {
   constructor() {
@@ -125,16 +126,19 @@ class ColumnsSection extends Component {
       <div className={!visible ? 'invisible-tab' : ''}>
         <Grid columns={3}>
           <GridColumn computer="8" tablet="16">
-            <Input icon="search" placeholder={translations[`${TRN_PREFIX}search`]} onChange={this.handleSearch} />
+            <Input
+              icon="search"
+              placeholder={translate('search', profile, translations)}
+              onChange={this.handleSearch} />
           </GridColumn>
           <GridColumn computer="8" textAlign="right" tablet="16">
             <span className="green_text bold pointer reset-text" onClick={this.handleReset}>
-              {translations[`${TRN_PREFIX}resetColumns`]}
+              {translate('resetColumns', profile, translations)}
             </span>
           </GridColumn>
           <Grid.Column computer="6" tablet="16">
             <OptionsList
-              title={translations[`${TRN_PREFIX}availableColumns`]}
+              title={translate('availableColumns', profile, translations)}
               tooltip="tooltip 1"
               className="smallHeight" >
               <ColumnsSelector
@@ -146,7 +150,7 @@ class ColumnsSection extends Component {
           </Grid.Column>
           <Grid.Column computer="5" tablet="16">
             <OptionsList
-              title={translations[`${TRN_PREFIX}selectedColumns`]}
+              title={translate('selectedColumns', profile, translations)}
               isRequired
               tooltip="tooltip 2"
               className="smallHeight" >
@@ -155,12 +159,13 @@ class ColumnsSection extends Component {
                 translations={translations}
                 columns={columns.filter(i => selectedColumns.find(j => j === i.id))}
                 order={selectedColumns}
-                onColumnSortChange={this.handleColumnSort} />
+                onColumnSortChange={this.handleColumnSort}
+                profile={profile} />
             </OptionsList>
           </Grid.Column>
           <Grid.Column computer="5" tablet="16">
             <OptionsList
-              title={translations[`${TRN_PREFIX}hierarchies`]}
+              title={translate('hierarchies', profile, translations)}
               tooltip="tooltip 3"
               className="smallHeight" >
               <ColumnSorter
@@ -171,34 +176,35 @@ class ColumnsSection extends Component {
                 columns={hierarchies}
                 order={hierarchiesOrder}
                 onColumnSelectionChange={this.handleHierarchySelection}
-                onColumnSortChange={this.handleHierarchySort} />
+                onColumnSortChange={this.handleHierarchySort}
+                profile={profile} />
             </OptionsList>
           </Grid.Column>
           {selectedColumns.length === 0
             ? (
               <Grid.Column computer={16} className="narrowRow">
-                <ErrorMessage visible message={translations[`${TRN_PREFIX}mustSelectOneColumn`]} />
+                <ErrorMessage visible message={translate('mustSelectOneColumn', profile, translations)} />
               </Grid.Column>
             )
             : null }
           {selectedColumns.length > 0 && selectedColumns.length === selectedHierarchies.length && !selectedSummaryReport
             ? (
               <Grid.Column computer={16} className="narrowRow">
-                <ErrorMessage visible message={translations[`${TRN_PREFIX}needMoreHierarchies`]} />
+                <ErrorMessage visible message={translate('needMoreHierarchies', profile, translations)} />
               </Grid.Column>
             )
             : null }
           {selectedHierarchies.length > 3
             ? (
               <Grid.Column computer={16} className="narrowRow">
-                <ErrorMessage visible message={translations[`${TRN_PREFIX}moreThan3Hierarchies`]} warning />
+                <ErrorMessage visible message={translate('moreThan3Hierarchies', profile, translations)} warning />
               </Grid.Column>
             )
             : null}
           {selectedColumns.length > 3 && profile === PROFILE_TAB
             ? (
               <Grid.Column computer={16} className="narrowRow">
-                <ErrorMessage visible message={translations[`${TRN_PREFIX}noMoreThan3ColumnsInTabs`]} />
+                <ErrorMessage visible message={translate('noMoreThan3ColumnsInTabs', profile, translations)} />
               </Grid.Column>
             )
             : null }

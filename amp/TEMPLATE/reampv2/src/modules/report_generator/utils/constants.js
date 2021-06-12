@@ -1,4 +1,5 @@
-export const TRN_PREFIX = 'amp.reportGenerator:';
+export const TRN_PREFIX_REPORT = 'amp.reportGenerator:';
+export const TRN_PREFIX_TAB = 'amp.tabGenerator:';
 export const URL_METADATA = '/rest/reports/designer';
 export const URL_PREVIEW = '/rest/data/report/preview';
 export const URL_GET_REPORT = '/rest/reports/{reportId}';

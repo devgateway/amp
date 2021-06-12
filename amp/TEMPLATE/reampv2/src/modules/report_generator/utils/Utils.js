@@ -1,4 +1,6 @@
-import { IS_MEASURELESS_REPORT, PROFILE_REPORT, PROFILE_TAB } from './constants';
+import {
+  IS_MEASURELESS_REPORT, PROFILE_REPORT, PROFILE_TAB, TRN_PREFIX_REPORT, TRN_PREFIX_TAB
+} from './constants';
 
 export function validateSaveModal(title, columns, reportDetails, hierarchies, measures) {
   if (title === null || title === undefined || title.toString().trim().length === 0) {
@@ -95,4 +97,21 @@ export function areEnoughDataForPreview(columns, measures, hierarchies, reportDe
     }
   }
   return false;
+}
+
+/**
+ * Return translations for tabs and reports.
+ * Default to reports if missing key for tabs.
+ * @param key
+ * @param profile
+ * @param translations
+ * @returns {*}
+ */
+export function translate(key, profile, translations) {
+  const prefix = profile === PROFILE_TAB ? TRN_PREFIX_TAB : TRN_PREFIX_REPORT;
+  let value = translations[prefix + key];
+  if (!value) {
+    value = translations[TRN_PREFIX_REPORT + key];
+  }
+  return value;
 }

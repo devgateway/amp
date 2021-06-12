@@ -5,11 +5,11 @@ import {
 } from 'semantic-ui-react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { FM_IS_PUBLIC_REPORT_ENABLED, PROFILE_TAB, TRN_PREFIX } from '../utils/constants';
+import { FM_IS_PUBLIC_REPORT_ENABLED, PROFILE_TAB } from '../utils/constants';
 import './MainMenu.css';
 import SaveModal from './SaveModal';
 import { getLayout } from '../actions/layoutActions';
-import { areEnoughDataForPreview } from '../utils/Utils';
+import { areEnoughDataForPreview, translate } from '../utils/Utils';
 
 const MENU = 'menu';
 
@@ -61,29 +61,29 @@ class MainMenu extends Component {
         <Menu fluid vertical>
           <Menu.Item
             name={MENU + 0}
-            content={translations[`${TRN_PREFIX}reportingDetails`]}
+            content={translate('reportingDetails', profile, translations)}
             active={tab === 0}
             onClick={this.handleItemClick}
               />
           <Menu.Item
             name={MENU + 1}
-            content={translations[`${TRN_PREFIX}columns`]}
+            content={translate('columns', profile, translations)}
             active={tab === 1}
             onClick={this.handleItemClick}
               />
           <Menu.Item
             name={MENU + 2}
-            content={translations[`${TRN_PREFIX}financialMeasures`]}
+            content={translate('financialMeasures', profile, translations)}
             active={tab === 2}
             onClick={this.handleItemClick}
               />
           {loaded && results.logged ? (
             <Item className="save_buttons_item">
               <Button color="green" onClick={() => this.setSaveModalOpen(true, !id)}>
-                {translations[`${TRN_PREFIX}save`]}
+                {translate('save', profile, translations)}
               </Button>
               <Button color="orange" onClick={() => this.setSaveModalOpen(true, true)}>
-                {translations[`${TRN_PREFIX}saveAs`]}
+                {translate('saveAs', profile, translations)}
               </Button>
             </Item>
           ) : null }
@@ -98,7 +98,7 @@ class MainMenu extends Component {
                 color="green"
                 onClick={runReport}
                 disabled={!areEnoughDataForPreview(columns, measures, hierarchies, reportDetails)}>
-                {translations[`${TRN_PREFIX}plusRunReport`]}
+                {translate('plusRunReport', profile, translations)}
               </Button>
             </Item>
           ) : null }

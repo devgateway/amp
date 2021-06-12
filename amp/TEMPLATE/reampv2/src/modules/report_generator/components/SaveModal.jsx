@@ -5,9 +5,9 @@ import {
 } from 'semantic-ui-react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { PROFILE_TAB, TRN_PREFIX } from '../utils/constants';
+import { PROFILE_TAB } from '../utils/constants';
 import ErrorMessage from './ErrorMessage';
-import { validateSaveModal } from '../utils/Utils';
+import { translate, validateSaveModal } from '../utils/Utils';
 import { updateReportDetailsName, updateReportDetailsNameReportCategory } from '../actions/stateUIActions';
 
 class SaveModal extends Component {
@@ -47,7 +47,6 @@ class SaveModal extends Component {
       translations, open, isNewReport, close, reportPending, metaDataPending, isTab, profile
     } = this.props;
     const loading = reportPending || metaDataPending;
-    const trnSufix = isTab || profile === PROFILE_TAB ? 'Tab' : 'Report';
     return (
       <Modal
         className="save-modal"
@@ -55,7 +54,9 @@ class SaveModal extends Component {
         open={open}
         onClose={() => close()}
       >
-        <Header content={isNewReport ? translations[`${TRN_PREFIX}saveAs`] : translations[`${TRN_PREFIX}save`]} />
+        <Header content={isNewReport
+          ? translate('saveAs', profile, translations)
+          : translate('save', profile, translations)} />
         <Modal.Content>
           {this.generateSaveModalContent()}
         </Modal.Content>
@@ -63,12 +64,12 @@ class SaveModal extends Component {
           <Button color="green" onClick={this.validateAndSave} loading={loading} disabled={loading}>
             <Icon name="save" />
             {isNewReport
-              ? translations[`${TRN_PREFIX}saveNew${trnSufix}`]
-              : translations[`${TRN_PREFIX}save${trnSufix}`]}
+              ? translate('saveNew', profile, translations)
+              : translate('save', profile, translations)}
           </Button>
           <Button color="red" onClick={close}>
             <Icon name="cancel" />
-            {translations[`${TRN_PREFIX}cancel`]}
+            {translate('cancel', profile, translations)}
           </Button>
         </Modal.Actions>
       </Modal>
@@ -77,7 +78,7 @@ class SaveModal extends Component {
 
   generateSaveModalContent = () => {
     const {
-      translations, reportPending, name, metaDataPending, selectedReportCategory, reportCategories
+      translations, reportPending, name, metaDataPending, selectedReportCategory, reportCategories, profile
     } = this.props;
     const { modalSaveError } = this.state;
     const loading = reportPending || metaDataPending;
@@ -89,16 +90,16 @@ class SaveModal extends Component {
             <Form.Field>
               <Label>
                 <div className="red_text" style={{ float: 'left', paddingRight: '5px' }}>* </div>
-                <div>{translations[`${TRN_PREFIX}enterReportTitle`]}</div>
+                <div>{translate('enterReportTitle', profile, translations)}</div>
               </Label>
               <Input defaultValue={name} focus onChange={(event) => this.handleChangeName(event.target.value)} />
             </Form.Field>
             {reportCategories ? (
               <Form.Field>
-                <Label>{translations[`${TRN_PREFIX}category`]}</Label>
+                <Label>{translate('category', profile, translations)}</Label>
                 <Dropdown
                   className="category-dropdown"
-                  placeholder={translations[`${TRN_PREFIX}selectCategory`]}
+                  placeholder={translate('selectCategory', profile, translations)}
                   selection
                   options={options}
                   defaultValue={selectedReportCategory}
@@ -109,7 +110,7 @@ class SaveModal extends Component {
             {modalSaveError ? (
               <>
                 <Divider />
-                <ErrorMessage visible message={translations[TRN_PREFIX + modalSaveError]} />
+                <ErrorMessage visible message={translate(modalSaveError, profile, translations)} />
               </>
             ) : null}
           </>

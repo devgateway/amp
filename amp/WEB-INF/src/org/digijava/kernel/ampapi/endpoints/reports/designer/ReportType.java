@@ -77,4 +77,8 @@ public enum ReportType {
     public boolean isDonor() {
         return this.equals(DONOR);
     }
+
+    public boolean isRegional() {
+        return this.equals(REGIONAL);
+    }
 }

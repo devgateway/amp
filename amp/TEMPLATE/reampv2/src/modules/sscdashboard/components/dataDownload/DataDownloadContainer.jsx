@@ -117,10 +117,11 @@ class DataDownloadContainer extends Component {
   }
 
   resetFilters() {
-    const { selectedFilters } = this.props;
+    const { selectedFilters, _dataDownloaded } = this.props;
     if (selectedFilters) {
       // eslint-disable-next-line react/no-did-mount-set-state
       this.setState({ selectedFilters });
+      _dataDownloaded();
     }
   }
 

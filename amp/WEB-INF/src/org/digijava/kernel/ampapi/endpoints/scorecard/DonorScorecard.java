@@ -3,11 +3,14 @@ package org.digijava.kernel.ampapi.endpoints.scorecard;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.digijava.kernel.ampapi.endpoints.common.model.Org;
 import org.digijava.kernel.ampapi.endpoints.common.model.OrgGroup;
 import org.digijava.kernel.ampapi.endpoints.common.model.OrgType;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.DashboardsService;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.scorecard.model.Donor;
@@ -34,6 +37,7 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -41,6 +45,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -53,9 +58,8 @@ import java.util.Set;
 /**
  * This class should have all endpoints related to the Donor Scorecard -
  * AMP-20002
- * 
+ *
  * @author Emanuel Perez
- * 
  */
 
 @Path("scorecard")
@@ -70,10 +74,23 @@ public class DonorScorecard {
     @ApiOperation(value = "Retrieve donor scorecard stats for the specified year and quarter.",
             notes = "If the year is not specified the current one will be used. "
                     + "If the quarter is not specified, the last one will be used")
-    public DonorScoreCardStats getScoreCardStats(@ApiParam("Year") @QueryParam("year") Integer year,
-                                                 @ApiParam(value = "Quarter", allowableValues = "1,2,3,4")
-                                                 @QueryParam("quarter") Integer quarter) {
-        return new ScorecardService().getDonorScorecardStats(year, quarter);
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "Donor ScoreCard stats for the selected "
+            + "quarter and year",
+            response = DonorScoreCardStats.class))
+    public Response getScoreCardStats(@ApiParam("Year") @QueryParam("year") Integer year,
+                                      @ApiParam(value = "Quarter", allowableValues = "1,2,3,4")
+                                      @QueryParam("quarter") Integer quarter) {
+        return DashboardsService.buildOkResponseWithOriginHeaders(
+                new ScorecardService().getDonorScorecardStats(year, quarter));
+    }
+
+    @OPTIONS
+    @Path("/stats")
+    @ApiOperation(
+            value = "Describe options for endpoint",
+            notes = "Enables Cross-Origin Resource Sharing for endpoint")
+    public Response describeScoreCardStats() {
+        return DashboardsService.buildOkResponseWithOriginHeaders("");
     }
 
     @GET
@@ -107,7 +124,7 @@ public class DonorScorecard {
             }
         };
     }
-    
+
     @GET
     @Path("/quickStats")
     @Produces(MediaType.APPLICATION_JSON)
@@ -120,34 +137,36 @@ public class DonorScorecard {
                 scorecardService.getPastQuarterProjectsCount(),
                 scorecardService.getPastQuarterUsersCount());
     }
-    
+
     @POST
     @Path("/manager/settings")
     @Consumes(MediaType.APPLICATION_JSON)
     @ApiOperation("Save the donor scorecard settings.")
     public void saveScorecardSettings(SettingsBean settingsBean) {
-        List<AmpScorecardSettings> scorecardSettingsList = (List<AmpScorecardSettings>) DbUtil.getAll(AmpScorecardSettings.class);
+        List<AmpScorecardSettings> scorecardSettingsList =
+                (List<AmpScorecardSettings>) DbUtil.getAll(AmpScorecardSettings.class);
         List<AmpCategoryValue> allCategoryValues = (List<AmpCategoryValue>) CategoryManagerUtil.
                 getAmpCategoryValueCollectionByKey("activity_status");
-        
-        AmpScorecardSettings settings = scorecardSettingsList.isEmpty() ? new AmpScorecardSettings() : scorecardSettingsList.get(0);
+
+        AmpScorecardSettings settings = scorecardSettingsList.isEmpty() ? new AmpScorecardSettings()
+                : scorecardSettingsList.get(0);
 
         settings.setValidationPeriod(settingsBean.getValidationPeriod());
         settings.setPercentageThreshold(settingsBean.getPercentageThreshold());
         if (settingsBean.getValidationTime() != null && settingsBean.getValidationTime() > 0) {
             settings.setValidationTime(settingsBean.getValidationTime());
         }
-        
+
         List<SettingsBean.CategoryValue> categoryValues = settingsBean.getCategoryValues();
-        
-        Set <AmpScorecardSettingsCategoryValue> closedStatuses = new HashSet<AmpScorecardSettingsCategoryValue>();
-        
+
+        Set<AmpScorecardSettingsCategoryValue> closedStatuses = new HashSet<AmpScorecardSettingsCategoryValue>();
+
         if (categoryValues != null) {
             Set<Long> selectedValesSet = new HashSet<>();
-            for (int i=0; i < categoryValues.size(); i++) {
+            for (int i = 0; i < categoryValues.size(); i++) {
                 selectedValesSet.add(categoryValues.get(i).getId());
             }
-            
+
             for (AmpCategoryValue categoryValue : allCategoryValues) {
                 if (selectedValesSet.contains(categoryValue.getId())) {
                     AmpScorecardSettingsCategoryValue scSettingsCategoryValue = new AmpScorecardSettingsCategoryValue();
@@ -156,8 +175,8 @@ public class DonorScorecard {
                     closedStatuses.add(scSettingsCategoryValue);
                 }
             }
-        }   
-        
+        }
+
         settings.setQuarters(String.join(",", settingsBean.getQuarters()));
         settings.getClosedStatuses().clear();
         settings.getClosedStatuses().addAll(closedStatuses);
@@ -169,7 +188,7 @@ public class DonorScorecard {
                     ApiError.toError("Exception while saving settings object: " + e.getMessage()));
         }
     }
-    
+
     @POST
     @Path("/manager/donors/noupdates")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -179,7 +198,7 @@ public class DonorScorecard {
                     + "excluded in the scorecard.")
     public void getDonorsNoUpdates(@ApiParam("list of donors") DonorsNoUpdatesWrapper donorsBean) {
         DbUtil.deleteAllNoUpdateOrgs(false);
-        
+
         for (Long donorId : donorsBean.getDonorsNoUpdates()) {
             AmpScorecardOrganisation org = new AmpScorecardOrganisation();
             org.setAmpDonorId(donorId);
@@ -207,14 +226,14 @@ public class DonorScorecard {
 
         // delete all excluded organizations from the amp_scorecard_organisation table having to_exclude = true
         DbUtil.deleteAllNoUpdateOrgs(true);
-        
+
         Set<Long> donorIds = new HashSet<>(donorsBean.getDonorIds());
         for (Long donorId : donorIds) {
             AmpScorecardOrganisation org = new AmpScorecardOrganisation();
             org.setAmpDonorId(donorId);
             org.setModifyDate(new Date());
             org.setToExclude(true);
-            
+
             try {
                 DbUtil.saveOrUpdateObject(org);
             } catch (Exception e) {
@@ -222,20 +241,20 @@ public class DonorScorecard {
                         ApiError.toError("Exception while saving scorecard organization object: " + e.getMessage()));
             }
         }
-        
+
         List<ScorecardNoUpdateDonor> allDonors = scorecardService.getScorecardDonors(true);
         List<Donor> allFilteredDonors = new ArrayList<>();
-        
+
         for (ScorecardNoUpdateDonor donor : allDonors) {
             if (!donorIds.contains(donor.getAmpDonorId())) {
                 allFilteredDonors.add(new Donor(donor.getAmpDonorId(), donor.getName()));
             }
         }
-        
+
         List<Donor> noUpdatesFilteredDonors = new ArrayList<>();
         List<ScorecardNoUpdateDonor> noUpdatedDonors = scorecardService.getScorecardDonors(false);
-        
-        for (ScorecardNoUpdateDonor noUpdateDonor: noUpdatedDonors) {
+
+        for (ScorecardNoUpdateDonor noUpdateDonor : noUpdatedDonors) {
             if (!donorIds.contains(noUpdateDonor.getAmpDonorId())) {
                 noUpdatesFilteredDonors.add(new Donor(noUpdateDonor.getAmpDonorId(), noUpdateDonor.getName()));
             }
@@ -254,7 +273,7 @@ public class DonorScorecard {
         List<Org> orgs = QueryUtil.getDonors(false);
         List<OrgType> orgTypes = QueryUtil.getOrgTypes();
         List<OrgGroup> orgGroups = QueryUtil.getOrgGroups();
-        
+
         List<DonorTreeNode> donorsTree = new ArrayList<>();
         for (OrgType orgType : orgTypes) {
             Set<Long> orgGrpIds = orgType.getGroupIds();

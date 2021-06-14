@@ -7,7 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
  */
 public class DonorScoreCardStats {
 
-    @ApiModelProperty(value = "the percentage of donors wich are on time", example = "60")
+    @ApiModelProperty(value = "the percentage of donors which are on time", example = "60")
     private final int onTime;
 
     @ApiModelProperty(value = "the percentage of donors which are late", example = "25")

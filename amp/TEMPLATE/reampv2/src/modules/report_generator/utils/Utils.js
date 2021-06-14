@@ -85,15 +85,19 @@ export function getProfileFromReport(data) {
   return PROFILE_REPORT;
 }
 
+// TODO: check if this can be generalized when we implement the saving report functionality.
 export function areEnoughDataForPreview(columns, measures, hierarchies, reportDetails, profile) {
   if (profile !== PROFILE_TAB) {
     if (columns && measures && hierarchies && reportDetails && columns.available && columns.available.length > 0) {
       if (columns.selected.length > 0 && (IS_MEASURELESS_REPORT || measures.selected.length > 0)) {
         const selectedSummaryReport = reportDetails && reportDetails.selectedSummaryReport;
-        if (columns.selected.length === hierarchies.selected.length && !selectedSummaryReport) {
+        if (!selectedSummaryReport) {
+          if (columns.selected.length === hierarchies.selected.length) {
+            return false;
+          }
+        } else if (measures.selected.length === 0 && hierarchies.selected.length === 0) {
           return false;
         }
-        // TODO: check if this can be generalized when we implement the saving report functionality.
         return true;
       }
     }

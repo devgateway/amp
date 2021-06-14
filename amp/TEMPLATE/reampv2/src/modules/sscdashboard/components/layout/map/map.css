@@ -9,6 +9,7 @@
     padding: 12px 0;
     position: relative;
     z-index: 1;
+    top:9px;
 }
 
 .map-container {

@@ -1,23 +1,11 @@
 package org.digijava.kernel.ampapi.endpoints.gis.services;
 
-import static org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants.UNDEFINED_NAME;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.AmpReportFilters;
-import org.dgfoundation.amp.newreports.DateCell;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.IdentifiedReportCell;
 import org.dgfoundation.amp.newreports.ReportArea;
@@ -35,19 +23,24 @@ import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.dto.FilterValue;
 import org.digijava.kernel.ampapi.endpoints.dto.GisActivity;
-import org.digijava.kernel.ampapi.endpoints.dto.gis.SscDashboardActivity;
-import org.digijava.kernel.ampapi.endpoints.dto.gis.SscDashboardObject;
-import org.digijava.kernel.ampapi.endpoints.dto.gis.SscDashboardObjectFactory;
-import org.digijava.kernel.ampapi.endpoints.dto.gis.SscDashboardResult;
 import org.digijava.kernel.ampapi.endpoints.gis.PerformanceFilterParameters;
 import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
-import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.util.SectorUtil;
-import org.digijava.module.common.util.DateTimeUtil;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import static org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants.UNDEFINED_NAME;
 
 public class ActivityService {
     protected static Logger logger = Logger.getLogger(ActivityService.class);
@@ -191,7 +184,7 @@ public class ActivityService {
                             }
                             sectors.add(sector);
 
-                        }                       
+                        }
                         matchesFilters.put(columnName, sectors);
                     } else {
                         matchesFilters.put(columnName, ids);
@@ -278,91 +271,5 @@ public class ActivityService {
         }
         return new RecentlyUpdatedActivities(headers, activities);
 
-    }
-
-    public static SscDashboardResult getSscDashboardResult() {
-        SscDashboardResult result = new SscDashboardResult();
-        ReportSpecificationImpl spec = new ReportSpecificationImpl("SccDashboard", ArConstants.DONOR_TYPE);
-        spec.addColumn(new ReportColumn(ColumnConstants.DONOR_COUNTRY));
-        spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR));
-        spec.addColumn(new ReportColumn(ColumnConstants.SSC_MODALITIES));
-        spec.addColumn(new ReportColumn(ColumnConstants.ACTUAL_START_DATE));
-        spec.addColumn(new ReportColumn(ColumnConstants.PROPOSED_START_DATE));
-
-        spec.getHierarchies().add(new ReportColumn(ColumnConstants.DONOR_COUNTRY));
-        spec.getHierarchies().add(new ReportColumn(ColumnConstants.PRIMARY_SECTOR));
-        spec.getHierarchies().add(new ReportColumn(ColumnConstants.SSC_MODALITIES));
-
-        ReportsUtil.configureSSCWorkspaceFilter(spec, true);
-        GeneratedReport report = EndpointUtils.runReport(spec);
-
-        if (report != null) {
-            for (ReportArea reportArea : report.reportContents.getChildren()) {
-                SscDashboardObject countries = SscDashboardObjectFactory.
-                        getSscDashboardObject(reportArea.getOwner().columnName, reportArea.getOwner().id);
-                List<ReportArea> sectorsReportArea;
-                sectorsReportArea = reportArea.getChildren();
-                for (ReportArea sectorReportArea : sectorsReportArea) {
-                    SscDashboardObject sectors = SscDashboardObjectFactory.
-                            getSscDashboardObject(sectorReportArea.getOwner().columnName,
-                                    sectorReportArea.getOwner().id);
-                    List<ReportArea> modalities = sectorReportArea.getChildren();
-                    for (ReportArea modalitiesReportArea : modalities) {
-                        SscDashboardObject modality = SscDashboardObjectFactory.
-                                getSscDashboardObject(modalitiesReportArea.getOwner().columnName,
-                                        modalitiesReportArea.getOwner().id);
-                        for (ReportArea activitiesReportArea : modalitiesReportArea.getChildren()) {
-                            Long actualStartDate = null;
-                            Long proposedStartDate = null;
-                            SscDashboardActivity da = new SscDashboardActivity(activitiesReportArea.getOwner().id);
-                            Map<ReportOutputColumn, ReportCell> activityRow = activitiesReportArea.getContents();
-                            Set<ReportOutputColumn> activityColumns = activityRow.keySet();
-                            for (ReportOutputColumn activitiesCls : activityColumns) {
-                                DateCell cellActivity = (DateCell) activityRow.get(activitiesCls);
-                                if (activitiesCls.originalColumnName.equals(ColumnConstants.ACTUAL_START_DATE)) {
-                                    actualStartDate = cellActivity.entityId;
-                                } else {
-                                    if (activitiesCls.originalColumnName.equals(ColumnConstants.PROPOSED_START_DATE)) {
-                                        proposedStartDate = cellActivity.entityId;
-                                    }
-                                }
-                            }
-                            result.getActivitiesId().add(activitiesReportArea.getOwner().id);
-                            if (actualStartDate == null && proposedStartDate == null) {
-                                continue;
-                            } else {
-                                if (actualStartDate == null) {
-                                    da.setYear(DateTimeUtil.getYearFromJulianNumber(proposedStartDate));
-                                } else {
-                                    if (proposedStartDate == null) {
-                                        da.setYear(DateTimeUtil.getYearFromJulianNumber(actualStartDate));
-                                    } else {
-                                        if (proposedStartDate < actualStartDate) {
-                                            da.setYear(DateTimeUtil.getYearFromJulianNumber(proposedStartDate));
-                                        } else {
-                                            da.setYear(DateTimeUtil.getYearFromJulianNumber(actualStartDate));
-                                        }
-                                    }
-                                }
-                            }
-                            if (da.getYear() > result.getMostRecentYear()) {
-                                result.setMostRecentYear(da.getYear());
-                            }
-                            modality.getChildren().add(da);
-                        }
-                        if (modality.getChildren().size() > 0) {
-                            sectors.getChildren().add(modality);
-                        }
-                    }
-                    if (sectors.getChildren().size() > 0) {
-                        countries.getChildren().add(sectors);
-                    }
-                }
-                if (countries.getChildren().size() > 0) {
-                    result.getChildren().add(countries);
-                }
-            }
-        }
-        return result;
     }
 }

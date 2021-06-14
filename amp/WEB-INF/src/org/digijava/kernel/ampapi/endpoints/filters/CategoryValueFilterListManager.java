@@ -1,12 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.filters;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
+import com.google.common.collect.ImmutableMap;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -16,7 +10,13 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
-import com.google.common.collect.ImmutableMap;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * This class generates the filter list (tree) object for category values
@@ -96,8 +96,9 @@ public final class CategoryValueFilterListManager implements FilterListManager {
                 && CategoryManagerUtil.loadAmpCategoryClassByKey(FeaturesUtil.
                 getGlobalSettingValue(GlobalSettingsConstants.WS_PREFIX_SSC)
                 + FILTER_NAME_TO_CATEGORY_ITEM.get(filterName).getKey()) != null) {
-            columnName = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.WS_PREFIX_SSC)
-                    .replace("_", " ") + columnName;
+            String ssc = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.WS_PREFIX_SSC);
+            columnName = ssc.replace("_", " ") + columnName;
+            filterName = ssc.toLowerCase(Locale.ROOT).replace("_", "-") + filterName;
         }
 
         List<String> filterIds = new ArrayList<>();

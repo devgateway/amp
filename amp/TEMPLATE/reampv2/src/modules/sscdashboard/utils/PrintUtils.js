@@ -101,7 +101,7 @@ export const printChartPrinter = (title, chartId, printContainer, iframe, countr
  */
 export const printChart = (title, chartId, filtersObject, format, calculateChildren, printContainer, useTitle) => {
   try {
-    const printElement = document.getElementById(printContainer);
+    const printElement = document.getElementById(printContainer).firstChild;
 
     const chartElement = document.getElementById(chartId).cloneNode(true);
     let chartHeight = `${document.getElementById(chartId).clientHeight}px`;

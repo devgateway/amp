@@ -18,11 +18,12 @@
     "dateformat": "^4.4.1",
     "dom-to-image-font-patch": "^1.0.1",
     "eslint-plugin-import": "^2.22.1",
-    "exceljs": "^4.1.1",
+    "exceljs": "^2.0.1",
     "history": "^4.10.1",
     "javascript-color-gradient": "^1.3.2",
     "leaflet": "^1.6.0",
     "leaflet-curve": "^1.0.0",
+    "nanoid": "^3.1.22",
     "nivo": "0.31.0",
     "platform": "^1.3.5",
     "plotly.js": "^1.57.1",
@@ -60,7 +61,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "export PUBLIC_URL=/TEMPLATE/reampv2/build/ && react-scripts build",
+    "build": "cross-env PUBLIC_URL=/TEMPLATE/reampv2/build/ react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint .",
@@ -87,6 +88,7 @@
     ]
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "eslint-config-airbnb": "^18.2.0",
     "eslint-plugin-promise": "^4.2.1"
   }

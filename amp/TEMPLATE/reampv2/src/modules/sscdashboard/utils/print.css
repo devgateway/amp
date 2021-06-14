@@ -9,6 +9,10 @@
     border: 1px solid black;
 }
 
+.print-dummy-border {
+    border: 1px solid black;
+}
+
 #print-friendly-dummy {
 
     width: 670px;
@@ -44,7 +48,8 @@
     padding-left: 0px;
     padding-right: 0px;
 }
-#print-friendly-dummy .one-by-one .chart-column{
+
+#print-friendly-dummy .one-by-one .chart-column {
 
     height: 250px;
 }
@@ -65,7 +70,8 @@
 #print-simple-dummy .custom-legend ul li .label {
     color: #273142;
 }
-#print-dummy .country-popup-1 .popup-footer .project-list{
+
+#print-dummy .country-popup-1 .popup-footer .project-list {
     height: auto;
     min-height: 0;
     overflow: visible;
@@ -187,9 +193,10 @@
     }
 
 
-    .one-by-one .chart-container > div > div > svg{
+    .one-by-one .chart-container > div > div > svg {
         transform: translate(-10%, 0) !important;
     }
+
     .last-row .col-print-12 .chart-container > div > div > svg {
         transform: translate(5%, 0) !important;
     }

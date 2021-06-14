@@ -11,7 +11,7 @@ export const API_FILTERS_COUNTRIES_URL = '/rest/filters/locations?firstLevelOnly
 export const API_AMP_SETTINGS_URL = '/rest/amp/settings';
 export const API_FILTERS_MODALITIES_URL = '/rest/filters/modalities?sscWorkspace=true';
 export const API_SSC_DASHBOARD_URL = '/rest/gis/sscdashboard';
-
+export const API_XLS_REPORT_URL = '/rest/gis/sscdashboard/xsl';
 export const API_REPORTS_ACTIVITY_DETAIL_URL = '/rest/gis/activities';
 
 export const BOOTSTRAP_COLUMNS_COUNT = 12;
@@ -33,6 +33,7 @@ export const DEFAULT_SCREEN_SIZE = 1920;
 export const DEFAULT_ELLIPSIS = 145;
 export const SECTOR_MODALITY_MIN_SIZE = 2;
 export const SECTOR_MODALITY_LEADING_LEFT = '0';
+export const WS_PREFIX = 'SSC_';
 
 export const HOME_CHART = 'home';
 export const SECTORS_CHART = 'sector';
@@ -42,9 +43,14 @@ export const COUNTRY_COLUMN = 'country-column';
 // eslint-disable-next-line max-len
 export const FALLBACK_FLAG = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAbCAQAAACkGQXlAAAAI0lEQVR42mP8L8lAVcA4auCogaMGjho4auCogaMGjhpINAAAOBcdpLw/CDsAAAAASUVORK5CYII=';
 export const OTHERS_CODE = '000';
+export const INVALID_COLUMN_ERROR_CODE = '0602';
+export const FILTER_PRIMARY_SECTOR = 'primary-sector';
+export const FILTER_SSC_MODALITIES = 'ssc-modalities';
+export const FILTER_DONOR_AGENCY_COUNTRY = 'donor-agency-country';
+
 
 export const SECTOR_COLOR_MAP = new Map([
-  ['11', '#d46453'], ['120', '#f5a15d'], ['130', '#ffcf8e'], ['140', '#ff7a7d'], ['150', '#ff417d'],
+  ['110', '#d46453'], ['120', '#f5a15d'], ['130', '#ffcf8e'], ['140', '#ff7a7d'], ['150', '#ff417d'],
   ['160', '#d61a88'], ['210', '#fff540'], ['220', '#28c074'], ['230', '#429058'], ['240', '#bd4035'],
   ['250', '#b0fff1'], ['311', '#144491'], ['312', '#9b0e3e'], ['313', '#10908e'], ['321', '#8f5765'],
   ['322', '#c7d4e1'], ['323', '#77b02a'], ['331', '#488bd4'], ['332', '#928fb8'], ['400', '#c6d831'],

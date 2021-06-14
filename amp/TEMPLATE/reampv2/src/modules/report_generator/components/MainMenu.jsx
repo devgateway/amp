@@ -97,7 +97,7 @@ class MainMenu extends Component {
                 fluid
                 color="green"
                 onClick={runReport}
-                disabled={!areEnoughDataForPreview(columns, measures, hierarchies, reportDetails)}>
+                disabled={!areEnoughDataForPreview(columns, measures, hierarchies, reportDetails, profile)}>
                 {translate('plusRunReport', profile, translations)}
               </Button>
             </Item>

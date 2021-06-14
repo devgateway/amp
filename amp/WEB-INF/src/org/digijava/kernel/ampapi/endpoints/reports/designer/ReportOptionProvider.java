@@ -54,7 +54,7 @@ public class ReportOptionProvider {
                     "Component Report", "Report Types"),
             new ReportOptionConfiguration("funding-component", "Contribution Tab (Activity Contributions)", null,
                     "Contribution Report", "Report Types"),
-            new ReportOptionConfiguration("totals-only", "Totals Only")
+            new ReportOptionConfiguration("annual-report", "Annual Report")
     );
 
     public static final List<ReportOptionConfiguration> MANAGEMENT_OR_REPORT_PROFILE_OPTIONS = ImmutableList.of(

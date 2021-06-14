@@ -28,9 +28,9 @@ class MainContent extends Component {
   // eslint-disable-next-line no-unused-vars
   componentDidUpdate(prevProps, prevState, snapshot) {
     const {
-      _updatePreviewId, _getPreview, columns, measures, hierarchies, reportDetails, lastReportId
+      _updatePreviewId, _getPreview, columns, measures, hierarchies, reportDetails, lastReportId, profile
     } = this.props;
-    if (areEnoughDataForPreview(columns, measures, hierarchies, reportDetails)) {
+    if (areEnoughDataForPreview(columns, measures, hierarchies, reportDetails, profile)) {
       // Convert input data to a String then Number.
       const _reportDetails = { ...reportDetails };
       // Remove fields that would make the preview flicker.

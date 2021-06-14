@@ -111,65 +111,103 @@ class ReportingDetailSection extends Component {
     return radios;
   }
 
-  render() {
-    const {
-      visible, translations, selectedTotalGrouping, selectedSummaryReport, selectedFundingGrouping,
-      selectedAllowEmptyFundingColumns, selectedSplitByFunding, selectedShowOriginalCurrencies,
-      description, loading, selectedAlsoShowPledges, selectedUseAboveFilters, profile
-    } = this.props;
+  /**
+   * We need this section ALWAYS in 2nd place from right to left.
+   * @returns {JSX.Element}
+   */
+  renderDescriptionSection = () => {
+    const { translations, profile, description } = this.props;
+    return (
+      <GridColumn computer="8" tablet="16">
+        <OptionsList title={translate('reportDescription', profile, translations)} tooltip="tooltip 2" >
+          <Form className="description">
+            <TextArea value={description} onChange={this.changeDescription} />
+          </Form>
+        </OptionsList>
+      </GridColumn>
+    );
+  }
 
+  renderGroupingSection = () => {
+    const {
+      translations, selectedTotalGrouping, selectedSummaryReport, profile, loading
+    } = this.props;
+    return (
+      <GridColumn computer="8" tablet="16">
+        <OptionsList
+          title={translate('totalGrouping', profile, translations)}
+          isRequired
+          tooltip="tooltip 1" >
+          <OptionsContent
+            radioList={this.getOptions(TOTAL_GROUPING_RADIO_OPTIONS)}
+            checkList={this.getOptions(TOTAL_GROUPING_CHECKBOX_OPTIONS)}
+            selectedRadio={selectedTotalGrouping}
+            selectedCheckboxes={[selectedSummaryReport]}
+            changeCheckList={[this.selectSummaryReport]}
+            changeRadioList={this.selectTotalGrouping}
+            loading={loading} />
+        </OptionsList>
+      </GridColumn>
+    );
+  }
+
+  renderFundingSection = () => {
+    const {
+      translations, selectedFundingGrouping, loading, profile
+    } = this.props;
+    return (
+      <GridColumn computer="8" tablet="16">
+        <OptionsList title={translate('fundingGroup', profile, translations)} tooltip="tooltip 3" isRequired >
+          <OptionsContent
+            radioList={this.getOptions(FUNDING_GROUPING_RADIO_OPTIONS)}
+            changeRadioList={this.selectFundingGrouping}
+            selectedRadio={selectedFundingGrouping}
+            loading={loading}
+        />
+        </OptionsList>
+      </GridColumn>
+    );
+  }
+
+  renderOptionsSection = () => {
+    const {
+      translations, selectedAllowEmptyFundingColumns, selectedSplitByFunding, selectedShowOriginalCurrencies,
+      loading, selectedAlsoShowPledges, selectedUseAboveFilters, profile
+    } = this.props;
+    return (
+      <GridColumn computer="8" tablet="16">
+        <OptionsList title={translate('options', profile, translations)} tooltip="tooltip 4" >
+          <OptionsContent
+            checkList={this.getOptions(OPTIONS_CHECKBOX_OPTIONS)}
+            selectedCheckboxes={[selectedAllowEmptyFundingColumns, selectedSplitByFunding,
+              selectedShowOriginalCurrencies, selectedAlsoShowPledges, selectedUseAboveFilters]}
+            changeCheckList={[this.selectAllowEmptyFundingColumns, this.selectSplitByFunding,
+              this.selectShowOriginalCurrencies, this.selectAlsoShowPledges, this.selectUseAboveFilters]}
+            loading={loading} />
+        </OptionsList>
+      </GridColumn>
+    );
+  }
+
+  render() {
+    const { visible } = this.props;
+    const showGroupingSection = this.getOptions(TOTAL_GROUPING_RADIO_OPTIONS).length !== 1
+      || this.getOptions(TOTAL_GROUPING_CHECKBOX_OPTIONS).length !== 0;
     return (
       <div className={!visible ? 'invisible-tab' : ''}>
         <Grid>
-          {(this.getOptions(TOTAL_GROUPING_RADIO_OPTIONS).length !== 1
-            || this.getOptions(TOTAL_GROUPING_CHECKBOX_OPTIONS).length !== 0) ? (
-              <GridColumn computer="8" tablet="16">
-                <OptionsList
-                  title={translate('totalGrouping', profile, translations)}
-                  isRequired
-                  tooltip="tooltip 1" >
-                  <OptionsContent
-                    radioList={this.getOptions(TOTAL_GROUPING_RADIO_OPTIONS)}
-                    checkList={this.getOptions(TOTAL_GROUPING_CHECKBOX_OPTIONS)}
-                    selectedRadio={selectedTotalGrouping}
-                    selectedCheckboxes={[selectedSummaryReport]}
-                    changeCheckList={[this.selectSummaryReport]}
-                    changeRadioList={this.selectTotalGrouping}
-                    loading={loading} />
-                </OptionsList>
-              </GridColumn>
-            ) : null}
-          {this.getOptions(FUNDING_GROUPING_RADIO_OPTIONS).length !== 1 ? (
-            <GridColumn computer="8" tablet="16">
-              <OptionsList title={translate('fundingGroup', profile, translations)} tooltip="tooltip 3" isRequired >
-                <OptionsContent
-                  radioList={this.getOptions(FUNDING_GROUPING_RADIO_OPTIONS)}
-                  changeRadioList={this.selectFundingGrouping}
-                  selectedRadio={selectedFundingGrouping}
-                  loading={loading}
-                />
-              </OptionsList>
-            </GridColumn>
+          {showGroupingSection ? (
+            <>
+              {this.renderGroupingSection()}
+              {this.renderDescriptionSection()}
+            </>
           ) : null}
-          <GridColumn computer="8" tablet="16">
-            <OptionsList title={translate('reportDescription', profile, translations)} tooltip="tooltip 2" >
-              <Form className="description">
-                <TextArea value={description} onChange={this.changeDescription} />
-              </Form>
-            </OptionsList>
-          </GridColumn>
+          {this.getOptions(FUNDING_GROUPING_RADIO_OPTIONS).length !== 1 ? (
+            this.renderFundingSection()
+          ) : null}
+          {!showGroupingSection ? this.renderDescriptionSection() : null}
           {this.getOptions(OPTIONS_CHECKBOX_OPTIONS).length !== 0 ? (
-            <GridColumn computer="8" tablet="16">
-              <OptionsList title={translate('options', profile, translations)} tooltip="tooltip 4" >
-                <OptionsContent
-                  checkList={this.getOptions(OPTIONS_CHECKBOX_OPTIONS)}
-                  selectedCheckboxes={[selectedAllowEmptyFundingColumns, selectedSplitByFunding,
-                    selectedShowOriginalCurrencies, selectedAlsoShowPledges, selectedUseAboveFilters]}
-                  changeCheckList={[this.selectAllowEmptyFundingColumns, this.selectSplitByFunding,
-                    this.selectShowOriginalCurrencies, this.selectAlsoShowPledges, this.selectUseAboveFilters]}
-                  loading={loading} />
-              </OptionsList>
-            </GridColumn>
+            this.renderOptionsSection()
           ) : null}
         </Grid>
       </div>

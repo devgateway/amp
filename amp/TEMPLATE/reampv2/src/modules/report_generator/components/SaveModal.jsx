@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Button, Divider, Dropdown, Form, Header, Icon, Input, Label, Modal
+  Button, Checkbox, Divider, Dropdown, Form, Header, Icon, Input, Label, Modal
 } from 'semantic-ui-react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { PROFILE_TAB } from '../utils/constants';
 import ErrorMessage from './ErrorMessage';
 import { translate, validateSaveModal } from '../utils/Utils';
 import { updateReportDetailsName, updateReportDetailsNameReportCategory } from '../actions/stateUIActions';
@@ -13,7 +12,7 @@ import { updateReportDetailsName, updateReportDetailsNameReportCategory } from '
 class SaveModal extends Component {
   constructor(props) {
     super(props);
-    this.state = { modalSaveError: null };
+    this.state = { modalSaveError: null, openReportOnSave: false };
   }
 
   shouldComponentUpdate(nextProps, nextState, nextContext) {
@@ -28,11 +27,12 @@ class SaveModal extends Component {
     const {
       save, close, name, columns, reportDetails, hierarchies, measures
     } = this.props;
+    const { openReportOnSave } = this.state;
     const msg = validateSaveModal(name, columns, reportDetails, hierarchies, measures);
     if (msg) {
       this.setState({ modalSaveError: msg });
     } else {
-      save();
+      save(openReportOnSave);
       close();
     }
   }
@@ -44,7 +44,7 @@ class SaveModal extends Component {
 
   generateSaveModal = () => {
     const {
-      translations, open, isNewReport, close, reportPending, metaDataPending, isTab, profile
+      translations, open, isNewReport, close, reportPending, metaDataPending, profile
     } = this.props;
     const loading = reportPending || metaDataPending;
     return (
@@ -76,11 +76,16 @@ class SaveModal extends Component {
     );
   }
 
+  handleChangeAutoOpen = () => {
+    const { openReportOnSave } = this.state;
+    this.setState({ openReportOnSave: !openReportOnSave });
+  }
+
   generateSaveModalContent = () => {
     const {
       translations, reportPending, name, metaDataPending, selectedReportCategory, reportCategories, profile
     } = this.props;
-    const { modalSaveError } = this.state;
+    const { modalSaveError, openReportOnSave } = this.state;
     const loading = reportPending || metaDataPending;
     const options = reportCategories ? reportCategories.map(i => ({ key: i.id, text: i.label, value: i.id })) : [];
     return (
@@ -107,6 +112,13 @@ class SaveModal extends Component {
             />
               </Form.Field>
             ) : null}
+            <Form.Field>
+              <Checkbox
+                toggle
+                label={translate('autoOpen', profile, translations)}
+                checked={openReportOnSave}
+                onChange={this.handleChangeAutoOpen} />
+            </Form.Field>
             {modalSaveError ? (
               <>
                 <Divider />
@@ -172,7 +184,6 @@ SaveModal.propTypes = {
   reportDetails: PropTypes.object,
   hierarchies: PropTypes.object,
   measures: PropTypes.object,
-  isTab: PropTypes.bool,
   profile: PropTypes.string,
 };
 
@@ -186,6 +197,5 @@ SaveModal.defaultProps = {
   reportDetails: undefined,
   hierarchies: undefined,
   measures: undefined,
-  isTab: false,
   profile: undefined,
 };

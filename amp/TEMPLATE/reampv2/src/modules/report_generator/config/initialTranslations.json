@@ -76,5 +76,6 @@
   "amp.tabGenerator:summaryReportWithoutMeasuresAndHierarchies": "Summary tabs without hierarchies and measures are not supported.",
   "amp.reportGenerator:noMoreThan3ColumnsInTabs": "You cannot select more than 3 columns in a desktop tab",
   "amp.reportGenerator:noMoreThan2MeasuresInTabs":"You cannot select more than 2 measures in a desktop tab",
-  "amp.reportGenerator:mustHave1MeasuresInTabs": "Must select at least one measure"
+  "amp.reportGenerator:mustHave1MeasuresInTabs": "Must select at least one measure",
+  "amp.reportGenerator:autoOpen": "Open the report after saving"
 }

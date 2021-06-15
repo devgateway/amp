@@ -102,7 +102,9 @@ class MainContent extends Component {
 
   render() {
     const { visibleTab } = this.state;
-    const { saveNewReport, saveReport, runReport, profile } = this.props;
+    const {
+      saveNewReport, saveReport, runReport, profile
+    } = this.props;
     return (
       <>
         <Grid>

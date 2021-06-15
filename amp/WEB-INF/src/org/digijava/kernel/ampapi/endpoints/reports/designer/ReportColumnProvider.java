@@ -223,7 +223,7 @@ public class ReportColumnProvider extends ReportEntityProvider {
                 getGlobalSettingValueBoolean(GlobalSettingsConstants.MTEF_ANNUAL_DATE_FORMAT);
 
         List<AmpColumns> filteredAmpColumns = ampColumns.stream()
-                .filter(col -> isColumnVisible(col, ampAllFieldsByName, mtefColumnsEnabled))
+                .filter(col -> isColumnVisible(col, type, ampAllFieldsByName, mtefColumnsEnabled))
                 .collect(Collectors.toList());
 
         for (AmpColumns ampColumn : filteredAmpColumns) {
@@ -273,10 +273,12 @@ public class ReportColumnProvider extends ReportEntityProvider {
         return ampTreeColumn;
     }
 
-    private boolean isColumnVisible(final AmpColumns column, final Map<String, AmpFieldsVisibility> ampAllFieldsByName,
+    private boolean isColumnVisible(final AmpColumns column, final ReportType type,
+                                    final Map<String, AmpFieldsVisibility> ampAllFieldsByName,
                                     final boolean mtefColumnsEnabled) {
 
-        if (COLUMNS_IGNORED_IN_REPORT_WIZARD.contains(column.getColumnName())) {
+        String columnName = column.getColumnName();
+        if (COLUMNS_IGNORED_IN_REPORT_WIZARD.contains(columnName)) {
             return false;
         }
 
@@ -284,8 +286,13 @@ public class ReportColumnProvider extends ReportEntityProvider {
             return false;
         }
 
+        if (type.isRegional() && columnName.equals(LOCATION_ADM_LEVEL_1)
+                || !type.isRegional() && columnName.equals(REGIONAL_REGION)) {
+            return false;
+        }
+
         AmpFieldsVisibility ampFieldVisibility = ampAllFieldsByName
-                .get(COLUMN_TO_FM_FIELD_MAP.getOrDefault(column.getColumnName(), column.getColumnName()));
+                .get(COLUMN_TO_FM_FIELD_MAP.getOrDefault(columnName, columnName));
 
         if (ampFieldVisibility == null || !ampFieldVisibility.isFieldActive(ampTreeVisibility)) {
             return false;

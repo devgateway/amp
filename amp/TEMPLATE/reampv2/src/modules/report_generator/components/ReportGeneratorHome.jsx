@@ -99,25 +99,25 @@ class ReportGeneratorHome extends Component {
     return body;
   }
 
-  saveReport = () => {
+  saveReport = (open) => {
     const { _save, uiReducer } = this.props;
     const body = this.commonReport(false, false);
-    return _save(uiReducer.id, body).then(response => this.processAfterSave(response));
+    return _save(uiReducer.id, body).then(response => this.processAfterSave(response, open));
   }
 
-  saveNewReport = () => {
+  saveNewReport = (open) => {
     const { _saveNew } = this.props;
     const body = this.commonReport(true, false);
-    return _saveNew(body).then(response => this.processAfterSave(response));
+    return _saveNew(body).then(response => this.processAfterSave(response, open));
   }
 
   runReport = () => {
     const { _runReport } = this.props;
     const body = this.commonReport(true, true);
-    return _runReport(body).then(response => this.processAfterSave(response));
+    return _runReport(body).then(response => this.processAfterSave(response, true));
   }
 
-  processAfterSave = (response) => {
+  processAfterSave = (response, open) => {
     const { translations, uiReducer, profile } = this.props;
     if (response.error) {
       const errors = [];
@@ -135,6 +135,9 @@ class ReportGeneratorHome extends Component {
     } else if (uiReducer.profile === PROFILE_TAB) {
       window.location.href = '/viewTeamReports.do?tabs=true&reset=true';
     } else {
+      if (open) {
+        window.open(`/TEMPLATE/ampTemplate/saikuui_reports/index_reports.html#report/open/${response.payload.id}`);
+      }
       window.location.href = '/viewTeamReports.do?tabs=false&reset=true';
     }
     return null;

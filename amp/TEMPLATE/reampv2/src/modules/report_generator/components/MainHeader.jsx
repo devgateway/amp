@@ -5,9 +5,11 @@ import {
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { ReportGeneratorContext } from './StartUp';
 import InfoIcon from '../static/images/icon-information.svg';
 import { translate } from '../utils/Utils';
+import { PROFILE_TAB } from '../utils/constants';
 
 class MainHeader extends Component {
   handleResetAll = () => {
@@ -23,12 +25,21 @@ class MainHeader extends Component {
     const { translations, profile } = this.props;
     // eslint-disable-next-line no-restricted-globals
     if (confirm(translate('confirmCancel', profile, translations))) {
-      window.location.href = '/viewTeamReports.do?tabs=false&reset=true';
+      if (profile !== PROFILE_TAB) {
+        window.location.href = '/viewTeamReports.do?tabs=false&reset=true';
+      } else {
+        window.location.href = '/viewTeamReports.do?tabs=true&reset=true';
+      }
     }
   }
 
   render() {
     const { translations, profile } = this.props;
+    const tooltipText = (
+      <Tooltip id="reset-all-tooltip">
+        {translate('resetAllTooltip', profile, translations)}
+      </Tooltip>
+    );
     return (
       <>
         <Grid>
@@ -42,8 +53,10 @@ class MainHeader extends Component {
             <GridColumn width="6" textAlign="right">
               <span className="green_text bold pointer" onClick={this.handleResetAll}>
                 {translate('resetAll', profile, translations)}
+                <OverlayTrigger trigger={['hover', 'focus']} overlay={tooltipText}>
+                  <img className="info-icon" src={InfoIcon} alt="info-icon" />
+                </OverlayTrigger>
               </span>
-              <img className="info-icon" src={InfoIcon} alt="info-icon" />
 &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
               <span className="red_text bold pointer" onClick={this.handleCancel}>
                 {translate('cancel', profile, translations)}

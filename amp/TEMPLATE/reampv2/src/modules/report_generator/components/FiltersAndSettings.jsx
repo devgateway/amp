@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Segment } from 'semantic-ui-react';
+import {
+  GridRow, Segment, GridColumn, Grid
+} from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import Filters from './Filters';
 import Settings from './Settings';
@@ -107,24 +109,36 @@ class FiltersAndSettings extends Component {
       <>
         <Segment loading={loading} placeholder textAlign="left" className="filters_segment">
           {!loading ? (
-            <>
-              <Filters
-                onApplyFilters={() => {}}
-                appliedSectionOpen={appliedSettingsOpen}
-                appliedSectionChange={this.handleFiltersChange} />
-              <Settings
-                onApplySettings={() => {}}
-                appliedSectionOpen={appliedFiltersOpen}
-                appliedSectionChange={this.handleSettingsChange} />
-              <div className="applied-filters-wrapper">
-                <div className={!appliedFiltersOpen ? 'invisible-applied-filters' : 'applied-filters'}>
-                  {this.generateAppliedFilters()}
-                </div>
-                <div className={!appliedSettingsOpen ? 'invisible-applied-filters' : 'applied-filters'}>
-                  {this.generateAppliedSettings()}
-                </div>
-              </div>
-            </>
+            <Grid>
+              <GridRow className="filter-title-wrapper">
+                <GridColumn computer={8} mobile={16}>
+                  <Filters
+                    onApplyFilters={() => {}}
+                    appliedSectionOpen={appliedFiltersOpen}
+                    appliedSectionChange={this.handleFiltersChange} />
+                </GridColumn>
+                <GridColumn computer={8} mobile={16}>
+                  <Settings
+                    onApplySettings={() => {}}
+                    appliedSectionOpen={appliedSettingsOpen}
+                    appliedSectionChange={this.handleSettingsChange} />
+                </GridColumn>
+              </GridRow>
+              {appliedFiltersOpen || appliedSettingsOpen ? (
+                <GridRow className="applied-filters-wrapper">
+                  <GridColumn computer={8} mobile={16}>
+                    <div className={!appliedFiltersOpen ? 'invisible-applied-filters' : 'applied-filters'}>
+                      {this.generateAppliedFilters()}
+                    </div>
+                  </GridColumn>
+                  <GridColumn computer={8} mobile={16}>
+                    <div className={!appliedSettingsOpen ? 'invisible-applied-filters' : 'applied-filters'}>
+                      {this.generateAppliedSettings()}
+                    </div>
+                  </GridColumn>
+                </GridRow>
+              ) : null}
+            </Grid>
           ) : null}
         </Segment>
       </>

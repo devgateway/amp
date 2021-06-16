@@ -100,7 +100,7 @@ class Filters extends Component {
     return (
       <>
         {filterLoaded ? (
-          <div className="filter-title-wrapper">
+          <>
             <div className="filter-title" onClick={this.showFilterWidget}>
               {translate('filters', profile, translations)}
 &nbsp;
@@ -114,7 +114,7 @@ class Filters extends Component {
                   : translate('showAppliedFilters', profile, translations)}
               </div>
             ) : null}
-          </div>
+          </>
         ) : <div style={{ float: 'left' }}><Loader active inline /></div>}
         {/* eslint-disable-next-line react/no-string-refs */}
         <div id="filter-popup" ref="filterPopup" style={{ display: (!show ? 'none' : 'block') }} />

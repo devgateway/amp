@@ -9,7 +9,6 @@
     margin-bottom: 0;
 }
 
-.sidebar-filter-wrapper .filter-list,
 .sidebar-filter-wrapper .horizontal-filter .filter-list .well {
     height: 280px;
 }
@@ -32,6 +31,7 @@
 
 .sidebar-filter-wrapper .well {
     background-color: #FFFFFF;
+    margin-bottom: 0;
 }
 
 .sidebar-filter-wrapper .selected .title,
@@ -185,8 +185,8 @@
 }
 
 .sidebar-filter-wrapper .horizontal-filter .filter-list .well .well-inner {
-    min-height: 90px;
-    max-height: 90px;
+    min-height: 75px;
+    max-height: 75px;
     overflow-y: auto;
     overflow-x: hidden;
     width: 100%;
@@ -309,12 +309,6 @@
     width: 100%;
 }
 
-.country-year-search-wrapper .horizontal-filter .well {
-    border-radius: 0;
-    height: calc(100vh - 180px);
-}
-
-
 .country-year-search-wrapper .panel {
     background-color: inherit;
     border: 0;
@@ -324,7 +318,7 @@
     content: ' ';
     position: absolute;
     background-color: transparent;
-    border: 10px solid #273142;
+    border: 10px solid;
     border-color: #273142 transparent transparent #273142;
     top: -12px;
     left: 15px;
@@ -334,7 +328,7 @@
     content: ' ';
     position: absolute;
     background-color: transparent;
-    border: 10px solid #273142;
+    border: 10px solid;
     border-color: #273142 transparent transparent #273142;
     top: -11px;
     left: 0;
@@ -374,10 +368,9 @@
 
 .country-year-search-wrapper .horizontal-filter .filter-list .well .well-inner {
     min-height: 80px;
-    max-height: 45%;
+    max-height: 100px;
     overflow-y: auto;
     overflow-x: hidden;
-    /*width: 100%;*/
 }
 
 .InfiniteCarousel {
@@ -549,4 +542,20 @@ ul.elements-list li:before {
     display: inline;
     height: 100%;
     vertical-align: middle;
+}
+
+#ddYear .elements-list,
+#ddYearCarousel  .elements-list{
+    -webkit-column-count: 2;
+    -moz-column-count: 2;
+    column-count: 2;
+}
+
+.disable-filter {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.label-bold {
+    font-weight: bold;
 }

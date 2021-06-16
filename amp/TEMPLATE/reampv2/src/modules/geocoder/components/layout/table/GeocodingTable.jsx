@@ -4,7 +4,7 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import GeocodingActionColumn from "./GeocodingActionColumn";
-import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
+import filterFactory, {textFilter} from 'react-bootstrap-table2-filter';
 
 import './table.css';
 import Locations from "./Locations";
@@ -71,23 +71,6 @@ class GeocodingTable extends Component {
         );
     }
 
-    expandColumnComponent({ isExpandableRow, isExpanded}) {
-        let content = '';
-
-        if (isExpandableRow) {
-            content = (isExpanded ? '(-)' : '(+)' );
-        } else {
-            content = ' ';
-        }
-
-        return (
-            <div>
-            <GeocodingActionColumn onActionClick={this.handleActionsClick} />
-            {content}
-            </div>
-        );
-    }
-
     render() {
         const {translations} = this.context;
 
@@ -96,15 +79,16 @@ class GeocodingTable extends Component {
         }
 
         let expandRow = {
-            onlyOneExpanding: true,
+            onlyOneExpanding: false,
             renderer: row => (
                 <Locations ampId={row.amp_id}/>
             ),
             nonExpandable: this.getNonExpandableIds(),
             showExpandColumn: true,
-            expandByColumnOnly: true,
+            expandByColumnOnly: false,
             expandColumnPosition: 'right',
-            expandColumnRenderer: ({ expanded, rowKey, expandable }) => {
+            parentClassName: 'geocoding-table-expanded-row',
+            expandColumnRenderer: ({isExpanded, rowKey, expandable}) => {
                 let containsError = this.hasError(rowKey);
                 let containsLocations = this.hasLocations(rowKey);
                 return <GeocodingActionColumn
@@ -112,7 +96,8 @@ class GeocodingTable extends Component {
                     message={containsError ? translations['amp.geocoder:errorGeocoding'] : translations['amp.geocoder:noLocations']}
                     tooltip={containsError ? translations['amp.geocoder:errorGeocodingTooltip'] : translations['amp.geocoder:editActionTooltip']}
                 />
-            }
+            },
+            expandHeaderColumnRenderer: ({ isAnyExpands }) => (null)
         };
 
         let options = {
@@ -178,15 +163,12 @@ class GeocodingTable extends Component {
                     data={data}
                     maxHeight="200px"
                     columns={columns}
-                    classes="table-striped"
                     expandRow={expandRow}
-                    expandableRow={ this.isExpandableRow }
-                    expandComponent={ this.expandComponent }
+                    classes="table-striped geocoding-table"
                     pagination={paginationFactory(options)}
                     filter={filterFactory()}
                     expandColumnOptions={{
                         expandColumnVisible: true,
-                        expandColumnComponent: this.expandColumnComponent,
                         columnWidth: '200px'
                     }}/>
             </div>

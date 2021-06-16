@@ -55,6 +55,7 @@ table thead tr th {
 
 .expand-cell {
     white-space: nowrap;
+    cursor: auto;
 }
 
 .pagination > .active > a,
@@ -339,4 +340,28 @@ table thead tr th {
 .tooltip {
     opacity: 1;
     padding-bottom: 5px;
+}
+
+.expand-cell-header {
+    pointer-events: none;
+}
+
+.expand-cell svg {
+    cursor: pointer;
+}
+
+.geocoding-table tr {
+    cursor: pointer;
+}
+
+.geocoding-table-expanded-row {
+    background-color: #E6F3E4 !important;
+}
+
+.reset-expansion-style tr {
+    cursor: auto;
+}
+
+.reset-expansion-style {
+    cursor: auto;
 }

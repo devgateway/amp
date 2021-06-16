@@ -22,7 +22,7 @@ class Settings extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show: false
+      show: false, changed: false, appliedSettingsOpen: false
     };
   }
 
@@ -60,6 +60,7 @@ class Settings extends Component {
     _updateAppliedSettings(data);
     onApplySettings(data);
     this.hideSettings();
+    this.setState({ changed: true });
   }
 
   hideSettings = () => {
@@ -72,23 +73,93 @@ class Settings extends Component {
     this.setState({ show: !show });
   }
 
+  generateAppliedSettings = () => {
+    const {
+      settings, profile, translations, reportGlobalSettings
+    } = this.props;
+    if (!reportGlobalSettings || !settings) {
+      return null;
+    }
+    return (
+      <div className="applied-filters">
+        <div>
+          <ul id="previsualization_tree">
+            <li>
+              <span className="prev_caret prev_caret-down" listener="true">
+                {translate('calendar', profile, translations)}
+              </span>
+              <ul className="prev_nested active">
+                <li>
+                  {reportGlobalSettings.find(i => i.id === 'calendar-id')
+                    .value.options.find(i => i.id === settings['calendar-id']).name}
+                </li>
+              </ul>
+              <span className="prev_caret prev_caret-down" listener="true">
+                {translate('currency', profile, translations)}
+              </span>
+              <ul className="prev_nested active">
+                <li>
+                  {reportGlobalSettings.find(i => i.id === 'currency-code')
+                    .value.options.find(i => i.id === settings['currency-code']).name}
+                </li>
+              </ul>
+              <span className="prev_caret prev_caret-down" listener="true">
+                {translate('amountUnits', profile, translations)}
+              </span>
+              <ul className="prev_nested active">
+                <li>
+                  {reportGlobalSettings.find(i => i.id === 'number-divider')
+                    .value.options.find(i => i.value === `${settings['amount-format']['number-divider']}`).name}
+                </li>
+              </ul>
+              <span className="prev_caret prev_caret-down" listener="true">
+                {translate('yearRange', profile, translations)}
+              </span>
+              <ul className="prev_nested active">
+                <li>
+                  {settings['year-range'].from} - {settings['year-range'].to}
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    );
+  }
+
   render() {
-    const { show } = this.state;
+    const { show, changed, appliedSettingsOpen } = this.state;
     const { translations, profile } = this.props;
     return (
-      <div className="filter-title settings-title">
-        <span className="filter-title" onClick={this.toggleSettings}>
-          {translate('settings', profile, translations)}
-        </span>
-        <div
-          id="settings-popup"
-          ref="settingsPopup"
-          style={{
-            display: (!show ? 'none' : 'block'),
-            padding: '0px',
-            borderColor: '#337ab7'
-          }} />
-      </div>
+      <>
+        <div className="filter-title settings-title">
+          <span className="filter-title" onClick={this.toggleSettings}>
+            {translate('settings', profile, translations)}
+          </span>
+          {changed ? (
+            <div
+              className={`filter-title applied-filters-label${appliedSettingsOpen ? ' expanded' : ''}`}
+              onClick={() => { this.setState({ appliedSettingsOpen: !appliedSettingsOpen }); }}>
+              {appliedSettingsOpen
+                ? translate('hideAppliedSettings', profile, translations)
+                : translate('showAppliedSettings', profile, translations)}
+            </div>
+          ) : null}
+          <div
+            id="settings-popup"
+            ref="settingsPopup"
+            style={{
+              display: (!show ? 'none' : 'block'),
+              padding: '0px',
+              borderColor: '#337ab7'
+            }} />
+        </div>
+        <div className="applied-filters-wrapper">
+          <div className={!appliedSettingsOpen ? 'invisible-applied-filters' : 'applied-filters'}>
+            {this.generateAppliedSettings()}
+          </div>
+        </div>
+      </>
     );
   }
 }
@@ -97,6 +168,7 @@ const mapStateToProps = state => ({
   translations: state.translationsReducer.translations,
   profile: state.uiReducer.profile,
   settings: state.uiReducer.settings,
+  reportGlobalSettings: state.settingsReducer.reportGlobalSettings,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -111,6 +183,7 @@ Settings.propTypes = {
   _fetchGlobalSettings: PropTypes.func.isRequired,
   _updateAppliedSettings: PropTypes.func.isRequired,
   profile: PropTypes.string,
+  reportGlobalSettings: PropTypes.object.isRequired
 };
 
 Settings.defaultProps = {

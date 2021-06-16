@@ -22,7 +22,7 @@ class Settings extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show: false, changed: false, appliedSettingsOpen: false
+      show: false, changed: false
     };
   }
 
@@ -73,63 +73,11 @@ class Settings extends Component {
     this.setState({ show: !show });
   }
 
-  generateAppliedSettings = () => {
-    const {
-      settings, profile, translations, reportGlobalSettings
-    } = this.props;
-    if (!reportGlobalSettings || !settings) {
-      return null;
-    }
-    return (
-      <div className="applied-filters">
-        <div>
-          <ul id="previsualization_tree">
-            <li>
-              <span className="prev_caret prev_caret-down" listener="true">
-                {translate('calendar', profile, translations)}
-              </span>
-              <ul className="prev_nested active">
-                <li>
-                  {reportGlobalSettings.find(i => i.id === 'calendar-id')
-                    .value.options.find(i => i.id === settings['calendar-id']).name}
-                </li>
-              </ul>
-              <span className="prev_caret prev_caret-down" listener="true">
-                {translate('currency', profile, translations)}
-              </span>
-              <ul className="prev_nested active">
-                <li>
-                  {reportGlobalSettings.find(i => i.id === 'currency-code')
-                    .value.options.find(i => i.id === settings['currency-code']).name}
-                </li>
-              </ul>
-              <span className="prev_caret prev_caret-down" listener="true">
-                {translate('amountUnits', profile, translations)}
-              </span>
-              <ul className="prev_nested active">
-                <li>
-                  {reportGlobalSettings.find(i => i.id === 'number-divider')
-                    .value.options.find(i => i.value === `${settings['amount-format']['number-divider']}`).name}
-                </li>
-              </ul>
-              <span className="prev_caret prev_caret-down" listener="true">
-                {translate('yearRange', profile, translations)}
-              </span>
-              <ul className="prev_nested active">
-                <li>
-                  {settings['year-range'].from} - {settings['year-range'].to}
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </div>
-      </div>
-    );
-  }
-
   render() {
-    const { show, changed, appliedSettingsOpen } = this.state;
-    const { translations, profile } = this.props;
+    const { show, changed } = this.state;
+    const {
+      translations, profile, appliedSectionOpen, appliedSectionChange
+    } = this.props;
     return (
       <>
         <div className="filter-title settings-title">
@@ -138,9 +86,9 @@ class Settings extends Component {
           </span>
           {changed ? (
             <div
-              className={`filter-title applied-filters-label${appliedSettingsOpen ? ' expanded' : ''}`}
-              onClick={() => { this.setState({ appliedSettingsOpen: !appliedSettingsOpen }); }}>
-              {appliedSettingsOpen
+              className={`filter-title applied-filters-label${appliedSectionOpen ? ' expanded' : ''}`}
+              onClick={() => { appliedSectionChange(); }}>
+              {appliedSectionOpen
                 ? translate('hideAppliedSettings', profile, translations)
                 : translate('showAppliedSettings', profile, translations)}
             </div>
@@ -153,11 +101,6 @@ class Settings extends Component {
               padding: '0px',
               borderColor: '#337ab7'
             }} />
-        </div>
-        <div className="applied-filters-wrapper">
-          <div className={!appliedSettingsOpen ? 'invisible-applied-filters' : 'applied-filters'}>
-            {this.generateAppliedSettings()}
-          </div>
         </div>
       </>
     );
@@ -183,7 +126,8 @@ Settings.propTypes = {
   _fetchGlobalSettings: PropTypes.func.isRequired,
   _updateAppliedSettings: PropTypes.func.isRequired,
   profile: PropTypes.string,
-  reportGlobalSettings: PropTypes.object.isRequired
+  appliedSectionOpen: PropTypes.bool.isRequired,
+  appliedSectionChange: PropTypes.func.isRequired
 };
 
 Settings.defaultProps = {

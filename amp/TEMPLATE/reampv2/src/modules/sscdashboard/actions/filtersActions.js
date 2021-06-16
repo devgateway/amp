@@ -21,7 +21,7 @@ export function fetchSectorsPending() {
 export function fetchSectorsSuccess(sectorsFilter) {
   return {
     type: FETCH_FILTERS_SECTORS_SUCCESS,
-    payload: makeFilterCamelCase(filterUndefined(sectorsFilter.items.primary))
+    payload: makeFilterCamelCase(sectorsFilter.items.primary)
   };
 }
 
@@ -68,14 +68,10 @@ function makeFilterCamelCase(theFilter) {
   });
 }
 
-function filterUndefined(theFilter) {
-  return theFilter.filter(f => f.id !== UNDEFINED_FILTER);
-}
-
-export function fetchModalitiesSuccess(sectorsFilter) {
+export function fetchModalitiesSuccess(modalitiesFilter) {
   return {
     type: FETCH_FILTERS_MODALITIES_SUCCESS,
-    payload: filterUndefined(sectorsFilter.items.values)
+    payload: modalitiesFilter.items.values
   };
 }
 

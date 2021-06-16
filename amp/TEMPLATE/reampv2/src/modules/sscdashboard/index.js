@@ -4,7 +4,7 @@ import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import rootReducer from './reducers/rootReducer';
 import Startup from './components/StartUp';
-import SSCDashboardRouter from './components/SSCDashboard.router';
+import SSCDashboardRouter from './components/SSCDashboardRouter';
 
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 

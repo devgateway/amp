@@ -4,13 +4,6 @@
 */
 package org.dgfoundation.amp.onepager.components.features.tables;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -52,6 +45,13 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
 /**
  * @author aartimon@dginternational.org
  * since Oct 26, 2010
@@ -80,7 +80,7 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
         searchOrganization.setDefaultOrgGroup(orgGroup);
     }
 
-    public void setTemplateFilter(AmpTemplatesVisibility template) {
+    public  void setTemplateFilter(AmpTemplatesVisibility template) {
         searchOrganization.setTemplateFilter(template);
     }
     
@@ -157,24 +157,22 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
         }
         return false;
     }
-    
-    private void updateSearchVisibility(AjaxRequestTarget target ) {
-        if (maxSizeCollectionValidationField.isVisible()){
+
+    private void updateSearchVisibility(AjaxRequestTarget target) {
+        if (maxSizeCollectionValidationField.isVisible()) {
             List<AmpOrgRole> tmpList = listModel.getObject();
-            if (tmpList != null && tmpList.size() > 0 ) {
+            if (tmpList != null && tmpList.size() > 0) {
                 searchOrganization.setVisibilityAllowed(false);
                 if (this.getId().equals("donorOrganization")) {
-                    donorFundingSection.setSearchOrgsComponentVisibility(false);
+                    donorFundingSection.setSearchOrgsComponentVisibility(false, target);
                 }
-                    
-            }
-            else{
+            } else {
                 searchOrganization.setVisibilityAllowed(true);
                 if (this.getId().equals("donorOrganization")) {
-                    donorFundingSection.setSearchOrgsComponentVisibility(true);
+                    donorFundingSection.setSearchOrgsComponentVisibility(true, target);
                 }
             }
-            if(target!=null){
+            if (target != null) {
                 target.add(searchOrganization);
             }
         }

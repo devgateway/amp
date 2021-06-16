@@ -177,7 +177,9 @@ const addWorkSheet = (workbook, sheetName, exportData) => {
 };
 
 export const exportToCSV = exportData => {
-  let title; let columns; let
+  let title;
+  let columns;
+  let
     rows;
   if (Array.isArray(exportData)) {
     title = exportData[0].title;
@@ -218,3 +220,40 @@ export const exportToCSV = exportData => {
   anchor.download = `${title}.csv`;
   anchor.click();
 };
+
+export function populateFilters(translations, filters, selectedFilters) {
+  const selectedFiltersForExport = [];
+
+  const { countries } = filters.countries;
+  const { sectors } = filters.sectors;
+  const { modalities } = filters.modalities;
+  const {
+    selectedCountries, selectedYears, selectedSectors, selectedModalities
+  } = selectedFilters;
+  if (selectedCountries && selectedCountries.length > 0) {
+    selectedFiltersForExport.push({
+      name: translations['amp.ssc.dashboard:Country'],
+      values: selectedCountries.map(sc => countries.find(c => c.id === sc).name).join(' | ')
+    });
+  }
+  if (selectedYears && selectedYears.length > 0) {
+    selectedFiltersForExport.push({
+      name: translations['amp.ssc.dashboard:Year'],
+      values: selectedYears.join(' | ')
+    });
+  }
+  if (selectedSectors && selectedSectors.length > 0) {
+    selectedFiltersForExport.push({
+      name: translations['amp.ssc.dashboard:Sector'],
+      values: selectedSectors.map(sc => sectors.find(c => c.id === sc).name).join(' | ')
+    });
+  }
+  if (selectedModalities && selectedModalities.length > 0) {
+    selectedFiltersForExport.push({
+      name: translations['amp.ssc.dashboard:Modalities'],
+      values: selectedModalities.map(sc => modalities.find(c => c.id === sc).name).join(' | ')
+    });
+  }
+
+  return selectedFiltersForExport;
+}

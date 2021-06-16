@@ -1,16 +1,5 @@
 package org.digijava.kernel.geocoding.client;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.UriBuilder;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.ImmutableList;
@@ -20,9 +9,25 @@ import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
+
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriBuilder;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+
+import static org.digijava.kernel.translator.util.TrnUtil.DEFAULT;
 
 /**
  * @author Octavian Ciubotaru
@@ -119,6 +124,14 @@ public class GeoCoderClient {
                 throw new RuntimeException("Failed to obtain geo coding results", e);
             }
         }
+    }
+
+    public String getGeoCodingFieldLabel(final String name) {
+        APIField f = AmpFieldsEnumerator.getEnumerator().getActivityFields().stream()
+                .filter(Objects::nonNull)
+                .filter(field -> field.getFieldName().equals(name))
+                .findFirst().orElse(null);
+        return f == null ? null : f.getFieldLabel().get(DEFAULT, TLSUtils.getEffectiveLangCode());
     }
 
     /**

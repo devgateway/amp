@@ -55,7 +55,7 @@ class ResetAllButton extends Component {
                     <Modal.Header closeButton>
                         <Modal.Title>{this.props.title}</Modal.Title>
                     </Modal.Header>
-                    <Modal.Body>All the geocoded locations would be reset.</Modal.Body>
+                    <Modal.Body>{translations['amp.geocoder:resetAllConfirmation']}</Modal.Body>
                     <Modal.Footer>
                         <Button variant="secondary" onClick={this.handleClose}>
                             {translations['amp.geocoder:cancel']}

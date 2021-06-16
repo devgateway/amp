@@ -1,6 +1,7 @@
 package org.digijava.kernel.entity.geocoding;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.digijava.kernel.geocoding.service.GeoCodingService;
 
 /**
  * Geo coded field. Can map to 0, 1 or more locations.
@@ -68,5 +69,9 @@ public class GeoCodedField {
 
     public void setEntity(final String entity) {
         this.entity = entity;
+    }
+
+    public String getLabel() {
+        return GeoCodingService.getClient().getGeoCodingFieldLabel(name);
     }
 }

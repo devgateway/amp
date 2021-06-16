@@ -4,13 +4,14 @@ import {connect} from "react-redux";
 import Highlighter from "react-highlight-words";
 import LocationActionColumn from "./LocationActionColumn";
 import {geocodeLocation} from "../../../actions/geocodingAction";
+import {TranslationContext} from "../../AppContext";
 
 
 function LocationFields({fields}) {
     return (
         fields.map((field) =>
             <>
-            <div> / <b>{field.name}</b> |
+            <div> / <b>{field.label}</b> |
                 <span className={'location-text'}>
                     <Highlighter
                         searchWords={[field.entity]}
@@ -56,6 +57,8 @@ class Locations extends Component {
             handleRejectLocation: this.handleRejectLocation.bind(this),
         };
 
+        const {translations} = this.context;
+
         let locationItems = locations.map((location) =>
             <>
                 <tr>
@@ -78,7 +81,7 @@ class Locations extends Component {
 
 
         return ( <div>
-            <div className={'search-result'}><b>{locations.length}</b> Search Results of <b>Locations</b></div>
+            <div className={'search-result'}><b>{locations.length}</b> {translations['amp.geocoder:searchResults']} <b>{translations['amp.geocoder:locations']}</b></div>
             <div>
                 <table className={'location-container'}>
                     <tbody>
@@ -89,6 +92,8 @@ class Locations extends Component {
         </div>);
     }
 }
+
+Locations.contextType = TranslationContext;
 
 const mapStateToProps = state => {
     return {

@@ -138,7 +138,43 @@ class MultiSelectionDropDown extends Component {
       categoriesSelection, categoryFetcher, chartName, chartSelected, onChangeChartSelected, parentId, filterId,
       filterName, label, disabled
     } = this.props;
-    const showQuickSelectionLinks = true; // parentId !== null;
+    const SelectAll = () => (
+      <>
+        <span className="select-all all">
+          <input
+            type="radio"
+            value="1"
+            name={`radio-${filterId}`}
+            id={`select-all-${filterId}`}
+            checked={this.getSelectedCount() === this.getOptionsCount()}
+          />
+          <label
+            htmlFor="select-all"
+            onClick={() => this.selectAll()}>
+            {translations['amp.ssc.dashboard:select-all']}
+          </label>
+        </span>
+      </>
+    );
+    const SelectNone = () => (
+      <>
+        <span className="select-all all">
+          <input
+            type="radio"
+            value="2"
+            name={`radio-${filterId}`}
+            id={`select-none-${filterId}`}
+            checked={this.getSelectedCount() === 0}
+          />
+          <label
+            htmlFor={`select-none-${filterId}`}
+            onClick={() => this.selectNone()}>
+            {translations['amp.ssc.dashboard:select-none']}
+          </label>
+        </span>
+      </>
+    );
+    const showQuickSelectionLinks = parentId !== null;
     const showSelectAll = true;
     return (
       <div className={`horizontal-filter dropdown panel ${disabled ? ' disable-filter' : ''}`}>
@@ -169,49 +205,38 @@ class MultiSelectionDropDown extends Component {
             className={`filter-list collapse${this.showCollapse() ? 'in' : ''}`}
             id={filterId}>
             <div className="well">
-              <div className="autocomplete-box">
-                <input
-                  onChange={this.onSearchBoxChange.bind(this)}
-                  value={searchText}
-                  placeholder={`${translations['amp.ssc.dashboard:search']}...`}
-                  ref={input => this.searchBox = input}
-                />
-                <span className="clear" onClick={this.handleClearText.bind(this)}>×</span>
+              <div className="row autocomplete">
+                {!showQuickSelectionLinks && (
+                  <div className="col-md-3">
+                    <div className="select-all-none">
+                      <SelectAll />
+                      <SelectNone />
+                    </div>
+                  </div>
+                )}
+                <div className={`col-md-${showQuickSelectionLinks ? '12' : '6'} autocomplete-row`}>
+                  <div className="autocomplete-box">
+                    <input
+                      onChange={this.onSearchBoxChange.bind(this)}
+                      value={searchText}
+                      placeholder={`${translations['amp.ssc.dashboard:search']}...`}
+                      ref={input => this.searchBox = input}
+                    />
+                    <span className="clear" onClick={this.handleClearText.bind(this)}>×</span>
+                  </div>
+                </div>
+                {!showQuickSelectionLinks && (
+                  <div className="col-md-3" />
+                )}
               </div>
               {showQuickSelectionLinks
               && (
                 <div className="select-all-none">
                   {showSelectAll
                   && (
-                    <span className="select-all all">
-                      <input
-                        type="radio"
-                        value="1"
-                        name={`radio-${filterId}`}
-                        id={`select-all-${filterId}`}
-                        checked={this.getSelectedCount() === this.getOptionsCount()}
-                      />
-                      <label
-                        htmlFor="select-all"
-                        onClick={() => this.selectAll()}>
-                        {translations['amp.ssc.dashboard:select-all']}
-                      </label>
-                    </span>
+                    <SelectAll />
                   )}
-                  <span className="select-all all">
-                    <input
-                      type="radio"
-                      value="2"
-                      name={`radio-${filterId}`}
-                      id={`select-none-${filterId}`}
-                      checked={this.getSelectedCount() === 0}
-                    />
-                    <label
-                      htmlFor={`select-none-${filterId}`}
-                      onClick={() => this.selectNone()}>
-                      {translations['amp.ssc.dashboard:select-none']}
-                    </label>
-                  </span>
+                  <SelectNone />
 
                   {categoryFetcher && categoriesSelection && categoriesSelection.map((category, idx) => {
                     const { id, name, tooltip } = category;
@@ -248,8 +273,8 @@ class MultiSelectionDropDown extends Component {
                   && (
                     <span
                       className="select-count">
-                      {`${translations[label]} (${this.getSelectedCount()}/${this.getOptionsCount()})`}
-                    </span>
+              {`${translations[label]} (${this.getSelectedCount()}/${this.getOptionsCount()})`}
+                </span>
                   )}
                 </div>
 
@@ -266,8 +291,8 @@ class MultiSelectionDropDown extends Component {
                   && (
                     <span
                       className="select-count">
-                      {`${translations[label]} (${this.getOptionsCount() - this.getSelectedCount()})`}
-                    </span>
+              {`${translations[label]} (${this.getOptionsCount() - this.getSelectedCount()})`}
+                </span>
                   )}
                 </div>
                 <div className="well-inner filter-list-inner">

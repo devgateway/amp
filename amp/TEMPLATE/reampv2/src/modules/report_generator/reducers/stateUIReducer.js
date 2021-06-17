@@ -32,6 +32,9 @@ import {
   SAVE_NEW_REPORT_PENDING,
   SAVE_NEW_REPORT_SUCCESS,
   SAVE_NEW_REPORT_ERROR,
+  SAVE_REPORT_PENDING,
+  SAVE_REPORT_SUCCESS,
+  SAVE_REPORT_ERROR,
 } from '../actions/stateUIActions';
 import {
   convertReportDetails
@@ -365,7 +368,28 @@ export default (state = initialState, action) => {
     case SAVE_NEW_REPORT_ERROR:
       return {
         ...state,
-        id: null,
+        id: action.id,
+        reportSaving: false,
+        reportSaved: false,
+        reportSaveError: action.error
+      };
+    case SAVE_REPORT_PENDING:
+      return {
+        ...state,
+        reportSaving: true,
+        reportSaved: false,
+        reportSaveError: null
+      };
+    case SAVE_REPORT_SUCCESS:
+      return {
+        ...state,
+        reportSaving: false,
+        reportSaved: true,
+        reportSaveError: null
+      };
+    case SAVE_REPORT_ERROR:
+      return {
+        ...state,
         reportSaving: false,
         reportSaved: false,
         reportSaveError: action.payload

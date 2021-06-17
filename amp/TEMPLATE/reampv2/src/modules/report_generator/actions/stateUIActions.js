@@ -275,10 +275,11 @@ export function saveNewReportSuccess(payload) {
   };
 }
 
-export function saveNewReportError(error) {
+export function saveNewReportError(error, id) {
   return {
     type: SAVE_NEW_REPORT_ERROR,
-    error
+    error,
+    id
   };
 }
 
@@ -350,13 +351,16 @@ export const fetchReport = (id) => dispatch => {
     .catch(error => dispatch(fetchReportError(error)));
 };
 
-export const saveNew = (data) => dispatch => {
+export const saveNew = (data) => (dispatch, getState) => {
+  const state = getState();
+  // To restore the id in case we are using 'Save As' on an existing report and something fails in the BE.
+  const { id } = state.uiReducer;
   dispatch(saveNewReportPending());
   return fetchApiData({
     url: `${URL_SAVE_NEW}?reportId=null`,
     body: data
   }).then((result) => dispatch(saveNewReportSuccess(result)))
-    .catch(error => dispatch(saveNewReportError(error)));
+    .catch(error => dispatch(saveNewReportError(error, id)));
 };
 
 export const save = (id, data) => dispatch => {

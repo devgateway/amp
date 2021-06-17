@@ -10,6 +10,8 @@ import Settings from './Settings';
 import { translate } from '../utils/Utils';
 import { ReportGeneratorContext } from './StartUp';
 import { updateAppliedFilters } from '../actions/stateUIActions';
+import { toggleIcon } from '../utils/appliedFiltersExtenalCode';
+import tree from './tree.css';
 
 let filter = null; // This is the widget.
 
@@ -40,39 +42,45 @@ class FiltersAndSettings extends Component {
     return (
       <div className="applied-filters">
         <div>
-          <ul id="previsualization_tree">
+          <ul className="previsualization_tree">
             <li>
-              <span className="prev_caret prev_caret-down" listener="true">
+              <span className="prev_caret_2">
                 {translate('calendar', profile, translations)}
               </span>
-              <ul className="prev_nested active">
+              <ul className="prev_nested">
                 <li>
                   {reportGlobalSettings.find(i => i.id === 'calendar-id')
                     .value.options.find(i => i.id === settings['calendar-id']).name}
                 </li>
               </ul>
-              <span className="prev_caret prev_caret-down" listener="true">
+            </li>
+            <li>
+              <span className="prev_caret_2">
                 {translate('currency', profile, translations)}
               </span>
-              <ul className="prev_nested active">
+              <ul className="prev_nested">
                 <li>
                   {reportGlobalSettings.find(i => i.id === 'currency-code')
                     .value.options.find(i => i.id === settings['currency-code']).name}
                 </li>
               </ul>
-              <span className="prev_caret prev_caret-down" listener="true">
+            </li>
+            <li>
+              <span className="prev_caret_2">
                 {translate('amountUnits', profile, translations)}
               </span>
-              <ul className="prev_nested active">
+              <ul className="prev_nested">
                 <li>
-                  {reportGlobalSettings.find(i => i.id === 'number-divider')
+                  {reportGlobalSettings.find(i => i.id === 'number-divider') /* FALLA CUANDO LE DOY RESET, CONVENDRIA ARREGLAR EN EL SETTINGS DIRECTAMENTE. */
                     .value.options.find(i => i.value === `${settings['amount-format']['number-divider']}`).name}
                 </li>
               </ul>
-              <span className="prev_caret prev_caret-down" listener="true">
+            </li>
+            <li>
+              <span className="prev_caret_2">
                 {translate('yearRange', profile, translations)}
               </span>
-              <ul className="prev_nested active">
+              <ul className="prev_nested">
                 <li>
                   {settings['year-range'].from}
                   {' '}
@@ -143,6 +151,12 @@ class FiltersAndSettings extends Component {
         </Segment>
       </>
     );
+  }
+
+  // eslint-disable-next-line react/sort-comp,no-unused-vars
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    // The js code that animates the applied filters tree has to be re-implemented and re-run.
+    toggleIcon('prev_caret_2');
   }
 }
 

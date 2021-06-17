@@ -13,6 +13,7 @@ import { fetchGlobalSettings } from '../actions/settingsActions';
 import { extractSettings } from '../reducers/utils/settingsDataConverter';
 import { updateAppliedSettings } from '../actions/stateUIActions';
 import { translate } from '../utils/Utils';
+import { toggleIcon } from '../utils/appliedFiltersExtenalCode';
 
 const SettingsWidget = require('../../../../../ampTemplate/node_modules/amp-settings/dist/amp-settings');
 

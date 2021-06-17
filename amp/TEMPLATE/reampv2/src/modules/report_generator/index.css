@@ -51,6 +51,7 @@
     margin-bottom: 40px;
     margin-left: 1rem;
     padding: 0;
+    top: 10px;
 }
 
 .errors_segment {
@@ -457,19 +458,5 @@ i.arrow {
 }
 
 .applied-filters > div > ul > li {
-    padding-left: 1em;
-}
-
-ul#previsualization_tree {
-    font-size: 1em;
-    padding: 15px;
-}
-
-#previsualization_tree ul {
-    list-style-type: none;
-    padding-left: 18px;
-}
-
-#previsualization_tree .prev_caret::before {
-    font-size: 0.8em;
+    padding-left: 0em;
 }

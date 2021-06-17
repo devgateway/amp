@@ -33,6 +33,10 @@ class FiltersAndSettings extends Component {
     this.setState({ appliedFiltersOpen: !appliedFiltersOpen });
   }
 
+  handleApplySettings = () => {
+    this.forceUpdate();
+  }
+
   generateAppliedSettings = () => {
     const {
       settings, profile, translations, reportGlobalSettings
@@ -131,7 +135,7 @@ class FiltersAndSettings extends Component {
                 </GridColumn>
                 <GridColumn computer={8} mobile={16}>
                   <Settings
-                    onApplySettings={() => {}}
+                    onApplySettings={this.handleApplySettings}
                     appliedSectionOpen={appliedSettingsOpen}
                     appliedSectionChange={this.handleSettingsChange} />
                 </GridColumn>

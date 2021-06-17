@@ -40,7 +40,7 @@
 .filters_segment {
     min-height: 4rem !important;
     background-color: #e7f1fd !important;
-    margin-right: 2rem !important;
+    margin-right: 1rem !important;
 }
 
 .ui.placeholder.segment.filters_segment {
@@ -49,7 +49,7 @@
     border-radius: 0;
     box-shadow: none;
     margin-bottom: 40px;
-    margin-left: -15px;
+    margin-left: 1rem;
     padding: 0;
 }
 

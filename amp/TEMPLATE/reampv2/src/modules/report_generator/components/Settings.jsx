@@ -80,10 +80,10 @@ class Settings extends Component {
     } = this.props;
     return (
       <>
-        <div className="filter-title settings-title">
-          <span className="filter-title" onClick={this.toggleSettings}>
+        <>
+          <div className="filter-title" onClick={this.toggleSettings}>
             {translate('settings', profile, translations)}
-          </span>
+          </div>
           {changed ? (
             <div
               className={`filter-title applied-filters-label${appliedSectionOpen ? ' expanded' : ''}`}
@@ -101,7 +101,7 @@ class Settings extends Component {
               padding: '0px',
               borderColor: '#337ab7'
             }} />
-        </div>
+        </>
       </>
     );
   }

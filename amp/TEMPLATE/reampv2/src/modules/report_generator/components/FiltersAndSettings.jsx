@@ -92,7 +92,7 @@ class FiltersAndSettings extends Component {
                 <li>
                   {`${translate('from', profile, translations)} ${settings['year-range'].from}`}
                   {' '}
-                  {`${translate('to', profile, translations)} ${settings['year-range'].to}`}
+                  {`${translate('until', profile, translations)} ${settings['year-range'].to}`}
                 </li>
               </ul>
             </li>

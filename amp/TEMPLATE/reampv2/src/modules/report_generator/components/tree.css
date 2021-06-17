@@ -20,20 +20,8 @@ ul, .previsualization_tree {
     user-select: none; /* Prevent text selection */
 }
 
-.prev_caret_2 {
-    cursor: pointer;
-    user-select: none; /* Prevent text selection */
-}
-
 /* Create the caret/arrow with a unicode, and style it */
 .prev_caret::before {
-    content: "\25B6";
-    color: black;
-    display: inline-block;
-    margin-right: 6px;
-}
-
-.prev_caret_2::before {
     content: "\25B6";
     color: black;
     display: inline-block;
@@ -46,10 +34,6 @@ ul, .previsualization_tree {
 }
 
 .previsualization_tree .prev_caret::before {
-    font-size: 0.8em;
-}
-
-.previsualization_tree .prev_caret_2::before {
     font-size: 0.8em;
 }
 

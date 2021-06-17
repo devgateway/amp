@@ -11,6 +11,7 @@ import { translate } from '../utils/Utils';
 import { ReportGeneratorContext } from './StartUp';
 import { updateAppliedFilters } from '../actions/stateUIActions';
 import { toggleIcon } from '../utils/appliedFiltersExtenalCode';
+// eslint-disable-next-line no-unused-vars
 import tree from './tree.css';
 
 let filter = null; // This is the widget.
@@ -44,7 +45,7 @@ class FiltersAndSettings extends Component {
         <div>
           <ul className="previsualization_tree">
             <li>
-              <span className="prev_caret_2">
+              <span className="prev_caret">
                 {translate('calendar', profile, translations)}
               </span>
               <ul className="prev_nested">
@@ -55,7 +56,7 @@ class FiltersAndSettings extends Component {
               </ul>
             </li>
             <li>
-              <span className="prev_caret_2">
+              <span className="prev_caret">
                 {translate('currency', profile, translations)}
               </span>
               <ul className="prev_nested">
@@ -66,7 +67,7 @@ class FiltersAndSettings extends Component {
               </ul>
             </li>
             <li>
-              <span className="prev_caret_2">
+              <span className="prev_caret">
                 {translate('amountUnits', profile, translations)}
               </span>
               <ul className="prev_nested">
@@ -77,7 +78,7 @@ class FiltersAndSettings extends Component {
               </ul>
             </li>
             <li>
-              <span className="prev_caret_2">
+              <span className="prev_caret">
                 {translate('yearRange', profile, translations)}
               </span>
               <ul className="prev_nested">
@@ -156,7 +157,7 @@ class FiltersAndSettings extends Component {
   // eslint-disable-next-line react/sort-comp,no-unused-vars
   componentDidUpdate(prevProps, prevState, snapshot) {
     // The js code that animates the applied filters tree has to be re-implemented and re-run.
-    toggleIcon('prev_caret_2');
+    toggleIcon();
   }
 }
 

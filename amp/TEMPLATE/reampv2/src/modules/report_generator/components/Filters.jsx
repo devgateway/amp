@@ -125,7 +125,7 @@ class Filters extends Component {
   // eslint-disable-next-line react/sort-comp,no-unused-vars
   componentDidUpdate(prevProps, prevState, snapshot) {
     // The js code that animates the applied filters tree has to be re-implemented and re-run.
-    toggleIcon('prev_caret');
+    toggleIcon();
   }
 }
 

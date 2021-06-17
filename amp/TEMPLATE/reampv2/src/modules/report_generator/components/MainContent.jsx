@@ -109,7 +109,7 @@ class MainContent extends Component {
       <>
         <Grid>
           <GridRow>
-            <GridColumn width="4">
+            <GridColumn computer="4" tablet={16}>
               <MainMenu
                 onClick={this.handleMenuClick}
                 tab={visibleTab}
@@ -117,7 +117,7 @@ class MainContent extends Component {
                 saveReport={saveReport}
                 runReport={runReport} />
             </GridColumn>
-            <GridColumn width="12">
+            <GridColumn computer="12" tablet={16}>
               <ReportingDetailSection visible={visibleTab === 0} />
               <ColumnsSection visible={visibleTab === 1} />
               <MeasuresSection visible={visibleTab === 2} />

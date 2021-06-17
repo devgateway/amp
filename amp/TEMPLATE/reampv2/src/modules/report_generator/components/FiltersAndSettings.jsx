@@ -72,8 +72,11 @@ class FiltersAndSettings extends Component {
               </span>
               <ul className="prev_nested">
                 <li>
-                  {reportGlobalSettings.find(i => i.id === 'number-divider') /* FALLA CUANDO LE DOY RESET, CONVENDRIA ARREGLAR EN EL SETTINGS DIRECTAMENTE. */
-                    .value.options.find(i => i.value === `${settings['amount-format']['number-divider']}`).name}
+                  {reportGlobalSettings.find(i => i.id === 'number-divider')
+                    .value.options.find(i => i.value === `${settings['amount-format']['number-divider']}`
+                      || i.value === settings['number-divider']
+                      || i.id === settings['number-divider'])
+                    .name}
                 </li>
               </ul>
             </li>

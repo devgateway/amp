@@ -19,7 +19,7 @@ class CountryPopupExport extends Component {
         alert('Error while printing');
       });
     } else {
-      printInnerCharts(printTitle, printChartId, printFilters, printFormat, this.props.countriesForExport);
+      printInnerCharts(printTitle, printChartId, printFilters, printFormat, countriesForExport);
     }
   }
 
@@ -29,7 +29,7 @@ class CountryPopupExport extends Component {
   }
 
   render() {
-    const { onlyOneCountry, countriesForExport } = this.props;
+    const { onlyOneCountry, countriesForExport, closeLargeCountryPopinAndClearFilter } = this.props;
     const { translations } = this.context;
     return (
       <div className={`export-wrapper ${onlyOneCountry ? 'single-country' : ''}`}>
@@ -49,7 +49,7 @@ class CountryPopupExport extends Component {
             xls
           </li>
           <PrintCountryCharts countriesForExport={countriesForExport} />
-          <li className="return-link" onClick={() => this.props.closeLargeCountryPopinAndClearFilter()}>X</li>
+          <li className="return-link" onClick={() => closeLargeCountryPopinAndClearFilter()}>X</li>
         </ul>
         <ReactTooltip
           place="bottom"
@@ -69,5 +69,11 @@ class CountryPopupExport extends Component {
 CountryPopupExport.contextType = SSCTranslationContext;
 export default CountryPopupExport;
 CountryPopupExport.propTypes = {
-  getExportData: PropTypes.func.isRequired
-}
+  getExportData: PropTypes.func.isRequired,
+  closeLargeCountryPopinAndClearFilter: PropTypes.func.isRequired,
+  countriesForExport: PropTypes.array.isRequired,
+  onlyOneCountry: PropTypes.bool.isRequired,
+  printTitle: PropTypes.string.isRequired,
+  printChartId: PropTypes.string.isRequired,
+  printFilters: PropTypes.array.isRequired
+};

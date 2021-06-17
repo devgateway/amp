@@ -37,13 +37,9 @@ class ActivityTable extends Component {
             sizePerPage: this.props.settings['workspace-default-records-per-page'],
             pageStartIndex: 1,
             paginationSize: 15,
-            prePage: 'Prev',
-            nextPage: 'Next',
-            firstPage: 'First',
-            lastPage: 'Last',
             hideSizePerPage: true,
             showTotal: true,
-            paginationTotalRenderer: (from, to, size) => PaginationTotal(from, to, size)
+            paginationTotalRenderer: (from, to, size) => PaginationTotal(from, to, size, translations)
         };
 
         let selectRow = {
@@ -117,7 +113,7 @@ class ActivityTable extends Component {
         return (
             <div className="activity-table">
                 {this.props.activitiesPending
-                    ? <Loading/>
+                    ? <Loading title={translations['amp.geocoder:geocodingRunning']} text={translations['amp.geocoder:geocodingRunningText']}/>
                     : <>
                         <BootstrapTable
                             ref={n => this.node = n}

@@ -92,7 +92,7 @@ class GeocodingTable extends Component {
         const {translations} = this.context;
 
         if (this.props.geocodingPending || this.props.geocodeShouldRun) {
-            return <Loading/>
+            return <Loading title={translations['amp.geocoder:geocodingRunning']} text={translations['amp.geocoder:geocodingRunningText']}/>
         }
 
         let expandRow = {
@@ -120,13 +120,9 @@ class GeocodingTable extends Component {
             sizePerPage: this.props.settings['workspace-default-records-per-page'],
             pageStartIndex: 1,
             paginationSize: 5,
-            prePage: 'Prev',
-            nextPage: 'Next',
-            firstPage: 'First',
-            lastPage: 'Last',
             hideSizePerPage: true,
             showTotal: true,
-            paginationTotalRenderer: (from, to, size) => PaginationTotal(from, to, size)
+            paginationTotalRenderer: (from, to, size) => PaginationTotal(from, to, size, translations)
         };
 
         let lastUpdatedHeaderText = translations['amp.geocoder:lastUpdatedDate'];
@@ -161,21 +157,13 @@ class GeocodingTable extends Component {
                 dataField: "project_title",
                 text: projectNameHeaderText,
                 headerStyle: () => {
-                    return { width: "45%" };
+                    return { width: "58%" };
                 },
                 filter: textFilter({
                     placeholder: translations['amp.geocoder:select'] + ' ' + projectNameHeaderText
                 }),
                 sort:true
-            },
-            {
-                dataField: "location",
-                text: locationHeaderText,
-                headerStyle: () => {
-                    return { width: "15%" };
-                },
-                sort:true
-            },
+            }
         ];
 
         let data = this.props.activities

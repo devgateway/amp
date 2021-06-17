@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import SidebarIntro from './SidebarIntro';
-
-import './sidebar.css';
-import HomeLink from '../filters/HomeLink';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
-import { loadCountriesFilters, loadModalitiesFilters, loadSectorsFilters } from '../../../actions/loadFilters';
 import { connect } from 'react-redux';
+import SidebarIntro from './SidebarIntro';
+import './sidebar.css';
+import FiltersLink from '../filters/FiltersLink';
 import { SSCTranslationContext } from '../../StartUp';
 import MultiSelectionDropDown from '../filters/MultiSelectionDropDown';
 import {
@@ -14,21 +13,24 @@ import {
 
 class Sidebar extends Component {
   render() {
-    const { chartSelected, onChangeChartSelected } = this.props;
-    const { selectedSectors = [], selectedModalities = [] } = this.props.selectedFilters;
-    const { handleSelectedSectorChanged, handleSelectedModalityChanged } = this.props.handleSelectedFiltersChange;
-    const { sectors } = this.props.filters.sectors;
-    const { modalities } = this.props.filters.modalities;
+    const {
+      chartSelected, onChangeChartSelected, toggleDataDownload, handleSelectedFiltersChange,
+      filters, selectedFilters
+    } = this.props;
+    const { selectedSectors = [], selectedModalities = [] } = selectedFilters;
+    const { handleSelectedSectorChanged, handleSelectedModalityChanged } = handleSelectedFiltersChange;
+    const { sectors } = filters.sectors;
+    const { modalities } = filters.modalities;
 
     return (
       <div className="col-md-2 sidebar">
         <div className="sidebar-filter-wrapper" id="side-accordion-filter">
-          <HomeLink
+          <FiltersLink
             chartSelected={chartSelected}
             onChangeChartSelect={onChangeChartSelected}
             title="amp.ssc.dashboard:Home-Page"
             chartName={HOME_CHART}
-                    />
+          />
           <div className="sidebar-filter-wrapper" id="side-accordion-filter">
             <MultiSelectionDropDown
               options={sectors}
@@ -41,7 +43,7 @@ class Sidebar extends Component {
               chartSelected={chartSelected}
               chartName={SECTORS_CHART}
               onChangeChartSelected={onChangeChartSelected}
-                        />
+            />
           </div>
           <div className="sidebar-filter-wrapper" id="side-accordion-filter">
             <MultiSelectionDropDown
@@ -55,20 +57,21 @@ class Sidebar extends Component {
               chartSelected={chartSelected}
               chartName={MODALITY_CHART}
               onChangeChartSelected={onChangeChartSelected}
-                        />
+            />
           </div>
-          <HomeLink
+          <FiltersLink
             chartSelected={chartSelected}
+            onLinkClicked={toggleDataDownload}
             onChangeChartSelect={onChangeChartSelected}
             title="amp.ssc.dashboard:Download-Page"
             chartName={DOWNLOAD_CHART}
-                    />
+          />
         </div>
         {(!chartSelected || chartSelected === HOME_CHART || chartSelected === DOWNLOAD_CHART)
-                && (
-                <SidebarIntro
-                  text={['amp.ssc.dashboard:home-text-1', 'amp.ssc.dashboard:home-text-2']} />
-                )}
+        && (
+          <SidebarIntro
+            text={['amp.ssc.dashboard:home-text-1', 'amp.ssc.dashboard:home-text-2']} />
+        )}
       </div>
     );
   }
@@ -92,12 +95,22 @@ const mapStateToProps = state => ({
   }
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-  loadSectorsFilters,
-  loadCountriesFilters,
-  loadModalitiesFilters
-}, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Sidebar);
 Sidebar
   .contextType = SSCTranslationContext;
+
+Sidebar.propTypes = {
+  filters: PropTypes.object.isRequired,
+  toggleDataDownload: PropTypes.func.isRequired,
+  chartSelected: PropTypes.string.isRequired,
+  onChangeChartSelected: PropTypes.func.isRequired,
+  selectedFilters: PropTypes.object.isRequired,
+  handleSelectedFiltersChange: PropTypes.shape({
+    handleSelectedModalityChanged: PropTypes.func.isRequired,
+    handleSelectedCountryChanged: PropTypes.func.isRequired,
+    handleSelectedYearChanged: PropTypes.func.isRequired,
+    handleSelectedSectorChanged: PropTypes.func.isRequired
+  }).isRequired
+};

@@ -44,7 +44,7 @@ class CancelGeocodingButton extends Component {
                     <Modal.Header closeButton>
                         <Modal.Title>{this.props.title}</Modal.Title>
                     </Modal.Header>
-                    <Modal.Body>Cancel the geocode process?</Modal.Body>
+                    <Modal.Body>{translations['amp.geocoder:cancelGeocodingConfirmation']}</Modal.Body>
                     <Modal.Footer>
                         <Button variant="secondary" onClick={this.handleClose}>
                             {translations['amp.geocoder:cancel']}

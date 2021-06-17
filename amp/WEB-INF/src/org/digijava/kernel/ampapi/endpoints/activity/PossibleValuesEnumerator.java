@@ -1,15 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
-
-import javax.ws.rs.core.Response;
-
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.activity.discriminators.CurrencyCommonPossibleValuesProvider;
@@ -25,6 +17,7 @@ import org.digijava.kernel.ampapi.endpoints.common.values.providers.Implementati
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.services.sync.model.SyncConstants.Entities;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
@@ -45,8 +38,17 @@ import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
+import javax.ws.rs.core.Response;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 /**
  * AMP Activity Endpoint for Possible Values -- /activity/fields/:fieldName
@@ -57,6 +59,10 @@ import com.google.common.collect.Multimap;
 public class PossibleValuesEnumerator {
     
     public static final Logger LOGGER = Logger.getLogger(PossibleValuesEnumerator.class);
+
+    private Map<String, List<PossibleValue>> cache = new ConcurrentHashMap<>();
+
+    private Timestamp cachedUpToDate;
 
     public static final PossibleValuesEnumerator INSTANCE = new PossibleValuesEnumerator(new AmpPossibleValuesDAO(),
             AMPTranslatorService.INSTANCE);
@@ -150,6 +156,28 @@ public class PossibleValuesEnumerator {
         }
     }
 
+    public List<PossibleValue> getPossibleValuesCachedForField(String longFieldName, List<APIField> apiFields) {
+        Timestamp lastModificationDate = getLastModificationDateForEntities();
+        if (cachedUpToDate == null) {
+            cachedUpToDate = lastModificationDate;
+        }
+        if (lastModificationDate.after(cachedUpToDate)) {
+            cache.clear();
+        }
+        cachedUpToDate = lastModificationDate;
+        try {
+            return cache.computeIfAbsent(longFieldName, key -> getPossibleValuesForField(longFieldName, apiFields));
+        } catch (Exception e) {
+            throw InterchangeUtils.newServerErrorException("Failed to obtain possible values.", e);
+        }
+    }
+
+    private Timestamp getLastModificationDateForEntities() {
+        return (Timestamp) PersistenceManager.getSession()
+                .createSQLQuery("SELECT max(operation_time) FROM amp_offline_changelog ")
+                .uniqueResult();
+    }
+
     /**
      * recursive method that gets possible values that can be held by a field
      *
@@ -225,7 +253,8 @@ public class PossibleValuesEnumerator {
     /**
      * Complex fields are discriminated fields -- when several underscorified paths 
      * lead to the same Java field. This method gets possible values for such fields
-     * @param configValue
+     * @param apiField
+     * @param discriminatorValue
      * @return
      * @throws Exception 
      */

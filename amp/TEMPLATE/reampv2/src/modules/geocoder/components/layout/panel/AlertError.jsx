@@ -11,7 +11,7 @@ export default class AlertError extends Component {
 
         return (
             <Alert variant="danger" show={true} transition={false}>
-                <Alert.Heading>Sorry, there was a problem</Alert.Heading>
+                <Alert.Heading>{translations['amp.geocoder:errorAlertWarning']}</Alert.Heading>
                 <p>{errorMessage}</p>
             </Alert>
         );

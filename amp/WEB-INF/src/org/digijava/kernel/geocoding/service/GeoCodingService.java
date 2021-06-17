@@ -403,4 +403,8 @@ public class GeoCodingService {
             }
         }
     }
+
+    public static GeoCoderClient getClient() {
+        return client;
+    }
 }

@@ -48,3 +48,7 @@ h4 {
     height: 200px;
     overflow-y: auto;
 }
+
+.react-bootstrap-table-pagination-total {
+    text-transform: lowercase;
+}

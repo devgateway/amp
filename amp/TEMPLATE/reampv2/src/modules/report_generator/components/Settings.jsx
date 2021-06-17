@@ -22,7 +22,7 @@ class Settings extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show: false
+      show: false, changed: false
     };
   }
 
@@ -60,6 +60,7 @@ class Settings extends Component {
     _updateAppliedSettings(data);
     onApplySettings(data);
     this.hideSettings();
+    this.setState({ changed: true });
   }
 
   hideSettings = () => {
@@ -73,22 +74,35 @@ class Settings extends Component {
   }
 
   render() {
-    const { show } = this.state;
-    const { translations, profile } = this.props;
+    const { show, changed } = this.state;
+    const {
+      translations, profile, appliedSectionOpen, appliedSectionChange
+    } = this.props;
     return (
-      <div className="filter-title settings-title">
-        <span className="filter-title" onClick={this.toggleSettings}>
-          {translate('settings', profile, translations)}
-        </span>
-        <div
-          id="settings-popup"
-          ref="settingsPopup"
-          style={{
-            display: (!show ? 'none' : 'block'),
-            padding: '0px',
-            borderColor: '#337ab7'
-          }} />
-      </div>
+      <>
+        <>
+          <div className="filter-title" onClick={this.toggleSettings}>
+            {translate('settings', profile, translations)}
+          </div>
+          {changed ? (
+            <div
+              className={`filter-title applied-filters-label${appliedSectionOpen ? ' expanded' : ''}`}
+              onClick={() => { appliedSectionChange(); }}>
+              {appliedSectionOpen
+                ? translate('hideAppliedSettings', profile, translations)
+                : translate('showAppliedSettings', profile, translations)}
+            </div>
+          ) : null}
+          <div
+            id="settings-popup"
+            ref="settingsPopup"
+            style={{
+              display: (!show ? 'none' : 'block'),
+              padding: '0px',
+              borderColor: '#337ab7'
+            }} />
+        </>
+      </>
     );
   }
 }
@@ -97,6 +111,7 @@ const mapStateToProps = state => ({
   translations: state.translationsReducer.translations,
   profile: state.uiReducer.profile,
   settings: state.uiReducer.settings,
+  reportGlobalSettings: state.settingsReducer.reportGlobalSettings,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -111,6 +126,8 @@ Settings.propTypes = {
   _fetchGlobalSettings: PropTypes.func.isRequired,
   _updateAppliedSettings: PropTypes.func.isRequired,
   profile: PropTypes.string,
+  appliedSectionOpen: PropTypes.bool.isRequired,
+  appliedSectionChange: PropTypes.func.isRequired
 };
 
 Settings.defaultProps = {

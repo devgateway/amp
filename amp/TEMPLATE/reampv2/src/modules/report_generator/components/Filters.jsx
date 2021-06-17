@@ -92,49 +92,30 @@ class Filters extends Component {
     this.setState({ showFiltersList: !showFiltersList });
   };
 
-  generateAppliedFilters = () => {
-    const {
-      filters, html, _updateAppliedFilters
-    } = this.props;
-    // If this is a saved report we might need to create the html for the first time.
-    if (html === null && filters && filter) {
-      const html_ = filter.getAppliedFilters({ returnHTML: true });
-      _updateAppliedFilters(filters, html_);
-      return <div dangerouslySetInnerHTML={{ __html: html_ }} />;
-    } else if (filters) {
-      return <div dangerouslySetInnerHTML={{ __html: html }} />;
-    }
-    return null;
-  }
-
   render() {
-    const { show, appliedFiltersOpen, filterLoaded } = this.state;
-    const { translations, filters, profile } = this.props;
+    const { show, filterLoaded } = this.state;
+    const {
+      translations, filters, profile, appliedSectionChange, appliedSectionOpen
+    } = this.props;
     return (
       <>
         {filterLoaded ? (
-          <div className="filter-title-wrapper">
+          <>
             <div className="filter-title" onClick={this.showFilterWidget}>
               {translate('filters', profile, translations)}
 &nbsp;
             </div>
             {hasFilters(filters) ? (
               <div
-                className={`filter-title applied-filters-label${appliedFiltersOpen ? ' expanded' : ''}`}
-                onClick={() => { this.setState({ appliedFiltersOpen: !appliedFiltersOpen }); }}>
-                {appliedFiltersOpen
+                className={`filter-title applied-filters-label${appliedSectionOpen ? ' expanded' : ''}`}
+                onClick={() => appliedSectionChange(filter)}>
+                {appliedSectionOpen
                   ? translate('hideAppliedFilters', profile, translations)
                   : translate('showAppliedFilters', profile, translations)}
               </div>
             ) : null}
-          </div>
+          </>
         ) : <div style={{ float: 'left' }}><Loader active inline /></div>}
-
-        <div className="applied-filters-wrapper">
-          <div className={!appliedFiltersOpen ? 'invisible-applied-filters' : 'applied-filters'}>
-            {this.generateAppliedFilters()}
-          </div>
-        </div>
         {/* eslint-disable-next-line react/no-string-refs */}
         <div id="filter-popup" ref="filterPopup" style={{ display: (!show ? 'none' : 'block') }} />
       </>
@@ -176,6 +157,8 @@ Filters.propTypes = {
   type: PropTypes.string.isRequired,
   _getMetadata: PropTypes.func.isRequired,
   profile: PropTypes.string,
+  appliedSectionChange: PropTypes.func.isRequired,
+  appliedSectionOpen: PropTypes.bool.isRequired
 };
 
 Filters.defaultProps = {

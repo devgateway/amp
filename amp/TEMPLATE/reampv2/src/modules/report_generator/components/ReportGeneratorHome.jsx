@@ -127,8 +127,8 @@ class ReportGeneratorHome extends Component {
       });
       if (errors.length > 0) {
         this.setState({ errors: errors.map(i => <ErrorMessage key={i.id} visible message={i.label} />) });
-        return null;
       }
+      return null;
     }
     if (response.payload.id < 0) {
       window.open(`/TEMPLATE/ampTemplate/saikuui_reports/index_reports.html#report/run/${response.payload.id}`);

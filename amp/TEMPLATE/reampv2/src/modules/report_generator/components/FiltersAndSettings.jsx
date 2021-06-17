@@ -90,10 +90,9 @@ class FiltersAndSettings extends Component {
               </span>
               <ul className="prev_nested">
                 <li>
-                  {settings['year-range'].from}
+                  {`${translate('from', profile, translations)} ${settings['year-range'].from}`}
                   {' '}
-                  -
-                  {settings['year-range'].to}
+                  {`${translate('to', profile, translations)} ${settings['year-range'].to}`}
                 </li>
               </ul>
             </li>

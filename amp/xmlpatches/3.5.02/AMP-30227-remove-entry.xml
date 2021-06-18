@@ -10,6 +10,7 @@
         <script>
             <lang delimiter=";" type="postgres">
                 DELETE FROM amp_global_settings WHERE settingsname = 'Report Generator - One Pager';
+                DELETE FROM dg_message WHERE message_key = '-137950819';
             </lang>
         </script>
     </apply>

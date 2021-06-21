@@ -45,7 +45,6 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
-import javax.ws.rs.core.Response;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -55,15 +54,11 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
 
-import static org.digijava.kernel.ampapi.endpoints.util.ApiConstants.ACCESS_CONTROL_ALLOW_HEADERS;
-import static org.digijava.kernel.ampapi.endpoints.util.ApiConstants.ACCESS_CONTROL_ALLOW_METHODS;
-import static org.digijava.kernel.ampapi.endpoints.util.ApiConstants.ACCESS_CONTROL_ALLOW_ORIGIN;
-
 /**
  * @author Diego Dimunzio
  */
 
-public class DashboardsService {
+public final class DashboardsService {
 
     private static final int RECORDS_PER_PAGE = 50;
     private static final int EXP_1 = 1;
@@ -73,6 +68,9 @@ public class DashboardsService {
     private static final int EXP_5 = 5;
     private static final int EXP_6 = 6;
 
+    private DashboardsService() {
+
+    }
     /**
      * Return a list of the available top __ for the dashboard charts Note -- I
      * (Phil) hacked this in, so it probably could use a review Also, I
@@ -666,15 +664,5 @@ public class DashboardsService {
             }
         }
         return ret;
-    }
-
-    public static Response buildOkResponseWithOriginHeaders(Object entity) {
-        return Response
-                .ok()
-                .header(ACCESS_CONTROL_ALLOW_ORIGIN, "*")
-                .header(ACCESS_CONTROL_ALLOW_HEADERS, "*")
-                .header(ACCESS_CONTROL_ALLOW_METHODS, "*")
-                .entity(entity)
-                .build();
     }
 }

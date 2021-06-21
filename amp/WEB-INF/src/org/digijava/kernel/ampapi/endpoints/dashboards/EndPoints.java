@@ -17,6 +17,7 @@ import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMapConfigSer
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMapConfigs;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMapService;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.ProjectAmounts;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.PublicServices;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.TopChartData;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.TopChartType;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.TopDescription;
@@ -70,7 +71,7 @@ public class EndPoints {
             value = "Describe options for endpoint",
             notes = "Enables Cross-Origin Resource Sharing for endpoint")
     public Response describeTopsDashboard() {
-        return DashboardsService.buildOkResponseWithOriginHeaders("");
+        return PublicServices.buildOkResponseWithOriginHeaders("");
     }
 
     @POST
@@ -84,7 +85,7 @@ public class EndPoints {
     public Response getAdminLevelsTotals(SettingsAndFiltersParameters config,
                                          @ApiParam("Property") @PathParam("type") TopChartType type,
                                          @DefaultValue("5") @QueryParam("limit") Integer limit) {
-        return DashboardsService.buildOkResponseWithOriginHeaders(
+        return PublicServices.buildOkResponseWithOriginHeaders(
                 new TopsChartService(config, type, limit).buildChartDataAggregated());
     }
 
@@ -130,7 +131,7 @@ public class EndPoints {
             value = "Describe options for endpoint",
             notes = "Enables Cross-Origin Resource Sharing for endpoint")
     public Response describeFundingTypeDashboard() {
-        return DashboardsService.buildOkResponseWithOriginHeaders("");
+        return PublicServices.buildOkResponseWithOriginHeaders("");
     }
 
     @POST
@@ -141,7 +142,7 @@ public class EndPoints {
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "Funding type chart data",
             response = FundingTypeChartData.class))
     public Response getFundingType(SettingsAndFiltersParameters config) {
-        return DashboardsService.buildOkResponseWithOriginHeaders(DashboardsService.getFundingTypeChartData(config));
+        return PublicServices.buildOkResponseWithOriginHeaders(DashboardsService.getFundingTypeChartData(config));
     }
 
     @OPTIONS
@@ -150,7 +151,7 @@ public class EndPoints {
             value = "Describe options for endpoint",
             notes = "Enables Cross-Origin Resource Sharing for endpoint")
     public Response describeFinancingInstrument() {
-        return DashboardsService.buildOkResponseWithOriginHeaders("");
+        return PublicServices.buildOkResponseWithOriginHeaders("");
     }
 
     @POST
@@ -161,7 +162,7 @@ public class EndPoints {
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "Funding istrumet chart data",
             response = FundingTypeChartData.class))
     public Response getFinancingInstrument(SettingsAndFiltersParameters config) {
-        return DashboardsService.buildOkResponseWithOriginHeaders(
+        return PublicServices.buildOkResponseWithOriginHeaders(
                 DashboardsService.getFinancingInstrumentChartData(config));
     }
 

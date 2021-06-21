@@ -10,7 +10,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.digijava.kernel.ampapi.endpoints.common.model.Org;
 import org.digijava.kernel.ampapi.endpoints.common.model.OrgGroup;
 import org.digijava.kernel.ampapi.endpoints.common.model.OrgType;
-import org.digijava.kernel.ampapi.endpoints.dashboards.services.DashboardsService;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.PublicServices;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.scorecard.model.Donor;
@@ -80,7 +80,7 @@ public class DonorScorecard {
     public Response getScoreCardStats(@ApiParam("Year") @QueryParam("year") Integer year,
                                       @ApiParam(value = "Quarter", allowableValues = "1,2,3,4")
                                       @QueryParam("quarter") Integer quarter) {
-        return DashboardsService.buildOkResponseWithOriginHeaders(
+        return PublicServices.buildOkResponseWithOriginHeaders(
                 new ScorecardService().getDonorScorecardStats(year, quarter));
     }
 
@@ -90,7 +90,7 @@ public class DonorScorecard {
             value = "Describe options for endpoint",
             notes = "Enables Cross-Origin Resource Sharing for endpoint")
     public Response describeScoreCardStats() {
-        return DashboardsService.buildOkResponseWithOriginHeaders("");
+        return PublicServices.buildOkResponseWithOriginHeaders("");
     }
 
     @GET

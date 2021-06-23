@@ -143,18 +143,18 @@ div.fakefile2 input {
                         margin-bottom:15px;">
                           <tr>
                             <td align=left class=title noWrap colspan="2">
-								<digi:errors/>                            
+								<digi:errors/>
 							</td>
                           </tr>
                           <tr>
-                            
+
                             <td align=center class=title noWrap colspan="2"><digi:trn>All fields marked with
                                 an</digi:trn><FONT
                                     color=red><B> * </B></FONT><digi:trn>are required.</digi:trn>
                             </td>
                           </tr>
                           <tr>
-                            
+
                             <td align=right class="map-configuration-cell">
     	                        <FONT color=red><B><BIG>*</BIG> </B></FONT> <digi:trn>URL</digi:trn>
                             </td>
@@ -163,7 +163,7 @@ div.fakefile2 input {
                             </td>
                           </tr>
                           <tr>
-                            
+
                             <td align=right class="map-configuration-cell">
     	                        <FONT color=red><B><BIG>*</BIG> </B></FONT> <digi:trn>Indicator/Base Map</digi:trn>
                             </td>
@@ -174,7 +174,7 @@ div.fakefile2 input {
                             </td>
                           </tr>
                           <tr>
-                            
+
                             <td align=right class="map-configuration-cell">
     	                        <FONT color=red><B><BIG>*</BIG> </B></FONT> <digi:trn>Map Type List</digi:trn>
                             </td>
@@ -186,7 +186,7 @@ div.fakefile2 input {
                             </td>
                           </tr>
                           <tr id="layer_name">
-                            
+
                             <td align=right class="map-configuration-cell">
     	                        <FONT color=red><B><BIG>*</BIG> </B></FONT> <digi:trn>Layer name</digi:trn>
                             </td>
@@ -194,8 +194,17 @@ div.fakefile2 input {
 	                            <html:text property="configName"></html:text>
                             </td>
                           </tr>
+                            <tr id="layers_name">
+
+                                <td align=right class="map-configuration-cell">
+                                    <FONT color=red><B><BIG>*</BIG> </B></FONT> <digi:trn>WMS Layer</digi:trn>
+                                </td>
+                                <td align=left class="map-configuration-cell">
+                                    <html:text property="layer"></html:text>
+                                </td>
+                            </tr>
                             <tr id="legend_notes">
-                                
+
                                 <td align="right" class="map-configuration-cell">Layer Notes</td>
                                 <td align="left" class="map-configuration-cell">
                                     <httml:textarea property="legendNotes" style="width: 350px; height: 50px;"
@@ -203,7 +212,7 @@ div.fakefile2 input {
                                 </td>
                             </tr>
                           <tr id="geo_id">
-                            
+
                             <td align=right class="map-configuration-cell">
     	                        <FONT color=red><B><BIG>*</BIG> </B></FONT> <digi:trn>Geo Id</digi:trn>
                             </td>
@@ -212,7 +221,7 @@ div.fakefile2 input {
                             </td>
                           </tr>
                           <tr id="count_id">
-                            
+
                             <td align=right class="map-configuration-cell">
     	                        <FONT color=red><B><BIG>*</BIG> </B></FONT> <digi:trn>Count Field</digi:trn>
                             </td>
@@ -221,7 +230,7 @@ div.fakefile2 input {
                             </td>
                           </tr>
                           <tr id="admin_1">
-                            
+
                             <td align=right class="map-configuration-cell">
     	                        <FONT color=red><B><BIG>*</BIG> </B></FONT> <digi:trn>Admin 1</digi:trn>
                             </td>
@@ -230,7 +239,7 @@ div.fakefile2 input {
                             </td>
                           </tr>
                           <tr id="admin_2">
-                            
+
                             <td align=right class="map-configuration-cell">
     	                        <FONT color=red><B><BIG>*</BIG> </B></FONT> <digi:trn>Admin 2</digi:trn>
                             </td>
@@ -311,7 +320,7 @@ function cancel()
 function doAction(index, action, confirmation) {
 	if(confirmation){
 		var ret = confirm("<digi:trn jsFriendly='true'>Are you sure?</digi:trn>");
-		if (!ret) return false; 
+		if (!ret) return false;
 	}
 	document.contentForm.action = "/content/structureTypeManager.do?action=" + action +"&index=" + index;
 	document.contentForm.target = "_self";
@@ -385,7 +394,7 @@ $("#legendFile").change(function(){
 	};
 	var binaryImg = document.getElementById("legendFile").files.item(0);
 	fr.readAsDataURL(binaryImg);
-		
+
 });
 
 
@@ -412,25 +421,31 @@ return blnResult;
 
 
 var updateMapType = function(){
-	
+
 	switch($("#mapType").val()){
 		case "2": // For Main map, we need to enable additional fields
 			$("#geo_id").show();
 			$("#admin_1").show();
 			$("#admin_2").show();
+            $("#layers_name").hide();
 		break;
-		default: 
+		case "11":
+            $("#layers_name").show();
+            $("#layer_name").show();
+            break;
+		default:
 			$("#geo_id").hide();
 			$("#admin_1").hide();
 			$("#admin_2").hide();
+            $("#layers_name").hide();
 		break;
 	}
-	
+
 }
 
 var updateMapSubType = function(){
-	
-	switch($("#mapSubType").val()){
+	var mapSupType =$("#mapSubType").val();
+	switch(mapSupType){
 		case "1": // Base map
 			//Hide legend
 			$("#legend_upload_form").hide();
@@ -454,9 +469,9 @@ var updateMapSubType = function(){
 			$("#mapType").hide();
 			$("#mapType").val("10");
 			$("#map_type_list").text("<digi:trn jsFriendly='true'>Indicator</digi:trn>");
-		break;
+		break
 	}
-	
+
 }
 $(document).ready(
 		function(){
@@ -477,7 +492,7 @@ function checkDot(str, cnt)
 			index = i + 1;
 			break;
 		}
-			
+
 	}
 	var diff = str.length - index;
 	if(count >= cnt && diff > 1)
@@ -502,7 +517,7 @@ function validateUrl(str)
 		if(temp == "www")
 			flag = checkDot(str, 2);
 		else
-			flag = checkDot(str, 1);	
+			flag = checkDot(str, 1);
 	}
 	else
 	{

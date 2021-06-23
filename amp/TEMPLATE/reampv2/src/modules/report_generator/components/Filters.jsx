@@ -46,7 +46,7 @@ class Filters extends Component {
   shouldComponentUpdate(nextProps, nextState, nextContext) {
     const { filters, html, _updateAppliedFilters } = this.props;
     // Load saved filters (only one time).
-    if (filters && html === null) {
+    if (filter && filters && html === null) {
       filter.deserialize({ filters, silent: true });
       const html_ = filter.getAppliedFilters({ returnHTML: true });
       _updateAppliedFilters(filters, html_);

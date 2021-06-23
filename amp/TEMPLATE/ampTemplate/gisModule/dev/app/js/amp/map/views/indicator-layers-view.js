@@ -205,13 +205,7 @@ module.exports = Backbone.View.extend({
   },
 
   getNewWMSLayer: function(layer) {
-    return L.tileLayer.wms(layer.get('link'), {
-      layers: layer.get('layer'),
-      // TODO: should these details be obtained from the API?
-      format: 'image/png',
-      transparent: true,
-      opacity: 0.75
-    });
+      return layer.wmsLayer;
   },
 
   getNewArcGISLayer: function(layer) {

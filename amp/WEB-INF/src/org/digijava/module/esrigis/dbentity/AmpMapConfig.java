@@ -13,6 +13,7 @@ public class AmpMapConfig {
     private byte[] legendImage;
     private String configName;
     private String legendNotes;
+    private String layer;
 
     public Long getId() {
         return id;
@@ -98,5 +99,13 @@ public class AmpMapConfig {
 
     public void setLegendNotes(String legendNotes) {
         this.legendNotes = legendNotes;
+    }
+
+    public String getLayer() {
+        return layer;
+    }
+
+    public void setLayer(String layer) {
+        this.layer = layer;
     }
 }

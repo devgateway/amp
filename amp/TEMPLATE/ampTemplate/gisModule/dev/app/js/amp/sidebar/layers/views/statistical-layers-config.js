@@ -38,7 +38,7 @@ module.exports = {
 		filterLayers:function(layers){
 			return layers.models.filter(function(layer){				
 				return (layer.attributes.type === layerTypes.INDICATOR_LAYERS || 
-				layer.attributes.type === layerTypes.wms || 
+				layer.attributes.type === layerTypes.WMS ||
 				layer.attributes.type === layerTypes.ARCGIS || 
 				layer.attributes.accessTypeId == accessTypes.STANDARD);
 				

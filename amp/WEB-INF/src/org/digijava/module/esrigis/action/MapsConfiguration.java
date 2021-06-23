@@ -136,6 +136,7 @@ public class MapsConfiguration extends DispatchAction {
         if (mapForm.getLegend().getFileData().length > 0) map.setLegendImage(mapForm.getLegend().getFileData());
         map.setConfigName(mapForm.getConfigName());
         map.setCountField(mapForm.getCount());
+        map.setLayer(mapForm.getLayer());
         DbHelper.save(map);
 
         return mapping.findForward("save");

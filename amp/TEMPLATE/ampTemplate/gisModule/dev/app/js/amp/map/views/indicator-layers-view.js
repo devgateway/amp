@@ -86,7 +86,7 @@ module.exports = Backbone.View.extend({
 			  // only add it to the map if is still selected.      
 			  if (layer.get('selected')) {
 				  self.map.addLayer(loadedLayer);
-				  if (loadedLayer.bringToBack) {
+				  if (loadedLayer.bringToBack && layerType !== 'wms') {
 					  loadedLayer.bringToBack();
 					  //TODO: drs, very dirty way of hiding boundaries so they don't hijack click events
 					  // I need to pull out boundaries into own view.

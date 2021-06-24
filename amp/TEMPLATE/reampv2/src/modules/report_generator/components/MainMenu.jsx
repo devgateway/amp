@@ -54,7 +54,7 @@ class MainMenu extends Component {
     } = this.state;
     const {
       translations, tab, saveNewReport, saveReport, loaded, results, runReport, id, options,
-      columns, measures, hierarchies, reportDetails, profile
+      columns, measures, hierarchies, reportDetails, profile, runReportPending
     } = this.props;
     return (
       <>
@@ -97,7 +97,8 @@ class MainMenu extends Component {
                 fluid
                 color="green"
                 onClick={runReport}
-                disabled={!areEnoughDataForPreview(columns, measures, hierarchies, reportDetails, profile)}>
+                disabled={!areEnoughDataForPreview(columns, measures, hierarchies, reportDetails, profile)
+                || runReportPending}>
                 {translate('plusRunReport', profile, translations)}
               </Button>
             </Item>
@@ -126,6 +127,7 @@ const mapStateToProps = state => ({
   measures: state.uiReducer.measures,
   hierarchies: state.uiReducer.hierarchies,
   profile: state.uiReducer.profile,
+  runReportPending: state.uiReducer.runReportPending,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -151,6 +153,7 @@ MainMenu.propTypes = {
   measures: PropTypes.object,
   hierarchies: PropTypes.object,
   profile: PropTypes.string,
+  runReportPending: PropTypes.bool.isRequired,
 };
 
 MainMenu.defaultProps = {

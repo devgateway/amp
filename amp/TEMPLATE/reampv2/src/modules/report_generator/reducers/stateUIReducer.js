@@ -35,6 +35,9 @@ import {
   SAVE_REPORT_PENDING,
   SAVE_REPORT_SUCCESS,
   SAVE_REPORT_ERROR,
+  RUN_REPORT_PENDING,
+  RUN_REPORT_SUCCESS,
+  RUN_REPORT_ERROR,
 } from '../actions/stateUIActions';
 import {
   convertReportDetails
@@ -89,7 +92,10 @@ const initialState = {
   id: null,
   reportSaving: false,
   reportSaved: false,
-  reportSaveError: null
+  reportSaveError: null,
+  runReportPending: false,
+  runReportSuccess: false,
+  runReportError: false,
 };
 
 export default (state = initialState, action) => {
@@ -393,6 +399,27 @@ export default (state = initialState, action) => {
         reportSaving: false,
         reportSaved: false,
         reportSaveError: action.payload
+      };
+    case RUN_REPORT_PENDING:
+      return {
+        ...state,
+        runReportPending: true,
+        runReportError: false,
+        runReportSuccess: false,
+      };
+    case RUN_REPORT_SUCCESS:
+      return {
+        ...state,
+        runReportPending: false,
+        runReportError: false,
+        runReportSuccess: true,
+      };
+    case RUN_REPORT_ERROR:
+      return {
+        ...state,
+        runReportPending: false,
+        runReportError: true,
+        runReportSuccess: false,
       };
     default:
       return state;

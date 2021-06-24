@@ -100,7 +100,6 @@ export function getProfileFromReport(data) {
   return PROFILE_REPORT;
 }
 
-// TODO: check if this can be generalized when we implement the saving report functionality.
 export function areEnoughDataForPreview(columns, measures, hierarchies, reportDetails, profile) {
   if (profile !== PROFILE_TAB) {
     if (columns && measures && hierarchies && reportDetails && columns.available && columns.available.length > 0) {

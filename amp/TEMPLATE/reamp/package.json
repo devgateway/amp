@@ -23,7 +23,7 @@
   "author": "Alexei Savca",
   "license": "inherit",
   "devDependencies": {
-    "amp-ui": "git+ssh://github.com/devgateway/amp-ui#fix/AMPOFFLINE-1536/links",
+    "amp-ui": "git+ssh://github.com/devgateway/amp-ui#fpre-release/v2.0.0",
     "babel-core": "^6.26.3",
     "babel-jest": "^6.0.1",
     "babel-loader": "^6.3.2",

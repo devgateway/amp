@@ -177,7 +177,10 @@ export default (state = initialState, action) => {
         ...state,
         reportDetails: {
           ...state.reportDetails,
-          name: action.payload
+          name: {
+            ...state.reportDetails.name,
+            [action.lang]: action.payload,
+          }
         }
       };
     case UPDATE_REPORT_DETAILS_REPORT_CATEGORY:

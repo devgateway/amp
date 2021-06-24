@@ -9,6 +9,7 @@ import ErrorMessage from './ErrorMessage';
 import { translate, validateSaveModal } from '../utils/Utils';
 import { updateReportDetailsName, updateReportDetailsNameReportCategory } from '../actions/stateUIActions';
 import { PROFILE_TAB } from '../utils/constants';
+import MultiLingualInputText from './MultiLingualInputText';
 
 class SaveModal extends Component {
   constructor(props) {
@@ -89,6 +90,17 @@ class SaveModal extends Component {
     const { modalSaveError, openReportOnSave } = this.state;
     const loading = reportPending || metaDataPending;
     const options = reportCategories ? reportCategories.map(i => ({ key: i.id, text: i.label, value: i.id })) : [];
+    const languages = ['fr', 'en', 'sp']; // TODO: Get from settings.
+    const names = [];
+    if (name) {
+      languages.forEach(l => {
+        if (name[l]) {
+          names.push(name[l]);
+        } else {
+          names.push('');
+        }
+      });
+    }
     return (
       <Form loading={loading}>
         {!loading ? (
@@ -98,7 +110,10 @@ class SaveModal extends Component {
                 <div className="red_text" style={{ float: 'left', paddingRight: '5px' }}>* </div>
                 <div>{translate('enterReportTitle', profile, translations)}</div>
               </Label>
-              <Input defaultValue={name} focus onChange={(event) => this.handleChangeName(event.target.value)} />
+              <MultiLingualInputText
+                values={names}
+                languages={languages}
+                onChange={this.handleChangeName} />
             </Form.Field>
             {reportCategories ? (
               <Form.Field>
@@ -134,9 +149,9 @@ class SaveModal extends Component {
     );
   }
 
-  handleChangeName = (val) => {
+  handleChangeName = (lang, event) => {
     const { _updateReportDetailsName } = this.props;
-    _updateReportDetailsName(val);
+    _updateReportDetailsName(event.target.value, lang);
   }
 
   render() {
@@ -164,7 +179,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  _updateReportDetailsName: (data) => updateReportDetailsName(data),
+  _updateReportDetailsName: (data, lang) => updateReportDetailsName(data, lang),
   _updateReportDetailsNameReportCategory: (data) => updateReportDetailsNameReportCategory(data),
 }, dispatch);
 

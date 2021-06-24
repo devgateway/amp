@@ -112,10 +112,11 @@ export function updateReportDetailsDescription(payload) {
   };
 }
 
-export function updateReportDetailsName(payload) {
+export function updateReportDetailsName(payload, lang) {
   return {
     type: UPDATE_REPORT_DETAILS_NAME,
-    payload
+    payload,
+    lang
   };
 }
 

@@ -206,6 +206,7 @@ public class GisEndPoints {
             String type = MapConstants.mapTypeNames.get(ampMapConfig
                     .getMapType());
             i.setType(type);
+            i.setLayer(ampMapConfig.getLayer());
             indicatorLayers.add(i);
         }
         return indicatorLayers;

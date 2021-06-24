@@ -17,6 +17,7 @@ import ErrorMessage from './ErrorMessage';
 import {
   PROFILE_TAB, RUN_REPORT_NAME, SETTINGS_YEAR_RANGE
 } from '../utils/constants';
+import { fetchLanguages } from '../actions/languagesActions';
 
 class ReportGeneratorHome extends Component {
   constructor() {
@@ -26,8 +27,10 @@ class ReportGeneratorHome extends Component {
 
   componentDidMount() {
     const {
-      _getMetadata, _fetchReport, location, _updateProfile, _updateId, translations, _updateReportDetailsFundingGrouping
+      _getMetadata, _fetchReport, location, _updateProfile, _updateId, translations,
+      _updateReportDetailsFundingGrouping, _fetchLanguages
     } = this.props;
+    _fetchLanguages();
     // eslint-disable-next-line react/destructuring-assignment,react/prop-types
     const { id } = this.props.match.params;
     const typeFromURL = new URLSearchParams(location.search).get('type');
@@ -187,7 +190,8 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   _saveNew: (data) => saveNew(data),
   _save: (id, data) => save(id, data),
   _runReport: (data) => runReport(data),
-  _updateReportDetailsFundingGrouping: (data) => updateReportDetailsFundingGrouping(data)
+  _updateReportDetailsFundingGrouping: (data) => updateReportDetailsFundingGrouping(data),
+  _fetchLanguages: () => fetchLanguages(),
 }, dispatch);
 
 ReportGeneratorHome.propTypes = {
@@ -205,6 +209,7 @@ ReportGeneratorHome.propTypes = {
   profile: PropTypes.string,
   layoutLoaded: PropTypes.bool,
   results: PropTypes.object,
+  _fetchLanguages: PropTypes.func.isRequired,
 };
 
 ReportGeneratorHome.defaultProps = {

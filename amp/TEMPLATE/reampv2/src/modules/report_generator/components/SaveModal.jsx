@@ -85,17 +85,16 @@ class SaveModal extends Component {
 
   generateSaveModalContent = () => {
     const {
-      translations, reportPending, name, metaDataPending, selectedReportCategory, reportCategories, profile
+      translations, reportPending, name, metaDataPending, selectedReportCategory, reportCategories, profile, languages
     } = this.props;
     const { modalSaveError, openReportOnSave } = this.state;
     const loading = reportPending || metaDataPending;
     const options = reportCategories ? reportCategories.map(i => ({ key: i.id, text: i.label, value: i.id })) : [];
-    const languages = ['fr', 'en', 'sp']; // TODO: Get from settings.
     const names = [];
     if (name) {
       languages.forEach(l => {
-        if (name[l]) {
-          names.push(name[l]);
+        if (name[l.id]) {
+          names.push(name[l.id]);
         } else {
           names.push('');
         }
@@ -155,6 +154,10 @@ class SaveModal extends Component {
   }
 
   render() {
+    const { languages } = this.props;
+    if (!languages) {
+      return null;
+    }
     return (
       <div className="invisible">
         {this.generateSaveModal()}
@@ -176,6 +179,7 @@ const mapStateToProps = state => ({
   measures: state.uiReducer.measures,
   isTab: state.uiReducer.isTab,
   profile: state.uiReducer.profile,
+  languages: state.languagesReducer.data
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -203,6 +207,7 @@ SaveModal.propTypes = {
   hierarchies: PropTypes.object,
   measures: PropTypes.object,
   profile: PropTypes.string,
+  languages: PropTypes.object,
 };
 
 SaveModal.defaultProps = {
@@ -216,4 +221,5 @@ SaveModal.defaultProps = {
   hierarchies: undefined,
   measures: undefined,
   profile: undefined,
+  languages: undefined
 };

@@ -8,12 +8,17 @@ export default class MultiLingualInputText extends Component {
     const panes = [];
     languages.forEach((item, i) => {
       panes.push({
-        menuItem: item,
+        menuItem: item.id,
         render: () => {
           const value = values[i];
           return (
             <Tab.Pane>
-              <input type="text" value={value} key={item} onChange={onChange.bind(null, item)} />
+              <input
+                type="text"
+                value={value}
+                key={item.id}
+                onChange={onChange.bind(null, item.id)}
+                placeholder={`(${item.id})`} />
             </Tab.Pane>
           );
         }

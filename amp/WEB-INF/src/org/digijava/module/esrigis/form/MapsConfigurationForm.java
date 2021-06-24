@@ -1,12 +1,11 @@
 package org.digijava.module.esrigis.form;
 
-import java.util.HashMap;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 
 public class MapsConfigurationForm extends ActionForm {
 
@@ -28,6 +27,7 @@ public class MapsConfigurationForm extends ActionForm {
     private HashMap<Integer, String> mapTypeList;
     private HashMap<Integer, String> mapSubTypeList;
     private String configName;
+    private String layer;
 
 
     private boolean reset;
@@ -157,5 +157,13 @@ public class MapsConfigurationForm extends ActionForm {
 
     public String getLegendNotes() {
         return legendNotes;
+    }
+
+    public String getLayer() {
+        return layer;
+    }
+
+    public void setLayer(String layer) {
+        this.layer = layer;
     }
 }

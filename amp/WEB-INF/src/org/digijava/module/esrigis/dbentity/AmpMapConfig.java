@@ -116,7 +116,8 @@ public class AmpMapConfig {
     public String getMapTypeName() {
         return mapTypeNames.get(this.mapType);
     }
-    public String getMapSubTypeName(){
+
+    public String getMapSubTypeName() {
         return mapSubTypeNames.get(this.mapSubType);
     }
 }

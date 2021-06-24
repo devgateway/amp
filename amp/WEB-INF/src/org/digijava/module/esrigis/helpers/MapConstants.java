@@ -14,7 +14,7 @@ public class MapConstants {
         public final static Integer BASEMAPS_ROOT = 8;
         public final static Integer NATIONAL_LAYER = 9;
         public final static Integer INDICATOR_LAYER = 10;
-        public final static Integer WMS_LAYER = 11;
+        public static final Integer WMS_LAYER = 11;
     }
     public final static class MapSubType {
         public final static Integer BASE = 1;

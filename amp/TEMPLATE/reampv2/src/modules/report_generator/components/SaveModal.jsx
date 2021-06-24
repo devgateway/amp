@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import ErrorMessage from './ErrorMessage';
 import { translate, validateSaveModal } from '../utils/Utils';
 import { updateReportDetailsName, updateReportDetailsNameReportCategory } from '../actions/stateUIActions';
+import { PROFILE_TAB } from '../utils/constants';
 
 class SaveModal extends Component {
   constructor(props) {
@@ -112,13 +113,15 @@ class SaveModal extends Component {
             />
               </Form.Field>
             ) : null}
-            <Form.Field>
-              <Checkbox
-                toggle
-                label={translate('autoOpen', profile, translations)}
-                checked={openReportOnSave}
-                onChange={this.handleChangeAutoOpen} />
-            </Form.Field>
+            {profile !== PROFILE_TAB ? (
+              <Form.Field>
+                <Checkbox
+                  toggle
+                  label={translate('autoOpen', profile, translations)}
+                  checked={openReportOnSave}
+                  onChange={this.handleChangeAutoOpen} />
+              </Form.Field>
+            ) : null}
             {modalSaveError ? (
               <>
                 <Divider />

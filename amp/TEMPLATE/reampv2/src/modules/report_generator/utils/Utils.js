@@ -58,12 +58,27 @@ export function convertReportType(value) {
   switch (value) {
     case 'funding-donor':
       return 'D';
-    case 'regional-component':
+    case 'funding-component':
       return 'R';
     case 'funding-contribution':
       return 'C';
     case 'funding-pledges':
       return 'P';
+    default:
+      return null;
+  }
+}
+
+export function revertReportType(value) {
+  switch (value) {
+    case 'D':
+      return 'funding-donor';
+    case 'R':
+      return 'funding-component';
+    case 'C':
+      return 'funding-contribution';
+    case 'P':
+      return 'funding-pledges';
     default:
       return null;
   }

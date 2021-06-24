@@ -4,15 +4,18 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
+import org.digijava.kernel.ampapi.endpoints.serializers.MultilingualContentDeserializer;
 import org.digijava.kernel.ampapi.endpoints.serializers.MultilingualContentSerializer;
 
 /**
  * @author Nadejda Mandrescu
  */
 @JsonSerialize(using = MultilingualContentSerializer.class)
+@JsonDeserialize(using = MultilingualContentDeserializer.class)
 public class MultilingualContent {
 
     private UnwrappedTranslations translations;

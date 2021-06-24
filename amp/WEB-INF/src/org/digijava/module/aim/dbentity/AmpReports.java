@@ -29,6 +29,7 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.LoggerIdentifiable;
 import org.digijava.module.aim.util.ObjectUtil4Amp;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -37,7 +38,8 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 
 @TranslatableClass (displayName = "Report")
-public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, Serializable, Cloneable, FilterDataSetInterface<AmpFilterData> {
+public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, Serializable, Identifiable, Cloneable,
+        FilterDataSetInterface<AmpFilterData> {
 
     private Long ampReportId;
 
@@ -410,7 +412,7 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
     }
 
     @Override public Object getIdentifier() {
-        return this.getAmpReportId().toString();
+        return this.getAmpReportId();
     }
 
     public Long getId() {

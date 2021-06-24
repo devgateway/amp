@@ -75,35 +75,34 @@ class HorizontalFilters extends Component {
               />
             </div>
             <div
-              className="col-md-2 country-year-search-wrapper first-element dropdown"
+              className="col-md-6 country-year-search-wrapper first-element dropdown"
               id="country-accordion-filter">
-              <MultiSelectionDropDown
-                options={countries}
-                filterName="amp.ssc.dashboard:search-by-country"
-                filterId="ddCountryCarousel"
-                parentId="country-accordion-filter"
-                categoryFetcher={getCategoryForCountry}
-                sortData
-                categoriesSelection={categoriesSelection}
-                selectedOptions={selectedCountries}
-                onChange={handleSelectedCountryChanged}
-                disabled={chartSelected === DOWNLOAD_CHART}
-              />
-            </div>
-            <div className="col-md-2 country-year-search-wrapper dropdown" id="country-accordion-filter">
-              <MultiSelectionDropDown
-                options={years}
-                selectedOptions={selectedYears}
-                filterName="amp.ssc.dashboard:search-by-year"
-                filterId="ddYearCarousel"
-                parentId="country-accordion-filter"
-                onChange={handleSelectedYearChanged}
-                disabled={chartSelected === DOWNLOAD_CHART}
-              />
-
-            </div>
-            <div className={`reset col-md-2${additionalCss}`}>
-              <div>
+              <div className="wide-dropdown">
+                <MultiSelectionDropDown
+                  options={countries}
+                  filterName="amp.ssc.dashboard:search-by-country"
+                  filterId="ddCountryCarousel"
+                  parentId="country-accordion-filter"
+                  categoryFetcher={getCategoryForCountry}
+                  sortData
+                  categoriesSelection={categoriesSelection}
+                  selectedOptions={selectedCountries}
+                  onChange={handleSelectedCountryChanged}
+                  disabled={chartSelected === DOWNLOAD_CHART}
+                />
+              </div>
+              <div className="wide-dropdown">
+                <MultiSelectionDropDown
+                  options={years}
+                  selectedOptions={selectedYears}
+                  filterName="amp.ssc.dashboard:search-by-year"
+                  filterId="ddYearCarousel"
+                  parentId="country-accordion-filter"
+                  onChange={handleSelectedYearChanged}
+                  disabled={chartSelected === DOWNLOAD_CHART}
+                />
+              </div>
+              <div className="wide-dropdown">
                 <button
                   className="btn btn-primary"
                   type="button"
@@ -111,7 +110,7 @@ class HorizontalFilters extends Component {
                   {translations['amp.ssc.dashboard:reset']}
                 </button>
               </div>
-            </div>
+          </div>
           </div>
         )}
         {chartSelected === HOME_CHART

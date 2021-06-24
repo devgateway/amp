@@ -8,10 +8,10 @@ import MainHeader from './MainHeader';
 import MainContent from './MainContent';
 import FiltersAndSettings from './FiltersAndSettings';
 import {
-  getMetadata, fetchReport, updateProfile, updateId, saveNew, save, runReport
+  getMetadata, fetchReport, updateProfile, updateId, saveNew, save, runReport, updateReportDetailsFundingGrouping
 } from '../actions/stateUIActions';
 import {
-  convertTotalGrouping, getProfileFromReport, translate, hasFilters
+  convertTotalGrouping, getProfileFromReport, translate, hasFilters, convertReportType, revertReportType
 } from '../utils/Utils';
 import ErrorMessage from './ErrorMessage';
 import {
@@ -26,7 +26,7 @@ class ReportGeneratorHome extends Component {
 
   componentDidMount() {
     const {
-      _getMetadata, _fetchReport, location, _updateProfile, _updateId, translations
+      _getMetadata, _fetchReport, location, _updateProfile, _updateId, translations, _updateReportDetailsFundingGrouping
     } = this.props;
     // eslint-disable-next-line react/destructuring-assignment,react/prop-types
     const { id } = this.props.match.params;
@@ -39,7 +39,10 @@ class ReportGeneratorHome extends Component {
         const profile = getProfileFromReport(action.payload);
         _updateProfile(profile);
         if (action.payload) {
-          return _getMetadata(action.payload.type, profile).then(() => this.setState({ showChildren: true }));
+          return _getMetadata(action.payload.type, profile).then(() => {
+            this.setState({ showChildren: true });
+            return _updateReportDetailsFundingGrouping(revertReportType(action.payload.type));
+          });
         } else {
           // eslint-disable-next-line max-len
           return this.setState({ errors: [<ErrorMessage visible message={translate('errorLoadingReport', profile, translations)} />] });
@@ -48,6 +51,7 @@ class ReportGeneratorHome extends Component {
     } else {
       _updateProfile(profileFromURL);
       _getMetadata(typeFromURL, profileFromURL);
+      _updateReportDetailsFundingGrouping(revertReportType(typeFromURL));
       // eslint-disable-next-line react/no-did-mount-set-state
       this.setState({ showChildren: true });
     }
@@ -59,7 +63,7 @@ class ReportGeneratorHome extends Component {
       id: isNew ? null : uiReducer.id,
       name: !isDynamic ? uiReducer.reportDetails.name : RUN_REPORT_NAME,
       description: uiReducer.reportDetails.description,
-      type: uiReducer.type,
+      type: convertReportType(uiReducer.reportDetails.selectedFundingGrouping),
       groupingOption: convertTotalGrouping(uiReducer.reportDetails.selectedTotalGrouping),
       summary: uiReducer.reportDetails.selectedSummaryReport,
       tab: (uiReducer.profile === PROFILE_TAB),
@@ -183,6 +187,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   _saveNew: (data) => saveNew(data),
   _save: (id, data) => save(id, data),
   _runReport: (data) => runReport(data),
+  _updateReportDetailsFundingGrouping: (data) => updateReportDetailsFundingGrouping(data)
 }, dispatch);
 
 ReportGeneratorHome.propTypes = {
@@ -196,6 +201,7 @@ ReportGeneratorHome.propTypes = {
   _save: PropTypes.func.isRequired,
   uiReducer: PropTypes.object.isRequired,
   _runReport: PropTypes.func.isRequired,
+  _updateReportDetailsFundingGrouping: PropTypes.func.isRequired,
   profile: PropTypes.string,
   layoutLoaded: PropTypes.bool,
   results: PropTypes.object,

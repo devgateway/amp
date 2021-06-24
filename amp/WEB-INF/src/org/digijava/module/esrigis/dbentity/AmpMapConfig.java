@@ -1,5 +1,8 @@
 package org.digijava.module.esrigis.dbentity;
 
+import static org.digijava.module.esrigis.helpers.MapConstants.mapSubTypeNames;
+import static org.digijava.module.esrigis.helpers.MapConstants.mapTypeNames;
+
 public class AmpMapConfig {
 
     private Long id;
@@ -93,6 +96,7 @@ public class AmpMapConfig {
         this.configName = configName;
     }
 
+
     public String getLegendNotes() {
         return legendNotes;
     }
@@ -107,5 +111,12 @@ public class AmpMapConfig {
 
     public void setLayer(String layer) {
         this.layer = layer;
+    }
+
+    public String getMapTypeName() {
+        return mapTypeNames.get(this.mapType);
+    }
+    public String getMapSubTypeName(){
+        return mapSubTypeNames.get(this.mapSubType);
     }
 }

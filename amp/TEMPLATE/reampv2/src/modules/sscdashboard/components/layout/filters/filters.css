@@ -609,4 +609,7 @@ ul.elements-list li:before {
 .wide-dropdown .btn:hover{
     font-weight: bold;
 }
+.sidebar-filter-wrapper .filterName{
+    padding-left: 5px;
+}
 

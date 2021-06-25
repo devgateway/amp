@@ -148,7 +148,7 @@ class MultiSelectionDropDown extends Component {
     const { searchText } = this.state;
     const {
       categoriesSelection, categoryFetcher, chartName, chartSelected, onChangeChartSelected, parentId, filterId,
-      filterName, label, disabled
+      filterName, label, disabled, selectionLimit
     } = this.props;
     const textWidth = this.getActualWidth(`${translations['amp.ssc.dashboard:select-all']
     } | ${translations['amp.ssc.dashboard:select-none']}`);
@@ -189,7 +189,8 @@ class MultiSelectionDropDown extends Component {
       </>
     );
     const showQuickSelectionLinks = parentId !== null;
-    const showSelectAll = true;
+    const showSelectAll = selectionLimit === 0;
+    const showSelectNone = selectionLimit === 0;
     return (
       <div className={`horizontal-filter dropdown panel ${disabled ? ' disable-filter' : ''}`}>
         {parentId
@@ -252,8 +253,10 @@ class MultiSelectionDropDown extends Component {
                   && (
                     <SelectAll />
                   )}
-                  <SelectNone />
-
+                  {showSelectAll
+                  && (
+                    <SelectNone />
+                  )}
                   {categoryFetcher && categoriesSelection && categoriesSelection.map((category, idx) => {
                     const { id, name, tooltip } = category;
                     return (
@@ -356,6 +359,6 @@ MultiSelectionDropDown.defaultProps = {
   chartSelected: null,
   label: null,
   disabled: false,
-  selectionLimit:0
+  selectionLimit: 0
 };
 export default MultiSelectionDropDown;

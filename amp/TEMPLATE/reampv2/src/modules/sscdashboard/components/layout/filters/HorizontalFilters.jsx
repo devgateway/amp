@@ -88,6 +88,7 @@ class HorizontalFilters extends Component {
                   categoriesSelection={categoriesSelection}
                   selectedOptions={selectedCountries}
                   onChange={handleSelectedCountryChanged}
+                  selectionLimit={6}
                   disabled={chartSelected === DOWNLOAD_CHART}
                 />
               </div>

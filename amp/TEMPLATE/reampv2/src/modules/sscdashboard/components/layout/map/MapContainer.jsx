@@ -16,7 +16,7 @@ import {
   getChartData
 } from '../../../utils/ProjectUtils';
 import { ACTIVITY_ID, PROJECT_TITLE } from '../../../utils/FieldsConstants';
-import { HOME_CHART, MODALITY_CHART } from '../../../utils/constants';
+import { DOWNLOAD_CHART, HOME_CHART, MODALITY_CHART } from '../../../utils/constants';
 import DataDownloadContainer from '../../dataDownload/DataDownloadContainer';
 import { populateFilters } from '../../../utils/exportUtils';
 
@@ -119,15 +119,15 @@ class MapContainer extends Component {
     const { translations } = this.context;
     return (
       <div className="col-md-10 col-md-offset-2 map-wrapper">
-        <HorizontalFilters
+        {chartSelected !== DOWNLOAD_CHART && (<HorizontalFilters
           selectedFilters={selectedFilters}
           filtersRestrictions={filtersRestrictions}
           handleSelectedFiltersChange={handleSelectedFiltersChange}
           chartSelected={chartSelected}
 
-        />
+        />)}
         <MapHome filteredProjects={filteredProjects} countries={countries} />
-        <PopupOverlay show={showDataDownload}>
+        <PopupOverlay show={showDataDownload} additionalClass={'data-container'}>
           <DataDownloadContainer
             selectedFilters={selectedFilters}
             filtersRestrictions={filtersRestrictions}

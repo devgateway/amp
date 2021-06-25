@@ -85,20 +85,28 @@ class SaveModal extends Component {
 
   generateSaveModalContent = () => {
     const {
-      translations, reportPending, name, metaDataPending, selectedReportCategory, reportCategories, profile, languages
+      translations, reportPending, name, metaDataPending, selectedReportCategory, reportCategories, profile, languages,
+      globalSettings
     } = this.props;
     const { modalSaveError, openReportOnSave } = this.state;
+    if (!globalSettings) {
+      return null;
+    }
     const loading = reportPending || metaDataPending;
     const options = reportCategories ? reportCategories.map(i => ({ key: i.id, text: i.label, value: i.id })) : [];
     const names = [];
     if (name) {
-      languages.forEach(l => {
-        if (name[l.id]) {
-          names.push(name[l.id]);
-        } else {
-          names.push('');
-        }
-      });
+      if (globalSettings.multilingual) {
+        languages.forEach(l => {
+          if (name[l.id]) {
+            names.push(name[l.id]);
+          } else {
+            names.push('');
+          }
+        });
+      } else {
+        names.push(name);
+      }
     }
     return (
       <Form loading={loading}>
@@ -123,6 +131,7 @@ class SaveModal extends Component {
                   selection
                   options={options}
                   defaultValue={selectedReportCategory}
+                  isMultiLanguage={globalSettings.multilingual}
                   onChange={this.handleCategoryChange}
             />
               </Form.Field>
@@ -179,7 +188,8 @@ const mapStateToProps = state => ({
   measures: state.uiReducer.measures,
   isTab: state.uiReducer.isTab,
   profile: state.uiReducer.profile,
-  languages: state.languagesReducer.data
+  languages: state.languagesReducer.data,
+  globalSettings: state.settingsReducer.globalSettings,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -208,6 +218,7 @@ SaveModal.propTypes = {
   measures: PropTypes.object,
   profile: PropTypes.string,
   languages: PropTypes.object,
+  globalSettings: PropTypes.object,
 };
 
 SaveModal.defaultProps = {
@@ -221,5 +232,6 @@ SaveModal.defaultProps = {
   hierarchies: undefined,
   measures: undefined,
   profile: undefined,
-  languages: undefined
+  languages: undefined,
+  globalSettings: undefined
 };

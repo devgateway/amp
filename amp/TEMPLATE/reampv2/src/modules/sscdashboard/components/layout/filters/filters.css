@@ -605,3 +605,7 @@ ul.elements-list li:before {
 .download-content .well-inner.filter-list-inner .row{
     height: 75px;
 }
+.sidebar-filter-wrapper .filterName{
+    padding-left: 5px;
+}
+

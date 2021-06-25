@@ -202,7 +202,9 @@ class MultiSelectionDropDown extends Component {
             aria-controls={filterId}
             onClick={() => (onChangeChartSelected && chartName
             !== chartSelected ? onChangeChartSelected(chartName) : false)}>
+            <span className="filterName">
             {translations[filterName]}
+              </span>
             {' '}
             {(!label) && (
               <span

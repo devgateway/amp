@@ -24,8 +24,10 @@ class MultiSelectionDropDown extends Component {
 
   onChange(e) {
     const ipSelectedFilter = parseInt(e.target.value, 10);
-    const { selectedOptions, onChange } = this.props;
-    onChange(calculateUpdatedValuesForDropDowns(ipSelectedFilter, selectedOptions));
+    const { selectedOptions, onChange, selectionLimit } = this.props;
+    if (selectionLimit === 0 || selectedOptions.length < selectionLimit || selectedOptions.includes(ipSelectedFilter)) {
+      onChange(calculateUpdatedValuesForDropDowns(ipSelectedFilter, selectedOptions));
+    }
   }
 
   onDropdownVisible(isVisible) {
@@ -325,7 +327,8 @@ MultiSelectionDropDown.propTypes = {
   chartSelected: PropTypes.string,
   chartName: PropTypes.string,
   filterName: PropTypes.string.isRequired,
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
+  selectionLimit: PropTypes.number
 };
 
 MultiSelectionDropDown.defaultProps = {
@@ -338,6 +341,7 @@ MultiSelectionDropDown.defaultProps = {
   onChangeChartSelected: null,
   chartSelected: null,
   label: null,
-  disabled: false
+  disabled: false,
+  selectionLimit:0
 };
 export default MultiSelectionDropDown;

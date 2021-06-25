@@ -130,6 +130,16 @@ class MultiSelectionDropDown extends Component {
     && chartName === chartSelected ? true : !parentId;
   }
 
+  getActualWidth(inputText) {
+    const font = '14px Montserrat \'Open Sans\'';
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    context.font = font;
+    const { width } = context.measureText(inputText);
+    const formattedWidth = Math.ceil(width);
+    return formattedWidth;
+  }
+
   render() {
     const { translations } = this.context;
     const onChangeNew = this.onChange.bind(this);
@@ -138,6 +148,8 @@ class MultiSelectionDropDown extends Component {
       categoriesSelection, categoryFetcher, chartName, chartSelected, onChangeChartSelected, parentId, filterId,
       filterName, label, disabled
     } = this.props;
+    const textWidth = this.getActualWidth(`${translations['amp.ssc.dashboard:select-all']
+    } | ${translations['amp.ssc.dashboard:select-none']}`);
     const SelectAll = () => (
       <>
         <span className="select-all all">
@@ -209,7 +221,7 @@ class MultiSelectionDropDown extends Component {
             <div className="well">
               <div className="row autocomplete">
                 {!showQuickSelectionLinks && (
-                  <div className="col-md-3">
+                  <div className={`col-md-${textWidth < 110 ? '3' : '5'}`}>
                     <div className="select-all-none">
                       <SelectAll />
                       <SelectNone />
@@ -228,7 +240,7 @@ class MultiSelectionDropDown extends Component {
                   </div>
                 </div>
                 {!showQuickSelectionLinks && (
-                  <div className="col-md-3" />
+                  <div className={`col-md-${textWidth < 110 ? '3' : '1'}`} />
                 )}
               </div>
               {showQuickSelectionLinks
@@ -275,8 +287,8 @@ class MultiSelectionDropDown extends Component {
                   && (
                     <span
                       className="select-count">
-              {`${translations[label]} (${this.getSelectedCount()}/${this.getOptionsCount()})`}
-                </span>
+                      {`${translations[label]} (${this.getSelectedCount()}/${this.getOptionsCount()})`}
+                    </span>
                   )}
                 </div>
 
@@ -293,8 +305,8 @@ class MultiSelectionDropDown extends Component {
                   && (
                     <span
                       className="select-count">
-              {`${translations[label]} (${this.getOptionsCount() - this.getSelectedCount()})`}
-                </span>
+                      {`${translations[label]} (${this.getOptionsCount() - this.getSelectedCount()})`}
+                    </span>
                   )}
                 </div>
                 <div className="well-inner filter-list-inner">

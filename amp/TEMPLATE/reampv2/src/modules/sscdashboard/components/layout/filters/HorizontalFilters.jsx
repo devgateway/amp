@@ -103,14 +103,18 @@ class HorizontalFilters extends Component {
                 />
               </div>
               <div className="wide-dropdown">
-                <button
-                  className="btn btn-primary"
-                  type="button"
-                  onClick={this.clearFilters.bind(this)}>
-                  {translations['amp.ssc.dashboard:reset']}
-                </button>
+                <div
+                  className={`horizontal-filter dropdown panel ${chartSelected === DOWNLOAD_CHART
+                    ? ' disable-filter' : ''}`}>
+                  <button
+                    className="reset btn btn-primary"
+                    type="button"
+                    onClick={this.clearFilters.bind(this)}>
+                    {translations['amp.ssc.dashboard:reset']}
+                  </button>
+                </div>
               </div>
-          </div>
+            </div>
           </div>
         )}
         {chartSelected === HOME_CHART

@@ -1,17 +1,24 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Tab } from 'semantic-ui-react';
+import { Tab, Menu } from 'semantic-ui-react';
 
 export default class MultiLingualInputText extends Component {
   render() {
     const {
-      languages, values, onChange, isMultiLanguage
+      languages, values, onChange, isMultiLanguage, mandatory
     } = this.props;
     if (isMultiLanguage) {
       const panes = [];
       languages.forEach((item, i) => {
         panes.push({
-          menuItem: item.id,
+          menuItem: (
+            mandatory.find(j => j === item.id) ? (
+              <Menu.Item key="messages">
+                <div className="red_text" style={{ float: 'left', paddingRight: '5px' }}>* </div>
+                {item.id}
+              </Menu.Item>
+            ) : item.id
+          ),
           render: () => {
             const value = values[i];
             return (
@@ -43,8 +50,10 @@ MultiLingualInputText.propTypes = {
   values: PropTypes.array.isRequired,
   languages: PropTypes.array.isRequired,
   onChange: PropTypes.func.isRequired,
-  isMultiLanguage: PropTypes.bool.isRequired
+  isMultiLanguage: PropTypes.bool.isRequired,
+  mandatory: PropTypes.array,
 };
 
 MultiLingualInputText.defaultProps = {
+  mandatory: [],
 };

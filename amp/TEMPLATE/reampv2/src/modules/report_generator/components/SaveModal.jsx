@@ -156,6 +156,7 @@ class SaveModal extends Component {
                 values={names}
                 languages={languages}
                 isMultiLanguage={globalSettings.multilingual}
+                mandatory={[globalSettings['default-language']]}
                 onChange={this.handleChangeName} />
             </Form.Field>
             {reportCategories ? (

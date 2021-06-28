@@ -155,6 +155,7 @@ class SaveModal extends Component {
               <MultiLingualInputText
                 values={names}
                 languages={languages}
+                isMultiLanguage={globalSettings.multilingual}
                 onChange={this.handleChangeName} />
             </Form.Field>
             {reportCategories ? (
@@ -166,7 +167,6 @@ class SaveModal extends Component {
                   selection
                   options={options}
                   defaultValue={selectedReportCategory}
-                  isMultiLanguage={globalSettings.multilingual}
                   onChange={this.handleCategoryChange}
             />
               </Form.Field>
@@ -196,8 +196,9 @@ class SaveModal extends Component {
     const { _updateReportDetailsName, _updateReportDetailsNameMultiLang } = this.props;
     if (lang) {
       _updateReportDetailsNameMultiLang(text, lang);
+    } else {
+      _updateReportDetailsName(text);
     }
-    _updateReportDetailsName(text);
   }
 
   render() {

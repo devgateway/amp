@@ -20,7 +20,7 @@ export default class MultiLingualInputText extends Component {
                   type="text"
                   value={value}
                   key={item.id}
-                  onChange={onChange.bind(null, item.id)}
+                  onChange={(event) => onChange(item.id, event.target.value)}
                   placeholder={`(${item.id})`} />
               </Tab.Pane>
             );
@@ -33,7 +33,7 @@ export default class MultiLingualInputText extends Component {
         <input
           type="text"
           value={values[0]}
-          onChange={onChange.bind(null, null)} />
+          onChange={(event) => onChange(null, event.target.value)} />
       );
     }
   }

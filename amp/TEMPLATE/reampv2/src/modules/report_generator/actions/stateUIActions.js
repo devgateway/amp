@@ -12,7 +12,9 @@ export const UPDATE_REPORT_DETAILS_ALLOW_EMPTY_FUNDING_COLUMNS = 'UPDATE_REPORT_
 export const UPDATE_REPORT_DETAILS_SPLIT_BY_FUNDING = 'UPDATE_REPORT_DETAILS_SPLIT_BY_FUNDING';
 export const UPDATE_REPORT_DETAILS_SHOW_ORIGINAL_CURRENCIES = 'UPDATE_REPORT_DETAILS_SHOW_ORIGINAL_CURRENCIES';
 export const UPDATE_REPORT_DETAILS_DESCRIPTION = 'UPDATE_REPORT_DETAILS_DESCRIPTION';
+export const UPDATE_REPORT_DETAILS_NAME_MULTILANG = 'UPDATE_REPORT_DETAILS_NAME_MULTILANG';
 export const UPDATE_REPORT_DETAILS_NAME = 'UPDATE_REPORT_DETAILS_NAME';
+export const REVERT_REPORT_DETAILS_NAME = 'REVERT_REPORT_DETAILS_NAME';
 export const UPDATE_REPORT_DETAILS_ALSO_SHOW_PLEDGES = 'UPDATE_REPORT_DETAILS_ALSO_SHOW_PLEDGES';
 export const UPDATE_REPORT_DETAILS_USE_ABOVE_FILTERS = 'UPDATE_REPORT_DETAILS_USE_ABOVE_FILTERS';
 export const UPDATE_REPORT_DETAILS_REPORT_CATEGORY = 'UPDATE_REPORT_DETAILS_REPORT_CATEGORY';
@@ -112,11 +114,25 @@ export function updateReportDetailsDescription(payload) {
   };
 }
 
-export function updateReportDetailsName(payload, lang) {
+export function updateReportDetailsNameMultiLang(payload, lang) {
+  return {
+    type: UPDATE_REPORT_DETAILS_NAME_MULTILANG,
+    payload,
+    lang
+  };
+}
+
+export function updateReportDetailsName(payload) {
   return {
     type: UPDATE_REPORT_DETAILS_NAME,
     payload,
-    lang
+  };
+}
+
+export function revertReportDetailsName(payload) {
+  return {
+    type: REVERT_REPORT_DETAILS_NAME,
+    payload,
   };
 }
 

@@ -7,7 +7,7 @@ import Startup from './components/StartUp';
 import NDDDashboardRouter from './components/NDDDashboard.router';
 import defaultTrnPack from './config/initialTranslations.json';
 import './index.css';
-import './open-sans.css';
+import '../../open-sans.css';
 
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 

@@ -144,7 +144,7 @@ class ColumnsSection extends Component {
               <ColumnsSelector
                 columns={_columns}
                 selected={selectedColumns}
-                showLoadingWhenEmpty
+                showLoadingWhenEmpty={!search}
                 onColumnSelectionChange={this.handleColumnSelection} />
             </OptionsList>
           </Grid.Column>

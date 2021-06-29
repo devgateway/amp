@@ -20,11 +20,12 @@ import {
 import ColumnSorter from './ColumnsSorter';
 import ErrorMessage from '../ErrorMessage';
 import { translate } from '../../utils/Utils';
+import InputWrapper from './InputWrapper';
 
 class ColumnsSection extends Component {
   constructor() {
     super();
-    this.state = { search: null };
+    this.state = { search: null, applySearch: false };
   }
 
   handleColumnSelection = (id) => {
@@ -107,7 +108,7 @@ class ColumnsSection extends Component {
   }
 
   handleSearch = (event) => {
-    this.setState({ search: event.target.value });
+    this.setState({ search: event.target.value, applySearch: false });
   }
 
   handleReset = () => {
@@ -115,21 +116,31 @@ class ColumnsSection extends Component {
     _resetColumnsSelected();
   }
 
+  // eslint-disable-next-line no-unused-vars
+  highlightColumns = (event) => {
+    const { search } = this.state;
+    if (search) {
+      this.setState({ applySearch: true });
+    }
+  }
+
   render() {
     const {
       visible, translations, columns, selectedColumns, hierarchies, hierarchiesOrder, selectedHierarchies,
       selectedSummaryReport, profile
     } = this.props;
-    const { search } = this.state;
+    const { search, applySearch } = this.state;
     const _columns = search ? columns.filter(i => i.label.toLowerCase().indexOf(search.toLowerCase()) > -1) : columns;
     return (
       <div className={!visible ? 'invisible-tab' : ''}>
         <Grid columns={3}>
           <GridColumn computer="8" tablet="16">
-            <Input
-              icon="search"
-              placeholder={translate('search', profile, translations)}
-              onChange={this.handleSearch} />
+            <InputWrapper keyPress="Enter" keyEvent={this.highlightColumns}>
+              <Input
+                icon="search"
+                placeholder={translate('search', profile, translations)}
+                onChange={this.handleSearch} />
+            </InputWrapper>
           </GridColumn>
           <GridColumn computer="8" textAlign="right" tablet="16">
             <span className="green_text bold pointer reset-text" onClick={this.handleReset}>
@@ -142,6 +153,7 @@ class ColumnsSection extends Component {
               tooltip="tooltip 1"
               className="smallHeight" >
               <ColumnsSelector
+                openSections={applySearch}
                 columns={_columns}
                 selected={selectedColumns}
                 showLoadingWhenEmpty

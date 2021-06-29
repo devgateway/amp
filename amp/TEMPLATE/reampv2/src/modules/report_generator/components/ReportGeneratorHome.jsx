@@ -15,7 +15,7 @@ import {
 } from '../utils/Utils';
 import ErrorMessage from './ErrorMessage';
 import {
-  PROFILE_TAB, RUN_REPORT_NAME, SETTINGS_YEAR_RANGE
+  PROFILE_TAB, RUN_REPORT_NAME, SETTINGS_YEAR_RANGE, TYPE_PLEDGE
 } from '../utils/constants';
 
 class ReportGeneratorHome extends Component {
@@ -32,6 +32,26 @@ class ReportGeneratorHome extends Component {
     const { id } = this.props.match.params;
     const typeFromURL = new URLSearchParams(location.search).get('type');
     const profileFromURL = new URLSearchParams(location.search).get('profile');
+
+    // TODO: remove this parameter (and section) once we finish testing.
+    const showOldReportGenerator = new URLSearchParams(location.search).get('showOldReportGenerator');
+    if (showOldReportGenerator === 'true') {
+      if (id) {
+        if (typeFromURL === TYPE_PLEDGE) {
+          window.open(`/reportWizard.do?editReportId=${id}&type=5`);
+        } else {
+          window.open(`/reportWizard.do?editReportId=${id}&type=1`);
+        }
+      } else {
+        // eslint-disable-next-line no-lonely-if
+        if (typeFromURL === TYPE_PLEDGE) {
+          window.open('/reportWizard.do?tabs=false&reset=true&type=5');
+        } else {
+          window.open('/reportWizard.do?tabs=false&reset=true&type=1');
+        }
+      }
+    }
+
     // If this is a saved report then ignore type and profile params from the URL.
     if (id) {
       _updateId(id);

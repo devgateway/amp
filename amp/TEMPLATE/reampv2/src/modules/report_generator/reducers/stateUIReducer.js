@@ -37,7 +37,7 @@ import {
   SAVE_REPORT_ERROR,
   RUN_REPORT_PENDING,
   RUN_REPORT_SUCCESS,
-  RUN_REPORT_ERROR,
+  RUN_REPORT_ERROR, SET_INITIAL_HIERARCHIES,
 } from '../actions/stateUIActions';
 import {
   convertReportDetails
@@ -239,6 +239,15 @@ export default (state = initialState, action) => {
         hierarchies: {
           ...state.hierarchies,
           order: action.payload
+        }
+      };
+    case SET_INITIAL_HIERARCHIES:
+      return {
+        ...state,
+        hierarchies: {
+          available: action.available,
+          selected: action.selected,
+          order: action.order
         }
       };
     case UPDATE_MEASURES_SELECTED_COLUMN:

@@ -28,7 +28,7 @@ class MainContent extends Component {
   // eslint-disable-next-line no-unused-vars
   componentDidUpdate(prevProps, prevState, snapshot) {
     const {
-      _updatePreviewId, _getPreview, columns, measures, hierarchies, reportDetails, lastReportId, profile
+      _updatePreviewId, _getPreview, columns, measures, hierarchies, reportDetails, lastReportId, profile, settings
     } = this.props;
     if (areEnoughDataForPreview(columns, measures, hierarchies, reportDetails, profile)) {
       // Convert input data to a String then Number.
@@ -47,7 +47,8 @@ class MainContent extends Component {
         hierarchies: {
           selected: hierarchies.selected,
           order: hierarchies.order
-        }
+        },
+        settings,
       };
       const name = md5(JSON.stringify(merged));
       const newId = javaHashCode(name);
@@ -79,6 +80,8 @@ class MainContent extends Component {
           show_original_currency: reportDetails.selectedShowOriginalCurrencies,
           summary: reportDetails.selectedSummaryReport
         });
+      } else {
+        console.log('no changes for preview');
       }
     } else {
       // With current user input we cant generate a valid preview.
@@ -103,10 +106,11 @@ class MainContent extends Component {
   render() {
     const { visibleTab } = this.state;
     const {
-      saveNewReport, saveReport, runReport, profile
+      saveNewReport, saveReport, runReport, profile, settings
     } = this.props;
     return (
       <>
+        {JSON.stringify(settings)}
         <Grid>
           <GridRow>
             <GridColumn computer="4" tablet={16}>
@@ -143,6 +147,7 @@ const mapStateToProps = (state) => ({
   measures: state.uiReducer.measures,
   hierarchies: state.uiReducer.hierarchies,
   profile: state.uiReducer.profile,
+  settings: state.uiReducer.settings,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -164,6 +169,7 @@ MainContent.propTypes = {
   saveReport: PropTypes.func.isRequired,
   runReport: PropTypes.func.isRequired,
   profile: PropTypes.string,
+  settings: PropTypes.object,
 };
 
 MainContent.defaultProps = {
@@ -172,7 +178,8 @@ MainContent.defaultProps = {
   columns: undefined,
   measures: undefined,
   hierarchies: undefined,
-  profile: undefined
+  profile: undefined,
+  settings: undefined
 };
 
 MainContent.contextType = ReportGeneratorContext;

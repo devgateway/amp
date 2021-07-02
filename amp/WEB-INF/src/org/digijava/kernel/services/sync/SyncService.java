@@ -271,6 +271,9 @@ public class SyncService implements InitializingBean {
         Predicate<APIField> fieldFilter = getChangedFields(systemDiff, lastSyncTime);
         Set<String> updatedPossibleValuesFields = new HashSet<>(fieldsEnumerator.findActivityFieldPaths(fieldFilter));
 
+        CachingFieldsEnumerator fieldsEnumeratorSSC = AmpFieldsEnumerator.getEnumerator(2L);
+        updatedPossibleValuesFields.addAll(fieldsEnumeratorSSC.findActivityFieldPaths(fieldFilter));
+
         List<String> newPossibleValuesFields = findNewPossibleValuesFields(
                 syncRequest.getActivityPossibleValuesFields(), findAllActivityFieldsWithPossibleValues());
 

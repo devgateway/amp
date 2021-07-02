@@ -30,8 +30,8 @@ export const TOTAL_GROUPING_RADIO_OPTIONS = [ANNUAL_REPORT, QUARTERLY_REPORT, MO
 export const TOTAL_GROUPING_CHECKBOX_OPTIONS = [SUMMARY_REPORT];
 
 export const FUNDING_DONOR = 'funding-donor';
-export const REGIONAL_REPORT = 'funding-component';
-export const COMPONENT_REPORT = 'funding-contribution';
+export const REGIONAL_REPORT = 'funding-regional';
+export const COMPONENT_REPORT = 'funding-component';
 export const PLEDGES_REPORT = 'funding-pledges';
 export const FUNDING_GROUPING_RADIO_OPTIONS = [FUNDING_DONOR, REGIONAL_REPORT, COMPONENT_REPORT, PLEDGES_REPORT];
 

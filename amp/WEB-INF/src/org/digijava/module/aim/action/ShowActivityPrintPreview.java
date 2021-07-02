@@ -60,7 +60,6 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.DocumentUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
-import org.digijava.module.aim.util.EUActivityUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.LocationUtil.HelperLocationAncestorLocationNamesAsc;
@@ -120,11 +119,7 @@ public class ShowActivityPrintPreview
                 }
 
 
-                //costing
-                Collection euActs = EUActivityUtil.getEUActivities(activity.getAmpActivityId());
-                request.setAttribute("costs", euActs);
-                
-                request.setAttribute("actId", actId);               
+                request.setAttribute("actId", actId);
                 int risk = IndicatorUtil.getOverallRisk(actId);
                 String riskName = MEIndicatorsUtil.getRiskRatingName(risk);
                 String rskColor = MEIndicatorsUtil.getRiskColor(risk);

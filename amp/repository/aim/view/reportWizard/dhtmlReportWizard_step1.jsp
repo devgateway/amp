@@ -61,12 +61,6 @@
 				                                        </nested:radio>
 				                                        <br />
 				                                   	</feature:display>
-				                                    <feature:display name="Contribution Report" module="Report Types">
-														<nested:radio property="reportType" disabled="${disableFundingType}" value="contribution"  onclick="repManager.checkSteps();repManager.callbackRepType('contribution');">
-				                                        	${activityContributions}
-				                                      	</nested:radio>
-				                                        <br />   	
-				                                   	</feature:display>
 												</c:when>
                            						<c:otherwise>
                                               <c:set var="disablePledgeType">true</c:set>

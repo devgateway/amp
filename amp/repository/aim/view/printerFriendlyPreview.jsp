@@ -3414,28 +3414,6 @@ body {background:none;}
 									</tr>
 								  </module:display>
 
-
-                                 <logic:present name="currentMember" scope="session">
-									 <module:display name="Activity Costing" parentModule="PROJECT MANAGEMENT">
-										<tr>
-										<td class="field_name" >
-												<b>
-												<digi:trn key="aim:costing"> Costing</digi:trn>
-										  </b>
-										</td>
-											<td bgcolor="#ffffff"><table width="100%">
-                                              <tr>
-                                                <td>
-                                                	<bean:define id="mode" value="preview" type="java.lang.String" toScope="request" />
-                                                    <jsp:include page="viewCostsSummary.jsp" />
-                                                </td>
-                                              </tr>
-                                            </table>
-                                            </td>
-                                      </tr>
-									</module:display>
-								  </logic:present>
-
 									<!-- GPI -->
 									<module:display name="/Activity Form/GPI" parentModule="/Activity Form">
 										<bean:define id="gpiSurvey" name="gpiSurveys" scope="request" toScope="page"

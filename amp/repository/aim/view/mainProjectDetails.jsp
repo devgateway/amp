@@ -715,31 +715,6 @@ ${aimMainProjectDetailsForm.activityExists}
 							</logic:notEqual>
 						</feature:display>						
 						
-						<feature:display module="Activity Costing" name="Costing">
-							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="8">
-							   <LI>
-                               		<a name="node">
-                                    <div>
-									<digi:trn key="aim:projectCosting">Costing</digi:trn>								
-                                    </div>
-                                    </a>
-								</LI>
-								</logic:equal>
-								<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="8">
-									
-										<c:set target="${urlTabs}" property="tabIndex" value="8"/>
-										<LI>
-                                <span>
-				              			<digi:link href="/viewProjectCostsBreakdown.do" name="urlTabs">
-										<div title='<digi:trn jsFriendly="true" key="aim:clickToViewCosting">Click here to view Costing</digi:trn>'>
-											<digi:trn key="aim:projectCosting">Costing</digi:trn>
-                                        </div>
-										</digi:link>
-                                </span>
-								</LI>
-							</logic:notEqual>
-						</feature:display>
-						
 						<feature:display name="Contracting" module="Contracting">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="9">
 							   <LI>

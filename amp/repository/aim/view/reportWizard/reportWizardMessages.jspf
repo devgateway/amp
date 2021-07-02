@@ -78,9 +78,6 @@
 	<c:set var="componentFunding" scope="request">
 		<digi:trn key="aim:componentTab">Component Tab (Component Funding)</digi:trn>
 	</c:set>
-	<c:set var="activityContributions" scope="request">
-		<digi:trn key="aim:contributionTab">Contribution Tab (Activity Contributions)</digi:trn>
-	</c:set>
 	<c:set var="summary" scope="request">
 		<digi:trn key="aim:summaryTab">Summary Tab</digi:trn>
 	</c:set>
@@ -118,9 +115,6 @@
 	</c:set>
 	<c:set var="componentFunding" scope="request">
 		<digi:trn key="aim:componentReport">Component Report (Component Funding)</digi:trn>
-	</c:set>
-	<c:set var="activityContributions" scope="request">
-		<digi:trn key="aim:contributionReport">Contribution Report (Activity Contributions)</digi:trn>
 	</c:set>
 	<c:set var="summary" scope="request">
 		<digi:trn key="aim:summaryReport">Summary Report</digi:trn>

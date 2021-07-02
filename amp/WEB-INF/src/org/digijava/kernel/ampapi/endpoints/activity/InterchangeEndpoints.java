@@ -14,6 +14,7 @@ import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivitySummary;
 import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivityView;
 import org.digijava.kernel.ampapi.endpoints.activity.dto.SwaggerActivity;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
+import org.digijava.kernel.ampapi.endpoints.activity.field.CachingFieldsEnumeratorFactory;
 import org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewActivityFunding;
 import org.digijava.kernel.ampapi.endpoints.activity.preview.PreviewActivityService;
@@ -148,12 +149,12 @@ public class InterchangeEndpoints {
             response = Collections.emptyMap();
         } else {
             ActivityUtil.loadWorkspacePrefixesIntoRequest();
-            List<APIField> apiFields = AmpFieldsEnumerator.getEnumerator().getActivityFields();
-            
-            List<APIField> apiFieldsSSC = AmpFieldsEnumerator.getEnumerator(2L).getActivityFields();
+
+            // Load an enumerator for each FM template (AMPOFFLINE-1562)
             List<APIField> mergedList = new ArrayList<>();
-            mergedList.addAll(apiFields);
-            mergedList.addAll(apiFieldsSSC);
+            AmpFieldsEnumerator.getAllEnumerators().forEach((i, item) -> {
+                mergedList.addAll(item.getActivityFields());
+            });
 
             response = fields.stream()
                     .filter(Objects::nonNull)

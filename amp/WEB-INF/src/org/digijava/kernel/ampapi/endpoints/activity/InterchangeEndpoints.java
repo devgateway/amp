@@ -149,11 +149,16 @@ public class InterchangeEndpoints {
         } else {
             ActivityUtil.loadWorkspacePrefixesIntoRequest();
             List<APIField> apiFields = AmpFieldsEnumerator.getEnumerator().getActivityFields();
+            
+            List<APIField> apiFieldsSSC = AmpFieldsEnumerator.getEnumerator(2L).getActivityFields();
+            List<APIField> mergedList = new ArrayList<>();
+            mergedList.addAll(apiFields);
+            mergedList.addAll(apiFieldsSSC);
 
             response = fields.stream()
                     .filter(Objects::nonNull)
                     .distinct()
-                    .collect(toMap(identity(), fieldName -> InterchangeUtils.possibleValuesFor(fieldName, apiFields)));
+                    .collect(toMap(identity(), fieldName -> InterchangeUtils.possibleValuesFor(fieldName, mergedList)));
         }
         MediaType responseType = MediaType.APPLICATION_JSON_TYPE;
         if (AmpMediaType.POSSIBLE_VALUES_V2_JSON.equals(ApiCompat.getRequestedMediaType())) {

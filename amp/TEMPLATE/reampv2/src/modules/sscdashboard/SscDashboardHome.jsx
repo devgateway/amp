@@ -113,6 +113,12 @@ class SscDashboardHome extends Component {
         }
       });
     }
+    if (chartSelected === SECTORS_CHART || chartSelected === MODALITY_CHART) {
+      const { selectedFilters } = this.state;
+      if (selectedFilters.selectedCountries.length > 0) {
+        this.openLargeCountryPopin();
+      }
+    }
     if (chartSelected !== DOWNLOAD_CHART) {
       this.setState({ showDataDownload: false });
     }
@@ -211,6 +217,10 @@ class SscDashboardHome extends Component {
 
   closeLargeCountryPopinAndClearFilter() {
     this.handleSelectedCountryChanged([]);
+  }
+
+  openLargeCountryPopin() {
+    this.setState({ showLargeCountryPopin: true });
   }
 
   closeLargeCountryPopin() {

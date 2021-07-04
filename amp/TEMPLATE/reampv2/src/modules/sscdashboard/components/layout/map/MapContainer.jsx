@@ -104,12 +104,12 @@ class MapContainer extends Component {
     return exportData;
   }
 
-
   render() {
     const {
       filters, projects, countriesForExport, countriesForExportChanged, selectedFilters, filtersRestrictions,
       handleSelectedFiltersChange, chartSelected, showLargeCountryPopin, closeLargeCountryPopinAndClearFilter,
-      filteredProjects, showEmptyProjects, onNoProjectsModalClose, showDataDownload, settings, toggleDataDownload
+      filteredProjects, showEmptyProjects, onNoProjectsModalClose, showDataDownload, settings, toggleDataDownload,
+      countriesMessage
     } = this.props;
     const { countries } = filters.countries;
     const { sectors } = filters.sectors;
@@ -119,15 +119,17 @@ class MapContainer extends Component {
     const { translations } = this.context;
     return (
       <div className="col-md-10 col-md-offset-2 map-wrapper">
-        {chartSelected !== DOWNLOAD_CHART && (<HorizontalFilters
+        {chartSelected !== DOWNLOAD_CHART && (
+        <HorizontalFilters
           selectedFilters={selectedFilters}
           filtersRestrictions={filtersRestrictions}
           handleSelectedFiltersChange={handleSelectedFiltersChange}
           chartSelected={chartSelected}
 
-        />)}
+        />
+        )}
         <MapHome filteredProjects={filteredProjects} countries={countries} />
-        <PopupOverlay show={showDataDownload} additionalClass={'data-container'}>
+        <PopupOverlay show={showDataDownload} additionalClass="data-container">
           <DataDownloadContainer
             selectedFilters={selectedFilters}
             filtersRestrictions={filtersRestrictions}
@@ -138,6 +140,7 @@ class MapContainer extends Component {
           />
         </PopupOverlay>
         <CountryPopupOverlay
+          countriesMessage={countriesMessage}
           show={showLargeCountryPopin}
           projects={filteredProjects}
           closeLargeCountryPopinAndClearFilter={closeLargeCountryPopinAndClearFilter}

@@ -10,13 +10,13 @@ export default class CountryPopupContainer extends Component {
   render() {
     const { translations } = this.context;
     const {
-      rows, closeLargeCountryPopinAndClearFilter, columnCount, countriesForExport, countriesForExportChanged, getExportData,
-      chartSelected
+      rows, closeLargeCountryPopinAndClearFilter,
+      columnCount, countriesForExport, countriesForExportChanged, getExportData,
+      chartSelected, countriesMessage
     } = this.props;
     return (
       <div>
-
-        <CountryPopupOverlayTitle />
+        <CountryPopupOverlayTitle countriesMessage={countriesMessage} />
         <CountryPopupExport
           closeLargeCountryPopinAndClearFilter={closeLargeCountryPopinAndClearFilter}
           onlyOneCountry={columnCount === 1}

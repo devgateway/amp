@@ -5,7 +5,9 @@ import PropTypes from 'prop-types';
 import Sidebar from './components/layout/sidebar/sidebar';
 import MapContainer from './components/layout/map/MapContainer';
 import { SSCTranslationContext } from './components/StartUp';
-import { DOWNLOAD_CHART, HOME_CHART, MODALITY_CHART, SECTORS_CHART } from './utils/constants';
+import {
+  DOWNLOAD_CHART, HOME_CHART, MODALITY_CHART, SECTORS_CHART
+} from './utils/constants';
 import { DONOR_COUNTRY, MODALITIES, PRIMARY_SECTOR } from './utils/FieldsConstants';
 import * as CallReports from './actions/callReports';
 
@@ -23,6 +25,7 @@ class SscDashboardHome extends Component {
       chartSelected: HOME_CHART,
       showEmptyProjects: false,
       showLargeCountryPopin: false,
+      countriesMessage: false,
       selectedFilters: {
         selectedYears: [],
         selectedCountries: [],
@@ -100,6 +103,15 @@ class SscDashboardHome extends Component {
     this.setState({ chartSelected });
     if (chartSelected !== SECTORS_CHART) {
       this.closeLargeCountryPopin();
+    }
+    if ((chartSelected === SECTORS_CHART || chartSelected === MODALITY_CHART)) {
+      this.setState((previousState) => {
+        if (previousState.selectedFilters.selectedCountries.length > 6) {
+          return ({ countriesMessage: true });
+        } else {
+          return null;
+        }
+      });
     }
     if (chartSelected !== DOWNLOAD_CHART) {
       this.setState({ showDataDownload: false });
@@ -225,7 +237,8 @@ class SscDashboardHome extends Component {
       showEmptyProjects,
       showLargeCountryPopin,
       countriesForExport,
-      showDataDownload
+      showDataDownload,
+      countriesMessage
     } = this.state;
     return (
       <>
@@ -239,7 +252,7 @@ class SscDashboardHome extends Component {
               handleSelectedFiltersChange={handleSelectedFiltersChange}
             />
             <MapContainer
-              showDataDownload={showDataDownload && ! showEmptyProjects}
+              showDataDownload={showDataDownload && !showEmptyProjects}
               toggleDataDownload={this.toggleDataDownload.bind(this)}
               chartSelected={chartSelected}
               selectedFilters={selectedFilters}
@@ -252,6 +265,7 @@ class SscDashboardHome extends Component {
               onNoProjectsModalClose={this.onNoProjectsModalClose.bind(this)}
               countriesForExport={countriesForExport}
               countriesForExportChanged={this.countriesForExportChanged.bind(this)}
+              countriesMessage={countriesMessage}
             />
           </div>
           <PrintDummy />

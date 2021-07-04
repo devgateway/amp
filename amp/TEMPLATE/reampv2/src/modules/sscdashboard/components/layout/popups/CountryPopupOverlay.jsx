@@ -9,7 +9,7 @@ class CountryPopupOverlay extends Component {
   render() {
     const {
       show, projects, closeLargeCountryPopinAndClearFilter, countriesForExport,
-      countriesForExportChanged, getExportData, chartSelected
+      countriesForExportChanged, getExportData, chartSelected, countriesMessage
     } = this.props;
     if (!show) {
       return null;
@@ -28,6 +28,7 @@ class CountryPopupOverlay extends Component {
       <div className={`country-popup-wrapper${columnCount === 1 ? '' : ` country${columnCount}`}`}>
         <div className="container-fluid">
           <CountryPopupContainer
+            countriesMessage={countriesMessage}
             rows={rows}
             columnCount={columnCount}
             closeLargeCountryPopinAndClearFilter={closeLargeCountryPopinAndClearFilter}

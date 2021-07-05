@@ -1,14 +1,26 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../popups.css';
-import { Alert } from 'react-bootstrap';
+import PropTypes from 'prop-types';
 
-const CountryPopupOverlayTitle = ({ countriesMessage }) => {
+const CountryPopupOverlayTitle = ({ countriesMessage, updateCountriesMessage }) => {
   const [show, setShow] = useState(countriesMessage);
   const style = {
     background: '#313d4f',
     color: 'white',
     'margin-bottom': '50px'
-  }
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (show) {
+        if (updateCountriesMessage) {
+          updateCountriesMessage(false);
+        }
+        setShow(false);
+      }
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, []);
   return (
     <div>
       {!show && (<h2>&nbsp;</h2>)}
@@ -25,3 +37,10 @@ const CountryPopupOverlayTitle = ({ countriesMessage }) => {
 };
 
 export default CountryPopupOverlayTitle;
+CountryPopupOverlayTitle.propTypes = {
+  countriesMessage: PropTypes.bool,
+  updateCountriesMessage: PropTypes.func.isRequired
+};
+CountryPopupOverlayTitle.defaultProps = {
+  countriesMessage: false
+}

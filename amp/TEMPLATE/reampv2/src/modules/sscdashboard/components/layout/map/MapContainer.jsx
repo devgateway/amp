@@ -104,7 +104,6 @@ class MapContainer extends Component {
     return exportData;
   }
 
-
   render() {
     const {
       filters, projects, countriesForExport, countriesForExportChanged, selectedFilters, filtersRestrictions,
@@ -119,15 +118,17 @@ class MapContainer extends Component {
     const { translations } = this.context;
     return (
       <div className="col-md-10 col-md-offset-2 map-wrapper">
-        {chartSelected !== DOWNLOAD_CHART && (<HorizontalFilters
+        {chartSelected !== DOWNLOAD_CHART && (
+        <HorizontalFilters
           selectedFilters={selectedFilters}
           filtersRestrictions={filtersRestrictions}
           handleSelectedFiltersChange={handleSelectedFiltersChange}
           chartSelected={chartSelected}
 
-        />)}
+        />
+        )}
         <MapHome filteredProjects={filteredProjects} countries={countries} />
-        <PopupOverlay show={showDataDownload} additionalClass={'data-container'}>
+        <PopupOverlay show={showDataDownload} additionalClass="data-container">
           <DataDownloadContainer
             selectedFilters={selectedFilters}
             filtersRestrictions={filtersRestrictions}
@@ -150,8 +151,9 @@ class MapContainer extends Component {
           getExportData={this.getExportData.bind(this)}
           chartSelected={chartSelected}
         />
-
-        <PopupOverlay show={showEmptyProjects}>
+        <PopupOverlay
+          show={showEmptyProjects}
+          additionalClass={chartSelected === DOWNLOAD_CHART ? 'data-container' : ''}>
           <SimplePopup
             message={translations['amp.ssc.dashboard:no-data']}
             onClose={onNoProjectsModalClose} />

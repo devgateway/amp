@@ -210,7 +210,11 @@ class SscDashboardHome extends Component {
   }
 
   render() {
-    const filtersRestrictions = { countriesWithData: this.countriesWithData };
+    const { projects } = this.props;
+    const filtersRestrictions = {
+      countriesWithData: this.countriesWithData,
+      mostRecentYear: projects.activities.mostRecentYear
+    };
 
     const handleSelectedFiltersChange = {
       handleSelectedModalityChanged: this.handleSelectedModalityChanged.bind(this),
@@ -239,7 +243,7 @@ class SscDashboardHome extends Component {
               handleSelectedFiltersChange={handleSelectedFiltersChange}
             />
             <MapContainer
-              showDataDownload={showDataDownload && ! showEmptyProjects}
+              showDataDownload={showDataDownload && !showEmptyProjects}
               toggleDataDownload={this.toggleDataDownload.bind(this)}
               chartSelected={chartSelected}
               selectedFilters={selectedFilters}

@@ -29,6 +29,8 @@ import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.listeners.NodeRemovalListener;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
+import static org.digijava.module.contentrepository.helper.CrConstants.PROPERTY_CM_DOCUMENT_TYPE;
+
 /**
  * @author Viorel Chihai
  *
@@ -259,7 +261,7 @@ public final class ContentRepositoryManager {
             QueryManager queryManager = session.getWorkspace().getQueryManager();
 
             Query query = queryManager.createQuery(String.format("SELECT * FROM nt:base WHERE %s IS NOT NULL "
-                    + "AND ampdoc:cmDocType IS NOT NULL "
+                    /*+ "AND " + PROPERTY_CM_DOCUMENT_TYPE + " IS NOT NULL "*/
                     + "AND jcr:path LIKE '/%s/%%/'", CrConstants.PROPERTY_CREATOR, path), Query.SQL);
             NodeIterator nodes = query.execute().getNodes();
             while (nodes.hasNext()) {

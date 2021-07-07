@@ -17,6 +17,7 @@ import ErrorMessage from './ErrorMessage';
 import {
   PROFILE_TAB, RUN_REPORT_NAME, SETTINGS_YEAR_RANGE
 } from '../utils/constants';
+import { setColumnsData, setHierarchiesData, setMeasuresData } from '../actions/mementoAction';
 
 class ReportGeneratorHome extends Component {
   constructor() {
@@ -26,7 +27,8 @@ class ReportGeneratorHome extends Component {
 
   componentDidMount() {
     const {
-      _getMetadata, _fetchReport, location, _updateProfile, _updateId, translations, _updateReportDetailsFundingGrouping
+      _getMetadata, _fetchReport, location, _updateProfile, _updateId, translations,
+      _updateReportDetailsFundingGrouping, _setColumnsData, _setMeasuresData, _setHierarchiesData
     } = this.props;
     // eslint-disable-next-line react/destructuring-assignment,react/prop-types
     const { id } = this.props.match.params;
@@ -41,6 +43,9 @@ class ReportGeneratorHome extends Component {
         if (action.payload) {
           return _getMetadata(action.payload.type, profile).then(() => {
             this.setState({ showChildren: true });
+            _setColumnsData(action.payload.columns.map(i => i.id));
+            _setMeasuresData(action.payload.measures.map(i => i.id));
+            _setHierarchiesData(action.payload.hierarchies.map(i => i.id));
             return _updateReportDetailsFundingGrouping(revertReportType(action.payload.type));
           });
         } else {
@@ -187,7 +192,10 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   _saveNew: (data) => saveNew(data),
   _save: (id, data) => save(id, data),
   _runReport: (data) => runReport(data),
-  _updateReportDetailsFundingGrouping: (data) => updateReportDetailsFundingGrouping(data)
+  _updateReportDetailsFundingGrouping: (data) => updateReportDetailsFundingGrouping(data),
+  _setColumnsData: (data) => setColumnsData(data),
+  _setHierarchiesData: (data) => setHierarchiesData(data),
+  _setMeasuresData: (data) => setMeasuresData(data),
 }, dispatch);
 
 ReportGeneratorHome.propTypes = {
@@ -205,6 +213,9 @@ ReportGeneratorHome.propTypes = {
   profile: PropTypes.string,
   layoutLoaded: PropTypes.bool,
   results: PropTypes.object,
+  _setColumnsData: PropTypes.func.isRequired,
+  _setMeasuresData: PropTypes.func.isRequired,
+  _setHierarchiesData: PropTypes.func.isRequired,
 };
 
 ReportGeneratorHome.defaultProps = {

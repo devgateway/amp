@@ -111,8 +111,14 @@ class ColumnsSection extends Component {
   }
 
   handleReset = () => {
-    const { _resetColumnsSelected } = this.props;
-    _resetColumnsSelected();
+    const {
+      _resetColumnsSelected, _updateColumnsSelected, id, initialColumns
+    } = this.props;
+    if (id) {
+      _updateColumnsSelected(initialColumns);
+    } else {
+      _resetColumnsSelected();
+    }
   }
 
   render() {
@@ -223,6 +229,8 @@ const mapStateToProps = (state) => ({
   hierarchiesOrder: state.uiReducer.hierarchies.order,
   selectedSummaryReport: state.uiReducer.reportDetails.selectedSummaryReport,
   profile: state.uiReducer.profile,
+  id: state.uiReducer.id,
+  initialColumns: state.mementoReducer.initialColumns,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -252,6 +260,8 @@ ColumnsSection.propTypes = {
   selectedSummaryReport: PropTypes.bool,
   _resetColumnsSelected: PropTypes.func.isRequired,
   profile: PropTypes.string,
+  id: PropTypes.number,
+  initialColumns: PropTypes.array,
 };
 
 ColumnsSection.defaultProps = {
@@ -261,7 +271,9 @@ ColumnsSection.defaultProps = {
   selectedHierarchies: [],
   hierarchiesOrder: [],
   selectedSummaryReport: false,
-  profile: undefined
+  profile: undefined,
+  id: undefined,
+  initialColumns: [],
 };
 
 ColumnsSection.contextType = ReportGeneratorContext;

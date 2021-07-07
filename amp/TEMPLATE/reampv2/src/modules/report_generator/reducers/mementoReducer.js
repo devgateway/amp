@@ -3,7 +3,7 @@ import {
 } from '../actions/mementoAction';
 
 const initialState = {
-  initialColumns: [],
+  columns: [],
   measures: [],
   hierarchies: [],
   filters: undefined,
@@ -26,7 +26,7 @@ export default (state = initialState, action) => {
     case SET_COLUMNS_DATA:
       return {
         ...state,
-        initialColumns: action.payload,
+        columns: action.payload,
       };
     case SET_HIERARCHIES_DATA:
       return {

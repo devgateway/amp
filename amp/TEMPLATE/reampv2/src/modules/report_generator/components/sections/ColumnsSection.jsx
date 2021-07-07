@@ -15,7 +15,7 @@ import {
   updateHierarchiesSelected,
   updateHierarchiesSorting,
   updateHierarchiesAvailable,
-  resetColumnsSelected
+  resetColumnsSelected, setInitialHierarchies
 } from '../../actions/stateUIActions';
 import ColumnSorter from './ColumnsSorter';
 import ErrorMessage from '../ErrorMessage';
@@ -113,10 +113,12 @@ class ColumnsSection extends Component {
 
   handleReset = () => {
     const {
-      _resetColumnsSelected, _updateColumnsSelected, id, initialColumns
+      _resetColumnsSelected, _updateColumnsSelected, id, initialColumns, _setInitialHierarchies, initialHierarchies
     } = this.props;
     if (id) {
       _updateColumnsSelected(Object.assign([], initialColumns));
+      const _hierarchies = { ...initialHierarchies };
+      _setInitialHierarchies([..._hierarchies.available], [..._hierarchies.selected], [..._hierarchies.order]);
     } else {
       _resetColumnsSelected();
     }
@@ -242,7 +244,8 @@ const mapStateToProps = (state) => ({
   selectedSummaryReport: state.uiReducer.reportDetails.selectedSummaryReport,
   profile: state.uiReducer.profile,
   id: state.uiReducer.id,
-  initialColumns: state.mementoReducer.initialColumns,
+  initialColumns: state.mementoReducer.columns,
+  initialHierarchies: state.mementoReducer.hierarchies,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -252,6 +255,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   _updateHierarchiesSorting: (data) => updateHierarchiesSorting(data),
   _updateHierarchiesAvailable: (data) => updateHierarchiesAvailable(data),
   _resetColumnsSelected: () => resetColumnsSelected(),
+  _setInitialHierarchies: (available, selected, order) => setInitialHierarchies(available, selected, order),
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ColumnsSection);
@@ -274,6 +278,8 @@ ColumnsSection.propTypes = {
   profile: PropTypes.string,
   id: PropTypes.number,
   initialColumns: PropTypes.array,
+  _setInitialHierarchies: PropTypes.func.isRequired,
+  initialHierarchies: PropTypes.array,
 };
 
 ColumnsSection.defaultProps = {
@@ -286,6 +292,7 @@ ColumnsSection.defaultProps = {
   profile: undefined,
   id: undefined,
   initialColumns: [],
+  initialHierarchies: [],
 };
 
 ColumnsSection.contextType = ReportGeneratorContext;

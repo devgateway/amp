@@ -76,8 +76,7 @@ class ReportGeneratorHome extends Component {
             this.setState({ showChildren: true });
 
             _setColumnsData((Object.assign([], action.payload.columns)).map(i => i.id));
-            _setMeasuresData(action.payload.measures.map(i => i.id));
-            _setHierarchiesData(action.payload.hierarchies.map(i => i.id));
+            _setMeasuresData(([ ...action.payload.measures ]));
 
             // Load hierarchies into Redux's state.
             const _hierarchies = data.payload.columns
@@ -97,6 +96,11 @@ class ReportGeneratorHome extends Component {
             }
             const selected = action.payload.hierarchies.map(i => i.id);
             _setInitialHierarchies(_hierarchies, selected, _hierarchiesOrder);
+            _setHierarchiesData({
+              available: [..._hierarchies],
+              selected: [...selected],
+              order: [..._hierarchiesOrder]
+            });
             return _updateReportDetailsFundingGrouping(revertReportType(action.payload.type));
           });
         } else {

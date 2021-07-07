@@ -149,7 +149,7 @@ class DataDownloadContainer extends Component {
     if (countries.length > 0 && filtersRestrictions.countriesWithData.length > 0) {
       countries = countries.filter(c => filtersRestrictions.countriesWithData.includes(c.id));
     }
-    generateYearsFilters(years, settings);
+    generateYearsFilters(years, settings, filtersRestrictions.mostRecentYear);
     return (
       <div className="data-download-wrapper">
 

@@ -37,11 +37,15 @@ export const fetchApiData = ({ body, url, headers }) => new Promise((resolve, re
 // TODO to move api route to a constant.
 export function loadTranslations(trnPack) {
   return new Promise((resolve) => fetch('/rest/translations/label-translations', getRequestOptions(trnPack))
-    .then(response => response.json())
-    .then(data => {
-      if (data.error) {
-        throw new Error(data.error);
-      }
-      return resolve(data);
+    .then(response => {
+        let contentType = response.headers.get("content-type");
+        if (contentType && contentType.indexOf("application/json") !== -1) {
+            return response.json().then(data => {
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                return resolve(data);
+            });
+        }
     }));
 }

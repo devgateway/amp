@@ -12,7 +12,9 @@ export const UPDATE_REPORT_DETAILS_ALLOW_EMPTY_FUNDING_COLUMNS = 'UPDATE_REPORT_
 export const UPDATE_REPORT_DETAILS_SPLIT_BY_FUNDING = 'UPDATE_REPORT_DETAILS_SPLIT_BY_FUNDING';
 export const UPDATE_REPORT_DETAILS_SHOW_ORIGINAL_CURRENCIES = 'UPDATE_REPORT_DETAILS_SHOW_ORIGINAL_CURRENCIES';
 export const UPDATE_REPORT_DETAILS_DESCRIPTION = 'UPDATE_REPORT_DETAILS_DESCRIPTION';
+export const UPDATE_REPORT_DETAILS_NAME_MULTILANG = 'UPDATE_REPORT_DETAILS_NAME_MULTILANG';
 export const UPDATE_REPORT_DETAILS_NAME = 'UPDATE_REPORT_DETAILS_NAME';
+export const REVERT_REPORT_DETAILS_NAME = 'REVERT_REPORT_DETAILS_NAME';
 export const UPDATE_REPORT_DETAILS_ALSO_SHOW_PLEDGES = 'UPDATE_REPORT_DETAILS_ALSO_SHOW_PLEDGES';
 export const UPDATE_REPORT_DETAILS_USE_ABOVE_FILTERS = 'UPDATE_REPORT_DETAILS_USE_ABOVE_FILTERS';
 export const UPDATE_REPORT_DETAILS_REPORT_CATEGORY = 'UPDATE_REPORT_DETAILS_REPORT_CATEGORY';
@@ -25,6 +27,7 @@ export const RESET_MEASURES_SELECTED_COLUMN = 'RESET_MEASURES_SELECTED_COLUMN';
 export const UPDATE_HIERARCHIES_SORT_COLUMN = 'UPDATE_HIERARCHIES_SORT_COLUMN';
 export const UPDATE_HIERARCHIES_SELECTED_COLUMN = 'UPDATE_HIERARCHIES_SELECTED_COLUMN';
 export const UPDATE_HIERARCHIES_LIST = 'UPDATE_HIERARCHIES_LIST';
+export const SET_INITIAL_HIERARCHIES = 'SET_INITIAL_HIERARCHIES';
 export const UPDATE_APPLIED_FILTERS = 'UPDATE_APPLIED_FILTERS';
 export const UPDATE_APPLIED_SETTINGS = 'UPDATE_APPLIED_SETTINGS';
 export const UPDATE_PROFILE = 'UPDATE_PROFILE';
@@ -112,10 +115,25 @@ export function updateReportDetailsDescription(payload) {
   };
 }
 
+export function updateReportDetailsNameMultiLang(payload, lang) {
+  return {
+    type: UPDATE_REPORT_DETAILS_NAME_MULTILANG,
+    payload,
+    lang
+  };
+}
+
 export function updateReportDetailsName(payload) {
   return {
     type: UPDATE_REPORT_DETAILS_NAME,
-    payload
+    payload,
+  };
+}
+
+export function revertReportDetailsName(payload) {
+  return {
+    type: REVERT_REPORT_DETAILS_NAME,
+    payload,
   };
 }
 
@@ -164,6 +182,15 @@ export function updateHierarchiesSorting(payload) {
   return {
     type: UPDATE_HIERARCHIES_SORT_COLUMN,
     payload
+  };
+}
+
+export function setInitialHierarchies(available, selected, order) {
+  return {
+    type: SET_INITIAL_HIERARCHIES,
+    available,
+    selected,
+    order,
   };
 }
 

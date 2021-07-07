@@ -93,6 +93,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
+import static org.digijava.kernel.ampapi.endpoints.common.EPConstants.REPORT_TYPE_ID_MAP;
 import static org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil.getCachedReportData;
 
 @Path("data")
@@ -286,16 +287,21 @@ public class Reports {
     @ApiOperation("Render a report preview in HTML format.")
     public final String getReportResult(
             @ApiParam("a JSON object with the report's parameters") ReportFormParameters formParams) {
-        ReportSpecificationImpl spec = new ReportSpecificationImpl("preview report", ArConstants.DONOR_TYPE);
+        int reportType = ArConstants.DONOR_TYPE;
+        if (formParams.getReportType() != null) {
+            reportType = REPORT_TYPE_ID_MAP.get(formParams.getReportType());
+        }
+        ReportSpecificationImpl spec = new ReportSpecificationImpl("preview report", reportType);
+        spec.setSummaryReport(Boolean.TRUE.equals(formParams.getSummary()));
         String groupingOption = formParams.getGroupingOption();
         ReportsUtil.setGroupingCriteria(spec, groupingOption);
         ReportsUtil.update(spec, formParams);
         SettingsUtils.applySettings(spec, formParams.getSettings(), true);
         FilterUtils.applyFilterRules(formParams.getFilters(), spec, null);
         GeneratedReport report = EndpointUtils.runReport(spec);
-        SaikuReportHtmlRenderer htmlRenederer = new SaikuReportHtmlRenderer(report);
+        SaikuReportHtmlRenderer htmlRenderer = new SaikuReportHtmlRenderer(report);
 
-        return htmlRenederer.renderTable().toString();
+        return htmlRenderer.renderTable().toString();
     }
 
     /**

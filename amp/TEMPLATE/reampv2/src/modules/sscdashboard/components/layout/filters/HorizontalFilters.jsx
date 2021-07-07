@@ -60,7 +60,7 @@ class HorizontalFilters extends Component {
       handleSelectedSectorChanged,
       handleSelectedModalityChanged
     } = handleSelectedFiltersChange;
-    generateYearsFilters(years, settings);
+    generateYearsFilters(years, settings, filtersRestrictions.mostRecentYear);
     const additionalCss = chartSelected === DOWNLOAD_CHART ? ' disable-filter' : '';
     return (
       <div className="h-filter-wrapper">
@@ -75,41 +75,45 @@ class HorizontalFilters extends Component {
               />
             </div>
             <div
-              className="col-md-2 country-year-search-wrapper first-element dropdown"
+              className="col-md-6 country-year-search-wrapper first-element dropdown"
               id="country-accordion-filter">
-              <MultiSelectionDropDown
-                options={countries}
-                filterName="amp.ssc.dashboard:search-by-country"
-                filterId="ddCountryCarousel"
-                parentId="country-accordion-filter"
-                categoryFetcher={getCategoryForCountry}
-                sortData
-                categoriesSelection={categoriesSelection}
-                selectedOptions={selectedCountries}
-                onChange={handleSelectedCountryChanged}
-                disabled={chartSelected === DOWNLOAD_CHART}
-              />
-            </div>
-            <div className="col-md-2 country-year-search-wrapper dropdown" id="country-accordion-filter">
-              <MultiSelectionDropDown
-                options={years}
-                selectedOptions={selectedYears}
-                filterName="amp.ssc.dashboard:search-by-year"
-                filterId="ddYearCarousel"
-                parentId="country-accordion-filter"
-                onChange={handleSelectedYearChanged}
-                disabled={chartSelected === DOWNLOAD_CHART}
-              />
-
-            </div>
-            <div className={`reset col-md-2${additionalCss}`}>
-              <div>
-                <button
-                  className="btn btn-primary"
-                  type="button"
-                  onClick={this.clearFilters.bind(this)}>
-                  {translations['amp.ssc.dashboard:reset']}
-                </button>
+              <div className="wide-dropdown">
+                <MultiSelectionDropDown
+                  options={countries}
+                  filterName="amp.ssc.dashboard:search-by-country"
+                  filterId="ddCountryCarousel"
+                  parentId="country-accordion-filter"
+                  categoryFetcher={getCategoryForCountry}
+                  sortData
+                  categoriesSelection={categoriesSelection}
+                  selectedOptions={selectedCountries}
+                  onChange={handleSelectedCountryChanged}
+                  selectionLimit={6}
+                  disabled={chartSelected === DOWNLOAD_CHART}
+                />
+              </div>
+              <div className="wide-dropdown">
+                <MultiSelectionDropDown
+                  options={years}
+                  selectedOptions={selectedYears}
+                  filterName="amp.ssc.dashboard:search-by-year"
+                  filterId="ddYearCarousel"
+                  parentId="country-accordion-filter"
+                  onChange={handleSelectedYearChanged}
+                  disabled={chartSelected === DOWNLOAD_CHART}
+                />
+              </div>
+              <div className="wide-dropdown">
+                <div
+                  className={`horizontal-filter dropdown panel ${chartSelected === DOWNLOAD_CHART
+                    ? ' disable-filter' : ''}`}>
+                  <button
+                    className="reset btn btn-primary"
+                    type="button"
+                    onClick={this.clearFilters.bind(this)}>
+                    {translations['amp.ssc.dashboard:reset']}
+                  </button>
+                </div>
               </div>
             </div>
           </div>

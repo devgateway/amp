@@ -32,6 +32,7 @@ import org.digijava.kernel.ampapi.endpoints.geocoding.GeoCoderEndpoint;
 import org.digijava.kernel.ampapi.endpoints.gpi.GPIErrors;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorErrors;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRulesErrors;
+import org.digijava.kernel.ampapi.endpoints.reports.designer.ReportDesignerErrors;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportErrors;
 import org.digijava.kernel.ampapi.endpoints.resource.ResourceErrors;
 import org.digijava.kernel.ampapi.endpoints.security.SecurityErrors;
@@ -65,6 +66,7 @@ public class ApiError {
     public static final int ERROR_CLASS_PERFORMANCERULE_ID = 15;
     public static final int ERROR_CLASS_MACHINE_TRANSLATION_ID = 16;
     public static final int ERROR_CLASS_GEO_CODER_ID = 17;
+    public static final int ERROR_CLASS_REPORT_DESIGNER_ID = 18;
 
     public static final int ERROR_CLASS_TEST_ID = 99;
 
@@ -78,6 +80,7 @@ public class ApiError {
         put("Resource Errors", ResourceErrors.class);
         put("Security Errors", SecurityErrors.class);
         put("Report Errors", ReportErrors.class);
+        put("Report Designer Errors", ReportDesignerErrors.class);
         put("Currency Errors", CurrencyErrors.class);
         put("Dashboard Errors", DashboardErrors.class);
         put("Indicator Errors", IndicatorErrors.class);

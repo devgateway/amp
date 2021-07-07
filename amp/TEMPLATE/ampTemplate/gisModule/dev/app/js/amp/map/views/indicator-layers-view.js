@@ -86,7 +86,7 @@ module.exports = Backbone.View.extend({
 			  // only add it to the map if is still selected.      
 			  if (layer.get('selected')) {
 				  self.map.addLayer(loadedLayer);
-				  if (loadedLayer.bringToBack) {
+				  if (loadedLayer.bringToBack && layerType !== 'wms') {
 					  loadedLayer.bringToBack();
 					  //TODO: drs, very dirty way of hiding boundaries so they don't hijack click events
 					  // I need to pull out boundaries into own view.
@@ -205,13 +205,7 @@ module.exports = Backbone.View.extend({
   },
 
   getNewWMSLayer: function(layer) {
-    return L.tileLayer.wms(layer.get('link'), {
-      layers: layer.get('layer'),
-      // TODO: should these details be obtained from the API?
-      format: 'image/png',
-      transparent: true,
-      opacity: 0.75
-    });
+      return layer.wmsLayer;
   },
 
   getNewArcGISLayer: function(layer) {

@@ -188,10 +188,12 @@ public class EditActivity extends Action {
 
     EditActivityForm eaForm = (EditActivityForm) form; // form bean instance
 
-    Long activityId = null;
-    activityId = eaForm.getActivityId();
-    Long actIdParam = null;
-    if(request.getParameter("ampActivityId")!=null) actIdParam = new Long(request.getParameter("ampActivityId"));
+      Long activityId = null;
+      activityId = eaForm.getActivityId();
+      Long actIdParam = null;
+      if (StringUtils.isNumeric(request.getParameter("ampActivityId"))) {
+          actIdParam = new Long(request.getParameter("ampActivityId"));
+      }
     if(actIdParam != null && actIdParam !=0L )
         activityId=actIdParam;
     eaForm.setWarningMessges(new ArrayList<String>());

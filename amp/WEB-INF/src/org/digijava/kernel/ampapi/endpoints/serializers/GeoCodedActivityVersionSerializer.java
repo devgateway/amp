@@ -4,16 +4,16 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import org.apache.log4j.Logger;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
+import org.digijava.module.translation.exotic.AmpDateFormatter;
+import org.digijava.module.translation.exotic.AmpDateFormatterFactory;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 
 /**
  * GeoCoded Activity json serializer
@@ -21,8 +21,6 @@ import java.text.SimpleDateFormat;
  * @author Viorel Chihai
  */
 public class GeoCodedActivityVersionSerializer extends JsonSerializer<AmpActivityVersion> {
-
-    private SimpleDateFormat dateFormat = new SimpleDateFormat(EPConstants.ISO8601_DATE_FORMAT);
 
     private static Logger logger = Logger.getLogger(GeoCodedActivityVersionSerializer.class);
 
@@ -36,8 +34,7 @@ public class GeoCodedActivityVersionSerializer extends JsonSerializer<AmpActivit
         jgen.writeNumberField("activity_id", activity.getAmpActivityId());
         jgen.writeStringField("project_title", activity.getName());
         jgen.writeStringField("amp_id", activity.getAmpId());
-        jgen.writeStringField("updated_date",
-                DateTimeUtil.formatISO8601DateTimestamp(activity.getUpdatedDate(), false));
+        jgen.writeStringField("updated_date", getDefaultDateFormatter().format(activity.getUpdatedDate()));
         try {
             jgen.writeStringField("description", DbUtil.getEditorBody(site, activity.getDescription(), lang));
         } catch (EditorException e) {
@@ -49,6 +46,10 @@ public class GeoCodedActivityVersionSerializer extends JsonSerializer<AmpActivit
     @Override
     public boolean isUnwrappingSerializer() {
         return true;
+    }
+
+    public AmpDateFormatter getDefaultDateFormatter() {
+        return AmpDateFormatterFactory.getLocalizedFormatter(DateTimeUtil.getGlobalPattern());
     }
 
 }

@@ -9,7 +9,7 @@ import AlertError from "./AlertError";
 import ActivityTableHeader from "../table/ActivityTableHeader";
 import {selectActivitiesForGeocoding} from "../../../actions/activitiesAction";
 
-const ProjectList = ({title}) => <h3>{title}</h3>;
+const ProjectList = ({title}) => <div className={'geocoder-title'}>{title}</div>;
 
 class GeocoderPanel extends Component {
 

@@ -39,6 +39,10 @@ class ActivityTable extends Component {
             paginationSize: 15,
             hideSizePerPage: true,
             showTotal: true,
+            prePageTitle: translations['amp.geocoder:paginationNextPageTitle'],
+            nextPageTitle: translations['amp.geocoder:paginationPrevPageTitle'],
+            firstPageTitle: translations['amp.geocoder:paginationFirstPageTitle'],
+            lastPageTitle: translations['amp.geocoder:paginationLastPageTitle'],
             paginationTotalRenderer: (from, to, size) => PaginationTotal(from, to, size, translations)
         };
 

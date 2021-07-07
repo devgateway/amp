@@ -60,16 +60,16 @@ public final class SscDashboardService {
             Long proposedStartDate = null;
             for (ReportOutputColumn cell : columns) {
                 ReportCell c = row.get(cell);
-                if (cell.columnName.equals(ColumnConstants.PROJECT_TITLE)) {
+                if (cell.originalColumnName.equals(ColumnConstants.PROJECT_TITLE)) {
                     r.setActivity(c.displayedValue);
                 } else {
-                    if (cell.columnName.equals(ColumnConstants.PRIMARY_SECTOR)) {
+                    if (cell.originalColumnName.equals(ColumnConstants.PRIMARY_SECTOR)) {
                         r.setSector(c.displayedValue);
                     } else {
-                        if (cell.columnName.equals(ColumnConstants.SSC_MODALITIES)) {
+                        if (cell.originalColumnName.equals(ColumnConstants.SSC_MODALITIES)) {
                             r.setModality(c.displayedValue);
                         } else {
-                            if (cell.columnName.equals(ColumnConstants.DONOR_COUNTRY)) {
+                            if (cell.originalColumnName.equals(ColumnConstants.DONOR_COUNTRY)) {
                                 r.setCountry(c.displayedValue);
                             } else {
 

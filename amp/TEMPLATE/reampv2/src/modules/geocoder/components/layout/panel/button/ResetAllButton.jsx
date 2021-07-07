@@ -47,7 +47,8 @@ class ResetAllButton extends Component {
 
         return (
             <>
-                <Button variant="primary" onClick={this.handleShow} disabled={!isEnabled}>
+                <Button variant="primary"  className={'pull-right'}
+                        onClick={this.handleShow} disabled={!isEnabled}>
                     {this.props.title}
                 </Button>
 

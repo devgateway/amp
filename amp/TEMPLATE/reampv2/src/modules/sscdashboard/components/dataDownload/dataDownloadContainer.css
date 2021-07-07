@@ -99,7 +99,7 @@
     height: 360px;
     width: 848px;
     background: #FFFFFF;
-    margin-top: 20px;
+    margin-top: 50px;
 }
 
 .data-download-wrapper .export-wrapper {
@@ -124,10 +124,6 @@
 
 .download-content .horizontal-filter .filter-list .well {
     padding: 10px 30px;
-}
-
-.download-content .autocomplete-box {
-    width: 480px;
 }
 
 .data-link {

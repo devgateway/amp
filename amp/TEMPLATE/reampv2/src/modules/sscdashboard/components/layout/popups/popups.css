@@ -7,6 +7,9 @@
     top: 145px;
     width: inherit;
 }
+.country-popup-wrapper.data-container{
+    top: 86px;
+}
 
 .country-popup-wrapper > .container-fluid {
     font-family: 'Montserrat', "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;

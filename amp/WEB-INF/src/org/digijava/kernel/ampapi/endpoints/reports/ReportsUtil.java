@@ -196,6 +196,7 @@ public class ReportsUtil {
         
         processRawValues(formParams);
         result.setReportWarnings(cachedReportData.report.reportWarnings);
+        result.setId(reportId);
         
         return result;
     }
@@ -936,7 +937,7 @@ public class ReportsUtil {
     }
 
     public static AmpReports getAmpReportFromSession(Integer reportToken) {
-        MaxSizeLinkedHashMap<Integer, AmpReports> reportsList = (MaxSizeLinkedHashMap<Integer, AmpReports>) TLSUtils.getRequest().getSession().getAttribute("reportStack");
+        MaxSizeLinkedHashMap<Integer, AmpReports> reportsList = TLSUtils.getReportStack();
         if (reportsList == null) {
             throw new WebApplicationException(Response.Status.NO_CONTENT);
         }

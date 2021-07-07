@@ -101,6 +101,12 @@ class SscDashboardHome extends Component {
     if (chartSelected !== SECTORS_CHART) {
       this.closeLargeCountryPopin();
     }
+    if (chartSelected === SECTORS_CHART || chartSelected === MODALITY_CHART) {
+      const { selectedFilters } = this.state;
+      if (selectedFilters.selectedCountries.length > 0) {
+        this.openLargeCountryPopin();
+      }
+    }
     if (chartSelected !== DOWNLOAD_CHART) {
       this.setState({ showDataDownload: false });
     }
@@ -201,6 +207,10 @@ class SscDashboardHome extends Component {
     this.handleSelectedCountryChanged([]);
   }
 
+  openLargeCountryPopin() {
+    this.setState({ showLargeCountryPopin: true });
+  }
+
   closeLargeCountryPopin() {
     this.setState({ showLargeCountryPopin: false });
   }
@@ -239,7 +249,7 @@ class SscDashboardHome extends Component {
               handleSelectedFiltersChange={handleSelectedFiltersChange}
             />
             <MapContainer
-              showDataDownload={showDataDownload && ! showEmptyProjects}
+              showDataDownload={showDataDownload && !showEmptyProjects}
               toggleDataDownload={this.toggleDataDownload.bind(this)}
               chartSelected={chartSelected}
               selectedFilters={selectedFilters}

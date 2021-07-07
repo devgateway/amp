@@ -250,7 +250,11 @@ class SscDashboardHome extends Component {
   }
 
   render() {
-    const filtersRestrictions = { countriesWithData: this.countriesWithData };
+    const { projects } = this.props;
+    const filtersRestrictions = {
+      countriesWithData: this.countriesWithData,
+      mostRecentYear: projects.activities.mostRecentYear
+    };
 
     const handleSelectedFiltersChange = {
       handleSelectedModalityChanged: this.handleSelectedModalityChanged.bind(this),

@@ -58,9 +58,12 @@ public class ReportOptionProvider {
     );
 
     public static final List<ReportOptionConfiguration> MANAGEMENT_OR_REPORT_PROFILE_OPTIONS = ImmutableList.of(
-        new ReportOptionConfiguration("split-by-funding", "Split by funding"),
-        new ReportOptionConfiguration("show-original-currency", "Show Original reporting currencies",
-                "This feature will show each transaction in the currency originally reported in the AMP.")
+        new ReportOptionConfiguration("split-by-funding", "Split by funding")
+    );
+
+    public static final List<ReportOptionConfiguration> PLEDGES_PROFILE_OPTIONS = ImmutableList.of(
+            new ReportOptionConfiguration("show-original-currency", "Show Original reporting currencies",
+                    "This feature will show each transaction in the currency originally reported in the AMP.")
     );
 
     public static final List<ReportOptionConfiguration> MANAGEMENT_OPTIONS = ImmutableList.of(
@@ -108,7 +111,10 @@ public class ReportOptionProvider {
                 .map(r -> getOptionFromConfiguration(r))
                 .collect(Collectors.toList()));
 
-        options.addAll(getManagementOrReportProfileOptions());
+        options.addAll(getPledgesProfileOptions());
+        if (!reportType.isPledge()) {
+            options.addAll(getManagementOrReportProfileOptions());
+        }
 
         if (isCurrentMemberManager()) {
             options.addAll(getManagementOptions());
@@ -127,6 +133,7 @@ public class ReportOptionProvider {
 
         if (isCurrentMemberManager()) {
             options.addAll(getManagementOptions());
+            options.addAll(getPledgesProfileOptions());
             options.addAll(getManagementOrReportProfileOptions());
         }
         options.addAll(getAllProfileOptions());
@@ -136,6 +143,12 @@ public class ReportOptionProvider {
 
     private List<ReportOption> getManagementOrReportProfileOptions() {
         return MANAGEMENT_OR_REPORT_PROFILE_OPTIONS.stream()
+                .map(r -> getOptionFromConfiguration(r))
+                .collect(Collectors.toList());
+    }
+
+    private List<ReportOption> getPledgesProfileOptions() {
+        return PLEDGES_PROFILE_OPTIONS.stream()
                 .map(r -> getOptionFromConfiguration(r))
                 .collect(Collectors.toList());
     }

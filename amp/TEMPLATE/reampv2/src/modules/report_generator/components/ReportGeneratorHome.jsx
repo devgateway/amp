@@ -8,16 +8,25 @@ import MainHeader from './MainHeader';
 import MainContent from './MainContent';
 import FiltersAndSettings from './FiltersAndSettings';
 import {
-  getMetadata, fetchReport, updateProfile, updateId, saveNew, save, runReport, updateReportDetailsFundingGrouping
+  getMetadata,
+  fetchReport,
+  updateProfile,
+  updateId,
+  saveNew,
+  save,
+  runReport,
+  updateReportDetailsFundingGrouping,
+  setInitialHierarchies
 } from '../actions/stateUIActions';
 import {
   convertTotalGrouping, getProfileFromReport, translate, hasFilters, convertReportType, revertReportType
 } from '../utils/Utils';
 import ErrorMessage from './ErrorMessage';
 import {
-  PROFILE_TAB, RUN_REPORT_NAME, SETTINGS_YEAR_RANGE
+  PROFILE_TAB, RUN_REPORT_NAME, SETTINGS_YEAR_RANGE, TYPE_PLEDGE
 } from '../utils/constants';
 import { setColumnsData, setHierarchiesData, setMeasuresData } from '../actions/mementoAction';
+import { fetchLanguages } from '../actions/languagesActions';
 
 class ReportGeneratorHome extends Component {
   constructor() {
@@ -28,12 +37,34 @@ class ReportGeneratorHome extends Component {
   componentDidMount() {
     const {
       _getMetadata, _fetchReport, location, _updateProfile, _updateId, translations,
-      _updateReportDetailsFundingGrouping, _setColumnsData, _setMeasuresData, _setHierarchiesData
+      _updateReportDetailsFundingGrouping, _setColumnsData, _setMeasuresData, _setHierarchiesData,
+      _setInitialHierarchies, _fetchLanguages
     } = this.props;
+    _fetchLanguages();
     // eslint-disable-next-line react/destructuring-assignment,react/prop-types
     const { id } = this.props.match.params;
     const typeFromURL = new URLSearchParams(location.search).get('type');
     const profileFromURL = new URLSearchParams(location.search).get('profile');
+
+    // TODO: remove this parameter (and section) once we finish testing.
+    const showOldReportGenerator = new URLSearchParams(location.search).get('showOldReportGenerator');
+    if (showOldReportGenerator === 'true') {
+      if (id) {
+        if (typeFromURL === TYPE_PLEDGE) {
+          window.open(`/reportWizard.do?editReportId=${id}&type=5`);
+        } else {
+          window.open(`/reportWizard.do?editReportId=${id}&type=1`);
+        }
+      } else {
+        // eslint-disable-next-line no-lonely-if
+        if (typeFromURL === TYPE_PLEDGE) {
+          window.open('/reportWizard.do?tabs=false&reset=true&type=5');
+        } else {
+          window.open('/reportWizard.do?tabs=false&reset=true&type=1');
+        }
+      }
+    }
+
     // If this is a saved report then ignore type and profile params from the URL.
     if (id) {
       _updateId(id);
@@ -41,11 +72,31 @@ class ReportGeneratorHome extends Component {
         const profile = getProfileFromReport(action.payload);
         _updateProfile(profile);
         if (action.payload) {
-          return _getMetadata(action.payload.type, profile).then(() => {
+          return _getMetadata(action.payload.type, profile).then((data) => {
             this.setState({ showChildren: true });
+
             _setColumnsData(action.payload.columns.map(i => i.id));
             _setMeasuresData(action.payload.measures.map(i => i.id));
             _setHierarchiesData(action.payload.hierarchies.map(i => i.id));
+
+            // Load hierarchies into Redux's state.
+            const _hierarchies = data.payload.columns
+              .filter(i => action.payload.columns.find(j => j.id === i.id))
+              .filter(i => i.hierarchy);
+            let _hierarchiesOrder = action.payload.hierarchies;
+            if (_hierarchiesOrder.length !== _hierarchies.length) {
+              _hierarchiesOrder = [];
+              action.payload.hierarchies.forEach(i => {
+                _hierarchiesOrder.push(i.id);
+              });
+              _hierarchies.forEach(i => {
+                if (!_hierarchiesOrder.find(j => j === i.id)) {
+                  _hierarchiesOrder.push(i.id);
+                }
+              });
+            }
+            const selected = action.payload.hierarchies.map(i => i.id);
+            _setInitialHierarchies(_hierarchies, selected, _hierarchiesOrder);
             return _updateReportDetailsFundingGrouping(revertReportType(action.payload.type));
           });
         } else {
@@ -196,6 +247,8 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   _setColumnsData: (data) => setColumnsData(data),
   _setHierarchiesData: (data) => setHierarchiesData(data),
   _setMeasuresData: (data) => setMeasuresData(data),
+  _setInitialHierarchies: (available, selected, order) => setInitialHierarchies(available, selected, order),
+  _fetchLanguages: () => fetchLanguages(),
 }, dispatch);
 
 ReportGeneratorHome.propTypes = {
@@ -216,6 +269,8 @@ ReportGeneratorHome.propTypes = {
   _setColumnsData: PropTypes.func.isRequired,
   _setMeasuresData: PropTypes.func.isRequired,
   _setHierarchiesData: PropTypes.func.isRequired,
+  _setInitialHierarchies: PropTypes.func.isRequired,
+  _fetchLanguages: PropTypes.func.isRequired,
 };
 
 ReportGeneratorHome.defaultProps = {

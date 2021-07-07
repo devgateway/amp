@@ -5,6 +5,7 @@ import previewReducer from './previewReducer';
 import settingsReducer from './settingsReducer';
 import layoutReducer from './layoutReducer';
 import mementoReducer from './mementoReducer';
+import languagesReducer from './languagesReducer';
 
 export default combineReducers({
   translationsReducer,
@@ -12,5 +13,6 @@ export default combineReducers({
   previewReducer,
   settingsReducer,
   layoutReducer,
-  mementoReducer
+  mementoReducer,
+  languagesReducer
 });

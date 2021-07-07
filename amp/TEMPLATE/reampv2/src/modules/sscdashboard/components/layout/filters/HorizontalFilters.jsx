@@ -60,7 +60,7 @@ class HorizontalFilters extends Component {
       handleSelectedSectorChanged,
       handleSelectedModalityChanged
     } = handleSelectedFiltersChange;
-    generateYearsFilters(years, settings);
+    generateYearsFilters(years, settings, filtersRestrictions.mostRecentYear);
     const additionalCss = chartSelected === DOWNLOAD_CHART ? ' disable-filter' : '';
     return (
       <div className="h-filter-wrapper">

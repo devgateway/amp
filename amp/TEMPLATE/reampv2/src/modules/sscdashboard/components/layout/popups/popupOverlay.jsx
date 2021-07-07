@@ -1,7 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './popups.css';
-import PropTypes from "prop-types";
-import CountryPopupOverlay from "./CountryPopupOverlay";
+import PropTypes from 'prop-types';
 
 const PopupOverlay = ({ additionalClass, show, children }) => {
   if (!show) {
@@ -14,12 +13,13 @@ const PopupOverlay = ({ additionalClass, show, children }) => {
       </div>
     </div>
   );
-}
+};
 export default PopupOverlay;
 PopupOverlay.propTypes = {
   show: PropTypes.bool.isRequired,
-  additionalClass: PropTypes.string
-}
+  additionalClass: PropTypes.string,
+  children: PropTypes.object.isRequired
+};
 PopupOverlay.defaultProps = {
   additionalClass: ''
-}
+};

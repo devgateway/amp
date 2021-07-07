@@ -154,8 +154,9 @@ class MapContainer extends Component {
           getExportData={this.getExportData.bind(this)}
           chartSelected={chartSelected}
         />
-
-        <PopupOverlay show={showEmptyProjects}>
+        <PopupOverlay
+          show={showEmptyProjects}
+          additionalClass={chartSelected === DOWNLOAD_CHART ? 'data-container' : ''}>
           <SimplePopup
             message={translations['amp.ssc.dashboard:no-data']}
             onClose={onNoProjectsModalClose} />

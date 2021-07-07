@@ -161,33 +161,6 @@ public class ResourceService {
         return nodeUuids;
     }
 
-    public List<String> getPrivateUuids() {
-        return getUuidsFromPath("private");
-    }
-
-    private List<String> getTeamUuids() {
-        return getUuidsFromPath("team");
-    }
-
-    private List<String> getUuidsFromPath(String path) {
-        Session session = DocumentManagerUtil.getReadSession(TLSUtils.getRequest());
-        List<String> uuids = new ArrayList<>();
-        try {
-            QueryManager queryManager = session.getWorkspace().getQueryManager();
-            Query query = queryManager.createQuery(String.format("SELECT * FROM nt:base WHERE %s "
-                    + "IS NOT NULL AND " + CrConstants.PROPERTY_CONTENT_TYPE + " IS NOT NULL "
-                    + "AND jcr:path LIKE '/%s/%%/'", CrConstants.PROPERTY_CREATOR, path), Query.SQL);
-            NodeIterator nodes = query.execute().getNodes();
-            while (nodes.hasNext()) {
-                uuids.add(nodes.nextNode().getIdentifier());
-            }
-        } catch (RepositoryException e) {
-            throw new RuntimeException(e);
-        }
-
-        return uuids;
-    }
-
     public List<String> getPrivateUuidsCreatedInIATI() {
         return getPrivateUuidsCreatedInClient(ClientMode.IATI_IMPORTER);
     }

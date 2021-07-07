@@ -36,6 +36,7 @@ class Settings extends Component {
       isPopup: true,
       definitionUrl: settingsURL
     });
+
     // eslint-disable-next-line react/no-string-refs
     widget.setElement(this.refs.settingsPopup);
     widget.on('applySettings', this.applySettings);

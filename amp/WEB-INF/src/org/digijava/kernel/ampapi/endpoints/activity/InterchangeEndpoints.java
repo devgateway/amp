@@ -148,12 +148,17 @@ public class InterchangeEndpoints {
             response = Collections.emptyMap();
         } else {
             ActivityUtil.loadWorkspacePrefixesIntoRequest();
-            List<APIField> apiFields = AmpFieldsEnumerator.getEnumerator().getActivityFields();
+
+            // Load an enumerator for each FM template (AMPOFFLINE-1562)
+            List<APIField> mergedList = new ArrayList<>();
+            AmpFieldsEnumerator.getAllEnumerators().forEach((i, item) -> {
+                mergedList.addAll(item.getActivityFields());
+            });
 
             response = fields.stream()
                     .filter(Objects::nonNull)
                     .distinct()
-                    .collect(toMap(identity(), fieldName -> InterchangeUtils.possibleValuesFor(fieldName, apiFields)));
+                    .collect(toMap(identity(), fieldName -> InterchangeUtils.possibleValuesFor(fieldName, mergedList)));
         }
         MediaType responseType = MediaType.APPLICATION_JSON_TYPE;
         if (AmpMediaType.POSSIBLE_VALUES_V2_JSON.equals(ApiCompat.getRequestedMediaType())) {

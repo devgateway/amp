@@ -1,7 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.reports.designer;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
@@ -9,7 +8,6 @@ import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.reports.converters.AmpARFilterConverter;
 import org.dgfoundation.amp.reports.converters.AmpReportFiltersConverter;
-import org.digijava.kernel.ampapi.endpoints.activity.DefaultTranslatedFieldReader;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.common.AMPTranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
@@ -55,9 +53,9 @@ import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
+import org.digijava.module.translation.util.MultilingualInputFieldValues;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -475,10 +473,9 @@ public class ReportManager {
         boolean isMultilingual = TranslationSettings.getCurrent().isMultilingual();
         Map<String, String> translations = new HashMap<>();
         if (isMultilingual) {
-            DefaultTranslatedFieldReader reader = new DefaultTranslatedFieldReader();
-            Field nameField = FieldUtils.getField(AmpReports.class, "name", true);
-            translations = (Map<String, String>)
-                    reader.get(nameField, AmpReports.class, ampReport.getName(), ampReport);
+            MultilingualInputFieldValues mifv = new MultilingualInputFieldValues(AmpReports.class, 
+                    ampReport.getAmpReportId(), "name", null, null);
+            translations = mifv.getTranslations();
         }
 
         return MultilingualContent.build(isMultilingual, ampReport.getName(), translations);

@@ -60,7 +60,7 @@ class HorizontalFilters extends Component {
       handleSelectedSectorChanged,
       handleSelectedModalityChanged
     } = handleSelectedFiltersChange;
-    generateYearsFilters(years, settings);
+    generateYearsFilters(years, settings, filtersRestrictions.mostRecentYear);
     const additionalCss = chartSelected === DOWNLOAD_CHART ? ' disable-filter' : '';
     return (
       <div className="h-filter-wrapper">
@@ -88,6 +88,7 @@ class HorizontalFilters extends Component {
                   categoriesSelection={categoriesSelection}
                   selectedOptions={selectedCountries}
                   onChange={handleSelectedCountryChanged}
+                  selectionLimit={6}
                   disabled={chartSelected === DOWNLOAD_CHART}
                 />
               </div>
@@ -103,14 +104,18 @@ class HorizontalFilters extends Component {
                 />
               </div>
               <div className="wide-dropdown">
-                <button
-                  className="btn btn-primary"
-                  type="button"
-                  onClick={this.clearFilters.bind(this)}>
-                  {translations['amp.ssc.dashboard:reset']}
-                </button>
+                <div
+                  className={`horizontal-filter dropdown panel ${chartSelected === DOWNLOAD_CHART
+                    ? ' disable-filter' : ''}`}>
+                  <button
+                    className="reset btn btn-primary"
+                    type="button"
+                    onClick={this.clearFilters.bind(this)}>
+                    {translations['amp.ssc.dashboard:reset']}
+                  </button>
+                </div>
               </div>
-          </div>
+            </div>
           </div>
         )}
         {chartSelected === HOME_CHART

@@ -24,8 +24,10 @@ class MultiSelectionDropDown extends Component {
 
   onChange(e) {
     const ipSelectedFilter = parseInt(e.target.value, 10);
-    const { selectedOptions, onChange } = this.props;
-    onChange(calculateUpdatedValuesForDropDowns(ipSelectedFilter, selectedOptions));
+    const { selectedOptions, onChange, selectionLimit } = this.props;
+    if (selectionLimit === 0 || selectedOptions.length < selectionLimit || selectedOptions.includes(ipSelectedFilter)) {
+      onChange(calculateUpdatedValuesForDropDowns(ipSelectedFilter, selectedOptions));
+    }
   }
 
   onDropdownVisible(isVisible) {
@@ -130,14 +132,26 @@ class MultiSelectionDropDown extends Component {
     && chartName === chartSelected ? true : !parentId;
   }
 
+  getActualWidth(inputText) {
+    const font = '14px Montserrat \'Open Sans\'';
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    context.font = font;
+    const { width } = context.measureText(inputText);
+    const formattedWidth = Math.ceil(width);
+    return formattedWidth;
+  }
+
   render() {
     const { translations } = this.context;
     const onChangeNew = this.onChange.bind(this);
     const { searchText } = this.state;
     const {
       categoriesSelection, categoryFetcher, chartName, chartSelected, onChangeChartSelected, parentId, filterId,
-      filterName, label, disabled
+      filterName, label, disabled, selectionLimit
     } = this.props;
+    const textWidth = this.getActualWidth(`${translations['amp.ssc.dashboard:select-all']
+    } | ${translations['amp.ssc.dashboard:select-none']}`);
     const SelectAll = () => (
       <>
         <span className="select-all all">
@@ -175,7 +189,8 @@ class MultiSelectionDropDown extends Component {
       </>
     );
     const showQuickSelectionLinks = parentId !== null;
-    const showSelectAll = true;
+    const showSelectAll = selectionLimit === 0;
+    const showSelectNone = selectionLimit === 0;
     return (
       <div className={`horizontal-filter dropdown panel ${disabled ? ' disable-filter' : ''}`}>
         {parentId
@@ -190,7 +205,9 @@ class MultiSelectionDropDown extends Component {
             aria-controls={filterId}
             onClick={() => (onChangeChartSelected && chartName
             !== chartSelected ? onChangeChartSelected(chartName) : false)}>
+            <span className="filterName">
             {translations[filterName]}
+              </span>
             {' '}
             {(!label) && (
               <span
@@ -207,7 +224,7 @@ class MultiSelectionDropDown extends Component {
             <div className="well">
               <div className="row autocomplete">
                 {!showQuickSelectionLinks && (
-                  <div className="col-md-3">
+                  <div className={`col-md-${textWidth < 110 ? '3' : '5'}`}>
                     <div className="select-all-none">
                       <SelectAll />
                       <SelectNone />
@@ -226,7 +243,7 @@ class MultiSelectionDropDown extends Component {
                   </div>
                 </div>
                 {!showQuickSelectionLinks && (
-                  <div className="col-md-3" />
+                  <div className={`col-md-${textWidth < 110 ? '3' : '1'}`} />
                 )}
               </div>
               {showQuickSelectionLinks
@@ -236,8 +253,10 @@ class MultiSelectionDropDown extends Component {
                   && (
                     <SelectAll />
                   )}
-                  <SelectNone />
-
+                  {showSelectAll
+                  && (
+                    <SelectNone />
+                  )}
                   {categoryFetcher && categoriesSelection && categoriesSelection.map((category, idx) => {
                     const { id, name, tooltip } = category;
                     return (
@@ -273,8 +292,8 @@ class MultiSelectionDropDown extends Component {
                   && (
                     <span
                       className="select-count">
-              {`${translations[label]} (${this.getSelectedCount()}/${this.getOptionsCount()})`}
-                </span>
+                      {`${translations[label]} (${this.getSelectedCount()}/${this.getOptionsCount()})`}
+                    </span>
                   )}
                 </div>
 
@@ -291,8 +310,8 @@ class MultiSelectionDropDown extends Component {
                   && (
                     <span
                       className="select-count">
-              {`${translations[label]} (${this.getOptionsCount() - this.getSelectedCount()})`}
-                </span>
+                      {`${translations[label]} (${this.getOptionsCount() - this.getSelectedCount()})`}
+                    </span>
                   )}
                 </div>
                 <div className="well-inner filter-list-inner">
@@ -325,7 +344,8 @@ MultiSelectionDropDown.propTypes = {
   chartSelected: PropTypes.string,
   chartName: PropTypes.string,
   filterName: PropTypes.string.isRequired,
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
+  selectionLimit: PropTypes.number
 };
 
 MultiSelectionDropDown.defaultProps = {
@@ -338,6 +358,7 @@ MultiSelectionDropDown.defaultProps = {
   onChangeChartSelected: null,
   chartSelected: null,
   label: null,
-  disabled: false
+  disabled: false,
+  selectionLimit: 0
 };
 export default MultiSelectionDropDown;

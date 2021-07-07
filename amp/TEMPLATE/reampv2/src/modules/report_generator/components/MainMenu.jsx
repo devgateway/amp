@@ -54,7 +54,7 @@ class MainMenu extends Component {
     } = this.state;
     const {
       translations, tab, saveNewReport, saveReport, loaded, results, runReport, id, options,
-      columns, measures, hierarchies, reportDetails, profile, runReportPending
+      columns, measures, hierarchies, reportDetails, profile, runReportPending, reportSaving
     } = this.props;
     return (
       <>
@@ -79,10 +79,12 @@ class MainMenu extends Component {
               />
           {loaded && results.logged ? (
             <Item className="save_buttons_item">
-              <Button color="green" onClick={() => this.setSaveModalOpen(true, false)} disabled={!id}>
+              <Button color="green" onClick={() => this.setSaveModalOpen(true, false)} 
+                      disabled={!id || reportSaving}>
                 {translate('save', profile, translations)}
               </Button>
-              <Button color="orange" onClick={() => this.setSaveModalOpen(true, true)}>
+              <Button color="orange" onClick={() => this.setSaveModalOpen(true, true)} 
+                      disabled={reportSaving}>
                 {translate('saveAs', profile, translations)}
               </Button>
             </Item>
@@ -128,6 +130,7 @@ const mapStateToProps = state => ({
   hierarchies: state.uiReducer.hierarchies,
   profile: state.uiReducer.profile,
   runReportPending: state.uiReducer.runReportPending,
+  reportSaving: state.uiReducer.reportSaving,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -154,6 +157,7 @@ MainMenu.propTypes = {
   hierarchies: PropTypes.object,
   profile: PropTypes.string,
   runReportPending: PropTypes.bool.isRequired,
+  reportSaving: PropTypes.bool
 };
 
 MainMenu.defaultProps = {
@@ -165,5 +169,6 @@ MainMenu.defaultProps = {
   columns: undefined,
   measures: undefined,
   hierarchies: undefined,
-  profile: undefined
+  profile: undefined,
+  reportSaving: false,
 };

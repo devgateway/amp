@@ -22,7 +22,7 @@ import {
   UPDATE_REPORT_DETAILS_ALSO_SHOW_PLEDGES,
   FETCH_REPORT_PENDING,
   FETCH_REPORT_ERROR,
-  UPDATE_REPORT_DETAILS_NAME,
+  UPDATE_REPORT_DETAILS_NAME_MULTILANG,
   UPDATE_REPORT_DETAILS_REPORT_CATEGORY,
   UPDATE_APPLIED_FILTERS,
   UPDATE_APPLIED_SETTINGS,
@@ -37,7 +37,10 @@ import {
   SAVE_REPORT_ERROR,
   RUN_REPORT_PENDING,
   RUN_REPORT_SUCCESS,
-  RUN_REPORT_ERROR, SET_INITIAL_HIERARCHIES,
+  RUN_REPORT_ERROR,
+  SET_INITIAL_HIERARCHIES,
+  UPDATE_REPORT_DETAILS_NAME,
+  REVERT_REPORT_DETAILS_NAME,
 } from '../actions/stateUIActions';
 import {
   convertReportDetails
@@ -172,12 +175,31 @@ export default (state = initialState, action) => {
           description: action.payload
         }
       };
+    case UPDATE_REPORT_DETAILS_NAME_MULTILANG:
+      return {
+        ...state,
+        reportDetails: {
+          ...state.reportDetails,
+          name: {
+            ...state.reportDetails.name,
+            [action.lang]: action.payload,
+          }
+        }
+      };
     case UPDATE_REPORT_DETAILS_NAME:
       return {
         ...state,
         reportDetails: {
           ...state.reportDetails,
-          name: action.payload
+          name: action.payload,
+        }
+      };
+    case REVERT_REPORT_DETAILS_NAME:
+      return {
+        ...state,
+        reportDetails: {
+          ...state.reportDetails,
+          name: action.payload,
         }
       };
     case UPDATE_REPORT_DETAILS_REPORT_CATEGORY:

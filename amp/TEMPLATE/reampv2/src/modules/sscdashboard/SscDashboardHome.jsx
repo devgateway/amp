@@ -5,7 +5,9 @@ import PropTypes from 'prop-types';
 import Sidebar from './components/layout/sidebar/sidebar';
 import MapContainer from './components/layout/map/MapContainer';
 import { SSCTranslationContext } from './components/StartUp';
-import { DOWNLOAD_CHART, HOME_CHART, MODALITY_CHART, SECTORS_CHART } from './utils/constants';
+import {
+  DOWNLOAD_CHART, HOME_CHART, MODALITY_CHART, SECTORS_CHART
+} from './utils/constants';
 import { DONOR_COUNTRY, MODALITIES, PRIMARY_SECTOR } from './utils/FieldsConstants';
 import * as CallReports from './actions/callReports';
 
@@ -23,6 +25,7 @@ class SscDashboardHome extends Component {
       chartSelected: HOME_CHART,
       showEmptyProjects: false,
       showLargeCountryPopin: false,
+      countriesMessage: false,
       selectedFilters: {
         selectedYears: [],
         selectedCountries: [],
@@ -100,6 +103,35 @@ class SscDashboardHome extends Component {
     this.setState({ chartSelected });
     if (chartSelected !== SECTORS_CHART) {
       this.closeLargeCountryPopin();
+    }
+    if ((chartSelected === SECTORS_CHART || chartSelected === MODALITY_CHART)) {
+      this.setState((previousState) => {
+        if (previousState.selectedFilters.selectedCountries.length > 0) {
+          this.openLargeCountryPopin();
+        }
+        if (previousState.selectedFilters.selectedCountries.length > 6) {
+          // select only the first 6
+          console.log(this.countriesWithData);
+          return ({ countriesMessage: true });
+        } else {
+          return ({ countriesMessage: false });
+        }
+      }, () => {
+        const { filters } = this.props;
+        const { selectedFilters } = this.state;
+        const newSelectedCountries = filters.countries.countries.filter(
+          c => selectedFilters.selectedCountries.includes(c.id)
+        ).sort((a, b) => {
+          if (a.name < b.name) {
+            return -1;
+          }
+          if (a.name > b.name) {
+            return 1;
+          }
+          return 0;
+        }).slice(0, 6).map(c => c.id);
+        this.handleSelectedCountryChanged(newSelectedCountries);
+      });
     }
     if (chartSelected !== DOWNLOAD_CHART) {
       this.setState({ showDataDownload: false });
@@ -185,6 +217,10 @@ class SscDashboardHome extends Component {
     });
   }
 
+  updateCountriesMessage(show) {
+    this.setState({ countriesMessage: show });
+  }
+
   countriesForExportChanged(countries) {
     this.setState({ countriesForExport: countries });
   }
@@ -199,6 +235,10 @@ class SscDashboardHome extends Component {
 
   closeLargeCountryPopinAndClearFilter() {
     this.handleSelectedCountryChanged([]);
+  }
+
+  openLargeCountryPopin() {
+    this.setState({ showLargeCountryPopin: true });
   }
 
   closeLargeCountryPopin() {
@@ -225,7 +265,8 @@ class SscDashboardHome extends Component {
       showEmptyProjects,
       showLargeCountryPopin,
       countriesForExport,
-      showDataDownload
+      showDataDownload,
+      countriesMessage
     } = this.state;
     return (
       <>
@@ -239,7 +280,7 @@ class SscDashboardHome extends Component {
               handleSelectedFiltersChange={handleSelectedFiltersChange}
             />
             <MapContainer
-              showDataDownload={showDataDownload && ! showEmptyProjects}
+              showDataDownload={showDataDownload && !showEmptyProjects}
               toggleDataDownload={this.toggleDataDownload.bind(this)}
               chartSelected={chartSelected}
               selectedFilters={selectedFilters}
@@ -252,6 +293,8 @@ class SscDashboardHome extends Component {
               onNoProjectsModalClose={this.onNoProjectsModalClose.bind(this)}
               countriesForExport={countriesForExport}
               countriesForExportChanged={this.countriesForExportChanged.bind(this)}
+              countriesMessage={countriesMessage}
+              updateCountriesMessage={this.updateCountriesMessage.bind(this)}
             />
           </div>
           <PrintDummy />
@@ -294,6 +337,7 @@ SscDashboardHome.propTypes = {
   loadCountriesFilters_: PropTypes.func.isRequired,
   loadModalitiesFilters_: PropTypes.func.isRequired,
   loadActivitiesDetails_: PropTypes.func.isRequired,
+  filters: PropTypes.object.isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SscDashboardHome);

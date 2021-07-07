@@ -36,14 +36,17 @@ class Settings extends Component {
       isPopup: true,
       definitionUrl: settingsURL
     });
-    if (settings === null) {
-      _fetchGlobalSettings(settingsURL).then((action) => {
+
+    _fetchGlobalSettings(settingsURL).then((action) => {
+      if (settings === null) {
         const gs = extractSettings(action.payload, action.payload2);
         return widget.restoreFromSaved(gs);
-      });
-    } else {
-      widget.restoreFromSaved(settings);
-    }
+      } else {
+        widget.restoreFromSaved(settings);
+        return true;
+      }
+    });
+
     // eslint-disable-next-line react/no-string-refs
     widget.setElement(this.refs.settingsPopup);
     widget.on('applySettings', this.applySettings);

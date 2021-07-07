@@ -37,20 +37,20 @@ class Settings extends Component {
       definitionUrl: settingsURL
     });
 
+    // eslint-disable-next-line react/no-string-refs
+    widget.setElement(this.refs.settingsPopup);
+    widget.on('applySettings', this.applySettings);
+    widget.on('close', this.hideSettings);
     _fetchGlobalSettings(settingsURL).then((action) => {
       if (settings === null) {
         const gs = extractSettings(action.payload, action.payload2);
         return widget.restoreFromSaved(gs);
       } else {
         widget.restoreFromSaved(settings);
-        return true;
+        // eslint-disable-next-line react/no-did-mount-set-state
+        this.setState({ changed: true });
       }
     });
-
-    // eslint-disable-next-line react/no-string-refs
-    widget.setElement(this.refs.settingsPopup);
-    widget.on('applySettings', this.applySettings);
-    widget.on('close', this.hideSettings);
   }
 
   componentWillUnmount() {

@@ -76,7 +76,7 @@ class ReportGeneratorHome extends Component {
             this.setState({ showChildren: true });
 
             _setColumnsData((Object.assign([], action.payload.columns)).map(i => i.id));
-            _setMeasuresData(([ ...action.payload.measures ]));
+            _setMeasuresData(([...action.payload.measures]));
 
             // Load hierarchies into Redux's state.
             const _hierarchies = data.payload.columns

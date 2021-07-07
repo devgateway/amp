@@ -116,7 +116,7 @@ class ColumnsSection extends Component {
       _resetColumnsSelected, _updateColumnsSelected, id, initialColumns
     } = this.props;
     if (id) {
-      _updateColumnsSelected(initialColumns);
+      _updateColumnsSelected(Object.assign([], initialColumns));
     } else {
       _resetColumnsSelected();
     }

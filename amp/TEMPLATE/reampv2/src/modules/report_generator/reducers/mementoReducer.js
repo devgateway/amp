@@ -24,7 +24,6 @@ export default (state = initialState, action) => {
       };
     }
     case SET_COLUMNS_DATA:
-      debugger
       return {
         ...state,
         initialColumns: action.payload,

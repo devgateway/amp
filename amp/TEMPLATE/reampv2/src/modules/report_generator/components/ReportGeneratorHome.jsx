@@ -75,7 +75,7 @@ class ReportGeneratorHome extends Component {
           return _getMetadata(action.payload.type, profile).then((data) => {
             this.setState({ showChildren: true });
 
-            _setColumnsData(action.payload.columns.map(i => i.id));
+            _setColumnsData((Object.assign([], action.payload.columns)).map(i => i.id));
             _setMeasuresData(action.payload.measures.map(i => i.id));
             _setHierarchiesData(action.payload.hierarchies.map(i => i.id));
 

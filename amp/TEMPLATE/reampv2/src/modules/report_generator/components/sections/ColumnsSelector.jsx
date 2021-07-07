@@ -46,7 +46,7 @@ export default class ColumnsSelector extends Component {
     event.preventDefault();
   }
 
-  // eslint-disable-next-line class-methods-use-this
+  // eslint-disable-next-line class-methods-use-this,react/sort-comp
   extractCategories(columns) {
     const categories = new Set();
     columns.forEach(item => {
@@ -55,9 +55,14 @@ export default class ColumnsSelector extends Component {
     return Array.from(categories);
   }
 
+  accordionActive = (activeIndex, i) => {
+    const { openSections } = this.props;
+    return activeIndex.includes(i) || openSections;
+  }
+
   render() {
     const {
-      columns, showLoadingWhenEmpty, selected, radio, noCategories
+      columns, showLoadingWhenEmpty, selected, radio, noCategories,
     } = this.props;
     const { activeIndex } = this.state;
     if (columns.length > 0) {
@@ -72,7 +77,10 @@ export default class ColumnsSelector extends Component {
                 const isChecked = subSelectedList.length === subList.length;
                 return (
                   <div key={Math.random()}>
-                    <Accordion.Title index={i} active={activeIndex.includes(i)} onClick={this.handleHeaderClick}>
+                    <Accordion.Title
+                      index={i}
+                      active={this.accordionActive(activeIndex, i)}
+                      onClick={this.handleHeaderClick}>
                       <div className={`ui checkbox general-checkbox${!isChecked && subSelectedList.length > 0 ? ' partial' : ''}`}>
                         <input
                           className="hidden"
@@ -89,7 +97,7 @@ export default class ColumnsSelector extends Component {
                         {`${cat} (${subSelectedList.length}/${subList.length})`}
                       </span>
                     </Accordion.Title>
-                    <Accordion.Content active={activeIndex.includes(i)}>
+                    <Accordion.Content active={this.accordionActive(activeIndex, i)}>
                       {subList.map(col => (
                         <div className="column-item" key={Math.random()}>
                           <Checkbox
@@ -154,6 +162,7 @@ ColumnsSelector.propTypes = {
   showLoadingWhenEmpty: PropTypes.bool,
   radio: PropTypes.bool,
   noCategories: PropTypes.bool,
+  openSections: PropTypes.bool,
 };
 
 ColumnsSelector.defaultProps = {
@@ -161,5 +170,6 @@ ColumnsSelector.defaultProps = {
   selected: [],
   showLoadingWhenEmpty: false,
   radio: false,
-  noCategories: false
+  noCategories: false,
+  openSections: false,
 };

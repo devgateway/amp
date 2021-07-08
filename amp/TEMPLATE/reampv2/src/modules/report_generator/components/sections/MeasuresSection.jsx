@@ -112,7 +112,7 @@ class MeasuresSection extends Component {
           <Grid.Column computer="8" tablet="16">
             <OptionsList
               title={translate('availableFinancialMeasures', profile, translations)}
-              tooltip="tooltip 1"
+              tooltip={translate('availableMeasuresTooltip', profile, translations)}
               isRequired
               className="smallHeight">
               <ColumnsSelector
@@ -127,7 +127,7 @@ class MeasuresSection extends Component {
             <OptionsList
               className="smallHeight"
               title={translate('orderSelectedFinancialMeasures', profile, translations)}
-              tooltip="tooltip 1" >
+              tooltip={translate('selectedMeasuresTooltip', profile, translations)} >
               <ColumnSorter
                 keyPrefix="measures"
                 translations={translations}

@@ -208,9 +208,10 @@ export function updateMeasuresSorting(payload) {
   };
 }
 
-export function resetMeasuresSelected() {
+export function resetMeasuresSelected(payload) {
   return {
-    type: RESET_MEASURES_SELECTED_COLUMN
+    type: RESET_MEASURES_SELECTED_COLUMN,
+    payload
   };
 }
 

@@ -25,6 +25,7 @@ import ErrorMessage from './ErrorMessage';
 import {
   PROFILE_TAB, RUN_REPORT_NAME, SETTINGS_YEAR_RANGE, TYPE_PLEDGE
 } from '../utils/constants';
+import { setColumnsData, setHierarchiesData, setMeasuresData } from '../actions/mementoAction';
 import { fetchLanguages } from '../actions/languagesActions';
 
 class ReportGeneratorHome extends Component {
@@ -36,7 +37,8 @@ class ReportGeneratorHome extends Component {
   componentDidMount() {
     const {
       _getMetadata, _fetchReport, location, _updateProfile, _updateId, translations,
-      _updateReportDetailsFundingGrouping, _setInitialHierarchies, _fetchLanguages
+      _updateReportDetailsFundingGrouping, _setColumnsData, _setMeasuresData, _setHierarchiesData,
+      _setInitialHierarchies, _fetchLanguages
     } = this.props;
     _fetchLanguages();
     // eslint-disable-next-line react/destructuring-assignment,react/prop-types
@@ -73,6 +75,9 @@ class ReportGeneratorHome extends Component {
           return _getMetadata(action.payload.type, profile).then((data) => {
             this.setState({ showChildren: true });
 
+            _setColumnsData((Object.assign([], action.payload.columns)).map(i => i.id));
+            _setMeasuresData(([...action.payload.measures]));
+
             // Load hierarchies into Redux's state.
             const _hierarchies = data.payload.columns
               .filter(i => action.payload.columns.find(j => j.id === i.id))
@@ -91,7 +96,11 @@ class ReportGeneratorHome extends Component {
             }
             const selected = action.payload.hierarchies.map(i => i.id);
             _setInitialHierarchies(_hierarchies, selected, _hierarchiesOrder);
-
+            _setHierarchiesData({
+              available: [..._hierarchies],
+              selected: [...selected],
+              order: [..._hierarchiesOrder]
+            });
             return _updateReportDetailsFundingGrouping(revertReportType(action.payload.type));
           });
         } else {
@@ -239,6 +248,9 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   _save: (id, data) => save(id, data),
   _runReport: (data) => runReport(data),
   _updateReportDetailsFundingGrouping: (data) => updateReportDetailsFundingGrouping(data),
+  _setColumnsData: (data) => setColumnsData(data),
+  _setHierarchiesData: (data) => setHierarchiesData(data),
+  _setMeasuresData: (data) => setMeasuresData(data),
   _setInitialHierarchies: (available, selected, order) => setInitialHierarchies(available, selected, order),
   _fetchLanguages: () => fetchLanguages(),
 }, dispatch);
@@ -258,6 +270,9 @@ ReportGeneratorHome.propTypes = {
   profile: PropTypes.string,
   layoutLoaded: PropTypes.bool,
   results: PropTypes.object,
+  _setColumnsData: PropTypes.func.isRequired,
+  _setMeasuresData: PropTypes.func.isRequired,
+  _setHierarchiesData: PropTypes.func.isRequired,
   _setInitialHierarchies: PropTypes.func.isRequired,
   _fetchLanguages: PropTypes.func.isRequired,
 };

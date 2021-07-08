@@ -293,8 +293,8 @@ export default (state = initialState, action) => {
         ...state,
         measures: {
           ...state.measures,
-          selected: [],
-          order: [],
+          selected: action.payload.selected,
+          order: action.payload.order,
         }
       };
     case UPDATE_APPLIED_FILTERS:

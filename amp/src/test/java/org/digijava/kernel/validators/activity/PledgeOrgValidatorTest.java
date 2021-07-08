@@ -1,15 +1,5 @@
 package org.digijava.kernel.validators.activity;
 
-import static org.digijava.kernel.validators.ValidatorUtil.filter;
-import static org.digijava.kernel.validators.activity.ValidatorMatchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.emptyIterable;
-import static org.hamcrest.Matchers.hasEntry;
-import static org.junit.Assert.assertThat;
-
-import java.util.Set;
-
 import com.google.common.collect.ImmutableSet;
 import org.dgfoundation.amp.activity.builder.ActivityBuilder;
 import org.dgfoundation.amp.activity.builder.FundingBuilder;
@@ -24,14 +14,33 @@ import org.digijava.kernel.validators.ValidatorUtil;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.hamcrest.Matcher;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+
+import java.util.Set;
+
+import static org.digijava.kernel.validators.ValidatorUtil.filter;
+import static org.digijava.kernel.validators.activity.ValidatorMatchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.emptyIterable;
+import static org.hamcrest.Matchers.hasEntry;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Octavian Ciubotaru
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({FeaturesUtil.class})
 public class PledgeOrgValidatorTest {
 
     private static APIField activityField;
@@ -39,9 +48,10 @@ public class PledgeOrgValidatorTest {
     private static InMemoryOrganisationManager organisationManager;
     private static InMemoryCategoryValuesManager categoryValues;
 
-    @BeforeClass
-    public static void setUp() {
+    @Before
+    public void setUp() {
         TransactionUtil.setUpWorkspaceEmptyPrefixes();
+        PowerMockito.mockStatic(FeaturesUtil.class);
         activityField = ValidatorUtil.getMetaData();
 
         organisationManager = InMemoryOrganisationManager.getInstance();
@@ -155,7 +165,7 @@ public class PledgeOrgValidatorTest {
                                 .getTransaction())
                         .getFunding())
                 .getActivity();
-
+        mockValidation();
         Set<ConstraintViolation> violations = getConstraintViolations(activity);
 
         assertThat(violations, containsInAnyOrder(
@@ -165,6 +175,10 @@ public class PledgeOrgValidatorTest {
                 violation(
                         organisationManager.getBelgiumGroup().getAmpOrgGrpId(),
                         usaidPledge.getId())));
+    }
+
+    private void mockValidation() {
+        when(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.MAPPING_DESTINATION_PROGRAM)).thenReturn(null);
     }
 
     @Test

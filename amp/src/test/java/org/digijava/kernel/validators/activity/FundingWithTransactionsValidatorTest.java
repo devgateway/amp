@@ -15,7 +15,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.hamcrest.Matcher;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
@@ -42,8 +42,8 @@ public class FundingWithTransactionsValidatorTest {
     private static APIField activityField;
     private static InMemoryCategoryValuesManager categoryValues;
 
-    @BeforeClass
-    public static void setUp() {
+    @Before
+    public void setUp() {
         TransactionUtil.setUpWorkspaceEmptyPrefixes();
         PowerMockito.mockStatic(FeaturesUtil.class);
         activityField = ValidatorUtil.getMetaData();
@@ -62,7 +62,10 @@ public class FundingWithTransactionsValidatorTest {
     }
 
     @Test
-    public void testBothFieldsRequired() {
+        public void testBothFieldsRequired() {
+
+        mockValidation();
+
         AmpActivityVersion activity = new ActivityBuilder()
                 .addFunding(new FundingBuilder()
                         .addTransaction(new TransactionBuilder()
@@ -70,8 +73,6 @@ public class FundingWithTransactionsValidatorTest {
                                 .getTransaction())
                         .getFunding())
                 .getActivity();
-
-        mockValidation();
 
         Set<ConstraintViolation> violations = getConstraintViolations(activity);
 

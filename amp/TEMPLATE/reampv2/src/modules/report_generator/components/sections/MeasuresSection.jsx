@@ -77,8 +77,15 @@ class MeasuresSection extends Component {
   }
 
   handleReset = () => {
-    const { _resetMeasuresSelected } = this.props;
-    _resetMeasuresSelected();
+    const { _resetMeasuresSelected, id, initialMeasures } = this.props;
+    if (id) {
+      _resetMeasuresSelected({
+        selected: [...initialMeasures].map(i => i.id),
+        order: [...initialMeasures].map(i => i.id)
+      });
+    } else {
+      _resetMeasuresSelected({ selected: [], order: [] });
+    }
   }
 
   render() {
@@ -164,12 +171,14 @@ const mapStateToProps = (state) => ({
   selectedMeasures: state.uiReducer.measures.selected,
   measuresOrder: state.uiReducer.measures.order,
   profile: state.uiReducer.profile,
+  id: state.uiReducer.id,
+  initialMeasures: state.mementoReducer.measures,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   _updateMeasuresSelected: (data) => updateMeasuresSelected(data),
   _updateMeasuresSorting: (data) => updateMeasuresSorting(data),
-  _resetMeasuresSelected: () => resetMeasuresSelected,
+  _resetMeasuresSelected: (selected, order) => resetMeasuresSelected(selected, order),
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MeasuresSection);
@@ -184,13 +193,17 @@ MeasuresSection.propTypes = {
   _updateMeasuresSorting: PropTypes.func.isRequired,
   _resetMeasuresSelected: PropTypes.func.isRequired,
   profile: PropTypes.string,
+  id: PropTypes.number,
+  initialMeasures: PropTypes.array,
 };
 
 MeasuresSection.defaultProps = {
   measures: [],
   selectedMeasures: [],
   measuresOrder: [],
-  profile: undefined
+  profile: undefined,
+  id: undefined,
+  initialMeasures: [],
 };
 
 MeasuresSection.contextType = ReportGeneratorContext;

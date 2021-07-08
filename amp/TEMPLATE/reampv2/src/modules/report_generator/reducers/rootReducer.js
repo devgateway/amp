@@ -4,6 +4,7 @@ import uiReducer from './stateUIReducer';
 import previewReducer from './previewReducer';
 import settingsReducer from './settingsReducer';
 import layoutReducer from './layoutReducer';
+import mementoReducer from './mementoReducer';
 import languagesReducer from './languagesReducer';
 
 export default combineReducers({
@@ -12,5 +13,6 @@ export default combineReducers({
   previewReducer,
   settingsReducer,
   layoutReducer,
+  mementoReducer,
   languagesReducer
 });

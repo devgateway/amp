@@ -85,6 +85,8 @@ class SaveModal extends Component {
         closeIcon={false}
         open={open}
         onClose={() => this.handleCancel()}
+        centered
+        size="small"
       >
         <Header content={isNewReport
           ? translate('saveAs', profile, translations)

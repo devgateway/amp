@@ -9,7 +9,18 @@ export default class MultiLingualInputText extends Component {
     } = this.props;
     if (isMultiLanguage) {
       const panes = [];
-      languages.forEach((item, i) => {
+      let _languages = [];
+      if (mandatory && mandatory.length === 1) {
+        _languages.push(languages.find(i => i.id === mandatory[0]));
+        languages.forEach(i => {
+          if (!_languages.find(j => j.id === i.id)) {
+            _languages.push(i);
+          }
+        });
+      } else {
+        _languages = languages;
+      }
+      _languages.forEach((item, i) => {
         panes.push({
           menuItem: (
             mandatory.find(j => j === item.id) ? (

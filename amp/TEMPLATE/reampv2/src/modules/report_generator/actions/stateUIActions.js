@@ -29,6 +29,7 @@ export const UPDATE_HIERARCHIES_SELECTED_COLUMN = 'UPDATE_HIERARCHIES_SELECTED_C
 export const UPDATE_HIERARCHIES_LIST = 'UPDATE_HIERARCHIES_LIST';
 export const SET_INITIAL_HIERARCHIES = 'SET_INITIAL_HIERARCHIES';
 export const UPDATE_APPLIED_FILTERS = 'UPDATE_APPLIED_FILTERS';
+export const UPDATE_INCLUDE_LOCATION_WITH_CHILDREN = 'UPDATE_INCLUDE_LOCATION_WITH_CHILDREN';
 export const UPDATE_APPLIED_SETTINGS = 'UPDATE_APPLIED_SETTINGS';
 export const UPDATE_PROFILE = 'UPDATE_PROFILE';
 export const UPDATE_ID = 'UPDATE_ID';
@@ -266,6 +267,13 @@ export function updateAppliedFilters(payload, html) {
     type: UPDATE_APPLIED_FILTERS,
     payload,
     html
+  };
+}
+
+export function updateIncludeLocationWithChildren(payload) {
+  return {
+    type: UPDATE_INCLUDE_LOCATION_WITH_CHILDREN,
+    payload,
   };
 }
 

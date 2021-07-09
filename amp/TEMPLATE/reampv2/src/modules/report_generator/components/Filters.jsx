@@ -4,7 +4,12 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Loader } from 'semantic-ui-react';
 import { ReportGeneratorContext } from './StartUp';
-import { getMetadata, updateAppliedFilters, updateReportDetailsUseAboveFilters } from '../actions/stateUIActions';
+import {
+  getMetadata,
+  updateAppliedFilters,
+  updateIncludeLocationWithChildren,
+  updateReportDetailsUseAboveFilters
+} from '../actions/stateUIActions';
 import { toggleIcon } from '../utils/appliedFiltersExtenalCode';
 import { translate, hasFilters } from '../utils/Utils';
 
@@ -85,7 +90,10 @@ class Filters extends Component {
   };
 
   applyFilters = () => {
-    const { onApplyFilters, _updateAppliedFilters, _updateReportDetailsUseAboveFilters } = this.props;
+    const {
+      onApplyFilters, _updateAppliedFilters, _updateReportDetailsUseAboveFilters,
+      _updateIncludeLocationWithChildren
+    } = this.props;
     this.hideFilters();
     const serialized = filter.serialize();
     const html = filter.getAppliedFilters({ returnHTML: true });
@@ -95,6 +103,7 @@ class Filters extends Component {
     } else {
       _updateReportDetailsUseAboveFilters(false);
     }
+    _updateIncludeLocationWithChildren(serialized['include-location-children']);
     onApplyFilters(serialized.filters);
   };
 
@@ -150,6 +159,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   _updateAppliedFilters: (data, html) => updateAppliedFilters(data, html),
   _updateReportDetailsUseAboveFilters: (data) => updateReportDetailsUseAboveFilters(data),
   _getMetadata: () => getMetadata(),
+  _updateIncludeLocationWithChildren: (data) => updateIncludeLocationWithChildren(data),
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Filters);
@@ -166,6 +176,7 @@ Filters.propTypes = {
   appliedSectionChange: PropTypes.func.isRequired,
   appliedSectionOpen: PropTypes.bool.isRequired,
   id: PropTypes.number,
+  _updateIncludeLocationWithChildren: PropTypes.func.isRequired,
 };
 
 Filters.defaultProps = {

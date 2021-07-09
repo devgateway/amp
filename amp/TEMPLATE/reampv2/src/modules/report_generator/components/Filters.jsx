@@ -16,42 +16,53 @@ class Filters extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show: false, showFiltersList: false, filterLoaded: false
+      show: false, showFiltersList: false, filterLoaded: false,
     };
   }
 
   componentDidMount() {
-    const { _getMetadata } = this.props;
+    const {
+      _getMetadata, id, filters, _updateAppliedFilters
+    } = this.props;
 
     /* NOTICE WE DONT SEND ANY PARAM HERE BECAUSE WE JUST WANT THE PROMISE */
     return _getMetadata().then((action) => {
       filter = new Filter({
         draggable: true,
         caller: 'REPORTS',
-        reportType: action.payload.type
+        reportType: action.payload.type,
       });
 
       filter.on('apply', this.applyFilters);
       filter.on('cancel', this.hideFilters);
 
       return filter.loaded.then(() => {
-        // eslint-disable-next-line react/no-string-refs
         filter.setElement(this.refs.filterPopup);
+
+        /* IMPORTANT: AT THIS POINT WE ASSUME THE REPORT DATA HAVE BEEN FETCHED!
+        (through 'loading' prop in FiltersAndSettings.jsx). We deserialize (only one time) with empty/saved
+        filters to set includeLocationChildren. */
+        if (id) {
+          const _filters = { ...filters };
+          if (_filters.includeLocationChildren === undefined || _filters.includeLocationChildren === null) {
+            _filters.includeLocationChildren = true;
+          }
+          filter.deserialize({ filters, silent: true });
+          const html_ = filter.getAppliedFilters({ returnHTML: true });
+          _updateAppliedFilters(filters, html_);
+        } else {
+          filter.deserialize({ filters: { includeLocationChildren: true }, silent: true });
+        }
         this.setState({ filterLoaded: true });
         return true;
       });
     });
   }
 
-  shouldComponentUpdate(nextProps, nextState, nextContext) {
-    const { filters, html, _updateAppliedFilters } = this.props;
-    // Load saved filters (only one time).
-    if (filter && filters && html === null) {
-      filter.deserialize({ filters, silent: true });
-      const html_ = filter.getAppliedFilters({ returnHTML: true });
-      _updateAppliedFilters(filters, html_);
-    }
-    return (nextProps !== this.props || nextState !== this.state || nextContext !== this.context);
+  // eslint-disable-next-line no-unused-vars
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    // The js code that animates the applied filters tree has to be re-implemented and re-run.
+    toggleIcon();
   }
 
   componentWillUnmount() {
@@ -121,12 +132,6 @@ class Filters extends Component {
       </>
     );
   }
-
-  // eslint-disable-next-line react/sort-comp,no-unused-vars
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    // The js code that animates the applied filters tree has to be re-implemented and re-run.
-    toggleIcon();
-  }
 }
 
 const mapStateToProps = state => ({
@@ -136,7 +141,9 @@ const mapStateToProps = state => ({
   filters: state.uiReducer.filters,
   html: state.uiReducer.appliedFilters,
   type: state.type,
-  profile: state.uiReducer.profile
+  profile: state.uiReducer.profile,
+  id: state.uiReducer.id,
+  includeLocationChildren: state.uiReducer.includeLocationChildren,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -153,18 +160,18 @@ Filters.propTypes = {
   _updateAppliedFilters: PropTypes.func.isRequired,
   _updateReportDetailsUseAboveFilters: PropTypes.func.isRequired,
   filters: PropTypes.object,
-  html: PropTypes.string,
   type: PropTypes.string.isRequired,
   _getMetadata: PropTypes.func.isRequired,
   profile: PropTypes.string,
   appliedSectionChange: PropTypes.func.isRequired,
-  appliedSectionOpen: PropTypes.bool.isRequired
+  appliedSectionOpen: PropTypes.bool.isRequired,
+  id: PropTypes.number,
 };
 
 Filters.defaultProps = {
   filters: null,
-  html: null,
-  profile: undefined
+  profile: undefined,
+  id: undefined,
 };
 
 Filters.contextType = ReportGeneratorContext;

@@ -51,12 +51,13 @@ class Filters extends Component {
         if (id) {
           const _filters = { ...filters };
           // We need the current value of includeLocationChildren, not when the props where received.
-          _filters.includeLocationChildren = store.getState().uiReducer.reportDetails.includeLocationChildren;
+          const { includeLocationChildren } = store.getState().uiReducer.reportDetails;
           _filters['include-location-children'] = _filters.includeLocationChildren;
           filter.deserialize({
             filters: _filters,
             silent: true,
-            '_filters.includeLocationChildren': _filters.includeLocationChildren
+            includeLocationChildren,
+            'include-location-children': includeLocationChildren
           });
           const html_ = filter.getAppliedFilters({ returnHTML: true });
           _updateAppliedFilters(filters, html_);

@@ -63,7 +63,12 @@ class Filters extends Component {
           const html_ = filter.getAppliedFilters({ returnHTML: true });
           _updateAppliedFilters(filters, html_);
         } else {
-          filter.deserialize({ filters: { includeLocationChildren: true }, silent: true });
+          filter.deserialize({
+            filters: { includeLocationChildren: true },
+            silent: true,
+            includeLocationChildren: true,
+            'include-location-children': true
+          });
         }
         this.setState({ filterLoaded: true });
         return true;

@@ -29,6 +29,7 @@ class Filters extends Component {
     const {
       _getMetadata, id, filters, _updateAppliedFilters
     } = this.props;
+    const { store } = this.context;
 
     /* NOTICE WE DONT SEND ANY PARAM HERE BECAUSE WE JUST WANT THE PROMISE */
     return _getMetadata().then((action) => {
@@ -49,10 +50,14 @@ class Filters extends Component {
         filters to set includeLocationChildren. */
         if (id) {
           const _filters = { ...filters };
-          if (_filters.includeLocationChildren === undefined || _filters.includeLocationChildren === null) {
-            _filters.includeLocationChildren = true;
-          }
-          filter.deserialize({ filters, silent: true });
+          // We need the current value of includeLocationChildren, not when the props where received.
+          _filters.includeLocationChildren = store.getState().uiReducer.reportDetails.includeLocationChildren;
+          _filters['include-location-children'] = _filters.includeLocationChildren;
+          filter.deserialize({
+            filters: _filters,
+            silent: true,
+            '_filters.includeLocationChildren': _filters.includeLocationChildren
+          });
           const html_ = filter.getAppliedFilters({ returnHTML: true });
           _updateAppliedFilters(filters, html_);
         } else {
@@ -152,7 +157,6 @@ const mapStateToProps = state => ({
   type: state.type,
   profile: state.uiReducer.profile,
   id: state.uiReducer.id,
-  includeLocationChildren: state.uiReducer.includeLocationChildren,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

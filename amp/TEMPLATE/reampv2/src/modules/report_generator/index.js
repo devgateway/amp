@@ -22,7 +22,7 @@ class ReportGeneratorApp extends Component {
   render() {
     return (
       <Provider store={this.store}>
-        <Startup defaultTrnPack={defaultTrnPack}>
+        <Startup defaultTrnPack={defaultTrnPack} store={this.store}>
           <ReportGeneratorRouter />
         </Startup>
       </Provider>

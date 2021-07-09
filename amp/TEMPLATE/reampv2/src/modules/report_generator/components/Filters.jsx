@@ -43,6 +43,7 @@ class Filters extends Component {
       filter.on('cancel', this.hideFilters);
 
       return filter.loaded.then(() => {
+        // eslint-disable-next-line react/no-string-refs
         filter.setElement(this.refs.filterPopup);
 
         /* IMPORTANT: AT THIS POINT WE ASSUME THE REPORT DATA HAVE BEEN FETCHED!

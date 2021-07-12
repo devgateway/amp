@@ -5,11 +5,11 @@ import PropTypes from 'prop-types';
 const CountryPopupOverlayTitle = ({ countriesMessage, updateCountriesMessage }) => {
   const [show, setShow] = useState(countriesMessage);
   const style = {
-    background: '#313d4f',
-    color: 'white',
+    background: '#FFFFFF',
+    color: '#000000',
+    'font-weight': 'bold',
     'margin-bottom': '50px'
   };
-
   useEffect(() => {
     const timer = setTimeout(() => {
       if (show) {
@@ -18,7 +18,7 @@ const CountryPopupOverlayTitle = ({ countriesMessage, updateCountriesMessage }) 
         }
         setShow(false);
       }
-    }, 5000);
+    }, 10000);
     return () => clearTimeout(timer);
   }, []);
   return (

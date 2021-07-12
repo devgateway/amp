@@ -158,7 +158,7 @@ class ColumnsSection extends Component {
           <Grid.Column computer="6" tablet="16">
             <OptionsList
               title={translate('availableColumns', profile, translations)}
-              tooltip="tooltip 1"
+              tooltip={translate('availableColumnsTooltip', profile, translations)}
               className="smallHeight" >
               <ColumnsSelector
                 openSections={applySearch}
@@ -172,7 +172,7 @@ class ColumnsSection extends Component {
             <OptionsList
               title={translate('selectedColumns', profile, translations)}
               isRequired
-              tooltip="tooltip 2"
+              tooltip={translate('selectedColumnsTooltip', profile, translations)}
               className="smallHeight" >
               <ColumnSorter
                 keyPrefix="columns"
@@ -186,7 +186,7 @@ class ColumnsSection extends Component {
           <Grid.Column computer="5" tablet="16">
             <OptionsList
               title={translate('hierarchies', profile, translations)}
-              tooltip="tooltip 3"
+              tooltip={translate('hierarchiesTooltip', profile, translations)}
               className="smallHeight" >
               <ColumnSorter
                 keyPrefix="hierarchies"

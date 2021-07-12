@@ -57,7 +57,8 @@
   "amp.reportGenerator:missingTitle":"Missing title",
   "amp.reportGenerator:missingColumns": "Please select at least one column",
   "amp.reportGenerator:previewError":"There was an error generating the preview.",
-  "amp.reportGenerator:previewTooltip": "tooltip 1",
+  "amp.reportGenerator:previewTooltip": "Quick preview of how the report looks like.",
+  "amp.tabGenerator:previewTooltip": "Quick preview of how the tab looks like.",
   "amp.reportGenerator:selectCategory": "Please select a category from below",
   "amp.reportGenerator:category": "Category",
   "amp.reportGenerator:appDescription": "The Report Generator allows you to create customized reports that fit your needs, based on data in the AMP. Starting with Report Details, click through each step to create your own report.",
@@ -86,5 +87,14 @@
   "amp.reportGenerator:noMoreThan2MeasuresInTabs":"You cannot select more than 2 measures in a desktop tab",
   "amp.reportGenerator:mustHave1MeasuresInTabs": "Must select at least one measure",
   "amp.reportGenerator:autoOpen": "Open the report after saving",
-  "amp.reportGenerator:resetAllTooltip": "Reset All Tooltip"
+  "amp.reportGenerator:resetAllTooltip": "Revert all changes done in the generator to the default values.",
+  "amp.reportGenerator:totalGroupingTooltip": "Options for grouping the Measure columns.",
+  "amp.reportGenerator:reportDescriptionTooltip": "Optional field to describe the report.",
+  "amp.reportGenerator:optionsTooltip": "General configuration options.",
+  "amp.reportGenerator:fundingTooltip": "Available types of report.",
+  "amp.reportGenerator:availableColumnsTooltip": "Used to select the columns that will be displayed in the report.",
+  "amp.reportGenerator:selectedColumnsTooltip": "Already selected columns that will be displayed in the report.",
+  "amp.reportGenerator:hierarchiesTooltip": "From selected columns, some that can be used as hierarchies in the report. To use them, tick the checkbox.",
+  "amp.reportGenerator:availableMeasuresTooltip": "Used to select the measures that will be displayed in the report.",
+  "amp.reportGenerator:selectedMeasuresTooltip": "Drag and Drop or use the arrows to reorder the selected measures."
 }

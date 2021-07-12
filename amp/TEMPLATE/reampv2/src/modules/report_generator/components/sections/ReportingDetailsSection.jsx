@@ -119,7 +119,9 @@ class ReportingDetailSection extends Component {
     const { translations, profile, description } = this.props;
     return (
       <GridColumn computer="8" tablet="16">
-        <OptionsList title={translate('reportDescription', profile, translations)} tooltip="tooltip 2" >
+        <OptionsList
+          title={translate('reportDescription', profile, translations)}
+          tooltip={translate('reportDescriptionTooltip', profile, translations)} >
           <Form className="description">
             <TextArea value={description} onChange={this.changeDescription} />
           </Form>
@@ -137,7 +139,7 @@ class ReportingDetailSection extends Component {
         <OptionsList
           title={translate('totalGrouping', profile, translations)}
           isRequired
-          tooltip="tooltip 1" >
+          tooltip={translate('totalGroupingTooltip', profile, translations)} >
           <OptionsContent
             radioList={this.getOptions(TOTAL_GROUPING_RADIO_OPTIONS)}
             checkList={this.getOptions(TOTAL_GROUPING_CHECKBOX_OPTIONS)}
@@ -157,7 +159,10 @@ class ReportingDetailSection extends Component {
     } = this.props;
     return (
       <GridColumn computer="8" tablet="16">
-        <OptionsList title={translate('fundingGroup', profile, translations)} tooltip="tooltip 3" isRequired >
+        <OptionsList
+          title={translate('fundingGroup', profile, translations)}
+          tooltip={translate('fundingTooltip', profile, translations)}
+          isRequired >
           <OptionsContent
             radioList={this.getOptions(FUNDING_GROUPING_RADIO_OPTIONS)}
             changeRadioList={this.selectFundingGrouping}
@@ -176,7 +181,9 @@ class ReportingDetailSection extends Component {
     } = this.props;
     return (
       <GridColumn computer="8" tablet="16">
-        <OptionsList title={translate('options', profile, translations)} tooltip="tooltip 4" >
+        <OptionsList
+          title={translate('options', profile, translations)}
+          tooltip={translate('optionsTooltip', profile, translations)} >
           <OptionsContent
             checkList={this.getOptions(OPTIONS_CHECKBOX_OPTIONS)}
             selectedCheckboxes={[selectedAllowEmptyFundingColumns, selectedSplitByFunding,

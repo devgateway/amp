@@ -83,17 +83,15 @@ class ReportGeneratorHome extends Component {
               .filter(i => action.payload.columns.find(j => j.id === i.id))
               .filter(i => i.hierarchy);
             let _hierarchiesOrder = action.payload.hierarchies;
-            if (_hierarchiesOrder.length !== _hierarchies.length) {
-              _hierarchiesOrder = [];
-              action.payload.hierarchies.forEach(i => {
+            _hierarchiesOrder = [];
+            action.payload.hierarchies.forEach(i => {
+              _hierarchiesOrder.push(i.id);
+            });
+            _hierarchies.forEach(i => {
+              if (!_hierarchiesOrder.find(j => j === i.id)) {
                 _hierarchiesOrder.push(i.id);
-              });
-              _hierarchies.forEach(i => {
-                if (!_hierarchiesOrder.find(j => j === i.id)) {
-                  _hierarchiesOrder.push(i.id);
-                }
-              });
-            }
+              }
+            });
             const selected = action.payload.hierarchies.map(i => i.id);
             _setInitialHierarchies(_hierarchies, selected, _hierarchiesOrder);
             _setHierarchiesData({

@@ -40,7 +40,7 @@ import {
   RUN_REPORT_ERROR,
   SET_INITIAL_HIERARCHIES,
   UPDATE_REPORT_DETAILS_NAME,
-  REVERT_REPORT_DETAILS_NAME,
+  REVERT_REPORT_DETAILS_NAME, UPDATE_INCLUDE_LOCATION_WITH_CHILDREN,
 } from '../actions/stateUIActions';
 import {
   convertReportDetails
@@ -302,6 +302,14 @@ export default (state = initialState, action) => {
         ...state,
         filters: action.payload,
         appliedFilters: action.html,
+      };
+    case UPDATE_INCLUDE_LOCATION_WITH_CHILDREN:
+      return {
+        ...state,
+        reportDetails: {
+          ...state.reportDetails,
+          includeLocationChildren: action.payload,
+        }
       };
     case UPDATE_APPLIED_SETTINGS:
       return {

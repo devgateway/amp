@@ -12,3 +12,4 @@ psql -U amp -c "UPDATE amp_global_settings SET settingsvalue = (SELECT CONCAT(se
 psql -U amp -c "UPDATE amp_global_settings SET settingsvalue = 'https://amp-registry-stg.ampsite.net/' WHERE settingsname = 'AMP Registry URL';"
 psql -U amp -c "UPDATE amp_global_settings SET settingsvalue = 'true' WHERE settingsname = 'AMP Offline Enabled';"
 psql -U amp -c "UPDATE amp_global_settings SET settingsvalue='off' WHERE settingsname = 'Secure Server';"
+psql -U amp -c "UPDATE amp_global_settings SET settingsvalue='$AMP_GEOCODER_URL' WHERE settingsname = 'Geo coder URL';"

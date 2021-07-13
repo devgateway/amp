@@ -4,12 +4,14 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.view.xls.IntWrapper;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.dgfoundation.amp.nireports.formulas.NiFormula;
 import org.digijava.kernel.ampapi.endpoints.common.model.Org;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.scorecard.model.ActivityUpdate;
 import org.digijava.kernel.ampapi.endpoints.scorecard.model.ColoredCell;
 import org.digijava.kernel.ampapi.endpoints.scorecard.model.ColoredCell.Colors;
+import org.digijava.kernel.ampapi.endpoints.scorecard.model.DonorScoreCardStats;
 import org.digijava.kernel.ampapi.endpoints.scorecard.model.Quarter;
 import org.digijava.kernel.ampapi.endpoints.util.CalendarUtil;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
@@ -31,7 +33,9 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -46,6 +50,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
+
+import static java.util.Calendar.YEAR;
 
 /**
  * Service class for Scorecard generation
@@ -61,11 +68,13 @@ public class ScorecardService {
     private AmpFiscalCalendar fiscalCalendar;
     private Double DEFAULT_THRESHOLD = 70d;
 
+    private static final int MONTHS_IN_QUARTER = 3;
+    private static final int QUARTERS_IN_YEAR = 4;
+
     public ScorecardService() {
         getAmpScorecardSettings();
         Long gsCalendarId = FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_CALENDAR);
         this.fiscalCalendar = FiscalCalendarUtil.getAmpFiscalCalendar(gsCalendarId);
-
     }
 
     private void getAmpScorecardSettings() {
@@ -81,15 +90,8 @@ public class ScorecardService {
         }
     }
 
-    public List<ActivityUpdate> getDonorActivityUpdates() {
-
-        return getDonorActivityUpdates(null);
-    }
-
     @SuppressWarnings("unchecked")
-    public List<AmpScorecardOrganisation> getAllNoUpdateDonors() {
-        int startYear = getDefaultStartYear();
-        int endYear = getDefaultEndYear();
+    public List<AmpScorecardOrganisation> getAllNoUpdateDonors(final int startYear, final int endYear) {
         Date startDate = CalendarUtil.getStartDate(fiscalCalendar.getAmpFiscalCalId(), startYear);
         Date endDate = CalendarUtil.getEndDate(fiscalCalendar.getAmpFiscalCalId(), endYear);
         Session session = PersistenceManager.getRequestDBSession();
@@ -104,13 +106,10 @@ public class ScorecardService {
     /**
      * Returns the list of all ActivityUpdates that occurred on the system except the ones from private WS
      * 
-     * @param allowedStatuses
      * @return List<ActivityUpdate> , list with all ActivityUpdates
      */
-    public List<ActivityUpdate> getDonorActivityUpdates(final List<String> allowedStatuses) {
+    public List<ActivityUpdate> getDonorActivityUpdates(final int startYear, final int endYear) {
         final List<ActivityUpdate> activityUpdateList = new ArrayList<ActivityUpdate>();
-        int startYear = getDefaultStartYear();
-        int endYear = getDefaultEndYear();
         Long gsCalendarId = FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_CALENDAR);
         Date startDate = CalendarUtil.getStartDate(gsCalendarId, startYear);
         Date endDate = CalendarUtil.getEndDate(gsCalendarId, endYear);
@@ -230,10 +229,10 @@ public class ScorecardService {
      * 
      * @return the default start year for generating the donor scorecard
      */
-    private int getDefaultStartYear() {
+    public int getDefaultStartYear() {
         int defaultStartYear = FeaturesUtil.getGlobalSettingValueInteger(Constants.GlobalSettings.START_YEAR_DEFAULT_VALUE);
         int startYear = defaultStartYear > 0 ? defaultStartYear : DEFAULT_START_YEAR;
-        
+
         return startYear;
     }
 
@@ -243,10 +242,10 @@ public class ScorecardService {
      * 
      * @return the default end year for generating the donor scorecard
      */
-    private int getDefaultEndYear() {
+    public int getDefaultEndYear() {
         int defaultEndYear = FeaturesUtil.getGlobalSettingValueInteger(Constants.GlobalSettings.END_YEAR_DEFAULT_VALUE);
         int endYear = defaultEndYear > 0 ? defaultEndYear : Calendar.getInstance().get(Calendar.YEAR);
-        
+
         return endYear;
     }
 
@@ -274,15 +273,15 @@ public class ScorecardService {
      * @return List<Quarter>, the list of the quarters that will represent the
      *         headers of the donor scorecard file.
      */
-    public List<Quarter> getQuarters(String filteredQuartersAsString) {
+    public List<Quarter> getQuarters(final int startYear, final int endYear, String filteredQuartersAsString) {
         final List<Quarter> quarters = new ArrayList<Quarter>();
         List<String> filteredQuarters = Arrays.asList(filteredQuartersAsString.split(","));
-        int startYear = getDefaultStartYear();
-        int endYear = getDefaultEndYear();
-        
+
         Long gsCalendarId = FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_CALENDAR);
         long startTime = CalendarUtil.getStartDate(gsCalendarId, startYear).getTime();
         long endTime = CalendarUtil.getEndDate(gsCalendarId, endYear).getTime();
+
+        int year = startYear;
         
         try {
             ICalendarWorker worker = fiscalCalendar.getworker();
@@ -299,8 +298,8 @@ public class ScorecardService {
                     cal.add(Calendar.MONTH, 3 * i);
                     currentTime = cal.getTimeInMillis();
                 }
-                startYear++;
-                startTime = CalendarUtil.getStartDate(gsCalendarId, startYear).getTime();
+                year++;
+                startTime = CalendarUtil.getStartDate(gsCalendarId, year).getTime();
             }
         } catch (Exception e) {
             logger.error("Couldn't generate quarters ", e);
@@ -310,11 +309,11 @@ public class ScorecardService {
     }
 
     public List<Quarter> getSettingsQuarters() {
-        return getQuarters(settings.getQuarters());
+        return getQuarters(getDefaultStartYear(), getDefaultEndYear(), settings.getQuarters());
     }
 
-    private List<Quarter> getAllQuarters() {
-        return getQuarters("Q1,Q2,Q3,Q4");
+    private List<Quarter> getAllQuarters(final int startYear, final int endYear) {
+        return getQuarters(startYear, endYear, "Q1,Q2,Q3,Q4");
     }
     
     /**
@@ -323,18 +322,18 @@ public class ScorecardService {
      * @return Quarter, the last past quarter
      */
     public Quarter getPastQuarter() {
-        List<Quarter> quarters = getAllQuarters();
+        List<Quarter> quarters = getAllQuarters(getDefaultStartYear(), getDefaultEndYear());
         Quarter quarter = null;
-        
+        Date currentDate = new Date();
+
         int i = 0;
         if (quarters.size() > 0) {
-            while ( i < quarters.size() && quarters.get(i).getQuarterEndDate().before(new Date())) {
+            while (i < quarters.size() && quarters.get(i).getQuarterEndDate().before(currentDate)) {
                 i++;
-            };
-            
-            quarter = i > 0 ? quarters.get(i-1) : quarters.get(0);
-        } 
-        
+            }
+            quarter = i > 0 ? quarters.get(i) : quarters.get(0);
+        }
+
         return quarter;
     }
 
@@ -349,10 +348,11 @@ public class ScorecardService {
      *         filled with the appropiate colors. For each quarter and donor
      *         there is a ColoredCell.
      */
-    public Map<Long, Map<String, ColoredCell>> getOrderedScorecardCells(List<ActivityUpdate> activityUpdates) {
-        Map<Long, Map<String, ColoredCell>> data = initializeScorecardCellData();
+    public Map<Long, Map<String, ColoredCell>> getOrderedScorecardCells(final int startYear, final int endYear,
+                                                                        List<ActivityUpdate> activityUpdates) {
+        Map<Long, Map<String, ColoredCell>> data = initializeScorecardCellData(startYear, endYear);
         data = countActivityUpdates(activityUpdates, data);
-        data = processCells(data);
+        data = processCells(startYear, endYear, data);
         return data;
     }
 
@@ -369,12 +369,16 @@ public class ScorecardService {
      * to reach or surpass the threshold for that quarter, then the previous
      * quarter is marked with yellow.
      * 
+     *
+     * @param startYear
+     * @param endYear
      * @param data
      *            Map<Long, Map<String, ColoredCell>>
      * @return the Map<Long, Map<String, ColoredCell>> with the ColoredCell
      *         filled with colors.
      */
-    private Map<Long, Map<String, ColoredCell>> processCells(final Map<Long, Map<String, ColoredCell>> data) {
+    private Map<Long, Map<String, ColoredCell>> processCells(final int startYear, final int endYear,
+                                                             final Map<Long, Map<String, ColoredCell>> data) {
         Set<AmpScorecardSettingsCategoryValue> statuses = settings.getClosedStatuses();
         String closedStatuses = "";
         for (AmpScorecardSettingsCategoryValue status : statuses) {
@@ -384,7 +388,7 @@ public class ScorecardService {
             closedStatuses = closedStatuses.substring(0, closedStatuses.length() - 1);
         }
         final String status = closedStatuses;
-        List<Quarter> quarters = getAllQuarters();
+        List<Quarter> quarters = getAllQuarters(startYear, endYear);
 
         for (final Quarter quarter : quarters) {
             PersistenceManager.getSession().doWork(new Work() {
@@ -587,10 +591,12 @@ public class ScorecardService {
      * 
      * @return the initialized Map<Long, Map<String, ColoredCell>> with the
      *         populated quarters and donors
+     * @param startYear
+     * @param endYear
      */
-    private Map<Long, Map<String, ColoredCell>> initializeScorecardCellData() {
+    private Map<Long, Map<String, ColoredCell>> initializeScorecardCellData(final int startYear, final int endYear) {
         Map<Long, Map<String, ColoredCell>> data = new HashMap<Long, Map<String, ColoredCell>>();
-        List<Quarter> quarters = getAllQuarters();
+        List<Quarter> quarters = getAllQuarters(startYear, endYear);
         List<Org> donors = QueryUtil.getDonors(true);
         for (Org donor : donors) {
             Long donorId = donor.getId();
@@ -604,7 +610,7 @@ public class ScorecardService {
             data.put(donorId, quarterCellMap);
 
         }
-        data = markNoUpdateDonorCells(data);
+        data = markNoUpdateDonorCells(startYear, endYear, data);
         return data;
     }
 
@@ -613,6 +619,9 @@ public class ScorecardService {
      * that have explicitly declared that they don't have projects updates for
      * the given quarter
      * 
+     *
+     * @param startYear
+     * @param endYear
      * @param data
      *            Map<Long, Map<String, ColoredCell>>, containing the
      *            ColoredCells for every donor and quarter
@@ -620,8 +629,9 @@ public class ScorecardService {
      *         donor and quarter filled with gray when it has been declared that
      *         the donor/quarter don't have a project update
      */
-    private Map<Long, Map<String, ColoredCell>> markNoUpdateDonorCells(Map<Long, Map<String, ColoredCell>> data) {
-        Collection<AmpScorecardOrganisation> noUpdateDonors = this.getAllNoUpdateDonors();
+    private Map<Long, Map<String, ColoredCell>> markNoUpdateDonorCells(final int startYear, final int endYear,
+                                                                       Map<Long, Map<String, ColoredCell>> data) {
+        Collection<AmpScorecardOrganisation> noUpdateDonors = this.getAllNoUpdateDonors(startYear, endYear);
 
         for (AmpScorecardOrganisation noUpdateDonor : noUpdateDonors) {
             Quarter quarter = new Quarter(fiscalCalendar, noUpdateDonor.getModifyDate());
@@ -758,4 +768,71 @@ public class ScorecardService {
         
         return sourceDate;
     }
+
+    public DonorScoreCardStats getDonorScorecardStats(final Integer scorecardYear, final Integer quarter) {
+        Quarter scorecardQuarter = getQuarterForDonorStats(scorecardYear, quarter);
+        int year = scorecardQuarter.getYear();
+        int numOfDonors = getFilteredDonors().size();
+        Map<Long, Map<String, ColoredCell>> orderedScorecardCells = getOrderedScorecardCells(year, year,
+                getDonorActivityUpdates(year, year));
+
+        List<AmpScorecardOrganisation> allNoUpdateDonors = this.getAllNoUpdateDonors(year, year);
+        List<Long> allNoUpdateDonorsIds = allNoUpdateDonors.stream()
+                .map(AmpScorecardOrganisation::getAmpDonorId)
+                .collect(Collectors.toList());
+
+        IntWrapper lateWrapper = new IntWrapper();
+        IntWrapper onTimeWrapper = new IntWrapper();
+
+        orderedScorecardCells.entrySet().stream()
+                .filter((a -> !allNoUpdateDonorsIds.contains(a.getKey())))
+                .forEach(a -> {
+                    Colors color = a.getValue().get(scorecardQuarter.toString()).getColor();
+                    if (color.equals(Colors.RED) || color.equals(Colors.YELLOW)) {
+                        lateWrapper.inc();
+                    } else if (color.equals(Colors.GREEN)) {
+                        onTimeWrapper.inc();
+                    }
+        });
+
+        int onTime = getPercentage(new BigDecimal(onTimeWrapper.intValue()), new BigDecimal(numOfDonors)).intValue();
+        int late = getPercentage(new BigDecimal(lateWrapper.intValue()), new BigDecimal(numOfDonors)).intValue();
+        int no = getPercentage(new BigDecimal(allNoUpdateDonors.size()), new BigDecimal(numOfDonors)).intValue();
+
+        return new DonorScoreCardStats(onTime, late, no);
+    }
+
+    private Quarter getQuarterForDonorStats(final Integer year, final Integer quarter) {
+        if (year == null && quarter == null) {
+            return getPastQuarter();
+        }
+
+        int currentYear = Calendar.getInstance().get(YEAR);
+        int currentMonth = Calendar.getInstance().get(Calendar.MONTH);
+
+        if (year < getDefaultStartYear() || year > currentYear) {
+            throw new ApiRuntimeException(ApiError.toError("Invalid year"));
+        }
+
+        if (quarter == null) {
+            if (year < currentYear) {
+                return getQuarters(year, year, "Q4").get(0);
+            } else {
+                return getPastQuarter();
+            }
+        } else {
+            if (quarter > QUARTERS_IN_YEAR) {
+                throw new ApiRuntimeException(ApiError.toError("Invalid quarter"));
+            } else if (year == currentYear && quarter - 1 > currentMonth / MONTHS_IN_QUARTER) {
+                throw new ApiRuntimeException(ApiError.toError("Invalid quarter and year"));
+            }
+        }
+
+        return getQuarters(year, year, "Q" + quarter).get(0);
+    }
+
+    protected BigDecimal getPercentage(BigDecimal a, BigDecimal b) {
+        return a.divide(b, NiFormula.DIVISION_MC).scaleByPowerOfTen(2).setScale(0, RoundingMode.HALF_UP);
+    }
+
 }

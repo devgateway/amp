@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-30225</jira>
+    <keyword>amp offline</keyword>
+    <author>jdeanquin</author>
+    <description>update amp offline compatibility to 1.5.0</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres"><![CDATA[
+
+                UPDATE amp_offline_compatible_version_range SET from_version = '1.5.0-SNAPSHOT', to_version = '1.5.1';
+                
+            ]]></lang>
+        </script>
+    </apply>
+</tns:patch>

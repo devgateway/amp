@@ -94,6 +94,9 @@ public class AmpGeneralSettings {
     @JsonProperty("workspace-prefix")
     private String workspacePrefix;
 
+    @JsonProperty("workspace-default-records-per-page")
+    private Integer workspaceDefaultRecordsPerPage;
+
     @JsonProperty("ndd-mapping-indirect-level")
     private Integer nddMappingIndirectLevel;
 
@@ -352,6 +355,14 @@ public class AmpGeneralSettings {
 
     public void setWorkspacePrefix(String workspacePrefix) {
         this.workspacePrefix = workspacePrefix;
+    }
+
+    public Integer getWorkspaceDefaultRecordsPerPage() {
+        return workspaceDefaultRecordsPerPage;
+    }
+
+    public void setWorkspaceDefaultRecordsPerPage(final Integer workspaceDefaultRecordsPerPage) {
+        this.workspaceDefaultRecordsPerPage = workspaceDefaultRecordsPerPage;
     }
 
     public String getDashboardDefaultMaxDate() {

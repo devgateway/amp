@@ -1,17 +1,5 @@
 package org.digijava.kernel.validators.activity;
 
-import static org.digijava.kernel.validators.ValidatorUtil.filter;
-import static org.digijava.kernel.validators.activity.ValidatorMatchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.anything;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.emptyIterable;
-import static org.hamcrest.Matchers.hasEntry;
-import static org.hamcrest.Matchers.hasProperty;
-import static org.junit.Assert.assertThat;
-
-import java.util.Set;
-
 import org.dgfoundation.amp.activity.builder.ActivityBuilder;
 import org.dgfoundation.amp.testutils.TransactionUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
@@ -22,23 +10,45 @@ import org.digijava.kernel.persistence.InMemoryLocationManager;
 import org.digijava.kernel.validation.ConstraintViolation;
 import org.digijava.kernel.validators.ValidatorUtil;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hamcrest.Matcher;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+
+import java.util.Set;
+
+import static org.digijava.kernel.validators.ValidatorUtil.filter;
+import static org.digijava.kernel.validators.activity.ValidatorMatchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.anything;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.emptyIterable;
+import static org.hamcrest.Matchers.hasEntry;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Octavian Ciubotaru
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({FeaturesUtil.class})
 public class ImplementationLevelValidatorTest {
 
     private static APIField activityField;
     private static InMemoryCategoryValuesManager categoryValueManager;
     private static InMemoryLocationManager locationManager;
 
-    @BeforeClass
-    public static void setUp() {
+    @Before
+    public void setUp() {
         TransactionUtil.setUpWorkspaceEmptyPrefixes();
+        PowerMockito.mockStatic(FeaturesUtil.class);
         activityField = ValidatorUtil.getMetaData();
         categoryValueManager = InMemoryCategoryValuesManager.getInstance();
         locationManager = InMemoryLocationManager.getInstance();
@@ -175,10 +185,14 @@ public class ImplementationLevelValidatorTest {
         AmpActivityVersion activity = new ActivityBuilder()
                 .addLocation(locationManager.getAmpLocation("Haiti"), 100f)
                 .getActivity();
-
+        mockValidation();
         Set<ConstraintViolation> violations = getConstraintViolations(activity);
 
         assertThat(violations, contains(locsViolation()));
+    }
+
+    private void mockValidation() {
+        when(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.MAPPING_DESTINATION_PROGRAM)).thenReturn(null);
     }
 
     @Test

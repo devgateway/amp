@@ -48,9 +48,7 @@ export default class ActivityApi {
 
     static fetchValuesForHydration(activityFieldsWithIds, fmId) {
         let url = ACTIVITY_FIELDS_ID_VALUES_API;
-        if (fmId) {
-            url += '/' + fmId;
-        }
+        url = url.replace('/ws_id', fmId ? '/' + fmId : '');
         return ApiHelper._postData(url, activityFieldsWithIds);
     }
 

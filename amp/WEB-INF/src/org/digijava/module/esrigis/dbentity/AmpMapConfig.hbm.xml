@@ -18,6 +18,7 @@
 		<property name="legendImage" column="legend_image" type="binary" length="500000"/>
 		<property name="configName" column="config_name" type="java.lang.String" />
 		<property name="legendNotes" column="legend_notes" type="text" />
+		<property name="layer" column="layer" type="text" />
 
 
 

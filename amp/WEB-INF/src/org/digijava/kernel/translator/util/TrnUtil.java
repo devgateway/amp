@@ -22,21 +22,6 @@
 
 package org.digijava.kernel.translator.util;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyResolver;
 import org.digijava.kernel.Constants;
@@ -66,6 +51,20 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 public class TrnUtil {
 
     private static final String CACHE_REGION = "org.digijava.kernel.translator.util.TranslatorUtil.Query";
@@ -80,7 +79,7 @@ public class TrnUtil {
     public static final String PREFIX = "prefix";
     public static final String DEFAULT = "default";
     public static final String PREFIXES = "prefixes";
-    
+
     /**
      * These are languages that has its own weight for sorting
      * Weight of the language is array length- its index (position in array)
@@ -89,7 +88,7 @@ public class TrnUtil {
      * NOTE: this is fast workaround, it would be better to make this configurable. 
      */
     private static String[] locales = {"en", "fr", "sp"};
-    
+
     /**
      * Returns weight of the locale.
      * uses {@link #locales} array for calculating weight.
@@ -104,7 +103,7 @@ public class TrnUtil {
             }
         }
         return null;
-        
+
 //      int w = locales.length;
 //      for (String language : locales) {
 //          if (language.equals(locale)){
@@ -350,7 +349,7 @@ public class TrnUtil {
                                             getCode());
             for(TrnLocale item:langs)
                 translations.put(item.getCode(), item);
-            
+
             //sort languages
             List<TrnLocale> sortedLanguages = new ArrayList<TrnLocale>();
             for(Locale item:languages)
@@ -467,7 +466,7 @@ public class TrnUtil {
         }
         return modules;
     }
-    
+
     /**
      * Returns messages for specified set of keys.
      * This is used when we need to load translations only by keys not looking at site_id and language.
@@ -482,7 +481,7 @@ public class TrnUtil {
             StringBuffer buff = new StringBuffer("from ");
             buff.append(Message.class.getName());
             buff.append(" as m where m.key in ( :keys )");
-            
+
             String oql = buff.toString();
             Session session = PersistenceManager.getRequestDBSession();
             Query query = session.createQuery(oql);
@@ -491,7 +490,7 @@ public class TrnUtil {
         }
         return messages;
     }
-    
+
     /**
      * Returns all messages of specified locale code.
      * @param locales set of locale codes like en, fr, es
@@ -541,7 +540,7 @@ public class TrnUtil {
     /**
      * Groups messages with key field in {@link MessageGroup} beans. 
      * @param messages
-     * @return 
+     * @return
      * @throws DgException
      */
     public static Collection<MessageGroup> groupByKey(Collection<Message> messages) throws DgException{
@@ -585,7 +584,7 @@ public class TrnUtil {
             }
             //add current message to the group.
             group.addMessage(message);
-            
+
             //need to work with scores?
             if (scoresByKey!=null){
                 //get score for the message
@@ -600,7 +599,7 @@ public class TrnUtil {
         //return list of the groups
         return groupByKey.values();
     }
-    
+
     /**
      * Message group object factory
      * @author Irakli Kobiashvili
@@ -610,7 +609,7 @@ public class TrnUtil {
     public static interface MessageGroupFactory<E extends MessageGroup>{
         public E createGroup(String key,String prefix);
     }
-    
+
     /**
      * Factory of standard message groups.
      * @author Irakli Kobiashvili
@@ -622,7 +621,7 @@ public class TrnUtil {
             return new MessageGroup(key,prefix);
         }
     }
-    
+
     /**
      * Factory of patcher message groups.
      * @author Irakli Kobiashvili
@@ -667,7 +666,7 @@ public class TrnUtil {
         private Session session = null;
         private Transaction tx = null;
         private TranslatorWorker worker = null;
-        
+
         public TrnDb() throws DgException{
             this.session = PersistenceManager.getRequestDBSession();
             this.worker = TranslatorWorker.getInstance("");
@@ -718,8 +717,8 @@ public class TrnUtil {
                 }
             }
         }
-        
-        
+
+
     }
 
 
@@ -788,7 +787,7 @@ public class TrnUtil {
             return element.getLocale()+"_"+element.getKey();
         }
     }
-    
+
     /**
      * Resolves locale_siteid_key as key of the message
      * @author Irakli Kobiashvili
@@ -839,6 +838,11 @@ public class TrnUtil {
             return w1.compareTo(w2);
         }
     }
+
+    public static void setTrnPrefix(String prefix) {
+        TLSUtils.getRequest().setAttribute(PREFIX, prefix);
+    }
+
     /**
      * Returns the current workspace prefix
      * @return ws prefix

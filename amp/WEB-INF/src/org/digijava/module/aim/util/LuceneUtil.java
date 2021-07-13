@@ -1357,7 +1357,7 @@ public class LuceneUtil implements Serializable {
     }
 
     private static Query getStandardQuery(String origSearchString, QueryParser parser) throws ParseException {
-        return parser.parse(buildWrapKeyword(origSearchString));
+        return parser.parse(QueryParser.escape(buildWrapKeyword(origSearchString)));
     }
 
     private static Query getFuzzyQuery(String origSearchString, QueryParser parser) {
@@ -1494,7 +1494,7 @@ public class LuceneUtil implements Serializable {
                 Directory directory = FSDirectory.open(new File(sc.getRealPath("/") + HELP_INDEX_DIRECTORY));
                 IndexReader indexReader = IndexReader.open(directory);
                 indexSearcher = new IndexSearcher(indexReader);
-                searchString = searchString.trim();
+                searchString = QueryParser.escape(searchString.trim());
                 query = parser.parse("+"+searchString+"*");
 
                 TopDocs topDocs = indexSearcher.search(query, MAX_LUCENE_RESULTS);
@@ -1528,7 +1528,7 @@ public class LuceneUtil implements Serializable {
         Query query = null;
         QueryParser parser = new QueryParser(Version.LUCENE_36, "article", ANALYZER);
 
-        query = parser.parse(searchString);
+        query = parser.parse(QueryParser.escape(searchString));
 
         Object hA = null;
         try {

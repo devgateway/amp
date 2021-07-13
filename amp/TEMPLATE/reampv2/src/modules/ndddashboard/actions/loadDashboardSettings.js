@@ -1,7 +1,7 @@
 import {
   fetchDashboardSettingsPending, fetchDashboardSettingsError, fetchDashboardSettingsSuccess
 } from './dashboardSettingsActions';
-import { fetchApiData } from '../../../utils/loadTranslations';
+import { fetchApiData } from '../../../utils/apiOperations';
 import { SETTINGS_EP, GS_EP } from '../utils/constants';
 
 export default () => dispatch => {

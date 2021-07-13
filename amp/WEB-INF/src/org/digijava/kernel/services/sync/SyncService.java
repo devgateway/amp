@@ -33,6 +33,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -75,10 +76,12 @@ import org.digijava.kernel.services.sync.model.Translation;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpOfflineChangelog;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.repository.AmpOfflineChangelogRepository;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ContactInfoUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
@@ -269,8 +272,16 @@ public class SyncService implements InitializingBean {
     private List<String> findUpdatedActivityPossibleValuesFields(SystemDiff systemDiff, SyncRequest syncRequest) {
         Date lastSyncTime = syncRequest.getLastSyncTime();
         Predicate<APIField> fieldFilter = getChangedFields(systemDiff, lastSyncTime);
-        Set<String> updatedPossibleValuesFields = new HashSet<>(fieldsEnumerator.findActivityFieldPaths(fieldFilter));
 
+        // Load an enumerator for each FM template (AMPOFFLINE-1562)
+        Set<String> updatedPossibleValuesFields = new HashSet<>();
+        Collection<AmpTemplatesVisibility> templates = FeaturesUtil.getAMPTemplatesVisibility();
+        Iterator<AmpTemplatesVisibility> i = templates.iterator();
+        while (i.hasNext()) {
+            CachingFieldsEnumerator fieldsEnumerator = AmpFieldsEnumerator.getEnumerator(i.next().getId());
+            updatedPossibleValuesFields.addAll(fieldsEnumerator.findActivityFieldPaths(fieldFilter));
+        }
+        
         List<String> newPossibleValuesFields = findNewPossibleValuesFields(
                 syncRequest.getActivityPossibleValuesFields(), findAllActivityFieldsWithPossibleValues());
 

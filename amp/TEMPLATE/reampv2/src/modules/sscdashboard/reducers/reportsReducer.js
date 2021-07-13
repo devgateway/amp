@@ -53,7 +53,6 @@ export default (state = initialState, action) => {
         activitiesLoaded: false,
         error: action.payload.error
       };
-
     default:
       return state;
   }

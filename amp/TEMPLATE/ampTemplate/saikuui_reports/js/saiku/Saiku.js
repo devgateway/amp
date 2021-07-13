@@ -88,8 +88,9 @@ $(document).ready(function () {
     Saiku.logger.log('Saiku.Document Ready');
     /* This is a change from original Saiku behavior, we need to know if the report is Donor/Pledge before
     loading the Filters widget. */
-    var id = hash.match(/\d+$/);
-    $.getJSON(Settings.AMP_PATH + '/' + id, loadPlugins);
+    var id = hash.match(/-?\d+$/);
+    const url = id < 0 ? Settings.AMP_PATH_RUN_TEMP : Settings.AMP_PATH;
+    $.getJSON(url + '/' + id, loadPlugins);
 });
 
 function loadPlugins(data) {

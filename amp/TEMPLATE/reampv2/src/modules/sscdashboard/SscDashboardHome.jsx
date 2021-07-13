@@ -5,7 +5,9 @@ import PropTypes from 'prop-types';
 import Sidebar from './components/layout/sidebar/sidebar';
 import MapContainer from './components/layout/map/MapContainer';
 import { SSCTranslationContext } from './components/StartUp';
-import { HOME_CHART, MODALITY_CHART, SECTORS_CHART } from './utils/constants';
+import {
+  DOWNLOAD_CHART, HOME_CHART, MODALITY_CHART, SECTORS_CHART
+} from './utils/constants';
 import { DONOR_COUNTRY, MODALITIES, PRIMARY_SECTOR } from './utils/FieldsConstants';
 import * as CallReports from './actions/callReports';
 
@@ -18,10 +20,12 @@ class SscDashboardHome extends Component {
     super(props);
     this.countriesWithData = [];
     this.state = {
+      showDataDownload: false,
       countriesForExport: [],
       chartSelected: HOME_CHART,
       showEmptyProjects: false,
       showLargeCountryPopin: false,
+      countriesMessage: false,
       selectedFilters: {
         selectedYears: [],
         selectedCountries: [],
@@ -33,11 +37,11 @@ class SscDashboardHome extends Component {
 
   componentDidMount() {
     const {
-      loadSectorsFilters, loadCountriesFilters, loadModalitiesFilters, projects
+      loadSectorsFilters_, loadCountriesFilters_, loadModalitiesFilters_, projects
     } = this.props;
-    loadSectorsFilters();
-    loadCountriesFilters();
-    loadModalitiesFilters();
+    loadSectorsFilters_();
+    loadCountriesFilters_();
+    loadModalitiesFilters_();
 
     if (projects.activitiesLoaded) {
       this.getProjectsData();
@@ -56,7 +60,7 @@ class SscDashboardHome extends Component {
         const initialData = this.getFilteredData();
         this.countriesWithData = initialData.map(c => c.id);
         const selectedYears = [];
-        // selectedYears.push(projects.activities.mostRecentYear);
+        selectedYears.push(projects.activities.mostRecentYear);
         this.handleSelectedYearChanged(selectedYears);
         // eslint-disable-next-line react/no-did-update-set-state
         this.setState({
@@ -66,10 +70,71 @@ class SscDashboardHome extends Component {
     }
   }
 
+  handleSelectedYearChanged(pSelectedYears) {
+    this.updateFilterState('selectedYears', pSelectedYears);
+  }
+
+  handleSelectedCountryChanged(pSelectedCountries) {
+    // we only keep for export the countries that are selected
+    this.setState(previousState => {
+      const countriesForExport = [...previousState.countriesForExport].filter(c => pSelectedCountries.includes(c));
+      return { countriesForExport };
+    });
+    const { chartSelected } = this.state;
+    if ((chartSelected === SECTORS_CHART || chartSelected === MODALITY_CHART)
+      && pSelectedCountries && pSelectedCountries.length >= 1) {
+      // currently we open large popin, in next tickets we will open also the popin for 2/3 countries selected
+      this.setState({ showLargeCountryPopin: true });
+    } else {
+      this.closeLargeCountryPopin();
+    }
+    this.updateFilterState('selectedCountries', pSelectedCountries);
+  }
+
+  handleSelectedModalityChanged(pSelectedModalities) {
+    this.updateFilterState('selectedModalities', pSelectedModalities);
+  }
+
+  handleSelectedSectorChanged(pSelectedSectors) {
+    this.updateFilterState('selectedSectors', pSelectedSectors);
+  }
+
   onChangeChartSelected(chartSelected) {
     this.setState({ chartSelected });
     if (chartSelected !== SECTORS_CHART) {
       this.closeLargeCountryPopin();
+    }
+    if ((chartSelected === SECTORS_CHART || chartSelected === MODALITY_CHART)) {
+      this.setState((previousState) => {
+        if (previousState.selectedFilters.selectedCountries.length > 0) {
+          this.openLargeCountryPopin();
+        }
+        if (previousState.selectedFilters.selectedCountries.length > 6) {
+          // select only the first 6
+          console.log(this.countriesWithData);
+          return ({ countriesMessage: true });
+        } else {
+          return ({ countriesMessage: false });
+        }
+      }, () => {
+        const { filters } = this.props;
+        const { selectedFilters } = this.state;
+        const newSelectedCountries = filters.countries.countries.filter(
+          c => selectedFilters.selectedCountries.includes(c.id)
+        ).sort((a, b) => {
+          if (a.name < b.name) {
+            return -1;
+          }
+          if (a.name > b.name) {
+            return 1;
+          }
+          return 0;
+        }).slice(0, 6).map(c => c.id);
+        this.handleSelectedCountryChanged(newSelectedCountries);
+      });
+    }
+    if (chartSelected !== DOWNLOAD_CHART) {
+      this.setState({ showDataDownload: false });
     }
   }
 
@@ -78,8 +143,8 @@ class SscDashboardHome extends Component {
   }
 
   getProjectsData() {
-    const { loadActivitiesDetails, projects } = this.props;
-    loadActivitiesDetails(projects.activities.activitiesId);
+    const { loadActivitiesDetails_, projects } = this.props;
+    loadActivitiesDetails_(projects.activities.activitiesId);
   }
 
   getFilteredProjects() {
@@ -152,6 +217,10 @@ class SscDashboardHome extends Component {
     });
   }
 
+  updateCountriesMessage(show) {
+    this.setState({ countriesMessage: show });
+  }
+
   countriesForExportChanged(countries) {
     this.setState({ countriesForExport: countries });
   }
@@ -164,45 +233,28 @@ class SscDashboardHome extends Component {
     }, this.getFilteredProjects);
   }
 
-  handleSelectedYearChanged(pSelectedYears) {
-    this.updateFilterState('selectedYears', pSelectedYears);
-  }
-
-  handleSelectedCountryChanged(pSelectedCountries) {
-    // we only keep for export the countries that are selected
-    this.setState(previousState => {
-      const countriesForExport = [...previousState.countriesForExport].filter(c => pSelectedCountries.includes(c));
-      return { countriesForExport };
-    });
-    const { chartSelected } = this.state;
-    if ((chartSelected === SECTORS_CHART || chartSelected === MODALITY_CHART)
-        && pSelectedCountries && pSelectedCountries.length >= 1) {
-      // currently we open large popin, in next tickets we will open also the popin for 2/3 countries selected
-      this.setState({ showLargeCountryPopin: true });
-    } else {
-      this.closeLargeCountryPopin();
-    }
-    this.updateFilterState('selectedCountries', pSelectedCountries);
-  }
-
-  handleSelectedModalityChanged(pSelectedModalities) {
-    this.updateFilterState('selectedModalities', pSelectedModalities);
-  }
-
   closeLargeCountryPopinAndClearFilter() {
     this.handleSelectedCountryChanged([]);
+  }
+
+  openLargeCountryPopin() {
+    this.setState({ showLargeCountryPopin: true });
   }
 
   closeLargeCountryPopin() {
     this.setState({ showLargeCountryPopin: false });
   }
 
-  handleSelectedSectorChanged(pSelectedSectors) {
-    this.updateFilterState('selectedSectors', pSelectedSectors);
+  toggleDataDownload() {
+    this.setState(previousSate => ({ showDataDownload: !previousSate.showDataDownload }));
   }
 
   render() {
-    const filtersRestrictions = { countriesWithData: this.countriesWithData };
+    const { projects } = this.props;
+    const filtersRestrictions = {
+      countriesWithData: this.countriesWithData,
+      mostRecentYear: projects.activities.mostRecentYear
+    };
 
     const handleSelectedFiltersChange = {
       handleSelectedModalityChanged: this.handleSelectedModalityChanged.bind(this),
@@ -211,33 +263,47 @@ class SscDashboardHome extends Component {
       handleSelectedSectorChanged: this.handleSelectedSectorChanged.bind(this)
     };
     const {
-      chartSelected, selectedFilters, filteredProjects, showEmptyProjects, showLargeCountryPopin, countriesForExport
+      chartSelected,
+      selectedFilters,
+      filteredProjects,
+      showEmptyProjects,
+      showLargeCountryPopin,
+      countriesForExport,
+      showDataDownload,
+      countriesMessage
     } = this.state;
     return (
-      <div className="container-fluid content-wrapper">
-        <div className="row">
-          <Sidebar
-            chartSelected={chartSelected}
-            onChangeChartSelected={this.onChangeChartSelected.bind(this)}
-            selectedFilters={selectedFilters}
-            handleSelectedFiltersChange={handleSelectedFiltersChange}
-                    />
-          <MapContainer
-            chartSelected={chartSelected}
-            selectedFilters={selectedFilters}
-            handleSelectedFiltersChange={handleSelectedFiltersChange}
-            filteredProjects={filteredProjects}
-            filtersRestrictions={filtersRestrictions}
-            showEmptyProjects={showEmptyProjects}
-            showLargeCountryPopin={showLargeCountryPopin}
-            closeLargeCountryPopinAndClearFilter={this.closeLargeCountryPopinAndClearFilter.bind(this)}
-            onNoProjectsModalClose={this.onNoProjectsModalClose.bind(this)}
-            countriesForExport={countriesForExport}
-            countriesForExportChanged={this.countriesForExportChanged.bind(this)}
-                    />
+      <>
+        <div className="container-fluid content-wrapper">
+          <div className="row">
+            <Sidebar
+              chartSelected={chartSelected}
+              toggleDataDownload={this.toggleDataDownload.bind(this)}
+              onChangeChartSelected={this.onChangeChartSelected.bind(this)}
+              selectedFilters={selectedFilters}
+              handleSelectedFiltersChange={handleSelectedFiltersChange}
+            />
+            <MapContainer
+              showDataDownload={showDataDownload && !showEmptyProjects}
+              toggleDataDownload={this.toggleDataDownload.bind(this)}
+              chartSelected={chartSelected}
+              selectedFilters={selectedFilters}
+              handleSelectedFiltersChange={handleSelectedFiltersChange}
+              filteredProjects={filteredProjects}
+              filtersRestrictions={filtersRestrictions}
+              showEmptyProjects={showEmptyProjects}
+              showLargeCountryPopin={showLargeCountryPopin}
+              closeLargeCountryPopinAndClearFilter={this.closeLargeCountryPopinAndClearFilter.bind(this)}
+              onNoProjectsModalClose={this.onNoProjectsModalClose.bind(this)}
+              countriesForExport={countriesForExport}
+              countriesForExportChanged={this.countriesForExportChanged.bind(this)}
+              countriesMessage={countriesMessage}
+              updateCountriesMessage={this.updateCountriesMessage.bind(this)}
+            />
+          </div>
+          <PrintDummy />
         </div>
-        <PrintDummy />
-      </div>
+      </>
     );
   }
 }
@@ -261,20 +327,21 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  loadActivitiesDetails: CallReports.loadActivitiesDetails,
-  loadSectorsFilters: LoadFilters.loadSectorsFilters,
-  loadCountriesFilters: LoadFilters.loadCountriesFilters,
-  loadModalitiesFilters: LoadFilters.loadModalitiesFilters
+  loadActivitiesDetails_: CallReports.loadActivitiesDetails,
+  loadSectorsFilters_: LoadFilters.loadSectorsFilters,
+  loadCountriesFilters_: LoadFilters.loadCountriesFilters,
+  loadModalitiesFilters_: LoadFilters.loadModalitiesFilters
 }, dispatch);
 
 SscDashboardHome.contextType = SSCTranslationContext;
 
 SscDashboardHome.propTypes = {
   projects: PropTypes.object.isRequired,
-  loadSectorsFilters: PropTypes.func.isRequired,
-  loadCountriesFilters: PropTypes.func.isRequired,
-  loadModalitiesFilters: PropTypes.func.isRequired,
-  loadActivitiesDetails: PropTypes.func.isRequired,
+  loadSectorsFilters_: PropTypes.func.isRequired,
+  loadCountriesFilters_: PropTypes.func.isRequired,
+  loadModalitiesFilters_: PropTypes.func.isRequired,
+  loadActivitiesDetails_: PropTypes.func.isRequired,
+  filters: PropTypes.object.isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SscDashboardHome);

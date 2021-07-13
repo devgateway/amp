@@ -1,7 +1,7 @@
 import {
   getSharedDataPending, getSharedDataError, getSharedDataSuccess
 } from './shareLinkActions';
-import { fetchApiData } from '../../../utils/loadTranslations';
+import { fetchApiData } from '../../../utils/apiOperations';
 import { GET_SHARED_EP } from '../utils/constants';
 
 export const getSharedData = (id) => dispatch => {

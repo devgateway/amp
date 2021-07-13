@@ -16,7 +16,6 @@
 <html:hidden property="action" />
 <html:hidden property="userId" />
 <html:hidden property="name" />
-<div id="someError"><digi:errors/></div>
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=380>
 	<tr>
@@ -100,6 +99,9 @@
 
 												</table>
 											</td>
+										</tr>
+										<tr>
+											<td colspan="2" style="padding-top: 15px"><div id="someError"><digi:errors/></div></td>
 										</tr>
 									</table>
 								</td>

@@ -8,6 +8,7 @@ import java.util.function.Function;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.ar.AmpARFilter;
@@ -17,6 +18,8 @@ import org.digijava.kernel.ampapi.endpoints.util.DateFilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
 /**
  * an AMP-specific extension of {@link ReportFilters}
@@ -34,6 +37,7 @@ public class AmpReportFilters extends ReportFiltersImpl {
      * also known as "selected year"
      */
     @JsonProperty(FiltersConstants.COMPUTED_YEAR)
+    @JsonInclude(NON_NULL)
     protected Integer computedYear;
 
     public AmpReportFilters(Map<ReportElement, FilterRule> filterRules) {
@@ -47,7 +51,7 @@ public class AmpReportFilters extends ReportFiltersImpl {
     public AmpReportFilters(AmpFiscalCalendar calendar) {
         this.calendar = calendar;
     }
-    
+
     public Integer getComputedYear() {
         return computedYear;
     }

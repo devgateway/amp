@@ -29,29 +29,29 @@ export default class HydratorHelper {
                 }
                 fieldToHydrate = fieldToHydrate + objectField;
                 if (fieldsManager.getFieldDef(fieldToHydrate)) {
-                if (fieldsManager.getFieldDef(fieldToHydrate)['id_only'] === true) {
-                    if (objectToHydrate[objectField]) {
-                        if (!valuesForHydration) {
-                            if (requestData[fieldToHydrate]) {
-                                requestData[fieldToHydrate].push(objectToHydrate[objectField]);
+                    if (fieldsManager.getFieldDef(fieldToHydrate)['id_only'] === true) {
+                        if (objectToHydrate[objectField]) {
+                            if (!valuesForHydration) {
+                                if (requestData[fieldToHydrate]) {
+                                    requestData[fieldToHydrate].push(objectToHydrate[objectField]);
+                                } else {
+                                    requestData[fieldToHydrate] = [(objectToHydrate[objectField])];
+                                }
                             } else {
-                                requestData[fieldToHydrate] = [(objectToHydrate[objectField])];
+                                objectToHydrate[objectField] = valuesForHydration[fieldToHydrate]
+                                    .find(field => field.id === objectToHydrate[objectField]);
                             }
-                        } else {
-                            objectToHydrate[objectField] = valuesForHydration[fieldToHydrate]
-                                .find(field => field.id === objectToHydrate[objectField]);
-                        }
-                        if (objectToHydrate[objectField].ancestorValues) {
-                            objectToHydrate[objectField][ActivityConstants.HIERARCHICAL_VALUE] =
-                                objectToHydrate[objectField].ancestorValues.map(i=>'[' + i + ']').join('');
-                            objectToHydrate[objectField][ActivityConstants.HIERARCHICAL_VALUE_DEPTH] =
-                                objectToHydrate[objectField].ancestorValues ? objectToHydrate[objectField].ancestorValues.length : 0;
-                        }
-                        if (objectToHydrate[objectField].translatedValue) {
-                            objectToHydrate[objectField]['translated-value'] = objectToHydrate[objectField].translatedValue;
+                            if (objectToHydrate[objectField]['ancestor-values']) {
+                                objectToHydrate[objectField][ActivityConstants.HIERARCHICAL_VALUE] =
+                                    objectToHydrate[objectField]['ancestor-values'].map(i=>'[' + i + ']').join('');
+                                objectToHydrate[objectField][ActivityConstants.HIERARCHICAL_VALUE_DEPTH] =
+                                    objectToHydrate[objectField]['ancestor-values'] ? objectToHydrate[objectField]['ancestor-values'].length : 0;
+                            }
+                            if (objectToHydrate[objectField].translatedValue) {
+                                objectToHydrate[objectField]['translated-value'] = objectToHydrate[objectField].translatedValue;
+                            }
                         }
                     }
-                }
                 } else {
                     console.warn('no field def: ' + fieldToHydrate);
                 }

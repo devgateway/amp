@@ -2,7 +2,7 @@
   <label>
  <input type="checkbox" name="<%= obj.group %>" value="<%= obj.id || obj.value %>" <% if(obj.selected){%> checked <%}%> >
  <span class="styled-checkbox"></span>
- <span title ="<%= tooltip %>" data-i18n="amp.gis:title-<%= obj.title.replace(/ /g,'') %>"  data-toggle="tooltip"><%= obj.title %></span>
+ <span title="" data-i18n="amp.gis:title-<%= obj.title.replace(/ /g,'') %>"  data-toggle="tooltip"><%= obj.title %></span>
   </label>
   <% if (obj.helpText){ %>
     <a href="#layer-info" class="layer-info"

@@ -1,7 +1,7 @@
 package org.digijava.module.aim.dbentity ;
 
-import java.io.Serializable;
-
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.digijava.kernel.ampapi.endpoints.serializers.report.AmpReportHierarchySerializer;
 import org.digijava.module.aim.annotations.reports.ColumnLike;
 import org.digijava.module.aim.annotations.reports.Level;
 import org.digijava.module.aim.annotations.reports.Order;
@@ -9,7 +9,10 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
+import java.io.Serializable;
 
+
+@JsonSerialize(using = AmpReportHierarchySerializer.class)
 public class AmpReportHierarchy implements Serializable, Comparable
 {
     @ColumnLike

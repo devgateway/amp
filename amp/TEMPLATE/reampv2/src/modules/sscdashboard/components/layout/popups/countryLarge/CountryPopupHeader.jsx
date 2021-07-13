@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import '../popups.css';
 import ReactTooltip from 'react-tooltip';
+import PropTypes from 'prop-types';
 import { SSCTranslationContext } from '../../../StartUp';
 import {
   SECTOR_MODALITY_LEADING_LEFT,
@@ -13,7 +14,6 @@ import CountryFlag from '../../../utils/CountryFlag';
 class CountryPopupHeader extends Component {
   onCountrySelected(e) {
     const ipSelectedCountry = parseInt(e.target.value, 10);
-
     const { countriesForExport, countriesForExportChanged } = this.props;
     countriesForExportChanged(calculateUpdatedValuesForDropDowns(ipSelectedCountry, countriesForExport));
   }
@@ -27,7 +27,7 @@ class CountryPopupHeader extends Component {
       country ? (
         <div className="header row">
           <div className={`col-md-${columnCount === 1 ? '4' : '5'}  col-xs-5 country-name`}>
-            <CountryFlag countryName={country.name}/>
+            <CountryFlag countryName={country.name} />
             {country.name}
           </div>
           <div className={`col-md-${columnCount === 1 ? '2' : '3'} col-xs-3 projects`}>
@@ -45,7 +45,10 @@ class CountryPopupHeader extends Component {
                 .padStart(SECTOR_MODALITY_MIN_SIZE, SECTOR_MODALITY_LEADING_LEFT)}
             </span>
             <span
-              className="label">{translations[`amp.ssc.dashboard:${chartSelected === SECTORS_CHART ? 'sectors-sector' : 'modalities-modality'}-types`]}</span>
+              className="label">
+              {translations[`amp.ssc.dashboard:${chartSelected === SECTORS_CHART
+                ? 'sectors-sector' : 'modalities-modality'}-types`]}
+            </span>
             {columnCount !== 1 && (
               <div className="export-checkbox">
                 <div className="custom-checkbox">
@@ -54,11 +57,11 @@ class CountryPopupHeader extends Component {
                     id={`chk-country-column-${country.id}`}
                     value={country.id}
                     onClick={this.onCountrySelected.bind(this)}
-                    checked={countriesForExport.includes(country.id)}/>
+                    checked={countriesForExport.includes(country.id)} />
                   <label
                     htmlFor={`chk-country-column-${country.id}`}
                     data-tip={translations['amp.ssc.dashboard:sectors-checkbox-tooltip']}
-                    data-for="download-checkbox"/>
+                    data-for="download-checkbox" />
                 </div>
               </div>
             )}
@@ -67,7 +70,7 @@ class CountryPopupHeader extends Component {
             place="bottom"
             multiline
             id="download-checkbox"
-            className="download-checkbox-tooltip"/>
+            className="download-checkbox-tooltip" />
         </div>
       ) : null
     );
@@ -75,4 +78,13 @@ class CountryPopupHeader extends Component {
 }
 
 CountryPopupHeader.contextType = SSCTranslationContext;
+CountryPopupHeader.propTypes = {
+  columnCount: PropTypes.number.isRequired,
+  countriesForExport: PropTypes.array.isRequired,
+  projectByGroupings: PropTypes.object.isRequired,
+  countriesForExportChanged: PropTypes.func.isRequired,
+  country: PropTypes.object.isRequired,
+  chartSelected: PropTypes.string.isRequired
+};
+
 export default CountryPopupHeader;

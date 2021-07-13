@@ -24,22 +24,28 @@ module.exports = Backbone.View.extend({
 	     tooltip += obj.description + '. ' ;
 	  }	     
 	  if(obj.createdOn){
-	     tooltip += '<br/> ' + this.app.translator.translateSync('amp.gis-layers-manager:tooltip-created-on','Created on') + ' ' + obj.createdOn;
+	     tooltip += (obj.description ? "</br>" : '') + this.app.translator.translateSync('amp.gis-layers-manager:tooltip-created-on','Created on') + ' ' + obj.createdOn;
 	  }
 	  if(obj.createdBy){
 		 tooltip += ' ' + this.app.translator.translateSync('amp.gis-layers-manager:tooltip-created-by','by') + ' ' + obj.createdBy;
-	  }	
+	  }
 	  return tooltip;
   },
   render: function() {
-    this.$el.html(this.template({obj: this.model.attributes, tooltip: this.createTooltip(this.model.attributes)}));
+    this.$el.html(this.template({obj: this.model.attributes}));
     this.app.translator.translateDOM(this.el); /* After to catch disabled */
-    this.$el.find('[data-toggle="tooltip"]').tooltip({html: true});
+    this.$el.find('[data-toggle="tooltip"]').tooltip({
+      content: this.createTooltip(this.model.attributes)
+    });
     return this;
   },
   toggleSelect: function() {
     this.model.trigger('toggleSelect', this.model);
-    if (this.model.get('type') === "Indicator Layers" || this.model.get('type') === "joinBoundaries") {
+    if (this.model.get('type') === "Indicator Layers"
+        || this.model.get('type') === "joinBoundaries"
+        || this.model.get('type') === "wms"
+    ) {
+        debugger;
     	this.app.mapView.headerGapAnalysisView.refresh(this.model);
     }    
     this.app.translator.translateDOM(this.el);

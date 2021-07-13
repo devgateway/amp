@@ -14,7 +14,7 @@ module.exports = Backbone.View.extend({
 
   render: function() {
     var base = this.model.get('link');
-    var qs = '?request=GetLegendGraphic&version=1.1.1&format=image/png%26layer=';
+    var qs = '?request=GetLegendGraphic&version=1.1.1&format=image/png&layer=';
     var wmsLayer = this.model.get('layer');
     var self = this;
 

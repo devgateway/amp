@@ -27,6 +27,7 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.helper.Workspace;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.DecimalWraper;
@@ -71,7 +72,17 @@ public final class ActivityInterchangeUtils {
      */
     public static JsonApiResponse<ActivitySummary> importActivity(Map<String, Object> newJson, boolean update,
             ActivityImportRules rules, String endpointContextPath) {
-        APIField activityField = AmpFieldsEnumerator.getEnumerator().getActivityField();
+        
+        // Load the enumerator for the FM template associated to the activity's workspace (AMPOFFLINE-1562)
+        APIField activityField = null;
+        Workspace team = TeamUtil.getWorkspace(Long.parseLong(newJson.get("team").toString()));
+        Long fmId = team.getFmTemplate() != null ? team.getFmTemplate().getId() : null;
+        if (fmId != null) {
+            activityField = AmpFieldsEnumerator.getEnumerator(fmId).getActivityField();
+        } else {
+            activityField = AmpFieldsEnumerator.getEnumerator().getActivityField();
+        }
+        
         StringBuffer sourceURL = TLSUtils.getRequest().getRequestURL();
 
         return new ActivityImporter(activityField, rules)

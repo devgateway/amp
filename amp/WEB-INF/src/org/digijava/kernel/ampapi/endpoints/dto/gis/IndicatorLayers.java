@@ -5,6 +5,7 @@ public class IndicatorLayers {
     private String title;
     private String type;
     private String link;
+    private String layer;
     private String legendNotes;
 
     public IndicatorLayers() {
@@ -46,7 +47,16 @@ public class IndicatorLayers {
     public void setLegendNotes(String legendNotes) {
         this.legendNotes = legendNotes;
     }
+
     public String getLegendNotes() {
         return legendNotes;
+    }
+
+    public String getLayer() {
+        return layer;
+    }
+
+    public void setLayer(String layer) {
+        this.layer = layer;
     }
 }

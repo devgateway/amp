@@ -87,5 +87,9 @@ public class AmpActivityVersion extends AmpActivityFields implements Versionable
     public void setRejectMessage(String rejectMessage) {
         this.rejectMessage = rejectMessage;
     }
-    
+
+    public void addLocation(AmpActivityLocation activityLocation) {
+        activityLocation.setActivity(this);
+        getLocations().add(activityLocation);
+    }
 }

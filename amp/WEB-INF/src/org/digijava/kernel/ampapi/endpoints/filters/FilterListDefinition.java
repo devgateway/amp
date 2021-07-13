@@ -2,7 +2,6 @@ package org.digijava.kernel.ampapi.endpoints.filters;
 
 import java.util.List;
 
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModelProperty;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;

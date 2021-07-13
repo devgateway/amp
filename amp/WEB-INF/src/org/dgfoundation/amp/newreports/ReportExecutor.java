@@ -13,5 +13,5 @@ public interface ReportExecutor {
      * @param report - {@link ReportSpecification}
      * @throws AMPException
      */
-    public GeneratedReport executeReport(ReportSpecification report) throws AMPException;
+    GeneratedReport executeReport(ReportSpecification report) throws AMPException;
 }

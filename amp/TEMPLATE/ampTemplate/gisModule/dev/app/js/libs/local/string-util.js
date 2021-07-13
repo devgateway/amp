@@ -13,7 +13,26 @@ StringUtils.getMultilangString = function(layer, field, generalSettings){
 		  if(_.isUndefined(result) || _.isNull(result)){
 			  result = layer[field][defaultLanguage] || '';
 		  } 
-	  }	 
+	  }
+	  
+	  // try to always return a value even if some data was missing at this point.
+      try {
+        if (!result) {
+          console.warn('fallback to default string for field ' + field);
+          if (layer[field] instanceof Object) {
+            const keys = Object.keys(layer[field]);
+            result = layer[field][keys[0]];
+          } else {
+            result = layer[field];
+          }
+        }
+      } catch (e) {
+	    console.error(e);
+      }
+	  if (result === null || result === undefined) {
+	  	result = '';
+	  }
+	  
 	  return result;  	
 };
 

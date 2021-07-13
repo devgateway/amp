@@ -213,6 +213,17 @@
 		<url-pattern>/rest/activity/updateMappings/async/*</url-pattern>
 	</filter-mapping>
 
+
+	<filter>
+		<filter-name>translationFilter</filter-name>
+		<filter-class>org.digijava.kernel.ampapi.filters.TranslationFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>translationFilter</filter-name>
+		<url-pattern>/rest/*</url-pattern>
+	</filter-mapping>
+
+
 	<!-- Jersey Servlet  -->
 	<servlet>
 		<servlet-name>AMP API End Points</servlet-name>

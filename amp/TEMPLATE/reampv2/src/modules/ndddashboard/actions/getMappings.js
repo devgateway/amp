@@ -1,7 +1,7 @@
 import {
   fetchDashboardSettingsError, fetchDashboardSettingsPending, fetchDashboardSettingsSuccess
 } from './mappingsActions';
-import { fetchApiData } from '../../../utils/loadTranslations';
+import { fetchApiData } from '../../../utils/apiOperations';
 import { INDIRECT_MAPPING_CONFIG, MAPPING_CONFIG_NO_INDIRECT } from '../utils/constants';
 
 export const getMappings = () => dispatch => {

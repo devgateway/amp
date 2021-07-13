@@ -13,7 +13,7 @@ ADD docker/setenv.sh bin/
 ADD docker/server.xml conf/
 ADD docker/tomcat-users.xml conf/
 
-RUN rm -r /usr/local/tomcat/webapps/ROOT && mkdir /usr/local/tomcat/webapps/ROOT
+RUN rm -fr /usr/local/tomcat/webapps/ROOT && mkdir /usr/local/tomcat/webapps/ROOT
 ADD $AMP_EXPLODED_WAR /usr/local/tomcat/webapps/ROOT
 ADD META-INF/context.xml /usr/local/tomcat/webapps/ROOT/META-INF/
 

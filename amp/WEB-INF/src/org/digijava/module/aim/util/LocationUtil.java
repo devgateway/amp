@@ -19,6 +19,7 @@ import org.digijava.module.aim.dbentity.AmpLocationIndicatorValue;
 import org.digijava.module.aim.exception.dynlocation.DuplicateLocationCodeException;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -246,5 +247,16 @@ public final class LocationUtil {
                 .uniqueResult();
         
         return indicatorValuesCount;
+    }
+
+    public static List<AmpCategoryValueLocations> getAllVisibleLocations() {
+        Session dbSession = PersistenceManager.getSession();
+
+        Criteria criteria = dbSession.createCriteria(AmpCategoryValueLocations.class);
+        criteria.setCacheable(true);
+
+        criteria.add(Restrictions.eqOrIsNull("deleted", false));
+
+        return criteria.list();
     }
 }

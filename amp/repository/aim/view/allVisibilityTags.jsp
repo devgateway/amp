@@ -38,6 +38,7 @@
 <module:display name="Funding" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Pledges" parentModule="PROJECT MANAGEMENT"/>
 <module:display name="AMP Offline" parentModule="PROJECT MANAGEMENT"/>
+<module:display name="AMP GeoCoder" parentModule="PROJECT MANAGEMENT"/>
 <module:display name="/GIS"></module:display>
 
 <module:display  name="/Dashboards"></module:display>

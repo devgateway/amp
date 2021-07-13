@@ -22,6 +22,7 @@ var Settings = {
     TOMCAT_WEBAPP: "/saiku",
     DEFAULT_VIEW_STATE: 'view', // could be 'edit' as well
     AMP_PATH: '/rest/data/report',
+    AMP_PATH_RUN_TEMP: '/rest/data/report/run',
     PAGINATION: true,
     RESULTS_PER_PAGE: 10,
     USE_AMP_LANGUAGE: true,

@@ -1,15 +1,5 @@
 package org.digijava.kernel.validators.activity;
 
-import static org.digijava.kernel.validators.ValidatorUtil.filter;
-import static org.digijava.kernel.validators.ValidatorUtil.getDefaultTranslationContext;
-import static org.hamcrest.Matchers.anything;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.emptyIterable;
-import static org.junit.Assert.*;
-
-import java.util.List;
-import java.util.Set;
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.dgfoundation.amp.onepager.helper.EditorStore;
@@ -23,13 +13,32 @@ import org.digijava.kernel.validators.ValidatorUtil;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+
+import java.util.List;
+import java.util.Set;
+
+import static org.digijava.kernel.validators.ValidatorUtil.filter;
+import static org.digijava.kernel.validators.ValidatorUtil.getDefaultTranslationContext;
+import static org.hamcrest.Matchers.anything;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.emptyIterable;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Octavian Ciubotaru
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({FeaturesUtil.class})
 public class UniqueActivityTitleValidatorTest {
 
     private static APIField activityField;
@@ -38,7 +47,7 @@ public class UniqueActivityTitleValidatorTest {
     @Before
     public void setUp() {
         TransactionUtil.setUpWorkspaceEmptyPrefixes();
-
+        PowerMockito.mockStatic(FeaturesUtil.class);
         activityField = ValidatorUtil.getMetaData();
         activityFieldML = ValidatorUtil.getMetaData(AmpActivityFields.class, ImmutableSet.of(),
                 new TestFieldInfoProvider(true));
@@ -57,10 +66,14 @@ public class UniqueActivityTitleValidatorTest {
     public void testEmptyTitle() {
         AmpActivityVersion activity = new AmpActivityVersion();
         activity.setName("");
-
+        mockValidation();
         Set<ConstraintViolation> violations = getConstraintViolations(activity, false);
 
         assertThat(violations, emptyIterable());
+    }
+
+    private void mockValidation() {
+        when(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.MAPPING_DESTINATION_PROGRAM)).thenReturn(null);
     }
 
     @Test

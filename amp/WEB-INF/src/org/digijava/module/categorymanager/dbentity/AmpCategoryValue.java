@@ -35,6 +35,8 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable<
     private Set<AmpCategoryValue> usedValues = new HashSet<>();
     private Set<AmpCategoryValue> usedByValues = new HashSet<>();
 
+    private AmpCategoryValue defaultUsedValue;
+
     private boolean translateable   = true;
 
     /**
@@ -108,6 +110,14 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable<
 
     public void setUsedByValues(Set<AmpCategoryValue> usedByValues) {
         this.usedByValues = usedByValues;
+    }
+
+    public AmpCategoryValue getDefaultUsedValue() {
+        return defaultUsedValue;
+    }
+
+    public void setDefaultUsedValue(AmpCategoryValue defaultUsedValue) {
+        this.defaultUsedValue = defaultUsedValue;
     }
 
     @Override

@@ -13,6 +13,8 @@ public final class ReportConstants {
     public static final String GROUPING_QUARTERLY = "Q";
     public static final String GROUPING_MONTHLY = "M";
 
+    public static final String REPORT_STACK_ATTR = "reportStack";
+
     private ReportConstants() {
 
     }

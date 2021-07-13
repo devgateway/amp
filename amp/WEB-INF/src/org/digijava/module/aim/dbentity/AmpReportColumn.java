@@ -1,26 +1,24 @@
 package org.digijava.module.aim.dbentity ;
 
-import java.io.Serializable;
-
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.apache.log4j.Logger;
-import org.digijava.kernel.exception.DgException;
-import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.ampapi.endpoints.serializers.report.AmpReportColumnSerializer;
 import org.digijava.module.aim.annotations.reports.ColumnLike;
-import org.digijava.module.aim.annotations.reports.Identificator;
 import org.digijava.module.aim.annotations.reports.Level;
 import org.digijava.module.aim.annotations.reports.Order;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.hibernate.Session;
-import org.hibernate.annotations.Index;
+
+import java.io.Serializable;
 
 
+@JsonSerialize(using = AmpReportColumnSerializer.class)
 public class AmpReportColumn implements Serializable, Comparable<AmpReportColumn>
 {
 //  @Identificator
 //  private Long id;
-    
+
     private static Logger logger = Logger.getLogger(AmpReportColumn.class);
     @ColumnLike
     private AmpColumns column;
@@ -35,7 +33,7 @@ public class AmpReportColumn implements Serializable, Comparable<AmpReportColumn
     private boolean addedByFilter;
     
 //  private boolean generated;
-    
+
     private static AmpCategoryValue defaultLevel = null;
     
     public AmpReportColumn() {
@@ -111,5 +109,5 @@ public class AmpReportColumn implements Serializable, Comparable<AmpReportColumn
         this.addedByFilter = addedByFilter;
     }
 
-    
+
 }

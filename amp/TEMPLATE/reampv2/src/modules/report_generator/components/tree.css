@@ -1,0 +1,48 @@
+ul.previsualization_tree {
+    font-size: 1em;
+    padding: 0;
+    margin: 0;
+}
+
+.previsualization_tree ul {
+    list-style-type: none;
+    padding-left: 18px;
+}
+
+/* Remove default bullets */
+ul, .previsualization_tree {
+    list-style-type: none;
+}
+
+/* Style the caret/arrow */
+.prev_caret {
+    cursor: pointer;
+    user-select: none; /* Prevent text selection */
+}
+
+/* Create the caret/arrow with a unicode, and style it */
+.prev_caret::before {
+    content: "\25B6";
+    color: black;
+    display: inline-block;
+    margin-right: 6px;
+}
+
+/* Rotate the caret/arrow icon when clicked on (using JavaScript) */
+.prev_caret-down::before {
+    transform: rotate(90deg);
+}
+
+.previsualization_tree .prev_caret::before {
+    font-size: 0.8em;
+}
+
+/* Hide the nested list */
+.previsualization_tree .prev_nested {
+    display: none;
+}
+
+/* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
+.previsualization_tree .prev_nested.active {
+    display: block;
+}

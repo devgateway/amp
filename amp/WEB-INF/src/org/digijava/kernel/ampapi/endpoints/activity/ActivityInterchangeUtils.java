@@ -74,8 +74,14 @@ public final class ActivityInterchangeUtils {
             ActivityImportRules rules, String endpointContextPath) {
         
         // Load the enumerator for the FM template associated to the activity's workspace (AMPOFFLINE-1562)
-        Workspace team = TeamUtil.getWorkspace(Long.parseLong(newJson.get("team").toString()));        
-        APIField activityField = AmpFieldsEnumerator.getEnumerator(team.getFmTemplate().getId()).getActivityField();
+        APIField activityField = null;
+        Workspace team = TeamUtil.getWorkspace(Long.parseLong(newJson.get("team").toString()));
+        Long fmId = team.getFmTemplate() != null ? team.getFmTemplate().getId() : null;
+        if (fmId != null) {
+            activityField = AmpFieldsEnumerator.getEnumerator(fmId).getActivityField();
+        } else {
+            activityField = AmpFieldsEnumerator.getEnumerator().getActivityField();
+        }
         
         StringBuffer sourceURL = TLSUtils.getRequest().getRequestURL();
 

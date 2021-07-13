@@ -12,6 +12,7 @@ import java.util.Map;
 
 import javax.xml.datatype.DatatypeFactory;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.request.Site;
@@ -27,7 +28,6 @@ import org.digijava.module.translation.jaxb.Trn;
  * Group of messages with same translation key.
  * They also should have same hash key but generated preferably from English translation
  * @author Irakli Kobiashvili
- * @see HashKeyPatch
  *
  */
 public class MessageGroup {
@@ -315,7 +315,7 @@ public class MessageGroup {
         if (result==null){
             Message msg = getMessageByLocale("en");
             if (msg != null){
-                result = msg.getMessage(); 
+                result = StringUtils.isBlank(msg.getOriginalMessage()) ? msg.getMessage() : msg.getOriginalMessage();
             }else if (this.messages!=null && this.messages.size()>0){
                 msg = this.messages.values().iterator().next();
                 result = msg.getMessage();

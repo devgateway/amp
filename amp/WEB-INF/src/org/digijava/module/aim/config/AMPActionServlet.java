@@ -4,11 +4,9 @@
  */
 package org.digijava.module.aim.config;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
+import org.apache.log4j.Logger;
+import org.apache.struts.action.ActionServlet;
+import org.digijava.module.aim.helper.Constants;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -16,11 +14,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import org.apache.log4j.Logger;
-import org.apache.struts.action.ActionServlet;
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.helper.Constants;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * Overrides the default struts ActionServlet
@@ -84,8 +82,9 @@ public class AMPActionServlet
      */
     if (index > -1) {
       int tempIndex = url.indexOf("/" + Constants.AIM_MODULE_KEY + "/");
-      if (tempIndex != -1 && !url.endsWith("displayFlag.do") && !url.endsWith("selectLocation.do")&&!url.endsWith("locationSelected.do")&&
-          !url.endsWith("editEUActivity.do")&&!url.endsWith("editIPAContract.do")&&!url.endsWith("addDisbOrderToContract.do")&&!url.endsWith("addDisbOrderToDisb.do")) {
+      if (tempIndex != -1 && !url.endsWith("displayFlag.do") && !url.endsWith("selectLocation.do")
+              && !url.endsWith("locationSelected.do") && !url.endsWith("editIPAContract.do")
+              && !url.endsWith("addDisbOrderToContract.do") && !url.endsWith("addDisbOrderToDisb.do")) {
         String pggrp = request.getParameter("edit");
         /*
          * The value of the request parameter 'edit tells the system, whether the user is still in the edit

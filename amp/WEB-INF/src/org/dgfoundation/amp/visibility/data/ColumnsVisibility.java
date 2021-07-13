@@ -325,7 +325,6 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
             put("Component Funding Organization", ColumnConstants.COMPONENT_FUNDING_ORGANIZATION);
             put("Component Second Responsible Organization", ColumnConstants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION);
             put("Component Type", ColumnConstants.COMPONENT_TYPE);
-            put("Costing Total Contribution", ColumnConstants.COSTING_DONOR);
             put("Credit/Donation", ColumnConstants.CREDIT_DONATION);
             put("Current Completion Date Comments", ColumnConstants.CURRENT_COMPLETION_DATE_COMMENTS);
             put("Description of Component Funding", ColumnConstants.DESCRIPTION_OF_COMPONENT_FUNDING);
@@ -334,7 +333,6 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
             put("Final Date for Disbursements Comments", ColumnConstants.FINAL_DATE_FOR_DISBURSEMENTS_COMMENTS);
             put("Funding end date", ColumnConstants.FUNDING_END_DATE);
             put("Funding start date", ColumnConstants.FUNDING_START_DATE);
-            put("Grand Total Cost", ColumnConstants.GRAND_TOTAL_COST);
             put("Loan Interest Rate", ColumnConstants.INTEREST_RATE);
             put("Loan Grace Period", ColumnConstants.GRACE_PERIOD);
             put("Loan Maturity Date", ColumnConstants.MATURITY);

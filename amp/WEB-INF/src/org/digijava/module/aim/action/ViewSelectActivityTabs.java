@@ -45,7 +45,6 @@ public class ViewSelectActivityTabs extends Action {
             { "field", "Regional Funding Tab", "regionalFunding" },
             { "field", "Paris Survey", "parisSurvey" },
             { "feature", "Activity Dashboard", "activityDashboard" },
-            { "field", "Costing Tab", "costing" },
             { "field", "Contracting Tab", "contracting" },
             { "feature", "Regional Observations", "regionalObservations" }};
 

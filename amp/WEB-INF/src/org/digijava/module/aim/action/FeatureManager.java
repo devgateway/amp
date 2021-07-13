@@ -122,7 +122,6 @@ public class FeatureManager extends MultiAction {
                     ampContext.removeAttribute(Constants.DC_FEATURE);
                     ampContext.removeAttribute(Constants.SC_FEATURE);
                     ampContext.removeAttribute(Constants.MS_FEATURE);
-                    ampContext.removeAttribute(Constants.AC_FEATURE);
                     ampContext.removeAttribute(Constants.LB_FEATURE);
                     ampContext.removeAttribute(Constants.SA_FEATURE);
             }
@@ -180,12 +179,6 @@ public class FeatureManager extends MultiAction {
                     } 
             }
 
-            if (ampFeature.getCode().equalsIgnoreCase(Constants.AC_FEATURE)) {
-                synchronized (ampContext) {
-                        ampContext.setAttribute(Constants.AC_FEATURE,featureOn);
-                    } 
-            }
-
             if (ampFeature.getCode().equalsIgnoreCase(Constants.LB_FEATURE)) {
                 synchronized (ampContext) {
                         ampContext.setAttribute(Constants.LB_FEATURE,featureOn);
@@ -240,15 +233,11 @@ public class FeatureManager extends MultiAction {
                         ampContext.removeAttribute(Constants.MS_FEATURE);
                     }
 
-                if (ampFeature.getCode().equalsIgnoreCase(Constants.AC_FEATURE)) 
-                    if (ampContext.getAttribute(Constants.AC_FEATURE) != null) {
-                        ampContext.removeAttribute(Constants.AC_FEATURE);
-                    }
-
-                if (ampFeature.getCode().equalsIgnoreCase(Constants.LB_FEATURE)) 
+                if (ampFeature.getCode().equalsIgnoreCase(Constants.LB_FEATURE)) {
                     if (ampContext.getAttribute(Constants.LB_FEATURE) != null) {
                         ampContext.removeAttribute(Constants.LB_FEATURE);
                     }
+                }
                 
                 if (ampFeature.getCode().equalsIgnoreCase(Constants.SA_FEATURE)) 
                     if (ampContext.getAttribute(Constants.SA_FEATURE) != null) {
@@ -349,7 +338,6 @@ public class FeatureManager extends MultiAction {
             ampContext1.removeAttribute(Constants.DC_FEATURE);
             ampContext1.removeAttribute(Constants.SC_FEATURE);
             ampContext1.removeAttribute(Constants.MS_FEATURE);
-            ampContext1.removeAttribute(Constants.AC_FEATURE);
             ampContext1.removeAttribute(Constants.LB_FEATURE);
             ampContext1.removeAttribute(Constants.SA_FEATURE);
         }
@@ -397,12 +385,6 @@ public class FeatureManager extends MultiAction {
             if (ampFeature.getCode().equalsIgnoreCase(Constants.MS_FEATURE)) {
                 synchronized (ampContext1) {
                         ampContext1.setAttribute(Constants.MS_FEATURE,featureOn);
-                    } 
-            }
-
-            if (ampFeature.getCode().equalsIgnoreCase(Constants.AC_FEATURE)) {
-                synchronized (ampContext1) {
-                        ampContext1.setAttribute(Constants.AC_FEATURE,featureOn);
                     } 
             }
 

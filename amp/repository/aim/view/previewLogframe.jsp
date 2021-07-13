@@ -127,10 +127,6 @@
 											&nbsp;
 										</td>
 										<td valign="top"  width="25%" vAlign="center" align ="left" height="20" style="border-top: 1px solid #CCC; border-top-style: dashed;">
-											<digi:trn key="aim:plogframe:totalBudget">Total budget</digi:trn>:
-											<bean:write name="aimEditActivityForm" property="costing.allCosts" format="###,###,###"/>
-										</td>
-										<td valign="top"  width="25%" vAlign="center" align ="left" height="20" style="border-top: 1px solid #CCC; border-top-style: dashed;">
 											<digi:trn key="aim:plogframe:ipaBudget">IPA budget</digi:trn>:
 											<bean:write name="aimEditActivityForm" property="contracts.ipaBudget" format="###,###,###.##" />
 											
@@ -313,48 +309,11 @@
 											<digi:trn key="aim:means">Means</digi:trn>
 										</td>
 										<td valign="top" vAlign="center"  width="25%" align ="center" class="textalb" height="20" bgcolor="#006699">
-											<digi:trn key="aim:contributions">Contributions</digi:trn>
-										</td>
-										<td valign="top" vAlign="center"  width="25%" align ="center" class="textalb" height="20" bgcolor="#006699">
 											<digi:trn key="aim:assumptions">Assumptions</digi:trn>
 										</td>
+										<td></td>
 										
 									</tr>
-									<logic:notEmpty name="aimEditActivityForm" property="costing.costs">
-									<logic:iterate name="aimEditActivityForm" property="costing.costs" id="euActivity"
-												type="org.digijava.module.aim.dbentity.EUActivity">	
-									<c:set target="${euActivity}" property="desktopCurrencyId" value="${defaultCurrency}"/>
-									<tr>
-										<td valign="top" bgcolor="#f4f4f2" width="25%" style="border-bottom: 1px solid #CCC; border-bottom-style: dashed;">
-												<c:out default="" value="${euActivity.name}"/>
-												<c:if test='${euActivity.inputs != ""}'>
-												<br/>
-													<table bgcolor="#FFFFFF" style="border:1px solid #DDDDDD;">
-														<tr>
-															<td>
-																<c:out default="" value="${euActivity.inputs }" />
-															</td>
-														</tr>
-													</table>
-												</c:if>
-										</td>
-										<td valign="top" bgcolor="#ffffff"  width="25%" style="border-bottom: 1px solid #CCC; border-bottom-style: dashed;">
-												<bean:write name="euActivity" property="totalCostCurrency" /> &nbsp;
-												<bean:write name="euActivity" property="totalCost" format="###,###,###"/>												
-										</td>
-										<td valign="top" bgcolor="#f4f4f2" width="25%"  style="border-bottom: 1px solid #CCC; border-bottom-style: dashed;">
-												<bean:write name="euActivity" property="totalContributionsConverted" format="###,###,###"/>
-
-										</td>
-										<td valign="top" bgcolor="#ffffff" width="25%"  style="border-bottom: 1px solid #CCC; border-bottom-style: dashed;">
-												<c:out default="" value="${euActivity.assumptions}"/>
-												<c:if test='${euActivity.assumptions == ""}'>
-													&nbsp;
-												</c:if>
-										</td>
-									</tr>
-									</logic:iterate>
-									</logic:notEmpty>
 								    </table>
 							   </td>
 							</tr>

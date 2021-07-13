@@ -66,8 +66,6 @@ public class MathExpressionRepository {
 
     public static final String NUMBER_OF_PROJECTS = "numberOfProjects";
 
-    public static final String COSTING_GRAND_TOTAL = "grandTotalCost";
-
     public static final String EXECUTION_RATE = "executionRate";
 
     /** NIGER COLUMNS */
@@ -123,7 +121,6 @@ public class MathExpressionRepository {
         buildUncommitedCumulativeBalance();
         buildNumberOfProject();
         buildMtefColumn();
-        buildCostingGrandTotal();
         buildExecutionRate();
         buildAverageDisbursementRate();
 
@@ -511,18 +508,6 @@ public class MathExpressionRepository {
         }
     }
 
-    /**
-     * Costing Grand Total value
-     */
-    private static void buildCostingGrandTotal() {
-        try {
-            MathExpression m1 = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.COSTING_GRAND_TOTAL, new BigDecimal(1));
-            expresions.put(COSTING_GRAND_TOTAL, m1);
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-        }
-    }
-        
     /**
      * Costing MTEF column
      */

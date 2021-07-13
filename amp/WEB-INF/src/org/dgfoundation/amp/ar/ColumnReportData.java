@@ -122,9 +122,6 @@ public class ColumnReportData extends ReportData<Column> {
         if (mainFundingColumn == null)
             mainFundingColumn = getColumn(ArConstants.COLUMN_TOTAL);
         
-        if (mainFundingColumn == null)
-            mainFundingColumn = getColumn(ArConstants.COSTING_GRAND_TOTAL);
-        
         List<Column> res = new ArrayList<Column>();
         if (mainFundingColumn != null)
             res.add(mainFundingColumn);

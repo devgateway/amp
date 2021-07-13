@@ -750,7 +750,7 @@ public class GroupColumn extends Column<Column> {
     }
     
     public boolean isTotalColumn(){
-        return this.getName().equals(ArConstants.COLUMN_CONTRIBUTION_TOTAL) || this.getName().equals(ArConstants.COLUMN_TOTAL);
+        return this.getName().equals(ArConstants.COLUMN_TOTAL);
     }
     
     /* (non-Javadoc)

@@ -218,10 +218,6 @@
 			<put name="title">Activity - Financial Progress Overview </put>
 			<put-item name="tabBody" module="aim" instance="default" teaser="financingBreakdown"/>
 	 	</layout>
-		<layout name="layoutProjectCostsBreakdown" extends="tabLayout">
-			<put name="title">Activity - Project Costing </put>
-			<put-item name="tabBody" module="aim" instance="default" teaser="costsBreakdown"/>
-	 	</layout>
 
         <layout name="layoutViewIPAContracting" extends="tabLayout">
 			<put name="title">Activity - IPA Contracting </put>
@@ -589,7 +585,6 @@
 				<page>viewStatusDescription</page>
 				<page>addSectorToIndicator</page>
 				<page>PI_Filter</page>
-				<page>aim_euActivityDetails</page>
 				<page>aim_orgPopupLayout</page>
 				<page>aim_assignFieldPermissions</page>
 				<!-- New Org Selector -->

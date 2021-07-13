@@ -726,8 +726,6 @@ public class ActivityUtil {
 
         if (act.getComponents() != null)
             act.getComponents().size();
-        if (act.getCosts() != null)
-            act.getCosts().size();
         if (act.getMember() != null)
             act.getMember().size();
         if (act.getContracts() != null)

@@ -100,11 +100,10 @@ public final class ArConstants {
     public final static int DONOR_TYPE = 1;
     public final static int COMPONENT_TYPE = 2;
     public final static int REGIONAL_TYPE = 3;
-    public final static int CONTRIBUTION_TYPE = 4;
     public final static int PLEDGES_TYPE = 5;
     public final static int GPI_TYPE = 6;
     public final static Set<Integer> LEGAL_REPORT_TYPES = Collections.unmodifiableSet(new HashSet<Integer>(Arrays.asList(
-            DONOR_TYPE, COMPONENT_TYPE, REGIONAL_TYPE, CONTRIBUTION_TYPE, PLEDGES_TYPE, GPI_TYPE
+            DONOR_TYPE, COMPONENT_TYPE, REGIONAL_TYPE, PLEDGES_TYPE, GPI_TYPE
             )));
     
     //metainfo values:
@@ -230,12 +229,10 @@ public final class ArConstants {
     
     //created columns
     public final static String COLUMN_TOTAL="Total Costs";
-    public final static String COLUMN_CONTRIBUTION_TOTAL="Total Contributions";
-    
+
     public final static String COLUMN_RAW_DATA="RAW DATA";
     public final static String COLUMN_FUNDING="Funding";
     public final static String COLUMN_PROPOSED_COST="Proposed Project Cost";
-    public final static String COSTING_GRAND_TOTAL="Grand Total";
     public final static String MTEF_COLUMN = "MTEF";
     
     public final static String COLUMN_ANY_SECTOR="Sector";
@@ -405,11 +402,9 @@ public final class ArConstants {
     
     public static final String VIEW_PROPOSED_COST="v_proposed_cost";
     public static final String VIEW_REVISED_COST="v_revised_project_cost";
-    public static final String VIEW_COST="v_costs"; 
     public static final String VIEW_DONOR_FUNDING="v_donor_funding";
     public static final String VIEW_COMPONENT_FUNDING="v_component_funding";
     public static final String VIEW_REGIONAL_FUNDING="v_regional_funding";
-    public static final String VIEW_CONTRIBUTION_FUNDING="v_contribution_funding";
     public static final String VIEW_PLEDGES_FUNDING="v_pledges_funding_st";
     
     

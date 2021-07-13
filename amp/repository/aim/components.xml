@@ -196,9 +196,6 @@
 	<!-- translation manager-->
 	<page name="viewTranslatorManager"  title ="- Translator Manager " />
 
-	<!-- costs -->
-	<page page="euActivityDetails" name="aim_euActivityDetails" title=" - Activity Details" />
-
 	<!-- program Manager-->
 	<page name="viewProgramTypeManager" title=" : Program Type Manager" />
 	<page name="addProgramType" title=" : Add Program Type" />
@@ -462,9 +459,6 @@
 	</teaser>
 	<teaser name="financingBreakdown" action="financingBreakdown.do">
 		viewFinancingBreakdown.jsp
-	</teaser>
-	<teaser name="costsBreakdown" action="projectCostsBreakdown.do">
-		viewCostsBreakdown.jsp
 	</teaser>
 
        <teaser name="contractingBreakdown" action="contractingBreakdown.do">

@@ -185,13 +185,6 @@ public class ColumnFilterGenerator {
             //c.getFilters().add(new AmpColumnsFilters(c, "expenditureClass", "expenditure_class_id"));
         }
             
-        if (ArConstants.VIEW_CONTRIBUTION_FUNDING.equals(c.getExtractorView())) {
-            //TODO: add filters here
-            AmpColumnsFilters acf = new AmpColumnsFilters(c,"donorGroups","org_grp_id");
-            c.getFilters().add(acf);
-            AmpColumnsFilters acf1= new AmpColumnsFilters(c,"typeOfAssistance","terms_assist_id");
-            c.getFilters().add(acf1);
-        }
         if (ArConstants.VIEW_COMPONENT_FUNDING.equals(c.getExtractorView())) {
             //TODO: add filters here    
             //AmpColumnsFilters acf = new AmpColumnsFilters(c,"regions","amp_component_id");

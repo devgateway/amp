@@ -130,14 +130,6 @@ YAHOO.amp.reportwizard.fundingGroups["regional"]		= new Array(
 YAHOO.amp.reportwizard.fundingGroups["component"]		= new Array(
 				 'Component Type','Administrative Level 1','Status','Primary Sector','National Planning Objectives Level 1','Administrative Level 3','Administrative Level 2','Component Name','Project Title','Component Funding Organization','Component Second Responsible Organization'
 			);
-YAHOO.amp.reportwizard.fundingGroups["contribution"]	= new Array(
-				'Costing Donor','Parent National Planning Objectives', 'National Planning Objectives Level 1', 'Primary Program Level 1', 
-				'Secondary Program Level 1', 'Primary Sector Sub-Sector',
-				'Status', 'Primary Sector', 'A.C. Chapter',
-				'Accession Instrument', 'Donor', 'Secondary Sector', 'Secondary Sector Sub-Sector', 'Activity Created By' ,'Tertiary Sector'
-				,'Tertiary Sector Sub-Sector'
-                ,'Tertiary Sector Sub-Sub-Sector'
-			);
 
 YAHOO.amp.reportwizard.fundingGroups["pledge"]= new Array(
 		'Related Projects', 'Pledges Donor Group', 'Pledges Aid Modality',

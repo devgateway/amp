@@ -51,21 +51,6 @@
 				  FROM amp_funding f
 					JOIN amp_category_value val ON f.financing_instr_category_value = val.id
 					JOIN amp_organisation o ON f.amp_donor_org_id = o.amp_org_id
-				  UNION
-				  SELECT eu.amp_activity_id, val.category_value, eu_con.financing_instr_category_value AS id,
-					null::bigint as terms_assist_id,
-					null::bigint as financing_instrument_id,
-					null::bigint as donor_org_id,
-					null::bigint as mode_of_payment_id,
-					null::bigint as funding_status_id,
-					null::bigint as agreement_id,
-					null::bigint as funding_id,
-					null::bigint as vulnerable_group_id,
-					null::bigint as project_results_available_id,
-					null::bigint as donor_org_country_id
-				  FROM amp_eu_activity eu
-					JOIN amp_eu_activity_contributions eu_con ON eu_con.eu_activity_id = eu.id
-					JOIN amp_category_value val ON eu_con.financing_instr_category_value = val.id
 				 ) v
 				 ON aav.amp_activity_id = v.amp_activity_id;
 			]]></lang>

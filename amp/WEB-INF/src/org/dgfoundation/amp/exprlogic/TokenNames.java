@@ -6,7 +6,6 @@ public final class TokenNames
     public static final String UNDISBURSED = "undisbursedLogicalToken";
     public static final String UNCOMMITTED = "uncommittedLogicalToken";
 
-    public static final String COSTING_GRAND_TOTAL = "grandTotalToken";
     public static final String MTEF = "mtefToken";
     
     public static final String CUMULATED_DISBURSEMENTS = "cumulatedDisbursements";

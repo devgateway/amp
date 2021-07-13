@@ -23,12 +23,10 @@ public class ReportOptionProvider {
     public static final List<ReportOptionConfiguration> REPORT_PROFILE_OPTIONS = ImmutableList.of(
         new ReportOptionConfiguration("funding-donor", "Donor Report (Donor Funding)", null,
                 "Donor Report", "Report Types"),
-        new ReportOptionConfiguration("funding-component", "Regional Report (Regional Funding)", null,
+        new ReportOptionConfiguration("funding-regional", "Regional Report (Regional Funding)", null,
                 "Regional Report", "Report Types"),
-        new ReportOptionConfiguration("funding-contribution", "Component Report (Component Funding)", null,
+        new ReportOptionConfiguration("funding-component", "Component Report (Component Funding)", null,
                 "Component Report", "Report Types"),
-        new ReportOptionConfiguration("funding-component", "Contribution Report (Activity Contributions)", null,
-                "Contribution Report", "Report Types"),
         new ReportOptionConfiguration("funding-pledges", "Pledges Report"),
         new ReportOptionConfiguration("summary-report", "Summary Report"),
         new ReportOptionConfiguration("annual-report", "Annual Report"),
@@ -48,12 +46,10 @@ public class ReportOptionProvider {
     public static final List<ReportOptionConfiguration> TAB_PROFILE_OPTIONS = ImmutableList.of(
             new ReportOptionConfiguration("funding-donor", "Donor Tab (Donor Funding)", null,
                     "Donor Report", "Report Types"),
-            new ReportOptionConfiguration("funding-component", "Regional Tab (Regional Funding)", null,
+            new ReportOptionConfiguration("funding-regional", "Regional Tab (Regional Funding)", null,
                     "Regional Report", "Report Types"),
-            new ReportOptionConfiguration("funding-contribution", "Component Tab (Component Funding)", null,
+            new ReportOptionConfiguration("funding-component", "Component Tab (Component Funding)", null,
                     "Component Report", "Report Types"),
-            new ReportOptionConfiguration("funding-component", "Contribution Tab (Activity Contributions)", null,
-                    "Contribution Report", "Report Types"),
             new ReportOptionConfiguration("annual-report", "Annual Report")
     );
 
@@ -83,8 +79,8 @@ public class ReportOptionProvider {
     public static final List<String> PLEDGES_OPTION_NAMES = ImmutableList.of("funding-pledges", "summary-report",
             "annual-report", "totals-only", "empty-funding-columns");
 
-    public static final List<String> REPORT_OPTION_NAMES = ImmutableList.of("funding-donor", "funding-component",
-            "funding-contribution", "funding-component", "summary-report", "annual-report", "quarterly-report",
+    public static final List<String> REPORT_OPTION_NAMES = ImmutableList.of("funding-donor", "funding-regional",
+            "funding-component", "summary-report", "annual-report", "quarterly-report",
             "monthly-report", "totals-only", "show-pledges", "empty-funding-columns");
 
     private TranslatorService translatorService;

@@ -23,8 +23,7 @@ public class PublicViewColumnsUtil
      * the views/tables which should be cached for the public view even though they are not extractor columns
      */
     protected static List<String> supplementalCachedViews = Arrays.<String>asList("amp_activity_group", "amp_activity", "amp_activity_version",
-                "v_donor_funding", "v_component_funding", "v_contribution_funding", "v_regional_funding",
-                "v_pledges_funding_st");
+                "v_donor_funding", "v_component_funding", "v_regional_funding", "v_pledges_funding_st");
     
     /**
      * only change this to false when you have REALLY good reasons for this and ONLY WHILE TESTING OTHER STUFF <br />

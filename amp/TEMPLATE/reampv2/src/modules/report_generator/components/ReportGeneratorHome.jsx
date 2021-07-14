@@ -20,7 +20,7 @@ import {
   markExistingReportSanitized,
   updateColumnsSelected,
   updateMeasuresSelected,
-  updateMeasuresSorting, updateHierarchiesSelected, updateHierarchiesSorting
+  updateMeasuresSorting,
 } from '../actions/stateUIActions';
 import {
   convertTotalGrouping, getProfileFromReport, translate, hasFilters, convertReportType, revertReportType
@@ -43,7 +43,7 @@ class ReportGeneratorHome extends Component {
       _getMetadata, _fetchReport, location, _updateProfile, _updateId, translations,
       _updateReportDetailsFundingGrouping, _setColumnsData, _setMeasuresData, _setHierarchiesData,
       _setInitialHierarchies, _fetchLanguages, _markExistingReportSanitized, _updateColumnsSelected,
-      _updateMeasuresSelected, _updateMeasuresSorting, _updateHierarchiesSelected, _updateHierarchiesSorting,
+      _updateMeasuresSelected, _updateMeasuresSorting,
     } = this.props;
     _fetchLanguages();
     // eslint-disable-next-line react/destructuring-assignment,react/prop-types
@@ -89,20 +89,17 @@ class ReportGeneratorHome extends Component {
             _updateMeasuresSelected(sanitizedSelectedMeasures.map(i => i.id));
             _updateMeasuresSorting(sanitizedSelectedMeasures.map(i => i.id));
             const sanitizedHierarchies = reportMetadata.payload.hierarchies
-              .filter(i => sanitizedSelectedColumns.find(j => j.id === i));
-            // _updateHierarchiesSelected(sanitizedHierarchies);
-            // _updateHierarchiesSorting(sanitizedHierarchies);
+              .filter(i => sanitizedSelectedColumns.find(j => j.id === i.id));
 
             // Save original columns and measures for "reset".
             _setColumnsData((Object.assign([], sanitizedSelectedColumns)).map(i => i.id));
-            _setMeasuresData(([...reportMetadata.payload.measures]));
+            _setMeasuresData(([...sanitizedSelectedMeasures]));
 
             // Load hierarchies into Redux's state.
             const _hierarchies = apiMetaData.payload.columns
               .filter(i => sanitizedSelectedColumns.find(j => j.id === i.id))
               .filter(i => i.hierarchy);
-            let _hierarchiesOrder = sanitizedHierarchies;
-            _hierarchiesOrder = [];
+            const _hierarchiesOrder = [];
             sanitizedHierarchies.forEach(i => {
               _hierarchiesOrder.push(i.id);
             });
@@ -278,8 +275,6 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   _updateColumnsSelected: (data) => updateColumnsSelected(data),
   _updateMeasuresSelected: (data) => updateMeasuresSelected(data),
   _updateMeasuresSorting: (data) => updateMeasuresSorting(data),
-  _updateHierarchiesSelected: (data) => updateHierarchiesSelected(data),
-  _updateHierarchiesSorting: (data) => updateHierarchiesSorting(data),
 }, dispatch);
 
 ReportGeneratorHome.propTypes = {
@@ -306,8 +301,6 @@ ReportGeneratorHome.propTypes = {
   _updateColumnsSelected: PropTypes.func.isRequired,
   _updateMeasuresSelected: PropTypes.func.isRequired,
   _updateMeasuresSorting: PropTypes.func.isRequired,
-  _updateHierarchiesSelected: PropTypes.func.isRequired,
-  _updateHierarchiesSorting: PropTypes.func.isRequired,
 };
 
 ReportGeneratorHome.defaultProps = {

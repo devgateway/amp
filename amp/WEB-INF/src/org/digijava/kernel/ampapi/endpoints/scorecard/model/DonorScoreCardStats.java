@@ -13,13 +13,18 @@ public class DonorScoreCardStats {
     @ApiModelProperty(value = "the percentage of donors which are late", example = "25")
     private final int late;
 
-    @ApiModelProperty(value = "the percentage of donors without updates", example = "15")
+    @ApiModelProperty(value = "the percentage of donors without updates", example = "5")
     private final int noUpdates;
 
-    public DonorScoreCardStats(int onTime, int late, int noUpdates) {
+    @ApiModelProperty(value = "the percentage of donors that provided update within the validation period",
+            example = "10")
+    private final int validationPeriod;
+
+    public DonorScoreCardStats(int onTime, int late, int noUpdates, int validationPeriod) {
         this.onTime = onTime;
         this.late = late;
         this.noUpdates = noUpdates;
+        this.validationPeriod = validationPeriod;
     }
 
     public int getOnTime() {
@@ -32,5 +37,9 @@ public class DonorScoreCardStats {
 
     public int getNoUpdates() {
         return noUpdates;
+    }
+
+    public int getValidationPeriod() {
+        return validationPeriod;
     }
 }

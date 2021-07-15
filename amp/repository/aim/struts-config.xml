@@ -115,7 +115,6 @@
     <form-bean name="aimUserDetailForm" type="org.digijava.module.aim.form.UserDetailForm" />
     <form-bean name="aimAdvancedReportForm" type="org.digijava.module.aim.form.AdvancedReportForm" />
 
-    <!-- The ReportWizardForm is used by the DHTML report wizard -->
     <form-bean name="aimSectorSchemeForm" type="org.digijava.module.aim.form.SectorSchemeForm" />
     <form-bean name="aimFlagUploaderForm" type="org.digijava.module.aim.form.FlagUploaderForm" />
     <form-bean name="aimTranslatorManagerForm" type="org.digijava.module.aim.form.TranslatorManagerForm" />
@@ -289,7 +288,6 @@
       <forward name="publicView" path="/aim/reportsPublicView.do" redirect="true" />
       <forward name="reportView" path="/aim/viewNewAdvancedReport.do?reload=true" />
       <forward name="queryView" path="/aim/viewNewAdvancedReport.do?reload=true&amp;view=reset&amp;viewFormat=foldable&amp;widget=true&amp;queryEngine=true" />
-      <forward name="reportWizard" path="/showLayout.do?layout=aim_showSelectedFilters" />
     </action>
     
  	<action name="aimReportsFilterPickerForm" path="/aim/validateReportsFilterPicker" scope="request" type="org.digijava.module.aim.action.ReportFilterPickerValidator" validate="false"/>

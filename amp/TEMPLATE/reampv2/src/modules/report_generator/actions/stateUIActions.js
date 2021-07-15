@@ -12,7 +12,9 @@ export const UPDATE_REPORT_DETAILS_ALLOW_EMPTY_FUNDING_COLUMNS = 'UPDATE_REPORT_
 export const UPDATE_REPORT_DETAILS_SPLIT_BY_FUNDING = 'UPDATE_REPORT_DETAILS_SPLIT_BY_FUNDING';
 export const UPDATE_REPORT_DETAILS_SHOW_ORIGINAL_CURRENCIES = 'UPDATE_REPORT_DETAILS_SHOW_ORIGINAL_CURRENCIES';
 export const UPDATE_REPORT_DETAILS_DESCRIPTION = 'UPDATE_REPORT_DETAILS_DESCRIPTION';
+export const UPDATE_REPORT_DETAILS_NAME_MULTILANG = 'UPDATE_REPORT_DETAILS_NAME_MULTILANG';
 export const UPDATE_REPORT_DETAILS_NAME = 'UPDATE_REPORT_DETAILS_NAME';
+export const REVERT_REPORT_DETAILS_NAME = 'REVERT_REPORT_DETAILS_NAME';
 export const UPDATE_REPORT_DETAILS_ALSO_SHOW_PLEDGES = 'UPDATE_REPORT_DETAILS_ALSO_SHOW_PLEDGES';
 export const UPDATE_REPORT_DETAILS_USE_ABOVE_FILTERS = 'UPDATE_REPORT_DETAILS_USE_ABOVE_FILTERS';
 export const UPDATE_REPORT_DETAILS_REPORT_CATEGORY = 'UPDATE_REPORT_DETAILS_REPORT_CATEGORY';
@@ -25,7 +27,9 @@ export const RESET_MEASURES_SELECTED_COLUMN = 'RESET_MEASURES_SELECTED_COLUMN';
 export const UPDATE_HIERARCHIES_SORT_COLUMN = 'UPDATE_HIERARCHIES_SORT_COLUMN';
 export const UPDATE_HIERARCHIES_SELECTED_COLUMN = 'UPDATE_HIERARCHIES_SELECTED_COLUMN';
 export const UPDATE_HIERARCHIES_LIST = 'UPDATE_HIERARCHIES_LIST';
+export const SET_INITIAL_HIERARCHIES = 'SET_INITIAL_HIERARCHIES';
 export const UPDATE_APPLIED_FILTERS = 'UPDATE_APPLIED_FILTERS';
+export const UPDATE_INCLUDE_LOCATION_WITH_CHILDREN = 'UPDATE_INCLUDE_LOCATION_WITH_CHILDREN';
 export const UPDATE_APPLIED_SETTINGS = 'UPDATE_APPLIED_SETTINGS';
 export const UPDATE_PROFILE = 'UPDATE_PROFILE';
 export const UPDATE_ID = 'UPDATE_ID';
@@ -48,6 +52,8 @@ export const SAVE_REPORT_ERROR = 'SAVE_REPORT_ERROR';
 export const RUN_REPORT_PENDING = 'RUN_REPORT_PENDING';
 export const RUN_REPORT_SUCCESS = 'RUN_REPORT_SUCCESS';
 export const RUN_REPORT_ERROR = 'RUN_REPORT_ERROR';
+
+export const MARK_EXISTING_REPORT_SANITIZED = 'MARK_EXISTING_REPORT_SANITIZED';
 
 export function updateReportDetailsTotalGrouping(payload) {
   return {
@@ -112,10 +118,25 @@ export function updateReportDetailsDescription(payload) {
   };
 }
 
+export function updateReportDetailsNameMultiLang(payload, lang) {
+  return {
+    type: UPDATE_REPORT_DETAILS_NAME_MULTILANG,
+    payload,
+    lang
+  };
+}
+
 export function updateReportDetailsName(payload) {
   return {
     type: UPDATE_REPORT_DETAILS_NAME,
-    payload
+    payload,
+  };
+}
+
+export function revertReportDetailsName(payload) {
+  return {
+    type: REVERT_REPORT_DETAILS_NAME,
+    payload,
   };
 }
 
@@ -167,6 +188,15 @@ export function updateHierarchiesSorting(payload) {
   };
 }
 
+export function setInitialHierarchies(available, selected, order) {
+  return {
+    type: SET_INITIAL_HIERARCHIES,
+    available,
+    selected,
+    order,
+  };
+}
+
 export function updateMeasuresSelected(payload) {
   return {
     type: UPDATE_MEASURES_SELECTED_COLUMN,
@@ -181,9 +211,10 @@ export function updateMeasuresSorting(payload) {
   };
 }
 
-export function resetMeasuresSelected() {
+export function resetMeasuresSelected(payload) {
   return {
-    type: RESET_MEASURES_SELECTED_COLUMN
+    type: RESET_MEASURES_SELECTED_COLUMN,
+    payload
   };
 }
 
@@ -238,6 +269,13 @@ export function updateAppliedFilters(payload, html) {
     type: UPDATE_APPLIED_FILTERS,
     payload,
     html
+  };
+}
+
+export function updateIncludeLocationWithChildren(payload) {
+  return {
+    type: UPDATE_INCLUDE_LOCATION_WITH_CHILDREN,
+    payload,
   };
 }
 
@@ -320,6 +358,12 @@ export function runReportError(error) {
   return {
     type: RUN_REPORT_ERROR,
     error
+  };
+}
+
+export function markExistingReportSanitized() {
+  return {
+    type: MARK_EXISTING_REPORT_SANITIZED,
   };
 }
 

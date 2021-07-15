@@ -77,13 +77,20 @@ class MeasuresSection extends Component {
   }
 
   handleReset = () => {
-    const { _resetMeasuresSelected } = this.props;
-    _resetMeasuresSelected();
+    const { _resetMeasuresSelected, id, initialMeasures } = this.props;
+    if (id) {
+      _resetMeasuresSelected({
+        selected: [...initialMeasures].map(i => i.id),
+        order: [...initialMeasures].map(i => i.id)
+      });
+    } else {
+      _resetMeasuresSelected({ selected: [], order: [] });
+    }
   }
 
   render() {
     const {
-      visible, translations, measures, selectedMeasures, measuresOrder, profile
+      visible, translations, measures, selectedMeasures, measuresOrder, profile, existingReportSanitized
     } = this.props;
     const { search } = this.state;
     const _measures = search ? measures.filter(i => i.label.toLowerCase().indexOf(search.toLowerCase()) > -1)
@@ -105,7 +112,7 @@ class MeasuresSection extends Component {
           <Grid.Column computer="8" tablet="16">
             <OptionsList
               title={translate('availableFinancialMeasures', profile, translations)}
-              tooltip="tooltip 1"
+              tooltip={translate('availableMeasuresTooltip', profile, translations)}
               isRequired
               className="smallHeight">
               <ColumnsSelector
@@ -113,6 +120,7 @@ class MeasuresSection extends Component {
                 selected={selectedMeasures}
                 showLoadingWhenEmpty
                 noCategories
+                isLoading={!existingReportSanitized}
                 onColumnSelectionChange={this.handleMeasureSelection} />
             </OptionsList>
           </Grid.Column>
@@ -120,7 +128,7 @@ class MeasuresSection extends Component {
             <OptionsList
               className="smallHeight"
               title={translate('orderSelectedFinancialMeasures', profile, translations)}
-              tooltip="tooltip 1" >
+              tooltip={translate('selectedMeasuresTooltip', profile, translations)} >
               <ColumnSorter
                 keyPrefix="measures"
                 translations={translations}
@@ -128,6 +136,7 @@ class MeasuresSection extends Component {
                 order={measuresOrder}
                 onColumnSelectionChange={this.handleHierarchySelection}
                 onColumnSortChange={this.handleMeasureSort}
+                isLoading={!existingReportSanitized}
                 profile={profile} />
             </OptionsList>
           </Grid.Column>
@@ -164,12 +173,15 @@ const mapStateToProps = (state) => ({
   selectedMeasures: state.uiReducer.measures.selected,
   measuresOrder: state.uiReducer.measures.order,
   profile: state.uiReducer.profile,
+  id: state.uiReducer.id,
+  initialMeasures: state.mementoReducer.measures,
+  existingReportSanitized: state.uiReducer.existingReportSanitized,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   _updateMeasuresSelected: (data) => updateMeasuresSelected(data),
   _updateMeasuresSorting: (data) => updateMeasuresSorting(data),
-  _resetMeasuresSelected: () => resetMeasuresSelected,
+  _resetMeasuresSelected: (selected, order) => resetMeasuresSelected(selected, order),
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MeasuresSection);
@@ -184,13 +196,19 @@ MeasuresSection.propTypes = {
   _updateMeasuresSorting: PropTypes.func.isRequired,
   _resetMeasuresSelected: PropTypes.func.isRequired,
   profile: PropTypes.string,
+  id: PropTypes.number,
+  initialMeasures: PropTypes.array,
+  existingReportSanitized: PropTypes.bool,
 };
 
 MeasuresSection.defaultProps = {
   measures: [],
   selectedMeasures: [],
   measuresOrder: [],
-  profile: undefined
+  profile: undefined,
+  id: undefined,
+  initialMeasures: [],
+  existingReportSanitized: false,
 };
 
 MeasuresSection.contextType = ReportGeneratorContext;

@@ -28,7 +28,7 @@
             </snapshots>
             <id>central</id>
             <name>amp</name>
-            <url>http://artifactory.ampdev.net/artifactory/amp</url>
+            <url>https://artifactory.dgdev.org/artifactory/central/</url>
         </repository>
         <repository>
             <id>OSGEO GeoTools repo</id>
@@ -42,7 +42,7 @@
             </snapshots>
             <id>central</id>
             <name>amp</name>
-            <url>http://artifactory.ampdev.net/artifactory/amp</url>
+            <url>https://artifactory.dgdev.org/artifactory/central/</url>
         </pluginRepository>
     </pluginRepositories>
 

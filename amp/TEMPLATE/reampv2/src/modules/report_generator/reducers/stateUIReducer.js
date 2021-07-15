@@ -22,7 +22,7 @@ import {
   UPDATE_REPORT_DETAILS_ALSO_SHOW_PLEDGES,
   FETCH_REPORT_PENDING,
   FETCH_REPORT_ERROR,
-  UPDATE_REPORT_DETAILS_NAME,
+  UPDATE_REPORT_DETAILS_NAME_MULTILANG,
   UPDATE_REPORT_DETAILS_REPORT_CATEGORY,
   UPDATE_APPLIED_FILTERS,
   UPDATE_APPLIED_SETTINGS,
@@ -38,6 +38,9 @@ import {
   RUN_REPORT_PENDING,
   RUN_REPORT_SUCCESS,
   RUN_REPORT_ERROR,
+  SET_INITIAL_HIERARCHIES,
+  UPDATE_REPORT_DETAILS_NAME,
+  REVERT_REPORT_DETAILS_NAME, UPDATE_INCLUDE_LOCATION_WITH_CHILDREN, MARK_EXISTING_REPORT_SANITIZED,
 } from '../actions/stateUIActions';
 import {
   convertReportDetails
@@ -96,6 +99,7 @@ const initialState = {
   runReportPending: false,
   runReportSuccess: false,
   runReportError: false,
+  existingReportSanitized: false,
 };
 
 export default (state = initialState, action) => {
@@ -172,12 +176,31 @@ export default (state = initialState, action) => {
           description: action.payload
         }
       };
+    case UPDATE_REPORT_DETAILS_NAME_MULTILANG:
+      return {
+        ...state,
+        reportDetails: {
+          ...state.reportDetails,
+          name: {
+            ...state.reportDetails.name,
+            [action.lang]: action.payload,
+          }
+        }
+      };
     case UPDATE_REPORT_DETAILS_NAME:
       return {
         ...state,
         reportDetails: {
           ...state.reportDetails,
-          name: action.payload
+          name: action.payload,
+        }
+      };
+    case REVERT_REPORT_DETAILS_NAME:
+      return {
+        ...state,
+        reportDetails: {
+          ...state.reportDetails,
+          name: action.payload,
         }
       };
     case UPDATE_REPORT_DETAILS_REPORT_CATEGORY:
@@ -241,6 +264,15 @@ export default (state = initialState, action) => {
           order: action.payload
         }
       };
+    case SET_INITIAL_HIERARCHIES:
+      return {
+        ...state,
+        hierarchies: {
+          available: action.available,
+          selected: action.selected,
+          order: action.order
+        }
+      };
     case UPDATE_MEASURES_SELECTED_COLUMN:
       return {
         ...state,
@@ -262,8 +294,8 @@ export default (state = initialState, action) => {
         ...state,
         measures: {
           ...state.measures,
-          selected: [],
-          order: [],
+          selected: action.payload.selected,
+          order: action.payload.order,
         }
       };
     case UPDATE_APPLIED_FILTERS:
@@ -271,6 +303,14 @@ export default (state = initialState, action) => {
         ...state,
         filters: action.payload,
         appliedFilters: action.html,
+      };
+    case UPDATE_INCLUDE_LOCATION_WITH_CHILDREN:
+      return {
+        ...state,
+        reportDetails: {
+          ...state.reportDetails,
+          includeLocationChildren: action.payload,
+        }
       };
     case UPDATE_APPLIED_SETTINGS:
       return {
@@ -420,6 +460,11 @@ export default (state = initialState, action) => {
         runReportPending: false,
         runReportError: true,
         runReportSuccess: false,
+      };
+    case MARK_EXISTING_REPORT_SANITIZED:
+      return {
+        ...state,
+        existingReportSanitized: true,
       };
     default:
       return state;

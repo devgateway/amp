@@ -127,11 +127,11 @@ export function getCategoryForCountry(country) {
   }
 }
 
-export function generateYearsFilters(years, settingsParam) {
+export function generateYearsFilters(years, settingsParam, maxYearParam) {
   const { settings, settingsLoaded } = settingsParam;
   if (settingsLoaded) {
     const minYear = parseInt(settings[DASHBOARD_DEFAULT_MIN_YEAR_RANGE], 10);
-    const maxYear = parseInt(settings[DASHBOARD_DEFAULT_MAX_YEAR_RANGE], 10);
+    const maxYear = maxYearParam || parseInt(settings[DASHBOARD_DEFAULT_MAX_YEAR_RANGE], 10);
     for (let i = maxYear; i >= minYear; i--) {
       years.push({ id: i, name: i });
     }

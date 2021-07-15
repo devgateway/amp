@@ -4,7 +4,12 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Loader } from 'semantic-ui-react';
 import { ReportGeneratorContext } from './StartUp';
-import { getMetadata, updateAppliedFilters, updateReportDetailsUseAboveFilters } from '../actions/stateUIActions';
+import {
+  getMetadata,
+  updateAppliedFilters,
+  updateIncludeLocationWithChildren,
+  updateReportDetailsUseAboveFilters
+} from '../actions/stateUIActions';
 import { toggleIcon } from '../utils/appliedFiltersExtenalCode';
 import { translate, hasFilters } from '../utils/Utils';
 
@@ -16,19 +21,22 @@ class Filters extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show: false, showFiltersList: false, filterLoaded: false
+      show: false, showFiltersList: false, filterLoaded: false,
     };
   }
 
   componentDidMount() {
-    const { _getMetadata } = this.props;
+    const {
+      _getMetadata, id, filters, _updateAppliedFilters
+    } = this.props;
+    const { store } = this.context;
 
     /* NOTICE WE DONT SEND ANY PARAM HERE BECAUSE WE JUST WANT THE PROMISE */
     return _getMetadata().then((action) => {
       filter = new Filter({
         draggable: true,
         caller: 'REPORTS',
-        reportType: action.payload.type
+        reportType: action.payload.type,
       });
 
       filter.on('apply', this.applyFilters);
@@ -37,21 +45,41 @@ class Filters extends Component {
       return filter.loaded.then(() => {
         // eslint-disable-next-line react/no-string-refs
         filter.setElement(this.refs.filterPopup);
+
+        /* IMPORTANT: AT THIS POINT WE ASSUME THE REPORT DATA HAVE BEEN FETCHED!
+        (through 'loading' prop in FiltersAndSettings.jsx). We deserialize (only one time) with empty/saved
+        filters to set includeLocationChildren. */
+        if (id) {
+          const _filters = { ...filters };
+          // We need the current value of includeLocationChildren, not when the props where received.
+          const { includeLocationChildren } = store.getState().uiReducer.reportDetails;
+          _filters['include-location-children'] = _filters.includeLocationChildren;
+          filter.deserialize({
+            filters: _filters,
+            silent: true,
+            includeLocationChildren,
+            'include-location-children': includeLocationChildren
+          });
+          const html_ = filter.getAppliedFilters({ returnHTML: true });
+          _updateAppliedFilters(filters, html_);
+        } else {
+          filter.deserialize({
+            filters: { includeLocationChildren: true },
+            silent: true,
+            includeLocationChildren: true,
+            'include-location-children': true
+          });
+        }
         this.setState({ filterLoaded: true });
         return true;
       });
     });
   }
 
-  shouldComponentUpdate(nextProps, nextState, nextContext) {
-    const { filters, html, _updateAppliedFilters } = this.props;
-    // Load saved filters (only one time).
-    if (filter && filters && html === null) {
-      filter.deserialize({ filters, silent: true });
-      const html_ = filter.getAppliedFilters({ returnHTML: true });
-      _updateAppliedFilters(filters, html_);
-    }
-    return (nextProps !== this.props || nextState !== this.state || nextContext !== this.context);
+  // eslint-disable-next-line no-unused-vars
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    // The js code that animates the applied filters tree has to be re-implemented and re-run.
+    toggleIcon();
   }
 
   componentWillUnmount() {
@@ -74,7 +102,10 @@ class Filters extends Component {
   };
 
   applyFilters = () => {
-    const { onApplyFilters, _updateAppliedFilters, _updateReportDetailsUseAboveFilters } = this.props;
+    const {
+      onApplyFilters, _updateAppliedFilters, _updateReportDetailsUseAboveFilters,
+      _updateIncludeLocationWithChildren
+    } = this.props;
     this.hideFilters();
     const serialized = filter.serialize();
     const html = filter.getAppliedFilters({ returnHTML: true });
@@ -84,6 +115,7 @@ class Filters extends Component {
     } else {
       _updateReportDetailsUseAboveFilters(false);
     }
+    _updateIncludeLocationWithChildren(serialized['include-location-children']);
     onApplyFilters(serialized.filters);
   };
 
@@ -121,12 +153,6 @@ class Filters extends Component {
       </>
     );
   }
-
-  // eslint-disable-next-line react/sort-comp,no-unused-vars
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    // The js code that animates the applied filters tree has to be re-implemented and re-run.
-    toggleIcon();
-  }
 }
 
 const mapStateToProps = state => ({
@@ -136,13 +162,15 @@ const mapStateToProps = state => ({
   filters: state.uiReducer.filters,
   html: state.uiReducer.appliedFilters,
   type: state.type,
-  profile: state.uiReducer.profile
+  profile: state.uiReducer.profile,
+  id: state.uiReducer.id,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   _updateAppliedFilters: (data, html) => updateAppliedFilters(data, html),
   _updateReportDetailsUseAboveFilters: (data) => updateReportDetailsUseAboveFilters(data),
   _getMetadata: () => getMetadata(),
+  _updateIncludeLocationWithChildren: (data) => updateIncludeLocationWithChildren(data),
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Filters);
@@ -153,18 +181,19 @@ Filters.propTypes = {
   _updateAppliedFilters: PropTypes.func.isRequired,
   _updateReportDetailsUseAboveFilters: PropTypes.func.isRequired,
   filters: PropTypes.object,
-  html: PropTypes.string,
   type: PropTypes.string.isRequired,
   _getMetadata: PropTypes.func.isRequired,
   profile: PropTypes.string,
   appliedSectionChange: PropTypes.func.isRequired,
-  appliedSectionOpen: PropTypes.bool.isRequired
+  appliedSectionOpen: PropTypes.bool.isRequired,
+  id: PropTypes.number,
+  _updateIncludeLocationWithChildren: PropTypes.func.isRequired,
 };
 
 Filters.defaultProps = {
   filters: null,
-  html: null,
-  profile: undefined
+  profile: undefined,
+  id: undefined,
 };
 
 Filters.contextType = ReportGeneratorContext;

@@ -104,12 +104,12 @@ class MapContainer extends Component {
     return exportData;
   }
 
-
   render() {
     const {
       filters, projects, countriesForExport, countriesForExportChanged, selectedFilters, filtersRestrictions,
       handleSelectedFiltersChange, chartSelected, showLargeCountryPopin, closeLargeCountryPopinAndClearFilter,
-      filteredProjects, showEmptyProjects, onNoProjectsModalClose, showDataDownload, settings, toggleDataDownload
+      filteredProjects, showEmptyProjects, onNoProjectsModalClose, showDataDownload, settings, toggleDataDownload,
+      countriesMessage, updateCountriesMessage
     } = this.props;
     const { countries } = filters.countries;
     const { sectors } = filters.sectors;
@@ -119,15 +119,17 @@ class MapContainer extends Component {
     const { translations } = this.context;
     return (
       <div className="col-md-10 col-md-offset-2 map-wrapper">
-        {chartSelected !== DOWNLOAD_CHART && (<HorizontalFilters
-          selectedFilters={selectedFilters}
-          filtersRestrictions={filtersRestrictions}
-          handleSelectedFiltersChange={handleSelectedFiltersChange}
-          chartSelected={chartSelected}
+        {chartSelected !== DOWNLOAD_CHART && (
+          <HorizontalFilters
+            selectedFilters={selectedFilters}
+            filtersRestrictions={filtersRestrictions}
+            handleSelectedFiltersChange={handleSelectedFiltersChange}
+            chartSelected={chartSelected}
 
-        />)}
+          />
+        )}
         <MapHome filteredProjects={filteredProjects} countries={countries} />
-        <PopupOverlay show={showDataDownload} additionalClass={'data-container'}>
+        <PopupOverlay show={showDataDownload} additionalClass="data-container">
           <DataDownloadContainer
             selectedFilters={selectedFilters}
             filtersRestrictions={filtersRestrictions}
@@ -138,6 +140,8 @@ class MapContainer extends Component {
           />
         </PopupOverlay>
         <CountryPopupOverlay
+          countriesMessage={countriesMessage}
+          updateCountriesMessage={updateCountriesMessage}
           show={showLargeCountryPopin}
           projects={filteredProjects}
           closeLargeCountryPopinAndClearFilter={closeLargeCountryPopinAndClearFilter}
@@ -150,8 +154,9 @@ class MapContainer extends Component {
           getExportData={this.getExportData.bind(this)}
           chartSelected={chartSelected}
         />
-
-        <PopupOverlay show={showEmptyProjects}>
+        <PopupOverlay
+          show={showEmptyProjects}
+          additionalClass={chartSelected === DOWNLOAD_CHART ? 'data-container' : ''}>
           <SimplePopup
             message={translations['amp.ssc.dashboard:no-data']}
             onClose={onNoProjectsModalClose} />
@@ -214,7 +219,9 @@ MapContainer.propTypes = {
   }),
   filtersRestrictions: PropTypes.object.isRequired,
   showDataDownload: PropTypes.bool,
-  toggleDataDownload: PropTypes.func.isRequired
+  toggleDataDownload: PropTypes.func.isRequired,
+  countriesMessage: PropTypes.bool,
+  updateCountriesMessage: PropTypes.func.isRequired
 };
 
 MapContainer.defaultProps = {
@@ -227,5 +234,6 @@ MapContainer.defaultProps = {
     selectedSectors: [],
     selectedModalities: [],
   },
-  showDataDownload: false
+  showDataDownload: false,
+  countriesMessage: false
 };

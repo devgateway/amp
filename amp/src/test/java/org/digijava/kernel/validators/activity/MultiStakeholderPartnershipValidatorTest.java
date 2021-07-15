@@ -8,10 +8,16 @@ import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors
 import org.digijava.kernel.validation.ConstraintViolation;
 import org.digijava.kernel.validators.ValidatorUtil;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.validator.groups.Submit;
 import org.hamcrest.Matcher;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Set;
 
@@ -20,17 +26,22 @@ import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.emptyIterable;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Viorel Chihai
  */
+
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({FeaturesUtil.class})
 public class MultiStakeholderPartnershipValidatorTest {
 
     private static APIField activityField;
 
-    @BeforeClass
-    public static void setUp() {
+    @Before
+    public void setUp() {
         TransactionUtil.setUpWorkspaceEmptyPrefixes();
+        PowerMockito.mockStatic(FeaturesUtil.class);
         activityField = ValidatorUtil.getMetaData();
     }
 
@@ -70,10 +81,15 @@ public class MultiStakeholderPartnershipValidatorTest {
                 .withMultiStakeholderPartnership(true)
                 .getActivity();
 
+        mockValidation();
         Set<ConstraintViolation> violations = getConstraintViolations(activity, Submit.class);
 
         assertThat(violations, containsInAnyOrder(ImmutableList.of(
                 violation("multi_stakeholder_partners"))));
+    }
+
+    private void mockValidation() {
+        when(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.MAPPING_DESTINATION_PROGRAM)).thenReturn(null);
     }
 
     @Test

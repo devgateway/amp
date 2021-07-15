@@ -15,16 +15,17 @@ import {
   updateHierarchiesSelected,
   updateHierarchiesSorting,
   updateHierarchiesAvailable,
-  resetColumnsSelected
+  resetColumnsSelected, setInitialHierarchies
 } from '../../actions/stateUIActions';
 import ColumnSorter from './ColumnsSorter';
 import ErrorMessage from '../ErrorMessage';
 import { translate } from '../../utils/Utils';
+import InputWrapper from './InputWrapper';
 
 class ColumnsSection extends Component {
   constructor() {
     super();
-    this.state = { search: null };
+    this.state = { search: null, applySearch: false };
   }
 
   handleColumnSelection = (id) => {
@@ -107,29 +108,47 @@ class ColumnsSection extends Component {
   }
 
   handleSearch = (event) => {
-    this.setState({ search: event.target.value });
+    this.setState({ search: event.target.value, applySearch: false });
   }
 
   handleReset = () => {
-    const { _resetColumnsSelected } = this.props;
-    _resetColumnsSelected();
+    const {
+      _resetColumnsSelected, _updateColumnsSelected, id, initialColumns, _setInitialHierarchies, initialHierarchies
+    } = this.props;
+    if (id) {
+      _updateColumnsSelected(Object.assign([], initialColumns));
+      const _hierarchies = { ...initialHierarchies };
+      _setInitialHierarchies([..._hierarchies.available], [..._hierarchies.selected], [..._hierarchies.order]);
+    } else {
+      _resetColumnsSelected();
+    }
+  }
+
+  // eslint-disable-next-line no-unused-vars
+  highlightColumns = (event) => {
+    const { search } = this.state;
+    if (search) {
+      this.setState({ applySearch: true });
+    }
   }
 
   render() {
     const {
       visible, translations, columns, selectedColumns, hierarchies, hierarchiesOrder, selectedHierarchies,
-      selectedSummaryReport, profile
+      selectedSummaryReport, profile, existingReportSanitized
     } = this.props;
-    const { search } = this.state;
+    const { search, applySearch } = this.state;
     const _columns = search ? columns.filter(i => i.label.toLowerCase().indexOf(search.toLowerCase()) > -1) : columns;
     return (
       <div className={!visible ? 'invisible-tab' : ''}>
         <Grid columns={3}>
           <GridColumn computer="8" tablet="16">
-            <Input
-              icon="search"
-              placeholder={translate('search', profile, translations)}
-              onChange={this.handleSearch} />
+            <InputWrapper keyPress="Enter" keyEvent={this.highlightColumns}>
+              <Input
+                icon="search"
+                placeholder={translate('search', profile, translations)}
+                onChange={this.handleSearch} />
+            </InputWrapper>
           </GridColumn>
           <GridColumn computer="8" textAlign="right" tablet="16">
             <span className="green_text bold pointer reset-text" onClick={this.handleReset}>
@@ -139,12 +158,14 @@ class ColumnsSection extends Component {
           <Grid.Column computer="6" tablet="16">
             <OptionsList
               title={translate('availableColumns', profile, translations)}
-              tooltip="tooltip 1"
+              tooltip={translate('availableColumnsTooltip', profile, translations)}
               className="smallHeight" >
               <ColumnsSelector
+                openSections={applySearch}
                 columns={_columns}
                 selected={selectedColumns}
-                showLoadingWhenEmpty
+                showLoadingWhenEmpty={!search}
+                isLoading={!existingReportSanitized}
                 onColumnSelectionChange={this.handleColumnSelection} />
             </OptionsList>
           </Grid.Column>
@@ -152,13 +173,14 @@ class ColumnsSection extends Component {
             <OptionsList
               title={translate('selectedColumns', profile, translations)}
               isRequired
-              tooltip="tooltip 2"
+              tooltip={translate('selectedColumnsTooltip', profile, translations)}
               className="smallHeight" >
               <ColumnSorter
                 keyPrefix="columns"
                 translations={translations}
                 columns={columns.filter(i => selectedColumns.find(j => j === i.id))}
                 order={selectedColumns}
+                isLoading={!existingReportSanitized}
                 onColumnSortChange={this.handleColumnSort}
                 profile={profile} />
             </OptionsList>
@@ -166,7 +188,7 @@ class ColumnsSection extends Component {
           <Grid.Column computer="5" tablet="16">
             <OptionsList
               title={translate('hierarchies', profile, translations)}
-              tooltip="tooltip 3"
+              tooltip={translate('hierarchiesTooltip', profile, translations)}
               className="smallHeight" >
               <ColumnSorter
                 keyPrefix="hierarchies"
@@ -175,6 +197,7 @@ class ColumnsSection extends Component {
                 translations={translations}
                 columns={hierarchies}
                 order={hierarchiesOrder}
+                isLoading={!existingReportSanitized}
                 onColumnSelectionChange={this.handleHierarchySelection}
                 onColumnSortChange={this.handleHierarchySort}
                 profile={profile} />
@@ -223,6 +246,10 @@ const mapStateToProps = (state) => ({
   hierarchiesOrder: state.uiReducer.hierarchies.order,
   selectedSummaryReport: state.uiReducer.reportDetails.selectedSummaryReport,
   profile: state.uiReducer.profile,
+  id: state.uiReducer.id,
+  initialColumns: state.mementoReducer.columns,
+  initialHierarchies: state.mementoReducer.hierarchies,
+  existingReportSanitized: state.uiReducer.existingReportSanitized,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -232,6 +259,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   _updateHierarchiesSorting: (data) => updateHierarchiesSorting(data),
   _updateHierarchiesAvailable: (data) => updateHierarchiesAvailable(data),
   _resetColumnsSelected: () => resetColumnsSelected(),
+  _setInitialHierarchies: (available, selected, order) => setInitialHierarchies(available, selected, order),
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ColumnsSection);
@@ -252,6 +280,11 @@ ColumnsSection.propTypes = {
   selectedSummaryReport: PropTypes.bool,
   _resetColumnsSelected: PropTypes.func.isRequired,
   profile: PropTypes.string,
+  id: PropTypes.number,
+  initialColumns: PropTypes.array,
+  _setInitialHierarchies: PropTypes.func.isRequired,
+  initialHierarchies: PropTypes.array,
+  existingReportSanitized: PropTypes.bool,
 };
 
 ColumnsSection.defaultProps = {
@@ -261,7 +294,11 @@ ColumnsSection.defaultProps = {
   selectedHierarchies: [],
   hierarchiesOrder: [],
   selectedSummaryReport: false,
-  profile: undefined
+  profile: undefined,
+  id: undefined,
+  initialColumns: [],
+  initialHierarchies: [],
+  existingReportSanitized: false,
 };
 
 ColumnsSection.contextType = ReportGeneratorContext;

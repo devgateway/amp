@@ -6,7 +6,6 @@
  */
 package org.dgfoundation.amp.ar;
 
-import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.lang.reflect.Constructor;
@@ -29,8 +28,6 @@ import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.ArConstants.SyntheticColumnsMeta;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.cell.ListCell;
@@ -48,7 +45,6 @@ import org.dgfoundation.amp.ar.view.xls.PlainGroupReportDataXLS;
 import org.dgfoundation.amp.ar.view.xls.RichColumnReportDataXLS;
 import org.dgfoundation.amp.ar.view.xls.RichGroupReportDataXLS;
 import org.dgfoundation.amp.ar.view.xls.XLSExportType;
-import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.dgfoundation.amp.ar.workers.CategAmountColWorker;
 import org.dgfoundation.amp.ar.workers.MetaTextColWorker;
 import org.dgfoundation.amp.ar.workers.TextColWorker;
@@ -59,18 +55,14 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.action.reportwizard.ReportWizardAction;
-import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
-import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
@@ -85,7 +77,6 @@ import org.digijava.module.budgetexport.reports.implementation.BudgetGroupReport
 import org.digijava.module.budgetexport.reports.implementation.BudgetMetaTextColWorker;
 import org.digijava.module.budgetexport.reports.implementation.BudgetTextColWorker;
 import org.digijava.module.budgetexport.util.BudgetExportConstants;
-import org.digijava.module.budgetexport.util.MappingEncoder;
 import org.hibernate.Query;
 import org.hibernate.Session;
 

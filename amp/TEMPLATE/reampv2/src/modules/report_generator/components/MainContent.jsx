@@ -28,7 +28,7 @@ class MainContent extends Component {
   // eslint-disable-next-line no-unused-vars
   componentDidUpdate(prevProps, prevState, snapshot) {
     const {
-      _updatePreviewId, _getPreview, columns, measures, hierarchies, reportDetails, lastReportId, profile,
+      _updatePreviewId, _getPreview, columns, measures, hierarchies, reportDetails, lastReportId, profile, settings,
       existingReportSanitized
     } = this.props;
     // Dont try to load the preview until the report metadata and columns info are loaded.
@@ -49,7 +49,8 @@ class MainContent extends Component {
         hierarchies: {
           selected: hierarchies.selected,
           order: hierarchies.order
-        }
+        },
+        settings,
       };
       const name = md5(JSON.stringify(merged));
       const newId = javaHashCode(name);
@@ -79,7 +80,8 @@ class MainContent extends Component {
           filters: dateFilter,
           show_empty_rows: true,
           show_original_currency: reportDetails.selectedShowOriginalCurrencies,
-          summary: reportDetails.selectedSummaryReport
+          summary: reportDetails.selectedSummaryReport,
+          settings
         });
       }
     } else {
@@ -105,7 +107,7 @@ class MainContent extends Component {
   render() {
     const { visibleTab } = this.state;
     const {
-      saveNewReport, saveReport, runReport, profile
+      saveNewReport, saveReport, runReport, profile,
     } = this.props;
     return (
       <>
@@ -145,6 +147,7 @@ const mapStateToProps = (state) => ({
   measures: state.uiReducer.measures,
   hierarchies: state.uiReducer.hierarchies,
   profile: state.uiReducer.profile,
+  settings: state.uiReducer.settings,
   existingReportSanitized: state.uiReducer.existingReportSanitized,
 });
 
@@ -167,6 +170,7 @@ MainContent.propTypes = {
   saveReport: PropTypes.func.isRequired,
   runReport: PropTypes.func.isRequired,
   profile: PropTypes.string,
+  settings: PropTypes.object,
   existingReportSanitized: PropTypes.bool,
 };
 
@@ -177,6 +181,7 @@ MainContent.defaultProps = {
   measures: undefined,
   hierarchies: undefined,
   profile: undefined,
+  settings: undefined,
   existingReportSanitized: false,
 };
 

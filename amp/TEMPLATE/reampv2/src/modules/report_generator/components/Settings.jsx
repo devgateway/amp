@@ -6,8 +6,7 @@ import PropTypes from 'prop-types';
 import styles from '../../../../../ampTemplate/node_modules/amp-settings/dist/amp-settings.css';
 import { ReportGeneratorContext } from './StartUp';
 import {
-  // eslint-disable-next-line no-unused-vars
-  TABS, URL_SETTINGS_TABS, URL_SETTINGS_REPORTS, REPORTS, PROFILE_TAB
+  URL_SETTINGS_REPORTS, REPORTS
 } from '../utils/constants';
 import { fetchGlobalSettings } from '../actions/settingsActions';
 import { extractSettings } from '../reducers/utils/settingsDataConverter';
@@ -60,6 +59,7 @@ class Settings extends Component {
 
   applySettings = (data) => {
     const { onApplySettings, _updateAppliedSettings } = this.props;
+    _updateAppliedSettings(null);
     _updateAppliedSettings(data);
     onApplySettings(data);
     this.hideSettings();

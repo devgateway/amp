@@ -83,8 +83,6 @@ class MainContent extends Component {
           summary: reportDetails.selectedSummaryReport,
           settings
         });
-      } else {
-        console.log('no changes for preview');
       }
     } else {
       // With current user input we cant generate a valid preview.

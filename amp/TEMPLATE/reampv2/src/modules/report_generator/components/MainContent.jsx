@@ -80,7 +80,8 @@ class MainContent extends Component {
           filters: dateFilter,
           show_empty_rows: true,
           show_original_currency: reportDetails.selectedShowOriginalCurrencies,
-          summary: reportDetails.selectedSummaryReport
+          summary: reportDetails.selectedSummaryReport,
+          settings
         });
       } else {
         console.log('no changes for preview');
@@ -108,11 +109,10 @@ class MainContent extends Component {
   render() {
     const { visibleTab } = this.state;
     const {
-      saveNewReport, saveReport, runReport, profile, settings
+      saveNewReport, saveReport, runReport, profile,
     } = this.props;
     return (
       <>
-        {JSON.stringify(settings)}
         <Grid>
           <GridRow>
             <GridColumn computer="4" tablet={16}>

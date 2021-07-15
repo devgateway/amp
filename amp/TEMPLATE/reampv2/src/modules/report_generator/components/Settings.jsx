@@ -60,6 +60,7 @@ class Settings extends Component {
 
   applySettings = (data) => {
     const { onApplySettings, _updateAppliedSettings } = this.props;
+    _updateAppliedSettings(null);
     _updateAppliedSettings(data);
     onApplySettings(data);
     this.hideSettings();

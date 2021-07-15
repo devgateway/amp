@@ -296,21 +296,6 @@ public final class ARUtil {
                     + teamMember.getEmail() + " from team "
                     + teamMember.getTeamName());
 
-        //TODO: Check Constantin - code comming from merge
-//      AmpARFilter af = (AmpARFilter) httpSession
-//              .getAttribute(ArConstants.REPORTS_FILTER);
-//      if (af == null)
-//          af = new AmpARFilter();
-//      af.readRequestData(request);
-//      Object initFilter   = request.getAttribute(ArConstants.INITIALIZE_FILTER_FROM_DB);
-//      if ( initFilter!=null && "true".equals(initFilter) ) {
-//          FilterUtil.populateFilter(r, af);
-//          /* The prepare function needs to have the filter (af) already populated */
-//          FilterUtil.prepare(request, af, true);
-//          httpSession.setAttribute( ReportWizardAction.EXISTING_SESSION_FILTER, af);
-//      }
-//      httpSession.setAttribute(ArConstants.REPORTS_FILTER, af);
-
         AmpReportGenerator arg = new AmpReportGenerator(r, filter, regenerateFilterQuery);
         arg.setCleanupMetadata(cleanupMetadata);
         arg.generate();

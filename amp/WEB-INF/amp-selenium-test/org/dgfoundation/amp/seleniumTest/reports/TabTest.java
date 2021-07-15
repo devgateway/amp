@@ -61,8 +61,8 @@ public class TabTest extends SeleneseTestCase{
         
         //ADD TAB
         boolean addTabAvailable = false;
-        if (selenium.isElementPresent("//a[contains(@href, " +
-                "\"/TEMPLATE/reampv2/build/index.html#/report_generator?profile=T\")]")) {
+        if (selenium.isElementPresent("//a[contains(@href, "
+                + "\"/TEMPLATE/reampv2/build/index.html#/report_generator?profile=T\")]")) {
             selenium.click("//a[contains(@href, \"/TEMPLATE/reampv2/build/index.html#/report_generator?profile=T\")]");
             selenium.waitForPageToLoad("50000");
             addTabAvailable = true;
@@ -378,8 +378,8 @@ public class TabTest extends SeleneseTestCase{
      */
     public static void addBasicTab (LoggingSelenium selenium, String tabName, String filter) throws InterruptedException{
         boolean addTabAvailable = false;
-        if (selenium.isElementPresent("//a[contains(@href, " +
-                "\"/TEMPLATE/reampv2/build/index.html#/report_generator?profile=T\")]")) {
+        if (selenium.isElementPresent("//a[contains(@href, "
+                + "\"/TEMPLATE/reampv2/build/index.html#/report_generator?profile=T\")]")) {
             selenium.click("//a[contains(@href, \"/TEMPLATE/reampv2/build/index.html#/report_generator?profile=T\")]");
             selenium.waitForPageToLoad("50000");
             addTabAvailable = true;

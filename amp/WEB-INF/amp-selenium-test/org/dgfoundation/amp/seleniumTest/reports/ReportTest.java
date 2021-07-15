@@ -54,10 +54,10 @@ public class ReportTest extends SeleneseTestCase{
         //ADD REPORT
         boolean addReportAvailable = false;
         if (SeleniumFeaturesConfiguration.getModuleState("Report Generator")){
-            if (selenium.isElementPresent("//a[contains(@href, " +
-                    "\"/TEMPLATE/reampv2/build/index.html#/report_generator?profile=R\")]")) {
-                selenium.click("//a[contains(@href, " +
-                        "\"/TEMPLATE/reampv2/build/index.html#/report_generator?profile=R\")]");
+            if (selenium.isElementPresent("//a[contains(@href, "
+                    + "\"/TEMPLATE/reampv2/build/index.html#/report_generator?profile=R\")]")) {
+                selenium.click("//a[contains(@href, " 
+                        + "\"/TEMPLATE/reampv2/build/index.html#/report_generator?profile=R\")]");
                 selenium.waitForPageToLoad("360000");
                 addReportAvailable = true;
             } else {
@@ -227,8 +227,8 @@ public class ReportTest extends SeleneseTestCase{
                 if (selenium.isElementPresent("//a[contains(@href, \"/aim/viewNewAdvancedReport.do~view=reset~widget=false~ampReportId=" + cnt + "\")]")) {
                     String repname = selenium.getText("//a[contains(@href, \"/aim/viewNewAdvancedReport.do~view=reset~widget=false~ampReportId=" + cnt + "\")]");
                     if (repname.equals(reportName)) {
-                        selenium.click("//a[contains(@href, " +
-                                "\"/TEMPLATE/reampv2/build/index.html#/report_generator/" + cnt + "\")]");
+                        selenium.click("//a[contains(@href, "
+                                + "\"/TEMPLATE/reampv2/build/index.html#/report_generator/" + cnt + "\")]");
                         done = true;
                         selenium.waitForPageToLoad("30000");                    
                     }
@@ -311,8 +311,8 @@ public class ReportTest extends SeleneseTestCase{
                 if (selenium.isElementPresent("//a[contains(@href, \"/aim/viewNewAdvancedReport.do~view=reset~widget=false~ampReportId=" + cnt + "\")]")) {
                     String repname = selenium.getText("//a[contains(@href, \"/aim/viewNewAdvancedReport.do~view=reset~widget=false~ampReportId=" + cnt + "\")]");
                     if (repname.equals(reportName)) {
-                        selenium.click("//a[contains(@href, " +
-                                "\"/TEMPLATE/reampv2/build/index.html#/report_generator/" + cnt + "\")]");
+                        selenium.click("//a[contains(@href, "
+                                + "\"/TEMPLATE/reampv2/build/index.html#/report_generator/" + cnt + "\")]");
                         done = true;
                         selenium.waitForPageToLoad("30000");                    
                     }

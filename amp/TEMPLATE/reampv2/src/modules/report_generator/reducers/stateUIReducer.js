@@ -40,7 +40,7 @@ import {
   RUN_REPORT_ERROR,
   SET_INITIAL_HIERARCHIES,
   UPDATE_REPORT_DETAILS_NAME,
-  REVERT_REPORT_DETAILS_NAME, UPDATE_INCLUDE_LOCATION_WITH_CHILDREN,
+  REVERT_REPORT_DETAILS_NAME, UPDATE_INCLUDE_LOCATION_WITH_CHILDREN, MARK_EXISTING_REPORT_SANITIZED,
 } from '../actions/stateUIActions';
 import {
   convertReportDetails
@@ -99,6 +99,7 @@ const initialState = {
   runReportPending: false,
   runReportSuccess: false,
   runReportError: false,
+  existingReportSanitized: false,
 };
 
 export default (state = initialState, action) => {
@@ -459,6 +460,11 @@ export default (state = initialState, action) => {
         runReportPending: false,
         runReportError: true,
         runReportSuccess: false,
+      };
+    case MARK_EXISTING_REPORT_SANITIZED:
+      return {
+        ...state,
+        existingReportSanitized: true,
       };
     default:
       return state;

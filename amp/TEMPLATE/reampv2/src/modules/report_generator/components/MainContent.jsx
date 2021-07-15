@@ -28,9 +28,11 @@ class MainContent extends Component {
   // eslint-disable-next-line no-unused-vars
   componentDidUpdate(prevProps, prevState, snapshot) {
     const {
-      _updatePreviewId, _getPreview, columns, measures, hierarchies, reportDetails, lastReportId, profile
+      _updatePreviewId, _getPreview, columns, measures, hierarchies, reportDetails, lastReportId, profile,
+      existingReportSanitized
     } = this.props;
-    if (areEnoughDataForPreview(columns, measures, hierarchies, reportDetails, profile)) {
+    // Dont try to load the preview until the report metadata and columns info are loaded.
+    if (existingReportSanitized && areEnoughDataForPreview(columns, measures, hierarchies, reportDetails, profile)) {
       // Convert input data to a String then Number.
       const _reportDetails = { ...reportDetails };
       // Remove fields that would make the preview flicker.
@@ -143,6 +145,7 @@ const mapStateToProps = (state) => ({
   measures: state.uiReducer.measures,
   hierarchies: state.uiReducer.hierarchies,
   profile: state.uiReducer.profile,
+  existingReportSanitized: state.uiReducer.existingReportSanitized,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -164,6 +167,7 @@ MainContent.propTypes = {
   saveReport: PropTypes.func.isRequired,
   runReport: PropTypes.func.isRequired,
   profile: PropTypes.string,
+  existingReportSanitized: PropTypes.bool,
 };
 
 MainContent.defaultProps = {
@@ -172,7 +176,8 @@ MainContent.defaultProps = {
   columns: undefined,
   measures: undefined,
   hierarchies: undefined,
-  profile: undefined
+  profile: undefined,
+  existingReportSanitized: false,
 };
 
 MainContent.contextType = ReportGeneratorContext;

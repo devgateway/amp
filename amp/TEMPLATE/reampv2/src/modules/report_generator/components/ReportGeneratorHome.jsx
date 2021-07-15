@@ -16,7 +16,11 @@ import {
   save,
   runReport,
   updateReportDetailsFundingGrouping,
-  setInitialHierarchies
+  setInitialHierarchies,
+  markExistingReportSanitized,
+  updateColumnsSelected,
+  updateMeasuresSelected,
+  updateMeasuresSorting,
 } from '../actions/stateUIActions';
 import {
   convertTotalGrouping, getProfileFromReport, translate, hasFilters, convertReportType, revertReportType
@@ -38,7 +42,8 @@ class ReportGeneratorHome extends Component {
     const {
       _getMetadata, _fetchReport, location, _updateProfile, _updateId, translations,
       _updateReportDetailsFundingGrouping, _setColumnsData, _setMeasuresData, _setHierarchiesData,
-      _setInitialHierarchies, _fetchLanguages
+      _setInitialHierarchies, _fetchLanguages, _markExistingReportSanitized, _updateColumnsSelected,
+      _updateMeasuresSelected, _updateMeasuresSorting,
     } = this.props;
     _fetchLanguages();
     // eslint-disable-next-line react/destructuring-assignment,react/prop-types
@@ -68,23 +73,34 @@ class ReportGeneratorHome extends Component {
     // If this is a saved report then ignore type and profile params from the URL.
     if (id) {
       _updateId(id);
-      return _fetchReport(id).then((action) => {
-        const profile = getProfileFromReport(action.payload);
+      return _fetchReport(id).then((reportMetadata) => {
+        const profile = getProfileFromReport(reportMetadata.payload);
         _updateProfile(profile);
-        if (action.payload) {
-          return _getMetadata(action.payload.type, profile).then((data) => {
+        if (reportMetadata.payload) {
+          return _getMetadata(reportMetadata.payload.type, profile).then((apiMetaData) => {
             this.setState({ showChildren: true });
 
-            _setColumnsData((Object.assign([], action.payload.columns)).map(i => i.id));
-            _setMeasuresData(([...action.payload.measures]));
+            // AMP-30290: We need to remove columns that are not available in the API anymore.
+            const sanitizedSelectedColumns = reportMetadata.payload.columns
+              .filter(i => apiMetaData.payload.columns.find(j => j.id === i.id));
+            _updateColumnsSelected(sanitizedSelectedColumns.map(i => i.id));
+            const sanitizedSelectedMeasures = reportMetadata.payload.measures
+              .filter(i => apiMetaData.payload.measures.find(j => i.id === j.id));
+            _updateMeasuresSelected(sanitizedSelectedMeasures.map(i => i.id));
+            _updateMeasuresSorting(sanitizedSelectedMeasures.map(i => i.id));
+            const sanitizedHierarchies = reportMetadata.payload.hierarchies
+              .filter(i => sanitizedSelectedColumns.find(j => j.id === i.id));
+
+            // Save original columns and measures for "reset".
+            _setColumnsData((Object.assign([], sanitizedSelectedColumns)).map(i => i.id));
+            _setMeasuresData(([...sanitizedSelectedMeasures]));
 
             // Load hierarchies into Redux's state.
-            const _hierarchies = data.payload.columns
-              .filter(i => action.payload.columns.find(j => j.id === i.id))
+            const _hierarchies = apiMetaData.payload.columns
+              .filter(i => sanitizedSelectedColumns.find(j => j.id === i.id))
               .filter(i => i.hierarchy);
-            let _hierarchiesOrder = action.payload.hierarchies;
-            _hierarchiesOrder = [];
-            action.payload.hierarchies.forEach(i => {
+            const _hierarchiesOrder = [];
+            sanitizedHierarchies.forEach(i => {
               _hierarchiesOrder.push(i.id);
             });
             _hierarchies.forEach(i => {
@@ -92,14 +108,17 @@ class ReportGeneratorHome extends Component {
                 _hierarchiesOrder.push(i.id);
               }
             });
-            const selected = action.payload.hierarchies.map(i => i.id);
+            const selected = sanitizedHierarchies.map(i => i.id);
             _setInitialHierarchies(_hierarchies, selected, _hierarchiesOrder);
+
+            // Save original hierarchies for "reset".
             _setHierarchiesData({
               available: [..._hierarchies],
               selected: [...selected],
               order: [..._hierarchiesOrder]
             });
-            return _updateReportDetailsFundingGrouping(revertReportType(action.payload.type));
+            _markExistingReportSanitized();
+            return _updateReportDetailsFundingGrouping(revertReportType(reportMetadata.payload.type));
           });
         } else {
           // eslint-disable-next-line max-len
@@ -107,6 +126,7 @@ class ReportGeneratorHome extends Component {
         }
       });
     } else {
+      _markExistingReportSanitized();
       _updateProfile(profileFromURL);
       _getMetadata(typeFromURL, profileFromURL);
       _updateReportDetailsFundingGrouping(revertReportType(typeFromURL));
@@ -251,6 +271,10 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   _setMeasuresData: (data) => setMeasuresData(data),
   _setInitialHierarchies: (available, selected, order) => setInitialHierarchies(available, selected, order),
   _fetchLanguages: () => fetchLanguages(),
+  _markExistingReportSanitized: () => markExistingReportSanitized(),
+  _updateColumnsSelected: (data) => updateColumnsSelected(data),
+  _updateMeasuresSelected: (data) => updateMeasuresSelected(data),
+  _updateMeasuresSorting: (data) => updateMeasuresSorting(data),
 }, dispatch);
 
 ReportGeneratorHome.propTypes = {
@@ -273,6 +297,10 @@ ReportGeneratorHome.propTypes = {
   _setHierarchiesData: PropTypes.func.isRequired,
   _setInitialHierarchies: PropTypes.func.isRequired,
   _fetchLanguages: PropTypes.func.isRequired,
+  _markExistingReportSanitized: PropTypes.func.isRequired,
+  _updateColumnsSelected: PropTypes.func.isRequired,
+  _updateMeasuresSelected: PropTypes.func.isRequired,
+  _updateMeasuresSorting: PropTypes.func.isRequired,
 };
 
 ReportGeneratorHome.defaultProps = {

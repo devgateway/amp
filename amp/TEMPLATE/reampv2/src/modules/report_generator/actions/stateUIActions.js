@@ -53,6 +53,8 @@ export const RUN_REPORT_PENDING = 'RUN_REPORT_PENDING';
 export const RUN_REPORT_SUCCESS = 'RUN_REPORT_SUCCESS';
 export const RUN_REPORT_ERROR = 'RUN_REPORT_ERROR';
 
+export const MARK_EXISTING_REPORT_SANITIZED = 'MARK_EXISTING_REPORT_SANITIZED';
+
 export function updateReportDetailsTotalGrouping(payload) {
   return {
     type: UPDATE_REPORT_DETAILS_TOTAL_GROUPING,
@@ -356,6 +358,12 @@ export function runReportError(error) {
   return {
     type: RUN_REPORT_ERROR,
     error
+  };
+}
+
+export function markExistingReportSanitized() {
+  return {
+    type: MARK_EXISTING_REPORT_SANITIZED,
   };
 }
 

@@ -102,8 +102,8 @@
   "amp.tabGenerator:selectedColumnsTooltip": "In this menu, you can see what fields you have previously selected. Click and drag on the arrows to change the order in which your selections will appear in your final tab.",
   "amp.reportGenerator:hierarchiesTooltip": "Decide in which order information will be grouped in the report. For example if you select “primary sector” all information will be grouped according to this selection.",
   "amp.tabGenerator:hierarchiesTooltip": "Decide in which order information will be grouped in the tab. For example if you select “primary sector” all information will be grouped according to this selection.",
-  "amp.reportGenerator:availableMeasuresTooltip": "All available fields that are enabled in the AMP.",
-  "amp.tabGenerator:availableMeasuresTooltip": "All available fields that are enabled in the AMP.",
+  "amp.reportGenerator:availableMeasuresTooltip": "All available financial fields that are enabled in the AMP.",
+  "amp.tabGenerator:availableMeasuresTooltip": "All available financial fields that are enabled in the AMP.",
   "amp.reportGenerator:selectedMeasuresTooltip": "Choose in what order the measures will appear in your final report.",
   "amp.tabGenerator:selectedMeasuresTooltip": "Choose in what order the measures will appear in your final tab."
 }

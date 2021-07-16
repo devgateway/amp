@@ -72,9 +72,9 @@ export default class ColumnSorter extends Component {
 
   render() {
     const {
-      columns, order, checkbox, keyPrefix, translations, selected, profile
+      columns, order, checkbox, keyPrefix, translations, selected, profile, isLoading
     } = this.props;
-    if (columns.length > 0) {
+    if (columns.length > 0 && !isLoading) {
       let sortedColumns = columns;
       if (order.length > 0) {
         sortedColumns = [];
@@ -160,6 +160,7 @@ ColumnSorter.propTypes = {
   translations: PropTypes.object.isRequired,
   selected: PropTypes.array,
   profile: PropTypes.string.isRequired,
+  isLoading: PropTypes.bool,
 };
 
 ColumnSorter.defaultProps = {
@@ -167,5 +168,6 @@ ColumnSorter.defaultProps = {
   order: [],
   checkbox: false,
   onColumnSelectionChange: undefined,
-  selected: []
+  selected: [],
+  isLoading: false,
 };

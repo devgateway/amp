@@ -19,8 +19,8 @@ const SscCustomLegend = ({ data, chartSelected }) => (
               <div className="col-md-9 col-xs-9 label">
                 <EllipsisText
                   text={d.simpleLabel}
-                  length={50}
-                  tail="" />
+                  length={40}
+                  tail="..." />
                 <span
                   className="label percentage">
                   {`${d.percentage}%`}

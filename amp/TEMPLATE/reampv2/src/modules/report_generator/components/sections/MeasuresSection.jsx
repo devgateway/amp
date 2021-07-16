@@ -90,7 +90,7 @@ class MeasuresSection extends Component {
 
   render() {
     const {
-      visible, translations, measures, selectedMeasures, measuresOrder, profile
+      visible, translations, measures, selectedMeasures, measuresOrder, profile, existingReportSanitized
     } = this.props;
     const { search } = this.state;
     const _measures = search ? measures.filter(i => i.label.toLowerCase().indexOf(search.toLowerCase()) > -1)
@@ -120,6 +120,7 @@ class MeasuresSection extends Component {
                 selected={selectedMeasures}
                 showLoadingWhenEmpty
                 noCategories
+                isLoading={!existingReportSanitized}
                 onColumnSelectionChange={this.handleMeasureSelection} />
             </OptionsList>
           </Grid.Column>
@@ -135,6 +136,7 @@ class MeasuresSection extends Component {
                 order={measuresOrder}
                 onColumnSelectionChange={this.handleHierarchySelection}
                 onColumnSortChange={this.handleMeasureSort}
+                isLoading={!existingReportSanitized}
                 profile={profile} />
             </OptionsList>
           </Grid.Column>
@@ -173,6 +175,7 @@ const mapStateToProps = (state) => ({
   profile: state.uiReducer.profile,
   id: state.uiReducer.id,
   initialMeasures: state.mementoReducer.measures,
+  existingReportSanitized: state.uiReducer.existingReportSanitized,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -195,6 +198,7 @@ MeasuresSection.propTypes = {
   profile: PropTypes.string,
   id: PropTypes.number,
   initialMeasures: PropTypes.array,
+  existingReportSanitized: PropTypes.bool,
 };
 
 MeasuresSection.defaultProps = {
@@ -204,6 +208,7 @@ MeasuresSection.defaultProps = {
   profile: undefined,
   id: undefined,
   initialMeasures: [],
+  existingReportSanitized: false,
 };
 
 MeasuresSection.contextType = ReportGeneratorContext;

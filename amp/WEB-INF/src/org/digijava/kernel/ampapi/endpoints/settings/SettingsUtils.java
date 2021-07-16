@@ -748,9 +748,9 @@ public class SettingsUtils {
         if (settings != null && settings.get(SettingsConstants.YEAR_RANGE_ID) != null) {
             Map<String, Object> yearRange = (Map<String, Object>) settings.get(SettingsConstants.YEAR_RANGE_ID);
             if (yearRange.get(SettingsConstants.YEAR_FROM) != null)
-                start = Integer.valueOf((String) yearRange.get(SettingsConstants.YEAR_FROM));
+                start = Integer.valueOf(yearRange.get(SettingsConstants.YEAR_FROM).toString());
             if (yearRange.get(SettingsConstants.YEAR_TO) != null)
-                end = Integer.valueOf((String) yearRange.get(SettingsConstants.YEAR_TO));
+                end = Integer.valueOf(yearRange.get(SettingsConstants.YEAR_TO).toString());
         } else if (setDefaults) {
             start = AmpARFilter.getDefaultStartYear(reportSettings.getCalendar());
             end = AmpARFilter.getDefaultEndYear(reportSettings.getCalendar());

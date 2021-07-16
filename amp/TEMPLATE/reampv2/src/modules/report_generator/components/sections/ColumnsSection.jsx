@@ -135,7 +135,7 @@ class ColumnsSection extends Component {
   render() {
     const {
       visible, translations, columns, selectedColumns, hierarchies, hierarchiesOrder, selectedHierarchies,
-      selectedSummaryReport, profile
+      selectedSummaryReport, profile, existingReportSanitized
     } = this.props;
     const { search, applySearch } = this.state;
     const _columns = search ? columns.filter(i => i.label.toLowerCase().indexOf(search.toLowerCase()) > -1) : columns;
@@ -165,6 +165,7 @@ class ColumnsSection extends Component {
                 columns={_columns}
                 selected={selectedColumns}
                 showLoadingWhenEmpty={!search}
+                isLoading={!existingReportSanitized}
                 onColumnSelectionChange={this.handleColumnSelection} />
             </OptionsList>
           </Grid.Column>
@@ -179,6 +180,7 @@ class ColumnsSection extends Component {
                 translations={translations}
                 columns={columns.filter(i => selectedColumns.find(j => j === i.id))}
                 order={selectedColumns}
+                isLoading={!existingReportSanitized}
                 onColumnSortChange={this.handleColumnSort}
                 profile={profile} />
             </OptionsList>
@@ -195,6 +197,7 @@ class ColumnsSection extends Component {
                 translations={translations}
                 columns={hierarchies}
                 order={hierarchiesOrder}
+                isLoading={!existingReportSanitized}
                 onColumnSelectionChange={this.handleHierarchySelection}
                 onColumnSortChange={this.handleHierarchySort}
                 profile={profile} />
@@ -246,6 +249,7 @@ const mapStateToProps = (state) => ({
   id: state.uiReducer.id,
   initialColumns: state.mementoReducer.columns,
   initialHierarchies: state.mementoReducer.hierarchies,
+  existingReportSanitized: state.uiReducer.existingReportSanitized,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -280,6 +284,7 @@ ColumnsSection.propTypes = {
   initialColumns: PropTypes.array,
   _setInitialHierarchies: PropTypes.func.isRequired,
   initialHierarchies: PropTypes.array,
+  existingReportSanitized: PropTypes.bool,
 };
 
 ColumnsSection.defaultProps = {
@@ -293,6 +298,7 @@ ColumnsSection.defaultProps = {
   id: undefined,
   initialColumns: [],
   initialHierarchies: [],
+  existingReportSanitized: false,
 };
 
 ColumnsSection.contextType = ReportGeneratorContext;

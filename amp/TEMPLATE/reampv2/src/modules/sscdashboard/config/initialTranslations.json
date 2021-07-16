@@ -1,7 +1,7 @@
 {
   "amp.ssc.dashboard:Home-Page": "Dashboard Home",
   "amp.ssc.dashboard:Download-Page": "Data",
-  "amp.ssc.dashboard:download-title":"SSC_DATA_EXPORT",
+  "amp.ssc.dashboard:download-title": "SSC_DATA_EXPORT",
   "amp.ssc.dashboard:Download": "Download",
   "amp.ssc.dashboard:Year": "Year",
   "amp.ssc.dashboard:Sector": "Sector",
@@ -36,7 +36,8 @@
   "amp.ssc.dashboard:select-all": "Select all",
   "amp.ssc.dashboard:select-none": "Select none",
   "amp.ssc.dashboard:center-map": "Center map",
+  "amp.ssc.dashboard:zoom-out": "Zoom Out",
   "amp.ssc.dashboard:project-xls": "Project/s (pipe separated)",
   "amp.ssc.dashboard:zoom-in": "Zoom in",
-  "amp.ssc.dashboard:zoom-out": "Zoom Out"
+  "amp.ssc.dashboard:six": "Only the first six countries were carried over. If something different is needed it will need to be modified with the flags/filters"
 }

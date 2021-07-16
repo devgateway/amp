@@ -8,7 +8,7 @@ import ReportGeneratorRouter from './components/ReportGenerator.router';
 import defaultTrnPack from './config/initialTranslations.json';
 import 'fomantic-ui-css/semantic.css';
 import '../ndddashboard/index.css';
-import '../ndddashboard/open-sans.css';
+import '../../open-sans.css';
 import './index.css';
 
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -22,7 +22,7 @@ class ReportGeneratorApp extends Component {
   render() {
     return (
       <Provider store={this.store}>
-        <Startup defaultTrnPack={defaultTrnPack}>
+        <Startup defaultTrnPack={defaultTrnPack} store={this.store}>
           <ReportGeneratorRouter />
         </Startup>
       </Provider>

@@ -7,6 +7,9 @@ import rootReducer from './reducers/rootReducer';
 import defaultTrnPack from './config/initialTranslations';
 import AppContext from './components/AppContext';
 import GeocoderPanel from "./components/layout/panel/GeocoderPanel";
+import './index.css';
+import '../../open-sans.css';
+
 
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 

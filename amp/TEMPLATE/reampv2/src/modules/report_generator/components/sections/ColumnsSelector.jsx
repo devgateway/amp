@@ -62,10 +62,10 @@ export default class ColumnsSelector extends Component {
 
   render() {
     const {
-      columns, showLoadingWhenEmpty, selected, radio, noCategories,
+      columns, showLoadingWhenEmpty, selected, radio, noCategories, isLoading
     } = this.props;
     const { activeIndex } = this.state;
-    if (columns.length > 0) {
+    if (columns.length > 0 && !isLoading) {
       if (!noCategories) {
         const categories = this.extractCategories(columns);
         return (
@@ -163,6 +163,7 @@ ColumnsSelector.propTypes = {
   radio: PropTypes.bool,
   noCategories: PropTypes.bool,
   openSections: PropTypes.bool,
+  isLoading: PropTypes.bool,
 };
 
 ColumnsSelector.defaultProps = {
@@ -172,4 +173,5 @@ ColumnsSelector.defaultProps = {
   radio: false,
   noCategories: false,
   openSections: false,
+  isLoading: false
 };

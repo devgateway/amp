@@ -135,7 +135,7 @@ class ColumnsSection extends Component {
   render() {
     const {
       visible, translations, columns, selectedColumns, hierarchies, hierarchiesOrder, selectedHierarchies,
-      selectedSummaryReport, profile
+      selectedSummaryReport, profile, existingReportSanitized
     } = this.props;
     const { search, applySearch } = this.state;
     const _columns = search ? columns.filter(i => i.label.toLowerCase().indexOf(search.toLowerCase()) > -1) : columns;
@@ -158,13 +158,14 @@ class ColumnsSection extends Component {
           <Grid.Column computer="6" tablet="16">
             <OptionsList
               title={translate('availableColumns', profile, translations)}
-              tooltip="tooltip 1"
+              tooltip={translate('availableColumnsTooltip', profile, translations)}
               className="smallHeight" >
               <ColumnsSelector
                 openSections={applySearch}
                 columns={_columns}
                 selected={selectedColumns}
                 showLoadingWhenEmpty={!search}
+                isLoading={!existingReportSanitized}
                 onColumnSelectionChange={this.handleColumnSelection} />
             </OptionsList>
           </Grid.Column>
@@ -172,13 +173,14 @@ class ColumnsSection extends Component {
             <OptionsList
               title={translate('selectedColumns', profile, translations)}
               isRequired
-              tooltip="tooltip 2"
+              tooltip={translate('selectedColumnsTooltip', profile, translations)}
               className="smallHeight" >
               <ColumnSorter
                 keyPrefix="columns"
                 translations={translations}
                 columns={columns.filter(i => selectedColumns.find(j => j === i.id))}
                 order={selectedColumns}
+                isLoading={!existingReportSanitized}
                 onColumnSortChange={this.handleColumnSort}
                 profile={profile} />
             </OptionsList>
@@ -186,7 +188,7 @@ class ColumnsSection extends Component {
           <Grid.Column computer="5" tablet="16">
             <OptionsList
               title={translate('hierarchies', profile, translations)}
-              tooltip="tooltip 3"
+              tooltip={translate('hierarchiesTooltip', profile, translations)}
               className="smallHeight" >
               <ColumnSorter
                 keyPrefix="hierarchies"
@@ -195,6 +197,7 @@ class ColumnsSection extends Component {
                 translations={translations}
                 columns={hierarchies}
                 order={hierarchiesOrder}
+                isLoading={!existingReportSanitized}
                 onColumnSelectionChange={this.handleHierarchySelection}
                 onColumnSortChange={this.handleHierarchySort}
                 profile={profile} />
@@ -246,6 +249,7 @@ const mapStateToProps = (state) => ({
   id: state.uiReducer.id,
   initialColumns: state.mementoReducer.columns,
   initialHierarchies: state.mementoReducer.hierarchies,
+  existingReportSanitized: state.uiReducer.existingReportSanitized,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -280,6 +284,7 @@ ColumnsSection.propTypes = {
   initialColumns: PropTypes.array,
   _setInitialHierarchies: PropTypes.func.isRequired,
   initialHierarchies: PropTypes.array,
+  existingReportSanitized: PropTypes.bool,
 };
 
 ColumnsSection.defaultProps = {
@@ -293,6 +298,7 @@ ColumnsSection.defaultProps = {
   id: undefined,
   initialColumns: [],
   initialHierarchies: [],
+  existingReportSanitized: false,
 };
 
 ColumnsSection.contextType = ReportGeneratorContext;

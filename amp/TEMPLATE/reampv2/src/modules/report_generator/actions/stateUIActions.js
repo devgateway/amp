@@ -29,6 +29,7 @@ export const UPDATE_HIERARCHIES_SELECTED_COLUMN = 'UPDATE_HIERARCHIES_SELECTED_C
 export const UPDATE_HIERARCHIES_LIST = 'UPDATE_HIERARCHIES_LIST';
 export const SET_INITIAL_HIERARCHIES = 'SET_INITIAL_HIERARCHIES';
 export const UPDATE_APPLIED_FILTERS = 'UPDATE_APPLIED_FILTERS';
+export const UPDATE_INCLUDE_LOCATION_WITH_CHILDREN = 'UPDATE_INCLUDE_LOCATION_WITH_CHILDREN';
 export const UPDATE_APPLIED_SETTINGS = 'UPDATE_APPLIED_SETTINGS';
 export const UPDATE_PROFILE = 'UPDATE_PROFILE';
 export const UPDATE_ID = 'UPDATE_ID';
@@ -51,6 +52,8 @@ export const SAVE_REPORT_ERROR = 'SAVE_REPORT_ERROR';
 export const RUN_REPORT_PENDING = 'RUN_REPORT_PENDING';
 export const RUN_REPORT_SUCCESS = 'RUN_REPORT_SUCCESS';
 export const RUN_REPORT_ERROR = 'RUN_REPORT_ERROR';
+
+export const MARK_EXISTING_REPORT_SANITIZED = 'MARK_EXISTING_REPORT_SANITIZED';
 
 export function updateReportDetailsTotalGrouping(payload) {
   return {
@@ -269,6 +272,13 @@ export function updateAppliedFilters(payload, html) {
   };
 }
 
+export function updateIncludeLocationWithChildren(payload) {
+  return {
+    type: UPDATE_INCLUDE_LOCATION_WITH_CHILDREN,
+    payload,
+  };
+}
+
 export function updateAppliedSettings(payload) {
   return {
     type: UPDATE_APPLIED_SETTINGS,
@@ -348,6 +358,12 @@ export function runReportError(error) {
   return {
     type: RUN_REPORT_ERROR,
     error
+  };
+}
+
+export function markExistingReportSanitized() {
+  return {
+    type: MARK_EXISTING_REPORT_SANITIZED,
   };
 }
 

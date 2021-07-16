@@ -6,7 +6,7 @@ import fetchTranslations from '../../../utils/actions/fetchTranslations';
 import { Loading } from '../../../utils/components/Loading';
 import defaultTrnPack from '../config/initialTranslations.json';
 
-export const ReportGeneratorContext = React.createContext({ translations: defaultTrnPack });
+export const ReportGeneratorContext = React.createContext({ translations: defaultTrnPack, store: null });
 
 /**
  * Component used to load everything we need before launching the APP
@@ -19,14 +19,14 @@ class Startup extends Component {
   }
 
   render() {
-    const { translationPending, children } = this.props;
+    const { translationPending, children, store } = this.props;
     if (translationPending) {
       return (<Loading />);
     } else {
       const { translations } = this.props;
       document.title = translations['amp.reportGenerator:page-title'];
       return (
-        <ReportGeneratorContext.Provider value={{ translations }}>
+        <ReportGeneratorContext.Provider value={{ translations, store }}>
           {children}
         </ReportGeneratorContext.Provider>
       );
@@ -49,10 +49,11 @@ Startup.propTypes = {
   children: PropTypes.object.isRequired,
   translationPending: PropTypes.bool,
   translations: PropTypes.object,
-  _fetchTranslations: PropTypes.func.isRequired
+  _fetchTranslations: PropTypes.func.isRequired,
+  store: PropTypes.object.isRequired,
 };
 
 Startup.defaultProps = {
   translationPending: false,
-  translations: undefined
+  translations: undefined,
 };

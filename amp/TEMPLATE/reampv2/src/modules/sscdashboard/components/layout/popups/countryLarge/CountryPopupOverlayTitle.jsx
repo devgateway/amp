@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import '../popups.css';
 import PropTypes from 'prop-types';
+import { SSCTranslationContext } from '../../../StartUp';
 
 const CountryPopupOverlayTitle = ({ countriesMessage, updateCountriesMessage }) => {
+  const translationsContext = useContext(SSCTranslationContext);
   const [show, setShow] = useState(countriesMessage);
   const style = {
-    background: '#313d4f',
-    color: 'white',
+    background: '#FFFFFF',
+    color: '#000000',
+    'font-weight': 'bold',
     'margin-bottom': '50px'
   };
-
   useEffect(() => {
     const timer = setTimeout(() => {
       if (show) {
@@ -18,7 +20,7 @@ const CountryPopupOverlayTitle = ({ countriesMessage, updateCountriesMessage }) 
         }
         setShow(false);
       }
-    }, 5000);
+    }, 10000);
     return () => clearTimeout(timer);
   }, []);
   return (
@@ -26,10 +28,7 @@ const CountryPopupOverlayTitle = ({ countriesMessage, updateCountriesMessage }) 
       {!show && (<h2>&nbsp;</h2>)}
       {show && (
         <div className="alert alert-primary" role="alert" style={style}>
-          <p>
-            Only the first six countries were carried over. If something different is needed it
-            will need to be modified with the flags/filters.
-          </p>
+          <p>{translationsContext.translations['amp.ssc.dashboard:six']}</p>
         </div>
       )}
     </div>
@@ -43,4 +42,4 @@ CountryPopupOverlayTitle.propTypes = {
 };
 CountryPopupOverlayTitle.defaultProps = {
   countriesMessage: false
-}
+};

@@ -17,8 +17,10 @@ import org.dgfoundation.amp.reports.ActivityType;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
+import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
 import org.digijava.kernel.ampapi.endpoints.publicportal.dto.PublicTotalsByMeasure;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
+import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -241,14 +243,16 @@ public class PublicPortalService {
         return new PublicTopData(headers, totals, topData, count, numberFormat, currency);
     }
 
-    public static int getActivitiesPledgesCount(PublicReportFormParameters config) {
+    public static int getActivitiesCount(Map<String, Object> filters, boolean isPledge) {
         ReportSpecificationImpl spec = new ReportSpecificationImpl("PublicPortal_activitiesPledgesCount",
                 ArConstants.DONOR_TYPE);
         spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_ID));
-        spec.addColumn(new ReportColumn(ColumnConstants.RELATED_PLEDGES));
-        spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
+        if (isPledge) {
+            spec.addColumn(new ReportColumn(ColumnConstants.RELATED_PLEDGES));
+            spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
+        }
 
-        applyFilterRules(config, spec, null);
+        applyFilterRules(filters, spec, null);
 
         spec.setDisplayEmptyFundingRows(true);
 
@@ -262,7 +266,9 @@ public class PublicPortalService {
 
                 for (ReportOutputColumn reportOutputColumn : col) {
                     String columnValue = row.get(reportOutputColumn).displayedValue;
-                    if (ColumnConstants.RELATED_PLEDGES.equals(reportOutputColumn.originalColumnName)) {
+                    if ((ColumnConstants.RELATED_PLEDGES.equals(reportOutputColumn.originalColumnName) && isPledge)
+                            || (ColumnConstants.ACTIVITY_ID.equals(reportOutputColumn.originalColumnName)
+                            && !isPledge)) {
                         if (!columnValue.equals("")) {
                             count++;
                         }
@@ -289,18 +295,35 @@ public class PublicPortalService {
         }
     }
 
-    public static PublicTotalsByMeasure getTotalByMeasure(String measure) {
-        ReportSpecificationImpl spec = new ReportSpecificationImpl("PublicPortal_activitiesPledgesCount",
-                ArConstants.DONOR_TYPE);
+    private static void applyFilterRules(Map<String, Object> filters, ReportSpecificationImpl spec,
+                                         Integer months) {
+        if (filters != null) {
+            FilterUtils.applyFilterRules(filters, spec, months);
+        }
+    }
+
+    public static PublicTotalsByMeasure getCountByMeasure(SettingsAndFiltersParameters config) {
         PublicTotalsByMeasure result = new PublicTotalsByMeasure();
-        result.setMeasure(measure);
-        result.setCurrency(result.getCurrency());
-        spec.addMeasure(new ReportMeasure(measure));
+        result.setMeasure("Total Activities");
+        result.setCount(PublicPortalService.getActivitiesCount(config != null ? config.getFilters() : null, false));
+        return result;
+    }
+
+    public static PublicTotalsByMeasure getTotalByMeasure(SettingsAndFiltersParameters config) {
+        PublicTotalsByMeasure result = new PublicTotalsByMeasure();
+        ReportSpecificationImpl spec = new ReportSpecificationImpl("PublicPortal_getTotalByMeasure",
+                ArConstants.DONOR_TYPE);
+        // applies settings, including funding type as a measure
+        SettingsUtils.applyExtendedSettings(spec, config.getSettings());
+        ReportsUtil.configureFilters(spec, config.getFilters());
+
+        result.setCurrency((String) config.getSettings().get(SettingsConstants.CURRENCY_ID));
         spec.setSummaryReport(true);
         GeneratedReport report = EndpointUtils.runReport(spec);
         Map<ReportOutputColumn, ReportCell> totals = report.reportContents.getContents();
         totals.entrySet().forEach(c -> {
             result.setTotal((BigDecimal) c.getValue().value);
+            result.setMeasure(c.getKey().originalColumnName);
         });
         return result;
     }

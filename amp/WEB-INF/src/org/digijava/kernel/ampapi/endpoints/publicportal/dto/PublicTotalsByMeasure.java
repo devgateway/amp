@@ -10,15 +10,19 @@ import java.math.BigDecimal;
  */
 public class PublicTotalsByMeasure {
 
-    @JsonProperty("Currency")
+    @JsonProperty("currency")
     @ApiModelProperty(example = "USD")
     private String currency;
 
-    @JsonProperty("Total")
-    @ApiModelProperty(example = "2222")
+    @JsonProperty("total")
+    @ApiModelProperty(example = "2222.235")
     private BigDecimal total;
 
-    @JsonProperty("Measure")
+    @JsonProperty("count")
+    @ApiModelProperty(example = "2222")
+    private Integer count;
+
+    @JsonProperty("measure")
     @ApiModelProperty(example = "Actual Commitments")
     private String measure;
 
@@ -44,5 +48,13 @@ public class PublicTotalsByMeasure {
 
     public void setMeasure(String measure) {
         this.measure = measure;
+    }
+
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
     }
 }

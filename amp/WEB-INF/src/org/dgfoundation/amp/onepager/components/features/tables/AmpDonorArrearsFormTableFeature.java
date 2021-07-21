@@ -80,5 +80,6 @@ public class AmpDonorArrearsFormTableFeature extends
             }
         };
         add(list);
+        addExpandableList();
     }
 }

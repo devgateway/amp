@@ -16,16 +16,16 @@ public class FundingDetailComparator {
                 .REORDER_FUNDING_ITEMS);
         switch (globalSettingComparator) {
             case Constants.COMPARATOR_TRANSACTION_DATE_DESC:
-                comparator = FundingDetailTransactionDateComparator.getDescending();
+                comparator = new FundingDetailTransactionDateComparator().getDescending();
                 break;
             case Constants.COMPARATOR_REPORTING_DATE_ASC:
-                comparator = FundingDetailReportingDateComparator.getAscending();
+                comparator = new FundingDetailReportingDateComparator().getAscending();
                 break;
             case Constants.COMPARATOR_REPORTING_DATE_DESC:
-                comparator = FundingDetailReportingDateComparator.getDescending();
+                comparator = new FundingDetailReportingDateComparator().getDescending();
                 break;
             default:
-                comparator = FundingDetailTransactionDateComparator.getAscending();
+                comparator = new FundingDetailTransactionDateComparator().getAscending();
         }
 
         return comparator;

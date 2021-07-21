@@ -9,7 +9,6 @@ import java.util.List;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
@@ -23,16 +22,10 @@ import org.dgfoundation.amp.onepager.components.FundingListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpBooleanChoiceField;
-import org.dgfoundation.amp.onepager.components.fields.AmpFreezingValidatorTransactionDateField;
-import org.dgfoundation.amp.onepager.components.fields.AmpGPINiIndicatorValidatorField;
-import org.dgfoundation.amp.onepager.components.fields.AmpPercentageCollectionValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.events.FreezingUpdateEvent;
-import org.dgfoundation.amp.onepager.events.GPINiQuestionUpdateEvent;
 import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
-import org.dgfoundation.amp.onepager.validators.AmpFreezingValidatorTransactionDate;
-import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.IPAContract;
@@ -66,7 +59,7 @@ public class AmpDonorDisbursementsFormTableFeature extends
                     if(ampFundingDetail.getTransactionType().equals(Constants.DISBURSEMENT_ORDER)) ret.add(ampFundingDetail.getDisbOrderId());
                 return ret;
             }
-        };      
+        };
         list = new FundingListEditor<AmpFundingDetail>("listDisbursements", setModel, FundingDetailComparator
                 .getFundingDetailComparator()) {
 
@@ -150,12 +143,9 @@ public class AmpDonorDisbursementsFormTableFeature extends
 
                 item.add(disasterResponse);                             
             }
-            
         };
         add(list);
-        
-        
-        
+        addExpandableList();
     }
 
 }

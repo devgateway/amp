@@ -5,19 +5,10 @@
 package org.dgfoundation.amp.onepager.components.features.tables;
 
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
-
 import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -26,6 +17,9 @@ import org.apache.wicket.util.convert.converter.DoubleConverter;
 import org.apache.wicket.validation.validator.RangeValidator;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
+import org.dgfoundation.amp.onepager.components.ExpandableListEditor;
+import org.dgfoundation.amp.onepager.components.ExpandableListNavigator;
+import org.dgfoundation.amp.onepager.components.FundingListEditor;
 import org.dgfoundation.amp.onepager.components.ListItem;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpBooleanChoiceField;
@@ -33,20 +27,24 @@ import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPan
 import org.dgfoundation.amp.onepager.components.fields.AmpCheckBoxFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpFreezingValidatorTransactionDateField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
-import org.dgfoundation.amp.onepager.converters.CustomDoubleConverter;
 import org.dgfoundation.amp.onepager.models.AbstractMixedSetModel;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
-import org.digijava.module.aim.helper.FundingDetailReportingDateComparator;
-import org.digijava.module.aim.helper.FundingDetailTransactionDateComparator;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 
 /**
  * @author mpostelnicu@dgateway.org since Nov 12, 2010
@@ -258,5 +256,16 @@ public abstract class AmpDonorFormTableFeaturePanel extends
     protected void addFreezingvalidator(ListItem<AmpFundingDetail> item) {
         item.add(new AmpFreezingValidatorTransactionDateField("freezingDateValidator", item.getModel(),
                 "freezingDateValidator"));
+    }
+
+    protected void addExpandableList() {
+        if (list instanceof FundingListEditor && ((FundingListEditor) list).isExpandable()) {
+            final ExpandableListNavigator<AmpFundingDetail> pln = new ExpandableListNavigator<AmpFundingDetail>(
+                    "expandableNavigator", (ExpandableListEditor) list);
+            pln.setOutputMarkupId(true);
+            add(pln);
+        } else {
+            add(new EmptyPanel("expandableNavigator"));
+        }
     }
 }

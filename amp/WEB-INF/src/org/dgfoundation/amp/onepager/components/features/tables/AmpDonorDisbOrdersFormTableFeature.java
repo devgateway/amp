@@ -91,7 +91,7 @@ public class AmpDonorDisbOrdersFormTableFeature extends
             }
         };
         add(list);
-
+        addExpandableList();
     }
 
 }

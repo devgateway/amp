@@ -39,10 +39,23 @@ public class PublicEndpoint {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(ui = false, id = "topprojects")
     @ApiOperation("Retrieves top 'count' projects based on fixed requirements.")
-    public PublicTopData getTopProjects(PublicReportFormParameters config,
-                                        @DefaultValue(TOP_COUNT) @QueryParam("count") Integer count,
-                                        @QueryParam("months") Integer months) {
-        return PublicPortalService.getTopProjects(config, count, months);
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "Top projects",
+            response = PublicTopData.class))
+    public Response getTopProjects(PublicReportFormParameters config,
+                                   @DefaultValue(TOP_COUNT) @QueryParam("count") Integer count,
+                                   @QueryParam("months") Integer months,
+                                   @QueryParam("lastUpdated") @DefaultValue("false") boolean lastUpdated) {
+        return PublicServices.buildOkResponseWithOriginHeaders(
+                PublicPortalService.getTopProjects(config, count, months, lastUpdated));
+    }
+
+    @OPTIONS
+    @Path("/topprojects")
+    @ApiOperation(
+            value = "Describe options for endpoint",
+            notes = "Enables Cross-Origin Resource Sharing for endpoint")
+    public Response describeTopProjects() {
+        return PublicServices.buildOkResponseWithOriginHeaders("");
     }
 
     @POST
@@ -53,15 +66,30 @@ public class PublicEndpoint {
             value = "Retrieves Donor Disbursements/Commitments List for the last X days",
             notes = "Get donor funding for the specific funding type "
                     + "with possibility to filter by number of records or age")
-    public PublicTopData getDonorFunding(@ApiParam(required = true) PublicReportFormParameters config,
-                                         @ApiParam(value = "the number of top records to show")
-                                         @QueryParam("count") Integer count,
-                                         @ApiParam(value = "the last number of months to consider")
-                                         @QueryParam("months") Integer months,
-                                         @ApiParam(value = "1 for commitment, 2 for disbursement", allowableValues =
-                                                 "1,2", required = true)
-                                         @DefaultValue("1") @QueryParam("fundingType") Integer fundingType) {
-        return PublicPortalService.getDonorFunding(config, count, months, fundingType);
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "Top donor funding",
+            response = PublicTopData.class))
+    public Response getDonorFunding(@ApiParam(required = true) PublicReportFormParameters config,
+                                    @ApiParam(value = "the number of top records to show")
+                                    @QueryParam("count") Integer count,
+                                    @ApiParam(value = "the last number of months to consider")
+                                    @QueryParam("months") Integer months,
+                                    @ApiParam(value = "1 for commitment, 2 for disbursement", allowableValues =
+                                            "1,2", required = true)
+                                    @DefaultValue("1") @QueryParam("fundingType") Integer fundingType,
+                                    @ApiParam(value = "true for Donor group, false for Donor agency", allowableValues =
+                                            "true,false", required = false)
+                                    @DefaultValue("false") @QueryParam("showDonorGroup") boolean showDonorGroup) {
+        return PublicServices.buildOkResponseWithOriginHeaders(PublicPortalService.getDonorFunding(config, count,
+                months, fundingType, showDonorGroup));
+    }
+
+    @OPTIONS
+    @Path("/donorFunding")
+    @ApiOperation(
+            value = "Describe options for endpoint",
+            notes = "Enables Cross-Origin Resource Sharing for endpoint")
+    public Response describeDonorFunding() {
+        return PublicServices.buildOkResponseWithOriginHeaders("");
     }
 
     @POST

@@ -51,12 +51,18 @@ public class PublicPortalService {
      * NOTE: the requirement is fixed at the moment, however we may need to provide some flexibility
      * => JsonBean config can be used for that
      *
-     * @param config - report config
-     * @param count  - the maximum number of results to retrieve
+     * @param config      - report config
+     * @param count       - the maximum number of results to retrieve
+     * @param lastUpdated - should order by updated date
      * @return JsonBean object with results
      */
     public static PublicTopData getTopProjects(
-            PublicReportFormParameters config, Integer count, Integer months) {
+            PublicReportFormParameters config, Integer count, Integer months, boolean lastUpdated) {
+
+        Set<String> rawMeasures = new HashSet<>();
+        rawMeasures.add(MeasureConstants.ACTUAL_COMMITMENTS);
+        rawMeasures.add(MeasureConstants.ACTUAL_DISBURSEMENTS);
+
         ApiErrorResponse error = ReportsUtil.validateReportConfig(config);
         if (error != null) {
             throw new ApiRuntimeException(error);
@@ -79,13 +85,15 @@ public class PublicPortalService {
         Set<String> columnsToIgnore = new HashSet<>();
 
         if (isSSCActivitiesTop) {
-            configureTopSSCProjects(spec);
-            columnsToIgnore.add(MeasureConstants.CUMULATED_SSC_COMMITMENTS);
+            configureTopSSCProjects(spec, lastUpdated);
+            if (lastUpdated) {
+                columnsToIgnore.add(MeasureConstants.CUMULATED_SSC_COMMITMENTS);
+            }
         } else {
-            configureTopStandardProjects(spec);
+            configureTopStandardProjects(spec, lastUpdated);
         }
 
-        return getPublicReport(count, spec, false, null, columnsToIgnore);
+        return getPublicReport(count, spec, false, null, columnsToIgnore, rawMeasures);
     }
 
     /**
@@ -99,16 +107,21 @@ public class PublicPortalService {
      *
      * @param spec report specification to configure
      */
-    private static void configureTopStandardProjects(ReportSpecificationImpl spec) {
+    private static void configureTopStandardProjects(ReportSpecificationImpl spec, boolean lastUpdated) {
         spec.addColumn(new ReportColumn(ColumnConstants.ACTUAL_START_DATE));
+        spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_ID));
         spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
         spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR));
         spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
 
         spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
         spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
-
-        spec.addSorter(new SortingInfo(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS), false));
+        if (lastUpdated) {
+            spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_UPDATED_ON));
+            spec.addSorter(new SortingInfo(new ReportColumn(ColumnConstants.ACTIVITY_UPDATED_ON), false));
+        } else {
+            spec.addSorter(new SortingInfo(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS), false));
+        }
     }
 
     /**
@@ -122,7 +135,7 @@ public class PublicPortalService {
      *
      * @param spec
      */
-    private static void configureTopSSCProjects(ReportSpecificationImpl spec) {
+    private static void configureTopSSCProjects(ReportSpecificationImpl spec, boolean lastUpdated) {
         spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
         spec.addColumn(new ReportColumn(ColumnConstants.COMPONENT_NAME));
         spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
@@ -130,10 +143,14 @@ public class PublicPortalService {
 
         spec.addMeasure(new ReportMeasure(MeasureConstants.BILATERAL_SSC_COMMITMENTS));
         spec.addMeasure(new ReportMeasure(MeasureConstants.TRIANGULAR_SSC_COMMITMENTS));
-        // using Cumulated SSC Commitments for sorting order 
-        spec.addMeasure(new ReportMeasure(MeasureConstants.CUMULATED_SSC_COMMITMENTS));
-
-        spec.addSorter(new SortingInfo(new ReportMeasure(MeasureConstants.CUMULATED_SSC_COMMITMENTS), false));
+        // using Cumulated SSC Commitments for sorting order
+        if (lastUpdated) {
+            spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_UPDATED_ON));
+            spec.addSorter(new SortingInfo(new ReportColumn(ColumnConstants.ACTIVITY_UPDATED_ON), false));
+        } else {
+            spec.addMeasure(new ReportMeasure(MeasureConstants.CUMULATED_SSC_COMMITMENTS));
+            spec.addSorter(new SortingInfo(new ReportMeasure(MeasureConstants.CUMULATED_SSC_COMMITMENTS), false));
+        }
     }
 
 
@@ -145,12 +162,16 @@ public class PublicPortalService {
      * @return
      */
     public static PublicTopData getDonorFunding(PublicReportFormParameters config, Integer count,
-                                                Integer months, Integer fundingType) {
+                                                Integer months, Integer fundingType, boolean showDonorGroup) {
         String measureName = null;
 
         ReportSpecificationImpl spec = new ReportSpecificationImpl("PublicPortal_GetDonorFunding",
                 ArConstants.DONOR_TYPE);
-        spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
+        if (showDonorGroup) {
+            spec.addColumn(new ReportColumn(ColumnConstants.DONOR_GROUP));
+        } else {
+            spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
+        }
         spec.setHierarchies(spec.getColumns());
         if (fundingType == 1) {
             spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
@@ -169,7 +190,7 @@ public class PublicPortalService {
         applyFilterRules(config, spec, months);
 
         SettingsUtils.applySettings(spec, config.getSettings(), true);
-        return getPublicReport(count, spec, true, measureName, null);
+        return getPublicReport(count, spec, true, measureName, null, null);
     }
 
     /**
@@ -184,7 +205,8 @@ public class PublicPortalService {
     private static PublicTopData getPublicReport(Integer count,
                                                  ReportSpecificationImpl spec, boolean calculateSubTotal,
                                                  String measureName,
-                                                 Set<String> columnsToIgnore) {
+                                                 Set<String> columnsToIgnore,
+                                                 Set<String> measureAsRawNumber) {
         GeneratedReport report = EndpointUtils.runReport(spec);
 
         String numberFormat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);
@@ -225,6 +247,15 @@ public class PublicPortalService {
                     for (Entry<ReportOutputColumn, ReportCell> cell : data.getContents().entrySet()) {
                         if (columnsToIgnore == null || !columnsToIgnore.contains(cell.getKey().columnName)) {
                             rowData.put(headersToId.get(cell.getKey().columnName), cell.getValue().displayedValue);
+                            if (measureAsRawNumber != null
+                                    && measureAsRawNumber.contains(cell.getKey().originalColumnName)) {
+                                rowData.put(headersToId.get(cell.getKey().columnName) + "-raw",
+                                        cell.getValue().value.toString());
+                                if (!headers.containsKey(headersToId.get(cell.getKey().columnName) + "-raw")) {
+                                    headers.put(headersToId.get(cell.getKey().columnName) + "-raw",
+                                            headersToId.get(cell.getKey().columnName) + "-raw");
+                                }
+                            }
                             if (calculateSubTotal) {
                                 if (cell.getKey().columnName.equals(measureName)) {
                                     total = total.add((BigDecimal) cell.getValue().value);

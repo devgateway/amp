@@ -166,8 +166,6 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpHomeThumbnail</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpGlobalSettings</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpLuceneIndexStamp</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.EUActivity</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.EUActivityContribution</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.FeatureTemplates</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.NpdSettings</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityReferenceDoc</hibernate-class>

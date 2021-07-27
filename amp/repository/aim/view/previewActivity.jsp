@@ -890,27 +890,6 @@ function collapseAll() {
 </c:if>
 <!-- END CONTACT INFORMATION -->
 
-<!-- COSTING -->
-<module:display name="Activity Costing" parentModule="PROJECT MANAGEMENT">
-<fieldset>
-	<legend>
-		<span class=legend_label id="costinglink" style="cursor: pointer;">
-			<digi:trn>Costing</digi:trn>
-		</span>	
-	</legend>
-	<div id=costingdiv class="toggleDiv">
-		<table width="100%" style="font-size:11px;">
-			<tr>
-				<td>
-					<bean:define id="mode" value="preview" type="java.lang.String" toScope="request"/> 
-					<jsp:include page="viewCostsSummary.jsp" />				</td>
-			</tr>
-		</table>
-	</div>
-</fieldset>
-</module:display>
-<!-- END COSTING -->
-
 <!-- IPA Contracting -->
 <jsp:include page="activitypreview/ipaContractingSection.jsp" />
 

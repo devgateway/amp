@@ -20,7 +20,6 @@
     <form-bean name="manageGPIForm" type="org.digijava.module.aim.form.ManageGPIForm" />
 
     <form-bean name="aimFieldPermissionsForm" type="org.digijava.module.aim.form.FieldPermissionsForm" />
-    <form-bean name="aimEUActivityForm" type="org.digijava.module.aim.form.EUActivityForm" />
     <form-bean name="aimIPAContractForm" type="org.digijava.module.aim.form.IPAContractForm" />
      <form-bean name="aimViewContractingForm" type="org.digijava.module.aim.form.ViewContractingForm" />
     <form-bean name="aimVisibilityManagerForm" type="org.digijava.module.aim.form.VisibilityManagerForm" />
@@ -326,9 +325,6 @@
     <action name="aimMainProjectDetailsForm" path="/aim/viewProjectDetails" scope="session" type="org.digijava.module.aim.action.ViewProjectDetails" validate="false">
       <forward name="forward" path="/showLayout.do?layout=aim_projectDetails" />
     </action>
-    <action path="/aim/viewEUActivityDetails" scope="request" type="org.digijava.module.aim.action.ViewEUActivity" validate="false">
-      <forward name="forward" path="/showLayout.do?layout=aim_euActivityDetails" />
-    </action>
     <action name="aimYearlyComparisonsForm" path="/aim/yearlyComparisonsFilter1" scope="request" type="org.digijava.module.aim.action.YearlyComparisonsFilter" validate="false">
       <forward name="forward" path="/showLayout.do?layout=viewYearlyComparisons" />
     </action>
@@ -340,7 +336,6 @@
     <action forward="/showLayout.do?layout=layoutSurvey" name="aimEditSurveyForm" path="/aim/viewSurvey" />
     <action forward="/showLayout.do?layout=layoutFinancingBreakdown" path="/aim/viewFinancingBreakdown" />
     <action name="aimViewContractingForm" forward="/showLayout.do?layout=layoutViewIPAContracting" path="/aim/viewIPAContracting" />
-    <action forward="/showLayout.do?layout=layoutProjectCostsBreakdown" path="/aim/viewProjectCostsBreakdown" />
     <action forward="/showLayout.do?layout=layoutRegionalFundingBreakdown" name="aimRegionalFundingForm" path="/aim/viewRegionalFundingBreakdown" validate="false" />
     <action forward="/showLayout.do?layout=layoutRegionalFundingDetails" name="aimRegionalFundingForm" path="/aim/viewRegFundDetails" />
     <action forward="/showLayout.do?layout=layoutFinancingBreakdownFilter" path="/aim/viewFinancingBreakdownFilter"  name="aimFinancingBreakdownForm" type="org.digijava.module.aim.form.FinancingBreakdownForm" validate="false"/>
@@ -414,7 +409,6 @@
     	<forward name="regionalFunding" path="/aim/viewRegionalFundingBreakdown.do?tabIndex=5" redirect="true" /> 
     	<forward name="parisSurvey" path="/aim/viewSurveyList.do?tabIndex=6" redirect="true" />       	
     	<forward name="activityDashboard" path="/aim/viewActivityDashboard.do?tabIndex=7" redirect="true" />       	
-    	<forward name="costing" path="/aim/viewProjectCostsBreakdown.do?tabIndex=8" redirect="true" />   	
     	<forward name="contracting" path="/aim/viewIPAContracting.do?tabIndex=9" redirect="true" />
     	<forward name="regionalObservations" path="/aim/viewRegionalObservations.do?tabIndex=10" redirect="true" />  	
     </action>

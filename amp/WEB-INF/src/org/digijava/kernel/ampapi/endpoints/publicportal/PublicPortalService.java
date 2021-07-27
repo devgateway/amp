@@ -201,8 +201,8 @@ public class PublicPortalService {
                                                  String measureName,
                                                  Set<String> columnsToIgnore,
                                                  Set<String> measureAsRawNumber) {
-        return getPublicReport(count, spec, calculateSubTotal, measureName, columnsToIgnore, measureAsRawNumber, null
-                , null);
+        return getPublicReport(count, spec, calculateSubTotal, measureName, columnsToIgnore,
+                measureAsRawNumber, null, null);
     }
 
     /**
@@ -218,12 +218,14 @@ public class PublicPortalService {
                                                  ReportSpecificationImpl spec, boolean calculateSubTotal,
                                                  String measureName,
                                                  Set<String> columnsToIgnore,
-                                                 Set<String> measureAsRawNumber, CachedReportData report2,
+                                                 Set<String> measureAsRawNumber, CachedReportData paginatedReport,
                                                  ReportArea pageArea) {
+        //TODO this could be more generic to avoid executing the report outside
+        // But i want to keep the change isolated from the rest so it doesnt affect other modules
         GeneratedReport report;
-        if (report2 != null) {
-            report = report2.report;
-            spec = (ReportSpecificationImpl) report2.report.spec;
+        if (paginatedReport != null) {
+            report = paginatedReport.report;
+            spec = (ReportSpecificationImpl) paginatedReport.report.spec;
         } else {
             report = EndpointUtils.runReport(spec);
         }
@@ -250,15 +252,22 @@ public class PublicPortalService {
                 headersToId.put(leafHeader.columnName, id);
             }
             // provide the top projects data
+            ReportArea reportArea = null;
+            if (paginatedReport != null) {
+                reportArea = pageArea;
+            } else {
+                reportArea = report.reportContents;
+            }
             if (count != null) {
                 count = Math.min(count, report.reportContents.getChildren().size());
             } else {
-                count = report.reportContents.getChildren().size();
+                if (paginatedReport == null) {
+                    count = report.reportContents.getChildren().size();
+                } else {
+                    count = reportArea.getChildren().size();
+                }
             }
-            ReportArea reportArea = report.reportContents;
-            if (report2 != null) {
-                reportArea = pageArea;
-            }
+
 
             BigDecimal total = new BigDecimal(0);
             Iterator<ReportArea> iter = reportArea.getChildren().iterator();
@@ -376,8 +385,8 @@ public class PublicPortalService {
         ReportArea pageArea = ReportsUtil.getReportAreaBasedOnPagination(recordsPerPage, start, cachedReportData);
 
         int totalPageCount = cachedReportData.paginationInfo.getPageCount(recordsPerPage);
-        PublicTopData result = getPublicReport(10, null, true, null, null, null, cachedReportData, pageArea);
-        result.setCount(cachedReportData.report.reportContents.getChildren().size()) ;
+        PublicTopData result = getPublicReport(null, null, true, null, null, null, cachedReportData, pageArea);
+        result.setCount(cachedReportData.report.reportContents.getChildren().size());
         result.setPage(page);
         result.setTotalPageCount(totalPageCount);
         result.setRecordsPerPage(recordsPerPage);

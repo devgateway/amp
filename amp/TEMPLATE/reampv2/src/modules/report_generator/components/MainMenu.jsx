@@ -61,30 +61,34 @@ class MainMenu extends Component {
         <Menu fluid vertical>
           <Menu.Item
             name={MENU + 0}
-            content={translate('reportingDetails', profile, translations)}
+            content={`1. ${translate('reportingDetails', profile, translations)}`}
             active={tab === 0}
             onClick={this.handleItemClick}
               />
           <Menu.Item
             name={MENU + 1}
-            content={translate('columns', profile, translations)}
+            content={`2. ${translate('columns', profile, translations)}`}
             active={tab === 1}
             onClick={this.handleItemClick}
               />
           <Menu.Item
             name={MENU + 2}
-            content={translate('financialMeasures', profile, translations)}
+            content={`3. ${translate('financialMeasures', profile, translations)}`}
             active={tab === 2}
             onClick={this.handleItemClick}
               />
           {loaded && results.logged ? (
             <Item className="save_buttons_item">
-              <Button color="green" onClick={() => this.setSaveModalOpen(true, false)} 
-                      disabled={!id || reportSaving}>
+              <Button
+                color="green"
+                onClick={() => this.setSaveModalOpen(true, false)}
+                disabled={!id || reportSaving}>
                 {translate('save', profile, translations)}
               </Button>
-              <Button color="orange" onClick={() => this.setSaveModalOpen(true, true)} 
-                      disabled={reportSaving}>
+              <Button
+                color="orange"
+                onClick={() => this.setSaveModalOpen(true, true)}
+                disabled={reportSaving}>
                 {translate('saveAs', profile, translations)}
               </Button>
             </Item>

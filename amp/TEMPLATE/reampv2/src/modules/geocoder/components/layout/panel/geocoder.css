@@ -1,14 +1,14 @@
 .geocoder-title {
-    font-weight: 600;
-    font-size: 20px;
+    font-size: 18px;
     margin-left: 15px;
     margin-bottom: 15px;
+    font-weight: bolder;
 }
 
 .geocoder-header {
     background-color: #F5F8FA;
     vertical-align: center;
-    font-size: 17px;
+    font-size: 15px;
     color: #111111;
 }
 
@@ -20,7 +20,6 @@
 
 .text-header {
     padding-top: 5px;
-    font-weight: 600;
     white-space: nowrap;
     color: #414F64;
 }

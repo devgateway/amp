@@ -36,8 +36,8 @@ table thead tr th {
     z-index: 5;
     top: 0;
     color: #8192b7;
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 13px;
+    font-weight: bolder;
 }
 
 .table > caption + thead > tr:first-child > th,

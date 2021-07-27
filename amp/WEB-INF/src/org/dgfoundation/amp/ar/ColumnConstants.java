@@ -69,7 +69,6 @@ public class ColumnConstants {
     public static final String CONTRACTING_AGENCY_DEPARTMENT_DIVISION = "Contracting Agency Department/Division";
     public static final String CONTRACTING_AGENCY_GROUPS = "Contracting Agency Groups";
     public static final String CONTRACTING_AGENCY_TYPE = "Contracting Agency Type";
-    public static final String COSTING_DONOR = "Costing Donor";
     public static final String CREDIT_DONATION = "Credit/Donation";
     public static final String CRIS_NUMBER = "Cris Number";
     public static final String CUMULATIVE_EXECUTION_RATE = "Cumulative Execution Rate";
@@ -123,7 +122,6 @@ public class ColumnConstants {
     public static final String GPI_1_Q10 = "Q10";
     public static final String GPI_1_Q10_DESCRIPTION = "Q10 Description";
 
-    public static final String GRAND_TOTAL_COST = "Grand Total Cost";
     public static final String GRACE_PERIOD = "Loan Grace Period";
     public static final String HAS_EXECUTING_AGENCY = "Has Executing Agency";
     public static final String IATI_IDENTIFIER = "IATI Identifier";

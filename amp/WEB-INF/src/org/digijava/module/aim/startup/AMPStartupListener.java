@@ -105,7 +105,6 @@ public class AMPStartupListener extends HttpServlet implements
             ampContext.setAttribute(Constants.DC_FEATURE, new Boolean(true));
             ampContext.setAttribute(Constants.SC_FEATURE, new Boolean(true));
             ampContext.setAttribute(Constants.MS_FEATURE, new Boolean(true));
-            ampContext.setAttribute(Constants.AC_FEATURE, new Boolean(true));
             ampContext.setAttribute(Constants.LB_FEATURE, new Boolean(true));
             ampContext.setAttribute(Constants.SA_FEATURE, new Boolean(true));
 

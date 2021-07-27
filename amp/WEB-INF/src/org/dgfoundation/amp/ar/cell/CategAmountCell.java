@@ -270,7 +270,7 @@ public Cell filter(Cell metaCell, Set ids) {
     
     if (!passesFilter(ArConstants.RELATED_PROJECTS, metaCell, ret)){
         // relatedProject filter is enabled but does not pass -> let's decide whether it is relevant
-        // it is relevant when NOT doing one of: COSTING_GRAND_TOTAL, ACTUAL_PLEDGE
+        // it is relevant when NOT doing one of: ACTUAL_PLEDGE
         if (!ret.isGlobalAmount()){
             return null;
         }
@@ -415,12 +415,12 @@ public Cell filter(Cell metaCell, Set ids) {
     }
     
     /**
-     * returns true IFF this cell holds an amount which is not splitable by hier. Examples: COSTING_GRAND_TOTAL, ACTUAL PLEDGE (total amount pledged for a pledge)
+     * returns true IFF this cell holds an amount which is not splitable by hier.
+     * Examples: ACTUAL PLEDGE (total amount pledged for a pledge)
      * @return
      */
     public boolean isGlobalAmount(){
-        boolean isAmountIndependentOfHier = this.existsMetaString(ArConstants.COSTING_GRAND_TOTAL);
-        isAmountIndependentOfHier |= ArConstants.PLEDGE.equals(getMetaValueString(ArConstants.TRANSACTION_TYPE));
+        boolean isAmountIndependentOfHier = ArConstants.PLEDGE.equals(getMetaValueString(ArConstants.TRANSACTION_TYPE));
         isAmountIndependentOfHier |= CommitmentGapCellGenerator.COMMITMENT_GAP_FUNDING_TYPE.equals(this.getMetaData().getMetaInfo(ArConstants.FUNDING_TYPE));
         return isAmountIndependentOfHier;
     }

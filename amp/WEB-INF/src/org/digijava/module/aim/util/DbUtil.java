@@ -75,8 +75,6 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamReports;
 import org.digijava.module.aim.dbentity.AmpUserExtension;
 import org.digijava.module.aim.dbentity.ApprovalStatus;
-import org.digijava.module.aim.dbentity.EUActivity;
-import org.digijava.module.aim.dbentity.EUActivityContribution;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.dbentity.OrgTypeSkeleton;
@@ -430,26 +428,6 @@ public class DbUtil {
 
     public static <T> T getObjectOrNull(Class<T> c, Serializable id) {
         return (T) PersistenceManager.getSession().get(c, id);
-    }
-
-    public static EUActivity getEuActivity(Long id) {
-        Session session = null;
-        EUActivity o = null;
-
-        try {
-            session = PersistenceManager.getSession();
-            o = (EUActivity) session.load(EUActivity.class, id);
-            o.getName();
-            Set<EUActivityContribution> s = o.getContributions();
-            for (EUActivityContribution i : s) {
-                i.getDonor().getName();
-            }
-
-        } catch (Exception e) {
-            logger.error("Uanble to get object of class " + EUActivity.class.getName() + " width id=" + id
-                    + ". Error was:" + e);
-        }
-        return o;
     }
 
     /**

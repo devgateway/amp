@@ -441,7 +441,6 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             result = (AmpActivityVersion) session.get(AmpActivityVersion.class, id);
             session.evict(result);
             result = (AmpActivityVersion) session.get(AmpActivityVersion.class, id);
-            Hibernate.initialize(result.getCosts());
             Hibernate.initialize(result.getInternalIds());
             Hibernate.initialize(result.getLocations());
             Hibernate.initialize(result.getSectors());

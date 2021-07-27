@@ -177,16 +177,6 @@ public class ComputedAmountColWorker extends MetaCellColumnWorker {
                 dest.addCell(destCell);
         }
 
-        // check injected funding
-        if (sourceGroup.getColumn(ArConstants.COSTING_GRAND_TOTAL) != null) {
-            CellColumn injectedDest = null;
-            Column injectedSourceCol = sourceGroup.getColumn(ArConstants.COSTING_GRAND_TOTAL);
-            i = injectedSourceCol.iterator();
-            while (i.hasNext()) {
-                ComputedAmountCell element = (ComputedAmountCell) i.next();
-                dest.addCell(element);
-            }
-        }
         return dest;
     }
 }

@@ -127,7 +127,6 @@ public class ReportWizardAction extends MultiAction {
                 put("donor", new Long(ArConstants.DONOR_TYPE));
                 put("regional", new Long(ArConstants.REGIONAL_TYPE));
                 put("component", new Long(ArConstants.COMPONENT_TYPE));
-                put("contribution", new Long(ArConstants.CONTRIBUTION_TYPE));
                 put("pledge", new Long(ArConstants.PLEDGES_TYPE));
             }
         };

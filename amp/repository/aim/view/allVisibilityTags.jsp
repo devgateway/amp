@@ -37,7 +37,6 @@
 <module:display name="Funding" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Pledges" parentModule="PROJECT MANAGEMENT"/>
 <module:display name="AMP Offline" parentModule="PROJECT MANAGEMENT"/>
-<module:display name="AMP GeoCoder" parentModule="PROJECT MANAGEMENT"/>
 <module:display name="/GIS"></module:display>
 
 <module:display  name="/Dashboards"></module:display>
@@ -174,6 +173,7 @@
 <feature:display name="Activity Dashboard" module="M & E"></feature:display>
 <feature:display name="Workspace Info" module="Tools"></feature:display>
 <feature:display name="IATI Importer" module="Tools"></feature:display>
+<feature:display name="AutoGeocoder" module="Tools"></feature:display>
 <feature:display name="Address Book" module="Tools"></feature:display>
 <field:display name="Unassigned Activities" feature="Workspace Info"></field:display>
 <field:display name="Non-archived Activities" feature="Workspace Info"></field:display>

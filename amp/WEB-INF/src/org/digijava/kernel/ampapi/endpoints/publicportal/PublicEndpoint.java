@@ -9,8 +9,11 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.PublicServices;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
 import org.digijava.kernel.ampapi.endpoints.publicportal.dto.PublicTotalsByMeasure;
+import org.digijava.kernel.ampapi.endpoints.reports.ReportFormParameters;
+import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 
 import javax.servlet.http.HttpServletResponse;
@@ -142,6 +145,36 @@ public class PublicEndpoint {
             value = "Describe options for endpoint",
             notes = "Enables Cross-Origin Resource Sharing for endpoint")
     public Response describeTotalActivities() {
+        return PublicServices.buildOkResponseWithOriginHeaders("");
+    }
+
+    /**
+     * @see ReportsUtil#getReportResultByPage
+     */
+    @POST
+    @Path("/searchprojects")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiOperation("Generates a custom report.")
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, message = "successful operation",
+            response = PublicTopData.class))
+    public final Response searchProjects(ReportFormParameters formParams) {
+        ApiErrorResponse result = ReportsUtil.validateReportConfig(formParams, true);
+        if (result != null) {
+            return Response.ok(result).build(); // FIXME return bad request
+        }
+        // we need reportId only to store the report result in cache
+        Long reportId = (long) formParams.getReportName().hashCode();
+        formParams.setCustom(true);
+        return PublicServices.buildOkResponseWithOriginHeaders(PublicPortalService.searchProjects(formParams,
+                reportId));
+    }
+
+    @OPTIONS
+    @Path("/searchprojects")
+    @ApiOperation(
+            value = "Describe options for endpoint",
+            notes = "Enables Cross-Origin Resource Sharing for endpoint")
+    public Response describeSearchProjects() {
         return PublicServices.buildOkResponseWithOriginHeaders("");
     }
 }

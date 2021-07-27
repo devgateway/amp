@@ -60,6 +60,7 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.esrigis.dbentity.AmpApiState;
+import org.jetbrains.annotations.Nullable;
 
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.WebApplicationException;
@@ -173,13 +174,8 @@ public class ReportsUtil {
         }
 
         // extract data for the requested page
-        ReportArea pageArea = null;
-        if (recordsPerPage != -1) {
-            pageArea = cachedReportData.paginationInfo.getPage(start, recordsPerPage);
-        } else if (cachedReportData != null && cachedReportData.report !=null) {
-            pageArea = cachedReportData.report.reportContents;
-        }
-        
+        ReportArea pageArea = getReportAreaBasedOnPagination(recordsPerPage, start, cachedReportData);
+
         int totalPageCount = cachedReportData.paginationInfo.getPageCount(recordsPerPage);
         
         // configure the result
@@ -200,7 +196,18 @@ public class ReportsUtil {
         
         return result;
     }
-    
+
+    @Nullable
+    public static ReportArea getReportAreaBasedOnPagination(int recordsPerPage, int start, CachedReportData cachedReportData) {
+        ReportArea pageArea = null;
+        if (recordsPerPage != -1) {
+            pageArea = cachedReportData.paginationInfo.getPage(start, recordsPerPage);
+        } else if (cachedReportData != null && cachedReportData.report !=null) {
+            pageArea = cachedReportData.report.reportContents;
+        }
+        return pageArea;
+    }
+
     protected static void fillReportInfo(GeneratedReport report, PagedReportResult result,
             ReportFormParameters formParams) {
         if (report == null) return;

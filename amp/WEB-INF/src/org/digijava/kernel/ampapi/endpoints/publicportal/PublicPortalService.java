@@ -14,11 +14,14 @@ import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.reports.ActivityType;
+import org.dgfoundation.amp.reports.CachedReportData;
+import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
 import org.digijava.kernel.ampapi.endpoints.publicportal.dto.PublicTotalsByMeasure;
+import org.digijava.kernel.ampapi.endpoints.reports.ReportFormParameters;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
@@ -193,6 +196,15 @@ public class PublicPortalService {
         return getPublicReport(count, spec, true, measureName, null, null);
     }
 
+    private static PublicTopData getPublicReport(Integer count,
+                                                 ReportSpecificationImpl spec, boolean calculateSubTotal,
+                                                 String measureName,
+                                                 Set<String> columnsToIgnore,
+                                                 Set<String> measureAsRawNumber) {
+        return getPublicReport(count, spec, calculateSubTotal, measureName, columnsToIgnore, measureAsRawNumber, null
+                , null);
+    }
+
     /**
      * Generates the report and retrieves 'count' results
      *
@@ -206,8 +218,15 @@ public class PublicPortalService {
                                                  ReportSpecificationImpl spec, boolean calculateSubTotal,
                                                  String measureName,
                                                  Set<String> columnsToIgnore,
-                                                 Set<String> measureAsRawNumber) {
-        GeneratedReport report = EndpointUtils.runReport(spec);
+                                                 Set<String> measureAsRawNumber, CachedReportData report2,
+                                                 ReportArea pageArea) {
+        GeneratedReport report;
+        if (report2 != null) {
+            report = report2.report;
+            spec = (ReportSpecificationImpl) report2.report.spec;
+        } else {
+            report = EndpointUtils.runReport(spec);
+        }
 
         String numberFormat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);
         String currency = spec.getSettings().getCurrencyCode();
@@ -236,9 +255,13 @@ public class PublicPortalService {
             } else {
                 count = report.reportContents.getChildren().size();
             }
+            ReportArea reportArea = report.reportContents;
+            if (report2 != null) {
+                reportArea = pageArea;
+            }
 
             BigDecimal total = new BigDecimal(0);
-            Iterator<ReportArea> iter = report.reportContents.getChildren().iterator();
+            Iterator<ReportArea> iter = reportArea.getChildren().iterator();
             int countCounter = count;
             while (countCounter > 0) {
                 ReportArea data = iter.next();
@@ -337,6 +360,27 @@ public class PublicPortalService {
         PublicTotalsByMeasure result = new PublicTotalsByMeasure();
         result.setMeasure("Total Activities");
         result.setCount(PublicPortalService.getActivitiesCount(config != null ? config.getFilters() : null, false));
+        return result;
+    }
+
+    public static PublicTopData searchProjects(ReportFormParameters formParams, Long reportId) {
+        // get the report (from cache if it was cached)
+        CachedReportData cachedReportData = ReportsUtil.getCachedReportData(reportId, formParams);
+        // read pagination data
+        int page = EndpointUtils.getSingleValue(formParams.getPage(), 0);
+        int recordsPerPage = EndpointUtils.getSingleValue(formParams.getRecordsPerPage(),
+                ReportPaginationUtils.getRecordsNumberPerPage());
+        int start = (page - 1) * recordsPerPage;
+
+        // extract data for the requested page
+        ReportArea pageArea = ReportsUtil.getReportAreaBasedOnPagination(recordsPerPage, start, cachedReportData);
+
+        int totalPageCount = cachedReportData.paginationInfo.getPageCount(recordsPerPage);
+        PublicTopData result = getPublicReport(10, null, true, null, null, null, cachedReportData, pageArea);
+        result.setCount(cachedReportData.report.reportContents.getChildren().size()) ;
+        result.setPage(page);
+        result.setTotalPageCount(totalPageCount);
+        result.setRecordsPerPage(recordsPerPage);
         return result;
     }
 

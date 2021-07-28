@@ -166,7 +166,7 @@ public class PublicPortalService {
      */
     public static PublicTopData getDonorFunding(PublicReportFormParameters config, Integer count,
                                                 Integer months, Integer fundingType, boolean showDonorGroup) {
-        String measureName = null;
+        Set<String> measuresName = new HashSet<>();
 
         ReportSpecificationImpl spec = new ReportSpecificationImpl("PublicPortal_GetDonorFunding",
                 ArConstants.DONOR_TYPE);
@@ -178,13 +178,13 @@ public class PublicPortalService {
         spec.setHierarchies(spec.getColumns());
         if (fundingType == 1) {
             spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
-            measureName = MeasureConstants.ACTUAL_COMMITMENTS;
+            measuresName.add(MeasureConstants.ACTUAL_COMMITMENTS);
             spec.addSorter(new SortingInfo(new ReportMeasure(
                     MeasureConstants.ACTUAL_COMMITMENTS), false));
 
         } else {
             if (fundingType == 2) {
-                measureName = MeasureConstants.ACTUAL_DISBURSEMENTS;
+                measuresName.add(MeasureConstants.ACTUAL_DISBURSEMENTS);
                 spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
                 spec.addSorter(new SortingInfo(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS), false));
             }
@@ -193,15 +193,15 @@ public class PublicPortalService {
         applyFilterRules(config, spec, months);
 
         SettingsUtils.applySettings(spec, config.getSettings(), true);
-        return getPublicReport(count, spec, true, measureName, null, null);
+        return getPublicReport(count, spec, true, measuresName, null, null);
     }
 
     private static PublicTopData getPublicReport(Integer count,
                                                  ReportSpecificationImpl spec, boolean calculateSubTotal,
-                                                 String measureName,
+                                                 Set<String> measuresName,
                                                  Set<String> columnsToIgnore,
                                                  Set<String> measureAsRawNumber) {
-        return getPublicReport(count, spec, calculateSubTotal, measureName, columnsToIgnore,
+        return getPublicReport(count, spec, calculateSubTotal, measuresName, columnsToIgnore,
                 measureAsRawNumber, null, null);
     }
 
@@ -216,7 +216,7 @@ public class PublicPortalService {
      */
     private static PublicTopData getPublicReport(Integer count,
                                                  ReportSpecificationImpl spec, boolean calculateSubTotal,
-                                                 String measureName,
+                                                 Set<String> measureName,
                                                  Set<String> columnsToIgnore,
                                                  Set<String> measureAsRawNumber, CachedReportData paginatedReport,
                                                  ReportArea pageArea) {
@@ -273,6 +273,12 @@ public class PublicPortalService {
             Iterator<ReportArea> iter = reportArea.getChildren().iterator();
             int countCounter = count;
             while (countCounter > 0) {
+                //prepare measures totals
+                if (measureName != null && measureName.size() > 0) {
+                    measureName.forEach(m -> {
+                        totals.put("SubTotal " + m, BigDecimal.ZERO);
+                    });
+                }
                 ReportArea data = iter.next();
                 Map<String, String> rowData = new LinkedHashMap<>();
                 if (data.getContents().size() > 1) {
@@ -289,8 +295,13 @@ public class PublicPortalService {
                                 }
                             }
                             if (calculateSubTotal) {
-                                if (cell.getKey().columnName.equals(measureName)) {
-                                    total = total.add((BigDecimal) cell.getValue().value);
+                                String measureTotal =
+                                        measureName.stream().filter(m
+                                                -> m.equals(cell.getKey().columnName)).findAny().orElse(null);
+                                if (measureTotal != null) {
+                                    totals.put("SubTotal " + measureTotal,
+                                            totals.get("SubTotal "
+                                                    + measureTotal).add((BigDecimal) cell.getValue().value));
                                 }
                             }
                         }
@@ -299,7 +310,6 @@ public class PublicPortalService {
                 topData.add(rowData);
                 countCounter--;
             }
-            totals.put("Total " + measureName, total);
         }
         count = count == null ? 0 : count;
 
@@ -385,7 +395,21 @@ public class PublicPortalService {
         ReportArea pageArea = ReportsUtil.getReportAreaBasedOnPagination(recordsPerPage, start, cachedReportData);
 
         int totalPageCount = cachedReportData.paginationInfo.getPageCount(recordsPerPage);
-        PublicTopData result = getPublicReport(null, null, true, null, null, null, cachedReportData, pageArea);
+        PublicTopData result = getPublicReport(null, null, true, cachedReportData.report.spec.getMeasureNames(), null,
+                null, cachedReportData, pageArea);
+        //calculate totals
+        cachedReportData.report.reportContents.getContents().keySet().forEach(rc -> {
+            if (rc.parentColumn != null && rc.parentColumn.originalColumnName.equals("Totals")) {
+                if (result.getTotals() == null) {
+                    result.setTotals(new HashMap<>());
+                }
+                BigDecimal total = (BigDecimal) cachedReportData.report.reportContents.getContents().get(rc).value;
+                result.getTotals().put("Total " + rc.originalColumnName, total);
+                System.out.println(rc.originalColumnName);
+                System.out.println(rc.originalColumnName);
+            }
+
+        });
         result.setCount(cachedReportData.report.reportContents.getChildren().size());
         result.setPage(page);
         result.setTotalPageCount(totalPageCount);

@@ -19,8 +19,10 @@ public class PublicTopData {
     private final Map<String, String> headers;
 
     @ApiModelProperty(dataType = "org.digijava.kernel.ampapi.swagger.types.PublicTopTotalsPH")
-    private final Map<String, BigDecimal> totals;
+    private final Map<String, BigDecimal> subTotals;
 
+    @ApiModelProperty(dataType = "org.digijava.kernel.ampapi.swagger.types.PublicTopTotalsPH")
+    private Map<String, BigDecimal> totals;
     @ApiModelProperty(dataType = "org.digijava.kernel.ampapi.swagger.types.PublicTopDataPH")
     private final List<Map<String, String>> data;
 
@@ -45,10 +47,10 @@ public class PublicTopData {
     @ApiModelProperty(example = "1")
     private Integer page;
 
-    PublicTopData(Map<String, String> headers, Map<String, BigDecimal> totals,
+    PublicTopData(Map<String, String> headers, Map<String, BigDecimal> subTotals,
                   List<Map<String, String>> data, Integer count, String numberFormat, String currency) {
         this.headers = headers;
-        this.totals = totals;
+        this.subTotals = subTotals;
         this.data = data;
         this.count = count;
         this.numberFormat = numberFormat;
@@ -59,8 +61,8 @@ public class PublicTopData {
         return headers;
     }
 
-    public Map<String, BigDecimal> getTotals() {
-        return totals;
+    public Map<String, BigDecimal> getSubTotals() {
+        return subTotals;
     }
 
     public List<Map<String, String>> getData() {
@@ -105,5 +107,13 @@ public class PublicTopData {
 
     public void setPage(Integer page) {
         this.page = page;
+    }
+
+    public Map<String, BigDecimal> getTotals() {
+        return totals;
+    }
+
+    public void setTotals(Map<String, BigDecimal> totals) {
+        this.totals = totals;
     }
 }

@@ -405,8 +405,6 @@ public class PublicPortalService {
                 }
                 BigDecimal total = (BigDecimal) cachedReportData.report.reportContents.getContents().get(rc).value;
                 result.getTotals().put("Total " + rc.originalColumnName, total);
-                System.out.println(rc.originalColumnName);
-                System.out.println(rc.originalColumnName);
             }
 
         });

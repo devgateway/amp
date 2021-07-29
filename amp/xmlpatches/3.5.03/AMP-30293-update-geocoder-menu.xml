@@ -16,10 +16,7 @@
 						(SELECT id
 						 FROM amp_modules_visibility
 						 WHERE name = '/GIS' AND parent IS NULL));
-
-				INSERT INTO amp_features_visibility
-						VALUES (nextval('amp_features_visibility_SEQ'),'AutoGeocoder',null,true,(SELECT id FROM amp_modules_visibility WHERE name = 'Tools'));
-
+						 
 				INSERT INTO amp_visibility_rule_amp_features_visibility(rule_id, feature_id)
 					VALUES(
 						   (SELECT rule_id from amp_menu_entry_view WHERE menu_id in (SELECT id from amp_menu_entry where name = 'AutoGeocoder')),

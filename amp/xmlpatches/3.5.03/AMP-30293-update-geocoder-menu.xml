@@ -20,7 +20,7 @@
 				INSERT INTO amp_visibility_rule_amp_features_visibility(rule_id, feature_id)
 					VALUES(
 						   (SELECT rule_id from amp_menu_entry_view WHERE menu_id in (SELECT id from amp_menu_entry where name = 'AutoGeocoder')),
-							(SELECT id FROM amp_features_visibility WHERE name = 'AutoGeocoder' AND parent IN (SELECT id FROM amp_modules_visibility WHERE name = 'Tools'))
+						   (SELECT id FROM amp_features_visibility WHERE name = 'AutoGeocoder')
 					);
 
 				DELETE FROM amp_visibility_rule_amp_modules_visibility

@@ -167,8 +167,6 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpHomeThumbnail</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpGlobalSettings</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpLuceneIndexStamp</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.EUActivity</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.EUActivityContribution</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.FeatureTemplates</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.NpdSettings</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityReferenceDoc</hibernate-class>
@@ -263,6 +261,13 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpOfflineRelease</hibernate-class>
 
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpOfflineChangelog</hibernate-class>
+
+
+		<!-- Geo Coding -->
+		<hibernate-class>org.digijava.kernel.entity.geocoding.GeoCodingProcess</hibernate-class>
+		<hibernate-class>org.digijava.kernel.entity.geocoding.GeoCodedActivity</hibernate-class>
+		<hibernate-class>org.digijava.kernel.entity.geocoding.GeoCodedLocation</hibernate-class>
+		<hibernate-class>org.digijava.kernel.entity.geocoding.GeoCodedField</hibernate-class>
 
 		<hibernate-class>org.digijava.module.aim.dbentity.MachineTranslation</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.MachineTranslationCharactersUsed</hibernate-class>

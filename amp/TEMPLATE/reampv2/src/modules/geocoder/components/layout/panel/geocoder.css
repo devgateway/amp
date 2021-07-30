@@ -1,0 +1,61 @@
+.geocoder-title {
+    font-size: 18px;
+    margin-left: 15px;
+    margin-bottom: 15px;
+    font-weight: bolder;
+}
+
+.geocoder-header {
+    background-color: #F5F8FA;
+    vertical-align: center;
+    font-size: 15px;
+    color: #111111;
+}
+
+.activities-message {
+    color: #5cb85c;
+    margin-left: 5px;
+    font-size: 13px;
+}
+
+.text-header {
+    padding-top: 5px;
+    white-space: nowrap;
+    color: #414F64;
+}
+
+.react-bootstrap-table th {
+    white-space: nowrap;
+}
+
+.form-control {
+    width: unset;
+}
+
+
+.title-container {
+    margin-bottom: 20px;
+}
+
+h4 {
+    margin-top: 50px;
+}
+
+.button-header {
+    margin-right: 10px;
+}
+
+@media (min-width: 1600px) {
+    .container {
+        width: 1570px;
+    }
+}
+
+.modal-activities {
+    height: 200px;
+    overflow-y: auto;
+}
+
+.react-bootstrap-table-pagination-total {
+    text-transform: lowercase;
+}

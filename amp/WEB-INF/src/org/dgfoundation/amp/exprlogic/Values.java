@@ -100,7 +100,6 @@ public class Values extends HashMap<String, BigDecimal> {
         this.addValue(ArConstants.PLANNED_COMMITMENT_FILTERED, values.get(ArConstants.PLANNED_COMMITMENT_FILTERED));
         this.addValue(ArConstants.PLANNED_DISBURSEMENT_FILTERED, values.get(ArConstants.PLANNED_DISBURSEMENT_FILTERED));
         this.addValue(ArConstants.PROPOSED_COST, values.get(ArConstants.PROPOSED_COST));
-        this.addValue(ArConstants.COSTING_GRAND_TOTAL, values.get(ArConstants.COSTING_GRAND_TOTAL));
         this.addValue(ArConstants.TOTAL_COMMITMENTS, values.get(ArConstants.TOTAL_COMMITMENTS));
         
         this.addValue(ArConstants.TOTAL_ACTUAL_DISBURSEMENT_LAST_CLOSED_MONTH, values.get(ArConstants.TOTAL_ACTUAL_DISBURSEMENT_LAST_CLOSED_MONTH));
@@ -199,8 +198,6 @@ public class Values extends HashMap<String, BigDecimal> {
             }
         } else if (cell.existsMetaString(ArConstants.PROPOSED_COST)) {
             this.addValue(ArConstants.PROPOSED_COST, tokens.get(TokenNames.UNCOMMITTED).evaluate(cell)); // what? why was "buildUncommitted()" here?
-        } else if (cell.existsMetaString(ArConstants.COSTING_GRAND_TOTAL)) {
-            this.addValue(ArConstants.COSTING_GRAND_TOTAL, tokens.get(TokenNames.COSTING_GRAND_TOTAL).evaluate(cell));
         }
         
         //this.addValue(ArConstants.MTEF_COLUMN, TokenRepository.buildMtefColumnToken().evaluate(cell));
@@ -251,8 +248,7 @@ public class Values extends HashMap<String, BigDecimal> {
         this.addValue(ArConstants.PLANNED_COMMITMENT_FILTERED, values.get(ArConstants.PLANNED_COMMITMENT_FILTERED));
         this.addValue(ArConstants.PLANNED_DISBURSEMENT_FILTERED, values.get(ArConstants.PLANNED_DISBURSEMENT_FILTERED));
         this.addValue(ArConstants.PROPOSED_COST, values.get(ArConstants.PROPOSED_COST));
-        this.addValue(ArConstants.COSTING_GRAND_TOTAL, values.get(ArConstants.COSTING_GRAND_TOTAL));
-        
+
         if ( this.mtefCols != null )
             for (AmpColumns col: this.mtefCols ) {
                 String mtefColName  = col.getColumnName();

@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.devgateway</groupId>
     <artifactId>amp</artifactId>
-    <version>3.5.2.2</version>
+    <version>3.5.4</version>
     <packaging>war</packaging>
     <name>Aid Management Platform</name>
     <properties>
@@ -28,7 +28,7 @@
             </snapshots>
             <id>central</id>
             <name>amp</name>
-            <url>http://artifactory.ampdev.net/artifactory/amp</url>
+            <url>https://artifactory.dgdev.org/artifactory/central/</url>
         </repository>
         <repository>
             <id>OSGEO GeoTools repo</id>
@@ -42,7 +42,7 @@
             </snapshots>
             <id>central</id>
             <name>amp</name>
-            <url>http://artifactory.ampdev.net/artifactory/amp</url>
+            <url>https://artifactory.dgdev.org/artifactory/central/</url>
         </pluginRepository>
     </pluginRepositories>
 
@@ -933,6 +933,11 @@
             <version>${jersey.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.9.10</version>
+        </dependency>
+        <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-json</artifactId>
             <version>${jersey.version}</version>
@@ -1007,6 +1012,11 @@
         <dependency>
             <groupId>com.google.cloud</groupId>
             <artifactId>google-cloud-storage</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>1.9</version>
         </dependency>
     </dependencies>
 

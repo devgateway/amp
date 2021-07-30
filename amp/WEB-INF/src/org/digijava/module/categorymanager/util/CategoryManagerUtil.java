@@ -921,7 +921,8 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
     public static List<AmpCategoryValue> getAllAcceptableValuesForACVClass(String categoryKey, Collection<AmpCategoryValue> relatedCollection)
     {
         List<AmpCategoryValue> collectionByKey = new ArrayList<AmpCategoryValue>();
-        Collection<AmpCategoryValue> collectionPrefiltered = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(categoryKey);
+        Collection<AmpCategoryValue> collectionPrefiltered =
+                CategoryManagerUtil.getAmpCategoryValueCollectionByKey(categoryKey, null);
         for (AmpCategoryValue acv: collectionPrefiltered){
             if (acv!= null && acv.isVisible())
                 collectionByKey.add(acv);

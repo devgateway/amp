@@ -1,23 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.reports;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import javax.servlet.http.HttpSession;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang.StringUtils;
@@ -78,6 +60,23 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.esrigis.dbentity.AmpApiState;
+
+import javax.servlet.http.HttpSession;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  * Reports API utility classes
@@ -197,6 +196,7 @@ public class ReportsUtil {
         
         processRawValues(formParams);
         result.setReportWarnings(cachedReportData.report.reportWarnings);
+        result.setId(reportId);
         
         return result;
     }
@@ -287,7 +287,7 @@ public class ReportsUtil {
         return null;
     }
     
-    private static CachedReportData getCachedReportData(Long reportId, ReportFormParameters formParams) {
+    public static CachedReportData getCachedReportData(Long reportId, ReportFormParameters formParams) {
 
         // use null in case the frontend has not generated an md5 token (e.g. Tabs as of 15/aug/2016).
         // Using the timestamp is a VERY bad idea since it would pollute the cache at each page cache
@@ -937,7 +937,7 @@ public class ReportsUtil {
     }
 
     public static AmpReports getAmpReportFromSession(Integer reportToken) {
-        MaxSizeLinkedHashMap<Integer, AmpReports> reportsList = (MaxSizeLinkedHashMap<Integer, AmpReports>) TLSUtils.getRequest().getSession().getAttribute("reportStack");
+        MaxSizeLinkedHashMap<Integer, AmpReports> reportsList = TLSUtils.getReportStack();
         if (reportsList == null) {
             throw new WebApplicationException(Response.Status.NO_CONTENT);
         }

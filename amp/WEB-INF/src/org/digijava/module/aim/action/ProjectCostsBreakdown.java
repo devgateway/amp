@@ -17,7 +17,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
-import org.digijava.module.aim.util.EUActivityUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 
 /**
@@ -38,9 +37,6 @@ public class ProjectCostsBreakdown extends TilesAction {
             return mapping.findForward("index");
         }
         
-        Collection euActs=EUActivityUtil.getEUActivities(activityId);
-        // EUActivities = same as Costs
-        request.setAttribute("costs",euActs);
         request.setAttribute("ampActivityId",activityId);
         return null;
     }

@@ -90,7 +90,6 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.DocumentUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
-import org.digijava.module.aim.util.EUActivityUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil.HelperLocationAncestorLocationNamesAsc;
 import org.digijava.module.aim.util.ProgramUtil;
@@ -188,10 +187,12 @@ public class EditActivity extends Action {
 
     EditActivityForm eaForm = (EditActivityForm) form; // form bean instance
 
-    Long activityId = null;
-    activityId = eaForm.getActivityId();
-    Long actIdParam = null;
-    if(request.getParameter("ampActivityId")!=null) actIdParam = new Long(request.getParameter("ampActivityId"));
+      Long activityId = null;
+      activityId = eaForm.getActivityId();
+      Long actIdParam = null;
+      if (StringUtils.isNumeric(request.getParameter("ampActivityId"))) {
+          actIdParam = new Long(request.getParameter("ampActivityId"));
+      }
     if(actIdParam != null && actIdParam !=0L )
         activityId=actIdParam;
     eaForm.setWarningMessges(new ArrayList<String>());
@@ -368,8 +369,6 @@ public class EditActivity extends Action {
                 return null;
             }
         }
-    Collection euActs = EUActivityUtil.getEUActivities(activityId);
-    request.setAttribute("costs", euActs);
 
     // load all themes
     Collection themes = new ArrayList(ProgramUtil.getAllThemes());
@@ -832,7 +831,6 @@ public class EditActivity extends Action {
 
           // set title,description and objective
           eaForm.getIdentification().setTitle(activity.getName().trim());
-          eaForm.getCosting().setCosts(new ArrayList(activity.getCosts()));
           eaForm.getIdentification().setTeam(activity.getTeam());
           eaForm.getIdentification().setCreatedBy(activity.getActivityCreator());
           eaForm.getIdentification().setModifiedBy(activity.getModifiedBy());

@@ -151,7 +151,7 @@ public class InterchangeUtils {
                 String fieldName = field.getKey();
                 List<Long> ids = field.getValue();
 
-                List<PossibleValue> allValues = possibleValuesFor(fieldName, apiFields).stream()
+                List<PossibleValue> allValues = possibleValuesCachedFor(fieldName, apiFields).stream()
                         .map(PossibleValue::flattenPossibleValues)
                         .flatMap(List::stream)
                         .collect(Collectors.toList());
@@ -172,14 +172,37 @@ public class InterchangeUtils {
     private static FieldIdValue getIdValue(Long id, Map<Object, PossibleValue> allValuesMap) {
         if (allValuesMap.containsKey(id)) {
             PossibleValue pv = allValuesMap.get(id);
-            return new FieldIdValue((Long) pv.getId(), pv.getValue(), pv.getTranslatedValues(), pv.getExtraInfo());
+            return new FieldIdValue((Long) pv.getId(), pv.getValue(), pv.getTranslatedValues(), pv.getExtraInfo(),
+                    getAncestorValues(allValuesMap, pv.getId(), new ArrayList<>()));
         }
 
         return new FieldIdValue(id);
     }
 
+    private static List<String> getAncestorValues(Map<Object, PossibleValue> allValuesMap, Object id,
+                                                  List<String> values) {
+        PossibleValue obj = allValuesMap.get(id);
+        List<String> ancestorValues = new ArrayList<>(values);
+        if (obj.getExtraInfo() instanceof ParentExtraInfo) {
+            ParentExtraInfo parentExtraInfo = (ParentExtraInfo) obj.getExtraInfo();
+            if (parentExtraInfo.getParentId() != null) {
+                List<String> newValues = getAncestorValues(allValuesMap, parentExtraInfo.getParentId(), ancestorValues);
+                if (newValues != null) {
+                    ancestorValues.addAll(newValues);
+                }
+            }
+            ancestorValues.add(obj.getValue());
+            return ancestorValues;
+        }
+        return null;
+    }
+
     public static List<PossibleValue> possibleValuesFor(String fieldName, List<APIField> apiFields) {
         return PossibleValuesEnumerator.INSTANCE.getPossibleValuesForField(fieldName, apiFields);
+    }
+
+    public static List<PossibleValue> possibleValuesCachedFor(String fieldName, List<APIField> apiFields) {
+        return PossibleValuesEnumerator.INSTANCE.getPossibleValuesCachedForField(fieldName, apiFields);
     }
 
     public static List<Field> getFieldsAnnotatedWith(Class<?> cls, Class<? extends Annotation> annotationCls1,

@@ -101,8 +101,10 @@ export const printChartPrinter = (title, chartId, printContainer, iframe, countr
  */
 export const printChart = (title, chartId, filtersObject, format, calculateChildren, printContainer, useTitle) => {
   try {
-    const printElement = document.getElementById(printContainer);
-
+    let printElement = document.getElementById(printContainer).firstChild;
+    if (!printElement) {
+      printElement = document.getElementById(printContainer);
+    }
     const chartElement = document.getElementById(chartId).cloneNode(true);
     let chartHeight = `${document.getElementById(chartId).clientHeight}px`;
     if (calculateChildren) {
@@ -128,6 +130,7 @@ export const printChart = (title, chartId, filtersObject, format, calculateChild
     return doPrint(printElement, titleElement, chartElement, format,
       title, height, chartElement.clientWidth);
   } catch (ex) {
+    debugger;
     console.log(`problem creating elements for print: ${ex}`);
   }
 };

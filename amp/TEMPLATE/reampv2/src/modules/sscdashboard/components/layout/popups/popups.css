@@ -5,8 +5,10 @@
     padding-top: 1%;
     position: fixed;
     top: 145px;
-    z-index: 10;
     width: inherit;
+}
+.country-popup-wrapper.data-container{
+    top: 86px;
 }
 
 .country-popup-wrapper > .container-fluid {
@@ -156,6 +158,7 @@
     border-bottom: 1px solid #313d4f;
     overflow: hidden;
     padding-bottom: 10px;
+    height: 47px;
 }
 
 .country-popup-1 .header .country-name {

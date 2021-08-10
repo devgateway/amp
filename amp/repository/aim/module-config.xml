@@ -57,7 +57,6 @@
 		<action login-required="false" pattern="/reportsFilterPicker" />
 		<action login-required="false" pattern="/reportsPublicView" />
 		<action login-required="false" pattern="/reportTableProxy" />
-		<action login-required="false" pattern="/reportWizard" />
 		<action login-required="false" pattern="/resetUserPassword" />
 		<action login-required="false" pattern="/showChangePassword" />
 		<action login-required="false" pattern="/showEmailForm" />

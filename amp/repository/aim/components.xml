@@ -322,16 +322,8 @@
 	
 	<page page="viewParisIndicatorPopupFilter" name="PI_Filter" title="AMP - PI Reports Filter" />
 	
-	<page page="reportWizard/dhtmlReportWizard" name="aim_dhtmlReportWizard" title=" - Report Wizard" />
-	<page page="reportWizard/dhtmlReportWizard" name="aim_dhtmlTabWizard" title=" - Tab Wizard" />
-	<page page="reportWizard/dhtmlReportWizard_onepager" name="aim_dhtmlReportWizard_onepager" title=" - Report Wizard" />
-	<page page="reportWizard/dhtmlReportWizard_onepager" name="aim_dhtmlTabWizard_onepager" title=" - Tab Wizard" />
-	
 	<page page="query/queryEngine" name="aim_queryEngine" title=" - Query" />
 	
-	<page page="reportWizard/saveMessage" name="aim_saveMessage" />
-	<page page="reportWizard/showSelectedFilters" name="aim_showSelectedFilters" />
-
 	<page page="printableActivityPerformance" name="aim_printActPerf" title="AMP - Activity-Performance" />
 	<page page="printableActivityRisk" name="aim_printActRisk" title="AMP - Activity-Risk" />
 

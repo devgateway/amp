@@ -69,17 +69,6 @@
 
 	<http pattern="/showPrinterFriendlyPage.do**" security="none"  />
 
-	<!-- report wizard -->
-	<http pattern="/reportWizard.do**" security="none" />
-	<http pattern="/aim/reportWizard.do**" security="none" />
-  	<!-- 
-  	<http pattern="/aim/default/reportWizard.do**" security="none" />
-  	<http pattern="/aim/reportWizard.do**" security="none" />
-  	-->
-	<!-- move this to the reports module -->
-	<http pattern="/reportsPublicView.do**" security="none" />
-	<http pattern="/aim/default/reportsPublicView.do**" security="none" />
-
 	<http pattern="/gis/showPublicGis.do**" security="none" />
 	<http pattern="/gis/getFoundingDetails.do**" security="none" />
 	<http pattern="/gis/showAdditionalGraphics.do**" security="none" />

@@ -9,7 +9,6 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.action.reportwizard.ReportWizardAction;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.hibernate.Session;
 
@@ -20,7 +19,7 @@ import org.hibernate.Session;
  */
 public class MultilingualInputFieldValues
 {
-    private static Logger logger        = Logger.getLogger(ReportWizardAction.class);
+    private static Logger logger = Logger.getLogger(MultilingualInputFieldValues.class);
     
     /**
      * the TranslatableClass which holds the field

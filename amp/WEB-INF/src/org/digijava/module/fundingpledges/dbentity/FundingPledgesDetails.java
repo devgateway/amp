@@ -271,6 +271,10 @@ public class FundingPledgesDetails implements FundingInformationItem, Identifiab
         return null;
     }
 
+    @Override public String getDisbursementId(){
+        return null;
+    }
+
     @Override
     public AmpCategoryValue getExpenditureClass() {
         return null;

@@ -63,6 +63,8 @@ public class FundingDetail implements Serializable, Comparable
     
     public Boolean disasterResponse;
 
+    public String disbursementId;
+
     public FundingDetail() {}
 
     public FundingDetail(long id) {
@@ -416,5 +418,12 @@ public class FundingDetail implements Serializable, Comparable
     public void setExpenditureClass(AmpCategoryValue expenditureClass) {
         this.expenditureClass = expenditureClass;
     }
- 
+
+    public String getDisbursementId() {
+        return disbursementId;
+    }
+
+    public void setDisbursementId(final String disbursementId) {
+        this.disbursementId = disbursementId;
+    }
 }

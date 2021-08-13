@@ -41,7 +41,7 @@
 		</logic:equal>
 	</logic:iterate>
 	</c:if>
-	
+
 	<!-- End Planned Disbursements -->
 	<tr>
 		<td colspan="2" class="preview-funding-total">

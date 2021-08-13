@@ -111,16 +111,16 @@ other rows (if any): capital spending percent / classification / attached pledge
 		</td>
 	</tr>
 </logic:present>
-	
-<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Expenditure Class" 
-		parentModule="/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table">
-	<logic:present name="fundingDetail" property="expenditureClass">
+
+<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Disbursement Id"
+				parentModule="/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table">
+	<logic:present name="fundingDetail" property="disbursementId">
 		<tr>
-		<td colspan="1" class="preview-align"><digi:trn>Expenditure Category</digi:trn>:&nbsp;</td>
-		<td colspan="3" align="left">
-			<digi:trn><bean:write name="fundingDetail" property="expenditureClass.value" /></digi:trn>			
-		</td>
-	</tr>
+			<td colspan="1" class="preview-align"><digi:trn>Disbursement ID</digi:trn>:&nbsp;</td>
+			<td colspan="3" align="left">
+				<bean:write name="fundingDetail" property="disbursementId" />
+			</td>
+		</tr>
 	</logic:present>
 </module:display>
 

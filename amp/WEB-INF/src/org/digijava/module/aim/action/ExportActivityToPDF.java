@@ -1505,7 +1505,8 @@ public class ExportActivityToPDF extends Action {
                 /**
                  * Workspace manager
                  */
-                if (FeaturesUtil.isVisibleField("Data Team Leader")) {
+                if (FeaturesUtil.isVisibleField("Data Team Leader")
+                        && identification.getTeam().getTeamLead() != null) {
                     columnName = TranslatorWorker.translateText("Workspace manager");
                     createGeneralInfoRow(mainLayout, columnName, identification.getTeam().getTeamLead().getUser().getFirstNames()
                             + " " + identification.getTeam().getTeamLead().getUser().getLastName() + " - "
@@ -3673,7 +3674,18 @@ public class ExportActivityToPDF extends Action {
             cell.setBackgroundColor(new Color(255,255,204));
             cell.setColspan(4);
             fundingTable.addCell(cell);
-        }        
+        }
+
+        if (fd.getTransactionType() == Constants.DISBURSEMENT
+                && FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Disbursements"
+                + "/Disbursements Table/Disbursement Id") && fd.getDisbursementId() != null) {
+            PdfPCell cell = new PdfPCell(new Paragraph(postprocessText(TranslatorWorker.translateText("Disbursement ID")
+                    + ": " + fd.getDisbursementId()), plainFont));
+            cell.setBorder(0);
+            cell.setBackgroundColor(new Color(255,255,204));
+            cell.setColspan(4);
+            fundingTable.addCell(cell);
+        }
     }
 
     private PdfPCell getRoleOrgForFundingFlows(FundingDetail fd,String fm) {

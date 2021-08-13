@@ -416,8 +416,8 @@
 <field:display name="Date Commitments" feature="Regional Funding"></field:display> 
 <field:display name="Date Current Value" feature="Activity"></field:display> 
 <field:display name="Date Disbursement" feature="Disbursement"></field:display>
-<field:display name="Related Pledge" feature="Disbursement"></field:display> 
-<field:display name="Date Disbursement" feature="Funding Information"></field:display> 
+<field:display name="Related Pledge" feature="Disbursement"></field:display>
+<field:display name="Date Disbursement" feature="Funding Information"></field:display>
 <field:display name="Date Disbursements" feature="Regional Funding"></field:display> 
 <field:display name="Date Expenditure" feature="Expenditures"></field:display> 
 <field:display name="Date Expenditures" feature="Regional Funding"></field:display> 
@@ -496,8 +496,8 @@
 <field:display name="Grand Total Commitments" feature="Activity - Component Step"></field:display> 
 <field:display name="Grand Total Disbursements" feature="Activity - Component Step"></field:display>
 <field:display name="Humanitarian Aid" feature="Identification"></field:display>
-<field:display name="Disaster Response Marker" feature="Identification"></field:display> 
-<field:display name="Implementation Level" feature="Location"></field:display> 
+<field:display name="Disaster Response Marker" feature="Identification"></field:display>
+<field:display name="Implementation Level" feature="Location"></field:display>
 <field:display name="Implementation Location" feature="Location"></field:display> 
 <field:display name="Inbox Alert" feature="Alert tab"></field:display> 
 <field:display name="Inbox Message" feature="Message tab"></field:display> 

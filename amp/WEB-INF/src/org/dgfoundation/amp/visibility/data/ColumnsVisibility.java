@@ -178,6 +178,8 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
         put("/Activity Form/Identification/Purpose", ColumnConstants.PURPOSE);
         put("/Activity Form/Identification/Humanitarian Aid", ColumnConstants.HUMANITARIAN_AID);
         put("/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Disaster Response", ColumnConstants.DISASTER_RESPONSE_MARKER);
+        put("/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Disbursement Id",
+                ColumnConstants.DISBURSEMENT_ID);
         put("/Activity Form/Identification/Objective", ColumnConstants.OBJECTIVE);
         put("/Activity Form/Identification/Reporting System", ColumnConstants.REPORTING_SYSTEM);
         put("/Activity Form/Identification/Results", ColumnConstants.RESULTS);
@@ -417,6 +419,8 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
             put("Variance Of Commitments", ColumnConstants.VARIANCE_OF_COMMITMENTS);
             put("Variance Of Disbursements", ColumnConstants.VARIANCE_OF_DISBURSEMENTS);
             put("Disaster Response Marker", ColumnConstants.DISASTER_RESPONSE_MARKER);
+            put("Disbursement ID", ColumnConstants.DISBURSEMENT_ID);
+
 
             // replicating the same approach as in the ReportWizard (until AMP-20480 is considered)
             String[] colPrefixList = new String[] {"National Planning Objectives Level ", "Primary Program Level ",

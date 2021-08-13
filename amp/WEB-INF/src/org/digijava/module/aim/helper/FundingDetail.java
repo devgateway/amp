@@ -63,7 +63,7 @@ public class FundingDetail implements Serializable, Comparable
     
     public Boolean disasterResponse;
 
-    public String disbursementId;
+    private String disbursementId;
 
     public FundingDetail() {}
 

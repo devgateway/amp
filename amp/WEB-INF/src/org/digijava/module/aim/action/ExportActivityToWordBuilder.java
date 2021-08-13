@@ -2550,7 +2550,8 @@ public class ExportActivityToWordBuilder {
         if (fndDet.getTransactionType() == Constants.DISBURSEMENT
                 && FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Disbursements"
                 + "/Disbursements Table/Disbursement Id")) {
-            currentRowData.addRowData(TranslatorWorker.translateText("Disbursement ID") + ": " + fndDet.getDisbursementId());
+            currentRowData.addRowData(TranslatorWorker.translateText("Disbursement ID") + ": "
+                    + fndDet.getDisbursementId());
         }
 
         if (fndDet.getPledge() != null && fndDet.getPledge() > 0) {

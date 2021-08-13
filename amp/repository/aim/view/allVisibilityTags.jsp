@@ -330,6 +330,7 @@
 <field:display feature="Funding Information" name="Project Monitoring"></field:display>
 <field:display feature="Funding Information" name="Project Sustainability"></field:display>
 <field:display feature="Funding Information" name="Project Problems"></field:display>
+<field:display feature="Funding Information" name="Disbursement ID"></field:display>
 <field:display feature="Government Contact Information" name="Government Email"></field:display>
 <field:display feature="Government Contact Information" name="Government First Name"></field:display> 
 <field:display feature="Identification" name="AMP ID"></field:display> 
@@ -603,8 +604,8 @@ deleted 6 fields, do not reinsert
 <field:display name="Disbursement Order Contract ID" feature="Disbursement Orders"></field:display> 
 <field:display name="Disbursement Order Number" feature="Disbursement Orders"></field:display> 
 <field:display name="Disbursement Orders Tab" feature="Disbursement Orders"></field:display> 
-<field:display name="Disbursements" feature="Contracting"></field:display> 
-<field:display name="Document Comment" feature="Related Documents"></field:display> 
+<field:display name="Disbursements" feature="Contracting"></field:display>
+<field:display name="Document Comment" feature="Related Documents"></field:display>
 <field:display name="Document Date" feature="Related Documents"></field:display> 
 <field:display name="Document Description" feature="Related Documents"></field:display> 
 <field:display name="Document FileName" feature="Related Documents"></field:display> 

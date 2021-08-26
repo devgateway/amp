@@ -114,8 +114,6 @@
     <form-bean name="aimUserDetailForm" type="org.digijava.module.aim.form.UserDetailForm" />
     <form-bean name="aimAdvancedReportForm" type="org.digijava.module.aim.form.AdvancedReportForm" />
 
-    <!-- The ReportWizardForm is used by the DHTML report wizard -->
-    <form-bean name="aimReportWizardForm" type="org.digijava.module.aim.form.reportwizard.ReportWizardForm" />
     <form-bean name="aimSectorSchemeForm" type="org.digijava.module.aim.form.SectorSchemeForm" />
     <form-bean name="aimFlagUploaderForm" type="org.digijava.module.aim.form.FlagUploaderForm" />
     <form-bean name="aimTranslatorManagerForm" type="org.digijava.module.aim.form.TranslatorManagerForm" />
@@ -289,7 +287,6 @@
       <forward name="publicView" path="/aim/reportsPublicView.do" redirect="true" />
       <forward name="reportView" path="/aim/viewNewAdvancedReport.do?reload=true" />
       <forward name="queryView" path="/aim/viewNewAdvancedReport.do?reload=true&amp;view=reset&amp;viewFormat=foldable&amp;widget=true&amp;queryEngine=true" />
-      <forward name="reportWizard" path="/showLayout.do?layout=aim_showSelectedFilters" />
     </action>
     
  	<action name="aimReportsFilterPickerForm" path="/aim/validateReportsFilterPicker" scope="request" type="org.digijava.module.aim.action.ReportFilterPickerValidator" validate="false"/>
@@ -1211,13 +1208,6 @@
     <action name="aimAdvancedReportForm" path="/aim/xlsExport" scope="session" type="org.digijava.module.aim.action.XLSExportAction" validate="false" />
     <action name="aimAdvancedReportForm" path="/aim/csvExport" scope="session" type="org.digijava.module.aim.action.CSVExportAction" validate="false" />
     <action forward="/showLayout.do?layout=addActivity" path="/aim/viewAddEdit" />
-    <action name="aimReportWizardForm" path="/aim/reportWizard" scope="session" type="org.digijava.module.aim.action.reportwizard.ReportWizardAction">
-    	 <forward name="showReport" path="/showLayout.do?layout=aim_dhtmlReportWizard" />
-    	 <forward name="showTab" path="/showLayout.do?layout=aim_dhtmlTabWizard" />
-    	 <forward name="showReport_onepager" path="/showLayout.do?layout=aim_dhtmlReportWizard_onepager" />
-    	 <forward name="showTab_onepager" path="/showLayout.do?layout=aim_dhtmlTabWizard_onepager" />
-    	 <forward name="save" path="/showLayout.do?layout=aim_saveMessage" />
-    </action>
     <action path="/aim/printableActivityChart" scope="request" type="org.digijava.module.aim.action.ViewPrintableActivityChart">
       <forward name="actPerformance" path="/showLayout.do?layout=aim_printActPerf" />
       <forward name="actRisk" path="/showLayout.do?layout=aim_printActRisk" />

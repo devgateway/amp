@@ -41,6 +41,7 @@ public class AmpDonorDisbursementsFormTableFeature extends
         AmpDonorFormTableFeaturePanel {
     private static final long serialVersionUID = 1L;
     private final static int SELECTOR_SIZE = 80;
+    private final static int DISBURSEMENT_ID_MAX_LENGTH = 255;
     /**
      * @param id
      * @param model
@@ -89,6 +90,7 @@ public class AmpDonorDisbursementsFormTableFeature extends
 
                 AmpTextFieldPanel<String> disbursementId = new AmpTextFieldPanel<String>("disbursementId",
                         new PropertyModel<>(item.getModel(), "disbursementId"), "Disbursement Id", false, true);
+                disbursementId.setTextContainerMaxSize(DISBURSEMENT_ID_MAX_LENGTH);
                 item.add(disbursementId);
                 
                 ArrayList<IPAContract> contractList;

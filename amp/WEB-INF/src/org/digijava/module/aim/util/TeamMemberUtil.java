@@ -66,7 +66,7 @@ public class TeamMemberUtil {
     public static User getUserEntityByTMId(Long teamMemberId) {
         return getAmpTeamMember(teamMemberId).getUser();
     }
-    
+
     public static AmpTeamMember getAmpTeamMemberByUserId(Long userId) {
         return (AmpTeamMember) PersistenceManager.getSession()
                 .createCriteria(AmpTeamMember.class)
@@ -77,7 +77,7 @@ public class TeamMemberUtil {
                 .setMaxResults(1)
                 .uniqueResult();
     }
-    
+
     public static AmpTeamMember getAmpTeamMember(Long id) {
         return (AmpTeamMember) PersistenceManager.getSession()
                 .createCriteria(AmpTeamMember.class)
@@ -88,7 +88,7 @@ public class TeamMemberUtil {
                 .setMaxResults(1)
                 .uniqueResult();
     }
-    
+
     private static LogicalExpression getNotDeletedTeamMemberRestriction() {
         return Restrictions.or(Restrictions.eq("deleted", false), Restrictions.isNull("deleted"));
     }
@@ -274,7 +274,7 @@ public class TeamMemberUtil {
 
     public static List<TeamMember> getAllTeamMembers(Long teamId) {
         try {
-            
+
             Session session = PersistenceManager.getSession();
             String queryString = "select distinct tm from " + AmpTeamMember.class.getName() + " tm "
                     + "where (tm.deleted is null or tm.deleted = false) ";
@@ -293,7 +293,7 @@ public class TeamMemberUtil {
             List<TeamMember> members = new ArrayList<>();
             for (AmpTeamMember atm : atms) {
                 members.add(new TeamMember(atm));
-                
+
             }
             Collections.sort((List<TeamMember>) members, new TeamMemberUtil.TeamMemberComparator());
 
@@ -302,7 +302,7 @@ public class TeamMemberUtil {
             throw new RuntimeException(e);
         }
     }
-    
+
     public static List<TeamMemberMail> getAllTeamMembersMail(Long teamId) {
         try {
 
@@ -1164,9 +1164,9 @@ public class TeamMemberUtil {
 
         Session session = PersistenceManager.getSession();
 
-        for (Long anId : id) {
-            if (anId != null) {
-                AmpTeamMember ampMember = (AmpTeamMember) session.load(AmpTeamMember.class, anId);
+        for (Long amId : id) {
+            if (amId != null) {
+                AmpTeamMember ampMember = (AmpTeamMember) session.load(AmpTeamMember.class, amId);
                 if (isTeamLead(ampMember)) {
                     AmpTeam team = ampMember.getAmpTeam();
                     team.setTeamLead(null);
@@ -1175,7 +1175,7 @@ public class TeamMemberUtil {
 
                 String qryStr = "select com from " + AmpComments.class.getName()
                         + " com where (com.memberId.ampTeamMemId=:memberId)";
-                Query qry = session.createQuery(qryStr).setParameter("memberId", anId, LongType.INSTANCE);
+                Query qry = session.createQuery(qryStr).setParameter("memberId", amId, LongType.INSTANCE);
                 List<AmpComments> memComments = qry.list();
                 for (AmpComments comm : memComments) {
                     comm.setMemberId(null);
@@ -1184,14 +1184,16 @@ public class TeamMemberUtil {
 
                 qryStr = "select atr from " + AmpAnalyticalReport.class.getName() + " atr "
                         + " where (atr.owner=:memberId) ";
-                qry = session.createQuery(qryStr).setLong("memberId", anId);
+                qry = session.createQuery(qryStr).setLong("memberId", amId);
                 List<AmpAnalyticalReport> ampAnalyticalReports = qry.list();
                 if (ampAnalyticalReports != null && ampAnalyticalReports.size() > 0) {
                     for (AmpAnalyticalReport ampAnRep : ampAnalyticalReports) {
                         session.delete(ampAnRep);
                     }
                 }
-
+                qryStr = "delete AmpDesktopTabSelection dts where dts.owner=:memberId";
+                qry = session.createQuery(qryStr).setLong("memberId", amId);
+                qry.executeUpdate();
                 deleteTeamMember(ampMember);
 
             }

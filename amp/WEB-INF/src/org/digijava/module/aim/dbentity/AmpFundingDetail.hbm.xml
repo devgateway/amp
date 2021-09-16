@@ -28,6 +28,7 @@
 		<property name="disbursementOrderRejected" column="disbursement_order_rejected" type="java.lang.Boolean" />
         <property name="capitalSpendingPercentage" column="capital_spend_percent" type="java.lang.Float" />
         <property name="disasterResponse" column="disaster_response" type="java.lang.Boolean" />
+		<property name="disbursementId" column="disbursement_id" type="java.lang.String" />
 
 		<many-to-one name="reportingOrgId" column="reporting_org_id"
 			class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" />

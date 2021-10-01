@@ -25,8 +25,9 @@ public class AutocompleteAcronymTitleModel extends Model<String>{
     
     public String getObject() {
         String ret = "";
-        if ((acronymModel == null || acronymModel.getObject() == null) || titleModel.getObject() == null)
+        if ((acronymModel == null || acronymModel.getObject() == null) && titleModel.getObject() == null) {
             return nullText;
+        }
         
         if (acronymModel != null){
             ret = ret + AmpAutocompleteFieldPanel.ACRONYM_DELIMITER_START +

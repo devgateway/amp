@@ -60,7 +60,8 @@ public class InternationalizedViewsRepository {
                 if (id == null || id.longValue() == 0 || id.longValue() == 999999999)
                     return null;
             }
-            return sqlconcat(resultSet.getString("agreement_title"), " - ", resultSet.getString(agreementCodeColumnName));
+            return sqlconcat(resultSet.getString("agreement_title"), " - ",
+                    resultSet.getString(agreementCodeColumnName) != null ? resultSet.getString(agreementCodeColumnName) : "");
         }
     }
     

@@ -77,9 +77,6 @@ public final class XmlPatcherUtil {
                 }
                 continue;
             }
-            /*if(f.getName().endsWith(".class")){
-                continue;
-            }*/
             if (patchNames.contains(f.getName())) {
                 
                 AmpXmlPatch patch = patchesMap.get(f.getName());                

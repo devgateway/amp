@@ -73,9 +73,9 @@ stage('Build') {
 
         def format = branch != null ? "%H" : "%P"
         def hash = sh(returnStdout: true, script: "git log --pretty=${format} -n 1").trim()
-        sh(returnStatus: true, script: "docker pull phosphorus:5000/amp-webapp:${tag} > /dev/null")
+        sh(returnStatus: true, script: "docker pull phosphorus.migrated.devgateway.org:5000/amp-webapp:${tag} > /dev/null")
         def imageIds = sh(returnStdout: true, script: "docker images -q -f \"label=git-hash=${hash}\"").trim()
-        sh(returnStatus: true, script: "docker rmi phosphorus:5000/amp-webapp:${tag} > /dev/null")
+        sh(returnStatus: true, script: "docker rmi phosphorus.migrated.devgateway.org:5000/amp-webapp:${tag} > /dev/null")
 
         // Find AMP version
         codeVersion = (readFile('amp/TEMPLATE/ampTemplate/site-config.xml') =~ /(?s).*<\!ENTITY ampVersion "([\d\.]+)">.*/)[0][1]
@@ -89,11 +89,11 @@ stage('Build') {
                     sh "cd amp && mvn -T 4 clean compile war:exploded -Djdbc.user=amp -Djdbc.password=amp122006 -Djdbc.db=amp -Djdbc.host=db -Djdbc.port=5432 -DdbName=postgresql -Djdbc.driverClassName=org.postgresql.Driver -Dmaven.test.skip=true -Dapidocs=true -DbuildVersion=AMP -DbuildSource=${tag} -e"
 
                     // Build Docker images & push it
-                    sh "docker build -q -t phosphorus:5000/amp-webapp:${tag} --build-arg AMP_EXPLODED_WAR=target/amp-AMP --build-arg AMP_PULL_REQUEST='${pr}' --build-arg AMP_BRANCH='${branch}' --label git-hash='${hash}' amp"
-                    sh "docker push phosphorus:5000/amp-webapp:${tag} > /dev/null"
+                    sh "docker build -q -t phosphorus.migrated.devgateway.org:5000/amp-webapp:${tag} --build-arg AMP_EXPLODED_WAR=target/amp-AMP --build-arg AMP_PULL_REQUEST='${pr}' --build-arg AMP_BRANCH='${branch}' --label git-hash='${hash}' amp"
+                    sh "docker push phosphorus.migrated.devgateway.org:5000/amp-webapp:${tag} > /dev/null"
                 } finally {
                     // Cleanup after Docker & Maven
-                    sh returnStatus: true, script: "docker rmi phosphorus:5000/amp-webapp:${tag}"
+                    sh returnStatus: true, script: "docker rmi phosphorus.migrated.devgateway.org:5000/amp-webapp:${tag}"
                     sh returnStatus: true, script: "cd amp && mvn clean -Djdbc.db=dummy"
                     sh returnStatus: true, script: "tar -cf ../amp-node-cache.tar --remove-files" +
                             " amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node" +

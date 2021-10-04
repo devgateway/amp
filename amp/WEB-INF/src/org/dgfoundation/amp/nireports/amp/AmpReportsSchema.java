@@ -148,7 +148,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
                     ColumnConstants.DONOR_TYPE, ColumnConstants.FUNDING_ID,
                     ColumnConstants.COMPONENT_FUNDING_ORGANIZATION,
                     ColumnConstants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION,
-                    ColumnConstants.CONCESSIONALITY_LEVEL)));
+                    ColumnConstants.CONCESSIONALITY_LEVEL, ColumnConstants.DISBURSEMENT_ID)));
     
     public final static OrganisationsDimension orgsDimension = OrganisationsDimension.instance;
     public final static LocationsDimension locsDimension = LocationsDimension.instance;
@@ -418,6 +418,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         no_dimension(ColumnConstants.DESCRIPTION_OF_COMPONENT_FUNDING, "v_component_funding_description");
         
         degenerate_dimension(ColumnConstants.DISASTER_RESPONSE_MARKER, "v_disaster_response_marker", boolDimension);
+        no_entity(ColumnConstants.DISBURSEMENT_ID, "v_disbursement_id");
         no_dimension(ColumnConstants.DONOR_CONTACT_ORGANIZATION, "v_donor_cont_org");
         no_entity(ColumnConstants.ENVIRONMENT, "v_environment", DG_EDITOR_POSTPROCESSOR);
         no_entity(ColumnConstants.EQUAL_OPPORTUNITY, "v_equalopportunity", DG_EDITOR_POSTPROCESSOR);

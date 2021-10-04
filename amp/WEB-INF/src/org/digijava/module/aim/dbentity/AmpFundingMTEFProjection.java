@@ -280,6 +280,10 @@ public class AmpFundingMTEFProjection implements Cloneable, Serializable, Compar
         return null;
     }
 
+    public String getDisbursementId() {
+        return null;
+    }
+
     @Override
     public AmpCategoryValue getExpenditureClass() {
         return null;

@@ -29,7 +29,7 @@
           WHEN fd.disaster_response IS TRUE THEN 1
           WHEN fd.disaster_response IS FALSE THEN 2
           ELSE NULL
-         END AS disaster_response_code,
+         END AS disaster_response_code, fd.disbursement_id AS disbursement_id,
          fd.recipient_org_id AS recipient_org_id, fd.recipient_role_id AS recipient_role_id,
          f.source_role_id AS source_role_id,
          fd.expenditure_class AS expenditure_class_id,
@@ -50,6 +50,7 @@
      NULL AS mode_of_payment_id, NULL as funding_status_id,
      NULL as capital_spend_percent, NULL as agreement_id,
      NULL AS disaster_response,
+	 NULL AS disbursement_id,
      NULL as recipient_org_id, NULL as recipient_role_id,
      (SELECT amp_role_id FROM amp_role WHERE role_code='DN'),
      NULL as expenditure_class_id,
@@ -73,6 +74,7 @@
      NULL AS mode_of_payment_id, NULL AS funding_status_id,
      NULL AS capital_spend_percent, NULL AS agreement_id,
      NULL AS disaster_response,
+	 NULL AS disbursement_id,
      NULL as recipient_org_id, NULL as recipient_role_id,
      (SELECT amp_role_id FROM amp_role WHERE role_code='DN'),
      NULL as expenditure_class_id,
@@ -88,7 +90,7 @@
     SELECT f.amp_activity_id, f.amp_funding_id as funding_id, m.amp_fund_mtef_projection_id AS amp_fund_detail_id, 3 AS transaction_type, m.amp_projected_categoryvalue_id AS adjustment_type,
          m.projection_date AS transaction_date, m.amount AS transaction_amount, NULL AS related_pledge_id, m.amp_currency_id AS currency_id, f.type_of_assistance_category_va AS terms_assist_id, NULL AS fixed_exchange_rate,
          f.financing_instr_category_value AS financing_instrument_id, f.amp_donor_org_id AS donor_org_id, f.mode_of_payment_category_va AS mode_of_payment_id, f.funding_status_category_va AS funding_status_id,
-         NULL as capital_spend_percent, f.agreement AS agreement_id, NULL AS disaster_response_code,
+         NULL as capital_spend_percent, f.agreement AS agreement_id, NULL AS disaster_response_code, NULL AS disbursement_id,
          m.recipient_org_id AS recipient_org_id, m.recipient_role_id AS recipient_role_id,
          f.source_role_id AS source_role_id,
          NULL AS expenditure_class_id,
@@ -121,6 +123,7 @@
 			vdf.capital_spend_percent,
 			vdf.agreement_id, agr.title AS agreement_title,
 			vdf.disaster_response_code,
+			vdf.disbursement_id,
 			vdf.recipient_org_id, recipient.name AS recipient_org_name,
 			vdf.recipient_role_id, recipient_role.name AS recipient_role_name,
 			vdf.source_role_id, source_role.name AS source_role_name,

@@ -250,6 +250,7 @@ public class FundingCalculationsHelper {
             if (updateTotals) addToTotals(adjType, fundDet, amt);
             fundDetailList.add(fundingDetail);
             fundingDetail.setDisasterResponse(fundDet.getDisasterResponse());
+            fundingDetail.setDisbursementId(fundDet.getDisbursementId());
         }
         totalCommitments = Logic.getInstance().getTotalDonorFundingCalculator().getTotalCommtiments(totPlannedComm, totActualComm, totPipelineComm);
         unDisbursementsBalance = Logic.getInstance().getTotalDonorFundingCalculator().getunDisbursementsBalance(totalCommitments, totActualDisb);

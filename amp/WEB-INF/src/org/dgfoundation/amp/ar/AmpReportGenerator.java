@@ -113,11 +113,7 @@ public class AmpReportGenerator extends ReportGenerator {
             if (monthly)
                 ret.add(ArConstants.MONTH);
 
-            if (reportMetadata.getType().intValue() != ArConstants.CONTRIBUTION_TYPE)
-                ret.add(ArConstants.FUNDING_TYPE);
-            else {
-                ret.add(ArConstants.FINANCING_INSTRUMENT);
-            }
+            ret.add(ArConstants.FUNDING_TYPE);
 
             //split column for type of assistance ONLY when TOA is added as column
             if(!ARUtil.hasHierarchy(reportMetadata.getHierarchies(),ArConstants.TERMS_OF_ASSISTANCE) &&
@@ -214,10 +210,6 @@ public class AmpReportGenerator extends ReportGenerator {
 
         if (generated.size() > 0) {
             createDataForColumns(generated);
-        }
-        
-        if (ARUtil.containsColumn(ArConstants.COSTING_GRAND_TOTAL,reportMetadata.getShowAblesColumns())){
-            rawColumns.getItems().remove(rawColumns.getColumn(ArConstants.COSTING_GRAND_TOTAL));
         }
     }
 
@@ -685,7 +677,6 @@ public class AmpReportGenerator extends ReportGenerator {
         put((long) ArConstants.DONOR_TYPE, ArConstants.VIEW_DONOR_FUNDING);
         put((long) ArConstants.COMPONENT_TYPE, ArConstants.VIEW_COMPONENT_FUNDING);
         put((long) ArConstants.REGIONAL_TYPE, ArConstants.VIEW_REGIONAL_FUNDING);
-        put((long) ArConstants.CONTRIBUTION_TYPE, ArConstants.VIEW_CONTRIBUTION_FUNDING);
         put((long) ArConstants.PLEDGES_TYPE, ArConstants.VIEW_PLEDGES_FUNDING);
     }};
     
@@ -874,7 +865,7 @@ public class AmpReportGenerator extends ReportGenerator {
         // get the funding column
         AmountCellColumn funding = (AmountCellColumn) rawColumns.getColumn(ArConstants.COLUMN_FUNDING);
                         
-        GroupColumn newcol = new GroupColumn(reportMetadata.getType().intValue() == 4 ? ArConstants.COLUMN_CONTRIBUTION_TOTAL: ArConstants.COLUMN_TOTAL);
+        GroupColumn newcol = new GroupColumn(ArConstants.COLUMN_TOTAL);
         
         if (categorizeByFundingType) {
             boolean removeActualCommitmentsSubcolumn = buildFundingTypeCategoriesSubcolumns(funding, newcol, verticalSplitByTypeOfAssistence, verticalSplitByModeOfPayment);
@@ -1581,19 +1572,6 @@ public class AmpReportGenerator extends ReportGenerator {
         }
 
         reportMetadata.setOrderedColumns(ARUtil.createOrderedColumns(reportMetadata.getShowAblesColumns()));
-
-        // attach funding coming from extra sources ... inject funding from
-        if (ARUtil.containsColumn(ArConstants.COSTING_GRAND_TOTAL,reportMetadata.getShowAblesColumns())) {
-            AmpReportColumn grandTotal = new AmpReportColumn();
-            AmpColumns grandTotalColumn = new AmpColumns();
-            grandTotal.setColumn(grandTotalColumn);
-            grandTotal.setOrderId(0L);
-            grandTotalColumn.setCellType("org.dgfoundation.amp.ar.cell.ComputedAmountCell");
-            grandTotalColumn.setColumnName(ArConstants.COSTING_GRAND_TOTAL);
-            grandTotalColumn.setExtractorView(ArConstants.VIEW_COST);
-            ColumnFilterGenerator.attachHardcodedFilters(grandTotalColumn);
-            reportMetadata.getOrderedColumns().add(grandTotal);
-        }
 
 
         attachFundingMeta();

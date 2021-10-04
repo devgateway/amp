@@ -4,9 +4,6 @@
  */
 package org.dgfoundation.amp.onepager.components.features.tables;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
@@ -34,6 +31,9 @@ import org.digijava.module.aim.helper.FundingDetailComparator;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author mpostelnicu@dgateway.org since Nov 8, 2010
  */
@@ -41,6 +41,7 @@ public class AmpDonorDisbursementsFormTableFeature extends
         AmpDonorFormTableFeaturePanel {
     private static final long serialVersionUID = 1L;
     private final static int SELECTOR_SIZE = 80;
+    private final static int DISBURSEMENT_ID_MAX_LENGTH = 255;
     /**
      * @param id
      * @param model
@@ -86,6 +87,11 @@ public class AmpDonorDisbursementsFormTableFeature extends
                         "Disbursement Order Id", false, true, null, false);
                 disbOrdIdSelector.getChoiceContainer().add(new AttributeAppender("style", new Model<String>("width: "+SELECTOR_SIZE+"px")));
                 item.add(disbOrdIdSelector);
+
+                AmpTextFieldPanel<String> disbursementId = new AmpTextFieldPanel<String>("disbursementId",
+                        new PropertyModel<>(item.getModel(), "disbursementId"), "Disbursement Id", false, true);
+                disbursementId.setTextContainerMaxSize(DISBURSEMENT_ID_MAX_LENGTH);
+                item.add(disbursementId);
                 
                 ArrayList<IPAContract> contractList;
                 if (model.getObject().getAmpActivityId() != null && model.getObject().getAmpActivityId().getContracts() != null)

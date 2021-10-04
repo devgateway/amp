@@ -28,7 +28,6 @@ import org.apache.struts.action.ActionMapping;
  * the appropriate mode to be processed and will invoke the method associated with that mode <br>
  *  - the method will execute and, after processing, will return the forward, that will be returned to the
  * main Struts controller<p>
- * @see EditEUActivity
  * @version 0.2
  */
 public abstract class MultiAction extends Action {

@@ -243,6 +243,10 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
             interValidators = @InterchangeableValidator(value = RequiredValidator.class,
                     fmPath = FMVisibility.PARENT_FM + "/Required Validator for Disaster Response"))
     private Boolean disasterResponse;
+
+    @Interchangeable(fieldTitle = "Disbursement ID", importable = true,
+            fmPath = FMVisibility.PARENT_FM + "/Disbursement Id")
+    private String disbursementId;
     
     public boolean isIatiAdded() {
         return iatiAdded;
@@ -666,6 +670,14 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 
     public void setDisasterResponse(Boolean disasterResponse) {
         this.disasterResponse = disasterResponse;
+    }
+
+    public String getDisbursementId() {
+        return disbursementId;
+    }
+
+    public void setDisbursementId(final String disbursementId) {
+        this.disbursementId = disbursementId;
     }
 
     public Long getCheckSum() {

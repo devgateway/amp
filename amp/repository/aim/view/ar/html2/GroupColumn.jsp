@@ -12,6 +12,6 @@
 <logic:iterate name="groupColumn" property="items" id="column" scope="page">
 	<bean:define id="viewable" name="column" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
 	<jsp:include page="<%=viewable.getViewerPath()%>">
-		<jsp:param name="inTotalColumn" value="<%=groupColumn.getName().equals(ArConstants.COLUMN_TOTAL) || groupColumn.getName().equals(ArConstants.COLUMN_CONTRIBUTION_TOTAL)%>"/>
+		<jsp:param name="inTotalColumn" value="<%=groupColumn.getName().equals(ArConstants.COLUMN_TOTAL)%>"/>
 	</jsp:include>	
 </logic:iterate>

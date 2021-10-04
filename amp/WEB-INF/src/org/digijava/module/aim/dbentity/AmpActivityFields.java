@@ -484,10 +484,6 @@ LoggerIdentifiable, Cloneable {
     @VersionableCollection(fieldTitle = "Line Ministry Observations")
     protected Set<AmpLineMinistryObservation> lineMinistryObservations = new HashSet<>();
 
-    //seems obsolete
-    @VersionableCollection(fieldTitle = "Costs")
-    protected Set costs;
-    
     @Interchangeable(fieldTitle = "Program Description", importable = true, fmPath = "/Activity Form/Program/Program Description")
     @VersionableFieldTextEditor(fieldTitle = "Program Description")
     protected String programDescription;
@@ -1084,14 +1080,6 @@ LoggerIdentifiable, Cloneable {
 
         public void setActivityDocuments(Set<AmpActivityDocument> activityDocuments) {
             this.activityDocuments = activityDocuments;
-        }
-
-        public Set getCosts() {
-            return costs;
-        }
-
-        public void setCosts(Set costs) {
-            this.costs = costs;
         }
 
         /**

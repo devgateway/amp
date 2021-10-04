@@ -1,30 +1,23 @@
 package org.digijava.module.aim.action;
 
-import static org.digijava.module.aim.helper.Constants.CURRENT_MEMBER;
-
-import java.awt.Color;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.StringJoiner;
-
-import javax.servlet.ServletContext;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import com.google.common.base.Strings;
+import com.lowagie.text.Chunk;
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Element;
+import com.lowagie.text.Font;
+import com.lowagie.text.Image;
+import com.lowagie.text.ListItem;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.Phrase;
+import com.lowagie.text.Rectangle;
+import com.lowagie.text.pdf.BaseFont;
+import com.lowagie.text.pdf.PdfContentByte;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfPTableEvent;
+import com.lowagie.text.pdf.PdfWriter;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
@@ -54,11 +47,9 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpStructureCoordinate;
 import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.dbentity.EUActivity;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.dbentity.IPAContractDisbursement;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
-import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.EditActivityForm.Identification;
 import org.digijava.module.aim.form.ProposedProjCost;
@@ -84,9 +75,7 @@ import org.digijava.module.aim.helper.ReferenceDoc;
 import org.digijava.module.aim.helper.RegionalFunding;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
-import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.EUActivityUtil;
 import org.digijava.module.aim.util.ExportActivityToPdfUtil;
 import org.digijava.module.aim.util.ExportUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -105,24 +94,27 @@ import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
 
-import com.lowagie.text.Chunk;
-import com.lowagie.text.Document;
-import com.lowagie.text.DocumentException;
-import com.lowagie.text.Element;
-import com.lowagie.text.Font;
-import com.lowagie.text.Image;
-import com.lowagie.text.ListItem;
-import com.lowagie.text.PageSize;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.Phrase;
-import com.lowagie.text.Rectangle;
-import com.lowagie.text.pdf.BaseFont;
-import com.lowagie.text.pdf.PdfContentByte;
-import com.lowagie.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.PdfPTable;
-import com.lowagie.text.pdf.PdfPTableEvent;
-import com.lowagie.text.pdf.PdfWriter;
-import com.lowagie.text.pdf.draw.LineSeparator;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.awt.Color;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.StringJoiner;
+
+import static org.digijava.module.aim.helper.Constants.CURRENT_MEMBER;
 
 /**
  * Export Activity to PDF
@@ -1435,12 +1427,6 @@ public class ExportActivityToPDF extends Action {
             if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost")) {
                 buildAnnualProjectBudgetTable(myForm,request,mainLayout);
             }
-            /**
-             * Costing
-             */
-            if(FeaturesUtil.isVisibleModule("Activity Costing")){
-                buildCostingPart(request, actId, mainLayout,ampContext);
-            }
 
             /**
              * Build IPA contracting
@@ -1513,7 +1499,8 @@ public class ExportActivityToPDF extends Action {
                 /**
                  * Workspace manager
                  */
-                if (FeaturesUtil.isVisibleField("Data Team Leader")) {
+                if (FeaturesUtil.isVisibleField("Data Team Leader")
+                        && identification.getTeam().getTeamLead() != null) {
                     columnName = TranslatorWorker.translateText("Workspace manager");
                     createGeneralInfoRow(mainLayout, columnName, identification.getTeam().getTeamLead().getUser().getFirstNames()
                             + " " + identification.getTeam().getTeamLead().getUser().getLastName() + " - "
@@ -2084,199 +2071,6 @@ public class ExportActivityToPDF extends Action {
         mainLayout.addCell(lmoValuesCell);
     }
     
-    private void buildCostingPart(HttpServletRequest request, Long actId,PdfPTable mainLayout,ServletContext ampContext) throws WorkerException, AimException {
-        int fmVisibleFieldsCounter=0;
-        String [] costingFmfields={"Costing Activity Name","Costing Total Cost","Costing Total Contribution"};
-        for(int i=0;i<costingFmfields.length;i++){
-            if(FeaturesUtil.isVisibleField(costingFmfields[i])){
-                fmVisibleFieldsCounter++;
-            }
-        }
-        if(fmVisibleFieldsCounter>0){
-            Paragraph p1;
-            HttpSession session=request.getSession();
-            PdfPCell costingCell1=new PdfPCell();
-            costingCell1.setBorder(0);
-            costingCell1.setBackgroundColor(new Color(244,244,242));
-            p1=new Paragraph(postprocessText(TranslatorWorker.translateText("Costing")),titleFont);
-            p1.setAlignment(Element.ALIGN_RIGHT);
-            costingCell1.addElement(p1);
-            mainLayout.addCell(costingCell1);
-
-
-            PdfPCell costingCell2=new PdfPCell();
-            costingCell2.setBorder(1);
-            costingCell2.setBorderColor(new Color(201,201,199));
-
-            PdfPTable costingInnerTable = buildPdfTable(fmVisibleFieldsCounter); //table with 3 cells
-            BigDecimal grandCost = new BigDecimal(0);
-            BigDecimal grandContribution = new BigDecimal(0);
-            if(FeaturesUtil.isVisibleField("Costing Activity Name")){
-                PdfPCell nameCell=new PdfPCell(new Paragraph(postprocessText(TranslatorWorker.translateText("name")),titleFont));
-                nameCell.setBorder(0);
-                nameCell.setBackgroundColor(new Color(244,244,242));
-                costingInnerTable.addCell(nameCell);
-            }
-
-            if(FeaturesUtil.isVisibleField("Costing Total Cost")){
-                PdfPCell totalCostCell=new PdfPCell(new Paragraph(postprocessText(TranslatorWorker.translateText("Total Cost")),titleFont));
-                totalCostCell.setBorder(0);
-                totalCostCell.setBackgroundColor(new Color(244,244,242));
-                costingInnerTable.addCell(totalCostCell);
-            }
-
-            if(FeaturesUtil.isVisibleField("Costing Total Contribution")){
-                PdfPCell totalContrCell=new PdfPCell(new Paragraph(postprocessText(TranslatorWorker.translateText("Total Contribution")),titleFont));
-                totalContrCell.setBorder(0);
-                totalContrCell.setBackgroundColor(new Color(244,244,242));
-                costingInnerTable.addCell(totalContrCell);
-            }
-
-
-            Collection euActs = EUActivityUtil.getEUActivities(actId); //costs
-            if(euActs!=null && euActs.size()>0){
-
-                TeamMember tm = (TeamMember) session.getAttribute(CURRENT_MEMBER);
-                Long defaultCurrency=null;
-                if (tm != null && tm.getAppSettings() != null && tm.getAppSettings().getCurrencyId() != null) {
-                    defaultCurrency = tm.getAppSettings().getCurrencyId();
-                } else{
-                    defaultCurrency = CurrencyUtil.getDefaultCurrency().getAmpCurrencyId();
-                }
-
-                for (EUActivity euActivity : (Collection<EUActivity>)euActs) {
-                    euActivity.setDesktopCurrencyId(defaultCurrency);
-                    //euAct name
-                    if(euActivity.getTotalCostConverted() != 0d){
-                        grandCost=grandCost.add(new BigDecimal(euActivity.getTotalCostConverted()));
-                    }
-                    if(euActivity.getTotalContributionsConverted()!= 0d){
-                        grandContribution=grandContribution.add(new BigDecimal(euActivity.getTotalContributionsConverted()));
-                    }
-                    //name
-                    if(FeaturesUtil.isVisibleField("Costing Activity Name")){
-                        PdfPCell name=new PdfPCell(new Paragraph(postprocessText(euActivity.getName()),titleFont));
-                        name.setBorder(0);
-                        name.setBackgroundColor(new Color(255,255,255));
-                        costingInnerTable.addCell(name);
-                    }
-
-                    //euAct totalsConverted
-                    if(FeaturesUtil.isVisibleField("Costing Total Cost")){
-                        NumberFormat formatter = FormatHelper.getDecimalFormat();
-                        Double totalsConverted=new Double(formatter.format(euActivity.getTotalCostConverted())) ;
-                        p1=new Paragraph(totalsConverted.toString(),plainFont);
-                        p1.setAlignment(Element.ALIGN_RIGHT);
-                        PdfPCell totalsConvertedCell=new PdfPCell(p1);
-                        totalsConvertedCell.setBorder(0);
-                        totalsConvertedCell.setBackgroundColor(new Color(255,255,255));
-                        costingInnerTable.addCell(totalsConvertedCell);
-                    }
-
-                    //totalContributionsConverted
-                    if(FeaturesUtil.isVisibleField("Costing Total Contribution")){
-                        Double totalContributionsConverted=new Double(new DecimalFormat("### ### ###.##").format(euActivity.getTotalContributionsConverted()));
-                        p1=new Paragraph(totalContributionsConverted.toString(),plainFont);
-                        p1.setAlignment(Element.ALIGN_RIGHT);
-                        PdfPCell totalContConvertedCell=new PdfPCell(p1);
-                        totalContConvertedCell.setBorder(0);
-                        totalContConvertedCell.setBackgroundColor(new Color(255,255,255));
-                        costingInnerTable.addCell(totalContConvertedCell);
-                    }
-
-                    PdfPCell anotherInfo=new PdfPCell();
-                    anotherInfo.setBorder(0);
-                    anotherInfo.setColspan(3);
-                    String euInfo="";
-                    if(FeaturesUtil.isVisibleField("Costing Inputs") && euActivity.getInputs()!=null){
-                        euInfo+= TranslatorWorker.translateText("Inputs")+":"+ euActivity.getInputs() + "\n";
-                    }
-                    if(FeaturesUtil.isVisibleField("Costing Assumptions") && euActivity.getAssumptions()!=null){
-                        euInfo+= TranslatorWorker.translateText("Assumptions")+":"+ euActivity.getAssumptions() + "\n";
-                    }
-                    if(FeaturesUtil.isVisibleField("Costing Progress") && euActivity.getProgress()!=null){
-                        euInfo+= TranslatorWorker.translateText("Progress")+":"+ euActivity.getProgress() + "\n";
-                    }
-                    if(FeaturesUtil.isVisibleField("Costing Due Date") && euActivity.getDueDate()!=null){
-                        euInfo+= TranslatorWorker.translateText("Due Date")+":"+ DateConversion.convertDateToLocalizedString(euActivity.getDueDate()) + "\n";
-                    }
-                    anotherInfo.addElement(new Paragraph(postprocessText(euInfo),plainFont));
-                    costingInnerTable.addCell(anotherInfo);
-                }
-
-            }
-            PdfPCell emptyCell=new PdfPCell();
-            emptyCell.setBorder(0);
-            //emptyCell.setColspan(2);
-            costingInnerTable.addCell(emptyCell);
-            PdfPCell lineCell=new PdfPCell();
-            lineCell.setBorder(0);
-            //HORIZONTAL LINE
-            Paragraph separator = new Paragraph(0);
-            separator.add(new Chunk(new LineSeparator(1, 100, Color.BLACK, Element.ALIGN_LEFT, 0)));
-            lineCell.addElement(separator);
-            costingInnerTable.addCell(lineCell);
-
-            PdfPCell emptyCell1=new PdfPCell();
-            emptyCell1.setBorder(0);
-            costingInnerTable.addCell(emptyCell1);
-
-            if(euActs!=null && euActs.size()>0){
-                PdfPCell totals=new PdfPCell();
-                totals.setBorder(0);
-                Paragraph total1=new Paragraph(postprocessText(TranslatorWorker.translateText("Totals"))+": ",titleFont);
-                total1.setAlignment(Element.ALIGN_RIGHT);
-                totals.addElement(total1);
-                costingInnerTable.addCell(totals);
-
-                NumberFormat formatter = FormatHelper.getDecimalFormat();
-                if(FeaturesUtil.isVisibleField("Grand Total Cost")){
-                    PdfPCell grandCostCell=new PdfPCell();
-                    grandCostCell.setBorder(0);
-
-                    String grTotal=formatter.format(grandCost);
-                    Paragraph gc1=new Paragraph(postprocessText(grTotal),plainFont);
-                    grandCostCell.addElement(gc1);
-                    costingInnerTable.addCell(grandCostCell);
-
-                    PdfPCell grandContributionCell=new PdfPCell();
-                    grandContributionCell.setBorder(0);
-                    String grContTotal=formatter.format(grandContribution) ;
-                    Paragraph gtc1=new Paragraph(postprocessText(grContTotal),plainFont);
-                    grandContributionCell.addElement(gtc1);
-                    costingInnerTable.addCell(grandContributionCell);
-                }
-
-                if(FeaturesUtil.isVisibleField("Costing Contribution Gap")){
-                    PdfPCell contGap=new PdfPCell();
-                    contGap.setBorder(0);
-                    Paragraph contGap1=new Paragraph(postprocessText(TranslatorWorker.translateText("Contribution Gap"))+": ",titleFont);
-                    contGap1.setAlignment(Element.ALIGN_RIGHT);
-                    contGap.addElement(contGap1);
-                    costingInnerTable.addCell(contGap);
-
-                    PdfPCell contGapCell=new PdfPCell();
-                    contGapCell.setBorder(0);
-                    String contributionGap=formatter.format(grandCost.subtract(grandContribution));
-                    Paragraph cg=new Paragraph(postprocessText(contributionGap),plainFont);
-                    contGapCell.addElement(cg);
-                    costingInnerTable.addCell(contGapCell);
-
-                    PdfPCell anotherEmptyCell=new PdfPCell();
-                    anotherEmptyCell.setBorder(0);
-                    Paragraph emptyCellVal=new Paragraph("  ");
-                    emptyCellVal.setAlignment(Element.ALIGN_RIGHT);
-                    anotherEmptyCell.addElement(emptyCellVal);
-                    costingInnerTable.addCell(anotherEmptyCell);
-                }
-
-            }
-            costingCell2.addElement(costingInnerTable);
-
-            mainLayout.addCell(costingCell2);
-        }
-    }
-
     public final static String getLatinLettersEquivalent(String src)// returns text without diacritics should be called with a Printable Equivalent
     {
         src = src.replace('ţ', 'ţ').replace("ț", "ţ").replace('Ţ', 'Ţ').replace('î', 'î').replace('ş', 'ş').replace('Ş', 'Ş').replace("ş", "ş").replace("î", "î").replace("ă", "ă").replace("ţ", "ţ");
@@ -3874,7 +3668,17 @@ public class ExportActivityToPDF extends Action {
             cell.setBackgroundColor(new Color(255,255,204));
             cell.setColspan(4);
             fundingTable.addCell(cell);
-        }        
+        }
+
+        if (fd.getTransactionType() == Constants.DISBURSEMENT
+                && FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Disbursements"
+                + "/Disbursements Table/Disbursement Id") && fd.getDisbursementId() != null) {
+            PdfPCell cell = new PdfPCell(new Paragraph(postprocessText(TranslatorWorker.translateText("Disbursement ID")
+                    + ": " + fd.getDisbursementId()), plainFont));
+            cell.setBorder(0);
+            cell.setColspan(COLUMNS_4);
+            fundingTable.addCell(cell);
+        }
     }
 
     private PdfPCell getRoleOrgForFundingFlows(FundingDetail fd,String fm) {

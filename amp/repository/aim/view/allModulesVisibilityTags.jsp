@@ -19,7 +19,6 @@
 <module:display name="NATIONAL PLAN DASHBOARD"></module:display>
 <module:display name="HELP"></module:display>
 
-<module:display name="Activity Costing" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Calendar" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Channel Overview" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Components" parentModule="PROJECT MANAGEMENT"></module:display>

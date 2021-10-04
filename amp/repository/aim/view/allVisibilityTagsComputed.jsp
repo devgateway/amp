@@ -16,7 +16,6 @@
 <module:display name="Template Documents Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Resource Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Activity Approval Process" parentModule="PROJECT MANAGEMENT"></module:display> 
-<module:display name="Activity Costing" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Structures Importer" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Currency deflator" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Dashboards Manager" parentModule="ADMINISTRATIVE SECTION"/>
@@ -97,8 +96,7 @@
 <module:display name="Aid Effectiveness Indicators Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Indicator Layer Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Program Mapping Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
-<feature:display module="Activity Costing" name="Costing"></feature:display> 
-<feature:display module="Contact Information" name="Government Contact Information"></feature:display> 
+<feature:display module="Contact Information" name="Government Contact Information"></feature:display>
 <feature:display module="Contracting" name="Contracting"></feature:display> 
 <feature:display module="Funding" name="Commitments"></feature:display> 
 <feature:display module="Funding" name="Disbursement Orders"></feature:display> 
@@ -112,8 +110,7 @@
 <feature:display module="Project ID and Planning" name="Planning"></feature:display> 
 <feature:display module="Project ID and Planning" name="Sectors"></feature:display>
 <feature:display module="Project ID and Planning" name="Budget"></feature:display> 
-<feature:display module="Report Types" name="Contribution Report"></feature:display> 
-<feature:display name="About AMP" module="HELP"></feature:display> 
+<feature:display name="About AMP" module="HELP"></feature:display>
 <feature:display name="Activity - Component Step" module="Components"></feature:display>
  <feature:display name="Activity Dashboard" module="M & E"></feature:display>
 
@@ -147,8 +144,7 @@
 <feature:display name="Component Report" module="Report Types"></feature:display> 
 <feature:display name="Components" module="Components"></feature:display> 
 <feature:display name="Contracting" module="Contracting"></feature:display> 
-<feature:display name="Costing" module="Activity Costing"></feature:display> 
-<feature:display name="Create Message Form" module="Messages"></feature:display> 
+<feature:display name="Create Message Form" module="Messages"></feature:display>
 <feature:display name="Cross Cutting Issues" module="Cross Cutting Issues"></feature:display> 
 <feature:display name="Disbursement Orders" module="Funding"></feature:display> 
 <feature:display name="Documents Tab" module="Document"></feature:display> 
@@ -399,23 +395,7 @@
 <field:display name="Contracting Total Amount" feature="Contracting"></field:display> 
 <field:display name="Contracting Total National Contribution" feature="Contracting"></field:display> 
 <field:display name="Contracting Type" feature="Contracting"></field:display> 
-<field:display name="Contribution Amount" feature="Costing"></field:display> 
-<field:display name="Contribution Currency" feature="Costing"></field:display> 
-<field:display name="Contribution Donors" feature="Costing"></field:display> 
-<field:display name="Contribution Financing Type" feature="Costing"></field:display> 
-<field:display name="Contribution Type of Assistance" feature="Costing"></field:display> 
-<field:display name="Costing Activity Id" feature="Costing"></field:display> 
-<field:display name="Costing Activity Name" feature="Costing"></field:display> 
-<field:display name="Costing Assumptions" feature="Costing"></field:display> 
-<field:display name="Costing Contribution Gap" feature="Costing"></field:display> 
-<field:display name="Costing Donor" feature="Costing"></field:display> 
-<field:display name="Costing Due Date" feature="Costing"></field:display> 
-<field:display name="Costing Inputs" feature="Costing"></field:display> 
-<field:display name="Costing Progress" feature="Costing"></field:display> 
-<field:display name="Costing Tab" feature="Costing"></field:display> 
-<field:display name="Costing Total Contribution" feature="Costing"></field:display> 
-<field:display name="Costing Total Cost" feature="Costing"></field:display> 
-<field:display name="Creation date" feature="Admin"></field:display> 
+<field:display name="Creation date" feature="Admin"></field:display>
 <field:display name="Cris Number" feature="Identification"></field:display> 
 <field:display name="Cumulative Commitment" feature="Funding Information"></field:display> 
 <field:display name="Cumulative Disbursement" feature="Funding Information"></field:display> 
@@ -436,8 +416,8 @@
 <field:display name="Date Commitments" feature="Regional Funding"></field:display> 
 <field:display name="Date Current Value" feature="Activity"></field:display> 
 <field:display name="Date Disbursement" feature="Disbursement"></field:display>
-<field:display name="Related Pledge" feature="Disbursement"></field:display> 
-<field:display name="Date Disbursement" feature="Funding Information"></field:display> 
+<field:display name="Related Pledge" feature="Disbursement"></field:display>
+<field:display name="Date Disbursement" feature="Funding Information"></field:display>
 <field:display name="Date Disbursements" feature="Regional Funding"></field:display> 
 <field:display name="Date Expenditure" feature="Expenditures"></field:display> 
 <field:display name="Date Expenditures" feature="Regional Funding"></field:display> 
@@ -514,11 +494,10 @@
 <field:display name="Government Phone Number" feature="Government Contact Information"></field:display> 
 <field:display name="Government Title" feature="Government Contact Information"></field:display> 
 <field:display name="Grand Total Commitments" feature="Activity - Component Step"></field:display> 
-<field:display name="Grand Total Cost" feature="Costing"></field:display> 
-<field:display name="Grand Total Disbursements" feature="Activity - Component Step"></field:display> 
+<field:display name="Grand Total Disbursements" feature="Activity - Component Step"></field:display>
 <field:display name="Humanitarian Aid" feature="Identification"></field:display>
-<field:display name="Disaster Response Marker" feature="Identification"></field:display> 
-<field:display name="Implementation Level" feature="Location"></field:display> 
+<field:display name="Disaster Response Marker" feature="Identification"></field:display>
+<field:display name="Implementation Level" feature="Location"></field:display>
 <field:display name="Implementation Location" feature="Location"></field:display> 
 <field:display name="Inbox Alert" feature="Alert tab"></field:display> 
 <field:display name="Inbox Message" feature="Message tab"></field:display> 

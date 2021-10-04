@@ -275,7 +275,6 @@ public final class Constants {
     public static final String DC_FEATURE = "DC"; // Documents feature code
     public static final String SC_FEATURE = "SC"; // Scenarios feature code
     public static final String MS_FEATURE = "MS"; //* Multi Sector Manager code
-    public static final String AC_FEATURE = "AC"; // Activity Costing feature code
     public static final String LB_FEATURE = "LB"; //* Logframe Builder code
     public static final String SA_FEATURE = "SA"; //* Standard AMP Form Fields code
 

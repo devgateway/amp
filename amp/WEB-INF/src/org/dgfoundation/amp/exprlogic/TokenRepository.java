@@ -29,9 +29,7 @@ public class TokenRepository {
             LogicalToken NOT_REAL_DISBURSEMENT = new NonDirectedTransactionLogicalToken(ArConstants.ACTUAL_DISBURSEMENTS, false);
             this.put(TokenNames.ACTUAL_DISBURSEMENT, buildSimpleTransactionLogicalToken(ArConstants.DISBURSEMENT, ArConstants.ACTUAL, NOT_REAL_DISBURSEMENT));
             this.put(TokenNames.UNCOMMITTED, buildUncommittedLogicalToken());
-            this.put(TokenNames.COSTING_GRAND_TOTAL, 
-                    new TokenExpression(new LogicalToken[] { new PresentLogicalToken(ArConstants.COSTING_GRAND_TOTAL, false)}));
-            
+
             this.put(TokenNames.CUMULATED_DISBURSEMENTS, buildCumulatedDisursementsLogicalToken());
             this.put(TokenNames.SELECTED_YEAR_PLANNED_DISBURSEMENTS, buildSelectedYearPlannedDisbursementsLogicalToken());
             this.put(TokenNames.PRIOR_ACTUAL_DISBURSEMENTS, buildPriorActualDisbursementsLogicalToken());
@@ -43,7 +41,6 @@ public class TokenRepository {
     {
         // Injected funding
         PresentLogicalToken proposedCost = new PresentLogicalToken(ArConstants.PROPOSED_COST, true);
-        PresentLogicalToken grandTotaldCost = new PresentLogicalToken(ArConstants.COSTING_GRAND_TOTAL, true);
 
         // Filter no Commitments funding
         EqualsLogicalToken NotDisbursementTrType = new EqualsLogicalToken(ArConstants.DISBURSEMENT, ArConstants.TRANSACTION_TYPE, true);
@@ -60,8 +57,7 @@ public class TokenRepository {
         ORBinaryLogicalToken or1 = new ORBinaryLogicalToken(actualAdjType, NotPlannedAdjType, false);
         ANDBinaryLogicalToken and2 = new ANDBinaryLogicalToken(or1, and1, false);
         ANDBinaryLogicalToken and3 = new ANDBinaryLogicalToken(and2, proposedCost, false);
-        ANDBinaryLogicalToken and4 = new ANDBinaryLogicalToken(and3, grandTotaldCost, false);
-        TokenExpression te = new TokenExpression(new LogicalToken[] { and4 });
+        TokenExpression te = new TokenExpression(new LogicalToken[] { and3 });
         return te;
     }
         
@@ -99,19 +95,17 @@ public class TokenRepository {
     private static TokenExpression buildSimpleTransactionLogicalToken(String trType, String adjType, LogicalToken finalAndLogicalToken)
     {
         PresentLogicalToken proposedCost = new PresentLogicalToken(ArConstants.PROPOSED_COST, true);
-        PresentLogicalToken grandTotaldCost = new PresentLogicalToken(ArConstants.COSTING_GRAND_TOTAL, true);
 
         EqualsLogicalToken seekedTrType = new EqualsLogicalToken(trType, ArConstants.TRANSACTION_TYPE, false);
         EqualsLogicalToken seekedAdjType = new EqualsLogicalToken(adjType, ArConstants.ADJUSTMENT_TYPE, false);
         
         ANDBinaryLogicalToken and2 = new ANDBinaryLogicalToken(seekedTrType, seekedAdjType, false);
         ANDBinaryLogicalToken and3 = new ANDBinaryLogicalToken(and2, proposedCost, false);
-        ANDBinaryLogicalToken and4 = new ANDBinaryLogicalToken(and3, grandTotaldCost, false);
-        
+
         if (finalAndLogicalToken != null)
-            and4 = new ANDBinaryLogicalToken(and4, finalAndLogicalToken, false);
+            and3 = new ANDBinaryLogicalToken(and3, finalAndLogicalToken, false);
         
-        TokenExpression te = new TokenExpression(new LogicalToken[] { and4 });
+        TokenExpression te = new TokenExpression(new LogicalToken[] { and3 });
         
         return te;
     }
@@ -207,7 +201,6 @@ public class TokenRepository {
     private static TokenExpression buildCumulatedDisursementsLogicalToken() {
 
         PresentLogicalToken proposedCost = new PresentLogicalToken(ArConstants.PROPOSED_COST, true);
-        PresentLogicalToken grandTotaldCost = new PresentLogicalToken(ArConstants.COSTING_GRAND_TOTAL, true);
 
         EqualsLogicalToken NotCommitments = new EqualsLogicalToken(ArConstants.COMMITMENT, ArConstants.TRANSACTION_TYPE, true);
         EqualsLogicalToken NotExpenditureTrType = new EqualsLogicalToken(ArConstants.EXPENDITURE, ArConstants.TRANSACTION_TYPE, true);
@@ -224,10 +217,9 @@ public class TokenRepository {
 
         ANDBinaryLogicalToken and3 = new ANDBinaryLogicalToken(and2, proposedCost, false);
 
-        ANDBinaryLogicalToken and4 = new ANDBinaryLogicalToken(and3, grandTotaldCost, false);
         //YearLogicalToken year = new YearLogicalToken();
         PresentLogicalToken year=new PresentLogicalToken(ArConstants.COMPUTE_ON_YEAR,false);
-        ANDBinaryLogicalToken and5 = new ANDBinaryLogicalToken(and4, year, false);
+        ANDBinaryLogicalToken and5 = new ANDBinaryLogicalToken(and3, year, false);
 
         GregorianCalendar c2=new GregorianCalendar();
         c2.set(Calendar.DAY_OF_MONTH,1);
@@ -247,7 +239,6 @@ public class TokenRepository {
 
     private static TokenExpression buildSelectedYearPlannedDisbursementsLogicalToken() {
         PresentLogicalToken proposedCost = new PresentLogicalToken(ArConstants.PROPOSED_COST, true);
-        PresentLogicalToken grandTotaldCost = new PresentLogicalToken(ArConstants.COSTING_GRAND_TOTAL, true);
 
         // Filter no Disbursement funding
         EqualsLogicalToken NotCommitments = new EqualsLogicalToken(ArConstants.COMMITMENT, ArConstants.TRANSACTION_TYPE, true);
@@ -263,11 +254,10 @@ public class TokenRepository {
         ORBinaryLogicalToken or1 = new ORBinaryLogicalToken(NotactualAdjType, plannedAdjType, false);
         ANDBinaryLogicalToken and2 = new ANDBinaryLogicalToken(or1, and1, false);
         ANDBinaryLogicalToken and3 = new ANDBinaryLogicalToken(and2, proposedCost, false);
-        ANDBinaryLogicalToken and4 = new ANDBinaryLogicalToken(and3, grandTotaldCost, false);
-        
+
         //YearLogicalToken year = new YearLogicalToken();
         PresentLogicalToken year=new PresentLogicalToken(ArConstants.COMPUTE_ON_YEAR,false);
-        ANDBinaryLogicalToken and5 = new ANDBinaryLogicalToken(and4, year, false);
+        ANDBinaryLogicalToken and5 = new ANDBinaryLogicalToken(and3, year, false);
 
         TokenExpression te = new TokenExpression(new LogicalToken[] { and5 });
         return te;
@@ -281,7 +271,6 @@ public class TokenRepository {
      */
     private static TokenExpression buildPriorActualDisbursementsLogicalToken() {
         PresentLogicalToken proposedCost = new PresentLogicalToken(ArConstants.PROPOSED_COST, true);
-        PresentLogicalToken grandTotaldCost = new PresentLogicalToken(ArConstants.COSTING_GRAND_TOTAL, true);
         EqualsLogicalToken NotCommitments = new EqualsLogicalToken(ArConstants.COMMITMENT, ArConstants.TRANSACTION_TYPE, true);
         EqualsLogicalToken NotExpenditureTrType = new EqualsLogicalToken(ArConstants.EXPENDITURE, ArConstants.TRANSACTION_TYPE, true);
         EqualsLogicalToken NotDisbursedOrderTrType = new EqualsLogicalToken(ArConstants.DISBURSEMENT_ORDERS, ArConstants.TRANSACTION_TYPE, true);
@@ -293,8 +282,7 @@ public class TokenRepository {
         ORBinaryLogicalToken or1 = new ORBinaryLogicalToken(actualAdjType, NotPlannedAdjType, false);
         ANDBinaryLogicalToken and2 = new ANDBinaryLogicalToken(or1, and1, false);
         ANDBinaryLogicalToken and3 = new ANDBinaryLogicalToken(and2, proposedCost, false);
-        ANDBinaryLogicalToken and4 = new ANDBinaryLogicalToken(and3, grandTotaldCost, false);
-        
+
         // if today =  09/2009  period should be 01/2009 to /08/2009
         GregorianCalendar c1=new GregorianCalendar(); 
         c1.set(Calendar.DAY_OF_MONTH,1);
@@ -319,7 +307,7 @@ public class TokenRepository {
         
         DateRangeLogicalToken token=new DateRangeLogicalToken(d1,d2,ArConstants.TRANSACTION_DATE);
         
-        ANDBinaryLogicalToken and5 = new ANDBinaryLogicalToken(and4, token, false);
+        ANDBinaryLogicalToken and5 = new ANDBinaryLogicalToken(and3, token, false);
         
         TokenExpression te = new TokenExpression(new LogicalToken[] { and5 });
 
@@ -333,7 +321,6 @@ public class TokenRepository {
     private static TokenExpression buildClosedMonthActualDisbursementsLogicalToken() {
 
         PresentLogicalToken proposedCost = new PresentLogicalToken(ArConstants.PROPOSED_COST, true);
-        PresentLogicalToken grandTotaldCost = new PresentLogicalToken(ArConstants.COSTING_GRAND_TOTAL, true);
 
         EqualsLogicalToken NotCommitments = new EqualsLogicalToken(ArConstants.COMMITMENT, ArConstants.TRANSACTION_TYPE, true);
         EqualsLogicalToken NotExpenditureTrType = new EqualsLogicalToken(ArConstants.EXPENDITURE, ArConstants.TRANSACTION_TYPE, true);
@@ -350,8 +337,6 @@ public class TokenRepository {
 
         ANDBinaryLogicalToken and3 = new ANDBinaryLogicalToken(and2, proposedCost, false);
 
-        ANDBinaryLogicalToken and4 = new ANDBinaryLogicalToken(and3, grandTotaldCost, false);
-        
         GregorianCalendar c1=new GregorianCalendar();
         c1.set(Calendar.DAY_OF_MONTH,1);
         c1.add(Calendar.MONTH,-1);
@@ -374,7 +359,7 @@ public class TokenRepository {
         
         DateRangeLogicalToken token=new DateRangeLogicalToken(d1,d2,ArConstants.TRANSACTION_DATE);
         
-        ANDBinaryLogicalToken and5 = new ANDBinaryLogicalToken(and4, token, false);
+        ANDBinaryLogicalToken and5 = new ANDBinaryLogicalToken(and3, token, false);
         
         TokenExpression te = new TokenExpression(new LogicalToken[] { and5 });
         return te;

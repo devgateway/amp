@@ -28,9 +28,9 @@ public class AutocompleteAcronymTitleModel extends Model<String> {
         }
 
         if (acronymModel != null && acronymModel.getObject() != null) {
-            ret = ret + AmpAutocompleteFieldPanel.ACRONYM_DELIMITER_START +
-                    acronymModel.getObject() +
-                    AmpAutocompleteFieldPanel.ACRONYM_DELIMITER_STOP;
+            ret = ret + AmpAutocompleteFieldPanel.ACRONYM_DELIMITER_START
+                    + acronymModel.getObject()
+                    + AmpAutocompleteFieldPanel.ACRONYM_DELIMITER_STOP;
         }
         ret = ret + titleModel.getObject();
         return ret;

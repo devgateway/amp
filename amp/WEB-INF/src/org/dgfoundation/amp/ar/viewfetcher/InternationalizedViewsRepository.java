@@ -61,7 +61,8 @@ public class InternationalizedViewsRepository {
                     return null;
             }
             return sqlconcat(resultSet.getString("agreement_title"), " - ",
-                    resultSet.getString(agreementCodeColumnName) != null ? resultSet.getString(agreementCodeColumnName) : "");
+                    resultSet.getString(agreementCodeColumnName) != null
+                            ? resultSet.getString(agreementCodeColumnName) : "");
         }
     }
     

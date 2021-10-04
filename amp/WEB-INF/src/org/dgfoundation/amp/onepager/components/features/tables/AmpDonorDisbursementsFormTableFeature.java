@@ -60,7 +60,7 @@ public class AmpDonorDisbursementsFormTableFeature extends
                     if(ampFundingDetail.getTransactionType().equals(Constants.DISBURSEMENT_ORDER)) ret.add(ampFundingDetail.getDisbOrderId());
                 return ret;
             }
-        };      
+        };
         list = new FundingListEditor<AmpFundingDetail>("listDisbursements", setModel, FundingDetailComparator
                 .getFundingDetailComparator()) {
 
@@ -149,12 +149,9 @@ public class AmpDonorDisbursementsFormTableFeature extends
 
                 item.add(disasterResponse);                             
             }
-            
         };
         add(list);
-        
-        
-        
+        addExpandableList();
     }
 
 }

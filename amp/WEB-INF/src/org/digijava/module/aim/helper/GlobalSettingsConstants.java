@@ -205,6 +205,8 @@ public class GlobalSettingsConstants {
 
     public static final String REORDER_FUNDING_ITEMS = "Reorder funding items";
 
+    public static final String FUNDING_ITEM_LIST_EXPANDABLE = "Make the funding item list expandable";
+
     public static final String AMP_REGISTRY_URL = "AMP Registry URL";
 
     public static final String AMP_OFFLINE_ENABLED = "AMP Offline Enabled";

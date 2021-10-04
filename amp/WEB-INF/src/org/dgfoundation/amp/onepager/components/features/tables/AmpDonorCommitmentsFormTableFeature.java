@@ -112,6 +112,7 @@ public class AmpDonorCommitmentsFormTableFeature extends
             
         };
         add(list);
+        addExpandableList();
     }
 
     @Override

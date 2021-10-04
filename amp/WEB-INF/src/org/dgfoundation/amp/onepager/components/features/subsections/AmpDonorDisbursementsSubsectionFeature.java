@@ -23,8 +23,11 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
+
+import static org.digijava.module.aim.helper.GlobalSettingsConstants.FUNDING_ITEM_LIST_EXPANDABLE;
 
 /**
  * Displays the funding disbursements subsection
@@ -34,15 +37,15 @@ import org.digijava.module.gateperm.util.PermissionUtil;
 public class AmpDonorDisbursementsSubsectionFeature extends
         AmpSubsectionFeatureFundingPanel<AmpFunding> {
 
-    private IModel<AmpOrganisation> fundingOrgModel; 
-    
+    private IModel<AmpOrganisation> fundingOrgModel;
+
     protected AmpDonorDisbursementsFormTableFeature disbursementsTableFeature;
-    
+
     public AmpDonorDisbursementsFormTableFeature getDisbursementsTableFeature() {
         return disbursementsTableFeature;
     }
-    
-    
+
+
     @Override
     protected void onConfigure() {
         super.onConfigure();
@@ -60,7 +63,7 @@ public class AmpDonorDisbursementsSubsectionFeature extends
         super(id, AmpFundingItemFeaturePanel.FM_NAME_BY_TRANSACTION_TYPE.get(transactionType), model, transactionType);
         disbursementsTableFeature = new AmpDonorDisbursementsFormTableFeature("disbursementsTableFeature", model, "Disbursements Table", transactionType);
         add(disbursementsTableFeature);
-        fundingOrgModel = new PropertyModel<AmpOrganisation>(model, "ampDonorOrgId");              
+        fundingOrgModel = new PropertyModel<AmpOrganisation>(model, "ampDonorOrgId");
         AmpAjaxLinkField addDisbursement=new AmpAjaxLinkField("addDisbursement","Add Disbursement","Add Disbursement") {
             @Override
             public void onClick(AjaxRequestTarget target) {
@@ -81,6 +84,11 @@ public class AmpDonorDisbursementsSubsectionFeature extends
                 target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
                 target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));
                 target.appendJavaScript(QuarterInformationPanel.getJSUpdate(getSession()));
+                if (FeaturesUtil.getGlobalSettingValueBoolean(FUNDING_ITEM_LIST_EXPANDABLE)) {
+                    target.appendJavaScript("$(window).scrollTop($('#"
+                            + disbursementsTableFeature.getParent().getMarkupId() + "').position().top)");
+                }
+
             }
         };
         addDisbursement.setAffectedByFreezing(false);

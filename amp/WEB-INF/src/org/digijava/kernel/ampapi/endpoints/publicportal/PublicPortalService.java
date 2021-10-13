@@ -26,6 +26,7 @@ import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
@@ -377,7 +378,9 @@ public class PublicPortalService {
 
     public static PublicTotalsByMeasure getCountByMeasure(SettingsAndFiltersParameters config) {
         PublicTotalsByMeasure result = new PublicTotalsByMeasure();
-        result.setMeasure("Total Activities");
+        result.getMeasure().put("original", "Total Activities");
+        result.getMeasure().put("translated", TranslatorWorker.translateText("Total Activities"));
+
         result.setCount(PublicPortalService.getActivitiesCount(config != null ? config.getFilters() : null, false));
         return result;
     }
@@ -429,7 +432,8 @@ public class PublicPortalService {
         Map<ReportOutputColumn, ReportCell> totals = report.reportContents.getContents();
         totals.entrySet().forEach(c -> {
             result.setTotal((BigDecimal) c.getValue().value);
-            result.setMeasure(c.getKey().originalColumnName);
+            result.getMeasure().put("original", c.getKey().originalColumnName);
+            result.getMeasure().put("translated", c.getKey().columnName);
         });
         return result;
     }

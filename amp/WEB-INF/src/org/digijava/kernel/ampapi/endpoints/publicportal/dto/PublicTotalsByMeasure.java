@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Julian de Anquin
@@ -24,7 +26,11 @@ public class PublicTotalsByMeasure {
 
     @JsonProperty("measure")
     @ApiModelProperty(example = "Actual Commitments")
-    private String measure;
+    private Map<String, String> measure;
+
+    public PublicTotalsByMeasure() {
+        measure = new HashMap<>();
+    }
 
     public String getCurrency() {
         return currency;
@@ -42,11 +48,11 @@ public class PublicTotalsByMeasure {
         this.total = total;
     }
 
-    public String getMeasure() {
+    public Map<String, String> getMeasure() {
         return measure;
     }
 
-    public void setMeasure(String measure) {
+    public void setMeasure(Map<String, String> measure) {
         this.measure = measure;
     }
 

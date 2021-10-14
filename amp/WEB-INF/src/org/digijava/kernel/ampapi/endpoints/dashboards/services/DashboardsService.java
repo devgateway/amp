@@ -71,6 +71,7 @@ public final class DashboardsService {
     private DashboardsService() {
 
     }
+
     /**
      * Return a list of the available top __ for the dashboard charts Note -- I
      * (Phil) hacked this in, so it probably could use a review Also, I
@@ -402,7 +403,10 @@ public final class DashboardsService {
             retlist.setName(DashboardConstants.FINANCING_INSTRUMENT);
             retlist.setTitle(TranslatorWorker.translateText(DashboardConstants.FINANCING_INSTRUMENT));
         }
+        for (ReportMeasure m : spec.getMeasures()) {
+            retlist.addMeasure(m.getMeasureName(), TranslatorWorker.translateText(m.getMeasureName()));
 
+        }
         return retlist;
     }
 

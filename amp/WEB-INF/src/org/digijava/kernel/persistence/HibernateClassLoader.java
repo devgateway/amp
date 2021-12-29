@@ -22,16 +22,15 @@
 
 package org.digijava.kernel.persistence;
 
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.config.DigiConfig;
 import org.digijava.kernel.config.HibernateClass;
 import org.digijava.kernel.config.HibernateClasses;
 import org.digijava.kernel.config.moduleconfig.ModuleConfig;
+import org.digijava.kernel.persistence.interceptors.AmpEntityInterceptor;
 import org.digijava.kernel.services.AmpOfflineVersion;
 import org.digijava.kernel.services.AmpOfflineVersionType;
 import org.digijava.kernel.util.I18NHelper;
-import org.digijava.kernel.persistence.interceptors.AmpEntityInterceptor;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -42,11 +41,10 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 
+import javax.persistence.Entity;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Iterator;
-
-import javax.persistence.Entity;
 
 /**
  * Hibernate Class loader, see digi.xml file for more details.
@@ -177,25 +175,17 @@ public class HibernateClassLoader {
                         .equalsIgnoreCase("true"))));
 
                 if (logger.isDebugEnabled()) {
-                    Object[] params = { hibernateClass.getContent() };
-                    logger.l7dlog(Level.DEBUG,
-                            "HibernateClassLoader.loadingHibernateClass",
-                            params, null);
+                    logger.debug("Loading Hibernate class " + hibernateClass.getContent());
                 }
 
                 // adding class to load
                 cfg.addClass(Class.forName(hibernateClass.getContent()));
             } catch (Exception ex) {
-                Object[] params = { hibernateClass.getContent() };
                 if (required) {
-                    logger.l7dlog(Level.FATAL,
-                            "HibernateClassLoader.loadingHibernateClass.error",
-                            params, ex);
+                    logger.fatal("Error loading Hibernate class " + hibernateClass.getContent());
                     break;
                 } else {
-                    logger.l7dlog(Level.ERROR,
-                            "HibernateClassLoader.loadingHibernateClass.error",
-                            params, ex);
+                    logger.error("Error loading Hibernate class " + hibernateClass.getContent());
                 }
             }
 

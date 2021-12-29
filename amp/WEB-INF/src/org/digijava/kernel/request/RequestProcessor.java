@@ -22,22 +22,7 @@
 
 package org.digijava.kernel.request;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.StringTokenizer;
-
-import javax.security.auth.Subject;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.apache.commons.beanutils.DynaBean;
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.struts.Globals;
 import org.apache.struts.action.Action;
@@ -74,7 +59,19 @@ import org.digijava.kernel.util.I18NHelper;
 import org.digijava.kernel.util.ModuleUtils;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteCache;
-import org.digijava.module.contentrepository.util.DocumentManagerUtil;
+
+import javax.security.auth.Subject;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.StringTokenizer;
 
 /**
  * This class works as Struts request processor
@@ -146,8 +143,10 @@ public class RequestProcessor
         }
 
         if (logger.isDebugEnabled()) {
-            logger.l7dlog(Level.DEBUG, "RequestProcessor.requiredPermissions",
-                          new Object[] {actionPermissions}, null);
+            logger.debug(String.format("Required permissions for Struts actions"
+                            + "\\n=================================================="
+                            + "\\n%s"
+                            + "\\n==================================================", actionPermissions));
         }
     }
 
@@ -174,9 +173,8 @@ public class RequestProcessor
             return;
 
         if (logger.isDebugEnabled()) {
-            logger.l7dlog(Level.DEBUG,
-                          "RequestProcessor.parsingActionPermissions",
-                          new Object[] {moduleName, actionPath}, null);
+            logger.debug(String.format("Parsing permission for module %s and action %s in struts-config.xml",
+                    moduleName, actionPath));
         }
 
         String key = addModule ? "/" + moduleName + actionPath :
@@ -383,8 +381,7 @@ public class RequestProcessor
                                     (moduleInstance == null ? actionFormName :
                                      moduleInstance) + actionFormName);
             if (logger.isDebugEnabled()) {
-                logger.l7dlog(Level.DEBUG, "RequestProcessor.actionFormName",
-                              new Object[] {newMapping.getAttribute()}, null);
+                logger.debug("Action form name is " + newMapping.getAttribute());
             }
             request.setAttribute(Globals.MAPPING_KEY, newMapping);
             request.setAttribute(Constants.ORIGINAL_MAPPING, mapping);
@@ -413,9 +410,7 @@ public class RequestProcessor
 
         String mainPath = super.processPath(request, response);
         if (logger.isDebugEnabled()) {
-            logger.l7dlog(Level.DEBUG, "RequestProcessor.sourceActionPath",
-                          new Object[] {mainPath}
-                          , null);
+            logger.debug("Source action path is " + mainPath);
         }
 
         Site currentSite = null;
@@ -613,9 +608,7 @@ public class RequestProcessor
 
             if (moduleName != null) {
                 if (logger.isDebugEnabled()) {
-                    logger.l7dlog(Level.DEBUG, "RequestProcessor.moduleName",
-                                  new Object[] {moduleName}
-                                  , null);
+                    logger.debug("Module name is " + moduleName);
                 }
 
                 if (moduleInstance != null) {

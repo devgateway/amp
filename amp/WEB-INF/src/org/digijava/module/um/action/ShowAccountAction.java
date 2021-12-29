@@ -115,8 +115,7 @@ public class ShowAccountAction
             forward = mapping.findForward("welcome");
 
             if (logger.isDebugEnabled()) {
-                String errKey = "Module.Um.ShowAccountAction.userNotFound";
-                logger.l7dlog(Level.ERROR, errKey, null, null );
+                logger.error("User object not found in session");
             }
         }
 

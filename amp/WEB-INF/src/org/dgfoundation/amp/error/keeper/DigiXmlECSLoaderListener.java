@@ -1,21 +1,15 @@
 package org.dgfoundation.amp.error.keeper;
 
-import java.io.File;
-
-import java.lang.reflect.Method;
+import org.apache.commons.digester.Digester;
+import org.apache.log4j.Logger;
+import org.digijava.kernel.config.DigiConfig;
+import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.util.DigiConfigManager;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-
-import org.apache.commons.digester.Digester;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-import org.apache.log4j.spi.LoggerRepository;
-import org.digijava.kernel.config.DigiConfig;
-import org.digijava.kernel.exception.DgException;
-import org.digijava.kernel.util.DigiConfigManager;
-import org.dgfoundation.ecs.InternalLoggerPlugin;
+import java.io.File;
 
 public class DigiXmlECSLoaderListener implements ServletContextListener {
     private static Logger logger = Logger.getLogger(DigiXmlECSLoaderListener.class);

@@ -22,15 +22,6 @@
 
 package org.digijava.kernel.taglib;
 
-import java.io.IOException;
-
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.jsp.JspException;
-
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.struts.tiles.ComponentContext;
 import org.digijava.kernel.Constants;
@@ -43,6 +34,14 @@ import org.digijava.kernel.util.I18NHelper;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.viewmanager.ViewConfig;
 import org.digijava.kernel.viewmanager.ViewConfigFactory;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.jsp.JspException;
+import java.io.IOException;
+import java.text.MessageFormat;
 
 /**
  * Digi insert tag
@@ -94,10 +93,7 @@ public class InsertTag
             String itemType = "invalid";
             String controllerUrl = null;
             if (logger.isDebugEnabled()) {
-                logger.l7dlog(Level.DEBUG,
-                              "InsertTag.processingPutItem",
-                              new Object[] {item}
-                              , null);
+                logger.debug("Processing <put-item> tag: " + item);
             }
 
             this.setControllerType(null);
@@ -165,10 +161,8 @@ public class InsertTag
                         if ( (requiredInstance != null) &&
                             (requiredInstance.isPermitted())) {
                             if (logger.isDebugEnabled()) {
-                                logger.l7dlog(Level.DEBUG,
-                                    "InsertTag.insertTeaserForModInst",
-                                    new Object[] {requiredInstance}
-                                    , null);
+                                logger.debug("digi:insert -> inserting teaser. Module instance is : "
+                                        + requiredInstance);
                             }
 
                             if (item.getItemType() == PutItem.MOD_INST_ITEM) {
@@ -207,12 +201,12 @@ public class InsertTag
                         }
                         else {
                             itemType="error";
-                            logger.l7dlog(Level.WARN,
-                                          "InsertTag.insertTeaserFailed",
-                                          new Object[] {requiredInstance,
-                                          item.getModule(),
-                                          item.getInstance()}
-                                          , null);
+                            logger.warn(MessageFormat.format("digi:insert -> unable to insert teaser. "
+                                            + "Module instance {0} is not permitted. "
+                                            + "Required module: {1}, instance: {2}",
+                                    requiredInstance,
+                                    item.getModule(),
+                                    item.getInstance()));
 
                             strPath = "/404.jsp";
                         }
@@ -223,10 +217,7 @@ public class InsertTag
                 }
 
                 if (logger.isDebugEnabled()) {
-                    logger.l7dlog(Level.DEBUG,
-                                  "InsertTag.includingFile",
-                                  new Object[] {strPath}
-                                  , null);
+                    logger.debug("Including file: " + strPath);
                 }
 
                 // now put attribute in tiles context
@@ -234,9 +225,7 @@ public class InsertTag
 
             }
             catch (Exception ex) {
-                logger.l7dlog(Level.ERROR,
-                              "InsertTag.error",
-                              null, ex);
+                logger.error("Error in digi:insert tag");
 
                 // now put attribute in tiles context to
                 // report error in page

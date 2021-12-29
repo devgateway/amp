@@ -22,6 +22,18 @@
 
 package org.digijava.kernel.util;
 
+import org.apache.log4j.Logger;
+import org.digijava.kernel.Constants;
+import org.digijava.kernel.cache.AbstractCache;
+import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.entity.ModuleInstance;
+import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.request.SiteDomain;
+import org.hibernate.Session;
+
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -33,19 +45,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
-
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.digijava.kernel.Constants;
-import org.digijava.kernel.cache.AbstractCache;
-import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.entity.ModuleInstance;
-import org.digijava.kernel.exception.DgException;
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.persistence.WorkerException;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.request.SiteDomain;
-import org.hibernate.Session;
 
 public class SiteCache implements Runnable {
 
@@ -248,8 +247,7 @@ public class SiteCache implements Runnable {
                     }
                 } else {
                     if (logger.isDebugEnabled()) {
-                        Object[] params = {siteDomain.getSiteDomain()};
-                        logger.l7dlog(Level.ERROR, "SiteCache.noSiteForDomain", params, null);
+                        logger.error("No site for domain " + siteDomain.getSiteDomain());
                     }
                 }
             }
@@ -299,9 +297,11 @@ public class SiteCache implements Runnable {
 
 
             if (logger.isDebugEnabled()) {
-                Object[] params = {
-                    toXml()};
-                logger.l7dlog(Level.DEBUG, "SiteCache.currentCache", params, null);
+                logger.debug(MessageFormat.format("Current site cache"
+                        + "\\n=================================================="
+                        + "\\n{0}"
+                        + "\\n==================================================",
+                        toXml()));
             }
         }
     }

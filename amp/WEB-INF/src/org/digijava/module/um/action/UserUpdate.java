@@ -23,28 +23,25 @@
 package org.digijava.module.um.action;
 
 
-import java.util.HashSet;
-import java.util.Set;
-
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.Constants;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.OrganizationType;
+import org.digijava.kernel.entity.UserLangPreferences;
 import org.digijava.kernel.entity.UserPreferences;
-import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.I18NHelper;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.um.form.UserUpdateForm;
 import org.digijava.module.um.util.DbUtil;
+
+import java.util.HashSet;
 import java.util.Iterator;
-import org.digijava.kernel.entity.UserLangPreferences;
-import org.digijava.kernel.util.RequestUtils;
+import java.util.Set;
 
 
 /**
@@ -75,8 +72,7 @@ public class UserUpdate
         UserUpdateForm userRegisterForm = (UserUpdateForm) form;
 
         if (userRegisterForm == null) {
-            String debugKey = "Module.Um.UserRegisterAction.formnull";
-            logger.l7dlog(Level.WARN, debugKey, null, null);
+            logger.warn("UserRegisterForm is null");
         }
 
         // get user object from session

@@ -76,10 +76,6 @@ public class TranslatorWorker {
     private static Logger logger =
         Logger.getLogger(TranslatorWorker.class);
 
-    static {
-        logger.setResourceBundle(I18NHelper.getKernelBundle());
-    }
-
     private static String CURR_SITE_SRC_MSG = "SITE_SRCLANG";
     private static String CURR_SITE_TARGET_MSG = "SITE_TARGETLANG";
     private static String ROOT_SITE_SRC_MSG = "ROOTSITE_SRCLANG";
@@ -558,10 +554,8 @@ public class TranslatorWorker {
             return (List<String>) q.list();
         }
         catch (HibernateException he) {
-            String errKey = "TranslatorWorker.HibExLoadingMessage.err";
-            Object[] params = {
-                he.getMessage()};
-            logger.l7dlog(Level.ERROR, errKey, params, he);
+            String errKey = "TranslatorWorker.HibExLoadingMessage.err ";
+            logger.error(errKey + he.getMessage());
             throw new WorkerException(he.getMessage(), he);
         }
     }
@@ -595,11 +589,8 @@ public class TranslatorWorker {
         }
 
         catch (HibernateException he) {
-
-            String errKey = "TranslatorWorker.HibExLoadingMessage.err";
-            Object[] params = {
-                he.getMessage()};
-            logger.l7dlog(Level.ERROR, errKey, params, he);
+            String errKey = "TranslatorWorker.HibExLoadingMessage.err ";
+            logger.error(errKey + he.getMessage());
             throw new WorkerException(he.getMessage(), he);
         }
 
@@ -710,11 +701,8 @@ public class TranslatorWorker {
 
         }
         catch (HibernateException he) {
-
-            String errKey = "TranslatorWorker.HibExLoadingMessage.err";
-            Object[] params = {
-                he.getMessage()};
-            logger.l7dlog(Level.ERROR, errKey, params, he);
+            String errKey = "TranslatorWorker.HibExLoadingMessage.err ";
+            logger.error(errKey + he.getMessage());
             throw new WorkerException(he.getMessage(), he);
         }
 
@@ -882,11 +870,8 @@ public class TranslatorWorker {
 
         }
         catch (HibernateException he) {
-
-            String errKey = "TranslatorWorker.HibExLoadingMessage.err";
-            Object[] params = {
-                he.getMessage()};
-            logger.l7dlog(Level.ERROR, errKey, params, he);
+            String errKey = "TranslatorWorker.HibExLoadingMessage.err ";
+            logger.error(errKey + he.getMessage());
             throw new WorkerException(he.getMessage(), he);
         }
     }
@@ -959,11 +944,8 @@ public class TranslatorWorker {
 
         }
         catch (HibernateException he) {
-
-            String errKey = "TranslatorWorker.HibExLoadingMessage.err";
-            Object[] params = {
-                he.getMessage()};
-            logger.l7dlog(Level.ERROR, errKey, params, he);
+            String errKey = "TranslatorWorker.HibExLoadingMessage.err ";
+            logger.error(errKey + he.getMessage());
             throw new WorkerException(he.getMessage(), he);
         }
     }

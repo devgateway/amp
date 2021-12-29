@@ -22,20 +22,18 @@
 
 package org.digijava.module.um.action;
 
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.Constants;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.I18NHelper;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.um.form.UserChangePasswordForm;
 import org.digijava.module.um.util.DbUtil;
-import org.digijava.kernel.util.RequestUtils;
 
 public class UserChangePassword
     extends Action {
@@ -65,7 +63,7 @@ public class UserChangePassword
             else {
 
                 if (logger.isDebugEnabled()) {
-                    logger.l7dlog(Level.DEBUG, "Module.Um.UserUpdateAction.invalidpwd", null, null);
+                    logger.debug("Invalid password");
                 }
 
                 // current password don't match

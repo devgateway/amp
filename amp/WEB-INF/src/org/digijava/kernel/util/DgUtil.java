@@ -22,32 +22,8 @@
 
 package org.digijava.kernel.util;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.text.SimpleDateFormat;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.StringTokenizer;
-import java.util.regex.Pattern;
-
-import javax.security.auth.Subject;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.upload.MultipartRequestWrapper;
@@ -80,6 +56,29 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
+
+import javax.security.auth.Subject;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.StringTokenizer;
+import java.util.regex.Pattern;
 
 public class DgUtil {
     
@@ -1399,10 +1398,7 @@ public class DgUtil {
                              urlFull.substring(index, urlFull.length()));
         }
         else {
-            Object params[] = {
-                url, urlFull};
-            logger.l7dlog(Level.ERROR,
-                          "DgUtil.mergeUrl", params, null);
+            logger.error(MessageFormat.format("Error merging Urls {0} to {1}", url, urlFull));
         }
 
         return null;

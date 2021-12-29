@@ -25,6 +25,7 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -58,9 +59,6 @@ public class CompleteTranslationAction extends DispatchAction
 {
 
     private static Logger logger = Logger.getLogger(org.digijava.kernel.translator.action.CompleteTranslationAction.class);
-    static {
-            logger.setResourceBundle(org.digijava.kernel.util.I18NHelper.getKernelBundle());
-    }
 
     /**
      * Used by all methods to setup data for display
@@ -71,12 +69,7 @@ public class CompleteTranslationAction extends DispatchAction
     private List<ValueBean> setupForm(List<TranslatorBean> sm, HttpServletRequest request){
 
         if (logger.isDebugEnabled()) {
-            Object[] param = { "CompleteTranslationAction", "setupForm()" };
-            logger.l7dlog(
-                Level.DEBUG,
-                "ActionClass.MethodEnter.db",
-                param,
-                null);
+            logger.debug("ActionClass.MethodEnter.db { \"CompleteTranslationAction\", \"setupForm()\" }");
         }
 
         List<ValueBean> message = new ArrayList<ValueBean>();
@@ -125,12 +118,7 @@ public class CompleteTranslationAction extends DispatchAction
 
         }
         if (logger.isDebugEnabled()) {
-            Object[] param = { "CompleteTranslationAction", "setupForm()" };
-            logger.l7dlog(
-                Level.DEBUG,
-                "ActionClass.MethodReturn.db",
-                param,
-                null);
+            logger.debug("ActionClass.MethodReturn.db { \"CompleteTranslationAction\", \"setupForm()\" }");
         }
         return message;
 
@@ -154,12 +142,7 @@ public class CompleteTranslationAction extends DispatchAction
                                    throws IOException, ServletException{
 
         if (logger.isDebugEnabled()) {
-            Object[] param = { "CompleteTranslationAction", "search()" };
-            logger.l7dlog(
-                Level.DEBUG,
-                "ActionClass.MethodEnter.db",
-                param,
-                null);
+            logger.debug("ActionClass.MethodEnter.db { \"CompleteTranslationAction\", \"search()\" }");
         }
         Long siteId = getSiteId(request);
         Long rootSiteId = getRootSiteId(request);
@@ -171,9 +154,7 @@ public class CompleteTranslationAction extends DispatchAction
             java.util.Set<String> ls = new TranslatorWorker().getPrefixesForSite(siteId, rootSiteId);
             request.setAttribute("list",ls);
         }catch(WorkerException we){
-            Object[] param = { "CompleteTranslationAction" };
-            logger.l7dlog(Level.ERROR, "ActionClass.Exception.err", param, we);
-
+            logger.error("ActionClass.Exception.err { \"CompleteTranslationAction\" }");
         }
 
 
@@ -212,8 +193,7 @@ public class CompleteTranslationAction extends DispatchAction
                 }
             }
         }catch(WorkerException we){
-            Object[] param = { "CompleteTranslationAction" };
-            logger.l7dlog(Level.ERROR, "ActionClass.Exception.err", param, we);
+            logger.error("ActionClass.Exception.err { \"CompleteTranslationAction\" }");
         }
         message = setupForm(sm,request);
 
@@ -234,12 +214,7 @@ public class CompleteTranslationAction extends DispatchAction
 
         }
         if (logger.isDebugEnabled()) {
-            Object[] param = { "CompleteTranslationAction", "search()" };
-            logger.l7dlog(
-                Level.DEBUG,
-                "ActionClass.MethodReturn.db",
-                param,
-                null);
+            logger.debug("ActionClass.MethodReturn.db { \"CompleteTranslationAction\", \"search()\" }");
         }
         return null;
 }
@@ -260,12 +235,7 @@ public class CompleteTranslationAction extends DispatchAction
                                    throws IOException, ServletException{
 
         if (logger.isDebugEnabled()) {
-            Object[] param = { "CompleteTranslationAction", "keywordSearch()" };
-            logger.l7dlog(
-                Level.DEBUG,
-                "ActionClass.MethodEnter.db",
-                param,
-                null);
+            logger.debug("ActionClass.MethodEnter.db { \"CompleteTranslationAction\", \"keywordSearch()\" }");
         }
         Long siteId = getSiteId(request);
         Long rootSiteId = getRootSiteId(request);
@@ -278,8 +248,7 @@ public class CompleteTranslationAction extends DispatchAction
             request.setAttribute("list",ls);
 
         }catch(WorkerException we){
-            Object[] param = { "CompleteTranslationAction" };
-            logger.l7dlog(Level.ERROR, "ActionClass.Exception.err", param, we);
+            logger.error("ActionClass.Exception.err { \"CompleteTranslationAction\" }");
         }
 
         List<ValueBean> message = new ArrayList<ValueBean>();
@@ -298,8 +267,7 @@ public class CompleteTranslationAction extends DispatchAction
               }
 
         }catch(WorkerException we){
-            Object[] param = { "CompleteTranslationAction" };
-            logger.l7dlog(Level.ERROR, "ActionClass.Exception.err", param, we);
+            logger.error("ActionClass.Exception.err { \"CompleteTranslationAction\" }");
         }
 
         message = setupForm(sm,request);
@@ -324,12 +292,7 @@ public class CompleteTranslationAction extends DispatchAction
 
         }
         if (logger.isDebugEnabled()) {
-            Object[] param = { "CompleteTranslationAction", "keywordSearch()" };
-            logger.l7dlog(
-                Level.DEBUG,
-                "ActionClass.MethodReturn.db",
-                param,
-                null);
+            logger.debug("ActionClass.MethodReturn.db { \"CompleteTranslationAction\", \"keywordSearch()\" }");
         }
         return null;
     }
@@ -351,41 +314,26 @@ public class CompleteTranslationAction extends DispatchAction
                                    throws IOException, ServletException{
 
         if (logger.isDebugEnabled()) {
-            Object[] param = { "CompleteTranslationAction", "addMessage()" };
-            logger.l7dlog(
-                Level.DEBUG,
-                "ActionClass.MethodEnter.db",
-                param,
-                null);
+            logger.debug("ActionClass.MethodEnter.db { \"CompleteTranslationAction\", \"addMessage()\" }");
         }
         String key=request.getParameter("key_list");
         String locale1=request.getParameter("locale");
         String textMessage=request.getParameter("message_text");
 
-        Object[] log = {key,locale1,textMessage};
-        logger.l7dlog(
-                    Level.DEBUG,
-                    "ActionClass.Translator.Values",
-                    log,
-                    null);
+        logger.debug(MessageFormat.format("ActionClass.Translator.Values {0} {1} {2}",
+                key, locale1, textMessage));
 
         try{
 
             updateMsg(request,key,textMessage,new Locale(locale1),getSiteId(request));
         }catch(Exception we){
-            Object[] param = { "CompleteTranslationAction" };
-            logger.l7dlog(Level.ERROR, "ActionClass.Exception.err", param, we);
+            logger.error("ActionClass.Exception.err { \"CompleteTranslationAction\" }");
             //handle the same
         }
 
         ActionForward af = keySearch(mapping,form,request,response);
         if (logger.isDebugEnabled()) {
-            Object[] param = { "CompleteTranslationAction", "addMessage()" };
-            logger.l7dlog(
-                Level.DEBUG,
-                "ActionClass.MethodReturn.db",
-                param,
-                null);
+            logger.debug("ActionClass.MethodReturn.db { \"CompleteTranslationAction\", \"addMessage()\" }");
         }
         return null;
     }
@@ -409,24 +357,14 @@ public class CompleteTranslationAction extends DispatchAction
                                    throws IOException, ServletException{
 
         if (logger.isDebugEnabled()) {
-            Object[] param = { "CompleteTranslationAction", "addMessage()" };
-            logger.l7dlog(
-                Level.DEBUG,
-                "ActionClass.MethodEnter.db",
-                param,
-                null);
+            logger.debug("ActionClass.MethodEnter.db { \"CompleteTranslationAction\", \"addMessage()\" }");
         }
 
         java.util.Set languages = SiteUtils.getTransLanguages(RequestUtils.getSite(request));
         request.setAttribute("languages",languages);
 
         if (logger.isDebugEnabled()) {
-            Object[] param = { "CompleteTranslationAction", "addMessage()" };
-            logger.l7dlog(
-                Level.DEBUG,
-                "ActionClass.MethodReturn.db",
-                param,
-                null);
+            logger.debug("ActionClass.MethodReturn.db { \"CompleteTranslationAction\", \"addMessage()\" }");
         }
 
         return mapping.findForward("success");
@@ -448,12 +386,7 @@ public class CompleteTranslationAction extends DispatchAction
 
 
         if (logger.isDebugEnabled()) {
-            Object[] param = { "CompleteTranslationAction", "expireKey()" };
-            logger.l7dlog(
-                Level.DEBUG,
-                "ActionClass.MethodEnter.db",
-                param,
-                null);
+            logger.debug("ActionClass.MethodEnter.db { \"CompleteTranslationAction\", \"expireKey()\" }");
         }
         String mykeys = request.getParameter("mykeys" + request.getParameter("rownum"));
 
@@ -469,19 +402,13 @@ public class CompleteTranslationAction extends DispatchAction
                     new TranslatorWorker().markKeyUnexpired(mykeys);
                 }
             }catch(WorkerException we){
-                Object[] param = { "CompleteTranslationAction" };
-                logger.l7dlog(Level.ERROR, "ActionClass.Exception.err", param, we);
+                logger.error("ActionClass.Exception.err { \"CompleteTranslationAction\" }");
             }
         }
 
         ActionForward af = keySearch(mapping,form,request,response);
         if (logger.isDebugEnabled()) {
-            Object[] param = { "CompleteTranslationAction", "expireKey()" };
-            logger.l7dlog(
-                Level.DEBUG,
-                "ActionClass.MethodReturn.db",
-                param,
-                null);
+            logger.debug("ActionClass.MethodReturn.db { \"CompleteTranslationAction\", \"expireKey()\" }");
         }
         return null;
     }
@@ -500,12 +427,7 @@ public class CompleteTranslationAction extends DispatchAction
                                    HttpServletResponse response){
 
         if (logger.isDebugEnabled()) {
-            Object[] param = { "CompleteTranslationAction", "update()" };
-            logger.l7dlog(
-                Level.DEBUG,
-                "ActionClass.MethodEnter.db",
-                param,
-                null);
+            logger.debug("ActionClass.MethodEnter.db { \"CompleteTranslationAction\", \"update()\" }");
         }
         String rownum = request.getParameter("rownum");
         String msgParam = "txt" + rownum;
@@ -518,18 +440,12 @@ public class CompleteTranslationAction extends DispatchAction
         try{
             updateMsg(request,mykeys,message,new Locale(request.getParameter("radio_locale2")),getSiteId(request));
         }catch(Exception we){
-            Object[] param = { "CompleteTranslationAction" };
-            logger.l7dlog(Level.ERROR, "ActionClass.Exception.err", param, we);
+            logger.error("ActionClass.Exception.err { \"CompleteTranslationAction\" }");
         }
 
         ActionForward af = keySearch(mapping,form,request,response);
         if (logger.isDebugEnabled()) {
-            Object[] param = { "CompleteTranslationAction", "update()" };
-            logger.l7dlog(
-                Level.DEBUG,
-                "ActionClass.MethodReturn.db",
-                param,
-                null);
+            logger.debug("ActionClass.MethodReturn.db { \"CompleteTranslationAction\", \"update()\" }");
         }
         return null;
 
@@ -549,12 +465,7 @@ public class CompleteTranslationAction extends DispatchAction
                                    HttpServletResponse response){
 
         if (logger.isDebugEnabled()) {
-            Object[] param = { "CompleteTranslationAction", "saveAll()" };
-            logger.l7dlog(
-                Level.DEBUG,
-                "ActionClass.MethodEnter.db",
-                param,
-                null);
+            logger.debug("ActionClass.MethodEnter.db { \"CompleteTranslationAction\", \"saveAll()\" }");
         }
 
         if(request.getParameter("total_rows")!=null)
@@ -570,8 +481,7 @@ public class CompleteTranslationAction extends DispatchAction
                     try{
                         updateMsg(request,mykeys,message,new Locale(request.getParameter("radio_locale2")),getSiteId(request));
                     }catch(Exception we){
-                        Object[] param = { "CompleteTranslationAction" };
-                        logger.l7dlog(Level.ERROR, "ActionClass.Exception.err", param, we);
+                        logger.error("ActionClass.Exception.err { \"CompleteTranslationAction\" }");
                     }
 
 
@@ -581,12 +491,7 @@ public class CompleteTranslationAction extends DispatchAction
 
         ActionForward af = keySearch(mapping,form,request,response);
         if (logger.isDebugEnabled()) {
-            Object[] param = { "CompleteTranslationAction", "saveAll()" };
-            logger.l7dlog(
-                Level.DEBUG,
-                "ActionClass.MethodReturn.db",
-                param,
-                null);
+            logger.debug("ActionClass.MethodReturn.db { \"CompleteTranslationAction\", \"saveAll()\" }");
         }
         return null;
     }
@@ -607,12 +512,7 @@ public class CompleteTranslationAction extends DispatchAction
                                        HttpServletResponse response){
         //if(request.getParameter("search")!=null){/*This section is for key search e.g ep:*/
         if (logger.isDebugEnabled()) {
-            Object[] param = { "CompleteTranslationAction", "keySearch()" };
-            logger.l7dlog(
-                Level.DEBUG,
-                "ActionClass.MethodEnter.db",
-                param,
-                null);
+            logger.debug("ActionClass.MethodEnter.db { \"CompleteTranslationAction\", \"keySearch()\" }");
         }
         List message = new ArrayList();
         Long siteId = getSiteId(request);
@@ -638,8 +538,7 @@ public class CompleteTranslationAction extends DispatchAction
         try{
              ls = new TranslatorWorker().getPrefixesForSite(siteId, rootSiteId);
         }catch(WorkerException we){
-            Object[] param = { "CompleteTranslationAction" };
-            logger.l7dlog(Level.ERROR, "ActionClass.Exception.err", param, we);
+            logger.error("ActionClass.Exception.err { \"CompleteTranslationAction\" }");
         }
         int startFrom = 0;
         if(request.getParameter("startFrom") != null)
@@ -659,8 +558,7 @@ public class CompleteTranslationAction extends DispatchAction
             message = setupForm(sm, request);
             request.setAttribute("No_rows",String.valueOf(sm.size()));
         }catch(WorkerException we){
-            Object[] param = { "CompleteTranslationAction" };
-            logger.l7dlog(Level.ERROR, "ActionClass.Exception.err", param, we);
+            logger.error("ActionClass.Exception.err { \"CompleteTranslationAction\" }");
         }
 
         request.setAttribute("Message",message);
@@ -670,12 +568,7 @@ public class CompleteTranslationAction extends DispatchAction
 
 
         if (logger.isDebugEnabled()) {
-            Object[] param = { "CompleteTranslationAction", "keySearch()" };
-            logger.l7dlog(
-                Level.DEBUG,
-                "ActionClass.MethodReturn.db",
-                param,
-                null);
+            logger.debug("ActionClass.MethodReturn.db { \"CompleteTranslationAction\", \"keySearch()\" }");
         }
         return null;
     }
@@ -721,12 +614,7 @@ public class CompleteTranslationAction extends DispatchAction
                                        HttpServletRequest request,
                                        HttpServletResponse response){
         if (logger.isDebugEnabled()) {
-            Object[] param = { "CompleteTranslationAction", "getAll()" };
-            logger.l7dlog(
-                Level.DEBUG,
-                "ActionClass.MethodEnter.db",
-                param,
-                null);
+            logger.debug("ActionClass.MethodEnter.db { \"CompleteTranslationAction\", \"getAll()\" }");
         }
         Long siteId = getSiteId(request);
         Long rootSiteId = getRootSiteId(request);
@@ -750,8 +638,7 @@ public class CompleteTranslationAction extends DispatchAction
             ls = new TranslatorWorker().getPrefixesForSite(siteId,rootSiteId);
 
         }catch(WorkerException we){
-            Object[] param = { "CompleteTranslationAction" };
-            logger.l7dlog(Level.ERROR, "ActionClass.Exception.err", param, we);
+            logger.error("ActionClass.Exception.err { \"CompleteTranslationAction\" }");
         }
         Iterator<String> it = ls.iterator();
         int c=0;
@@ -778,8 +665,7 @@ public class CompleteTranslationAction extends DispatchAction
                     }
 
                 }catch(WorkerException we){
-                    Object[] param = { "CompleteTranslationAction" };
-                    logger.l7dlog(Level.ERROR, "ActionClass.Exception.err", param, we);
+                    logger.error("ActionClass.Exception.err { \"CompleteTranslationAction\" }");
                 }
                 for(int i=0 ; i<sm.size();i++)
                 {
@@ -837,12 +723,7 @@ public class CompleteTranslationAction extends DispatchAction
 
 
         if (logger.isDebugEnabled()) {
-            Object[] param = { "CompleteTranslationAction", "getAll()" };
-            logger.l7dlog(
-                Level.DEBUG,
-                "ActionClass.MethodReturn.db",
-                param,
-                null);
+            logger.debug("ActionClass.MethodReturn.db { \"CompleteTranslationAction\", \"getAll()\" }");
         }
         return null;
     }
@@ -860,12 +741,7 @@ public class CompleteTranslationAction extends DispatchAction
     private void updateMsg(HttpServletRequest request, String key,String strMessage, Locale locale, Long siteId) {
 
         if (logger.isDebugEnabled()) {
-            Object[] param = { "CompleteTranslationAction", "updateMsg()" };
-            logger.l7dlog(
-                Level.DEBUG,
-                "ActionClass.MethodEnter.db",
-                param,
-                null);
+            logger.debug("ActionClass.MethodEnter.db { \"CompleteTranslationAction\", \"updateMsg()\" }");
         }
         TranslatorWorker translatorWorker = TranslatorWorker.getInstance(key);
         Message msg = translatorWorker.getByKey(key, locale.toString(), siteId);
@@ -892,12 +768,7 @@ public class CompleteTranslationAction extends DispatchAction
         }
 
         if (logger.isDebugEnabled()) {
-            Object[] param = { "CompleteTranslationAction", "updateMsg()" };
-            logger.l7dlog(
-                Level.DEBUG,
-                "ActionClass.MethodReturn.db",
-                param,
-                null);
+            logger.debug("ActionClass.MethodReturn.db { \"CompleteTranslationAction\", \"updateMsg()\" }");
         }
         }
 

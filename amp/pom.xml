@@ -28,11 +28,7 @@
             </snapshots>
             <id>central</id>
             <name>amp</name>
-            <url>https://artifactory.dgdev.org/artifactory/central/</url>
-        </repository>
-        <repository>
-            <id>OSGEO GeoTools repo</id>
-            <url>http://download.osgeo.org/webdav/geotools</url>
+            <url>https://artifactory.dgdev.org/artifactory/amp/</url>
         </repository>
     </repositories>
     <pluginRepositories>
@@ -42,7 +38,7 @@
             </snapshots>
             <id>central</id>
             <name>amp</name>
-            <url>https://artifactory.dgdev.org/artifactory/central/</url>
+            <url>https://artifactory.dgdev.org/artifactory/amp/</url>
         </pluginRepository>
     </pluginRepositories>
 
@@ -210,6 +206,10 @@
                 <exclusion>
                     <artifactId>jstl</artifactId>
                     <groupId>javax.servlet</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>log4j</artifactId>
+                    <groupId>log4j</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -513,11 +513,6 @@
     		<scope>test</scope>
     	</dependency>
         <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.14</version>
-        </dependency>
-        <dependency>
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-analyzers</artifactId>
             <version>${lucene.version}</version>
@@ -633,12 +628,17 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.6.1</version>
+            <version>1.7.32</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>1.6.1</version>
+            <artifactId>log4j-over-slf4j</artifactId>
+            <version>1.7.32</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.9</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
@@ -827,14 +827,6 @@
             <artifactId>digi-commons</artifactId>
             <version>1.0.0</version>
             <type>jar</type>
-
-        </dependency>
-
-        <dependency>
-            <groupId>org.dgfoundation.ecs</groupId>
-            <artifactId>ecs-core</artifactId>
-            <version>1.0.51</version>
-            <type>jar</type>
         </dependency>
 
         <dependency>
@@ -959,6 +951,12 @@
             <groupId>com.github.jarlakxen</groupId>
             <artifactId>embedphantomjs</artifactId>
             <version>2.9</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>log4j-over-slf4j</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.github.fge</groupId>

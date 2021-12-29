@@ -40,11 +40,6 @@
 			org.dgfoundation.amp.error.keeper.DigiXmlECSLoaderListener
 		</listener-class>
 	</listener>
-	<listener>
-		<listener-class>
-			org.dgfoundation.ecs.ContextLoaderListener
-		</listener-class>
-	</listener>
 	<!--                 SEGMENT END                 -->
 	<!--  ADD ENTRIES BELOW -->
 

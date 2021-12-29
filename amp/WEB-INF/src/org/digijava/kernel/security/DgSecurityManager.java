@@ -22,12 +22,6 @@
 
 package org.digijava.kernel.security;
 
-import java.security.Permission;
-
-import javax.security.auth.Subject;
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.struts.Globals;
 import org.digijava.kernel.Constants;
@@ -36,6 +30,11 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.I18NHelper;
 import org.digijava.kernel.util.RequestUtils;
+
+import javax.security.auth.Subject;
+import javax.servlet.http.HttpServletRequest;
+import java.security.Permission;
+import java.text.MessageFormat;
 
 public class DgSecurityManager {
 
@@ -135,21 +134,17 @@ public class DgSecurityManager {
      */
     public static boolean permitted(Subject subject, Site site, int action) {
 
-        Object params[] = {
-            subject.toString(), site.getId(), new Integer(action)};
-        logger.l7dlog(Level.DEBUG, "DgSecurityManager.permittedCalled",
-                      params, null);
+        logger.debug(MessageFormat.format("Permitted() was called for subject {0}, site {1} and action {2}",
+                subject.toString(), site.getId(), new Integer(action)));
 
         if ( (!site.isSecure()) && (action == SitePermission.INT_READ)) {
             // Everyone has read access to non-secure site
-            logger.l7dlog(Level.DEBUG, "DgSecurityManager.unsecuredSite",
-                          null, null);
+            logger.debug("Site is not secure and read is permitted");
 
             return true;
         }
 
-        logger.l7dlog(Level.DEBUG, "DgSecurityManager.securedSite",
-                      null, null);
+        logger.debug("Site is secure or action is not \"READ\"");
 
         SitePermission permission = new SitePermission(site, action);
 
@@ -160,11 +155,9 @@ public class DgSecurityManager {
     public static boolean permitted(Subject subject, Site site,
                                     ModuleInstance moduleInstance,
                                     int action) {
-        Object params[] = {
-            subject.toString(), moduleInstance.getModuleName(),
-            moduleInstance.getInstanceName(), new Integer(action)};
-        logger.l7dlog(Level.DEBUG,
-                      "DgSecurityManager.permittedCalledForModule", params, null);
+        logger.debug(MessageFormat.format(
+                "Permitted() was called for subject {0}, module {1}, instance {2} and action {3}",
+                subject.toString(), moduleInstance.getModuleName(), moduleInstance.getInstanceName(), action));
 
         ModuleInstancePermission permission = new ModuleInstancePermission(
             moduleInstance, action);

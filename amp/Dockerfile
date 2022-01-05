@@ -1,4 +1,4 @@
-FROM tomcat:7.0-jdk8
+FROM tomcat:8.5-jdk8
 
 ARG AMP_EXPLODED_WAR
 ARG AMP_PULL_REQUEST

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.zip.GZIPInputStream;
 
+import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
@@ -26,7 +27,24 @@ public class GzippedServletRequest extends HttpServletRequestWrapper {
 
     @Override
     public ServletInputStream getInputStream() throws IOException {
-        return new ServletInputStreamWrapper(new GZIPInputStream((super.getInputStream())));
+        ServletInputStream is = super.getInputStream();
+        return new ServletInputStreamWrapper(new GZIPInputStream(is)) {
+
+            @Override
+            public boolean isFinished() {
+                return is.isFinished();
+            }
+
+            @Override
+            public boolean isReady() {
+                return is.isReady();
+            }
+
+            @Override
+            public void setReadListener(ReadListener listener) {
+                is.setReadListener(listener);
+            }
+        };
     }
 
     @Override

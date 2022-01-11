@@ -22,6 +22,7 @@
 
 package org.digijava.kernel.util;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -61,7 +62,6 @@ import javax.security.auth.Subject;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -550,10 +550,8 @@ public class DgUtil {
      */
     public static String encodeBase64(String string) {
         try {
-            return URLEncoder.encode(new sun.misc.BASE64Encoder().encodeBuffer(
-                string.getBytes()), "UTF-8");
-        }
-        catch (UnsupportedEncodingException ex) {
+            return URLEncoder.encode(Base64.encodeBase64String(string.getBytes()), "UTF-8");
+        } catch (UnsupportedEncodingException ex) {
             logger.error("Could not encode Base64", ex);
             throw new RuntimeException(ex);
         }
@@ -566,17 +564,9 @@ public class DgUtil {
      */
     public static String decodeBase64(String string) {
         try {
-            try {
-                return new String(new sun.misc.BASE64Decoder().decodeBuffer(
-                    URLDecoder.decode(string, "UTF-8")));
-            }
-            catch (UnsupportedEncodingException ex) {
-                logger.error("Could not decode Base64", ex);
-                throw new RuntimeException(ex);
-            }
-        }
-        catch (IOException ex) {
-            logger.error("Could not decode Base64", ex);
+            return new String(Base64.decodeBase64(URLDecoder.decode(string, "UTF-8")));
+        } catch (UnsupportedEncodingException ex) {
+            logger.error("Could not dencode Base64", ex);
             throw new RuntimeException(ex);
         }
     }

@@ -9,8 +9,8 @@
     <properties>
         <wicketVersion>6.29.0</wicketVersion>
         <tomcatVersion>7.0.67</tomcatVersion>
-        <springSecurityVersion>3.1.4.RELEASE</springSecurityVersion>
-        <springVersion>3.0.7.RELEASE</springVersion>
+        <springSecurityVersion>5.6.1</springSecurityVersion>
+        <springVersion>5.3.14</springVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jackrabbit.version>2.16.2</jackrabbit.version>
         <lucene.version>3.6.2</lucene.version>
@@ -66,16 +66,6 @@
             <version>2.7.6</version>
         </dependency>
         <dependency>
-            <groupId>asm</groupId>
-            <artifactId>asm-attrs</artifactId>
-            <version>1.5.3</version>
-        </dependency>
-        <dependency>
-            <groupId>asm</groupId>
-            <artifactId>asm</artifactId>
-            <version>3.1</version>
-        </dependency>
-        <dependency>
             <groupId>avalon</groupId>
             <artifactId>avalon-framework</artifactId>
             <version>4.1.4</version>
@@ -86,19 +76,9 @@
             <version>1.4</version>
         </dependency>
         <dependency>
-            <groupId>batik</groupId>
-            <artifactId>batik</artifactId>
-            <version>1.5</version>
-        </dependency>
-        <dependency>
             <groupId>org.beanshell</groupId>
             <artifactId>bsh</artifactId>
             <version>2.0b4</version>
-        </dependency>
-        <dependency>
-            <groupId>cglib</groupId>
-            <artifactId>cglib</artifactId>
-            <version>3.1</version>
         </dependency>
         <dependency>
             <groupId>commons-beanutils</groupId>
@@ -234,11 +214,6 @@
             <version>2.1</version>
         </dependency>
         <dependency>
-            <groupId>fop</groupId>
-            <artifactId>fop</artifactId>
-            <version>0.20.5</version>
-        </dependency>
-        <dependency>
             <groupId>groovy</groupId>
             <artifactId>groovy-all-1.0-jsr</artifactId>
             <version>03</version>
@@ -274,11 +249,6 @@
             <artifactId>classmate</artifactId>
             <version>1.1.0</version>
         </dependency>
-		<dependency>
-			<groupId>org.thymeleaf</groupId>
-			<artifactId>thymeleaf-spring3</artifactId>
-			<version>2.1.4.RELEASE</version>
-		</dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-spatial</artifactId>
@@ -539,37 +509,12 @@
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-asm</artifactId>
-            <version>${springVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-beans</artifactId>
-            <version>${springVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>${springVersion}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-            <version>${springVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-expression</artifactId>
-            <version>${springVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-tx</artifactId>
-            <version>${springVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
+            <artifactId>spring-jdbc</artifactId>
             <version>${springVersion}</version>
         </dependency>
         <dependency>
@@ -710,11 +655,6 @@
             <version>${wicketVersion}</version> </dependency> -->
         <!-- <dependency> <groupId>org.projectlombok</groupId> <artifactId>lombok</artifactId>
             <version>1.12.6</version> <scope>provided</scope> </dependency> -->
-        <dependency>
-            <groupId>com.mockrunner</groupId>
-            <artifactId>mockrunner</artifactId>
-            <version>0.4.1</version>
-        </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
@@ -882,33 +822,10 @@
             <version>${jersey.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.sun.jersey.contribs</groupId>
-            <artifactId>jersey-spring</artifactId>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-servlet</artifactId>
             <version>${jersey.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring-core</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring-beans</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring-aop</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring-context</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring-web</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
-
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-server</artifactId>
@@ -1027,6 +944,11 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <dependency>
+                <groupId>cglib</groupId>
+                <artifactId>cglib</artifactId>
+                <version>3.2.9</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -1050,6 +972,24 @@
         </resources>
 
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>enforce</id>
+                        <configuration>
+                            <rules>
+                                <dependencyConvergence/>
+                            </rules>
+                        </configuration>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.developmentgateway</groupId>
                 <artifactId>inccheckstyle-maven-plugin</artifactId>

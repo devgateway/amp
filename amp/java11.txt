@@ -1,0 +1,37 @@
+
+Spring must be upgraded at least 5.1.x
+https://github.com/spring-projects/spring-framework/wiki/Spring-Framework-Versions
+Spring 3 because asm cannot read compiled classes.
+
+Hibernate uses bytecode manipulation as well. Must be upgraded to either of these versions:
+5.3.22+
+5.4.32+
+5.5
+5.6
+6.0
+
+Jersey v1 - likely to work with java 11, last 1.x release is from 2015. Should upgrade.
+Jersey v2 must be used! Java 11 is supported since 2.29.
+
+Wicket IOC uses cglib!
+
+-------------
+
+cglib deps:
+* wicket-ioc-6.29.0.jar
+* mockrunner-0.4.1.jar
+* spring-beans-3.0.7.RELEASE.jar
+
+spring-asm-3.0.7.RELEASE.jar deps:
+* spring-core-3.0.7.RELEASE.jar
+
+----
+
+asm 7.0 supports java 11
+cglib 3.2.9 is using asm 7.0, and supports java 11?
+
+
+Removed ThymeLeaf, mockrunner, jersey-spring, fop as we don't use it.
+jersey-spring replaced with jersey-servlet
+
+Why we need groovy?

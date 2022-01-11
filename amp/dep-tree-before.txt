@@ -1,0 +1,324 @@
+octavian@octpc:~/IdeaProjects/amp/amp$ mvn dependency:tree
+WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by com.google.inject.internal.cglib.core.$ReflectUtils$1 (file:/usr/share/maven/lib/guice.jar) to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
+WARNING: Please consider reporting this to the maintainers of com.google.inject.internal.cglib.core.$ReflectUtils$1
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+[INFO] Scanning for projects...
+[INFO]
+[INFO] -------------------------< org.devgateway:amp >-------------------------
+[INFO] Building Aid Management Platform 3.5.5-SNAPSHOT
+[INFO] --------------------------------[ war ]---------------------------------
+[INFO]
+[INFO] --- maven-dependency-plugin:2.8:tree (default-cli) @ amp ---
+[INFO] org.devgateway:amp:war:3.5.5-SNAPSHOT
+[INFO] +- org.mockito:mockito-core:jar:1.10.19:compile
+[INFO] |  \- org.objenesis:objenesis:jar:2.1:runtime
+[INFO] +- org.powermock:powermock-module-junit4:jar:1.6.6:test
+[INFO] |  \- org.powermock:powermock-module-junit4-common:jar:1.6.6:test
+[INFO] |     +- org.powermock:powermock-core:jar:1.6.6:test
+[INFO] |     \- org.powermock:powermock-reflect:jar:1.6.6:test
+[INFO] +- org.powermock:powermock-api-mockito:jar:1.6.6:test
+[INFO] |  \- org.powermock:powermock-api-mockito-common:jar:1.6.6:test
+[INFO] |     \- org.powermock:powermock-api-support:jar:1.6.6:test
+[INFO] +- antlr:antlr:jar:2.7.6:compile
+[INFO] +- asm:asm-attrs:jar:1.5.3:compile
+[INFO] +- asm:asm:jar:3.1:compile
+[INFO] +- avalon:avalon-framework:jar:4.1.4:compile
+[INFO] +- axis:axis:jar:1.4:compile
+[INFO] |  +- org.apache.axis:axis-jaxrpc:jar:1.4:compile
+[INFO] |  \- org.apache.axis:axis-saaj:jar:1.4:compile
+[INFO] +- org.beanshell:bsh:jar:2.0b4:compile
+[INFO] +- cglib:cglib:jar:3.1:compile
+[INFO] |  \- org.ow2.asm:asm:jar:4.2:compile
+[INFO] +- commons-beanutils:commons-beanutils-bean-collections:jar:1.8.0:compile
+[INFO] +- commons-beanutils:commons-beanutils:jar:1.8.0:compile
+[INFO] +- commons-chain:commons-chain:jar:1.2:compile
+[INFO] +- commons-codec:commons-codec:jar:1.4:compile
+[INFO] +- commons-collections:commons-collections:jar:3.1:compile
+[INFO] +- org.apache.tomcat:tomcat-jdbc:jar:7.0.67:compile
+[INFO] +- org.apache.tomcat:tomcat-juli:jar:7.0.67:compile
+[INFO] +- commons-dbcp:commons-dbcp:jar:1.4:compile
+[INFO] +- commons-digester:commons-digester:jar:1.8:compile
+[INFO] +- commons-discovery:commons-discovery:jar:0.2:compile
+[INFO] +- commons-fileupload:commons-fileupload:jar:1.2.1:compile
+[INFO] +- commons-io:commons-io:jar:2.5:compile
+[INFO] +- commons-lang:commons-lang:jar:2.6:compile
+[INFO] +- commons-logging:commons-logging:jar:1.1.1:compile
+[INFO] +- commons-math:commons-math:jar:1.0:compile
+[INFO] +- commons-pool:commons-pool:jar:1.5.4:compile
+[INFO] +- commons-validator:commons-validator:jar:1.3.1:compile
+[INFO] +- commons-vfs:commons-vfs:jar:1.0:compile
+[INFO] +- concurrent:concurrent:jar:1.3.4:compile
+[INFO] +- displaytag:displaytag:jar:1.0:compile
+[INFO] +- dom4j:dom4j:jar:1.6.1:compile
+[INFO] +- net.sf.ehcache:ehcache-core:jar:2.6.9:compile
+[INFO] +- net.sf.ezmorph:ezmorph:jar:1.0.6:compile
+[INFO] +- net.sf.flexjson:flexjson:jar:2.1:compile
+[INFO] +- fop:fop:jar:0.20.5:compile
+[INFO] |  +- batik:batik-1.5-fop:jar:0.20-5:compile
+[INFO] |  \- avalon-framework:avalon-framework:jar:4.0:compile
+[INFO] +- groovy:groovy-all-1.0-jsr:jar:03:compile
+[INFO] +- org.hibernate.javax.persistence:hibernate-jpa-2.0-api:jar:1.0.1.Final:compile
+[INFO] +- org.hibernate:hibernate-core:jar:4.2.13.Final:compile
+[INFO] |  +- org.jboss.logging:jboss-logging:jar:3.1.0.GA:compile
+[INFO] |  +- org.javassist:javassist:jar:3.18.1-GA:compile
+[INFO] |  +- org.jboss.spec.javax.transaction:jboss-transaction-api_1.1_spec:jar:1.0.1.Final:compile
+[INFO] |  \- org.hibernate.common:hibernate-commons-annotations:jar:4.0.2.Final:compile
+[INFO] +- org.hibernate:hibernate-ehcache:jar:4.2.13.Final:compile
+[INFO] +- org.hibernate:hibernate-validator:jar:5.1.1.Final:compile
+[INFO] |  \- javax.validation:validation-api:jar:1.1.0.Final:compile
+[INFO] +- com.fasterxml:classmate:jar:1.1.0:compile
+[INFO] +- org.thymeleaf:thymeleaf-spring3:jar:2.1.4.RELEASE:compile
+[INFO] |  \- org.thymeleaf:thymeleaf:jar:2.1.4.RELEASE:compile
+[INFO] |     \- org.unbescape:unbescape:jar:1.1.0.RELEASE:compile
+[INFO] +- org.hibernate:hibernate-spatial:jar:4.0:compile
+[INFO] |  +- org.postgis:postgis-jdbc:jar:1.5.2:compile
+[INFO] |  \- com.vividsolutions:jts:jar:1.13:compile
+[INFO] +- com.lowagie:itext:jar:2.1.7:compile
+[INFO] |  +- bouncycastle:bcmail-jdk14:jar:138:compile
+[INFO] |  +- bouncycastle:bcprov-jdk14:jar:138:compile
+[INFO] |  \- org.bouncycastle:bctsp-jdk14:jar:1.38:compile
+[INFO] |     +- org.bouncycastle:bcprov-jdk14:jar:1.38:compile
+[INFO] |     \- org.bouncycastle:bcmail-jdk14:jar:1.38:compile
+[INFO] +- com.lowagie:itext-rtf:jar:2.1.3:compile
+[INFO] +- javax.jcr:jcr:jar:2.0:compile
+[INFO] +- org.apache.jackrabbit:jackrabbit-api:jar:2.16.2:compile
+[INFO] +- org.apache.jackrabbit:jackrabbit-core:jar:2.16.2:compile
+[INFO] |  +- org.apache.jackrabbit:jackrabbit-data:jar:2.16.2:compile
+[INFO] |  +- org.apache.derby:derby:jar:10.14.2.0:compile
+[INFO] |  \- org.slf4j:jcl-over-slf4j:jar:1.7.25:compile
+[INFO] +- org.apache.jackrabbit:jackrabbit-jcr-commons:jar:2.16.2:compile
+[INFO] +- org.apache.jackrabbit:jackrabbit-spi:jar:2.16.2:compile
+[INFO] +- org.apache.jackrabbit:jackrabbit-spi-commons:jar:2.16.2:compile
+[INFO] +- org.apache.jackrabbit:jackrabbit-text-extractors:jar:1.6.5:compile
+[INFO] |  +- pdfbox:pdfbox:jar:0.7.3:compile
+[INFO] |  |  +- org.fontbox:fontbox:jar:0.1.0:compile
+[INFO] |  |  \- org.jempbox:jempbox:jar:0.2.0:compile
+[INFO] |  \- net.sourceforge.nekohtml:nekohtml:jar:1.9.7:compile
+[INFO] +- jakarta-regexp:jakarta-regexp:jar:1.4:compile
+[INFO] +- com.sun.media:jai-codec:jar:1.1.3:compile
+[INFO] +- javax.media:jai-core:jar:1.1.3:compile
+[INFO] +- net.sf.jasperreports:jasperreports:jar:3.7.6:compile
+[INFO] |  \- eclipse:jdtcore:jar:3.1.0:compile
+[INFO] +- com.sun.xml.bind:jaxb-impl:jar:2.1.13:compile
+[INFO] +- com.sun.xml.bind:jaxb-xjc:jar:2.1.13:compile
+[INFO] +- javax.xml.bind:jaxb-api:jar:2.1:compile
+[INFO] |  +- javax.xml.stream:stax-api:jar:1.0-2:compile
+[INFO] |  \- javax.activation:activation:jar:1.1:compile
+[INFO] +- com.sun.xml.bind:jaxb-libs:jar:1.0.6:compile
+[INFO] |  \- com.sun.msv.datatype.xsd:xsdlib:jar:20060615:compile
+[INFO] |     \- isorelax:isorelax:jar:20030108:compile
+[INFO] +- com.sun.xml.bind:jaxb1-impl:jar:2.1.13:compile
+[INFO] +- jaxen:jaxen:jar:1.1.4:compile
+[INFO] +- org.ccil.cowan.tagsoup:tagsoup:jar:1.2.1:compile
+[INFO] +- javax.xml:jaxrpc-api:jar:1.1:compile
+[INFO] +- jfree:jcommon:jar:1.0.16:compile
+[INFO] +- org.jdom:jdom:jar:1.1:compile
+[INFO] +- sleepycat:je:jar:1.7.0:compile
+[INFO] +- com.fasterxml.jackson.core:jackson-annotations:jar:2.9.5:compile
+[INFO] +- com.fasterxml.jackson.core:jackson-databind:jar:2.9.5:compile
+[INFO] |  \- com.fasterxml.jackson.core:jackson-core:jar:2.9.5:compile
+[INFO] +- com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:jar:2.9.5:compile
+[INFO] |  +- com.fasterxml.jackson.jaxrs:jackson-jaxrs-base:jar:2.9.5:compile
+[INFO] |  \- com.fasterxml.jackson.module:jackson-module-jaxb-annotations:jar:2.9.5:compile
+[INFO] +- com.fasterxml.jackson.datatype:jackson-datatype-hibernate4:jar:2.9.5:compile
+[INFO] +- org.jsoup:jsoup:jar:1.7.1:compile
+[INFO] +- jfree:jfreechart:jar:1.0.13:compile
+[INFO] +- net.sf.json-lib:json-lib:jar:jdk15:2.3:compile
+[INFO] +- javax.faces:jsf-api:jar:1.1_02:compile
+[INFO] +- javax.ws.rs:jsr311-api:jar:1.1.1:compile
+[INFO] +- javax.servlet.jsp.jstl:jstl-api:jar:1.2:compile
+[INFO] +- org.glassfish.web:jstl-impl:jar:1.2:compile
+[INFO] +- javax.transaction:jta:jar:1.1:compile
+[INFO] +- junit:junit:jar:4.12:test
+[INFO] +- org.hamcrest:hamcrest-library:jar:1.3:test
+[INFO] +- org.hamcrest:hamcrest-core:jar:1.3:test
+[INFO] +- org.unitils:unitils-core:jar:3.4.2:test
+[INFO] |  \- ognl:ognl:jar:2.6.9:compile
+[INFO] +- org.apache.lucene:lucene-analyzers:jar:3.6.2:compile
+[INFO] +- org.apache.lucene:lucene-core:jar:3.6.2:compile
+[INFO] +- org.apache.lucene:lucene-highlighter:jar:3.6.2:compile
+[INFO] |  +- org.apache.lucene:lucene-memory:jar:3.6.2:compile
+[INFO] |  \- org.apache.lucene:lucene-queries:jar:3.6.2:compile
+[INFO] +- org.apache.lucene:lucene-snowball:jar:3.0.3:compile
+[INFO] +- odmg:odmg:jar:3.0:compile
+[INFO] +- org.springframework:spring-asm:jar:3.0.7.RELEASE:compile
+[INFO] +- org.springframework:spring-beans:jar:3.0.7.RELEASE:compile
+[INFO] +- org.springframework:spring-context:jar:3.0.7.RELEASE:compile
+[INFO] |  \- org.springframework:spring-aop:jar:3.0.7.RELEASE:compile
+[INFO] +- org.springframework:spring-core:jar:3.0.7.RELEASE:compile
+[INFO] +- org.springframework:spring-expression:jar:3.0.7.RELEASE:compile
+[INFO] +- org.springframework:spring-tx:jar:3.0.7.RELEASE:compile
+[INFO] |  \- aopalliance:aopalliance:jar:1.0:compile
+[INFO] +- org.springframework:spring-web:jar:3.0.7.RELEASE:compile
+[INFO] +- org.springframework:spring-test:jar:3.0.7.RELEASE:test
+[INFO] +- org.apache.poi:poi:jar:3.14:compile
+[INFO] +- org.apache.poi:poi-scratchpad:jar:3.14:compile
+[INFO] +- org.apache.poi:poi-ooxml:jar:3.14:compile
+[INFO] |  +- org.apache.poi:poi-ooxml-schemas:jar:3.14:compile
+[INFO] |  |  \- org.apache.xmlbeans:xmlbeans:jar:2.6.0:compile
+[INFO] |  |     \- stax:stax-api:jar:1.0.1:compile
+[INFO] |  \- com.github.virtuald:curvesapi:jar:1.03:compile
+[INFO] +- org.quartz-scheduler:quartz:jar:1.8.5:compile
+[INFO] +- relaxngDatatype:relaxngDatatype:jar:20020414:compile
+[INFO] +- com.sun.xml.messaging.saaj:saaj-impl:jar:1.3.4:compile
+[INFO] |  \- org.jvnet:mimepull:jar:1.4:compile
+[INFO] +- javax.xml.soap:saaj-api:jar:1.3:compile
+[INFO] +- saxpath:saxpath:jar:1.0-FCS:compile
+[INFO] +- xalan:serializer:jar:2.7.1:compile
+[INFO] +- org.slf4j:slf4j-api:jar:1.7.32:compile
+[INFO] +- org.slf4j:log4j-over-slf4j:jar:1.7.32:compile
+[INFO] +- ch.qos.logback:logback-classic:jar:1.2.9:compile
+[INFO] |  \- ch.qos.logback:logback-core:jar:1.2.9:compile
+[INFO] +- org.springframework.security:spring-security-core:jar:3.1.4.RELEASE:compile
+[INFO] +- org.springframework.security:spring-security-config:jar:3.1.4.RELEASE:compile
+[INFO] +- org.springframework.security:spring-security-web:jar:3.1.4.RELEASE:compile
+[INFO] |  \- org.springframework:spring-jdbc:jar:3.0.7.RELEASE:compile
+[INFO] +- taglibs:standard:jar:1.0.6:compile
+[INFO] +- org.apache.struts:struts-core:jar:1.3.10:compile
+[INFO] |  \- oro:oro:jar:2.0.8:compile
+[INFO] +- org.apache.struts:struts-el:jar:1.3.10:compile
+[INFO] +- org.apache.struts:struts-extras:jar:1.3.10:compile
+[INFO] +- org.apache.struts:struts-taglib:jar:1.3.10:compile
+[INFO] +- org.apache.struts:struts-tiles:jar:1.3.10:compile
+[INFO] +- org.codehaus.swizzle:swizzle-confluence:jar:1.1:compile
+[INFO] +- com.tonbeller:tbutils-wcf:jar:1.8.0-070305:compile
+[INFO] +- com.tonbeller:wcf:jar:1.8.0-070305:compile
+[INFO] +- com.mockrunner:mockrunner:jar:0.4.1:compile
+[INFO] +- com.google.guava:guava:jar:28.2-android:compile
+[INFO] |  +- com.google.guava:failureaccess:jar:1.0.1:compile
+[INFO] |  +- com.google.guava:listenablefuture:jar:9999.0-empty-to-avoid-conflict-with-guava:compile
+[INFO] |  +- com.google.code.findbugs:jsr305:jar:3.0.2:compile
+[INFO] |  +- org.checkerframework:checker-compat-qual:jar:2.5.5:compile
+[INFO] |  +- com.google.errorprone:error_prone_annotations:jar:2.3.4:compile
+[INFO] |  \- com.google.j2objc:j2objc-annotations:jar:1.3:compile
+[INFO] +- org.apache.wicket:wicket-core:jar:6.29.0:compile
+[INFO] |  +- org.apache.wicket:wicket-util:jar:6.29.0:compile
+[INFO] |  \- org.apache.wicket:wicket-request:jar:6.29.0:compile
+[INFO] +- org.apache.wicket:wicket-auth-roles:jar:6.29.0:compile
+[INFO] +- org.apache.wicket:wicket-datetime:jar:6.29.0:compile
+[INFO] +- org.apache.wicket:wicket-extensions:jar:6.29.0:compile
+[INFO] +- org.apache.wicket:wicket-ioc:jar:6.29.0:compile
+[INFO] |  \- javax.inject:javax.inject:jar:1:compile
+[INFO] +- org.apache.wicket:wicket-spring:jar:6.29.0:compile
+[INFO] +- org.apache.wicket:wicket-devutils:jar:6.29.0:compile
+[INFO] +- axis:axis-wsdl4j:jar:1.5.1:compile
+[INFO] +- xalan:xalan:jar:2.7.1:compile
+[INFO] +- xerces:xercesImpl:jar:2.10.0:compile
+[INFO] +- xml-apis:xml-apis:jar:1.4.01:compile
+[INFO] +- xmlrpc:xmlrpc:jar:2.0.1:compile
+[INFO] +- xmlunit:xmlunit:jar:1.1:compile
+[INFO] +- org.apache.tomcat:tomcat-jsp-api:jar:7.0.67:provided
+[INFO] |  \- org.apache.tomcat:tomcat-el-api:jar:7.0.67:provided
+[INFO] +- org.apache.tomcat:tomcat-servlet-api:jar:7.0.67:provided
+[INFO] +- ant:ant-jakarta-oro:jar:1.6.1:compile
+[INFO] +- org.gnu:jel:jar:2.0.1-p1:compile
+[INFO] +- ecs:ecs:jar:1.4.2:compile
+[INFO] +- joda-time:joda-time:jar:2.0:compile
+[INFO] +- org.digijava:digi-commons:jar:1.0.0:compile
+[INFO] +- postgresql:postgresql:jar:9.2-1002.jdbc4:compile
+[INFO] +- com.sun.mail:mailapi:jar:1.4.4:compile
+[INFO] +- com.sun.mail:smtp:jar:1.4.5:compile
+[INFO] +- net.sf.opencsv:opencsv:jar:2.3:compile
+[INFO] +- net.ftlines.wicket-source:wicket-source:jar:6.0.0.8:compile
+[INFO] |  \- org.apache.wicket:wicket:pom:6.0.0:compile
+[INFO] +- net.htmlparser.jericho:jericho-html:jar:3.3:compile
+[INFO] +- org.jetbrains:annotations:jar:16.0.2:compile
+[INFO] +- com.itextpdf:itextpdf:jar:5.5.0:compile
+[INFO] +- com.itextpdf.tool:xmlworker:jar:5.5.0:compile
+[INFO] +- com.sun.jersey:jersey-core:jar:1.19:compile
+[INFO] +- com.sun.jersey.contribs:jersey-spring:jar:1.19:compile
+[INFO] |  \- com.sun.jersey:jersey-servlet:jar:1.19:compile
+[INFO] +- com.sun.jersey:jersey-server:jar:1.19:compile
+[INFO] +- com.sun.jersey:jersey-client:jar:1.19:compile
+[INFO] +- com.sun.jersey.contribs:jersey-multipart:jar:1.19:compile
+[INFO] |  \- org.jvnet.mimepull:mimepull:jar:1.9.3:compile
+[INFO] +- org.reflections:reflections:jar:0.9.10:compile
+[INFO] |  \- com.google.code.findbugs:annotations:jar:2.0.1:compile
+[INFO] +- com.sun.jersey:jersey-json:jar:1.19:compile
+[INFO] |  \- org.codehaus.jettison:jettison:jar:1.1:compile
+[INFO] +- com.mashape.unirest:unirest-java:jar:1.4.9:compile
+[INFO] |  +- org.apache.httpcomponents:httpclient:jar:4.5.2:compile
+[INFO] |  |  \- org.apache.httpcomponents:httpcore:jar:4.4.4:compile
+[INFO] |  +- org.apache.httpcomponents:httpasyncclient:jar:4.1.1:compile
+[INFO] |  |  \- org.apache.httpcomponents:httpcore-nio:jar:4.4.4:compile
+[INFO] |  +- org.apache.httpcomponents:httpmime:jar:4.5.2:compile
+[INFO] |  \- org.json:json:jar:20160212:compile
+[INFO] +- com.github.jarlakxen:embedphantomjs:jar:2.9:compile
+[INFO] |  +- org.apache.commons:commons-lang3:jar:3.4:compile
+[INFO] |  \- org.apache.commons:commons-compress:jar:1.12:compile
+[INFO] +- com.github.fge:json-schema-validator:jar:2.2.6:test
+[INFO] |  +- com.googlecode.libphonenumber:libphonenumber:jar:6.2:test
+[INFO] |  +- com.github.fge:json-schema-core:jar:1.2.5:test
+[INFO] |  |  +- com.github.fge:uri-template:jar:0.9:test
+[INFO] |  |  |  \- com.github.fge:msg-simple:jar:1.1:test
+[INFO] |  |  |     \- com.github.fge:btf:jar:1.2:test
+[INFO] |  |  +- com.github.fge:jackson-coreutils:jar:1.8:test
+[INFO] |  |  \- org.mozilla:rhino:jar:1.7R4:test
+[INFO] |  +- javax.mail:mailapi:jar:1.4.3:test
+[INFO] |  \- net.sf.jopt-simple:jopt-simple:jar:4.6:test
+[INFO] +- org.apache.tika:tika-core:jar:1.18:compile
+[INFO] +- org.passay:passay:jar:1.2.0:compile
+[INFO] |  \- org.cryptacular:cryptacular:jar:1.2.0:compile
+[INFO] |     \- org.bouncycastle:bcprov-jdk15on:jar:1.54:compile
+[INFO] +- io.swagger:swagger-core:jar:1.5.20:compile
+[INFO] |  +- com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:jar:2.9.5:compile
+[INFO] |  |  \- org.yaml:snakeyaml:jar:1.18:compile
+[INFO] |  \- io.swagger:swagger-models:jar:1.5.20:compile
+[INFO] +- io.swagger:swagger-annotations:jar:1.5.20:compile
+[INFO] +- io.swagger:swagger-jersey-jaxrs:jar:1.5.20:compile
+[INFO] |  \- io.swagger:swagger-jaxrs:jar:1.5.20:compile
+[INFO] +- net.bull.javamelody:javamelody-core:jar:1.75.0:compile
+[INFO] |  \- org.jrobin:jrobin:jar:1.5.9:compile
+[INFO] +- net.sf.saxon:Saxon-HE:jar:9.9.1-6:compile
+[INFO] +- com.google.cloud:google-cloud-translate:jar:1.94.4:compile
+[INFO] |  +- io.grpc:grpc-api:jar:1.28.0:compile
+[INFO] |  |  +- io.grpc:grpc-context:jar:1.28.0:compile
+[INFO] |  |  \- org.codehaus.mojo:animal-sniffer-annotations:jar:1.18:compile
+[INFO] |  +- io.grpc:grpc-stub:jar:1.28.0:compile
+[INFO] |  +- io.grpc:grpc-protobuf:jar:1.28.0:compile
+[INFO] |  |  \- io.grpc:grpc-protobuf-lite:jar:1.28.0:compile
+[INFO] |  +- com.google.api:api-common:jar:1.9.0:compile
+[INFO] |  |  \- com.google.auto.value:auto-value-annotations:jar:1.7:compile
+[INFO] |  +- com.google.protobuf:protobuf-java:jar:3.11.4:compile
+[INFO] |  +- com.google.api.grpc:proto-google-common-protos:jar:1.17.0:compile
+[INFO] |  +- com.google.api.grpc:proto-google-cloud-translate-v3beta1:jar:0.77.4:compile
+[INFO] |  +- com.google.api.grpc:proto-google-cloud-translate-v3:jar:1.0.4:compile
+[INFO] |  +- com.google.api:gax:jar:1.55.0:compile
+[INFO] |  +- com.google.api:gax-grpc:jar:1.55.0:compile
+[INFO] |  |  +- io.grpc:grpc-auth:jar:1.28.0:compile
+[INFO] |  |  +- io.grpc:grpc-netty-shaded:jar:1.28.0:compile
+[INFO] |  |  |  \- io.grpc:grpc-core:jar:1.28.0:compile
+[INFO] |  |  |     +- com.google.android:annotations:jar:4.1.1.4:compile
+[INFO] |  |  |     \- io.perfmark:perfmark-api:jar:0.19.0:compile
+[INFO] |  |  \- io.grpc:grpc-alts:jar:1.28.0:compile
+[INFO] |  |     +- io.grpc:grpc-grpclb:jar:1.28.0:compile
+[INFO] |  |     \- org.conscrypt:conscrypt-openjdk-uber:jar:2.2.1:compile
+[INFO] |  +- org.threeten:threetenbp:jar:1.4.1:compile
+[INFO] |  +- com.google.cloud:google-cloud-core:jar:1.93.3:compile
+[INFO] |  +- com.google.cloud:google-cloud-core-http:jar:1.93.3:compile
+[INFO] |  |  +- com.google.http-client:google-http-client-appengine:jar:1.34.2:compile
+[INFO] |  |  +- com.google.api:gax-httpjson:jar:0.72.0:compile
+[INFO] |  |  \- io.opencensus:opencensus-contrib-http-util:jar:0.24.0:compile
+[INFO] |  +- com.google.apis:google-api-services-translate:jar:v2-rev20170525-1.30.9:compile
+[INFO] |  +- com.google.auth:google-auth-library-credentials:jar:0.20.0:compile
+[INFO] |  +- com.google.auth:google-auth-library-oauth2-http:jar:0.20.0:compile
+[INFO] |  +- com.google.http-client:google-http-client:jar:1.34.2:compile
+[INFO] |  +- com.google.http-client:google-http-client-jackson2:jar:1.34.2:compile
+[INFO] |  \- javax.annotation:javax.annotation-api:jar:1.3.2:compile
+[INFO] +- com.google.cloud:google-cloud-storage:jar:1.106.0:compile
+[INFO] |  +- com.google.api-client:google-api-client:jar:1.30.9:compile
+[INFO] |  |  \- com.google.oauth-client:google-oauth-client:jar:1.30.5:compile
+[INFO] |  +- com.google.apis:google-api-services-storage:jar:v1-rev20200226-1.30.9:compile
+[INFO] |  +- io.opencensus:opencensus-api:jar:0.24.0:compile
+[INFO] |  +- com.google.api.grpc:proto-google-iam-v1:jar:0.13.0:compile
+[INFO] |  \- com.google.protobuf:protobuf-java-util:jar:3.11.4:compile
+[INFO] |     \- com.google.code.gson:gson:jar:2.8.6:compile
+[INFO] \- org.apache.commons:commons-text:jar:1.9:compile
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.369 s
+[INFO] Finished at: 2022-01-10T14:31:51+02:00
+[INFO] ------------------------------------------------------------------------

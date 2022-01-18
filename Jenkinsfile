@@ -22,6 +22,7 @@ println "Pull request: ${pr}"
 println "Tag: ${tag}"
 
 def dbVersion
+def pgVersion = 14
 def country
 def ampUrl
 
@@ -189,7 +190,9 @@ stage('Build') {
                             " amp/TEMPLATE/ampTemplate/dashboard/dev/node" +
                             " amp/TEMPLATE/ampTemplate/dashboard/dev/node_modules" +
                             " amp/TEMPLATE/reamp/node" +
-                            " amp/TEMPLATE/reamp/node_modules"
+                            " amp/TEMPLATE/reamp/node_modules" +
+                            " amp/TEMPLATE/reampv2/node" +
+                            " amp/TEMPLATE/reampv2/node_modules"
                 }
             }
         }
@@ -206,7 +209,7 @@ stage('Deploy') {
             dbVersion = sh(returnStdout: true, script: "ssh sulfur.migrated.devgateway.org 'cd /opt/amp_dbs && amp-db find ${codeVersion} ${country}'").trim()
 
             // Deploy AMP
-            sh "ssh sulfur.migrated.devgateway.org 'cd /opt/docker/amp && ./up.sh ${tag} ${country} ${dbVersion}'"
+            sh "ssh sulfur.migrated.devgateway.org 'cd /opt/docker/amp && ./up.sh ${tag} ${country} ${dbVersion} ${pgVersion}'"
 
             slackSend(channel: 'amp-ci', color: 'good', message: "Deploy AMP - Success\nDeployed ${changePretty} will be ready for testing at ${ampUrl} in about 3 minutes")
 
@@ -231,7 +234,7 @@ stage('Deploy again') {
         }
         node {
             try {
-                sh "ssh sulfur.migrated.devgateway.org 'cd /opt/docker/amp && ./up.sh ${tag} ${country} ${dbVersion}'"
+                sh "ssh sulfur.migrated.devgateway.org 'cd /opt/docker/amp && ./up.sh ${tag} ${country} ${dbVersion} ${pgVersion}'"
 
                 slackSend(channel: 'amp-ci', color: 'good', message: "Deploy AMP - Success\nDeployed ${changePretty} will be ready for testing at ${ampUrl} in about 3 minutes")
 

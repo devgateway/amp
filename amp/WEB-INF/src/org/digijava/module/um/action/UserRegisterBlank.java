@@ -22,7 +22,6 @@
 
 package org.digijava.module.um.action;
 
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -31,16 +30,16 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.Constants;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.entity.UserLangPreferences;
+import org.digijava.kernel.mail.DgEmailManager;
 import org.digijava.kernel.request.SiteDomain;
+import org.digijava.kernel.security.HttpLoginManager;
 import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.DgUtil;
+import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.um.form.UserRegisterForm;
 import org.digijava.module.um.util.DbUtil;
-import org.digijava.kernel.entity.UserLangPreferences;
-import org.digijava.kernel.util.DgUtil;
-import org.digijava.kernel.mail.DgEmailManager;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.kernel.security.HttpLoginManager;
-import org.digijava.kernel.util.SiteUtils;
 
 /**
  * <p>Title: DiGiJava</p>
@@ -67,8 +66,7 @@ public class UserRegisterBlank
     UserRegisterForm userRegisterForm = (UserRegisterForm) form;
 
     if (userRegisterForm == null) {
-      String debugKey = "Module.Um.UserRegisterAction.formnull";
-      logger.l7dlog(Level.WARN, debugKey, null, null);
+      logger.warn("UserRegisterForm is null");
     }
 
     // create new user class
@@ -125,10 +123,7 @@ public class UserRegisterBlank
 
       // if set debug mode then print out
       if (logger.isDebugEnabled()) {
-        String debugKey = "Module.Um.UserRegisterAction.emailexits";
-        Object params[] = {
-            user.getEmail()};
-        logger.l7dlog(Level.DEBUG, debugKey, params, null);
+        logger.debug(String.format("Email %s already exists", user.getEmail()));
       }
 
       // email already exists
@@ -159,10 +154,7 @@ public class UserRegisterBlank
 
       // if set debug mode then print out
       if (logger.isDebugEnabled()) {
-        String debugKey = "Module.Um.UserRegisterAction.mailsend";
-        Object params[] = {
-            user.getEmail()};
-        logger.l7dlog(Level.DEBUG, debugKey, params, null);
+        logger.debug(String.format("The message send to %s", user.getEmail()));
       }
 
       SiteDomain currentDomain = RequestUtils.getSiteDomain(request);

@@ -77,12 +77,7 @@ private static Logger logger =
         HttpServletResponse response)
         throws IOException, ServletException {
             if (logger.isDebugEnabled()) {
-                Object[] param = { "TranslatorAction", "execute()" };
-                logger.l7dlog(
-                    Level.DEBUG,
-                    "ActionClass.MethodEnter.db",
-                    param,
-                    null);
+                logger.debug("ActionClass.MethodEnter.db { \"TranslatorAction\", \"execute()\" }");
             }
                 TranslatorForm tForm = (TranslatorForm)form;
 
@@ -115,12 +110,7 @@ private static Logger logger =
 
 
         if (logger.isDebugEnabled()) {
-            Object[] param = { "TranslatorLocaleUpdate", "execute()" };
-            logger.l7dlog(
-                Level.DEBUG,
-                "ActionClass.MethodReturn.db",
-                param,
-                null);
+            logger.debug("ActionClass.MethodReturn.db { \"TranslatorLocaleUpdate\", \"execute()\" }");
         }
 
 

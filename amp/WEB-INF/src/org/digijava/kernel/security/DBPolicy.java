@@ -22,26 +22,6 @@
 
 package org.digijava.kernel.security;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.security.CodeSource;
-import java.security.Permission;
-import java.security.PermissionCollection;
-import java.security.Permissions;
-import java.security.Policy;
-import java.security.Principal;
-import java.security.ProtectionDomain;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.Constants;
 import org.digijava.kernel.cache.AbstractCache;
@@ -53,6 +33,25 @@ import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.GroupPermission;
 import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.kernel.util.I18NHelper;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.security.CodeSource;
+import java.security.Permission;
+import java.security.PermissionCollection;
+import java.security.Permissions;
+import java.security.Policy;
+import java.security.Principal;
+import java.security.ProtectionDomain;
+import java.text.MessageFormat;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class DBPolicy
     extends Policy
@@ -193,10 +192,7 @@ public class DBPolicy
         // to system default policy
         if (permission instanceof ResourcePermission) {
             if (logger.isDebugEnabled()) {
-                Object params[] = {
-                    permission};
-                logger.l7dlog(Level.DEBUG, "DBPolicy.checkingPermission",
-                              params, null);
+                logger.debug(MessageFormat.format("Checking permission {0} with DBPolicy", permission));
             }
             Principal[] principals = domain.getPrincipals();
 
@@ -242,9 +238,8 @@ public class DBPolicy
         }
 
         if (logger.isDebugEnabled()) {
-            Object[] params = {
-                this.toString()};
-            logger.l7dlog(Level.DEBUG, "DBPolicy.currentDBPolicy", params, null);
+            logger.debug(MessageFormat.format("Current DBPolicy object is:\\n------\\n{0} \\n------\\n",
+                    this.toString()));
         }
     }
 

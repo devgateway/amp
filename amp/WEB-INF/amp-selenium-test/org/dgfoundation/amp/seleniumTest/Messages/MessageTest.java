@@ -1,6 +1,5 @@
 package org.dgfoundation.amp.seleniumTest.Messages;
 
-import org.apache.log4j.Logger;
 import org.dgfoundation.amp.seleniumTest.SeleniumTestUtil;
 
 import com.thoughtworks.selenium.SeleneseTestCase;

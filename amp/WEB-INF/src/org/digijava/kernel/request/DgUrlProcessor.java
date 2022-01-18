@@ -22,17 +22,6 @@
 
 package org.digijava.kernel.request;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.Constants;
 import org.digijava.kernel.config.moduleconfig.Action;
@@ -42,6 +31,15 @@ import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.I18NHelper;
 import org.digijava.kernel.util.SiteCache;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * <p>Title: DiGiJava</p>
@@ -157,9 +155,8 @@ public class DgUrlProcessor {
 
         // if debuge enabled
         if (logger.isDebugEnabled()) {
-            Object[] prms = {
-              modinst[0], modinst[1], modinst[2]};
-            logger.l7dlog(Level.INFO, "DgUrlProcessor.expandUrl", prms, null);
+            logger.info(String.format("Expand url module name %s, module instance %s, action name %s",
+                    modinst[0], modinst[1], modinst[2]));
         }
 
         // remove .do from action name

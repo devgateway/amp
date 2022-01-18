@@ -8,7 +8,7 @@
     <name>Aid Management Platform</name>
     <properties>
         <wicketVersion>6.29.0</wicketVersion>
-        <tomcatVersion>7.0.67</tomcatVersion>
+        <tomcatVersion>8.5.73</tomcatVersion>
         <springSecurityVersion>3.1.4.RELEASE</springSecurityVersion>
         <springVersion>3.0.7.RELEASE</springVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -1122,6 +1122,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.2.0</version>
                 <executions>
                     <execution>
                         <id>copy-dependencies</id>

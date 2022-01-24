@@ -54,7 +54,7 @@ stage('Checkstyle') {
 
                 updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle in progress', 'PENDING')
 
-                withEnv(["PATH+MAVEN=${tool 'M339'}/bin"]) {
+                docker.image('maven:3.8.4-jdk-8').inside {
                     sh "cd amp && mvn inccheckstyle:check -DbaseBranch=remotes/origin/${CHANGE_TARGET}"
                 }
 
@@ -89,7 +89,7 @@ stage('Quick Test') {
         println "AMP Version: ${codeVersion}"
 
         countries = sh(returnStdout: true,
-                script: "ssh sulfur.migrated.devgateway.org 'cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort'")
+                script: "cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort")
                 .trim()
         if (countries == "") {
             println "There are no database backups compatible with ${codeVersion}"
@@ -146,16 +146,17 @@ stage('Build') {
         }
     }
 
-    ampUrl = "http://amp-${country}-${tag}-tc9.ampsite.net/"
+    ampUrl = "http://amp-${country}-${tag}.stg.ampsite.net/"
 
     node {
         checkout scm
 
+        def image = "boad.aws.devgateway.org:5000/amp-webapp:${tag}"
         def format = branch != null ? "%H" : "%P"
         def hash = sh(returnStdout: true, script: "git log --pretty=${format} -n 1").trim()
-        sh(returnStatus: true, script: "docker pull phosphorus.migrated.devgateway.org:5000/amp-webapp:${tag} > /dev/null")
+        sh(returnStatus: true, script: "docker pull ${image} > /dev/null")
         def imageIds = sh(returnStdout: true, script: "docker images -q -f \"label=git-hash=${hash}\"").trim()
-        sh(returnStatus: true, script: "docker rmi phosphorus.migrated.devgateway.org:5000/amp-webapp:${tag} > /dev/null")
+        sh(returnStatus: true, script: "docker rmi ${image} > /dev/null")
 
         if (imageIds.equals("")) {
             withEnv(["PATH+MAVEN=${tool 'M339'}/bin"]) {
@@ -166,12 +167,12 @@ stage('Build') {
                     sh "cd amp && mvn -T 4 clean compile war:exploded ${legacyMvnOptions} -DskipTests -DbuildSource=${tag} -e"
 
                     // Build Docker images & push it
-                    sh "docker build -q -t phosphorus.migrated.devgateway.org:5000/amp-webapp:${tag} --build-arg AMP_EXPLODED_WAR=target/amp --build-arg AMP_PULL_REQUEST='${pr}' --build-arg AMP_BRANCH='${branch}' --build-arg AMP_REGISTRY_PRIVATE_KEY='${registryKey}' --label git-hash='${hash}' amp"
-                    sh "docker push phosphorus.migrated.devgateway.org:5000/amp-webapp:${tag} > /dev/null"
+                    sh "docker build -q -t ${image} --build-arg AMP_EXPLODED_WAR=target/amp --build-arg AMP_PULL_REQUEST='${pr}' --build-arg AMP_BRANCH='${branch}' --build-arg AMP_REGISTRY_PRIVATE_KEY='${registryKey}' --label git-hash='${hash}' amp"
+                    sh "docker push ${image} > /dev/null"
                 } finally {
 
                     // Cleanup after Docker & Maven
-                    sh returnStatus: true, script: "docker rmi phosphorus.migrated.devgateway.org:5000/amp-webapp:${tag}"
+                    sh returnStatus: true, script: "docker rmi ${image}"
                     sh returnStatus: true, script: "cd amp && mvn clean -Djdbc.db=dummy"
                     sh returnStatus: true, script: "tar -cf ../amp-node-cache.tar --remove-files" +
                             " amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node" +
@@ -203,10 +204,10 @@ stage('Deploy') {
     node {
         try {
             // Find latest database version compatible with ${codeVersion}
-            dbVersion = sh(returnStdout: true, script: "ssh sulfur.migrated.devgateway.org 'cd /opt/amp_dbs && amp-db find ${codeVersion} ${country}'").trim()
+            dbVersion = sh(returnStdout: true, script: "cd /opt/amp_dbs && amp-db find ${codeVersion} ${country}").trim()
 
             // Deploy AMP
-            sh "ssh sulfur.migrated.devgateway.org 'cd /opt/docker/amp && ./up.sh ${tag} ${country} ${dbVersion}'"
+            sh "cd /opt/docker/amp && ./up.sh ${tag} ${country} ${dbVersion}"
 
             slackSend(channel: 'amp-ci', color: 'good', message: "Deploy AMP - Success\nDeployed ${changePretty} will be ready for testing at ${ampUrl} in about 3 minutes")
 
@@ -231,7 +232,7 @@ stage('Deploy again') {
         }
         node {
             try {
-                sh "ssh sulfur.migrated.devgateway.org 'cd /opt/docker/amp && ./up.sh ${tag} ${country} ${dbVersion}'"
+                sh "cd /opt/docker/amp && ./up.sh ${tag} ${country} ${dbVersion}"
 
                 slackSend(channel: 'amp-ci', color: 'good', message: "Deploy AMP - Success\nDeployed ${changePretty} will be ready for testing at ${ampUrl} in about 3 minutes")
 

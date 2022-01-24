@@ -47,7 +47,7 @@ def updateGitHubCommitStatus(context, message, state) {
 
 // Run checkstyle only for PR builds
 stage('Checkstyle') {
-    when (branch == null) {
+//     when (branch == null) { TODO install plugin to support this use case
         node {
             try {
                 checkout scm
@@ -63,7 +63,7 @@ stage('Checkstyle') {
                 updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle found violations', 'ERROR')
             }
         }
-    }
+//     }
 }
 
 def legacyMvnOptions = "-Djdbc.user=amp " +

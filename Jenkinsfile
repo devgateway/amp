@@ -47,14 +47,14 @@ def updateGitHubCommitStatus(context, message, state) {
 
 // Run checkstyle only for PR builds
 stage('Checkstyle') {
-//     when (branch == null) { TODO install plugin to support this use case
-        node {
+    node {
+        if (branch == null) {
             try {
                 checkout scm
 
                 updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle in progress', 'PENDING')
 
-                docker.image('maven:3.8.4-jdk-8').inside {
+                docker.image('maven:3.8.4-jdk-8').inside('-v $HOME/.m2:/root/.m2') {
                     sh "cd amp && mvn inccheckstyle:check -DbaseBranch=remotes/origin/${CHANGE_TARGET}"
                 }
 
@@ -63,7 +63,7 @@ stage('Checkstyle') {
                 updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle found violations', 'ERROR')
             }
         }
-//     }
+    }
 }
 
 def legacyMvnOptions = "-Djdbc.user=amp " +
@@ -88,9 +88,11 @@ stage('Quick Test') {
         codeVersion = readMavenPom(file: 'amp/pom.xml').version
         println "AMP Version: ${codeVersion}"
 
-        countries = sh(returnStdout: true,
-                script: "cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort")
-                .trim()
+        countries = "boad\nchad"
+//          TODO UNDO!
+//         sh(returnStdout: true,
+//                 script: "cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort")
+//                 .trim()
         if (countries == "") {
             println "There are no database backups compatible with ${codeVersion}"
             currentBuild.result = 'FAILURE'
@@ -114,7 +116,7 @@ stage('Quick Test') {
 
             updateGitHubCommitStatus('jenkins/failfasttests', 'Testing in progress', 'PENDING')
 
-            withEnv(["PATH+MAVEN=${tool 'M339'}/bin"]) {
+            docker.image('maven:3.8.4-jdk-8').inside('-v $HOME/.m2:/root/.m2') {
                 def testStatus = sh returnStatus: true, script: "cd amp && mvn clean test -Dskip.npm -Dskip.gulp ${legacyMvnOptions}"
 
                 // Archive unit test report

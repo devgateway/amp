@@ -48,21 +48,21 @@ def updateGitHubCommitStatus(context, message, state) {
 // Run checkstyle only for PR builds
 stage('Checkstyle') {
     node {
-        if (branch == null) {
+//         if (branch == null) {
             try {
                 checkout scm
 
                 updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle in progress', 'PENDING')
 
                 docker.image('maven:3.8.4-jdk-8').inside('-v $HOME/.m2:/root/.m2') {
-                    sh "cd amp && mvn inccheckstyle:check -DbaseBranch=remotes/origin/${CHANGE_TARGET}"
+                    sh "cd amp && mvn -B inccheckstyle:check -DbaseBranch=remotes/origin/${CHANGE_TARGET}"
                 }
 
                 updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle success', 'SUCCESS')
             } catch(e) {
                 updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle found violations', 'ERROR')
             }
-        }
+//         }
     }
 }
 
@@ -88,11 +88,9 @@ stage('Quick Test') {
         codeVersion = readMavenPom(file: 'amp/pom.xml').version
         println "AMP Version: ${codeVersion}"
 
-        countries = "boad\nchad"
-//          TODO UNDO!
-//         sh(returnStdout: true,
-//                 script: "cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort")
-//                 .trim()
+        countries = sh(returnStdout: true,
+                script: "ssh boad.aws.devgateway.org 'cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort'")
+                .trim()
         if (countries == "") {
             println "There are no database backups compatible with ${codeVersion}"
             currentBuild.result = 'FAILURE'
@@ -117,7 +115,7 @@ stage('Quick Test') {
             updateGitHubCommitStatus('jenkins/failfasttests', 'Testing in progress', 'PENDING')
 
             docker.image('maven:3.8.4-jdk-8').inside('-v $HOME/.m2:/root/.m2') {
-                def testStatus = sh returnStatus: true, script: "cd amp && mvn clean test -Dskip.npm -Dskip.gulp ${legacyMvnOptions}"
+                def testStatus = sh returnStatus: true, script: "cd amp && mvn -B clean test -Dskip.npm -Dskip.gulp ${legacyMvnOptions}"
 
                 // Archive unit test report
                 junit 'amp/target/surefire-reports/TEST-*.xml'
@@ -161,12 +159,12 @@ stage('Build') {
         sh(returnStatus: true, script: "docker rmi ${image} > /dev/null")
 
         if (imageIds.equals("")) {
-            withEnv(["PATH+MAVEN=${tool 'M339'}/bin"]) {
+            docker.image('maven:3.8.4-jdk-8').inside('-v $HOME/.m2:/root/.m2 -v $HOME/amp-node-cache.tar:amp-node-cache.tar') {
                 try {
-                    sh returnStatus: true, script: 'tar -xf ../amp-node-cache.tar'
+                    sh returnStatus: true, script: 'tar -xf amp-node-cache.tar'
 
                     // Build AMP
-                    sh "cd amp && mvn -T 4 clean compile war:exploded ${legacyMvnOptions} -DskipTests -DbuildSource=${tag} -e"
+                    sh "cd amp && mvn -B -T 4 clean compile war:exploded ${legacyMvnOptions} -DskipTests -DbuildSource=${tag} -e"
 
                     // Build Docker images & push it
                     sh "docker build -q -t ${image} --build-arg AMP_EXPLODED_WAR=target/amp --build-arg AMP_PULL_REQUEST='${pr}' --build-arg AMP_BRANCH='${branch}' --build-arg AMP_REGISTRY_PRIVATE_KEY='${registryKey}' --label git-hash='${hash}' amp"
@@ -175,8 +173,8 @@ stage('Build') {
 
                     // Cleanup after Docker & Maven
                     sh returnStatus: true, script: "docker rmi ${image}"
-                    sh returnStatus: true, script: "cd amp && mvn clean -Djdbc.db=dummy"
-                    sh returnStatus: true, script: "tar -cf ../amp-node-cache.tar --remove-files" +
+                    sh returnStatus: true, script: "cd amp && mvn -B clean -Djdbc.db=dummy"
+                    sh returnStatus: true, script: "tar -cf amp-node-cache.tar --remove-files" +
                             " amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node" +
                             " amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node_modules" +
                             " amp/TEMPLATE/ampTemplate/node_modules/gis-layers-manager/node" +

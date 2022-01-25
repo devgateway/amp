@@ -24,6 +24,7 @@ println "Tag: ${tag}"
 def dbVersion
 def country
 def ampUrl
+def dockerRepo = "registry.developmentgateway.org/"
 
 def updateGitHubCommitStatus(context, message, state) {
     repoUrl = sh(returnStdout: true, script: "git config --get remote.origin.url").trim()
@@ -151,7 +152,7 @@ stage('Build') {
     node {
         checkout scm
 
-        def image = "boad.aws.devgateway.org:5000/amp-webapp:${tag}"
+        def image = "${dockerRepo}amp-webapp:${tag}"
         def format = branch != null ? "%H" : "%P"
         def hash = sh(returnStdout: true, script: "git log --pretty=${format} -n 1").trim()
         sh(returnStatus: true, script: "docker pull ${image} > /dev/null")
@@ -159,9 +160,10 @@ stage('Build') {
         sh(returnStatus: true, script: "docker rmi ${image} > /dev/null")
 
         if (imageIds.equals("")) {
-            docker.image('maven:3.8.4-jdk-8').inside('-v $HOME/.m2:/root/.m2 -v $HOME/amp-node-cache.tar:amp-node-cache.tar') {
+            sh 'mkdir -p $HOME/node_cache'
+            docker.image('maven:3.8.4-jdk-8').inside('-v $HOME/.m2:/root/.m2 -v $HOME/node_cache:/var/node_cache') {
                 try {
-                    sh returnStatus: true, script: 'tar -xf amp-node-cache.tar'
+                    sh returnStatus: true, script: 'tar -xf /var/node_cache/amp-node-cache.tar'
 
                     // Build AMP
                     sh "cd amp && mvn -B -T 4 clean compile war:exploded ${legacyMvnOptions} -DskipTests -DbuildSource=${tag} -e"
@@ -174,7 +176,7 @@ stage('Build') {
                     // Cleanup after Docker & Maven
                     sh returnStatus: true, script: "docker rmi ${image}"
                     sh returnStatus: true, script: "cd amp && mvn -B clean -Djdbc.db=dummy"
-                    sh returnStatus: true, script: "tar -cf amp-node-cache.tar --remove-files" +
+                    sh returnStatus: true, script: "tar -cf /var/node_cache/amp-node-cache.tar --remove-files" +
                             " amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node" +
                             " amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node_modules" +
                             " amp/TEMPLATE/ampTemplate/node_modules/gis-layers-manager/node" +

@@ -55,7 +55,7 @@ stage('Checkstyle') {
 
                 updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle in progress', 'PENDING')
 
-                docker.image('maven:3.8.4-jdk-8').inside('-v $HOME/.m2:/root/.m2') {
+                docker.image('maven:3.8.4-jdk-8').inside("-e HOME=${env.WORKSPACE}") {
                     sh "cd amp && mvn -B inccheckstyle:check -DbaseBranch=remotes/origin/${CHANGE_TARGET}"
                 }
 
@@ -115,15 +115,16 @@ stage('Quick Test') {
 
             updateGitHubCommitStatus('jenkins/failfasttests', 'Testing in progress', 'PENDING')
 
-            docker.image('maven:3.8.4-jdk-8').inside('-v $HOME/.m2:/root/.m2') {
-                def testStatus = sh returnStatus: true, script: "cd amp && mvn -B clean test -Dskip.npm -Dskip.gulp ${legacyMvnOptions}"
+            def testStatus = 1
+            docker.image('maven:3.8.4-jdk-8').inside("-e HOME=${env.WORKSPACE}") {
+                testStatus = sh returnStatus: true, script: "cd amp && mvn -B clean test -Dskip.npm -Dskip.gulp ${legacyMvnOptions}"
+            }
 
-                // Archive unit test report
-                junit 'amp/target/surefire-reports/TEST-*.xml'
+            // Archive unit test report
+            junit 'amp/target/surefire-reports/TEST-*.xml'
 
-                if (testStatus != 0) {
-                    error "Tests command returned an error code!"
-                }
+            if (testStatus != 0) {
+                error "Tests command returned an error code!"
             }
 
             updateGitHubCommitStatus('jenkins/failfasttests', 'Fail fast tests: success', 'SUCCESS')
@@ -160,41 +161,43 @@ stage('Build') {
         sh(returnStatus: true, script: "docker rmi ${image} > /dev/null")
 
         if (imageIds.equals("")) {
-            sh 'mkdir -p $HOME/node_cache'
-            docker.image('maven:3.8.4-jdk-8').inside('-e MAVEN_CONFIG=/var/maven/.m2 -e HOME=${env.WORKSPACE} -v $HOME/.m2:/var/maven/.m2 -v $HOME/node_cache:/var/node_cache') {
-                try {
-                    sh "env"
-                    sh returnStatus: true, script: 'tar -xf /var/node_cache/amp-node-cache.tar'
+            try {
+//                 sh returnStatus: true, script: 'tar -xf /var/amp-node-cache.tar'
 
-                    // Build AMP
+                // Build AMP
+                docker.image('maven:3.8.4-jdk-8').inside("-e HOME=${env.WORKSPACE}") {
                     sh "cd amp && mvn -B -T 4 clean compile war:exploded ${legacyMvnOptions} -DskipTests -DbuildSource=${tag} -e"
-
-                    // Build Docker images & push it
-                    sh "docker build -q -t ${image} --build-arg AMP_EXPLODED_WAR=target/amp --build-arg AMP_PULL_REQUEST='${pr}' --build-arg AMP_BRANCH='${branch}' --build-arg AMP_REGISTRY_PRIVATE_KEY='${registryKey}' --label git-hash='${hash}' amp"
-                    sh "docker push ${image} > /dev/null"
-                } finally {
-
-                    // Cleanup after Docker & Maven
-                    sh returnStatus: true, script: "docker rmi ${image}"
-                    sh returnStatus: true, script: "cd amp && mvn -B clean -Djdbc.db=dummy"
-                    sh returnStatus: true, script: "tar -cf /var/node_cache/amp-node-cache.tar --remove-files" +
-                            " amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node" +
-                            " amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node_modules" +
-                            " amp/TEMPLATE/ampTemplate/node_modules/gis-layers-manager/node" +
-                            " amp/TEMPLATE/ampTemplate/node_modules/gis-layers-manager/node_modules" +
-                            " amp/TEMPLATE/ampTemplate/node_modules/amp-settings/node" +
-                            " amp/TEMPLATE/ampTemplate/node_modules/amp-settings/node_modules" +
-                            " amp/TEMPLATE/ampTemplate/node_modules/amp-translate/node" +
-                            " amp/TEMPLATE/ampTemplate/node_modules/amp-translate/node_modules" +
-                            " amp/TEMPLATE/ampTemplate/node_modules/amp-state/node" +
-                            " amp/TEMPLATE/ampTemplate/node_modules/amp-state/node_modules" +
-                            " amp/TEMPLATE/ampTemplate/gisModule/dev/node" +
-                            " amp/TEMPLATE/ampTemplate/gisModule/dev/node_modules" +
-                            " amp/TEMPLATE/ampTemplate/dashboard/dev/node" +
-                            " amp/TEMPLATE/ampTemplate/dashboard/dev/node_modules" +
-                            " amp/TEMPLATE/reamp/node" +
-                            " amp/TEMPLATE/reamp/node_modules"
                 }
+
+                // Build Docker images & push it
+                sh "docker build -q -t ${image} --build-arg AMP_EXPLODED_WAR=target/amp --build-arg AMP_PULL_REQUEST='${pr}' --build-arg AMP_BRANCH='${branch}' --build-arg AMP_REGISTRY_PRIVATE_KEY='${registryKey}' --label git-hash='${hash}' amp"
+                sh "docker push ${image} > /dev/null"
+            } finally {
+
+                // Cleanup after Docker & Maven
+                sh returnStatus: true, script: "docker rmi ${image}"
+
+                docker.image('maven:3.8.4-jdk-8').inside("-e HOME=${env.WORKSPACE}") {
+                    sh returnStatus: true, script: "cd amp && mvn -B clean -Djdbc.db=dummy"
+                }
+
+//                 sh returnStatus: true, script: "tar -cf /var/amp-node-cache.tar --remove-files" +
+//                         " amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node" +
+//                         " amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node_modules" +
+//                         " amp/TEMPLATE/ampTemplate/node_modules/gis-layers-manager/node" +
+//                         " amp/TEMPLATE/ampTemplate/node_modules/gis-layers-manager/node_modules" +
+//                         " amp/TEMPLATE/ampTemplate/node_modules/amp-settings/node" +
+//                         " amp/TEMPLATE/ampTemplate/node_modules/amp-settings/node_modules" +
+//                         " amp/TEMPLATE/ampTemplate/node_modules/amp-translate/node" +
+//                         " amp/TEMPLATE/ampTemplate/node_modules/amp-translate/node_modules" +
+//                         " amp/TEMPLATE/ampTemplate/node_modules/amp-state/node" +
+//                         " amp/TEMPLATE/ampTemplate/node_modules/amp-state/node_modules" +
+//                         " amp/TEMPLATE/ampTemplate/gisModule/dev/node" +
+//                         " amp/TEMPLATE/ampTemplate/gisModule/dev/node_modules" +
+//                         " amp/TEMPLATE/ampTemplate/dashboard/dev/node" +
+//                         " amp/TEMPLATE/ampTemplate/dashboard/dev/node_modules" +
+//                         " amp/TEMPLATE/reamp/node" +
+//                         " amp/TEMPLATE/reamp/node_modules"
             }
         }
     }

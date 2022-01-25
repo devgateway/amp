@@ -163,6 +163,7 @@ stage('Build') {
             sh 'mkdir -p $HOME/node_cache'
             docker.image('maven:3.8.4-jdk-8').inside('-v $HOME/.m2:/root/.m2 -v $HOME/node_cache:/var/node_cache') {
                 try {
+                    sh "env"
                     sh returnStatus: true, script: 'tar -xf /var/node_cache/amp-node-cache.tar'
 
                     // Build AMP

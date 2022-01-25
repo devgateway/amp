@@ -169,6 +169,8 @@ stage('Build') {
                     sh "cd amp && mvn -B -T 4 clean compile war:exploded ${legacyMvnOptions} -DskipTests -DbuildSource=${tag} -e"
                 }
 
+                sh "cat ${env.WORKSPACE}/.npm/_logs/*"
+
                 // Build Docker images & push it
                 sh "docker build -q -t ${image} --build-arg AMP_EXPLODED_WAR=target/amp --build-arg AMP_PULL_REQUEST='${pr}' --build-arg AMP_BRANCH='${branch}' --build-arg AMP_REGISTRY_PRIVATE_KEY='${registryKey}' --label git-hash='${hash}' amp"
                 sh "docker push ${image} > /dev/null"

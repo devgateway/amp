@@ -165,13 +165,11 @@ stage('Build') {
 //                 sh returnStatus: true, script: 'tar -xf /var/amp-node-cache.tar'
 
                 // Build AMP
-                withEnv(['DOCKER_BUILDKIT=1']) {
-                    sshagent (credentials: ['GitHubDgReadOnlyKey']) {
-                        def uid = sh(returnStdout: true, script: 'id -u').trim()
-                        def mvnImage = docker.build('maven-3.8.4-jdk-8', "--ssh=default --build-arg jenkinsUserID=${uid} ./amp/maven")
-                        mvnImage.inside('-v $HOME/.ssh/known_hosts:/home/jenkins/.ssh/known_hosts:ro -v $HOME/.m2-amp:/home/jenkins/.m2') {
-                            sh "cd amp && mvn -B clean compile war:exploded ${legacyMvnOptions} -DskipTests -DbuildSource=${tag} -e"
-                        }
+                sshagent (credentials: ['GitHubDgReadOnlyKey']) {
+                    def uid = sh(returnStdout: true, script: 'id -u').trim()
+                    def mvnImage = docker.build('maven-3.8.4-jdk-8', "--build-arg jenkinsUserID=${uid} ./amp/maven")
+                    mvnImage.inside('-v $HOME/.ssh/known_hosts:/home/jenkins/.ssh/known_hosts:ro -v $HOME/.m2-amp:/home/jenkins/.m2 -v $SSH_AUTH_SOCK:$SSH_AUTH_SOCK -e SSH_AUTH_SOCK=$SSH_AUTH_SOCK') {
+                        sh "cd amp && mvn -B clean compile war:exploded ${legacyMvnOptions} -DskipTests -DbuildSource=${tag} -e"
                     }
                 }
 

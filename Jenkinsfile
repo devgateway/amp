@@ -167,9 +167,9 @@ stage('Build') {
                 // Build AMP
                 withEnv(['DOCKER_BUILDKIT=1']) {
                     sshagent (credentials: ['GitHubDgReadOnlyKey']) {
-                        def uid = returnStatus: true, script: 'id -u'
-                        def gid = returnStatus: true, script: 'id -g'
-                        docker.build('maven-3.8.4-jdk-8', '--ssh=default --build-arg jenkinsGroupID=${gid} --build-arg jenkinsUserID=${uid} ./amp/maven').inside {
+                        def uid = sh returnStdout: true, script: 'id -u'
+                        def gid = sh returnStdout: true, script: 'id -g'
+                        docker.build('maven-3.8.4-jdk-8', "--ssh=default --build-arg jenkinsGroupID=${gid} --build-arg jenkinsUserID=${uid} ./amp/maven").inside {
                             sh "cd amp && mvn -B -T 4 clean compile war:exploded ${legacyMvnOptions} -DskipTests -DbuildSource=${tag} -e"
                         }
                     }

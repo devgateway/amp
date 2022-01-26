@@ -167,7 +167,7 @@ stage('Build') {
                 // Build AMP
                 withEnv(['DOCKER_BUILDKIT=1']) {
                     sshagent (credentials: ['GitHubDgReadOnlyKey']) {
-                        docker.build('maven-3.8.4-jdk-8', '--ssh=default ./maven').inside {
+                        docker.build('maven-3.8.4-jdk-8', '--ssh=default ./amp/maven').inside {
                             sh "cd amp && mvn -B -T 4 clean compile war:exploded ${legacyMvnOptions} -DskipTests -DbuildSource=${tag} -e"
                         }
                     }

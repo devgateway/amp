@@ -65,7 +65,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "cross-env PUBLIC_URL=/TEMPLATE/reampv2/build/ react-scripts build",
+    "build": "cross-env PUBLIC_URL=/TEMPLATE/reampv2/build/ react-scripts --max-old-space-size=6000 build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint .",

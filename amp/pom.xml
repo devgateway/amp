@@ -1517,9 +1517,6 @@
                         <configuration>
 		                    <arguments>run build</arguments>
 		                    <workingDirectory>${project.basedir}/TEMPLATE/reampv2</workingDirectory>
-                            <environmentVariables>
-                                <NODE_OPTIONS>--max-old-space-size=6000</NODE_OPTIONS>
-                            </environmentVariables>
 	                    </configuration>
                     </execution>
                     <execution>

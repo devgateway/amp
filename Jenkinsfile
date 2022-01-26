@@ -165,8 +165,12 @@ stage('Build') {
 //                 sh returnStatus: true, script: 'tar -xf /var/amp-node-cache.tar'
 
                 // Build AMP
-                docker.image('maven:3.8.4-jdk-8').inside("-e HOME=${env.WORKSPACE}") {
-                    sh "cd amp && mvn -B -T 4 clean compile war:exploded ${legacyMvnOptions} -DskipTests -DbuildSource=${tag} -e"
+                withEnv(['DOCKER_BUILDKIT=1']) {
+                    sshagent (credentials: ['GitHubDgReadOnlyKey']) {
+                        docker.build('maven-3.8.4-jdk-8', '--ssh=default ./maven').inside {
+                            sh "cd amp && mvn -B -T 4 clean compile war:exploded ${legacyMvnOptions} -DskipTests -DbuildSource=${tag} -e"
+                        }
+                    }
                 }
 
                 // Build Docker images & push it

@@ -168,8 +168,9 @@ stage('Build') {
                 withEnv(['DOCKER_BUILDKIT=1']) {
                     sshagent (credentials: ['GitHubDgReadOnlyKey']) {
                         def uid = sh(returnStdout: true, script: 'id -u').trim()
-                        docker.build('maven-3.8.4-jdk-8', "--ssh=default --build-arg jenkinsUserID=${uid} ./amp/maven").inside {
-                            sh "cd amp && mvn -B -T 4 clean compile war:exploded ${legacyMvnOptions} -DskipTests -DbuildSource=${tag} -e"
+                        def mvnImage = docker.build('maven-3.8.4-jdk-8', "--ssh=default --build-arg jenkinsUserID=${uid} ./amp/maven")
+                        mvnImage.inside('-v $HOME/.ssh/known_hosts:/home/jenkins/.ssh/known_hosts:ro -v $HOME/.m2:/home/jenkins/.m2') {
+                            sh "cd amp && mvn -B clean compile war:exploded ${legacyMvnOptions} -DskipTests -DbuildSource=${tag} -e"
                         }
                     }
                 }
@@ -178,8 +179,6 @@ stage('Build') {
                 sh "docker build -q -t ${image} --build-arg AMP_EXPLODED_WAR=target/amp --build-arg AMP_PULL_REQUEST='${pr}' --build-arg AMP_BRANCH='${branch}' --build-arg AMP_REGISTRY_PRIVATE_KEY='${registryKey}' --label git-hash='${hash}' amp"
                 sh "docker push ${image} > /dev/null"
             } finally {
-
-                sh "cat ${env.WORKSPACE}/.npm/_logs/*"
 
                 // Cleanup after Docker & Maven
                 sh returnStatus: true, script: "docker rmi ${image}"

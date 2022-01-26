@@ -169,7 +169,7 @@ stage('Build') {
                     sshagent (credentials: ['GitHubDgReadOnlyKey']) {
                         def uid = sh(returnStdout: true, script: 'id -u').trim()
                         def mvnImage = docker.build('maven-3.8.4-jdk-8', "--ssh=default --build-arg jenkinsUserID=${uid} ./amp/maven")
-                        mvnImage.inside('-v $HOME/.ssh/known_hosts:/home/jenkins/.ssh/known_hosts:ro -v $HOME/.m2:/home/jenkins/.m2') {
+                        mvnImage.inside('-v $HOME/.ssh/known_hosts:/home/jenkins/.ssh/known_hosts:ro -v $HOME/.m2-amp:/home/jenkins/.m2') {
                             sh "cd amp && mvn -B clean compile war:exploded ${legacyMvnOptions} -DskipTests -DbuildSource=${tag} -e"
                         }
                     }

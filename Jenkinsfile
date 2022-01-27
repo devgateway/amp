@@ -60,21 +60,19 @@ def insideMavenImage(commands) {
 // Run checkstyle only for PR builds
 stage('Checkstyle') {
     node {
-//         if (branch == null) {
-            try {
-                checkout scm
+        try {
+            checkout scm
 
-                updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle in progress', 'PENDING')
+            updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle in progress', 'PENDING')
 
-                insideMavenImage {
-                    sh "cd amp && mvn -B -o inccheckstyle:check -DbaseBranch=remotes/origin/${CHANGE_TARGET}"
-                }
-
-                updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle success', 'SUCCESS')
-            } catch(e) {
-                updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle found violations', 'ERROR')
+            insideMavenImage {
+                sh "cd amp && mvn -B -o inccheckstyle:check -DbaseBranch=remotes/origin/${CHANGE_TARGET}"
             }
-//         }
+
+            updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle success', 'SUCCESS')
+        } catch(e) {
+            updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle found violations', 'ERROR')
+        }
     }
 }
 
@@ -173,7 +171,7 @@ stage('Build') {
 
         if (imageIds.equals("")) {
             try {
-//                 sh returnStatus: true, script: 'tar -xf /var/amp-node-cache.tar'
+                sh returnStatus: true, script: 'tar -xf amp-node-cache.tar'
 
                 // Build AMP
                 insideMavenImage {
@@ -192,23 +190,25 @@ stage('Build') {
                     sh returnStatus: true, script: "cd amp && mvn -B clean -Djdbc.db=dummy"
                 }
 
-//                 sh returnStatus: true, script: "tar -cf /var/amp-node-cache.tar --remove-files" +
-//                         " amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node" +
-//                         " amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node_modules" +
-//                         " amp/TEMPLATE/ampTemplate/node_modules/gis-layers-manager/node" +
-//                         " amp/TEMPLATE/ampTemplate/node_modules/gis-layers-manager/node_modules" +
-//                         " amp/TEMPLATE/ampTemplate/node_modules/amp-settings/node" +
-//                         " amp/TEMPLATE/ampTemplate/node_modules/amp-settings/node_modules" +
-//                         " amp/TEMPLATE/ampTemplate/node_modules/amp-translate/node" +
-//                         " amp/TEMPLATE/ampTemplate/node_modules/amp-translate/node_modules" +
-//                         " amp/TEMPLATE/ampTemplate/node_modules/amp-state/node" +
-//                         " amp/TEMPLATE/ampTemplate/node_modules/amp-state/node_modules" +
-//                         " amp/TEMPLATE/ampTemplate/gisModule/dev/node" +
-//                         " amp/TEMPLATE/ampTemplate/gisModule/dev/node_modules" +
-//                         " amp/TEMPLATE/ampTemplate/dashboard/dev/node" +
-//                         " amp/TEMPLATE/ampTemplate/dashboard/dev/node_modules" +
-//                         " amp/TEMPLATE/reamp/node" +
-//                         " amp/TEMPLATE/reamp/node_modules"
+                sh returnStatus: true, script: "tar -cf amp-node-cache.tar --remove-files" +
+                        " amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node" +
+                        " amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node_modules" +
+                        " amp/TEMPLATE/ampTemplate/node_modules/gis-layers-manager/node" +
+                        " amp/TEMPLATE/ampTemplate/node_modules/gis-layers-manager/node_modules" +
+                        " amp/TEMPLATE/ampTemplate/node_modules/amp-settings/node" +
+                        " amp/TEMPLATE/ampTemplate/node_modules/amp-settings/node_modules" +
+                        " amp/TEMPLATE/ampTemplate/node_modules/amp-translate/node" +
+                        " amp/TEMPLATE/ampTemplate/node_modules/amp-translate/node_modules" +
+                        " amp/TEMPLATE/ampTemplate/node_modules/amp-state/node" +
+                        " amp/TEMPLATE/ampTemplate/node_modules/amp-state/node_modules" +
+                        " amp/TEMPLATE/ampTemplate/gisModule/dev/node" +
+                        " amp/TEMPLATE/ampTemplate/gisModule/dev/node_modules" +
+                        " amp/TEMPLATE/ampTemplate/dashboard/dev/node" +
+                        " amp/TEMPLATE/ampTemplate/dashboard/dev/node_modules" +
+                        " amp/TEMPLATE/reamp/node" +
+                        " amp/TEMPLATE/reamp/node_modules" +
+                        " amp/TEMPLATE/reampv2/node" +
+                        " amp/TEMPLATE/reampv2/node_modules"
             }
         }
     }
@@ -221,10 +221,10 @@ stage('Deploy') {
     node {
         try {
             // Find latest database version compatible with ${codeVersion}
-            dbVersion = sh(returnStdout: true, script: "cd /opt/amp_dbs && amp-db find ${codeVersion} ${country}").trim()
+            dbVersion = sh(returnStdout: true, script: "ssh boad.aws.devgateway.org 'cd /opt/amp_dbs && amp-db find ${codeVersion} ${country}''").trim()
 
             // Deploy AMP
-            sh "cd /opt/docker/amp && ./up.sh ${tag} ${country} ${dbVersion}"
+            sh "ssh boad.aws.devgateway.org 'cd /opt/docker/amp && ./up.sh ${tag} ${country} ${dbVersion}'"
 
             slackSend(channel: 'amp-ci', color: 'good', message: "Deploy AMP - Success\nDeployed ${changePretty} will be ready for testing at ${ampUrl} in about 3 minutes")
 
@@ -249,7 +249,7 @@ stage('Deploy again') {
         }
         node {
             try {
-                sh "cd /opt/docker/amp && ./up.sh ${tag} ${country} ${dbVersion}"
+                sh "ssh boad.aws.devgateway.org 'cd /opt/docker/amp && ./up.sh ${tag} ${country} ${dbVersion}'"
 
                 slackSend(channel: 'amp-ci', color: 'good', message: "Deploy AMP - Success\nDeployed ${changePretty} will be ready for testing at ${ampUrl} in about 3 minutes")
 

@@ -1727,6 +1727,16 @@
                 <groupId>de.qaware.maven</groupId>
                 <artifactId>go-offline-maven-plugin</artifactId>
                 <version>1.2.8</version>
+                <configuration>
+                    <dynamicDependencies>
+                        <DynamicDependency>
+                            <groupId>org.apache.maven.surefire</groupId>
+                            <artifactId>surefire-junit47</artifactId>
+                            <version>3.0.0-M2</version>
+                            <repositoryType>PLUGIN</repositoryType>
+                        </DynamicDependency>
+                    </dynamicDependencies>
+                </configuration>
             </plugin>
         </plugins>
 

@@ -67,7 +67,7 @@ stage('Checkstyle') {
                 updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle in progress', 'PENDING')
 
                 insideMavenImage {
-                    sh "cd amp && mvn -B inccheckstyle:check -DbaseBranch=remotes/origin/${CHANGE_TARGET}"
+                    sh "cd amp && mvn -B -o inccheckstyle:check -DbaseBranch=remotes/origin/${CHANGE_TARGET}"
                 }
 
                 updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle success', 'SUCCESS')
@@ -128,7 +128,7 @@ stage('Quick Test') {
 
             def testStatus = 1
             insideMavenImage {
-                testStatus = sh returnStatus: true, script: "cd amp && mvn -B clean test -Dskip.npm -Dskip.gulp ${legacyMvnOptions}"
+                testStatus = sh returnStatus: true, script: "cd amp && mvn -B -o clean test -Dskip.npm -Dskip.gulp ${legacyMvnOptions}"
             }
 
             // Archive unit test report
@@ -177,7 +177,7 @@ stage('Build') {
 
                 // Build AMP
                 insideMavenImage {
-                    sh "cd amp && mvn -B clean compile war:exploded ${legacyMvnOptions} -DskipTests -DbuildSource=${tag} -e"
+                    sh "cd amp && mvn -B -o clean compile war:exploded ${legacyMvnOptions} -DskipTests -DbuildSource=${tag} -e"
                 }
 
                 // Build Docker images & push it

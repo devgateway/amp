@@ -11,4 +11,4 @@ WORKDIR $HOME
 
 ADD --chown=jenkins pom.xml $HOME
 
-RUN ["mvn", "-B", "dependency:resolve", "dependency:resolve-plugins", "dependency:go-offline"]
+RUN ["mvn", "-B", "de.qaware.maven:go-offline-maven-plugin:resolve-dependencies"]

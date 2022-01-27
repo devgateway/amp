@@ -59,21 +59,23 @@ def insideMavenImage(commands) {
 
 // Run checkstyle only for PR builds
 stage('Checkstyle') {
-    node {
-        try {
-            checkout scm
+    if (branch == null) {
+        node {
+            try {
+                checkout scm
 
-            updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle in progress', 'PENDING')
+                updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle in progress', 'PENDING')
 
-            insideMavenImage {
-                sh "cd amp && mvn -B -o inccheckstyle:check -DbaseBranch=remotes/origin/${CHANGE_TARGET}"
+                insideMavenImage {
+                    sh "cd amp && mvn -B -o inccheckstyle:check -DbaseBranch=remotes/origin/${CHANGE_TARGET}"
+                }
+
+                updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle success', 'SUCCESS')
+            } catch(e) {
+                updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle found violations', 'ERROR')
+
+                throw e
             }
-
-            updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle success', 'SUCCESS')
-        } catch(e) {
-            updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle found violations', 'ERROR')
-
-            throw e
         }
     }
 }

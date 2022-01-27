@@ -2,7 +2,8 @@ FROM maven:3.8.4-jdk-8
 
 ENTRYPOINT []
 
-RUN adduser --disabled-password --gecos jenkins --uid `id -u` jenkins
+ARG jenkinsUserID
+RUN adduser --disabled-password --gecos jenkins --uid ${jenkinsUserID} jenkins
 
 USER jenkins
 

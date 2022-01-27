@@ -167,8 +167,9 @@ stage('Build') {
                 // Build AMP
                 sshagent (credentials: ['GitHubDgReadOnlyKey']) {
                     def uid = sh(returnStdout: true, script: 'id -u').trim()
+                    sh 'cp ./amp/pom.xml ./amp/maven'
                     def mvnImage = docker.build('maven-3.8.4-jdk-8', "--build-arg jenkinsUserID=${uid} ./amp/maven")
-                    mvnImage.inside('-v $HOME/.ssh/known_hosts:/home/jenkins/.ssh/known_hosts:ro -v $HOME/.m2-amp:/home/jenkins/.m2 -v $SSH_AUTH_SOCK:$SSH_AUTH_SOCK -e SSH_AUTH_SOCK=$SSH_AUTH_SOCK') {
+                    mvnImage.inside('-v $HOME/.ssh/known_hosts:/home/jenkins/.ssh/known_hosts:ro -v $SSH_AUTH_SOCK:$SSH_AUTH_SOCK -e SSH_AUTH_SOCK=$SSH_AUTH_SOCK') {
                         sh "cd amp && mvn -B clean compile war:exploded ${legacyMvnOptions} -DskipTests -DbuildSource=${tag} -e"
                     }
                 }

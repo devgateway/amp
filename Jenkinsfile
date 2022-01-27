@@ -221,7 +221,7 @@ stage('Deploy') {
     node {
         try {
             // Find latest database version compatible with ${codeVersion}
-            dbVersion = sh(returnStdout: true, script: "ssh boad.aws.devgateway.org 'cd /opt/amp_dbs && amp-db find ${codeVersion} ${country}''").trim()
+            dbVersion = sh(returnStdout: true, script: "ssh boad.aws.devgateway.org 'cd /opt/amp_dbs && amp-db find ${codeVersion} ${country}'").trim()
 
             // Deploy AMP
             sh "ssh boad.aws.devgateway.org 'cd /opt/docker/amp && ./up.sh ${tag} ${country} ${dbVersion}'"

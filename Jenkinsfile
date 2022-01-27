@@ -48,10 +48,9 @@ def updateGitHubCommitStatus(context, message, state) {
 
 def insideMavenImage(commands) {
     sshagent (credentials: ['GitHubDgReadOnlyKey']) {
-        def uid = sh(returnStdout: true, script: 'id -u').trim()
         sh 'cp -u ./amp/pom.xml ./amp/maven'
-        def mvnImage = docker.build('maven-3.8.4-jdk-8', "--build-arg jenkinsUserID=${uid} ./amp/maven")
-        mvnImage.inside('-v $HOME/.ssh/known_hosts:/home/jenkins/.ssh/known_hosts:ro -v $SSH_AUTH_SOCK:$SSH_AUTH_SOCK -e SSH_AUTH_SOCK=$SSH_AUTH_SOCK') {
+        def mvnImage = docker.build('maven-3.8.4-jdk-8', "./amp/maven")
+        mvnImage.inside('-v $HOME/.ssh/known_hosts:/home/jenkins/.ssh/known_hosts:ro -v $SSH_AUTH_SOCK:$SSH_AUTH_SOCK') {
             commands()
         }
     }

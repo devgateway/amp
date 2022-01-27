@@ -46,6 +46,17 @@ def updateGitHubCommitStatus(context, message, state) {
     ])
 }
 
+def insideMavenImage(commands) {
+    sshagent (credentials: ['GitHubDgReadOnlyKey']) {
+        def uid = sh(returnStdout: true, script: 'id -u').trim()
+        sh 'cp -u ./amp/pom.xml ./amp/maven'
+        def mvnImage = docker.build('maven-3.8.4-jdk-8', "--build-arg jenkinsUserID=${uid} ./amp/maven")
+        mvnImage.inside('-v $HOME/.ssh/known_hosts:/home/jenkins/.ssh/known_hosts:ro -v $SSH_AUTH_SOCK:$SSH_AUTH_SOCK -e SSH_AUTH_SOCK=$SSH_AUTH_SOCK') {
+            commands()
+        }
+    }
+}
+
 // Run checkstyle only for PR builds
 stage('Checkstyle') {
     node {
@@ -55,7 +66,7 @@ stage('Checkstyle') {
 
                 updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle in progress', 'PENDING')
 
-                docker.image('maven:3.8.4-jdk-8').inside("-e HOME=${env.WORKSPACE}") {
+                insideMavenImage {
                     sh "cd amp && mvn -B inccheckstyle:check -DbaseBranch=remotes/origin/${CHANGE_TARGET}"
                 }
 
@@ -116,7 +127,7 @@ stage('Quick Test') {
             updateGitHubCommitStatus('jenkins/failfasttests', 'Testing in progress', 'PENDING')
 
             def testStatus = 1
-            docker.image('maven:3.8.4-jdk-8').inside("-e HOME=${env.WORKSPACE}") {
+            insideMavenImage {
                 testStatus = sh returnStatus: true, script: "cd amp && mvn -B clean test -Dskip.npm -Dskip.gulp ${legacyMvnOptions}"
             }
 
@@ -165,13 +176,8 @@ stage('Build') {
 //                 sh returnStatus: true, script: 'tar -xf /var/amp-node-cache.tar'
 
                 // Build AMP
-                sshagent (credentials: ['GitHubDgReadOnlyKey']) {
-                    def uid = sh(returnStdout: true, script: 'id -u').trim()
-                    sh 'cp ./amp/pom.xml ./amp/maven'
-                    def mvnImage = docker.build('maven-3.8.4-jdk-8', "--build-arg jenkinsUserID=${uid} ./amp/maven")
-                    mvnImage.inside('-v $HOME/.ssh/known_hosts:/home/jenkins/.ssh/known_hosts:ro -v $SSH_AUTH_SOCK:$SSH_AUTH_SOCK -e SSH_AUTH_SOCK=$SSH_AUTH_SOCK') {
-                        sh "cd amp && mvn -B clean compile war:exploded ${legacyMvnOptions} -DskipTests -DbuildSource=${tag} -e"
-                    }
+                insideMavenImage {
+                    sh "cd amp && mvn -B clean compile war:exploded ${legacyMvnOptions} -DskipTests -DbuildSource=${tag} -e"
                 }
 
                 // Build Docker images & push it
@@ -182,7 +188,7 @@ stage('Build') {
                 // Cleanup after Docker & Maven
                 sh returnStatus: true, script: "docker rmi ${image}"
 
-                docker.image('maven:3.8.4-jdk-8').inside("-e HOME=${env.WORKSPACE}") {
+                insideMavenImage {
                     sh returnStatus: true, script: "cd amp && mvn -B clean -Djdbc.db=dummy"
                 }
 

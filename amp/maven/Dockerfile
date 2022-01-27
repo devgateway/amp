@@ -11,4 +11,4 @@ WORKDIR $HOME
 
 ADD --chown=jenkins pom.xml $HOME
 
-RUN ["/usr/local/bin/mvn-entrypoint.sh", "mvn", "dependency:go-offline"]
+RUN ["/usr/local/bin/mvn-entrypoint.sh", "mvn", "-B", "dependency:go-offline"]

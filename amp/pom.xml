@@ -283,6 +283,12 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-spatial</artifactId>
             <version>4.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>postgresql</groupId>
+                    <artifactId>postgresql</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -1025,8 +1031,6 @@
     <build>
         <sourceDirectory>${project.basedir}/WEB-INF/src</sourceDirectory>
 
-        <outputDirectory>${project.basedir}/WEB-INF/classes</outputDirectory>
-
         <finalName>${project.artifactId}</finalName>
 
         <resources>
@@ -1107,25 +1111,6 @@
                     </webResources>
                     <webXml>WEB-INF/web.xml</webXml>
                 </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy-dependencies</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>WEB-INF/lib</outputDirectory>
-                            <excludeScope>provided</excludeScope>
-                            <silent>true</silent>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
 
             <plugin>
@@ -1513,44 +1498,6 @@
 		                <workingDirectory>${project.basedir}/TEMPLATE/reamp</workingDirectory>
 	                    </configuration>
                   </execution>
-<!--                    !!!! Next part is for building filters and dashboard. It was commented out until  -->
-<!--                     there is a decision on how to approach dependecies caching (node_modules) AMP-20022 !!! -->
-
-
-<!--                           Installing node and npm for filters -->
-<!--                     <execution> -->
-<!--                         <id>install node and npm for filters</id> -->
-<!--                         <goals> -->
-<!--                             <goal>install-node-and-npm</goal> -->
-<!--                         </goals> -->
-<!--                         <configuration> -->
-<!--                              <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-filter</workingDirectory> -->
-<!--                         </configuration> -->
-<!--                     </execution> -->
-<!--                     Running npm for filters -->
-<!--                     <execution> -->
-<!--                         <id>npm install for filters</id> -->
-<!--                         <goals> -->
-<!--                             <goal>npm</goal> -->
-<!--                         </goals> -->
-<!--                         <phase>generate-sources</phase> -->
-<!--                         <configuration> -->
-<!--                  		    <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-filter</workingDirectory> -->
-<!--                         </configuration> -->
-<!--                     </execution> -->
-<!--                         Running gulp for filters -->
-<!--                     <execution> -->
-<!--                         <id>gulp build for filters</id> -->
-<!--                         <goals> -->
-<!--                             <goal>gulp</goal> -->
-<!--                         </goals> -->
-<!--                         <phase>generate-sources</phase> -->
-<!--                         <configuration> -->
-<!--                             <arguments>build</arguments> -->
-<!--                				<workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-filter</workingDirectory> -->
-<!--                         </configuration> -->
-<!--                     </execution> -->
-
                     <!-- Installing node and npm  for Dashboard-->
                     <execution>
                         <id>npm install for Dashboards</id>

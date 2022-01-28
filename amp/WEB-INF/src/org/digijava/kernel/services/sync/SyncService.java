@@ -105,7 +105,7 @@ public class SyncService implements InitializingBean {
             new BeanPropertyRowMapper<>(ActivityChange.class);
 
     private PossibleValuesEnumerator possibleValuesEnumerator = PossibleValuesEnumerator.INSTANCE;
-    private CachingFieldsEnumerator fieldsEnumerator = AmpFieldsEnumerator.getEnumerator();
+    private CachingFieldsEnumerator fieldsEnumerator;
     private CurrencyService currencyService = CurrencyService.INSTANCE;
 
     private ResourceService resourceService = new ResourceService();
@@ -123,6 +123,10 @@ public class SyncService implements InitializingBean {
 
     @Autowired
     private SyncDAO syncDAO;
+
+    // autowired just to make sure that AmpFieldsEnumerator is initialized first
+    @Autowired
+    private AmpFieldsEnumerator ampFieldsEnumerator;
 
     private static class AmpOfflineChangelogMapper implements RowMapper<AmpOfflineChangelog> {
 
@@ -142,6 +146,7 @@ public class SyncService implements InitializingBean {
         Context initialContext = new InitialContext();
         DataSource dataSource = (DataSource) initialContext.lookup(Constants.UNIFIED_JNDI_ALIAS);
         jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+        fieldsEnumerator = AmpFieldsEnumerator.getEnumerator();
     }
 
     public SystemDiff diff(SyncRequest syncRequest) {

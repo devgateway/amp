@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export UMASK=0022
+
 JAVA_OPTS="-server -Xmx2g -Djava.awt.headless=true"
 JAVA_OPTS="$JAVA_OPTS -DsmtpHost=sulfur.migrated.devgateway.org -DsmtpFrom=system@digijava.org"
 JAVA_OPTS="$JAVA_OPTS -XX:HeapDumpPath=/opt/heapdumps -XX:+HeapDumpOnOutOfMemoryError"

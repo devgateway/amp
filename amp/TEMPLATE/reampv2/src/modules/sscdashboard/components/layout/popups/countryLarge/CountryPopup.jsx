@@ -11,7 +11,7 @@ import {
   getChartData
 } from '../../../../utils/ProjectUtils';
 import { SSCTranslationContext } from '../../../StartUp';
-import { COLOR_MAP, SECTORS_CHART } from '../../../../utils/constants';
+import { SECTORS_CHART } from '../../../../utils/constants';
 
 class CountryPopup extends Component {
   render() {

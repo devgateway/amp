@@ -24,7 +24,7 @@ function ActivitySaveResults(props) {
 
     function deepFlatten(array) {
         return array.reduce(function (r, e) {
-            return Array.isArray(e) ? r.push(...deepFlatten(e)) : r.push(e), r
+            return Array.isArray(e) ? r.push(...deepFlatten(e)) : (r.push(e), r)
         }, [])
     };
 

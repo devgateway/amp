@@ -6,7 +6,6 @@ import {connect} from "react-redux";
 import ResetAllButton from "../panel/button/ResetAllButton";
 import CancelGeocodingButton from "../panel/button/CancelGeocodingButton";
 import SaveAllEditsButton from "../panel/button/SaveAllEditsButton";
-import {Loading} from "../panel/Loading";
 
 class GeocodingTableHeader extends Component {
 

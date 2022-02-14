@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './GenericTooltip.css';
 
 const GenericToolTip = ({ titleLabel, color, values }) => {

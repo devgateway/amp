@@ -266,7 +266,7 @@ function updateActivitySaveStatus(activities, ampId, pending, error) {
 }
 
 function getActivitySavePendingStatus(activities) {
-    if (activities.find(item => item.pending == true)) {
+    if (activities.find(item => item.pending === true)) {
         return true;
     }
 

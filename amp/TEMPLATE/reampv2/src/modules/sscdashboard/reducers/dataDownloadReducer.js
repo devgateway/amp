@@ -4,7 +4,6 @@ import {
   FETCH_XLS_REPORT_PENDING,
   FETCH_XLS_REPORT_SUCCESS
 } from '../actions/downloadDataActions';
-import { INVALID_COLUMN_ERROR_CODE } from '../utils/constants';
 
 const initialState = {
   dataDownloadPending: false,

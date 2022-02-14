@@ -5,6 +5,7 @@ const SimplePopup = (props) => {
   const { message, onClose } = props;
   return (
     <div className="simple-popup">
+      {/*eslint-disable-next-line jsx-a11y/anchor-is-valid*/}
       <a
         className="x-close"
         onClick={e => {

@@ -1288,6 +1288,7 @@
                         <phase>process-resources</phase>
                         <configuration>
                              <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-boilerplate</workingDirectory>
+                            <nodeVersion>v16.4.0</nodeVersion>
                         </configuration>
                     </execution>
                     <!-- Running npm for amp-boilerplate-->
@@ -1299,7 +1300,7 @@
                         <!-- optional: default phase is "generate-resources" -->
                         <phase>process-resources</phase>
                         <configuration>
-                            <arguments>install</arguments>
+                            <arguments>ci</arguments>
                			    <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-boilerplate</workingDirectory>
                         </configuration>
                     </execution>

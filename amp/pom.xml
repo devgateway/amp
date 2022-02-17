@@ -1224,6 +1224,7 @@
                         <phase>process-resources</phase>
                         <configuration>
                             <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/dashboard/dev</workingDirectory>
+                            <nodeVersion>v16.4.0</nodeVersion>
                         </configuration>
                     </execution>
                     <!-- Installing node and npm  for amp-state-->
@@ -1554,7 +1555,7 @@
                         <configuration>
                             <!-- optional: The default argument is actually  "install", so unless you need to run some other npm command,
                             you can remove this whole <configuration> section.-->
-                            <arguments>install</arguments>
+                            <arguments>ci</arguments>
                             <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/dashboard/dev</workingDirectory>
                         </configuration>
                     </execution>

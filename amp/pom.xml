@@ -1487,7 +1487,7 @@
                         <phase>process-resources</phase>
                         <configuration>
                              <workingDirectory>${project.basedir}/TEMPLATE/reampv2</workingDirectory>
-                            <nodeVersion>v12.16.2</nodeVersion>
+                            <nodeVersion>v16.4.0</nodeVersion>
                         </configuration>
                     </execution>
 					 <execution>
@@ -1497,7 +1497,7 @@
                         </goals>
                         <phase>process-resources</phase>
                         <configuration>
-                            <arguments>install</arguments>
+                            <arguments>ci</arguments>
                			    <workingDirectory>${project.basedir}/TEMPLATE/reampv2</workingDirectory>
                         </configuration>
                     </execution>

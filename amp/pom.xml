@@ -1101,7 +1101,6 @@
                                 <exclude>TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node_modules/**</exclude>
                                 <exclude>TEMPLATE/ampTemplate/node_modules/gis-layers-manager/node/**</exclude>
                                 <exclude>TEMPLATE/ampTemplate/node_modules/gis-layers-manager/node_modules/**</exclude>
-                                <exclude>TEMPLATE/ampTemplate/node_modules/amp-filter/node_modules/**</exclude>
                                 <exclude>TEMPLATE/ampTemplate/node_modules/amp-settings/node/**</exclude>
                                 <exclude>TEMPLATE/ampTemplate/node_modules/amp-settings/node_modules/**</exclude>
                                 <exclude>TEMPLATE/ampTemplate/node_modules/amp-filter/node/**</exclude>

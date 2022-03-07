@@ -295,6 +295,12 @@
             <groupId>com.lowagie</groupId>
             <artifactId>itext</artifactId>
             <version>2.1.7</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.bouncycastle</groupId>
+                    <artifactId>bcprov-jdk14</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.lowagie</groupId>
@@ -981,6 +987,12 @@
             <groupId>org.passay</groupId>
             <artifactId>passay</artifactId>
             <version>1.2.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.bouncycastle</groupId>
+                    <artifactId>bcprov-jdk15on</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>

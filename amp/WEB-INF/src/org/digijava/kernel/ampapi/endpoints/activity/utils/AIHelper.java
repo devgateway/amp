@@ -3,6 +3,7 @@ package org.digijava.kernel.ampapi.endpoints.activity.utils;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
@@ -100,8 +101,6 @@ public class AIHelper {
     public static String getEditorKey(String fieldName) {
         // must start with "aim-" since it is expected by AF like this...
         // The activity form to avoid this issue is using team member see EditorWrapperModel.generateEditorKey
-        // to avoid collisions even  under the the same member we add a random number from 0 to RANDOM_UPPER_LIMIT -1
-        return "aim-importer-" + fieldName + "-" + (System.currentTimeMillis()
-                + (int) (Math.random() * RANDOM_UPPER_LIMIT));
+        return "aim-importer-" + fieldName + "-" + UUID.randomUUID();
     }
 }

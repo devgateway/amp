@@ -6,7 +6,7 @@ var originalSync = Backbone.sync;
 
 // Eventually will be a config, but we don't have config built yet.
 var _path = window.location.pathname,
-    _CORS_API = 'http://66.207.103.134',
+    _CORS_API = 'http://localhost:3000',
     _AMP_API = _path.substr(0, _path.indexOf('/TEMPLATE')),
     _IS_NODE = (window.location.host === 'localhost:3000'),
     API_BASE = _IS_NODE ? _CORS_API : _AMP_API;

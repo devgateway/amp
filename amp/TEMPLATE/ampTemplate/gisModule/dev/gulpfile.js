@@ -40,6 +40,8 @@ var browserify = require('browserify');
 var watchify = require('watchify');
 var gulp = require('gulp');
 var g = require('gulp-load-plugins')();
+var connect = require('gulp-connect');
+const { createProxyMiddleware } = require('http-proxy-middleware');
 var gulpi18nScraper = require('gulp-i18n-scraper');
 var gulpUtil = require('gulp-util');
 var mold = require('mold-source-map');
@@ -257,10 +259,15 @@ gulp.task('preview', gulp.series('build', cb => {
 // dev
 //------------------------------------
 gulp.task('dev-server', cb => {
-  g.serve({
-    root: [paths.app.root],
-    port: 3000
-  })();
+  connect.server({
+    root: [ paths.app.root ],
+    port: 3000,
+    middleware: (connect, opt) => [
+      createProxyMiddleware(['!/compiled-css/**', '!/compiled-js/**', '!/img/**', '!/fonts/**', '!/index.html'], {
+        target: 'http://localhost:8080'
+      })
+    ],
+  });
   cb();
 });
 

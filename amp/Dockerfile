@@ -34,7 +34,7 @@ RUN --mount=type=ssh \
     && mv target/amp exploded \
     && rm -rf target
 
-FROM tomcat:8.5-jdk8
+FROM tomcat:8.5.79-jdk8
 
 ARG AMP_PULL_REQUEST
 ARG AMP_BRANCH

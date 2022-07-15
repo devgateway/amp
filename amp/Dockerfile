@@ -35,7 +35,7 @@ RUN --mount=type=ssh \
         TEMPLATE/reampv2/node \
         TEMPLATE/reampv2/node_modules
 
-FROM tomcat:8.5-jdk8
+FROM tomcat:8.5.79-jdk8
 
 ARG AMP_PULL_REQUEST
 ARG AMP_BRANCH

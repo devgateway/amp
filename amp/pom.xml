@@ -3,16 +3,15 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.devgateway</groupId>
     <artifactId>amp</artifactId>
-    <version>${buildVersion}</version>
+    <version>2.13.1.1.1</version>
     <packaging>war</packaging>
     <name>Aid Management Platform</name>
     <properties>
         <wicketVersion>6.18.0</wicketVersion>
-        <tomcatVersion>7.0.54</tomcatVersion>
+        <tomcatVersion>8.5.73</tomcatVersion>
         <springSecurityVersion>3.1.4.RELEASE</springSecurityVersion>
         <springVersion>3.0.7.RELEASE</springVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <buildVersion>2.13-SNAPSHOT</buildVersion>
         <buildSource></buildSource>
         <buildDate></buildDate>
         <jersey.version>1.19</jersey.version>
@@ -27,11 +26,7 @@
             </snapshots>
             <id>central</id>
             <name>amp</name>
-            <url>http://artifactory.ampdev.net/artifactory/amp</url>
-        </repository>
-        <repository>
-            <id>OSGEO GeoTools repo</id>
-            <url>http://download.osgeo.org/webdav/geotools</url>
+            <url>https://artifactory.dgdev.org/artifactory/amp/</url>
         </repository>
     </repositories>
     <pluginRepositories>
@@ -41,7 +36,7 @@
             </snapshots>
             <id>central</id>
             <name>amp</name>
-            <url>http://artifactory.ampdev.net/artifactory/amp</url>
+            <url>https://artifactory.dgdev.org/artifactory/amp/</url>
         </pluginRepository>
     </pluginRepositories>
 
@@ -259,12 +254,24 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-spatial</artifactId>
             <version>4.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>postgresql</groupId>
+                    <artifactId>postgresql</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
             <groupId>com.lowagie</groupId>
             <artifactId>itext</artifactId>
             <version>2.1.7</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.bouncycastle</groupId>
+                    <artifactId>bcprov-jdk14</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.lowagie</groupId>
@@ -837,9 +844,9 @@
         </dependency>
 
         <dependency>
-            <groupId>postgresql</groupId>
+            <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>9.2-1002.jdbc4</version>
+            <version>42.3.1</version>
         </dependency>
         <dependency>
             <groupId>com.sun.mail</groupId>
@@ -883,6 +890,16 @@
             <groupId>org.saiku</groupId>
             <artifactId>saiku-web</artifactId>
             <version>${saiku.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.itextpdf.tool</groupId>
+                    <artifactId>xmlworker</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.itextpdf</groupId>
+                    <artifactId>itextpdf</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.saiku</groupId>
@@ -893,6 +910,16 @@
             <groupId>org.olap4j</groupId>
             <artifactId>olap4j</artifactId>
             <version>1.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
+            <version>5.5.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.itextpdf.tool</groupId>
+            <artifactId>xmlworker</artifactId>
+            <version>5.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.olap4j</groupId>
@@ -973,6 +1000,12 @@
             <groupId>com.github.jarlakxen</groupId>
             <artifactId>embedphantomjs</artifactId>
             <version>2.9</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>log4j-over-slf4j</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         
 		<dependency>
@@ -986,7 +1019,7 @@
     <build>
         <sourceDirectory>${project.basedir}/WEB-INF/src</sourceDirectory>
 
-        <outputDirectory>${project.basedir}/WEB-INF/classes</outputDirectory>
+        <finalName>${project.artifactId}</finalName>
 
         <resources>
             <resource>
@@ -1011,8 +1044,6 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.3</version>
                 <configuration>
-                    <warName>${project.version}</warName>
-
                     <recompressZippedFiles>false</recompressZippedFiles>
                     <archive>
                         <manifestEntries>
@@ -1022,31 +1053,46 @@
                         </manifestEntries>
                     </archive>
                     <webResources>
+                        <!-- Intellij Idea cannot handle correctly two resources with the same source directory. -->
                         <resource>
-                            <directory>.</directory>
+                            <directory>${project.basedir}/TEMPLATE/ampTemplate</directory>
                             <includes>
-                                <include>TEMPLATE/ampTemplate/site-config.xml</include>
+                                <include>site-config.xml</include>
                             </includes>
-                           <filtering>true</filtering>
+                            <filtering>true</filtering>
+                            <targetPath>TEMPLATE/ampTemplate</targetPath>
                         </resource>
                         <resource>
-                            <directory>.</directory>
+                            <directory>${project.basedir}</directory>
                             <includes>
                                 <include>**/*</include>
                             </includes>
                             <excludes>
-                                <exclude>META-INF/context.xml</exclude>
                                 <exclude>WEB-INF/src/**</exclude>
+                                <exclude>.idea/**</exclude>
                                 <exclude>.settings/**</exclude>
                                 <exclude>.externalToolBuilders/**</exclude>
                                 <exclude>TEMPLATE/ampTemplate/site-config.xml</exclude>
                                 <exclude>TEMPLATE/ampTemplate/gisModule/dev/node/**</exclude>
                                 <exclude>TEMPLATE/ampTemplate/gisModule/dev/node_modules/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/dashboard/dev/node/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/dashboard/dev/node_modules/**</exclude>
                                 <exclude>TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node/**</exclude>
                                 <exclude>TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node_modules/**</exclude>
                                 <exclude>TEMPLATE/ampTemplate/node_modules/gis-layers-manager/node/**</exclude>
                                 <exclude>TEMPLATE/ampTemplate/node_modules/gis-layers-manager/node_modules/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/node_modules/amp-settings/node/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/node_modules/amp-settings/node_modules/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/node_modules/amp-filter/node/**</exclude>
                                 <exclude>TEMPLATE/ampTemplate/node_modules/amp-filter/node_modules/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/node_modules/amp-translate/node/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/node_modules/amp-translate/node_modules/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/node_modules/amp-state/node/**</exclude>
+                                <exclude>TEMPLATE/ampTemplate/node_modules/amp-state/node_modules/**</exclude>
+                                <exclude>TEMPLATE/reamp/node/**</exclude>
+                                <exclude>TEMPLATE/reamp/node_modules/**</exclude>
+                                <exclude>TEMPLATE/reampv2/node/**</exclude>
+                                <exclude>TEMPLATE/reampv2/node_modules/**</exclude>
                                 <exclude>src/**</exclude>
                                 <exclude>target/**</exclude>
                             </excludes>
@@ -1054,25 +1100,6 @@
                     </webResources>
                     <webXml>WEB-INF/web.xml</webXml>
                 </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy-dependencies</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>WEB-INF/lib</outputDirectory>
-                            <excludeScope>provided</excludeScope>
-                            <silent>true</silent>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
 
             <plugin>
@@ -1165,6 +1192,58 @@
                              <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>
                         </configuration>
                     </execution>
+                    <!-- Installing node and npm  for amp-state-->
+                    <execution>
+                        <!-- optional: you don't really need execution ids, but it looks nice in your build log. -->
+                        <id>install node and npm for amp-state</id>
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+                        <!-- optional: default phase is "generate-resources" -->
+                        <phase>process-resources</phase>
+                        <configuration>
+                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-state</workingDirectory>
+                        </configuration>
+                    </execution>
+                    <!-- Running npm for amp-state-->
+                    <execution>
+                        <id>npm install for amp-state</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <!-- optional: default phase is "generate-resources" -->
+                        <phase>process-resources</phase>
+                        <configuration>
+                            <arguments>install</arguments>
+               			    <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-state</workingDirectory>
+                        </configuration>
+                    </execution>
+                    <!-- Installing node and npm  for amp-translate-->
+                    <execution>
+                        <!-- optional: you don't really need execution ids, but it looks nice in your build log. -->
+                        <id>install node and npm for amp-translate</id>
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+                        <!-- optional: default phase is "generate-resources" -->
+                        <phase>process-resources</phase>
+                        <configuration>
+                             <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-translate</workingDirectory>
+                        </configuration>
+                    </execution>
+                    <!-- Running npm for amp-translate-->
+                    <execution>
+                        <id>npm install for amp-translate</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <!-- optional: default phase is "generate-resources" -->
+                        <phase>process-resources</phase>
+                        <configuration>
+                            <arguments>install</arguments>
+               			    <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-translate</workingDirectory>
+                        </configuration>
+                    </execution>
                     <!-- Installing node and npm  for amp-boilerplate-->
                     <execution>
                         <!-- optional: you don't really need execution ids, but it looks nice in your build log. -->
@@ -1203,7 +1282,45 @@
                				<workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-boilerplate</workingDirectory>
                         </configuration>
                     </execution>
-                                                 <!-- Installing node and npm  for gis-layers-manager-->
+                    <!-- Installing node and npm  for amp-filter-->
+                    <execution>
+                        <!-- optional: you don't really need execution ids, but it looks nice in your build log. -->
+                        <id>install node and npm for amp-filter</id>
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+                        <!-- optional: default phase is "generate-resources" -->
+                        <phase>process-resources</phase>
+                        <configuration>
+                             <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-filter</workingDirectory>
+                        </configuration>
+                    </execution>
+                    <!-- Running npm for amp-filter-->
+                    <execution>
+                        <id>npm install for amp-filter</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <!-- optional: default phase is "generate-resources" -->
+                        <phase>process-resources</phase>
+                        <configuration>
+                            <arguments>install</arguments>
+               			    <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-filter</workingDirectory>
+                        </configuration>
+                    </execution>
+                    <!-- Running gulp for amp-filter-->
+                    <execution>
+                        <id>gulp build for amp-filter</id>
+                        <goals>
+                            <goal>gulp</goal>
+                        </goals>
+                        <phase>process-resources</phase>
+                        <configuration>
+                            <arguments>build</arguments>
+               				<workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-filter</workingDirectory>
+                        </configuration>
+                    </execution>
+                    <!-- Installing node and npm  for gis-layers-manager-->
                     <execution>
                         <!-- optional: you don't really need execution ids, but it looks nice in your build log. -->
                         <id>install node and npm for gis-layers-manager</id>

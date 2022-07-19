@@ -14,13 +14,18 @@ if (BRANCH_NAME ==~ /feature\/AMP-\d+.*/) {
 // Record original branch or pull request for cleanup jobs
 def branch = env.CHANGE_ID == null ? BRANCH_NAME : null
 def pr = env.CHANGE_ID
+def registryKey = env.AMP_REGISTRY_PRIVATE_KEY
+def changePretty = (pr != null) ? "pull request ${pr}" : "branch ${branch}"
 
 println "Branch: ${branch}"
 println "Pull request: ${pr}"
 println "Tag: ${tag}"
 
-def codeVersion
 def dbVersion
+def pgVersion = 14
+def country
+def ampUrl
+def dockerRepo = "registry.developmentgateway.org/"
 
 def updateGitHubCommitStatus(context, message, state) {
     repoUrl = sh(returnStdout: true, script: "git config --get remote.origin.url").trim()
@@ -42,110 +47,90 @@ def updateGitHubCommitStatus(context, message, state) {
     ])
 }
 
-// Run checkstyle only for PR builds
-stage('Checkstyle') {
-    if (branch == null) {
-        node {
-            try {
-                checkout scm
-
-                updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle in progress', 'PENDING')
-
-                withEnv(["PATH+MAVEN=${tool 'M339'}/bin"]) {
-                    sh "cd amp && mvn inccheckstyle:check -DbaseBranch=remotes/origin/${CHANGE_TARGET}"
-                }
-
-                updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle success', 'SUCCESS')
-            } catch(e) {
-                updateGitHubCommitStatus('jenkins/checkstyle', 'Checkstyle found violations', 'ERROR')
-            }
-        }
-    }
-}
+def codeVersion
+def countries
 
 stage('Build') {
-    timeout(15) {
-        input "Proceed with build?"
-    }
 
     node {
         checkout scm
 
-        def format = branch != null ? "%H" : "%P"
-        def hash = sh(returnStdout: true, script: "git log --pretty=${format} -n 1").trim()
-        sh(returnStatus: true, script: "docker pull phosphorus:5000/amp-webapp:${tag} > /dev/null")
-        def imageIds = sh(returnStdout: true, script: "docker images -q -f \"label=git-hash=${hash}\"").trim()
-        sh(returnStatus: true, script: "docker rmi phosphorus:5000/amp-webapp:${tag} > /dev/null")
-
         // Find AMP version
-        codeVersion = (readFile('amp/TEMPLATE/ampTemplate/site-config.xml') =~ /(?s).*<\!ENTITY ampVersion "([\d\.]+)">.*/)[0][1]
+        codeVersion = readMavenPom(file: 'amp/pom.xml').version
+        println "AMP Version: ${codeVersion}"
 
-        if (imageIds.equals("")) {
-            withEnv(["PATH+MAVEN=${tool 'M339'}/bin"]) {
-                try {
-                    sh returnStatus: true, script: 'tar -xf ../amp-node-cache.tar'
-
-                    // Build AMP
-                    sh "cd amp && mvn -T 4 clean compile war:exploded -Djdbc.user=amp -Djdbc.password=amp122006 -Djdbc.db=amp -Djdbc.host=db -Djdbc.port=5432 -DdbName=postgresql -Djdbc.driverClassName=org.postgresql.Driver -Dmaven.test.skip=true -Dapidocs=true -DbuildVersion=AMP -DbuildSource=${tag} -e"
-
-                    // Build Docker images & push it
-                    sh "docker build -q -t phosphorus:5000/amp-webapp:${tag} --build-arg AMP_EXPLODED_WAR=target/amp-AMP --build-arg AMP_PULL_REQUEST='${pr}' --build-arg AMP_BRANCH='${branch}' --label git-hash='${hash}' amp"
-                    sh "docker push phosphorus:5000/amp-webapp:${tag} > /dev/null"
-                } finally {
-                    // Cleanup after Docker & Maven
-                    sh returnStatus: true, script: "docker rmi phosphorus:5000/amp-webapp:${tag}"
-                    sh returnStatus: true, script: "cd amp && mvn clean -Djdbc.db=dummy"
-                    sh returnStatus: true, script: "tar -cf ../amp-node-cache.tar --remove-files" +
-                            " amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node" +
-                            " amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node_modules" +
-                            " amp/TEMPLATE/ampTemplate/node_modules/gis-layers-manager/node" +
-                            " amp/TEMPLATE/ampTemplate/node_modules/gis-layers-manager/node_modules" +
-                            " amp/TEMPLATE/ampTemplate/node_modules/amp-settings/node" +
-                            " amp/TEMPLATE/ampTemplate/node_modules/amp-settings/node_modules" +
-                            " amp/TEMPLATE/ampTemplate/gisModule/dev/node" +
-                            " amp/TEMPLATE/ampTemplate/gisModule/dev/node_modules" +
-                            " amp/TEMPLATE/reamp/node" +
-                            " amp/TEMPLATE/reamp/node_modules"
-                }
-            }
-        }
-    }
-}
-
-def deployed = false
-def country
-
-def changePretty = (pr != null) ? "pull request ${pr}" : "branch ${branch}"
-def ampUrl
-
-// If this stage fails then next stage will retry deployment. Otherwise next stage will be skipped.
-stage('Deploy') {
-
-    // Find list of countries which have database dumps compatible with ${codeVersion}
-    def countries
-    node {
-        countries = sh(returnStdout: true, script: "ssh sulfur 'cd /opt/amp_dbs && amp-db ls ${codeVersion}'").trim()
+        countries = sh(returnStdout: true,
+                script: "ssh boad.aws.devgateway.org 'cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort'")
+                .trim()
         if (countries == "") {
             println "There are no database backups compatible with ${codeVersion}"
             currentBuild.result = 'FAILURE'
         }
     }
 
-    timeout(time: 1, unit: 'HOURS') {
+    timeout(15) {
         milestone()
-        country = input message: "Proceed with deploy?", parameters: [choice(choices: countries, name: 'country')]
+        country = input(
+                message: "Proceed with build and deploy?",
+                parameters: [choice(choices: countries, name: 'country')])
         milestone()
     }
 
-    ampUrl = "http://amp-${country}-${tag}-tc9.ampsite.net/"
+    ampUrl = "http://amp-${country}-${tag}.stg.ampsite.net/"
 
+    node {
+        checkout scm
+
+        def image = "${dockerRepo}amp-webapp:${tag}"
+        def format = branch != null ? "%H" : "%P"
+        def hash = sh(returnStdout: true, script: "git log --pretty=${format} -n 1").trim()
+        sh(returnStatus: true, script: "docker pull ${image} > /dev/null")
+        def imageIds = sh(returnStdout: true, script: "docker images -q -f \"label=git-hash=${hash}\"").trim()
+        sh(returnStatus: true, script: "docker rmi ${image} > /dev/null")
+
+        if (imageIds.equals("")) {
+            try {
+                updateGitHubCommitStatus('jenkins/build', 'Build in progress', 'PENDING')
+
+                sshagent(credentials: ['GitHubDgReadOnlyKey']) {
+                    withEnv(['DOCKER_BUILDKIT=1']) {
+                        sh "docker build " +
+                                "--progress=plain " +
+                                "--ssh default " +
+                                "-t ${image} " +
+                                "--build-arg BUILD_SOURCE='${tag}' " +
+                                "--build-arg AMP_PULL_REQUEST='${pr}' " +
+                                "--build-arg AMP_BRANCH='${branch}' " +
+                                "--build-arg AMP_REGISTRY_PRIVATE_KEY='${registryKey}' " +
+                                "--label git-hash='${hash}' " +
+                                "amp"
+                    }
+                }
+                sh "docker push ${image} > /dev/null"
+
+                updateGitHubCommitStatus('jenkins/build', 'Built successfully', 'SUCCESS')
+            } catch (e) {
+                updateGitHubCommitStatus('jenkins/build', 'Build failed', 'ERROR')
+                throw e
+            } finally {
+                // Cleanup after Docker & Maven
+                sh returnStatus: true, script: "docker rmi ${image}"
+            }
+        }
+    }
+}
+
+def deployed = false
+
+// If this stage fails then next stage will retry deployment. Otherwise next stage will be skipped.
+stage('Deploy') {
     node {
         try {
             // Find latest database version compatible with ${codeVersion}
-            dbVersion = sh(returnStdout: true, script: "ssh sulfur 'cd /opt/amp_dbs && amp-db find ${codeVersion} ${country}'").trim()
+            dbVersion = sh(returnStdout: true, script: "ssh boad.aws.devgateway.org 'cd /opt/amp_dbs && amp-db find ${codeVersion} ${country}'").trim()
 
             // Deploy AMP
-            sh "ssh sulfur 'cd /opt/docker/amp && ./up.sh ${tag} ${country} ${dbVersion}'"
+            sh "ssh boad.aws.devgateway.org 'amp-up ${tag} ${country} ${dbVersion} ${pgVersion}'"
 
             slackSend(channel: 'amp-ci', color: 'good', message: "Deploy AMP - Success\nDeployed ${changePretty} will be ready for testing at ${ampUrl} in about 3 minutes")
 
@@ -170,7 +155,7 @@ stage('Deploy again') {
         }
         node {
             try {
-                sh "ssh sulfur 'cd /opt/docker/amp && ./up.sh ${tag} ${country} ${dbVersion}'"
+                sh "ssh boad.aws.devgateway.org 'amp-up ${tag} ${country} ${dbVersion} ${pgVersion}'"
 
                 slackSend(channel: 'amp-ci', color: 'good', message: "Deploy AMP - Success\nDeployed ${changePretty} will be ready for testing at ${ampUrl} in about 3 minutes")
 

@@ -112,6 +112,21 @@ function failureReportFunction(o) {
     YAHOO.util.Connect.asyncRequest("GET", "/rest/security/layout", getUserInformation);
 };
 
+Filters.prototype.populateSelectedFilters = function (theDiv, theFilterWidget) {
+    var ret = [];
+    var filters = theFilterWidget.serializeToModels();
+    $.each(filters.filters, function (key, filter) {
+        if (filter.modelType !== 'DATE-RANGE-VALUES') {
+            var filterValues = $.map(filter, function (f, i) {
+                return f.attributes.name;
+            });
+            ret.push(key + ' : [ ' + filterValues.join(',') + ' ] ');
+        } else {
+            ret.push(key + ' : [ ' + filter.start + '-' + filter.end + ' ] ');
+        }
+    });
+    $(theDiv).html(ret.join(' |'));
+}
 Filters.prototype.success = function (o) {
     if (o.responseText.length > 2) {
         this.filterPanel.setBody(o.responseText);
@@ -138,7 +153,7 @@ Filters.prototype.success = function (o) {
 
 Filters.prototype.failure = failureReportFunction;
 
-Filters.prototype.showFilters = function (reportContextId, auxId) {
+Filters.prototype.showFilters = function (reportContextId, auxId, hideFilters) {
     widgetFilter.reportContextId = reportContextId;
     if (widgetFilter.reportContextId === 'report_wizard') {
         widgetFilter.auxId = auxId; // used only for advanced search.
@@ -147,13 +162,17 @@ Filters.prototype.showFilters = function (reportContextId, auxId) {
             but right now those 2 processes do initializations we need for report generator.*/
             widgetFilter.deserialize({filters: {}}, {silent: true});
         }
-        this.showFilterWidget();
+        if (!hideFilters) {
+            this.showFilterWidget();
+        }
     } else if (widgetFilter.reportContextId === 'workspace_editor') {
         var id = new URL(window.location).searchParams.get('tId');
         if (id && widgetFilter.gotSavedFilters !== true) {
-            this.loadSavedFilterData(id, false);
+            this.loadSavedFilterData(id, false, hideFilters);
         } else {
-            this.showFilterWidget();
+            if (!hideFilters) {
+                this.showFilterWidget();
+            }
         }
     } else if (widgetFilter.gotSavedFilters !== true) {
         this.loadSavedFilterData(widgetFilter.reportContextId, true);
@@ -162,7 +181,7 @@ Filters.prototype.showFilters = function (reportContextId, auxId) {
     }
 };
 
-Filters.prototype.loadSavedFilterData = function (id, isReport) {
+Filters.prototype.loadSavedFilterData = function (id, isReport, hideFilters) {
     var self = this;
     var url = isReport ? REPORT_URL : TEAM_URL;
     $.ajax({
@@ -176,7 +195,9 @@ Filters.prototype.loadSavedFilterData = function (id, isReport) {
                 data.reportMetadata.reportSpec.includeLocationChildren :
                 (data[WORKSPACE_FILTERS] ? data[WORKSPACE_FILTERS].includeLocationChildren : true);
             widgetFilter.deserialize({filters: filters}, {silent: true});
-            self.showFilterWidget();
+            if (!hideFilters) {
+                self.showFilterWidget();
+            }
         }
     });
     widgetFilter.gotSavedFilters = true;

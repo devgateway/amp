@@ -1583,7 +1583,6 @@
             if (once) {
                 var context_id = '<%=ReportContextData.getCurrentReportContextId(request, true)%>';
                 repFilters.showFilters(context_id, undefined, true);
-                container.hide();
             }
             once = false;
         }, widgetFilter));

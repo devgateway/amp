@@ -52,6 +52,8 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
+import static org.dgfoundation.amp.nireports.runtime.ColumnReportData.UNALLOCATED_ID;
+
 /**
  * 
  * @author Diego Dimunzio
@@ -84,7 +86,7 @@ public class DashboardsService {
     public static LinkedHashMap<String, Object> setFilterId(Long id, String column) {
         LinkedHashMap<String, Object> filterObject = new LinkedHashMap<String, Object>();
         List<Long> filterIds = new ArrayList<Long>();
-        if (id >0) {
+        if (id > 0 || id.equals(UNALLOCATED_ID)) {
             filterIds.add(id);
             filterObject.put(column, filterIds);
         }
@@ -122,7 +124,7 @@ public class DashboardsService {
         for (ReportArea ra : report.reportContents.getChildren()) {
             // detect those undefined for countries, but skip those that are really undefined for regions
             if (ra.getOwner() != null && ra.getOwner().id < 0
-                    && (ra.getOwner().id != ColumnReportData.UNALLOCATED_ID)) {
+                    && (ra.getOwner().id != UNALLOCATED_ID)) {
                 undefinedAreas.add(ra);
             }
         }

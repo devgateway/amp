@@ -15,6 +15,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.gateperm.core.Gate;
 import org.digijava.module.gateperm.core.GatePermConst;
+import org.digijava.module.gateperm.util.PermissionUtil;
 
 /**
  * Gives right if current user is assigned to an org that is related (by any role) to an object - such an activity
@@ -87,7 +88,7 @@ public class RelatedOrgGate extends Gate {
     //AmpTeamMember atm = (AmpTeamMember) session.get(AmpTeamMember.class, tm.getMemberId());
     //AmpTeamMember atm=TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
     
-    User user =  TeamMemberUtil.getUserEntityByTMId(tm.getMemberId() ); //atm.getUser();
+    User user = PermissionUtil.getUser(scope, tm);
 
     
     

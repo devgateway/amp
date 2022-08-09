@@ -12,7 +12,6 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.gateperm.core.Gate;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
@@ -70,7 +69,7 @@ public abstract class AbstractOrgRoleGate extends Gate {
         if (tm == null) {
             throw new RuntimeException("Team member not found in scope");
         }
-        user = TeamMemberUtil.getUserEntityByTMId(tm.getMemberId());
+        user = PermissionUtil.getUser(scope, tm);
 
         paramRoleCode = parameters.poll().trim();
     }

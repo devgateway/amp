@@ -26,7 +26,10 @@ import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMFieldPermissionViewer;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.user.User;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.Identifiable;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.gateperm.core.ClusterIdentifiable;
 import org.digijava.module.gateperm.core.CompositePermission;
 import org.digijava.module.gateperm.core.Gate;
@@ -642,6 +645,15 @@ public final class PermissionUtil {
         hs.flush();
 
         return null;//mapping.getInputForward();
+    }
+
+    public static User getUser(Map scope, TeamMember teamMember) {
+        User user = (User) scope.get(GatePermConst.ScopeKeys.CURRENT_USER);
+        if (user == null || !user.getId().equals(teamMember.getUserId())) {
+            user = TeamMemberUtil.getUserEntityByTMId(teamMember.getMemberId());
+            scope.put(GatePermConst.ScopeKeys.CURRENT_USER, user);
+        }
+        return user;
     }
 
 }

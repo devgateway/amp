@@ -3,9 +3,9 @@ package org.digijava.module.gateperm.gates;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.gateperm.core.Gate;
 import org.digijava.module.gateperm.core.GatePermConst;
+import org.digijava.module.gateperm.util.PermissionUtil;
 
 
 /**
@@ -27,7 +27,7 @@ public class VerifiedRegionGate extends Gate {
         TeamMember tm = (TeamMember) scope.get(GatePermConst.ScopeKeys.CURRENT_MEMBER);
         if (tm==null) 
             return false; 
-        User user = TeamMemberUtil.getUserEntityByTMId(tm.getMemberId());
+        User user = PermissionUtil.getUser(scope, tm);
 
         //check if the scope has a region in it, if it does use that directly
         if (user.getRegion() != null)

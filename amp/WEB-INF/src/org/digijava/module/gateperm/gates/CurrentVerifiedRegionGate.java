@@ -5,10 +5,10 @@ import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
-import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.gateperm.core.Gate;
 import org.digijava.module.gateperm.core.GatePermConst;
+import org.digijava.module.gateperm.util.PermissionUtil;
 
 
 /**
@@ -32,7 +32,7 @@ public class CurrentVerifiedRegionGate extends Gate {
         TeamMember tm = (TeamMember) scope.get(GatePermConst.ScopeKeys.CURRENT_MEMBER);
         if (tm==null) 
             return false; 
-        User user = TeamMemberUtil.getUserEntityByTMId(tm.getMemberId());
+        User user = PermissionUtil.getUser(scope, tm);
 
         //check if the scope has a region in it, if it does use that directly
         AmpCategoryValueLocations currentLocation = (AmpCategoryValueLocations) scope.get(GatePermConst.ScopeKeys.CURRENT_REGION);

@@ -235,6 +235,8 @@ public class GlobalSettingsConstants {
 
     public static final String MACHINE_TRANSLATION_MAX_CHARACTERS = "Machine Translation Monthly Max Characters";
 
+    public static final String COMPUTED_MANAGEMENT_WORKSPACES = "Computed management workspaces";
+
     /**
      * fields which, although existing in the database, should be rendered with a display: none on the GlobalSettings
      * form so that the user never has a chance of changing their value

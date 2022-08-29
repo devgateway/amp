@@ -116,13 +116,18 @@ Filters.prototype.populateSelectedFilters = function (theDiv, theFilterWidget) {
     var ret = [];
     var filters = theFilterWidget.serializeToModels();
     $.each(filters.filters, function (key, filter) {
-        if (filter.modelType !== 'DATE-RANGE-VALUES') {
-            var filterValues = $.map(filter, function (f, i) {
-                return f.attributes.name;
-            });
-            ret.push(key + ' : [ ' + filterValues.join(',') + ' ] ');
-        } else {
-            ret.push(key + ' : [ ' + filter.start + '-' + filter.end + ' ] ');
+        switch (filter.modelType) {
+            case 'YEAR-SINGLE-VALUE':
+                ret.push(key + ' : [ ' + filter.year + ' ] ');
+                break;
+            case 'DATE-RANGE-VALUES':
+                ret.push(key + ' : [ ' + filter.start + '-' + filter.end + ' ] ');
+                break;
+            default:
+                var filterValues = $.map(filter, function (f, i) {
+                    return f.attributes.name;
+                });
+                ret.push(key + ' : [ ' + filterValues.join(',') + ' ] ');
         }
     });
     $(theDiv).html(ret.join(' |'));

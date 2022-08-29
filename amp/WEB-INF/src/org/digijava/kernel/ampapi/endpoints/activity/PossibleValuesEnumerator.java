@@ -152,7 +152,8 @@ public class PossibleValuesEnumerator {
         try {
             return pvp == null ? Collections.emptyList() : pvp.getPossibleValues(translatorService);
         } catch (Exception e) {
-            throw InterchangeUtils.newServerErrorException("Failed to obtain possible values.", e);
+            throw InterchangeUtils.newServerErrorException(
+                    String.format("Failed to obtain possible values for %s.", longFieldName), e);
         }
     }
 
@@ -168,7 +169,8 @@ public class PossibleValuesEnumerator {
         try {
             return cache.computeIfAbsent(longFieldName, key -> getPossibleValuesForField(longFieldName, apiFields));
         } catch (Exception e) {
-            throw InterchangeUtils.newServerErrorException("Failed to obtain possible values.", e);
+            throw InterchangeUtils.newServerErrorException(
+                    String.format("Failed to obtain possible values for field %s.", longFieldName), e);
         }
     }
 

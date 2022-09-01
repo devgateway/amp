@@ -25,7 +25,8 @@ module.exports = BackboneDash.View.extend({
           this.isRtl = false;
       }
     var valuesLength = this.model.get('values') ? this.model.get('values').length : 0;
-    var height = util.calculateChartHeight(valuesLength, true);
+    var sourceHeight = this.model.get('source') ? 22 : 0;
+    var height = util.calculateChartHeight(valuesLength, true) + sourceHeight;
     this.dashChartOptions = _({}).extend(options.chartOptions, {
       height: height, //450,  // sync with css!!!
       width: $('.container').width(),	// sync with css!!!
@@ -142,15 +143,9 @@ module.exports = BackboneDash.View.extend({
         if (adjType) {
             trnAdjType = this.chart.$el.find('.ftype-options option:selected').text();
         }
-        if (self.isRtl) {
-            moneyContext = currencyName + ' ' + ( this.model.get('sumarizedTotal') !== undefined ?
-                util.translateLanguage(this.model.get('sumarizedTotal')) +' : ' +  ' ': ' ')  ;
-            moneyContext = moneyContext + trnAdjType ;
-        }else{
-            moneyContext = (this.model.get('sumarizedTotal') !== undefined ? ': '
-                + util.translateLanguage(this.model.get('sumarizedTotal')) + ' ': ' ') + currencyName;
-            moneyContext = trnAdjType + moneyContext;
-        }
+        moneyContext = (this.model.get('sumarizedTotal') !== undefined ? ': '
+            + util.translateLanguage(this.model.get('sumarizedTotal')) + ' ': ' ') + currencyName;
+        moneyContext = trnAdjType + moneyContext;
 
         // size the canvas
         canvas.setAttribute('width', w);
@@ -158,6 +153,8 @@ module.exports = BackboneDash.View.extend({
 
         var ctx = canvas.getContext('2d');
         // make the background opaque white
+        ctx.direction = self.isRtl ? 'rtl' : 'ltr';
+        ctx.textAlign='start';
         ctx.beginPath();
         ctx.rect(0, 0, w, h);
         ctx.fillStyle = '#fff';
@@ -168,44 +165,40 @@ module.exports = BackboneDash.View.extend({
         ctx.font = 'bold 22px "Open Sans"';
         var strTitle = this.model.get('title');
         var titleX = 10;
-        var titleAlig='';
         var trnAdustTypeX = 10;
-        var trnAdjustTypeAl='left';
-        var moneyContextX = w - 10;
-        var moneyContextTextAlign='right';
-        var moneyContextTextAlignReset='left';
+        var moneyContextX = w-10;
         if (self.isRtl) {
             //for title
-            titleX = w - strTitle.length;
-            ctx.textAlign = 'right';
+            titleX = w - 10;
             //for adjustment type
             trnAdustTypeX = w - 10;
             //for currency
             moneyContextX = 10;
-            moneyContextTextAlign='left';
-            moneyContextTextAlignReset='left';
         }
-        trnAdjustTypeAl = titleAlig;
         ctx.fillText(strTitle.toUpperCase(), titleX, 10 + 22);
 
-
+        // Add source
+        var source = this.model.get('source');
+        if (source) {
+            ctx.fillStyle = '#000';
+            ctx.font = 'normal 14px "Open Sans"';
+            ctx.fillText(source, titleX, h - 10);
+        }
 
         // what money are we talking about?
         ctx.fillStyle = '#333';
         if (self.model.get('chartType') === 'fragmentation') {
             ctx.font = 'normal 14px "Open Sans"';
-            ctx.textAlign = trnAdjustTypeAl;
             ctx.fillText(trnAdjType, trnAdustTypeX, 50);
         } else {
-            ctx.textAlign = moneyContextTextAlign;
+            ctx.textAlign = 'end';
             ctx.fillText(moneyContext, moneyContextX, 10 + 22);
-            ctx.textAlign = moneyContextTextAlignReset;// reset it
+            ctx.textAlign = 'start';
         }
         // reset font to something normal (nvd3 uses css ugh...)
         ctx.font = 'normal 12px "sans-serif"';
 
 
-        ctx.textAlign='start';
 
         $('.modal.in .modal-dialog').width(w + 60);
     },
@@ -224,25 +217,6 @@ module.exports = BackboneDash.View.extend({
     var boundCB = _(cb).bind(this);
     window.setTimeout(function() {
       this.app.tryTo(function() {
-          //before calling canvas we adjust the text if in rtl mode
-
-          if (this.isRtl) {
-              $('.preview-area .svg-wrap .nv-group .nv-bar text').each(function (index, element) {
-
-                  var NUMERIC_REGEXP = /[-]{0,1}[\d]*[\.]{0,1}[\d]+/;
-                  var STRING_REGEXP = /[^0-9.]/;
-                  if (this.textContent.match(NUMERIC_REGEXP) && this.textContent.match(STRING_REGEXP)) {
-                      var newText = document.createElementNS("http://www.w3.org/2000/svg", "text");
-                      newText.setAttributeNS(null, "x", parseFloat(element.getAttributeNS(null, "x")) - 20);
-                      newText.setAttributeNS(null, "y", element.getAttributeNS(null, "y"));
-                      var textNode = document.createTextNode(this.textContent.match(STRING_REGEXP)[0]);
-                      newText.appendChild(textNode);
-                      this.parentNode.appendChild(newText);
-                      this.textContent = this.textContent.match(NUMERIC_REGEXP)[0];
-                  }
-
-              });
-          }
           canvg(canvas, svg.parentNode.innerHTML, { // note: svg.outerHTML breaks IE
               offsetY: ((self.model.get('chartType') !== 'fragmentation') ? 42 : 65),
               ignoreDimensions: true,

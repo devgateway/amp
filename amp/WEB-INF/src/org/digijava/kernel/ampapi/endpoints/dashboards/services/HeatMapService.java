@@ -98,6 +98,8 @@ public class HeatMapService {
             // transform data
             transform(result);
         }
+
+        result.setSource(DashboardsService.getSource());
         
         return result;
     }

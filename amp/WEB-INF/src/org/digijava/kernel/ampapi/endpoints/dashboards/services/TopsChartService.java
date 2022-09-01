@@ -304,6 +304,7 @@ public class TopsChartService {
         retlist.setTotalPositive(totalPositive);
         retlist.setName(name);
         retlist.setTitle(title);
+        retlist.setSource(DashboardsService.getSource());
         return retlist;
     }
 }

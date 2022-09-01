@@ -11,6 +11,8 @@ public class AidPredictabilityChartData {
 
     private String title;
 
+    private String source;
+
     private String currency;
 
     private String measure;
@@ -65,5 +67,13 @@ public class AidPredictabilityChartData {
 
     public void setTotals(AidPredictabilityAmounts totals) {
         this.totals = totals;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 }

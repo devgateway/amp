@@ -6,6 +6,7 @@ var multibarDebug = require('../../../../../../../reamp/tools/log')("amp:dashboa
 
 var nv = window.nv;  // nvd3 is a pain
 var customizedMultiBarChart = require('./customized/multiBarChart.js');
+const util = require("../../ugly/util");
 // var d3 = require('d3-browserify');
 
 
@@ -20,12 +21,16 @@ function countCategories(data) {
 }
 
 
-function chart(options) {
+function chart(options, data) {
   var maxValue = 10;
     var isRtl = app.generalSettings.attributes['rtl-direction'];
   //this check is needed because I need strictly either 300 or 400 px, and sometimes, when the chart overflows, it
   //will give me >400 px height
   var height = options.height < 400 ? 300 : 400;
+  var calculatedHeight = util.calculateChartHeight(data[0].values.length, false, options.model);
+  if (calculatedHeight !== null) {
+    height = calculatedHeight;
+  }
   multibarDebug.log("Setting multibar height", height);
   var _chart = nv.models.customizedMultiBarChart()  
     .forceY([0, maxValue])  // ensures yAxis is showing at least 0 and 10, but won't restrict the domain

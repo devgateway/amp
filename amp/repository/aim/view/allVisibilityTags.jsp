@@ -56,6 +56,7 @@
 <feature:display name="Location Fragmentation" module="/Dashboards"/>
 <feature:display name="Program Fragmentation" module="/Dashboards"/>
 <feature:display name="NDD Dashboard" module="/Dashboards"/>
+<feature:display name="Source" module="/Dashboards"/>
 
 <module:display name="HELP"></module:display> 
 <module:display name="Issues" parentModule="PROJECT MANAGEMENT"></module:display> 

@@ -16,6 +16,8 @@ public class FundingTypeChartData {
     @ApiModelProperty("title of the report")
     private String title;
 
+    private String source;
+
     private BigDecimal total;
 
     private String sumarizedTotal;
@@ -70,5 +72,13 @@ public class FundingTypeChartData {
 
     public void setValues(List<FundingTypeAmountsForYear> values) {
         this.values = values;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 }

@@ -33,7 +33,6 @@ import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.newreports.TextCell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.amp.OutputSettings;
-import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.dgfoundation.amp.reports.ReportUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.dashboards.DashboardFormParameters;
@@ -49,6 +48,7 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -253,7 +253,21 @@ public class DashboardsService {
         retlist.setName(DashboardConstants.AID_PREDICTABILITY);
         retlist.setTitle(TranslatorWorker.translateText(DashboardConstants.AID_PREDICTABILITY));
         retlist.setMeasure("disbursements");
+        retlist.setSource(getSource());
         return retlist;
+    }
+
+    public static String getSource() {
+        return FeaturesUtil.isVisibleFeature("/Dashboards", "Source")
+                ? buildSource()
+                : null;
+    }
+
+    private static String buildSource() {
+        return String.format("%s: %s - %s",
+                TranslatorWorker.translateText("Source"),
+                TranslatorWorker.translateText("AMP"),
+                TranslatorWorker.translateText(FeaturesUtil.getCurrentCountryName()));
     }
 
     public static ProjectAmounts getAidPredictabilityProjects(DashboardFormParameters filter, String year,
@@ -388,6 +402,7 @@ public class DashboardsService {
 
         retlist.setName(DashboardConstants.FUNDING_TYPE);
         retlist.setTitle(TranslatorWorker.translateText(DashboardConstants.FUNDING_TYPE));
+        retlist.setSource(getSource());
 
         return retlist;
     }

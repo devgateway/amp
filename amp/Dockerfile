@@ -37,15 +37,27 @@ RUN --mount=type=ssh \
 
 FROM tomcat:8.5.79-jdk8
 
+RUN apt-get update \
+    && apt-get install -y apt-transport-https ca-certificates curl gnupg --no-install-recommends \
+    && curl -sSL https://dl.google.com/linux/linux_signing_key.pub | apt-key add - \
+    && echo "deb https://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list \
+    && apt-get update \
+    && apt-get install -y google-chrome-stable fontconfig fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst fonts-symbola fonts-noto fonts-freefont-ttf --no-install-recommends \
+    && apt-get purge --auto-remove -y curl gnupg \
+    && rm -rf /var/lib/apt/lists/*
+
+ENV CHROME_PATH /opt/google/chrome
+ENV CHROME_NO_SANDBOX 1
+
+COPY docker/wait-for-it.sh docker/setenv.sh bin/
+COPY docker/server.xml docker/tomcat-users.xml conf/
+
 ARG AMP_PULL_REQUEST
 ARG AMP_BRANCH
 ARG AMP_REGISTRY_PRIVATE_KEY
 
 LABEL "pull-request"=$AMP_PULL_REQUEST
 LABEL "branch"=$AMP_BRANCH
-
-COPY docker/wait-for-it.sh docker/setenv.sh bin/
-COPY docker/server.xml docker/tomcat-users.xml conf/
 
 ENV AMP_REGISTRY_PRIVATE_KEY $AMP_REGISTRY_PRIVATE_KEY
 

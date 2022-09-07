@@ -72,6 +72,7 @@
 
     <!-- SET to TRACE in order to see queries and their value, INFO is default -->
     <logger name="org.hibernate.type" level="INFO" />
+    <logger name="org.digijava.kernel.ampapi.endpoints.common.print" level="DEBUG" />
 
     <logger name="amp-email" additivity="false" level="DEBUG">
         <appender-ref ref="amp-email" />

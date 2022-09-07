@@ -92,14 +92,15 @@ function printMap(options) {
                   addRtlStyle(document.location.href) +
                   '<link rel="stylesheet" href="' + styleBootstrapThemeLocation + '">' +
                   '<style>' + fontFace + '</style>';
-    var html = "<html><head>" + headers + "</head><body>" + mapContainer[0].outerHTML + "</body></html>";
+    var html = "<html><head>" + headers + "</head><body onload=\"restoreScroll()\">" +
+        "<script>function restoreScroll() {" + script + "}</script>" +
+        mapContainer[0].outerHTML + "</body></html>";
     //console.log(html); Only for Debugging
     $.ajax({
         data: JSON.stringify({
             content: html,
             width: window.innerWidth,
-            height: window.innerHeight,
-            javascript: script
+            height: window.innerHeight
         }),
         contentType: 'application/json',
         headers : {

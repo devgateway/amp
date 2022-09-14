@@ -22,10 +22,11 @@ println "Pull request: ${pr}"
 println "Tag: ${tag}"
 
 def dbVersion
-def pgVersion = 14
 def country
-def ampUrl
-def dockerRepo = "registry.developmentgateway.org/"
+def imageRegistry = "798366298150.dkr.ecr.us-east-1.amazonaws.com"
+def imageName = "${imageRegistry}/amp"
+def imageTag
+def environment = "staging"
 
 def updateGitHubCommitStatus(context, message, state) {
     repoUrl = sh(returnStdout: true, script: "git config --get remote.origin.url").trim()
@@ -48,25 +49,10 @@ def updateGitHubCommitStatus(context, message, state) {
 }
 
 def codeVersion
-def countries
+def countries = "bfaso\nchad\nciv\ndrc\negypt\nethiopia\ngambia\nhaiti\nhonduras\njordan\nkosovo\n" +
+  "kyrgyzstan\nliberia\nmadagascar\nmalawi\nmoldova\nnepal\nniger\nsenegal\ntanzania\ntimor\ntimor\nuganda"
 
 stage('Build') {
-
-    node {
-        checkout scm
-
-        // Find AMP version
-        codeVersion = readMavenPom(file: 'amp/pom.xml').version
-        println "AMP Version: ${codeVersion}"
-
-        countries = sh(returnStdout: true,
-                script: "ssh boad.aws.devgateway.org 'cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort'")
-                .trim()
-        if (countries == "") {
-            println "There are no database backups compatible with ${codeVersion}"
-            currentBuild.result = 'FAILURE'
-        }
-    }
 
     timeout(15) {
         milestone()
@@ -76,19 +62,18 @@ stage('Build') {
         milestone()
     }
 
-    ampUrl = "http://amp-${country}-${tag}.stg.ampsite.net/"
-
     node {
         checkout scm
 
-        def image = "${dockerRepo}amp-webapp:${tag}"
-        def format = branch != null ? "%H" : "%P"
-        def hash = sh(returnStdout: true, script: "git log --pretty=${format} -n 1").trim()
-        sh(returnStatus: true, script: "docker pull ${image} > /dev/null")
-        def imageIds = sh(returnStdout: true, script: "docker images -q -f \"label=git-hash=${hash}\"").trim()
-        sh(returnStatus: true, script: "docker rmi ${image} > /dev/null")
+        // Find AMP version
+        codeVersion = readMavenPom(file: 'amp/pom.xml').version
+        println "AMP Version: ${codeVersion}"
 
-        if (imageIds.equals("")) {
+        def shortHash = sh(returnStdout: true, script: "git rev-parse --short HEAD").trim()
+        imageTag = "${tag}-${shortHash}"
+        def imageRef = "${imageName}:${imageTag}"
+
+        docker.withRegistry("https://${imageRegistry}", 'ecr:us-east-1:aws-ecr-credentials-id') {
             try {
                 updateGitHubCommitStatus('jenkins/build', 'Build in progress', 'PENDING')
 
@@ -97,16 +82,15 @@ stage('Build') {
                         sh "docker build " +
                                 "--progress=plain " +
                                 "--ssh default " +
-                                "-t ${image} " +
+                                "-t ${imageRef} " +
                                 "--build-arg BUILD_SOURCE='${tag}' " +
                                 "--build-arg AMP_PULL_REQUEST='${pr}' " +
                                 "--build-arg AMP_BRANCH='${branch}' " +
                                 "--build-arg AMP_REGISTRY_PRIVATE_KEY='${registryKey}' " +
-                                "--label git-hash='${hash}' " +
                                 "amp"
                     }
                 }
-                sh "docker push ${image} > /dev/null"
+                sh "docker push ${imageRef} > /dev/null"
 
                 updateGitHubCommitStatus('jenkins/build', 'Built successfully', 'SUCCESS')
             } catch (e) {
@@ -114,56 +98,47 @@ stage('Build') {
                 throw e
             } finally {
                 // Cleanup after Docker & Maven
-                sh returnStatus: true, script: "docker rmi ${image}"
+                sh returnStatus: true, script: "docker rmi ${imageRef}"
             }
         }
     }
 }
 
-def deployed = false
-
-// If this stage fails then next stage will retry deployment. Otherwise next stage will be skipped.
 stage('Deploy') {
     node {
-        try {
-            // Find latest database version compatible with ${codeVersion}
-            dbVersion = sh(returnStdout: true, script: "ssh boad.aws.devgateway.org 'cd /opt/amp_dbs && amp-db find ${codeVersion} ${country}'").trim()
+        checkout scm
 
-            // Deploy AMP
-            sh "ssh boad.aws.devgateway.org 'amp-up ${tag} ${country} ${dbVersion} ${pgVersion}'"
-
-            slackSend(channel: 'amp-ci', color: 'good', message: "Deploy AMP - Success\nDeployed ${changePretty} will be ready for testing at ${ampUrl} in about 3 minutes")
-
-            deployed = true
-        } catch (e) {
-            slackSend(channel: 'amp-ci', color: 'warning', message: "Deploy AMP - Failed\nFailed to deploy ${changePretty}")
-
-            currentBuild.result = 'UNSTABLE'
+        docker.withRegistry("https://${imageRegistry}", 'ecr:us-east-1:aws-ecr-credentials-id') {
+            sshagent(credentials: ['GitOpsKey']) {
+                sh "docker run " +
+                  "--rm " +
+                  "-v `pwd`/git-ops-up.sh:/git-ops-up.sh " +
+                  "-v \$(readlink -f \$SSH_AUTH_SOCK):/ssh-agent " +
+                  "-e SSH_AUTH_SOCK=/ssh-agent " +
+                  "${imageRegistry}/gitops-runner " +
+                  "./git-ops-up.sh ${tag} ${country} ${imageTag} ${codeVersion} ${environment}"
+            }
         }
     }
 }
 
-// Retry deploy with the same country.
-stage('Deploy again') {
-    if (deployed) {
-        println 'Already deployed, skipping this step.'
-    } else {
-        timeout(time: 1, unit: 'HOURS') {
-            milestone()
-            input message: "Proceed with repeated deploy for ${country}?"
-            milestone()
-        }
-        node {
-            try {
-                sh "ssh boad.aws.devgateway.org 'amp-up ${tag} ${country} ${dbVersion} ${pgVersion}'"
+stage('Undeploy') {
+    milestone()
+    country = input(message: "Undeploy amp-${tag}-${country}.k8s.dgstg.org?")
+    milestone()
 
-                slackSend(channel: 'amp-ci', color: 'good', message: "Deploy AMP - Success\nDeployed ${changePretty} will be ready for testing at ${ampUrl} in about 3 minutes")
+    node {
+        checkout scm
 
-                currentBuild.result = 'SUCCESS'
-            } catch (e) {
-                slackSend(channel: 'amp-ci', color: 'warning', message: "Deploy AMP - Failed\nFailed to deploy ${changePretty}")
-
-                throw e
+        docker.withRegistry("https://${imageRegistry}", 'ecr:us-east-1:aws-ecr-credentials-id') {
+            sshagent(credentials: ['GitOpsKey']) {
+                sh "docker run " +
+                  "--rm " +
+                  "-v `pwd`/git-ops-down.sh:/git-ops-down.sh " +
+                  "-v \$(readlink -f \$SSH_AUTH_SOCK):/ssh-agent " +
+                  "-e SSH_AUTH_SOCK=/ssh-agent " +
+                  "${imageRegistry}/gitops-runner " +
+                  "./git-ops-down.sh ${tag} ${country}"
             }
         }
     }

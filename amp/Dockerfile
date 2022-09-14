@@ -10,8 +10,8 @@ RUN --mount=type=ssh \
     --mount=type=cache,target=/root/.npm \
     mvn -B test war:exploded \
       -DbuildSource=$BUILD_SOURCE \
-      -Djdbc.user=amp -Djdbc.password=amp122006 -Djdbc.db=amp -Djdbc.host=db \
-      -Djdbc.port=5432 -DdbName=postgresql -Djdbc.driverClassName=org.postgresql.Driver \
+      -Djdbc.user='${dbUser}' -Djdbc.password='${dbPassword}' -Djdbc.db='${dbName}' -Djdbc.host='${dbHost}' \
+      -Djdbc.port='${dbPort}' -DdbName=postgresql -Djdbc.driverClassName=org.postgresql.Driver \
     && mv target/amp exploded \
     && rm -rf target \
         TEMPLATE/ampTemplate/node_modules/amp-boilerplate/node \

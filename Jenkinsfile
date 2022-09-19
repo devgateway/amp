@@ -1,5 +1,7 @@
 #!groovy
 
+import org.jenkinsci.plugins.pipeline.modeldefinition.Utils
+
 // Important: What is BRANCH_NAME?
 // It is branch name for builds triggered from branches.
 // It is PR-<pr-id> for builds triggered from pull requests.
@@ -51,95 +53,112 @@ def updateGitHubCommitStatus(context, message, state) {
 def codeVersion
 def countries = "bfaso\nchad\nciv\ndrc\negypt\nethiopia\ngambia\nhaiti\nhonduras\njordan\nkosovo\n" +
   "kyrgyzstan\nliberia\nmadagascar\nmalawi\nmoldova\nnepal\nniger\nsenegal\ntanzania\ntimor\ntimor\nuganda"
+def action
+
+stage('Init') {
+    milestone()
+    def ret = input(
+        parameters: [
+            choice(choices: ['deploy', 'undeploy'], name: 'action'),
+            text(name: 'tag',
+                defaultValue: tag,
+                description: 'Override the tag to undeploy an arbitrary AMP instance.',
+                trim: true),
+            choice(choices: countries, name: 'country'),
+        ])
+    country = ret.country
+    action = ret.action
+    tag = ret.tag
+    milestone()
+}
 
 stage('Build') {
+    if (action == 'deploy') {
+        node {
+            checkout scm
 
-    timeout(15) {
-        milestone()
-        country = input(
-                message: "Proceed with build and deploy?",
-                parameters: [choice(choices: countries, name: 'country')])
-        milestone()
-    }
+            // Find AMP version
+            codeVersion = readMavenPom(file: 'amp/pom.xml').version
+            println "AMP Version: ${codeVersion}"
 
-    node {
-        checkout scm
+            def shortHash = sh(returnStdout: true, script: "git rev-parse --short HEAD").trim()
+            imageTag = "${tag}-${shortHash}"
+            def imageRef = "${imageName}:${imageTag}"
 
-        // Find AMP version
-        codeVersion = readMavenPom(file: 'amp/pom.xml').version
-        println "AMP Version: ${codeVersion}"
+            docker.withRegistry("https://${imageRegistry}", 'ecr:us-east-1:aws-ecr-credentials-id') {
+                try {
+                    updateGitHubCommitStatus('jenkins/build', 'Build in progress', 'PENDING')
 
-        def shortHash = sh(returnStdout: true, script: "git rev-parse --short HEAD").trim()
-        imageTag = "${tag}-${shortHash}"
-        def imageRef = "${imageName}:${imageTag}"
-
-        docker.withRegistry("https://${imageRegistry}", 'ecr:us-east-1:aws-ecr-credentials-id') {
-            try {
-                updateGitHubCommitStatus('jenkins/build', 'Build in progress', 'PENDING')
-
-                sshagent(credentials: ['GitHubDgReadOnlyKey']) {
-                    withEnv(['DOCKER_BUILDKIT=1']) {
-                        sh "docker build " +
-                                "--progress=plain " +
-                                "--ssh default " +
-                                "-t ${imageRef} " +
-                                "--build-arg BUILD_SOURCE='${tag}' " +
-                                "--build-arg AMP_PULL_REQUEST='${pr}' " +
-                                "--build-arg AMP_BRANCH='${branch}' " +
-                                "--build-arg AMP_REGISTRY_PRIVATE_KEY='${registryKey}' " +
-                                "amp"
+                    sshagent(credentials: ['GitHubDgReadOnlyKey']) {
+                        withEnv(['DOCKER_BUILDKIT=1']) {
+                            sh "docker build " +
+                                    "--progress=plain " +
+                                    "--ssh default " +
+                                    "-t ${imageRef} " +
+                                    "--build-arg BUILD_SOURCE='${tag}' " +
+                                    "--build-arg AMP_PULL_REQUEST='${pr}' " +
+                                    "--build-arg AMP_BRANCH='${branch}' " +
+                                    "--build-arg AMP_REGISTRY_PRIVATE_KEY='${registryKey}' " +
+                                    "amp"
+                        }
                     }
-                }
-                sh "docker push ${imageRef} > /dev/null"
+                    sh "docker push ${imageRef} > /dev/null"
 
-                updateGitHubCommitStatus('jenkins/build', 'Built successfully', 'SUCCESS')
-            } catch (e) {
-                updateGitHubCommitStatus('jenkins/build', 'Build failed', 'ERROR')
-                throw e
-            } finally {
-                // Cleanup after Docker & Maven
-                sh returnStatus: true, script: "docker rmi ${imageRef}"
+                    updateGitHubCommitStatus('jenkins/build', 'Built successfully', 'SUCCESS')
+                } catch (e) {
+                    updateGitHubCommitStatus('jenkins/build', 'Build failed', 'ERROR')
+                    throw e
+                } finally {
+                    // Cleanup after Docker & Maven
+                    sh returnStatus: true, script: "docker rmi ${imageRef}"
+                }
             }
         }
+    } else {
+        Utils.markStageSkippedForConditional('Build')
     }
 }
 
 stage('Deploy') {
-    node {
-        checkout scm
+    if (action == 'deploy') {
+        node {
+            checkout scm
 
-        docker.withRegistry("https://${imageRegistry}", 'ecr:us-east-1:aws-ecr-credentials-id') {
-            sshagent(credentials: ['GitOpsKey']) {
-                sh "docker run " +
-                  "--rm " +
-                  "-v `pwd`/git-ops-up.sh:/git-ops-up.sh " +
-                  "-v \$(readlink -f \$SSH_AUTH_SOCK):/ssh-agent " +
-                  "-e SSH_AUTH_SOCK=/ssh-agent " +
-                  "${imageRegistry}/gitops-runner " +
-                  "./git-ops-up.sh ${tag} ${country} ${imageTag} ${codeVersion} ${environment}"
+            docker.withRegistry("https://${imageRegistry}", 'ecr:us-east-1:aws-ecr-credentials-id') {
+                sshagent(credentials: ['GitOpsKey']) {
+                    sh "docker run " +
+                      "--rm " +
+                      "-v `pwd`/git-ops-up.sh:/git-ops-up.sh " +
+                      "-v \$(readlink -f \$SSH_AUTH_SOCK):/ssh-agent " +
+                      "-e SSH_AUTH_SOCK=/ssh-agent " +
+                      "${imageRegistry}/gitops-runner " +
+                      "./git-ops-up.sh ${tag} ${country} ${imageTag} ${codeVersion} ${environment}"
+                }
             }
         }
+    } else {
+        Utils.markStageSkippedForConditional('Deploy')
     }
 }
 
 stage('Undeploy') {
-    milestone()
-    country = input(message: "Undeploy amp-${tag}-${country}.k8s.dgstg.org?")
-    milestone()
+    if (action == 'undeploy') {
+        node {
+            checkout scm
 
-    node {
-        checkout scm
-
-        docker.withRegistry("https://${imageRegistry}", 'ecr:us-east-1:aws-ecr-credentials-id') {
-            sshagent(credentials: ['GitOpsKey']) {
-                sh "docker run " +
-                  "--rm " +
-                  "-v `pwd`/git-ops-down.sh:/git-ops-down.sh " +
-                  "-v \$(readlink -f \$SSH_AUTH_SOCK):/ssh-agent " +
-                  "-e SSH_AUTH_SOCK=/ssh-agent " +
-                  "${imageRegistry}/gitops-runner " +
-                  "./git-ops-down.sh ${tag} ${country}"
+            docker.withRegistry("https://${imageRegistry}", 'ecr:us-east-1:aws-ecr-credentials-id') {
+                sshagent(credentials: ['GitOpsKey']) {
+                    sh "docker run " +
+                      "--rm " +
+                      "-v `pwd`/git-ops-down.sh:/git-ops-down.sh " +
+                      "-v \$(readlink -f \$SSH_AUTH_SOCK):/ssh-agent " +
+                      "-e SSH_AUTH_SOCK=/ssh-agent " +
+                      "${imageRegistry}/gitops-runner " +
+                      "./git-ops-down.sh ${tag} ${country}"
+                }
             }
         }
+    } else {
+        Utils.markStageSkippedForConditional('Undeploy')
     }
 }

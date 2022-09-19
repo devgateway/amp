@@ -11,5 +11,5 @@ trap "rm -rf $tmpdir" EXIT
 git clone git@github.com:devgateway/amp-gitops.git $tmpdir
 cd $tmpdir
 ./up.sh $@
-git commit -m "up $SOURCE $COUNTRY"
+git commit -m "up $SOURCE $COUNTRY" --allow-empty
 git push

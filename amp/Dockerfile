@@ -52,6 +52,10 @@ ENV CHROME_NO_SANDBOX 1
 COPY docker/wait-for-it.sh docker/setenv.sh bin/
 COPY docker/server.xml docker/tomcat-users.xml conf/
 
+RUN rm -fr /usr/local/tomcat/webapps/ROOT
+
+ENV AMP_REGISTRY_PRIVATE_KEY $AMP_REGISTRY_PRIVATE_KEY
+
 ARG AMP_PULL_REQUEST
 ARG AMP_BRANCH
 ARG AMP_REGISTRY_PRIVATE_KEY
@@ -59,7 +63,4 @@ ARG AMP_REGISTRY_PRIVATE_KEY
 LABEL "pull-request"=$AMP_PULL_REQUEST
 LABEL "branch"=$AMP_BRANCH
 
-ENV AMP_REGISTRY_PRIVATE_KEY $AMP_REGISTRY_PRIVATE_KEY
-
-RUN rm -fr /usr/local/tomcat/webapps/ROOT
 COPY --from=compile /tmp/amp/exploded /usr/local/tomcat/webapps/ROOT/

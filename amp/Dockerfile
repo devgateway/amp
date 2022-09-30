@@ -54,6 +54,8 @@ COPY docker/server.xml docker/tomcat-users.xml conf/
 
 RUN rm -fr /usr/local/tomcat/webapps/ROOT
 
+COPY --from=compile /tmp/amp/exploded/WEB-INF/lib /usr/local/tomcat/webapps/ROOT/WEB-INF/lib
+
 ENV AMP_REGISTRY_PRIVATE_KEY $AMP_REGISTRY_PRIVATE_KEY
 
 ARG AMP_PULL_REQUEST

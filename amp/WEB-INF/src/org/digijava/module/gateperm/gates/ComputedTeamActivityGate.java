@@ -97,7 +97,6 @@ public class ComputedTeamActivityGate extends Gate {
         //      .getMemberId());
         
         //AmpTeamMember atm=TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
-        User user = TeamMemberUtil.getUserEntityByTMId(tm.getMemberId());//atm.getUser();
 
         Set relatedTeamsForMember = TeamUtil.getRelatedTeamsForMember(tm);
         Set computedOrgs = TeamUtil.getComputedOrgs(relatedTeamsForMember);

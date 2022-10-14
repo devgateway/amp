@@ -13,7 +13,7 @@ class FundingTypeSelector extends Component {
     const { dashboardSettings, onChange, defaultValue } = this.props;
     const options = dashboardSettings.find(s => s.id === 'funding-type');
     return (
-      <form className="form-inline dash-form dash-adj-type" role="form">
+      <form className="form-inline dash-form dash-adj-type">
         <select
           defaultValue={defaultValue}
           className="form-control like-btn-sm ftype-options"

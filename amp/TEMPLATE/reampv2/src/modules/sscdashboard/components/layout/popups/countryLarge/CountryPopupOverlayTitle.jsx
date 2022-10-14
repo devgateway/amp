@@ -22,7 +22,7 @@ const CountryPopupOverlayTitle = ({ countriesMessage, updateCountriesMessage }) 
       }
     }, 10000);
     return () => clearTimeout(timer);
-  }, []);
+  }, [show, updateCountriesMessage]);
   return (
     <div>
       {!show && (<h2>&nbsp;</h2>)}

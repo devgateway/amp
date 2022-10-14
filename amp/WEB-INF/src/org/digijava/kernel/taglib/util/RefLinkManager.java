@@ -22,9 +22,6 @@
 
 package org.digijava.kernel.taglib.util;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.cache.AbstractCache;
 import org.digijava.kernel.request.Site;
@@ -33,6 +30,9 @@ import org.digijava.kernel.util.I18NHelper;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.viewmanager.ViewConfig;
 import org.digijava.kernel.viewmanager.ViewConfigFactory;
+
+import javax.servlet.http.HttpServletRequest;
+import java.text.MessageFormat;
 
 /**
  * <p>Title: DiGiJava</p>
@@ -58,7 +58,7 @@ public class RefLinkManager {
                     getClass().getName());
             // if set debug mode then print out
             if (logger.isDebugEnabled()) {
-                logger.l7dlog(Level.DEBUG, "RefLinkManager.initialize", null, null);
+                logger.debug("Initialize RefLinkManager JCS Cache");
             }
 
         }
@@ -144,8 +144,7 @@ Exception {
         else {
             // if set debug mode then print out
             if (logger.isDebugEnabled()) {
-                Object[] params = {refLink.getPath(), id};
-                logger.l7dlog(Level.DEBUG, "RefLinkManager.getFileFromCache", params, null);
+                logger.debug(MessageFormat.format("Get file path from cache {0} {1}", refLink.getPath(), id));
             }
         }
 
@@ -201,8 +200,7 @@ Exception {
         else {
             // if set debug mode then print out
             if (logger.isDebugEnabled()) {
-                Object[] params = {refLink.getPath(), id};
-                logger.l7dlog(Level.DEBUG, "RefLinkManager.getPageFromCache", params, null);
+                logger.debug(MessageFormat.format("Get page path from cache {0} {1}", refLink.getPath(), id));
             }
         }
 
@@ -232,9 +230,7 @@ Exception {
         else {
             // if set debug mode then print out
             if (logger.isDebugEnabled()) {
-                Object[] params = {
-                    refLink.getPath()};
-                logger.l7dlog(Level.DEBUG, "RefLinkManager.getFromCache", params, null);
+                logger.debug("Get file from cache " + refLink.getPath());
             }
         }
 
@@ -314,11 +310,8 @@ Exception {
 
                         // if set debug mode then print out
                         if (logger.isDebugEnabled()) {
-                            Object[] params = {
-                                refLink.getPath(),
-                                new Integer(0)};
-                            logger.l7dlog(Level.DEBUG,
-                                          "RefLinkManager.putInCache", params, null);
+                            logger.debug(MessageFormat.format("Put file in cache {0}, cache size {1}",
+                                    refLink.getPath(), 0));
                         }
                     }
                 }
@@ -327,20 +320,14 @@ Exception {
 
                 // if set debug mode then print out
                 if (logger.isDebugEnabled()) {
-                    Object[] params = {
-                        ex.getMessage()};
-                    logger.l7dlog(Level.ERROR, "RefLinkManager.exception",
-                                  params, null);
+                    logger.error("Exception " + ex.getMessage());
                 }
             }
         }
         catch (Exception ex) {
             // if set debug mode then print out
             if (logger.isDebugEnabled()) {
-                Object[] params = {
-                    ex.getMessage()};
-                logger.l7dlog(Level.ERROR, "RefLinkManager.exception", params,
-                              ex);
+                logger.error("Exception " + ex.getMessage());
             }
         }
 

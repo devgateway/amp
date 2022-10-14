@@ -151,7 +151,7 @@ public class AmpEstimatedDonorDisbursementsFormTableFeature extends
             }
         };
         add(list);
-        
+        addExpandableList();
         
         
     }

@@ -10,14 +10,9 @@ import org.dgfoundation.amp.ar.dbentity.FilterDataSetInterface;
 import org.dgfoundation.amp.error.CurrentReportContextIdException;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.ar.util.FilterUtil;
-import org.digijava.module.aim.ar.util.ReportFilterFormUtil;
-import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.FormatHelper;
-import org.digijava.module.aim.util.CurrencyUtil;
-
-import bsh.org.objectweb.asm.Constants;
 
 /**
  * holds all the information (AmpReports instance + extra information) needed to generate and render a report<br />

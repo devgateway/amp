@@ -50,6 +50,8 @@ public class HeatMap {
     @ApiModelProperty("Heat map matrix. Size: yCount by xCount.")
     private El[][] matrix;
 
+    private String source;
+
     public static class El {
 
         @ApiModelProperty("Displayed value")
@@ -193,5 +195,13 @@ public class HeatMap {
 
     public void setSummary(List<String> summary) {
         this.summary = summary;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 }

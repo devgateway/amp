@@ -32,6 +32,7 @@ public interface FundingInformationItem {
     public Long getDbId();
     public void setTransactionAmount(Double transactionAmount);
     public Boolean getDisasterResponse();
+    String getDisbursementId();
     public AmpCategoryValue getExpenditureClass();
     
     //method used to detect if the record has changed while editing an activity

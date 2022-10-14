@@ -62,6 +62,7 @@ public final class GatePermConst {
         public static final MetaInfo PERMISSIBLE=new MetaInfo("permissible","object to which the gate is associated");
         public static final MetaInfo ACTIVITY=new MetaInfo("activity","the currently edited activity");
         public static final MetaInfo CURRENT_MEMBER= new MetaInfo("currentMember","TeamMember object for the currently logged in user");
+        public static final MetaInfo CURRENT_USER= new MetaInfo("currentUser","User object for the currently logged in user");
         public static final MetaInfo CURRENT_ORG= new MetaInfo("currentOrg","Current displayed organisation");
         public static final MetaInfo CURRENT_ORG_ROLE= new MetaInfo("currentOrgRole","Current displayed organisation role as string");
         public static final MetaInfo CURRENT_DONOR_ORGANISATION = new MetaInfo("currentDonorOrganisation",

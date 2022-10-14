@@ -194,7 +194,7 @@ public class PossibleValuesEnumeratorTest {
             fail();
         } catch (ApiRuntimeException e) {
             assertErrorJsonEquals(e.getError(),
-                    "{\"error\":{\"0001\":[\"(Internal Error) Failed to obtain possible values.\"]}}");
+                    "{\"error\":{\"0001\":[\"(Internal Error) Failed to obtain possible values for field.\"]}}");
         }
     }
 

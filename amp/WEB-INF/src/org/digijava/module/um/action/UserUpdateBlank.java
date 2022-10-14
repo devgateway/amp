@@ -70,8 +70,7 @@ public class UserUpdateBlank
         UserUpdateForm userRegisterForm = (UserUpdateForm) form;
 
         if (userRegisterForm == null) {
-            String debugKey = "Module.Um.UserRegisterAction.formnull";
-            logger.l7dlog(Level.WARN, debugKey, null, null);
+            logger.warn("UserRegisterForm is null");
         }
 
         // get user object from session

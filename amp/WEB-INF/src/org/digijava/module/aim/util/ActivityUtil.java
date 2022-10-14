@@ -41,7 +41,6 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.admin.helper.AmpActivityFake;
-import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
@@ -601,24 +600,16 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         }
         return organisation;
       }
-  
-  public static int getFundingByOrgCount(Long id) {
-        Session session = null;
-        int orgrolesCount = 0;
-        try {
-          session = PersistenceManager.getSession();
-          String queryString = "select count(*) from " + AmpFunding.class.getName() +" f, "
-                  + AmpActivity.class.getName() + " a "
-                  + "where f.ampActivityId=a.ampActivityId and (f.ampDonorOrgId=:orgId)";
-          Query qry = session.createQuery(queryString);
-          qry.setParameter("orgId", id, LongType.INSTANCE);
-          orgrolesCount = (Integer)qry.uniqueResult();
-        }
-        catch (Exception ex) {
-          logger.error("Unable to get fundings for organization :" + ex);
-        }
-        return orgrolesCount;
-      }
+
+    public static List<String> getAmpIdsByFundingOrg(Long id) {
+        String queryString = "select a.ampId "
+                + "from " + AmpFunding.class.getName() + " f, " + AmpActivity.class.getName() + " a "
+                + "where f.ampActivityId=a.ampActivityId "
+                + "and (f.ampDonorOrgId=:orgId)";
+        Query qry = PersistenceManager.getSession().createQuery(queryString);
+        qry.setParameter("orgId", id, LongType.INSTANCE);
+        return (List<String>) qry.list();
+    }
 
   public static Collection<Components> getAllComponents(Long id) {
     Collection<Components> componentsCollection = new ArrayList<Components>();

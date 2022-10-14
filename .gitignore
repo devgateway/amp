@@ -1,14 +1,7 @@
 amp/TEMPLATE/ampTemplate/node_modules/amp-settings/dist/
 amp/TEMPLATE/ampTemplate/node_modules/amp-settings/src/compiled-css/amp-settings.css
 amp/TEMPLATE/ampTemplate/node_modules/amp-settings/src/compiled-js/amp-settings.js
-amp/TEMPLATE/reamp/modules/gpi-reports/script.min.js
-amp/TEMPLATE/reamp/modules/gpi-data/script.min.js
-amp/TEMPLATE/reamp/modules/admin/resource-manager-admin/script.min.js
-amp/TEMPLATE/reamp/modules/admin/data-freeze-manager/script.min.js
-amp/TEMPLATE/reamp/modules/admin/dashboard/script.min.js
-amp/TEMPLATE/reamp/modules/admin/currency/deflator/script.min.js
 amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/src/compiled-js/amp-boilerplate.js
-amp/TEMPLATE/reamp/node/
 amp/TEMPLATE/ampTemplate/node_modules_10/
 amp/TEMPLATE/ampTemplate/node_modules/amp-filter/node/node_modules/
 amp/TEMPLATE/ampTemplate/node_modules/amp-filter/node/
@@ -18,7 +11,6 @@ amp/TEMPLATE/ampTemplate/node_modules/amp-filter/dist/amp-filter.css
 amp/TEMPLATE/ampTemplate/node_modules/amp-filter/src/compiled-css/amp-filter.css
 amp/TEMPLATE/ampTemplate/node_modules/amp-filter/src/compiled-js/amp-filter.js
 amp/TEMPLATE/ampTemplate/node_modules/amp-filter/dist/amp-filter.js
-amp/TEMPLATE/reamp/modules/admin/performance-alert-manager/script.min.js
 amp/TEMPLATE/ampTemplate/node_modules/amp-state/node/
 amp/TEMPLATE/ampTemplate/node_modules/amp-translate/node/
 amp/TEMPLATE/ampTemplate/node_modules/amp-translate/node_modules/

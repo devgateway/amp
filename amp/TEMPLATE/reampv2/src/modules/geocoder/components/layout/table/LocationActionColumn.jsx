@@ -34,6 +34,7 @@ class LocationActionColumn extends Component {
                     <ul>
                         <li>
                             <OverlayTrigger placement="top" overlay={renderAcceptTooltip}>
+                                {/*eslint-disable-next-line jsx-a11y/anchor-is-valid*/}
                                 <a href="#" title="accept" onClick={e => handleAcceptLocation(e, this.props.location.id)}>
                                     <FontAwesomeIcon className={'fa-icon fa-2x'} icon={faCheckCircle}/>
                                     <span>{translations['amp.geocoder:locationAccept']}</span>
@@ -43,6 +44,7 @@ class LocationActionColumn extends Component {
 
                         <li>
                             <OverlayTrigger placement="top" overlay={renderRejectTooltip}>
+                                {/*eslint-disable-next-line jsx-a11y/anchor-is-valid*/}
                                 <a href="#" title="reject" onClick={e => handleRejectLocation(e, this.props.location.id)}>
                                     <FontAwesomeIcon className={'fa-icon fa-2x'} icon={faTimesCircle}/>
                                     <span>{translations['amp.geocoder:locationReject']}</span>

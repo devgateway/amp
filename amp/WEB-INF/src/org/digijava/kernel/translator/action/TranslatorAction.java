@@ -22,14 +22,6 @@
 
 package org.digijava.kernel.translator.action;
 
-import java.io.IOException;
-
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -41,6 +33,12 @@ import org.digijava.kernel.translator.form.TranslatorForm;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.I18NHelper;
 import org.digijava.kernel.util.RequestUtils;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /* Controller Class that's called by Struts or Tiles ActionServlet... See the definitions in
  * struts-config.xml under /Web-INF/
@@ -74,12 +72,7 @@ public class TranslatorAction extends Action {
         HttpServletResponse response)
         throws IOException, ServletException {
         if (logger.isDebugEnabled()) {
-            Object[] param = { "TranslatorAction", "execute()" };
-            logger.l7dlog(
-                Level.DEBUG,
-                "ActionClass.MethodEnter.db",
-                param,
-                null);
+            logger.debug("ActionClass.MethodEnter.db { \"TranslatorAction\", \"execute()\" }");
         }
         ServletContext context = getServlet().getServletContext();
         TranslatorForm tForm = (TranslatorForm) form;
@@ -137,19 +130,11 @@ public class TranslatorAction extends Action {
             }
 
         } catch (Exception e) {
-
-            Object[] param = { "TranslatorAction" };
-            logger.l7dlog(Level.ERROR, "ActionClass.Exception.err", param, e);
-
+            logger.error("ActionClass.Exception.err { \"TranslatorAction\" }");
         }
 
         if (logger.isDebugEnabled()) {
-            Object[] param = { "TranslatorLocaleUpdate", "execute()" };
-            logger.l7dlog(
-                Level.DEBUG,
-                "ActionClass.MethodReturn.db",
-                param,
-                null);
+            logger.debug("ActionClass.MethodReturn.db { \"TranslatorLocaleUpdate\", \"execute()\" }");
         }
         return new ActionForward(request.getParameter("back_url"), true);
 

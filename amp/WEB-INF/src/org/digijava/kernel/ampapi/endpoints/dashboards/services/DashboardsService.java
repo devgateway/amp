@@ -33,7 +33,6 @@ import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.newreports.TextCell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.amp.OutputSettings;
-import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.dgfoundation.amp.reports.ReportUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.dashboards.DashboardFormParameters;
@@ -49,10 +48,13 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+
+import static org.dgfoundation.amp.nireports.runtime.ColumnReportData.UNALLOCATED_ID;
 
 /**
  *
@@ -92,7 +94,7 @@ public class DashboardsService {
     public static LinkedHashMap<String, Object> setFilterId(Long id, String column) {
         LinkedHashMap<String, Object> filterObject = new LinkedHashMap<String, Object>();
         List<Long> filterIds = new ArrayList<Long>();
-        if (id >0) {
+        if (id > 0 || id.equals(UNALLOCATED_ID)) {
             filterIds.add(id);
             filterObject.put(column, filterIds);
         }
@@ -130,7 +132,7 @@ public class DashboardsService {
         for (ReportArea ra : report.reportContents.getChildren()) {
             // detect those undefined for countries, but skip those that are really undefined for regions
             if (ra.getOwner() != null && ra.getOwner().id < 0
-                    && (ra.getOwner().id != ColumnReportData.UNALLOCATED_ID)) {
+                    && (ra.getOwner().id != UNALLOCATED_ID)) {
                 undefinedAreas.add(ra);
             }
         }
@@ -251,7 +253,21 @@ public class DashboardsService {
         retlist.setName(DashboardConstants.AID_PREDICTABILITY);
         retlist.setTitle(TranslatorWorker.translateText(DashboardConstants.AID_PREDICTABILITY));
         retlist.setMeasure("disbursements");
+        retlist.setSource(getSource());
         return retlist;
+    }
+
+    public static String getSource() {
+        return FeaturesUtil.isVisibleFeature("/Dashboards", "Source")
+                ? buildSource()
+                : null;
+    }
+
+    private static String buildSource() {
+        return String.format("%s: %s - %s",
+                TranslatorWorker.translateText("Source"),
+                TranslatorWorker.translateText("AMP"),
+                TranslatorWorker.translateText(FeaturesUtil.getCurrentCountryName()));
     }
 
     public static ProjectAmounts getAidPredictabilityProjects(DashboardFormParameters filter, String year,
@@ -386,6 +402,7 @@ public class DashboardsService {
 
         retlist.setName(DashboardConstants.FUNDING_TYPE);
         retlist.setTitle(TranslatorWorker.translateText(DashboardConstants.FUNDING_TYPE));
+        retlist.setSource(getSource());
 
         return retlist;
     }

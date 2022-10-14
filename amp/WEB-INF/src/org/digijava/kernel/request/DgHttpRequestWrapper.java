@@ -374,4 +374,19 @@ public class DgHttpRequestWrapper
         return request.getRemotePort();
     }
 
+    @Override
+    public String changeSessionId() {
+        return request.changeSessionId();
+    }
+
+    @Override
+    public <T extends HttpUpgradeHandler> T upgrade(
+            Class<T> httpUpgradeHandlerClass) throws IOException, ServletException {
+        return request.upgrade(httpUpgradeHandlerClass);
+    }
+
+    @Override
+    public long getContentLengthLong() {
+        return request.getContentLengthLong();
+    }
 }

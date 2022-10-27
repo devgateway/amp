@@ -16,6 +16,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.errors.GenericErrors;
+import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -74,9 +75,8 @@ public final class ActivityInterchangeUtils {
             ActivityImportRules rules, String endpointContextPath) {
         
         // Load the enumerator for the FM template associated to the activity's workspace (AMPOFFLINE-1562)
-        APIField activityField = null;
-        Workspace team = TeamUtil.getWorkspace(Long.parseLong(newJson.get("team").toString()));
-        Long fmId = team.getFmTemplate() != null ? team.getFmTemplate().getId() : null;
+        APIField activityField;
+        Long fmId = getFMTemplateId(newJson);
         if (fmId != null) {
             activityField = AmpFieldsEnumerator.getEnumerator(fmId).getActivityField();
         } else {
@@ -88,6 +88,14 @@ public final class ActivityInterchangeUtils {
         return new ActivityImporter(activityField, rules)
                 .importOrUpdate(newJson, update, endpointContextPath, sourceURL.toString())
                 .getResult();
+    }
+
+    private static Long getFMTemplateId(Map<String, Object> newJson) {
+        if (AmpClientModeHolder.isOfflineClient()) {
+            Workspace team = TeamUtil.getWorkspace(Long.parseLong(newJson.get("team").toString()));
+            return team.getFmTemplate() != null ? team.getFmTemplate().getId() : null;
+        }
+        return null;
     }
 
     /**

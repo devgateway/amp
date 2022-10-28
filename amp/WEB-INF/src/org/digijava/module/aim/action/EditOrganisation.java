@@ -103,14 +103,13 @@ public class EditOrganisation extends DispatchAction {
       }
       return false;
   }
-  
-  @Override
-  protected ActionForward unspecified(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception {
-      if (sessionChk(request)) {
-          return mapping.findForward("index");
-      }
-      return create(mapping, form, request, response);
-  }
+
+    @Override
+    protected ActionForward unspecified(
+            ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+        return mapping.findForward(sessionChk(request) ? "index" : "added");
+    }
   
   public ActionForward create(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
       if (sessionChk(request)) {

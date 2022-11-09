@@ -1199,7 +1199,7 @@
                 </executions>
             </plugin>
 
-            <!-- Integrate Gulp with Maven -->
+            <!-- Integrate node.js with Maven -->
             <plugin>
                 <groupId>com.github.eirslett</groupId>
                 <artifactId>frontend-maven-plugin</artifactId>
@@ -1208,277 +1208,229 @@
                     <nodeVersion>v16.4.0</nodeVersion>
                 </configuration>
                 <executions>
-                    <!-- Installing node and npm  for GIS-->
                     <execution>
-                        <!-- optional: you don't really need execution ids, but it looks nice in your build log. -->
                         <id>install node and npm for GIS</id>
                         <goals>
                             <goal>install-node-and-npm</goal>
                         </goals>
-                        <!-- optional: default phase is "generate-resources" -->
                         <phase>process-resources</phase>
                         <configuration>
                              <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
-                        <!-- optional: you don't really need execution ids, but it looks nice in your build log. -->
                         <id>install node and npm for Dashboards</id>
                         <goals>
                             <goal>install-node-and-npm</goal>
                         </goals>
-                        <!-- optional: default phase is "generate-resources" -->
                         <phase>process-resources</phase>
                         <configuration>
                             <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/dashboard/dev</workingDirectory>
                         </configuration>
                     </execution>
-                    <!-- Installing node and npm  for amp-state-->
                     <execution>
-                        <!-- optional: you don't really need execution ids, but it looks nice in your build log. -->
                         <id>install node and npm for amp-state</id>
                         <goals>
                             <goal>install-node-and-npm</goal>
                         </goals>
-                        <!-- optional: default phase is "generate-resources" -->
                         <phase>process-resources</phase>
                         <configuration>
                              <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-state</workingDirectory>
                         </configuration>
                     </execution>
-                    <!-- Running npm for amp-state-->
                     <execution>
-                        <id>npm install for amp-state</id>
+                        <id>npm ci for amp-state</id>
                         <goals>
                             <goal>npm</goal>
                         </goals>
-                        <!-- optional: default phase is "generate-resources" -->
                         <phase>process-resources</phase>
                         <configuration>
                             <arguments>ci</arguments>
                			    <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-state</workingDirectory>
                         </configuration>
                     </execution>
-                    <!-- Installing node and npm  for amp-translate-->
                     <execution>
-                        <!-- optional: you don't really need execution ids, but it looks nice in your build log. -->
                         <id>install node and npm for amp-translate</id>
                         <goals>
                             <goal>install-node-and-npm</goal>
                         </goals>
-                        <!-- optional: default phase is "generate-resources" -->
                         <phase>process-resources</phase>
                         <configuration>
                              <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-translate</workingDirectory>
                         </configuration>
                     </execution>
-                    <!-- Running npm for amp-translate-->
                     <execution>
-                        <id>npm install for amp-translate</id>
+                        <id>npm ci for amp-translate</id>
                         <goals>
                             <goal>npm</goal>
                         </goals>
-                        <!-- optional: default phase is "generate-resources" -->
                         <phase>process-resources</phase>
                         <configuration>
                             <arguments>ci</arguments>
                			    <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-translate</workingDirectory>
                         </configuration>
                     </execution>
-                    <!-- Installing node and npm  for amp-boilerplate-->
                     <execution>
-                        <!-- optional: you don't really need execution ids, but it looks nice in your build log. -->
                         <id>install node and npm for amp-boilerplate</id>
                         <goals>
                             <goal>install-node-and-npm</goal>
                         </goals>
-                        <!-- optional: default phase is "generate-resources" -->
                         <phase>process-resources</phase>
                         <configuration>
                              <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-boilerplate</workingDirectory>
                         </configuration>
                     </execution>
-                    <!-- Running npm for amp-boilerplate-->
                     <execution>
-                        <id>npm install for amp-boilerplate</id>
+                        <id>npm ci for amp-boilerplate</id>
                         <goals>
                             <goal>npm</goal>
                         </goals>
-                        <!-- optional: default phase is "generate-resources" -->
                         <phase>process-resources</phase>
                         <configuration>
                             <arguments>ci</arguments>
                			    <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-boilerplate</workingDirectory>
                         </configuration>
                     </execution>
-                    <!-- Running gulp for amp-boilerplate-->
                     <execution>
-                        <id>gulp build for amp-boilerplate</id>
+                        <id>npm run build for amp-boilerplate</id>
                         <goals>
-                            <goal>gulp</goal>
+                            <goal>npm</goal>
                         </goals>
                         <phase>process-resources</phase>
                         <configuration>
-                            <arguments>build</arguments>
+                            <arguments>run build</arguments>
                				<workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-boilerplate</workingDirectory>
                         </configuration>
                     </execution>
-                    <!-- Installing node and npm  for amp-filter-->
                     <execution>
-                        <!-- optional: you don't really need execution ids, but it looks nice in your build log. -->
                         <id>install node and npm for amp-filter</id>
                         <goals>
                             <goal>install-node-and-npm</goal>
                         </goals>
-                        <!-- optional: default phase is "generate-resources" -->
                         <phase>process-resources</phase>
                         <configuration>
                              <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-filter</workingDirectory>
                         </configuration>
                     </execution>
-                    <!-- Running npm for amp-filter-->
                     <execution>
-                        <id>npm install for amp-filter</id>
+                        <id>npm ci for amp-filter</id>
                         <goals>
                             <goal>npm</goal>
                         </goals>
-                        <!-- optional: default phase is "generate-resources" -->
                         <phase>process-resources</phase>
                         <configuration>
                             <arguments>ci</arguments>
                			    <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-filter</workingDirectory>
                         </configuration>
                     </execution>
-                    <!-- Running gulp for amp-filter-->
                     <execution>
-                        <id>gulp build for amp-filter</id>
+                        <id>npm run build for amp-filter</id>
                         <goals>
-                            <goal>gulp</goal>
+                            <goal>npm</goal>
                         </goals>
                         <phase>process-resources</phase>
                         <configuration>
-                            <arguments>build</arguments>
+                            <arguments>run build</arguments>
                				<workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-filter</workingDirectory>
                         </configuration>
                     </execution>
-                    <!-- Installing node and npm  for gis-layers-manager-->
                     <execution>
-                        <!-- optional: you don't really need execution ids, but it looks nice in your build log. -->
                         <id>install node and npm for gis-layers-manager</id>
                         <goals>
                             <goal>install-node-and-npm</goal>
                         </goals>
-                        <!-- optional: default phase is "generate-resources" -->
                         <phase>process-resources</phase>
                         <configuration>
                              <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/gis-layers-manager</workingDirectory>
                         </configuration>
                     </execution>
-                    <!-- Running npm for gis-layers-manager-->
                     <execution>
-                        <id>npm install for gis-layers-manager</id>
+                        <id>npm ci for gis-layers-manager</id>
                         <goals>
                             <goal>npm</goal>
                         </goals>
-                        <!-- optional: default phase is "generate-resources" -->
                         <phase>process-resources</phase>
                         <configuration>
                             <arguments>ci</arguments>
                			    <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/gis-layers-manager</workingDirectory>
                         </configuration>
                     </execution>
-                    <!-- Running gulp for gis-layers-manager-->
                     <execution>
-                        <id>gulp build for gis-layers-manager</id>
+                        <id>npm run build for gis-layers-manager</id>
                         <goals>
-                            <goal>gulp</goal>
+                            <goal>npm</goal>
                         </goals>
                         <phase>process-resources</phase>
                         <configuration>
-                            <arguments>build</arguments>
+                            <arguments>run build</arguments>
                				<workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/gis-layers-manager</workingDirectory>
                         </configuration>
                     </execution>
-                                       <!-- Installing node and npm  for amp-settings-->
                     <execution>
-                        <!-- optional: you don't really need execution ids, but it looks nice in your build log. -->
                         <id>install node and npm for amp-settings</id>
                         <goals>
                             <goal>install-node-and-npm</goal>
                         </goals>
-                        <!-- optional: default phase is "generate-resources" -->
                         <phase>process-resources</phase>
                         <configuration>
                              <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-settings</workingDirectory>
                         </configuration>
                     </execution>
-                      <!-- Running npm for amp-settings-->
                     <execution>
-                        <id>npm install for amp-settings</id>
+                        <id>npm ci for amp-settings</id>
                         <goals>
                             <goal>npm</goal>
                         </goals>
-                        <!-- optional: default phase is "generate-resources" -->
                         <phase>process-resources</phase>
                         <configuration>
                             <arguments>ci</arguments>
                			    <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-settings</workingDirectory>
                         </configuration>
                     </execution>
-                    <!-- Running gulp for amp-settings-->
                     <execution>
-                        <id>gulp build for amp-settings</id>
-                        <goals>
-                            <goal>gulp</goal>
-                        </goals>
-                        <phase>process-resources</phase>
-                        <configuration>
-                            <arguments>build</arguments>
-               				<workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-settings</workingDirectory>
-                        </configuration>
-                    </execution>
-                    <!-- Running npm for GIS-->
-                    <execution>
-                        <id>npm install for GIS</id>
+                        <id>npm run build for amp-settings</id>
                         <goals>
                             <goal>npm</goal>
                         </goals>
-                        <!-- optional: default phase is "generate-resources" -->
                         <phase>process-resources</phase>
                         <configuration>
-                            <!-- optional: The default argument is actually  "install", so unless you need to run some other npm command,
-                            you can remove this whole <configuration> section.-->
+                            <arguments>run build</arguments>
+               				<workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-settings</workingDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>npm ci for GIS</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <phase>process-resources</phase>
+                        <configuration>
                             <arguments>ci</arguments>
                			    <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>
                         </configuration>
                     </execution>
-                    <!-- Running gulp for GIS-->
                     <execution>
-                        <id>gulp build for GIS</id>
+                        <id>npm run build for GIS</id>
                         <goals>
-                            <goal>gulp</goal>
+                            <goal>npm</goal>
                         </goals>
-<!--                         optional: the default phase is "generate-resources" -->
                         <phase>process-resources</phase>
                         <configuration>
-<!--                             optional: if not specified, it will run gulp's default   -->
-<!--                             task (and you can remove this whole <configuration> section.)  -->
-                            <arguments>build</arguments>
+                            <arguments>run build</arguments>
                				<workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
-                        <id>gulp test for GIS</id>
+                        <id>npm run test for GIS</id>
                         <goals>
-                            <goal>gulp</goal>
+                            <goal>npm</goal>
                         </goals>
                         <phase>test</phase>
                         <configuration>
-                            <arguments>test</arguments>
+                            <arguments>run test</arguments>
                				<workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>
                         </configuration>
                     </execution>
-                    <!-- Installing node and npm  for reampv2-->
                     <execution>
                         <id>install node and npm for reampv2</id>
                         <goals>
@@ -1490,7 +1442,7 @@
                         </configuration>
                     </execution>
 					 <execution>
-                        <id>npm install for reampv2</id>
+                        <id>npm ci for reampv2</id>
                         <goals>
                             <goal>npm</goal>
                         </goals>
@@ -1512,26 +1464,22 @@
 	                    </configuration>
                   </execution>
                     <execution>
-                        <!-- optional: you don't really need execution ids, but it looks nice in your build log. -->
                         <id>install node and npm for reamp</id>
                         <goals>
                             <goal>install-node-and-npm</goal>
                         </goals>
-                        <!-- optional: default phase is "generate-resources" -->
                         <phase>process-resources</phase>
                         <configuration>
                              <workingDirectory>${project.basedir}/TEMPLATE/reamp</workingDirectory>
                         </configuration>
                     </execution>
 					 <execution>
-                        <id>npm install for reamp</id>
+                        <id>npm ci for reamp</id>
                         <goals>
                             <goal>npm</goal>
                         </goals>
-                        <!-- optional: default phase is "generate-resources" -->
                         <phase>process-resources</phase>
                         <configuration>
-                            <!-- legacy-peer-deps option is required because we're using UglifyJs plugin  -->
                             <arguments>ci</arguments>
                			    <workingDirectory>${project.basedir}/TEMPLATE/reamp</workingDirectory>
                         </configuration>
@@ -1547,32 +1495,25 @@
 		                <workingDirectory>${project.basedir}/TEMPLATE/reamp</workingDirectory>
 	                    </configuration>
                   </execution>
-                    <!-- Installing node and npm  for Dashboard-->
                     <execution>
-                        <id>npm install for Dashboards</id>
+                        <id>npm ci for Dashboards</id>
                         <goals>
                             <goal>npm</goal>
                         </goals>
-                        <!-- optional: default phase is "generate-resources" -->
                         <phase>process-resources</phase>
                         <configuration>
-                            <!-- optional: The default argument is actually  "install", so unless you need to run some other npm command,
-                            you can remove this whole <configuration> section.-->
                             <arguments>ci</arguments>
                             <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/dashboard/dev</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
-                        <id>gulp build for Dashboards</id>
+                        <id>npm run build for Dashboards</id>
                         <goals>
-                            <goal>gulp</goal>
+                            <goal>npm</goal>
                         </goals>
-                        <!--                         optional: the default phase is "generate-resources" -->
                         <phase>process-resources</phase>
                         <configuration>
-                            <!--                             optional: if not specified, it will run gulp's default   -->
-                            <!--                             task (and you can remove this whole <configuration> section.)  -->
-                            <arguments>build</arguments>
+                            <arguments>run build</arguments>
                             <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/dashboard/dev</workingDirectory>
                         </configuration>
                     </execution>
@@ -1731,7 +1672,6 @@
                                         <goals>
                                             <goal>install-node-and-npm</goal>
                                             <goal>npm</goal>
-                                            <goal>gulp</goal>
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>

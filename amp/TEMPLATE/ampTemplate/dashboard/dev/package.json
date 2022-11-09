@@ -5,7 +5,8 @@
   "repository": "git://github.com/uniphil/amp-svn",
   "main": "gulpfile.js",
   "scripts": {
-    "test": "echo 'Testing not yet configured...'"
+    "test": "echo 'Testing not yet configured...'",
+    "build": "gulp build"
   },
   "license": "TODO: what is the license for AMP?",
   "devDependencies": {

@@ -27,7 +27,7 @@ public class ShowChangePassword extends Action {
             cpForm.setUserId(tm.getEmail());
             cpForm.setUserIdEnabled(true);
         }else {
-            cpForm.setUserIdEnabled(true);
+            cpForm.setUserIdEnabled(false);
         }
 
         return mapping.findForward("forward");

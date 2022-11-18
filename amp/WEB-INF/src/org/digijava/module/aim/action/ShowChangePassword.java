@@ -4,6 +4,11 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.request.TLSUtils;
+import org.digijava.module.aim.form.ChangePasswordForm;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.TeamUtil;
 
 public class ShowChangePassword extends Action {
 
@@ -14,7 +19,16 @@ public class ShowChangePassword extends Action {
                                  response) throws
         
                 java.lang.Exception {
+        ChangePasswordForm cpForm = (ChangePasswordForm) form;
 
+        TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
+
+        if (tm != null && tm.getEmail() != null) {
+            cpForm.setUserId(tm.getEmail());
+            cpForm.setUserIdEnabled(true);
+        }else {
+            cpForm.setUserIdEnabled(true);
+        }
 
         return mapping.findForward("forward");
     }

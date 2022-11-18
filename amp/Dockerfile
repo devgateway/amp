@@ -112,7 +112,7 @@ COPY --from=compile-amp-settings /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-
 COPY --from=compile-gis-layers-manager /tmp/amp/TEMPLATE/ampTemplate/node_modules/gis-layers-manager/dist TEMPLATE/ampTemplate/node_modules/gis-layers-manager/dist
 COPY --from=compile-gis-module /tmp/amp/TEMPLATE/ampTemplate/gisModule/dist TEMPLATE/ampTemplate/gisModule/dist
 COPY --from=compile-dashboard /tmp/amp/TEMPLATE/ampTemplate/dashboard/build TEMPLATE/ampTemplate/dashboard/build
-COPY --from=compile-reamp /tmp/amp/TEMPLATE/reamp/modules TEMPLATE/reamp/modules
+COPY --from=compile-reamp /tmp/amp/TEMPLATE/reamp TEMPLATE/reamp
 COPY --from=compile-reampv2 /tmp/amp/TEMPLATE/reampv2/build TEMPLATE/reampv2/build
 ARG BUILD_SOURCE
 RUN --mount=type=cache,target=/root/.m2 \

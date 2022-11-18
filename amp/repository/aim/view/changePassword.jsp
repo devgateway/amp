@@ -105,10 +105,10 @@ function validate(){
 						</digi:trn>
 					</td>
 					<td align="left" style="padding-bottom:10px;">
-						<c:if test="${!umViewEditUserForm.getUserIdEnabled}">
+						<c:if test="${umViewEditUserForm.getUserIdEnabled}">
 							<html:text property="userId" styleClass="pwd_username" size="20"/><span>&nbsp;&nbsp;&nbsp;</span>
 						</c:if>
-						<c:if test="${!!umViewEditUserForm.userIdEnabled}">
+						<c:if test="${!umViewEditUserForm.userIdEnabled}">
 							<html:text property="userId" disabled="true"  styleClass="pwd_username" size="20"/><span>&nbsp;&nbsp;&nbsp;</span>
 						</c:if>
 

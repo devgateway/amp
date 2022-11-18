@@ -111,7 +111,7 @@
         />
    
    <cache
-        name="org.digijava.module.aim.Fdbentity.AmpMenuEntryInPublicView"
+        name="org.digijava.module.aim.dbentity.AmpMenuEntryInPublicView"
         maxElementsInMemory="700"
         eternal="true"
         overflowToDisk="false"

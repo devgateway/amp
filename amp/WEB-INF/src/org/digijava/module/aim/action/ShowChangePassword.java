@@ -21,7 +21,7 @@ public class ShowChangePassword extends Action {
                 java.lang.Exception {
         ChangePasswordForm cpForm = (ChangePasswordForm) form;
 
-        TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
+        TeamMember tm = TeamUtil.getCurrentMember();
 
         if (tm != null && tm.getEmail() != null) {
             cpForm.setUserId(tm.getEmail());

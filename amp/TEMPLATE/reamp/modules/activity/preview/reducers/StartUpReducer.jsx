@@ -19,7 +19,9 @@ export default function startUpReducer(state: Object = defaultState, action: Obj
             return Object.assign({}, state, {
                 translations: action.payload.translations,
                 isStartupInProgress: false,
-                settings: action.payload.settings
+                settings: action.payload.settings,
+                globalSettings: action.payload.globalSettings,
+                calendar: action.payload.calendar,
             });
 
         default:

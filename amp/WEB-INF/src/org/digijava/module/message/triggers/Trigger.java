@@ -6,6 +6,7 @@
  */
 package org.digijava.module.message.triggers;
 
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.message.helper.Event;
 import org.digijava.module.message.helper.AmpMessageWorker;
 
@@ -51,5 +52,4 @@ public abstract class Trigger {
             e1.printStackTrace();
         }
     }
-
 }

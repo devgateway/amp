@@ -26,7 +26,6 @@ $(document).ready(function () {
         reportTypeCode = PLEDGE_TYPE;
     }
     var advancedFilters = (document.URL.indexOf('queryEngine.do') > -1);
-    var isWorkspaceEditor = (document.URL.indexOf('Workspace.do') > -1);
     var embedded = advancedFilters;
     widgetFilter = new ampFilter({
         el: container,
@@ -60,33 +59,30 @@ $(document).ready(function () {
         // Save just applied filters in case the user hits "reset" button.
         $('#queryLabelsDiv').html('<div><img class="loading-spinner" src="/TEMPLATE/ampTemplate/img_2/loading-icon.gif" /></div>');
         var serializedFilters = widgetFilter.serialize() || {};
-        if (isWorkspaceEditor) {
-            repFilters.populateSelectedFilters('#listFiltersDiv', widgetFilter);
+        var url = '/aim/reportsFilterPicker.do?apply=true&cacheBuster=';
+        if (advancedFilters) {
+            showSpinner();
+            url += new Date().getTime() + '&reportContextId=' + widgetFilter.auxId + '&doreset=true&queryEngine=true';
         } else {
-            var url = '/aim/reportsFilterPicker.do?apply=true&cacheBuster=';
-            if (advancedFilters) {
-                showSpinner();
-                url += new Date().getTime() + '&reportContextId=' + widgetFilter.auxId + '&doreset=true&queryEngine=true';
-            } else {
-                url += new Date().getTime() + '&reportContextId=' + widgetFilter.reportContextId +
-                    '&sourceIsReportWizard=true';
-            }
-            $.ajax({
-                type: 'POST',
-                url: url,
-                data: "filtersWidget=" + JSON.stringify(serializedFilters),
-                success: function (data) {
-                    if (!embedded) {
-                        $('#listFiltersDiv').html(data);
-                        $('#hasFilters').val(true);
-                    } else {
-                        $('#queryLabelsDiv').html(data);
-                        // document.getElementById('queryLabelsDiv').scrollIntoView();
-                        hideSpinner();
-                    }
-                }
-            });
+            url += new Date().getTime() + '&reportContextId=' + widgetFilter.reportContextId +
+                '&sourceIsReportWizard=true';
         }
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: "filtersWidget=" + JSON.stringify(serializedFilters),
+            success: function (data) {
+                if (!embedded) {
+                    $('#listFiltersDiv').html(data);
+                    repFilters.populateSelectedFilters('#listFiltersDiv', widgetFilter);
+                    $('#hasFilters').val(true);
+                } else {
+                    $('#queryLabelsDiv').html(data);
+                    // document.getElementById('queryLabelsDiv').scrollIntoView();
+                    hideSpinner();
+                }
+            }
+        });
         if (!embedded) {
             $(container).hide();
             $('#useFiltersCheckbox').attr('checked', 'checked');

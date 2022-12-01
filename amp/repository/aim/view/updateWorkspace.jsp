@@ -442,8 +442,11 @@
                     }
                     if (document.aimUpdateWorkspaceForm.computation.checked == true) {
                         var selectedOrganizations = $('[name="selectedOrgId"]');
+                        var useFilter = $("input[name='useFilter'][value='true']:radio")[0].checked;
                         var hasFilters = $.parseJSON(document.aimUpdateWorkspaceForm.hasFilters.value);
-                        if (!hasFilters && selectedOrganizations.length <= 0) {
+                        if ((useFilter && !hasFilters) ||
+                            (!useFilter && selectedOrganizations.length === 0)) {
+
                             alert("<digi:trn key="aim:computation">Please add a filter or a children organization</digi:trn>");
                             document.aimUpdateWorkspaceForm.computation.focus();
                             return false;

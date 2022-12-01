@@ -53,6 +53,8 @@ public class GisConstants {
         add(MeasureConstants.BILATERAL_SSC_DISBURSEMENTS);
         add(MeasureConstants.TRIANGULAR_SSC_COMMITMENTS);
         add(MeasureConstants.TRIANGULAR_SSC_DISBURSEMENTS);
+        add(MeasureConstants.PROJECTION_MTEF_PROJECTIONS);
+        add(MeasureConstants.PIPELINE_MTEF_PROJECTIONS);
     }};
     
     public static final Map<String, HardCodedCategoryValue> ADM_TO_IMPL_CATEGORY_VALUE = new HashMap<String, HardCodedCategoryValue>() {{

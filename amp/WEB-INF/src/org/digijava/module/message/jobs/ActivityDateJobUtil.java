@@ -7,6 +7,7 @@ import org.digijava.module.message.util.AmpMessageUtil;
 import java.util.Date;
 
 public final class ActivityDateJobUtil {
+    private static final Integer DAYS_COUNT = 3;
 
     private ActivityDateJobUtil() {
     }
@@ -19,15 +20,14 @@ public final class ActivityDateJobUtil {
         Date dateAfterDays;
         try {
             AmpMessageSettings as = AmpMessageUtil.getMessageSettings();
-            if (as != null &&
-                    as.getDaysForAdvanceAlertsWarnings() != null &&
-                    as.getDaysForAdvanceAlertsWarnings().intValue() > 0) {
+            if (as != null && as.getDaysForAdvanceAlertsWarnings() != null
+                    && as.getDaysForAdvanceAlertsWarnings().intValue() > 0) {
                 dateAfterDays = AmpDateUtils.getDateAfterDays(curDate, as.getDaysForAdvanceAlertsWarnings().intValue());
             } else {
-                dateAfterDays = AmpDateUtils.getDateAfterDays(curDate, 3);
+                dateAfterDays = AmpDateUtils.getDateAfterDays(curDate, DAYS_COUNT);
             }
         } catch (Exception ex) {
-            dateAfterDays = AmpDateUtils.getDateAfterDays(curDate, 3);
+            dateAfterDays = AmpDateUtils.getDateAfterDays(curDate, DAYS_COUNT);
         }
 
         return dateAfterDays;

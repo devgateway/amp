@@ -15,19 +15,19 @@ public final class ActivityDateJobUtil {
      * @return the date after the count of days specified
      */
     public static Date getDateAfterDays() {
-        Date curDate=new Date();
+        Date curDate = new Date();
         Date dateAfterDays;
-        try{
-            AmpMessageSettings as= AmpMessageUtil.getMessageSettings();
-            if(as!=null &&
-                    as.getDaysForAdvanceAlertsWarnings()!=null &&
-                    as.getDaysForAdvanceAlertsWarnings().intValue()>0){
-                dateAfterDays= AmpDateUtils.getDateAfterDays(curDate,as.getDaysForAdvanceAlertsWarnings().intValue());
-            }else{
-                dateAfterDays=AmpDateUtils.getDateAfterDays(curDate,3);
+        try {
+            AmpMessageSettings as = AmpMessageUtil.getMessageSettings();
+            if (as != null &&
+                    as.getDaysForAdvanceAlertsWarnings() != null &&
+                    as.getDaysForAdvanceAlertsWarnings().intValue() > 0) {
+                dateAfterDays = AmpDateUtils.getDateAfterDays(curDate, as.getDaysForAdvanceAlertsWarnings().intValue());
+            } else {
+                dateAfterDays = AmpDateUtils.getDateAfterDays(curDate, 3);
             }
-        }catch(Exception ex){
-            dateAfterDays=AmpDateUtils.getDateAfterDays(curDate,3);
+        } catch (Exception ex) {
+            dateAfterDays = AmpDateUtils.getDateAfterDays(curDate, 3);
         }
 
         return dateAfterDays;

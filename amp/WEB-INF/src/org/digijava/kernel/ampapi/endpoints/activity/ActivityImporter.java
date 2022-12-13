@@ -4,6 +4,7 @@ import static org.digijava.kernel.ampapi.endpoints.activity.SaveMode.DRAFT;
 import static org.digijava.kernel.ampapi.endpoints.activity.SaveMode.SUBMIT;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -296,10 +297,11 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
                 prepareToSave();
                 boolean draftChange = ActivityUtil.detectDraftChange(newActivity, oldActivityDraft);
 
-                newActivity = activityService.saveActivity(newActivity, getTranslations(), modifiedBy, draftChange,
-                        saveContext, getEditorStore(), getSite());
+                List<AmpContentTranslation> cumulativeTranslations = new ArrayList<>();
+                newActivity = activityService.saveActivity(newActivity, getTranslations(), cumulativeTranslations,
+                        modifiedBy, draftChange, saveContext, getEditorStore(), getSite());
 
-                activityService.updateLuceneIndex(newActivity, oldActivity, update, trnSettings, getTranslations(),
+                activityService.updateLuceneIndex(newActivity, oldActivity, update, trnSettings, cumulativeTranslations,
                         getSite());
             }
         } catch (Exception e) {

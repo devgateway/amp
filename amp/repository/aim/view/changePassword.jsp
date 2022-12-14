@@ -101,17 +101,12 @@ function validate(){
 <!--						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>-->
 						<span style="color:#FF0000;">*</span>
 						<digi:trn key="aim:email">
-							UserId
+							User ID
 						</digi:trn>
 					</td>
 					<td align="left" style="padding-bottom:10px;">
-						<c:if test="${!umViewEditUserForm.getUserIdEnabled}">
-							<html:text property="userId" styleClass="pwd_username" size="20"/><span>&nbsp;&nbsp;&nbsp;</span>
-						</c:if>
-						<c:if test="${!!umViewEditUserForm.userIdEnabled}">
-							<html:text property="userId" disabled="true"  styleClass="pwd_username" size="20"/><span>&nbsp;&nbsp;&nbsp;</span>
-						</c:if>
-
+						<html:text property="userId" disabled="${aimChangePasswordForm.userIdEnabled}"  styleClass="pwd_username" size="20"/>
+						<span>&nbsp;&nbsp;&nbsp;</span>
 
 						<font color="red" style="font-size:11px;">
 						<digi:trn key="aim:userIdExample1">

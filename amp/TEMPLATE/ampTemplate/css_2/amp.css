@@ -415,7 +415,7 @@ div.reg_form_container h2 { font-size:30px; font-weight:bold; color:#FFFFFF; bac
 span.formnote{color:#595959; font-size:14px;font-weight:bold;line-height:20px;}
 span.formnote .login_warning_title{font-size: 16px; font-weight: 600; color: #225099FF;}
 td.title{background-color:#f0f0f0;color:#999; font-size:12px;font-weight:bold;padding:10px;}
-div.reg_form_container .f-names {color:#000000; font-size:12px;}
+div.reg_form_container .f-names {color: rgba(0, 0, 0, 0.6); font-size:12px;}
 div.breadcrumbsplaceholder {height:25px; clear:both;margin:20px 0px 20px 0px; width:950px; background:#f0f0f0; color:#000;}
 #amphome{width:1000px; margin:0 auto;}
 #amphomesidebar{width:220px; float:right;}
@@ -543,7 +543,7 @@ div.reg_form_container h2 { font-size:30px; font-weight:bold; color:#FFFFFF; bac
 span.formnote{color:#595959; font-size:14px;font-weight:500;line-height:20px;}
 td.title{background-color:#f0f0f0;color:#999; font-size:12px;font-weight:bold;padding:10px;}
 /* changed font-size */
-div.reg_form_container .f-names {color:#000000; font-size:14px; text-align: right; padding-right: 30px;}
+div.reg_form_container .f-names {color: rgba(0, 0, 0, 0.6); font-size:14px; text-align: right; padding-right: 30px;}
 /* added input row container - tmugo */
 div.reg_form_container .input_row_container td { border-bottom: 1px solid #edeff1; padding: 18px;}
 div.reg_form_container .reg_submit_btn_container td { padding: 20px 18px; border-bottom: none;}

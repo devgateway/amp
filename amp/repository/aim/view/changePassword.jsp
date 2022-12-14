@@ -105,7 +105,14 @@ function validate(){
 						</digi:trn>
 					</td>
 					<td align="left" style="padding-bottom:10px;">
-						<html:text property="userId" disabled="${aimChangePasswordForm.userIdEnabled}"  styleClass="pwd_username" size="20"/>
+						<c:if test="${aimChangePasswordForm.userIdEnabled}">
+							<html:text property="userId" styleClass="pwd_username" size="20"/>
+							<span>&nbsp;&nbsp;&nbsp;</span>
+						</c:if>
+						<c:if test="${!aimChangePasswordForm.userIdEnabled}">
+							<html:text property="userId" disabled="true"  styleClass="pwd_username" size="20"/>
+							<span>&nbsp;&nbsp;&nbsp;</span>
+						</c:if>
 						<span>&nbsp;&nbsp;&nbsp;</span>
 
 						<font color="red" style="font-size:11px;">

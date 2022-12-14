@@ -371,6 +371,21 @@ public class DashboardsService {
 
         Map<String, List<FundingTypeAmount>> values = new TreeMap<>(); // Map<year, List<type, amount, formattedAmount>>
         ReportOutputColumn toaCol = report.leafHeaders.get(0);
+
+        String fundingTypeConstant = DashboardConstants.FUNDING_TYPE;
+        String title = TranslatorWorker.translateText(fundingTypeConstant);
+        List<FundingTypeAmountsForYear> outValues = new ArrayList<>();
+
+
+        // check if report has report contents
+        if (report.isEmpty) {
+            retlist.setValues(outValues);
+            retlist.setName(fundingTypeConstant);
+            retlist.setTitle(title);
+
+            return retlist;
+        }
+
         for (ReportArea toaArea : report.reportContents.getChildren()) {
             String toa = toaArea.getContents().get(toaCol).displayedValue;
             long toaId = toaArea.getOwner().id;
@@ -391,7 +406,7 @@ public class DashboardsService {
                 //values.computeIfAbsent(year, yr -> new ArrayList<>()).add(toaBean);
             }
         }
-        List<FundingTypeAmountsForYear> outValues = new ArrayList<>();
+
         for (String yearValue : values.keySet()) {
             FundingTypeAmountsForYear yearBean = new FundingTypeAmountsForYear();
             yearBean.setYear(yearValue);
@@ -400,8 +415,8 @@ public class DashboardsService {
         }
         retlist.setValues(outValues);
 
-        retlist.setName(DashboardConstants.FUNDING_TYPE);
-        retlist.setTitle(TranslatorWorker.translateText(DashboardConstants.FUNDING_TYPE));
+        retlist.setName(fundingTypeConstant);
+        retlist.setTitle(title);
         retlist.setSource(getSource());
 
         return retlist;

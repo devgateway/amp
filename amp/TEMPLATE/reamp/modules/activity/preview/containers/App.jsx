@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import { createSelector } from 'reselect'
 import {ActivityPreviewUI, FieldsManager, CurrencyRatesManager, ErrorHelper} from 'amp-ui';
 import * as ActivityActions from '../actions/ActivityActions';
 import ActivityFundingTotals from '../utils/ActivityFundingTotals';
@@ -10,6 +11,14 @@ import * as ContactActions from '../actions/ContactsAction.jsx'
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import {APDocumentPage} from '../containers/APDocumentPage.jsx';
+
+const getActivityContext = createSelector(
+  props => props.activityReducer,
+  props => props.startUpReducer,
+  (activityReducer, startUpReducer) => ({
+      ...activityReducer.activityContext,
+      calendar: startUpReducer.calendar,
+  }));
 
 /**
  *
@@ -27,8 +36,8 @@ class App extends Component {
         contactsByIds: PropTypes.object,
         APDocumentPage: PropTypes.func.isRequired,
         resourceReducer: PropTypes.object,
-        activityWsInfo: PropTypes.array.isRequired
-
+        activityWsInfo: PropTypes.array.isRequired,
+        globalSettings: PropTypes.object.isRequired,
     }
 
     constructor(props, context) {
@@ -54,7 +63,8 @@ class App extends Component {
             currencyRatesManager: this.props.activityReducer.currencyRatesManager,
             APDocumentPage,
             resourceReducer: this.props.resourceReducer,
-            activityWsInfo: this.props.activityReducer.activityWsInfo
+            activityWsInfo: this.props.activityReducer.activityWsInfo,
+            globalSettings: this.props.startUpReducer.globalSettings,
         };
     }
 
@@ -71,7 +81,8 @@ class App extends Component {
                 </div>
             </div>)
         } else {
-            const {activity, activityContext, error} = this.props.activityReducer;
+            const {activity, error} = this.props.activityReducer;
+            const activityContext = getActivityContext(this.props);
             if (error) {
                 return ErrorHelper.showErrors(error, translate);
             } else {

@@ -60,7 +60,7 @@ stage('Build') {
         println "AMP Version: ${codeVersion}"
 
         countries = sh(returnStdout: true,
-                script: "ssh boad.aws.devgateway.org 'cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort'")
+                script: "ssh ${env.AMP_STAGING_HOSTNAME} 'cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort'")
                 .trim()
         if (countries == "") {
             println "There are no database backups compatible with ${codeVersion}"
@@ -123,10 +123,10 @@ stage('Deploy') {
     node {
         try {
             // Find latest database version compatible with ${codeVersion}
-            dbVersion = sh(returnStdout: true, script: "ssh boad.aws.devgateway.org 'cd /opt/amp_dbs && amp-db find ${codeVersion} ${country}'").trim()
+            dbVersion = sh(returnStdout: true, script: "ssh ${env.AMP_STAGING_HOSTNAME} 'cd /opt/amp_dbs && amp-db find ${codeVersion} ${country}'").trim()
 
             // Deploy AMP
-            sh "ssh boad.aws.devgateway.org 'amp-up2 ${tag} ${country} ${dbVersion} ${pgVersion}'"
+            sh "ssh ${env.AMP_STAGING_HOSTNAME} 'amp-up2 ${tag} ${country} ${dbVersion} ${pgVersion}'"
 
             slackSend(channel: 'amp-ci', color: 'good', message: "Deploy AMP - Success\nDeployed ${changePretty} will be ready for testing at ${ampUrl} in about 3 minutes")
 
@@ -151,7 +151,7 @@ stage('Deploy again') {
         }
         node {
             try {
-                sh "ssh boad.aws.devgateway.org 'amp-up2 ${tag} ${country} ${dbVersion} ${pgVersion}'"
+                sh "ssh ${env.AMP_STAGING_HOSTNAME} 'amp-up2 ${tag} ${country} ${dbVersion} ${pgVersion}'"
 
                 slackSend(channel: 'amp-ci', color: 'good', message: "Deploy AMP - Success\nDeployed ${changePretty} will be ready for testing at ${ampUrl} in about 3 minutes")
 

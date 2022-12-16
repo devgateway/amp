@@ -1,4 +1,5 @@
 import {fetchJson, postJson} from 'amp/tools/index';
+import translate from '../utils/translate';
 
 export default class ApiHelper {
     static extractErrors(errors, obj) {
@@ -6,9 +7,10 @@ export default class ApiHelper {
         if (errors) {
             errors = Array.isArray(errors) ? errors : [errors];
             errors.forEach((error) => {
-                for (const key in error) {
-                    const messageKey = "Couldn\nt find activity! It may be no longer exists in the system.";
-                    const message = {messageKey};
+                for (const _key in error) {
+                    const message = {
+                        messageKey: translate("activityNotFound"),
+                    };
                     if (obj && obj.id) {
                         message.id = obj.id;
                     }

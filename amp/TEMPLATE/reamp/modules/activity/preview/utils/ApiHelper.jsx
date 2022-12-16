@@ -7,7 +7,7 @@ export default class ApiHelper {
             errors = Array.isArray(errors) ? errors : [errors];
             errors.forEach((error) => {
                 for (const key in error) {
-                    const messageKey = 'amp.preview:server-errors-' + key;
+                    const messageKey = "Couldn\nt find activity! It may be no longer exists in the system.";
                     const message = {messageKey};
                     if (obj && obj.id) {
                         message.id = obj.id;

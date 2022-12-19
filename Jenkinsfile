@@ -25,7 +25,7 @@ def dbVersion
 def pgVersion = 14
 def country
 def ampUrl
-def dockerRepo = "registry.developmentgateway.org/"
+def dockerRepo = "798366298150.dkr.ecr.us-east-1.amazonaws.com/"
 
 def updateGitHubCommitStatus(context, message, state) {
     repoUrl = sh(returnStdout: true, script: "git config --get remote.origin.url").trim()
@@ -82,13 +82,9 @@ stage('Build') {
         checkout scm
 
         def image = "${dockerRepo}amp-webapp:${tag}"
-        def format = branch != null ? "%H" : "%P"
-        def hash = sh(returnStdout: true, script: "git log --pretty=${format} -n 1").trim()
-        sh(returnStatus: true, script: "docker pull ${image} > /dev/null")
-        def imageIds = sh(returnStdout: true, script: "docker images -q -f \"label=git-hash=${hash}\"").trim()
-        sh(returnStatus: true, script: "docker rmi ${image} > /dev/null")
+        def hash = sh(returnStdout: true, script: "git log --pretty=%H -n 1").trim()
 
-        if (imageIds.equals("")) {
+        docker.withRegistry("https://798366298150.dkr.ecr.us-east-1.amazonaws.com", "ecr:us-east-1:aws-ecr-credentials-id") {
             try {
                 updateGitHubCommitStatus('jenkins/build', 'Build in progress', 'PENDING')
 
@@ -130,7 +126,7 @@ stage('Deploy') {
             dbVersion = sh(returnStdout: true, script: "ssh boad.aws.devgateway.org 'cd /opt/amp_dbs && amp-db find ${codeVersion} ${country}'").trim()
 
             // Deploy AMP
-            sh "ssh boad.aws.devgateway.org 'amp-up ${tag} ${country} ${dbVersion} ${pgVersion}'"
+            sh "ssh boad.aws.devgateway.org 'amp-up2 ${tag} ${country} ${dbVersion} ${pgVersion}'"
 
             slackSend(channel: 'amp-ci', color: 'good', message: "Deploy AMP - Success\nDeployed ${changePretty} will be ready for testing at ${ampUrl} in about 3 minutes")
 
@@ -155,7 +151,7 @@ stage('Deploy again') {
         }
         node {
             try {
-                sh "ssh boad.aws.devgateway.org 'amp-up ${tag} ${country} ${dbVersion} ${pgVersion}'"
+                sh "ssh boad.aws.devgateway.org 'amp-up2 ${tag} ${country} ${dbVersion} ${pgVersion}'"
 
                 slackSend(channel: 'amp-ci', color: 'good', message: "Deploy AMP - Success\nDeployed ${changePretty} will be ready for testing at ${ampUrl} in about 3 minutes")
 

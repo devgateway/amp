@@ -56,8 +56,8 @@ public class LocationSkeleton extends HierEntitySkeleton<LocationSkeleton> {
                         rs.getString("code"), nullInsteadOfZero(rs.getLong("parent_location")))
                         .withCvId(nullInsteadOfZero(rs.getLong("parent_category_value")))
                         .withTemplateId(nullInsteadOfZero(rs.getLong("template_id")))
-//                        .withLat(nullInsteadOfZero(rs.getDouble("gs_lat")))
-//                        .withLon(nullInsteadOfZero(rs.getDouble("gs_long")))
+                        .withLat(nullInsteadOfZero(rs.getDouble("gs_lat")))
+                        .withLon(nullInsteadOfZero(rs.getDouble("gs_long")))
                         .withGroup(nullInsteadOfZero(rs.getLong("amp_category_value_group_id")))
                         .withDescription(rs.getString("description"))
                         .getLocationSkeleton();

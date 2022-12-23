@@ -408,7 +408,7 @@ div.reg_form_container{width:1000px; margin:0 auto;text-align:center;}
 div.reg_form_container table {margin:0 auto; }
 /* timothymugo - add height of the input boxes */
 div.reg_form_container input,div.reg_form_container form input, div.reg_form_container form select{border:1px solid #d0d0d0;height:30px;}
-div.reg_form_container .buttonx {background-color:#68b35b; font-size:11px; color:#FFFFFF; font-weight:bold; padding: 3px 5px; height:30px; width: 200px; margin-right: 392px; }
+div.reg_form_container .buttonx {background-color:#68b35b; font-size:14px; color:#FFFFFF; font-weight:bold; padding: 3px 5px; height:30px; width: 200px; margin-right: 392px; }
 div.reg_form_container form input.dr-menu, div.reg_form_container input.dr-menu{ font-size:14px; font-weight:bold; color:#FFFFFF; background-color:#4A687A; margin:10px;height:25px;border:1px solid #364d5a;}
 div.reg_form_title{text-align:left;border-top:5px solid #4A687A; margin:0px 0px 20px 0px; background:#f0f0f0;padding:0px 0px 10px 0px;border-bottom:1px solid  #ccccce;}
 div.reg_form_container h2 { font-size:30px; font-weight:bold; color:#FFFFFF; background-color:#4A687A; margin-left:10px; padding:5px; letter-spacing:-1px; margin-right:10px;display:inline;}
@@ -536,7 +536,7 @@ div.reg_form_container{width:1000px; margin:0 auto; text-align: left;}
 div.reg_form_container table {margin:0 auto; }
 /* Modify the input boxes - timothymugo */
 div.reg_form_container input,div.reg_form_container form input, div.reg_form_container form select{border:1px solid #d0d0d0;height:30px; font-size: 11px; width: 280px; padding: 5px 20px; border-radius: 5px;}
-div.reg_form_container .buttonx {background-color:#68b35b; border-top: 1px solid #99BAF1; font-size:11px; color:#FFFFFF; font-weight:bold; padding: 3px 5px; height:30px;}
+div.reg_form_container .buttonx {background-color:#68b35b; border-top: 1px solid #99BAF1; font-size:14px; color:#FFFFFF; font-weight: 700; padding: 3px 5px; height:30px;}
 div.reg_form_container form input.dr-menu, div.reg_form_container input.dr-menu{ font-size:14px; font-weight:bold; color:#FFFFFF; background-color:#4A687A; margin:10px;height:25px;border:1px solid #364d5a;}
 div.reg_form_title{text-align:left;border-top:5px solid #4A687A; margin:0px 0px 20px 0px; background:#f0f0f0;padding:0px 0px 10px 0px;border-bottom:1px solid  #ccccce;}
 div.reg_form_container h2 { font-size:30px; font-weight:bold; color:#FFFFFF; background-color:#4A687A; margin-left:10px; padding:5px; letter-spacing:-1px; margin-right:10px;display:inline;}

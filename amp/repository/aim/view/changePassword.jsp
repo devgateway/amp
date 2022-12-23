@@ -59,7 +59,7 @@ function validate(){
 						</digi:trn></div>
 	<table>
 		<tr>
-			<td bgcolor="#dbe5f1" style="padding: 10px 20px;">
+			<td bgcolor="#f5faff" style="padding: 10px 20px;">
 				<span class="formnote">
 						<digi:trn key="aim:loginWarning">
 							<h4 class="login_warning_title">You are signing-in to one or more secure applications for

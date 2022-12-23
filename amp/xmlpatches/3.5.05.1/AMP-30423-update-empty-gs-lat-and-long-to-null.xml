@@ -3,7 +3,7 @@
            xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
     <jira>AMP-30363</jira>
-    <keyword>remove iati importer url</keyword>
+    <keyword>Update gs_long and gs_lat to null if it is empty</keyword>
     <author>timothymugo</author>
     <apply>
         <script>

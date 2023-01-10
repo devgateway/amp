@@ -8,10 +8,16 @@
     <apply>
         <script>
             <lang delimiter=";" type="postgres">
-                INSERT INTO util_global_settings_possible_ (setting_name, value_id, value_shown) VALUES
-                ('Amounts in Thousands', '0', 'Amounts in Units'),
-                ('Amounts in Thousands', '1', 'Amounts in Thousands'),
-                ('Amounts in Thousands', '2', 'Amounts in Millions');
+
+                INSERT INTO util_global_settings_possible_ (setting_name, value_id, value_shown)
+                SELECT 'Amounts in Thousands', '0', 'Amounts in Units'
+                WHERE NOT EXISTS (SELECT 1 FROM util_global_settings_possible_ WHERE setting_name = 'Amounts in Thousands' AND value_id = '0' AND value_shown = 'Amounts in Units')
+                UNION
+                SELECT 'Amounts in Thousands', '1', 'Amounts in Thousands'
+                WHERE NOT EXISTS (SELECT 1 FROM util_global_settings_possible_ WHERE setting_name = 'Amounts in Thousands' AND value_id = '1' AND value_shown = 'Amounts in Thousands')
+                UNION
+                SELECT 'Amounts in Thousands', '2', 'Amounts in Millions'
+                WHERE NOT EXISTS (SELECT 1 FROM util_global_settings_possible_ WHERE setting_name = 'Amounts in Thousands' AND value_id = '2' AND value_shown = 'Amounts in Millions');
 
                 CREATE OR REPLACE VIEW v_g_settings_amount_units AS
                 SELECT util_global_settings_possible_.value_id AS id,

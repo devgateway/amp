@@ -11,9 +11,9 @@
                 INSERT INTO util_global_settings_possible_ (setting_name, value_id, value_shown) VALUES
                 ('Amounts in Thousands', '0', 'Amounts in Units'),
                 ('Amounts in Thousands', '1', 'Amounts in Thousands'),
-                ('Amounts in Thousands', '2', 'Amounts in Millions') ON CONFLICT DO NOTHING;
+                ('Amounts in Thousands', '2', 'Amounts in Millions');
 
-                CREATE OR REPLACE VIEW v_g_settings_units AS
+                CREATE OR REPLACE VIEW v_g_settings_amount_units AS
                 SELECT util_global_settings_possible_.value_id AS id,
                 util_global_settings_possible_.value_shown AS value
                 FROM util_global_settings_possible_

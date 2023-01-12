@@ -21,8 +21,9 @@ public interface ActivityService {
     AmpActivityVersion getActivity(Long activityId) throws DgException;
     
     AmpActivityVersion saveActivity(AmpActivityVersion newActivity, List<AmpContentTranslation> translations,
-                                              AmpTeamMember modifiedBy, boolean draftChange, SaveContext saveContext,
-                                              EditorStore editorStore, Site site) throws Exception;
+            List<AmpContentTranslation> cumulativeTranslations,
+            AmpTeamMember modifiedBy, boolean draftChange, SaveContext saveContext,
+            EditorStore editorStore, Site site) throws Exception;
     
     void updateLuceneIndex(AmpActivityVersion newActivity, AmpActivityVersion oldActivity, boolean update,
                            TranslationSettings trnSettings, List<AmpContentTranslation> translations, Site site);

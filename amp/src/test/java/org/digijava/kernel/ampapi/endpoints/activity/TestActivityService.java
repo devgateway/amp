@@ -50,8 +50,9 @@ public class TestActivityService implements ActivityService {
     
     @Override
     public AmpActivityVersion saveActivity(AmpActivityVersion newActivity, List<AmpContentTranslation> translations,
-                                           AmpTeamMember modifiedBy, boolean draftChange, SaveContext saveContext,
-                                           EditorStore editorStore, Site site) {
+            List<AmpContentTranslation> cumulativeTranslations,
+            AmpTeamMember modifiedBy, boolean draftChange, SaveContext saveContext,
+            EditorStore editorStore, Site site) {
         return newActivity;
     }
     

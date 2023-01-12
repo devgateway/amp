@@ -170,8 +170,10 @@ public class ActivityUtil {
 
         boolean newActivity = oldA.getAmpActivityId() == null;
         AmpActivityVersion a = null;
+        List<AmpContentTranslation> cumulativeValues = new ArrayList<>();
         try {
-            a = saveActivityNewVersion(oldA, values, ampCurrentMember, draft, session, saveContext, editorStore, site);
+            a = saveActivityNewVersion(oldA, values, cumulativeValues, ampCurrentMember, draft, session, saveContext,
+                    editorStore, site);
         } catch (Exception exception) {
             logger.error("Error saving activity:", exception); // Log the exception
             throw new RuntimeException("Can't save activity:", exception);
@@ -181,8 +183,7 @@ public class ActivityUtil {
             new ActivityValidationWorkflowTrigger(a);
         }
 
-        List<AmpContentTranslation> translations = values == null ? new ArrayList<>() : new ArrayList<>(values);
-        LuceneUtil.addUpdateActivity(rootRealPath, !newActivity, site, locale, a, oldA, translations);
+        LuceneUtil.addUpdateActivity(rootRealPath, !newActivity, site, locale, a, oldA, cumulativeValues);
 
         return a;
     }
@@ -203,12 +204,13 @@ public class ActivityUtil {
     }
     
     public static AmpActivityVersion saveActivityNewVersion(AmpActivityVersion a,
-            Collection<AmpContentTranslation> translations, AmpTeamMember ampCurrentMember, boolean draft,
+            Collection<AmpContentTranslation> translations, List<AmpContentTranslation> cumulativeTranslations,
+            AmpTeamMember ampCurrentMember, boolean draft,
             Session session, SaveContext context, EditorStore editorStore, Site site) throws Exception {
         
         boolean draftChange = detectDraftChange(a, draft);
-        return saveActivityNewVersion(a, translations, ampCurrentMember, draft, draftChange, session, context,
-                editorStore, site);
+        return saveActivityNewVersion(a, translations, cumulativeTranslations, ampCurrentMember, draft,
+                draftChange, session, context, editorStore, site);
     }
 
     /**
@@ -216,7 +218,8 @@ public class ActivityUtil {
      * returns newActivity
      */
     public static AmpActivityVersion saveActivityNewVersion(AmpActivityVersion a,
-            Collection<AmpContentTranslation> translations, AmpTeamMember ampCurrentMember, boolean draft,
+            Collection<AmpContentTranslation> translations, List<AmpContentTranslation> cumulativeTranslations,
+            AmpTeamMember ampCurrentMember, boolean draft,
             boolean draftChange, Session session, SaveContext context,
             EditorStore editorStore, Site site) throws Exception {
 
@@ -236,7 +239,7 @@ public class ActivityUtil {
         }
 
         if (ContentTranslationUtil.multilingualIsEnabled())
-            ContentTranslationUtil.cloneTranslations(a, translations);
+            ContentTranslationUtil.cloneTranslations(a, translations, cumulativeTranslations);
 
         //is versioning activated?
         boolean createNewVersion = (draft == draftChange) && ActivityVersionUtil.isVersioningEnabled();

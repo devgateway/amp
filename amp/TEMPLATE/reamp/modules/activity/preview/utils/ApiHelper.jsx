@@ -9,7 +9,7 @@ export default class ApiHelper {
             errors.forEach((error) => {
                 for (const _key in error) {
                     const message = {
-                        messageKey: translate("activityNotFound"),
+                        messageKey: this.handleApiErrors(_key, translate),
                     };
                     if (obj && obj.id) {
                         message.id = obj.id;
@@ -20,6 +20,10 @@ export default class ApiHelper {
             });
         }
         return errorMessages;
+    }
+
+    static handleApiErrors(errorCode, translateFn) {
+        return translateFn(errorCode);
     }
 
     static _fetchData(url) {

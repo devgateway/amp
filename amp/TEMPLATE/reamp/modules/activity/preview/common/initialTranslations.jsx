@@ -489,5 +489,5 @@ export const initialTranslations = {
     "sameUserEditingError": "You may only edit one activity at a time.",
     "exportToWord":"Export to Word",
     "disbursementId":"Disbursement ID",
-    "activityNotFound": "Couldn't find activity! It may be no longer exists in the system"
+    "0208": "Couldn't find activity! It may be no longer exists in the system"
 }

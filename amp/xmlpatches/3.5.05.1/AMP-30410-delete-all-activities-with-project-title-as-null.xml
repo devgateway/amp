@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>AMP-30410</jira>
+    <keyword>delete activities with project name as null</keyword>
+    <author>timothymugo</author>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                DELETE FROM amp_activity_location WHERE amp_activity_id IN (select amp_activity_version.amp_activity_id from amp_activity_version where name is null);
+                DELETE FROM amp_activity_sector WHERE amp_activity_id IN (select amp_activity_version.amp_activity_id from amp_activity_version where name is null);
+                DELETE FROM amp_funding_amount WHERE amp_activity_id IN (select amp_activity_version.amp_activity_id from amp_activity_version where name is null);
+                UPDATE amp_activity_group SET amp_activity_last_version_id = NULL WHERE amp_activity_last_version_id IN (select amp_activity_version.amp_activity_id from amp_activity_version where name is null);
+                DELETE from amp_org_role WHERE activity in (select amp_activity_version.amp_activity_id from amp_activity_version where name is null);
+                DELETE FROM amp_activity_version WHERE name is null;
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

@@ -21,7 +21,7 @@ public class AmpSectorDTO {
     @JsonProperty("code")
     private final String code;
 
-    @JsonProperty("code")
+    @JsonProperty("codeOfficial")
     private final String codeOfficial;
 
     public AmpSectorDTO(final AmpSector sector) {

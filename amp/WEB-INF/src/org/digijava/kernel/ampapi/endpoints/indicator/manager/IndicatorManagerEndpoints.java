@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
+import org.digijava.module.aim.dbentity.AmpSector;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -22,6 +23,15 @@ public class IndicatorManagerEndpoints {
     @ApiOperation(value = "Retrieve and provide a list of indicators.")
     public List<AmpIndicatorDTO> getIndicators() {
         return new IndicatorManagerService().getIndicators();
+    }
+
+    @GET
+    @Path("/sectors")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "getSectors")
+    @ApiOperation(value = "Retrieve and provide a list of sectors used by indicators.")
+    public List<AmpSectorDTO> getSectors() {
+        return new IndicatorManagerService().getSectors();
     }
 
 

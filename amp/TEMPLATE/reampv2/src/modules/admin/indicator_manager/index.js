@@ -3,23 +3,23 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import rootReducer from './reducers/rootReducer';
-import Startup from './components/Startup';
+import StartUp from './components/StartUp';
 import defaultTrnPack from './config/initialTranslations.json';
 import './index.css';
 import '../../../open-sans.css';
 
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-const NDDDashboardApp = () => {
+const AdminIndicatorManagerApp = () => {
   const [store] = useState(() => createStore(rootReducer, composeEnhancer(applyMiddleware(thunk))));
 
   return (
     <Provider store={store}>
-      <Startup defaultTrnPack={defaultTrnPack}>
+      <StartUp defaultTrnPack={defaultTrnPack}>
         <div>Hello</div>
-      </Startup>
+      </StartUp>
     </Provider>
   );
 };
 
-export default NDDDashboardApp;
+export default AdminIndicatorManagerApp;

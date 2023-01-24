@@ -13,6 +13,7 @@
     "consistent-return": "off",
     "comma-dangle": "off",
     "generator-star-spacing": "off",
+    "import/extensions": "off",
     "import/no-unresolved": [
       "error",
       {

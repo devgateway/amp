@@ -1,11 +1,15 @@
 import React from 'react';
-import { Col, Row, Button } from 'react-bootstrap';
+import {
+  Col, Row, Button, Form
+} from 'react-bootstrap';
 import BootstrapTable, { PaginationOptions } from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import filterFactory, { FilterFactoryProps } from 'react-bootstrap-table2-filter';
 import 'react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css';
 import ToolkitProvider, { Search, CSVExport, ToolkitContextType } from 'react-bootstrap-table2-toolkit';
 // eslint-disable-next-line import/no-unresolved
+// @ts-ignore
+import overlayFactory from 'react-bootstrap-table2-overlay';
 import styles from './Table.module.css';
 
 const SkeletonTable = ({ columns, data, title }: any) => {
@@ -38,7 +42,44 @@ const SkeletonTable = ({ columns, data, title }: any) => {
         text: 'All',
         value: data.length,
       }
-    ]
+    ],
+    firstPageText: 'First',
+    prePageText: 'Back',
+    nextPageText: 'Next',
+    lastPageText: 'Last',
+    nextPageTitle: 'First page',
+    prePageTitle: 'Pre page',
+    firstPageTitle: 'Next page',
+    lastPageTitle: 'Last page',
+    showTotal: true,
+    sizePerPage: 10,
+    hidePageListOnlyOnePage: true,
+    sizePerPageRenderer: ({
+      options,
+      currSizePerPage,
+      onSizePerPageChange
+    }) => (
+      <Row lg={4}>
+        <Form.Control
+          as="select"
+          value={currSizePerPage}
+          style={{
+            width: 180,
+            marginLeft: 20
+          }}
+          onChange={(e) => onSizePerPageChange(Number(e.target.value))}
+        >
+          {
+          options.map((option) => (
+            <option key={option.text} value={option.page}>
+              {option.text}
+            </option>
+          ))
+        }
+        </Form.Control>
+      </Row>
+
+    )
   };
 
   const filterOptions: FilterFactoryProps = {
@@ -76,26 +117,48 @@ const SkeletonTable = ({ columns, data, title }: any) => {
 
                 <Row sm={12} className={styles.table_header_bottom}>
                   <Col sm={6}>
-                    <Button type="primary">
-                      <i className="fa fa-plus" />
-                      {' '}
-                      <span>Add New</span>
-                    </Button>
+                    <div className={styles.table_header_bottom_left}>
+                      <Button type="primary">
+                        <i className="fa fa-plus" />
+                        {' '}
+                        <span>Add New Indicator</span>
+                      </Button>
+                      <ExportCSVButton
+                        {...props.csvProps}
+                        className={styles.export_button}
+                      >
+                        <Button style={{
+                          backgroundColor: '#198754',
+                        }}>
+                          <i className="fa fa-download" />
+                          {' '}
+                          Export CSV
+                        </Button>
+                      </ExportCSVButton>
+                    </div>
+
                   </Col>
                   {/* searchbar should be far right on the col */}
                   <Col sm={6}>
-                    <div>
+                    <div className={styles.table_header_bottom_right}>
+
+                      <div className={styles.sector_filter_container}>
+                        <Form.Label className={styles.filter_label}>Sectors</Form.Label>
+                        <Form.Control as="select" className={styles.filter_select}>
+                          <option value="all">All Sectors</option>
+                          <option value="agriculture">Agriculture</option>
+                          <option value="education">Education</option>
+                          <option value="health">Health</option>
+                          <option value="infrastructure">Infrastructure</option>
+                          <option value="social protection">Social Protection</option>
+                        </Form.Control>
+                      </div>
+
                       <div className={styles.search_container}>
                         <SearchBar
                           {...props.searchProps}
                           placeholder="Search"
                         />
-                        <ExportCSVButton
-                          {...props.csvProps}
-                          className={styles.export_button}
-                        >
-                          Export
-                        </ExportCSVButton>
                       </div>
                     </div>
 
@@ -105,12 +168,27 @@ const SkeletonTable = ({ columns, data, title }: any) => {
               <hr />
               <BootstrapTable
                 {...props.baseProps}
+                bordered
+                bootstrap4
+                headerClasses={styles.table_header_titles}
+                bodyClasses={styles.table_body}
                 pagination={paginationFactory(paginationOptions)}
                 selectRow={{
                   mode: 'checkbox',
                   clickToSelect: false,
                 }}
                 filter={filterFactory(filterOptions)}
+                noDataIndication={() => (
+                  <div className={styles.no_data}>
+                    <h3>No Data Available</h3>
+                  </div>
+                )}
+                overlay={overlayFactory({
+                  spinner: true,
+                  styles: {
+                    overlay: (base: any) => ({ ...base, background: 'rgba(255, 0, 0, 0.5)' })
+                  }
+                })}
               />
             </div>
           )

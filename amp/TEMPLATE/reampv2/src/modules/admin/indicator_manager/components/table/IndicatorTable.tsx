@@ -46,10 +46,13 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ setShowAddForm, transla
                 return (
                     <Row sm={8} className={styles.action_wrapper}>
                         <div className={styles.action_container}>
-                            <i style={{ fontSize: 20, color: '#00D100' }} className="fa fa-pencil" aria-hidden="true" onClick={() => console.log('testing action edit button')}></i>
+                            <i style={{ fontSize: 20, color: '#007bff' }} className="fa fa-eye" aria-hidden="true" onClick={() => console.log('testing action view button')}></i>
                         </div>
                         <div className={styles.action_container}>
-                            <i style={{ fontSize: 20, color: '#da2a2a' }} className="fa fa-trash" aria-hidden="true"></i>
+                            <i style={{ fontSize: 20, color: '#198754' }} className="fa fa-pencil" aria-hidden="true" onClick={() => console.log('testing action edit button')}></i>
+                        </div>
+                        <div className={styles.action_container}>
+                            <i style={{ fontSize: 20, color: '#dc3545' }} className="fa fa-trash" aria-hidden="true"></i>
                         </div>
                     </Row>
                 )

@@ -1,30 +1,22 @@
 /* eslint-disable */
 import React, { useState, useMemo, useEffect } from 'react';
-
+import { Row } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import SkeletonTable from './Table';
 import { ColumnDescription } from 'react-bootstrap-table-next';
 import { textFilter } from 'react-bootstrap-table2-filter';
-// import ActionMenu from '../../components/tables/ActionMenu';
-
-const sampleData = [
-  {
-    "id": 1,
-    "name": "Leanne Graham",
-    "email": "test@test.com",
-    "city": "test city",
-    "company": "test company"
-  },
-  {
-    "id": 2,
-    "name": "Aeanne Graham",
-    "email": "abc@test.com",
-    "city": "test city",
-    "company": "test company"
-  }
-]
+import styles from './InidcatorTable.module.css';
+import { DefaultComponentProps } from '../../types';
+import sampleData from './test_data.json';
 
 
-const FetchPolicy = ({ setShowAddForm }: { setShowAddForm: any }) => {
+interface IndicatorTableProps extends DefaultComponentProps {
+    setShowAddForm: any;
+}
+
+
+const IndicatorTable: React.FC<IndicatorTableProps> = ({ setShowAddForm, translations }) => {
 
     const columns: ColumnDescription<any, any>[] = useMemo(() => [
         {
@@ -34,22 +26,16 @@ const FetchPolicy = ({ setShowAddForm }: { setShowAddForm: any }) => {
             headerStyle: { width: '10%' },
         },
         {
-            dataField: 'name',
-            text: 'Name',
+            dataField: 'indicatorName',
+            text: 'Indicator Name',
             sort: true,
-            headerStyle: { width: '20%' }
+            headerStyle: { width: '50%' }
         },
         {
-            dataField: 'email',
-            text: 'Email',
+            dataField: 'sector',
+            text: 'Sector',
             sort: true,
-            headerStyle: { width: '20%' },
-        },
-        {
-            dataField: 'city',
-            text: 'City',
-            sort: true,
-            headerStyle: { width: '20%' },
+            headerStyle: { width: '30%' },
         },
         {
             dataField: 'action',
@@ -58,18 +44,18 @@ const FetchPolicy = ({ setShowAddForm }: { setShowAddForm: any }) => {
             csvExport: false,
             formatter: (cell: any, row: any) => {
                 return (
-                    <div className="d-flex justify-content-center">
-                        <div className="mr-2">
-                            <i className="fa fa-pencil" aria-hidden="true" onClick={() => setShowAddForm(true)}></i>
+                    <Row sm={8} className={styles.action_wrapper}>
+                        <div className={styles.action_container}>
+                            <i style={{ fontSize: 20, color: '#00D100' }} className="fa fa-pencil" aria-hidden="true" onClick={() => console.log('testing action edit button')}></i>
                         </div>
-                        <div>
-                            <i className="fa fa-trash" aria-hidden="true"></i>
+                        <div className={styles.action_container}>
+                            <i style={{ fontSize: 20, color: '#da2a2a' }} className="fa fa-trash" aria-hidden="true"></i>
                         </div>
-                    </div>
+                    </Row>
                 )
             },
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     ], []);
 
     const [ordersData, setOrdersData] = useState<any>(useMemo(() => [], []));
@@ -85,12 +71,20 @@ const FetchPolicy = ({ setShowAddForm }: { setShowAddForm: any }) => {
     return (
         <>
             <SkeletonTable
-            title="Inidcation Management" 
-            data={ordersData} 
-            columns={columns}
+                title={translations['amp.indicatormanager:table-title']}
+                data={ordersData}
+                columns={columns}
             />
         </>
     )
 }
 
-export default React.memo(FetchPolicy);
+const InidcatorTableMemo = React.memo(IndicatorTable);
+
+const mapStateToProps = (state: any) => ({
+    translations: state.translationsReducer.translations
+});
+
+const mapDispatchToProps = (dispatch: any) => bindActionCreators({}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(InidcatorTableMemo);

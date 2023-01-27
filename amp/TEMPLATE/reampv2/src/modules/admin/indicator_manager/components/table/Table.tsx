@@ -1,10 +1,10 @@
 import React from 'react';
-import { Col, Row, } from 'react-bootstrap';
+import { Col, Row, Button } from 'react-bootstrap';
 import BootstrapTable, { PaginationOptions } from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import filterFactory, { FilterFactoryProps } from 'react-bootstrap-table2-filter';
 import 'react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css';
-import ToolkitProvider, { Search, CSVExport } from 'react-bootstrap-table2-toolkit';
+import ToolkitProvider, { Search, CSVExport, ToolkitContextType } from 'react-bootstrap-table2-toolkit';
 // eslint-disable-next-line import/no-unresolved
 import styles from './Table.module.css';
 
@@ -49,36 +49,59 @@ const SkeletonTable = ({ columns, data, title }: any) => {
   };
 
   return (
-    <Col lg={12}>
+    <Col sm={12}>
       <ToolkitProvider
         keyField="id"
         data={data}
         columns={columns}
         search
+        exportCSV
       >
         {
-          (props: any) => (
+          (props: ToolkitContextType) => (
             <div>
-              <Row className={styles.table_header}>
-                <Col sm={6}>
-                  <h3>{title}</h3>
-                </Col>
-                {/* searchbar should be far right on the col */}
-                <Col sm={6}>
-                  <div className={styles.search_container}>
-                    <SearchBar
-                      {...props.searchProps}
-                      placeholder="Search"
-                    />
-                    <ExportCSVButton
-                      {...props.csvProps}
-                      className={styles.export_button}
-                    >
-                      Export CSV
-                    </ExportCSVButton>
-                  </div>
-                </Col>
-              </Row>
+              <Col
+                sm={12}
+                style={{
+                  paddingBottom: 15
+                }}>
+                <Row className={styles.table_header}>
+                  <Col sm={6}>
+                    <h3>{title}</h3>
+                  </Col>
+                  <Col sm={6}>
+                    <hr />
+                  </Col>
+                </Row>
+
+                <Row sm={12} className={styles.table_header_bottom}>
+                  <Col sm={6}>
+                    <Button type="primary">
+                      <i className="fa fa-plus" />
+                      {' '}
+                      <span>Add New</span>
+                    </Button>
+                  </Col>
+                  {/* searchbar should be far right on the col */}
+                  <Col sm={6}>
+                    <div>
+                      <div className={styles.search_container}>
+                        <SearchBar
+                          {...props.searchProps}
+                          placeholder="Search"
+                        />
+                        <ExportCSVButton
+                          {...props.csvProps}
+                          className={styles.export_button}
+                        >
+                          Export
+                        </ExportCSVButton>
+                      </div>
+                    </div>
+
+                  </Col>
+                </Row>
+              </Col>
               <hr />
               <BootstrapTable
                 {...props.baseProps}
@@ -88,7 +111,7 @@ const SkeletonTable = ({ columns, data, title }: any) => {
                   clickToSelect: false,
                 }}
                 filter={filterFactory(filterOptions)}
-      />
+              />
             </div>
           )
         }

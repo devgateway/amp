@@ -8,7 +8,7 @@ import StartUp from './components/StartUp';
 import defaultTrnPack from './config/initialTranslations.json';
 import './index.css';
 import '../../../open-sans.css';
-import Table from './components/table/IndicatorTable.tsx';
+import InidcatorTable from './components/table/IndicatorTable.tsx';
 
 const checkreduxDevTools = () => {
   if (typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) {
@@ -33,7 +33,7 @@ const AdminIndicatorManagerApp = () => {
   return (
     <Provider store={store}>
       <StartUp defaultTrnPack={defaultTrnPack}>
-        <Table />
+        <InidcatorTable />
       </StartUp>
     </Provider>
   );

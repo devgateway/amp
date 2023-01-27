@@ -17,7 +17,7 @@ import java.util.List;
 public class IndicatorManagerEndpoints {
 
     @GET
-    @Path("/indicator")
+    @Path("/indicators")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "getIndicators")
     @ApiOperation(value = "Retrieve and provide a list of indicators.")

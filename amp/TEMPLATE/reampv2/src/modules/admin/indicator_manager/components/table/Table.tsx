@@ -7,9 +7,6 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import filterFactory, { FilterFactoryProps } from 'react-bootstrap-table2-filter';
 import 'react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css';
 import ToolkitProvider, { Search, CSVExport, ToolkitContextType } from 'react-bootstrap-table2-toolkit';
-// eslint-disable-next-line import/no-unresolved
-// @ts-ignore
-import overlayFactory from 'react-bootstrap-table2-overlay';
 import styles from './Table.module.css';
 
 const SkeletonTable = ({ columns, data, title }: any) => {
@@ -168,8 +165,6 @@ const SkeletonTable = ({ columns, data, title }: any) => {
               <hr />
               <BootstrapTable
                 {...props.baseProps}
-                bordered
-                bootstrap4
                 headerClasses={styles.table_header_titles}
                 bodyClasses={styles.table_body}
                 pagination={paginationFactory(paginationOptions)}
@@ -180,15 +175,9 @@ const SkeletonTable = ({ columns, data, title }: any) => {
                 filter={filterFactory(filterOptions)}
                 noDataIndication={() => (
                   <div className={styles.no_data}>
-                    <h3>No Data Available</h3>
+                    <h5>No Data Available</h5>
                   </div>
                 )}
-                overlay={overlayFactory({
-                  spinner: true,
-                  styles: {
-                    overlay: (base: any) => ({ ...base, background: 'rgba(255, 0, 0, 0.5)' })
-                  }
-                })}
               />
             </div>
           )

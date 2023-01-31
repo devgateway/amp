@@ -38,4 +38,15 @@ public class IndicatorManagerService {
                 .map(AmpSectorDTO::new)
                 .collect(Collectors.toList());
     }
+
+    public AmpIndicatorDTO getIndicatorById(final String id) {
+        Session session = PersistenceManager.getSession();
+
+        AmpIndicator indicator = (AmpIndicator) session.get(AmpIndicator.class, Long.valueOf(id));
+        if (indicator != null) {
+            return new AmpIndicatorDTO(indicator);
+        }
+
+        throw new IllegalArgumentException("Indicator with id " + id + " not found");
+    }
 }

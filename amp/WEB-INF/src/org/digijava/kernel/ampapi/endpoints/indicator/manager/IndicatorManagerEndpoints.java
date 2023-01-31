@@ -7,6 +7,7 @@ import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
@@ -22,6 +23,15 @@ public class IndicatorManagerEndpoints {
     @ApiOperation(value = "Retrieve and provide a list of indicators.")
     public List<AmpIndicatorDTO> getIndicators() {
         return new IndicatorManagerService().getIndicators();
+    }
+
+    @GET
+    @Path("/indicators/{id}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "getIndicatorById")
+    @ApiOperation(value = "Retrieve the indicator by id.")
+    public AmpIndicatorDTO getIndicatorById(@PathParam("id") String id) {
+        return new IndicatorManagerService().getIndicatorById(id);
     }
 
     @GET

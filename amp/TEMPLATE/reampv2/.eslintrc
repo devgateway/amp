@@ -1,6 +1,9 @@
 {
-  "parser": "babel-eslint",
-  "extends": ["airbnb"],
+  "extends": [
+    "airbnb",
+    "plugin:react/recommended",
+    "airbnb-typescript"
+  ], 
   "env": {
     "browser": true,
     "mocha": true,

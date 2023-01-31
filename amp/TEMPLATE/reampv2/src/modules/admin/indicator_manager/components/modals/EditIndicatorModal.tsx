@@ -4,7 +4,9 @@ import {
   Form, Modal, Button
 } from 'react-bootstrap';
 import Select from 'react-select';
+import { useFormik } from 'formik';
 import styles from './css/IndicatorModal.module.css';
+import { newIndicatorValidationSchema } from '../../utils/validator';
 
 const options = [
   { value: 'chocolate', label: 'Chocolate' },
@@ -18,11 +20,37 @@ interface EditIndicatorModalProps {
   indicator?: any;
 }
 
+interface IndicatorFormValues {
+  name: string;
+  description?: string;
+  code: string;
+  sectors: string[];
+  type: string;
+  creationDate?: string;
+}
+
 const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
   const { show, setShow } = props;
   const nodeRef = useRef(null);
 
   const handleClose = () => setShow(false);
+
+  const initialValues: IndicatorFormValues = {
+    name: '',
+    description: '',
+    code: '',
+    sectors: [],
+    type: 'ascending',
+    creationDate: ''
+  };
+
+  const formik = useFormik({
+    initialValues,
+    validationSchema: newIndicatorValidationSchema,
+    onSubmit: (values) => {
+      console.log(values);
+    }
+  });
 
   return (
     <Modal
@@ -37,10 +65,13 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
         <Modal.Title>Edit Indicator</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form>
+        <Form validated onSubmit={formik.handleSubmit}>
           <Form.Group controlId="formBasicName">
             <Form.Label>Indicator Name</Form.Label>
             <Form.Control required aria-required type="text" placeholder="Enter Indicator Name" />
+            <Form.Control.Feedback type="invalid">
+              Please provide a valid Indicator Name.
+            </Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group controlId="formBasicDescription">

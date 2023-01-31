@@ -9,16 +9,16 @@ import filterFactory, { FilterFactoryProps } from 'react-bootstrap-table2-filter
 import 'react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css';
 import ToolkitProvider, { Search, CSVExport, ToolkitContextType } from 'react-bootstrap-table2-toolkit';
 import styles from './Table.module.css';
-import AddNewIndicatorForm from '../forms/AddNewIndicatorForm';
+import AddNewIndicatorModal from '../modals/AddNewIndicatorModal';
 
 const SkeletonTable = ({ columns, data, title }: any) => {
   const { SearchBar } = Search;
   const { ExportCSVButton } = CSVExport;
 
-  const [showAddNewIndicatorForm, setShowAddNewIndicatorForm] = useState(false);
+  const [showAddNewIndicatorModal, setShowAddNewIndicatorModal] = useState(false);
 
-  const showAddNewIndicatorFormHandler = () => {
-    setShowAddNewIndicatorForm(true);
+  const showAddNewIndicatorModalHandler = () => {
+    setShowAddNewIndicatorModal(true);
   };
 
   // create a pagination factory
@@ -96,7 +96,7 @@ const SkeletonTable = ({ columns, data, title }: any) => {
 
   return (
     <>
-      <AddNewIndicatorForm show={showAddNewIndicatorForm} setShow={setShowAddNewIndicatorForm} />
+      <AddNewIndicatorModal show={showAddNewIndicatorModal} setShow={setShowAddNewIndicatorModal} />
       <Col sm={12}>
         <ToolkitProvider
           keyField="id"
@@ -125,7 +125,7 @@ const SkeletonTable = ({ columns, data, title }: any) => {
                   <Row sm={12} className={styles.table_header_bottom}>
                     <Col sm={6}>
                       <div className={styles.table_header_bottom_left}>
-                        <Button type="primary" onClick={showAddNewIndicatorFormHandler}>
+                        <Button type="primary" onClick={showAddNewIndicatorModalHandler}>
                           <i className="fa fa-plus" />
                           {' '}
                           <span>Add New Indicator</span>

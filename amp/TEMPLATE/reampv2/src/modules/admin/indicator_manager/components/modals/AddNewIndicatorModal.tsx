@@ -1,13 +1,24 @@
+/* eslint-disable import/no-unresolved */
 import React, { useRef } from 'react';
-import { Form, Modal, Button } from 'react-bootstrap';
-import styles from './css/AddNewIndicatorForm.module.css';
+import {
+  Form, Modal, Button
+} from 'react-bootstrap';
+import Select from 'react-select';
+import styles from './css/AddNewIndicatorModal.module.css';
+import { getCurrentDate } from '../../utils/dateFn';
 
-interface IndicatorFormProps {
+const options = [
+  { value: 'chocolate', label: 'Chocolate' },
+  { value: 'strawberry', label: 'Strawberry' },
+  { value: 'vanilla', label: 'Vanilla' }
+];
+
+interface AddNewIndicatorModalProps {
   show: boolean;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const AddNewIndicatorForm: React.FC<IndicatorFormProps> = (props) => {
+const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
   const { show, setShow } = props;
   const nodeRef = useRef(null);
 
@@ -42,6 +53,17 @@ const AddNewIndicatorForm: React.FC<IndicatorFormProps> = (props) => {
             <Form.Control type="text" placeholder="Enter Indicator Code" />
           </Form.Group>
 
+          <Form.Group controlId="formIndicatorSectors">
+            <Form.Label>Indicator Sectors</Form.Label>
+            <Select
+              isMulti
+              name="sectors"
+              options={options}
+              className="basic-multi-select"
+              classNamePrefix="select"
+            />
+          </Form.Group>
+
           <Form.Group controlId="formIndicatorType">
             <Form.Label>Indicator Type</Form.Label>
             <Form.Control as="select">
@@ -52,7 +74,7 @@ const AddNewIndicatorForm: React.FC<IndicatorFormProps> = (props) => {
 
           <Form.Group controlId="formCreationDate">
             <Form.Label>Creation Date</Form.Label>
-            <Form.Control readOnly type="date" placeholder="Enter Creation Date" />
+            <Form.Control type="date" readOnly defaultValue={getCurrentDate()} placeholder="Enter Creation Date" />
           </Form.Group>
 
         </Form>
@@ -67,4 +89,4 @@ const AddNewIndicatorForm: React.FC<IndicatorFormProps> = (props) => {
   );
 };
 
-export default AddNewIndicatorForm;
+export default AddNewIndicatorModal;

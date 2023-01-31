@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="org.digijava.module.aim.dbentity.AmpIndicatorGlobalValue" table="AMP_INDICATOR_GLOBAL_VALUE" lazy="false">
+        <cache usage="read-write" />
+        <id name="id" column="id" type="java.lang.Long">
+            <generator class="native">
+                <param name="sequence">AMP_INDICATOR_GLOBAL_VALUE_seq</param>
+            </generator>
+        </id>
+
+        <many-to-one name="indicator" column="indicator_id"
+                     class="org.digijava.module.aim.dbentity.AmpIndicator" cascade="none" lazy="false"/>
+
+        <property name="type" type="int" not-null="true"/>
+        <property name="originalValue" column="original_value" type="java.lang.Double" not-null="true"/>
+        <property name="originalValueDate" column="original_value_date" type="java.util.Date"/>
+        <property name="revisedValue" column="revised_value" type="java.lang.Double" not-null="true"/>
+        <property name="revisedValueDate" column="revised_value_date" type="java.util.Date"/>
+
+    </class>
+</hibernate-mapping>

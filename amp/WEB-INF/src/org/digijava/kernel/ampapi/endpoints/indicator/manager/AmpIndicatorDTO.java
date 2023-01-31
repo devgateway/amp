@@ -10,7 +10,9 @@ import io.swagger.annotations.ApiModelProperty;
 import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
 import org.digijava.kernel.ampapi.endpoints.gis.LocalizedDateSerializer;
 import org.digijava.module.aim.dbentity.AmpIndicator;
+import org.digijava.module.aim.dbentity.AmpIndicatorGlobalValue;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpTheme;
 
 import java.util.Date;
 import java.util.List;
@@ -44,10 +46,22 @@ public class AmpIndicatorDTO {
     @JsonSerialize(using = LocalizedDateSerializer.class)
     private Date creationDate;
 
+    @JsonProperty("base")
+    private AmpIndicatorGlobalValue baseValue;
+
+    @JsonProperty("target")
+    private AmpIndicatorGlobalValue targetValue;
+
     @JsonProperty("sectors")
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "ampSectorId")
     @JsonIdentityReference(alwaysAsId = true)
     private List<AmpSector> sectors;
+
+    @JsonProperty("programs")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "ampThemeId")
+    @JsonIdentityReference(alwaysAsId = true)
+    private List<AmpTheme> programs;
+
 
     public AmpIndicatorDTO(final AmpIndicator indicator) {
         this.id = indicator.getIndicatorId();
@@ -59,6 +73,9 @@ public class AmpIndicatorDTO {
         this.ascending = indicator.getType() == null || indicator.getType().equals("A");
         this.creationDate = indicator.getCreationDate();
         this.sectors = indicator.getSectors().stream().collect(Collectors.toList());
+        this.baseValue = indicator.getBaseValue();
+        this.targetValue = indicator.getTargetValue();
+        this.programs = indicator.getPrograms().stream().collect(Collectors.toList());
     }
 
     public Long getId() {
@@ -115,5 +132,17 @@ public class AmpIndicatorDTO {
 
     public void setSectors(final List<AmpSector> sectors) {
         this.sectors = sectors;
+    }
+
+    public AmpIndicatorGlobalValue getBaseValue() {
+        return baseValue;
+    }
+
+    public void setBaseValue(final AmpIndicatorGlobalValue baseValue) {
+        this.baseValue = baseValue;
+    }
+
+    public AmpIndicatorGlobalValue getTargetValue() {
+        return targetValue;
     }
 }

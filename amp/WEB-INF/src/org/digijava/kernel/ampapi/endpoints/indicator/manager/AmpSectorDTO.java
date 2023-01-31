@@ -26,7 +26,8 @@ public class AmpSectorDTO {
 
     public AmpSectorDTO(final AmpSector sector) {
         this.id = sector.getAmpSectorId();
-        this.name = TranslationUtil.loadTranslationsForField(AmpSector.class, "name", sector.getName(), sector.getAmpSectorId());
+        this.name = TranslationUtil.loadTranslationsForField(AmpSector.class, "name", sector.getName(),
+                sector.getAmpSectorId());
         this.code = sector.getSectorCode();
         this.codeOfficial = sector.getSectorCodeOfficial();
     }

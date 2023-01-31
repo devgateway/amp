@@ -1,15 +1,15 @@
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.Set;
-
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.Validators;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+
+import java.io.Serializable;
+import java.util.Date;
+import java.util.Set;
 
 @TranslatableClass (displayName = "Indicator")
 public class AmpIndicator implements Serializable, Identifiable
@@ -39,9 +39,12 @@ public class AmpIndicator implements Serializable, Identifiable
     @Validators (unique="/Activity Form/M&E/uniqueSectorsValidator")
     private Set<AmpSector> sectors;
 //    @Interchangeable(fieldTitle="Comments")
+
+    private Set<AmpTheme> programs;
+
     private String comments;
 //    @Interchangeable(fieldTitle="Unit")
-        private String unit;
+    private String unit;
     /**
      * Indicator connections with activities.
      * Elements in this set contains activity and values assigned to this activity-indicator connections.
@@ -59,6 +62,8 @@ public class AmpIndicator implements Serializable, Identifiable
      */
     
     private Set<IndicatorTheme> valuesTheme;
+
+    private Set<AmpIndicatorGlobalValue> indicatorValues;
 
     @Interchangeable(fieldTitle="Indicator Category")
     private AmpCategoryValue indicatorsCategory;
@@ -112,8 +117,17 @@ public class AmpIndicator implements Serializable, Identifiable
     public Set<AmpSector> getSectors() {
         return sectors;
     }
+
     public void setSectors(Set<AmpSector> sectors) {
         this.sectors = sectors;
+    }
+
+    public Set<AmpTheme> getPrograms() {
+        return programs;
+    }
+
+    public void setPrograms(Set<AmpTheme> programs) {
+        this.programs = programs;
     }
     public boolean isDefaultInd() {
         return defaultInd;
@@ -165,5 +179,27 @@ public class AmpIndicator implements Serializable, Identifiable
     @Override
     public Object getIdentifier() {
         return indicatorId;
+    }
+
+    public Set<AmpIndicatorGlobalValue> getIndicatorValues() {
+        return indicatorValues;
+    }
+
+    public void setIndicatorValues(final Set<AmpIndicatorGlobalValue> indicatorValues) {
+        this.indicatorValues = indicatorValues;
+    }
+
+    public AmpIndicatorGlobalValue getBaseValue() {
+        return indicatorValues.stream()
+                .filter(AmpIndicatorGlobalValue::isBaseValue)
+                .findFirst()
+                .orElse(null);
+    }
+
+    public AmpIndicatorGlobalValue getTargetValue() {
+        return indicatorValues.stream()
+                .filter(AmpIndicatorGlobalValue::isTargetValue)
+                .findFirst()
+                .orElse(null);
     }
 }

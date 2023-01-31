@@ -5,16 +5,33 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import SkeletonTable from './Table';
 import { ColumnDescription } from 'react-bootstrap-table-next';
-import styles from './InidcatorTable.module.css';
+import styles from './IndicatorTable.module.css';
 import { DefaultComponentProps } from '../../types';
 import sampleData from './test_data.json';
 
+// Modals
+import ViewIndicatorModal from '../modals/ViewIndicatorModal';
+import EditIndicatorModal from '../modals/EditIndicatorModal';
 
 interface IndicatorTableProps extends DefaultComponentProps {
 }
 
 
 const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
+
+    const [selectedRow, setSelectedRow] = useState<any>(null);
+    const [showViewIndicatorModal, setShowViewIndicatorModal] = useState<boolean>(false);
+    const [showEditIndicatorModal, setShowEditIndicatorModal] = useState<boolean>(false);
+
+    const viewIndicatorModalHandler = (row: any) => {
+        setSelectedRow(row);
+        setShowViewIndicatorModal(true);
+    };
+
+    const editIndicatorModalHandler = (row: any) => {
+        setSelectedRow(row);
+        setShowEditIndicatorModal(true);
+    };
 
     const columns: ColumnDescription<any, any>[] = useMemo(() => [
         {
@@ -44,10 +61,10 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
                 return (
                     <Row sm={8} className={styles.action_wrapper}>
                         <div className={styles.action_container}>
-                            <i style={{ fontSize: 20, color: '#007bff' }} className="fa fa-eye" aria-hidden="true" onClick={() => console.log('testing action view button')}></i>
+                            <i style={{ fontSize: 20, color: '#007bff' }} className="fa fa-eye" aria-hidden="true" onClick={() => viewIndicatorModalHandler(row)}></i>
                         </div>
                         <div className={styles.action_container}>
-                            <i style={{ fontSize: 20, color: '#198754' }} className="fa fa-pencil" aria-hidden="true" onClick={() => console.log('testing action edit button')}></i>
+                            <i style={{ fontSize: 20, color: '#198754' }} className="fa fa-pencil" aria-hidden="true" onClick={() => editIndicatorModalHandler(row)}></i>
                         </div>
                         <div className={styles.action_container}>
                             <i style={{ fontSize: 20, color: '#dc3545' }} className="fa fa-trash" aria-hidden="true"></i>
@@ -71,6 +88,18 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
 
     return (
         <>
+            <ViewIndicatorModal
+                show={showViewIndicatorModal}
+                setShow={setShowViewIndicatorModal}
+                indicator={selectedRow}
+            />
+
+            <EditIndicatorModal
+                show={showEditIndicatorModal}
+                setShow={setShowEditIndicatorModal}
+                indicator={selectedRow}
+            />
+            
             <SkeletonTable
                 title={translations['amp.indicatormanager:table-title']}
                 data={inidcatorsData}

@@ -5,7 +5,6 @@ import {
 } from 'react-bootstrap';
 import Select from 'react-select';
 import styles from './css/IndicatorModal.module.css';
-import { getCurrentDate } from '../../utils/dateFn';
 
 const options = [
   { value: 'chocolate', label: 'Chocolate' },
@@ -13,12 +12,13 @@ const options = [
   { value: 'vanilla', label: 'Vanilla' }
 ];
 
-interface AddNewIndicatorModalProps {
+interface EditIndicatorModalProps {
   show: boolean;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
+  indicator?: any;
 }
 
-const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
+const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
   const { show, setShow } = props;
   const nodeRef = useRef(null);
 
@@ -34,7 +34,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
       animation={false}
     >
       <Modal.Header closeButton>
-        <Modal.Title>Add New Indicator</Modal.Title>
+        <Modal.Title>Edit Indicator</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
@@ -72,11 +72,6 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
             </Form.Control>
           </Form.Group>
 
-          <Form.Group controlId="formCreationDate">
-            <Form.Label>Creation Date</Form.Label>
-            <Form.Control type="date" readOnly defaultValue={getCurrentDate()} placeholder="Enter Creation Date" />
-          </Form.Group>
-
         </Form>
       </Modal.Body>
       <Modal.Footer>
@@ -89,4 +84,4 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
   );
 };
 
-export default AddNewIndicatorModal;
+export default EditIndicatorModal;

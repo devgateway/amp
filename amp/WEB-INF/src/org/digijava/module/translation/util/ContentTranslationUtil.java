@@ -112,15 +112,16 @@ public class ContentTranslationUtil {
      *
      * @return the identifier for the object in the TranslationStore
      */
-    private static Long getFieldTrnPack(Class clazz, String objClass, Long objId, String fieldName, String currentLocale, String fieldTrnCurrentLocale, List<AmpContentTranslation> formFieldTrns){
+    private static Long getFieldTrnPack(Class clazz, Long objId, String fieldName,
+            String currentLocale, String fieldTrnCurrentLocale, List<AmpContentTranslation> formFieldTrns,
+            List<AmpContentTranslation> cumulativeTranslations) {
+        String objClass = clazz.getName();
         //get old translations for current field
         List<AmpContentTranslation> currentTranslations = loadFieldTranslations(objClass, objId, fieldName);
         //create the FieldTranslationPack object
         FieldTranslationPack trnPack = new FieldTranslationPack(objClass, fieldName);
-        if (currentTranslations != null){ //if we have trns from the db, add them to the list
-            for (AmpContentTranslation ampContentTranslation : currentTranslations) {
-                trnPack.add(ampContentTranslation);
-            }
+        for (AmpContentTranslation ampContentTranslation : currentTranslations) {
+            trnPack.add(ampContentTranslation);
         }
 
         if (formFieldTrns != null){//override the translations from the db with the ones from the form if available
@@ -139,6 +140,9 @@ public class ContentTranslationUtil {
                 trnPack.add(getBaseLanguage(), baseTrn);
         }
 
+        trnPack.getTranslations().forEach((locale, value) ->
+                cumulativeTranslations.add(new AmpContentTranslation(objClass, objId, fieldName, locale, value)));
+
         return TranslationStore.insert(trnPack);
     }
 
@@ -149,7 +153,7 @@ public class ContentTranslationUtil {
      * @param obj Object that needs translation cloning
      */
     public static void cloneTranslations(Object obj){
-        cloneTranslations(obj, null);
+        cloneTranslations(obj, null, new ArrayList<>());
     }
 
     /**
@@ -201,12 +205,12 @@ public class ContentTranslationUtil {
      * @param formTranslations the list of translations that were modified using the activity form
      */
     @SuppressWarnings("unchecked")
-    public static void cloneTranslations(Object obj, Collection<AmpContentTranslation> formTranslations)
-    {
+    public static void cloneTranslations(Object obj, Collection<AmpContentTranslation> formTranslations,
+            List<AmpContentTranslation> cumulativeTranslations) {
         //check if multilingual is enabled
         if (!multilingualIsEnabled())
             return;
-        cloneTranslations(obj, formTranslations, new HashSet<String>());
+        cloneTranslations(obj, formTranslations, cumulativeTranslations, new HashSet<String>());
     }
     
     /**
@@ -218,7 +222,8 @@ public class ContentTranslationUtil {
      * @param processed keeps track of processed object to avoid infinite recursive calls via circular references 
      * and it should be empty at the first function call
      */
-    private static void cloneTranslations(Object obj, Collection<AmpContentTranslation> formTranslations, Set<String> processed){
+    private static void cloneTranslations(Object obj, Collection<AmpContentTranslation> formTranslations,
+            List<AmpContentTranslation> cumulativeTranslations, Set<String> processed) {
         Hibernate.initialize(obj);
         String objClass = getObjectClassName(obj);
         Long objId = getObjectId(obj);
@@ -259,7 +264,8 @@ public class ContentTranslationUtil {
                     }
 
                     //generate FTP with old translations + insert updated translation
-                    Long packId = getFieldTrnPack(clazz, objClass, objId, fieldName, currentLocale, fieldTrnCurrentLocale, formFieldTrns);
+                    Long packId = getFieldTrnPack(clazz, objId, fieldName, currentLocale,
+                            fieldTrnCurrentLocale, formFieldTrns, cumulativeTranslations);
                     //replace the value of the field with the identifier for the FTP from the TranslationStore
                     Method methSetField = clazz.getMethod("set" + Strings.capitalize(fieldName), String.class);
                     methSetField.invoke(obj, String.valueOf(packId));
@@ -285,7 +291,7 @@ public class ContentTranslationUtil {
                                 if (o.getClass().isAnnotationPresent(TranslatableClass.class) &&
                                     !o.getClass().isAssignableFrom(AmpActivityVersion.class) //not supported
                                     )
-                                cloneTranslations(o, formTranslations, processed);
+                                cloneTranslations(o, formTranslations, cumulativeTranslations, processed);
                                 else {
                                     //we don't have mixed collections, no point in iterating forward through the collection
                                     break;
@@ -299,7 +305,7 @@ public class ContentTranslationUtil {
                     Object o = methGetField.invoke(obj);
                      
                     if(o!=null) {
-                        cloneTranslations(o, formTranslations, processed);
+                        cloneTranslations(o, formTranslations, cumulativeTranslations, processed);
                     }
                 }
             }

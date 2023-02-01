@@ -79,7 +79,19 @@ public class AmpActivityLocation implements Versionable, Serializable, Cloneable
     public void setLocationPercentage(Float locationPercentage) {
         this.locationPercentage = locationPercentage;
     }
-    
+
+    public AmpActivityLocation() {
+    }
+
+    public AmpActivityLocation(AmpActivityVersion activity, AmpCategoryValueLocations location,
+                               Float locationPercentage, String latitude, String longitude) {
+        this.activity = activity;
+        this.location = location;
+        this.locationPercentage = locationPercentage;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
     @Override
     public boolean equalsForVersioning(Object obj) {
         AmpActivityLocation aux = (AmpActivityLocation) obj;

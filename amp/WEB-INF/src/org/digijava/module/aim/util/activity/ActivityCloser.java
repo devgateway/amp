@@ -18,6 +18,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.digijava.module.aim.util.activity.GenericUserHelper.getAmpTeamMemberModifier;
@@ -89,6 +90,7 @@ public class ActivityCloser {
 
         AmpActivityVersion auxActivity = null;
         auxActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(oldActivity, null,
+                new ArrayList<>(),
                 member, oldActivity.getDraft(), PersistenceManager.getSession(), saveContext, editorStore, site);
         java.util.Locale javaLocale = new java.util.Locale("en");
         LuceneUtil.addUpdateActivity(AMPStartupListener.SERVLET_CONTEXT_ROOT_REAL_PATH, true,

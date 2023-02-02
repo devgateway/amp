@@ -10,12 +10,12 @@
         </id>
 
         <many-to-one name="indicator" column="indicator_id"
-                     class="org.digijava.module.aim.dbentity.AmpIndicator" cascade="none" lazy="false"/>
+                     class="org.digijava.module.aim.dbentity.AmpIndicator" cascade="none" />
 
         <property name="type" type="int" not-null="true"/>
-        <property name="originalValue" column="original_value" type="java.lang.Double" not-null="true"/>
+        <property name="originalValue" column="original_value" type="java.lang.Double"/>
         <property name="originalValueDate" column="original_value_date" type="java.util.Date"/>
-        <property name="revisedValue" column="revised_value" type="java.lang.Double" not-null="true"/>
+        <property name="revisedValue" column="revised_value" type="java.lang.Double"/>
         <property name="revisedValueDate" column="revised_value_date" type="java.util.Date"/>
 
     </class>

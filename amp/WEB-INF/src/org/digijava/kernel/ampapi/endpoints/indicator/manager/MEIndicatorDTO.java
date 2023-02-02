@@ -1,14 +1,13 @@
 package org.digijava.kernel.ampapi.endpoints.indicator.manager;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModelProperty;
 import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
-import org.digijava.kernel.ampapi.endpoints.gis.LocalizedDateSerializer;
+import org.digijava.kernel.ampapi.endpoints.serializers.LocalizedDateDeserializer;
+import org.digijava.kernel.ampapi.endpoints.serializers.LocalizedDateSerializer;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorGlobalValue;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -19,11 +18,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static org.digijava.module.aim.dbentity.AmpIndicatorValue.BASE;
+import static org.digijava.module.aim.dbentity.AmpIndicatorValue.TARGET;
+
 /**
  * DTO for AmpIndicator
  */
 @JsonPropertyOrder({"id", "name", "description", "code", "ascending", "creationDate", "sectors"})
-public class AmpIndicatorDTO {
+public class MEIndicatorDTO {
 
     @JsonProperty("id")
     private Long id;
@@ -44,6 +46,7 @@ public class AmpIndicatorDTO {
 
     @JsonProperty("creationDate")
     @JsonSerialize(using = LocalizedDateSerializer.class)
+    @JsonDeserialize(using = LocalizedDateDeserializer.class)
     private Date creationDate;
 
     @JsonProperty("base")
@@ -53,17 +56,16 @@ public class AmpIndicatorDTO {
     private AmpIndicatorGlobalValue targetValue;
 
     @JsonProperty("sectors")
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "ampSectorId")
-    @JsonIdentityReference(alwaysAsId = true)
-    private List<AmpSector> sectors;
+    private List<Long> sectorIds;
 
     @JsonProperty("programs")
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "ampThemeId")
-    @JsonIdentityReference(alwaysAsId = true)
-    private List<AmpTheme> programs;
+    private List<Long> programIds;
 
+    public MEIndicatorDTO() {
 
-    public AmpIndicatorDTO(final AmpIndicator indicator) {
+    }
+
+    public MEIndicatorDTO(final AmpIndicator indicator) {
         this.id = indicator.getIndicatorId();
         this.name = TranslationUtil.loadTranslationsForField(AmpIndicator.class, "name",
                 indicator.getName(), indicator.getIndicatorId());
@@ -72,10 +74,10 @@ public class AmpIndicatorDTO {
         this.code = indicator.getCode();
         this.ascending = indicator.getType() == null || indicator.getType().equals("A");
         this.creationDate = indicator.getCreationDate();
-        this.sectors = indicator.getSectors().stream().collect(Collectors.toList());
         this.baseValue = indicator.getBaseValue();
         this.targetValue = indicator.getTargetValue();
-        this.programs = indicator.getPrograms().stream().collect(Collectors.toList());
+        this.sectorIds = indicator.getSectors().stream().map(AmpSector::getAmpSectorId).collect(Collectors.toList());
+        this.programIds = indicator.getPrograms().stream().map(AmpTheme::getAmpThemeId).collect(Collectors.toList());
     }
 
     public Long getId() {
@@ -126,23 +128,42 @@ public class AmpIndicatorDTO {
         this.creationDate = creationDate;
     }
 
-    public List<AmpSector> getSectors() {
-        return sectors;
-    }
-
-    public void setSectors(final List<AmpSector> sectors) {
-        this.sectors = sectors;
-    }
-
     public AmpIndicatorGlobalValue getBaseValue() {
         return baseValue;
     }
 
     public void setBaseValue(final AmpIndicatorGlobalValue baseValue) {
+        if (baseValue == null) {
+            baseValue.setType(BASE);
+        }
+
         this.baseValue = baseValue;
     }
 
     public AmpIndicatorGlobalValue getTargetValue() {
         return targetValue;
+    }
+
+    public void setTargetValue(final AmpIndicatorGlobalValue targetValue) {
+        if (targetValue != null) {
+            targetValue.setType(TARGET);
+        }
+        this.targetValue = targetValue;
+    }
+
+    public List<Long> getSectorIds() {
+        return sectorIds;
+    }
+
+    public void setSectorIds(final List<Long> sectorIds) {
+        this.sectorIds = sectorIds;
+    }
+
+    public List<Long> getProgramIds() {
+        return programIds;
+    }
+
+    public void setProgramIds(final List<Long> programIds) {
+        this.programIds = programIds;
     }
 }

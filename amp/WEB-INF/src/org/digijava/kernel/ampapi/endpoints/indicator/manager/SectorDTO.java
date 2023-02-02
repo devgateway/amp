@@ -9,7 +9,7 @@ import org.digijava.module.aim.dbentity.AmpSector;
 import java.util.Map;
 
 @JsonPropertyOrder({"id", "name", "code", "codeOfficial"})
-public class AmpSectorDTO {
+public class SectorDTO {
 
     @JsonProperty("id")
     private final Long id;
@@ -24,7 +24,7 @@ public class AmpSectorDTO {
     @JsonProperty("codeOfficial")
     private final String codeOfficial;
 
-    public AmpSectorDTO(final AmpSector sector) {
+    public SectorDTO(final AmpSector sector) {
         this.id = sector.getAmpSectorId();
         this.name = TranslationUtil.loadTranslationsForField(AmpSector.class, "name", sector.getName(),
                 sector.getAmpSectorId());

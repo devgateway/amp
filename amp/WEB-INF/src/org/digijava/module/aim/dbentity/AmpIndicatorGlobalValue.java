@@ -2,6 +2,11 @@ package org.digijava.module.aim.dbentity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.digijava.kernel.ampapi.endpoints.serializers.LocalizedDateDeserializer;
+import org.digijava.kernel.ampapi.endpoints.serializers.LocalizedDateSerializer;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -21,16 +26,27 @@ public class AmpIndicatorGlobalValue implements Serializable {
      */
     private int type;
 
+    @JsonProperty("originalValue")
     private Double originalValue;
 
+    @JsonSerialize(using = LocalizedDateSerializer.class)
+    @JsonDeserialize(using = LocalizedDateDeserializer.class)
+    @JsonProperty("originalValueDate")
     private Date originalValueDate;
 
+    @JsonProperty("revisedValue")
     private Double revisedValue;
 
+    @JsonSerialize(using = LocalizedDateSerializer.class)
+    @JsonDeserialize(using = LocalizedDateDeserializer.class)
+    @JsonProperty("revisedValueDate")
     private Double revisedValueDate;
 
     @JsonIgnore
     private AmpIndicator indicator;
+
+    public AmpIndicatorGlobalValue() {
+    }
 
     public AmpIndicatorGlobalValue(final int type) {
         this.type = type;

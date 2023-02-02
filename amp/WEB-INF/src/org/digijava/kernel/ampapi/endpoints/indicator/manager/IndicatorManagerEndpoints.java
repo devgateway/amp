@@ -2,6 +2,7 @@ package org.digijava.kernel.ampapi.endpoints.indicator.manager;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.digijava.kernel.ampapi.endpoints.gpi.ValidationUtils;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 
@@ -33,7 +34,7 @@ public class IndicatorManagerEndpoints {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "getMEIndicatorById")
     @ApiOperation(value = "Retrieve the M&E indicator by id.")
-    public MEIndicatorDTO getMEIndicatorById(@PathParam("id") String id) {
+    public MEIndicatorDTO getMEIndicatorById(@PathParam("id") Long id) {
         return new IndicatorManagerService().getMEIndicatorById(id);
     }
 
@@ -44,7 +45,19 @@ public class IndicatorManagerEndpoints {
     @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "createMEIndicator")
     @ApiOperation(value = "Save new M&E indicator")
     public MEIndicatorDTO createMEIndicator(MEIndicatorDTO indicatorRequest) {
+        ValidationUtils.requireValid(indicatorRequest);
         return new IndicatorManagerService().createMEIndicator(indicatorRequest);
+    }
+
+    @POST
+    @Path("/indicators/{id}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "updateMEIndicator")
+    @ApiOperation(value = "Update M&E indicator")
+    public MEIndicatorDTO updateMEIndicator(@PathParam("id") Long id, MEIndicatorDTO indicatorRequest) {
+        ValidationUtils.requireValid(indicatorRequest);
+        return new IndicatorManagerService().updateMEIndicator(id, indicatorRequest);
     }
 
     @DELETE
@@ -52,7 +65,7 @@ public class IndicatorManagerEndpoints {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "getIndicatorById")
     @ApiOperation(value = "Delete M&E indicator by id.")
-    public void deleteMEIndicatorById(@PathParam("id") String id) {
+    public void deleteMEIndicatorById(@PathParam("id") Long id) {
         new IndicatorManagerService().deleteMEIndicator(id);
     }
 

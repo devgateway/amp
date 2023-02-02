@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModelProperty;
 import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
+import org.digijava.kernel.ampapi.endpoints.indicator.manager.validators.ValidProgramIds;
+import org.digijava.kernel.ampapi.endpoints.indicator.manager.validators.ValidSectorIds;
 import org.digijava.kernel.ampapi.endpoints.serializers.LocalizedDateDeserializer;
 import org.digijava.kernel.ampapi.endpoints.serializers.LocalizedDateSerializer;
 import org.digijava.module.aim.dbentity.AmpIndicator;
@@ -13,6 +15,8 @@ import org.digijava.module.aim.dbentity.AmpIndicatorGlobalValue;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
 
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +36,7 @@ public class MEIndicatorDTO {
 
     @JsonProperty("name")
     @ApiModelProperty(dataType = "org.digijava.kernel.ampapi.swagger.types.MultilingualLabelPH")
+    @NotNull
     private Map<String, String> name;
 
     @JsonProperty("description")
@@ -39,6 +44,7 @@ public class MEIndicatorDTO {
     private Map<String, String> description;
 
     @JsonProperty("code")
+    @NotNull
     private String code;
 
     @JsonProperty("ascending")
@@ -47,6 +53,7 @@ public class MEIndicatorDTO {
     @JsonProperty("creationDate")
     @JsonSerialize(using = LocalizedDateSerializer.class)
     @JsonDeserialize(using = LocalizedDateDeserializer.class)
+    @NotNull
     private Date creationDate;
 
     @JsonProperty("base")
@@ -56,10 +63,12 @@ public class MEIndicatorDTO {
     private AmpIndicatorGlobalValue targetValue;
 
     @JsonProperty("sectors")
-    private List<Long> sectorIds;
+    @ValidSectorIds
+    private List<Long> sectorIds = new ArrayList<>();
 
     @JsonProperty("programs")
-    private List<Long> programIds;
+    @ValidProgramIds
+    private List<Long> programIds = new ArrayList<>();
 
     public MEIndicatorDTO() {
 
@@ -133,7 +142,7 @@ public class MEIndicatorDTO {
     }
 
     public void setBaseValue(final AmpIndicatorGlobalValue baseValue) {
-        if (baseValue == null) {
+        if (baseValue != null) {
             baseValue.setType(BASE);
         }
 

@@ -20,13 +20,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static org.digijava.kernel.ampapi.endpoints.indicator.IndicatorEPConstants.DESCRIPTION;
 import static org.digijava.kernel.ampapi.endpoints.indicator.IndicatorEPConstants.NAME;
 
 
 /**
  * Indicator Manager Service
- * 
+ *
  * @author vchihai
  */
 public class IndicatorManagerService {
@@ -48,15 +49,16 @@ public class IndicatorManagerService {
     }
 
 
-    public MEIndicatorDTO getMEIndicatorById(final String indicatorId) {
+    public MEIndicatorDTO getMEIndicatorById(final Long indicatorId) {
         Session session = PersistenceManager.getSession();
 
-        AmpIndicator indicator = (AmpIndicator) session.get(AmpIndicator.class, Long.valueOf(indicatorId));
+        AmpIndicator indicator = (AmpIndicator) session.get(AmpIndicator.class, indicatorId);
         if (indicator != null) {
             return new MEIndicatorDTO(indicator);
         }
 
-        throw new ApiRuntimeException(ApiError.toError("Indicator with id " + indicatorId + " not found"));
+        throw new ApiRuntimeException(BAD_REQUEST,
+                ApiError.toError("Indicator with id " + indicatorId + " not found"));
     }
 
     public MEIndicatorDTO createMEIndicator(final MEIndicatorDTO indicatorRequest) {
@@ -97,14 +99,15 @@ public class IndicatorManagerService {
         return new MEIndicatorDTO(indicator);
     }
 
-    public void deleteMEIndicator(final String indicatorId) {
+    public void deleteMEIndicator(final Long indicatorId) {
         Session session = PersistenceManager.getSession();
 
-        AmpIndicator indicator = (AmpIndicator) session.get(AmpIndicator.class, Long.valueOf(indicatorId));
+        AmpIndicator indicator = (AmpIndicator) session.get(AmpIndicator.class, indicatorId);
         if (indicator != null) {
             session.delete(indicator);
         } else {
-            throw new ApiRuntimeException(ApiError.toError("Indicator with id " + indicatorId + " not found"));
+            throw new ApiRuntimeException(BAD_REQUEST,
+                    ApiError.toError("Indicator with id " + indicatorId + " not found"));
         }
     }
 
@@ -123,4 +126,65 @@ public class IndicatorManagerService {
             throw new ApiRuntimeException(ApiError.toError(e.getMessage()));
         }
     }
+
+    public MEIndicatorDTO updateMEIndicator(final Long indicatorId, final MEIndicatorDTO indRequest) {
+        Session session = PersistenceManager.getSession();
+        AmpIndicator indicator = (AmpIndicator) session.get(AmpIndicator.class, indicatorId);
+        if (indicator != null) {
+            indicator.setName(contentTranslator.extractTranslationsOrSimpleValue(NAME, indicator,
+                    indRequest.getName()));
+
+            indicator.setDescription(contentTranslator.extractTranslationsOrSimpleValue(DESCRIPTION, indicator,
+                    indRequest.getDescription()));
+
+            indicator.setCode(indRequest.getCode());
+            indicator.setType(indRequest.isAscending() ? "A" : "D");
+            indicator.setCreationDate(indRequest.getCreationDate());
+
+            if (indRequest.getBaseValue() != null) {
+                if (indicator.getBaseValue() != null) {
+                    indicator.getBaseValue().setOriginalValue(indRequest.getBaseValue().getOriginalValue());
+                    indicator.getBaseValue().setOriginalValueDate(indRequest.getBaseValue().getOriginalValueDate());
+                    indicator.getBaseValue().setRevisedValue(indRequest.getBaseValue().getRevisedValue());
+                    indicator.getBaseValue().setRevisedValueDate(indRequest.getBaseValue().getRevisedValueDate());
+                } else {
+                    indicator.getIndicatorValues().add(indRequest.getBaseValue());
+                    indicator.getBaseValue().setIndicator(indicator);
+                }
+            }
+
+            if (indRequest.getTargetValue() != null) {
+                if (indicator.getTargetValue() != null) {
+                    indicator.getTargetValue().setOriginalValue(indRequest.getTargetValue().getOriginalValue());
+                    indicator.getTargetValue().setOriginalValueDate(indRequest.getTargetValue().getOriginalValueDate());
+                    indicator.getTargetValue().setRevisedValue(indRequest.getTargetValue().getRevisedValue());
+                    indicator.getTargetValue().setRevisedValueDate(indRequest.getTargetValue().getRevisedValueDate());
+                } else {
+                    indicator.getIndicatorValues().add(indRequest.getTargetValue());
+                    indicator.getTargetValue().setIndicator(indicator);
+                }
+            }
+
+            Set<AmpSector> sectors = indRequest.getSectorIds().stream()
+                    .map(id -> (AmpSector) session.get(AmpSector.class, id))
+                    .collect(Collectors.toSet());
+            indicator.getSectors().clear();
+            indicator.getSectors().addAll(sectors);
+
+            indicator.getPrograms().clear();
+            if (!indRequest.getProgramIds().isEmpty()) {
+                Set<AmpTheme> programs = indRequest.getProgramIds().stream()
+                        .map(id -> (AmpTheme) session.get(AmpTheme.class, id))
+                        .collect(Collectors.toSet());
+                indicator.getPrograms().addAll(programs);
+            }
+
+            session.update(indicator);
+            return new MEIndicatorDTO(indicator);
+        }
+
+        throw new ApiRuntimeException(BAD_REQUEST,
+                ApiError.toError("Indicator with id " + indicatorId + " not found"));
+    }
+
 }

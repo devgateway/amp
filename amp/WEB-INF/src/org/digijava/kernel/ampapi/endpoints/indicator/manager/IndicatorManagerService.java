@@ -2,6 +2,8 @@ package org.digijava.kernel.ampapi.endpoints.indicator.manager;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorGlobalValue;
@@ -31,7 +33,7 @@ public class IndicatorManagerService {
 
     private TranslationUtil contentTranslator = new TranslationUtil();
 
-    public List<MEIndicatorDTO> getIndicators() {
+    public List<MEIndicatorDTO> getMEIndicators() {
         Session session = PersistenceManager.getSession();
 
         List<AmpIndicator> indicators = session.createCriteria(AmpIndicator.class)
@@ -50,18 +52,18 @@ public class IndicatorManagerService {
                 .collect(Collectors.toList());
     }
 
-    public MEIndicatorDTO getIndicatorById(final String id) {
+    public MEIndicatorDTO getMEIndicatorById(final String indicatorId) {
         Session session = PersistenceManager.getSession();
 
-        AmpIndicator indicator = (AmpIndicator) session.get(AmpIndicator.class, Long.valueOf(id));
+        AmpIndicator indicator = (AmpIndicator) session.get(AmpIndicator.class, Long.valueOf(indicatorId));
         if (indicator != null) {
             return new MEIndicatorDTO(indicator);
         }
 
-        throw new IllegalArgumentException("Indicator with id " + id + " not found");
+        throw new ApiRuntimeException(ApiError.toError("Indicator with id " + indicatorId + " not found"));
     }
 
-    public MEIndicatorDTO createAmpIndicator(final MEIndicatorDTO indicatorRequest) {
+    public MEIndicatorDTO createMEIndicator(final MEIndicatorDTO indicatorRequest) {
         Session session = PersistenceManager.getSession();
         AmpIndicator indicator = new AmpIndicator();
 
@@ -96,6 +98,17 @@ public class IndicatorManagerService {
 
         session.save(indicator);
 
-        return indicatorRequest;
+        return new MEIndicatorDTO(indicator);
+    }
+
+    public void deleteMEIndicator(final String indicatorId) {
+        Session session = PersistenceManager.getSession();
+
+        AmpIndicator indicator = (AmpIndicator) session.get(AmpIndicator.class, Long.valueOf(indicatorId));
+        if (indicator != null) {
+            session.delete(indicator);
+        } else {
+            throw new ApiRuntimeException(ApiError.toError("Indicator with id " + indicatorId + " not found"));
+        }
     }
 }

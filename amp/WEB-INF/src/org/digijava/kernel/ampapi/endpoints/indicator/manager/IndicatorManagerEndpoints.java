@@ -6,6 +6,7 @@ import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -22,28 +23,37 @@ public class IndicatorManagerEndpoints {
     @Path("/indicators")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "getIndicators")
-    @ApiOperation(value = "Retrieve and provide a list of indicators.")
-    public List<MEIndicatorDTO> getIndicators() {
-        return new IndicatorManagerService().getIndicators();
+    @ApiOperation(value = "Retrieve and provide a list of M&E indicators.")
+    public List<MEIndicatorDTO> getMEIndicators() {
+        return new IndicatorManagerService().getMEIndicators();
+    }
+
+    @GET
+    @Path("/indicators/{id}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "getMEIndicatorById")
+    @ApiOperation(value = "Retrieve the M&E indicator by id.")
+    public MEIndicatorDTO getMEIndicatorById(@PathParam("id") String id) {
+        return new IndicatorManagerService().getMEIndicatorById(id);
     }
 
     @POST
     @Path("/indicators")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "crateIndicator")
-    @ApiOperation(value = "Save new indicator")
-    public MEIndicatorDTO createIndicator(MEIndicatorDTO indicatorRequest) {
-        return new IndicatorManagerService().createAmpIndicator(indicatorRequest);
+    @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "createMEIndicator")
+    @ApiOperation(value = "Save new M&E indicator")
+    public MEIndicatorDTO createMEIndicator(MEIndicatorDTO indicatorRequest) {
+        return new IndicatorManagerService().createMEIndicator(indicatorRequest);
     }
 
-    @GET
+    @DELETE
     @Path("/indicators/{id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "getIndicatorById")
-    @ApiOperation(value = "Retrieve the indicator by id.")
-    public MEIndicatorDTO getIndicatorById(@PathParam("id") String id) {
-        return new IndicatorManagerService().getIndicatorById(id);
+    @ApiOperation(value = "Delete M&E indicator by id.")
+    public void deleteMEIndicatorById(@PathParam("id") String id) {
+        new IndicatorManagerService().deleteMEIndicator(id);
     }
 
     @GET

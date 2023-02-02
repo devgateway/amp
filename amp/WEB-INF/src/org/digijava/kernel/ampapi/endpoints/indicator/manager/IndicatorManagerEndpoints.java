@@ -65,5 +65,14 @@ public class IndicatorManagerEndpoints {
         return new IndicatorManagerService().getSectors();
     }
 
+    @GET
+    @Path("/programs")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "getPrograms")
+    @ApiOperation(value = "Retrieve and provide a list of programs used by indicators.")
+    public List<ProgramDTO> getPrograms() {
+        return new IndicatorManagerService().getPrograms();
+    }
+
 
 }

@@ -4,11 +4,13 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorGlobalValue;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
@@ -45,12 +47,6 @@ public class IndicatorManagerService {
                 .collect(Collectors.toList());
     }
 
-
-    public List<SectorDTO> getSectors() {
-        return SectorUtil.getAllParentSectors().stream()
-                .map(SectorDTO::new)
-                .collect(Collectors.toList());
-    }
 
     public MEIndicatorDTO getMEIndicatorById(final String indicatorId) {
         Session session = PersistenceManager.getSession();
@@ -109,6 +105,22 @@ public class IndicatorManagerService {
             session.delete(indicator);
         } else {
             throw new ApiRuntimeException(ApiError.toError("Indicator with id " + indicatorId + " not found"));
+        }
+    }
+
+    public List<SectorDTO> getSectors() {
+        return SectorUtil.getAllParentSectors().stream()
+                .map(SectorDTO::new)
+                .collect(Collectors.toList());
+    }
+
+    public List<ProgramDTO> getPrograms() {
+        try {
+            return ProgramUtil.getAllThemes().stream()
+                    .map(ProgramDTO::new)
+                    .collect(Collectors.toList());
+        } catch (DgException e) {
+            throw new ApiRuntimeException(ApiError.toError(e.getMessage()));
         }
     }
 }

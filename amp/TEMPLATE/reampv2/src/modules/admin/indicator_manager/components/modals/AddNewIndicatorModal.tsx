@@ -18,7 +18,7 @@ interface AddNewIndicatorModalProps {
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
+const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = function (props) {
   const { show, setShow } = props;
   const nodeRef = useRef(null);
 

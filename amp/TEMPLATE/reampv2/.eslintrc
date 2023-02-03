@@ -2,12 +2,17 @@
   "extends": [
     "airbnb",
     "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
     "airbnb-typescript"
   ], 
   "env": {
     "browser": true,
     "mocha": true,
     "node": true
+  },
+  "parserOptions": {
+    "project": "./tsconfig.eslint.json",
+    "tsconfigRootDir": "./"
   },
   "rules": {
     "arrow-parens": [
@@ -74,7 +79,15 @@
         "afterOpening": "allow-multiline"
       }
     ],
-    "react/jsx-props-no-spreading": "off"
+    "react/jsx-props-no-spreading": "off",
+    "react/no-unstable-nested-components": "off",
+    "react/jsx-curly-newline": "off",
+    "react/jsx-max-props-per-line": [
+      "error",
+      {
+        "maximum": 1
+      }
+    ]
   },
   "plugins": [
     "import",

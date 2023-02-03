@@ -1,11 +1,12 @@
-/* eslint-disable import/no-unresolved */
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   Form, Modal, Button
 } from 'react-bootstrap';
+import { useFormik } from 'formik';
 import Select from 'react-select';
 import styles from './css/IndicatorModal.module.css';
 import { getCurrentDate } from '../../utils/dateFn';
+import { newIndicatorValidationSchema } from '../../utils/validator';
 
 const options = [
   { value: 'chocolate', label: 'Chocolate' },
@@ -18,11 +19,50 @@ interface AddNewIndicatorModalProps {
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = function (props) {
+interface IndicatorFormValues {
+  name: string;
+  description?: string;
+  code: string;
+  sectors: string[];
+  type: string;
+  creationDate?: string;
+}
+
+const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
   const { show, setShow } = props;
   const nodeRef = useRef(null);
 
+  const [newIndicatorFormValidated, setNewIndicatorFormValidated] = useState(false);
+
   const handleClose = () => setShow(false);
+
+  const initialValues: IndicatorFormValues = {
+    name: '',
+    description: '',
+    code: '',
+    sectors: [],
+    type: 'ascending',
+    creationDate: ''
+  };
+
+  const formik = useFormik({
+    initialValues,
+    validationSchema: newIndicatorValidationSchema,
+    validate: (values) => {
+      const errors: Partial<IndicatorFormValues> = {};
+      if (values.name === '') {
+        errors.name = 'Please provide a valid Indicator Name.';
+      }
+      if (Object.keys(errors).length > 0) {
+        setNewIndicatorFormValidated(false);
+        return errors;
+      }
+      setNewIndicatorFormValidated(true);
+    },
+    onSubmit: (values) => {
+      console.log(values);
+    },
+  });
 
   return (
     <Modal
@@ -31,16 +71,18 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = function (prop
       centered
       ref={nodeRef}
       backdropClassName={styles.modal_backdrop}
-      animation={false}
     >
       <Modal.Header closeButton>
         <Modal.Title>Add New Indicator</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form>
+        <Form noValidate validated={newIndicatorFormValidated} onSubmit={formik.handleSubmit}>
           <Form.Group controlId="formBasicName">
             <Form.Label>Indicator Name</Form.Label>
             <Form.Control required aria-required type="text" placeholder="Enter Indicator Name" />
+            <Form.Control.Feedback type="invalid">
+              Please provide a valid Indicator Name.
+            </Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group controlId="formBasicDescription">
@@ -83,7 +125,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = function (prop
         <Button variant="secondary" onClick={handleClose}>
           Close
         </Button>
-        <Button variant="primary">Save changes</Button>
+        <Button type="submit" variant="success">Save changes</Button>
       </Modal.Footer>
     </Modal>
   );

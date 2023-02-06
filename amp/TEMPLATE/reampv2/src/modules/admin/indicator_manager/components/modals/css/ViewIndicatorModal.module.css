@@ -1,0 +1,17 @@
+.viewmodal_wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.view_row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 30px;
+}
+
+.view_item {
+    width: 50%;
+    text-align: left;
+}

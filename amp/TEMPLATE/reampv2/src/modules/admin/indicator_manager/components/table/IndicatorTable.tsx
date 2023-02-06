@@ -14,6 +14,7 @@ import sampleData from './test_data.json';
 // Modals
 import ViewIndicatorModal from '../modals/ViewIndicatorModal';
 import EditIndicatorModal from '../modals/EditIndicatorModal';
+import DeleteIndicatorModal from '../modals/DeleteIndicatorModal';
 
 interface IndicatorTableProps extends DefaultComponentProps {
 }
@@ -22,6 +23,7 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
   const [selectedRow, setSelectedRow] = useState<any>(null);
   const [showViewIndicatorModal, setShowViewIndicatorModal] = useState<boolean>(false);
   const [showEditIndicatorModal, setShowEditIndicatorModal] = useState<boolean>(false);
+  const [showDeleteIndicatorModal, setShowDeleteIndicatorModal] = useState<boolean>(false);
 
   const viewIndicatorModalHandler = (row: any) => {
     setSelectedRow(row);
@@ -31,6 +33,11 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
   const editIndicatorModalHandler = (row: any) => {
     setSelectedRow(row);
     setShowEditIndicatorModal(true);
+  };
+
+  const deleteIndicatorModalHandler = (row: any) => {
+    setSelectedRow(row);
+    setShowDeleteIndicatorModal(true);
   };
 
   const columns: ColumnDescription<any, any>[] = useMemo(() => [
@@ -79,7 +86,9 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
             <i
               style={{ fontSize: 20, color: '#dc3545' }}
               className="fa fa-trash"
-              aria-hidden="true" />
+              aria-hidden="true"
+              onClick={() => deleteIndicatorModalHandler(row)} 
+              />
           </div>
         </Row>
       ),
@@ -109,6 +118,12 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
         setShow={setShowEditIndicatorModal}
         indicator={selectedRow}
             />
+      
+      <DeleteIndicatorModal
+        show={showDeleteIndicatorModal}
+        setShow={setShowDeleteIndicatorModal}
+        indicator={selectedRow}
+      />
 
       <SkeletonTable
         title={translations['amp.indicatormanager:table-title']}

@@ -65,6 +65,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
   });
 
   return (
+    // this modal wrapper should be a separate component that can be reused since the props are the same
     <Modal
       show={show}
       onHide={handleClose}

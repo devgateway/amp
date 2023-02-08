@@ -9,6 +9,7 @@ export function fetchAmpSettingsPending() {
 }
 
 export function fetchAmpSettingsSuccess(settings) {
+  console.log('fetchAmpSettingsSuccess', settings);
   return {
     type: FETCH_AMP_SETTINGS_SUCCESS,
     payload: settings

@@ -49,6 +49,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
     initialValues,
     validationSchema: newIndicatorValidationSchema,
     validate: (values) => {
+      // @ts-ignore
       const errors: Partial<IndicatorFormValues> = {};
       if (values.name === '') {
         errors.name = 'Please provide a valid Indicator Name.';
@@ -71,6 +72,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
       onHide={handleClose}
       centered
       ref={nodeRef}
+      animation={false}
       backdropClassName={styles.modal_backdrop}
     >
       <Modal.Header closeButton>

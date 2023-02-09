@@ -1,7 +1,4 @@
-package org.digijava.kernel.ampapi.endpoints.gis;
-
-import java.io.IOException;
-import java.util.Date;
+package org.digijava.kernel.ampapi.endpoints.serializers;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
@@ -10,6 +7,9 @@ import io.swagger.models.properties.DateProperty;
 import io.swagger.models.properties.Property;
 import org.digijava.kernel.ampapi.swagger.converters.PropertyDescriber;
 import org.digijava.module.aim.helper.FormatHelper;
+
+import java.io.IOException;
+import java.util.Date;
 
 /**
  * @author Octavian Ciubotaru

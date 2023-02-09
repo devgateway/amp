@@ -19,6 +19,12 @@
 
 		<property name="comments" column="Comments" type="java.lang.String" />
 
+		<set name="indicatorValues" lazy="true" inverse="true" cascade="all-delete-orphan">
+			<cache usage="read-write" />
+			<key column="indicator_id" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpIndicatorGlobalValue" />
+		</set>
+
 		<many-to-one name="indicatorsCategory" column="indicators_category"
 			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 
@@ -29,6 +35,12 @@
 			<cache usage="read-write" />
 			<key column="indicator_id" />
 			<many-to-many class="org.digijava.module.aim.dbentity.AmpSector" column="amp_sector_id" />
+		</set>
+
+		<set name="programs" table="AMP_PROGRAM_INDICATOR" lazy="true" cascade="none">
+			<cache usage="read-write" />
+			<key column="indicator_id" />
+			<many-to-many class="org.digijava.module.aim.dbentity.AmpTheme" column="amp_theme_id" />
 		</set>
 
 		<set name="valuesActivity" lazy="true" inverse="true" cascade="delete-orphan">

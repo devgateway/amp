@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable import/no-named-as-default-member */
 /* eslint-disable import/no-named-as-default */
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useLayoutEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -11,15 +12,26 @@ import styles from './IndicatorTable.module.css';
 import { DefaultComponentProps } from '../../types';
 import sampleData from './test_data.json';
 
+import { getIndicators } from '../../reducers/fetchIndicatorsReducer';
+
 // Modals
 import ViewIndicatorModal from '../modals/ViewIndicatorModal';
 import EditIndicatorModal from '../modals/EditIndicatorModal';
 import DeleteIndicatorModal from '../modals/DeleteIndicatorModal';
+import { Loading } from '../../../../../utils/components/Loading';
 
 interface IndicatorTableProps extends DefaultComponentProps {
 }
 
 const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
+  const dispatch = useDispatch();
+  const { indicators, loading, error } = useSelector((state: any) => state.fetchIndicatorsReducer);
+
+  useLayoutEffect(() => {
+    dispatch(getIndicators());
+  }, []);
+
+
   const [selectedRow, setSelectedRow] = useState<any>(null);
   const [showViewIndicatorModal, setShowViewIndicatorModal] = useState<boolean>(false);
   const [showEditIndicatorModal, setShowEditIndicatorModal] = useState<boolean>(false);
@@ -48,16 +60,22 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
       headerStyle: { width: '10%' },
     },
     {
-      dataField: 'indicatorName',
+      dataField: 'code',
+      text: 'Code',
+      sort: true,
+      headerStyle: { width: '10%' },
+    },
+    {
+      dataField: 'name.en',
       text: 'Indicator Name',
       sort: true,
       headerStyle: { width: '50%' },
     },
     {
-      dataField: 'sector',
-      text: 'Sector',
+      dataField: 'creationDate',
+      text: 'Creation Date',
       sort: true,
-      headerStyle: { width: '30%' },
+      headerStyle: { width: '10%' },
     },
     {
       dataField: 'action',
@@ -97,14 +115,6 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
 
   const [inidcatorsData, setIndicatorsData] = useState<any>(useMemo(() => [], []));
 
-  const fetchData = async () => {
-    setIndicatorsData(sampleData);
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   return (
     <>
       <ViewIndicatorModal
@@ -125,11 +135,14 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
         indicator={selectedRow}
       />
 
-      <SkeletonTable
+      {
+        loading ? <Loading /> :
+        <SkeletonTable
         title={translations['amp.indicatormanager:table-title']}
-        data={inidcatorsData}
+        data={indicators}
         columns={columns}
             />
+      }
     </>
   );
 };

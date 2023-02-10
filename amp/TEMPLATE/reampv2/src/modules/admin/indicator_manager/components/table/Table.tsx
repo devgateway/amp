@@ -89,8 +89,7 @@ const SkeletonTable = ({ columns, data, title }: any) => {
 
   const filterOptions: FilterFactoryProps = {
     afterFilter: (result: any, column: any) => {
-      console.log('result', result);
-      console.log('column', column);
+      // console.log(result, column); 
     }
   };
 

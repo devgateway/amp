@@ -33,6 +33,7 @@ import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.dgfoundation.amp.onepager.models.AmpThemeSearchModel;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
+import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.AmpDividePercentageField;
 import org.dgfoundation.amp.onepager.util.FMUtil;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
@@ -52,6 +53,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static org.dgfoundation.amp.onepager.OnePagerMessages.HAS_PROGRAM_INDICATOR_ALERT_MSG;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.MAXIMUM_PERCENTAGE;
 
 /**
@@ -190,8 +192,17 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
                         "delProgram", "Delete Program") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
+                        final AmpActivityVersion activity = am.getObject();
+                        final AmpActivityProgram program = item.getModelObject();
+                        boolean hasIndicators = ActivityUtil.hasProgramIndicatorsInActivity(activity, program);
+                        if (hasIndicators) {
+                            String message = TranslatorUtil.getTranslation(HAS_PROGRAM_INDICATOR_ALERT_MSG);
+                            target.appendJavaScript(OnePagerUtil.createJSAlert(message));
+                            return;
+                        }
+
                         if (ProgramUtil.isSourceMappedProgram(setting)) {
-                            if (hasMappedPrograms(setModel.getObject(), item.getModelObject())) {
+                            if (hasMappedPrograms(setModel.getObject(), program)) {
                                 String message = TranslatorUtil.getTranslation(
                                         OnePagerMessages.HAS_MAPPED_PROGRAMS_ALERT_MSG);
                                 target.appendJavaScript(OnePagerUtil.createJSAlert(message));
@@ -200,7 +211,7 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
                             send(AmpProgramFormTableFeature.this.getPage(),
                                     Broadcast.BREADTH, new DirectProgramMappingUpdateEvent(target));
                         }
-                        setModel.getObject().remove(item.getModelObject());
+                        setModel.getObject().remove(program);
                         target.add(listParent);
                         list.removeAll();
                         percentageValidationField.reloadValidationField(target);

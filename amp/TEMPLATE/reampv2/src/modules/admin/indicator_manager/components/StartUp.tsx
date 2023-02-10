@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import fetchTranslations from '../../../../utils/actions/fetchTranslations';
 import { Loading } from '../../../../utils/components/Loading';
 // eslint-disable-next-line import/no-unresolved
 import { DefaultTranslationPackTypes } from '../types';
+import { getSectors } from '../reducers/fetchSectorsReducer';
 
 export const AdminIndicatorManagerContext = React.createContext({});
 
@@ -26,12 +27,16 @@ const Startup: React.FC<StartupProps> = (props) => {
     defaultTrnPack, _fetchTranslations, children, translations, translationPending, api
   } = props;
 
+  const dispatch = useDispatch();
+  const sectorsReducer = useSelector((state: any) => state.fetchSectorsReducer);
+
   useEffect(() => {
     _fetchTranslations(defaultTrnPack);
+    dispatch(getSectors());
     // eslint-disable-next-line
   }, []);
 
-  if (translationPending) {
+  if (translationPending && sectorsReducer.loading) {
     return (<Loading />);
   } else {
     document.title = translations['amp.indicatormanager:page-title'];

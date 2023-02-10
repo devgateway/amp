@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable import/no-named-as-default-member */
 /* eslint-disable import/no-named-as-default */
-import React, { useState, useMemo, useEffect, useLayoutEffect } from 'react';
+import React, { useState, useMemo, useLayoutEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
@@ -10,7 +10,6 @@ import { ColumnDescription } from 'react-bootstrap-table-next';
 import SkeletonTable from './Table';
 import styles from './IndicatorTable.module.css';
 import { DefaultComponentProps } from '../../types';
-import sampleData from './test_data.json';
 
 import { getIndicators } from '../../reducers/fetchIndicatorsReducer';
 
@@ -25,7 +24,8 @@ interface IndicatorTableProps extends DefaultComponentProps {
 
 const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
   const dispatch = useDispatch();
-  const { indicators, loading, error } = useSelector((state: any) => state.fetchIndicatorsReducer);
+  const { indicators, loading } = useSelector((state: any) => state.fetchIndicatorsReducer);
+  const sectorsReducer = useSelector((state: any) => state.fetchSectorsReducer);
 
   useLayoutEffect(() => {
     dispatch(getIndicators());
@@ -113,8 +113,6 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
     },
   ], []);
 
-  const [inidcatorsData, setIndicatorsData] = useState<any>(useMemo(() => [], []));
-
   return (
     <>
       <ViewIndicatorModal
@@ -141,6 +139,7 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
         title={translations['amp.indicatormanager:table-title']}
         data={indicators}
         columns={columns}
+        sectors={sectorsReducer.sectors}
             />
       }
     </>

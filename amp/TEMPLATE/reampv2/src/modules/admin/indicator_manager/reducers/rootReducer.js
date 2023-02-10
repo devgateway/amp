@@ -6,6 +6,7 @@ import sharedDataReducer from './sharedDataReducer';
 
 //indicators reducers
 import fetchIndicatorsReducer from './fetchIndicatorsReducer';
+import fetchSectorsReducer from './fetchSectorsReducer';
 
 export default combineReducers({
   startupReducer,
@@ -13,4 +14,5 @@ export default combineReducers({
   shareLinkReducer,
   sharedDataReducer,
   fetchIndicatorsReducer,
+  fetchSectorsReducer
 });

@@ -1,4 +1,4 @@
-import { IndicatorObjectType, SectorObjectType } from './../types';
+import { IndicatorObjectType } from './../types';
 import { createAsyncThunk, createSlice, } from "@reduxjs/toolkit";
 
 type IndicatorInitialStateType = {

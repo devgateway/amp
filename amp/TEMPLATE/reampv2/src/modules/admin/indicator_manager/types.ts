@@ -10,6 +10,13 @@ interface TranslatableObject {
     [key: string]: string;
 }
 
+export interface BaseAndTargetValueType {
+    originalValue:     number;
+    originalValueDate: string;
+    revisedlValue:     number;
+    revisedValueDate:  string;
+}
+
 export interface SectorObjectType {
     id:           number;
     name:         TranslatableObject;
@@ -25,7 +32,15 @@ export interface IndicatorObjectType {
     ascending:    boolean;
     creationDate: string;
     sectors:      number[];
-    base:         any;
-    target:       any;
-    programs:     any[];
+    base:         BaseAndTargetValueType | null;
+    target:       BaseAndTargetValueType | null;
+    programs:     number[];
+}
+
+export interface ProgramObjectType {
+    id:       number;
+    name:     TranslatableObject;
+    code:     string;
+    type:     "National" | "Secondary" | "Tertiary" | "Primary";
+    children: ProgramObjectType[];
 }

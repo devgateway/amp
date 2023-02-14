@@ -26,7 +26,7 @@ public class ProgramIdsValidator implements ConstraintValidator<ValidProgramIds,
 
         Session session = PersistenceManager.getSession();
         Integer validProgramIdsFromDb = (Integer) session.createQuery("SELECT count(p.ampThemeId) FROM AmpTheme p "
-                        + "WHERE p.ampThemeId in (:programIds)")
+                        + "WHERE p.ampThemeId in (:programIds) AND (p.deleted = false OR p.deleted is null)")
                 .setParameterList("programIds", programIds)
                 .uniqueResult();
 

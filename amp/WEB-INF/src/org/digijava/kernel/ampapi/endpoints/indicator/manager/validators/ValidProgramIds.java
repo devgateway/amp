@@ -20,7 +20,7 @@ import static java.lang.annotation.ElementType.FIELD;
 @Constraint(validatedBy = ProgramIdsValidator.class)
 public @interface ValidProgramIds {
 
-    String message() default "shouldn't contain invalid program ids";
+    String message() default "shouldn't contain invalid or deleted program ids";
 
     Class<?>[] groups() default {};
 

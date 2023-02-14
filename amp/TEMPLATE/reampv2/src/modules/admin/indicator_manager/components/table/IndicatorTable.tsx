@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable import/no-named-as-default-member */
 /* eslint-disable import/no-named-as-default */
-import React, { useState, useMemo, useLayoutEffect } from 'react';
+import React, { useState, useMemo, useLayoutEffect, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
@@ -9,7 +9,7 @@ import { bindActionCreators } from 'redux';
 import { ColumnDescription } from 'react-bootstrap-table-next';
 import SkeletonTable from './Table';
 import styles from './IndicatorTable.module.css';
-import { DefaultComponentProps } from '../../types';
+import { DefaultComponentProps, IndicatorObjectType } from '../../types';
 
 import { getIndicators } from '../../reducers/fetchIndicatorsReducer';
 
@@ -24,7 +24,7 @@ interface IndicatorTableProps extends DefaultComponentProps {
 
 const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
   const dispatch = useDispatch();
-  const { indicators, loading } = useSelector((state: any) => state.fetchIndicatorsReducer);
+  const { indicators: fetchedIndicators, loading } = useSelector((state: any) => state.fetchIndicatorsReducer);
   const sectorsReducer = useSelector((state: any) => state.fetchSectorsReducer);
 
   useLayoutEffect(() => {
@@ -36,6 +36,14 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
   const [showViewIndicatorModal, setShowViewIndicatorModal] = useState<boolean>(false);
   const [showEditIndicatorModal, setShowEditIndicatorModal] = useState<boolean>(false);
   const [showDeleteIndicatorModal, setShowDeleteIndicatorModal] = useState<boolean>(false);
+  const [selectedSector, setSelectedSector] = useState(0);
+  const [indicators, setIndicators] = useState<IndicatorObjectType[]>(fetchedIndicators);
+
+  useEffect(() => {
+    if (fetchedIndicators) {
+      setIndicators(fetchedIndicators);
+    }
+  }, [fetchedIndicators]);
 
   const viewIndicatorModalHandler = (row: any) => {
     setSelectedRow(row);
@@ -105,13 +113,29 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
               style={{ fontSize: 20, color: '#dc3545' }}
               className="fa fa-trash"
               aria-hidden="true"
-              onClick={() => deleteIndicatorModalHandler(row)} 
-              />
+              onClick={() => deleteIndicatorModalHandler(row)}
+            />
           </div>
         </Row>
       ),
     },
   ], []);
+
+  const handleFilterIndicators = () => {
+    if (Number(selectedSector) === 0) {
+      setIndicators(fetchedIndicators);
+      return;
+    }
+    const filteredIndicators = fetchedIndicators.filter((indicator: IndicatorObjectType) => {
+      return indicator.sectors.includes(Number(selectedSector));
+    });
+    setIndicators([]);
+    setIndicators(filteredIndicators);
+  }
+
+  useEffect(() => {
+    handleFilterIndicators();
+  }, [selectedSector])
 
   return (
     <>
@@ -119,14 +143,14 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
         show={showViewIndicatorModal}
         setShow={setShowViewIndicatorModal}
         indicator={selectedRow}
-            />
+      />
 
       <EditIndicatorModal
         show={showEditIndicatorModal}
         setShow={setShowEditIndicatorModal}
         indicator={selectedRow}
-            />
-      
+      />
+
       <DeleteIndicatorModal
         show={showDeleteIndicatorModal}
         setShow={setShowDeleteIndicatorModal}
@@ -135,12 +159,13 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
 
       {
         loading ? <Loading /> :
-        <SkeletonTable
-        title={translations['amp.indicatormanager:table-title']}
-        data={indicators}
-        columns={columns}
-        sectors={sectorsReducer.sectors}
-            />
+          <SkeletonTable
+            title={translations['amp.indicatormanager:table-title']}
+            data={indicators}
+            columns={columns}
+            sectors={sectorsReducer.sectors}
+            setSelectedSector={setSelectedSector}
+          />
       }
     </>
   );

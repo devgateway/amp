@@ -1,17 +1,17 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
-  Form, Modal, Button
+  Form, Modal, Button, Col
 } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import Select from 'react-select';
 import styles from './css/IndicatorModal.module.css';
 import { getCurrentDate } from '../../utils/dateFn';
 import { newIndicatorValidationSchema } from '../../utils/validator';
+import { useSelector } from 'react-redux';
 
-const options = [
-  { value: 'chocolate', label: 'Chocolate' },
-  { value: 'strawberry', label: 'Strawberry' },
-  { value: 'vanilla', label: 'Vanilla' }
+const ascendingOptions = [
+  { value: true, label: 'True' },
+  { value: false, label: 'False' }
 ];
 
 interface AddNewIndicatorModalProps {
@@ -24,7 +24,7 @@ interface IndicatorFormValues {
   description?: string;
   code: string;
   sectors: string[];
-  type: string;
+  ascending: boolean;
   creationDate?: string;
 }
 
@@ -36,12 +36,41 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
 
   const handleClose = () => setShow(false);
 
+  const sectorsReducer = useSelector((state: any) => state.fetchSectorsReducer);
+  const programsReducer = useSelector((state: any) => state.fetchProgramsReducer);
+
+  const [sectors, setSectors] = React.useState<{ value: string, name: string }[]>([]);
+  const [programs, setPrograms] = React.useState<{ value: string, name: string }[]>([]);
+
+  const getSectors = () => {
+    const sectorData = sectorsReducer.sectors.map((sector: any) => ({
+      value: sector.id,
+      label: sector.name.en
+    }));
+    setSectors(sectorData);
+  };
+
+  const getProgramData = () => {
+    const programData = programsReducer.programs.map((program: any) => ({
+      value: program.id,
+      label: program.name.en
+    }));
+    setPrograms(programData);
+  };
+
+
+  useEffect(() => {
+    getSectors();
+    getProgramData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sectorsReducer.sectors, programsReducer.programs])
+
   const initialValues: IndicatorFormValues = {
     name: '',
     description: '',
     code: '',
     sectors: [],
-    type: 'ascending',
+    ascending: true,
     creationDate: ''
   };
 
@@ -74,6 +103,8 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
       ref={nodeRef}
       animation={false}
       backdropClassName={styles.modal_backdrop}
+      backdrop="static"
+      keyboard={false}
     >
       <Modal.Header closeButton>
         <Modal.Title>Add New Indicator</Modal.Title>
@@ -98,23 +129,72 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
             <Form.Control type="text" placeholder="Enter Indicator Code" />
           </Form.Group>
 
+          <Form.Group as={Col}>
+            <Form.Label><h4>Base Values</h4></Form.Label>
+            <Form.Row>
+              <Form.Group>
+                <Form.Label>Original Value</Form.Label>
+                <Form.Control type="text" placeholder="Enter Original Value" />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Original Value Date</Form.Label>
+                <Form.Control type="date" placeholder="Enter Original Value Date" />
+              </Form.Group>
+            </Form.Row>
+          </Form.Group>
+
+          <Form.Group as={Col}>
+            <Form.Label><h4>Target Values</h4></Form.Label>
+            <Form.Row>
+              <Form.Group>
+                <Form.Label>Target Value</Form.Label>
+                <Form.Control type="text" placeholder="Enter Target Value" />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Target Value Date</Form.Label>
+                <Form.Control type="date" placeholder="Enter Target Value Date" />
+              </Form.Group>
+            </Form.Row>
+          </Form.Group>
+
           <Form.Group controlId="formIndicatorSectors">
             <Form.Label>Indicator Sectors</Form.Label>
+            {
+              sectors.length > 0 ? (
+                <Select
+                  isMulti
+                  name="sectors"
+                  options={sectors}
+                  className="basic-multi-select"
+                  classNamePrefix="select"
+                />
+              ) : null
+            }
+          </Form.Group>
+
+          <Form.Group controlId="programs">
+            <Form.Label>Programs</Form.Label>
+            {
+              programs.length > 0 ? (
+                <Select
+                  isMulti
+                  name="programs"
+                  options={programs}
+                  className="basic-multi-select"
+                  classNamePrefix="select"
+                />
+              ) : null
+            }
+          </Form.Group>
+
+          <Form.Group controlId="Ascending">
+            <Form.Label>Ascending</Form.Label>
             <Select
-              isMulti
-              name="sectors"
-              options={options}
+              name="ascending"
+              options={ascendingOptions}
               className="basic-multi-select"
               classNamePrefix="select"
             />
-          </Form.Group>
-
-          <Form.Group controlId="formIndicatorType">
-            <Form.Label>Indicator Type</Form.Label>
-            <Form.Control as="select">
-              <option value="ascending">Ascending</option>
-              <option value="descending">Descending</option>
-            </Form.Control>
           </Form.Group>
 
           <Form.Group controlId="formCreationDate">

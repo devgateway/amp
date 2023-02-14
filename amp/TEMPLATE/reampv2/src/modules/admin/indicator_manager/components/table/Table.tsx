@@ -1,5 +1,5 @@
 /* eslint-disable import/no-unresolved */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Col, Row, Button, Form
 } from 'react-bootstrap';
@@ -17,12 +17,11 @@ interface SkeletonTableProps {
   data: any;
   title: string;
   sectors?: SectorObjectType[];
+  setSelectedSector: React.Dispatch<React.SetStateAction<number>>;
 };
 
 const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
-  const { columns, data, title, sectors } = props;
-
-  // console.log('==========', sectors);
+  const { columns, data, title, sectors, setSelectedSector } = props;
 
   const { SearchBar } = Search;
   const { ExportCSVButton } = CSVExport;
@@ -32,6 +31,10 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
   const showAddNewIndicatorModalHandler = () => {
     setShowAddNewIndicatorModal(true);
   };
+
+  useEffect(() => {
+    setSelectedSector(0);
+  }, [])
 
   // create a pagination factory
   const paginationOptions: PaginationOptions = {
@@ -158,12 +161,20 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
 
                         <div className={styles.sector_filter_container}>
                           <Form.Label className={styles.filter_label}>Sectors</Form.Label>
-                          <Form.Control as="select" className={styles.filter_select}>
+                          <Form.Control
+                            onChange={(e) => setSelectedSector(e.target.value as unknown as number)}
+                            as="select"
+                            className={styles.filter_select}>
+                            <option value="0">All Sectors</option>
                             {
                               sectors && sectors.length > 0 ?
-                              sectors.map((sector) => (
-                                <option key={sector.id} value={sector.id}>{sector.name.en}</option>
-                              )) : <option value="0">No Sectors Available</option>
+                                sectors.map((sector) => (
+                                  <option
+                                    key={sector.id}
+                                    value={sector.id}>
+                                    {sector.name.en}
+                                  </option>
+                                )) : <option value="0">No Sectors Available</option>
                             }
                           </Form.Control>
                         </div>
@@ -172,7 +183,7 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
                           <SearchBar
                             {...props.searchProps}
                             placeholder="Search"
-                      />
+                          />
                         </div>
                       </div>
 
@@ -195,10 +206,10 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
                       <h5>No Data Available</h5>
                     </div>
                   )}
-      />
+                />
               </div>
             )
-}
+          }
         </ToolkitProvider >
 
       </Col >

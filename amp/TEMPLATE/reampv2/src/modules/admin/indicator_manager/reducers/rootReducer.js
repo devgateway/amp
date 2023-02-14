@@ -1,4 +1,4 @@
-import { combineReducers } from 'redux';
+import { combineReducers } from '@reduxjs/toolkit';
 import startupReducer from './startupReducer';
 import translationsReducer from '../../../../utils/reducers/translationsReducer';
 import shareLinkReducer from './shareLinkReducer';

@@ -112,14 +112,14 @@ public class IndicatorManagerService {
     }
 
     public List<SectorDTO> getSectors() {
-        return SectorUtil.getAllParentSectors().stream()
+        return SectorUtil.getAllParentSectors(true).stream()
                 .map(SectorDTO::new)
                 .collect(Collectors.toList());
     }
 
     public List<ProgramDTO> getPrograms() {
         try {
-            return ProgramUtil.getAllThemes().stream()
+            return ProgramUtil.getAllThemes(true, true).stream()
                     .map(ProgramDTO::new)
                     .collect(Collectors.toList());
         } catch (DgException e) {

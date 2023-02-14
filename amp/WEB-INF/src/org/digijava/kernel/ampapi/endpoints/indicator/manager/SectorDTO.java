@@ -8,7 +8,7 @@ import org.digijava.module.aim.dbentity.AmpSector;
 
 import java.util.Map;
 
-@JsonPropertyOrder({"id", "name", "code", "codeOfficial"})
+@JsonPropertyOrder({"id", "name", "code", "codeOfficial", "deleted"})
 public class SectorDTO {
 
     @JsonProperty("id")
@@ -24,12 +24,16 @@ public class SectorDTO {
     @JsonProperty("codeOfficial")
     private final String codeOfficial;
 
+    @JsonProperty("deleted")
+    private final boolean deleted;
+
     public SectorDTO(final AmpSector sector) {
         this.id = sector.getAmpSectorId();
         this.name = TranslationUtil.loadTranslationsForField(AmpSector.class, "name", sector.getName(),
                 sector.getAmpSectorId());
         this.code = sector.getSectorCode();
         this.codeOfficial = sector.getSectorCodeOfficial();
+        this.deleted = sector.isSoftDeleted();
     }
 
     public Long getId() {
@@ -46,5 +50,9 @@ public class SectorDTO {
 
     public String getCodeOfficial() {
         return codeOfficial;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
     }
 }

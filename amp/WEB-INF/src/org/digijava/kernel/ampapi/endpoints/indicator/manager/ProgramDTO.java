@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@JsonPropertyOrder({"id", "name", "code", "type"})
+@JsonPropertyOrder({"id", "name", "code", "type", "deleted", "children"})
 public class ProgramDTO {
 
     @JsonProperty("id")
@@ -27,6 +27,9 @@ public class ProgramDTO {
     @JsonProperty("type")
     private final String type;
 
+    @JsonProperty("deleted")
+    private final boolean deleted;
+
     @JsonProperty("children")
     private final List<ProgramDTO> children = new ArrayList<>();
 
@@ -36,6 +39,7 @@ public class ProgramDTO {
                 program.getAmpThemeId());
         this.code = program.getThemeCode();
         this.type = program.getTypeCategoryValue().getValue();
+        this.deleted = program.isSoftDeleted();
         this.children.addAll(program.getSiblings().stream().map(ProgramDTO::new).collect(Collectors.toList()));
     }
 
@@ -53,6 +57,10 @@ public class ProgramDTO {
 
     public String getType() {
         return type;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
     }
 
     public List<ProgramDTO> getChildren() {

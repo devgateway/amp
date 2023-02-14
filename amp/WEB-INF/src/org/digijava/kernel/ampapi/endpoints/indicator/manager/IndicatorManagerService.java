@@ -104,7 +104,12 @@ public class IndicatorManagerService {
 
         AmpIndicator indicator = (AmpIndicator) session.get(AmpIndicator.class, indicatorId);
         if (indicator != null) {
-            session.delete(indicator);
+            if (indicator.getValuesActivity().isEmpty()) {
+                session.delete(indicator);
+            }
+            throw new ApiRuntimeException(BAD_REQUEST,
+                    ApiError.toError("Indicator with id " + indicatorId + " cannot be deleted because "
+                            + "it is used by activities"));
         } else {
             throw new ApiRuntimeException(BAD_REQUEST,
                     ApiError.toError("Indicator with id " + indicatorId + " not found"));

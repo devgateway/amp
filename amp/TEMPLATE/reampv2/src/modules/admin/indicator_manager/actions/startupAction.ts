@@ -8,14 +8,15 @@ export function fetchAmpSettingsPending() {
   };
 }
 
-export function fetchAmpSettingsSuccess(settings) {
+export function fetchAmpSettingsSuccess(settings:any) {
+  console.log('fetchAmpSettingsSuccess', settings);
   return {
     type: FETCH_AMP_SETTINGS_SUCCESS,
     payload: settings
   };
 }
 
-export function fetchAmpSettingsError(error) {
+export function fetchAmpSettingsError(error: any) {
   return {
     type: FETCH_AMP_SETTINGS_ERROR,
     error

@@ -2,12 +2,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import {
   Form, Modal, Button, Col
 } from 'react-bootstrap';
-import { useFormik } from 'formik';
+import { useFormik, Formik } from 'formik';
 import Select from 'react-select';
 import styles from './css/IndicatorModal.module.css';
 import { getCurrentDate } from '../../utils/dateFn';
 import { newIndicatorValidationSchema } from '../../utils/validator';
 import { useSelector } from 'react-redux';
+import { BaseAndTargetValueType } from '../../types';
 
 const ascendingOptions = [
   { value: true, label: 'True' },
@@ -23,9 +24,12 @@ interface IndicatorFormValues {
   name: string;
   description?: string;
   code: string;
-  sectors: string[];
+  sectors: number[];
   ascending: boolean;
   creationDate?: string;
+  programs: number[];
+  base: BaseAndTargetValueType;
+  target: BaseAndTargetValueType;
 }
 
 const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
@@ -70,8 +74,21 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
     description: '',
     code: '',
     sectors: [],
-    ascending: true,
-    creationDate: ''
+    programs: [],
+    ascending: false,
+    creationDate: getCurrentDate(),
+    base: {
+      originalValue: 0,
+      originalValueDate: getCurrentDate(),
+      revisedlValue: 0,
+      revisedValueDate: getCurrentDate(),
+    },
+    target: {
+      originalValue: 0,
+      originalValueDate: getCurrentDate(),
+      revisedlValue: 0,
+      revisedValueDate: getCurrentDate(),
+    }
   };
 
   const formik = useFormik({
@@ -109,107 +126,245 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
       <Modal.Header closeButton>
         <Modal.Title>Add New Indicator</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
-        <Form noValidate validated={newIndicatorFormValidated} onSubmit={formik.handleSubmit}>
-          <Form.Group controlId="formBasicName">
-            <Form.Label>Indicator Name</Form.Label>
-            <Form.Control required aria-required type="text" placeholder="Enter Indicator Name" />
-            <Form.Control.Feedback type="invalid">
-              Please provide a valid Indicator Name.
-            </Form.Control.Feedback>
-          </Form.Group>
-
-          <Form.Group controlId="formBasicDescription">
-            <Form.Label>Indicator Description</Form.Label>
-            <Form.Control type="text" placeholder="Enter Indicator Description" />
-          </Form.Group>
-
-          <Form.Group controlId="formIndicatorCode">
-            <Form.Label>Indicator Code</Form.Label>
-            <Form.Control type="text" placeholder="Enter Indicator Code" />
-          </Form.Group>
-
-          <Form.Group as={Col}>
-            <Form.Label><h4>Base Values</h4></Form.Label>
-            <Form.Row>
-              <Form.Group>
-                <Form.Label>Original Value</Form.Label>
-                <Form.Control type="text" placeholder="Enter Original Value" />
+      <Formik
+        initialValues={initialValues}
+        validationSchema={newIndicatorValidationSchema}
+        onSubmit={(values) => {
+          console.log(values);
+        }}
+      >
+        {(props) => (
+          <Form noValidate onSubmit={formik.handleSubmit}>
+            <Modal.Body>
+              <Form.Group as={Col} controlId="formBasicName">
+                <Form.Label>Indicator Name</Form.Label>
+                <Form.Control
+                  defaultValue={props.values.name}
+                  onChange={props.handleChange}
+                  onBlur={props.handleBlur}
+                  name="name"
+                  className={`${(props.errors.name && props.touched.name) && styles.text_is_invalid}`}
+                  isInvalid={!!props.errors.name}
+                  required
+                  aria-required type="text"
+                  placeholder="Enter Indicator Name"
+                />
+                <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
+                  {props.errors.name}
+                </Form.Control.Feedback>
               </Form.Group>
-              <Form.Group>
-                <Form.Label>Original Value Date</Form.Label>
-                <Form.Control type="date" placeholder="Enter Original Value Date" />
-              </Form.Group>
-            </Form.Row>
-          </Form.Group>
 
-          <Form.Group as={Col}>
-            <Form.Label><h4>Target Values</h4></Form.Label>
-            <Form.Row>
-              <Form.Group>
-                <Form.Label>Target Value</Form.Label>
-                <Form.Control type="text" placeholder="Enter Target Value" />
+              <Form.Group controlId="formBasicDescription">
+                <Form.Label>Indicator Description</Form.Label>
+                <Form.Control
+                  defaultValue={props.values.description}
+                  onChange={props.handleChange}
+                  onBlur={props.handleBlur}
+                  name="description"
+                  type="text"
+                  placeholder="Enter Indicator Description"
+                />
+                <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
+                  {props.errors.description}
+                </Form.Control.Feedback>
               </Form.Group>
-              <Form.Group>
-                <Form.Label>Target Value Date</Form.Label>
-                <Form.Control type="date" placeholder="Enter Target Value Date" />
-              </Form.Group>
-            </Form.Row>
-          </Form.Group>
 
-          <Form.Group controlId="formIndicatorSectors">
-            <Form.Label>Indicator Sectors</Form.Label>
-            {
-              sectors.length > 0 ? (
+              <Form.Group controlId="formIndicatorCode">
+                <Form.Label>Indicator Code</Form.Label>
+                <Form.Control
+                  defaultValue={props.values.code}
+                  onChange={props.handleChange}
+                  onBlur={props.handleBlur}
+                  name="code"
+                  required
+                  type="text"
+                  placeholder="Enter Indicator Code"
+                />
+                <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
+                  {props.errors.code}
+                </Form.Control.Feedback>
+              </Form.Group>
+
+              <Form.Group as={Col}>
+                <Form.Label><h4>Base Values</h4></Form.Label>
+                <Form.Row>
+                  <Form.Group>
+                    <Form.Label>Original Value</Form.Label>
+                    <Form.Control
+                      defaultValue={props.values.base.originalValue}
+                      onChange={props.handleChange}
+                      onBlur={props.handleBlur}
+                      name="base.originalValue"
+                      type="text"
+                      placeholder="Enter Original Value" />
+
+                    <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
+                      {props.errors.base?.originalValue}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+
+                  <Form.Group>
+                    <Form.Label>Original Value Date</Form.Label>
+                    <Form.Control
+                      defaultValue={props.values.base.originalValueDate}
+                      onChange={props.handleChange}
+                      onBlur={props.handleBlur}
+                      name="base.originalValueDate"
+                      type="date"
+                      placeholder="Enter Original Value Date" />
+
+                    <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
+                      {props.errors.base?.originalValueDate}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                </Form.Row>
+
+                <Form.Row>
+                  <Form.Group>
+                    <Form.Label>Revised Value</Form.Label>
+                    <Form.Control
+                      defaultValue={props.values.base.revisedlValue}
+                      onChange={props.handleChange}
+                      onBlur={props.handleBlur}
+                      name="base.revisedlValue"
+                      type="text"
+                      placeholder="Enter Revised Value" />
+
+                    <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
+                      {props.errors.base?.revisedlValue}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+
+                  <Form.Group>
+                    <Form.Label>Revised Value Date</Form.Label>
+                    <Form.Control
+                      defaultValue={props.values.base.revisedValueDate}
+                      onChange={props.handleChange}
+                      onBlur={props.handleBlur}
+                      name="base.revisedValueDate"
+                      type="date"
+                      placeholder="Enter Revised Value Date" />
+
+                    <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
+                      {props.errors.base?.revisedValueDate}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                </Form.Row>
+              </Form.Group>
+
+              <Form.Group as={Col}>
+                <Form.Label><h4>Target Values</h4></Form.Label>
+                <Form.Row>
+                  <Form.Group>
+                    <Form.Label>Target Value</Form.Label>
+                    <Form.Control
+                      defaultValue={props.values.target.originalValue}
+                      onChange={props.handleChange}
+                      onBlur={props.handleBlur}
+                      name="target.originalValue"
+                      type="text"
+                      placeholder="Enter Target Value" />
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Label>Target Value Date</Form.Label>
+                    <Form.Control
+                      defaultValue={props.values.target.originalValueDate}
+                      onChange={props.handleChange}
+                      onBlur={props.handleBlur}
+                      name="target.originalValueDate"
+                      type="date"
+                      placeholder="Enter Target Value Date" />
+                  </Form.Group>
+                </Form.Row>
+
+                <Form.Row>
+                  <Form.Group>
+                    <Form.Label>Revised Value</Form.Label>
+                    <Form.Control
+                      defaultValue={props.values.base.revisedlValue}
+                      onChange={props.handleChange}
+                      onBlur={props.handleBlur}
+                      name="base.revisedlValue"
+                      type="text"
+                      placeholder="Enter Revised Value" />
+
+                    <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
+                      {props.errors.base?.revisedlValue}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+
+                  <Form.Group>
+                    <Form.Label>Revised Value Date</Form.Label>
+                    <Form.Control
+                      defaultValue={props.values.base.revisedValueDate}
+                      onChange={props.handleChange}
+                      onBlur={props.handleBlur}
+                      name="base.revisedValueDate"
+                      type="date"
+                      placeholder="Enter Revised Value Date" />
+
+                    <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
+                      {props.errors.base?.revisedValueDate}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                </Form.Row>
+              </Form.Group>
+
+              <Form.Group controlId="formIndicatorSectors">
+                <Form.Label>Indicator Sectors</Form.Label>
+                {
+                  sectors.length > 0 ? (
+                    <Select
+                      isMulti
+                      name="sectors"
+                      options={sectors}
+                      className="basic-multi-select"
+                      classNamePrefix="select"
+                    />
+                  ) : null
+                }
+              </Form.Group>
+
+              <Form.Group controlId="programs">
+                <Form.Label>Programs</Form.Label>
+                {
+                  programs.length > 0 ? (
+                    <Select
+                      isMulti
+                      name="programs"
+                      options={programs}
+                      className="basic-multi-select"
+                      classNamePrefix="select"
+                    />
+                  ) : null
+                }
+              </Form.Group>
+
+              <Form.Group controlId="Ascending">
+                <Form.Label>Ascending</Form.Label>
                 <Select
-                  isMulti
-                  name="sectors"
-                  options={sectors}
+                  name="ascending"
+                  options={ascendingOptions}
                   className="basic-multi-select"
                   classNamePrefix="select"
                 />
-              ) : null
-            }
-          </Form.Group>
+              </Form.Group>
 
-          <Form.Group controlId="programs">
-            <Form.Label>Programs</Form.Label>
-            {
-              programs.length > 0 ? (
-                <Select
-                  isMulti
-                  name="programs"
-                  options={programs}
-                  className="basic-multi-select"
-                  classNamePrefix="select"
-                />
-              ) : null
-            }
-          </Form.Group>
+              <Form.Group controlId="formCreationDate">
+                <Form.Label>Creation Date</Form.Label>
+                <Form.Control type="date" readOnly defaultValue={getCurrentDate()} placeholder="Enter Creation Date" />
+              </Form.Group>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleClose}>
+                Close
+              </Button>
+              <Button type="submit" variant="success">Save changes</Button>
+            </Modal.Footer>
+          </Form>
+        )}
+      </Formik>
 
-          <Form.Group controlId="Ascending">
-            <Form.Label>Ascending</Form.Label>
-            <Select
-              name="ascending"
-              options={ascendingOptions}
-              className="basic-multi-select"
-              classNamePrefix="select"
-            />
-          </Form.Group>
-
-          <Form.Group controlId="formCreationDate">
-            <Form.Label>Creation Date</Form.Label>
-            <Form.Control type="date" readOnly defaultValue={getCurrentDate()} placeholder="Enter Creation Date" />
-          </Form.Group>
-
-        </Form>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
-          Close
-        </Button>
-        <Button type="submit" variant="success">Save changes</Button>
-      </Modal.Footer>
     </Modal>
   );
 };

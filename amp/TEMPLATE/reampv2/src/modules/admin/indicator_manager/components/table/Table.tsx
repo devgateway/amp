@@ -34,7 +34,7 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
 
   useEffect(() => {
     setSelectedSector(0);
-  }, [])
+  }, [setSelectedSector]);
 
   // create a pagination factory
   const paginationOptions: PaginationOptions = {

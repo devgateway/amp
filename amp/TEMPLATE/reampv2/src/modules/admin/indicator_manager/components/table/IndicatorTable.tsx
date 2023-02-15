@@ -77,7 +77,41 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
       dataField: 'name.en',
       text: 'Indicator Name',
       sort: true,
-      headerStyle: { width: '50%' },
+      headerStyle: { width: '35%' },
+    },
+    {
+      dataField: 'sectors',
+      text: 'Sectors',
+      sort: true,
+      headerStyle: { width: '30%' },
+      formatter: (_cell: any, row: any) => {
+        return (
+        <div>
+          {
+            _cell.map((sectorId: any) => {
+              console.log('sectorId', sectorId);
+              const foundSector = !sectorsReducer.loading && sectorsReducer.sectors.find((sector: any) => sector.id === sectorId);
+              console.log('sectorsReducer', sectorsReducer.sectors);
+              console.log('foundSector', foundSector);
+            
+              if (foundSector) {
+                console.log(foundSector.name);
+              return <span>{foundSector.name.en}
+                <br />
+
+              </span>
+              }
+
+              return (
+                <span>
+                  {sectorId}
+                  <br />
+                </span>
+              )
+            })
+          }
+        </div>
+      )},
     },
     {
       dataField: 'creationDate',

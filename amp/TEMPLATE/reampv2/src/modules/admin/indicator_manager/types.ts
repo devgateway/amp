@@ -11,10 +11,10 @@ interface TranslatableObject {
 }
 
 export interface BaseAndTargetValueType {
-    originalValue:     number;
-    originalValueDate: string;
-    revisedlValue:     number;
-    revisedValueDate:  string;
+    originalValue?:     number;
+    originalValueDate?: string;
+    revisedlValue?:     number;
+    revisedValueDate?:  string;
 }
 
 export interface SectorObjectType {

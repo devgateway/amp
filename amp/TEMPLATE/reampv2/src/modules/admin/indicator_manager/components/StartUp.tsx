@@ -39,7 +39,7 @@ const Startup: React.FC<StartupProps> = (props) => {
     // eslint-disable-next-line
   }, []);
 
-  if (translationPending && sectorsReducer.loading && programsReducer.loading) {
+  if (translationPending || sectorsReducer.loading || programsReducer.loading) {
     return (<Loading />);
   } else {
     document.title = translations['amp.indicatormanager:page-title'];

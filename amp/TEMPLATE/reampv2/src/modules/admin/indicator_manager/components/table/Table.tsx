@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable import/no-unresolved */
+import React, { useEffect, useState } from 'react';
 import {
   Col, Row, Button, Form
 } from 'react-bootstrap';
@@ -8,10 +9,32 @@ import filterFactory, { FilterFactoryProps } from 'react-bootstrap-table2-filter
 import 'react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css';
 import ToolkitProvider, { Search, CSVExport, ToolkitContextType } from 'react-bootstrap-table2-toolkit';
 import styles from './Table.module.css';
+import AddNewIndicatorModal from '../modals/AddNewIndicatorModal';
+import { SectorObjectType } from '../../types';
 
-const SkeletonTable = ({ columns, data, title }: any) => {
+interface SkeletonTableProps {
+  columns: any;
+  data: any;
+  title: string;
+  sectors?: SectorObjectType[];
+  setSelectedSector: React.Dispatch<React.SetStateAction<number>>;
+};
+
+const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
+  const { columns, data, title, sectors, setSelectedSector } = props;
+
   const { SearchBar } = Search;
   const { ExportCSVButton } = CSVExport;
+
+  const [showAddNewIndicatorModal, setShowAddNewIndicatorModal] = useState(false);
+
+  const showAddNewIndicatorModalHandler = () => {
+    setShowAddNewIndicatorModal(true);
+  };
+
+  useEffect(() => {
+    setSelectedSector(0);
+  }, [setSelectedSector]);
 
   // create a pagination factory
   const paginationOptions: PaginationOptions = {
@@ -67,12 +90,12 @@ const SkeletonTable = ({ columns, data, title }: any) => {
           onChange={(e) => onSizePerPageChange(Number(e.target.value))}
         >
           {
-          options.map((option) => (
-            <option key={option.text} value={option.page}>
-              {option.text}
-            </option>
-          ))
-        }
+            options.map((option) => (
+              <option key={option.text} value={option.page}>
+                {option.text}
+              </option>
+            ))
+          }
         </Form.Control>
       </Row>
 
@@ -81,110 +104,116 @@ const SkeletonTable = ({ columns, data, title }: any) => {
 
   const filterOptions: FilterFactoryProps = {
     afterFilter: (result: any, column: any) => {
-      console.log('result', result);
-      console.log('column', column);
+      // console.log(result, column); 
     }
   };
 
   return (
-    <Col sm={12}>
-      <ToolkitProvider
-        keyField="id"
-        data={data}
-        columns={columns}
-        search
-        exportCSV
-      >
-        {
-          (props: ToolkitContextType) => (
-            <div>
-              <Col
-                sm={12}
-                style={{
-                  paddingBottom: 15
-                }}>
-                <Row className={styles.table_header}>
-                  <Col sm={6}>
-                    <h3>{title}</h3>
-                  </Col>
-                  <Col sm={6}>
-                    <hr />
-                  </Col>
-                </Row>
+    <>
+      <AddNewIndicatorModal show={showAddNewIndicatorModal} setShow={setShowAddNewIndicatorModal} />
+      <Col sm={12}>
+        <ToolkitProvider
+          keyField="id"
+          data={data}
+          columns={columns}
+          search
+          exportCSV
+        >
+          {
+            (props: ToolkitContextType) => (
+              <div>
+                <Col
+                  sm={12}
+                  style={{
+                    paddingBottom: 15
+                  }}>
+                  <Row className={styles.table_header}>
+                    <Col sm={6}>
+                      <h3>{title}</h3>
+                    </Col>
+                    <Col sm={6}>
+                      <hr />
+                    </Col>
+                  </Row>
 
-                <Row sm={12} className={styles.table_header_bottom}>
-                  <Col sm={6}>
-                    <div className={styles.table_header_bottom_left}>
-                      <Button type="primary">
-                        <i className="fa fa-plus" />
-                        {' '}
-                        <span>Add New Indicator</span>
-                      </Button>
-                      <ExportCSVButton
-                        {...props.csvProps}
-                        className={styles.export_button}
-                      >
-                        <Button style={{
-                          backgroundColor: '#198754',
-                        }}>
+                  <Row sm={12} className={styles.table_header_bottom}>
+                    <Col sm={6}>
+                      <div className={styles.table_header_bottom_left}>
+                        <Button type="primary" onClick={showAddNewIndicatorModalHandler}>
+                          <i className="fa fa-plus" />
+                          {' '}
+                          <span>Add New Indicator</span>
+                        </Button>
+                        <ExportCSVButton
+                          {...props.csvProps}
+                          className={styles.export_button}
+                        >
                           <i className="fa fa-download" />
                           {' '}
                           Export CSV
-                        </Button>
-                      </ExportCSVButton>
-                    </div>
-
-                  </Col>
-                  {/* searchbar should be far right on the col */}
-                  <Col sm={6}>
-                    <div className={styles.table_header_bottom_right}>
-
-                      <div className={styles.sector_filter_container}>
-                        <Form.Label className={styles.filter_label}>Sectors</Form.Label>
-                        <Form.Control as="select" className={styles.filter_select}>
-                          <option value="all">All Sectors</option>
-                          <option value="agriculture">Agriculture</option>
-                          <option value="education">Education</option>
-                          <option value="health">Health</option>
-                          <option value="infrastructure">Infrastructure</option>
-                          <option value="social protection">Social Protection</option>
-                        </Form.Control>
+                        </ExportCSVButton>
                       </div>
 
-                      <div className={styles.search_container}>
-                        <SearchBar
-                          {...props.searchProps}
-                          placeholder="Search"
-                        />
+                    </Col>
+                    {/* searchbar should be far right on the col */}
+                    <Col sm={6}>
+                      <div className={styles.table_header_bottom_right}>
+
+                        <div className={styles.sector_filter_container}>
+                          <Form.Label className={styles.filter_label}>Sectors</Form.Label>
+                          <Form.Control
+                            onChange={(e) => setSelectedSector(e.target.value as unknown as number)}
+                            as="select"
+                            className={styles.filter_select}>
+                            <option value="0">All Sectors</option>
+                            {
+                              sectors && sectors.length > 0 ?
+                                sectors.map((sector) => (
+                                  <option
+                                    key={sector.id}
+                                    value={sector.id}>
+                                    {sector.name.en}
+                                  </option>
+                                )) : <option value="0">No Sectors Available</option>
+                            }
+                          </Form.Control>
+                        </div>
+
+                        <div className={styles.search_container}>
+                          <SearchBar
+                            {...props.searchProps}
+                            placeholder="Search"
+                          />
+                        </div>
                       </div>
+
+                    </Col>
+                  </Row>
+                </Col>
+                <hr />
+                <BootstrapTable
+                  {...props.baseProps}
+                  headerClasses={styles.table_header_titles}
+                  bodyClasses={styles.table_body}
+                  pagination={paginationFactory(paginationOptions)}
+                  selectRow={{
+                    mode: 'checkbox',
+                    clickToSelect: false,
+                  }}
+                  filter={filterFactory(filterOptions)}
+                  noDataIndication={() => (
+                    <div className={styles.no_data}>
+                      <h5>No Data Available</h5>
                     </div>
+                  )}
+                />
+              </div>
+            )
+          }
+        </ToolkitProvider >
 
-                  </Col>
-                </Row>
-              </Col>
-              <hr />
-              <BootstrapTable
-                {...props.baseProps}
-                headerClasses={styles.table_header_titles}
-                bodyClasses={styles.table_body}
-                pagination={paginationFactory(paginationOptions)}
-                selectRow={{
-                  mode: 'checkbox',
-                  clickToSelect: false,
-                }}
-                filter={filterFactory(filterOptions)}
-                noDataIndication={() => (
-                  <div className={styles.no_data}>
-                    <h5>No Data Available</h5>
-                  </div>
-                )}
-              />
-            </div>
-          )
-        }
-      </ToolkitProvider>
-
-    </Col>
+      </Col >
+    </>
 
   );
 };

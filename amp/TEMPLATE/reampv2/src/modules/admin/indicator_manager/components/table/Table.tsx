@@ -1,5 +1,5 @@
 /* eslint-disable import/no-unresolved */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Col, Row, Button, Form
 } from 'react-bootstrap';
@@ -10,8 +10,19 @@ import 'react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css
 import ToolkitProvider, { Search, CSVExport, ToolkitContextType } from 'react-bootstrap-table2-toolkit';
 import styles from './Table.module.css';
 import AddNewIndicatorModal from '../modals/AddNewIndicatorModal';
+import { SectorObjectType } from '../../types';
 
-const SkeletonTable = ({ columns, data, title }: any) => {
+interface SkeletonTableProps {
+  columns: any;
+  data: any;
+  title: string;
+  sectors?: SectorObjectType[];
+  setSelectedSector: React.Dispatch<React.SetStateAction<number>>;
+};
+
+const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
+  const { columns, data, title, sectors, setSelectedSector } = props;
+
   const { SearchBar } = Search;
   const { ExportCSVButton } = CSVExport;
 
@@ -20,6 +31,10 @@ const SkeletonTable = ({ columns, data, title }: any) => {
   const showAddNewIndicatorModalHandler = () => {
     setShowAddNewIndicatorModal(true);
   };
+
+  useEffect(() => {
+    setSelectedSector(0);
+  }, [setSelectedSector]);
 
   // create a pagination factory
   const paginationOptions: PaginationOptions = {
@@ -89,8 +104,7 @@ const SkeletonTable = ({ columns, data, title }: any) => {
 
   const filterOptions: FilterFactoryProps = {
     afterFilter: (result: any, column: any) => {
-      console.log('result', result);
-      console.log('column', column);
+      // console.log(result, column); 
     }
   };
 
@@ -147,13 +161,21 @@ const SkeletonTable = ({ columns, data, title }: any) => {
 
                         <div className={styles.sector_filter_container}>
                           <Form.Label className={styles.filter_label}>Sectors</Form.Label>
-                          <Form.Control as="select" className={styles.filter_select}>
-                            <option value="all">All Sectors</option>
-                            <option value="agriculture">Agriculture</option>
-                            <option value="education">Education</option>
-                            <option value="health">Health</option>
-                            <option value="infrastructure">Infrastructure</option>
-                            <option value="social protection">Social Protection</option>
+                          <Form.Control
+                            onChange={(e) => setSelectedSector(e.target.value as unknown as number)}
+                            as="select"
+                            className={styles.filter_select}>
+                            <option value="0">All Sectors</option>
+                            {
+                              sectors && sectors.length > 0 ?
+                                sectors.map((sector) => (
+                                  <option
+                                    key={sector.id}
+                                    value={sector.id}>
+                                    {sector.name.en}
+                                  </option>
+                                )) : <option value="0">No Sectors Available</option>
+                            }
                           </Form.Control>
                         </div>
 
@@ -161,7 +183,7 @@ const SkeletonTable = ({ columns, data, title }: any) => {
                           <SearchBar
                             {...props.searchProps}
                             placeholder="Search"
-                      />
+                          />
                         </div>
                       </div>
 
@@ -184,10 +206,10 @@ const SkeletonTable = ({ columns, data, title }: any) => {
                       <h5>No Data Available</h5>
                     </div>
                   )}
-      />
+                />
               </div>
             )
-}
+          }
         </ToolkitProvider >
 
       </Col >

@@ -1,29 +1,49 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable import/no-named-as-default-member */
 /* eslint-disable import/no-named-as-default */
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useLayoutEffect, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { ColumnDescription } from 'react-bootstrap-table-next';
 import SkeletonTable from './Table';
 import styles from './IndicatorTable.module.css';
-import { DefaultComponentProps } from '../../types';
-import sampleData from './test_data.json';
+import { DefaultComponentProps, IndicatorObjectType } from '../../types';
+
+import { getIndicators } from '../../reducers/fetchIndicatorsReducer';
 
 // Modals
 import ViewIndicatorModal from '../modals/ViewIndicatorModal';
 import EditIndicatorModal from '../modals/EditIndicatorModal';
 import DeleteIndicatorModal from '../modals/DeleteIndicatorModal';
+import { Loading } from '../../../../../utils/components/Loading';
 
 interface IndicatorTableProps extends DefaultComponentProps {
 }
 
 const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
+  const dispatch = useDispatch();
+  const { indicators: fetchedIndicators, loading } = useSelector((state: any) => state.fetchIndicatorsReducer);
+  const sectorsReducer = useSelector((state: any) => state.fetchSectorsReducer);
+
+  useLayoutEffect(() => {
+    dispatch(getIndicators());
+  }, []);
+
+
   const [selectedRow, setSelectedRow] = useState<any>(null);
   const [showViewIndicatorModal, setShowViewIndicatorModal] = useState<boolean>(false);
   const [showEditIndicatorModal, setShowEditIndicatorModal] = useState<boolean>(false);
   const [showDeleteIndicatorModal, setShowDeleteIndicatorModal] = useState<boolean>(false);
+  const [selectedSector, setSelectedSector] = useState(0);
+  const [indicators, setIndicators] = useState<IndicatorObjectType[]>(fetchedIndicators);
+
+  useEffect(() => {
+    if (fetchedIndicators) {
+      setIndicators(fetchedIndicators);
+    }
+  }, [fetchedIndicators]);
 
   const viewIndicatorModalHandler = (row: any) => {
     setSelectedRow(row);
@@ -48,16 +68,56 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
       headerStyle: { width: '10%' },
     },
     {
-      dataField: 'indicatorName',
-      text: 'Indicator Name',
+      dataField: 'code',
+      text: 'Code',
       sort: true,
-      headerStyle: { width: '50%' },
+      headerStyle: { width: '10%' },
     },
     {
-      dataField: 'sector',
-      text: 'Sector',
+      dataField: 'name.en',
+      text: 'Indicator Name',
+      sort: true,
+      headerStyle: { width: '35%' },
+    },
+    {
+      dataField: 'sectors',
+      text: 'Sectors',
       sort: true,
       headerStyle: { width: '30%' },
+      formatter: (_cell: any, row: any) => {
+        return (
+        <div>
+          {
+            _cell.map((sectorId: any) => {
+              console.log('sectorId', sectorId);
+              const foundSector = !sectorsReducer.loading && sectorsReducer.sectors.find((sector: any) => sector.id === sectorId);
+              console.log('sectorsReducer', sectorsReducer.sectors);
+              console.log('foundSector', foundSector);
+            
+              if (foundSector) {
+                console.log(foundSector.name);
+              return <span>{foundSector.name.en}
+                <br />
+
+              </span>
+              }
+
+              return (
+                <span>
+                  {sectorId}
+                  <br />
+                </span>
+              )
+            })
+          }
+        </div>
+      )},
+    },
+    {
+      dataField: 'creationDate',
+      text: 'Creation Date',
+      sort: true,
+      headerStyle: { width: '10%' },
     },
     {
       dataField: 'action',
@@ -87,23 +147,29 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
               style={{ fontSize: 20, color: '#dc3545' }}
               className="fa fa-trash"
               aria-hidden="true"
-              onClick={() => deleteIndicatorModalHandler(row)} 
-              />
+              onClick={() => deleteIndicatorModalHandler(row)}
+            />
           </div>
         </Row>
       ),
     },
   ], []);
 
-  const [inidcatorsData, setIndicatorsData] = useState<any>(useMemo(() => [], []));
-
-  const fetchData = async () => {
-    setIndicatorsData(sampleData);
-  };
+  const handleFilterIndicators = () => {
+    if (Number(selectedSector) === 0) {
+      setIndicators(fetchedIndicators);
+      return;
+    }
+    const filteredIndicators = fetchedIndicators.filter((indicator: IndicatorObjectType) => {
+      return indicator.sectors.includes(Number(selectedSector));
+    });
+    setIndicators([]);
+    setIndicators(filteredIndicators);
+  }
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    handleFilterIndicators();
+  }, [selectedSector])
 
   return (
     <>
@@ -111,25 +177,30 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
         show={showViewIndicatorModal}
         setShow={setShowViewIndicatorModal}
         indicator={selectedRow}
-            />
+      />
 
       <EditIndicatorModal
         show={showEditIndicatorModal}
         setShow={setShowEditIndicatorModal}
         indicator={selectedRow}
-            />
-      
+      />
+
       <DeleteIndicatorModal
         show={showDeleteIndicatorModal}
         setShow={setShowDeleteIndicatorModal}
         indicator={selectedRow}
       />
 
-      <SkeletonTable
-        title={translations['amp.indicatormanager:table-title']}
-        data={inidcatorsData}
-        columns={columns}
-            />
+      {
+        loading ? <Loading /> :
+          <SkeletonTable
+            title={translations['amp.indicatormanager:table-title']}
+            data={indicators}
+            columns={columns}
+            sectors={sectorsReducer.sectors}
+            setSelectedSector={setSelectedSector}
+          />
+      }
     </>
   );
 };

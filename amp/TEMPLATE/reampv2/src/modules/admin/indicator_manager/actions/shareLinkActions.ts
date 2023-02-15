@@ -11,14 +11,14 @@ export function fetchShareLinkPending() {
   };
 }
 
-export function fetchShareLinkSuccess(payload) {
+export function fetchShareLinkSuccess(payload:any) {
   return {
     type: FETCH_SHARE_LINK_SUCCESS,
     payload
   };
 }
 
-export function fetchShareLinkError(error) {
+export function fetchShareLinkError(error: any) {
   return {
     type: FETCH_SHARE_LINK_ERROR,
     error
@@ -31,16 +31,17 @@ export function getSharedDataPending() {
   };
 }
 
-export function getSharedDataSuccess(payload) {
+export function getSharedDataSuccess(payload: any) {
   return {
     type: GET_SHARED_DATA_SUCCESS,
     payload
   };
 }
 
-export function getSharedDataError(error) {
+export function getSharedDataError(error: any) {
   return {
     type: GET_SHARED_DATA_ERROR,
     error
   };
 }
+

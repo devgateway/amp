@@ -106,10 +106,11 @@ public class IndicatorManagerService {
         if (indicator != null) {
             if (indicator.getValuesActivity().isEmpty()) {
                 session.delete(indicator);
+            } else {
+                throw new ApiRuntimeException(BAD_REQUEST,
+                        ApiError.toError("Indicator with id " + indicatorId + " cannot be deleted because "
+                                + "it is used by activities"));
             }
-            throw new ApiRuntimeException(BAD_REQUEST,
-                    ApiError.toError("Indicator with id " + indicatorId + " cannot be deleted because "
-                            + "it is used by activities"));
         } else {
             throw new ApiRuntimeException(BAD_REQUEST,
                     ApiError.toError("Indicator with id " + indicatorId + " not found"));

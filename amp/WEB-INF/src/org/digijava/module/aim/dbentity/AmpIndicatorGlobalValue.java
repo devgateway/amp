@@ -40,7 +40,7 @@ public class AmpIndicatorGlobalValue implements Serializable {
     @JsonSerialize(using = LocalizedDateSerializer.class)
     @JsonDeserialize(using = LocalizedDateDeserializer.class)
     @JsonProperty("revisedValueDate")
-    private Double revisedValueDate;
+    private Date revisedValueDate;
 
     @JsonIgnore
     private AmpIndicator indicator;
@@ -100,11 +100,11 @@ public class AmpIndicatorGlobalValue implements Serializable {
         this.revisedValue = revisedValue;
     }
 
-    public Double getRevisedValueDate() {
+    public Date getRevisedValueDate() {
         return revisedValueDate;
     }
 
-    public void setRevisedValueDate(final Double revisedValueDate) {
+    public void setRevisedValueDate(final Date revisedValueDate) {
         this.revisedValueDate = revisedValueDate;
     }
 

@@ -21,8 +21,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
-import static org.digijava.kernel.ampapi.endpoints.indicator.IndicatorEPConstants.DESCRIPTION;
-import static org.digijava.kernel.ampapi.endpoints.indicator.IndicatorEPConstants.NAME;
 
 
 /**
@@ -65,10 +63,8 @@ public class IndicatorManagerService {
         Session session = PersistenceManager.getSession();
         AmpIndicator indicator = new AmpIndicator();
 
-        indicator.setName(contentTranslator.extractTranslationsOrSimpleValue(NAME, indicator,
-                indicatorRequest.getName()));
-        indicator.setDescription(contentTranslator.extractTranslationsOrSimpleValue(DESCRIPTION, indicator,
-                indicatorRequest.getDescription()));
+        indicator.setName(indicatorRequest.getName());
+        indicator.setDescription(indicatorRequest.getDescription());
 
         indicator.setCode(indicatorRequest.getCode());
         indicator.setType(indicatorRequest.isAscending() ? "A" : "D");
@@ -137,11 +133,8 @@ public class IndicatorManagerService {
         Session session = PersistenceManager.getSession();
         AmpIndicator indicator = (AmpIndicator) session.get(AmpIndicator.class, indicatorId);
         if (indicator != null) {
-            indicator.setName(contentTranslator.extractTranslationsOrSimpleValue(NAME, indicator,
-                    indRequest.getName()));
-
-            indicator.setDescription(contentTranslator.extractTranslationsOrSimpleValue(DESCRIPTION, indicator,
-                    indRequest.getDescription()));
+            indicator.setName(indRequest.getName());
+            indicator.setDescription(indRequest.getDescription());
 
             indicator.setCode(indRequest.getCode());
             indicator.setType(indRequest.isAscending() ? "A" : "D");

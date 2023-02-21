@@ -172,7 +172,7 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
                                   <option
                                     key={sector.id}
                                     value={sector.id}>
-                                    {sector.name.en}
+                                    {sector.name}
                                   </option>
                                 )) : <option value="0">No Sectors Available</option>
                             }

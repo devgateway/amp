@@ -74,7 +74,7 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
       headerStyle: { width: '10%' },
     },
     {
-      dataField: 'name.en',
+      dataField: 'name',
       text: 'Indicator Name',
       sort: true,
       headerStyle: { width: '35%' },
@@ -89,21 +89,17 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
         <div>
           {
             _cell.map((sectorId: any) => {
-              console.log('sectorId', sectorId);
               const foundSector = !sectorsReducer.loading && sectorsReducer.sectors.find((sector: any) => sector.id === sectorId);
-              console.log('sectorsReducer', sectorsReducer.sectors);
-              console.log('foundSector', foundSector);
             
               if (foundSector) {
-                console.log(foundSector.name);
-              return <span>{foundSector.name.en}
+              return <span key={sectorId}>{foundSector.name}
                 <br />
 
               </span>
               }
 
               return (
-                <span>
+                <span key={sectorId}>
                   {sectorId}
                   <br />
                 </span>

@@ -68,6 +68,8 @@
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
     "semantic-ui-react": "^2.0.3",
+    "sweetalert2": "^11.7.2",
+    "sweetalert2-react-content": "^4.0.0",
     "yup": "^0.32.11"
   },
   "scripts": {

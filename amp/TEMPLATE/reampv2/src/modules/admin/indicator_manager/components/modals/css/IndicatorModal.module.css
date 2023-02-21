@@ -17,3 +17,9 @@
     color: #dc3545;
     font-size: 12px;
 }
+
+.checkbox_label {
+    margin-left: 10px;
+    font-size: 16px;
+    font-weight: 500;
+}

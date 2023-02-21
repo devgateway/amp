@@ -78,7 +78,7 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
               </div>
               <div className={styles.view_item}>
                 <h4 className={styles.label}>Indicator Name</h4>
-                <p className={styles.value}>{indicator.name.en}</p>
+                <p className={styles.value}>{indicator.name}</p>
               </div>
             </Row>
             <Row className={styles.view_row}>
@@ -88,7 +88,7 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
               </div>
               <div className={styles.view_item}>
                 <h4 className={styles.label}>Indicator Description</h4>
-                <p className={styles.value}>{indicator.description.en  === "" || '' ? 'No Description available': indicator.description.en}</p>
+                <p className={styles.value}>{indicator.description  === "" || '' ? 'No Description available': indicator.description}</p>
               </div>
             </Row>
 
@@ -110,7 +110,7 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
                 {sectorData.length > 0 ? sectorData.map((sector) => (
                   <p style={{
                     backgroundColor: colorOptions[sector.id % 10].color,
-                  }} className={styles.array_item} key={sector.id}>{sector.name.en}</p>
+                  }} className={styles.array_item} key={sector.id}>{sector.name}</p>
                 )) :
                   <p>No Sectors avaliable</p>
                 }
@@ -121,7 +121,7 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
             <Row className={styles.view_row_full}>
               <h4 className={styles.label}>Programs</h4>
               {programData.length > 0 ? programData.map((program) => (
-                <p className={styles.array_item} key={program.id}>{program.name.en}</p>
+                <p className={styles.array_item} key={program.id}>{program.name}</p>
               )) :
                 <p>No Programs avaliable</p>
               }

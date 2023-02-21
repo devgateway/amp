@@ -2,13 +2,19 @@ import React, { useEffect, useRef, useState } from 'react';
 import {
   Form, Modal, Button, Col
 } from 'react-bootstrap';
-import { useFormik, Formik } from 'formik';
+import { Formik } from 'formik';
 import Select from 'react-select';
 import styles from './css/IndicatorModal.module.css';
-import { getCurrentDate } from '../../utils/dateFn';
-import { newIndicatorValidationSchema } from '../../utils/validator';
-import { useSelector } from 'react-redux';
+import { formatJavascriptDate, getCurrentDate } from '../../utils/dateFn';
+import { indicatorValidationSchema } from '../../utils/validator';
+import { useDispatch, useSelector } from 'react-redux';
 import { BaseAndTargetValueType } from '../../types';
+import { createIndicator } from '../../reducers/createIndicatorReducer';
+import { getIndicators } from '../../reducers/fetchIndicatorsReducer';
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content';
+
+const MySwal = withReactContent(Swal);
 
 const ascendingOptions = [
   { value: true, label: 'True' },
@@ -35,21 +41,24 @@ interface IndicatorFormValues {
 const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
   const { show, setShow } = props;
   const nodeRef = useRef(null);
-
-  const [newIndicatorFormValidated, setNewIndicatorFormValidated] = useState(false);
+  const dispatch = useDispatch();
 
   const handleClose = () => setShow(false);
+  const createIndicatorState = useSelector((state: any) => state.createIndicatorReducer);
 
   const sectorsReducer = useSelector((state: any) => state.fetchSectorsReducer);
   const programsReducer = useSelector((state: any) => state.fetchProgramsReducer);
 
-  const [sectors, setSectors] = React.useState<{ value: string, name: string }[]>([]);
-  const [programs, setPrograms] = React.useState<{ value: string, name: string }[]>([]);
+  const [enableBaseValuesInput, setEnableBaseValuesInput] = useState(false);
+  const [enableTargetValuesInput, setEnableTargetValuesInput] = useState(false);
+
+  const [sectors, setSectors] = useState<{ value: string, name: string }[]>([]);
+  const [programs, setPrograms] = useState<{ value: string, name: string }[]>([]);
 
   const getSectors = () => {
     const sectorData = sectorsReducer.sectors.map((sector: any) => ({
       value: sector.id,
-      label: sector.name.en
+      label: sector.name
     }));
     setSectors(sectorData);
   };
@@ -57,7 +66,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
   const getProgramData = () => {
     const programData = programsReducer.programs.map((program: any) => ({
       value: program.id,
-      label: program.name.en
+      label: program.name
     }));
     setPrograms(programData);
   };
@@ -79,9 +88,9 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
     creationDate: getCurrentDate(),
     base: {
       originalValue: 0,
-      originalValueDate: getCurrentDate(),
+      originalValueDate: '',
       revisedlValue: 0,
-      revisedValueDate: getCurrentDate(),
+      revisedValueDate: '',
     },
     target: {
       originalValue: 0,
@@ -90,26 +99,6 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
       revisedValueDate: getCurrentDate(),
     }
   };
-
-  const formik = useFormik({
-    initialValues,
-    validationSchema: newIndicatorValidationSchema,
-    validate: (values) => {
-      // @ts-ignore
-      const errors: Partial<IndicatorFormValues> = {};
-      if (values.name === '') {
-        errors.name = 'Please provide a valid Indicator Name.';
-      }
-      if (Object.keys(errors).length > 0) {
-        setNewIndicatorFormValidated(false);
-        return errors;
-      }
-      setNewIndicatorFormValidated(true);
-    },
-    onSubmit: (values) => {
-      console.log(values);
-    },
-  });
 
   return (
     // this modal wrapper should be a separate component that can be reused since the props are the same
@@ -128,13 +117,60 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
       </Modal.Header>
       <Formik
         initialValues={initialValues}
-        validationSchema={newIndicatorValidationSchema}
+        validationSchema={indicatorValidationSchema}
         onSubmit={(values) => {
-          console.log(values);
+          const { name, description, code, sectors, programs, ascending, creationDate, base, target } = values;
+
+          const indicatorData = {
+            name,
+            description,
+            code,
+            sectors,
+            programs,
+            ascending,
+            creationDate: creationDate ? formatJavascriptDate(creationDate) : null,
+            base: enableBaseValuesInput ? {
+              orginalValue: base.originalValue,
+              originalValueDate: base.originalValueDate ? formatJavascriptDate(base.originalValueDate) : null,
+              revisedValue: base.revisedlValue,
+              revisedValueDate: base.revisedValueDate ? formatJavascriptDate(base.revisedValueDate) : null,
+            } : null,
+            target: enableTargetValuesInput ? {
+              orginalValue: target.originalValue,
+              originalValueDate: target.originalValueDate ? formatJavascriptDate(target.originalValueDate) : null,
+              revisedValue: target.revisedlValue,
+              revisedValueDate: target.revisedValueDate ? formatJavascriptDate(target.revisedValueDate) : null,
+            } : null
+          };
+
+          dispatch(createIndicator(indicatorData));
+
+          if (!createIndicatorState.loading && !createIndicatorState?.error) {
+            MySwal.fire({
+              title: 'Success',
+              text: 'Indicator created successfully',
+              icon: 'success',
+              confirmButtonText: 'Ok',
+            }).then(() => {
+              handleClose();
+              dispatch(getIndicators());
+            });
+
+            return;
+          }
+
+          MySwal.fire({
+            title: 'Error',
+            text: createIndicatorState.loading ? 'Creating Indicator...' : createIndicatorState.error,
+            icon: 'error',
+            confirmButtonText: 'Ok',
+          });
+
+
         }}
       >
         {(props) => (
-          <Form noValidate onSubmit={formik.handleSubmit}>
+          <Form noValidate onSubmit={props.handleSubmit}>
             <Modal.Body>
               <Form.Group as={Col} controlId="formBasicName">
                 <Form.Label>Indicator Name</Form.Label>
@@ -185,130 +221,157 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                 </Form.Control.Feedback>
               </Form.Group>
 
-              <Form.Group as={Col}>
-                <Form.Label><h4>Base Values</h4></Form.Label>
-                <Form.Row>
-                  <Form.Group>
-                    <Form.Label>Original Value</Form.Label>
-                    <Form.Control
-                      defaultValue={props.values.base.originalValue}
-                      onChange={props.handleChange}
-                      onBlur={props.handleBlur}
-                      name="base.originalValue"
-                      type="text"
-                      placeholder="Enter Original Value" />
+              <Form.Check>
 
-                    <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
-                      {props.errors.base?.originalValue}
-                    </Form.Control.Feedback>
-                  </Form.Group>
+                <Form.Check
+                  type="switch"
+                  name="baseToggle"
+                  checked={enableBaseValuesInput}
+                  onChange={() => setEnableBaseValuesInput(!enableBaseValuesInput)}
+                  label={<h4 className={styles.checkbox_label}>Enable Base Values Input</h4>}
+                />
+              </Form.Check>
 
-                  <Form.Group>
-                    <Form.Label>Original Value Date</Form.Label>
-                    <Form.Control
-                      defaultValue={props.values.base.originalValueDate}
-                      onChange={props.handleChange}
-                      onBlur={props.handleBlur}
-                      name="base.originalValueDate"
-                      type="date"
-                      placeholder="Enter Original Value Date" />
+              {enableBaseValuesInput && (
+                <Form.Group as={Col}>
+                  <Form.Label><h4>Base Values</h4></Form.Label>
+                  <Form.Row>
+                    <Form.Group>
+                      <Form.Label>Original Value</Form.Label>
+                      <Form.Control
+                        defaultValue={props.values.base?.originalValue}
+                        onChange={props.handleChange}
+                        onBlur={props.handleBlur}
+                        name="base.originalValue"
+                        type="text"
+                        placeholder="Enter Original Value" />
 
-                    <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
-                      {props.errors.base?.originalValueDate}
-                    </Form.Control.Feedback>
-                  </Form.Group>
-                </Form.Row>
+                      <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
+                        {props.errors.base?.originalValue}
+                      </Form.Control.Feedback>
+                    </Form.Group>
 
-                <Form.Row>
-                  <Form.Group>
-                    <Form.Label>Revised Value</Form.Label>
-                    <Form.Control
-                      defaultValue={props.values.base.revisedlValue}
-                      onChange={props.handleChange}
-                      onBlur={props.handleBlur}
-                      name="base.revisedlValue"
-                      type="text"
-                      placeholder="Enter Revised Value" />
+                    <Form.Group>
+                      <Form.Label>Original Value Date</Form.Label>
+                      <Form.Control
+                        defaultValue={props.values.base?.originalValueDate}
+                        onChange={props.handleChange}
+                        onBlur={props.handleBlur}
+                        name="base.originalValueDate"
+                        type="date"
+                        placeholder="Enter Original Value Date" />
 
-                    <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
-                      {props.errors.base?.revisedlValue}
-                    </Form.Control.Feedback>
-                  </Form.Group>
+                      <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
+                        {props.errors.base?.originalValueDate}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                  </Form.Row>
 
-                  <Form.Group>
-                    <Form.Label>Revised Value Date</Form.Label>
-                    <Form.Control
-                      defaultValue={props.values.base.revisedValueDate}
-                      onChange={props.handleChange}
-                      onBlur={props.handleBlur}
-                      name="base.revisedValueDate"
-                      type="date"
-                      placeholder="Enter Revised Value Date" />
+                  <Form.Row>
+                    <Form.Group>
+                      <Form.Label>Revised Value</Form.Label>
+                      <Form.Control
+                        defaultValue={props.values.base.revisedlValue}
+                        onChange={props.handleChange}
+                        onBlur={props.handleBlur}
+                        name="base.revisedlValue"
+                        type="text"
+                        placeholder="Enter Revised Value" />
 
-                    <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
-                      {props.errors.base?.revisedValueDate}
-                    </Form.Control.Feedback>
-                  </Form.Group>
-                </Form.Row>
-              </Form.Group>
+                      <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
+                        {props.errors.base?.revisedlValue}
+                      </Form.Control.Feedback>
+                    </Form.Group>
 
-              <Form.Group as={Col}>
-                <Form.Label><h4>Target Values</h4></Form.Label>
-                <Form.Row>
-                  <Form.Group>
-                    <Form.Label>Target Value</Form.Label>
-                    <Form.Control
-                      defaultValue={props.values.target.originalValue}
-                      onChange={props.handleChange}
-                      onBlur={props.handleBlur}
-                      name="target.originalValue"
-                      type="text"
-                      placeholder="Enter Target Value" />
-                  </Form.Group>
-                  <Form.Group>
-                    <Form.Label>Target Value Date</Form.Label>
-                    <Form.Control
-                      defaultValue={props.values.target.originalValueDate}
-                      onChange={props.handleChange}
-                      onBlur={props.handleBlur}
-                      name="target.originalValueDate"
-                      type="date"
-                      placeholder="Enter Target Value Date" />
-                  </Form.Group>
-                </Form.Row>
+                    <Form.Group>
+                      <Form.Label>Revised Value Date</Form.Label>
+                      <Form.Control
+                        defaultValue={props.values.base.revisedValueDate}
+                        onChange={props.handleChange}
+                        onBlur={props.handleBlur}
+                        name="base.revisedValueDate"
+                        type="date"
+                        placeholder="Enter Revised Value Date" />
 
-                <Form.Row>
-                  <Form.Group>
-                    <Form.Label>Revised Value</Form.Label>
-                    <Form.Control
-                      defaultValue={props.values.base.revisedlValue}
-                      onChange={props.handleChange}
-                      onBlur={props.handleBlur}
-                      name="base.revisedlValue"
-                      type="text"
-                      placeholder="Enter Revised Value" />
+                      <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
+                        {props.errors.base?.revisedValueDate}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                  </Form.Row>
+                </Form.Group>
+              )
+              }
 
-                    <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
-                      {props.errors.base?.revisedlValue}
-                    </Form.Control.Feedback>
-                  </Form.Group>
 
-                  <Form.Group>
-                    <Form.Label>Revised Value Date</Form.Label>
-                    <Form.Control
-                      defaultValue={props.values.base.revisedValueDate}
-                      onChange={props.handleChange}
-                      onBlur={props.handleBlur}
-                      name="base.revisedValueDate"
-                      type="date"
-                      placeholder="Enter Revised Value Date" />
+              <Form.Check>
+                <Form.Check
+                  type="switch"
+                  name="baseToggle"
+                  checked={enableTargetValuesInput}
+                  onChange={() => setEnableTargetValuesInput(!enableTargetValuesInput)}
+                  label={<h4 className={styles.checkbox_label}>Enable Target Values Input</h4>}
+                />
+              </Form.Check>
 
-                    <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
-                      {props.errors.base?.revisedValueDate}
-                    </Form.Control.Feedback>
-                  </Form.Group>
-                </Form.Row>
-              </Form.Group>
+              {enableTargetValuesInput && (
+                <Form.Group as={Col}>
+                  <Form.Label><h4>Target Values</h4></Form.Label>
+                  <Form.Row>
+                    <Form.Group>
+                      <Form.Label>Target Value</Form.Label>
+                      <Form.Control
+                        defaultValue={props.values.target.originalValue}
+                        onChange={props.handleChange}
+                        onBlur={props.handleBlur}
+                        name="target.originalValue"
+                        type="text"
+                        placeholder="Enter Target Value" />
+                    </Form.Group>
+                    <Form.Group>
+                      <Form.Label>Target Value Date</Form.Label>
+                      <Form.Control
+                        defaultValue={props.values.target.originalValueDate}
+                        onChange={props.handleChange}
+                        onBlur={props.handleBlur}
+                        name="target.originalValueDate"
+                        type="date"
+                        placeholder="Enter Target Value Date" />
+                    </Form.Group>
+                  </Form.Row>
+
+                  <Form.Row>
+                    <Form.Group>
+                      <Form.Label>Revised Value</Form.Label>
+                      <Form.Control
+                        defaultValue={props.values.base.revisedlValue}
+                        onChange={props.handleChange}
+                        onBlur={props.handleBlur}
+                        name="base.revisedlValue"
+                        type="text"
+                        placeholder="Enter Revised Value" />
+
+                      <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
+                        {props.errors.base?.revisedlValue}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+
+                    <Form.Group>
+                      <Form.Label>Revised Value Date</Form.Label>
+                      <Form.Control
+                        defaultValue={props.values.base.revisedValueDate}
+                        onChange={props.handleChange}
+                        onBlur={props.handleBlur}
+                        name="base.revisedValueDate"
+                        type="date"
+                        placeholder="Enter Revised Value Date" />
+
+                      <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
+                        {props.errors.base?.revisedValueDate}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                  </Form.Row>
+                </Form.Group>
+              )}
 
               <Form.Group controlId="formIndicatorSectors">
                 <Form.Label>Indicator Sectors</Form.Label>
@@ -318,6 +381,13 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                       isMulti
                       name="sectors"
                       options={sectors}
+                      onChange={(values) => {
+                        // set the formik value with the selected values and remove the label
+                        const selectedValues = values.map((value: any) => parseInt(value.value))
+                        props.setFieldValue('sectors', selectedValues);
+                      }}
+                      getOptionValue={(option) => option.value}
+                      onBlur={props.handleBlur}
                       className="basic-multi-select"
                       classNamePrefix="select"
                     />
@@ -333,6 +403,13 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                       isMulti
                       name="programs"
                       options={programs}
+                      onChange={(values) => {
+                        // set the formik value with the selected values and remove the label
+                        const selectedValues = values.map((value: any) => parseInt(value.value))
+                        props.setFieldValue('programs', selectedValues);
+                      }}
+                      getOptionValue={(option) => option.value}
+                      onBlur={props.handleBlur}
                       className="basic-multi-select"
                       classNamePrefix="select"
                     />
@@ -364,7 +441,6 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
           </Form>
         )}
       </Formik>
-
     </Modal>
   );
 };

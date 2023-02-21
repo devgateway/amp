@@ -1,5 +1,5 @@
 /* eslint-disable import/no-unresolved */
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import {
   Form, Modal, Button, Col
 } from 'react-bootstrap';
@@ -13,6 +13,10 @@ import { updateIndicator } from '../../reducers/updateIndicatorReducer';
 import { backendDateToJavascriptDate , formatJavascriptDate } from '../../utils/dateFn';
 import { formatObjArrayToNumberArray } from '../../utils/formatter';
 import { getIndicators } from '../../reducers/fetchIndicatorsReducer';
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content';
+
+const MySwal = withReactContent(Swal);
 
 const ascendingOptions = [
   { value: true, label: 'True' },
@@ -40,12 +44,13 @@ interface IndicatorFormValues {
 const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
   const { show, setShow, indicator } = props;
   const dispatch = useDispatch();
-  const nodeRef = useRef(null);
+  const nodeRef = useRef(null);  
 
   const handleClose = () => setShow(false);
 
   const sectorsReducer = useSelector((state: any) => state.fetchSectorsReducer);
   const programsReducer = useSelector((state: any) => state.fetchProgramsReducer);
+  const updateIndicatorReducer = useSelector((state: any) => state.updateIndicatorReducer);
 
   const [enableBaseValuesInput, setEnableBaseValuesInput] = useState(false);
   const [enableTargetValuesInput, setEnableTargetValuesInput] = useState(false);
@@ -117,12 +122,35 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
     return indicatorProgramData;
   };
 
+  const checkIfBaseValuesAreFilled = () => {
+    if(indicator) {
+      const { base } = indicator;
+      if (base?.originalValue || base?.originalValueDate || base?.revisedValue || base?.revisedValueDate) {
+        setEnableBaseValuesInput(true);
+      }
+    }
+  }
+
+  const checkIfTargetValuesAreFilled = () => {
+    if(indicator) {
+      const { target } = indicator;
+      if (target?.originalValue || target?.originalValueDate || target?.revisedValue || target?.revisedValueDate) {
+        setEnableTargetValuesInput(true);
+      }
+    }
+  }
+
   useLayoutEffect(() => {
     getSectors();
     getPrograms();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    checkIfBaseValuesAreFilled();
+    checkIfTargetValuesAreFilled();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [indicator]);
 
   const initialValues: IndicatorFormValues = {
     name: indicator?.name || '',
@@ -135,13 +163,13 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
     base: {
       originalValue: indicator?.base?.originalValue,
       originalValueDate: indicator?.base?.originalValueDate && backendDateToJavascriptDate(indicator?.base?.originalValueDate),
-      revisedlValue: indicator?.base?.revisedlValue,
+      revisedValue: indicator?.base?.revisedValue,
       revisedValueDate: indicator?.base?.revisedValueDate && backendDateToJavascriptDate(indicator?.base?.revisedValueDate),
     },
     target: {
       originalValue: indicator?.target?.originalValue,
       originalValueDate: indicator?.target?.originalValueDate && backendDateToJavascriptDate(indicator?.target?.originalValueDate),
-      revisedlValue: indicator?.target?.revisedlValue,
+      revisedValue: indicator?.target?.revisedValue,
       revisedValueDate: indicator?.target?.revisedValueDate && backendDateToJavascriptDate(indicator?.target?.revisedValueDate),
     }
   };
@@ -176,15 +204,40 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
             programs : formatObjArrayToNumberArray(programs),
             ascending,
             creationDate: creationDate && formatJavascriptDate(creationDate),
-            base: enableBaseValuesInput ? base : null,
-            target: enableTargetValuesInput ? target : null
+            base: enableBaseValuesInput ? {
+              originalValue: base.originalValue,
+              originalValueDate: base.originalValueDate ? formatJavascriptDate(base.originalValueDate) : null,
+              revisedValue: base.revisedValue,
+              revisedValueDate: base.revisedValueDate ? formatJavascriptDate(base.revisedValueDate) : null,
+            } : null,
+            target: enableTargetValuesInput ? {
+              originalValue: target.originalValue,
+              originalValueDate: target.originalValueDate ? formatJavascriptDate(target.originalValueDate) : null,
+              revisedValue: target.revisedValue,
+              revisedValueDate: target.revisedValueDate ? formatJavascriptDate(target.revisedValueDate) : null,
+            } : null
           };
 
-          dispatch(updateIndicator(updatedIndicatorData));
-          dispatch(getIndicators());
-          handleClose();
+          dispatch(updateIndicator(updatedIndicatorData as IndicatorObjectType));
+
+          if (!updateIndicatorReducer.loading && !updateIndicatorReducer.error) {
+            MySwal.fire({
+              icon: 'success',
+              title: 'Indicator updated successfully',
+              timer: 3000
+            }).then(() =>{
+              dispatch(getIndicators());
+              handleClose();
+            });
+            return;
+          }
 
 
+          MySwal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong!',
+          });
         }}
       >
         {(props) => (
@@ -252,7 +305,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                   />
                 </Form.Check>
 
-                {enableBaseValuesInput && (
+                {  enableBaseValuesInput && (
                   <Form.Group as={Col}>
                     <Form.Label><h4>Base Values</h4></Form.Label>
                     <Form.Row>
@@ -291,7 +344,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                       <Form.Group>
                         <Form.Label>Revised Value</Form.Label>
                         <Form.Control
-                          defaultValue={props.values.base.revisedlValue}
+                          defaultValue={props.values.base.revisedValue}
                           onChange={props.handleChange}
                           onBlur={props.handleBlur}
                           name="base.revisedlValue"
@@ -299,7 +352,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                           placeholder="Enter Revised Value" />
 
                         <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
-                          {props.errors.base?.revisedlValue}
+                          {props.errors.base?.revisedValue}
                         </Form.Control.Feedback>
                       </Form.Group>
 
@@ -333,7 +386,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                   />
                 </Form.Check>
 
-                {enableTargetValuesInput && (
+                { enableTargetValuesInput && (
                   <Form.Group as={Col}>
                     <Form.Label><h4>Target Values</h4></Form.Label>
                     <Form.Row>
@@ -345,7 +398,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                           onBlur={props.handleBlur}
                           name="target.originalValue"
                           type="text"
-                          placeholder="Enter Target Value" />
+                          placeholder="Enter Target Original Value" />
                       </Form.Group>
                       <Form.Group>
                         <Form.Label>Target Value Date</Form.Label>
@@ -355,7 +408,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                           onBlur={props.handleBlur}
                           name="target.originalValueDate"
                           type="date"
-                          placeholder="Enter Target Value Date" />
+                          placeholder="Enter Target Original Value Date" />
                       </Form.Group>
                     </Form.Row>
 
@@ -363,30 +416,30 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                       <Form.Group>
                         <Form.Label>Revised Value</Form.Label>
                         <Form.Control
-                          defaultValue={props.values.base.revisedlValue}
+                          defaultValue={props.values.target.revisedValue}
                           onChange={props.handleChange}
                           onBlur={props.handleBlur}
-                          name="base.revisedlValue"
+                          name="target.revisedValue"
                           type="text"
-                          placeholder="Enter Revised Value" />
+                          placeholder="Enter Target Revised Value" />
 
                         <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
-                          {props.errors.base?.revisedlValue}
+                          {props.errors.target?.revisedValue}
                         </Form.Control.Feedback>
                       </Form.Group>
 
                       <Form.Group>
                         <Form.Label>Revised Value Date</Form.Label>
                         <Form.Control
-                          defaultValue={props.values.base.revisedValueDate}
+                          defaultValue={props.values.target.revisedValueDate}
                           onChange={props.handleChange}
                           onBlur={props.handleBlur}
-                          name="base.revisedValueDate"
+                          name="target.revisedValueDate"
                           type="date"
-                          placeholder="Enter Revised Value Date" />
+                          placeholder="Enter Target Revised Value Date" />
 
                         <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
-                          {props.errors.base?.revisedValueDate}
+                          {props.errors.target?.revisedValueDate}
                         </Form.Control.Feedback>
                       </Form.Group>
                     </Form.Row>
@@ -448,7 +501,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                     classNamePrefix="select"
                   />
                 </Form.Group>
-                { console.log(props.values)}
+              
                 <Form.Group controlId="formCreationDate">
                   <Form.Label>Creation Date</Form.Label>
                   <Form.Control 

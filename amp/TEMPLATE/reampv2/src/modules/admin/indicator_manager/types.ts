@@ -9,7 +9,7 @@ export type DefaultComponentProps = {
 export interface BaseAndTargetValueType {
     originalValue?:     number;
     originalValueDate?: string;
-    revisedlValue?:     number;
+    revisedValue?:     number;
     revisedValueDate?:  string;
 }
 

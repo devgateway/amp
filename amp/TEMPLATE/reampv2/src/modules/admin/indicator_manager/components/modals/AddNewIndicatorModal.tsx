@@ -89,13 +89,13 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
     base: {
       originalValue: 0,
       originalValueDate: '',
-      revisedlValue: 0,
+      revisedValue: 0,
       revisedValueDate: '',
     },
     target: {
       originalValue: 0,
       originalValueDate: getCurrentDate(),
-      revisedlValue: 0,
+      revisedValue: 0,
       revisedValueDate: getCurrentDate(),
     }
   };
@@ -130,15 +130,15 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
             ascending,
             creationDate: creationDate ? formatJavascriptDate(creationDate) : null,
             base: enableBaseValuesInput ? {
-              orginalValue: base.originalValue,
+              originalValue: base.originalValue,
               originalValueDate: base.originalValueDate ? formatJavascriptDate(base.originalValueDate) : null,
-              revisedValue: base.revisedlValue,
+              revisedValue: base.revisedValue,
               revisedValueDate: base.revisedValueDate ? formatJavascriptDate(base.revisedValueDate) : null,
             } : null,
             target: enableTargetValuesInput ? {
-              orginalValue: target.originalValue,
+              originalValue: target.originalValue,
               originalValueDate: target.originalValueDate ? formatJavascriptDate(target.originalValueDate) : null,
-              revisedValue: target.revisedlValue,
+              revisedValue: target.revisedValue,
               revisedValueDate: target.revisedValueDate ? formatJavascriptDate(target.revisedValueDate) : null,
             } : null
           };
@@ -155,7 +155,6 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
               handleClose();
               dispatch(getIndicators());
             });
-
             return;
           }
 
@@ -271,7 +270,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                     <Form.Group>
                       <Form.Label>Revised Value</Form.Label>
                       <Form.Control
-                        defaultValue={props.values.base.revisedlValue}
+                        defaultValue={props.values.base.revisedValue}
                         onChange={props.handleChange}
                         onBlur={props.handleBlur}
                         name="base.revisedlValue"
@@ -279,7 +278,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                         placeholder="Enter Revised Value" />
 
                       <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
-                        {props.errors.base?.revisedlValue}
+                        {props.errors.base?.revisedValue}
                       </Form.Control.Feedback>
                     </Form.Group>
 
@@ -343,7 +342,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                     <Form.Group>
                       <Form.Label>Revised Value</Form.Label>
                       <Form.Control
-                        defaultValue={props.values.base.revisedlValue}
+                        defaultValue={props.values.base.revisedValue}
                         onChange={props.handleChange}
                         onBlur={props.handleBlur}
                         name="base.revisedlValue"
@@ -351,7 +350,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                         placeholder="Enter Revised Value" />
 
                       <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
-                        {props.errors.base?.revisedlValue}
+                        {props.errors.base?.revisedValue}
                       </Form.Control.Feedback>
                     </Form.Group>
 

@@ -63,25 +63,25 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
   const columns: ColumnDescription<any, any>[] = useMemo(() => [
     {
       dataField: 'id',
-      text: 'ID',
+      text: translations['amp.indicatormanager:table-header-id'],
       sort: true,
       headerStyle: { width: '10%' },
     },
     {
       dataField: 'code',
-      text: 'Code',
+      text: translations['amp.indicatormanager:table-header-code'],
       sort: true,
       headerStyle: { width: '10%' },
     },
     {
       dataField: 'name',
-      text: 'Indicator Name',
+      text: translations['amp.indicatormanager:table-header-indicator-name'],
       sort: true,
       headerStyle: { width: '35%' },
     },
     {
       dataField: 'sectors',
-      text: 'Sectors',
+      text: translations['amp.indicatormanager:sectors'],
       sort: true,
       headerStyle: { width: '30%' },
       formatter: (_cell: any, row: any) => {
@@ -111,13 +111,13 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
     },
     {
       dataField: 'creationDate',
-      text: 'Creation Date',
+      text: translations['amp.indicatormanager:table-header-creation-date'],
       sort: true,
       headerStyle: { width: '10%' },
     },
     {
       dataField: 'action',
-      text: 'Action',
+      text: translations['amp.indicatormanager:table-header-action'],
       headerStyle: { width: '30%' },
       csvExport: false,
       formatter: (_cell: any, row: any) => (
@@ -173,18 +173,21 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
         show={showViewIndicatorModal}
         setShow={setShowViewIndicatorModal}
         indicator={selectedRow}
+        translations={translations}
       />
 
       <EditIndicatorModal
         show={showEditIndicatorModal}
         setShow={setShowEditIndicatorModal}
         indicator={selectedRow}
+        translations={translations}
       />
 
       <DeleteIndicatorModal
         show={showDeleteIndicatorModal}
         setShow={setShowDeleteIndicatorModal}
         indicator={selectedRow}
+        translations={translations}
       />
 
       {
@@ -195,6 +198,7 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
             columns={columns}
             sectors={sectorsReducer.sectors}
             setSelectedSector={setSelectedSector}
+            translations={translations}
           />
       }
     </>

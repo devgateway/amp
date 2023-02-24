@@ -7,10 +7,10 @@ import Select from 'react-select';
 import { Formik } from 'formik';
 import styles from './css/IndicatorModal.module.css';
 import { indicatorValidationSchema } from '../../utils/validator';
-import { BaseAndTargetValueType, IndicatorObjectType, SectorObjectType } from '../../types';
+import { BaseAndTargetValueType, DefaultComponentProps, IndicatorObjectType, SectorObjectType } from '../../types';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateIndicator } from '../../reducers/updateIndicatorReducer';
-import { backendDateToJavascriptDate , formatJavascriptDate } from '../../utils/dateFn';
+import { backendDateToJavascriptDate, formatJavascriptDate } from '../../utils/dateFn';
 import { formatObjArrayToNumberArray } from '../../utils/formatter';
 import { getIndicators } from '../../reducers/fetchIndicatorsReducer';
 import Swal from 'sweetalert2'
@@ -23,7 +23,7 @@ const ascendingOptions = [
   { value: false, label: 'False' }
 ];
 
-interface EditIndicatorModalProps {
+interface EditIndicatorModalProps extends DefaultComponentProps {
   show: boolean;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
   indicator: IndicatorObjectType;
@@ -42,9 +42,9 @@ interface IndicatorFormValues {
 }
 
 const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
-  const { show, setShow, indicator } = props;
+  const { show, setShow, indicator, translations } = props;
   const dispatch = useDispatch();
-  const nodeRef = useRef(null);  
+  const nodeRef = useRef(null);
 
   const handleClose = () => setShow(false);
 
@@ -123,7 +123,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
   };
 
   const checkIfBaseValuesAreFilled = () => {
-    if(indicator) {
+    if (indicator) {
       const { base } = indicator;
       if (base?.originalValue || base?.originalValueDate || base?.revisedValue || base?.revisedValueDate) {
         setEnableBaseValuesInput(true);
@@ -132,7 +132,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
   }
 
   const checkIfTargetValuesAreFilled = () => {
-    if(indicator) {
+    if (indicator) {
       const { target } = indicator;
       if (target?.originalValue || target?.originalValueDate || target?.revisedValue || target?.revisedValueDate) {
         setEnableTargetValuesInput(true);
@@ -187,7 +187,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
       keyboard={false}
     >
       <Modal.Header closeButton>
-        <Modal.Title>Edit Indicator</Modal.Title>
+        <Modal.Title>{translations["amp.indicatormanager:edit-indicator"]}</Modal.Title>
       </Modal.Header>
       <Formik
         initialValues={initialValues}
@@ -200,8 +200,8 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
             name,
             description,
             code,
-            sectors : formatObjArrayToNumberArray(sectors),
-            programs : formatObjArrayToNumberArray(programs),
+            sectors: formatObjArrayToNumberArray(sectors),
+            programs: formatObjArrayToNumberArray(programs),
             ascending,
             creationDate: creationDate && formatJavascriptDate(creationDate),
             base: enableBaseValuesInput ? {
@@ -225,7 +225,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
               icon: 'success',
               title: 'Indicator updated successfully',
               timer: 3000
-            }).then(() =>{
+            }).then(() => {
               dispatch(getIndicators());
               handleClose();
             });
@@ -256,7 +256,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                     isInvalid={!!props.errors.name}
                     required
                     aria-required type="text"
-                    placeholder="Enter Indicator Name"
+                    placeholder={translations["amp.indicatormanager:enter-indicator-name"]}
                   />
                   <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
                     {props.errors.name}
@@ -264,14 +264,14 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                 </Form.Group>
 
                 <Form.Group controlId="formBasicDescription">
-                  <Form.Label>Indicator Description</Form.Label>
+                  <Form.Label>{translations["amp.indicatormanager:indicator-description"]}</Form.Label>
                   <Form.Control
                     defaultValue={props.values.description}
                     onChange={props.handleChange}
                     onBlur={props.handleBlur}
                     name="description"
                     type="text"
-                    placeholder="Enter Indicator Description"
+                    placeholder={translations["amp.indicatormanager:enter-indicator-description"]}
                   />
                   <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
                     {props.errors.description}
@@ -279,7 +279,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                 </Form.Group>
 
                 <Form.Group controlId="formIndicatorCode">
-                  <Form.Label>Indicator Code</Form.Label>
+                  <Form.Label>{translations["amp.indicatormanager:indicator-code"]}</Form.Label>
                   <Form.Control
                     defaultValue={props.values.code}
                     onChange={props.handleChange}
@@ -287,7 +287,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                     name="code"
                     required
                     type="text"
-                    placeholder="Enter Indicator Code"
+                    placeholder={translations["amp.indicatormanager:enter-indicator-code"]}
                   />
                   <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
                     {props.errors.code}
@@ -301,23 +301,23 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                     name="baseToggle"
                     checked={enableBaseValuesInput}
                     onChange={() => setEnableBaseValuesInput(!enableBaseValuesInput)}
-                    label={<h4 className={styles.checkbox_label}>Enable Base Values Input</h4>}
+                    label={<h4 className={styles.checkbox_label}>{translations["amp.indicatormanager:enable-base"]}</h4>}
                   />
                 </Form.Check>
 
-                {  enableBaseValuesInput && (
+                {enableBaseValuesInput && (
                   <Form.Group as={Col}>
-                    <Form.Label><h4>Base Values</h4></Form.Label>
+                    <Form.Label><h4>{translations["amp.indicatormanager:base-values"]}</h4></Form.Label>
                     <Form.Row>
                       <Form.Group>
-                        <Form.Label>Original Value</Form.Label>
+                        <Form.Label>{translations['amp.indicatormanager:original-value']}</Form.Label>
                         <Form.Control
                           defaultValue={props.values.base?.originalValue}
                           onChange={props.handleChange}
                           onBlur={props.handleBlur}
                           name="base.originalValue"
                           type="text"
-                          placeholder="Enter Original Value" />
+                          placeholder={translations["amp.indicatormanager:enter-original-value"]} />
 
                         <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
                           {props.errors.base?.originalValue}
@@ -325,7 +325,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                       </Form.Group>
 
                       <Form.Group>
-                        <Form.Label>Original Value Date</Form.Label>
+                        <Form.Label>{translations["amp.indicatormanager:original-value-date"]}</Form.Label>
                         <Form.Control
                           defaultValue={props.values.base?.originalValueDate}
                           onChange={props.handleChange}
@@ -342,14 +342,14 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
 
                     <Form.Row>
                       <Form.Group>
-                        <Form.Label>Revised Value</Form.Label>
+                        <Form.Label>{translations["amp.indicatormanager:revised-value"]}</Form.Label>
                         <Form.Control
                           defaultValue={props.values.base.revisedValue}
                           onChange={props.handleChange}
                           onBlur={props.handleBlur}
                           name="base.revisedlValue"
                           type="text"
-                          placeholder="Enter Revised Value" />
+                          placeholder={translations["amp.indicatormanager:enter-revised-value"]} />
 
                         <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
                           {props.errors.base?.revisedValue}
@@ -357,14 +357,14 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                       </Form.Group>
 
                       <Form.Group>
-                        <Form.Label>Revised Value Date</Form.Label>
+                        <Form.Label>{translations['amp.indicatormanager:revised-value-date']}</Form.Label>
                         <Form.Control
                           defaultValue={props.values.base.revisedValueDate}
                           onChange={props.handleChange}
                           onBlur={props.handleBlur}
                           name="base.revisedValueDate"
                           type="date"
-                          placeholder="Enter Revised Value Date" />
+                          placeholder={translations['amp.indicatormanager:enter-revised-value-date']} />
 
                         <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
                           {props.errors.base?.revisedValueDate}
@@ -382,64 +382,64 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                     name="baseToggle"
                     checked={enableTargetValuesInput}
                     onChange={() => setEnableTargetValuesInput(!enableTargetValuesInput)}
-                    label={<h4 className={styles.checkbox_label}>Enable Target Values Input</h4>}
+                    label={<h4 className={styles.checkbox_label}>{translations["amp.indicatormanager:enable-target"]}</h4>}
                   />
                 </Form.Check>
 
-                { enableTargetValuesInput && (
+                {enableTargetValuesInput && (
                   <Form.Group as={Col}>
-                    <Form.Label><h4>Target Values</h4></Form.Label>
+                    <Form.Label><h4>{translations["amp.indicatormanager:target-values"]}</h4></Form.Label>
                     <Form.Row>
                       <Form.Group>
-                        <Form.Label>Target Value</Form.Label>
+                        <Form.Label>{translations["amp.indicatormanager:target-value"]}</Form.Label>
                         <Form.Control
                           defaultValue={props.values.target.originalValue}
                           onChange={props.handleChange}
                           onBlur={props.handleBlur}
                           name="target.originalValue"
                           type="text"
-                          placeholder="Enter Target Original Value" />
+                          placeholder={translations["amp.indicatormanager:enter-target-value"]} />
                       </Form.Group>
                       <Form.Group>
-                        <Form.Label>Target Value Date</Form.Label>
+                        <Form.Label>{translations["amp.indicatormanager:target-value-date"]}</Form.Label>
                         <Form.Control
                           defaultValue={props.values.target.originalValueDate}
                           onChange={props.handleChange}
                           onBlur={props.handleBlur}
                           name="target.originalValueDate"
                           type="date"
-                          placeholder="Enter Target Original Value Date" />
+                          placeholder={translations["amp.indicatormanager:enter-target-value-date"]} />
                       </Form.Group>
                     </Form.Row>
 
                     <Form.Row>
                       <Form.Group>
-                        <Form.Label>Revised Value</Form.Label>
+                        <Form.Label>{translations["amp.indicatormanager:revised-value"]}</Form.Label>
                         <Form.Control
-                          defaultValue={props.values.target.revisedValue}
+                          defaultValue={props.values.base.revisedValue}
                           onChange={props.handleChange}
                           onBlur={props.handleBlur}
-                          name="target.revisedValue"
+                          name="base.revisedlValue"
                           type="text"
-                          placeholder="Enter Target Revised Value" />
+                          placeholder={translations["amp.indicatormanager:enter-revised-value"]} />
 
                         <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
-                          {props.errors.target?.revisedValue}
+                          {props.errors.base?.revisedValue}
                         </Form.Control.Feedback>
                       </Form.Group>
 
                       <Form.Group>
-                        <Form.Label>Revised Value Date</Form.Label>
+                        <Form.Label>{translations["amp.indicatormanager:revised-value-date"]}</Form.Label>
                         <Form.Control
-                          defaultValue={props.values.target.revisedValueDate}
+                          defaultValue={props.values.base.revisedValueDate}
                           onChange={props.handleChange}
                           onBlur={props.handleBlur}
-                          name="target.revisedValueDate"
+                          name="base.revisedValueDate"
                           type="date"
-                          placeholder="Enter Target Revised Value Date" />
+                          placeholder={translations["amp.indicatormanager:enter-revised-value-date"]} />
 
                         <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
-                          {props.errors.target?.revisedValueDate}
+                          {props.errors.base?.revisedValueDate}
                         </Form.Control.Feedback>
                       </Form.Group>
                     </Form.Row>
@@ -448,7 +448,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
 
 
                 <Form.Group controlId="formIndicatorSectors">
-                  <Form.Label>Indicator Sectors</Form.Label>
+                  <Form.Label>{translations["amp.indicatormanager:sectors"]}</Form.Label>
                   {
                     sectors.length > 0 ? (
                       <Select
@@ -460,7 +460,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                           const selectedValues = values.map((value: any) => parseInt(value.value))
                           props.setFieldValue('sectors', selectedValues);
                         }}
-                        getOptionValue={(option) => option.value} 
+                        getOptionValue={(option) => option.value}
                         className="basic-multi-select"
                         classNamePrefix="select"
                         defaultValue={props.values.sectors}
@@ -469,8 +469,9 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                   }
                 </Form.Group>
 
+
                 <Form.Group controlId="programs">
-                  <Form.Label>Programs</Form.Label>
+                  <Form.Label>{translations["amp.indicatormanager:programs"]}</Form.Label>
                   {
                     programs.length > 0 ? (
                       <Select
@@ -483,39 +484,36 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                           props.setFieldValue('programs', selectedValues);
                         }}
                         getOptionValue={(option) => option.value}
+                        onBlur={props.handleBlur}
                         className="basic-multi-select"
                         classNamePrefix="select"
-                        defaultValue={props.values.programs}
                       />
-                    ) : <Select isDisabled defaultValue={[{ label: 'No Programs avaliable' }]} />
+                    ) : null
                   }
                 </Form.Group>
 
                 <Form.Group controlId="Ascending">
-                  <Form.Label>Ascending</Form.Label>
+                  <Form.Label>{translations["amp.indicatormanager:ascending"]}</Form.Label>
                   <Select
                     name="ascending"
-                    defaultValue={{ label: props.values.ascending ? 'True' : 'False', value: props.values.ascending }}
                     options={ascendingOptions}
                     className="basic-multi-select"
                     classNamePrefix="select"
                   />
                 </Form.Group>
-              
+
                 <Form.Group controlId="formCreationDate">
-                  <Form.Label>Creation Date</Form.Label>
-                  <Form.Control 
-                  type="date" 
-                  readOnly 
-                  defaultValue={props.values.creationDate} 
-                  placeholder="Enter Creation Date" />
+                  <Form.Label>{translations["amp.indicatormanager:table-header-creation-date"]}</Form.Label>
+                  <Form.Control type="date" readOnly defaultValue={props.values.creationDate} />
                 </Form.Group>
               </Modal.Body>
               <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>
-                  Close
+                  {translations["amp.indicatormanager:close"]}
                 </Button>
-                <Button type="submit" variant="primary">Save changes</Button>
+                <Button type="submit" variant="success">
+                  {translations["amp.indicatormanager:save"]}
+                </Button>
               </Modal.Footer>
             </Form>
           </>

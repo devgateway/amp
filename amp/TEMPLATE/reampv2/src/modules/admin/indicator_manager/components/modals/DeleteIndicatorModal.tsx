@@ -6,17 +6,18 @@ import { deleteIndicator } from '../../reducers/deleteIndicatorReducer';
 import { getIndicators } from '../../reducers/fetchIndicatorsReducer';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content';
+import { DefaultComponentProps } from '../../types';
 
 const MySwal = withReactContent(Swal);
 
-interface DeleteIndicatorModalProps {
+interface DeleteIndicatorModalProps extends DefaultComponentProps {
     show: boolean;
     setShow: React.Dispatch<React.SetStateAction<boolean>>;
     indicator?: any;
 }
 
 const DeleteIndicatorModal: React.FC<DeleteIndicatorModalProps> = (props) => {
-    const { show, setShow, indicator } = props;
+    const { show, setShow, indicator, translations } = props;
     const dispatch = useDispatch();
 
     const deleteIndicatorState = useSelector((state: any) => state.deleteIndicator);
@@ -28,8 +29,8 @@ const DeleteIndicatorModal: React.FC<DeleteIndicatorModalProps> = (props) => {
 
         if (!deleteIndicatorState?.error) {
             MySwal.fire({
-                title: <p>AMP Indicator Manager</p>,
-                text: 'Indicator Deleted Successfully',
+                title: <p>{translations["amp.indicatormanager:table-title"]}</p>,
+                text: translations["amp.indicatormanager:delete-success"],
                 icon: 'success',
                 timer: 3000,
                 timerProgressBar: true,
@@ -41,8 +42,8 @@ const DeleteIndicatorModal: React.FC<DeleteIndicatorModalProps> = (props) => {
         }
 
         MySwal.fire({
-            title: <p>AMP Indicator Manager</p>,
-            text: 'Indicator Delete Failed',
+            title: <p>{translations["amp.indicatormanager:table-title"]}</p>,
+            text: translations["amp.indicatormanager:delete-failed"],
             icon: 'error',
             timer: 3000,
             timerProgressBar: true,
@@ -60,17 +61,17 @@ const DeleteIndicatorModal: React.FC<DeleteIndicatorModalProps> = (props) => {
                 animation={false}
             >
                 <Modal.Header closeButton>
-                    <Modal.Title>Delete Indicator</Modal.Title>
+                    <Modal.Title>{translations["amp.indicatormanager:delete-indicator"]}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <p>Are you sure you want to delete this indicator?</p>
+                    <p>{translations["amp.indicatormanager:delete-confirm"]}</p>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
-                        Cancel
+                        {translations["amp.indicatormanager:cancel"]}
                     </Button>
                     <Button variant="danger" onClick={handleDeleteIndicator}>
-                        Delete
+                        {translations["amp.indicatormanager:delete"]}
                     </Button>
                 </Modal.Footer>
             </Modal>

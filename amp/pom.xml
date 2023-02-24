@@ -1045,13 +1045,13 @@
     </dependencyManagement>
 
     <build>
-        <sourceDirectory>${project.basedir}/WEB-INF/src</sourceDirectory>
+        <sourceDirectory>${project.basedir}/src/main/webapp/WEB-INF/src</sourceDirectory>
 
         <finalName>${project.artifactId}</finalName>
 
         <resources>
             <resource>
-                <directory>WEB-INF/src</directory>
+                <directory>${project.basedir}/src/main/webapp/WEB-INF/src</directory>
                 <excludes>
                     <exclude>**/*.java</exclude>
                 </excludes>
@@ -1096,7 +1096,7 @@
                                 <include>**/*</include>
                             </includes>
                             <excludes>
-                                <exclude>WEB-INF/src/**</exclude>
+                                <exclude>./src/main/webapp/WEB-INF/src/**</exclude>
                                 <exclude>.idea/**</exclude>
                                 <exclude>.settings/**</exclude>
                                 <exclude>.externalToolBuilders/**</exclude>
@@ -1126,7 +1126,7 @@
                             </excludes>
                         </resource>
                     </webResources>
-                    <webXml>WEB-INF/web.xml</webXml>
+                    <webXml>./src/main/webapp/WEB-INF/web.xml</webXml>
                 </configuration>
             </plugin>
 

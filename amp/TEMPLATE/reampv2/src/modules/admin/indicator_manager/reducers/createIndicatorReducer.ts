@@ -1,3 +1,4 @@
+import { errorHelper } from './../utils/errorHelper';
 import { IndicatorObjectType } from './../types';
 import { createAsyncThunk, createSlice, } from "@reduxjs/toolkit";
 
@@ -47,7 +48,7 @@ const createIndicatorSlice = createSlice({
         });
         builder.addCase(createIndicator.rejected, (state, action) => {
             state.loading = false;
-            state.error = action.error;
+            state.error = errorHelper(action.payload);
     
         });
     }

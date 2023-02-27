@@ -7,6 +7,7 @@ import { getIndicators } from '../../reducers/fetchIndicatorsReducer';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content';
 import { DefaultComponentProps } from '../../types';
+import useDidMountEffect from '../../utils/hooks';
 
 const MySwal = withReactContent(Swal);
 
@@ -20,35 +21,40 @@ const DeleteIndicatorModal: React.FC<DeleteIndicatorModalProps> = (props) => {
     const { show, setShow, indicator, translations } = props;
     const dispatch = useDispatch();
 
-    const deleteIndicatorState = useSelector((state: any) => state.deleteIndicator);
+    const deleteIndicatorState = useSelector((state: any) => state.deleteIndicatorReducer);
 
     const handleClose = () => setShow(false);
 
-    const handleDeleteIndicator = () => {
-        dispatch(deleteIndicator(indicator?.id));
+    useDidMountEffect(() => {
+        if (!deleteIndicatorState?.loading && deleteIndicatorState?.error) {
+            MySwal.fire({
+                title: <p>{translations["amp.indicatormanager:table-title"]}</p>,
+                text: deleteIndicatorState?.error ?? translations["amp.indicatormanager:delete-failed"],
+                icon: 'error',
+                timer: 3000,
+                timerProgressBar: true,
+            });
+            handleClose();
+        }
 
-        if (!deleteIndicatorState?.error) {
+        if (!deleteIndicatorState?.loading && !deleteIndicatorState?.error) {
             MySwal.fire({
                 title: <p>{translations["amp.indicatormanager:table-title"]}</p>,
                 text: translations["amp.indicatormanager:delete-success"],
                 icon: 'success',
                 timer: 3000,
                 timerProgressBar: true,
-            });
+            })
 
             handleClose();
             dispatch(getIndicators());
             return;
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [deleteIndicatorState]);
 
-        MySwal.fire({
-            title: <p>{translations["amp.indicatormanager:table-title"]}</p>,
-            text: translations["amp.indicatormanager:delete-failed"],
-            icon: 'error',
-            timer: 3000,
-            timerProgressBar: true,
-        });
-        handleClose();
+    const handleDeleteIndicator = () => {
+        dispatch(deleteIndicator(indicator?.id));
     };
 
     return (

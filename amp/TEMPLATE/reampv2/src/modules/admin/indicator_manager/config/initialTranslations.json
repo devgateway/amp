@@ -68,5 +68,6 @@
   "amp.indicatormanager:edit-indicator": "Edit Indicator",
   "amp.indicatormanager:view-indicator": "View Indicator",
   "amp.indicatormanager:view-indicator-id": "Indicator ID",
-  "amp.indicatormanager:view-error": "Error Loading Indicator"
+  "amp.indicatormanager:view-error": "Error Loading Indicator",
+  "amp.indicatormanager:error-used-by-activities": "This indicator is used by activities and cannot be deleted"
 }

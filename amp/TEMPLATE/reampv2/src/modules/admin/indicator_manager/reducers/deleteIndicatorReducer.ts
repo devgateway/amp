@@ -1,3 +1,4 @@
+import { errorHelper } from '../utils/errorHelper';
 import { IndicatorObjectType } from './../types';
 import { createAsyncThunk, createSlice, } from "@reduxjs/toolkit";
 
@@ -21,11 +22,11 @@ export const deleteIndicator = createAsyncThunk(
         });
         const data: IndicatorObjectType = await response.json();
 
-        if (response.status !== 204) {
-            return rejectWithValue(data);
+        if (response.status === 200 || response.status === 204) {
+            return data;
         }
 
-        return data;
+        return rejectWithValue(data);
     }
 );
 
@@ -43,7 +44,7 @@ const deleteIndicatorSlice = createSlice({
         });
         builder.addCase(deleteIndicator.rejected, (state, action) => {
             state.loading = false;
-            state.error = action.error;
+            state.error = errorHelper(action.payload);
     
         });
     }

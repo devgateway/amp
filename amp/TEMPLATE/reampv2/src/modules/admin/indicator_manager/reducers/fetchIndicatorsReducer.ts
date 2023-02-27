@@ -1,3 +1,4 @@
+import { errorHelper } from './../utils/errorHelper';
 import { IndicatorObjectType } from './../types';
 import { createAsyncThunk, createSlice, } from "@reduxjs/toolkit";
 
@@ -30,7 +31,22 @@ export const getIndicators = createAsyncThunk(
 const fetchIndicatorSlice = createSlice({
     name: "indicatorsData",
     initialState,
-    reducers: {},
+    reducers: {
+        addIndicator: (state, action) => {
+            state.indicators = [...state.indicators, action.payload];
+        },
+        removeIndicator: (state, action) => {
+            state.indicators = state.indicators.filter((indicator) => indicator.id !== action.payload);
+        },
+        updateIndicator: (state, action) => {
+            state.indicators = state.indicators.map((indicator) => {
+                if (indicator.id === action.payload.id) {
+                    return action.payload;
+                }
+                return indicator;
+            });
+        }
+    },
     extraReducers: (builder) => {
         builder.addCase(getIndicators.pending, (state) => {
             state.loading = true;
@@ -41,10 +57,12 @@ const fetchIndicatorSlice = createSlice({
         });
         builder.addCase(getIndicators.rejected, (state, action) => {
             state.loading = false;
-            state.error = action.error;
+            state.error = errorHelper(action.payload);
     
         });
     }
 });
+
+export const { addIndicator } = fetchIndicatorSlice.actions;
 
 export default fetchIndicatorSlice.reducer;

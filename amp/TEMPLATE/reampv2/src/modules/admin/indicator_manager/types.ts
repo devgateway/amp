@@ -6,28 +6,24 @@ export type DefaultComponentProps = {
     translations: DefaultTranslationPackTypes;
 }
 
-interface TranslatableObject {
-    [key: string]: string;
-}
-
 export interface BaseAndTargetValueType {
     originalValue?:     number;
     originalValueDate?: string;
-    revisedlValue?:     number;
+    revisedValue?:     number;
     revisedValueDate?:  string;
 }
 
 export interface SectorObjectType {
     id:           number;
-    name:         TranslatableObject;
+    name:         string;
     code:         string;
     codeOfficial: string;
 }
 
 export interface IndicatorObjectType {
     id:           number;
-    name:         TranslatableObject;
-    description:  TranslatableObject;
+    name:         string;
+    description:  string;
     code:         string;
     ascending:    boolean;
     creationDate: string;
@@ -39,7 +35,7 @@ export interface IndicatorObjectType {
 
 export interface ProgramObjectType {
     id:       number;
-    name:     TranslatableObject;
+    name:     string;
     code:     string;
     type:     "National" | "Secondary" | "Tertiary" | "Primary";
     children: ProgramObjectType[];

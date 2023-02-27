@@ -3,10 +3,10 @@ import React, { useLayoutEffect } from 'react';
 import { Modal, Row } from 'react-bootstrap';
 import backdropStyles from './css/IndicatorModal.module.css';
 import styles from './css/ViewIndicatorModal.module.css';
-import { IndicatorObjectType, ProgramObjectType, SectorObjectType } from '../../types';
+import { DefaultComponentProps, IndicatorObjectType, ProgramObjectType, SectorObjectType } from '../../types';
 import { useSelector } from 'react-redux';
 
-interface ViewIndicatorModalProps {
+interface ViewIndicatorModalProps extends DefaultComponentProps {
   show: boolean;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
   indicator: IndicatorObjectType;
@@ -26,7 +26,7 @@ const colorOptions = [
 ];
 
 const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
-  const { show, setShow, indicator } = props;
+  const { show, setShow, indicator, translations } = props;
   const sectorsReducer = useSelector((state: any) => state.fetchSectorsReducer);
   const programsReducer = useSelector((state: any) => state.fetchProgramsReducer);
 
@@ -66,70 +66,70 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
       size='lg'
     >
       <Modal.Header closeButton>
-        <Modal.Title>View Indicator</Modal.Title>
+        <Modal.Title>{translations["amp.indicatormanager:view-indicator"]}</Modal.Title>
       </Modal.Header>
       {indicator ?
         <Modal.Body>
           <div className={styles.viewmodal_wrapper}>
             <Row className={styles.view_row}>
               <div className={styles.view_item}>
-                <h4>Indicator ID</h4>
+                <h4>{translations["amp.indicatormanager:view-indicator-id"]}</h4>
                 <p className={styles.value}>{indicator.id}</p>
               </div>
               <div className={styles.view_item}>
-                <h4 className={styles.label}>Indicator Name</h4>
-                <p className={styles.value}>{indicator.name.en}</p>
+                <h4 className={styles.label}>{translations["amp.indicatormanager:indicator-name"]}</h4>
+                <p className={styles.value}>{indicator.name}</p>
               </div>
             </Row>
             <Row className={styles.view_row}>
               <div className={styles.view_item}>
-                <h4>Indicator Code</h4>
+                <h4>{translations["amp.indicatormanager:indicator-code"]}</h4>
                 <p className={styles.value}>{indicator.code}</p>
               </div>
               <div className={styles.view_item}>
-                <h4 className={styles.label}>Indicator Description</h4>
-                <p className={styles.value}>{indicator.description.en  === "" || '' ? 'No Description available': indicator.description.en}</p>
+                <h4 className={styles.label}>{translations["amp.indicatormanager:indicator-description"]}</h4>
+                <p className={styles.value}>{indicator.description  === "" || '' ? 'No Description available': indicator.description}</p>
               </div>
             </Row>
 
             <Row className={styles.view_row}>
               <div className={styles.view_item}>
-                <h4 className={styles.label}>Ascending</h4>
+                <h4 className={styles.label}>{translations["amp.indicatormanager:ascending"]}</h4>
                 <p className={styles.value}>{indicator.ascending ? 'True' : 'False'}</p>
               </div>
 
               <div className={styles.view_item}>
-                <h4 className={styles.label}>Indicator Creation Date</h4>
+                <h4 className={styles.label}>{translations["amp.indicatormanager:table-header-creation-date"]}</h4>
                 <p className={styles.value}>{indicator.creationDate}</p>
               </div>
             </Row>
 
             <Row className={styles.view_row_full}>
-              <h4 className={styles.label}>Indicator Sectors</h4>
+              <h4 className={styles.label}>{translations["amp.indicatormanager:sectors"]}</h4>
               <div className={styles.value}>
                 {sectorData.length > 0 ? sectorData.map((sector) => (
                   <p style={{
                     backgroundColor: colorOptions[sector.id % 10].color,
-                  }} className={styles.array_item} key={sector.id}>{sector.name.en}</p>
+                  }} className={styles.array_item} key={sector.id}>{sector.name}</p>
                 )) :
-                  <p>No Sectors avaliable</p>
+                  <p>{translations["amp.indicatormanager:no-data"]}</p>
                 }
               </div>
 
             </Row>
 
             <Row className={styles.view_row_full}>
-              <h4 className={styles.label}>Programs</h4>
+              <h4 className={styles.label}>{translations["amp.indicatormanager:programs"]}</h4>
               {programData.length > 0 ? programData.map((program) => (
-                <p className={styles.array_item} key={program.id}>{program.name.en}</p>
+                <p className={styles.array_item} key={program.id}>{program.name}</p>
               )) :
-                <p>No Programs avaliable</p>
+                <p>{translations["amp.indicatormanager:no-data"]}</p>
               }
             </Row>
           </div>
         </Modal.Body> :
         <Modal.Body>
-          <h3>Error loading indicator</h3>
+          <h3>{translations["amp.indicatormanager:view-error"]}</h3>
         </Modal.Body>
       }
 

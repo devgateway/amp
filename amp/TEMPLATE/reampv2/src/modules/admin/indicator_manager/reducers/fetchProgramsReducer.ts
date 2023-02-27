@@ -1,3 +1,4 @@
+import { errorHelper } from './../utils/errorHelper';
 import { createAsyncThunk, createSlice, } from "@reduxjs/toolkit";
 import { ProgramObjectType } from "../types";
 
@@ -41,7 +42,7 @@ const fetchProgramsSlice = createSlice({
         });
         builder.addCase(getPrograms.rejected, (state, action) => {
             state.loading = false;
-            state.error = action.error;
+            state.error = errorHelper(action.payload);
     
         });
     }

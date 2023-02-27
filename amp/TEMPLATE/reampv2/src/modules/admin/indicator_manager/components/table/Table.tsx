@@ -10,9 +10,9 @@ import 'react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css
 import ToolkitProvider, { Search, CSVExport, ToolkitContextType } from 'react-bootstrap-table2-toolkit';
 import styles from './Table.module.css';
 import AddNewIndicatorModal from '../modals/AddNewIndicatorModal';
-import { SectorObjectType } from '../../types';
+import { DefaultComponentProps, SectorObjectType } from '../../types';
 
-interface SkeletonTableProps {
+interface SkeletonTableProps extends DefaultComponentProps {
   columns: any;
   data: any;
   title: string;
@@ -21,7 +21,7 @@ interface SkeletonTableProps {
 };
 
 const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
-  const { columns, data, title, sectors, setSelectedSector } = props;
+  const { columns, data, title, sectors, setSelectedSector, translations } = props;
 
   const { SearchBar } = Search;
   const { ExportCSVButton } = CSVExport;
@@ -59,18 +59,18 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
         value: 100,
       },
       {
-        text: 'All',
+        text: translations['amp.indicatormanager:all'],
         value: data.length,
       }
     ],
-    firstPageText: 'First',
-    prePageText: 'Back',
-    nextPageText: 'Next',
-    lastPageText: 'Last',
-    nextPageTitle: 'First page',
-    prePageTitle: 'Pre page',
-    firstPageTitle: 'Next page',
-    lastPageTitle: 'Last page',
+    firstPageText: translations['amp.indicatormanager:first'],
+    prePageText: translations['amp.indicatormanager:previous'],
+    nextPageText: translations['amp.indicatormanager:next'],
+    lastPageText: translations['amp.indicatormanager:last'],
+    nextPageTitle: translations['amp.indicatormanager:next-page'],
+    prePageTitle: translations['amp.indicatormanager:pre-page'],
+    firstPageTitle: translations['amp.indicatormanager:first-page'],
+    lastPageTitle: translations['amp.indicatormanager:last-page'],
     showTotal: true,
     sizePerPage: 10,
     hidePageListOnlyOnePage: true,
@@ -110,7 +110,7 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
 
   return (
     <>
-      <AddNewIndicatorModal show={showAddNewIndicatorModal} setShow={setShowAddNewIndicatorModal} />
+      <AddNewIndicatorModal show={showAddNewIndicatorModal} setShow={setShowAddNewIndicatorModal} translations={translations} />
       <Col sm={12}>
         <ToolkitProvider
           keyField="id"
@@ -142,7 +142,7 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
                         <Button type="primary" onClick={showAddNewIndicatorModalHandler}>
                           <i className="fa fa-plus" />
                           {' '}
-                          <span>Add New Indicator</span>
+                          <span>{translations['amp.dashboard:add-new']}</span>
                         </Button>
                         <ExportCSVButton
                           {...props.csvProps}
@@ -150,7 +150,7 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
                         >
                           <i className="fa fa-download" />
                           {' '}
-                          Export CSV
+                          <span>{translations['amp.indicatormanager:export-csv']}</span>
                         </ExportCSVButton>
                       </div>
 
@@ -160,21 +160,21 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
                       <div className={styles.table_header_bottom_right}>
 
                         <div className={styles.sector_filter_container}>
-                          <Form.Label className={styles.filter_label}>Sectors</Form.Label>
+                          <Form.Label className={styles.filter_label}>{translations['amp.indicatormanager:sectors']}</Form.Label>
                           <Form.Control
                             onChange={(e) => setSelectedSector(e.target.value as unknown as number)}
                             as="select"
                             className={styles.filter_select}>
-                            <option value="0">All Sectors</option>
+                            <option value="0">{translations['amp.indicatormanager:all-sectors']}</option>
                             {
                               sectors && sectors.length > 0 ?
                                 sectors.map((sector) => (
                                   <option
                                     key={sector.id}
                                     value={sector.id}>
-                                    {sector.name.en}
+                                    {sector.name}
                                   </option>
-                                )) : <option value="0">No Sectors Available</option>
+                                )) : <option value="0">{translations['amp.indicatormanager:no-data']}</option>
                             }
                           </Form.Control>
                         </div>
@@ -182,7 +182,7 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
                         <div className={styles.search_container}>
                           <SearchBar
                             {...props.searchProps}
-                            placeholder="Search"
+                            placeholder={translations['amp.indicatormanager:search']}
                           />
                         </div>
                       </div>
@@ -203,7 +203,7 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
                   filter={filterFactory(filterOptions)}
                   noDataIndication={() => (
                     <div className={styles.no_data}>
-                      <h5>No Data Available</h5>
+                      <h5>{translations['amp.indicatormanager:no-data']}</h5>
                     </div>
                   )}
                 />

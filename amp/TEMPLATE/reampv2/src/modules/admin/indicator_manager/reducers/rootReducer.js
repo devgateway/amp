@@ -8,6 +8,9 @@ import sharedDataReducer from './sharedDataReducer';
 import fetchIndicatorsReducer from './fetchIndicatorsReducer';
 import fetchSectorsReducer from './fetchSectorsReducer';
 import fetchProgramsReducer from './fetchProgramsReducer';
+import createIndicatorReducer from './createIndicatorReducer';
+import updateIndicatorReducer from './updateIndicatorReducer';
+import deleteIndicatorReducer from './deleteIndicatorReducer';
 
 export default combineReducers({
   startupReducer,
@@ -16,5 +19,8 @@ export default combineReducers({
   sharedDataReducer,
   fetchIndicatorsReducer,
   fetchSectorsReducer,
-  fetchProgramsReducer
+  fetchProgramsReducer,
+  createIndicatorReducer,
+  updateIndicatorReducer,
+  deleteIndicatorReducer
 });

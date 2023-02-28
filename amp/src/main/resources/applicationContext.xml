@@ -9,4 +9,5 @@
 
     <context:component-scan base-package="org.digijava.kernel.ampapi.endpoints.security.services"/>
 
+
 </beans>

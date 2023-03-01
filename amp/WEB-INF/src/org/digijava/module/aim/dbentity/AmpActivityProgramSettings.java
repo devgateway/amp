@@ -6,6 +6,7 @@ import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.ProgramUtil;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Map;
 
 public class AmpActivityProgramSettings implements Serializable, Identifiable {

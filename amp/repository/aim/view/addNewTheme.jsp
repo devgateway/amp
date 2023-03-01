@@ -7,6 +7,13 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
 
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"/>"></script>
+
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css">
+
+<jsp:include page="scripts/newCalendar.jsp" flush="true" />
+
 
 <style>
 body {font-family:Arial, Helvetica, sans-serif; font-size:12px;}
@@ -323,11 +330,36 @@ hr {border: 0; color: #E5E5E5; background-color: #E5E5E5; height: 1px; width: 10
 			      <td align="left"><html:checkbox property="showInRMFilters"/></td>
 				</tr>
 				<tr>
-				<td height="25" align="center" colspan="3" bgcolor=#ffffff>
-				<hr />
+					<td width="30%" height="20" align="right" valign="middle">
+						<digi:trn key="aim:startDate">Start Date</digi:trn>
+					</td>
+					<td width="2" align="left">&nbsp;</td>
+					<td align="left">
+						<html:text property="startDate"  styleId="startDate" name="aimThemeForm" readonly="true"  />
+						<a id="date1" href='javascript:pickDateById("date1", "startDate")'>
+							<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
+						</a>
+					</td>
+				</tr>
+					<tr>
+						<td width="30%" height="20" align="right" valign="middle">
+							<digi:trn key="aim:endDate">End Date</digi:trn>
+						</td>
+						<td width="2" align="left">&nbsp;</td>
+						<td align="left">
+							<html:text property="endDate"  styleId="endDate" name="aimThemeForm" readonly="true"  />
+							<a id="date1" href='javascript:pickDateById("date1", "endDate")'>
+								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
+							</a>
+						</td>
+					</tr>
+				<tr>
+					<td height="25" align="center" colspan="3" bgcolor=#ffffff>
+					<hr />
 						<input class="buttonx" type="button" id="addBtn" name="addBtn" value="<digi:trn key="aim:btnsave">Save</digi:trn>" onclick="return submitProgram('<bean:write name="aimThemeForm" property="themeId"/>','<bean:write name="aimThemeForm" property="rootId"/>','<bean:write name="aimThemeForm" property="name"/>')">&nbsp;&nbsp;
 						<input class="buttonx" type="reset" value="<digi:trn>Reset</digi:trn>">&nbsp;&nbsp;
-						<input class="buttonx" type="button" name="close" value="<digi:trn key="aim:btnclose">Close</digi:trn>" onclick="closeWindow()">				</td>
+						<input class="buttonx" type="button" name="close" value="<digi:trn key="aim:btnclose">Close</digi:trn>" onclick="closeWindow()">
+					</td>
 				</tr>	
   </table>
 

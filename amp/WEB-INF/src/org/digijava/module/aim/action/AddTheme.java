@@ -333,13 +333,11 @@ public class AddTheme extends Action {
         ampTheme.setShowInRMFilters(themeForm.getShowInRMFilters());
 
         if (themeForm.getStartDate() != null) {
-            Date castStartDate = DateConversion.getDate(themeForm.getStartDate(), "dd/MM/yyyy");
-            ampTheme.setStartDate(castStartDate);
+            ampTheme.setStartDate(DateConversion.getDate(themeForm.getStartDate()));
         }
 
         if (themeForm.getEndDate() != null) {
-            Date castEndDate = DateConversion.getDate(themeForm.getEndDate(), "dd/MM/yyyy");
-            ampTheme.setEndDate(castEndDate);
+            ampTheme.setEndDate(DateConversion.getDate(themeForm.getEndDate()));
         }
 
         if (themeForm.getParentId() != null && themeForm.getParentId().longValue()!=0 ) {
@@ -400,13 +398,11 @@ public class AddTheme extends Action {
         themeForm.setShowInRMFilters (ampTheme.getShowInRMFilters());
 
         if (ampTheme.getStartDate() != null) {
-            String startDateToStr = DateConversion.convertDateToString(ampTheme.getStartDate());
-            themeForm.setStartDate(startDateToStr);
+            themeForm.setStartDate(DateConversion.convertDateToString(ampTheme.getStartDate()));
         }
 
         if (ampTheme.getEndDate() != null) {
-            String endDateToStr = DateConversion.convertDateToString(ampTheme.getEndDate());
-            themeForm.setEndDate(endDateToStr);
+            themeForm.setEndDate(DateConversion.convertDateToString(ampTheme.getEndDate()));
         }
 
         if (ampTheme.getExternalFinancing() == null) {

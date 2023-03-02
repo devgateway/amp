@@ -36,9 +36,24 @@ Build everything, run a development server with livereload, with one easy comman
 $ gulp dev
 ````
 
+Replace
+```javascript
+<script src="complied-js/app.js"></script>
+```
+
+with  
+
+```javascript
+<script src="http://localhost:3000/TEMPLATE/ampTemplate/dashboard/dev/app/compiled-js/app.js"></script>
+```  
+
+in the `app/index.html`
+
+Ensure the Tomcat server is running
+
 You can access the dashboards now at
 
-[`localhost:3000/TEMPLATE/ampTemplate/dashboard/dev/app/index.html`](http://localhost:3000/TEMPLATE/ampTemplate/dashboard/dev/app/index.html)
+[`http://localhost:8080/TEMPLATE/ampTemplate/dashboard/dev/app/index.html`](http://localhost:8080/TEMPLATE/ampTemplate/dashboard/dev/app/index.html)
 
 
 Testing

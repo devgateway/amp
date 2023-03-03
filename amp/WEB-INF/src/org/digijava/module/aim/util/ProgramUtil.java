@@ -1400,7 +1400,17 @@ public class ProgramUtil {
                 tempAmpTheme.setTotalFinancing(editeTheme.getTotalFinancing());
                 tempAmpTheme.setShowInRMFilters(editeTheme.getShowInRMFilters());
 
-//beginTransaction();
+                if (editeTheme.getStartDate() != null)
+                    tempAmpTheme.setStartDate(editeTheme.getStartDate());
+                else
+                    tempAmpTheme.setStartDate(null);
+
+                if (editeTheme.getEndDate() != null)
+                    tempAmpTheme.setEndDate(editeTheme.getEndDate());
+                else
+                    tempAmpTheme.setEndDate(null);
+
+
                 session.update(tempAmpTheme);
                 //tx.commit();
             }

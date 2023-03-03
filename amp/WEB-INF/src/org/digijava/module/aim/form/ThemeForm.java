@@ -1,6 +1,7 @@
 package org.digijava.module.aim.form;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.struts.action.ActionForm;
@@ -115,12 +116,32 @@ public class ThemeForm extends ActionForm {
 
         private Boolean showInRMFilters;
 
+        private String startDate;
+
+        private String endDate;
+
     public Boolean getShowInRMFilters() {
         return showInRMFilters;
     }
 
     public void setShowInRMFilters(Boolean showInRMFilters) {
         this.showInRMFilters = showInRMFilters;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
 
     public String getAlpha() {

@@ -15,9 +15,12 @@ import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.dimension.NPODimension;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.form.ThemeForm;
+import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+
+import java.util.Date;
 
 /**
  * 
@@ -329,6 +332,14 @@ public class AddTheme extends Action {
         ampTheme.setEnvironmentConsiderations(themeForm.getProgramEnvironmentConsiderations());
         ampTheme.setShowInRMFilters(themeForm.getShowInRMFilters());
 
+        if (themeForm.getStartDate() != null) {
+            ampTheme.setStartDate(DateConversion.getDate(themeForm.getStartDate()));
+        }
+
+        if (themeForm.getEndDate() != null) {
+            ampTheme.setEndDate(DateConversion.getDate(themeForm.getEndDate()));
+        }
+
         if (themeForm.getParentId() != null && themeForm.getParentId().longValue()!=0 ) {
             ampTheme.setParentThemeId(ProgramUtil.getThemeById(themeForm.getParentId()));
             int indlevel = themeForm.getPrgLevel();
@@ -385,6 +396,14 @@ public class AddTheme extends Action {
         themeForm.setProgramBeneficiaries(ampTheme.getBeneficiaries());
         themeForm.setProgramEnvironmentConsiderations(ampTheme.getEnvironmentConsiderations());
         themeForm.setShowInRMFilters (ampTheme.getShowInRMFilters());
+
+        if (ampTheme.getStartDate() != null) {
+            themeForm.setStartDate(DateConversion.convertDateToString(ampTheme.getStartDate()));
+        }
+
+        if (ampTheme.getEndDate() != null) {
+            themeForm.setEndDate(DateConversion.convertDateToString(ampTheme.getEndDate()));
+        }
 
         if (ampTheme.getExternalFinancing() == null) {
             themeForm.setProgramExternalFinancing(Double.valueOf(0));

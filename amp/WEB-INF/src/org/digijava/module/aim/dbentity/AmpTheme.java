@@ -1,9 +1,7 @@
 package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Set;
+import java.util.*;
 
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.NPODimension;
@@ -21,7 +19,6 @@ import org.digijava.module.aim.util.NameableOrIdentifiable;
 import org.digijava.module.aim.util.SoftDeletable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
-import java.util.TreeSet;
 @TranslatableClass (displayName = "Theme")
 public class AmpTheme implements Serializable, SoftDeletable, Identifiable, ARDimensionable, HierarchyListable,
         AmpAutoCompleteDisplayable<AmpTheme>, NameableOrIdentifiable {
@@ -70,6 +67,10 @@ public class AmpTheme implements Serializable, SoftDeletable, Identifiable, ARDi
     private Double externalFinancing;
     private Double internalFinancing;
     private Double totalFinancing;
+
+    private Date startDate;
+
+    private Date endDate;
     
     private transient Collection<AmpTheme> transientChildren;
 
@@ -336,6 +337,34 @@ public class AmpTheme implements Serializable, SoftDeletable, Identifiable, ARDi
         public String toString() {
         return name;
     }
+
+        /**
+         * @return the startDate
+         */
+        public Date getStartDate() {
+            return startDate;
+        }
+
+        /**
+         * @param startDate the startDate to set
+         */
+        public void setStartDate(Date startDate) {
+            this.startDate = startDate;
+        }
+
+        /**
+         * @return the endDate
+         */
+        public Date getEndDate() {
+            return endDate;
+        }
+
+        /**
+         * @param endDate the endDate to set
+         */
+        public void setEndDate(Date endDate) {
+            this.endDate = endDate;
+        }
 
         /**
          * @return the totalFinancing

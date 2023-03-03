@@ -55,5 +55,7 @@
 		</set>
 		<property name="isbudgetprogram" column="is_budget_program" type="java.lang.Integer" />
         <property name="showInRMFilters" column="show_in_rm" type="java.lang.Boolean" />
+		<property name="startDate" column="start_date" type="java.util.Date" />
+		<property name="endDate" column="end_date" type="java.util.Date" />
 	</class>
 </hibernate-mapping>

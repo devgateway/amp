@@ -89,6 +89,12 @@ public class IndicatorManagerService {
                 .collect(Collectors.toSet());
         indicator.setSectors(sectors);
 
+        if (indicatorRequest.getProgramIds().size() > 1) {
+            throw new ApiRuntimeException(BAD_REQUEST,
+                    ApiError.toError("Indicator cannot be created because "
+                            + "it can be assigned to only one program"));
+        }
+
         Set<AmpTheme> programs = indicatorRequest.getProgramIds().stream()
                 .map(id -> (AmpTheme) session.get(AmpTheme.class, id))
                 .collect(Collectors.toSet());
@@ -205,6 +211,12 @@ public class IndicatorManagerService {
                     indicator.getIndicatorValues().add(indRequest.getTargetValue());
                     indicator.getTargetValue().setIndicator(indicator);
                 }
+            }
+
+            if (indRequest.getProgramIds().size() > 1) {
+                throw new ApiRuntimeException(BAD_REQUEST,
+                        ApiError.toError("Indicator cannot be updated because "
+                                + "it can be assigned to only one program"));
             }
 
             Set<AmpSector> sectors = indRequest.getSectorIds().stream()

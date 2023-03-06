@@ -34,10 +34,12 @@ public class ProgramDTO {
     @JsonProperty("children")
     private final List<ProgramDTO> children = new ArrayList<>();
 
+    @JsonProperty("startDate")
     @JsonSerialize(using = LocalizedDateSerializer.class)
     @JsonDeserialize(using = LocalizedDateDeserializer.class)
     private Date startDate;
 
+    @JsonProperty("endDate")
     @JsonSerialize(using = LocalizedDateSerializer.class)
     @JsonDeserialize(using = LocalizedDateDeserializer.class)
     private Date endDate;

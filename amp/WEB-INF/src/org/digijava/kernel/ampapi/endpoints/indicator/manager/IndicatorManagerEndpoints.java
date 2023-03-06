@@ -5,6 +5,8 @@ import io.swagger.annotations.ApiOperation;
 import org.digijava.kernel.ampapi.endpoints.gpi.ValidationUtils;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;

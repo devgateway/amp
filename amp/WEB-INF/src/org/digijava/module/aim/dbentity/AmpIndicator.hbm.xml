@@ -19,6 +19,9 @@
 
 		<property name="comments" column="Comments" type="java.lang.String" />
 
+		<property name="startDate" column="start_date" type="java.util.Date" />
+		<property name="endDate" column="end_date" type="java.util.Date" />
+
 		<set name="indicatorValues" lazy="true" inverse="true" cascade="all-delete-orphan">
 			<cache usage="read-write" />
 			<key column="indicator_id" />

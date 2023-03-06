@@ -25,7 +25,7 @@ import static org.digijava.module.aim.dbentity.AmpIndicatorValue.TARGET;
 /**
  * DTO for AmpIndicator
  */
-@JsonPropertyOrder({"id", "name", "description", "code", "ascending", "creationDate", "sectors"})
+@JsonPropertyOrder({"id", "name", "description", "code", "ascending", "creationDate", "sectors", "startDate", "endDate"})
 public class MEIndicatorDTO {
 
     @JsonProperty("id")
@@ -65,6 +65,16 @@ public class MEIndicatorDTO {
     @ValidProgramIds
     private List<Long> programIds = new ArrayList<>();
 
+    @JsonProperty("startDate")
+    @JsonSerialize(using = LocalizedDateSerializer.class)
+    @JsonDeserialize(using = LocalizedDateDeserializer.class)
+    private Date startDate;
+
+    @JsonProperty("endDate")
+    @JsonSerialize(using = LocalizedDateSerializer.class)
+    @JsonDeserialize(using = LocalizedDateDeserializer.class)
+    private Date endDate;
+
     public MEIndicatorDTO() {
 
     }
@@ -80,6 +90,8 @@ public class MEIndicatorDTO {
         this.targetValue = indicator.getTargetValue();
         this.sectorIds = indicator.getSectors().stream().map(AmpSector::getAmpSectorId).collect(Collectors.toList());
         this.programIds = indicator.getPrograms().stream().map(AmpTheme::getAmpThemeId).collect(Collectors.toList());
+        this.startDate = indicator.getStartDate();
+        this.endDate = indicator.getEndDate();
     }
 
     public Long getId() {
@@ -128,6 +140,22 @@ public class MEIndicatorDTO {
 
     public void setCreationDate(final Date creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+    
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 
     public AmpIndicatorGlobalValue getBaseValue() {

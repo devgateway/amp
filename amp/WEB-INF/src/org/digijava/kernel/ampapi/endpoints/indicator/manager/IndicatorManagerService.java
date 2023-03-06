@@ -15,6 +15,7 @@ import org.digijava.module.aim.util.SectorUtil;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 
+import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -27,6 +28,7 @@ import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
  * Indicator Manager Service
  *
  * @author vchihai
+ * @author Timothy Mugo
  */
 public class IndicatorManagerService {
 
@@ -69,6 +71,8 @@ public class IndicatorManagerService {
         indicator.setCode(indicatorRequest.getCode());
         indicator.setType(indicatorRequest.isAscending() ? "A" : "D");
         indicator.setCreationDate(indicatorRequest.getCreationDate());
+        indicator.setStartDate(indicatorRequest.getStartDate());
+        indicator.setEndDate(indicatorRequest.getEndDate());
 
         Set<AmpIndicatorGlobalValue> indicatorValues = new HashSet<>();
         if (indicatorRequest.getBaseValue() != null) {
@@ -89,6 +93,43 @@ public class IndicatorManagerService {
                 .map(id -> (AmpTheme) session.get(AmpTheme.class, id))
                 .collect(Collectors.toSet());
         indicator.setPrograms(programs);
+
+        if (!indicator.getPrograms().isEmpty()) {
+
+            for (AmpTheme program : indicator.getPrograms()) {
+
+                if (program.getStartDate() != null) {
+                    Timestamp timestampIndicatorStartDate = new Timestamp(indicator.getStartDate().getTime());
+                    Timestamp timestampProgramStartDate = new Timestamp(program.getStartDate().getTime());
+
+                    if (!timestampIndicatorStartDate.equals(timestampProgramStartDate)) {
+                        throw new ApiRuntimeException(BAD_REQUEST,
+                                ApiError.toError("Indicator cannot be created because "
+                                        + "the start date of the program is not equal with the start date of the indicator"));
+                    }
+
+
+                    indicator.setStartDate(program.getStartDate());
+                }
+
+                if (program.getEndDate() != null) {
+                    Timestamp timestampIndicatorEndDate = new Timestamp(indicator.getEndDate().getTime());
+                    Timestamp timestampProgramEndDate = new Timestamp(program.getEndDate().getTime());
+
+                    if (!timestampIndicatorEndDate.equals(timestampProgramEndDate)) {
+                        throw new ApiRuntimeException(BAD_REQUEST,
+                                ApiError.toError("Indicator cannot be created because "
+                                        + "the end date of the program is not equal with the end date of the indicator"));
+                    }
+
+                    indicator.setEndDate(program.getEndDate());
+                }
+
+            }
+        } else {
+            indicator.setStartDate(indicatorRequest.getStartDate());
+            indicator.setEndDate(indicatorRequest.getEndDate());
+        }
 
         session.save(indicator);
 
@@ -175,7 +216,31 @@ public class IndicatorManagerService {
                 Set<AmpTheme> programs = indRequest.getProgramIds().stream()
                         .map(id -> (AmpTheme) session.get(AmpTheme.class, id))
                         .collect(Collectors.toSet());
+
                 indicator.getPrograms().addAll(programs);
+
+                for (AmpTheme program : indicator.getPrograms()) {
+                    if (program.getStartDate() != null && indicator.getStartDate() != null) {
+                        if (program.getStartDate().after(indicator.getCreationDate())) {
+                            throw new ApiRuntimeException(BAD_REQUEST,
+                                    ApiError.toError("Indicator with id " + indicator.getIndicatorId() + " cannot be created because "
+                                            + "the start date of the program is after the start date of the indicator"));
+                        }
+
+                        indicator.setStartDate(program.getStartDate());
+                    }
+
+                    if (program.getEndDate() != null && indicator.getEndDate() != null) {
+                        if (program.getEndDate().before(indicator.getCreationDate())) {
+                            throw new ApiRuntimeException(BAD_REQUEST,
+                                    ApiError.toError("Indicator with id " + indicator.getIndicatorId() + " cannot be created because "
+                                            + "the end date of the program is before the end date of the indicator"));
+                        }
+
+                        indicator.setEndDate(program.getEndDate());
+                    }
+                }
+
             }
 
             session.update(indicator);

@@ -84,7 +84,8 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 
 
         final AmpAutocompleteFieldPanel<AmpIndicator> searchIndicators =
-                new AmpAutocompleteFieldPanel<AmpIndicator>("search", "Search Indicators", AmpMEIndicatorSearchModel.class) {
+                new AmpAutocompleteFieldPanel<AmpIndicator>("search", "Search Indicators",
+                        AmpMEIndicatorSearchModel.class) {
 
                     private static final long serialVersionUID = 1227775244079125152L;
 

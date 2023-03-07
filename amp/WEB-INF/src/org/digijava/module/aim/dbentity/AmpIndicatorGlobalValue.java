@@ -117,4 +117,14 @@ public class AmpIndicatorGlobalValue implements Serializable {
     public boolean isTargetValue() {
         return type == AmpIndicatorValue.TARGET;
     }
+
+    @JsonIgnore
+    public Double getValue() {
+        return getRevisedValue() != null ? getRevisedValue() : getOriginalValue();
+    }
+
+    @JsonIgnore
+    public Date getValueDate() {
+        return getRevisedValueDate() != null ? getRevisedValueDate() : getOriginalValueDate();
+    }
 }

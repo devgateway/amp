@@ -11,6 +11,8 @@
 		</id>
 		<property column="allow_multiple" name="allowMultiple" type="boolean" />
 		<property column="name" name="name" type="java.lang.String" />
+		<property column="start_date" name="startDate" type="java.util.Date" />
+		<property column="end_date" name="endDate" type="java.util.Date" />
 		<many-to-one name="defaultHierarchy" column="default_hierarchy"
 			class="org.digijava.module.aim.dbentity.AmpTheme" cascade="none" not-null="false" />
 

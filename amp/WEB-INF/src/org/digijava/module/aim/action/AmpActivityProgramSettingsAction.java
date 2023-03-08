@@ -13,6 +13,7 @@ import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.form.AmpActivityProgramSettingsForm;
 import org.digijava.module.aim.util.ProgramUtil;
+import org.jfree.util.Log;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,6 +36,7 @@ public class AmpActivityProgramSettingsAction
             if (!errors.isEmpty()) {
                 saveErrors(request, errors);
             } else {
+
                 ProgramUtil.saveAmpActivityProgramSettings(ampActivityProgramSettingsForm.getSettingsList());
                 ampActivityProgramSettingsForm.setEvent(null);
             }
@@ -67,6 +69,13 @@ public class AmpActivityProgramSettingsAction
                 errors.add(ActionMessages.GLOBAL_MESSAGE,
                         new ActionMessage("error.aim.removeProgramSetting", oldSetting.getName()));
 
+            }
+
+            if (setting.getStartDate() != null && setting.getEndDate() != null) {
+                if (setting.getStartDate().after(setting.getEndDate())) {
+                    errors.add(ActionMessages.GLOBAL_MESSAGE,
+                            new ActionMessage("error.aim.programSettingDateRange", oldSetting.getName()));
+                }
             }
         });
         return errors;

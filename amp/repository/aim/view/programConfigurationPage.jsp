@@ -5,6 +5,14 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"/>"></script>
+
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css">
+
+<jsp:include page="scripts/newCalendar.jsp" flush="true" />
+
 <script language="JavaScript">
 
  function cancelSaving() {
@@ -114,7 +122,7 @@
 <digi:form action="/programConfigurationPage.do" method="post">
 
 <table width="100%" cellspacing="1" cellpadding="4" valign="top" align="left" style="margin-top:15px;" class="inside">
-<logic:iterate name="aimActivityProgramSettingsForm" property="settingsList" id="settingsList">
+<logic:iterate name="aimActivityProgramSettingsForm" property="settingsList" id="settingsList" indexId="index">
 <tr>
 <td colspan="2" bgColor=#f2f2f2 class="inside" height="20" align="center" style="font-weight:bold;">
 <digi:trn key="aim:${settingsList.name}"> <c:out value="${settingsList.name}"/></digi:trn>
@@ -130,7 +138,7 @@ Default Hierarchy
 
 <html:select name="settingsList" property="defaultHierarchyId" indexed="true">
   <html:option value="-1"><digi:trn key="aim:selprogram">Select Program</digi:trn></html:option>
-	<html:optionsCollection  property="programList" value="ampThemeId" label="name" />
+	<html:optionsCollection  property="programList"  value="ampThemeId" label="name" />
 </html:select>
 </td>
 </tr>
@@ -139,6 +147,27 @@ Default Hierarchy
 <digi:trn key="aim:allowMultiple">Allow Multiple</digi:trn>? <html:checkbox name="settingsList" property="allowMultiple" indexed="true" />
 </td>
 </tr>
+		<td width="50%" class="inside" align="right">
+			<digi:trn key="aim:startDate">Start Date</digi:trn>
+		</td>
+		<td class="inside">
+			<html:text property="startDate"  styleId="startDate${index}" name="settingsList" readonly="true"  />
+			<a id="date${index}" href='javascript:pickDateById("date${index}", "startDate${index}")'>
+				<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
+			</a>
+		</td>
+</tr>
+	</tr>
+	<td width="50%" class="inside" align="right">
+		<digi:trn key="aim:endDate">End Date</digi:trn>
+	</td>
+	<td class="inside">
+		<html:text property="endDate"  styleId="endDate${index}" name="settingsList" readonly="true"  />
+		<a id="date1${index}" href='javascript:pickDateById("date1${index}", "endDate${index}")'>
+			<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
+		</a>
+	</td>
+	</tr>
 </logic:iterate>
 
 <tr>

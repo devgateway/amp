@@ -38,6 +38,12 @@
         return valid;
     }
 
+	function saveProgramConfiguration(){
+		if(validateSave()){
+			document.forms[0].submit();
+		}
+	}
+
    var enterBinder	= new EnterHitBinder('saveMPCBtn');
 
 </script>
@@ -149,9 +155,21 @@ Default Hierarchy
 </tr>
 		<td width="50%" class="inside" align="right">
 			<digi:trn key="aim:startDate">Start Date</digi:trn>
+
 		</td>
 		<td class="inside">
-			<html:text property="startDate"  styleId="startDate${index}" name="settingsList" readonly="true"  />
+			<html:text property="startDate" styleId="startDate${index}" name="settingsList" readonly="true" indexed="true"  />
+			<jsp:useBean id="dateConverter" class="org.digijava.module.aim.helper.DateConversion">
+				<c:set target="${dateConverter}" property="settingsList">
+					<bean:write name="settingsList" property="startDate" />
+				</c:set>
+			</jsp:useBean>
+			<%
+				String starDate = pageContext.getAttribute("startDate").toString();
+				if (starDate != null && !starDate.equals("")) {
+					pageContext.setAttribute("startDate", dateConverter.);
+				}
+			%>
 			<a id="date${index}" href='javascript:pickDateById("date${index}", "startDate${index}")'>
 				<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 			</a>
@@ -173,7 +191,7 @@ Default Hierarchy
 <tr>
 <td colspan="2" class="inside" align=center>
 <c:set var="trn"><digi:trn key="aim:btnsave">Save</digi:trn></c:set>
-<html:submit property="save" value="${trn}" styleClass="buttonx" onclick="return validateSave()"  styleId="saveMPCBtn"/>
+<html:submit property="save" value="${trn}" styleClass="buttonx" onclick="return saveProgramConfiguration()"  styleId="saveMPCBtn"/>
 <c:set var="tran"><digi:trn key="aim:btncancel">Cancel</digi:trn></c:set>
 <c:set var="resetTrn"><digi:trn key="aim:btnreset">Reset</digi:trn></c:set>
   <html:reset property="reset" styleClass="buttonx" value="${resetTrn}" />

@@ -5,6 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"/>"></script>
@@ -158,34 +159,31 @@ Default Hierarchy
 
 		</td>
 		<td class="inside">
-			<html:text property="startDate" styleId="startDate${index}" name="settingsList" readonly="true" indexed="true"  />
-			<jsp:useBean id="dateConverter" class="org.digijava.module.aim.helper.DateConversion">
-				<c:set target="${dateConverter}" property="settingsList">
-					<bean:write name="settingsList" property="startDate" />
-				</c:set>
-			</jsp:useBean>
-			<%
-				String starDate = pageContext.getAttribute("startDate").toString();
-				if (starDate != null && !starDate.equals("")) {
-					pageContext.setAttribute("startDate", dateConverter.);
-				}
-			%>
+			<html:text property="startDate" styleId="startDate${index}" name="settingsList" readonly="true"  />
+			<fmt:parseDate pattern="dd/MM/yyyy" value="${settingsList.startDate}" var="startDate" />
+
+<%--			<jsp:useBean id="dateConverter" class="org.digijava.module.aim.helper.DateConversion">--%>
+<%--				<c:set target="${dateConverter}" property="settingsList">--%>
+<%--					<bean:write name="settingsList" property="startDate" />--%>
+<%--				</c:set>--%>
+<%--			</jsp:useBean>--%>
+
 			<a id="date${index}" href='javascript:pickDateById("date${index}", "startDate${index}")'>
 				<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 			</a>
 		</td>
 </tr>
-	</tr>
-	<td width="50%" class="inside" align="right">
-		<digi:trn key="aim:endDate">End Date</digi:trn>
-	</td>
-	<td class="inside">
-		<html:text property="endDate"  styleId="endDate${index}" name="settingsList" readonly="true"  />
-		<a id="date1${index}" href='javascript:pickDateById("date1${index}", "endDate${index}")'>
-			<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
-		</a>
-	</td>
-	</tr>
+<%--	<tr>--%>
+<%--	<td width="50%" class="inside" align="right">--%>
+<%--		<digi:trn key="aim:endDate">End Date</digi:trn>--%>
+<%--	</td>--%>
+<%--	<td class="inside">--%>
+<%--		<html:text property="endDate"  styleId="endDate${index}" name="settingsList" readonly="true"  />--%>
+<%--		<a id="date1${index}" href='javascript:pickDateById("date1${index}", "endDate${index}")'>--%>
+<%--			<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">--%>
+<%--		</a>--%>
+<%--	</td>--%>
+<%--	</tr>--%>
 </logic:iterate>
 
 <tr>

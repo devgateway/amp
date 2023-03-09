@@ -616,7 +616,7 @@ div.yui-ac-hd{border:1px solid red;}
 div.adminicon{float:right;}
 .t-name {font-size:11px;}
 .activity_me {background-color:#FFFFFF; border:1px solid #CCCCCC; margin-top:15px; padding:10px;}
-.activity_me td {padding-bottom:8px;}
+.activity_me td {padding-bottom:8px; padding-left: 10px;}
 .dijitToolbar .dijitButtonContents{padding:0px;}
 .soria .dijitButtonNode {
     -moz-border-bottom-colors: none;

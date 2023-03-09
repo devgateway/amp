@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import io.swagger.annotations.ApiModelProperty;
-import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
 import org.digijava.kernel.ampapi.endpoints.indicator.manager.validators.ValidProgramIds;
 import org.digijava.kernel.ampapi.endpoints.indicator.manager.validators.ValidSectorIds;
 import org.digijava.kernel.ampapi.endpoints.serializers.LocalizedDateDeserializer;
@@ -19,7 +17,6 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.digijava.module.aim.dbentity.AmpIndicatorValue.BASE;
@@ -35,13 +32,11 @@ public class MEIndicatorDTO {
     private Long id;
 
     @JsonProperty("name")
-    @ApiModelProperty(dataType = "org.digijava.kernel.ampapi.swagger.types.MultilingualLabelPH")
     @NotNull
-    private Map<String, String> name;
+    private String name;
 
     @JsonProperty("description")
-    @ApiModelProperty(dataType = "org.digijava.kernel.ampapi.swagger.types.MultilingualLabelPH")
-    private Map<String, String> description;
+    private String description;
 
     @JsonProperty("code")
     @NotNull
@@ -76,10 +71,8 @@ public class MEIndicatorDTO {
 
     public MEIndicatorDTO(final AmpIndicator indicator) {
         this.id = indicator.getIndicatorId();
-        this.name = TranslationUtil.loadTranslationsForField(AmpIndicator.class, "name",
-                indicator.getName(), indicator.getIndicatorId());
-        this.description = TranslationUtil.loadTranslationsForField(AmpIndicator.class, "description",
-                indicator.getDescription(), indicator.getIndicatorId());
+        this.name = indicator.getName();
+        this.description = indicator.getDescription();
         this.code = indicator.getCode();
         this.ascending = indicator.getType() == null || indicator.getType().equals("A");
         this.creationDate = indicator.getCreationDate();
@@ -97,19 +90,19 @@ public class MEIndicatorDTO {
         this.id = id;
     }
 
-    public Map<String, String> getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(final Map<String, String> name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
-    public Map<String, String> getDescription() {
+    public String getDescription() {
         return description;
     }
 
-    public void setDescription(final Map<String, String> description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 

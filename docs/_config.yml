@@ -24,8 +24,8 @@ description: >- # this means to ignore newlines until "baseurl:"
   Through the Aid Management Program (AMP), DG is the leading global provider of 
   Aid Information Management Systems (AIMS). The program includes not just software, 
   but also training, ongoing support, and a peer network of other AMP country partners.
-baseurl: "/test-gh-pages" # the subpath of your site, e.g. /blog
-url: "https://jdeanquin-dg.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+baseurl: "/amp" # the subpath of your site, e.g. /blog
+url: "http://devgateway.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: DGateway
 github_username:  devgateway
 

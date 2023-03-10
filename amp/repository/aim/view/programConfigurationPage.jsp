@@ -7,6 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"/>"></script>
 
@@ -41,7 +42,12 @@
 
 	function saveProgramConfiguration(){
 		if(validateSave()){
-			document.forms[0].submit();
+			// loop through all the settings and set the default hierarchy id
+			<digi:context name="save" property="context/module/moduleinstance/programConfigurationPage.do?action=save" />
+
+			document.aimActivityProgramSettingsForm.action = "<%= save %>"
+			document.aimActivityProgramSettingsForm.target = "_self";
+			document.aimActivityProgramSettingsForm.submit();
 		}
 	}
 
@@ -129,10 +135,10 @@
 <digi:form action="/programConfigurationPage.do" method="post">
 
 <table width="100%" cellspacing="1" cellpadding="4" valign="top" align="left" style="margin-top:15px;" class="inside">
-<logic:iterate name="aimActivityProgramSettingsForm" property="settingsListDTO" id="settingsList" indexId="index">
+<logic:iterate name="aimActivityProgramSettingsForm" property="settingsListDTO" id="settingsListDTO" indexId="index">
 <tr>
 <td colspan="2" bgColor=#f2f2f2 class="inside" height="20" align="center" style="font-weight:bold;">
-<digi:trn key="aim:${settingsList.name}"> <c:out value="${settingsList.name}"/></digi:trn>
+<digi:trn key="aim:${settingsListDTO.name}"> <c:out value="${settingsListDTO.name}"/></digi:trn>
 </td>
 </tr>
 <tr>
@@ -143,34 +149,34 @@ Default Hierarchy
 </td>
 <td class="inside">
 
-<html:select name="settingsList" property="defaultHierarchyId" indexed="true">
+<html:select name="settingsListDTO" property="defaultHierarchy" indexed="true" value="${settingsListDTO.defaultHierarchy.ampThemeId}">
   <html:option value="-1"><digi:trn key="aim:selprogram">Select Program</digi:trn></html:option>
-	<html:optionsCollection  property="programList"  value="ampThemeId" label="name" />
+	<html:optionsCollection property="programList" value="ampThemeId" label="name" />
 </html:select>
 </td>
 </tr>
 <tr>
 <td colspan="2" class="inside" align=center>
-<digi:trn key="aim:allowMultiple">Allow Multiple</digi:trn>? <html:checkbox name="settingsList" property="allowMultiple" indexed="true" />
+<digi:trn key="aim:allowMultiple">Allow Multiple</digi:trn>? <html:checkbox name="settingsListDTO" property="allowMultiple" indexed="true" />
 </td>
 </tr>
 		<td width="50%" class="inside" align="right">
 			<digi:trn key="aim:startDate">Start Date</digi:trn>
 
 		</td>
-<%--		<td class="inside">--%>
-<%--			<html:text property="startDate" styleId="startDate${index}" name="settingsList" readonly="true" indexed="true" />--%>
-<%--			<a id="date${index}" href='javascript:pickDateById("date${index}", "startDate${index}")'>--%>
-<%--				<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">--%>
-<%--			</a>--%>
-<%--		</td>--%>
+		<td class="inside">
+			<html:text property="startDate" styleId="startDate${index}" name="settingsListDTO" readonly="true" indexed="true" />
+			<a id="date${index}" href='javascript:pickDateById("date${index}", "startDate${index}")'>
+				<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
+			</a>
+		</td>
 </tr>
 	<tr>
 	<td width="50%" class="inside" align="right">
 		<digi:trn key="aim:endDate">End Date</digi:trn>
 	</td>
 <%--	<td class="inside">--%>
-<%--		<html:text property="endDate"  styleId="endDate${index}" name="settingsList" readonly="true" indexed="true"  />--%>
+<%--		<html:text property="endDate"  styleId="endDate${index}" name="settingsListDTO" readonly="true" indexed="true"  />--%>
 <%--		<a id="date1${index}" href='javascript:pickDateById("date1${index}", "endDate${index}")'>--%>
 <%--			<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">--%>
 <%--		</a>--%>
@@ -181,7 +187,7 @@ Default Hierarchy
 <tr>
 <td colspan="2" class="inside" align=center>
 <c:set var="trn"><digi:trn key="aim:btnsave">Save</digi:trn></c:set>
-<html:submit property="save" value="${trn}" styleClass="buttonx" onclick="return saveProgramConfiguration()"  styleId="saveMPCBtn"/>
+<html:button property="save" value="${trn}" styleClass="buttonx" onclick="return saveProgramConfiguration()"  styleId="saveMPCBtn"/>
 <c:set var="tran"><digi:trn key="aim:btncancel">Cancel</digi:trn></c:set>
 <c:set var="resetTrn"><digi:trn key="aim:btnreset">Reset</digi:trn></c:set>
   <html:reset property="reset" styleClass="buttonx" value="${resetTrn}" />

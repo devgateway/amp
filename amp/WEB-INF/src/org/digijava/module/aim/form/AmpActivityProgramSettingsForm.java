@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
@@ -44,15 +45,21 @@ public class AmpActivityProgramSettingsForm
                 this.settingsList = settingsList;
         }
 
+        @Override
+        public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) {
+                ActionErrors errors = new ActionErrors();
+                return errors;
+        }
+
+        @Override
         public void reset(ActionMapping mapping, HttpServletRequest request) {
-                if (this.settingsList != null) {
-                        Iterator settingsIter = settingsList.iterator();
+                if (this.settingsListDTO != null) {
+                        Iterator settingsIter = settingsListDTO.iterator();
                         while (settingsIter.hasNext()) {
-                                AmpActivityProgramSettings setting = (
-                                    AmpActivityProgramSettings)
+                                AmpActivityProgramSettingsDTO setting = (
+                                    AmpActivityProgramSettingsDTO)
                                     settingsIter.next();
                                 setting.setAllowMultiple(false);
-
                         }
                 }
 

@@ -1,9 +1,8 @@
 package org.digijava.module.aim.form.helpers;
-import org.apache.struts.action.ActionForm;
-import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
+import org.digijava.module.aim.dbentity.AmpTheme;
 
-public class AmpActivityProgramSettingsDTO extends ActionForm {
-    private Long defaultHierarchy;
+public class AmpActivityProgramSettingsDTO {
+    private AmpTheme defaultHierarchy;
 
     private boolean allowMultiple;
 
@@ -18,11 +17,11 @@ public class AmpActivityProgramSettingsDTO extends ActionForm {
 
     public AmpActivityProgramSettingsDTO() {}
 
-    public Long getDefaultHierarchy() {
+    public AmpTheme getDefaultHierarchy() {
         return defaultHierarchy;
     }
 
-    public void setDefaultHierarchy(Long defaultHierarchy) {
+    public void setDefaultHierarchy(AmpTheme defaultHierarchy) {
         this.defaultHierarchy = defaultHierarchy;
     }
 

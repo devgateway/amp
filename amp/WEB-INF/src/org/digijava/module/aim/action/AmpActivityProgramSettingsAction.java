@@ -22,24 +22,28 @@ import java.util.List;
 
 public class AmpActivityProgramSettingsAction
         extends Action {
-    private static Logger logger = Logger.getLogger(
-            AmpActivityProgramSettingsAction.class);
+    private static final Logger LOGGER = Logger.getLogger(AmpActivityProgramSettingsAction.class);
 
+    public AmpActivityProgramSettingsAction() {
+        super();
+    }
+
+    @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form,
                                  HttpServletRequest request,
-                                 HttpServletResponse response) throws java.lang.Exception {
+                                 HttpServletResponse response) throws Exception {
 
         AmpActivityProgramSettingsForm ampActivityProgramSettingsForm = (AmpActivityProgramSettingsForm) form;
-
+        String event = ampActivityProgramSettingsForm.getEvent();
         if (request.getParameter("save") != null) {
-            ActionMessages errors = validate(ampActivityProgramSettingsForm.getSettingsList());
+            ActionMessages errors = validate(ampActivityProgramSettingsForm.getSettingsListDTO());
             if (!errors.isEmpty()) {
                 saveErrors(request, errors);
             } else {
-//                List<AmpActivityProgramSettings> tempSettings = dtoToEntity(ampActivityProgramSettingsForm.getSettingsList();
+                List<AmpActivityProgramSettings> settingsDtoToEntity = dtoToEntity(ampActivityProgramSettingsForm.getSettingsListDTO());
 
 
-                ProgramUtil.saveAmpActivityProgramSettings(ampActivityProgramSettingsForm.getSettingsList());
+                ProgramUtil.saveAmpActivityProgramSettings(settingsDtoToEntity);
                 ampActivityProgramSettingsForm.setEvent(null);
             }
             return mapping.findForward("forward");
@@ -55,10 +59,8 @@ public class AmpActivityProgramSettingsAction
             List<AmpActivityProgramSettings> tempAmpActivitySettingsEntities = (List<AmpActivityProgramSettings>) ProgramUtil.getAmpActivityProgramSettingsList(true);
             List<AmpActivityProgramSettingsDTO> tempAmpActivitySettingsDTO = entityToDto(tempAmpActivitySettingsEntities);
 
-            ampActivityProgramSettingsForm.
-                    setSettingsListDTO(tempAmpActivitySettingsDTO);
+            ampActivityProgramSettingsForm.setSettingsListDTO(tempAmpActivitySettingsDTO);
             return mapping.findForward("forward");
-
         }
 
     }
@@ -66,16 +68,17 @@ public class AmpActivityProgramSettingsAction
     private List dtoToEntity (List<AmpActivityProgramSettingsDTO> dto) {
         AmpActivityProgramSettingsForm form = new AmpActivityProgramSettingsForm();
 
+        if (form.getSettingsList() == null) {
+            form.setSettingsList(new ArrayList<>());
+        }
+
         for (AmpActivityProgramSettingsDTO ampActivityProgramSetting : dto) {
             AmpActivityProgramSettings ampActivityProgramSettingEntity = new AmpActivityProgramSettings();
 
-            AmpTheme settingTheme = ProgramUtil.getThemeById(ampActivityProgramSetting.getDefaultHierarchy());
-
-
             ampActivityProgramSettingEntity.setName(ampActivityProgramSetting.getName());
             ampActivityProgramSettingEntity.setAllowMultiple(ampActivityProgramSetting.isAllowMultiple());
-            ampActivityProgramSettingEntity.setAllowMultiple(ampActivityProgramSetting.isAllowMultiple());
-            ampActivityProgramSettingEntity.setDefaultHierarchy(settingTheme);
+            ampActivityProgramSettingEntity.setDefaultHierarchy(ampActivityProgramSetting.getDefaultHierarchy());
+
 
             if (ampActivityProgramSetting.getStartDate() != null) {
                 ampActivityProgramSettingEntity.setStartDate(DateConversion.getDate(ampActivityProgramSetting.getStartDate()));
@@ -88,6 +91,7 @@ public class AmpActivityProgramSettingsAction
             form.getSettingsList().add(ampActivityProgramSettingEntity);
         }
 
+        form.setSettingsList(form.getSettingsList());
         return form.getSettingsList();
     }
 
@@ -105,8 +109,12 @@ public class AmpActivityProgramSettingsAction
             ampActivityProgramSettingDto.setAmpProgramSettingsId(ampActivityProgramSetting.getAmpProgramSettingsId());
             ampActivityProgramSettingDto.setName(ampActivityProgramSetting.getName());
             ampActivityProgramSettingDto.setAllowMultiple(ampActivityProgramSetting.isAllowMultiple());
-            ampActivityProgramSettingDto.setAllowMultiple(ampActivityProgramSetting.isAllowMultiple());
-//            ampActivityProgramSettingDto.setDefaultHierarchy(ampActivityProgramSetting.getDefaultHierarchy());
+
+            if (ampActivityProgramSetting.getDefaultHierarchy() != null) {
+                Long ampThemeId = ampActivityProgramSetting.getDefaultHierarchy().getAmpThemeId();
+                ampActivityProgramSettingDto.setDefaultHierarchy(ampActivityProgramSetting.getDefaultHierarchy());
+            }
+
 
             if (ampActivityProgramSetting.getStartDate() != null) {
                 ampActivityProgramSettingDto.setStartDate(DateConversion.convertDateToString(ampActivityProgramSetting.getStartDate()));
@@ -123,7 +131,7 @@ public class AmpActivityProgramSettingsAction
         return form.getSettingsListDTO();
     }
 
-    private ActionMessages validate(List<AmpActivityProgramSettings> settingsList) {
+    private ActionMessages validate(List<AmpActivityProgramSettingsDTO> settingsList) {
         ActionMessages errors = new ActionMessages();
         settingsList.stream().forEach((setting) -> {
             AmpActivityProgramSettings oldSetting =

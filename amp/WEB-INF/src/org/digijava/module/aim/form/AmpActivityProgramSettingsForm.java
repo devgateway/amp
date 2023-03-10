@@ -9,23 +9,26 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
+import org.digijava.module.aim.form.helpers.AmpActivityProgramSettingsDTO;
 
 public class AmpActivityProgramSettingsForm
     extends ActionForm {
 
         private String event;
         private List programList;
-        private List settingsList;
+        private List<AmpActivityProgramSettings> settingsList;
+
+        private List<AmpActivityProgramSettingsDTO> settingsListDTO;
 
         public String getEvent() {
                 return event;
         }
 
-        public List getProgramList() {
+        public List<AmpActivityProgramSettings> getProgramList() {
                 return programList;
         }
 
-        public List getSettingsList() {
+        public List<AmpActivityProgramSettings> getSettingsList() {
                 return settingsList;
         }
 
@@ -55,4 +58,11 @@ public class AmpActivityProgramSettingsForm
 
         }
 
+        public List<AmpActivityProgramSettingsDTO> getSettingsListDTO() {
+                return settingsListDTO;
+        }
+
+        public void setSettingsListDTO(List<AmpActivityProgramSettingsDTO> settingsListDTO) {
+                this.settingsListDTO = settingsListDTO;
+        }
 }

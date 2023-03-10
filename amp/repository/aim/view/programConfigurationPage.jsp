@@ -94,7 +94,7 @@
 <td class="inside"><b><digi:trn key="aim:defaultHierarchy">Default Hierarchy</digi:trn></b></td>
 <td class="inside"><b><digi:trn key="aim:allowMultiple">Allow Multiple</digi:trn></b></td>
 </tr>
-<logic:iterate name="aimActivityProgramSettingsForm" property="settingsList" id="setting">
+<logic:iterate name="aimActivityProgramSettingsForm" property="settingsListDTO" id="setting">
 <tr>
 <td class="inside">
 <digi:trn key="aim:${setting.name}"> <c:out value="${setting.name}"/></digi:trn>
@@ -129,7 +129,7 @@
 <digi:form action="/programConfigurationPage.do" method="post">
 
 <table width="100%" cellspacing="1" cellpadding="4" valign="top" align="left" style="margin-top:15px;" class="inside">
-<logic:iterate name="aimActivityProgramSettingsForm" property="settingsList" id="settingsList" indexId="index">
+<logic:iterate name="aimActivityProgramSettingsForm" property="settingsListDTO" id="settingsList" indexId="index">
 <tr>
 <td colspan="2" bgColor=#f2f2f2 class="inside" height="20" align="center" style="font-weight:bold;">
 <digi:trn key="aim:${settingsList.name}"> <c:out value="${settingsList.name}"/></digi:trn>
@@ -158,32 +158,24 @@ Default Hierarchy
 			<digi:trn key="aim:startDate">Start Date</digi:trn>
 
 		</td>
-		<td class="inside">
-			<html:text property="startDate" styleId="startDate${index}" name="settingsList" readonly="true"  />
-			<fmt:parseDate pattern="dd/MM/yyyy" value="${settingsList.startDate}" var="startDate" />
-
-<%--			<jsp:useBean id="dateConverter" class="org.digijava.module.aim.helper.DateConversion">--%>
-<%--				<c:set target="${dateConverter}" property="settingsList">--%>
-<%--					<bean:write name="settingsList" property="startDate" />--%>
-<%--				</c:set>--%>
-<%--			</jsp:useBean>--%>
-
-			<a id="date${index}" href='javascript:pickDateById("date${index}", "startDate${index}")'>
-				<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
-			</a>
-		</td>
+<%--		<td class="inside">--%>
+<%--			<html:text property="startDate" styleId="startDate${index}" name="settingsList" readonly="true" indexed="true" />--%>
+<%--			<a id="date${index}" href='javascript:pickDateById("date${index}", "startDate${index}")'>--%>
+<%--				<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">--%>
+<%--			</a>--%>
+<%--		</td>--%>
 </tr>
-<%--	<tr>--%>
-<%--	<td width="50%" class="inside" align="right">--%>
-<%--		<digi:trn key="aim:endDate">End Date</digi:trn>--%>
-<%--	</td>--%>
+	<tr>
+	<td width="50%" class="inside" align="right">
+		<digi:trn key="aim:endDate">End Date</digi:trn>
+	</td>
 <%--	<td class="inside">--%>
-<%--		<html:text property="endDate"  styleId="endDate${index}" name="settingsList" readonly="true"  />--%>
+<%--		<html:text property="endDate"  styleId="endDate${index}" name="settingsList" readonly="true" indexed="true"  />--%>
 <%--		<a id="date1${index}" href='javascript:pickDateById("date1${index}", "endDate${index}")'>--%>
 <%--			<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">--%>
 <%--		</a>--%>
 <%--	</td>--%>
-<%--	</tr>--%>
+	</tr>
 </logic:iterate>
 
 <tr>

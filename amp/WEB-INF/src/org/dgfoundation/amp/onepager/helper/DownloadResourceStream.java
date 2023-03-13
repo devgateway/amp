@@ -6,6 +6,7 @@ import java.util.Locale;
 import javax.jcr.Node;
 import javax.jcr.Property;
 import javax.jcr.RepositoryException;
+
 import org.apache.log4j.Logger;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.model.IModel;
@@ -23,7 +24,7 @@ import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
 public class DownloadResourceStream<T extends ObjectReferringDocument> implements IResourceStream {
     private static final Logger logger = Logger.getLogger(DownloadResourceStream.class);
-    
+
     private String contentType;
     private transient Locale locale;
     private FileUpload file;
@@ -32,21 +33,33 @@ public class DownloadResourceStream<T extends ObjectReferringDocument> implement
     private String fileName;
     private transient InputStream fileData;
     private Bytes fileSize;
-    
+
+    public DownloadResourceStream(FileUpload f, String fileName) {
+        this(f);
+        this.fileName = fileName;
+    }
+
     public DownloadResourceStream(FileUpload f) {
         this.file = f;
         this.newResource = true;
     }
-    
+
     public DownloadResourceStream(IModel<T> doc) {
         this.doc = doc;
         this.newResource = false;
     }
-    
-    private synchronized void initHelperFields(){
+
+    public DownloadResourceStream(IModel<T> doc, String fileName) {
+        this(doc);
+        this.fileName = fileName;
+
+    }
+
+
+    private synchronized void initHelperFields() {
         //Singleton
-        if (true || contentType == null){
-            if (newResource){
+        if (true || contentType == null) {
+            if (newResource) {
                 contentType = file.getContentType();
                 fileSize = Bytes.bytes(file.getSize());
                 fileName = file.getClientFileName();
@@ -55,18 +68,17 @@ public class DownloadResourceStream<T extends ObjectReferringDocument> implement
                 } catch (IOException e) {
                     logger.error(e.getMessage(), e);
                 }
-            }
-            else{
-                AmpAuthWebSession s =  (AmpAuthWebSession) org.apache.wicket.Session.get();
+            } else {
+                AmpAuthWebSession s = (AmpAuthWebSession) org.apache.wicket.Session.get();
                 Node node = DocumentManagerUtil.getWriteNode(doc.getObject().getUuid(), SessionUtil.getCurrentServletRequest());
                 NodeWrapper nw = new NodeWrapper(node);
-                
+
                 contentType = nw.getContentType();
                 fileName = nw.getName();
                 try {
                     Property data = nw.getNode().getProperty(CrConstants.PROPERTY_DATA);
                     fileData = data.getStream();
-                    
+
                     Property size = nw.getNode().getProperty(CrConstants.PROPERTY_FILE_SIZE);
                     fileSize = Bytes.bytes(size.getLong());
                     DocumentManagerUtil.logoutJcrSessions(SessionUtil.getCurrentServletRequest());
@@ -76,7 +88,7 @@ public class DownloadResourceStream<T extends ObjectReferringDocument> implement
             }
         }
     }
-    
+
     @Override
     public Time lastModifiedTime() {
         return null;
@@ -131,7 +143,7 @@ public class DownloadResourceStream<T extends ObjectReferringDocument> implement
     @Override
     public void setStyle(String style) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
@@ -143,8 +155,8 @@ public class DownloadResourceStream<T extends ObjectReferringDocument> implement
     @Override
     public void setVariation(String variation) {
         // TODO Auto-generated method stub
-        
+
     }
 
-    
+
 }

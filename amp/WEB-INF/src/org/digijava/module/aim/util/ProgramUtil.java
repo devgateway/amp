@@ -1576,6 +1576,19 @@ public class ProgramUtil {
                         } else {
                             oldSetting.setDefaultHierarchy(null);
                         }
+
+                        if (setting.getStartDate() != null) {
+                            oldSetting.setStartDate(setting.getStartDate());
+                        } else {
+                            oldSetting.setStartDate(null);
+                        }
+
+                        if (setting.getEndDate() != null) {
+                            oldSetting.setEndDate(setting.getEndDate());
+                        } else {
+                            oldSetting.setEndDate(null);
+                        }
+
                         session.update(oldSetting);
                     }
 

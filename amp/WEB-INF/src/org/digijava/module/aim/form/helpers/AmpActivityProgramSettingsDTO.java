@@ -4,6 +4,8 @@ import org.digijava.module.aim.dbentity.AmpTheme;
 public class AmpActivityProgramSettingsDTO {
     private AmpTheme defaultHierarchy;
 
+    private Long defaultHierarchyId;
+
     private boolean allowMultiple;
 
     private Long ampProgramSettingsId;
@@ -63,5 +65,13 @@ public class AmpActivityProgramSettingsDTO {
 
     public void setEndDate(String endDate) {
         this.endDate = endDate;
+    }
+
+    public Long getDefaultHierarchyId() {
+        return defaultHierarchyId;
+    }
+
+    public void setDefaultHierarchyId(Long defaultHierarchyId) {
+        this.defaultHierarchyId = defaultHierarchyId;
     }
 }

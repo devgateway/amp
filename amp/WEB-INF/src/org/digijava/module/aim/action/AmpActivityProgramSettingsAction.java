@@ -28,13 +28,13 @@ public class AmpActivityProgramSettingsAction
         super();
     }
 
+
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form,
                                  HttpServletRequest request,
                                  HttpServletResponse response) throws Exception {
-
         AmpActivityProgramSettingsForm ampActivityProgramSettingsForm = (AmpActivityProgramSettingsForm) form;
-        String event = ampActivityProgramSettingsForm.getEvent();
+
         if (request.getParameter("save") != null) {
             ActionMessages errors = validate(ampActivityProgramSettingsForm.getSettingsListDTO());
             if (!errors.isEmpty()) {
@@ -75,6 +75,7 @@ public class AmpActivityProgramSettingsAction
         for (AmpActivityProgramSettingsDTO ampActivityProgramSetting : dto) {
             AmpActivityProgramSettings ampActivityProgramSettingEntity = new AmpActivityProgramSettings();
 
+            ampActivityProgramSettingEntity.setAmpProgramSettingsId(ampActivityProgramSetting.getAmpProgramSettingsId());
             ampActivityProgramSettingEntity.setName(ampActivityProgramSetting.getName());
             ampActivityProgramSettingEntity.setAllowMultiple(ampActivityProgramSetting.isAllowMultiple());
             ampActivityProgramSettingEntity.setDefaultHierarchy(ampActivityProgramSetting.getDefaultHierarchy());
@@ -111,7 +112,6 @@ public class AmpActivityProgramSettingsAction
             ampActivityProgramSettingDto.setAllowMultiple(ampActivityProgramSetting.isAllowMultiple());
 
             if (ampActivityProgramSetting.getDefaultHierarchy() != null) {
-                Long ampThemeId = ampActivityProgramSetting.getDefaultHierarchy().getAmpThemeId();
                 ampActivityProgramSettingDto.setDefaultHierarchy(ampActivityProgramSetting.getDefaultHierarchy());
             }
 

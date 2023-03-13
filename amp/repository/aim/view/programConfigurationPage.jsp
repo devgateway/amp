@@ -42,12 +42,7 @@
 
 	function saveProgramConfiguration(){
 		if(validateSave()){
-			// loop through all the settings and set the default hierarchy id
-			<digi:context name="save" property="context/module/moduleinstance/programConfigurationPage.do?action=save" />
-
-			document.aimActivityProgramSettingsForm.action = "<%= save %>"
-			document.aimActivityProgramSettingsForm.target = "_self";
-			document.aimActivityProgramSettingsForm.submit();
+			document.forms[0].submit();
 		}
 	}
 
@@ -149,7 +144,7 @@ Default Hierarchy
 </td>
 <td class="inside">
 
-<html:select name="settingsListDTO" property="defaultHierarchy" indexed="true" value="${settingsListDTO.defaultHierarchy.ampThemeId}">
+<html:select name="settingsListDTO" property="defaultHierarchyId" indexed="true" value="${settingsListDTO.defaultHierarchy.ampThemeId}">
   <html:option value="-1"><digi:trn key="aim:selprogram">Select Program</digi:trn></html:option>
 	<html:optionsCollection property="programList" value="ampThemeId" label="name" />
 </html:select>
@@ -175,19 +170,19 @@ Default Hierarchy
 	<td width="50%" class="inside" align="right">
 		<digi:trn key="aim:endDate">End Date</digi:trn>
 	</td>
-<%--	<td class="inside">--%>
-<%--		<html:text property="endDate"  styleId="endDate${index}" name="settingsListDTO" readonly="true" indexed="true"  />--%>
-<%--		<a id="date1${index}" href='javascript:pickDateById("date1${index}", "endDate${index}")'>--%>
-<%--			<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">--%>
-<%--		</a>--%>
-<%--	</td>--%>
+	<td class="inside">
+		<html:text property="endDate"  styleId="endDate${index}" name="settingsListDTO" readonly="true" indexed="true"  />
+		<a id="date1${index}" href='javascript:pickDateById("date1${index}", "endDate${index}")'>
+			<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
+		</a>
+	</td>
 	</tr>
 </logic:iterate>
 
 <tr>
 <td colspan="2" class="inside" align=center>
 <c:set var="trn"><digi:trn key="aim:btnsave">Save</digi:trn></c:set>
-<html:button property="save" value="${trn}" styleClass="buttonx" onclick="return saveProgramConfiguration()"  styleId="saveMPCBtn"/>
+<html:submit property="save" value="${trn}" styleClass="buttonx" onclick="return saveProgramConfiguration()"  styleId="saveMPCBtn"/>
 <c:set var="tran"><digi:trn key="aim:btncancel">Cancel</digi:trn></c:set>
 <c:set var="resetTrn"><digi:trn key="aim:btnreset">Reset</digi:trn></c:set>
   <html:reset property="reset" styleClass="buttonx" value="${resetTrn}" />

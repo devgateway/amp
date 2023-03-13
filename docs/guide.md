@@ -1,5 +1,5 @@
 ---
 title: User guide
 redirect_to:
-  - https://jdeanquin-dg.github.io/test-gh-pages/assets/doc/Simplified_User_Manual_3.x_Version
+  - https://devgateway.github.io/amp/assets/docs/Simplified_User_Manual_3.x_Version.pdf
 ---

@@ -1,11 +1,7 @@
 package org.digijava.module.aim.action;
 
 import org.apache.log4j.Logger;
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessages;
+import org.apache.struts.action.*;
 import org.digijava.kernel.ampapi.endpoints.ndd.NDDService;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
@@ -18,6 +14,7 @@ import org.digijava.module.aim.util.ProgramUtil;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class AmpActivityProgramSettingsAction
@@ -37,11 +34,12 @@ public class AmpActivityProgramSettingsAction
 
         if (request.getParameter("save") != null) {
             ActionMessages errors = validate(ampActivityProgramSettingsForm.getSettingsListDTO());
+
             if (!errors.isEmpty()) {
                 saveErrors(request, errors);
+                return mapping.findForward("forward");
             } else {
                 List<AmpActivityProgramSettings> settingsDtoToEntity = dtoToEntity(ampActivityProgramSettingsForm.getSettingsListDTO());
-
 
                 ProgramUtil.saveAmpActivityProgramSettings(settingsDtoToEntity);
                 ampActivityProgramSettingsForm.setEvent(null);
@@ -56,7 +54,7 @@ public class AmpActivityProgramSettingsAction
                 ampActivityProgramSettingsForm.getProgramList().remove(indirectProgram);
             }
 
-            List<AmpActivityProgramSettings> tempAmpActivitySettingsEntities = (List<AmpActivityProgramSettings>) ProgramUtil.getAmpActivityProgramSettingsList(true);
+            List<AmpActivityProgramSettings> tempAmpActivitySettingsEntities = ProgramUtil.getAmpActivityProgramSettingsList(true);
             List<AmpActivityProgramSettingsDTO> tempAmpActivitySettingsDTO = entityToDto(tempAmpActivitySettingsEntities);
 
             ampActivityProgramSettingsForm.setSettingsListDTO(tempAmpActivitySettingsDTO);
@@ -137,19 +135,22 @@ public class AmpActivityProgramSettingsAction
             AmpActivityProgramSettings oldSetting =
                     (AmpActivityProgramSettings) PersistenceManager.getSession().get(AmpActivityProgramSettings.class,
                             setting.getAmpProgramSettingsId());
-//            if (oldSetting.getDefaultHierarchy() != null && setting.getDefaultHierarchy().getAmpThemeId() == -1) {
-//                // we are removing
-//                errors.add(ActionMessages.GLOBAL_MESSAGE,
-//                        new ActionMessage("error.aim.removeProgramSetting", oldSetting.getName()));
-//
-//            }
+            if (oldSetting.getDefaultHierarchy() != null && setting.getDefaultHierarchy().getAmpThemeId() == -1) {
+                // we are removing
+                errors.add(ActionMessages.GLOBAL_MESSAGE,
+                        new ActionMessage("error.aim.removeProgramSetting", oldSetting.getName()));
 
-//            if (setting.getStartDate() != null && setting.getEndDate() != null) {
-//                if (setting.getStartDate().after(setting.getEndDate())) {
-//                    errors.add(ActionMessages.GLOBAL_MESSAGE,
-//                            new ActionMessage("error.aim.programSettingDateRange", oldSetting.getName()));
-//                }
-//            }
+            }
+
+            Date startDate = setting.getStartDate() != null ? DateConversion.getDate(setting.getStartDate()) : null;
+            Date endDate = setting.getEndDate() != null ? DateConversion.getDate(setting.getEndDate()) : null;
+
+            if (startDate != null && endDate != null) {
+                if (startDate.after(endDate)) {
+                    errors.add(ActionMessages.GLOBAL_MESSAGE,
+                            new ActionMessage("error.aim.programSettingDateRange", oldSetting.getName()));
+                }
+            }
         });
         return errors;
 

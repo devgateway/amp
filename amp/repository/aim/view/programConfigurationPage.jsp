@@ -171,7 +171,7 @@ Default Hierarchy
 		<digi:trn key="aim:endDate">End Date</digi:trn>
 	</td>
 	<td class="inside">
-		<html:text property="endDate"  styleId="endDate${index}" name="settingsListDTO" readonly="true" indexed="true"  />
+		<html:text property="endDate" onchange=""  styleId="endDate${index}" name="settingsListDTO" readonly="true" indexed="true"  />
 		<a id="date1${index}" href='javascript:pickDateById("date1${index}", "endDate${index}")'>
 			<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 		</a>

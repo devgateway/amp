@@ -11,6 +11,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.form.helpers.AmpActivityProgramSettingsDTO;
+import org.digijava.module.aim.helper.DateConversion;
 
 public class AmpActivityProgramSettingsForm
     extends ActionForm {
@@ -48,6 +49,19 @@ public class AmpActivityProgramSettingsForm
         @Override
         public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) {
                 ActionErrors errors = new ActionErrors();
+                if (this.settingsListDTO != null) {
+                        for (AmpActivityProgramSettingsDTO setting : settingsListDTO) {
+                                Date startDate = setting.getStartDate() != null ? DateConversion.getDate(setting.getStartDate()) : null;
+                                Date endDate = setting.getEndDate() != null ? DateConversion.getDate(setting.getEndDate()) : null;
+
+                                if (startDate != null && endDate != null) {
+                                        if (startDate.after(endDate)) {
+                                                errors.add("startDate", new org.apache.struts.action.ActionMessage(
+                                                        "error.aim.activityProgramSettings.startDateAfterEndDate"));
+                                        }
+                                }
+                        }
+                }
                 return errors;
         }
 

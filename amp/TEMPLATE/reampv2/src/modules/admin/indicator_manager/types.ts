@@ -37,6 +37,16 @@ export interface ProgramObjectType {
     id:       number;
     name:     string;
     code:     string;
-    type:     "National" | "Secondary" | "Tertiary" | "Primary";
+    type:     "National" | "Regional";
     children: ProgramObjectType[];
+}
+
+export interface ProgramSchemeType {
+    ampProgramSettingsId: number;
+    name:                 string;
+    programName:          string;
+    allowMultiple:        boolean;
+    startDate:            string;
+    endDate:              null;
+    children:             ProgramObjectType[];
 }

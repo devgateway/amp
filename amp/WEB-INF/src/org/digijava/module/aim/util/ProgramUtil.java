@@ -12,6 +12,7 @@ import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.DatabaseWaver;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.digijava.kernel.ampapi.endpoints.ndd.NDDService;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -2056,6 +2057,28 @@ public class ProgramUtil {
             }
         }
         return currentLevel;
+    }
+
+    /**
+     * Returns the default hierarchy programs for the themes
+     * @return List<AmpTheme>
+     */
+    public static List<AmpTheme> getDefaultHierarchyPrograms () {
+        AmpTheme indirectProgram = NDDService.getDstIndirectProgramRoot();
+
+        List<AmpTheme> defaultHierarchyPrograms = new ArrayList<>();
+
+        try {
+            defaultHierarchyPrograms = getAllThemes();
+        } catch (DgException e) {
+            logger.error("Error while getting all themes", e);
+        }
+
+        if (indirectProgram != null) {
+            defaultHierarchyPrograms.remove(indirectProgram);
+        }
+
+        return defaultHierarchyPrograms;
     }
 
 }

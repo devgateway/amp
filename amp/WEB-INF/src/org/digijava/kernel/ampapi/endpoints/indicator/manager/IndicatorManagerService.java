@@ -6,10 +6,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.dbentity.AmpIndicatorGlobalValue;
-import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.hibernate.Session;
@@ -121,12 +118,19 @@ public class IndicatorManagerService {
 
     public List<ProgramDTO> getPrograms() {
         try {
+
             return ProgramUtil.getAllThemes(true, true).stream()
                     .map(ProgramDTO::new)
                     .collect(Collectors.toList());
         } catch (DgException e) {
             throw new ApiRuntimeException(ApiError.toError(e.getMessage()));
         }
+    }
+
+    public List<ProgramSchemeDTO> getProgramScheme() {
+        return ProgramUtil.getAmpActivityProgramSettingsList(false).stream()
+                .map(ProgramSchemeDTO::new)
+                .collect(Collectors.toList());
     }
 
     public MEIndicatorDTO updateMEIndicator(final Long indicatorId, final MEIndicatorDTO indRequest) {

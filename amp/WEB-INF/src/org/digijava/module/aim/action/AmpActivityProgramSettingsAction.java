@@ -47,12 +47,8 @@ public class AmpActivityProgramSettingsAction
             return mapping.findForward("forward");
         } else {
             //Load programs settings
-            ampActivityProgramSettingsForm.setProgramList(ProgramUtil.getAllThemes());
-            // Remove from the list of available themes the one used as indirect program.
-            AmpTheme indirectProgram = NDDService.getDstIndirectProgramRoot();
-            if (indirectProgram != null) {
-                ampActivityProgramSettingsForm.getProgramList().remove(indirectProgram);
-            }
+            ampActivityProgramSettingsForm.setProgramList(ProgramUtil.getDefaultHierarchyPrograms());
+
 
             List<AmpActivityProgramSettings> tempAmpActivitySettingsEntities = ProgramUtil.getAmpActivityProgramSettingsList(true);
             List<AmpActivityProgramSettingsDTO> tempAmpActivitySettingsDTO = entityToDto(tempAmpActivitySettingsEntities);

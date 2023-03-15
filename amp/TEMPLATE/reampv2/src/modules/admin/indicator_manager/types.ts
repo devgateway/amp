@@ -31,6 +31,7 @@ export interface IndicatorObjectType {
     base:         BaseAndTargetValueType | null;
     target:       BaseAndTargetValueType | null;
     programs:     number[];
+    programScheme: string;
 }
 
 export interface ProgramObjectType {

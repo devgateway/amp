@@ -11,7 +11,15 @@ const extractChildren = (children: ProgramObjectType[]) => {
     return childrenArray;
 }
 
-export const extractChildrenFromProgramScheme = (programScheme: ProgramSchemeType)=> {
+export const extractChildrenFromProgramScheme = (programScheme: ProgramSchemeType | Array<ProgramSchemeType>)=> {
+    if (Array.isArray(programScheme)) {
+        const childrenArray: ProgramObjectType[] = [];
+        programScheme.forEach((scheme) => {
+            childrenArray.push(...extractChildren(scheme.children));
+        });
+        return childrenArray;
+    }
+    
     const { children } = programScheme;
     return extractChildren(children);
 }

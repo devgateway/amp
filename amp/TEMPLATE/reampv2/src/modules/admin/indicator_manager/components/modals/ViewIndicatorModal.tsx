@@ -5,6 +5,7 @@ import backdropStyles from './css/IndicatorModal.module.css';
 import styles from './css/ViewIndicatorModal.module.css';
 import { DefaultComponentProps, IndicatorObjectType, ProgramObjectType, SectorObjectType } from '../../types';
 import { useSelector } from 'react-redux';
+import { extractChildrenFromProgramScheme } from '../../utils/helpers';
 
 interface ViewIndicatorModalProps extends DefaultComponentProps {
   show: boolean;
@@ -45,7 +46,8 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
   const getProgramData = () => {
     if (!indicator) return;
     const programIds = indicator.programs;
-    const programData = programsReducer.programs.filter((program: any) => programIds.includes(program.id));
+    const children = extractChildrenFromProgramScheme(programsReducer.programs);
+    const programData = children.filter((program: any) => programIds.includes(program.id));
     setProgramData(programData);
   };
 

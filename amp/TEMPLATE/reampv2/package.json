@@ -74,7 +74,7 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-    "start": "DISABLE_ESLINT_PLUGIN=true react-scripts start",
+    "start": "react-scripts start",
     "build": "cross-env PUBLIC_URL=/TEMPLATE/reampv2/build/ react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",

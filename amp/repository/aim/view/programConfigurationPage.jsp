@@ -44,6 +44,8 @@
 		if(validateSave()){
 			document.forms[0].submit();
 		}
+
+		window.location = "/aim/programConfigurationPage.do"
 	}
 
    var enterBinder	= new EnterHitBinder('saveMPCBtn');
@@ -145,7 +147,7 @@ Default Hierarchy
 <td class="inside">
 
 <html:select name="settingsListDTO" property="defaultHierarchyId" indexed="true" value="${settingsListDTO.defaultHierarchy.ampThemeId}">
-  <html:option value="-1"><digi:trn key="aim:selprogram">Select Program</digi:trn></html:option>
+  <html:option value="-1"><digi:trn key="aim:selprogram" >Select Program</digi:trn></html:option>
 	<html:optionsCollection property="programList" value="ampThemeId" label="name" />
 </html:select>
 </td>
@@ -171,7 +173,7 @@ Default Hierarchy
 		<digi:trn key="aim:endDate">End Date</digi:trn>
 	</td>
 	<td class="inside">
-		<html:text property="endDate" onchange=""  styleId="endDate${index}" name="settingsListDTO" readonly="true" indexed="true"  />
+		<html:text property="endDate" styleId="endDate${index}" name="settingsListDTO" readonly="true" indexed="true"  />
 		<a id="date1${index}" href='javascript:pickDateById("date1${index}", "endDate${index}")'>
 			<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 		</a>

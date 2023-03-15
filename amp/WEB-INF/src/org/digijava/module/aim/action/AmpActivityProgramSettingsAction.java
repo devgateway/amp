@@ -3,6 +3,7 @@ package org.digijava.module.aim.action;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.*;
 import org.digijava.kernel.ampapi.endpoints.ndd.NDDService;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpTheme;
@@ -37,11 +38,11 @@ public class AmpActivityProgramSettingsAction
 
             if (!errors.isEmpty()) {
                 saveErrors(request, errors);
-                return mapping.findForward("forward");
             } else {
                 List<AmpActivityProgramSettings> settingsDtoToEntity = dtoToEntity(ampActivityProgramSettingsForm.getSettingsListDTO());
 
                 ProgramUtil.saveAmpActivityProgramSettings(settingsDtoToEntity);
+                ampActivityProgramSettingsForm.setSettingsListDTO(entityToDto(settingsDtoToEntity));
                 ampActivityProgramSettingsForm.setEvent(null);
             }
             return mapping.findForward("forward");
@@ -76,8 +77,11 @@ public class AmpActivityProgramSettingsAction
             ampActivityProgramSettingEntity.setAmpProgramSettingsId(ampActivityProgramSetting.getAmpProgramSettingsId());
             ampActivityProgramSettingEntity.setName(ampActivityProgramSetting.getName());
             ampActivityProgramSettingEntity.setAllowMultiple(ampActivityProgramSetting.isAllowMultiple());
-            ampActivityProgramSettingEntity.setDefaultHierarchy(ampActivityProgramSetting.getDefaultHierarchy());
 
+            if (ampActivityProgramSetting.getDefaultHierarchyId() != null && ampActivityProgramSetting.getDefaultHierarchyId() != -1) {
+                AmpTheme selectedTheme = ProgramUtil.getThemeById(ampActivityProgramSetting.getDefaultHierarchyId());
+                ampActivityProgramSettingEntity.setDefaultHierarchy(selectedTheme);
+            }
 
             if (ampActivityProgramSetting.getStartDate() != null) {
                 ampActivityProgramSettingEntity.setStartDate(DateConversion.getDate(ampActivityProgramSetting.getStartDate()));
@@ -111,6 +115,7 @@ public class AmpActivityProgramSettingsAction
 
             if (ampActivityProgramSetting.getDefaultHierarchy() != null) {
                 ampActivityProgramSettingDto.setDefaultHierarchy(ampActivityProgramSetting.getDefaultHierarchy());
+                ampActivityProgramSettingDto.setDefaultHierarchyId(ampActivityProgramSetting.getDefaultHierarchy().getAmpThemeId());
             }
 
 
@@ -132,10 +137,14 @@ public class AmpActivityProgramSettingsAction
     private ActionMessages validate(List<AmpActivityProgramSettingsDTO> settingsList) {
         ActionMessages errors = new ActionMessages();
         settingsList.stream().forEach((setting) -> {
-            AmpActivityProgramSettings oldSetting =
-                    (AmpActivityProgramSettings) PersistenceManager.getSession().get(AmpActivityProgramSettings.class,
-                            setting.getAmpProgramSettingsId());
-            if (oldSetting.getDefaultHierarchy() != null && setting.getDefaultHierarchy().getAmpThemeId() == -1) {
+            AmpActivityProgramSettings oldSetting = null;
+            try {
+                oldSetting = ProgramUtil.getAmpActivityProgramSettings(setting.getAmpProgramSettingsId());
+            } catch (DgException e) {
+                throw new RuntimeException(e);
+            }
+
+            if (oldSetting.getDefaultHierarchyId() != null && setting.getDefaultHierarchyId() == -1) {
                 // we are removing
                 errors.add(ActionMessages.GLOBAL_MESSAGE,
                         new ActionMessage("error.aim.removeProgramSetting", oldSetting.getName()));

@@ -82,10 +82,8 @@ public class IndicatorManagerService {
                 .collect(Collectors.toSet());
         indicator.setSectors(sectors);
 
-        Set<AmpTheme> programs = indicatorRequest.getProgramIds().stream()
-                .map(id -> (AmpTheme) session.get(AmpTheme.class, id))
-                .collect(Collectors.toSet());
-        indicator.setPrograms(programs);
+        AmpTheme program = ProgramUtil.getThemeById(indicatorRequest.getProgramId());
+        indicator.setProgram(program);
 
         session.save(indicator);
 
@@ -174,12 +172,9 @@ public class IndicatorManagerService {
             indicator.getSectors().clear();
             indicator.getSectors().addAll(sectors);
 
-            indicator.getPrograms().clear();
-            if (!indRequest.getProgramIds().isEmpty()) {
-                Set<AmpTheme> programs = indRequest.getProgramIds().stream()
-                        .map(id -> (AmpTheme) session.get(AmpTheme.class, id))
-                        .collect(Collectors.toSet());
-                indicator.getPrograms().addAll(programs);
+            indicator.getProgram().getIndicators().remove(indicator);
+            if (indRequest.getProgramId() != null) {
+
             }
 
             session.update(indicator);

@@ -37,11 +37,9 @@
 			<many-to-many class="org.digijava.module.aim.dbentity.AmpSector" column="amp_sector_id" />
 		</set>
 
-		<set name="programs" table="AMP_PROGRAM_INDICATOR" lazy="true" cascade="none">
-			<cache usage="read-write" />
-			<key column="indicator_id" />
-			<many-to-many class="org.digijava.module.aim.dbentity.AmpTheme" column="amp_theme_id" />
-		</set>
+		<many-to-one name="programScheme" class="org.digijava.module.aim.dbentity.AmpActivityProgramSettings" column="program_scheme_id" cascade="none" />
+
+		<many-to-one name="program" column="program_id" class="org.digijava.module.aim.dbentity.AmpTheme" cascade="none" />
 
 		<set name="valuesActivity" lazy="true" inverse="true" cascade="delete-orphan">
 				<key column="indicator_id"/>

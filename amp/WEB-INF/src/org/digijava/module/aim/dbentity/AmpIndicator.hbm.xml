@@ -10,7 +10,7 @@
 		</id>
 
 		<property name="name" column="name" type="java.lang.String" />
-		<property name="code" column="code" type="java.lang.String" />
+		<property name="code" column="code" type="java.lang.String" unique="true" />
 		<property name="description" column="description" type="text" />
 		<property name="type" column="type" type="java.lang.String" />
 		<property name="creationDate" column="creation_date" type="java.util.Date" />

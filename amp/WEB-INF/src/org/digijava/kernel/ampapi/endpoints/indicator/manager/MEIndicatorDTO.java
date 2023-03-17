@@ -4,9 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.digijava.kernel.ampapi.endpoints.indicator.manager.validators.ValidProgramId;
-import org.digijava.kernel.ampapi.endpoints.indicator.manager.validators.ValidProgramSchemeId;
-import org.digijava.kernel.ampapi.endpoints.indicator.manager.validators.ValidSectorIds;
+import org.digijava.kernel.ampapi.endpoints.indicator.manager.validators.*;
 import org.digijava.kernel.ampapi.endpoints.serializers.LocalizedDateDeserializer;
 import org.digijava.kernel.ampapi.endpoints.serializers.LocalizedDateSerializer;
 import org.digijava.module.aim.dbentity.AmpIndicator;
@@ -32,6 +30,7 @@ public class MEIndicatorDTO {
     private Long id;
 
     @JsonProperty("name")
+    @ValidIndicatorName
     @NotNull
     private String name;
 
@@ -39,6 +38,7 @@ public class MEIndicatorDTO {
     private String description;
 
     @JsonProperty("code")
+    @ValidIndicatorCode
     @NotNull
     private String code;
 

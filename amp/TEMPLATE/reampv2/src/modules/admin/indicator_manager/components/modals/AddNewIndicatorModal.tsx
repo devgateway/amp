@@ -5,7 +5,7 @@ import {
 import { Formik, FormikProps } from 'formik';
 import Select from 'react-select';
 import styles from './css/IndicatorModal.module.css';
-import { formatJavascriptDate, getCurrentDate } from '../../utils/dateFn';
+import { backendDateToJavascriptDate, formatJavascriptDate, getCurrentDate } from '../../utils/dateFn';
 import { indicatorValidationSchema } from '../../utils/validator';
 import { useDispatch, useSelector } from 'react-redux';
 import { BaseAndTargetValueType, DefaultComponentProps, ProgramSchemeType } from '../../types';
@@ -14,6 +14,7 @@ import { getIndicators } from '../../reducers/fetchIndicatorsReducer';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content';
 import { extractChildrenFromProgramScheme } from '../../utils/helpers';
+import useDidMountEffect from '../../utils/hooks';
 
 const MySwal = withReactContent(Swal);
 
@@ -34,8 +35,7 @@ interface IndicatorFormValues {
   sectors: number[];
   ascending: boolean;
   creationDate?: string;
-  programs: number[];
-  programScheme: string;
+  programId: string;
   base: BaseAndTargetValueType;
   target: BaseAndTargetValueType;
 }
@@ -60,6 +60,11 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
   const [programSchemes, setProgramSchemes] = useState<{ value: string, name: string }[]>([]);
   const [programs, setPrograms] = useState<{ value: string, label: string }[]>([]);
 
+  const [baseValueOriginalDateDisabled, setBaseValueOriginalDateDisabled] = useState(false);
+  const [targetValueOriginalDateFieldDisabled, setTargetValueOriginalDateDisabled] = useState(false);
+
+  const formikRef = useRef<FormikProps<IndicatorFormValues>>(null);
+
   const getSectors = () => {
     const sectorData = sectorsReducer.sectors.map((sector: any) => ({
       value: sector.id,
@@ -79,6 +84,11 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
   const getProgramsForProgramScheme = () => {
     if (selectedProgramSchemeId) {
       setProgramFieldVisible(false);
+      setEnableBaseValuesInput(false);
+      setEnableTargetValuesInput(false);
+      formikRef?.current?.setFieldValue("base.originalValueDate", "");
+      formikRef?.current?.setFieldValue("target.originalValueDate", "");
+
       const programScheme: ProgramSchemeType = programsReducer.programs.find((program: ProgramSchemeType) => program.ampProgramSettingsId.toString() === selectedProgramSchemeId.toString());
       if (programScheme) {
         const children = extractChildrenFromProgramScheme(programScheme);
@@ -90,6 +100,21 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
         setPrograms([]);
         setPrograms(programData);
         setProgramFieldVisible(true);
+
+
+        if (programScheme.startDate) {
+          formikRef.current?.setFieldValue("base.originalValueDate", "");
+          formikRef?.current?.setFieldValue("base.originalValueDate", backendDateToJavascriptDate(programScheme.startDate || ''));
+          setEnableBaseValuesInput(true);
+          setBaseValueOriginalDateDisabled(true);
+        }
+    
+        if (programScheme.endDate) {
+          formikRef.current?.setFieldValue("target.originalValueDate", "");
+          formikRef?.current?.setFieldValue("target.originalValueDate", backendDateToJavascriptDate(programScheme.endDate || ''));
+          setEnableTargetValuesInput(true);
+          setTargetValueOriginalDateDisabled(true);
+        }
       }
 
     }
@@ -101,6 +126,9 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
     console.log(selectedOption.value);
     props.setFieldValue("program", "");
     setProgramFieldVisible(false);
+    
+  
+
   };
 
 
@@ -116,13 +144,34 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sectorsReducer.sectors, programsReducer.programs])
 
+  useDidMountEffect(() =>{
+    if (!createIndicatorState.loading && !createIndicatorState?.error) {
+      MySwal.fire({
+        title: 'Success',
+        text: 'Indicator created successfully',
+        icon: 'success',
+        confirmButtonText: 'Ok',
+      }).then(() => {
+        handleClose();
+        dispatch(getIndicators());
+      });
+      return;
+    }
+
+    MySwal.fire({
+      title: 'Error',
+      text: createIndicatorState.loading ? 'Creating Indicator...' : createIndicatorState.error,
+      icon: 'error',
+      confirmButtonText: 'Ok',
+    });
+  }, [createIndicatorState])
+
   const initialValues: IndicatorFormValues = {
     name: '',
     description: '',
     code: '',
     sectors: [],
-    programs: [],
-    programScheme: '',
+    programId: '',
     ascending: false,
     creationDate: getCurrentDate(),
     base: {
@@ -133,9 +182,9 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
     },
     target: {
       originalValue: 0,
-      originalValueDate: getCurrentDate(),
+      originalValueDate: '',
       revisedValue: 0,
-      revisedValueDate: getCurrentDate(),
+      revisedValueDate: ''
     }
   };
 
@@ -156,23 +205,24 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
         <Modal.Title>{translations['amp.dashboard:add-new']}</Modal.Title>
       </Modal.Header>
       <Formik
+        innerRef={formikRef}
         initialValues={initialValues}
         validationSchema={indicatorValidationSchema}
         onSubmit={(values) => {
-          const { name, description, code, sectors, programs, ascending, creationDate, base, target } = values;
+          const { name, description, code, sectors, programId, ascending, creationDate, base, target } = values;
 
           const indicatorData = {
             name,
             description,
             code,
             sectors,
-            programs,
+            programId: programId ? parseInt(programId) : null,
             ascending,
             creationDate: creationDate ? formatJavascriptDate(creationDate) : null,
             base: enableBaseValuesInput ? {
-              originalValue: base.originalValue,
+              originalValue: parseInt(String(base.originalValue)),
               originalValueDate: base.originalValueDate ? formatJavascriptDate(base.originalValueDate) : null,
-              revisedValue: base.revisedValue,
+              revisedValue: parseInt(String(base.revisedValue)),
               revisedValueDate: base.revisedValueDate ? formatJavascriptDate(base.revisedValueDate) : null,
             } : null,
             target: enableTargetValuesInput ? {
@@ -184,28 +234,6 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
           };
 
           dispatch(createIndicator(indicatorData));
-
-          if (!createIndicatorState.loading && !createIndicatorState?.error) {
-            MySwal.fire({
-              title: 'Success',
-              text: 'Indicator created successfully',
-              icon: 'success',
-              confirmButtonText: 'Ok',
-            }).then(() => {
-              handleClose();
-              dispatch(getIndicators());
-            });
-            return;
-          }
-
-          MySwal.fire({
-            title: 'Error',
-            text: createIndicatorState.loading ? 'Creating Indicator...' : createIndicatorState.error,
-            icon: 'error',
-            confirmButtonText: 'Ok',
-          });
-
-
         }}
       >
         {(props) => (
@@ -323,7 +351,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                           }}
                           getOptionValue={(option) => option.value}
                           onBlur={props.handleBlur}
-                          className={`basic-multi-select ${styles.input_field} ${(props.errors.programScheme && props.touched.programScheme) && styles.text_is_invalid}`}
+                          className={`basic-multi-select ${styles.input_field}`}
                           classNamePrefix="select"
                         />
                       ) : null
@@ -342,11 +370,11 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                             options={programs}
                             onChange={(selectedValue) => {
                               // set the formik value with the selected values and remove the label
-                              props.setFieldValue('programs', selectedValue?.value);
+                              props.setFieldValue('programId', selectedValue?.value);
                             }}
                             getOptionValue={(option) => option.value}
                             onBlur={props.handleBlur}
-                            className="basic-multi-select"
+                            className={`basic-multi-select ${styles.input_field} ${(props.errors.programId && props.touched.programId) && styles.text_is_invalid}`}
                             classNamePrefix="select"
                           />
                         ) : null
@@ -403,6 +431,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                           onBlur={props.handleBlur}
                           name="base.originalValueDate"
                           type="date"
+                          disabled={baseValueOriginalDateDisabled}
                           className={`${styles.input_field} ${(props.errors.base?.originalValueDate && props.touched.base?.originalValueDate) && styles.text_is_invalid}`}
                           placeholder="Enter Original Value Date" />
 
@@ -419,7 +448,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                           defaultValue={props.values.base.revisedValue}
                           onChange={props.handleChange}
                           onBlur={props.handleBlur}
-                          name="base.revisedlValue"
+                          name="base.revisedValue"
                           type="text"
                           className={`${styles.input_field} ${(props.errors.base?.revisedValue && props.touched.base?.revisedValue) && styles.text_is_invalid}`}
                           placeholder={translations["amp.indicatormanager:enter-revised-value"]} />
@@ -484,6 +513,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                         onBlur={props.handleBlur}
                         name="target.originalValueDate"
                         type="date"
+                        disabled={targetValueOriginalDateFieldDisabled}
                         className={`${styles.input_field} ${(props.errors.target?.originalValueDate && props.touched.target?.originalValueDate) && styles.text_is_invalid}`}
                         placeholder={translations["amp.indicatormanager:enter-target-value-date"]} />
                     </Form.Group>
@@ -496,7 +526,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                         defaultValue={props.values.base.revisedValue}
                         onChange={props.handleChange}
                         onBlur={props.handleBlur}
-                        name="base.revisedlValue"
+                        name="target.revisedlValue"
                         type="text"
                         className={`${styles.input_field} ${(props.errors.base?.revisedValue && props.touched.base?.revisedValue) && styles.text_is_invalid}`}
                         placeholder={translations["amp.indicatormanager:enter-revised-value"]} />
@@ -512,7 +542,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                         defaultValue={props.values.base.revisedValueDate}
                         onChange={props.handleChange}
                         onBlur={props.handleBlur}
-                        name="base.revisedValueDate"
+                        name="target.revisedValueDate"
                         type="date"
                         className={`${styles.input_field} ${(props.errors.base?.revisedValueDate && props.touched.base?.revisedValueDate) && styles.text_is_invalid}`}
                         placeholder={translations["amp.indicatormanager:enter-revised-value-date"]} />

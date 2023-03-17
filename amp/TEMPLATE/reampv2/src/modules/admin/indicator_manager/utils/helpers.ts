@@ -19,7 +19,19 @@ export const extractChildrenFromProgramScheme = (programScheme: ProgramSchemeTyp
         });
         return childrenArray;
     }
-    
+
     const { children } = programScheme;
     return extractChildren(children);
+}
+
+export const getProgamSchemeForChild = (programSchemes: Array<ProgramSchemeType>, childId: string | number) => {
+    let programScheme: ProgramSchemeType | undefined;
+    programSchemes.forEach((scheme) => {
+        const children = extractChildrenFromProgramScheme(scheme);
+        const child = children.find((child) => child.id.toString() === childId.toString());
+        if (child) {
+            programScheme = scheme;
+        }
+    });
+    return programScheme;
 }

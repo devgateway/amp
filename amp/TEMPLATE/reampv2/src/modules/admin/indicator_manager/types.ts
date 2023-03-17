@@ -30,8 +30,7 @@ export interface IndicatorObjectType {
     sectors:      number[];
     base:         BaseAndTargetValueType | null;
     target:       BaseAndTargetValueType | null;
-    programs:     number[];
-    programScheme: string;
+    programId:       string | null;
 }
 
 export interface ProgramObjectType {

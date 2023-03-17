@@ -10,7 +10,9 @@ export const errorHelper = <T>(error: T | any[]) => {
     const tempError = error as any;
 
     if (tempError) {
-        const extractedError = tempError.error["0000"][0];
+        const detectKeys = Object.keys(tempError)[0];
+        
+        const extractedError = tempError.error[detectKeys][0];
 
         if (!extractedError) {
             return "An error occurred.";

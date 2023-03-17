@@ -22,7 +22,7 @@ export const updateIndicator = createAsyncThunk(
     "indicators/updateIndicator",
     async (indicator: UpdateIndicatorType, { rejectWithValue }) => {
         const response = await fetch(`/rest/indicatorManager/indicators/${indicator.id}`, {
-            method: "POST",
+            method: "PUT",
             headers: {
                 "Content-Type": "application/json",
             },

@@ -45,9 +45,9 @@ const ViewIndicatorModal: React.FC<ViewIndicatorModalProps> = (props) => {
 
   const getProgramData = () => {
     if (!indicator) return;
-    const programIds = indicator.programs;
+    const programId = indicator.programId;
     const children = extractChildrenFromProgramScheme(programsReducer.programs);
-    const programData = children.filter((program: any) => programIds.includes(program.id));
+    const programData = children.filter((program: any) => programId === program.id);
     setProgramData(programData);
   };
 

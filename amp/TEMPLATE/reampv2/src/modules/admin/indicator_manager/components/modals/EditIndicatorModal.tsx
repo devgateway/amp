@@ -62,9 +62,12 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
   const [sectors, setSectors] = useState<{ value: string, name: string }[]>([]);
   const [programSchemes, setProgramSchemes] = useState<{ value: string, name: string }[]>([]);
   const [programs, setPrograms] = useState<{ value: string, label: string }[]>([]);
+  const [defaultProgram, setDefaultProgram] = useState<{ value: string, label: string } | null>(null);
 
   const [baseValueOriginalDateDisabled, setBaseValueOriginalDateDisabled] = useState(false);
   const [targetValueOriginalDateFieldDisabled, setTargetValueOriginalDateDisabled] = useState(false);
+  const [baseValuesDisabled, setBaseValueDisabled] = useState(false);
+  const [targetValuesDisabled, setTargetValueDisabled] = useState(false);
 
   const formikRef = useRef<FormikProps<IndicatorFormValues>>(null);
 
@@ -76,8 +79,16 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
     setSectors(sectorData);
   };
 
+  const getPrograms = () => {
+    const programData = programsReducer.programs.map((program: any) => ({
+      value: program.id,
+      label: program.name
+    }));
+    setPrograms(programData);
+  };
+
   const getProgramSchemes = () => {
-    const programData = programsReducer.programs.map((program: ProgramSchemeType) => ({
+    const programData = programsReducer.programSchemes.map((program: ProgramSchemeType) => ({
       value: program.ampProgramSettingsId,
       label: program.name
     }));
@@ -89,10 +100,12 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
       setProgramFieldVisible(false);
       setEnableBaseValuesInput(false);
       setEnableTargetValuesInput(false);
+      setBaseValueDisabled(false);
+      setTargetValueDisabled(false);
       formikRef?.current?.setFieldValue("base.originalValueDate", "");
       formikRef?.current?.setFieldValue("target.originalValueDate", "");
 
-      const programScheme: ProgramSchemeType = programsReducer.programs.find((program: ProgramSchemeType) => program.ampProgramSettingsId.toString() === selectedProgramSchemeId.toString());
+      const programScheme: ProgramSchemeType = programsReducer.programSchemes.find((program: ProgramSchemeType) => program.ampProgramSettingsId.toString() === selectedProgramSchemeId.toString());
       if (programScheme) {
         const children = extractChildrenFromProgramScheme(programScheme);
         const programData = children.map((program: any) => ({
@@ -108,12 +121,14 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
           formikRef?.current?.setFieldValue("base.originalValueDate", backendDateToJavascriptDate(programScheme.startDate || ''));
           setEnableBaseValuesInput(true);
           setBaseValueOriginalDateDisabled(true);
+          setBaseValueDisabled(true);
         }
-    
+
         if (programScheme.endDate) {
           formikRef?.current?.setFieldValue("target.originalValueDate", backendDateToJavascriptDate(programScheme.endDate || ''));
           setEnableTargetValuesInput(true);
           setTargetValueOriginalDateDisabled(true);
+          setTargetValueDisabled(true);
         }
       }
 
@@ -159,17 +174,31 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
   };
 
 
-  const getDefaultPropgramScheme = () => {
 
+  const getDefaultPropgramScheme = () => {
     if (indicator?.programId) {
-      const foundProgramScheme = getProgamSchemeForChild(programsReducer.programs, indicator?.programId);
+      const foundProgramScheme = getProgamSchemeForChild(programsReducer.programSchemes, indicator?.programId);
       if (foundProgramScheme) {
         return {
           value: foundProgramScheme.ampProgramSettingsId.toString(),
           label: foundProgramScheme.name
         }
       }
-    } 
+    }
+  }
+
+  const getDefaultProgram = () => {
+    if (indicator?.programId) {
+      const getProgram = programsReducer.programs.find((program: any) => program.id === indicator?.programId);
+      if (getProgram) {
+        formikRef?.current?.setFieldValue("programId", getProgram.id.toString());
+        setProgramFieldVisible(true);
+        setDefaultProgram({
+          value: getProgram.id.toString(),
+          label: getProgram.name
+        });
+      }
+    }
   }
 
   const checkIfBaseValuesAreFilled = () => {
@@ -193,12 +222,18 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
   useLayoutEffect(() => {
     getSectors();
     getProgramSchemes();
+    getPrograms();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     checkIfBaseValuesAreFilled();
     checkIfTargetValuesAreFilled();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [indicator]);
+
+  useEffect(() => {
+    getDefaultProgram();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [indicator]);
 
@@ -384,7 +419,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                             }}
                             getOptionValue={(option) => option.value}
                             onBlur={props.handleBlur}
-                            className={`basic-multi-select ${styles.input_field} ${(props.errors.sectors && props.touched.sectors) && styles.text_is_invalid}`}
+                            className={`basic-multi-select ${(props.errors.sectors && props.touched.sectors) && styles.text_is_invalid}`}
                             classNamePrefix="select"
                             defaultValue={props.values.sectors}
                           />
@@ -433,9 +468,9 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                               }}
                               getOptionValue={(option) => option.value}
                               onBlur={props.handleBlur}
-                              className="basic-multi-select"
+                              className={`basic-multi-select ${styles.input_field} ${(props.errors.programId && props.touched.programId) && styles.text_is_invalid}`}
                               classNamePrefix="select"
-
+                              defaultValue={defaultProgram}
                             />
                           ) : null
                         }
@@ -453,6 +488,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                         name="baseToggle"
                         checked={enableBaseValuesInput}
                         onChange={() => setEnableBaseValuesInput(!enableBaseValuesInput)}
+                        disabled={baseValuesDisabled}
                         label={<h4 className={styles.checkbox_label}>{translations["amp.indicatormanager:enable-base"]}</h4>}
                       />
                     </Form.Check>
@@ -545,6 +581,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                         name="baseToggle"
                         checked={enableTargetValuesInput}
                         onChange={() => setEnableTargetValuesInput(!enableTargetValuesInput)}
+                        disabled={targetValuesDisabled}
                         label={<h4 className={styles.checkbox_label}>{translations["amp.indicatormanager:enable-target"]}</h4>}
                       />
                     </Form.Check>

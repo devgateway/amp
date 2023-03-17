@@ -48,9 +48,7 @@ const createIndicatorSlice = createSlice({
         });
         builder.addCase(createIndicator.rejected, (state, action) => {
             state.loading = false;
-            console.log("++++++++++", action.payload);
             state.error = errorHelper(action.payload);
-    
         });
     }
 });

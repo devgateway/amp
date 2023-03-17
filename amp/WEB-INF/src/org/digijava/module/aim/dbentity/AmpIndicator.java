@@ -41,7 +41,6 @@ public class AmpIndicator implements Serializable, Identifiable
 //    @Interchangeable(fieldTitle="Comments")
 
     private AmpTheme program;
-    private AmpActivityProgramSettings programScheme;
 
     private String comments;
 //    @Interchangeable(fieldTitle="Unit")
@@ -121,14 +120,6 @@ public class AmpIndicator implements Serializable, Identifiable
 
     public void setSectors(Set<AmpSector> sectors) {
         this.sectors = sectors;
-    }
-
-    public AmpActivityProgramSettings getProgramScheme() {
-        return programScheme;
-    }
-
-    public void setProgramScheme(AmpActivityProgramSettings programScheme) {
-        this.programScheme = programScheme;
     }
 
     public AmpTheme getProgram() {

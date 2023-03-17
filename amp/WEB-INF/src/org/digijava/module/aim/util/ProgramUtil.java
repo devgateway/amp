@@ -2081,4 +2081,25 @@ public class ProgramUtil {
         return defaultHierarchyPrograms;
     }
 
+    public static AmpActivityProgramSettings getProgramSettingFromTheme(AmpTheme theme) {
+        AmpActivityProgramSettings setting = null;
+        List<AmpActivityProgramSettings> settings = getAmpActivityProgramSettingsList(false);
+
+
+        while (theme.getIndlevel() != 1) {
+            theme = theme.getParentThemeId();
+        }
+
+        for (AmpActivityProgramSettings s : settings) {
+            if (s.getDefaultHierarchy() != null && s.getDefaultHierarchy().getAmpThemeId().equals(theme.getRootTheme().getAmpThemeId())) {
+                setting = s;
+                break;
+            }
+        }
+
+
+
+
+        return setting;
+    }
 }

@@ -72,7 +72,10 @@ public class IndicatorManagerService {
 
         Set<AmpIndicatorGlobalValue> indicatorValues = new HashSet<>();
 
-        validateProgramSettingsAndGlobalValues(indicatorRequest, indicator);
+        if (indicatorRequest.getProgramId() != null) {
+            indicator.setProgram(ProgramUtil.getTheme(indicatorRequest.getProgramId()));
+            validateProgramSettingsAndGlobalValues(indicatorRequest, indicator);
+        }
 
         if (indicatorRequest.getBaseValue() != null) {
             AmpIndicatorGlobalValue validatedBaseValues = validateBaseValues(indicatorRequest);
@@ -149,22 +152,19 @@ public class IndicatorManagerService {
             indicator.setType(indRequest.isAscending() ? "A" : "D");
             indicator.setCreationDate(indRequest.getCreationDate());
 
-            validateProgramSettingsAndGlobalValues(indRequest, indicator);
+            if (indRequest.getProgramId() != null) {
+                indicator.setProgram(ProgramUtil.getTheme(indRequest.getProgramId()));
+                validateProgramSettingsAndGlobalValues(indRequest, indicator);
+            }
 
             if (indRequest.getBaseValue() != null) {
                 AmpIndicatorGlobalValue validatedBaseValues = validateBaseValues(indRequest);
                 indicator.getIndicatorValues().add(validatedBaseValues);
-            } else {
-                indicator.getIndicatorValues().add(indRequest.getBaseValue());
-                indicator.getBaseValue().setIndicator(indicator);
             }
 
             if (indRequest.getTargetValue() != null) {
                 AmpIndicatorGlobalValue validatedTargetValues = validateTargetValues(indRequest);
                 indicator.getIndicatorValues().add(validatedTargetValues);
-            } else {
-                indicator.getIndicatorValues().add(indRequest.getTargetValue());
-                indicator.getTargetValue().setIndicator(indicator);
             }
 
             Set<AmpSector> sectors = indRequest.getSectorIds().stream()
@@ -173,7 +173,10 @@ public class IndicatorManagerService {
             indicator.getSectors().clear();
             indicator.getSectors().addAll(sectors);
 
-            indicator.getProgram().getIndicators().remove(indicator);
+            if (indicator.getProgram() != null && indRequest.getProgramId() == null) {
+                indicator.getProgram().getIndicators().remove(indicator);
+                indicator.setProgram(null);
+            }
 
             session.update(indicator);
             return new MEIndicatorDTO(indicator);

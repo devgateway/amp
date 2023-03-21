@@ -30,7 +30,6 @@ public class MEIndicatorDTO {
     private Long id;
 
     @JsonProperty("name")
-    @ValidIndicatorName
     @NotNull
     private String name;
 
@@ -38,7 +37,6 @@ public class MEIndicatorDTO {
     private String description;
 
     @JsonProperty("code")
-    @ValidIndicatorCode
     @NotNull
     private String code;
 
@@ -165,7 +163,7 @@ public class MEIndicatorDTO {
         return programId;
     }
 
-    public void setProgramIds(final Long programId) {
+    public void setProgramId(final Long programId) {
         this.programId = programId;
     }
 }

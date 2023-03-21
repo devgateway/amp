@@ -116,7 +116,7 @@ public final class WorkspaceFilter {
         }
 
         // remove draft activities at end since filters don't not know of this condition
-        if (team.getHideDraftActivities()) {
+        if (team.getHideDraftActivities() != null && team.getHideDraftActivities()) {
             String draftActsSql = "SELECT amp_activity_id FROM amp_activity WHERE draft = TRUE";
             Set<Long> draftActivities = ActivityUtil.fetchLongs(draftActsSql);
             ids.removeAll(draftActivities);

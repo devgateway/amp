@@ -61,9 +61,7 @@ public class MEIndicatorDTO {
     private AmpIndicatorGlobalValue targetValue;
 
     @JsonProperty("sectors")
-    @NotEmpty(message = "Sector list cannot be empty.")
     @ValidSectorIds
-    @ApiModelProperty(required = true)
     private List<Long> sectorIds = new ArrayList<>();
 
     @JsonProperty("programs")

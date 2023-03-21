@@ -145,7 +145,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
   useEffect(() => {
     getProgramsForProgramScheme();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedProgramSchemeId, formikRef])
+  }, [selectedProgramSchemeId])
 
 
   useEffect(() => {
@@ -156,6 +156,15 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
   }, [sectorsReducer.sectors, programsReducer.programs, programsReducer.programSchemes])
 
   useDidMountEffect(() => {
+    if (createIndicatorState.loading) {
+      MySwal.fire({
+        icon: 'info',
+        title: 'Creating Indicator...',
+        timer: 1000
+      });
+      return;
+    }
+
     if (!createIndicatorState.loading && !createIndicatorState?.error) {
       MySwal.fire({
         title: 'Success',
@@ -171,7 +180,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
 
     MySwal.fire({
       title: 'Error',
-      text: createIndicatorState.loading ? 'Creating Indicator...' : createIndicatorState.error,
+      text: createIndicatorState.loading ? 'Error creating indicator' : createIndicatorState.error,
       icon: 'error',
       confirmButtonText: 'Ok',
     });
@@ -388,7 +397,12 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                             className={`basic-multi-select ${styles.input_field} ${(props.errors.programId && props.touched.programId) && styles.text_is_invalid}`}
                             classNamePrefix="select"
                           />
-                        ) : null
+                        ) :
+                         <Select
+                          name="programs"
+                          isDisabled={true}
+                          defaultValue={ { value: 0, label: translations["amp.indicatormanager:no-programs"] } }
+                          />
                       }
                     </Form.Group>
                   </Row>

@@ -1,5 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 
+/**
+ * @param func - Function to be executed after the first render
+ * @param deps - Dependencies for the effect
+ * @description - This hook is used to execute a function after the first render
+ */
 const useDidMountEffect = (func: React.EffectCallback, deps?: React.DependencyList | undefined) => {
     const didMount = useRef(false);
 

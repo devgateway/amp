@@ -70,5 +70,7 @@
   "amp.indicatormanager:view-indicator-id": "Indicator ID",
   "amp.indicatormanager:view-error": "Error Loading Indicator",
   "amp.indicatormanager:error-used-by-activities": "This indicator is used by activities and cannot be deleted",
-  "amp.indicatormanager:program-scheme": "Program Scheme"
+  "amp.indicatormanager:program-scheme": "Program Scheme",
+  "amp.indicatormanager:no-program-scheme": "No Programs Scheme Available",
+  "amp.indicatormanager:no-programs": "No Programs Available"
 }

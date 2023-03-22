@@ -134,7 +134,7 @@ function validate(){
 				</tr>
 				<tr class="input_row_container">
 					<td width="3">&nbsp;</td>
-					<td class=f-names style="padding-bottom:10px;" valign="top" noWrap>
+					<td class=f-names style="padding-bottom:10px;" noWrap>
 <!--						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>-->
 						<span style="color:#FF0000;">*</span> <digi:trn key="aim:newPassword">New Password</digi:trn>
 					</td>
@@ -150,7 +150,7 @@ function validate(){
 					<td width="3">&nbsp;</td>
 					<td class=f-names style="padding-bottom:10px;" noWrap>
 <!--						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>-->
-						<span style="color:#FF0000;">*</span> <digi:trn key="aim:confirmNewPassword">Confirm new
+						<span style="color:#FF0000;">*</span> <digi:trn key="aim:confirmNewPassword">Confirm New
 						Password</digi:trn>
 					</td>
 					<td align="left" style="padding-bottom:10px;">

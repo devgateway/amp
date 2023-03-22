@@ -6,7 +6,7 @@ import rootReducer from './reducers/rootReducer';
 import Startup from './components/StartUp';
 import ReportGeneratorRouter from './components/ReportGenerator.router';
 import defaultTrnPack from './config/initialTranslations.json';
-// import 'fomantic-ui-css/semantic.min.css';
+import 'fomantic-ui-css/semantic.min.css';
 import '../ndddashboard/index.css';
 import '../../open-sans.css';
 import './index.css';

@@ -21,7 +21,7 @@
     "dayjs": "^1.11.7",
     "dom-to-image-font-patch": "^1.0.1",
     "exceljs": "^2.0.1",
-    "fomantic-ui-css": "^2.9.1",
+    "fomantic-ui-css": "^2.8.7",
     "formik": "^2.2.9",
     "history": "^4.10.1",
     "javascript-color-gradient": "^1.3.2",

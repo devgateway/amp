@@ -97,7 +97,7 @@ function validate(){
 				
 				<tr class="input_row_container">
 					<td width="3">&nbsp;</td>
-					<td class=f-names style="padding-bottom:30px;" noWrap width="18%" valign=top>
+					<td class=f-names style="padding-bottom:10px;" noWrap width="18%">
 <!--						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>-->
 						<span style="color:#FF0000;">*</span>
 						<digi:trn key="aim:email">

@@ -4,6 +4,7 @@ import com.sun.jersey.spi.container.ContainerRequest;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.onepager.util.FMUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivityInformation;
 import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivitySummary;
 import org.digijava.kernel.ampapi.endpoints.activity.dto.TeamMemberInformation;
@@ -11,19 +12,26 @@ import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
+import org.digijava.kernel.ampapi.endpoints.dto.Activity;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.errors.GenericErrors;
+import org.digijava.kernel.ampapi.endpoints.security.SecurityService;
+import org.digijava.kernel.ampapi.endpoints.security.dto.UserSessionInformation;
+import org.digijava.kernel.ampapi.endpoints.security.services.WorkspaceMemberService;
 import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
+import org.digijava.module.aim.dbentity.AmpOrgRole;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
@@ -42,12 +50,18 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.PathSegment;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
+
+import static org.digijava.module.aim.helper.GlobalSettingsConstants.EXEMPT_ORGANIZATION_REPORT;
 
 /**
  * @author Octavian Ciubotaru
@@ -281,12 +295,12 @@ public final class ActivityInterchangeUtils {
         }
     }
 
-    public static Map<String, Object> getActivityByAmpId(String ampId) {
+    public static Map<String, Object> getActivityByAmpId(String ampId, boolean isOffLineClientCall) {
         Long activityId = ActivityUtil.findActivityIdByAmpId(ampId);
         if (activityId == null) {
             ApiErrorResponseService.reportResourceNotFound(ActivityErrors.ACTIVITY_NOT_FOUND.withDetails(ampId));
         }
-        return getActivity(activityId);
+        return getActivity(activityId, isOffLineClientCall);
     }
 
     /**
@@ -295,8 +309,42 @@ public final class ActivityInterchangeUtils {
      * @param projectId is amp_activity_id
      * @return
      */
-    public static Map<String, Object> getActivity(Long projectId) {
-        return getActivity(projectId, null);
+    public static Map<String, Object> getActivity(Long projectId, boolean isOfflineClientCall) {
+        Map<String, Object> activity = getActivity(projectId, null);
+        if (!isOfflineClientCall) {
+            filterPropertyBasedOnUserPermission(activity, projectId);
+        }
+        return activity;
+    }
+
+    private static void filterPropertyBasedOnUserPermission(Map<String, Object> activity, Long projectId){
+        final long DONOR_ROLE = 1L;
+        final String ACTIVITY_DOCUMENTS = "activity_documents";
+        UserSessionInformation userInformation = SecurityService.getInstance().getUserSessionInformation();
+        if (userInformation != null) {
+            User user = UserUtils.getUser(userInformation.getUserId());
+            if (user != null){
+                if (user.getAssignedOrgs() != null && !user.getAssignedOrgs().isEmpty()){
+                    if (!userBelongToExemptOrgForDocumentVisualization(user)) {
+                        List organizationIds = user.getAssignedOrgs().stream()
+                                .map(ampOrganisation -> ampOrganisation.getAmpOrgId()).collect(Collectors.toList());
+                        List<AmpOrgRole> ampOrgRoles = ActivityUtil.getAmpRolesForActivityAndOrganizationsAndRole(projectId,
+                                organizationIds, DONOR_ROLE);
+                        if (ampOrgRoles == null || ampOrgRoles.size() == 0) {
+                            activity.replace(ACTIVITY_DOCUMENTS, null);
+                        }
+                    }
+                } else{
+                    activity.replace(ACTIVITY_DOCUMENTS, null);
+                }
+            }
+        }
+    }
+
+    private static boolean userBelongToExemptOrgForDocumentVisualization(User user) {
+        return user.getAssignedOrgs().stream()
+                .filter(ampOrganisation -> ampOrganisation.getIdentifier().equals(FeaturesUtil.getGlobalSettingValueLong(EXEMPT_ORGANIZATION_REPORT)))
+                .count() > 0;
     }
 
     public static AmpActivityVersion loadActivity(Long actId) {
@@ -324,6 +372,7 @@ public final class ActivityInterchangeUtils {
             ApiErrorResponseService.reportResourceNotFound(
                     ActivityErrors.ACTIVITY_NOT_FOUND.withDetails(projectId.toString()));
         }
+
         return getActivity(loadActivity(projectId), filter);
     }
 
@@ -338,7 +387,8 @@ public final class ActivityInterchangeUtils {
         try {
             ActivityExporter exporter = new ActivityExporter(filter);
             Long fmId = activity.getTeam().getFmTemplate() != null ? activity.getTeam().getFmTemplate().getId() : null;
-            return exporter.export(activity, fmId);
+            Map<String, Object> activityMap = exporter.export(activity, fmId);
+            return activityMap;
         } catch (Exception e) {
             logger.error("Error in loading activity. " + e.getMessage());
             throw new RuntimeException(e);

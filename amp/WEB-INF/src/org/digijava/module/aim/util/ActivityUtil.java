@@ -575,6 +575,24 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         return role;
       }
 
+  public static List<AmpOrgRole> getAmpRolesForActivityAndOrganizationsAndRole(Long actId, List<Long> organizationId,
+                                                                               Long roleId){
+      List<AmpOrgRole> ampOrgRoles = new ArrayList<>();
+      if (organizationId != null && organizationId.size() > 0) {
+          String queryString = "select ar from AmpOrgRole ar "
+                  + " where ar.activity.ampActivityId = :actId "
+                  + " and ar.organisation.ampOrgId in ( :orgId ) "
+                  + " and ar.role.ampRoleId = :roleId ";
+          Query qry = PersistenceManager.getSession().createQuery(queryString);
+          qry.setParameter("actId", actId);
+          qry.setParameterList("orgId", organizationId);
+          qry.setParameter("roleId", roleId);
+          ampOrgRoles = qry.list();
+      }
+
+      return ampOrgRoles;
+  }
+
   public static AmpOrganisation getAmpOrganisation(Long actId, Long orgRoleId) {
         Session session = null;
         AmpOrganisation organisation = null;

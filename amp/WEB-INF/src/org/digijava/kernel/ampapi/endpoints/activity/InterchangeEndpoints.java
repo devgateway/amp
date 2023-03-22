@@ -8,6 +8,9 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.Example;
 import io.swagger.annotations.ExampleProperty;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpHeaders;
+import org.apache.http.protocol.HTTP;
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivityInformation;
 import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivitySummary;
@@ -31,13 +34,19 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
+import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
+import org.digijava.kernel.util.DgUtil;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.springframework.security.web.util.UrlUtils;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -300,7 +309,8 @@ public class InterchangeEndpoints {
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, response = SwaggerActivity.class,
             message = "activity with full set of configured fields and their values"))
     public SwaggerActivity getProject(@ApiParam("project id") @PathParam("projectId") Long projectId) {
-        Map<String, Object> activity = ActivityInterchangeUtils.getActivity(projectId);
+        Map<String, Object> activity = ActivityInterchangeUtils.getActivity(projectId,
+                AmpClientModeHolder.isOfflineClient());
         return new SwaggerActivity(activity);
     }
 
@@ -335,7 +345,8 @@ public class InterchangeEndpoints {
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, response = SwaggerActivity.class,
             message = "activity with full set of configured fields and their values"))
     public SwaggerActivity getProjectByAmpId(@ApiParam("AMP Id") @QueryParam("amp-id") String ampId) {
-        Map<String, Object> activity = ActivityInterchangeUtils.getActivityByAmpId(ampId);
+        Map<String, Object> activity = ActivityInterchangeUtils.getActivityByAmpId(ampId,
+                AmpClientModeHolder.isOfflineClient());
         return new SwaggerActivity(activity);
     }
 

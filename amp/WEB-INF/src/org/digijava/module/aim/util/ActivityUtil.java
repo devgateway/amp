@@ -2106,7 +2106,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 
     public static int daysToValidation(AmpActivityVersion activity) {
         int result;
-        int daysBetween = daysBetween(activity.getUpdatedDate(), new Date());
+        int daysBetween = daysBetween(activity.getUpdatedDate() != null ? activity.getUpdatedDate(): new Date(), new Date());
         String daysBeforeValidation = FeaturesUtil.getGlobalSettingValue(
                 GlobalSettingsConstants.NUMBER_OF_DAYS_BEFORE_AUTOMATIC_VALIDATION);
         result = (Integer.parseInt(daysBeforeValidation) - daysBetween);

@@ -62,6 +62,8 @@ public class IndicatorManagerService {
         Session session = PersistenceManager.getSession();
         AmpIndicator indicator = new AmpIndicator();
 
+        validateIndicatorName(indicatorRequest.getName(), session);
+        validateIndicatorCode(indicatorRequest.getCode(), session);
 
         indicator.setName(indicatorRequest.getName());
         indicator.setDescription(indicatorRequest.getDescription());
@@ -145,6 +147,14 @@ public class IndicatorManagerService {
         Session session = PersistenceManager.getSession();
         AmpIndicator indicator = (AmpIndicator) session.get(AmpIndicator.class, indicatorId);
         if (indicator != null) {
+            if (!indicator.getName().equals(indRequest.getName())) {
+                validateIndicatorName(indRequest.getName(), session);
+            }
+
+            if (!indicator.getCode().equals(indRequest.getCode())) {
+                validateIndicatorCode(indRequest.getCode(), session);
+            }
+
             indicator.setName(indRequest.getName());
             indicator.setDescription(indRequest.getDescription());
 
@@ -292,5 +302,29 @@ public class IndicatorManagerService {
         }
 
         return targetValues;
+    }
+
+    public void validateIndicatorName (String name, Session session) {
+        AmpIndicator existingIndicator = (AmpIndicator) session.createCriteria(AmpIndicator.class)
+                .addOrder(Order.asc("id"))
+                .add(org.hibernate.criterion.Restrictions.eq("name", name))
+                .setMaxResults(1)
+                .uniqueResult();
+        if (existingIndicator != null) {
+            throw new ApiRuntimeException(BAD_REQUEST,
+                    ApiError.toError("Indicator with name " + name + " already exists"));
+        }
+    }
+
+    public void validateIndicatorCode (String code, Session session) {
+        AmpIndicator existingIndicator = (AmpIndicator) session.createCriteria(AmpIndicator.class)
+                .addOrder(Order.asc("id"))
+                .add(org.hibernate.criterion.Restrictions.eq("code", code))
+                .setMaxResults(1)
+                .uniqueResult();
+        if (existingIndicator != null) {
+            throw new ApiRuntimeException(BAD_REQUEST,
+                    ApiError.toError("Indicator with code " + code + " already exists"));
+        }
     }
 }

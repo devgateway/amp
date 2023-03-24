@@ -5,14 +5,10 @@ import io.swagger.annotations.ApiOperation;
 import org.digijava.kernel.ampapi.endpoints.gpi.ValidationUtils;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
@@ -49,7 +45,7 @@ public class IndicatorManagerEndpoints {
         return new IndicatorManagerService().createMEIndicator(indicatorRequest);
     }
 
-    @POST
+    @PUT
     @Path("/indicators/{id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -82,10 +78,8 @@ public class IndicatorManagerEndpoints {
     @Path("/programs")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "getPrograms")
-    @ApiOperation(value = "Retrieve and provide a list of programs used by indicators.")
-    public List<ProgramDTO> getPrograms() {
-        return new IndicatorManagerService().getPrograms();
+    @ApiOperation(value = "Retrieve and provide a list of programs nested with their program schemes used by indicators.")
+    public List<ProgramSchemeDTO> getPrograms() {
+        return new IndicatorManagerService().getProgramScheme();
     }
-
-
 }

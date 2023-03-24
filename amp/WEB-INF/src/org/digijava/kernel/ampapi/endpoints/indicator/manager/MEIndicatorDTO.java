@@ -4,15 +4,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.digijava.kernel.ampapi.endpoints.indicator.manager.validators.ValidProgramIds;
-import org.digijava.kernel.ampapi.endpoints.indicator.manager.validators.ValidSectorIds;
+import org.digijava.kernel.ampapi.endpoints.indicator.manager.validators.*;
 import org.digijava.kernel.ampapi.endpoints.serializers.LocalizedDateDeserializer;
 import org.digijava.kernel.ampapi.endpoints.serializers.LocalizedDateSerializer;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorGlobalValue;
 import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpTheme;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,7 +24,7 @@ import static org.digijava.module.aim.dbentity.AmpIndicatorValue.TARGET;
 /**
  * DTO for AmpIndicator
  */
-@JsonPropertyOrder({"id", "name", "description", "code", "ascending", "creationDate", "sectors"})
+@JsonPropertyOrder({"id", "name", "description", "code", "ascending", "creationDate", "sectors", "programId"})
 public class MEIndicatorDTO {
 
     @JsonProperty("id")
@@ -61,9 +60,9 @@ public class MEIndicatorDTO {
     @ValidSectorIds
     private List<Long> sectorIds = new ArrayList<>();
 
-    @JsonProperty("programs")
-    @ValidProgramIds
-    private List<Long> programIds = new ArrayList<>();
+    @JsonProperty("programId")
+    @ValidProgramId
+    private Long programId;
 
     public MEIndicatorDTO() {
 
@@ -79,7 +78,7 @@ public class MEIndicatorDTO {
         this.baseValue = indicator.getBaseValue();
         this.targetValue = indicator.getTargetValue();
         this.sectorIds = indicator.getSectors().stream().map(AmpSector::getAmpSectorId).collect(Collectors.toList());
-        this.programIds = indicator.getPrograms().stream().map(AmpTheme::getAmpThemeId).collect(Collectors.toList());
+        this.programId = indicator.getProgram() != null ? indicator.getProgram().getAmpThemeId() : null;
     }
 
     public Long getId() {
@@ -161,11 +160,11 @@ public class MEIndicatorDTO {
         this.sectorIds = sectorIds;
     }
 
-    public List<Long> getProgramIds() {
-        return programIds;
+    public Long getProgramId() {
+        return programId;
     }
 
-    public void setProgramIds(final List<Long> programIds) {
-        this.programIds = programIds;
+    public void setProgramId(final Long programId) {
+        this.programId = programId;
     }
 }

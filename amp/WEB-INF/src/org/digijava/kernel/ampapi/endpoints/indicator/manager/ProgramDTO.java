@@ -29,6 +29,7 @@ public class ProgramDTO {
     @JsonProperty("children")
     private final List<ProgramDTO> children = new ArrayList<>();
 
+
     public ProgramDTO(final AmpTheme program) {
         this.id = program.getAmpThemeId();
         this.name = program.getName();

@@ -1,6 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.indicator.manager.validators;
 
-
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.Documented;
@@ -11,15 +10,13 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.FIELD;
 
 /**
- *
- * @author Viorel Chihai
+ * @author Timothy Mugo
  */
 @Documented
 @Target(FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = ProgramIdsValidator.class)
-public @interface ValidProgramIds {
-
+@Constraint(validatedBy = ProgramIdValidator.class)
+public @interface ValidProgramId {
     String message() default "shouldn't contain invalid or deleted program ids";
 
     Class<?>[] groups() default {};

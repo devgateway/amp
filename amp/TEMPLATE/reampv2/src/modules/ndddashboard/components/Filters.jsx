@@ -16,6 +16,7 @@ const filter = new Filter({
 class Filters extends Component {
   constructor(props) {
     super(props);
+    this.filterPopup = React.createRef();
     this.state = {
       show: false, filtersWithModels: null, showFiltersList: false, savedDashboardLoaded: false
     };
@@ -54,7 +55,7 @@ class Filters extends Component {
       this.setState({ show: true });
       return filter.loaded.then(() => {
         // eslint-disable-next-line react/no-string-refs
-        filter.setElement(this.refs.filterPopup);
+        filter.setElement(this.ref.filterPopup);
         return filter.showFilters();
       });
     }
@@ -138,8 +139,7 @@ class Filters extends Component {
             ) : null}
           </div>
         </div>
-        {/* eslint-disable-next-line react/no-string-refs */}
-        <div id="filter-popup" ref="filterPopup" style={{ display: (!show ? 'none' : 'block') }} />
+        <div id="filter-popup" ref={this.filterPopup} style={{ display: (!show ? 'none' : 'block') }} />
       </Col>
     );
   }

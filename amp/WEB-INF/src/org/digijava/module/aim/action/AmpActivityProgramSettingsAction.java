@@ -156,6 +156,18 @@ public class AmpActivityProgramSettingsAction
                             new ActionMessage("error.aim.programSettingDateRange", oldSetting.getName()));
                 }
             }
+
+            /**
+             * It is not allowed to change program's date if indicator is already attached
+             */
+            if ((oldSetting.getDefaultHierarchy()!= null && oldSetting.getDefaultHierarchy().getIndicators().size() > 0)){
+                if ((oldSetting.getStartDate() != null && startDate.getTime() != oldSetting.getStartDate().getTime()) ||
+                        (oldSetting.getEndDate() != null && endDate.getTime() != oldSetting.getEndDate().getTime())) {
+                    errors.add(ActionMessages.GLOBAL_MESSAGE,
+                            new ActionMessage("error.aim.dateRange.indicator", oldSetting.getName()));
+                }
+            }
+
         });
         return errors;
 

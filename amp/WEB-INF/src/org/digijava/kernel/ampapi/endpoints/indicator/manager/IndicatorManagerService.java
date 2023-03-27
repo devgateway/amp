@@ -8,6 +8,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.hibernate.Session;
@@ -17,6 +18,7 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -157,11 +159,11 @@ public class IndicatorManagerService {
         }
 
 
-        if (!indicator.getProgramIds().isEmpty()) {
+        if (indicator.getProgramId() != null) {
             indicatorProgram = session.createCriteria(AmpIndicator.class)
                     .add(Restrictions.eq("name", name))
                     .createCriteria("programs")
-                    .add(Restrictions.in("ampThemeId", indicator.getProgramIds()))
+                    .add(Restrictions.eq("ampThemeId", indicator.getProgramId()))
                     .list().size();
         }
 
@@ -169,7 +171,7 @@ public class IndicatorManagerService {
             throw new ApiRuntimeException(BAD_REQUEST,
                     ApiError.toError("Indicator with name " + indicator.getName() + " sectors " +
                             StringUtils.join(indicator.getSectorIds(), ",") +
-                            " and programs " + StringUtils.join(indicator.getProgramIds(), ",") + " already exist"));
+                            " and programs " + indicator.getProgramId() + " already exist"));
         }
 
         if (indicatorSector > 0  && indicatorProgram == -1) {
@@ -179,7 +181,7 @@ public class IndicatorManagerService {
         } else if (indicatorSector == -1 && indicatorProgram > 0) {
             throw new ApiRuntimeException(BAD_REQUEST,
                     ApiError.toError("Indicator with name " + indicator.getName() + " and program " +
-                            StringUtils.join(indicator.getProgramIds(), ",") + " already exist"));
+                            indicator.getProgramId() + " already exist"));
         }
 
     }

@@ -76,7 +76,7 @@ public class IndicatorManagerService {
         AmpIndicator indicator = new AmpIndicator();
         String name = indicatorRequest.getName();
         validateYear(indicatorRequest);
-        validateNameProgramSectorUnique(name, indicatorRequest, session);
+//        validateNameProgramSectorUnique(name, indicatorRequest, session);
 
         validateIndicatorName(indicatorRequest.getName(), session);
         validateIndicatorCode(indicatorRequest.getCode(), session);

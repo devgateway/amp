@@ -78,7 +78,7 @@ public class IndicatorManagerEndpoints {
     @Path("/programs")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.IN_ADMIN, id = "getPrograms")
-    @ApiOperation(value = "Retrieve and provide a list of programs nested with their program schemes used by indicators.")
+    @ApiOperation(value = "Retrieve and provide a list of programs schemes nested with their programs used by indicators.")
     public List<ProgramSchemeDTO> getPrograms() {
         return new IndicatorManagerService().getProgramScheme();
     }

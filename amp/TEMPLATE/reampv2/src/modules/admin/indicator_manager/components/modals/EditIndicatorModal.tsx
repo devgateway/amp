@@ -542,7 +542,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                             onChange={props.handleChange}
                             onBlur={props.handleBlur}
                             name="base.originalValue"
-                            type="text"
+                            type="number"
                             className={`${styles.input_field} ${(props.errors.base?.originalValue && props.touched.base?.originalValue) && styles.text_is_invalid}`}
                             placeholder={translations["amp.indicatormanager:enter-original-value"]} />
 
@@ -576,8 +576,8 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                             defaultValue={props.values.base.revisedValue}
                             onChange={props.handleChange}
                             onBlur={props.handleBlur}
-                            name="base.revisedlValue"
-                            type="text"
+                            name="base.revisedValue"
+                            type="number"
                             className={`${styles.input_field} ${(props.errors.base?.revisedValue && props.touched.base?.revisedValue) && styles.text_is_invalid}`}
                             placeholder={translations["amp.indicatormanager:enter-revised-value"]} />
 
@@ -630,7 +630,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                             onChange={props.handleChange}
                             onBlur={props.handleBlur}
                             name="target.originalValue"
-                            type="text"
+                            type="number"
                             className={`${styles.input_field} ${(props.errors.target?.originalValue && props.touched.target?.originalValue) && styles.text_is_invalid}`}
                             placeholder={translations["amp.indicatormanager:enter-target-value"]} />
                         </Form.Group>
@@ -655,8 +655,8 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                             defaultValue={props.values.base.revisedValue}
                             onChange={props.handleChange}
                             onBlur={props.handleBlur}
-                            name="target.revisedlValue"
-                            type="text"
+                            name="target.revisedValue"
+                            type="number"
                             className={`${styles.input_field} ${(props.errors.base?.revisedValue && props.touched.base?.revisedValue) && styles.text_is_invalid}`}
                             placeholder={translations["amp.indicatormanager:enter-revised-value"]} />
 

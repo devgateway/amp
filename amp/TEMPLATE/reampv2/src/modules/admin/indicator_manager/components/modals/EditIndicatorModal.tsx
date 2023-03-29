@@ -421,6 +421,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                         options={ascendingOptions}
                         className="basic-multi-select"
                         classNamePrefix="select"
+                        defaultValue={{ value: props.values.ascending, label: props.values.ascending ? "True" : "False" }}
                       />
                     </Form.Group>
 
@@ -633,6 +634,10 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                             type="number"
                             className={`${styles.input_field} ${(props.errors.target?.originalValue && props.touched.target?.originalValue) && styles.text_is_invalid}`}
                             placeholder={translations["amp.indicatormanager:enter-target-value"]} />
+
+                            <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
+                              {props.errors.target?.originalValue}
+                            </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group className={styles.view_item}>
                           <Form.Label>{translations["amp.indicatormanager:target-value-date"]}</Form.Label>
@@ -652,32 +657,32 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                         <Form.Group className={styles.view_item}>
                           <Form.Label>{translations["amp.indicatormanager:revised-value"]}</Form.Label>
                           <Form.Control
-                            defaultValue={props.values.base.revisedValue}
+                            defaultValue={props.values.target.revisedValue}
                             onChange={props.handleChange}
                             onBlur={props.handleBlur}
                             name="target.revisedValue"
                             type="number"
-                            className={`${styles.input_field} ${(props.errors.base?.revisedValue && props.touched.base?.revisedValue) && styles.text_is_invalid}`}
+                            className={`${styles.input_field} ${(props.errors.target?.revisedValue && props.touched.target?.revisedValue) && styles.text_is_invalid}`}
                             placeholder={translations["amp.indicatormanager:enter-revised-value"]} />
 
                           <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
-                            {props.errors.base?.revisedValue}
+                            {props.errors.target?.revisedValue}
                           </Form.Control.Feedback>
                         </Form.Group>
 
                         <Form.Group className={styles.view_item}>
                           <Form.Label>{translations["amp.indicatormanager:revised-value-date"]}</Form.Label>
                           <Form.Control
-                            defaultValue={props.values.base.revisedValueDate}
+                            defaultValue={props.values.target.revisedValueDate}
                             onChange={props.handleChange}
                             onBlur={props.handleBlur}
                             name="target.revisedValueDate"
                             type="date"
-                            className={`${styles.input_field} ${(props.errors.base?.revisedValueDate && props.touched.base?.revisedValueDate) && styles.text_is_invalid}`}
+                            className={`${styles.input_field} ${(props.errors.target?.revisedValueDate && props.touched.target?.revisedValueDate) && styles.text_is_invalid}`}
                             placeholder={translations["amp.indicatormanager:enter-revised-value-date"]} />
 
                           <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
-                            {props.errors.base?.revisedValueDate}
+                            {props.errors.target?.revisedValueDate}
                           </Form.Control.Feedback>
                         </Form.Group>
                       </Row>

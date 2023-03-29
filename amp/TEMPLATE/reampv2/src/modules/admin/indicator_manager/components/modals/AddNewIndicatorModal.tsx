@@ -15,6 +15,7 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content';
 import { extractChildrenFromProgramScheme } from '../../utils/helpers';
 import useDidMountEffect from '../../utils/hooks';
+import { reduce } from 'lodash';
 
 const MySwal = withReactContent(Swal);
 
@@ -320,9 +321,17 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                     <Select
                       name="ascending"
                       options={ascendingOptions}
-                      className="basic-multi-select"
+                      onBlur={props.handleBlur}
+                      className={`${styles.input_field} ${(props.errors.ascending && props.touched.ascending) && styles.text_is_invalid}`}
                       classNamePrefix="select"
+                      onChange={(value) => {
+                        if (value) props.setFieldValue('ascending', value.value)
+                      }}
+                      defaultValue={ascendingOptions[1]}
                     />
+                    <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
+                      {props.errors.ascending}
+                    </Form.Control.Feedback>
                   </Form.Group>
 
                   <Form.Group className={styles.view_item} controlId="formCreationDate">
@@ -531,6 +540,10 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                           type="number"
                           className={`${styles.input_field} ${(props.errors.target?.originalValue && props.touched.target?.originalValue) && styles.text_is_invalid}`}
                           placeholder={translations["amp.indicatormanager:enter-target-value"]} />
+
+                        <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
+                          {props.errors.target?.originalValue}
+                        </Form.Control.Feedback>
                       </Form.Group>
                       <Form.Group className={styles.view_item}>
                         <Form.Label>{translations["amp.indicatormanager:target-value-date"]}</Form.Label>
@@ -543,6 +556,10 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                           disabled={targetValueOriginalDateFieldDisabled}
                           className={`${styles.input_field} ${(props.errors.target?.originalValueDate && props.touched.target?.originalValueDate) && styles.text_is_invalid}`}
                           placeholder={translations["amp.indicatormanager:enter-target-value-date"]} />
+
+                        <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
+                          {props.errors.target?.originalValueDate}
+                        </Form.Control.Feedback>
                       </Form.Group>
                     </Row>
 
@@ -550,32 +567,32 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                       <Form.Group className={styles.view_item}>
                         <Form.Label>{translations["amp.indicatormanager:revised-value"]}</Form.Label>
                         <Form.Control
-                          defaultValue={props.values.base.revisedValue}
+                          defaultValue={props.values.target.revisedValue}
                           onChange={props.handleChange}
                           onBlur={props.handleBlur}
                           name="target.revisedValue"
                           type="number"
-                          className={`${styles.input_field} ${(props.errors.base?.revisedValue && props.touched.base?.revisedValue) && styles.text_is_invalid}`}
+                          className={`${styles.input_field} ${(props.errors.target?.revisedValue && props.touched.target?.revisedValue) && styles.text_is_invalid}`}
                           placeholder={translations["amp.indicatormanager:enter-revised-value"]} />
 
                         <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
-                          {props.errors.base?.revisedValue}
+                          {props.errors.target?.revisedValue}
                         </Form.Control.Feedback>
                       </Form.Group>
 
                       <Form.Group className={styles.view_item}>
                         <Form.Label>{translations["amp.indicatormanager:revised-value-date"]}</Form.Label>
                         <Form.Control
-                          defaultValue={props.values.base.revisedValueDate}
+                          defaultValue={props.values.target.revisedValueDate}
                           onChange={props.handleChange}
                           onBlur={props.handleBlur}
                           name="target.revisedValueDate"
                           type="date"
-                          className={`${styles.input_field} ${(props.errors.base?.revisedValueDate && props.touched.base?.revisedValueDate) && styles.text_is_invalid}`}
+                          className={`${styles.input_field} ${(props.errors.target?.revisedValueDate && props.touched.target?.revisedValueDate) && styles.text_is_invalid}`}
                           placeholder={translations["amp.indicatormanager:enter-revised-value-date"]} />
 
                         <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
-                          {props.errors.base?.revisedValueDate}
+                          {props.errors.target?.revisedValueDate}
                         </Form.Control.Feedback>
                       </Form.Group>
                     </Row>

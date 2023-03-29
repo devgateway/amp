@@ -51,8 +51,6 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
   const sectorsReducer = useSelector((state: any) => state.fetchSectorsReducer);
   const programsReducer = useSelector((state: any) => state.fetchProgramsReducer);
 
-  const [enableBaseValuesInput, setEnableBaseValuesInput] = useState(false);
-  const [enableTargetValuesInput, setEnableTargetValuesInput] = useState(false);
   const [programFieldVisible, setProgramFieldVisible] = useState(false);
   const [selectedProgramSchemeId, setSelectedProgramSchemeId] = useState<string | null>(null);
 
@@ -62,8 +60,6 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
 
   const [baseValueOriginalDateDisabled, setBaseValueOriginalDateDisabled] = useState(false);
   const [targetValueOriginalDateFieldDisabled, setTargetValueOriginalDateDisabled] = useState(false);
-  const [baseValuesDisabled, setBaseValueDisabled] = useState(false);
-  const [targetValuesDisabled, setTargetValueDisabled] = useState(false);
 
   const formikRef = useRef<FormikProps<IndicatorFormValues>>(null);
 
@@ -94,10 +90,6 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
   const getProgramsForProgramScheme = () => {
     if (selectedProgramSchemeId) {
       setProgramFieldVisible(false);
-      setEnableBaseValuesInput(false);
-      setEnableTargetValuesInput(false);
-      setBaseValueDisabled(false);
-      setTargetValueDisabled(false);
       formikRef?.current?.setFieldValue("base.originalValueDate", "");
       formikRef?.current?.setFieldValue("target.originalValueDate", "");
 
@@ -117,17 +109,13 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
         if (programScheme.startDate) {
           formikRef.current?.setFieldValue("base.originalValueDate", "");
           formikRef?.current?.setFieldValue("base.originalValueDate", backendDateToJavascriptDate(programScheme.startDate || ''));
-          setEnableBaseValuesInput(true);
           setBaseValueOriginalDateDisabled(true);
-          setBaseValueDisabled(true);
         }
 
         if (programScheme.endDate) {
           formikRef.current?.setFieldValue("target.originalValueDate", "");
           formikRef?.current?.setFieldValue("target.originalValueDate", backendDateToJavascriptDate(programScheme.endDate || ''));
-          setEnableTargetValuesInput(true);
           setTargetValueOriginalDateDisabled(true);
-          setTargetValueDisabled(true);
         }
       }
 
@@ -239,18 +227,18 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
             programId: programId ? parseInt(programId) : null,
             ascending,
             creationDate: creationDate ? formatJavascriptDate(creationDate) : null,
-            base: enableBaseValuesInput ? {
+            base: {
               originalValue: parseInt(String(base.originalValue)),
               originalValueDate: base.originalValueDate ? formatJavascriptDate(base.originalValueDate) : null,
               revisedValue: parseInt(String(base.revisedValue)),
               revisedValueDate: base.revisedValueDate ? formatJavascriptDate(base.revisedValueDate) : null,
-            } : null,
-            target: enableTargetValuesInput ? {
+            },
+            target: {
               originalValue: target.originalValue,
               originalValueDate: target.originalValueDate ? formatJavascriptDate(target.originalValueDate) : null,
               revisedValue: target.revisedValue,
               revisedValueDate: target.revisedValueDate ? formatJavascriptDate(target.revisedValueDate) : null,
-            } : null
+            }
           };
 
           dispatch(createIndicator(indicatorData));
@@ -417,26 +405,10 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
 
                 )}
 
-
-
-                <Row className={styles.view_row}>
-                  <Form.Check className={styles.view_one_item}>
-                    <Form.Check
-                      type="switch"
-                      name="baseToggle"
-                      checked={enableBaseValuesInput}
-                      onChange={() => setEnableBaseValuesInput(!enableBaseValuesInput)}
-                      disabled={baseValuesDisabled}
-                      label={<h4 className={styles.checkbox_label}>{translations["amp.indicatormanager:enable-base"]}</h4>}
-                    />
-                  </Form.Check>
-                </Row>
-
-                {enableBaseValuesInput && (
                   <Form.Group as={Col}>
                     <Row className={styles.view_row}>
                       <Form.Label className={styles.view_one_item}>
-                        <h5>{translations["amp.indicatormanager:base-values"]}</h5>
+                        <h4>{translations["amp.indicatormanager:base-values"]}</h4>
                       </Form.Label>
                     </Row>
 
@@ -509,23 +481,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                       </Form.Group>
                     </Row>
                   </Form.Group>
-                )
-                }
 
-                <Row className={styles.view_row}>
-                  <Form.Check className={styles.view_one_item}>
-                    <Form.Check
-                      type="switch"
-                      name="baseToggle"
-                      checked={enableTargetValuesInput}
-                      onChange={() => setEnableTargetValuesInput(!enableTargetValuesInput)}
-                      disabled={targetValuesDisabled}
-                      label={<h4 className={styles.checkbox_label}>{translations["amp.indicatormanager:enable-target"]}</h4>}
-                    />
-                  </Form.Check>
-                </Row>
-
-                {enableTargetValuesInput && (
                   <Form.Group as={Col}>
                     <Form.Label><h4>{translations["amp.indicatormanager:target-values"]}</h4></Form.Label>
                     <Row className={styles.view_row}>
@@ -596,7 +552,6 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                       </Form.Group>
                     </Row>
                   </Form.Group>
-                )}
               </div>
 
             </Modal.Body>

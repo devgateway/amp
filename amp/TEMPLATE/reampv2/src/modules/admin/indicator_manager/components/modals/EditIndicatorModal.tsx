@@ -54,8 +54,6 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
   const programsReducer = useSelector((state: any) => state.fetchProgramsReducer);
   const updateIndicatorReducer = useSelector((state: any) => state.updateIndicatorReducer);
 
-  const [enableBaseValuesInput, setEnableBaseValuesInput] = useState(false);
-  const [enableTargetValuesInput, setEnableTargetValuesInput] = useState(false);
   const [programFieldVisible, setProgramFieldVisible] = useState(false);
   const [selectedProgramSchemeId, setSelectedProgramSchemeId] = useState<string | null>(null);
 
@@ -66,8 +64,6 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
 
   const [baseValueOriginalDateDisabled, setBaseValueOriginalDateDisabled] = useState(false);
   const [targetValueOriginalDateFieldDisabled, setTargetValueOriginalDateDisabled] = useState(false);
-  const [baseValuesDisabled, setBaseValueDisabled] = useState(false);
-  const [targetValuesDisabled, setTargetValueDisabled] = useState(false);
   const [defaultProgramScheme, setDefaultProgramScheme] = useState<{ value: string, label: string } | null>(null);
 
 
@@ -100,10 +96,6 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
   const getProgramsForProgramScheme = () => {
     if (selectedProgramSchemeId) {
       setProgramFieldVisible(false);
-      setEnableBaseValuesInput(false);
-      setEnableTargetValuesInput(false);
-      setBaseValueDisabled(false);
-      setTargetValueDisabled(false);
       formikRef?.current?.setFieldValue("base.originalValueDate", "");
       formikRef?.current?.setFieldValue("target.originalValueDate", "");
 
@@ -121,16 +113,12 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
 
         if (programScheme.startDate) {
           formikRef?.current?.setFieldValue("base.originalValueDate", backendDateToJavascriptDate(programScheme.startDate || ''));
-          setEnableBaseValuesInput(true);
           setBaseValueOriginalDateDisabled(true);
-          setBaseValueDisabled(true);
         }
 
         if (programScheme.endDate) {
           formikRef?.current?.setFieldValue("target.originalValueDate", backendDateToJavascriptDate(programScheme.endDate || ''));
-          setEnableTargetValuesInput(true);
           setTargetValueOriginalDateDisabled(true);
-          setTargetValueDisabled(true);
         }
       }
 
@@ -186,19 +174,13 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
         })
         if (foundProgramScheme.startDate) {
           formikRef?.current?.setFieldValue("base.originalValueDate", backendDateToJavascriptDate(foundProgramScheme.startDate || ''));
-          setEnableBaseValuesInput(true);
           setBaseValueOriginalDateDisabled(true);
-          setBaseValueDisabled(true);
         }
 
         if (foundProgramScheme.endDate) {
           formikRef?.current?.setFieldValue("target.originalValueDate", backendDateToJavascriptDate(foundProgramScheme.endDate || ''));
-          setEnableTargetValuesInput(true);
           setTargetValueOriginalDateDisabled(true);
-          setTargetValueDisabled(true);
         }
-
-       
       }
     }
   }
@@ -217,23 +199,6 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
     }
   }
 
-  const checkIfBaseValuesAreFilled = () => {
-    if (indicator) {
-      const { base } = indicator;
-      if (base?.originalValue || base?.originalValueDate || base?.revisedValue || base?.revisedValueDate) {
-        setEnableBaseValuesInput(true);
-      }
-    }
-  }
-
-  const checkIfTargetValuesAreFilled = () => {
-    if (indicator) {
-      const { target } = indicator;
-      if (target?.originalValue || target?.originalValueDate || target?.revisedValue || target?.revisedValueDate) {
-        setEnableTargetValuesInput(true);
-      }
-    }
-  }
 
   useLayoutEffect(() => {
     getSectors();
@@ -242,11 +207,6 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    checkIfBaseValuesAreFilled();
-    checkIfTargetValuesAreFilled();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [indicator]);
 
   useEffect(() => {
     getDefaultProgram();
@@ -282,6 +242,8 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
       text: updateIndicatorReducer.loading ? translations["amp.indicatormanager:save-failed"] : updateIndicatorReducer.error,
     });
   }, [updateIndicatorReducer]);
+
+  console.log(indicator)
 
   const initialValues: IndicatorFormValues = {
     name: indicator?.name || '',
@@ -337,18 +299,18 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
             programId: programId ? parseInt(programId) : null,
             ascending,
             creationDate: creationDate && formatJavascriptDate(creationDate),
-            base: enableBaseValuesInput ? {
+            base:{
               originalValue: base.originalValue,
               originalValueDate: base.originalValueDate ? formatJavascriptDate(base.originalValueDate) : null,
               revisedValue: base.revisedValue,
               revisedValueDate: base.revisedValueDate ? formatJavascriptDate(base.revisedValueDate) : null,
-            } : null,
-            target: enableTargetValuesInput ? {
+            },
+            target: {
               originalValue: target.originalValue,
               originalValueDate: target.originalValueDate ? formatJavascriptDate(target.originalValueDate) : null,
               revisedValue: target.revisedValue,
               revisedValueDate: target.revisedValueDate ? formatJavascriptDate(target.revisedValueDate) : null,
-            } : null
+            } 
           };
 
           dispatch(updateIndicator(updatedIndicatorData as IndicatorObjectType));
@@ -512,26 +474,10 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
 
                   )}
 
-
-
-                  <Row className={styles.view_row}>
-                    <Form.Check className={styles.view_one_item}>
-                      <Form.Check
-                        type="switch"
-                        name="baseToggle"
-                        checked={enableBaseValuesInput}
-                        onChange={() => setEnableBaseValuesInput(!enableBaseValuesInput)}
-                        disabled={baseValuesDisabled}
-                        label={<h4 className={styles.checkbox_label}>{translations["amp.indicatormanager:enable-base"]}</h4>}
-                      />
-                    </Form.Check>
-                  </Row>
-
-                  {enableBaseValuesInput && (
                     <Form.Group as={Col}>
                       <Row className={styles.view_row}>
                         <Form.Label className={styles.view_one_item}>
-                          <h5>{translations["amp.indicatormanager:base-values"]}</h5>
+                          <h4>{translations["amp.indicatormanager:base-values"]}</h4>
                         </Form.Label>
                       </Row>
 
@@ -604,23 +550,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                         </Form.Group>
                       </Row>
                     </Form.Group>
-                  )
-                  }
 
-                  <Row className={styles.view_row}>
-                    <Form.Check className={styles.view_one_item}>
-                      <Form.Check
-                        type="switch"
-                        name="baseToggle"
-                        checked={enableTargetValuesInput}
-                        onChange={() => setEnableTargetValuesInput(!enableTargetValuesInput)}
-                        disabled={targetValuesDisabled}
-                        label={<h4 className={styles.checkbox_label}>{translations["amp.indicatormanager:enable-target"]}</h4>}
-                      />
-                    </Form.Check>
-                  </Row>
-
-                  {enableTargetValuesInput && (
                     <Form.Group as={Col}>
                       <Form.Label><h4>{translations["amp.indicatormanager:target-values"]}</h4></Form.Label>
                       <Row className={styles.view_row}>
@@ -687,7 +617,6 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                         </Form.Group>
                       </Row>
                     </Form.Group>
-                  )}
                 </div>
 
               </Modal.Body>

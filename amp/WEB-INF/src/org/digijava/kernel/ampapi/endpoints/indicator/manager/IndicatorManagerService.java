@@ -145,11 +145,14 @@ public class IndicatorManagerService {
 
         String endInString = "01/01/" + endYear;
         dateTime = DateTime.parse(endInString, formatter);
+        Date revisedValueDate = value.getRevisedValueDate();
 
-        if (dateTime.isAfter(value.getRevisedValueDate().getTime())) {
-            throw new ApiRuntimeException(BAD_REQUEST,
-                    ApiError.toError(error + "Revised value date " + simpleDateFormat.format(value.getRevisedValueDate())
-                            + " should be greater than " + endInString));
+        if (revisedValueDate != null) {
+            if (dateTime.isAfter(value.getRevisedValueDate().getTime())) {
+                throw new ApiRuntimeException(BAD_REQUEST,
+                        ApiError.toError(error + "Revised value date " + simpleDateFormat.format(value.getRevisedValueDate())
+                                + " should be greater than " + endInString));
+            }
         }
     }
 

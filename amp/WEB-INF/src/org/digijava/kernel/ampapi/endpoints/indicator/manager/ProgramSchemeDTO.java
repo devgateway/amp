@@ -45,11 +45,16 @@ public class ProgramSchemeDTO {
     public ProgramSchemeDTO(final AmpActivityProgramSettings setting) {
         this.ampProgramSettingsId = setting.getAmpProgramSettingsId();
         this.name = setting.getName();
-        this.programName = setting.getDefaultHierarchy().getName();
         this.allowMultiple = setting.isAllowMultiple();
         this.startDate = setting.getStartDate();
         this.endDate = setting.getEndDate();
-        this.children.addAll(setting.getDefaultHierarchy().getSiblings().stream().map(ProgramDTO::new).collect(Collectors.toList()));
+
+        if (setting.getDefaultHierarchy() != null) {
+            this.programName = setting.getDefaultHierarchy().getName();
+            this.children.addAll(setting.getDefaultHierarchy().getSiblings().stream().map(ProgramDTO::new).collect(Collectors.toList()));
+        } else {
+            this.programName = null;
+        }
     }
 
     public Long getAmpProgramSettingsId() {

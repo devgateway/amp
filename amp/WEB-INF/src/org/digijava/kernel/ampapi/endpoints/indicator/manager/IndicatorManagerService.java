@@ -95,7 +95,7 @@ public class IndicatorManagerService {
         }
 
         if (indicatorRequest.getBaseValue() != null) {
-            if (indicatorRequest.getBaseValue().getOriginalValueDate() != null || indicatorRequest.getBaseValue().getOriginalValue() != null) {
+            if (indicatorRequest.getBaseValue().getOriginalValueDate() != null || indicatorRequest.getBaseValue().getRevisedValueDate() != null) {
                 String baseStartYear = String.valueOf(DateConversion.getYear(DateConversion.convertDateToString(indicatorRequest.getBaseValue().getOriginalValueDate())));
                 String baseEndYear = String.valueOf(DateConversion.getYear(DateConversion.convertDateToString(indicatorRequest.getBaseValue().getRevisedValueDate())));
 
@@ -107,7 +107,7 @@ public class IndicatorManagerService {
         }
 
         if (indicatorRequest.getTargetValue() != null) {
-            if (indicatorRequest.getTargetValue().getOriginalValueDate() != null || indicatorRequest.getTargetValue().getOriginalValue() != null) {
+            if (indicatorRequest.getTargetValue().getOriginalValueDate() != null || indicatorRequest.getTargetValue().getRevisedValueDate() != null) {
                 String targetStartYear = String.valueOf(DateConversion.getYear(DateConversion.convertDateToString(indicatorRequest.getTargetValue().getOriginalValueDate())));
                 String targetEndYear = String.valueOf(DateConversion.getYear(DateConversion.convertDateToString(indicatorRequest.getTargetValue().getRevisedValueDate())));
 

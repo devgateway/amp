@@ -8,7 +8,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.*;
-import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.hibernate.Session;
@@ -75,7 +75,6 @@ public class IndicatorManagerService {
         Session session = PersistenceManager.getSession();
         AmpIndicator indicator = new AmpIndicator();
         String name = indicatorRequest.getName();
-        validateYear(indicatorRequest);
 //        validateNameProgramSectorUnique(name, indicatorRequest, session);
 
         validateIndicatorName(indicatorRequest.getName(), session);
@@ -96,11 +95,24 @@ public class IndicatorManagerService {
         }
 
         if (indicatorRequest.getBaseValue() != null) {
+            if (indicatorRequest.getBaseValue().getOriginalValueDate() != null || indicatorRequest.getBaseValue().getOriginalValue() != null) {
+                String baseStartYear = String.valueOf(DateConversion.getYear(DateConversion.convertDateToString(indicatorRequest.getBaseValue().getOriginalValueDate())));
+                String baseEndYear = String.valueOf(DateConversion.getYear(DateConversion.convertDateToString(indicatorRequest.getBaseValue().getRevisedValueDate())));
+
+                validateYearRange( baseStartYear, baseEndYear ,indicatorRequest.getBaseValue(), "Base");
+            }
+
             AmpIndicatorGlobalValue validatedBaseValues = validateBaseValues(indicatorRequest);
             indicatorValues.add(validatedBaseValues);
         }
 
         if (indicatorRequest.getTargetValue() != null) {
+            if (indicatorRequest.getTargetValue().getOriginalValueDate() != null || indicatorRequest.getTargetValue().getOriginalValue() != null) {
+                String targetStartYear = String.valueOf(DateConversion.getYear(DateConversion.convertDateToString(indicatorRequest.getTargetValue().getOriginalValueDate())));
+                String targetEndYear = String.valueOf(DateConversion.getYear(DateConversion.convertDateToString(indicatorRequest.getTargetValue().getRevisedValueDate())));
+
+                validateYearRange(targetStartYear, targetEndYear,indicatorRequest.getTargetValue(), "Target");
+            }
             AmpIndicatorGlobalValue validatedTargetValues = validateTargetValues(indicatorRequest);
             indicatorValues.add(validatedTargetValues);
         }
@@ -118,22 +130,17 @@ public class IndicatorManagerService {
         return new MEIndicatorDTO(indicator);
     }
 
-    private void validateYear(MEIndicatorDTO value) {
-        String startYear = FeaturesUtil.getGlobalSettingValue(START_YEAR_DEFAULT_VALUE);
-        String endYear = FeaturesUtil.getGlobalSettingValue(END_YEAR_DEFAULT_VALUE);
-        validateYearRange(startYear, endYear, value.getBaseValue(), "Base");
-        validateYearRange(startYear, endYear, value.getTargetValue(), "Target");
-
-    }
-
     private void validateYearRange(String startYear, String endYear, AmpIndicatorGlobalValue value, String error){
         String startInString = "01/01/" + startYear;
         DateTime dateTime = DateTime.parse(startInString, formatter);
+        Date originalValueDate = value.getOriginalValueDate();
 
-        if (dateTime.isAfter(value.getOriginalValueDate().getTime())) {
-            throw new ApiRuntimeException(BAD_REQUEST,
+        if (originalValueDate != null) {
+            if (dateTime.isAfter(value.getOriginalValueDate().getTime())) {
+                throw new ApiRuntimeException(BAD_REQUEST,
                     ApiError.toError(error + " Original value date " + simpleDateFormat.format(value.getOriginalValueDate())
                             + " should be greater than " + startInString));
+            }
         }
 
         String endInString = "01/01/" + endYear;
@@ -288,8 +295,16 @@ public class IndicatorManagerService {
                 AmpActivityProgramSettings indicatorSettings = ProgramUtil.getProgramSettingFromTheme(indicator.getProgram());
 
                 if (indicatorSettings != null) {
-                    Date baseOriginalValueDate = indicatorRequest.getBaseValue().getOriginalValueDate();
-                    Date targetOriginalValueDate = indicatorRequest.getTargetValue().getOriginalValueDate();
+                    Date baseOriginalValueDate = null;
+                    Date targetOriginalValueDate = null;
+
+                    if (indicatorRequest.getBaseValue() != null) {
+                        baseOriginalValueDate = indicatorRequest.getBaseValue().getOriginalValueDate();
+                    }
+
+                    if (indicatorRequest.getTargetValue() != null) {
+                        targetOriginalValueDate = indicatorRequest.getTargetValue().getOriginalValueDate();
+                    }
 
                     if (indicatorSettings.getStartDate() != null) {
                         if (baseOriginalValueDate != null) {

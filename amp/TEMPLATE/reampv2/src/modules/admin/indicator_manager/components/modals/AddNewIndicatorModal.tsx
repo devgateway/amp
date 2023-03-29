@@ -15,7 +15,6 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content';
 import { extractChildrenFromProgramScheme } from '../../utils/helpers';
 import useDidMountEffect from '../../utils/hooks';
-import { reduce } from 'lodash';
 
 const MySwal = withReactContent(Swal);
 

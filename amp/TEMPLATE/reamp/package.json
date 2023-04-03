@@ -23,7 +23,7 @@
   "author": "Alexei Savca",
   "license": "inherit",
   "devDependencies": {
-    "amp-ui": "github:devgateway/amp-ui#6cc7203f2266ffcdff8753604b7312f43fcbfa3f",
+    "amp-ui": "github:devgateway/amp-ui#cb40615f5b073fd8aa44836409efa4b246d02b0c",
     "babel-core": "^6.26.3",
     "babel-jest": "^6.0.1",
     "babel-loader": "^6.3.2",

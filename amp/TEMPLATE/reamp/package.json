@@ -23,7 +23,7 @@
   "author": "Alexei Savca",
   "license": "inherit",
   "devDependencies": {
-    "amp-ui": "github:devgateway/amp-ui#AMP-30478/fix-download-resource",
+    "amp-ui": "github:devgateway/amp-ui#task/AMP-30515/HideTotals",
     "babel-core": "^6.26.3",
     "babel-jest": "^6.0.1",
     "babel-loader": "^6.3.2",

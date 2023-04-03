@@ -37,6 +37,7 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.request.service.IgnoredAgentsService;
 import org.digijava.kernel.security.DgSecurityManager;
 import org.digijava.kernel.security.DigiSecurityManager;
@@ -142,10 +143,9 @@ public class DgUtil {
                                               boolean isTranslator) {
         Locale language = null;
         if (isTranslator) {
-            Iterator iter = SiteCache.getInstance().getTranslationLanguages(
-                site).iterator();
-            while (iter.hasNext()) {
-                Locale item = (Locale) iter.next();
+            for (Object o : SiteCache.getInstance().getTranslationLanguages(
+                    site)) {
+                Locale item = (Locale) o;
                 if (item.getCode().equals(langCode)) {
                     language = item;
                     break;
@@ -153,10 +153,7 @@ public class DgUtil {
             }
         }
         else {
-            Iterator iter = SiteCache.getInstance().getUserLanguages(site).
-                iterator();
-            while (iter.hasNext()) {
-                Locale item = (Locale) iter.next();
+            for (Locale item : SiteCache.getInstance().getUserLanguages(site)) {
                 if (item.getCode().equals(langCode)) {
                     language = item;
                     break;

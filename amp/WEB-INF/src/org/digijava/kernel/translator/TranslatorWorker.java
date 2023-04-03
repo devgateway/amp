@@ -202,7 +202,9 @@ public class TranslatorWorker {
     {
         try
         {
-            return translateText(text, null, TLSUtils.getEffectiveLangCode(), TLSUtils.getSiteId());
+            String effectiveLangCode = TLSUtils.getEffectiveLangCode();
+            Long siteId = TLSUtils.getSiteId();
+            return translateText(text, null, effectiveLangCode, siteId);
         }
         catch(Exception e)
         {

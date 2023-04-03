@@ -51,7 +51,7 @@ import org.digijava.module.aim.util.TeamMemberUtil;
  */
 
 public class SwitchLanguage
-    extends Action {
+        extends Action {
     private static final Logger logger = Logger.getLogger(SwitchLanguage.class);
     private static final String ACT_FORM_PATH = "wicket/onepager/activity/";
     private static final String ACT_SSC_FORM_PATH = "wicket/onepager/ssc/";
@@ -60,7 +60,7 @@ public class SwitchLanguage
                                  ActionForm form,
                                  javax.servlet.http.HttpServletRequest request,
                                  javax.servlet.http.HttpServletResponse
-                                 response) throws java.lang.Exception {
+                                         response) throws java.lang.Exception {
 
         //TranslationForm formBean = (TranslationForm) form;
         String actId=null;
@@ -68,51 +68,48 @@ public class SwitchLanguage
         String localeKey = null;
         String referrerUrl = request.getParameter("rfr");
         localeKey = request.getParameter("code");
-        Enumeration en = request.getParameterNames();
+        Enumeration<String> en = request.getParameterNames();
         while (en.hasMoreElements()) {
             String paramName = (String) en.nextElement();
             if (!paramName.equals("rfr")&&!paramName.equals("code")){
                 referrerUrl = referrerUrl + "&" + paramName + "=" + request.getParameter(paramName);
             }
         }
-        
         if( referrerUrl != null )
             referrerUrl = URLDecoder.decode(referrerUrl, "UTF-8");
         else
             referrerUrl = "";
 
         //are we going back to the activity form?
-       
-        if (referrerUrl.contains(ACT_FORM_PATH)){ 
+
+        if (referrerUrl.contains(ACT_FORM_PATH)){
             //get activity id
             actId = referrerUrl.substring(referrerUrl.indexOf(ACT_FORM_PATH) + ACT_FORM_PATH.length());
             //free lock
             ActivityGatekeeper.pageModeChange(actId);
             isActivityForm=true;
-            
+
         }
         else if (referrerUrl.contains(ACT_SSC_FORM_PATH)) {
             actId = referrerUrl.substring(referrerUrl.indexOf(ACT_SSC_FORM_PATH) + ACT_SSC_FORM_PATH.length());
             ActivityGatekeeper.pageModeChange(actId);
             isActivityForm=true;
         }
-        
-        
         //for public user
         if (RequestUtils.getUser(request) == null) {
             if (referrerUrl.indexOf("language=")!= -1) {
-            referrerUrl = referrerUrl.substring(0,referrerUrl.length()-2);
-            referrerUrl += localeKey;
+                referrerUrl = referrerUrl.substring(0,referrerUrl.length()-2);
+                referrerUrl += localeKey;
             }
             else {
                 boolean hasParameters = referrerUrl.indexOf('?') != -1;
                 referrerUrl += hasParameters?'&':'?';
                 referrerUrl += "language="+localeKey;
             }
-                
+
             return new ActionForward(referrerUrl, true);
         }
-        
+
         //String localeKey=(String)request.getParameter("lang");
         Locale locale = new Locale();
         locale.setCode(localeKey);
@@ -121,19 +118,19 @@ public class SwitchLanguage
         if(referrerUrl.equals("/translation/default/showAdvancedTranslation.do")) {
             referrerUrl = "/translation/showAdvancedTranslation.do";
         }
-        
+
         //refresh team member data
         TeamMember tm = (TeamMember)request.getSession().getAttribute("currentMember");
         if( tm!=null && tm.getTeamId()!=null ) {
-         TeamMember teamMember= new TeamMember(TeamMemberUtil.getAmpTeamMember(tm.getMemberId()));
-        
-         //populate also the appSettings
-         AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(teamMember.getTeamId());
-         ApplicationSettings appSettings = new ApplicationSettings(ampAppSettings);
-         teamMember.setAppSettings(appSettings);
-         request.getSession().setAttribute("currentMember",teamMember );
-         request.getSession().setAttribute(Constants.USER_WORKSPACES, TeamMemberUtil.getTeamMembers(tm.getEmail()));
-       }
+            TeamMember teamMember= new TeamMember(TeamMemberUtil.getAmpTeamMember(tm.getMemberId()));
+
+            //populate also the appSettings
+            AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(teamMember.getTeamId());
+            ApplicationSettings appSettings = new ApplicationSettings(ampAppSettings);
+            teamMember.setAppSettings(appSettings);
+            request.getSession().setAttribute("currentMember",teamMember );
+            request.getSession().setAttribute(Constants.USER_WORKSPACES, TeamMemberUtil.getTeamMembers(tm.getEmail()));
+        }
         if(isActivityForm){
             if( actId.equals("new")){ //if its a new activity we go to desktop
                 response.sendRedirect("/showDesktop.do");

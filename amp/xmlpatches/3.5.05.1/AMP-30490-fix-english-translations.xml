@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>AMP-30490</jira>
+    <keyword>Fix English translations</keyword>
+    <author>timothygachengo</author>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                UPDATE dg_site_domain set language_code=null where site_domain_id=9 and site_id=3;
+                UPDATE dg_site_domain set is_default=true where site_domain_id=7 and site_id=1;
+                UPDATE dg_site_domain set is_default=false where site_domain_id=3 and site_id=3;
+                UPDATE dg_site_domain set is_default=false where site_domain_id=1 and site_id=1;
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

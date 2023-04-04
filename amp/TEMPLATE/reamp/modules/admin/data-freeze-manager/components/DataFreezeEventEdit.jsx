@@ -56,8 +56,6 @@ class DataFreezeEventEdit extends Component {
                 }
             });
         }
-        // Object.entries(toggleState).forEach(value =>
-        // )
 
         this.setState({
             showDatePicker: toggleState

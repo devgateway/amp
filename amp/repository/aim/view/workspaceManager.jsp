@@ -166,6 +166,17 @@
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/paginator/paginator-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datatable/datatable-min.js"></script>
 <digi:instance property="aimWorkspaceForm" />
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const selects = document.getElementsByTagName('select');
+        for (let i = 0; i < selects.length; i++) {
+            const selectedOption = selects[i].querySelector('option[selected]');
+            if (selectedOption !== null) {
+                selects[i].value = selectedOption.value;
+            }
+        }
+    });
+</script>
 <script type="text/javascript">
 
 
@@ -1029,12 +1040,15 @@
     function showDetails() {
         id = document.getElementsByName('teamId')[0].value;
         desc = document.getElementsByName('teamName')[0].value;
+        console.log("id: "+id);
         if(id===""||desc===""){
             alert("<digi:trn jsFriendly='true'>Select a Team First</digi:trn>");
             return;
         }
-	
-        value = document.getElementById('showdataWs').options[document.getElementById('showdataWs').selectedIndex].value;
+
+
+        value = document.getElementById('showdataWs').options[document.getElementById('showdataWs').selectedIndex].value;;
+        console.log(value)
         if(value==0){
             showTeamMembers(document.getElementsByName('teamId')[0].value, document.getElementById('teamTitle').value);			
         }
@@ -1299,10 +1313,13 @@
                         <td>&nbsp;</td>
                         <td align="right">
                     <digi:trn>Select</digi:trn>:&nbsp;
-                    <select id="showdataWs" class="inp-text"> 
-                        <option value="0"><digi:trn>Members</digi:trn></option> 
-                        <option value="1"><digi:trn>Activities</digi:trn></option> 
-                    </select> &nbsp;&nbsp;&nbsp;
+                            <html:select name="aimWorkspaceForm" property="workspaceDataSelections" styleId="showdataWs" styleClass="inp-text">
+                                <html:optionsCollection name="aimWorkspaceForm" property="workspaceDataSelections" label="label" value="value" />
+                            </html:select>
+<%--                    <select id="showdataWs" class="inp-text" value="0">--%>
+<%--                        <option selected aria-selected="true" value="0"><digi:trn>Members</digi:trn></option>--%>
+<%--                        <option value="1"><digi:trn>Activities</digi:trn></option>--%>
+<%--                    </select>--%>
 					<input type="button" id="ws_go" class="buttonx" value='<digi:trn jsFriendly="true">Show</digi:trn>' onclick="showDetails()">
                     </td>
                     </tr>
@@ -1324,7 +1341,7 @@
                     <table width="100%" class="visibleTable" id="loadedDetails" cellspacing="0" cellpadding="0" valign="top" align="left" border="0" >
                         <tr>
                             <td align=center>
-                                <input type="hidden" name="teamId" value=""/>
+                                <input type="hidden" name="teamId" />
                                 <input type="hidden" name="teamName" value=""/>
                                 <table  cellspacing="1" cellpadding="2" align="left" width="100%" style="font-size:12px;">
                                     <tr><td>

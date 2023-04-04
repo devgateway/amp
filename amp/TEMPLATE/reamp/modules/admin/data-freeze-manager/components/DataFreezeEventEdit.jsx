@@ -49,6 +49,16 @@ class DataFreezeEventEdit extends Component {
         let field = event.target.getAttribute('data-field');
         let toggleState = this.state.showDatePicker;
         toggleState[field] = !toggleState[field];
+        if (toggleState[field] == true) {
+            Object.keys(toggleState).forEach(key => {
+                if (key !== field) {
+                    toggleState[key] = false;
+                }
+            });
+        }
+        // Object.entries(toggleState).forEach(value =>
+        // )
+
         this.setState({
             showDatePicker: toggleState
         });

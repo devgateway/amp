@@ -58,7 +58,10 @@ class DataFreezeEventEdit extends Component {
         let currentRecord = this.props.dataFreezeEvent;
         currentRecord.freezingDate = moment(date, this.getDisplayDateFormat()).format(Constants.EP_DATE_FORMAT);
         this.setState({
-            currentRecord: currentRecord
+            currentRecord: currentRecord,
+            showDatePicker: {
+                freezingDate: false
+            }
         });
     }
 
@@ -66,7 +69,10 @@ class DataFreezeEventEdit extends Component {
         let currentRecord = this.props.dataFreezeEvent;
         currentRecord.openPeriodStart = moment(date, this.getDisplayDateFormat()).format(Constants.EP_DATE_FORMAT);
         this.setState({
-            currentRecord: currentRecord
+            currentRecord: currentRecord,
+            showDatePicker: {
+                openPeriodStart: false
+            }
         });
     }
 
@@ -74,7 +80,10 @@ class DataFreezeEventEdit extends Component {
         let currentRecord = this.props.dataFreezeEvent;
         currentRecord.openPeriodEnd = moment(date, this.getDisplayDateFormat()).format(Constants.EP_DATE_FORMAT);
         this.setState({
-            currentRecord: currentRecord
+            currentRecord: currentRecord,
+            showDatePicker: {
+                openPeriodEnd: false
+            }
         });
     }
 

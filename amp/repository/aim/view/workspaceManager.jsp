@@ -166,17 +166,6 @@
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/paginator/paginator-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datatable/datatable-min.js"></script>
 <digi:instance property="aimWorkspaceForm" />
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const selects = document.getElementsByTagName('select');
-        for (let i = 0; i < selects.length; i++) {
-            const selectedOption = selects[i].querySelector('option[selected]');
-            if (selectedOption !== null) {
-                selects[i].value = selectedOption.value;
-            }
-        }
-    });
-</script>
 <script type="text/javascript">
 
 

@@ -38,6 +38,7 @@ class App extends Component {
         resourceReducer: PropTypes.object,
         activityWsInfo: PropTypes.array.isRequired,
         globalSettings: PropTypes.object.isRequired,
+        reportingTotals: PropTypes.object
     }
 
     constructor(props, context) {
@@ -49,7 +50,7 @@ class App extends Component {
     }
 
     getChildContext() {
-        const {activityFieldsManager, activityFundingTotals} = this.props.activityReducer;
+        const {activityFieldsManager, activityFundingTotals, reportingTotals} = this.props.activityReducer;
         const {contactsByIds, contactFieldsManager} = this.props.contactReducer;
         return {
             activityFieldsManager,
@@ -65,6 +66,7 @@ class App extends Component {
             resourceReducer: this.props.resourceReducer,
             activityWsInfo: this.props.activityReducer.activityWsInfo,
             globalSettings: this.props.startUpReducer.globalSettings,
+            reportingTotals
         };
     }
 

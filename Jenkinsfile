@@ -49,8 +49,19 @@ def updateGitHubCommitStatus(context, message, state) {
 
 def codeVersion
 def countries
+def environment
 
 stage('Build') {
+
+    timeout(15) {
+        milestone()
+        environment = input(
+                message: "Server to deploy",
+                parameters: [choice(choices: ["${env.AMP_STAGING_HOSTNAME}", "${env.AMP_DE_HOSTNAME}"], name: 'environment')])
+        milestone()
+    }
+
+    println "Using environment: ${environment}"
 
     node {
         checkout scm
@@ -60,7 +71,7 @@ stage('Build') {
         println "AMP Version: ${codeVersion}"
 
         countries = sh(returnStdout: true,
-                script: "ssh ${env.AMP_STAGING_HOSTNAME} 'cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort'")
+                script: "ssh ${environment} 'cd /opt/amp_dbs && amp-db ls ${codeVersion} | sort'")
                 .trim()
         if (countries == "") {
             println "There are no database backups compatible with ${codeVersion}"
@@ -76,7 +87,15 @@ stage('Build') {
         milestone()
     }
 
-    ampUrl = "http://amp-${country}-${tag}.stg.ampsite.net/"
+    println "Let set amp url based on ${environment}"
+
+    if ("${environment}".toLowerCase().contains("ampdevde")) {
+        ampUrl = "http://amp-${country}-${tag}.de.ampsite.net/"
+    } else {
+        ampUrl = "http://amp-${country}-${tag}.stg.ampsite.net/"
+    }
+
+    println "amp url is ${ampUrl}"
 
     node {
         checkout scm
@@ -123,10 +142,10 @@ stage('Deploy') {
     node {
         try {
             // Find latest database version compatible with ${codeVersion}
-            dbVersion = sh(returnStdout: true, script: "ssh ${env.AMP_STAGING_HOSTNAME} 'cd /opt/amp_dbs && amp-db find ${codeVersion} ${country}'").trim()
+            dbVersion = sh(returnStdout: true, script: "ssh ${environment} 'cd /opt/amp_dbs && amp-db find ${codeVersion} ${country}'").trim()
 
             // Deploy AMP
-            sh "ssh ${env.AMP_STAGING_HOSTNAME} 'amp-up2 ${tag} ${country} ${dbVersion} ${pgVersion}'"
+            sh "ssh ${environment} 'amp-up2 ${tag} ${country} ${dbVersion} ${pgVersion}'"
 
             slackSend(channel: 'amp-ci', color: 'good', message: "Deploy AMP - Success\nDeployed ${changePretty} will be ready for testing at ${ampUrl} in about 3 minutes")
 
@@ -151,7 +170,7 @@ stage('Deploy again') {
         }
         node {
             try {
-                sh "ssh ${env.AMP_STAGING_HOSTNAME} 'amp-up2 ${tag} ${country} ${dbVersion} ${pgVersion}'"
+                sh "ssh ${environment} 'amp-up2 ${tag} ${country} ${dbVersion} ${pgVersion}'"
 
                 slackSend(channel: 'amp-ci', color: 'good', message: "Deploy AMP - Success\nDeployed ${changePretty} will be ready for testing at ${ampUrl} in about 3 minutes")
 

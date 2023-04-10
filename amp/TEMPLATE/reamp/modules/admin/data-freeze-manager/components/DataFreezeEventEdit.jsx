@@ -194,7 +194,7 @@ class DataFreezeEventEdit extends Component {
               {this.state.showDatePicker.freezingDate &&
                <div className="datepicker-outer-wrapper">
                   <div className="datepicker-inner-wrapper">
-                    <DatePicker data-field="freezingDate"  onChange={this.onFreezingDateChange} date={this.toDisplayDateFormat(this.props.dataFreezeEvent.freezingDate)} dateFormat={this.getDisplayDateFormat()}/>
+                    <DatePicker data-field="freezingDate"  onChange={this.onFreezingDateChange} date={this.toDisplayDateFormat(this.props.dataFreezeEvent.freezingDate)} dateFormat={this.getDisplayDateFormat()} onClickOutside={this.toggleDatePicker}/>
                   </div>
               </div>
               }
@@ -217,7 +217,7 @@ class DataFreezeEventEdit extends Component {
                 {this.state.showDatePicker.openPeriodStart &&
                     <div className="datepicker-outer-wrapper">
                     <div className="datepicker-inner-wrapper">
-                      <DatePicker onChange={this.onOpenPeriodStartChange} date={this.toDisplayDateFormat(this.props.dataFreezeEvent.openPeriodStart)} dateFormat={this.getDisplayDateFormat()}/>
+                      <DatePicker onChange={this.onOpenPeriodStartChange} date={this.toDisplayDateFormat(this.props.dataFreezeEvent.openPeriodStart)} dateFormat={this.getDisplayDateFormat()} onClickOutside={this.toggleDatePicker}/>
                      </div>
                     </div>
                 }
@@ -234,7 +234,7 @@ class DataFreezeEventEdit extends Component {
               {this.state.showDatePicker.openPeriodEnd &&
                   <div className="datepicker-outer-wrapper">
                   <div className="datepicker-inner-wrapper">
-                    <DatePicker data-field="openPeriodEnd" onChange={this.onOpenPeriodEndChange} date={this.toDisplayDateFormat(this.props.dataFreezeEvent.openPeriodEnd)} dateFormat={this.getDisplayDateFormat()}/>
+                    <DatePicker data-field="openPeriodEnd" onChange={this.onOpenPeriodEndChange} date={this.toDisplayDateFormat(this.props.dataFreezeEvent.openPeriodEnd)} dateFormat={this.getDisplayDateFormat()} onClickOutside={this.toggleDatePicker}/>
                    </div>
                   </div>
               }

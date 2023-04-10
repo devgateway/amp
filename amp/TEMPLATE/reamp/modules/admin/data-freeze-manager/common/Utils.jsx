@@ -44,20 +44,10 @@ class Utils {
         if ( message ) {
             errors.push( message );
         }
-        errors.push( ...this.validateFreezingDate( dataFreezeEvent ) );
+    
         errors.push( ...this.validateStartAndEndDate( dataFreezeEvent ) );
         errors.push( ...this.validateGracePeriod( dataFreezeEvent ) );
         return errors
-    }
-
-    static validateFreezingDate( dataFreezeEvent ) {
-        let errors = [];
-        let freezingDate = moment( dataFreezeEvent.freezingDate, Constants.EP_DATE_FORMAT );
-        let today = moment();
-        if ( today.startOf( 'day' ).isAfter( freezingDate ) ) {
-            errors.push( { messageKey: 'amp.data-freezing:invalid-freeze-date', id: dataFreezeEvent.id, cid: dataFreezeEvent.cid, affectedFields: ['freezingDate'] });
-        }
-        return errors;
     }
 
     static validateStartAndEndDate( dataFreezeEvent ) {

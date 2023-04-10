@@ -67,6 +67,16 @@ public final class DataFreezeService {
         
         Date openPeriodStart = dataFreezeEvent.getOpenPeriodStart();
         Date openPeriodEnd = dataFreezeEvent.getOpenPeriodEnd();
+
+        if (openPeriodStart != null && openPeriodEnd != null && openPeriodStart.after(openPeriodEnd)) {
+           if (openPeriodStart.after(openPeriodEnd)) {
+                Map<String, String> error = new HashMap<>();
+                error.put(DataFreezeErrors.OPEN_PERIOD_START_AFTER_END.getErrorId(),
+                        DataFreezeErrors.OPEN_PERIOD_START_AFTER_END.description);
+                errors.add(error);
+           }
+        }
+
         if (DataFreezeUtil.openPeriodOverlaps(dataFreezeEvent.getId(), openPeriodStart, openPeriodEnd)) {
             Map<String, String> error = new HashMap<>();
             error.put(DataFreezeErrors.OPEN_PERIOD_OVERLAPS.getErrorId(),

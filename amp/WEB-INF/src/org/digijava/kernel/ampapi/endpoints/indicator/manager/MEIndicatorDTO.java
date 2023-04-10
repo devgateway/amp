@@ -4,14 +4,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.digijava.kernel.ampapi.endpoints.indicator.manager.validators.*;
+import org.digijava.kernel.ampapi.endpoints.indicator.manager.validators.ValidProgramId;
+import org.digijava.kernel.ampapi.endpoints.indicator.manager.validators.ValidSectorIds;
 import org.digijava.kernel.ampapi.endpoints.serializers.LocalizedDateDeserializer;
 import org.digijava.kernel.ampapi.endpoints.serializers.LocalizedDateSerializer;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorGlobalValue;
 import org.digijava.module.aim.dbentity.AmpSector;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Date;

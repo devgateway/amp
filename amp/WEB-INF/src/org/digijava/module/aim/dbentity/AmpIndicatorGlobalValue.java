@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.digijava.kernel.ampapi.endpoints.serializers.LocalizedDateDeserializer;
 import org.digijava.kernel.ampapi.endpoints.serializers.LocalizedDateSerializer;
 
@@ -117,5 +116,15 @@ public class AmpIndicatorGlobalValue implements Serializable {
     @JsonIgnore
     public boolean isTargetValue() {
         return type == AmpIndicatorValue.TARGET;
+    }
+
+    @JsonIgnore
+    public Double getValue() {
+        return getRevisedValue() != null ? getRevisedValue() : getOriginalValue();
+    }
+
+    @JsonIgnore
+    public Date getValueDate() {
+        return getRevisedValueDate() != null ? getRevisedValueDate() : getOriginalValueDate();
     }
 }

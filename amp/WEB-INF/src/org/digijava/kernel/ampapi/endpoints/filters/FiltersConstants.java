@@ -206,6 +206,8 @@ public class FiltersConstants {
     public static final String TYPE_OF_ASSISTANCE = "type-of-assistance";
     public static final String WORKSPACES = "workspaces";
 
+    public static final String INDICATOR_NAME = "indicator-name";
+
     /** filters IDs to Name mapping */
     public static final Map<String, String> ID_NAME_MAP = Collections.unmodifiableMap(new HashMap<String, String>() {{
         put(COMPUTED_YEAR, "Computed Year");

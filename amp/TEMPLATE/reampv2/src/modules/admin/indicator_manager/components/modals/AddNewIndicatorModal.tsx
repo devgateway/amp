@@ -341,6 +341,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                             const selectedValues = values.map((value: any) => parseInt(value.value))
                             props.setFieldValue('sectors', selectedValues);
                           }}
+                          isClearable
                           getOptionValue={(option) => option.value}
                           onBlur={props.handleBlur}
                           className={`basic-multi-select ${(props.errors.sectors && props.touched.sectors) && styles.text_is_invalid}`}
@@ -365,6 +366,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                               handleProgramSchemeChange(selectedValue.value, props);
                             }
                           }}
+                          isClearable
                           getOptionValue={(option) => option.value}
                           onBlur={props.handleBlur}
                           className={`basic-multi-select ${styles.input_field}`}
@@ -388,6 +390,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                               // set the formik value with the selected values and remove the label
                               props.setFieldValue('programId', selectedValue?.value);
                             }}
+                            isClearable
                             getOptionValue={(option) => option.value}
                             onBlur={props.handleBlur}
                             className={`basic-multi-select ${styles.input_field} ${(props.errors.programId && props.touched.programId) && styles.text_is_invalid}`}

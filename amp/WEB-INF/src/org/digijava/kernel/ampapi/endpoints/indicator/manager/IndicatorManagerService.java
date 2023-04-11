@@ -256,6 +256,8 @@ public class IndicatorManagerService {
             indicator.setType(indRequest.isAscending() ? "A" : "D");
             indicator.setCreationDate(indRequest.getCreationDate());
 
+            Set<AmpIndicatorGlobalValue> updatedIndicatorValues = new HashSet<>();
+
             if (indRequest.getProgramId() != null) {
                 indicator.setProgram(ProgramUtil.getTheme(indRequest.getProgramId()));
                 validateProgramSettingsAndGlobalValues(indRequest, indicator);
@@ -263,12 +265,42 @@ public class IndicatorManagerService {
 
             if (indRequest.getBaseValue() != null) {
                 AmpIndicatorGlobalValue validatedBaseValues = validateBaseValues(indRequest);
-                indicator.getIndicatorValues().add(validatedBaseValues);
+
+                if (validatedBaseValues.getOriginalValue() != null) {
+                    indicator.getBaseValue().setOriginalValue(validatedBaseValues.getOriginalValue());
+                }
+
+                if (validatedBaseValues.getRevisedValue() != null) {
+                    indicator.getBaseValue().setRevisedValue(validatedBaseValues.getRevisedValue());
+                }
+
+                if (validatedBaseValues.getRevisedValueDate() != null) {
+                    indicator.getBaseValue().setRevisedValueDate(validatedBaseValues.getRevisedValueDate());
+                }
+
+                if (validatedBaseValues.getOriginalValueDate() != null) {
+                    indicator.getBaseValue().setOriginalValueDate(validatedBaseValues.getOriginalValueDate());
+                }
             }
 
             if (indRequest.getTargetValue() != null) {
                 AmpIndicatorGlobalValue validatedTargetValues = validateTargetValues(indRequest);
-                indicator.getIndicatorValues().add(validatedTargetValues);
+
+                if (validatedTargetValues.getOriginalValue() != null) {
+                    indicator.getTargetValue().setOriginalValue(validatedTargetValues.getOriginalValue());
+                }
+
+                if (validatedTargetValues.getRevisedValue() != null) {
+                    indicator.getTargetValue().setRevisedValue(validatedTargetValues.getRevisedValue());
+                }
+
+                if (validatedTargetValues.getRevisedValueDate() != null) {
+                    indicator.getTargetValue().setRevisedValueDate(validatedTargetValues.getRevisedValueDate());
+                }
+
+                if (validatedTargetValues.getOriginalValueDate() != null) {
+                    indicator.getTargetValue().setOriginalValueDate(validatedTargetValues.getOriginalValueDate());
+                }
             }
 
             Set<AmpSector> sectors = indRequest.getSectorIds().stream()

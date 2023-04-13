@@ -7,10 +7,10 @@ import Select from 'react-select';
 import { Formik, FormikProps } from 'formik';
 import styles from './css/IndicatorModal.module.css';
 import { indicatorValidationSchema } from '../../utils/validator';
-import { BaseAndTargetValueType, DefaultComponentProps, IndicatorObjectType, ProgramSchemeType, SectorObjectType } from '../../types';
+import { BaseAndTargetValueType, DefaultComponentProps, IndicatorObjectType, ProgramSchemeType, SectorObjectType, SettingsType } from '../../types';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateIndicator } from '../../reducers/updateIndicatorReducer';
-import { backendDateToJavascriptDate, formatJavascriptDate } from '../../utils/dateFn';
+import { DateUtil } from '../../utils/dateFn';
 import { formatObjArrayToNumberArray } from '../../utils/formatter';
 import { getIndicators } from '../../reducers/fetchIndicatorsReducer';
 import Swal from 'sweetalert2'
@@ -47,6 +47,13 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
   const { show, setShow, indicator, translations } = props;
   const dispatch = useDispatch();
   const nodeRef = useRef(null);
+
+  const globalSettings: SettingsType = useSelector((state: any) => state.fetchSettingsReducer.settings);
+
+
+  const formatDate = (date: string) => {
+    return DateUtil.formatJavascriptDate(date, globalSettings['default-date-format']?.toUpperCase());
+  }
 
   const handleClose = () => setShow(false);
 
@@ -112,12 +119,12 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
         setProgramFieldVisible(true);
 
         if (programScheme.startDate) {
-          formikRef?.current?.setFieldValue("base.originalValueDate", backendDateToJavascriptDate(programScheme.startDate || ''));
+          formikRef?.current?.setFieldValue("base.originalValueDate", DateUtil.backendDateToJavascriptDate(programScheme.startDate || ''));
           setBaseValueOriginalDateDisabled(true);
         }
 
         if (programScheme.endDate) {
-          formikRef?.current?.setFieldValue("target.originalValueDate", backendDateToJavascriptDate(programScheme.endDate || ''));
+          formikRef?.current?.setFieldValue("target.originalValueDate", DateUtil.backendDateToJavascriptDate(programScheme.endDate || ''));
           setTargetValueOriginalDateDisabled(true);
         }
       }
@@ -173,12 +180,12 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
           label: foundProgramScheme.name
         })
         if (foundProgramScheme.startDate) {
-          formikRef?.current?.setFieldValue("base.originalValueDate", backendDateToJavascriptDate(foundProgramScheme.startDate || ''));
+          formikRef?.current?.setFieldValue("base.originalValueDate", DateUtil.backendDateToJavascriptDate(foundProgramScheme.startDate || ''));
           setBaseValueOriginalDateDisabled(true);
         }
 
         if (foundProgramScheme.endDate) {
-          formikRef?.current?.setFieldValue("target.originalValueDate", backendDateToJavascriptDate(foundProgramScheme.endDate || ''));
+          formikRef?.current?.setFieldValue("target.originalValueDate", DateUtil.backendDateToJavascriptDate(foundProgramScheme.endDate || ''));
           setTargetValueOriginalDateDisabled(true);
         }
       }
@@ -243,8 +250,6 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
     });
   }, [updateIndicatorReducer]);
 
-  console.log(indicator)
-
   const initialValues: IndicatorFormValues = {
     name: indicator?.name || '',
     description: indicator?.description || '',
@@ -252,18 +257,18 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
     sectors: getDefaultSectors() || [],
     programId: '',
     ascending: indicator?.ascending || false,
-    creationDate: indicator?.creationDate && backendDateToJavascriptDate(indicator?.creationDate),
+    creationDate: indicator?.creationDate && DateUtil.backendDateToJavascriptDate(indicator?.creationDate),
     base: {
       originalValue: indicator?.base?.originalValue,
-      originalValueDate: indicator?.base?.originalValueDate && backendDateToJavascriptDate(indicator?.base?.originalValueDate),
+      originalValueDate: indicator?.base?.originalValueDate && DateUtil.backendDateToJavascriptDate(indicator?.base?.originalValueDate),
       revisedValue: indicator?.base?.revisedValue,
-      revisedValueDate: indicator?.base?.revisedValueDate && backendDateToJavascriptDate(indicator?.base?.revisedValueDate),
+      revisedValueDate: indicator?.base?.revisedValueDate && DateUtil.backendDateToJavascriptDate(indicator?.base?.revisedValueDate),
     },
     target: {
       originalValue: indicator?.target?.originalValue,
-      originalValueDate: indicator?.target?.originalValueDate && backendDateToJavascriptDate(indicator?.target?.originalValueDate),
+      originalValueDate: indicator?.target?.originalValueDate && DateUtil.backendDateToJavascriptDate(indicator?.target?.originalValueDate),
       revisedValue: indicator?.target?.revisedValue,
-      revisedValueDate: indicator?.target?.revisedValueDate && backendDateToJavascriptDate(indicator?.target?.revisedValueDate),
+      revisedValueDate: indicator?.target?.revisedValueDate && DateUtil.backendDateToJavascriptDate(indicator?.target?.revisedValueDate),
     }
   };
 
@@ -298,20 +303,22 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
             sectors: formatObjArrayToNumberArray(sectors),
             programId: programId ? parseInt(programId) : null,
             ascending,
-            creationDate: creationDate && formatJavascriptDate(creationDate),
+            creationDate: creationDate && formatDate(creationDate),
             base:{
               originalValue: base.originalValue,
-              originalValueDate: base.originalValueDate ? formatJavascriptDate(base.originalValueDate) : null,
+              originalValueDate: base.originalValueDate ? formatDate(base.originalValueDate) : null,
               revisedValue: base.revisedValue,
-              revisedValueDate: base.revisedValueDate ? formatJavascriptDate(base.revisedValueDate) : null,
+              revisedValueDate: base.revisedValueDate ? formatDate(base.revisedValueDate) : null,
             },
             target: {
               originalValue: target.originalValue,
-              originalValueDate: target.originalValueDate ? formatJavascriptDate(target.originalValueDate) : null,
+              originalValueDate: target.originalValueDate ? formatDate(target.originalValueDate) : null,
               revisedValue: target.revisedValue,
-              revisedValueDate: target.revisedValueDate ? formatJavascriptDate(target.revisedValueDate) : null,
-            } 
+              revisedValueDate: target.revisedValueDate ? formatDate(target.revisedValueDate) : null,
+            }
           };
+
+          console.log('updated', updatedIndicatorData)
 
           dispatch(updateIndicator(updatedIndicatorData as IndicatorObjectType));
         }}
@@ -411,7 +418,6 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                               const selectedValues = values.map((value: any) => parseInt(value.value))
                               props.setFieldValue('sectors', selectedValues);
                             }}
-                            isClearable
                             getOptionValue={(option) => option.value}
                             onBlur={props.handleBlur}
                             className={`basic-multi-select ${(props.errors.sectors && props.touched.sectors) && styles.text_is_invalid}`}
@@ -422,7 +428,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                       }
                     </Form.Group>
                   </Row>
-                  
+
                   <Row className={styles.view_row}>
                     <Form.Group className={styles.view_one_item} controlId="programScheme">
                       <Form.Label>{translations["amp.indicatormanager:program-scheme"]}</Form.Label>
@@ -469,7 +475,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                               classNamePrefix="select"
                               defaultValue={defaultProgram}
                             />
-                          ) : 
+                          ) :
                           <Select
                           name="programs"
                           isDisabled={true}
@@ -513,6 +519,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                             onBlur={props.handleBlur}
                             name="base.originalValueDate"
                             type="date"
+                            pattern={globalSettings['default-date-format'] ? globalSettings['default-date-format'].toLowerCase() : 'dd/mm/yyyy'}
                             disabled={baseValueOriginalDateDisabled}
                             className={`${styles.input_field} ${(props.errors.base?.originalValueDate && props.touched.base?.originalValueDate) && styles.text_is_invalid}`}
                             placeholder="Enter Original Value Date" />

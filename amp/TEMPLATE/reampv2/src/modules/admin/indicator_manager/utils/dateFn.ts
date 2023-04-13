@@ -1,18 +1,30 @@
 /* eslint-disable import/prefer-default-export */
 import dayjs from 'dayjs';
 
-export const stringToDate = (date: string) => {
-    // convert string to javascript date
-    const [day, month, year] = date.split('/');
-    return new Date(`${year}-${month}-${day}`);
-};
+export class DateUtil {
+    static stringToDate = (date: string, format: string = 'dd/MM/yyyy') => {
+        // convert string to javascript date using the specified format
+        return dayjs(date, format).toDate();
+    };
 
-export const getCurrentDate = () => dayjs().format('YYYY-MM-DD');
+    static dateToString = (date: Date | string, format: string = 'dd/MM/yyyy') => {
+        // convert javascript date to string using the specified format
+        if (typeof date === 'string') {
+            return date;
+        }
+        format = format.toUpperCase();
+        console.log('format', format);
+        return dayjs(date).format(format);
 
-export const backendDateToJavascriptDate = (date: string) => {
-    // convert date from DD/MM/YYYY to YYYY-MM-DD
-    const [day, month, year] = date.split('/');
-    return `${year}-${month}-${day}`;
+    };
+    
+    static getCurrentDate = () => dayjs().format('YYYY-MM-DD');
+    
+    static backendDateToJavascriptDate = (date: string) => {
+        // convert date from DD/MM/YYYY to YYYY-MM-DD
+        const [day, month, year] = date.split('/');
+        return `${year}-${month}-${day}`;
+    }
+    
+    static formatJavascriptDate = (date: string, format?: string) => dayjs(date).format(format ?? 'DD/MM/YYYY');
 }
-
-export const formatJavascriptDate = (date: string) => dayjs(date).format('DD/MM/YYYY');

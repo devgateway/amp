@@ -7,6 +7,7 @@ import { Loading } from '../../../../utils/components/Loading';
 import { DefaultTranslationPackTypes } from '../types';
 import { getSectors } from '../reducers/fetchSectorsReducer';
 import { getPrograms } from '../reducers/fetchProgramsReducer';
+import { getSettings } from '../reducers/fetchSettingsReducer';
 
 export const AdminIndicatorManagerContext = React.createContext({});
 
@@ -16,14 +17,14 @@ interface StartupProps {
   children: React.ReactNode;
   translations: DefaultTranslationPackTypes;
   translationPending: boolean;
-  api: any;
+  api?: any;
 }
 
 /**
  * Component used to load everything we need before launching the APP
  * TODO check if we should abstract it to a Load Translations component to avoid copy ^
  */
-const Startup: React.FC<StartupProps> = (props) => {
+const Startup: React.FC<StartupProps> = (props: any) => {
   const {
     defaultTrnPack, _fetchTranslations, children, translations, translationPending, api
   } = props;
@@ -31,15 +32,17 @@ const Startup: React.FC<StartupProps> = (props) => {
   const dispatch = useDispatch();
   const sectorsReducer = useSelector((state: any) => state.fetchSectorsReducer);
   const programsReducer = useSelector((state: any) => state.fetchProgramsReducer);
+  const settingsReducer = useSelector((state: any) => state.fetchSettingsReducer);
 
   useEffect(() => {
+    dispatch(getSettings());
     _fetchTranslations(defaultTrnPack);
     dispatch(getSectors());
     dispatch(getPrograms());
     // eslint-disable-next-line
   }, []);
 
-  if (translationPending || sectorsReducer.loading || programsReducer.loading) {
+  if (translationPending || sectorsReducer.loading || programsReducer.loading || settingsReducer.loading) {
     return (<Loading />);
   } else {
     document.title = translations['amp.indicatormanager:page-title'];

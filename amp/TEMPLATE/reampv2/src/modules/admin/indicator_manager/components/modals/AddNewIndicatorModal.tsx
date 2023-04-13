@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import {
   Form, Modal, Button, Col, Row
 } from 'react-bootstrap';
@@ -35,7 +35,7 @@ interface IndicatorFormValues {
   code: string;
   sectors: number[];
   ascending: boolean;
-  creationDate?: string;
+  creationDate?: any;
   programId: string;
   base: BaseAndTargetValueType;
   target: BaseAndTargetValueType;
@@ -47,7 +47,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
   const dispatch = useDispatch();
   const settingsReducer: SettingsType = useSelector((state: any) => state.fetchSettingsReducer.settings);
 
-  const formatDate = (date: string) => {
+  const formatDate = (date: string | Date) => {
     return DateUtil.dateToString(date, settingsReducer['default-date-format']);
   }
 
@@ -123,6 +123,11 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
     }
   }
 
+  const getCreationDate = () => {
+    const date = DateUtil.getCurrentDate();
+    formikRef?.current?.setFieldValue("creationDate", date);
+  }
+
 
   const handleProgramSchemeChange = (selectedOption: any, props: FormikProps<IndicatorFormValues>) => {
     setSelectedProgramSchemeId(selectedOption);
@@ -130,6 +135,10 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
     setProgramFieldVisible(false);
   };
 
+  useLayoutEffect(() =>{
+    getCreationDate();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     getProgramsForProgramScheme();
@@ -181,8 +190,8 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
     code: '',
     sectors: [],
     programId: '',
+    creationDate: DateUtil.getCurrentDate().toString(),
     ascending: false,
-    creationDate: DateUtil.getCurrentDate(),
     base: {
       originalValue: 0,
       originalValueDate: '',
@@ -227,16 +236,16 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
             sectors,
             programId: programId ? parseInt(programId) : null,
             ascending,
-            creationDate: creationDate ? formatDate(creationDate) : null,
+            creationDate: creationDate ? formatDate(new Date(creationDate)) : null,
             base: {
               originalValue: parseInt(String(base.originalValue)),
-              originalValueDate: base.originalValueDate ? formatDate(base.originalValueDate) : null,
+              originalValueDate: base.originalValueDate ? DateUtil.formatJavascriptDate(base.originalValueDate) : null,
               revisedValue: parseInt(String(base.revisedValue)),
-              revisedValueDate: base.revisedValueDate ? formatDate(base.revisedValueDate) : null,
+              revisedValueDate: base.revisedValueDate ? DateUtil.formatJavascriptDate(base.revisedValueDate) : null,
             },
             target: {
               originalValue: target.originalValue,
-              originalValueDate: target.originalValueDate ? formatDate(target.originalValueDate) : null,
+              originalValueDate: target.originalValueDate ? DateUtil.formatJavascriptDate(target.originalValueDate) : null,
               revisedValue: target.revisedValue,
               revisedValueDate: target.revisedValueDate ? formatDate(target.revisedValueDate) : null,
             }
@@ -326,9 +335,9 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                     <Form.Label>{translations["amp.indicatormanager:table-header-creation-date"]}</Form.Label>
                     <DateInput
                       name="creationDate"
-                      value={props.values.creationDate}
+                      defaultValue={props.values.creationDate}
                       disabled
-                      defaultValue={new Date()}
+                      value={props.values.creationDate}
                       clearIcon={null}
                       calendarIcon={null}
                       className={styles.input_field} />

@@ -16,8 +16,10 @@ export class DateUtil {
         return dayjs(date).format(format);
 
     };
+
+    static getCurrentDate = () => dayjs().toDate();
     
-    static getCurrentDate = () => dayjs().format('YYYY-MM-DD');
+    static getCurrentStrDate = () => dayjs().format('YYYY-MM-DD');
     
     static backendDateToJavascriptDate = (date: string) => {
         // convert date from DD/MM/YYYY to YYYY-MM-DD

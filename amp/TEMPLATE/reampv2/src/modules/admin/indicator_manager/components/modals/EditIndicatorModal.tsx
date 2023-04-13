@@ -591,8 +591,12 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                       <Form.Group className={styles.view_item}>
                         <Form.Label>{translations["amp.indicatormanager:target-value-date"]}</Form.Label>
                         <DateInput
-                          defaultValue={props.values.target.originalValueDate}
-                          onChange={props.handleChange}
+                          value={props.values.target.originalValueDate}
+                          onChange={(value) => {
+                            if (value) {
+                              props.setFieldValue("target.originalValueDate", value);
+                            }
+                          }}
                           onBlur={props.handleBlur}
                           name="target.originalValueDate"
                           className={`${styles.input_field} ${(props.errors.target?.originalValueDate && props.touched.target?.originalValueDate) && styles.text_is_invalid}`} />
@@ -620,7 +624,11 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                         <Form.Label>{translations["amp.indicatormanager:revised-value-date"]}</Form.Label>
                         <DateInput
                           value={props.values.target.revisedValueDate}
-                          onChange={props.handleChange}
+                          onChange={(value) => {
+                            if (value) {
+                              props.setFieldValue("target.revisedValueDate", value);
+                            }
+                          }}
                           onBlur={props.handleBlur}
                           name="target.revisedValueDate"
                           className={`${styles.input_field} ${(props.errors.target?.revisedValueDate && props.touched.target?.revisedValueDate) && styles.text_is_invalid}`} />

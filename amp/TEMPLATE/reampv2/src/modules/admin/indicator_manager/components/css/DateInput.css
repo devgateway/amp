@@ -18,6 +18,11 @@
     transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 }
 
+.react-date-picker--disabled {
+    background-color: #eee !important;
+    opacity: 1;
+}
+
 .react-date-picker__inputGroup__input {
     outline: none !important;
 }

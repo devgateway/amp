@@ -13,7 +13,6 @@ export class DateUtil {
             return date;
         }
         format = format.toUpperCase();
-        console.log('format', format);
         return dayjs(date).format(format);
 
     };

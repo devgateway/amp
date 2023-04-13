@@ -10,7 +10,6 @@ import defaultTrnPack from './config/initialTranslations.json';
 import './index.css';
 import '../../../open-sans.css';
 import InidcatorTable from './components/table/IndicatorTable';
-import DateInput from './components/DateInput';
 
 const checkreduxDevTools = () => {
   if (typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) {

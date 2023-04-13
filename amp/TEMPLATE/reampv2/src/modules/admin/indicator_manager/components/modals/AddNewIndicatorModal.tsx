@@ -64,9 +64,6 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
   const [programSchemes, setProgramSchemes] = useState<{ value: string, name: string }[]>([]);
   const [programs, setPrograms] = useState<{ value: string, label: string }[]>([]);
 
-  const [baseValueOriginalDateDisabled, setBaseValueOriginalDateDisabled] = useState(false);
-  const [targetValueOriginalDateFieldDisabled, setTargetValueOriginalDateDisabled] = useState(false);
-
   const formikRef = useRef<FormikProps<IndicatorFormValues>>(null);
 
   const getSectors = () => {
@@ -115,13 +112,11 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
         if (programScheme.startDate) {
           formikRef.current?.setFieldValue("base.originalValueDate", "");
           formikRef?.current?.setFieldValue("base.originalValueDate", DateUtil.backendDateToJavascriptDate(programScheme.startDate || ''));
-          setBaseValueOriginalDateDisabled(true);
         }
 
         if (programScheme.endDate) {
           formikRef.current?.setFieldValue("target.originalValueDate", "");
           formikRef?.current?.setFieldValue("target.originalValueDate", DateUtil.backendDateToJavascriptDate(programScheme.endDate || ''));
-          setTargetValueOriginalDateDisabled(true);
         }
       }
 
@@ -247,9 +242,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
             }
           };
 
-          console.log(indicatorData);
-
-          // dispatch(createIndicator(indicatorData));
+          dispatch(createIndicator(indicatorData));
         }}
       >
         {(props) => (
@@ -331,7 +324,14 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
 
                   <Form.Group className={styles.view_item} controlId="formCreationDate">
                     <Form.Label>{translations["amp.indicatormanager:table-header-creation-date"]}</Form.Label>
-                    <Form.Control type="date" readOnly defaultValue={DateUtil.getCurrentDate()} />
+                    <DateInput
+                      name="creationDate"
+                      value={props.values.creationDate}
+                      disabled
+                      defaultValue={new Date()}
+                      clearIcon={null}
+                      calendarIcon={null}
+                      className={styles.input_field} />
                   </Form.Group>
                 </Row>
 
@@ -442,14 +442,6 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
 
                     <Form.Group className={styles.view_item}>
                       <Form.Label>{translations["amp.indicatormanager:original-value-date"]}</Form.Label>
-                      {/* <Form.Control
-                            defaultValue={props.values.base.originalValueDate}
-                            onChange={props.handleChange}
-                            onBlur={props.handleBlur}
-                            name="base.originalValueDate"
-                            type="date"
-                            className={`${styles.input_field} ${(props.errors.base?.originalValueDate && props.touched.base?.originalValueDate) && styles.text_is_invalid}`}
-                            placeholder={translations['amp.indicatormanager:enter-original-value-date']} /> */}
                       <DateInput
                         name="base.originalValueDate"
                         value={props.values.base.originalValueDate}
@@ -485,14 +477,17 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
 
                     <Form.Group className={styles.view_item}>
                       <Form.Label>{translations['amp.indicatormanager:revised-value-date']}</Form.Label>
-                      <Form.Control
-                        defaultValue={props.values.base.revisedValueDate}
-                        onChange={props.handleChange}
+                      <DateInput
+                        value={props.values.base.revisedValueDate}
+                        onChange={(value) => {
+                          if (value) {
+                            props.setFieldValue('base.revisedValueDate', value);
+                          }
+                        }}
                         onBlur={props.handleBlur}
                         name="base.revisedValueDate"
-                        type="date"
                         className={`${styles.input_field} ${(props.errors.base?.revisedValueDate && props.touched.base?.revisedValueDate) && styles.text_is_invalid}`}
-                        placeholder={translations['amp.indicatormanager:enter-revised-value-date']} />
+                         />
 
                       <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
                         {props.errors.base?.revisedValueDate}
@@ -521,15 +516,16 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                     </Form.Group>
                     <Form.Group className={styles.view_item}>
                       <Form.Label>{translations["amp.indicatormanager:target-value-date"]}</Form.Label>
-                      <Form.Control
-                        defaultValue={props.values.target.originalValueDate}
-                        onChange={props.handleChange}
-                        onBlur={props.handleBlur}
+                      <DateInput
                         name="target.originalValueDate"
-                        type="date"
-                        disabled={targetValueOriginalDateFieldDisabled}
-                        className={`${styles.input_field} ${(props.errors.target?.originalValueDate && props.touched.target?.originalValueDate) && styles.text_is_invalid}`}
-                        placeholder={translations["amp.indicatormanager:enter-target-value-date"]} />
+                        value={props.values.target.originalValueDate}
+                        onChange={(value) => {
+                          if (value) {
+                            props.setFieldValue('target.originalValueDate', value);
+                          }
+                        }}
+                        onBlur={props.handleBlur}
+                        className={`${styles.input_field} ${(props.errors.target?.originalValueDate && props.touched.target?.originalValueDate) && styles.text_is_invalid}`} />
 
                       <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
                         {props.errors.target?.originalValueDate}
@@ -556,14 +552,17 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
 
                     <Form.Group className={styles.view_item}>
                       <Form.Label>{translations["amp.indicatormanager:revised-value-date"]}</Form.Label>
-                      <Form.Control
-                        defaultValue={props.values.target.revisedValueDate}
-                        onChange={props.handleChange}
+                      <DateInput
+                        value={props.values.target.revisedValueDate}
+                        onChange={(value) => {
+                          if (value) {
+                            props.setFieldValue('target.revisedValueDate', value);
+                          }
+                        }}
                         onBlur={props.handleBlur}
                         name="target.revisedValueDate"
-                        type="date"
                         className={`${styles.input_field} ${(props.errors.target?.revisedValueDate && props.touched.target?.revisedValueDate) && styles.text_is_invalid}`}
-                        placeholder={translations["amp.indicatormanager:enter-revised-value-date"]} />
+                         />
 
                       <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
                         {props.errors.target?.revisedValueDate}

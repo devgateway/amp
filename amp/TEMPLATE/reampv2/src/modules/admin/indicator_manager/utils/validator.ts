@@ -2,6 +2,13 @@
 import { DateUtil } from './dateFn';
 import * as Yup from 'yup';
 
+Yup.setLocale({
+  mixed: {
+    required: 'This field is required',
+    notType: 'This field is invalid',
+    default: 'This field is invalid',
+  },
+})
 
 // convert string to javascript date
 Yup.addMethod(Yup.string, 'toJavascriptDate', function toJavascriptDate() {
@@ -39,6 +46,7 @@ export const indicatorValidationSchema = Yup.object().shape({
     }).nullable(),
     revisedValueDate: Yup.date().optional().nullable().when('originalValueDate', (originalValueDate: any) => {
       if (originalValueDate) {
+        console.log('originalValueDate', originalValueDate);
         return Yup.date().min(originalValueDate, 'Revised target date must be greater than original target date');
       }
       return Yup.date().optional().nullable();

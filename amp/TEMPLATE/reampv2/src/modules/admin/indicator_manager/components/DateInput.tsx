@@ -15,18 +15,20 @@ export interface DateInputProps {
     onChange?: ((value: Value) => void) | undefined;
     disabled?: boolean;
     onBlur?: (e: any) => void;
-    clearIcon?:  React.ReactElement | null | undefined;
+    clearIcon?: React.ReactElement | string | null | undefined;
     calendarIcon?: React.ReactElement | null | undefined;
+    inputRef?: React.RefObject<HTMLInputElement>;
 }
 
 const DateInput: React.FC<DateInputProps> = (props) => {
-    const { className, value, onChange, name, defaultValue, disabled, clearIcon, calendarIcon } = props;
+    const { className, value, onChange, name, defaultValue, disabled, clearIcon, calendarIcon, inputRef } = props;
     const globalSettings: SettingsType = useSelector((state: any) => state.fetchSettingsReducer.settings);
     const [dateFormat, setDateFormat] = useState('dd/MM/yyyy');
+    const [inputValue, setInputValue] = useState<string | Date | undefined>(value);
 
     const getDefaultDateFormat = () => {
         if (globalSettings) {
-            const format = globalSettings['default-date-format']; 
+            const format = globalSettings['default-date-format'];
 
             if (format) {
                 setDateFormat(format);
@@ -34,10 +36,29 @@ const DateInput: React.FC<DateInputProps> = (props) => {
         }
     }
 
+    const clearInputValue = () => {
+        setInputValue(undefined);
+    }
+
+    useEffect(() => {
+        setInputValue(value);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [value]);
+
     useEffect(() => {
         getDefaultDateFormat();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [globalSettings]);
+    
+    const ClearInputButton = () => {
+        return (
+            <svg xmlns="http://www.w3.org/2000/svg" onClick={clearInputValue} width="19" height="19" viewBox="0 0 19 19" stroke="black" stroke-width="2" 
+            className="react-date-picker__clear-button__icon react-date-picker__button__icon">
+                <line x1="4" x2="15" y1="4" y2="15"></line>
+                <line x1="15" x2="4" y1="4" y2="15"></line>
+            </svg>
+        )
+    }
 
     return (
         <DatePicker
@@ -48,12 +69,19 @@ const DateInput: React.FC<DateInputProps> = (props) => {
             className={className}
             onChange={onChange}
             name={name}
-            value={value ? value: null}
+            value={inputValue}
             minDate={new Date('1970-01-01')}
             defaultValue={defaultValue}
             disabled={disabled}
-            clearIcon={clearIcon}
+            clearIcon={clearIcon === null ? null : <ClearInputButton />}
             calendarIcon={calendarIcon}
+            monthAriaLabel="Month"
+            dayAriaLabel="Day"
+            yearAriaLabel="Year"
+            closeCalendar
+            clearAriaLabel="Clear Date"
+            calendarAriaLabel="Toggle Calendar"
+            inputRef={inputRef}
         />
 
     )

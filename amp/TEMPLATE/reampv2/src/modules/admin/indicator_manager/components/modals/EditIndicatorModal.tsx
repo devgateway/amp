@@ -72,6 +72,9 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
 
   const [defaultProgramScheme, setDefaultProgramScheme] = useState<{ value: string, label: string } | null>(null);
 
+  const [baseOriginalValueDateDisabled, setBaseOriginalValueDateDisabled] = useState(false);
+  const [targetOriginalValueDateDisabled, setTargetOriginalValueDateDisabled] = useState(false);
+
 
   const formikRef = useRef<FormikProps<IndicatorFormValues>>(null);
 
@@ -102,9 +105,9 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
   const getProgramsForProgramScheme = () => {
     if (selectedProgramSchemeId) {
       setProgramFieldVisible(false);
-      formikRef?.current?.setFieldValue("base.originalValueDate", "");
-      formikRef?.current?.setFieldValue("target.originalValueDate", "");
-
+      setBaseOriginalValueDateDisabled(false);
+      setTargetOriginalValueDateDisabled(false);
+      
       const programScheme: ProgramSchemeType = programsReducer.programSchemes.find((program: ProgramSchemeType) => program.ampProgramSettingsId.toString() === selectedProgramSchemeId.toString());
       if (programScheme) {
         const children = extractChildrenFromProgramScheme(programScheme);
@@ -119,10 +122,12 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
 
         if (programScheme.startDate) {
           formikRef?.current?.setFieldValue("base.originalValueDate", DateUtil.backendDateToJavascriptDate(programScheme.startDate || ''));
+          setBaseOriginalValueDateDisabled(true);
         }
 
         if (programScheme.endDate) {
           formikRef?.current?.setFieldValue("target.originalValueDate", DateUtil.backendDateToJavascriptDate(programScheme.endDate || ''));
+          setTargetOriginalValueDateDisabled(true);
         }
       }
 
@@ -524,6 +529,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                           }}
                           onBlur={props.handleBlur}
                           name="base.originalValueDate"
+                          disabled={baseOriginalValueDateDisabled}
                           className={`${styles.input_field} ${(props.errors.base?.originalValueDate && props.touched.base?.originalValueDate) && styles.text_is_invalid}`}
                         />
 
@@ -597,6 +603,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                               props.setFieldValue("target.originalValueDate", value);
                             }
                           }}
+                          disabled={targetOriginalValueDateDisabled}
                           onBlur={props.handleBlur}
                           name="target.originalValueDate"
                           className={`${styles.input_field} ${(props.errors.target?.originalValueDate && props.touched.target?.originalValueDate) && styles.text_is_invalid}`} />

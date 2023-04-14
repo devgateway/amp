@@ -64,6 +64,9 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
   const [programSchemes, setProgramSchemes] = useState<{ value: string, name: string }[]>([]);
   const [programs, setPrograms] = useState<{ value: string, label: string }[]>([]);
 
+  const [baseOriginalValueDateDisabled, setBaseOriginalValueDateDisabled] = useState(false);
+  const [targetOriginalValueDateDisabled, setTargetOriginalValueDateDisabled] = useState(false);
+
   const formikRef = useRef<FormikProps<IndicatorFormValues>>(null);
 
   const getSectors = () => {
@@ -95,6 +98,8 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
       setProgramFieldVisible(false);
       formikRef?.current?.setFieldValue("base.originalValueDate", "");
       formikRef?.current?.setFieldValue("target.originalValueDate", "");
+      setBaseOriginalValueDateDisabled(false);
+      setTargetOriginalValueDateDisabled(false);
 
       const programScheme: ProgramSchemeType = programsReducer.programSchemes.find((program: ProgramSchemeType) => program.ampProgramSettingsId.toString() === selectedProgramSchemeId.toString());
       if (programScheme) {
@@ -112,11 +117,13 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
         if (programScheme.startDate) {
           formikRef.current?.setFieldValue("base.originalValueDate", "");
           formikRef?.current?.setFieldValue("base.originalValueDate", DateUtil.backendDateToJavascriptDate(programScheme.startDate || ''));
+          setBaseOriginalValueDateDisabled(true);
         }
 
         if (programScheme.endDate) {
           formikRef.current?.setFieldValue("target.originalValueDate", "");
           formikRef?.current?.setFieldValue("target.originalValueDate", DateUtil.backendDateToJavascriptDate(programScheme.endDate || ''));
+          setTargetOriginalValueDateDisabled(true);
         }
       }
 
@@ -459,7 +466,9 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                             props.setFieldValue('base.originalValueDate', value);
                           }
                         }}
-                        className={styles.input_field} />
+                        onBlur={props.handleBlur}
+                        disabled={baseOriginalValueDateDisabled}
+                        className={`${styles.input_field} ${(props.errors.base?.originalValueDate && props.touched.base?.originalValueDate) && styles.text_is_invalid}`}/>
 
                       <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>
                         {props.errors.base?.originalValueDate}
@@ -534,6 +543,7 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                           }
                         }}
                         onBlur={props.handleBlur}
+                        disabled={targetOriginalValueDateDisabled}
                         className={`${styles.input_field} ${(props.errors.target?.originalValueDate && props.touched.target?.originalValueDate) && styles.text_is_invalid}`} />
 
                       <Form.Control.Feedback type="invalid" className={styles.text_is_invalid}>

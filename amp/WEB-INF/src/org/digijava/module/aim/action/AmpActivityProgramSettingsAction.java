@@ -47,20 +47,20 @@ public class AmpActivityProgramSettingsAction
             }
             return mapping.findForward("forward");
         } else {
-            //Load programs settings
-            ampActivityProgramSettingsForm.setProgramList(ProgramUtil.getDefaultHierarchyPrograms());
-
-
-            List<AmpActivityProgramSettings> tempAmpActivitySettingsEntities = ProgramUtil.getAmpActivityProgramSettingsList(true);
-            List<AmpActivityProgramSettingsDTO> tempAmpActivitySettingsDTO = entityToDto(tempAmpActivitySettingsEntities);
-
-            ampActivityProgramSettingsForm.setSettingsListDTO(tempAmpActivitySettingsDTO);
+            ampActivityProgramSettingsForm.setSettingsListDTO(getProgramList(ampActivityProgramSettingsForm));
             return mapping.findForward("forward");
         }
 
     }
 
-    private List dtoToEntity (List<AmpActivityProgramSettingsDTO> dto) {
+    private List<AmpActivityProgramSettingsDTO> getProgramList(AmpActivityProgramSettingsForm ampActivityProgramSettingsForm) {
+        ampActivityProgramSettingsForm.setProgramList(ProgramUtil.getDefaultHierarchyPrograms());
+
+        List<AmpActivityProgramSettings> tempAmpActivitySettingsEntities = ProgramUtil.getAmpActivityProgramSettingsList(true);
+        return entityToDto(tempAmpActivitySettingsEntities);
+    }
+
+    private List<AmpActivityProgramSettings> dtoToEntity (List<AmpActivityProgramSettingsDTO> dto) {
         AmpActivityProgramSettingsForm form = new AmpActivityProgramSettingsForm();
 
         if (form.getSettingsList() == null) {
@@ -153,7 +153,7 @@ public class AmpActivityProgramSettingsAction
             if (startDate != null && endDate != null) {
                 if (startDate.after(endDate)) {
                     errors.add(ActionMessages.GLOBAL_MESSAGE,
-                            new ActionMessage("error.aim.programSettingDateRange", oldSetting.getName()));
+                            new ActionMessage("error.aim.programSettingDateError", oldSetting.getName()));
                 }
             }
 

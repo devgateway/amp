@@ -139,7 +139,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
 
   const handleProgramSchemeChange = (selectedOption: any, props: FormikProps<IndicatorFormValues>) => {
     setSelectedProgramSchemeId(selectedOption);
-    props.setFieldValue("program", "");
+    props.setFieldValue("programId", "");
     setProgramFieldVisible(false);
   };
 

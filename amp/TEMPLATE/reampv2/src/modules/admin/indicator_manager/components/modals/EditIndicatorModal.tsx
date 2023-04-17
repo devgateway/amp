@@ -139,7 +139,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
 
   const handleProgramSchemeChange = (selectedOption: any, props: FormikProps<IndicatorFormValues>) => {
     setSelectedProgramSchemeId(selectedOption);
-    props.setFieldValue("programId", "");
+    props.setFieldValue("programId", null);
     setProgramFieldVisible(false);
   };
 
@@ -172,7 +172,6 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
 
     return indicatorSectorData;
   };
-
 
 
   const getDefaultPropgramScheme = () => {
@@ -438,7 +437,6 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                       }
                     </Form.Group>
                   </Row>
-
                   <Row className={styles.view_row}>
                     <Form.Group className={styles.view_one_item} controlId="programScheme">
                       <Form.Label>{translations["amp.indicatormanager:program-scheme"]}</Form.Label>
@@ -450,6 +448,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                             onChange={(selectedValue) => {
                               // set the formik value with the selected values and remove the label
                               if (selectedValue) {
+                                setDefaultProgramScheme(selectedValue);
                                 handleProgramSchemeChange(selectedValue.value, props);
                               }
                             }}
@@ -458,7 +457,6 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                             onBlur={props.handleBlur}
                             className={`basic-multi-select ${styles.input_field}`}
                             classNamePrefix="select"
-                            defaultValue={defaultProgramScheme}
                             value={defaultProgramScheme}
                           />
                         ) : null

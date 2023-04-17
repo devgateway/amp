@@ -33,7 +33,6 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpAnalyticalReport;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpDesktopTabSelection;
@@ -1182,15 +1181,6 @@ public class TeamMemberUtil {
                     session.saveOrUpdate(comm);
                 }
 
-                qryStr = "select atr from " + AmpAnalyticalReport.class.getName() + " atr "
-                        + " where (atr.owner=:memberId) ";
-                qry = session.createQuery(qryStr).setLong("memberId", amId);
-                List<AmpAnalyticalReport> ampAnalyticalReports = qry.list();
-                if (ampAnalyticalReports != null && ampAnalyticalReports.size() > 0) {
-                    for (AmpAnalyticalReport ampAnRep : ampAnalyticalReports) {
-                        session.delete(ampAnRep);
-                    }
-                }
                 qryStr = "delete AmpDesktopTabSelection dts where dts.owner=:memberId";
                 qry = session.createQuery(qryStr).setLong("memberId", amId);
                 qry.executeUpdate();

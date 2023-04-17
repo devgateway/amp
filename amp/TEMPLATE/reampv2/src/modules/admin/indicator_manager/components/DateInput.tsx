@@ -18,10 +18,13 @@ export interface DateInputProps {
     clearIcon?: React.ReactElement | string | null | undefined;
     calendarIcon?: React.ReactElement | null | undefined;
     inputRef?: React.RefObject<HTMLInputElement>;
+    minDate?: Date;
+    maxDate?: Date;
+    onClear?: () => void;
 }
 
 const DateInput: React.FC<DateInputProps> = (props) => {
-    const { className, value, onChange, name, defaultValue, disabled, clearIcon, calendarIcon, inputRef } = props;
+    const { className, value, onChange, name, defaultValue, disabled, clearIcon, calendarIcon, inputRef, minDate, maxDate, onClear } = props;
     const globalSettings: SettingsType = useSelector((state: any) => state.fetchSettingsReducer.settings);
     const [dateFormat, setDateFormat] = useState('dd/MM/yyyy');
     const [inputValue, setInputValue] = useState<string | Date | undefined>(value);
@@ -46,13 +49,22 @@ const DateInput: React.FC<DateInputProps> = (props) => {
     }, [value]);
 
     useEffect(() => {
+        if (!inputValue){
+            if (onClear) {
+                onClear();
+            }
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [inputValue]);
+
+    useEffect(() => {
         getDefaultDateFormat();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [globalSettings]);
     
     const ClearInputButton = () => {
         return (
-            <svg xmlns="http://www.w3.org/2000/svg" onClick={clearInputValue} width="19" height="19" viewBox="0 0 19 19" stroke="black" stroke-width="2" 
+            <svg xmlns="http://www.w3.org/2000/svg" onClick={clearInputValue} width="19" height="19" viewBox="0 0 19 19" stroke="black" strokeWidth="2" 
             className="react-date-picker__clear-button__icon react-date-picker__button__icon">
                 <line x1="4" x2="15" y1="4" y2="15"></line>
                 <line x1="15" x2="4" y1="4" y2="15"></line>
@@ -70,7 +82,8 @@ const DateInput: React.FC<DateInputProps> = (props) => {
             onChange={onChange}
             name={name}
             value={inputValue}
-            minDate={new Date('1970-01-01')}
+            minDate={minDate && new Date('1970-01-01')}
+            maxDate={maxDate && new Date('2200-12-31')}
             defaultValue={defaultValue}
             disabled={disabled}
             clearIcon={clearIcon === null ? null : <ClearInputButton />}

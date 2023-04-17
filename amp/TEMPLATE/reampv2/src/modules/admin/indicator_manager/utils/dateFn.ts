@@ -28,4 +28,6 @@ export class DateUtil {
     }
     
     static formatJavascriptDate = (date: string, format?: string) => dayjs(date).format(format ?? 'DD/MM/YYYY');
+
+    static addDays = (date: Date, days: number) => dayjs(date).add(days, 'day').toDate();
 }

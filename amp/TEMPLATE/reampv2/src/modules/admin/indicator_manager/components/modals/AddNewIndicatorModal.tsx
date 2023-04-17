@@ -13,9 +13,10 @@ import { createIndicator } from '../../reducers/createIndicatorReducer';
 import { getIndicators } from '../../reducers/fetchIndicatorsReducer';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content';
-import { extractChildrenFromProgramScheme } from '../../utils/helpers';
+import { checkObjectIsNull, extractChildrenFromProgramScheme } from '../../utils/helpers';
 import useDidMountEffect from '../../utils/hooks';
 import DateInput from '../DateInput';
+import lodash from 'lodash';
 
 const MySwal = withReactContent(Swal);
 
@@ -176,9 +177,9 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
         text: 'Indicator created successfully',
         icon: 'success',
         confirmButtonText: 'Ok',
-      }).then(() => {
-        handleClose();
+      }).then(() => { 
         dispatch(getIndicators());
+        handleClose();
       });
       return;
     }
@@ -244,17 +245,17 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
             programId: programId ? parseInt(programId) : null,
             ascending,
             creationDate: creationDate ? formatDate(new Date(creationDate)) : null,
-            base: {
-              originalValue: parseInt(String(base.originalValue)),
+            base: checkObjectIsNull(base) ? null : {
+              originalValue: base.originalValue ? lodash.toNumber(base.originalValue): null,
               originalValueDate: base.originalValueDate ? DateUtil.formatJavascriptDate(base.originalValueDate) : null,
-              revisedValue: parseInt(String(base.revisedValue)),
+              revisedValue: base.revisedValue ? lodash.toNumber(base.revisedValue) : null,
               revisedValueDate: base.revisedValueDate ? DateUtil.formatJavascriptDate(base.revisedValueDate) : null,
             },
-            target: {
-              originalValue: target.originalValue,
+            target: checkObjectIsNull(target) ? null : {
+              originalValue: target.originalValue ? lodash.toNumber(target.originalValue) : null,
               originalValueDate: target.originalValueDate ? DateUtil.formatJavascriptDate(target.originalValueDate) : null,
-              revisedValue: target.revisedValue,
-              revisedValueDate: target.revisedValueDate ? formatDate(target.revisedValueDate) : null,
+              revisedValue: target.revisedValue ? lodash.toNumber(target.revisedValue) : null,
+              revisedValueDate: target.revisedValueDate ? DateUtil.formatJavascriptDate(target.revisedValueDate) : null,
             }
           };
 
@@ -466,6 +467,9 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                             props.setFieldValue('base.originalValueDate', value);
                           }
                         }}
+                        onClear={() => {
+                          props.setFieldValue('base.originalValueDate', null);
+                        }}
                         onBlur={props.handleBlur}
                         disabled={baseOriginalValueDateDisabled}
                         className={`${styles.input_field} ${(props.errors.base?.originalValueDate && props.touched.base?.originalValueDate) && styles.text_is_invalid}`}/>
@@ -501,6 +505,9 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                           if (value) {
                             props.setFieldValue('base.revisedValueDate', value);
                           }
+                        }}
+                        onClear={() => {
+                          props.setFieldValue('base.revisedValueDate', null);
                         }}
                         onBlur={props.handleBlur}
                         name="base.revisedValueDate"
@@ -542,6 +549,9 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                             props.setFieldValue('target.originalValueDate', value);
                           }
                         }}
+                        onClear={() => {
+                          props.setFieldValue('target.originalValueDate', null);
+                        }}
                         onBlur={props.handleBlur}
                         disabled={targetOriginalValueDateDisabled}
                         className={`${styles.input_field} ${(props.errors.target?.originalValueDate && props.touched.target?.originalValueDate) && styles.text_is_invalid}`} />
@@ -577,6 +587,9 @@ const AddNewIndicatorModal: React.FC<AddNewIndicatorModalProps> = (props) => {
                           if (value) {
                             props.setFieldValue('target.revisedValueDate', value);
                           }
+                        }}
+                        onClear={() => {
+                          props.setFieldValue('target.revisedValueDate', null);
                         }}
                         onBlur={props.handleBlur}
                         name="target.revisedValueDate"

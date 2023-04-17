@@ -19,7 +19,7 @@
 
 		<property name="comments" column="Comments" type="java.lang.String" />
 
-		<set name="indicatorValues" lazy="true" inverse="true" cascade="all">
+		<set name="indicatorValues" lazy="true" inverse="true" cascade="all-delete-orphan">
 			<cache usage="read-write" />
 			<key column="indicator_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpIndicatorGlobalValue" />

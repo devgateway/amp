@@ -273,8 +273,9 @@ public class IndicatorManagerService {
                 updatedValues.add(validatedTargetValues);
             }
 
+            indicator.getIndicatorValues().clear();
             updatedValues.forEach(value -> value.setIndicator(indicator));
-            indicator.setIndicatorValues(updatedValues);
+            indicator.getIndicatorValues().addAll(updatedValues);
 
             Set<AmpSector> sectors = indRequest.getSectorIds().stream()
                     .map(id -> (AmpSector) session.get(AmpSector.class, id))

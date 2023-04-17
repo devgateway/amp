@@ -15,9 +15,11 @@ import { formatObjArrayToNumberArray } from '../../utils/formatter';
 import { getIndicators } from '../../reducers/fetchIndicatorsReducer';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content';
-import { extractChildrenFromProgramScheme, getProgamSchemeForChild } from '../../utils/helpers';
+import { checkObjectIsNull, extractChildrenFromProgramScheme, getProgamSchemeForChild } from '../../utils/helpers';
 import useDidMountEffect from '../../utils/hooks';
 import DateInput from '../DateInput';
+import lodash from 'lodash';
+
 
 const MySwal = withReactContent(Swal);
 
@@ -181,12 +183,15 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
           value: foundProgramScheme.ampProgramSettingsId.toString(),
           label: foundProgramScheme.name
         })
+
         if (foundProgramScheme.startDate) {
           formikRef?.current?.setFieldValue("base.originalValueDate", DateUtil.backendDateToJavascriptDate(foundProgramScheme.startDate || ''));
+          setBaseOriginalValueDateDisabled(true);
         }
 
         if (foundProgramScheme.endDate) {
           formikRef?.current?.setFieldValue("target.originalValueDate", DateUtil.backendDateToJavascriptDate(foundProgramScheme.endDate || ''));
+          setTargetOriginalValueDateDisabled(true);
         }
       }
     }
@@ -237,8 +242,8 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
         title: 'Indicator updated successfully',
         timer: 3000
       }).then(() => {
-        dispatch(getIndicators());
         handleClose();
+        dispatch(getIndicators());
       });
       return;
     }
@@ -304,21 +309,19 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
             programId: programId ? parseInt(programId) : null,
             ascending,
             creationDate: creationDate && formatDate(creationDate),
-            base: {
-              originalValue: base.originalValue,
+            base: checkObjectIsNull(base) ? null : {
+              originalValue: base.originalValue ? lodash.toNumber(base.originalValue) : null,
               originalValueDate: base.originalValueDate ? formatDate(base.originalValueDate) : null,
-              revisedValue: base.revisedValue,
+              revisedValue: base.revisedValue ? lodash.toNumber(base.revisedValue) : null,
               revisedValueDate: base.revisedValueDate ? formatDate(base.revisedValueDate) : null,
             },
-            target: {
-              originalValue: target.originalValue,
+            target: checkObjectIsNull(target) ? null : {
+              originalValue: target.originalValue ? lodash.toNumber(target.originalValue) : null,
               originalValueDate: target.originalValueDate ? formatDate(target.originalValueDate) : null,
-              revisedValue: target.revisedValue,
+              revisedValue: target.revisedValue ? lodash.toNumber(target.revisedValue) : null,
               revisedValueDate: target.revisedValueDate ? formatDate(target.revisedValueDate) : null,
             }
           };
-
-          console.log('updated', updatedIndicatorData)
 
           dispatch(updateIndicator(updatedIndicatorData as IndicatorObjectType));
         }}
@@ -456,6 +459,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                             className={`basic-multi-select ${styles.input_field}`}
                             classNamePrefix="select"
                             defaultValue={defaultProgramScheme}
+                            value={defaultProgramScheme}
                           />
                         ) : null
                       }
@@ -527,6 +531,9 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                               props.setFieldValue("base.originalValueDate", value);
                             }
                           }}
+                          onClear={() => {
+                            props.setFieldValue("base.originalValueDate", null);
+                          }}
                           onBlur={props.handleBlur}
                           name="base.originalValueDate"
                           disabled={baseOriginalValueDateDisabled}
@@ -564,6 +571,9 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                             if (value) {
                               props.setFieldValue("base.revisedValueDate", value);
                             }
+                          }}
+                          onClear={() => {
+                            props.setFieldValue("base.revisedValueDate", null);
                           }}
                           onBlur={props.handleBlur}
                           name="base.revisedValueDate"
@@ -603,6 +613,9 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                               props.setFieldValue("target.originalValueDate", value);
                             }
                           }}
+                          onClear={() => {
+                            props.setFieldValue("target.originalValueDate", null);
+                          }}
                           disabled={targetOriginalValueDateDisabled}
                           onBlur={props.handleBlur}
                           name="target.originalValueDate"
@@ -614,7 +627,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                       <Form.Group className={styles.view_item}>
                         <Form.Label>{translations["amp.indicatormanager:revised-value"]}</Form.Label>
                         <Form.Control
-                          value={props.values.target.revisedValue}
+                          defaultValue={props.values.target.revisedValue}
                           onChange={props.handleChange}
                           onBlur={props.handleBlur}
                           name="target.revisedValue"
@@ -635,6 +648,9 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                             if (value) {
                               props.setFieldValue("target.revisedValueDate", value);
                             }
+                          }}
+                          onClear={() => {
+                            props.setFieldValue("target.revisedValueDate", null);
                           }}
                           onBlur={props.handleBlur}
                           name="target.revisedValueDate"

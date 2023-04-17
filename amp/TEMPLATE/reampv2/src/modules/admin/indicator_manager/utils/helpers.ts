@@ -35,3 +35,26 @@ export const getProgamSchemeForChild = (programSchemes: Array<ProgramSchemeType>
     });
     return programScheme;
 }
+
+export const checkObjectIsNull = <T>(obj: T | any) => {
+    // return null if all the values of the object are null
+    if (obj === null) {
+        return true;
+    }
+
+    if (typeof obj === 'object') {
+        const keys = Object.keys(obj);
+        if (keys.length === 0) {
+            return true;
+        }
+        let isNull = true;
+        keys.forEach((key) => {
+            if (obj[key] !== null) {
+                isNull = false;
+            }
+        });
+        return isNull;
+    }
+
+    return false;
+}

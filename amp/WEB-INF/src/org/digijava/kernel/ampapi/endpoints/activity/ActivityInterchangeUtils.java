@@ -4,6 +4,7 @@ import com.sun.jersey.spi.container.ContainerRequest;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.FMUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivityInformation;
 import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivitySummary;
@@ -87,7 +88,7 @@ public final class ActivityInterchangeUtils {
      */
     public static JsonApiResponse<ActivitySummary> importActivity(Map<String, Object> newJson, boolean update,
             ActivityImportRules rules, String endpointContextPath) {
-        
+
         // Load the enumerator for the FM template associated to the activity's workspace (AMPOFFLINE-1562)
         APIField activityField;
         Long fmId = getFMTemplateId(newJson);
@@ -96,7 +97,7 @@ public final class ActivityInterchangeUtils {
         } else {
             activityField = AmpFieldsEnumerator.getEnumerator().getActivityField();
         }
-        
+
         StringBuffer sourceURL = TLSUtils.getRequest().getRequestURL();
 
         return new ActivityImporter(activityField, rules)
@@ -311,7 +312,8 @@ public final class ActivityInterchangeUtils {
      */
     public static Map<String, Object> getActivity(Long projectId, boolean isOfflineClientCall) {
         Map<String, Object> activity = getActivity(projectId, null);
-        if (!isOfflineClientCall) {
+        if (!isOfflineClientCall &&
+                FeaturesUtil.isVisibleModule("/REPORTING/Activity Preview/Hide Documents if no donor")) {
             filterPropertyBasedOnUserPermission(activity, projectId);
         }
         return activity;
@@ -353,7 +355,7 @@ public final class ActivityInterchangeUtils {
                 ApiErrorResponseService.reportResourceNotFound(
                         ActivityErrors.ACTIVITY_NOT_FOUND.withDetails(actId.toString()));
             }
-            
+
             return ActivityUtil.loadActivity(actId);
         } catch (DgException e) {
             throw new RuntimeException(e);

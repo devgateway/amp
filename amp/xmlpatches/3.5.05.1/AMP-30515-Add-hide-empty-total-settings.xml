@@ -9,8 +9,16 @@
         <script>
             <lang delimiter=";" type="postgres">
                 insert into amp_modules_visibility (id, name, haslevel, parent)
-                values (nextval('amp_modules_visibility_seq'), 'Activity Preview', true, (select id from
-                amp_modules_visibility where name = 'REPORTING'));
+                    select nextval('amp_modules_visibility_seq'), 'Activity Preview',  true,
+                        (select id
+                        from amp_modules_visibility
+                        where name = 'REPORTING')
+                    where not exists(select 1
+                                    from amp_modules_visibility
+                                    where name = 'Activity Preview'
+                                    and parent = (select id
+                                    from amp_modules_visibility
+                                    where name = 'REPORTING'));
 
                 insert into amp_modules_visibility (id, name, haslevel, parent)
                 values (nextval('amp_modules_visibility_seq'), 'Hide Total Actual Commitments', true, (select id from
@@ -39,6 +47,7 @@
                 and parent = (
                 select id from
                 amp_modules_visibility where name = 'REPORTING')));
+
             </lang>
         </script>
     </apply>

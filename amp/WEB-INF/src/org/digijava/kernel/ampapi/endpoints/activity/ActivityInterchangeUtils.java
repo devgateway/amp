@@ -4,8 +4,6 @@ import com.sun.jersey.spi.container.ContainerRequest;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
-import org.dgfoundation.amp.onepager.util.AmpFMTypes;
-import org.dgfoundation.amp.onepager.util.FMUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivityInformation;
 import org.digijava.kernel.ampapi.endpoints.activity.dto.ActivitySummary;
 import org.digijava.kernel.ampapi.endpoints.activity.dto.TeamMemberInformation;
@@ -13,7 +11,6 @@ import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
-import org.digijava.kernel.ampapi.endpoints.dto.Activity;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
@@ -21,7 +18,6 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.errors.GenericErrors;
 import org.digijava.kernel.ampapi.endpoints.security.SecurityService;
 import org.digijava.kernel.ampapi.endpoints.security.dto.UserSessionInformation;
-import org.digijava.kernel.ampapi.endpoints.security.services.WorkspaceMemberService;
 import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -32,7 +28,6 @@ import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
@@ -40,6 +35,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.Workspace;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ActivityVersionUtil;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -51,17 +47,15 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.PathSegment;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import static org.digijava.kernel.ampapi.endpoints.common.EPConstants.ACTIVITY_DOCUMENTS;
 import static org.digijava.module.aim.helper.GlobalSettingsConstants.EXEMPT_ORGANIZATION_REPORT;
 
 /**
@@ -316,27 +310,27 @@ public final class ActivityInterchangeUtils {
                 FeaturesUtil.isVisibleModule("/REPORTING/Activity Preview/Hide Documents if no donor")) {
             filterPropertyBasedOnUserPermission(activity, projectId);
         }
-        return activity;
+            return activity;
     }
 
-    private static void filterPropertyBasedOnUserPermission(Map<String, Object> activity, Long projectId){
-        final long DONOR_ROLE = 1L;
-        final String ACTIVITY_DOCUMENTS = "activity_documents";
+    private static void filterPropertyBasedOnUserPermission(Map<String, Object> activity, Long projectId) {
+        final Long donorRole = DbUtil.getAmpRole(Constants.FUNDING_AGENCY).getAmpRoleId();
         UserSessionInformation userInformation = SecurityService.getInstance().getUserSessionInformation();
         if (userInformation != null) {
             User user = UserUtils.getUser(userInformation.getUserId());
-            if (user != null){
-                if (user.getAssignedOrgs() != null && !user.getAssignedOrgs().isEmpty()){
+            if (user != null) {
+                if (user.getAssignedOrgs() != null && !user.getAssignedOrgs().isEmpty()) {
                     if (!userBelongToExemptOrgForDocumentVisualization(user)) {
                         List organizationIds = user.getAssignedOrgs().stream()
                                 .map(ampOrganisation -> ampOrganisation.getAmpOrgId()).collect(Collectors.toList());
-                        List<AmpOrgRole> ampOrgRoles = ActivityUtil.getAmpRolesForActivityAndOrganizationsAndRole(projectId,
-                                organizationIds, DONOR_ROLE);
+                        List<AmpOrgRole> ampOrgRoles =
+                                ActivityUtil.getAmpRolesForActivityAndOrganizationsAndRole(projectId,
+                                        organizationIds, donorRole);
                         if (ampOrgRoles == null || ampOrgRoles.size() == 0) {
                             activity.replace(ACTIVITY_DOCUMENTS, null);
                         }
                     }
-                } else{
+                } else {
                     activity.replace(ACTIVITY_DOCUMENTS, null);
                 }
             }
@@ -345,7 +339,9 @@ public final class ActivityInterchangeUtils {
 
     private static boolean userBelongToExemptOrgForDocumentVisualization(User user) {
         return user.getAssignedOrgs().stream()
-                .filter(ampOrganisation -> ampOrganisation.getIdentifier().equals(FeaturesUtil.getGlobalSettingValueLong(EXEMPT_ORGANIZATION_REPORT)))
+                .filter(ampOrganisation
+                        -> ampOrganisation.getIdentifier().equals(
+                                FeaturesUtil.getGlobalSettingValueLong(EXEMPT_ORGANIZATION_REPORT)))
                 .count() > 0;
     }
 

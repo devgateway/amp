@@ -60,7 +60,7 @@ import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpRole;
+import org.digijava.module.aim.dbentity.amp_togole;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpStructureImg;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -553,7 +553,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
       return PersistenceManager.getSession().createQuery(queryString).setParameter("actId", id, LongType.INSTANCE).list();
   }
 
-  public static AmpRole getAmpRole(Long actId, Long orgRoleId) {
+  public static amp_togole getAmpRole(Long actId, Long orgRoleId) {
         Session session = null;
         AmpRole role = null;
         try {
@@ -576,7 +576,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
       }
 
   public static List<AmpOrgRole> getAmpRolesForActivityAndOrganizationsAndRole(Long actId, List<Long> organizationId,
-                                                                               Long roleId){
+                                                                               Long roleId) {
       List<AmpOrgRole> ampOrgRoles = new ArrayList<>();
       if (organizationId != null && organizationId.size() > 0) {
           String queryString = "select ar from AmpOrgRole ar "

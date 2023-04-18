@@ -8,6 +8,7 @@ import { DefaultTranslationPackTypes } from '../types';
 import { getSectors } from '../reducers/fetchSectorsReducer';
 import { getPrograms } from '../reducers/fetchProgramsReducer';
 import { getSettings } from '../reducers/fetchSettingsReducer';
+import { resetSizePerPage } from '../reducers/fetchIndicatorsReducer';
 
 export const AdminIndicatorManagerContext = React.createContext({});
 
@@ -39,6 +40,7 @@ const Startup: React.FC<StartupProps> = (props: any) => {
     _fetchTranslations(defaultTrnPack);
     dispatch(getSectors());
     dispatch(getPrograms());
+    dispatch(resetSizePerPage());
     // eslint-disable-next-line
   }, []);
 

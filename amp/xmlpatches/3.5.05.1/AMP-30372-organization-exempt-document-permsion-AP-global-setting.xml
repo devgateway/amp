@@ -11,7 +11,7 @@
                 CREATE OR REPLACE VIEW v_g_settings_amp_organization AS
                 select amp_org_id as id, name as value from amp_organisation order by name asc;
                 insert into amp_global_settings(id, settingsName, possiblevalues, description,section)
-                values(nextval('amp_global_settings_seq'), 'Exempt organization to see reports', 'v_g_settings_amp_organization','Organization allowed to see reports in AP','general');
+                values(nextval('amp_global_settings_seq'), 'Exempt organization to see documents', 'v_g_settings_amp_organization','Organization allowed to see documents in AP and AF','general');
             </lang>
         </script>
     </apply>

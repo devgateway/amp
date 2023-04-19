@@ -60,7 +60,7 @@ import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.amp_togole;
+import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpStructureImg;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -116,11 +116,11 @@ public class ActivityUtil {
     logger.info(" this is the other components getting called....");
     try {
       session = PersistenceManager.getRequestDBSession();
-      String rewrittenColumns = SQLUtils.rewriteQuery("amp_components", "ac", 
+      String rewrittenColumns = SQLUtils.rewriteQuery("amp_components", "ac",
               new HashMap<String, String>(){{
                   put("title", InternationalizedModelDescription.getForProperty(AmpComponent.class, "title").getSQLFunctionCall("ac.amp_component_id"));
                   put("description", InternationalizedModelDescription.getForProperty(AmpComponent.class, "description").getSQLFunctionCall("ac.amp_component_id"));
-              }});      
+              }});
       String queryString = "select " + rewrittenColumns + " from amp_components ac " +
             "where (ac.amp_activity_id=:actId)";
       Query qry = session.createSQLQuery(queryString).addEntity(AmpComponent.class);
@@ -165,14 +165,14 @@ public class ActivityUtil {
       oql += " order by act.name";
 
       Query query = session.createQuery(oql);
-      
+
       setSearchActivitiesQueryParams(query, ampThemeId, statusCode, donorOrgId, fromDate, toDate, locationId, teamMember);
-      
+
       if (pageStart!=null && rowCount!=null){
           query.setFirstResult(pageStart);
           query.setMaxResults(rowCount);
       }
-      
+
       result = query.list();
     }
     catch (Exception ex) {
@@ -215,8 +215,8 @@ public class ActivityUtil {
             "   from " + AmpActivityProgram.class.getName() + " prog ";
 
       oql+= getSearchActivitiesWhereClause(ampThemeId, statusCode, donorOrgId, fromDate, toDate, locationId, teamMember);
-    
-      
+
+
       Query query = session.createQuery(oql);
 
       setSearchActivitiesQueryParams(query, ampThemeId, statusCode, donorOrgId, fromDate, toDate, locationId, teamMember);
@@ -264,7 +264,7 @@ public class ActivityUtil {
           Query query = session.createQuery(oql);
 
           setSearchActivitiesQueryParams(query, ampThemeId, statusCode, donorOrgId, fromDate, toDate, locationId, teamMember);
-          
+
           result = (Integer)query.uniqueResult();
         }
         catch (Exception ex) {
@@ -294,9 +294,9 @@ public class ActivityUtil {
           Date toDate,
           Long locationId,
           TeamMember teamMember) {
-      
+
       String oql="";
-      
+
       if (ampThemeId!=null){
           oql += " inner join prog.program as theme ";
       }
@@ -352,7 +352,7 @@ public class ActivityUtil {
                     whereTeamStatement.append(" and ( latestAct.team.ampTeamId =:teamId ) ");
           }
           }
-        
+
       }
       if(relatedOrgsCriteria){
           oql+=" inner join latestAct.orgrole role ";
@@ -390,11 +390,11 @@ public class ActivityUtil {
           Date toDate,
           Long locationId,
           TeamMember teamMember) {
-      
+
       if (ampThemeId != null) {
           query.setLong("ampThemeId", ampThemeId.longValue());
         }
-      
+
         if (fromDate != null) {
           query.setDate("FromDate", fromDate);
         }
@@ -407,7 +407,7 @@ public class ActivityUtil {
         if (teamMember!=null && teamMember.getTeamId()!=null&&!teamMember.getTeamAccessType().equals("Management")){
           query.setLong("teamId", teamMember.getTeamId());
         }
-        
+
   }
 
   @SuppressWarnings("unchecked")
@@ -422,8 +422,8 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
       return PersistenceManager.getSession().createSQLQuery(queryString).addEntity(AmpActivityLocation.class)
               .setParameter("actId", activityId, LongType.INSTANCE).list();
   }
-    
-    
+
+
     /**
      * Load activity from db.
      * Use this one instead of method below this if you realy want to load all data.
@@ -473,7 +473,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             ActivityUtil.setCurrentWorkspacePrefixIntoRequest(result);
 
             ActivityUtil.initializeForApi(result);
-            
+
         } catch (ObjectNotFoundException e) {
             logger.debug("AmpActivityVersion with id=" + id + " not found");
         } catch (Exception e) {
@@ -536,11 +536,11 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                 .setParameterList("ampIds", ampIds)
                 .list();
     }
-  
+
   public static AmpActivityVersion loadAmpActivity(Long id){
-     return (AmpActivityVersion) PersistenceManager.getSession().load(AmpActivityVersion.class, id); 
+     return (AmpActivityVersion) PersistenceManager.getSession().load(AmpActivityVersion.class, id);
   }
- 
+
   public static List<AmpActivitySector> getAmpActivitySectors(Long actId) {
       String queryString = "select a.* from amp_activity_sector a " + "where a.amp_activity_id=:actId";
       return PersistenceManager.getSession().createSQLQuery(queryString).addEntity(AmpActivitySector.class)
@@ -553,7 +553,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
       return PersistenceManager.getSession().createQuery(queryString).setParameter("actId", id, LongType.INSTANCE).list();
   }
 
-  public static amp_togole getAmpRole(Long actId, Long orgRoleId) {
+  public static AmpRole getAmpRole(Long actId, Long orgRoleId) {
         Session session = null;
         AmpRole role = null;
         try {

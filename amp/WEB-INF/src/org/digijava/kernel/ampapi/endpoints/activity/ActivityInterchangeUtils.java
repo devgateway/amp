@@ -56,7 +56,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.digijava.kernel.ampapi.endpoints.common.EPConstants.ACTIVITY_DOCUMENTS;
-import static org.digijava.module.aim.helper.GlobalSettingsConstants.EXEMPT_ORGANIZATION_DOCUMENT;
+import static org.digijava.module.aim.helper.GlobalSettingsConstants.EXEMPT_ORGANIZATION_REPORTS;
 
 /**
  * @author Octavian Ciubotaru
@@ -306,8 +306,8 @@ public final class ActivityInterchangeUtils {
      */
     public static Map<String, Object> getActivity(Long projectId, boolean isOfflineClientCall) {
         Map<String, Object> activity = getActivity(projectId, null);
-        if (!isOfflineClientCall
-                && FeaturesUtil.isVisibleModule("/REPORTING/Activity Preview/Hide Documents if no donor")) {
+        if (!isOfflineClientCall){
+//                && FeaturesUtil.isVisibleModule("/REPORTING/Activity Preview/Hide Documents if no donor")) {
             filterPropertyBasedOnUserPermission(activity, projectId);
         }
             return activity;
@@ -331,7 +331,7 @@ public final class ActivityInterchangeUtils {
                         }
                     }
                 } else {
-                    activity.replace(ACTIVITY_DOCUMENTS, null);
+                    activity.remove(ACTIVITY_DOCUMENTS);
                 }
             }
         }
@@ -341,7 +341,7 @@ public final class ActivityInterchangeUtils {
         return user.getAssignedOrgs().stream()
                 .filter(ampOrganisation
                         -> ampOrganisation.getIdentifier().equals(
-                                FeaturesUtil.getGlobalSettingValueLong(EXEMPT_ORGANIZATION_DOCUMENT)))
+                                FeaturesUtil.getGlobalSettingValueLong(EXEMPT_ORGANIZATION_REPORTS)))
                 .count() > 0;
     }
 

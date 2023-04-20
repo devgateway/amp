@@ -243,6 +243,6 @@ public class GlobalSettingsConstants {
      */
     public final static Set<String> SETTINGS_TO_HIDE = new HashSet<>(Arrays.asList(REPORT_WIZARD_VISIBILITY_SOURCE));
 
-    public static final String EXEMPT_ORGANIZATION_DOCUMENT = "Exempt organization to see documents";
+    public static final String EXEMPT_ORGANIZATION_REPORTS = "Exempt organization to see reports";
 
 }

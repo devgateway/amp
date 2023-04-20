@@ -11,7 +11,7 @@ import org.digijava.module.gateperm.core.Gate;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
 
-import static org.digijava.module.aim.helper.GlobalSettingsConstants.EXEMPT_ORGANIZATION_DOCUMENT;
+import static org.digijava.module.aim.helper.GlobalSettingsConstants.EXEMPT_ORGANIZATION_REPORTS;
 
 /**
  * Gives right if current user is assigned to an org that is related (by any role) to an object - such an activity
@@ -47,7 +47,7 @@ public class RelatedOrgExemptGate extends Gate {
         User user = PermissionUtil.getUser(scope, tm);
 
 
-        return user.hasVerifiedOrganizationId(FeaturesUtil.getGlobalSettingValueLong(EXEMPT_ORGANIZATION_DOCUMENT));
+        return user.hasVerifiedOrganizationId(FeaturesUtil.getGlobalSettingValueLong(EXEMPT_ORGANIZATION_REPORTS));
     }
 
     @Override

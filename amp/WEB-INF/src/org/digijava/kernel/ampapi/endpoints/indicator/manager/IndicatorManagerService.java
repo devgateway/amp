@@ -117,7 +117,7 @@ public class IndicatorManagerService {
             indicatorValues.add(validatedTargetValues);
         }
 
-        indicatorValues.stream().forEach(value -> value.setIndicator(indicator));
+        indicatorValues.forEach(value -> value.setIndicator(indicator));
         indicator.setIndicatorValues(indicatorValues);
 
         Set<AmpSector> sectors = indicatorRequest.getSectorIds().stream()
@@ -256,52 +256,26 @@ public class IndicatorManagerService {
             indicator.setType(indRequest.isAscending() ? "A" : "D");
             indicator.setCreationDate(indRequest.getCreationDate());
 
-            Set<AmpIndicatorGlobalValue> updatedIndicatorValues = new HashSet<>();
-
             if (indRequest.getProgramId() != null) {
                 indicator.setProgram(ProgramUtil.getTheme(indRequest.getProgramId()));
                 validateProgramSettingsAndGlobalValues(indRequest, indicator);
             }
 
+            Set <AmpIndicatorGlobalValue> updatedValues = new HashSet<>();
+
             if (indRequest.getBaseValue() != null) {
                 AmpIndicatorGlobalValue validatedBaseValues = validateBaseValues(indRequest);
-
-                if (validatedBaseValues.getOriginalValue() != null) {
-                    indicator.getBaseValue().setOriginalValue(validatedBaseValues.getOriginalValue());
-                }
-
-                if (validatedBaseValues.getRevisedValue() != null) {
-                    indicator.getBaseValue().setRevisedValue(validatedBaseValues.getRevisedValue());
-                }
-
-                if (validatedBaseValues.getRevisedValueDate() != null) {
-                    indicator.getBaseValue().setRevisedValueDate(validatedBaseValues.getRevisedValueDate());
-                }
-
-                if (validatedBaseValues.getOriginalValueDate() != null) {
-                    indicator.getBaseValue().setOriginalValueDate(validatedBaseValues.getOriginalValueDate());
-                }
+                updatedValues.add(validatedBaseValues);
             }
 
             if (indRequest.getTargetValue() != null) {
                 AmpIndicatorGlobalValue validatedTargetValues = validateTargetValues(indRequest);
-
-                if (validatedTargetValues.getOriginalValue() != null) {
-                    indicator.getTargetValue().setOriginalValue(validatedTargetValues.getOriginalValue());
-                }
-
-                if (validatedTargetValues.getRevisedValue() != null) {
-                    indicator.getTargetValue().setRevisedValue(validatedTargetValues.getRevisedValue());
-                }
-
-                if (validatedTargetValues.getRevisedValueDate() != null) {
-                    indicator.getTargetValue().setRevisedValueDate(validatedTargetValues.getRevisedValueDate());
-                }
-
-                if (validatedTargetValues.getOriginalValueDate() != null) {
-                    indicator.getTargetValue().setOriginalValueDate(validatedTargetValues.getOriginalValueDate());
-                }
+                updatedValues.add(validatedTargetValues);
             }
+
+            indicator.getIndicatorValues().clear();
+            updatedValues.forEach(value -> value.setIndicator(indicator));
+            indicator.getIndicatorValues().addAll(updatedValues);
 
             Set<AmpSector> sectors = indRequest.getSectorIds().stream()
                     .map(id -> (AmpSector) session.get(AmpSector.class, id))
@@ -371,7 +345,6 @@ public class IndicatorManagerService {
     }
 
     public AmpIndicatorGlobalValue validateBaseValues(final MEIndicatorDTO indicatorRequest) {
-        new AmpIndicatorGlobalValue();
         AmpIndicatorGlobalValue baseValues = indicatorRequest.getBaseValue();
 
         if (indicatorRequest.getBaseValue() != null) {

@@ -52,6 +52,7 @@ const fetchIndicatorSlice = createSlice({
             state.loading = true;
         });
         builder.addCase(getIndicators.fulfilled, (state, action) => {
+            state.indicators = [];
             state.loading = false;
             state.indicators = action.payload;
         });

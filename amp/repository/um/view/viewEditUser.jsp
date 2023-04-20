@@ -69,6 +69,9 @@ function goAction(value){
 	  				return false;
 	  			}
 	  		}
+			if (!confirm("Are you sure you want to perform this action?. Confirming the deletion the assignment will be deleted")) {
+				return false
+			}
 	  	}
 	  	if(submitForm==true){
 	  		document.getElementById("event").value=value;

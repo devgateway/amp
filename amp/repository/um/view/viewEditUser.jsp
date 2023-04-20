@@ -437,11 +437,11 @@ function validateUserInfo(){
         		                                                                    <tr>
                 	                                                                    <td width="2%">
                                                                                              <html:multibox name="umViewEditUserForm" property="selAssignedOrgs" styleId="verOrg_${ind}">
-                                                                                                     <bean:write name="org" property="ampOrgId" scope="page"/>
+                                                                                                     <bean:write name="organisation" property="ampOrgId" scope="page"/>
                                                                                              </html:multibox>
                     	                                                                 </td>
                         	                                                             <td align="left" width="49%">
-                                                                                             <bean:write name="org" property="name" scope="page"/>
+                                                                                             <bean:write name="organisation" property="name" scope="page"/>
                             	                                                         </td>                                                                                                   
                                 		                                             </tr>
                                         	                                     </logic:iterate>

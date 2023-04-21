@@ -24,7 +24,7 @@
 
 
                 insert into amp_modules_visibility (id, name, haslevel, parent)
-                values (nextval('amp_modules_visibility_seq'), 'Hide Documents if no donor', true, (select id
+                values (nextval('amp_modules_visibility_seq'), '/REPORTING/Activity Preview/Hide Documents if no donor', true, (select id
                 from amp_modules_visibility
                 where name = 'Activity Preview'
                 and parent = (select id

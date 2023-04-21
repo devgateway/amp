@@ -12,6 +12,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.convert.IConverter;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
+import org.dgfoundation.amp.onepager.components.features.subsections.AmpMEBaseValuesSubsectionFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
@@ -74,45 +75,56 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
                 new TranslatedChoiceRenderer<AmpIndicatorRiskRatings>(), false);
         add(riskSelect);
 
-        AmpTextFieldPanel<Double> baseValue = new AmpTextFieldPanel<Double>("baseValue",
-                new PropertyModel<Double>(indicator, "baseValue.value"), "Base Value") {
-            public IConverter getInternalConverter(java.lang.Class<?> type) {
-                return CustomDoubleConverter.INSTANCE;
-            }
-        };
-        baseValue.getTextContainer().setEnabled(false);
-        add(baseValue);
 
-        AmpDatePickerFieldPanel baseValueDate = new AmpDatePickerFieldPanel("baseValueDate",
-                new PropertyModel<>(indicator, "baseValue.valueDate"), "Base Value Date");
-        baseValueDate.getDate().setEnabled(false);
-        add(baseValueDate);
+        final AmpMEBaseValuesSubsectionFeaturePanel baseValuesRow = new AmpMEBaseValuesSubsectionFeaturePanel("baseValues", "baseValues",
+                new PropertyModel(indicator, "baseValue"), new PropertyModel<>(indicator, "baseValues"));
 
-        AmpTextFieldPanel<Double> targetValue = new AmpTextFieldPanel<Double>("targetValue",
-                new PropertyModel<Double>(indicator, "targetValue.value"), "Target Value") {
-            public IConverter getInternalConverter(java.lang.Class<?> type) {
-                return CustomDoubleConverter.INSTANCE;
-            }
-        };
-        targetValue.getTextContainer().setEnabled(false);
-        add(targetValue);
+        add(baseValuesRow);
 
-        AmpDatePickerFieldPanel targetValueDate = new AmpDatePickerFieldPanel("targetValueDate",
-                new PropertyModel<>(indicator, "targetValue.valueDate"), "Target Value Date");
-        targetValueDate.getDate().setEnabled(false);
-        add(targetValueDate);
+        final AmpMEBaseValuesSubsectionFeaturePanel targetValuesRow = new AmpMEBaseValuesSubsectionFeaturePanel("targetValues", "targetValues",
+                new PropertyModel(indicator, "targetValue"), new PropertyModel<>(indicator, "targetValues"));
 
-        final AmpIndicatorValue actualVal = new AmpIndicatorValue(AmpIndicatorValue.ACTUAL);
+        add(targetValuesRow);
 
-        for (AmpIndicatorValue val : values.getObject()) {
-            switch (val.getValueType()) {
-                case AmpIndicatorValue.ACTUAL:
-                    val.copyValuesTo(actualVal);
-                    break;
-                default:
-                    break;
-            }
-        }
+//        AmpTextFieldPanel<Double> baseValue = new AmpTextFieldPanel<Double>("baseValue",
+//                new PropertyModel<Double>(indicator, "baseValue.value"), "Base Value") {
+//            public IConverter getInternalConverter(java.lang.Class<?> type) {
+//                return CustomDoubleConverter.INSTANCE;
+//            }
+//        };
+//        baseValue.getTextContainer().setEnabled(false);
+//        add(baseValue);
+//
+//        AmpDatePickerFieldPanel baseValueDate = new AmpDatePickerFieldPanel("baseValueDate",
+//                new PropertyModel<>(indicator, "baseValue.valueDate"), "Base Value Date");
+//        baseValueDate.getDate().setEnabled(false);
+//        add(baseValueDate);
+//
+//        AmpTextFieldPanel<Double> targetValue = new AmpTextFieldPanel<Double>("targetValue",
+//                new PropertyModel<Double>(indicator, "targetValue.value"), "Target Value") {
+//            public IConverter getInternalConverter(java.lang.Class<?> type) {
+//                return CustomDoubleConverter.INSTANCE;
+//            }
+//        };
+//        targetValue.getTextContainer().setEnabled(false);
+//        add(targetValue);
+//
+//        AmpDatePickerFieldPanel targetValueDate = new AmpDatePickerFieldPanel("targetValueDate",
+//                new PropertyModel<>(indicator, "targetValue.valueDate"), "Target Value Date");
+//        targetValueDate.getDate().setEnabled(false);
+//        add(targetValueDate);
+//
+//        final AmpIndicatorValue actualVal = new AmpIndicatorValue(AmpIndicatorValue.ACTUAL);
+//
+//        for (AmpIndicatorValue val : values.getObject()) {
+//            switch (val.getValueType()) {
+//                case AmpIndicatorValue.ACTUAL:
+//                    val.copyValuesTo(actualVal);
+//                    break;
+//                default:
+//                    break;
+//            }
+//        }
 
         AmpAjaxLinkField setValue = new AmpAjaxLinkField("setValues", "Set Value", "Set Value") {
             @Override

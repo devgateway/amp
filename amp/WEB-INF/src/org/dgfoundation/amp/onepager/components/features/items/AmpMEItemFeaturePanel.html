@@ -1,16 +1,18 @@
-<style>
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org">
+<style xmlns:wicket="http://www.w3.org/1999/xhtml">
 .featuredLabelLnk{background-color:#FFFFFF; padding:5px; border:1px solid #CCCCCC; display:block; margin-top:7px;}
 </style>
 <wicket:extend>
-<span wicket:id="featureLabel"/>
+<span wicket:id="featureLabel"></span>
 	<a href="#" class="slider featuredLabelLnk">
 		<b><span wicket:id="indicatorName"/></b><span wicket:id="indicatorCode" />
 	</a>
-	<div  class="invisible-item">
+	<div class="invisible-item">
 		<table width="100%" border="0" cellspacing="2" cellpadding="2" class="activity_me">
 			<tr>
 				<td colspan="2">
-					<span wicket:id="logframe"/>
+					<span wicket:id="logframe"></span>
 				</td>
 			</tr>
 			<tr>
@@ -19,25 +21,9 @@
 				</td>
 			</tr>
 			<tr>
-				<td>
-					<span wicket:id="baseValue"/>
+				<td colspan="2" align="left">
+					<span wicket:id="baseValues"></span>
 				</td>
-				<td>
-					<span wicket:id="baseValueDate"/>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<span wicket:id="targetValue"/>
-				</td>
-				<td>
-					<span wicket:id="targetValueDate"/>
-				</td>
-			</tr>
-			<tr>
-<!--				<td colspan="2">-->
-<!--					<span wicket:id="actualValues"/>-->
-<!--				</td>-->
 			</tr>
 
 			<tr>
@@ -55,6 +41,7 @@
 					<span wicket:id="setValues" />
 				</td>
 			</tr>
-		</table>
-	</div>
+			</table>
+		</div>
 </wicket:extend>
+</html>

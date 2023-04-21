@@ -33,6 +33,7 @@ import org.digijava.kernel.validators.activity.ProgramMappingValidator;
 import org.digijava.kernel.validators.activity.RegionLocationValidator;
 import org.digijava.kernel.validators.activity.TreeCollectionValidator;
 import org.digijava.kernel.validators.activity.UniqueActivityTitleValidator;
+import org.digijava.kernel.validators.common.RegexValidator;
 import org.digijava.kernel.validators.common.TotalPercentageValidator;
 import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.kernel.validators.common.SizeValidator;
@@ -712,7 +713,12 @@ LoggerIdentifiable, Cloneable {
      @VersionableCollection(fieldTitle = "GPI Surveys")
     protected Set <AmpGPISurvey> gpiSurvey;
 
-    @Interchangeable(fieldTitle = "Line Ministry Rank", importable = true, fmPath = "/Activity Form/Planning/Line Ministry Rank")
+    @Interchangeable(fieldTitle = "Line Ministry Rank", importable = true, fmPath = "/Activity Form/Planning/Line Ministry Rank",
+            interValidators = {
+            @InterchangeableValidator(
+                    value = RegexValidator.class,
+                    attributes = "regex=" + ActivityFieldsConstants.LINE_MINISTRY_RANK)
+    })
     @VersionableFieldSimple(fieldTitle = "Line Ministry Rank")
     protected Integer lineMinRank;
 

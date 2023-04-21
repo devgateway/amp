@@ -69,6 +69,9 @@ function goAction(value){
 	  				return false;
 	  			}
 	  		}
+			if (!confirm("Are you sure you want to perform this action?. Confirming the deletion the assignment will be deleted")) {
+				return false
+			}
 	  	}
 	  	if(submitForm==true){
 	  		document.getElementById("event").value=value;
@@ -436,12 +439,12 @@ function validateUserInfo(){
     	                                                                        <logic:iterate id="organisation" name="umViewEditUserForm" property="assignedOrgs" indexId="ind">
         		                                                                    <tr>
                 	                                                                    <td width="2%">
-                                                                                             <html:multibox name="umViewEditUserForm" property="assignedOrgs" styleId="verOrg_${ind}">
-                                                                                                     <bean:write name="organisation" property="ampOrgId" scope="page"/>
+                                                                                             <html:multibox name="umViewEditUserForm" property="selAssignedOrgs" styleId="verOrg_${ind}">
+                                                                                                     <bean:write name="org" property="ampOrgId" scope="page"/>
                                                                                              </html:multibox>
                     	                                                                 </td>
                         	                                                             <td align="left" width="49%">
-                                                                                             <bean:write name="organisation" property="name" scope="page"/>
+                                                                                             <bean:write name="org" property="name" scope="page"/>
                             	                                                         </td>                                                                                                   
                                 		                                             </tr>
                                         	                                     </logic:iterate>

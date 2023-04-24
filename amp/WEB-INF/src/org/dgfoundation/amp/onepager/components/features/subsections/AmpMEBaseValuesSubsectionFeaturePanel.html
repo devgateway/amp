@@ -2,16 +2,27 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org">
 <body>
 <wicket:extend>
-  <div>
-    <tr>
-      <td>
-        <span wicket:id="baseValue"></span>
-      </td>
-      <td>
-        <span wicket:id="baseValueDate"></span>
-      </td>
-    </tr>
-  </div>
+    <table width="100%" border="0" cellspacing="2" cellpadding="2">
+      <tr>
+        <td>
+          <span wicket:id="baseValue"></span>
+        </td>
+
+        <td>
+          <span wicket:id="baseValueDate"></span>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <span wicket:id="revisedBaseValue"></span>
+        </td>
+        <td>
+          <span wicket:id="revisedBaseValueDate"></span>
+        </td>
+      </tr>
+
+    </table>
 </wicket:extend>
 </body>
 </html>

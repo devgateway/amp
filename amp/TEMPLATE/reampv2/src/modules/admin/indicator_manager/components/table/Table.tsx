@@ -11,6 +11,8 @@ import ToolkitProvider, { Search, CSVExport, ToolkitContextType } from 'react-bo
 import styles from './Table.module.css';
 import AddNewIndicatorModal from '../modals/AddNewIndicatorModal';
 import { DefaultComponentProps, SectorObjectType } from '../../types';
+import { useSelector, useDispatch } from 'react-redux';
+import { setSizePerPage} from '../../reducers/fetchIndicatorsReducer';
 
 interface SkeletonTableProps extends DefaultComponentProps {
   columns: any;
@@ -22,6 +24,14 @@ interface SkeletonTableProps extends DefaultComponentProps {
 
 const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
   const { columns, data, title, sectors, setSelectedSector, translations } = props;
+  const dispatch = useDispatch();
+
+  const sizePerPage: number = useSelector((state: any) => state.fetchIndicatorsReducer.sizePerPage);
+
+  const handleSizePerPageChange = (onSizePerPageChange: (value: number) => void, size: number) => {
+    onSizePerPageChange(size);
+    dispatch(setSizePerPage(size))
+  }
 
   const { SearchBar } = Search;
   const { ExportCSVButton } = CSVExport;
@@ -32,6 +42,7 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
     setShowAddNewIndicatorModal(true);
   };
 
+
   useEffect(() => {
     setSelectedSector(0);
   }, [setSelectedSector]);
@@ -40,7 +51,7 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
   const paginationOptions: PaginationOptions = {
     paginationSize: 4,
     pageStartIndex: 1,
-    alwaysShowAllBtns: true,
+    alwaysShowAllBtns: true,       
     sizePerPageList: [
       {
         text: '10',
@@ -72,12 +83,12 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
     firstPageTitle: translations['amp.indicatormanager:first-page'],
     lastPageTitle: translations['amp.indicatormanager:last-page'],
     showTotal: true,
-    sizePerPage: 10,
+    sizePerPage: sizePerPage,
     hidePageListOnlyOnePage: true,
     sizePerPageRenderer: ({
       options,
       currSizePerPage,
-      onSizePerPageChange
+      onSizePerPageChange,
     }) => (
       <Row lg={4}>
         <Form.Control
@@ -87,7 +98,7 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
             width: 180,
             marginLeft: 20
           }}
-          onChange={(e) => onSizePerPageChange(Number(e.target.value))}
+          onChange={(e) => handleSizePerPageChange(onSizePerPageChange, parseInt(e.target.value))}
         >
           {
             options.map((option) => (

@@ -22,7 +22,7 @@ public class MEListEditor<T> extends ExpandableListEditor<T> {
         boolean itemEnabled = item.isEnabled();
         boolean fmMode = ((AmpAuthWebSession) getSession()).isFmMode();
 
-        AmpIndicator indicator = (AmpIndicator) item.getModel().getObject();
+        AmpIndicatorValue indicatorValue = (AmpIndicatorValue) item.getModel().getObject();
         item.setEnabled(itemEnabled);
     }
 

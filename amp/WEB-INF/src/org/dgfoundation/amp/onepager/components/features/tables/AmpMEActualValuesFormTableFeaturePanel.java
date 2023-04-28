@@ -18,11 +18,12 @@ public class AmpMEActualValuesFormTableFeaturePanel extends AmpMEValuesFormTable
                 @Override
                 protected void onPopulateItem(ListItem<AmpIndicatorValue> item) {
                     super.onPopulateItem(item);
-                    item.add(getActualValue);
+                    appendActualValueToItem(item);
                 }
             };
 
             add(list);
+            addExpandableList();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

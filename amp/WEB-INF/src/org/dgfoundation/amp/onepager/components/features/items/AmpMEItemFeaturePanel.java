@@ -12,7 +12,9 @@ import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpMEBaseValuesSubsectionFeaturePanel;
+import org.dgfoundation.amp.onepager.components.features.subsections.AmpMEFieldsSubsectionFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpMETargetValuesSubsectionFeaturePanel;
+import org.dgfoundation.amp.onepager.components.features.subsections.AmpMEValuesSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpIndicatorGroupField;
@@ -39,11 +41,10 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
      * @throws Exception
      */
     public AmpMEItemFeaturePanel(String id, String fmName, final IModel<IndicatorActivity> conn,
-                                 IModel<AmpIndicator> indicator, final IModel<Set<AmpIndicatorValue>> values) {
+                                 IModel<AmpIndicator> indicator, final IModel<Set<AmpIndicatorValue>> values) throws Exception {
         super(id, fmName, true);
 
-        if (values.getObject() == null)
-            values.setObject(new HashSet<AmpIndicatorValue>());
+        if (values.getObject() == null) values.setObject(new HashSet<>());
 
         final Label indicatorNameLabel = new Label("indicatorName", new PropertyModel<String>(indicator, "name"));
         add(indicatorNameLabel);
@@ -71,16 +72,10 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
                 new TranslatedChoiceRenderer<AmpIndicatorRiskRatings>(), false);
         add(riskSelect);
 
-        final AmpMEBaseValuesSubsectionFeaturePanel baseValues = new AmpMEBaseValuesSubsectionFeaturePanel(
-                "baseValues", "Base Values", new PropertyModel<>(indicator, "baseValue"),
-                new PropertyModel<>(indicator, "baseValue"));
+        final AmpMEValuesSubsectionFeature valuesSubsection = new AmpMEValuesSubsectionFeature("valuesSubsection",
+                fmName, indicator);
 
-        add(baseValues);
-
-        final AmpMETargetValuesSubsectionFeaturePanel targetValues = new AmpMETargetValuesSubsectionFeaturePanel(
-                "targetValues", "Target Values", new PropertyModel<>(indicator, "targetValue"), values);
-
-        add(targetValues);
+        add(valuesSubsection);
 
         AmpAjaxLinkField setValue = new AmpAjaxLinkField("setValues", "Set Value", "Set Value") {
             @Override

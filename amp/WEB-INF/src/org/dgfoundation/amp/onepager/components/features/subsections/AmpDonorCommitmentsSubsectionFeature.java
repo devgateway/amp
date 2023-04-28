@@ -34,7 +34,7 @@ public class AmpDonorCommitmentsSubsectionFeature extends AmpSubsectionFeatureFu
      * @param id
      * @param fmName
      * @param model
-     * @param ampFundingItemFeaturePanel 
+     * @param AmpFundingItemFeaturePanel
      * @throws Exception
      */
     public AmpDonorCommitmentsSubsectionFeature(String id,

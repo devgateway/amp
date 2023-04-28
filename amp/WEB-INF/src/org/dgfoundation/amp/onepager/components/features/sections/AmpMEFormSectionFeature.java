@@ -60,7 +60,12 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
         list = new ListView<IndicatorActivity>("list", listModel) {
             @Override
             protected void populateItem(final ListItem<IndicatorActivity> item) {
-                AmpMEItemFeaturePanel indicator = new AmpMEItemFeaturePanel("item", "ME Item", item.getModel(), PersistentObjectModel.getModel(item.getModelObject().getIndicator()), new PropertyModel(item.getModel(), "values"));
+                AmpMEItemFeaturePanel indicator = null;
+                try {
+                    indicator = new AmpMEItemFeaturePanel("item", "ME Item", item.getModel(), PersistentObjectModel.getModel(item.getModelObject().getIndicator()), new PropertyModel(item.getModel(), "values"));
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
                 item.add(indicator);
 
                 String translatedMessage = TranslatorUtil.getTranslation("Do you really want to delete this indicator?");

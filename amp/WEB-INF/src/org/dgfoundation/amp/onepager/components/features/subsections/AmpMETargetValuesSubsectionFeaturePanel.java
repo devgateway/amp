@@ -28,7 +28,7 @@ public class AmpMETargetValuesSubsectionFeaturePanel extends AmpSubsectionFeatur
             }
         };
 
-        targetValueContainer.getTextContainer().setEnabled(false);
+        targetValueContainer.getTextContainer().setEnabled(true);
         add(targetValueContainer);
 
         AmpDatePickerFieldPanel targetValueDateContainer = new AmpDatePickerFieldPanel("targetValueDate",

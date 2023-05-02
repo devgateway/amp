@@ -13,7 +13,7 @@ public class AmpMEValuesSubsectionFeature extends AmpSubsectionFeaturePanel<AmpI
     public AmpMEValuesSubsectionFeature(String id, String fmName, IModel<AmpIndicator> model) throws Exception {
         super(id, "Actual Values", model);
 
-        AmpMEActualValuesFormTableFeaturePanel valuesTable = new AmpMEActualValuesFormTableFeaturePanel("table", model, fmName, false, 7);
+        AmpMEActualValuesFormTableFeaturePanel valuesTable = new AmpMEActualValuesFormTableFeaturePanel("table", model, "Actual Values", false, 7);
         add(valuesTable);
 
         AmpAjaxLinkField addActualValue = new AmpAjaxLinkField("addActualValue", "Add Actual Value", "Add Actual Value") {

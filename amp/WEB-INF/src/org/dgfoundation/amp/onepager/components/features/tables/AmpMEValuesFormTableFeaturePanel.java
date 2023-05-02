@@ -10,7 +10,6 @@ import org.dgfoundation.amp.onepager.components.*;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.converters.CustomDoubleConverter;
 import org.dgfoundation.amp.onepager.models.AbstractMixedSetModel;
-import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 
@@ -40,7 +39,7 @@ public abstract class AmpMEValuesFormTableFeaturePanel extends AmpMEFormTableFea
     }
 
     protected AmpTextFieldPanel<Double> getActualValue(ListItem<AmpIndicatorValue> item){
-        return  new AmpTextFieldPanel<Double>("actualValue", new PropertyModel<>(item.getModel(), "actualValue"), "Actual Value") {
+        return  new AmpTextFieldPanel<Double>("actualValue", new PropertyModel<>(item.getModel(), "value"), "Actual Value") {
 
             public IConverter getInternalConverter(java.lang.Class<?> type) {
                 return CustomDoubleConverter.INSTANCE;

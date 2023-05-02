@@ -156,6 +156,7 @@ Default Hierarchy
 <td colspan="2" class="inside" align=center>
 <digi:trn key="aim:allowMultiple">Allow Multiple</digi:trn>? <html:checkbox name="settingsListDTO" property="allowMultiple" indexed="true" />
 </td>
+<c:if test="${settingsListDTO.defaultHierarchy != null}">
 </tr>
 		<td width="50%" class="inside" align="right">
 			<digi:trn key="aim:startDate">Start Date</digi:trn>
@@ -179,6 +180,7 @@ Default Hierarchy
 		</a>
 	</td>
 	</tr>
+	</c:if>
 </logic:iterate>
 
 <tr>

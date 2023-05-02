@@ -332,7 +332,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                 <div className={styles.viewmodal_wrapper}>
                   <Row className={styles.view_row}>
                     <Form.Group as={Col} className={styles.view_item} controlId="formBasicName">
-                      <Form.Label>Indicator Name</Form.Label>
+                      <Form.Label>{translations["amp.indicatormanager:indicator-name"]}</Form.Label>
                       <Form.Control
                         defaultValue={props.values.name}
                         onChange={props.handleChange}
@@ -350,7 +350,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                     </Form.Group>
 
                     <Form.Group className={styles.view_item} controlId="formIndicatorCode">
-                      <Form.Label>Indicator Code</Form.Label>
+                      <Form.Label>{translations["amp.indicatormanager:indicator-code"]}</Form.Label>
                       <Form.Control
                         defaultValue={props.values.code}
                         onChange={props.handleChange}
@@ -368,7 +368,7 @@ const EditIndicatorModal: React.FC<EditIndicatorModalProps> = (props) => {
                   </Row>
                   <Row className={styles.view_row}>
                     <Form.Group className={styles.view_one_item} controlId="formBasicDescription">
-                      <Form.Label>Indicator Description</Form.Label>
+                      <Form.Label>{translations["amp.indicatormanager:indicator-description"]}</Form.Label>
                       <Form.Control
                         defaultValue={props.values.description}
                         onChange={props.handleChange}

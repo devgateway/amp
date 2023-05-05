@@ -1,17 +1,19 @@
 import { errorHelper } from './../utils/errorHelper';
 import { IndicatorObjectType } from './../types';
-import { createAsyncThunk, createSlice, } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 type IndicatorInitialStateType = {
     indicators: IndicatorObjectType[];
     loading: boolean;
     error: any;
+    sizePerPage?: number;
 }
 
 const initialState: IndicatorInitialStateType = {
     indicators: [],
     loading: false,
     error: null,
+    sizePerPage: 10
 }
 
 export const getIndicators = createAsyncThunk(
@@ -29,7 +31,7 @@ export const getIndicators = createAsyncThunk(
 );
 
 const fetchIndicatorSlice = createSlice({
-    name: "indicatorsData",
+    name: "indicatorState",
     initialState,
     reducers: {
         addIndicator: (state, action) => {
@@ -45,6 +47,12 @@ const fetchIndicatorSlice = createSlice({
                 }
                 return indicator;
             });
+        },
+        setSizePerPage: (state, action) => {
+            state.sizePerPage = action.payload;
+        },
+        resetSizePerPage : (state) => {
+            state.sizePerPage = initialState.sizePerPage;
         }
     },
     extraReducers: (builder) => {
@@ -52,6 +60,7 @@ const fetchIndicatorSlice = createSlice({
             state.loading = true;
         });
         builder.addCase(getIndicators.fulfilled, (state, action) => {
+            state.indicators = [];
             state.loading = false;
             state.indicators = action.payload;
         });
@@ -63,6 +72,12 @@ const fetchIndicatorSlice = createSlice({
     }
 });
 
-export const { addIndicator } = fetchIndicatorSlice.actions;
+export const { 
+    addIndicator,
+    removeIndicator,
+    updateIndicator,
+    setSizePerPage,
+    resetSizePerPage 
+} = fetchIndicatorSlice.actions;
 
 export default fetchIndicatorSlice.reducer;

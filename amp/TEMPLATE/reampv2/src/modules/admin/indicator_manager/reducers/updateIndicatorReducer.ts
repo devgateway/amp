@@ -53,7 +53,7 @@ const updateIndicatorSlice = createSlice({
         builder.addCase(updateIndicator.rejected, (state, action) => {
             state.loading = false;
             state.error = errorHelper(action.payload);
-    
+
         });
     }
 });

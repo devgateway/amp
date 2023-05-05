@@ -86,28 +86,29 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
       headerStyle: { width: '30%' },
       formatter: (_cell: any, row: any) => {
         return (
-        <div>
-          {
-            _cell.map((sectorId: any) => {
-              const foundSector = !sectorsReducer.loading && sectorsReducer.sectors.find((sector: any) => sector.id === sectorId);
-            
-              if (foundSector) {
-              return <span key={sectorId}>{foundSector.name}
-                <br />
+          <div>
+            {
+              _cell.map((sectorId: any) => {
+                const foundSector = !sectorsReducer.loading && sectorsReducer.sectors.find((sector: any) => sector.id === sectorId);
 
-              </span>
-              }
+                if (foundSector) {
+                  return <span key={sectorId}>{foundSector.name}
+                    <br />
 
-              return (
-                <span key={sectorId}>
-                  {sectorId}
-                  <br />
-                </span>
-              )
-            })
-          }
-        </div>
-      )},
+                  </span>
+                }
+
+                return (
+                  <span key={sectorId}>
+                    {sectorId}
+                    <br />
+                  </span>
+                )
+              })
+            }
+          </div>
+        )
+      },
     },
     {
       dataField: 'creationDate',
@@ -169,26 +170,33 @@ const IndicatorTable: React.FC<IndicatorTableProps> = ({ translations }) => {
 
   return (
     <>
-      <ViewIndicatorModal
-        show={showViewIndicatorModal}
-        setShow={setShowViewIndicatorModal}
-        indicator={selectedRow}
-        translations={translations}
-      />
+      {showViewIndicatorModal &&
+        <ViewIndicatorModal
+          show={showViewIndicatorModal}
+          setShow={setShowViewIndicatorModal}
+          indicator={selectedRow}
+          translations={translations}
+        />
+      }
 
-      <EditIndicatorModal
-        show={showEditIndicatorModal}
-        setShow={setShowEditIndicatorModal}
-        indicator={selectedRow}
-        translations={translations}
-      />
+      {showEditIndicatorModal &&
+        <EditIndicatorModal
+          show={showEditIndicatorModal}
+          setShow={setShowEditIndicatorModal}
+          indicator={selectedRow}
+          translations={translations}
+        />
+      }
 
-      <DeleteIndicatorModal
-        show={showDeleteIndicatorModal}
-        setShow={setShowDeleteIndicatorModal}
-        indicator={selectedRow}
-        translations={translations}
-      />
+
+      {showDeleteIndicatorModal &&
+        <DeleteIndicatorModal
+          show={showDeleteIndicatorModal}
+          setShow={setShowDeleteIndicatorModal}
+          indicator={selectedRow}
+          translations={translations}
+        />
+      }
 
       {
         loading ? <Loading /> :

@@ -40,6 +40,8 @@ var browserify = require('browserify');
 var watchify = require('watchify');
 var gulp = require('gulp');
 var g = require('gulp-load-plugins')();
+var connect = require('gulp-connect');
+const { createProxyMiddleware } = require('http-proxy-middleware');
 var gulpi18nScraper = require('gulp-i18n-scraper');
 var gulpUtil = require('gulp-util');
 var mold = require('mold-source-map');
@@ -162,15 +164,17 @@ gulp.task('less', function() {
     .pipe(gulp.dest(paths.app.stylesheets.compiledDest));
 });
 
+const watchJsAndCss = cb => {
+  gulp.watch([paths.app.scripts.top, paths.app.scripts.amp], gulp.series('lint'));
+  gulp.watch(paths.app.stylesheets.all, gulp.series('less'));
+  cb();
+};
 
-gulp.task('watch', ['watchify'], function() {
-  gulp.watch([paths.app.scripts.top, paths.app.scripts.amp], ['lint']);
-  gulp.watch(paths.app.stylesheets.all, ['less']);
-});
+gulp.task('watch', gulp.series('watchify', watchJsAndCss));
 
 
 gulp.task('lint', function() {
-  gulp.src([paths.app.scripts.amp, paths.app.scripts.top])
+  return gulp.src([paths.app.scripts.amp, paths.app.scripts.top])
     .pipe(g.plumber())
     .pipe(g.jscs())
     .pipe(g.jshint())
@@ -196,41 +200,35 @@ gulp.task('clean', function(done) {
 //------------------------------------
 // build for dist
 //------------------------------------
-// TODO: fix revision for windows and re-enable
-gulp.task('build', ['clean', 'build-js', 'build-css'/*, 'revision'*/, 'copy-stuff']);
 
-
-gulp.task('build-js', ['clean', 'browserify'], function() {
+gulp.task('build-js', gulp.series('browserify', function() {
   return gulp.src(paths.app.scripts.built)
   	//.pipe(react())
     .pipe(g.streamify(g.uglify().on('error', gulpUtil.log)))
     .pipe(gulp.dest(paths.dist.scripts));
-});
+}));
 
-
-gulp.task('build-css', ['clean', 'less'], function() {
+gulp.task('build-css', gulp.series('less', function() {
   return gulp.src(paths.app.stylesheets.compiled)
     .pipe(g.csso())
     .pipe(gulp.dest(paths.dist.stylesheets));
-});
-
-
-gulp.task('copy-stuff', ['clean', 'build-index'], function() {
-  gulp.src(paths.app.rootstuff).pipe(gulp.dest(paths.dist.root));
-  //libs.concat(paths.app.stylesheets.entry))
-//gulp.src(paths.app.stylesheets.libs.concat(paths.app.stylesheets.entry))
-  gulp.src(paths.app.images).pipe(gulp.dest(paths.dist.images));
-  gulp.src(paths.app.fonts).pipe(gulp.dest(paths.dist.fonts));
-  gulp.src('app/empty.json').pipe(gulp.dest(paths.dist.root));
-});
+}));
 
 gulp.task('build-index',  function(){
   return gulp.src('app/src-index.html')
-            .pipe(g.rename('index.html'))
-            .pipe(gulp.dest('app/'));
+    .pipe(g.rename('index.html'))
+    .pipe(gulp.dest('app/'));
 });
 
-gulp.task('revision', ['clean', 'build-js', 'build-css'], function() {
+const copyRootStuff = () => gulp.src(paths.app.rootstuff).pipe(gulp.dest(paths.dist.root));
+const copyAppImages = () => gulp.src(paths.app.images).pipe(gulp.dest(paths.dist.images));
+const copyAppFonts = () => gulp.src(paths.app.fonts).pipe(gulp.dest(paths.dist.fonts));
+const copyEmptyJson = () => gulp.src('app/empty.json').pipe(gulp.dest(paths.dist.root));
+
+gulp.task('copy-stuff', gulp.series('build-index',
+  gulp.parallel(copyRootStuff, copyAppImages, copyAppFonts, copyEmptyJson)));
+
+gulp.task('revision', gulp.series('clean', 'build-js', 'build-css', function() {
   var versionableGlob = '**/*.{js,css}';
   var antiHtmlFilter =  g.filter(versionableGlob);  // so we can avoid versioning html
   gulp.src([ paths.dist.root + versionableGlob,
@@ -241,12 +239,17 @@ gulp.task('revision', ['clean', 'build-js', 'build-css'], function() {
     .pipe(antiHtmlFilter.restore())   // bring the html back into the stream
     .pipe(g.revReplace())             // replace asset names in html as revisioned names
     .pipe(gulp.dest(paths.dist.root));// write everything back to disk
-});
+}));
 
+// TODO: fix revision for windows and re-enable
+gulp.task('build', gulp.series('clean', 'build-js', 'build-css'/*, 'revision'*/, 'copy-stuff'));
 
-gulp.task('preview', ['build'], g.serve({
-  root: [paths.dist.root],
-  port: 3000
+gulp.task('preview', gulp.series('build', cb => {
+  g.serve({
+    root: [paths.dist.root],
+    port: 3000
+  })();
+  cb();
 }));
 
 
@@ -255,31 +258,35 @@ gulp.task('preview', ['build'], g.serve({
 //------------------------------------
 // dev
 //------------------------------------
-gulp.task('default', ['dev-ci']);
-gulp.task('dev', ['lint', 'less', 'dev-server', 'watch', 'reload', 'dev-index-no-mock']);
-gulp.task('dev-mock', ['lint', 'less', 'dev-server', 'watch', 'reload', 'dev-index']);
-gulp.task('dev-ci',['dev','watch-and-test']);
+gulp.task('dev-server', cb => {
+  connect.server({
+    root: [ paths.app.root ],
+    port: 3000,
+    middleware: (connect, opt) => [
+      createProxyMiddleware(['!/compiled-css/**', '!/compiled-js/**', '!/img/**', '!/fonts/**', '!/index.html'], {
+        target: 'http://localhost:8080'
+      })
+    ],
+  });
+  cb();
+});
 
-gulp.task('dev-server', g.serve({
-  root: [paths.app.root],
-  port: 3000
-}));
 
-
-gulp.task('reload', ['dev-server', 'watch'], function() {
+gulp.task('reload', function(cb) {
   g.livereload.listen();
-  return gulp.watch([
+  gulp.watch([
     paths.app.rootstuff,
     paths.app.stylesheets.compiled,
     paths.app.scripts.built,
     paths.app.images,
     paths.app.fonts
   ]).on('change', g.livereload.changed);
+  cb();
 });
 
 
 // takes src-index.html, injects mockAPI
-gulp.task('dev-index', ['bundle-mock'], function(){
+gulp.task('dev-index', gulp.series('bundle-mock', function(){
   return gulp.src('app/src-index.html')
             .pipe(
                 g.inject(
@@ -289,7 +296,7 @@ gulp.task('dev-index', ['bundle-mock'], function(){
                     }))
             .pipe(g.rename('index.html'))
             .pipe(gulp.dest('app/'));
-});
+}));
 
 // takes src-index.html, injects mockAPI
 gulp.task('dev-index-no-mock', function(){
@@ -298,27 +305,14 @@ gulp.task('dev-index-no-mock', function(){
             .pipe(gulp.dest('app/'));
 });
 
+gulp.task('dev', gulp.series('lint', 'less', 'dev-server', 'watch', 'reload', 'dev-index-no-mock'));
+gulp.task('dev-mock', gulp.series('lint', 'less', 'dev-server', 'watch', 'reload', 'dev-index'));
 
 
 
 //------------------------------------
 // test
 //------------------------------------
-
-gulp.task('webtest', ['build-tests', 'serve-tests', 'reload-tests']);
-
-
-gulp.task('watch-and-test', ['test'], function() {
-  // TODO: for some reason the watch on `paths.tests.scripts` doesn't work
-  // when called from 'dev-ci' I think a different watch is overiding it....
-  return gulp.watch([paths.tests.scripts, paths.app.scripts.top, paths.app.scripts.amp], ['test']);
-});
-
-
-gulp.task('test', ['build-tests'], function() {
-  return gulp.src(paths.tests.entry, {read: false})
-        .pipe(g.mocha());
-});
 
 gulp.task('build-tests', function() {
   gulp.src([paths.tests.css, paths.tests.qunit])
@@ -327,15 +321,34 @@ gulp.task('build-tests', function() {
   return _bundlify(browserify, paths.tests.entry, paths.tests.compiledDest, 'compiled-test.js');
 });
 
-gulp.task('serve-tests', ['build-tests'], g.serve({
-  root: [paths.tests.root],
-  port: 3000
+gulp.task('test', gulp.series('build-tests', function() {
+  return gulp.src(paths.tests.entry, {read: false})
+    .pipe(g.mocha());
+}));
+
+gulp.task('watch-and-test', gulp.series('test', function(cb) {
+  // TODO: for some reason the watch on `paths.tests.scripts` doesn't work
+  // when called from 'dev-ci' I think a different watch is overiding it....
+  gulp.watch([paths.tests.scripts, paths.app.scripts.top, paths.app.scripts.amp], gulp.series('test'));
+  cb();
+}));
+
+gulp.task('serve-tests', gulp.series('build-tests', cb => {
+  g.serve({
+    root: [paths.tests.root],
+    port: 3000
+  })();
+  cb();
 }));
 
 
-gulp.task('reload-tests', ['build-tests'], function() {
-  gulp.watch(paths.tests.scripts, ['build-tests']);
+gulp.task('reload-tests', gulp.series('build-tests', function(cb) {
+  gulp.watch(paths.tests.scripts, gulp.series('build-tests'));
   gulp.watch(paths.tests.compiled)
     .on('change', g.livereload.changed);
-});
+  cb();
+}));
 
+gulp.task('webtest', gulp.series('build-tests', 'serve-tests', 'reload-tests'));
+gulp.task('dev-ci', gulp.series('dev', 'watch-and-test'));
+gulp.task('default', gulp.series('dev-ci'));

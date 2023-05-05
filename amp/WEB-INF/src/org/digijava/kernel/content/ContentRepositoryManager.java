@@ -132,9 +132,10 @@ public final class ContentRepositoryManager {
                 request.setAttribute(JCR_WRITE_SESSION, writeSession);
             } else {
                 writeSession.save();
-                registerNamespace(writeSession, "ampdoc", AMP_DOC_NAMESPACE);
-                registerNamespace(writeSession, "amplabel", AMP_LABLE_NAMESPACE);
             }
+
+            registerNamespace(writeSession, "ampdoc", AMP_DOC_NAMESPACE);
+            registerNamespace(writeSession, "amplabel", AMP_LABLE_NAMESPACE);
             registerObservers(writeSession);
         } catch (RepositoryException e) {
             throw new RuntimeException(e.getMessage(), e);

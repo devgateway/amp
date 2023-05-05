@@ -116,7 +116,7 @@ public class EPConstants {
 
     public static final String ISO8601_DATE_AND_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
     public static final String ISO8601_DATE_FORMAT = "yyyy-MM-dd";
-    
+    public static final String ACTIVITY_DOCUMENTS = "activity_documents";
     /**
      * Map containing the length of date strings used for validation
      * "2019-02-26T11:08:56.235-0200" - 28 characters

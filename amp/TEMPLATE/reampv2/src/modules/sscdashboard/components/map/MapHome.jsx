@@ -206,6 +206,7 @@ class MapHome extends Component {
           zoomOutTitle={translations['amp.ssc.dashboard:zoom-out']}
         />
         <Control position="topleft" className="leaflet-control-zoom leaflet-bar">
+          {/*eslint-disable-next-line jsx-a11y/anchor-is-valid*/}
           <a onClick={this.handleCenterClick.bind(this)}>
             <img
               src={CenterIcon}

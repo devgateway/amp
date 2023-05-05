@@ -20,6 +20,9 @@ Install module's dependencies
 
     npm install
 
+Note: At the moment we're using uglifyjs-webpack-plugin from a newer webpack version for compatibility with es6.
+While installing you may need to use --legacy-peer-deps option.
+
 Run
 
     npm start

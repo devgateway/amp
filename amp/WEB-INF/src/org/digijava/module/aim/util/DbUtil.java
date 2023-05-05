@@ -561,41 +561,26 @@ public class DbUtil {
         return calendar;
     }
 
-    public static Collection<AmpActivityVersion> getAllactivitiesRelatedToOrg(Long orgId) {
-        Session session = null;
-        Query qry = null;
-        Collection<AmpActivityVersion> activities = new ArrayList<AmpActivityVersion>();
-        try {
-            session = PersistenceManager.getSession();
-            String queryString = "select role.activity from " + AmpOrgRole.class.getName() + " role,"
-                    + AmpActivity.class.getName() + " a "
-                    + " where role.activity = a.ampActivityId and role.organisation=" + orgId;
-            qry = session.createQuery(queryString);
-            activities = qry.list();
-        } catch (Exception e) {
-            logger.error("Unable to get all activities");
-            logger.debug("Exceptiion " + e);
-        }
-        return activities;
+    public static List<String> getAmpIdsByOrg(Long orgId) {
+        String queryString = "select a.ampId "
+                + "from " + AmpOrgRole.class.getName() + " role, " + AmpActivity.class.getName() + " a "
+                + "where role.organisation=:orgId "
+                + "and role.activity = a.ampActivityId";
+        return PersistenceManager.getSession()
+                .createQuery(queryString)
+                .setLong("orgId", orgId)
+                .list();
     }
 
-    public static int getAllOrgActivitiesCount(Long orgId) {
-        Session session = null;
-        Query qry = null;
-        int activitiesCount = 0;
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            String queryString = "select count(*) from " + AmpActivityInternalId.class.getName() + " f,"
-                    + AmpActivityGroup.class.getName()
-                    + " g where f.ampActivity = g.ampActivityLastVersion and (f.organisation=:orgId)";
-            qry = session.createQuery(queryString);
-            qry.setParameter("orgId", orgId, LongType.INSTANCE);
-            activitiesCount = (Integer) qry.uniqueResult();
-        } catch (Exception e) {
-            logger.error("Unable to get all activities");
-            logger.debug("Exceptiion " + e);
-        }
-        return activitiesCount;
+    public static List<String> getAmpIdsByInternalIdOrg(Long orgId) {
+        String queryString = "select f.ampActivity.ampId "
+                + "from " + AmpActivityInternalId.class.getName() + " f," + AmpActivityGroup.class.getName() + " g "
+                + "where f.ampActivity = g.ampActivityLastVersion "
+                + "and (f.organisation=:orgId)";
+        return PersistenceManager.getRequestDBSession()
+                .createQuery(queryString)
+                .setLong("orgId", orgId)
+                .list();
     }
 
     public static AmpFiscalCalendar getAmpFiscalCalendar(Long ampFisCalId) {

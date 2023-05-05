@@ -70,6 +70,13 @@ public class SettingsConstants {
     public static final String GIS_DEFAULT_MAX_DATE = "gis-default-max-date";
     public static final String GIS_DEFAULT_MIN_DATE = "gis-default-min-date";
 
+    public static final String REPORT_DEFAULT_MAX_DATE = "report-default-max-date";
+
+    public static final String REPORT_DEFAULT_MIN_DATE = "report-default-min-date";
+
+    public static final String REPORT_DEFAULT_MAX_YEAR_RANGE = "report-default-max-year-range";
+    public static final String REPORT_DEFAULT_MIN_YEAR_RANGE = "report-default-min-year-range";
+
 
 
 

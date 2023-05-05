@@ -85,6 +85,7 @@ public class ActivityFieldsConstants {
     
     public static final String IATI_IDENTIFIER = "IATI Identifier";
     public static final String UUID = "UUID";
+    public static final String LINE_MINISTRY_RANK ="^[1-5]$";
 
     public static final class Locations {
         private Locations() {

@@ -40,6 +40,7 @@ package org.digijava.kernel.viewmanager.reposimpl;
 *
 *************************************************************************/
 
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -154,11 +155,7 @@ public class ViewConfigImpl extends ViewConfigUtil  {
      */
     public String getPagePath(String pageName, boolean appendExtension) throws
         ViewConfigException {
-        logger.l7dlog(Level.DEBUG,
-                      "SiteConfigUtils.getPagePath.layout",
-                      new Object[] {
-                      pageName}
-                      , null);
+        logger.debug("SiteConfigUtils.getPagePath.layout " + pageName);
 
         return findExistingFile(
                                 (appendExtension ? pageName + ".jsp" : pageName),
@@ -186,11 +183,9 @@ public class ViewConfigImpl extends ViewConfigUtil  {
         ViewConfigException {
 
         if (logger.isDebugEnabled()) {
-            logger.l7dlog(Level.DEBUG,
-                          "SiteConfigUtils.getFilePathCalled",
-                          new Object[] {
-                          moduleName, moduleInstance, pageName, teaserName}
-                          , null);
+            logger.debug(MessageFormat.format("getFilePath() called for module {0}, instance {1}"
+                            + ", page {2}, teaser {3}",
+                    moduleName, moduleInstance, pageName, teaserName));
         }
 
         String fileName = null;
@@ -321,11 +316,7 @@ public class ViewConfigImpl extends ViewConfigUtil  {
         }
 
         if (logger.isDebugEnabled()) {
-            logger.l7dlog(Level.DEBUG,
-                          "SiteConfigUtils.getFilePathReturns",
-                          new Object[] {
-                          fileName}
-                          , null);
+            logger.debug("getFilePath() returned " + fileName);
         }
 
         return fileName;

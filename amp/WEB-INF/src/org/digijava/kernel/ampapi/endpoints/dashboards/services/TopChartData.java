@@ -24,6 +24,8 @@ public class TopChartData {
 
     private String title;
 
+    private String source;
+
     public List<TopChartAmount> getValues() {
         return values;
     }
@@ -86,5 +88,13 @@ public class TopChartData {
 
     public void setCurrency(String currency) {
         this.currency = currency;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 }

@@ -36,6 +36,10 @@ $(document).ready(function () {
     });
 
     var events = _.extend({}, Backbone.Events);
+
+    events.listenTo(widgetFilter, 'filtersDeserialized', function () {
+        repFilters.populateSelectedFilters('#listFiltersDiv', widgetFilter);
+    });
     events.listenTo(widgetFilter, 'widgetLoaded', function () {
         widgetFilter.deserialize({filters: {includeLocationChildren: true}}, {silent: true});
     });
@@ -70,6 +74,7 @@ $(document).ready(function () {
             success: function (data) {
                 if (!embedded) {
                     $('#listFiltersDiv').html(data);
+                    repFilters.populateSelectedFilters('#listFiltersDiv', widgetFilter);
                     $('#hasFilters').val(true);
                 } else {
                     $('#queryLabelsDiv').html(data);

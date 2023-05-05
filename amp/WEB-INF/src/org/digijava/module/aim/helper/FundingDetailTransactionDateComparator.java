@@ -2,23 +2,16 @@ package org.digijava.module.aim.helper;
 
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 
-import java.io.Serializable;
 import java.util.Comparator;
 
 /**
  * Created by Aldo Picca.
  */
-public class FundingDetailTransactionDateComparator implements Serializable {
+public class FundingDetailTransactionDateComparator extends FundingDetailGenericComparator {
 
-    private static final Comparator<AmpFundingDetail> comparator = Comparator.comparing(
-            AmpFundingDetail::getTransactionDate, Comparator.nullsFirst(Comparator.naturalOrder()));
-
-    public static Comparator<AmpFundingDetail> getAscending() {
-        return comparator;
+    @Override
+    public Comparator<AmpFundingDetail> getDefaultComparator() {
+        return Comparator.comparing(
+                AmpFundingDetail::getTransactionDate, Comparator.nullsFirst(Comparator.naturalOrder()));
     }
-
-    public static Comparator<AmpFundingDetail> getDescending() {
-        return comparator.reversed();
-    }
-
 }

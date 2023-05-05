@@ -24,6 +24,9 @@
         </div>
         <button type="button" class="btn btn-link btn-xs pull-right reset" style="display:none" data-i18n="amp.dashboard:chart-reset">reset others</button>
       </div>
+      <% if (model.get('source')) { %>
+        <div class="dash-chart-source"><%= model.get('source') %></div>
+      <% } %>
       <div class="alert alert-warning negative-values-message" role="alert">
           <strong data-i18n="amp.dashboard:negatives-values">Negative values are not represented in this chart.</strong><br>
           <span data-i18n="amp.dashboard:negatives-values-parag">Please switch to bar chart or table view to view all values.</span>

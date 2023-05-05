@@ -79,11 +79,12 @@ public class AMPActivityService implements ActivityService {
     
     @Override
     public AmpActivityVersion saveActivity(AmpActivityVersion newActivity, List<AmpContentTranslation> translations,
-                                           AmpTeamMember modifiedBy, boolean draftChange, SaveContext saveContext,
-                                           EditorStore editorStore, Site site) throws Exception {
+            List<AmpContentTranslation> cumulativeTranslations,
+            AmpTeamMember modifiedBy, boolean draftChange, SaveContext saveContext,
+            EditorStore editorStore, Site site) throws Exception {
         
         Session session = PersistenceManager.getSession();
-        return saveActivityNewVersion(newActivity, translations, modifiedBy,
+        return saveActivityNewVersion(newActivity, translations, cumulativeTranslations, modifiedBy,
                 Boolean.TRUE.equals(newActivity.getDraft()), draftChange,
                 session, saveContext, editorStore, site);
     }

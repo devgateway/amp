@@ -488,5 +488,6 @@ export const initialTranslations = {
     "editPermissionError": "You do not have permissions to edit this activity.",
     "sameUserEditingError": "You may only edit one activity at a time.",
     "exportToWord":"Export to Word",
-    "disbursementId":"Disbursement ID"
+    "disbursementId":"Disbursement ID",
+    "0208": "Couldn't find activity! It may be no longer exists in the system"
 }

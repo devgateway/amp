@@ -6,7 +6,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.digijava.kernel.ampapi.endpoints.common.print.phantom.PhantomService;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -28,7 +27,6 @@ public class PrintImageService {
     private static final String NO_CACHE_NO_STORE_MUST_REVALIDATE = "no-cache, no-store, must-revalidate";
     private static final String PNG_EXTENSION = ".png";
     private static final String HTML_EXTENSION = ".html";
-    private static final String JS_EXTENSION = ".js";
     private static final int FILE_NAME_LENGTH = 10;
     private static final String ERROR_CREATING_IMAGE = "Error Creating image";
     private static final String CACHE_CONTROL = "Cache-Control";
@@ -55,9 +53,7 @@ public class PrintImageService {
             final Integer height = getHeight(htmlContent);
             final Integer width = getWidth(htmlContent);
             tmpImageFile = File.createTempFile(RandomStringUtils.randomAlphabetic(FILE_NAME_LENGTH), PNG_EXTENSION);
-            tmpJsFile = createTmpFile(htmlContent.getJavascript(), JS_EXTENSION);
-            final String scriptPath = tmpJsFile != null ? tmpJsFile.getAbsolutePath(): "";
-            PhantomService.createImage(tmpContentFile.toURI().toString(), tmpImageFile.getAbsolutePath(), width, height, scriptPath);
+            ScreenshotService.takeScreenshot(tmpContentFile, tmpImageFile, width, height);
             Files.copy(tmpImageFile.toPath(), output);
             return createImageBase64Response(output); // this also should change for PDF
         } catch (final Exception e) {

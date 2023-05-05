@@ -117,7 +117,6 @@ class GeocodingTable extends Component {
         let lastUpdatedHeaderText = translations['amp.geocoder:lastUpdatedDate'];
         let ampIdHeaderText = translations['amp.geocoder:ampId'];
         let projectNameHeaderText = translations['amp.geocoder:projectName'];
-        let locationHeaderText = translations['amp.geocoder:location'];
 
         let columns = [
             {

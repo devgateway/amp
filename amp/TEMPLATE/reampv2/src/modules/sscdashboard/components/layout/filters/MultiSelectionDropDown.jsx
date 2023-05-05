@@ -190,7 +190,6 @@ class MultiSelectionDropDown extends Component {
     );
     const showQuickSelectionLinks = parentId !== null;
     const showSelectAll = selectionLimit === 0;
-    const showSelectNone = selectionLimit === 0;
     return (
       <div className={`horizontal-filter dropdown panel ${disabled ? ' disable-filter' : ''}`}>
         {parentId

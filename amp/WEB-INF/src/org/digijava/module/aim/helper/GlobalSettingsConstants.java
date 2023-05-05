@@ -205,6 +205,8 @@ public class GlobalSettingsConstants {
 
     public static final String REORDER_FUNDING_ITEMS = "Reorder funding items";
 
+    public static final String FUNDING_ITEM_LIST_EXPANDABLE = "Make the funding item list expandable";
+
     public static final String AMP_REGISTRY_URL = "AMP Registry URL";
 
     public static final String AMP_OFFLINE_ENABLED = "AMP Offline Enabled";
@@ -233,10 +235,14 @@ public class GlobalSettingsConstants {
 
     public static final String MACHINE_TRANSLATION_MAX_CHARACTERS = "Machine Translation Monthly Max Characters";
 
+    public static final String COMPUTED_MANAGEMENT_WORKSPACES = "Computed management workspaces";
+
     /**
      * fields which, although existing in the database, should be rendered with a display: none on the GlobalSettings
      * form so that the user never has a chance of changing their value
      */
     public final static Set<String> SETTINGS_TO_HIDE = new HashSet<>(Arrays.asList(REPORT_WIZARD_VISIBILITY_SOURCE));
+
+    public static final String EXEMPT_ORGANIZATION_DOCUMENTS = "Exempt organization to see documents";
 
 }

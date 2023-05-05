@@ -41,7 +41,6 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.admin.helper.AmpActivityFake;
-import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
@@ -117,11 +116,11 @@ public class ActivityUtil {
     logger.info(" this is the other components getting called....");
     try {
       session = PersistenceManager.getRequestDBSession();
-      String rewrittenColumns = SQLUtils.rewriteQuery("amp_components", "ac", 
+      String rewrittenColumns = SQLUtils.rewriteQuery("amp_components", "ac",
               new HashMap<String, String>(){{
                   put("title", InternationalizedModelDescription.getForProperty(AmpComponent.class, "title").getSQLFunctionCall("ac.amp_component_id"));
                   put("description", InternationalizedModelDescription.getForProperty(AmpComponent.class, "description").getSQLFunctionCall("ac.amp_component_id"));
-              }});      
+              }});
       String queryString = "select " + rewrittenColumns + " from amp_components ac " +
             "where (ac.amp_activity_id=:actId)";
       Query qry = session.createSQLQuery(queryString).addEntity(AmpComponent.class);
@@ -166,14 +165,14 @@ public class ActivityUtil {
       oql += " order by act.name";
 
       Query query = session.createQuery(oql);
-      
+
       setSearchActivitiesQueryParams(query, ampThemeId, statusCode, donorOrgId, fromDate, toDate, locationId, teamMember);
-      
+
       if (pageStart!=null && rowCount!=null){
           query.setFirstResult(pageStart);
           query.setMaxResults(rowCount);
       }
-      
+
       result = query.list();
     }
     catch (Exception ex) {
@@ -216,8 +215,8 @@ public class ActivityUtil {
             "   from " + AmpActivityProgram.class.getName() + " prog ";
 
       oql+= getSearchActivitiesWhereClause(ampThemeId, statusCode, donorOrgId, fromDate, toDate, locationId, teamMember);
-    
-      
+
+
       Query query = session.createQuery(oql);
 
       setSearchActivitiesQueryParams(query, ampThemeId, statusCode, donorOrgId, fromDate, toDate, locationId, teamMember);
@@ -265,7 +264,7 @@ public class ActivityUtil {
           Query query = session.createQuery(oql);
 
           setSearchActivitiesQueryParams(query, ampThemeId, statusCode, donorOrgId, fromDate, toDate, locationId, teamMember);
-          
+
           result = (Integer)query.uniqueResult();
         }
         catch (Exception ex) {
@@ -295,9 +294,9 @@ public class ActivityUtil {
           Date toDate,
           Long locationId,
           TeamMember teamMember) {
-      
+
       String oql="";
-      
+
       if (ampThemeId!=null){
           oql += " inner join prog.program as theme ";
       }
@@ -353,7 +352,7 @@ public class ActivityUtil {
                     whereTeamStatement.append(" and ( latestAct.team.ampTeamId =:teamId ) ");
           }
           }
-        
+
       }
       if(relatedOrgsCriteria){
           oql+=" inner join latestAct.orgrole role ";
@@ -391,11 +390,11 @@ public class ActivityUtil {
           Date toDate,
           Long locationId,
           TeamMember teamMember) {
-      
+
       if (ampThemeId != null) {
           query.setLong("ampThemeId", ampThemeId.longValue());
         }
-      
+
         if (fromDate != null) {
           query.setDate("FromDate", fromDate);
         }
@@ -408,7 +407,7 @@ public class ActivityUtil {
         if (teamMember!=null && teamMember.getTeamId()!=null&&!teamMember.getTeamAccessType().equals("Management")){
           query.setLong("teamId", teamMember.getTeamId());
         }
-        
+
   }
 
   @SuppressWarnings("unchecked")
@@ -423,8 +422,8 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
       return PersistenceManager.getSession().createSQLQuery(queryString).addEntity(AmpActivityLocation.class)
               .setParameter("actId", activityId, LongType.INSTANCE).list();
   }
-    
-    
+
+
     /**
      * Load activity from db.
      * Use this one instead of method below this if you realy want to load all data.
@@ -474,7 +473,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             ActivityUtil.setCurrentWorkspacePrefixIntoRequest(result);
 
             ActivityUtil.initializeForApi(result);
-            
+
         } catch (ObjectNotFoundException e) {
             logger.debug("AmpActivityVersion with id=" + id + " not found");
         } catch (Exception e) {
@@ -537,11 +536,11 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                 .setParameterList("ampIds", ampIds)
                 .list();
     }
-  
+
   public static AmpActivityVersion loadAmpActivity(Long id){
-     return (AmpActivityVersion) PersistenceManager.getSession().load(AmpActivityVersion.class, id); 
+     return (AmpActivityVersion) PersistenceManager.getSession().load(AmpActivityVersion.class, id);
   }
- 
+
   public static List<AmpActivitySector> getAmpActivitySectors(Long actId) {
       String queryString = "select a.* from amp_activity_sector a " + "where a.amp_activity_id=:actId";
       return PersistenceManager.getSession().createSQLQuery(queryString).addEntity(AmpActivitySector.class)
@@ -576,6 +575,24 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         return role;
       }
 
+  public static List<AmpOrgRole> getAmpRolesForActivityAndOrganizationsAndRole(Long actId, List<Long> organizationId,
+                                                                               Long roleId) {
+      List<AmpOrgRole> ampOrgRoles = new ArrayList<>();
+      if (organizationId != null && organizationId.size() > 0) {
+          String queryString = "select ar from AmpOrgRole ar "
+                  + " where ar.activity.ampActivityId = :actId "
+                  + " and ar.organisation.ampOrgId in ( :orgId ) "
+                  + " and ar.role.ampRoleId = :roleId ";
+          Query qry = PersistenceManager.getSession().createQuery(queryString);
+          qry.setParameter("actId", actId);
+          qry.setParameterList("orgId", organizationId);
+          qry.setParameter("roleId", roleId);
+          ampOrgRoles = qry.list();
+      }
+
+      return ampOrgRoles;
+  }
+
   public static AmpOrganisation getAmpOrganisation(Long actId, Long orgRoleId) {
         Session session = null;
         AmpOrganisation organisation = null;
@@ -601,24 +618,16 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         }
         return organisation;
       }
-  
-  public static int getFundingByOrgCount(Long id) {
-        Session session = null;
-        int orgrolesCount = 0;
-        try {
-          session = PersistenceManager.getSession();
-          String queryString = "select count(*) from " + AmpFunding.class.getName() +" f, "
-                  + AmpActivity.class.getName() + " a "
-                  + "where f.ampActivityId=a.ampActivityId and (f.ampDonorOrgId=:orgId)";
-          Query qry = session.createQuery(queryString);
-          qry.setParameter("orgId", id, LongType.INSTANCE);
-          orgrolesCount = (Integer)qry.uniqueResult();
-        }
-        catch (Exception ex) {
-          logger.error("Unable to get fundings for organization :" + ex);
-        }
-        return orgrolesCount;
-      }
+
+    public static List<String> getAmpIdsByFundingOrg(Long id) {
+        String queryString = "select a.ampId "
+                + "from " + AmpFunding.class.getName() + " f, " + AmpActivity.class.getName() + " a "
+                + "where f.ampActivityId=a.ampActivityId "
+                + "and (f.ampDonorOrgId=:orgId)";
+        Query qry = PersistenceManager.getSession().createQuery(queryString);
+        qry.setParameter("orgId", id, LongType.INSTANCE);
+        return (List<String>) qry.list();
+    }
 
   public static Collection<Components> getAllComponents(Long id) {
     Collection<Components> componentsCollection = new ArrayList<Components>();
@@ -2115,7 +2124,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 
     public static int daysToValidation(AmpActivityVersion activity) {
         int result;
-        int daysBetween = daysBetween(activity.getUpdatedDate(), new Date());
+        int daysBetween = daysBetween(activity.getUpdatedDate() != null ? activity.getUpdatedDate(): new Date(), new Date());
         String daysBeforeValidation = FeaturesUtil.getGlobalSettingValue(
                 GlobalSettingsConstants.NUMBER_OF_DAYS_BEFORE_AUTOMATIC_VALIDATION);
         result = (Integer.parseInt(daysBeforeValidation) - daysBetween);

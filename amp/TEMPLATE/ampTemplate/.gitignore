@@ -1,4 +1,2 @@
-# first, ignore everything in node modules, so we don't track build deps
-node_modules/*
-# then, unignore our own libraries that we want to have available on the `require` search path
-!node_modules/amp-*
+node_modules/*/node
+node_modules/*/node_modules

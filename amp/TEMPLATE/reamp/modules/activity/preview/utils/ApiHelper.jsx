@@ -1,4 +1,5 @@
 import {fetchJson, postJson} from 'amp/tools/index';
+import translate from '../utils/translate';
 
 export default class ApiHelper {
     static extractErrors(errors, obj) {
@@ -6,9 +7,10 @@ export default class ApiHelper {
         if (errors) {
             errors = Array.isArray(errors) ? errors : [errors];
             errors.forEach((error) => {
-                for (const key in error) {
-                    const messageKey = 'amp.preview:server-errors-' + key;
-                    const message = {messageKey};
+                for (const _key in error) {
+                    const message = {
+                        messageKey: this.handleApiErrors(_key, translate),
+                    };
                     if (obj && obj.id) {
                         message.id = obj.id;
                     }
@@ -18,6 +20,10 @@ export default class ApiHelper {
             });
         }
         return errorMessages;
+    }
+
+    static handleApiErrors(errorCode, translateFn) {
+        return translateFn(errorCode);
     }
 
     static _fetchData(url) {

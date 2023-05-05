@@ -21,6 +21,8 @@ public class FundingTypeChartData {
     @ApiModelProperty("Measures of the report")
     private List<Measure> measures;
 
+    private String source;
+
     private BigDecimal total;
 
     private String sumarizedTotal;
@@ -117,5 +119,13 @@ public class FundingTypeChartData {
         public void setTranslated(final String translated) {
             this.translated = translated;
         }
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 }

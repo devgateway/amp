@@ -133,6 +133,17 @@ public class AmpGeneralSettings {
     @JsonProperty(SettingsConstants.GIS_DEFAULT_MIN_YEAR_RANGE)
     private String gisDefaultMinYearRange;
 
+    @JsonProperty(SettingsConstants.REPORT_DEFAULT_MAX_DATE)
+    private String reportDefaultMaxDate;
+
+    @JsonProperty(SettingsConstants.REPORT_DEFAULT_MIN_DATE)
+    private String reportDefaultMinDate;
+
+    @JsonProperty(SettingsConstants.REPORT_DEFAULT_MAX_YEAR_RANGE)
+    private String reportDefaultMaxYearRange;
+    @JsonProperty(SettingsConstants.REPORT_DEFAULT_MIN_YEAR_RANGE)
+    private String reportDefaultMinYearRange;
+
     public Boolean getUseIconsForSectorsInProjectList() {
         return useIconsForSectorsInProjectList;
     }
@@ -475,5 +486,38 @@ public class AmpGeneralSettings {
 
     public void setNddMappingProgramLevel(Integer nddMappingProgramLevel) {
         this.nddMappingProgramLevel = nddMappingProgramLevel;
+    }
+
+    public String getReportDefaultMinDate() {
+        return reportDefaultMinDate;
+    }
+
+    public void setReportDefaultMinDate(String reportDefaultMinDate) {
+        this.reportDefaultMinDate = reportDefaultMinDate;
+    }
+
+
+    public String getReportDefaultMaxDate() {
+        return reportDefaultMaxDate;
+    }
+
+    public void setReportDefaultMaxDate(String reportDefaultMaxDate) {
+        this.reportDefaultMaxDate = reportDefaultMaxDate;
+    }
+
+    public void setReportDefaultMaxYearRange(String reportDefaultMaxYearRange) {
+        this.reportDefaultMaxYearRange = reportDefaultMaxYearRange;
+    }
+
+    public void setReportDefaultMinYearRange(String reportDefaultMinYearRange) {
+        this.reportDefaultMinYearRange = reportDefaultMinYearRange;
+    }
+
+    public String getReportDefaultMaxYearRange() {
+        return reportDefaultMaxYearRange;
+    }
+
+    public String getReportDefaultMinYearRange() {
+        return reportDefaultMinYearRange;
     }
 }

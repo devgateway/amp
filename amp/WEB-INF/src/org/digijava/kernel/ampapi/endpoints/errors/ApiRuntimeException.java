@@ -24,7 +24,7 @@ public class ApiRuntimeException extends RuntimeException {
     }
 
     public ApiRuntimeException(Status status, ApiErrorResponse error, Throwable cause) {
-        super(cause);
+        super(error.toString(), cause);
         this.responseStatus = status;
         this.error = error;
     }

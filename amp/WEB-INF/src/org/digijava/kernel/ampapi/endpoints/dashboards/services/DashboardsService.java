@@ -24,7 +24,6 @@ import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.newreports.TextCell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.amp.OutputSettings;
-import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
 import org.dgfoundation.amp.reports.ReportUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.dashboards.DashboardFormParameters;
@@ -40,6 +39,7 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -53,6 +53,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
+
+import static org.dgfoundation.amp.nireports.runtime.ColumnReportData.UNALLOCATED_ID;
 
 /**
  * @author Diego Dimunzio
@@ -94,7 +96,7 @@ public final class DashboardsService {
     public static LinkedHashMap<String, Object> setFilterId(Long id, String column) {
         LinkedHashMap<String, Object> filterObject = new LinkedHashMap<String, Object>();
         List<Long> filterIds = new ArrayList<Long>();
-        if (id > 0) {
+        if (id > 0 || id.equals(UNALLOCATED_ID)) {
             filterIds.add(id);
             filterObject.put(column, filterIds);
         }
@@ -134,7 +136,7 @@ public final class DashboardsService {
         for (ReportArea ra : report.reportContents.getChildren()) {
             // detect those undefined for countries, but skip those that are really undefined for regions
             if (ra.getOwner() != null && ra.getOwner().id < 0
-                    && (ra.getOwner().id != ColumnReportData.UNALLOCATED_ID)) {
+                    && (ra.getOwner().id != UNALLOCATED_ID)) {
                 undefinedAreas.add(ra);
             }
         }
@@ -256,7 +258,21 @@ public final class DashboardsService {
         retlist.setName(DashboardConstants.AID_PREDICTABILITY);
         retlist.setTitle(TranslatorWorker.translateText(DashboardConstants.AID_PREDICTABILITY));
         retlist.setMeasure("disbursements");
+        retlist.setSource(getSource());
         return retlist;
+    }
+
+    public static String getSource() {
+        return FeaturesUtil.isVisibleFeature("/Dashboards", "Source")
+                ? buildSource()
+                : null;
+    }
+
+    private static String buildSource() {
+        return String.format("%s: %s - %s",
+                TranslatorWorker.translateText("Source"),
+                TranslatorWorker.translateText("AMP"),
+                TranslatorWorker.translateText(FeaturesUtil.getCurrentCountryName()));
     }
 
     public static ProjectAmounts getAidPredictabilityProjects(DashboardFormParameters filter, String year,
@@ -368,6 +384,21 @@ public final class DashboardsService {
 
         Map<String, List<FundingTypeAmount>> values = new TreeMap<>(); // Map<year, List<type, amount, formattedAmount>>
         ReportOutputColumn toaCol = report.leafHeaders.get(0);
+
+        String fundingTypeConstant = DashboardConstants.FUNDING_TYPE;
+        String title = TranslatorWorker.translateText(fundingTypeConstant);
+        List<FundingTypeAmountsForYear> outValues = new ArrayList<>();
+
+
+        // check if report has report contents
+        if (report.isEmpty) {
+            retlist.setValues(outValues);
+            retlist.setName(fundingTypeConstant);
+            retlist.setTitle(title);
+
+            return retlist;
+        }
+
         for (ReportArea toaArea : report.reportContents.getChildren()) {
             String toa = toaArea.getContents().get(toaCol).displayedValue;
             long toaId = toaArea.getOwner().id;
@@ -388,7 +419,7 @@ public final class DashboardsService {
                 //values.computeIfAbsent(year, yr -> new ArrayList<>()).add(toaBean);
             }
         }
-        List<FundingTypeAmountsForYear> outValues = new ArrayList<>();
+
         for (String yearValue : values.keySet()) {
             FundingTypeAmountsForYear yearBean = new FundingTypeAmountsForYear();
             yearBean.setYear(yearValue);
@@ -407,6 +438,7 @@ public final class DashboardsService {
             retlist.addMeasure(m.getMeasureName(), TranslatorWorker.translateText(m.getMeasureName()));
 
         }
+        retlist.setSource(getSource());
         return retlist;
     }
 

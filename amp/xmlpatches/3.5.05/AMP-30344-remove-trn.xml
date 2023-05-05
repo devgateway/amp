@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>AMP-30344</jira>
+    <keyword>remove unused trn</keyword>
+    <author>Octavian Ciubotaru</author>
+    <description>remove unused trn</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                DELETE FROM dg_message WHERE message_key = '-978639019';
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

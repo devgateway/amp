@@ -142,7 +142,7 @@ public class AmpDonorExpendituresFormTableFeature extends
             }
         };
         add(list);
-
+        addExpandableList();
     }
 
 }

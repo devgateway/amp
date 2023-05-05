@@ -9,9 +9,9 @@ import javax.servlet.ServletInputStream;
  * A simple wrapper that converts InputStream to ServletInputStream.
  * @author Octavian Ciubotaru
  */
-public class ServletInputStreamWrapper extends ServletInputStream {
+public abstract class ServletInputStreamWrapper extends ServletInputStream {
 
-    private InputStream is;
+    private final InputStream is;
 
     public ServletInputStreamWrapper(InputStream is) {
         this.is = is;

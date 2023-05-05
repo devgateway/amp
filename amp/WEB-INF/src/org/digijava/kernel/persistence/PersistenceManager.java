@@ -22,20 +22,6 @@
 
 package org.digijava.kernel.persistence;
 
-import java.io.Serializable;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
-
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.cache.AbstractCache;
 import org.digijava.kernel.config.DigiConfig;
@@ -62,6 +48,19 @@ import org.hibernate.jdbc.ReturningWork;
 import org.hibernate.jdbc.Work;
 import org.hibernate.mapping.PersistentClass;
 import org.hibernate.metadata.ClassMetadata;
+
+import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class PersistenceManager {
 
@@ -244,8 +243,7 @@ public class PersistenceManager {
             config = DigiConfigManager.getConfig();
 
             if (logger.isDebugEnabled()) {
-                String debugKey = "PersistenceManager.initialize";
-                logger.l7dlog(Level.DEBUG, debugKey, null, null);
+                logger.debug("Initializing persistence manager");
             }
 
             // load kernel hibernate classes

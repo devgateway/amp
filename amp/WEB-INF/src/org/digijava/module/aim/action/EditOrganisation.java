@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.Vector;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -69,6 +70,8 @@ import org.hibernate.JDBCException;
 
 public class EditOrganisation extends DispatchAction {
 
+    private static final int MAX_ACTIVITIES = 100;
+
   private static Logger logger = Logger.getLogger(EditOrganisation.class);
   public final static String MULTILINGUAL_ORG_PREFIX = "multilingual_organisation";
   
@@ -100,14 +103,13 @@ public class EditOrganisation extends DispatchAction {
       }
       return false;
   }
-  
-  @Override
-  protected ActionForward unspecified(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception {
-      if (sessionChk(request)) {
-          return mapping.findForward("index");
-      }
-      return create(mapping, form, request, response);
-  }
+
+    @Override
+    protected ActionForward unspecified(
+            ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+        return mapping.findForward(sessionChk(request) ? "index" : "added");
+    }
   
   public ActionForward create(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
       if (sessionChk(request)) {
@@ -361,67 +363,35 @@ public class EditOrganisation extends DispatchAction {
       }
       AddOrgForm editForm = (AddOrgForm) form;
       ActionMessages errors = new ActionMessages();
-      Collection activities = DbUtil.getAllactivitiesRelatedToOrg(editForm.getAmpOrgId()); //DbUtil.getAllActivities();
-      int testFunding = ActivityUtil.getFundingByOrgCount(editForm.getAmpOrgId());
-      //Iterator itr1 = activities.iterator();
-      boolean flag = false;
-      boolean flag2 = false;
-      if (testFunding > 0 ) {
-          flag2 = true;
-      }
-      
-      if(!activities.isEmpty()){
-          flag =true;
+
+      Set<String> ampIds = getAmpIdsWithOrg(editForm.getAmpOrgId());
+
+      if (!ampIds.isEmpty()) {
+          String topAmpIds = ampIds.stream().limit(MAX_ACTIVITIES).collect(Collectors.joining(", "));
+          errors.add(ActionMessages.GLOBAL_MESSAGE,
+                  new ActionMessage("error.aim.organizationManager.deleteOrgActError", topAmpIds));
       }
 
-//      while (itr1.hasNext()) {
-//          AmpActivity testActivity;
-//          testActivity = (AmpActivity) itr1.next();
-//
-//          //Collection testOrgrole = testActivity.getOrgrole();
-//          Collection testOrgrole = ActivityUtil.getOrgRole(testActivity.getAmpActivityId());
-//          Iterator itr2 = testOrgrole.iterator();
-//
-//          while (itr2.hasNext()) {
-//              AmpOrgRole test = (AmpOrgRole) itr2.next();
-//              if (test.getOrganisation().getAmpOrgId().equals(editForm.getAmpOrgId())) {
-//                  flag = true;
-//                  break;
-//              }
-//          }
-//      }
-      if (flag || flag2) {
-          errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.organizationManager.deleteOrgActError"));
-          saveErrors(request, errors);
-          editForm.setActionFlag("edit");
-          return mapping.findForward("forward");
-      } else {
-
-          int activitiesCount = DbUtil.getAllOrgActivitiesCount(editForm.getAmpOrgId());
-          if (activitiesCount > 0) {
-              errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.organizationManager.deleteOrgActError"));
-
-              saveErrors(request, errors);
-              editForm.setActionFlag("edit");
-              return mapping.findForward("forward");
-          }
           AmpOrganisation org = DbUtil.getOrganisation(editForm.getAmpOrgId());
           if (org.getCalendar() != null && org.getCalendar().size() > 0) {
-              errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.organizationManager.deleteOrgEventError"));
-              saveErrors(request, errors);
-              editForm.setActionFlag("edit");
-              return mapping.findForward("forward");
-
+              errors.add(ActionMessages.GLOBAL_MESSAGE,
+                      new ActionMessage("error.aim.organizationManager.deleteOrgEventError"));
           }
 
           List<AmpTeam> releatedTeams = TeamUtil.getTeamByOrg(editForm.getAmpOrgId());
           if (releatedTeams != null && !releatedTeams.isEmpty()){
               errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.organizationManager.deleteOrgTeamError"));
+          }
+
+          if (org.getUsers() != null && !org.getUsers().isEmpty()) {
+              errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.organizationManager.deleteOrgVerifiedOrgError"));
+          }
+
+          if (!errors.isEmpty()){
               saveErrors(request, errors);
               editForm.setActionFlag("edit");
               return mapping.findForward("forward");
           }
-
 
           try {                             
               DbUtil.deleteOrg(org);
@@ -438,12 +408,22 @@ public class EditOrganisation extends DispatchAction {
 
           return mapping.findForward("added");
 
-      }
 
   }
-  
-  
 
+  private Set<String> getAmpIdsWithOrg(Long orgId) {
+      Set<String> ids = new TreeSet<>();
+      addAllIfNotNull(ids, DbUtil.getAmpIdsByOrg(orgId));
+      addAllIfNotNull(ids, ActivityUtil.getAmpIdsByFundingOrg(orgId));
+      addAllIfNotNull(ids, DbUtil.getAmpIdsByInternalIdOrg(orgId));
+      return ids;
+  }
+
+  private void addAllIfNotNull(Set set, Collection collectionToAdd){
+      if (set != null && collectionToAdd != null && !collectionToAdd.isEmpty()){
+          set.addAll(collectionToAdd);
+      }
+  }
 
   public ActionForward addStaffInfo(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
       if (sessionChkForWInfo(request)) {

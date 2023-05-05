@@ -149,7 +149,7 @@ public class AmpReleaseOfFundsFormTableFeature extends
             }
         };
         add(list);
-        
+        addExpandableList();
         
         
     }

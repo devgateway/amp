@@ -901,6 +901,9 @@ public class LuceneUtil implements Serializable {
 
             if (!valueTranslationsList.isEmpty()) {
                 for (AmpContentTranslation translation : valueTranslationsList) {
+                    if (translation.getTranslation() == null) {
+                        continue;
+                    }
                     // Added try/catch because Field can throw an exception if any of the parameters is wrong and that would break the process.
                     try {
                         if ("name".equals(field)){
@@ -1041,41 +1044,41 @@ public class LuceneUtil implements Serializable {
             IndexWriterConfig indexWriterConfig = new IndexWriterConfig(Version.LUCENE_36, LuceneUtil.ANALYZER);
             indexWriterConfig.setWriteLockTimeout(LOCK_OBTAIN_WAIT_FOREVER);
             Directory directory = FSDirectory.open(new File(rootRealPath + ACTIVITY_INDEX_DIRECTORY));
-            IndexWriter indexWriter = new IndexWriter(directory, indexWriterConfig);
+            try (IndexWriter indexWriter = new IndexWriter(directory, indexWriterConfig)) {
 
-            ArrayList<String> componentsCode = new ArrayList<String>();
-            if(newActivity.getComponents() != null && Hibernate.isInitialized(newActivity.getComponents())){
-                for (AmpComponent c : newActivity.getComponents()) {
-                    componentsCode.add(c.getCode());
+                ArrayList<String> componentsCode = new ArrayList<String>();
+                if (newActivity.getComponents() != null && Hibernate.isInitialized(newActivity.getComponents())) {
+                    for (AmpComponent c : newActivity.getComponents()) {
+                        componentsCode.add(c.getCode());
+                    }
                 }
-            }
 
-            String language = navigationLanguage.getLanguage();
+                String language = navigationLanguage.getLanguage();
 
-            ActivityLuceneDocument actLuceneDoc = new ActivityLuceneDocument();
-            actLuceneDoc.setAmpActivityId(String.valueOf(newActivity.getAmpActivityId()));
-            actLuceneDoc.setProjectId(projectid);
-            actLuceneDoc.setName(String.valueOf(newActivity.getName()));
-            actLuceneDoc.setDescription(DbUtil.getEditorBody(site, newActivity.getDescription(), language));
-            actLuceneDoc.setObjective(DbUtil.getEditorBody(site, newActivity.getObjective(), language));
-            actLuceneDoc.setPurpose(DbUtil.getEditorBody(site, newActivity.getPurpose(), language));
-            actLuceneDoc.setResults(DbUtil.getEditorBody(site, newActivity.getResults(), language));
-            actLuceneDoc.setContactName(DbUtil.getEditorBody(site, newActivity.getContactName(), language));
-            actLuceneDoc.setCrisNumber(newActivity.getCrisNumber());
-            actLuceneDoc.setBudgetCodeProjectId(newActivity.getBudgetCodeProjectID());
-            actLuceneDoc.setBudgetCodes(LuceneUtil.getBudgetCodesForActivity(newActivity));
-            actLuceneDoc.setComponentCodes(componentsCode);
-            actLuceneDoc.setTranslations(translations);
-    
-            Document doc = activityToLuceneDocument(actLuceneDoc);
+                ActivityLuceneDocument actLuceneDoc = new ActivityLuceneDocument();
+                actLuceneDoc.setAmpActivityId(String.valueOf(newActivity.getAmpActivityId()));
+                actLuceneDoc.setProjectId(projectid);
+                actLuceneDoc.setName(String.valueOf(newActivity.getName()));
+                actLuceneDoc.setDescription(DbUtil.getEditorBody(site, newActivity.getDescription(), language));
+                actLuceneDoc.setObjective(DbUtil.getEditorBody(site, newActivity.getObjective(), language));
+                actLuceneDoc.setPurpose(DbUtil.getEditorBody(site, newActivity.getPurpose(), language));
+                actLuceneDoc.setResults(DbUtil.getEditorBody(site, newActivity.getResults(), language));
+                actLuceneDoc.setContactName(DbUtil.getEditorBody(site, newActivity.getContactName(), language));
+                actLuceneDoc.setCrisNumber(newActivity.getCrisNumber());
+                actLuceneDoc.setBudgetCodeProjectId(newActivity.getBudgetCodeProjectID());
+                actLuceneDoc.setBudgetCodes(LuceneUtil.getBudgetCodesForActivity(newActivity));
+                actLuceneDoc.setComponentCodes(componentsCode);
+                actLuceneDoc.setTranslations(translations);
 
-            if (doc != null) {
-                try {
-                    indexWriter.addDocument(doc);
-                    indexWriter.optimize();
-                    indexWriter.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
+                Document doc = activityToLuceneDocument(actLuceneDoc);
+
+                if (doc != null) {
+                    try {
+                        indexWriter.addDocument(doc);
+                        indexWriter.optimize();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         } catch (Exception e) {

@@ -17,7 +17,6 @@ public final class HtmlContent {
 
     @ApiModelProperty(value = "the height of the image (in px)", example = "100")
     private Integer height;
-    private String javascript;
 
     public String getContent() {
         return content;
@@ -41,13 +40,5 @@ public final class HtmlContent {
 
     public void setHeight(final Integer height) {
         this.height = height;
-    }
-
-    public String getJavascript() {
-        return javascript;
-    }
-
-    public void setJavascript(final String javascript) {
-        this.javascript = javascript;
     }
 }

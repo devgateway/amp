@@ -1,12 +1,9 @@
 package org.digijava.module.aim.util;
         
-import java.sql.SQLException;
-import java.text.Collator;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.digijava.kernel.exception.DgException;

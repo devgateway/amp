@@ -45,6 +45,10 @@ export const ACTIVITY_WS_INFO_LOADING = 'ACTIVITY_WS_INFO_LOADING';
 export const ACTIVITY_WS_INFO_LOADED = 'ACTIVITY_WS_INFO_LOADED';
 export const ACTIVITY_WS_INFO_FAILED = 'ACTIVITY_WS_INFO_FAILED';
 
+export const FM_SETTINGS = 'fm-settings';
+export const REPORTING = 'REPORTING';
+export const ACTIVITY_PREVIEW = 'Activity Preview';
+
 
 export function loadActivityForActivityPreview(activityId) {
     return (dispatch, ownProps) => {
@@ -90,6 +94,11 @@ export function loadActivityForActivityPreview(activityId) {
                                     // it wont be used it will just return 1.
                                     const currencyRatesManager = new CurrencyRatesManager([],
                                         activityFundingInformation.currency, translate, DateUtils, {});
+                                    var reportingTotalVisibilty = {};
+                                    if (fmTree.hasOwnProperty(FM_SETTINGS) && fmTree[FM_SETTINGS].hasOwnProperty(REPORTING) &&
+                                        fmTree[FM_SETTINGS][REPORTING].hasOwnProperty(ACTIVITY_PREVIEW)){
+                                        reportingTotalVisibilty = fmTree[FM_SETTINGS][REPORTING][ACTIVITY_PREVIEW]
+                                    }
                                     return dispatch({
                                         type: ACTIVITY_LOAD_LOADED,
                                         payload: {
@@ -97,7 +106,8 @@ export function loadActivityForActivityPreview(activityId) {
                                             activityFieldsManager,
                                             activityContext: _getActivityContext(settings, activityInfo, activity),
                                             activityFundingTotals: new ActivityFundingTotals(activity, activityFundingInformation),
-                                            currencyRatesManager
+                                            currencyRatesManager,
+                                            reportingTotals: reportingTotalVisibilty,
                                         }
                                     });
                                 });

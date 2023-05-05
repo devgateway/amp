@@ -507,36 +507,38 @@ public class DocumentData implements Comparable<DocumentData>, Serializable {
      */
     public static DocumentData buildFromNodeWrapper(NodeWrapper nodeWrapper, String uuid, String nodeVersionUUID) {
         DocumentData documentData = new DocumentData();
-        documentData.setName(nodeWrapper.getName());
-        if (uuid != null) {
-            documentData.setUuid(uuid);
-        } else {
-            documentData.setUuid(nodeWrapper.getUuid());
+        if (nodeWrapper != null) {
+            documentData.setName(nodeWrapper.getName());
+            if (uuid != null) {
+                documentData.setUuid(uuid);
+            } else {
+                documentData.setUuid(nodeWrapper.getUuid());
+            }
+            if (nodeVersionUUID != null) {
+                documentData.setNodeVersionUUID(nodeVersionUUID);
+            }
+            documentData.setNodeVersionUUID(nodeWrapper.getUuid());
+            documentData.setTitle(nodeWrapper.getTitle());
+            documentData.setDescription(nodeWrapper.getDescription());
+            documentData.setNotes(nodeWrapper.getNotes());
+            documentData.setFileSize(nodeWrapper.getFileSizeInMegabytes());
+            documentData.setCalendar(nodeWrapper.getDate());
+            documentData.setVersionNumber(nodeWrapper.getVersionNumber());
+            documentData.setContentType(nodeWrapper.getContentType());
+            documentData.setWebLink(nodeWrapper.getWebLink());
+            documentData.setCmDocTypeId(nodeWrapper.getCmDocTypeId());
+            documentData.setYearofPublication(nodeWrapper.getYearOfPublication());
+            documentData.setLabels(nodeWrapper.getLabels());
+            documentData.setCreatorTeamId(nodeWrapper.getCreatorTeam());
+            documentData.setCreatorEmail(nodeWrapper.getCreator());
+            documentData.setIndex(nodeWrapper.getIndex());
+            documentData.setCategory(nodeWrapper.getCategory());
+            documentData.process();
+            documentData.computeIconPath(true);
+            documentData.setOrganisations(
+                    DocumentOrganizationManager.getInstance().getOrganisationsAsStringByUUID(documentData.getUuid()));
+            documentData.setCreatorClient(nodeWrapper.getCreatorClient());
         }
-        if (nodeVersionUUID != null) {
-            documentData.setNodeVersionUUID(nodeVersionUUID);
-        }
-        documentData.setNodeVersionUUID(nodeWrapper.getUuid());
-        documentData.setTitle(nodeWrapper.getTitle());
-        documentData.setDescription(nodeWrapper.getDescription());
-        documentData.setNotes(nodeWrapper.getNotes());
-        documentData.setFileSize(nodeWrapper.getFileSizeInMegabytes());
-        documentData.setCalendar(nodeWrapper.getDate());
-        documentData.setVersionNumber(nodeWrapper.getVersionNumber());
-        documentData.setContentType(nodeWrapper.getContentType());
-        documentData.setWebLink(nodeWrapper.getWebLink());
-        documentData.setCmDocTypeId(nodeWrapper.getCmDocTypeId());
-        documentData.setYearofPublication(nodeWrapper.getYearOfPublication());
-        documentData.setLabels(nodeWrapper.getLabels());
-        documentData.setCreatorTeamId(nodeWrapper.getCreatorTeam());
-        documentData.setCreatorEmail(nodeWrapper.getCreator());
-        documentData.setIndex(nodeWrapper.getIndex());
-        documentData.setCategory(nodeWrapper.getCategory());
-        documentData.process();
-        documentData.computeIconPath(true);
-        documentData.setOrganisations(
-                DocumentOrganizationManager.getInstance().getOrganisationsAsStringByUUID(documentData.getUuid()));
-        documentData.setCreatorClient(nodeWrapper.getCreatorClient());
         return documentData;
     }
     

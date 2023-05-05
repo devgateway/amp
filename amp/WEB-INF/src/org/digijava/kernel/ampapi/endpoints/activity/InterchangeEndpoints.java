@@ -31,6 +31,7 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
+import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.module.aim.helper.Constants;
@@ -300,7 +301,8 @@ public class InterchangeEndpoints {
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, response = SwaggerActivity.class,
             message = "activity with full set of configured fields and their values"))
     public SwaggerActivity getProject(@ApiParam("project id") @PathParam("projectId") Long projectId) {
-        Map<String, Object> activity = ActivityInterchangeUtils.getActivity(projectId);
+        Map<String, Object> activity = ActivityInterchangeUtils.getActivity(projectId,
+                AmpClientModeHolder.isOfflineClient());
         return new SwaggerActivity(activity);
     }
 
@@ -335,7 +337,8 @@ public class InterchangeEndpoints {
     @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK, response = SwaggerActivity.class,
             message = "activity with full set of configured fields and their values"))
     public SwaggerActivity getProjectByAmpId(@ApiParam("AMP Id") @QueryParam("amp-id") String ampId) {
-        Map<String, Object> activity = ActivityInterchangeUtils.getActivityByAmpId(ampId);
+        Map<String, Object> activity = ActivityInterchangeUtils.getActivityByAmpId(ampId,
+                AmpClientModeHolder.isOfflineClient());
         return new SwaggerActivity(activity);
     }
 

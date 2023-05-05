@@ -61,11 +61,10 @@ public class AmpModulesVisibility extends AmpObjectVisibility implements Seriali
      * @deprecated does not provide the latest state when outside Admin session, use FeaturesUtil
      */
     public boolean isVisibleTemplateObj(AmpTemplatesVisibility aObjVis) {
-        for (AmpObjectVisibility ampObjectVisibility : aObjVis.getItems()) {
-            Long tempId = id;
-            AmpModulesVisibility x = (AmpModulesVisibility) ampObjectVisibility;
-            int compareResult = x.getId().compareTo(tempId);
-            if (compareResult == 0) return true;
+        for (Iterator it = aObjVis.getItems().iterator(); it.hasNext();) {
+            AmpModulesVisibility x = (AmpModulesVisibility) it.next();
+            if (x.getId().compareTo(id) == 0)
+                return true;
         }
         return false;
     }

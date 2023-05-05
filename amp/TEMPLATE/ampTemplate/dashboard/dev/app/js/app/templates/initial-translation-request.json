@@ -149,5 +149,7 @@
 "amp.dashboard:chart-tooltip-download-chart[title]":"Download image or table",
 "amp.dashboard:chart-tooltip-expand-chart[title]":"Expand chart",
 "amp.dashboard:chart-tooltip-collapse-chart[title]":"Collapse chart",
-"amp.dashboard:chart-tooltip-heatmap-chart[title]":"View heat map"
+"amp.dashboard:chart-tooltip-heatmap-chart[title]":"View heat map",
+"amp.dashboard:chart-TopPrograms": "Top Programs",
+"amp.dashboard:chart-TopPrograms-others": "Others"
 }

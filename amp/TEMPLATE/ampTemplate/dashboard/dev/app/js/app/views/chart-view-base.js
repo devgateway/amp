@@ -61,6 +61,7 @@ module.exports = BackboneDash.View.extend({
     this.listenTo(this.model, 'change:xAxisColumn', this.render);
     this.listenTo(this.model, 'change:limit', this.updateData);
     this.listenTo(this.model, 'change:view', this.render);
+    this.listenTo(this.model, 'change:programType', this.render);
 
     this.app.state.register(this, 'chart:' + this.model.url, {
       get: _.partial(_(this.model.pick).bind(this.model), 'limit', 'adjtype', 'xAxisColumn', 'view', 'big','stacked','showPlannedDisbursements','showActualDisbursements','seriesToExclude', 'xLimit', 'yLimit', 'swapAxes'),
@@ -113,6 +114,37 @@ module.exports = BackboneDash.View.extend({
 	    } else {
 	    	self.rendered = true;
 	    }
+
+      console.log('model=====>', self.model.get('programType'));
+
+      //  if (self.model.get('programType')) {  // this chart has programs type
+      //       self.rendered = false;
+      //       const pgrOptions = [
+      //           {
+      //               "id": "prg_level_1",
+      //               "name": "National Planning Objectives Level 1"
+      //           },
+      //           {
+      //               "id": "prg_level_2",
+      //               "name": "National Planning Objectives Level 2"
+      //           },
+      //           {
+      //               "id": "prg_level_3",
+      //               "name": "National Planning Objectives Level 3"
+      //           }
+      //       ];
+      //       self.$('.program-options').html(
+      //           pgrOptions.map(function(opt) {
+      //               return adjOptTemplate({
+      //                   opt: opt,
+      //                   current: (opt.id === self.model.get('programType'))
+      //               });
+      //           }, self)
+      //       );
+
+      //   } else {
+      //       self.rendered = false;
+      //   }
 	    
 	    // For heatmaps add some extra combos.
         if (self.model.get('chartType') === 'fragmentation') {

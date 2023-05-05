@@ -1,9 +1,11 @@
 package org.digijava.module.aim.form;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.form.helpers.WorkspaceDataSelection;
 
 public class WorkspaceForm extends ActionForm {
 
@@ -14,6 +16,8 @@ public class WorkspaceForm extends ActionForm {
     private int page;
     
     private String workspaceType="all";
+
+    private List<WorkspaceDataSelection> workspaceDataSelections;
     
     private int numPerPage=-1;
     
@@ -22,6 +26,7 @@ public class WorkspaceForm extends ActionForm {
         private Integer currentRow;
         private Integer currentPage;
         private Long selectedWs;
+
 
         public Integer getCurrentPage() {
             return currentPage;
@@ -123,5 +128,12 @@ public class WorkspaceForm extends ActionForm {
         return workspaceGroup;
         
     }
-    
+
+    public List<WorkspaceDataSelection> getWorkspaceDataSelections() {
+        return workspaceDataSelections;
+    }
+
+    public void setWorkspaceDataSelections(List<WorkspaceDataSelection> workspaceDataSelections) {
+        this.workspaceDataSelections = workspaceDataSelections;
+    }
 }

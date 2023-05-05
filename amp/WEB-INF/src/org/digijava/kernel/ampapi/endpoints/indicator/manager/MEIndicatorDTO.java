@@ -4,8 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.digijava.kernel.ampapi.endpoints.indicator.manager.validators.ValidProgramId;
+import io.swagger.annotations.ApiModelProperty;
 import org.digijava.kernel.ampapi.endpoints.indicator.manager.validators.ValidSectorIds;
+import org.digijava.kernel.ampapi.endpoints.indicator.manager.validators.ValidProgramId;
 import org.digijava.kernel.ampapi.endpoints.serializers.LocalizedDateDeserializer;
 import org.digijava.kernel.ampapi.endpoints.serializers.LocalizedDateSerializer;
 import org.digijava.module.aim.dbentity.AmpIndicator;
@@ -48,6 +49,7 @@ public class MEIndicatorDTO {
     @JsonSerialize(using = LocalizedDateSerializer.class)
     @JsonDeserialize(using = LocalizedDateDeserializer.class)
     @NotNull
+    @ApiModelProperty(dataType = "java.util.date", example = "02/02/2023")
     private Date creationDate;
 
     @JsonProperty("base")

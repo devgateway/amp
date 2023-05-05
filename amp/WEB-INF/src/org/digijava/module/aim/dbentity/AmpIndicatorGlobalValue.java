@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiModelProperty;
 import org.digijava.kernel.ampapi.endpoints.serializers.LocalizedDateDeserializer;
 import org.digijava.kernel.ampapi.endpoints.serializers.LocalizedDateSerializer;
 
@@ -32,6 +34,7 @@ public class AmpIndicatorGlobalValue implements Serializable {
     @JsonSerialize(using = LocalizedDateSerializer.class)
     @JsonDeserialize(using = LocalizedDateDeserializer.class)
     @JsonProperty("originalValueDate")
+    @ApiModelProperty(dataType = "java.util.date", example = "02/02/2023")
     private Date originalValueDate;
 
     @JsonProperty("revisedValue")
@@ -40,6 +43,7 @@ public class AmpIndicatorGlobalValue implements Serializable {
     @JsonSerialize(using = LocalizedDateSerializer.class)
     @JsonDeserialize(using = LocalizedDateDeserializer.class)
     @JsonProperty("revisedValueDate")
+    @ApiModelProperty(dataType = "java.util.date", example = "02/02/2023")
     private Date revisedValueDate;
 
     @JsonIgnore

@@ -32,6 +32,7 @@ import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorGlobalValue;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.ProgramUtil;
@@ -47,6 +48,7 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -109,7 +111,8 @@ public class IndicatorManagerService {
         AmpIndicator indicator = new AmpIndicator();
         String name = indicatorRequest.getName();
         validateYear(indicatorRequest);
-        validateNameProgramSectorUnique(name, indicatorRequest, session);
+        //TODO see why the following line was commented out
+        //validateNameProgramSectorUnique(name, indicatorRequest, session);
 
         validateIndicatorName(indicatorRequest.getName(), session);
         validateIndicatorCode(indicatorRequest.getCode(), session);
@@ -129,11 +132,24 @@ public class IndicatorManagerService {
         }
 
         if (indicatorRequest.getBaseValue() != null) {
+            if (indicatorRequest.getBaseValue().getOriginalValueDate() != null || indicatorRequest.getBaseValue().getRevisedValueDate() != null) {
+                String baseStartYear = String.valueOf(DateConversion.getYear(DateConversion.convertDateToString(indicatorRequest.getBaseValue().getOriginalValueDate())));
+                String baseEndYear = String.valueOf(DateConversion.getYear(DateConversion.convertDateToString(indicatorRequest.getBaseValue().getRevisedValueDate())));
+
+                validateYearRange( baseStartYear, baseEndYear ,indicatorRequest.getBaseValue(), "Base");
+            }
+
             AmpIndicatorGlobalValue validatedBaseValues = validateBaseValues(indicatorRequest);
             indicatorValues.add(validatedBaseValues);
         }
 
         if (indicatorRequest.getTargetValue() != null) {
+            if (indicatorRequest.getTargetValue().getOriginalValueDate() != null || indicatorRequest.getTargetValue().getRevisedValueDate() != null) {
+                String targetStartYear = String.valueOf(DateConversion.getYear(DateConversion.convertDateToString(indicatorRequest.getTargetValue().getOriginalValueDate())));
+                String targetEndYear = String.valueOf(DateConversion.getYear(DateConversion.convertDateToString(indicatorRequest.getTargetValue().getRevisedValueDate())));
+
+                validateYearRange(targetStartYear, targetEndYear,indicatorRequest.getTargetValue(), "Target");
+            }
             AmpIndicatorGlobalValue validatedTargetValues = validateTargetValues(indicatorRequest);
             indicatorValues.add(validatedTargetValues);
         }
@@ -159,7 +175,7 @@ public class IndicatorManagerService {
 
     }
 
-    private void validateYearRange(String startYear, String endYear, AmpIndicatorGlobalValue value, String error) {
+    private void validateYearRange(String startYear, String endYear, AmpIndicatorGlobalValue value, String error){
         String startInString = "01/01/" + startYear;
         DateTime dateTime = DateTime.parse(startInString, formatter);
 
@@ -286,17 +302,25 @@ public class IndicatorManagerService {
                 validateProgramSettingsAndGlobalValues(indRequest, indicator);
             }
 
+            Set <AmpIndicatorGlobalValue> updatedValues = new HashSet<>();
+
             if (indRequest.getBaseValue() != null) {
                 AmpIndicatorGlobalValue validatedBaseValues = validateBaseValues(indRequest);
+                updatedValues.add(validatedBaseValues);
                 indicator.getIndicatorValues().add(validatedBaseValues);
                 indicator.getBaseValue().setIndicator(indicator);
             }
 
             if (indRequest.getTargetValue() != null) {
                 AmpIndicatorGlobalValue validatedTargetValues = validateTargetValues(indRequest);
+                updatedValues.add(validatedTargetValues);
                 indicator.getIndicatorValues().add(validatedTargetValues);
                 indicator.getTargetValue().setIndicator(indicator);
             }
+
+            indicator.getIndicatorValues().clear();
+            updatedValues.forEach(value -> value.setIndicator(indicator));
+            indicator.getIndicatorValues().addAll(updatedValues);
 
             Set<AmpSector> sectors = indRequest.getSectorIds().stream()
                     .map(id -> (AmpSector) session.get(AmpSector.class, id))
@@ -361,7 +385,6 @@ public class IndicatorManagerService {
     }
 
     public AmpIndicatorGlobalValue validateBaseValues(final MEIndicatorDTO indicatorRequest) {
-        new AmpIndicatorGlobalValue();
         AmpIndicatorGlobalValue baseValues = indicatorRequest.getBaseValue();
 
         if (indicatorRequest.getBaseValue() != null) {

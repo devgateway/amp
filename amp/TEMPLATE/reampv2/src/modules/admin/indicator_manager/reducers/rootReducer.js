@@ -3,6 +3,7 @@ import startupReducer from './startupReducer';
 import translationsReducer from '../../../../utils/reducers/translationsReducer';
 import shareLinkReducer from './shareLinkReducer';
 import sharedDataReducer from './sharedDataReducer';
+import fetchSettingsReducer from './fetchSettingsReducer';
 
 //indicators reducers
 import fetchIndicatorsReducer from './fetchIndicatorsReducer';
@@ -22,5 +23,6 @@ export default combineReducers({
   fetchProgramsReducer,
   createIndicatorReducer,
   updateIndicatorReducer,
-  deleteIndicatorReducer
+  deleteIndicatorReducer,
+  fetchSettingsReducer
 });

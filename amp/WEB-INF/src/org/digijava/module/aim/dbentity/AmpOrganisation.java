@@ -11,6 +11,7 @@ import org.dgfoundation.amp.ar.dimension.DonorDimension;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.digijava.kernel.ampapi.endpoints.common.valueproviders.OrganisationValueProvider;
 import org.digijava.kernel.dbentity.Country;
+import org.digijava.kernel.user.User;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValue;
 import org.digijava.module.aim.annotations.interchange.PossibleValueId;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
@@ -116,6 +117,8 @@ public class AmpOrganisation implements Comparable<AmpOrganisation>, Identifiabl
     private String  lineMinRegNumber;
     
     private boolean translateable   = true;
+
+    private Set<User> users;
 
     @OrganizationReportColumn(columnName="Line Ministry Registration Number",propertyType=PropertyType.NGO)
     public String getLineMinRegNumber() {
@@ -732,6 +735,14 @@ public class AmpOrganisation implements Comparable<AmpOrganisation>, Identifiabl
     public static String hqlStringForName(String idSource)
     {
         return InternationalizedModelDescription.getForProperty(AmpOrganisation.class, "name").getSQLFunctionCall(idSource + ".ampOrgId");
+    }
+
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set users) {
+        this.users = users;
     }
 
 }   

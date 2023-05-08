@@ -17,6 +17,7 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.WorkspaceForm;
+import org.digijava.module.aim.form.helpers.WorkspaceDataSelection;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.search.util.SearchUtil;
 import org.hibernate.Hibernate;
@@ -40,6 +41,20 @@ public class WorkspaceManager extends Action {
         int NUM_RECORDS = 10000;
         Collection<AmpTeam> workspaces = new ArrayList<AmpTeam>();
         WorkspaceForm wsForm = (WorkspaceForm) form;
+
+        ArrayList<WorkspaceDataSelection> workspaceDataSelections = new ArrayList<>();
+
+        WorkspaceDataSelection members = new WorkspaceDataSelection();
+        members.setLabel("Members");
+        members.setValue("0");
+        workspaceDataSelections.add(members);
+
+        WorkspaceDataSelection activities = new WorkspaceDataSelection();
+        activities.setLabel("Activities");
+        activities.setValue("1");
+        workspaceDataSelections.add(activities);
+
+        wsForm.setWorkspaceDataSelections(workspaceDataSelections);
 
 
         if (request.getParameter("reset") != null && request.getParameter("reset").equalsIgnoreCase("true")) {

@@ -59,6 +59,8 @@ module.exports = BackboneDash.View.extend({
             window.location = '/';
         }
 
+        console.log(enabledChartsFM)
+
         var enabledCharts = enabledChartsFM.models[0].get('fm-settings')['DASHBOARDS'];
 
         var col = [];
@@ -91,10 +93,14 @@ module.exports = BackboneDash.View.extend({
                 {app: this.app, url: '/rest/dashboard/tops/ps'}));
         }
 
+        if (_.find(enabledCharts, function (item) {
+            console.log(item);
+            return item === PR;
+        })) {
             col.push(new TopsChart(
                 {name: 'Top Programs', big: false, view: 'bar', programType: 'programs'},
                 {app: this.app, url: '/rest/dashboard/tops/pr'}));
-
+        }
 
         if (_.find(enabledCharts, function (item) {
             return item === AP;

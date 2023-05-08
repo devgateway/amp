@@ -18,7 +18,7 @@ module.exports = ChartModel.extend({
 	    swapAxes: false,
 	    heatmap_type: null,
 	    showResetButton: false,
-	    showFullLegends: false,
+	    showFullLegends: false
 	},
 
 	_prepareTranslations: function() {

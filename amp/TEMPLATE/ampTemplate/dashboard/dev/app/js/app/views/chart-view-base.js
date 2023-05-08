@@ -29,7 +29,8 @@ module.exports = BackboneDash.View.extend({
     'click .download': 'download',
     'click .expand': 'big',
     'click .retry': 'render',
-    'click .heatmap-switch': 'heatmapSwitchAxis'
+    'click .heatmap-switch': 'heatmapSwitchAxis',
+    'change .dash-program-type select': 'changeProgramType',
   },
 
   chartViews: [
@@ -114,6 +115,39 @@ module.exports = BackboneDash.View.extend({
 	    } else {
 	    	self.rendered = true;
 	    }
+
+      if (self.model.get('programType') !== void 0) {  // this chart has programs type
+            self.rendered = true;
+            const pgrOptions = [
+                {
+                    id: "national_plan_objective",
+                    name: app.translator.translateSync('amp.dashboard:prgscheme-national-plan-objective')
+                },
+                {
+                    id: "primary_program",
+                    name: app.translator.translateSync('amp.dashboard:prgscheme-primary-program')
+                },
+                {
+                    id: "secondary_program",
+                    name: app.translator.translateSync('amp.dashboard:prgscheme-secondary-program')
+                },
+                {
+                    id: "tertiary_program",
+                    name: app.translator.translateSync('amp.dashboard:prgscheme-tertiary-program')
+                }
+            ];
+            self.$('.program-options').html(
+                pgrOptions.map(function(opt) {
+                    return adjOptTemplate({
+                        opt: opt,
+                        current: (opt.id === self.model.get('programType'))
+                    });
+                }, self)
+            );
+
+        } else {
+            self.rendered = true;
+        }
 	    
 	    // For heatmaps add some extra combos.
         if (self.model.get('chartType') === 'fragmentation') {

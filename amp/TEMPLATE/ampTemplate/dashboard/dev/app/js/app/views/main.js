@@ -94,7 +94,6 @@ module.exports = BackboneDash.View.extend({
         }
 
         if (_.find(enabledCharts, function (item) {
-            console.log(item);
             return item === PR;
         })) {
             col.push(new TopsChart(

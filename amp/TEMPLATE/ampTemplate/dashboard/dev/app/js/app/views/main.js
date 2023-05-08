@@ -59,8 +59,6 @@ module.exports = BackboneDash.View.extend({
             window.location = '/';
         }
 
-        console.log(enabledChartsFM)
-
         var enabledCharts = enabledChartsFM.models[0].get('fm-settings')['DASHBOARDS'];
 
         var col = [];
@@ -97,7 +95,7 @@ module.exports = BackboneDash.View.extend({
             return item === PR;
         })) {
             col.push(new TopsChart(
-                {name: 'Top Programs', big: false, view: 'bar', programType: 'programs'},
+                {name: 'Top Programs', big: false, view: 'bar', programType: 'National Planning Objectives Level 1'},
                 {app: this.app, url: '/rest/dashboard/tops/pr'}));
         }
 

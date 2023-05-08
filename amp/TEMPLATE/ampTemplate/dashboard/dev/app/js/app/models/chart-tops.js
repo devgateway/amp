@@ -10,7 +10,7 @@ module.exports = ChartModel.extend({
     limit: 5,
     title: '',
     bigN: 0,
-    chartType: 'top'
+    chartType: 'top',
   },
 
   _prepareTranslations: function() {

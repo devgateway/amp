@@ -120,22 +120,23 @@ module.exports = BackboneDash.View.extend({
             self.rendered = true;
             const pgrOptions = [
                 {
-                    id: "national_plan_objective",
+                    id: "National Plan Objective Level 1",
                     name: app.translator.translateSync('amp.dashboard:prgscheme-national-plan-objective')
                 },
                 {
-                    id: "primary_program",
+                    id: "Primary Program Level 1",
                     name: app.translator.translateSync('amp.dashboard:prgscheme-primary-program')
                 },
                 {
-                    id: "secondary_program",
+                    id: "Secondary Program Level 1",
                     name: app.translator.translateSync('amp.dashboard:prgscheme-secondary-program')
                 },
                 {
-                    id: "tertiary_program",
+                    id: "Tertiary Program Level 1",
                     name: app.translator.translateSync('amp.dashboard:prgscheme-tertiary-program')
                 }
             ];
+            
             self.$('.program-options').html(
                 pgrOptions.map(function(opt) {
                     return adjOptTemplate({
@@ -144,7 +145,6 @@ module.exports = BackboneDash.View.extend({
                     });
                 }, self)
             );
-
         } else {
             self.rendered = true;
         }
@@ -387,6 +387,11 @@ module.exports = BackboneDash.View.extend({
   changeAdjType: function(e) {
     var newType = e.currentTarget.value;
     this.model.set('adjtype', newType);
+  },
+
+  changeProgramType: function(e) {
+    var newType = e.currentTarget.value; 
+    this.model.set('programType', newType);
   },
   
   changeXAxis: function(e) {

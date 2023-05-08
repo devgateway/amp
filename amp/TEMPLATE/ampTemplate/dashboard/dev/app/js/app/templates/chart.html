@@ -76,7 +76,7 @@
         </form>
       <% } %>
       
-      <% if (model.get('programType') === "programs") { %>
+      <% if (model.get('programType') && model.get('showMeasuresSelector') === true) { %>
         <form class="form-inline dash-form dash-program-type" role="form">
           <select class="form-control like-btn-sm program-options">
             <option>...</option>

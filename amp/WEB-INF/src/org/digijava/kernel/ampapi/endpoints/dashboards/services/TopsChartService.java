@@ -156,10 +156,12 @@ public class TopsChartService {
                 name = DashboardConstants.TOP_DONOR_GROUPS;
                 break;
             case PR:
-                setColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1);
-                applyFilter(FilterUtils.INSTANCE.idFromColumnName(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1));
                 title = TranslatorWorker.translateText(DashboardConstants.TOP_PROGRAMS);
                 name = DashboardConstants.TOP_PROGRAMS;
+
+                String selectedProgramScheme = (String) config.getSettings().get("program-type");
+                setColumn(selectedProgramScheme);
+                applyFilter(FilterUtils.INSTANCE.idFromColumnName(selectedProgramScheme));
                 break;
             case NDD:
                 setColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_1);

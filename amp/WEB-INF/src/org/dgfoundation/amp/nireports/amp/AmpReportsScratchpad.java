@@ -1,17 +1,5 @@
 package org.dgfoundation.amp.nireports.amp;
 
-import static org.apache.commons.collections.CollectionUtils.containsAny;
-import static org.apache.commons.collections.CollectionUtils.intersection;
-
-import java.sql.Connection;
-import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
-
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.algo.Memoizer;
@@ -43,6 +31,18 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+
+import java.sql.Connection;
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+
+import static org.apache.commons.collections.CollectionUtils.containsAny;
+import static org.apache.commons.collections.CollectionUtils.intersection;
 
 /**
  * the AMP-schema-specific scratchpad <br />
@@ -149,6 +149,9 @@ public class AmpReportsScratchpad implements SchemaSpecificScratchpad {
     }
 
     private void checkMeasurelessHierarchies(ReportSpecification spec) {
+        if (spec.getReportType() == ArConstants.INDICATOR_TYPE) {
+            return;
+        }
         List<String> amountColumns = AmpReportsSchema.getInstance().getAmountColumns();
         List<String> onlyMeasurelessHierarchies = AmpReportsSchema.ONLY_MEASURELESS_HIERARCHIES;
 

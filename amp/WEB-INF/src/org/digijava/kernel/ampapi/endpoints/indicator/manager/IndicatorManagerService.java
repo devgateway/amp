@@ -2,13 +2,39 @@ package org.digijava.kernel.ampapi.endpoints.indicator.manager;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.ar.MeasureConstants;
+import org.dgfoundation.amp.newreports.AmountCell;
+import org.dgfoundation.amp.newreports.AmpReportFilters;
+import org.dgfoundation.amp.newreports.GeneratedReport;
+import org.dgfoundation.amp.newreports.GroupingCriteria;
+import org.dgfoundation.amp.newreports.ReportArea;
+import org.dgfoundation.amp.newreports.ReportAreaImpl;
+import org.dgfoundation.amp.newreports.ReportCell;
+import org.dgfoundation.amp.newreports.ReportColumn;
+import org.dgfoundation.amp.newreports.ReportMeasure;
+import org.dgfoundation.amp.newreports.ReportOutputColumn;
+import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+import org.dgfoundation.amp.nireports.NiReportsEngine;
+import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
+import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
+import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorYearValues;
+import org.digijava.kernel.ampapi.endpoints.indicator.YearValue;
+import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
+import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
+import org.digijava.module.aim.dbentity.AmpIndicator;
+import org.digijava.module.aim.dbentity.AmpIndicatorGlobalValue;
+import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.DateConversion;
+import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.hibernate.Session;
@@ -18,14 +44,23 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
+import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 import static org.digijava.module.aim.helper.Constants.GlobalSettings.END_YEAR_DEFAULT_VALUE;
 import static org.digijava.module.aim.helper.Constants.GlobalSettings.START_YEAR_DEFAULT_VALUE;
 
@@ -75,7 +110,9 @@ public class IndicatorManagerService {
         Session session = PersistenceManager.getSession();
         AmpIndicator indicator = new AmpIndicator();
         String name = indicatorRequest.getName();
-//        validateNameProgramSectorUnique(name, indicatorRequest, session);
+        validateYear(indicatorRequest);
+        //TODO see why the following line was commented out
+        //validateNameProgramSectorUnique(name, indicatorRequest, session);
 
         validateIndicatorName(indicatorRequest.getName(), session);
         validateIndicatorCode(indicatorRequest.getCode(), session);
@@ -117,7 +154,7 @@ public class IndicatorManagerService {
             indicatorValues.add(validatedTargetValues);
         }
 
-        indicatorValues.forEach(value -> value.setIndicator(indicator));
+        indicatorValues.stream().forEach(value -> value.setIndicator(indicator));
         indicator.setIndicatorValues(indicatorValues);
 
         Set<AmpSector> sectors = indicatorRequest.getSectorIds().stream()
@@ -130,29 +167,33 @@ public class IndicatorManagerService {
         return new MEIndicatorDTO(indicator);
     }
 
+    private void validateYear(MEIndicatorDTO value) {
+        String startYear = FeaturesUtil.getGlobalSettingValue(START_YEAR_DEFAULT_VALUE);
+        String endYear = FeaturesUtil.getGlobalSettingValue(END_YEAR_DEFAULT_VALUE);
+        validateYearRange(startYear, endYear, value.getBaseValue(), "Base");
+        validateYearRange(startYear, endYear, value.getTargetValue(), "Target");
+
+    }
+
     private void validateYearRange(String startYear, String endYear, AmpIndicatorGlobalValue value, String error){
         String startInString = "01/01/" + startYear;
         DateTime dateTime = DateTime.parse(startInString, formatter);
-        Date originalValueDate = value.getOriginalValueDate();
 
-        if (originalValueDate != null) {
-            if (dateTime.isAfter(value.getOriginalValueDate().getTime())) {
-                throw new ApiRuntimeException(BAD_REQUEST,
-                    ApiError.toError(error + " Original value date " + simpleDateFormat.format(value.getOriginalValueDate())
+        if (dateTime.isAfter(value.getOriginalValueDate().getTime())) {
+            throw new ApiRuntimeException(BAD_REQUEST,
+                    ApiError.toError(error + " Original value date "
+                            + simpleDateFormat.format(value.getOriginalValueDate())
                             + " should be greater than " + startInString));
-            }
         }
 
         String endInString = "01/01/" + endYear;
         dateTime = DateTime.parse(endInString, formatter);
-        Date revisedValueDate = value.getRevisedValueDate();
 
-        if (revisedValueDate != null) {
-            if (dateTime.isAfter(value.getRevisedValueDate().getTime())) {
-                throw new ApiRuntimeException(BAD_REQUEST,
-                        ApiError.toError(error + "Revised value date " + simpleDateFormat.format(value.getRevisedValueDate())
-                                + " should be greater than " + endInString));
-            }
+        if (dateTime.isAfter(value.getRevisedValueDate().getTime())) {
+            throw new ApiRuntimeException(BAD_REQUEST,
+                    ApiError.toError(error + "Revised value date "
+                            + simpleDateFormat.format(value.getRevisedValueDate())
+                            + " should be greater than " + endInString));
         }
     }
 
@@ -179,19 +220,19 @@ public class IndicatorManagerService {
 
         if (indicatorSector > 0 && indicatorProgram > 0) {
             throw new ApiRuntimeException(BAD_REQUEST,
-                    ApiError.toError("Indicator with name " + indicator.getName() + " sectors " +
-                            StringUtils.join(indicator.getSectorIds(), ",") +
-                            " and programs " + indicator.getProgramId() + " already exist"));
+                    ApiError.toError("Indicator with name " + indicator.getName() + " sectors "
+                            + StringUtils.join(indicator.getSectorIds(), ",")
+                            + " and program " + indicator.getProgramId()  + " already exist"));
         }
 
         if (indicatorSector > 0  && indicatorProgram == -1) {
             throw new ApiRuntimeException(BAD_REQUEST,
-                    ApiError.toError("Indicator with name " + indicator.getName() + " and sectors " +
-                            StringUtils.join(indicator.getSectorIds(), ",") + " already exist"));
+                    ApiError.toError("Indicator with name " + indicator.getName() + " and sectors "
+                            + StringUtils.join(indicator.getSectorIds(), ",") + " already exist"));
         } else if (indicatorSector == -1 && indicatorProgram > 0) {
             throw new ApiRuntimeException(BAD_REQUEST,
-                    ApiError.toError("Indicator with name " + indicator.getName() + " and program " +
-                            indicator.getProgramId() + " already exist"));
+                    ApiError.toError("Indicator with name " + indicator.getName() + " and program "
+                            + indicator.getProgramId() + " already exist"));
         }
 
     }
@@ -266,11 +307,15 @@ public class IndicatorManagerService {
             if (indRequest.getBaseValue() != null) {
                 AmpIndicatorGlobalValue validatedBaseValues = validateBaseValues(indRequest);
                 updatedValues.add(validatedBaseValues);
+                indicator.getIndicatorValues().add(validatedBaseValues);
+                indicator.getBaseValue().setIndicator(indicator);
             }
 
             if (indRequest.getTargetValue() != null) {
                 AmpIndicatorGlobalValue validatedTargetValues = validateTargetValues(indRequest);
                 updatedValues.add(validatedTargetValues);
+                indicator.getIndicatorValues().add(validatedTargetValues);
+                indicator.getTargetValue().setIndicator(indicator);
             }
 
             indicator.getIndicatorValues().clear();
@@ -296,40 +341,35 @@ public class IndicatorManagerService {
                 ApiError.toError("Indicator with id " + indicatorId + " not found"));
     }
 
-    public void validateProgramSettingsAndGlobalValues(final MEIndicatorDTO indicatorRequest, final AmpIndicator indicator) {
+    public void validateProgramSettingsAndGlobalValues(final MEIndicatorDTO indicatorRequest,
+                                                       final AmpIndicator indicator) {
         if (indicatorRequest.getProgramId() != null) {
             indicator.setProgram(ProgramUtil.getTheme(indicatorRequest.getProgramId()));
 
             if (indicator.getProgram() != null) {
-                AmpActivityProgramSettings indicatorSettings = ProgramUtil.getProgramSettingFromTheme(indicator.getProgram());
+                AmpActivityProgramSettings indSettings = ProgramUtil.getProgramSettingFromTheme(indicator.getProgram());
 
-                if (indicatorSettings != null) {
-                    Date baseOriginalValueDate = null;
-                    Date targetOriginalValueDate = null;
+                if (indSettings != null) {
+                    Date baseOriginalValueDate = indicatorRequest.getBaseValue().getOriginalValueDate();
+                    Date targetOriginalValueDate = indicatorRequest.getTargetValue().getOriginalValueDate();
 
-                    if (indicatorRequest.getBaseValue() != null) {
-                        baseOriginalValueDate = indicatorRequest.getBaseValue().getOriginalValueDate();
-                    }
-
-                    if (indicatorRequest.getTargetValue() != null) {
-                        targetOriginalValueDate = indicatorRequest.getTargetValue().getOriginalValueDate();
-                    }
-
-                    if (indicatorSettings.getStartDate() != null) {
+                    if (indSettings.getStartDate() != null) {
                         if (baseOriginalValueDate != null) {
-                            if (!baseOriginalValueDate.equals(indicatorSettings.getStartDate())) {
+                            if (!baseOriginalValueDate.equals(indSettings.getStartDate())) {
                                 throw new ApiRuntimeException(BAD_REQUEST,
-                                        ApiError.toError("Base original value date must be equal program start date"));
+                                        ApiError.toError("Base original value date must be equal "
+                                                + "program start date"));
                             }
                         } else {
                             throw new ApiRuntimeException(BAD_REQUEST,
-                                    ApiError.toError("Base original value date is required since program start date is set"));
+                                    ApiError.toError("Base original value date is required since "
+                                            + "program start date is set"));
                         }
                     }
 
-                    if (indicatorSettings.getEndDate() != null) {
+                    if (indSettings.getEndDate() != null) {
                         if (targetOriginalValueDate != null) {
-                            if (!targetOriginalValueDate.equals(indicatorSettings.getEndDate())) {
+                            if (!targetOriginalValueDate.equals(indSettings.getEndDate())) {
                                 throw new ApiRuntimeException(BAD_REQUEST,
                                         ApiError.toError("Target value date must be equal program end date"));
                             }
@@ -411,7 +451,7 @@ public class IndicatorManagerService {
         return targetValues;
     }
 
-    public void validateIndicatorName (String name, Session session) {
+    public void validateIndicatorName(String name, Session session) {
         AmpIndicator existingIndicator = (AmpIndicator) session.createCriteria(AmpIndicator.class)
                 .addOrder(Order.asc("id"))
                 .add(org.hibernate.criterion.Restrictions.eq("name", name))
@@ -423,7 +463,7 @@ public class IndicatorManagerService {
         }
     }
 
-    public void validateIndicatorCode (String code, Session session) {
+    public void validateIndicatorCode(String code, Session session) {
         AmpIndicator existingIndicator = (AmpIndicator) session.createCriteria(AmpIndicator.class)
                 .addOrder(Order.asc("id"))
                 .add(org.hibernate.criterion.Restrictions.eq("code", code))
@@ -432,6 +472,123 @@ public class IndicatorManagerService {
         if (existingIndicator != null) {
             throw new ApiRuntimeException(BAD_REQUEST,
                     ApiError.toError("Indicator with code " + code + " already exists"));
+        }
+    }
+
+    public IndicatorYearValues getIndicatorYearValuesByIndicatorId(Long indicatorId,
+                                                                   SettingsAndFiltersParameters params) {
+        AmpIndicator existingIndicator = getAllAmpIndicators().stream()
+                .filter(indicator -> indicator.getIndicatorId().equals(indicatorId))
+                .findFirst()
+                .orElse(null);
+
+        if (existingIndicator == null) {
+            throw new ApiRuntimeException(NOT_FOUND,
+                    ApiError.toError("Indicator with id " + indicatorId + " does not exist"));
+        }
+
+        Map<Long, List<YearValue>> indicatorsWithYearValues = getAllIndicatorYearValuesWithActualValues(params);
+        return getIndicatorYearValues(existingIndicator, indicatorsWithYearValues);
+    }
+
+    public List<IndicatorYearValues> getIndicatorValuesByProgramId(Long programId,
+                                                                   SettingsAndFiltersParameters params) {
+
+        List<AmpIndicator> indicatorsByProgram = getAllAmpIndicators().stream()
+                .filter(indicator -> indicator.getProgram() != null)
+                .filter(indicator -> indicator.getProgram().getAmpThemeId().equals(programId))
+                .collect(Collectors.toList());
+
+        Map<Long, List<YearValue>> indicatorsWithYearValues = getAllIndicatorYearValuesWithActualValues(params);
+
+        List<IndicatorYearValues> indicatorYearValues = indicatorsByProgram.stream()
+                .map(indicator -> getIndicatorYearValues(indicator, indicatorsWithYearValues))
+                .collect(Collectors.toList());
+
+        return indicatorYearValues;
+    }
+
+    private IndicatorYearValues getIndicatorYearValues(final AmpIndicator indicator,
+                                                       final Map<Long, List<YearValue>> indicatorsWithYearValues) {
+        BigDecimal baseValue = indicator.getBaseValue() != null
+                ? new BigDecimal(indicator.getBaseValue().getValue()) : BigDecimal.ZERO;
+        BigDecimal targetValue = indicator.getTargetValue() != null
+                ? new BigDecimal(indicator.getTargetValue().getValue()) : BigDecimal.ZERO;
+        List<YearValue> yearValues = indicatorsWithYearValues.get(indicator.getIndicatorId());
+
+        return new IndicatorYearValues(indicator, baseValue, yearValues, targetValue);
+    }
+
+    public Map<Long, List<YearValue>> getAllIndicatorYearValuesWithActualValues(SettingsAndFiltersParameters params) {
+        GeneratedReport generatedReport = runIndicatorReport(params);
+        Map<Long, List<YearValue>> data = new HashMap<>();
+
+        List<ReportArea> children = generatedReport.reportContents.getChildren() == null
+                ? Collections.emptyList()
+                : generatedReport.reportContents.getChildren();
+
+        Map<Long, AmpIndicator> indicatorById = getAllAmpIndicators().stream()
+                .collect(Collectors.toMap(AmpIndicator::getIndicatorId, Function.identity()));
+
+        for (ReportArea area : children) {
+            AmpIndicator indicator = indicatorById.get(area.getOwner().id);
+            List<YearValue> actualValues = new ArrayList<>();
+
+            for (Map.Entry<ReportOutputColumn, ReportCell> entry : area.getContents().entrySet()) {
+                ReportOutputColumn col = entry.getKey();
+
+                if (col.parentColumn != null
+                        && col.originalColumnName.equals(MeasureConstants.INDICATOR_ACTUAL_VALUE)
+                        && col.parentColumn.parentColumn != null
+                        && col.parentColumn.parentColumn.originalColumnName.equals(NiReportsEngine.FUNDING_COLUMN_NAME)
+                        && col.parentColumn.parentColumn.parentColumn == null) {
+                    int year = Integer.parseInt(col.parentColumn.originalColumnName);
+                    AmountCell cell = (AmountCell) entry.getValue();
+                    BigDecimal actualValue = cell.extractValue();
+                    actualValues.add(new YearValue(year, actualValue));
+                }
+            }
+            data.put(indicator.getIndicatorId(), actualValues);
+        }
+
+        return data;
+    }
+
+    private GeneratedReport runIndicatorReport(SettingsAndFiltersParameters settingsAndFilters) {
+        ReportSpecificationImpl spec = new ReportSpecificationImpl("indicator-data", ArConstants.INDICATOR_TYPE);
+
+        spec.addColumn(new ReportColumn(ColumnConstants.INDICATOR_NAME));
+        spec.getHierarchies().add(new ReportColumn(ColumnConstants.INDICATOR_NAME));
+        spec.addMeasure(new ReportMeasure(MeasureConstants.INDICATOR_ACTUAL_VALUE));
+        spec.setSummaryReport(true);
+        spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
+
+        applySettingsAndFilters(settingsAndFilters, spec);
+
+        return EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
+    }
+
+    private void applySettingsAndFilters(
+            SettingsAndFiltersParameters settingsAndFilters,
+            ReportSpecificationImpl spec) {
+
+        Map<String, Object> filters = settingsAndFilters.getFilters();
+        if (filters == null) {
+            filters = new LinkedHashMap<>();
+        }
+        AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, null);
+        if (filterRules != null) {
+            spec.setFilters(filterRules);
+        }
+
+        SettingsUtils.applySettings(spec, settingsAndFilters.getSettings(), true);
+    }
+
+    private List<AmpIndicator> getAllAmpIndicators() {
+        try {
+            return IndicatorUtil.getAllIndicators();
+        } catch (DgException e) {
+            throw new RuntimeException("Failed to load indicators");
         }
     }
 }

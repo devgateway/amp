@@ -41,7 +41,7 @@ table.fixed-layout {table-layout:fixed; width: 100%;}
 td select.inp-text-orgType{width:250px;}
 td input#keyWordTextField{height:22px;}
 table#addUserContainer tr td input {border:1px solid #D0D0D0; background-color:#FFFFFF;margin:0px 0px 0px 5px; width:150px;}
-table tr td.f-names{font-weight:bold;}
+table tr td.f-names{font-weight:700; font-size: 14px;}
 .insidex{font-size:11px;color:#000000;padding:2px;margin:5px}
 .dropdwn_sm {border:1px solid #D0D0D0; font-size:11px; background-color:#FFFFFF;}
 .dropdwn_sm_wksp {border:1px solid #CCCCCC; font-size:11px; background-color:#FFFFFF; color:#000000;}
@@ -406,14 +406,16 @@ ul.first-of-type li.yui-gen14 {}
 /*-----rafy-----*/
 div.reg_form_container{width:1000px; margin:0 auto;text-align:center;}
 div.reg_form_container table {margin:0 auto; }
-div.reg_form_container input,div.reg_form_container form input, div.reg_form_container form select{border:1px solid #d0d0d0;height:18px;}
-div.reg_form_container .buttonx {background-color:#5E8AD1; border-top: 1px solid #99BAF1; border-left:1px solid #99BAF1; border-right:1px solid #225099; border-bottom:1px solid #225099; font-size:11px; color:#FFFFFF; font-weight:bold; padding-left:5px; padding-right:5px; padding-top:3px; padding-bottom:3px; height:25px;}
+/* timothymugo - add height of the input boxes */
+div.reg_form_container input,div.reg_form_container form input, div.reg_form_container form select{border:1px solid #d0d0d0;height:30px;}
+div.reg_form_container .buttonx {background-color:#68b35b; font-size:14px; color:#FFFFFF; font-weight:bold; padding: 3px 5px; height:30px; width: 200px; margin-right: 421px; }
 div.reg_form_container form input.dr-menu, div.reg_form_container input.dr-menu{ font-size:14px; font-weight:bold; color:#FFFFFF; background-color:#4A687A; margin:10px;height:25px;border:1px solid #364d5a;}
 div.reg_form_title{text-align:left;border-top:5px solid #4A687A; margin:0px 0px 20px 0px; background:#f0f0f0;padding:0px 0px 10px 0px;border-bottom:1px solid  #ccccce;}
 div.reg_form_container h2 { font-size:30px; font-weight:bold; color:#FFFFFF; background-color:#4A687A; margin-left:10px; padding:5px; letter-spacing:-1px; margin-right:10px;display:inline;}
 span.formnote{color:#595959; font-size:14px;font-weight:bold;line-height:20px;}
+span.formnote .login_warning_title{font-size: 16px; font-weight: 600; color: #225099FF;}
 td.title{background-color:#f0f0f0;color:#999; font-size:12px;font-weight:bold;padding:10px;}
-div.reg_form_container .f-names {color:#000000; font-size:12px;}
+div.reg_form_container .f-names {color: rgba(0, 0, 0, 0.6); font-size:12px;}
 div.breadcrumbsplaceholder {height:25px; clear:both;margin:20px 0px 20px 0px; width:950px; background:#f0f0f0; color:#000;}
 #amphome{width:1000px; margin:0 auto;}
 #amphomesidebar{width:220px; float:right;}
@@ -530,16 +532,21 @@ div.adminicon{float:right;}
 
 
 /*-----rafy-----*/
-div.reg_form_container{width:1000px; margin:0 auto;text-align:center;}
+div.reg_form_container{width:1000px; margin:0 auto; text-align: left;}
 div.reg_form_container table {margin:0 auto; }
-div.reg_form_container input,div.reg_form_container form input, div.reg_form_container form select{border:1px solid #d0d0d0;height:18px; width:145px;}
-div.reg_form_container .buttonx {background-color:#5E8AD1; border-top: 1px solid #99BAF1; border-left:1px solid #99BAF1; border-right:1px solid #225099; border-bottom:1px solid #225099; font-size:11px; color:#FFFFFF; font-weight:bold; padding-left:5px; padding-right:5px; padding-top:3px; padding-bottom:3px; height:25px;}
+/* Modify the input boxes - timothymugo */
+div.reg_form_container input,div.reg_form_container form input, div.reg_form_container form select{border:1px solid #d0d0d0;height:30px; font-size: 11px; width: 280px; padding: 5px 20px; border-radius: 5px;}
+div.reg_form_container .buttonx {background-color:#68b35b; border-top: 1px solid #99BAF1; font-size:14px; color:#FFFFFF; font-weight: 700; padding: 3px 5px; height:30px;}
 div.reg_form_container form input.dr-menu, div.reg_form_container input.dr-menu{ font-size:14px; font-weight:bold; color:#FFFFFF; background-color:#4A687A; margin:10px;height:25px;border:1px solid #364d5a;}
 div.reg_form_title{text-align:left;border-top:5px solid #4A687A; margin:0px 0px 20px 0px; background:#f0f0f0;padding:0px 0px 10px 0px;border-bottom:1px solid  #ccccce;}
 div.reg_form_container h2 { font-size:30px; font-weight:bold; color:#FFFFFF; background-color:#4A687A; margin-left:10px; padding:5px; letter-spacing:-1px; margin-right:10px;display:inline;}
-span.formnote{color:#595959; font-size:14px;font-weight:bold;line-height:20px;}
+span.formnote{color:#595959; font-size:14px;font-weight:500;line-height:20px;}
 td.title{background-color:#f0f0f0;color:#999; font-size:12px;font-weight:bold;padding:10px;}
-div.reg_form_container .f-names {color:#000000; font-size:12px;}
+/* changed font-size */
+div.reg_form_container .f-names {color: rgba(0, 0, 0, 0.6); font-size:14px; text-align: right; padding-right: 10px;}
+/* added input row container - tmugo */
+div.reg_form_container .input_row_container td { border-bottom: 1px solid #edeff1; padding: 8px;}
+div.reg_form_container .reg_submit_btn_container td { padding: 20px 18px; border-bottom: none;}
 div.breadcrumbsplaceholder {height:25px; clear:both;margin:20px 0px 20px 0px; width:950px; background:#f0f0f0; color:#000;}
 #amphome{width:1000px; margin:0 auto;}
 #amphometext{width:740px; float:left;}
@@ -760,7 +767,7 @@ html.ie div.header{z-index:9999;}
 #previewHeaderSectionDiv {background-color:#F5F5F5; text-align:center; padding-top:5px; padding-bottom:5px; border-top:1px solid #E9E9E9; border-bottom:1px solid #E9E9E9; font-size:11px; font-weight:bold; color:#5C5C5C;}
 #previewHeaderSectionDiv span {font-size:11px; font-weight:bold; color:#5C5C5C; cursor: pointer;}
 #components_dots table tr td {font-size:11px;}
-table tr td {font-size:11px;}
+table tr td {}
 div.breadcrump_cont{display:none;}
 
 .dgf_footer {margin-top:15px; margin-bottom:15px; text-align:center; font-size:11px; color:#8B8B8B; line-height:18px;}

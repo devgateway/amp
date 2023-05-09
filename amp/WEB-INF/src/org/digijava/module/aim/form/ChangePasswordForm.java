@@ -13,6 +13,15 @@ public class ChangePasswordForm extends ValidatorForm {
           private String newPassword = null;
           private String conformNewPassword = null;
 
+          private boolean userIdEnabled = true;
+
+          public boolean getUserIdEnabled() {
+              return userIdEnabled;
+          }
+
+          public void setUserIdEnabled(boolean userIdEnabled) {
+              this.userIdEnabled = userIdEnabled;
+          }
           public String getUserId() {
                      return this.userId;
           }

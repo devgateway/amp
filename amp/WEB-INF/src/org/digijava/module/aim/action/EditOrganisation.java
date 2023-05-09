@@ -370,28 +370,28 @@ public class EditOrganisation extends DispatchAction {
           String topAmpIds = ampIds.stream().limit(MAX_ACTIVITIES).collect(Collectors.joining(", "));
           errors.add(ActionMessages.GLOBAL_MESSAGE,
                   new ActionMessage("error.aim.organizationManager.deleteOrgActError", topAmpIds));
-          saveErrors(request, errors);
-          editForm.setActionFlag("edit");
-          return mapping.findForward("forward");
-      } else {
+      }
+
           AmpOrganisation org = DbUtil.getOrganisation(editForm.getAmpOrgId());
           if (org.getCalendar() != null && org.getCalendar().size() > 0) {
               errors.add(ActionMessages.GLOBAL_MESSAGE,
                       new ActionMessage("error.aim.organizationManager.deleteOrgEventError"));
-              saveErrors(request, errors);
-              editForm.setActionFlag("edit");
-              return mapping.findForward("forward");
-
           }
 
           List<AmpTeam> releatedTeams = TeamUtil.getTeamByOrg(editForm.getAmpOrgId());
           if (releatedTeams != null && !releatedTeams.isEmpty()){
               errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.organizationManager.deleteOrgTeamError"));
+          }
+
+          if (org.getUsers() != null && !org.getUsers().isEmpty()) {
+              errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.organizationManager.deleteOrgVerifiedOrgError"));
+          }
+
+          if (!errors.isEmpty()){
               saveErrors(request, errors);
               editForm.setActionFlag("edit");
               return mapping.findForward("forward");
           }
-
 
           try {                             
               DbUtil.deleteOrg(org);
@@ -408,16 +408,21 @@ public class EditOrganisation extends DispatchAction {
 
           return mapping.findForward("added");
 
-      }
 
   }
 
   private Set<String> getAmpIdsWithOrg(Long orgId) {
       Set<String> ids = new TreeSet<>();
-      ids.addAll(DbUtil.getAmpIdsByOrg(orgId));
-      ids.addAll(ActivityUtil.getAmpIdsByFundingOrg(orgId));
-      ids.addAll(DbUtil.getAmpIdsByInternalIdOrg(orgId));
+      addAllIfNotNull(ids, DbUtil.getAmpIdsByOrg(orgId));
+      addAllIfNotNull(ids, ActivityUtil.getAmpIdsByFundingOrg(orgId));
+      addAllIfNotNull(ids, DbUtil.getAmpIdsByInternalIdOrg(orgId));
       return ids;
+  }
+
+  private void addAllIfNotNull(Set set, Collection collectionToAdd){
+      if (set != null && collectionToAdd != null && !collectionToAdd.isEmpty()){
+          set.addAll(collectionToAdd);
+      }
   }
 
   public ActionForward addStaffInfo(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {

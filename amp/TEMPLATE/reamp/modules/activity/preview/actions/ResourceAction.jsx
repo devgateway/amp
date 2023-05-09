@@ -9,13 +9,16 @@ export const RESOURCES_LOAD_LOADED = 'RESOURCES_LOAD_LOADED';
 export const RESOURCES_LOAD_FAILED = 'RESOURCES_LOAD_FAILED';
 
 export const loadResourcesForActivity = (activity) => (dispatch, ownProps) => {
-    const resourcesByUuids =
-        new Set(activity[ActivityConstants.ACTIVITY_DOCUMENTS].map(r => r[ResourceConstants.UUID]));
-    const resourcesByUUID = Array.from(resourcesByUuids);
-    dispatch({
-        type: RESOURCES_LOAD_LOADING
-    })
-    return loadHydratedResources(resourcesByUUID)(dispatch, ownProps);
+    if (activity.hasOwnProperty(ActivityConstants.ACTIVITY_DOCUMENTS)
+     && activity[ActivityConstants.ACTIVITY_DOCUMENTS] !== null) {
+        const resourcesByUuids =
+            new Set(activity[ActivityConstants.ACTIVITY_DOCUMENTS].map(r => r[ResourceConstants.UUID]));
+        const resourcesByUUID = Array.from(resourcesByUuids);
+        dispatch({
+            type: RESOURCES_LOAD_LOADING
+        })
+        return loadHydratedResources(resourcesByUUID)(dispatch, ownProps);
+    }
 }
 export const loadHydratedResources = (ids) => (dispatch, ownProps) => {
     const resourcesFields = [ResourceConstants.RESOURCE_TYPE, ResourceConstants.TYPE];

@@ -503,6 +503,13 @@ public class SettingsUtils {
         addDateSetting(settings, GlobalSettingsConstants.GIS_DEFAUL_MIN_YEAR_RANGE,
                 SettingsConstants.GIS_DEFAULT_MIN_DATE, SettingsConstants.GIS_DEFAULT_MIN_YEAR_RANGE,
                 gsFiscalCalendar, currentCalendar, false);
+        addDateSetting(settings, Constants.GlobalSettings.END_YEAR_DEFAULT_VALUE,
+                SettingsConstants.REPORT_DEFAULT_MAX_DATE, SettingsConstants.REPORT_DEFAULT_MAX_DATE,
+                gsFiscalCalendar, currentCalendar, true);
+        addDateSetting(settings, Constants.GlobalSettings.START_YEAR_DEFAULT_VALUE,
+                SettingsConstants.REPORT_DEFAULT_MIN_DATE, SettingsConstants.REPORT_DEFAULT_MIN_DATE,
+                gsFiscalCalendar, currentCalendar, false);
+
     }
 
     private static void addDateSetting(AmpGeneralSettings settings, String globalSettingsName, String dateSettingsName,
@@ -518,6 +525,10 @@ public class SettingsUtils {
             settings.setGisDefaultMaxYearRange(yearNumber);
         } else if (yearSettingsName.equals(SettingsConstants.GIS_DEFAULT_MIN_YEAR_RANGE)) {
             settings.setGisDefaultMinYearRange(yearNumber);
+        } else if (yearSettingsName.equals(SettingsConstants.REPORT_DEFAULT_MAX_YEAR_RANGE)) {
+            settings.setReportDefaultMaxYearRange(yearNumber);
+        } else if (yearSettingsName.equals(SettingsConstants.REPORT_DEFAULT_MIN_YEAR_RANGE)) {
+            settings.setReportDefaultMinYearRange(yearNumber);
         }
 
         if (!StringUtils.equals(yearNumber, "-1")) {
@@ -541,6 +552,10 @@ public class SettingsUtils {
                 settings.setGisDefaultMaxDate(formattedDate);
             } else if (dateSettingsName.equals(SettingsConstants.GIS_DEFAULT_MIN_DATE)) {
                 settings.setGisDefaultMinDate(formattedDate);
+            } else if (dateSettingsName.equals(SettingsConstants.REPORT_DEFAULT_MAX_DATE)) {
+                settings.setReportDefaultMaxDate(formattedDate);
+            } else if (dateSettingsName.equals(SettingsConstants.REPORT_DEFAULT_MIN_DATE)) {
+                settings.setReportDefaultMinDate(formattedDate);
             }
         }
     }

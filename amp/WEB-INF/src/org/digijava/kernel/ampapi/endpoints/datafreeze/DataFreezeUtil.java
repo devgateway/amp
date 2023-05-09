@@ -90,7 +90,7 @@ public final class DataFreezeUtil {
     }
 
     public static List<AmpDataFreezeSettings> getDataFreeEventsList(Integer offset, Integer count, String orderBy,
-            String sort, Integer total) {
+                                                                    String sort, Integer total) {
         Integer maxResults = count == null ? DataFreezeConstants.DEFAULT_RECORDS_PER_PAGE : count;
         Integer startAt = (offset == null || offset > total) ? DataFreezeConstants.DEFAULT_OFFSET : offset;
         String orderByColumn = (orderBy == null) ? DataFreezeConstants.DEFAULT_SORT_COLUMN : orderBy;
@@ -133,7 +133,7 @@ public final class DataFreezeUtil {
     }
 
     public static void freezeActivitiesForFreezingDate(AmpDataFreezeSettings currentFreezingEvent,
-            Set<Long> activitiesId) {
+                                                       Set<Long> activitiesId) {
         SimpleDateFormat fullDateNoHourFormatter = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat yearFormatter = new SimpleDateFormat("yyyy");
         final String fullDate = fullDateNoHourFormatter.format(currentFreezingEvent.getFreezingDate()) + " 23:59:59";
@@ -171,7 +171,7 @@ public final class DataFreezeUtil {
 
     /**
      * Return a freezing event if today is the freezing date
-     * 
+     *
      * @return
      */
     public static AmpDataFreezeSettings getCurrentFreezingEvent() {
@@ -188,13 +188,18 @@ public final class DataFreezeUtil {
 
         PersistenceManager.getSession().doWork(new Work() {
             public void execute(Connection conn) throws SQLException {
-                String todaysFreezingEventQuery = "SELECT max(id) FROM  amp_data_freeze_settings "
-                        + " WHERE CURRENT_DATE >=(freezing_date::date + coalesce(grace_period, 0)) "
-                        + " AND executed = FALSE AND enabled = TRUE "
-                        + "  AND (freezing_date::date + coalesce(grace_period, 0)) = "
-                        + " (SELECT min((freezing_date::date + coalesce(grace_period, 0))) "
-                        + " FROM amp_data_freeze_settings WHERE executed = FALSE AND enabled = TRUE "
-                        + " and CURRENT_DATE <=(freezing_date::date + coalesce(grace_period, 0)))";
+                String todaysFreezingEventQuery = "SELECT max(id)" +
+                        " FROM amp_data_freeze_settings" +
+                        " WHERE CURRENT_DATE >= (freezing_date::date + coalesce(grace_period, 0))" +
+                        "  AND executed = FALSE" +
+                        "  AND enabled = TRUE" +
+                        "  AND (freezing_date::date + coalesce(grace_period, 0)) =" +
+                        "      coalesce((SELECT min((freezing_date::date + coalesce(grace_period, 0)))" +
+                        "                FROM amp_data_freeze_settings" +
+                        "                WHERE executed = FALSE" +
+                        "                  AND enabled = TRUE" +
+                        "                  and CURRENT_DATE <= (freezing_date::date + coalesce(grace_period, 0)))," +
+                        "               (freezing_date::date + coalesce(grace_period, 0)))";
                 RsInfo rsi = SQLUtils.rawRunQuery(conn, todaysFreezingEventQuery, null);
                 if (rsi.rs.next()) {
                     freezingEventId.value = rsi.rs.getLong(1);
@@ -225,7 +230,7 @@ public final class DataFreezeUtil {
 
     /**
      * Get list of active users and assigned to workspaces
-     * 
+     *
      * @return List<User> users
      */
     public static List<User> getUsers() {
@@ -235,11 +240,11 @@ public final class DataFreezeUtil {
                 + "where user.banned = false";
         Query query = session.createQuery(teamMembersQuery);
         List<AmpTeamMember> teamMembers = query.list();
-        
+
         Set<User> users = teamMembers.stream()
                 .map(AmpTeamMember::getUser)
                 .collect(Collectors.toSet());
-        
+
         return new ArrayList<User>(users);
     }
 

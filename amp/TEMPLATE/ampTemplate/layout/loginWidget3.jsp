@@ -94,7 +94,7 @@
         <c:set var="title">
           <digi:trn>Click here to change your password</digi:trn>
         </c:set>
-        <digi:link href="/showChangePassword.do" title="${title}" module="aim">
+        <digi:link style="text-align: center;" href="/showChangePassword.do" title="${title}" module="aim">
           <digi:trn> Change Password</digi:trn>
         </digi:link>
         <br/>

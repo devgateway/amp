@@ -1,0 +1,90 @@
+.modal_backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 100;
+}
+
+.is_invalid {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
+
+.text_is_invalid {
+    color: #dc3545;
+    font-size: 12px;
+}
+
+.checkbox_label {
+    margin-left: 10px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.viewmodal_wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.view_row {
+    margin: 0 !important;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    padding: 7px 10px !important;
+}
+
+.view_one_item {
+    width: 100%;
+    text-align: left;
+    margin: 0 1%;
+}
+
+.view_row_full {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    padding: 10px;
+    flex-direction: column;
+}
+
+.array_item {
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    max-width: 80%;
+}
+
+.view_item {
+    width: 50%;
+    text-align: left;
+    margin: 0 1%;
+}
+
+.input_field {
+    width: 100%;
+    height: 40px;
+    font-size: 16px;
+}
+
+.input_field_checkbox {
+    width: 100%;
+}
+
+/* Remove arrows from number input fields */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}

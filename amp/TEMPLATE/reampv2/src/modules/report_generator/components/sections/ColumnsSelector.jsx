@@ -86,7 +86,7 @@ export default class ColumnsSelector extends Component {
                           className="hidden"
                           id={`${i}_cat`}
                           type="checkbox"
-                          checked={isChecked} />
+                          defaultChecked={isChecked} />
                         <label
                           className="general-label"
                           htmlFor={`${i}_cat`}

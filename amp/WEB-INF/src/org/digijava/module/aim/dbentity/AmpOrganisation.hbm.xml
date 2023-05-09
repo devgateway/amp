@@ -143,6 +143,11 @@
                 <property name="orgKeyAreas" column="org_key_areas" type="java.lang.String" />
                 <property name="lineMinRegNumber" column="line_min_reg_numb" type="java.lang.String" />
 
+		<set name="users" table="DG_USER_ORGS" lazy="true">
+			<key column="org_id" />
+			<many-to-many class="org.digijava.kernel.user.User" column="USER_ID" />
+		</set>
+
 	</class>
 
 </hibernate-mapping>

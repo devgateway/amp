@@ -26,7 +26,7 @@ public class SectorIdsValidator implements ConstraintValidator<ValidSectorIds, L
 
         Session session = PersistenceManager.getSession();
         Integer validSectorIdsFromDb = (Integer) session.createQuery("SELECT count(s.ampSectorId) FROM AmpSector s "
-                        + "WHERE s.ampSectorId in (:sectorIds)")
+                        + "WHERE s.ampSectorId in (:sectorIds) AND (s.deleted = false OR s.deleted is null)")
                 .setParameterList("sectorIds", sectorIds)
                 .uniqueResult();
 

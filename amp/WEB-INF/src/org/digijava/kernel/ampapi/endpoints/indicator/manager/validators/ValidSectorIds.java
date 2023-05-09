@@ -21,7 +21,7 @@ import static java.lang.annotation.ElementType.FIELD;
 @Constraint(validatedBy = SectorIdsValidator.class)
 public @interface ValidSectorIds {
 
-    String message() default "shouldn't contain invalid sector ids";
+    String message() default "shouldn't contain invalid or deleted sector ids";
 
     Class<?>[] groups() default {};
 

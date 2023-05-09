@@ -40,7 +40,7 @@ public class AmpIndicator implements Serializable, Identifiable
     private Set<AmpSector> sectors;
 //    @Interchangeable(fieldTitle="Comments")
 
-    private Set<AmpTheme> programs;
+    private AmpTheme program;
 
     private String comments;
 //    @Interchangeable(fieldTitle="Unit")
@@ -122,13 +122,14 @@ public class AmpIndicator implements Serializable, Identifiable
         this.sectors = sectors;
     }
 
-    public Set<AmpTheme> getPrograms() {
-        return programs;
+    public AmpTheme getProgram() {
+        return program;
     }
 
-    public void setPrograms(Set<AmpTheme> programs) {
-        this.programs = programs;
+    public void setProgram(AmpTheme program) {
+        this.program = program;
     }
+
     public boolean isDefaultInd() {
         return defaultInd;
     }

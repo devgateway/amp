@@ -5,21 +5,18 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModelProperty;
-import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
-import org.digijava.kernel.ampapi.endpoints.indicator.manager.validators.ValidProgramIds;
 import org.digijava.kernel.ampapi.endpoints.indicator.manager.validators.ValidSectorIds;
+import org.digijava.kernel.ampapi.endpoints.indicator.manager.validators.ValidProgramId;
 import org.digijava.kernel.ampapi.endpoints.serializers.LocalizedDateDeserializer;
 import org.digijava.kernel.ampapi.endpoints.serializers.LocalizedDateSerializer;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorGlobalValue;
 import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpTheme;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.digijava.module.aim.dbentity.AmpIndicatorValue.BASE;
@@ -28,20 +25,18 @@ import static org.digijava.module.aim.dbentity.AmpIndicatorValue.TARGET;
 /**
  * DTO for AmpIndicator
  */
-@JsonPropertyOrder({"id", "name", "description", "code", "ascending", "creationDate", "sectors"})
+@JsonPropertyOrder({"id", "name", "description", "code", "ascending", "creationDate", "sectors", "programId"})
 public class MEIndicatorDTO {
 
     @JsonProperty("id")
     private Long id;
 
     @JsonProperty("name")
-    @ApiModelProperty(dataType = "org.digijava.kernel.ampapi.swagger.types.MultilingualLabelPH")
     @NotNull
-    private Map<String, String> name;
+    private String name;
 
     @JsonProperty("description")
-    @ApiModelProperty(dataType = "org.digijava.kernel.ampapi.swagger.types.MultilingualLabelPH")
-    private Map<String, String> description;
+    private String description;
 
     @JsonProperty("code")
     @NotNull
@@ -54,6 +49,7 @@ public class MEIndicatorDTO {
     @JsonSerialize(using = LocalizedDateSerializer.class)
     @JsonDeserialize(using = LocalizedDateDeserializer.class)
     @NotNull
+    @ApiModelProperty(dataType = "java.util.date", example = "02/02/2023")
     private Date creationDate;
 
     @JsonProperty("base")
@@ -66,9 +62,9 @@ public class MEIndicatorDTO {
     @ValidSectorIds
     private List<Long> sectorIds = new ArrayList<>();
 
-    @JsonProperty("programs")
-    @ValidProgramIds
-    private List<Long> programIds = new ArrayList<>();
+    @JsonProperty("programId")
+    @ValidProgramId
+    private Long programId;
 
     public MEIndicatorDTO() {
 
@@ -76,17 +72,15 @@ public class MEIndicatorDTO {
 
     public MEIndicatorDTO(final AmpIndicator indicator) {
         this.id = indicator.getIndicatorId();
-        this.name = TranslationUtil.loadTranslationsForField(AmpIndicator.class, "name",
-                indicator.getName(), indicator.getIndicatorId());
-        this.description = TranslationUtil.loadTranslationsForField(AmpIndicator.class, "description",
-                indicator.getDescription(), indicator.getIndicatorId());
+        this.name = indicator.getName();
+        this.description = indicator.getDescription();
         this.code = indicator.getCode();
         this.ascending = indicator.getType() == null || indicator.getType().equals("A");
         this.creationDate = indicator.getCreationDate();
         this.baseValue = indicator.getBaseValue();
         this.targetValue = indicator.getTargetValue();
         this.sectorIds = indicator.getSectors().stream().map(AmpSector::getAmpSectorId).collect(Collectors.toList());
-        this.programIds = indicator.getPrograms().stream().map(AmpTheme::getAmpThemeId).collect(Collectors.toList());
+        this.programId = indicator.getProgram() != null ? indicator.getProgram().getAmpThemeId() : null;
     }
 
     public Long getId() {
@@ -97,19 +91,19 @@ public class MEIndicatorDTO {
         this.id = id;
     }
 
-    public Map<String, String> getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(final Map<String, String> name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
-    public Map<String, String> getDescription() {
+    public String getDescription() {
         return description;
     }
 
-    public void setDescription(final Map<String, String> description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -168,11 +162,11 @@ public class MEIndicatorDTO {
         this.sectorIds = sectorIds;
     }
 
-    public List<Long> getProgramIds() {
-        return programIds;
+    public Long getProgramId() {
+        return programId;
     }
 
-    public void setProgramIds(final List<Long> programIds) {
-        this.programIds = programIds;
+    public void setProgramId(final Long programId) {
+        this.programId = programId;
     }
 }

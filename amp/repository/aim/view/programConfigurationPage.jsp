@@ -16,6 +16,15 @@
 <jsp:include page="scripts/newCalendar.jsp" flush="true" />
 
 <script language="JavaScript">
+	$(document).ready(function () {
+		var hierarchyIDs=$("select[name$='.defaultHierarchyId']");
+
+		if (hierarchyIDs != null) {
+			for (var i = 0; i < hierarchyIDs.length; i++) {
+				handleHierarchyChange(i);
+			}
+		}
+	});
 
  function cancelSaving() {
 
@@ -45,7 +54,26 @@
 			document.forms[0].submit();
 		}
 
-		window.location = "/aim/programConfigurationPage.do"
+	}
+
+	function handleHierarchyChange(hierarchyIndex){
+	    if (hierarchyIndex == null) {
+	        hierarchyIndex = -1;
+	    }
+
+		const hierarchyIdClass = 'settingsListDTO[' + hierarchyIndex + '].defaultHierarchyId';
+		const hierarchyId = document.getElementsByName(hierarchyIdClass)[0].selectedOptions[0].value;
+
+
+		if (hierarchyId.toString() === "-1") {
+			$('.mpc-startDate' + hierarchyIndex).hide();
+			$('#startDate' + hierarchyIndex).val(null);
+			$('.mpc-endDate' + hierarchyIndex).hide();
+			$('#endDate' + hierarchyIndex).val(null);
+		} else {
+			$('.mpc-startDate' + hierarchyIndex).show();
+			$('.mpc-endDate' + hierarchyIndex).show();
+		}
 	}
 
    var enterBinder	= new EnterHitBinder('saveMPCBtn');
@@ -146,7 +174,7 @@ Default Hierarchy
 </td>
 <td class="inside">
 
-<html:select name="settingsListDTO" property="defaultHierarchyId" indexed="true" value="${settingsListDTO.defaultHierarchy.ampThemeId}">
+<html:select onchange="return handleHierarchyChange(${index})" name="settingsListDTO" property="defaultHierarchyId" styleId="settingsListDTO${index}" indexed="true" value="${settingsListDTO.defaultHierarchy.ampThemeId}">
   <html:option value="-1"><digi:trn key="aim:selprogram" >Select Program</digi:trn></html:option>
 	<html:optionsCollection property="programList" value="ampThemeId" label="name" />
 </html:select>
@@ -156,8 +184,7 @@ Default Hierarchy
 <td colspan="2" class="inside" align=center>
 <digi:trn key="aim:allowMultiple">Allow Multiple</digi:trn>? <html:checkbox name="settingsListDTO" property="allowMultiple" indexed="true" />
 </td>
-<c:if test="${settingsListDTO.defaultHierarchy != null}">
-</tr>
+<tr class="mpc-startDate${index}">
 		<td width="50%" class="inside" align="right">
 			<digi:trn key="aim:startDate">Start Date</digi:trn>
 
@@ -169,7 +196,7 @@ Default Hierarchy
 			</a>
 		</td>
 </tr>
-	<tr>
+	<tr class="mpc-endDate${index}">
 	<td width="50%" class="inside" align="right">
 		<digi:trn key="aim:endDate">End Date</digi:trn>
 	</td>
@@ -180,7 +207,6 @@ Default Hierarchy
 		</a>
 	</td>
 	</tr>
-	</c:if>
 </logic:iterate>
 
 <tr>
@@ -197,7 +223,6 @@ Default Hierarchy
 </td>
 </tr>
 </table>
-
 
 </digi:form >
 

@@ -245,4 +245,10 @@ public class GlobalSettingsConstants {
 
     public static final String EXEMPT_ORGANIZATION_DOCUMENTS = "Exempt organization to see documents";
 
+    public static final String INTEGRATION_AIRFLOW_URL = "Airflow url";
+    public static final String INTEGRATION_AIRFLOW_USERNAME = "Airflow user";
+    public static final String INTEGRATION_AIRFLOW_PASSWORD = "Airflow password";
+    public static final String INTEGRATION_AIRFLOW_DAG_RUN_URL = "Airflow dag run url";
+    public static final String INTEGRATION_FILE_UPLOAD_DIR = "Integration file upload folder";
+
 }

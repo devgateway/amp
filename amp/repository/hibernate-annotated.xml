@@ -3,5 +3,7 @@
 <hibernate-packages required="false">
 	<hibernate-package>org.digijava.kernel.entity.MailSpool</hibernate-package>
 	<hibernate-class>org.digijava.kernel.ampapi.postgis.entity.AmpLocator</hibernate-class>
-	
+	<hibernate-class>org.digijava.kernel.entity.integration.FileUploaded</hibernate-class>
+	<hibernate-class>org.digijava.kernel.entity.integration.FileInformation</hibernate-class>
+	<hibernate-class>org.digijava.kernel.entity.integration.FileRecord</hibernate-class>
 </hibernate-packages>

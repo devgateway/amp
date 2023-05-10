@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>GGW-2024</jira>
+    <keyword>Backend Endpoints to support ETL</keyword>
+    <author>drychter</author>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                CREATE SCHEMA IF NOT EXISTS etl;
+
+                CREATE TABLE IF NOT EXISTS etl.dg_file_uploaded
+                (
+                id bigint NOT NULL,
+                path text NOT NULL,
+                file_name text NOT NULL,
+                created_date DATE DEFAULT CURRENT_DATE,
+                CONSTRAINT etl_dg_file_uploaded_pkey PRIMARY KEY (id)
+                );
+
+                CREATE SEQUENCE etl.dg_file_uploaded_seq START 1;
+
+                CREATE TABLE IF NOT EXISTS etl.dg_file_information
+                (
+                id bigint NOT NULL,
+                file_name text NOT NULL,
+                records integer,
+                success integer,
+                error integer,
+                status text,
+                message json,
+                created_date DATE DEFAULT CURRENT_DATE,
+                CONSTRAINT etl_dg_file_information_pkey PRIMARY KEY (id)
+                );
+
+                CREATE SEQUENCE etl.dg_file_information_seq START 1;
+
+                CREATE TABLE IF NOT EXISTS etl.dg_file_record
+                (
+                id bigint NOT NULL,
+                file_information_id bigint,
+                row integer,
+                content json,
+                status text,
+                error json,
+                amp_id text,
+                created_date DATE DEFAULT CURRENT_DATE,
+                CONSTRAINT etl_dg_file_record_file_information_id_fkey FOREIGN KEY (file_information_id)
+                REFERENCES etl.dg_file_information (id) MATCH SIMPLE
+                );
+
+                CREATE SEQUENCE etl.dg_file_record_seq START 1;
+
+                INSERT INTO amp_global_settings (id, settingsname, settingsvalue, description, section, internal)
+                VALUES (nextval('amp_global_settings_seq'), 'Airflow url', 'http://localhost:8080/api/v1/',
+                'Airflow api url', 'general', true);
+
+                INSERT INTO amp_global_settings (id, settingsname, settingsvalue, description, section, internal)
+                VALUES (nextval('amp_global_settings_seq'), 'Airflow user', 'admin',
+                'Airflow user', 'general', true);
+
+                INSERT INTO amp_global_settings (id, settingsname, settingsvalue, description, section, internal)
+                VALUES (nextval('amp_global_settings_seq'), 'Airflow password', 'xeTucC2WNFcHXqm5',
+                'Airflow password', 'general', true);
+
+                INSERT INTO amp_global_settings (id, settingsname, settingsvalue, description, section, internal)
+                VALUES (nextval('amp_global_settings_seq'), 'Airflow dag run url', 'dags/#template/dagRuns',
+                'Airflow dag run url. #template is replaced at execution time. DONT REMOVE IT', 'general', true);
+
+                INSERT INTO amp_global_settings (id, settingsname, settingsvalue, description, section, internal)
+                VALUES (nextval('amp_global_settings_seq'), 'Integration file upload folder', '/opt/etl/',
+                'Integration file upload folder. Defines folder to store files to be processed by Airflow', 'general', true);
+
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

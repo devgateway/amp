@@ -67,9 +67,9 @@
 
 		if (hierarchyId.toString() === "-1") {
 			$('.mpc-startDate' + hierarchyIndex).hide();
-			$('#startDate' + hierarchyIndex).val(null);
+			$('#startDate' + hierarchyIndex).val('');
 			$('.mpc-endDate' + hierarchyIndex).hide();
-			$('#endDate' + hierarchyIndex).val(null);
+			$('#endDate' + hierarchyIndex).val('');
 		} else {
 			$('.mpc-startDate' + hierarchyIndex).show();
 			$('.mpc-endDate' + hierarchyIndex).show();

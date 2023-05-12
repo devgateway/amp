@@ -493,7 +493,7 @@ public class SettingsUtils {
 
         addDateSetting(settings, GlobalSettingsConstants.DASHBOARD_DEFAULT_MAX_YEAR_RANGE,
                 SettingsConstants.DASHBOARD_DEFAULT_MAX_DATE, SettingsConstants.DASHBOARD_DEFAULT_MAX_YEAR_RANGE,
-                gsFiscalCalendar, currentCalendar, true);
+                gsFiscalCalendar, currentCalendar, false);
         addDateSetting(settings, GlobalSettingsConstants.DASHBOARD_DEFAULT_MIN_YEAR_RANGE,
                 SettingsConstants.DASHBOARD_DEFAULT_MIN_DATE, SettingsConstants.DASHBOARD_DEFAULT_MIN_YEAR_RANGE,
                 gsFiscalCalendar, currentCalendar, false);

@@ -367,6 +367,30 @@ public class InterchangeEndpoints {
     }
 
     @POST
+    @Path("/projects/budget-code-project")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getProjectsByAmpIds", ui = false)
+    @ApiOperation("Retrieve activities by Budget code project Ids.")
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK,
+            message = "A list of projects with full set of configured fields and their values. For each amp_id that is "
+                    + "invalid or its export failed, the entry will provide only the 'amp_id' and the 'error'",
+            examples =
+            @Example(value = {
+                    @ExampleProperty(
+                            mediaType = "application/json;charset=utf-8",
+                            value = "[\n  {\n    \"internal_id\": 912,\n    \"amp_id\": \"872329912\",\n    ...\n  }"
+                                    + ",\n  "
+                                    + "{\n    \"amp_id\": \"invalid\",\n    \"error\": {\n      \"0132\": "
+                                    + "[{ \"Activity not found\": null }]\n    }\n  }\n]\n"
+                    )
+            })
+    ))
+    public Collection<Map<String, Object>> getProjectsByProjectCodeIds(@ApiParam(value = "List of project-code", required = true)
+                                                               List<String> budgetCodeProjectIds) {
+        return ActivityInterchangeUtils.getActivitiesByBudgetCodeProjectIds(budgetCodeProjectIds);
+    }
+
+    @POST
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_OPTIONAL}, id = "addProject", ui = false)

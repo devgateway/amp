@@ -6,19 +6,13 @@ import org.digijava.kernel.ampapi.endpoints.integration.dto.DagRunsRequestDTO;
 import org.digijava.kernel.ampapi.endpoints.integration.dto.DagRunsResponseDTO;
 import org.digijava.kernel.ampapi.endpoints.util.ObjectMapperUtils;
 import org.digijava.kernel.restclient.RestClient;
-import org.digijava.kernel.user.User;
-import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.TeamMemberUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
@@ -54,7 +48,6 @@ public class DagServiceImpl implements DagService {
         return dagService;
     }
 
-    //    @Value("${airflow.api.url}")
     private String endpointUrl =FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.INTEGRATION_AIRFLOW_URL);
     private String airflowUsername = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.INTEGRATION_AIRFLOW_USERNAME);
     private String airflowUserPassword = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.INTEGRATION_AIRFLOW_PASSWORD);
@@ -88,7 +81,9 @@ public class DagServiceImpl implements DagService {
         HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(payload, headers);
 
         RestClient client = RestClient.getInstance(RestClient.Type.JSON);
-        ClientResponse response = client.requestPOST(endpointUrl + dagRunsUrl.replace("#template", dagRunsRequest.getDagId()), requestEntity);
+        String airflowUrl = endpointUrl + dagRunsUrl.replace("#template", dagRunsRequest.getDagId());
+        LOGGER.info("Airflow url {}", airflowUrl);
+        ClientResponse response = client.requestPOST(airflowUrl, requestEntity);
         if (response.getStatus() == HttpStatus.OK.value()) {
             return ObjectMapperUtils.readValueFromString(response.getEntity(String.class), DagRunsResponseDTO.class);
         } else {

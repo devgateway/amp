@@ -60,6 +60,7 @@ public class AmpActivityProgramSettingsAction
         return entityToDto(tempAmpActivitySettingsEntities);
     }
 
+
     private List<AmpActivityProgramSettings> dtoToEntity (List<AmpActivityProgramSettingsDTO> dto) {
         AmpActivityProgramSettingsForm form = new AmpActivityProgramSettingsForm();
 
@@ -77,14 +78,14 @@ public class AmpActivityProgramSettingsAction
             if (ampActivityProgramSetting.getDefaultHierarchyId() != null && ampActivityProgramSetting.getDefaultHierarchyId() != -1) {
                 AmpTheme selectedTheme = ProgramUtil.getThemeById(ampActivityProgramSetting.getDefaultHierarchyId());
                 ampActivityProgramSettingEntity.setDefaultHierarchy(selectedTheme);
-            }
 
-            if (ampActivityProgramSetting.getStartDate() != null) {
-                ampActivityProgramSettingEntity.setStartDate(DateConversion.getDate(ampActivityProgramSetting.getStartDate()));
-            }
+                if (ampActivityProgramSetting.getStartDate() != null) {
+                    ampActivityProgramSettingEntity.setStartDate(DateConversion.getDate(ampActivityProgramSetting.getStartDate()));
+                }
 
-            if (ampActivityProgramSetting.getEndDate() != null) {
-                ampActivityProgramSettingEntity.setEndDate(DateConversion.getDate(ampActivityProgramSetting.getEndDate()));
+                if (ampActivityProgramSetting.getEndDate() != null) {
+                    ampActivityProgramSettingEntity.setEndDate(DateConversion.getDate(ampActivityProgramSetting.getEndDate()));
+                }
             }
 
             form.getSettingsList().add(ampActivityProgramSettingEntity);

@@ -156,7 +156,7 @@ class MainDashboardContainer extends Component {
                       nddLoaded={nddLoaded}
                       selectedPrograms={selectedPrograms}
                       nddLoadingPending={nddLoadingPending} />
-                  </Col>
+                  </Col> 
                 </>
               ) : (
                 <Col
@@ -171,13 +171,7 @@ class MainDashboardContainer extends Component {
           {!embedded ? (
             <>
               <Row>
-                <Col md={12}>
-                  <div className="separator" />
-                </Col>
-              </Row>
-              <Row style={{ marginRight: '-15px', marginLeft: '-15px', border: '1px solid #ddd' }}>
-                <Col md={12} style={{ paddingLeft: 0, paddingRight: 0 }}>
-                  <div className="chart-container">
+                <Col md={12} style={{ paddingLeft: 0, paddingRight: 0, backgroundColor: 'white' }}>
                     <div className="chart">
                       <div className="section_title">
                         <span>{translations['amp.dashboard:funding-over-time']}</span>
@@ -196,11 +190,10 @@ class MainDashboardContainer extends Component {
                         />
                       ) : <div className="loading" />}
                     </div>
-                  </div>
                 </Col>
               </Row>
             </>
-          ) : (null)}
+          ) : null}
         </>
       );
     }

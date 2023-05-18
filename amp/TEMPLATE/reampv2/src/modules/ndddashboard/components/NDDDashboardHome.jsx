@@ -17,7 +17,6 @@ import { printChart } from '../../sscdashboard/utils/PrintUtils';
 import './print.css';
 import { removeFilter } from '../utils/Utils';
 import { SRC_DIRECT } from './charts/FundingByYearChart';
-
 const queryString = require('query-string');
 
 class NDDDashboardHome extends Component {
@@ -60,6 +59,7 @@ class NDDDashboardHome extends Component {
           [CURRENCY_CODE]: data[0].payload[Object.keys(data[0].payload)
             .find(i => data[0].payload[i].id === CURRENCY_CODE)].value.defaultId
         };
+        console.log('data', data)
         let ids = [`${data[1].payload[SRC_PROGRAM].id}`, `${data[1].payload[DST_PROGRAM].id}`];
         let fundingType = data[0].payload.find(i => i.id === FUNDING_TYPE).value.defaultId;
 

@@ -24,7 +24,7 @@ public class CalendarEndpoint {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "getContact", ui = false)
+    @ApiMethod(id = "getCalendar", ui = false)
     @ApiOperation("Retrieve calendars.")
     public List<AmpFiscalCalendar> getCalendars(@QueryParam("id") List<Long> id) {
         return CalendarUtil.getCalendars(id);

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title data-i18n="amp.dashboard:page-title">Aid Management Platform - Dashboards</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap-theme.min.css" integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+
+  <!-- existing main.css -->
+  <!-- <link rel="stylesheet" href="https://amp-timor-develop.de.ampsite.net/TEMPLATE/ampTemplate/dashboard/build/compiled-css/main.css" /> -->
+
+  <!-- css specific to this content -->
+  <link rel="stylesheet" href="budget.css" />
+
+
+</head>
+
+<body>
+
+  <div id="amp-dashboard" class="content-direction">
+    <div class="container">
+      <!-- start: wrapper for entire content section -->
+      <div class="budget-dashboard">
+        <!-- start: Heading and back to link-->
+        <div class="row">
+
+          <div class="col-xs-6">
+            <h2>Total Budget</h2>
+          </div>
+          <div class="col-xs-6">
+            <span class="link-text green-text pull-right">Back to...</span>
+          </div>
+        </div>
+        <!-- end: Heading and back to link-->
+
+        <!-- start: Report section 1 -->
+        <div class="row report-section">
+
+          <!-- start: Report header -->
+          <div class="header">
+            <div class="col">
+              <span class="header-label">AMP Project</span>
+              <span class="header-value">Youth, Employment, and Skills</span>
+            </div>
+
+            <div class="col flex-item-grow">
+              <span class="header-label">AMP ID</span>
+              <span class="header-value">11201026516594</span>
+            </div>
+            <div class="col">
+              <span class="header-label">Actual Committment</span>
+              <span class="header-value"> 12,000,000 EUR</span>
+            </div>
+            <div class="col">
+              <span class="header-label">Date</span>
+              <span class="header-value"> 01/01/2017</span>
+            </div>
+          </div>
+          <!-- end: Report header -->
+
+          <div class="report-content">
+
+            <div class="section">
+              <div class="col">
+                <span class="budget-label">Project</span>
+                <span class="budget-value">Youth, Employment and Skills (YES)</span>
+              </div>
+              <div class="col">
+                <span class="budget-label">Organization</span>
+                <span class="budget-value">German Government</span>
+              </div>
+              <div class="col">
+                <span class="budget-label">Owner</span>
+                <span class="value-icon owner">owner</span>
+                <span class="budget-value small">Damian Rycher</span>
+              </div>
+            </div>
+
+            <div class="section">
+              <div class="col">
+                <span class="budget-label">Amount</span>
+                <span class="budget-value">12,000,000.00</span>
+              </div>
+              <div class="col">
+                <span class="budget-label">Currency</span>
+                <span class="budget-value">EUR</span>
+              </div>
+              <div class="col padded">
+                <span class="value-icon calendar">calendar</span>
+                <span class="budget-value">20 Apr 2023 12:54</span>
+              </div>
+              <div class="col padded">
+                <span class="value-icon status open">status</span>
+                <span class="budget-label left">Status</span>
+                <span class="budget-value">Open</span>
+              </div>
+              <div class="col padded">
+                <span class="value-icon guests">guests</span>
+                <span class="budget-value bubble">#Guest 1</span>
+                <span class="budget-value bubble">#Guest 2</span>
+              </div>
+              <div class="col padded">
+                <span class="value-icon details">details</span>
+                <span class="budget-value green-text link-text">Details</span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+        <!-- end: Report section 1 -->
+
+        <!-- start: Report section 2 -->
+        <div class="row report-section">
+          <!-- start: Report section 2 header -->
+          <div class="header white">
+              <div class="col-xs-3 v-divider">
+                <h3>Projected Budget</h3>
+              </div>
+              <div class="col">
+                <span class="value-icon status closed">status</span>
+                <span class="budget-label left">Status</span>
+                <span class="budget-value">Closed</span>
+              </div>
+          </div>
+          <!-- end: Report 2 header -->
+
+          <!-- start: Report 2 content -->
+          <div class="report-content">
+
+            <div class="section">
+              <div class="col">
+                <span class="budget-label">Sub Project</span>
+                <span class="budget-value">Pritina Youth Center Training</span>
+              </div>
+              <div class="col">
+                <span class="budget-label">Organization</span>
+                <span class="budget-value">German Government</span>
+              </div>
+              <div class="col">
+                <span class="budget-label">Owner</span>
+                <span class="value-icon owner">owner</span>
+                <span class="budget-value small">Damian Rycher</span>
+              </div>
+              <div class="col">
+                <span class="budget-label">Default Asssignee</span>
+                <span class="value-icon user">guests</span>
+                <span class="budget-value small">Julian de Anquin</span>
+              </div>
+              <div class="col">
+                <span class="budget-label">Workflow Item Type</span>
+                <span class="value-icon workflow">user</span>
+                <span class="budget-value small">General</span>
+              </div>
+            </div>
+
+            <div class="section">
+              <div class="col">
+                <span class="budget-label">Amount</span>
+                <span class="budget-value">500,000.00</span>
+              </div>
+              <div class="col">
+                <span class="budget-label">Currency</span>
+                <span class="budget-value">EUR</span>
+              </div>
+              <div class="col padded">
+                <span class="value-icon calendar">calendar</span>
+                <span class="budget-value">20 Apr 2023 12:54</span>
+              </div>
+              <div class="col padded">
+                <span class="value-icon details">details</span>
+                <span class="budget-value green-text link-text">Details</span>
+              </div>
+            </div>
+
+          </div>
+          <!-- end: Report 2 content -->
+        </div>
+        <!-- end: Report section 2 -->
+
+        <!-- start: Report section 3 -->
+        <div class="row report-section secondary">
+
+          <!-- start: Report section 3 header -->
+          <div class="header grey">
+              <div class="col-xs-3">
+                <h3>Workflow Item Details</h3>
+              </div>
+              <div class="col">
+                <ul class="report-header-nav">
+                  <li class="active">Overview</li>
+                  <li>Documents</li>
+                  <li>History</li>
+                </ul>
+              </div>
+          </div>
+          <!-- end: Report 3 header -->
+
+
+          <!-- start: Report 3 content -->
+          <div class="report-content">
+            <div class="section">
+              <div class="col">
+                <span class="budget-label">Item</span>
+                <span class="budget-value">Rent Revenue</span>
+              </div>
+              <div class="col">
+                <span class="budget-label">Status</span>
+                <span class="value-icon workflow-status open">workflow status</span>
+                <span class="budget-value">Open</span>
+              </div>
+              <div class="col">
+                <span class="budget-label">Asssignee</span>
+                <span class="value-icon user">guests</span>
+                <span class="budget-value small">Julian de Anquin</span>
+              </div>
+              <div class="col">
+                <span class="budget-label">Workflow Item Type</span>
+                <span class="value-icon workflow">user</span>
+                <span class="budget-value small">General</span>
+              </div>
+            </div>
+
+            <div class="section">
+              <div class="col">
+                <span class="budget-label">Budget</span>
+                <span class="value-icon euro">euro</span>
+                <span class="budget-value">1,500.00</span>
+              </div>
+              <div class="col">
+                <span class="budget-label orange-text">Due Date Exceeded</span>
+                <span class="value-icon workflow-calendar">euro</span>
+                <span class="budget-value">20 Apr 2023 15:43</span>
+              </div>
+            </div>
+
+          </div>
+          <!-- end: Report 3 content -->
+
+        </div>
+        <!-- end: Report section 3 -->
+
+      </div>
+      <!-- end: wrapper for entire content section -->
+
+    </div>
+    <!-- end: container -->
+  </div>
+  <!-- end: amp-dashboard -->
+
+
+
+</body>
+
+</html>

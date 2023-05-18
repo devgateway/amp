@@ -5,7 +5,7 @@
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
                     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
                     http://www.springframework.org/schema/security 
                     http://www.springframework.org/schema/security/spring-security-3.1.xsd
@@ -24,7 +24,7 @@
 	<http pattern="/robots.txt" security="none" />
 	<http pattern="/favicon.ico" security="none" />
 	<http pattern="/" security="none" />
-	
+
 	<http pattern="/translation/ajaxTranslator.do**" security="none" />
 
     <http pattern="/aim/confirmRegisteration.do**" security="none" />
@@ -40,9 +40,9 @@
     <http pattern="/aim/resetUserPassword.do**" security="none" />
 
 	<http pattern="/aim/registerUser.do**" security="none" />
-	
+
 	<http pattern="/aim/csvExport.do**" security="none" />
-	
+
 	<http pattern="/viewNewAdvancedReport.do**" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
  		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 	</http>
@@ -53,18 +53,18 @@
 
     <http pattern="/aim/pdfExport.do**" security="none" />
 
-	
+
 
 	<http pattern="/aim/viewActivityHistory.do**" security="none" />
 	<http pattern="/exception/showExceptionReport.do**" security="none" />
 
     <http pattern="/aim/viewActivityPreview.do**" security="none"  />
-   
-    
+
+
     <http pattern="/aim/exportActToPDF.do**" security="none"  />
-  
+
 	<http pattern="/aim/exportActToWord.do**" security="none"  />
-  
+
 	<http pattern="/aim/default/previewActivity.do**" security="none" />
 
 	<http pattern="/showPrinterFriendlyPage.do**" security="none"  />
@@ -73,7 +73,7 @@
 	<http pattern="/gis/getFoundingDetails.do**" security="none" />
 	<http pattern="/gis/showAdditionalGraphics.do**" security="none" />
 	<http pattern="/budgetexport/budgetExportService.do**" security="none" />
-	<!-- 
+	<!--
 	<http pattern="/esrigis/**" security="none" />
 	 -->
 	<http pattern="/rest/**" security="none" />
@@ -84,17 +84,18 @@
     <http pattern="/TEMPLATE/ampTemplate/gisModule/dev/**" security="none" />
     <http pattern="/TEMPLATE/ampTemplate/gisModule/**" security="none" />
     <http pattern="/gis/boundaries/**" security="none" />
-	
+
 	<http pattern="/TEMPLATE/ampTemplate/dashboard/**" security="none" />
+	<http pattern="/TEMPLATE/html/**" security="none" />
 	<http pattern="/TEMPLATE/ampTemplate/dashboard/build/**" security="none" />
-	
+
 	<http pattern="/TEMPLATE/reamp/modules/ampoffline/download/**" security="none" />
 	<http pattern="/TEMPLATE/reamp/modules/activity/preview/**" security="none" />
 	<http pattern="/TEMPLATE/reampv2/build/**" security="none" />
 
     <http pattern="/TEMPLATE/ampTemplate/saikuui_reports/**" security="none" />
-    
-  
+
+
 	<!-- match images -->
 	<http pattern="[^ \t\r\n\v\f]+\.(gif|jpg|jpeg|tiff|png|js|css|swf|eot|woff|woff2|ttf)(\?)?.*$"
 		request-matcher="regex" security="none" />
@@ -102,10 +103,10 @@
 	<!-- alllow bypass for login page -->
 	<http pattern="/showLayout.do/?layout=login" request-matcher="regex"
 		security="none" />
-	
+
 	<http pattern="/showLayout.do/?layout=viewActivityHistory" request-matcher="regex"
 		security="none" />
-		
+
 	<!-- import digi module spring configuration files -->
 	<beans:import resource="classpath:../../repository/**/module-spring.xml" />
 
@@ -125,7 +126,7 @@
     </http>
     <http pattern="/calendar/showCalendarEvent.do**"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
         <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-    </http>    
+    </http>
     <http pattern="/calendar/showEvents.do**"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
         <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
     </http>
@@ -143,11 +144,11 @@
     <http pattern="/contentrepository/documentManager.do**"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
         <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
     </http>
-    
+
     <http pattern="/viewTeamReports.do**"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
         <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
     </http>
-    
+
     <http pattern="/aim/viewTeamReports.do*"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
         <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
     </http>
@@ -164,20 +165,20 @@
         <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
     </http>
 
-   
+
 
 	<!-- set the digestEntryPoint to set up the HTTP headers for digest -->
 	<http entry-point-ref="digestEntryPoint" realm="AMP-Realm">
 		<!-- do not allow anonymous tokens, they are enabled by default ! -->
 		<anonymous enabled="false" />
 
-		<!-- digest filter reference, as the authentication filter for the security 
+		<!-- digest filter reference, as the authentication filter for the security
 			chain -->
 		<custom-filter ref="digestFilter" position="BASIC_AUTH_FILTER" />
 
 		<!-- all the rest of the AMP pages need the user to be authenticated -->
 		<intercept-url pattern="/**" access="ROLE_AUTHENTICATED" />
-		
+
 		<!-- standard logout url to terminate the session and delete Tomcat cookies -->
 		<!-- <logout delete-cookies="JSESSIONID" logout-url="/j_spring_logout" />
 		 -->
@@ -209,7 +210,7 @@
 		</beans:property>
 	</beans:bean>
 
-	<!-- digest filter - this will check the HTTP headers and perform authentication 
+	<!-- digest filter - this will check the HTTP headers and perform authentication
 		if an Authorization section is found -->
 	<beans:bean id="digestFilter"
 		class="org.springframework.security.web.authentication.www.DigestAuthenticationFilter">

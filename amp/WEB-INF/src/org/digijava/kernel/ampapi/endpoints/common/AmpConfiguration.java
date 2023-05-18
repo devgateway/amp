@@ -199,8 +199,9 @@ public class AmpConfiguration {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "updateCompatibleVersionRange", ui = false, authTypes = AuthRule.IN_ADMIN)
     @ApiOperation("Update an existing version range that denotes AMP Offline compatibility.")
-    public AmpOfflineCompatibleVersionRange updateCompatibleVersionRange(@PathParam("id") Long id,
-                                                                         AmpOfflineCompatibleVersionRange versionRange) {
+    public AmpOfflineCompatibleVersionRange
+    updateCompatibleVersionRange(@PathParam("id") Long id,
+                                 AmpOfflineCompatibleVersionRange versionRange) {
         try {
             versionRange.setId(id);
             return ampVersionService.updateCompatibleVersionRange(versionRange);

@@ -23,7 +23,7 @@
   "author": "Alexei Savca",
   "license": "inherit",
   "devDependencies": {
-    "amp-ui": "github:devgateway/amp-ui#35d15a9efe2de868113fd47218a10743a393d5d4",
+    "amp-ui": "github:devgateway/amp-ui#task/AMP-30597/trubudget-MockUps",
     "babel-core": "^6.26.3",
     "babel-jest": "^6.0.1",
     "babel-loader": "^6.3.2",

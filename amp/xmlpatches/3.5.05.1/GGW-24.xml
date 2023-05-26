@@ -72,29 +72,38 @@
                 VALUES (nextval('amp_global_settings_seq'), 'Integration file upload folder', '/opt/etl/',
                 'Integration file upload folder. Defines folder to store files to be processed by Airflow', 'general', true);
 
-                CREATE TABLE IF NOT EXISTS etl.dg_funding_header (
-                id bigint PRIMARY KEY,
-                project_code text,
-                donor_organization_id text,
-                type_of_assistance text,
-                financing_instrument text,
-                mode_of_payment text,
-                source_role text,
-                file_name text,
-                CONSTRAINT unique_combination UNIQUE (project_code, donor_organization_id, type_of_assistance, financing_instrument, mode_of_payment, source_role, file_name)
-                );
+                CREATE TABLE IF NOT EXISTS etl.dg_funding_header
+                (
+                id bigint NOT NULL,
+                project_code bigint,
+                donor_organization_id bigint,
+                type_of_assistance bigint,
+                financing_instrument bigint,
+                mode_of_payment bigint,
+                source_role bigint,
+                file_information_id bigint,
+                CONSTRAINT dg_funding_header_pkey PRIMARY KEY (id),
+                CONSTRAINT unique_combination UNIQUE (project_code, donor_organization_id, type_of_assistance, financing_instrument, mode_of_payment, source_role, file_information_id),
+                CONSTRAINT etl_dg_funding_header_file_information_id_fkey FOREIGN KEY (file_information_id)
+                REFERENCES etl.dg_file_information (id) MATCH SIMPLE
+                )
 
                 CREATE SEQUENCE etl.funding_header_seq START 1;
 
-                CREATE TABLE IF NOT EXISTS etl.dg_funding_detail (
-                id bigint PRIMARY KEY,
-                funding_id bigint REFERENCES etl.dg_funding_header(id),
-                transaction_type text,
-                adjustment_type text,
-                transaction_date text,
-                transaction_amount text,
-                currency text
-                );
+                CREATE TABLE IF NOT EXISTS etl.dg_funding_detail
+                (
+                id bigint NOT NULL,
+                funding_id bigint,
+                transaction_type text COLLATE pg_catalog."default",
+                adjustment_type bigint,
+                transaction_date text COLLATE pg_catalog."default",
+                transaction_amount float,
+                currency bigint,
+                CONSTRAINT dg_funding_detail_pkey PRIMARY KEY (id),
+                CONSTRAINT dg_funding_detail_funding_id_fkey FOREIGN KEY (funding_id)
+                REFERENCES etl.dg_funding_header (id) MATCH SIMPLE
+                )
+
 
                 CREATE SEQUENCE etl.funding_detail_seq START 1;
 

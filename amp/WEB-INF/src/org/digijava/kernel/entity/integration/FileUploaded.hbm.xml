@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="org.digijava.kernel.entity.integration.FileUploaded" table="dg_file_uploaded" lazy="false" schema="etl">
+        <cache usage="read-write" />
+        <id name="id" type="java.lang.Long" column="id">
+            <generator class="native">
+                <param name="sequence">dg_file_uploaded_seq</param>
+            </generator>
+        </id>
+        <property name="path" column="path" type="java.lang.String"/>
+        <property name="fileName" column="file_name" type="java.lang.String"/>
+        <property name="createdDate" column="created_date" type="java.util.Date"/>
+    </class>
+
+</hibernate-mapping>

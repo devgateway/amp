@@ -226,25 +226,32 @@ public final class ActivityInterchangeUtils {
                 getAmpTeamId())));
     }
 
-    /**
-     * Batch export of activities by amp-ids
-     * @param ampIds
-     * @return
-     */
-    public static Collection<Map<String, Object>> getActivitiesByAmpIds(List<String> ampIds) {
+
+    public static Collection<Map<String, Object>> getActivitiesByIds(List<String> ids, ActivityFilterIdEnum discriminator) {
         Map<String, Map<String, Object>> jsonActivities = new HashMap<>();
         ActivityExporter exporter = new ActivityExporter(null);
         // TODO report duplicate/empty amp-ids?
-        Set<String> uniqueAmpIds = new HashSet(ampIds);
+        Set<String> uniqueAmpIds = new HashSet(ids);
         uniqueAmpIds.remove("");
-        ampIds = new ArrayList<>(uniqueAmpIds);
+        ids = new ArrayList<>(uniqueAmpIds);
         // temporary until the root cause for stale cache is fixed
         PersistenceManager.getSession().setCacheMode(CacheMode.REFRESH);
 
-        for (int fromIndex = 0; fromIndex < ampIds.size(); fromIndex += ActivityEPConstants.BATCH_DB_QUERY_SIZE) {
-            int end = Math.min(ampIds.size(), fromIndex + ActivityEPConstants.BATCH_DB_QUERY_SIZE);
-            List<String> currentAmpIds = ampIds.subList(fromIndex, end);
-            List<AmpActivityVersion> activities = ActivityUtil.getActivitiesByAmpIds(currentAmpIds);
+        for (int fromIndex = 0; fromIndex < ids.size(); fromIndex += ActivityEPConstants.BATCH_DB_QUERY_SIZE) {
+            int end = Math.min(ids.size(), fromIndex + ActivityEPConstants.BATCH_DB_QUERY_SIZE);
+            List<String> currentAmpIds = ids.subList(fromIndex, end);
+            List<AmpActivityVersion> activities = new ArrayList<>();
+            switch (discriminator){
+                case AMP_ID: {
+                    activities = ActivityUtil.getActivitiesByAmpIds(currentAmpIds);
+                    break;
+                }
+                case BUDGET_CODE_PROJECT: {
+                    activities = ActivityUtil.getActivitiesByBudgetCodeProject(currentAmpIds);
+                    break;
+                }
+            }
+
             activities.forEach(activity -> {
                 String ampId = activity.getAmpId();
                 Map<String, Object> result = new LinkedHashMap<>();
@@ -271,20 +278,44 @@ public final class ActivityInterchangeUtils {
             });
             PersistenceManager.getSession().clear();
         }
-        reportActivitiesNotFound(uniqueAmpIds, jsonActivities);
+        reportActivitiesNotFound(uniqueAmpIds, jsonActivities, discriminator);
         // Always succeed on normal exit, no matter if some activities export failed
         EndpointUtils.setResponseStatusMarker(HttpServletResponse.SC_OK);
         return jsonActivities.values();
     }
 
+    /**
+     * Batch export of activities by amp-ids
+     * @param ampIds
+     * @return
+     */
+    public static Collection<Map<String, Object>> getActivitiesByAmpIds(List<String> ampIds) {
+        return getActivitiesByIds(ampIds, ActivityFilterIdEnum.AMP_ID);
+    }
+
+    public static Collection<Map<String, Object>> getActivitiesByBudgetCodeProjectIds(List<String> projectCodeIds) {
+        return getActivitiesByIds(projectCodeIds, ActivityFilterIdEnum.BUDGET_CODE_PROJECT);
+    }
+
     private static void reportActivitiesNotFound(Set<String> ampIds,
-            Map<String, Map<String, Object>> processedActivities) {
+                                                 Map<String, Map<String, Object>> processedActivities,
+                                                 ActivityFilterIdEnum discriminator) {
         if (processedActivities.size() != ampIds.size()) {
             ampIds.removeAll(processedActivities.keySet());
             ampIds.forEach(ampId -> {
                 Map<String, Object> notFoundJson = new LinkedHashMap<>();
                 notFoundJson.put(EPConstants.ERROR, ApiError.toError(ActivityErrors.ACTIVITY_NOT_FOUND).getErrors());
-                notFoundJson.put(ActivityEPConstants.AMP_ID_FIELD_NAME, ampId);
+                switch (discriminator){
+                    case AMP_ID: {
+                        notFoundJson.put(ActivityEPConstants.AMP_ID_FIELD_NAME, ampId);
+                        break;
+                    }
+                    case BUDGET_CODE_PROJECT: {
+                        notFoundJson.put(ActivityEPConstants.PROJECT_CODE_FIELD_NAME, ampId);
+                        break;
+                    }
+                }
+
                 processedActivities.put(ampId, notFoundJson);
             });
         }
@@ -416,4 +447,9 @@ public final class ActivityInterchangeUtils {
 
         return calculatedAmount.doubleValue();
     }
+
+    public enum ActivityFilterIdEnum {
+        AMP_ID, BUDGET_CODE_PROJECT
+    }
+
 }

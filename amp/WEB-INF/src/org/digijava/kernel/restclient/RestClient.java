@@ -18,6 +18,7 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.WebResource.Builder;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
+import org.springframework.http.HttpEntity;
 
 /**
  * A simple Rest client
@@ -76,6 +77,23 @@ public class RestClient {
         String info = String.format("[HTTP %d] GET %s", response.getStatus(), webResource.getURI());
         logger.debug(info);
         return response.getEntity(String.class);
+    }
+
+    public ClientResponse requestPOST(String endpointURL, HttpEntity<Map<String, Object>> requestBody) {
+        WebResource webResource = client.resource(endpointURL);
+        Builder builder = webResource.accept(mediaType);
+        if (requestBody != null) {
+            for (String headerName : requestBody.getHeaders().keySet()) {
+                for (String headerValue : requestBody.getHeaders().get(headerName)) {
+                    builder.header(headerName, headerValue);
+                }
+            }
+        }
+        ClientResponse response = builder.post(ClientResponse.class, requestBody.getBody());
+
+        String info = String.format("[HTTP %d] POST %s", response.getStatus(), webResource.getURI());
+        logger.debug(info);
+        return response;
     }
     
 }

@@ -271,6 +271,10 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityIndirectProgram</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpThemeMapping</hibernate-class>
 
+		<hibernate-class>org.digijava.kernel.entity.integration.FileUploaded</hibernate-class>
+		<hibernate-class>org.digijava.kernel.entity.integration.FileInformation</hibernate-class>
+		<hibernate-class>org.digijava.kernel.entity.integration.FileRecord</hibernate-class>
+
 	</hibernate-classes>
 	<!-- AIM classes End-->
 

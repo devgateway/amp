@@ -537,6 +537,15 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                 .list();
     }
 
+    public static List<AmpActivityVersion> getActivitiesByBudgetCodeProject(List<String> projectCodeIds) {
+        String queryString = "select a from "
+                + AmpActivity.class.getName()
+                + " a where a.budgetCodeProjectID in (:budgetCodeProjectIds) ";
+        return PersistenceManager.getSession().createQuery(queryString)
+                .setParameterList("budgetCodeProjectIds", projectCodeIds)
+                .list();
+    }
+
   public static AmpActivityVersion loadAmpActivity(Long id){
      return (AmpActivityVersion) PersistenceManager.getSession().load(AmpActivityVersion.class, id);
   }

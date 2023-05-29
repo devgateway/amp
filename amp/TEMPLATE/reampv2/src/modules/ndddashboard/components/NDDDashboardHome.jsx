@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import { Container } from 'react-bootstrap';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -17,7 +17,200 @@ import { printChart } from '../../sscdashboard/utils/PrintUtils';
 import './print.css';
 import { removeFilter } from '../utils/Utils';
 import { SRC_DIRECT } from './charts/FundingByYearChart';
-const queryString = require('query-string');
+import queryString from 'query-string';
+
+const NDDDashboardHome2 = (props) => {
+  const {
+    _callReport,
+    mapping,
+    ndd,
+    nddLoadingPending,
+    nddLoaded,
+    dashboardSettings,
+    _loadDashboardSettings,
+    _getMappings,
+    _callTopReport,
+    _clearTopReport,
+    noIndirectMapping,
+    globalSettings,
+    _getSharedData,
+  } = props;
+
+  const params = queryString.parse(props.location.search);
+  const [state, setState] = useState({
+    filters: undefined,
+    dashboardId: undefined,
+    fundingType: undefined,
+    selectedPrograms: undefined,
+    settings: undefined,
+    selectedDirectProgram: null,
+    embedded: !!params.embedded,
+    fundingByYearSource: SRC_DIRECT
+  });
+
+  const getSharedDataOrResolve = (id) => {
+    if (id) {
+      return _getSharedData(id);
+    }
+    return Promise.resolve();
+  }
+
+  useEffect( () => {
+    const { embedded } = state;
+    const { id } = props.match.params;
+
+    setState(prevState => ({ ...prevState, dashboardId: id }));
+
+    const fetchData = async () => {
+      try {
+        const settingsResponse = await _loadDashboardSettings();
+        const mappingsResponse = await _getMappings();
+        const sharedDataResponse = await getSharedDataOrResolve(id);
+
+        const tempSettings = {
+          [CURRENCY_CODE]: settingsResponse.payload[Object.keys(settingsResponse.payload)
+            .find(i => settingsResponse.payload[i].id === CURRENCY_CODE)].value.defaultId
+        };
+
+        let ids = [`${mappingsResponse.payload[SRC_PROGRAM].id}`, `${mappingsResponse.payload[DST_PROGRAM].id}`];
+        let fundingType = settingsResponse.payload.find(i => i.id === FUNDING_TYPE).value.defaultId;
+
+        if (id) {
+          const savedData = JSON.parse(sharedDataResponse.payload.stateBlob);
+          if (savedData && savedData.settings) {
+            if (savedData.settings[CURRENCY_CODE]) {
+              tempSettings[CURRENCY_CODE] = savedData.settings[CURRENCY_CODE];
+            }
+          }
+          if (savedData && savedData.fundingType) {
+            fundingType = savedData.fundingType;
+          }
+          if (savedData && savedData.selectedPrograms) {
+            ids = savedData.selectedPrograms;
+          }
+        }
+
+        setState(prevState => ({
+          ...prevState,
+          selectedPrograms: ids,
+          settings: tempSettings,
+          fundingType
+        }));
+
+        if (embedded) {
+          _callReport(fundingType, {}, ids, tempSettings);
+        }
+      } catch (error) {
+        console.error(error);
+        // Handle your error here
+      } finally {
+        if (embedded) {
+          const { fundingType, settings, selectedPrograms } = state;
+          _callReport(fundingType, {}, selectedPrograms, settings);
+        }
+      }
+    };
+
+    fetchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const resetChartAfterUnClick = () => {
+    const { selectedDirectProgram, filters, embedded } = state;
+    if (selectedDirectProgram) {
+      if (!embedded) {
+        // Remove the filter manually or it will keep affecting the chart.
+        const fixedFilters = removeFilter(filters, selectedDirectProgram);
+        setState(prevState => ({
+          ...prevState,
+          selectedDirectProgram: null,
+          filters: fixedFilters
+        }));
+      } else {
+        setState(prevState => ({
+          ...prevState,
+          selectedDirectProgram: null,
+        }));
+      }
+    }
+  }
+
+  const handleOuterChartClick = (event, outerData) => {
+    const {
+      selectedDirectProgram, filters, settings, fundingType
+    } = state;
+    if (event.points[0].data.name === DIRECT) {
+      if (!selectedDirectProgram) {
+        setState(prevState => ({ ...prevState, selectedDirectProgram: outerData[event.points[0].i], fundingByYearSource: SRC_DIRECT }));
+        _callTopReport(fundingType || dashboardSettings.find(i => i.id === FUNDING_TYPE).value.defaultId,
+          settings, filters, outerData[event.points[0].i]);
+      } else {
+        _clearTopReport();
+        resetChartAfterUnClick();
+      }
+    }
+  }
+
+  const {
+    filters,
+    dashboardId,
+    fundingType,
+    selectedPrograms,
+    settings,
+    selectedDirectProgram,
+    embedded,
+    fundingByYearSource
+  } = state;
+
+  const onChangeSource = (e)=> {
+    setState( prevState=> ({
+        ...prevState,
+        fundingByYearSource: e.target.value
+      })
+    );
+  }
+
+
+  return (
+    <Container fluid className="main-container" id="ndd-main-container">
+      <div className="row header" style={{ marginRight: '-30px', marginLeft: '-30px' }}>
+        {mapping && settings && globalSettings && selectedPrograms && !embedded ? (
+          <HeaderContainer
+            onApplySettings={this.onApplySettings}
+            onApplyFilters={this.onApplyFilters}
+            filters={filters}
+            globalSettings={globalSettings}
+            settings={settings}
+            fundingType={fundingType}
+            selectedPrograms={selectedPrograms}
+            dashboardId={dashboardId} />
+        ) : null}
+      </div>
+      <MainDashboardContainer
+        handleOuterChartClick={this.handleOuterChartClick.bind(this)}
+        selectedDirectProgram={selectedDirectProgram}
+        filters={filters}
+        ndd={ndd}
+        nddLoaded={nddLoaded}
+        nddLoadingPending={nddLoadingPending}
+        dashboardSettings={dashboardSettings}
+        onChangeFundingType={this.onChangeFundingType}
+        onChangeProgram={this.onChangeProgram}
+        fundingType={fundingType}
+        selectedPrograms={selectedPrograms}
+        mapping={mapping}
+        settings={settings}
+        globalSettings={globalSettings}
+        noIndirectMapping={noIndirectMapping}
+        downloadImage={this.downloadImage.bind(this)}
+        embedded={embedded}
+        onChangeSource={this.onChangeSource.bind(this)}
+        fundingByYearSource={fundingByYearSource}
+      />
+      <PrintDummy />
+    </Container>
+  );
+}
 
 class NDDDashboardHome extends Component {
   constructor(props) {

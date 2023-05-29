@@ -1,4 +1,4 @@
-import React, { Component, useContext } from 'react';
+import React, {  useContext } from 'react';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -156,7 +156,7 @@ const MainDashboardContainer = (props) => {
               <Col
                 md={12}
                 style={{
-                  paddingRight: 0, paddingLeft: 0, backgroundColor: 'white', height: 400
+                  paddingRight: 0, paddingLeft: 0, backgroundColor: 'white', height: 3000
                 }}>
                 <div className="loading loading-absolute" />
               </Col>
@@ -165,13 +165,14 @@ const MainDashboardContainer = (props) => {
         {!embedded ? (
           <>
             <Row style={{
-              borderBottom: '1px solid #ddd', borderTop: '1px solid rgba(0,0,0,0.1)', height: '100%', marginRight: '-15px', marginLeft: '-15px', backgroundColor: 'white'
+              borderBottom: '1px solid #ddd', height: 400, marginRight: '-15px', marginLeft: '-15px', backgroundColor: 'white'
             }}>
               <Col md={12} style={{ paddingLeft: 0, paddingRight: 0, backgroundColor: 'white' }}>
-                <div className="chart">
-                  <div className="section_title" style={{ backgroundColor: 'white' }}>
+                {/* <div className="chart"> */}
+                  <div className="section_title" style={{ backgroundColor: 'white', marginTop: '2%', marginBottom: '0.2%' }}>
                     <span>{translations['amp.dashboard:funding-over-time']}</span>
                   </div>
+
                   {nddLoaded && !nddLoadingPending ? (
                     <FundingByYearChart
                       selectedDirectProgram={selectedDirectProgram}
@@ -184,8 +185,16 @@ const MainDashboardContainer = (props) => {
                       onChangeSource={onChangeSource}
                       fundingByYearSource={fundingByYearSource}
                     />
-                  ) : <div className="loading" />}
-                </div>
+                  ) : (
+                    <Col
+                    md={12}
+                    style={{
+                      paddingRight: 0, paddingLeft: 0, backgroundColor: 'white', height: 3000
+                    }}>
+                    <div className="loading loading-absolute" />
+                  </Col>
+                  )}
+                {/* </div> */}
               </Col>
             </Row>
           </>

@@ -86,7 +86,7 @@
                 CONSTRAINT unique_combination UNIQUE (project_code, donor_organization_id, type_of_assistance, financing_instrument, mode_of_payment, source_role, file_information_id),
                 CONSTRAINT etl_dg_funding_header_file_information_id_fkey FOREIGN KEY (file_information_id)
                 REFERENCES etl.dg_file_information (id) MATCH SIMPLE
-                )
+                );
 
                 CREATE SEQUENCE etl.funding_header_seq START 1;
 
@@ -102,7 +102,7 @@
                 CONSTRAINT dg_funding_detail_pkey PRIMARY KEY (id),
                 CONSTRAINT dg_funding_detail_funding_id_fkey FOREIGN KEY (funding_id)
                 REFERENCES etl.dg_funding_header (id) MATCH SIMPLE
-                )
+                );
 
 
                 CREATE SEQUENCE etl.funding_detail_seq START 1;

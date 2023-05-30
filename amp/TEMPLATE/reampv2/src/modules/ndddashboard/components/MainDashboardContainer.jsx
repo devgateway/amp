@@ -258,4 +258,4 @@ MainDashboardContainer.defaultProps = {
   dashboardSettings: null,
   embedded: false
 };
-MainDashboardContainer.contextType = NDDTranslationContext;
+

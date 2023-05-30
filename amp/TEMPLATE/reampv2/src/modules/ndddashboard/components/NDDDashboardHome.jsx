@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { Container } from 'react-bootstrap';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -19,7 +19,7 @@ import { removeFilter } from '../utils/Utils';
 import { SRC_DIRECT } from './charts/FundingByYearChart';
 import queryString from 'query-string';
 
-const NDDDashboardHome2 = (props) => {
+const NDDDashboardHome = (props) => {
   const {
     _callReport,
     mapping,
@@ -150,6 +150,7 @@ const NDDDashboardHome2 = (props) => {
       }
     }
   }
+  const memoizedHandleChartClick = useCallback(handleOuterChartClick, []);
 
   const {
     filters,
@@ -170,14 +171,64 @@ const NDDDashboardHome2 = (props) => {
     );
   }
 
+  const memoizedOnChangeSource = useCallback(onChangeSource, []);
+
+  const onApplyFilters = (data) => {
+    const {
+      fundingType, selectedDirectProgram, settings, selectedPrograms
+    } = state;
+
+    setState(prevState => ({ ...prevState, filters: data }));
+    _callReport(fundingType, data, selectedPrograms, settings);
+    if (selectedDirectProgram !== null) {
+      _callTopReport(fundingType, settings, data, selectedDirectProgram);
+    }
+  }
+
+  const onChangeFundingType = (value) => {
+    const { filters, selectedPrograms, settings } = state;
+    resetChartAfterUnClick();
+    setState(prevState => ({ ...prevState, fundingType: value }));
+    _callReport(value, filters, selectedPrograms, settings);
+    _clearTopReport();
+  }
+
+  const onChangeProgram = (value) => {
+    const { filters, fundingType, settings } = state;
+    const selectedPrograms = value.split('-');
+    setState(prevState => ({ ...prevState, selectedPrograms }));
+    resetChartAfterUnClick();
+    _callReport(fundingType, filters, selectedPrograms, settings);
+  }
+
+  const onApplySettings = (data) => {
+    const {
+      fundingType, selectedPrograms, filters, selectedDirectProgram
+    } = state;
+
+    setState(prevState => ({ ...prevState, settings: data }));
+    _callReport(fundingType, filters, selectedPrograms, data);
+    if (selectedDirectProgram !== null) {
+      _callTopReport(fundingType, data, filters, selectedDirectProgram);
+    }
+  }
+
+  const { translations } = useContext(NDDTranslationContext);
+  const downloadImage = ()=> {
+    printChart(translations['amp.ndd.dashboard:page-title'], 'ndd-main-container',
+      [], 'png', false, 'print-simple-dummy-container', false);
+  }
+
+  const memoizedDownloadImage = useCallback(downloadImage, []);
+
 
   return (
     <Container fluid className="main-container" id="ndd-main-container">
       <div className="row header" style={{ marginRight: '-30px', marginLeft: '-30px' }}>
         {mapping && settings && globalSettings && selectedPrograms && !embedded ? (
           <HeaderContainer
-            onApplySettings={this.onApplySettings}
-            onApplyFilters={this.onApplyFilters}
+            onApplySettings={onApplySettings}
+            onApplyFilters={onApplyFilters}
             filters={filters}
             globalSettings={globalSettings}
             settings={settings}
@@ -187,250 +238,29 @@ const NDDDashboardHome2 = (props) => {
         ) : null}
       </div>
       <MainDashboardContainer
-        handleOuterChartClick={this.handleOuterChartClick.bind(this)}
+        handleOuterChartClick={memoizedHandleChartClick}
         selectedDirectProgram={selectedDirectProgram}
         filters={filters}
         ndd={ndd}
         nddLoaded={nddLoaded}
         nddLoadingPending={nddLoadingPending}
         dashboardSettings={dashboardSettings}
-        onChangeFundingType={this.onChangeFundingType}
-        onChangeProgram={this.onChangeProgram}
+        onChangeFundingType={onChangeFundingType}
+        onChangeProgram={onChangeProgram}
         fundingType={fundingType}
         selectedPrograms={selectedPrograms}
         mapping={mapping}
         settings={settings}
         globalSettings={globalSettings}
         noIndirectMapping={noIndirectMapping}
-        downloadImage={this.downloadImage.bind(this)}
+        downloadImage={memoizedDownloadImage}
         embedded={embedded}
-        onChangeSource={this.onChangeSource.bind(this)}
+        onChangeSource={memoizedOnChangeSource}
         fundingByYearSource={fundingByYearSource}
       />
       <PrintDummy />
     </Container>
   );
-}
-
-class NDDDashboardHome extends Component {
-  constructor(props) {
-    super(props);
-    // eslint-disable-next-line react/prop-types
-    const params = queryString.parse(props.location.search);
-    this.state = {
-      filters: undefined,
-      dashboardId: undefined,
-      fundingType: undefined,
-      selectedPrograms: undefined,
-      settings: undefined,
-      selectedDirectProgram: null,
-      embedded: !!params.embedded,
-      fundingByYearSource: SRC_DIRECT
-    };
-  }
-
-  // eslint-disable-next-line react/sort-comp
-  getSharedDataOrResolve = (id) => {
-    const { _getSharedData } = this.props;
-    if (id) {
-      return _getSharedData(id);
-    }
-    return Promise.resolve();
-  }
-
-  componentDidMount() {
-    const { _loadDashboardSettings, _getMappings } = this.props;
-    const { embedded } = this.state;
-    // eslint-disable-next-line react/destructuring-assignment,react/prop-types
-    const { id } = this.props.match.params;
-    // eslint-disable-next-line react/no-did-mount-set-state
-    this.setState({ dashboardId: id });
-    // Load settings and mappings but dont call _callReport directly, Filters.jsx will do the call.
-    return Promise.all([_loadDashboardSettings(), _getMappings(), this.getSharedDataOrResolve(id)])
-      .then(data => {
-        const tempSettings = {
-          [CURRENCY_CODE]: data[0].payload[Object.keys(data[0].payload)
-            .find(i => data[0].payload[i].id === CURRENCY_CODE)].value.defaultId
-        };
-        console.log('data', data)
-        let ids = [`${data[1].payload[SRC_PROGRAM].id}`, `${data[1].payload[DST_PROGRAM].id}`];
-        let fundingType = data[0].payload.find(i => i.id === FUNDING_TYPE).value.defaultId;
-
-        if (id) {
-          const savedData = JSON.parse(data[2].payload.stateBlob);
-          if (savedData && savedData.settings) {
-            if (savedData.settings[CURRENCY_CODE]) {
-              tempSettings[CURRENCY_CODE] = savedData.settings[CURRENCY_CODE];
-            }
-          }
-          if (savedData && savedData.fundingType) {
-            fundingType = savedData.fundingType;
-          }
-          if (savedData && savedData.selectedPrograms) {
-            ids = savedData.selectedPrograms;
-          }
-        }
-
-        this.setState({
-          selectedPrograms: ids,
-          settings: tempSettings,
-          fundingType
-        });
-        /* Notice we dont need to define this.state.filters here, we will get it from onApplyFilters. Apparently
-        the filter widget takes date.start and date.end automatically from dashboard settings EP. */
-        return data;
-      }).finally(() => {
-        if (embedded) {
-          const { _callReport } = this.props;
-          const { fundingType, settings, selectedPrograms } = this.state;
-          _callReport(fundingType, {}, selectedPrograms, settings);
-        }
-      });
-  }
-
-  handleOuterChartClick(event, outerData) {
-    const {
-      selectedDirectProgram, filters, settings, fundingType
-    } = this.state;
-    const { dashboardSettings } = this.props;
-    if (event.points[0].data.name === DIRECT) {
-      if (!selectedDirectProgram) {
-        this.setState({ selectedDirectProgram: outerData[event.points[0].i], fundingByYearSource: SRC_DIRECT });
-        const { _callTopReport } = this.props;
-        _callTopReport(fundingType || dashboardSettings.find(i => i.id === FUNDING_TYPE).value.defaultId,
-          settings, filters, outerData[event.points[0].i]);
-      } else {
-        const { _clearTopReport } = this.props;
-        _clearTopReport();
-        this.resetChartAfterUnClick();
-      }
-    }
-  }
-
-  onChangeSource(value) {
-    this.setState({ fundingByYearSource: value.target.value });
-  }
-
-  resetChartAfterUnClick = () => {
-    const { selectedDirectProgram, filters, embedded } = this.state;
-    if (selectedDirectProgram) {
-      if (!embedded) {
-        // Remove the filter manually or it will keep affecting the chart.
-        const fixedFilters = removeFilter(filters, selectedDirectProgram);
-        this.setState(() => ({
-          selectedDirectProgram: null,
-          filters: fixedFilters
-        }));
-      } else {
-        this.setState(() => ({
-          selectedDirectProgram: null,
-        }));
-      }
-    }
-  }
-
-  onApplyFilters = (data) => {
-    const { _callReport, _callTopReport } = this.props;
-    const {
-      fundingType, selectedDirectProgram, settings, selectedPrograms
-    } = this.state;
-    this.setState({ filters: data });
-    _callReport(fundingType, data, selectedPrograms, settings);
-    if (selectedDirectProgram !== null) {
-      _callTopReport(fundingType, settings, data, selectedDirectProgram);
-    }
-  }
-
-  onChangeFundingType = (value) => {
-    const { _callReport, _clearTopReport } = this.props;
-    const { filters, selectedPrograms, settings } = this.state;
-    this.resetChartAfterUnClick();
-    this.setState({ fundingType: value });
-    _callReport(value, filters, selectedPrograms, settings);
-    _clearTopReport();
-  }
-
-  onChangeProgram = (value) => {
-    const { _callReport } = this.props;
-    const { filters, fundingType, settings } = this.state;
-    const selectedPrograms = value.split('-');
-    this.setState({ selectedPrograms });
-    this.resetChartAfterUnClick();
-    _callReport(fundingType, filters, selectedPrograms, settings);
-  }
-
-  onApplySettings = (data) => {
-    const { _callReport, _callTopReport } = this.props;
-    const {
-      fundingType, selectedPrograms, filters, selectedDirectProgram
-    } = this.state;
-    this.setState({ settings: data });
-    _callReport(fundingType, filters, selectedPrograms, data);
-    if (selectedDirectProgram !== null) {
-      _callTopReport(fundingType, data, filters, selectedDirectProgram);
-    }
-  }
-
-  downloadImage() {
-    const { translations } = this.context;
-    printChart(translations['amp.ndd.dashboard:page-title'], 'ndd-main-container',
-      [], 'png', false, 'print-simple-dummy-container', false);
-  }
-
-  render() {
-    const {
-      filters,
-      dashboardId,
-      fundingType,
-      selectedPrograms,
-      settings,
-      selectedDirectProgram,
-      embedded,
-      fundingByYearSource
-    } = this.state;
-    const {
-      ndd, nddLoadingPending, nddLoaded, dashboardSettings, mapping, noIndirectMapping, globalSettings
-    } = this.props;
-    return (
-      <Container fluid className="main-container" id="ndd-main-container">
-        <div className="row header" style={{ marginRight: '-30px', marginLeft: '-30px' }}>
-          {mapping && settings && globalSettings && selectedPrograms && !embedded ? (
-            <HeaderContainer
-              onApplySettings={this.onApplySettings}
-              onApplyFilters={this.onApplyFilters}
-              filters={filters}
-              globalSettings={globalSettings}
-              settings={settings}
-              fundingType={fundingType}
-              selectedPrograms={selectedPrograms}
-              dashboardId={dashboardId} />
-          ) : null}
-        </div>
-        <MainDashboardContainer
-          handleOuterChartClick={this.handleOuterChartClick.bind(this)}
-          selectedDirectProgram={selectedDirectProgram}
-          filters={filters}
-          ndd={ndd}
-          nddLoaded={nddLoaded}
-          nddLoadingPending={nddLoadingPending}
-          dashboardSettings={dashboardSettings}
-          onChangeFundingType={this.onChangeFundingType}
-          onChangeProgram={this.onChangeProgram}
-          fundingType={fundingType}
-          selectedPrograms={selectedPrograms}
-          mapping={mapping}
-          settings={settings}
-          globalSettings={globalSettings}
-          noIndirectMapping={noIndirectMapping}
-          downloadImage={this.downloadImage.bind(this)}
-          embedded={embedded}
-          onChangeSource={this.onChangeSource.bind(this)}
-          fundingByYearSource={fundingByYearSource}
-        />
-        <PrintDummy />
-      </Container>
-    );
-  }
 }
 
 const
@@ -480,6 +310,4 @@ NDDDashboardHome.defaultProps = {
   globalSettings: undefined
 };
 
-NDDDashboardHome
-  .contextType = NDDTranslationContext;
 export default connect(mapStateToProps, mapDispatchToProps)(NDDDashboardHome);

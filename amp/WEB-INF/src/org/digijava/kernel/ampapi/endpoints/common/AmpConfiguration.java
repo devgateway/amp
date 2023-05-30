@@ -167,6 +167,23 @@ public class AmpConfiguration {
     }
 
     @GET
+    @Path("global-settings/public")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(ui = false, id = "public-global-settings")
+    @ApiOperation(value = "Returns all public AMP Global Settings.")
+    @ApiResponses(@ApiResponse(code = HttpServletResponse.SC_OK,
+            message = "Response is a map containing all public global settings where "
+                    + "key is setting name and value is setting value."))
+    public Map<String, String> getPublicGlobalSettings() {
+        return FeaturesUtil.getGlobalSettings().stream()
+                .filter(s -> s.getGlobalSettingsValue() != null
+                        && PublicGlobalSettings.SETTINGS.contains(s.getGlobalSettingsName()))
+                .collect(Collectors.toMap(
+                        AmpGlobalSettings::getGlobalSettingsName,
+                        AmpGlobalSettings::getGlobalSettingsValue));
+    }
+
+    @GET
     @Path("compatible-version-range")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "getCompatibleVersionRanges", ui = false, authTypes = AuthRule.IN_ADMIN)
@@ -194,9 +211,8 @@ public class AmpConfiguration {
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "updateCompatibleVersionRange", ui = false, authTypes = AuthRule.IN_ADMIN)
     @ApiOperation("Update an existing version range that denotes AMP Offline compatibility.")
-    public AmpOfflineCompatibleVersionRange
-    updateCompatibleVersionRange(@PathParam("id") Long id,
-                                 AmpOfflineCompatibleVersionRange versionRange) {
+    public AmpOfflineCompatibleVersionRange updateCompatibleVersionRange(@PathParam("id") Long id,
+                                                                         AmpOfflineCompatibleVersionRange versionRange) {
         try {
             versionRange.setId(id);
             return ampVersionService.updateCompatibleVersionRange(versionRange);

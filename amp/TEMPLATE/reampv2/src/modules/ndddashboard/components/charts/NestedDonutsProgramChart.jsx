@@ -271,11 +271,12 @@ const NestedDonutsProgramChart = (props) => {
   return (
     <CSSTransitionGroup
       /* key={selectedDirectProgram} */
-      ref={transitionRef}
+      noderef={transitionRef}
       transitionName="solar-chart"
       transitionAppear
       transitionLeave
       transitionEnter
+      transitionAppearTimeout={TRANSITIONS}
       transitionEnterTimeout={TRANSITIONS}
       transitionLeaveTimeout={TRANSITIONS}>
       <Plot

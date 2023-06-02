@@ -4,3 +4,11 @@
 $content-width: 1024px;
 
 @import "minima";
+
+.site-title::after {
+	content: url("{{ site.baseurl }}/assets/img/header.jpg");
+	display: inline-block;
+	position: relative;
+	left: 600px;
+	top: 5px;
+}

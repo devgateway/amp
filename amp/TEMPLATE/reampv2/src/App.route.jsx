@@ -10,6 +10,7 @@ const AdminIndicatorManagerApp = lazy(() => import('./modules/admin/indicator_ma
 const NDDDashboardApp = lazy(() => import('./modules/ndddashboard'));
 const ReportGeneratorApp = lazy(() => import('./modules/report_generator'));
 const GeocoderApp = lazy(() => import('./modules/geocoder'));
+const MeDashboard = lazy(() => import('./modules/medashboard'));
 
 const AppRoute = () => (
   <Router history={createHashHistory()}>
@@ -21,6 +22,7 @@ const AppRoute = () => (
       <Route path="/report_generator" component={ReportGeneratorApp} />
       <Route path="/geocoder" component={GeocoderApp} />
       <Route path="/indicatormanager" component={AdminIndicatorManagerApp} />
+      <Route path="/me" component={MeDashboard} />
     </Suspense>
   </Router>
 );

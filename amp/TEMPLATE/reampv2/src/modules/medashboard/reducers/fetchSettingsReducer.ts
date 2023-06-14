@@ -2,12 +2,12 @@ import { errorHelper } from './../utils/errorHelper';
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { SettingsType } from "../types";
 
-export const getSettings = createAsyncThunk(
+export const loadDashboardSettings = createAsyncThunk(
     'fetchSettings',
     async (_, { rejectWithValue }) => {
         const response = await fetch('/rest/amp/settings');
         const data = await response.json();
-        
+
         if (response.status !== 200) {
             return rejectWithValue(data);
         }
@@ -25,14 +25,14 @@ export const fetchSettingsSlice = createSlice({
     },
     reducers: {},
     extraReducers: (builder) => {
-        builder.addCase(getSettings.pending, (state) => {
+        builder.addCase(loadDashboardSettings.pending, (state) => {
             state.loading = true;
         });
-        builder.addCase(getSettings.fulfilled, (state, action) => {
+        builder.addCase(loadDashboardSettings.fulfilled, (state, action) => {
             state.loading = false;
             state.settings = action.payload;
         });
-        builder.addCase(getSettings.rejected, (state, action) => {
+        builder.addCase(loadDashboardSettings.rejected, (state, action) => {
             state.loading = false;
             state.error = errorHelper(action.payload);
         });

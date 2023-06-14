@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import fetchTranslations from '../../../utils/actions/fetchTranslations';
 import { Loading } from '../../../utils/components/Loading';
 // eslint-disable-next-line import/no-unresolved
 import { DefaultTranslationPackTypes } from '../types';
-import { getSettings } from '../reducers/fetchSettingsReducer';
+import { loadDashboardSettings } from '../reducers/fetchSettingsReducer';
+import defaultTrnPack from '../config/initialTranslations.json';
+import './styles.css';
 
-export const AdminIndicatorManagerContext = React.createContext({});
+export const MeDashboardContext = React.createContext({ translations: defaultTrnPack, api: {} });
 
 interface StartupProps {
   defaultTrnPack: any;
@@ -30,7 +32,7 @@ const Startup: React.FC<StartupProps> = (props: any) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getSettings());
+    dispatch(loadDashboardSettings());
     _fetchTranslations(defaultTrnPack);
     // eslint-disable-next-line
   }, []);
@@ -38,11 +40,11 @@ const Startup: React.FC<StartupProps> = (props: any) => {
   if (translationPending) {
     return (<Loading />);
   } else {
-    document.title = translations['amp.indicatormanager:page-title'];
+    document.title = translations['amp.me.dashboard:page-title'];
     return (
-      <AdminIndicatorManagerContext.Provider value={{ translations, api }}>
+      <MeDashboardContext.Provider value={{ translations, api }}>
         {children}
-      </AdminIndicatorManagerContext.Provider>
+      </MeDashboardContext.Provider>
     );
   }
 };

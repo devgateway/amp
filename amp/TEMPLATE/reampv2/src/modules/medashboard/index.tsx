@@ -9,6 +9,7 @@ import StartUp from './components/StartUp';
 import defaultTrnPack from './config/initialTranslations.json';
 import './index.css';
 import '../../open-sans.css';
+import MeDashboardHome from './components/MeDashboardHome';
 
 const checkreduxDevTools = () => {
   if (typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) {
@@ -37,7 +38,7 @@ const MeDashboard = () => {
   return (
     <Provider store={store}>
       <StartUp defaultTrnPack={defaultTrnPack}>
-        <div>M&e dashboard</div>
+        <MeDashboardHome />
       </StartUp>
     </Provider>
   );

@@ -10,3 +10,4 @@ lucene/
 rebel.xml
 /api-docs/
 /derby.log
+**/.DS_Store

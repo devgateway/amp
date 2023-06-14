@@ -1,6 +1,5 @@
 import React from 'react'
 import { Col, Row } from 'react-bootstrap';
-import Gauge from './charts/GaugesChart';
 import LeftSection from './sections/LeftSection';
 
 const MainDashboardContainer = () => {

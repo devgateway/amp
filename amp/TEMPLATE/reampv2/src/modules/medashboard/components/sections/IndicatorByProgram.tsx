@@ -10,17 +10,6 @@ const options = [
     { value: 'vanilla', label: 'Vanilla' }
 ];
 
-const sampleData = [
-    {
-        id: '1',
-        value: 40,
-    },
-    {
-        id: '2',
-        value: 60,
-    }
-]
-
 const IndicatorByProgram = () => {
     return (
         <div>
@@ -88,7 +77,7 @@ const IndicatorByProgram = () => {
                         width: 500,
                         height: 500,
                     }}>
-                        <Gauge data={sampleData} height={300} width={400} innerValue={40} innerColor={''} />
+                        <Gauge innerValue={90} suffix={'%'}  />
                     </Col>
                 </Row>
             </Col>

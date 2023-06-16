@@ -10,7 +10,7 @@ const MainDashboardContainer = () => {
             }}>
                 <Col md={12} style={{ paddingRight: 0, paddingLeft: 0 }}>
                     <div className="section_title">
-                        <h3>Dashboard</h3>
+                        <h3>M&E Dashboard</h3>
                     </div>
                 </Col>
             </Row>
@@ -23,12 +23,10 @@ const MainDashboardContainer = () => {
                 backgroundColor: 'white',
                 paddingTop: 20
             }}>
-                <Col md={6} style={{ paddingRight: 0, paddingLeft: 0 }}>
+                <Col md={6} style={{ paddingRight: 0, paddingLeft: 0, borderRight: '1px solid #ddd' }}>
                     <LeftSection />
-                    {/* <Gauge data={[]} height={300} width={500} innerValue={60} innerColor={''} /> */}
                 </Col>
                 <Col md={6} style={{ paddingRight: 0, paddingLeft: 0 }}>
-                    right section
                 </Col>
             </Row>
         </>

@@ -2,6 +2,7 @@
 /** eslint-disable */
 import React, { useLayoutEffect, useRef, useState } from "react";
 import { ResponsiveRadialBar } from "@nivo/radial-bar";
+import { MarginProps } from "../../../types";
 
 export interface CenterTextProps {
   innerValue: string | number;
@@ -11,16 +12,18 @@ export interface CenterTextProps {
 
 export interface GaugeProps {
   height?: number;
+  width?: number;
   innerValue: string | number;
   suffix?: string;
+  margin?: MarginProps;
 }
 
 const colorsData = [
-  { x: "red", color: "#ff0000", min: 1, max: 25 },
+  { x: "red", color: "#ee6055", min: 1, max: 25 },
   { x: "dark orange", color: "#ff8c00", min: 26, max: 40 },
   { x: "light orange", color: "#ffd580", min: 41, max: 50 },
   { x: "yellow", color: "#ffff00", min: 51, max: 70 },
-  { x: "green", color: "#00ff00", min: 71, max: 100 }
+  { x: "green", color: "#aaf683", min: 71, max: 100 }
 ];
 
 //@ts-ignore
@@ -30,9 +33,10 @@ const CenteredMetric: React.FC<CenterTextProps> = (props) => {
 
   return (
     <text
-      x={center[0] - 50}
+      x={center[0]}
       y={center[1]}
-      style={{ fontSize: "40pt" }}
+      textAnchor="middle"
+      style={{ fontSize: "42pt" }}
       ref={ref}
     >
       {innerValue}{suffix || '%'}
@@ -41,7 +45,7 @@ const CenteredMetric: React.FC<CenterTextProps> = (props) => {
 };
 
 const Gauge: React.FC<GaugeProps> = (props) => {
-  const { height, innerValue, suffix } = props;
+  const { height, innerValue, suffix, width, margin } = props;
   const [dataValues, setDataValues] = useState<Array<any>>([])
 
   useLayoutEffect(() => {
@@ -62,7 +66,7 @@ const Gauge: React.FC<GaugeProps> = (props) => {
         setDataValues((prev) => [...prev, { x: `white${i}`, y: 0.1, color: "#ffffff" }])
       }
     })
-  }, [innerValue])
+  }, [innerValue]);
 
   const data = [
     {
@@ -72,15 +76,19 @@ const Gauge: React.FC<GaugeProps> = (props) => {
   ];
 
   return (
-    <div style={{ height: height || 500 }}>
+    <div style={{ height: height || 350, width: width || 350 }}>
       <ResponsiveRadialBar
         data={data}
         startAngle={-90}
         endAngle={90}
         colors={(item) => item.data.color}
         maxValue={100}
-        layers={["bars", ({ center }) => CenteredMetric({ center, innerValue, suffix })]}
+        layers={["bars", ({ center  }) => CenteredMetric({ center, innerValue, suffix })]}
         innerRadius={0.8}
+        animate={true}
+        margin={margin || {
+          top: 40, right: 70, bottom: 0,
+        }}
       />
     </div>
   );

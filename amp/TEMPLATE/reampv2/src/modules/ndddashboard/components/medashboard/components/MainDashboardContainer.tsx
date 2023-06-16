@@ -6,24 +6,10 @@ const MainDashboardContainer = () => {
     return (
         <>
             <Row style={{
-                marginRight: '-15px', marginLeft: '-15px', border: '1px solid #ddd', borderBottom: 'none'
-            }}>
-                <Col md={12} style={{ paddingRight: 0, paddingLeft: 0 }}>
-                    <div className="section_title">
-                        <h3>M&E Dashboard</h3>
-                    </div>
-                </Col>
-            </Row>
-            <Row style={{
-                marginRight: '-15px',
-                marginLeft: '-15px',
-                border: '1px solid #ddd',
                 display: 'flex',
-                borderTop: 'none',
-                backgroundColor: 'white',
-                paddingTop: 20
+                borderTop: 'none'
             }}>
-                <Col md={6} style={{ paddingRight: 0, paddingLeft: 0, borderRight: '1px solid #ddd' }}>
+                <Col md={6} style={{ paddingRight: 0, paddingLeft: 0,  paddingTop: 20, borderRight: '1px solid #ddd' }}>
                     <LeftSection />
                 </Col>
                 <Col md={6} style={{ paddingRight: 0, paddingLeft: 0 }}>

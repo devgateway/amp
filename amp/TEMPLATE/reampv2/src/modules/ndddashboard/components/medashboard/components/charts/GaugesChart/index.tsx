@@ -1,4 +1,3 @@
-
 /** eslint-disable */
 import React, { useLayoutEffect, useRef, useState } from "react";
 import { ResponsiveRadialBar } from "@nivo/radial-bar";
@@ -88,6 +87,13 @@ const Gauge: React.FC<GaugeProps> = (props) => {
         animate={true}
         margin={margin || {
           top: 40, right: 70, bottom: 0,
+        }}
+        theme={{
+          tooltip: {
+            container: {
+              display: 'none'
+            }
+          }
         }}
       />
     </div>

@@ -13,16 +13,19 @@ const data = [
   {
     id: 'Baseline',
     value: 55,
+    label: 'Baseline 2020',
     color: 'hsl(206, 100%, 49%)'
   },
   {
     id: 'Current',
     value: 80,
+    label: 'Current 2020',
     color: 'hsl(32, 100%, 58%)'
   },
   {
     id: 'Target',
     value: 60,
+    label: 'Target 2020',
     color: 'hsl(95, 54%, 40%)'
   }
 ]
@@ -45,6 +48,31 @@ const BarChart: React.FC<BarChartProps> = (props) => {
       data={data}
       indexBy="id"
       colors={item => item.data.color}
+      tooltipLabel={item => item.data.label}
+      tooltip={
+        (item) => {
+          return (
+            <div style={{
+              padding: 10,
+              fontSize: 12,
+              backgroundColor: '#fff',
+              borderRadius: 5,
+              display: 'flex',
+              alignItems: 'center',
+              boxShadow: '0 1px 2px rgba(0, 0, 0, 0.25)'
+            }}>
+              <div style={{
+                width: 10,
+                height: 10,
+                backgroundColor: item.data.color,
+              }}></div>
+              <span style={{ fontWeight: 'normal', paddingLeft: 4  }}>{item.data.label}</span>
+              <span>:</span>
+              <span style={{ fontWeight: 'bold', paddingLeft: 6 }}>{item.data.value} details</span>
+            </div>
+          )
+        }
+      }
       legends={[
         {
           dataFrom: 'indexes',
@@ -75,7 +103,7 @@ const BarChart: React.FC<BarChartProps> = (props) => {
       axisRight={null}
       axisBottom={null}
       axisLeft={null}
-      margin={margin || { top: 40, right: 30, left: 20 }}
+      margin={margin || { top: 50, right: 30, left: 20 }}
       borderRadius={3}
       padding={0.3}
       enableLabel={false}

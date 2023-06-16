@@ -72,7 +72,7 @@
 															<c:forEach var="prop" items="${cont.properties}"> 
 																<c:if test="${prop.name=='contact phone'}">
 																	<li>
-																		${prop.actualPhoneNumber}
+																		${prop.value}
 																	</li>
 																</c:if>
 															</c:forEach>

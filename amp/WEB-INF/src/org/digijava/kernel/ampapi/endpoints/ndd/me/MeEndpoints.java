@@ -3,7 +3,9 @@ package org.digijava.kernel.ampapi.endpoints.ndd.me;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
+import org.digijava.kernel.ampapi.endpoints.indicator.manager.IndicatorManagerService;
 import org.digijava.kernel.ampapi.endpoints.indicator.manager.MEIndicatorDTO;
+import org.digijava.kernel.ampapi.endpoints.indicator.manager.SectorDTO;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 
 import javax.ws.rs.GET;
@@ -35,13 +37,13 @@ public class MeEndpoints {
         return MeService.getIndicatorsByProgram(programId);
     }
 
-    @POST
-    @Path("indicatorsByProgramReport")
+    @GET
+    @Path("sectors")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = "getMeIndicatorsByProgramReport")
-    @ApiOperation("")
-    public final MeReportDTO getIndicatorsByProgramReport(SettingsAndFiltersParameters params) {
-        return MeService.generateIndicatorsByProgramsReport(params);
+    @ApiMethod(id = "getMeSectors")
+    @ApiOperation(value = "Retrieve and provide a list of M&E sectors.")
+    public final List<SectorDTO> getSectors() {
+        return new IndicatorManagerService().getSectors();
     }
 
     @GET
@@ -51,5 +53,14 @@ public class MeEndpoints {
     @ApiOperation(value = "Retrieve and provide a list of M&E indicators by sector.")
     public final List<MEIndicatorDTO> getIndicatorsBySector(@PathParam("id") Long sectorId) {
         return MeService.getIndicatorsBySector(sectorId);
+    }
+
+    @POST
+    @Path("indicatorsReport")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "indicatorReport")
+    @ApiOperation("")
+    public final MeReportDTO getIndicatorsByProgramReport(SettingsAndFiltersParameters params) {
+        return MeService.generateIndicatorsReport(params);
     }
 }

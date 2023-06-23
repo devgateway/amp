@@ -20,6 +20,7 @@ import org.hibernate.Session;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -132,7 +133,7 @@ public class MeService {
         return indicators.stream().map(MEIndicatorDTO::new).collect(Collectors.toList());
     }
 
-    static MeReportDTO generateIndicatorsByProgramsReport(SettingsAndFiltersParameters params) {
+    static MeReportDTO generateIndicatorsReport(SettingsAndFiltersParameters params) {
         AmpReportFilters filters = DashboardUtils.getFiltersFromParams(params.getFilters());
         ReportMeasure measures = DashboardUtils.getMeasureFromParams(params.getSettings());
 
@@ -148,30 +149,26 @@ public class MeService {
         Session session = PersistenceManager.getSession();
         AmpIndicator indicator = (AmpIndicator) session.get(AmpIndicator.class, indicatorId);
 
-        indicator.getValuesActivity().forEach(valueActivity -> {
-            if (valueActivity.getValues() != null)  {
-                valueActivity.getValues().forEach(value -> {
-                    if (value.getValueType() == AmpIndicatorValue.BASE) {
-                        baseValueAggregate.updateAndGet(v -> v + value.getValue());
-
-                        if (baseDate.get() == null || baseDate.get().before(value.getValueDate())) {
-                            baseDate.set(value.getValueDate());
-                        }
-                    } else if (value.getValueType()  == AmpIndicatorValue.ACTUAL) {
-                        currentValueAggregate.updateAndGet(v -> v + value.getValue());
-
-                        if (actualDate.get() == null || actualDate.get().before(value.getValueDate())) {
-                            actualDate.set(value.getValueDate());
-                        }
-                    } else if (value.getValueType()  == AmpIndicatorValue.TARGET) {
-                        targetValueAggregate.updateAndGet(v -> v + value.getValue());
-
-                        if (targetDate.get() == null || targetDate.get().before(value.getValueDate())) {
-                            targetDate.set(value.getValueDate());
-                        }
+        indicator.getValuesTheme().forEach(valueTheme -> {
+            valueTheme.getValues().forEach(value -> {
+                if (value.getValueType() == AmpIndicatorValue.BASE) {
+                    baseValueAggregate.updateAndGet(v -> v + value.getValue());
+                    if (baseDate.get() == null || baseDate.get().before(value.getValueDate())) {
+                        baseDate.set(value.getValueDate());
                     }
-                });
-            }
+                } else if (value.getValueType()  == AmpIndicatorValue.ACTUAL) {
+                    currentValueAggregate.updateAndGet(v -> v + value.getValue());
+
+                    if (actualDate.get() == null || actualDate.get().before(value.getValueDate())) {
+                        actualDate.set(value.getValueDate());
+                    }
+                } else if (value.getValueType()  == AmpIndicatorValue.TARGET) {
+                    targetValueAggregate.updateAndGet(v -> v + value.getValue());
+                    if (targetDate.get() == null || targetDate.get().before(value.getValueDate())) {
+                        targetDate.set(value.getValueDate());
+                    }
+                }
+            });
         });
 
         IndicatorValues indicatorValues = new IndicatorValues();
@@ -180,7 +177,6 @@ public class MeService {
         baseValue.setYear(MeService.getYearString(baseDate.get()));
         baseValue.setDetail(baseValueAggregate.get());
         indicatorValues.setBase(baseValue);
-
 
         MeValue actualValue = new MeValue();
         actualValue.setYear(MeService.getYearString(actualDate.get()));

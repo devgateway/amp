@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
 import org.digijava.kernel.ampapi.endpoints.indicator.manager.IndicatorManagerService;
 import org.digijava.kernel.ampapi.endpoints.indicator.manager.MEIndicatorDTO;
+import org.digijava.kernel.ampapi.endpoints.indicator.manager.ProgramSchemeDTO;
 import org.digijava.kernel.ampapi.endpoints.indicator.manager.SectorDTO;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 
@@ -19,6 +20,14 @@ import java.util.List;
 @Path("me")
 @Api("me")
 public class MeEndpoints {
+    @GET
+    @Path("programConfiguration")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "getMeProgramConfiguration")
+    @ApiOperation(value = "Retrieve and provide a list of M&E program configurations.")
+    public final List<ProgramSchemeDTO> getProgramConfiguration() {
+        return MeService.getProgramConfiguration();
+    }
     @POST
     @Path("programReport")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -62,5 +71,23 @@ public class MeEndpoints {
     @ApiOperation("")
     public final MeReportDTO getIndicatorsByProgramReport(SettingsAndFiltersParameters params) {
         return MeService.generateIndicatorsReport(params);
+    }
+
+    @POST
+    @Path("indicatorProgressReport")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "indicatorProgressReport")
+    @ApiOperation("")
+    public final ProgressReportDTO getIndicatorProgressReport(SettingsAndFiltersParameters params) {
+        return MeService.generateIndicatorProgressReport(params);
+    }
+
+    @POST
+    @Path("programProgressReport")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "programProgressReport")
+    @ApiOperation("")
+    public final ProgressReportDTO getProgramProgressReport(SettingsAndFiltersParameters params) {
+        return MeService.generateProgramProgressReport(params);
     }
 }

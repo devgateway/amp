@@ -1979,11 +1979,13 @@ border-right: 1px solid rgb(208, 208, 208);
 													</c:forEach>
 	                                            </td>
 	                                            <td class="tdClass">
-	                                            	<c:forEach var="phone" items="${orgCont.contact.properties}">
-														<c:if test="${phone.name=='contact phone'}">                                                                                     
-                                                                                 <div><c:if test="${not empty phone.phoneCategory}"><digi:trn> <c:out value="${phone.phoneCategory}"/></digi:trn></c:if> <c:out value="${phone.actualPhoneNumber}"></c:out></div>
-														</c:if>
-													</c:forEach>
+                                                    <c:if test="${orgCont.contact.properties.size()>0}">
+                                                        <c:forEach var="phone" items="${orgCont.contact.properties}">
+                                                            <c:if test="${phone.name=='contact phone'}">
+                                                                <div><c:if test="${not empty phone.phoneCategory}"><digi:trn> <c:out value="${phone.phoneCategory}"/></digi:trn></c:if><c:if test="${not empty phone.value}"> <c:out value="${phone.value}"></c:out> </c:if></div>
+                                                            </c:if>
+                                                        </c:forEach>
+                                                    </c:if>
 	                                            </td>
 	                                            <td class="tdClass">
 	                                                <c:forEach var="phone" items="${orgCont.contact.properties}">

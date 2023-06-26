@@ -985,7 +985,7 @@ initContactScript();
 																											<c:out value="${phone.phoneCategory}" />
 																										</digi:trn>
 																									</c:if>
-																									<c:out value="${phone.actualPhoneNumber}"></c:out>
+																									<c:out value="${phone.value}"></c:out>
 																								</div>
 																							</c:if>
 																						</c:forEach></td>

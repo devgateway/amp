@@ -166,7 +166,7 @@ export function loadActivityForActivityPreview(activityId) {
             fundings.forEach(funding => {
                 const fundingFromConverted =
                     activityFundingInformation[FUNDING_INFORMATION][ActivityConstants.FUNDINGS].find(fundingInWsCurrency =>
-                        funding[ActivityConstants.FUNDING_ID] === fundingInWsCurrency[ActivityConstants.FUNDING_ID]);
+                        funding[ActivityConstants.AMP_FUNDING_ID] === fundingInWsCurrency[ActivityConstants.AMP_FUNDING_ID]);
                 if (activityFundingInformation) {
                     transactions.forEach(tt => {
                         const rawTransactionsList = funding[tt];

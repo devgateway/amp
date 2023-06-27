@@ -293,3 +293,11 @@ h3 {
     float: right;
 }
 
+.form-check {
+    align-items: center;
+}
+
+.form-check-label {
+    padding-left: 5px;
+}
+

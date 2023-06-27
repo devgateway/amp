@@ -10,6 +10,7 @@
     "@fortawesome/react-fontawesome": "^0.1.11",
     "@nivo/bar": "^0.74.0",
     "@nivo/core": "^0.74.0",
+    "@nivo/line": "^0.74.0",
     "@nivo/pie": "^0.74.0",
     "@nivo/radial-bar": "^0.74.0",
     "@reduxjs/toolkit": "^1.8.4",

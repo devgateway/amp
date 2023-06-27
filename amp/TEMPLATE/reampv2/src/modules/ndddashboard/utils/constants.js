@@ -63,3 +63,7 @@ export const AVAILABLE_COLORS = [PROGRAMLVL1_COLOR, INDIRECT_PROGRAM_COLOR, MAPP
 export const SELECTED_COLORS = new Map();
 
 export const CHART_COLOR_MAP = new Map();
+
+export const BASE_VALUE_COLOR = '#008efa'
+export const CURRENT_VALUE_COLOR = '#ff9b29'
+export const TARGET_VALUE_COLOR = '#5d9d2f'

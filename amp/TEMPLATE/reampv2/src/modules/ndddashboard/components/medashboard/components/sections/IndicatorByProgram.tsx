@@ -69,12 +69,12 @@ const IndicatorByProgram = () => {
                 }}>
                     <Col md={6} style={{
                     }}>
-                        <Gauge innerValue={90} suffix={'%'} height={300} />
+                        <Gauge innerValue={90} suffix={'%'} />
                     </Col>
                     <Col md={6}>
 
                         <div style={{
-                            height: 300
+                            height: 250
                         }}>
                             <BarChart
                              title={'Program Progress'} />

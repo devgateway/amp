@@ -75,7 +75,7 @@ const Gauge: React.FC<GaugeProps> = (props) => {
   ];
 
   return (
-    <div style={{ height: height || 350 }}>
+    <div style={{ height: height || 350, width: 350 }}>
       <ResponsiveRadialBar
         data={data}
         startAngle={-90}

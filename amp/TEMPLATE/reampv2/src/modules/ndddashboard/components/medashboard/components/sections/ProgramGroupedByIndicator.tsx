@@ -76,7 +76,7 @@ const ProgramGroupedByIndicator = () => {
                     <Col md={12}
                     style={{
                         paddingLeft: 15,
-                        paddingRight: 15,
+                        paddingRight: 5,
                     }}>
                         <Row md={12} style={{
                             alignItems: 'center',
@@ -115,11 +115,7 @@ const ProgramGroupedByIndicator = () => {
                                         border: 'none',
                                         tetAlign: 'right',
                                         order: 1
-                                    }),
-                                    menu: (base) => ({
-                                        ...base,
-                                        width: '200px'
-                                    }),
+                                    })
                                 }}
                                 />
                             </Col>

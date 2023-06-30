@@ -43,7 +43,7 @@ Replace the following line in `app/index.html` with the following:
 with the following:
 
 ```html
-<script src="http//localhost:3000/TEMPLATE/ampTemplate/dashboard/dev/app/compiled-js/app.js"></script>
+<script src="http://localhost:3000/TEMPLATE/ampTemplate/dashboard/dev/app/compiled-js/app.js"></script>
 ```
 
 <br />

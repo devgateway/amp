@@ -5,22 +5,22 @@ import org.dgfoundation.amp.newreports.AmpReportFilters;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
 import org.digijava.kernel.ampapi.endpoints.indicator.manager.MEIndicatorDTO;
+import org.digijava.kernel.ampapi.endpoints.indicator.manager.ProgramSchemeDTO;
 import org.digijava.kernel.ampapi.endpoints.ndd.utils.DashboardUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.dbentity.IndicatorTheme;
+import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.hibernate.Session;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -29,7 +29,12 @@ import java.util.stream.Collectors;
 
 public class MeService {
     protected static final Logger logger = Logger.getLogger(MeService.class);
-    
+
+    static List<ProgramSchemeDTO> getProgramConfiguration () {
+        List<AmpActivityProgramSettings> settings = ProgramUtil.getAmpActivityProgramSettingsList(true);
+        return settings.stream().map(ProgramSchemeDTO::new).collect(Collectors.toList());
+    }
+
     private static String getYearString(Date date) {
         int year = DateConversion.getYear(DateConversion.convertDateToString(date));
         return Integer.toString(year);
@@ -196,5 +201,69 @@ public class MeService {
     static List<MEIndicatorDTO> getIndicatorsBySector(Long sectorId) {
         AmpSector sector = SectorUtil.getAmpSector(sectorId);
         return sector.getIndicators().stream().map(MEIndicatorDTO::new).collect(Collectors.toList());
+    }
+
+    static ProgressReportDTO generateIndicatorProgressReport(SettingsAndFiltersParameters params) {
+        AmpReportFilters filters = DashboardUtils.getFiltersFromParams(params.getFilters());
+        ReportMeasure measures = DashboardUtils.getMeasureFromParams(params.getSettings());
+
+        int yearsCount = Integer.valueOf(params.getSettings().get("yearsCount").toString());
+
+        if (yearsCount < 5) {
+            yearsCount = 5;
+        }
+
+        Long indicatorId = Long.valueOf(params.getSettings().get("indicatorId").toString());
+        Session session = PersistenceManager.getSession();
+        AmpIndicator indicator = (AmpIndicator) session.get(AmpIndicator.class, indicatorId);
+        return new ProgressReportDTO(new ProgressValue(), new ProgressValue(), new ProgressValue());
+    }
+
+    static ProgressReportDTO generateProgramProgressReport(SettingsAndFiltersParameters params) {
+        AmpReportFilters filters = DashboardUtils.getFiltersFromParams(params.getFilters());
+        ReportMeasure measures = DashboardUtils.getMeasureFromParams(params.getSettings());
+
+        Long programId = Long.valueOf(params.getSettings().get("programId").toString());
+        int yearsCount = Integer.valueOf(params.getSettings().get("yearsCount").toString());
+
+        if (yearsCount < 5) {
+            yearsCount = 5;
+        }
+
+        AmpTheme program = ProgramUtil.getThemeById(programId);
+        Set<IndicatorTheme> programIndicators =  program.getIndicators();
+
+        ProgressValue baseValue = new ProgressValue();
+        ProgressValue actualValue = new ProgressValue();
+        ProgressValue targetValue = new ProgressValue();
+
+        programIndicators.forEach(indicator -> {
+            indicator.getValues().forEach(indValue -> {
+                if (indValue != null) {
+                    String year = getYearString(indValue.getValueDate());
+                    int valueType = indValue.getValueType();
+
+                    if (valueType == AmpIndicatorValue.BASE) {
+                        computeIndValuesPerYear(baseValue, indValue, year);
+                    } else if (valueType == AmpIndicatorValue.ACTUAL) {
+                        computeIndValuesPerYear(actualValue, indValue, year);
+                    } else if (valueType == AmpIndicatorValue.TARGET) {
+                        computeIndValuesPerYear(targetValue, indValue, year);
+                    }
+                }
+            });
+        });
+
+        return new ProgressReportDTO(baseValue, actualValue, targetValue);
+    }
+
+    private static void computeIndValuesPerYear(ProgressValue baseValue,
+                                   AmpIndicatorValue indValue, String year) {
+        if (baseValue.getAmountsByYear().containsKey(year)) {
+            baseValue.getAmountsByYear().put(
+                    year, baseValue.getAmountsByYear().get(year) + indValue.getValue());
+        } else {
+            baseValue.getAmountsByYear().put(year, indValue.getValue());
+        }
     }
 }

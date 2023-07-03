@@ -1506,6 +1506,10 @@ public class ProgramUtil {
           return programSettings;
     }
 
+    /**
+     * Returns a list of all enabled program settings. If no program settings are enabled, a default list is created.
+     * @return a list of all enabled program settings
+     */
     public static List<AmpActivityProgramSettings> getEnabledProgramSettings() {
         List<AmpActivityProgramSettings> programSettings = getAmpActivityProgramSettingsList(true);
         if (programSettings.isEmpty()) {

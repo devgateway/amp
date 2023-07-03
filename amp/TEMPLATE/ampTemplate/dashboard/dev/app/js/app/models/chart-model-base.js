@@ -31,8 +31,6 @@ module.exports = BackboneDash.Model.extend({
       data.settings = _({}).extend(data.settings, {'funding-type': this.get('adjtype')});
     }
 
-    console.log(JSON.stringify(this))
-
     if (this.get('programType') && this.get('showProgramType') === true) {
       data.settings = _({}).extend(data.settings, {'program-settings': this.get('programType')});
     }

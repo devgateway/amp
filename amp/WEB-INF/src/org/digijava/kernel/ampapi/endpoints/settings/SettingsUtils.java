@@ -162,6 +162,9 @@ public class SettingsUtils {
         return new SettingOptions(true, defaultId, options);
     }
 
+    /**
+     * @return enabled program settings/schemes
+     */
     private static SettingOptions getEnabledProgramSettings() {
         List<AmpActivityProgramSettings> programSettings = ProgramUtil.getEnabledProgramSettings();
         List<SettingOptions.Option> options = new ArrayList<>();

@@ -15,6 +15,7 @@ import { NDDTranslationContext } from './StartUp';
 import TopChartContainer from './TopChartContainer';
 import { SELECTED_COLORS } from '../utils/constants';
 import { ALL_PROGRAMS } from '../../admin/ndd/constants/Constants';
+import MeDashboard from './medashboard';
 
 class MainDashboardContainer extends Component {
   // eslint-disable-next-line react/sort-comp
@@ -201,6 +202,26 @@ class MainDashboardContainer extends Component {
               </Row>
             </>
           ) : (null)}
+          <>
+          <Row>
+            <Col md={12}>
+              <div className="separator" />
+            </Col>
+          </Row>
+          <Row style={{ border: '1px solid #ddd' }}>
+            <Col md={12} style={{ paddingLeft: 0, paddingRight: 0 }}>
+              <div className='chart-container'>
+                <div className="chart">
+                <div className="section_title">
+                    <span>{translations['amp.ndd.dashboard:me-dashboard']}</span>
+                  </div>
+                  <MeDashboard />
+                </div>
+                </div>
+            </Col>
+          </Row>
+          </>
+
         </>
       );
     }

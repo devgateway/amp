@@ -1,0 +1,20 @@
+.dropdown {
+    width: 100%;
+    font-size: 14px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    background-color: #f3f5f8;
+    color: rgba(0, 0, 0, 0.5);
+    font-weight: 500;
+}
+
+.download_btn_wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    width: 35px;
+    height: 35px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}

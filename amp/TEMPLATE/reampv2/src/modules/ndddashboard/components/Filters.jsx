@@ -139,7 +139,7 @@ class Filters extends Component {
             ) : null}
           </div>
         </div>
-        <div id="filter-popup" ref={this.filterPopup} style={{ display: (!show ? 'none' : 'block') }} />
+        <div id="filter-popup" ref="filterPopup" style={{ display: (!show ? 'none' : 'block') }} />
       </Col>
     );
   }

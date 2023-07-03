@@ -1512,15 +1512,17 @@ public class ProgramUtil {
             programSettings = createDefaultAmpActivityProgramSettingsList();
         }
 
-        for (AmpActivityProgramSettings programSetting : programSettings) {
+        Iterator<AmpActivityProgramSettings> iterator = programSettings.iterator();
+
+        while(iterator.hasNext()){
+            AmpActivityProgramSettings programSetting = iterator.next();
             if(programSetting.getDefaultHierarchy() == null) {
-                programSettings.remove(programSetting);
+                iterator.remove();
             }
         }
 
         return programSettings;
     }
-
 
     public static List createDefaultAmpActivityProgramSettingsList() {
         Session session = PersistenceManager.getSession();

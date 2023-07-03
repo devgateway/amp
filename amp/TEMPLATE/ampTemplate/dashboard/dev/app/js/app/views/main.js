@@ -95,7 +95,7 @@ module.exports = BackboneDash.View.extend({
             return item === PR;
         })) {
             col.push(new TopsChart(
-                {name: 'Top Programs', big: false, view: 'bar', programType: 'National Planning Objectives Level 1'},
+                {name: 'Top Programs', big: false, view: 'bar'},
                 {app: this.app, url: '/rest/dashboard/tops/pr'}));
         }
 

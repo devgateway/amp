@@ -4,9 +4,7 @@ var BackboneDash = require('../backbone-dash');
 
 module.exports = BackboneDash.Model.extend({
 
-  defaults: {
-    defaultProgramType: 'National Planning Objectives Level 1'
-  },
+  defaults: {},
 
   initialize: function(attrs, options) {
     this.app = options.app;
@@ -32,9 +30,11 @@ module.exports = BackboneDash.Model.extend({
       // TODO adjtype hard-coding key for now, should get from settings...
       data.settings = _({}).extend(data.settings, {'funding-type': this.get('adjtype')});
     }
-    
-    if (this.get('programType')) {
-      data.settings = _({}).extend(data.settings, {'program-type': this.get('programType')});
+
+    console.log(JSON.stringify(this))
+
+    if (this.get('programType') && this.get('showProgramType') === true) {
+      data.settings = _({}).extend(data.settings, {'program-settings': this.get('programType')});
     }
 
     _.defaults(data.settings,{ 'currency-code': this.app.settingsWidget.definitions.getDefaultCurrencyId()});

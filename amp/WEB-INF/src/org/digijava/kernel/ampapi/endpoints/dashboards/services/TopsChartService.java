@@ -156,7 +156,7 @@ public class TopsChartService {
                 name = DashboardConstants.TOP_DONOR_GROUPS;
                 break;
             case PR:
-                String selectedProgramScheme = (String) config.getSettings().get("program-type");
+                String selectedProgramScheme = (String) config.getSettings().get("program-settings");
                 String fundingType = (String) config.getSettings().get("funding-type");
                 setColumn(selectedProgramScheme);
                 applyFilter(FilterUtils.INSTANCE.idFromColumnName(fundingType));

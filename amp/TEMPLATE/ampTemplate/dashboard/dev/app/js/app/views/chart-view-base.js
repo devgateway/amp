@@ -118,27 +118,18 @@ module.exports = BackboneDash.View.extend({
 
       if (self.model.get('programType') !== void 0) {  // this chart has programs type
             self.rendered = true;
-            const pgrOptions = [
-                {
-                    id: "National Planning Objectives Level 1",
-                    name: app.translator.translateSync('amp.dashboard:prgscheme-national-plan-objective')
-                },
-                {
-                    id: "Primary Program Level 1",
-                    name: app.translator.translateSync('amp.dashboard:prgscheme-primary-program')
-                },
-                {
-                    id: "Secondary Program Level 1",
-                    name: app.translator.translateSync('amp.dashboard:prgscheme-secondary-program')
-                },
-                {
-                    id: "Tertiary Program Level 1",
-                    name: app.translator.translateSync('amp.dashboard:prgscheme-tertiary-program')
+            const pgrOptions = self.app.settingsWidget.definitions.getProgramSetting();
+
+            if (!pgrOptions) {
+                self.app.report('Could not find Program Type settings');
+            } else {
+                if (self.model.get('programType') === 'FAKE') {
+                    self.model.set('programType', pgrOptions.get('value').defaultId);
                 }
-            ];
+            }
 
             self.$('.program-options').html(
-                pgrOptions.map(function(opt) {
+              _(pgrOptions.get('value').options).map(function(opt) {
                     return adjOptTemplate({
                         opt: opt,
                         current: (opt.id === self.model.get('programType'))

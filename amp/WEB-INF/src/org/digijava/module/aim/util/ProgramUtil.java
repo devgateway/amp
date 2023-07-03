@@ -1506,6 +1506,21 @@ public class ProgramUtil {
           return programSettings;
     }
 
+    public static List<AmpActivityProgramSettings> getEnabledProgramSettings() {
+        List<AmpActivityProgramSettings> programSettings = getAmpActivityProgramSettingsList(true);
+        if (programSettings.isEmpty()) {
+            programSettings = createDefaultAmpActivityProgramSettingsList();
+        }
+
+        for (AmpActivityProgramSettings programSetting : programSettings) {
+            if(programSetting.getDefaultHierarchy() == null) {
+                programSettings.remove(programSetting);
+            }
+        }
+
+        return programSettings;
+    }
+
 
     public static List createDefaultAmpActivityProgramSettingsList() {
         Session session = PersistenceManager.getSession();

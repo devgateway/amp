@@ -101,6 +101,7 @@
   },
   "devDependencies": {
     "@types/babel__traverse": "^7.18.2",
+    "@types/dateformat": "^5.0.0",
     "@types/node": "^16.18.11",
     "@types/react": "^16.14.35",
     "@types/react-bootstrap-table-next": "^4.0.18",

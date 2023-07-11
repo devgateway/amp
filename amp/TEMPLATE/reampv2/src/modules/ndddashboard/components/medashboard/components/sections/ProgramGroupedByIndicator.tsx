@@ -50,6 +50,24 @@ const ProgramGroupedByIndicator = () => {
                     </Col>
                 </Row>
                 <Row style={{
+                    width: '100%',
+                    paddingBottom: 4,
+                    paddingTop: 10,
+                    marginLeft: 0,
+                    borderBottom: '1px solid #e5e5e5',
+
+                }}>
+                    <Col md={11} style={{
+                        paddingRight: 10
+                    }}>
+                        <div style={{
+                            fontSize: 14,
+                            fontWeight: 600,
+                            color: 'rgba(0, 0, 0, 0.5)',
+                        }}>Indicator Name</div>
+                    </Col>
+                </Row>
+                <Row style={{
                     paddingLeft: -10
                 }}>
                     <Col md={6} style={{
@@ -67,7 +85,6 @@ const ProgramGroupedByIndicator = () => {
 
                     </Col>
                 </Row>
-
                 <Row style={{
                     padding: '15px',
                     borderTop: '1px solid #ddd',

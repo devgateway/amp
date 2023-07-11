@@ -7,6 +7,9 @@ import shareLinkReducer from './shareLinkReducer';
 import sharedDataReducer from './sharedDataReducer';
 import mappingsReducer from './mappingsReducer';
 
+//me dashboard
+import programConfigurationReducer from '../medashboard/reducers/fetchProgramConfiguration';
+
 export default combineReducers({
   startupReducer,
   translationsReducer,
@@ -14,5 +17,6 @@ export default combineReducers({
   dashboardSettingsReducer,
   shareLinkReducer,
   sharedDataReducer,
-  mappingsReducer
+  mappingsReducer,
+  programConfigurationReducer
 });

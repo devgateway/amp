@@ -6,11 +6,14 @@ import { Container, Row, Col } from 'react-bootstrap';
 
 const MeDashboardHome = (props: any) => {
   return (
-      <Container>
+      <Container style={{
+        marginRight: '-15px', marginLeft: '-15px', border: '1px solid #ddd', borderBottom: 'none', backgroundColor: '#ffffff'
+      }}>
         <Row md={12} style={{
           paddingTop: 10,
           paddingBottom: 30,
           borderBottom: '1px solid #ccc',
+          backgroundColor: '#ffffff !important',
         }}>
           <Col md={12}>
             <span style={{

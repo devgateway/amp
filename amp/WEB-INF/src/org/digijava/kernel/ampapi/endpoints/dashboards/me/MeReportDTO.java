@@ -1,4 +1,4 @@
-package org.digijava.kernel.ampapi.endpoints.ndd.me;
+package org.digijava.kernel.ampapi.endpoints.dashboards.me;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;

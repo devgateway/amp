@@ -18,7 +18,6 @@ const LeftSection: React.FC<LeftSectionProps> = (props) => {
     <div>
       <IndicatorByProgram />
       <ProgramGroupedByIndicator />
-
       <Row md={12} style={{
         display: 'flex',
         marginLeft: 0,
@@ -36,8 +35,6 @@ const LeftSection: React.FC<LeftSectionProps> = (props) => {
           <span className={styles.button_text}>{translations['amp.ndd.dashboard:me-add-indicator']}</span>
         </Button>
       </Row>
-        <IndicatorByProgram />
-        <ProgramGroupedByIndicator/>
     </div>
   )
 }

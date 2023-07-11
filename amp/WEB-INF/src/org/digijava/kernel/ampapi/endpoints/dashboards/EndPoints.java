@@ -20,6 +20,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.dashboards.me.IndicatorValues;
+import org.digijava.kernel.ampapi.endpoints.dashboards.me.MeReportDTO;
+import org.digijava.kernel.ampapi.endpoints.dashboards.me.MeService;
+import org.digijava.kernel.ampapi.endpoints.dashboards.me.ProgressReportDTO;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.AmpColorThresholdWrapper;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMap;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMapConfigService;
@@ -34,6 +38,11 @@ import org.digijava.kernel.ampapi.endpoints.dashboards.services.TopsChartService
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.DashboardsService;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMapService;
 import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
+import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorYearValues;
+import org.digijava.kernel.ampapi.endpoints.indicator.manager.IndicatorManagerService;
+import org.digijava.kernel.ampapi.endpoints.indicator.manager.MEIndicatorDTO;
+import org.digijava.kernel.ampapi.endpoints.indicator.manager.ProgramSchemeDTO;
+import org.digijava.kernel.ampapi.endpoints.indicator.manager.SectorDTO;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.module.esrigis.dbentity.AmpApiState;
@@ -228,6 +237,77 @@ public class EndPoints {
                     + "number of colors and nuances. Only thresholds can be changed.")
     public void setHeatMapSettings(AmpColorThresholdWrapper config) {
         new HeatMapConfigService().saveHeatMapAdminSettings(config);
+    }
+
+    @GET
+    @Path("sectors")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "getMeSectors")
+    @ApiOperation(value = "Retrieve and provide a list of M&E sectors.")
+    public final List<SectorDTO> getSectors() {
+        return new IndicatorManagerService().getSectors();
+    }
+
+    @GET
+    @Path("/me/programConfiguration")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "getMeProgramConfiguration")
+    @ApiOperation(value = "Retrieve and provide a list of M&E program configurations.")
+    public final List<ProgramSchemeDTO> getProgramConfiguration() {
+        return MeService.getProgramConfiguration();
+    }
+    @POST
+    @Path("/me/programReport")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "getMeProgramReport")
+    @ApiOperation("")
+    public final MeReportDTO getMeProgramReport(SettingsAndFiltersParameters params) {
+        return MeService.generateProgramsByValueReport(params);
+    }
+
+    @GET
+    @Path("/me/indicatorsByProgram/{id}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "getMeIndicatorsByProgramReport")
+    @ApiOperation(value = "Retrieve and provide a list of M&E indicators by program.")
+    public final List<MEIndicatorDTO> getIndicatorsByProgram(@PathParam("id") Long programId) {
+        return new MeService().getIndicatorsByProgram(programId);
+    }
+
+    @POST
+    @Path("/me/indicatorReport/{id}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "indicatorProgressReport")
+    @ApiOperation("")
+    public final IndicatorYearValues getIndicatorProgressReport(@PathParam("id") Long indicatorId, SettingsAndFiltersParameters params) {
+        return new MeService().generateIndicatorProgressReport(indicatorId, params);
+    }
+
+    @GET
+    @Path("/me/indicatorsBySector/{id}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "getMeIndicatorsBySectorReport")
+    @ApiOperation(value = "Retrieve and provide a list of M&E indicators by sector.")
+    public final List<MEIndicatorDTO> getIndicatorsBySector(@PathParam("id") Long sectorId) {
+        return new MeService().getIndicatorsBySector(sectorId);
+    }
+
+//    @POST
+//    @Path("/me/indicatorsReport")
+//    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+//    @ApiMethod(id = "indicatorReport")
+//    @ApiOperation("")
+//    public final MeReportDTO getIndicatorsByProgramReport(SettingsAndFiltersParameters params) {
+//        return new MeService().generateIndicatorsReport(params);
+//    }
+
+    @POST
+    @Path("/me/programProgressReport")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "programProgressReport")
+    @ApiOperation("")
+    public final ProgressReportDTO getProgramProgressReport(SettingsAndFiltersParameters params) {
+        return new MeService().generateProgramProgressReport(params);
     }
 
 }

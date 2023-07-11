@@ -501,11 +501,9 @@ public class IndicatorManagerService {
 
         Map<Long, List<YearValue>> indicatorsWithYearValues = getAllIndicatorYearValuesWithActualValues(params);
 
-        List<IndicatorYearValues> indicatorYearValues = indicatorsByProgram.stream()
+        return indicatorsByProgram.stream()
                 .map(indicator -> getIndicatorYearValues(indicator, indicatorsWithYearValues))
                 .collect(Collectors.toList());
-
-        return indicatorYearValues;
     }
 
     private IndicatorYearValues getIndicatorYearValues(final AmpIndicator indicator,

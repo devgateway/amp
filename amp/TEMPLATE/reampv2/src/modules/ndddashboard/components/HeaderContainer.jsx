@@ -1,22 +1,23 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Filters from './Filters';
 import Settings from './Settings';
 import Share from './Share';
 
-const HeaderContainer = (props) => {
-  const {
-    onApplyFilters, filters, dashboardId, onApplySettings, globalSettings, settings, fundingType, selectedPrograms
-  } = props;
-
-  return (
-    <div>
-      <Filters onApplyFilters={onApplyFilters} dashboardId={dashboardId} globalSettings={globalSettings} />
-      <Settings onApplySettings={onApplySettings} settings={settings} />
-      <Share filters={filters} settings={settings} fundingType={fundingType} selectedPrograms={selectedPrograms} />
-    </div>
-  );
-}
+export default class HeaderContainer extends Component {
+  render() {
+    const {
+      onApplyFilters, filters, dashboardId, onApplySettings, globalSettings, settings, fundingType, selectedPrograms
+    } = this.props;
+    return (
+      <div>
+        <Filters onApplyFilters={onApplyFilters} dashboardId={dashboardId} globalSettings={globalSettings} />
+        <Settings onApplySettings={onApplySettings} settings={settings} />
+        <Share filters={filters} settings={settings} fundingType={fundingType} selectedPrograms={selectedPrograms} />
+      </div>
+    );
+  }
+};
 
 HeaderContainer.propTypes = {
   onApplyFilters: PropTypes.func.isRequired,
@@ -34,5 +35,3 @@ HeaderContainer.defaultProps = {
   dashboardId: undefined,
   settings: undefined
 };
-
-export default HeaderContainer;

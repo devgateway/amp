@@ -1,5 +1,6 @@
-import React from 'react';
-import { Col, Button, Form, Modal } from 'react-bootstrap';
+import React, { Component } from 'react';
+import { Col, Button, Form } from 'react-bootstrap';
+import Modal from 'react-bootstrap-modal';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -19,78 +20,74 @@ const getLink = (id) => {
   return url + id;
 };
 
-const Share = (props) => {
-  const {
-    _getShareLink,
-    filters,
-    translations,
-    shareLink,
-    settings,
-    fundingType,
-    selectedPrograms
-  } = props;
-
-  const [show, setShow] = React.useState(false);
-
-  const handleClose = () => setShow(false);
-
-  const handleShow = () => {
-    _getShareLink(filters ? filters.filters : null, settings, fundingType, selectedPrograms);
-    setShow(true);
+class Share extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { show: false };
+    this.generateModal = this.generateModal.bind(this);
   }
 
-  const nodeRef = React.useRef(null);
+   handleClose = () => this.setState({ show: false });
 
-  const generateModal = () => {
-    return (
-      <Modal
-      show={show}
-      onHide={handleClose}
-      centered
-      ref={nodeRef}
-      backdrop='static'
-      backdropClassName='modal_backdrop'
-      animation={false}>
-        <Modal.Header
-          closeButton
-          style={{
-            backgroundColor: '#337ab7', paddingTop: '8px', paddingBottom: '8px', color: 'white'
-          }}>
-          <Modal.Title>{translations[`${TRN_PREFIX}share-copy-link`]}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <span className="label-bold">{` ${translations[`${TRN_PREFIX}share-link`]}`}</span>
-          <Form.Control type="text" readOnly value={shareLink ? getLink(shareLink.id) : null} />
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="primary" onClick={handleClose}>
-            {translations[`${TRN_PREFIX}close`]}
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    );
-  }
+   handleShow = () => this.prepareDataToSave().then(() => this.setState({ show: true }));
 
-  return (
-    <Col md={3}>
-      <div className="panel">
-        <div className="panel-body">
-          <h3 className="inline-heading">{translations[`${TRN_PREFIX}share`]}</h3>
-          <button
-            onClick={handleShow}
-            type="button"
-            className="btn btn-sm btn-default pull-right dash-share-button">
-            <span className="glyphicon glyphicon-link" />
-            <span>{translations['amp.ndd.dashboard:Link']}</span>
-          </button>
-        </div>
-      </div>
-      <div>
-        {generateModal()}
-      </div>
-    </Col>
-  );
-};
+   prepareDataToSave = () => {
+     // TODO: prepare data chart settings.
+     // eslint-disable-next-line no-shadow
+     const {
+       _getShareLink, filters, settings, fundingType, selectedPrograms
+     } = this.props;
+     return _getShareLink(filters ? filters.filters : null, settings, fundingType, selectedPrograms);
+   }
+
+   generateModal() {
+     const { show } = this.state;
+     const { shareLink, translations } = this.props;
+     return (
+       <Modal show={show} onHide={this.handleClose}>
+         <Modal.Header
+           closeButton
+           style={{
+             backgroundColor: '#337ab7', paddingTop: '8px', paddingBottom: '8px', color: 'white'
+           }}>
+           <Modal.Title>{translations[`${TRN_PREFIX}share-copy-link`]}</Modal.Title>
+         </Modal.Header>
+         <Modal.Body>
+           <span className="label-bold">{` ${translations[`${TRN_PREFIX}share-link`]}`}</span>
+           <Form.Control type="text" value={shareLink ? getLink(shareLink.id) : null} />
+         </Modal.Body>
+         <Modal.Footer>
+           <Button variant="primary" onClick={this.handleClose}>
+             {translations[`${TRN_PREFIX}close`]}
+           </Button>
+         </Modal.Footer>
+       </Modal>
+     );
+   }
+
+   render() {
+     const { translations } = this.props;
+     return (
+       <Col md={3}>
+         <div className="panel">
+           <div className="panel-body">
+             <h3 className="inline-heading">{translations[`${TRN_PREFIX}share`]}</h3>
+             <button
+               onClick={this.handleShow}
+               type="button"
+               className="btn btn-sm btn-default pull-right dash-share-button">
+               <span className="glyphicon glyphicon-link" />
+               <span>{translations['amp.ndd.dashboard:Link']}</span>
+             </button>
+           </div>
+         </div>
+         <div>
+           {this.generateModal()}
+         </div>
+       </Col>
+     );
+   }
+}
 
 const mapStateToProps = state => ({
   shareLink: state.shareLinkReducer.shareLink,

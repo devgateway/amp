@@ -15,7 +15,6 @@ import { NDDTranslationContext } from './StartUp';
 import TopChartContainer from './TopChartContainer';
 import { SELECTED_COLORS } from '../utils/constants';
 import { ALL_PROGRAMS } from '../../admin/ndd/constants/Constants';
-import MeDashboard from './medashboard';
 
 const MainDashboardContainer = (props) => {
   const {
@@ -76,7 +75,7 @@ const MainDashboardContainer = (props) => {
     return (
       <>
         <Row style={{
-          marginRight: '-15px', marginLeft: '-15px', border: '1px solid #ddd', borderBottom: 'none'
+          marginRight: '-15px', marginLeft: '-15px', border: '1px solid #ddd', borderBottom: 'none', backgroundColor: '#ffffff'
         }}>
           <Col md={12} style={{ paddingRight: 0, paddingLeft: 0 }}>
             <div className="section_title">
@@ -103,7 +102,7 @@ const MainDashboardContainer = (props) => {
           border: 'none',
           display: 'flex',
           borderTop: 'none',
-          backgroundColor: 'white'
+          backgroundColor: '#ffffff'
         }}>
           {nddLoaded && !nddLoadingPending
             ? (
@@ -259,4 +258,3 @@ MainDashboardContainer.defaultProps = {
   dashboardSettings: null,
   embedded: false
 };
-

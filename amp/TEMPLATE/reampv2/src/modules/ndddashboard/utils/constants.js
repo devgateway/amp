@@ -67,3 +67,6 @@ export const CHART_COLOR_MAP = new Map();
 export const BASE_VALUE_COLOR = '#008efa'
 export const CURRENT_VALUE_COLOR = '#ff9b29'
 export const TARGET_VALUE_COLOR = '#5d9d2f'
+
+export const REST_PROGRAM_CONFIGURATION = '/rest/dashboard/programConfiguration';
+export const REST_SECTORS = '/rest/dashboard/sectors';

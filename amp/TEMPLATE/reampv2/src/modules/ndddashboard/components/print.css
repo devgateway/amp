@@ -1,7 +1,7 @@
 
 #print-dummy, #print-simple-dummy {
     position: absolute;
-    /* top: -20000px; */
+    //top: -20000px;
     left: 50px;
 }
 

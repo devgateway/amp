@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react';
-import { Container } from 'react-bootstrap';
+import { Col, Container, Row, Nav } from 'react-bootstrap';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -18,6 +18,8 @@ import './print.css';
 import { removeFilter } from '../utils/Utils';
 import { SRC_DIRECT } from './charts/FundingByYearChart';
 import queryString from 'query-string';
+import { Tab } from 'react-bootstrap';
+import MeDashboardContainer from '../medashboard';
 
 const NDDDashboardHome = (props) => {
   const {
@@ -47,6 +49,7 @@ const NDDDashboardHome = (props) => {
     embedded: !!params.embedded,
     fundingByYearSource: SRC_DIRECT
   });
+  const [currentTab, setCurrentTab] = React.useState('ndd');
 
   const getSharedDataOrResolve = (id) => {
     if (id) {
@@ -55,7 +58,7 @@ const NDDDashboardHome = (props) => {
     return Promise.resolve();
   }
 
-  useEffect( () => {
+  useEffect(() => {
     const { embedded } = state;
     const { id } = props.match.params;
 
@@ -112,7 +115,7 @@ const NDDDashboardHome = (props) => {
     };
 
     fetchData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const resetChartAfterUnClick = () => {
@@ -163,11 +166,11 @@ const NDDDashboardHome = (props) => {
     fundingByYearSource
   } = state;
 
-  const onChangeSource = (e)=> {
-    setState( prevState=> ({
-        ...prevState,
-        fundingByYearSource: e.target.value
-      })
+  const onChangeSource = (e) => {
+    setState(prevState => ({
+      ...prevState,
+      fundingByYearSource: e.target.value
+    })
     );
   }
 
@@ -214,7 +217,7 @@ const NDDDashboardHome = (props) => {
   }
 
   const { translations } = useContext(NDDTranslationContext);
-  const downloadImage = ()=> {
+  const downloadImage = () => {
     printChart(translations['amp.ndd.dashboard:page-title'], 'ndd-main-container',
       [], 'png', false, 'print-simple-dummy-container', false);
   }
@@ -223,7 +226,7 @@ const NDDDashboardHome = (props) => {
 
 
   return (
-    <Container fluid className="main-container" id="ndd-main-container">
+    <Container>
       <div className="row header" style={{ marginRight: '-30px', marginLeft: '-30px' }}>
         {mapping && settings && globalSettings && selectedPrograms && !embedded ? (
           <HeaderContainer
@@ -237,28 +240,60 @@ const NDDDashboardHome = (props) => {
             dashboardId={dashboardId} />
         ) : null}
       </div>
-      <MainDashboardContainer
-        handleOuterChartClick={memoizedHandleChartClick}
-        selectedDirectProgram={selectedDirectProgram}
-        filters={filters}
-        ndd={ndd}
-        nddLoaded={nddLoaded}
-        nddLoadingPending={nddLoadingPending}
-        dashboardSettings={dashboardSettings}
-        onChangeFundingType={onChangeFundingType}
-        onChangeProgram={onChangeProgram}
-        fundingType={fundingType}
-        selectedPrograms={selectedPrograms}
-        mapping={mapping}
-        settings={settings}
-        globalSettings={globalSettings}
-        noIndirectMapping={noIndirectMapping}
-        downloadImage={memoizedDownloadImage}
-        embedded={embedded}
-        onChangeSource={memoizedOnChangeSource}
-        fundingByYearSource={fundingByYearSource}
-      />
-      <PrintDummy />
+
+      <Tab.Container
+        activeKey={currentTab}
+        onSelect={tab => setCurrentTab(tab)}
+        id="ndd-tabs"
+        defaultActiveKey="ndd">
+        <Col style={{
+          backgroundColor: '#f5f5f5',
+          paddingTop: 25,
+          borderRadius: 5,
+        }}>
+          <Row sm={3}>
+            <Nav variant="pills">
+              <Nav.Item>
+                <Nav.Link eventKey="ndd" title="NDD Dashboard">NDD Dashboard</Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link eventKey="me" title="Monitoring nd Evaluation Indicators">Monitoring and Evaluation Indicators</Nav.Link>
+              </Nav.Item>
+            </Nav>
+          </Row>
+          <Col md={12}>
+            <Tab.Content>
+              <Tab.Pane eventKey="ndd">
+                <MainDashboardContainer
+                  handleOuterChartClick={memoizedHandleChartClick}
+                  selectedDirectProgram={selectedDirectProgram}
+                  filters={filters}
+                  ndd={ndd}
+                  nddLoaded={nddLoaded}
+                  nddLoadingPending={nddLoadingPending}
+                  dashboardSettings={dashboardSettings}
+                  onChangeFundingType={onChangeFundingType}
+                  onChangeProgram={onChangeProgram}
+                  fundingType={fundingType}
+                  selectedPrograms={selectedPrograms}
+                  mapping={mapping}
+                  settings={settings}
+                  globalSettings={globalSettings}
+                  noIndirectMapping={noIndirectMapping}
+                  downloadImage={memoizedDownloadImage}
+                  embedded={embedded}
+                  onChangeSource={memoizedOnChangeSource}
+                  fundingByYearSource={fundingByYearSource}
+                />
+                <PrintDummy />
+              </Tab.Pane>
+              <Tab.Pane eventKey="me">
+                <MeDashboardContainer />
+              </Tab.Pane>
+            </Tab.Content>
+          </Col>
+        </Col>
+      </Tab.Container>
     </Container>
   );
 }

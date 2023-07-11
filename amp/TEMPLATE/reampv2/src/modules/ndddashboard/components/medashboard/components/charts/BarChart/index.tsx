@@ -43,7 +43,7 @@ const BarChart: React.FC<BarChartProps> = (props) => {
         paddingTop: 15,
         marginBottom: 10,
       }}>{title}</span>
-       <div style={{ height: height || 140, width: width || 250, marginTop: 1 }}>
+       <div style={{ height: height || 192, width: width || 250, marginTop: 1 }}>
       <ResponsiveBar
       data={data}
       indexBy="id"

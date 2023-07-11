@@ -44,7 +44,7 @@ const CenteredMetric: React.FC<CenterTextProps> = (props) => {
 };
 
 const Gauge: React.FC<GaugeProps> = (props) => {
-  const { height, innerValue, suffix, width, margin } = props;
+  const { height, innerValue, suffix, margin } = props;
   const [dataValues, setDataValues] = useState<Array<any>>([])
 
   useLayoutEffect(() => {
@@ -75,7 +75,7 @@ const Gauge: React.FC<GaugeProps> = (props) => {
   ];
 
   return (
-    <div style={{ height: height || 350, width: width || 350 }}>
+    <div style={{ height: height || 350, width: 350 }}>
       <ResponsiveRadialBar
         data={data}
         startAngle={-90}
@@ -86,7 +86,7 @@ const Gauge: React.FC<GaugeProps> = (props) => {
         innerRadius={0.8}
         animate={true}
         margin={margin || {
-          top: 40, right: 70, bottom: 0,
+          top: 40, right: 70, bottom: 0
         }}
         theme={{
           tooltip: {

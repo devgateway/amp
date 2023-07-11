@@ -41,5 +41,6 @@
   "amp.ndd.dashboard:load-more": "Load more",
   "amp.ndd.dashboard:legends": "Legends",
   "amp.ndd.dashboard:loading": "Loading",
-  "amp.ndd.dashboard:me-dashboard": "Monitoring and Evaluation Indicators"
+  "amp.ndd.dashboard:me-dashboard": "Monitoring and Evaluation Indicators",
+  "amp.ndd.dashboard:me-add-indicator": "Add an Indicator"
 }

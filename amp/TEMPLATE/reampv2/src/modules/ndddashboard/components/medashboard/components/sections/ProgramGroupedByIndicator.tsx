@@ -1,8 +1,10 @@
 import React from 'react'
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Form } from 'react-bootstrap';
 import styles from './css/Styles.module.css';
 import Gauge from '../charts/GaugesChart';
 import BarChart from '../charts/BarChart';
+import LineChart from '../charts/LineChart';
+import Select from 'react-select';
 
 const options = [
     { value: 'Indicator 1', label: 'Indicator 1' },
@@ -70,17 +72,74 @@ const ProgramGroupedByIndicator = () => {
                 }}>
                     <Col md={6} style={{
                     }}>
-                        <Gauge innerValue={90} suffix={'%'} height={300} />
+                        <Gauge innerValue={90} suffix={'%'} />
                     </Col>
                     <Col md={6}>
 
                         <div style={{
-                            height: 300
+                            height: 250
                         }}>
                             <BarChart
                                 title={'Program Progress'} />
                         </div>
 
+                    </Col>
+                </Row>
+                <Row style={{
+                    padding: '15px',
+                    borderTop: '1px solid #ddd',
+                    borderBottom: '1px solid #ddd'
+                }}>
+                    <Col md={12}
+                    style={{
+                        paddingLeft: 15,
+                        paddingRight: 5,
+                    }}>
+                        <Row md={12} style={{
+                            alignItems: 'center',
+                        }}>
+                            <Col md={6}>
+                                <Form.Check
+                                    type="radio"
+                                    label="Indicator Progress"
+                                />
+                            </Col>
+                            <Col md={6}>
+                                <Select
+                                options={options}
+                                defaultValue={options[0]}
+                                isSearchable={false}
+                                components={{
+                                    IndicatorSeparator: () => null,
+                                }}
+                                styles={{
+                                    control: (base) => ({
+                                        ...base,
+                                        boxShadow: 'none',
+                                        border: 'none',
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                    }),
+                                    valueContainer: (base) => ({
+                                        ...base,
+                                        paddingLeft: 20,
+                                        justifyContent: 'flex-end',
+                                    }),
+                                    singleValue: (base) => ({
+                                        ...base,
+                                        color: '#116282',
+                                        fontWeight: 600,
+                                        border: 'none',
+                                        tetAlign: 'right',
+                                        order: 1
+                                    })
+                                }}
+                                />
+                            </Col>
+                        </Row>
+                    </Col>
+                    <Col md={12}>
+                        <LineChart />
                     </Col>
                 </Row>
             </Col>

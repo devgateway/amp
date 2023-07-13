@@ -70,3 +70,5 @@ export const TARGET_VALUE_COLOR = '#5d9d2f'
 
 export const REST_PROGRAM_CONFIGURATION = '/rest/dashboard/programConfiguration';
 export const REST_SECTORS = '/rest/dashboard/sectors';
+export const REST_INDICATORS_BY_PROGRAM = '/rest/dashboard/me/indicatorsByProgram';
+export const REST_PROGRAM_PROGRESS_REPORT = '/rest/dashboard/me/programReport';

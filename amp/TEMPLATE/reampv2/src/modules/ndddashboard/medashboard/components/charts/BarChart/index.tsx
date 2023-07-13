@@ -1,8 +1,14 @@
 import { ResponsiveBar } from '@nivo/bar';
 import React from 'react';
-import { MarginProps } from '../../../types';
+import { ComponentProps, MarginProps } from '../../../types';
 
-export interface BarChartProps {
+export interface DataType {
+  id: string;
+  value: number;
+  label: string;
+  color: string;
+}
+export interface BarChartProps extends ComponentProps {
   title?: string;
   height?: number;
   width?: number;

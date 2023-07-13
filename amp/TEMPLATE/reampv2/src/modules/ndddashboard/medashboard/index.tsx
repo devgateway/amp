@@ -5,6 +5,8 @@ import { Container, Row, Col } from 'react-bootstrap';
 
 
 const MeDashboardHome = (props: any) => {
+  const { filters } = props;
+
   return (
       <Container style={{
         marginRight: '-15px', marginLeft: '-15px', border: '1px solid #ddd', borderBottom: 'none', backgroundColor: '#ffffff'
@@ -27,7 +29,7 @@ const MeDashboardHome = (props: any) => {
             </span>
           </Col>
         </Row>
-        <MainDashboardContainer />
+        <MainDashboardContainer filters={filters} />
       </Container>
 
   );

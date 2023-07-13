@@ -42,5 +42,14 @@
   "amp.ndd.dashboard:legends": "Legends",
   "amp.ndd.dashboard:loading": "Loading",
   "amp.ndd.dashboard:me-dashboard": "Monitoring and Evaluation Indicators",
-  "amp.ndd.dashboard:me-add-indicator": "Add an Indicator"
+  "amp.ndd.dashboard:me-add-indicator": "Add an Indicator",
+  "amp.ndd.dashboard:me-program-progress": "Program Progress",
+  "amp.ndd.dashboard:me-baseline": "Baseline",
+  "amp.ndd.dashboard:me-target": "Target",
+  "amp.ndd.dashboard:me-current": "Current",
+  "amp.ndd.dashboard:me-actual": "Actual",
+  "amp.ndd.dashboard:me-no-mpc": "No Available Prorgam Configuration",
+  "amp.ndd.dashboard:me-no-programs": "No Programs Available",
+  "amp.ndd.dashboard:me-no-indicator": "No Indicators Available",
+  "amp.ndd.dashboard:me-no-data": "No Data Available"
 }

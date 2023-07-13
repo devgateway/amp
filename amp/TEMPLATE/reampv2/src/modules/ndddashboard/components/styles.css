@@ -322,15 +322,15 @@ h3 {
     margin-left: -14px;
 }
 
-.nav-item {
+.nav-item:first-child {
     margin-left: 48px;
     margin-right: 10px;
 }
 
-.nav-item:last-child {
+/* .nav-item:last-child {
     margin-left: 0;
     margin-right: 0;
-}
+} */
 
 .nav-link {
     font-size: 20px;

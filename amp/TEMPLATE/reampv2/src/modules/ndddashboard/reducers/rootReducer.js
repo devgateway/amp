@@ -9,6 +9,8 @@ import mappingsReducer from './mappingsReducer';
 
 //me dashboard
 import programConfigurationReducer from '../medashboard/reducers/fetchProgramConfiguration';
+import indicatorsByProgramReducer from '../medashboard/reducers/fetchIndicatorsByProgram';
+import programProgressReportReducer from '../medashboard/reducers/fetchProgramProgressReport';
 
 export default combineReducers({
   startupReducer,
@@ -18,5 +20,7 @@ export default combineReducers({
   shareLinkReducer,
   sharedDataReducer,
   mappingsReducer,
-  programConfigurationReducer
+  programConfigurationReducer,
+  indicatorsByProgramReducer,
+  programProgressReportReducer
 });

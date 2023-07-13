@@ -2,6 +2,10 @@ import translations from '../config/initialTranslations.json';
 
 export type DefaultTranslations = typeof translations;
 
+export interface ComponentProps {
+  translations: DefaultTranslations
+}
+
 export type MarginProps = {
     top?: number;
     right?: number;
@@ -35,4 +39,25 @@ export type ProgramConfigChild = {
 export type InitialState = {
     loading: boolean;
     error: any;
+}
+
+export interface YearValue {
+    year:   string;
+    detail: number;
+}
+export interface Values {
+    actual: YearValue;
+    base:   YearValue;
+    target: YearValue;
+}
+
+export interface ReportData {
+    progress: number;
+    values:   Values;
+}
+
+export enum ValuesType {
+    Actual = "actual",
+    Base = "base",
+    Target = "target"
 }

@@ -1,23 +1,67 @@
-import React from 'react'
-import IndicatorByProgram from './IndicatorByProgram'
-import ProgramGroupedByIndicator from './ProgramGroupedByIndicator'
+import React, { useEffect, useState } from 'react';
+import IndicatorByProgram from './IndicatorByProgram';
+import ProgramGroupedByIndicator from './ProgramGroupedByIndicator';
 import { Button, Row } from 'react-bootstrap';
-import { DefaultTranslations } from '../../types';
+import { DefaultTranslations, ProgramConfigChild } from '../../types';
 import { Dispatch, bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import styles from './css/Styles.module.css';
+import { findProgramConfig, extractLv1Children } from '../../utils/data';
 
 interface LeftSectionProps {
-  translations: DefaultTranslations
+  translations: DefaultTranslations,
+  filters: any
 }
 
 const LeftSection: React.FC<LeftSectionProps> = (props) => {
-  const { translations } = props;
+  const { translations, filters } = props;
+
+  const programConfigurationReducer = useSelector((state: any) => state.programConfigurationReducer);
+
+  const [selectedConfiguration, setSelectedConfiguration] = useState<number | null>(null);
+  const [level1Children, setLevel1Children] = useState<ProgramConfigChild[]>([]);
+  const [level1Child, setLevel1Child] = useState<number | null>(null);
+
+  if (!selectedConfiguration && programConfigurationReducer.data) {
+    setSelectedConfiguration(programConfigurationReducer.data[0].ampProgramSettingsId);
+  }
+
+  useEffect(() => {
+    if (selectedConfiguration && programConfigurationReducer.data) {
+      const foundProgram = findProgramConfig(selectedConfiguration, programConfigurationReducer.data);
+
+      if (foundProgram) {
+        const children = extractLv1Children(foundProgram);
+        setLevel1Children(children);
+        setLevel1Child(children[0].id);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedConfiguration]);
 
   return (
     <div>
-      <IndicatorByProgram />
-      <ProgramGroupedByIndicator />
+      {programConfigurationReducer.loading ? <div className="loading">Loading...</div> :
+        <IndicatorByProgram
+          translations={translations}
+          programConfiguration={programConfigurationReducer.data}
+          setLevel1Child={setLevel1Child}
+          selectedConfiguration={selectedConfiguration}
+          setSelectedConfiguration={setSelectedConfiguration}
+          level1Children={level1Children}
+          setLevel1Children={setLevel1Children}
+          level1Child={level1Child}
+          filters={filters}
+        />
+      }
+
+      {(!level1Child) ? <div className="loading">Loading...</div> :
+        <ProgramGroupedByIndicator
+          translations={translations}
+          level1Child={level1Child}
+        />
+      }
+
       <Row md={12} style={{
         display: 'flex',
         marginLeft: 0,

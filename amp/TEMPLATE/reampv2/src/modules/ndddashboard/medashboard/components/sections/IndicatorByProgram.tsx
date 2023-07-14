@@ -3,9 +3,10 @@ import { Row, Col } from 'react-bootstrap';
 import styles from './css/Styles.module.css';
 import Gauge from '../charts/GaugesChart';
 import BarChart from '../charts/BarChart';
-import { ComponentProps, ProgramConfig, ProgramConfigChild, ReportData } from '../../types';
+import { ComponentProps, ProgramConfig, ProgramConfigChild, YearValues } from '../../types';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchProgramProgressReport } from '../../reducers/fetchProgramProgressReport';
+import { fetchProgramReport } from '../../reducers/fetchProgramReportReducer';
+import ChartUtils from '../../utils/chart';
 
 interface IndicatorByProgramProps extends ComponentProps {
     programConfiguration: ProgramConfig[];
@@ -31,8 +32,10 @@ const IndicatorByProgram: React.FC<IndicatorByProgramProps> = (props) => {
     } = props;
     const dispatch = useDispatch();
 
-    const programProgressReportReducer = useSelector((state: any) => state.programProgressReportReducer);
-    const report: ReportData | null = programProgressReportReducer.data || null;
+    const programReportReducer = useSelector((state: any) => state.programReportReducer);
+    const [progressValue, setProgressValue] = React.useState<number>(0);
+    //eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [report, setReport] = React.useState<YearValues[] | null>( programReportReducer.data);
 
     if (!selectedConfiguration && programConfiguration) {
         setSelectedConfiguration(programConfiguration[0].ampProgramSettingsId);
@@ -40,10 +43,23 @@ const IndicatorByProgram: React.FC<IndicatorByProgramProps> = (props) => {
 
     useEffect(() => {
         if (level1Child) {
-            dispatch(fetchProgramProgressReport({ filters, id: level1Child }));
+            dispatch(fetchProgramReport({ filters, id: level1Child }));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [level1Child]);
+
+    useEffect(() => {
+        if (report) {
+            const aggregates = ChartUtils.computeAggregateValues(report);
+            const progress = ChartUtils.generateGaugeValue({
+                baseValue: aggregates.baseValue,
+                targetValue: aggregates.targetValue,
+                actualValue: aggregates.actualValue
+            });
+
+            setProgressValue(progress);
+        }
+    }, [report]);
 
     return (
         <div>
@@ -115,14 +131,14 @@ const IndicatorByProgram: React.FC<IndicatorByProgramProps> = (props) => {
                         <span className="cheat-lineheight" />
                     </Col>
                 </Row>
-                { (!programProgressReportReducer.loading && report) &&
+                { (!programReportReducer.loading && report) &&
                 <Row style={{
                     paddingLeft: -10
                 }}>
 
                     <Col md={6} style={{
                     }}>
-                        <Gauge innerValue={report.progress || 0} suffix={'%'} />
+                        <Gauge innerValue={progressValue} suffix={'%'} />
                     </Col>
                     <Col md={6}>
 
@@ -131,6 +147,7 @@ const IndicatorByProgram: React.FC<IndicatorByProgramProps> = (props) => {
                         }}>
                             <BarChart
                                 translations={translations}
+                                data={report}
                                 title={translations['amp.ndd.dashboard:me-program-progress']} />
                         </div>
                     </Col>
@@ -141,4 +158,4 @@ const IndicatorByProgram: React.FC<IndicatorByProgramProps> = (props) => {
     )
 }
 
-export default IndicatorByProgram;
+export default React.memo(IndicatorByProgram);

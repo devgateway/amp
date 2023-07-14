@@ -245,7 +245,7 @@ const NDDDashboardHome = (props) => {
         activeKey={currentTab}
         onSelect={tab => setCurrentTab(tab)}
         id="ndd-tabs"
-        defaultActiveKey="me">
+        defaultActiveKey="ndd">
         <Col style={{
           backgroundColor: '#f5f5f5',
           paddingTop: 25,
@@ -253,9 +253,9 @@ const NDDDashboardHome = (props) => {
         }}>
           <Row sm={3}>
             <Nav variant="pills">
-              {/* <Nav.Item>
+              <Nav.Item>
                 <Nav.Link eventKey="ndd" title="NDD Dashboard">NDD Dashboard</Nav.Link>
-              </Nav.Item> */}
+              </Nav.Item>
               <Nav.Item>
                 <Nav.Link eventKey="me" title="Monitoring nd Evaluation Indicators">Monitoring and Evaluation Indicators</Nav.Link>
               </Nav.Item>
@@ -263,7 +263,7 @@ const NDDDashboardHome = (props) => {
           </Row>
           <Col md={12}>
             <Tab.Content>
-              {/* <Tab.Pane eventKey="ndd">
+              <Tab.Pane eventKey="ndd">
                 <MainDashboardContainer
                   handleOuterChartClick={memoizedHandleChartClick}
                   selectedDirectProgram={selectedDirectProgram}
@@ -286,7 +286,7 @@ const NDDDashboardHome = (props) => {
                   fundingByYearSource={fundingByYearSource}
                 />
                 <PrintDummy />
-              </Tab.Pane> */}
+              </Tab.Pane>
               <Tab.Pane eventKey="me">
                 <MeDashboardContainer filters={filters} />
               </Tab.Pane>

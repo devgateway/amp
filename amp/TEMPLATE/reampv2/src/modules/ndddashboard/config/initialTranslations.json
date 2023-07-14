@@ -44,6 +44,7 @@
   "amp.ndd.dashboard:me-dashboard": "Monitoring and Evaluation Indicators",
   "amp.ndd.dashboard:me-add-indicator": "Add an Indicator",
   "amp.ndd.dashboard:me-program-progress": "Program Progress",
+  "amp.ndd.dashboard:me-indicator-report": "Indicator Report",
   "amp.ndd.dashboard:me-baseline": "Baseline",
   "amp.ndd.dashboard:me-target": "Target",
   "amp.ndd.dashboard:me-current": "Current",

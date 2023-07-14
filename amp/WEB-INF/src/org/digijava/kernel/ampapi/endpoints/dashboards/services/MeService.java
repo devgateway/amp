@@ -1,4 +1,4 @@
-package org.digijava.kernel.ampapi.endpoints.dashboards.me;
+package org.digijava.kernel.ampapi.endpoints.dashboards.services;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -61,103 +61,17 @@ public class MeService {
 
     public static List<ProgramSchemeDTO> getProgramConfiguration () {
         List<AmpActivityProgramSettings> settings = ProgramUtil.getAmpActivityProgramSettingsList(true);
+
+        //remove settings with no hierarchy
+        settings.removeIf(setting -> setting.getDefaultHierarchy() == null);
         return settings.stream().map(ProgramSchemeDTO::new).collect(Collectors.toList());
     }
 
-    private static String getYearString(Date date) {
-        int year = DateConversion.getYear(DateConversion.convertDateToString(date));
-        return Integer.toString(year);
-    }
-
-    private static int calculateProgress(double base, double actual, double target) {
-        if (target == 0) {
-            return 0;
-        }
-
-        // formula:  [(Current value - Base value) / (Target value - Base value)]*100
-        double progressAggregate = (actual - base) / (target - base);
-        return Math.round((float) progressAggregate * 100);
-    }
-
-    private static IndicatorValues createAggregate (Long programId) {
-        IndicatorValues indicatorValues = new IndicatorValues();
-
-        AtomicReference<Double> baseAggregate = new AtomicReference<>(0.0);
-        AtomicReference<Double> actualAggregate = new AtomicReference<>(0.0);
-        AtomicReference<Double> targetAggregate = new AtomicReference<>(0.0);
-
-        AtomicReference<Date> baseDate = new AtomicReference<>(null);
-        AtomicReference<Date> actualDate = new AtomicReference<>(null);
-        AtomicReference<Date> targetDate = new AtomicReference<>(null);
-
-        AmpTheme program = ProgramUtil.getThemeById(programId);
-        Set<IndicatorTheme> programIndicators =  program.getIndicators();
-
-        programIndicators.forEach(indicator -> {
-            indicator.getValues().forEach(value -> {
-                int indicatorType = value.getValueType();
-
-                if (indicatorType == AmpIndicatorValue.BASE) {
-                    baseAggregate.updateAndGet(v -> v + value.getValue());
-
-                    if (baseDate.get() == null || baseDate.get().before(value.getValueDate())) {
-                        baseDate.set(value.getValueDate());
-                    }
-                } else if (indicatorType == AmpIndicatorValue.ACTUAL) {
-                    actualAggregate.updateAndGet(v -> v + value.getValue());
-
-                    if (actualDate.get() == null || actualDate.get().before(value.getValueDate())) {
-                        actualDate.set(value.getValueDate());
-                    }
-                } else if (indicatorType == AmpIndicatorValue.TARGET) {
-                    targetAggregate.updateAndGet(v -> v + value.getValue());
-
-                    if (targetDate.get() == null || targetDate.get().before(value.getValueDate())) {
-                        targetDate.set(value.getValueDate());
-                    }
-                }
-            });
-        });
-
-        // set indicator values
-        MeValue baseValue = new MeValue();
-        baseValue.setYear(MeService.getYearString(baseDate.get()));
-        baseValue.setDetail(baseAggregate.get());
-        indicatorValues.setBase(baseValue);
-
-        MeValue actualValue = new MeValue();
-        actualValue.setYear(MeService.getYearString(actualDate.get()));
-        actualValue.setDetail(actualAggregate.get());
-        indicatorValues.setActual(actualValue);
-
-        MeValue targetValue = new MeValue();
-        targetValue.setYear(MeService.getYearString(targetDate.get()));
-        targetValue.setDetail(targetAggregate.get());
-        indicatorValues.setTarget(targetValue);
-
-        return indicatorValues;
-    }
-
-    public static MeReportDTO generateProgramsByValueReport (
-            SettingsAndFiltersParameters params) {
-        AmpReportFilters filters = DashboardUtils.getFiltersFromParams(params.getFilters());
-        ReportMeasure measures = DashboardUtils.getMeasureFromParams(params.getSettings());
-
-        Long programId = Long.valueOf(params.getSettings().get("programId").toString());
-
-        IndicatorValues indicatorValues = MeService.createAggregate(programId);
-        double baseAggregate = indicatorValues.getBase().getDetail();
-        double actualAggregate = indicatorValues.getActual().getDetail();
-        double targetAggregate = indicatorValues.getTarget().getDetail();
-
-        int progress = MeService.calculateProgress(baseAggregate, actualAggregate, targetAggregate);
-
-        return new MeReportDTO(progress, indicatorValues);
-    }
 
     public List<MEIndicatorDTO> getIndicatorsByProgram (Long programId) {
         List<AmpIndicator> indicators = new ArrayList<>();
         AmpTheme program = ProgramUtil.getThemeById(programId);
+
         Set<IndicatorTheme> programIndicators =  program.getIndicators();
 
 
@@ -168,82 +82,33 @@ public class MeService {
         return indicators.stream().map(MEIndicatorDTO::new).collect(Collectors.toList());
     }
 
-    public MeReportDTO generateIndicatorsReport (
-            SettingsAndFiltersParameters params) {
-        AmpReportFilters filters = DashboardUtils.getFiltersFromParams(params.getFilters());
-        ReportMeasure measures = DashboardUtils.getMeasureFromParams(params.getSettings());
-
-        AtomicReference<Double> baseValueAggregate = new AtomicReference<>(0.0);
-        AtomicReference<Double> currentValueAggregate = new AtomicReference<>(0.0);
-        AtomicReference<Double> targetValueAggregate = new AtomicReference<>(0.0);
-
-        AtomicReference<Date> baseDate = new AtomicReference<>(null);
-        AtomicReference<Date> actualDate = new AtomicReference<>(null);
-        AtomicReference<Date> targetDate = new AtomicReference<>(null);
-
-        Long indicatorId = Long.valueOf(params.getSettings().get("indicatorId").toString());
-        Session session = PersistenceManager.getSession();
-        AmpIndicator indicator = (AmpIndicator) session.get(AmpIndicator.class, indicatorId);
-
-        indicator.getValuesTheme().forEach(valueTheme -> {
-            valueTheme.getValues().forEach(value -> {
-                if (value.getValueType() == AmpIndicatorValue.BASE) {
-                    baseValueAggregate.updateAndGet(v -> v + value.getValue());
-                    if (baseDate.get() == null || baseDate.get().before(value.getValueDate())) {
-                        baseDate.set(value.getValueDate());
-                    }
-                } else if (value.getValueType()  == AmpIndicatorValue.ACTUAL) {
-                    currentValueAggregate.updateAndGet(v -> v + value.getValue());
-
-                    if (actualDate.get() == null || actualDate.get().before(value.getValueDate())) {
-                        actualDate.set(value.getValueDate());
-                    }
-                } else if (value.getValueType()  == AmpIndicatorValue.TARGET) {
-                    targetValueAggregate.updateAndGet(v -> v + value.getValue());
-                    if (targetDate.get() == null || targetDate.get().before(value.getValueDate())) {
-                        targetDate.set(value.getValueDate());
-                    }
-                }
-            });
-        });
-
-        IndicatorValues indicatorValues = new IndicatorValues();
-
-        MeValue baseValue = new MeValue();
-        baseValue.setYear(MeService.getYearString(baseDate.get()));
-        baseValue.setDetail(baseValueAggregate.get());
-        indicatorValues.setBase(baseValue);
-
-        MeValue actualValue = new MeValue();
-        actualValue.setYear(MeService.getYearString(actualDate.get()));
-        actualValue.setDetail(baseValueAggregate.get());
-        indicatorValues.setActual(actualValue);
-
-        MeValue targetValue = new MeValue();
-        targetValue.setYear(MeService.getYearString(targetDate.get()));
-        targetValue.setDetail(targetValueAggregate.get());
-        indicatorValues.setTarget(targetValue);
-
-        int progress = MeService.calculateProgress(baseValueAggregate.get(), currentValueAggregate.get(), targetValueAggregate.get());
-
-        return new MeReportDTO(progress, indicatorValues);
-    }
-
     public List<MEIndicatorDTO> getIndicatorsBySector (Long sectorId) {
         AmpSector sector = SectorUtil.getAmpSector(sectorId);
         return sector.getIndicators().stream().map(MEIndicatorDTO::new).collect(Collectors.toList());
     }
 
+    public List<IndicatorYearValues> getIndicatorValuesByProgramId(Long programId,
+                                                                   SettingsAndFiltersParameters params) {
+
+        List<AmpIndicator> indicatorsByProgram = getAllAmpIndicators().stream()
+                .filter(indicator -> indicator.getProgram() != null)
+                .filter(indicator -> indicator.getProgram().getAmpThemeId().equals(programId))
+                .collect(Collectors.toList());
+
+        Map<Long, List<YearValue>> indicatorsWithYearValues = getAllIndicatorYearValuesWithActualValues(params);
+
+        return indicatorsByProgram.stream()
+                .map(indicator -> getIndicatorYearValues(indicator, indicatorsWithYearValues))
+                .collect(Collectors.toList());
+
+    }
+
+
     public IndicatorYearValues generateIndicatorProgressReport (Long indicatorId,
             SettingsAndFiltersParameters params) {
-        int yearsCount = Integer.valueOf(params.getSettings().get("yearsCount").toString());
-
-        if (yearsCount < 5) {
-            yearsCount = 5;
-        }
-
         Session session = PersistenceManager.getSession();
         AmpIndicator indicator = (AmpIndicator) session.get(AmpIndicator.class, indicatorId);
+
         Map<Long, List<YearValue>> indicatorsWithYearValues = getAllIndicatorYearValuesWithActualValues(params);
         return getIndicatorYearValues(indicator, indicatorsWithYearValues);
     }
@@ -313,21 +178,6 @@ public class MeService {
         return getIndicatorYearValues(existingIndicator, indicatorsWithYearValues);
     }
 
-    public List<IndicatorYearValues> getIndicatorValuesByProgramId(Long programId,
-                                                                   SettingsAndFiltersParameters params) {
-
-        List<AmpIndicator> indicatorsByProgram = getAllAmpIndicators().stream()
-                .filter(indicator -> indicator.getProgram() != null)
-                .filter(indicator -> indicator.getProgram().getAmpThemeId().equals(programId))
-                .collect(Collectors.toList());
-
-        Map<Long, List<YearValue>> indicatorsWithYearValues = getAllIndicatorYearValuesWithActualValues(params);
-
-        return indicatorsByProgram.stream()
-                .map(indicator -> getIndicatorYearValues(indicator, indicatorsWithYearValues))
-                .collect(Collectors.toList());
-    }
-
     private IndicatorYearValues getIndicatorYearValues(final AmpIndicator indicator,
                                                        final Map<Long, List<YearValue>> indicatorsWithYearValues) {
         BigDecimal baseValue = BigDecimal.ZERO;
@@ -342,6 +192,11 @@ public class MeService {
         }
 
         List<YearValue> yearValues = indicatorsWithYearValues.get(indicator.getIndicatorId());
+
+        if (yearValues == null) {
+            yearValues = Collections.emptyList();
+        }
+
         return new IndicatorYearValues(indicator, baseValue, yearValues, targetValue);
     }
 
@@ -418,5 +273,10 @@ public class MeService {
         } catch (DgException e) {
             throw new RuntimeException("Failed to load indicators");
         }
+    }
+
+    private static String getYearString(Date date) {
+        int year = DateConversion.getYear(DateConversion.convertDateToString(date));
+        return Integer.toString(year);
     }
 }

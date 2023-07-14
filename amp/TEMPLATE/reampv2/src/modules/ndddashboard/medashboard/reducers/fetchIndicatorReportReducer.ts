@@ -1,43 +1,42 @@
-import { errorHelper } from '../../../admin/indicator_manager/utils/errorHelper';
-import { REST_PROGRAM_PROGRESS_REPORT } from '../../utils/constants';
-import { ReportData } from '../types';
+import { errorHelper } from "../../../admin/indicator_manager/utils/errorHelper";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { YearValues } from '../types';
+import { REST_INDICATOR_REPORT } from "../../utils/constants";
 
-const REDUCER_NAME = 'progressReport';
+const REDUCER_NAME = 'indicatorReport';
 
-type ProgressReportInitialStateType = {
-    data: ReportData | null;
+type IndicatorReportInitialStateType = {
+    data: YearValues | null;
     loading: boolean;
     error: any;
 }
 
-const initialState: ProgressReportInitialStateType = {
+const initialState: IndicatorReportInitialStateType = {
     data: null,
     loading: false,
-    error: null
+    error: null,
 }
 
-export const fetchProgramProgressReport = createAsyncThunk(
+export const fetchIndicatorReport = createAsyncThunk(
     `${REDUCER_NAME}/fetch`,
     async ({ filters, id} : { filters: any, id: number }, { rejectWithValue }) => {
-        const response = await fetch(`${REST_PROGRAM_PROGRESS_REPORT}/${id}`,{
+        const response = await fetch(`${REST_INDICATOR_REPORT}/${id}`,{
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({ ...filters }),
         });
-        const data: ReportData = await response.json();
+        const data: YearValues = await response.json();
 
         if (response.status !== 200) {
             return rejectWithValue(data);
         }
-
         return data;
     }
 );
 
-const programProgressReportSlice = createSlice({
+const indicatorReportSlice = createSlice({
     name: REDUCER_NAME,
     initialState,
     reducers: {
@@ -48,15 +47,15 @@ const programProgressReportSlice = createSlice({
         }
     },
     extraReducers: (builder) => {
-        builder.addCase(fetchProgramProgressReport.pending, (state) => {
+        builder.addCase(fetchIndicatorReport.pending, (state) => {
             state.loading = true;
         });
-        builder.addCase(fetchProgramProgressReport.fulfilled, (state, action) => {
-            state.data = null;
+        builder.addCase(fetchIndicatorReport.fulfilled, (state, action) => {
+            state.error = null;
             state.loading = false;
             state.data = action.payload;
         });
-        builder.addCase(fetchProgramProgressReport.rejected, (state, action) => {
+        builder.addCase(fetchIndicatorReport.rejected, (state, action) => {
             state.loading = false;
             state.error = errorHelper(action.payload);
 
@@ -64,6 +63,7 @@ const programProgressReportSlice = createSlice({
     }
 });
 
-export const { resetState } = programProgressReportSlice.actions;
-export default programProgressReportSlice.reducer;
-
+export const {
+    resetState
+} = indicatorReportSlice.actions;
+export default indicatorReportSlice.reducer;

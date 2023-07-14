@@ -41,6 +41,18 @@ export type InitialState = {
     error: any;
 }
 
+export interface ActualValue {
+    year: string | number;
+    value: number
+}
+
+export interface YearValues {
+    actualValues: ActualValue [];
+    baseValue: number;
+    targetValue: number;
+    indicatorId: number;
+}
+
 export interface YearValue {
     year:   string;
     detail: number;
@@ -57,7 +69,7 @@ export interface ReportData {
 }
 
 export enum ValuesType {
-    Actual = "actual",
-    Base = "base",
-    Target = "target"
+    Baseline = "Baseline",
+    Target = "Target",
+    Current = "Current",
 }

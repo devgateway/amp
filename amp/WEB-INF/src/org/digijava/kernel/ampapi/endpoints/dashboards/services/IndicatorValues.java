@@ -1,4 +1,4 @@
-package org.digijava.kernel.ampapi.endpoints.dashboards.me;
+package org.digijava.kernel.ampapi.endpoints.dashboards.services;
 
 public class IndicatorValues {
     private MeValue actual;

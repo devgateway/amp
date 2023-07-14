@@ -3,7 +3,7 @@ import { connect, useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import fetchTranslations from '../../../utils/actions/fetchTranslations';
-import { fetchProgramConfiguration }  from '../medashboard/reducers/fetchProgramConfiguration';
+import { fetchProgramConfiguration }  from '../medashboard/reducers/fetchProgramConfigurationReducer';
 import { Loading } from '../../../utils/components/Loading';
 import defaultTrnPack from '../config/initialTranslations.json';
 

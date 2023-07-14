@@ -1,4 +1,4 @@
-package org.digijava.kernel.ampapi.endpoints.dashboards.me;
+package org.digijava.kernel.ampapi.endpoints.dashboards.services;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -9,10 +9,10 @@ public class ProgressReportDTO {
     private final ProgressValue base;
 
     @JsonProperty("actual")
-    private ProgressValue actual;
+    private final ProgressValue actual;
 
     @JsonProperty("target")
-    private ProgressValue target;
+    private final ProgressValue target;
 
     public ProgressReportDTO (ProgressValue base, ProgressValue actual, ProgressValue target) {
         this.base = base;
@@ -28,7 +28,7 @@ public class ProgressReportDTO {
         return actual;
     }
 
-    public void setActual (ProgressValue actual) {
-        this.actual = actual;
+    public ProgressValue getTarget () {
+        return target;
     }
 }

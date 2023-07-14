@@ -59,6 +59,7 @@ const LeftSection: React.FC<LeftSectionProps> = (props) => {
         <ProgramGroupedByIndicator
           translations={translations}
           level1Child={level1Child}
+          filters={filters}
         />
       }
 

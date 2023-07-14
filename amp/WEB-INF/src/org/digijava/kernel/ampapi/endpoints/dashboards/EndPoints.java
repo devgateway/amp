@@ -20,10 +20,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
-import org.digijava.kernel.ampapi.endpoints.dashboards.me.IndicatorValues;
-import org.digijava.kernel.ampapi.endpoints.dashboards.me.MeReportDTO;
-import org.digijava.kernel.ampapi.endpoints.dashboards.me.MeService;
-import org.digijava.kernel.ampapi.endpoints.dashboards.me.ProgressReportDTO;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.MeReportDTO;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.MeService;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.ProgressReportDTO;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.AmpColorThresholdWrapper;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMap;
 import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMapConfigService;
@@ -45,6 +44,7 @@ import org.digijava.kernel.ampapi.endpoints.indicator.manager.ProgramSchemeDTO;
 import org.digijava.kernel.ampapi.endpoints.indicator.manager.SectorDTO;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.module.esrigis.dbentity.AmpApiState;
 import org.digijava.module.esrigis.dbentity.ApiStateType;
 
@@ -249,33 +249,104 @@ public class EndPoints {
     }
 
     @GET
-    @Path("/me/programConfiguration")
+    @Path("indicators")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "getMeIndicators")
+    @ApiOperation(value = "Retrieve and provide a list of M&E indicators.")
+    public final List<MEIndicatorDTO> getIndicators() {
+        return new IndicatorManagerService().getMEIndicators();
+    }
+
+    @GET
+    @Path("programConfiguration")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "getMeProgramConfiguration")
     @ApiOperation(value = "Retrieve and provide a list of M&E program configurations.")
     public final List<ProgramSchemeDTO> getProgramConfiguration() {
         return MeService.getProgramConfiguration();
     }
+
+    /**
+     * Returns indicator values for indicators attached to a program
+     *   [{
+     *         "baseValue": 1000,
+     *         "actualValues": [
+     *             {
+     *                 "year": 2021,
+     *                 "value": 0
+     *             },
+     *             {
+     *                 "year": 2022,
+     *                 "value": 3000.000000000000
+     *             },
+     *             {
+     *                 "year": 2023,
+     *                 "value": 553.000000000000
+     *             }
+     *         ],
+     *         "targetValue": 3000,
+     *         "indicatorId": 11
+     *     },]
+     * @param id
+     * @param params
+     * @return
+     */
     @POST
-    @Path("/me/programReport")
+    @Path("/me/programReport/{id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "getMeProgramReport")
-    @ApiOperation("")
-    public final MeReportDTO getMeProgramReport(SettingsAndFiltersParameters params) {
-        return MeService.generateProgramsByValueReport(params);
+    @ApiOperation(value = "Returns indicator values for program.")
+    public List<IndicatorYearValues> getIndicatorYearValuesByProgram(@PathParam("id") Long id,
+                                                                     SettingsAndFiltersParameters params) {
+        return new MeService().getIndicatorValuesByProgramId(id, params);
     }
 
     @GET
     @Path("/me/indicatorsByProgram/{id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = "getMeIndicatorsByProgramReport")
+    @ApiMethod(id = "getMeIndicatorsByProgram")
     @ApiOperation(value = "Retrieve and provide a list of M&E indicators by program.")
     public final List<MEIndicatorDTO> getIndicatorsByProgram(@PathParam("id") Long programId) {
         return new MeService().getIndicatorsByProgram(programId);
     }
 
+    /**
+     * Returns indicator values for indicator
+     * {
+     *         "baseValue": 1000,
+     *         "actualValues": [
+     *             {
+     *                 "year": 2021,
+     *                 "value": 0
+     *             },
+     *             {
+     *                 "year": 2022,
+     *                 "value": 3000.000000000000
+     *             },
+     *             {
+     *                 "year": 2023,
+     *                 "value": 553.000000000000
+     *             }
+     *         ],
+     *         "targetValue": 3000,
+     *         "indicatorId": 11
+     *     }
+     * @param id
+     * @param params
+     * @return
+     */
     @POST
     @Path("/me/indicatorReport/{id}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "getValuesForIndicator")
+    @ApiOperation(value = "Returns indicator values for indicator.")
+    public IndicatorYearValues getIndicatorYearValuesByIndicator(@PathParam("id") Long id,
+                                                                 SettingsAndFiltersParameters params) {
+        return new MeService().getIndicatorYearValuesByIndicatorId(id, params);
+    }
+
+    @POST
+    @Path("/me/indicatorProgressReport/{id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "indicatorProgressReport")
     @ApiOperation("")
@@ -292,22 +363,13 @@ public class EndPoints {
         return new MeService().getIndicatorsBySector(sectorId);
     }
 
-//    @POST
-//    @Path("/me/indicatorsReport")
-//    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-//    @ApiMethod(id = "indicatorReport")
-//    @ApiOperation("")
-//    public final MeReportDTO getIndicatorsByProgramReport(SettingsAndFiltersParameters params) {
-//        return new MeService().generateIndicatorsReport(params);
-//    }
-
     @POST
-    @Path("/me/programProgressReport")
+    @Path("/me/programProgressReport/{id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(id = "programProgressReport")
     @ApiOperation("")
-    public final ProgressReportDTO getProgramProgressReport(SettingsAndFiltersParameters params) {
-        return new MeService().generateProgramProgressReport(params);
+    public List<IndicatorYearValues> getProgramProgressReport(@PathParam("id") Long programId, SettingsAndFiltersParameters params) {
+        return new MeService().getIndicatorValuesByProgramId(programId, params);
     }
 
 }

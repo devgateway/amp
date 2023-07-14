@@ -1,4 +1,4 @@
-package org.digijava.kernel.ampapi.endpoints.dashboards.me;
+package org.digijava.kernel.ampapi.endpoints.dashboards.services;
 
 import java.util.HashMap;
 import java.util.Map;

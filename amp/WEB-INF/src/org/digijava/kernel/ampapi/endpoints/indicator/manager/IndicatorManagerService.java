@@ -350,8 +350,20 @@ public class IndicatorManagerService {
                 AmpActivityProgramSettings indSettings = ProgramUtil.getProgramSettingFromTheme(indicator.getProgram());
 
                 if (indSettings != null) {
-                    Date baseOriginalValueDate = indicatorRequest.getBaseValue().getOriginalValueDate();
-                    Date targetOriginalValueDate = indicatorRequest.getTargetValue().getOriginalValueDate();
+                    Date baseOriginalValueDate = null;
+                    Date targetOriginalValueDate = null;
+
+                    if (indicatorRequest.getBaseValue() != null) {
+                        if (indicatorRequest.getBaseValue().getOriginalValueDate() != null) {
+                            baseOriginalValueDate = indicatorRequest.getBaseValue().getOriginalValueDate();
+                        }
+                    }
+
+                    if (indicatorRequest.getTargetValue() != null) {
+                        if (indicatorRequest.getTargetValue().getOriginalValueDate() != null) {
+                            targetOriginalValueDate = indicatorRequest.getTargetValue().getOriginalValueDate();
+                        }
+                    }
 
                     if (indSettings.getStartDate() != null) {
                         if (baseOriginalValueDate != null) {
@@ -472,121 +484,6 @@ public class IndicatorManagerService {
         if (existingIndicator != null) {
             throw new ApiRuntimeException(BAD_REQUEST,
                     ApiError.toError("Indicator with code " + code + " already exists"));
-        }
-    }
-
-    public IndicatorYearValues getIndicatorYearValuesByIndicatorId(Long indicatorId,
-                                                                   SettingsAndFiltersParameters params) {
-        AmpIndicator existingIndicator = getAllAmpIndicators().stream()
-                .filter(indicator -> indicator.getIndicatorId().equals(indicatorId))
-                .findFirst()
-                .orElse(null);
-
-        if (existingIndicator == null) {
-            throw new ApiRuntimeException(NOT_FOUND,
-                    ApiError.toError("Indicator with id " + indicatorId + " does not exist"));
-        }
-
-        Map<Long, List<YearValue>> indicatorsWithYearValues = getAllIndicatorYearValuesWithActualValues(params);
-        return getIndicatorYearValues(existingIndicator, indicatorsWithYearValues);
-    }
-
-    public List<IndicatorYearValues> getIndicatorValuesByProgramId(Long programId,
-                                                                   SettingsAndFiltersParameters params) {
-
-        List<AmpIndicator> indicatorsByProgram = getAllAmpIndicators().stream()
-                .filter(indicator -> indicator.getProgram() != null)
-                .filter(indicator -> indicator.getProgram().getAmpThemeId().equals(programId))
-                .collect(Collectors.toList());
-
-        Map<Long, List<YearValue>> indicatorsWithYearValues = getAllIndicatorYearValuesWithActualValues(params);
-
-        return indicatorsByProgram.stream()
-                .map(indicator -> getIndicatorYearValues(indicator, indicatorsWithYearValues))
-                .collect(Collectors.toList());
-    }
-
-    private IndicatorYearValues getIndicatorYearValues(final AmpIndicator indicator,
-                                                       final Map<Long, List<YearValue>> indicatorsWithYearValues) {
-        BigDecimal baseValue = indicator.getBaseValue() != null
-                ? new BigDecimal(indicator.getBaseValue().getValue()) : BigDecimal.ZERO;
-        BigDecimal targetValue = indicator.getTargetValue() != null
-                ? new BigDecimal(indicator.getTargetValue().getValue()) : BigDecimal.ZERO;
-        List<YearValue> yearValues = indicatorsWithYearValues.get(indicator.getIndicatorId());
-
-        return new IndicatorYearValues(indicator, baseValue, yearValues, targetValue);
-    }
-
-    public Map<Long, List<YearValue>> getAllIndicatorYearValuesWithActualValues(SettingsAndFiltersParameters params) {
-        GeneratedReport generatedReport = runIndicatorReport(params);
-        Map<Long, List<YearValue>> data = new HashMap<>();
-
-        List<ReportArea> children = generatedReport.reportContents.getChildren() == null
-                ? Collections.emptyList()
-                : generatedReport.reportContents.getChildren();
-
-        Map<Long, AmpIndicator> indicatorById = getAllAmpIndicators().stream()
-                .collect(Collectors.toMap(AmpIndicator::getIndicatorId, Function.identity()));
-
-        for (ReportArea area : children) {
-            AmpIndicator indicator = indicatorById.get(area.getOwner().id);
-            List<YearValue> actualValues = new ArrayList<>();
-
-            for (Map.Entry<ReportOutputColumn, ReportCell> entry : area.getContents().entrySet()) {
-                ReportOutputColumn col = entry.getKey();
-
-                if (col.parentColumn != null
-                        && col.originalColumnName.equals(MeasureConstants.INDICATOR_ACTUAL_VALUE)
-                        && col.parentColumn.parentColumn != null
-                        && col.parentColumn.parentColumn.originalColumnName.equals(NiReportsEngine.FUNDING_COLUMN_NAME)
-                        && col.parentColumn.parentColumn.parentColumn == null) {
-                    int year = Integer.parseInt(col.parentColumn.originalColumnName);
-                    AmountCell cell = (AmountCell) entry.getValue();
-                    BigDecimal actualValue = cell.extractValue();
-                    actualValues.add(new YearValue(year, actualValue));
-                }
-            }
-            data.put(indicator.getIndicatorId(), actualValues);
-        }
-
-        return data;
-    }
-
-    private GeneratedReport runIndicatorReport(SettingsAndFiltersParameters settingsAndFilters) {
-        ReportSpecificationImpl spec = new ReportSpecificationImpl("indicator-data", ArConstants.INDICATOR_TYPE);
-
-        spec.addColumn(new ReportColumn(ColumnConstants.INDICATOR_NAME));
-        spec.getHierarchies().add(new ReportColumn(ColumnConstants.INDICATOR_NAME));
-        spec.addMeasure(new ReportMeasure(MeasureConstants.INDICATOR_ACTUAL_VALUE));
-        spec.setSummaryReport(true);
-        spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
-
-        applySettingsAndFilters(settingsAndFilters, spec);
-
-        return EndpointUtils.runReport(spec, ReportAreaImpl.class, null);
-    }
-
-    private void applySettingsAndFilters(
-            SettingsAndFiltersParameters settingsAndFilters,
-            ReportSpecificationImpl spec) {
-
-        Map<String, Object> filters = settingsAndFilters.getFilters();
-        if (filters == null) {
-            filters = new LinkedHashMap<>();
-        }
-        AmpReportFilters filterRules = FilterUtils.getFilterRules(filters, null);
-        if (filterRules != null) {
-            spec.setFilters(filterRules);
-        }
-
-        SettingsUtils.applySettings(spec, settingsAndFilters.getSettings(), true);
-    }
-
-    private List<AmpIndicator> getAllAmpIndicators() {
-        try {
-            return IndicatorUtil.getAllIndicators();
-        } catch (DgException e) {
-            throw new RuntimeException("Failed to load indicators");
         }
     }
 }

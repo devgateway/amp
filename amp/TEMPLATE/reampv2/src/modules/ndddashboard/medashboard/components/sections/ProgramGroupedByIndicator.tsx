@@ -8,33 +8,39 @@ import LineChart from '../charts/LineChart';
 import Select from 'react-select';
 import { ComponentProps } from '../../types';
 import { IndicatorObjectType } from '../../../../admin/indicator_manager/types';
-import { fetchIndicatorsByProgram } from '../../reducers/fetchIndicatorsByProgram';
+import { fetchIndicatorsByProgram } from '../../reducers/fetchIndicatorsByProgramReducer';
+import { fetchIndicatorReport } from '../../reducers/fetchIndicatorReportReducer';
+import ChartUtils from '../../utils/chart';
 
 const options = [
-    { value: 'Indicator 1', label: 'Indicator 1' },
-    { value: 'Indicator 2', label: 'Indicator 2' },
-    { value: 'Indicator 3', label: 'Indicator 3' },
-    { value: 'Indicator 4', label: 'Indicator 4' },
+    { value: 1, label: '1 Year' },
+    { value: 2, label: '2 Years' },
+    { value: 3, label: '3 Years' },
+    { value: 4, label: '4 Years' },
+    { value: 5, label: '5 Years' }
 ]
 
 interface ProgramGroupedByIndicatorProps extends ComponentProps {
     level1Child: number | null;
+    filters: any;
 }
 
 const ProgramGroupedByIndicator: React.FC<ProgramGroupedByIndicatorProps> = (props) => {
-    const { translations, level1Child } = props;
+    const { translations, level1Child, filters } = props;
     const dispatch = useDispatch();
     const indicatorsByProgramReducer = useSelector((state: any) => state.indicatorsByProgramReducer);
+    const indicatorReportReducer = useSelector((state: any) => state.indicatorReportReducer);
 
     const [selectedOption, setSelectedOption] = useState<IndicatorObjectType | null>(null);
     const [selectedIndicatorName, setSelectedIndicatorName] = useState<string | null>(null);
-
+    const [progressValue, setProgressValue] = useState<number>(0);
 
     useEffect(() => {
         if (!selectedOption && indicatorsByProgramReducer.data.length > 0) {
             setSelectedOption(indicatorsByProgramReducer.data[0]);
             setSelectedIndicatorName(indicatorsByProgramReducer.data[0].name);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -42,9 +48,24 @@ const ProgramGroupedByIndicator: React.FC<ProgramGroupedByIndicatorProps> = (pro
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [level1Child]);
 
+    useEffect(() => {
+        if (indicatorReportReducer.data) {
+            const actualValue = ChartUtils.getActualValueForCurrentYear(indicatorReportReducer.data.actualValues);
+            const progress = ChartUtils.generateGaugeValue({
+                baseValue: indicatorReportReducer.data.baseValue,
+                targetValue: actualValue,
+                actualValue: indicatorReportReducer.data.targetValue
+            });
+
+            setProgressValue(progress);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [indicatorReportReducer.data]);
+
     const handleIndicatorChange = (selectedOption: any, indicatorName: string) => {
         setSelectedOption(selectedOption);
         setSelectedIndicatorName(indicatorName);
+        dispatch(fetchIndicatorReport({ filters, id: selectedOption }));
     }
 
 
@@ -116,12 +137,14 @@ const ProgramGroupedByIndicator: React.FC<ProgramGroupedByIndicatorProps> = (pro
                         }}>{selectedIndicatorName || ' '}</div>
                     </Col>
                 </Row>
+                { indicatorReportReducer.loading ? <div className="loading">Loading...</div> : (
                 <Row style={{
                     paddingLeft: -10
                 }}>
+
                     <Col md={6} style={{
                     }}>
-                        <Gauge innerValue={90} suffix={'%'} />
+                        <Gauge innerValue={progressValue} suffix={'%'} />
                     </Col>
                     <Col md={6}>
 
@@ -129,12 +152,13 @@ const ProgramGroupedByIndicator: React.FC<ProgramGroupedByIndicatorProps> = (pro
                             height: 250
                         }}>
                             <BarChart
-                                translations={translations}
-                                title={'Program Progress'} />
+                               translations={translations}
+                               data={indicatorReportReducer.data}
+                               title={translations["amp.ndd.dashboard:me-indicator-report"]}/>
                         </div>
-
                     </Col>
                 </Row>
+                 )}
                 <Row style={{
                     padding: '15px',
                     borderTop: '1px solid #ddd',
@@ -197,4 +221,4 @@ const ProgramGroupedByIndicator: React.FC<ProgramGroupedByIndicatorProps> = (pro
     )
 }
 
-export default ProgramGroupedByIndicator;
+export default React.memo(ProgramGroupedByIndicator);

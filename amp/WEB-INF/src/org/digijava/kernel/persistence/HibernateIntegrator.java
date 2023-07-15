@@ -1,12 +1,12 @@
 package org.digijava.kernel.persistence;
 
 import org.digijava.kernel.persistence.listeners.SiteDomainListener;
+import org.hibernate.boot.Metadata;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.event.service.spi.EventListenerRegistry;
 import org.hibernate.event.spi.EventType;
 import org.hibernate.integrator.spi.Integrator;
-import org.hibernate.metamodel.source.MetadataImplementor;
 import org.hibernate.service.spi.SessionFactoryServiceRegistry;
 
 /**
@@ -17,20 +17,13 @@ import org.hibernate.service.spi.SessionFactoryServiceRegistry;
 public class HibernateIntegrator implements Integrator {
 
     @Override
-    public void integrate(Configuration configuration, SessionFactoryImplementor sessionFactory,
-            SessionFactoryServiceRegistry serviceRegistry) {
-
+    public void integrate(Metadata metadata, SessionFactoryImplementor sessionFactoryImplementor, SessionFactoryServiceRegistry sessionFactoryServiceRegistry) {
         SiteDomainListener siteDomainListener = new SiteDomainListener();
 
-        final EventListenerRegistry eventRegistry = serviceRegistry.getService(EventListenerRegistry.class);
+        final EventListenerRegistry eventRegistry = sessionFactoryServiceRegistry.getService(EventListenerRegistry.class);
         eventRegistry.appendListeners(EventType.POST_COMMIT_INSERT, siteDomainListener);
         eventRegistry.appendListeners(EventType.POST_COMMIT_UPDATE, siteDomainListener);
         eventRegistry.appendListeners(EventType.POST_COMMIT_DELETE, siteDomainListener);
-    }
-
-    @Override
-    public void integrate(MetadataImplementor metadata, SessionFactoryImplementor sessionFactory,
-            SessionFactoryServiceRegistry serviceRegistry) {
     }
 
     @Override

@@ -1,49 +1,40 @@
 package org.digijava.kernel.ampapi.endpoints.common;
 
-import com.sun.jersey.spi.container.ContainerRequest;
-import com.sun.jersey.spi.container.ContainerResponse;
-import com.sun.jersey.spi.container.ContainerResponseFilter;
-
-import org.apache.log4j.Logger;
-import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.helper.Constants;
-
-import java.util.Map;
+import org.digijava.kernel.ampregistry.JerseyAmpRegistryClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.container.ContainerResponseContext;
+import javax.ws.rs.container.ContainerResponseFilter;
+import java.util.Map;
 
-
-/**
- * Endpoint response post processor filer
- */
 public class ApiResponseFilter implements ContainerResponseFilter {
 
-    private static final Logger logger = Logger.getLogger(ApiResponseFilter.class);
+    private static final Logger logger = LoggerFactory.getLogger(ApiResponseFilter.class);
 
     /**
      * Filter method called after a response has been provided for a request
-     * @param request
-     * @param response
-     * @return
+     * @param requestContext
+     * @param responseContext
      */
     @Override
-    public ContainerResponse filter(ContainerRequest request, ContainerResponse response) {
+    public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) {
 
         Integer responseStatusMarker = EndpointUtils.getResponseStatusMarker();
         // override only the default 200 status with custom one
-        if (responseStatusMarker != null && response.getStatus() == HttpServletResponse.SC_OK) {
-            response.setStatus(responseStatusMarker);
+        if (responseStatusMarker != null && responseContext.getStatus() == HttpServletResponse.SC_OK) {
+            responseContext.setStatus(responseStatusMarker);
         }
 
         Map<String, String> responseHeaderMarkers = EndpointUtils.getResponseHeaderMarkers();
         if (responseHeaderMarkers != null) {
             for (Map.Entry<String, String> headerMarker : responseHeaderMarkers.entrySet()) {
-                response.getHttpHeaders().add(headerMarker.getKey(), headerMarker.getValue());
+                responseContext.getHeaders().add(headerMarker.getKey(), headerMarker.getValue());
             }
         }
 
         EndpointUtils.cleanUpResponseMarkers();
-
-        return response;
     }
 }

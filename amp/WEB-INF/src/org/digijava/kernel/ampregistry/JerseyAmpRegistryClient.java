@@ -1,33 +1,28 @@
 package org.digijava.kernel.ampregistry;
 
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.GenericType;
-import com.sun.jersey.api.client.config.ClientConfig;
-import com.sun.jersey.api.client.config.DefaultClientConfig;
-import com.sun.jersey.api.json.JSONConfiguration;
-import org.apache.log4j.Logger;
+import org.digijava.kernel.services.AmpOfflineService;
 import org.digijava.module.aim.dbentity.AmpOfflineRelease;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
 import java.io.InputStream;
 import java.util.List;
 
-import static com.sun.jersey.api.client.config.ClientConfig.PROPERTY_CONNECT_TIMEOUT;
-import static com.sun.jersey.api.client.config.ClientConfig.PROPERTY_READ_TIMEOUT;
-
-/**
- * @author Octavian Ciubotaru
- */
 public class JerseyAmpRegistryClient implements AmpRegistryClient {
-
-    private static Logger logger = Logger.getLogger(JerseyAmpRegistryClient.class);
 
     private static final String SECRET_TOKEN_HEADER = "Secret-Token";
     private static final String AMP_OFFLINE_RELEASE_RESOURCE = "amp-offline-release";
     private static final String AMP_REGISTRY_RESOURCE = "amp-registry";
+    private static final Logger logger = LoggerFactory.getLogger(JerseyAmpRegistryClient.class);
 
     private static final Integer JERSEY_CONNECT_TIMEOUT = getPropertyConnectTimeout();
     private static final Integer JERSEY_READ_TIMEOUT = getPropertyReadTimeout();
@@ -37,54 +32,45 @@ public class JerseyAmpRegistryClient implements AmpRegistryClient {
     private String baseUrl;
 
     public JerseyAmpRegistryClient() {
-        ClientConfig clientConfig = new DefaultClientConfig();
-        clientConfig.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
-        if (JERSEY_CONNECT_TIMEOUT != null) {
-            clientConfig.getProperties().put(PROPERTY_CONNECT_TIMEOUT, JERSEY_CONNECT_TIMEOUT);
-        }
-
-        if (JERSEY_READ_TIMEOUT != null) {
-            clientConfig.getProperties().put(PROPERTY_READ_TIMEOUT, JERSEY_READ_TIMEOUT);
-        }
-        client = Client.create(clientConfig);
+        client = ClientBuilder.newClient();
 
         baseUrl = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMP_REGISTRY_URL);
     }
 
     @Override
     public List<AmpOfflineRelease> getReleases() {
-        return client.resource(UriBuilder.fromUri(baseUrl).path(AMP_OFFLINE_RELEASE_RESOURCE).build())
-                .accept(MediaType.APPLICATION_JSON_TYPE)
+        return client.target(UriBuilder.fromUri(baseUrl).path(AMP_OFFLINE_RELEASE_RESOURCE).build())
+                .request(MediaType.APPLICATION_JSON_TYPE)
                 .get(new GenericType<List<AmpOfflineRelease>>() { });
     }
 
     @Override
     public InputStream resourceStream(String absoluteUrl) {
-        return client.resource(absoluteUrl).get(InputStream.class);
+        return client.target(absoluteUrl).request().get(InputStream.class);
     }
 
     @Override
     public List<AmpInstallation> listAmpInstallations(String secretToken) {
-        return client.resource(UriBuilder.fromUri(baseUrl).path(AMP_REGISTRY_RESOURCE).build())
+        return client.target(UriBuilder.fromUri(baseUrl).path(AMP_REGISTRY_RESOURCE).build())
+                .request(MediaType.APPLICATION_JSON_TYPE)
                 .header(SECRET_TOKEN_HEADER, secretToken)
-                .accept(MediaType.APPLICATION_JSON_TYPE)
                 .get(new GenericType<List<AmpInstallation>>() { });
     }
 
     @Override
     public void createAmpInstallation(AmpInstallation installation, String secretToken) {
-        client.resource(UriBuilder.fromUri(baseUrl).path(AMP_REGISTRY_RESOURCE).build())
+        client.target(UriBuilder.fromUri(baseUrl).path(AMP_REGISTRY_RESOURCE).build())
+                .request()
                 .header(SECRET_TOKEN_HEADER, secretToken)
-                .type(MediaType.APPLICATION_JSON_TYPE)
-                .put(installation);
+                .put(Entity.entity(installation, MediaType.APPLICATION_JSON_TYPE));
     }
 
     @Override
     public void updateAmpInstallation(Long id, AmpInstallation installation, String secretToken) {
-        client.resource(UriBuilder.fromUri(baseUrl).path(AMP_REGISTRY_RESOURCE).path(id.toString()).build())
+        client.target(UriBuilder.fromUri(baseUrl).path(AMP_REGISTRY_RESOURCE).path(id.toString()).build())
+                .request()
                 .header(SECRET_TOKEN_HEADER, secretToken)
-                .type(MediaType.APPLICATION_JSON_TYPE)
-                .post(installation);
+                .post(Entity.entity(installation, MediaType.APPLICATION_JSON_TYPE));
     }
 
     /**
@@ -123,6 +109,8 @@ public class JerseyAmpRegistryClient implements AmpRegistryClient {
     }
 
     public void destroy() {
-        client.destroy();
+        client.close();
     }
 }
+
+

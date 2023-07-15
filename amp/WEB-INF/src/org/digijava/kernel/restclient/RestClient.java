@@ -3,79 +3,79 @@
  */
 package org.digijava.kernel.restclient;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.client.ClientProperties;
+import org.glassfish.jersey.client.JerseyClientBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
 
-import org.apache.log4j.Logger;
+import javax.ws.rs.core.Response;
 
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.WebResource.Builder;
-import com.sun.jersey.core.util.MultivaluedMapImpl;
+import java.util.*;
 
-/**
- * A simple Rest client
- * 
- * @author Nadejda Mandrescu
- */
 public class RestClient {
     public enum Type {
         JSON
-    };
-    
-    protected static final Logger logger = Logger.getLogger(RestClient.class);
-    
-    protected static Map<Type, Client> existingClients = new TreeMap<Type, Client>(); 
-    protected static Map<Client, String> clientsMediaType = new HashMap<Client, String>();
-    
-    protected Client client;
+    }
+
+    protected static final Logger logger = LoggerFactory.getLogger(RestClient.class);
+
+    protected static Map<Type, Client> existingClients = new TreeMap<>();
+    protected static Map<Client, String> clientsMediaType = new HashMap<>();
+
+    protected WebTarget webTarget;
     protected String mediaType;
-    
+
     public static synchronized RestClient getInstance(Type type) {
         if (!existingClients.containsKey(type)) {
-            Client client = null;
-            switch (type) {
-            case JSON:
-                client = Client.create();
+            ClientConfig config = new ClientConfig();
+            Client client = JerseyClientBuilder.newBuilder()
+                    .withConfig(config)
+                    .build();
+            if (Objects.requireNonNull(type) == Type.JSON) {
                 clientsMediaType.put(client, MediaType.APPLICATION_JSON);
-                break;
-            default:
+            } else {
                 throw new RuntimeException("Rest client not implemented for " + type + " type.");
             }
             existingClients.put(type, client);
         }
         return new RestClient(existingClients.get(type));
     }
-    
+
     private RestClient(Client client) {
-        this.client = client;
+        this.webTarget = client.target("");
         this.mediaType = clientsMediaType.get(client);
     }
-    
+
     /**
      * Executes a GET request
-     * @param url REST Endpoint 
-     * @param queryParams (optional) query parameters, multiple values allowed per parameter 
+     *
+     * @param endpointURL REST Endpoint
+     * @param queryParams (optional) query parameters, multiple values allowed per parameter
      * @return JSON string
      */
     public String requestGET(String endpointURL, Map<String, List<String>> queryParams) {
-        WebResource webResource = client.resource(endpointURL);
-        
-        MultivaluedMap<String, String> qP = new MultivaluedMapImpl();
-        qP.putAll(queryParams);
-        
-        webResource = webResource.queryParams(qP);
-        Builder builder = webResource.accept(mediaType);
-        ClientResponse response = builder.get(ClientResponse.class);
-        String info = String.format("[HTTP %d] GET %s", response.getStatus(), webResource.getURI());
+        WebTarget target = webTarget.path(endpointURL);
+
+        // Build query parameters
+        for (Map.Entry<String, List<String>> entry : queryParams.entrySet()) {
+            String paramName = entry.getKey();
+            List<String> paramValues = entry.getValue();
+            for (String paramValue : paramValues) {
+                target = target.queryParam(paramName, paramValue);
+            }
+        }
+
+        Invocation.Builder builder = target.request(mediaType);
+        Response response = builder.get();
+        String info = String.format("[HTTP %d] GET %s", response.getStatus(), target.getUri());
         logger.debug(info);
-        return response.getEntity(String.class);
+        return response.getEntity().toString();
     }
-    
 }

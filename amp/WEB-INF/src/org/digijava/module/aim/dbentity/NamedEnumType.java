@@ -11,7 +11,7 @@ import com.google.common.collect.HashBiMap;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.internal.util.ReflectHelper;
-import org.hibernate.property.Getter;
+import org.hibernate.property.access.spi.Getter;
 import org.hibernate.type.EnumType;
 
 /**

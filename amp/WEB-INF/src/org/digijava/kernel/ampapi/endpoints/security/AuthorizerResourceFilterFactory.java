@@ -1,57 +1,29 @@
 package org.digijava.kernel.ampapi.endpoints.security;
 
-import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.List;
-
-import com.sun.jersey.api.model.AbstractMethod;
-import com.sun.jersey.spi.container.ContainerRequest;
-import com.sun.jersey.spi.container.ContainerRequestFilter;
-import com.sun.jersey.spi.container.ContainerResponseFilter;
-import com.sun.jersey.spi.container.ResourceFilter;
-import com.sun.jersey.spi.container.ResourceFilterFactory;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
+import org.glassfish.jersey.server.ContainerRequest;
 
-/**
- * Factory for resource and sub-resource method filters for authorization purposes.
- *
- * @author Octavian Ciubotaru
- */
-public class AuthorizerResourceFilterFactory implements ResourceFilterFactory {
 
-    private static class Filter implements ResourceFilter, ContainerRequestFilter {
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.container.ContainerRequestFilter;
+import javax.ws.rs.container.ResourceInfo;
+import javax.ws.rs.core.Context;
+import java.io.IOException;
+import java.lang.reflect.Method;
 
-        private Method method;
-        private ApiMethod apiMethod;
 
-        Filter(Method method, ApiMethod apiMethod) {
-            this.method = method;
-            this.apiMethod = apiMethod;
-        }
+public class AuthorizerResourceFilterFactory implements ContainerRequestFilter {
 
-        @Override
-        public ContainerRequestFilter getRequestFilter() {
-            return this;
-        }
-
-        @Override
-        public ContainerResponseFilter getResponseFilter() {
-            return null;
-        }
-
-        @Override
-        public ContainerRequest filter(ContainerRequest request) {
-            ActionAuthorizer.authorize(method, apiMethod, request);
-            return request;
-        }
-    }
+    @Context
+    private ResourceInfo resourceInfo;
 
     @Override
-    public List<ResourceFilter> create(AbstractMethod am) {
-        ApiMethod apiMethod = am.getAnnotation(ApiMethod.class);
+    public void filter(ContainerRequestContext requestContext) throws IOException {
+        Method method = resourceInfo.getResourceMethod();
+        ApiMethod apiMethod = method.getAnnotation(ApiMethod.class);
         if (apiMethod != null) {
-            return Collections.singletonList(new Filter(am.getMethod(), apiMethod));
+            ActionAuthorizer.authorize(method, apiMethod, (ContainerRequest) requestContext.getRequest());
         }
-        return null;
     }
 }
+

@@ -7,6 +7,7 @@ import java.sql.SQLException;
 
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.type.StringType;
 import org.hibernate.usertype.UserType;
 
@@ -38,17 +39,28 @@ public class AmpOfflineVersionType implements UserType {
     }
 
     @Override
-    public Object nullSafeGet(ResultSet rs, String[] names, SessionImplementor session,
-            Object owner) throws HibernateException, SQLException {
-        String v = (String) StringType.INSTANCE.get(rs, names[0], session);
+    public Object nullSafeGet(ResultSet resultSet, String[] strings, SharedSessionContractImplementor sharedSessionContractImplementor, Object o) throws HibernateException, SQLException {
+        String v = (String) StringType.INSTANCE.get(resultSet, strings[0], sharedSessionContractImplementor);
         return v == null ? null : new AmpOfflineVersion(v);
     }
 
     @Override
-    public void nullSafeSet(PreparedStatement st, Object value, int index,
-            SessionImplementor session) throws HibernateException, SQLException {
-        StringType.INSTANCE.set(st, value == null ? null : value.toString(), index, session);
+    public void nullSafeSet(PreparedStatement preparedStatement, Object o, int i, SharedSessionContractImplementor sharedSessionContractImplementor) throws HibernateException, SQLException {
+        StringType.INSTANCE.set(preparedStatement, o == null ? null : o.toString(), i, sharedSessionContractImplementor);
     }
+
+//    @Override
+//    public Object nullSafeGet(ResultSet rs, String[] names, SessionImplementor session,
+//            Object owner) throws HibernateException, SQLException {
+//        String v = (String) StringType.INSTANCE.get(rs, names[0], session);
+//        return v == null ? null : new AmpOfflineVersion(v);
+//    }
+//
+////    @Override
+//    public void nullSafeSet(PreparedStatement st, Object value, int index,
+//            SessionImplementor session) throws HibernateException, SQLException {
+//        StringType.INSTANCE.set(st, value == null ? null : value.toString(), index, session);
+//    }
 
     @Override
     public Object deepCopy(Object value) throws HibernateException {

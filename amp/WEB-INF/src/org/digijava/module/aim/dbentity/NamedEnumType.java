@@ -1,5 +1,6 @@
 package org.digijava.module.aim.dbentity;
 
+import java.lang.reflect.Method;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,6 +13,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.internal.util.ReflectHelper;
 import org.hibernate.property.access.spi.Getter;
+import org.hibernate.property.access.spi.GetterMethodImpl;
 import org.hibernate.type.EnumType;
 
 /**
@@ -34,14 +36,15 @@ public class NamedEnumType extends EnumType {
         } catch (ClassNotFoundException e) {
             throw new HibernateException("Enum class not found", e);
         }
-        Getter getter = ReflectHelper.getGetter(enumClass, valueProperty);
+        Method getterMethod = ReflectHelper.findGetterMethod(enumClass, valueProperty);
+        Getter getter = new GetterMethodImpl(enumClass, valueProperty, getterMethod);
+
         for (Enum enumConstant : enumClass.getEnumConstants()) {
             values.put(enumConstant, (String) getter.get(enumConstant));
         }
         super.setParameterValues(parameters);
     }
 
-    @Override
     public Object nullSafeGet(ResultSet rs, String[] names, SessionImplementor session,
             Object owner) throws SQLException {
         String value = rs.getString(names[0]);
@@ -52,7 +55,6 @@ public class NamedEnumType extends EnumType {
         }
     }
 
-    @Override
     public void nullSafeSet(PreparedStatement st, Object value, int index,
             SessionImplementor session) throws HibernateException, SQLException {
         String jdbcValue = value != null ? values.get((Enum) value) : null;

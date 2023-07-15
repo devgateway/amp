@@ -9,6 +9,7 @@ import java.util.Properties;
 
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.usertype.ParameterizedType;
 import org.hibernate.usertype.UserType;
 
@@ -63,7 +64,20 @@ public class IntegerPersistentEnum implements UserType, ParameterizedType{
         return x.hashCode();
     }
 
+    @Override
+    public Object nullSafeGet(ResultSet resultSet, String[] strings, SharedSessionContractImplementor sharedSessionContractImplementor, Object o) throws HibernateException, SQLException {
+        int value = resultSet.getInt(strings[0]);
+        return resultSet.wasNull() ? null : Enum.get(value);
+    }
 
+    @Override
+    public void nullSafeSet(PreparedStatement preparedStatement, Object o, int i, SharedSessionContractImplementor sharedSessionContractImplementor) throws HibernateException, SQLException {
+        if (o == null) {
+            preparedStatement.setNull(i, Types.INTEGER);
+        } else {
+            preparedStatement.setInt(i, ((Enum)o).getValue());
+        }
+    }
 
 
     /**
@@ -101,7 +115,7 @@ public class IntegerPersistentEnum implements UserType, ParameterizedType{
         return original;
     }
 
-    @Override
+//    @Override
     public Object nullSafeGet(ResultSet rs, String[] names,
             SessionImplementor session, Object owner)
             throws HibernateException, SQLException {
@@ -109,7 +123,7 @@ public class IntegerPersistentEnum implements UserType, ParameterizedType{
         return rs.wasNull() ? null : Enum.get(value);
     }
 
-    @Override
+//    @Override
     public void nullSafeSet(PreparedStatement st, Object value, int index,
             SessionImplementor session) throws HibernateException, SQLException {
         if (value == null) {

@@ -41,7 +41,12 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.StatelessSession;
 import org.hibernate.Transaction;
+import org.hibernate.boot.Metadata;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.engine.jdbc.connections.spi.ConnectionProvider;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.jdbc.ReturningWork;
@@ -67,6 +72,7 @@ public class PersistenceManager {
     private static SessionFactory sf;
     private static Configuration cfg;
     private static Logger logger = I18NHelper.getKernelLogger(PersistenceManager.class);
+    public static String HIBERNATE_CFG_XML = "hibernate.cfg.xml";
 
     public static String PRECACHE_REGION =
             "org.digijava.kernel.persistence.PersistenceManager.precache_region";
@@ -174,9 +180,16 @@ public class PersistenceManager {
         return sf.getClassMetadata(clazz);
     }
 
-    public static PersistentClass getClassMapping(Class<?> clazz)
-    {
-        return cfg.getClassMapping(clazz.getName());
+//    public static PersistentClass getClassMapping(Class<?> clazz)
+//    {
+//        return cfg.getClassMapping(clazz.getName());
+//    }
+
+    public static PersistentClass getClassMapping(Class<?> clazz) {
+        StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure(HIBERNATE_CFG_XML).build();
+        MetadataSources sources = new MetadataSources(registry);
+        Metadata metadata = sources.buildMetadata();
+        return metadata.getEntityBinding(clazz.getName());
     }
 
     /**
@@ -185,8 +198,9 @@ public class PersistenceManager {
      * @throws SQLException
      */
     public static Connection getJdbcConnection() throws SQLException {
-        SessionFactoryImplementor sfi = (SessionFactoryImplementor) sf;
-        return sfi.getConnectionProvider().getConnection();
+        return sf.
+                getSessionFactoryOptions().getServiceRegistry().
+                getService(ConnectionProvider.class).getConnection();
     }
 
 
@@ -610,7 +624,7 @@ public class PersistenceManager {
         Session session = null;
 
         try {
-            sf.evict(objectClass, primaryKey);
+            sf.getCache().evict(objectClass, primaryKey);
 
             session = getSession();
             Object obj = session.load(objectClass, primaryKey);

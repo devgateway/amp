@@ -22,7 +22,9 @@
 
 package org.digijava.kernel.util;
 
+import java.io.File;
 import java.net.URL;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -33,6 +35,10 @@ import org.digijava.kernel.persistence.HibernateClassLoader;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.resource.ResourceStreamHandlerFactory;
 import org.hibernate.HibernateException;
+import org.hibernate.boot.Metadata;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.mapping.PersistentClass;
 import org.hibernate.tool.hbm2ddl.SchemaUpdate;
@@ -73,15 +79,20 @@ public class DigiSchemaExport {
                 logger.error("Error creating hibernate configuration", ex1);
                 throw ex1;
             }
+            URL configFileURL = new File("/standAloneAmpHibernate.cfg.xml").toURI().toURL(); //some method to get hold of the location of your hibernate.cfg.xml
+            StandardServiceRegistry standardRegistry = new StandardServiceRegistryBuilder().configure(configFileURL).build();
+            Metadata metaData = new MetadataSources(standardRegistry).getMetadataBuilder().build();
+            Collection<PersistentClass> entityBindings = metaData.getEntityBindings();
+            Iterator<PersistentClass> classIter = entityBindings.iterator();
 
             if (commandLineParams.containsKey("-names")) {
                 logger.info("Generating comma-separated table names");
 
-                Iterator classIter = cfg.getClassMappings();
+//                Iterator classIter = cfg.getClassMappings();
                 boolean first = true;
                 StringBuffer tables = new StringBuffer();
                 while (classIter.hasNext()) {
-                    PersistentClass item = (PersistentClass)classIter.next();
+                    PersistentClass item = classIter.next();
                     String tableName = item.getTable().getName();
                     if (first) {
                         first = false;

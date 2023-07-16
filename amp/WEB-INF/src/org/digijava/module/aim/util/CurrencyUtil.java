@@ -495,16 +495,14 @@ public class CurrencyUtil {
     }
 
     private static AmpCurrency doFetchCurrency(String currCode) {
-        try {
             String queryString = "select c from " + AmpCurrency.class.getName()
                     + " c " + "where (c.currencyCode=:id)";
-            Query qry = PersistenceManager.getSession().createQuery(queryString);
+            Session session = PersistenceManager.getSession();
+            Query qry = session.createQuery(queryString);
             qry.setCacheable(true);
             qry.setParameter("id", currCode, StringType.INSTANCE);
             return (AmpCurrency) qry.uniqueResult();
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
+
     }
 
     public static List<AmpCurrency> getActiveAmpCurrencyByName() {

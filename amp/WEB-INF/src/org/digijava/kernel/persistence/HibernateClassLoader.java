@@ -163,14 +163,13 @@ public class HibernateClassLoader {
                         .applySettings(cfg.getProperties()).build();
                 sessionFactory = cfg.buildSessionFactory(serviceRegistry);
             } else {
-                cfg.configure(HIBERNATE_CFG_XML);
                 cfg.setInterceptor(new AmpEntityInterceptor());
                 if (HIBERNATE_CFG_OVERRIDE_DATABASE != null) {
                     cfg.setProperty("hibernate.connection.url", HIBERNATE_CFG_OVERRIDE_DATABASE);
                 }
                 HIBERNATE_CFG_OVERRIDE_DATABASE = null; // reset after each session
-                ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
-                        .applySettings(cfg.getProperties()).build();
+                ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().configure(HIBERNATE_CFG_XML).build();
+
                 sessionFactory = cfg.buildSessionFactory(serviceRegistry);
             }
         } catch (Exception ex1) {

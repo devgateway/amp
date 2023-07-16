@@ -1,27 +1,33 @@
 <?xml version="1.0"?>
-<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 5.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-5.0.dtd">
 <!-- Generated Aug 25, 2009 11:00:06 PM by Hibernate Tools 3.2.5.Beta -->
-<hibernate-mapping>
+<hibernate-mapping xmlns="http://www.hibernate.org/xsd/hibernate-mapping"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.hibernate.org/xsd/hibernate-mapping
+                                       http://www.hibernate.org/xsd/hibernate-mapping/hibernate-mapping-5.0.xsd">
+
     <class name="org.digijava.module.xmlpatcher.dbentity.AmpXmlPatch" table="AMP_XML_PATCH">
-    <cache usage="read-write" />
+        <cache usage="read-write"/>
         <id name="patchId" type="java.lang.String">
-            <column name="patch_id" />
+            <column name="patch_id"/>
         </id>
         <property name="location" type="java.lang.String">
-            <column name="location" />
+            <column name="location"/>
         </property>
         <property name="discovered" type="java.util.Date">
-            <column name="discovered" />
+            <column name="discovered"/>
         </property>
         <property name="state" type="java.lang.Short">
-            <column name="state" />
+            <column name="state"/>
         </property>
         <list name="logs" inverse="false" table="AMP_XML_PATCH_LOG" lazy="true" cascade="all">
-        	<cache usage="read-write"/>
+            <cache usage="read-write"/>
             <key column="patch_id"/>
             <index column="idx"/>
-            <one-to-many class="org.digijava.module.xmlpatcher.dbentity.AmpXmlPatchLog" />
+            <one-to-many class="org.digijava.module.xmlpatcher.dbentity.AmpXmlPatchLog"/>
         </list>
     </class>
+
 </hibernate-mapping>

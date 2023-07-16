@@ -29,6 +29,7 @@ import org.digijava.kernel.config.moduleconfig.ModuleConfig;
 import org.digijava.kernel.persistence.interceptors.AmpEntityInterceptor;
 import org.digijava.kernel.services.AmpOfflineVersion;
 import org.digijava.kernel.services.AmpOfflineVersionType;
+import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
@@ -110,7 +111,7 @@ public class HibernateClassLoader {
         boolean required = false;
 
         if (cfg == null) {
-            cfg = new Configuration();
+            cfg = new LocalHibernateConfig();
             cfg.addSqlFunction("count", new ClassicCountFunction());
             cfg.addSqlFunction("avg", new ClassicAvgFunction());
             cfg.addSqlFunction("sum", new ClassicSumFunction());
@@ -243,4 +244,33 @@ class ClassicSumFunction extends SQLFunctionTemplate {
     public String render(Type firstArgumentType, List arguments, SessionFactoryImplementor sessionFactory) {
         return "sum(" + arguments.get(0) + ")";
     }
+}
+
+
+class LocalHibernateConfig extends Configuration {
+
+    /**
+     * Default UID
+     */
+    private static final long serialVersionUID = -6375194723506753313L;
+
+    private static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(HibernateClassLoader.class);
+
+    /**
+     * @see org.hibernate.cfg.Configuration#getConfigurationInputStream(java.lang.String)
+     */
+    protected InputStream getConfigurationInputStream(String resource)
+            throws HibernateException {
+
+        logger.info("Configuration resource: " + resource);
+
+        InputStream stream = HibernateClassLoader.class
+                .getResourceAsStream(resource);
+        if (stream == null) {
+            logger.warn(resource + " not found");
+            throw new HibernateException(resource + " not found");
+        }
+        return stream;
+    }
+
 }

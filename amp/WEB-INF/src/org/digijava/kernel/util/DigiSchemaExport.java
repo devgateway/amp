@@ -24,10 +24,7 @@ package org.digijava.kernel.util;
 
 import java.io.File;
 import java.net.URL;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.StandaloneJndiAMPInitializer;
@@ -42,6 +39,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.mapping.PersistentClass;
 import org.hibernate.tool.hbm2ddl.SchemaUpdate;
+import org.hibernate.tool.schema.TargetType;
 
 public class DigiSchemaExport {
     private static Logger logger = Logger.getLogger(DigiSchemaExport.class);
@@ -111,7 +109,10 @@ public class DigiSchemaExport {
                     logger.info("Skipping database schema update");
                 }
                 try {
-                    new SchemaUpdate(cfg).execute(true, doUpdate);
+                    EnumSet<TargetType> enumSet = EnumSet.of(TargetType.DATABASE);
+
+                    new SchemaUpdate().execute(enumSet, metaData,standardRegistry);
+//                    new SchemaUpdate(cfg).execute(true, doUpdate);
                 }
                 catch (HibernateException ex) {
                     logger.error("Error updating schema ", ex);

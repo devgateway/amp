@@ -162,9 +162,9 @@
 		<listener-class>org.digijava.module.aim.startup.QuartzStartupListener</listener-class>
 	</listener>
 
-	<listener>
-		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
-	</listener>
+<!--	<listener>-->
+<!--		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>-->
+<!--	</listener>-->
 	<listener>
 		<listener-class>
 			org.springframework.web.context.ContextLoaderListener
@@ -222,29 +222,25 @@
 	<!-- Jersey Servlet  -->
 	<servlet>
 		<servlet-name>AMP API End Points</servlet-name>
-		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
 		<init-param>
-		    <param-name>com.sun.jersey.config.property.packages</param-name>
-		    <param-value>
-                io.swagger.jaxrs.json,
-                io.swagger.jaxrs.listing,
-                org.digijava.kernel.ampapi.endpoints
-            </param-value>
-	    </init-param>
-    	<init-param>
-			<param-name>com.sun.jersey.spi.container.ContainerRequestFilters</param-name>
-			<param-value>org.digijava.kernel.ampapi.authentication.AuthRequestFilter</param-value>
-		</init-param>
-    	<init-param>
-			<param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name>
-			<param-value>org.digijava.kernel.ampapi.endpoints.common.ApiResponseFilter</param-value>
+			<param-name>jersey.config.server.provider.packages</param-name>
+			<param-value>
+				io.swagger.jaxrs.json,
+				io.swagger.jaxrs.listing,
+				org.digijava.kernel.ampapi.endpoints
+			</param-value>
 		</init-param>
 		<init-param>
-			<param-name>com.sun.jersey.spi.container.ResourceFilters</param-name>
-			<param-value>org.digijava.kernel.ampapi.endpoints.security.AuthorizerResourceFilterFactory</param-value>
+			<param-name>jersey.config.server.provider.classnames</param-name>
+			<param-value>
+				org.digijava.kernel.ampapi.authentication.AuthRequestFilter,
+				org.digijava.kernel.ampapi.endpoints.common.ApiResponseFilter,
+				org.digijava.kernel.ampapi.endpoints.security.AuthorizerResourceFilterFactory
+			</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
-	 </servlet>
+	</servlet>
  	<servlet-mapping>
 		<servlet-name>AMP API End Points</servlet-name>
  		<url-pattern>/rest/*</url-pattern>

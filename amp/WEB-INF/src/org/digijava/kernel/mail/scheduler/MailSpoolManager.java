@@ -22,13 +22,7 @@
 
 package org.digijava.kernel.mail.scheduler;
 
-import org.apache.log4j.Logger;
-import org.quartz.impl.StdSchedulerFactory;
-import org.quartz.Scheduler;
-import org.digijava.kernel.exception.DgException;
-import org.quartz.JobDetail;
-import org.quartz.CronTrigger;
-import org.digijava.kernel.util.DigiConfigManager;
+
 
 
 /**
@@ -43,6 +37,12 @@ import org.digijava.kernel.util.DigiConfigManager;
  * @author not attributable
  * @version 1.0
  */
+import org.apache.log4j.Logger;
+import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.util.DigiConfigManager;
+import org.quartz.*;
+import org.quartz.impl.StdSchedulerFactory;
+
 public class MailSpoolManager {
 
     private static Logger logger = Logger.getLogger(MailSpoolManager.class);
@@ -58,25 +58,30 @@ public class MailSpoolManager {
 
             logger.info("Initialize Mail Scheduler");
 
-            // get default quartz scheduler
-            Scheduler sched = StdSchedulerFactory.getDefaultScheduler();
-            sched.start();
+            // Create a new instance of the Quartz Scheduler
+            SchedulerFactory schedulerFactory = new StdSchedulerFactory();
+            Scheduler scheduler = schedulerFactory.getScheduler();
+            scheduler.start();
 
-            jobDetail = new JobDetail("MailScheduler1","MailScheduler",MailScheduler.class);
-            trigger = new CronTrigger("MailScheduler1","MailScheduler");
+            jobDetail = JobBuilder.newJob(MailScheduler.class)
+                    .withIdentity("MailScheduler", "MailSchedulerGroup")
+                    .build();
 
             // fire every <error-cache>15</error-cache> minute.
             // see digi.xml
-            trigger.setCronExpression("0 0/" +
-                                      DigiConfigManager.getConfig().getSmtp().getCacheMinutes() +
-                                      " * * * ?");
+            trigger = TriggerBuilder.newTrigger()
+                    .withIdentity("MailSchedulerTrigger", "MailSchedulerGroup")
+                    .withSchedule(CronScheduleBuilder.cronSchedule("0 0/" +
+                            DigiConfigManager.getConfig().getSmtp().getCacheMinutes() +
+                            " * * * ?"))
+                    .build();
 
-            sched.scheduleJob(jobDetail, trigger);
+            scheduler.scheduleJob(jobDetail, trigger);
 
         }
         catch (Exception ex) {
             throw new DgException("can't initialize mail scheduler", ex);
         }
     }
-
 }
+

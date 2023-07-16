@@ -58,13 +58,12 @@ public final class XmlPatcherUtil {
      *            the dir to seek for unrecorded patches
      * @param patchNames
      *            the existing patch names
-     * @throws DgException
      * @param appPath
      *            the application Path - usually serviceContext.getRealPath("/")
      * @param patchesMap the already discovered patches
      */
     public static void recordNewPatchesInDir(String appPath, File dir,
-            Set<String> patchNames, Map<String, AmpXmlPatch> patchesMap) throws DgException {
+            Set<String> patchNames, Map<String, AmpXmlPatch> patchesMap) {
         if (!dir.isDirectory())
             throw new RuntimeException(
                     "Patch discovery location is not a directory!");

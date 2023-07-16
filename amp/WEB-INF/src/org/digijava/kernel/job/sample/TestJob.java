@@ -27,6 +27,8 @@ import org.digijava.kernel.job.AbstractSingletonJob;
 import org.quartz.JobExecutionException;
 import org.quartz.JobExecutionContext;
 import org.digijava.kernel.job.JobCachedObject;
+import org.quartz.JobKey;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -40,7 +42,8 @@ public class TestJob
     boolean success = true;
 
     Date date = context.getFireTime();
-    logger.info("Quartz call : " + context.getJobDetail().getName()
+    JobKey jobKey =  context.getJobDetail().getKey();
+    logger.info("Quartz call : " + jobKey.getName()
                        + " : " + date.toString());
 
     try {

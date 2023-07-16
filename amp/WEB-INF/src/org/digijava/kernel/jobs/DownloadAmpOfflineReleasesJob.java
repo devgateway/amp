@@ -154,6 +154,7 @@ public class DownloadAmpOfflineReleasesJob extends NonConcurrentJob {
         AmpQuartzJobClass jobClass = new AmpQuartzJobClass();
         jobClass.setClassFullname(DownloadAmpOfflineReleasesJob.class.getName());
         jobClass.setName(NAME);
+        jobClass.setSchedName(NAME);
         QuartzJobClassUtils.addJobClasses(jobClass);
 
         QuartzJobForm jobForm = new QuartzJobForm();

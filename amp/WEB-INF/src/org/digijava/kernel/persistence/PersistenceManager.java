@@ -773,13 +773,14 @@ public class PersistenceManager {
                 try {
                     // note: flushing is needed only if session uses FlushMode.MANUAL
                     session.flush();
+                    // If the flush is successful, proceed with the commit
+                    transaction.commit();
                 } catch (HibernateException e) {
                     // logging the error since finally may throw another exception and this one will be lost
                     logger.error("Failed to flush the session.", e);
+                    // Rollback the transaction explicitly
+                    transaction.rollback();
                     throw e;
-                } finally {
-                    // do we really want to attempt commit if flushing fails?
-                    transaction.commit();
                 }
             }
         }

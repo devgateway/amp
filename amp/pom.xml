@@ -9,7 +9,7 @@
     <properties>
         <wicketVersion>6.29.0</wicketVersion>
         <tomcatVersion>8.5.73</tomcatVersion>
-        <springSecurityVersion>3.1.4.RELEASE</springSecurityVersion>
+        <springSecurityVersion>5.6.11</springSecurityVersion>
         <springVersion>3.0.7.RELEASE</springVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jackrabbit.version>2.16.2</jackrabbit.version>
@@ -249,8 +249,8 @@
         </dependency>
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
-            <artifactId>hibernate-jpa-2.0-api</artifactId>
-            <version>1.0.1.Final</version>
+            <artifactId>hibernate-jpa-2.1-api</artifactId>
+            <version>1.0.2.Final</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -263,10 +263,16 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-ehcache</artifactId>
             <version>5.6.15.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.common</groupId>
+            <artifactId>hibernate-commons-annotations</artifactId>
+            <version>5.1.2.Final</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -637,7 +643,7 @@
         <dependency>
             <groupId>org.quartz-scheduler</groupId>
             <artifactId>quartz</artifactId>
-            <version>1.8.5</version>
+            <version>2.3.2</version>
         </dependency>
         <dependency>
             <groupId>relaxngDatatype</groupId>
@@ -872,7 +878,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.3.1</version>
+            <version>42.6.0</version>
         </dependency>
         <dependency>
             <groupId>com.sun.mail</groupId>

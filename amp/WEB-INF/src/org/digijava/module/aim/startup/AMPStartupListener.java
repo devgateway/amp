@@ -86,16 +86,22 @@ public class AMPStartupListener extends HttpServlet implements
     }
 
     public void contextInitialized(ServletContextEvent sce) {
-        PersistenceManager.inTransaction(() -> contextInitializedInternal(sce));
+        PersistenceManager.inTransaction(() -> {
+            try {
+                contextInitializedInternal(sce);
+            } catch (AMPException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
     
-    public void contextInitializedInternal(ServletContextEvent sce) {
+    public void contextInitializedInternal(ServletContextEvent sce) throws AMPException {
         logger.debug("I am running with a new code!!!!");
         
         
         ServletContext ampContext = null;
 
-        try {
+//        try {
             ampContext = sce.getServletContext();
             SERVLET_CONTEXT_ROOT_REAL_PATH = ampContext.getRealPath("/");
             ampContext.setAttribute(Constants.ME_FEATURE, new Boolean(true));
@@ -192,10 +198,10 @@ public class AMPStartupListener extends HttpServlet implements
             new SwaggerConfigurer().configure();
 
             DgEmailManager.triggerStaticInitializers();
-        } catch (Throwable e) {
-            logger.error("Exception while initialising AMP :" + e.getMessage(), e);
-            throw new Error(e);
-        }
+//        } catch (Throwable e) {
+//            logger.error("Exception while initialising AMP :" + e.getMessage(), e);
+//            throw new Error(e);
+//        }
     }
 
     public void registerEhCacheMBeans() {

@@ -30,11 +30,7 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.cache.AbstractCache;
 import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.kernel.util.DigiConfigManager;
-import org.quartz.JobDetail;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
-import org.quartz.SchedulerException;
-import org.quartz.StatefulJob;
+import org.quartz.*;
 
 /**
  * <p>Title: </p>
@@ -75,7 +71,8 @@ public abstract class AbstractSingletonJob
       JobExecutionException {
 
     JobDetail jobDetail = context.getJobDetail();
-    String jobName = jobDetail.getName();
+    JobKey jobKey = jobDetail.getKey();
+    String jobName = jobKey.getName();
 
     AbstractCache jobCache = DigiCacheManager.getInstance().getCache(CACHE_REGION);
     JobCachedObject cachedJob = (JobCachedObject) jobCache.get(jobName);

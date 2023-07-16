@@ -1,5 +1,8 @@
 package org.digijava.module.aim.util;
 
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -45,11 +48,15 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.Logic;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.jdbc.Work;
+import org.hibernate.metadata.ClassMetadata;
+import org.hibernate.query.Query;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.StringType;
+
 
 /**
  * @author medea
@@ -686,9 +693,11 @@ public class FeaturesUtil {
             buildGlobalSettingsCache(getGlobalSettings());
         Map<String, AmpGlobalSettings> settings = globalSettingsCache;
         AmpGlobalSettings value = settings.get(globalSettingName);
+        System.out.println(value);
         if (value == null)
             return null;
-        return value.getGlobalSettingsValue();
+        String res= value.getGlobalSettingsValue();
+        return res;
     }
     
     public static boolean getGlobalSettingValueBoolean(String globalSettingName) {
@@ -737,6 +746,13 @@ public class FeaturesUtil {
     /*
      * to get all the Global settings
      */
+    public static String getDatabaseName(Session session) {
+        final String[] databaseName = {""};
+
+        session.doWork(connection -> databaseName[0] = connection.getCatalog());
+
+        return databaseName[0];
+    }
     public static List<AmpGlobalSettings> getGlobalSettings() {
         List<AmpGlobalSettings> coll = null;
         Session session = null;
@@ -744,6 +760,9 @@ public class FeaturesUtil {
         Query qry = null;
         try {
             session = PersistenceManager.getRequestDBSession();
+            String databaseName = getDatabaseName(session);
+
+            System.out.println(databaseName);
             qryStr = "select gs from " + AmpGlobalSettings.class.getName() + " gs ";
             qry = session.createQuery(qryStr);
             coll = qry.list();

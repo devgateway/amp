@@ -45,6 +45,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 
 public class HibernateClassLoader {
@@ -155,28 +156,32 @@ public class HibernateClassLoader {
      *
      */
     public static void buildHibernateSessionFactory() {
-        InputStream inp = HibernateClassLoader.class.getResourceAsStream(HIBERNATE_CFG_XML);
-        try {
-            if (inp == null) {
-                cfg.setInterceptor(new AmpEntityInterceptor());
-                ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
-                        .applySettings(cfg.getProperties()).build();
-                sessionFactory = cfg.buildSessionFactory(serviceRegistry);
-            } else {
-                cfg.configure(HIBERNATE_CFG_XML);
-                cfg.setInterceptor(new AmpEntityInterceptor());
-                if (HIBERNATE_CFG_OVERRIDE_DATABASE != null) {
-                    cfg.setProperty("hibernate.connection.url", HIBERNATE_CFG_OVERRIDE_DATABASE);
-                }
-                HIBERNATE_CFG_OVERRIDE_DATABASE = null; // reset after each session
-                ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
-                        .applySettings(cfg.getProperties()).build();
-                sessionFactory = cfg.buildSessionFactory(serviceRegistry);
-            }
-        } catch (Exception ex1) {
-            logger.error("Unable to build hibernate session factory", ex1);
-            throw new RuntimeException(ex1);
-        }
+        cfg.setInterceptor(new AmpEntityInterceptor());
+        sessionFactory = cfg.configure().buildSessionFactory();
+        Map<String,Object> props = sessionFactory.getProperties();
+        System.out.println(props);
+
+//        InputStream inp = HibernateClassLoader.class.getResourceAsStream(HIBERNATE_CFG_XML);
+//        try {
+//            if (inp == null) {
+//                cfg.setInterceptor(new AmpEntityInterceptor());
+////                ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+////                        .applySettings(cfg.getProperties()).build();
+//                sessionFactory = cfg.configure().buildSessionFactory();
+//            } else {
+//                cfg.setInterceptor(new AmpEntityInterceptor());
+//                if (HIBERNATE_CFG_OVERRIDE_DATABASE != null) {
+//                    cfg.setProperty("hibernate.connection.url", HIBERNATE_CFG_OVERRIDE_DATABASE);
+//                }
+//                HIBERNATE_CFG_OVERRIDE_DATABASE = null; // reset after each session
+////                ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().configure(HIBERNATE_CFG_XML).build();
+//
+//                sessionFactory = cfg.configure(HIBERNATE_CFG_XML).buildSessionFactory();
+//            }
+//        } catch (Exception ex1) {
+//            logger.error("Unable to build hibernate session factory", ex1);
+//            throw new RuntimeException(ex1);
+//        }
     }
 }
 

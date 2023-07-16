@@ -3,6 +3,9 @@ package org.digijava.module.aim.dbentity;
 public class AmpQuartzJobClass {
     private Long id;
     private String name;
+
+
+    private String schedName;
     private String classFullname;
 
     public AmpQuartzJobClass() {
@@ -18,6 +21,13 @@ public class AmpQuartzJobClass {
 
     public String getName() {
         return name;
+    }
+    public String getSchedName() {
+        return schedName;
+    }
+
+    public void setSchedName(String schedName) {
+        this.schedName = schedName;
     }
 
     public void setName(String name) {

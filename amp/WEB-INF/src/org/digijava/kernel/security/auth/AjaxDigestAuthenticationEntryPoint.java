@@ -19,7 +19,7 @@ public class AjaxDigestAuthenticationEntryPoint extends DigestAuthenticationEntr
     @Override
     public void commence(HttpServletRequest request,
             HttpServletResponse response, AuthenticationException authException)
-            throws IOException, ServletException {
+            throws IOException {
         super.commence(request, new UnauthorizedHttpResponse(response), authException);
     }
     private static class UnauthorizedHttpResponse extends HttpServletResponseWrapper{

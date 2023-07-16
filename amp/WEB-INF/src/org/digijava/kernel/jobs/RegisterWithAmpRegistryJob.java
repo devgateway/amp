@@ -154,6 +154,7 @@ public class RegisterWithAmpRegistryJob extends ConnectionCleaningJob {
         AmpQuartzJobClass jobClass = new AmpQuartzJobClass();
         jobClass.setClassFullname(RegisterWithAmpRegistryJob.class.getName());
         jobClass.setName(NAME);
+        jobClass.setSchedName(NAME);
         QuartzJobClassUtils.addJobClasses(jobClass);
 
         QuartzJobForm jobForm = new QuartzJobForm();

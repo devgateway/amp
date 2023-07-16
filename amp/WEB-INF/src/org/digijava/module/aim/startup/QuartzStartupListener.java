@@ -2,6 +2,7 @@ package org.digijava.module.aim.startup;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.util.Enumeration;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -48,9 +49,12 @@ public class QuartzStartupListener extends QuartzInitializerListener {
     private void initializeQuartz(ServletContextEvent sce) {
         ServletContext sc = sce.getServletContext();
         try {
-            SchedulerFactory factory = (SchedulerFactory) sc.getAttribute(QuartzInitializerListener.QUARTZ_FACTORY_KEY);
+
+//            SchedulerFactory factory = (SchedulerFactory) sc.getAttribute(QuartzInitializerListener.QUARTZ_FACTORY_KEY);
+            SchedulerFactory factory =  org.quartz.impl.DirectSchedulerFactory.getInstance();
 
             Scheduler scheduler = factory.getScheduler();
+
 
             scheduler.getContext().put(Constants.AMP_SERVLET_CONTEXT, sc);
 

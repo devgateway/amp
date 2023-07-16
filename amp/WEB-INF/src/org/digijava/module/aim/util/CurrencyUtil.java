@@ -31,10 +31,10 @@ import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.caching.AmpCaching;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
 import org.hibernate.type.DateType;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.LongType;
@@ -495,16 +495,13 @@ public class CurrencyUtil {
     }
 
     private static AmpCurrency doFetchCurrency(String currCode) {
-        try {
-            String queryString = "select c from " + AmpCurrency.class.getName()
-                    + " c " + "where (c.currencyCode=:id)";
-            Query qry = PersistenceManager.getSession().createQuery(queryString);
-            qry.setCacheable(true);
-            qry.setParameter("id", currCode, StringType.INSTANCE);
-            return (AmpCurrency) qry.uniqueResult();
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
+        String queryString = "select c from " + AmpCurrency.class.getName()
+                + " c " + "where c.currencyCode = "+"'"+currCode+"'";
+        Session session = PersistenceManager.getSession();
+        Query qry = session.createQuery(queryString);
+        qry.setCacheable(true);
+//        qry.setParameter("id", currCode, StringType.INSTANCE);
+        return (AmpCurrency) qry.uniqueResult();
     }
 
     public static List<AmpCurrency> getActiveAmpCurrencyByName() {

@@ -31,6 +31,7 @@ public class AmpCurrencyConvertor implements CurrencyConvertor {
     protected String baseCurrencyCode = CurrencyUtil.getBaseCurrency().getCurrencyCode();
 
     public static AmpCurrencyConvertor getInstance() {
+        System.out.println(instance);
         return instance;
     }
 

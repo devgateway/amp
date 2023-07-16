@@ -34,13 +34,12 @@ import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.authentication.dao.SaltSource;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 public class DigiDaoAuthenticationProvider
-    extends DaoAuthenticationProvider implements InitializingBean, SaltSource {
+    extends DaoAuthenticationProvider implements InitializingBean {
 
     protected void additionalAuthenticationChecks(UserDetails userDetails,
                                                   UsernamePasswordAuthenticationToken
@@ -53,16 +52,16 @@ public class DigiDaoAuthenticationProvider
         String userPassword = userDetails.getPassword();
         String pass = authentication.getCredentials().toString();
 
-        Object saltObj;
-        String salt = "";
-
-        SaltSource saltSource = this.getSaltSource();
-        if (saltSource != null) {
-            saltObj = saltSource.getSalt(userDetails);
-            if (saltObj != null) {
-                salt = saltObj.toString();
-            }
-        }
+//        Object saltObj;
+//        String salt = "";
+//
+//        SaltSource saltSource = this.getSaltSource();
+//        if (saltSource != null) {
+//            saltObj = saltSource.getSalt(userDetails);
+//            if (saltObj != null) {
+//                salt = saltObj.toString();
+//            }
+//        }
 
         boolean passwordMatched = false;
                     compare = pass.trim();

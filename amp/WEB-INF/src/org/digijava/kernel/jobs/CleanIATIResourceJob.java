@@ -62,6 +62,7 @@ public class CleanIATIResourceJob extends ConnectionCleaningJob {
         AmpQuartzJobClass jobClass = new AmpQuartzJobClass();
         jobClass.setClassFullname(CleanIATIResourceJob.class.getName());
         jobClass.setName(NAME);
+        jobClass.setSchedName(NAME);
         QuartzJobClassUtils.addJobClasses(jobClass);
 
         QuartzJobForm jobForm = new QuartzJobForm();

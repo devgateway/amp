@@ -16,24 +16,24 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class NonConcurrentJob extends ConnectionCleaningJob {
     private final Logger logger = LoggerFactory.getLogger(NonConcurrentJob.class);
-    
+
     @Override public final void executeInternal(JobExecutionContext context) throws JobExecutionException {
-        try {      
+        try {
             List<JobExecutionContext> jobs = context.getScheduler().getCurrentlyExecutingJobs();
             if (jobs != null && !jobs.isEmpty()) {
-                  for (JobExecutionContext job : jobs) {
-                    if (job.getTrigger().getJobName().equals(context.getTrigger().getJobName()) 
+                for (JobExecutionContext job : jobs) {
+                    if (job.getTrigger().getKey().equals(context.getTrigger().getKey())
                             && !job.getJobInstance().equals(this)) {
-                        logger.warn("There's another instance running, : " + this);
+                        logger.warn("There's another instance running: {}", this);
                         return;
                     }
                 }
             }
-        } catch (SchedulerException e) {
-            logger.error("Error during non concurrent job execution ", e);
+        } catch (Exception e) {
+            logger.error("Error during non-concurrent job execution", e);
         }
         executeNonConcurrentInternal(context);
     }
-    
+
     public abstract void executeNonConcurrentInternal(JobExecutionContext context) throws JobExecutionException;
 }

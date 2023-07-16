@@ -41,6 +41,7 @@
 		<hibernate-class>org.digijava.kernel.entity.ContentAlert</hibernate-class>
 		<!-- <hibernate-class>org.digijava.kernel.dbentity.SignOn</hibernate-class>  -->
 		<hibernate-class>org.digijava.kernel.entity.OracleLocale</hibernate-class>
+		<hibernate-class>org.digijava.module.xmlpatcher.dbentity.AmpXmlPatch</hibernate-class>
 		<hibernate-class>org.digijava.kernel.entity.PrincipalPermission</hibernate-class>
 		<hibernate-class>org.digijava.kernel.entity.PrincipalPermissionParameter</hibernate-class>
 		<hibernate-class>org.digijava.kernel.entity.Message</hibernate-class>

@@ -30,20 +30,38 @@ import java.util.Comparator;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.util.SiteUtils;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "DG_SITE_DOMAIN")
 public class SiteDomain implements Serializable{
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DG_SITE_DOMAIN_SEQ")
+    @SequenceGenerator(name = "DG_SITE_DOMAIN_SEQ", sequenceName = "DG_SITE_DOMAIN_SEQ", allocationSize = 1)    @Column(name = "SITE_DOMAIN_ID")
+    private Long siteDomainId;
 
-    public static final Comparator<SiteDomain> DEFAULTS_FIRST = comparing(SiteDomain::isDefaultDomain).reversed();
+    @Column(name = "SITE_DOMAIN")
+    private String siteDbDomain;
 
-    private long siteDomainId;
+    @Column(name = "SITE_PATH")
+    private String sitePath;
+
+    @ManyToOne
+    @JoinColumn(name = "SITE_ID")
     private Site site;
 
-    //private String siteDomain;
-
-    private String sitePath;
+    @ManyToOne
+    @JoinColumn(name = "LANGUAGE_CODE")
     private Locale language;
+
+    @Column(name = "IS_DEFAULT")
     private boolean defaultDomain;
+
+    @Column(name = "ENABLE_SECURITY")
     private Boolean enableSecurity;
+    public static final Comparator<SiteDomain> DEFAULTS_FIRST = comparing(SiteDomain::isDefaultDomain).reversed();
+
+
 
     /**
      * <p>This is the hibernate-persisted domain value in the database.
@@ -60,7 +78,6 @@ public class SiteDomain implements Serializable{
      * but use the same database records.
      *
      */
-    private String siteDbDomain;
     private static Logger logger = Logger.getLogger(SiteDomain.class);
 
     /**

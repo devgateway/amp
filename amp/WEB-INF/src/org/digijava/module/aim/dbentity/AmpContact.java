@@ -29,80 +29,76 @@ import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.hibernate.annotations.Formula;
 
+import javax.persistence.*;
 /**
  * holds contact user's information
  * @author Dare
  *
  */
 @TranslatableClass (displayName = "Contact")
-public class AmpContact implements Comparable, Serializable, Cloneable, Versionable, Identifiable {
 
+@Entity
+@Table(name = "AMP_CONTACT")
+public class AmpContact implements Comparable, Serializable, Cloneable, Versionable, Identifiable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "contact_id")
     @Interchangeable(fieldTitle = "ID")
     @JsonProperty(ContactEPConstants.ID)
     @JsonView(ContactView.Summary.class)
     private Long id;
 
+    @Column(name = "name")
     @Interchangeable(fieldTitle = "Name", importable = true,
             interValidators = @InterchangeableValidator(RequiredValidator.class))
     @JsonProperty(ContactEPConstants.NAME)
     @JsonView(ContactView.Summary.class)
     private String name;
 
+    @Column(name = "lastname")
     @Interchangeable(fieldTitle = "Last Name", importable = true,
             interValidators = @InterchangeableValidator(RequiredValidator.class))
     @JsonProperty(ContactEPConstants.LAST_NAME)
     @JsonView(ContactView.Summary.class)
     private String lastname;
 
-    @Interchangeable(fieldTitle = "Title", importable = true, pickIdOnly = true,
-        discriminatorOption = CategoryConstants.CONTACT_TITLE_KEY)
-    @JsonIgnore
-    private AmpCategoryValue title;
-
+    @Column(name = "organisation_name")
     @TranslatableField
     @Interchangeable(fieldTitle = "Organization Name", importable = true)
     @JsonIgnore
     private String organisationName;
 
+    @Column(name = "is_shared")
+    @JsonIgnore
+    private Boolean shared;
+
+    @Column(name = "function")
     @TranslatableField
     @Interchangeable(fieldTitle = "Function", importable = true)
     @JsonIgnore
     private String function;
 
+    @Column(name = "officeaddress")
     @Interchangeable(fieldTitle = "Office Address", importable = true)
     @JsonIgnore
     private String officeaddress;
 
-    // do we need it?
-    @JsonIgnore
-    private String temporaryId;
-
-    @JsonIgnore
-    private String nameAndLastName;
-
-    @JsonIgnore
-    private String fullname;
-
-    /**
-     * currently these fields are not usable, but will become when we decide
-     * to link contact list to calendar and messaging
-     */
-    @JsonIgnore
-    private Boolean shared; //is contact shared between amp users
-
+    @ManyToOne
+    @JoinColumn(name = "creator_id")
     @Interchangeable(fieldTitle = ContactFieldsConstants.CREATED_BY, pickIdOnly = true)
     @JsonIgnore
-    private AmpTeamMember creator; //who created the contact
+    private AmpTeamMember creator;
 
+    @ManyToOne
+    @JoinColumn(name = "title")
+    @Interchangeable(fieldTitle = "Title", importable = true, pickIdOnly = true,
+            discriminatorOption = CategoryConstants.CONTACT_TITLE_KEY)
     @JsonIgnore
-    private SortedSet<AmpActivityContact> activityContacts;
+    private AmpCategoryValue title;
 
-    @Interchangeable(fieldTitle = "Organisation Contacts", importable = true,
-            validators = @Validators(unique = FMVisibility.ALWAYS_VISIBLE_FM))
-    @JsonIgnore
-    private Set<AmpOrganisationContact> organizationContacts = new HashSet<>();
-
+    @OneToMany(mappedBy = "contact", cascade = CascadeType.ALL, orphanRemoval = true)
     @InterchangeableDiscriminator(discriminatorField = "name", settings = {
             @Interchangeable(fieldTitle = ContactEPConstants.EMAIL,
                     discriminatorOption = Constants.CONTACT_PROPERTY_NAME_EMAIL,
@@ -126,7 +122,40 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
                     importable = true,
                     type = AmpContactFaxProperty.class)})
     @JsonIgnore
-    private SortedSet<AmpContactProperty> properties = new TreeSet<>();
+    private Set<AmpContactProperty> properties = new HashSet<>();
+
+    @OneToMany(mappedBy = "contact", cascade = CascadeType.REMOVE)
+    @JsonIgnore
+    private Set<AmpActivityContact> activityContacts= new HashSet<>();
+
+    @OneToMany(mappedBy = "contact", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Interchangeable(fieldTitle = "Organisation Contacts", importable = true,
+            validators = @Validators(unique = FMVisibility.ALWAYS_VISIBLE_FM))
+    @JsonIgnore
+    private Set<AmpOrganisationContact> organizationContacts = new HashSet<>();
+    @JsonIgnore
+    @Formula(value = "name || $cnt$ || $cnt$ || lastname || $cnt$ || ($cnt$ || contact_id || $cnt$) || $cnt$")
+    private String fullname;
+
+
+
+    // do we need it?
+    @JsonIgnore
+    @Transient
+    private String temporaryId;
+
+    @JsonIgnore
+    @Transient
+    private String nameAndLastName;
+
+
+
+
+
+
+
+
+
 
     public AmpContact(){
 
@@ -181,7 +210,7 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
     }
 
     public SortedSet<AmpActivityContact> getActivityContacts() {
-        return activityContacts;
+        return new TreeSet<>(activityContacts);
     }
     public void setActivityContacts(SortedSet<AmpActivityContact> activityContacts) {
         this.activityContacts = activityContacts;
@@ -206,7 +235,7 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
         this.officeaddress = officeaddress;
     }
     public SortedSet<AmpContactProperty> getProperties() {
-        return properties;
+        return new TreeSet<>(properties);
     }
     public void setProperties(SortedSet<AmpContactProperty> properties) {
         this.properties = properties;

@@ -7,13 +7,30 @@ import org.digijava.module.contentrepository.helper.ObjectReferringDocument;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "AMP_ORGANISATION_DOCUMENT")
+@Cacheable
 public class AmpOrganisationDocument extends ObjectReferringDocument {
     public static final String SESSION_NAME = "ORGANISATION_DOCUMENTS";
-    
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_ORGANISATION_DOCUMENT_seq")
+    @SequenceGenerator(name = "AMP_ORGANISATION_DOCUMENT_seq", sequenceName = "AMP_ORGANISATION_DOCUMENT_seq", allocationSize = 1)
+    @Column(name = "id")
     private Long id;
-    private AmpOrganisation ampOrganisation;
+
+    @Column(name = "uuid")
+    private String uuid;
+
+    @Column(name = "selected_version_uuid")
     private String selectedVersionUUID;
-    
+
+    @ManyToOne
+    @JoinColumn(name = "amp_org_id")
+    private AmpOrganisation ampOrganisation;
+
     public Long getId() {
         return id;
     }

@@ -86,7 +86,7 @@ public class FeaturesUtil {
     }
     
     public static synchronized void buildGlobalSettingsCache(List<AmpGlobalSettings> globalSettings) {
-        globalSettingsCache = new HashMap<String, AmpGlobalSettings>();
+        globalSettingsCache = new HashMap<>();
         for (AmpGlobalSettings sett : globalSettings) {
             globalSettingsCache.put(sett.getGlobalSettingsName(), sett);
         }
@@ -696,11 +696,9 @@ public class FeaturesUtil {
             buildGlobalSettingsCache(getGlobalSettings());
         Map<String, AmpGlobalSettings> settings = globalSettingsCache;
         AmpGlobalSettings value = settings.get(globalSettingName);
-        System.out.println(value);
         if (value == null)
             return null;
-        String res= value.getGlobalSettingsValue();
-        return res;
+        return value.getGlobalSettingsValue();
     }
     
     public static boolean getGlobalSettingValueBoolean(String globalSettingName) {
@@ -763,12 +761,10 @@ public class FeaturesUtil {
         Query qry;
         try {
             session = PersistenceManager.getRequestDBSession();
-//            Transaction tx= session.getTransaction()!=null?session.getTransaction():session.beginTransaction();
             qryStr = "select gs from " + AmpGlobalSettings.class.getName() + " gs ";
             qry = session.createQuery(qryStr);
-            coll = qry.list();
-            System.out.println(coll);
-//            tx.commit();
+            return qry.getResultList();
+//            System.out.println(coll.size());
 
 
         }
@@ -776,7 +772,7 @@ public class FeaturesUtil {
             logger.error(ex, ex);
         }
 
-        return coll;
+        return null;
     }
 
     /*

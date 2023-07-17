@@ -5,6 +5,7 @@
  */
 package org.digijava.module.xmlpatcher.dbentity;
 
+import javax.persistence.*;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
@@ -20,40 +21,31 @@ import java.util.Date;
  *         status of the execution
  */
 public class AmpXmlPatchLog implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_XML_PATCH_LOG_seq")
+    @SequenceGenerator(name = "AMP_XML_PATCH_LOG_seq", sequenceName = "AMP_XML_PATCH_LOG_seq", allocationSize = 1)
+    @Column(name = "id")
+    private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "patch_id")
+    private AmpXmlPatch patch;
 
-    protected Long id;
+    @Column(name = "log", columnDefinition = "text")
+    private StringBuffer log;
 
-    /**
-     * The patch reference to this log
-     */
-    protected AmpXmlPatch patch;
+    @Column(name = "date")
+    private Date date;
 
-    /**
-     * The log text
-     */
-    protected StringBuffer log;
+    @Column(name = "error")
+    private Boolean error;
 
-    /**
-     * The execution date/entry date log
-     */
-    protected Date date;
+    @Column(name = "file_checksum")
+    private String fileChecksum;
 
-    /**
-     * True if the execution has encountered errors
-     */
-    protected Boolean error;
+    @Column(name = "elapsed")
+    private Long elapsed;
 
-    /**
-     * The MD5 checksum of the patch file. May be used to find if the patch file
-     * has been changed from one execution to the other.
-     */
-    protected String fileChecksum;
-
-    /**
-     * The amount of time in milliseconds that the patch execution lasted
-     */
-    protected Long elapsed;
 
     /**
      * Appends a string to the log stringbuffer

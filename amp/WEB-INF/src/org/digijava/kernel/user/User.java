@@ -32,12 +32,7 @@ import java.util.Set;
 import javax.security.auth.Subject;
 
 import org.digijava.kernel.dbentity.Country;
-import org.digijava.kernel.entity.Entity;
-import org.digijava.kernel.entity.Image;
-import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.entity.OrganizationType;
-import org.digijava.kernel.entity.UserLangPreferences;
-import org.digijava.kernel.entity.UserPreferences;
+import org.digijava.kernel.entity.*;
 import org.digijava.kernel.request.Site;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValue;
 import org.digijava.kernel.ampapi.endpoints.common.valueproviders.UserValueProvider;
@@ -45,53 +40,165 @@ import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpUserExtension;
 import org.digijava.module.aim.util.Identifiable;
-
+import javax.persistence.*;
 @InterchangeableValue(UserValueProvider.class)
+@javax.persistence.Entity
+@Table(name = "DG_USER")
 public class User
-    extends Entity implements Serializable, Comparable, Identifiable {
+    extends org.digijava.kernel.entity.Entity implements Serializable, Comparable, Identifiable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "dg_user_seq")
+    @SequenceGenerator(name = "dg_user_seq", sequenceName = "dg_user_seq", allocationSize = 1)    @Column(name = "ID")
+    private Long id;
 
-    private Subject subject;
+    @Column(name = "CREATION_DATE")
+    private Date creationDate;
+
+    @Column(name = "CREATION_IP")
+    private String creationIP;
+
+    @Column(name = "LAST_MODIFIED")
+    private Date lastModified;
+
+    @Column(name = "MODIFYING_IP")
+    private String modifyingIP;
+
+    @Column(name = "FIRST_NAMES")
     private String firstNames;
+
+    @Column(name = "LAST_NAME")
     private String lastName;
+
+    @Column(name = "EMAIL", unique = true)
     private String email;
+
+    @Column(name = "EMAIL_VERIFIED")
     private boolean emailVerified;
+
+    @Column(name = "EMAIL_BOUNCING")
     private boolean emailBouncing;
+
+    @Column(name = "NO_ALERTS_UNTIL")
     private Date noAlertsUntil;
+
+    @Column(name = "PASSWORD")
     private String password;
+
+    @Column(name = "SALT")
     private String salt;
+
+    @Column(name = "PASS_QUESTION")
     private String passQuestion;
+
+    @Column(name = "PASS_ANSWER")
     private String passAnswer;
+
+    @Column(name = "URL")
     private String url;
+
+    @Column(name = "BANNED")
     private boolean banned;
-    private Boolean pledger;
-    private Boolean pledgeSuperUser;
-    private Site registeredThrough;
-    private Set interests;
-    private java.sql.Clob bio;
-    private Image portrait;
-    private String organizationName;
-    private OrganizationType organizationType;
+
+    @Column(name = "REFERRAL")
     private String referral;
-    private Country country;
-    private AmpCategoryValueLocations region;
-    private HashMap sitePreferences;
-    private Set groups;
-    private HashMap siteContentLocales;
-    private String address;
-    private Image photo;
-    private UserPreferences userPreference;
-    private UserLangPreferences userLangPreferences;
-    private Locale registerLanguage;
-    private boolean globalAdmin;
+
+    @Column(name = "ORGANIZATION_TYPE_OTHER", columnDefinition = "text")
     private String organizationTypeOther;
-    private Set contacts;
+
+    @Column(name = "ADDRESS")
+    private String address;
+
+    @ManyToOne
+    @JoinColumn(name = "COUNTRY_ISO")
+    private Country country;
+
+    @ManyToOne
+    @JoinColumn(name = "region_id")
+    private AmpCategoryValueLocations region;
+
+    @ManyToOne
+    @JoinColumn(name = "image_id")
+    private Image photo;
+
+    @ManyToOne
+    @JoinColumn(name = "ORGANIZATION_TYPE_ID")
+    private OrganizationType organizationType;
+
+    @ManyToOne
+    @JoinColumn(name = "REGISTRATION_LANGUAGE")
+    private Locale registerLanguage;
+
+    @Column(name = "GLOBAL_ADMIN")
+    private boolean globalAdmin;
+
+    @ManyToOne
+    @JoinColumn(name = "user_ext_id")
     private AmpUserExtension userExtension;
-    private Boolean exemptFromDataFreezing;
-    private Boolean notificationEmailEnabled = false;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Interests> interests = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "DG_USER_GROUP",
+            joinColumns = @JoinColumn(name = "USER_ID"),
+            inverseJoinColumns = @JoinColumn(name = "GROUP_ID"))
+    private Set<Group> groups = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<UserContactInfo> contacts = new HashSet<>();
+
+    @ManyToOne
+    @JoinColumn(name = "REGISTERED_THROUGH")
+    private Site registeredThrough;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "DG_USER_ORGS",
+            joinColumns = @JoinColumn(name = "USER_ID"),
+            inverseJoinColumns = @JoinColumn(name = "ORG_ID"))
+    private Set<AmpOrganisation> assignedOrgs = new HashSet<>();
+
+    @Column(name = "PLEDGER")
+    private boolean pledger;
+
+    @Column(name = "PLEDGE_SUPER_USER", columnDefinition = "boolean default false")
+    private boolean pledgeSuperUser;
+
+    @Column(name = "PASSWORD_CHANGED_AT")
+    private Date passwordChangedAt;
+
+    @Column(name = "EXEMPT_FROM_DATA_FREEZING")
+    private boolean exemptFromDataFreezing;
+
+    @Column(name = "notification_email")
     private String notificationEmail;
 
-    private Set<AmpOrganisation> assignedOrgs;
-    private Date passwordChangedAt;
+    @Column(name = "notification_email_enabled")
+    private Boolean notificationEmailEnabled;
+    @Transient
+
+    private Subject subject;
+    @Transient
+
+    private java.sql.Clob bio;
+    @Transient
+
+    private Image portrait;
+    @Transient
+
+    private String organizationName;
+    @Transient
+
+    private HashMap sitePreferences;
+    @Transient
+
+    private HashMap siteContentLocales;
+    @Transient
+
+    private UserPreferences userPreference;
+    @Transient
+
+    private UserLangPreferences userLangPreferences;
+
 
     public User() {}
 

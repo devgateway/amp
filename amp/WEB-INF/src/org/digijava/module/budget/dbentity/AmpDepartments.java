@@ -4,20 +4,35 @@ import java.io.Serializable;
 import java.util.Set;
 
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-
+import javax.persistence.*;
+@Entity
+@Table(name = "AMP_DEPARTMENTS")
+@Cacheable
 public class AmpDepartments implements Serializable,Comparable {
 
     /**
      * 
      */
     private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_DEPARTMENTS_seq")
+    @SequenceGenerator(name = "AMP_DEPARTMENTS_seq", sequenceName = "AMP_DEPARTMENTS_seq", allocationSize = 1)
+    @Column(name = "id_department")
+    private Long id;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "AMP_ORGANISATION_DEPARTMENTS",
+            joinColumns = @JoinColumn(name = "ID"),
+            inverseJoinColumns = @JoinColumn(name = "amp_org_id"))
+    private Set<AmpOrganisation> organisations;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "code")
+    private String code;
     public AmpDepartments() {
     }
-    private Long id;
-    private String name;
-    private String code;
-    private Set<AmpOrganisation> organisations;
     
     
     public Set<AmpOrganisation> getOrganisations() {

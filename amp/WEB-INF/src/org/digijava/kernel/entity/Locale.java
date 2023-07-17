@@ -23,15 +23,27 @@
 package org.digijava.kernel.entity;
 
 import java.io.Serializable;
+import javax.persistence.*;
+import javax.persistence.Entity;
 
 
-
+@Entity
+@Table(name = "DG_LOCALE")
 public class Locale implements Serializable {
-
-    private String name;
+    @Id
+    @Column(name = "CODE")
     private String code;
+
+    @Column(name = "NAME")
+    private String name;
+
+    @Column(name = "AVAILABLE")
     private boolean available;
+
+    @Column(name = "MESSAGE_LANG_KEY")
     private String messageLangKey;
+
+    @Column(name = "LEFT_TO_RIGHT")
     private Boolean leftToRight;
 
     public Locale() {

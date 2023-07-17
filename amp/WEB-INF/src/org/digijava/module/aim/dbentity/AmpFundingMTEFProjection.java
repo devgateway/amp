@@ -14,44 +14,70 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "AMP_FUNDING_MTEF_PROJECTION")
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class AmpFundingMTEFProjection implements Cloneable, Serializable, Comparable<AmpFundingMTEFProjection>,
         FundingInformationItem {
 
     private static final long serialVersionUID = -1583797313318079006L;
 
+    @Id
     @InterchangeableId
     @Interchangeable(fieldTitle = "Transaction ID")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_funding_mtef_projection_seq")
+    @SequenceGenerator(name = "amp_funding_mtef_projection_seq", sequenceName = "amp_funding_mtef_projection_seq",allocationSize = 1)
+    @Column(name = "amp_fund_mtef_projection_id")
     private Long ampFundingMTEFProjectionId;
 
-    @Interchangeable(fieldTitle = "Projection", pickIdOnly = true, importable = true, 
-            discriminatorOption = CategoryConstants.MTEF_PROJECTION_KEY,
-            interValidators = @InterchangeableValidator(RequiredValidator.class))
-    private AmpCategoryValue projection;
-
-    @Interchangeable(fieldTitle = "Amount", importable = true,
-            interValidators = @InterchangeableValidator(RequiredValidator.class))
-    private Double amount;
-
-    @Interchangeable(fieldTitle = "Currency", pickIdOnly = true, importable = true,
-            interValidators = @InterchangeableValidator(RequiredValidator.class))
-    private AmpCurrency ampCurrency;
-
+    @Column(name = "projection_date")
     @Interchangeable(fieldTitle = "Projection Date", importable = true,
             interValidators = @InterchangeableValidator(RequiredValidator.class))
     private Date projectionDate;
 
+    @Column(name = "reporting_date")
+    private Date reportingDate;
+
+    @Column(name = "date_updated")
+    private Date updatedDate;
+
+    @Column(name = "amount")
+    @Interchangeable(fieldTitle = "Amount", importable = true,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
+    private Double amount;
+
+    @ManyToOne
+    @JoinColumn(name = "amp_currency_id")
+    @Interchangeable(fieldTitle = "Currency", pickIdOnly = true, importable = true,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
+    private AmpCurrency ampCurrency;
+
+    @ManyToOne
+    @JoinColumn(name = "amp_funding_id")
     @InterchangeableBackReference
     private AmpFunding ampFunding;
 
-    private Date reportingDate;
+    @ManyToOne
+    @JoinColumn(name = "amp_projected_categoryvalue_id")
+    @Interchangeable(fieldTitle = "Projection", pickIdOnly = true, importable = true,
+            discriminatorOption = CategoryConstants.MTEF_PROJECTION_KEY,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
+    private AmpCategoryValue projection;
 
-    private Date updatedDate;
-    
+    @ManyToOne
+    @JoinColumn(name = "recipient_org_id")
     private AmpOrganisation recipientOrg;
-    
+
+    @ManyToOne
+    @JoinColumn(name = "recipient_role_id")
     private AmpRole recipientRole;
-    
+
+    @Transient
     private Long checkSum;
     
     public static class FundingMTEFProjectionComparator implements Comparator<AmpFundingMTEFProjection>, Serializable {

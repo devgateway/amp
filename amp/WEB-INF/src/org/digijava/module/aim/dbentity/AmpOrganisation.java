@@ -25,100 +25,222 @@ import org.digijava.module.budget.dbentity.AmpBudgetSector;
 import org.digijava.module.budget.dbentity.AmpDepartments;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
+import javax.persistence.*;
 
 @TranslatableClass (displayName = "Organisation")
 @InterchangeableValue(OrganisationValueProvider.class)
+@Entity
+@Table(name = "AMP_ORGANISATION")
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class AmpOrganisation implements Comparable<AmpOrganisation>, Identifiable, Serializable, ARDimensionable, HierarchyListable, NameableOrIdentifiable
 {
-    
-    //IATI-check: not to be ignored. 
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_ORGANISATION_seq")
+    @SequenceGenerator(name = "AMP_ORGANISATION_seq", sequenceName = "AMP_ORGANISATION_seq", allocationSize = 1)
+    @Column(name = "amp_org_id")
     @PossibleValueId
     private Long ampOrgId;
+
+    @Column(name = "name")
     @TranslatableField
     private String name;
-    /**
-     * @deprecated
-     */
-    private String orgType;  // defunct
+
+    @Column(name = "org_type")
+    private String orgType;
+
+    @Column(name = "dac_org_code")
     private String dacOrgCode;
+
+    @Column(name = "org_iso_code")
     private String orgIsoCode;
+
+    @Column(name = "description", columnDefinition = "text")
     @TranslatableField
     private String description;
-    private String orgCode;
-    
-    @Deprecated
-    private String orgGroup;  // defunct
-    private AmpFiscalCalendar ampFiscalCalId;
-    private AmpSectorScheme ampSecSchemeId;
-    private String fundingorgid;
-    private Boolean deleted;
 
+    @Column(name = "org_code")
+    private String orgCode;
+
+    @Column(name = "budget_org_code")
     private String budgetOrgCode;
 
-    private String acronymAndName;
-    /**
-     * @deprecated
-     */
-    private String orgTypeCode; // defunct
+    @Column(name = "org_group")
+    private String orgGroup;
 
-    private AmpOrgGroup orgGrpId;
+    @Column(name = "funding_org_id")
+    private String fundingOrgId;
+
+    @Column(name = "address")
     private String address;
-    private Country countryId;
+
+    @Column(name = "org_url")
     private String orgUrl;
+
+    @Column(name = "acronym")
     private String acronym;
 
-    private AmpCategoryValueLocations region;
-    private AmpCategoryValue implemLocationLevel;
-    private Set<AmpOrgLocation> locations;
-    private Set<AmpOrgStaffInformation> staffInfos;
-    private AmpCategoryValueLocations country;
-    private Set<AmpOrgRecipient> recipients;
-
-    private String addressAbroad;
-    private String taxNumber;
-    private String primaryPurpose;
-    private String minPlanRegNumb;
-    private String legalPersonNum;
-    private Date legalPersonRegDate;
-    private Date minPlanRegDate;
-    private Set<AmpOrganizationBudgetInformation> organizationBudgetInfos;
-    private Set<AmpAhsurvey> survey;    // Collection of AmpAhsurvey dbentity objects
-    private Set<AmpCalendar> calendar;
-
+    @Column(name = "segment_code")
     private String segmentCode;
+
+    @Column(name = "deleted")
+    private Boolean deleted;
+
+    @ManyToMany
+    @LazyCollection(LazyCollectionOption.TRUE)
+    @JoinTable(name = "AMP_ORGANISATION_SECTOR",
+            joinColumns = @JoinColumn(name = "amp_org_id"),
+            inverseJoinColumns = @JoinColumn(name = "amp_sector_id"))
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<AmpSector> sectors;
 
+    @ManyToOne
+    @JoinColumn(name = "org_grp_id")
+    private AmpOrgGroup orgGrpId;
+
+    @ManyToOne
+    @JoinColumn(name = "imp_level_id")
+    private AmpCategoryValue implemLocationLevel;
+
+    @ManyToOne
+    @JoinColumn(name = "country_id")
+    private Country countryId;
+
+    @ManyToOne
+    @JoinColumn(name = "amp_fiscal_cal_id")
+    private AmpFiscalCalendar ampFiscalCalId;
+
+    @ManyToOne
+    @JoinColumn(name = "amp_sec_scheme_id")
+    private AmpSectorScheme ampSecSchemeId;
+
+    @Column(name = "org_type_code")
+    private String orgTypeCode;
+
+    @OneToMany(mappedBy = "ampOrgId")
+    @LazyCollection(LazyCollectionOption.TRUE)
+    private Set<AmpAhsurvey> survey;
+
+    @OneToMany(mappedBy = "pointOfDeliveryDonor")
+    @LazyCollection(LazyCollectionOption.TRUE)
+    private Set<AmpAhsurvey> surveyByPointOfDeliveryDonor;
+
+    @ManyToMany
+    @JoinTable(name = "AMP_CALENDAR_EVENT_ORGANISATIO",
+            joinColumns = @JoinColumn(name = "amp_org_id"),
+            inverseJoinColumns = @JoinColumn(name = "calendar_id"))
+    @LazyCollection(LazyCollectionOption.TRUE)
+    private Set<AmpCalendar> calendar;
+
+    @OneToMany(mappedBy = "ampOrgId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @LazyCollection(LazyCollectionOption.TRUE)
     private Set<AmpOrganisationDocument> documents;
 
-    private String otherInformation;
-    private Date lineMinRegDate;
-    private Date operFuncApprDate;
-    private String receiptLegPersonalityAct;
-    
-    //unused anywhere
-    private transient Set<AmpAhsurvey> surveyByPointOfDeliveryDonor;
+    @OneToMany(mappedBy = "ampOrgId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<AmpOrgLocation> locations;
 
-    private Set<AmpOrganisationContact> organizationContacts;
-    
-    // this field is saved in Organization Dashboard and not from organization manager in admin
-    private String orgBackground;
-    /*
-     *this field is saved in Organization Dashboard and not from organization manager in admin
-     * don't confuse it with Description field
-     */
-    private String orgDescription;
-    // this field is saved in Organization Dashboard and not from organization manager in admin
-    private String orgKeyAreas;
-    
-    //Budget fields
-    private AmpBudgetSector parentsector;
-    private Set<AmpDepartments> departments;
+    @OneToMany(mappedBy = "ampOrgId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<AmpOrgStaffInformation> staffInfos;
+
+    @OneToMany(mappedBy = "ampOrgId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<AmpOrganizationBudgetInformation> organizationBudgetInfos;
+
+    @ManyToOne
+    @JoinColumn(name = "amp_country_id")
+    private AmpCategoryValueLocations country;
+
+    @OneToMany(mappedBy = "parentOrgId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<AmpOrgRecipient> recipients;
+
+    @ManyToMany
+    @JoinTable(name = "AMP_ORGANISATION_BUDGETSECTOR",
+            joinColumns = @JoinColumn(name = "amp_org_id"),
+            inverseJoinColumns = @JoinColumn(name = "idsector"))
     private Set<AmpBudgetSector> budgetsectors;
-    private String  lineMinRegNumber;
+
+    @ManyToMany
+    @JoinTable(name = "AMP_ORGANISATION_DEPARTMENTS",
+            joinColumns = @JoinColumn(name = "amp_org_id"),
+            inverseJoinColumns = @JoinColumn(name = "id"))
+    private Set<AmpDepartments> departments;
+
+    @ManyToOne
+    @JoinColumn(name = "budget_sector_id")
+    private AmpBudgetSector parentsector;
+
+    @OneToMany(mappedBy = "ampOrgId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<AmpOrganisationContact> organizationContacts;
+
+    @Column(name = "address_abroad")
+    private String addressAbroad;
+
+    @Column(name = "tax_number")
+    private String taxNumber;
+
+    @Column(name = "regist_num_min_plan")
+    private String minPlanRegNumb;
+
+    @Column(name = "legal_personality_number")
+    private String legalPersonNum;
+
+    @Column(name = "legal_personality_reg_date")
+    private Date legalPersonRegDate;
+
+    @Column(name = "min_plan_reg_date")
+    private Date minPlanRegDate;
+
+    @Column(name = "org_primary_purpose", columnDefinition = "text")
+    private String primaryPurpose;
+
+    @Column(name = "org_other_info", columnDefinition = "text")
+    private String otherInformation;
+
+    @Column(name = "org_line_ministry_reg_date")
+    private Date lineMinRegDate;
+
+    @Column(name = "org_oper_func_approval_date")
+    private Date operFuncApprDate;
+
+    @Column(name = "org_rec_leg_per_act")
+    private String receiptLegPersonalityAct;
+
+    @ManyToOne
+    @JoinColumn(name = "cat_val_loc_region_id")
+    private AmpCategoryValueLocations region;
+
+    @Column(name = "org_background")
+    private String orgBackground;
+
+    @Column(name = "org_description")
+    private String orgDescription;
+
+    @Column(name = "org_key_areas")
+    private String orgKeyAreas;
+
+    @Column(name = "line_min_reg_numb")
+    private String lineMinRegNumber;
+
+    @ManyToMany
+    @JoinTable(name = "DG_USER_ORGS",
+            joinColumns = @JoinColumn(name = "org_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<User> users;
     
+
+    @Transient
+    private String fundingorgid;
+
+    @Transient
+    private String acronymAndName;
+
+    @Transient
     private boolean translateable   = true;
 
-    private Set<User> users;
 
     @OrganizationReportColumn(columnName="Line Ministry Registration Number",propertyType=PropertyType.NGO)
     public String getLineMinRegNumber() {

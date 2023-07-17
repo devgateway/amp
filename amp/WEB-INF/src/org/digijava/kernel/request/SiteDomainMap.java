@@ -30,12 +30,24 @@ package org.digijava.kernel.request;
  * @author not attributable
  * @version 1.0
  */
+import javax.persistence.*;
+
+@Entity
+@Table(name = "SiteDomainMap")
 
 public class SiteDomainMap
 {
+  @Id
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SiteDomainMap_seq")
+  @SequenceGenerator(name = "SiteDomainMap_seq", sequenceName = "SiteDomainMap_seq", allocationSize = 1)  @Column(name = "id")
   private Long id;
-  private String siteId;
+
+  @Column(name = "domain")
   private String domain;
+
+  @Column(name = "site")
+  private String siteId;
+
   public SiteDomainMap() {
   }
   public Long getId()

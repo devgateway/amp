@@ -5,14 +5,30 @@
 
 package org.digijava.module.aim.dbentity;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "AMP_SITE_FLAGS")
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class AmpSiteFlag {
-    
+
+    @Id
+    @Column(name = "country_id")
     private Long countryId;
-    
+
+    @Column(name = "flag")
     private byte[] flag;
 
+    @Column(name = "content_type")
     private String contentType;
-    
+
+    @Column(name = "def_flag")
     private boolean defaultFlag;
 
     /**

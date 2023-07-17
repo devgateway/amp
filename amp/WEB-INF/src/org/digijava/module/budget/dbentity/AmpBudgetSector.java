@@ -4,18 +4,33 @@ import java.io.Serializable;
 import java.util.Set;
 
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-
-
+import javax.persistence.*;
+@Entity
+@Table(name = "AMP_BUDGET_SECTOR")
+@Cacheable
 public class AmpBudgetSector implements Serializable,Comparable{
     private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_BUDGET_SECTOR_seq")
+    @SequenceGenerator(name = "AMP_BUDGET_SECTOR_seq", sequenceName = "AMP_BUDGET_SECTOR_seq", allocationSize = 1)    @Column(name = "budged_sector_id")
+    private Long idsector;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "AMP_ORGANISATION_BUDGETSECTOR",
+            joinColumns = @JoinColumn(name = "idsector"),
+            inverseJoinColumns = @JoinColumn(name = "amp_org_id"))
+    private Set<AmpOrganisation> organisations;
+
+    @Column(name = "sector_name")
+    private String sectorname;
+
+    @Column(name = "code")
+    private String code;
     
     public AmpBudgetSector() {
         super();
     }
-    private Long idsector;
-    private String sectorname;
-    private String code;
-    private Set<AmpOrganisation> organisations;
     
     
     

@@ -26,12 +26,109 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.entity.Entity;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.ModuleInstance;
+import org.digijava.kernel.user.Group;
 
+import javax.persistence.*;
+import java.util.Date;
+
+@javax.persistence.Entity
+@Table(name = "DG_SITE")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "DISCRIMINATOR")
 public class Site
 extends Entity implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "dg_site_seq")
+    @SequenceGenerator(name = "dg_site_seq", sequenceName = "dg_site_seq", allocationSize = 1)    @Column(name = "ID")
+    private Long id;
+
+    @Column(name = "NAME")
+    private String name;
+
+    @Column(name = "INHERIT_SECURITY")
+    private boolean inheritSecurity;
+
+    @Column(name = "CREATION_DATE")
+    private Date creationDate;
+
+    @Column(name = "CREATION_IP")
+    private String creationIP;
+
+    @Column(name = "LAST_MODIFIED")
+    private Date lastModified;
+
+    @Column(name = "MODIFYING_IP")
+    private String modifyingIP;
+
+    @Column(name = "PARENT_ID")
+    private Long parentId;
+
+    @Column(name = "SITE_ID")
+    private String siteId;
+
+    @Column(name = "PRIVATE_P")
+    private boolean secure;
+
+    @Column(name = "METADESCRIPTION")
+    private String metaDescription;
+
+    @Column(name = "METAKEYWORDS")
+    private String metaKeywords;
+
+    @Column(name = "PRIORITY")
+    private int priority;
+
+    @Column(name = "MISSION")
+    private String mission;
+
+    @Column(name = "FOLDER")
+    private String folder;
+
+    @Column(name = "INVISIBLE")
+    private boolean invisible;
+
+    @Column(name = "ALERTS_TO_ADMIN")
+    private Boolean sendAlertsToAdmin;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "DG_SITE_TRANS_LANG_MAP",
+            joinColumns = @JoinColumn(name = "SITE_ID"),
+            inverseJoinColumns = @JoinColumn(name = "CODE"))
+    private Set<Locale> translationLanguages = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "DG_SITE_USER_LANG_MAP",
+            joinColumns = @JoinColumn(name = "SITE_ID"),
+            inverseJoinColumns = @JoinColumn(name = "CODE"))
+    private Set<Locale> userLanguages = new HashSet<>();
+
+    @ManyToOne
+    @JoinColumn(name = "DEFAULT_LANGUAGE")
+    private Locale defaultLanguage;
+
+    @OneToMany(mappedBy = "site", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Group> groups = new HashSet<>();
+
+    @OneToMany(mappedBy = "site", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<SiteDomain> siteDomains = new HashSet<>();
+
+    @OneToMany(mappedBy = "site", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ModuleInstance> moduleInstances = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "DG_SITE_COUNTRY_MAP",
+            joinColumns = @JoinColumn(name = "SITE_ID"),
+            inverseJoinColumns = @JoinColumn(name = "ISO"))
+    private Set<Country> countries = new HashSet<>();
+
+    @ManyToOne
+    @JoinColumn(name = "DEFAULT_INSTANCE")
+    private ModuleInstance defaultInstance;
 
     public static final String globalCountryIso = "global";
     public static final String globalCountryName = "global";
@@ -40,29 +137,10 @@ extends Entity implements Serializable {
     public final static String[] defaultGroups = {
         "Administrators", "Members", "Translators"};
 
-    private String siteId;
     private String description;
-    private String metaDescription;
-    private String metaKeywords;
-    private String mission;
     private boolean active;
-    private boolean secure;
     private boolean open;
-    private int priority;
     private HashSet applInstances;
-    private Set groups;
-    private Locale defaultLanguage;
-    private Set<SiteDomain> siteDomains;
-    private java.util.Set<Locale> userLanguages;
-    private java.util.Set countries;
-    private java.util.Set translationLanguages;
-    private Set moduleInstances;
-    private String folder;
-    private Long parentId;
-    private boolean inheritSecurity;
-    private boolean invisible;
-    private Boolean sendAlertsToAdmin;
-    private ModuleInstance defaultInstance;
 
     /**
      * Default constructor, needed for Hibernate

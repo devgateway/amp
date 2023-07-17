@@ -10,23 +10,35 @@ import java.util.List;
 import org.digijava.module.aim.helper.donorReport.OrgProfileValue;
 import org.digijava.module.aim.helper.donorReport.ValueTranslatabePair;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import javax.persistence.*;
 
-
+@Entity
+@Table(name = "AMP_STAFF_INFO")
+@Cacheable
 public class AmpOrgStaffInformation implements Serializable,OrgProfileValue{
     private static final long serialVersionUID = 1L;
     //IATI-check: to be ignored
-    
-//    @Interchangeable(fieldTitle="ID")
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_STAFF_INFO_seq")
+    @SequenceGenerator(name = "AMP_STAFF_INFO_seq", sequenceName = "AMP_STAFF_INFO_seq", allocationSize = 1)
+    @Column(name = "amp_staff_info_id")
     private Long id;
-//    @Interchangeable(fieldTitle="Year")
+
+    @Column(name = "year")
     private Long year;
-//    @Interchangeable(fieldTitle="Staff Number")
-    private Long staffNumber;
-//    @Interchangeable(fieldTitle="Type")
+
+    @ManyToOne
+    @JoinColumn(name = "staff_type")
     private AmpCategoryValue type;
-//    @Interchangeable(fieldTitle="Organization")
+
+    @Column(name = "number_of_staff")
+    private Long staffNumber;
+
+    @ManyToOne
+    @JoinColumn(name = "amp_org_id")
     private AmpOrganisation organization;
-    // helper field, not for saving in db..
+
     private boolean newlyCreated;
 
     public boolean isNewlyCreated() {

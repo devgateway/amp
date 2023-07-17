@@ -24,6 +24,7 @@ package org.digijava.kernel.user;
 
 import java.io.Serializable;
 import java.security.Principal;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -34,26 +35,93 @@ import org.digijava.kernel.security.ResourcePermission;
 import org.digijava.kernel.security.SitePermission;
 
 import com.google.common.collect.ImmutableSet;
-
+import javax.persistence.*;
+@javax.persistence.Entity
+@Table(name = "DG_GROUP")
 public class Group
     extends Entity
     implements Principal, Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "dg_group_seq")
+    @SequenceGenerator(name = "dg_group_seq", sequenceName = "dg_group_seq", allocationSize = 1)    @Column(name = "ID")
+    private Long id;
 
+    @Column(name = "INHERIT_SECURITY")
+    private boolean inheritSecurity;
+
+    @Column(name = "CREATION_DATE")
+    private Date creationDate;
+
+    @Column(name = "CREATION_IP")
+    private String creationIP;
+
+    @Column(name = "LAST_MODIFIED")
+    private Date lastModified;
+
+    @Column(name = "MODIFYING_IP")
+    private String modifyingIP;
+
+    @Column(name = "PARENT_ID")
+    private Long parentId;
+
+    @Column(name = "GROUP_NAME")
+    private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "SITE_ID")
+    private Site site;
+
+    @Column(name = "GROUP_KEY")
+    private String key;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "DG_USER_GROUP",
+            joinColumns = @JoinColumn(name = "GROUP_ID"),
+            inverseJoinColumns = @JoinColumn(name = "USER_ID"))
+    private Set<User> users = new HashSet<>();
+    @Transient
     public static final String ADMINISTRATORS = "ADM";
+    @Transient
+
     public static final String SUPER_ADMINISTRATORS = "SADM";
+    @Transient
+
     public static final String MEMBERS = "MEM";
+    @Transient
+
     public static final String TRANSLATORS = "TRN";
+    @Transient
+
     public static final String EDITORS = "EDT";
+    @Transient
+
     public static final String PLEDGERS = "PLE";
+    @Transient
+
     public static final String NATIONAL_COORDINATORS = "NCO";
+    @Transient
+
 
     public static final String ADMINISTRATORS_NAME = "Administrators";
+    @Transient
+
     public static final String SUPER_ADMINISTRATORS_NAME = "Super Administrators";
+    @Transient
+
     public static final String MEMBERS_NAME = "Members";
+    @Transient
+
     public static final String TRANSLATORS_NAME = "Translators";
+    @Transient
+
     public static final String EDITORS_NAME = "Editors";
+    @Transient
+
     public static final String PLEDGERS_NAME = "Pledgers";
+    @Transient
+
     public static final String NATIONAL_COORDINATORS_NAME = "National Coordinators";
+    @Transient
 
     public static final HashMap defaultGroups;
 
@@ -68,12 +136,8 @@ public class Group
         defaultGroups.put(NATIONAL_COORDINATORS, NATIONAL_COORDINATORS_NAME);
     }
 
-    private Site site;
-    private String key;
-    private Set users;
-    private Long parentId;
-    private boolean inheritSecurity;
-    
+    @Transient
+
     public static final Set<String> ADMIN_GROUPS = ImmutableSet.of(Group.ADMINISTRATORS, Group.SUPER_ADMINISTRATORS);
 
     public Group() {

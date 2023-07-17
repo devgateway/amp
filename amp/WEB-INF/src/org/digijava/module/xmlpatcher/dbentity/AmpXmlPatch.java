@@ -11,45 +11,49 @@ import java.util.Date;
 import java.util.List;
 
 import org.digijava.module.xmlpatcher.util.XmlPatcherConstants;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.ListIndexBase;
+
+import javax.persistence.*;
 
 /**
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org This represents the
  *         reference of an XML patch file. It holds key information about the
  *         execution and state of the patch
  */
+@Entity
+@Table(name = "AMP_XML_PATCH")
+@Cacheable
 public class AmpXmlPatch implements Serializable, Comparable<AmpXmlPatch> {
-
     /**
      * This is the id of the patch. This is the actual name of the XML file,
      * without its path
      */
-    protected String patchId;
-
+    @Id
+    @Column(name = "patch_id")
+    private String patchId;
     /**
      * This is the location of the patch, the dir where this patch has been read
      * from, relative to AMP app root
      */
-    protected String location;
-
+    @Column(name = "location")
+    private String location;
     /**
      * The date when the patch has been first found by the patcher module
      */
-    protected Date discovered;
+    @Column(name = "discovered")
+    private Date discovered;
 
-    /**
-     * The state of the patch
-     * 
-     * @see org.digijava.module.xmlpatcher.util.XmlPatcherConstants
-     */
-    protected Short state;
+    @Column(name = "state")
+    private Short state;
 
-    /**
-     * The execution logs for this patch, if any
-     */
-    protected List<AmpXmlPatchLog> logs;
+    @OneToMany(mappedBy = "ampXmlPatch", cascade = CascadeType.ALL)
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    private List<AmpXmlPatchLog> logs;
 
     public AmpXmlPatch() {
-        logs=new ArrayList<AmpXmlPatchLog>();
+        logs= new ArrayList<>();
     }
 
     /**

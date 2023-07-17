@@ -26,7 +26,9 @@ import org.digijava.module.aim.validator.groups.API;
 import org.digijava.module.aim.validator.groups.Submit;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,125 +52,269 @@ import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.
 @TranslatableClass(displayName = "Funding")
 @InterchangeableValidator(value = FundingWithTransactionsValidator.class, attributes = "required=Y")
 @InterchangeableValidator(PledgeOrgValidator.class)
+@Entity
+@Table(name = "AMP_FUNDING")
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class AmpFunding implements Serializable, Versionable, Cloneable, Identifiable {
     //IATI-check: not ignored!
     private static final long serialVersionUID = 1L;
 
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_FUNDING_seq")
+    @SequenceGenerator(name = "AMP_FUNDING_seq", sequenceName = "AMP_FUNDING_seq", allocationSize = 1)
+    @Column(name = "amp_funding_id")
     @InterchangeableId
     @Interchangeable(fieldTitle = "Funding ID")
     private Long ampFundingId;
 
-    @Interchangeable(fieldTitle = "Donor Organization ID", pickIdOnly = true, importable = true,
-            interValidators = @InterchangeableValidator(RequiredValidator.class),
-            commonPV = CommonFieldsConstants.COMMON_ORGANIZATION)
-    private AmpOrganisation ampDonorOrgId;
-
-    @InterchangeableBackReference
-    private AmpActivityVersion ampActivityId;
+    @Column(name = "crs_transaction_no")
     private Long crsTransactionNo;
+
+    @Column(name = "financing_id")
     @Interchangeable(fieldTitle="Financing ID",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Organization Id", importable=true)
     private String financingId;
+
+    @Column(name = "funding_terms_code")
     private String fundingTermsCode;
+
+    @Column(name = "funding_classification_date")
+    @Interchangeable(fieldTitle="Funding Classification Date",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Classification Date", importable=true)
+    private Date fundingClassificationDate;
+
+    @Column(name = "planned_start_date")
     private Date plannedStartDate;
+
+    @Column(name = "planned_completion_date")
     private Date plannedCompletionDate;
+
+    @Column(name = "actual_start_date")
     @Interchangeable(fieldTitle="Actual Start Date",fmPath="/Activity Form/Planning/Actual Start Date", importable=true)
     private Date actualStartDate;
+
+    @Column(name = "actual_completion_date")
     @Interchangeable(fieldTitle="Actual Completion Date",fmPath="/Activity Form/Planning/Actual Completion Date", importable=true)
     private Date actualCompletionDate;
-    
+
+    @Column(name = "original_comp_date")
     @Interchangeable(fieldTitle = "Original Completion Date", importable = true,
             fmPath = "/Activity Form/Planning/Original Completion Date",
             interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
                     fmPath = "/Activity Form/Planning/Required Validator for Original Completion Date"))
     private Date originalCompDate;
-    
+
+    @Column(name = "last_audit_date")
     private Date lastAuditDate;
+
+    @Column(name = "reporting_date")
     @Interchangeable(fieldTitle="Reporting Date", importable=true)
     private Date reportingDate;
-    
+
+    @Column(name = "conditions", columnDefinition = "text")
     @Interchangeable(fieldTitle="Conditions",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Conditions", importable=true)
     @TranslatableField
     private String conditions;
-    
+
+    @Column(name = "donor_objective", columnDefinition = "text")
     @Interchangeable(fieldTitle="Donor Objective",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Donor Objective", importable=true)
     @TranslatableField
     private String donorObjective;
+
+    @Column(name = "language")
     private String language;
+
+    @Column(name = "version")
     private String version;
+
+    @Column(name = "cal_type")
     private String calType;
+
+    @Column(name = "comments", columnDefinition = "text")
     private String comments;
+
+    @Column(name = "signature_date")
     private Date signatureDate;
-    
-    @TransactionOrgRole(groups = API.class)
-    @InterchangeableDiscriminator(discriminatorField = "transactionType",
-        configurer = AmpFundingDetailDiscriminationConfigurer.class,
-        settings = {
-            @Interchangeable(fieldTitle = ArConstants.COMMITMENT, discriminatorOption = "" + Constants.COMMITMENT,
-                    fmPath = ActivityEPConstants.COMMITMENTS_TABLE_FM_PATH,
-                    importable = true),
-            @Interchangeable(fieldTitle = ArConstants.DISBURSEMENT, discriminatorOption = "" + Constants.DISBURSEMENT,
-                    fmPath = ActivityEPConstants.DISB_TABLE_FM_PATH,
-                    importable = true),
-            @Interchangeable(fieldTitle = ArConstants.ARREARS, discriminatorOption = "" + Constants.ARREARS,
-                    fmPath = ActivityEPConstants.ARREARS_TABLE_FM_PATH,
-                    importable = true),
-            @Interchangeable(fieldTitle = ArConstants.DISBURSEMENT_ORDERS,
-                    discriminatorOption = "" + Constants.DISBURSEMENT_ORDER,
-                    fmPath = ActivityEPConstants.DISB_ORDERS_TABLE_FM_PATH,
-                    importable = true),
-            @Interchangeable(fieldTitle = ArConstants.ESTIMATED_DISBURSEMENTS,
-                    discriminatorOption = "" + Constants.ESTIMATED_DONOR_DISBURSEMENT,
-                    fmPath = ActivityEPConstants.EST_DISB_TABLE_FM_PATH,
-                    importable = true),
-            @Interchangeable(fieldTitle = ArConstants.RELEASE_OF_FUNDS,
-                    discriminatorOption = "" + Constants.RELEASE_OF_FUNDS,
-                    fmPath = ActivityEPConstants.RELEASE_FUNDS_TABLE_FM_PATH,
-                    importable = true),
-            @Interchangeable(fieldTitle = ArConstants.EXPENDITURE, discriminatorOption = "" + Constants.EXPENDITURE,
-                    fmPath = ActivityEPConstants.EXPENDITURES_TABLE_FM_PATH,
-                    importable = true)
-        })
-    private Set<AmpFundingDetail> fundingDetails = new HashSet<>();
-    
-    @Interchangeable(fieldTitle = ActivityFieldsConstants.MTEF_PROJECTIONS, importable = true,
-            fmPath = "/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections")
-    private Set<AmpFundingMTEFProjection> mtefProjections = new HashSet<>();
-    
+
+    @Column(name = "active")
     @Interchangeable(fieldTitle="Active",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Active", importable = true)
     private Boolean active;
+
+    @Column(name = "delegated_cooperation")
     @Interchangeable(fieldTitle="Delegated Cooperation",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Delegated Cooperation", importable = true)
     private Boolean delegatedCooperation;
+
+    @Column(name = "delegated_partner")
     @Interchangeable(fieldTitle="Delegated Partner",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Delegated Partner", importable=true)
     private Boolean delegatedPartner;
 
-    // private AmpModality modalityId;
-    
+    @Column(name = "group_versioned_funding")
+    @Interchangeable(fieldTitle="Group Versioned Funding", importable=true)
+    private Long groupVersionedFunding;
+
+    @Column(name = "capital_spend_percent")
+    private Float capitalSpendingPercentage;
+
+    @Column(name = "loan_terms", columnDefinition = "text")
+    @Interchangeable(fieldTitle="Loan Terms",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Loan Terms", importable=true)
+    private String loanTerms;
+
+    @Column(name = "order_number")
+    private Integer orderNumber;
+
+    @Column(name = "index")
+    private Integer index;
+
+    @Column(name = "ratification_date")
+    @Interchangeable(fieldTitle = "Ratification Date",
+            fmPath = "/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Ratification Date",
+            importable = true)
+    private Date ratificationDate;
+
+    @Column(name = "grace_period")
+    @Interchangeable(fieldTitle = "Grace Period",
+            fmPath = "/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Grace Period",
+            importable = true)
+    private Integer gracePeriod;
+
+    @Column(name = "interest_rate")
+    @Interchangeable(fieldTitle = "Interest Rate",
+            fmPath = "/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Interest Rate",
+            importable = true)
+    private Float interestRate;
+
+    @Column(name = "maturity")
+    @Interchangeable(fieldTitle = "Maturity",
+            fmPath = "/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Maturity",
+            importable = true)
+    private Date maturity;
+
+    @Column(name = "project_results_available")
+    @Interchangeable(fieldTitle = "Project Results Available", label = FUNDING_PROJECT_RESULTS_AVAILABLE_LABEL,
+            fmPath = FUNDING_ITEM_CLASSIFICATION_FM_PATH + "/Project Results Available", importable = true,
+            interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
+                    fmPath = FUNDING_ITEM_CLASSIFICATION_FM_PATH + "/Required Validator for Project Results Available"))
+    private Boolean projectResultsAvailable;
+
+    @Column(name = "project_results_link")
+    @Interchangeable(fieldTitle = "Project Results Link", label = FUNDING_PROJECT_RESULTS_LINK_LABEL,
+            fmPath = FUNDING_ITEM_CLASSIFICATION_FM_PATH + "/Project Results Link", importable = true)
+    private String projectResultsLink;
+
+    @Column(name = "project_joint_decision")
+    @Interchangeable(fieldTitle = "Project Joint Decision", label = FUNDING_PROJECT_JOINT_DECISION_LABEL,
+            fmPath = FUNDING_ITEM_CLASSIFICATION_FM_PATH + "/Project Joint Decision", importable = true,
+            interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
+                    fmPath = FUNDING_ITEM_CLASSIFICATION_FM_PATH + "/Required Validator for Project Joint Decision"))
+    private String projectJointDecision;
+
+    @Column(name = "project_monitoring")
+    @Interchangeable(fieldTitle = "Project Monitoring", label = FUNDING_PROJECT_MONITORING_LABEL,
+            fmPath = FUNDING_ITEM_CLASSIFICATION_FM_PATH + "/Project Monitoring", importable = true,
+            interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
+                    fmPath = FUNDING_ITEM_CLASSIFICATION_FM_PATH + "/Required Validator for Project Monitoring"))
+    private String projectMonitoring;
+
+    @Column(name = "project_sustainability")
+    @Interchangeable(fieldTitle = "Project Sustainability", label = FUNDING_PROJECT_SUSTAINABILITY_LABEL,
+            fmPath = FUNDING_ITEM_CLASSIFICATION_FM_PATH + "/Project Sustainability", importable = true,
+            interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
+                    fmPath = FUNDING_ITEM_CLASSIFICATION_FM_PATH + "/Required Validator for Project Sustainability"))
+    private String projectSustainability;
+
+    @TransactionOrgRole(groups = API.class)
+    @InterchangeableDiscriminator(discriminatorField = "transactionType",
+            configurer = AmpFundingDetailDiscriminationConfigurer.class,
+            settings = {
+                    @Interchangeable(fieldTitle = ArConstants.COMMITMENT, discriminatorOption = "" + Constants.COMMITMENT,
+                            fmPath = ActivityEPConstants.COMMITMENTS_TABLE_FM_PATH,
+                            importable = true),
+                    @Interchangeable(fieldTitle = ArConstants.DISBURSEMENT, discriminatorOption = "" + Constants.DISBURSEMENT,
+                            fmPath = ActivityEPConstants.DISB_TABLE_FM_PATH,
+                            importable = true),
+                    @Interchangeable(fieldTitle = ArConstants.ARREARS, discriminatorOption = "" + Constants.ARREARS,
+                            fmPath = ActivityEPConstants.ARREARS_TABLE_FM_PATH,
+                            importable = true),
+                    @Interchangeable(fieldTitle = ArConstants.DISBURSEMENT_ORDERS,
+                            discriminatorOption = "" + Constants.DISBURSEMENT_ORDER,
+                            fmPath = ActivityEPConstants.DISB_ORDERS_TABLE_FM_PATH,
+                            importable = true),
+                    @Interchangeable(fieldTitle = ArConstants.ESTIMATED_DISBURSEMENTS,
+                            discriminatorOption = "" + Constants.ESTIMATED_DONOR_DISBURSEMENT,
+                            fmPath = ActivityEPConstants.EST_DISB_TABLE_FM_PATH,
+                            importable = true),
+                    @Interchangeable(fieldTitle = ArConstants.RELEASE_OF_FUNDS,
+                            discriminatorOption = "" + Constants.RELEASE_OF_FUNDS,
+                            fmPath = ActivityEPConstants.RELEASE_FUNDS_TABLE_FM_PATH,
+                            importable = true),
+                    @Interchangeable(fieldTitle = ArConstants.EXPENDITURE, discriminatorOption = "" + Constants.EXPENDITURE,
+                            fmPath = ActivityEPConstants.EXPENDITURES_TABLE_FM_PATH,
+                            importable = true)
+            })
+
+
+
+    @Interchangeable(fieldTitle = "Project Problems", label = FUNDING_PROJECT_PROBLEMS_LABEL,
+            fmPath = FUNDING_ITEM_CLASSIFICATION_FM_PATH + "/Project Problems", importable = true,
+            interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
+                    fmPath = FUNDING_ITEM_CLASSIFICATION_FM_PATH + "/Required Validator for Project Problems"))
+    private String projectProblems;
+
+    @ManyToOne
+    @JoinColumn(name = "amp_donor_org_id")
+    @Interchangeable(fieldTitle = "Donor Organization ID", pickIdOnly = true, importable = true,
+            interValidators = @InterchangeableValidator(RequiredValidator.class),
+            commonPV = CommonFieldsConstants.COMMON_ORGANIZATION)
+    private AmpOrganisation ampDonorOrgId;
+
+    @ManyToOne
+    @JoinColumn(name = "source_role_id")
+    @Interchangeable(fieldTitle = "Source Role", importable = true, pickIdOnly = true,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
+    private AmpRole sourceRole;
+
+    @ManyToOne
+    @JoinColumn(name = "amp_activity_id", referencedColumnName = "amp_activity_id")
+    @InterchangeableBackReference
+    private AmpActivityVersion ampActivityId;
+
+    @ManyToOne
+    @JoinColumn(name = "type_of_assistance_category_va")
     @Interchangeable(fieldTitle = "Type of Assistance",
-            fmPath = "/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Type of Assistence", 
+            fmPath = "/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Type of Assistence",
             discriminatorOption = CategoryConstants.TYPE_OF_ASSISTENCE_KEY, importable = true,
             pickIdOnly = true, requiredDependencies = {FundingWithTransactionsValidator.TRANSACTION_PRESENT_KEY},
             dependencyRequired = ALWAYS)
     private AmpCategoryValue typeOfAssistance;
-    
+
+    @ManyToOne
+    @JoinColumn(name = "financing_instr_category_value")
     @Interchangeable(fieldTitle = "Financing Instrument",
-            fmPath = "/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Financing Instrument", 
+            fmPath = "/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Financing Instrument",
             discriminatorOption = CategoryConstants.FINANCING_INSTRUMENT_KEY, importable = true,
             pickIdOnly = true, requiredDependencies = {FundingWithTransactionsValidator.TRANSACTION_PRESENT_KEY},
             dependencyRequired = ALWAYS)
     private AmpCategoryValue financingInstrument;
-    
-    @Interchangeable(fieldTitle="Funding Status", fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Status", 
-                     discriminatorOption = CategoryConstants.FUNDING_STATUS_KEY, importable=true, pickIdOnly=true)
+
+    @ManyToOne
+    @JoinColumn(name = "funding_status_category_va")
+    @Interchangeable(fieldTitle="Funding Status", fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Status",
+            discriminatorOption = CategoryConstants.FUNDING_STATUS_KEY, importable=true, pickIdOnly=true)
     private AmpCategoryValue fundingStatus;
-    
-    @Interchangeable(fieldTitle="Mode of Payment", fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Mode of Payment", 
-                     discriminatorOption = CategoryConstants.MODE_OF_PAYMENT_KEY, importable=true, pickIdOnly=true)
+
+    @ManyToOne
+    @JoinColumn(name = "mode_of_payment_category_va")
+    @Interchangeable(fieldTitle="Mode of Payment", fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Mode of Payment",
+            discriminatorOption = CategoryConstants.MODE_OF_PAYMENT_KEY, importable=true, pickIdOnly=true)
     private AmpCategoryValue modeOfPayment;
-    
-    @Interchangeable(fieldTitle="Concessionality Level", fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Concessionality Level", 
-             discriminatorOption = CategoryConstants.CONCESSIONALITY_LEVEL_KEY, importable=true, pickIdOnly=true)
+
+    @ManyToOne
+    @JoinColumn(name = "concessionality_level_va")
+    @Interchangeable(fieldTitle="Concessionality Level", fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Concessionality Level",
+            discriminatorOption = CategoryConstants.CONCESSIONALITY_LEVEL_KEY, importable=true, pickIdOnly=true)
     private AmpCategoryValue concessionalityLevel;
 
+    @ManyToOne
+    @JoinColumn(name = "vulnerable_group_va")
     @Interchangeable(fieldTitle = "Vulnerable Group", label = FUNDING_VULNERABLE_GROUP_LABEL,
             fmPath = FUNDING_ITEM_CLASSIFICATION_FM_PATH + "/Vulnerable Group",
             discriminatorOption = CategoryConstants.VULNERABLE_GROUP_LEVEL_KEY, importable = true, pickIdOnly = true,
@@ -176,84 +322,30 @@ public class AmpFunding implements Serializable, Versionable, Cloneable, Identif
                     fmPath = FUNDING_ITEM_CLASSIFICATION_FM_PATH + "/Required Validator for Vulnerable Group"))
     private AmpCategoryValue vulnerableGroup;
 
-    @Interchangeable(fieldTitle="Loan Terms",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Loan Terms", importable=true)
-    private String loanTerms;
-    @Interchangeable(fieldTitle="Group Versioned Funding", importable=true)
-    private Long groupVersionedFunding;
-    private Float capitalSpendingPercentage;
-
+    @ManyToOne
+    @JoinColumn(name = "agreement")
     @Interchangeable(fieldTitle = "Agreement",
             fmPath = "/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement",
             importable = true)
     @Independent
     private AmpAgreement agreement;
 
-    @Interchangeable(fieldTitle = "Source Role", importable = true, pickIdOnly = true,
-            interValidators = @InterchangeableValidator(RequiredValidator.class))
-    private AmpRole sourceRole;
-    @Interchangeable(fieldTitle="Funding Classification Date",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Classification Date", importable=true)
-    private Date fundingClassificationDate;
+    @Column(name = "effective_funding_date")
     @Interchangeable(fieldTitle="Effective Funding Date",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Effective Funding Date", importable=true)
     private Date effectiveFundingDate;
+
+    @Column(name = "funding_closing_date")
     @Interchangeable(fieldTitle="Funding Closing Date",fmPath="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Closing Date", importable=true)
     private Date fundingClosingDate;
 
-    @Interchangeable(fieldTitle = "Ratification Date",
-            fmPath = "/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Ratification Date",
-            importable = true)
-    private Date ratificationDate;
+    @OneToMany(mappedBy = "ampFundingId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<AmpFundingDetail> fundingDetails= new HashSet<>();
 
-    @Interchangeable(fieldTitle = "Grace Period",
-            fmPath = "/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Grace Period",
-            importable = true)
-    private Integer gracePeriod;
+    @OneToMany(mappedBy = "ampFundingId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.MTEF_PROJECTIONS, importable = true,
+            fmPath = "/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections")
+    private Set<AmpFundingMTEFProjection> mtefProjections= new HashSet<>();
 
-    @Interchangeable(fieldTitle = "Interest Rate",
-            fmPath = "/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Interest Rate",
-            importable = true)
-    private Float interestRate;
-
-    @Interchangeable(fieldTitle = "Maturity",
-            fmPath = "/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Maturity",
-            importable = true)
-    private Date maturity;
-
-    @Interchangeable(fieldTitle = "Project Results Available", label = FUNDING_PROJECT_RESULTS_AVAILABLE_LABEL,
-            fmPath = FUNDING_ITEM_CLASSIFICATION_FM_PATH + "/Project Results Available", importable = true,
-            interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
-                    fmPath = FUNDING_ITEM_CLASSIFICATION_FM_PATH + "/Required Validator for Project Results Available"))
-    protected Boolean projectResultsAvailable;
-
-    @Interchangeable(fieldTitle = "Project Results Link", label = FUNDING_PROJECT_RESULTS_LINK_LABEL,
-            fmPath = FUNDING_ITEM_CLASSIFICATION_FM_PATH + "/Project Results Link", importable = true)
-    protected String projectResultsLink;
-
-    @Interchangeable(fieldTitle = "Project Joint Decision", label = FUNDING_PROJECT_JOINT_DECISION_LABEL,
-            fmPath = FUNDING_ITEM_CLASSIFICATION_FM_PATH + "/Project Joint Decision", importable = true,
-            interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
-                    fmPath = FUNDING_ITEM_CLASSIFICATION_FM_PATH + "/Required Validator for Project Joint Decision"))
-    protected String projectJointDecision;
-
-    @Interchangeable(fieldTitle = "Project Monitoring", label = FUNDING_PROJECT_MONITORING_LABEL,
-            fmPath = FUNDING_ITEM_CLASSIFICATION_FM_PATH + "/Project Monitoring", importable = true,
-            interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
-                    fmPath = FUNDING_ITEM_CLASSIFICATION_FM_PATH + "/Required Validator for Project Monitoring"))
-    protected String projectMonitoring;
-
-    @Interchangeable(fieldTitle = "Project Sustainability", label = FUNDING_PROJECT_SUSTAINABILITY_LABEL,
-            fmPath = FUNDING_ITEM_CLASSIFICATION_FM_PATH + "/Project Sustainability", importable = true,
-            interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
-                    fmPath = FUNDING_ITEM_CLASSIFICATION_FM_PATH + "/Required Validator for Project Sustainability"))
-    protected String projectSustainability;
-
-    @Interchangeable(fieldTitle = "Project Problems", label = FUNDING_PROJECT_PROBLEMS_LABEL,
-            fmPath = FUNDING_ITEM_CLASSIFICATION_FM_PATH + "/Project Problems", importable = true,
-            interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
-                    fmPath = FUNDING_ITEM_CLASSIFICATION_FM_PATH + "/Required Validator for Project Problems"))
-    protected String projectProblems;
-
-    private Integer orderNumber;
-    private Integer index;
     
     @Override
     public boolean equalsForVersioning(Object obj) {

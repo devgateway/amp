@@ -4,9 +4,9 @@
 	<class name="org.digijava.module.aim.dbentity.AmpCurrency" table="AMP_CURRENCY" lazy="false">
 		<cache usage="read-write" />
 		<id name="ampCurrencyId" column="amp_currency_id" type="java.lang.Long">
-<!--			<generator class="native">-->
-<!--				<param name="sequence">AMP_CURRENCY_seq</param>-->
-<!--			</generator>-->
+			<generator class="native">
+				<param name="sequence">AMP_CURRENCY_seq</param>
+			</generator>
 		</id>
 
 		<property name="currencyCode" column="currency_code" type="java.lang.String" unique="true" />

@@ -11,26 +11,43 @@ import java.util.Set;
 import org.digijava.module.aim.helper.donorReport.OrgProfileValue;
 import org.digijava.module.aim.helper.donorReport.ValueTranslatabePair;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-
+import javax.persistence.*;
+@Entity
+@Table(name = "AMP_ORG_BUDGET_INFO")
 
 public class AmpOrganizationBudgetInformation implements Serializable,OrgProfileValue{
-
-    //IATI-check: to be ignored
-    //  @Interchangeable(fieldTitle="ID")
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_ORG_BUDGET_INFO_seq")
+    @SequenceGenerator(name = "AMP_ORG_BUDGET_INFO_seq", sequenceName = "AMP_ORG_BUDGET_INFO_seq", allocationSize = 1)    @Column(name = "id")
     private Long id;
-//  @Interchangeable(fieldTitle="Type")
-    private AmpCategoryValue type;
-//  @Interchangeable(fieldTitle="Year")
-    private Long year;
-//  @Interchangeable(fieldTitle="Amount")
+
+    @Column(name = "amount")
     private Double amount;
-//  @Interchangeable(fieldTitle="Currency")
+
+    @Column(name = "year")
+    private Long year;
+
+    @ManyToOne
+    @JoinColumn(name = "amp_currency_id")
     private AmpCurrency currency;
-//  @Interchangeable(fieldTitle="Organization", recursive=true)
+
+    @ManyToOne
+    @JoinColumn(name = "amp_org_id")
     private AmpOrganisation organization;
-    private boolean newlyCreated;
-//    @Interchangeable(fieldTitle="Organizations", recursive=true)
+
+    @ManyToOne
+    @JoinColumn(name = "type")
+    private AmpCategoryValue type;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "amp_budget_organizations",
+            joinColumns = @JoinColumn(name = "id"),
+            inverseJoinColumns = @JoinColumn(name = "org_id"))
     private Set<AmpOrganisation> organizations;
+    //IATI-check: to be ignored
+
+    @Transient
+    private boolean newlyCreated;
 
 
     public Double getAmount() {

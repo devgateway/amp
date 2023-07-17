@@ -49,11 +49,11 @@
     <logger name="org.apache" level="INFO" />
 
     <!-- Limit the org.quartz category to INFO as its DEBUG is verbose -->
-    <logger name="org.quartz" level="INFO" />
+    <logger name="org.quartz" level="TRACE" />
 
-    <logger name="org.digijava" level="INFO" /> <!-- DEBUG default -->
+    <logger name="org.digijava" level="TRACE" /> <!-- DEBUG default -->
 
-    <logger name="org.dgfoundation" level="INFO" /> <!-- DEBUG default -->
+    <logger name="org.dgfoundation" level="TRACE" /> <!-- DEBUG default -->
 
     <!-- SET to DEBUG to see wicket page render times -->
     <logger name="org.apache.wicket.devutils.inspector.RenderPerformanceListener" level="DEBUG" />
@@ -61,14 +61,14 @@
     <!-- Limit JSF logging to DEBUG.  FINER and FINEST will not be logged -->
     <logger name="javax.enterprise.resource.webcontainer.jsf" level="INFO" />
 
-    <logger name="org.hibernate" level="ERROR" />
+    <logger name="org.hibernate" level="TRACE" />
 
     <logger name="net.sf.hibernate.cache" level="ERROR" />
 
     <logger name="net.sf.ehcache.hibernate" level="ERROR" />
 
     <!-- SET to TRACE in order to see queries and their value, INFO is default -->
-    <logger name="org.hibernate.SQL" level="INFO" />
+    <logger name="org.hibernate.SQL" level="TRACE" />
 
     <!-- SET to TRACE in order to see queries and their value, INFO is default -->
     <logger name="org.hibernate.type" level="INFO" />

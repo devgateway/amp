@@ -12,23 +12,34 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import javax.persistence.*;
 
 @TranslatableClass (displayName = "Organisation Contact")
-public class AmpOrganisationContact implements Serializable,OrgProfileValue {
 
+@Entity
+@Table(name = "AMP_ORG_CONTACT")
+public class AmpOrganisationContact implements Serializable,OrgProfileValue {
+    @Id
     @InterchangeableId
     @Interchangeable(fieldTitle = "Id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_ORG_CONTACT_seq")
+    @SequenceGenerator(name = "AMP_ORG_CONTACT_seq", sequenceName = "AMP_ORG_CONTACT_seq", allocationSize = 1)    @Column(name = "id")
     private Long id;
 
-    private AmpContact contact;
-    
+    @Column(name = "is_primary_contact")
+    private Boolean primaryContact;
+
+    @ManyToOne
+    @JoinColumn(name = "amp_org_id")
     @Interchangeable(fieldTitle = "Organisation", pickIdOnly = true,
             interValidators = @InterchangeableValidator(RequiredValidator.class),
             uniqueConstraint = true, importable = true)
     private AmpOrganisation organisation;
-    
-    private Boolean primaryContact;
-    
+
+    @ManyToOne
+    @JoinColumn(name = "contact_id")
+    private AmpContact contact;
+
     public AmpOrganisationContact(){
         
     }

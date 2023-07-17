@@ -5,7 +5,12 @@ package org.digijava.module.aim.dbentity ;
 
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.util.HierarchyListable;
+import org.hibernate.annotations.Polymorphism;
+import org.hibernate.annotations.PolymorphismType;
 
+import javax.persistence.Cacheable;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.Collection;
 import java.util.Set;
 
@@ -13,6 +18,10 @@ import java.util.Set;
  * @author aartimon@dginternational.org
  * @since Apr 27, 2011
  */
+@Entity
+@Table(name = "amp_activity")
+@Polymorphism(type = PolymorphismType.EXPLICIT)
+@Cacheable
 public class AmpActivity extends AmpActivityVersion implements Cloneable, HierarchyListable {
 
     /**
@@ -26,7 +35,7 @@ public class AmpActivity extends AmpActivityVersion implements Cloneable, Hierar
     @Override
     public Object clone() throws CloneNotSupportedException {
         try {
-            return (AmpActivity) super.clone();
+            return super.clone();
         } catch (CloneNotSupportedException e) {
             throw new InternalError(e.toString());
         }

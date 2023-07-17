@@ -13,14 +13,24 @@ import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.Output;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import javax.persistence.*;
+@Entity
+@Table(name = "AMP_AGREEMENT")
+@Cacheable
 @TranslatableClass(displayName = "Agreement")
 public class AmpAgreement implements Serializable, Versionable, Identifiable {
     private static final long serialVersionUID = 1L;
 
+    @Id
     @Interchangeable(fieldTitle = "Agreement ID")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_AGREEMENT_seq")
+    @SequenceGenerator(name = "AMP_AGREEMENT_seq", sequenceName = "AMP_AGREEMENT_seq", allocationSize = 1)
+    @Column(name = "id")
     private Long id;
 
+    @Column(name = "code")
     @Interchangeable(fieldTitle = "Code",
             fmPath = "/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement/Code",
             importable = true,
@@ -29,6 +39,7 @@ public class AmpAgreement implements Serializable, Versionable, Identifiable {
                     @InterchangeableValidator(AgreementCodeValidator.class)})
     private String code;
 
+    @Column(name = "title")
     @Interchangeable(fieldTitle = "Title",
             fmPath = "/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement/Title",
             importable = true,
@@ -36,18 +47,21 @@ public class AmpAgreement implements Serializable, Versionable, Identifiable {
     @TranslatableField
     private String title;
 
+    @Column(name = "effective_date")
     @Interchangeable(fieldTitle = "Effective Date", fmPath = "/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement/Effective Date", importable = true)
     private Date effectiveDate;
 
+    @Column(name = "signature_date")
     @Interchangeable(fieldTitle = "Signature Date", fmPath = "/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement/Signature Date", importable = true)
     private Date signatureDate;
 
+    @Column(name = "close_date")
     @Interchangeable(fieldTitle = "Close Date", fmPath = "/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement/Close Date", importable = true)
     private Date closeDate;
 
+    @Column(name = "parlimentary_date")
     @Interchangeable(fieldTitle = "Parlimentary Approval Date", fmPath = "/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement/Parlimentary Approval Date", importable = true)
     private Date parlimentaryApprovalDate;
-
     public AmpAgreement() {
         super();
     }

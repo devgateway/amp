@@ -7,15 +7,28 @@ import java.util.List;
 
 import org.digijava.module.aim.helper.donorReport.OrgProfileValue;
 import org.digijava.module.aim.helper.donorReport.ValueTranslatabePair;
-
-
+import javax.persistence.*;
+@Entity
+@Table(name = "AMP_ORG_RECIPIENT")
+@Cacheable
 public class AmpOrgRecipient implements Serializable,OrgProfileValue {
     private static final long serialVersionUID = 1L;
-    //IATI check: not to be ignored
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_ORG_RECIPIENT_seq")
+    @SequenceGenerator(name = "AMP_ORG_RECIPIENT_seq", sequenceName = "AMP_ORG_RECIPIENT_seq", allocationSize = 1)    @Column(name = "amp_org_rec_id")
     private Long ampOrgRecipientId;
-    private AmpOrganisation organization;
-    private AmpOrganisation parentOrganization;
+
+    @Column(name = "description")
     private String description;
+
+    @ManyToOne
+    @JoinColumn(name = "amp_org_id")
+    private AmpOrganisation organization;
+
+    @ManyToOne
+    @JoinColumn(name = "parent_org_id")
+    private AmpOrganisation parentOrganization;
+
 
     public String getDescription() {
         return description;

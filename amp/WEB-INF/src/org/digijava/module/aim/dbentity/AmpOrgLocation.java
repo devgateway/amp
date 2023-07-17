@@ -9,17 +9,28 @@ import java.util.List;
 import org.digijava.module.aim.helper.donorReport.OrgProfileValue;
 import org.digijava.module.aim.helper.donorReport.ValueTranslatabePair;
 
+import javax.persistence.*;
 
+@Entity
+@Table(name = "AMP_ORG_LOCATION")
+@Cacheable
 public class AmpOrgLocation implements Serializable,OrgProfileValue {
     private static final long serialVersionUID = 1L;
-    //IATI-check: to be ignored
-//    @Interchangeable(fieldTitle="AMP Organization Location ID")
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_ORG_LOCATION_seq")
+    @SequenceGenerator(name = "AMP_ORG_LOCATION_seq", sequenceName = "AMP_ORG_LOCATION_seq", allocationSize = 1)    @Column(name = "amp_org_loc_id")
     private Long ampOrgLocId;
-//    @Interchangeable(fieldTitle="Percent")
+
+    @Column(name = "percent")
     private Double percent;
-//    @Interchangeable(fieldTitle="Organization")
+
+    @ManyToOne
+    @JoinColumn(name = "amp_org_id")
     private AmpOrganisation organization;
-//    @Interchangeable(fieldTitle="Location"/*, descend = true*/)
+
+    @ManyToOne
+    @JoinColumn(name = "location_id")
     private AmpCategoryValueLocations location;
 
     public Long getAmpOrgLocId() {

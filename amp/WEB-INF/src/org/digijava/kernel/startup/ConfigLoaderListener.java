@@ -94,14 +94,15 @@ public class ConfigLoaderListener
     
     public static int parseBugFixingVersion(String completeProductVersion, String versionPrefix) {
             int indexOf = completeProductVersion.indexOf(versionPrefix);
-            String bugFixingVersionString="";
+            StringBuilder bugFixingVersionString= new StringBuilder();
             for(int i=indexOf+versionPrefix.length()+1;i<completeProductVersion.length();i++) {
                 char c=completeProductVersion.charAt(i);
                 if(c<'0' || c>'9') break;
-                bugFixingVersionString+=c;
+                bugFixingVersionString.append(c);
             }
         if(bugFixingVersionString.length()==0) return 0;
-        return Integer.parseInt(bugFixingVersionString);
+        logger.debug(bugFixingVersionString.toString());
+        return Integer.parseInt(bugFixingVersionString.toString());
     }
 
     public void contextInitialized(ServletContextEvent sce) {
@@ -258,8 +259,8 @@ public class ConfigLoaderListener
                 //metaData.getDatabaseMinorVersion()!=dbMinorVersion || 
                 dbBugfixingVersion>parseBugFixingVersion(metaData.getDatabaseProductVersion(), metaData.getDatabaseMajorVersion()+"."+metaData.getDatabaseMinorVersion())) 
             throw new IncompatibleEnvironmentException("Database version ("+metaData.getDatabaseProductVersion()+") is incompatible. Database version needs to be "+dbMajorVersion+"."+dbMinorVersion+" and bugfixing version at least "+dbBugfixingVersion);
-    
-        if(metaData.getDriverMajorVersion()!=jdbcMajorVersion || 
+        logger.debug("Versions "+metaData.getDriverMajorVersion()+"|"+jdbcMajorVersion);
+        if(metaData.getDriverMajorVersion()!=jdbcMajorVersion ||
                 // metaData.getDriverMinorVersion()!=jdbcMinorVersion || 
                 jdbcBugfixingVersion>parseBugFixingVersion(metaData.getDriverVersion(), metaData.getDriverMajorVersion()+"."+metaData.getDriverMinorVersion())) 
             throw new IncompatibleEnvironmentException("JDBC driver version ("+metaData.getDriverVersion()+") is incompatible. JDBC version needs to be "+jdbcMajorVersion+"."+jdbcMinorVersion+" and bugfixing version at least "+jdbcBugfixingVersion);

@@ -1,11 +1,22 @@
 package org.digijava.module.aim.dbentity;
 
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "amp_quartz_job_class")
 public class AmpQuartzJobClass {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "jc_id")
     private Long id;
+
+    @Column(name = "jc_name")
     private String name;
 
-
+@Column(name = "sched_name")
     private String schedName;
+@Column(name = "jc_class_fullname")
     private String classFullname;
 
     public AmpQuartzJobClass() {

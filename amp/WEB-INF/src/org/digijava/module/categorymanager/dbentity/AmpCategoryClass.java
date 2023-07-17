@@ -1,5 +1,10 @@
 package org.digijava.module.categorymanager.dbentity;
 
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
@@ -8,19 +13,46 @@ import java.util.Set;
  * @author Alex Gartner
  *
  */
+@Entity
+@Table(name = "AMP_CATEGORY_CLASS")
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class AmpCategoryClass implements Serializable, Comparable<AmpCategoryClass> {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_CATEGORY_CLASS_SEQ")
+    @SequenceGenerator(name = "AMP_CATEGORY_CLASS_SEQ", sequenceName = "AMP_CATEGORY_CLASS_seq", allocationSize = 1)
+    @Column(name = "id")
     private Long id;
+
+    @Column(name = "category_name")
     private String name;
-    private String description;
+
+    @Column(name = "keyName", unique = true)
     private String keyName;
-    private boolean isMultiselect   = false;
-    private boolean isOrdered       = false;
-    
+
+    @Column(name = "description", columnDefinition = "text")
+    private String description;
+
+    @Column(name = "is_multiselect")
+    private boolean isMultiselect;
+
+    @Column(name = "is_ordered")
+    private boolean isOrdered;
+
+    @OneToMany(mappedBy = "ampCategoryClass", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderColumn(name = "index_column")
     private List<AmpCategoryValue> possibleValues;
-    
-    private List<AmpCategoryClass> usedCategories;
-    private Set<AmpCategoryClass> usedByCategories;
-    
+
+    @ManyToMany(mappedBy = "usedCategories", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @LazyCollection(LazyCollectionOption.EXTRA)
+    private List<AmpCategoryClass> usedByCategories;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "AMP_CATEGORIES_USED", joinColumns = @JoinColumn(name = "used_category_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
+    @LazyCollection(LazyCollectionOption.EXTRA)
+    private Set<AmpCategoryClass> usedCategories;
+
+
     private Boolean usedByCategorySingleSelect; //how this category class is linked with current usedByCategory
     
     public String getDescription() {
@@ -78,17 +110,17 @@ public class AmpCategoryClass implements Serializable, Comparable<AmpCategoryCla
     public void setKeyName(String key) {
         this.keyName = key;
     }
-    public List<AmpCategoryClass> getUsedCategories() {
+    public Set<AmpCategoryClass> getUsedCategories() {
         return usedCategories;
     }
-    public void setUsedCategories(List<AmpCategoryClass> usedCategories) {
+    public void setUsedCategories(Set<AmpCategoryClass> usedCategories) {
         this.usedCategories = usedCategories;
     }
     
-    public Set<AmpCategoryClass> getUsedByCategories() {
+    public List<AmpCategoryClass> getUsedByCategories() {
         return usedByCategories;
     }
-    public void setUsedByCategories(Set<AmpCategoryClass> usedByCategories) {
+    public void setUsedByCategories(List<AmpCategoryClass> usedByCategories) {
         this.usedByCategories = usedByCategories;
     }
     public int compareTo(AmpCategoryClass o) {

@@ -11,20 +11,46 @@ import java.util.*;
 
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "AMP_TEMPLATES_VISIBILITY")
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class AmpTemplatesVisibility extends AmpObjectVisibility implements Serializable, Cloneable {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = -4765301740400470276L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_TEMPLATES_VISIBILITY_SEQ")
+    @SequenceGenerator(name = "AMP_TEMPLATES_VISIBILITY_SEQ", sequenceName = "amp_templates_visibility_seq", allocationSize = 1)
+    @Column(name = "id")
+    private Long id;
 
-    private Set<AmpFeaturesVisibility> features;
-    private Set<AmpFieldsVisibility> fields;
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "visible")
     private String visible;
 
+    @ManyToMany(mappedBy = "templates")
+    private Set<AmpModulesVisibility> items;
+
+    @ManyToMany
+    @JoinTable(
+            name = "amp_features_templates",
+            joinColumns = @JoinColumn(name = "template"),
+            inverseJoinColumns = @JoinColumn(name = "feature")
+    )
+    private Set<AmpFeaturesVisibility> features;
+
+    @ManyToMany(mappedBy = "templates")
+    private Set<AmpFieldsVisibility> fields;
+    private static final long serialVersionUID = -4765301740400470276L;
+
+
+    @Transient
     //Non persistent
     private List<String> usedByTeamsNames;
-    
+
     public Set<AmpFeaturesVisibility> getFeatures() {
         return features;
     }
@@ -37,7 +63,7 @@ public class AmpTemplatesVisibility extends AmpObjectVisibility implements Seria
         return fields;
     }
 
-    public void setFields(Set<AmpFieldsVisibility> fields) 
+    public void setFields(Set<AmpFieldsVisibility> fields)
     {
         namesCache = null;
         this.fields = fields;
@@ -177,5 +203,26 @@ public class AmpTemplatesVisibility extends AmpObjectVisibility implements Seria
     public boolean isVisibleTemplateObj(AmpTemplatesVisibility template) {
         // TODO Auto-generated method stub
         return false;
+    }
+
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(Long id) {
+        this.id = id;
     }
 }

@@ -21,19 +21,32 @@ import org.digijava.module.aim.helper.fiscalcalendar.GregorianBasedWorker;
 import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.digijava.module.aim.helper.fiscalcalendar.NepaliBasedWorker;
 import org.digijava.module.aim.util.Identifiable;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "AMP_FISCAL_CALENDAR")
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class AmpFiscalCalendar implements Serializable, Identifiable, OrgProfileValue, CalendarConverter {
     
     @JsonProperty("id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_FISCAL_CALENDAR_SEQ")
+    @SequenceGenerator(name = "AMP_FISCAL_CALENDAR_SEQ", sequenceName = "AMP_FISCAL_CALENDAR_SEQ",allocationSize = 1)
+    @Column(name = "amp_fiscal_cal_id")
     private Long ampFiscalCalId;
 
     @JsonProperty("start-month-num")
+    @Column(name = "start_month_num")
     private Integer startMonthNum;
 
     @JsonProperty("year-offset")
+    @Column(name = "year_offset")
     private Integer yearOffset;
 
     @JsonProperty("start-day-num")
+    @Column(name = "start_day_num")
     private Integer startDayNum;
 
     private String name;
@@ -41,11 +54,14 @@ public class AmpFiscalCalendar implements Serializable, Identifiable, OrgProfile
     private String description;
 
     @JsonProperty("base-cal")
+    @Column(name = "base_cal")
     private String baseCal;
 
     @JsonProperty("is-fiscal")
+    @Column(name = "is_fiscal")
     private Boolean isFiscal; // This indicates whether calendar is fiscal or not.
-    
+
+    @OneToMany(mappedBy = "calendar", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AmpCurrency> constantCurrencies;
 
     /**

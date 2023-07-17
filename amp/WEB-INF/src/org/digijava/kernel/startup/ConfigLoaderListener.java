@@ -240,6 +240,7 @@ public class ConfigLoaderListener
         compat.load(new FileInputStream(compatFile));
         
         String prefix=null;
+        String version=metaData.getDatabaseProductVersion();
         if(metaData.getDatabaseProductName().equals("PostgreSQL")) prefix="postgresql";else
         prefix =(metaData.getDatabaseProductVersion().toUpperCase().indexOf(ORACLE_DB)>-1)?"oracle":"mysql";
         

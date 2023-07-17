@@ -14,20 +14,31 @@ import io.swagger.annotations.ApiModelProperty;
 import org.digijava.kernel.ampapi.endpoints.config.utils.ConfigHelper;
 import org.digijava.module.aim.helper.KeyValue;
 
+import javax.persistence.*;
+
+@Entity(name = "amp_global_settings")
+@Table(name = "amp_global_settings")
 public class AmpGlobalSettings implements Serializable {
     
     @JsonIgnore
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_global_settings_seq")
+    @SequenceGenerator(name = "amp_global_settings_seq", sequenceName = "amp_global_settings_seq",allocationSize = 1)
     private Long globalId;
     
     @JsonProperty("settingName")
     @ApiModelProperty(value = "the name of the global settings", example = "Link Mode of Payment to Funding Status")
+    @Column(name = "settingsname")
     private String globalSettingsName;
     
     @JsonProperty("settingValue")
+    @Column(name = "settingsvalue")
     @ApiModelProperty(value = "the current value of the settings", example = "false")
     private String globalSettingsValue;
     
     @JsonProperty("possibleValues")
+    @Column(name = "possiblevalues")
     @ApiModelProperty(value = "the type of possible values",
             allowableValues = "t_Boolean, t_Integer, t_Double, t_year_default_start, t_year_default_end, "
                     + "t_static_range, t_static_year, t_audit_trial_clenaup, t_components_sort, "
@@ -36,10 +47,12 @@ public class AmpGlobalSettings implements Serializable {
     private String globalSettingsPossibleValues;
     
     @JsonProperty("description")
+    @Column(name = "description")
     @ApiModelProperty(example = "Link Mode of Payment to Funding Status Description")
     private String globalSettingsDescription; //a description that will appear on mouseover
     
     @JsonProperty("section")
+    @Column(name = "section")
     @ApiModelProperty(example = "funding")
     private String section;
     
@@ -47,14 +60,17 @@ public class AmpGlobalSettings implements Serializable {
     private transient String[] listOfValues;
     
     @JsonProperty("valueTranslatable")
+    @Column(name = "value_translatable")
     @ApiModelProperty("if the global settings has translations")
     private Boolean valueTranslatable;
     
     @JsonProperty("possibleValuesIds")
+    @Transient
     @ApiModelProperty("possible values of the current setting in a { \"name1\" : \"value1\", ...} format")
     private Map<String, String> possibleValuesIds = new HashMap<>();
     
     @JsonIgnore
+    @Column(name = "internal")
     private Boolean internal;
     
     public Boolean getValueTranslatable() {

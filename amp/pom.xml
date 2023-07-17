@@ -8,9 +8,9 @@
     <name>Aid Management Platform</name>
     <properties>
         <wicketVersion>6.29.0</wicketVersion>
-        <tomcatVersion>8.5.73</tomcatVersion>
+        <tomcatVersion>8.5.90</tomcatVersion>
         <springSecurityVersion>5.6.11</springSecurityVersion>
-        <springVersion>3.0.7.RELEASE</springVersion>
+        <springVersion>5.3.28</springVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jackrabbit.version>2.16.2</jackrabbit.version>
         <lucene.version>3.6.2</lucene.version>

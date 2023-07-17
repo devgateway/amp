@@ -18,8 +18,11 @@ import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.SchedulerFactory;
 import org.quartz.ee.servlet.QuartzInitializerListener;
+import org.quartz.impl.StdSchedulerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static org.digijava.module.message.helper.MessageConstants.triggerName;
 
 /**
  * @author Octavian Ciubotaru
@@ -51,7 +54,7 @@ public class QuartzStartupListener extends QuartzInitializerListener {
         try {
 
 //            SchedulerFactory factory = (SchedulerFactory) sc.getAttribute(QuartzInitializerListener.QUARTZ_FACTORY_KEY);
-            SchedulerFactory factory =  org.quartz.impl.DirectSchedulerFactory.getInstance();
+            SchedulerFactory factory =  new StdSchedulerFactory();
 
             Scheduler scheduler = factory.getScheduler();
 
@@ -88,8 +91,8 @@ public class QuartzStartupListener extends QuartzInitializerListener {
         jobForm.setGroupName("ampServices");
         jobForm.setManualJob(false);
         jobForm.setName(jobClass.getName());
-//      jobForm.setTriggerGroupName(triggerGroupName);
-//      jobForm.setTriggerName(triggerName);
+      jobForm.setTriggerGroupName(jobClass.getName());
+      jobForm.setTriggerName(jobClass.getName());
         jobForm.setTriggerType(QuartzJobForm.DAILY);
         jobForm.setExeTimeH("1");
         jobForm.setExeTimeM("1");

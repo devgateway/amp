@@ -4,6 +4,7 @@
  <session-factory>
   <property name="hibernate.transaction.coordinator_class">org.hibernate.resource.transaction.backend.jdbc.internal.JdbcResourceLocalTransactionCoordinatorBuilderImpl</property>
   <property name="connection.datasource">java:comp/env/ampDS</property>
+  <property name="hibernate.dialect">org.hibernate.spatial.dialect.postgis.PostgisPG82Dialect</property>
   <property name="current_session_context_class">thread</property>
   <property name="max_fetch_depth">0</property>
   <property name="default_batch_fetch_size">20</property>
@@ -12,7 +13,7 @@
   <property name="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.internal.SingletonEhcacheRegionFactory</property>
   <property name="cache.use_second_level_cache">true</property>
   <property name="cache.use_query_cache">true</property> 
-  <property name="show_sql">false</property>
+  <property name="show_sql">true</property>
   <property name="use_sql_comments">false</property>
   <property name="jdbc.batch_size">20</property>
   <property name="jdbc.batch_versioned_data">true</property>
@@ -20,5 +21,8 @@
   <property name="jdbc.use_streams_for_binary">true</property>
   <property name="query.substitutions">true 1, false 0, yes 'Y', no 'N'</property>
   <property name="hbm2ddl.auto">update</property>
+  <property name="hibernate.connection.username">postgres</property>
+  <property name="hibernate.connection.password">password123</property>
+
  </session-factory>
 </hibernate-configuration>

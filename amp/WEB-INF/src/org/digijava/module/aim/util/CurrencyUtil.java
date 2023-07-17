@@ -32,6 +32,7 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.caching.AmpCaching;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
@@ -498,10 +499,14 @@ public class CurrencyUtil {
         String queryString = "select c from " + AmpCurrency.class.getName()
                 + " c " + "where c.currencyCode = "+"'"+currCode+"'";
         Session session = PersistenceManager.getSession();
+        Transaction tx = session.getTransaction();
         Query qry = session.createQuery(queryString);
         qry.setCacheable(true);
 //        qry.setParameter("id", currCode, StringType.INSTANCE);
-        return (AmpCurrency) qry.uniqueResult();
+        Object res =qry.uniqueResult();
+        tx.commit();
+
+        return (AmpCurrency)res ;
     }
 
     public static List<AmpCurrency> getActiveAmpCurrencyByName() {

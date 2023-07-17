@@ -14,29 +14,63 @@ import org.digijava.module.aim.dbentity.Versionable;
 import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.Output;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.persistence.*;
 
 /**
  * Represents one of the possible values for a certain category
  * @author Alex Gartner
  *
  */
+@Entity
+@Table(name = "AMP_CATEGORY_VALUE")
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class AmpCategoryValue implements Serializable, Identifiable, Comparable<AmpCategoryValue>, HierarchyListable, Versionable{
-    @PossibleValueId
-    private Long id;
-    private AmpCategoryClass ampCategoryClass;
-    @PossibleValueValue
-    private String value;
-    private Integer index;
-    private Boolean deleted = false;
-    
-    private Set<AmpActivityVersion> activities;
-    //private Long fieldType;
-    
-    private Set<AmpCategoryValue> usedValues = new HashSet<>();
-    private Set<AmpCategoryValue> usedByValues = new HashSet<>();
 
+    @Id
+    @PossibleValueId
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_CATEGORY_VALUE_SEQ")
+    @SequenceGenerator(name = "AMP_CATEGORY_VALUE_SEQ", sequenceName = "AMP_CATEGORY_VALUE_seq", allocationSize = 1)
+    @Column(name = "id")
+    private Long id;
+
+    @Column(name = "category_value")
+    @PossibleValueId
+    private String value;
+
+    @Column(name = "deleted")
+    private Boolean deleted;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "amp_category_class_id")
+    private AmpCategoryClass ampCategoryClass;
+
+    @Column(name = "index_column")
+    private Integer index;
+
+    @ManyToMany
+    @JoinTable(
+            name = "AMP_CATEGORY_VALUES_USED",
+            joinColumns = @JoinColumn(name = "value_id"),
+            inverseJoinColumns = @JoinColumn(name = "used_value_id")
+    )
+    private Set<AmpCategoryValue> usedValues;
+
+    @ManyToMany(mappedBy = "usedValues")
+    private Set<AmpCategoryValue> usedByValues;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "default_used_value")
     private AmpCategoryValue defaultUsedValue;
 
+
+    @Transient
+    private Set<AmpActivityVersion> activities;
+    //private Long fieldType;
+
+
+    @Transient
     private boolean translateable   = true;
 
     /**
@@ -45,14 +79,14 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable<
      * @return
      */
     public String getEncodedValue(){
-        String value = "";
+        StringBuilder value = new StringBuilder();
         for(int i=0;i<this.value.length();i++) {
             if(this.value.charAt(i)>='A' && this.value.charAt(i) <= 'z'){
-                value = value + this.value.charAt(i);
+                value.append(this.value.charAt(i));
             }
         }
         //value = URLEncoder.encode(this.value,"");
-        return value;
+        return value.toString();
     }
 
     public Long getId() {
@@ -176,7 +210,7 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable<
     
     @Override
     public Object prepareMerge(AmpActivityVersion newActivity) {
-        this.activities = new HashSet<AmpActivityVersion>();
+        this.activities = new HashSet<>();
         this.activities.add(newActivity);
         return this;
     }

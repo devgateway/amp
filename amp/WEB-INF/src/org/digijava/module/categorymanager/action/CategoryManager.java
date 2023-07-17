@@ -487,7 +487,7 @@ public class CategoryManager extends Action {
                         //label category states updates
                         String queryString  = "delete from " + AmpLinkedCategoriesState.class.getName() + " s where s.mainCategory=:dbCategory";
                         dbSession.createQuery(queryString).setEntity("dbCategory", dbCategory).executeUpdate();
-                        List<AmpCategoryClass> usedCategories = dbCategory.getUsedCategories();
+                        Set<AmpCategoryClass> usedCategories = dbCategory.getUsedCategories();
                         for (AmpCategoryClass ampCategoryClass : usedCategories) {
                             AmpLinkedCategoriesState newState = new AmpLinkedCategoriesState ();
                             newState.setMainCategory(dbCategory);

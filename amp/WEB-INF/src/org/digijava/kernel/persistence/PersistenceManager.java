@@ -579,10 +579,10 @@ public class PersistenceManager {
      * upon creating a new session, a transaction is created.
      */
     public static Session getSession() {
-        boolean currentSessionIsManaged = CURRENT_SESSION_IS_MANAGED.get();
-        if (!currentSessionIsManaged) {
-            throw new IllegalStateException("Called outside of managed session context.");
-        }
+//        boolean currentSessionIsManaged = CURRENT_SESSION_IS_MANAGED.get();
+//        if (!currentSessionIsManaged) {
+//            throw new IllegalStateException("Called outside of managed session context.");
+//        }
         Session sess = PersistenceManager.sf.getCurrentSession();
         Transaction transaction = sess.getTransaction();
         if (transaction == null || !transaction.isActive()) {
@@ -775,7 +775,7 @@ public class PersistenceManager {
                     session.flush();
                     // If the flush is successful, proceed with the commit
                     transaction.commit();
-                } catch (HibernateException e) {
+                } catch (Exception e) {
                     // logging the error since finally may throw another exception and this one will be lost
                     logger.error("Failed to flush the session.", e);
                     // Rollback the transaction explicitly

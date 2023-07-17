@@ -15,36 +15,79 @@ import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.NameableOrIdentifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.persistence.*;
 
 /**
  * @author medea
  */
 @TranslatableClass(displayName = "Location")
+@Entity
+@Table(name = "AMP_CATEGORY_VALUE_LOCATION")
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class AmpCategoryValueLocations implements Identifiable,
         HierarchyListable, ARDimensionable, Serializable, AmpAutoCompleteDisplayable<AmpCategoryValueLocations>,
         OrgProfileValue, NameableOrIdentifiable {
     //IATI-check: this is not to be ignored, but not importable, since it's obtained from possible values
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_CATEGORY_VALUE_LOCATION_SEQ")
+    @SequenceGenerator(name = "AMP_CATEGORY_VALUE_LOCATION_SEQ", sequenceName = "AMP_CATEGORY_VALUE_LOCATION_SEQ",allocationSize = 1)
+    @Column(name = "id")
     private Long id;
-    @TranslatableField
-    private String name;
-    private AmpCategoryValue parentCategoryValue;
-    private AmpCategoryValueLocations parentLocation;
-    private Set<AmpCategoryValueLocations> childLocations = new HashSet<>();
-    private AmpCategoryValueLocations group;
-    private String description;
-    private String gsLat;
-    private String gsLong;
-    private String geoCode;
-    private String code;
-    private String iso3;
-    private String fullName;
 
+    @Column(name = "location_name")
+    private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "parent_category_value", nullable = false)
+    private AmpCategoryValue parentCategoryValue;
+
+    @ManyToOne
+    @JoinColumn(name = "parent_location")
+    private AmpCategoryValueLocations parentLocation;
+
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "gs_lat")
+    private String gsLat;
+
+    @Column(name = "gs_long")
+    private String gsLong;
+
+    @Column(name = "geo_code")
+    private String geoCode;
+
+    @Column(name = "code")
+    private String code;
+
+    @Column(name = "deleted")
     private Boolean deleted;
 
-    private boolean translateable = false;
+    @Column(name = "ISO3", length = 3, unique = true )
+    private String iso3;
+
+    @Column(name = "ISO", length = 3, unique = true)
     private String iso;
 
+    @OneToMany(mappedBy = "parentLocation", cascade = CascadeType.ALL)
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @OrderBy("name")
+    private Set<AmpCategoryValueLocations> childLocations;
+
+    @ManyToOne
+    @JoinColumn(name = "template_id")
     private AmpTemplatesVisibility template;
+
+    @ManyToOne
+    @JoinColumn(name = "amp_category_value_group_id")
+    private AmpCategoryValueLocations group;
+    @Transient
+    private String fullName;
+    @Transient
+    private boolean translateable;
 
     public AmpTemplatesVisibility getTemplate() {
         return template;

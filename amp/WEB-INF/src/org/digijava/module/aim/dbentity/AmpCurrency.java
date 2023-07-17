@@ -13,22 +13,40 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.hibernate.Query;
 
+import javax.persistence.*;
+
 @TranslatableClass (displayName = "Currency")
+@Entity(name = "amp_currency")
+@Table(name = "amp_currency")
 public class AmpCurrency implements Serializable, Comparable<AmpCurrency>, Identifiable, NiCurrency
 {
     //IATI-check: to not be ignored. obtained from possible values 
     @PossibleValueId
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_currency_seq")
+    @SequenceGenerator(name = "amp_currency_seq", sequenceName = "amp_currency_seq", allocationSize = 1)
+    @Column(name = "amp_currency_id")
     private Long ampCurrencyId;
     @PossibleValueValue
+    @Column(name = "currency_code")
     private String currencyCode;
+    @Column(name = "country_name")
     private String countryName;
     @TranslatableField
+    @Column(name = "currency_name")
     private String currencyName;
-    private AmpCategoryValueLocations countryLocation;
+    @Column(name = "active_flag")
     private Integer activeFlag;
+
+    @ManyToOne
+    @JoinColumn(name = "country_location_id")
+    private AmpCategoryValueLocations countryLocation;
+
+    @ManyToOne
+    @JoinColumn(name = "amp_fiscal_cal_id")
+    private AmpFiscalCalendar calendar;
     
-    private AmpFiscalCalendar calendar; 
-    
+   @Column(name = "virtual_flag")
     private boolean virtual;
     
     /**

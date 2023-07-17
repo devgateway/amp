@@ -23,7 +23,7 @@ public class CategoryLabelsUtil {
         HashSet<Long> labelCategoryIds                  = new HashSet<Long>();
         
         if ( category.getUsedCategories() == null )
-            category.setUsedCategories( new ArrayList<AmpCategoryClass>() );
+            category.setUsedCategories( new HashSet<>() );
         category.getUsedCategories().clear();
         
         if ( usedCategories == null || usedCategories.size() == 0 )

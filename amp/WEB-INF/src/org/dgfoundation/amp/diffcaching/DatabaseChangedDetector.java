@@ -5,6 +5,8 @@ import java.util.function.Supplier;
 
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 /**
  * a supplier for {@link ExpiringCacher} which triggers a cache invalidate when any kind of mutating event is logged in the AMP in-db changelog
@@ -17,10 +19,13 @@ public class DatabaseChangedDetector implements Supplier<Boolean> {
     
     @Override
     public Boolean get() {
-        long lastFullEtl = PersistenceManager.getSession().doReturningWork(this::getLastFullEtl);
+        Session session =PersistenceManager.getSession();
+        Transaction tx = session.getTransaction();
+        long lastFullEtl = session.doReturningWork(this::getLastFullEtl);
         boolean res = lastFullEtl > lastProcessedFullEtl;
         ExpiringCacher.logger.debug(String.format("DBCD: lastFullEtl = %d, lastProcessedFullETL = %d, returning: %b\n", lastFullEtl, lastProcessedFullEtl, res));
         this.lastProcessedFullEtl = lastFullEtl;
+        tx.commit();
         return res;
     }
     

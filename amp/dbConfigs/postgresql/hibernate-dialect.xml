@@ -1,1 +1,1 @@
-<property name="dialect">org.dgfoundation.amp.ar.viewfetcher.AmpPostgresDialect</property>
+<property name="hibernate.dialect">org.dgfoundation.amp.ar.viewfetcher.AmpPostgresDialect</property>

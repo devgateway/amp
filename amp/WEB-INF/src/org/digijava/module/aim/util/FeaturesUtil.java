@@ -558,16 +558,19 @@ public class FeaturesUtil {
     public static byte[] getDefaultFlag() {
         Session session = null;
         byte flag[] = null;
-        String qryStr = null;
-        Query qry = null;
+        String qryStr;
+        Query qry;
+        Transaction tx;
 
         try {
             qryStr = "select f from " + AmpSiteFlag.class.getName() + " f " +
             "where f.defaultFlag=true";
             session = PersistenceManager.getSession();
+            tx=session.getTransaction();
             qry = session.createQuery(qryStr);
             AmpSiteFlag sf = null;
             Iterator itr = qry.list().iterator();
+            tx.commit();
             if (itr.hasNext()) {
                 sf = (AmpSiteFlag) itr.next();
             }
@@ -755,21 +758,24 @@ public class FeaturesUtil {
     }
     public static List<AmpGlobalSettings> getGlobalSettings() {
         List<AmpGlobalSettings> coll = null;
-        Session session = null;
-        String qryStr = null;
-        Query qry = null;
+        Session session;
+        String qryStr;
+        Query qry;
         try {
             session = PersistenceManager.getRequestDBSession();
-            String databaseName = getDatabaseName(session);
-
-            System.out.println(databaseName);
+//            Transaction tx= session.getTransaction()!=null?session.getTransaction():session.beginTransaction();
             qryStr = "select gs from " + AmpGlobalSettings.class.getName() + " gs ";
             qry = session.createQuery(qryStr);
             coll = qry.list();
+            System.out.println(coll);
+//            tx.commit();
+
+
         }
         catch (Exception ex) {
             logger.error(ex, ex);
         }
+
         return coll;
     }
 

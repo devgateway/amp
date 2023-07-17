@@ -9,9 +9,13 @@ import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
+import javax.persistence.*;
+
 /**
  * @author Octavian Ciubotaru
  */
+@Entity
+@DiscriminatorValue("contact phone")
 public class AmpContactPhoneProperty extends AmpContactProperty {
 
     @Interchangeable(fieldTitle = "Value", importable = true,
@@ -26,10 +30,13 @@ public class AmpContactPhoneProperty extends AmpContactProperty {
             interValidators = @InterchangeableValidator(
                     value = RegexValidator.class,
                     attributes = "regex=" + ActivityEPConstants.REGEX_PATTERN_PHONE_EXTENSION))
+
     private String extensionValue;
 
     @Interchangeable(fieldTitle = "Type", importable = true, pickIdOnly = true,
             discriminatorOption = CategoryConstants.CONTACT_PHONE_TYPE_KEY)
+    @ManyToOne
+    @JoinColumn(name = "type_id")
     private AmpCategoryValue type;
 
     public String getExtensionValue() {

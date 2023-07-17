@@ -2,12 +2,28 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 import java.util.Comparator;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "AMP_DESKTOP_TAB_SELECTION")
 public class AmpDesktopTabSelection implements Serializable{
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_DESKTOP_TAB_SELECTION_seq_generator")
+    @SequenceGenerator(name = "AMP_DESKTOP_TAB_SELECTION_seq_generator", sequenceName = "AMP_DESKTOP_TAB_SELECTION_seq", allocationSize = 1)
+    @Column(name = "id")
     private Long id;
+
+    @Column(name = "array_index", nullable = false)
+    private int index;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner_id")
     private AmpTeamMember owner;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "amp_report_id")
     private AmpReports report;
-    private Integer index;
+
     
     public static Comparator<AmpDesktopTabSelection> tabOrderComparator = new Comparator<AmpDesktopTabSelection>() {
 

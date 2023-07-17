@@ -1,9 +1,25 @@
 package org.digijava.module.aim.dbentity;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "AMP_FILTERED_CURRENCY_RATE")
 public class AmpFilteredCurrencyRate {
-        private Long id;
-        private AmpCurrency fromCurrency;
-        private AmpCurrency toCurrency;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_filtered_currency_rate_seq")
+    @SequenceGenerator(name = "amp_filtered_currency_rate_seq", sequenceName = "AMP_FILTERED_CURRENCY_RATE_seq", allocationSize = 1)
+    @Column(name = "id")
+    private Long id;
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "from_currency_id")
+    private AmpCurrency fromCurrency;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "to_currency_id")
+    private AmpCurrency toCurrency;
+
         public Long getId() {
             return id;
         }

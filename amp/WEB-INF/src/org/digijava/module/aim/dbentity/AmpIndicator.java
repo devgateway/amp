@@ -10,61 +10,79 @@ import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import javax.persistence.*;
+import java.util.Date;
+import java.util.Set;
 
+@Entity
+@Table(name = "AMP_INDICATOR")
 @TranslatableClass (displayName = "Indicator")
 public class AmpIndicator implements Serializable, Identifiable
 {
-    
-    //IATI-check: to be ignored
-    private static final long serialVersionUID = 1L;
-//  @Interchangeable(fieldTitle="Indicator ID")
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_indicator_seq_generator")
+    @SequenceGenerator(name = "amp_indicator_seq_generator", sequenceName = "AMP_INDICATOR_seq", allocationSize = 1)
+    @Column(name = "indicator_id")
     private Long indicatorId;
-//  @Interchangeable(fieldTitle="Default Indicator")
-    private boolean defaultInd;
-//  @Interchangeable(fieldTitle="Name",fmPath="/Activity Form/M&E/Name")
+
+    @Column(name = "name")
     @TranslatableField
     private String name;
-//  @Interchangeable(fieldTitle="Code",fmPath="/Activity Form/M&E/Code")
+
+    @Column(name = "code")
     private String code;
-//  @Interchangeable(fieldTitle="Type")
-    private String type;
-//  @Interchangeable(fieldTitle="Creation Date",fmPath="/Activity Form/M&E/Creation Date")
-    private Date creationDate;
-//  @Interchangeable(fieldTitle="Category")
-    private int category;
+
+    @Column(name = "description")
     @TranslatableField
-//    @Interchangeable(fieldTitle="Description",fmPath="/Activity Form/M&E/Indicator Description")
+
     private String description;
-//    @Interchangeable(fieldTitle="Sectors", pickIdOnly=true)
-    @Validators (unique="/Activity Form/M&E/uniqueSectorsValidator")
-    private Set<AmpSector> sectors;
-//    @Interchangeable(fieldTitle="Comments")
+
+    @Column(name = "type")
+    private String type;
+
+    @Column(name = "creation_date")
+    private Date creationDate;
+
+    @Column(name = "default_ind")
+    private Boolean defaultInd;
+
+    @Column(name = "unit")
+    private String unit;
+
+    @Column(name = "Comments")
     private String comments;
-//    @Interchangeable(fieldTitle="Unit")
-        private String unit;
-    /**
-     * Indicator connections with activities.
-     * Elements in this set contains activity and values assigned to this activity-indicator connections.
-     * Please look carefully in IndicatorConnection.hbm.xml before changing anything, because {@link IndicatorActivity} is subclass of {@link IndicatorConnection}
-     * @see IndicatorConnection
-     */
-    
-    private Set<IndicatorActivity> valuesActivity;
 
-    /**
-     * Indicator connections with themes.
-     * Elements in this set contains theme and values assigned to this theme-indicator connections.
-     * Please look carefully in IndicatorConnection.hbm.xml before changing anything, because {@link IndicatorTheme} is subclass of {@link IndicatorConnection}
-     * @see IndicatorConnection
-     */
-    
-    private Set<IndicatorTheme> valuesTheme;
-
+    @ManyToOne
+    @JoinColumn(name = "indicators_category")
     @Interchangeable(fieldTitle="Indicator Category")
     private AmpCategoryValue indicatorsCategory;
 
+    @ManyToOne
+    @JoinColumn(name = "risk")
     @Interchangeable(fieldTitle="Risk")
+
     private AmpIndicatorRiskRatings risk;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "AMP_SECTOR_INDICATOR",
+            joinColumns = @JoinColumn(name = "indicator_id"),
+            inverseJoinColumns = @JoinColumn(name = "amp_sector_id"))
+    @Validators (unique="/Activity Form/M&E/uniqueSectorsValidator")
+
+    private Set<AmpSector> sectors;
+
+    @OneToMany(mappedBy = "indicator", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<IndicatorActivity> valuesActivity;
+
+    @OneToMany(mappedBy = "indicator", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<IndicatorTheme> valuesTheme;
+    
+    //IATI-check: to be ignored
+    private static final long serialVersionUID = 1L;
+
+    @Transient
+    private int category;
 
 
     public Long getIndicatorId() {

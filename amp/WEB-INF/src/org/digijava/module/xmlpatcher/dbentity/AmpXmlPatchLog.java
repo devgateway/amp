@@ -20,6 +20,10 @@ import java.util.Date;
  *         execution, the output of the invocation (possible errors) and the
  *         status of the execution
  */
+import javax.persistence.*;
+
+@Entity
+@Table(name = "AMP_XML_PATCH_LOG")
 public class AmpXmlPatchLog implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_XML_PATCH_LOG_seq")

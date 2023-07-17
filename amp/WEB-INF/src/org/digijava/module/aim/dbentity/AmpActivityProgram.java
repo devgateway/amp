@@ -17,29 +17,46 @@ import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TreeNodeAware;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "AMP_ACTIVITY_PROGRAM")
 public class AmpActivityProgram implements Versionable, Serializable, Cloneable, TreeNodeAware<AmpTheme> {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_activity_program_seq_generator")
+    @SequenceGenerator(name = "amp_activity_program_seq_generator", sequenceName = "AMP_ACTIVITY_PROGRAM_seq", allocationSize = 1)
+    @Column(name = "amp_activity_program_id")
     @InterchangeableId
     @Interchangeable(fieldTitle = "Id")
     private Long ampActivityProgramId;
 
-        @Interchangeable(fieldTitle = "Program Percentage", importable = true, percentageConstraint = true,
-                fmPath = FMVisibility.PARENT_FM + "/programPercentage",
-                interValidators = @InterchangeableValidator(RequiredValidator.class))
-        private Float programPercentage;
+    @ManyToOne
+    @JoinColumn(name = "amp_activity_id", nullable = false)
+    @InterchangeableBackReference
+    private AmpActivityVersion activity;
 
-        @PossibleValues(ThemePossibleValuesProvider.class)
-        @Interchangeable(fieldTitle = "Program", importable = true, pickIdOnly = true, uniqueConstraint = true,
-                interValidators = @InterchangeableValidator(RequiredValidator.class))
-        private AmpTheme program;
+    @ManyToOne
+    @JoinColumn(name = "amp_program_id", nullable = false)
+    @PossibleValues(ThemePossibleValuesProvider.class)
+    @Interchangeable(fieldTitle = "Program", importable = true, pickIdOnly = true, uniqueConstraint = true,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
+    private AmpTheme program;
 
+    @Column(name = "program_percentage")
+    @Interchangeable(fieldTitle = "Program Percentage", importable = true, percentageConstraint = true,
+            fmPath = FMVisibility.PARENT_FM + "/programPercentage",
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
+    private Float programPercentage;
+
+    @ManyToOne
+    @JoinColumn(name = "program_setting", nullable = false)
+    private AmpActivityProgramSettings programSetting;
+
+    @OneToMany(mappedBy = "activityProgram", cascade = CascadeType.ALL, orphanRemoval = true)
     @Interchangeable(fieldTitle = "Indirect Programs")
     private Set<AmpActivityIndirectProgram> indirectPrograms = new HashSet<>();
 
-        @InterchangeableBackReference
-        private AmpActivityVersion activity;
-        private AmpActivityProgramSettings programSetting;
+
 
     public Set<AmpActivityIndirectProgram> getIndirectPrograms() {
         return indirectPrograms;

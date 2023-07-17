@@ -10,19 +10,28 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
+import javax.persistence.*;
 import java.io.Serializable;
 
+@Entity
+@Table(name = "amp_report_measures")
 @JsonSerialize(using = AmpReportMeasureSerializer.class)
 public class AmpReportMeasures  implements Serializable, Comparable<AmpReportMeasures>{
     private static Logger logger = Logger.getLogger(AmpReportMeasures.class);
-    
-    @ColumnLike
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "measureId")
     private AmpMeasures measure;
-    @Order
+
+    @Column(name = "orderId")
     private Long orderId;
-    @Level
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "levelId")
     private AmpCategoryValue level;
-    
+
+    @Transient
     private static AmpCategoryValue defaultLevel = null;
     
     public AmpReportMeasures() {

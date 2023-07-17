@@ -10,29 +10,46 @@ import org.digijava.module.translation.util.ContentTranslationUtil;
 /**
  * The Amp Aid Effectiveness Indicator domain class
  */
+import javax.persistence.*;
+import java.util.List;
+
+@Entity
+@Table(name = "AMP_AID_EFFECTIVENESS_INDICATOR")
 @TranslatableClass (displayName = "Aid Effectiveness Indicator")
 public class AmpAidEffectivenessIndicator implements Serializable {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_aid_effectiveness_indicator_seq_generator")
+    @SequenceGenerator(name = "amp_aid_effectiveness_indicator_seq_generator", sequenceName = "AMP_AID_EFFECTIVENESS_INDICATOR_seq", allocationSize = 1)
+    @Column(name = "amp_indicator_id")
     private Long ampIndicatorId;
-    
+
+    @Column(name = "amp_indicator_name")
     @TranslatableField
+
     private String ampIndicatorName;
-    
+
+    @Column(name = "tooltip_text", columnDefinition = "text")
     @TranslatableField
+
     private String tooltipText;
 
-    // default is true
+    @Column(name = "ACTIVE")
     private boolean active;
 
-    // deafult is true
+    @Column(name = "MANDATORY")
     private boolean mandatory;
 
-    // 0 - dropdown list, 1 - selectbox list
-    private int indicatorType;
+    @Column(name = "INDICATOR_TYPE")
+    private Integer indicatorType;
 
+    @OneToMany(mappedBy = "indicator", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderColumn(name = "idx")
     private List<AmpAidEffectivenessIndicatorOption> options;
 
-    public static enum IndicatorType {
+
+
+
+    public enum IndicatorType {
         DROPDOWN_LIST, SELECT_LIST  // 0 - dropdown list, 1 - selectbox list
     }
 

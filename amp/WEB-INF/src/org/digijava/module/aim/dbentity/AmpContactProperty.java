@@ -5,14 +5,28 @@ import java.io.Serializable;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.helper.Constants;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "AMP_CONTACT_PROPERTIES")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "name", discriminatorType = DiscriminatorType.STRING)
 public abstract class AmpContactProperty implements Comparable, Serializable {
-
+    @Id
+    @GeneratedValue(generator = "ampContactPropertiesSeq")
+    @SequenceGenerator(name = "ampContactPropertiesSeq", sequenceName = "AMP_CONTACT_PROPERTIES_seq", allocationSize = 1)
+    @Column(name = "property_id")
     @InterchangeableId
     @Interchangeable(fieldTitle = "Id")
     private Long id;
 
+    @Column(name = "value")
+    private String value;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "contact_id")
     private AmpContact contact;
+
 
     private String name;
 

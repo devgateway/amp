@@ -22,12 +22,18 @@
 
 package org.digijava.kernel.entity;
 
+import javax.persistence.*;
+import javax.persistence.Entity;
 
+@Entity
+@Table(name = "DG_ORGANIZATION_TYPE")
 public class OrganizationType {
-
+    @Id
+    @Column(name = "id")
     private String id;
-    private String type;
 
+    @Column(name = "TYPE")
+    private String type;
     public OrganizationType() {}
 
     public OrganizationType( String id, String type ) {

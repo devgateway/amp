@@ -10,7 +10,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import org.digijava.module.aim.util.Output;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "AMP_AHSURVEY_RESPONSE")
 public class AmpAhsurveyResponse implements Versionable, Cloneable, Serializable {
 
     //IATI-check: to be ignored
@@ -18,15 +21,26 @@ public class AmpAhsurveyResponse implements Versionable, Cloneable, Serializable
      * 
      */
     private static final long serialVersionUID = 1L;
-//  @Interchangeable(fieldTitle="ID")
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_ahsurvey_response_seq_generator")
+    @SequenceGenerator(name = "amp_ahsurvey_response_seq_generator", sequenceName = "AMP_AHSURVEY_RESPONSE_seq", allocationSize = 1)
+    @Column(name = "amp_response_id")
     private Long ampReponseId;
+
+    @ManyToOne
+    @JoinColumn(name = "amp_ahsurvey_id", referencedColumnName = "amp_ahsurvey_id", nullable = false)
     private AmpAhsurvey ampAHSurveyId;
-//  @Interchangeable(fieldTitle="Survey Question ID", importable = true)
+
+    @ManyToOne
+    @JoinColumn(name = "amp_question_id", referencedColumnName = "amp_question_id", nullable = false)
     private AmpAhsurveyQuestion ampQuestionId;
-//  @Interchangeable(fieldTitle="Response", importable = true)
+
+    @Column(name = "response")
     private String response;
-//  @Interchangeable(fieldTitle="References", importable = true)
+
+    @Column(name = "references_col")
     private String references;
+
 
 
     public String getReferences() {

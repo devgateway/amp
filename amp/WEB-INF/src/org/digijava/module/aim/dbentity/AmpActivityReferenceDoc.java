@@ -6,17 +6,38 @@ import java.util.Date;
 
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import javax.persistence.*;
+import java.util.Date;
 
+@Entity
+@Table(name = "AMP_ACTIVITY_REFERENCEDOC")
 public class AmpActivityReferenceDoc implements Serializable, Versionable, Cloneable {
 
     private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_activity_referencedoc_seq_generator")
+    @SequenceGenerator(name = "amp_activity_referencedoc_seq_generator", sequenceName = "AMP_ACTIVITY_REFERENCEDOC_seq", allocationSize = 1)
+    @Column(name = "amp_activity_referencedoc_id")
     private Long id;
-    private AmpActivityVersion activity;
-    private AmpCategoryValue categoryValue;
+
+    @Column(name = "comment_")
     private String comment;
+
+    @Column(name = "created")
     private Date created;
+
+    @Column(name = "lastEdited")
     private Date lastEdited;
-    
+
+    @ManyToOne
+    @JoinColumn(name = "activity_id")
+    private AmpActivityVersion activity;
+
+    @ManyToOne
+    @JoinColumn(name = "categoryValueId")
+    private AmpCategoryValue categoryValue;
+
     public AmpActivityVersion getActivity() {
         return activity;
     }

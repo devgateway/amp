@@ -5,16 +5,28 @@ import java.util.*;
 
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Output;
+import javax.persistence.*;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
+@Entity
+@Table(name = "AMP_GPI_SURVEY")
 public class AmpGPISurvey implements Versionable, Serializable, Cloneable, Comparable<AmpGPISurvey> {
-
-    //IATI-check: to be ignored
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_GPISURVEY_seq")
+    @SequenceGenerator(name = "AMP_GPISURVEY_seq", sequenceName = "AMP_GPISURVEY_seq", allocationSize = 1)
+    @Column(name = "amp_gpisurvey_id")
     private Long ampGPISurveyId;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "amp_activity_id", nullable = false)
     private AmpActivityVersion ampActivityId;
-//  @Interchangeable(fieldTitle="Responses"/*, descend = true*/)
-    private Set<AmpGPISurveyResponse> responses;
-//  @Interchangeable(fieldTitle="Survey Date")
+
+    @OneToMany(mappedBy = "ampGPISurvey", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<AmpGPISurveyResponse> responses = new HashSet<>();
+
+    @Column(name = "survey_date")
     private Date surveyDate;
 
     public Date getSurveyDate() {

@@ -9,14 +9,44 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.SectorUtil;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "AMP_CLASSIFICATION_CONFIG")
 public class AmpClassificationConfiguration implements Serializable, Identifiable {
-    
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_classification_config_seq_generator")
+    @SequenceGenerator(name = "amp_classification_config_seq_generator", sequenceName = "AMP_CLASSIFICATION_CONFIG_seq", allocationSize = 1)
+    @Column(name = "id")
+    private Long id;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "multisector")
+    private boolean multisector;
+
+    @Column(name = "is_primary_sector")
+    private boolean primary;
+
+    @ManyToOne
+    @JoinColumn(name = "classification_id")
+    private AmpSectorScheme classification;
+
+    @Transient
     public static final String PRIMARY_CLASSIFICATION_CONFIGURATION_NAME    = "Primary";
+    @Transient
     public static final String SECONDARY_CLASSIFICATION_CONFIGURATION_NAME  = "Secondary";
+    @Transient
     public static final String TERTIARY_CLASSIFICATION_CONFIGURATION_NAME   = "Tertiary";
+    @Transient
     public static final String QUATERNARY_CLASSIFICATION_CONFIGURATION_NAME = "Quaternary";
+    @Transient
     public static final String QUINARY_CLASSIFICATION_CONFIGURATION_NAME    = "Quinary";
+    @Transient
     public static final String TAG_CLASSIFICATION_CONFIGURATION_NAME    = "Tag";
     
     @SuppressWarnings("serial")
@@ -75,13 +105,7 @@ public class AmpClassificationConfiguration implements Serializable, Identifiabl
                     .put(QUATERNARY_CLASSIFICATION_CONFIGURATION_NAME, QUATERNARY_SECTOR_COLUMNS_BY_LEVEL)
                     .put(QUINARY_CLASSIFICATION_CONFIGURATION_NAME, QUINARY_SECTOR_COLUMNS_BY_LEVEL)
                     .build();
-    
-    private Long id;
-    private String name;
-    private String description;
-    private AmpSectorScheme classification;
-    private boolean multisector ;
-    private boolean primary;
+
 
     public AmpSectorScheme getClassification() {
         return classification;

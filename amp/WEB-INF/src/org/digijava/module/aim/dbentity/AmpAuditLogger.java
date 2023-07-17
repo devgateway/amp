@@ -12,7 +12,10 @@ import java.text.SimpleDateFormat;
 
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.FeaturesUtil;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "AMP_AUDIT_LOGGER")
 public class AmpAuditLogger implements Comparable, Serializable {
     /**
      * 
@@ -21,28 +24,65 @@ public class AmpAuditLogger implements Comparable, Serializable {
     /**
      * 
      */
-    public static final String PREFIX_TO_REMOVE = "Amp";
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_audit_logger_seq_generator")
+    @SequenceGenerator(name = "amp_audit_logger_seq_generator", sequenceName = "AMP_AUDIT_LOGGER_seq", allocationSize = 1)
+    @Column(name = "id")
     private Long id;
+
+    @Column(name = "teamName")
     private String teamName;
+
+    @Column(name = "authorName")
     private String authorName;
-    private String editorName;
+
+    @Column(name = "authorEmail")
     private String authorEmail;
-    private String editorEmail;
-    private Timestamp loggedDate;
-    private Timestamp modifyDate;
-    private String sloggeddate;
-    private String smodifydate;
-    private String browser;
-    private String ip;
-    private String action;
-    private String objectId;
-    private String objectType;
-    private String objectTypeTrimmed;
-    private String objectName;
-    private String detail;
+
+    @Column(name = "userid")
     private Long userid;
 
+    @Column(name = "editorName")
+    private String editorName;
+
+    @Column(name = "editorEmail")
+    private String editorEmail;
+
+    @Column(name = "loggedDate")
+    private Timestamp loggedDate;
+
+    @Column(name = "modifyDate")
+    private Timestamp modifyDate;
+
+    @Column(name = "browser")
+    private String browser;
+
+    @Column(name = "ip")
+    private String ip;
+
+    @Column(name = "action")
+    private String action;
+
+    @Column(name = "objectId")
+    private String objectId;
+
+    @Column(name = "objectType")
+    private String objectType;
+
+    @Column(name = "objectName")
+    private String objectName;
+
+    @Column(name = "detail")
+    private String detail;
+    @Transient
+    public static final String PREFIX_TO_REMOVE = "Amp";
+
+    @Transient
+    private String sloggeddate;
+    @Transient
+    private String smodifydate;
+    @Transient
+    private String objectTypeTrimmed;
 
     public Long getUserid() {
         return userid;

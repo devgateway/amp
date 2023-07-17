@@ -9,15 +9,28 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "AMP_TEAM_MEMBER_ROLES")
 public class AmpTeamMemberRoles implements Serializable {
-    
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_team_member_roles_seq_generator")
+    @SequenceGenerator(name = "amp_team_member_roles_seq_generator", sequenceName = "AMP_TEAM_MEMBER_ROLES_seq", allocationSize = 1)
+    @Column(name = "amp_team_mem_role_id")
     private Long ampTeamMemRoleId;
+
+    @Column(name = "role")
     private String role;
+
+    @Column(name = "description", columnDefinition = "text")
     private String description;
-    private Boolean teamHead;     /* whether this role is the team lead role */
+
+    @Column(name = "team_head")
+    private Boolean teamHead;
+
+    @Column(name = "approver")
     private boolean approver;
-    
     
     /**
      * @return ampTeamMemRoleId

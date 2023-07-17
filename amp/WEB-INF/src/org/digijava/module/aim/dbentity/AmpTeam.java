@@ -22,47 +22,104 @@ import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.NameableOrIdentifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "AMP_TEAM")
 @TranslatableClass (displayName = "Team")
 @JsonSerialize(using = AmpTeamSerializer.class)
 public class AmpTeam  implements Serializable, Comparable, Identifiable, FilterDataSetInterface<AmpTeamFilterData>,
                                     NameableOrIdentifiable {
     private static final Logger logger = Logger.getLogger(AmpTeam.class);
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_team_seq_generator")
+    @SequenceGenerator(name = "amp_team_seq_generator", sequenceName = "AMP_TEAM_seq", allocationSize = 1)
+    @Column(name = "amp_team_id")
     @PossibleValueId
+
     private Long ampTeamId;
+
+    @Column(name = "name")
     @TranslatableField
     @PossibleValueValue
     private String name;
-    
-    private Boolean addActivity;
-    private Boolean isolated;//called thus because 'private' is a reserved keyword in Java
-    private Boolean computation;
-    private Boolean hideDraftActivities;
-    private Boolean useFilter;
+
+    @Column(name = "access_type")
+    private String accessType;
+
+    @Column(name = "description")
     @TranslatableField
+
     private String description;
 
-    private AmpTeamMember teamLead; // Denotes the Team Leader
+    @Column(name = "add_activity")
+    private Boolean addActivity;
 
+    @Column(name = "isolated")
+    private Boolean isolated;
+
+    @Column(name = "computation")
+    private Boolean computation;
+
+    @Column(name = "hide_draft")
+    private Boolean hideDraftActivities;
+
+    @Column(name = "use_filter")
+    private Boolean useFilter;
+
+    @Column(name = "cross_team_validation")
+    private Boolean crossTeamValidation;
+
+    @ManyToOne
+    @JoinColumn(name = "team_lead_id")
+    private AmpTeamMember teamLead;
+
+    @ManyToOne
+    @JoinColumn(name = "parent_team_id")
     private AmpTeam parentTeamId;
-    
-    private Collection childrenWorkspaces;
-    
-    private String accessType;      // Management or Team
 
-    private AmpTeam relatedTeamId;  // a donor team referring a mofed team
-    private Set<AmpActivityVersion> activityList;       // activities assigned to donor team
-    
-    private Set organizations;      // activities assigned to donor team
-    
+    @ManyToOne
+    @JoinColumn(name = "related_team_id")
+    private AmpTeam relatedTeamId;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "AMP_TEAM_ACTIVITIES",
+            joinColumns = @JoinColumn(name = "amp_team_id"),
+            inverseJoinColumns = @JoinColumn(name = "amp_activity_id"))
+    private Set<AmpActivityVersion> activityList;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "AMP_TEAM_ORGS",
+            joinColumns = @JoinColumn(name = "amp_team_id"),
+            inverseJoinColumns = @JoinColumn(name = "amp_org_id"))
+    private Set<AmpOrganisation> organizations;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "group_categoryvalue_id")
     private AmpCategoryValue workspaceGroup;
-    
+
+    @Column(name = "permission_strategy")
     private String permissionStrategy;
-    
+
+    @OneToMany(mappedBy = "ampTeam", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AmpTeamFilterData> filterDataSet;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fm_template")
     private AmpTemplatesVisibility fmTemplate;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "workspace_prefix_categoryvalue_id")
     private AmpCategoryValue workspacePrefix;
+
+
+
+
+ @Transient
+
+    private Collection childrenWorkspaces;
+    @Transient
     private Boolean crossteamvalidation;
 
     @Override

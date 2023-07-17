@@ -9,21 +9,34 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 /**
  * @author Octavian Ciubotaru
  */
+import javax.persistence.*;
+
+@Entity
+@Table(name = "AMP_ACTIVITY_INDIRECT_PROGRAM")
 public class AmpActivityIndirectProgram implements Serializable, Cloneable {
 
     public static final int PERCENTAGE_PRECISION = 2;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_ACTIVITY_INDIRECT_PROGRAM_SEQ")
+    @SequenceGenerator(name = "AMP_ACTIVITY_INDIRECT_PROGRAM_SEQ", sequenceName = "AMP_ACTIVITY_INDIRECT_PROGRAM_SEQ", allocationSize = 1)    @Column(name = "id")
     @InterchangeableId
     @Interchangeable(fieldTitle = "Id")
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "amp_activity_program_id", nullable = false)
     private AmpActivityProgram activityProgram;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "amp_program_id", nullable = false)
     @Interchangeable(fieldTitle = "Program", pickIdOnly = true)
     private AmpTheme program;
 
+    @Column(name = "program_percentage", precision = 5, scale = 2)
     @Interchangeable(fieldTitle = "Percentage")
     private BigDecimal percentage;
+
 
     public AmpActivityIndirectProgram() {
     }

@@ -7,25 +7,37 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Identifiable;
+import javax.persistence.*;
+import java.util.Set;
 
+@Entity
+@Table(name = "AMP_ACTIVITY_GROUP")
 public class AmpActivityGroup implements Serializable, Identifiable, Cloneable {
     private static final long serialVersionUID = 1L;
-    
+
+    @Id
     @JsonIgnore
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_activity_group_seq")
+    @SequenceGenerator(name = "amp_activity_group_seq", sequenceName = "amp_activity_group_seq", allocationSize = 1)    @Column(name = "amp_activity_group_id")
     private Long ampActivityGroupId;
 
+    @Version
     @Interchangeable(fieldTitle = "Version", importable = true)
     @JsonProperty(value = "version", access = JsonProperty.Access.READ_ONLY)
     private Long version;
-
     @JsonIgnore
+    @Column(name = "autoClosedOnExpiration")
+    private Boolean autoClosedOnExpiration;
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "amp_activity_last_version_id", insertable = false, updatable = false)
     private AmpActivityVersion ampActivityLastVersion;
-    
     @JsonIgnore
-    private boolean autoClosedOnExpiration = false;
-    
-    @JsonIgnore
+    @OneToMany(mappedBy = "activityGroup", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AmpActivityVersion> activities;
+    
+
+
 
     public Long getAmpActivityGroupId() {
         return ampActivityGroupId;

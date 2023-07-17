@@ -26,21 +26,50 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.request.Site;
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.*;
+import javax.persistence.Entity;
+import java.util.Date;
 
+@Entity
+@Table(name = "DG_INTERESTS")
 public class Interests
     implements Serializable {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "dg_interests_seq")
+    @SequenceGenerator(name = "dg_interests_seq", sequenceName = "dg_interests_seq", allocationSize = 1)
+    @Column(name = "ID")
     private Long id;
-    private Site site;
+
+    @Column(name = "RECEIVE_ALERTS")
     private boolean receiveAlerts;
+
+    @Column(name = "JOIN_DATE")
+    private Date joinDate;
+
+    @ManyToOne
+    @JoinColumn(name = "USER_ID")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "SITE_ID")
+    private Site site;
+
+    @ManyToOne
+    @JoinColumn(name = "CONTENT_ALERT")
     private ContentAlert contentAlert;
+
+    @Column(name = "ADDED_BY")
+    private Long addedBy;
+
+    @Column(name = "LAST_ALERT_DATE")
+    private Date lastAlertDate;
+
+    @Column(name = "NEXT_ALERT_DATE")
+    private Date nextAlertDate;
+
     private String siteUrl;
     private String siteDescription;
-    private User user;
-    private Date joinDate;
-    private Long addedBy;
-    private Date lastAlertDate;
-    private Date nextAlertDate;
+
 
     public Interests() {}
 

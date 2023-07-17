@@ -8,24 +8,39 @@ import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.util.Output;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "AMP_ACTIVITY_INTERNAL_ID")
 public class AmpActivityInternalId implements Serializable, Versionable, Cloneable {
     //IATI-check: used. 
     private static final long serialVersionUID = 469552292854192522L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_activity_internal_id_seq_generator")
+    @SequenceGenerator(name = "amp_activity_internal_id_seq_generator", sequenceName = "AMP_ACTIVITY_INTERNAL_ID_seq", allocationSize = 1)
+    @Column(name = "id")
     @InterchangeableId
     @Interchangeable(fieldTitle = "Id")
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "amp_activity_id", nullable = false)
+    @InterchangeableBackReference
+
+    private AmpActivityVersion ampActivity;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "amp_org_id", nullable = false)
     @Interchangeable(fieldTitle = "Organization", importable = true, pickIdOnly = true)
+
     private AmpOrganisation organisation;
 
-    @InterchangeableBackReference
-    private AmpActivityVersion ampActivity;
-    
+    @Column(name = "internal_id")
     @Interchangeable(fieldTitle = "Internal ID", importable = true,
             fmPath = "/Activity Form/Activity Internal IDs/Internal IDs/internalId")
     private String internalId;
+
 
     public Long getId() {
         return id;

@@ -4,18 +4,29 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import org.digijava.module.aim.util.Output;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "AMP_ACTIVITY_BUDGET_STRUCTURE")
 public class AmpActivityBudgetStructure implements Versionable, Serializable, Cloneable {
     
     //TODO: not expected to be used in IATI. commenting for now
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_ACTIVITY_BUDGET_STRUCTURE_seq")
+    @SequenceGenerator(name = "AMP_ACTIVITY_BUDGET_STRUCTURE_seq", sequenceName = "AMP_ACTIVITY_BUDGET_STRUCTURE_seq", allocationSize = 1)    @Column(name = "amp_activity_budget_structure_id")
     private Long ampActivityBudgetStructureId;
-//  @Interchangeable (fieldTitle ="Budget Structure Name", importable = true)
-    private String budgetStructureName;
-    
-//  @Interchangeable (fieldTitle ="Budget Structure Percentage" ,fmPath="/Activity Form/Budget Structure/Budget Structure/budgetStructurePercentage", importable = true)
-    //@Validators (percentage = "/Activity Form/Budget Structure/Budget Structure/programPercentageTotal")
-    private Float budgetStructurePercentage;
+
+    @ManyToOne
+    @JoinColumn(name = "amp_activity_id")
     private AmpActivityVersion activity;
+
+    @Column(name = "budget_structure_name")
+    private String budgetStructureName;
+
+    @Column(name = "budget_structure_percentage")
+    private Float budgetStructurePercentage;
+
     
     public Long getAmpActivityBudgetStructureId() {
         return ampActivityBudgetStructureId;

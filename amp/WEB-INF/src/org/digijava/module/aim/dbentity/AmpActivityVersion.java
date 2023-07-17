@@ -4,7 +4,7 @@
 package org.digijava.module.aim.dbentity;
 
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
-import org.digijava.kernel.ampapi.endpoints.security.dto.User;
+import org.digijava.kernel.user.User;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;

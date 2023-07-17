@@ -14,26 +14,39 @@ import org.digijava.module.aim.jackson.TranslatingConverter;
  * 
  * @author Nadejda Mandrescu
  */
+import javax.persistence.*;
+
+@Entity
+@Table(name = "AMP_COLOR_THRESHOLD")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AmpColorThreshold {
-
+    @Id
     @JsonProperty("id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_COLOR_THRESHOLD_seq")
+    @SequenceGenerator(name = "AMP_COLOR_THRESHOLD_seq", sequenceName = "AMP_COLOR_THRESHOLD_seq", allocationSize = 1)    @Column(name = "amp_color_threshold_id")
     private Long ampColorThresholdId;
 
+    @Column(name = "color_name", unique = true)
     @JsonProperty("name")
     @JsonSerialize(converter = TranslatingConverter.class)
     @ApiModelProperty(example = "Dark Red")
     private String colorName;
 
+    @Column(name = "color_hash", unique = true)
     @JsonProperty("color")
     @ApiModelProperty(example = "#d05151")
     private String colorHash;
 
+    @Column(name = "threshold_start")
     @JsonProperty("amountFrom")
+
     private BigDecimal thresholdStart;
 
+    @Column(name = "index")
     @JsonIgnore
     private Integer index;
+
+
     
     /**
      * @return the ampColorThresholdId

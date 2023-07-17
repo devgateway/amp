@@ -33,28 +33,42 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  * The value object class for the Countries. Maps to the table PL_COUNTRIES
  *
  */
+import javax.persistence.*;
+
+@Entity
+@Table(name = "DG_COUNTRIES")
 public class Country
     implements Serializable {
 
-    /** identifier field */
+    @Id
+    @Column(name = "ISO")
     private String iso;
 
-    /** persistent fields */
+    @Column(name = "COUNTRY_ID", length = 38)
     private Long countryId;
 
+    @Column(name = "COUNTRY_NAME", length = 200)
     private String countryName;
 
+    @Column(name = "ISO3", length = 3)
     private String iso3;
 
+    @Column(name = "STAT", length = 1)
     private String stat;
 
+    @Column(name = "SHOW_CTRY", length = 1)
     private String showCtry;
 
+    @Column(name = "DEC_CTRY", length = 1)
     private String decCtryFlag;
 
+    @Column(name = "MESSAGE_LANG_KEY", length = 200)
     private String messageLangKey;
 
+    @Column(name = "AVAILABLE")
     private boolean available;
+
+
 
     /** full constructor */
     public Country(Long countryId, String iso, String countryName, String iso3,

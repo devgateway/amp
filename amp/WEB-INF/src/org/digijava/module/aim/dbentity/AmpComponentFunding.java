@@ -25,54 +25,75 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+import javax.persistence.*;
+import java.util.Date;
 
+@Entity
+@Table(name = "AMP_COMPONENT_FUNDING")
 public class AmpComponentFunding implements Cloneable, Serializable {
-    // IATI-check: to be ignored
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_COMPONENT_FUNDING_seq")
+    @SequenceGenerator(name = "AMP_COMPONENT_FUNDING_seq", sequenceName = "AMP_COMPONENT_FUNDING_seq", allocationSize = 1)
+    @Column(name = "amp_component_funding_id")
     @InterchangeableId
     @Interchangeable(fieldTitle = "Id")
     private Long ampComponentFundingId;
 
+    @Column(name = "transaction_type")
     private Integer transactionType;
 
+    @Column(name = "transaction_date")
+    @Interchangeable(fieldTitle = COMPONENT_FUNDING_TRANSACTION_DATE, importable = true,
+            fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_FUNDING_TRANSACTION_DATE,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
+    private Date transactionDate;
+
+    @Column(name = "reporting_date")
+    private Date reportingDate;
+
+    @Column(name = "transaction_amount")
+    @Interchangeable(fieldTitle = COMPONENT_FUNDING_AMOUNT, importable = true,
+            fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_FUNDING_AMOUNT,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
+    private Double transactionAmount;
+
+    @Column(name = "description")
+    @Interchangeable(fieldTitle = COMPONENT_FUNDING_DESCRIPTION,
+            fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_FUNDING_DESCRIPTION)
+    private String description;
+
+    @ManyToOne
+    @JoinColumn(name = "rep_organization_id")
+    @Interchangeable(fieldTitle = COMPONENT_ORGANIZATION, importable = true, pickIdOnly = true,
+            fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_ORGANIZATION,
+            dependencies = {ComponentFundingOrgRoleValidator.ORGANIZATION_PRESENT_KEY})
+    private AmpOrganisation reportingOrganization;
+
+    @ManyToOne
+    @JoinColumn(name = "component_second_rep_org_id")
+    private AmpOrganisation componentSecondResponsibleOrganization;
+
+    @ManyToOne
+    @JoinColumn(name = "currency_id")
+    @Interchangeable(fieldTitle = COMPONENT_FUNDING_CURRENCY, importable = true, pickIdOnly = true,
+            fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_FUNDING_CURRENCY,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
+    private AmpCurrency currency;
+
+    @ManyToOne
+    @JoinColumn(name = "amp_component_id")
+    @InterchangeableBackReference
+
+    private AmpComponent component;
+
+    @ManyToOne
+    @JoinColumn(name = "adjustment_type")
     @Interchangeable(fieldTitle = COMPONENT_FUNDING_ADJUSTMENT_TYPE, importable = true, pickIdOnly = true,
             fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_FUNDING_ADJUSTMENT_TYPE,
             interValidators = @InterchangeableValidator(RequiredValidator.class),
             discriminatorOption = CategoryConstants.ADJUSTMENT_TYPE_KEY)
     private AmpCategoryValue adjustmentType;
 
-    @Interchangeable(fieldTitle = COMPONENT_FUNDING_TRANSACTION_DATE, importable = true,
-            fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_FUNDING_TRANSACTION_DATE,
-            interValidators = @InterchangeableValidator(RequiredValidator.class))
-    private Date transactionDate;
-
-    // @Interchangeable(fieldTitle="Reporting Date")
-    private Date reportingDate;
-
-    @Interchangeable(fieldTitle = COMPONENT_FUNDING_AMOUNT, importable = true,
-            fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_FUNDING_AMOUNT,
-            interValidators = @InterchangeableValidator(RequiredValidator.class))
-    private Double transactionAmount;
-
-    @Interchangeable(fieldTitle = COMPONENT_ORGANIZATION, importable = true, pickIdOnly = true,
-            fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_ORGANIZATION,
-            dependencies = {ComponentFundingOrgRoleValidator.ORGANIZATION_PRESENT_KEY})
-    private AmpOrganisation reportingOrganization;
-
-    //@Interchangeable(fieldTitle = COMPONENT_SECOND_REPORTING_ORGANIZATION, importable = true, pickIdOnly = true)
-    private AmpOrganisation componentSecondResponsibleOrganization;
-
-    @Interchangeable(fieldTitle = COMPONENT_FUNDING_CURRENCY, importable = true, pickIdOnly = true,
-            fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_FUNDING_CURRENCY,
-            interValidators = @InterchangeableValidator(RequiredValidator.class))
-    private AmpCurrency currency;
-
-    @Interchangeable(fieldTitle = COMPONENT_FUNDING_DESCRIPTION,
-            fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_FUNDING_DESCRIPTION)
-    private String description;
-
-    @InterchangeableBackReference
-    private AmpComponent component;
 
     /**
      * @return Returns the adjustmentType.

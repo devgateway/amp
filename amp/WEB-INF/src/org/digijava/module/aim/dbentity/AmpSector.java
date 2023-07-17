@@ -17,60 +17,97 @@ import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.NameableOrIdentifiable;
 import org.digijava.module.aim.util.SoftDeletable;
+import org.hibernate.annotations.Filter;
 
+import javax.persistence.*;
+import java.util.Set;
 
+@Entity
+@Table(name = "AMP_SECTOR")
 @TranslatableClass (displayName = "Sector")
 public class AmpSector implements Serializable, Identifiable,
         ARDimensionable, HierarchyListable, AmpAutoCompleteDisplayable<AmpSector>,
         SoftDeletable, Cloneable, OrgProfileValue, NameableOrIdentifiable {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_sector_seq_generator")
+    @SequenceGenerator(name = "amp_sector_seq_generator", sequenceName = "AMP_SECTOR_seq", allocationSize = 1)
+    @Column(name = "amp_sector_id")
     @PossibleValueId
+
     private Long ampSectorId;
 
+    @ManyToOne
+    @JoinColumn(name = "parent_sector_id")
     private AmpSector parentSectorId;
 
+    @ManyToOne
+    @JoinColumn(name = "amp_sec_scheme_id")
+    private AmpSectorScheme ampSecSchemeId;
+
+    @Column(name = "sector_code")
     private String sectorCode;
 
+    @Column(name = "sector_code_official")
+    private String sectorCodeOfficial;
+
+    @Column(name = "name")
     @PossibleValueValue
     @TranslatableField
     private String name;
 
+    @Column(name = "type")
     private String type;
-    private AmpOrganisation ampOrgId;
 
-    private AmpSectorScheme ampSecSchemeId;
+    @Column(name = "description")
     @TranslatableField
 
     private String description;
 
+    @Column(name = "language")
     private String language;
 
+    @Column(name = "version")
     private String version;
-    
-    //unused anywhere
-    @Deprecated
-    private Set aidlist;
-    
-    
-    private Set<AmpIndicator> indicators;
 
-    private Set<AmpSector> sectors;
-
+    @Column(name = "deleted")
     private Boolean deleted;
 
+    @Column(name = "segment_code")
+    private Integer segmentCode;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "AMP_SECTOR_INDICATOR",
+            joinColumns = @JoinColumn(name = "amp_sector_id"),
+            inverseJoinColumns = @JoinColumn(name = "indicator_id"))
+    private Set<AmpIndicator> indicators;
+
+    @OneToMany(mappedBy = "parentSectorId", cascade = CascadeType.ALL)
+    @Filter(name = "isDeletedFilter", condition = "(deleted is null or deleted = :deleted)")
+    private Set<AmpSector> sectors;
+
+    @OneToMany(mappedBy = "sectorId", cascade = CascadeType.ALL)
+    private Set<AmpActivitySector> aidlist;
+
+
+
+
+@Transient
+    private AmpOrganisation ampOrgId;
+
+
+    
+  @Transient
     private boolean translateable = true;
 
-    private String sectorCodeOfficial;
 
-    private String segmentCode;
-    
+
     private transient Collection<AmpSector> transientChildren;
 
-    public String getSegmentCode() {
+    public Integer getSegmentCode() {
         return segmentCode;
     }
 
-    public void setSegmentCode(String segmentCode) {
+    public void setSegmentCode(Integer segmentCode) {
         this.segmentCode = segmentCode;
     }
 //

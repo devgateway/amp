@@ -8,6 +8,7 @@ import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -27,30 +28,33 @@ import java.util.TreeMap;
  * @author Irakli Kobiashvili
  *
  */
+@Entity
+@DiscriminatorValue("a")
 public class IndicatorActivity extends IndicatorConnection implements Versionable, Cloneable {
 
     //IATI-check: to be ignored
     private static final long serialVersionUID = 2L;
-    
-    /**
-     * Activity
-     */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "activity_id")
     @InterchangeableBackReference
+
     private AmpActivityVersion activity;
-    
-    /**
-     * Indicator risk.
-     * Actually risk is in each connection of indicator and activity.
-     */
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "risk")
     @PossibleValues(AmpIndicatorRiskRatingsPossibleValuesProvider.class)
     @Interchangeable(fieldTitle = "Risk", importable = true, pickIdOnly = true,
             fmPath = "/Activity Form/M&E/ME Item/Risk")
     private AmpIndicatorRiskRatings risk;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ind_val_category")
     @Interchangeable(fieldTitle = "Log Frame", importable = true, pickIdOnly = true,
             discriminatorOption = CategoryConstants.LOGFRAME_KEY,
             fmPath = "/Activity Form/M&E/ME Item/Logframe Category")
     private AmpCategoryValue logFrame;
+    
+
 
     public AmpActivityVersion getActivity() {
         return activity;

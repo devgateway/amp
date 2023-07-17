@@ -9,22 +9,36 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 /**
  * @author Octavian Ciubotaru
  */
+import javax.persistence.*;
+
+@Entity
+@Table(name = "AMP_INDIRECT_THEME")
 public class AmpIndirectTheme {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_INDIRECT_THEME_SEQ")
+    @SequenceGenerator(name = "AMP_INDIRECT_THEME_SEQ", sequenceName = "AMP_INDIRECT_THEME_SEQ", allocationSize = 1)
+    @Column(name = "id")
     @JsonIgnore
+
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "old_theme_id", unique = true, nullable = false)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "ampThemeId",
             resolver = EntityResolver.class, scope = AmpTheme.class)
     @JsonIdentityReference(alwaysAsId = true)
     @JsonProperty("src-program")
     private AmpTheme oldTheme;
 
+    @ManyToOne
+    @JoinColumn(name = "new_theme_id", unique = true, nullable = false)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "ampThemeId",
             resolver = EntityResolver.class, scope = AmpTheme.class)
     @JsonIdentityReference(alwaysAsId = true)
     @JsonProperty("dst-program")
     private AmpTheme newTheme;
+
 
     @JsonProperty("level")
     private Integer level;

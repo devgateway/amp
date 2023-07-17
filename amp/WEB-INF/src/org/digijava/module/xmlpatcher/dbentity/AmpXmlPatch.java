@@ -48,7 +48,7 @@ public class AmpXmlPatch implements Serializable, Comparable<AmpXmlPatch> {
     @Column(name = "state")
     private Short state;
 
-    @OneToMany(mappedBy = "ampXmlPatch", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "patch", cascade = CascadeType.ALL)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private List<AmpXmlPatchLog> logs;
 

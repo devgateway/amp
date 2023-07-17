@@ -26,23 +26,33 @@ package org.digijava.module.common.dbentity;
  * @author not attributable
  * @version 1.0
  */
+import javax.persistence.*;
 
+@Entity
+@Table(name = "DG_ITEM_STATUS")
 public class ItemStatus {
+    @Id
+    @Column(name = "code")
+    private String code;
 
+    @Column(name = "NAME")
+    private String name;
     // news status
+    @Transient
     public final static String PUBLISHED = "pu";
+    @Transient
     public final static String PENDING = "pe";
+    @Transient
     public final static String REJECTED = "re";
+    @Transient
     public final static String ARCHIVED = "ar";
+    @Transient
     public final static String DELETED = "dl";
 
     // -----------
     // same as publish not used in database
+    @Transient
     public final static String REVOKE = "rev";
-    // -----------
-
-    private String code;
-    private String name;
 
 
     public ItemStatus() {

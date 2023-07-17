@@ -19,13 +19,5 @@
 			</key>
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpOrgGroup" />			
 		</set>
-
-		<!--
-			<set name="organizations" cascade="delete" inverse="true">
-			<cache usage="read-write" />
-			<key column="amp_org_type_id"/>
-			<one-to-many class="org.digijava.module.aim.dbentity.AmpOrganisation"/>
-			</set>	
-		-->
 	</class>
 </hibernate-mapping>

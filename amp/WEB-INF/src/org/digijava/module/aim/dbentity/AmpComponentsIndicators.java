@@ -1,11 +1,25 @@
 package org.digijava.module.aim.dbentity;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "AMP_COMPONENTS_INDICATORS")
 public class AmpComponentsIndicators 
 {
+    @Id
+    @GeneratedValue(generator = "ampComponentsIndicatorsSeq")
+    @SequenceGenerator(name = "ampComponentsIndicatorsSeq", sequenceName = "AMP_COMPONENTS_INDICATORS_seq", allocationSize = 1)
+    @Column(name = "amp_component_indicator_id")
     private Long ampCompIndId;
+
+    @Column(name = "code")
     private String code;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "description", columnDefinition = "text")
     private String description;
+
     
     /**
      * @return Returns the ampCompIndId.

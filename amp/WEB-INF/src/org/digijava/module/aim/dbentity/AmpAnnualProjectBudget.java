@@ -8,26 +8,39 @@ import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.util.Output;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "AMP_ANNUAL_PROJECT_BUDGET")
 public class AmpAnnualProjectBudget implements Serializable, Versionable, Cloneable, Comparable {
 
-    //IATI-check: to be ignored
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_annual_project_budget_seq_generator")
+    @SequenceGenerator(name = "amp_annual_project_budget_seq_generator", sequenceName = "amp_annual_project_budget_seq", allocationSize = 1)
+    @Column(name = "amp_annual_project_budget_id")
     @InterchangeableId
     @Interchangeable(fieldTitle = "Id")
     private Long ampAnnualProjectBudgetId;
-    
-    @Interchangeable(fieldTitle="Amount", importable = true)
-    private Double amount;
-    
-    @Interchangeable(fieldTitle="Year", importable = true)
-    private Date year;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "amp_activity_id", nullable = false)
     @InterchangeableBackReference
     private AmpActivityVersion activity;
-    
+
+    @Column(name = "year")
+    @Interchangeable(fieldTitle="Year", importable = true)
+
+    private Date year;
+
+    @Column(name = "amount")
+    @Interchangeable(fieldTitle="Amount", importable = true)
+
+    private Double amount;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "amp_currency_id")
     @Interchangeable(fieldTitle="Currency", importable = true, pickIdOnly = true)
-    protected AmpCurrency ampCurrencyId;
+    private AmpCurrency ampCurrencyId;
 
     public Long getAmpAnnualProjectBudgetId() {
         return ampAnnualProjectBudgetId;

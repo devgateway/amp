@@ -7,21 +7,40 @@ import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.Identifiable;
+import javax.persistence.*;
+import java.util.Set;
 
+@Entity
+@Table(name = "AMP_COMPONENT_TYPE")
 @TranslatableClass(displayName = "Component Type")
 public class AmpComponentType implements ARDimensionable, Serializable, Identifiable {
 
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(generator = "ampComponentTypeSeq")
+    @SequenceGenerator(name = "ampComponentTypeSeq", sequenceName = "AMP_COMPONENT_TYPE_seq", allocationSize = 1)
+    @Column(name = "type_id")
     private Long type_id;
 
+    @Column(name = "name")
     @TranslatableField
+
     private String name;
+
+    @Column(name = "code")
     private String code;
+
+    @Column(name = "enable")
     private Boolean enable;
+
+    @Column(name = "selectable")
     private Boolean selectable;
 
-    private transient Set<AmpComponent> components;
+    @OneToMany(mappedBy = "type", cascade = CascadeType.ALL)
+    private Set<AmpComponent> components;
+
+
 
     @Override
     public Object getIdentifier() {

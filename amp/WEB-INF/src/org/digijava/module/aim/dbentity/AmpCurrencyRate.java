@@ -1,14 +1,32 @@
 package org.digijava.module.aim.dbentity ;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.persistence.*;
+import java.util.Date;
 
+@Entity
+@Table(name = "AMP_CURRENCY_RATE")
 public class AmpCurrencyRate
 {
+    @Id
+    @GeneratedValue(generator = "ampCurrencyRateSeq")
+    @SequenceGenerator(name = "ampCurrencyRateSeq", sequenceName = "AMP_CURRENCY_RATE_seq", allocationSize = 1)
+    @Column(name = "amp_currency_rate_id")
     private Long ampCurrencyRateId;
+
+    @Column(name = "from_currency_code", nullable = false)
     private String fromCurrencyCode;
+
+    @Column(name = "to_currency_code", nullable = false)
     private String toCurrencyCode;
+
+    @Column(name = "exchange_rate", nullable = false)
     private Double exchangeRate;
+
+    @Column(name = "exchange_rate_date", nullable = false)
     private Date exchangeRateDate;
+
+    @Column(name = "data_source")
     private Integer dataSource;
     
     public AmpCurrencyRate() {};

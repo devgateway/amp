@@ -10,20 +10,28 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * 
  * @author Viorel Chihai
  */
+import javax.persistence.*;
+
+@Entity
+@Table(name = "AMP_ALLOWED_FILETYPE")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AmpFileType {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+    @Column(name = "filetype_id")
+    private Long id;
 
-    Long id;
+    @Column(name = "name")
+    private String name;
 
-    @JsonProperty("name")
-    String name;
+    @Transient
 
     @JsonProperty("description")
     String description;
-
+@Transient
     @JsonProperty("mimeTypes")
     List<String> mimeTypes;
-    
+    @Transient
     @JsonProperty("extensions")
     List<String> extensions;
     

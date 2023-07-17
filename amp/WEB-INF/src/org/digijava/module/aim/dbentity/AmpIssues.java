@@ -14,27 +14,42 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.aim.validator.groups.Submit;
+import javax.persistence.*;
+import java.util.Date;
+import java.util.Set;
 
+@Entity
+@Table(name = "AMP_ISSUES")
 public class AmpIssues implements Serializable, Versionable, Cloneable {
 
-    //IATI-check: to be ignored
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_issues_seq_generator")
+    @SequenceGenerator(name = "amp_issues_seq_generator", sequenceName = "AMP_ISSUES_seq", allocationSize = 1)
+    @Column(name = "amp_issue_id")
     @InterchangeableId
     @Interchangeable(fieldTitle = "Id")
     private Long ampIssueId;
 
+    @Column(name = "name", columnDefinition = "text")
     @Interchangeable(fieldTitle = "Name", label = "Issue", importable = true,
             interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class))
-    private String name ;
+    private String name;
 
+    @Column(name = "issueDate")
+    @Interchangeable(fieldTitle = "Issue Date", importable = true, fmPath = "/Activity Form/Issues Section/Issue/Date")
+
+    private Date issueDate;
+
+    @ManyToOne
     @InterchangeableBackReference
+    @JoinColumn(name = "amp_activity_id", referencedColumnName = "amp_activity_id")
     private AmpActivityVersion activity;
 
+    @OneToMany(mappedBy = "issue", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("ampMeasureId ASC")
     @Interchangeable(fieldTitle = "Measures", importable = true, fmPath = "/Activity Form/Issues Section/Issue/Measure")
     private Set<AmpMeasure> measures = new HashSet<>();
 
-    @Interchangeable(fieldTitle = "Issue Date", importable = true, fmPath = "/Activity Form/Issues Section/Issue/Date")
-    private Date issueDate;
  
     public String getName() {
         return name;

@@ -10,7 +10,6 @@
 		</id>
 
 		<property name="name" column="name" type="java.lang.String" />
-		<!-- <property name="description" column="description" type="java.lang.String"/> -->
 
 		<property name="options" column="options" type="java.lang.String" />
 		<property name="reportDescription" column="report_description" type="text" />
@@ -38,11 +37,6 @@
 		<property name="updatedDate" column="updated_date" type="java.util.Date" />
 		<property name="publishedDate" column="published_date" type="java.util.Date" />
 
-		<!--  <many-to-one name="ampPage" column="ampPageId"
-			class="org.digijava.module.aim.dbentity.AmpPages" /> -->
-
-		<!--<many-to-one name="ampReportsOptions" column="amp_option_id" class="org.digijava.module.aim.dbentity.AmpReportsOptions" not-null="true"/>
-		-->
 		<set name="members" table="AMP_MEMBER_REPORTS" lazy="true" cascade="save-update">
 			<cache usage="read-write"/>
 			<key column="amp_report_id" />
@@ -114,7 +108,6 @@
 			<key column="amp_report_id" />
 			<one-to-many class="org.dgfoundation.amp.ar.dbentity.AmpFilterData" />
 		</set>
-		<!--  <many-to-one name="defaultFilter" column="default_filter_id" class="org.dgfoundation.amp.ar.AmpARFilter" not-null="false"/>-->
 
 	</class>
 </hibernate-mapping>

@@ -15,28 +15,40 @@ import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.util.Output;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "AMP_ACTIVITY_CONTACT")
 @TranslatableClass (displayName="ActivityContact")
 public class AmpActivityContact implements Versionable, Comparable, Serializable, Cloneable {
-
+    @Id
     @InterchangeableId
     @Interchangeable(fieldTitle = "Id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_ACTIVITY_CONTACT_seq")
+    @SequenceGenerator(name = "AMP_ACTIVITY_CONTACT_seq", sequenceName = "AMP_ACTIVITY_CONTACT_seq", allocationSize = 1)    @Column(name = "activity_contact_id")
     private Long id;
 
+    @Column(name = "contact_type")
+    private String contactType;
+
+    @Column(name = "is_primary_contact")
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.PRIMARY_CONTACT, importable = true)
+    private Boolean primaryContact;
+
+    @ManyToOne
+    @JoinColumn(name = "activity_id")
     @InterchangeableBackReference
     private AmpActivityVersion activity;
 
+    @ManyToOne
+    @JoinColumn(name = "contact_id")
     @PossibleValues(ContactPossibleValuesProvider.class)
     @Interchangeable(fieldTitle = "Contact", pickIdOnly = true, importable = true, uniqueConstraint = true,
             interValidators = @InterchangeableValidator(RequiredValidator.class),
             commonPV = CommonFieldsConstants.COMMON_CONTACT)
     private AmpContact contact;
-    
-    @Interchangeable(fieldTitle = ActivityFieldsConstants.PRIMARY_CONTACT, importable = true)
-    private Boolean primaryContact;
-    
-    private String contactType; // Donor/MOFED funding,Project Coordinator,Sector Ministry or Implementing/Executing Agency Contact Information
-    
+
+
     public AmpActivityVersion getActivity() {
         return activity;
     }

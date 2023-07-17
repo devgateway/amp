@@ -16,44 +16,48 @@ import org.digijava.module.aim.helper.donorReport.ValueTranslatabePair;
 import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.NameableOrIdentifiable;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "AMP_ORG_GROUP")
 @TranslatableClass (displayName = "Organisation Group")
 public class AmpOrgGroup implements Serializable, Comparable, Identifiable, ARDimensionable, HierarchyListable,OrgProfileValue, NameableOrIdentifiable
 {
-    //IATI-check: to be ignored
-//  @Interchangeable(fieldTitle="Organization Group ID", id = true)
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_ORG_GROUP_seq")
+    @SequenceGenerator(name = "AMP_ORG_GROUP_seq", sequenceName = "AMP_ORG_GROUP_seq", allocationSize = 1)
+    @Column(name = "amp_org_grp_id")
     private Long ampOrgGrpId;
-    
-//  @Interchangeable(fieldTitle="Organization Group Name", value = true)
+
+    @Column(name = "org_grp_name")
     @TranslatableField
     private String orgGrpName;
-    
-//  @Interchangeable(fieldTitle="Organization Group Code")
+
+    @Column(name = "org_grp_code")
     @TranslatableField
     private String orgGrpCode;
-    
-    //private Set organizations; 
-//  @Interchangeable(fieldTitle="Organization Type")
-    private AmpOrgType orgType; // a mandatory field, added for donor-access
-    
-    
-    private boolean translateable   = true;
-    // this field is saved in Organization Dashboard and not from organization manager in admin
-//  @Interchangeable(fieldTitle="Organization Background (Dashboard)")
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "org_type", nullable = false)
+    private AmpOrgType orgType;
+
+    @Column(name = "org_grp_background")
     private String orgGrpBackground;
-    /*
-     *this field is saved in Organization Dashboard and not from organization manager in admin
-     * don't confuse it with Description field
-     */
-//  @Interchangeable(fieldTitle="Organization Group Description (Dashboard)")
+
+    @Column(name = "org_grp_description")
     private String orgGrpDescription;
-    // this field is saved in  Organization Dashboard and not from organization manager in admin
-//  @Interchangeable(fieldTitle="Organization Group Key Areas (Dashboard)")
+
+    @Column(name = "org_grp_keyareas")
     private String orgGrpKeyAreas;
-    
-    
+
+    @Column(name = "deleted")
     private Boolean deleted;
-    
+    //IATI-check: to be ignored
+
+    @Transient
+    private boolean translateable   = true;
+
     /**
      * @return Returns the ampOrgGrpId.
      */

@@ -17,22 +17,38 @@ import org.digijava.module.common.util.DateTimeUtil;
  * @author mihai
  *
  */
+import javax.persistence.*;
+
+@Entity
+@Table(name = "IPA_CONTRACT_DISBURSEMENT")
 public class IPAContractDisbursement implements Serializable, Cloneable {
     private static final long serialVersionUID = -4688757182074104911L;
-    
-    //IATI-check: to be ignored
-//  @Interchangeable(fieldTitle="ID")
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ipa_contract_disbursement_seq")
+    @SequenceGenerator(name = "ipa_contract_disbursement_seq", sequenceName = "IPA_CONTRACT_DISBURSEMENT_seq", allocationSize = 1)
+    @Column(name = "id")
     private Long id;
-//  @Interchangeable(fieldTitle="Adjustment Type",fmPath="/Activity Form/Contracts/Contract Item/Contract Disbursements/Adjustment Type", importable = true)
+
+    @ManyToOne
+    @JoinColumn(name = "adjustment_type")
     private AmpCategoryValue adjustmentType;
-//  @Interchangeable(fieldTitle="Amount",fmPath="/Activity Form/Contracts/Contract Item/Contract Disbursements/Amount", importable = true)
+
+    @Column(name = "amount")
     private Double amount;
-//  @Interchangeable(fieldTitle="Currency",fmPath="/Activity Form/Contracts/Contract Item/Contract Disbursements/Currency", importable = true)
+
+    @ManyToOne
+    @JoinColumn(name = "currency")
     private AmpCurrency currency;
-//  @Interchangeable(fieldTitle="Date",fmPath="/Activity Form/Contracts/Contract Item/Contract Disbursements/Transaction Date", importable = true)
+
+    @ManyToOne
+    @JoinColumn(name = "ipa_contract_id")
+    private IPAContract contract;
+
+    @Column(name = "date_")
     private Date date;
-//  @Interchangeable(fieldTitle="Contract", pickIdOnly=true, importable = true)
-        private IPAContract contract;
+    
+
 
         public IPAContract getContract() {
             return contract;

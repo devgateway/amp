@@ -4,12 +4,29 @@ import java.io.Serializable;
 
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "AMP_CALENDAR_ATTENDEE")
 public class AmpCalendarAttendee implements Serializable{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID")
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "CALENDAR_ID")
     private AmpCalendar ampCalendar;
+
+    @ManyToOne
+    @JoinColumn(name = "MEMBER_ID")
     private AmpTeamMember member;
+
+    @ManyToOne
+    @JoinColumn(name = "TEAM_ID")
     private AmpTeam team;
+
+    @Column(name = "GUEST")
     private String guest;
 
     public AmpCalendarAttendee() {

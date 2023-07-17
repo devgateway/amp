@@ -36,97 +36,136 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.common.util.DateTimeUtil;
+import javax.persistence.*;
+import java.util.Date;
+import java.util.Set;
 
+@Entity
+@Table(name = "AMP_REPORTS")
 @TranslatableClass (displayName = "Report")
 public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, Serializable, Identifiable, Cloneable,
         FilterDataSetInterface<AmpFilterData> {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_REPORTS_seq_generator")
+    @SequenceGenerator(name = "AMP_REPORTS_seq_generator", sequenceName = "AMP_REPORTS_seq", allocationSize = 1)
+    @Column(name = "amp_report_id")
     private Long ampReportId;
 
-    //private AmpARFilter defaultFilter;
-    
-    private transient ReportGenerator reportGenerator;
+    @Column(name = "name")
     @TranslatableField
-    private String name;
-    
-    // private String description;
-    @TranslatableField
-    private String reportDescription;
 
+    private String name;
+
+    @Column(name = "options")
     private String options;
 
-    private Boolean hideActivities;
+    @Column(name = "report_description")
+    @TranslatableField
 
-    private Boolean drilldownTab;
+    private String reportDescription;
 
-    private Boolean publicReport;
-    
-    private Boolean workspaceLinked;
-    
-    /**
-     * see AMP-17746
-     */
-    private Boolean alsoShowPledges;
-    
-    /**
-     * see AMP-17746
-     */
-    private Boolean onlyShowProjectsRelatedPledges;
-
+    @Column(name = "type")
     private Long type;
 
-    // private AmpReportsOptions ampReportsOptions;
-    private String description;
+    @Column(name = "hide_activities")
+    private Boolean hideActivities;
 
-    /**
-     * team reports oslt
-     */
-    private Set<AmpTeamMember> members;
+    @Column(name = "drilldown_tab")
+    private Boolean drilldownTab;
 
-    private Set<AmpReportColumn> columns;
+    @Column(name = "publicReport")
+    private Boolean publicReport;
 
-    private List<AmpReportColumn> orderedColumns;
+    @Column(name = "workspaceLinked")
+    private Boolean workspaceLinked;
 
-    private Set<AmpReportHierarchy> hierarchies;
+    @Column(name = "budget_exporter")
+    private Boolean budgetExporter;
 
-    private Set<AmpReportMeasures> measures;
+    @Column(name = "allow_empty_fund_cols")
+    private Boolean allowEmptyFundingColumns;
 
-    private Set<AmpMeasures> reportMeasures;
+    @Column(name = "also_show_pledges")
+    private Boolean alsoShowPledges;
 
-    private AmpTeamMember ownerId; // the member that created the report
+    @Column(name = "show_original_currency")
+    private Boolean showOriginalCurrency;
 
-    private Date updatedDate; // last date when the report was modified
+    @Column(name = "split_by_funding", nullable = false)
+    private Boolean splitByFunding;
 
-    /*
-     *  to be set in order to get information for translation purposes in pdf and excel reports
-     *  not serialized
-     */
-    private Long siteId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ownerId")
+    private AmpTeamMember ownerId;
 
-    private String locale;
-
-    //private AmpPages ampPage;
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cv_activity_level")
     private AmpCategoryValue activityLevel;
 
-    private String user;
-    
-    private Set<AmpDesktopTabSelection> desktopTabSelections;
-    
-    private Set<AmpReportLog> logs;
-    
-    private Set<AmpFilterData> filterDataSet;
-    
-    private Boolean allowEmptyFundingColumns;
-    
-    private Boolean showOriginalCurrency;
-    
-    private Boolean budgetExporter = false;
-    private Date publishedDate;
-    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "report_category")
     private AmpCategoryValue reportCategory;
 
-    private Boolean splitByFunding = false;
+    @Column(name = "updated_date")
+    private Date updatedDate;
+
+    @Column(name = "published_date")
+    private Date publishedDate;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "AMP_MEMBER_REPORTS",
+            joinColumns = @JoinColumn(name = "amp_report_id"),
+            inverseJoinColumns = @JoinColumn(name = "amp_member_id"))
+    private Set<AmpTeamMember> members;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "ampReport", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<AmpReportLog> logs;
+
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "AMP_REPORT_COLUMN", joinColumns = @JoinColumn(name = "amp_report_id"))
+    private Set<AmpReportColumn> columns;
+
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "AMP_REPORT_HIERARCHY", joinColumns = @JoinColumn(name = "amp_report_id"))
+    private Set<AmpReportHierarchy> hierarchies;
+
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "AMP_REPORT_MEASURES", joinColumns = @JoinColumn(name = "amp_report_id"))
+    private Set<AmpReportMeasures> measures;
+
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "AMP_REPORT_XLEVEL_MEASURES", joinColumns = @JoinColumn(name = "amp_report_id"))
+    private Set<AmpReportMeasures> reportMeasures;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "ampReport", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<AmpDesktopTabSelection> desktopTabSelections;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "ampReport", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<AmpFilterData> filterDataSet;
+
+    @Transient
+    private transient ReportGenerator reportGenerator;
+
+    
+
+
+@Transient
+    private String description;
+
+
+@Transient
+    private List<AmpReportColumn> orderedColumns;
+
+
+@Transient
+    private Long siteId;
+@Transient
+    private String locale;
+
+@Transient
+    private String user;
+
+
 
     public Boolean getSplitByFunding() {
         return splitByFunding;
@@ -427,11 +466,11 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
         return this.name.toLowerCase().replaceAll(" ", "");
     }
 
-    public Set<AmpMeasures> getReportMeasures() {
+    public Set<AmpReportMeasures> getReportMeasures() {
         return reportMeasures;
     }
 
-    public void setReportMeasures(Set<AmpMeasures> reportMeasures) {
+    public void setReportMeasures(Set<AmpReportMeasures> reportMeasures) {
         this.reportMeasures = reportMeasures;
     }
 

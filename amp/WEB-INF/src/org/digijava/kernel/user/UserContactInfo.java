@@ -21,15 +21,23 @@
  */
 
 package org.digijava.kernel.user;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "DG_USER_CONTACT_INFO")
 public class UserContactInfo {
+    @EmbeddedId
+    private UserContactInfoPK id;
 
+    @Column(name = "CONTACT_TYPE")
+    private String contactType;
+
+    @Column(name = "CONTACT_DATA")
+    private String contactData;
     public static final String PHONE = "user.home-info.telecom.telephone.number";
     public static final String FAX = "user.home-info.telecom.fax.number";
 
-    private UserContactInfoPK id;
-    private String contactType;
-    private String contactData;
+
 
     public String getContactData() {
         return contactData;

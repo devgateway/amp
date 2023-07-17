@@ -18,29 +18,67 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.message.dbentity.AmpMessageState;
+import javax.persistence.*;
+import java.util.Set;
 
+@Entity
+@Table(name = "AMP_TEAM_MEMBER")
 @InterchangeableValue(TeamMemberValueProvider.class)
 public class AmpTeamMember implements Serializable, Identifiable/*, Versionable*/ {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_team_member_seq_generator")
+    @SequenceGenerator(name = "amp_team_member_seq_generator", sequenceName = "amp_team_member_seq", allocationSize = 1)
+    @Column(name = "amp_team_mem_id")   
     @PossibleValueId
+
     private Long ampTeamMemId;
 
+    @Column(name = "publish_doc_permission")
+    private Boolean publishDocPermission;
+
+    @ManyToOne
+    @JoinColumn(name = "user_")
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "amp_team_id")
     private AmpTeam ampTeam;
+
+    @ManyToOne
+    @JoinColumn(name = "amp_member_role_id")
     private AmpTeamMemberRoles ampMemberRole;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "AMP_MEMBER_ACTIVITIES",
+            joinColumns = @JoinColumn(name = "amp_member_id"),
+            inverseJoinColumns = @JoinColumn(name = "amp_activity_id"))
     private Set<AmpActivityVersion> activities;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "AMP_MEMBER_REPORTS",
+            joinColumns = @JoinColumn(name = "amp_member_id"),
+            inverseJoinColumns = @JoinColumn(name = "amp_report_id"))
     private Set<AmpReports> reports;
-    
-    //private Set links;
-    private Set logs;
-    private Set<AmpMessageState> messages;
-    private Boolean publishDocPermission; /*whether the team member has permissions to add document using templates*/
 
-    // added for donor access
-    private Set editableFundingOrgs;    // in case of donor - allowed organisations whose funding details this TM can edit
+    @OneToMany(mappedBy = "ampMemberId", cascade = CascadeType.ALL)
+    private Set<AmpReportLog> logs;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "AMP_EDIT_DONOR_ORG",
+            joinColumns = @JoinColumn(name = "amp_team_mem_id"),
+            inverseJoinColumns = @JoinColumn(name = "amp_org_id"))
+    private Set<AmpOrganisation> editableFundingOrgs;
+
+    @OneToMany(mappedBy = "ownerId", cascade = CascadeType.ALL, orphanRemoval = true)
+//    @OrderBy(value = "index")
     private Set<AmpDesktopTabSelection> desktopTabSelections;
+
+    @OneToMany(mappedBy = "receiverId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<AmpMessageState> messages;
+
+    @Column(name = "deleted")
+    private Boolean deleted;
+   
 
     public void setReports(Set<AmpReports> reports) {
         this.reports = reports;
@@ -50,7 +88,6 @@ public class AmpTeamMember implements Serializable, Identifiable/*, Versionable*
         return this.reports;
     }
 
-    private Boolean deleted;
 
     /**
      * @return ampTeam

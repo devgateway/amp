@@ -17,24 +17,32 @@ import org.digijava.module.aim.annotations.interchange.PossibleValues;
  * @author Irakli Kobiashvili
  *
  */
+import javax.persistence.*;
+import java.util.Set;
+
+@Entity
+@Table(name = "AMP_INDICATOR_CONNECTION")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "sub_clazz")
 public class IndicatorConnection implements Serializable, Comparable<IndicatorTheme>{
 
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_INDICATOR_CONNECTION_seq")
+    @SequenceGenerator(name = "AMP_INDICATOR_CONNECTION_seq", sequenceName = "AMP_INDICATOR_CONNECTION_seq", allocationSize = 1)
+    @Column(name = "id")
     @InterchangeableId
     @Interchangeable(fieldTitle = "Id")
     private Long id;
 
-    /**
-     * Indicator. this field is mandatory. It defines indicator in connection with activity, theme or team. 
-     */
+    @ManyToOne( fetch = FetchType.LAZY)
+    @JoinColumn(name = "indicator_id")
     @PossibleValues(AmpIndicatorPossibleValuesProvider.class)
     @Interchangeable(fieldTitle = "Indicator", importable = true, pickIdOnly = true, uniqueConstraint = true)
     private AmpIndicator indicator;
 
-    /**
-     * Indicator values.
-     */
+    @OneToMany(mappedBy = "indicatorConnection", cascade = CascadeType.ALL, orphanRemoval = true)
     @InterchangeableDiscriminator(discriminatorField = "valueType",
             configurer = AmpIndicatorValueDiscriminationConfigurer.class, settings = {
             @Interchangeable(fieldTitle = "Base", discriminatorOption = "" + AmpIndicatorValue.BASE,
@@ -45,7 +53,11 @@ public class IndicatorConnection implements Serializable, Comparable<IndicatorTh
                     multipleValues = false, fmPath = "/Activity Form/M&E/ME Item/Revised Value", importable = true),
             @Interchangeable(fieldTitle = "Actual", discriminatorOption = "" + AmpIndicatorValue.ACTUAL,
                     multipleValues = false, fmPath = "/Activity Form/M&E/ME Item/Current Value", importable = true)})
-    protected Set<AmpIndicatorValue> values = new HashSet<>();
+    protected Set<AmpIndicatorValue> values= new HashSet<>();
+
+
+
+
     
     public Long getId() {
         return id;

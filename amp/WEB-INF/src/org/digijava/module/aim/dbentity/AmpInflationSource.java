@@ -15,45 +15,49 @@ import org.digijava.module.aim.util.Identifiable;
  * 
  * @author Nadejda Mandrescu
  */
+import javax.persistence.*;
+
+@Entity
+@Table(name = "AMP_INFLATION_SOURCE")
 public class AmpInflationSource implements Serializable, Identifiable {
     
     private static final long serialVersionUID = -6422564054049848996L;
-    
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_INFLATION_SOURCE_seq")
+    @SequenceGenerator(name = "AMP_INFLATION_SOURCE_seq", sequenceName = "AMP_INFLATION_SOURCE_seq", allocationSize = 1)
+    @Column(name = "amp_inflation_source_id")
     private Long id;
-    
-    /**
-     * Data Source name, translatable
-     */
+
+    @Column(name = "name", nullable = false)
     @NotNull
+
     private String name;
-    
-    /**
-     * Data Source description, translatable
-     */
+
+    @Column(name = "description", columnDefinition = "text")
     private String description;
-    
-    /**
-     * Flags if the current data source was chosen to provide inflation rates
-     */
+
+    @Column(name = "selected", nullable = false)
     @NotNull
-    private Boolean selected;
-    
-    /**
-     * Inflation Rates frequency selected to be provided via current data source
-     */
+
+    private Boolean selected = false;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "frequency", length = 1)
     private IRFrequency frequency;
-    
-    /**
-     * The currency for which this Data Source provides inflation rates
-     */
+
+    @ManyToOne
+    @JoinColumn(name = "currency_id", nullable = false)
     @NotNull
     private AmpCurrency currency;
-    
-    /**
-     * Other non-standard settings available for the current data source 
-     */
-    //DEFLATOR: once we have Settings V2, store any custom settings per data source there, how explicitly
+
+    @Column(name = "api_token")
     private String apiToken;
+
+
+    
+
+
 
     /**
      * @return the id

@@ -8,14 +8,28 @@ import java.io.Serializable;
  * @author Irakli Kobiashvili
  *
  */
+import javax.persistence.*;
+
+@Entity
+@Table(name = "AMP_USER_EXT")
 public class AmpUserExtension implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    @EmbeddedId
     private AmpUserExtensionPK ampUserExtId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "amp_org_type_id", nullable = false)
     private AmpOrgType orgType;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "amp_org_group__id", nullable = false)
     private AmpOrgGroup orgGroup;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "amp_org_id", nullable = false)
     private AmpOrganisation organization;
+
     
     public AmpUserExtension(){
         

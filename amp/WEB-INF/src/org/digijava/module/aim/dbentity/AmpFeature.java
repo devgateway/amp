@@ -7,14 +7,33 @@ import java.util.Set;
  * modified by dan
  *
  */
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
+
+@Entity
+@Table(name = "AMP_FEATURE")
 public class AmpFeature {
-    
+    @Id
+    @GeneratedValue(generator = "ampFeatureSeq")
+    @SequenceGenerator(name = "ampFeatureSeq", sequenceName = "AMP_FEATURE_seq", allocationSize = 1)
+    @Column(name = "amp_feature_id")
     private Integer ampFeatureId;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "description")
     private String description;
+
+    @Column(name = "code")
     private String code;
-    private boolean active;
-    private Set templates;
+
+    @Column(name = "active")
+    private Boolean active;
+
+    @ManyToMany(mappedBy = "features")
+    private Set<FeatureTemplates> templates = new HashSet<>();
     private String nameTrimmed;
     
     /**

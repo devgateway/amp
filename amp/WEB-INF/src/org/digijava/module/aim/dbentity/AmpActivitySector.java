@@ -14,27 +14,43 @@ import org.digijava.module.aim.annotations.interchange.PossibleValues;
 import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.aim.util.TreeNodeAware;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "AMP_ACTIVITY_SECTOR")
 public class AmpActivitySector implements Versionable, Serializable, Cloneable, TreeNodeAware<AmpSector> {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_activity_sector_seq_generator")
+    @SequenceGenerator(name = "amp_activity_sector_seq_generator", sequenceName = "AMP_ACTIVITY_SECTOR_seq", allocationSize = 1)
+    @Column(name = "amp_activity_sector_id")
     @InterchangeableId
     @Interchangeable(fieldTitle = "Id")
     private Long ampActivitySectorId;
 
+    @ManyToOne
+    @JoinColumn(name = "amp_activity_id")
     @InterchangeableBackReference
     private AmpActivityVersion activityId;
 
+    @ManyToOne
+    @JoinColumn(name = "amp_sector_id")
     @PossibleValues(SectorPossibleValuesProvider.class)
     @Interchangeable(fieldTitle = "Sector", importable = true, pickIdOnly = true, uniqueConstraint = true,
             interValidators = @InterchangeableValidator(RequiredValidator.class))
     private AmpSector sectorId;
-    
-    @Interchangeable(fieldTitle="Sector Percentage", importable = true, percentageConstraint = true, 
+
+    @ManyToOne
+    @JoinColumn(name = "classification_config_id")
+    private AmpClassificationConfiguration classificationConfig;
+
+    @Column(name = "sector_percentage")
+    @Interchangeable(fieldTitle="Sector Percentage", importable = true, percentageConstraint = true,
             fmPath = FMVisibility.PARENT_FM + "/sectorPercentage",
             interValidators = @InterchangeableValidator(RequiredValidator.class))
     private Float sectorPercentage;
 
-    private AmpClassificationConfiguration classificationConfig;
+
+
 
     public AmpClassificationConfiguration getClassificationConfig() {
         return classificationConfig;

@@ -21,6 +21,12 @@ import org.digijava.module.common.util.DateTimeUtil;
  * @author mihai
  *
  */
+import javax.persistence.*;
+import java.util.Date;
+import java.util.Set;
+
+@Entity
+@Table(name = "IPA_CONTRACT")
 @TranslatableClass (displayName = "IPA Contract")
 public class IPAContract implements Serializable, Versionable, Cloneable {
 
@@ -32,108 +38,154 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
      */
     
     private static final long serialVersionUID = 2485772788422409800L;
+
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ipa_contract_seq")
+    @SequenceGenerator(name = "ipa_contract_seq", sequenceName = "IPA_CONTRACT_seq", allocationSize = 1)
+    @Column(name = "id")
     private Long id;
+
+    @Column(name = "contract_name")
     @TranslatableField
-//  @Interchangeable(fieldTitle = "Contract Name", fmPath = "/Activity Form/Contracts/Contract Item/Contract Info/Contract Name")
+
     private String contractName;
 
+    @Column(name = "description")
     @TranslatableField
-//  @Interchangeable(fieldTitle = "Description", fmPath = "/Activity Form/Contracts/Contract Item/Contract Info/Contract Description")
     private String description;
-//  @Interchangeable(fieldTitle = "Contracting Organization Text")
+
+    @Column(name = "contracting_organization_text")
     private String contractingOrganizationText;
-//  @Interchangeable(fieldTitle = "IPA activity categ")
-    private transient AmpCategoryValue activityCategory;
-//  @Interchangeable(fieldTitle = "Start of Tendering", fmPath = "/Activity Form/Contracts/Contract Item/Contract Details/Start of Tendering")
+
+    @ManyToOne
+    @JoinColumn(name = "activity_category_id")
+    private AmpCategoryValue activityCategory;
+
+    @ManyToOne
+    @JoinColumn(name = "status")
+    private AmpCategoryValue status;
+
+    @ManyToOne
+    @JoinColumn(name = "type")
+    private AmpCategoryValue type;
+
+    @ManyToOne
+    @JoinColumn(name = "contractType")
+    private AmpCategoryValue contractType;
+
+    @ManyToOne
+    @JoinColumn(name = "contracting_org")
+    private AmpOrganisation organization;
+
+    @ManyToOne
+    @JoinColumn(name = "activity_id")
+    private AmpActivityVersion activity;
+
+    @Column(name = "start_of_tendering")
     private Date startOfTendering;
-//  @Interchangeable(fieldTitle = "Signature of Contract", fmPath = "/Activity Form/Contracts/Contract Item/Contract Details/Signature")
+
+    @Column(name = "signature_of_contract")
     private Date signatureOfContract;
-//  @Interchangeable(fieldTitle = "Contract Validity", fmPath = "/Activity Form/Contracts/Contract Item/Contract Details/Validity")
+
+    @Column(name = "contract_validity")
     private Date contractValidity;
-//  @Interchangeable(fieldTitle = "Contract Completion", fmPath = "/Activity Form/Contracts/Contract Item/Contract Details/Completion")
+
+    @Column(name = "contract_completion")
     private Date contractCompletion;
 
-//  @Interchangeable(fieldTitle = "Total Private Contrib Amount Date", fmPath = "/Activity Form/Contracts/Contract Item/Funding Allocation/IB Date")
+    @Column(name = "total_amount")
+    private Double totalAmount;
+
+    @Column(name = "contract_total_value")
+    private Double contractTotalValue;
+
+    @ManyToOne
+    @JoinColumn(name = "total_amount_currency")
+    private AmpCurrency totalAmountCurrency;
+
+    @ManyToOne
+    @JoinColumn(name = "disbursements_global_currency")
+    private AmpCurrency disbursementsGlobalCurrency;
+
+    @Column(name = "TOT_PRIVATE_CONTR_DATE")
     private Date totalPrivateContribAmountDate;
-//  @Interchangeable(fieldTitle = "Total National Contrib Regional Amount Date", fmPath = "/Activity Form/Contracts/Contract Item/Funding Allocation/Regional Date")
+
+    @Column(name = "TOT_NATIONAL_CONTR_REG_DATE")
     private Date totalNationalContribRegionalAmountDate;
-//  @Interchangeable(fieldTitle = "Total NationalContrib IFI Amount Date", fmPath = "/Activity Form/Contracts/Contract Item/Funding Allocation/IFI Date")
+
+    @Column(name = "TOT_NATIONAL_CONTR_IFI_DATE")
     private Date totalNationalContribIFIAmountDate;
-//  @Interchangeable(fieldTitle = "Total National Contrib Central Amount Date", fmPath = "/Activity Form/Contracts/Contract Item/Funding Allocation/Central Date")
+
+    @Column(name = "TOT_NATIONAL_CONTR_CENT_DATE")
     private Date totalNationalContribCentralAmountDate;
-//  @Interchangeable(fieldTitle = "Total EC Contrib INV Amount Date", fmPath = "/Activity Form/Contracts/Contract Item/Funding Allocation/INV Date")
+
+    @Column(name = "TOT_EC_CONTR_INV_DATE")
     private Date totalECContribINVAmountDate;
-//  @Interchangeable(fieldTitle = "Total EC Contrib IB Amount Date", fmPath = "/Activity Form/Contracts/Contract Item/Funding Allocation/IB Date")
+
+    @Column(name = "TOT_EC_CONTR_IB_DATE")
     private Date totalECContribIBAmountDate;
 
-//  @Interchangeable(fieldTitle = "Total EC Contrib IB Amount", fmPath = "/Activity Form/Contracts/Contract Item/Funding Allocation/IB Amount")
+    @Column(name = "total_ec_contrib_ib_amount")
     private Double totalECContribIBAmount;
-//  @Interchangeable(fieldTitle = "Total Amount", fmPath = "/Activity Form/Contracts/Contract Item/Funding Allocation/Contract Total Amount")
-    private Double totalAmount;
-//  @Interchangeable(fieldTitle = "Contract Total Value", fmPath = "/Activity Form/Contracts/Contract Item/Funding Allocation/Contract Total Value")
-    private Double contractTotalValue;
-//  @Interchangeable(fieldTitle = "Total Amount Currency", fmPath = "/Activity Form/Contracts/Contract Item/Funding Allocation/Currency")
-    private transient AmpCurrency totalAmountCurrency;
-//  @Interchangeable(fieldTitle = "Disbursements Global Currency")
-    private transient AmpCurrency dibusrsementsGlobalCurrency;
-//  @Interchangeable(fieldTitle = "Total EC Contrib INV Amount", fmPath = "/Activity Form/Contracts/Contract Item/Funding Allocation/INV Amount")
+
+    @Column(name = "total_ec_contrib_inv_amount")
     private Double totalECContribINVAmount;
-//  @Interchangeable(fieldTitle = "Total National Contrib Central Amount", fmPath = "/Activity Form/Contracts/Contract Item/Funding Allocation/Central Amount")
+
+    @Column(name = "TOT_NATIONAL_CONTR_CENTRAL")
     private Double totalNationalContribCentralAmount;
-//  @Interchangeable(fieldTitle = "Total National Contrib Regional Amount", fmPath = "/Activity Form/Contracts/Contract Item/Funding Allocation/Regional Amount")
+
+    @Column(name = "TOT_NATIONAL_CONTR_REGIONAL")
     private Double totalNationalContribRegionalAmount;
-//  @Interchangeable(fieldTitle = "Total National Contrib IFI Amount", fmPath = "/Activity Form/Contracts/Contract Item/Funding Allocation/IFI Amount")
+
+    @Column(name = "TOT_NATIONAL_CONTRIB_IFI")
     private Double totalNationalContribIFIAmount;
-//  @Interchangeable(fieldTitle = "Total Private Contrib Amount", fmPath = "/Activity Form/Contracts/Contract Item/Funding Allocation/IB Amount")
+
+    @Column(name = "total_private_contrib_amount")
     private Double totalPrivateContribAmount;
-//  @Interchangeable(fieldTitle = "Disbursements", fmPath = "/Activity Form/Contracts/Contract Item/Contract Disbursements")
-    private transient Set<IPAContractDisbursement> disbursements;
 
-    // @Interchangeable(fieldTitle = "Activity")
-    private transient AmpActivityVersion activity;
+    @ManyToMany
+    @JoinTable(
+            name = "AMP_IPA_CONTRACTING_ORGANIZATI",
+            joinColumns = @JoinColumn(name = "ipa_contract_id"),
+            inverseJoinColumns = @JoinColumn(name = "organization")
+    )
+    private Set<AmpOrganisation> organizations;
 
-//  @Interchangeable(fieldTitle = "Organization", pickIdOnly = true)
-    private transient AmpOrganisation organization;
-//  @Interchangeable(fieldTitle = "Organizations", fmPath = "/Activity Form/Contracts/Contract Item/Contract Organizations")
-//  @Validators(unique = "/Activity Form/Organizations/Donor Organization/Unique Orgs Validator")
-    private transient Set<AmpOrganisation> organizations;
-//  @Interchangeable(fieldTitle = "IPA Status", fmPath = "/Activity Form/Contracts/Contract Item/Contract Details/Status")
-    private transient AmpCategoryValue status;
-    // this disbursements and executionRate are used in Montenegro
-//  @Interchangeable(fieldTitle = "Total Disbursements")
+    @OneToMany(mappedBy = "ipaContract", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<IPAContractDisbursement> disbursements;
+
+    @Column(name = "donor_contract_funding")
+    private Double donorContractFundinAmount;
+
+    @ManyToOne
+    @JoinColumn(name = "donor_contract_funding_currency")
+    private AmpCurrency donorContractFundingCurrency;
+
+    @Column(name = "tot_amount_donor_contract_funding")
+    private Double totAmountDonorContractFunding;
+
+    @ManyToOne
+    @JoinColumn(name = "total_amount_currency_donor")
+    private AmpCurrency totalAmountCurrencyDonor;
+
+    @Column(name = "tot_amount_country_contract_funding")
+    private Double totAmountCountryContractFunding;
+
+    @ManyToOne
+    @JoinColumn(name = "total_amount_currency_country")
+    private AmpCurrency totalAmountCurrencyCountry;
+
+    private transient AmpCurrency dibusrsementsGlobalCurrency;
+
     private Double totalDisbursements;
-//  @Interchangeable(fieldTitle = "Execution Rate")
     private Double executionRate;
     // burkina mission - exchange rate is computed based on the disbursement
     // entered in funding step and total amount
     // of the contract (contractTotalValue)
-//  @Interchangeable(fieldTitle = "Funding Total Disbursements")
     private Double fundingTotalDisbursements;
-//  @Interchangeable(fieldTitle = "Funding Execution Rate")
     private Double fundingExecutionRate;
-//  @Interchangeable(fieldTitle = "IPA Activity Type", fmPath = "/Activity Form/Contracts/Contract Item/Contract Info/Activity Type")
-    private transient AmpCategoryValue type;
-    //ATTENTION: no amp_category_classs with such a value!
-//  @Interchangeable(fieldTitle = "Contract Type", fmPath = "/Activity Form/Contracts/Contract Item/Contract Info/Contract Type")
-    private transient AmpCategoryValue contractType;
 
-    /**
-    * 
-    */
-//  @Interchangeable(fieldTitle = "Donor Contract Funding Amount")
-    private Double donorContractFundinAmount;
-//  @Interchangeable(fieldTitle = "Donor Contract Funding Currency")
-    private transient AmpCurrency donorContractFundingCurrency;
-
-//  @Interchangeable(fieldTitle = "Total Amount Donor Contract Funding")
-    private Double totAmountDonorContractFunding;
-//  @Interchangeable(fieldTitle = "Total Amount Currency Donor")
-    private transient AmpCurrency totalAmountCurrencyDonor;
-
-//  @Interchangeable(fieldTitle = "Total Amount Country Contract Funding")
-    private Double totAmountCountryContractFunding;
-//  @Interchangeable(fieldTitle = "Total Amount Currency Country")
-    private transient AmpCurrency totalAmountCurrencyCountry;   
 
     
     public AmpCategoryValue getType() {

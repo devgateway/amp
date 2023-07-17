@@ -3,26 +3,38 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "AMP_AHSURVEY_CALC_FORMULA")
 public class AmpAhsurveyIndicatorCalcFormula implements Serializable {
-
-    //IATI-check: to be ignored
-//  @Interchangeable(fieldTitle="ID", id = true, importable = true)
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_ahsurvey_calc_formula_seq_generator")
+    @SequenceGenerator(name = "amp_ahsurvey_calc_formula_seq_generator", sequenceName = "AMP_AHSURVEY_CALC_FORMULA_seq", allocationSize = 1)
+    @Column(name = "formula_id")
     private Long id;
-//  @Interchangeable(fieldTitle="Formula", value = true)
-    private String calcFormula;
-//  @Interchangeable(fieldTitle="Column Index")
-    private Long columnIndex;
-//  @Interchangeable(fieldTitle="Constant Name")
-    private String constantName;
-//  @Interchangeable(fieldTitle="Base Line Value")
-    private String baseLineValue;
-//  @Interchangeable(fieldTitle="Target Value")
-    private String targetValue;
-//  @Interchangeable(fieldTitle="Enabled")
-    private Boolean enabled;
-    private AmpAhsurveyIndicator parentIndicator;
 
+    @Column(name = "formula_text")
+    private String calcFormula;
+
+    @Column(name = "column_index")
+    private Long columnIndex;
+
+    @Column(name = "constant_name")
+    private String constantName;
+
+    @Column(name = "base_line_value")
+    private String baseLineValue;
+
+    @Column(name = "target_value")
+    private String targetValue;
+
+    @Column(name = "formula_status")
+    private Boolean enabled;
+
+    @ManyToOne(cascade = CascadeType.PERSIST, optional = false)
+    @JoinColumn(name = "amp_indicator_id")
+    private AmpAhsurveyIndicator parentIndicator;
 
     public AmpAhsurveyIndicatorCalcFormula() {
     }

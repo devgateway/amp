@@ -22,60 +22,120 @@ import org.digijava.module.aim.util.SoftDeletable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 import java.util.TreeSet;
+import javax.persistence.*;
+import java.util.Set;
+
+@Entity
+@Table(name = "AMP_THEME")
 @TranslatableClass (displayName = "Theme")
 public class AmpTheme implements Serializable, SoftDeletable, Identifiable, ARDimensionable, HierarchyListable,
         AmpAutoCompleteDisplayable<AmpTheme>, NameableOrIdentifiable {
-
-    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_theme_seq_generator")
+    @SequenceGenerator(name = "amp_theme_seq_generator", sequenceName = "AMP_THEME_seq", allocationSize = 1)
+    @Column(name = "amp_theme_id")
     @PossibleValueId
-    private Long ampThemeId ;
-    private AmpTheme parentThemeId ;
-    private String themeCode ;
+    private Long ampThemeId;
 
-    private String budgetProgramCode ;
-    private Integer isbudgetprogram;
+    @ManyToOne
+    @JoinColumn(name = "parent_theme_id")
+    private AmpTheme parentThemeId;
+
+    @Column(name = "theme_code")
+    private String themeCode;
+
+    @Column(name = "budget_program_code")
+    private String budgetProgramCode;
+
+    @Column(name = "name")
     @PossibleValueValue
     @TranslatableField
-    private String name ;
-    private String encodeName;
-    //private String type ;
-    private AmpCategoryValue typeCategoryValue;
+    private String name;
+
+    @Column(name = "level_")
     private Integer indlevel;
+
+    @Column(name = "description")
     @TranslatableField
-    private String description ;
-    private String language ;
-    private String version ;
-    
+    private String description;
+
+    @Column(name = "language")
+    private String language;
+
+    @Column(name = "version")
+    private String version;
+
+    @Column(name = "lead_agency")
+    private String leadAgency;
+
+    @Column(name = "target_groups")
+    private String targetGroups;
+
+    @Column(name = "background")
+    private String background;
+
+    @Column(name = "objectives")
+    private String objectives;
+
+    @Column(name = "outputs")
+    private String outputs;
+
+    @Column(name = "deleted")
     private Boolean deleted;
+
+    @Column(name = "beneficiaries")
+    private String beneficiaries;
+
+    @Column(name = "environment_considerations")
+    private String environmentConsiderations;
+
+    @Column(name = "external_financing")
+    private Double externalFinancing;
+
+    @Column(name = "internal_financing")
+    private Double internalFinancing;
+
+    @Column(name = "total_financing")
+    private Double totalFinancing;
+
+    @ManyToOne
+    @JoinColumn(name = "type_category_value_id")
+    private AmpCategoryValue typeCategoryValue;
+
+    @OneToMany(mappedBy = "themeId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<IndicatorTheme> indicators;
+
+    @OneToMany(mappedBy = "defaultHierarchy", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<AmpActivityProgramSettings> programSettings;
+
+    @OneToMany(mappedBy = "parentThemeId")
+    private Set<AmpTheme> siblings;
+
+    @Column(name = "is_budget_program")
+    private Integer isBudgetProgram;
+
+    @Column(name = "show_in_rm")
+    private Boolean showInRMFilters;
+    private static final long serialVersionUID = 1L;
+
+    @Transient
+
+    private Integer isbudgetprogram;
+    @Transient
+    private String encodeName;
+
     
     /**
      * don't be fooled by the name - it gets the children
      */
-    private Set<AmpTheme> siblings;
+    @Transient
     private boolean transientBoolean;
 
-    /**
-     * Connections to Indicators.
-     * This field contains {@link IndicatorTheme} beans.
-     * Please refer to AmpTheme.hbm.xml and IndicatorConnection.hbm.xml for details.
-     */
-    private Set<IndicatorTheme> indicators;
-    private String leadAgency;
-    private String targetGroups;
-    private String background;
-    private String objectives;
-    private String outputs;
-    private String beneficiaries;
-    private String environmentConsiderations;
-    private Double externalFinancing;
-    private Double internalFinancing;
-    private Double totalFinancing;
+
     
     private transient Collection<AmpTheme> transientChildren;
 
-
-    private Boolean showInRMFilters;
-
+    @Transient
     private boolean translateable   = true;
     
     public Boolean getShowInRMFilters() {
@@ -85,9 +145,8 @@ public class AmpTheme implements Serializable, SoftDeletable, Identifiable, ARDi
     public void setShowInRMFilters(Boolean showInRMFilters) {
         this.showInRMFilters = showInRMFilters;
     }
-
+@Transient
     private String programviewname;
-    private Set<AmpActivityProgramSettings> programSettings;
 
     /**
      * @return

@@ -5,18 +5,38 @@ import java.io.Serializable;
 import org.digijava.module.aim.annotations.interchange.PossibleValueId;
 import org.digijava.module.aim.annotations.interchange.PossibleValueValue;
 import org.digijava.module.aim.util.Identifiable;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "AMP_ROLE")
 public class AmpRole implements Serializable, Identifiable, Comparable<AmpRole>
 {
-    //IATI-check: not to be ignored, but obtained via possible values 
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_role_seq_generator")
+    @SequenceGenerator(name = "amp_role_seq_generator", sequenceName = "AMP_ROLE_seq", allocationSize = 1)
+    @Column(name = "amp_role_id")
     @PossibleValueId
-    private Long ampRoleId ;
-    private String roleCode ;
+
+    private Long ampRoleId;
+
+    @Column(name = "role_code")
+    private String roleCode;
+
+    @Column(name = "name")
     @PossibleValueValue
-    private String name ;
-    private String type ;
-    private String description ;
-    private String language ;
+    private String name;
+
+    @Column(name = "type")
+    private String type;
+
+    @Column(name = "description", columnDefinition = "text")
+    private String description;
+
+    @Column(name = "language")
+    private String language;
+    //IATI-check: not to be ignored, but obtained via possible values 
+
     
     
     /**

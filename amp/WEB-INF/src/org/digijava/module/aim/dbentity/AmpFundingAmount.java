@@ -18,12 +18,52 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.aim.validator.groups.Submit;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * Simple Funding Amount
  */
-public class AmpFundingAmount implements Comparable<AmpFundingAmount>, Serializable, Versionable, Cloneable {
+import javax.persistence.*;
+import javax.persistence.*;
+import java.util.Date;
 
+@Entity
+@Table(name = "AMP_FUNDING_AMOUNT")
+public class AmpFundingAmount implements Comparable<AmpFundingAmount>, Serializable, Versionable, Cloneable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_funding_amount_seq")
+    @SequenceGenerator(name = "amp_funding_amount_seq", sequenceName = "AMP_FUNDING_AMOUNT_seq", allocationSize = 1)
+    @Column(name = "amp_funding_amount_id")
+    private Long ampFundingAmountId;
+
+    @ManyToOne
+    @JoinColumn(name = "amp_activity_id")
+    @InterchangeableBackReference
+    private AmpActivityVersion activity;
+
+    @Column(name = "amount")
+    @Interchangeable(fieldTitle = "Amount", importable = true,
+            fmPath = FMVisibility.PARENT_FM + "/" + CategoryConstants.PROJECT_AMOUNT_NAME,
+            interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
+                    fmPath = FMVisibility.PARENT_FM + "/Required Validator for Cost Amount"))
+    @VersionableFieldSimple(fieldTitle = "Fun Amount")
+    private Double funAmount;
+
+    @Column(name = "date")
+    @Interchangeable(fieldTitle = "Funding Date", importable = true, fmPath = FMVisibility.PARENT_FM + "/" + CategoryConstants.PROPOSE_PRJC_DATE_NAME)
+    @VersionableFieldSimple(fieldTitle = "Fun Date")
+    private Date funDate;
+
+    @ManyToOne
+    @JoinColumn(name = "amp_currency_id")
+    @Interchangeable(fieldTitle = "Currency", importable = true, fmPath = FMVisibility.PARENT_FM + "/Currency",
+            pickIdOnly = true, commonPV = CommonFieldsConstants.COMMON_CURRENCY)
+    @VersionableFieldSimple(fieldTitle = "Currency")
+    private AmpCurrency currency;
+
+    @Column(name = "type", nullable = false, columnDefinition = "int default 0")
+    @Enumerated(EnumType.STRING)
+    private FundingType funType;
     public enum FundingType {
         PROPOSED, //0
         REVISED; //1
@@ -41,28 +81,6 @@ public class AmpFundingAmount implements Comparable<AmpFundingAmount>, Serializa
         }
     };
     
-    private Long ampFundingAmountId;
-
-    @InterchangeableBackReference
-    private AmpActivityVersion activity;
-    
-    @Interchangeable(fieldTitle = "Amount", importable = true,
-            fmPath = FMVisibility.PARENT_FM + "/" + CategoryConstants.PROJECT_AMOUNT_NAME,
-            interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
-                    fmPath = FMVisibility.PARENT_FM + "/Required Validator for Cost Amount"))
-    @VersionableFieldSimple(fieldTitle = "Fun Amount")
-    protected Double funAmount;
-    
-    @Interchangeable(fieldTitle = "Currency", importable = true, fmPath = FMVisibility.PARENT_FM + "/Currency",
-            pickIdOnly = true, commonPV = CommonFieldsConstants.COMMON_CURRENCY)
-    @VersionableFieldSimple(fieldTitle = "Currency")
-    private AmpCurrency currency;
-    
-    @Interchangeable(fieldTitle = "Funding Date", importable = true, fmPath = FMVisibility.PARENT_FM + "/" + CategoryConstants.PROPOSE_PRJC_DATE_NAME)
-    @VersionableFieldSimple(fieldTitle = "Fun Date")
-    protected Date funDate;
-    
-    protected FundingType funType;
 
     /**
      * @return the ampFundingAmountId

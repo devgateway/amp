@@ -37,47 +37,74 @@ import org.digijava.module.aim.util.Output;
  * Persister class for Components
  * @author Priyajith
  */
+import javax.persistence.*;
+import java.sql.Timestamp;
+import java.util.Set;
+
+@Entity
+@Table(name = "AMP_COMPONENTS")
 @TranslatableClass (displayName = "Component")
 public class AmpComponent implements Serializable, Comparable<AmpComponent>, Versionable, Cloneable, Identifiable {
-    
-    //IATI-check: to be ignored
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_components_seq")
+    @SequenceGenerator(name = "amp_components_seq", sequenceName = "AMP_COMPONENTS_seq", allocationSize = 1)
+    @Column(name = "amp_component_id")
     @InterchangeableId
     @Interchangeable(fieldTitle = "Id")
     private Long ampComponentId;
 
-    @InterchangeableBackReference
-    private AmpActivityVersion activity;
-
+    @Column(name = "title")
     @Interchangeable(fieldTitle = COMPONENT_TITLE,
             interValidators = @InterchangeableValidator(RequiredValidator.class), importable = true,
             fmPath="/Activity Form/Components/Component/Component Information/Component Title")
     @TranslatableField
     private String title;
 
+    @Column(name = "description", columnDefinition = "text")
     @Interchangeable(fieldTitle = COMPONENT_DESCRIPTION, importable = true,
             fmPath="/Activity Form/Components/Component/Component Information/Description")
     @TranslatableField
     private String description;
 
-    private java.sql.Timestamp creationdate;
-
+    @Column(name = "code")
     private String code;
 
+    @Column(name = "creation_date")
+    private Timestamp creationDate;
+
+    @ManyToOne
+    @JoinColumn(name = "amp_activity_id")
+    @InterchangeableBackReference
+    private AmpActivityVersion activity;
+
+    @ManyToOne
+    @JoinColumn(name = "type")
+    @PossibleValues(ComponentTypePossibleValuesProvider.class)
+    @Interchangeable(fieldTitle = COMPONENT_TYPE, importable = true, pickIdOnly = true,
+            fmPath = "/Activity Form/Components/Component/Component Information/Component Type")
+    private AmpComponentType type;
+
+    @OneToMany(mappedBy = "component", cascade = CascadeType.ALL, orphanRemoval = true)
     @InterchangeableDiscriminator(discriminatorField = "transactionType",
-        configurer = AmpComponentFundingDiscriminationConfigurer.class,
-        settings = {
-            @Interchangeable(fieldTitle = ArConstants.COMMITMENT, discriminatorOption = "" + Constants.COMMITMENT,
-                    fmPath = "/Activity Form/Components/Component/Components Commitments/Commitment Table",
-                    importable = true),
-            @Interchangeable(fieldTitle = ArConstants.DISBURSEMENT, discriminatorOption = "" + Constants.DISBURSEMENT,
-                    fmPath = "/Activity Form/Components/Component/Components Disbursements/Disbursement Table",
-                    importable = true),
-            @Interchangeable(fieldTitle = ArConstants.EXPENDITURE, discriminatorOption = "" + Constants.EXPENDITURE,
-                    fmPath = "/Activity Form/Components/Component/Components Expenditures/Expenditure Table",
-                    importable = true)
-    })
+            configurer = AmpComponentFundingDiscriminationConfigurer.class,
+            settings = {
+                    @Interchangeable(fieldTitle = ArConstants.COMMITMENT, discriminatorOption = "" + Constants.COMMITMENT,
+                            fmPath = "/Activity Form/Components/Component/Components Commitments/Commitment Table",
+                            importable = true),
+                    @Interchangeable(fieldTitle = ArConstants.DISBURSEMENT, discriminatorOption = "" + Constants.DISBURSEMENT,
+                            fmPath = "/Activity Form/Components/Component/Components Disbursements/Disbursement Table",
+                            importable = true),
+                    @Interchangeable(fieldTitle = ArConstants.EXPENDITURE, discriminatorOption = "" + Constants.EXPENDITURE,
+                            fmPath = "/Activity Form/Components/Component/Components Expenditures/Expenditure Table",
+                            importable = true)
+            })
     private Set<AmpComponentFunding> fundings = new HashSet<>();
+
+
+    private java.sql.Timestamp creationdate;
+
+
 
     public static class AmpComponentComparator implements Comparator<AmpComponent>{
         @Override
@@ -99,10 +126,6 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
         }
     }
 
-    @PossibleValues(ComponentTypePossibleValuesProvider.class)
-    @Interchangeable(fieldTitle = COMPONENT_TYPE, importable = true, pickIdOnly = true,
-            fmPath = "/Activity Form/Components/Component/Component Information/Component Type")
-    private AmpComponentType type;
     
     private String Url;
 

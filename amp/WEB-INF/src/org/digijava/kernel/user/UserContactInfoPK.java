@@ -22,8 +22,10 @@
 
 package org.digijava.kernel.user;
 
+import javax.persistence.Embeddable;
 import java.io.Serializable;
 
+@Embeddable
 public class UserContactInfoPK
     implements Serializable {
 

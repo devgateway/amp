@@ -9,15 +9,24 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import javax.persistence.*;
+
+@Entity
+@Table(name = "AMP_AHSURVEY_QUESTION_TYPE")
 
 public class AmpAhsurveyQuestionType implements Serializable{
-//IATI-check: to be ignored
-//  @Interchangeable(fieldTitle="ID", id = true)
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_ahsurvey_question_type_seq_generator")
+    @SequenceGenerator(name = "amp_ahsurvey_question_type_seq_generator", sequenceName = "AMP_AHSURVEY_QUESTION_TYPE_seq", allocationSize = 1)
+    @Column(name = "amp_type_id")
     private Long ampTypeId;
-//  @Interchangeable(fieldTitle="Name", importable = true, value = true)
-    private String name;    // 'yes-no', 'calculated'
-//  @Interchangeable(fieldTitle="Description", importable = true)
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "description")
     private String desc;
+
     
     /**
      * @return Returns the desc.

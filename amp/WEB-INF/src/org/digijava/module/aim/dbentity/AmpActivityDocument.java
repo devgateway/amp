@@ -16,19 +16,32 @@ import org.digijava.module.contentrepository.helper.ObjectReferringDocument;
  * @author Alex Gartner
  *
  */
+import javax.persistence.*;
+
+@Entity
+@Table(name = "AMP_ACTIVITY_DOCUMENT")
 public class AmpActivityDocument extends ObjectReferringDocument implements Serializable, Versionable, Cloneable {
 
+    @Id
     @InterchangeableId
     @Interchangeable(fieldTitle = "Id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_ACTIVITY_DOCUMENT_seq")
+    @SequenceGenerator(name = "AMP_ACTIVITY_DOCUMENT_seq", sequenceName = "AMP_ACTIVITY_DOCUMENT_seq", allocationSize = 1)    @Column(name = "id")
     private Long id;
 
-    @InterchangeableBackReference
-    private AmpActivityVersion ampActivity;
+    @Column(name = "uuid")
+    private String uuid;
 
+    @Column(name = "document_type")
     @Interchangeable(fieldTitle = "Document Type", importable = true,
             interValidators = @InterchangeableValidator(RequiredValidator.class))
     private String documentType;
-    
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @InterchangeableBackReference
+    @JoinColumn(name = "amp_activity_id", nullable = false)
+    private AmpActivityVersion ampActivity;
+
     public String getDocumentType() {
         return documentType;
     }

@@ -6,15 +6,35 @@ import java.util.Set;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
-public class AmpCalendar implements Serializable {   
-
+@Entity
+@Table(name = "AMP_CALENDAR")
+public class AmpCalendar implements Serializable {
+    @EmbeddedId
     private AmpCalendarPK calendarPK;
+
+    @ManyToOne
+    @JoinColumn(name = "MEMBER_ID")
     private AmpTeamMember member;
-    private Set<AmpOrganisation> organisations;
-    private Set attendees;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "AMP_CALENDAR_EVENT_ORGANISATIO",
+            joinColumns = @JoinColumn(name = "CALENDAR_ID"),
+            inverseJoinColumns = @JoinColumn(name = "amp_org_id"))
+    private Set<AmpOrganisation> organisations = new HashSet<>();
+
+    @OneToMany(mappedBy = "ampCalendar", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<AmpCalendarAttendee> attendees = new HashSet<>();
+
+    @Column(name = "PRIVATE")
     private boolean privateEvent;
-    private AmpCategoryValue eventsType; 
+
+    @ManyToOne
+    @JoinColumn(name = "EVENTS_TYPE_ID")
+    private AmpCategoryValue eventsType;
 
     public AmpCalendar() {
 

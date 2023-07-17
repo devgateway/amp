@@ -11,11 +11,22 @@ import java.io.Serializable;
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
  *
  */
-public class AmpImputation implements Serializable {
+import javax.persistence.*;
 
+@Entity
+@Table(name = "AMP_IMPUTATION")
+public class AmpImputation implements Serializable {
+    @Id
+    @Column(name = "code")
     private String code;
+
+    @Column(name = "description", length = 255)
     private String description;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "chapter_code")
     private AmpChapter chapter;
+
     
     public AmpImputation() {
         

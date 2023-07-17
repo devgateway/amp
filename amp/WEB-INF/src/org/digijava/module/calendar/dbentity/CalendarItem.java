@@ -27,58 +27,47 @@ import java.util.Date;
 import org.apache.log4j.Logger;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "DG_CALENDAR_ITEM")
 public class CalendarItem implements LoggerIdentifiable{
 
   /**
    * logging tracer
    */
   private static Logger logger = Logger.getLogger(CalendarItem.class);
-
-  /**
-   * event identity
-   */
+  @Id
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "dg_calendar_item_seq")
+  @SequenceGenerator(name = "dg_calendar_item_seq", sequenceName = "dg_calendar_item_seq", allocationSize = 1)
+  @Column(name = "ID")
   private Long id;
 
-  /**
-   * event item identity
-   */
+  @ManyToOne
+  @JoinColumn(name = "CALENDAR_ID")
   private Calendar calendar;
 
-  /**
-   * user identity of event item's author
-   */
+  @Column(name = "USER_ID")
   private Long userId;
 
-  /**
-   * language in which event item was created
-   */
+  @Column(name = "LANGUAGE")
   private String language;
 
-  /**
-   * title of event item
-   */
+  @Column(name = "TITLE")
   private String title;
 
-  /**
-   * description of event item
-   */
+  @Column(name = "DESCRIPTION")
   private String description;
 
-  /**
-   * client computer IP
-   */
+  @Column(name = "CREATION_IP")
   private String creationIp;
 
-  /**
-   * creation date of event item
-   */
+  @Column(name = "CREATION_DATE")
   private Date creationDate;
 
-    /**
-     * for Calendar events. 0 - Awaiting Approval 1 - Approved -1 - Not Approved
-     */
-    private Integer approve = null;
+  @Column(name = "approve")
+  private Integer approve;
+
 
   public CalendarItem() {
   }

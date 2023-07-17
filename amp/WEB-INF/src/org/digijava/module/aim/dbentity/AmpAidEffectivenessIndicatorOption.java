@@ -9,11 +9,24 @@ import java.util.ArrayList;
  * The amp aid effectiveness indicator option domain class
  * An option could be anything, not just predefined
  */
-public class AmpAidEffectivenessIndicatorOption implements Serializable, Versionable, Cloneable {
+import javax.persistence.*;
 
+@Entity
+@Table(name = "AMP_AID_EFFECTIVENESS_INDICATOR_OPTION")
+public class AmpAidEffectivenessIndicatorOption implements Serializable, Versionable, Cloneable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_indicator_option_seq_generator")
+    @SequenceGenerator(name = "amp_indicator_option_seq_generator", sequenceName = "AMP_AID_EFFECTIVENESS_INDICATOR_OPTION_seq", allocationSize = 1)
+    @Column(name = "amp_indicator_option_id")
     private Long ampIndicatorOptionId;
-    private String ampIndicatorOptionName;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "amp_indicator_id")
     private AmpAidEffectivenessIndicator indicator;
+
+    @Column(name = "amp_indicator_option_name")
+    private String ampIndicatorOptionName;
+
 
     public AmpAidEffectivenessIndicator getIndicator() {
         return indicator;

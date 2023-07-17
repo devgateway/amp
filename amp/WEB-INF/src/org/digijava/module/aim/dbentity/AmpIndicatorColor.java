@@ -4,19 +4,33 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "AMP_INDICATOR_COLOR")
 public class AmpIndicatorColor implements Serializable{
-
-    private String color;
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_INDICATOR_COLOR_seq")
+    @SequenceGenerator(name = "AMP_INDICATOR_COLOR_seq", sequenceName = "AMP_INDICATOR_COLOR_seq", allocationSize = 1)
+    @Column(name = "amp_indicator_color_id")
     @JsonIgnore
-    private AmpIndicatorLayer indicatorLayer;
 
-    @JsonIgnore
     private Long indicatorColorId;
 
+    @Column(name = "color")
+    private String color;
+
+    @Column(name = "payload")
     @JsonProperty("order")
     private Long payload;
+
+    @ManyToOne
+    @JsonIgnore
+
+    @JoinColumn(name = "amp_indicator_layer_id")
+    private AmpIndicatorLayer indicatorLayer;
+
+
     
     
     public String getColor() {

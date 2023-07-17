@@ -11,27 +11,41 @@ import java.util.Comparator;
 import java.util.Set;
 
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import javax.persistence.*;
+import java.util.Set;
 
+@Entity
+@Table(name = "AMP_AHSURVEY_INDICATOR")
 public class AmpAhsurveyIndicator implements Serializable {
 
-    //IATI-check: to be ignored
-    
-//  @Interchangeable(fieldTitle="ID")
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_indicator_seq_generator")
+    @SequenceGenerator(name = "amp_indicator_seq_generator", sequenceName = "AMP_INDICATOR_seq", allocationSize = 1)
+    @Column(name = "amp_indicator_id")
     private Long ampIndicatorId;
-//  @Interchangeable(fieldTitle="Name", importable = true)
+
+    @Column(name = "name")
     private String name;
-//  @Interchangeable(fieldTitle="Total Questions", importable = true)
+
+    @Column(name = "total_question")
     private Integer totalQuestions;
-//  @Interchangeable(fieldTitle="Indicator Number", importable = true)
+
+    @Column(name = "indicator_number")
     private Integer indicatorNumber;
-//  @Interchangeable(fieldTitle="Indicator Code", importable = true)
+
+    @Column(name = "indicator_code")
     private String indicatorCode;
-//  @Interchangeable(fieldTitle="Status", importable = true)
+
+    @Column(name = "status")
     private String status;
-//  @Interchangeable(fieldTitle="Questions", pickIdOnly=true, importable = true)
+
+    @OneToMany(mappedBy = "ampIndicatorId", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AmpAhsurveyQuestion> questions;
-//  @Interchangeable(fieldTitle="Calc Formulas", importable = true)
+
+    @OneToMany(mappedBy = "ampIndicatorId", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AmpAhsurveyIndicatorCalcFormula> calcFormulas;
+
 
     
     public static class AhsurveyIndicatorComparator implements Comparator<AmpAhsurveyIndicator>, Serializable {

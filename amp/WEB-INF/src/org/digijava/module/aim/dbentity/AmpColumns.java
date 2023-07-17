@@ -5,33 +5,57 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.digijava.module.aim.annotations.reports.Identificator;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "AMP_COLUMNS")
 public class AmpColumns implements Serializable, Comparable<AmpColumns>
 {
     protected static final Logger logger = Logger.getLogger(AmpColumns.class);
-    
+    @Id
     @Identificator
-    private Long columnId ;
-    private String columnName ;
-    //private String columnNameTrimmed;
+
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_columns_seq")
+    @SequenceGenerator(name = "amp_columns_seq", sequenceName = "AMP_COLUMNS_seq", allocationSize = 1)
+    @Column(name = "columnId")
+    private Long columnId;
+
+    @Column(name = "columnName", unique = true)
+    private String columnName;
+
+    @Column(name = "aliasName")
     private String aliasName;
-    private Set reports;
+
+    @Column(name = "cellType")
     private String cellType;
+
+    @Column(name = "extractorView")
     private String extractorView;
-    private Set<AmpColumnsFilters> filters;
+
+    @Column(name = "tokenExpression")
     private String tokenExpression;
-    
-    // header calculations
+
+    @Column(name = "totalExpression")
     private String totalExpression;
-    private Boolean showRowCalculations;
-    
+
+    @Column(name = "relatedContentPersisterClass")
     private String relatedContentPersisterClass;
-    private String description;
-    /**
-     * true if the column data is needed in order for correct filtering to be applied
-     * @see http://bugs.digijava.org/jira/browse/AMP-3454?focusedCommentId=39811#action_39811
-     */
+
+    @Column(name = "filterRetrievable")
     private Boolean filterRetrievable;
+
+    @Column(name = "showRowCalculations")
+    private Boolean showRowCalculations;
+
+    @Column(name = "description", columnDefinition = "text")
+    private String description;
+
+    @OneToMany(mappedBy = "column", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<AmpColumnsFilters> filters;
+@Transient
+    private Set reports;
+
+
     
 
 

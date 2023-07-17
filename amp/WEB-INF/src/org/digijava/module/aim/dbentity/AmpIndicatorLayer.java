@@ -10,30 +10,75 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "AMP_INDICATOR_LAYER")
 @TranslatableClass (displayName = "IndicatorLayer")
 public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicatorLayer>, LoggerIdentifiable {
-    
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_INDICATOR_LAYER_seq")
+    @SequenceGenerator(name = "AMP_INDICATOR_LAYER_seq", sequenceName = "AMP_INDICATOR_LAYER_seq", allocationSize = 1)
+    @Column(name = "id")
     private Long id;
+
+    @Column(name = "indicator_name")
     @TranslatableField
+
     private String name;
-    @VersionableFieldTextEditor
-    private String description;
-    private Set <AmpIndicatorColor> colorRamp;
-    private Long numberOfClasses;
+
+    @ManyToOne
+    @JoinColumn(name = "adm_level")
     private AmpCategoryValue admLevel;
-    private Set <AmpLocationIndicatorValue> indicatorValues;
-    private Set <AmpIndicatorWorkspace> sharedWorkspaces;
-    @TranslatableField
-    private String unit;
-    private AmpCategoryValue indicatorType;
-    private Boolean population;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "access_type", nullable = false, columnDefinition = "integer default 0")
     private IndicatorAccessType accessType;
+
+    @Column(name = "description", columnDefinition = "text")
+    @VersionableFieldTextEditor
+
+    private String description;
+
+    @Column(name = "number_of_classes")
+    private Long numberOfClasses;
+
+    @Column(name = "unit")
+    @TranslatableField
+
+    private String unit;
+
+    @ManyToOne
+    @JoinColumn(name = "indicator_type_id", foreignKey = @ForeignKey(name = "indTypeForeignKey"))
+    private AmpCategoryValue indicatorType;
+
+    @Column(name = "is_population", nullable = false, columnDefinition = "boolean default false")
+    private Boolean population;
+
+    @Column(name = "created_on")
     private Date createdOn;
+
+    @Column(name = "updated_on")
     private Date updatedOn;
-    private AmpTeamMember createdBy;
+
+    @Column(name = "zero_category_enabled", columnDefinition = "boolean default false")
     private Boolean zeroCategoryEnabled;
-    
+
+    @ManyToOne
+    @JoinColumn(name = "created_by")
+    private AmpTeamMember createdBy;
+
+    @OneToMany(mappedBy = "indicatorLayer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<AmpIndicatorColor> colorRamp;
+
+    @OneToMany(mappedBy = "indicatorLayer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<AmpLocationIndicatorValue> indicatorValues;
+
+    @OneToMany(mappedBy = "indicatorLayer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<AmpIndicatorWorkspace> sharedWorkspaces;
+
+
+
     public Long getId() {
         return id;
     }

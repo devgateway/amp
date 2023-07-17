@@ -5,10 +5,12 @@ import org.digijava.kernel.validators.common.RegexValidator;
 import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
-
+import javax.persistence.*;
 /**
  * @author Octavian Ciubotaru
  */
+@Entity
+@DiscriminatorValue("contact email")
 public class AmpContactEmailProperty extends AmpContactProperty {
 
     @Interchangeable(fieldTitle = "Value",

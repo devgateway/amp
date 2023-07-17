@@ -12,24 +12,38 @@ import java.util.*;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.util.Output;
 
+import javax.persistence.*;
+import java.util.Date;
+import java.util.Set;
 
+@Entity
+@Table(name = "AMP_AHSURVEY")
 public class AmpAhsurvey implements Versionable, Serializable, Cloneable, Comparable<AmpAhsurvey> {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_ahsurvey_seq_generator")
+    @SequenceGenerator(name = "amp_ahsurvey_seq_generator", sequenceName = "AMP_AHSURVEY_seq", allocationSize = 1)
+    @Column(name = "amp_ahsurvey_id")
     @Interchangeable(fieldTitle = "ID")
     private Long ampAHSurveyId;
 
-    //IATI-check: to be ignored
-    
-    //private AmpFunding ampFundingId;
-    //private Integer surveyYear;
-    //point of delivery donor
+    @ManyToOne
+    @JoinColumn(name = "amp_activity_id", nullable = false)
     private AmpActivityVersion ampActivityId;
+
+    @ManyToOne
+    @JoinColumn(name = "amp_org_id", nullable = false)
     private AmpOrganisation ampDonorOrgId;
+
+    @ManyToOne
+    @JoinColumn(name = "point_of_delivery_donor")
     private AmpOrganisation pointOfDeliveryDonor;
-//    @Interchangeable(fieldTitle="Responses", importable = true)
+
+    @OneToMany(mappedBy = "ampAhsurveyId", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AmpAhsurveyResponse> responses;
-//  @Interchangeable(fieldTitle="Survey Date", importable = true)
+
+    @Column(name = "survey_date")
     private Date surveyDate;
+
 
     public Date getSurveyDate() {
         return surveyDate;

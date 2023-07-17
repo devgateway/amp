@@ -17,6 +17,10 @@ import org.digijava.module.common.util.DateTimeUtil;
  * @author George Khakhanashvili
  *
  */
+import javax.persistence.*;
+
+@Entity
+@Table(name = "AMP_INDICATOR_VALUES")
 public class AmpIndicatorValue implements Serializable, Cloneable{
     private static final Logger logger = Logger.getLogger(AmpIndicatorValue.class);
     /*
@@ -36,34 +40,60 @@ public class AmpIndicatorValue implements Serializable, Cloneable{
 
     private static final long serialVersionUID = 1L;
 
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_INDICATOR_VALUES_seq")
+    @SequenceGenerator(name = "AMP_INDICATOR_VALUES_seq", sequenceName = "AMP_INDICATOR_VALUES_seq", allocationSize = 1)
+    @Column(name = "ind_val_id")
     private Long indValId;
 
+    @Column(name = "comment_")
     @Interchangeable(fieldTitle = "Comment", importable = true)
+
     private String comment;
 
+    @Column(name = "value_date")
     @Interchangeable(fieldTitle = "Date", importable = true,
             interValidators = @InterchangeableValidator(value = RequiredValidator.class, discriminatorOptions =
                     {"" + AmpIndicatorValue.BASE, "" + AmpIndicatorValue.ACTUAL, "" + AmpIndicatorValue.TARGET}))
     private Date valueDate;
 
+    @Column(name = "interval_start_date")
     private Date dataIntervalStart;
+
+    @Column(name = "interval_end_date")
     private Date dataIntervalEnd;
 
+    @Column(name = "value")
     @Interchangeable(fieldTitle = "Value", importable = true,
             interValidators = @InterchangeableValidator(value = RequiredValidator.class, discriminatorOptions =
                     {"" + AmpIndicatorValue.BASE, "" + AmpIndicatorValue.ACTUAL, "" + AmpIndicatorValue.TARGET}))
     private Double value;
 
+    @Column(name = "value_type")
     private int valueType;
-    private Boolean defaultInd;
 
+    @ManyToOne
+    @JoinColumn(name = "ind_connect_id", nullable = false)
     @InterchangeableBackReference
+
     private IndicatorConnection indicatorConnection;
 
+    @Column(name = "default_ind")
+    private Boolean defaultInd;
+
+    @ManyToOne
+    @JoinColumn(name = "location_id")
     private AmpLocation location;
-    
-    private AmpCategoryValue indicatorSource;
+
+    @ManyToOne
+    @JoinColumn(name = "subgroup")
     private AmpIndicatorSubgroup subgroup;
+
+    @ManyToOne
+    @JoinColumn(name = "indicator_source")
+    private AmpCategoryValue indicatorSource;
+
     /*
      * NOTICE
      * 

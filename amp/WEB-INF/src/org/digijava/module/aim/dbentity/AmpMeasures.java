@@ -5,24 +5,45 @@ import java.util.Set;
 
 import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.module.aim.annotations.reports.Identificator;
+import javax.persistence.*;
+import java.util.Set;
 
+@Entity
+@Table(name = "AMP_MEASURES")
 //but used in reports engine
 public class AmpMeasures  implements Serializable, Comparable
 {
+
+    @Id
     @Identificator
-    private Long measureId ;
-    
-    private String measureName ;
+
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_MEASURES_seq_generator")
+    @SequenceGenerator(name = "AMP_MEASURES_seq_generator", sequenceName = "AMP_MEASURES_seq", allocationSize = 1)
+    @Column(name = "measureId")
+    private Long measureId;
+
+    @Column(name = "measureName")
+    private String measureName;
+
+    @Column(name = "aliasName")
     private String aliasName;
-    
-    /**
-     * not used
-     */
+
+    @Column(name = "type")
     private String type;
-    private Set reports;
+
+    @Column(name = "expression")
     private String expression;
+
+    @Column(name = "description")
     private String description;
-    
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "AMP_REPORT_MEASURES",
+            joinColumns = @JoinColumn(name = "measureId"),
+            inverseJoinColumns = @JoinColumn(name = "amp_report_id"))
+    private Set<AmpReports> reports;
+
+
     public String getDescription() {
         return description;
     }

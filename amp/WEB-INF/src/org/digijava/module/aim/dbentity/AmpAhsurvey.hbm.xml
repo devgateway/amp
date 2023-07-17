@@ -9,13 +9,6 @@
 				<param name="sequence">AMP_AHSURVEY_seq</param>
 			</generator>
 		</id>
-
-		<!--
-			<many-to-one name="ampFundingId" column="amp_funding_id" class="org.digijava.module.aim.dbentity.AmpFunding"
-			cascade="none" not-null="true" />
-			<property name="surveyYear" column="survey_year" type="java.lang.Integer"/>
-		-->
-
 		<many-to-one name="ampActivityId" column="amp_activity_id"
 			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" not-null="true" />
 

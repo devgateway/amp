@@ -22,9 +22,163 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
+import javax.persistence.*;
+import java.util.Date;
 
+@Entity
+@Table(name = "AMP_FUNDING_DETAIL")
 public class AmpFundingDetail implements Serializable, Cloneable, FundingInformationItem {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_funding_detail_seq")
+    @SequenceGenerator(name = "amp_funding_detail_seq", sequenceName = "AMP_FUNDING_DETAIL_seq", allocationSize = 1)
+    @Column(name = "amp_fund_detail_id")
+    @InterchangeableId
+    @Interchangeable(fieldTitle = "Transaction ID")
+    private Long ampFundDetailId;
 
+    @Column(name = "fiscal_year")
+    private Integer fiscalYear;
+
+    @Column(name = "fiscal_quarter")
+    private Integer fiscalQuarter;
+
+    @Column(name = "transaction_type")
+    private Integer transactionType;
+
+    @Column(name = "transaction_date")
+    @Interchangeable(fieldTitle = "Transaction Date", importable = true,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
+    private Date transactionDate;
+
+    @Column(name = "transaction_date2")
+    private Date transactionDate2;
+
+    @Column(name = "reporting_date")
+    @Interchangeable(fieldTitle = "Reporting Date", importable = true)
+    @TimestampField
+    private Date reportingDate;
+
+    @Column(name = "date_updated")
+    @Interchangeable(fieldTitle = "Updated Date")
+    @TimestampField
+    private Date updatedDate;
+
+    @Column(name = "transaction_amount")
+    @Interchangeable(fieldTitle = "Transaction Amount", importable = true,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
+    private Double transactionAmount;
+
+    @Column(name = "language")
+    private String language;
+
+    @Column(name = "version")
+    private String version;
+
+    @Column(name = "cal_type")
+    private String calType;
+
+    @Column(name = "org_role_code")
+    private String orgRoleCode;
+
+    @Column(name = "exp_category")
+    @Interchangeable(fieldTitle = "Expenditure Classification", importable = true,
+            fmPath = FMVisibility.PARENT_FM + "/Expenditure Classification")
+    private String expCategory;
+
+    @Column(name = "fixed_exchange_rate")
+
+    @Interchangeable(fieldTitle = "Fixed Exchange Rate", importable = true,
+            fmPath = FMVisibility.PARENT_FM + "/Fixed exchange rate")
+    private Double fixedExchangeRate;
+
+    @Column(name = "disb_order_id")
+    @Interchangeable(fieldTitle = "Disbursement Order ID", importable = true,
+            fmPath = FMVisibility.PARENT_FM + "/Disbursement Order Id")
+    private String disbOrderId;
+
+    @Column(name = "disbursement_order_rejected")
+    @Interchangeable(fieldTitle = "Rejected", importable = true,
+            fmPath = FMVisibility.PARENT_FM + "/Rejected")
+    private Boolean disbursementOrderRejected;
+
+    @Column(name = "capital_spend_percent")
+    @Interchangeable(fieldTitle = "Capital Spending Percentage", importable = true,
+            fmPath = FMVisibility.PARENT_FM + "/Capital Spending Percentage")
+    private Float capitalSpendingPercentage;
+
+    @Column(name = "disaster_response")
+    @Interchangeable(fieldTitle = "Disaster Response", importable = true,
+            fmPath = FMVisibility.PARENT_FM + "/Disaster Response",
+            interValidators = @InterchangeableValidator(value = RequiredValidator.class,
+                    fmPath = FMVisibility.PARENT_FM + "/Required Validator for Disaster Response"))
+    private Boolean disasterResponse;
+
+    @Column(name = "disbursement_id")
+    @Interchangeable(fieldTitle = "Disbursement ID", importable = true,
+            fmPath = FMVisibility.PARENT_FM + "/Disbursement Id")
+    private String disbursementId;
+
+    @ManyToOne
+    @JoinColumn(name = "reporting_org_id")
+    private AmpOrganisation reportingOrgId;
+
+    @ManyToOne
+    @JoinColumn(name = "pledge_id")
+    @Interchangeable(fieldTitle = ActivityFieldsConstants.Funding.Details.PLEDGE, importable = true, pickIdOnly = true,
+            fmPath = FMVisibility.PARENT_FM + "/Pledges",
+            dependencies = {PledgeOrgValidator.FUNDING_ORGANIZATION_VALID_PRESENT_KEY})
+    @PossibleValues(FundingePledgesValueProvider.class)
+    private FundingPledges pledgeid;
+
+    @ManyToOne
+    @JoinColumn(name = "amp_currency_id")
+    @Interchangeable(fieldTitle = "Currency", importable = true, pickIdOnly = true,
+            interValidators = @InterchangeableValidator(RequiredValidator.class),
+            commonPV = CommonFieldsConstants.COMMON_CURRENCY)
+    private AmpCurrency ampCurrencyId;
+
+    @ManyToOne
+    @JoinColumn(name = "amp_funding_id")
+    @InterchangeableBackReference
+    private AmpFunding ampFundingId;
+
+    @ManyToOne
+    @JoinColumn(name = "ipa_contract_id")
+    private IPAContract contract;
+
+    @ManyToOne
+    @JoinColumn(name = "adjustment_type")
+    @Interchangeable(fieldTitle = "Adjustment Type", importable = true, pickIdOnly = true,
+            discriminatorOption = CategoryConstants.ADJUSTMENT_TYPE_KEY,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
+    private AmpCategoryValue adjustmentType;
+
+    @ManyToOne
+    @JoinColumn(name = "expenditure_class")
+    @Interchangeable(fieldTitle = "Expenditure Class", importable = true, pickIdOnly = true,
+            fmPath = FMVisibility.PARENT_FM + "/Expenditure Class",
+            interValidators = @InterchangeableValidator(value = RequiredValidator.class,
+                    fmPath = FMVisibility.PARENT_FM + "/Required Validator for Expenditure Class"),
+            discriminatorOption = CategoryConstants.EXPENDITURE_CLASS_KEY)
+    private AmpCategoryValue expenditureClass;
+
+    @ManyToOne
+    @JoinColumn(name = "recipient_org_id")
+    @Interchangeable(fieldTitle = "Recipient Organization", importable = true, pickIdOnly = true,
+            fmPath = FMVisibility.PARENT_FM + ActivityEPConstants.RECIPIENT_ORG_FM_PATH,
+            commonPV = CommonFieldsConstants.COMMON_ORGANIZATION)
+    private AmpOrganisation recipientOrg;
+
+    @ManyToOne
+    @JoinColumn(name = "recipient_role_id")
+    @Interchangeable(fieldTitle = "Recipient Role", importable = true, pickIdOnly = true,
+            fmPath = FMVisibility.PARENT_FM + ActivityEPConstants.RECIPIENT_ROLE_FM_PATH,
+            commonPV = CommonFieldsConstants.COMMON_ROLE)
+    private AmpRole recipientRole;
+
+    @ManyToOne
+    @JoinColumn(name = "fixed_base_currency_id")
+    private AmpCurrency fixedRateBaseCurrency;
     public static class FundingDetailComparatorByTransactionDateAsc implements Comparator<AmpFundingDetail>, Serializable {
 
         @Override
@@ -128,36 +282,6 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
         }
     }
 
-    @InterchangeableId
-    @Interchangeable(fieldTitle = "Transaction ID")
-    private Long ampFundDetailId;
-
-    private Integer fiscalYear;
-    private Integer fiscalQuarter;
-    
-    /**
-     * values of transactionType
-     * public static final int COMMITMENT = 0 ;
-     * public static final int DISBURSEMENT = 1 ;
-     * public static final int EXPENDITURE = 2 ;
-     * public static final int DISBURSEMENT_ORDER = 4 ;
-     * public static final int MTEFPROJECTION = 3 ;
-     * public static final int ARREAR = 10;
-     */
-
-    private Integer transactionType;
-
-    @Interchangeable(fieldTitle = "Adjustment Type", importable = true, pickIdOnly = true,
-            discriminatorOption = CategoryConstants.ADJUSTMENT_TYPE_KEY,
-            interValidators = @InterchangeableValidator(RequiredValidator.class))
-    private AmpCategoryValue adjustmentType;
-
-    @Interchangeable(fieldTitle = "Expenditure Class", importable = true, pickIdOnly = true,
-            fmPath = FMVisibility.PARENT_FM + "/Expenditure Class",
-            interValidators = @InterchangeableValidator(value = RequiredValidator.class,
-                    fmPath = FMVisibility.PARENT_FM + "/Required Validator for Expenditure Class"),
-            discriminatorOption = CategoryConstants.EXPENDITURE_CLASS_KEY)
-    private AmpCategoryValue expenditureClass;
     
     
     public AmpCategoryValue getExpenditureClass() {
@@ -168,85 +292,10 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
         this.expenditureClass = expenditureClass;
     }
 
-    @Interchangeable(fieldTitle = "Transaction Date", importable = true,
-            interValidators = @InterchangeableValidator(RequiredValidator.class))
-    private Date transactionDate;
-    private Date transactionDate2;
-    
-    @Interchangeable(fieldTitle = "Reporting Date", importable = true)
-    @TimestampField
-    private Date reportingDate;
-    
-    @Interchangeable(fieldTitle = "Updated Date")
-    @TimestampField
-    private Date updatedDate;
-
-    @Interchangeable(fieldTitle = "Transaction Amount", importable = true,
-            interValidators = @InterchangeableValidator(RequiredValidator.class))
-    private Double transactionAmount;
-    private String language;
-    private String version;
-    private String calType;
-    private String orgRoleCode; // defunct
-    @Interchangeable(fieldTitle = "Currency", importable = true, pickIdOnly = true,
-            interValidators = @InterchangeableValidator(RequiredValidator.class),
-            commonPV = CommonFieldsConstants.COMMON_CURRENCY)
-    private AmpCurrency ampCurrencyId;
-    private AmpOrganisation reportingOrgId;
-    @InterchangeableBackReference
-    private AmpFunding ampFundingId;
-    
-    @Interchangeable(fieldTitle = "Fixed Exchange Rate", importable = true,
-            fmPath = FMVisibility.PARENT_FM + "/Fixed exchange rate")
-    private Double fixedExchangeRate;
-    
-    private AmpCurrency fixedRateBaseCurrency;
-    
-    @Interchangeable(fieldTitle = "Rejected", importable = true,
-            fmPath = FMVisibility.PARENT_FM + "/Rejected")
-    private Boolean disbursementOrderRejected;
-    
-    @Interchangeable(fieldTitle = ActivityFieldsConstants.Funding.Details.PLEDGE, importable = true, pickIdOnly = true,
-            fmPath = FMVisibility.PARENT_FM + "/Pledges",
-            dependencies = {PledgeOrgValidator.FUNDING_ORGANIZATION_VALID_PRESENT_KEY})
-    @PossibleValues(FundingePledgesValueProvider.class)
-    private FundingPledges pledgeid;
-    
-    @Interchangeable(fieldTitle = "Capital Spending Percentage", importable = true,
-            fmPath = FMVisibility.PARENT_FM + "/Capital Spending Percentage")
-    private Float capitalSpendingPercentage;
-    
-    @Interchangeable(fieldTitle = "Recipient Organization", importable = true, pickIdOnly = true,
-            fmPath = FMVisibility.PARENT_FM + ActivityEPConstants.RECIPIENT_ORG_FM_PATH,
-            commonPV = CommonFieldsConstants.COMMON_ORGANIZATION)
-    private AmpOrganisation recipientOrg;
-    
-    @Interchangeable(fieldTitle = "Recipient Role", importable = true, pickIdOnly = true,
-            fmPath = FMVisibility.PARENT_FM + ActivityEPConstants.RECIPIENT_ROLE_FM_PATH,
-            commonPV = CommonFieldsConstants.COMMON_ROLE)
-    private AmpRole recipientRole;
-    
-    @Interchangeable(fieldTitle = "Expenditure Classification", importable = true,
-            fmPath = FMVisibility.PARENT_FM + "/Expenditure Classification")
-    private String expCategory;
-    
-    @Interchangeable(fieldTitle = "Disbursement Order ID", importable = true,
-            fmPath = FMVisibility.PARENT_FM + "/Disbursement Order Id")
-    private String disbOrderId;
-    
-    private IPAContract contract;
+    @Transient
     private boolean iatiAdded = false; //nonpersistant
+    @Transient
     private Long checkSum;
-    
-    @Interchangeable(fieldTitle = "Disaster Response", importable = true,
-            fmPath = FMVisibility.PARENT_FM + "/Disaster Response",
-            interValidators = @InterchangeableValidator(value = RequiredValidator.class,
-                    fmPath = FMVisibility.PARENT_FM + "/Required Validator for Disaster Response"))
-    private Boolean disasterResponse;
-
-    @Interchangeable(fieldTitle = "Disbursement ID", importable = true,
-            fmPath = FMVisibility.PARENT_FM + "/Disbursement Id")
-    private String disbursementId;
     
     public boolean isIatiAdded() {
         return iatiAdded;

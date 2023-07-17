@@ -7,19 +7,36 @@ import java.io.Serializable;
  * we will use the associated freezing event to freeze a transaction or
  * to enable adding a new one after that (to be used by the validator
  */
+import javax.persistence.*;
+
+@Entity
+@Table(name = "AMP_ACTIVITY_FROZEN")
 public class AmpActivityFrozen implements Serializable{
     
     /**
      * 
      */
     private static final long serialVersionUID = 4970281121028892306L;
-    private Long  ampActivityFrozenid;    
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_ACTIVITY_FROZEN_seq")
+    @SequenceGenerator(name = "AMP_ACTIVITY_FROZEN_seq", sequenceName = "AMP_ACTIVITY_FROZEN_seq", allocationSize = 1)    @Column(name = "amp_data_freeze_exclusion_id")
+    private Long ampActivityFrozenid;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "amp_activity_group_id", nullable = false, insertable = false, updatable = false)
     private AmpActivityGroup activityGroup;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "data_freeze_event_id", nullable = false, insertable = false, updatable = false)
     private AmpDataFreezeSettings dataFreezeEvent;
-    // the frozen field is to be able to freeze and unfreeze and activity 
-    // under a given period
+
+    @Column(name = "frozen")
     private Boolean frozen;
+
+    @Column(name = "deleted")
     private Boolean deleted;
+
     public AmpActivityFrozen(){
         
     }

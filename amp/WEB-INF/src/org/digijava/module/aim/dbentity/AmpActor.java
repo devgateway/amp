@@ -13,24 +13,38 @@ import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.validator.groups.Submit;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "AMP_ACTOR")
 @TranslatableClass (displayName = "Actor")
 public class AmpActor  implements Serializable, Cloneable, Identifiable {
     //IATI-check: not used in IATI
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_actor_seq_generator")
+    @SequenceGenerator(name = "amp_actor_seq_generator", sequenceName = "AMP_ACTOR_seq", allocationSize = 1)
+    @Column(name = "amp_actor_id")
     @InterchangeableId
     @Interchangeable(fieldTitle = "Id")
     private Long ampActorId;
 
+    @Column(name = "name")
     @Interchangeable(fieldTitle = "Name", label = "Actor", importable = true,
             interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class))
     @TranslatableField
     private String name;
 
-    private String nameTrimmed;
-
+    @ManyToOne
+    @JoinColumn(name = "amp_measure_id")
     @InterchangeableBackReference
     private AmpMeasure measure;
+
+
+
+    @Transient
+    private String nameTrimmed;
+
     
 
     public String getName() {

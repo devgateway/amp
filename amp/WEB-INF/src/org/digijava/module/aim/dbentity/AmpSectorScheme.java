@@ -9,18 +9,33 @@ import org.digijava.module.aim.annotations.interchange.PossibleValueValue;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.SectorUtil;
+import javax.persistence.*;
+
+@Entity
+@Table(name = "AMP_SECTOR_SCHEME")
+
 @TranslatableClass (displayName = "Sector Scheme")
 public class AmpSectorScheme implements Serializable
 {
     //IATI-check: might be relevant, but obtained from possible values
+    @Id
     @PossibleValueId
-    private Long ampSecSchemeId ;
-    private String secSchemeCode ;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_sector_scheme_seq_generator")
+    @SequenceGenerator(name = "amp_sector_scheme_seq_generator", sequenceName = "AMP_SECTOR_SCHEME_seq", allocationSize = 1)
+    @Column(name = "amp_sec_scheme_id")
+    private Long ampSecSchemeId;
+
+    @Column(name = "sec_scheme_code")
+    private String secSchemeCode;
+
+    @Column(name = "sec_scheme_name")
     @PossibleValueValue
     @TranslatableField
-    private String secSchemeName ;
+    private String secSchemeName;
 
+    @Column(name = "show_in_rm")
     private Boolean showInRMFilters;
+
 
     public Boolean getShowInRMFilters() {
         return showInRMFilters;

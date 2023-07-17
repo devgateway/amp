@@ -137,7 +137,7 @@ public class AmpOrganisation implements Comparable<AmpOrganisation>, Identifiabl
     @LazyCollection(LazyCollectionOption.TRUE)
     private Set<AmpCalendar> calendar;
 
-    @OneToMany(mappedBy = "ampOrgId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "ampOrganisation", cascade = CascadeType.ALL, orphanRemoval = true)
     @LazyCollection(LazyCollectionOption.TRUE)
     private Set<AmpOrganisationDocument> documents;
 

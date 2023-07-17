@@ -144,8 +144,8 @@ public class User
             inverseJoinColumns = @JoinColumn(name = "GROUP_ID"))
     private Set<Group> groups = new HashSet<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<UserContactInfo> contacts = new HashSet<>();
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private Set<UserContactInfo> contacts = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "REGISTERED_THROUGH")
@@ -494,9 +494,9 @@ public class User
         return organizationTypeOther;
     }
 
-    public Set getContacts() {
-        return contacts;
-    }
+//    public Set getContacts() {
+//        return contacts;
+//    }
 
     public void setInterests(Set interests) {
         this.interests = interests;
@@ -506,9 +506,9 @@ public class User
         this.organizationTypeOther = organizationTypeOther;
     }
 
-    public void setContacts(Set contacts) {
-        this.contacts = contacts;
-    }
+//    public void setContacts(Set contacts) {
+//        this.contacts = contacts;
+//    }
 
     /**
      * @return the pledger

@@ -37,9 +37,6 @@
 		<many-to-one name="typeCategoryValue" column="type_category_value_id"
 			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" not-null="true" />
 
-		<!-- <many-to-one name="activityId" column="amp_activity_id"
-			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" not-null="false" />
-			-->
 		<set name="indicators" lazy="false" cascade="delete-orphan" inverse="true">
 			<key column="theme_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.IndicatorTheme" />

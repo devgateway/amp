@@ -27,11 +27,18 @@ import org.digijava.kernel.request.Site;
 import java.sql.Clob;
 import java.util.Set;
 import java.io.Serializable;
+import javax.persistence.*;
+import javax.persistence.Entity;
 
+@Entity
+@Table(name = "DG_CONTENT_ALERT")
 public class ContentAlert
     implements Serializable {
-
+    @Id
+    @Column(name = "VALUE")
     private Long value;
+
+    @Column(name = "NAME")
     private String name;
 
     public ContentAlert() {

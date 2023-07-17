@@ -11,9 +11,28 @@ import org.dgfoundation.amp.ar.ColumnFilteringInfo;
  * @author mihai
  *
  */
+import javax.persistence.*;
+
+@Entity
+@Table(name = "AMP_COLUMNS_FILTERS")
 public class AmpColumnsFilters extends ColumnFilteringInfo implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_columns_filters_seq")
+    @SequenceGenerator(name = "amp_columns_filters_seq", sequenceName = "AMP_COLUMNS_FILTERS_seq", allocationSize = 1)
+    @Column(name = "id")
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "column_id")
     private AmpColumns column;
+
+    @Column(name = "bean_field_name")
+    private String beanFieldName;
+
+    @Column(name = "view_field_name")
+    private String viewFieldName;
+
     
     public AmpColumnsFilters(){
     }

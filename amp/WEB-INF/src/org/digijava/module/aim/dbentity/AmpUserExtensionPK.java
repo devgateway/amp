@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import org.digijava.kernel.user.User;
 
+import javax.persistence.Embeddable;
+
 /**
  * Primary Key for AmpUserExtension entity.
  * Maybe it is good idea to add team here, and in each team(workspace) user will have different organizations.
@@ -11,6 +13,7 @@ import org.digijava.kernel.user.User;
  * @see AmpUserExtension
  *
  */
+@Embeddable
 public class AmpUserExtensionPK implements Serializable{
 
     private static final long serialVersionUID = 1L;

@@ -7,16 +7,28 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "AMP_COLUMNS_ORDER")
 public class AmpColumnsOrder implements Serializable, Comparable {
     /**
      * 
      */
     private static final long serialVersionUID = 5670661886522418984L;
     /** Comment for <code>serialVersionUID</code> */
-    String columnName;
-    Long indexOrder;
-    Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_columns_order_seq")
+    @SequenceGenerator(name = "amp_columns_order_seq", sequenceName = "AMP_COLUMNS_ORDER_seq", allocationSize = 1)
+    @Column(name = "id")
+    private Long id;
+
+    @Column(name = "columnName")
+    private String columnName;
+
+    @Column(name = "indexOrder")
+    private Long indexOrder;
+
     
     public Long getId() {
         return id;

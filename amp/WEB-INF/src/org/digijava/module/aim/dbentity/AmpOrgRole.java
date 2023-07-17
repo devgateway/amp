@@ -17,35 +17,59 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.aim.util.SerializableComparator;
 
+import javax.persistence.*;
+import java.util.Set;
 
+@Entity
+@Table(name = "AMP_ORG_ROLE")
 public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Versionable, Cloneable {
-    //IATI-check: not to be ignored
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_ORG_ROLE_seq")
+    @SequenceGenerator(name = "AMP_ORG_ROLE_seq", sequenceName = "AMP_ORG_ROLE_seq", allocationSize = 1)
+    @Column(name = "amp_org_role_id")
     @InterchangeableId
     @Interchangeable(fieldTitle = "Id")
     private Long ampOrgRoleId;
 
-    @InterchangeableBackReference
-    private AmpActivityVersion activity;
-    
-    @Interchangeable(fieldTitle = "Organization", importable = true, pickIdOnly = true, uniqueConstraint = true,
-            interValidators = @InterchangeableValidator(RequiredValidator.class),
-            commonPV = CommonFieldsConstants.COMMON_ORGANIZATION)
-    private AmpOrganisation organisation;
-    
-    private AmpRole role;
+    @Column(name = "percentage")
     @Interchangeable(fieldTitle = "Percentage", importable = true, percentageConstraint = true,
             fmPath = FMVisibility.PARENT_FM + "/percentage",
             interValidators = @InterchangeableValidator(RequiredValidator.class))
-    private Float   percentage;
-    @Interchangeable(fieldTitle = "Budgets", importable = true, fmPath = FMVisibility.PARENT_FM + "/Budget Code")
-    private Set<AmpOrgRoleBudget> budgets = new HashSet<>();
-    
+    private Float percentage;
+
+    @Column(name = "additional_info")
     @Interchangeable(fieldTitle = "Additional Info", importable = true, label = "Department/Division",
             fmPath = FMVisibility.PARENT_FM + "/relOrgadditionalInfo")
     private String additionalInfo;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "activity", nullable = false)
+    @InterchangeableBackReference
+
+    private AmpActivityVersion activity;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "organisation", nullable = false)
+    @Interchangeable(fieldTitle = "Organization", importable = true, pickIdOnly = true, uniqueConstraint = true,
+            interValidators = @InterchangeableValidator(RequiredValidator.class),
+            commonPV = CommonFieldsConstants.COMMON_ORGANIZATION)
+    private AmpOrganisation organisation;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role", nullable = false)
+    private AmpRole role;
+
+    @OneToMany(mappedBy = "ampOrgRole", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("ampOrgRoleBudgetId asc")
+    @Interchangeable(fieldTitle = "Budgets", importable = true, fmPath = FMVisibility.PARENT_FM + "/Budget Code")
+
+    private Set<AmpOrgRoleBudget> budgets =new HashSet<>();
+
+    @OneToMany(mappedBy = "ampOrgRole", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AmpGPINiSurvey> gpiNiSurveys;
     
+
     public Float getPercentage() {
         return percentage;
     }

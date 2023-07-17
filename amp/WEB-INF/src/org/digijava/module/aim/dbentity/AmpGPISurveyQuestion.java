@@ -11,27 +11,43 @@ import java.util.Comparator;
 import java.util.Set;
 
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import javax.persistence.*;
+import java.util.Set;
 
+@Entity
+@Table(name = "AMP_GPI_SURVEY_QUESTION")
 public class AmpGPISurveyQuestion implements Serializable {
 
-    //IATI-check: to be ignored
-//  @Interchangeable(fieldTitle="ID", id = true)
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_GPI_SURVEY_QUESTION_seq")
+    @SequenceGenerator(name = "AMP_GPI_SURVEY_QUESTION_seq", sequenceName = "AMP_GPI_SURVEY_QUESTION_seq", allocationSize = 1)
+    @Column(name = "amp_question_id")
     private Long ampQuestionId;
-//  @Interchangeable(fieldTitle="Question Text", value = true)
+
+    @Column(name = "question_text")
     private String questionText;
-    
-//  @Interchangeable(fieldTitle="Parent question", pickIdOnly=true)
-    private AmpGPISurveyQuestion parentQuestion;
-//  @Interchangeable(fieldTitle="Indicator", pickIdOnly=true)
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "amp_indicator_id", nullable = false)
     private AmpGPISurveyIndicator ampIndicatorId;
-//  @Interchangeable(fieldTitle="Question Number")
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "parent_question_id")
+    private AmpGPISurveyQuestion parentQuestion;
+
+    @Column(name = "question_number")
     private Integer questionNumber;
-//  @Interchangeable(fieldTitle="Question Type")
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "amp_type_id", nullable = false)
     private AmpGPISurveyQuestionType ampTypeId;
-//  @Interchangeable(fieldTitle="Status")
+
+    @Column(name = "status")
     private String status;
-//  @Interchangeable(fieldTitle="Questions", pickIdOnly=true)
+
+    @OneToMany(mappedBy = "parentQuestion", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AmpGPISurveyQuestion> questions;
+
 
     public AmpGPISurveyQuestion getParentQuestion() {
         return parentQuestion;

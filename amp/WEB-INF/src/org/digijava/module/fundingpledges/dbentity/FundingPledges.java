@@ -29,58 +29,146 @@ import org.hibernate.jdbc.Work;
 /**
  * @author Diego Dimunzio
  */
+import javax.persistence.*;
+import java.util.Date;
+import java.util.Set;
+
+@Entity
+@Table(name = "AMP_FUNDING_PLEDGES")
 public class FundingPledges implements Comparable<FundingPledges>, Serializable, LoggerIdentifiable {
     
     private static final long serialVersionUID = 1L;
-    
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_funding_pledges_seq")
+    @SequenceGenerator(name = "amp_funding_pledges_seq", sequenceName = "AMP_FUNDING_PLEDGES_seq", allocationSize = 1)
+    @Column(name = "id")
     @PossibleValueId
     private Long id;
+
+    @Column(name = "date_created")
     private Date createdDate;
+
+    @ManyToOne
+    @JoinColumn(name = "title")
     private AmpCategoryValue title;
+
+    @ManyToOne
+    @JoinColumn(name = "status")
     private AmpCategoryValue status;
-    
+
+    @Column(name = "titleFreeText")
     @PossibleValueValue
     private String titleFreeText;
-    
+
+    @Column(name = "additionalInformation")
     private String additionalInformation;
+
+    @Column(name = "whoAuthorizedPledge")
     private String whoAuthorizedPledge;
-    private String furtherApprovalNedded;
-    @Deprecated
-    private AmpOrganisation organization;
-    
-    private AmpOrgGroup organizationGroup;
-    
-    private Set<FundingPledgesSector> sectorlist = new HashSet<>();
-    private Set<FundingPledgesLocation> locationlist = new HashSet<>();
-    private Set<FundingPledgesProgram> programlist = new HashSet<>();
-    private Set<FundingPledgesDetails> fundingPledgesDetails = new HashSet<>();
-    // "Point of Contact at Donors Conference on March 31st"
+
+    @Column(name = "furtherApprovalNedded")
+    private String furtherApprovalNeeded;
+
+    @Column(name = "contactName")
     private String contactName;
+
+    @Column(name = "contactAddress")
     private String contactAddress;
+
+    @Column(name = "contactEmail")
     private String contactEmail;
+
+    @Column(name = "contactTitle")
     private String contactTitle;
+
+    @Column(name = "contactMinistry")
     private String contactMinistry;
+
+    @Column(name = "contactTelephone")
     private String contactTelephone;
+
+    @Column(name = "contactFax")
     private String contactFax;
-    private AmpOrganisation contactOrganization;
+
+    @Column(name = "contactAlternativeName")
     private String contactAlternativeName;
+
+    @Column(name = "contactAlternativeTelephone")
     private String contactAlternativeTelephone;
+
+    @Column(name = "contactAlternativeEmail")
     private String contactAlternativeEmail;
-    //"is Point of Contact for Follow Up"
+
+    @Column(name = "contactName_1")
     private String contactName_1;
+
+    @Column(name = "contactAddress_1")
     private String contactAddress_1;
+
+    @Column(name = "contactEmail_1")
     private String contactEmail_1;
+
+    @Column(name = "contactTitle_1")
     private String contactTitle_1;
+
+    @Column(name = "contactMinistry_1")
     private String contactMinistry_1;
+
+    @Column(name = "contactTelephone_1")
     private String contactTelephone_1;
+
+    @Column(name = "contactFax_1")
     private String contactFax_1;
-    private AmpOrganisation contactOrganization_1;
+
+    @Column(name = "contactAlternativeName_1")
     private String contactAlternativeName_1;
+
+    @Column(name = "contactAlternativeTelephone_1")
     private String contactAlternativeTelephone_1;
+
+    @Column(name = "contactAlternativeEmail_1")
     private String contactAlternativeEmail_1;
-    private TreeSet<String> yearsList;
-    private Set<FundingPledgesDocument> documents = new HashSet<>();
+
+    @ManyToOne
+    @JoinColumn(name = "amp_org_id")
+    private AmpOrganisation organization;
+
+    @ManyToOne
+    @JoinColumn(name = "amp_org_grp_id")
+    private AmpOrgGroup organizationGroup;
+
+    @ManyToOne
+    @JoinColumn(name = "contactOrganization")
+    private AmpOrganisation contactOrganization;
+
+    @ManyToOne
+    @JoinColumn(name = "contactOrganization_1")
+    private AmpOrganisation contactOrganization_1;
+
+    @OneToMany(mappedBy = "pledgeid", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<FundingPledgesProgram> programlist;
+
+    @OneToMany(mappedBy = "pledgeid", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<FundingPledgesLocation> locationlist;
+
+    @OneToMany(mappedBy = "pledgeid", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<FundingPledgesSector> sectorlist;
+
+    @OneToMany(mappedBy = "pledgeid", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<FundingPledgesDocument> documents;
+
+    @OneToMany(mappedBy = "pledgeid", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<FundingPledgesDetails> fundingPledgesDetails;
+
+    private String furtherApprovalNedded;
+
     
+
+
+
+
+    private TreeSet<String> yearsList;
+
     @Override
     public boolean equals(Object o) {
         if (o == null) return false;

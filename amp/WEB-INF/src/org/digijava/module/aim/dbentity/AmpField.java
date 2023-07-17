@@ -5,12 +5,20 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "AMP_FIELD")
 public class AmpField implements Serializable {
+    @Id
+    @GeneratedValue(generator = "ampFieldSeq")
+    @SequenceGenerator(name = "ampFieldSeq", sequenceName = "AMP_FIELD_seq", allocationSize = 1)
+    @Column(name = "amp_field_id")
     private Long ampFieldId;
-    
+
+    @Column(name = "field_name")
     private String fieldName;
-    
+
     /**
      * @return Returns the ampFieldId.
      */

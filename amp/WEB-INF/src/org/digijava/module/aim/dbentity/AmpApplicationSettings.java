@@ -10,43 +10,69 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.digijava.kernel.ampapi.endpoints.security.serializers.AmpApplicationSettingsSerializer;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "AMP_APPLICATION_SETTINGS")
 @SuppressWarnings("serial")
+
 @JsonSerialize(using = AmpApplicationSettingsSerializer.class)
 public class AmpApplicationSettings implements Serializable {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_application_settings_seq_generator")
+    @SequenceGenerator(name = "amp_application_settings_seq_generator", sequenceName = "amp_application_settings_seq", allocationSize = 1)
+    @Column(name = "amp_app_settings_id")
     private Long ampAppSettingsId;
 
-    private AmpTeam team;
-
+    @Column(name = "def_rec_per_page")
     private Integer defaultRecordsPerPage;
 
-    private Integer reportStartYear;
+    @Column(name = "num_pages_to_display")
+    private Integer numberOfPagesToDisplay;
 
-    private Integer reportEndYear;
-
-    private AmpCurrency currency;
-
-    private AmpFiscalCalendar fiscalCalendar;
-
-    private String language;
-    
-    private String validation;
-
-    private Boolean showAllCountries = false;
-
-    private AmpReports defaultTeamReport;
-
+    @Column(name = "def_rep_per_page")
     private Integer defaultReportsPerPage;
 
+    @Column(name = "report_start_year")
+    private Integer reportStartYear;
+
+    @Column(name = "report_end_year")
+    private Integer reportEndYear;
+
+    @Column(name = "language")
+    private String language;
+
+    @Column(name = "validation")
+    private String validation;
+
+    @Column(name = "show_all_countries")
+    private Boolean showAllCountries;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "default_team_ampreport_id")
+    private AmpReports defaultTeamReport;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "team_id")
+    private AmpTeam team;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "currency_id")
+    private AmpCurrency currency;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fis_cal_id")
+    private AmpFiscalCalendar fiscalCalendar;
+
+    @Column(name = "allow_add_team_res")
     private Integer allowAddTeamRes;
 
-    private Integer allowShareTeamRes; //across the workspaces
+    @Column(name = "allow_share_res_globally")
+    private Integer allowShareTeamRes;
 
+    @Column(name = "allow_publishing_resources")
     private Integer allowPublishingResources;
 
-    private Integer numberOfPagesToDisplay;
-    
     public Boolean getShowAllCountries() {
         return showAllCountries;
     }

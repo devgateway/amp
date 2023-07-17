@@ -13,20 +13,39 @@ import java.util.List;
 
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.Output;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "AMP_COMMENTS")
 public class AmpComments implements Serializable, Cloneable, Versionable {
-    
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_comments_seq")
+    @SequenceGenerator(name = "amp_comments_seq", sequenceName = "AMP_COMMENTS_seq", allocationSize = 1)
+    @Column(name = "amp_comment_id")
     private Long ampCommentId;
-    private AmpActivityVersion ampActivityId;
-    private AmpField ampFieldId;
-    private AmpTeamMember memberId;
-    private Date commentDate;
+
+    @Column(name = "comment_", columnDefinition = "text")
     private String comment;
-    
-    /* we will use this field to store teammember's, 
-    because team member may be removed from the team,
-    so memberId will be useless*/
+
+    @Column(name = "member_name")
     private String memberName;
+
+    @Column(name = "comment_date")
+    private Date commentDate;
+
+    @ManyToOne
+    @JoinColumn(name = "amp_activity_id")
+    private AmpActivityVersion ampActivityId;
+
+    @ManyToOne
+    @JoinColumn(name = "amp_field_id")
+    private AmpField ampFieldId;
+
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private AmpTeamMember memberId;
+
+
 
     public String getMemberName() {
         return memberName;

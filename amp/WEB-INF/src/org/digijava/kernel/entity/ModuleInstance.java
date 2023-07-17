@@ -26,19 +26,44 @@ import java.io.Serializable;
 
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.Constants;
+import javax.persistence.*;
+import javax.persistence.Entity;
 
+@Entity
+@Table(name = "DG_MODULE_INSTANCE")
 public class ModuleInstance implements Serializable {
 
     public static final int NUMBER_OF_ITEMS_IN_TEASER = 8;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "dg_module_instance_seq_generator")
+    @SequenceGenerator(name = "dg_module_instance_seq_generator", sequenceName = "dg_module_instance_seq", allocationSize = 1)
+    @Column(name = "MODULE_INSTANCE_ID")
     private Long moduleInstanceId;
-    private Site site;
+
+    @Column(name = "MODULE_NAME")
     private String moduleName;
+
+    @Column(name = "MODULE_INSTANCE")
     private String instanceName;
-    private boolean common;
-    private ModuleInstance realInstance;
+
+    @Column(name = "PERMITTED")
     private boolean permitted;
+
+    @Column(name = "NUM_OF_ITEMS_IN_TEASER")
     private Long numberOfItemsInTeaser;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "SITE_ID")
+    private Site site;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "REAL_INSTANCE_ID")
+    private ModuleInstance realInstance;
+
+
+    @Transient
+    private boolean common;
 
 
     public ModuleInstance() {

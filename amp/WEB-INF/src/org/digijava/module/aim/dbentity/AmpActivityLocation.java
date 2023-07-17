@@ -22,17 +22,29 @@ import org.digijava.module.aim.util.TreeNodeAware;
  * @author Irakli Kobiashvili
  *
  */
+import javax.persistence.*;
+
+@Entity
+@Table(name = "AMP_ACTIVITY_LOCATION")
 public class AmpActivityLocation implements Versionable, Serializable, Cloneable,
         TreeNodeAware<AmpCategoryValueLocations> {
 
-    //IATI-check: should be exported.
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_activity_location_seq_generator")
+    @SequenceGenerator(name = "amp_activity_location_seq_generator", sequenceName = "AMP_ACTIVITY_LOCATION_seq", allocationSize = 1)
+    @Column(name = "amp_activity_location_id")
     @InterchangeableId
     @Interchangeable(fieldTitle = "Id")
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "amp_activity_id", nullable = false)
     @InterchangeableBackReference
+
     private AmpActivityVersion activity;
 
+    @ManyToOne
+    @JoinColumn(name = "location_id", nullable = false)
     @PossibleValues(LocationPossibleValuesProvider.class)
     @Interchangeable(fieldTitle = ActivityFieldsConstants.Locations.LOCATION, pickIdOnly = true, importable = true,
             uniqueConstraint = true,
@@ -44,16 +56,22 @@ public class AmpActivityLocation implements Versionable, Serializable, Cloneable
             })
     private AmpCategoryValueLocations location;
 
+    @Column(name = "location_percentage")
     @Interchangeable(fieldTitle = "Location Percentage",
             interValidators = @InterchangeableValidator(value = RequiredValidator.class,
                     fmPath = "/Activity Form/Location/Locations/Location percentage required"),
             fmPath = "/Activity Form/Location/Locations/Location Item/locationPercentage",
             percentageConstraint = true, importable = true)
     private Float locationPercentage;
+
+    @Column(name = "location_latitude")
     @Interchangeable(fieldTitle = "Latitude", fmPath = "/Activity Form/Location/Locations/Location Item/Latitude", importable = true)
     private String latitude;
+
+    @Column(name = "location_longitude")
     @Interchangeable(fieldTitle = "Longitude", fmPath = "/Activity Form/Location/Locations/Location Item/Logitude", importable = true)
     private String longitude;
+
     
     public Long getId() {
         return id;

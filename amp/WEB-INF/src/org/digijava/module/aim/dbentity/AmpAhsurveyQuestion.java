@@ -9,24 +9,40 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Set;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "AMP_AHSURVEY_QUESTION")
 public class AmpAhsurveyQuestion implements Serializable{
-//IATI-check: to be ignored
-//  @Interchangeable(fieldTitle="Question ID", id = true, importable = true)
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_ahsurvey_question_seq_generator")
+    @SequenceGenerator(name = "amp_ahsurvey_question_seq_generator", sequenceName = "AMP_AHSURVEY_QUESTION_seq", allocationSize = 1)
+    @Column(name = "amp_question_id")
     private Long ampQuestionId;
-//  @Interchangeable(fieldTitle="Question Text", value = true)
+
+    @Column(name = "question_text")
     private String questionText;
-//  @Interchangeable(fieldTitle="Parent Question", pickIdOnly=true)
-    private AmpAhsurveyQuestion parentQuestion;
-//  @Interchangeable(fieldTitle="Indicator ID")
+
+    @ManyToOne( optional = false)
+    @JoinColumn(name = "amp_indicator_id")
     private AmpAhsurveyIndicator ampIndicatorId;
-//  @Interchangeable(fieldTitle="Question Number")
+
+    @ManyToOne
+    @JoinColumn(name = "parent_question_id")
+    private AmpAhsurveyQuestion parentQuestion;
+
+    @Column(name = "question_number")
     private Integer questionNumber;
-//  @Interchangeable(fieldTitle="Type ID")
+
+    @ManyToOne( optional = false)
+    @JoinColumn(name = "amp_type_id")
     private AmpAhsurveyQuestionType ampTypeId;
-//  @Interchangeable(fieldTitle="Status")
+
+    @Column(name = "status")
     private String status;
-//  @Interchangeable(fieldTitle="Questions", pickIdOnly=true)
+
+    @OneToMany(mappedBy = "parentQuestion",  fetch = FetchType.LAZY)
     private Set<AmpAhsurveyQuestion> questions;
     
 

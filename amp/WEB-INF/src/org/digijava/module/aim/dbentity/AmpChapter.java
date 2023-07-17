@@ -12,11 +12,25 @@ import java.util.Set;
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
  *
  */
+import javax.persistence.*;
+import java.util.Set;
+
+@Entity
+@Table(name = "AMP_CHAPTER")
 public class AmpChapter implements Serializable {
+    @Id
+    @Column(name = "code")
     private String code;
+
+    @Column(name = "year")
     private Integer year;
+
+    @Column(name = "description", length = 255)
     private String description;
+
+    @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AmpImputation> imputations;
+
 
     
     public AmpChapter() {

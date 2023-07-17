@@ -3,18 +3,41 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Set;
+import javax.persistence.*;
+import java.util.Set;
 
+@Entity
+@Table(name = "AMP_GPI_SURVEY_INDICATOR")
 public class AmpGPISurveyIndicator implements Serializable {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_GPI_SURVEY_INDICATOR_seq")
+    @SequenceGenerator(name = "AMP_GPI_SURVEY_INDICATOR_seq", sequenceName = "AMP_GPI_SURVEY_INDICATOR_seq", allocationSize = 1)
+    @Column(name = "amp_indicator_id")
     private Long ampIndicatorId;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "total_question")
     private Integer totalQuestions;
+
+    @Column(name = "indicator_code")
     private String indicatorCode;
+
+    @Column(name = "status")
     private String status;
-    private Set<AmpGPISurveyQuestion> questions;
-    private Set<AmpGPISurveyIndicatorCalcFormula> calcFormulas;
+
+    @Column(name = "description", columnDefinition = "text")
     private String description;
+
+    @Column(name = "show_as_indicator")
     private Boolean showAsIndicator;
+
+    @OneToMany(mappedBy = "ampGPISurveyIndicator", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<AmpGPISurveyQuestion> questions;
+
+    @OneToMany(mappedBy = "ampGPISurveyIndicator", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<AmpGPISurveyIndicatorCalcFormula> calcFormulas;
 
     public static class GPISurveyIndicatorComparator implements Comparator<AmpGPISurveyIndicator>, Serializable {
 

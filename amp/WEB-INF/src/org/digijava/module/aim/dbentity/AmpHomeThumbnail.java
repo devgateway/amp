@@ -1,21 +1,36 @@
 package org.digijava.module.aim.dbentity;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "AMP_HOME_THUMBNAIL")
 public class AmpHomeThumbnail {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_HOME_THUMBNAIL_seq")
+    @SequenceGenerator(name = "AMP_HOME_THUMBNAIL_seq", sequenceName = "AMP_HOME_THUMBNAIL_seq", allocationSize = 1)
+    @Column(name = "THUMBNAIL_ID")
     private Long thumbnailId;
-    
+
+    @Lob
+    @Column(name = "THUMBNAIL", length = 500000)
     private byte[] thumbnail;
 
-    private int placeholder;
-    
+    @Column(name = "PLACEHOLDER")
+    private Integer placeholder;
+
+    @Lob
+    @Column(name = "OPTIONAL_FILE", length = 500000)
     private byte[] optionalFile;
 
+    @Column(name = "OPTIONAL_FILE_NAME")
     private String optionalFileName;
 
+    @Column(name = "OPTIONAL_FILE_CONTENT_TYPE")
     private String optionalFileContentType;
 
+    @Column(name = "THUMBNAIL_CONTENT_TYPE")
     private String thumbnailContentType;
 
+    @Column(name = "THUMBNAIL_LABEL")
     private String thumbnailLabel;
 
     /**

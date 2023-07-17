@@ -27,10 +27,70 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.digijava.module.common.dbentity.ItemStatus;
+import javax.persistence.*;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
+@Entity
+@Table(name = "DG_CALENDAR")
 public class Calendar {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID")
+    private Long id;
 
+    @Column(name = "SITE_ID")
+    private String siteId;
+
+    @Column(name = "MODULE_INSTANCE_ID")
+    private String instanceId;
+
+    @ManyToOne
+    @JoinColumn(name = "STATUS")
+    private ItemStatus status;
+
+    @Column(name = "LOCATION")
+    private String location;
+
+    @Column(name = "MAIL_TO")
+    private String mailTo;
+
+    @Column(name = "COUNTRY_ISO")
+    private String country;
+
+    @Column(name = "SOURCE_NAME")
+    private String sourceName;
+
+    @Column(name = "SOURCE_URL")
+    private String sourceUrl;
+
+    @Column(name = "START_DATE")
+    private Date startDate;
+
+    @Column(name = "END_DATE")
+    private Date endDate;
+
+    @Column(name = "ENABLE_HTML")
+    private boolean enableHTML;
+
+    @Column(name = "start_tbd")
+    private TBD startTBD;
+
+    @Column(name = "end_tbd")
+    private TBD endTBD;
+
+    @Column(name = "ENABLE_SMILES")
+    private boolean enableSmiles;
+
+    @OneToMany(mappedBy = "calendar", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<CalendarItem> calendarItem = new HashSet<>();
+
+    @OneToMany(mappedBy = "calendar", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<RecurrCalEvent> recurrCalEvent = new HashSet<>();
+    @Transient
     public static final String noneCountryIso = "none";
+    @Transient
     public static final String noneCountryName = "None";
 
     public static class TBD
@@ -75,89 +135,8 @@ public class Calendar {
 */
     }
 
-    /**
-     * event identity
-     */
-    private Long id;
 
-    /**
-     * site identity, siteName, e.g. 'amp'
-     */
-    private String siteId;
 
-    /**
-     * instance name
-     */
-    private String instanceId;
-
-    /**
-     * status of event item
-     */
-    private ItemStatus status;
-
-    /**
-     * location of event item's author
-     */
-    private String location;
-
-    /**
-     * mailing address, where remind message about an event item is sent
-     */
-    private String mailTo;
-
-    /**
-     * country or residence key of event item's author
-     */
-    private String country;
-
-    /**
-     * source name of event item
-     */
-    private String sourceName;
-
-    /**
-     * source URL of event item
-     */
-    private String sourceUrl;
-
-    /**
-     * publication date of event item
-     */
-    private Date startDate;
-
-    /**
-     * archive date of event item
-     */
-    private Date endDate;
-
-    /**
-     * true if html should be enabled when parsimg BBCode, false otherwise
-     * when enabled only safe html tags - b,u,i,a,pre are parsed
-     */
-    private boolean enableHTML;
-
-    /**
-     * determines if start date is TBD
-     */
-    private Calendar.TBD startTBD = null;
-
-    /**
-     * determines if end date is TBD
-     */
-    private Calendar.TBD endTBD = null;
-
-    /**
-     * true if smiles should be parsed by BBCodeParser,false otherwise
-     */
-    private boolean enableSmiles;
-
-    /**
-     * Set of event items from current event
-     */
-    private Set calendarItem;
-
-    private Set recurrCalEvent;
-    
     public Calendar() {
     }
 

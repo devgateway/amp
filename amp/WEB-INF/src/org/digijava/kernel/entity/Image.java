@@ -22,12 +22,40 @@
 
 package org.digijava.kernel.entity;
 
+import javax.persistence.*;
+import java.util.Date;
 
+@javax.persistence.Entity
+@Table(name = "DG_IMAGE")
 public class Image
     extends Entity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "dg_image_seq")
+    @SequenceGenerator(name = "dg_image_seq", sequenceName = "dg_image_seq", allocationSize = 1)    @Column(name = "ID")
+    private Long id;
 
+    @Column(name = "NAME")
+    private String name;
+
+    @Column(name = "CREATION_DATE")
+    private Date creationDate;
+
+    @Column(name = "CREATION_IP")
+    private String creationIP;
+
+    @Column(name = "LAST_MODIFIED")
+    private Date lastModified;
+
+    @Column(name = "MODIFYING_IP")
+    private String modifyingIP;
+
+    @Column(name = "CONTENT_TYPE")
     private String contentType;
+
+    @Lob
+    @Column(name = "DATA")
     private byte[] image;
+
     /*
      * this class should be able to store bitstreams for images
      */

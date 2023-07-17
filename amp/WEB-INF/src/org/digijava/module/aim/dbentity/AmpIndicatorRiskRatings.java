@@ -3,15 +3,25 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 
 import org.digijava.module.aim.util.Identifiable;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "AMP_INDICATOR_RISK_RATINGS")
 public class AmpIndicatorRiskRatings implements Identifiable, Serializable {
-    //IATI-check: to be ignored
-    
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_indicator_risk_ratings_seq_generator")
+    @SequenceGenerator(name = "amp_indicator_risk_ratings_seq_generator", sequenceName = "AMP_INDICATOR_RISK_RATINGS_seq", allocationSize = 1)
+    @Column(name = "amp_ind_risk_ratings_id")
     private Long ampIndRiskRatingsId;
+
+    @Column(name = "rating_name")
     private String ratingName;
+
+    @Column(name = "rating_value")
+    private Integer ratingValue;
+    @Transient
     private String translatedRatingName;
-    private int ratingValue;
-    
+
     public Long getAmpIndRiskRatingsId() {
         return ampIndRiskRatingsId;
     }

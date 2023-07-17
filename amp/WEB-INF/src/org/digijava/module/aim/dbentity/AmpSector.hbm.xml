@@ -14,9 +14,6 @@
 
 		<property name="sectorCode" column="sector_code" type="java.lang.String"/>
 		<property name="sectorCodeOfficial" column="sector_code_official" type="java.lang.String"/>
-		<!--<property name="ampDacSectorId" column="amp_dac_sector_id" type="long"/>-->
-		<!--<many-to-one name="ampDacSectorId" column="amp_dac_sector_id" class="org.digijava.module.aim.dbentity.AmpDacSector" cascade="none"/>-->
-
 		<property name="name" column="name" type="java.lang.String"/>
 		<property name="type" column="type" type="java.lang.String"/>
 		<property name="description" column="description"  type="text"/>

@@ -16,6 +16,10 @@ import org.digijava.module.common.util.DateTimeUtil;
  * @author Dolghier Constantin
  *
  */
+import javax.persistence.*;
+
+@Entity
+@Table(name = "AMP_INFLATION_RATES")
 public class AmpInflationRate implements Serializable, Comparable<AmpInflationRate>
 {
     private static final long serialVersionUID = 1L;
@@ -26,26 +30,27 @@ public class AmpInflationRate implements Serializable, Comparable<AmpInflationRa
     public final static String MAX_DATE_STR = MAX_DEFLATION_YEAR + "-12-31";
     public final static Date MIN_DATE = DateTimeUtil.parseDate(MIN_DATE_STR, CurrencyEPConstants.DATE_FORMAT);
     public final static Date MAX_DATE = DateTimeUtil.parseDate(MAX_DATE_STR, CurrencyEPConstants.DATE_FORMAT);
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_INFLATION_RATE_seq")
+    @SequenceGenerator(name = "AMP_INFLATION_RATE_seq", sequenceName = "AMP_INFLATION_RATE_seq", allocationSize = 1)
+    @Column(name = "amp_inflation_rate_id")
     private Long id;
-    
-    /**
-     * the currency related to which the inflation rate is specified
-     */
+
+    @Column(name = "period_start", unique = true)
+    private Date periodStart;
+
+    @Column(name = "inflation_rate")
+    private Double inflationRate;
+
+    @ManyToOne
+    @JoinColumn(name = "currency_id", unique = true, nullable = false)
     @NotNull
+
     private AmpCurrency currency;
 
-    /**
-     * the Gregorian period start date for which we specify the inflation rate compared with the previous period
-     */
-    private Date periodStart;
     
-    /**
-     * inflation rate expressed as a percentage change of the prices from previous period. <br />
-     * Thus, inflationRate = -50% means prices have halved while inflationRate = +100% means prices have doubled
-     */
-    private double inflationRate;
-    
+
+
     public AmpInflationRate() {}
     
     public AmpInflationRate(AmpCurrency currency, Date periodStart, double inflationRate) {

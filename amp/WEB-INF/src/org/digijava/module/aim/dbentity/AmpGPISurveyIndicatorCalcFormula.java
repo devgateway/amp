@@ -1,17 +1,39 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "AMP_GPI_SURVEY_CALC_FORMULA")
 public class AmpGPISurveyIndicatorCalcFormula implements Serializable {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_GPI_SURVEY_CALC_FORMULA_seq")
+    @SequenceGenerator(name = "AMP_GPI_SURVEY_CALC_FORMULA_seq", sequenceName = "AMP_GPI_SURVEY_CALC_FORMULA_seq", allocationSize = 1)
+    @Column(name = "formula_id")
     private Long id;
+
+    @Column(name = "formula_text")
     private String calcFormula;
+
+    @Column(name = "column_index")
     private Long columnIndex;
+
+    @Column(name = "constant_name")
     private String constantName;
+
+    @Column(name = "base_line_value")
     private String baseLineValue;
+
+    @Column(name = "target_value")
     private String targetValue;
+
+    @Column(name = "formula_status")
     private Boolean enabled;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "amp_indicator_id", nullable = false)
     private AmpGPISurveyIndicator parentIndicator;
+
 
 
     public AmpGPISurveyIndicatorCalcFormula() {

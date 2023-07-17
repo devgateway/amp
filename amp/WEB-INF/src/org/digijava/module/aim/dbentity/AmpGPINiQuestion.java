@@ -5,21 +5,46 @@ import java.util.Comparator;
 import java.util.Set;
 
 import org.apache.commons.collections.ComparatorUtils;
+import javax.persistence.*;
+import java.util.Set;
 
+@Entity
+@Table(name = "AMP_GPI_NI_QUESTION")
 public class AmpGPINiQuestion implements Serializable {
     
     private static final long serialVersionUID = 6751072241262868712L;
-    
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_GPI_NI_QUESTION_seq")
+    @SequenceGenerator(name = "AMP_GPI_NI_QUESTION_seq", sequenceName = "AMP_GPI_NI_QUESTION_seq", allocationSize = 1)
+    @Column(name = "amp_gpi_ni_question_id")
     private Long ampGPINiQuestionId;
-    private AmpGPINiIndicator ampGPINiIndicator;
+
+    @Column(name = "code", nullable = false)
     private String code;
+
+    @Column(name = "description", columnDefinition = "text")
     private String description;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type")
     private GPINiQuestionType type;
+
+    @Column(name = "index")
     private Integer index;
+
+    @Column(name = "allow_multiple")
     private Boolean allowMultiple;
+
+    @Column(name = "requires_data_entry")
     private Boolean requiresDataEntry;
-    
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "amp_gpi_ni_indicator_id", nullable = false)
+    private AmpGPINiIndicator ampGPINiIndicator;
+
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<AmpGPINiQuestionOption> options;
+
 
     public Long getAmpGPINiQuestionId() {
         return ampGPINiQuestionId;

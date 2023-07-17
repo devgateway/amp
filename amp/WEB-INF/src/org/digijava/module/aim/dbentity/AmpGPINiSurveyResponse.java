@@ -5,19 +5,42 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import javax.persistence.*;
+import java.util.Set;
 
+@Entity
+@Table(name = "AMP_GPI_NI_SURVEY_RESPONSE")
 public class AmpGPINiSurveyResponse implements Serializable, Cloneable {
 
     private static final long serialVersionUID = -6656563271238273140L;
-    
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_GPI_NI_SURVEY_RESPONSE_seq")
+    @SequenceGenerator(name = "AMP_GPI_NI_SURVEY_RESPONSE_seq", sequenceName = "AMP_GPI_NI_SURVEY_RESPONSE_seq", allocationSize = 1)
+    @Column(name = "amp_gpi_ni_survey_response_id")
     private Long ampGPINiSurveyResponseId;
-    private transient Long oldKey;
-    private AmpGPINiSurvey ampGPINiSurvey;
-    private AmpGPINiQuestion ampGPINiQuestion;
+
+    @Column(name = "integer_response")
     private Long integerResponse;
+
+    @Column(name = "text_response", columnDefinition = "text")
     private String textResponse;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "question_option_id")
     private AmpGPINiQuestionOption questionOption;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "amp_gpi_ni_survey_id", nullable = false)
+    private AmpGPINiSurvey ampGPINiSurvey;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "amp_gpi_ni_question_id", nullable = false)
+    private AmpGPINiQuestion ampGPINiQuestion;
+
+    @OneToMany(mappedBy = "ampGPINiSurveyResponse", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AmpGPINiSurveyResponseDocument> supportingDocuments;
+    private transient Long oldKey;
+
 
     public Long getAmpGPINiSurveyResponseId() {
         return ampGPINiSurveyResponseId;

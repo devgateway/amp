@@ -12,26 +12,45 @@ import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.NameableOrIdentifiable;
+import javax.persistence.*;
+import java.util.Set;
 
+@Entity
+@Table(name = "AMP_ORG_TYPE")
 @TranslatableClass (displayName = "Organisation Type")
 public class AmpOrgType implements Serializable,Comparable,Identifiable, ARDimensionable, HierarchyListable, NameableOrIdentifiable {
     //IATI-check: to not be ignored
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_org_type_seq_generator")
+    @SequenceGenerator(name = "amp_org_type_seq_generator", sequenceName = "AMP_ORG_TYPE_seq", allocationSize = 1)
+    @Column(name = "amp_org_type_id")
     private Long ampOrgTypeId;
+
+    @Column(name = "org_type")
     @TranslatableField
+
     private String orgType;
-    
+
+    @Column(name = "org_type_code")
     @TranslatableField
+
     private String orgTypeCode;
-    @Deprecated
+
+    @Column(name = "org_type_is_governmental")
     private Boolean orgTypeIsGovernmental;
-    //private Set organizations;
-    
-    // NGO, Governmental etc.
+
+    @Column(name = "org_type_classification")
     private String classification;
-    
+
+    @OneToMany(mappedBy = "orgType")
+    private Set<AmpOrgGroup> orgGroups;
+
+    @Transient
+
     private boolean translateable   = true;
     
-    private Set<AmpOrgGroup> orgGroups;
+
     
     public String getClassification() {
         return classification;

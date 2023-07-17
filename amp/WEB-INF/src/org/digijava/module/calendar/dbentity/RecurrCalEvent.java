@@ -1,16 +1,37 @@
 package org.digijava.module.calendar.dbentity;
 
 import java.util.Date;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "DG_RECURR_EVENT")
 public class RecurrCalEvent {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "dg_recurr_event_seq")
+    @SequenceGenerator(name = "dg_recurr_event_seq", sequenceName = "dg_recurr_event_seq", allocationSize = 1)
+    @Column(name = "ID")
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "CALENDAR_ID", nullable = false)
     private Calendar calendar;
-    private String selectedStartMonth;
-    private Long recurrPeriod;
+
+    @Column(name = "TYPE_OF_OCCURRENCE")
     private String typeofOccurrence;
+
+    @Column(name = "SELECTED_MONTH")
+    private String selectedStartMonth;
+
+    @Column(name = "OCCURR_WEEKDAYS")
     private String occurrWeekDays;
+
+    @Column(name = "RECURR_PERIOD")
+    private Long recurrPeriod;
+
+    @Column(name = "RECURR_START_DATE")
     private Date recurrStartDate;
+
+    @Column(name = "RECURR_END_DATE")
     private Date recurrEndDate;
     
     

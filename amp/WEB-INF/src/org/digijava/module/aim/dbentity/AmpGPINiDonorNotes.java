@@ -16,13 +16,41 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModelProperty;
 import org.digijava.kernel.ampapi.endpoints.serializers.ISO8601DateDeserializer;
 import org.digijava.kernel.ampapi.endpoints.serializers.ISO8601DateSerializer;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "AMP_GPI_NI_DONOR_NOTES")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AmpGPINiDonorNotes implements Serializable {
-    
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_GPI_NI_DONOR_NOTES_seq")
+    @SequenceGenerator(name = "AMP_GPI_NI_DONOR_NOTES_seq", sequenceName = "AMP_GPI_NI_DONOR_NOTES_seq", allocationSize = 1)
+    @Column(name = "amp_gpi_ni_donor_notes_id")
     @JsonProperty("id")
     private Long ampGPINiDonorNotesId;
 
+    @Column(name = "notes", columnDefinition = "text")
+    @NotNull
+    @Size(min = 1)
+    @ApiModelProperty(example = "Sample Note 1")
+    private String notes;
+
+    @Column(name = "notes_date")
+    @JsonSerialize(using = ISO8601DateSerializer.class)
+    @JsonDeserialize(using = ISO8601DateDeserializer.class)
+    @ApiModelProperty(example = "2018-11-29")
+    @NotNull
+    private Date notesDate;
+
+    @Column(name = "indicator_code")
+
+    @NotNull
+    @Size(min = 1)
+    @ApiModelProperty(example = "1")
+    private String indicatorCode;
+
+    @ManyToOne
+    @JoinColumn(name = "donor_id", nullable = false)
     @JsonProperty("donorId")
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "ampOrgId",
             resolver = EntityResolver.class, scope = AmpOrganisation.class)
@@ -31,21 +59,7 @@ public class AmpGPINiDonorNotes implements Serializable {
     @ApiModelProperty(value = "Donor Agency", example = "41")
     private AmpOrganisation donor;
 
-    @NotNull
-    @Size(min = 1)
-    @ApiModelProperty(example = "Sample Note 1")
-    private String notes;
 
-    @JsonSerialize(using = ISO8601DateSerializer.class)
-    @JsonDeserialize(using = ISO8601DateDeserializer.class)
-    @ApiModelProperty(example = "2018-11-29")
-    @NotNull
-    private Date notesDate;
-
-    @NotNull
-    @Size(min = 1)
-    @ApiModelProperty(example = "1")
-    private String indicatorCode;
 
     public Long getAmpGPINiDonorNotesId() {
         return ampGPINiDonorNotesId;

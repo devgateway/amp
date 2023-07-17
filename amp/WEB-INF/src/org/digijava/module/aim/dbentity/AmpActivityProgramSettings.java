@@ -7,23 +7,59 @@ import org.digijava.module.aim.util.ProgramUtil;
 
 import java.io.Serializable;
 import java.util.Map;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "AMP_PROGRAM_SETTINGS")
 public class AmpActivityProgramSettings implements Serializable, Identifiable {
 
     /**
      *
      */
     private static final long serialVersionUID = -2140430282705711013L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_program_settings_seq_generator")
+    @SequenceGenerator(name = "amp_program_settings_seq_generator", sequenceName = "AMP_PROGRAM_SETTINGS_seq", allocationSize = 1)
+    @Column(name = "amp_program_settings_id")
+    private Long ampProgramSettingsId;
 
+    @Column(name = "allow_multiple")
+    private boolean allowMultiple;
+
+    @Column(name = "name")
+    private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "default_hierarchy")
+    private AmpTheme defaultHierarchy;
+    @Transient
     private static final int LEVEL_0 = 0;
+    @Transient
+
     private static final int LEVEL_1 = 1;
+    @Transient
+
     private static final int LEVEL_2 = 2;
+    @Transient
+
     private static final int LEVEL_3 = 3;
+    @Transient
+
     private static final int LEVEL_4 = 4;
+    @Transient
+
     private static final int LEVEL_5 = 5;
+    @Transient
+
     private static final int LEVEL_6 = 6;
+    @Transient
+
     private static final int LEVEL_7 = 7;
+    @Transient
+
     private static final int LEVEL_8 = 8;
+    @Transient
+
 
     private static final Map<Integer, String> NATIONAL_PLANNING_OBJECTIVES_COLUMNS_BY_LEVEL =
             new ImmutableMap.Builder<Integer, String>()
@@ -111,10 +147,7 @@ public class AmpActivityProgramSettings implements Serializable, Identifiable {
                     .put(ProgramUtil.INDIRECT_PRIMARY_PROGRAM, INDIRECT_PRIMARY_PROGRAM_COLUMNS_BY_LEVEL)
                     .build();
 
-        private AmpTheme defaultHierarchy;
-        private boolean allowMultiple;
-        private Long ampProgramSettingsId;
-        private String name;
+
         public AmpTheme getDefaultHierarchy() {
                 return defaultHierarchy;
         }

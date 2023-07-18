@@ -47,32 +47,41 @@ const LeftSection: React.FC<LeftSectionProps> = (props) => {
   // @ts-ignore
   return (
     <div>
-      {programConfigurationReducer.loading ? <div className="loading">Loading...</div> :
-        <IndicatorByProgram
-          translations={translations}
-          programConfiguration={programConfigurationReducer.data}
-          setLevel1Child={setLevel1Child}
-          selectedConfiguration={selectedConfiguration}
-          setSelectedConfiguration={setSelectedConfiguration}
-          level1Children={level1Children}
-          setLevel1Children={setLevel1Children}
-          level1Child={level1Child}
-          filters={filters}
-        />
-      }
+      <div style={{
+        minHeight: '350px'
+      }}>
+        {programConfigurationReducer.loading ? <div className="loading">Loading...</div> :
+            <IndicatorByProgram
+                translations={translations}
+                programConfiguration={programConfigurationReducer.data}
+                setLevel1Child={setLevel1Child}
+                selectedConfiguration={selectedConfiguration}
+                setSelectedConfiguration={setSelectedConfiguration}
+                level1Children={level1Children}
+                setLevel1Children={setLevel1Children}
+                level1Child={level1Child}
+                filters={filters}
+            />
+        }
+      </div>
 
-      {(!level1Child) ? <div className="loading">Loading...</div> :
-      (
-          new Array(numberOfIndicators).fill(0).map((_, index) => {
-            return (
-                <ProgramGroupedByIndicator
-                    translations={translations}
-                    level1Child={level1Child}
-                    filters={filters}/>
+      <div style={{
+        minHeight: '350px'
+      }}>
+        {(level1Child) &&
+            (
+                new Array(numberOfIndicators).fill(0).map((_, index) => {
+                  return (
+                      <ProgramGroupedByIndicator
+                          translations={translations}
+                          level1Child={level1Child}
+                          filters={filters}/>
+                  )
+                })
             )
-            })
-      )
-      }
+        }
+      </div>
+
 
       <Row md={12} style={{
         display: 'flex',

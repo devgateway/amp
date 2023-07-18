@@ -140,7 +140,7 @@ const ProgramGroupedByIndicator: React.FC<ProgramGroupedByIndicatorProps> = (pro
                         }}>{selectedIndicatorName || ' '}</div>
                     </Col>
                 </Row>
-                { indicatorReportReducer.loading ? <div className="loading">Loading...</div> : (
+                { !indicatorReportReducer.loading && (
                 <Row style={{
                     paddingLeft: -10
                 }}>

@@ -5,21 +5,32 @@ import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "AMP_THEME_MAPPING")
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 /**
  * @author Viorel Chihai
  */
 public class AmpThemeMapping {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_theme_mapping_seq_gen")
+    @SequenceGenerator(name = "amp_theme_mapping_seq_gen", sequenceName = "AMP_THEME_MAPPING_SEQ", allocationSize = 1)
+    @Column(name = "id")
     @JsonIgnore
     private Long id;
-
+     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "src_theme_id", nullable = false, unique = true, referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_amp_theme_mapping_src_theme"))
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "ampThemeId",
             resolver = EntityResolver.class, scope = AmpTheme.class)
     @JsonIdentityReference(alwaysAsId = true)
     @JsonProperty("src-program")
     private AmpTheme srcTheme;
-
+     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "dst_theme_id", nullable = false, unique = true, referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_amp_theme_mapping_dst_theme"))
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "ampThemeId",
             resolver = EntityResolver.class, scope = AmpTheme.class)
     @JsonIdentityReference(alwaysAsId = true)

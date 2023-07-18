@@ -4,16 +4,39 @@ import java.io.Serializable;
 import java.util.Date;
 
 import org.digijava.module.aim.util.FeaturesUtil;
+import java.util.Date;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "AMP_THEME_INDICATOR_VALUE")
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Deprecated
 public class AmpThemeIndicatorValue implements Comparable, Serializable 
 {
+
+     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_theme_ind_val_seq_gen")
+    @SequenceGenerator(name = "amp_theme_ind_val_seq_gen", sequenceName = "AMP_THEME_IND_ID_VAL_seq", allocationSize = 1)
+    @Column(name = "amp_theme_ind_val_id")
     private Long ampThemeIndValId;
-    private int valueType;
+
+    @Column(name = "value_type")
+    private Integer valueType;
+
+    @Column(name = "value_amount")
     private Double valueAmount;
+
+    @Column(name = "creation_date")
     private Date creationDate;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "theme_indicator_id")
     private AmpThemeIndicators themeIndicatorId;
-    private AmpIndicator indicatorId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "indicator_id")
+ 
     /**
      * @return Returns the ampThemeIndValId.
      */

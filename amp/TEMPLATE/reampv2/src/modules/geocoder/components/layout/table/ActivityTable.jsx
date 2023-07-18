@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import BootstrapTable from "react-bootstrap-table-next";
-import paginationFactory from 'react-bootstrap-table2-paginator';
+import BootstrapTable from "@musicstory/react-bootstrap-table-next";
+import paginationFactory from '@musicstory/react-bootstrap-table2-paginator';
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
-import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
+import filterFactory, { textFilter } from '@musicstory/react-bootstrap-table2-filter';
 import Tooltip from "react-bootstrap/Tooltip";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 

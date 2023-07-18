@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
-import BootstrapTable from "react-bootstrap-table-next";
-import paginationFactory from 'react-bootstrap-table2-paginator';
+import BootstrapTable from "@musicstory/react-bootstrap-table-next";
+import paginationFactory from '@musicstory/react-bootstrap-table2-paginator';
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import GeocodingActionColumn from "./GeocodingActionColumn";
-import filterFactory, {textFilter} from 'react-bootstrap-table2-filter';
+import filterFactory, {textFilter} from '@musicstory/react-bootstrap-table2-filter';
 
 import './table.css';
 import Locations from "./Locations";
@@ -43,7 +43,7 @@ class GeocodingTable extends Component {
     }
 
     existLocationsInGeocoding = () => {
-        return this.props.activities.some(activity => activity.status === 'ERROR' 
+        return this.props.activities.some(activity => activity.status === 'ERROR'
                                           || (activity.locations.length > 0 && activity.status !== 'SAVED'));
     }
 

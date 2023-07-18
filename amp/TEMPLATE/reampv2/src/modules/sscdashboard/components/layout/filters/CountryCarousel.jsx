@@ -1,5 +1,5 @@
 import React, { Component, Suspense } from 'react';
-import InfiniteCarousel from 'react-leaf-carousel';
+import InfiniteCarousel from '@tmugo/react-infinite-carousel';
 import EllipsisText from 'react-ellipsis-text';
 import PropTypes from 'prop-types';
 import * as Utils from '../../../utils/Utils';

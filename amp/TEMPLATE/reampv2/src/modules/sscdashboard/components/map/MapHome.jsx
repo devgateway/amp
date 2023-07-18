@@ -3,7 +3,7 @@ import {
   Map, TileLayer, CircleMarker, Popup, ZoomControl
 } from 'react-leaflet';
 import * as L from 'leaflet';
-import Control from 'react-leaflet-control';
+import Control from 'react-leaflet-custom-control';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';

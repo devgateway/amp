@@ -5,7 +5,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 
 
 const MeDashboardHome = (props: any) => {
-  const { filters } = props;
+  const { filters, downloadImage } = props;
 
   return (
       <Container style={{
@@ -29,7 +29,7 @@ const MeDashboardHome = (props: any) => {
             </span>
           </Col>
         </Row>
-        <MainDashboardContainer filters={filters} />
+        <MainDashboardContainer filters={filters} downloadImage={downloadImage} />
       </Container>
 
   );

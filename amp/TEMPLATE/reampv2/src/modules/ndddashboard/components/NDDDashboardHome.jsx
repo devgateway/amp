@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react';
-import { Col, Container, Row, Nav } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { NDDTranslationContext } from './StartUp';
-import MainDashboardContainer from './MainDashboardContainer';
 import HeaderContainer from './HeaderContainer';
 import { callReport, callTopReport, clearTopReport } from '../actions/callReports';
 import { CURRENCY_CODE, DIRECT, FUNDING_TYPE } from '../utils/constants';
@@ -12,14 +11,12 @@ import loadDashboardSettings from '../actions/loadDashboardSettings';
 import { getMappings } from '../actions/getMappings';
 import { DST_PROGRAM, SRC_PROGRAM } from '../../admin/ndd/constants/Constants';
 import { getSharedData } from '../actions/getSharedData';
-import PrintDummy from '../../sscdashboard/utils/PrintDummy';
+import NDDDashboardTabs from './NDDDashboardTabs';
 import { printChart } from '../../sscdashboard/utils/PrintUtils';
 import './print.css';
 import { removeFilter } from '../utils/Utils';
 import { SRC_DIRECT } from './charts/FundingByYearChart';
 import queryString from 'query-string';
-import { Tab } from 'react-bootstrap';
-import MeDashboardContainer from '../medashboard';
 
 const NDDDashboardHome = (props) => {
   const {
@@ -49,7 +46,6 @@ const NDDDashboardHome = (props) => {
     embedded: !!params.embedded,
     fundingByYearSource: SRC_DIRECT
   });
-  const [currentTab, setCurrentTab] = React.useState('me');
 
   const getSharedDataOrResolve = (id) => {
     if (id) {
@@ -227,73 +223,42 @@ const NDDDashboardHome = (props) => {
 
   return (
     <Container>
-      <div className="row header" style={{ marginRight: '-30px', marginLeft: '-30px' }}>
+      <div className="row header" style={{marginRight: '-30px', marginLeft: '-30px'}}>
         {mapping && settings && globalSettings && selectedPrograms && !embedded ? (
-          <HeaderContainer
-            onApplySettings={onApplySettings}
-            onApplyFilters={onApplyFilters}
-            filters={filters}
-            globalSettings={globalSettings}
-            settings={settings}
-            fundingType={fundingType}
-            selectedPrograms={selectedPrograms}
-            dashboardId={dashboardId} />
+            <HeaderContainer
+                onApplySettings={onApplySettings}
+                onApplyFilters={onApplyFilters}
+                filters={filters}
+                globalSettings={globalSettings}
+                settings={settings}
+                fundingType={fundingType}
+                selectedPrograms={selectedPrograms}
+                dashboardId={dashboardId}/>
         ) : null}
       </div>
 
-      <Tab.Container
-        activeKey={currentTab}
-        onSelect={tab => setCurrentTab(tab)}
-        id="ndd-tabs"
-        defaultActiveKey="ndd">
-        <Col style={{
-          backgroundColor: '#f5f5f5',
-          paddingTop: 25,
-          borderRadius: 5,
-        }}>
-          <Row sm={3}>
-            <Nav variant="pills">
-              <Nav.Item>
-                <Nav.Link eventKey="ndd" title="NDD Dashboard">NDD Dashboard</Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link eventKey="me" title="Monitoring nd Evaluation Indicators">Monitoring and Evaluation Indicators</Nav.Link>
-              </Nav.Item>
-            </Nav>
-          </Row>
-          <Col md={12}>
-            <Tab.Content>
-              <Tab.Pane eventKey="ndd">
-                <MainDashboardContainer
-                  handleOuterChartClick={memoizedHandleChartClick}
-                  selectedDirectProgram={selectedDirectProgram}
-                  filters={filters}
-                  ndd={ndd}
-                  nddLoaded={nddLoaded}
-                  nddLoadingPending={nddLoadingPending}
-                  dashboardSettings={dashboardSettings}
-                  onChangeFundingType={onChangeFundingType}
-                  onChangeProgram={onChangeProgram}
-                  fundingType={fundingType}
-                  selectedPrograms={selectedPrograms}
-                  mapping={mapping}
-                  settings={settings}
-                  globalSettings={globalSettings}
-                  noIndirectMapping={noIndirectMapping}
-                  downloadImage={memoizedDownloadImage}
-                  embedded={embedded}
-                  onChangeSource={memoizedOnChangeSource}
-                  fundingByYearSource={fundingByYearSource}
-                />
-                <PrintDummy />
-              </Tab.Pane>
-              <Tab.Pane eventKey="me">
-                <MeDashboardContainer filters={filters} />
-              </Tab.Pane>
-            </Tab.Content>
-          </Col>
-        </Col>
-      </Tab.Container>
+      <NDDDashboardTabs
+          handleOuterChartClick={memoizedHandleChartClick}
+          selectedDirectProgram={selectedDirectProgram}
+          filters={filters}
+          ndd={ndd}
+          nddLoaded={nddLoaded}
+          nddLoadingPending={nddLoadingPending}
+          dashboardSettings={dashboardSettings}
+          onChangeFundingType={onChangeFundingType}
+          onChangeProgram={onChangeProgram}
+          fundingType={fundingType}
+          selectedPrograms={selectedPrograms}
+          mapping={mapping}
+          settings={settings}
+          globalSettings={globalSettings}
+          noIndirectMapping={noIndirectMapping}
+          downloadImage={memoizedDownloadImage}
+          embedded={embedded}
+          onChangeSource={memoizedOnChangeSource}
+          fundingByYearSource={fundingByYearSource}
+          translations={translations}
+      />
     </Container>
   );
 }

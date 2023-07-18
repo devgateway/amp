@@ -6,6 +6,7 @@ import fetchTranslations from '../../../utils/actions/fetchTranslations';
 import { fetchProgramConfiguration }  from '../medashboard/reducers/fetchProgramConfigurationReducer';
 import { Loading } from '../../../utils/components/Loading';
 import defaultTrnPack from '../config/initialTranslations.json';
+import {fetchFm} from "../medashboard/reducers/fetchFmReducer";
 
 export const NDDTranslationContext = React.createContext({ translations: defaultTrnPack });
 
@@ -14,17 +15,18 @@ export const NDDTranslationContext = React.createContext({ translations: default
  * TODO check if we should abstract it to a Load Translations component to avoid copy ^
  */
 const Startup = (props) => {
-  const { translationPending, translations, _fetchTranslations, programConfigurationPending } = props;
+  const { translationPending, translations, _fetchTranslations, programConfigurationPending, fmReducerPending } = props;
   const dispatch = useDispatch();
 
   useEffect(() => {
     _fetchTranslations(defaultTrnPack);
 
     dispatch(fetchProgramConfiguration());
+    dispatch(fetchFm());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (translationPending || programConfigurationPending) {
+  if (translationPending || programConfigurationPending || fmReducerPending) {
     return (<Loading />);
   } else {
     document.title = translations['amp.ndd.dashboard:page-title'];
@@ -40,6 +42,7 @@ const mapStateToProps = state => ({
   translationPending: state.translationsReducer.pending,
   translations: state.translationsReducer.translations,
   programConfigurationPending: state.programConfigurationReducer.pending,
+  fmReducerPending: state.fetchFmReducer.loading,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

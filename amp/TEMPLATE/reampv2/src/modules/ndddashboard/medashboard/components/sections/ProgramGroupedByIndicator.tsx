@@ -23,10 +23,11 @@ const options = [
 interface ProgramGroupedByIndicatorProps extends ComponentProps {
     level1Child: number | null;
     filters: any;
+    downloadImage: any;
 }
 
 const ProgramGroupedByIndicator: React.FC<ProgramGroupedByIndicatorProps> = (props) => {
-    const { translations, level1Child, filters } = props;
+    const { translations, level1Child, filters, downloadImage } = props;
     const dispatch = useDispatch();
     const indicatorsByProgramReducer = useSelector((state: any) => state.indicatorsByProgramReducer);
     const indicatorReportReducer = useSelector((state: any) => state.indicatorReportReducer);
@@ -113,7 +114,7 @@ const ProgramGroupedByIndicator: React.FC<ProgramGroupedByIndicatorProps> = (pro
                     <Col md={1} style={{
                         padding: 0
                     }}>
-                        <div className={styles.download_btn_wrapper}>
+                        <div className={styles.download_btn_wrapper} onClick={downloadImage}>
                             <span className="glyphicon glyphicon-cloud-download" />
                         </div>
                     </Col>

@@ -63,13 +63,10 @@ export interface Values {
     target: YearValue;
 }
 
-export interface ReportData {
-    progress: number;
-    values:   Values;
+export interface FmColumn {
+    [key: string]: string[];
 }
 
-export enum ValuesType {
-    Baseline = "Baseline",
-    Target = "Target",
-    Current = "Current",
+export interface  FmSettings {
+    "fm-settings": FmColumn;
 }

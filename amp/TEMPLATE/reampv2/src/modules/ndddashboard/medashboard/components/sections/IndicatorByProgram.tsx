@@ -17,6 +17,7 @@ interface IndicatorByProgramProps extends ComponentProps {
     selectedConfiguration: number | null;
     setSelectedConfiguration: React.Dispatch<React.SetStateAction<number | null>>;
     filters: any;
+    downloadImage: any;
 }
 
 const IndicatorByProgram: React.FC<IndicatorByProgramProps> = (props) => {
@@ -28,7 +29,8 @@ const IndicatorByProgram: React.FC<IndicatorByProgramProps> = (props) => {
         level1Children,
         selectedConfiguration,
         setSelectedConfiguration,
-        filters
+        filters,
+        downloadImage
     } = props;
     const dispatch = useDispatch();
 
@@ -104,7 +106,7 @@ const IndicatorByProgram: React.FC<IndicatorByProgramProps> = (props) => {
                         padding: 0,
                         cursor: 'pointer'
                     }}>
-                        <div className={styles.download_btn_wrapper}>
+                        <div className={styles.download_btn_wrapper} onClick={downloadImage}>
                             <span className="glyphicon glyphicon-cloud-download" />
                         </div>
                     </Col>

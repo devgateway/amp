@@ -1,4 +1,4 @@
-import { ProgramConfig, ProgramConfigChild } from '../types';
+import {FmSettings, ProgramConfig, ProgramConfigChild} from '../types';
 
 export const extractLv1Children = (program: ProgramConfig) => {
     const { children } = program;
@@ -16,5 +16,17 @@ export const extractLv1Children = (program: ProgramConfig) => {
 
 export const findProgramConfig = (id: number, data: ProgramConfig[]) => {
     return data.find((program) => program.ampProgramSettingsId === id);
+}
 
+export const extractFmColumnsData = (data: FmSettings, columnName: string) => {
+    const { "fm-settings": fmSettings } = data;
+    const fmColumns = Object.keys(fmSettings);
+
+    const findProgressTrackingColumn = fmColumns.find((column) => column === columnName);
+
+    if (!findProgressTrackingColumn) {
+        return [];
+    }
+
+    return fmSettings[columnName];
 }

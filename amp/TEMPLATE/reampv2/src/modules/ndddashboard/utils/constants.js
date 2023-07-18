@@ -68,7 +68,10 @@ export const BASE_VALUE_COLOR = '#008efa'
 export const CURRENT_VALUE_COLOR = '#ff9b29'
 export const TARGET_VALUE_COLOR = '#5d9d2f'
 
+export const PROGRESS_TRACKING_DASHBOARDS = 'PROGRESS TRACKING DASHBOARDS'
+
 export const REST_PROGRAM_CONFIGURATION = '/rest/dashboard/programConfiguration';
+export const REST_FM_SETTINGS = '/rest/common/fm/flat';
 export const REST_SECTORS = '/rest/dashboard/sectors';
 export const REST_INDICATORS = '/rest/dashboard/me/indicators';
 export const REST_INDICATORS_BY_PROGRAM = '/rest/dashboard/me/indicatorsByProgram';

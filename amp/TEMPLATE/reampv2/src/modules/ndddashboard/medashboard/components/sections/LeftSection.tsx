@@ -10,11 +10,12 @@ import { findProgramConfig, extractLv1Children } from '../../utils/data';
 
 interface LeftSectionProps {
   translations: DefaultTranslations,
-  filters: any
+  filters: any,
+  downloadImage: any,
 }
 
 const LeftSection: React.FC<LeftSectionProps> = (props) => {
-  const { translations, filters } = props;
+  const { translations, filters, downloadImage } = props;
 
   const programConfigurationReducer = useSelector((state: any) => state.programConfigurationReducer);
 
@@ -52,6 +53,7 @@ const LeftSection: React.FC<LeftSectionProps> = (props) => {
           setLevel1Children={setLevel1Children}
           level1Child={level1Child}
           filters={filters}
+          downloadImage={downloadImage}
         />
       }
 
@@ -60,6 +62,7 @@ const LeftSection: React.FC<LeftSectionProps> = (props) => {
           translations={translations}
           level1Child={level1Child}
           filters={filters}
+          downloadImage={downloadImage}
         />
       }
 

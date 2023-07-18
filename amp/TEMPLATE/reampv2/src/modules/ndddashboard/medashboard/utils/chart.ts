@@ -1,4 +1,5 @@
 import { ActualValue, YearValues } from "../types";
+import {printChart} from "../../../sscdashboard/utils/PrintUtils";
 
 interface GaugeUtils {
     baseValue: number,
@@ -51,6 +52,10 @@ class ChartUtils {
         }, { actualValue: 0, targetValue: 0, baseValue: 0 });
 
         return aggregateValues;
+    }
+
+    public static downloadChartImage = (title: string, containerId: string) => {
+        printChart(title, containerId, [], 'png', false, 'print-simple-dummy-container', false);
     }
 }
 

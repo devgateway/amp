@@ -2,10 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import MainDashboardContainer from './components/MainDashboardContainer';
 import { Container, Row, Col } from 'react-bootstrap';
+import PrintDummy from "../../sscdashboard/utils/PrintDummy";
 
 
 const MeDashboardHome = (props: any) => {
-  const { filters, downloadImage } = props;
+  const { filters } = props;
 
   return (
       <Container style={{
@@ -29,7 +30,8 @@ const MeDashboardHome = (props: any) => {
             </span>
           </Col>
         </Row>
-        <MainDashboardContainer filters={filters} downloadImage={downloadImage} />
+        <MainDashboardContainer filters={filters} />
+        <PrintDummy/>
       </Container>
 
   );

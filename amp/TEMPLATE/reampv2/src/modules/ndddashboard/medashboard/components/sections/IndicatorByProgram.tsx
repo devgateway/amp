@@ -17,7 +17,6 @@ interface IndicatorByProgramProps extends ComponentProps {
     selectedConfiguration: number | null;
     setSelectedConfiguration: React.Dispatch<React.SetStateAction<number | null>>;
     filters: any;
-    downloadImage: any;
 }
 
 const IndicatorByProgram: React.FC<IndicatorByProgramProps> = (props) => {
@@ -29,8 +28,7 @@ const IndicatorByProgram: React.FC<IndicatorByProgramProps> = (props) => {
         level1Children,
         selectedConfiguration,
         setSelectedConfiguration,
-        filters,
-        downloadImage
+        filters
     } = props;
     const dispatch = useDispatch();
 
@@ -69,6 +67,7 @@ const IndicatorByProgram: React.FC<IndicatorByProgramProps> = (props) => {
                 borderBottom: '1px solid #ddd',
                 minHeight: 500
             }}>
+                <div id="indicators-by-program">
                 <Row md={12} style={{
                     width: '100%',
                     marginLeft: 0,
@@ -76,6 +75,7 @@ const IndicatorByProgram: React.FC<IndicatorByProgramProps> = (props) => {
                     alignItems: 'center',
                     justifyContent: 'center',
                 }}>
+
                     <Col md={11} style={{
                         paddingRight: 10
                     }}>
@@ -106,11 +106,13 @@ const IndicatorByProgram: React.FC<IndicatorByProgramProps> = (props) => {
                         padding: 0,
                         cursor: 'pointer'
                     }}>
-                        <div className={styles.download_btn_wrapper} onClick={downloadImage}>
+                        <div className={styles.download_btn_wrapper} onClick={() => ChartUtils.downloadChartImage(
+                            `${translations['amp.ndd.dashboard:me-dashboard']}-programs`, 'indicators-by-program')}>
                             <span className="glyphicon glyphicon-cloud-download" />
                         </div>
                     </Col>
                 </Row>
+
                 <Row style={{
                     width: '100%',
                     paddingBottom: 20,
@@ -118,7 +120,7 @@ const IndicatorByProgram: React.FC<IndicatorByProgramProps> = (props) => {
                     borderBottom: '1px solid #e5e5e5',
 
                 }}>
-                    <Col md={11} style={{
+                    <Col md={11}  style={{
                         paddingRight: 10
                     }}>
                         {level1Children.length === 0 ? <option>Loading...</option> : (
@@ -133,7 +135,8 @@ const IndicatorByProgram: React.FC<IndicatorByProgramProps> = (props) => {
                         <span className="cheat-lineheight" />
                     </Col>
                 </Row>
-                { (!programReportReducer.loading && report) &&
+
+                { (!programReportReducer.loading) &&
                 <Row style={{
                     paddingLeft: -10
                 }}>
@@ -149,12 +152,13 @@ const IndicatorByProgram: React.FC<IndicatorByProgramProps> = (props) => {
                         }}>
                             <BarChart
                                 translations={translations}
-                                data={report}
+                                data={report ? report : []}
                                 title={translations['amp.ndd.dashboard:me-program-progress']} />
                         </div>
                     </Col>
                 </Row>
                 }
+                </div>
             </Col>
         </div>
     )

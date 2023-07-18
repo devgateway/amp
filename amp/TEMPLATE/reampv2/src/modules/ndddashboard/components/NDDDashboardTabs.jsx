@@ -101,8 +101,7 @@ const NDDDashboardTabs = (props)  => {
                             <Tab.Pane eventKey="me">
                                 <Suspense fallback={<div className="loading" />}>
                                     <MeDashboardContainer
-                                        downloadImage={props.downloadImage}
-                                        ilters={props.filters}/>
+                                        filters={props.filters}/>
                                 </Suspense>
                             </Tab.Pane>
                         )

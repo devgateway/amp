@@ -23,11 +23,10 @@ const options = [
 interface ProgramGroupedByIndicatorProps extends ComponentProps {
     level1Child: number | null;
     filters: any;
-    downloadImage: any;
 }
 
 const ProgramGroupedByIndicator: React.FC<ProgramGroupedByIndicatorProps> = (props) => {
-    const { translations, level1Child, filters, downloadImage } = props;
+    const { translations, level1Child, filters } = props;
     const dispatch = useDispatch();
     const indicatorsByProgramReducer = useSelector((state: any) => state.indicatorsByProgramReducer);
     const indicatorReportReducer = useSelector((state: any) => state.indicatorReportReducer);
@@ -72,7 +71,7 @@ const ProgramGroupedByIndicator: React.FC<ProgramGroupedByIndicatorProps> = (pro
 
     return (
         <div>
-            <Col md={12} style={{
+            <Col md={12} id="program-grouped-by-indicators" style={{
                 borderBottom: '1px solid #ddd',
             }}>
                 <Row md={12} style={{
@@ -112,13 +111,16 @@ const ProgramGroupedByIndicator: React.FC<ProgramGroupedByIndicatorProps> = (pro
                         <span className="cheat-lineheight" />
                     </Col>
                     <Col md={1} style={{
-                        padding: 0
+                        padding: 0,
+                        cursor: 'pointer'
                     }}>
-                        <div className={styles.download_btn_wrapper} onClick={downloadImage}>
+                        <div className={styles.download_btn_wrapper} onClick={() => ChartUtils.downloadChartImage(
+                            `${translations['amp.ndd.dashboard:me-dashboard']}-indicators`, 'program-grouped-by-indicators')}>
                             <span className="glyphicon glyphicon-cloud-download" />
                         </div>
                     </Col>
                 </Row>
+
                 <Row style={{
                     width: '100%',
                     paddingBottom: 4,

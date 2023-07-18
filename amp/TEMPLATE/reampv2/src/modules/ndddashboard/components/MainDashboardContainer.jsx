@@ -15,6 +15,7 @@ import { NDDTranslationContext } from './StartUp';
 import TopChartContainer from './TopChartContainer';
 import { SELECTED_COLORS } from '../utils/constants';
 import { ALL_PROGRAMS } from '../../admin/ndd/constants/Constants';
+import PrintDummy from "../../sscdashboard/utils/PrintDummy";
 
 const MainDashboardContainer = (props) => {
   const {
@@ -197,6 +198,7 @@ const MainDashboardContainer = (props) => {
                 {/* </div> */}
               </Col>
             </Row>
+            <PrintDummy />
           </>
         ) : null}
       </>

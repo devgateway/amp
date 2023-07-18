@@ -7,27 +7,55 @@ import java.io.Serializable;
 import java.util.Set;
 
 import org.dgfoundation.amp.visibility.AmpVisibilityRuleType;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
+@Entity
+@Table(name = "AMP_VISIBILITY_RULE")
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 /**
  * Defines visibility rule of a given type (ANY/ALL) that can consist of other rules or fields, features, modules, etc  
  * @author Nadejda Mandrescu
  */
 public class AmpVisibilityRule implements Serializable {
+
+     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_visibility_rule_seq_gen")
+    @SequenceGenerator(name = "amp_visibility_rule_seq_gen", sequenceName = "AMP_VISIBILITY_RULE_seq", allocationSize = 1)
+    @Column(name = "id")
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PARENT_ID", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_amp_visibility_rule_parent"))
     private AmpVisibilityRule parent;
-    /** A set of children rules*/
-    private Set<AmpVisibilityRule> children;
-    
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "RULE_TYPE")
     private AmpVisibilityRuleType type;
-    
-    /**
-     * Only leaf child rule can have actual visibility rules. 
-     * It is not allowed to mix children rules with actual visibility rules. 
-     */
-    /** */
-    private Set<AmpFieldsVisibility> fields;
-    private Set<AmpFeaturesVisibility> features;
-    private Set<AmpModulesVisibility> modules;
+
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Set<AmpVisibilityRule> children = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "AMP_VISIBILITY_RULE_AMP_FIELDS_VISIBILITY",
+            joinColumns = @JoinColumn(name = "RULE_ID"),
+            inverseJoinColumns = @JoinColumn(name = "FIELD_ID"))
+    private Set<AmpFieldsVisibility> fields = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "AMP_VISIBILITY_RULE_AMP_FEATURES_VISIBILITY",
+            joinColumns = @JoinColumn(name = "RULE_ID"),
+            inverseJoinColumns = @JoinColumn(name = "FEATURE_ID"))
+    private Set<AmpFeaturesVisibility> features = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "AMP_VISIBILITY_RULE_AMP_MODULES_VISIBILITY",
+            joinColumns = @JoinColumn(name = "RULE_ID"),
+            inverseJoinColumns = @JoinColumn(name = "MODULE_ID"))
+    private Set<AmpModulesVisibility> modules = new HashSet<>();
+
     
     /* any other dependency can be defined here, 
      * but appropriate logic should be added for it to process the overall rule status

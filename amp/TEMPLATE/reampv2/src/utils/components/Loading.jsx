@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const Loading = () => (
+const Loading = () => (
   <div className="jumbotron">
     <div className="progress">
       <div
@@ -15,3 +15,6 @@ export const Loading = () => (
     </div>
   </div>
 );
+
+// eslint-disable-next-line import/prefer-default-export
+export { Loading };

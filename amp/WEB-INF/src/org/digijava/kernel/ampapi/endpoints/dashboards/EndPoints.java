@@ -345,15 +345,6 @@ public class EndPoints {
         return new MeService().getIndicatorYearValuesByIndicatorId(id, params);
     }
 
-    @POST
-    @Path("/me/indicatorProgressReport/{id}")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = "indicatorProgressReport")
-    @ApiOperation("")
-    public final IndicatorYearValues getIndicatorProgressReport(@PathParam("id") Long indicatorId, SettingsAndFiltersParameters params) {
-        return new MeService().generateIndicatorProgressReport(indicatorId, params);
-    }
-
     @GET
     @Path("/me/indicatorsBySector/{id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -362,14 +353,4 @@ public class EndPoints {
     public final List<MEIndicatorDTO> getIndicatorsBySector(@PathParam("id") Long sectorId) {
         return new MeService().getIndicatorsBySector(sectorId);
     }
-
-    @POST
-    @Path("/me/programProgressReport/{id}")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(id = "programProgressReport")
-    @ApiOperation("")
-    public List<IndicatorYearValues> getProgramProgressReport(@PathParam("id") Long programId, SettingsAndFiltersParameters params) {
-        return new MeService().getIndicatorValuesByProgramId(programId, params);
-    }
-
 }

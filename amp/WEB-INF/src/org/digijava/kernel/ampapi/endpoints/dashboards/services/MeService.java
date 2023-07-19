@@ -103,65 +103,6 @@ public class MeService {
 
     }
 
-
-    public IndicatorYearValues generateIndicatorProgressReport (Long indicatorId,
-            SettingsAndFiltersParameters params) {
-        Session session = PersistenceManager.getSession();
-        AmpIndicator indicator = (AmpIndicator) session.get(AmpIndicator.class, indicatorId);
-
-        Map<Long, List<YearValue>> indicatorsWithYearValues = getAllIndicatorYearValuesWithActualValues(params);
-        return getIndicatorYearValues(indicator, indicatorsWithYearValues);
-    }
-
-    public ProgressReportDTO generateProgramProgressReport (
-            SettingsAndFiltersParameters params) {
-        AmpReportFilters filters = DashboardUtils.getFiltersFromParams(params.getFilters());
-        ReportMeasure measures = DashboardUtils.getMeasureFromParams(params.getSettings());
-
-        Long programId = Long.valueOf(params.getSettings().get("programId").toString());
-        int yearsCount = Integer.valueOf(params.getSettings().get("yearsCount").toString());
-
-        if (yearsCount < 5) {
-            yearsCount = 5;
-        }
-
-        AmpTheme program = ProgramUtil.getThemeById(programId);
-        Set<IndicatorTheme> programIndicators =  program.getIndicators();
-
-        ProgressValue baseValue = new ProgressValue();
-        ProgressValue actualValue = new ProgressValue();
-        ProgressValue targetValue = new ProgressValue();
-
-        programIndicators.forEach(indicator -> {
-            indicator.getValues().forEach(indValue -> {
-                if (indValue != null) {
-                    String year = getYearString(indValue.getValueDate());
-                    int valueType = indValue.getValueType();
-
-                    if (valueType == AmpIndicatorValue.BASE) {
-                        computeIndValuesPerYear(baseValue, indValue, year);
-                    } else if (valueType == AmpIndicatorValue.ACTUAL) {
-                        computeIndValuesPerYear(actualValue, indValue, year);
-                    } else if (valueType == AmpIndicatorValue.TARGET) {
-                        computeIndValuesPerYear(targetValue, indValue, year);
-                    }
-                }
-            });
-        });
-
-        return new ProgressReportDTO(baseValue, actualValue, targetValue);
-    }
-
-    private static void computeIndValuesPerYear(ProgressValue baseValue,
-                                   AmpIndicatorValue indValue, String year) {
-        if (baseValue.getAmountsByYear().containsKey(year)) {
-            baseValue.getAmountsByYear().put(
-                    year, baseValue.getAmountsByYear().get(year) + indValue.getValue());
-        } else {
-            baseValue.getAmountsByYear().put(year, indValue.getValue());
-        }
-    }
-
     public IndicatorYearValues getIndicatorYearValuesByIndicatorId(Long indicatorId,
                                                                    SettingsAndFiltersParameters params) {
         AmpIndicator existingIndicator = getAllAmpIndicators().stream()
@@ -169,13 +110,19 @@ public class MeService {
                 .findFirst()
                 .orElse(null);
 
+        int yearsCount = Integer.valueOf(params.getSettings().get("yearCount").toString());
+
+        if (yearsCount < 5) {
+            yearsCount = 5;
+        }
+
         if (existingIndicator == null) {
             throw new ApiRuntimeException(NOT_FOUND,
                     ApiError.toError("Indicator with id " + indicatorId + " does not exist"));
         }
 
         Map<Long, List<YearValue>> indicatorsWithYearValues = getAllIndicatorYearValuesWithActualValues(params);
-        return getIndicatorYearValues(existingIndicator, indicatorsWithYearValues);
+        return getIndicatorYearValues(existingIndicator, indicatorsWithYearValues, yearsCount);
     }
 
     private IndicatorYearValues getIndicatorYearValues(final AmpIndicator indicator,
@@ -195,6 +142,32 @@ public class MeService {
 
         if (yearValues == null) {
             yearValues = Collections.emptyList();
+        }
+
+        return new IndicatorYearValues(indicator, baseValue, yearValues, targetValue);
+    }
+
+    private IndicatorYearValues getIndicatorYearValues(final AmpIndicator indicator,
+                                                       final Map<Long, List<YearValue>> indicatorsWithYearValues, final int yearsCount) {
+        BigDecimal baseValue = BigDecimal.ZERO;
+        BigDecimal targetValue = BigDecimal.ZERO;
+
+        if (indicator.getBaseValue() != null && indicator.getBaseValue().getValue() != null) {
+            baseValue = BigDecimal.valueOf(indicator.getBaseValue().getValue());
+        }
+
+        if (indicator.getTargetValue() != null && indicator.getTargetValue().getValue() != null) {
+            targetValue = BigDecimal.valueOf(indicator.getTargetValue().getValue());
+        }
+
+        List<YearValue> yearValues = indicatorsWithYearValues.get(indicator.getIndicatorId());
+
+        if (yearValues == null) {
+            yearValues = Collections.emptyList();
+        }
+
+        if (yearValues.size() > yearsCount) {
+            yearValues = yearValues.subList(0, yearsCount);
         }
 
         return new IndicatorYearValues(indicator, baseValue, yearValues, targetValue);
@@ -273,10 +246,5 @@ public class MeService {
         } catch (DgException e) {
             throw new RuntimeException("Failed to load indicators");
         }
-    }
-
-    private static String getYearString(Date date) {
-        int year = DateConversion.getYear(DateConversion.convertDateToString(date));
-        return Integer.toString(year);
     }
 }

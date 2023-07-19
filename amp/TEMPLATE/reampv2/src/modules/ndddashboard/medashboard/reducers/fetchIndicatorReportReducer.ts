@@ -19,13 +19,27 @@ const initialState: IndicatorReportInitialStateType = {
 
 export const fetchIndicatorReport = createAsyncThunk(
     `${REDUCER_NAME}/fetch`,
-    async ({ filters, id} : { filters: any, id: number }, { rejectWithValue }) => {
+    async ({ filters, id, yearCount, settings } : { filters: any, id: number, yearCount?: number, settings: any }, { rejectWithValue }) => {
+        let count = 5;
+
+        if (yearCount && yearCount > 5) {
+            count = yearCount;
+        }
+
+        const requestBody = {
+            ...filters,
+            settings: {
+                ...settings,
+                yearCount: count
+            }
+        }
+
         const response = await fetch(`${REST_INDICATOR_REPORT}/${id}`,{
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ ...filters }),
+            body: JSON.stringify({ ...requestBody }),
         });
         const data: YearValues = await response.json();
 

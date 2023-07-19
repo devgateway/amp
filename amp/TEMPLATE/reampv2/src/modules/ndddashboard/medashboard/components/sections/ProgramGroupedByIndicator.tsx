@@ -13,20 +13,21 @@ import { fetchIndicatorReport } from '../../reducers/fetchIndicatorReportReducer
 import ChartUtils from '../../utils/chart';
 
 const options = [
-    { value: 1, label: '1 Year' },
-    { value: 2, label: '2 Years' },
-    { value: 3, label: '3 Years' },
-    { value: 4, label: '4 Years' },
-    { value: 5, label: '5 Years' }
+    { value: 5, label: '5 Years' },
+    { value: 10, label: '10 Years' },
+    { value: 15, label: '15 Years' },
+    { value: 20, label: '20 Years' },
+    { value: 25, label: '25 Years' }
 ]
 
 interface ProgramGroupedByIndicatorProps extends ComponentProps {
     level1Child: number | null;
     filters: any;
+    settings: any;
 }
 
 const ProgramGroupedByIndicator: React.FC<ProgramGroupedByIndicatorProps> = (props) => {
-    const { translations, level1Child, filters } = props;
+    const { translations, level1Child, filters, settings } = props;
     const dispatch = useDispatch();
     const indicatorsByProgramReducer = useSelector((state: any) => state.indicatorsByProgramReducer);
     const indicatorReportReducer = useSelector((state: any) => state.indicatorReportReducer);
@@ -34,11 +35,27 @@ const ProgramGroupedByIndicator: React.FC<ProgramGroupedByIndicatorProps> = (pro
     const [selectedOption, setSelectedOption] = useState<IndicatorObjectType | null>(null);
     const [selectedIndicatorName, setSelectedIndicatorName] = useState<string | null>(null);
     const [progressValue, setProgressValue] = useState<number>(0);
+    const [yearCount, setYearCount] = useState<number>(5);
+
+    const calculateProgressValue = () => {
+        if (indicatorReportReducer.data) {
+            const actualValue = ChartUtils.getActualValueForCurrentYear(indicatorReportReducer.data.actualValues);
+            const progress = ChartUtils.generateGaugeValue({
+                baseValue: indicatorReportReducer.data.baseValue,
+                targetValue: indicatorReportReducer.data.targetValue,
+                actualValue: actualValue === 0 ? indicatorReportReducer.data.baseValue : actualValue
+            });
+
+            setProgressValue(progress);
+        }
+    }
 
     useEffect(() => {
         if (!selectedOption && indicatorsByProgramReducer.data.length > 0) {
             setSelectedOption(indicatorsByProgramReducer.data[0]);
             setSelectedIndicatorName(indicatorsByProgramReducer.data[0].name);
+            dispatch(fetchIndicatorReport({ filters, id: indicatorsByProgramReducer.data[0].id, yearCount, settings }));
+            calculateProgressValue();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -48,24 +65,17 @@ const ProgramGroupedByIndicator: React.FC<ProgramGroupedByIndicatorProps> = (pro
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [level1Child]);
 
-    useEffect(() => {
-        if (indicatorReportReducer.data) {
-            const actualValue = ChartUtils.getActualValueForCurrentYear(indicatorReportReducer.data.actualValues);
-            const progress = ChartUtils.generateGaugeValue({
-                baseValue: indicatorReportReducer.data.baseValue,
-                targetValue: actualValue,
-                actualValue: indicatorReportReducer.data.targetValue
-            });
 
-            setProgressValue(progress);
-        }
+    useEffect(() => {
+        calculateProgressValue();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [indicatorReportReducer.data]);
 
     const handleIndicatorChange = (selectedOption: any, indicatorName: string) => {
         setSelectedOption(selectedOption);
         setSelectedIndicatorName(indicatorName);
-        dispatch(fetchIndicatorReport({ filters, id: selectedOption }));
+        dispatch(fetchIndicatorReport({ filters, id: selectedOption, yearCount, settings }));
+        calculateProgressValue();
     }
 
 
@@ -186,6 +196,16 @@ const ProgramGroupedByIndicator: React.FC<ProgramGroupedByIndicatorProps> = (pro
                                     options={options}
                                     defaultValue={options[0]}
                                     isSearchable={false}
+                                    onChange={(option) => {
+                                        if  (option && selectedOption) {
+                                            setYearCount(option.value as any);
+                                            dispatch(fetchIndicatorReport({
+                                                filters,
+                                                id: selectedOption as any,
+                                                yearCount : option.value as number,
+                                                settings }));
+                                        }
+                                    }}
                                     components={{
                                         IndicatorSeparator: () => null,
                                     }}
@@ -216,7 +236,9 @@ const ProgramGroupedByIndicator: React.FC<ProgramGroupedByIndicatorProps> = (pro
                         </Row>
                     </Col>
                     <Col md={12}>
-                        <LineChart />
+                        {!indicatorReportReducer.loading && (
+                            <LineChart data={indicatorReportReducer.data}/>
+                        )}
                     </Col>
                 </Row>
             </Col>

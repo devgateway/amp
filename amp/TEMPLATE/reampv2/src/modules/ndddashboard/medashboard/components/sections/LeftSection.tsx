@@ -11,10 +11,11 @@ import { findProgramConfig, extractLv1Children } from '../../utils/data';
 interface LeftSectionProps {
   translations: DefaultTranslations,
   filters: any,
+  settings: any
 }
 
 const LeftSection: React.FC<LeftSectionProps> = (props) => {
-  const { translations, filters } = props;
+  const { translations, filters, settings } = props;
 
   const programConfigurationReducer = useSelector((state: any) => state.programConfigurationReducer);
 
@@ -61,6 +62,7 @@ const LeftSection: React.FC<LeftSectionProps> = (props) => {
                 setLevel1Children={setLevel1Children}
                 level1Child={level1Child}
                 filters={filters}
+                settings={settings}
             />
         }
       </div>
@@ -75,6 +77,8 @@ const LeftSection: React.FC<LeftSectionProps> = (props) => {
                       <ProgramGroupedByIndicator
                           translations={translations}
                           level1Child={level1Child}
+                          settings={settings}
+                          key={index}
                           filters={filters}/>
                   )
                 })

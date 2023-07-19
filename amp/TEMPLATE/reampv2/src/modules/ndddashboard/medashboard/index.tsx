@@ -4,9 +4,15 @@ import MainDashboardContainer from './components/MainDashboardContainer';
 import { Container, Row, Col } from 'react-bootstrap';
 import PrintDummy from "../../sscdashboard/utils/PrintDummy";
 
+interface MeDashboardHomeProps {
+  filters: any;
+  dashboardSettings?: any;
+  settings?: any;
+  globalSettings?: any;
+}
 
-const MeDashboardHome = (props: any) => {
-  const { filters } = props;
+const MeDashboardHome: React.FC<MeDashboardHomeProps> = (props) => {
+  const { filters, settings } = props;
 
   return (
       <Container style={{
@@ -30,7 +36,7 @@ const MeDashboardHome = (props: any) => {
             </span>
           </Col>
         </Row>
-        <MainDashboardContainer filters={filters} />
+        <MainDashboardContainer filters={filters} settings={settings} />
         <PrintDummy/>
       </Container>
 

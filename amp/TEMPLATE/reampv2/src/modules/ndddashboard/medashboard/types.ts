@@ -70,3 +70,12 @@ export interface FmColumn {
 export interface  FmSettings {
     "fm-settings": FmColumn;
 }
+
+export interface LineChartData {
+    id:    string;
+    color: string;
+    data: {
+        x: string;
+        y: number;
+    } [];
+}

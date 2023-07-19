@@ -19,13 +19,17 @@ const initialState: ProgressReportInitialStateType = {
 
 export const fetchProgramReport = createAsyncThunk(
     `${REDUCER_NAME}/fetch`,
-    async ({ filters, id} : { filters: any, id: number }, { rejectWithValue }) => {
+    async ({ filters, id, settings } : { filters: any, id: number, settings: any }, { rejectWithValue }) => {
+        const requestData = {
+            ...filters,
+            settings: settings
+        }
         const response = await fetch(`${REST_PROGRAM_PROGRESS_REPORT}/${id}`,{
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ ...filters }),
+            body: JSON.stringify({ ...requestData }),
         });
         const data: YearValues[] = await response.json();
 

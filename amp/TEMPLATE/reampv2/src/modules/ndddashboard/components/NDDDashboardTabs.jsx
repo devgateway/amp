@@ -101,6 +101,9 @@ const NDDDashboardTabs = (props)  => {
                             <Tab.Pane eventKey="me">
                                 <Suspense fallback={<div className="loading" />}>
                                     <MeDashboardContainer
+                                        dashboardSettings={props.dashboardSettings}
+                                        settings={props.settings}
+                                        globalSettings={props.globalSettings}
                                         filters={props.filters}/>
                                 </Suspense>
                             </Tab.Pane>

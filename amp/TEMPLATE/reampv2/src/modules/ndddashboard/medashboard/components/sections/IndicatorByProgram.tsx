@@ -17,6 +17,7 @@ interface IndicatorByProgramProps extends ComponentProps {
     selectedConfiguration: number | null;
     setSelectedConfiguration: React.Dispatch<React.SetStateAction<number | null>>;
     filters: any;
+    settings: any;
 }
 
 const IndicatorByProgram: React.FC<IndicatorByProgramProps> = (props) => {
@@ -28,7 +29,8 @@ const IndicatorByProgram: React.FC<IndicatorByProgramProps> = (props) => {
         level1Children,
         selectedConfiguration,
         setSelectedConfiguration,
-        filters
+        filters,
+        settings
     } = props;
     const dispatch = useDispatch();
 
@@ -43,7 +45,7 @@ const IndicatorByProgram: React.FC<IndicatorByProgramProps> = (props) => {
 
     useEffect(() => {
         if (level1Child) {
-            dispatch(fetchProgramReport({ filters, id: level1Child }));
+            dispatch(fetchProgramReport({ filters, id: level1Child, settings }));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [level1Child]);
@@ -59,7 +61,8 @@ const IndicatorByProgram: React.FC<IndicatorByProgramProps> = (props) => {
 
             setProgressValue(progress);
         }
-    }, [report]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [level1Child]);
 
     return (
         <div>

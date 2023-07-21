@@ -1406,31 +1406,41 @@ public class DbUtil {
             if (organisationContacts != null) {
                 // this will remove all organisation contact which are linked to
                 // this organisation
-                for (Iterator iterator = organisationContacts.iterator(); iterator.hasNext();) {
-                    AmpOrganisationContact ampOrganisationContact = (AmpOrganisationContact) iterator.next();
-                    if (org.getAmpOrgId() != null) {
-                        if (ampOrganisationContact.getId() != null) {
+                Iterator<AmpOrganisationContact> organisationContactIterator = organisationContacts.iterator();
+
+                while (organisationContactIterator.hasNext()) {
+                    AmpOrganisationContact ampOrganisationContact = organisationContactIterator.next();
+
+                    if(org.getAmpOrgId() != null) {
+                        if(ampOrganisationContact.getId() != null) {
                             // AmpContact
                             // cont=ampOrganisationContact.getContact();
-                            AmpOrganisationContact contToBeRemoved = (AmpOrganisationContact) sess
-                                    .get(AmpOrganisationContact.class, ampOrganisationContact.getId());
-                            if (contToBeRemoved != null) {
+                            AmpOrganisationContact contToBeRemoved =
+                                    (AmpOrganisationContact) sess
+                                            .get(AmpOrganisationContact.class,
+                                                    ampOrganisationContact.getId());
+                            if(contToBeRemoved != null) {
                                 AmpContact ampContact = contToBeRemoved.getContact();
                                 sess.delete(contToBeRemoved);
-                                ampContact.getOrganizationContacts().remove(contToBeRemoved);
+                                organisationContactIterator.remove();
+                                ampContact.getOrganizationContacts()
+                                        .remove(contToBeRemoved);
                                 sess.update(ampContact);
-                                org.getOrganizationContacts().remove(contToBeRemoved);
+
                             }
 
                         }
                     }
                 }
 
-                // now re-save all organisation contacts
-                for (AmpOrganisationContact organizationContact : organisationContacts) {
-                    // save or update contact
+                // Since you've modified the original set, need to get a new iterator
+                organisationContactIterator = organisationContacts.iterator();
+
+                while (organisationContactIterator.hasNext()) {
+                    AmpOrganisationContact organizationContact = organisationContactIterator.next();
                     AmpContact contact = organizationContact.getContact();
                     AmpContact ampContact = null;
+
                     if (contact.getId() != null) { // contact already exists.
                         ampContact = (AmpContact) sess.get(AmpContact.class, contact.getId());
                         ampContact.setName(contact.getName());
@@ -1463,7 +1473,6 @@ public class DbUtil {
                     }
 
                     // link org to cont
-                    AmpOrganisationContact newOrgCont = new AmpOrganisationContact();
                     organizationContact.setOrganisation(org);
                     organizationContact.setPrimaryContact(organizationContact.getPrimaryContact());
                     if (ampContact != null) {
@@ -1472,7 +1481,6 @@ public class DbUtil {
                         organizationContact.setContact(contact);
                     }
                     sess.save(organizationContact);
-
                 }
             }
 

@@ -4,6 +4,7 @@
   "private": true,
   "proxy": "http://localhost:8080",
   "dependencies": {
+    "@devgateway/react-infinite-carousel": "^2.0.3",
     "@fortawesome/fontawesome-svg-core": "^1.2.30",
     "@fortawesome/free-solid-svg-icons": "^5.14.0",
     "@fortawesome/react-fontawesome": "^0.1.11",
@@ -12,6 +13,7 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
+    "babel-eslint": "^10.1.0",
     "bootstrap": "^4.5.3",
     "d3": "^5.16.0",
     "d3-format": "^2.0.0",
@@ -46,7 +48,6 @@
     "react-fontawesome": "^1.7.1",
     "react-highlight-words": "^0.17.0",
     "react-image": "^4.1.0",
-    "react-leaf-carousel": "github:devgateway/react-infinite-carousel#master",
     "react-leaflet": "^2.6.3",
     "react-leaflet-control": "^2.1.2",
     "react-plotly.js": "^2.4.0",

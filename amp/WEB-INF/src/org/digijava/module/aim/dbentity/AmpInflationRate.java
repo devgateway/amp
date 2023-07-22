@@ -43,7 +43,7 @@ public class AmpInflationRate implements Serializable, Comparable<AmpInflationRa
     private Double inflationRate;
 
     @ManyToOne
-    @JoinColumn(name = "currency_id", unique = true, nullable = false)
+    @JoinColumn(name = "amp_currency_id", unique = true, nullable = false)
     @NotNull
 
     private AmpCurrency currency;

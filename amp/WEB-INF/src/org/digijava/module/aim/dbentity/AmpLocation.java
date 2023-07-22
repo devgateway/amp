@@ -42,7 +42,7 @@ public class AmpLocation implements Serializable, Cloneable, Identifiable
     private String geoCode;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "location_id", referencedColumnName = "id")
+    @JoinColumn(name = "id", referencedColumnName = "id")
     private AmpCategoryValueLocations location;
 
     @ManyToOne(cascade = CascadeType.ALL)

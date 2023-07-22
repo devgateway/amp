@@ -23,7 +23,7 @@ public class AmpReportLog implements Serializable{
     private AmpReports report;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "amp_member_id", referencedColumnName = "amp_member_id")
+    @JoinColumn(name = "amp_team_mem_id", referencedColumnName = "amp_team_mem_id")
     private AmpTeamMember member;
 
     @Column(name = "last_time_shown")

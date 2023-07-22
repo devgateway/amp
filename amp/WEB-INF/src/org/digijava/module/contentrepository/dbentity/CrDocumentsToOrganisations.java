@@ -5,15 +5,33 @@ package org.digijava.module.contentrepository.dbentity;
 
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.contentrepository.helper.ObjectReferringDocument;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * @author Alex Gartner
  *
  */
+import javax.persistence.*;
+
+@Entity
+@Table(name = "CR_DOCUMENTS_TO_ORGANISATIONS")
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class CrDocumentsToOrganisations extends ObjectReferringDocument {
-    
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "amp_organisation_id")
     private AmpOrganisation ampOrganisation;
+
+    @Column(name = "document_uuid")
+    private String uuid;
+
     
     public CrDocumentsToOrganisations(){
         ;

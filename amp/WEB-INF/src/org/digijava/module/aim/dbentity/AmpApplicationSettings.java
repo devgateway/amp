@@ -57,7 +57,7 @@ public class AmpApplicationSettings implements Serializable {
     private AmpTeam team;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "currency_id")
+    @JoinColumn(name = "amp_currency_id")
     private AmpCurrency currency;
 
     @ManyToOne(fetch = FetchType.LAZY)

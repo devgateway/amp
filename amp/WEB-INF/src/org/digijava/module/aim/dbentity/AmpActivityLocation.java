@@ -44,7 +44,7 @@ public class AmpActivityLocation implements Versionable, Serializable, Cloneable
     private AmpActivityVersion activity;
 
     @ManyToOne
-    @JoinColumn(name = "location_id", nullable = false)
+    @JoinColumn(name = "id", nullable = false)
     @PossibleValues(LocationPossibleValuesProvider.class)
     @Interchangeable(fieldTitle = ActivityFieldsConstants.Locations.LOCATION, pickIdOnly = true, importable = true,
             uniqueConstraint = true,

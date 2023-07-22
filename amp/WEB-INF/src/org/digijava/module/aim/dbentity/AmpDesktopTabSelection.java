@@ -17,7 +17,7 @@ public class AmpDesktopTabSelection implements Serializable{
     private int index;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "owner_id")
+    @JoinColumn(name = "owner_id", referencedColumnName = "amp_team_mem_id")
     private AmpTeamMember owner;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -23,12 +23,21 @@
 package org.digijava.module.um.dbentity;
 
 import java.util.Date;
+import javax.persistence.*;
+import java.util.Date;
 
+@Entity
+@Table(name = "DG_RESET_PASSWORD")
 public class ResetPassword {
-
+    @Id
+    @Column(name = "USER_ID")
     private long userId;
+
+    @Column(name = "RESET_DATE", length = 400)
+    private Date resetDate;
+
+    @Column(name = "CODE", length = 100)
     private String code;
-    private java.util.Date resetDate;
 
     public ResetPassword() {}
 

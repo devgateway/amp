@@ -30,7 +30,7 @@ public class AmpOrgLocation implements Serializable,OrgProfileValue {
     private AmpOrganisation organization;
 
     @ManyToOne
-    @JoinColumn(name = "location_id")
+    @JoinColumn(name = "id")
     private AmpCategoryValueLocations location;
 
     public Long getAmpOrgLocId() {

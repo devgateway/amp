@@ -50,13 +50,13 @@ public class AmpTeamMember implements Serializable, Identifiable/*, Versionable*
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "AMP_MEMBER_ACTIVITIES",
-            joinColumns = @JoinColumn(name = "amp_member_id"),
+            joinColumns = @JoinColumn(name = "amp_team_mem_id"),
             inverseJoinColumns = @JoinColumn(name = "amp_activity_id"))
     private Set<AmpActivityVersion> activities;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "AMP_MEMBER_REPORTS",
-            joinColumns = @JoinColumn(name = "amp_member_id"),
+            joinColumns = @JoinColumn(name = "amp_team_mem_id"),
             inverseJoinColumns = @JoinColumn(name = "amp_report_id"))
     private Set<AmpReports> reports;
 

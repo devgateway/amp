@@ -47,7 +47,7 @@ public class AmpGPINiAidOnBudget implements Serializable {
     private Date indicatorDate;
 
     @ManyToOne
-    @JoinColumn(name = "currency_id", nullable = false)
+    @JoinColumn(name = "amp_currency_id", nullable = false)
     @JsonProperty("currencyCode")
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "currencyCode",
             resolver = EntityResolver.class, scope = AmpCurrency.class)

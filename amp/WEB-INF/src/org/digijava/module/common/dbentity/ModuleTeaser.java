@@ -26,16 +26,26 @@ package org.digijava.module.common.dbentity;
  * @author not attributable
  * @version 1.0
  */
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "DG_MODULE_TEASER_SETTINGS")
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class ModuleTeaser {
 
-
+    @Id
+    @Column(name = "module_instance_id")
     private Long id;
 
+    @Column(name = "show_teaser")
     private String showTeaser;
 
+    @Column(name = "teaser_order")
     private Long order;
 
+    @Column(name = "show_num_items_teaser")
     private String showItemsPerTeaser;
 
     public ModuleTeaser() {

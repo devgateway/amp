@@ -42,7 +42,7 @@ public class AmpComments implements Serializable, Cloneable, Versionable {
     private AmpField ampFieldId;
 
     @ManyToOne
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", referencedColumnName = "amp_team_mem_id")
     private AmpTeamMember memberId;
 
 

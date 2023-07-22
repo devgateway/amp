@@ -63,17 +63,17 @@ public class AmpRegionalFunding implements Versionable, Serializable, Cloneable 
     private String expenditureCategory;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "activity_id", referencedColumnName = "activity_id")
+    @JoinColumn(name = "amp_activity_id", referencedColumnName = "amp_activity_id")
     @InterchangeableBackReference
 
     private AmpActivityVersion activity;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "rep_organization_id", referencedColumnName = "organization_id")
+    @JoinColumn(name = "rep_organization_id", referencedColumnName = "amp_org_id")
     private AmpOrganisation reportingOrganization;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "currency_id", referencedColumnName = "currency_id")
+    @JoinColumn(name = "currency_id", referencedColumnName = "amp_currency_id")
     @Interchangeable(fieldTitle = "Currency", importable = true, pickIdOnly = true,
             interValidators = @InterchangeableValidator(RequiredValidator.class),
             commonPV = CommonFieldsConstants.COMMON_CURRENCY)
@@ -84,11 +84,11 @@ public class AmpRegionalFunding implements Versionable, Serializable, Cloneable 
     @Interchangeable(fieldTitle = ActivityFieldsConstants.RegionalFunding.LOCATION, pickIdOnly = true,
             commonPV = CommonFieldsConstants.COMMON_REGION, importable = true,
             interValidators = @InterchangeableValidator(RequiredValidator.class))
-    @JoinColumn(name = "region_location_id", referencedColumnName = "location_id", nullable = false)
+    @JoinColumn(name = "region_location_id", referencedColumnName = "id", nullable = false)
     private AmpCategoryValueLocations regionLocation;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "adjustment_type", referencedColumnName = "category_value_id")
+    @JoinColumn(name = "adjustment_type", referencedColumnName = "id")
     @Interchangeable(fieldTitle = "Adjustment Type", importable = true, pickIdOnly = true,
             discriminatorOption = CategoryConstants.ADJUSTMENT_TYPE_KEY,
             interValidators = @InterchangeableValidator(RequiredValidator.class))

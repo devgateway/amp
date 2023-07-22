@@ -3,41 +3,37 @@ package org.digijava.module.message.dbentity;
 import java.io.Serializable;
 
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "AMP_MESSAGE_STATE")
 public class AmpMessageState implements Serializable{
-    
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_message_state_seq")
+    @SequenceGenerator(name = "amp_message_state_seq", sequenceName = "AMP_MESSAGE_STATE_seq", allocationSize = 1)
+    @Column(name = "message_state_Id")
     private Long id;
-    
-    /**
-     * which message's state is current state
-     */ 
-    private AmpMessage message;
-    
-    
-    /**
-     * team member Id
-     */
-    //private Long memberId;
-    
-    private AmpTeamMember receiver;
-    
-    /**
-     * is message already read
-     */
-    private Boolean read;
-    /**
-     * holds the name of sender
-     */
+
+    @Column(name = "sender")
     private String sender;
-    
-    /**
-     * this field is used to see sent messages
-     */
+
+    @Column(name = "sender_Id")
     private Long senderId;
-    /**
-     * defines whether a message should appear in inbox or not. if the inbox is full, message should be hidden
-     */
+
+    @Column(name = "is_read")
+    private Boolean read;
+
+    @Column(name = "is_message_hidden")
     private Boolean messageHidden;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "message_id")
+    private AmpMessage message;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "receiver_id", referencedColumnName = "amp_team_mem_id")
+    private AmpTeamMember receiver;
+
 
     public Long getSenderId() {
         return senderId;

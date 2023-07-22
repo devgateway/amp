@@ -12,21 +12,43 @@ import java.util.*;
  * Time: 3:42 PM
  * To change this template use File | Settings | File Templates.
  */
+import javax.persistence.*;
+import java.util.Calendar;
+import java.util.HashSet;
+import java.util.Set;
+
+@Entity
+@Table(name = "DG_SUSPEND_LOGIN")
 public class SuspendLogin {
     private static SimpleDateFormat sdf = null;
     static {
         sdf = new SimpleDateFormat("dd/MM/yyyy");
     }
-
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+
+    @Column(name = "name")
     private String name;
-    private String reasonText;
+
+    @Column(name = "SUSPEND_TIL")
+    @Temporal(TemporalType.TIMESTAMP)
     private Calendar suspendTil;
+
+    @Column(name = "REASON_TEXT")
+    private String reasonText;
+
+    @Column(name = "EXPIRES")
     private Boolean expires;
+
+    @Column(name = "ACTIVE")
     private Boolean active;
 
-    private Set<User> users;
+    @ManyToMany(mappedBy = "suspendLogins")
+    private Set<User> users = new HashSet<>();
+
+
 
     public Long getId() {
         return id;

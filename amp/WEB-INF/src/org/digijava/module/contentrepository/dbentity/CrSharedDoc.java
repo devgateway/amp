@@ -2,29 +2,33 @@ package org.digijava.module.contentrepository.dbentity;
 
 import org.digijava.module.aim.dbentity.AmpTeam;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "CR_SHARED_DOC")
+@Cacheable
 public class CrSharedDoc {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "Id")
     private Long id;
-    /**
-     * This will store node UUID,which is shared
-     */
+
+    @Column(name = "node_uuid")
     private String nodeUUID;
-    /**
-     * team id to which the resource is shared
-     */
-    private AmpTeam team;
-    /**
-     * State will show whether this resource is pending approval to appear as team doc, or it's shared through workspaces,e.t.c
-     */
+
+    @Column(name = "state")
     private Integer state;
-    /**
-     * stores uuid of the original private document,which was shared and became team doc
-     */
+
+    @ManyToOne
+    @JoinColumn(name = "team_id")
+    private AmpTeam team;
+
+    @Column(name = "shared_private_res_uuid")
     private String sharedPrivateNodeUUID;
-    
-    /**
-     * node's version uuid , which is/was requested to be shared
-     */
+
+    @Column(name = "shared_node_version_uuid")
     private String sharedNodeVersionUUID;
+
     
     public CrSharedDoc(){}
     

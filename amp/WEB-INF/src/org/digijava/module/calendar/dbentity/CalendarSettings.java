@@ -21,7 +21,10 @@
  */
 
 package org.digijava.module.calendar.dbentity;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "DG_CALENDAR_SETTINGS")
 public class CalendarSettings {
 
     /**
@@ -41,83 +44,52 @@ public class CalendarSettings {
      * <p>Description: </p>Events are displayed as a small table(year) view with events listing for the selected month.
      */
     public final static String YEAR_VIEW = "yv";
-
-    /**
-     * event identity
-     */
+    @Id
+    @Column(name = "ID")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "dg_calendar_settings_seq")
+    @SequenceGenerator(name = "dg_calendar_settings_seq", sequenceName = "dg_calendar_settings_seq", allocationSize = 1)
     private Long id;
 
-    /**
-     * instance name
-     */
+    @Column(name = "MODULE_INSTANCE_ID")
     private String instanceId;
 
-    /**
-     * site name
-     */
+    @Column(name = "SITE_ID")
     private String siteId;
 
-    /**
-     * language in which event item was created
-     */
+    @Column(name = "LANGUAGE")
     private String language;
 
-    /**
-     * <p>true when Calendar is moderated, false when Calendar is unmoderated</p>
-     * <p> Description:</p><p>When moderated any registered user can post events, they go live only after Admin approves them (user is informed about this). Anybody can view them. Admin get alerts about new items.</p>
-     * When Unmoderated -  Any registered user can post events, they go live immediately. Anybody can view them.
-     */
-    private boolean moderated;
+    @Column(name = "MODERATED")
+    private Boolean moderated;
 
-    /**
-     * true when Calendar is private, false when Calendar is public
-     * <p> Description:</p>When private only members can post or view events.
-     */
-    private boolean privateItem;
+    @Column(name = "PRIVATE")
+    private Boolean privateItem;
 
-    /**
-     * default approve message
-     */
+    @Column(name = "APPROVE_MSG")
     private String approveMessage;
 
-    /**
-     * true if approve message should be sent, false otherwise
-     */
-    private boolean sendApproveMessage;
+    @Column(name = "SEND_APPROVE_MSG")
+    private Boolean sendApproveMessage;
 
-    /**
-     * default reject message
-     */
+    @Column(name = "REJECT_MSG")
     private String rejectMessage;
 
-    /**
-     * true if reject message should be sent,false otherwise
-     */
-    private boolean sendRejectMessage;
+    @Column(name = "SEND_REJECT_MSG")
+    private Boolean sendRejectMessage;
 
-    /**
-     * default revoke message
-     */
+    @Column(name = "REVOKE_MSG")
     private String revokeMessage;
 
-    /**
-     * true if revoke message should be sent,false otherwise
-     */
-    private boolean sendRevokeMessage;
+    @Column(name = "SEND_REVOKE_MSG")
+    private Boolean sendRevokeMessage;
 
-    /**
-     * Calendar default view
-     */
+    @Column(name = "DEFAULT_VIEW")
     private String defaultView;
 
-    /**
-     * number of charachters in visible title text for event item
-     */
+    @Column(name = "NUMBER_OF_CHARS_IN_TITLE")
     private Long numberOfCharsInTitle;
 
-    /**
-     * number of visible events per page
-     */
+    @Column(name = "NUMBER_OF_ITEMS_PER_PAGE")
     private Long numberOfItemsPerPage;
 
     /**

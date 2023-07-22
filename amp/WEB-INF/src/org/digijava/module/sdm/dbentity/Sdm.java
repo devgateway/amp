@@ -36,14 +36,34 @@ import org.digijava.module.sdm.util.DbUtil;
  * @author not attributable
  * @version 1.0
  */
+import javax.persistence.*;
+import java.util.Set;
+
+@Entity
+@Table(name = "DG_SDM")
 
 public class Sdm {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "dg_sdm_seq")
+    @SequenceGenerator(name = "dg_sdm_seq", sequenceName = "dg_sdm_seq", allocationSize = 1)
+    @Column(name = "ID")
     private Long id;
+
+    @Column(name = "SITE_ID")
     private String siteId;
+
+    @Column(name = "INSTANCE_ID")
     private String instanceId;
+
+    @Column(name = "NAME")
     private String name;
+
+    @OneToMany(mappedBy = "sdm", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("paragraph_order ASC")
     private Set<SdmItem> items;
+
+
 
     public String getName() {
         return name;

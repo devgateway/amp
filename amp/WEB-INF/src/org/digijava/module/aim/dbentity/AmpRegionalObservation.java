@@ -38,7 +38,7 @@ public class AmpRegionalObservation implements Serializable, Versionable, Clonea
     private Date observationDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "amp_activity_id", referencedColumnName = "activity_id")
+    @JoinColumn(name = "amp_activity_id", referencedColumnName = "amp_activity_id")
     private AmpActivityVersion activity;
 
     @OneToMany(mappedBy = "regionalObservation", cascade = CascadeType.ALL, orphanRemoval = true)

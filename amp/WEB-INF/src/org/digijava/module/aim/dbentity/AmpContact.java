@@ -86,7 +86,7 @@ public class AmpContact implements Comparable, Serializable, Cloneable, Versiona
     private String officeaddress;
 
     @ManyToOne
-    @JoinColumn(name = "creator_id")
+    @JoinColumn(name = "creator_id", referencedColumnName = "amp_team_mem_id")
     @Interchangeable(fieldTitle = ContactFieldsConstants.CREATED_BY, pickIdOnly = true)
     @JsonIgnore
     private AmpTeamMember creator;

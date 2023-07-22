@@ -32,11 +32,11 @@ public class AmpPledge implements Serializable{
     private Double amount;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "currency", referencedColumnName = "currency_id")
+    @JoinColumn(name = "currency", referencedColumnName = "amp_currency_id")
     private AmpCurrency currency;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "adjustment_type", referencedColumnName = "category_value_id")
+    @JoinColumn(name = "adjustment_type", referencedColumnName = "id")
     private AmpCategoryValue adjustmentType;
 
     @Column(name = "program")

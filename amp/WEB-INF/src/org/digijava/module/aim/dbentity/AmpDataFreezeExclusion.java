@@ -17,7 +17,7 @@ public class AmpDataFreezeExclusion implements Serializable {
     private Long ampDataFreezeExclusionId;
 
     @ManyToOne
-    @JoinColumn(name = "activity_id", nullable = false, referencedColumnName = "amp_activity_id")
+    @JoinColumn(name = "amp_activity_id", nullable = false, referencedColumnName = "amp_activity_id")
     private AmpActivityVersion activity;
 
     @ManyToOne

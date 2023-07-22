@@ -4,11 +4,27 @@ package org.digijava.module.contentrepository.dbentity;
  * @author Dare
  *
  */
+import javax.persistence.*;
+
+@Entity
+@Table(name = "CR_TEAM_NODE_STATE")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "state_clazz", discriminatorType = DiscriminatorType.STRING)
 public class TeamNodeState {
-    
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CR_TEAM_NODE_STATE_seq")
+    @SequenceGenerator(name = "CR_TEAM_NODE_STATE_seq", sequenceName = "CR_TEAM_NODE_STATE_seq", allocationSize = 1)
+    @Column(name = "id")
     private Long id;
+
+    @Column(name = "node_UUID")
     private String nodeUUID;
+
+    @Column(name = "node_version_uuid")
     private String versionID;
+    
+
     
     public TeamNodeState() {        
     }

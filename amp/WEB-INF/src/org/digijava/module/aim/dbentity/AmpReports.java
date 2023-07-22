@@ -95,7 +95,7 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
     private Boolean splitByFunding;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ownerId")
+    @JoinColumn(name = "ownerId", referencedColumnName = "amp_team_mem_id")
     private AmpTeamMember ownerId;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -115,7 +115,7 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "AMP_MEMBER_REPORTS",
             joinColumns = @JoinColumn(name = "amp_report_id"),
-            inverseJoinColumns = @JoinColumn(name = "amp_member_id"))
+            inverseJoinColumns = @JoinColumn(name = "amp_team_mem_id"))
     private Set<AmpTeamMember> members;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "ampReport", cascade = CascadeType.ALL, orphanRemoval = true)

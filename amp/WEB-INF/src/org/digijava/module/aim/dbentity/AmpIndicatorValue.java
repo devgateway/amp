@@ -83,7 +83,7 @@ public class AmpIndicatorValue implements Serializable, Cloneable{
     private Boolean defaultInd;
 
     @ManyToOne
-    @JoinColumn(name = "location_id")
+    @JoinColumn(name = "amp_location_id")
     private AmpLocation location;
 
     @ManyToOne

@@ -65,7 +65,7 @@ public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicator
     private Boolean zeroCategoryEnabled;
 
     @ManyToOne
-    @JoinColumn(name = "created_by")
+    @JoinColumn(name = "created_by", referencedColumnName = "amp_team_mem_id")
     private AmpTeamMember createdBy;
 
     @OneToMany(mappedBy = "indicatorLayer", cascade = CascadeType.ALL, orphanRemoval = true)

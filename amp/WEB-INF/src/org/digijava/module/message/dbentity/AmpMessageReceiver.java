@@ -3,12 +3,26 @@ package org.digijava.module.message.dbentity;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "AMP_MESSAGE_RECEIVER")
 public class AmpMessageReceiver {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_message_receiver_seq")
+    @SequenceGenerator(name = "amp_message_receiver_seq", sequenceName = "AMP_MESSAGE_RECEIVER_seq", allocationSize = 1)
+    @Column(name = "message_receiver_id")
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "receiver_id")
     private AmpTeamMember receiver;
+
+    @ManyToOne
+    @JoinColumn(name = "message_id", nullable = false)
     private AmpMessage message;
+
+
     
     public Long getId() {
         return id;

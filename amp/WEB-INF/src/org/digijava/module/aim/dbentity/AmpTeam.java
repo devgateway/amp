@@ -72,7 +72,7 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, FilterD
     private Boolean crossTeamValidation;
 
     @ManyToOne
-    @JoinColumn(name = "team_lead_id")
+    @JoinColumn(name = "team_lead_id", referencedColumnName = "amp_team_mem_id")
     private AmpTeamMember teamLead;
 
     @ManyToOne

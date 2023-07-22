@@ -60,7 +60,7 @@ public class AmpMEIndicatorValue {
     private String comments;
 
     @ManyToOne
-    @JoinColumn(name = "activity_id")
+    @JoinColumn(name = "amp_activity_id")
     private AmpActivityVersion activityId;
 
     @ManyToOne

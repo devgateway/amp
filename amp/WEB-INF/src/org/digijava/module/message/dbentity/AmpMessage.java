@@ -13,50 +13,73 @@ import org.digijava.module.sdm.dbentity.Sdm;
  * @author Dare Roinishvili
  *
  */
-public abstract class AmpMessage {
-    private Long id;
-    
-    /**
-     * name or subject of message.
-     */
-    private String name;
-    private Long priorityLevel; //low, high e.t.c. 
-    private Long messageType; //alert,approvals,system message e.t.c.
-    private String senderType;  
-    private Long senderId;  //if user sends alert, then it's that user's id... vtqvat user daregistrirda,anu User manager agzavnis da romeli useric daregistrirda imis,id iqneba
-    private Date creationDate; //date when it was created
-    private String objectURL;
-    private Long relatedActivityId;    
-    
-    private String senderName;  //sender name
+import javax.persistence.*;
 
-    /**
-     * emails should be sent.
-     */
-    private Boolean emailable;
-    
+@Entity
+@Table(name = "AMP_MESSAGE")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "message_clazz", discriminatorType = DiscriminatorType.STRING)
+public abstract class AmpMessage {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_message_seq")
+    @SequenceGenerator(name = "amp_message_seq", sequenceName = "AMP_MESSAGE_seq", allocationSize = 1)
+    @Column(name = "amp_message_Id")
+    private Long id;
+
+    @Column(name = "name", columnDefinition = "text")
+    private String name;
+
+    @Column(name = "description", columnDefinition = "text")
     private String description;
-    
-    /**
-     * defines whether message is saved(==it's a draft) or sent
-     */
+
+    @Column(name = "priority_level")
+    private Long priorityLevel;
+
+    @Column(name = "message_type")
+    private Long messageType;
+
+    @Column(name = "sender_type")
+    private String senderType;
+
+    @Column(name = "sender_id")
+    private Long senderId;
+
+    @Column(name = "creation_date")
+    private Date creationDate;
+
+    @Column(name = "is_emailable")
+    private Boolean emailable;
+
+    @Column(name = "is_draft")
     private Boolean draft;
-    
-    /**
-     * this field holds Id of the forwarded message, if it exists 
-     */
+
+    @ManyToOne
+    @JoinColumn(name = "forwarded_message_Id")
     private AmpMessage forwardedMessage;
-    
-    /**
-     * holds replied message , if it exists
-     */
+
+    @ManyToOne
+    @JoinColumn(name = "replied_message_Id")
     private AmpMessage repliedMessage;
-        
-    private String externalReceivers; //contacts + people outside AMP
-        
-    private Sdm attachedDocs; //for attaching files
-    
+
+    @ManyToOne
+    @JoinColumn(name = "attached_doc_id", unique = true)
+    private Sdm attachedDocs;
+
+    @OneToMany(mappedBy = "message", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AmpMessageReceiver> messageReceivers;
+
+    @Column(name = "external_receivers", columnDefinition = "text")
+    private String externalReceivers;
+
+    @Column(name = "sender_name", columnDefinition = "text")
+    private String senderName;
+
+    @Column(name = "object_URL")
+    private String objectURL;
+
+    @Column(name = "related_act_id")
+    private Long relatedActivityId;
+
 
     public Set<AmpMessageReceiver> getMessageReceivers() {
         return messageReceivers;

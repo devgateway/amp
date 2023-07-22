@@ -1,5 +1,10 @@
 package org.digijava.module.contentrepository.dbentity;
 
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+
+@Entity
+@DiscriminatorValue("lav")
 public class NodeLastApprovedVersion extends TeamNodeState{
     
     public NodeLastApprovedVersion() {

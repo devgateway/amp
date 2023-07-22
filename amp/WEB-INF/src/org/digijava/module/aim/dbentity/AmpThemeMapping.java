@@ -25,14 +25,14 @@ public class AmpThemeMapping {
     @JsonIgnore
     private Long id;
      @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "src_theme_id", nullable = false, unique = true, referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_amp_theme_mapping_src_theme"))
+    @JoinColumn(name = "src_theme_id", nullable = false, unique = true, referencedColumnName = "amp_theme_id", foreignKey = @ForeignKey(name = "fk_amp_theme_mapping_src_theme"))
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "ampThemeId",
             resolver = EntityResolver.class, scope = AmpTheme.class)
     @JsonIdentityReference(alwaysAsId = true)
     @JsonProperty("src-program")
     private AmpTheme srcTheme;
      @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "dst_theme_id", nullable = false, unique = true, referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_amp_theme_mapping_dst_theme"))
+    @JoinColumn(name = "dst_theme_id", nullable = false, unique = true, referencedColumnName = "amp_theme_id", foreignKey = @ForeignKey(name = "fk_amp_theme_mapping_dst_theme"))
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "ampThemeId",
             resolver = EntityResolver.class, scope = AmpTheme.class)
     @JsonIdentityReference(alwaysAsId = true)

@@ -31,7 +31,7 @@ public class AmpActivityReferenceDoc implements Serializable, Versionable, Clone
     private Date lastEdited;
 
     @ManyToOne
-    @JoinColumn(name = "activity_id")
+    @JoinColumn(name = "amp_activity_id")
     private AmpActivityVersion activity;
 
     @ManyToOne

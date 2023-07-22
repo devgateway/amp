@@ -79,7 +79,7 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
     private AmpOrganisation organization;
 
     @ManyToOne
-    @JoinColumn(name = "activity_id")
+    @JoinColumn(name = "amp_activity_id")
     private AmpActivityVersion activity;
 
     @Column(name = "start_of_tendering")

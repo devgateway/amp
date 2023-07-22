@@ -16,21 +16,42 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.PropertyListable.PropertyListableIgnore;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.annotations.reports.IgnorePersistence;
+import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.util.Identifiable;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "AMP_FILTER_DATA")
 public class AmpFilterData implements Serializable {
     private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_filter_data_seq")
+    @SequenceGenerator(name = "amp_filter_data_seq", sequenceName = "AMP_FILTER_DATA_seq", allocationSize = 1)
+    @Column(name = "id")
     private Long id;
-    private FilterDataSetInterface filterRelObj;
+
+    @Column(name = "property_name")
     private String propertyName;
+
+    @Column(name = "property_class_name")
     private String propertyClassName;
+
+    @Column(name = "element_class_name")
     private String elementClassName;
+
+    @Column(name = "value")
     private String value;
-    
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "amp_report_id", nullable = false)
+    private AmpReports amp_report_id;
+    private FilterDataSetInterface filterRelObj;
+
     
     
     private static Logger logger = Logger.getLogger(AmpFilterData.class);
@@ -44,7 +65,7 @@ public class AmpFilterData implements Serializable {
     private static final List<String> primitiveTypesList    = Arrays.asList( primitiveTypes );
     
     public AmpFilterData () {;}
-    public AmpFilterData (FilterDataSetInterface filterRelObj, String propertyName, String propertyClassName, 
+    public AmpFilterData (FilterDataSetInterface filterRelObj, String propertyName, String propertyClassName,
                             String elementClassName, String value) {
         this.filterRelObj           = filterRelObj;
         this.propertyName       = propertyName;

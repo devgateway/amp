@@ -36,7 +36,7 @@ public class AmpActivityContact implements Versionable, Comparable, Serializable
     private Boolean primaryContact;
 
     @ManyToOne
-    @JoinColumn(name = "activity_id")
+    @JoinColumn(name = "amp_activity_id")
     @InterchangeableBackReference
     private AmpActivityVersion activity;
 

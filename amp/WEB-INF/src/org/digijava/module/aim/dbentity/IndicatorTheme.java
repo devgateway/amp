@@ -18,7 +18,7 @@ public class IndicatorTheme extends IndicatorConnection {
     private static final long serialVersionUID = 3L;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "theme_id")
+    @JoinColumn(name = "theme_id", referencedColumnName = "amp_theme_id")
     private AmpTheme theme;
 
     public AmpTheme getTheme() {

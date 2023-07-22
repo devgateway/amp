@@ -48,7 +48,7 @@ public class AmpPerformanceRule {
     private Boolean enabled = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "level_category", referencedColumnName = "category_value_id", nullable = false)
+    @JoinColumn(name = "level_category", referencedColumnName = "id", nullable = false)
     @JsonSerialize(using = AmpCategoryValueSerializer.class)
 
     private AmpCategoryValue level;

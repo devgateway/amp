@@ -235,7 +235,7 @@ public class AmpActivityVersion extends AmpActivityFields implements Versionable
     private AmpTeam team;
 
     @ManyToOne
-    @JoinColumn(name = "activity_creator")
+    @JoinColumn(name = "activity_creator", referencedColumnName = "amp_team_mem_id")
     private AmpTeamMember activityCreator;
 
     @Column(name = "approval_status")
@@ -259,7 +259,7 @@ public class AmpActivityVersion extends AmpActivityFields implements Versionable
     private Date modifiedDate;
 
     @ManyToOne
-    @JoinColumn(name = "modified_by")
+    @JoinColumn(name = "modified_by", referencedColumnName = "amp_team_mem_id")
     private AmpTeamMember modifiedBy;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -315,7 +315,7 @@ public class AmpActivityVersion extends AmpActivityFields implements Versionable
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "AMP_MEMBER_ACTIVITIES",
             joinColumns = @JoinColumn(name = "amp_activity_id"),
-            inverseJoinColumns = @JoinColumn(name = "amp_member_id"))
+            inverseJoinColumns = @JoinColumn(name = "amp_team_mem_id"))
     private Set<AmpTeamMember> member;
 
     @OneToMany(mappedBy = "ampActivityVersion", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -359,7 +359,7 @@ public class AmpActivityVersion extends AmpActivityFields implements Versionable
     private Set<IndicatorActivity> indicators;
 
     @ManyToOne
-    @JoinColumn(name = "approvedBy")
+    @JoinColumn(name = "approvedBy", referencedColumnName = "amp_team_mem_id")
     private AmpTeamMember approvedBy;
 
     @Column(name = "approvalDate")

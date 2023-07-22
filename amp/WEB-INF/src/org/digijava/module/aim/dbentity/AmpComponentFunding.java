@@ -74,7 +74,7 @@ public class AmpComponentFunding implements Cloneable, Serializable {
     private AmpOrganisation componentSecondResponsibleOrganization;
 
     @ManyToOne
-    @JoinColumn(name = "currency_id")
+    @JoinColumn(name = "amp_currency_id")
     @Interchangeable(fieldTitle = COMPONENT_FUNDING_CURRENCY, importable = true, pickIdOnly = true,
             fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_FUNDING_CURRENCY,
             interValidators = @InterchangeableValidator(RequiredValidator.class))

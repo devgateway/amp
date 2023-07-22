@@ -8,25 +8,44 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.SiteCache;
 import org.digijava.module.aim.util.AmpMath;
 import org.digijava.module.help.helper.HelpContent;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "HELP_HELP_TOPICS")
 public class HelpTopic implements Serializable{
     
     private static final long serialVersionUID = 1L;
-    private Long helpTopicId=null;
-    private String keywordsTrnKey=null;
-    private String titleTrnKey=null;
-    private HelpTopic parent=null;
-    private String bodyEditKey=null;
-    
-    /**
-     * Not a number, but "siteId" (e.g. 'amp')
-     */
-    private String siteId = null;
-    private String moduleInstance=null;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "help_help_topics_seq")
+    @SequenceGenerator(name = "help_help_topics_seq", sequenceName = "HELP_HELP_TOPICS_seq", allocationSize = 1)
+    @Column(name = "helpTopicId")
+    private Long helpTopicId;
+
+    @Column(name = "keywordsTrnKey")
+    private String keywordsTrnKey;
+
+    @Column(name = "titleTrnKey")
+    private String titleTrnKey;
+
+    @Column(name = "topicKey", unique = true)
     private String topicKey;
-    private Integer topicType;  
-    
-    //used for saving tree state.. not saved in DB
+
+    @Column(name = "bodyEditKey")
+    private String bodyEditKey;
+
+    @Column(name = "siteId", nullable = false)
+    private String siteId;
+
+    @Column(name = "topic_type")
+    private Integer topicType;
+
+    @Column(name = "moduleInstance", nullable = false)
+    private String moduleInstance;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_Id")
+    private HelpTopic parent;
+
     private List<HelpContent> helpContent;
     
     public String getBodyEditKey() {

@@ -26,7 +26,10 @@ import java.io.Serializable;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "DG_SDM_ITEM")
 public class SdmItem
     implements Serializable {
 
@@ -36,21 +39,48 @@ public class SdmItem
     public final static String TYPE_FILE = "file";
     public final static String TYPE_IMG = "image";
     //
+    @EmbeddedId
+    private SdmItemKey id;
 
+    @Column(name = "CONTENT_TYPE")
+    private String contentType;
+
+    @Column(name = "ALIGNMENT")
+    private String alignment;
+
+    @Column(name = "FONT")
+    private String font;
+
+    @Column(name = "FONTSIZE")
+    private Long fontSize;
+
+    @Column(name = "FONTCOLOR")
+    private String fontColor;
+
+    @Column(name = "BOLD")
+    private String bold;
+
+    @Column(name = "ITALIC")
+    private String italic;
+
+    @Column(name = "UNDERLINE")
+    private String underline;
+
+    @Column(name = "CONTENT_TITLE")
+    private String contentTitle;
+
+    @Lob
+    @Column(name = "CONTENT", nullable = false)
+    private byte[] content;
+
+    @Column(name = "CONTENT_TXT")
+    private String contentText;
+
+    @Column(name = "REAL_TYPE")
+    private String realType;
     private Sdm document;
     private Long paragraphOrder;
-    private String contentType;
-    private String contentTitle;
-    private String alignment;
-    private String font;
-    private Long fontSize;
-    private String fontColor;
-    private String bold;
-    private String italic;
-    private String underline;
-    private String contentText;
-    private byte[] content;
-    private String realType;
+
 
     public SdmItem() {
 

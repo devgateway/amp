@@ -35,7 +35,7 @@ public class IndicatorActivity extends IndicatorConnection implements Versionabl
     //IATI-check: to be ignored
     private static final long serialVersionUID = 2L;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "activity_id")
+    @JoinColumn(name = "amp_activity_id")
     @InterchangeableBackReference
 
     private AmpActivityVersion activity;

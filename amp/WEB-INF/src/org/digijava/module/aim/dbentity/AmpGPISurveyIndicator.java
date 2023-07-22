@@ -36,7 +36,7 @@ public class AmpGPISurveyIndicator implements Serializable {
     @OneToMany(mappedBy = "ampGPISurveyIndicator", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AmpGPISurveyQuestion> questions;
 
-    @OneToMany(mappedBy = "ampGPISurveyIndicator", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "parentIndicator", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AmpGPISurveyIndicatorCalcFormula> calcFormulas;
 
     public static class GPISurveyIndicatorComparator implements Comparator<AmpGPISurveyIndicator>, Serializable {

@@ -38,7 +38,7 @@ public class AmpAhsurvey implements Versionable, Serializable, Cloneable, Compar
     @JoinColumn(name = "point_of_delivery_donor")
     private AmpOrganisation pointOfDeliveryDonor;
 
-    @OneToMany(mappedBy = "ampAhsurveyId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "ampAHSurveyId", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AmpAhsurveyResponse> responses;
 
     @Column(name = "survey_date")

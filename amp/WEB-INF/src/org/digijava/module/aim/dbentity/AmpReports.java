@@ -118,7 +118,7 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
             inverseJoinColumns = @JoinColumn(name = "amp_team_mem_id"))
     private Set<AmpTeamMember> members;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "ampReport", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "report", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AmpReportLog> logs;
 
     @ElementCollection(fetch = FetchType.LAZY)
@@ -137,7 +137,7 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
     @CollectionTable(name = "AMP_REPORT_XLEVEL_MEASURES", joinColumns = @JoinColumn(name = "amp_report_id"))
     private Set<AmpReportMeasures> reportMeasures;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "ampReport", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "report", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AmpDesktopTabSelection> desktopTabSelections;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "ampReport", cascade = CascadeType.ALL, orphanRemoval = true)

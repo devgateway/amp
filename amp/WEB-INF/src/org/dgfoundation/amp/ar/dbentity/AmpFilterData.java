@@ -49,7 +49,7 @@ public class AmpFilterData implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "amp_report_id", nullable = false)
-    private AmpReports amp_report_id;
+    private AmpReports ampReport;
     private FilterDataSetInterface filterRelObj;
 
     
@@ -303,5 +303,12 @@ public class AmpFilterData implements Serializable {
     public void setValue(String value) {
         this.value = value;
     }
-    
+
+    public AmpReports getAmpReport() {
+        return ampReport;
+    }
+
+    public void setAmpReport(AmpReports ampReport) {
+        this.ampReport = ampReport;
+    }
 }

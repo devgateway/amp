@@ -43,7 +43,7 @@ public class AmpAhsurveyIndicator implements Serializable {
     @OneToMany(mappedBy = "ampIndicatorId", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AmpAhsurveyQuestion> questions;
 
-    @OneToMany(mappedBy = "ampIndicatorId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "parentIndicator", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AmpAhsurveyIndicatorCalcFormula> calcFormulas;
 
 

@@ -60,7 +60,7 @@ public class AmpTeamMember implements Serializable, Identifiable/*, Versionable*
             inverseJoinColumns = @JoinColumn(name = "amp_report_id"))
     private Set<AmpReports> reports;
 
-    @OneToMany(mappedBy = "ampMemberId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "ampReportMemberLogId", cascade = CascadeType.ALL)
     private Set<AmpReportLog> logs;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -73,7 +73,7 @@ public class AmpTeamMember implements Serializable, Identifiable/*, Versionable*
 //    @OrderBy(value = "index")
     private Set<AmpDesktopTabSelection> desktopTabSelections;
 
-    @OneToMany(mappedBy = "receiverId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AmpMessageState> messages;
 
     @Column(name = "deleted")

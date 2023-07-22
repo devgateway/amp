@@ -13,25 +13,45 @@ import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 /**
  * @author Octavian Ciubotaru
  */
-public class GeoCodedLocation {
 
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+
+import javax.persistence.*;
+import java.util.List;
+
+@Entity
+@Table(name = "AMP_GEO_CODED_LOCATION")
+public class GeoCodedLocation {
+    @Id
     @JsonIgnore
+
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "geoCodedLocationSeqGen")
+    @SequenceGenerator(name = "geoCodedLocationSeqGen", sequenceName = "AMP_GEO_CODED_LOCATION_SEQ", allocationSize = 1)
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "GEO_CODED_ACTIVITY_ID", nullable = false)
     @JsonIgnore
+
     private GeoCodedActivity activity;
 
+    @Column(name = "ACCEPTED", nullable = false)
     @ApiModelProperty("True if location was accepted, false if rejected. "
             + "If null, then the location is neither rejected or accepted.")
-    private Boolean accepted;
+    private boolean accepted;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "LOCATION_ID", nullable = false)
     @ApiModelProperty("Location Id")
     @JsonSerialize(using = GeoCodedCategoryValueLocationSerializer.class)
     @JsonUnwrapped
     private AmpCategoryValueLocations location;
 
+    @OneToMany(mappedBy = "geoCodedLocation", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderColumn(name = "INDEX")
     @ApiModelProperty("Fields that refer to this location")
     private List<GeoCodedField> fields = new ArrayList<>();
+
 
     public GeoCodedLocation() {
     }

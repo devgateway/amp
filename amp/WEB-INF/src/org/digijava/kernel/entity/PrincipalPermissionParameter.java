@@ -25,12 +25,22 @@ package org.digijava.kernel.entity;
 import java.io.Serializable;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import javax.persistence.*;
+import javax.persistence.Entity;
 
+@Entity
+@Table(name = "DG_PRINCIPAL_PERMISSION_PARAM")
 public class PrincipalPermissionParameter
     implements Serializable {
+    @EmbeddedId
+    private PrincipalPermissionParameterId id;
 
+    @Column(name = "PARAM_CLASS", length = 255)
     private String parameterClass;
+
+    @Column(name = "PARAM_VALUE", columnDefinition = "text")
     private String parameterValue;
+
 
     private PrincipalPermission principalPermission;
     private int index;

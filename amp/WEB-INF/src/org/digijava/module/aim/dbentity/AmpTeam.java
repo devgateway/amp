@@ -102,7 +102,7 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, FilterD
     @Column(name = "permission_strategy")
     private String permissionStrategy;
 
-    @OneToMany(mappedBy = "ampTeam", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AmpTeamFilterData> filterDataSet;
 
     @ManyToOne(fetch = FetchType.LAZY)

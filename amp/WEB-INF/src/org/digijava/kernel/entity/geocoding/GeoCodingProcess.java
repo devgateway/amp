@@ -18,19 +18,34 @@ import java.util.stream.Collectors;
  *
  * @author Octavian Ciubotaru
  */
-public class GeoCodingProcess {
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 
+import javax.persistence.*;
+import java.util.List;
+
+@Entity
+@Table(name = "AMP_GEO_CODING")
+public class GeoCodingProcess {
+    @Id
     @JsonIgnore
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "geoCodingProcessSeqGen")
+    @SequenceGenerator(name = "geoCodingProcessSeqGen", sequenceName = "AMP_GEO_CODING_SEQ", allocationSize = 1)
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "TEAM_MEMBER_ID", nullable = false)
     @ApiModelProperty("Team member running the current geo coding process")
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "ampTeamMemId")
     @JsonIdentityReference(alwaysAsId = true)
     @JsonProperty("amp_team_member_id")
     private AmpTeamMember teamMember;
 
+    @OneToMany(mappedBy = "geoCodingProcess", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<GeoCodedActivity> activities = new ArrayList<>();
+
+
+    @JsonIgnore
 
     public GeoCodingProcess() {
     }

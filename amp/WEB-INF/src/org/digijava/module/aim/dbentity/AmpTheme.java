@@ -102,7 +102,7 @@ public class AmpTheme implements Serializable, SoftDeletable, Identifiable, ARDi
     @JoinColumn(name = "type_category_value_id")
     private AmpCategoryValue typeCategoryValue;
 
-    @OneToMany(mappedBy = "themeId", cascade = CascadeType.ALL, orphanRemoval = true)
+//    @OneToMany(mappedBy = "themeId", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<IndicatorTheme> indicators;
 
     @OneToMany(mappedBy = "defaultHierarchy", cascade = CascadeType.ALL, orphanRemoval = true)

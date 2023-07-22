@@ -75,7 +75,7 @@ public class AmpIndicator implements Serializable, Identifiable
     @OneToMany(mappedBy = "indicator", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<IndicatorActivity> valuesActivity;
 
-    @OneToMany(mappedBy = "indicator", cascade = CascadeType.ALL, orphanRemoval = true)
+//    @OneToMany(mappedBy = "indicator", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<IndicatorTheme> valuesTheme;
     
     //IATI-check: to be ignored

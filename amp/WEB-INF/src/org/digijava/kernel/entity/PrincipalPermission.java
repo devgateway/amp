@@ -23,17 +23,37 @@
 package org.digijava.kernel.entity;
 
 import java.util.Set;
+import javax.persistence.*;
+import javax.persistence.Entity;
+import java.util.HashSet;
+import java.util.Set;
 
+@Entity
+@Table(name = "DG_PRINCIPAL_PERMISSION")
 public class PrincipalPermission{
 
     public static final int USER_PRINCIPAL = 0;
     public static final int GROUP_PRINCIPAL = 1;
-
-    private int principalType;
-    private long targetId;
-    private String permissionClass;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DG_PRINCIPAL_PERMISSION_SEQ")
+    @SequenceGenerator(name = "DG_PRINCIPAL_PERMISSION_SEQ", sequenceName = "DG_PRINCIPAL_PERMISSION_SEQ", allocationSize = 1)
+    @Column(name = "PRINCIPAL_PERMISSION_ID")
     private Long principalPermissionId;
-    private Set parameters;
+
+    @Column(name = "PRINCIPAL_TYPE")
+    private int principalType;
+
+    @Column(name = "TARGET_ID")
+    private Long targetId;
+
+    @Column(name = "PERMISSION_CLASS", length = 255)
+    private String permissionClass;
+
+    @OneToMany(mappedBy = "principalPermission", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("paramIndex ASC")
+    private Set<PrincipalPermissionParameter> parameters = new HashSet<>();
+
+
 
     public String getPermissionClass() {
         return permissionClass;

@@ -8,7 +8,6 @@
 				<param name="sequence">EP_ADDRESSES_seq</param>
 			</generator>
 		</id>
-		<!--property column="AGENCY_ID" length="22" name="agencyId" type="java.lang.Long"//-->
 		<property column="ADDRESS" length="400" name="address" type="java.lang.String" />
 		<property column="ADDRESS2" length="400" name="address2" type="java.lang.String" />
 		<property column="CITY" length="200" name="city" type="java.lang.String" />

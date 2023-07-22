@@ -23,9 +23,18 @@
 package org.digijava.kernel.entity;
 
 
+import javax.persistence.*;
+import javax.persistence.Entity;
+
+@Entity
+@Table(name = "DG_HOW_DID_U_HEAR")
 public class HowDidYouHear {
 
+    @Id
+    @Column(name = "id")
     private String id;
+
+    @Column(name = "referral")
     private String referral;
 
     public HowDidYouHear() {}

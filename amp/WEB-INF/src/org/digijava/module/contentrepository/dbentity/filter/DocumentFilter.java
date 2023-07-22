@@ -103,7 +103,7 @@ public class DocumentFilter {
     private List<String> filterOwners;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_", referencedColumnName = "id")
+    @JoinColumn(name = "user_", referencedColumnName = "amp_team_mem_id")
     private AmpTeamMember user;
     
 

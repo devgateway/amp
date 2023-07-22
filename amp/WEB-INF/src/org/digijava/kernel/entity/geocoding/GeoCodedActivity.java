@@ -13,29 +13,46 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 /**
  * Represents an activity that is being geo coded.
  */
-public class GeoCodedActivity {
 
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
+
+import javax.persistence.*;
+import java.util.List;
+
+@Entity
+@Table(name = "AMP_GEO_CODED_ACTIVITY")
+public class GeoCodedActivity {
+    @Id
     @JsonIgnore
+
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "geoCodedActivitySeqGen")
+    @SequenceGenerator(name = "geoCodedActivitySeqGen", sequenceName = "AMP_GEO_CODED_ACTIVITY_SEQ", allocationSize = 1)
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
+    @JoinColumn(name = "GEO_CODING_ID", nullable = false)
     private GeoCodingProcess geoCodingProcess;
 
-    /**
-     * Queue Id on geo coding server. Used to retrieve results.
-     */
+    @Column(name = "QUEUE_ID", nullable = false)
     @JsonIgnore
+
     private Long queueId;
 
-    @JsonSerialize(using = GeoCodedActivityVersionSerializer.class)
-    @JsonUnwrapped
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ACTIVITY_VERSION_ID", unique = true, nullable = false)
     private AmpActivityVersion activity;
 
+    @Column(name = "STATUS", nullable = false)
+    @Enumerated(EnumType.STRING)
     @ApiModelProperty("Geo coding status for this activity")
     private Status status;
 
+    @OneToMany(mappedBy = "geoCodedActivity", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderColumn(name = "INDEX")
     @ApiModelProperty("Geo coded locations. Populated only when status is complete.")
-    private List<GeoCodedLocation> locations = new ArrayList<>();
+    private List<GeoCodedLocation> locations;
+
 
     public enum Status {
         RUNNING, COMPLETED, ERROR, SAVED;

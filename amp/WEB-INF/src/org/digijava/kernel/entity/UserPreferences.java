@@ -27,11 +27,21 @@ import java.io.Serializable;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.User;
 
+import javax.persistence.*;
+import javax.persistence.Entity;
+
+@Entity
+@Table(name = "DG_USER_PREFERENCES")
 public class UserPreferences implements Serializable{
 
+    @Column(name = "SHOW_PUBLIC_P")
     private boolean publicProfile;
+    @Column(name = "RECEIVE_ALERTS_P")
     private boolean receiveAlerts;
+    @EmbeddedId
+    @Id
     private UserPreferencesPK id;
+    @Column(name = "BIOGRAPHY", columnDefinition = "text")
     private String biography;
 
     public UserPreferences() {}

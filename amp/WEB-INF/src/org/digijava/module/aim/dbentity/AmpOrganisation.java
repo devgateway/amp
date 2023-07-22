@@ -122,7 +122,7 @@ public class AmpOrganisation implements Comparable<AmpOrganisation>, Identifiabl
     @Column(name = "org_type_code")
     private String orgTypeCode;
 
-    @OneToMany(mappedBy = "ampOrgId")
+    @OneToMany(mappedBy = "ampAHSurveyId")
     @LazyCollection(LazyCollectionOption.TRUE)
     private Set<AmpAhsurvey> survey;
 
@@ -141,26 +141,26 @@ public class AmpOrganisation implements Comparable<AmpOrganisation>, Identifiabl
     @LazyCollection(LazyCollectionOption.TRUE)
     private Set<AmpOrganisationDocument> documents;
 
-    @OneToMany(mappedBy = "ampOrgId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "ampOrgLocId", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AmpOrgLocation> locations;
 
-    @OneToMany(mappedBy = "ampOrgId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AmpOrgStaffInformation> staffInfos;
 
-    @OneToMany(mappedBy = "ampOrgId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AmpOrganizationBudgetInformation> organizationBudgetInfos;
 
     @ManyToOne
     @JoinColumn(name = "amp_country_id")
     private AmpCategoryValueLocations country;
 
-    @OneToMany(mappedBy = "parentOrgId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "ampOrgRecipientId", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AmpOrgRecipient> recipients;
 
     @ManyToMany
     @JoinTable(name = "AMP_ORGANISATION_BUDGETSECTOR",
             joinColumns = @JoinColumn(name = "amp_org_id"),
-            inverseJoinColumns = @JoinColumn(name = "idsector"))
+            inverseJoinColumns = @JoinColumn(name = "budged_sector_id"))
     private Set<AmpBudgetSector> budgetsectors;
 
     @ManyToMany
@@ -170,10 +170,10 @@ public class AmpOrganisation implements Comparable<AmpOrganisation>, Identifiabl
     private Set<AmpDepartments> departments;
 
     @ManyToOne
-    @JoinColumn(name = "budget_sector_id")
+    @JoinColumn(name = "budget_sector_id", referencedColumnName = "budged_sector_id")
     private AmpBudgetSector parentsector;
 
-    @OneToMany(mappedBy = "ampOrgId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AmpOrganisationContact> organizationContacts;
 
     @Column(name = "address_abroad")

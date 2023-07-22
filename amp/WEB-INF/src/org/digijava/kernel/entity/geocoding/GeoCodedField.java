@@ -8,20 +8,31 @@ import org.digijava.kernel.geocoding.service.GeoCodingService;
  *
  * @author Octavian Ciubotaru
  */
-public class GeoCodedField {
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "AMP_GEO_CODED_FIELD")
+public class GeoCodedField {
+    @Id
     @JsonIgnore
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "geoCodedFieldSeqGen")
+    @SequenceGenerator(name = "geoCodedFieldSeqGen", sequenceName = "AMP_GEO_CODED_FIELD_SEQ", allocationSize = 1)
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
+    @JoinColumn(name = "GEO_CODED_LOCATION_ID", nullable = false)
     private GeoCodedLocation location;
 
+    @Column(name = "NAME", nullable = false, length = 255)
     private String name;
 
+    @Column(name = "VALUE", nullable = false)
     private String value;
 
+    @Column(name = "ENTITY", length = 255)
     private String entity;
-
     public GeoCodedField() {
     }
 

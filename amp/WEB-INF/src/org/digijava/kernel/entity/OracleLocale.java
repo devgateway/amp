@@ -27,12 +27,24 @@ package org.digijava.kernel.entity;
  * the old, TCL-based system. It provides mapping between Oracle and DiGi
  * locales
  */
+
+import javax.persistence.*;
+import javax.persistence.Entity;
+
+@Entity
+@Table(name = "J_LOCALES")
+@Cacheable
 public class OracleLocale {
-
+    @Id
+    @Column(name = "LOCALE_ABBREV", length = 10)
     private String oracleLocale;
-    private Locale locale;
-    private String languageName;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ISO", referencedColumnName = "CODE", insertable = false, updatable = false)
+    private Locale locale;
+
+    @Column(name = "NLS_LANG_NAME", length = 100)
+    private String languageName;
     public Locale getLocale() {
         return locale;
     }

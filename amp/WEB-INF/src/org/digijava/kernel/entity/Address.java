@@ -25,64 +25,76 @@ package org.digijava.kernel.entity;
 import java.io.Serializable;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
+import javax.persistence.*;
+import javax.persistence.Entity;
+
+@Entity
+@Table(name = "EP_ADDRESSES")
 /** @author shamir.karkal */
 public class Address implements Serializable {
 
-    /** identifier field */
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "addressSeqGen")
+    @SequenceGenerator(name = "addressSeqGen", sequenceName = "EP_ADDRESSES_seq", allocationSize = 1)
+    @Column(name = "ADDRESS_ID")
     private Long addressId;
+
+    @Column(name = "ADDRESS", length = 400)
+    private String address;
+
+    @Column(name = "ADDRESS2", length = 400)
+    private String address2;
+
+    @Column(name = "CITY", length = 200)
+    private String city;
+
+    @Column(name = "STATE", length = 200)
+    private String state;
+
+    @Column(name = "COUNTRY", length = 200)
+    private String country;
+
+    @Column(name = "COUNTRY_CODE", length = 2)
+    private String countryCode;
+
+    @Column(name = "POSTAL_CODE", length = 100)
+    private String postalCode;
+
+    @Column(name = "FIRST_NAMES", length = 200)
+    private String firstNames;
+
+    @Column(name = "LAST_NAME", length = 200)
+    private String lastName;
+
+    @Column(name = "TITLE", length = 200)
+    private String title;
+
+    @Column(name = "DEPARTMENT", length = 200)
+    private String department;
+
+    @Column(name = "PHONE", length = 100)
+    private String phone;
+
+    @Column(name = "FAX", length = 100)
+    private String fax;
+
+    @Column(name = "EMAIL", length = 100)
+    private String email;
+
+    @Column(name = "URL", length = 300)
+    private String url;
+
+    @Column(name = "OLD_ADDRESS_ID")
+    private Long oldAddressId;
+
 
     /** nullable persistent field */
     private Long agencyId;
 
-    /** nullable persistent field */
-    private String address;
 
-    /** nullable persistent field */
-    private String address2;
 
-    /** nullable persistent field */
-    private String city;
 
-    /** nullable persistent field */
-    private String state;
 
-    /** nullable persistent field */
-    private String country;
-
-    /** nullable persistent field */
-    private String countryCode;
-
-    /** nullable persistent field */
-    private String postalCode;
-
-    /** nullable persistent field */
-    private String firstNames;
-
-    /** nullable persistent field */
-    private String lastName;
-
-    /** nullable persistent field */
-    private String title;
-
-    /** nullable persistent field */
-    private String department;
-
-    /** nullable persistent field */
-    private String phone;
-
-    /** nullable persistent field */
-    private String fax;
-
-    /** nullable persistent field */
-    private String email;
-
-    /** nullable persistent field */
-    private String url;
-
-    /** nullable persistent field */
-    private Long oldAddressId;
-
-    /** full constructor */
     public Address(java.lang.Long addressId, java.lang.Long agencyId, java.lang.String address, java.lang.String address2, java.lang.String city, java.lang.String state, java.lang.String country, java.lang.String countryCode, java.lang.String postalCode, java.lang.String firstNames, java.lang.String lastName, java.lang.String title, java.lang.String department, java.lang.String phone, java.lang.String fax, java.lang.String email, java.lang.String url, java.lang.Long oldAddressId) {
         this.addressId = addressId;
         this.agencyId = agencyId;

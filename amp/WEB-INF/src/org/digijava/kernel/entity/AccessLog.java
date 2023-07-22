@@ -27,22 +27,55 @@ import java.util.Map;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
+import javax.persistence.*;
+import javax.persistence.Entity;
+
+@Entity
+@Table(name = "DG_ACCESS_LOG")
 public class AccessLog
     implements Cloneable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "accessLogSeqGen")
+    @SequenceGenerator(name = "accessLogSeqGen", sequenceName = "DG_ACCESS_LOG_SEQ", allocationSize = 1)
+    private Long id;
 
-    private long id;
-    private String url;
-    private Date logDate;
-    private String userIp;
+    @Column(name = "SITE_ID")
     private String siteId;
+
+    @Column(name = "MODULE_NAME")
     private String moduleName;
+
+    @Column(name = "INSTANCE_NAME")
     private String instanceName;
+
+    @Column(name = "REAL_SITE_ID")
     private String realSiteId;
+
+    @Column(name = "REAL_INSTANCE_NAME")
     private String realInstanceName;
+
+    @Column(name = "USER_ID")
     private Long userId;
+
+    @Column(name = "USER_IP")
+    private String userIp;
+
+    @Column(name = "LOG_DATE")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date logDate;
+
+    @Column(name = "URL")
+    private String url;
+
+    @Column(name = "LANG_CODE")
     private String languageCode;
-    private String identityType;
+
+    @Column(name = "IDENTITY")
     private String itemIdentity;
+
+    @Column(name = "IDENTITY_TYPE")
+    private String identityType;
+
 
     /*
      non-persistent properties

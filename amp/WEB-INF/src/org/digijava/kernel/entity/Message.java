@@ -37,22 +37,46 @@ import org.digijava.module.aim.util.AmpMath;
  *
  * This class maps to message_lang table
  */
+import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import java.sql.Timestamp;
+
+@Entity
+@Table(name = "DG_MESSAGE")
 public class Message implements Serializable{
 
     private static final long serialVersionUID = 1;
 
-    private String key;
+    @EmbeddedId
+    private MessageId id;
+
+    @Column(name = "MESSAGE_UTF8", columnDefinition = "text")
     private String message;
-    private String locale;
+
+    @Column(name = "CREATED")
     private Timestamp created;
+
+    @Column(name = "LAST_ACCESSED")
     private Timestamp lastAccessed;
-    private String siteId;
+
+    @Column(name = "KEY_WORDS")
     private String keyWords;
+
+    @Column(name = "ORIG_MESSAGE", columnDefinition = "text")
+    private String originalMessage;
+
+    @Column(name = "PREFIX")
+    private String prefix;
+
+    @Column(name = "AMP_OFFLINE")
+    private Boolean ampOffline;
+    private String key;
+    private String locale;
+    private String siteId;
     private int hashCode;
     private boolean hasHashCode;
-    private String originalMessage;
-    private String prefix;
-    private Boolean ampOffline;
     public Message(){
         hasHashCode = false;
     }

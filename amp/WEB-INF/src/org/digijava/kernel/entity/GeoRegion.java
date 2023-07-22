@@ -25,12 +25,25 @@ package org.digijava.kernel.entity;
 import java.security.acl.Group;
 import java.security.Principal;
 import java.util.Enumeration;
+import javax.persistence.*;
+import javax.persistence.Entity;
 
+@Entity
+@Table(name = "DG_GEOREGIONS")
 public class GeoRegion implements Group {
 
+
+    @Id
+    @Column(name = "ISO2")
     private String id;
+
+    @Column(name = "NAME", length = 400)
     private String name;
+
+    @Column(name = "TYPE", length = 200)
     private String type;
+
+    @Column(name = "ACTIVE", length = 1)
     private String active;
 
     public GeoRegion() {

@@ -26,13 +26,37 @@ import java.util.Set;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.request.Site;
 import java.io.Serializable;
+import javax.persistence.*;
+import javax.persistence.Entity;
+import java.util.HashSet;
+import java.util.Set;
 
+@Entity
+@Table(name = "DG_USER_LANG_PREFERENCES")
 public class UserLangPreferences implements Serializable{
-
+    @Id
+    @EmbeddedId
     private UserPreferencesPK id;
+
+    @ManyToMany
+    @JoinTable(
+            name = "DG_USER_CONT_LANGUAGE_MAP",
+            joinColumns = {
+                    @JoinColumn(name = "USER_ID"),
+                    @JoinColumn(name = "SITE_ID")
+            },
+            inverseJoinColumns = @JoinColumn(name = "CODE")
+    )
+    private Set<Locale> contentLanguages = new HashSet<>();
+
+    @ManyToOne
+    @JoinColumn(name = "NAV_LANGUAGE")
     private Locale navigationLanguage;
-    private Set contentLanguages;
+
+    @ManyToOne
+    @JoinColumn(name = "ALERTS_LANGUAGE")
     private Locale alertsLanguage;
+
 
     public UserLangPreferences() {}
 

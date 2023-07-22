@@ -341,7 +341,7 @@ public class AmpFunding implements Serializable, Versionable, Cloneable, Identif
     @OneToMany(mappedBy = "ampFundingId", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AmpFundingDetail> fundingDetails= new HashSet<>();
 
-    @OneToMany(mappedBy = "ampFundingId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "ampFundingMTEFProjectionId", cascade = CascadeType.ALL, orphanRemoval = true)
     @Interchangeable(fieldTitle = ActivityFieldsConstants.MTEF_PROJECTIONS, importable = true,
             fmPath = "/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections")
     private Set<AmpFundingMTEFProjection> mtefProjections= new HashSet<>();

@@ -21,9 +21,18 @@
  */
 
 package org.digijava.kernel.entity;
+import javax.persistence.*;
+import javax.persistence.Entity;
 
+@Entity
+@Table(name = "DG_DUMMY")
 public class Dummy {
-    private long id;
+
+    @Id
+    @Column(name = "DUMMY_ID")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "dg_dummy_seq")
+    @SequenceGenerator(name = "dg_dummy_seq", sequenceName = "dg_dummy_seq", allocationSize = 1)
+    private Long id;
 
     public long getId() {
         return id;

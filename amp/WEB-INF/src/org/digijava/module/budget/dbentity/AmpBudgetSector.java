@@ -13,7 +13,8 @@ public class AmpBudgetSector implements Serializable,Comparable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_BUDGET_SECTOR_seq")
-    @SequenceGenerator(name = "AMP_BUDGET_SECTOR_seq", sequenceName = "AMP_BUDGET_SECTOR_seq", allocationSize = 1)    @Column(name = "budged_sector_id")
+    @SequenceGenerator(name = "AMP_BUDGET_SECTOR_seq", sequenceName = "AMP_BUDGET_SECTOR_seq", allocationSize = 1)
+    @Column(name = "budged_sector_id")
     private Long idsector;
 
     @ManyToMany(fetch = FetchType.LAZY)

@@ -30,6 +30,9 @@ import java.io.Serializable;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.User;
 
+import javax.persistence.Embeddable;
+
+@Embeddable
 public class UserPreferencesPK
     implements Serializable {
 

@@ -13,7 +13,7 @@ import org.hibernate.Transaction;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "AMP_TEAM_FILTER_DATA")
+@Table
 public class AmpTeamFilterData extends AmpFilterData {
     private static final long serialVersionUID = 1L;
     private static Logger logger = Logger.getLogger(AmpTeamFilterData.class);
@@ -86,6 +86,72 @@ public class AmpTeamFilterData extends AmpFilterData {
             PersistenceManager.closeSession(sess);
         }
         
-    } 
-    
+    }
+
+    public static Logger getLogger() {
+        return logger;
+    }
+
+    public static void setLogger(Logger logger) {
+        AmpTeamFilterData.logger = logger;
+    }
+
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @Override
+    public String getPropertyName() {
+        return propertyName;
+    }
+
+    @Override
+    public void setPropertyName(String propertyName) {
+        this.propertyName = propertyName;
+    }
+
+    @Override
+    public String getPropertyClassName() {
+        return propertyClassName;
+    }
+
+    @Override
+    public void setPropertyClassName(String propertyClassName) {
+        this.propertyClassName = propertyClassName;
+    }
+
+    @Override
+    public String getElementClassName() {
+        return elementClassName;
+    }
+
+    @Override
+    public void setElementClassName(String elementClassName) {
+        this.elementClassName = elementClassName;
+    }
+
+    @Override
+    public String getValue() {
+        return value;
+    }
+
+    @Override
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    @Override
+    public AmpTeam getFilterRelObj() {
+        return filterRelObj;
+    }
+
+    public void setFilterRelObj(AmpTeam filterRelObj) {
+        this.filterRelObj = filterRelObj;
+    }
 }

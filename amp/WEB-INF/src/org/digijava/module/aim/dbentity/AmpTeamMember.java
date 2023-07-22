@@ -69,7 +69,7 @@ public class AmpTeamMember implements Serializable, Identifiable/*, Versionable*
             inverseJoinColumns = @JoinColumn(name = "amp_org_id"))
     private Set<AmpOrganisation> editableFundingOrgs;
 
-    @OneToMany(mappedBy = "ownerId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
 //    @OrderBy(value = "index")
     private Set<AmpDesktopTabSelection> desktopTabSelections;
 

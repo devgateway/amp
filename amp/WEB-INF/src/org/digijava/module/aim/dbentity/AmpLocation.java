@@ -3,22 +3,54 @@ package org.digijava.module.aim.dbentity ;
 import java.io.Serializable;
 
 import org.digijava.module.aim.util.Identifiable;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "AMP_LOCATION")
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class AmpLocation implements Serializable, Cloneable, Identifiable
 {
-    private Long ampLocationId ;
-    private String iso3Code ;
-    private String name ;
-    private String description ;
-    private String gisCoordinates ;
-    private String language ;
-    private String version ;
+
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_LOCATION_seq")
+    @SequenceGenerator(name = "AMP_LOCATION_seq", sequenceName = "AMP_LOCATION_seq", allocationSize = 1)
+    @Column(name = "amp_location_id")
+    private Long ampLocationId;
+
+    @Column(name = "iso3_code")
+    private String iso3Code;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "description", columnDefinition = "text")
+    private String description;
+
+    @Column(name = "gis_coordinates")
+    private String gisCoordinates;
+
+    @Column(name = "language")
+    private String language;
+
+    @Column(name = "version")
+    private String version;
+
+    @Column(name = "geo_code")
     private String geoCode;
-    
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "location_id", referencedColumnName = "id")
     private AmpCategoryValueLocations location;
-    
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "region_location_id", referencedColumnName = "id")
     private AmpCategoryValueLocations regionLocation;
-    
+
+
+
     public AmpCategoryValueLocations getLocation() {
         return location;
     }

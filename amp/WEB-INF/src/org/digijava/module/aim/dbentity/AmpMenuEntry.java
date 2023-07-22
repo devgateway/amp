@@ -16,21 +16,64 @@ import org.hibernate.annotations.DiscriminatorOptions;
  * 
  * @author Nadejda Mandrescu
  */
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "AMP_MENU_ENTRY")
 @DiscriminatorOptions(force=true)
 public class AmpMenuEntry implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_MENU_ENTRY_seq")
+    @SequenceGenerator(name = "AMP_MENU_ENTRY_seq", sequenceName = "AMP_MENU_ENTRY_seq", allocationSize = 1)
+    @Column(name = "id")
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "PARENT_ID")
     private AmpMenuEntry parent;
+
+    @Column(name = "NAME", nullable = false, unique = true)
     private String name;
+
+    @Column(name = "TITLE")
     private String title;
+
+    @Column(name = "TOOLTIP")
     private String tooltip;
+
+    @Column(name = "URL")
     private String url;
+
+    @Column(name = "FLAGS")
     private String flags;
-    private int position = 0;
+
+    @Column(name = "POSITION")
+    private int position;
+
+    @Column(name = "REQUEST_URL", columnDefinition = "text")
     private String requestUrl;
-    private Set<AmpMenuEntry> items;
+
+    @ManyToMany
+    @JoinTable(name = "AMP_MENU_ENTRY_DG_GROUP", joinColumns = @JoinColumn(name = "MENU_ID"), inverseJoinColumns = @JoinColumn(name = "GROUP_ID"))
     private Set<Group> groups;
-    private Map<AmpView, AmpVisibilityRule> viewVisibilityMap;
-    private Map<AmpView, String> viewURLMap;
+
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<AmpMenuEntry> items;
+
+    @ElementCollection
+    @CollectionTable(name = "AMP_MENU_ENTRY_VIEW", joinColumns = @JoinColumn(name = "MENU_ID"))
+    @MapKeyColumn(name = "VIEW_TYPE", columnDefinition = "integer")
+    @Column(name = "RULE_ID")
+    private Map<Integer, Long> viewVisibilityMap;
+
+    @ElementCollection
+    @CollectionTable(name = "AMP_MENU_ENTRY_VIEW", joinColumns = @JoinColumn(name = "MENU_ID"))
+    @MapKeyColumn(name = "VIEW_TYPE", columnDefinition = "integer")
+    @Column(name = "URL")
+    private Map<Integer, String> viewURLMap;
+
+
     
     /**
      * @return the id
@@ -190,7 +233,7 @@ public class AmpMenuEntry implements Serializable {
     /**
      * @return the viewVisibilityMap
      */
-    public Map<AmpView, AmpVisibilityRule> getViewVisibilityMap() {
+    public Map<Integer, Long> getViewVisibilityMap() {
         return viewVisibilityMap;
     }
 
@@ -198,21 +241,21 @@ public class AmpMenuEntry implements Serializable {
      * @param viewVisibilityMap the viewVisibilityMap to set
      */
     public void setViewVisibilityMap(
-            Map<AmpView, AmpVisibilityRule> viewVisibilityMap) {
+            Map<Integer, Long> viewVisibilityMap) {
         this.viewVisibilityMap = viewVisibilityMap;
     }
 
     /**
      * @return the viewURLMap
      */
-    public Map<AmpView, String> getViewURLMap() {
+    public Map<Integer, String> getViewURLMap() {
         return viewURLMap;
     }
 
     /**
      * @param viewURLMap the viewURLMap to set
      */
-    public void setViewURLMap(Map<AmpView, String> viewURLMap) {
+    public void setViewURLMap(Map<Integer, String> viewURLMap) {
         this.viewURLMap = viewURLMap;
     }
     

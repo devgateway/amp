@@ -3,17 +3,34 @@ package org.digijava.module.aim.dbentity;
 /**
  * @author Octavian Ciubotaru
  */
-public class MachineTranslation {
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "machine_translation")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+public class MachineTranslation {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "machine_translation_seq_gen")
+    @SequenceGenerator(name = "machine_translation_seq_gen", sequenceName = "machine_translation_seq", allocationSize = 1)
+    @Column(name = "id")
     private Long id;
 
+    @Column(name = "src_lang", length = 2, nullable = false)
     private String sourceLanguage;
 
+    @Column(name = "dst_lang", length = 2, nullable = false)
     private String targetLanguage;
 
+    @Column(name = "src_text", columnDefinition = "text", nullable = false, unique = true)
     private String text;
 
+    @Column(name = "dst_text", columnDefinition = "text", nullable = false)
     private String translatedText;
+
+
 
     public MachineTranslation() {
     }

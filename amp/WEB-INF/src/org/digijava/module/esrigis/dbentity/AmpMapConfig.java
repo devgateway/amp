@@ -2,21 +2,55 @@ package org.digijava.module.esrigis.dbentity;
 
 import static org.digijava.module.esrigis.helpers.MapConstants.mapSubTypeNames;
 import static org.digijava.module.esrigis.helpers.MapConstants.mapTypeNames;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "AMP_MAP_CONFIG")
 public class AmpMapConfig {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_map_config_seq")
+    @SequenceGenerator(name = "amp_map_config_seq", sequenceName = "amp_map_config_seq", allocationSize = 1)
+    @Column(name = "id")
+    private Long Id;
 
-    private Long id;
+    @Column(name = "mapurl")
     private String mapUrl;
+
+    @Column(name = "maptype")
     private Integer mapType;
-    private Integer mapSubType;
+
+    @Column(name = "county_field")
     private String countyField;
+
+    @Column(name = "district_field")
     private String districtField;
+
+    @Column(name = "geoid_field")
     private String geoIdField;
+
+    @Column(name = "count_field")
     private String countField;
+
+    @Column(name = "map_subtype")
+    private Integer mapSubType;
+
+    @Lob
+    @Column(name = "legend_image", length = 500000)
     private byte[] legendImage;
+
+    @Column(name = "config_name")
     private String configName;
+
+    @Lob
+    @Column(name = "legend_notes")
     private String legendNotes;
+
+    @Lob
+    @Column(name = "layer")
     private String layer;
+    private Long id;
+
+
 
     public Long getId() {
         return id;

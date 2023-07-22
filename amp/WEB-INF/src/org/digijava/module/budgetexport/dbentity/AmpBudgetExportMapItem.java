@@ -5,26 +5,54 @@ package org.digijava.module.budgetexport.dbentity;
  * Date: 2/2/12
  * Time: 5:44 PM
  */
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "amp_budget_export_map_item")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class AmpBudgetExportMapItem {
     public static final int MAP_MATCH_LEVEL_NONE = 0;
     public static final int MAP_MATCH_LEVEL_SOME = 1;
     public static final int MAP_MATCH_LEVEL_EXACT = 2;
     public static final int MAP_MATCH_LEVEL_MANUAL = 3;
-    
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_budget_export_map_rule_seq")
+    @SequenceGenerator(name = "amp_budget_export_map_rule_seq", sequenceName = "amp_budget_export_map_rule_seq", allocationSize = 1)
+    @Column(name = "id")
     private Long id;
-    private AmpBudgetExportMapRule rule;
-    private int matchLevel;
+
+    @Column(name = "imp_code")
     private String importedCode;
+
+    @Column(name = "amp_object_id")
     private Long ampObjectID;
 
-
+    @Column(name = "imported_label")
     private String importedLabel;
+
+    @Column(name = "amp_label")
     private String ampLabel;
+
+    @Column(name = "additional_label")
     private String additionalLabel;
+
+    @Column(name = "match_level")
+    private int matchLevel;
+
+    @Column(name = "approved")
+    private boolean approved;
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "rule")
+    private AmpBudgetExportMapRule rule;
+
 
     private boolean showAdditionalLabelCol;
 
-    private boolean approved;
 
     //NonPersistent field
     private boolean warning;

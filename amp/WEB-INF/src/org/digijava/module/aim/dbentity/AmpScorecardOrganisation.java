@@ -1,5 +1,7 @@
 package org.digijava.module.aim.dbentity;
 
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import java.util.Date;
 
 
@@ -11,12 +13,29 @@ import java.util.Date;
  * @author Emanuel Perez
  *
  */
-public class AmpScorecardOrganisation {
+import javax.persistence.*;
+import java.util.Date;
 
-    private Long ampDonorId;
+@Entity
+@Table(name = "amp_scorecard_organisation")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+public class AmpScorecardOrganisation {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_scorecard_organisation_seq")
+    @SequenceGenerator(name = "amp_scorecard_organisation_seq", sequenceName = "amp_scorecard_organisation_seq", allocationSize = 1)
+    @Column(name = "id")
     private Long id;
+
+    @Column(name = "modify_date")
     private Date modifyDate;
+
+    @Column(name = "amp_donor_id")
+    private Long ampDonorId;
+
+    @Column(name = "to_exclude")
     private boolean toExclude;
+
 
     
     /**

@@ -5,23 +5,44 @@ import java.io.Serializable;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "AMP_STRUCTURE_COORDINATE")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class AmpStructureCoordinate implements Serializable, Cloneable {
 
     private static final long serialVersionUID = -6217182726089147778L;
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_STRUCTURE_COORDINATE_seq")
+    @SequenceGenerator(name = "AMP_STRUCTURE_COORDINATE_seq", sequenceName = "AMP_STRUCTURE_COORDINATE_seq", allocationSize = 1)
+    @Column(name = "amp_structure_coordinate_id")
     @InterchangeableId
     @Interchangeable(fieldTitle = "Id")
     private Long ampStructureCoordinateId;
 
+    @Column(name = "latitude", columnDefinition = "text")
     @Interchangeable(fieldTitle = "Latitude", importable = true)
+
     private String latitude;
 
+    @Column(name = "longitude", columnDefinition = "text")
     @Interchangeable(fieldTitle = "Longitude", importable = true)
+
     private String longitude;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "amp_structure_id")
     @InterchangeableBackReference
+
     private AmpStructure structure;
+
+
+
+
 
     public Long getAmpStructureCoordinateId() {
         return ampStructureCoordinateId;

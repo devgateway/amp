@@ -9,19 +9,44 @@ import java.util.logging.Logger;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.common.util.DateTimeUtil;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import javax.persistence.*;
+import java.util.Date;
+
+@Entity
+@Table(name = "IPA_CONTRACT_AMENDMENT")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class IPAContractAmendment implements Serializable, Cloneable {
 
     /**
      * 
      */
     private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ipa_contract_amendment_seq_gen")
+    @SequenceGenerator(name = "ipa_contract_amendment_seq_gen", sequenceName = "IPA_CONTRACT_AMENDMENT_seq", allocationSize = 1)
+    @Column(name = "id")
     private Long id;
+
+    @Column(name = "amount")
     private Double amount;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "currency")
     private AmpCurrency currency;
-    private Date date;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "ipa_contract_id")
     private IPAContract contract;
+
+    @Column(name = "date_")
+    private Date date;
+
+    @Column(name = "reference")
     private String reference;
+
 
     /**
      * 

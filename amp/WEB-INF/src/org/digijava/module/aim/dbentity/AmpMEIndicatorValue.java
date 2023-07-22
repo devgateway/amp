@@ -3,31 +3,79 @@ package org.digijava.module.aim.dbentity;
 import java.util.Date;
 
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import javax.persistence.*;
+import java.util.Date;
 
+@Entity
+@Table(name = "AMP_ME_INDICATOR_VALUE")
 @Deprecated
 public class AmpMEIndicatorValue {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_ME_INDICATOR_VALUE_seq")
+    @SequenceGenerator(name = "AMP_ME_INDICATOR_VALUE_seq", sequenceName = "AMP_ME_INDICATOR_VALUE_seq", allocationSize = 1)
+    @Column(name = "amp_me_indicator_val_id")
     private Long ampMeIndValId;
-    private AmpActivityVersion activityId;
-    private AmpMEIndicators meIndicatorId;
-    private Float baseVal;  // BASE
+
+    @Column(name = "base_val")
+    private Float baseVal;
+
+    @Column(name = "actual_val")
+    private Float actualVal;
+
+    @Column(name = "target_val")
+    private Float targetVal;
+
+    @Column(name = "revised_target_val")
+    private Float revisedTargetVal;
+
+    @Column(name = "base_val_date")
     private Date baseValDate;
-    private String baseValComments;
-    private Float actualVal;  // ACTUAL
+
+    @Column(name = "actual_val_date")
     private Date actualValDate;
-    private String actualValComments;
-    private Float targetVal; // TARGET
+
+    @Column(name = "target_val_date")
     private Date targetValDate;
-    private String targetValComments;
-    private Float revisedTargetVal; // Revised TARGET
-    private String revisedTargetValComments;
+
+    @Column(name = "revised_target_val_date")
     private Date revisedTargetValDate;
-    private String comments;
-    private AmpIndicator indicator;
-    //private Long logframeValueId;
-    
+
+    @Column(name = "base_val_comments")
+    private String baseValComments;
+
+    @Column(name = "actual_val_comments")
+    private String actualValComments;
+
+    @Column(name = "target_val_comments")
+    private String targetValComments;
+
+    @Column(name = "revised_target_val_comments")
+    private String revisedTargetValComments;
+
+    @ManyToOne
+    @JoinColumn(name = "indicators_category")
     private AmpCategoryValue indicatorsCategory;
-    
+
+    @Column(name = "Comments")
+    private String comments;
+
+    @ManyToOne
+    @JoinColumn(name = "activity_id")
+    private AmpActivityVersion activityId;
+
+    @ManyToOne
+    @JoinColumn(name = "indicator_id")
+    private AmpIndicator indicator;
+
+    @ManyToOne
+    @JoinColumn(name = "risk")
     private AmpIndicatorRiskRatings risk;
+
+    private AmpMEIndicators meIndicatorId;
+
+
+
+    
     /**
      * @return Returns the activityId.
      */

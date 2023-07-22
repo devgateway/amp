@@ -5,6 +5,12 @@ import java.sql.Date;
 /**
  * Created by esoliani on 17/06/16.
  */
+
+import javax.persistence.*;
+import java.sql.Date;
+
+@Entity
+@Table(name = "AMP_INTERCHANGEABLE_RESULT")
 public class AmpInterchangeableResult {
 
     public enum AmpResultStatus {
@@ -15,13 +21,32 @@ public class AmpInterchangeableResult {
         }
     }
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_INTERCHANGEABLE_RESULT_seq")
+    @SequenceGenerator(name = "AMP_INTERCHANGEABLE_RESULT_seq", sequenceName = "AMP_INTERCHANGEABLE_RESULT_seq", allocationSize = 1)
+    @Column(name = "id")
     private Long id;
+
+    @Column(name = "date")
     private Date date;
+
+    @Column(name = "project_id")
     private String projectId;
+
+    @Column(name = "activity_id")
     private String ampActivityId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
     private AmpResultStatus status;
+
+    @Column(name = "errors")
     private String errorDetails;
+
+    @Column(name = "operation")
     private String operation;
+
+
 
     public AmpInterchangeableResult() {
     }

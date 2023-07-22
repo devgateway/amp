@@ -5,18 +5,43 @@ import java.util.Date;
 
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import javax.persistence.*;
+import java.util.Date;
+
+@Entity
+@Table(name = "AMP_PLEDGES")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class AmpPledge implements Serializable{
     /**
      * 
      */
     private static final long serialVersionUID = -2427620222411238018L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_PLEDGES_seq")
+    @SequenceGenerator(name = "AMP_PLEDGES_seq", sequenceName = "AMP_PLEDGES_seq", allocationSize = 1)
+    @Column(name = "amp_pledge_id")
     private Long ampPledgeId;
+
+    @Column(name = "date_")
     private Date date;
+
+    @Column(name = "amount")
     private Double amount;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "currency", referencedColumnName = "currency_id")
     private AmpCurrency currency;
-    private AmpCategoryValue adjustmentType ;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "adjustment_type", referencedColumnName = "category_value_id")
+    private AmpCategoryValue adjustmentType;
+
+    @Column(name = "program")
     private String program;
+
     public AmpCategoryValue getAdjustmentType() {
         return adjustmentType;
     }

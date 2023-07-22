@@ -1,5 +1,7 @@
 package org.digijava.module.aim.dbentity ;
 
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
@@ -9,20 +11,55 @@ import java.util.Set;
  * @deprecated use {@link AmpIndicator}
  *
  */
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.*;
+
+@Entity
+@Table(name = "AMP_THEME_INDICATORS")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Deprecated
 public class AmpThemeIndicators implements Serializable, Comparable
 {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "amp_theme_ind_id")
     private Long ampThemeIndId;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "code")
     private String code;
+
+    @Column(name = "type")
     private String type;
+
+    @Column(name = "creation_date")
     private Date creationDate;
-    private int category;
-    private boolean npIndicator;
+
+    @Column(name = "category")
+    private Integer category;
+
+    @Column(name = "np_indicator")
+    private Boolean npIndicator;
+
+    @Column(name = "description", length = 10000)
     private String description;
+
+    @OneToMany(mappedBy = "ampThemeIndicators", cascade = CascadeType.ALL, orphanRemoval = true)
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    private Set<AmpIndicatorSector> sectors = new HashSet<>();
+
+    @OneToMany(mappedBy = "themeIndicator", cascade = CascadeType.ALL, orphanRemoval = true)
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    private Set<AmpThemeIndicatorValue> indicatorValues = new HashSet<>();
+
     private Set themes;
-    private Set indicatorValues;
-    private Set sectors;
+
     
     public AmpThemeIndicators() {}
 
@@ -171,5 +208,5 @@ public class AmpThemeIndicators implements Serializable, Comparable
     public void setSectors(Set sectors) {
         this.sectors = sectors;
     }
-    
+
 }

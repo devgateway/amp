@@ -3,26 +3,46 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 
 import org.apache.log4j.Logger;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * Persistent class for Structure Images
  * @author mmoras
  */
+import javax.persistence.*;
+
+@Entity
+@Table(name = "AMP_STRUCTURE_IMG")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+
 public class AmpStructureImg implements Serializable, Cloneable, Comparable<AmpStructureImg> {
     private static Logger logger = Logger.getLogger(AmpStructureImg.class);
-    
-    
-    private Long id;
-    
-    private byte[] imgFile;
 
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_STRUCTURE_IMG_seq")
+    @SequenceGenerator(name = "AMP_STRUCTURE_IMG_seq", sequenceName = "AMP_STRUCTURE_IMG_seq", allocationSize = 1)
+    @Column(name = "id")
+    private Long id;
+
+    @Column(name = "img_file_name")
     private String imgFileName;
-    
+
+    @Column(name = "content_type")
     private String contentType;
 
+    @Lob
+    @Column(name = "img_file")
+    private byte[] imgFile;
+
+    @Column(name = "creation_time")
     private Long creationTime;
-    
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "amp_structure_id", nullable = false)
     private AmpStructure structure;
+
     
     public Long getId() {
         return id;

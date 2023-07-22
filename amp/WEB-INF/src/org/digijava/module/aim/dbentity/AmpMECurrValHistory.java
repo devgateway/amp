@@ -1,14 +1,33 @@
 package org.digijava.module.aim.dbentity;
 
 import java.util.Date;
+import javax.persistence.*;
+import java.util.Date;
 
+@Entity
+@Table(name = "AMP_ME_CURR_VAL_HISTORY")
 @Deprecated
 public class AmpMECurrValHistory {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_ME_CURR_VAL_HIST_seq")
+    @SequenceGenerator(name = "AMP_ME_CURR_VAL_HIST_seq", sequenceName = "AMP_ME_CURR_VAL_HIST_seq", allocationSize = 1)
+    @Column(name = "amp_me_curr_val_history_id")
     private Long ampMECurrValHistoryId;
-    private AmpIndicator meIndValue;
-    private float currValue;
+
+    @Column(name = "curr_val")
+    private Float currValue;
+
+    @Column(name = "curr_val_date")
     private Date currValueDate;
+
+    @Column(name = "comments")
     private String comments;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "me_ind_value", referencedColumnName = "indicator_id")
+    private AmpIndicator meIndValue;
+
 
     /**
      * @return Returns the ampMECurrValHistoryId.

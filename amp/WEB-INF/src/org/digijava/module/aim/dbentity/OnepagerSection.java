@@ -1,14 +1,27 @@
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import java.io.Serializable;
+import javax.persistence.*;
+
+@Entity
+@Table(name = "AMP_ONEPAGER_SECTION")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class OnepagerSection implements Serializable{
     private static final long serialVersionUID = 1L;
-
-    //persisted fields
+    @Id
+    @Column(name = "className")
     private String className;
-    private Integer position;
+
+    @Column(name = "folded")
     private Boolean folded;
+
+    @Column(name = "position")
+    private Integer position;
+    //persisted fields
+
 
     //non persisted fields
     private String name;

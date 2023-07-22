@@ -7,6 +7,8 @@ import java.io.Serializable;
 import java.util.Set;
 
 import org.dgfoundation.amp.visibility.AmpVisibilityRuleType;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -14,7 +16,7 @@ import java.util.Set;
 @Entity
 @Table(name = "AMP_VISIBILITY_RULE")
 @Cacheable
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 /**
  * Defines visibility rule of a given type (ANY/ALL) that can consist of other rules or fields, features, modules, etc  
  * @author Nadejda Mandrescu

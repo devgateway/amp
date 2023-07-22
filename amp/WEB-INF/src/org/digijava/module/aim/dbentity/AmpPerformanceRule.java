@@ -16,26 +16,49 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
  * @author Viorel Chihai
  *
  */
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
+
+@Entity
+@Table(name = "AMP_PERFORMANCE_RULE")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AmpPerformanceRule {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_PERFORMANCE_RULE_seq")
+    @SequenceGenerator(name = "AMP_PERFORMANCE_RULE_seq", sequenceName = "AMP_PERFORMANCE_RULE_seq", allocationSize = 1)
+    @Column(name = "rule_id")
     private Long id;
 
+    @Column(name = "rule_name", nullable = false)
     @ApiModelProperty(example = "No disbursements")
+
     private String name;
 
+    @Column(name = "rule_description")
     private String description;
 
+    @Column(name = "rule_type_class_name", nullable = false)
     @JsonProperty(PerformanceRuleConstants.JSON_ATTRIBUTE_TYPE_CLASS_NAME)
+
     private String typeClassName;
 
+    @Column(name = "enabled", nullable = false)
     private Boolean enabled = false;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "level_category", referencedColumnName = "category_value_id", nullable = false)
     @JsonSerialize(using = AmpCategoryValueSerializer.class)
+
     private AmpCategoryValue level;
 
+    @OneToMany(mappedBy = "rule", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonManagedReference
-    private Set<AmpPerformanceRuleAttribute> attributes;
+    private Set<AmpPerformanceRuleAttribute> attributes = new HashSet<>();
+
+
+
 
     public Long getId() {
         return id;

@@ -1,14 +1,31 @@
 package org.digijava.module.aim.dbentity;
 
+import javax.persistence.*;
 
+@Entity
+@Table(name = "AMP_ME_INDICATORS")
 @Deprecated
 public class AmpMEIndicators {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_ME_INDICATORS_seq")
+    @SequenceGenerator(name = "AMP_ME_INDICATORS_seq", sequenceName = "AMP_ME_INDICATORS_seq", allocationSize = 1)
+    @Column(name = "amp_me_indicator_id")
     private Long ampMEIndId;
+
+    @Column(name = "code")
     private String code;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "description", columnDefinition = "text")
     private String description;
-    private boolean defaultInd;
-    private boolean ascendingInd;
+
+    @Column(name = "default_ind")
+    private Boolean defaultInd;
+
+    @Column(name = "ascending_ind")
+    private Boolean ascendingInd;
     
     
     /**

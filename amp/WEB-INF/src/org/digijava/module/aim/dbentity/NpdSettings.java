@@ -1,5 +1,7 @@
 package org.digijava.module.aim.dbentity;
 
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import java.io.Serializable;
 
 /**
@@ -7,17 +9,37 @@ import java.io.Serializable;
  *
  * @author Dare Roinishvili
  */
+import javax.persistence.*;
+
+@Entity
+@Table(name = "amp_npd_settings")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class NpdSettings implements Serializable {
     
     private static final long serialVersionUID = 1L;
-    
+    @Id
+    @Column(name = "npd_settings_id")
     private Long id;
-    private Integer height;
+
+    @Column(name = "width")
     private Integer width;
+
+    @Column(name = "height")
+    private Integer height;
+
+    @Column(name = "angle")
     private Integer angle;
-    private AmpTeam team;
+
+    @Column(name = "activities_per_page")
     private Integer actListPageSize;
-    private String selectedYearsForTeam; //used in npd to display graph by years;
+
+    @Column(name = "selected_years_for_team")
+    private String selectedYearsForTeam;
+
+    @OneToOne(mappedBy = "npdSettings")
+    private AmpTeam team;
+
     
     public Integer getActListPageSize() {
         return actListPageSize;

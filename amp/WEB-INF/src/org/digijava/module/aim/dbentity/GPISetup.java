@@ -7,7 +7,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.digijava.module.aim.annotations.reports.Identificator;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "AMP_GPI_SETUP")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class GPISetup implements Serializable, Comparable {
 
     public static final String ACTUAL_DISBURSEMENTS = "Actual Disbursements";
@@ -17,12 +24,26 @@ public class GPISetup implements Serializable, Comparable {
     public static final String ACTUAL_EXPENDITURES = "Actual Expenditures";
     public static final String PLANNED_EXPENDITURES = "Planned Expenditures";
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_gpi_setup_seq_gen")
+    @SequenceGenerator(name = "amp_gpi_setup_seq_gen", sequenceName = "AMP_GPI_SETUP_seq", allocationSize = 1)
+    @Column(name = "gpiSetupId")
     @Identificator
+
     private Long gpiSetupId;
+
+    @Column(name = "indicator5aActualDisbursement")
     private String indicator5aActualDisbursement;
+
+    @Column(name = "indicator5aPlannedDisbursement")
     private String indicator5aPlannedDisbursement;
+
+    @Column(name = "indicator6ScheduledDisbursements")
     private String indicator6ScheduledDisbursements;
+
+    @Column(name = "indicator9bDisbursements")
     private String indicator9bDisbursements;
+
 
     private transient Map<String, String> listOfValues;
 

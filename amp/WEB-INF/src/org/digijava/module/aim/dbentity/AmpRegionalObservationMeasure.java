@@ -7,17 +7,36 @@ import java.util.Set;
 
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.persistence.*;
+import java.util.Set;
+
+@Entity
+@Table(name = "AMP_REG_OBS_MEASURE")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @TranslatableClass (displayName = "Regional Observation Measure")
 public class AmpRegionalObservationMeasure implements Serializable, Cloneable {
-    //IATI-check: to be ignored
-//  @Interchangeable(fieldTitle="ID")
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_REG_OBS_MEASURE_seq")
+    @SequenceGenerator(name = "AMP_REG_OBS_MEASURE_seq", sequenceName = "AMP_REG_OBS_MEASURE_seq", allocationSize = 1)
+    @Column(name = "amp_reg_obs_measure_id")
     private Long ampRegionalObservationMeasureId;
-//  @Interchangeable(fieldTitle="Name")
+
+    @Column(name = "name", columnDefinition = "text")
     @TranslatableField
     private String name;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "amp_regional_observation_id", referencedColumnName = "amp_regional_observation_id")
     private AmpRegionalObservation regionalObservation;
-//  @Interchangeable(fieldTitle="Actors",fmPath="/Activity Form/Regional Observations/Observation/Measure/Actor")
+
+    @OneToMany(mappedBy = "measure", cascade = CascadeType.ALL, orphanRemoval = true)
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<AmpRegionalObservationActor> actors;
+
+
 
 
     public String getName() {

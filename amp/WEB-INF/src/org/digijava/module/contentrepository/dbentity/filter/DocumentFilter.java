@@ -22,6 +22,23 @@ import org.digijava.module.contentrepository.util.DocumentOrganizationManager;
  * @author Alex Gartner
  *
  */
+import java.util.List;
+import javax.persistence.Cacheable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Index;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "CR_DOCUMENT_FILTER")
+@Cacheable
 public class DocumentFilter {
     
     public final static String SESSION_LAST_APPLIED_PUBLIC_FILTER   = "SESSION_LAST_APPLIED_PUBLIC_FILTER";
@@ -33,38 +50,72 @@ public class DocumentFilter {
     
     public static final Long KEYWORDS_MODE_ANY = 0L;
     public static final Long KEYWORDS_MODE_ALL = 1L;
-    
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CR_DOCUMENT_FILTER_SEQ")
+    @Column(name = "id")
     private Long id;
-    
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "source")
     private String source;
-    
+
+    @Column(name = "base_username")
     private String baseUsername;
+
+    @Column(name = "base_team_id")
     private Long baseTeamId;
-    
-    /**
-      * the AmpOrganisationId to filter by. null, zero or negative value = don't filter by this field 
-      */
-    private Long organisationId;
-    
+
+    @Column(name = "public_view_position")
+    private Long publicViewPosition;
+
+    @Column(name = "filter_from_date")
+    private String filterFromDate;
+
+    @Column(name = "filter_to_date")
+    private String filterToDate;
+
+    @ElementCollection(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cr_document_filter_id")
+    @Column(name = "label_uuid")
+    private List<String> filterLabelsUUID;
+
+    @ElementCollection(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cr_document_filter_id")
+    @Column(name = "doc_type")
+    private List<Long> filterDocTypeIds;
+
+    @ElementCollection(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cr_document_filter_id")
+    @Column(name = "doc_type")
+    private List<String> filterFileType;
+
+    @ElementCollection(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cr_document_filter_id")
+    @Column(name = "team_ids")
+    private List<Long> filterTeamIds;
+
+    @ElementCollection(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cr_document_filter_id")
+    @Column(name = "filter_owners")
+    private List<String> filterOwners;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_", referencedColumnName = "id")
     private AmpTeamMember user;
     
-    private List<String> filterLabelsUUID;
+
+
+    private Long organisationId;
+
     private List<Label> filterLabels;
-    
-    private List<Long> filterDocTypeIds;
-    private List<String> filterFileType;
-    
-    private List<Long> filterTeamIds;
-    private List<String> filterOwners;
-    
-    private String filterFromDate;
-    private String filterToDate;
+
     
     private Long filterKeywordMode = KEYWORDS_MODE_ANY;
     
-    private Long publicViewPosition;
-    
+
     private List<String> filterKeywords;
     
     public DocumentFilter() {

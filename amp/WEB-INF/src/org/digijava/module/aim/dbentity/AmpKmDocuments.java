@@ -4,20 +4,42 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "AMP_KM_DOCUMENTS")
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class AmpKmDocuments
 {
     private static Logger logger = Logger.getLogger(AmpKmDocuments.class) ;
-    
-    private Long ampKmId ;
-    private String name ;
-    private String type; 
-    private String description ;
-    private String language ;
-    private String version ;
-    private Set activities ;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_KM_DOCUMENTS_seq")
+    @SequenceGenerator(name = "AMP_KM_DOCUMENTS_seq", sequenceName = "AMP_KM_DOCUMENTS_seq", allocationSize = 1)
+    @Column(name = "amp_km_id")
+    private Long ampKmId;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "type")
+    private String type;
+
+    @Column(name = "description", columnDefinition = "text")
+    private String description;
+
+    @Column(name = "language")
+    private String language;
+
+    @Column(name = "version")
+    private String version;
+
+    @ManyToOne
+    @JoinColumn(name = "document_type", referencedColumnName = "id")
     private AmpCategoryValue documentType;
-    
+    private Set activities;
 
     /**
      * @return

@@ -1,5 +1,7 @@
 package org.digijava.module.budgetexport.dbentity;
 
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import java.util.Date;
 import java.util.List;
 
@@ -8,20 +10,49 @@ import java.util.List;
  * Date: 2/2/12
  * Time: 5:20 PM
  */
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+@Entity
+@Table(name = "amp_budget_export_project")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class AmpBudgetExportProject {
     public static final int DATA_SOURCE_CSV = 0;
     public static final int DATA_SOURCE_SERVICE = 1;
-
-    
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_budget_export_project_seq")
+    @SequenceGenerator(name = "amp_budget_export_project_seq", sequenceName = "amp_budget_export_project_seq", allocationSize = 1)
+    @Column(name = "id")
     private Long id;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "description")
     private String description;
+
+    @Column(name = "creation_date")
     private Date creationDate;
-    private List<AmpBudgetExportMapRule> rules;
+
+    @Column(name = "report_id")
     private Long ampReportId;
+
+    @Column(name = "mapping_service_url")
     private String mappingImportServiceURL;
+
+    @Column(name = "service_action_url")
     private String serviceActionURL;
+
+    @Column(name = "data_source")
     private int dataSource;
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AmpBudgetExportMapRule> rules = new ArrayList<>();
+
+
     
     public Long getId() {
         return id;

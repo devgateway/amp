@@ -9,6 +9,7 @@ import org.dgfoundation.amp.visibility.data.RuleBasedData;
 /**
  * @author Nadejda Mandrescu
  */
+
 public abstract class AmpMenuEntryInView extends AmpMenuEntry implements RuleBasedData {
     
     private Long menuViewId;

@@ -18,61 +18,96 @@ import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * Persister class for Structures
  * @author fferreyra
  */
+import java.util.List;
+import java.util.Set;
+import javax.persistence.*;
+
+@Entity
+@Table(name = "AMP_STRUCTURE")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @TranslatableClass (displayName = "Structure")
 public class AmpStructure implements Serializable, Comparable<Object>, Versionable, Cloneable, Identifiable {
 
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_STRUCTURE_seq")
+    @SequenceGenerator(name = "AMP_STRUCTURE_seq", sequenceName = "AMP_STRUCTURE_seq", allocationSize = 1)
+    @Column(name = "amp_structure_id")
     @InterchangeableId
     @Interchangeable(fieldTitle = "Id")
     private Long ampStructureId;
-    
+
+    @Column(name = "title", nullable = false)
     @TranslatableField
     @Interchangeable(fieldTitle = "Title", importable = true, fmPath = "/Activity Form/Structures/Structure Title",
             interValidators = @InterchangeableValidator(RequiredValidator.class))
     private String title;
-    
+
+    @Column(name = "description", columnDefinition = "text")
     @TranslatableField
-    @Interchangeable(fieldTitle = "Description", importable = true, 
+    @Interchangeable(fieldTitle = "Description", importable = true,
             fmPath = "/Activity Form/Structures/Structure Description")
     private String description;
-    
-    @Interchangeable(fieldTitle = "Latitude", importable = true, 
+
+    @Column(name = "latitude", columnDefinition = "text")
+    @Interchangeable(fieldTitle = "Latitude", importable = true,
             fmPath = "/Activity Form/Structures/Structure Latitude")
     private String latitude;
-    
-    @Interchangeable(fieldTitle = "Longitude", importable = true, 
+
+    @Column(name = "longitude", columnDefinition = "text")
+    @Interchangeable(fieldTitle = "Longitude", importable = true,
             fmPath = "/Activity Form/Structures/Structure Longitude")
     private String longitude;
-    
+
+    @Column(name = "shape", columnDefinition = "text")
     @Interchangeable(fieldTitle = "Shape", importable = true, fmPath = "/Activity Form/Structures/Structure Shape")
+
     private String shape;
-    
-    private java.sql.Timestamp creationdate;
-    
-    @Interchangeable(fieldTitle = "Type", pickIdOnly = true, importable = true, 
+
+    @Column(name = "creation_date")
+    private java.sql.Timestamp creationDate;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "amp_activity_id")
+    @InterchangeableBackReference
+
+    private AmpActivityVersion activity;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "type")
+
+    @Interchangeable(fieldTitle = "Type", pickIdOnly = true, importable = true,
             fmPath = "/Activity Form/Structures/Structure Type")
     private AmpStructureType type;
 
-    @InterchangeableBackReference
-    private AmpActivityVersion activity;
-    
-    private Set<AmpStructureImg> images;
-    
-    @Interchangeable(fieldTitle = "Coordinates", importable = true, fmPath = "/Activity Form/Structures/Map")
-    private List<AmpStructureCoordinate> coordinates = new ArrayList<>();
-    
-    private String coords;
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "structure_color")
     @Interchangeable(fieldTitle = "Structure Color", fmPath = "/Activity Form/Structures/Map",
             discriminatorOption = CategoryConstants.GIS_STRUCTURES_COLOR_CODING_KEY, importable = true,
             pickIdOnly = true)
     private AmpCategoryValue structureColor;
+
+    @OneToMany(mappedBy = "ampStructure", cascade = CascadeType.ALL, orphanRemoval = true)
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    private Set<AmpStructureImg> images;
+
+    @OneToMany(mappedBy = "ampStructure", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderColumn(name = "index")
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @Interchangeable(fieldTitle = "Coordinates", importable = true, fmPath = "/Activity Form/Structures/Map")
+
+    private List<AmpStructureCoordinate> coordinates = new ArrayList<>();
+    private String coords;
+
+    private java.sql.Timestamp creationdate;
     private Long structureColorId;
     private Integer tempId; // client side id used for identifying structures
 

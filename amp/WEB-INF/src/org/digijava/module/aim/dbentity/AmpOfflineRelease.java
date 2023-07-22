@@ -15,6 +15,11 @@ import com.google.common.collect.ImmutableMap;
 /**
  * @author Octavian Ciubotaru
  */
+import javax.persistence.*;
+import java.util.Date;
+
+@Entity
+@Table(name = "amp_offline_release")
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AmpOfflineRelease implements Comparable<AmpOfflineRelease>, Cloneable {
@@ -39,22 +44,36 @@ public class AmpOfflineRelease implements Comparable<AmpOfflineRelease>, Cloneab
             .put("debian", "deb")
             .put(MAC_OS, "zip")
             .build();
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_offline_release_seq")
+    @SequenceGenerator(name = "amp_offline_release_seq", sequenceName = "amp_offline_release_seq", allocationSize = 1)
+    @Column(name = "id")
     private Long id;
 
+    @Column(name = "version", nullable = false, unique = true)
     @javax.validation.constraints.Pattern(regexp = VER_REGEX)
+
     private String version;
 
+    @Column(name = "os", nullable = false, unique = true)
     @javax.validation.constraints.Pattern(regexp = OS_REGEX)
+
     private String os;
 
+    @Column(name = "arch", nullable = false, unique = true)
     @javax.validation.constraints.Pattern(regexp = ARCH_REGEX)
+
     private String arch;
 
+    @Column(name = "critical", nullable = false)
     private boolean critical;
-
     @JsonSerialize(using = ISO8601DateSerializer.class)
+
+    @Column(name = "date", nullable = false)
     private Date date;
+
+
+
 
     private String url;
 

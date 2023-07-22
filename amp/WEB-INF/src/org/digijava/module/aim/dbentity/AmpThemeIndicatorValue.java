@@ -4,13 +4,15 @@ import java.io.Serializable;
 import java.util.Date;
 
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import java.util.Date;
 import javax.persistence.*;
 
 @Entity
 @Table(name = "AMP_THEME_INDICATOR_VALUE")
 @Cacheable
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Deprecated
 public class AmpThemeIndicatorValue implements Comparable, Serializable 
 {
@@ -34,8 +36,10 @@ public class AmpThemeIndicatorValue implements Comparable, Serializable
     @JoinColumn(name = "theme_indicator_id")
     private AmpThemeIndicators themeIndicatorId;
 
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "indicator_id")
+    private AmpIndicator indicatorId;
  
     /**
      * @return Returns the ampThemeIndValId.

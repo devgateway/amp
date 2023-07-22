@@ -3,13 +3,25 @@ package org.digijava.module.aim.dbentity;
 /**
  * @author Octavian Ciubotaru
  */
-public class MachineTranslationCharactersUsed {
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "machine_translation_characters_used")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+public class MachineTranslationCharactersUsed {
+    @Id
+    @Column(name = "id")
     private Long id;
 
+    @Column(name = "month", length = 6, nullable = false)
     private String month;
 
+    @Column(name = "used", nullable = false)
     private Integer used;
+
 
     public Long getId() {
         return id;

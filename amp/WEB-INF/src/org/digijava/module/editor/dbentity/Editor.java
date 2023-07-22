@@ -46,28 +46,52 @@ import org.digijava.module.aim.util.Output;
  * @version 1.0
  */
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "DG_EDITOR")
 public class Editor
     implements Serializable, Cloneable, Versionable {
 
     private static final long serialVersionUID = 1L;
+    @EmbeddedId
+    private EditorId editorId;
+
+    @Column(name = "LAST_MOD_DATE")
+    private Date lastModDate;
+
+    @Column(name = "URL")
+    private String url;
+
+    @ManyToOne
+    @JoinColumn(name = "USER_ID")
+    private User user;
+
+    @Column(name = "CREATION_IP")
+    private String creationIp;
+
+    @Column(name = "TITLE")
+    private String title;
+
+    @Column(name = "BODY", columnDefinition = "text")
+    private String body;
+
+    @Column(name = "NOTICE")
+    private String notice;
+
+    @Column(name = "ORDER_INDEX")
+    private int orderIndex;
+
+    @Column(name = "GROUP_NAME")
+    private String groupName;
 
 //  private static Logger logger = Logger.getLogger(Editor.class);
 
     private String siteId;
     private String editorKey;
-    private Date lastModDate;
-    private String url;
+
     private String language;
 
-    private String title;
-    private String body;
-    private String notice;
-
-    private String creationIp;
-    private User user;
-
-    private int orderIndex;
-    private String groupName;
 
     public Date getLastModDate() {
         return lastModDate;

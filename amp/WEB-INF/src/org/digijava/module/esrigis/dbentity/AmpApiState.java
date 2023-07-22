@@ -15,6 +15,11 @@ import io.swagger.annotations.ApiModelProperty;
  * @author jdeanquin
  *
  */
+import javax.persistence.*;
+import java.util.Date;
+
+@Entity
+@Table(name = "AMP_API_STATE")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AmpApiState implements Serializable {
 
@@ -24,34 +29,48 @@ public class AmpApiState implements Serializable {
     public static class DetailView extends BriefView {
     }
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_api_state_seq")
+    @SequenceGenerator(name = "amp_api_state_seq", sequenceName = "amp_api_state_seq", allocationSize = 1)
+    @Column(name = "id")
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @JsonView(BriefView.class)
     private Long id;
 
+    @Column(name = "title")
     @ApiModelProperty(example = "Dashboard")
     @JsonView(BriefView.class)
     private String title;
 
+    @Column(name = "description")
     @ApiModelProperty(example = "Saved dashboard")
     @JsonView(BriefView.class)
     private String description;
 
-    @JsonIgnore
-    private ApiStateType type;
-
+    @Column(name = "stateBlob", columnDefinition = "text")
     @ApiModelProperty(example = "{\"chart:/rest/dashboard/tops/do\":{\"limit\":5,\"adjtype\":\"Actual Commitments\","
             + "\"view\":\"bar\",\"big\":false},\"chart:/rest/dashboard/tops/dg\":{\"limit\":5,"
             + "\"adjtype\":\"Actual Commitments\",\"view\":\"bar\",\"big\":false}}")
     @JsonView(DetailView.class)
     private String stateBlob;
 
+    @Column(name = "date_created")
     @JsonView(BriefView.class)
     @JsonProperty(value = "created", access = JsonProperty.Access.READ_ONLY)
     @JsonSerialize(using = ApiStateDateTimeSerializer.class)
     private Date createdDate;
 
+    @Column(name = "date_updated")
     @JsonIgnore
+
     private Date updatedDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type")
+    @JsonIgnore
+
+    private ApiStateType type;
+
 
     public AmpApiState(){
         

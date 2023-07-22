@@ -6,13 +6,34 @@
 
 package org.digijava.module.aim.dbentity;
 
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "AMP_TEAM_REPORTS")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class AmpTeamReports implements Comparable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_TEAM_REPORTS_seq")
+    @SequenceGenerator(name = "AMP_TEAM_REPORTS_seq", sequenceName = "AMP_TEAM_REPORTS_seq", allocationSize = 1)
+    @Column(name = "amp_team_reports_id")
+    private Long ampTeamReportsId;
 
-          private Long ampTeamReportsId;
-          private AmpTeam team;
-          private AmpReports report;
-          private boolean teamView;
+    @Column(name = "team_view")
+    private Boolean teamView;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "team")
+    private AmpTeam team;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "report")
+    private AmpReports report;
+
+
+
 
           public void setAmpTeamReportsId(Long value) {
                      ampTeamReportsId = value;

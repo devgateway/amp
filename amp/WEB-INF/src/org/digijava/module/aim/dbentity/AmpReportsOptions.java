@@ -4,14 +4,28 @@
  */
 
 package org.digijava.module.aim.dbentity;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "AMP_REPORTS_OPTIONS")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class AmpReportsOptions {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_REPORTS_OPTIONS_seq")
+    @SequenceGenerator(name = "AMP_REPORTS_OPTIONS_seq", sequenceName = "AMP_REPORTS_OPTIONS_seq", allocationSize = 1)
+    @Column(name = "amp_option_id")
     private Long ampOptionId;
 
+    @Column(name = "name")
     private String name;
 
-    private char options;
+    @Column(name = "options")
+    private Character options;
+
 
     public Long getAmpOptionId() {
         return ampOptionId;

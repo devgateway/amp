@@ -1,5 +1,7 @@
 package org.digijava.module.aim.dbentity;
 
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,19 +9,41 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
+
+@Entity
+@Table(name = "AMP_SCORECARD_SETTINGS")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class AmpScorecardSettings implements Serializable {
 
     /**
      * 
      */
     private static final long serialVersionUID = -2696192720129725674L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_scorecard_settings_seq")
+    @SequenceGenerator(name = "amp_scorecard_settings_seq", sequenceName = "AMP_SCORECARD_SETTINGS_seq", allocationSize = 1)
+    @Column(name = "id")
     private Long ampScorecardSettingsId;
-    private Boolean validationPeriod = Boolean.FALSE;
-    private Integer validationTime;
-    private Double percentageThreshold;
-    private Set<AmpScorecardSettingsCategoryValue> closedStatuses = new HashSet<AmpScorecardSettingsCategoryValue>();
 
+    @Column(name = "validation_period")
+    private Boolean validationPeriod;
+
+    @Column(name = "validation_time")
+    private Integer validationTime;
+
+    @Column(name = "percentage_threshold")
+    private Double percentageThreshold;
+
+    @Column(name = "quarters")
     private String quarters;
+
+    @OneToMany(mappedBy = "ampScorecardSettings", cascade = {CascadeType.ALL}, orphanRemoval = true)
+    private Set<AmpScorecardSettingsCategoryValue> closedStatuses = new HashSet<>();
+
 
     public Long getAmpScorecardSettingsId() {
         return ampScorecardSettingsId;

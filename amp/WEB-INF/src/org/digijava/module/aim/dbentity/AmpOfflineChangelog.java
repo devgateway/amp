@@ -5,13 +5,30 @@ import java.util.Date;
 /**
  * @author Octavian Ciubotaru
  */
+import javax.persistence.*;
+import java.util.Date;
+
+@Entity
+@Table(name = "amp_offline_changelog")
 public class AmpOfflineChangelog {
-    
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_offline_changelog_seq")
+    @SequenceGenerator(name = "amp_offline_changelog_seq", sequenceName = "amp_offline_changelog_seq", allocationSize = 1)
+    @Column(name = "id")
     private Long id;
+
+    @Column(name = "entity_name", length = 50, nullable = false)
     private String entityName;
+
+    @Column(name = "entity_id")
     private String entityId;
+
+    @Column(name = "operation_name", length = 20, nullable = false)
     private String operationName;
+
+    @Column(name = "operation_time", nullable = false)
     private Date operationTime;
+
 
     public Long getId() {
         return id;

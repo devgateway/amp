@@ -11,20 +11,43 @@ import java.util.Set;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.Output;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.persistence.*;
+import java.util.Date;
+import java.util.Set;
+
+@Entity
+@Table(name = "AMP_REGIONAL_OBSERVATION")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @TranslatableClass (displayName = "Regional Observation")
 public class AmpRegionalObservation implements Serializable, Versionable, Cloneable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_REGIONAL_OBSERVATION_seq")
+    @SequenceGenerator(name = "AMP_REGIONAL_OBSERVATION_seq", sequenceName = "AMP_REGIONAL_OBSERVATION_seq", allocationSize = 1)
+    @Column(name = "amp_regional_observation_id")
+    private Long ampRegionalObservationId;
+
+    @Column(name = "name", columnDefinition = "text")
+    @TranslatableField
+
+    private String name;
+
+    @Column(name = "observationDate")
+    private Date observationDate;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "amp_activity_id", referencedColumnName = "activity_id")
+    private AmpActivityVersion activity;
+
+    @OneToMany(mappedBy = "regionalObservation", cascade = CascadeType.ALL, orphanRemoval = true)
+    @org.hibernate.annotations.OrderBy(clause = "amp_reg_obs_measure_id asc")
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    private Set<AmpRegionalObservationMeasure> regionalObservationMeasures;
 
     //IATI-check: to be ignored
-//  @Interchangeable(fieldTitle="ID")
-    private Long ampRegionalObservationId;
-//  @Interchangeable(fieldTitle="Name")
-    @TranslatableField
-    private String name;
-    private AmpActivityVersion activity;
-//  @Interchangeable(fieldTitle="Regional Observation Measures",fmPath="/Activity Form/Regional Observations/Observation/Measure")
-    private Set<AmpRegionalObservationMeasure> regionalObservationMeasures;
-//  @Interchangeable(fieldTitle="Observation Date",fmPath="/Activity Form/Regional Observations/Observation/Date")
-    private Date observationDate;
+
 
     public String getName() {
         return name;

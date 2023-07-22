@@ -10,24 +10,40 @@ import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
+
+@Entity
+@Table(name = "AMP_LINE_MINISTRY_OBS_MEASURE")
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 
 public class AmpLineMinistryObservationMeasure implements Serializable, Cloneable {
     //IATI-check: to be ignored
 
     @InterchangeableId
     @Interchangeable(fieldTitle = "ID")
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_LINE_MINISTRY_OBS_MEASURE_seq")
+    @SequenceGenerator(name = "AMP_LINE_MINISTRY_OBS_MEASURE_seq", sequenceName = "AMP_LINE_MINISTRY_OBS_MEASURE_seq", allocationSize = 1)
+    @Column(name = "amp_line_ministry_obs_measure_id")
     private Long ampLineMinistryObservationMeasureId;
-
     @Interchangeable(fieldTitle = "Name", importable = true,
             interValidators = @InterchangeableValidator(RequiredValidator.class))
+    @Column(name = "name", columnDefinition = "text")
     private String name;
-
     @InterchangeableBackReference
-    private AmpLineMinistryObservation lineMinistryObservation;
-
     @Interchangeable(fieldTitle = "Actors", importable = true,
             fmPath = "/Activity Form/Line Ministry Observations/Observation/Measure/Actor")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "amp_line_ministry_observation_id", referencedColumnName = "amp_line_ministry_observation_id")
+    private AmpLineMinistryObservation lineMinistryObservation;
+
+    @OneToMany(mappedBy = "measure", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AmpLineMinistryObservationActor> actors = new HashSet<>();
+
 
     public String getName() {
         return name;

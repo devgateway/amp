@@ -14,29 +14,44 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableBackRefere
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.util.Output;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import javax.persistence.*;
+import java.util.Date;
+import java.util.Set;
+
+@Entity
+@Table(name = "AMP_LINE_MINISTRY_OBSERVATION")
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class AmpLineMinistryObservation implements Serializable, Versionable, Cloneable {
     private static final long serialVersionUID = 1L;
     //IATI-check: to be ignored
-
+    @Id
     @InterchangeableId
     @Interchangeable(fieldTitle = "ID")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_LINE_MINISTRY_OBSERVATION_seq")
+    @SequenceGenerator(name = "AMP_LINE_MINISTRY_OBSERVATION_seq", sequenceName = "AMP_LINE_MINISTRY_OBSERVATION_seq", allocationSize = 1)
+    @Column(name = "amp_line_ministry_observation_id")
     private Long ampLineMinistryObservationId;
-
     @Interchangeable(fieldTitle = "Name", importable = true,
             interValidators = @InterchangeableValidator(RequiredValidator.class))
+    @Column(name = "name", columnDefinition = "text")
     private String name;
-
-    @InterchangeableBackReference
-    private AmpActivityVersion activity;
-
-    @Interchangeable(fieldTitle = "Measures", importable = true,
-            fmPath = "/Activity Form/Line Ministry Observations/Observation/Measure")
-    private Set<AmpLineMinistryObservationMeasure> lineMinistryObservationMeasures = new HashSet<>();
-
     @Interchangeable(fieldTitle = "Date", importable = true,
             fmPath = "/Activity Form/Line Ministry Observations/Observation/Date")
+    @Column(name = "observationDate")
     private Date observationDate;
+    @InterchangeableBackReference
+    @ManyToOne
+    @JoinColumn(name = "amp_activity_id", referencedColumnName = "amp_activity_id")
+    private AmpActivityVersion activity;
+    @Interchangeable(fieldTitle = "Measures", importable = true,
+            fmPath = "/Activity Form/Line Ministry Observations/Observation/Measure")
+    @OneToMany(mappedBy = "lineMinistryObservation", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("ampLineMinistryObsMeasureId ASC")
+    private Set<AmpLineMinistryObservationMeasure> lineMinistryObservationMeasures= new HashSet<>();
+
+
 
     public String getName() {
         return name;

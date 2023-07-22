@@ -5,12 +5,14 @@ import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "AMP_THEME_MAPPING")
 @Cacheable
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 /**
  * @author Viorel Chihai
  */

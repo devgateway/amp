@@ -22,47 +22,79 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import javax.persistence.*;
+import java.util.Date;
+
+@Entity
+@Table(name = "AMP_REGIONAL_FUNDING")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class AmpRegionalFunding implements Versionable, Serializable, Cloneable {
     //IATI-check: to be ignored
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_REGIONAL_FUNDING_seq")
+    @SequenceGenerator(name = "AMP_REGIONAL_FUNDING_seq", sequenceName = "AMP_REGIONAL_FUNDING_seq", allocationSize = 1)
+    @Column(name = "amp_regional_funding_id")
     @InterchangeableId
     @Interchangeable(fieldTitle = "ID")
     private Long ampRegionalFundingId;
 
-    @InterchangeableBackReference
-    private AmpActivityVersion activity;
-
+    @Column(name = "transaction_type")
     private Integer transactionType;
 
-    @Interchangeable(fieldTitle = "Adjustment Type", importable = true, pickIdOnly = true,
-        discriminatorOption = CategoryConstants.ADJUSTMENT_TYPE_KEY,
-        interValidators = @InterchangeableValidator(RequiredValidator.class))
-    private AmpCategoryValue adjustmentType;
-
+    @Column(name = "transaction_date")
     @Interchangeable(fieldTitle = "Transaction Date", importable = true,
             interValidators = @InterchangeableValidator(RequiredValidator.class))
     private Date transactionDate;
 
+    @Column(name = "reporting_date")
     private Date reportingDate;
+
+    @Column(name = "transaction_amount")
 
     @Interchangeable(fieldTitle = "Transaction Amount", importable = true,
             interValidators = @InterchangeableValidator(RequiredValidator.class))
     private Double transactionAmount;
 
+    @Column(name = "exp_category")
+    private String expenditureCategory;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "activity_id", referencedColumnName = "activity_id")
+    @InterchangeableBackReference
+
+    private AmpActivityVersion activity;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "rep_organization_id", referencedColumnName = "organization_id")
     private AmpOrganisation reportingOrganization;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "currency_id", referencedColumnName = "currency_id")
     @Interchangeable(fieldTitle = "Currency", importable = true, pickIdOnly = true,
             interValidators = @InterchangeableValidator(RequiredValidator.class),
             commonPV = CommonFieldsConstants.COMMON_CURRENCY)
     private AmpCurrency currency;
 
-    private String expenditureCategory;
-
+    @ManyToOne(fetch = FetchType.LAZY)
     @PossibleValues(RegionPossibleValuesProvider.class)
     @Interchangeable(fieldTitle = ActivityFieldsConstants.RegionalFunding.LOCATION, pickIdOnly = true,
             commonPV = CommonFieldsConstants.COMMON_REGION, importable = true,
             interValidators = @InterchangeableValidator(RequiredValidator.class))
+    @JoinColumn(name = "region_location_id", referencedColumnName = "location_id", nullable = false)
     private AmpCategoryValueLocations regionLocation;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "adjustment_type", referencedColumnName = "category_value_id")
+    @Interchangeable(fieldTitle = "Adjustment Type", importable = true, pickIdOnly = true,
+            discriminatorOption = CategoryConstants.ADJUSTMENT_TYPE_KEY,
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
+    private AmpCategoryValue adjustmentType;
+
+
 
     /**
      * @return Returns the activity.

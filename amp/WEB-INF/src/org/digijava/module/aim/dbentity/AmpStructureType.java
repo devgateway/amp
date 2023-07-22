@@ -10,21 +10,45 @@ import org.digijava.module.aim.annotations.interchange.PossibleValueValue;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.Identifiable;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import javax.persistence.*;
+import java.util.Set;
+
+@Entity
+@Table(name = "AMP_STRUCTURE_TYPE")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @TranslatableClass (displayName = "Structure Type")
 public class AmpStructureType implements ARDimensionable, Serializable, Identifiable {
 //IATI-check: not to be ignored
     private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_STRUCTURE_TYPE_seq")
+    @SequenceGenerator(name = "AMP_STRUCTURE_TYPE_seq", sequenceName = "AMP_STRUCTURE_TYPE_seq", allocationSize = 1)
+    @Column(name = "typeid")
     @PossibleValueId
+
     private Long typeId;
+
+    @Column(name = "name")
     @TranslatableField
     @PossibleValueValue
     private String name;
+
+    @Column(name = "graphicType")
     private String graphicType;
+
+    @Lob
+    @Column(name = "iconfile", length = 500000)
     private byte[] iconFile;
+
+    @OneToMany(mappedBy = "type", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<AmpStructure> structures;
+
     private String iconFileContentType;
 
-    private transient Set<AmpStructure> structures;
 
     public Set<AmpStructure> getStructures() {
         return structures;

@@ -1,11 +1,19 @@
 package org.digijava.module.aim.dbentity;
 
 
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import java.io.Serializable;
 
 /**
  *
  */
+import javax.persistence.*;
+
+@Entity
+@Table(name = "amp_team_summary_notification_settings")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class AmpTeamSummaryNotificationSettings implements Serializable {
 
     private static final long serialVersionUID = 1898518611418974995L;
@@ -13,11 +21,17 @@ public class AmpTeamSummaryNotificationSettings implements Serializable {
     public AmpTeamSummaryNotificationSettings() {
 
     }
-    private Long id;
-    private Boolean notifyManager;
-    private Boolean notifyApprover;
+    @Id
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id")
     private AmpTeam ampTeam;
 
+    @Column(name = "notify_manager")
+    private Boolean notifyManager;
+
+    @Column(name = "notify_approver")
+    private Boolean notifyApprover;
+    private Long id;
 
     public Boolean getNotifyApprover() {
         return notifyApprover != null ? notifyApprover : false;

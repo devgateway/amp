@@ -5,11 +5,32 @@ package org.digijava.module.budgetexport.dbentity;
  * Date: 2/6/12
  * Time: 4:44 PM
  */
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "amp_budget_export_csv_item")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class AmpBudgetExportCSVItem {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_budget_export_csv_item_seq")
+    @SequenceGenerator(name = "amp_budget_export_csv_item_seq", sequenceName = "amp_budget_export_csv_item_seq", allocationSize = 1)
+    @Column(name = "id")
     private Long id;
-    private AmpBudgetExportMapRule rule;
+
+    @Column(name = "code")
     private String code;
+
+    @Column(name = "label")
     private String label;
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "rule")
+    private AmpBudgetExportMapRule rule;
+
     
     public AmpBudgetExportCSVItem(){}
     public AmpBudgetExportCSVItem(String code, String label, AmpBudgetExportMapRule rule){

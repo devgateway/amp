@@ -23,7 +23,7 @@ public class AmpGPISurvey implements Versionable, Serializable, Cloneable, Compa
     @JoinColumn(name = "amp_activity_id", nullable = false)
     private AmpActivityVersion ampActivityId;
 
-    @OneToMany(mappedBy = "ampGPISurvey", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "ampResponseId", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AmpGPISurveyResponse> responses = new HashSet<>();
 
     @Column(name = "survey_date")

@@ -77,6 +77,10 @@ public class AmpGPISurveyResponse implements Versionable, Cloneable, Serializabl
         this.ampGPISurveyId = ampGPISurveyId;
     }
 
+    public Long getAmpResponseId() {
+        return ampResponseId;
+    }
+
     public static class AmpGPISurveyResponseComparator implements Comparator<AmpGPISurveyResponse>, Serializable {
 
         private static final long serialVersionUID = 1L;

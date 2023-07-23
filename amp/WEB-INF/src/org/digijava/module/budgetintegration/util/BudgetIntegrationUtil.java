@@ -6,7 +6,7 @@ import java.util.Set;
 
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpInterchangeableResult;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 
 public final class BudgetIntegrationUtil {
     

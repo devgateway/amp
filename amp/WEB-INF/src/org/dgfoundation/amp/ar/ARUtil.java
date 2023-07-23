@@ -77,7 +77,7 @@ import org.digijava.module.budgetexport.reports.implementation.BudgetGroupReport
 import org.digijava.module.budgetexport.reports.implementation.BudgetMetaTextColWorker;
 import org.digijava.module.budgetexport.reports.implementation.BudgetTextColWorker;
 import org.digijava.module.budgetexport.util.BudgetExportConstants;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 
 /**

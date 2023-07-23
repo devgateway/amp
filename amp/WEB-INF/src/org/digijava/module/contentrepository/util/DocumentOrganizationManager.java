@@ -13,7 +13,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
 import org.digijava.module.contentrepository.dbentity.CrDocumentsToOrganisations;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 

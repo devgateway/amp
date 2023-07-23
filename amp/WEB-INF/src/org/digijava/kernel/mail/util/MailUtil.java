@@ -36,7 +36,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Calendar;
 import org.hibernate.Hibernate;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import javax.mail.internet.*;
 import org.digijava.kernel.mail.DgEmailManager;
 import org.digijava.kernel.util.DigiConfigManager;

@@ -62,7 +62,7 @@ import org.digijava.module.translation.util.importexport.ImportResult;
 import org.digijava.module.translation.util.importexport.ImportRowConsumerCallable;
 import org.hibernate.Criteria;
 import org.hibernate.FlushMode;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 

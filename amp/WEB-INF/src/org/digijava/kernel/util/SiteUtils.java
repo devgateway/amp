@@ -36,7 +36,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.digijava.kernel.request.TLSUtils;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.Constants;

@@ -27,7 +27,7 @@ import java.util.List;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.ShaCrypt;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.dao.DataRetrievalFailureException;

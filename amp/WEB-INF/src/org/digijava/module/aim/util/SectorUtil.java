@@ -34,7 +34,7 @@ import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.Sector;
 import org.digijava.module.aim.util.caching.AmpCaching;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.jdbc.Work;

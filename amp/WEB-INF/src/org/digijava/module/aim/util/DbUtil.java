@@ -89,7 +89,7 @@ import org.digijava.module.aim.util.caching.AmpCaching;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.hibernate.Hibernate;
 import org.hibernate.JDBCException;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;

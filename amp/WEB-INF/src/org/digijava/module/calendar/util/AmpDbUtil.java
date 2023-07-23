@@ -22,7 +22,7 @@ import org.digijava.module.calendar.dbentity.Calendar;
 import org.digijava.module.calendar.dbentity.CalendarItem;
 import org.digijava.module.calendar.entity.AmpEventType;
 import org.digijava.module.calendar.exception.CalendarException;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.type.LongType;

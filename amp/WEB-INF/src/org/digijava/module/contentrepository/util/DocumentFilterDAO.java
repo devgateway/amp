@@ -7,7 +7,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.contentrepository.dbentity.CrDocumentsToOrganisations;
 import org.digijava.module.contentrepository.dbentity.filter.DocumentFilter;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 

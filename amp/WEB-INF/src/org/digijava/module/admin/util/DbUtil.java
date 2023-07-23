@@ -42,9 +42,10 @@ import org.digijava.kernel.user.User;
 import org.digijava.module.admin.exception.AdminException;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.helper.KeyValue;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+
 
 public class DbUtil {
 

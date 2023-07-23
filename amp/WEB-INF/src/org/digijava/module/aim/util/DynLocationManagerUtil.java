@@ -49,7 +49,7 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.hibernate.NonUniqueResultException;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 
 public class DynLocationManagerUtil {

@@ -42,7 +42,7 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.UserUtils;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataRetrievalFailureException;

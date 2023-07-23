@@ -22,7 +22,7 @@ import org.apache.log4j.Logger;
 import org.digijava.module.autopatcher.exceptions.InvalidPatchRepositoryException;
 import org.digijava.module.autopatcher.schema.Patch;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 
 public class PatcherUtil {

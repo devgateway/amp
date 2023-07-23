@@ -35,7 +35,7 @@ import org.digijava.kernel.entity.MailSpool;
 import org.digijava.kernel.mail.exception.MailSpoolException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.type.CalendarType;

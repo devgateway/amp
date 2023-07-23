@@ -18,7 +18,7 @@ import org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicator;
 import org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicatorOption;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.ObjectNotFoundException;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 
 /**

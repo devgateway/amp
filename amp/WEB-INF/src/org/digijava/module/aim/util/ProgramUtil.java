@@ -41,7 +41,7 @@ import org.digijava.module.aim.helper.IndicatorsBean;
 import org.digijava.module.aim.helper.TreeItem;
 import org.hibernate.CacheMode;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.type.LongType;

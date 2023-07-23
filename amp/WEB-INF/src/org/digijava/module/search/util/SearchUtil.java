@@ -47,7 +47,7 @@ import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.contentrepository.util.DocumentsNodesAttributeManager;
 import org.digijava.module.search.helper.Resource;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.type.LongType;
@@ -232,8 +232,7 @@ public class SearchUtil {
             newQueryString += "WHERE" +  buildLike(keywords, "f.title", searchMode);
         }
         
-        SQLQuery newQuery = session.createSQLQuery(newQueryString).addScalar("pledge_id", StandardBasicTypes.LONG);
-        newQuery = newQuery.addScalar("title", StandardBasicTypes.STRING);
+        Query newQuery = session.createNativeQuery(newQueryString).addScalar("pledge_id", StandardBasicTypes.LONG).addScalar("title", StandardBasicTypes.STRING);
         addKeywordParameters(newQuery, keywords);
 
         List<Object[]> items = newQuery.list();

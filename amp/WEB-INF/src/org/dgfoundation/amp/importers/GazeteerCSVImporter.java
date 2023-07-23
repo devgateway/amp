@@ -11,7 +11,7 @@ import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampapi.postgis.entity.AmpLocator;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 
 
 /**

@@ -29,7 +29,7 @@ import org.digijava.module.gateperm.core.PermissionMap;
 import org.digijava.module.gateperm.form.PermissionForm;
 import org.digijava.module.gateperm.util.ActionUtil;
 import org.digijava.module.gateperm.util.PermissionUtil;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.springframework.beans.BeanWrapperImpl;

@@ -11,7 +11,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Projections;
 

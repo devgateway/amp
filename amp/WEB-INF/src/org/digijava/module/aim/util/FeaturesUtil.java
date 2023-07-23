@@ -754,25 +754,23 @@ public class FeaturesUtil {
 
         return databaseName[0];
     }
+
+
     public static List<AmpGlobalSettings> getGlobalSettings() {
         List<AmpGlobalSettings> coll = null;
-        Session session;
-        String qryStr;
-        Query qry;
+        Session session = null;
+        String qryStr = null;
+        org.hibernate.Query qry = null;
         try {
             session = PersistenceManager.getRequestDBSession();
             qryStr = "select gs from " + AmpGlobalSettings.class.getName() + " gs ";
             qry = session.createQuery(qryStr);
-            return qry.getResultList();
-//            System.out.println(coll.size());
-
-
+            coll = qry.list();
         }
         catch (Exception ex) {
             logger.error(ex, ex);
         }
-
-        return null;
+        return coll;
     }
 
     /*

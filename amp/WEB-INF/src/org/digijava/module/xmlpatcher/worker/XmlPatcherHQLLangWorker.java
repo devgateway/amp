@@ -15,7 +15,7 @@ import org.digijava.module.xmlpatcher.jaxb.Lang;
 import org.digijava.module.xmlpatcher.jaxb.Script;
 import org.digijava.module.xmlpatcher.util.XmlPatcherUtil;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 
 /**

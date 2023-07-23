@@ -69,7 +69,7 @@ import org.digijava.kernel.util.UserUtils;
 import org.digijava.kernel.viewmanager.ViewConfig;
 import org.digijava.kernel.viewmanager.ViewConfigFactory;
 import org.hibernate.ObjectNotFoundException;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;

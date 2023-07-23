@@ -34,7 +34,7 @@ import org.digijava.module.categorymanager.util.CategoryLabelsUtil;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.categorymanager.util.PossibleValue;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.type.LongType;

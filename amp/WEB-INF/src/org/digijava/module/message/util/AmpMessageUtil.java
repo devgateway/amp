@@ -25,7 +25,7 @@ import org.digijava.module.message.dbentity.AmpMessageState;
 import org.digijava.module.message.dbentity.TemplateAlert;
 import org.digijava.module.message.helper.MessageConstants;
 import org.hibernate.Criteria;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;

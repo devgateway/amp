@@ -36,7 +36,7 @@ import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.I18NHelper;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.StatelessSession;
@@ -579,10 +579,10 @@ public class PersistenceManager {
      * upon creating a new session, a transaction is created.
      */
     public static Session getSession() {
-//        boolean currentSessionIsManaged = CURRENT_SESSION_IS_MANAGED.get();
-//        if (!currentSessionIsManaged) {
-//            throw new IllegalStateException("Called outside of managed session context.");
-//        }
+        boolean currentSessionIsManaged = CURRENT_SESSION_IS_MANAGED.get();
+        if (!currentSessionIsManaged) {
+            throw new IllegalStateException("Called outside of managed session context.");
+        }
         Session sess = PersistenceManager.sf.getCurrentSession();
         Transaction transaction = sess.getTransaction();
         if (transaction == null || !transaction.isActive()) {
@@ -733,7 +733,7 @@ public class PersistenceManager {
             return false;
         throw new RuntimeException("cannot convert object " + obj + " to boolean");
     }
-    
+
     public static StatelessSession openNewStatelessSession() {
         return sf.openStatelessSession();
     }

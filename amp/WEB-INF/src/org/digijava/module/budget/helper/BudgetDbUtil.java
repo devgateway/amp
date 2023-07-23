@@ -14,7 +14,7 @@ import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.budget.dbentity.AmpDepartments;
 import org.digijava.module.budget.dbentity.AmpBudgetSector;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 

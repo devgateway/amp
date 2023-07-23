@@ -61,7 +61,7 @@ import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.util.SiteUtils;
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 
 /**

@@ -19,7 +19,7 @@ import org.digijava.module.aim.annotations.reports.IgnorePersistence;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.util.Identifiable;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import javax.persistence.*;

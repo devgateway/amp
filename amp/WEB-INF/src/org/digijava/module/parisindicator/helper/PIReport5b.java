@@ -34,7 +34,7 @@ import org.digijava.module.parisindicator.helper.row.PIReportAbstractRow;
 import org.digijava.module.parisindicator.model.PIUseCase;
 import org.digijava.module.parisindicator.util.PIConstants;
 import org.digijava.module.parisindicator.util.PIUtils;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 
 import java.util.Collections;

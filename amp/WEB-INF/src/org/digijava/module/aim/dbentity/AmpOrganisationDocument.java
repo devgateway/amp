@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.contentrepository.helper.ObjectReferringDocument;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 
 import javax.persistence.*;

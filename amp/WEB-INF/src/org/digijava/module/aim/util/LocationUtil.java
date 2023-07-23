@@ -20,7 +20,7 @@ import org.digijava.module.aim.exception.dynlocation.DuplicateLocationCodeExcept
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.hibernate.Criteria;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Projections;

@@ -47,7 +47,7 @@ public class GeoCodedLocation {
     @JsonUnwrapped
     private AmpCategoryValueLocations location;
 
-    @OneToMany(mappedBy = "geoCodedLocation", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "location", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderColumn(name = "INDEX")
     @ApiModelProperty("Fields that refer to this location")
     private List<GeoCodedField> fields = new ArrayList<>();

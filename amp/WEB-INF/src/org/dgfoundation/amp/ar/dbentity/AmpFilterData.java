@@ -50,6 +50,8 @@ public class AmpFilterData implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "amp_report_id", nullable = false)
     private AmpReports ampReport;
+
+    @Transient
     private FilterDataSetInterface filterRelObj;
 
     

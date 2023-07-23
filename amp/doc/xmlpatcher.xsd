@@ -6,273 +6,284 @@
 <!-- author Mihai Postelnicu - mpostelnicu@dgfoundation.org	-->
 <!-- *******************************************************-->
 
-<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher"
-	targetNamespace="http://docs.ampdev.net/schemas/xmlpatcher">
-	<element name="patch" type="tns:patch"/>
+<schema xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://docs.ampdev.net/schemas/xmlpatcher">
+    <element name="patch" type="tns:patch"/>
 
 
-	<complexType name="patch">
-		<sequence>
-			<element name="jira" type="string" minOccurs="0"
-				maxOccurs="1">
-				<annotation>
-					<documentation>
-						Specify here the JIRA ticket that this patch is
-						related with. For multiple tickets, use several
-						jira elements
-					</documentation>
-				</annotation>
-			</element>
-			<element name="keyword" type="string" minOccurs="0"
-				maxOccurs="unbounded">
-				<annotation>
-					<documentation>
-						Specify a keyword that relates with this patch.
-						This can either be a module name, or keywords
-						related to what this patch is addressing
-					</documentation>
-				</annotation>
-			</element>
-			<element name="author" type="string" minOccurs="1"
-				maxOccurs="unbounded">
-				<annotation>
-					<documentation>
-						Use your SVN user name or your full name. This
-						can help track the patch creator in the patcher
-						web interface
-					</documentation>
-				</annotation>
-			</element>
-			<element name="description" type="string" minOccurs="0"
-				maxOccurs="1">
-				<annotation>
-					<documentation>
-						Enter as much info as possible about what
-						exactly this patch is addressing. Try to specify
-						even obvious stuff, later those obvious things
-						become un-obvious and its much harder to
-						understand what a patch is supposed to do and
-						maybe fix it.
-					</documentation>
-				</annotation>
-			</element>
-			<element name="deprecate" type="string" minOccurs="0"
-				maxOccurs="unbounded">
-				<annotation>
-					<documentation>
-						The patch name that this patch is deprecating,
-						if any. The system first reads all deprecated
-						patches (all deprecate entities from all patch
-						files) and will never attempt to apply any of
-						them. Use multiple deprecate entities if your
-						patch is deprecating multiple previous patches.
-						For the patch name, you can either include the
-						.xml extension of the file name or not.
-						Deprecating a patch by another patch (the
-						deprecator) means the deprecator will inherit
-						its dependencies (if there are any patches that
-						depend on a deprecated patch, they will depend
-						on the deprecator).
-					</documentation>
-				</annotation>
-			</element>
-			<element name="trigger" type="tns:trigger" minOccurs="0"
-				maxOccurs="1">
-			</element>
-			<element name="apply" type="tns:scriptGroup" minOccurs="1"
-				maxOccurs="1">
-				<annotation>
-					<documentation>
-						The functional part of the patch goes here.
-						Write the scripts you want this patch to apply
-						to the database. All scripts inside one apply
-						element will be attempted to run into a single
-						transaction. The transaction is rolledback if it
-						fails using the JDBC rollback capabilities. The
-						rollback feature is not applicable if you
-						manually force commits or if you use DDL
-						statements (modify tables/columns/etc). In such
-						case you need to use the rollback entity and
-						make table backups. If you need several
-						transactions use several apply elements.
-					</documentation>
-				</annotation>
-			</element>
-			<element name="rollback" type="tns:rollback"
-				minOccurs="0" maxOccurs="1">
+    <complexType name="patch">
+        <sequence>
+            <element name="jira" type="string" minOccurs="0"
+                     maxOccurs="1">
                 <annotation>
-                	<documentation>Use this section whenever you need to make sure that by failing, your path will produce data loss.
-                	 Candidates are DDL patches, that cannot use the JDBC rollback feature and which if fail they produce unrecoverable loss. 
-                	 For such cases use the rollback entity to prepare DDL copies that may be applied if the patch fails. </documentation>
+                    <documentation>
+                        Specify here the JIRA ticket that this patch is
+                        related with. For multiple tickets, use several
+                        jira elements
+                    </documentation>
                 </annotation>
-			</element>
-		</sequence>
-		<attribute name="retryOnFail" type="boolean" default="false" use="optional">
-			<annotation>
-				<documentation>
-					If true, the failure to run a patch will not disable
-					that patch, the system will attempt to re-apply it
-					next time.
-				</documentation>
-			</annotation>
-		</attribute>
-		<attribute name="closeOnSuccess" type="boolean" use="optional" default="true">
-			<annotation>
-				<documentation>Defaults to true. If false, this patch will be re-applied even if it succeeded. This is needed in order to produce "cleanup" patches. In such case, the trigger will kick in
-whenever some re-occurring garbage data has been found using condition entities, and that requires immediate correction</documentation>
-			</annotation></attribute>
-		<attribute name="failOnError" type="boolean" default="true">
-			<annotation>
-				<documentation>Should the migration fail if an error occurs while executing this patch?</documentation>
-			</annotation>
-		</attribute>
-	</complexType>
+            </element>
+            <element name="keyword" type="string" minOccurs="0"
+                     maxOccurs="unbounded">
+                <annotation>
+                    <documentation>
+                        Specify a keyword that relates with this patch.
+                        This can either be a module name, or keywords
+                        related to what this patch is addressing
+                    </documentation>
+                </annotation>
+            </element>
+            <element name="author" type="string" minOccurs="1"
+                     maxOccurs="unbounded">
+                <annotation>
+                    <documentation>
+                        Use your SVN user name or your full name. This
+                        can help track the patch creator in the patcher
+                        web interface
+                    </documentation>
+                </annotation>
+            </element>
+            <element name="description" type="string" minOccurs="0"
+                     maxOccurs="1">
+                <annotation>
+                    <documentation>
+                        Enter as much info as possible about what
+                        exactly this patch is addressing. Try to specify
+                        even obvious stuff, later those obvious things
+                        become un-obvious and its much harder to
+                        understand what a patch is supposed to do and
+                        maybe fix it.
+                    </documentation>
+                </annotation>
+            </element>
+            <element name="deprecate" type="string" minOccurs="0"
+                     maxOccurs="unbounded">
+                <annotation>
+                    <documentation>
+                        The patch name that this patch is deprecating,
+                        if any. The system first reads all deprecated
+                        patches (all deprecate entities from all patch
+                        files) and will never attempt to apply any of
+                        them. Use multiple deprecate entities if your
+                        patch is deprecating multiple previous patches.
+                        For the patch name, you can either include the
+                        .xml extension of the file name or not.
+                        Deprecating a patch by another patch (the
+                        deprecator) means the deprecator will inherit
+                        its dependencies (if there are any patches that
+                        depend on a deprecated patch, they will depend
+                        on the deprecator).
+                    </documentation>
+                </annotation>
+            </element>
+            <element name="trigger" type="tns:trigger" minOccurs="0"
+                     maxOccurs="1">
+            </element>
+            <element name="apply" type="tns:scriptGroup" minOccurs="1"
+                     maxOccurs="1">
+                <annotation>
+                    <documentation>
+                        The functional part of the patch goes here.
+                        Write the scripts you want this patch to apply
+                        to the database. All scripts inside one apply
+                        element will be attempted to run into a single
+                        transaction. The transaction is rolledback if it
+                        fails using the JDBC rollback capabilities. The
+                        rollback feature is not applicable if you
+                        manually force commits or if you use DDL
+                        statements (modify tables/columns/etc). In such
+                        case you need to use the rollback entity and
+                        make table backups. If you need several
+                        transactions use several apply elements.
+                    </documentation>
+                </annotation>
+            </element>
+            <element name="rollback" type="tns:rollback"
+                     minOccurs="0" maxOccurs="1">
+                <annotation>
+                    <documentation>Use this section whenever you need to make sure that by failing, your path will
+                        produce data loss.
+                        Candidates are DDL patches, that cannot use the JDBC rollback feature and which if fail they
+                        produce unrecoverable loss.
+                        For such cases use the rollback entity to prepare DDL copies that may be applied if the patch
+                        fails.
+                    </documentation>
+                </annotation>
+            </element>
+        </sequence>
+        <attribute name="retryOnFail" type="boolean" default="false" use="optional">
+            <annotation>
+                <documentation>
+                    If true, the failure to run a patch will not disable
+                    that patch, the system will attempt to re-apply it
+                    next time.
+                </documentation>
+            </annotation>
+        </attribute>
+        <attribute name="closeOnSuccess" type="boolean" use="optional" default="true">
+            <annotation>
+                <documentation>Defaults to true. If false, this patch will be re-applied even if it succeeded. This is
+                    needed in order to produce "cleanup" patches. In such case, the trigger will kick in
+                    whenever some re-occurring garbage data has been found using condition entities, and that requires
+                    immediate correction
+                </documentation>
+            </annotation>
+        </attribute>
+        <attribute name="failOnError" type="boolean" default="true">
+            <annotation>
+                <documentation>Should the migration fail if an error occurs while executing this patch?</documentation>
+            </annotation>
+        </attribute>
+    </complexType>
 
-	<complexType name="trigger">
-		<annotation>
-			<documentation>
-				A trigger entity is a set of conditions grouped by any
-				(OR) or all (AND) operators. There can be only one
-				trigger per patch, if any, and this trigger can hold an
-				arbitrary number of conditions (more than 1). The
-				trigger of type ALL will return true if all the
-				underlying conditions are true, a trigger of type webANY
-				will return true if at least one condition is met. A
-				trigger's result may be inverted using inverted
-				attribute, so a false trigger becomes true.
-			</documentation>
-		</annotation>
-		<sequence>
-			<element name="condition" type="tns:condition" minOccurs="1" maxOccurs="unbounded"></element>
-		</sequence>
-		<attribute name="type" type="tns:triggerType" default="all">
-			<annotation>
-				<documentation>
-					use any if this trigger needs to have at least one
-					valid condition, or all if this trigger has to match
-					all its conditions
-				</documentation>
-			</annotation>
-		</attribute>
-		<attribute name="inverted" type="boolean" default="false">
-			<annotation>
-				<documentation>
-					defaults to false. When true, the trigger is
-					inverted (allowed becomes unallowed and vice-versa)
-				</documentation>
-			</annotation>
-		</attribute>
-	</complexType>
+    <complexType name="trigger">
+        <annotation>
+            <documentation>
+                A trigger entity is a set of conditions grouped by any
+                (OR) or all (AND) operators. There can be only one
+                trigger per patch, if any, and this trigger can hold an
+                arbitrary number of conditions (more than 1). The
+                trigger of type ALL will return true if all the
+                underlying conditions are true, a trigger of type webANY
+                will return true if at least one condition is met. A
+                trigger's result may be inverted using inverted
+                attribute, so a false trigger becomes true.
+            </documentation>
+        </annotation>
+        <sequence>
+            <element name="condition" type="tns:condition" minOccurs="1" maxOccurs="unbounded"></element>
+        </sequence>
+        <attribute name="type" type="tns:triggerType" default="all">
+            <annotation>
+                <documentation>
+                    use any if this trigger needs to have at least one
+                    valid condition, or all if this trigger has to match
+                    all its conditions
+                </documentation>
+            </annotation>
+        </attribute>
+        <attribute name="inverted" type="boolean" default="false">
+            <annotation>
+                <documentation>
+                    defaults to false. When true, the trigger is
+                    inverted (allowed becomes unallowed and vice-versa)
+                </documentation>
+            </annotation>
+        </attribute>
+    </complexType>
 
-	<simpleType name="triggerType">
-		<restriction base="string">
-			<enumeration value="all" >
-				<annotation>
-					<documentation></documentation>
-				</annotation></enumeration>
-			<enumeration value="any" />
-		</restriction>
-	</simpleType>
+    <simpleType name="triggerType">
+        <restriction base="string">
+            <enumeration value="all">
+                <annotation>
+                    <documentation></documentation>
+                </annotation>
+            </enumeration>
+            <enumeration value="any"/>
+        </restriction>
+    </simpleType>
 
-	<complexType name="condition" mixed="true">
-		<sequence>
-			<element name="param" type="tns:conditionParam" minOccurs="0" maxOccurs="unbounded"/>
-			<element name="script" type="tns:script" minOccurs="0" maxOccurs="unbounded"/>
-			<element name="test" minOccurs="0" maxOccurs="1" type="string"/>
-		</sequence>
-		<attribute name="type" type="tns:conditionType"
-			default="custom">
-		</attribute>
-		<attribute name="inverted" type="boolean" default="false"></attribute>
-	</complexType>
+    <complexType name="condition" mixed="true">
+        <sequence>
+            <element name="param" type="tns:conditionParam" minOccurs="0" maxOccurs="unbounded"/>
+            <element name="script" type="tns:script" minOccurs="0" maxOccurs="unbounded"/>
+            <element name="test" minOccurs="0" maxOccurs="1" type="string"/>
+        </sequence>
+        <attribute name="type" type="tns:conditionType"
+                   default="custom">
+        </attribute>
+        <attribute name="inverted" type="boolean" default="false"></attribute>
+    </complexType>
 
-	<simpleType name="conditionType">
-		<restriction base="string">
-			<enumeration value="custom">
-				<annotation>
-					<documentation>The most generic condition type, to which all the
-						rest transform to.
-						It provides definition space for a series of variables defined using
-						script entities plus
-						a test. The test entity is a BSH expression that can make use of
-						the previously defined variables     				
-    				</documentation>
-				</annotation>
-			</enumeration>
-			<enumeration value="dbName">
-				<annotation>
-					<documentation>This condition type tests if the current schema
-						(database) name equals the specify value. This condition works for
-						any type of database in AMP as it has specific callers
-						to identify the current schema based on which database is currently
-						used.</documentation>
-				</annotation>
-			</enumeration>
-			<enumeration value="appliedPatch">
-				<annotation>
-					<documentation>This condition tests if the specified patch file
-						name has already been applied.
-						Bear in mind the patcher will try to re-apply all non-applied patches
-						until either all patches are applied or no patch has been applied
-						in the previous call due to restrictions</documentation>
-				</annotation>
-			</enumeration>
-		</restriction>
-	</simpleType>
+    <simpleType name="conditionType">
+        <restriction base="string">
+            <enumeration value="custom">
+                <annotation>
+                    <documentation>The most generic condition type, to which all the
+                        rest transform to.
+                        It provides definition space for a series of variables defined using
+                        script entities plus
+                        a test. The test entity is a BSH expression that can make use of
+                        the previously defined variables
+                    </documentation>
+                </annotation>
+            </enumeration>
+            <enumeration value="dbName">
+                <annotation>
+                    <documentation>This condition type tests if the current schema
+                        (database) name equals the specify value. This condition works for
+                        any type of database in AMP as it has specific callers
+                        to identify the current schema based on which database is currently
+                        used.
+                    </documentation>
+                </annotation>
+            </enumeration>
+            <enumeration value="appliedPatch">
+                <annotation>
+                    <documentation>This condition tests if the specified patch file
+                        name has already been applied.
+                        Bear in mind the patcher will try to re-apply all non-applied patches
+                        until either all patches are applied or no patch has been applied
+                        in the previous call due to restrictions
+                    </documentation>
+                </annotation>
+            </enumeration>
+        </restriction>
+    </simpleType>
 
-	<complexType name="conditionParam">
-	<annotation>
-	<documentation>This entity is still under development. Please ignore for the moment...</documentation>
-	</annotation>
-		<simpleContent>
-			<extension base="string">
-				<attribute name="name" type="string"></attribute>
-			</extension>
-		</simpleContent>
-	</complexType>
+    <complexType name="conditionParam">
+        <annotation>
+            <documentation>This entity is still under development. Please ignore for the moment...</documentation>
+        </annotation>
+        <simpleContent>
+            <extension base="string">
+                <attribute name="name" type="string"></attribute>
+            </extension>
+        </simpleContent>
+    </complexType>
 
-	<complexType name="script">
-		<sequence>
-			<element name="lang" type="tns:lang" minOccurs="1" maxOccurs="unbounded"></element>
-		</sequence>
-		<attribute name="returnVar" type="string"></attribute>
-	</complexType>
+    <complexType name="script">
+        <sequence>
+            <element name="lang" type="tns:lang" minOccurs="1" maxOccurs="unbounded"></element>
+        </sequence>
+        <attribute name="returnVar" type="string"></attribute>
+    </complexType>
 
-	<complexType name="lang">
-		<simpleContent>
-			<extension base="string">
-				<attribute name="type" type="tns:langType"></attribute>
-				<attribute name="delimiter" type="string" default=";"></attribute>
-			</extension>
-		</simpleContent>
-	</complexType>
+    <complexType name="lang">
+        <simpleContent>
+            <extension base="string">
+                <attribute name="type" type="tns:langType"></attribute>
+                <attribute name="delimiter" type="string" default=";"></attribute>
+            </extension>
+        </simpleContent>
+    </complexType>
 
-	<simpleType name="langType">
-		<restriction base="string">
-			<enumeration value="sql"></enumeration>
-			<enumeration value="hql"></enumeration>
-			<enumeration value="mysql"></enumeration>
-			<enumeration value="oracle"></enumeration>
-			<enumeration value="postgres"></enumeration>
-			<enumeration value="bsh"></enumeration>
-			<whiteSpace value="collapse"></whiteSpace>
-		</restriction>
-	</simpleType>
+    <simpleType name="langType">
+        <restriction base="string">
+            <enumeration value="sql"></enumeration>
+            <enumeration value="hql"></enumeration>
+            <enumeration value="mysql"></enumeration>
+            <enumeration value="oracle"></enumeration>
+            <enumeration value="postgres"></enumeration>
+            <enumeration value="bsh"></enumeration>
+            <whiteSpace value="collapse"></whiteSpace>
+        </restriction>
+    </simpleType>
 
 
-	<complexType name="scriptGroup">
-    	<sequence>
-    		<element name="script" type="tns:script" minOccurs="1" maxOccurs="unbounded"></element>
-    	</sequence>
+    <complexType name="scriptGroup">
+        <sequence>
+            <element name="script" type="tns:script" minOccurs="1" maxOccurs="unbounded"></element>
+        </sequence>
     </complexType>
 
     <complexType name="rollback">
-    	<sequence>
-    		<element name="prepare" type="tns:scriptGroup" maxOccurs="1"
-    			minOccurs="0">
-    		</element>
-    		<element name="apply" type="tns:scriptGroup" maxOccurs="1" minOccurs="1"></element>
-    		<element name="cleanup" type="tns:scriptGroup" maxOccurs="1" minOccurs="0"></element>
-    	</sequence>
+        <sequence>
+            <element name="prepare" type="tns:scriptGroup" maxOccurs="1"
+                     minOccurs="0">
+            </element>
+            <element name="apply" type="tns:scriptGroup" maxOccurs="1" minOccurs="1"></element>
+            <element name="cleanup" type="tns:scriptGroup" maxOccurs="1" minOccurs="0"></element>
+        </sequence>
     </complexType>
 </schema>

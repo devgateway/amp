@@ -47,7 +47,7 @@ public class AmpInflationSource implements Serializable, Identifiable {
     private IRFrequency frequency;
 
     @ManyToOne
-    @JoinColumn(name = "amp_currency_id", nullable = false)
+    @JoinColumn(name = "currency_id", nullable = false)
     @NotNull
     private AmpCurrency currency;
 

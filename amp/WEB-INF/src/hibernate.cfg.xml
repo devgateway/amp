@@ -23,6 +23,7 @@
   <property name="hbm2ddl.auto">update</property>
   <property name="hibernate.connection.username">postgres</property>
   <property name="hibernate.connection.password">password123</property>
+  <property name="hibernate.hbm2ddl.auto">none</property>
 
  </session-factory>
 </hibernate-configuration>

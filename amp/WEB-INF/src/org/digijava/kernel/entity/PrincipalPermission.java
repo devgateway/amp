@@ -32,6 +32,8 @@ import java.util.Set;
 @Table(name = "DG_PRINCIPAL_PERMISSION")
 public class PrincipalPermission{
 
+
+    public PrincipalPermission(){}
     public static final int USER_PRINCIPAL = 0;
     public static final int GROUP_PRINCIPAL = 1;
     @Id
@@ -50,8 +52,16 @@ public class PrincipalPermission{
     private String permissionClass;
 
     @OneToMany(mappedBy = "principalPermission", cascade = CascadeType.ALL, orphanRemoval = true)
-    @OrderBy("paramIndex ASC")
+    @OrderBy("param_index ASC")
     private Set<PrincipalPermissionParameter> parameters = new HashSet<>();
+
+    public PrincipalPermission(Long principalPermissionId, int principalType, Long targetId, String permissionClass, Set<PrincipalPermissionParameter> parameters) {
+        this.principalPermissionId = principalPermissionId;
+        this.principalType = principalType;
+        this.targetId = targetId;
+        this.permissionClass = permissionClass;
+        this.parameters = parameters;
+    }
 
 
 

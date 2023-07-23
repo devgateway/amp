@@ -23,12 +23,16 @@
 package org.digijava.kernel.user;
 
 import javax.persistence.Embeddable;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import java.io.Serializable;
 
 @Embeddable
 public class UserContactInfoPK
     implements Serializable {
 
+    @ManyToOne
+    @JoinColumn(name = "USER_ID")
     private User user;
     private int contactIndex;
 

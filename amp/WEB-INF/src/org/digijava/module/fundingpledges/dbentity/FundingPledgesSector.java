@@ -5,14 +5,31 @@ import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.aim.dbentity.AmpSector;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "AMP_FUNDING_PLEDGES_SECTOR")
 public class FundingPledgesSector implements Identifiable{
-    
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_FUNDING_PLEDGES_SECTOR_SEQ")
+    @SequenceGenerator(name = "AMP_FUNDING_PLEDGES_SECTOR_SEQ", sequenceName = "AMP_FUNDING_PLEDGES_SECTOR_SEQ", allocationSize = 1)
+    @Column(name = "id")
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pledge_id", nullable = false)
     private FundingPledges pledgeid;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "amp_sector_id", nullable = false)
     private AmpSector sector;
+
+    @Column(name = "sector_percentage")
     private Float sectorpercentage;
-    
+
+
     @Override public Object getIdentifier(){
         return this.id;
     }

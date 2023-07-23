@@ -6,80 +6,80 @@
 <!--  http://docs.google.com/Doc?id=djf3gch_56gs9dqtjc  -->
 <!-- ************************************************** -->
 <xs:schema
-	targetNamespace="http://digijava.org/module/gateperm/feed/schema.xml"
-	xmlns="http://digijava.org/module/gateperm/feed/schema.xml"
-	xmlns:gateperm="http://digijava.org/module/gateperm/feed/schema.xml"
-	xmlns:xs="http://www.w3.org/2001/XMLSchema"
-	xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
-	xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"
-	elementFormDefault="qualified" id="gateperm"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema" jaxb:version="1.0"
+        xmlns:gateperm="http://digijava.org/module/gateperm/feed/schema.xml"
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+        xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"
+        targetNamespace="http://digijava.org/module/gateperm/feed/schema.xml"
+        xmlns="http://digijava.org/module/gateperm/feed/schema.xml"
+        elementFormDefault="qualified" id="gateperm"
+        jaxb:version="1.0"
 >
-	<xs:element name="permissions" msdata:IsDataSet="true">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element name="gatePerm" type="gateperm:gatePermType" minOccurs="0"
-					maxOccurs="unbounded"/>
-				<xs:element name="compositePerm" type="gateperm:compositePermType"
-					minOccurs="0" maxOccurs="unbounded"
-				/>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-	<xs:complexType name="compositePermType">
-		<xs:sequence>
-			<xs:element name="assignedObjId" nillable="true"
-				type="gateperm:assignedObjIdType" minOccurs="0" maxOccurs="unbounded"
-			/>
-			<xs:element name="gatePerm"
-				type="gateperm:gatePermType" minOccurs="0" maxOccurs="unbounded"
-			/>
-			<xs:element name="compositePerm"
-				type="gateperm:compositePermType" minOccurs="0" maxOccurs="unbounded"
-			/>
-			<xs:element name="description" type="xs:string"
-				minOccurs="0" maxOccurs="1"
-			/>
-		</xs:sequence>
-		<xs:attribute name="name" type="xs:string" use="required" />
-		<xs:attribute name="intersection" type="xs:boolean" use="optional" />
-		<xs:attribute name="dedicated" type="xs:boolean" use="optional" />
-	</xs:complexType>
-	<xs:complexType name="gatePermType">
-		<xs:sequence>
-			<xs:element name="assignedObjId" nillable="true"
-				type="gateperm:assignedObjIdType" minOccurs="0" maxOccurs="unbounded"
-			/>
-			<xs:element name="param" type="xs:string"
-				minOccurs="0" maxOccurs="unbounded"
-			/>
-			<xs:element name="action" type="permActionType"
-				minOccurs="0" maxOccurs="unbounded"
-			/>
-			<xs:element name="description" type="xs:string"
-				minOccurs="0" maxOccurs="1"
-			/>
-		
-		</xs:sequence>
-		<xs:attribute name="name" type="xs:string" use="required" />
-		<xs:attribute name="dedicated" type="xs:boolean" use="optional" />
-		<xs:attribute name="gateClass" type="xs:string" use="required" />
-	</xs:complexType>
-	<xs:complexType name="assignedObjIdType">
-		<xs:simpleContent>
-			<xs:extension base="xs:string">
-				<xs:attribute name="permissibleClass" type="xs:string"
-					use="required"
-				/>
-			</xs:extension>
-		</xs:simpleContent>
-	</xs:complexType>
-	<xs:simpleType name="permActionType">
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="VIEW" />
-			<xs:enumeration value="EDIT" />
-			<xs:enumeration value="NEW" />
-			<xs:enumeration value="PUBLISH" />
-		</xs:restriction>
-	</xs:simpleType>
+    <xs:element name="permissions" msdata:IsDataSet="true">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="gatePerm" type="gateperm:gatePermType" minOccurs="0"
+                            maxOccurs="unbounded"/>
+                <xs:element name="compositePerm" type="gateperm:compositePermType"
+                            minOccurs="0" maxOccurs="unbounded"
+                />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="compositePermType">
+        <xs:sequence>
+            <xs:element name="assignedObjId" nillable="true"
+                        type="gateperm:assignedObjIdType" minOccurs="0" maxOccurs="unbounded"
+            />
+            <xs:element name="gatePerm"
+                        type="gateperm:gatePermType" minOccurs="0" maxOccurs="unbounded"
+            />
+            <xs:element name="compositePerm"
+                        type="gateperm:compositePermType" minOccurs="0" maxOccurs="unbounded"
+            />
+            <xs:element name="description" type="xs:string"
+                        minOccurs="0" maxOccurs="1"
+            />
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="intersection" type="xs:boolean" use="optional"/>
+        <xs:attribute name="dedicated" type="xs:boolean" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="gatePermType">
+        <xs:sequence>
+            <xs:element name="assignedObjId" nillable="true"
+                        type="gateperm:assignedObjIdType" minOccurs="0" maxOccurs="unbounded"
+            />
+            <xs:element name="param" type="xs:string"
+                        minOccurs="0" maxOccurs="unbounded"
+            />
+            <xs:element name="action" type="permActionType"
+                        minOccurs="0" maxOccurs="unbounded"
+            />
+            <xs:element name="description" type="xs:string"
+                        minOccurs="0" maxOccurs="1"
+            />
+
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="dedicated" type="xs:boolean" use="optional"/>
+        <xs:attribute name="gateClass" type="xs:string" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="assignedObjIdType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="permissibleClass" type="xs:string"
+                              use="required"
+                />
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:simpleType name="permActionType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="VIEW"/>
+            <xs:enumeration value="EDIT"/>
+            <xs:enumeration value="NEW"/>
+            <xs:enumeration value="PUBLISH"/>
+        </xs:restriction>
+    </xs:simpleType>
 </xs:schema>

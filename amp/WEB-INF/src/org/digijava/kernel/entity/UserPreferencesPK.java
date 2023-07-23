@@ -30,13 +30,19 @@ import java.io.Serializable;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.User;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Embeddable
 public class UserPreferencesPK
     implements Serializable {
-
+@ManyToOne
+@JoinColumn(name = "USER_ID")
     private User user;
+@ManyToOne
+@JoinColumn(name = "SITE_ID")
     private Site site;
 
     public UserPreferencesPK() {}

@@ -39,14 +39,7 @@ public class AmpKmDocuments
     @ManyToOne
     @JoinColumn(name = "document_type", referencedColumnName = "id")
     private AmpCategoryValue documentType;
-    private Set activities;
 
-    /**
-     * @return
-     */
-    public Set getActivities() {
-        return activities;
-    }
 
     /**
      * @return
@@ -90,12 +83,7 @@ public class AmpKmDocuments
         return version;
     }
 
-    /**
-     * @param set
-     */
-    public void setActivities(Set set) {
-        activities = set;
-    }
+
 
     /**
      * @param long1

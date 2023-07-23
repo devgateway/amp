@@ -21,20 +21,53 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.aim.dbentity.AmpCurrency;
+
+import javax.persistence.*;
+import java.util.Date;
+
+@Entity
+@Table(name = "AMP_FUNDING_PLEDGES_DETAILS")
 public class FundingPledgesDetails implements FundingInformationItem, Identifiable{
-    
-    private long id;
-    private FundingPledges pledgeid;
-    private AmpCategoryValue pledgetype;
-    private AmpCategoryValue typeOfAssistance;
-    private AmpCategoryValue aidmodality;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_FUNDING_PLEDGES_DETAILS_seq")
+    @SequenceGenerator(name = "AMP_FUNDING_PLEDGES_DETAILS_seq", sequenceName = "AMP_FUNDING_PLEDGES_DETAILS_seq", allocationSize = 1)
+    @Column(name = "id")
+    private Long id;
+
+    @Column(name = "amount")
     private Double amount;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pledge_id")
+    private FundingPledges pledgeid;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pledge_type")
+    private AmpCategoryValue pledgetype;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "currency")
     private AmpCurrency currency;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "type_of_assistance")
+    private AmpCategoryValue typeOfAssistance;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "aid_modality")
+    private AmpCategoryValue aidmodality;
+
+    @Column(name = "year")
     private String fundingYear;
-    
-    private Date fundingDateStart; // only meaningful when [Pledge Funding]/[Pledge Funding - Year Range] is enabled
-    private Date fundingDateEnd; // only meaningful when [Pledge Funding]/[Pledge Funding - Year Range] is enabled
-    
+
+    @Column(name = "dateStart")
+    private Date fundingDateStart;
+
+    @Column(name = "dateEnd")
+    private Date fundingDateEnd;
+
     public java.sql.Timestamp getFunding_date() {
         java.sql.Timestamp dateStart = fundingDateStart == null ? null : new Timestamp(fundingDateStart.getTime());
         java.sql.Timestamp yearStamp = fundingYear == null ? null : Timestamp.valueOf(new StringBuffer(getFundingYear()).append("-01-01 00:00:00").toString());

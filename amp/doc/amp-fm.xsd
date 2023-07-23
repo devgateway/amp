@@ -5,59 +5,58 @@
 <!--              version 0.1 - 04-Jul-2008             -->
 <!-- ************************************************** -->
 
-<xs:schema targetNamespace="http://dgfoundation.org/amp/visibility/feed/fm/schema.xml"
-	xmlns="http://dgfoundation.org/amp/visibility/feed/fm/schema.xml"
-	xmlns:fm="http://dgfoundation.org/amp/visibility/feed/fm/schema.xml"
-	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
-	xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" elementFormDefault="qualified"
-	id="fm"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema" jaxb:version="1.0">
+<xs:schema xmlns:fm="http://dgfoundation.org/amp/visibility/feed/fm/schema.xml"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+           xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" targetNamespace="http://dgfoundation.org/amp/visibility/feed/fm/schema.xml"
+           xmlns="http://dgfoundation.org/amp/visibility/feed/fm/schema.xml" elementFormDefault="qualified"
+           id="fm"
+           jaxb:version="1.0">
 
-	<xs:element name="visibilityTemplates" msdata:IsDataSet="true">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element name="template" type="fm:templateType" maxOccurs="unbounded" />
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
+    <xs:element name="visibilityTemplates" msdata:IsDataSet="true">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="template" type="fm:templateType" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
 
-	<xs:complexType name="templateType">
-		<xs:sequence>
-			<xs:element name="module" type="fm:moduleType" minOccurs="1"
-				maxOccurs="unbounded" />
-		</xs:sequence>
-		<xs:attribute name="name" type="xs:string" use="required" />
-	</xs:complexType>
+    <xs:complexType name="templateType">
+        <xs:sequence>
+            <xs:element name="module" type="fm:moduleType" minOccurs="1"
+                        maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+    </xs:complexType>
 
-<xs:complexType name="moduleType">
-		<xs:sequence>
-			<xs:element name="module" type="fm:moduleType" minOccurs="0"
-				maxOccurs="unbounded" />
-			<xs:element name="feature" type="fm:featureType" minOccurs="0"
-				maxOccurs="unbounded" />
-		</xs:sequence>
-		<xs:attribute name="name" type="xs:string" use="required" />
-		<xs:attribute name="visible" type="xs:boolean" use="required" />
-</xs:complexType>
+    <xs:complexType name="moduleType">
+        <xs:sequence>
+            <xs:element name="module" type="fm:moduleType" minOccurs="0"
+                        maxOccurs="unbounded"/>
+            <xs:element name="feature" type="fm:featureType" minOccurs="0"
+                        maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="visible" type="xs:boolean" use="required"/>
+    </xs:complexType>
 
-<xs:complexType name="featureType">
-		<xs:sequence>
-			<xs:element name="field" type="fm:fieldType" minOccurs="0"
-				maxOccurs="unbounded"/>
-		</xs:sequence>
-		<xs:attribute name="name" type="xs:string" use="required" />
-		<xs:attribute name="visible" type="xs:boolean" use="required" />
-</xs:complexType>
+    <xs:complexType name="featureType">
+        <xs:sequence>
+            <xs:element name="field" type="fm:fieldType" minOccurs="0"
+                        maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="visible" type="xs:boolean" use="required"/>
+    </xs:complexType>
 
 
-<xs:complexType name="fieldType">
-		<xs:simpleContent>
-			<xs:extension base="xs:string">
-				<xs:attribute name="visible" type="xs:boolean" use="required" />
-			</xs:extension>
-		</xs:simpleContent>
-</xs:complexType>
-
+    <xs:complexType name="fieldType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="visible" type="xs:boolean" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
 
 
 </xs:schema>

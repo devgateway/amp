@@ -5,6 +5,7 @@ import java.io.Serializable;
 import org.digijava.kernel.user.User;
 
 import javax.persistence.Embeddable;
+import javax.persistence.ManyToOne;
 
 /**
  * Primary Key for AmpUserExtension entity.
@@ -17,7 +18,7 @@ import javax.persistence.Embeddable;
 public class AmpUserExtensionPK implements Serializable{
 
     private static final long serialVersionUID = 1L;
-    
+    @ManyToOne
     private User user;
 
     public AmpUserExtensionPK(){

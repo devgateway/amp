@@ -48,7 +48,7 @@ public class GeoCodedActivity {
     @ApiModelProperty("Geo coding status for this activity")
     private Status status;
 
-    @OneToMany(mappedBy = "geoCodedActivity", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderColumn(name = "INDEX")
     @ApiModelProperty("Geo coded locations. Populated only when status is complete.")
     private List<GeoCodedLocation> locations;

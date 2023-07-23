@@ -37,7 +37,7 @@ public class NpdSettings implements Serializable {
     @Column(name = "selected_years_for_team")
     private String selectedYearsForTeam;
 
-    @OneToOne(mappedBy = "npdSettings")
+    @OneToOne
     private AmpTeam team;
 
     

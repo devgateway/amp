@@ -7,152 +7,152 @@
 <!--                      (DRAFT)                       -->
 <!-- ************************************************** -->
 
-<xs:schema targetNamespace="http://digijava.org/module/digifeed/feeds/fb/freebalance.xml"
-	xmlns="http://digijava.org/module/digifeed/feeds/fb/freebalance.xml"
-	xmlns:fb="http://digijava.org/module/digifeed/feeds/fb/freebalance.xml"
-	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
-	xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" elementFormDefault="qualified"
-	id="fb" xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema" jaxb:version="1.0"
-	jaxb:extensionBindingPrefixes="xjc">
+<xs:schema xmlns:fb="http://digijava.org/module/digifeed/feeds/fb/freebalance.xml"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+           xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://digijava.org/module/digifeed/feeds/fb/freebalance.xml" xmlns="http://digijava.org/module/digifeed/feeds/fb/freebalance.xml"
+           elementFormDefault="qualified"
+           id="fb" jaxb:version="1.0"
+           jaxb:extensionBindingPrefixes="xjc">
 
-	<!-- begin XJC internal parsing directives (please ignore when constructing a non XJC parser/publisher)-->
-	<xsd:annotation>
-		<xsd:appinfo>
-			<jaxb:globalBindings>
-				<jaxb:javaType name="java.util.Date" xmlType="xs:date"
-					printMethod="org.digijava.module.digifeed.utils.PublisherDateFormatter.print"
-					parseMethod="org.digijava.module.digifeed.utils.PublisherDateFormatter.parse" />
-			</jaxb:globalBindings>
-		</xsd:appinfo>
-	</xsd:annotation>
-	<!-- end XJC internal parsing directives -->
-
-
-	<xs:element name="activities" msdata:IsDataSet="true">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element name="activity" type="fb:activityType" maxOccurs="unbounded" />
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-
-	<xs:complexType name="activityType">
-		<xs:sequence>
-			<xs:element name="funding" type="fb:fundingType" minOccurs="0"
-				maxOccurs="unbounded" />
-		</xs:sequence>
-		<xs:attribute name="id" type="xs:string" use="required" />
-	</xs:complexType>
-
-	<xs:complexType name="fundingType">
-		<xs:sequence>
-			<xs:element name="org" type="fb:orgType" minOccurs="0" />
-			<xs:element name="location" type="fb:locationType" minOccurs="0" />
-			<xs:element name="component" type="fb:componentType" minOccurs="0" />
-			<xs:element name="amount" type="fb:moneyType" minOccurs="1" />
-		</xs:sequence>
-		<xs:attribute name="perspective" type="xs:string" use="optional" />
-		<xs:attribute name="transactionDate" type="xs:date" use="optional" />
-		<xs:attribute name="transactionType" type="fb:trType" use="required" />
-		<xs:attribute name="adjustmentType" type="fb:adjType" use="required" />
-
-	</xs:complexType>
-
-	<xs:complexType name="orgType">
-		<xs:annotation>
-			<xs:documentation>entity body=org name (optional)</xs:documentation>
-		</xs:annotation>
-
-		<xs:simpleContent>
-			<xs:extension base="xs:string">
-				<xs:attribute name="id" type="xs:string" use="required" />
-			</xs:extension>
-		</xs:simpleContent>
-	</xs:complexType>
+    <!-- begin XJC internal parsing directives (please ignore when constructing a non XJC parser/publisher)-->
+    <xsd:annotation>
+        <xsd:appinfo>
+            <jaxb:globalBindings>
+                <jaxb:javaType name="java.util.Date" xmlType="xs:date"
+                               printMethod="org.digijava.module.digifeed.utils.PublisherDateFormatter.print"
+                               parseMethod="org.digijava.module.digifeed.utils.PublisherDateFormatter.parse"/>
+            </jaxb:globalBindings>
+        </xsd:appinfo>
+    </xsd:annotation>
+    <!-- end XJC internal parsing directives -->
 
 
-	<xs:complexType name="componentType">
-		<xs:annotation>
-			<xs:documentation>entity body=component name</xs:documentation>
-		</xs:annotation>
+    <xs:element name="activities" msdata:IsDataSet="true">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="activity" type="fb:activityType" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
 
-		<xs:simpleContent>
-			<xs:extension base="xs:string">
-				<xs:attribute name="id" type="xs:string" use="required" />
-			</xs:extension>
-		</xs:simpleContent>
-	</xs:complexType>
+    <xs:complexType name="activityType">
+        <xs:sequence>
+            <xs:element name="funding" type="fb:fundingType" minOccurs="0"
+                        maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="fundingType">
+        <xs:sequence>
+            <xs:element name="org" type="fb:orgType" minOccurs="0"/>
+            <xs:element name="location" type="fb:locationType" minOccurs="0"/>
+            <xs:element name="component" type="fb:componentType" minOccurs="0"/>
+            <xs:element name="amount" type="fb:moneyType" minOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="perspective" type="xs:string" use="optional"/>
+        <xs:attribute name="transactionDate" type="xs:date" use="optional"/>
+        <xs:attribute name="transactionType" type="fb:trType" use="required"/>
+        <xs:attribute name="adjustmentType" type="fb:adjType" use="required"/>
+
+    </xs:complexType>
+
+    <xs:complexType name="orgType">
+        <xs:annotation>
+            <xs:documentation>entity body=org name (optional)</xs:documentation>
+        </xs:annotation>
+
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="id" type="xs:string" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
 
 
-	<xs:complexType name="locationType">
-		<xs:annotation>
-			<xs:documentation>entity body=location name</xs:documentation>
-		</xs:annotation>
+    <xs:complexType name="componentType">
+        <xs:annotation>
+            <xs:documentation>entity body=component name</xs:documentation>
+        </xs:annotation>
 
-		<xs:simpleContent>
-			<xs:extension base="xs:string">
-				<xs:attribute name="id" type="xs:string" use="required" />
-				<xs:attribute name="type" type="fb:locationCodeType" use="required" />
-			</xs:extension>
-		</xs:simpleContent>
-	</xs:complexType>
-
-
-	<xs:simpleType name="currencyCodeType">
-		<xs:annotation>
-			<xs:documentation>ISO-4217 currency codes</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:string">
-			<xs:length value="3" />
-		</xs:restriction>
-	</xs:simpleType>
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="id" type="xs:string" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
 
 
-	<xs:simpleType name="trType">
-		<xs:annotation>
-			<xs:documentation>
-				0 = Commitment 1 = Disbursement 2 = Expenditure
-			</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:short">
-			<xs:enumeration value="0" />
-			<xs:enumeration value="1" />
-			<xs:enumeration value="2" />
-		</xs:restriction>
-	</xs:simpleType>
+    <xs:complexType name="locationType">
+        <xs:annotation>
+            <xs:documentation>entity body=location name</xs:documentation>
+        </xs:annotation>
 
-	<xs:simpleType name="adjType">
-		<xs:annotation>
-			<xs:documentation>0 = Planned 1 = Actual</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:short">
-			<xs:enumeration value="0" />
-			<xs:enumeration value="1" />
-		</xs:restriction>
-	</xs:simpleType>
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="id" type="xs:string" use="required"/>
+                <xs:attribute name="type" type="fb:locationCodeType" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
 
-	<xs:simpleType name="locationCodeType">
-		<xs:annotation>
-			<xs:documentation>
-				1 = World Region 2 = Country 3 = Country Region 4 = Country
-			</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:short">
-			<xs:enumeration value="1" />
-			<xs:enumeration value="2" />
-			<xs:enumeration value="3" />
-			<xs:enumeration value="4" />
-		</xs:restriction>
-	</xs:simpleType>
 
-	<xs:complexType name="moneyType">
-		<xs:simpleContent>
-			<xs:extension base="xs:string">
-				<xs:attribute name="value" type="xs:decimal" use="optional" />
-				<xs:attribute name="currency" type="fb:currencyCodeType" use="optional" />
-			</xs:extension>
-		</xs:simpleContent>
-	</xs:complexType>
+    <xs:simpleType name="currencyCodeType">
+        <xs:annotation>
+            <xs:documentation>ISO-4217 currency codes</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:length value="3"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+
+    <xs:simpleType name="trType">
+        <xs:annotation>
+            <xs:documentation>
+                0 = Commitment 1 = Disbursement 2 = Expenditure
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:short">
+            <xs:enumeration value="0"/>
+            <xs:enumeration value="1"/>
+            <xs:enumeration value="2"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="adjType">
+        <xs:annotation>
+            <xs:documentation>0 = Planned 1 = Actual</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:short">
+            <xs:enumeration value="0"/>
+            <xs:enumeration value="1"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="locationCodeType">
+        <xs:annotation>
+            <xs:documentation>
+                1 = World Region 2 = Country 3 = Country Region 4 = Country
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:short">
+            <xs:enumeration value="1"/>
+            <xs:enumeration value="2"/>
+            <xs:enumeration value="3"/>
+            <xs:enumeration value="4"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="moneyType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="value" type="xs:decimal" use="optional"/>
+                <xs:attribute name="currency" type="fb:currencyCodeType" use="optional"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
 
 </xs:schema>

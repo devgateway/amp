@@ -103,6 +103,9 @@ public class AmpTheme implements Serializable, SoftDeletable, Identifiable, ARDi
     private AmpCategoryValue typeCategoryValue;
 
 //    @OneToMany(mappedBy = "themeId", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private Set<IndicatorConnection> indicatorConnections;
+
+    @Transient
     private Set<IndicatorTheme> indicators;
 
     @OneToMany(mappedBy = "defaultHierarchy", cascade = CascadeType.ALL, orphanRemoval = true)

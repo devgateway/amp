@@ -37,7 +37,7 @@ public class AmpGPINiSurveyResponse implements Serializable, Cloneable {
     @JoinColumn(name = "amp_gpi_ni_question_id", nullable = false)
     private AmpGPINiQuestion ampGPINiQuestion;
 
-    @OneToMany(mappedBy = "ampGPINiSurveyResponse", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "surveyResponse", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AmpGPINiSurveyResponseDocument> supportingDocuments;
     private transient Long oldKey;
 

@@ -137,8 +137,11 @@ extends Entity implements Serializable {
     public final static String[] defaultGroups = {
         "Administrators", "Members", "Translators"};
 
+    @Transient
     private String description;
+    @Transient
     private boolean active;
+    @Transient
     private boolean open;
     private HashSet applInstances;
 

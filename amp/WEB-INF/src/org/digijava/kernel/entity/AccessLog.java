@@ -81,7 +81,12 @@ public class AccessLog
      non-persistent properties
      */
     private String identityPattern;
-    private Map parameters;
+    @Transient
+//    @ElementCollection
+//    @MapKeyColumn(name = "param_key") // Column name for map keys
+//    @Column(name = "param_value") // Column name for map values
+//    @CollectionTable(name = "DG_ACCESS_LOG_PARAMS", joinColumns = @JoinColumn(name = "access_log_id"))
+    private Map<Object, Object> parameters;
     private String forwardedAddr;
     private String originalIp;
 

@@ -40,14 +40,7 @@ import java.security.Policy;
 import java.security.Principal;
 import java.security.ProtectionDomain;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
@@ -884,6 +877,7 @@ final class PermissionStorage implements Serializable {
             paramTypes[i] = param.getParameterClass();
             i++;
         }
+        System.out.println(Arrays.toString(paramTypes));
 
         Constructor constructor = permissionClass.getConstructor(paramTypes);
         return (ResourcePermission) constructor.newInstance(paramValues);

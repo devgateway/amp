@@ -71,6 +71,7 @@ public class AmpMEIndicatorValue {
     @JoinColumn(name = "risk")
     private AmpIndicatorRiskRatings risk;
 
+    @Transient
     private AmpMEIndicators meIndicatorId;
 
 

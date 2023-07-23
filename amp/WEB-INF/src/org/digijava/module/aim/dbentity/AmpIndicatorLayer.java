@@ -71,7 +71,7 @@ public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicator
     @OneToMany(mappedBy = "indicatorLayer", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AmpIndicatorColor> colorRamp;
 
-    @OneToMany(mappedBy = "indicatorLayer", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "indicator", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AmpLocationIndicatorValue> indicatorValues;
 
     @OneToMany(mappedBy = "indicatorLayer", cascade = CascadeType.ALL, orphanRemoval = true)

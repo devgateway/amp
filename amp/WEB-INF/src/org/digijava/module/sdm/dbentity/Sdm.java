@@ -59,7 +59,7 @@ public class Sdm {
     @Column(name = "NAME")
     private String name;
 
-    @OneToMany(mappedBy = "sdm", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "document", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("paragraph_order ASC")
     private Set<SdmItem> items;
 

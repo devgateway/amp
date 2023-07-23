@@ -11,7 +11,7 @@ public class AmpMapConfig {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_map_config_seq")
     @SequenceGenerator(name = "amp_map_config_seq", sequenceName = "amp_map_config_seq", allocationSize = 1)
     @Column(name = "id")
-    private Long Id;
+    private Long id;
 
     @Column(name = "mapurl")
     private String mapUrl;
@@ -48,7 +48,6 @@ public class AmpMapConfig {
     @Lob
     @Column(name = "layer")
     private String layer;
-    private Long id;
 
 
 

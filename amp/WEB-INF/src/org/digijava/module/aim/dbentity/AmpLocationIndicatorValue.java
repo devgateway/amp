@@ -18,7 +18,7 @@ public class AmpLocationIndicatorValue implements Serializable{
     private Long id;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "location_id", referencedColumnName = "id", nullable = false)
     private AmpCategoryValueLocations location;
 
     @ManyToOne(cascade = CascadeType.ALL)

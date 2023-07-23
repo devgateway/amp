@@ -45,7 +45,10 @@ public class SuspendLogin {
     @Column(name = "ACTIVE")
     private Boolean active;
 
-    @ManyToMany(mappedBy = "suspendLogins")
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "DG_SUSPEND_LOGIN_USERS",
+            joinColumns = @JoinColumn(name = "SUSPEND_LOGIN_ID"),
+            inverseJoinColumns = @JoinColumn(name = "USER_ID"))
     private Set<User> users = new HashSet<>();
 
 

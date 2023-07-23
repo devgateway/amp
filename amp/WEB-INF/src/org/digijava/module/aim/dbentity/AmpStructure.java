@@ -95,11 +95,11 @@ public class AmpStructure implements Serializable, Comparable<Object>, Versionab
             pickIdOnly = true)
     private AmpCategoryValue structureColor;
 
-    @OneToMany(mappedBy = "ampStructure", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "structure", cascade = CascadeType.ALL, orphanRemoval = true)
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<AmpStructureImg> images;
 
-    @OneToMany(mappedBy = "ampStructure", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "structure", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderColumn(name = "index")
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @Interchangeable(fieldTitle = "Coordinates", importable = true, fmPath = "/Activity Form/Structures/Map")

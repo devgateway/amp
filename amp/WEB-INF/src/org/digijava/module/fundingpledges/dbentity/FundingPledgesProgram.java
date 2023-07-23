@@ -3,13 +3,31 @@ package org.digijava.module.fundingpledges.dbentity;
 
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.util.Identifiable;
+import org.digijava.module.aim.dbentity.AmpTheme;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "AMP_FUNDING_PLEDGES_PROGRAM")
 public class FundingPledgesProgram implements Identifiable{
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_FUNDING_PLEDGES_PROGRAM_SEQ")
+    @SequenceGenerator(name = "AMP_FUNDING_PLEDGES_PROGRAM_SEQ", sequenceName = "AMP_FUNDING_PLEDGES_PROGRAM_SEQ", allocationSize = 1)
+    @Column(name = "id")
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pledge_id", nullable = false)
     private FundingPledges pledgeid;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "amp_program_id", nullable = false)
     private AmpTheme program;
+
+    @Column(name = "program_percentage")
     private Float programpercentage;
+
+
 
     @Override public Object getIdentifier(){
         return this.id;

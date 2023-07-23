@@ -42,7 +42,7 @@ public class AmpGPINiQuestion implements Serializable {
     @JoinColumn(name = "amp_gpi_ni_indicator_id", nullable = false)
     private AmpGPINiIndicator ampGPINiIndicator;
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "ampGPINiQuestion", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<AmpGPINiQuestionOption> options;
 
 

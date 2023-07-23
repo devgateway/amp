@@ -13,6 +13,7 @@ import java.util.Set;
 @Entity
 @Table(name = "AMP_CALENDAR")
 public class AmpCalendar implements Serializable {
+    @Column(name = "CALENDAR_ID")
     @EmbeddedId
     private AmpCalendarPK calendarPK;
 

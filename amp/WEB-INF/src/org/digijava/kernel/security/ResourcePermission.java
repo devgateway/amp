@@ -68,6 +68,7 @@ public abstract class ResourcePermission
         this.actionMask = modifySecurityAction(action);
     }
 
+
     public ResourcePermission(String resource, Integer action) {
         this(resource, action.intValue());
     }

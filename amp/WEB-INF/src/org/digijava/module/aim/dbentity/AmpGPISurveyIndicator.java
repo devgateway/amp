@@ -33,7 +33,7 @@ public class AmpGPISurveyIndicator implements Serializable {
     @Column(name = "show_as_indicator")
     private Boolean showAsIndicator;
 
-    @OneToMany(mappedBy = "ampGPISurveyIndicator", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "ampIndicatorId", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AmpGPISurveyQuestion> questions;
 
     @OneToMany(mappedBy = "parentIndicator", cascade = CascadeType.ALL, orphanRemoval = true)

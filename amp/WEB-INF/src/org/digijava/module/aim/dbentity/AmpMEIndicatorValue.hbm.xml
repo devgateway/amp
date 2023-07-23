@@ -34,10 +34,6 @@
 
 		<many-to-one name="activityId" column="activity_id"
 			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" />
-		<!-- 
-			<many-to-one name="meIndicatorId" column="me_indicator_id" 
-			class="org.digijava.module.aim.dbentity.AmpMEIndicators" cascade="none"/>	
-		-->
 		<many-to-one name="indicator" column="indicator_id"
 			class="org.digijava.module.aim.dbentity.AmpIndicator" cascade="none" />
 

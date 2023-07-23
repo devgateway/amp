@@ -4,13 +4,33 @@ package org.digijava.module.fundingpledges.dbentity;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.util.Identifiable;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 
-public class FundingPledgesLocation implements Identifiable{
-    
+import javax.persistence.*;
+import java.io.Serializable;
+
+@Entity
+@Table(name = "AMP_FUNDING_PLEDGES_LOCATION")
+public class FundingPledgesLocation implements Identifiable, Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_FUNDING_PLEDGES_LOCATION_SEQ")
+    @SequenceGenerator(name = "AMP_FUNDING_PLEDGES_LOCATION_SEQ", sequenceName = "AMP_FUNDING_PLEDGES_LOCATION_SEQ", allocationSize = 1)
+    @Column(name = "id")
     private Long id;
-    private FundingPledges pledgeid;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "location_id", nullable = false)
     private AmpCategoryValueLocations location;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pledge_id", nullable = false)
+    private FundingPledges pledgeid;
+
+    @Column(name = "location_percentage")
     private Float locationpercentage;
+
+
     
     @Override public Object getIdentifier(){
         return this.id;

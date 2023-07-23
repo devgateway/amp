@@ -23,18 +23,7 @@ import org.digijava.module.contentrepository.util.DocumentOrganizationManager;
  *
  */
 import java.util.List;
-import javax.persistence.Cacheable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Index;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "CR_DOCUMENT_FILTER")
@@ -53,6 +42,7 @@ public class DocumentFilter {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CR_DOCUMENT_FILTER_SEQ")
+    @SequenceGenerator(name = "CR_DOCUMENT_FILTER_SEQ", sequenceName = "CR_DOCUMENT_FILTER_SEQ", allocationSize = 1)
     @Column(name = "id")
     private Long id;
 
@@ -110,12 +100,14 @@ public class DocumentFilter {
 
     private Long organisationId;
 
+    @Transient
     private List<Label> filterLabels;
 
     
     private Long filterKeywordMode = KEYWORDS_MODE_ANY;
     
 
+    @Transient
     private List<String> filterKeywords;
     
     public DocumentFilter() {

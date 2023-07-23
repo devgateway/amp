@@ -66,7 +66,7 @@ public class FundingPledges implements Comparable<FundingPledges>, Serializable,
     @Column(name = "whoAuthorizedPledge")
     private String whoAuthorizedPledge;
 
-    @Column(name = "furtherApprovalNedded")
+    @Column(name = "furtherApprovalNeeded")
     private String furtherApprovalNeeded;
 
     @Column(name = "contactName")
@@ -160,7 +160,6 @@ public class FundingPledges implements Comparable<FundingPledges>, Serializable,
     @OneToMany(mappedBy = "pledgeid", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<FundingPledgesDetails> fundingPledgesDetails;
 
-    private String furtherApprovalNedded;
 
     
 
@@ -239,7 +238,7 @@ public class FundingPledges implements Comparable<FundingPledges>, Serializable,
     
     @java.lang.SuppressWarnings("all")
     public String getFurtherApprovalNedded() {
-        return this.furtherApprovalNedded;
+        return this.furtherApprovalNeeded;
     }
     
     @java.lang.Deprecated
@@ -433,7 +432,7 @@ public class FundingPledges implements Comparable<FundingPledges>, Serializable,
     
     @java.lang.SuppressWarnings("all")
     public void setFurtherApprovalNedded(final String furtherApprovalNedded) {
-        this.furtherApprovalNedded = furtherApprovalNedded;
+        this.furtherApprovalNeeded = furtherApprovalNedded;
     }
     
     @java.lang.Deprecated

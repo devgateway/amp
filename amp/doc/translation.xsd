@@ -1,30 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
-	<xs:element name="Translations">
-    	<xs:complexType>
-    		<xs:sequence>
-    			<xs:element name="trn" type="Trn" maxOccurs="unbounded" minOccurs="0" />
-    		</xs:sequence>    		
-    	</xs:complexType>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+           attributeFormDefault="unqualified">
+    <xs:element name="Translations">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="trn" type="Trn" maxOccurs="unbounded" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
     </xs:element>
-    
+
     <xs:complexType name="Trn">
-    	<xs:sequence>
-    		<xs:element name="lang" type="Language" maxOccurs="unbounded" minOccurs="1"/>
-    	</xs:sequence>
-    	<xs:attribute name="key" use="optional" type="xs:string" />
-		<xs:attribute name="siteId" use="optional" type="xs:string" />
-		<xs:attribute name="site" use="optional" type="xs:string" />
-		<xs:attribute name="keywords" use="optional" type="xs:string" />
-	</xs:complexType>
-	
-	<xs:complexType name="Language">
-		<xs:simpleContent>
-     		<xs:extension base="xs:string">
-		       <xs:attribute name="lastAccessed" use="optional" type="xs:dateTime" />
-			   <xs:attribute name="updated" use="optional" type="xs:dateTime" />
-			   <xs:attribute name="code" use="required" type="xs:string" />
-		     </xs:extension>
-   		</xs:simpleContent>
-	</xs:complexType>
+        <xs:sequence>
+            <xs:element name="lang" type="Language" maxOccurs="unbounded" minOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="key" use="optional" type="xs:string"/>
+        <xs:attribute name="siteId" use="optional" type="xs:string"/>
+        <xs:attribute name="site" use="optional" type="xs:string"/>
+        <xs:attribute name="keywords" use="optional" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="Language">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="lastAccessed" use="optional" type="xs:dateTime"/>
+                <xs:attribute name="updated" use="optional" type="xs:dateTime"/>
+                <xs:attribute name="code" use="required" type="xs:string"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
 </xs:schema>

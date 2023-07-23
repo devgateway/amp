@@ -152,7 +152,7 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
     )
     private Set<AmpOrganisation> organizations;
 
-    @OneToMany(mappedBy = "ipaContract", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "contract", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<IPAContractDisbursement> disbursements;
 
     @Column(name = "donor_contract_funding")

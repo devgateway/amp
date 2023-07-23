@@ -238,12 +238,12 @@ public class AmpActivityVersion extends AmpActivityFields implements Versionable
     @JoinColumn(name = "activity_creator", referencedColumnName = "amp_team_mem_id")
     private AmpTeamMember activityCreator;
 
-    @Column(name = "approval_status")
-    @Type(type = "org.digijava.module.aim.dbentity.NamedEnumType", parameters = {
-            @org.hibernate.annotations.Parameter(name = "enumClass", value = "org.digijava.module.aim.dbentity.ApprovalStatus"),
-            @org.hibernate.annotations.Parameter(name = "valueProperty", value = "dbName")
-    })
-    private ApprovalStatus approvalStatus;
+//    @Column(name = "approval_status")
+//    @Type(type = "org.digijava.module.aim.dbentity.NamedEnumType", parameters = {
+//            @org.hibernate.annotations.Parameter(name = "enumClass", value = "org.digijava.module.aim.dbentity.ApprovalStatus"),
+//            @org.hibernate.annotations.Parameter(name = "valueProperty", value = "dbName")
+//    })
+//    private ApprovalStatus approvalStatus;
 
     @Column(name = "funding_sources_number")
     private Integer fundingSourcesNumber;
@@ -276,7 +276,7 @@ public class AmpActivityVersion extends AmpActivityFields implements Versionable
             inverseJoinColumns = @JoinColumn(name = "amp_categoryvalue_id"))
     private Set<AmpCategoryValue> categories;
 
-    @OneToMany(mappedBy = "ampActivityVersion", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "ampActivity", cascade = CascadeType.ALL, orphanRemoval = true)
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<AmpActivityDocument> activityDocuments;
 
@@ -284,7 +284,7 @@ public class AmpActivityVersion extends AmpActivityFields implements Versionable
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<AmpOrgRole> orgrole;
 
-    @OneToMany(mappedBy = "ampActivityVersion", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "activityId", cascade = CascadeType.ALL, orphanRemoval = true)
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<AmpActivitySector> sectors;
 
@@ -292,23 +292,23 @@ public class AmpActivityVersion extends AmpActivityFields implements Versionable
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<IPAContract> contracts;
 
-    @OneToMany(mappedBy = "ampActivityVersion", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<AmpActivityLocation> locations;
 
-    @OneToMany(mappedBy = "ampActivityVersion", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "ampActivity", cascade = CascadeType.ALL, orphanRemoval = true)
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<AmpActivityInternalId> internalIds;
 
-    @OneToMany(mappedBy = "ampActivityVersion", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "ampActivityId", cascade = CascadeType.ALL, orphanRemoval = true)
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<AmpFunding> funding;
 
-    @OneToMany(mappedBy = "ampActivityVersion", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<AmpComponent> components;
 
-    @OneToMany(mappedBy = "ampActivityVersion", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<AmpStructure> structures;
 
@@ -318,15 +318,15 @@ public class AmpActivityVersion extends AmpActivityFields implements Versionable
             inverseJoinColumns = @JoinColumn(name = "amp_team_mem_id"))
     private Set<AmpTeamMember> member;
 
-    @OneToMany(mappedBy = "ampActivityVersion", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<AmpIssues> issues;
 
-    @OneToMany(mappedBy = "ampActivityVersion", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<AmpRegionalObservation> regionalObservations;
 
-    @OneToMany(mappedBy = "ampActivityVersion", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<AmpLineMinistryObservation> lineMinistryObservations;
 
@@ -334,29 +334,29 @@ public class AmpActivityVersion extends AmpActivityFields implements Versionable
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<AmpRegionalFunding> regionalFundings;
 
-    @OneToMany(mappedBy = "ampActivityVersion", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "ampActivityId", cascade = CascadeType.ALL, orphanRemoval = true)
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<AmpAhsurvey> survey;
 
-    @OneToMany(mappedBy = "ampActivityVersion", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "ampActivityId", cascade = CascadeType.ALL, orphanRemoval = true)
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<AmpGPISurvey> gpiSurvey;
 
-    @OneToMany(mappedBy = "ampActivityVersion", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<AmpAnnualProjectBudget> annualProjectBudgets;
 
-    @OneToMany(mappedBy = "ampActivityVersion", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<AmpActivityProgram> actPrograms;
 
-    @OneToMany(mappedBy = "ampActivityVersion", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<AmpActivityBudgetStructure> actBudgetStructure;
 
-    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
-    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    private Set<IndicatorActivity> indicators;
+//    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
+//    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+//    private Set<IndicatorActivity> indicators;
 
     @ManyToOne
     @JoinColumn(name = "approvedBy", referencedColumnName = "amp_team_mem_id")
@@ -385,7 +385,7 @@ public class AmpActivityVersion extends AmpActivityFields implements Versionable
     @Column(name = "proposed_project_life")
     private Integer proposedProjectLife;
 
-    @OneToMany(mappedBy = "ampActivityVersion", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AmpFundingAmount> costAmounts;
     @Transient
     protected String rejectMessage;

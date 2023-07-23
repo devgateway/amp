@@ -46,6 +46,7 @@ public class HelpTopic implements Serializable{
     @JoinColumn(name = "parent_Id")
     private HelpTopic parent;
 
+    @Transient
     private List<HelpContent> helpContent;
     
     public String getBodyEditKey() {

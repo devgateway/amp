@@ -64,6 +64,7 @@ public class ObjectPermission
         this.className = className;
     }
 
+
     /**
          * Constructor for an ObjectPermission which grants permission on any instace
      * of a class (class-level permission). In this case instanceId=null.

@@ -39,8 +39,14 @@ public class SdmItem
     public final static String TYPE_FILE = "file";
     public final static String TYPE_IMG = "image";
     //
-    @EmbeddedId
-    private SdmItemKey id;
+    @Id
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "SDM_ID", referencedColumnName = "ID")
+    private Sdm document;
+
+    @Id
+    @Column(name = "PARAGRAPH_ORDER")
+    private Long paragraphOrder;
 
     @Column(name = "CONTENT_TYPE")
     private String contentType;
@@ -78,9 +84,6 @@ public class SdmItem
 
     @Column(name = "REAL_TYPE")
     private String realType;
-    private Sdm document;
-    private Long paragraphOrder;
-
 
     public SdmItem() {
 

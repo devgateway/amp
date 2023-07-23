@@ -25,7 +25,7 @@ public class AmpGPINiIndicator implements Serializable {
     @Column(name = "description", columnDefinition = "text")
     private String description;
 
-    @OneToMany(mappedBy = "indicator", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "ampGPINiIndicator", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<AmpGPINiQuestion> questions;
 
 

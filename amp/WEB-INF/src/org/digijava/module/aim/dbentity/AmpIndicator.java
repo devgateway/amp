@@ -73,11 +73,16 @@ public class AmpIndicator implements Serializable, Identifiable
     private Set<AmpSector> sectors;
 
     @OneToMany(mappedBy = "indicator", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<IndicatorConnection> indicatorConnections;
+    @Transient
     private Set<IndicatorActivity> valuesActivity;
 
-//    @OneToMany(mappedBy = "indicator", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "indicator", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<IndicatorConnection> indicatorThemes;
+
+    @Transient
     private Set<IndicatorTheme> valuesTheme;
-    
+
     //IATI-check: to be ignored
     private static final long serialVersionUID = 1L;
 
@@ -183,5 +188,17 @@ public class AmpIndicator implements Serializable, Identifiable
     @Override
     public Object getIdentifier() {
         return indicatorId;
+    }
+
+    public void setIndicatorConnections(Set<IndicatorConnection> indicatorConnections) {
+        this.indicatorConnections = indicatorConnections;
+    }
+
+    public Set<IndicatorConnection> getIndicatorConnections() {
+        return indicatorConnections;
+    }
+
+    public Set<IndicatorConnection> getIndicatorThemes() {
+        return indicatorThemes;
     }
 }

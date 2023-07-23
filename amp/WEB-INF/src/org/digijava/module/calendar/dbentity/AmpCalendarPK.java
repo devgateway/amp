@@ -1,5 +1,9 @@
 package org.digijava.module.calendar.dbentity;
 
+import javax.persistence.Embeddable;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -8,8 +12,12 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+@Embeddable
 public class AmpCalendarPK
     implements Serializable {
+
+    @ManyToOne
+    @JoinColumn(name = "CALENDAR_ID")
   private Calendar calendar;
 
   public AmpCalendarPK() {

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <activities xmlns="freebalance.xsd">
-	<activity id="101">
-		<funding perspective="MOFED" transactionDate="01-01-1997" transactionType="2"
-			adjustmentType="1">
-			<org id="101">IDA</org>
-			<location id="25" type="3">Ontario</location>
-			<component id="1212">DECENTRALISATION SECRETARIAT</component>
-			<amount value="12300000" currency="USD"></amount>
-		</funding>
-	</activity>
+    <activity id="101">
+        <funding perspective="MOFED" transactionDate="01-01-1997" transactionType="2"
+                 adjustmentType="1">
+            <org id="101">IDA</org>
+            <location id="25" type="3">Ontario</location>
+            <component id="1212">DECENTRALISATION SECRETARIAT</component>
+            <amount value="12300000" currency="USD"></amount>
+        </funding>
+    </activity>
 </activities>

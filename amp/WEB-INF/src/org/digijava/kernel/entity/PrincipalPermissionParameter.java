@@ -32,8 +32,15 @@ import javax.persistence.Entity;
 @Table(name = "DG_PRINCIPAL_PERMISSION_PARAM")
 public class PrincipalPermissionParameter
     implements Serializable {
-    @EmbeddedId
-    private PrincipalPermissionParameterId id;
+
+    @Id
+    @ManyToOne
+    @JoinColumn(name = "PRINCIPAL_PERMISSION_ID")
+    private PrincipalPermission principalPermission;
+
+    @Column(name = "PARAM_INDEX")
+    @Id
+    private int index;
 
     @Column(name = "PARAM_CLASS", length = 255)
     private String parameterClass;
@@ -41,9 +48,6 @@ public class PrincipalPermissionParameter
     @Column(name = "PARAM_VALUE", columnDefinition = "text")
     private String parameterValue;
 
-
-    private PrincipalPermission principalPermission;
-    private int index;
 
     public boolean equals(Object other) {
         if (other instanceof PrincipalPermissionParameter) {

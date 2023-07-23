@@ -1,14 +1,16 @@
 package org.digijava.kernel.entity;
 
-import javax.persistence.Embeddable;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Embeddable
 public class PrincipalPermissionParameterId implements Serializable {
 
+    @ManyToOne
     private PrincipalPermission principalPermission;
 
+    @Column(name = "PARAM_INDEX")
+    @Id
     private int index;
 
     // Constructors, getters, and setters

@@ -33,7 +33,7 @@ public class AmpActivityGroup implements Serializable, Identifiable, Cloneable {
     @JoinColumn(name = "amp_activity_last_version_id", insertable = false, updatable = false)
     private AmpActivityVersion ampActivityLastVersion;
     @JsonIgnore
-    @OneToMany(mappedBy = "activityGroup", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "ampActivityGroup", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AmpActivityVersion> activities;
     
 

@@ -33,6 +33,7 @@ import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.user.Group;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.PossibleValueId;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -40,7 +41,9 @@ import java.util.Date;
 @javax.persistence.Entity
 @Table(name = "DG_SITE")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "DISCRIMINATOR")
+@DiscriminatorValue("null")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Site
 extends Entity implements Serializable {
 

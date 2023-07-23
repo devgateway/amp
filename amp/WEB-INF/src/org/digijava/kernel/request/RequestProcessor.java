@@ -516,6 +516,7 @@ public class RequestProcessor
                 if (!HttpLoginManager.isNewSessionAction(mainPath)) {
                     try {
                         // Forward to login and stop processing
+                        // TODO: 7/23/23 here is where we do login 
                         doLogin(request, response);
                         return null;
                     }

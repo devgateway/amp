@@ -38,11 +38,11 @@ public class PrincipalPermissionParameter
     @JoinColumn(name = "PRINCIPAL_PERMISSION_ID")
     private PrincipalPermission principalPermission;
 
-    @Column(name = "PARAM_INDEX")
     @Id
+    @Column(name = "PARAM_INDEX")
     private int index;
 
-    @Column(name = "PARAM_CLASS", length = 255)
+    @Column(name = "PARAM_CLASS")
     private String parameterClass;
 
     @Column(name = "PARAM_VALUE", columnDefinition = "text")

@@ -30,9 +30,8 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.security.permission.ObjectPermission;
 import org.digijava.kernel.util.SiteCache;
 
-import javax.persistence.Entity;
 
-@Entity
+
 public class SitePermission
     extends ObjectPermission implements Serializable {
 

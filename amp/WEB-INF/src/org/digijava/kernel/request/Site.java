@@ -31,6 +31,8 @@ import org.digijava.kernel.entity.Entity;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.user.Group;
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.PossibleValueId;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -42,10 +44,19 @@ import java.util.Date;
 public class Site
 extends Entity implements Serializable {
 
+
     @Id
+    @Column(name = "ID")
+    @Interchangeable(fieldTitle = "Id")
+    @PossibleValueId
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "dg_site_seq")
-    @SequenceGenerator(name = "dg_site_seq", sequenceName = "dg_site_seq", allocationSize = 1)    @Column(name = "ID")
+    @SequenceGenerator(name = "dg_site_seq", sequenceName = "dg_site_seq", allocationSize = 1)
     private Long id;
+
+    @Override
+    public String getName() {
+        return name;
+    }
 
     @Column(name = "NAME")
     private String name;
@@ -143,6 +154,7 @@ extends Entity implements Serializable {
     private boolean active;
     @Transient
     private boolean open;
+    @Transient
     private HashSet applInstances;
 
     /**

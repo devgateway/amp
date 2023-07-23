@@ -153,11 +153,11 @@ public class AccessLog
         return newInstance;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    private void setId(long id) {
+    private void setId(Long id) {
         this.id = id;
     }
 

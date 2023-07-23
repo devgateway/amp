@@ -112,6 +112,9 @@ public class User
     @JoinColumn(name = "COUNTRY_ISO")
     private Country country;
 
+    @OneToMany
+
+
     @ManyToOne
     @JoinColumn(name = "region_id")
     private AmpCategoryValueLocations region;
@@ -189,6 +192,10 @@ public class User
     @Transient
 
     private HashMap sitePreferences;
+
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private Set<UserContactInfo> contacts;
     @Transient
 
     private HashMap siteContentLocales;
@@ -494,9 +501,9 @@ public class User
         return organizationTypeOther;
     }
 
-//    public Set getContacts() {
-//        return contacts;
-//    }
+    public Set<UserContactInfo> getContacts() {
+        return contacts;
+    }
 
     public void setInterests(Set interests) {
         this.interests = interests;
@@ -506,9 +513,9 @@ public class User
         this.organizationTypeOther = organizationTypeOther;
     }
 
-//    public void setContacts(Set contacts) {
-//        this.contacts = contacts;
-//    }
+    public void setContacts(Set<UserContactInfo> contacts) {
+        this.contacts = contacts;
+    }
 
     /**
      * @return the pledger

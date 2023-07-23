@@ -157,13 +157,14 @@ public class DynamicColumnsUtil {
     }
     
     public static List<Integer> getMtefYears() {
-        try {
-            Session session = PersistenceManager.getSession();
+//        try {
+            Session session = PersistenceManager.getRequestDBSession();
             String queryString = "select distinct(year(p.projectionDate)) FROM "
                 + AmpFundingMTEFProjection.class.getName() + " p WHERE p.projectionDate IS NOT NULL "
                 + " ORDER BY year(p.projectionDate)";
+            Query query = session.createQuery(queryString);
             
-            List<Integer> rawList = session.createQuery(queryString).list();
+            List<Integer> rawList = query.getResultList();
             List<Integer> retList = new ArrayList<>();
             
             if (rawList.isEmpty())
@@ -176,8 +177,8 @@ public class DynamicColumnsUtil {
                 retList.add(i);
                 
             return retList;
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
+//        } catch (Exception ex) {
+//            throw new RuntimeException(ex);
+//        }
     }
 }

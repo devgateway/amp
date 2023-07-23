@@ -167,10 +167,9 @@ public class XmlPatcherService extends AbstractServiceImpl {
      * 
      * @param scheduledPatches
      * @param serviceContext
-     * @throws DgException
      */
     private Collection<AmpXmlPatch> processUnclosedPatches(Collection<AmpXmlPatch> scheduledPatches,
-            ServiceContext serviceContext) throws DgException {
+            ServiceContext serviceContext) {
         Iterator<AmpXmlPatch> iterator = scheduledPatches.iterator();
         logger.info(scheduledPatches.size()+" patches scheduled for execution...");
         while (iterator.hasNext()) {

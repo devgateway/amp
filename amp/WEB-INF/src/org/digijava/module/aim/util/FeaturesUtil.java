@@ -86,7 +86,7 @@ public class FeaturesUtil {
     }
     
     public static synchronized void buildGlobalSettingsCache(List<AmpGlobalSettings> globalSettings) {
-        globalSettingsCache = new HashMap<>();
+        globalSettingsCache = new HashMap<String, AmpGlobalSettings>();
         for (AmpGlobalSettings sett : globalSettings) {
             globalSettingsCache.put(sett.getGlobalSettingsName(), sett);
         }
@@ -558,19 +558,16 @@ public class FeaturesUtil {
     public static byte[] getDefaultFlag() {
         Session session = null;
         byte flag[] = null;
-        String qryStr;
-        Query qry;
-        Transaction tx;
+        String qryStr = null;
+        Query qry = null;
 
         try {
             qryStr = "select f from " + AmpSiteFlag.class.getName() + " f " +
             "where f.defaultFlag=true";
             session = PersistenceManager.getSession();
-            tx=session.getTransaction();
             qry = session.createQuery(qryStr);
             AmpSiteFlag sf = null;
             Iterator itr = qry.list().iterator();
-            tx.commit();
             if (itr.hasNext()) {
                 sf = (AmpSiteFlag) itr.next();
             }
@@ -747,20 +744,11 @@ public class FeaturesUtil {
     /*
      * to get all the Global settings
      */
-    public static String getDatabaseName(Session session) {
-        final String[] databaseName = {""};
-
-        session.doWork(connection -> databaseName[0] = connection.getCatalog());
-
-        return databaseName[0];
-    }
-
-
     public static List<AmpGlobalSettings> getGlobalSettings() {
         List<AmpGlobalSettings> coll = null;
         Session session = null;
         String qryStr = null;
-        org.hibernate.Query qry = null;
+        Query qry = null;
         try {
             session = PersistenceManager.getRequestDBSession();
             qryStr = "select gs from " + AmpGlobalSettings.class.getName() + " gs ";

@@ -1,14 +1,14 @@
-<!--<?xml version="1.0" encoding="UTF-8"?>-->
-<!--<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">-->
-<!--<hibernate-mapping>-->
-<!--  <class name="org.digijava.module.aim.dbentity.AmpQuartzJobClass" table="amp_quartz_job_class">-->
-<!--    <id column="jc_Id" name="id" type="java.lang.Long">-->
-<!--      <generator class="native">-->
-<!--        <param name="sequence">amp_quartz_job_class_seq</param>-->
-<!--      </generator>-->
-<!--    </id>-->
-<!--    <property column="jc_name" name="name" type="java.lang.String"/>-->
-<!--    <property column="sched_name" name="schedName" type="java.lang.String"/>-->
-<!--    <property column="jc_class_fullname" name="classFullname" type="java.lang.String"/>-->
-<!--  </class>-->
-<!--</hibernate-mapping>-->
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="org.digijava.module.aim.dbentity.AmpQuartzJobClass" table="amp_quartz_job_class">
+    <id column="jc_Id" name="id" type="java.lang.Long">
+      <generator class="native">
+        <param name="sequence">amp_quartz_job_class_seq</param>
+      </generator>
+    </id>
+    <property column="jc_name" name="name" type="java.lang.String"/>
+    <property column="sched_name" name="schedName" type="java.lang.String"/>
+    <property column="jc_class_fullname" name="classFullname" type="java.lang.String"/>
+  </class>
+</hibernate-mapping>

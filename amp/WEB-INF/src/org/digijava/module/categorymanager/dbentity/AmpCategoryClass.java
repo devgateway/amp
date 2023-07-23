@@ -6,6 +6,8 @@ import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -45,12 +47,12 @@ public class AmpCategoryClass implements Serializable, Comparable<AmpCategoryCla
 
     @ManyToMany(mappedBy = "usedCategories", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @LazyCollection(LazyCollectionOption.EXTRA)
-    private List<AmpCategoryClass> usedByCategories;
+    private Set<AmpCategoryClass> usedByCategories;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "AMP_CATEGORIES_USED", joinColumns = @JoinColumn(name = "used_category_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
     @LazyCollection(LazyCollectionOption.EXTRA)
-    private Set<AmpCategoryClass> usedCategories;
+    private List<AmpCategoryClass> usedCategories;
 
 
     private Boolean usedByCategorySingleSelect; //how this category class is linked with current usedByCategory
@@ -110,17 +112,17 @@ public class AmpCategoryClass implements Serializable, Comparable<AmpCategoryCla
     public void setKeyName(String key) {
         this.keyName = key;
     }
-    public Set<AmpCategoryClass> getUsedCategories() {
+    public List<AmpCategoryClass> getUsedCategories() {
         return usedCategories;
     }
-    public void setUsedCategories(Set<AmpCategoryClass> usedCategories) {
+    public void setUsedCategories(List<AmpCategoryClass> usedCategories) {
         this.usedCategories = usedCategories;
     }
     
-    public List<AmpCategoryClass> getUsedByCategories() {
+    public Set<AmpCategoryClass> getUsedByCategories() {
         return usedByCategories;
     }
-    public void setUsedByCategories(List<AmpCategoryClass> usedByCategories) {
+    public void setUsedByCategories(Set<AmpCategoryClass> usedByCategories) {
         this.usedByCategories = usedByCategories;
     }
     public int compareTo(AmpCategoryClass o) {

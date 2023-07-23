@@ -54,8 +54,7 @@ public class QuartzJobClassUtils {
         try {
             PersistenceManager.initialize(true);
             session = PersistenceManager.getRequestDBSession();
-            String databaseName = FeaturesUtil.getDatabaseName(session);
-            System.out.println(databaseName);
+
             tx = session.getTransaction();
             String queryString = "select cls from " + AmpQuartzJobClass.class.getName() + " cls where cls.classFullname= '" + classfullname + "'";
 //            String qr = "SELECT * FROM AMP_QUARTZ_JOB_CLASS WHERE jc_class_fullname=:classfullname LIMIT 1";

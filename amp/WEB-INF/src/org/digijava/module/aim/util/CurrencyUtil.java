@@ -498,13 +498,13 @@ public class CurrencyUtil {
     private static AmpCurrency doFetchCurrency(String currCode) {
         String queryString = "select c from " + AmpCurrency.class.getName()
                 + " c " + "where c.currencyCode = "+"'"+currCode+"'";
-        Session session = PersistenceManager.getSession();
-        Transaction tx = session.getTransaction();
+        Session session = PersistenceManager.getRequestDBSession();
+//        Transaction tx = session.getTransaction();
         Query qry = session.createQuery(queryString);
         qry.setCacheable(true);
 //        qry.setParameter("id", currCode, StringType.INSTANCE);
         Object res =qry.uniqueResult();
-        tx.commit();
+//        tx.commit();
 
         return (AmpCurrency)res ;
     }

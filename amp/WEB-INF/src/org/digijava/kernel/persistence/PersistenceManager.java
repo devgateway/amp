@@ -34,13 +34,9 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.I18NHelper;
-import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
+import org.hibernate.*;
+import org.hibernate.boot.spi.MetadataImplementor;
 import org.hibernate.query.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.StatelessSession;
-import org.hibernate.Transaction;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
@@ -72,7 +68,6 @@ public class PersistenceManager {
     private static SessionFactory sf;
     private static Configuration cfg;
     private static Logger logger = I18NHelper.getKernelLogger(PersistenceManager.class);
-    public static String HIBERNATE_CFG_XML = "hibernate.cfg.xml";
 
     public static String PRECACHE_REGION =
             "org.digijava.kernel.persistence.PersistenceManager.precache_region";
@@ -167,8 +162,7 @@ public class PersistenceManager {
      * @return
      */
     public static Session openNewSession() {
-        org.hibernate.Session openSession = sf.openSession();
-        return openSession;
+        return sf.openSession();
     }
 
     /**
@@ -182,14 +176,19 @@ public class PersistenceManager {
 
 //    public static PersistentClass getClassMapping(Class<?> clazz)
 //    {
+////        PersistenceManager.sf.getC().getMetaData();
 //        return cfg.getClassMapping(clazz.getName());
 //    }
 
     public static PersistentClass getClassMapping(Class<?> clazz) {
-        StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure(HIBERNATE_CFG_XML).build();
-        MetadataSources sources = new MetadataSources(registry);
-        Metadata metadata = sources.buildMetadata();
-        return metadata.getEntityBinding(clazz.getName());
+        MetadataImplementor metadataImplementor = (MetadataImplementor) PersistenceManager.sf.getMetamodel();
+        PersistentClass persistentClass = metadataImplementor.getEntityBinding(clazz.getName());
+        return persistentClass;
+
+//        StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure(HIBERNATE_CFG_XML).build();
+//        MetadataSources sources = new MetadataSources(registry);
+//        Metadata metadata = sources.buildMetadata();
+//        return metadata.getEntityBinding(clazz.getName());
     }
 
     /**
@@ -198,9 +197,8 @@ public class PersistenceManager {
      * @throws SQLException
      */
     public static Connection getJdbcConnection() throws SQLException {
-        return sf.
-                getSessionFactoryOptions().getServiceRegistry().
-                getService(ConnectionProvider.class).getConnection();
+        SessionFactoryImplementor sfi = (SessionFactoryImplementor) sf;
+        return sfi.getServiceRegistry().getService(ConnectionProvider.class).getConnection();
     }
 
 
@@ -624,9 +622,10 @@ public class PersistenceManager {
         Session session = null;
 
         try {
-            sf.getCache().evict(objectClass, primaryKey);
+//            sf.getCache().evict(objectClass, primaryKey);
 
             session = getSession();
+            session.evict(primaryKey);
             Object obj = session.load(objectClass, primaryKey);
             Hibernate.initialize(obj);
         }
@@ -773,17 +772,17 @@ public class PersistenceManager {
                 try {
                     // note: flushing is needed only if session uses FlushMode.MANUAL
                     session.flush();
-                    // If the flush is successful, proceed with the commit
-                    transaction.commit();
-                } catch (Exception e) {
+                } catch (HibernateException e) {
                     // logging the error since finally may throw another exception and this one will be lost
                     logger.error("Failed to flush the session.", e);
-                    // Rollback the transaction explicitly
-                    transaction.rollback();
                     throw e;
+                } finally {
+                    // do we really want to attempt commit if flushing fails?
+                    transaction.commit();
                 }
             }
         }
+
     }
 
     /**

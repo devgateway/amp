@@ -120,7 +120,7 @@ public class MeasuresVisibility extends DataVisibility implements FMSettings {
 
     @SuppressWarnings("unchecked")
     private static Set<String> _getAllMeasures() {
-        return Collections.unmodifiableSet(new HashSet<String>(PersistenceManager.getSession().createSQLQuery("select distinct(measurename) from amp_measures").list()));
+        return Collections.unmodifiableSet(new HashSet<String>(PersistenceManager.getRequestDBSession().createNativeQuery("select distinct(measurename) from amp_measures").list()));
     }
     
     /**

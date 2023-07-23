@@ -153,7 +153,7 @@ public class FundingPledgesDetails implements FundingInformationItem, Identifiab
     }
     
     @java.lang.SuppressWarnings("all")
-    public long getId() {
+    public Long getId() {
         return this.id;
     }
     
@@ -193,7 +193,7 @@ public class FundingPledgesDetails implements FundingInformationItem, Identifiab
     }
     
     @java.lang.SuppressWarnings("all")
-    public void setId(final long id) {
+    public void setId( Long id) {
         this.id = id;
     }
     

@@ -26,11 +26,14 @@ import java.io.Serializable;
 
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.Constants;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import javax.persistence.*;
 import javax.persistence.Entity;
 
 @Entity
 @Table(name = "DG_MODULE_INSTANCE")
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class ModuleInstance implements Serializable {
 
     public static final int NUMBER_OF_ITEMS_IN_TEASER = 8;
@@ -53,11 +56,11 @@ public class ModuleInstance implements Serializable {
     @Column(name = "NUM_OF_ITEMS_IN_TEASER")
     private Long numberOfItemsInTeaser;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "SITE_ID")
     private Site site;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "REAL_INSTANCE_ID")
     private ModuleInstance realInstance;
 

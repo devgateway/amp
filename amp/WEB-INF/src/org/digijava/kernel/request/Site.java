@@ -129,9 +129,11 @@ extends Entity implements Serializable {
     private Set<Group> groups = new HashSet<>();
 
     @OneToMany(mappedBy = "site", cascade = CascadeType.ALL, orphanRemoval = true)
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<SiteDomain> siteDomains = new HashSet<>();
 
     @OneToMany(mappedBy = "site", cascade = CascadeType.ALL, orphanRemoval = true)
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<ModuleInstance> moduleInstances = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)

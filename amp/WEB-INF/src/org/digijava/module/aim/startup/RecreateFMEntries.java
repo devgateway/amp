@@ -36,13 +36,9 @@ public class RecreateFMEntries {
     
     @SuppressWarnings("serial")
     protected static final Set<String> oldMeasuresToRestore = new HashSet<String>() {{
-        add(MeasureConstants.ACTUAL_COMMITMENTS);
         add(MeasureConstants.ACTUAL_DISBURSEMENT_ORDERS);
         add(MeasureConstants.ACTUAL_EXPENDITURES);
-        add(MeasureConstants.PLANNED_COMMITMENTS);
-        add(MeasureConstants.PLANNED_DISBURSEMENTS);
         add(MeasureConstants.PLANNED_EXPENDITURES);
-        add(MeasureConstants.ACTUAL_DISBURSEMENT_ORDERS);
         add(MeasureConstants.PLANNED_DISBURSEMENT_ORDERS);
         add(MeasureConstants.PLEDGES_ACTUAL_PLEDGE);
         add(MeasureConstants.PIPELINE_COMMITMENTS);
@@ -73,21 +69,19 @@ public class RecreateFMEntries {
     public void doIt(ServletContext ampContext) {
         logger.info("adding newly-created-measures entries to the FM and enabling them according to the AF configuration...");
 
-        List<String> measuresToRestore = new ArrayList<>();
-        measuresToRestore.addAll(MeasuresVisibility.allMeasures);        
+        List<String> measuresToRestore = new ArrayList<>(MeasuresVisibility.allMeasures);
         
         long measuresModuleId = PersistenceManager.getLong(
-                PersistenceManager.getSession().createSQLQuery("select mod.id from amp_modules_visibility mod JOIN amp_modules_visibility rep "
+                PersistenceManager.getRequestDBSession().createNativeQuery("select mod.id from amp_modules_visibility mod JOIN amp_modules_visibility rep "
                         + "ON lower(rep.name)='reporting' and rep.id = mod.parent WHERE lower(mod.name)='measures'")
                 .uniqueResult());
         
-        for(Object templateIdObj : PersistenceManager.getSession().createSQLQuery("select id from amp_templates_visibility").list()) {
+        for(Object templateIdObj : PersistenceManager.getRequestDBSession().createNativeQuery("select id from amp_templates_visibility").list()) {
             long templateId = PersistenceManager.getLong(templateIdObj);
             MeasuresVisibility mv = new MeasuresVisibility();
-            
-            
-            Set<String> enabledMeasuresByAF = new HashSet<String>();
-            enabledMeasuresByAF.addAll(mv.detectVisibleDataAF(templateId));
+
+
+            Set<String> enabledMeasuresByAF = new HashSet<>(mv.detectVisibleDataAF(templateId));
             
             
             String gsValue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NEW_FIELDS_VISIBILITY);

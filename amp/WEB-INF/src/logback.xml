@@ -5,7 +5,7 @@
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <!-- set it to TRACE to see hibernate query parameters, INFO is default -->
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>DEBUG</level>
+            <level>INFO</level>
         </filter>
 
         <encoder>
@@ -17,7 +17,7 @@
         <file>${catalina.base}/logs/amp.log</file>
 
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>DEBUG</level>
+            <level>INFO</level>
         </filter>
 
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -33,7 +33,7 @@
         <file>${catalina.base}/logs/amp-email.log</file>
 
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>DEBUG</level>
+            <level>INFO</level>
         </filter>
 
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -45,20 +45,20 @@
         </encoder>
     </appender>
 
-    <!-- Limit the org.apache category to INFO as its DEBUG is verbose -->
+    <!-- Limit the org.apache category to INFO as its INFO is verbose -->
     <logger name="org.apache" level="INFO" />
 
-    <!-- Limit the org.quartz category to INFO as its DEBUG is verbose -->
+    <!-- Limit the org.quartz category to INFO as its INFO is verbose -->
     <logger name="org.quartz" level="TRACE" />
 
-    <logger name="org.digijava" level="TRACE" /> <!-- DEBUG default -->
+    <logger name="org.digijava" level="TRACE" /> <!-- INFO default -->
 
-    <logger name="org.dgfoundation" level="TRACE" /> <!-- DEBUG default -->
+    <logger name="org.dgfoundation" level="TRACE" /> <!-- INFO default -->
 
-    <!-- SET to DEBUG to see wicket page render times -->
-    <logger name="org.apache.wicket.devutils.inspector.RenderPerformanceListener" level="DEBUG" />
+    <!-- SET to INFO to see wicket page render times -->
+    <logger name="org.apache.wicket.devutils.inspector.RenderPerformanceListener" level="INFO" />
 
-    <!-- Limit JSF logging to DEBUG.  FINER and FINEST will not be logged -->
+    <!-- Limit JSF logging to INFO.  FINER and FINEST will not be logged -->
     <logger name="javax.enterprise.resource.webcontainer.jsf" level="INFO" />
 
     <logger name="org.hibernate" level="TRACE" />
@@ -73,7 +73,7 @@
     <!-- SET to TRACE in order to see queries and their value, INFO is default -->
     <logger name="org.hibernate.type" level="INFO" />
 
-    <logger name="amp-email" additivity="false" level="DEBUG">
+    <logger name="amp-email" additivity="false" level="INFO">
         <appender-ref ref="amp-email" />
     </logger>
 

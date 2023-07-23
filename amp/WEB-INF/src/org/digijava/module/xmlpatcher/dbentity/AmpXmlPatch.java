@@ -6,9 +6,7 @@
 package org.digijava.module.xmlpatcher.dbentity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import org.digijava.module.xmlpatcher.util.XmlPatcherConstants;
 import org.hibernate.annotations.Cache;
@@ -24,7 +22,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "AMP_XML_PATCH")
-@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class AmpXmlPatch implements Serializable, Comparable<AmpXmlPatch> {
     /**
      * This is the id of the patch. This is the actual name of the XML file,
@@ -43,17 +41,21 @@ public class AmpXmlPatch implements Serializable, Comparable<AmpXmlPatch> {
      * The date when the patch has been first found by the patcher module
      */
     @Column(name = "discovered")
-    private Date discovered;
+    protected Date discovered;
 
     @Column(name = "state")
-    private Short state;
+    protected Short state;
 
-    @OneToMany(mappedBy = "patch", cascade = CascadeType.ALL)
+
+
+    @OneToMany(mappedBy = "patch", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    private List<AmpXmlPatchLog> logs;
+    @ListIndexBase
+    @OrderColumn(name = "idx")
+    private Set<AmpXmlPatchLog> logs= new LinkedHashSet<>();
 
     public AmpXmlPatch() {
-        logs= new ArrayList<>();
+        logs= new LinkedHashSet<>();
     }
 
     /**
@@ -105,15 +107,15 @@ public class AmpXmlPatch implements Serializable, Comparable<AmpXmlPatch> {
         this.state = state;
     }
 
-    public List<AmpXmlPatchLog> getLogs() {
-        if (logs!=null){ 
-            return logs;
+    public Set<AmpXmlPatchLog> getLogs() {
+        if (logs == null) {
+            logs = new LinkedHashSet<>();
         }
-        return new ArrayList<AmpXmlPatchLog>();
+        return logs;
     }
 
-    public void setLogs(List<AmpXmlPatchLog> logs) {
-        this.logs = logs;
+    public void setLogs(Set<AmpXmlPatchLog> logs) {
+        this.logs =  logs;
     }
 
     @Override
@@ -141,5 +143,6 @@ public class AmpXmlPatch implements Serializable, Comparable<AmpXmlPatch> {
         AmpXmlPatch other = (AmpXmlPatch) oth;
         return this.location.equals(other.location) && (this.patchId.equals(other.patchId));
     }
+
 
 }

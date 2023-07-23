@@ -40,7 +40,11 @@ import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.type.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
+import org.springframework.core.type.filter.AnnotationTypeFilter;
 
+import javax.persistence.Entity;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -90,9 +94,8 @@ public class HibernateClassLoader {
      * @param config
      */
     public static void initialize(HashMap config) {
-        Iterator iterModules = config.keySet().iterator();
-        while (iterModules.hasNext()) {
-            String moduleName = (String) iterModules.next();
+        for (Object o : config.keySet()) {
+            String moduleName = (String) o;
             ModuleConfig moduleConfig = (ModuleConfig) config.get(moduleName);
 
             HibernateClasses classes = moduleConfig.getHibernateClasses();
@@ -100,6 +103,28 @@ public class HibernateClassLoader {
                 loadHibernateClasses(classes);
             } else {
                 logger.warn("No hibernate classes for module " + moduleName);
+            }
+        }
+        /* Add support for annotates classes not finish yet */
+        // the following will detect all classes that are annotated as @Entity
+        ClassPathScanningCandidateComponentProvider scanner = new ClassPathScanningCandidateComponentProvider(
+                false);
+        scanner.addIncludeFilter(new AnnotationTypeFilter(Entity.class));
+
+        /*
+         * only register classes within package
+         * org.digijava.kernel.ampapi.postgis.entity need to take the
+         * configuration file /repository/hibernate-annotated.xml
+         */
+
+        for (BeanDefinition bd : scanner
+                .findCandidateComponents("org.digijava.kernel.ampapi.postgis.entity")) {
+            String name = bd.getBeanClassName();
+            try {
+                // Add each class to the to the persistence content
+                cfg.addAnnotatedClass(Class.forName(name));
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
@@ -129,10 +154,12 @@ public class HibernateClassLoader {
             try {
                 // check if class is critical resource to load
                 // see catch block
-                required = (((classes.getRequired() == null || classes.getRequired().equalsIgnoreCase("true"))
-                        && (hibernateClass.getRequired() == null || !hibernateClass.getRequired().equalsIgnoreCase("false")))
-                        || ((classes.getRequired() != null && classes.getRequired().equalsIgnoreCase("false"))
-                        && (hibernateClass.getRequired() != null && hibernateClass.getRequired()
+                required = (((classes.getRequired() == null || classes
+                        .getRequired().equalsIgnoreCase("true")) && (hibernateClass
+                        .getRequired() == null || !hibernateClass.getRequired()
+                        .equalsIgnoreCase("false"))) || ((classes.getRequired() != null && classes
+                        .getRequired().equalsIgnoreCase("false")) && (hibernateClass
+                        .getRequired() != null && hibernateClass.getRequired()
                         .equalsIgnoreCase("true"))));
 
                 if (logger.isDebugEnabled()) {
@@ -140,13 +167,11 @@ public class HibernateClassLoader {
                 }
 
                 // adding class to load
-                cfg.addAnnotatedClass(Class.forName(hibernateClass.getContent()));
+                cfg.addClass(Class.forName(hibernateClass.getContent()));
             } catch (Exception ex) {
+                logger.error("Error loading Hibernate class " + hibernateClass.getContent());
                 if (required) {
-                    logger.error("Error loading Hibernate class " + hibernateClass.getContent());
                     break;
-                } else {
-                    logger.error("Error loading Hibernate class " + hibernateClass.getContent());
                 }
             }
         }
@@ -156,32 +181,26 @@ public class HibernateClassLoader {
      *
      */
     public static void buildHibernateSessionFactory() {
-        cfg.setInterceptor(new AmpEntityInterceptor());
-        sessionFactory = cfg.configure().buildSessionFactory();
-        Map<String,Object> props = sessionFactory.getProperties();
-        System.out.println(props);
-
-//        InputStream inp = HibernateClassLoader.class.getResourceAsStream(HIBERNATE_CFG_XML);
-//        try {
-//            if (inp == null) {
-//                cfg.setInterceptor(new AmpEntityInterceptor());
-////                ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
-////                        .applySettings(cfg.getProperties()).build();
-//                sessionFactory = cfg.configure().buildSessionFactory();
-//            } else {
-//                cfg.setInterceptor(new AmpEntityInterceptor());
-//                if (HIBERNATE_CFG_OVERRIDE_DATABASE != null) {
-//                    cfg.setProperty("hibernate.connection.url", HIBERNATE_CFG_OVERRIDE_DATABASE);
-//                }
-//                HIBERNATE_CFG_OVERRIDE_DATABASE = null; // reset after each session
-////                ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().configure(HIBERNATE_CFG_XML).build();
-//
-//                sessionFactory = cfg.configure(HIBERNATE_CFG_XML).buildSessionFactory();
-//            }
-//        } catch (Exception ex1) {
-//            logger.error("Unable to build hibernate session factory", ex1);
-//            throw new RuntimeException(ex1);
-//        }
+        InputStream inp = HibernateClassLoader.class
+                .getResourceAsStream(HIBERNATE_CFG_XML);
+        try {
+            if (inp == null) {
+                cfg.setInterceptor(new AmpEntityInterceptor());
+                sessionFactory = cfg.buildSessionFactory();
+            } else {
+                Configuration newConfig = cfg.configure(HIBERNATE_CFG_XML);
+                newConfig.setInterceptor(new AmpEntityInterceptor());
+                if (HIBERNATE_CFG_OVERRIDE_DATABASE != null)
+                    newConfig.setProperty("hibernate.connection.url",
+                            HIBERNATE_CFG_OVERRIDE_DATABASE);
+                HIBERNATE_CFG_OVERRIDE_DATABASE = null; // reset after each
+                // session
+                sessionFactory = newConfig.buildSessionFactory();
+            }
+        } catch (Exception ex1) {
+            logger.error("Unable to build hibernate session factory", ex1);
+            throw new RuntimeException(ex1);
+        }
     }
 }
 

@@ -46,7 +46,6 @@ import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.query.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.Constants;
@@ -861,25 +860,23 @@ final class PermissionStorage implements Serializable {
                                                 principalPermission) throws
         ClassNotFoundException, NoSuchMethodException, InstantiationException,
         IllegalAccessException, InvocationTargetException {
-        Class permissionClass = Class.forName(principalPermission.
+        Class<?> permissionClass = Class.forName(principalPermission.
                                               getPermissionClass());
         Class[] paramTypes = new Class[principalPermission.getParameters().size()];
         Object[] paramValues = new Object[paramTypes.length];
         int i = 0;
-        Iterator iter = principalPermission.getParameters().iterator();
-        while (iter.hasNext()) {
+        for (Object o : principalPermission.getParameters()) {
             PrincipalPermissionParameter item = (PrincipalPermissionParameter)
-                iter.next();
+                    o;
             ResourcePermission.TypedParameter param = PeramSerializer.
-                restoreParameter(item.getParameterClass(),
-                                 item.getParameterValue());
+                    restoreParameter(item.getParameterClass(),
+                            item.getParameterValue());
             paramValues[i] = param.getValue();
             paramTypes[i] = param.getParameterClass();
             i++;
         }
-        System.out.println(Arrays.toString(paramTypes));
 
-        Constructor constructor = permissionClass.getConstructor(paramTypes);
+        Constructor<?> constructor = permissionClass.getConstructor(paramTypes);
         return (ResourcePermission) constructor.newInstance(paramValues);
     }
 

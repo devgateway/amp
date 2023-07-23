@@ -37,7 +37,8 @@ public class AmpXmlPatchLog implements Serializable {
 
     @Column(name = "log", columnDefinition = "text")
     private StringBuffer log;
-
+    @Column(name = "idx", nullable = false)
+    private Integer idx;
     @Column(name = "date")
     private Date date;
 
@@ -158,4 +159,11 @@ public class AmpXmlPatchLog implements Serializable {
         this.error = error;
     }
 
+    public Integer getIdx() {
+        return idx;
+    }
+
+    public void setIdx(Integer idx) {
+        this.idx = idx;
+    }
 }

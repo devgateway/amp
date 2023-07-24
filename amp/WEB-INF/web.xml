@@ -162,9 +162,6 @@
 		<listener-class>org.digijava.module.aim.startup.QuartzStartupListener</listener-class>
 	</listener>
 
-<!--	<listener>-->
-<!--		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>-->
-<!--	</listener>-->
 	<listener>
 		<listener-class>
 			org.springframework.web.context.ContextLoaderListener
@@ -236,7 +233,8 @@
 			<param-value>
 				org.digijava.kernel.ampapi.authentication.AuthRequestFilter,
 				org.digijava.kernel.ampapi.endpoints.common.ApiResponseFilter,
-				org.digijava.kernel.ampapi.endpoints.security.AuthorizerResourceFilterFactory
+				org.digijava.kernel.ampapi.endpoints.security.AuthorizerResourceFilterFactory,
+				org.glassfish.jersey.media.multipart.MultiPartFeature
 			</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>

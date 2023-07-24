@@ -22,7 +22,6 @@ import javax.ws.rs.core.Response;
 import com.google.common.hash.Hashing;
 import com.google.common.io.Files;
 import com.google.common.net.HttpHeaders;
-import com.sun.jersey.core.header.ContentDisposition;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -45,6 +44,7 @@ import org.digijava.kernel.services.AmpVersionService;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpOfflineCompatibleVersionRange;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.glassfish.jersey.media.multipart.ContentDisposition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

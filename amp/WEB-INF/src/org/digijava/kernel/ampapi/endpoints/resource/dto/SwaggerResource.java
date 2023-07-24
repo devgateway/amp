@@ -1,5 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.resource.dto;
 
+import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -20,7 +21,7 @@ import io.swagger.annotations.ApiModel;
         + "See [/resource/fields](#/resource/getAvailableFields) EP for the full list of fields and rules.\n"
         + "Export an existing contact as an example from "
         + "[/resource/{uuid}](#/resource/getResource) EP.")
-public class SwaggerResource extends SwaggerMapWrapper<String, Object> {
+public class SwaggerResource extends SwaggerMapWrapper<String, Object> implements Serializable {
 
     public static final FullResource getExample() {
         FullResource r = new FullResource();
@@ -33,6 +34,7 @@ public class SwaggerResource extends SwaggerMapWrapper<String, Object> {
         r.getProperties().put("...", new Object());
         return r;
     }
+    public SwaggerResource(){}
 
     public static class FullResource extends AmpResource {
         private Map<String, Object> properties = new LinkedHashMap<>();

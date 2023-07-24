@@ -61,7 +61,6 @@ public class ReportsDesignerEndpoint {
             @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse",
                     message = "error if invalid configuration is received")})
     @POST
-    @Path("/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public final JsonApiResponse<Report> createReport(@ApiParam("reportId") ReportRequest reportRequest,
                                                   @QueryParam("isDynamic") @DefaultValue("false") Boolean isDynamic) {

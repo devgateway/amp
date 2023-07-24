@@ -103,7 +103,7 @@ public class FieldVisibilityTag extends BodyTagSupport {
                 if(ampTreeVisibility!=null)
                    if(!isFeatureTheParent(ampTreeVisibility)){
                        FeaturesUtil.updateFieldWithFeatureVisibility(ampTreeVisibility.getFeatureByNameFromRoot(this.getFeature()).getId(),this.getName());
-                       AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
+                       AmpTemplatesVisibility currentTemplate= FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
                        ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
                        FeaturesUtil.setAmpTreeVisibility(ampContext, session,ampTreeVisibility);
                    } 

@@ -46,7 +46,7 @@
     </appender>
 
     <!-- Limit the org.apache category to INFO as its INFO is verbose -->
-    <logger name="org.apache" level="INFO" />
+    <logger name="org.apache" level="TRACE" />
 
     <!-- Limit the org.quartz category to INFO as its INFO is verbose -->
     <logger name="org.quartz" level="TRACE" />
@@ -73,6 +73,8 @@
     <!-- SET to TRACE in order to see queries and their value, INFO is default -->
     <logger name="org.hibernate.type" level="INFO" />
 
+    <logger name="org.apache.catalina.core" level="TRACE" />
+
     <logger name="amp-email" additivity="false" level="INFO">
         <appender-ref ref="amp-email" />
     </logger>
@@ -81,4 +83,5 @@
         <appender-ref ref="console" />
         <appender-ref ref="default.file" />
     </root>
+
 </configuration>

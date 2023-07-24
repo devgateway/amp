@@ -17,10 +17,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.StreamingOutput;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.sun.jersey.multipart.FormDataParam;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -35,6 +33,7 @@ import org.digijava.module.aim.util.ColorRampUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 
 @Path("indicator")
 @Api("indicator")

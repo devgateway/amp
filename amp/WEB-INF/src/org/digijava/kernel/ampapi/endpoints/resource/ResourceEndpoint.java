@@ -1,39 +1,12 @@
 package org.digijava.kernel.ampapi.endpoints.resource;
 
-import static java.util.Collections.emptyMap;
-import static java.util.function.Function.identity;
-import static java.util.stream.Collectors.toMap;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-
-import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
 import com.fasterxml.jackson.annotation.JsonView;
-import com.sun.jersey.core.header.FormDataContentDisposition;
-import com.sun.jersey.multipart.FormDataParam;
-
-import org.apache.commons.io.FileUtils;
+import io.swagger.annotations.*;
 import org.digijava.kernel.ampapi.endpoints.activity.APIWorkspaceMemberFieldList;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesEnumerator;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
 import org.digijava.kernel.ampapi.endpoints.resource.dto.AmpResource;
 import org.digijava.kernel.ampapi.endpoints.resource.dto.ResourceView;
 import org.digijava.kernel.ampapi.endpoints.resource.dto.SwaggerListResource;
@@ -45,11 +18,16 @@ import org.digijava.module.aim.util.ActivityUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+import static java.util.Collections.emptyMap;
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toMap;
 
 /**
  * @author Viorel Chihai
@@ -184,53 +162,53 @@ public class ResourceEndpoint {
         return new ResourceImporter().createResource(resource.getMap()).getResult();
     }
 
-    @PUT
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_OPTIONAL},
-            id = "createResourceWithDoc", ui = false)
-    @ApiOperation(value = "Create new web link or document resource.",
-            notes = "Returns brief representation of resource.\n\n"
-                    + "<h3>Sample resource parameter:</h3><pre>\n"
-                    + "{\n"
-                    + "  \"title\": \"Resource title\",\n"
-                    + "  \"description\": \"Resource description\",\n"
-                    + "  \"note\": \"Resource note\"\n"
-                    + "}\n"
-                    + "</pre>")
-    @ApiResponses({
-            @ApiResponse(code = HttpServletResponse.SC_OK, response = AmpResource.class,
-                    message = "the brief representationresource"),
-            @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse_File-or-Link",
-                    message = "error if invalid configuration is received")})
-    @JsonView({ResourceView.File.class, ResourceView.Link.class})
-    public JsonApiResponse<AmpResource> createDocResource(
-            @FormDataParam("resource") @ApiParam(value = "resource configuration", type = "SwaggerResource")
-                    SwaggerResource resource,
-            @FormDataParam("file") InputStream uploadedInputStream,
-            @FormDataParam("file") FormDataContentDisposition fileDetail) {
-
-        if (resource == null) {
-            throw new ApiRuntimeException(Response.Status.BAD_REQUEST, ApiError.toError(
-                    "Parameter 'resource' is not specified or Content-Type for 'resource' is wrong."));
-        }
-
-        File file = null;
-        JerseyFileAdapter formFile = null;
-        try {
-            if (uploadedInputStream != null) {
-                file = File.createTempFile("createResourceWithDoc", null);
-                FileUtils.copyInputStreamToFile(uploadedInputStream, file);
-                formFile = new JerseyFileAdapter(fileDetail, file);
-            }
-            return new ResourceImporter().createResource(resource.getMap(), formFile).getResult();
-        } catch (IOException e) {
-            logger.error("Failed to process file.", e);
-            throw new ApiRuntimeException(Response.Status.BAD_REQUEST,
-                    ApiError.toError("Failed to process 'file' parameter."));
-        } finally {
-            FileUtils.deleteQuietly(file);
-        }
-    }
+//    @PUT
+//    @Consumes(MediaType.MULTIPART_FORM_DATA)
+//    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+//    @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_OPTIONAL},
+//            id = "createResourceWithDoc", ui = false)
+//    @ApiOperation(value = "Create new web link or document resource.",
+//            notes = "Returns brief representation of resource.\n\n"
+//                    + "<h3>Sample resource parameter:</h3><pre>\n"
+//                    + "{\n"
+//                    + "  \"title\": \"Resource title\",\n"
+//                    + "  \"description\": \"Resource description\",\n"
+//                    + "  \"note\": \"Resource note\"\n"
+//                    + "}\n"
+//                    + "</pre>")
+//    @ApiResponses({
+//            @ApiResponse(code = HttpServletResponse.SC_OK, response = AmpResource.class,
+//                    message = "the brief representationresource"),
+//            @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse_File-or-Link",
+//                    message = "error if invalid configuration is received")})
+//    @JsonView({ResourceView.File.class, ResourceView.Link.class})
+//    public JsonApiResponse<AmpResource> createDocResource(
+//            @FormDataParam("resource") @ApiParam(value = "resource configuration", type = "SwaggerResource")
+//                    SwaggerResource resource,
+//            @FormDataParam("file") InputStream uploadedInputStream,
+//            @FormDataParam("fileDetail") FormDataContentDisposition fileDetail) {
+//
+//        if (resource == null) {
+//            throw new ApiRuntimeException(Response.Status.BAD_REQUEST, ApiError.toError(
+//                    "Parameter 'resource' is not specified or Content-Type for 'resource' is wrong."));
+//        }
+//
+//        File file = null;
+//        JerseyFileAdapter formFile = null;
+//        try {
+//            if (uploadedInputStream != null) {
+//                file = File.createTempFile("createResourceWithDoc", null);
+//                FileUtils.copyInputStreamToFile(uploadedInputStream, file);
+//                formFile = new JerseyFileAdapter(fileDetail, file);
+//            }
+//            return new ResourceImporter().createResource(resource.getMap(), formFile).getResult();
+//        } catch (IOException e) {
+//            logger.error("Failed to process file.", e);
+//            throw new ApiRuntimeException(Response.Status.BAD_REQUEST,
+//                    ApiError.toError("Failed to process 'file' parameter."));
+//        } finally {
+//            FileUtils.deleteQuietly(file);
+//        }
+//    }
 
 }

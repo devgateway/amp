@@ -55,7 +55,7 @@ public class SitePermission
 
 
     public SitePermission(Long siteId, Integer action) {
-        this(SiteCache.getInstance().getSite(siteId), action.intValue());
+        this(SiteCache.getInstance().getSite(siteId), action);
     }
 
     public SitePermission(Long siteId, int action) {

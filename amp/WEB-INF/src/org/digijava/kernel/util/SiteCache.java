@@ -63,7 +63,7 @@ public class SiteCache implements Runnable {
             initLanguageCodes();
 
             instances.addAll(site.getModuleInstances());
-            Collections.sort(instances, moduleInstanceComparator);
+            instances.sort(moduleInstanceComparator);
         }
         
         private void initLanguageCodes() {
@@ -218,29 +218,23 @@ public class SiteCache implements Runnable {
             
             newSharedInstances = new ArrayList<ModuleInstance>(session.createQuery(queryString).list());
 
-            Collections.sort(newSharedInstances, moduleInstanceComparator);
+            newSharedInstances.sort(moduleInstanceComparator);
 
             queryString = "from " + SiteDomain.class.getName() + " sd left join fetch sd.site site " +
                           " left join fetch site.translationLanguages left join fetch site.userLanguages " +
                           " left join fetch site.countries";
-            
-            Iterator<SiteDomain> iter = session.createQuery(queryString).list().iterator();
-            while (iter.hasNext()) {
-                SiteDomain siteDomain = iter.next();
-
+            List domains = session.createQuery(queryString).list();
+            System.out.println(domains);
+            for (SiteDomain siteDomain : (Iterable<SiteDomain>) domains) {
                 String path = siteDomain.getSitePath() == null ? "" :
-                    siteDomain.getSitePath().trim();
-                SortedMap<String, SiteDomain> siteDomainPathes = (SortedMap<String, SiteDomain>) siteDomainCache.get(
-                    siteDomain.getSiteDomain().trim());
-                if (siteDomainPathes == null) {
-                    siteDomainPathes = new TreeMap<String, SiteDomain>(reverseStringComparator);
-                    siteDomainCache.put(siteDomain.getSiteDomain().trim(),
-                                        siteDomainPathes);
-                }
-                siteDomainPathes.put(path, siteDomain);
-
+                        siteDomain.getSitePath().trim();
+                SortedMap<String, SiteDomain> siteDomainPaths = siteDomainCache.computeIfAbsent(
+                        siteDomain.getSiteDomain().trim(), k -> new TreeMap<>(reverseStringComparator));
+                siteDomainPaths.put(path, siteDomain);
+                System.out.println(siteDomainPaths);
                 Site site = siteDomain.getSite();
-                if( site != null ) {
+                System.out.println(site);
+                if (site != null) {
                     if (!siteCache.containsKey(site.getId())) {
                         siteCache.put(site.getId(), new CachedSite(site));
                         sitesByStringIdCache.put(site.getSiteId(), new CachedSite(site));
@@ -248,6 +242,8 @@ public class SiteCache implements Runnable {
                 } else {
                     if (logger.isDebugEnabled()) {
                         logger.error("No site for domain " + siteDomain.getSiteDomain());
+                        System.out.println("No site for domain " + siteDomain.getSiteDomain());
+                        return;
                     }
                 }
             }
@@ -257,9 +253,7 @@ public class SiteCache implements Runnable {
             throw new DgException("load() failed ",ex);
         }
 
-        Iterator iter = siteCache.values().iterator();
-        while (iter.hasNext()) {
-            CachedSite cachedSite = (CachedSite) iter.next();
+        for (CachedSite cachedSite : siteCache.values()) {
             synchronizePreferences(siteCache, cachedSite);
         }
 
@@ -360,6 +354,7 @@ public class SiteCache implements Runnable {
         if (cachedSite == null) {
             return null;
         }
+        System.out.println(cachedSite);
         return cachedSite.getSite();
     }
 

@@ -49,7 +49,7 @@ extends Entity implements Serializable {
 
 
     @Id
-    @Column(name = "ID")
+    @Column(name = "id")
     @Interchangeable(fieldTitle = "Id")
     @PossibleValueId
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "dg_site_seq")
@@ -386,5 +386,12 @@ extends Entity implements Serializable {
                 .findAny()
                 .orElse(this.defaultLanguage);
     }
-    
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

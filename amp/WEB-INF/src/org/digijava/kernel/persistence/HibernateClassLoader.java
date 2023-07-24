@@ -141,7 +141,7 @@ public class HibernateClassLoader {
             cfg.addSqlFunction("count", new ClassicCountFunction());
             cfg.addSqlFunction("avg", new ClassicAvgFunction());
             cfg.addSqlFunction("sum", new ClassicSumFunction());
-            cfg.registerTypeOverride(new AmpOfflineVersionType(), new String[] { AmpOfflineVersion.class.getName() });
+//            cfg.registerTypeOverride(new AmpOfflineVersionType(), new String[] { AmpOfflineVersion.class.getName() });
         }
 
         if (classes == null) {

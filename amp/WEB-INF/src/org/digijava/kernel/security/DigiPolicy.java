@@ -42,6 +42,8 @@ import java.security.ProtectionDomain;
 import java.sql.SQLException;
 import java.util.*;
 
+import org.digijava.kernel.request.Site;
+import org.digijava.module.aim.dbentity.AmpColumns;
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.query.Query;
@@ -400,7 +402,7 @@ final class PermissionStorage implements Serializable {
     private static final long serialVersionUID = 1;
 
     private transient Map principalPermissions;
-    private Map permissionToPrincipalPermission;
+    private final Map permissionToPrincipalPermission;
 
     public PermissionStorage() {
         principalPermissions = new HashMap();
@@ -616,15 +618,11 @@ final class PermissionStorage implements Serializable {
         PrincipalPermission pp = createPrincipalPermission(principal,
             permission);
         try {
-            session = PersistenceManager.getSession();
-//beginTransaction();
+            session = PersistenceManager.getRequestDBSession();
             session.save(pp);
-            Iterator iter = pp.getParameters().iterator();
-            while (iter.hasNext()) {
-                Object item = (Object)iter.next();
+            for (Object item : pp.getParameters()) {
                 session.save(item);
             }
-            //tx.commit();
         }
         catch (Exception ex) {
             throw ex;
@@ -637,13 +635,12 @@ final class PermissionStorage implements Serializable {
         Session session = null;
         try {
             session = PersistenceManager.getSession();
-//beginTransaction();
             PrincipalPermission pp = null;
             Iterator iter = principalPermissionIds.iterator();
             while (iter.hasNext()) {
                 Long itemId = (Long) iter.next();
                 try {
-                    pp = (PrincipalPermission) session.load(
+                    pp = session.load(
                         PrincipalPermission.class, itemId);
                 }
                 catch (ObjectNotFoundException ex1) {
@@ -654,7 +651,6 @@ final class PermissionStorage implements Serializable {
                     session.delete(pp);
                 }
             }
-            //tx.commit();
         }
         catch (Exception ex) {
             throw ex;
@@ -666,36 +662,32 @@ final class PermissionStorage implements Serializable {
         Session session = null;
         try {
             session = PersistenceManager.getSession();
-//beginTransaction();
 
-            Iterator iter = principals.iterator();
-            while (iter.hasNext()) {
-                Principal item = (Principal)iter.next();
+            for (Object principal : principals) {
+                Principal item = (Principal) principal;
                 int principalType = 0;
                 Long targetId = null;
 
                 if (item instanceof UserPrincipal) {
                     principalType = PrincipalPermission.USER_PRINCIPAL;
-                    targetId = new Long(((UserPrincipal)item).getUserId());
-                } else
-                if (item instanceof GroupPrincipal) {
+                    targetId = ((UserPrincipal) item).getUserId();
+                } else if (item instanceof GroupPrincipal) {
                     principalType = PrincipalPermission.GROUP_PRINCIPAL;
-                    targetId = new Long(((GroupPrincipal)item).getGroupId());
+                    targetId = new Long(((GroupPrincipal) item).getGroupId());
                 }
 
                 if (targetId == null) {
-                    logger.warn("Unable to remove unknown principal: "+ item);
+                    logger.warn("Unable to remove unknown principal: " + item);
                     continue;
                 }
                 Query q = session.createQuery("from " + PrincipalPermission.class.getName() +
-                    " pp where pp.principalType=:prType and pp.targetId=:targetId");
+                        " pp where pp.principalType=:prType and pp.targetId=:targetId");
                 q.setInteger("prType", principalType);
                 q.setLong("targetId", targetId.longValue());
 
                 List permissions = q.list();
-                Iterator ppIter = permissions.iterator();
-                while (ppIter.hasNext()) {
-                    PrincipalPermission ppItem = (PrincipalPermission)ppIter.next();
+                for (Object permission : permissions) {
+                    PrincipalPermission ppItem = (PrincipalPermission) permission;
                     session.delete(ppItem);
                 }
                 logger.debug("Removed " + permissions.size() + " permission(s)");
@@ -715,67 +707,72 @@ final class PermissionStorage implements Serializable {
             synchronized (principalPermissions) {
                 principalPermissions.clear();
                 permissionToPrincipalPermission.clear();
+                session = PersistenceManager.getRequestDBSession();
+                String query1 = "SELECT s.id FROM "+ Site.class.getName()+ " s";
+                Query<Long> query = session.createQuery(query1, Long.class);
+                List<Long> ids = query.getResultList();
 
-                    session = PersistenceManager.getSession();
-                    Iterator iter = session.createQuery("from " +
-                        PrincipalPermission.class.
-                        getName() +
-                        " as pp").iterate();
-                    while (iter.hasNext()) {
-                        PrincipalPermission principalPermission = (
-                            PrincipalPermission) iter.
-                            next();
-                        Principal principal = createPrincipal(
+                List<String> list = new ArrayList<>();
+                ids.forEach((xx) -> list.add(String.valueOf(xx)));
+                System.out.println("IDS "+list);
+//                String queryString = "select c.aliasName from " + AmpColumns.class.getName() + " c where c.extractorView = 'v_mtef_funding' AND c.aliasName like '" + prefix + "%' ";
+//
+//                String query2="SELECT f from"+ PrincipalPermission.class.getName();
+                String hql = "SELECT a FROM " +PrincipalPermission.class.getName()+" a WHERE a.principalPermissionId IN (SELECT b.principalPermission.principalPermissionId FROM "+PrincipalPermissionParameter.class.getName()+" b WHERE b.index=0 and b.parameterValue IN :ids)";
+                List result = session.createQuery(hql)
+                        .setParameter("ids", list)
+                        .list();
+                for (Object o : result) {
+                    PrincipalPermission principalPermission = (
+                            PrincipalPermission) o;
+                    Principal principal = createPrincipal(
                             principalPermission);
-                        ResourcePermission permission = null;
-                        try {
-                            permission = createPermission(principalPermission);
-                        }
-                        catch (ClassNotFoundException ex) {
+                    ResourcePermission permission = null;
+                    try {
+                        permission = createPermission(principalPermission);
+                    } catch (ClassNotFoundException ex) {
                             /*
                              For 2 digi installations on the same application
                              server this error may be most common if both use
                              ths same DB. That's why we make logger.debug() here
                              */
-                            if (logger.isDebugEnabled()) {
-                                logger.debug(
+                        if (logger.isDebugEnabled()) {
+                            logger.debug(
                                     "Unable to find permission class process PrincipalPermission #" +
-                                    principalPermission.
-                                    getPrincipalPermissionId(),
+                                            principalPermission.
+                                                    getPrincipalPermissionId(),
                                     ex);
-                            }
-                            continue;
                         }
-                        catch (Exception ex) {
-                            // Minimize output for invalid permissions
-                            if (logger.isDebugEnabled()) {
-                                logger.warn(
+                        continue;
+                    } catch (Exception ex) {
+                        // Minimize output for invalid permissions
+                        if (logger.isDebugEnabled()) {
+                            logger.warn(
                                     "Unable to process PrincipalPermission #" +
-                                    principalPermission.
-                                    getPrincipalPermissionId(),
+                                            principalPermission.
+                                                    getPrincipalPermissionId(),
                                     ex);
-                            }
-                            else {
-                                logger.warn(
+                        } else {
+                            logger.warn(
                                     "Unable to process PrincipalPermission #" +
-                                    principalPermission.
-                                    getPrincipalPermissionId() + ": " +
-                                    ex.getMessage());
-                            }
-                            continue;
+                                            principalPermission.
+                                                    getPrincipalPermissionId() + ": " +
+                                            ex.getMessage());
                         }
-
-                        Permissions permissions = (Permissions)
-                            principalPermissions.get(principal);
-                        if (permissions == null) {
-                            permissions = new Permissions();
-                            principalPermissions.put(principal, permissions);
-                        }
-
-                        permissions.add(permission);
-
-                        addToMapping(principalPermission, principal, permission);
+                        continue;
                     }
+
+                    Permissions permissions = (Permissions)
+                            principalPermissions.get(principal);
+                    if (permissions == null) {
+                        permissions = new Permissions();
+                        principalPermissions.put(principal, permissions);
+                    }
+
+                    permissions.add(permission);
+
+                    addToMapping(principalPermission, principal, permission);
+                }
                 }
             logger.debug("permissionToPrincipalPermission = " + permissionToPrincipalPermission);
         }
@@ -875,6 +872,7 @@ final class PermissionStorage implements Serializable {
             paramTypes[i] = param.getParameterClass();
             i++;
         }
+        System.out.println(Arrays.toString(paramValues));
 
         Constructor<?> constructor = permissionClass.getConstructor(paramTypes);
         return (ResourcePermission) constructor.newInstance(paramValues);
@@ -989,11 +987,10 @@ final class PeramSerializer {
             resultType = String.class;
             result = value;
         } else {
-            Iterator iter = wrappersToPrimitiveTypes.entrySet().iterator();
-            while (iter.hasNext()) {
-                Map.Entry item = (Map.Entry) iter.next();
+            for (Object o : wrappersToPrimitiveTypes.entrySet()) {
+                Map.Entry item = (Map.Entry) o;
                 if (typeName.equals(item.getValue())) {
-                    resultType = Class.forName( (String) item.getKey());
+                    resultType = Class.forName((String) item.getKey());
                 }
             }
 

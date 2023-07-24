@@ -121,6 +121,7 @@ public class RecreateFMEntries {
             feature.setHasLevel(false);
                             
             reportingModule.getOrCreateItems().add(feature);
+            logger.info("Saving feature to DB: "+feature.getName());
             session.save(feature);
             
             if (enabledMeasuresByAF.contains(measureName)) {

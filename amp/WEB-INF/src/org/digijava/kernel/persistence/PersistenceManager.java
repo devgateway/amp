@@ -181,14 +181,11 @@ public class PersistenceManager {
 //    }
 
     public static PersistentClass getClassMapping(Class<?> clazz) {
-        MetadataImplementor metadataImplementor = (MetadataImplementor) PersistenceManager.sf.getMetamodel();
-        PersistentClass persistentClass = metadataImplementor.getEntityBinding(clazz.getName());
-        return persistentClass;
 
-//        StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure(HIBERNATE_CFG_XML).build();
-//        MetadataSources sources = new MetadataSources(registry);
-//        Metadata metadata = sources.buildMetadata();
-//        return metadata.getEntityBinding(clazz.getName());
+        StandardServiceRegistry registry = new StandardServiceRegistryBuilder().applySettings(cfg.getProperties()).build();
+        MetadataSources sources = new MetadataSources(registry);
+        Metadata metadata = sources.buildMetadata();
+        return metadata.getEntityBinding(clazz.getName());
     }
 
     /**

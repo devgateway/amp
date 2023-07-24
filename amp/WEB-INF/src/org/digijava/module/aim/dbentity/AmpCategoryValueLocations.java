@@ -38,6 +38,7 @@ public class AmpCategoryValueLocations implements Identifiable,
     private Long id;
 
     @Column(name = "location_name")
+    @TranslatableField
     private String name;
 
     @ManyToOne

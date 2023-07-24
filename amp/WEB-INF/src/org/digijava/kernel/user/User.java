@@ -170,7 +170,7 @@ public class User
     private Date passwordChangedAt;
 
     @Column(name = "EXEMPT_FROM_DATA_FREEZING")
-    private boolean exemptFromDataFreezing;
+    private Boolean exemptFromDataFreezing;
 
     @Column(name = "notification_email")
     private String notificationEmail;
@@ -231,7 +231,7 @@ public class User
 
     @Override
     public Object getIdentifier() {
-        return id;
+        return this.id;
     }
 
     /**
@@ -668,4 +668,12 @@ public class User
         return email;
     }
 
+    @Override
+    public void setId(Long id) {
+        this.id = id;
+    }
+    @Override
+    public Long getId() {
+        return  this.id;
+    }
 }

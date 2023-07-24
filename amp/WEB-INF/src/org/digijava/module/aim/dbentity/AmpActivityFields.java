@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.*;
 import javax.validation.Valid;
 
 import org.dgfoundation.amp.ar.ArConstants;
@@ -86,54 +87,69 @@ LoggerIdentifiable, Cloneable {
     @Interchangeable(fieldTitle = "Project Impact", importable = true,
             fmPath = "/Activity Form/Identification/Project Impact")
     @VersionableFieldTextEditor(fieldTitle = "Project Impact")
+    @Column(name = "project_impact", columnDefinition = "text")
+
     protected String projectImpact;
 
     @Interchangeable(fieldTitle = "Activity Summary", importable = true,
             fmPath = "/Activity Form/Identification/Activity Summary")
     @VersionableFieldTextEditor(fieldTitle = "Activity Summary")
+    @Column(name = "activity_summary", columnDefinition = "text")
+
     protected String activitySummary;
 
     @Interchangeable(fieldTitle = "Conditionalities", importable = true,
             fmPath = "/Activity Form/Identification/Conditionalities")
     @VersionableFieldTextEditor(fieldTitle = "Conditionality")
+    @Column(name = "conditionality", columnDefinition = "text")
+
     protected String conditionality;
 
     @Interchangeable(fieldTitle = "Project Management", importable = true,
             fmPath = "/Activity Form/Identification/Project Management")
     @VersionableFieldTextEditor(fieldTitle = "Project Management")
+    @Column(name = "project_management", columnDefinition = "text")
+
     protected String projectManagement;
 
     //getter and setter never used
 //  @Interchangeable(fieldTitle = "Activity Budget",fmPath="/Activity Form/Identification/Activity Budget", required="/Activity Form/Identification/Required Validator for Activity Budget")
     @VersionableFieldSimple(fieldTitle = "Activity Budget")
+    @Column(name = "budget")
     protected Integer budget;
     
     @Interchangeable(fieldTitle = "Government Agreement Number", importable = true, fmPath = "/Activity Form/Identification/Government Agreement Number")
     @VersionableFieldSimple(fieldTitle = "Government Agreement Number")
+    @Column(name = "gov_agreement_number")
     protected String govAgreementNumber;
     
     @Interchangeable(fieldTitle = "Budget Code Project ID", importable = true, fmPath = "/Activity Form/Identification/Budget Code Project ID")
     @VersionableFieldSimple(fieldTitle = "Budget Code Project ID")
+    @Column(name = "budget_code_project_id")
     protected String budgetCodeProjectID;
     
     //getter and setter never used
     @Interchangeable(fieldTitle = "Budget Sector", importable = true, fmPath = "/Activity Form/Identification/Budget Classification")
     @VersionableFieldSimple(fieldTitle = "Budget Sector")
+    @Column(name = "budget_sector")
     protected Long budgetsector;
     
     //getter and setter never used
     @Interchangeable(fieldTitle = "Budget Organization", importable = true, fmPath = "/Activity Form/Identification/Budget Classification")
     @VersionableFieldSimple(fieldTitle = "Budget Organization")
+    @Column(name = "budget_organization")
     protected Long budgetorganization;
     
     @Interchangeable(fieldTitle = "Budget Department", importable = true, fmPath = "/Activity Form/Identification/Budget Classification")
     @VersionableFieldSimple(fieldTitle = "Budget Department")
+    @Column(name = "budget_department")
     protected Long budgetdepartment;
     
     
     //getter and setter never used
     @Interchangeable(fieldTitle = "Budget Program", importable = true, fmPath = "/Activity Form/Identification/Budget Classification")
     @VersionableFieldSimple(fieldTitle = "Budget Program")
+    @Column(name = "budget_program")
     protected Long budgetprogram;
 
     //protected String govAgreementNumber;
@@ -141,10 +157,15 @@ LoggerIdentifiable, Cloneable {
     @Interchangeable(fieldTitle = ActivityFieldsConstants.AMP_ACTIVITY_ID)
     @PermissibleProperty(type={Permissible.PermissibleProperty.PROPERTY_TYPE_ID})
     @VersionableFieldSimple(fieldTitle = "Internal ID", blockSingleChange = true)
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_ACTIVITY_VERSION_seq")
+    @SequenceGenerator(name = "AMP_ACTIVITY_VERSION_seq", sequenceName = "AMP_ACTIVITY_VERSION_seq", allocationSize = 1)
+    @Column(name = "amp_activity_id")
     protected Long ampActivityId ;
 
     @Interchangeable(fieldTitle = ActivityFieldsConstants.AMP_ID)
     @VersionableFieldSimple(fieldTitle = "AMP Id", blockSingleChange = true)
+    @Column(name = "amp_id")
     protected String ampId ;
 
     @Interchangeable(fieldTitle = ActivityFieldsConstants.PROJECT_TITLE, importable = true,
@@ -153,6 +174,7 @@ LoggerIdentifiable, Cloneable {
     @PermissibleProperty(type={Permissible.PermissibleProperty.PROPERTY_TYPE_LABEL})
     @VersionableFieldSimple(fieldTitle = "Name", mandatoryForSingleChange = true)
     @TranslatableField
+    @Column(name = "name")
     protected String name ;
     
     @Interchangeable(fieldTitle = "Description", importable = true,
@@ -160,14 +182,20 @@ LoggerIdentifiable, Cloneable {
             interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
                     fmPath = "/Activity Form/Identification/Required Validator for Description"))
     @VersionableFieldTextEditor(fieldTitle = "Description")
-    protected String description ;
+    @Column(name = "description", columnDefinition = "text")
+
+    protected String description;
 
     @Interchangeable(fieldTitle = "Project Comments", importable = true, fmPath = "/Activity Form/Identification/Project Comments")
     @VersionableFieldTextEditor(fieldTitle = "Project Comments")
+    @Column(name = "projectComments", columnDefinition = "text")
+
     protected String projectComments ;
     
     @Interchangeable(fieldTitle = "Lessons Learned", importable = true, fmPath = "/Activity Form/Identification/Lessons Learned")
     @VersionableFieldTextEditor(fieldTitle = "Lessons Learned")
+    @Column(name = "lessons_learned", columnDefinition = "text")
+
     protected String lessonsLearned;
     
     @Interchangeable(fieldTitle = "Objective", importable = true, fmPath = "/Activity Form/Identification/Objective",
@@ -176,56 +204,81 @@ LoggerIdentifiable, Cloneable {
                     fmPath = "/Activity Form/Identification/Required Validator for Objective",
                     groups = Submit.class))
     @VersionableFieldTextEditor(fieldTitle = "Objective")
+    @Column(name = "objectives", columnDefinition = "text")
+
     protected String objective ;
     
     @Interchangeable(fieldTitle = "Purpose", importable = true, fmPath = "/Activity Form/Identification/Purpose")
     @VersionableFieldTextEditor(fieldTitle = "Purpose")
+    @Column(name = "purpose", columnDefinition = "text")
+
     protected String purpose;
     
     @Interchangeable(fieldTitle = "Results", importable = true, fmPath = "/Activity Form/Identification/Results")
     @VersionableFieldTextEditor(fieldTitle = "Results")
+    @Column(name = "results", columnDefinition = "text")
+
     protected String results;
     
     @Interchangeable(fieldTitle = "Document Space", importable = true)
     @VersionableFieldSimple(fieldTitle = "Document Space")
+    @Column(name = "document_space")
+
     protected String documentSpace;
 
     @Interchangeable(fieldTitle = ActivityFieldsConstants.IATI_IDENTIFIER, importable = true,
             fmPath = "/Activity Form/Identification/IATI Identifier",
             readOnlyFmPath = "/Activity Form/Identification/IATI Identifier Read Only")
     @VersionableFieldSimple(fieldTitle = ActivityFieldsConstants.IATI_IDENTIFIER)
+    @Column(name = "iati_identifier")
     protected String iatiIdentifier;
 
     @Interchangeable(fieldTitle = ActivityFieldsConstants.IS_DRAFT,
             interValidators = @InterchangeableValidator(RequiredValidator.class), importable = true)
     @VersionableFieldSimple(fieldTitle = "Is Draft?", blockSingleChange = true)
+    @Column(name = "draft")
+
     protected Boolean draft;
 
     @VersionableFieldSimple(fieldTitle = ActivityFieldsConstants.CHANGE_TYPE)
+    @Column(name = "change_type")
+
     protected String changeType;
 
     @Interchangeable(fieldTitle = ActivityFieldsConstants.LAST_IMPORTED_AT)
     @VersionableFieldSimple(fieldTitle = ActivityFieldsConstants.LAST_IMPORTED_AT)
     @TimestampField
+    @Column(name = "last_imported_at")
+
     protected Date lastImportedAt;
 
     @Interchangeable(fieldTitle = ActivityFieldsConstants.LAST_IMPORTED_BY, pickIdOnly=true)
     @VersionableFieldSimple(fieldTitle = ActivityFieldsConstants.LAST_IMPORTED_BY)
+    @ManyToOne
+    @JoinColumn(name = "last_imported_by")
     protected User lastImportedBy;
 
     @Interchangeable(fieldTitle = "Equal Oportunity", importable = true, fmPath = "/Activity Form/Cross Cutting Issues/Equal Opportunity")
     @VersionableFieldTextEditor(fieldTitle = "Equal Oportunity")
+    @Column(name = "equalOpportunity")
+
     protected String equalOpportunity;
     
     @Interchangeable(fieldTitle = "Environment", importable = true, fmPath = "/Activity Form/Cross Cutting Issues/Environment")
     @VersionableFieldTextEditor(fieldTitle = "Environment")
+    @Column(name = "environment")
+
     protected String environment;
     
     @Interchangeable(fieldTitle = "Minorities", importable = true, fmPath = "/Activity Form/Cross Cutting Issues/Minorities")
     @VersionableFieldTextEditor(fieldTitle = "Minorities")
+    @Column(name = "minorities")
+
     protected String minorities;
 
     @VersionableFieldSimple(fieldTitle = "Language")
+    @Column(name = "language")
+
     protected String language ;
 
     @Interchangeable(fieldTitle = "Original Completion Date", importable = true,
@@ -733,6 +786,8 @@ LoggerIdentifiable, Cloneable {
     //commenting for now
 //  @Interchangeable(fieldTitle = "Deleted", importable=false)
     @VersionableFieldSimple(fieldTitle = "Deleted")
+    @Column(name = "deleted")
+
     protected Boolean deleted;
 
     @VersionableCollection(fieldTitle = "Aid Effectiveness")
@@ -810,12 +865,15 @@ LoggerIdentifiable, Cloneable {
     protected Set<AmpCategoryValue> categories = new HashSet<>();
 
     @VersionableFieldTextEditor(fieldTitle = "Status Other Info")
+    @Column(name = "status_other_info")
     protected String statusOtherInfo;
 
     @VersionableFieldTextEditor(fieldTitle = "Project Category Other Info")
+    @Column(name = "project_category_other_info")
     protected String projectCategoryOtherInfo;
 
     @VersionableFieldTextEditor(fieldTitle = "Modalities Other Info")
+    @Column(name = "modalities_other_info")
     protected String modalitiesOtherInfo;
 
     /*

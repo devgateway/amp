@@ -499,12 +499,9 @@ public class CurrencyUtil {
         String queryString = "select c from " + AmpCurrency.class.getName()
                 + " c " + "where c.currencyCode = "+"'"+currCode+"'";
         Session session = PersistenceManager.getRequestDBSession();
-//        Transaction tx = session.getTransaction();
         Query qry = session.createQuery(queryString);
         qry.setCacheable(true);
-//        qry.setParameter("id", currCode, StringType.INSTANCE);
         Object res =qry.uniqueResult();
-//        tx.commit();
 
         return (AmpCurrency)res ;
     }

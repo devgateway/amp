@@ -2,7 +2,6 @@ package org.digijava.module.aim.startup;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.util.Enumeration;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -18,11 +17,8 @@ import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.SchedulerFactory;
 import org.quartz.ee.servlet.QuartzInitializerListener;
-import org.quartz.impl.StdSchedulerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static org.digijava.module.message.helper.MessageConstants.triggerName;
 
 /**
  * @author Octavian Ciubotaru
@@ -52,12 +48,9 @@ public class QuartzStartupListener extends QuartzInitializerListener {
     private void initializeQuartz(ServletContextEvent sce) {
         ServletContext sc = sce.getServletContext();
         try {
-
-//            SchedulerFactory factory = (SchedulerFactory) sc.getAttribute(QuartzInitializerListener.QUARTZ_FACTORY_KEY);
-            SchedulerFactory factory =  new StdSchedulerFactory();
+            SchedulerFactory factory = (SchedulerFactory) sc.getAttribute(QuartzInitializerListener.QUARTZ_FACTORY_KEY);
 
             Scheduler scheduler = factory.getScheduler();
-
 
             scheduler.getContext().put(Constants.AMP_SERVLET_CONTEXT, sc);
 
@@ -91,8 +84,8 @@ public class QuartzStartupListener extends QuartzInitializerListener {
         jobForm.setGroupName("ampServices");
         jobForm.setManualJob(false);
         jobForm.setName(jobClass.getName());
-      jobForm.setTriggerGroupName(jobClass.getName());
-      jobForm.setTriggerName(jobClass.getName());
+//      jobForm.setTriggerGroupName(triggerGroupName);
+//      jobForm.setTriggerName(triggerName);
         jobForm.setTriggerType(QuartzJobForm.DAILY);
         jobForm.setExeTimeH("1");
         jobForm.setExeTimeM("1");

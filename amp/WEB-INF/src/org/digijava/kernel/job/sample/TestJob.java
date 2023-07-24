@@ -27,24 +27,21 @@ import org.digijava.kernel.job.AbstractSingletonJob;
 import org.quartz.JobExecutionException;
 import org.quartz.JobExecutionContext;
 import org.digijava.kernel.job.JobCachedObject;
-import org.quartz.JobKey;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class TestJob
-    extends AbstractSingletonJob {
+        extends AbstractSingletonJob {
 
   private static Logger logger = Logger.getLogger(TestJob.class);
 
   public boolean executeSingletonJob(JobExecutionContext context) throws
-      JobExecutionException {
+          JobExecutionException {
     boolean success = true;
 
     Date date = context.getFireTime();
-    JobKey jobKey =  context.getJobDetail().getKey();
-    logger.info("Quartz call : " + jobKey.getName()
-                       + " : " + date.toString());
+    logger.info("Quartz call : " + context.getJobDetail().getName()
+            + " : " + date.toString());
 
     try {
       Thread.sleep(1000);

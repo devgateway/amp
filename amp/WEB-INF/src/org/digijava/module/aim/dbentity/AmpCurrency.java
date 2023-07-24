@@ -11,6 +11,7 @@ import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Identifiable;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.query.Query;
 
 import javax.persistence.*;
@@ -18,6 +19,7 @@ import javax.persistence.*;
 @TranslatableClass (displayName = "Currency")
 @Entity(name = "amp_currency")
 @Table(name = "amp_currency")
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class AmpCurrency implements Serializable, Comparable<AmpCurrency>, Identifiable, NiCurrency
 {
     //IATI-check: to not be ignored. obtained from possible values 
@@ -38,11 +40,11 @@ public class AmpCurrency implements Serializable, Comparable<AmpCurrency>, Ident
     @Column(name = "active_flag")
     private Integer activeFlag;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "country_location_id")
     private AmpCategoryValueLocations countryLocation;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "amp_fiscal_cal_id")
     private AmpFiscalCalendar calendar;
     

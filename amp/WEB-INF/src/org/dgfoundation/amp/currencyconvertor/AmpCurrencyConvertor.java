@@ -62,8 +62,16 @@ public class AmpCurrencyConvertor implements CurrencyConvertor {
         if (res != null)
             return res;
 
-        logger.warn(String.format("calculating currency %s exchange rates", currencyCode));
-        OneCurrencyCalculator newRes = PersistenceManager.getSession().doReturningWork(conn -> new OneCurrencyCalculator(CurrencyUtil.getAmpcurrency(currencyCode), conn));
+        logger.warn(String.format("Calculating currency %s exchange rates", currencyCode));
+        OneCurrencyCalculator newRes = PersistenceManager.getRequestDBSession().doReturningWork(conn -> {
+
+            AmpCurrency  currency = CurrencyUtil.getAmpcurrency(currencyCode);
+            if (conn.isClosed())
+                conn = PersistenceManager.getJdbcConnection();
+            System.out.println(currency);
+            OneCurrencyCalculator oneCurrencyCalculator= new OneCurrencyCalculator(currency, conn);
+            return oneCurrencyCalculator ;
+        });
         currencyCalculators.put(newRes.currency.getCurrencyCode(), newRes);
         return newRes;
     }

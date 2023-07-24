@@ -30,7 +30,11 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.cache.AbstractCache;
 import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.kernel.util.DigiConfigManager;
-import org.quartz.*;
+import org.quartz.JobDetail;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
+import org.quartz.SchedulerException;
+import org.quartz.StatefulJob;
 
 /**
  * <p>Title: </p>
@@ -42,11 +46,11 @@ import org.quartz.*;
  */
 
 public abstract class AbstractSingletonJob
-    implements StatefulJob {
+        implements StatefulJob {
 
   private static Logger logger = Logger.getLogger(AbstractSingletonJob.class);
   public final static String CACHE_REGION =
-      "org.digijava.kernel.job.JobsCacheRegion";
+          "org.digijava.kernel.job.JobsCacheRegion";
 
   public AbstractSingletonJob() {
   }
@@ -68,23 +72,22 @@ public abstract class AbstractSingletonJob
 
 
   public void execute(JobExecutionContext context) throws
-      JobExecutionException {
+          JobExecutionException {
 
     JobDetail jobDetail = context.getJobDetail();
-    JobKey jobKey = jobDetail.getKey();
-    String jobName = jobKey.getName();
+    String jobName = jobDetail.getName();
 
     AbstractCache jobCache = DigiCacheManager.getInstance().getCache(CACHE_REGION);
     JobCachedObject cachedJob = (JobCachedObject) jobCache.get(jobName);
     String serverName = DigiConfigManager.getConfig().getServerType();
     if (serverName == null || serverName.trim().length() == 0) {
       logger.warn ("Server type is not specified in digi.xml. " +
-                   "This may cause abnormal execution of the scheduled job");
+              "This may cause abnormal execution of the scheduled job");
       serverName = JobCachedObject.UNKNOWN_SERVER_NAME;
     }
 
     if (cachedJob == null ||
-        (cachedJob.getVerson() == getJobVersion(jobName)/* &&
+            (cachedJob.getVerson() == getJobVersion(jobName)/* &&
          cachedJob.getState() != JobCachedObject.STATE_RUNNING*/)) {
 
       logger.info("Processing job [" + this.getClass().getName() + "]");
@@ -99,7 +102,7 @@ public abstract class AbstractSingletonJob
         cachedJob.setJobName(jobName);
         cachedJob.setVerson(1);
         logger.info("Seting initial version to job [" + this.getClass().getName() +
-                    "]");
+                "]");
       }
 
       cachedJob.setServerName(serverName);
@@ -109,19 +112,19 @@ public abstract class AbstractSingletonJob
       this.setJobVersion(jobName, cachedJob.getVerson());
 
 
-        try {
-          Thread.sleep(DigiConfigManager.getConfig().getJobDelaySec() * 1000);
-        }
-        catch (InterruptedException iex) {
-          logger.warn("Job delay exception",
-                      iex);
-        }
+      try {
+        Thread.sleep(DigiConfigManager.getConfig().getJobDelaySec() * 1000);
+      }
+      catch (InterruptedException iex) {
+        logger.warn("Job delay exception",
+                iex);
+      }
 
       cachedJob = (JobCachedObject)jobCache.get(jobName);
 
       if (cachedJob.getVerson() ==
-          this.getJobVersion(jobName) &&
-          cachedJob.getServerName().compareTo(serverName) == 0) {
+              this.getJobVersion(jobName) &&
+              cachedJob.getServerName().compareTo(serverName) == 0) {
 
         boolean success = false;
         try {
@@ -129,8 +132,8 @@ public abstract class AbstractSingletonJob
         }
         catch (SchedulerException ex) {
           logger.warn("Unable to get schedule job [" + this.getClass().getName() +
-                      "]",
-                      ex);
+                          "]",
+                  ex);
         }
 
         if (success) {
@@ -141,20 +144,20 @@ public abstract class AbstractSingletonJob
         }
         jobCache.put(jobName, cachedJob);
         logger.info("Job [" + this.getClass().getName() + "] completed (" +
-                    cachedJob.getState() + ")");
+                cachedJob.getState() + ")");
       } else {
         setJobVersion(jobName, cachedJob.getVerson());
         logger.debug("Job is running on another server. Version: " +
-                     String.valueOf(cachedJob.getVerson()));
+                String.valueOf(cachedJob.getVerson()));
       }
     }
     else {
       setJobVersion(jobName, cachedJob.getVerson());
       logger.debug("Job is running on another server. Version: " +
-                   String.valueOf(cachedJob.getVerson()));
+              String.valueOf(cachedJob.getVerson()));
     }
   }
 
   public abstract boolean executeSingletonJob(JobExecutionContext context) throws
-      JobExecutionException;
+          JobExecutionException;
 }

@@ -31,7 +31,7 @@ import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.caching.AmpCaching;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;

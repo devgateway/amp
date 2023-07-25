@@ -8,7 +8,7 @@ import java.util.Collection;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpStructureType;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 
 public class StructuresUtil {

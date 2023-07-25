@@ -33,7 +33,7 @@ import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;

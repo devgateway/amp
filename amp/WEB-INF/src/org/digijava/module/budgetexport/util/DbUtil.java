@@ -11,7 +11,7 @@ import org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapItem;
 import org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapRule;
 import org.digijava.module.budgetexport.dbentity.AmpBudgetExportProject;
 import org.hibernate.Hibernate;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 
 import java.util.ArrayList;

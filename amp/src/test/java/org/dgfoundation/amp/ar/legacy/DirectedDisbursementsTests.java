@@ -9,7 +9,7 @@ import org.dgfoundation.amp.nireports.testcases.SimpleColumnModel;
 import org.dgfoundation.amp.testutils.*;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.junit.Test;
 
 

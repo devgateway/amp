@@ -15,7 +15,7 @@ import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatch;
 import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatchLog;
 import org.digijava.module.xmlpatcher.jaxb.Patch;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.xml.sax.SAXException;

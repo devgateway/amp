@@ -39,7 +39,7 @@ import org.digijava.module.translation.jaxb.Language;
 import org.digijava.module.translation.jaxb.ObjectFactory;
 import org.digijava.module.translation.jaxb.Translations;
 import org.digijava.module.translation.jaxb.Trn;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 
 import java.util.Arrays;

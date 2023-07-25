@@ -65,7 +65,7 @@ import org.digijava.module.contentrepository.helper.DocumentData;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.helper.ObjectReferringDocument;
 import org.digijava.module.contentrepository.helper.TeamInformationBeanDM;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 
 
 public class DocumentManagerUtil {

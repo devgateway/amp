@@ -67,7 +67,7 @@ import org.digijava.module.translation.security.TranslateObject;
 import org.digijava.module.translation.security.TranslatePermission;
 import org.digijava.module.translation.security.TranslateSecurityManager;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 
 public class TranslationManager {

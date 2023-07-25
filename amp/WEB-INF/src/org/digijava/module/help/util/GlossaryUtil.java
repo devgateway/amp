@@ -16,7 +16,7 @@ import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.help.dbentity.HelpTopic;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 

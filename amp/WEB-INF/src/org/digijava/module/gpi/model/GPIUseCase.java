@@ -47,7 +47,7 @@ import org.digijava.module.gpi.helper.GPIReport9b;
 import org.digijava.module.gpi.helper.row.GPIReportAbstractRow;
 import org.digijava.module.gpi.util.GPIConstants;
 import org.digijava.module.gpi.util.GPIUtils;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 
 public class GPIUseCase {

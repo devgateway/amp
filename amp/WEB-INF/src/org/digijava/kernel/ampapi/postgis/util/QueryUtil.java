@@ -51,7 +51,7 @@ import org.digijava.module.esrigis.dbentity.AmpApiState;
 import org.digijava.module.esrigis.dbentity.ApiStateType;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.Criteria;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.jdbc.Work;

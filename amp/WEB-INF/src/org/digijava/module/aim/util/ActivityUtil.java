@@ -90,7 +90,7 @@ import org.digijava.module.categorymanager.util.IdWithValueShim;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.hibernate.Hibernate;
 import org.hibernate.ObjectNotFoundException;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.jdbc.ReturningWork;

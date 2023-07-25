@@ -15,7 +15,7 @@ import org.digijava.module.contentrepository.helper.template.PossibleValueHelper
 import org.digijava.module.contentrepository.helper.template.SubmittedValueHolder;
 import org.digijava.module.contentrepository.helper.template.TemplateDocumentHelper;
 import org.digijava.module.contentrepository.helper.template.TemplateFieldHelper;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 /**

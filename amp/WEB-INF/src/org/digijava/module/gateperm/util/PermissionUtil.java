@@ -38,7 +38,7 @@ import org.digijava.module.gateperm.core.Permissible;
 import org.digijava.module.gateperm.core.Permission;
 import org.digijava.module.gateperm.core.PermissionMap;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 
 /**

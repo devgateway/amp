@@ -45,7 +45,7 @@ import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.translation.exotic.AmpDateFormatter;
 import org.digijava.module.translation.exotic.AmpDateFormatterFactory;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.joda.time.DateTime;
 

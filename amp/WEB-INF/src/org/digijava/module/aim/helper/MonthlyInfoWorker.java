@@ -10,7 +10,7 @@ import org.dgfoundation.amp.Util;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 
 /**

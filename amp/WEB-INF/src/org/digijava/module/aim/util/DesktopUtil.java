@@ -13,7 +13,7 @@ import org.dgfoundation.amp.Util;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpTeam;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.type.DateType;
 import org.hibernate.type.LongType;

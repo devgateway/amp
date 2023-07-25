@@ -44,7 +44,7 @@ import org.digijava.module.gpi.helper.row.GPIReportAbstractRow;
 import org.digijava.module.gpi.model.GPIFilter;
 import org.digijava.module.gpi.util.GPIConstants;
 import org.digijava.module.gpi.util.GPIUtils;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 
 import java.util.Collections;

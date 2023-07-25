@@ -14,7 +14,7 @@ import org.digijava.module.aim.dbentity.AmpAhsurveyResponse;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.helper.ParisIndicatorReportHelper;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.type.IntegerType;

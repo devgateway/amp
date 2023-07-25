@@ -63,7 +63,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.core.Permissible;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 
 @TranslatableClass (displayName = "Activity Form Field")

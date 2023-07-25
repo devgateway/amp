@@ -42,7 +42,7 @@ import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.type.LongType;
 

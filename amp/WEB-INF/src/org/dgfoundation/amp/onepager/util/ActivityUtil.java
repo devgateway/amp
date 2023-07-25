@@ -97,7 +97,7 @@ import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.Hibernate;
 import org.hibernate.LockMode;
 import org.hibernate.LockOptions;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;

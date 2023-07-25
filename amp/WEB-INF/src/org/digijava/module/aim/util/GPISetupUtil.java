@@ -13,7 +13,7 @@ import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.GPIDefaultFilters;
 import org.digijava.module.aim.dbentity.GPISetup;
 import org.hibernate.Hibernate;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 
 public class GPISetupUtil {

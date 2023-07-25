@@ -15,7 +15,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;

@@ -55,7 +55,7 @@ import org.digijava.module.sdm.dbentity.SdmItem;
 import org.digijava.module.sdm.exception.SDMException;
 import org.hibernate.FlushMode;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 

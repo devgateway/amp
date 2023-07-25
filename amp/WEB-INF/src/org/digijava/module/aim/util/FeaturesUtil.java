@@ -45,7 +45,7 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.Logic;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.type.IntegerType;

@@ -23,7 +23,7 @@ import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.util.AdvancedReportUtil;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 
 /**

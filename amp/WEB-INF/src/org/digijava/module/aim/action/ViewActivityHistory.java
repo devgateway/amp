@@ -27,7 +27,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 
 public class ViewActivityHistory extends DispatchAction {

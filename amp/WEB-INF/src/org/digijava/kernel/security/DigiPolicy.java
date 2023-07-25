@@ -51,7 +51,7 @@ import java.util.Set;
 
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 

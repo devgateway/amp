@@ -23,7 +23,7 @@ import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.digijava.module.aim.util.OrganizationSkeleton;
 import org.digijava.module.aim.util.caching.AmpCaching;
 import org.digijava.module.translation.util.ContentTranslationUtil;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 
 /**

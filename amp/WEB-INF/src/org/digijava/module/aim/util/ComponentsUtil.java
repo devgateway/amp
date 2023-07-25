@@ -28,7 +28,7 @@ import org.digijava.module.aim.dbentity.AmpComponentsIndicators;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.type.LongType;

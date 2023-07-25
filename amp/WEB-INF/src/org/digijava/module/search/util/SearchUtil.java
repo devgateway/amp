@@ -47,7 +47,7 @@ import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.contentrepository.util.DocumentsNodesAttributeManager;
 import org.digijava.module.search.helper.Resource;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.type.LongType;

@@ -30,7 +30,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.esrigis.dbentity.AmpMapConfig;
 import org.hibernate.HibernateException;
 import org.hibernate.JDBCException;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;

@@ -32,7 +32,7 @@ import org.digijava.module.aim.helper.MEIndicatorValue;
 import org.digijava.module.aim.helper.PriorCurrentValues;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.hibernate.JDBCException;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.engine.spi.SessionImplementor;

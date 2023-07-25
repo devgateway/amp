@@ -30,7 +30,7 @@ import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.version.exception.CannotGetLastVersionForVersionException;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 
 public class ActivityVersionUtil {

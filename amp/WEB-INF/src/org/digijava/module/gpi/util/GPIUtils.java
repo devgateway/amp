@@ -27,7 +27,7 @@ import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.common.util.DateTimeUtil;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 
 public class GPIUtils {

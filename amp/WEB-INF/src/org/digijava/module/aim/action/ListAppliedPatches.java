@@ -25,7 +25,7 @@ import org.apache.struts.action.ActionServlet;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.form.ListAppliedPatchesForm;
 import org.digijava.module.autopatcher.core.PatchFile;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.engine.spi.SessionImplementor;
 

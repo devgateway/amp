@@ -18,7 +18,7 @@ import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.exception.NoDocumentTypeException;
 import org.digijava.module.contentrepository.action.SelectDocumentDM;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 
 /**

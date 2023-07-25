@@ -51,7 +51,7 @@ import org.digijava.module.gpi.model.GPIFilter;
 import org.digijava.module.gpi.util.GPIConstants;
 import org.digijava.module.gpi.util.GPIUtils;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 
 import java.util.Collections;

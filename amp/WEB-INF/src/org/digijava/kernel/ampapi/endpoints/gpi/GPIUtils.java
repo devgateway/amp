@@ -25,7 +25,7 @@ import org.digijava.module.aim.dbentity.AmpGPINiAidOnBudget;
 import org.digijava.module.aim.dbentity.AmpGPINiDonorNotes;
 import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.TeamMember;

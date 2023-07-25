@@ -11,7 +11,7 @@ import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Identifiable;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 
 @TranslatableClass (displayName = "Currency")
 public class AmpCurrency implements Serializable, Comparable<AmpCurrency>, Identifiable, NiCurrency

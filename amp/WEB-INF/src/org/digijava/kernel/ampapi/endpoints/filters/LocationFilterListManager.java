@@ -27,7 +27,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationSkeleton;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 
 /**

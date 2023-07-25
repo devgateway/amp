@@ -36,7 +36,7 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.StatelessSession;

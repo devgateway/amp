@@ -102,12 +102,15 @@ public class FieldVisibilityTag extends BodyTagSupport {
                 }
                 ampTreeVisibility=FeaturesUtil.getAmpTreeVisibility(ampContext, session);
                 if(ampTreeVisibility!=null)
-                   if(!isFeatureTheParent(ampTreeVisibility)){
-                       FeaturesUtil.updateFieldWithFeatureVisibility(ampTreeVisibility.getFeatureByNameFromRoot(this.getFeature()).getId(),this.getName());
-                       AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
-                       ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
-                       FeaturesUtil.setAmpTreeVisibility(ampContext, session,ampTreeVisibility);
-                   } 
+                   if(!isFeatureTheParent(ampTreeVisibility)) {
+                       AmpFeaturesVisibility ampFeaturesVisibility = ampTreeVisibility.getFeatureByNameFromRoot(this.getFeature());
+//                       if (ampFeaturesVisibility != null) {
+                           FeaturesUtil.updateFieldWithFeatureVisibility(ampFeaturesVisibility.getId(), this.getName());
+                           AmpTemplatesVisibility currentTemplate = (AmpTemplatesVisibility) FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
+                           ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
+                           FeaturesUtil.setAmpTreeVisibility(ampContext, session, ampTreeVisibility);
+                       }
+//                   }
 //     }
        
     } catch (Exception e) {

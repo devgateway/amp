@@ -1,6 +1,5 @@
 package org.digijava.kernel.jobs;
 
-import com.sun.jersey.api.client.UniformInterfaceException;
 import org.digijava.kernel.ampregistry.AmpRegistryService;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.services.AmpOfflineService;
@@ -145,7 +144,7 @@ public class DownloadAmpOfflineReleasesJob extends NonConcurrentJob {
         try {
             ampOfflineService.saveToDisk(release, ampRegistryService.releaseFileSupplier(release));
             existingReleases.add(release);
-        } catch (IOException | UniformInterfaceException e) {
+        } catch (Exception e) {
             logger.warn(e.getClass().getSimpleName() + ": " + e.getMessage());
         }
     }

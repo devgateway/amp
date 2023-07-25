@@ -18,10 +18,10 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 
-import com.sun.jersey.api.NotFoundException;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;

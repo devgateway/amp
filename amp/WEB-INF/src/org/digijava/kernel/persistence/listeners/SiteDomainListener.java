@@ -9,6 +9,7 @@ import org.hibernate.event.spi.PostInsertEvent;
 import org.hibernate.event.spi.PostInsertEventListener;
 import org.hibernate.event.spi.PostUpdateEvent;
 import org.hibernate.event.spi.PostUpdateEventListener;
+import org.hibernate.persister.entity.EntityPersister;
 
 /**
  * Monitors changes to SiteDomain entities.
@@ -36,5 +37,15 @@ public class SiteDomainListener implements PostUpdateEventListener, PostDeleteEv
         if (entity instanceof SiteDomain) {
             QuartzJobUtils.runJobIfNotPaused(RegisterWithAmpRegistryJob.NAME);
         }
+    }
+
+    @Override
+    public boolean requiresPostCommitHanding(EntityPersister entityPersister) {
+        return false;
+    }
+
+    @Override
+    public boolean requiresPostCommitHandling(EntityPersister persister) {
+        return PostUpdateEventListener.super.requiresPostCommitHandling(persister);
     }
 }

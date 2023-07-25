@@ -68,10 +68,10 @@
     <logger name="net.sf.ehcache.hibernate" level="ERROR" />
 
     <!-- SET to TRACE in order to see queries and their value, INFO is default -->
-    <logger name="org.hibernate.SQL" level="INFO" />
+    <logger name="org.hibernate.SQL" level="TRACE" />
 
     <!-- SET to TRACE in order to see queries and their value, INFO is default -->
-    <logger name="org.hibernate.type" level="INFO" />
+    <logger name="org.hibernate.type" level="TRACE" />
 
     <logger name="amp-email" additivity="false" level="DEBUG">
         <appender-ref ref="amp-email" />

@@ -23,9 +23,7 @@
 package org.digijava.kernel.util;
 
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.StandaloneJndiAMPInitializer;
@@ -33,9 +31,14 @@ import org.digijava.kernel.persistence.HibernateClassLoader;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.resource.ResourceStreamHandlerFactory;
 import org.hibernate.HibernateException;
+import org.hibernate.boot.Metadata;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.mapping.PersistentClass;
 import org.hibernate.tool.hbm2ddl.SchemaUpdate;
+import org.hibernate.tool.schema.TargetType;
 
 public class DigiSchemaExport {
     private static Logger logger = Logger.getLogger(DigiSchemaExport.class);
@@ -73,11 +76,15 @@ public class DigiSchemaExport {
                 logger.error("Error creating hibernate configuration", ex1);
                 throw ex1;
             }
+            StandardServiceRegistry standardRegistry = new StandardServiceRegistryBuilder().applySettings(cfg.getProperties()).build();
+            Metadata metaData = new MetadataSources(standardRegistry).getMetadataBuilder().build();
+            Collection<PersistentClass> entityBindings = metaData.getEntityBindings();
+            Iterator<PersistentClass> classIter = entityBindings.iterator();
 
             if (commandLineParams.containsKey("-names")) {
                 logger.info("Generating comma-separated table names");
 
-                Iterator classIter = cfg.getClassMappings();
+//                Iterator classIter = cfg.cfggetClassMappings();
                 boolean first = true;
                 StringBuffer tables = new StringBuffer();
                 while (classIter.hasNext()) {
@@ -100,7 +107,10 @@ public class DigiSchemaExport {
                     logger.info("Skipping database schema update");
                 }
                 try {
-                    new SchemaUpdate(cfg).execute(true, doUpdate);
+                    EnumSet<TargetType> enumSet = EnumSet.of(TargetType.DATABASE);
+
+                    new SchemaUpdate().execute(enumSet, metaData,standardRegistry);
+//                    new SchemaUpdate(cfg).execute(true, doUpdate);
                 }
                 catch (HibernateException ex) {
                     logger.error("Error updating schema ", ex);

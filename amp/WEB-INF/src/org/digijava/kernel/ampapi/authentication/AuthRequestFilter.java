@@ -1,11 +1,14 @@
 package org.digijava.kernel.ampapi.authentication;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.Context;
 
 import org.apache.commons.lang.StringUtils;
@@ -19,9 +22,8 @@ import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.glassfish.jersey.server.ContainerRequest;
 
-import com.sun.jersey.spi.container.ContainerRequest;
-import com.sun.jersey.spi.container.ContainerRequestFilter;
 
 /***
  * Configures common parameters and validates some requests
@@ -36,23 +38,7 @@ public class AuthRequestFilter implements ContainerRequestFilter {
     
     private static final Logger logger = Logger.getLogger(AuthRequestFilter.class);
 
-    @Override
-    public ContainerRequest filter(ContainerRequest containerReq) {
-        SiteDomain siteDomain = null;
-        //yet to strip the mainPath dynamically, committed hardcoded for testing purposes
-        String mainPath="/rest";
-        siteDomain = SiteCache.getInstance().getSiteDomain(httpRequest.getServerName(), mainPath);
 
-        // configure requested language
-        addLanguage(siteDomain);
-        
-        // configure translastions if exist
-        addTranslations(siteDomain);
-        
-        addDefaultTreeVisibility();
-
-        return containerReq;
-    }
     
     private void addLanguage(SiteDomain siteDomain) {
         if (httpRequest.getParameter(EPConstants.LANGUAGE) != null) {
@@ -105,5 +91,22 @@ public class AuthRequestFilter implements ContainerRequestFilter {
             FeaturesUtil.setAmpTreeVisibility(httpRequest.getServletContext(), httpRequest.getSession(), ampTreeVisibility);
         }
     }
-    
+
+    @Override
+    public void filter(ContainerRequestContext containerRequestContext) throws IOException {
+        SiteDomain siteDomain = null;
+        //yet to strip the mainPath dynamically, committed hardcoded for testing purposes
+        String mainPath="/rest";
+        siteDomain = SiteCache.getInstance().getSiteDomain(httpRequest.getServerName(), mainPath);
+
+        // configure requested language
+        addLanguage(siteDomain);
+
+        // configure translastions if exist
+        addTranslations(siteDomain);
+
+        addDefaultTreeVisibility();
+
+//        return containerReq;
+    }
 }

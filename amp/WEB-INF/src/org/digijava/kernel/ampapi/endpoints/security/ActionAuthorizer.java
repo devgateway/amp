@@ -21,8 +21,8 @@ import org.digijava.kernel.util.SpringUtil;
 import org.digijava.module.aim.dbentity.AmpOfflineRelease;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.glassfish.jersey.server.ContainerRequest;
 
-import com.sun.jersey.spi.container.ContainerRequest;
 
 /**
  * Authorizes current API request based on the given set of required actions 

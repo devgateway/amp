@@ -15,8 +15,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
-
-import com.vividsolutions.jts.geom.Geometry;
+import org.locationtech.jts.geom.Geometry;
 
 
 @Entity (name="amp_locator")
@@ -112,7 +111,6 @@ public class AmpLocator implements Serializable{
     @Temporal (TemporalType.DATE)
     private Date lastModified;
     
-    @Type(type="org.hibernate.spatial.GeometryType")
     private Geometry theGeometry;
 
     //internal use only

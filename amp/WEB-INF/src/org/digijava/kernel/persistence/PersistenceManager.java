@@ -41,7 +41,12 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.StatelessSession;
 import org.hibernate.Transaction;
+import org.hibernate.boot.Metadata;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.engine.jdbc.connections.spi.ConnectionProvider;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.jdbc.ReturningWork;
@@ -176,7 +181,12 @@ public class PersistenceManager {
 
     public static PersistentClass getClassMapping(Class<?> clazz)
     {
-        return cfg.getClassMapping(clazz.getName());
+
+        StandardServiceRegistry registry = new StandardServiceRegistryBuilder().applySettings(cfg.getProperties()).build();
+        MetadataSources sources = new MetadataSources(registry);
+        Metadata metadata = sources.buildMetadata();
+        return metadata.getEntityBinding(clazz.getName());
+//        return cfg.getClassMapping(clazz.getName());
     }
 
     /**
@@ -184,9 +194,14 @@ public class PersistenceManager {
      * @return
      * @throws SQLException
      */
+//    public static Connection getJdbcConnection() throws SQLException {
+//        SessionFactoryImplementor sfi = (SessionFactoryImplementor) sf;
+//        return sfi.getConnectionProvider().getConnection();
+//    }
+
     public static Connection getJdbcConnection() throws SQLException {
         SessionFactoryImplementor sfi = (SessionFactoryImplementor) sf;
-        return sfi.getConnectionProvider().getConnection();
+        return sfi.getServiceRegistry().getService(ConnectionProvider.class).getConnection();
     }
 
 
@@ -610,9 +625,10 @@ public class PersistenceManager {
         Session session = null;
 
         try {
-            sf.evict(objectClass, primaryKey);
+//            sf.evict(objectClass, primaryKey);
 
             session = getSession();
+            session.evict(primaryKey);
             Object obj = session.load(objectClass, primaryKey);
             Hibernate.initialize(obj);
         }

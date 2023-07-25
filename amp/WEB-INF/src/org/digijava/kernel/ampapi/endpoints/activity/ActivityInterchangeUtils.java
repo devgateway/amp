@@ -1,6 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import com.sun.jersey.spi.container.ContainerRequest;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
@@ -41,6 +40,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.aim.util.ValidationStatus;
+import org.glassfish.jersey.server.ContainerRequest;
 import org.hibernate.CacheMode;
 
 import javax.servlet.http.HttpServletResponse;
@@ -157,7 +157,7 @@ public final class ActivityInterchangeUtils {
     }
 
     private static Long getRequestId(ContainerRequest containerReq) {
-        List<PathSegment> paths = containerReq.getPathSegments();
+        List<PathSegment> paths = containerReq.getUriInfo().getPathSegments();
         Long id = null;
         if (paths != null && paths.size() > 0) {
             PathSegment segment = paths.get(paths.size() - 1);

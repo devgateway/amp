@@ -232,8 +232,8 @@ public class SearchUtil {
             newQueryString += "WHERE" +  buildLike(keywords, "f.title", searchMode);
         }
         
-        SQLQuery newQuery = session.createSQLQuery(newQueryString).addScalar("pledge_id", StandardBasicTypes.LONG);
-        newQuery = newQuery.addScalar("title", StandardBasicTypes.STRING);
+        Query newQuery = session.createNativeQuery(newQueryString).addScalar("pledge_id", StandardBasicTypes.LONG).addScalar("title", StandardBasicTypes.STRING);
+//        newQuery = newQuery.addScalar("title", StandardBasicTypes.STRING);
         addKeywordParameters(newQuery, keywords);
 
         List<Object[]> items = newQuery.list();

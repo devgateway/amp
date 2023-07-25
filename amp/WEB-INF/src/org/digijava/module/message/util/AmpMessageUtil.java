@@ -444,7 +444,7 @@ public class AmpMessageUtil {
             " msg.id=state.message.id and state.receiver.ampTeamMemId=:tmId and msg.draft=false and state.messageHidden=true";  
             query=session.createQuery(queryString);         
             query.setParameter("tmId", tmId);           
-            hiddenMsgs=((Integer)query.uniqueResult()).intValue();
+            hiddenMsgs= Long.valueOf((String) query.uniqueResult()).intValue();
             if(hiddenMsgs>0){
                 full=true;
             }

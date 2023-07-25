@@ -1644,14 +1644,14 @@ public class FeaturesUtil {
             Long templateId, Session session) throws HibernateException {
         Transaction tx = null;
         AmpTemplatesVisibility ampTemplate = new AmpTemplatesVisibility();
-        ampTemplate = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class,
+        ampTemplate = session.load(AmpTemplatesVisibility.class,
                 templateId);
         if (ampTemplate.getFields()!=null){
             ampTemplate.getFields().retainAll(fields);
             ampTemplate.getFields().addAll(fields);
             ampTemplate.invalidateCache();
         }else{
-            ampTemplate.setFields(new TreeSet<AmpFieldsVisibility>());
+            ampTemplate.setFields(new TreeSet<>());
             ampTemplate.getFields().addAll(fields);
             ampTemplate.invalidateCache();
         }

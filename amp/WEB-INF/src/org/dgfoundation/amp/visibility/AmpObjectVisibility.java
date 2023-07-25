@@ -36,7 +36,11 @@ public abstract class AmpObjectVisibility  extends Permissible implements Serial
     @PermissibleProperty(type={Permissible.PermissibleProperty.PROPERTY_TYPE_LABEL,Permissible.PermissibleProperty.PROPERTY_TYPE_CLUSTER_ID})
     protected String name;
 
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+
+    protected AmpObjectVisibility parent;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent")
     protected Set<AmpObjectVisibility> items;
     protected Set allItems;
     protected String nameTrimmed;
@@ -71,7 +75,6 @@ public abstract class AmpObjectVisibility  extends Permissible implements Serial
 
     public abstract AmpTemplatesVisibility getTemplate();
     
-    protected AmpObjectVisibility parent;
 
 
     protected Set<AmpTemplatesVisibility> templates;

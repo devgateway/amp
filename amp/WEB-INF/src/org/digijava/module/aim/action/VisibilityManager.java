@@ -417,16 +417,12 @@ public class VisibilityManager extends MultiAction {
             TreeSet<AmpFeaturesVisibility> features = new TreeSet<>();
             TreeSet<AmpFieldsVisibility> fields = new TreeSet<>();
 
-            AmpTreeVisibility x=ampTreeVisibility;
-            for(Iterator it=x.getItems().values().iterator();it.hasNext();)
-            {
-                Object obj=it.next();
-                AmpTreeVisibility treeNode=(AmpTreeVisibility)obj;
-                if (treeNode.getRoot() instanceof AmpModulesVisibility)
-                    if(request.getParameter("moduleVis:" + treeNode.getRoot().getId()) != null) {
-                        modules.add((AmpModulesVisibility) treeNode.getRoot());
+            for (AmpTreeVisibility obj : ampTreeVisibility.getItems().values()) {
+                if (obj.getRoot() instanceof AmpModulesVisibility)
+                    if (request.getParameter("moduleVis:" + obj.getRoot().getId()) != null) {
+                        modules.add((AmpModulesVisibility) obj.getRoot());
                     }
-                recursivelyParseFMTree(treeNode, modules, features, fields, request);
+                recursivelyParseFMTree(obj, modules, features, fields, request);
             }
 
             FeaturesUtil.updateAmpTemplateNameTreeVisibility(request.getParameter("templateName"), templateId, hbsession);

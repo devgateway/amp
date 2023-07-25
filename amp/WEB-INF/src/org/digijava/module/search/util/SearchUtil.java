@@ -287,7 +287,7 @@ public class SearchUtil {
                 + AmpActivityVersion.sqlStringForName("f.amp_activity_id")
                 + " AS name, f.approval_status, f.draft FROM amp_activity f WHERE f.amp_activity_id in ("
                 + Util.toCSStringForIN(ids) + ")";
-        SQLQuery newQuery = session.createSQLQuery(newQueryString).addScalar("amp_activity_id", LongType.INSTANCE);
+        SQLQuery newQuery = session.createNativeQuery(newQueryString).addScalar("amp_activity_id", LongType.INSTANCE);
         newQuery = newQuery.addScalar("amp_id", org.hibernate.type.StandardBasicTypes.STRING);
         newQuery = newQuery.addScalar("name", org.hibernate.type.StandardBasicTypes.STRING);
         newQuery = newQuery.addScalar("approval_status", org.hibernate.type.StandardBasicTypes.STRING);

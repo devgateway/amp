@@ -37,7 +37,7 @@ public class AmpCurrencyConvertor implements CurrencyConvertor {
     protected void checkCache() {
         if (System.currentTimeMillis() - lastTimeTokenChecked > 5 * 1000 * 60) { // check ETL for changes no more frequently than once in 5 minutes
             Long lastCurrencyChange = PersistenceManager.getLong(
-                PersistenceManager.getSession().createSQLQuery("select max(event_id) from amp_etl_changelog where entity_name = 'exchange_rate'").uniqueResult());
+                PersistenceManager.getSession().createNativeQuery("select max(event_id) from amp_etl_changelog where entity_name = 'exchange_rate'").uniqueResult());
 
             lastTimeTokenChecked = System.currentTimeMillis();
 

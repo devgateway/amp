@@ -386,7 +386,7 @@ public class DbUtil {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select aaii.* from amp_activity_internal_id aaii "
                     + "where aaii.amp_activity_id=:actId";
-            Query qry = session.createSQLQuery(queryString).addEntity(AmpActivityInternalId.class);
+            Query qry = session.createNativeQuery(queryString).addEntity(AmpActivityInternalId.class);
             qry.setParameter("actId", actId, LongType.INSTANCE);
             col = qry.list();
         } catch (Exception ex) {
@@ -1687,7 +1687,7 @@ public class DbUtil {
             String queryString = "SELECT " + rewrittenColumns + " FROM amp_org_group aog WHERE aog.amp_org_grp_id IN ("
                     + idsQueryString + ")";
 
-            Query qry = session.createSQLQuery(queryString).addEntity(AmpOrgGroup.class);
+            Query qry = session.createNativeQuery(queryString).addEntity(AmpOrgGroup.class);
             col = qry.list();
         } catch (Exception e) {
             logger.error("Exception from getAllContractingAgencyGroupsOfPortfolio()", e);
@@ -1735,7 +1735,7 @@ public class DbUtil {
                     + "inner join amp_organisation ao on (ao.org_grp_id = aog.amp_org_grp_id) "
                     + "inner join amp_funding af on (af.amp_donor_org_id = ao.amp_org_id) "
                     + "inner join amp_activity aa on (aa.amp_activity_id = af.amp_activity_id) where (ao.deleted is null or ao.deleted = false) ";
-            Query qry = session.createSQLQuery(queryString).addEntity(AmpOrgGroup.class);
+            Query qry = session.createNativeQuery(queryString).addEntity(AmpOrgGroup.class);
             col = qry.list();
         } catch (Exception e) {
             logger.error("Got exception from getAllOrgGroupsOfPortfolio()", e);
@@ -1764,7 +1764,7 @@ public class DbUtil {
                     + "inner join amp_organisation ao on (aog.amp_org_grp_id=ao.org_grp_id ) "
                     + "inner join amp_funding af on (af.amp_donor_org_id = ao.amp_org_id) "
                     + "inner join amp_activity aa on (aa.amp_activity_id = af.amp_activity_id) where (ao.deleted is null or ao.deleted = false) ";
-            Query qry = session.createSQLQuery(queryString).addEntity(AmpOrgType.class);
+            Query qry = session.createNativeQuery(queryString).addEntity(AmpOrgType.class);
             col = qry.list();
         } catch (Exception e) {
             logger.error("Exception from getAllOrgTypesOfPortfolio()", e);

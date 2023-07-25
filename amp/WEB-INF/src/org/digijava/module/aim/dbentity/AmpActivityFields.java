@@ -2139,10 +2139,10 @@ LoggerIdentifiable, Cloneable {
 
 
 
-        public String toString(){
-            if(name!=null) return name;
-            return super.toString();
-        }
+//        public String toString(){
+//            if(name!=null) return name;
+//            return super.toString();
+//        }
 
 
         public Boolean isHumanitarianAid( ) {

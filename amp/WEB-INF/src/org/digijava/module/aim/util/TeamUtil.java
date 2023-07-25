@@ -978,7 +978,7 @@ public class TeamUtil {
             Query query = session.createQuery(qs);
             query.setParameterList("activity", activities);
             query.executeUpdate();
-            query = session.createSQLQuery("delete from amp_member_activities where amp_activity_id in (:activity)");
+            query = session.createNativeQuery("delete from amp_member_activities where amp_activity_id in (:activity)");
             query.setParameterList("activity", activities);
             query.executeUpdate();
             tx.commit();

@@ -241,7 +241,7 @@ public class XmlPatcherService extends AbstractServiceImpl {
             // workaround a design fault whereas a patch which was deleted and then a different one with the same name was readded remains marked as "deleted" by AMP and never executed.
             // AMP 2.7.1+ does not start without this fix (unless one does manual intervetions to the DB)
             // this has been added here instead of an XML patch because this code has to be run before the XML patches have been discovered
-            // DO NOT CHANGE THIS TO USE PersistenceManager.getSession().createSQLQuery(), as this leads to AMP hanging (Postgres hangs when having the same UPDATE in 2 different transactions open - there is a patch which does the same)
+            // DO NOT CHANGE THIS TO USE PersistenceManager.getSession().createNativeQuery(), as this leads to AMP hanging (Postgres hangs when having the same UPDATE in 2 different transactions open - there is a patch which does the same)
             java.sql.Connection conn = PersistenceManager.getJdbcConnection();
             conn.prepareStatement("UPDATE amp_xml_patch set state=0 WHERE patch_id similar to '((v)|(z)|(zz))%' AND location ='xmlpatches/general/views/' AND state=4;").executeUpdate();
             conn.close();

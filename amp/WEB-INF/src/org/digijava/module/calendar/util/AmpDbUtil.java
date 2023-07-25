@@ -564,7 +564,7 @@ public class AmpDbUtil {
             try {
                 session = PersistenceManager.getSession();
                 String queryString = "select m.module from amp_modules_templates m where m.module=" + amv.getId();
-                qry = session.createSQLQuery(queryString);
+                qry = session.createNativeQuery(queryString);
                 Iterator itr = qry.list().iterator();
                 if (itr.hasNext()) {
                     return true;

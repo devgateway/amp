@@ -85,9 +85,9 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable<
         // not used, calculated value, see getIndex() method
     }
 
-    public String toString() {
-        return value;
-    }
+//    public String toString() {
+//        return value;
+//    }
     public Object getIdentifier() {
         return this.getId();
     }

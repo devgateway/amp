@@ -36,7 +36,7 @@ public class ProjectAdapter implements MappingEntityAdapter {
     public int getObjectCount() throws DgException {
         Session sess = PersistenceManager.getRequestDBSession();
         StringBuilder queryStr = new StringBuilder("select distinct activity.amp_activity_id from v_titles activity");
-        SQLQuery q = sess.createSQLQuery(queryStr.toString());
+        SQLQuery q = sess.createNativeQuery(queryStr.toString());
         List<Long> ids = q.list();
         return ids != null?ids.size():0;
     }

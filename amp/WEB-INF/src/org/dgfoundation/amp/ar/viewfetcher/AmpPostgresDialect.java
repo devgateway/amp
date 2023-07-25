@@ -1,9 +1,10 @@
 package org.dgfoundation.amp.ar.viewfetcher;
 
 import org.hibernate.dialect.function.VarArgsSQLFunction;
+import org.hibernate.spatial.dialect.postgis.PostgisPG82Dialect;
 import org.hibernate.type.StringType;
 
-public class AmpPostgresDialect extends org.hibernate.spatial.dialect.postgis.PostgisDialect {
+public class AmpPostgresDialect extends PostgisPG82Dialect {
     private static final long serialVersionUID = 1L;
 
     

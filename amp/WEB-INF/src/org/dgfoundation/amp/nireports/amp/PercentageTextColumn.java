@@ -65,7 +65,7 @@ public class PercentageTextColumn extends AmpDifferentialColumn<PercentageTextCe
             res.add(new ReportRenderWarning(new NumberedTypedEntity(actWithNull), this.name, null, tp));
         }
         String query = String.format("SELECT %s, SUM(percentage) AS percentage FROM %s WHERE %s GROUP BY 1 HAVING sum(percentage) < 99.99 OR sum(percentage) > 100.01", "amp_activity_id", this.viewName, actFilteringQuery);
-        List<Object[]> rows = PersistenceManager.getSession().createSQLQuery(query).list();
+        List<Object[]> rows = PersistenceManager.getSession().createNativeQuery(query).list();
         for(Object[] row:rows)
         {
             long activityId = PersistenceManager.getLong(row[AMP_ACTIVITY_ID]);

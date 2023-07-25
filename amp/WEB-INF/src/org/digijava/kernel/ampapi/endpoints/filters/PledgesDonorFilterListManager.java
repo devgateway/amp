@@ -147,7 +147,7 @@ public final class PledgesDonorFilterListManager implements FilterListManager {
         String query = "SELECT grpId FROM v_all_organizations_with_roles "
                 + "WHERE roles like '%" + getDonorRoleId() + "%'";
         
-        List<Long> rows = (List<Long>) session.createSQLQuery(query).list().stream()
+        List<Long> rows = (List<Long>) session.createNativeQuery(query).list().stream()
                 .map(o -> Long.parseLong(o.toString()))
                 .collect(Collectors.toList());
         

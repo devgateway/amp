@@ -67,6 +67,7 @@ public class FieldVisibilityTag extends BodyTagSupport {
     
        ServletContext ampContext=pageContext.getServletContext();
        HttpSession session=pageContext.getSession();
+            System.out.println(session);
  try{
        AmpTreeVisibility ampTreeVisibility=FeaturesUtil.getAmpTreeVisibility(ampContext, session);
            if(ampTreeVisibility!=null)

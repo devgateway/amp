@@ -776,7 +776,7 @@ public class DbUtil {
         if (tableName == null || tableName.length() == 0)
             return ret;
 
-        List<Object[]> ls = PersistenceManager.getSession().createSQLQuery("select id, value from " + tableName).list();
+        List<Object[]> ls = PersistenceManager.getSession().createNativeQuery("select id, value from " + tableName).list();
         for (Object[] obj : ls) {
             KeyValue keyValue = new KeyValue(PersistenceManager.getString(obj[0]),
                     PersistenceManager.getString(obj[1]));

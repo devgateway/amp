@@ -109,11 +109,11 @@ public class MultilingualTests28 extends ReportsTestCase {
         {
             PersistenceManager.cleanupSession(session);
             session = PersistenceManager.getSession();
-            session.createSQLQuery("UPDATE amp_reports SET name = 'victim_report' WHERE amp_report_id = 54").executeUpdate();
-            session.createSQLQuery("DELETE FROM amp_content_translation WHERE object_id = 54 AND object_class like '%AmpReports'").executeUpdate();
-            session.createSQLQuery("INSERT INTO amp_content_translation(id, object_class, object_id, field_name, locale, translation) VALUES " + 
+            session.createNativeQuery("UPDATE amp_reports SET name = 'victim_report' WHERE amp_report_id = 54").executeUpdate();
+            session.createNativeQuery("DELETE FROM amp_content_translation WHERE object_id = 54 AND object_class like '%AmpReports'").executeUpdate();
+            session.createNativeQuery("INSERT INTO amp_content_translation(id, object_class, object_id, field_name, locale, translation) VALUES " + 
                         "(nextval('amp_content_translation_seq'), 'org.digijava.module.aim.dbentity.AmpReports', 54, 'name', 'en', 'victim_report')").executeUpdate();
-            session.createSQLQuery("INSERT INTO amp_content_translation(id, object_class, object_id, field_name, locale, translation) VALUES " + 
+            session.createNativeQuery("INSERT INTO amp_content_translation(id, object_class, object_id, field_name, locale, translation) VALUES " + 
                     "(nextval('amp_content_translation_seq'), 'org.digijava.module.aim.dbentity.AmpReports', 54, 'name', 'ru', 'дохлый отчет')").executeUpdate();
             PersistenceManager.cleanupSession(session);
         }

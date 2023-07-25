@@ -83,7 +83,7 @@ public class DbUtil {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select aci.* from amp_content_item aci "
                     + "where aci.isHomepage = true";
-            Query qry = session.createSQLQuery(queryString).addEntity(
+            Query qry = session.createNativeQuery(queryString).addEntity(
                     AmpContentItem.class);
             Iterator<AmpContentItem> itr = qry.list().iterator();
             if (itr.hasNext()) {

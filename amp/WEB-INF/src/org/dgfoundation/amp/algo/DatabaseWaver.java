@@ -32,7 +32,7 @@ public class DatabaseWaver implements Waver<Long>{
         if (in == null)
             return result;
         String query = this.query.replace("$", Util.toCSStringForIN(in));
-        List<?> ids = PersistenceManager.getSession().createSQLQuery(query).list();
+        List<?> ids = PersistenceManager.getSession().createNativeQuery(query).list();
         for(Object longAsObj:ids)
             result.add(PersistenceManager.getLong(longAsObj));
         return result;

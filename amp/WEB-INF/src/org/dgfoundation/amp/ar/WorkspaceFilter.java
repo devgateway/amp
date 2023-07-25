@@ -217,7 +217,7 @@ public final class WorkspaceFilter {
     public static boolean isActivityWithinWorkspace(long ampActivityId) {
         String str = getWorkspaceFilterQuery(TLSUtils.getRequest().getSession());
         String query = String.format("SELECT (%d IN (%s)) AS rs", ampActivityId, str);
-        java.util.List<?> res = PersistenceManager.getSession().createSQLQuery(query).list();
+        java.util.List<?> res = PersistenceManager.getSession().createNativeQuery(query).list();
         return (Boolean) res.get(0);
     }
 
@@ -248,11 +248,11 @@ public final class WorkspaceFilter {
      */
     public static Set<AmpTeam> getComputedRelatedWorkspaces() {
         String wsQuery = getWorkspaceFilterQuery(TLSUtils.getRequest().getSession());
-        List res = PersistenceManager.getSession().createSQLQuery(wsQuery).list();
+        List res = PersistenceManager.getSession().createNativeQuery(wsQuery).list();
         if (res != null && !res.isEmpty()) {
             String activitiesQuery = "select amp_team_id from amp_activity_Version where amp_activity_id IN (" +
                     Joiner.on(',').join(res) + ")";
-            List<Number> teamIds = PersistenceManager.getSession().createSQLQuery(activitiesQuery).list();
+            List<Number> teamIds = PersistenceManager.getSession().createNativeQuery(activitiesQuery).list();
             return TeamUtil.getRelatedTeamsForTeamsById(teamIds);
         }
 

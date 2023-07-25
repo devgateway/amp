@@ -61,7 +61,7 @@
     <!-- Limit JSF logging to DEBUG.  FINER and FINEST will not be logged -->
     <logger name="javax.enterprise.resource.webcontainer.jsf" level="INFO" />
 
-    <logger name="org.hibernate" level="ERROR" />
+    <logger name="org.hibernate" level="TRACE" />
 
     <logger name="net.sf.hibernate.cache" level="ERROR" />
 

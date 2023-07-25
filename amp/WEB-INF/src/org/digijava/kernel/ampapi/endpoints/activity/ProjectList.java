@@ -149,7 +149,7 @@ public class ProjectList {
 
             // for every workspace generate the workspace query to get the activities.
             final String query = WorkspaceFilter.getViewableActivitiesIdByTeams(teamMemberList);
-            viewableActivityIds = PersistenceManager.getSession().createSQLQuery(query)
+            viewableActivityIds = PersistenceManager.getSession().createNativeQuery(query)
                     .addScalar("amp_activity_id", LongType.INSTANCE).list();
         }
         return viewableActivityIds;

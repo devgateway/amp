@@ -77,11 +77,11 @@ public class RecreateFMEntries {
         measuresToRestore.addAll(MeasuresVisibility.allMeasures);        
         
         long measuresModuleId = PersistenceManager.getLong(
-                PersistenceManager.getSession().createSQLQuery("select mod.id from amp_modules_visibility mod JOIN amp_modules_visibility rep "
+                PersistenceManager.getRequestDBSession().createNativeQuery("select mod.id from amp_modules_visibility mod JOIN amp_modules_visibility rep "
                         + "ON lower(rep.name)='reporting' and rep.id = mod.parent WHERE lower(mod.name)='measures'")
                 .uniqueResult());
         
-        for(Object templateIdObj : PersistenceManager.getSession().createSQLQuery("select id from amp_templates_visibility").list()) {
+        for(Object templateIdObj : PersistenceManager.getRequestDBSession().createNativeQuery("select id from amp_templates_visibility").list()) {
             long templateId = PersistenceManager.getLong(templateIdObj);
             MeasuresVisibility mv = new MeasuresVisibility();
             

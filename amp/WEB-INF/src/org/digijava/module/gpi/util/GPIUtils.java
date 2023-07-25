@@ -337,7 +337,7 @@ public class GPIUtils {
     
     public static List<AmpGPISurveyQuestion> getQuestionsByCode(String code) {
         Session session = PersistenceManager.getSession();
-        Query query = session.createSQLQuery("SELECT * FROM amp_gpi_survey_question agsq WHERE amp_indicator_id = (SELECT amp_indicator_id FROM amp_gpi_survey_indicator agsi WHERE indicator_code like ?)")
+        Query query = session.createNativeQuery("SELECT * FROM amp_gpi_survey_question agsq WHERE amp_indicator_id = (SELECT amp_indicator_id FROM amp_gpi_survey_indicator agsi WHERE indicator_code like ?)")
                 .addEntity(AmpGPISurveyQuestion.class).setString(0, code);
         //List<AmpGPISurveyQuestion> list = new ArrayList<AmpGPISurveyQuestion>();
         return query.list();

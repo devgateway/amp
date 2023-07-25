@@ -367,7 +367,7 @@ public class GPIUseCase {
                 where += " AND aog.org_type IN (" + dt + ") ";
             }
 
-            Query query = session.createSQLQuery(selectQueryString + where + endQueryString);
+            Query query = session.createNativeQuery(selectQueryString + where + endQueryString);
             logger.debug(query.getQueryString());
             commonData = query.list();
         } catch (Exception e) {

@@ -503,7 +503,7 @@ public class DbUtil {
             session = PersistenceManager.getSession();
             //"from " + User.class.getName() + " rs where sha1(concat(cast(rs.email as byte),rs.id))=:hash and rs.emailVerified=false"; 
             String queryString = "select ID from DG_USER where sha1((cast(EMAIL as bytea) || cast(cast(ID as text)as bytea)))=:hash and EMAIL_VERIFIED=false";
-            Query query = session.createSQLQuery(queryString);
+            Query query = session.createNativeQuery(queryString);
             query.setString("hash", id);
             iduser = (BigInteger) query.uniqueResult();
             if (iduser!= null){

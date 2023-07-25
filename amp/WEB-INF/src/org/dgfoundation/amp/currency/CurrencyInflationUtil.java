@@ -49,7 +49,7 @@ public class CurrencyInflationUtil {
     }
     
     public static void deleteAllInflationRates() {
-        PersistenceManager.getSession().createSQLQuery("DELETE FROM amp_inflation_rates WHERE 1=1").executeUpdate();
+        PersistenceManager.getSession().createNativeQuery("DELETE FROM amp_inflation_rates WHERE 1=1").executeUpdate();
     }
     
     public static List<AmpCurrency> getConstantAmpCurrencies() {

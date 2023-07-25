@@ -465,7 +465,7 @@ public class QueryUtil {
     
         Map<Long, LocationSkeleton> locations = LocationSkeleton.populateSkeletonLocationsList();
         long parentLocationId = PersistenceManager.getLong(PersistenceManager.getSession()
-                .createSQLQuery("SELECT acvl.id FROM amp_category_value_location acvl WHERE acvl.parent_location IS NULL AND location_name=(" + 
+                .createNativeQuery("SELECT acvl.id FROM amp_category_value_location acvl WHERE acvl.parent_location IS NULL AND location_name=(" + 
                         "select country_name from DG_COUNTRIES WHERE iso='" + FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY) + "')")
                         .list().get(0));
         

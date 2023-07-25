@@ -200,7 +200,7 @@ public class ConfigHelper {
 
         List<Object[]> ls = null;
         try {
-            ls = PersistenceManager.getSession().createSQLQuery("select id, value from " + tableName).list();
+            ls = PersistenceManager.getSession().createNativeQuery("select id, value from " + tableName).list();
         } catch (Exception e) {
             return null;
         }

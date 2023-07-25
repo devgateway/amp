@@ -328,7 +328,7 @@ public class PIUseCase {
             DetachedCriteria liveActivityVersions = DetachedCriteria.forClass(AmpActivity.class).setProjection(Projections.property("ampActivityId"));
 
             // TODO: we need Hibernate 4 to use Criteria Queries for this (needs nested subqueries with multiple params)
-            SQLQuery latestSurveysOnlySQL = session.createSQLQuery("SELECT s.amp_ahsurvey_id AS survey_ids FROM "
+            SQLQuery latestSurveysOnlySQL = session.createNativeQuery("SELECT s.amp_ahsurvey_id AS survey_ids FROM "
                     + "(select max(survey_date) AS max_date,amp_activity_id from amp_ahsurvey group by amp_activity_id) AS r "
                     + "INNER JOIN amp_ahsurvey s ON s.amp_activity_id=r.amp_activity_id AND s.survey_date=r.max_date" + " UNION "
                     + "select amp_ahsurvey_id AS survey_ids from amp_ahsurvey where survey_date is null and amp_activity_id "

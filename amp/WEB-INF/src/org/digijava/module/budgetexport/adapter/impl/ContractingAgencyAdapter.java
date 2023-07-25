@@ -23,7 +23,7 @@ public class ContractingAgencyAdapter implements MappingEntityAdapter {
     public List<HierarchyListable> getAllObjects() throws DgException {
         Session sess = PersistenceManager.getRequestDBSession();
         StringBuilder queryStr = new StringBuilder("select distinct contracting.amp_org_id from v_contracting_agency contracting");
-        SQLQuery q = sess.createSQLQuery(queryStr.toString());
+        SQLQuery q = sess.createNativeQuery(queryStr.toString());
         List<Long> ids = q.list();
 
         StringBuilder objQueryStr = new StringBuilder("from ");
@@ -40,7 +40,7 @@ public class ContractingAgencyAdapter implements MappingEntityAdapter {
     public int getObjectCount() throws DgException {
         Session sess = PersistenceManager.getRequestDBSession();
         StringBuilder queryStr = new StringBuilder("select distinct contracting.amp_org_id from v_contracting_agency contracting");
-        SQLQuery q = sess.createSQLQuery(queryStr.toString());
+        SQLQuery q = sess.createNativeQuery(queryStr.toString());
         List<Long> ids = q.list();
         return ids != null?ids.size():0;
     }

@@ -226,7 +226,7 @@ public class AMPStartupListener extends HttpServlet implements
      */
     protected void runCacheRefreshingQuery(String funcName, String what) {
         String query = String.format("SELECT %s() FROM (select 1) AS dual", funcName);
-        java.util.List<?> shouldBe1 = PersistenceManager.getSession().createSQLQuery(query).list(); // force recreation of the location cached at each AMP startup
+        java.util.List<?> shouldBe1 = PersistenceManager.getSession().createNativeQuery(query).list(); // force recreation of the location cached at each AMP startup
         
         if (shouldBe1.size() != 1)
             throw new Error("recreating AMP " + what + " caches failed");

@@ -96,7 +96,7 @@ public class DbHelper {
     public static ArrayList<Long> getInActivities(String query)
             throws Exception {
         Session session = PersistenceManager.getRequestDBSession();
-        List<Object> qResult = session.createSQLQuery(query).list();
+        List<Object> qResult = session.createNativeQuery(query).list();
         ArrayList<Long> result = new ArrayList<Long>(qResult.size());
         for (Object obj : qResult) {
             result.add(PersistenceManager.getLong(obj));
@@ -127,7 +127,7 @@ public class DbHelper {
     public static ArrayList<Long> getInActivitiesLong(String query)
             throws Exception {
         Session session = PersistenceManager.getRequestDBSession();
-        ArrayList<Long> result = (ArrayList<Long>) session.createSQLQuery(query).list();
+        ArrayList<Long> result = (ArrayList<Long>) session.createNativeQuery(query).list();
         return result;
     }
     

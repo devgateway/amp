@@ -33,7 +33,7 @@ public final class GisUtils {
         
         final String performanceIssuesQuery = "SELECT amp_activity_id FROM v_performance_alert_level";
         
-        List<String> actIds = session.createSQLQuery(performanceIssuesQuery)
+        List<String> actIds = session.createNativeQuery(performanceIssuesQuery)
                             .addScalar("amp_activity_id", StandardBasicTypes.STRING)
                              .list();
         

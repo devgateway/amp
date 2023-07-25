@@ -80,7 +80,7 @@ public class DigiSchemaExport {
             Metadata metaData = new MetadataSources(standardRegistry).getMetadataBuilder().build();
             Collection<PersistentClass> entityBindings = metaData.getEntityBindings();
             Iterator<PersistentClass> classIter = entityBindings.iterator();
-
+            System.out.println(classIter);
             if (commandLineParams.containsKey("-names")) {
                 logger.info("Generating comma-separated table names");
 

@@ -123,7 +123,7 @@ public class ActivityUtil {
               }});
       String queryString = "select " + rewrittenColumns + " from amp_components ac " +
             "where (ac.amp_activity_id=:actId)";
-      Query qry = session.createSQLQuery(queryString).addEntity(AmpComponent.class);
+      Query qry = session.createNativeQuery(queryString).addEntity(AmpComponent.class);
       qry.setParameter("actId", actId, LongType.INSTANCE);
       col = qry.list();
     }
@@ -419,7 +419,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 
   public static List<AmpActivityLocation> getActivityLocations(Long activityId) {
       String queryString = "select locs.* from amp_activity_location locs where (locs.amp_activity_id=:actId) ";
-      return PersistenceManager.getSession().createSQLQuery(queryString).addEntity(AmpActivityLocation.class)
+      return PersistenceManager.getSession().createNativeQuery(queryString).addEntity(AmpActivityLocation.class)
               .setParameter("actId", activityId, LongType.INSTANCE).list();
   }
 
@@ -543,7 +543,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 
   public static List<AmpActivitySector> getAmpActivitySectors(Long actId) {
       String queryString = "select a.* from amp_activity_sector a " + "where a.amp_activity_id=:actId";
-      return PersistenceManager.getSession().createSQLQuery(queryString).addEntity(AmpActivitySector.class)
+      return PersistenceManager.getSession().createNativeQuery(queryString).addEntity(AmpActivitySector.class)
               .setParameter("actId", actId, LongType.INSTANCE).list();
   }
 
@@ -562,7 +562,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                 "inner join amp_org_role aor on (aor.role = ar.amp_role_id) " +
                 "inner join amp_activity aa on (aa.amp_activity_id = aor.activity) " +
                 "where (aa.amp_activity_id=:actId) and (aor.amp_org_role_id=:orgRoleId)";
-          Query qry = session.createSQLQuery(queryString).addEntity(AmpRole.class);
+          Query qry = session.createNativeQuery(queryString).addEntity(AmpRole.class);
           qry.setParameter("actId", actId, LongType.INSTANCE);
           qry.setParameter("orgRoleId", orgRoleId, LongType.INSTANCE);
           if ((qry.list() != null) && (qry.list().size()>0)) {
@@ -606,7 +606,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
           String queryString = "select " + rewrittenColumns + " from amp_organisation ao " +                "inner join amp_org_role aor on (aor.organisation = ao.amp_org_id) " +
                 "inner join amp_activity aa on (aa.amp_activity_id = aor.activity) " +
                 "where (aa.amp_activity_id=:actId) and (aor.amp_org_role_id=:orgRoleId)";
-          Query qry = session.createSQLQuery(queryString).addEntity(AmpOrganisation.class);
+          Query qry = session.createNativeQuery(queryString).addEntity(AmpOrganisation.class);
           qry.setParameter("actId", actId, LongType.INSTANCE);
           qry.setParameter("orgRoleId", orgRoleId, LongType.INSTANCE);
           if ((qry.list() != null) && (qry.list().size()>0)) {
@@ -723,7 +723,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         logger.info(" inside getting the old activities.....");
         try {
 
-            List result = session.createSQLQuery("Select * from ( select amp_activity_id, amp_activity_group_id, date_updated, rank() over (PARTITION BY amp_activity_group_id order by date_updated desc) as rank from amp_activity_version order by amp_activity_group_id) as SQ where sq.rank > "+size).list();
+            List result = session.createNativeQuery("Select * from ( select amp_activity_id, amp_activity_group_id, date_updated, rank() over (PARTITION BY amp_activity_group_id order by date_updated desc) as rank from amp_activity_version order by amp_activity_group_id) as SQ where sq.rank > "+size).list();
             Iterator iter = result.iterator();
             List<Long> idActivities = new ArrayList<Long>();
             while(iter.hasNext()){
@@ -985,7 +985,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                     }});
         }
         else {
-            res = PersistenceManager.getSession().createSQLQuery(usedQuery).list();
+            res = PersistenceManager.getSession().createNativeQuery(usedQuery).list();
         }
         for(Object aaa:res)
         {
@@ -1749,7 +1749,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             if (!crossTeamValidationEnabled)
                 query += "  AND (a.amp_team_id = " + tm.getTeamId() + ")";
             
-            List<BigInteger> validated_activity_ids = PersistenceManager.getSession().createSQLQuery(query).list();
+            List<BigInteger> validated_activity_ids = PersistenceManager.getSession().createNativeQuery(query).list();
             for(BigInteger bi:validated_activity_ids)
                 result.add(bi.longValue());
             return result;
@@ -2019,7 +2019,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 
         Session session = PersistenceManager.getRequestDBSession();
 
-        List<Long> validatedActivityIds = (List<Long>) session.createSQLQuery(filterQuery)
+        List<Long> validatedActivityIds = (List<Long>) session.createNativeQuery(filterQuery)
                 .addScalar("amp_activity_id", StandardBasicTypes.LONG)
                 .list();
 
@@ -2053,7 +2053,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             return Collections.emptyList();
         }
 
-        List<Long> result = PersistenceManager.getSession().createSQLQuery(query)
+        List<Long> result = PersistenceManager.getSession().createNativeQuery(query)
                 .addScalar("amp_activity_id", LongType.INSTANCE).list();
 
         return result;

@@ -489,7 +489,7 @@ public class DbUtil {
         String bodyOther = null; // translation in any language which is not English and is not the requested one
     
         String stat = String.format("SELECT body, language FROM dg_editor WHERE site_id = '%s' AND editor_key = '%s'", site.getSiteId(), editorKey);
-        List<Object[]> res = PersistenceManager.getSession().createSQLQuery(stat).list();
+        List<Object[]> res = PersistenceManager.getSession().createNativeQuery(stat).list();
         for(Object[] entry:res)
         {
             String editorBody = PersistenceManager.getString(entry[0]);

@@ -190,7 +190,7 @@ public final class OrganizationFilterListManager implements FilterListManager {
         Session session = PersistenceManager.getSession();
         String query = "SELECT orgId, orgName, orgAcronym, grpId, roles FROM v_all_organizations_with_roles "
                 + "ORDER BY orgname";
-        List<Object[]> rows = session.createSQLQuery(query).list();
+        List<Object[]> rows = session.createNativeQuery(query).list();
 
         ArrayList<OrganizationSkeleton> orgsWithRoles = new ArrayList<OrganizationSkeleton>();
         for (Object[] row : rows) {

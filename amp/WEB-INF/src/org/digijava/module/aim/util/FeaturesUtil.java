@@ -49,6 +49,7 @@ import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.type.IntegerType;
+import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
 
 /**
@@ -1186,9 +1187,11 @@ public class FeaturesUtil {
      * @throws HibernateException
      */
     public static AmpTemplatesVisibility getTemplateVisibility(Long id) {
-        AmpTemplatesVisibility ft = (AmpTemplatesVisibility) PersistenceManager.getSession().load(AmpTemplatesVisibility.class, id);
+        AmpTemplatesVisibility ft = PersistenceManager.getRequestDBSession().load(AmpTemplatesVisibility.class, id);
+        System.out.println(ft);
         TreeSet<AmpTemplatesVisibility> mySet = new TreeSet<AmpTemplatesVisibility>(FeaturesUtil.ALPHA_ORDER);
         mySet.addAll(PersistenceManager.getSession().createQuery("from " + AmpModulesVisibility.class.getName()).list());
+        System.out.println(mySet);
         ft.setAllItems(mySet);
         return ft;
     }
@@ -1406,20 +1409,21 @@ public class FeaturesUtil {
     public static AmpFieldsVisibility getFieldVisibility(String fieldName) {
 
         Session session = null;
-        Query q = null;
-        Collection c = null;
+        Query<AmpFieldsVisibility> q = null;
+        Object c = null;
         AmpFieldsVisibility id = null;
 
         try {
             session = PersistenceManager.getSession();
-            String queryString = new String();
+            String queryString;
             queryString = "select a from " + AmpFieldsVisibility.class.getName()
-            + " a where (a.name=:fieldName) ";
-            q = session.createQuery(queryString);
+            + " a where a.name=:fieldName ";
+            q = session.createQuery(queryString, AmpFieldsVisibility.class);
             q.setParameter("fieldName", fieldName, StringType.INSTANCE);
-            c = q.list();
-            if(c.size()!=0)
-                id=(AmpFieldsVisibility) c.iterator().next();
+            id = q.getSingleResult();
+//            System.out.println(c);
+//
+            System.out.println(id);
 
         }
         catch (Exception ex) {
@@ -1828,12 +1832,13 @@ public class FeaturesUtil {
         Query qry;      
         String qryStr;
         try {
-            session = PersistenceManager.getSession();
-            AmpFeaturesVisibility feature = (AmpFeaturesVisibility) session.load(AmpFeaturesVisibility.class, featureId);
+            session = PersistenceManager.getRequestDBSession();
+            AmpFeaturesVisibility feature = session.load(AmpFeaturesVisibility.class, featureId);
             qryStr = "select f from " + AmpFieldsVisibility.class.getName() + " f  where f.name = :fieldName"; ;
             qry = session.createQuery(qryStr);
-            qry.setString("fieldName", fieldName);
+            qry.setParameter("fieldName", fieldName,StringType.INSTANCE);
             AmpFieldsVisibility field = (AmpFieldsVisibility) qry.uniqueResult();
+            System.out.println(field);
             if (field != null){             
                 feature.getOrCreateItems().add(field);
                 field.setParent(feature);
@@ -2148,7 +2153,7 @@ public class FeaturesUtil {
     {
         String qryStr = "select gs.globalSettingsValue from " + AmpGlobalSettings.class.getName() +
                     " gs where gs.globalSettingsName = 'Default Country' ";
-        Query qry = PersistenceManager.getSession().createQuery(qryStr); 
+        Query qry = PersistenceManager.getRequestDBSession().createQuery(qryStr);
         String defaultCountryIso = (String) qry.uniqueResult();
         return defaultCountryIso;
     }
@@ -2227,15 +2232,15 @@ public class FeaturesUtil {
             String queryString = "select fv from " +AmpModulesVisibility.class.getName() +
             " mv inner join mv.items fv "+
             " inner join fv.templates tmpl" +
-            " where (mv.name=:moduleName) and (fv.name=:featureName)" +
-            " and (tmpl.id=:defTemplId)";
+            " where mv.name=:moduleName and fv.name=:featureName" +
+            " and tmpl.id=:defTemplId";
             Query qry = session.createQuery(queryString);
-            qry.setString("featureName", featureName);
-            qry.setString("moduleName", moduleName);
-            qry.setLong("defTemplId", defTemplId);
-            if (qry.list() != null && qry.list().size() > 0) {
-                feature = (AmpFeaturesVisibility) qry.uniqueResult();
-            }
+            qry.setParameter("featureName", featureName,StringType.INSTANCE);
+            qry.setParameter("moduleName", moduleName, StringType.INSTANCE);
+            qry.setParameter("defTemplId", defTemplId, LongType.INSTANCE);
+//            if (qry.list() != null && qry.list().size() > 0) {
+            feature = (AmpFeaturesVisibility) qry.uniqueResult();
+//            }
 
 
         } catch (Exception e) {

@@ -139,7 +139,7 @@ public class DbUtil {
             session = PersistenceManager.getSession();
             String queryString = "SELECT s.* FROM amp_sector s "
                     + "WHERE s.parent_sector_id =:id " ;
-             qry = session.createSQLQuery(queryString).addEntity(AmpSector.class);
+             qry = session.createNativeQuery(queryString).addEntity(AmpSector.class);
              qry.setParameter("id", id, LongType.INSTANCE);
              col = qry.list();
         } catch (Exception ex) {
@@ -522,7 +522,7 @@ public class DbUtil {
 
     public static ArrayList<BigInteger> getInActivities(String query) throws Exception{
         Session session = PersistenceManager.getRequestDBSession();
-        ArrayList<BigInteger> result = (ArrayList<BigInteger>) session.createSQLQuery("select amp_activity_id from amp_activity where " + query).list();
+        ArrayList<BigInteger> result = (ArrayList<BigInteger>) session.createNativeQuery("select amp_activity_id from amp_activity where " + query).list();
         return result;
     }
     

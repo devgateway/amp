@@ -1182,7 +1182,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
                 SQLUtils.insert(conn, "amp_measures", "measureid", "amp_measures_seq", Arrays.asList("measurename", "aliasname", "type", "description"), values);
                 MeasuresVisibility.resetMeasuresList();
             }
-            return toBeAdded.stream().map(z -> z.toString()).collect(Collectors.toSet());
+            return toBeAdded.stream().map(Object::toString).collect(Collectors.toSet());
         });
     }
     

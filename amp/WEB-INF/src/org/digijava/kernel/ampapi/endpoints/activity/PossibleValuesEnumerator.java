@@ -176,7 +176,7 @@ public class PossibleValuesEnumerator {
 
     private Timestamp getLastModificationDateForEntities() {
         return (Timestamp) PersistenceManager.getSession()
-                .createSQLQuery("SELECT max(operation_time) FROM amp_offline_changelog ")
+                .createNativeQuery("SELECT max(operation_time) FROM amp_offline_changelog ")
                 .uniqueResult();
     }
 

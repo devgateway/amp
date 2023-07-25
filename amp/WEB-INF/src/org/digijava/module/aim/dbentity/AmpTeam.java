@@ -210,9 +210,9 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, FilterD
         return ampTeamId.compareTo(((AmpTeam)o).getAmpTeamId());
     }
     
-    public String toString() {
-        return name;
-    }
+//    public String toString() {
+//        return name;
+//    }
 
     public Object getIdentifier() {
         return this.getAmpTeamId();

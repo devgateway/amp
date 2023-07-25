@@ -20,6 +20,7 @@ import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.query.Query;
 import org.hibernate.Session;
+import org.hibernate.type.StringType;
 
 /**
  * List of utility methods to operate with effectiveness indicators
@@ -177,13 +178,13 @@ public class AidEffectivenessIndicatorUtil {
 
         String queryStr = "delete from amp_modules_templates where module in " +
                 "(select id from amp_modules_visibility where name = :name)";
-        Query query = session.createSQLQuery(queryStr);
+        Query query = session.createNativeQuery(queryStr);
         query.setString("name", AID_EFFECTIVENESS_INDICATOR_VISIBILITY_PREFIX + indicator.getFmName());
         query.executeUpdate();
 
 
         queryStr = "delete from amp_modules_visibility where name = :name";
-        query = session.createSQLQuery(queryStr);
+        query = session.createNativeQuery(queryStr);
         query.setString("name", AID_EFFECTIVENESS_INDICATOR_VISIBILITY_PREFIX + indicator.getFmName());
         query.executeUpdate();
     }
@@ -195,7 +196,7 @@ public class AidEffectivenessIndicatorUtil {
     public static void createModulesVisibility(String indicatorName) {
         Session session = PersistenceManager.getSession();
         String queryStr = "select count(*) from amp_modules_visibility where lower (name) = :name";
-        Query query = session.createSQLQuery(queryStr);
+        Query query = session.createNativeQuery(queryStr);
         query.setString("name", (AID_EFFECTIVENESS_INDICATOR_VISIBILITY_PREFIX + indicatorName).toLowerCase());
         int count = Integer.parseInt(query.uniqueResult().toString());
 
@@ -203,13 +204,13 @@ public class AidEffectivenessIndicatorUtil {
         if (count == 0) {
             queryStr = "select parent from amp_modules_visibility values where name like '"
                     + AID_EFFECTIVENESS_INDICATOR_VISIBILITY_PREFIX + "%'";
-            query = session.createSQLQuery(queryStr);
+            query = session.createNativeQuery(queryStr);
             query.setMaxResults(1);
             List resultList = query.list();
             // if parent exists
             if (resultList != null && resultList.size() > 0) {
                 queryStr = "insert into amp_modules_visibility values(nextval('amp_modules_visibility_seq'), :name, '', 't', :parent)";
-                query = session.createSQLQuery(queryStr);
+                query = session.createNativeQuery(queryStr);
                 query.setString("name", AID_EFFECTIVENESS_INDICATOR_VISIBILITY_PREFIX + indicatorName);
                 query.setLong("parent", Long.parseLong(resultList.get(0).toString()));
                 query.executeUpdate();
@@ -226,9 +227,9 @@ public class AidEffectivenessIndicatorUtil {
         Session session = PersistenceManager.getSession();
 
         String queryStr = "update amp_modules_visibility set name = :name where name = :oldName";
-        Query query = session.createSQLQuery(queryStr);
-        query.setString("name", AID_EFFECTIVENESS_INDICATOR_VISIBILITY_PREFIX +  indicator.getFmName());
-        query.setString("oldName", AID_EFFECTIVENESS_INDICATOR_VISIBILITY_PREFIX + oldIndicatorName);
+        Query query = session.createNativeQuery(queryStr);
+        query.setParameter("name", AID_EFFECTIVENESS_INDICATOR_VISIBILITY_PREFIX +  indicator.getFmName(), StringType.INSTANCE);
+        query.setParameter("oldName", AID_EFFECTIVENESS_INDICATOR_VISIBILITY_PREFIX + oldIndicatorName, StringType.INSTANCE);
         query.executeUpdate();
     }
 
@@ -243,7 +244,7 @@ public class AidEffectivenessIndicatorUtil {
                 "    a.amp_indicator_option_id = o.amp_indicator_option_id\n" +
                 "    and o.amp_indicator_id=:indicatorId";
 
-        Query query = session.createSQLQuery(queryStr);
+        Query query = session.createNativeQuery(queryStr);
         query.setParameter("indicatorId", indicatorId);
 
         long count = ((Number) query.uniqueResult()).longValue();
@@ -259,7 +260,7 @@ public class AidEffectivenessIndicatorUtil {
                 "where \n" +
                 "    a.amp_indicator_option_id=:optionId";
 
-        Query query = session.createSQLQuery(queryStr);
+        Query query = session.createNativeQuery(queryStr);
         query.setParameter("optionId", optionId);
 
         long count = ((Number) query.uniqueResult()).longValue();

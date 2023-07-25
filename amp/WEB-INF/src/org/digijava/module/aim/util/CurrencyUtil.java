@@ -824,7 +824,7 @@ public class CurrencyUtil {
             return;
         }
         String codes = Util.toCSString(currencyCode);
-        PersistenceManager.getSession().createSQLQuery(String.format("DELETE FROM amp_currency_rate r "
+        PersistenceManager.getSession().createNativeQuery(String.format("DELETE FROM amp_currency_rate r "
                 + " WHERE r.from_currency_code in (%s) OR r.to_currency_code in (%s)", codes, codes)).executeUpdate();
     }
 

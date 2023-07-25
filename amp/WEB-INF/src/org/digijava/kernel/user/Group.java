@@ -85,9 +85,9 @@ public class Group
         this.key = key;
     }
 
-    public String toString() {
-        return "[" + this.getClass().getName() + "]" + this.name;
-    }
+//    public String toString() {
+//        return "[" + this.getClass().getName() + "]" + this.name;
+//    }
 
     public Site getSite() {
         return site;

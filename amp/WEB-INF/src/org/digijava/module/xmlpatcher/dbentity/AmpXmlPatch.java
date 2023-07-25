@@ -6,9 +6,7 @@
 package org.digijava.module.xmlpatcher.dbentity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import org.digijava.module.xmlpatcher.util.XmlPatcherConstants;
 
@@ -46,10 +44,10 @@ public class AmpXmlPatch implements Serializable, Comparable<AmpXmlPatch> {
     /**
      * The execution logs for this patch, if any
      */
-    protected List<AmpXmlPatchLog> logs;
+    protected Set<AmpXmlPatchLog> logs= new LinkedHashSet<>();
 
     public AmpXmlPatch() {
-        logs=new ArrayList<AmpXmlPatchLog>();
+        logs= new LinkedHashSet<>(new ArrayList<AmpXmlPatchLog>());
     }
 
     /**
@@ -101,15 +99,15 @@ public class AmpXmlPatch implements Serializable, Comparable<AmpXmlPatch> {
         this.state = state;
     }
 
-    public List<AmpXmlPatchLog> getLogs() {
-        if (logs!=null){ 
-            return logs;
+    public Set<AmpXmlPatchLog> getLogs() {
+        if (logs == null) {
+            logs = new LinkedHashSet<>();
         }
-        return new ArrayList<AmpXmlPatchLog>();
+        return logs;
     }
 
-    public void setLogs(List<AmpXmlPatchLog> logs) {
-        this.logs = logs;
+    public void setLogs(Set<AmpXmlPatchLog> logs) {
+        this.logs =  logs;
     }
 
     @Override

@@ -320,17 +320,14 @@ public final class XmlPatcherUtil {
      */
     public static void addLogToPatch(AmpXmlPatch p, AmpXmlPatchLog log) {
         Session sess = null;
-        Transaction tx = null;
 
         try {
-            sess = PersistenceManager.getSession();
-//beginTransaction();
-            AmpXmlPatch lazyPatch = (AmpXmlPatch) sess.load(AmpXmlPatch.class,
+            sess = PersistenceManager.getRequestDBSession();
+            AmpXmlPatch lazyPatch = sess.load(AmpXmlPatch.class,
                     p.getPatchId());
             log.setPatch(lazyPatch);
             lazyPatch.getLogs().add(log);
             sess.saveOrUpdate(lazyPatch);
-            //tx.commit();
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             throw new RuntimeException(e);

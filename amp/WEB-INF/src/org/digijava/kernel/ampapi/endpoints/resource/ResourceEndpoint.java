@@ -24,7 +24,6 @@ import javax.ws.rs.core.Response;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.sun.jersey.core.header.FormDataContentDisposition;
-import com.sun.jersey.multipart.FormDataParam;
 
 import org.apache.commons.io.FileUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.APIWorkspaceMemberFieldList;
@@ -42,6 +41,7 @@ import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -184,53 +184,53 @@ public class ResourceEndpoint {
         return new ResourceImporter().createResource(resource.getMap()).getResult();
     }
 
-    @PUT
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_OPTIONAL},
-            id = "createResourceWithDoc", ui = false)
-    @ApiOperation(value = "Create new web link or document resource.",
-            notes = "Returns brief representation of resource.\n\n"
-                    + "<h3>Sample resource parameter:</h3><pre>\n"
-                    + "{\n"
-                    + "  \"title\": \"Resource title\",\n"
-                    + "  \"description\": \"Resource description\",\n"
-                    + "  \"note\": \"Resource note\"\n"
-                    + "}\n"
-                    + "</pre>")
-    @ApiResponses({
-            @ApiResponse(code = HttpServletResponse.SC_OK, response = AmpResource.class,
-                    message = "the brief representationresource"),
-            @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse_File-or-Link",
-                    message = "error if invalid configuration is received")})
-    @JsonView({ResourceView.File.class, ResourceView.Link.class})
-    public JsonApiResponse<AmpResource> createDocResource(
-            @FormDataParam("resource") @ApiParam(value = "resource configuration", type = "SwaggerResource")
-                    SwaggerResource resource,
-            @FormDataParam("file") InputStream uploadedInputStream,
-            @FormDataParam("file") FormDataContentDisposition fileDetail) {
-
-        if (resource == null) {
-            throw new ApiRuntimeException(Response.Status.BAD_REQUEST, ApiError.toError(
-                    "Parameter 'resource' is not specified or Content-Type for 'resource' is wrong."));
-        }
-
-        File file = null;
-        JerseyFileAdapter formFile = null;
-        try {
-            if (uploadedInputStream != null) {
-                file = File.createTempFile("createResourceWithDoc", null);
-                FileUtils.copyInputStreamToFile(uploadedInputStream, file);
-                formFile = new JerseyFileAdapter(fileDetail, file);
-            }
-            return new ResourceImporter().createResource(resource.getMap(), formFile).getResult();
-        } catch (IOException e) {
-            logger.error("Failed to process file.", e);
-            throw new ApiRuntimeException(Response.Status.BAD_REQUEST,
-                    ApiError.toError("Failed to process 'file' parameter."));
-        } finally {
-            FileUtils.deleteQuietly(file);
-        }
-    }
+//    @PUT
+//    @Consumes(MediaType.MULTIPART_FORM_DATA)
+//    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+//    @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_OPTIONAL},
+//            id = "createResourceWithDoc", ui = false)
+//    @ApiOperation(value = "Create new web link or document resource.",
+//            notes = "Returns brief representation of resource.\n\n"
+//                    + "<h3>Sample resource parameter:</h3><pre>\n"
+//                    + "{\n"
+//                    + "  \"title\": \"Resource title\",\n"
+//                    + "  \"description\": \"Resource description\",\n"
+//                    + "  \"note\": \"Resource note\"\n"
+//                    + "}\n"
+//                    + "</pre>")
+//    @ApiResponses({
+//            @ApiResponse(code = HttpServletResponse.SC_OK, response = AmpResource.class,
+//                    message = "the brief representationresource"),
+//            @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse_File-or-Link",
+//                    message = "error if invalid configuration is received")})
+//    @JsonView({ResourceView.File.class, ResourceView.Link.class})
+//    public JsonApiResponse<AmpResource> createDocResource(
+//            @FormDataParam("resource") @ApiParam(value = "resource configuration", type = "SwaggerResource")
+//                    SwaggerResource resource,
+//            @FormDataParam("file") InputStream uploadedInputStream,
+//            @FormDataParam("file") FormDataContentDisposition fileDetail) {
+//
+//        if (resource == null) {
+//            throw new ApiRuntimeException(Response.Status.BAD_REQUEST, ApiError.toError(
+//                    "Parameter 'resource' is not specified or Content-Type for 'resource' is wrong."));
+//        }
+//
+//        File file = null;
+//        JerseyFileAdapter formFile = null;
+//        try {
+//            if (uploadedInputStream != null) {
+//                file = File.createTempFile("createResourceWithDoc", null);
+//                FileUtils.copyInputStreamToFile(uploadedInputStream, file);
+//                formFile = new JerseyFileAdapter(fileDetail, file);
+//            }
+//            return new ResourceImporter().createResource(resource.getMap(), formFile).getResult();
+//        } catch (IOException e) {
+//            logger.error("Failed to process file.", e);
+//            throw new ApiRuntimeException(Response.Status.BAD_REQUEST,
+//                    ApiError.toError("Failed to process 'file' parameter."));
+//        } finally {
+//            FileUtils.deleteQuietly(file);
+//        }
+//    }
 
 }

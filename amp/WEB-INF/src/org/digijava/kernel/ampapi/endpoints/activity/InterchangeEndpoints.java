@@ -367,7 +367,6 @@ public class InterchangeEndpoints {
     }
 
     @POST
-    @Path("/")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = {AuthRule.AUTHENTICATED, AuthRule.AMP_OFFLINE_OPTIONAL}, id = "addProject", ui = false)
     @ApiOperation(

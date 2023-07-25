@@ -55,6 +55,16 @@ public class AmpXmlPatchLog implements Serializable {
      */
     protected Long elapsed;
 
+    public Integer getIdx() {
+        return idx;
+    }
+
+    public void setIdx(Integer idx) {
+        this.idx = idx;
+    }
+
+    protected Integer idx;
+
     /**
      * Appends a string to the log stringbuffer
      * 

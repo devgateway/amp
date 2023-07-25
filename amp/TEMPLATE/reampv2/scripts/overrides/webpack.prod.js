@@ -8,6 +8,15 @@ const override = config => {
   // eslint-disable-next-line global-require
   config.plugins.push(new ModuleFederationPlugin(require('../../module-federation.config')));
 
+  config.output = {
+    // Make sure to use [name] or [id] in output.filename
+    //  when using multiple entry points
+    ...config.output,
+    publicPath: '/TEMPLATE/reampv2/build/',
+    filename: '[name].bundle.js',
+    chunkFilename: '[id].bundle.js'
+  };
+
   config.module.rules = [
     ...config.module.rules,
     {

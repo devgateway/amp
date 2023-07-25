@@ -21,26 +21,26 @@ import javax.persistence.*;
 @Entity
 @Table(name = "AMP_FIELDS_VISIBILITY")
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-
+@SequenceGenerator(name = "AMP_FIELDS_VISIBILITY_SEQ", sequenceName = "amp_fields_visibility_seq", allocationSize = 1)
 public class AmpFieldsVisibility extends AmpObjectVisibility implements Serializable{
     
         
     private static final long serialVersionUID = 1255296454545642749L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_FIELDS_VISIBILITY_SEQ")
-    @SequenceGenerator(name = "AMP_FIELDS_VISIBILITY_SEQ", sequenceName = "amp_fields_visibility_seq", allocationSize = 1)
-    @Column(name = "id")
-    private Long id;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_FIELDS_VISIBILITY_SEQ")
+//    @SequenceGenerator(name = "AMP_FIELDS_VISIBILITY_SEQ", sequenceName = "amp_fields_visibility_seq", allocationSize = 1)
+//    @Column(name = "id")
+//    private Long id;
+//
+//    @Column(name = "name")
+//    private String name;
 
-    @Column(name = "name")
-    private String name;
-
-    @Column(name = "description")
-    private String description;
-
-    @Column(name = "hasLevel")
-    private Boolean hasLevel;
+//    @Column(name = "description")
+//    private String description;
+//
+//    @Column(name = "hasLevel")
+//    private Boolean hasLevel;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent")
@@ -55,19 +55,17 @@ public class AmpFieldsVisibility extends AmpObjectVisibility implements Serializ
     private Set<AmpTemplatesVisibility> templates;
     
     public String getVisible() {
-        return templates.contains(parent.getParent().getParent())?"true":"false";
+        return templates.contains(super.parent.getParent().getParent())?"true":"false";
     }
 
     public AmpTemplatesVisibility getTemplate() {
-        return parent.getTemplate();
+        return super.parent.getTemplate();
     } 
     
     public boolean isVisibleTemplateObj(AmpTemplatesVisibility aObjVis){
-        for(Iterator it=aObjVis.getFields().iterator();it.hasNext();)
-        {
-            AmpFieldsVisibility x=(AmpFieldsVisibility) it.next();
-            if(x.getId().compareTo(id)==0) return true;
-            
+        for (AmpFieldsVisibility x : aObjVis.getFields()) {
+            if (x.getId().compareTo(id) == 0) return true;
+
         }
         return false;
     }
@@ -94,12 +92,12 @@ public class AmpFieldsVisibility extends AmpObjectVisibility implements Serializ
         return String.format("%s: %s", this.getName(), this.getVisible());
     }
 
-    @Override
-    public void setTemplates(Set<AmpTemplatesVisibility> templates) {
-        this.templates = templates;
-    }
+//    @Override
+//    public void setTemplates(Set<AmpTemplatesVisibility> templates) {
+//        this.templates = templates;
+//    }
 
-    public void setParent(AmpFeaturesVisibility parent) {
-        this.parent = parent;
-    }
+//    public void setParent(AmpFeaturesVisibility parent) {
+//        this.parent = parent;
+//    }
 }

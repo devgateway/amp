@@ -18,28 +18,29 @@ import javax.persistence.*;
 @Entity
 @Table(name = "AMP_FEATURES_VISIBILITY")
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@SequenceGenerator(name = "AMP_FEATURES_VISIBILITY_SEQ", sequenceName = "amp_features_visibility_seq",allocationSize = 1)
 public class AmpFeaturesVisibility extends AmpObjectVisibility implements Serializable {
 
     private static final long serialVersionUID = 7004856623866175824L;
 
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_FEATURES_VISIBILITY_SEQ")
-    @SequenceGenerator(name = "AMP_FEATURES_VISIBILITY_SEQ", sequenceName = "amp_features_visibility_seq",allocationSize = 1)
-    @Column(name = "id")
-    private Long id;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_FEATURES_VISIBILITY_SEQ")
+//    @SequenceGenerator(name = "AMP_FEATURES_VISIBILITY_SEQ", sequenceName = "amp_features_visibility_seq",allocationSize = 1)
+//    @Column(name = "id")
+//    private Long id;
+//
+//    @Column(name = "name")
+//    private String name;
+//
+//    @Column(name = "description")
+//    private String description;
 
-    @Column(name = "name")
-    private String name;
+//    @Column(name = "hasLevel")
+//    private Boolean hasLevel;
 
-    @Column(name = "description")
-    private String description;
-
-    @Column(name = "hasLevel")
-    private Boolean hasLevel;
-
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private Set<AmpFieldsVisibility> items;
+//    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+//    private Set<AmpFieldsVisibility> items;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent")
@@ -50,15 +51,15 @@ public class AmpFeaturesVisibility extends AmpObjectVisibility implements Serial
 
 
     public AmpObjectVisibility getParent() {
-        return (AmpModulesVisibility)parent;
+        return (AmpModulesVisibility)super.parent;
     }
 
     public String getVisible() {
-        return templates.contains(parent.getParent())?"true":"false";
+        return templates.contains(super.parent.getParent())?"true":"false";
     }
     
     public AmpTemplatesVisibility getTemplate() {
-        return parent.getTemplate();
+        return super.parent.getTemplate();
     } 
     
     public boolean isVisibleTemplateObj(AmpTemplatesVisibility aObjVis){
@@ -74,7 +75,7 @@ public class AmpFeaturesVisibility extends AmpObjectVisibility implements Serial
         return AmpFeaturesVisibility.class;
         
     }
-    
-    
-    
+
+
+
 }

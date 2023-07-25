@@ -18,21 +18,22 @@ import javax.persistence.*;
 @Entity
 @Table(name = "AMP_TEMPLATES_VISIBILITY")
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@SequenceGenerator(name = "AMP_TEMPLATES_VISIBILITY_SEQ", sequenceName = "amp_templates_visibility_seq", allocationSize = 1)
 public class AmpTemplatesVisibility extends AmpObjectVisibility implements Serializable, Cloneable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_TEMPLATES_VISIBILITY_SEQ")
-    @SequenceGenerator(name = "AMP_TEMPLATES_VISIBILITY_SEQ", sequenceName = "amp_templates_visibility_seq", allocationSize = 1)
-    @Column(name = "id")
-    private Long id;
-
-    @Column(name = "name")
-    private String name;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_TEMPLATES_VISIBILITY_SEQ")
+//    @SequenceGenerator(name = "AMP_TEMPLATES_VISIBILITY_SEQ", sequenceName = "amp_templates_visibility_seq", allocationSize = 1)
+//    @Column(name = "id")
+//    private Long id;
+//
+//    @Column(name = "name")
+//    private String name;
 
     @Column(name = "visible")
     private String visible;
 
-    @ManyToMany(mappedBy = "templates")
-    private Set<AmpModulesVisibility> items;
+//    @ManyToMany(mappedBy = "templates")
+//    private Set<AmpModulesVisibility> items;
 
     @ManyToMany
     @JoinTable(

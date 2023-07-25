@@ -20,6 +20,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "AMP_MODULES_VISIBILITY")
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@SequenceGenerator(name = "AMP_MODULES_VISIBILITY_SEQ", sequenceName = "amp_modules_visibility_seq", allocationSize = 1)
 public class AmpModulesVisibility extends AmpObjectVisibility implements Serializable {
     
     /**
@@ -27,23 +28,33 @@ public class AmpModulesVisibility extends AmpObjectVisibility implements Seriali
      */
     private static final long serialVersionUID = 292612393819900427L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_MODULES_VISIBILITY_SEQ")
-    @SequenceGenerator(name = "AMP_MODULES_VISIBILITY_SEQ", sequenceName = "amp_modules_visibility_seq", allocationSize = 1)
-    @Column(name = "id")
-    private Long id;
+//    @Override
+//    public Long getId() {
+//        return super.id;
+//    }
+//
+//    @Override
+//    public void setId(Long id) {
+//        this.id = id;
+//    }
 
-    @Column(name = "name", unique = true)
-    private String name;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_MODULES_VISIBILITY_SEQ")
+//    @SequenceGenerator(name = "AMP_MODULES_VISIBILITY_SEQ", sequenceName = "amp_modules_visibility_seq", allocationSize = 1)
+//    @Column(name = "id")
+//    private Long id;
 
-    @Column(name = "description")
-    private String description;
+//    @Column(name = "name", unique = true)
+//    private String name;
 
-    @Column(name = "hasLevel")
-    private Boolean hasLevel;
+//    @Column(name = "description")
+//    private String description;
 
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<AmpFeaturesVisibility> items;
+//    @Column(name = "hasLevel")
+//    private Boolean hasLevel;
+
+//    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private Set<AmpFeaturesVisibility> items;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent")
@@ -81,8 +92,7 @@ public class AmpModulesVisibility extends AmpObjectVisibility implements Seriali
      * @deprecated does not provide the latest state when outside Admin session, use FeaturesUtil
      */
     public boolean isVisibleId(Long id) {
-        for (Iterator it = this.getTemplates().iterator(); it.hasNext();) {
-            AmpTemplatesVisibility x = (AmpTemplatesVisibility) it.next();
+        for (AmpTemplatesVisibility x : this.getTemplates()) {
             if (x.getId().compareTo(id) == 0)
                 return true;
 
@@ -96,8 +106,8 @@ public class AmpModulesVisibility extends AmpObjectVisibility implements Seriali
      * @deprecated does not provide the latest state when outside Admin session, use FeaturesUtil
      */
     public boolean isVisibleTemplateObj(AmpTemplatesVisibility aObjVis) {
-        for (Iterator it = aObjVis.getItems().iterator(); it.hasNext();) {
-            AmpModulesVisibility x = (AmpModulesVisibility) it.next();
+        for (AmpObjectVisibility ampObjectVisibility : aObjVis.getItems()) {
+            AmpModulesVisibility x = (AmpModulesVisibility) ampObjectVisibility;
             if (x.getId().compareTo(id) == 0)
                 return true;
 
@@ -144,35 +154,35 @@ public class AmpModulesVisibility extends AmpObjectVisibility implements Seriali
         return AmpModulesVisibility.class;
     }
 
-    @Override
-    public String getName() {
-        return name;
-    }
+//    @Override
+//    public String getName() {
+//        return this.name;
+//    }
+//
+//    @Override
+//    public void setName(String name) {
+//        this.name = name;
+//    }
 
-    @Override
-    public void setName(String name) {
-        this.name = name;
-    }
+//    @Override
+//    public String getDescription() {
+//        return description;
+//    }
+//
+//    @Override
+//    public void setDescription(String description) {
+//        this.description = description;
+//    }
+//
+//    @Override
+//    public Boolean getHasLevel() {
+//        return hasLevel;
+//    }
 
-    @Override
-    public String getDescription() {
-        return description;
-    }
-
-    @Override
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    @Override
-    public Boolean getHasLevel() {
-        return hasLevel;
-    }
-
-    @Override
-    public void setHasLevel(Boolean hasLevel) {
-        this.hasLevel = hasLevel;
-    }
+//    @Override
+//    public void setHasLevel(Boolean hasLevel) {
+//        this.hasLevel = hasLevel;
+//    }
 
 
 }

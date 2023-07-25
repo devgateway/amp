@@ -16,24 +16,34 @@ import org.digijava.module.gateperm.core.ClusterIdentifiable;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.core.Permissible;
 
+import javax.persistence.*;
+
 /**
  * @author dan
  *
  */
+@MappedSuperclass
 public abstract class AmpObjectVisibility  extends Permissible implements Serializable, Comparable, ClusterIdentifiable {
      private final static String [] IMPLEMENTED_ACTIONS=new String[] { GatePermConst.Actions.EDIT, GatePermConst.Actions.VIEW } ;
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AMP_MODULES_VISIBILITY_SEQ")
+    @SequenceGenerator(name = "AMP_MODULES_VISIBILITY_SEQ", sequenceName = "amp_modules_visibility_seq", allocationSize = 1)
+    @Column(name = "id")
     @PermissibleProperty(type={Permissible.PermissibleProperty.PROPERTY_TYPE_ID})
     protected Long id;
-    
+
+    @Column(name = "name", unique = true)
     @PermissibleProperty(type={Permissible.PermissibleProperty.PROPERTY_TYPE_LABEL,Permissible.PermissibleProperty.PROPERTY_TYPE_CLUSTER_ID})
     protected String name;
-    
+
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     protected Set<AmpObjectVisibility> items;
     protected Set allItems;
     protected String nameTrimmed;
     protected String properName;
+    @Column(name = "hasLevel")
     protected Boolean hasLevel;
+    @Column(name = "description")
     protected String description;
     
     
@@ -62,6 +72,8 @@ public abstract class AmpObjectVisibility  extends Permissible implements Serial
     public abstract AmpTemplatesVisibility getTemplate();
     
     protected AmpObjectVisibility parent;
+
+
     protected Set<AmpTemplatesVisibility> templates;
     
     public abstract String getVisible();

@@ -1193,9 +1193,9 @@ public class FeaturesUtil {
      * @throws HibernateException
      */
     public static AmpTemplatesVisibility getTemplateVisibility(Long id) {
-        AmpTemplatesVisibility ft = (AmpTemplatesVisibility) PersistenceManager.getSession().load(AmpTemplatesVisibility.class, id);
+        AmpTemplatesVisibility ft = PersistenceManager.getRequestDBSession().load(AmpTemplatesVisibility.class, id);
         TreeSet<AmpTemplatesVisibility> mySet = new TreeSet<AmpTemplatesVisibility>(FeaturesUtil.ALPHA_ORDER);
-        mySet.addAll(PersistenceManager.getSession().createQuery("from " + AmpModulesVisibility.class.getName()).list());
+        mySet.addAll(PersistenceManager.getRequestDBSession().createQuery("from " + AmpModulesVisibility.class.getName()).list());
         ft.setAllItems(mySet);
         return ft;
     }

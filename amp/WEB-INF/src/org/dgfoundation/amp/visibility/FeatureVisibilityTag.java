@@ -224,8 +224,7 @@ public class FeatureVisibilityTag extends BodyTagSupport {
     
     public boolean existFeatureinDB(AmpTreeVisibility atv) {
         AmpFeaturesVisibility featureByNameFromRoot = atv.getFeatureByNameFromRoot(this.getName());
-        if(featureByNameFromRoot==null) return false;
-        return true;
+        return featureByNameFromRoot != null;
     }
     
     public boolean isModuleTheParent(AmpTreeVisibility atv)

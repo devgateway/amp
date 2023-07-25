@@ -13,6 +13,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
@@ -65,6 +66,7 @@ public class FieldVisibilityTag extends BodyTagSupport {
         // TODO Auto-generated constructor stub
     }
 
+    @Transactional
     public int doStartTag() throws JspException {
 
         ServletContext ampContext = pageContext.getServletContext();
@@ -102,11 +104,14 @@ public class FieldVisibilityTag extends BodyTagSupport {
             ampTreeVisibility = FeaturesUtil.getAmpTreeVisibility(ampContext, session);
             if (ampTreeVisibility != null) {
                 if (!isFeatureTheParent(ampTreeVisibility)) {
-                    FeaturesUtil.updateFieldWithFeatureVisibility(ampTreeVisibility.getFeatureByNameFromRoot(this.getFeature()).getId(), this.getName());
-                    AmpTemplatesVisibility currentTemplate = FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
-                    ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
-                    FeaturesUtil.setAmpTreeVisibility(ampContext, session, ampTreeVisibility);
-                }
+                    AmpFeaturesVisibility ampFeaturesVisibility= ampTreeVisibility.getFeatureByNameFromRoot(this.getFeature());
+                        System.out.println("Feature: "+this.getFeature() +" Name: "+ this.getName() +"FeatureVisibility: "+ampFeaturesVisibility);
+                        FeaturesUtil.updateFieldWithFeatureVisibility(ampFeaturesVisibility.getId(), this.getName());
+                        AmpTemplatesVisibility currentTemplate = FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
+                        ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
+                        FeaturesUtil.setAmpTreeVisibility(ampContext, session, ampTreeVisibility);
+                    }
+
             }
 //     }
 
@@ -224,7 +229,7 @@ public class FieldVisibilityTag extends BodyTagSupport {
         //AmpFeaturesVisibility f=(AmpFeaturesVisibility) featureByNameFromRoot.getRoot();
         if (featureByNameFromRoot != null)
             if (featureByNameFromRoot.getItems() != null) {
-                if (featureByNameFromRoot.getItems().containsKey(this.getName())) return true;
+                return featureByNameFromRoot.getItems().containsKey(this.getName());
             }
         //else ////System.out.println("errror in FM - field: "+this.getName() + " -- feature:"+this.getFeature());
         //else ////System.out.println("errror in FM - field: "+this.getName() + " -- feature:"+this.getFeature());

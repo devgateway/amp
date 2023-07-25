@@ -15,7 +15,6 @@ import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.Validator;
 
-import com.sun.xml.bind.Messages;
 import com.sun.xml.bind.DatatypeConverterImpl;
 
 /**
@@ -129,19 +128,19 @@ public class DefaultJAXBContextImpl extends JAXBContext {
      * @return an instance of the Java content interface
      * @exception JAXBException
      */
-    public Object newInstance( Class javaContentInterface ) 
+    public Object newInstance( Class javaContentInterface )
         throws JAXBException {
 
         if( javaContentInterface == null ) {
-            throw new JAXBException( Messages.format( Messages.CI_NOT_NULL ) );
+            throw new JAXBException("javaContentInterface cannot be null.");
         }
 
         try {
             Class c = gi.getDefaultImplementation( javaContentInterface );
             if(c==null)
-                throw new JAXBException(
-                    Messages.format( Messages.MISSING_INTERFACE, javaContentInterface ));
-            
+                throw new JAXBException("Unable to find an implementation for the interface: " + javaContentInterface);
+
+
             return c.newInstance();
         } catch( Exception e ) {
             throw new JAXBException( e );

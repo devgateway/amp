@@ -44,6 +44,7 @@ import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.query.Query;
 import org.hibernate.Session;
+import org.hibernate.type.StringType;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.security.core.GrantedAuthority;
@@ -74,8 +75,8 @@ public class DigiUserDetailsService
         try {
             session = PersistenceManager.getRequestDBSession();
             Query q = session.createQuery("from " + User.class.getName() +
-                                          " u where lower(u.email) =? ");
-            q.setString(0, email.toLowerCase());
+                                          " u where lower(u.email) =:email ");
+            q.setParameter("email", email.toLowerCase(), StringType.INSTANCE);
             q.setCacheable(true);
 
             List results = q.list();

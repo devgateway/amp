@@ -62,8 +62,7 @@ public class MenuItemsProcessor {
         }
         if (tm != null && tm.getMemberId() != null) {
             AmpTeamMember atm = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
-            Set<Group> groups = ImmutableSet.copyOf(atm.getUser().getGroups());
-            Set<Group> userGroups = atm != null && atm.getUser() != null ? groups : null;
+            Set<Group> userGroups = atm != null && atm.getUser() != null ? atm.getUser().getGroups() : null;
             if (userGroups != null) {
                 for(Group group : userGroups) {
                     currentUserGroupKeys.add(group.getKey());

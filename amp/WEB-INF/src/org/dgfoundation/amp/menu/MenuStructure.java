@@ -72,9 +72,8 @@ public class MenuStructure {
         for (T t : orderedEntries) {
 
             AmpMenuEntryInView ame = (AmpMenuEntryInView) t;
-            Set<Group> groups = ImmutableSet.copyOf(ame.getGroups());
             Set<String> groupKeys = new HashSet<String>();
-            for (Group group : groups) {
+            for (Group group : ame.getGroups()) {
                 groupKeys.add(group.getKey());
             }
             MenuItem mi = new MenuItem(ame.getName(), ame.getTitle(), ame.getTooltip(), ame.getUrl(), ame.getFlags(), ame.getRequestUrl(), groupKeys);

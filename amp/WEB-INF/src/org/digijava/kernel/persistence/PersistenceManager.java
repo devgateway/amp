@@ -54,6 +54,7 @@ import org.hibernate.jdbc.Work;
 import org.hibernate.mapping.PersistentClass;
 import org.hibernate.metadata.ClassMetadata;
 
+import javax.persistence.FlushModeType;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -585,6 +586,7 @@ public class PersistenceManager {
             throw new IllegalStateException("Called outside of managed session context.");
         }
         Session sess = PersistenceManager.sf.getCurrentSession();
+        sess.setFlushMode(FlushModeType.AUTO);
         Transaction transaction = sess.getTransaction();
         if (transaction == null || !transaction.isActive()) {
             sess.beginTransaction();
@@ -772,17 +774,18 @@ public class PersistenceManager {
         Transaction transaction = session.getTransaction();
         if (transaction != null) {
             if (transaction.isActive()) {
-                try {
-                    // note: flushing is needed only if session uses FlushMode.MANUAL
-                    session.flush();
-                } catch (HibernateException e) {
-                    // logging the error since finally may throw another exception and this one will be lost
-                    logger.error("Failed to flush the session.", e);
-                    throw e;
-                } finally {
-                    // do we really want to attempt commit if flushing fails?
+//                try {
+//                    // note: flushing is needed only if session uses FlushMode.MANUAL
+//                    session.flush();
+//                } catch (HibernateException e) {
+//                    // logging the error since finally may throw another exception and this one will be lost
+//                    logger.error("Failed to flush the session.", e);
+//                    throw e;
+//                } finally {
+//                    // do we really want to attempt commit if flushing fails?
+                //session will be flushed automatically on transaction commit since we set the FlusmodeType as AUTO
                     transaction.commit();
-                }
+//                }
             }
         }
     }

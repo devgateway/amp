@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.common.collect.ImmutableSet;
 import org.apache.commons.collections.CollectionUtils;
 import org.dgfoundation.amp.menu.dynamic.DynamicMenu;
 import org.dgfoundation.amp.menu.dynamic.EmailMenu;
@@ -60,8 +61,9 @@ public class MenuItemsProcessor {
             currentUserGroupKeys.add(Group.PLEDGERS);
         }
         if (tm != null && tm.getMemberId() != null) {
-            AmpTeamMember atm = TeamMemberUtil.getAmpTeamMember(tm.getMemberId()); 
-            Set<Group> userGroups = atm != null && atm.getUser() != null ? atm.getUser().getGroups() : null;
+            AmpTeamMember atm = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
+            Set<Group> groups = ImmutableSet.copyOf(atm.getUser().getGroups());
+            Set<Group> userGroups = atm != null && atm.getUser() != null ? groups : null;
             if (userGroups != null) {
                 for(Group group : userGroups) {
                     currentUserGroupKeys.add(group.getKey());

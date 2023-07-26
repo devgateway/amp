@@ -11,10 +11,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import org.apache.log4j.Logger;
+import com.google.common.collect.ImmutableSet;
 import org.dgfoundation.amp.visibility.data.DataVisibility;
 import org.digijava.kernel.user.Group;
 import org.digijava.module.aim.dbentity.AmpMenuEntryInView;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Keeps all possible menu entries for a specific public/admin/team view, 
@@ -23,16 +25,20 @@ import org.digijava.module.aim.dbentity.AmpMenuEntryInView;
  * @author Nadejda Mandrescu
  */
 public class MenuStructure {
-    private static Logger logger = Logger.getLogger(MenuStructure.class);
+    private static Logger logger = LoggerFactory.getLogger(MenuStructure.class);
     
     private static Map<AmpView, MenuStructure> structurePerView = initViews();
     
     private static Map<AmpView, MenuStructure> initViews() {
-        Map<AmpView, MenuStructure> viewsMap = new TreeMap<AmpView, MenuStructure>();
-        for (AmpView view : AmpView.values()) {
-            viewsMap.put(view, new MenuStructure(MenuUtils.getMenuEntries(view, true), view));
-        }
-        return Collections.synchronizedMap(viewsMap);
+
+            Map<AmpView, MenuStructure> viewsMap = new TreeMap<AmpView, MenuStructure>();
+            for (AmpView view : AmpView.values()) {
+                viewsMap.put(view, new MenuStructure(MenuUtils.getMenuEntries(view, true), view));
+            }
+            return Collections.synchronizedMap(viewsMap);
+
+
+
     }
     
     /**
@@ -64,9 +70,11 @@ public class MenuStructure {
         Map<T, MenuItem> itemsMap = new HashMap<T, MenuItem>();
         itemsMap.put(null, root);
         for (T t : orderedEntries) {
+
             AmpMenuEntryInView ame = (AmpMenuEntryInView) t;
+            Set<Group> groups = ImmutableSet.copyOf(ame.getGroups());
             Set<String> groupKeys = new HashSet<String>();
-            for (Group group : ame.getGroups()) {
+            for (Group group : groups) {
                 groupKeys.add(group.getKey());
             }
             MenuItem mi = new MenuItem(ame.getName(), ame.getTitle(), ame.getTooltip(), ame.getUrl(), ame.getFlags(), ame.getRequestUrl(), groupKeys);

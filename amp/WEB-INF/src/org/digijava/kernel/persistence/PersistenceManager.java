@@ -53,6 +53,7 @@ import org.hibernate.jdbc.ReturningWork;
 import org.hibernate.jdbc.Work;
 import org.hibernate.mapping.PersistentClass;
 import org.hibernate.metadata.ClassMetadata;
+import org.hibernate.resource.transaction.spi.TransactionStatus;
 
 import javax.persistence.FlushModeType;
 import java.io.Serializable;
@@ -525,7 +526,7 @@ public class PersistenceManager {
      *
      */
     public static void rollbackCurrentSessionTx() {
-        if (sf.getCurrentSession().getTransaction().isActive()
+        if (sf.getCurrentSession().getTransaction().getStatus().equals(TransactionStatus.ACTIVE)
                 && sf.getCurrentSession().isOpen()
                 && sf.getCurrentSession().isConnected()) {
             logger.info("Trying to rollback database transaction after exception");

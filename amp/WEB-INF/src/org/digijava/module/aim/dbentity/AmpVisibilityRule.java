@@ -131,8 +131,8 @@ public class AmpVisibilityRule implements Serializable {
         this.modules = modules;
     }
     
-    @Override
-    public String toString() {
-        return String.format("[id: %d, type: %d, modules: %s, features: %s, fields: %s, children: %s]", this.id, this.type, this.modules, this.features, this.fields, this.children);
-    }
+//    @Override
+//    public String toString() {
+//        return String.format("[id: %d, type: %d, modules: %s, features: %s, fields: %s, children: %s]", this.id, this.type, this.modules, this.features, this.fields, this.children);
+//    }
 }

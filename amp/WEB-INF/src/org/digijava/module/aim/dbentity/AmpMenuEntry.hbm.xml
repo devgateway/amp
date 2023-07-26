@@ -11,7 +11,7 @@
         <property name="position" column="POSITION" type="int" />
         <property name="requestUrl" column="REQUEST_URL" type="text" />
         
-        <set name="groups" cascade="all" table="AMP_MENU_ENTRY_DG_GROUP">
+        <set name="groups" cascade="all" table="AMP_MENU_ENTRY_DG_GROUP" lazy="false">
 	         <key column="MENU_ID" property-ref="id"/>
 	         <many-to-many column="GROUP_ID" class="org.digijava.kernel.user.Group"/>
       	</set>
@@ -52,7 +52,7 @@
     </class>
     
     <class name="org.digijava.module.aim.dbentity.AmpMenuEntryInView" table="v_menu_entry" abstract="true" polymorphism="explicit" discriminator-value="null">
-    	<cache usage="read-only" />
+    	<cache usage="read-write" />
     	
     	<id name="menuViewId" type="java.lang.Long" column="menu_view_id"/>
     	<discriminator column="VIEW_TYPE" type="int" force="true" insert="false"/>

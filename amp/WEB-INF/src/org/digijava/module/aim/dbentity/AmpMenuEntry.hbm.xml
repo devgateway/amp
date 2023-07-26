@@ -11,8 +11,8 @@
         <property name="position" column="POSITION" type="int" />
         <property name="requestUrl" column="REQUEST_URL" type="text" />
         
-        <set name="groups" cascade="all" table="AMP_MENU_ENTRY_DG_GROUP" lazy="false">
-	         <key column="MENU_ID" property-ref="id"/>
+        <set name="groups" cascade="all" table="AMP_MENU_ENTRY_DG_GROUP">
+	         <key column="MENU_ID"/>
 	         <many-to-many column="GROUP_ID" class="org.digijava.kernel.user.Group"/>
       	</set>
 	'

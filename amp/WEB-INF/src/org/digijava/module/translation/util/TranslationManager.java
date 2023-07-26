@@ -663,7 +663,7 @@ public class TranslationManager {
         logger.debug(queryString);
 
         Query query = session.createQuery(queryString);
-        query.setCacheable(true);
+//        query.setCacheable(true);
 
         List<Object[]> locales = query.list();
         List<String[]> res = new ArrayList<>();

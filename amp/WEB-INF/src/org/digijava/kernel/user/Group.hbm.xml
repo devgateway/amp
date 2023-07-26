@@ -23,5 +23,10 @@
 			<many-to-many class="org.digijava.kernel.user.User" column="USER_ID" />
 		</set>
 
+		<set name="menuEntries" table="AMP_MENU_ENTRY_DG_GROUP" cascade="all" inverse="true">
+			<key column="GROUP_ID" />
+			<many-to-many class="org.digijava.module.aim.dbentity.AmpMenuEntryInView" column="menu_id" />
+		</set>
+
 	</class>
 </hibernate-mapping>

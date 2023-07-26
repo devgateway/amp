@@ -34,6 +34,7 @@ import org.digijava.kernel.security.ResourcePermission;
 import org.digijava.kernel.security.SitePermission;
 
 import com.google.common.collect.ImmutableSet;
+import org.digijava.module.aim.dbentity.AmpMenuEntryInView;
 
 public class Group
     extends Entity
@@ -71,6 +72,16 @@ public class Group
     private Site site;
     private String key;
     private Set users;
+    private Set<AmpMenuEntryInView> menuEntries= new HashSet<>();
+
+    public Set<AmpMenuEntryInView> getMenuEntries() {
+        return menuEntries;
+    }
+
+    public void setMenuEntries(Set<AmpMenuEntryInView> menuEntries) {
+        this.menuEntries = menuEntries;
+    }
+
     private Long parentId;
     private boolean inheritSecurity;
     

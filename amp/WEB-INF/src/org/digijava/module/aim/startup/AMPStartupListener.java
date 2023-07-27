@@ -180,7 +180,6 @@ public class AMPStartupListener extends HttpServlet implements
             runCacheRefreshingQuery("update_program_level_caches_internal", "program");
             runCacheRefreshingQuery("update_sector_level_caches_internal", "sector");
             runCacheRefreshingQuery("update_organisation_caches_internal", "organisation");
-            
             ContentRepositoryManager.initialize();
             
             checkDatabaseSanity();

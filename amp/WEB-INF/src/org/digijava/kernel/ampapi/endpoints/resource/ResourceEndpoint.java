@@ -23,7 +23,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.sun.jersey.core.header.FormDataContentDisposition;
 
 import org.apache.commons.io.FileUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.APIWorkspaceMemberFieldList;
@@ -41,6 +40,8 @@ import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.services.AmpFieldsEnumerator;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.glassfish.jersey.media.multipart.ContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -208,7 +209,7 @@ public class ResourceEndpoint {
 //            @FormDataParam("resource") @ApiParam(value = "resource configuration", type = "SwaggerResource")
 //                    SwaggerResource resource,
 //            @FormDataParam("file") InputStream uploadedInputStream,
-//            @FormDataParam("file") FormDataContentDisposition fileDetail) {
+//            @FormDataParam("file") ContentDisposition fileDetail) {
 //
 //        if (resource == null) {
 //            throw new ApiRuntimeException(Response.Status.BAD_REQUEST, ApiError.toError(

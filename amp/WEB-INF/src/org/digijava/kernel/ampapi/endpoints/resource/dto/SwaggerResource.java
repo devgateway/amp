@@ -3,8 +3,8 @@ package org.digijava.kernel.ampapi.endpoints.resource.dto;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
 
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import org.digijava.kernel.ampapi.endpoints.dto.MultilingualContent;
 import org.digijava.kernel.ampapi.endpoints.dto.SwaggerMapWrapper;
 import org.digijava.kernel.ampapi.endpoints.resource.ResourceType;

@@ -102,7 +102,7 @@ public class AuthRequestFilter implements ContainerRequestFilter {
         // configure requested language
         addLanguage(siteDomain);
 
-        // configure translastions if exist
+        // configure translations if exist
         addTranslations(siteDomain);
 
         addDefaultTreeVisibility();

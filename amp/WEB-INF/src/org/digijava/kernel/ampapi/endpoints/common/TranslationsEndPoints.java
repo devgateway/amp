@@ -152,11 +152,12 @@ public class TranslationsEndPoints {
     @Path("/languages/{langCode}")
     @ApiOperation("Change the language used in session.")
     @ApiMethod(ui = false, id = "LanguageSwitch")
-    public void switchLanguage(@PathParam("langCode") @ApiParam(name = "langCode", example = "fr") String langCode,
+    public String switchLanguage(@PathParam("langCode") @ApiParam(name = "langCode", example = "fr") String langCode,
                                @Context HttpServletResponse response) {
         Locale locale = new Locale();
         locale.setCode(langCode);
         DgUtil.switchLanguage(locale, TLSUtils.getRequest(), response);
+        return null;
     }
 
     @GET

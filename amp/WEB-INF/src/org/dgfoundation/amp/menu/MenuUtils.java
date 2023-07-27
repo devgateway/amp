@@ -45,6 +45,7 @@ public class MenuUtils {
     public static AmpView getCurrentView() {
         HttpSession session =TLSUtils.getRequest().getSession();
         TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
+        System.out.println(tm);
         if (tm == null) {
             return AmpView.PUBLIC;
         }

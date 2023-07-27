@@ -5,10 +5,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import com.sun.jersey.core.header.FormDataContentDisposition;
 import org.apache.commons.io.FileUtils;
 import org.apache.struts.upload.FormFile;
 import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
+import org.glassfish.jersey.media.multipart.ContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 
 /**
  * Adapts jersey file & metadata to {@link FormFile} that is consumed by {@link TemporaryDocumentData}.
@@ -17,10 +18,10 @@ import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
  */
 class JerseyFileAdapter implements FormFile {
 
-    private FormDataContentDisposition fileDetail;
+    private ContentDisposition fileDetail;
     private File file;
 
-    JerseyFileAdapter(FormDataContentDisposition fileDetail, File file) {
+    JerseyFileAdapter(ContentDisposition fileDetail, File file) {
         this.fileDetail = fileDetail;
         this.file = file;
     }

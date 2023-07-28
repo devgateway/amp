@@ -154,10 +154,10 @@ public class DbUtil {
                     PasswordEncoder passwordEncoder = org.springframework.security.crypto.factory.PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
                     // Set BCrypt hashed password
-                    String hashedPassword = passwordEncoder.encode(pass.trim());
+//                    String hashedPassword = passwordEncoder.encode(pass.trim());
 
                     // check user in database
-                    if(hashedPassword.equalsIgnoreCase(iterUser.getPassword().trim())) {
+                    if(passwordEncoder.matches(pass,iterUser.getPassword().trim())) {
                         iscorrect = true;
                         break;
                     }

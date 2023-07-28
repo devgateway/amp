@@ -24,17 +24,12 @@ package org.digijava.kernel.util;
 
 import static java.util.stream.Collectors.toList;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.StringTokenizer;
+import java.util.*;
 import java.util.stream.Stream;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletRequest;
 
@@ -57,7 +52,6 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.query.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
@@ -160,14 +154,30 @@ public class UserUtils {
         }
         List<UserPreferencesPK> keys = users.stream().map(u -> new UserPreferencesPK(u, site)).collect(toList());
 
-        org.hibernate.Session session = PersistenceManager.getSession();
-        List<UserLangPreferences> preferences = session
-                .createCriteria(UserLangPreferences.class)
-                .add(Restrictions.in("id", keys))
-                .list();
+//        org.hibernate.Session session = PersistenceManager.getSession();
+//        List<UserLangPreferences> preferences = session
+//                .createCriteria(UserLangPreferences.class)
+//                .add(Restrictions.in("id", keys))
+//                .list();
+        List<UserLangPreferences> userLangPreferences;
+
+        try (Session session = PersistenceManager.getSession()) {
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<UserLangPreferences> criteriaQuery = criteriaBuilder.createQuery(UserLangPreferences.class);
+            Root<UserLangPreferences> root = criteriaQuery.from(UserLangPreferences.class);
+            criteriaQuery.select(root);
+            criteriaQuery.where(root.get("id").in(keys));
+
+            Query<UserLangPreferences> query = session.createQuery(criteriaQuery);
+            userLangPreferences= query.list();
+        } catch (Exception e) {
+            // Handle exceptions if necessary
+            e.printStackTrace();
+            userLangPreferences= Collections.emptyList();
+        }
 
         Map<Long, UserLangPreferences> result = new HashMap<>();
-        preferences.forEach(p -> result.put(p.getId().getUser().getId(), p));
+        userLangPreferences.forEach(p -> result.put(p.getId().getUser().getId(), p));
         return result;
     }
 
@@ -343,10 +353,19 @@ public class UserUtils {
      * @return list of users
      */
     public static List<User> getAllUsers() {
-        List<User> users = PersistenceManager.getSession()
-                .createCriteria(User.class)
-                .list();
-        return users;
+        try (Session session = PersistenceManager.getSession()) {
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
+            Root<User> root = criteriaQuery.from(User.class);
+            criteriaQuery.select(root);
+
+            Query<User> query = session.createQuery(criteriaQuery);
+            return query.list();
+        } catch (Exception e) {
+            // Handle exceptions if necessary
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
     }
     
     /**
@@ -357,7 +376,7 @@ public class UserUtils {
     public static List<User> getUsers(List<Long> userIds) {
         if (userIds == null || userIds.isEmpty())
             return Collections.emptyList();
-        List<User> users = PersistenceManager.getSession().createQuery("from " + User.class.getName() + " o " + 
+        List<User> users = PersistenceManager.getRequestDBSession().createQuery("from " + User.class.getName() + " o " +
                 "where o.id in (:ids)").setParameterList("ids", userIds).list();
         users.forEach(user -> ProxyHelper.initializeObject(user));
         return users;
@@ -506,12 +525,30 @@ public class UserUtils {
      * @return user
      */
     public static User getUserByEmailAddress(String email) {
+//        String trimmedLowercasedEmail = StringUtils.trimToEmpty(StringUtils.lowerCase(email));
+//        return (User) PersistenceManager.getSession()
+//                .createCriteria(User.class)
+//                .setCacheable(true)
+//                .add(Restrictions.eq("email", trimmedLowercasedEmail).ignoreCase())
+//                .uniqueResult();
         String trimmedLowercasedEmail = StringUtils.trimToEmpty(StringUtils.lowerCase(email));
-        return (User) PersistenceManager.getSession()
-                .createCriteria(User.class)
-                .setCacheable(true)
-                .add(Restrictions.eq("email", trimmedLowercasedEmail).ignoreCase())
-                .uniqueResult();
+        try (Session session = PersistenceManager.getRequestDBSession()) {
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
+            Root<User> root = criteriaQuery.from(User.class);
+            criteriaQuery.select(root);
+            criteriaQuery.where(criteriaBuilder.equal(criteriaBuilder.lower(root.get("email")), trimmedLowercasedEmail));
+
+            Query<User> query = session.createQuery(criteriaQuery);
+            query.setCacheable(true);
+            User user= query.uniqueResult();
+            System.out.println(user);
+            return user;
+        } catch (Exception e) {
+            // Handle exceptions if necessary
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**

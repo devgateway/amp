@@ -49,6 +49,7 @@ import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 
 /**
@@ -202,6 +203,7 @@ public class SecurityService {
     public UserSessionInformation authenticate(AuthenticationRequest authRequest) {
         String username = authRequest.getUserName();
         String password = authRequest.getPassword();
+        System.out.println(password);
         Integer workspaceIdInt = authRequest.getWorkspaceId();
         Long workspaceId = (workspaceIdInt == null) ? null : workspaceIdInt.longValue();
     
@@ -210,7 +212,10 @@ public class SecurityService {
         }
     
         User user = UserUtils.getUserByEmailAddress(username);
-        if (user == null || !user.getPassword().equals(password)) {
+        PasswordEncoder passwordEncoder = org.springframework.security.crypto.factory.PasswordEncoderFactories.createDelegatingPasswordEncoder();
+
+        // Set BCrypt hashed password
+        if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
             ApiErrorResponseService.reportForbiddenAccess(SecurityErrors.INVALID_USER_PASSWORD);
         }
     

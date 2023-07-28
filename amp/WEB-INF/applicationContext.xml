@@ -211,25 +211,13 @@
 	</beans:bean>
 
 
-
-<!--	<beans:bean id="passwordEncoder" class="org.springframework.security.crypto.factory.PasswordEncoderFactories" factory-method="createDelegatingPasswordEncoder" />-->
-
-
-<!--	<beans:bean id ="passwordEncoder" class = "org.springframework.security.crypto.password.BCryptPasswordEncoder" factory-method = "getInstance" />-->
-
 	<!-- auth service used to query the database and get the user bean -->
 	<beans:bean id="digiUserDetailsService"
 		class="org.digijava.kernel.security.auth.DigiUserDetailsService">
 		<beans:property name="populateGroupAuthorities">
 			<beans:value>false</beans:value>
 		</beans:property>
-		<beans:property name="passwordEncoder" ref="passwordEncoder"/>
 	</beans:bean>
-
-<!--	<beans:bean id="authenticationProvider" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">-->
-<!--		<beans:property name="userDetailsService" ref="digiUserDetailsService" />-->
-<!--		<beans:property name="passwordEncoder" ref="passwordEncoder" />-->
-<!--	</beans:bean>-->
 
 
 

@@ -114,7 +114,7 @@ public class DbUtil {
 
             String queryString = "from " + User.class.getName() + " rs where rs.email = :email";
             Query query = sess.createQuery(queryString);
-            query.setString("email", user);
+            query.setParameter("email", user, StringType.INSTANCE);
             
             Iterator iter = query.iterate();
 //////////////////////
@@ -151,8 +151,13 @@ public class DbUtil {
                             break;
                     }
 
+                    PasswordEncoder passwordEncoder = org.springframework.security.crypto.factory.PasswordEncoderFactories.createDelegatingPasswordEncoder();
+
+                    // Set BCrypt hashed password
+                    String hashedPassword = passwordEncoder.encode(pass.trim());
+
                     // check user in database
-                    if(encryptPassword.equalsIgnoreCase(iterUser.getPassword().trim())) {
+                    if(hashedPassword.equalsIgnoreCase(iterUser.getPassword().trim())) {
                         iscorrect = true;
                         break;
                     }
@@ -215,9 +220,13 @@ public class DbUtil {
                 logger.error("Invalid password request code");
                 return false;
             }
+            PasswordEncoder passwordEncoder = org.springframework.security.crypto.factory.PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
-            iterUser.setPassword(ShaCrypt.crypt(newPassword.trim()).trim());
-            iterUser.setSalt(new Long(newPassword.trim().hashCode()).toString());
+            // Set BCrypt hashed password
+            String hashedPassword = passwordEncoder.encode(newPassword.trim()).trim();
+
+            iterUser.setPassword(hashedPassword);
+            iterUser.setSalt(BCrypt.gensalt());
             session.update(iterUser);
             session.delete(resetPassword);
             //tx.commit();
@@ -263,8 +272,12 @@ public class DbUtil {
                 iterUser = (User) iter.next();
             }
 //beginTransaction();
-            iterUser.setPassword(ShaCrypt.crypt(newPassword.trim()).trim());
-            iterUser.setSalt(new Long(newPassword.trim().hashCode()).toString());
+            PasswordEncoder passwordEncoder = org.springframework.security.crypto.factory.PasswordEncoderFactories.createDelegatingPasswordEncoder();
+
+            // Set BCrypt hashed password
+            String hashedPassword = passwordEncoder.encode(newPassword.trim()).trim();
+            iterUser.setPassword(hashedPassword);
+            iterUser.setSalt(BCrypt.gensalt());
             iterUser.updateLastModified();
             session.save(iterUser);
 

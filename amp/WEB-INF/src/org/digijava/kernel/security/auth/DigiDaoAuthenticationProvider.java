@@ -37,6 +37,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class DigiDaoAuthenticationProvider
         extends DaoAuthenticationProvider implements InitializingBean {
@@ -69,9 +70,12 @@ public class DigiDaoAuthenticationProvider
         // first try new user ( using SHA1 )
         encryptPassword = ShaCrypt.crypt(compare.trim()).trim();
 
+        PasswordEncoder passwordEncoder = org.springframework.security.crypto.factory.PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
+        // Set BCrypt hashed password
+        String hashedPassword = passwordEncoder.encode(userDetails.getPassword());
         // check user in database
-        if (encryptPassword.equalsIgnoreCase(userPassword.trim())) {
+        if (hashedPassword.equalsIgnoreCase(userPassword.trim())) {
             passwordMatched = true;
         }
 

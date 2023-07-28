@@ -34,6 +34,7 @@ import org.digijava.module.um.form.UserRegisterForm;
 import org.digijava.module.um.util.AmpUserUtil;
 import org.digijava.module.um.util.DbUtil;
 import org.digijava.kernel.security.PasswordPolicyValidator;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class RegisterUser extends Action {
 
@@ -140,7 +141,11 @@ public class RegisterUser extends Action {
                 //create User Registration Trigger
                  if(FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.USER_REGISTRATION_BY_MAIL)){
                      String link = RequestUtils.getFullModuleUrl(request);
-                     String id = ShaCrypt.crypt(user.getEmail().trim()+user.getId()).trim();
+                     PasswordEncoder passwordEncoder = org.springframework.security.crypto.factory.PasswordEncoderFactories.createDelegatingPasswordEncoder();
+
+                     // Set BCrypt hashed password
+                     String id = passwordEncoder.encode(user.getEmail().trim()+user.getId()).trim();
+
                      String description = "Welcome to AMP!"+ '\n'+'\n'+"We must first verify your email address before you become a full registered member (with login privileges)." +'\n'+ "In order to verify your email and complete the registration process, please click on the link below. " +
                                       '\n'+link+ "confirmRegisteration.do?id="+id;
                      try{

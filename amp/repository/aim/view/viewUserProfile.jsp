@@ -1,6 +1,7 @@
 <%@ page pageEncoding="UTF-8" %>
 <%@ page import="org.digijava.module.aim.util.FeaturesUtil" %>
 <%@ page import="org.digijava.module.aim.helper.GlobalSettingsConstants" %>
+<%@ page import="org.springframework.security.crypto.password.PasswordEncoder" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
@@ -100,7 +101,9 @@ td.inside_header {background-color:#C7D4DB; color:#000; height:30px; border-colo
 								Long id = ((org.digijava.module.aim.helper.TeamMember) session.getAttribute("currentMember")).getMemberId();
 								if( request.getParameter("id") != null && value.equalsIgnoreCase("true") && id.equals(new Long(request.getParameter("id")))){
 									org.digijava.kernel.user.User user = (org.digijava.kernel.user.User) session.getAttribute("org.digijava.kernel.user");
-									String encryptedPass = org.digijava.kernel.util.ShaCrypt.crypt(user.getEmail() + "_" + user.getPassword());
+									PasswordEncoder passwordEncoder = org.springframework.security.crypto.factory.PasswordEncoderFactories.createDelegatingPasswordEncoder();
+									// Set BCrypt hashed password
+									String encryptedPass = passwordEncoder.encode(user.getEmail() + "_" + user.getPassword());
 								%>
 									<a href="/<%=request.getContextPath()%>repository/aim/view/autologin.jsp?user=<%=user.getEmail()%>&password=<%=encryptedPass%>&workspaceId=<%=id%>">
 										<digi:trn key="aim:autologin"><b>Autologin</b></digi:trn>

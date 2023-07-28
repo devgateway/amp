@@ -58,6 +58,7 @@ import org.hibernate.ObjectNotFoundException;
 import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  * This class containts user-related utillity functions. User must be
@@ -521,7 +522,10 @@ public class UserUtils {
      * @param password String new password
      */
     public static void setPassword(User user, String password) {
-        user.setPassword(ShaCrypt.crypt(password.trim()).trim());
+        PasswordEncoder passwordEncoder = org.springframework.security.crypto.factory.PasswordEncoderFactories.createDelegatingPasswordEncoder();
+
+        // Set BCrypt hashed password
+        user.setPassword( passwordEncoder.encode(user.getPassword().trim()).trim());
         user.setSalt(new Long(password.trim().hashCode()).toString());
         user.setPasswordChangedAt(new Date());
     }

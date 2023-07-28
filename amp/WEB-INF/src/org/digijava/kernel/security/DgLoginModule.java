@@ -51,6 +51,7 @@ import org.digijava.kernel.util.I18NHelper;
 import org.digijava.kernel.util.ShaCrypt;
 import org.digijava.kernel.util.UnixCrypt;
 import org.digijava.kernel.util.UserUtils;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class DgLoginModule
     implements LoginModule {
@@ -364,9 +365,13 @@ public class DgLoginModule
             else {
                 encryptPassword = pass.trim();
             }
+            PasswordEncoder passwordEncoder = org.springframework.security.crypto.factory.PasswordEncoderFactories.createDelegatingPasswordEncoder();
+
+            // Set BCrypt hashed password
+            String hashedPassword = passwordEncoder.encode(pass.trim());
 
             // check user in database
-            if (encryptPassword.equalsIgnoreCase(dbPassword.trim())) {
+            if (hashedPassword.equalsIgnoreCase(dbPassword.trim())) {
                 logger.debug("Password matched");
                 // add credentials and principals to this
 

@@ -1313,8 +1313,10 @@ public class TranslatorWorker {
                 q.setString("msgKey", processKeyCase(key.trim()));
             }
             q.setTimestamp("stamp", expTimestamp);
+            Long countLong = (Long) q.uniqueResult();
 
-            Integer count = (Integer)q.uniqueResult();
+            Integer count = countLong.intValue();
+
             result = count.intValue() > 0;
 
         }

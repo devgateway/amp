@@ -61,17 +61,17 @@
     <!-- Limit JSF logging to DEBUG.  FINER and FINEST will not be logged -->
     <logger name="javax.enterprise.resource.webcontainer.jsf" level="INFO" />
 
-    <logger name="org.hibernate" level="TRACE" />
+    <logger name="org.hibernate" level="ERROR" />
 
     <logger name="net.sf.hibernate.cache" level="ERROR" />
 
     <logger name="net.sf.ehcache.hibernate" level="ERROR" />
 
     <!-- SET to TRACE in order to see queries and their value, INFO is default -->
-    <logger name="org.hibernate.SQL" level="TRACE" />
+    <logger name="org.hibernate.SQL" level="INFO" />
 
     <!-- SET to TRACE in order to see queries and their value, INFO is default -->
-    <logger name="org.hibernate.type" level="TRACE" />
+    <logger name="org.hibernate.type" level="INFO" />
 
     <logger name="amp-email" additivity="false" level="DEBUG">
         <appender-ref ref="amp-email" />

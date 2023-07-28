@@ -1201,8 +1201,8 @@ public final class HttpLoginManager {
 
         try {
             session = PersistenceManager.getRequestDBSession();
-            Query q = session.createQuery("from " + User.class.getName() + " u where lower(u.email) =? ");
-            q.setString(0, email.toLowerCase());
+            Query q = session.createQuery("from " + User.class.getName() + " u where lower(u.email) =:email ");
+            q.setParameter("email", email.toLowerCase());
             q.setCacheable(true);
 
             List results = q.list();

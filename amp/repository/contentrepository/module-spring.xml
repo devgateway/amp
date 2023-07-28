@@ -8,8 +8,8 @@
                     http://www.springframework.org/schema/security/spring-security.xsd">
 
     <!-- Pages with anonymous access -->
-    <http pattern="/contentrepository/publicDocTabManager.do**"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
-        <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+    <http pattern="/contentrepository/publicDocTabManager.do**" use-expressions="true" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+        <intercept-url pattern="/**" access="permitAll" />
     </http>
 
  	<http pattern="/contentrepository/documentManager.do\?ajaxDocumentList=true&amp;dynamicList=publicListObj" request-matcher="regex" security="none" />

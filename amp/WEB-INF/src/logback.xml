@@ -51,9 +51,13 @@
     <!-- Limit the org.quartz category to INFO as its DEBUG is verbose -->
     <logger name="org.quartz" level="INFO" />
 
+    <logger name="org.springframework.security" level="TRACE"/>
+
+
     <logger name="org.digijava" level="INFO" /> <!-- DEBUG default -->
 
     <logger name="org.dgfoundation" level="INFO" /> <!-- DEBUG default -->
+    <logger name="org.dgfoundation.amp.visibility" level="INFO" /> <!-- DEBUG default -->
 
     <!-- SET to DEBUG to see wicket page render times -->
     <logger name="org.apache.wicket.devutils.inspector.RenderPerformanceListener" level="DEBUG" />
@@ -61,17 +65,17 @@
     <!-- Limit JSF logging to DEBUG.  FINER and FINEST will not be logged -->
     <logger name="javax.enterprise.resource.webcontainer.jsf" level="INFO" />
 
-    <logger name="org.hibernate" level="TRACE" />
+    <logger name="org.hibernate" level="INFO" />
 
     <logger name="net.sf.hibernate.cache" level="ERROR" />
 
     <logger name="net.sf.ehcache.hibernate" level="ERROR" />
 
     <!-- SET to TRACE in order to see queries and their value, INFO is default -->
-    <logger name="org.hibernate.SQL" level="TRACE" />
+    <logger name="org.hibernate.SQL" level="INFO" />
 
     <!-- SET to TRACE in order to see queries and their value, INFO is default -->
-    <logger name="org.hibernate.type" level="TRACE" />
+    <logger name="org.hibernate.type" level="INFO" />
 
     <logger name="amp-email" additivity="false" level="DEBUG">
         <appender-ref ref="amp-email" />

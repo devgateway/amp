@@ -29,17 +29,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import javax.security.auth.Subject;
-
+import com.google.common.hash.Hashing;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.request.SiteDomain;
-import org.digijava.kernel.security.DgSecurityManager;
-import org.digijava.kernel.security.ResourcePermission;
 import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.kernel.util.UserUtils;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.query.Query;
@@ -52,11 +45,27 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
+@Component
 public class DigiUserDetailsService
     implements UserDetailsService {
 
     private boolean populateGroupAuthorities = false;
+    private PasswordEncoder passwordEncoder;
+    private PasswordEncoder noOpPasswordEncoder;
+    String constantSaltValue = "thisIsMySalt";
+
+
+
+    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder=passwordEncoder;
+    }
+
 
     /**
      * loadUserByUsername
@@ -100,9 +109,29 @@ public class DigiUserDetailsService
 
     protected UserDetails getUserDetails(User user) throws DataAccessException {
         Collection<? extends GrantedAuthority> authorities = getAssignedAuthorities(user);
+        noOpPasswordEncoder = NoOpPasswordEncoder.getInstance();
+//        String salt = BCrypt.gensalt();
+//        System.out.println(salt);
 
-        UserDetails ud = new org.springframework.security.core.userdetails.User(user.getEmail(),
-            user.getPassword(), true, true, true, true, authorities);
+//        BCryptPasswordEncoder customBCryptPasswordEncoder = new CustomPasswordEncoder(user.getSalt());
+//        String password = customBCryptPasswordEncoder.encode("abc");
+//        System.out.println(password);
+                UserDetails ud = org.springframework.security.core.userdetails.User.builder()
+                .username(user.getEmail())
+                .password(user.getPassword())
+                .accountExpired(false)
+//                .passwordEncoder(customBCryptPasswordEncoder::encode) // Encode the password using the passwordEncoder
+                .accountLocked(false)
+                .credentialsExpired(false)
+                .disabled(false)
+                .authorities(authorities)
+                .build();
+        System.out.println("User name: "+ud.getUsername());
+        System.out.println("User details pass: "+ud.getPassword());
+        System.out.println("User pass: "+user.getPassword());
+
+//        UserDetails ud = new org.springframework.security.core.userdetails.User(user.getEmail(),
+//            user.getPassword(), true, true, true, true, authorities);
 
         return ud;
     }
@@ -151,5 +180,7 @@ public class DigiUserDetailsService
     public void setPopulateGroupAuthorities(boolean populateGroupAuthorities) {
         this.populateGroupAuthorities = populateGroupAuthorities;
     }
+
+
 
 }

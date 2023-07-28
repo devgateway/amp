@@ -39,6 +39,7 @@ import org.digijava.kernel.entity.UserPreferences;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.security.auth.CustomPasswordEncoder;
 import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.ProxyHelper;
@@ -59,6 +60,9 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class DbUtil {
     private static Logger logger = Logger.getLogger(DbUtil.class);
@@ -434,12 +438,17 @@ public class DbUtil {
             session = PersistenceManager.getSession();
 //beginTransaction();
 
-            // set encrypted password
-            user.setPassword(ShaCrypt.crypt(user.getPassword().trim()).trim());
+            String salt = BCrypt.gensalt();
+//            BCryptPasswordEncoder passwordEncoder = new CustomPasswordEncoder(salt);
+            PasswordEncoder passwordEncoder = org.springframework.security.crypto.factory.PasswordEncoderFactories.createDelegatingPasswordEncoder();
+
+            // Set BCrypt hashed password
+            String hashedPassword = passwordEncoder.encode(user.getPassword().trim());
+            user.setPassword(hashedPassword);
+
 
             // set hashed password
-            user.setSalt(new Long(user.getPassword().trim().hashCode()).
-                         toString());
+            user.setSalt(salt);
 
             // update user
             session.save(user);

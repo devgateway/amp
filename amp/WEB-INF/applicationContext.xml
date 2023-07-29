@@ -231,5 +231,6 @@
 	</beans:bean>
 
 	<context:component-scan base-package="org.digijava.kernel.services"/>
+	<context:component-scan base-package="org.digijava.kernel.security"/>
 
 </beans:beans>   

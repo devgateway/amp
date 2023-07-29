@@ -500,8 +500,8 @@ public class TeamUtil {
                 Iterator itr1 = qry.list().iterator();
                 int numMem = 0;
                 if(itr1.hasNext()) {
-                    Integer num = (Integer) itr1.next();
-                    numMem = num.intValue();
+                    Long longNum= (Long) itr1.next();
+                    numMem = longNum.intValue();
                 }
                 if(numMem == 0) {
                     workspace.setHasMembers(false);

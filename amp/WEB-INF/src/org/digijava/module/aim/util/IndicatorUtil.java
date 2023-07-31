@@ -1870,9 +1870,7 @@ public class IndicatorUtil {
          try {
              Set<IndicatorActivity> valuesActivity=ActivityUtil.loadActivity(actId).getIndicators();
                 if(valuesActivity!=null && valuesActivity.size()>0){
-                    Iterator<IndicatorActivity> it=valuesActivity.iterator();
-                    while(it.hasNext()){
-                        IndicatorActivity indActivity = it.next();
+                    for (IndicatorActivity indActivity : valuesActivity) {
                         if (indActivity.getRisk() != null) {
                             risks.add(indActivity.getRisk());
                         }

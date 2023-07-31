@@ -1,9 +1,9 @@
 package org.digijava.module.aim.validator;
 
-import static org.digijava.module.aim.dbentity.ApprovalStatus.APPROVED;
-import static org.digijava.module.aim.dbentity.ApprovalStatus.REJECTED;
-import static org.digijava.module.aim.dbentity.ApprovalStatus.STARTED;
-import static org.digijava.module.aim.dbentity.ApprovalStatus.STARTED_APPROVED;
+import static org.digijava.module.aim.dbentity.ApprovalStatus.approved;
+import static org.digijava.module.aim.dbentity.ApprovalStatus.rejected;
+import static org.digijava.module.aim.dbentity.ApprovalStatus.started;
+import static org.digijava.module.aim.dbentity.ApprovalStatus.started_approved;
 import static org.digijava.module.aim.helper.Constants.PROJECT_VALIDATION_FOR_ALL_EDITS;
 import static org.digijava.module.aim.helper.Constants.PROJECT_VALIDATION_OFF;
 import static org.digijava.module.aim.helper.Constants.PROJECT_VALIDATION_ON;
@@ -69,7 +69,7 @@ public class ApprovalStatusConstraintTest extends AbstractActivityValidatorTest<
     @Test
     public void testNeedsApprovalNewDraftActivityValidationOn() {
         AmpActivity activity = new AmpActivity();
-        activity.setApprovalStatus(STARTED);
+        activity.setApprovalStatus(started);
         activity.setDraft(true);
         mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_ALL_EDITS, activity);
 
@@ -81,7 +81,7 @@ public class ApprovalStatusConstraintTest extends AbstractActivityValidatorTest<
     @Test
     public void testNeedsApprovalNewSubmittedActivityByApproverValidationOn() {
         AmpActivity activity = new AmpActivity();
-        activity.setApprovalStatus(STARTED);
+        activity.setApprovalStatus(started);
         activity.setDraft(false);
         mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_ALL_EDITS, activity);
 
@@ -93,7 +93,7 @@ public class ApprovalStatusConstraintTest extends AbstractActivityValidatorTest<
     @Test
     public void testNeedsApprovalNewSubmittedActivityByNonApproverValidationOn() {
         AmpActivity activity = new AmpActivity();
-        activity.setApprovalStatus(STARTED);
+        activity.setApprovalStatus(started);
         activity.setDraft(false);
 
         mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_ALL_EDITS, activity);
@@ -108,7 +108,7 @@ public class ApprovalStatusConstraintTest extends AbstractActivityValidatorTest<
     @Test
     public void testNeedsApprovalNewSubmittedActivityByNonApproverValidationOff() {
         AmpActivity activity = new AmpActivity();
-        activity.setApprovalStatus(STARTED);
+        activity.setApprovalStatus(started);
 
         mockValidation(PROJECT_VALIDATION_OFF, PROJECT_VALIDATION_FOR_ALL_EDITS, activity);
 
@@ -125,7 +125,7 @@ public class ApprovalStatusConstraintTest extends AbstractActivityValidatorTest<
         ActivityValidationContext.getOrThrow().setOldActivity(oldActivity);
         
         AmpActivity activity = (AmpActivity) oldActivity.clone();
-        activity.setApprovalStatus(REJECTED);
+        activity.setApprovalStatus(rejected);
         activity.setDraft(true);
 
         mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_ALL_EDITS, activity);
@@ -138,7 +138,7 @@ public class ApprovalStatusConstraintTest extends AbstractActivityValidatorTest<
     @Test
     public void testRejectedNewDraftActivityByApprover() {
         AmpActivity activity = new AmpActivity();
-        activity.setApprovalStatus(REJECTED);
+        activity.setApprovalStatus(rejected);
         activity.setDraft(true);
         
         mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_ALL_EDITS, activity);
@@ -151,7 +151,7 @@ public class ApprovalStatusConstraintTest extends AbstractActivityValidatorTest<
     @Test
     public void testRejectedNewDraftActivityByNonApprover() {
         AmpActivity activity = new AmpActivity();
-        activity.setApprovalStatus(REJECTED);
+        activity.setApprovalStatus(rejected);
         activity.setDraft(true);
 
         mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_ALL_EDITS, activity);
@@ -167,7 +167,7 @@ public class ApprovalStatusConstraintTest extends AbstractActivityValidatorTest<
     public void testApprovalStatusApprovedOnDraft() {
         AmpActivity activity = new AmpActivity();
         activity.setDraft(true);
-        activity.setApprovalStatus(APPROVED);
+        activity.setApprovalStatus(approved);
 
         Set<ConstraintViolation<AmpActivity>> violations = validateForAPI(activity);
 
@@ -178,7 +178,7 @@ public class ApprovalStatusConstraintTest extends AbstractActivityValidatorTest<
     public void testSubmitNewApprovedActivityValidationOff() {
         AmpActivity activity = new AmpActivity();
         activity.setDraft(false);
-        activity.setApprovalStatus(APPROVED);
+        activity.setApprovalStatus(approved);
 
         mockValidation(PROJECT_VALIDATION_OFF, PROJECT_VALIDATION_FOR_ALL_EDITS, activity);
 
@@ -191,7 +191,7 @@ public class ApprovalStatusConstraintTest extends AbstractActivityValidatorTest<
     public void testDraftNewApprovedActivityValidationOff() {
         AmpActivity activity = new AmpActivity();
         activity.setDraft(true);
-        activity.setApprovalStatus(APPROVED);
+        activity.setApprovalStatus(approved);
 
         mockValidation(PROJECT_VALIDATION_OFF, PROJECT_VALIDATION_FOR_ALL_EDITS, activity);
 
@@ -204,7 +204,7 @@ public class ApprovalStatusConstraintTest extends AbstractActivityValidatorTest<
     public void testSubmitNewStartedApprovedActivityValidationOff() {
         AmpActivity activity = new AmpActivity();
         activity.setDraft(false);
-        activity.setApprovalStatus(STARTED_APPROVED);
+        activity.setApprovalStatus(started_approved);
 
         mockValidation(PROJECT_VALIDATION_OFF, PROJECT_VALIDATION_FOR_ALL_EDITS, activity);
 
@@ -217,7 +217,7 @@ public class ApprovalStatusConstraintTest extends AbstractActivityValidatorTest<
     public void testDraftNewStartedApprovedActivityValidationOff() {
         AmpActivity activity = new AmpActivity();
         activity.setDraft(true);
-        activity.setApprovalStatus(STARTED_APPROVED);
+        activity.setApprovalStatus(started_approved);
 
         mockValidation(PROJECT_VALIDATION_OFF, PROJECT_VALIDATION_FOR_ALL_EDITS, activity);
 
@@ -230,7 +230,7 @@ public class ApprovalStatusConstraintTest extends AbstractActivityValidatorTest<
     public void testSubmitNewStartedApprovedActivityValidationOn() {
         AmpActivity activity = new AmpActivity();
         activity.setDraft(false);
-        activity.setApprovalStatus(STARTED_APPROVED);
+        activity.setApprovalStatus(started_approved);
 
         mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_ALL_EDITS, activity);
 
@@ -243,7 +243,7 @@ public class ApprovalStatusConstraintTest extends AbstractActivityValidatorTest<
     public void testSubmitNewApprovedActivityValidationOn() {
         AmpActivity activity = new AmpActivity();
         activity.setDraft(false);
-        activity.setApprovalStatus(APPROVED);
+        activity.setApprovalStatus(approved);
 
         mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_ALL_EDITS, activity);
 

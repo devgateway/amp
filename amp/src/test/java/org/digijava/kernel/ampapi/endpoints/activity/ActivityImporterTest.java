@@ -250,7 +250,7 @@ public class ActivityImporterTest {
     
     private ActivityImporter validateAndRetrieveImporter(Map<String, Object> json) {
         AmpActivityVersion activity = new AmpActivityVersion();
-        activity.setApprovalStatus(ApprovalStatus.STARTED);
+        activity.setApprovalStatus(ApprovalStatus.started);
         APIField activityField = new APIField();
         ActivityImporter importer = new ActivityImporter(activityField, new ActivityImportRules(true, false, false));
         importer.validateAndImport(activity, json, true);
@@ -446,13 +446,13 @@ public class ActivityImporterTest {
                         hasProperty("name", equalTo("Activity 1")),
                         hasProperty("draft", equalTo(false)),
                         hasProperty("ampId", equalTo("12345678")),
-                        hasProperty("approvalStatus", equalTo(ApprovalStatus.STARTED_APPROVED))
+                        hasProperty("approvalStatus", equalTo(ApprovalStatus.started_approved))
                 )),
                 hasProperty("newActivity", allOf(
                         hasProperty("name", equalTo("Title")),
                         hasProperty("draft", equalTo(true)),
                         hasProperty("ampId", equalTo("12345678")),
-                        hasProperty("approvalStatus", equalTo(ApprovalStatus.EDITED))
+                        hasProperty("approvalStatus", equalTo(ApprovalStatus.edited))
                 ))));
     }
     
@@ -476,13 +476,13 @@ public class ActivityImporterTest {
                         hasProperty("name", equalTo("Activity 1")),
                         hasProperty("draft", equalTo(false)),
                         hasProperty("ampId", equalTo("12345678")),
-                        hasProperty("approvalStatus", equalTo(ApprovalStatus.STARTED_APPROVED))
+                        hasProperty("approvalStatus", equalTo(ApprovalStatus.started_approved))
                 )),
                 hasProperty("newActivity", allOf(
                         hasProperty("name", equalTo("Title")),
                         hasProperty("draft", equalTo(false)),
                         hasProperty("ampId", equalTo("12345678")),
-                        hasProperty("approvalStatus", equalTo(ApprovalStatus.EDITED))
+                        hasProperty("approvalStatus", equalTo(ApprovalStatus.edited))
                 ))));
     }
     

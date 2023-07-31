@@ -1,6 +1,6 @@
 package org.digijava.module.aim.validator.approval;
 
-import static org.digijava.module.aim.dbentity.ApprovalStatus.REJECTED;
+import static org.digijava.module.aim.dbentity.ApprovalStatus.rejected;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -41,7 +41,7 @@ public class ApprovalStatusConstraint implements ConstraintValidator<AllowedAppr
 
             Long activityTeamId = activity.getTeam().getAmpTeamId();
 
-            if (REJECTED.equals(approvalStatus)) {
+            if (rejected.equals(approvalStatus)) {
                 return activity.getDraft() && ActivityUtil.canReject(activity.getModifiedBy(), oldDraft, isNew);
             }
 

@@ -1168,7 +1168,7 @@ public class DbUtil {
             queryString = " select org from " + AmpOrganisation.class.getName()
                     + " org where org.orgGrpId=:orgGroupId and (org.deleted is null or org.deleted = false) order by org.name ";
             q = session.createQuery(queryString);
-            q.setLong("orgGroupId", orgGroupId);
+            q.setParameter("orgGroupId", orgGroupId, LongType.INSTANCE);
             organizations = q.list();
         } catch (Exception ex) {
             logger.error("Unable to get Amp organisation names  from database " + ex.getMessage());
@@ -1191,7 +1191,7 @@ public class DbUtil {
         if (publicView) {
             queryString.append(String.format(
                     " and orgRole.activity.approvalStatus in ('%s', '%s') and orgRole.activity.team.parentTeamId is not null ",
-                    ApprovalStatus.APPROVED.getDbName(), ApprovalStatus.STARTED_APPROVED.getDbName()));
+                    ApprovalStatus.approved.getDbName(), ApprovalStatus.started_approved.getDbName()));
         }
 
         Query query = PersistenceManager.getSession().createQuery(queryString.toString());

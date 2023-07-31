@@ -205,8 +205,8 @@ public final class SummaryChangesService {
                                 + "     WHERE isolated = FALSE "
                                 + "       OR isolated IS NULL ) ",
                         Constants.ACTIVITY_NEEDS_APPROVAL_STATUS,
-                        ApprovalStatus.APPROVED.getDbName(),
-                        ApprovalStatus.STARTED_APPROVED.getDbName());
+                        ApprovalStatus.approved.getDbName(),
+                        ApprovalStatus.started_approved.getDbName());
 
                 ArrayList<FilterParam> params = new ArrayList<FilterParam>();
                 params.add(new FilterParam(DateUtils.addDays(fromDate, -1), Types.TIMESTAMP));

@@ -99,8 +99,6 @@ import org.hibernate.LockMode;
 import org.hibernate.LockOptions;
 import org.hibernate.query.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
 
 /**
  * Util class used to manipulate an activity
@@ -424,8 +422,8 @@ public class ActivityUtil {
 
     public static boolean isApproved(AmpActivityVersion activity) {
         ApprovalStatus approvalStatus = activity.getApprovalStatus();
-        return ApprovalStatus.APPROVED.equals(approvalStatus)
-                || ApprovalStatus.STARTED_APPROVED.equals(approvalStatus);
+        return ApprovalStatus.approved.equals(approvalStatus)
+                || ApprovalStatus.started_approved.equals(approvalStatus);
     }
 
     private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityVersion a) {
@@ -524,23 +522,23 @@ public class ActivityUtil {
             if (teamLeadFlag) {
                 if (savedAsDraft) {
                     if (rejected) {
-                        a.setApprovalStatus(ApprovalStatus.REJECTED);
+                        a.setApprovalStatus(ApprovalStatus.rejected);
                     } else {
                         if (newActivity) {
-                            a.setApprovalStatus(ApprovalStatus.STARTED);
+                            a.setApprovalStatus(ApprovalStatus.started);
                         } else {
                             if (oldA.getApprovalStatus() != null
-                                    && ApprovalStatus.STARTED.equals(oldA.getApprovalStatus()))
-                                a.setApprovalStatus(ApprovalStatus.STARTED);
+                                    && ApprovalStatus.started.equals(oldA.getApprovalStatus()))
+                                a.setApprovalStatus(ApprovalStatus.started);
                             else
-                                a.setApprovalStatus(ApprovalStatus.EDITED);
+                                a.setApprovalStatus(ApprovalStatus.edited);
                         }
                     }
                 } else {
                     // If activity belongs to the same workspace where TL/AP is
                     // logged set it validated
                     if (isSameWorkspace) {
-                        a.setApprovalStatus(ApprovalStatus.APPROVED);
+                        a.setApprovalStatus(ApprovalStatus.approved);
                         a.setApprovedBy(ampCurrentMember);
                         a.setApprovalDate(Calendar.getInstance().getTime());
                     } else {
@@ -550,14 +548,14 @@ public class ActivityUtil {
                          * set it validated
                          */
                         if (crossTeamValidation) {
-                            a.setApprovalStatus(ApprovalStatus.APPROVED);
+                            a.setApprovalStatus(ApprovalStatus.approved);
                             a.setApprovedBy(ampCurrentMember);
                             a.setApprovalDate(Calendar.getInstance().getTime());
                         } else {
-                            if (ApprovalStatus.STARTED.equals(oldA.getApprovalStatus())) {
-                                a.setApprovalStatus(ApprovalStatus.STARTED);
+                            if (ApprovalStatus.started.equals(oldA.getApprovalStatus())) {
+                                a.setApprovalStatus(ApprovalStatus.started);
                             } else {
-                                a.setApprovalStatus(ApprovalStatus.EDITED);
+                                a.setApprovalStatus(ApprovalStatus.edited);
                             }
                         }
                     }
@@ -566,28 +564,28 @@ public class ActivityUtil {
                 if (Constants.PROJECT_VALIDATION_FOR_NEW_ONLY.equals(validation)) {
                     if (newActivity) {
                         // all the new activities will have the started status
-                        a.setApprovalStatus(ApprovalStatus.STARTED);
+                        a.setApprovalStatus(ApprovalStatus.started);
                     } else {
                         // if we edit an existing not validated status it will
                         // keep the old status - started
                         if (oldA.getApprovalStatus() != null
-                                && ApprovalStatus.STARTED.equals(oldA.getApprovalStatus()))
-                            a.setApprovalStatus(ApprovalStatus.STARTED);
+                                && ApprovalStatus.started.equals(oldA.getApprovalStatus()))
+                            a.setApprovalStatus(ApprovalStatus.started);
                         // if we edit an existing activity that is validated or
                         // startedvalidated or edited
                         else
-                            a.setApprovalStatus(ApprovalStatus.APPROVED);
+                            a.setApprovalStatus(ApprovalStatus.approved);
                     }
                 } else {
                     if (Constants.PROJECT_VALIDATION_FOR_ALL_EDITS.equals(validation)) {
                         if (newActivity) {
-                            a.setApprovalStatus(ApprovalStatus.STARTED);
+                            a.setApprovalStatus(ApprovalStatus.started);
                         } else {
                             if (oldA.getApprovalStatus() != null
-                                    && ApprovalStatus.STARTED.equals(oldA.getApprovalStatus()))
-                                a.setApprovalStatus(ApprovalStatus.STARTED);
+                                    && ApprovalStatus.started.equals(oldA.getApprovalStatus()))
+                                a.setApprovalStatus(ApprovalStatus.started);
                             else
-                                a.setApprovalStatus(ApprovalStatus.EDITED);
+                                a.setApprovalStatus(ApprovalStatus.edited);
                         }
                     }
                 }
@@ -597,9 +595,9 @@ public class ActivityUtil {
         } else {
             // Validation is OF in GS activity approved
             if (newActivity) {
-                a.setApprovalStatus(ApprovalStatus.STARTED_APPROVED);
+                a.setApprovalStatus(ApprovalStatus.started_approved);
             } else {
-                a.setApprovalStatus(ApprovalStatus.APPROVED);
+                a.setApprovalStatus(ApprovalStatus.approved);
             }
             a.setApprovedBy(ampCurrentMember);
             a.setApprovalDate(Calendar.getInstance().getTime());
@@ -621,7 +619,7 @@ public class ActivityUtil {
                 boolean isSameWorkspace = atm.getAmpTeam().getAmpTeamId().equals(activityTeamId);
                 return isSameWorkspace || atm.getAmpTeam().getCrossteamvalidation();
             } else if (Constants.PROJECT_VALIDATION_FOR_NEW_ONLY.equals(validation)) {
-                return oldApprovalStatus != null && !oldApprovalStatus.equals(ApprovalStatus.STARTED);
+                return oldApprovalStatus != null && !oldApprovalStatus.equals(ApprovalStatus.started);
             }
         } else {
             return true;
@@ -664,9 +662,9 @@ public class ActivityUtil {
         }
         String validation = getValidationSetting(atm);
         if (isProjectValidationOn(validation)) {
-            return Boolean.FALSE.equals(isDraft) && ApprovalStatus.APPROVED.equals(approvalStatus);
+            return Boolean.FALSE.equals(isDraft) && ApprovalStatus.approved.equals(approvalStatus);
         }
-        ApprovalStatus allowed = isNewActivity ? ApprovalStatus.STARTED_APPROVED : ApprovalStatus.APPROVED;
+        ApprovalStatus allowed = isNewActivity ? ApprovalStatus.started_approved : ApprovalStatus.approved;
         return allowed.equals(approvalStatus);
     }
 

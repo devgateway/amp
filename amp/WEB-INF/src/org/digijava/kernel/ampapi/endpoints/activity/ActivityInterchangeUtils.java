@@ -347,7 +347,7 @@ public final class ActivityInterchangeUtils {
 
     public static AmpActivityVersion loadActivity(Long actId) {
         try {
-            if (PersistenceManager.getSession().get(AmpActivityVersion.class, actId) == null) {
+            if (PersistenceManager.getRequestDBSession().get(AmpActivityVersion.class, actId) == null) {
                 ApiErrorResponseService.reportResourceNotFound(
                         ActivityErrors.ACTIVITY_NOT_FOUND.withDetails(actId.toString()));
             }

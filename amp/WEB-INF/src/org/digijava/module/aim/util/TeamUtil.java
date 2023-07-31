@@ -503,11 +503,7 @@ public class TeamUtil {
                     Long longNum= (Long) itr1.next();
                     numMem = longNum.intValue();
                 }
-                if(numMem == 0) {
-                    workspace.setHasMembers(false);
-                } else {
-                    workspace.setHasMembers(true);
-                }
+                workspace.setHasMembers(numMem != 0);
                 qryStr = "select count(*) from " + AmpActivity.class.getName()
                     + " act " + "where (act.team=:teamId)";
                 qry = session.createQuery(qryStr);
@@ -515,14 +511,9 @@ public class TeamUtil {
                 itr1 = qry.list().iterator();
                 int numAct = 0;
                 if(itr1.hasNext()) {
-                    Integer num = (Integer) itr1.next();
-                    numAct = num.intValue();
+                    numAct = ((Long)  itr1.next()).intValue();
                 }
-                if(numAct == 0) {
-                    workspace.setHasActivities(false);
-                } else {
-                    workspace.setHasActivities(true);
-                }
+                workspace.setHasActivities(numAct != 0);
                 qryStr = "select t from " + AmpTeam.class.getName() + " t "
                     + "where (t.parentTeamId.ampTeamId=:teamId)";
                 qry = session.createQuery(qryStr);
@@ -1006,10 +997,7 @@ public class TeamUtil {
                 + " tm where tm.parentTeamId.ampTeamId=:ampTeamId";
             q = session.createQuery(qry);
             q.setParameter("ampTeamId", ampTeamId, LongType.INSTANCE);
-            if(q != null && q.list().size() > 0)
-                ans = false;
-            else
-                ans = true;
+            ans = q.list().size() <= 0;
         } catch(Exception ex) {
             logger.error("Unable to get AmpTeam [checkForParentTeam()]", ex);
             throw new RuntimeException(ex);
@@ -1060,8 +1048,7 @@ public class TeamUtil {
         Query qry = session.createQuery(queryString.toString());
         for (Object[] rs : (List<Object[]>) qry.list()) {
             Long actId = (Long) rs[1];
-            if (result.get(actId) == null)
-                result.put(actId, new ArrayList<AmpActivityDocument>());
+            result.computeIfAbsent(actId, k -> new ArrayList<AmpActivityDocument>());
             result.get(actId).add((AmpActivityDocument) rs[0]);
         }
         return result;
@@ -1106,15 +1093,15 @@ public class TeamUtil {
                 queryString.append("  and   (g.ampActivityLastVersion.draft is null or g.ampActivityLastVersion.draft=false)) ");
             }
             if(keyword!=null && keyword.length()>0){
-                queryString.append(" and lower(" + activityNameHql + ") like lower(:name)") ;
+                queryString.append(" and lower(").append(activityNameHql).append(") like lower(:name)");
             }
             
             qry = session.createQuery(queryString.toString());
             if(keyword!=null && keyword.length()>0){
-                qry.setString("name", "%" + keyword + "%");
+                qry.setParameter("name", "%" + keyword + "%",StringType.INSTANCE);
             }
             if(teamId!=null){
-                qry.setLong("teamId", teamId);
+                qry.setParameter("teamId", teamId, LongType.INSTANCE);
             }          
             col  = qry.list();
             Map<Long, Object[]> res = new TreeMap<Long, Object[]>();
@@ -1137,26 +1124,13 @@ public class TeamUtil {
      */
     public static Set<Long> fetchIds(PreparedStatement statement)
     {
-        ResultSet rs = null;
-        try
-        {
-            rs = statement.executeQuery();
+        try (ResultSet rs = statement.executeQuery()) {
             Set<Long> res = new HashSet<Long>();
             while (rs.next())
                 res.add(rs.getLong(1));
             return res;
-        }
-        catch(SQLException ex)
-        {
+        } catch (SQLException ex) {
             return null;
-        }
-        finally
-        {
-            if (rs != null)
-            {
-                try{rs.close();}
-                catch(SQLException e){}
-            }
         }
         
     }
@@ -1169,13 +1143,13 @@ public class TeamUtil {
       if (teamId == null) {
           queryString.append(" and (A.amp_team_id is null)") ;
       }else{
-          queryString.append(" and (A.amp_team_id=" + teamId + ")") ;
+          queryString.append(" and (A.amp_team_id=").append(teamId).append(")");
       }
       if (!includedraft){
           queryString.append("  and   (A.draft is null or A.draft=false) ");
       }
       if (keyword != null && keyword.length() > 0){
-          queryString.append(" and lower(" + AmpActivityVersion.sqlStringForName("A.amp_activity_id") + ") like lower(?)") ;
+          queryString.append(" and lower(").append(AmpActivityVersion.sqlStringForName("A.amp_activity_id")).append(") like lower(?)");
       }
 
       final Set<Long> ids = new HashSet<Long>();

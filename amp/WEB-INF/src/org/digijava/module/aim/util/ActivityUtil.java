@@ -324,8 +324,8 @@ public class ActivityUtil {
                     whereTeamStatement.append(String.format(
                             " and (latestAct.draft=false or latestAct.draft is null) "
                                     + "and latestAct.approvalStatus IN ('%s', '%s') ",
-                            ApprovalStatus.APPROVED.getDbName(),
-                            ApprovalStatus.STARTED_APPROVED.getDbName()));
+                            ApprovalStatus.approved.getDbName(),
+                            ApprovalStatus.started_approved.getDbName()));
                     List<AmpTeam> teams = new ArrayList<AmpTeam>();
                     TeamUtil.getTeams(team, teams);
                     String relatedOrgs = "", teamIds = "";
@@ -1943,8 +1943,8 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                         + " and act.ampActivityGroup.ampActivityGroupId = ? "
                         + " and act.ampActivityId <> ? "
                         + " ORDER BY act.ampActivityId DESC",
-                ApprovalStatus.APPROVED.getDbName(),
-                ApprovalStatus.STARTED_APPROVED.getDbName()))
+                ApprovalStatus.approved.getDbName(),
+                ApprovalStatus.started_approved.getDbName()))
                 .setMaxResults(1);
         qry.setParameter(0, activity.getAmpActivityGroup().getAmpActivityGroupId());
         qry.setParameter(1, activityId);
@@ -2071,14 +2071,14 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             if (isTeamMemberValidator) {
                 if (Constants.PROJECT_VALIDATION_FOR_ALL_EDITS.equalsIgnoreCase(validationOption)) {
                     if (activity.getTeam() != null
-                            && (ApprovalStatus.STARTED.equals(activity.getApprovalStatus())
-                            || ApprovalStatus.EDITED.equals(activity.getApprovalStatus()))) {
+                            && (ApprovalStatus.started.equals(activity.getApprovalStatus())
+                            || ApprovalStatus.edited.equals(activity.getApprovalStatus()))) {
                         canValidate = true;
                     }
                 } else {
                     //it will display the validate label only if it is just started and was not approved not even once
                     if (Constants.PROJECT_VALIDATION_FOR_NEW_ONLY.equalsIgnoreCase(validationOption)
-                            && ApprovalStatus.STARTED.equals(activity.getApprovalStatus())) {
+                            && ApprovalStatus.started.equals(activity.getApprovalStatus())) {
                             canValidate = true;
                         }
                     }

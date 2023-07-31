@@ -33,13 +33,13 @@ public class ActivityCloser {
 
     public void closeActivities(List<AmpActivityVersion> closeableActivities, Long closedCategoryValue,
                                 SaveContext saveContext) throws Exception {
-        ApprovalStatus newStatus = ApprovalStatus.APPROVED;
+        ApprovalStatus newStatus = ApprovalStatus.approved;
         LOGGER.error(closeableActivities.size());
         for (AmpActivityVersion ver : closeableActivities) {
 
             if ("On".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PROJECTS_VALIDATION))) {
-                newStatus = ver.getApprovalStatus().equals(ApprovalStatus.STARTED_APPROVED)
-                        ? ApprovalStatus.STARTED : ApprovalStatus.EDITED;
+                newStatus = ver.getApprovalStatus().equals(ApprovalStatus.started_approved)
+                        ? ApprovalStatus.started : ApprovalStatus.edited;
             }
 
             AmpCategoryValue oldActivityStatus =

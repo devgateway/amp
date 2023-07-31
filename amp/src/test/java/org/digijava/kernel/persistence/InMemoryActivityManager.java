@@ -63,7 +63,7 @@ public class InMemoryActivityManager implements InMemoryManager<AmpActivityVersi
                 .withDraft(false)
                 .withGroup(group1)
                 .withActivityCreator(creator)
-                .withApprovalStatus(ApprovalStatus.STARTED_APPROVED)
+                .withApprovalStatus(ApprovalStatus.started_approved)
                 .withTeam(creator.getAmpTeam())
                 .getActivity());
         activityGroupVersions.put(1L, 1L);
@@ -79,7 +79,7 @@ public class InMemoryActivityManager implements InMemoryManager<AmpActivityVersi
                 .withGroup(group2)
                 .withActivityCreator(creator)
                 .withTeam(creator.getAmpTeam())
-                .withApprovalStatus(ApprovalStatus.APPROVED)
+                .withApprovalStatus(ApprovalStatus.approved)
                 .getActivity());
     
         activityGroupVersions.put(2L, 2L);

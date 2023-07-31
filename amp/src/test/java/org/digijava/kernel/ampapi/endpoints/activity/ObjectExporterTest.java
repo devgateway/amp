@@ -216,11 +216,11 @@ public class ObjectExporterTest {
     @Test
     public void testApprovalStatusRefHack() {
         Dummy dummy = new Dummy();
-        dummy.approvalStatus = ApprovalStatus.STARTED;
+        dummy.approvalStatus = ApprovalStatus.started;
 
         Map<String, Object> jsonObj = exporter.export(dummy);
 
-        assertThat(jsonObj, hasEntry("approval_status", ApprovalStatus.STARTED.getId()));
+        assertThat(jsonObj, hasEntry("approval_status", ApprovalStatus.started.getId()));
     }
 
     @Test

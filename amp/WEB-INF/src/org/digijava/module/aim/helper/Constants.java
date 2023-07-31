@@ -196,10 +196,10 @@ public final class Constants {
     public static final String ACTIVITY_STATUS_CONSIDERED       = "Considered";
     
     public static final Set<ApprovalStatus> ACTIVITY_NEEDS_APPROVAL_STATUS_SET = ImmutableSet.of(
-            ApprovalStatus.CREATED,
-            ApprovalStatus.STARTED,
-            ApprovalStatus.EDITED,
-            ApprovalStatus.REJECTED);
+            ApprovalStatus.created,
+            ApprovalStatus.started,
+            ApprovalStatus.edited,
+            ApprovalStatus.rejected);
 
     public static final String ACTIVITY_NEEDS_APPROVAL_STATUS = ACTIVITY_NEEDS_APPROVAL_STATUS_SET.stream()
             .map(z -> StringUtils.wrap(z.getDbName(), "'"))

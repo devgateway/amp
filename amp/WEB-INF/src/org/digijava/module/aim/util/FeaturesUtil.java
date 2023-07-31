@@ -1861,12 +1861,13 @@ public class FeaturesUtil {
         String qryStr;
         try {
 
-            session = PersistenceManager.getSession();
+            session = PersistenceManager.getRequestDBSession();
             AmpModulesVisibility module = (AmpModulesVisibility) session.load(AmpModulesVisibility.class,moduleId);
             qryStr = "select f from " + AmpFeaturesVisibility.class.getName() + " f  where f.name = :featureName";
             qry = session.createQuery(qryStr).setString("featureName", featureName);
-            AmpFeaturesVisibility feature = (AmpFeaturesVisibility) qry.uniqueResult();
-            if (feature != null){               
+//            AmpFeaturesVisibility feature = (AmpFeaturesVisibility) qry.uniqueResult();//returns multiple rsuts
+            AmpFeaturesVisibility feature = (AmpFeaturesVisibility) qry.list().get(0);
+            if (feature != null){
                 module.getOrCreateItems().add(feature);
                 feature.setParent(module);
                 session.saveOrUpdate(feature);

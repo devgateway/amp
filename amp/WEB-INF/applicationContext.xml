@@ -14,6 +14,10 @@
 
 	<beans:import resource="classpath:/applicationContext.xml" />
 
+	<beans:bean id="customHttpFirewall" class="org.digijava.kernel.security.auth.CustomHttpFirewall"/>
+	<http-firewall ref="customHttpFirewall"/>
+
+
 	<!-- by default allow displaying of the flag -->
 	<http pattern="/aim/default/displayFlag.do**" security="none" />
 
@@ -164,36 +168,38 @@
         <intercept-url pattern="/**" access="permitAll" />
     </http>
 
-   
 
+	<beans:bean id="logoutFilter" class="org.springframework.security.web.authentication.logout.LogoutFilter">
+		<beans:constructor-arg index="0" value="/showLayout.do/?layout=login" />
+		<beans:constructor-arg index="1">
+			<beans:list>
+				<beans:bean id="securityContextLogoutHandler" class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler" />
+			</beans:list>
+		</beans:constructor-arg>
+		<beans:property name="filterProcessesUrl" value="/j_spring_logout" />
+	</beans:bean>
 	<!-- set the digestEntryPoint to set up the HTTP headers for digest -->
 	<http entry-point-ref="digestEntryPoint" realm="AMP-Realm" use-expressions="true">
 		<!-- do not allow anonymous tokens, they are enabled by default ! -->
 		<anonymous enabled="false" />
 
-		<!-- digest filter reference, as the authentication filter for the security 
+		<!-- digest filter reference, as the authentication filter for the security
 			chain -->
 		<custom-filter ref="digestFilter" position="BASIC_AUTH_FILTER" />
 
 		<!-- all the rest of the AMP pages need the user to be authenticated -->
 		<intercept-url pattern="/**" access="hasRole('ROLE_AUTHENTICATED')" />
-		
+
+
 		<!-- standard logout url to terminate the session and delete Tomcat cookies -->
-		<!-- <logout delete-cookies="JSESSIONID" logout-url="/j_spring_logout" />
-		 -->
+<!--<logout delete-cookies="JSESSIONID" logout-url="/j_spring_logout" />-->
+
+<!--		 &ndash;&gt;-->
 
 		<custom-filter position="LOGOUT_FILTER" ref="logoutFilter" />
 	</http>
 
-<beans:bean id="logoutFilter" class="org.springframework.security.web.authentication.logout.LogoutFilter">
-    <beans:constructor-arg index="0" value="/showLayout.do/?layout=login" />
-    <beans:constructor-arg index="1">
-        <beans:list>
-            <beans:bean id="securityContextLogoutHandler" class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler" />
-        </beans:list>
-    </beans:constructor-arg>
-    <beans:property name="filterProcessesUrl" value="/j_spring_logout" />
-</beans:bean>
+
 	<beans:bean id="passwordEncoder" class="org.springframework.security.crypto.password.NoOpPasswordEncoder"
 				factory-method="getInstance"/>
 
@@ -231,6 +237,6 @@
 	</beans:bean>
 
 	<context:component-scan base-package="org.digijava.kernel.services"/>
-	<context:component-scan base-package="org.digijava.kernel.security"/>
+	<context:component-scan base-package="org.digijava.kernel.security.auth"/>
 
 </beans:beans>   

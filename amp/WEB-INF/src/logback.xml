@@ -50,6 +50,7 @@
 
     <!-- Limit the org.quartz category to INFO as its DEBUG is verbose -->
     <logger name="org.quartz" level="INFO" />
+    <logger name="org.springframework.security" level="TRACE" />
 
     <logger name="org.digijava" level="INFO" /> <!-- DEBUG default -->
 

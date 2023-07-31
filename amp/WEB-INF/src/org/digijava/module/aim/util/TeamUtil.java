@@ -1643,7 +1643,8 @@ public class TeamUtil {
                 qry         = session.createQuery(queryString);
                 if ( getTabs!=null )
                     qry.setBoolean("getTabs", getTabs);
-                count       = (Integer) qry.uniqueResult();
+                Long longCount = (Long) qry.uniqueResult();
+                count       = longCount.intValue();
                 
             } else if (!inlcludeMemberReport){
                 queryString = "select r from "

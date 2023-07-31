@@ -14,7 +14,7 @@
 
 	<beans:import resource="classpath:/applicationContext.xml" />
 
-	<beans:bean id="customHttpFirewall" class="org.digijava.kernel.security.auth.CustomHttpFirewall"/>
+	<beans:bean id="customHttpFirewall" class="org.springframework.security.web.firewall.DefaultHttpFirewall"/>
 	<http-firewall ref="customHttpFirewall"/>
 
 
@@ -167,6 +167,9 @@
     <http pattern="/index.do*"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
         <intercept-url pattern="/**" access="permitAll" />
     </http>
+	<http pattern="/translation/showNewAdvancedTranslation.do*"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+		<intercept-url pattern="/**" access="permitAll" />
+	</http>
 
 
 	<beans:bean id="logoutFilter" class="org.springframework.security.web.authentication.logout.LogoutFilter">
@@ -176,7 +179,7 @@
 				<beans:bean id="securityContextLogoutHandler" class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler" />
 			</beans:list>
 		</beans:constructor-arg>
-		<beans:property name="filterProcessesUrl" value="/j_spring_logout" />
+<!--		<beans:property name="filterProcessesUrl" value="/j_spring_logout" />-->
 	</beans:bean>
 	<!-- set the digestEntryPoint to set up the HTTP headers for digest -->
 	<http entry-point-ref="digestEntryPoint" realm="AMP-Realm" use-expressions="true">

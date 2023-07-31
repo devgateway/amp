@@ -147,16 +147,13 @@ public class SiteCache implements Runnable {
         }
     };
 
-    public static final Comparator<ModuleInstance> moduleInstanceComparator = new Comparator<ModuleInstance>() {
-        public int compare(ModuleInstance i1,
-                            ModuleInstance i2) {
-            int result;
-            result = i1.getModuleName().compareTo(i2.getModuleName());
-            if (result == 0) {
-                result = i1.getInstanceName().compareTo(i2.getInstanceName());
-            }
-            return result;
+    public static final Comparator<ModuleInstance> moduleInstanceComparator = (i1, i2) -> {
+        int result;
+        result = i1.getModuleName().compareTo(i2.getModuleName());
+        if (result == 0) {
+            result = i1.getInstanceName().compareTo(i2.getInstanceName());
         }
+        return result;
     };
 
     private java.util.List sharedInstances;

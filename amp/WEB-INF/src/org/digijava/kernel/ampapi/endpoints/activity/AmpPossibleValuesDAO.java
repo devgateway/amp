@@ -140,7 +140,8 @@ public class AmpPossibleValuesDAO implements PossibleValuesDAO {
     private boolean isValid(String tableName, String configColName, String configType, String idColName, Long id) {
         String query = "SELECT count(" + idColName + ") FROM " + tableName + " WHERE " + configColName + "='"
                 + configType + "' AND " + idColName + "=" + id;
-        BigInteger count = (BigInteger) PersistenceManager.getSession().createNativeQuery(query).uniqueResult();
+        Long longCount = (Long)PersistenceManager.getSession().createNativeQuery(query).uniqueResult();
+        BigInteger count = BigInteger.valueOf(longCount);
         return count.intValue() == 1;
     }
 

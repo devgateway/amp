@@ -443,8 +443,9 @@ public class AmpMessageUtil {
             queryString="select count(state.id) from "+AmpMessageState.class.getName()+" state, "+clazz.getName()+" msg where"+
             " msg.id=state.message.id and state.receiver.ampTeamMemId=:tmId and msg.draft=false and state.messageHidden=true";  
             query=session.createQuery(queryString);         
-            query.setParameter("tmId", tmId);           
-            hiddenMsgs=((Integer)query.uniqueResult()).intValue();
+            query.setParameter("tmId", tmId);
+            Long longValue =(Long) query.uniqueResult();
+            hiddenMsgs=longValue.intValue();
             if(hiddenMsgs>0){
                 full=true;
             }

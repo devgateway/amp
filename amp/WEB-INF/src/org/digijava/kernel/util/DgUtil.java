@@ -704,12 +704,15 @@ public class DgUtil {
         Site currentSite = RequestUtils.getSite(request);
         ModuleInstance requiredInstance = new ModuleInstance();
         requiredInstance.setSite(currentSite);
+        System.out.println(requiredInstance);
 
         requiredInstance.setModuleName(moduleName);
         requiredInstance.setInstanceName(moduleInstance);
+        System.out.println(requiredInstance);
 
         List allowedInstances = SiteCache.getInstance().getInstances(
             currentSite);
+        System.out.println(allowedInstances);
         logger.debug("Allowed instances: " + allowedInstances);
         int index = Collections.binarySearch(allowedInstances, requiredInstance,
                                              SiteCache.moduleInstanceComparator);

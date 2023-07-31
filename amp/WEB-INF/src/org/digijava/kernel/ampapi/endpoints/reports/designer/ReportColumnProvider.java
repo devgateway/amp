@@ -18,8 +18,13 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
+import org.hibernate.Session;
 import org.hibernate.criterion.Order;
+import org.hibernate.query.Query;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -176,12 +181,22 @@ public class ReportColumnProvider extends ReportEntityProvider {
         return ampTreeColumnsMapByType.get(type);
     }
 
+
     public List<AmpColumns> fetchAmpColumns() {
-        return PersistenceManager.getSession()
-                .createCriteria(AmpColumns.class)
-                .setCacheable(true)
-                .addOrder(Order.asc("columnName"))
-                .list();
+        // Assuming you have a PersistenceManager to get the session
+        Session session = PersistenceManager.getRequestDBSession();
+
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<AmpColumns> criteriaQuery = criteriaBuilder.createQuery(AmpColumns.class);
+        Root<AmpColumns> root = criteriaQuery.from(AmpColumns.class);
+
+        criteriaQuery.orderBy(criteriaBuilder.asc(root.get("columnName")));
+        criteriaQuery.select(root);
+
+        Query<AmpColumns> query = session.createQuery(criteriaQuery);
+        query.setCacheable(true);
+
+        return query.list();
     }
 
     private ReportColumn convertAmpColumnToReportColumn(final AmpColumns ampColumn, final String category,

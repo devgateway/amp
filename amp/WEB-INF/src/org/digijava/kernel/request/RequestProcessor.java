@@ -110,44 +110,49 @@ public class RequestProcessor
      */
     public void init(ActionServlet servlet,
                      ModuleConfig moduleConfig) throws ServletException {
+        try {
+            super.init(servlet, moduleConfig);
 
-        super.init(servlet, moduleConfig);
+            String modulePrefix = moduleConfig.getPrefix();
+            actionPermissions = new HashMap<>();
 
-        String modulePrefix = moduleConfig.getPrefix();
-        actionPermissions = new HashMap();
+            if ( (modulePrefix == null) || (modulePrefix.trim().length() == 0)) {
 
-        if ( (modulePrefix == null) || (modulePrefix.trim().length() == 0)) {
+                ActionConfig[] actionConfigs = moduleConfig.findActionConfigs();
+                if (actionConfigs != null) {
+                    for (ActionConfig actionConfig : actionConfigs) {
+                        int slashPos = actionConfig.getPath().substring(1).indexOf(
+                                "/");
+                        if (actionConfig.getPath().startsWith("/") &&
+                                slashPos >= 0) {
 
-            ActionConfig[] actionConfigs = moduleConfig.findActionConfigs();
-            if (actionConfigs != null) {
-                for (int i = 0; i < actionConfigs.length; i++) {
-                    ActionConfig actionConfig = actionConfigs[i];
-
-                    int slashPos = actionConfig.getPath().substring(1).indexOf(
-                        "/");
-                    if (actionConfig.getPath().startsWith("/") &&
-                        slashPos >= 0) {
-
-                        String moduleName = actionConfig.getPath().substring(1,
-                            slashPos + 1);
-                        String actionPath = actionConfig.getPath().substring(
-                            slashPos + 1);
-                        initModuleActionSecurity(moduleName, actionPath, true);
+                            String moduleName = actionConfig.getPath().substring(1,
+                                    slashPos + 1);
+                            String actionPath = actionConfig.getPath().substring(
+                                    slashPos + 1);
+                            initModuleActionSecurity(moduleName, actionPath, true);
+                        }
                     }
                 }
             }
-        }
-        else {
-            throw new java.lang.UnsupportedOperationException(
-                "Struts modules are not supported yet");
+            else {
+                throw new java.lang.UnsupportedOperationException(
+                        "Struts modules are not supported yet");
+            }
+
+            if (logger.isDebugEnabled()) {
+                logger.debug(String.format("Required permissions for Struts actions"
+                        + "\\n=================================================="
+                        + "\\n%s"
+                        + "\\n==================================================", actionPermissions));
+            }
+        }catch (Throwable e)
+        {
+            logger.info("Error: ",e);
+            throw e;
         }
 
-        if (logger.isDebugEnabled()) {
-            logger.debug(String.format("Required permissions for Struts actions"
-                            + "\\n=================================================="
-                            + "\\n%s"
-                            + "\\n==================================================", actionPermissions));
-        }
+
     }
 
     /**
@@ -630,8 +635,9 @@ public class RequestProcessor
                         }
                     }
 
-                requiredInstance = DgUtil.getRequiredInstance(request, moduleName,
+                    requiredInstance = DgUtil.getRequiredInstance(request, moduleName,
                     moduleInstance);
+                System.out.println(requiredInstance);
 
                 if (requiredInstance== null) {
                     String errorMessage = "The required instance " +  moduleName + ":" +  moduleInstance + " was not found";

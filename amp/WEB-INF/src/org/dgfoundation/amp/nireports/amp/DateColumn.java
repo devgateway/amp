@@ -1,11 +1,5 @@
 package org.dgfoundation.amp.nireports.amp;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
 import org.dgfoundation.amp.nireports.DateCell;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
@@ -15,6 +9,12 @@ import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.digijava.module.common.util.DateTimeUtil;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 
 /**
  * a differentially-fetched column which generates {@link DateCell} cells

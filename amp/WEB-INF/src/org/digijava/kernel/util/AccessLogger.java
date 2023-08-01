@@ -22,26 +22,25 @@
 
 package org.digijava.kernel.util;
 
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.HashMap;
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.log4j.Logger;
 import org.digijava.commons.asyncdispatcher.AsyncBuffer;
 import org.digijava.commons.asyncdispatcher.AsyncHandler;
 import org.digijava.kernel.Constants;
+import org.digijava.kernel.config.DigiConfig;
 import org.digijava.kernel.config.moduleconfig.Action;
+import org.digijava.kernel.config.moduleconfig.ModuleConfig;
 import org.digijava.kernel.entity.AccessLog;
+import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.ModuleInstance;
-import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
-import org.digijava.kernel.user.User;
-import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.config.DigiConfig;
 import org.digijava.kernel.request.searchfriendly.ActionInformation;
-import org.digijava.kernel.config.moduleconfig.ModuleConfig;
+import org.digijava.kernel.user.User;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.HashMap;
 
 public class AccessLogger
     implements AsyncHandler {

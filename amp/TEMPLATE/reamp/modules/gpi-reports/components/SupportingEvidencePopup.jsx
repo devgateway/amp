@@ -1,9 +1,10 @@
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import * as reportsActions from '../actions/ReportsActions';
-import { Modal } from 'react-bootstrap';
+import {Modal} from 'react-bootstrap';
 import * as Constants from '../common/Constants';
+
 class SupportingEvidencePopup extends Component {
     constructor( props, context ) {
         super( props, context );

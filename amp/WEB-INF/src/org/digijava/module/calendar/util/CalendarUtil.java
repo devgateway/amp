@@ -22,19 +22,8 @@
 
 package org.digijava.module.calendar.util;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.CalendarConverter;
-import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.exception.NoCategoryClassException;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
@@ -46,6 +35,12 @@ import org.digijava.module.calendar.entity.AmpEventType;
 import org.digijava.module.calendar.exception.CalendarException;
 import org.digijava.module.calendar.form.CalendarItemForm;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Class with static methods used for Data convertion and form population 

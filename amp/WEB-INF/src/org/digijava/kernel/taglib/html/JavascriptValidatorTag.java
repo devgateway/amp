@@ -22,33 +22,22 @@
 
 package org.digijava.kernel.taglib.html;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.PageContext;
-
-import org.apache.commons.validator.Field;
-import org.apache.commons.validator.Form;
-import org.apache.commons.validator.ValidatorAction;
-import org.apache.commons.validator.ValidatorResources;
+import org.apache.commons.validator.*;
 import org.apache.commons.validator.util.ValidatorUtils;
-import org.apache.commons.validator.Var;
 import org.apache.struts.config.ModuleConfig;
 import org.apache.struts.taglib.TagUtils;
 import org.apache.struts.util.MessageResources;
-import org.apache.struts.util.RequestUtils;
 import org.apache.struts.validator.Resources;
 import org.apache.struts.validator.ValidatorPlugIn;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.taglib.util.TagUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.PageContext;
+import java.io.IOException;
+import java.util.*;
 
 public class JavascriptValidatorTag
     extends org.apache.struts.taglib.html.JavascriptValidatorTag {

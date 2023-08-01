@@ -5,20 +5,6 @@
 
 package org.digijava.module.aim.util;
 
-import java.sql.Timestamp;
-import java.text.Collator;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -31,11 +17,17 @@ import org.digijava.module.aim.dbentity.AmpAuditLogger;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.hibernate.HibernateException;
-import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.hibernate.type.DateType;
 import org.hibernate.type.StringType;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.sql.Timestamp;
+import java.text.Collator;
+import java.util.*;
 
 import static org.digijava.module.aim.util.activity.GenericUserHelper.getAmpUserModifier;
 

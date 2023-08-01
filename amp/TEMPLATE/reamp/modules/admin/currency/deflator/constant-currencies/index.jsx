@@ -1,11 +1,12 @@
 import * as AMP from 'amp/architecture';
 import * as NewConstantCurrency from './new.jsx';
 import * as Entry from './entry.jsx';
-import { DEFLATOR_SETTINGS, CONSTANT_CURRENCIES } from 'amp/config/endpoints';
-import { fetchJson, postJson } from 'amp/tools';
+import {CONSTANT_CURRENCIES, DEFLATOR_SETTINGS} from 'amp/config/endpoints';
+import {fetchJson, postJson} from 'amp/tools';
 import React from 'react';
-import { showSave, RequestStatus } from '../tools';
-import { Alert } from 'react-bootstrap';
+import {RequestStatus, showSave} from '../tools';
+import {Alert} from 'react-bootstrap';
+
 require("./style.less");
 
 class Model extends AMP.Model {

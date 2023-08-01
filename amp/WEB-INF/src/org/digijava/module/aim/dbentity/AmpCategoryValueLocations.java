@@ -1,8 +1,5 @@
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-import java.util.*;
-
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.LocationsDimension;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
@@ -15,6 +12,9 @@ import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.NameableOrIdentifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * @author medea

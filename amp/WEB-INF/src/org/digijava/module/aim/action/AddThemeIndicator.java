@@ -4,16 +4,6 @@
 
 package org.digijava.module.aim.action;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -24,14 +14,14 @@ import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.IndicatorTheme;
 import org.digijava.module.aim.form.ThemeForm;
-import org.digijava.module.aim.helper.AllPrgIndicators;
-import org.digijava.module.aim.helper.AmpPrgIndicator;
-import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
-import org.digijava.module.aim.helper.DateConversion;
-import org.digijava.module.aim.helper.IndicatorThemeBean;
-import org.digijava.module.aim.helper.IndicatorValuesComparator;
+import org.digijava.module.aim.helper.*;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.ProgramUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.util.*;
 
 
 public class AddThemeIndicator extends Action {

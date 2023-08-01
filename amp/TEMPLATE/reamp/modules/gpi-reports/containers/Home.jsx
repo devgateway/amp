@@ -1,10 +1,7 @@
-import React, { Component, PropTypes } from 'react';
+import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import * as startUp from '../actions/StartUpAction';
 import * as commonListsActions from '../actions/CommonListsActions';
-require('../styles/main.less');
-require('bootstrap');
 import * as Constants from '../common/Constants';
 import Report9b from '../components/Report9b';
 import Report6 from '../components/Report6';
@@ -13,7 +10,10 @@ import Report5a from '../components/Report5a';
 import Report1Output2 from '../components/Report1Output2';
 import Report1Output1 from '../components/Report1Output1';
 
- class App extends Component {
+require('../styles/main.less');
+require('bootstrap');
+
+class App extends Component {
     constructor( props, context ) {
         super( props, context );
         this.state = { currentReport: null, currentOutput: Constants.OUTPUT_1};

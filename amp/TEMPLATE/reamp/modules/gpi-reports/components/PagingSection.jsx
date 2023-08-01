@@ -1,8 +1,8 @@
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import * as startUp from '../actions/StartUpAction';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import * as commonListsActions from '../actions/CommonListsActions';
+
 class PagingSection extends Component {
     constructor( props, context ) {
         super( props, context );

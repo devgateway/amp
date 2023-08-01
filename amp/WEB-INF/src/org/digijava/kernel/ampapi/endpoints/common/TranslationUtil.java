@@ -1,18 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.common;
 
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.toMap;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.function.Function;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.dto.MultilingualContent;
@@ -28,6 +15,14 @@ import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.digijava.module.translation.util.FieldTranslationPack;
+
+import java.lang.reflect.Field;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.function.Function;
+
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toMap;
 
 /**
  * Content Translator

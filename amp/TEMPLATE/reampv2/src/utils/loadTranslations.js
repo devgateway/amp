@@ -1,4 +1,4 @@
-import { WS_PREFIX } from '../modules/sscdashboard/utils/constants';
+import {WS_PREFIX} from '../modules/sscdashboard/utils/constants';
 
 const POST = 'POST';
 const GET = 'GET';

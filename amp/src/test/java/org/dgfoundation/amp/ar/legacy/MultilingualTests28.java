@@ -1,12 +1,9 @@
 package org.dgfoundation.amp.ar.legacy;
 
-import java.util.List;
-import java.util.TreeMap;
-
 import org.apache.struts.mock.MockHttpServletRequest;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
-import org.dgfoundation.amp.testutils.ReportTestingUtils;
 import org.dgfoundation.amp.testutils.AmpRunnable;
+import org.dgfoundation.amp.testutils.ReportTestingUtils;
 import org.dgfoundation.amp.testutils.ReportsTestCase;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -16,6 +13,9 @@ import org.hibernate.Session;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import java.util.List;
+import java.util.TreeMap;
 
 /**
  * multilingual editor tests

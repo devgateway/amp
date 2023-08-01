@@ -1,19 +1,5 @@
 package org.digijava.module.um.util;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import org.hibernate.ObjectNotFoundException;
-import org.hibernate.query.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.UserLangPreferences;
 import org.digijava.kernel.entity.UserPreferencesPK;
@@ -23,11 +9,18 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpAuditLogger;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpUserExtension;
 import org.digijava.module.aim.dbentity.AmpUserExtensionPK;
 import org.digijava.module.aim.exception.AimException;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.hibernate.ObjectNotFoundException;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Methods for working with User related tasks.

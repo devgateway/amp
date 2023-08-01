@@ -4,16 +4,7 @@ package org.digijava.module.esrigis.action;
  * @author Diego Dimunzio
  */
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import net.sf.json.JSONArray;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -24,6 +15,13 @@ import org.digijava.module.esrigis.form.DataDispatcherForm;
 import org.digijava.module.esrigis.helpers.DbHelper;
 import org.digijava.module.esrigis.helpers.MapFilter;
 import org.digijava.module.esrigis.helpers.QueryUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Iterator;
+import java.util.List;
 
 public class DataDispatcher extends MultiAction {
     private static Logger logger = Logger.getLogger(DataDispatcher.class);

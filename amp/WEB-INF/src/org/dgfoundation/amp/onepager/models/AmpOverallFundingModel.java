@@ -1,8 +1,5 @@
 package org.dgfoundation.amp.onepager.models;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.Util;
 import org.digijava.kernel.request.TLSUtils;
@@ -13,6 +10,9 @@ import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DecimalWraper;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class AmpOverallFundingModel implements IModel {
 

@@ -1,36 +1,39 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { Container, Segment } from 'semantic-ui-react';
-import { ReportGeneratorContext } from './StartUp';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+import {Container, Segment} from 'semantic-ui-react';
+import {ReportGeneratorContext} from './StartUp';
 import MainHeader from './MainHeader';
 import MainContent from './MainContent';
 import FiltersAndSettings from './FiltersAndSettings';
 import {
-  getMetadata,
-  fetchReport,
-  updateProfile,
-  updateId,
-  saveNew,
-  save,
-  runReport,
-  updateReportDetailsFundingGrouping,
-  setInitialHierarchies,
-  markExistingReportSanitized,
-  updateColumnsSelected,
-  updateMeasuresSelected,
-  updateMeasuresSorting,
+    fetchReport,
+    getMetadata,
+    markExistingReportSanitized,
+    runReport,
+    save,
+    saveNew,
+    setInitialHierarchies,
+    updateColumnsSelected,
+    updateId,
+    updateMeasuresSelected,
+    updateMeasuresSorting,
+    updateProfile,
+    updateReportDetailsFundingGrouping,
 } from '../actions/stateUIActions';
 import {
-  convertTotalGrouping, getProfileFromReport, translate, hasFilters, convertReportType, revertReportType
+    convertReportType,
+    convertTotalGrouping,
+    getProfileFromReport,
+    hasFilters,
+    revertReportType,
+    translate
 } from '../utils/Utils';
 import ErrorMessage from './ErrorMessage';
-import {
-  PROFILE_TAB, RUN_REPORT_NAME, SETTINGS_YEAR_RANGE
-} from '../utils/constants';
-import { setColumnsData, setHierarchiesData, setMeasuresData } from '../actions/mementoAction';
-import { fetchLanguages } from '../actions/languagesActions';
+import {PROFILE_TAB, RUN_REPORT_NAME, SETTINGS_YEAR_RANGE} from '../utils/constants';
+import {setColumnsData, setHierarchiesData, setMeasuresData} from '../actions/mementoAction';
+import {fetchLanguages} from '../actions/languagesActions';
 
 class ReportGeneratorHome extends Component {
   constructor() {

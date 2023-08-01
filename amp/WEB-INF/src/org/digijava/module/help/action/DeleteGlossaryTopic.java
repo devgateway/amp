@@ -1,12 +1,5 @@
 package org.digijava.module.help.action;
 
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -16,6 +9,10 @@ import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.help.dbentity.HelpTopic;
 import org.digijava.module.help.form.HelpForm;
 import org.digijava.module.help.util.GlossaryUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * Deletes help topic.

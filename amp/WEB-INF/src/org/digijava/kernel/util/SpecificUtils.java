@@ -22,17 +22,6 @@
 
 package org.digijava.kernel.util;
 
-import java.util.Enumeration;
-import java.util.Iterator;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.hibernate.ObjectNotFoundException;
-import org.hibernate.query.Query;
-import org.hibernate.Session;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.OracleLocale;
@@ -40,6 +29,15 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
+import org.hibernate.ObjectNotFoundException;
+import org.hibernate.Session;
+import org.hibernate.query.Query;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Enumeration;
+import java.util.Iterator;
 
 /**
  * This class was created to concentrate <b>ALL</b> utillities, needed for

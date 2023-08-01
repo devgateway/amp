@@ -1,15 +1,13 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
 import SidebarIntro from './SidebarIntro';
 import './sidebar.css';
 import FiltersLink from '../filters/FiltersLink';
-import { SSCTranslationContext } from '../../StartUp';
+import {SSCTranslationContext} from '../../StartUp';
 import MultiSelectionDropDown from '../filters/MultiSelectionDropDown';
-import {
-  DOWNLOAD_CHART, HOME_CHART, MODALITY_CHART, SECTORS_CHART
-} from '../../../utils/constants';
+import {DOWNLOAD_CHART, HOME_CHART, MODALITY_CHART, SECTORS_CHART} from '../../../utils/constants';
 
 class Sidebar extends Component {
   render() {

@@ -1,7 +1,9 @@
 import {
-  UPDATE_ACTIVITIES_PENDING, UPDATE_ACTIVITIES_SUCCESS, UPDATE_ACTIVITIES_ERROR, INVOKE_ACTIVITIES_SUCCESS
-}
-  from '../actions/updateActivitiesAction';
+    INVOKE_ACTIVITIES_SUCCESS,
+    UPDATE_ACTIVITIES_ERROR,
+    UPDATE_ACTIVITIES_PENDING,
+    UPDATE_ACTIVITIES_SUCCESS
+} from '../actions/updateActivitiesAction';
 
 const initialState = {
   updating: false,

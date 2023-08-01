@@ -3,11 +3,11 @@
  */
 package org.dgfoundation.amp.menu.dynamic;
 
-import java.util.List;
-
 import org.dgfoundation.amp.menu.MenuItem;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.translation.util.TranslationManager;
+
+import java.util.List;
 
 /**
  * Dynamic Language menu sub-items builder 

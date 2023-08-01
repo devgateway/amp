@@ -1,10 +1,5 @@
 package org.digijava.module.aim.util;
 
-import java.awt.Color;
-import java.text.DecimalFormat;
-
-import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
 import org.digijava.module.aim.helper.Constants;
 import org.jfree.chart.ChartFactory;
@@ -19,6 +14,10 @@ import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.category.StackedBarRenderer;
 import org.jfree.chart.renderer.category.StackedBarRenderer3D;
 import org.jfree.data.category.CategoryDataset;
+
+import javax.servlet.http.HttpSession;
+import java.awt.*;
+import java.text.DecimalFormat;
 
 public class ChartUtil {
   private static Logger logger = Logger.getLogger(ChartUtil.class);

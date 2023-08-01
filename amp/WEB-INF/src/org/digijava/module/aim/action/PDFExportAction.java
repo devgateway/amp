@@ -6,6 +6,28 @@
  */
 package org.digijava.module.aim.action;
 
+import com.lowagie.text.*;
+import com.lowagie.text.pdf.*;
+import org.apache.log4j.Logger;
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.ar.*;
+import org.dgfoundation.amp.ar.view.pdf.GroupReportDataPDF;
+import org.dgfoundation.amp.ar.view.pdf.PDFExporter;
+import org.dgfoundation.amp.ar.view.pdf.ReportPdfExportState;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.ResponseUtil;
+import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.form.AdvancedReportForm;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.FeaturesUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -14,53 +36,6 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.apache.log4j.Logger;
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.dgfoundation.amp.ar.ARUtil;
-import org.dgfoundation.amp.ar.AmpARFilter;
-import org.dgfoundation.amp.ar.ArConstants;
-import org.dgfoundation.amp.ar.GenericViews;
-import org.dgfoundation.amp.ar.GroupReportData;
-import org.dgfoundation.amp.ar.MetaInfo;
-import org.dgfoundation.amp.ar.ReportContextData;
-import org.dgfoundation.amp.ar.Viewable;
-import org.dgfoundation.amp.ar.view.pdf.GroupReportDataPDF;
-import org.dgfoundation.amp.ar.view.pdf.PDFExporter;
-import org.dgfoundation.amp.ar.view.pdf.ReportPdfExportState;
-import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.persistence.WorkerException;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.kernel.util.ResponseUtil;
-import org.digijava.module.aim.dbentity.AmpReports;
-import org.digijava.module.aim.form.AdvancedReportForm;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.FeaturesUtil;
-
-import com.lowagie.text.BadElementException;
-import com.lowagie.text.Document;
-import com.lowagie.text.ExceptionConverter;
-import com.lowagie.text.Font;
-import com.lowagie.text.Image;
-import com.lowagie.text.PageSize;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.Rectangle;
-import com.lowagie.text.pdf.BaseFont;
-import com.lowagie.text.pdf.PdfContentByte;
-import com.lowagie.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.PdfPTable;
-import com.lowagie.text.pdf.PdfPageEvent;
-import com.lowagie.text.pdf.PdfWriter;
 
 /**
  * 

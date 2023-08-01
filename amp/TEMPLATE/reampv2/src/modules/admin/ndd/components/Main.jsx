@@ -1,16 +1,10 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import './css/style.css';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import { NDDContext } from './Startup';
-import {
-  getNDD,
-  getNDDError,
-  getNDDPending,
-  getPrograms,
-  getProgramsPending
-} from '../reducers/startupReducer';
+import {NDDContext} from './Startup';
+import {getNDD, getNDDError, getNDDPending, getPrograms, getProgramsPending} from '../reducers/startupReducer';
 import fetchNDD from '../actions/fetchNDD';
 import fetchPrograms from '../actions/fetchAvailablePrograms';
 import fetchLayout from '../actions/fetchLayout';

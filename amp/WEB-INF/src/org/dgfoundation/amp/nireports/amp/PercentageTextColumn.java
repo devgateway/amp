@@ -1,13 +1,5 @@
 package org.dgfoundation.amp.nireports.amp;
 
-import java.math.BigDecimal;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.newreports.NumberedTypedEntity;
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
@@ -18,6 +10,14 @@ import org.dgfoundation.amp.nireports.amp.diff.TextColumnKeyBuilder;
 import org.dgfoundation.amp.nireports.behaviours.PercentageTokenBehaviour;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.digijava.kernel.persistence.PersistenceManager;
+
+import java.math.BigDecimal;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * 

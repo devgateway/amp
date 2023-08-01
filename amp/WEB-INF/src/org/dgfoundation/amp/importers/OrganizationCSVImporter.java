@@ -3,10 +3,6 @@
  */
 package org.dgfoundation.amp.importers;
 
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Properties;
-
 import org.apache.log4j.Logger;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
@@ -14,6 +10,10 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.hibernate.HibernateException;
 import org.hibernate.query.Query;
 import org.hibernate.type.StringType;
+
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Properties;
 
 
 /**

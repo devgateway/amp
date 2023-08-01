@@ -1,8 +1,6 @@
-import {
-  fetchShareLinkPending, fetchShareLinkError, fetchShareLinkSuccess
-} from './shareLinkActions';
-import { fetchApiData } from '../../../utils/apiOperations';
-import { SHARING_EP } from '../utils/constants';
+import {fetchShareLinkError, fetchShareLinkPending, fetchShareLinkSuccess} from './shareLinkActions';
+import {fetchApiData} from '../../../utils/apiOperations';
+import {SHARING_EP} from '../utils/constants';
 
 export const getShareLink = (filters, settings, fundingType, selectedPrograms) => dispatch => {
   dispatch(fetchShareLinkPending());

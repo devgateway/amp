@@ -1,14 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.gis.services;
 
-import java.io.InputStream;
-import java.util.Date;
-import java.util.List;
-
-import javax.jcr.Node;
-import javax.jcr.RepositoryException;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.services.sync.model.SyncConstants;
@@ -18,8 +9,16 @@ import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
-import org.hibernate.query.Query;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
+
+import javax.jcr.Node;
+import javax.jcr.RepositoryException;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.io.InputStream;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Service clas used to download map tiles

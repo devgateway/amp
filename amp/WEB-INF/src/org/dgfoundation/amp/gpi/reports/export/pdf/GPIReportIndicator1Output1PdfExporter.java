@@ -1,42 +1,26 @@
 package org.dgfoundation.amp.gpi.reports.export.pdf;
 
-import static java.util.stream.Collectors.groupingBy;
-
-import java.awt.Color;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
+import com.lowagie.text.Font;
+import com.lowagie.text.*;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfWriter;
 import org.apache.commons.lang3.StringUtils;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.gpi.reports.GPIDocument;
-import org.dgfoundation.amp.gpi.reports.GPIDonorActivityDocument;
-import org.dgfoundation.amp.gpi.reports.GPIRemark;
-import org.dgfoundation.amp.gpi.reports.GPIReport;
-import org.dgfoundation.amp.gpi.reports.GPIReportConstants;
-import org.dgfoundation.amp.gpi.reports.GPIReportOutputColumn;
-import org.dgfoundation.amp.gpi.reports.GPIReportUtils;
+import org.dgfoundation.amp.gpi.reports.*;
 import org.dgfoundation.amp.newreports.CalendarConverter;
 import org.dgfoundation.amp.newreports.ReportSettings;
 import org.digijava.kernel.ampapi.endpoints.gpi.GPIDataService;
 import org.digijava.kernel.translator.TranslatorWorker;
 
-import com.lowagie.text.Chunk;
-import com.lowagie.text.Document;
-import com.lowagie.text.DocumentException;
-import com.lowagie.text.Element;
-import com.lowagie.text.Font;
-import com.lowagie.text.FontFactory;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.Phrase;
-import com.lowagie.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.PdfPTable;
-import com.lowagie.text.pdf.PdfWriter;
+import java.awt.*;
+import java.util.List;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.groupingBy;
 
 /**
  * @author Viorel Chihai

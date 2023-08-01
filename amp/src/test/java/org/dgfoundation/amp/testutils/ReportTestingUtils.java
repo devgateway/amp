@@ -1,8 +1,5 @@
 package org.dgfoundation.amp.testutils;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.struts.mock.MockHttpServletRequest;
 import org.dgfoundation.amp.StandaloneAMPInitializer;
 import org.dgfoundation.amp.ar.AmpARFilter;
@@ -15,8 +12,11 @@ import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpReports;
-import org.hibernate.query.Query;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * various static methods and constants for the report testing infrastructure

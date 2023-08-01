@@ -4,8 +4,6 @@
  */
 package org.dgfoundation.amp.onepager.translation;
 
-import java.util.HashMap;
-import java.util.Locale;
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.Session;
@@ -22,13 +20,14 @@ import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.digijava.kernel.entity.Message;
-import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Locale;
 
 /**
  * @author aartimon@dginternational.org

@@ -1,15 +1,15 @@
 package org.digijava.module.aim.validator.approval;
 
-import static org.digijava.module.aim.dbentity.ApprovalStatus.rejected;
-
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
-
 import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.validator.ActivityValidationContext;
+
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
+
+import static org.digijava.module.aim.dbentity.ApprovalStatus.rejected;
 
 /**
  * @author Nadejda Mandrescu

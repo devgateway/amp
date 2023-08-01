@@ -3,10 +3,10 @@
  */
 package org.digijava.module.aim.dbentity;
 
+import org.dgfoundation.amp.visibility.AmpVisibilityRuleType;
+
 import java.io.Serializable;
 import java.util.Set;
-
-import org.dgfoundation.amp.visibility.AmpVisibilityRuleType;
 
 /**
  * Defines visibility rule of a given type (ANY/ALL) that can consist of other rules or fields, features, modules, etc  

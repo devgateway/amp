@@ -3,20 +3,14 @@
  */
 package org.dgfoundation.amp.ar.view.pdf;
 
+import com.lowagie.text.*;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.Viewable;
-import org.dgfoundation.amp.ar.cell.TextCell;
 import org.dgfoundation.amp.ar.cell.XmlHierarchyCell;
 import org.dgfoundation.amp.ar.helper.HierarchycalItem;
 import org.digijava.module.aim.action.ExportActivityToPDF;
-
-import com.lowagie.text.Chunk;
-import com.lowagie.text.Font;
-import com.lowagie.text.List;
-import com.lowagie.text.ListItem;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.PdfPTable;
 
 /**
  * @author Alex

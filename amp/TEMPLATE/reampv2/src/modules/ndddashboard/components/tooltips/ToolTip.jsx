@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import './ToolTip.css';
-import { NDDTranslationContext } from '../StartUp';
-import { formatNumberWithSettings } from '../../utils/Utils';
+import {NDDTranslationContext} from '../StartUp';
+import {formatNumberWithSettings} from '../../utils/Utils';
 
 class ToolTip extends Component {
   // eslint-disable-next-line class-methods-use-this

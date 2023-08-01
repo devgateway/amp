@@ -3,20 +3,13 @@
  */
 package org.dgfoundation.amp.menu;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-
-import com.google.common.collect.ImmutableSet;
 import org.dgfoundation.amp.visibility.data.DataVisibility;
 import org.digijava.kernel.user.Group;
 import org.digijava.module.aim.dbentity.AmpMenuEntryInView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.*;
 
 /**
  * Keeps all possible menu entries for a specific public/admin/team view, 

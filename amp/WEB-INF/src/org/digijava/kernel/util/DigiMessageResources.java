@@ -22,8 +22,6 @@
 
 package org.digijava.kernel.util;
 
-import java.util.Locale;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.util.MessageResourcesFactory;
 import org.apache.struts.util.PropertyMessageResources;
@@ -31,6 +29,8 @@ import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
+
+import java.util.Locale;
 
 /**
  *

@@ -1,5 +1,15 @@
 package org.digijava.module.autopatcher.core;
 
+import org.apache.log4j.Logger;
+import org.digijava.module.autopatcher.exceptions.InvalidPatchRepositoryException;
+import org.digijava.module.autopatcher.schema.Patch;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.query.Query;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -7,23 +17,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-
-import org.apache.log4j.Logger;
-import org.digijava.module.autopatcher.exceptions.InvalidPatchRepositoryException;
-import org.digijava.module.autopatcher.schema.Patch;
-import org.hibernate.HibernateException;
-import org.hibernate.query.Query;
-import org.hibernate.Session;
+import java.util.*;
 
 public class PatcherUtil {
 

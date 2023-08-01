@@ -1,5 +1,5 @@
-import { fetchApiData } from '../../../utils/loadTranslations';
-import { URL_METADATA } from '../utils/constants';
+import {fetchApiData} from '../../../utils/loadTranslations';
+import {URL_METADATA} from '../utils/constants';
 
 export const CREATE_REPORT_PENDING = 'CREATE_REPORT_PENDING';
 export const CREATE_REPORT_SUCCESS = 'CREATE_REPORT_SUCCESS';

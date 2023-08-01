@@ -1,32 +1,6 @@
 package org.digijava.module.message.helper;
 
-import org.digijava.module.message.triggers.ActivityActualStartDateTrigger;
-import org.digijava.module.message.triggers.ActivityCurrentCompletionDateTrigger;
-import org.digijava.module.message.triggers.ActivityDisbursementDateTrigger;
-import org.digijava.module.message.triggers.ActivityFinalDateForContractingTrigger;
-import org.digijava.module.message.triggers.ActivityFinalDateForDisbursementsTrigger;
-import org.digijava.module.message.triggers.ActivityMeassureComparisonTrigger;
-import org.digijava.module.message.triggers.ActivityProposedApprovalDateTrigger;
-import org.digijava.module.message.triggers.ActivityProposedCompletionDateTrigger;
-import org.digijava.module.message.triggers.ActivityProposedStartDateTrigger;
-import org.digijava.module.message.triggers.ActivitySaveTrigger;
-import org.digijava.module.message.triggers.ActivityValidationWorkflowTrigger;
-import org.digijava.module.message.triggers.ApprovedActivityTrigger;
-import org.digijava.module.message.triggers.ApprovedCalendarEventTrigger;
-import org.digijava.module.message.triggers.ApprovedResourceShareTrigger;
-import org.digijava.module.message.triggers.CalendarEventSaveTrigger;
-import org.digijava.module.message.triggers.CalendarEventTrigger;
-import org.digijava.module.message.triggers.DataFreezeEmailNotificationTrigger;
-import org.digijava.module.message.triggers.AwaitingApprovalCalendarTrigger;
-import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
-import org.digijava.module.message.triggers.NotApprovedCalendarEventTrigger;
-import org.digijava.module.message.triggers.SummaryChangeNotificationTrigger;
-import org.digijava.module.message.triggers.PendingResourceShareTrigger;
-import org.digijava.module.message.triggers.PerformanceRuleAlertTrigger;
-import org.digijava.module.message.triggers.RejectResourceSharetrigger;
-import org.digijava.module.message.triggers.RemoveCalendarEventTrigger;
-import org.digijava.module.message.triggers.UserAddedToFirstWorkspaceTrigger;
-import org.digijava.module.message.triggers.UserRegistrationTrigger;
+import org.digijava.module.message.triggers.*;
 /**
  * Constants for AmpMessage class and it's subclasses
  * @author Dare Roinishvili

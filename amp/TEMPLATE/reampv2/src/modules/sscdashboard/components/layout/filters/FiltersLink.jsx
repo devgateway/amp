@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import './filters.css';
-import { SSCTranslationContext } from '../../StartUp';
+import {SSCTranslationContext} from '../../StartUp';
 
 class FiltersLink extends Component {
   onSelectOptions() {

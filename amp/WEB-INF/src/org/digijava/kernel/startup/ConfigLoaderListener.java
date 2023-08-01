@@ -22,28 +22,6 @@
 
 package org.digijava.kernel.startup;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.lang.management.ManagementFactory;
-import java.lang.management.MemoryPoolMXBean;
-import java.lang.management.MemoryUsage;
-import java.security.Policy;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Properties;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.servlet.http.HttpServlet;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.security.Security;
 import org.digijava.kernel.config.moduleconfig.ModuleConfig;
@@ -61,6 +39,27 @@ import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.viewmanager.ViewConfigFactory;
 import org.digijava.module.xmlpatcher.core.SimpleSQLPatcher;
+
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.http.HttpServlet;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryPoolMXBean;
+import java.lang.management.MemoryUsage;
+import java.security.Policy;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Properties;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Parses digi.xml configuration file,

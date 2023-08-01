@@ -22,8 +22,8 @@
 
 package org.digijava.kernel.syndication.jel;
 
-import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * <p>Title: </p>

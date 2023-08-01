@@ -22,11 +22,6 @@
 
 package org.digijava.module.admin.action;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -36,6 +31,11 @@ import org.digijava.kernel.security.DigiSecurityManager;
 import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.admin.form.CacheForm;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class ShowCaches
     extends Action {

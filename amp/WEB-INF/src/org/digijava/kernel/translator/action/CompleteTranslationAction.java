@@ -21,36 +21,31 @@
  */
 
 package org.digijava.kernel.translator.action;
-import java.io.IOException;
+
+import org.apache.log4j.Logger;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.actions.DispatchAction;
+import org.digijava.kernel.entity.Message;
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.translator.TranslatorBean;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.translator.ValueBean;
+import org.digijava.kernel.util.DgUtil;
+import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.SiteCache;
+import org.digijava.kernel.util.SiteUtils;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.sql.Timestamp;
-
-import org.apache.struts.action.Action;
-import org.apache.struts.actions.DispatchAction;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.digijava.kernel.util.DgUtil;
-import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.translator.TranslatorBean;
-import org.digijava.kernel.request.SiteDomain;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.entity.Message;
-import org.digijava.kernel.persistence.WorkerException;
-import org.digijava.kernel.translator.ValueBean;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.kernel.util.SiteCache;
-import org.digijava.kernel.util.SiteUtils;
 
 /**
  * This class is used for complete/global translations

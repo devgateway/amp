@@ -1,26 +1,9 @@
 package org.digijava.kernel.ampapi.postgis.util;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.FilterParam;
-import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
-import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
-import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
-import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
-import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.dgfoundation.amp.ar.viewfetcher.ViewFetcher;
+import org.dgfoundation.amp.ar.viewfetcher.*;
 import org.digijava.kernel.ampapi.endpoints.common.model.Location;
 import org.digijava.kernel.ampapi.endpoints.common.model.Org;
 import org.digijava.kernel.ampapi.endpoints.common.model.OrgGroup;
@@ -33,34 +16,28 @@ import org.digijava.kernel.ampapi.postgis.entity.AmpLocator;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
-import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
-import org.digijava.module.aim.dbentity.AmpRole;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.LocationSkeleton;
-import org.digijava.module.aim.util.OrganisationUtil;
-import org.digijava.module.aim.util.OrganizationSkeleton;
-import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.aim.util.*;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.esrigis.dbentity.AmpApiState;
 import org.digijava.module.esrigis.dbentity.ApiStateType;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.Criteria;
-import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.jdbc.Work;
+import org.hibernate.query.Query;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.io.ParseException;
 import org.locationtech.jts.io.WKTReader;
 
-import java.util.LinkedHashSet;
-
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
 
 import static org.digijava.kernel.ampapi.endpoints.indicator.IndicatorEPConstants.MAX_ADMIN_LEVEL_SUPPORTED;
 

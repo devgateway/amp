@@ -1,9 +1,10 @@
-import React, { Component, PropTypes } from 'react';
+import React, {Component} from 'react';
 import TypeList from './TypeManager/TypeList.jsx';
 import Settings from './Settings/Settings.jsx';
-import { ALERT_TYPE } from '../../utils/constants.jsx';
-import { delay } from 'amp/tools';
-import { Alert } from 'react-bootstrap';
+import {ALERT_TYPE} from '../../utils/constants.jsx';
+import {delay} from 'amp/tools';
+import {Alert} from 'react-bootstrap';
+
 export default class HomePage extends Component {
     constructor() {
         super();

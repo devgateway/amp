@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import '../popups.css';
-import { getProjects } from '../../../../utils/ProjectUtils';
-import { SSCTranslationContext } from '../../../StartUp';
-import { DEFAULT_ELLIPSIS, DEFAULT_SCREEN_SIZE } from '../../../../utils/constants';
+import {getProjects} from '../../../../utils/ProjectUtils';
+import {SSCTranslationContext} from '../../../StartUp';
+import {DEFAULT_ELLIPSIS, DEFAULT_SCREEN_SIZE} from '../../../../utils/constants';
 
 class CountryPopupFooter extends Component {
   constructor(props) {

@@ -22,11 +22,11 @@
 
 package org.digijava.kernel.taglib.html;
 
-import javax.servlet.jsp.JspException;
-
 import org.apache.struts.taglib.TagUtils;
 import org.digijava.kernel.taglib.util.TagUtil;
 import org.digijava.kernel.util.DgUtil;
+
+import javax.servlet.jsp.JspException;
 
 /**
  * <p>Title: DiGiJava</p>

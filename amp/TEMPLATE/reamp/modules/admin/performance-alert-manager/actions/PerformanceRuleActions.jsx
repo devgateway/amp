@@ -1,5 +1,6 @@
 import performanceRuleApi from '../api/PerformanceRuleApi.jsx';
 import Utils from '../common/Utils.jsx';
+
 export const LOAD_PERFORMANCE_RULE_LIST_SUCCESS = 'LOAD_PERFORMANCE_RULE_LIST_SUCCESS';
 export const LOAD_TYPE_LIST_SUCCESS = 'LOAD_TYPE_LIST_SUCCESS';
 export const LOAD_LEVEL_LIST_SUCCESS = 'LOAD_LEVEL_LIST_SUCCESS';

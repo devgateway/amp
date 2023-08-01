@@ -1,13 +1,5 @@
 package org.dgfoundation.amp.ar;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.servlet.http.HttpSession;
-
 import com.google.common.base.Joiner;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
@@ -23,6 +15,9 @@ import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
+
+import javax.servlet.http.HttpSession;
+import java.util.*;
 
 import static org.digijava.module.aim.helper.GlobalSettingsConstants.COMPUTED_MANAGEMENT_WORKSPACES;
 

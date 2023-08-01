@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import PropTypes from 'prop-types';
-import { NDDContext } from './Startup';
+import {NDDContext} from './Startup';
 import './css/style.css';
 
 class Notifications extends Component {

@@ -22,14 +22,11 @@
 
 package org.digijava.kernel.util;
 
-import org.digijava.kernel.user.User;
-import org.hibernate.HibernateException;
 import org.apache.log4j.Logger;
-import org.hibernate.Hibernate;
-import org.digijava.kernel.request.Site;
 import org.digijava.kernel.entity.Image;
-import java.util.Collection;
-import java.util.Iterator;
+import org.digijava.kernel.user.User;
+import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
 
 /**
  * This class contains utillity methods to initialize proxy classes/lazy

@@ -1,21 +1,6 @@
 package org.digijava.module.contentrepository.action;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.apache.struts.action.ActionErrors;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.*;
 import org.apache.struts.actions.DispatchAction;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -29,6 +14,11 @@ import org.digijava.module.contentrepository.helper.template.TemplateConstants;
 import org.digijava.module.contentrepository.helper.template.TemplateDocumentHelper;
 import org.digijava.module.contentrepository.helper.template.TemplateFieldHelper;
 import org.digijava.module.contentrepository.util.TemplateDocsUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.util.*;
 
 public class TemplateDocActions extends DispatchAction {
     

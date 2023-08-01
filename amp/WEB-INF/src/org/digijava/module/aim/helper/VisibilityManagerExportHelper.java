@@ -1,21 +1,9 @@
 package org.digijava.module.aim.helper;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.TreeSet;
-
-import javax.xml.bind.JAXBException;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
-import org.dgfoundation.amp.visibility.feed.fm.schema.FeatureType;
-import org.dgfoundation.amp.visibility.feed.fm.schema.FieldType;
-import org.dgfoundation.amp.visibility.feed.fm.schema.ModuleType;
-import org.dgfoundation.amp.visibility.feed.fm.schema.ObjectFactory;
-import org.dgfoundation.amp.visibility.feed.fm.schema.TemplateType;
-import org.dgfoundation.amp.visibility.feed.fm.schema.VisibilityTemplates;
+import org.dgfoundation.amp.visibility.feed.fm.schema.*;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
@@ -24,6 +12,12 @@ import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+
+import javax.xml.bind.JAXBException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.TreeSet;
 /**
  * @author Diego Dimunzio
  * 

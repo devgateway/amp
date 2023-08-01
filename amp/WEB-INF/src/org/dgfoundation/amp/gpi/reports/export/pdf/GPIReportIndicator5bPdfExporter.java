@@ -1,17 +1,16 @@
 package org.dgfoundation.amp.gpi.reports.export.pdf;
 
-import java.awt.Color;
-
-import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.gpi.reports.GPIReport;
-import org.dgfoundation.amp.gpi.reports.GPIReportOutputColumn;
-
 import com.lowagie.text.Element;
 import com.lowagie.text.Font;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.Phrase;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
+import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.gpi.reports.GPIReport;
+import org.dgfoundation.amp.gpi.reports.GPIReportOutputColumn;
+
+import java.awt.*;
 
 /**
  * @author Viorel Chihai

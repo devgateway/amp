@@ -4,9 +4,6 @@
  */
 package org.dgfoundation.amp.onepager.components.fields;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.LinkedList;
 import org.apache.wicket.Component;
 import org.apache.wicket.Session;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
@@ -19,6 +16,10 @@ import org.dgfoundation.amp.onepager.util.FMInfo;
 import org.dgfoundation.amp.onepager.util.FMUtil;
 import org.dgfoundation.amp.onepager.util.FMUtil.PathException;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.LinkedList;
 
 /**
  * Tab wrapper for AmpCommentPanel to be used with AjaxTabbedPanel

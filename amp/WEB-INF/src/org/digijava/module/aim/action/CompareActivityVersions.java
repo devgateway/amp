@@ -1,29 +1,8 @@
 package org.digijava.module.aim.action;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.apache.struts.action.ActionErrors;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
+import org.apache.struts.action.*;
 import org.apache.struts.actions.DispatchAction;
 import org.apache.wicket.util.string.Strings;
 import org.digijava.kernel.entity.Locale;
@@ -34,28 +13,25 @@ import org.digijava.module.aim.annotations.activityversioning.CompareOutput;
 import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
-import org.digijava.module.aim.dbentity.AmpActivityContact;
-import org.digijava.module.aim.dbentity.AmpActivityFields;
-import org.digijava.module.aim.dbentity.AmpActivityGroup;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.dbentity.Versionable;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.form.CompareActivityVersionsForm;
 import org.digijava.module.aim.helper.ActivityHistory;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.ActivityUtil;
-import org.digijava.module.aim.util.ActivityVersionUtil;
-import org.digijava.module.aim.util.AuditLoggerUtil;
-import org.digijava.module.aim.util.LuceneUtil;
-import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.util.*;
 import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.FlushMode;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.*;
 
 public class CompareActivityVersions extends DispatchAction {
 

@@ -1,7 +1,8 @@
 package org.dgfoundation.amp.ar.viewfetcher;
 
 import java.sql.SQLException;
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * these are indexed in the map by their hashCode() / equals() functions, so be sure to make those meaningful

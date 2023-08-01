@@ -1,30 +1,20 @@
 package org.digijava.module.aim.util;
-        
-import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
-import java.util.*;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.*;
-import org.digijava.module.aim.helper.ActivityIndicator;
-import org.digijava.module.aim.helper.AllPrgIndicators;
-import org.digijava.module.aim.helper.AmpPrgIndicator;
-import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.DateConversion;
-import org.digijava.module.aim.helper.IndicatorThemeBean;
-import org.digijava.module.translation.util.ContentTranslationUtil;
-import org.hibernate.HibernateException;
-import org.hibernate.ObjectNotFoundException;
-import org.hibernate.query.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.digijava.module.aim.helper.*;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.*;
+import org.hibernate.query.Query;
 import org.hibernate.type.IntegerType;
+
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
         
         
         /**

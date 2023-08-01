@@ -4,27 +4,6 @@
 
 package org.digijava.module.aim.util;
 
-import java.io.Serializable;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.permissionmanager.web.PMUtil;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
@@ -33,37 +12,27 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityDocument;
-import org.digijava.module.aim.dbentity.AmpActivityGroup;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpApplicationSettings;
-import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpReports;
-import org.digijava.module.aim.dbentity.AmpTeamSummaryNotificationSettings;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.dbentity.AmpTeamReports;
-import org.digijava.module.aim.dbentity.NpdSettings;
-import org.digijava.module.aim.helper.ApplicationSettings;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.helper.ReportsCollection;
-import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.helper.Workspace;
+import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.helper.*;
 import org.digijava.module.contentrepository.dbentity.CrSharedDoc;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.gateperm.core.CompositePermission;
 import org.digijava.module.gateperm.core.GatePermission;
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
-import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.io.Serializable;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
 
 /**
  * Persister class for all Team/Workspaces related Objects

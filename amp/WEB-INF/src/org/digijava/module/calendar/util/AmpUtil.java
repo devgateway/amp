@@ -1,10 +1,5 @@
 package org.digijava.module.calendar.util;
 
-import java.text.Collator;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
-
 import org.digijava.kernel.util.collections.CollectionSynchronizer;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -15,15 +10,15 @@ import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.AmpCalendarAttendee;
 import org.digijava.module.calendar.dbentity.Calendar;
-import org.digijava.module.calendar.entity.AmpCalendarGraph;
-import org.digijava.module.calendar.entity.AmpCalendarGraphItem;
-import org.digijava.module.calendar.entity.CalendarOptions;
-import org.digijava.module.calendar.entity.DateBreakDown;
-import org.digijava.module.calendar.entity.DateNavigator;
-import org.digijava.module.calendar.entity.DateNavigatorItem;
+import org.digijava.module.calendar.entity.*;
 import org.digijava.module.calendar.exception.CalendarException;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+
+import java.text.Collator;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class AmpUtil {
     public static CollectionSynchronizer attendeeSyncronizer = new

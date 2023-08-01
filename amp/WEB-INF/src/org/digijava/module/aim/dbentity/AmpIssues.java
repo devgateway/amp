@@ -1,12 +1,5 @@
 package org.digijava.module.aim.dbentity ;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
 import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
@@ -14,6 +7,9 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.aim.validator.groups.Submit;
+
+import java.io.Serializable;
+import java.util.*;
 
 public class AmpIssues implements Serializable, Versionable, Cloneable {
 

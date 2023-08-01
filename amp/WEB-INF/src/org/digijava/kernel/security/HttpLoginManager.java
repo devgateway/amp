@@ -22,24 +22,6 @@
 
 package org.digijava.kernel.security;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-import javax.security.auth.Subject;
-import javax.security.auth.login.LoginContext;
-import javax.security.auth.login.LoginException;
-import javax.servlet.ServletContext;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.log4j.Logger;
 import org.apache.struts.Globals;
@@ -59,23 +41,29 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.security.principal.UserPrincipal;
 import org.digijava.kernel.user.User;
-import org.digijava.kernel.util.DgUtil;
-import org.digijava.kernel.util.DigiCacheManager;
-import org.digijava.kernel.util.DigiConfigManager;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.kernel.util.SiteCache;
-import org.digijava.kernel.util.SiteUtils;
-import org.digijava.kernel.util.UserUtils;
+import org.digijava.kernel.util.*;
 import org.digijava.kernel.viewmanager.ViewConfig;
 import org.digijava.kernel.viewmanager.ViewConfigFactory;
 import org.hibernate.ObjectNotFoundException;
-import org.hibernate.query.Query;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import javax.security.auth.Subject;
+import javax.security.auth.login.LoginContext;
+import javax.security.auth.login.LoginException;
+import javax.servlet.ServletContext;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.*;
 
 public final class HttpLoginManager {
 

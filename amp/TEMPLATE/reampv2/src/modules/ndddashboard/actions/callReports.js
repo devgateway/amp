@@ -1,19 +1,26 @@
 import {
-  fetchIndirectReportPending,
-  fetchIndirectReportError,
-  fetchIndirectReportSuccess,
-  fetchTopReportPending,
-  fetchTopReportSuccess, fetchTopReportError,
-  resetTopReport,
-  fetchYearDetailSuccess, fetchYearDetailPending, fetchYearDetailError
+    fetchIndirectReportError,
+    fetchIndirectReportPending,
+    fetchIndirectReportSuccess,
+    fetchTopReportError,
+    fetchTopReportPending,
+    fetchTopReportSuccess,
+    fetchYearDetailError,
+    fetchYearDetailPending,
+    fetchYearDetailSuccess,
+    resetTopReport
 } from './reportActions';
-import { fetchApiData } from '../../../utils/apiOperations';
+import {fetchApiData} from '../../../utils/apiOperations';
 import {
-  CURRENCY_CODE, DEFAULT_CURRENCY,
-  DIRECT_INDIRECT_REPORT, FUNDING_TYPE, INCLUDE_LOCATIONS_WITH_CHILDREN, TOP_DONOR_REPORT,
-  ACTIVITY_DETAIL_REPORT
+    ACTIVITY_DETAIL_REPORT,
+    CURRENCY_CODE,
+    DEFAULT_CURRENCY,
+    DIRECT_INDIRECT_REPORT,
+    FUNDING_TYPE,
+    INCLUDE_LOCATIONS_WITH_CHILDREN,
+    TOP_DONOR_REPORT
 } from '../utils/constants';
-import { removeFilter } from '../utils/Utils';
+import {removeFilter} from '../utils/Utils';
 
 export const callReport = (fundingType, filters, programIds, settings) => dispatch => {
   dispatch(fetchIndirectReportPending());

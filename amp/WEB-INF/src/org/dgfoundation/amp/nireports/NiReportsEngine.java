@@ -1,73 +1,31 @@
 package org.dgfoundation.amp.nireports;
 
-import static java.util.stream.Collectors.toList;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.SortedSet;
-import java.util.TreeMap;
-import java.util.TreeSet;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.algo.timing.RunNode;
-import org.dgfoundation.amp.newreports.IReportEnvironment;
-import org.dgfoundation.amp.nireports.output.NiReportFilterResult;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.algo.Graph;
 import org.dgfoundation.amp.algo.ValueWrapper;
 import org.dgfoundation.amp.algo.timing.InclusiveTimer;
+import org.dgfoundation.amp.algo.timing.RunNode;
+import org.dgfoundation.amp.newreports.IReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportCollapsingStrategy;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportWarning;
-import org.dgfoundation.amp.nireports.output.NiReportData;
-import org.dgfoundation.amp.nireports.output.NiReportDataOutputter;
-import org.dgfoundation.amp.nireports.output.NiReportOutputCleaner;
-import org.dgfoundation.amp.nireports.output.NiReportRunResult;
-import org.dgfoundation.amp.nireports.output.NiReportVoidnessChecker;
+import org.dgfoundation.amp.nireports.output.*;
 import org.dgfoundation.amp.nireports.output.sorting.NiReportSorter;
-import org.dgfoundation.amp.nireports.runtime.CacheHitsCounter;
-import org.dgfoundation.amp.nireports.runtime.CachingCalendarConverter;
-import org.dgfoundation.amp.nireports.runtime.CellColumn;
-import org.dgfoundation.amp.nireports.runtime.Column;
-import org.dgfoundation.amp.nireports.runtime.ColumnContents;
-import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
-import org.dgfoundation.amp.nireports.runtime.GroupColumn;
-import org.dgfoundation.amp.nireports.runtime.GroupReportData;
-import org.dgfoundation.amp.nireports.runtime.HierarchiesTracker;
-import org.dgfoundation.amp.nireports.runtime.IdsAcceptorsBuilder;
-import org.dgfoundation.amp.nireports.runtime.NiCell;
-import org.dgfoundation.amp.nireports.runtime.NiColSplitCell;
-import org.dgfoundation.amp.nireports.runtime.PostMeasureVHiersVisitor;
-import org.dgfoundation.amp.nireports.runtime.ReportData;
-import org.dgfoundation.amp.nireports.runtime.VSplitStrategy;
-import org.dgfoundation.amp.nireports.schema.Behaviour;
-import org.dgfoundation.amp.nireports.schema.DimensionSnapshot;
-import org.dgfoundation.amp.nireports.schema.IdsAcceptor;
-import org.dgfoundation.amp.nireports.schema.NiDimension;
+import org.dgfoundation.amp.nireports.runtime.*;
+import org.dgfoundation.amp.nireports.schema.*;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
-import org.dgfoundation.amp.nireports.schema.NiReportColumn;
-import org.dgfoundation.amp.nireports.schema.NiReportMeasure;
-import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
-import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
-import org.dgfoundation.amp.nireports.schema.SchemaSpecificScratchpad;
-import org.dgfoundation.amp.nireports.schema.TimeRange;
 import org.digijava.kernel.translator.LocalizableLabel;
+
+import java.util.*;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * The NiReports engine API-independent entrypoint. A single report should be run per instance <br />

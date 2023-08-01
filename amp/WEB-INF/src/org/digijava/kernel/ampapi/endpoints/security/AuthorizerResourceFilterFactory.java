@@ -3,7 +3,6 @@ package org.digijava.kernel.ampapi.endpoints.security;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.glassfish.jersey.server.ContainerRequest;
 
-
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ResourceInfo;

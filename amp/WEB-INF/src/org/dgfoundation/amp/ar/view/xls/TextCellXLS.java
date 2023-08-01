@@ -6,12 +6,6 @@
  */
 package org.dgfoundation.amp.ar.view.xls;
 
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -22,6 +16,12 @@ import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.cell.TextCell;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.Html2TextCallback;
+
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * 

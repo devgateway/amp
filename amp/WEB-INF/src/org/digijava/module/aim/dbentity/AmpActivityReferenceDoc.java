@@ -1,11 +1,11 @@
 package org.digijava.module.aim.dbentity;
 
+import org.digijava.module.aim.util.Output;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
-
-import org.digijava.module.aim.util.Output;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 public class AmpActivityReferenceDoc implements Serializable, Versionable, Cloneable {
 

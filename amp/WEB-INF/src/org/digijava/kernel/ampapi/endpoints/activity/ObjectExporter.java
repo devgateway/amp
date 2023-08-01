@@ -1,13 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.CachingFieldsEnumerator;
@@ -17,6 +9,9 @@ import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.common.util.DateTimeUtil;
+
+import java.lang.reflect.Field;
+import java.util.*;
 
 /**
  * @author Octavian Ciubotaru

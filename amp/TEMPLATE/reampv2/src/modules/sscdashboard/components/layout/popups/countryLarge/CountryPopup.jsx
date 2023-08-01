@@ -1,17 +1,17 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import '../popups.css';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
 import CountryPopupHeader from './CountryPopupHeader';
 import CountryPopupChart from './CountryPopupChart';
 import CountryPopupFooter from './CountryPopupFooter';
 import {
-  generateStructureBasedOnModalitiesProjectCount,
-  generateStructureBasedOnSectorProjectCount,
-  getChartData
+    generateStructureBasedOnModalitiesProjectCount,
+    generateStructureBasedOnSectorProjectCount,
+    getChartData
 } from '../../../../utils/ProjectUtils';
-import { SSCTranslationContext } from '../../../StartUp';
-import { SECTORS_CHART } from '../../../../utils/constants';
+import {SSCTranslationContext} from '../../../StartUp';
+import {SECTORS_CHART} from '../../../../utils/constants';
 
 class CountryPopup extends Component {
   render() {

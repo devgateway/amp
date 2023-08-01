@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import dateformat from 'dateformat';
-import { TRN_PREFIX } from '../utils/constants';
+import {TRN_PREFIX} from '../utils/constants';
 
 export default class FilterOutputItem extends Component {
   generateChildren = (items) => {

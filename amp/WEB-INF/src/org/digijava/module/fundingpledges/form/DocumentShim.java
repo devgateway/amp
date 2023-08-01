@@ -2,7 +2,6 @@ package org.digijava.module.fundingpledges.form;
 
 import org.apache.log4j.Logger;
 import org.digijava.module.contentrepository.helper.DocumentData;
-import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesDocument;
 

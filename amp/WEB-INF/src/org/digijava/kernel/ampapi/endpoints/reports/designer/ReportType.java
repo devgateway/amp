@@ -5,11 +5,7 @@ package org.digijava.kernel.ampapi.endpoints.reports.designer;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import static org.dgfoundation.amp.ar.ArConstants.COMPONENT_TYPE;
-import static org.dgfoundation.amp.ar.ArConstants.DONOR_TYPE;
-import static org.dgfoundation.amp.ar.ArConstants.GPI_TYPE;
-import static org.dgfoundation.amp.ar.ArConstants.PLEDGES_TYPE;
-import static org.dgfoundation.amp.ar.ArConstants.REGIONAL_TYPE;
+import static org.dgfoundation.amp.ar.ArConstants.*;
 
 /**
  * Report types

@@ -1,5 +1,4 @@
-import {STATE_TRANSLATIONS_LOADED, STATE_APP_INITIALIZED} from '../actions/StartUpAction';
-import TranslationManager from '../utils/TranslationManager';
+import {STATE_APP_INITIALIZED} from '../actions/StartUpAction';
 
 /**
  *

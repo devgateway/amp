@@ -2,14 +2,7 @@ package org.digijava.kernel.ampapi.endpoints.gis.services.ssc;
 
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.newreports.AmpReportFilters;
-import org.dgfoundation.amp.newreports.DateCell;
-import org.dgfoundation.amp.newreports.GeneratedReport;
-import org.dgfoundation.amp.newreports.ReportArea;
-import org.dgfoundation.amp.newreports.ReportCell;
-import org.dgfoundation.amp.newreports.ReportColumn;
-import org.dgfoundation.amp.newreports.ReportOutputColumn;
-import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+import org.dgfoundation.amp.newreports.*;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.dto.gis.SscDashboardActivity;
 import org.digijava.kernel.ampapi.endpoints.dto.gis.SscDashboardObject;
@@ -22,11 +15,7 @@ import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.module.common.util.DateTimeUtil;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public final class SscDashboardService {
     private SscDashboardService() {

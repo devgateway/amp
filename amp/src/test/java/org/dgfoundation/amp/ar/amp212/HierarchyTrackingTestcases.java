@@ -1,8 +1,5 @@
 package org.dgfoundation.amp.ar.amp212;
 
-import java.math.BigDecimal;
-import java.util.Arrays;
-
 import org.dgfoundation.amp.nireports.runtime.CacheHitsCounter;
 import org.dgfoundation.amp.nireports.runtime.HierarchiesTracker;
 import org.dgfoundation.amp.nireports.schema.ConstantNiDimension;
@@ -10,6 +7,9 @@ import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.dgfoundation.amp.testutils.AmpTestCase;
 import org.junit.Test;
+
+import java.math.BigDecimal;
+import java.util.Arrays;
 
 
 /**

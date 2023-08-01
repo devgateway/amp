@@ -3,6 +3,12 @@
  */
 package org.digijava.kernel.ampapi.endpoints.config.utils;
 
+import org.apache.log4j.Logger;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpGlobalSettings;
+import org.digijava.module.aim.helper.KeyValue;
+import org.digijava.module.common.util.DateTimeUtil;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,12 +16,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.log4j.Logger;
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpGlobalSettings;
-import org.digijava.module.aim.helper.KeyValue;
-import org.digijava.module.common.util.DateTimeUtil;
 
 
 /**

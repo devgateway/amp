@@ -1,15 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.filters;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.stream.Collectors;
-
+import com.google.common.collect.ImmutableMap;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -23,7 +14,9 @@ import org.digijava.module.aim.util.OrganizationSkeleton;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 
-import com.google.common.collect.ImmutableMap;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 /**
  * This class generates the filter list (tree) object for organizations

@@ -1,6 +1,6 @@
 import React from 'react';
-import { printChartPrinter } from '../../../../utils/PrintUtils';
-import { SSCTranslationContext } from '../../../StartUp';
+import {printChartPrinter} from '../../../../utils/PrintUtils';
+import {SSCTranslationContext} from '../../../StartUp';
 import {getRootUrl} from "../../../../../../utils/Utils";
 
 class PrintCountryCharts extends React.Component {

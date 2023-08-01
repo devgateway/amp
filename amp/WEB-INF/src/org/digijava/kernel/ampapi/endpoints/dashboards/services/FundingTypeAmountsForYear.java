@@ -1,8 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.dashboards.services;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.List;
 
 /**
  * @author Octavian Ciubotaru

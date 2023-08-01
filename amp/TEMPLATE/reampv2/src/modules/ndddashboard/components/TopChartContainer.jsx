@@ -1,16 +1,12 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {
-  CHART_COLOR_MAP, CURRENCY_CODE
-} from '../utils/constants';
+import {CHART_COLOR_MAP, CURRENCY_CODE} from '../utils/constants';
 import CustomLegend from '../../../utils/components/CustomLegend';
 import './legends/legends.css';
-import {
-  getCustomColor, formatNumberWithSettings
-} from '../utils/Utils';
+import {formatNumberWithSettings, getCustomColor} from '../utils/Utils';
 import TopChart from './charts/TopChart';
-import { NDDTranslationContext } from './StartUp';
-import { ALL_PROGRAMS } from '../../admin/ndd/constants/Constants';
+import {NDDTranslationContext} from './StartUp';
+import {ALL_PROGRAMS} from '../../admin/ndd/constants/Constants';
 
 export default class TopChartContainer extends Component {
   getProgramLegend() {

@@ -1,13 +1,13 @@
 package org.digijava.kernel.ampapi.endpoints.performance.matcher.definition;
 
-import java.util.List;
-import java.util.function.Function;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleConstants;
 import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute;
 import org.digijava.module.aim.dbentity.AmpPerformanceRuleAttribute.PerformanceRuleAttributeType;
+
+import java.util.List;
+import java.util.function.Function;
 
 /**
  * 

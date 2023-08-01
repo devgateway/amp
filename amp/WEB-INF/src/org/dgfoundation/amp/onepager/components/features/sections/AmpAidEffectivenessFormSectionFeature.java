@@ -1,11 +1,5 @@
 package org.dgfoundation.amp.onepager.components.features.sections;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.AbstractSingleSelectChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
@@ -22,6 +16,12 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicator;
 import org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicatorOption;
 import org.digijava.module.aim.util.AidEffectivenessIndicatorUtil;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 
 public class AmpAidEffectivenessFormSectionFeature extends

@@ -1,9 +1,5 @@
 package org.dgfoundation.amp.nireports.behaviours;
 
-import java.util.List;
-import java.util.Set;
-import java.util.function.Function;
-
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.ComparableValue;
@@ -11,6 +7,10 @@ import org.dgfoundation.amp.nireports.runtime.NiCell;
 import org.dgfoundation.amp.nireports.runtime.VSplitStrategy;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+
+import java.util.List;
+import java.util.Set;
+import java.util.function.Function;
 
 /**
  * the {@link VSplitStrategy} of a Currency entity - measures vertically divided by the original currency

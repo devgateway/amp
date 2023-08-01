@@ -1,24 +1,21 @@
 package org.digijava.module.help.util;
 
-import java.util.Iterator;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.SiteCache;
-import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.help.dbentity.HelpTopic;
-import org.hibernate.query.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Utility method for glossary

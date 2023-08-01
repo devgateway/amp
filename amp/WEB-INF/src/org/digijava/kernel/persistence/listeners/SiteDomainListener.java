@@ -3,12 +3,7 @@ package org.digijava.kernel.persistence.listeners;
 import org.digijava.kernel.jobs.RegisterWithAmpRegistryJob;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.module.aim.util.QuartzJobUtils;
-import org.hibernate.event.spi.PostDeleteEvent;
-import org.hibernate.event.spi.PostDeleteEventListener;
-import org.hibernate.event.spi.PostInsertEvent;
-import org.hibernate.event.spi.PostInsertEventListener;
-import org.hibernate.event.spi.PostUpdateEvent;
-import org.hibernate.event.spi.PostUpdateEventListener;
+import org.hibernate.event.spi.*;
 import org.hibernate.persister.entity.EntityPersister;
 
 /**

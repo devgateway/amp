@@ -1,8 +1,8 @@
 package org.digijava.module.aim.util.caching;
 
-import java.util.*;
-
 import org.digijava.module.aim.dbentity.AmpCurrency;
+
+import java.util.List;
 
 /**
  * reset it by overwriting (AmpCaching.currencyCache = new CurrencyCache())

@@ -1,9 +1,9 @@
 package org.dgfoundation.amp.ar.view.pdf;
 
-import java.awt.Color;
-import java.util.ArrayList;
-
 import com.lowagie.text.pdf.PdfPCell;
+
+import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * utility class for holding the global state of an export

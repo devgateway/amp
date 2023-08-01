@@ -1,5 +1,5 @@
-import { fetchApiData } from '../../../utils/loadTranslations';
-import { URL_GLOBAL_SETTINGS } from '../utils/constants';
+import {fetchApiData} from '../../../utils/loadTranslations';
+import {URL_GLOBAL_SETTINGS} from '../utils/constants';
 
 export const FETCH_GLOBAL_SETTINGS_PENDING = 'FETCH_GLOBAL_SETTINGS_PENDING';
 export const FETCH_GLOBAL_SETTINGS_SUCCESS = 'FETCH_GLOBAL_SETTINGS_SUCCESS';

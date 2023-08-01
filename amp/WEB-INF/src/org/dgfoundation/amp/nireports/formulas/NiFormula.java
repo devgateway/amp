@@ -1,22 +1,16 @@
 package org.dgfoundation.amp.nireports.formulas;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.BiFunction;
-import java.util.function.Function;
-
 import org.dgfoundation.amp.nireports.output.nicells.NiFormulaicAmountCell;
-
-import static org.dgfoundation.amp.nireports.output.nicells.NiFormulaicAmountCell.isDefined;
-import static org.dgfoundation.amp.nireports.output.nicells.NiFormulaicAmountCell.UNDEFINED;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.util.*;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+
+import static org.dgfoundation.amp.nireports.output.nicells.NiFormulaicAmountCell.UNDEFINED;
+import static org.dgfoundation.amp.nireports.output.nicells.NiFormulaicAmountCell.isDefined;
 
 /**
  * An expression to be evaluated as function of a set of variables (also called <i>tokens</i>).

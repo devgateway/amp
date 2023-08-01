@@ -1,14 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.security.services;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.security.dto.User;
 import org.digijava.kernel.entity.Locale;
@@ -20,6 +11,12 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpUserExtension;
 import org.digijava.module.um.util.AmpUserUtil;
 import org.springframework.stereotype.Component;
+
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * User related services

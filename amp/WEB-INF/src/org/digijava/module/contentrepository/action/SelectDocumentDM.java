@@ -1,14 +1,5 @@
 package org.digijava.module.contentrepository.action;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -17,8 +8,10 @@ import org.digijava.module.contentrepository.form.SelectDocumentForm;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.helper.DocumentData;
 import org.digijava.module.contentrepository.helper.TeamInformationBeanDM;
-import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 /**
  * 
  * This action is used whenever there is a need to select 1 or more documents from

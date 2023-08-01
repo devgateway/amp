@@ -1,12 +1,12 @@
 package org.digijava.kernel.ampapi.endpoints.common.valueproviders;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-
 import org.apache.commons.beanutils.PropertyUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.common.TranslationUtil;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValueProvider;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * @author Octavian Ciubotaru

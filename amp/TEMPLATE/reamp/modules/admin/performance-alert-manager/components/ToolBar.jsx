@@ -1,18 +1,10 @@
-import React, {
-    Component,
-    PropTypes
-} from 'react';
-import {
-    connect
-} from 'react-redux';
-import {
-    bindActionCreators
-} from 'redux';
-
-import * as Constants from '../common/Constants';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import Utils from '../common/Utils'
-require('../styles/less/main.less');
 import * as performanceRuleActions from '../actions/PerformanceRuleActions';
+
+require('../styles/less/main.less');
 
 class ToolBar extends Component {
     constructor(props, context) {

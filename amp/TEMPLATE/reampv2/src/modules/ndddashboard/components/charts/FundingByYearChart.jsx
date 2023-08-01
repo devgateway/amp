@@ -1,21 +1,24 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 
 // Dont use react-plotly directly: https://github.com/plotly/react-plotly.js/issues/135#issuecomment-501398125
 import Plotly from 'plotly.js';
 import createPlotlyComponent from 'react-plotly.js/factory';
-import { callYearDetailReport } from '../../actions/callReports';
+import {callYearDetailReport} from '../../actions/callReports';
 import {
-  DIRECT_PROGRAM, INDIRECT_PROGRAMS, PROGRAMLVL1, CODE,
-  PROGRAMLVL2, TRN_PREFIX, CURRENCY_CODE, FUNDING_TYPE
+    CODE,
+    CURRENCY_CODE,
+    DIRECT_PROGRAM,
+    FUNDING_TYPE,
+    INDIRECT_PROGRAMS,
+    PROGRAMLVL1,
+    PROGRAMLVL2,
+    TRN_PREFIX
 } from '../../utils/constants';
-import {
-  formatNumberWithSettings, getCustomColor, formatKMB
-} from '../../utils/Utils';
+import {formatKMB, formatNumberWithSettings, getCustomColor} from '../../utils/Utils';
 // eslint-disable-next-line no-unused-vars
-import styles from '../styles.css';
 import ToolTip from '../tooltips/ToolTip';
 import YearDetail from './YearDetail';
 

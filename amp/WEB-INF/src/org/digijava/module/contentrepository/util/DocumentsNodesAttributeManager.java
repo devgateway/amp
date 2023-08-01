@@ -1,22 +1,21 @@
 package org.digijava.module.contentrepository.util;
 
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
-import javax.jcr.Node;
-import javax.jcr.RepositoryException;
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.gis.services.MapTilesService;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
 import org.digijava.module.contentrepository.exception.CrException;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
-import org.hibernate.query.Query;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
+
+import javax.jcr.Node;
+import javax.jcr.RepositoryException;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Public Document Manager

@@ -22,15 +22,15 @@
 
 package org.digijava.kernel.syndication.aggregator;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.apache.commons.digester.Digester;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.syndication.digester.Rss;
 import org.digijava.kernel.syndication.digester.RssChannel;
 import org.digijava.kernel.syndication.digester.RssItem;
 import org.xml.sax.SAXException;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * <p>Title: </p>

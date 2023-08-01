@@ -1,20 +1,15 @@
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-
 import org.digijava.kernel.ampapi.endpoints.common.values.providers.LocationPossibleValuesProvider;
 import org.digijava.kernel.validators.activity.ImplementationLevelValidator;
 import org.digijava.kernel.validators.common.RequiredValidator;
-import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
-import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
-import org.digijava.module.aim.annotations.interchange.InterchangeableId;
-import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
-import org.digijava.module.aim.annotations.interchange.PossibleValues;
+import org.digijava.module.aim.annotations.interchange.*;
 import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.aim.util.TreeNodeAware;
+
+import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Connection between Activity and Location.

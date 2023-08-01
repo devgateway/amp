@@ -1,13 +1,13 @@
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.util.Output;
+
+import java.io.Serializable;
+import java.util.ArrayList;
 
 public class AmpActivityInternalId implements Serializable, Versionable, Cloneable {
     //IATI-check: used. 

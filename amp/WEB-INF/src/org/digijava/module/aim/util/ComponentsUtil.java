@@ -3,36 +3,22 @@ package org.digijava.module.aim.util;
 /*
  * @author Govind G Dalwani
  */
-import java.text.Collator;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityGroup;
-import org.digijava.module.aim.dbentity.AmpComponent;
-import org.digijava.module.aim.dbentity.AmpComponentFunding;
-import org.digijava.module.aim.dbentity.AmpComponentType;
-import org.digijava.module.aim.dbentity.AmpComponentsIndicators;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
+
+import java.text.Collator;
+import java.util.*;
 
 public class ComponentsUtil {
 

@@ -1,30 +1,25 @@
 package org.digijava.module.aim.ar.util;
 
-import java.lang.reflect.Field;
-import java.sql.Connection;
-import java.util.*;
-import java.util.Map.Entry;
-
-import org.apache.batik.gvt.renderer.DynamicRenderer;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
-import org.dgfoundation.amp.algo.ExceptionConsumer;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnFilterGenerator;
 import org.dgfoundation.amp.ar.ViewDonorFilteringInfo;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.exception.reports.ReportException;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.digijava.module.aim.util.OrganizationSkeleton;
 import org.digijava.module.aim.util.caching.AmpCaching;
 import org.digijava.module.translation.util.ContentTranslationUtil;
-import org.hibernate.query.Query;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
+
+import java.lang.reflect.Field;
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * various utils for reports

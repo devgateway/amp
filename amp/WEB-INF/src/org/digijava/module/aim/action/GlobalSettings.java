@@ -2,26 +2,9 @@ package org.digijava.module.aim.action;
 /*
 * @ author Govind G Dalwani
 */
-import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
+import org.apache.struts.action.*;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.currency.inflation.CCExchangeRate;
@@ -42,6 +25,13 @@ import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.services.auditcleaner.AuditCleaner;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.currencyrates.CurrencyRatesService;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.net.URLDecoder;
+import java.util.*;
 
 public class GlobalSettings extends Action {
     private static Logger logger                = Logger.getLogger(GlobalSettings.class);

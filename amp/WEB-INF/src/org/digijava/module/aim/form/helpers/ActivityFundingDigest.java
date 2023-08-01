@@ -2,40 +2,20 @@
 package org.digijava.module.aim.form.helpers;
 
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.*;
-
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpApplicationSettings;
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
-import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpOrgRole;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpRole;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.form.ProposedProjCost;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.FilterParams;
-import org.digijava.module.aim.helper.FormatHelper;
-import org.digijava.module.aim.helper.Funding;
-import org.digijava.module.aim.helper.FundingDetail;
-import org.digijava.module.aim.helper.FundingOrganization;
-import org.digijava.module.aim.helper.FundingValidator;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.helper.KeyValue;
-import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.helper.*;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-
 import javax.servlet.http.HttpSession;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.*;
 
 /**
  * funding digest for a full activity

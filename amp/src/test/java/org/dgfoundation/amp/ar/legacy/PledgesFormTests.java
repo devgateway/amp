@@ -1,25 +1,23 @@
 package org.dgfoundation.amp.ar.legacy;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import org.dgfoundation.amp.StandaloneAMPInitializer;
 import org.dgfoundation.amp.testutils.ReportsTestCase;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.fundingpledges.action.DisableableKeyValue;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesLocation;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 import org.digijava.module.fundingpledges.form.PledgeForm;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * Pledges Form tests

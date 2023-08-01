@@ -1,13 +1,14 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import Section from './Section';
 import PercentageList from '../fields/PercentageList';
 import {
-  LOCATIONS,
-  LOCATION,
-  LOCATION_PERCENTAGE,
-  IMPLEMENTATION_LEVEL,
-  IMPLEMENTATION_LOCATION
+    IMPLEMENTATION_LEVEL,
+    IMPLEMENTATION_LOCATION,
+    LOCATION,
+    LOCATION_PERCENTAGE,
+    LOCATIONS
 } from '../../utils/ActivityConstants';
+
 require('../../styles/ActivityView.css');
 
 /**

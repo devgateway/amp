@@ -1,10 +1,8 @@
 package org.digijava.module.budgetexport.adapter;
 
 
-
 import org.apache.log4j.Logger;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Properties;

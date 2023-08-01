@@ -1,6 +1,7 @@
 const CONTEXT = 'GPI_REPORTS';
 const SETTINGS_DEFINITIONS_EP = '/rest/settings-definitions/gpi-reports';
 import * as Constants from '../common/Constants';
+
 class Utils {
     static initializeFilterWidget() {
         return new ampFilter( {

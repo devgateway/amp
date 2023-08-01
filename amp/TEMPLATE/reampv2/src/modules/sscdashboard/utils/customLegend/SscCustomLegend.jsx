@@ -2,7 +2,7 @@ import React from 'react';
 import './sscCustomLegend.css';
 import EllipsisText from 'react-ellipsis-text';
 import PropTypes from 'prop-types';
-import { COLOR_MAP } from '../constants';
+import {COLOR_MAP} from '../constants';
 
 const SscCustomLegend = ({ data, chartSelected }) => (
   <div className="custom-legend">

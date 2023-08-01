@@ -22,25 +22,20 @@
 
 package org.digijava.module.translation.util;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-
-import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
-import org.hibernate.query.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.hibernate.Session;
+import org.hibernate.query.Query;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * <p>Title: </p>

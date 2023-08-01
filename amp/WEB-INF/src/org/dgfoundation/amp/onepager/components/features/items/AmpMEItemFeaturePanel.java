@@ -3,13 +3,9 @@
  */
 package org.dgfoundation.amp.onepager.components.features.items;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -20,7 +16,6 @@ import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPan
 import org.dgfoundation.amp.onepager.components.fields.AmpIndicatorGroupField;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.dgfoundation.amp.onepager.translation.TranslatedChoiceRenderer;
-import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
@@ -28,6 +23,9 @@ import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author aartimon@dginternational.org

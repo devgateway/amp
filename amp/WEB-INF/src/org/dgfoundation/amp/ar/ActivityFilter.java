@@ -1,8 +1,5 @@
 package org.dgfoundation.amp.ar;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
@@ -16,6 +13,9 @@ import org.dgfoundation.amp.reports.converters.AmpARFilterConverter;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.module.aim.startup.AMPStartupListener;
 import org.digijava.module.aim.util.LuceneUtil;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * This class is used to filter activities according to filters.

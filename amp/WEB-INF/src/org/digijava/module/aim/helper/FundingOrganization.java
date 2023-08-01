@@ -1,10 +1,9 @@
 package org.digijava.module.aim.helper;
 
-import java.util.Collection;
-import java.util.List;
-
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+
+import java.util.List;
 
 /**
  * @author jose

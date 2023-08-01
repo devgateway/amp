@@ -6,20 +6,15 @@
  */
 package org.digijava.module.digifeed.feeds.ar;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
-
-import org.hibernate.query.Query;
-import org.hibernate.Session;
-
 import org.apache.commons.lang.NotImplementedException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.digifeed.core.GenericFeedQuery;
 import org.digijava.module.digifeed.core.GenericFeedRequest;
+import org.hibernate.Session;
+import org.hibernate.query.Query;
+
+import java.util.*;
 
 /**
  * This class provides access to the business side object tree for AiDA

@@ -1,15 +1,14 @@
 package org.digijava.kernel.validators.common;
 
-import java.util.Map;
-import java.util.Objects;
-import java.util.regex.Pattern;
-
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.validation.ConstraintValidator;
 import org.digijava.kernel.validation.ConstraintValidatorContext;
+
+import java.util.Map;
+import java.util.Objects;
+import java.util.regex.Pattern;
 
 /**
  * Verifies that the value matches the regex pattern.

@@ -1,6 +1,5 @@
 // @flow
-import React, { Component, PropTypes } from 'react';
-import styles from './App.less';
+import React, {Component} from 'react';
 
 
 export default class App extends Component {

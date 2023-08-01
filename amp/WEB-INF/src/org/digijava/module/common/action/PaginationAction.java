@@ -17,11 +17,11 @@
  *************************************************************************/
 package org.digijava.module.common.action;
 
+import org.apache.log4j.Logger;
+import org.apache.struts.action.Action;
+
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.log4j.Logger;
-
-import org.apache.struts.action.Action;
 
 /**
  * <p>Title: DiGiJava</p>

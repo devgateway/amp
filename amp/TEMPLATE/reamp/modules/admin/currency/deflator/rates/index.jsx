@@ -1,9 +1,8 @@
 import React from "react";
 import * as AMP from "amp/architecture";
 import * as Rate from "./rate";
-import style from "./style.less";
-import {showSave, maybeDownload} from "../tools";
-import {Glyphicon, ProgressBar, Alert} from "react-bootstrap";
+import {maybeDownload, showSave} from "../tools";
+import {Alert} from "react-bootstrap";
 
 var sortByPeriod = (a, b) => a.period().localeCompare(b.period());
 

@@ -9,13 +9,7 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.validators.activity.FundingWithTransactionsValidator;
 import org.digijava.kernel.validators.activity.PledgeOrgValidator;
 import org.digijava.kernel.validators.common.RequiredValidator;
-import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
-import org.digijava.module.aim.annotations.interchange.Independent;
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
-import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
-import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
-import org.digijava.module.aim.annotations.interchange.InterchangeableId;
-import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
+import org.digijava.module.aim.annotations.interchange.*;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.Constants;
@@ -28,23 +22,9 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FUNDING_ITEM_CLASSIFICATION_FM_PATH;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FUNDING_PROJECT_JOINT_DECISION_LABEL;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FUNDING_PROJECT_MONITORING_LABEL;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FUNDING_PROJECT_PROBLEMS_LABEL;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FUNDING_PROJECT_RESULTS_AVAILABLE_LABEL;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FUNDING_PROJECT_RESULTS_LINK_LABEL;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FUNDING_PROJECT_SUSTAINABILITY_LABEL;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FUNDING_VULNERABLE_GROUP_LABEL;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.*;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
 
 @TranslatableClass(displayName = "Funding")

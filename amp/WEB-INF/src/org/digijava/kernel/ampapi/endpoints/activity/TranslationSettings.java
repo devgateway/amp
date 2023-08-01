@@ -1,10 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import java.lang.reflect.Field;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.dto.MultilingualContent;
 import org.digijava.kernel.request.TLSUtils;
@@ -13,6 +8,11 @@ import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTe
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.translation.util.ContentTranslationUtil;
+
+import java.lang.reflect.Field;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Class for storing translating settings for activity export. <br>

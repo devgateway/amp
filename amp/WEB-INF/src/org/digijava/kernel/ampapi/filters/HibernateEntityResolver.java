@@ -1,31 +1,18 @@
 package org.digijava.kernel.ampapi.filters;
 
-import java.io.Serializable;
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
 import com.fasterxml.jackson.annotation.ObjectIdGenerator;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.hibernate.Session;
-import org.hibernate.criterion.Property;
-import org.hibernate.metadata.ClassMetadata;
-
-import javax.persistence.metamodel.EntityType;
-
-/**
- * @author Octavian Ciubotaru
- */
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Property;
 import org.hibernate.metamodel.spi.MetamodelImplementor;
 import org.hibernate.persister.entity.EntityPersister;
-import javax.persistence.metamodel.EntityType;
+
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class HibernateEntityResolver implements Function<ObjectIdGenerator.IdKey, Object> {
 

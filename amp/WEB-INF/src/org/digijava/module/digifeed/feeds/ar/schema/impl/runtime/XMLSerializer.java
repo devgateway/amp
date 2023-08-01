@@ -7,13 +7,12 @@
 
 package org.digijava.module.digifeed.feeds.ar.schema.impl.runtime;
 
-import javax.xml.bind.ValidationEvent;
-
-import org.xml.sax.SAXException;
-
 import com.sun.xml.bind.JAXBObject;
 import com.sun.xml.bind.marshaller.IdentifiableObject;
 import com.sun.xml.bind.serializer.AbortSerializationException;
+import org.xml.sax.SAXException;
+
+import javax.xml.bind.ValidationEvent;
 
 /**
  * Receives XML serialization event

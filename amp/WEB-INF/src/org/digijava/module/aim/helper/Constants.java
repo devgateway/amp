@@ -1,12 +1,12 @@
 package org.digijava.module.aim.helper ;
 
-import java.awt.Color;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import com.google.common.collect.ImmutableSet;
 import org.apache.commons.lang3.StringUtils;
 import org.digijava.module.aim.dbentity.ApprovalStatus;
+
+import java.awt.*;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public final class Constants {
 

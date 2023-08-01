@@ -1,17 +1,13 @@
 package org.digijava.kernel.validators.activity;
 
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.hasToString;
-import static org.hamcrest.Matchers.isA;
-
 import com.google.common.collect.ImmutableList;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.validation.ConstraintValidator;
 import org.digijava.kernel.validation.ConstraintViolation;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
+
+import static org.hamcrest.Matchers.*;
 
 /**
  * @author Octavian Ciubotaru

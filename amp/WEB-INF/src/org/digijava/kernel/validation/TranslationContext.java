@@ -1,16 +1,16 @@
 package org.digijava.kernel.validation;
 
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
+import org.apache.commons.lang3.tuple.Triple;
+import org.dgfoundation.amp.onepager.helper.EditorStore;
+import org.digijava.module.aim.dbentity.AmpContentTranslation;
+import org.digijava.module.editor.dbentity.Editor;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.tuple.Triple;
-import org.dgfoundation.amp.onepager.helper.EditorStore;
-import org.digijava.module.aim.dbentity.AmpContentTranslation;
-import org.digijava.module.editor.dbentity.Editor;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 /**
  * This class allows to load values for multilingual fields for validation purposes.

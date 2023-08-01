@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { createSelector } from 'reselect'
-import {ActivityPreviewUI, FieldsManager, CurrencyRatesManager, ErrorHelper} from 'amp-ui';
+import {createSelector} from 'reselect'
+import {ActivityPreviewUI, CurrencyRatesManager, ErrorHelper, FieldsManager} from 'amp-ui';
 import * as ActivityActions from '../actions/ActivityActions';
 import ActivityFundingTotals from '../utils/ActivityFundingTotals';
 import Logger from '../utils/LoggerManager';

@@ -6,34 +6,26 @@ package org.digijava.module.aim.action;
 
 
 import org.apache.log4j.Logger;
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessages;
+import org.apache.struts.action.*;
 import org.digijava.kernel.Constants;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.UserLangPreferences;
 import org.digijava.kernel.mail.DgEmailManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
+import org.digijava.kernel.security.PasswordPolicyValidator;
 import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.ShaCrypt;
-import org.digijava.module.aim.dbentity.AmpOrgGroup;
-import org.digijava.module.aim.dbentity.AmpOrgType;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpUserExtension;
-import org.digijava.module.aim.dbentity.AmpUserExtensionPK;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.message.triggers.UserRegistrationTrigger;
 import org.digijava.module.um.form.UserRegisterForm;
 import org.digijava.module.um.util.AmpUserUtil;
 import org.digijava.module.um.util.DbUtil;
-import org.digijava.kernel.security.PasswordPolicyValidator;
 
 public class RegisterUser extends Action {
 

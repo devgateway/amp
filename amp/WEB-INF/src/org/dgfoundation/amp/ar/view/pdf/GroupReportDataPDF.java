@@ -6,18 +6,17 @@
  */
 package org.dgfoundation.amp.ar.view.pdf;
 
-import java.awt.Color;
-import java.util.Iterator;
-
+import com.lowagie.text.Font;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.Viewable;
 import org.digijava.module.aim.action.ExportActivityToPDF;
 
-import com.lowagie.text.Font;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.PdfPTable;
+import java.awt.*;
+import java.util.Iterator;
 
 /**
  * 

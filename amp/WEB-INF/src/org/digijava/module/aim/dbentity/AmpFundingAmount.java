@@ -3,10 +3,6 @@
  */
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-
 import org.apache.commons.lang.StringUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.CommonFieldsConstants;
@@ -18,6 +14,10 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.aim.validator.groups.Submit;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Simple Funding Amount

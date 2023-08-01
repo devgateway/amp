@@ -5,10 +5,6 @@
  */
 package org.digijava.module.xmlpatcher.worker;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-
 import org.digijava.module.xmlpatcher.core.XmlPatcherWorkerFactory;
 import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatchLog;
 import org.digijava.module.xmlpatcher.exception.XmlPatcherScriptWorkerException;
@@ -16,6 +12,10 @@ import org.digijava.module.xmlpatcher.exception.XmlPatcherWorkerException;
 import org.digijava.module.xmlpatcher.jaxb.Lang;
 import org.digijava.module.xmlpatcher.jaxb.Script;
 import org.digijava.module.xmlpatcher.util.XmlPatcherConstants;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org Responsible for

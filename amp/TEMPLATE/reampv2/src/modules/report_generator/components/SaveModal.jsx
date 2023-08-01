@@ -1,17 +1,17 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {
-  Button, Checkbox, Divider, Dropdown, Form, Header, Icon, Label, Modal
-} from 'semantic-ui-react';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+import {Button, Checkbox, Divider, Dropdown, Form, Header, Icon, Label, Modal} from 'semantic-ui-react';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
 import ErrorMessage from './ErrorMessage';
-import { translate, validateSaveModal } from '../utils/Utils';
+import {translate, validateSaveModal} from '../utils/Utils';
 import {
-  updateReportDetailsNameMultiLang, updateReportDetailsName,
-  updateReportDetailsNameReportCategory, revertReportDetailsName
+    revertReportDetailsName,
+    updateReportDetailsName,
+    updateReportDetailsNameMultiLang,
+    updateReportDetailsNameReportCategory
 } from '../actions/stateUIActions';
-import { PROFILE_TAB } from '../utils/constants';
+import {PROFILE_TAB} from '../utils/constants';
 import MultiLingualInputText from './MultiLingualInputText';
 
 class SaveModal extends Component {

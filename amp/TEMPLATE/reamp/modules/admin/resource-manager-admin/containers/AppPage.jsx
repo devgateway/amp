@@ -1,6 +1,6 @@
 // @flow
-import { bindActionCreators } from "redux";
-import { connect } from "react-redux";
+import {bindActionCreators} from "redux";
+import {connect} from "react-redux";
 import App from "../components/Layout/App.jsx";
 import * as AppActions from "../actions/AppActions";
 

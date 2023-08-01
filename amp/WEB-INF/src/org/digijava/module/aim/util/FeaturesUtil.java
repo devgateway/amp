@@ -1,21 +1,5 @@
 package org.digijava.module.aim.util;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.concurrent.ConcurrentHashMap;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
@@ -26,31 +10,24 @@ import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.dbentity.AmpColumnsOrder;
-import org.digijava.module.aim.dbentity.AmpComponentType;
-import org.digijava.module.aim.dbentity.AmpFeature;
-import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
-import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
-import org.digijava.module.aim.dbentity.AmpGlobalSettings;
-import org.digijava.module.aim.dbentity.AmpHomeThumbnail;
-import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
-import org.digijava.module.aim.dbentity.AmpModulesVisibility;
-import org.digijava.module.aim.dbentity.AmpSiteFlag;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
-import org.digijava.module.aim.dbentity.FeatureTemplates;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Flag;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.Logic;
 import org.hibernate.HibernateException;
-import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author medea

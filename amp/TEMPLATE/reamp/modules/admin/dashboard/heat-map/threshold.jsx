@@ -1,6 +1,7 @@
 import React from "react";
 import NumericInput from "react-numeric-input";
 import {Alert} from "react-bootstrap";
+
 require('./style.less');
 
 function formatPercentage(value) {

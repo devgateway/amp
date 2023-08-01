@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
-import { Tabs, Tab } from 'react-bootstrap';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import React, {useState} from 'react';
+import {Tab, Tabs} from 'react-bootstrap';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import PropTypes from 'prop-types';
 import AdminNDDIndirectProgramApp from '../indirect';
 import AdminNDDProgramApp from '../program';
 
 // eslint-disable-next-line no-unused-vars
-import styles from './css/style.css';
 
 const NDDAdminNavigator = ({ translations }) => {
   const [key, setKey] = useState('indirect');

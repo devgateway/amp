@@ -1,11 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.indicator;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import javax.ws.rs.core.Response;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.menu.AmpView;
 import org.dgfoundation.amp.menu.MenuUtils;
@@ -23,6 +17,11 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.hibernate.Session;
+
+import javax.ws.rs.core.Response;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 
 /**

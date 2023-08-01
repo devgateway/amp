@@ -1,11 +1,11 @@
 package org.digijava.kernel.ampapi.helpers.geojson;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JsonNode;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**

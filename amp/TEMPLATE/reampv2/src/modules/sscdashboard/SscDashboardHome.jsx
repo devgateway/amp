@@ -1,14 +1,12 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import PropTypes from 'prop-types';
 import Sidebar from './components/layout/sidebar/sidebar';
 import MapContainer from './components/layout/map/MapContainer';
-import { SSCTranslationContext } from './components/StartUp';
-import {
-  DOWNLOAD_CHART, HOME_CHART, MODALITY_CHART, SECTORS_CHART
-} from './utils/constants';
-import { DONOR_COUNTRY, MODALITIES, PRIMARY_SECTOR } from './utils/FieldsConstants';
+import {SSCTranslationContext} from './components/StartUp';
+import {DOWNLOAD_CHART, HOME_CHART, MODALITY_CHART, SECTORS_CHART} from './utils/constants';
+import {DONOR_COUNTRY, MODALITIES, PRIMARY_SECTOR} from './utils/FieldsConstants';
 import * as CallReports from './actions/callReports';
 
 import * as LoadFilters from './actions/loadFilters';

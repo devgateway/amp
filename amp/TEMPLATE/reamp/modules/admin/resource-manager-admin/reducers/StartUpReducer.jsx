@@ -1,5 +1,5 @@
 // @flow
-import { STATE_TRANSLATIONS_LOADED } from '../actions/StartUpAction.jsx';
+import {STATE_TRANSLATIONS_LOADED} from '../actions/StartUpAction.jsx';
 
 const defaultState = {
     translations: {}

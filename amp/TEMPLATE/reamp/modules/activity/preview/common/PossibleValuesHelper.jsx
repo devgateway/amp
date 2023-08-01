@@ -1,4 +1,4 @@
-import { CommonPossibleValuesHelper } from 'amp-ui';
+import {CommonPossibleValuesHelper} from 'amp-ui';
 
 
 export default function processPossibleValues(possibleValuesCollection){

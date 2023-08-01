@@ -1,15 +1,13 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {
-  Button, Item, Menu,
-} from 'semantic-ui-react';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { FM_IS_PUBLIC_REPORT_ENABLED, PROFILE_TAB } from '../utils/constants';
+import {Button, Item, Menu,} from 'semantic-ui-react';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+import {FM_IS_PUBLIC_REPORT_ENABLED, PROFILE_TAB} from '../utils/constants';
 import './MainMenu.css';
 import SaveModal from './SaveModal';
-import { getLayout } from '../actions/layoutActions';
-import { areEnoughDataForPreview, translate } from '../utils/Utils';
+import {getLayout} from '../actions/layoutActions';
+import {areEnoughDataForPreview, translate} from '../utils/Utils';
 
 const MENU = 'menu';
 

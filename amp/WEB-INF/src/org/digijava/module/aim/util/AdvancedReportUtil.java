@@ -4,31 +4,15 @@
  */
 package org.digijava.module.aim.util;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpColumns;
-import org.digijava.module.aim.dbentity.AmpDesktopTabSelection;
-import org.digijava.module.aim.dbentity.AmpMeasures;
-import org.digijava.module.aim.dbentity.AmpReportColumn;
-import org.digijava.module.aim.dbentity.AmpReportHierarchy;
-import org.digijava.module.aim.dbentity.AmpReports;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.dbentity.AmpTeamReports;
-import org.hibernate.query.Query;
+import org.digijava.module.aim.dbentity.*;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 
 import java.text.Collator;
+import java.util.*;
 
 /**
  * AdvancedReportUtil.java

@@ -1,8 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import java.util.List;
-import java.util.Locale;
-
 import org.dgfoundation.amp.onepager.helper.EditorStore;
 import org.dgfoundation.amp.onepager.util.SaveContext;
 import org.digijava.kernel.exception.DgException;
@@ -20,6 +17,9 @@ import org.digijava.module.aim.util.LuceneUtil;
 import org.hibernate.Session;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+
+import java.util.List;
+import java.util.Locale;
 
 import static org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion;
 

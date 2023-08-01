@@ -1,25 +1,24 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import {
-  Grid, GridColumn, Input
-} from 'semantic-ui-react';
-import { PROFILE_TAB } from '../../utils/constants';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+import {Grid, GridColumn, Input} from 'semantic-ui-react';
+import {PROFILE_TAB} from '../../utils/constants';
 import OptionsList from './OptionsList';
-import { ReportGeneratorContext } from '../StartUp';
+import {ReportGeneratorContext} from '../StartUp';
 import ColumnsSelector from './ColumnsSelector';
 import {
-  updateColumnsSelected,
-  updateColumnsSorting,
-  updateHierarchiesSelected,
-  updateHierarchiesSorting,
-  updateHierarchiesAvailable,
-  resetColumnsSelected, setInitialHierarchies
+    resetColumnsSelected,
+    setInitialHierarchies,
+    updateColumnsSelected,
+    updateColumnsSorting,
+    updateHierarchiesAvailable,
+    updateHierarchiesSelected,
+    updateHierarchiesSorting
 } from '../../actions/stateUIActions';
 import ColumnSorter from './ColumnsSorter';
 import ErrorMessage from '../ErrorMessage';
-import { translate } from '../../utils/Utils';
+import {translate} from '../../utils/Utils';
 import InputWrapper from './InputWrapper';
 
 class ColumnsSection extends Component {

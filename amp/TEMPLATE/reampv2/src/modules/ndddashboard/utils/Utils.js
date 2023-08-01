@@ -2,14 +2,10 @@
 // eslint-disable-next-line no-unused-vars
 import React from 'react';
 import Gradient from 'javascript-color-gradient';
-import { format } from 'd3-format';
+import {format} from 'd3-format';
 
-import {
-  CHART_COLOR_MAP, AVAILABLE_COLORS, SELECTED_COLORS, MAX_GRADIENTS
-} from './constants';
-import {
-  ALL_PROGRAMS, DST_PROGRAM, PROGRAM_MAPPING, SRC_PROGRAM
-} from '../../admin/ndd/constants/Constants';
+import {AVAILABLE_COLORS, CHART_COLOR_MAP, MAX_GRADIENTS, SELECTED_COLORS} from './constants';
+import {ALL_PROGRAMS, DST_PROGRAM, PROGRAM_MAPPING, SRC_PROGRAM} from '../../admin/ndd/constants/Constants';
 
 export function hashCode(str) { // java String#hashCode
   let hash = 0;

@@ -1,7 +1,5 @@
 package org.digijava.module.aim.startup;
 
-import java.util.List;
-
 import org.dgfoundation.amp.ar.ARUtil;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.UserLangPreferences;
@@ -11,19 +9,14 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.kernel.util.UserUtils;
-import org.digijava.module.aim.dbentity.AmpOrgGroup;
-import org.digijava.module.aim.dbentity.AmpOrgType;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
-import org.digijava.module.aim.dbentity.AmpUserExtension;
-import org.digijava.module.aim.dbentity.AmpUserExtensionPK;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.um.util.AmpUserUtil;
+
+import java.util.List;
 
 
 public final class AmpBackgroundActivitiesUtil {

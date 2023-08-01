@@ -3,14 +3,14 @@
  */
 package org.digijava.module.aim.dbentity;
 
+import org.dgfoundation.amp.menu.AmpView;
+import org.digijava.kernel.user.Group;
+import org.hibernate.annotations.DiscriminatorOptions;
+
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
-import org.dgfoundation.amp.menu.AmpView;
-import org.digijava.kernel.user.Group;
-import org.hibernate.annotations.DiscriminatorOptions;
 
 /**
  * Stores one menu entry details

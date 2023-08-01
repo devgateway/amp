@@ -1,13 +1,12 @@
 package org.digijava.module.aim.startup;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.util.FeaturesUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DeleteMeasuresFromFM {
     

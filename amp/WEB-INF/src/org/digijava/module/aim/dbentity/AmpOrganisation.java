@@ -1,11 +1,5 @@
 package org.digijava.module.aim.dbentity ;
 
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.Set;
-
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.DonorDimension;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
@@ -25,6 +19,12 @@ import org.digijava.module.budget.dbentity.AmpBudgetSector;
 import org.digijava.module.budget.dbentity.AmpDepartments;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.Set;
 
 @TranslatableClass (displayName = "Organisation")
 @InterchangeableValue(OrganisationValueProvider.class)

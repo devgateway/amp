@@ -1,16 +1,16 @@
 import {
-  fetchSectorsPending,
-  fetchSectorsSuccess,
-  fetchSectorsError,
-  fetchCountriesError,
-  fetchCountriesPending,
-  fetchCountriesSuccess,
-  fetchModalitiesError,
-  fetchModalitiesPending,
-  fetchModalitiesSuccess
+    fetchCountriesError,
+    fetchCountriesPending,
+    fetchCountriesSuccess,
+    fetchModalitiesError,
+    fetchModalitiesPending,
+    fetchModalitiesSuccess,
+    fetchSectorsError,
+    fetchSectorsPending,
+    fetchSectorsSuccess
 } from './filtersActions';
-import { fetchApiData } from '../../../utils/apiOperations';
-import { API_FILTERS_SECTORS_URL, API_FILTERS_COUNTRIES_URL, API_FILTERS_MODALITIES_URL } from '../utils/constants';
+import {fetchApiData} from '../../../utils/apiOperations';
+import {API_FILTERS_COUNTRIES_URL, API_FILTERS_MODALITIES_URL, API_FILTERS_SECTORS_URL} from '../utils/constants';
 
 export const loadSectorsFilters = () => dispatch => {
   dispatch(fetchSectorsPending());

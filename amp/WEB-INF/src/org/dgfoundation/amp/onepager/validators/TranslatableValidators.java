@@ -1,6 +1,5 @@
 package org.dgfoundation.amp.onepager.validators;
 
-import org.apache.bcel.generic.ISUB;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.FormComponent;
@@ -11,7 +10,6 @@ import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidatorAdapter;
 import org.apache.wicket.validation.validator.StringValidator;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.models.ResourceTranslationModel;
 import org.dgfoundation.amp.onepager.models.TranslationDecoratorModel;
 

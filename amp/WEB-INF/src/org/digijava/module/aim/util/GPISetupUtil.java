@@ -1,20 +1,15 @@
 package org.digijava.module.aim.util;
 
+import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.*;
+import org.hibernate.Session;
+import org.hibernate.query.Query;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-
-import org.digijava.kernel.exception.DgException;
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpGPISurveyIndicator;
-import org.digijava.module.aim.dbentity.AmpMeasures;
-import org.digijava.module.aim.dbentity.AmpOrgType;
-import org.digijava.module.aim.dbentity.GPIDefaultFilters;
-import org.digijava.module.aim.dbentity.GPISetup;
-import org.hibernate.Hibernate;
-import org.hibernate.query.Query;
-import org.hibernate.Session;
 
 public class GPISetupUtil {
 

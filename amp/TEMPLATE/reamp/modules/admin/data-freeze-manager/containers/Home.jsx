@@ -1,20 +1,14 @@
-import React, {
-    Component,
-    PropTypes
-} from 'react';
-import {
-    connect
-} from 'react-redux';
-import {
-    bindActionCreators
-} from 'redux';
-require('bootstrap');
-require('../styles/less/main.less');
-import * as startUp from '../actions/StartUpAction';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import DataFreezeEventList from '../components/DataFreezeEventList';
 import UnfreezeAll from '../components/UnfreezeAll';
 import * as Constants from '../common/Constants';
-import * as commonListsActions from  '../actions/CommonListsActions.jsx';
+import * as commonListsActions from '../actions/CommonListsActions.jsx';
+
+require('bootstrap');
+require('../styles/less/main.less');
+
 class App extends Component {
     constructor(props, context) {
         super(props, context);

@@ -1,5 +1,5 @@
-import { fetchLayoutSuccess, fetchLayoutPending, fetchLayoutError } from './layoutAction';
-import { LAYOUT_EP } from '../constants/Constants';
+import {fetchLayoutError, fetchLayoutPending, fetchLayoutSuccess} from './layoutAction';
+import {LAYOUT_EP} from '../constants/Constants';
 
 function fetchLayout() {
   return dispatch => {

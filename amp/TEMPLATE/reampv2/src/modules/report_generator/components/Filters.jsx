@@ -1,17 +1,17 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { Loader } from 'semantic-ui-react';
-import { ReportGeneratorContext } from './StartUp';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+import {Loader} from 'semantic-ui-react';
+import {ReportGeneratorContext} from './StartUp';
 import {
-  getMetadata,
-  updateAppliedFilters,
-  updateIncludeLocationWithChildren,
-  updateReportDetailsUseAboveFilters
+    getMetadata,
+    updateAppliedFilters,
+    updateIncludeLocationWithChildren,
+    updateReportDetailsUseAboveFilters
 } from '../actions/stateUIActions';
-import { toggleIcon } from '../utils/appliedFiltersExtenalCode';
-import { translate, hasFilters } from '../utils/Utils';
+import {toggleIcon} from '../utils/appliedFiltersExtenalCode';
+import {hasFilters, translate} from '../utils/Utils';
 
 const Filter = require('../../../../../ampTemplate/node_modules/amp-filter/dist/amp-filter');
 

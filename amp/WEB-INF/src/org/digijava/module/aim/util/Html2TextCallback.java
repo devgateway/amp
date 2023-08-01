@@ -1,10 +1,9 @@
 package org.digijava.module.aim.util;
 
-import java.io.IOException;
-import java.io.Reader;
-
 import javax.swing.text.html.HTMLEditorKit.ParserCallback;
 import javax.swing.text.html.parser.ParserDelegator;
+import java.io.IOException;
+import java.io.Reader;
 
 public class Html2TextCallback extends ParserCallback {
     StringBuffer s;

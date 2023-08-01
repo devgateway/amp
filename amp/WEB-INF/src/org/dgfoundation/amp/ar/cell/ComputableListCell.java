@@ -6,10 +6,10 @@
  */
 package org.dgfoundation.amp.ar.cell;
 
+import org.dgfoundation.amp.ar.Computable;
+
 import java.util.Iterator;
 import java.util.List;
-
-import org.dgfoundation.amp.ar.Computable;
 
 /**
  * 

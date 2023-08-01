@@ -1,26 +1,16 @@
 package org.digijava.module.aim.util;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicator;
 import org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicatorOption;
-import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.ObjectNotFoundException;
-import org.hibernate.query.Query;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 import org.hibernate.type.StringType;
+
+import java.util.*;
 
 /**
  * List of utility methods to operate with effectiveness indicators

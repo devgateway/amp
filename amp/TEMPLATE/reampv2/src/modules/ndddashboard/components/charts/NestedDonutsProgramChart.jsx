@@ -1,22 +1,28 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { CSSTransitionGroup } from 'react-transition-group';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {CSSTransitionGroup} from 'react-transition-group';
 
 // Dont use react-plotly directly: https://github.com/plotly/react-plotly.js/issues/135#issuecomment-501398125
 import Plotly from 'plotly.js';
 import createPlotlyComponent from 'react-plotly.js/factory';
 import {
-  DIRECT_PROGRAM, INDIRECT_PROGRAMS, PROGRAMLVL1, AMOUNT, CODE, DIRECT, INDIRECT,
-  TRANSITIONS, PROGRAMLVL2, TRN_PREFIX, CURRENCY_CODE
+    AMOUNT,
+    CODE,
+    CURRENCY_CODE,
+    DIRECT,
+    DIRECT_PROGRAM,
+    INDIRECT,
+    INDIRECT_PROGRAMS,
+    PROGRAMLVL1,
+    PROGRAMLVL2,
+    TRANSITIONS,
+    TRN_PREFIX
 } from '../../utils/constants';
-import {
-  addAlpha, formatNumberWithSettings, getCustomColor
-} from '../../utils/Utils';
+import {addAlpha, formatNumberWithSettings, getCustomColor} from '../../utils/Utils';
 import ToolTip from '../tooltips/ToolTip';
 // eslint-disable-next-line no-unused-vars
-import styles from '../styles.css';
 
 const Plot = createPlotlyComponent(Plotly);
 

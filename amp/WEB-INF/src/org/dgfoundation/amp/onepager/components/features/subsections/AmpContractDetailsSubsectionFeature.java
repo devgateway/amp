@@ -3,17 +3,15 @@
  */
 package org.dgfoundation.amp.onepager.components.features.subsections;
 
-import java.util.Date;
-
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
-import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.IPAContract;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+
+import java.util.Date;
 
 /**
  * @author aartimon@dginternational.org

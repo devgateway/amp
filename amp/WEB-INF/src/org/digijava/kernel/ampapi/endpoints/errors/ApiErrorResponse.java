@@ -1,16 +1,12 @@
 package org.digijava.kernel.ampapi.endpoints.errors;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModelProperty;
+import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
+import org.digijava.kernel.ampapi.endpoints.util.ObjectMapperUtils;
+
 import java.util.Collection;
 import java.util.Map;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.dgfoundation.amp.algo.AlgoUtils;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
-
-import io.swagger.annotations.ApiModelProperty;
-import org.digijava.kernel.ampapi.endpoints.util.ObjectMapperUtils;
 
 public class ApiErrorResponse {
 

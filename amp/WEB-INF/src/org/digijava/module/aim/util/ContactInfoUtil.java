@@ -1,7 +1,5 @@
 package org.digijava.module.aim.util;
 
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
@@ -10,10 +8,11 @@ import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Projections;
+import org.hibernate.query.Query;
+
+import java.util.List;
 
 public class ContactInfoUtil {
     private static Logger logger = Logger.getLogger(ContactInfoUtil.class);

@@ -3,16 +3,16 @@
 */
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import org.digijava.kernel.ampapi.endpoints.config.utils.ConfigHelper;
 import org.digijava.module.aim.helper.KeyValue;
+
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class AmpGlobalSettings implements Serializable {
     

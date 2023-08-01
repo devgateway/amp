@@ -1,9 +1,9 @@
 import * as AMP from "amp/architecture";
 import React from "react";
 import * as validate from "amp/tools/validate";
-import style from "./style.less";
 import cn from "classnames";
 import {keyCode} from "amp/tools";
+
 const KEY_UP = 38;
 const KEY_DOWN = 40;
 

@@ -1,11 +1,11 @@
 package org.digijava.kernel.services.sync;
 
+import org.digijava.module.common.util.DateTimeUtil;
+import org.springframework.jdbc.core.RowMapper;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
-
-import org.digijava.module.common.util.DateTimeUtil;
-import org.springframework.jdbc.core.RowMapper;
 
 /**
  * @author Octavian Ciubotaru

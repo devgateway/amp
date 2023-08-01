@@ -1,29 +1,17 @@
 package org.digijava.module.aim.action;
 
-import java.awt.Color;
-import java.io.ByteArrayOutputStream;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.poi.hssf.usermodel.HSSFRichTextString;
+import com.lowagie.text.Font;
+import com.lowagie.text.*;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfWriter;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.dbentity.AmpContactPhoneProperty;
-import org.digijava.module.aim.dbentity.AmpContactProperty;
-import org.digijava.module.aim.dbentity.AmpOrgRecipient;
-import org.digijava.module.aim.dbentity.AmpOrgStaffInformation;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpOrganisationContact;
-import org.digijava.module.aim.dbentity.AmpOrganizationBudgetInformation;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.form.AddOrgForm;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.Constants;
@@ -33,14 +21,14 @@ import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
-import com.lowagie.text.Document;
-import com.lowagie.text.Element;
-import com.lowagie.text.Font;
-import com.lowagie.text.PageSize;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.PdfPTable;
-import com.lowagie.text.pdf.PdfWriter;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.*;
+import java.io.ByteArrayOutputStream;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 public class ExportNGOToPdf extends Action {
     

@@ -1,14 +1,7 @@
-import React, {
-    Component,
-    PropTypes
-} from 'react';
-import {
-    connect
-} from 'react-redux';
-import {
-    bindActionCreators
-} from 'redux';
-import * as Constants from '../common/Constants';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+
 require('../styles/less/main.less');
 class AppliedFilters extends Component {
     constructor(props, context) {

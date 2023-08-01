@@ -1,11 +1,11 @@
 package org.digijava.module.aim.dbentity;
 
+import com.fasterxml.jackson.annotation.ObjectIdGenerator;
+import com.fasterxml.jackson.annotation.ObjectIdResolver;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
-
-import com.fasterxml.jackson.annotation.ObjectIdGenerator;
-import com.fasterxml.jackson.annotation.ObjectIdResolver;
 
 /**
  * <p>Delegates resolving of objects to an external resolver. Delegation can only be realized by calling

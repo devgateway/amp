@@ -22,13 +22,12 @@
 
 package org.digijava.module.translation.form;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class TranslationPermissionsForm
       extends ActionForm {

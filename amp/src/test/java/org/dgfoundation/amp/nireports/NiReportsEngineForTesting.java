@@ -1,11 +1,5 @@
 package org.dgfoundation.amp.nireports;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.function.Function;
-import java.util.function.Supplier;
-
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.ExceptionConsumer;
 import org.dgfoundation.amp.ar.MeasureConstants;
@@ -14,8 +8,13 @@ import org.dgfoundation.amp.newreports.ReportEnvBuilder;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.nireports.runtime.GroupReportData;
-import org.dgfoundation.amp.nireports.runtime.MultiHierarchiesTracker;
 import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class NiReportsEngineForTesting extends NiReportsEngine {
     

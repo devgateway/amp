@@ -6,10 +6,10 @@
  */
 package org.digijava.module.aim.dbentity;
 
+import org.digijava.module.aim.util.Output;
+
 import java.io.Serializable;
 import java.util.ArrayList;
-
-import org.digijava.module.aim.util.Output;
 
 public class AmpAhsurveyResponse implements Versionable, Cloneable, Serializable {
 

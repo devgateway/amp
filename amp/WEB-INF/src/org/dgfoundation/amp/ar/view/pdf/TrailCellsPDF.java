@@ -6,26 +6,21 @@
  */
 package org.dgfoundation.amp.ar.view.pdf;
 
-import java.awt.Color;
-import java.util.Iterator;
-import java.util.List;
-import org.apache.log4j.Logger;
-
-import org.dgfoundation.amp.ar.ColumnReportData;
-import org.dgfoundation.amp.ar.Exporter;
-import org.dgfoundation.amp.ar.GroupReportData;
-import org.dgfoundation.amp.ar.ReportData;
-import org.dgfoundation.amp.ar.Viewable;
-import org.dgfoundation.amp.ar.cell.Cell;
-import org.digijava.kernel.persistence.WorkerException;
-import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.dbentity.AmpReports;
-import org.digijava.module.aim.action.ExportActivityToPDF;
-
 import com.lowagie.text.Font;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
+import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.Exporter;
+import org.dgfoundation.amp.ar.ReportData;
+import org.dgfoundation.amp.ar.Viewable;
+import org.dgfoundation.amp.ar.cell.Cell;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.action.ExportActivityToPDF;
+import org.digijava.module.aim.dbentity.AmpReports;
+
+import java.awt.*;
+import java.util.List;
 
 /**
  * 

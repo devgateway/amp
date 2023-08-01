@@ -3,18 +3,17 @@
  */
 package org.dgfoundation.amp.ar.dimension;
 
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpSector;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.query.Query;
+
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import org.hibernate.HibernateException;
-import org.hibernate.query.Query;
-import org.hibernate.Session;
-
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpSector;
 
 /**
  * SectorDimension.java TODO description here

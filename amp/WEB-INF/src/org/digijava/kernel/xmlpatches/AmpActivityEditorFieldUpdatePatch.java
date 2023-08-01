@@ -1,14 +1,5 @@
 package org.digijava.kernel.xmlpatches;
 
-import java.sql.SQLException;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.StringJoiner;
-
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.AlgoUtils;
@@ -21,6 +12,10 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.editor.dbentity.Editor;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+
+import java.sql.SQLException;
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * This class is used by XML Patcher to fixes invalid editor fields.

@@ -1,23 +1,17 @@
 package org.digijava.module.currencyrates;
 
-import java.math.BigDecimal;
+import org.apache.log4j.Logger;
+import org.digijava.module.aim.helper.DecimalToText;
+import org.digijava.module.currencyrates.fxtop.ConvertResult;
+import org.digijava.module.currencyrates.fxtop.FxtopServicesLocator;
+import org.digijava.module.currencyrates.fxtop.FxtopServicesPortType;
+
+import javax.xml.rpc.ServiceException;
 import java.rmi.RemoteException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
-
-import javax.mail.MethodNotSupportedException;
-import javax.management.RuntimeErrorException;
-import javax.xml.rpc.ServiceException;
-
-import org.apache.log4j.Logger;
-import org.digijava.module.aim.helper.DecimalToText;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.currencyrates.fxtop.ConvertResult;
-import org.digijava.module.currencyrates.fxtop.FxtopServicesLocator;
-import org.digijava.module.currencyrates.fxtop.FxtopServicesPortType;
 
 public class FxtopWSCurrencyClientImpl implements WSCurrencyClient {
     private static Logger logger = Logger

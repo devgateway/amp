@@ -1,24 +1,12 @@
 package org.dgfoundation.amp.newreports;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-
 import org.apache.struts.mock.MockHttpServletRequest;
 import org.dgfoundation.amp.StandaloneAMPInitializer;
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.algo.ExceptionConsumer;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.nireports.CategAmountCell;
-import org.dgfoundation.amp.nireports.Cell;
-import org.dgfoundation.amp.nireports.NiReportsEngine;
-import org.dgfoundation.amp.nireports.NiReportsEngineForTesting;
-import org.dgfoundation.amp.nireports.TestcasesReportsSchema;
+import org.dgfoundation.amp.nireports.*;
 import org.dgfoundation.amp.nireports.amp.MetaCategory;
 import org.dgfoundation.amp.nireports.output.NiReportExecutor;
 import org.dgfoundation.amp.nireports.output.NiReportOutputBuilder;
@@ -37,6 +25,9 @@ import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.Constants;
 import org.junit.Rule;
+
+import java.util.*;
+import java.util.function.Function;
 
 public abstract class ReportingTestCase extends AmpTestCase {
     

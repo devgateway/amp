@@ -1,44 +1,13 @@
 package org.dgfoundation.amp.gpi.reports;
 
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.mapping;
-import static java.util.stream.Collectors.reducing;
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.function.Predicate;
-
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.currencyconvertor.AmpCurrencyConvertor;
-import org.dgfoundation.amp.newreports.AmountCell;
-import org.dgfoundation.amp.newreports.CalendarConverter;
-import org.dgfoundation.amp.newreports.FilterRule;
-import org.dgfoundation.amp.newreports.GeneratedReport;
-import org.dgfoundation.amp.newreports.ReportArea;
-import org.dgfoundation.amp.newreports.ReportCell;
-import org.dgfoundation.amp.newreports.ReportElement;
+import org.dgfoundation.amp.newreports.*;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
-import org.dgfoundation.amp.newreports.ReportOutputColumn;
-import org.dgfoundation.amp.newreports.TextCell;
 import org.dgfoundation.amp.nireports.MonetaryAmount;
 import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
@@ -50,6 +19,18 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.hibernate.jdbc.Work;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.function.Function;
+import java.util.function.Predicate;
+
+import static java.util.stream.Collectors.*;
 
 /**
  * A utility class to transform a GeneratedReport to GPI Report 6

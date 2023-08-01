@@ -1,11 +1,9 @@
-import React, { Component } from 'react';
-import {
-  Button, ButtonGroup, Grid, GridColumn, GridRow
-} from 'semantic-ui-react';
+import React, {Component} from 'react';
+import {Button, ButtonGroup, Grid, GridColumn, GridRow} from 'semantic-ui-react';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { translate } from '../../utils/Utils';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+import {translate} from '../../utils/Utils';
 
 class NavigationButtons extends Component {
   setEnabledOrDisabledButtons = () => {

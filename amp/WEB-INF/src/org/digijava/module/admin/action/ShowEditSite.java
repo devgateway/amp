@@ -22,15 +22,6 @@
 
 package org.digijava.module.admin.action;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.Set;
-
-import javax.security.auth.Subject;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -50,6 +41,9 @@ import org.digijava.kernel.viewmanager.ViewConfig;
 import org.digijava.kernel.viewmanager.ViewConfigFactory;
 import org.digijava.module.admin.form.SiteForm;
 import org.digijava.module.admin.util.DbUtil;
+
+import javax.security.auth.Subject;
+import java.util.*;
 
 public class ShowEditSite
     extends Action {

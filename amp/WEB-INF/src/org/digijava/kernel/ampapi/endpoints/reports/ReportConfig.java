@@ -1,9 +1,9 @@
 package org.digijava.kernel.ampapi.endpoints.reports;
 
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
+
+import java.util.Map;
 
 /**
  * @author Octavian Ciubotaru

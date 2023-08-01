@@ -6,12 +6,11 @@
  */
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-import java.util.Iterator;
-
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
-import org.digijava.module.gateperm.core.GatePermConst;
+
+import java.io.Serializable;
+import java.util.Iterator;
 
 public class AmpFieldsVisibility extends AmpObjectVisibility implements Serializable{
     

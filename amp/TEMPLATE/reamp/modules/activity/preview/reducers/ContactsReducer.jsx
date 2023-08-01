@@ -1,4 +1,4 @@
-import {CONTACTS_LOAD_LOADING, CONTACTS_LOAD_LOADED, CONTACTS_LOAD_FAILED} from '../actions/ContactsAction.jsx';
+import {CONTACTS_LOAD_FAILED, CONTACTS_LOAD_LOADED, CONTACTS_LOAD_LOADING} from '../actions/ContactsAction.jsx';
 
 const defaultState = {
     contactsByIds: {},

@@ -1,8 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.reports;
 
-import static org.digijava.kernel.ampapi.endpoints.errors.ApiError.ERROR_CLASS_REPORT_ID;
-
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+
+import static org.digijava.kernel.ampapi.endpoints.errors.ApiError.ERROR_CLASS_REPORT_ID;
 
 /**
  * Defines errors used by Reports API. Please define concrete errors, normally is an invalid request input. <br>

@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './popups.css';
 import CountryPopupContainer from './countryLarge/CountryPopupContainer';
-import { calculateColumnCount } from '../../../utils/Utils';
-import { SSCTranslationContext } from '../../StartUp';
+import {calculateColumnCount} from '../../../utils/Utils';
+import {SSCTranslationContext} from '../../StartUp';
 
 const CountryPopupOverlay = ({
   show, projects, closeLargeCountryPopinAndClearFilter, countriesForExport,

@@ -4,14 +4,13 @@
  */
 package org.digijava.module.gateperm.gates;
 
-import java.util.Map;
-import java.util.Queue;
-
+import bsh.EvalError;
+import bsh.Interpreter;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.digijava.module.gateperm.core.Gate;
 
-import bsh.EvalError;
-import bsh.Interpreter;
+import java.util.Map;
+import java.util.Queue;
 
 /**
  * ScriptingGate.java

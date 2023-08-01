@@ -22,23 +22,6 @@
 
 package org.digijava.kernel.translator;
 
-import java.io.UnsupportedEncodingException;
-import java.sql.Date;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.digijava.kernel.ampapi.filters.AmpClientModeHolder;
@@ -56,13 +39,20 @@ import org.digijava.kernel.translator.util.TrnAccessUpdateQueue;
 import org.digijava.kernel.translator.util.TrnUtil;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.DigiConfigManager;
-import org.digijava.kernel.util.I18NHelper;
 import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.util.SiteUtils;
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
-import org.hibernate.query.Query;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.io.UnsupportedEncodingException;
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.util.*;
 
 /**
  * @author Shamanth Murthy

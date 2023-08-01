@@ -1,10 +1,5 @@
 package org.digijava.module.contentrepository.util;
 
-import java.text.Collator;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Locale;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.exception.AimException;
@@ -15,9 +10,14 @@ import org.digijava.module.contentrepository.helper.template.PossibleValueHelper
 import org.digijava.module.contentrepository.helper.template.SubmittedValueHolder;
 import org.digijava.module.contentrepository.helper.template.TemplateDocumentHelper;
 import org.digijava.module.contentrepository.helper.template.TemplateFieldHelper;
-import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+
+import java.text.Collator;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
 /**
  * @author Dare
  *

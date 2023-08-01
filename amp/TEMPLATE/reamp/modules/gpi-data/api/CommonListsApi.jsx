@@ -1,5 +1,6 @@
-import { postJson, delay, fetchJson } from 'amp/tools';
-class CommonListsApi {    
+import {fetchJson} from 'amp/tools';
+
+class CommonListsApi {
     static getCurrencyList() {              
         return new Promise((resolve, reject) => {
             fetchJson('/rest/settings-definitions/gpi-data').then((response) => {

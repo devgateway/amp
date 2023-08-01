@@ -1,11 +1,11 @@
 package org.digijava.module.aim.util;
 
-import java.util.Collection;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpQuartzJobClass;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.hibernate.Transaction;
+
+import java.util.Collection;
 
 public class QuartzJobClassUtils {
     public static Collection<AmpQuartzJobClass> getAllJobClasses() {

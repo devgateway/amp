@@ -1,14 +1,5 @@
 package org.digijava.module.contentrepository.action;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.ListIterator;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -19,6 +10,14 @@ import org.digijava.module.contentrepository.dbentity.template.TextBoxField;
 import org.digijava.module.contentrepository.form.ManageTemplDocFieldForm;
 import org.digijava.module.contentrepository.helper.template.PossibleValueHelper;
 import org.digijava.module.contentrepository.helper.template.TemplateFieldHelper;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.ListIterator;
 
 public class ManageFieldAction extends Action{
     

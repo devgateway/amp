@@ -22,13 +22,13 @@
 
 package org.digijava.kernel.taglib.html;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.jsp.JspException;
-
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.taglib.util.TagUtil;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.jsp.JspException;
 
 /**
  *

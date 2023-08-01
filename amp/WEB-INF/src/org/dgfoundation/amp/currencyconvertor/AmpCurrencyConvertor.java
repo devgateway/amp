@@ -1,15 +1,14 @@
 package org.dgfoundation.amp.currencyconvertor;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.common.util.DateTimeUtil;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * the AMP schema currency convertor. Thread-safe

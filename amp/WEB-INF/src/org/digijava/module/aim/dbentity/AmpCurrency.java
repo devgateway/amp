@@ -1,7 +1,5 @@
 package org.digijava.module.aim.dbentity ;
 
-import java.io.Serializable;
-
 import org.dgfoundation.amp.nireports.NiCurrency;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.annotations.interchange.PossibleValueId;
@@ -12,6 +10,8 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.hibernate.query.Query;
+
+import java.io.Serializable;
 
 @TranslatableClass (displayName = "Currency")
 public class AmpCurrency implements Serializable, Comparable<AmpCurrency>, Identifiable, NiCurrency

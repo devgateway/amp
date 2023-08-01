@@ -1,19 +1,17 @@
-import React, { Component, PropTypes } from 'react';
+import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import { FormControl } from 'react-bootstrap';
-import { OverlayTrigger } from 'react-bootstrap';
-import {Tooltip } from 'react-bootstrap';
-import { Button } from 'react-bootstrap';
+import {OverlayTrigger, Tooltip} from 'react-bootstrap';
 import DatePicker from 'react-date-picker';
 import moment from 'moment';
 import {Typeahead} from 'react-bootstrap-typeahead';
+import * as aidOnBudgetActions from '../actions/AidOnBudgetActions.jsx';
+import * as Constants from '../common/constants.jsx';
+
 require('react-date-picker/base.css');
 require('react-date-picker/theme/hackerone.css');
 require('../styles/main.less');
-import * as aidOnBudgetActions from '../actions/AidOnBudgetActions.jsx';
-import * as startUp from '../actions/StartUpAction.jsx';
-import * as Constants from '../common/constants.jsx';
+
 class AidOnBudgetRow extends Component {
     constructor(props, context) {
         super(props, context);

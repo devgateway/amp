@@ -1,21 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.gis.services;
 
-import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.regex.Matcher;
-
-import com.google.common.collect.ImmutableSet;
 import com.fasterxml.jackson.databind.node.POJONode;
 import com.fasterxml.jackson.databind.node.TextNode;
+import com.google.common.collect.ImmutableSet;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -25,19 +12,7 @@ import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.dgfoundation.amp.newreports.AmountsUnits;
-import org.dgfoundation.amp.newreports.AmpReportFilters;
-import org.dgfoundation.amp.newreports.FilterRule;
-import org.dgfoundation.amp.newreports.GeneratedReport;
-import org.dgfoundation.amp.newreports.IdentifiedReportCell;
-import org.dgfoundation.amp.newreports.ReportArea;
-import org.dgfoundation.amp.newreports.ReportAreaImpl;
-import org.dgfoundation.amp.newreports.ReportCell;
-import org.dgfoundation.amp.newreports.ReportColumn;
-import org.dgfoundation.amp.newreports.ReportOutputColumn;
-import org.dgfoundation.amp.newreports.ReportSettingsImpl;
-import org.dgfoundation.amp.newreports.ReportSpecification;
-import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+import org.dgfoundation.amp.newreports.*;
 import org.dgfoundation.amp.nireports.amp.OutputSettings;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.gis.PerformanceFilterParameters;
@@ -46,11 +21,7 @@ import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
-import org.digijava.kernel.ampapi.helpers.geojson.FeatureGeoJSON;
-import org.digijava.kernel.ampapi.helpers.geojson.GeoJSON;
-import org.digijava.kernel.ampapi.helpers.geojson.LineStringGeoJSON;
-import org.digijava.kernel.ampapi.helpers.geojson.PointGeoJSON;
-import org.digijava.kernel.ampapi.helpers.geojson.PolygonGeoJSON;
+import org.digijava.kernel.ampapi.helpers.geojson.*;
 import org.digijava.kernel.ampapi.helpers.geojson.objects.ClusteredPoints;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -65,8 +36,15 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 import org.hibernate.HibernateException;
-import org.hibernate.query.Query;
 import org.hibernate.jdbc.Work;
+import org.hibernate.query.Query;
+
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
+import java.util.regex.Matcher;
 
 /**
  * 

@@ -1,12 +1,5 @@
 package org.digijava.module.categorymanager.dbentity;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
-
 import org.digijava.module.aim.annotations.interchange.PossibleValueId;
 import org.digijava.module.aim.annotations.interchange.PossibleValueValue;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -14,6 +7,9 @@ import org.digijava.module.aim.dbentity.Versionable;
 import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.Output;
+
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * Represents one of the possible values for a certain category

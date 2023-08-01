@@ -22,12 +22,6 @@
 
 package org.digijava.module.admin.util;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.StringTokenizer;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.error.AMPException;
 import org.digijava.kernel.ampapi.endpoints.config.utils.ConfigHelper;
@@ -42,9 +36,11 @@ import org.digijava.kernel.user.User;
 import org.digijava.module.admin.exception.AdminException;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.helper.KeyValue;
-import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+
+import java.util.*;
 
 public class DbUtil {
 

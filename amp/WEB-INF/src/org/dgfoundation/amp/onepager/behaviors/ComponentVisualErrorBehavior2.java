@@ -4,15 +4,12 @@ import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.IAjaxRegionMarkupIdProvider;
 import org.apache.wicket.behavior.Behavior;
-import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.feedback.FeedbackMessages;
-import org.apache.wicket.feedback.IFeedbackMessageFilter;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.util.string.Strings;
-import org.apache.wicket.extensions.markup.html.form.DateTextField;
 import org.digijava.kernel.translator.TranslatorWorker;
 
 public class ComponentVisualErrorBehavior2 extends Behavior implements IAjaxRegionMarkupIdProvider {

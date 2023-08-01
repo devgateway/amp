@@ -1,44 +1,21 @@
 package org.digijava.module.aim.util;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
-import org.digijava.module.aim.dbentity.AmpMECurrValHistory;
-import org.digijava.module.aim.dbentity.AmpMEIndicatorValue;
-import org.digijava.module.aim.dbentity.AmpMEIndicators;
-import org.digijava.module.aim.helper.ActivityIndicator;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.AllActivities;
 import org.digijava.module.aim.helper.AllMEIndicators;
-import org.digijava.module.aim.helper.AmpMEIndicatorList;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.DateConversion;
-import org.digijava.module.aim.helper.MEIndicatorRisk;
-import org.digijava.module.aim.helper.MEIndicatorValue;
-import org.digijava.module.aim.helper.PriorCurrentValues;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.hibernate.JDBCException;
-import org.hibernate.query.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.query.Query;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.LongType;
-import org.hibernate.type.StringType;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 @Deprecated
 public class MEIndicatorsUtil

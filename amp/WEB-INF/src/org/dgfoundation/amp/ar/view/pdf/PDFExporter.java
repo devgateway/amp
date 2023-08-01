@@ -6,14 +6,9 @@
  */
 package org.dgfoundation.amp.ar.view.pdf;
 
-import java.awt.Color;
-import java.util.ArrayList;
-
+import com.lowagie.text.pdf.PdfPTable;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.Viewable;
-
-import com.lowagie.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.PdfPTable;
 
 /**
  * 

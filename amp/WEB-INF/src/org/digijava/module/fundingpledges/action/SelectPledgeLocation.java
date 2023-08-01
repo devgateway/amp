@@ -1,26 +1,12 @@
 package org.digijava.module.fundingpledges.action;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.ARUtil;
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
-import org.digijava.module.aim.helper.KeyValue;
-import org.digijava.module.aim.util.DynLocationManagerUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.digijava.module.fundingpledges.dbentity.FundingPledgesLocation;
 import org.digijava.module.fundingpledges.form.PledgeForm;
 
 public class SelectPledgeLocation extends Action {

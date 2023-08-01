@@ -1,10 +1,8 @@
 package org.digijava.kernel.security.auth;
 
 import org.springframework.security.web.firewall.FirewalledRequest;
-import org.springframework.security.web.firewall.HttpFirewall;
 import org.springframework.security.web.firewall.RequestRejectedException;
 import org.springframework.security.web.firewall.StrictHttpFirewall;
-import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import javax.servlet.http.HttpServletRequest;
 

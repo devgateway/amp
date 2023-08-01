@@ -6,9 +6,9 @@ import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.budgetexport.adapter.MappingEntityAdapter;
 import org.digijava.module.budgetexport.adapter.MappingEntityAdapterUtil;
-import org.hibernate.query.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 
 import java.util.List;
 

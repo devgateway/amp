@@ -1,8 +1,5 @@
 package org.digijava.module.message.jobs;
 
-import java.util.Calendar;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.onepager.util.SaveContext;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -19,6 +16,9 @@ import org.hibernate.Session;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
+
+import java.util.Calendar;
+import java.util.List;
 
 public class ActivityAutomaticValidationJob extends ConnectionCleaningJob implements StatefulJob {
 

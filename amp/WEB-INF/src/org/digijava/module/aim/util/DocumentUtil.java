@@ -1,19 +1,5 @@
 package org.digijava.module.aim.util;
 
-import java.io.ByteArrayInputStream;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.jcr.Node;
-import javax.jcr.NodeIterator;
-import javax.jcr.PathNotFoundException;
-import javax.jcr.Property;
-import javax.jcr.RepositoryException;
-import javax.jcr.ValueFormatException;
-import javax.jcr.lock.LockException;
-import javax.jcr.nodetype.ConstraintViolationException;
-import javax.jcr.version.VersionException;
-
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
@@ -24,6 +10,14 @@ import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponseDocument;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.ManagedDocument;
 import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
+
+import javax.jcr.*;
+import javax.jcr.lock.LockException;
+import javax.jcr.nodetype.ConstraintViolationException;
+import javax.jcr.version.VersionException;
+import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DocumentUtil {
 

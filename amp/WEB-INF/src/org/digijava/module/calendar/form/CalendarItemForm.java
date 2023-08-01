@@ -22,19 +22,15 @@
 
 package org.digijava.module.calendar.form;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang.StringUtils;
-import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
 import org.digijava.module.calendar.util.CalendarPopulator;
 import org.digijava.module.um.util.Calendar;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 
 public class CalendarItemForm
     extends CalendarPaginationForm {

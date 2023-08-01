@@ -1,26 +1,19 @@
 package org.dgfoundation.amp.ar.dbentity;
 
-import java.beans.PropertyDescriptor;
-import java.io.Serializable;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.PropertyListable.PropertyListableIgnore;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.annotations.reports.IgnorePersistence;
 import org.digijava.module.aim.util.Identifiable;
-import org.hibernate.HibernateException;
-import org.hibernate.query.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+
+import java.beans.PropertyDescriptor;
+import java.io.Serializable;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.*;
 
 public class AmpFilterData implements Serializable {
     private static final long serialVersionUID = 1L;

@@ -1,15 +1,13 @@
-import React, { Component } from 'react';
-import {
-  Grid, GridColumn, GridRow, Header
-} from 'semantic-ui-react';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+import React, {Component} from 'react';
+import {Grid, GridColumn, GridRow, Header} from 'semantic-ui-react';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { ReportGeneratorContext } from './StartUp';
+import {OverlayTrigger, Tooltip} from 'react-bootstrap';
+import {ReportGeneratorContext} from './StartUp';
 import InfoIcon from '../static/images/icon-information.svg';
-import { translate } from '../utils/Utils';
-import { PROFILE_TAB } from '../utils/constants';
+import {translate} from '../utils/Utils';
+import {PROFILE_TAB} from '../utils/constants';
 
 class MainHeader extends Component {
   handleResetAll = () => {

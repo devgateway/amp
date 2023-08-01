@@ -1,10 +1,8 @@
 /* eslint-disable max-len */
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {
-  Accordion, Checkbox, Form, Icon
-} from 'semantic-ui-react';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import {Accordion, Checkbox, Form, Icon} from 'semantic-ui-react';
+import {OverlayTrigger, Tooltip} from 'react-bootstrap';
 import InfoIcon from '../../static/images/icon-information.svg';
 
 export default class ColumnsSelector extends Component {

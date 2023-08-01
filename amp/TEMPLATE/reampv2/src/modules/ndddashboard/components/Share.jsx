@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
-import { Col, Button, Form } from 'react-bootstrap';
+import React, {Component} from 'react';
+import {Button, Col, Form} from 'react-bootstrap';
 import Modal from 'react-bootstrap-modal';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import { getShareLink } from '../actions/generateShareLink';
-import { TRN_PREFIX } from '../utils/constants';
+import {getShareLink} from '../actions/generateShareLink';
+import {TRN_PREFIX} from '../utils/constants';
 
 const getLink = (id) => {
   const regex = /\/\d+$/;

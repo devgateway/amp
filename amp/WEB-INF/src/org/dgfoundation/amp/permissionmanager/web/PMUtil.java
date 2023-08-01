@@ -3,22 +3,6 @@
  */
 package org.dgfoundation.amp.permissionmanager.web;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeModel;
-
 import org.apache.log4j.Logger;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMGateReadEditWrapper;
@@ -34,27 +18,21 @@ import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamUtil;
-import org.digijava.module.gateperm.core.CompositePermission;
-import org.digijava.module.gateperm.core.GatePermConst;
-import org.digijava.module.gateperm.core.GatePermission;
-import org.digijava.module.gateperm.core.Permissible;
-import org.digijava.module.gateperm.core.Permission;
-import org.digijava.module.gateperm.core.PermissionMap;
-import org.digijava.module.gateperm.gates.BooleanGate;
-import org.digijava.module.gateperm.gates.LogicalGate;
-import org.digijava.module.gateperm.gates.OrgRoleGate;
-import org.digijava.module.gateperm.gates.StrategyPermSelectGate;
-import org.digijava.module.gateperm.gates.UserLevelGate;
-import org.digijava.module.gateperm.gates.WorkspaceGate;
+import org.digijava.module.gateperm.core.*;
+import org.digijava.module.gateperm.gates.*;
 import org.digijava.module.gateperm.util.PermissionUtil;
 import org.hibernate.HibernateException;
-import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.hibernate.type.StringType;
+
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeModel;
+import java.util.*;
 
 /**
  * @author dan

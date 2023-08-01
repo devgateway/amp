@@ -3,33 +3,9 @@
  */
 package org.digijava.kernel.ampapi.endpoints.common;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.NotFoundException;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.MediaType;
-
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
-import org.dgfoundation.amp.newreports.GeneratedReport;
-import org.dgfoundation.amp.newreports.ReportAreaImpl;
-import org.dgfoundation.amp.newreports.ReportExecutor;
-import org.dgfoundation.amp.newreports.ReportSpecification;
-import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+import org.dgfoundation.amp.newreports.*;
 import org.dgfoundation.amp.nireports.amp.AmpReportsSchema;
 import org.dgfoundation.amp.nireports.amp.NiReportsGenerator;
 import org.dgfoundation.amp.nireports.amp.OutputSettings;
@@ -58,6 +34,15 @@ import org.digijava.module.esrigis.dbentity.AmpApiState;
 import org.digijava.module.esrigis.dbentity.ApiStateType;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.NotFoundException;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.MediaType;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.text.DecimalFormat;
+import java.util.*;
 
 /**
  * Common utility methods for all endpoints

@@ -1,6 +1,6 @@
-import { UNDEFINED_FILTER } from '../utils/constants';
-import { EXTRA_INFO } from '../utils/FieldsConstants';
-import { toCamelCase } from '../utils/Utils';
+import {UNDEFINED_FILTER} from '../utils/constants';
+import {EXTRA_INFO} from '../utils/FieldsConstants';
+import {toCamelCase} from '../utils/Utils';
 
 export const FETCH_FILTERS_SECTORS_PENDING = 'FETCH_FILTERS_SECTORS_PENDING';
 export const FETCH_FILTERS_SECTORS_SUCCESS = 'FETCH_FILTERS_SECTORS_SUCCESS';

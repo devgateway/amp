@@ -1,4 +1,4 @@
-import { SAVE_NDD_PENDING, SAVE_NDD_SUCCESS, SAVE_NDD_ERROR } from '../actions/saveAction';
+import {SAVE_NDD_ERROR, SAVE_NDD_PENDING, SAVE_NDD_SUCCESS} from '../actions/saveAction';
 
 const initialState = {
   saving: false,

@@ -1,7 +1,5 @@
 package org.digijava.module.aim.dbentity ;
 
-import java.io.Serializable;
-
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.annotations.interchange.PossibleValueId;
@@ -9,6 +7,8 @@ import org.digijava.module.aim.annotations.interchange.PossibleValueValue;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.SectorUtil;
+
+import java.io.Serializable;
 @TranslatableClass (displayName = "Sector Scheme")
 public class AmpSectorScheme implements Serializable
 {

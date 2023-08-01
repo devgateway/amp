@@ -1,12 +1,11 @@
-import React, { Component } from 'react';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import React, {Component} from 'react';
+import {OverlayTrigger, Tooltip} from 'react-bootstrap';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { NDDContext } from '../Startup';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+import {NDDContext} from '../Startup';
 
 // eslint-disable-next-line no-unused-vars
-import styles from '../css/style.css';
 
 class HelpTooltip extends Component {
   render() {

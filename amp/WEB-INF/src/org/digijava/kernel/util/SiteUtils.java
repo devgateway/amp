@@ -22,22 +22,6 @@
 
 package org.digijava.kernel.util;
 
-import java.security.Permission;
-import java.security.PermissionCollection;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-
-import org.digijava.kernel.request.TLSUtils;
-import org.hibernate.query.Query;
-import org.hibernate.Session;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.Constants;
 import org.digijava.kernel.entity.Locale;
@@ -46,13 +30,20 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.security.DigiSecurityManager;
 import org.digijava.kernel.security.SitePermission;
 import org.digijava.kernel.security.principal.GroupPrincipal;
 import org.digijava.kernel.service.ServiceManager;
 import org.digijava.kernel.services.siteidentity.SiteIdentityService;
 import org.digijava.kernel.user.Group;
+import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
+
+import java.security.Permission;
+import java.security.PermissionCollection;
+import java.util.*;
 
 /**
  * This class containts site-related utillity functions. Site must be

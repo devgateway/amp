@@ -1,18 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.dashboards.services;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.stream.Collectors;
-
-import javax.ws.rs.core.Response;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
@@ -27,6 +14,12 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
+
+import javax.ws.rs.core.Response;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * HeatMap Configurations

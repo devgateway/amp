@@ -1,9 +1,9 @@
 package org.digijava.kernel.ampapi.endpoints.util;
 
+import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 
 /**
  * This class is used for exposing filters using the rest of the properties

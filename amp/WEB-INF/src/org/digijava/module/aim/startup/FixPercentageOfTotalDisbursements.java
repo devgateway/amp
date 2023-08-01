@@ -1,17 +1,13 @@
 package org.digijava.module.aim.startup;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.util.FeaturesUtil;
+
+import java.util.*;
 
 public class FixPercentageOfTotalDisbursements {
     

@@ -1,4 +1,5 @@
 import {keyCode} from "amp/tools";
+
 export const MIN_YEAR = 1970;
 export const MAX_YEAR = 2050;
 const KEY_DELETE = 0;

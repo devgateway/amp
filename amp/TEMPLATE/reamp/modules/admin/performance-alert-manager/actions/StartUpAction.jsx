@@ -1,6 +1,7 @@
 import * as AMP from 'amp/architecture';
-import { loadTranslations } from 'amp/modules/translate';
-import { initialTranslations } from '../common/Translations.jsx';
+import {loadTranslations} from 'amp/modules/translate';
+import {initialTranslations} from '../common/Translations.jsx';
+
 export const STATE_TRANSLATIONS_LOADED = 'STATE_TRANSLATIONS_LOADED';
 
 export function startUp( store ) {    

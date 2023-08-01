@@ -1,4 +1,4 @@
-import { FETCH_LAYOUT_ERROR, FETCH_LAYOUT_PENDING, FETCH_LAYOUT_SUCCESS } from '../actions/layoutActions';
+import {FETCH_LAYOUT_ERROR, FETCH_LAYOUT_PENDING, FETCH_LAYOUT_SUCCESS} from '../actions/layoutActions';
 
 const initialState = {
   pending: false,

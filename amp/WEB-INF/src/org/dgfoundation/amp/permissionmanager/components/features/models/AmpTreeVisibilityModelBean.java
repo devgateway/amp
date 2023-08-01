@@ -3,12 +3,11 @@
  */
 package org.dgfoundation.amp.permissionmanager.components.features.models;
 
+import org.dgfoundation.amp.visibility.AmpObjectVisibility;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.dgfoundation.amp.visibility.AmpObjectVisibility;
-import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 
 /**
  * @author dan

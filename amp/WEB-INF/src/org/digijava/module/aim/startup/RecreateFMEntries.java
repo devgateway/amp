@@ -1,13 +1,5 @@
 package org.digijava.module.aim.startup;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-
-import javax.servlet.ServletContext;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
@@ -19,6 +11,9 @@ import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.hibernate.Session;
+
+import javax.servlet.ServletContext;
+import java.util.*;
 
 /**
  * this class scans for newly-added measures in amp_measures which are not present there and adds them, in all the templates installed in the system. 

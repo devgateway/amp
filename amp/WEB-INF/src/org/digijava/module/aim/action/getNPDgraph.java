@@ -1,37 +1,13 @@
 package org.digijava.module.aim.action;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.dbentity.AmpIndicatorValue;
-import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.dbentity.IndicatorTheme;
-import org.digijava.module.aim.dbentity.NpdSettings;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.NpdGraphForm;
-import org.digijava.module.aim.util.ChartUtil;
-import org.digijava.module.aim.util.IndicatorUtil;
-import org.digijava.module.aim.util.NpdUtil;
-import org.digijava.module.aim.util.ProgramUtil;
-import org.digijava.module.aim.util.TeamUtil;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.aim.util.*;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.ChartUtilities;
@@ -41,6 +17,11 @@ import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.CustomCategoryDataset;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.util.*;
 
 /**
  * NPD Indicators graph generator action.

@@ -22,12 +22,6 @@
 
 package org.digijava.module.sdm.util;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -37,10 +31,15 @@ import org.digijava.module.sdm.dbentity.Sdm;
 import org.digijava.module.sdm.dbentity.SdmItem;
 import org.digijava.module.sdm.exception.SDMException;
 import org.hibernate.HibernateException;
-import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.hibernate.type.StringType;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * <p>Title: DiGiJava</p>

@@ -1,14 +1,5 @@
 package org.digijava.module.aim.util;
 
-import java.text.Collator;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.digijava.kernel.exception.DgException;
@@ -20,11 +11,14 @@ import org.digijava.module.aim.exception.dynlocation.DuplicateLocationCodeExcept
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.hibernate.Criteria;
-import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
+
+import java.text.Collator;
+import java.util.*;
 
 public final class LocationUtil {
 

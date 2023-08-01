@@ -1,9 +1,9 @@
 package org.dgfoundation.amp.nireports.amp;
 
+import org.dgfoundation.amp.nireports.NiPrecisionSetting;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-
-import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 
 /**
  * the precision setting used by AMP.

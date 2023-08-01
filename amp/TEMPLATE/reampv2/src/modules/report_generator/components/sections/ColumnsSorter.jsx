@@ -1,9 +1,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
-import { Checkbox, Icon } from 'semantic-ui-react';
-import { translate } from '../../utils/Utils';
+import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
+import {Checkbox, Icon} from 'semantic-ui-react';
+import {translate} from '../../utils/Utils';
 
 export default class ColumnSorter extends Component {
   constructor(props) {

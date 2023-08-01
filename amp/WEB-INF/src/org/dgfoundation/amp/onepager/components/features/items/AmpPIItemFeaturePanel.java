@@ -3,8 +3,6 @@
  */
 package org.dgfoundation.amp.onepager.components.features.items;
 
-import java.util.*;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -17,7 +15,10 @@ import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpSearchOrganizationComponent;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpPIFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.fields.*;
+import org.dgfoundation.amp.onepager.components.fields.AmpAddLinkField;
+import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
+import org.dgfoundation.amp.onepager.components.fields.AmpLinkField;
+import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
 import org.dgfoundation.amp.onepager.models.DateToYearModel;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
@@ -26,7 +27,7 @@ import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.util.DbUtil;
 
-import java.util.Collections;
+import java.util.*;
 
 /**
  * @author aartimon@dginternational.org

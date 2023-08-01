@@ -1,5 +1,6 @@
-import { postJson, delay, fetchJson, deleteJson } from 'amp/tools';
-class DonorNotesApi {    
+import {deleteJson, fetchJson, postJson} from 'amp/tools';
+
+class DonorNotesApi {
     static save(data) { 
         const url = Array.isArray(data) ? '/rest/gpi/donor-notes/save-all' : '/rest/gpi/donor-notes';        
         return new Promise((resolve, reject) => {

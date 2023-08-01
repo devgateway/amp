@@ -1,16 +1,12 @@
 package org.dgfoundation.amp.onepager.components.fields;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.validators.AmpGPINiDependentQuestionValidator;
 import org.digijava.module.aim.dbentity.AmpGPINiQuestion;
 import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponse;
+
+import java.util.*;
 
 /**
  * This field can be used to validate the GPI Survey responses for the fields depending on others

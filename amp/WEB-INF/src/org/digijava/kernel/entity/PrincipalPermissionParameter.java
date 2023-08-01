@@ -22,9 +22,10 @@
 
 package org.digijava.kernel.entity;
 
-import java.io.Serializable;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+
+import java.io.Serializable;
 
 public class PrincipalPermissionParameter
     implements Serializable {

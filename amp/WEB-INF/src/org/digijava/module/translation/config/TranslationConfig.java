@@ -22,16 +22,15 @@
 
 package org.digijava.module.translation.config;
 
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.apache.commons.digester.Digester;
 import org.digijava.kernel.config.KeyValuePair;
 import org.digijava.kernel.util.DigesterFactory;
 import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TranslationConfig {
     private String dropdownConfig;

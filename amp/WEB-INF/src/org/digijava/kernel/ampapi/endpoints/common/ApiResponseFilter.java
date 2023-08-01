@@ -1,20 +1,14 @@
 package org.digijava.kernel.ampapi.endpoints.common;
 
 
-
 import org.apache.log4j.Logger;
-import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.helper.Constants;
-import org.glassfish.jersey.server.ContainerRequest;
-import org.glassfish.jersey.server.ContainerResponse;
-
-import java.io.IOException;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
+import java.io.IOException;
+import java.util.Map;
 
 
 /**

@@ -1,13 +1,12 @@
 package org.digijava.kernel.security.auth;
-import java.io.IOException;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletResponseWrapper;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.www.DigestAuthenticationEntryPoint;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponseWrapper;
+import java.io.IOException;
 
 /**
  * 

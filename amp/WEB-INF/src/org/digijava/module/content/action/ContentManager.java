@@ -1,31 +1,17 @@
 package org.digijava.module.content.action;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.TreeSet;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.struts.action.ActionErrors;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
+import org.apache.struts.action.*;
 import org.apache.struts.actions.DispatchAction;
 import org.apache.struts.upload.FormFile;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.dbentity.AmpHomeThumbnail;
-import org.digijava.module.aim.form.WelcomePageForm;
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.content.util.DbUtil;
 import org.digijava.module.content.dbentity.AmpContentItem;
 import org.digijava.module.content.dbentity.AmpContentItemThumbnail;
 import org.digijava.module.content.form.ContentForm;
+import org.digijava.module.content.util.DbUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.*;
 
 public class ContentManager extends DispatchAction {
 

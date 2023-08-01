@@ -17,35 +17,16 @@
  *************************************************************************/
 package org.digijava.module.um.util;
 
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.dbentity.Country;
-import org.digijava.kernel.entity.ContentAlert;
-import org.digijava.kernel.entity.HowDidYouHear;
-import org.digijava.kernel.entity.Image;
-import org.digijava.kernel.entity.Interests;
 import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.entity.OrganizationType;
-import org.digijava.kernel.entity.UserPreferences;
+import org.digijava.kernel.entity.*;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
-import org.digijava.kernel.util.ProxyHelper;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.kernel.util.ShaCrypt;
-import org.digijava.kernel.util.UnixCrypt;
-import org.digijava.kernel.util.UserUtils;
+import org.digijava.kernel.util.*;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -54,11 +35,15 @@ import org.digijava.module.um.dbentity.SuspendLogin;
 import org.digijava.module.um.exception.UMException;
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
-import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.hibernate.type.LongType;
-import org.hibernate.type.StringType;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import java.math.BigInteger;
+import java.util.*;
 
 public class DbUtil {
     private static Logger logger = Logger.getLogger(DbUtil.class);

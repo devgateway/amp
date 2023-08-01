@@ -1,4 +1,4 @@
-import { DEVELOPMENT } from './Constants';
+import {DEVELOPMENT} from './Constants';
 
 export function getRootUrl() {
   if (process.env.NODE_ENV === DEVELOPMENT) {

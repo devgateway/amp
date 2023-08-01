@@ -25,9 +25,6 @@ package org.digijava.module.sdm.dbentity;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.digijava.module.sdm.exception.SDMException;
-import org.digijava.module.sdm.util.DbUtil;
-
 /**
  * <p>Title: DiGiJava</p>
  * <p>Description: </p>

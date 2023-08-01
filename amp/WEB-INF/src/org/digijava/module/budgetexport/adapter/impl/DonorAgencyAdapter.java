@@ -2,16 +2,14 @@ package org.digijava.module.budgetexport.adapter.impl;
 
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.action.OrganisationManager;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.budgetexport.adapter.MappingEntityAdapter;
 import org.digijava.module.budgetexport.adapter.MappingEntityAdapterUtil;
-import org.hibernate.query.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 
-import java.math.BigInteger;
 import java.util.List;
 
 /**

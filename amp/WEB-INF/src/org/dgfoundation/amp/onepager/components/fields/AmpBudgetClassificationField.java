@@ -4,9 +4,6 @@
  */
 package org.dgfoundation.amp.onepager.components.fields;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -14,7 +11,6 @@ import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.models.BudgetClassificationProxyModel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
@@ -23,6 +19,9 @@ import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.budget.dbentity.AmpBudgetSector;
 import org.digijava.module.budget.dbentity.AmpDepartments;
 import org.digijava.module.budget.helper.BudgetDbUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**

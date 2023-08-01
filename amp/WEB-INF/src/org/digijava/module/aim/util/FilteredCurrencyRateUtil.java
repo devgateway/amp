@@ -1,16 +1,15 @@
 package org.digijava.module.aim.util;
 
-import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpFilteredCurrencyRate;
-import org.hibernate.query.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+
+import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.List;
 
 public class FilteredCurrencyRateUtil {
     

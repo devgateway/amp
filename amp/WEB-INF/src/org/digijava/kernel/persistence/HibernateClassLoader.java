@@ -21,20 +21,17 @@
  */
 
 package org.digijava.kernel.persistence;
+
 import org.digijava.kernel.config.DigiConfig;
 import org.digijava.kernel.config.HibernateClass;
 import org.digijava.kernel.config.HibernateClasses;
 import org.digijava.kernel.config.moduleconfig.ModuleConfig;
 import org.digijava.kernel.persistence.interceptors.AmpEntityInterceptor;
-import org.digijava.kernel.services.AmpOfflineVersion;
-import org.digijava.kernel.services.AmpOfflineVersionType;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.dialect.function.SQLFunctionTemplate;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
-import org.hibernate.service.ServiceRegistry;
 import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.type.Type;
 import org.slf4j.Logger;
@@ -48,27 +45,6 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import org.digijava.kernel.config.DigiConfig;
-import org.digijava.kernel.config.HibernateClass;
-import org.digijava.kernel.config.HibernateClasses;
-import org.digijava.kernel.config.moduleconfig.ModuleConfig;
-import org.digijava.kernel.persistence.interceptors.AmpEntityInterceptor;
-import org.digijava.kernel.services.AmpOfflineVersion;
-import org.digijava.kernel.services.AmpOfflineVersionType;
-import org.digijava.kernel.util.I18NHelper;
-import org.hibernate.HibernateException;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
-
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
-import org.springframework.core.type.filter.AnnotationTypeFilter;
-
-import javax.persistence.Entity;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Iterator;
 
 /**
  * Hibernate Class loader, see digi.xml file for more details.

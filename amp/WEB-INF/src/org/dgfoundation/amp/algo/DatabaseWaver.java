@@ -1,11 +1,11 @@
 package org.dgfoundation.amp.algo;
 
+import org.dgfoundation.amp.Util;
+import org.digijava.kernel.persistence.PersistenceManager;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import org.dgfoundation.amp.Util;
-import org.digijava.kernel.persistence.PersistenceManager;
 
 /**
  * a waver which selects ids using a query like SELECT DISTINCT(BLA) FROM FOO WHERE X IN (in)

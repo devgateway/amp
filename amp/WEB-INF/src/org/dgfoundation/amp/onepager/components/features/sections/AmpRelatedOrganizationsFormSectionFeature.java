@@ -4,9 +4,6 @@
  */
 package org.dgfoundation.amp.onepager.components.features.sections;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpRelatedOrganizationsOtherTableFeature;
@@ -22,6 +19,9 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author aartimon@dginternational.org since Oct 26, 2010

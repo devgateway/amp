@@ -1,5 +1,5 @@
 import domtoimage from 'dom-to-image-font-patch';
-import { COUNTRY_COLUMN, PNG_FORMAT } from './constants';
+import {COUNTRY_COLUMN, PNG_FORMAT} from './constants';
 
 export const printInnerCharts = (title, chartId, filtersObject, format, countriesForExport) => {
   const rows = document.getElementById(chartId).childNodes;

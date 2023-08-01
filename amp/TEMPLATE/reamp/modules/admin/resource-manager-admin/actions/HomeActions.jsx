@@ -15,12 +15,12 @@ export const STATE_SETTINGS_LOADED = 'STATE_SETTINGS_LOADED';
 export const STATE_SETTINGS_ERROR = 'STATE_SETTINGS_ERROR';
 import {
     ALLOWED_FILE_TYPES_ENDPOINT,
-    REST_BASE,
     AVAILABLE_FILE_TYPES_ENDPOINT,
+    REST_BASE,
     SAVE_FILE_TYPES_ENDPOINT,
     SETTINGS_ENDPOINT
 } from '../utils/constants.jsx';
-import { postJson, delay, fetchJson } from 'amp/tools';
+import {fetchJson, postJson} from 'amp/tools';
 
 export function loadAction() {
     console.log('loadAction');

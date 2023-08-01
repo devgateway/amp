@@ -1,9 +1,9 @@
-import React, { Component, PropTypes, Button } from 'react';
-import { delay } from 'amp/tools';
+import React, {Component} from 'react';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 import NumberInput from 'react-number-input';
 import Checkbox from 'rc-checkbox';
+
 require('../../Layout/App.less');
 export default class Settings extends Component {
 

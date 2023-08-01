@@ -1,19 +1,14 @@
 package org.dgfoundation.amp.ar.amp212;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.newreports.PaginatedReportAreaForTests;
-import org.dgfoundation.amp.newreports.ReportingTestCase;
-import org.dgfoundation.amp.newreports.AreaOwner;
-import org.dgfoundation.amp.newreports.GroupingCriteria;
-import org.dgfoundation.amp.newreports.ReportSpecification;
-import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+import org.dgfoundation.amp.newreports.*;
 import org.dgfoundation.amp.newreports.pagination.PaginatedReport;
 import org.dgfoundation.amp.nireports.testcases.ReportModelGenerator;
 import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * 

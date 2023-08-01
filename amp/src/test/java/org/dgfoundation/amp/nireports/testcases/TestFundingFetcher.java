@@ -1,14 +1,12 @@
 package org.dgfoundation.amp.nireports.testcases;
 
 
-
-import java.util.Map;
-
 import org.dgfoundation.amp.nireports.CategAmountCell;
 import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
 import org.dgfoundation.amp.nireports.testcases.generic.HardcodedCells;
 import org.dgfoundation.amp.nireports.testcases.generic.HardcodedColumn;
-import org.dgfoundation.amp.nireports.testcases.generic.TestcasesFundingCells;
+
+import java.util.Map;
 
 /**
  * funding fetcher used in HardcodedReportsTestSchema

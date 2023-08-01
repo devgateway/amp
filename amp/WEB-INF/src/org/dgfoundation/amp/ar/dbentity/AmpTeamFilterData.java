@@ -1,14 +1,13 @@
 package org.dgfoundation.amp.ar.dbentity;
 
-import java.util.Iterator;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.hibernate.HibernateException;
-import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+
+import java.util.Iterator;
+import java.util.List;
 
 public class AmpTeamFilterData extends AmpFilterData {
     private static final long serialVersionUID = 1L;

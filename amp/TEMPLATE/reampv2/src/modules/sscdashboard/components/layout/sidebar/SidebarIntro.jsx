@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { SSCTranslationContext } from '../../StartUp';
+import React, {Component} from 'react';
+import {SSCTranslationContext} from '../../StartUp';
 
 class SidebarIntro extends Component {
   render() {

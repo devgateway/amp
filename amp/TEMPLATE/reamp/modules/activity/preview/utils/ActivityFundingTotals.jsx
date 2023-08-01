@@ -1,4 +1,4 @@
-import { FieldPathConstants, NumberUtils } from 'amp-ui';
+import {NumberUtils} from 'amp-ui';
 
 export default class ActivityFundingTotals {
     constructor(activity, activityFunding) {

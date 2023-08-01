@@ -1,12 +1,11 @@
 import React from "react";
 import * as AMP from "amp/architecture";
-import style from "./style.less";
 import cn from "classnames";
-import {allow, negative, point, number} from "amp/tools/validate";
+import {negative, number, point} from "amp/tools/validate";
+import {keyCode} from "amp/tools";
+
 const KEY_UP = 38;
 const KEY_DOWN = 40;
-import {keyCode} from "amp/tools";
-import DatePicker from "react-date-picker";
 require('react-date-picker/index.css');
 
 export var actions = AMP.actions({

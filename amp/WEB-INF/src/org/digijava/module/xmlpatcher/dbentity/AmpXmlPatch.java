@@ -5,10 +5,13 @@
  */
 package org.digijava.module.xmlpatcher.dbentity;
 
-import java.io.Serializable;
-import java.util.*;
-
 import org.digijava.module.xmlpatcher.util.XmlPatcherConstants;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org This represents the

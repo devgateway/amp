@@ -1,4 +1,5 @@
-import { postJson, delay, fetchJson } from 'amp/tools';
+import {fetchJson} from 'amp/tools';
+
 class CommonListsApi {
 
     static getSettings() {

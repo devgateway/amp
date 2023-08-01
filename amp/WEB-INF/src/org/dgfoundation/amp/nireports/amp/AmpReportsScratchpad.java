@@ -1,17 +1,5 @@
 package org.dgfoundation.amp.nireports.amp;
 
-import static org.apache.commons.collections.CollectionUtils.containsAny;
-import static org.apache.commons.collections.CollectionUtils.intersection;
-
-import java.sql.Connection;
-import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
-
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.algo.Memoizer;
@@ -26,11 +14,7 @@ import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.newreports.CalendarConverter;
 import org.dgfoundation.amp.newreports.IReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportSpecification;
-import org.dgfoundation.amp.nireports.Cell;
-import org.dgfoundation.amp.nireports.ComparableValue;
-import org.dgfoundation.amp.nireports.NiPrecisionSetting;
-import org.dgfoundation.amp.nireports.NiReportsEngine;
-import org.dgfoundation.amp.nireports.TranslatedDate;
+import org.dgfoundation.amp.nireports.*;
 import org.dgfoundation.amp.nireports.amp.PercentagesCorrector.Snapshot;
 import org.dgfoundation.amp.nireports.amp.diff.DifferentialCache;
 import org.dgfoundation.amp.nireports.runtime.CachingCalendarConverter;
@@ -43,6 +27,18 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+
+import java.sql.Connection;
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+
+import static org.apache.commons.collections.CollectionUtils.containsAny;
+import static org.apache.commons.collections.CollectionUtils.intersection;
 
 /**
  * the AMP-schema-specific scratchpad <br />

@@ -3,13 +3,13 @@
  */
 package org.dgfoundation.amp.ar.workers;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.cell.NewTextCell;
 import org.dgfoundation.amp.ar.cell.TextCell;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * @author alex

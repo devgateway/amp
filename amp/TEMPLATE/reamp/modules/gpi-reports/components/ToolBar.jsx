@@ -1,7 +1,7 @@
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import * as startUp from '../actions/StartUpAction.jsx';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+
 class ToolBar extends Component {
     constructor( props, context ) {
         super( props, context );

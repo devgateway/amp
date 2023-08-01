@@ -1,15 +1,14 @@
 package org.digijava.kernel.services;
 
+import org.hibernate.HibernateException;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
+import org.hibernate.type.StringType;
+import org.hibernate.usertype.UserType;
+
 import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import org.hibernate.HibernateException;
-import org.hibernate.engine.spi.SessionImplementor;
-import org.hibernate.engine.spi.SharedSessionContractImplementor;
-import org.hibernate.type.StringType;
-import org.hibernate.usertype.UserType;
 
 /**
  * @author Octavian Ciubotaru

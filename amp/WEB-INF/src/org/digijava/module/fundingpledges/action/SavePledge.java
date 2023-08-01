@@ -1,16 +1,5 @@
 package org.digijava.module.fundingpledges.action;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
@@ -25,27 +14,16 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.admin.helper.AmpPledgeFake;
-import org.digijava.module.aim.util.AuditLoggerUtil;
-import org.digijava.module.aim.util.DynLocationManagerUtil;
-import org.digijava.module.aim.util.LuceneUtil;
-import org.digijava.module.aim.util.ProgramUtil;
-import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.aim.util.*;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
-import org.digijava.module.fundingpledges.dbentity.FundingPledges;
-import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
-import org.digijava.module.fundingpledges.dbentity.FundingPledgesDocument;
-import org.digijava.module.fundingpledges.dbentity.FundingPledgesLocation;
-import org.digijava.module.fundingpledges.dbentity.FundingPledgesProgram;
-import org.digijava.module.fundingpledges.dbentity.FundingPledgesSector;
-import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
-import org.digijava.module.fundingpledges.form.DocumentShim;
-import org.digijava.module.fundingpledges.form.FundingPledgesDetailsShim;
-import org.digijava.module.fundingpledges.form.IdNamePercentage;
-import org.digijava.module.fundingpledges.form.PledgeForm;
-import org.digijava.module.fundingpledges.form.PledgeFormContact;
-import org.digijava.module.fundingpledges.form.TransientDocumentShim;
+import org.digijava.module.fundingpledges.dbentity.*;
+import org.digijava.module.fundingpledges.form.*;
 import org.hibernate.Session;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.*;
 
 public class SavePledge extends Action {
     private static Logger logger = Logger.getLogger(SavePledge.class);

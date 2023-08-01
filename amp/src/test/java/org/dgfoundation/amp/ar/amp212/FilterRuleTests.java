@@ -1,16 +1,16 @@
 package org.dgfoundation.amp.ar.amp212;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import org.dgfoundation.amp.newreports.FilterRule;
+import org.dgfoundation.amp.newreports.FilterRule.FilterType;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.TreeSet;
 
-import org.dgfoundation.amp.newreports.FilterRule;
-import org.dgfoundation.amp.newreports.FilterRule.FilterType;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * ETL Testcases

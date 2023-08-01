@@ -5,33 +5,21 @@
 
 package org.digijava.module.aim.dbentity;
 
-import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_DESCRIPTION;
-import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_TITLE;
-import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_TYPE;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
 import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpComponentFundingDiscriminationConfigurer;
 import org.digijava.kernel.ampapi.endpoints.activity.values.providers.ComponentTypePossibleValuesProvider;
 import org.digijava.kernel.validators.common.RequiredValidator;
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
-import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
-import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
-import org.digijava.module.aim.annotations.interchange.PossibleValues;
-import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
-import org.digijava.module.aim.annotations.interchange.InterchangeableId;
+import org.digijava.module.aim.annotations.interchange.*;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.Output;
+
+import java.io.Serializable;
+import java.util.*;
+
+import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.*;
 
 /**
  * Persister class for Components

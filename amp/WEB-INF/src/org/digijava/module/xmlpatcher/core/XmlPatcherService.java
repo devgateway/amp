@@ -5,17 +5,6 @@
  */
 package org.digijava.module.xmlpatcher.core;
 
-import java.io.File;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.sql.SQLException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -35,6 +24,12 @@ import org.digijava.module.xmlpatcher.util.XmlPatcherConstants;
 import org.digijava.module.xmlpatcher.util.XmlPatcherUtil;
 import org.digijava.module.xmlpatcher.worker.XmlPatcherWorker;
 import org.hibernate.HibernateException;
+
+import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
+import java.util.*;
 
 /**
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org

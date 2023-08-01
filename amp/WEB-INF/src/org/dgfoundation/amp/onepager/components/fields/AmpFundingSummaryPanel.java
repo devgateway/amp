@@ -1,7 +1,5 @@
 package org.dgfoundation.amp.onepager.components.fields;
 
-import java.util.List;
-
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
@@ -10,6 +8,8 @@ import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.AmpRequiredComponentContainer;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+
+import java.util.List;
 
 public class AmpFundingSummaryPanel extends AmpComponentPanel<Void> implements
         AmpRequiredComponentContainer {

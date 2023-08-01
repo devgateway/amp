@@ -1,18 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.errors;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-
-import javax.servlet.http.HttpServletResponse;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
@@ -32,14 +19,17 @@ import org.digijava.kernel.ampapi.endpoints.geocoding.GeoCoderEndpoint;
 import org.digijava.kernel.ampapi.endpoints.gpi.GPIErrors;
 import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorErrors;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRulesErrors;
-import org.digijava.kernel.ampapi.endpoints.reports.designer.ReportDesignerErrors;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportErrors;
+import org.digijava.kernel.ampapi.endpoints.reports.designer.ReportDesignerErrors;
 import org.digijava.kernel.ampapi.endpoints.resource.ResourceErrors;
 import org.digijava.kernel.ampapi.endpoints.security.SecurityErrors;
 import org.digijava.kernel.ampapi.endpoints.sync.SynchronizerErrors;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.json.JSONObject;
 import org.json.XML;
+
+import javax.servlet.http.HttpServletResponse;
+import java.util.*;
 
 /**
  * Defines API Error Utility class for manipulating ApiErrorMessage objects

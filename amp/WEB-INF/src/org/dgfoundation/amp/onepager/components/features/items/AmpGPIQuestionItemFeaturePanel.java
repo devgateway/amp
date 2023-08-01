@@ -1,26 +1,16 @@
 package org.dgfoundation.amp.onepager.components.features.items;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
-import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpGroupFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpLabelFieldPanel;
 import org.dgfoundation.amp.onepager.models.GPIYesNoAnswerModel;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -29,7 +19,7 @@ import org.digijava.module.aim.dbentity.AmpGPISurveyIndicator;
 import org.digijava.module.aim.dbentity.AmpGPISurveyQuestion;
 import org.digijava.module.aim.dbentity.AmpGPISurveyResponse;
 
-import java.util.Collections;
+import java.util.*;
 
 public class AmpGPIQuestionItemFeaturePanel extends AmpFeaturePanel<AmpGPISurveyIndicator> {
     

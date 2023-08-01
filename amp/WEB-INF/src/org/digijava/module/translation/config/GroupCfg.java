@@ -22,10 +22,10 @@
 
 package org.digijava.module.translation.config;
 
+import org.digijava.kernel.config.KeyValuePair;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import org.digijava.kernel.config.KeyValuePair;
 
 public class GroupCfg {
     private String id;

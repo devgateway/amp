@@ -1,5 +1,5 @@
-import { fetchApiData } from '../../../utils/loadTranslations';
-import { URL_LANGUAGES } from '../utils/constants';
+import {fetchApiData} from '../../../utils/loadTranslations';
+import {URL_LANGUAGES} from '../utils/constants';
 
 export const FETCH_LANGUAGES_PENDING = 'FETCH_LANGUAGES_PENDING';
 export const FETCH_LANGUAGES_SUCCESS = 'FETCH_LANGUAGES_SUCCESS';

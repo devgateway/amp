@@ -1,6 +1,5 @@
 package org.dgfoundation.amp.onepager.components.fields;
 
-import org.apache.commons.collections.map.HashedMap;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;

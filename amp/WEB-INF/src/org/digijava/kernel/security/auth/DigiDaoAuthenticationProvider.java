@@ -22,13 +22,11 @@
 
 package org.digijava.kernel.security.auth;
 
-import java.util.List;
-
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.ShaCrypt;
-import org.hibernate.query.Query;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -37,6 +35,8 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
+import java.util.List;
 
 public class DigiDaoAuthenticationProvider
         extends DaoAuthenticationProvider implements InitializingBean {

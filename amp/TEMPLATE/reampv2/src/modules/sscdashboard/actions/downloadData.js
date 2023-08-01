@@ -1,15 +1,15 @@
-import { fetchApiData } from '../../../utils/loadTranslations';
+import {fetchApiData} from '../../../utils/loadTranslations';
 import {
-  fetchXlsReportDone,
-  fetchXlsReportError,
-  fetchXlsReportPending,
-  fetchXlsReportSuccess
+    fetchXlsReportDone,
+    fetchXlsReportError,
+    fetchXlsReportPending,
+    fetchXlsReportSuccess
 } from './downloadDataActions';
 import {
-  API_XLS_REPORT_URL,
-  FILTER_DONOR_AGENCY_COUNTRY,
-  FILTER_PRIMARY_SECTOR,
-  FILTER_SSC_MODALITIES
+    API_XLS_REPORT_URL,
+    FILTER_DONOR_AGENCY_COUNTRY,
+    FILTER_PRIMARY_SECTOR,
+    FILTER_SSC_MODALITIES
 } from '../utils/constants';
 
 const report = {

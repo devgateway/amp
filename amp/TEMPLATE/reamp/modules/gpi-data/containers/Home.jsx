@@ -1,10 +1,9 @@
-import React, { Component, PropTypes } from 'react';
+import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import AidOnBudgetList from "../components/AidOnBudgetList.jsx";
 import DonorNotesList from "../components/DonorNotesList.jsx";
-import * as commonListsActions from  '../actions/CommonListsActions.jsx';
-import * as startUp from '../actions/StartUpAction.jsx';
+import * as commonListsActions from '../actions/CommonListsActions.jsx';
 
 class App extends Component {
 

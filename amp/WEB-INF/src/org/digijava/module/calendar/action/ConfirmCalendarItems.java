@@ -22,10 +22,6 @@
 
 package org.digijava.module.calendar.action;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -40,6 +36,10 @@ import org.digijava.module.calendar.dbentity.CalendarSettings;
 import org.digijava.module.calendar.form.CalendarItemForm;
 import org.digijava.module.calendar.util.DbUtil;
 import org.digijava.module.common.dbentity.ItemStatus;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Action displayes confirmation page for selected event items, status of which is being changed

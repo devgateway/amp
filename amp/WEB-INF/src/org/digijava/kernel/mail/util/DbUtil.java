@@ -22,23 +22,22 @@
 
 package org.digijava.kernel.mail.util;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
-
-import javax.mail.Address;
-import javax.mail.internet.InternetAddress;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.MailSpool;
 import org.digijava.kernel.mail.exception.MailSpoolException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.hibernate.HibernateException;
-import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.hibernate.type.CalendarType;
+
+import javax.mail.Address;
+import javax.mail.internet.InternetAddress;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 public class DbUtil {
   private static Logger logger = Logger.getLogger(DbUtil.class);

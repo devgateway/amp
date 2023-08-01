@@ -1,16 +1,5 @@
 package org.digijava.module.aim.action ;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -22,6 +11,11 @@ import org.digijava.module.aim.helper.AllActivities;
 import org.digijava.module.aim.helper.AllThemes;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.aim.util.ProgramUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.util.*;
 
 public class OverallIndicatorManager extends Action
 {

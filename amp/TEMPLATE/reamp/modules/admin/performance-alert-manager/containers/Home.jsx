@@ -1,16 +1,10 @@
-import React, {
-    Component,
-    PropTypes
-} from 'react';
-import {
-    connect
-} from 'react-redux';
-import {
-    bindActionCreators
-} from 'redux';
-require('../styles/less/main.less');
-import * as startUp from '../actions/StartUpAction';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import PerformanceRuleList from '../components/PerformanceRuleList.jsx';
+
+require('../styles/less/main.less');
+
 class App extends Component {
     constructor(props, context) {
         super(props, context);

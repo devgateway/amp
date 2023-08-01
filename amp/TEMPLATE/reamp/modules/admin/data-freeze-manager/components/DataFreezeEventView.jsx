@@ -1,20 +1,13 @@
-import React, {
-    Component,
-    PropTypes
-} from 'react';
-import {
-    connect
-} from 'react-redux';
-import {
-    bindActionCreators
-} from 'redux';
-import * as startUp from '../actions/StartUpAction';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import * as commonListsActions from '../actions/CommonListsActions';
 import * as dataFreezeActions from '../actions/DataFreezeActions';
 import AppliedFilters from './AppliedFilters';
 import moment from 'moment';
 import * as Constants from '../common/Constants';
 import {OverlayTrigger, Tooltip} from "react-bootstrap";
+
 require('../styles/less/main.less');
 class DataFreezeEventView extends Component {
     constructor(props, context) {

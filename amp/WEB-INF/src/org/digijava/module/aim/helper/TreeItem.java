@@ -1,25 +1,16 @@
 package org.digijava.module.aim.helper;
 
 
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.persistence.WorkerException;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.collections.HierarchyMember;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.IndicatorTheme;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.digijava.kernel.translator.*;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 
 /**

@@ -1,9 +1,7 @@
 import EllipsisText from 'react-ellipsis-text';
 import React from 'react';
 import * as FieldsConstants from './FieldsConstants';
-import {
-  COLOR_MAP, COLOR_MAP_CUSTOM, MODALITY_CHART
-} from './constants';
+import {COLOR_MAP, COLOR_MAP_CUSTOM, MODALITY_CHART} from './constants';
 
 export function generateStructureBasedOnSector(objectData) {
   return generateStructureBasedOnSectorProjectCount(objectData).groupings;

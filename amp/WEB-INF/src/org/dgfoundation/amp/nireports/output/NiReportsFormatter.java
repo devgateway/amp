@@ -1,33 +1,18 @@
 package org.dgfoundation.amp.nireports.output;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.IdentityHashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.SortedMap;
-import java.util.Stack;
-import java.util.function.Supplier;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.AmpCollections;
-import org.dgfoundation.amp.newreports.AreaOwner;
-import org.dgfoundation.amp.newreports.GeneratedReport;
-import org.dgfoundation.amp.newreports.HeaderCell;
-import org.dgfoundation.amp.newreports.ReportArea;
-import org.dgfoundation.amp.newreports.ReportAreaImpl;
-import org.dgfoundation.amp.newreports.ReportCell;
-import org.dgfoundation.amp.newreports.ReportOutputColumn;
-import org.dgfoundation.amp.newreports.ReportSpecification;
-import org.dgfoundation.amp.newreports.TextCell;
+import org.dgfoundation.amp.newreports.*;
 import org.dgfoundation.amp.nireports.amp.OutputSettings;
 import org.dgfoundation.amp.nireports.output.nicells.CellVisitor;
 import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
 import org.dgfoundation.amp.nireports.output.nicells.NiSplitCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.Column;
+
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.function.Supplier;
 
 
 /**

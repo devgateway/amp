@@ -22,19 +22,18 @@
 
 package org.digijava.kernel.user;
 
+import com.google.common.collect.ImmutableSet;
+import org.digijava.kernel.entity.Entity;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.security.ResourcePermission;
+import org.digijava.kernel.security.SitePermission;
+import org.digijava.module.aim.dbentity.AmpMenuEntryInView;
+
 import java.io.Serializable;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
-
-import org.digijava.kernel.entity.Entity;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.security.ResourcePermission;
-import org.digijava.kernel.security.SitePermission;
-
-import com.google.common.collect.ImmutableSet;
-import org.digijava.module.aim.dbentity.AmpMenuEntryInView;
 
 public class Group
     extends Entity

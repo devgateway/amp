@@ -1,39 +1,13 @@
-package org.dgfoundation.amp; 
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+package org.dgfoundation.amp;
 
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.ar.ArConstants;
-import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.dgfoundation.amp.ar.workers.CategAmountColWorker;
 import org.dgfoundation.amp.currencyconvertor.AmpCurrencyConvertor;
 import org.dgfoundation.amp.currencyconvertor.CurrencyConvertor;
-import org.digijava.kernel.cache.AbstractCache;
-import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.User;
-import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
-import org.digijava.module.aim.dbentity.AmpOrgRole;
-import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
@@ -44,13 +18,14 @@ import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
-import org.digijava.module.editor.util.DbUtil;
 import org.hibernate.HibernateException;
-import org.hibernate.query.Query;
 import org.hibernate.Session;
-import org.hibernate.jdbc.ReturningWork;
-import org.hibernate.type.StringType;
 import org.springframework.beans.BeanWrapperImpl;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.sql.SQLException;
+import java.util.*;
 
 public final class Util {
 

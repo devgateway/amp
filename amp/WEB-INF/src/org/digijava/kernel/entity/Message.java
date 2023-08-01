@@ -21,14 +21,15 @@
  */
 
 package org.digijava.kernel.entity;
-import java.io.Serializable;
-import java.sql.Timestamp;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.SiteCache;
 import org.digijava.module.aim.util.AmpMath;
+
+import java.io.Serializable;
+import java.sql.Timestamp;
 /**
  * @author shamanth.murthy
  *

@@ -6,7 +6,28 @@
  */
 package org.digijava.module.aim.action;
 
-import java.io.File;
+import org.apache.log4j.Logger;
+import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.util.IOUtils;
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.ar.*;
+import org.dgfoundation.amp.ar.view.xls.GroupReportDataXLS;
+import org.dgfoundation.amp.ar.view.xls.IntWrapper;
+import org.dgfoundation.amp.ar.view.xls.XLSExportType;
+import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.ResponseUtil;
+import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.form.AdvancedReportForm;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.FeaturesUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
@@ -14,56 +35,6 @@ import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.apache.commons.vfs.FileContent;
-import org.apache.commons.vfs.FileObject;
-import org.apache.commons.vfs.FileSystemManager;
-import org.apache.commons.vfs.VFS;
-import org.apache.log4j.Logger;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
-import org.apache.poi.hssf.usermodel.HSSFFont;
-import org.apache.poi.hssf.usermodel.HSSFFooter;
-import org.apache.poi.hssf.usermodel.HSSFPatriarch;
-import org.apache.poi.hssf.usermodel.HSSFPicture;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.RichTextString;
-import org.apache.poi.util.IOUtils;
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.dgfoundation.amp.ar.ARUtil;
-import org.dgfoundation.amp.ar.AmpARFilter;
-import org.dgfoundation.amp.ar.ArConstants;
-import org.dgfoundation.amp.ar.GenericViews;
-import org.dgfoundation.amp.ar.GroupReportData;
-import org.dgfoundation.amp.ar.MetaInfo;
-import org.dgfoundation.amp.ar.ReportContextData;
-import org.dgfoundation.amp.ar.view.xls.GroupReportDataXLS;
-import org.dgfoundation.amp.ar.view.xls.IntWrapper;
-import org.dgfoundation.amp.ar.view.xls.XLSExportType;
-import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.persistence.WorkerException;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.request.TLSUtils;
-import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.kernel.util.ResponseUtil;
-import org.digijava.module.aim.dbentity.AmpReports;
-import org.digijava.module.aim.form.AdvancedReportForm;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * 

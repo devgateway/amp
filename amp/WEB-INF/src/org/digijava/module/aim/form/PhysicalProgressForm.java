@@ -1,10 +1,10 @@
 package org.digijava.module.aim.form ;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.helper.Components;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class PhysicalProgressForm extends ActionForm
 {

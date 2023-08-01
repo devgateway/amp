@@ -1,54 +1,31 @@
 package org.digijava.module.gpi.model;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
-import org.digijava.module.aim.dbentity.AmpGPISurveyIndicator;
-import org.digijava.module.aim.dbentity.AmpOrgGroup;
-import org.digijava.module.aim.dbentity.AmpOrgType;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.GPIDefaultFilters;
-import org.digijava.module.aim.dbentity.GPISetup;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.Constants.GlobalSettings;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.util.CurrencyUtil;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.GPISetupUtil;
-import org.digijava.module.aim.util.HierarchyListableUtil;
-import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.aim.util.*;
 import org.digijava.module.aim.util.filters.GroupingElement;
 import org.digijava.module.aim.util.filters.HierarchyListableImplementation;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.gpi.form.GPIForm;
-import org.digijava.module.gpi.helper.GPIAbstractReport;
-import org.digijava.module.gpi.helper.GPIReport1;
-import org.digijava.module.gpi.helper.GPIReport5a;
-import org.digijava.module.gpi.helper.GPIReport6;
-import org.digijava.module.gpi.helper.GPIReport9b;
+import org.digijava.module.gpi.helper.*;
 import org.digijava.module.gpi.helper.row.GPIReportAbstractRow;
 import org.digijava.module.gpi.util.GPIConstants;
 import org.digijava.module.gpi.util.GPIUtils;
-import org.hibernate.query.Query;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.*;
 
 public class GPIUseCase {
 

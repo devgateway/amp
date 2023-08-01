@@ -6,16 +6,15 @@
  */
 package org.dgfoundation.amp.ar.view.pdf;
 
-import org.dgfoundation.amp.ar.Exporter;
-import org.dgfoundation.amp.ar.Viewable;
-import org.dgfoundation.amp.ar.cell.AmountCell;
-import org.digijava.module.aim.action.ExportActivityToPDF;
-
 import com.lowagie.text.Element;
 import com.lowagie.text.Font;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
+import org.dgfoundation.amp.ar.Exporter;
+import org.dgfoundation.amp.ar.Viewable;
+import org.dgfoundation.amp.ar.cell.AmountCell;
+import org.digijava.module.aim.action.ExportActivityToPDF;
 
 /**
  * 

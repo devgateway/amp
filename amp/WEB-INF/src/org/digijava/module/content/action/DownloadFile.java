@@ -1,8 +1,5 @@
 package org.digijava.module.content.action;
 
-import java.io.OutputStream;
-import java.util.TreeSet;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -12,6 +9,9 @@ import org.digijava.kernel.util.ResponseUtil;
 import org.digijava.module.content.dbentity.AmpContentItem;
 import org.digijava.module.content.dbentity.AmpContentItemThumbnail;
 import org.digijava.module.content.util.DbUtil;
+
+import java.io.OutputStream;
+import java.util.TreeSet;
 
 public class DownloadFile extends Action {
     

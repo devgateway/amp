@@ -5,6 +5,21 @@
 
 package org.dgfoundation.amp.onepager.models;
 
+import org.dgfoundation.amp.ar.FilterParam;
+import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.TLSUtils;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
+import org.digijava.module.aim.dbentity.AmpOrgType;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
+import org.digijava.module.translation.util.ContentTranslationUtil;
+import org.hibernate.Session;
+import org.hibernate.jdbc.Work;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,21 +27,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-
-import org.digijava.module.aim.dbentity.AmpOrgType;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
-import org.hibernate.Session;
-import org.hibernate.jdbc.Work;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.dgfoundation.amp.ar.FilterParam;
-import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
-import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.dbentity.AmpOrgGroup;
-import org.digijava.module.translation.util.ContentTranslationUtil;
 
 /**
  * @author mpostelnicu@dgateway.org since Sep 28, 2010

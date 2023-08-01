@@ -1,14 +1,13 @@
 package org.digijava.module.aim.validator.contact;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import org.apache.commons.lang3.mutable.MutableLong;
+import org.digijava.module.aim.dbentity.AmpActivityContact;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-
-import org.apache.commons.lang3.mutable.MutableLong;
-import org.digijava.module.aim.dbentity.AmpActivityContact;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Viorel Chihai

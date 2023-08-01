@@ -4,23 +4,6 @@
 package org.digijava.module.gateperm.util;
 
 
-import java.io.File;
-import java.io.FileFilter;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import org.apache.http.HttpRequest;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMFieldPermissionViewer;
@@ -30,16 +13,18 @@ import org.digijava.kernel.user.User;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.TeamMemberUtil;
-import org.digijava.module.gateperm.core.ClusterIdentifiable;
-import org.digijava.module.gateperm.core.CompositePermission;
-import org.digijava.module.gateperm.core.Gate;
-import org.digijava.module.gateperm.core.GatePermConst;
-import org.digijava.module.gateperm.core.Permissible;
-import org.digijava.module.gateperm.core.Permission;
-import org.digijava.module.gateperm.core.PermissionMap;
+import org.digijava.module.gateperm.core.*;
 import org.hibernate.HibernateException;
-import org.hibernate.query.Query;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.FileFilter;
+import java.sql.SQLException;
+import java.util.*;
 
 /**
  * PermissionUtil.java TODO description here

@@ -3,7 +3,6 @@ package org.digijava.module.aim.helper;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
-
 import org.apache.log4j.Logger;
 
 public class ParisIndicatorDataSource implements JRDataSource {

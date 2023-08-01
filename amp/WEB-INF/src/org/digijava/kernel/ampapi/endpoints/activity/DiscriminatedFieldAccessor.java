@@ -1,15 +1,10 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.TreeSet;
-
 import org.apache.commons.beanutils.PropertyUtils;
 import org.digijava.kernel.request.TLSUtils;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils.WORKSPACE_PREFIX;
 

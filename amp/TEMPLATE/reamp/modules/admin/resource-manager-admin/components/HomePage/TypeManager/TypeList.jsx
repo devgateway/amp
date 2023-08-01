@@ -1,7 +1,7 @@
 import FilteredMultiSelect from 'react-filtered-multiselect';
-import React, { Component, PropTypes, Button } from 'react';
-import { Alert, Glyphicon } from 'react-bootstrap';
-import { delay } from 'amp/tools';
+import React, {Component} from 'react';
+import {Alert, Glyphicon} from 'react-bootstrap';
+
 require('../../Layout/App.less');
 
 

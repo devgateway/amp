@@ -22,11 +22,7 @@
 
 package org.digijava.kernel.util;
 
-import java.net.URL;
-import java.util.*;
-
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.StandaloneJndiAMPInitializer;
 import org.digijava.kernel.persistence.HibernateClassLoader;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.resource.ResourceStreamHandlerFactory;
@@ -39,6 +35,8 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.mapping.PersistentClass;
 import org.hibernate.tool.hbm2ddl.SchemaUpdate;
 import org.hibernate.tool.schema.TargetType;
+
+import java.util.*;
 
 public class DigiSchemaExport {
     private static Logger logger = Logger.getLogger(DigiSchemaExport.class);

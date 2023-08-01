@@ -22,29 +22,20 @@
 
 package org.digijava.kernel.user;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
-import javax.security.auth.Subject;
-
+import org.digijava.kernel.ampapi.endpoints.common.valueproviders.UserValueProvider;
 import org.digijava.kernel.dbentity.Country;
-import org.digijava.kernel.entity.Entity;
-import org.digijava.kernel.entity.Image;
 import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.entity.OrganizationType;
-import org.digijava.kernel.entity.UserLangPreferences;
-import org.digijava.kernel.entity.UserPreferences;
+import org.digijava.kernel.entity.*;
 import org.digijava.kernel.request.Site;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValue;
-import org.digijava.kernel.ampapi.endpoints.common.valueproviders.UserValueProvider;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpUserExtension;
 import org.digijava.module.aim.util.Identifiable;
+
+import javax.security.auth.Subject;
+import java.io.Serializable;
+import java.util.*;
 
 @InterchangeableValue(UserValueProvider.class)
 public class User

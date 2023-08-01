@@ -1,5 +1,4 @@
-import {RESOURCES_POSSIBLE_VALUES_API, RESOURCES_ENABLED_FIELDS_API, RESOURCES_API}
-    from '../common/ReampConstants.jsx';
+import {RESOURCES_API, RESOURCES_ENABLED_FIELDS_API, RESOURCES_POSSIBLE_VALUES_API} from '../common/ReampConstants.jsx';
 import ApiHelper from "../utils/ApiHelper.jsx";
 
 export default class ResourceApi {

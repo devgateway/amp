@@ -1,8 +1,7 @@
 import React from 'react';
 import L from 'leaflet';
 // eslint-disable-next-line no-unused-vars
-import { curve } from 'leaflet-curve';
-import { withLeaflet } from 'react-leaflet';
+import {withLeaflet} from 'react-leaflet';
 
 // TODO make it configurable and parametrized
 class ConnectionLayer extends React.Component {

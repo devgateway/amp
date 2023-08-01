@@ -1,6 +1,6 @@
 // @flow
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
 import TypeList from '../components/TypeManager/TypeList.jxs';
 import * as TypeListAction from '../actions/TypeListAction.jsx';
 

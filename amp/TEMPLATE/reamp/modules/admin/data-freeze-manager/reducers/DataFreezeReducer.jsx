@@ -1,5 +1,9 @@
-import { DATA_FREEZE_EVENT_ON_SAVE, DATA_FREEZE_EVENT_SAVING ,LOAD_DATA_FREEZE_EVENT_LIST_SUCCESS }
-from '../actions/DataFreezeActions'
+import {
+    DATA_FREEZE_EVENT_ON_SAVE,
+    DATA_FREEZE_EVENT_SAVING,
+    LOAD_DATA_FREEZE_EVENT_LIST_SUCCESS
+} from '../actions/DataFreezeActions'
+
 const defaultState = {
      data: {
           saving : false,

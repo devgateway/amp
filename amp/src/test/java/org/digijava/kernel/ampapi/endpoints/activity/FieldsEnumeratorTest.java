@@ -1,40 +1,10 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_ALWAYS_REQUIRED;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_NON_DRAFT_REQUIRED;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FIELD_NOT_REQUIRED;
-import static org.digijava.kernel.ampapi.endpoints.activity.TestFMService.HIDDEN_FM_PATH;
-import static org.digijava.kernel.ampapi.endpoints.activity.TestFMService.VISIBLE_FM_PATH;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasItems;
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.io.IOException;
-import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableSet;
-
 import org.dgfoundation.amp.testutils.TransactionUtil;
-import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
-import org.digijava.kernel.ampapi.endpoints.activity.field.APIType;
-import org.digijava.kernel.ampapi.endpoints.activity.field.FieldInfoProvider;
-import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
-import org.digijava.kernel.ampapi.endpoints.activity.field.FieldsEnumerator;
+import org.digijava.kernel.ampapi.endpoints.activity.field.*;
 import org.digijava.kernel.ampapi.endpoints.common.CommonSettings;
 import org.digijava.kernel.ampapi.endpoints.common.TestTranslatorService;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
@@ -52,13 +22,7 @@ import org.digijava.kernel.validators.activity.TreeCollectionValidator;
 import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.kernel.validators.common.SizeValidator;
 import org.digijava.kernel.validators.common.TotalPercentageValidator;
-import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
-import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
-import org.digijava.module.aim.annotations.interchange.InterchangeableId;
-import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
-import org.digijava.module.aim.annotations.interchange.TimestampField;
-import org.digijava.module.aim.annotations.interchange.Validators;
+import org.digijava.module.aim.annotations.interchange.*;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpContact;
@@ -69,6 +33,20 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
+
+import java.io.IOException;
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.*;
+import static org.digijava.kernel.ampapi.endpoints.activity.TestFMService.HIDDEN_FM_PATH;
+import static org.digijava.kernel.ampapi.endpoints.activity.TestFMService.VISIBLE_FM_PATH;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Octavian Ciubotaru

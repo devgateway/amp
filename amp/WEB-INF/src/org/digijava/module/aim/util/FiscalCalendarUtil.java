@@ -1,11 +1,5 @@
 package org.digijava.module.aim.util;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.newreports.CalendarConverter;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -19,6 +13,12 @@ import org.hibernate.Session;
 import org.joda.time.Chronology;
 import org.joda.time.DateTime;
 import org.joda.time.chrono.GregorianChronology;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 public class FiscalCalendarUtil {
     

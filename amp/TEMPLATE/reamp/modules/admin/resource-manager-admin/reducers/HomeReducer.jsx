@@ -1,18 +1,19 @@
 // @flow
 import {
-    STATE_TYPES_LOADED,
-    STATE_TYPES_LOADING,
     STATE_ALLOWED_TYPES_ERROR,
-    STATE_ALLOWED_TYPES_LOADING,
     STATE_ALLOWED_TYPES_LOADED,
+    STATE_ALLOWED_TYPES_LOADING,
+    STATE_SETTINGS_ERROR,
+    STATE_SETTINGS_LOADED,
+    STATE_SETTINGS_LOADING,
     STATE_SETTINGS_SAVE_ERROR,
     STATE_SETTINGS_SAVE_SAVED,
     STATE_SETTINGS_SAVE_SAVING,
-    STATE_SETTINGS_LOADED,
-    STATE_SETTINGS_ERROR,
-    STATE_SETTINGS_LOADING
+    STATE_TYPES_LOADED,
+    STATE_TYPES_LOADING
 } from '../actions/HomeActions.jsx';
-import { ALERT_TYPE } from '../utils/constants.jsx';
+import {ALERT_TYPE} from '../utils/constants.jsx';
+
 const defaultState = {
     loadingTypesAvailable: false,
     typesLoaded: false,

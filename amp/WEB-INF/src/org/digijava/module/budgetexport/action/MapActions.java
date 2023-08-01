@@ -1,7 +1,6 @@
 package org.digijava.module.budgetexport.action;
 
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.ecs.StringElement;
 import org.apache.ecs.xml.XML;
@@ -10,11 +9,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
-
 import org.apache.struts.upload.FormFile;
-import org.dgfoundation.amp.importers.CSVImporter;
 import org.digijava.module.aim.util.HierarchyListable;
-import org.digijava.module.budgetexport.adapter.DummyAmpEntity;
 import org.digijava.module.budgetexport.adapter.MappingEntityAdapter;
 import org.digijava.module.budgetexport.adapter.MappingEntityAdapterUtil;
 import org.digijava.module.budgetexport.dbentity.AmpBudgetExportCSVItem;
@@ -27,18 +23,10 @@ import org.digijava.module.budgetexport.util.AmpEntityMappedItem;
 import org.digijava.module.budgetexport.util.BudgetExportUtil;
 import org.digijava.module.budgetexport.util.DbUtil;
 
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
-import java.io.StringWriter;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by IntelliJ IDEA.

@@ -3,19 +3,6 @@
  */
 package org.dgfoundation.amp.ar.dyn;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.exprlogic.MathExpressionRepository;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -23,8 +10,10 @@ import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.util.AdvancedReportUtil;
-import org.hibernate.query.Query;
 import org.hibernate.Session;
+
+import javax.servlet.ServletContext;
+import java.util.*;
 
 /**
  * @author Alex Gartner

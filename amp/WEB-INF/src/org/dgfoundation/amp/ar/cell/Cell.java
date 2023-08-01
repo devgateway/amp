@@ -5,23 +5,15 @@
  */
 package org.dgfoundation.amp.ar.cell;
 
+import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.*;
+import org.dgfoundation.amp.ar.workers.ColumnWorker;
+import org.digijava.kernel.translator.TranslatorWorker;
+
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
-
-import org.apache.log4j.Logger;
-import org.dgfoundation.amp.ar.AmpReportGenerator;
-import org.dgfoundation.amp.ar.ArConstants;
-import org.dgfoundation.amp.ar.CellColumn;
-import org.dgfoundation.amp.ar.Column;
-import org.dgfoundation.amp.ar.ColumnIdentifiable;
-import org.dgfoundation.amp.ar.ReportData;
-import org.dgfoundation.amp.ar.RowIdentifiable;
-import org.dgfoundation.amp.ar.Viewable;
-import org.dgfoundation.amp.ar.workers.ColumnWorker;
-import org.digijava.kernel.translator.TranslatorWorker;
 
 
 /**

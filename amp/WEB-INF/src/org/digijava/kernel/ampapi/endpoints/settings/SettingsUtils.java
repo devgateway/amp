@@ -8,12 +8,7 @@ import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.currency.ConstantCurrency;
 import org.dgfoundation.amp.menu.AmpView;
 import org.dgfoundation.amp.menu.MenuUtils;
-import org.dgfoundation.amp.newreports.AmountsUnits;
-import org.dgfoundation.amp.newreports.ReportMeasure;
-import org.dgfoundation.amp.newreports.ReportSettings;
-import org.dgfoundation.amp.newreports.ReportSettingsImpl;
-import org.dgfoundation.amp.newreports.ReportSpecification;
-import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+import org.dgfoundation.amp.newreports.*;
 import org.dgfoundation.amp.reports.ReportUtils;
 import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.AmpGeneralSettings;
@@ -28,29 +23,13 @@ import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.FormatHelper;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.helper.KeyValue;
-import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.CurrencyUtil;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.FiscalCalendarUtil;
-import org.digijava.module.aim.util.ResourceManagerSettingsUtil;
-import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.aim.helper.*;
+import org.digijava.module.aim.util.*;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Utility class for amp settings handling

@@ -1,10 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.security;
 
-import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.Map;
-import java.util.TreeMap;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils;
@@ -22,6 +17,11 @@ import org.digijava.module.aim.dbentity.AmpOfflineRelease;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.glassfish.jersey.server.ContainerRequest;
+
+import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.Map;
+import java.util.TreeMap;
 
 
 /**

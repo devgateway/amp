@@ -1,9 +1,8 @@
 package org.dgfoundation.amp.gpi.reports.export.pdf;
 
+import com.lowagie.text.Element;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.gpi.reports.GPIReportConstants;
-
-import com.lowagie.text.Element;
 
 /**
  * @author Viorel Chihai

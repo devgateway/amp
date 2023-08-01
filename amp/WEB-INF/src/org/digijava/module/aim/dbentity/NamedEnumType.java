@@ -1,12 +1,5 @@
 package org.digijava.module.aim.dbentity;
 
-import java.lang.reflect.Method;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Types;
-import java.util.Properties;
-
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import org.hibernate.HibernateException;
@@ -15,6 +8,13 @@ import org.hibernate.internal.util.ReflectHelper;
 import org.hibernate.property.access.spi.Getter;
 import org.hibernate.property.access.spi.GetterMethodImpl;
 import org.hibernate.type.EnumType;
+
+import java.lang.reflect.Method;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.util.Properties;
 
 /**
  * @author Octavian Ciubotaru

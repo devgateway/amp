@@ -1,10 +1,10 @@
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import * as startUp from '../actions/StartUpAction';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import * as commonListsActions from '../actions/CommonListsActions';
 import Utils from '../common/Utils';
-import { INDICATOR_5B_CODE, GREG_BASE_CALENDAR} from '../common/Constants';
+import {INDICATOR_5B_CODE} from '../common/Constants';
+
 class YearsFilterSection extends Component {
     constructor( props, context ) {
         super( props, context );

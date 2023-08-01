@@ -4,8 +4,6 @@
  */
 package org.dgfoundation.amp.onepager.components.features.sections;
 
-import java.util.*;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -21,6 +19,10 @@ import org.digijava.module.aim.dbentity.AmpComponentType;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.ComponentsUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * @author aartimon@dginternational.org since Oct 27, 2010

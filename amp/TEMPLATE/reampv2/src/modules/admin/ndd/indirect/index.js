@@ -1,15 +1,13 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {
-  applyMiddleware, bindActionCreators, compose, createStore
-} from 'redux';
+import {applyMiddleware, bindActionCreators, compose, createStore} from 'redux';
 import thunk from 'redux-thunk';
-import { connect, Provider } from 'react-redux';
+import {connect, Provider} from 'react-redux';
 
 import Main from '../components/Main';
 import rootReducer from '../reducers/rootReducer';
 import defaultTrnPack from './config/initialTranslations.json';
-import Startup, { NDDContext } from '../components/Startup';
+import Startup, {NDDContext} from '../components/Startup';
 
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 

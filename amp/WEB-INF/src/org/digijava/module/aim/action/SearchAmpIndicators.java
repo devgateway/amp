@@ -1,10 +1,5 @@
 package org.digijava.module.aim.action;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -15,7 +10,11 @@ import org.digijava.module.aim.dbentity.IndicatorTheme;
 import org.digijava.module.aim.form.ThemeForm;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.ProgramUtil;
-import org.digijava.module.aim.util.ProgramUtil.ThemeIdComparator;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 
 public class SearchAmpIndicators extends Action {

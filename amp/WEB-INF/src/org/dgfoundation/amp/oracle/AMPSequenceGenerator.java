@@ -1,13 +1,13 @@
 package org.dgfoundation.amp.oracle;
 
-import java.util.Properties;
-
 import org.hibernate.HibernateException;
 import org.hibernate.MappingException;
 import org.hibernate.dialect.Dialect;
 import org.hibernate.id.SequenceGenerator;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.type.Type;
+
+import java.util.Properties;
 
 
 /**

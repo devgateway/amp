@@ -1,10 +1,5 @@
 package org.digijava.module.aim.dbentity ;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Set;
-
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.NPODimension;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
@@ -12,15 +7,13 @@ import org.digijava.module.aim.annotations.interchange.PossibleValueId;
 import org.digijava.module.aim.annotations.interchange.PossibleValueValue;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
-import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.HierarchyListable;
-import org.digijava.module.aim.util.HierarchyListableComparator;
-import org.digijava.module.aim.util.Identifiable;
-import org.digijava.module.aim.util.NameableOrIdentifiable;
-import org.digijava.module.aim.util.SoftDeletable;
+import org.digijava.module.aim.util.*;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Set;
 import java.util.TreeSet;
 @TranslatableClass (displayName = "Theme")
 public class AmpTheme implements Serializable, SoftDeletable, Identifiable, ARDimensionable, HierarchyListable,

@@ -1,19 +1,16 @@
-import React, { Component } from 'react';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+import React, {Component} from 'react';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import MultiSelectionDropDown from './MultiSelectionDropDown';
 import CountryCarousel from './CountryCarousel';
 
 import './filters.css';
-import {
-  DOWNLOAD_CHART, HOME_CHART, MODALITY_CHART,
-  SECTORS_CHART
-} from '../../../utils/constants';
-import { EXTRA_INFO, GROUP_ID } from '../../../utils/FieldsConstants';
-import { SSCTranslationContext } from '../../StartUp';
+import {DOWNLOAD_CHART, HOME_CHART, MODALITY_CHART, SECTORS_CHART} from '../../../utils/constants';
+import {EXTRA_INFO, GROUP_ID} from '../../../utils/FieldsConstants';
+import {SSCTranslationContext} from '../../StartUp';
 
-import { generateYearsFilters, getCategoryForCountry } from '../../../utils/Utils';
+import {generateYearsFilters, getCategoryForCountry} from '../../../utils/Utils';
 
 class HorizontalFilters extends Component {
 // TODO move to utility file

@@ -1,12 +1,5 @@
 package org.digijava.module.search.action;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpSession;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -19,6 +12,12 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
 import org.digijava.module.search.form.SearchForm;
 import org.digijava.module.search.util.SearchUtil;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class Search extends Action {
     public ActionForward execute(ActionMapping mapping, ActionForm form,

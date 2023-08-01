@@ -1,13 +1,13 @@
 package org.dgfoundation.amp.nireports.output;
 
-import java.util.SortedSet;
-import java.util.SortedMap;
-
 import org.dgfoundation.amp.algo.timing.RunNode;
 import org.dgfoundation.amp.newreports.CalendarConverter;
 import org.dgfoundation.amp.newreports.ReportWarning;
 import org.dgfoundation.amp.nireports.NiHeaderInfo;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
+
+import java.util.SortedMap;
+import java.util.SortedSet;
 
 /**
  * a container for the artefacts of running a report in {@link NiReportsEngine}

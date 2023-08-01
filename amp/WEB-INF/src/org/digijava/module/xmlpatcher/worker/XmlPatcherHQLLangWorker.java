@@ -5,9 +5,6 @@
  */
 package org.digijava.module.xmlpatcher.worker;
 
-import java.sql.SQLException;
-import java.util.List;
-
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatchLog;
 import org.digijava.module.xmlpatcher.exception.XmlPatcherLangWorkerException;
@@ -15,8 +12,10 @@ import org.digijava.module.xmlpatcher.jaxb.Lang;
 import org.digijava.module.xmlpatcher.jaxb.Script;
 import org.digijava.module.xmlpatcher.util.XmlPatcherUtil;
 import org.hibernate.HibernateException;
-import org.hibernate.query.Query;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
+
+import java.util.List;
 
 /**
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org

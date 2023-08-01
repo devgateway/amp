@@ -1,14 +1,13 @@
-import React, { Component } from 'react';
-import { applyMiddleware, compose, createStore } from 'redux';
+import React, {Component} from 'react';
+import {applyMiddleware, compose, createStore} from 'redux';
 import thunk from 'redux-thunk';
-import { Provider } from 'react-redux';
-import { Container, Col, Row } from 'react-bootstrap';
+import {Provider} from 'react-redux';
+import {Col, Container, Row} from 'react-bootstrap';
 import rootReducer from './reducers/rootReducer';
 import defaultTrnPack from './config/initialTranslations.json';
 import Startup from './components/Startup';
 import NDDAdminNavigator from './components/NDDAdminNavigator';
 // eslint-disable-next-line no-unused-vars
-import style from './components/css/style.css';
 
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 

@@ -3,18 +3,6 @@
  */
 package org.digijava.module.aim.startup;
 
-import java.lang.management.ManagementFactory;
-import java.util.Collection;
-import java.util.Hashtable;
-import java.util.Properties;
-import java.util.Set;
-
-import javax.management.MBeanServer;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.servlet.http.HttpServlet;
-
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.management.ManagementService;
 import org.apache.jackrabbit.util.TransientFileFactory;
@@ -46,6 +34,17 @@ import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
 import org.hibernate.Session;
+
+import javax.management.MBeanServer;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.http.HttpServlet;
+import java.lang.management.ManagementFactory;
+import java.util.Collection;
+import java.util.Hashtable;
+import java.util.Properties;
+import java.util.Set;
 
 public class AMPStartupListener extends HttpServlet implements
         ServletContextListener {

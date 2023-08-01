@@ -1,11 +1,5 @@
 package org.digijava.module.aim.dbentity ;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.CommonFieldsConstants;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -16,6 +10,12 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableId;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.aim.util.SerializableComparator;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Set;
 
 
 public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Versionable, Cloneable {

@@ -3,8 +3,6 @@
  */
 package org.dgfoundation.amp.menu;
 
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -14,6 +12,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.hibernate.query.Query;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 /**
  * Menu utility methods 

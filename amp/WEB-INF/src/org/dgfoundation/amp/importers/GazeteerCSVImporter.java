@@ -1,17 +1,16 @@
 package org.dgfoundation.amp.importers;
 
-import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Map;
-import java.util.Properties;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampapi.postgis.entity.AmpLocator;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.hibernate.HibernateException;
 import org.hibernate.query.Query;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Map;
+import java.util.Properties;
 
 
 /**

@@ -1,14 +1,10 @@
 package org.digijava.module.translation.util;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
 import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyResolver;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.util.TrnUtil;
+
+import java.util.*;
 
 /**
  * Buffers changes to list.

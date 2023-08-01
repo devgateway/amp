@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import { bindActionCreators } from 'redux';
+import React, {Component} from 'react';
+import {bindActionCreators} from 'redux';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 
 class FundingTypeSelector extends Component {
   constructor(props) {

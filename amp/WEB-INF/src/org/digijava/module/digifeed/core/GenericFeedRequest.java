@@ -6,6 +6,9 @@
  */
 package org.digijava.module.digifeed.core;
 
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.digifeed.exception.UnsupportedParamTypeException;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.ParseException;
@@ -13,10 +16,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
-
-import org.apache.log4j.Logger;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.digifeed.exception.UnsupportedParamTypeException;
 
 /**
  * 

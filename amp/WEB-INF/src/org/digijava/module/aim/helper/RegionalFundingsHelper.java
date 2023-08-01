@@ -5,18 +5,12 @@
 
 package org.digijava.module.aim.helper;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+
+import java.util.*;
 
 /**
  * Helper class for RegionalFundings manipulation

@@ -1,12 +1,5 @@
 package org.digijava.module.aim.action;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -17,18 +10,15 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.ViewActivityHistoryForm;
-import org.digijava.module.aim.helper.ActivityHistory;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.FormatHelper;
-import org.digijava.module.aim.helper.SummaryChange;
-import org.digijava.module.aim.helper.SummaryChangeHtmlRenderer;
-import org.digijava.module.aim.helper.SummaryChangesService;
-import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.helper.*;
 import org.digijava.module.aim.util.ActivityUtil;
-import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
-import org.hibernate.query.Query;
 import org.hibernate.Session;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Collection;
+import java.util.LinkedHashMap;
 
 public class ViewActivityHistory extends DispatchAction {
 

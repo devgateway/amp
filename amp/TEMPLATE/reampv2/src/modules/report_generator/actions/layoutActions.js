@@ -1,5 +1,5 @@
-import { URL_LAYOUT } from '../utils/constants';
-import { fetchApiData } from '../../../utils/loadTranslations';
+import {URL_LAYOUT} from '../utils/constants';
+import {fetchApiData} from '../../../utils/loadTranslations';
 
 export const FETCH_LAYOUT_PENDING = 'FETCH_LAYOUT_PENDING';
 export const FETCH_LAYOUT_SUCCESS = 'FETCH_LAYOUT_SUCCESS';

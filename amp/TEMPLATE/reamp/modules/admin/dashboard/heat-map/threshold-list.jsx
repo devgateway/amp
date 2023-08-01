@@ -3,7 +3,7 @@ import React from "react";
 import ThresholdState from "./threshold-state.jsx";
 import Threshold from "./threshold.jsx";
 import {Alert, Button, Glyphicon} from "react-bootstrap";
-import {postJson, delay} from "amp/tools";
+import {delay, postJson} from "amp/tools";
 import {HEAT_MAP_ADMIN} from "amp/config/endpoints";
 
 const ALERT_TYPE = {

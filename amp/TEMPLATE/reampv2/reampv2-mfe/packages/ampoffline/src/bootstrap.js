@@ -2,26 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import boilerplate from './amp-boilerplate';
 
 const Root = () => (
     <React.StrictMode>
         <App />
     </React.StrictMode>
 );
-
-function getParameterByName(name, url = window.location.href) {
-    name = name.replace(/[[\]]/g, '\\$&');
-    const regex = new RegExp(`[?&]${name}(=([^&#]*)|&|#|$)`);
-    const results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, ' '));
-}
-
-if (!getParameterByName('embedded')) {
-    new boilerplate.layout({});
-}
 
 export const mount = (el) => {
     if (el) {

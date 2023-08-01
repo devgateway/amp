@@ -1,0 +1,41 @@
+{
+  "name": "container",
+  "version": "1.0.0",
+  "private": true,
+  "proxy": "http://localhost:8080",
+  "scripts": {
+    "start": "node scripts/start.js",
+    "build": "PUBLIC_URL=/ node scripts/build.js",
+    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "dependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/user-event": "^14.4.3",
+    "@types/jest": "^29.5.3",
+    "@types/node": "^20.4.5",
+    "@types/react": "^18.2.17",
+    "@types/react-dom": "^18.2.7",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.14.2",
+    "react-scripts": "^5.0.1",
+    "web-vitals": "^3.4.0"
+  },
+  "devDependencies": {
+    "eslint-config-react": "^1.1.7"
+  }
+}

@@ -1,11 +1,11 @@
-import React, {Component} from 'react';
-import {ResponsiveBar} from '@nivo/bar';
+import React, { Component } from 'react';
+import { ResponsiveBar } from '@nivo/bar';
 import PropTypes from 'prop-types';
-import {NDDTranslationContext} from '../StartUp';
+import { NDDTranslationContext } from '../StartUp';
 import ToolTip from '../tooltips/ToolTip';
-import {formatKMB, formatNumberWithSettings} from '../../utils/Utils';
+import { formatKMB, formatNumberWithSettings } from '../../utils/Utils';
 import SimpleLegend from '../../../../utils/components/SimpleLegend';
-import {CURRENCY_CODE} from '../../utils/constants';
+import { CURRENCY_CODE } from '../../utils/constants';
 
 const styles = {
   fontFamily: 'sans-serif',

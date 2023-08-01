@@ -1,6 +1,6 @@
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {APDocument} from 'amp-ui';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { APDocument } from 'amp-ui';
 import * as ResourceAction from '../actions/ResourceAction';
 import RepositoryManager from '../utils/RepositoryManager';
 

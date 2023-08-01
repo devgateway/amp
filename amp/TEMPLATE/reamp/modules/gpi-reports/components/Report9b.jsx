@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import Utils from '../common/Utils';
 import * as reportsActions from '../actions/ReportsActions';
 import * as commonListsActions from '../actions/CommonListsActions';
@@ -8,7 +8,6 @@ import * as Constants from '../common/Constants';
 import HeaderToolTip from './HeaderToolTip';
 import Loading from './Loading';
 import YearsFilterSection from './YearsFilterSection';
-
 class Report9b extends Component {
     constructor( props, context ) {
         super( props, context );

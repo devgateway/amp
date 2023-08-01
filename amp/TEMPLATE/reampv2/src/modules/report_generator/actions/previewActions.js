@@ -1,5 +1,5 @@
-import {URL_PREVIEW} from '../utils/constants';
-import {fetchApiData} from '../../../utils/loadTranslations';
+import { URL_PREVIEW } from '../utils/constants';
+import { fetchApiData } from '../../../utils/loadTranslations';
 
 export const FETCH_PREVIEW_PENDING = 'FETCH_PREVIEW_PENDING';
 export const FETCH_PREVIEW_SUCCESS = 'FETCH_PREVIEW_SUCCESS';

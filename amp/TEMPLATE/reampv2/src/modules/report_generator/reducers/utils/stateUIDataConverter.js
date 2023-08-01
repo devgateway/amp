@@ -1,4 +1,4 @@
-import {revertTotalGrouping} from '../../utils/Utils';
+import { revertTotalGrouping } from '../../utils/Utils';
 
 /**
  * IMPORTANT: KEEP THIS FUNCTIONS PURE BECAUSE THEY WILL BE USED INSIDE stateUIReducer.js!!!

@@ -1,5 +1,6 @@
 import React from "react";
-import {Dropdown, Glyphicon, MenuItem, ProgressBar} from "react-bootstrap";
+import {ProgressBar, Glyphicon, Dropdown, MenuItem} from "react-bootstrap";
+import * as AMP from "amp/architecture";
 
 //Describes an XHR request status
 export const RequestStatus = {

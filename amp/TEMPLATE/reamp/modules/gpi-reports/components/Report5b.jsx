@@ -1,15 +1,15 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import Utils from '../common/Utils';
 import * as reportsActions from '../actions/ReportsActions';
 import * as commonListsActions from '../actions/CommonListsActions';
+import * as startUp from '../actions/StartUpAction.jsx';
 import * as Constants from '../common/Constants';
-import {IMG_VALUE, INDICATOR_5B, INDICATOR_5B_CODE} from '../common/Constants';
 import Loading from './Loading';
+import { IMG_VALUE, INDICATOR_5B, INDICATOR_5B_CODE, GREG_BASE_CALENDAR} from '../common/Constants';
 import HeaderToolTip from './HeaderToolTip';
 import YearsFilterSection from './YearsFilterSection';
-
 class Report5b extends Component {
     constructor( props, context ) {
         super( props, context );

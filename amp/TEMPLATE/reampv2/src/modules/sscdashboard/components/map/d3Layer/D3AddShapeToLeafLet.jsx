@@ -1,4 +1,4 @@
-import {MapLayer} from 'react-leaflet';
+import { MapLayer } from 'react-leaflet';
 import * as L from 'leaflet';
 import * as d3 from 'd3';
 

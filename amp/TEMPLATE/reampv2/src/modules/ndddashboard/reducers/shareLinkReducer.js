@@ -1,4 +1,8 @@
-import {FETCH_SHARE_LINK_ERROR, FETCH_SHARE_LINK_PENDING, FETCH_SHARE_LINK_SUCCESS} from '../actions/shareLinkActions';
+import {
+  FETCH_SHARE_LINK_ERROR,
+  FETCH_SHARE_LINK_PENDING,
+  FETCH_SHARE_LINK_SUCCESS
+} from '../actions/shareLinkActions';
 
 const initialState = {
   shareLinkLoaded: false,

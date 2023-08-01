@@ -1,7 +1,6 @@
-import {deleteJson, fetchJson, postJson, putJson} from 'amp/tools';
-import {loadTranslations} from 'amp/modules/translate';
+import { postJson, delay, fetchJson, deleteJson, putJson } from 'amp/tools';
+import { loadTranslations } from 'amp/modules/translate';
 import * as Constants from '../common/Constants';
-
 class PerformanceRuleApi {
     static getPerformanceRuleList( data ) {
         const url = '/rest/performance/admin/?page=' + data.paging.currentPageNumber + '&size=' + data.paging.recordsPerPage;

@@ -1,10 +1,8 @@
 import {fetchApiData} from "../../../utils/apiOperations";
 import {
     API_REPORTS_URL,
-    FIELD_ACTIVITY_DATE,
+    FIELD_ACTIVITY_DATE, FIELD_LOCATION, FIELD_PROJECT_DESCRIPTION,
     FIELD_AMP_ID,
-    FIELD_LOCATION,
-    FIELD_PROJECT_DESCRIPTION,
     FIELD_PROJECT_TITLE
 } from "../utils/geocoder-constants";
 

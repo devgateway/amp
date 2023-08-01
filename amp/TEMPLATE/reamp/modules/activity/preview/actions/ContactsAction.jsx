@@ -1,6 +1,7 @@
 import {ActivityConstants, FieldPathConstants, FieldsManager} from 'amp-ui';
 import ContactsApi from '../api/ContactApi.jsx';
 import Logger from '../utils/LoggerManager';
+import HydratorHelper from '../utils/HydratorHelper.jsx';
 
 export const CONTACTS_LOAD_LOADING = 'CONTACTS_LOAD_LOADING';
 export const CONTACTS_LOAD_LOADED = 'CONTACTS_LOAD_LOADED';

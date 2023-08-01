@@ -1,7 +1,20 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import {OverlayTrigger, Tooltip} from 'react-bootstrap';
+import React, {
+    Component,
+    PropTypes
+} from 'react';
+import {
+    connect
+} from 'react-redux';
+import {
+    bindActionCreators
+} from 'redux';
+import {
+    OverlayTrigger
+} from 'react-bootstrap';
+import {
+    Tooltip
+} from 'react-bootstrap';
+import * as startUp from '../actions/StartUpAction';
 import * as dataFreezeActions from '../actions/DataFreezeActions';
 import * as commonListsActions from '../actions/CommonListsActions';
 import DataFreezeEventRow from '../components/DataFreezeEventRow';

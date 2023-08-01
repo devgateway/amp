@@ -1,22 +1,22 @@
-import React, {Component} from 'react';
-import {Container} from 'react-bootstrap';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import { Container } from 'react-bootstrap';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import {NDDTranslationContext} from './StartUp';
+import { NDDTranslationContext } from './StartUp';
 import MainDashboardContainer from './MainDashboardContainer';
 import HeaderContainer from './HeaderContainer';
-import {callReport, callTopReport, clearTopReport} from '../actions/callReports';
-import {CURRENCY_CODE, DIRECT, FUNDING_TYPE} from '../utils/constants';
+import { callReport, callTopReport, clearTopReport } from '../actions/callReports';
+import { CURRENCY_CODE, DIRECT, FUNDING_TYPE } from '../utils/constants';
 import loadDashboardSettings from '../actions/loadDashboardSettings';
-import {getMappings} from '../actions/getMappings';
-import {DST_PROGRAM, SRC_PROGRAM} from '../../admin/ndd/constants/Constants';
-import {getSharedData} from '../actions/getSharedData';
+import { getMappings } from '../actions/getMappings';
+import { DST_PROGRAM, SRC_PROGRAM } from '../../admin/ndd/constants/Constants';
+import { getSharedData } from '../actions/getSharedData';
 import PrintDummy from '../../sscdashboard/utils/PrintDummy';
-import {printChart} from '../../sscdashboard/utils/PrintUtils';
+import { printChart } from '../../sscdashboard/utils/PrintUtils';
 import './print.css';
-import {removeFilter} from '../utils/Utils';
-import {SRC_DIRECT} from './charts/FundingByYearChart';
+import { removeFilter } from '../utils/Utils';
+import { SRC_DIRECT } from './charts/FundingByYearChart';
 
 const queryString = require('query-string');
 

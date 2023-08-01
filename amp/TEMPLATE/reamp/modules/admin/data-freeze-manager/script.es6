@@ -1,12 +1,12 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import {Provider} from 'react-redux';
-import {hashHistory, Route, Router} from 'react-router';
-import {syncHistoryWithStore} from 'react-router-redux';
+import { render } from 'react-dom';
+import { Provider } from 'react-redux';
+import { Router, hashHistory, Route, IndexRoute } from 'react-router';
+import { syncHistoryWithStore } from 'react-router-redux';
+import ReactDOM from "react-dom";
 import configureStore from './store/configureStore';
 import App from "./containers/App.jsx";
-import {gpiStartUp} from './actions/StartUpAction';
-
+import { gpiStartUp } from './actions/StartUpAction';
 export const store = configureStore();
 const history = syncHistoryWithStore(hashHistory, store);
 

@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import {Typeahead} from 'react-bootstrap-typeahead';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { Typeahead } from 'react-bootstrap-typeahead';
 import PropTypes from 'prop-types';
-import {NDDContext} from './Startup';
+import { NDDContext } from './Startup';
 import './css/Typeahead.css';
 import './css/style.css';
 import RequiredMark from './common/RequiredMark';

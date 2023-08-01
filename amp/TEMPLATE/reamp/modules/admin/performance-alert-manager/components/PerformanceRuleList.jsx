@@ -1,15 +1,22 @@
-import React, {Component} from 'react';
+import React, {
+    Component,
+    PropTypes
+} from 'react';
 import ReactDOM from 'react-dom';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import * as performanceRuleActions from '../actions/PerformanceRuleActions';
+import {
+    connect
+} from 'react-redux';
+import {
+    bindActionCreators
+} from 'redux';
+require('../styles/less/main.less');
+import * as startUp from '../actions/StartUpAction';
+import * as performanceRuleActions from '../actions/PerformanceRuleActions';;
+import * as Constants from '../common/Constants';
 import ToolBar from './ToolBar';
 import PagingSection from './PagingSection';
 import PerformanceRuleForm from './PerformanceRuleForm';
 import PerformanceRuleRow from './PerformanceRuleRow'
-
-require('../styles/less/main.less');
-;
 
 class PerformanceRuleList extends Component {
     constructor(props, context) {

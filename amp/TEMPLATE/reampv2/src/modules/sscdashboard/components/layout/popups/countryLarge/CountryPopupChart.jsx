@@ -1,10 +1,13 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import '../popups.css';
-import {ResponsivePie} from '@nivo/pie';
-import {SSCTranslationContext} from '../../../StartUp';
-import {COLOR_MAP, OTHERS_CODE, SECTORS_LIMIT_CHART, SECTORS_OTHERS_ID_CHART} from '../../../../utils/constants';
-import {toCamelCase} from '../../../../utils/Utils';
+import { ResponsivePie } from '@nivo/pie';
+import { SSCTranslationContext } from '../../../StartUp';
+import {
+  OTHERS_CODE, SECTORS_LIMIT_CHART,
+  SECTORS_OTHERS_ID_CHART, COLOR_MAP
+} from '../../../../utils/constants';
+import { toCamelCase } from '../../../../utils/Utils';
 import Tooltip from '../../../utils/GenericTooltip';
 import SscCustomLegend from '../../../../utils/customLegend/SscCustomLegend';
 

@@ -1,13 +1,16 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {Form, Grid, GridColumn} from 'semantic-ui-react';
-import {OverlayTrigger, Tooltip} from 'react-bootstrap';
-import {ReportGeneratorContext} from '../StartUp';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import {
+  Form,
+  Grid, GridColumn
+} from 'semantic-ui-react';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { ReportGeneratorContext } from '../StartUp';
 import ErrorMessage from '../ErrorMessage';
 import InfoIcon from '../../static/images/icon-information.svg';
-import {translate} from '../../utils/Utils';
+import { translate } from '../../utils/Utils';
 
 /**
  * This component will check (almost) all values selected by the user and fetch a new report preview if necessary.

@@ -1,6 +1,6 @@
-import React, {Component, lazy, Suspense} from 'react';
-import {Route, Router} from 'react-router-dom';
-import {createHashHistory} from 'history';
+import React, { Suspense, lazy, Component } from 'react';
+import { Router, Route } from 'react-router-dom';
+import { createHashHistory } from 'history';
 import './App.css';
 
 const SSCDashboardApp = lazy(() => import('./modules/sscdashboard'));

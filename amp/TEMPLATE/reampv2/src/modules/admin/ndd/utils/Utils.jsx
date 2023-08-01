@@ -1,4 +1,6 @@
-import {ALL_PROGRAMS, CHILDREN, DST_PROGRAM, SRC_PROGRAM, TYPE_DST, TYPE_SRC} from '../constants/Constants';
+import {
+  CHILDREN, DST_PROGRAM, SRC_PROGRAM, ALL_PROGRAMS, TYPE_SRC, TYPE_DST
+} from '../constants/Constants';
 
 /**
  * id can be lvl1, lvl2 or lvl3.

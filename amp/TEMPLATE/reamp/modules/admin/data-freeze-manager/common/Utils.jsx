@@ -1,6 +1,5 @@
 import moment from 'moment';
 import * as Constants from '../common/Constants';
-
 class Utils {
     static extractErrors( errors, obj ) {
         var errorMessages = [];

@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {Route} from 'react-router-dom';
+import React, { Component } from 'react';
+import { Route } from 'react-router-dom';
 import '../../../App.css';
 import SssDashboardHome from '../SscDashboardHome';
 import PrinterFriendly from '../utils/PrinterFriendly';

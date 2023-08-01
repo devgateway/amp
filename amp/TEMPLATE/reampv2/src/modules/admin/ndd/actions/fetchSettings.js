@@ -1,5 +1,5 @@
-import {fetchSettingsError, fetchSettingsPending, fetchSettingsSuccess} from './settingsAction';
-import {SETTINGS_EP} from '../constants/Constants';
+import { fetchSettingsSuccess, fetchSettingsPending, fetchSettingsError } from './settingsAction';
+import { SETTINGS_EP } from '../constants/Constants';
 
 function fetchSettings() {
   return dispatch => {

@@ -1,6 +1,5 @@
-import {DateConstants, DateUtilsHelper} from 'amp-ui';
+import { DateUtilsHelper, DateConstants} from 'amp-ui';
 import Moment from 'moment';
-
 let gSDateFormat;
 export default class DateUtils {
     static registerSettings({lang,pGSDateFormat}){

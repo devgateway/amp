@@ -1,9 +1,12 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import React, { Component, PropTypes } from 'react';
+import ReactDOM from 'react-dom';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as startUp from '../actions/StartUpAction';
 import * as Constants from '../common/Constants';
-import SupportingEvidencePopup from './SupportingEvidencePopup'
-
+import SupportingEvidencePopup from  './SupportingEvidencePopup'
+import { Overlay  } from 'react-bootstrap';
+import { Tooltip   } from 'react-bootstrap';
 class Report1Output1Row extends Component {
     constructor( props, context ) {
         super( props, context );

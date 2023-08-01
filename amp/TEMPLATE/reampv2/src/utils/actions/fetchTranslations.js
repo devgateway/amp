@@ -1,5 +1,6 @@
-import {fetchTranslationsError, fetchTranslationsPending, fetchTranslationsSuccess} from './translationsActions';
-import {loadTranslations} from '../loadTranslations';
+import { fetchTranslationsSuccess, fetchTranslationsPending, fetchTranslationsError }
+  from './translationsActions';
+import { loadTranslations } from '../loadTranslations';
 
 function fetchTranslations(translations) {
   return dispatch => {

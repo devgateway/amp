@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {OverlayTrigger, Tooltip} from 'react-bootstrap';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import InfoIcon from '../../static/images/icon-information.svg';
 
 export default class OptionsList extends Component {

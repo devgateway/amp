@@ -1,4 +1,6 @@
-import {IS_MEASURELESS_REPORT, PROFILE_REPORT, PROFILE_TAB, TRN_PREFIX_REPORT, TRN_PREFIX_TAB} from './constants';
+import {
+  IS_MEASURELESS_REPORT, PROFILE_REPORT, PROFILE_TAB, TRN_PREFIX_REPORT, TRN_PREFIX_TAB
+} from './constants';
 
 export function validateSaveModal(title, columns, reportDetails, hierarchies, measures) {
   if (title === null || title === undefined || title.toString().trim().length === 0) {

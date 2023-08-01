@@ -1,9 +1,8 @@
 import * as AMP from "amp/architecture";
 import React from "react";
-import {OFFLINE_INSTALLERS} from "amp/config/endpoints";
-import {loadTranslations} from "amp/modules/translate";
+import { OFFLINE_INSTALLERS } from "amp/config/endpoints";
+import { loadTranslations } from "amp/modules/translate";
 import DownloadLinks from "./components/DownloadLinks.jsx";
-
 require('./style.less');
 
 var AMPOfflineDownload = React.createClass( {

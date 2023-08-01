@@ -1,11 +1,11 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
-import {NDDContext} from './Startup';
+import { NDDContext } from './Startup';
 import './css/style.css';
 import ProgramSelectGroup from './ProgramSelectGroup';
-import {TYPE_DST, TYPE_SRC} from '../constants/Constants';
+import { TYPE_DST, TYPE_SRC } from '../constants/Constants';
 
 class ProgramSelectGroupRow extends Component {
   render() {

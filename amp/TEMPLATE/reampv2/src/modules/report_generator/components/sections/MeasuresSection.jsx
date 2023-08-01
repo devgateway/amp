@@ -1,16 +1,22 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {Grid, GridColumn, Input} from 'semantic-ui-react';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {IS_MEASURELESS_REPORT, PROFILE_TAB} from '../../utils/constants';
-import {resetMeasuresSelected, updateMeasuresSelected, updateMeasuresSorting,} from '../../actions/stateUIActions';
-import {ReportGeneratorContext} from '../StartUp';
+import {
+  Grid, GridColumn, Input
+} from 'semantic-ui-react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { IS_MEASURELESS_REPORT, PROFILE_TAB } from '../../utils/constants';
+import {
+  updateMeasuresSelected,
+  updateMeasuresSorting,
+  resetMeasuresSelected,
+} from '../../actions/stateUIActions';
+import { ReportGeneratorContext } from '../StartUp';
 import OptionsList from './OptionsList';
 import ColumnsSelector from './ColumnsSelector';
 import ErrorMessage from '../ErrorMessage';
 import ColumnSorter from './ColumnsSorter';
-import {translate} from '../../utils/Utils';
+import { translate } from '../../utils/Utils';
 
 class MeasuresSection extends Component {
   constructor() {

@@ -1,14 +1,14 @@
-import React, {Component} from 'react';
-import {Tab, Tabs} from 'react-bootstrap';
-import {bindActionCreators} from 'redux';
+import React, { Component } from 'react';
+import { Tab, Tabs } from 'react-bootstrap';
+import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
-import {SSCTranslationContext} from '../StartUp';
+import { connect } from 'react-redux';
+import { SSCTranslationContext } from '../StartUp';
 import './dataDownloadContainer.css';
 import MultiSelectionDropDown from '../layout/filters/MultiSelectionDropDown';
-import {generateYearsFilters} from '../../utils/Utils';
-import {dataDownloaded, downloadData} from '../../actions/downloadData';
-import {exportToXLS, populateFilters} from '../../utils/exportUtils';
+import { generateYearsFilters } from '../../utils/Utils';
+import { downloadData, dataDownloaded } from '../../actions/downloadData';
+import { exportToXLS, populateFilters } from '../../utils/exportUtils';
 
 class DataDownloadContainer extends Component {
   constructor(props) {

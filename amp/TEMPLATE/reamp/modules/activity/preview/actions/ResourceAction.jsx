@@ -1,7 +1,8 @@
 import ResourceApi from '../api/ResourceApi.jsx';
-import {ActivityConstants, FieldsManager, ResourceConstants} from 'amp-ui';
+import {FieldsManager} from 'amp-ui';
 import LoggerManager from '../utils/LoggerManager';
 import processPossibleValues from '../common/PossibleValuesHelper.jsx';
+import { ResourceConstants, ActivityConstants } from 'amp-ui';
 
 export const RESOURCES_LOAD_LOADING = 'RESOURCES_LOAD_LOADING';
 export const RESOURCES_LOAD_LOADED = 'RESOURCES_LOAD_LOADED';

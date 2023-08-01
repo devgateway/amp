@@ -1,17 +1,19 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import * as reportsActions from '../actions/ReportsActions';
 import * as commonListsActions from '../actions/CommonListsActions';
+import * as startUp from '../actions/StartUpAction';
 import * as Constants from '../common/Constants';
 import Utils from '../common/Utils';
 import PagingSection from './PagingSection';
 import YearsFilterSection from './YearsFilterSection';
 import RemarksPopup from './RemarksPopup';
 import ToolBar from './ToolBar';
+import { Modal } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import HeaderToolTip from './HeaderToolTip';
 import Loading from './Loading';
-
 class Report5a extends Component {
     constructor( props, context ) {
         super( props, context );

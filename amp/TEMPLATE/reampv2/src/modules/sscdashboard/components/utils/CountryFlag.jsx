@@ -1,8 +1,8 @@
-import {useImage} from 'react-image';
-import React, {Suspense} from 'react';
+import { useImage } from 'react-image';
+import React, { Suspense } from 'react';
 import PropTypes from 'prop-types';
 import * as Utils from '../../utils/Utils';
-import {FALLBACK_FLAG} from '../../utils/constants';
+import { FALLBACK_FLAG } from '../../utils/constants';
 
 const Flag = ({ countryName }) => {
   const { src } = useImage({

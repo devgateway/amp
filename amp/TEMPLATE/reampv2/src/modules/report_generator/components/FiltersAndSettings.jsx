@@ -1,15 +1,18 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import {Grid, GridColumn, GridRow, Segment} from 'semantic-ui-react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import {
+  GridRow, Segment, GridColumn, Grid
+} from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import Filters from './Filters';
 import Settings from './Settings';
-import {translate} from '../utils/Utils';
-import {ReportGeneratorContext} from './StartUp';
-import {updateAppliedFilters} from '../actions/stateUIActions';
-import {toggleIcon} from '../utils/appliedFiltersExtenalCode';
+import { translate } from '../utils/Utils';
+import { ReportGeneratorContext } from './StartUp';
+import { updateAppliedFilters } from '../actions/stateUIActions';
+import { toggleIcon } from '../utils/appliedFiltersExtenalCode';
 // eslint-disable-next-line no-unused-vars
+import tree from './tree.css';
 
 let filter = null; // This is the widget.
 

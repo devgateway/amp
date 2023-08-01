@@ -1,12 +1,12 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {nanoid} from 'nanoid';
+import { nanoid } from 'nanoid';
 import CountryPopupOverlayTitle from './CountryPopupOverlayTitle';
 import CountryPopupExport from './CountryPopupExport';
 import CountryPopup from './CountryPopup';
-import {calculateColumnCount} from '../../../../utils/Utils';
-import {BOOTSTRAP_COLUMNS_COUNT, COUNTRY_COLUMN} from '../../../../utils/constants';
-import {SSCTranslationContext} from '../../../StartUp';
+import { calculateColumnCount } from '../../../../utils/Utils';
+import { BOOTSTRAP_COLUMNS_COUNT, COUNTRY_COLUMN } from '../../../../utils/constants';
+import { SSCTranslationContext } from '../../../StartUp';
 
 export default class CountryPopupContainer extends Component {
   getLeft(length, r) {

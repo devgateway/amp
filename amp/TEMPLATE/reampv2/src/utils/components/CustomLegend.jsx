@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import EllipsisText from 'react-ellipsis-text';
 import PropTypes from 'prop-types';
-import {formatOnlyNumber} from '../../modules/ndddashboard/utils/Utils';
+import { formatOnlyNumber } from '../../modules/ndddashboard/utils/Utils';
 
 export default class CustomLegend extends Component {
   render() {

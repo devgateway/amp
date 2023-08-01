@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import DownloadLinks from './DownloadLinks';
 import monitor from '../images/monitor.png';
 import './css/style.css';
-import {TranslationContext} from './Startup';
+import { TranslationContext } from './Startup';
 
 export default class AMPOfflineDownload extends Component {
   render() {

@@ -1,11 +1,12 @@
-import React, {Component} from 'react';
-import {Col} from 'react-bootstrap';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import React, { Component } from 'react';
+import { Col } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
-import {TRN_PREFIX} from '../utils/constants';
+import { TRN_PREFIX } from '../utils/constants';
 // eslint-disable-next-line no-unused-vars
-import {NDDTranslationContext} from './StartUp';
+import styles from '../../../../../ampTemplate/node_modules/amp-settings/dist/amp-settings.css';
+import { NDDTranslationContext } from './StartUp';
 
 const SettingsWidget = require('../../../../../ampTemplate/node_modules/amp-settings/dist/amp-settings');
 

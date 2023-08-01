@@ -1,4 +1,8 @@
-import {FETCH_LANGUAGES_ERROR, FETCH_LANGUAGES_PENDING, FETCH_LANGUAGES_SUCCESS} from '../actions/languagesActions';
+import {
+  FETCH_LANGUAGES_ERROR,
+  FETCH_LANGUAGES_PENDING,
+  FETCH_LANGUAGES_SUCCESS
+} from '../actions/languagesActions';
 
 const initialState = {
   pending: false,

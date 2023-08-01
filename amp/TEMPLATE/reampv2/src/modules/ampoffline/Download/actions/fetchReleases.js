@@ -1,5 +1,5 @@
-import {fetchReleasesError, fetchReleasesPending, fetchReleasesSuccess} from './startupAction';
-import {AMP_OFFLINE_INSTALLERS} from '../constants/Constants';
+import { fetchReleasesSuccess, fetchReleasesPending, fetchReleasesError } from './startupAction';
+import { AMP_OFFLINE_INSTALLERS } from '../constants/Constants';
 
 function fetchReleases() {
   return dispatch => {

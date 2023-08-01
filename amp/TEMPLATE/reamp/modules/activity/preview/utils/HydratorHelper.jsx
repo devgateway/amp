@@ -1,4 +1,4 @@
-import {ActivityConstants} from "amp-ui";
+import { ActivityConstants } from "amp-ui";
 
 export default class HydratorHelper {
     static fetchRequestDataForHydration(object, fieldsManager, parent) {

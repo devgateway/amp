@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import * as reportsActions from '../actions/ReportsActions';
 import * as commonListsActions from '../actions/CommonListsActions';
 import * as Constants from '../common/Constants';
@@ -12,7 +12,6 @@ import RemarksPopup from './RemarksPopup';
 import ToolBar from './ToolBar';
 import HeaderToolTip from './HeaderToolTip';
 import Loading from './Loading';
-
 class Report1Output1 extends Component {
     constructor( props, context ) {
         super( props, context );

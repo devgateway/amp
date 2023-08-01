@@ -1,4 +1,4 @@
-import {FETCH_RELEASES_ERROR, FETCH_RELEASES_PENDING, FETCH_RELEASES_SUCCESS} from '../actions/startupAction';
+import { FETCH_RELEASES_PENDING, FETCH_RELEASES_SUCCESS, FETCH_RELEASES_ERROR } from '../actions/startupAction';
 
 const initialState = {
   pending: false,

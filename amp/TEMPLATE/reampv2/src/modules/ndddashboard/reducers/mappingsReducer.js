@@ -1,4 +1,4 @@
-import {FETCH_MAPPINGS_ERROR, FETCH_MAPPINGS_PENDING, FETCH_MAPPINGS_SUCCESS} from '../actions/mappingsActions';
+import { FETCH_MAPPINGS_ERROR, FETCH_MAPPINGS_PENDING, FETCH_MAPPINGS_SUCCESS } from '../actions/mappingsActions';
 
 const initialState = {
   mappingsLoaded: false,

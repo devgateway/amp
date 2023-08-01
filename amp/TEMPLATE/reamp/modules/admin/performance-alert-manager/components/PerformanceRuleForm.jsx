@@ -1,12 +1,18 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import React, {
+    Component,
+    PropTypes
+} from 'react';
+import {
+    connect
+} from 'react-redux';
+import {
+    bindActionCreators
+} from 'redux';
+require('../styles/less/main.less');
+import * as startUp from '../actions/StartUpAction';
 import * as performanceRuleActions from '../actions/PerformanceRuleActions';
 import * as Constants from '../common/Constants';
 import Utils from '../common/Utils';
-
-require('../styles/less/main.less');
-
 class PerformanceRuleForm extends Component {
     constructor(props, context) {
         super(props, context);

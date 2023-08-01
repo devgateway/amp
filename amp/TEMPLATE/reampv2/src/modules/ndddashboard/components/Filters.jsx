@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
-import {Col} from 'react-bootstrap';
+import React, { Component } from 'react';
+import { Col } from 'react-bootstrap';
 import PropTypes from 'prop-types';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import FilterOutputItem from './FilterOutputItem';
-import {TRN_PREFIX} from '../utils/constants';
+import { TRN_PREFIX } from '../utils/constants';
 
 const Filter = require('../../../../../ampTemplate/node_modules/amp-filter/dist/amp-filter');
 

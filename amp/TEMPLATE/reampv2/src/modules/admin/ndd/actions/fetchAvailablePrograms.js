@@ -1,4 +1,4 @@
-import {fetchProgramsError, fetchProgramsPending, fetchProgramsSuccess} from './startupAction';
+import { fetchProgramsSuccess, fetchProgramsPending, fetchProgramsError } from './startupAction';
 
 function fetchPrograms(url) {
   return dispatch => {

@@ -1,14 +1,17 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 // eslint-disable-next-line no-unused-vars
-import {ReportGeneratorContext} from './StartUp';
-import {REPORTS, URL_SETTINGS_REPORTS} from '../utils/constants';
-import {fetchGlobalSettings} from '../actions/settingsActions';
-import {extractSettings} from '../reducers/utils/settingsDataConverter';
-import {updateAppliedSettings} from '../actions/stateUIActions';
-import {translate} from '../utils/Utils';
+import styles from '../../../../../ampTemplate/node_modules/amp-settings/dist/amp-settings.css';
+import { ReportGeneratorContext } from './StartUp';
+import {
+  URL_SETTINGS_REPORTS, REPORTS
+} from '../utils/constants';
+import { fetchGlobalSettings } from '../actions/settingsActions';
+import { extractSettings } from '../reducers/utils/settingsDataConverter';
+import { updateAppliedSettings } from '../actions/stateUIActions';
+import { translate } from '../utils/Utils';
 
 const SettingsWidget = require('../../../../../ampTemplate/node_modules/amp-settings/dist/amp-settings');
 

@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {Menu, Tab} from 'semantic-ui-react';
+import { Tab, Menu } from 'semantic-ui-react';
 
 export default class MultiLingualInputText extends Component {
   render() {

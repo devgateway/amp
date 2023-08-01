@@ -1,5 +1,5 @@
-import {CALENDAR_API, GLOBAL_SETTINGS_API, SETTINGS_API} from '../common/ReampConstants';
-import {fetchJson} from 'amp/tools/index';
+import { SETTINGS_API, GLOBAL_SETTINGS_API, CALENDAR_API } from '../common/ReampConstants';
+import { fetchJson, postJson } from 'amp/tools/index';
 
 export default class StartUpApi {
     static fetchSettings() {

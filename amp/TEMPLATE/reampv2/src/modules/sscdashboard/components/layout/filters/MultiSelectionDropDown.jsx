@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactTooltip from 'react-tooltip';
 import VisibilitySensor from 'react-visibility-sensor';
 import './filters.css';
-import {SSCTranslationContext} from '../../StartUp';
-import {calculateUpdatedValuesForDropDowns, compareArrayNumber} from '../../../utils/Utils';
+import { SSCTranslationContext } from '../../StartUp';
+import { compareArrayNumber, calculateUpdatedValuesForDropDowns } from '../../../utils/Utils';
 
 class MultiSelectionDropDown extends Component {
   constructor(props) {

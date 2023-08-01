@@ -1,4 +1,4 @@
-import {PRODUCTION} from '../common/ReampConstants.jsx';
+import { PRODUCTION } from '../common/ReampConstants.jsx';
 import * as log from 'loglevel';
 
 export default class LoggerManager {

@@ -1,4 +1,5 @@
 import React from "react";
+import ReactDOM from "react-dom";
 import ThresholdList from "./threshold-list.jsx";
 import {fetchJson} from "amp/tools";
 

@@ -1,21 +1,14 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import platform from 'platform';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import {getReleases, getReleasesError, getReleasesPending} from '../reducers/startupReducer';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { getReleases, getReleasesError, getReleasesPending } from '../reducers/startupReducer';
 import fetchReleases from '../actions/fetchReleases';
 import {
-    AMP_OFFLINE_INSTALLERS,
-    DEBIAN_LINUX,
-    LINUX,
-    MAC,
-    MACINTOSH,
-    OS_X,
-    REDHAT_LINUX,
-    WINDOWS
+  AMP_OFFLINE_INSTALLERS, DEBIAN_LINUX, LINUX, MAC, MACINTOSH, OS_X, REDHAT_LINUX, WINDOWS
 } from '../constants/Constants';
 
-import {TranslationContext} from './Startup';
+import { TranslationContext } from './Startup';
 
 class DownloadLinks extends Component {
   constructor(props) {

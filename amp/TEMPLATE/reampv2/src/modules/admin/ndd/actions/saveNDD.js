@@ -1,5 +1,5 @@
-import {saveNDDError, saveNDDPending, saveNDDSuccess} from './saveAction';
-import {LAYOUT_EP} from '../constants/Constants';
+import { saveNDDSuccess, saveNDDPending, saveNDDError } from './saveAction';
+import { LAYOUT_EP } from '../constants/Constants';
 
 function saveNDD(src, dst, mappings, urlSavePrograms, urlSaveConfig, level) {
   return dispatch => {

@@ -1,7 +1,8 @@
 import React from "react";
+import Link from "react-router";
+import ReactDOM from "react-dom";
 import platform from "platform";
-import {fetchJson} from "amp/tools";
-
+import { fetchJson } from "amp/tools";
 require('./style.less');
 
 const WINDOWS = 'windows';

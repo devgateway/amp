@@ -1,4 +1,4 @@
-import {fetchNDDError, fetchNDDPending, fetchNDDSuccess} from './startupAction';
+import { fetchNDDSuccess, fetchNDDPending, fetchNDDError } from './startupAction';
 
 function fetchNDD(url) {
   return dispatch => {

@@ -1,8 +1,8 @@
-import {loadTranslations} from 'amp/modules/translate';
-import {initialTranslations} from '../common/initialTranslations';
+import { loadTranslations } from 'amp/modules/translate';
+import { initialTranslations } from '../common/initialTranslations';
 import TranslationManager from '../utils/TranslationManager';
 import StartUpApi from "../api/StartUpApi";
-import {GS_DEFAULT_CALENDAR} from '../common/ReampConstants';
+import { GS_DEFAULT_CALENDAR } from '../common/ReampConstants';
 
 /**
  *

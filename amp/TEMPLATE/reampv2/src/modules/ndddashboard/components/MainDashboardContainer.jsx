@@ -1,18 +1,20 @@
-import React, {Component} from 'react';
-import {bindActionCreators} from 'redux';
+import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
-import {Col, Row} from 'react-bootstrap';
+import { connect } from 'react-redux';
+import { Col, Row } from 'react-bootstrap';
 import NestedDonutsProgramChart from './charts/NestedDonutsProgramChart';
 import FundingTypeSelector from './FundingTypeSelector';
 import './legends/legends.css';
-import {getCustomColor, getGradient} from '../utils/Utils';
+import {
+  getCustomColor, getGradient
+} from '../utils/Utils';
 import FundingByYearChart from './charts/FundingByYearChart';
 import PieChartTypeSelector from './PieChartTypeSelector';
-import {NDDTranslationContext} from './StartUp';
+import { NDDTranslationContext } from './StartUp';
 import TopChartContainer from './TopChartContainer';
-import {SELECTED_COLORS} from '../utils/constants';
-import {ALL_PROGRAMS} from '../../admin/ndd/constants/Constants';
+import { SELECTED_COLORS } from '../utils/constants';
+import { ALL_PROGRAMS } from '../../admin/ndd/constants/Constants';
 
 class MainDashboardContainer extends Component {
   // eslint-disable-next-line react/sort-comp

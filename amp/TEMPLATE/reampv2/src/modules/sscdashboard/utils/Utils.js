@@ -1,10 +1,10 @@
 import {
-    DASHBOARD_DEFAULT_MAX_YEAR_RANGE,
-    DASHBOARD_DEFAULT_MIN_YEAR_RANGE,
-    FALLBACK_FLAG,
-    FLAGS_DIRECTORY
+  DASHBOARD_DEFAULT_MAX_YEAR_RANGE,
+  DASHBOARD_DEFAULT_MIN_YEAR_RANGE,
+  FALLBACK_FLAG,
+  FLAGS_DIRECTORY
 } from './constants';
-import {EXTRA_INFO, GROUP_ID} from './FieldsConstants';
+import { EXTRA_INFO, GROUP_ID } from './FieldsConstants';
 
 export function splitArray(a, n, balanced) {
   if (n < 2) return [a];

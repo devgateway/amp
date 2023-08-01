@@ -1,16 +1,13 @@
-import React, {Component, Suspense} from 'react';
+import React, { Component, Suspense } from 'react';
 import InfiniteCarousel from 'react-leaf-carousel';
 import EllipsisText from 'react-ellipsis-text';
 import PropTypes from 'prop-types';
 import * as Utils from '../../../utils/Utils';
 import './filters.css';
 import {
-    FLAGS_TO_SHOW_DEFAULT,
-    FLAGS_TO_SHOW_SMALL,
-    FLAGS_TO_SHOW_SMALL_WIDTH_THRESHOLD,
-    NEGATIVE_ONE,
-    ONE,
-    ZERO
+  FLAGS_TO_SHOW_DEFAULT,
+  FLAGS_TO_SHOW_SMALL,
+  FLAGS_TO_SHOW_SMALL_WIDTH_THRESHOLD, NEGATIVE_ONE, ONE, ZERO
 } from '../../../utils/constants';
 import CountryFlag from '../../utils/CountryFlag';
 

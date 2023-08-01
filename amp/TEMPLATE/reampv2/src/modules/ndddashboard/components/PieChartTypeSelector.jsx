@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
-import {bindActionCreators} from 'redux';
+import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
-import {extractPrograms} from '../utils/Utils';
+import { connect } from 'react-redux';
+import { extractPrograms } from '../utils/Utils';
 
 class PieChartTypeSelector extends Component {
   constructor(props) {

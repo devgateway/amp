@@ -1,11 +1,12 @@
-import React, {Component} from 'react';
+import React, { Component, PropTypes } from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import DonorNotesRow from './DonorNotesRow.jsx';
 import * as donorNotesActions from '../actions/DonorNotesActions.jsx';
-import * as commonListsActions from '../actions/CommonListsActions.jsx';
+import * as commonListsActions from  '../actions/CommonListsActions.jsx';
+import * as startUp from '../actions/StartUpAction.jsx';
+import { Alert } from 'react-bootstrap';
 import Utils from '../common/utils.jsx';
-
 class DonorNotesList extends Component {
     constructor(props, context) {
         super(props, context);

@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import fetchTranslations from '../../../utils/actions/fetchTranslations';
-import {Loading} from '../../../utils/components/Loading';
+import { Loading } from '../../../utils/components/Loading';
 import defaultTrnPack from '../config/initialTranslations.json';
 
 export const ReportGeneratorContext = React.createContext({ translations: defaultTrnPack, store: null });

@@ -1,6 +1,5 @@
-import {fetchJson, postJson} from 'amp/tools';
-import {REPORTS_CONFIGURATION} from '../common/ReportsConfiguration';
-
+import { postJson, delay, fetchJson, deleteJson } from 'amp/tools';
+import { REPORTS_CONFIGURATION } from '../common/ReportsConfiguration';
 class ReportsApi {
     static fetchReportData( requestData, report ) {
         return new Promise(( resolve, reject ) => {

@@ -1,5 +1,9 @@
-import {fetchApiData} from '../../../utils/loadTranslations';
-import {PROFILE_REPORT, TYPE_DONOR, URL_GET_REPORT, URL_METADATA, URL_SAVE, URL_SAVE_NEW} from '../utils/constants';
+import { fetchApiData } from '../../../utils/loadTranslations';
+import {
+  PROFILE_REPORT,
+  TYPE_DONOR,
+  URL_GET_REPORT, URL_METADATA, URL_SAVE, URL_SAVE_NEW
+} from '../utils/constants';
 
 export const UPDATE_REPORT_DETAILS_TOTAL_GROUPING = 'UPDATE_REPORT_DETAILS_TOTAL_GROUPING';
 export const UPDATE_REPORT_DETAILS_TOTALS_ONLY = 'UPDATE_REPORT_DETAILS_TOTALS_ONLY';

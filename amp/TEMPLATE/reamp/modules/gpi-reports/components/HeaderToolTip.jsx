@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
-import {OverlayTrigger, Tooltip} from 'react-bootstrap';
-import {IMG_VALUE} from '../common/Constants';
+import React, { Component } from 'react';
+import { Tooltip, OverlayTrigger } from 'react-bootstrap';
+import { IMG_VALUE } from '../common/Constants';
 
 
-class HeaderToolTip extends Component {
+ class HeaderToolTip extends Component {
 
      constructor() {
           super();

@@ -1,10 +1,12 @@
 /* eslint-disable react/destructuring-assignment */
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
-import {NDDContext} from './Startup';
-import {CHILDREN, FIRST_LEVEL, PROGRAM, SECOND_LEVEL, STATE_LEVEL_FIELD, THIRD_LEVEL} from '../constants/Constants';
+import { NDDContext } from './Startup';
+import {
+  CHILDREN, FIRST_LEVEL, PROGRAM, SECOND_LEVEL, STATE_LEVEL_FIELD, THIRD_LEVEL
+} from '../constants/Constants';
 import '../../../../../node_modules/react-bootstrap-typeahead/css/Typeahead.min.css';
 import './css/style.css';
 import Select from './Select';

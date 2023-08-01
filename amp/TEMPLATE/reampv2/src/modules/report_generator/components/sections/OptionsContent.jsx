@@ -1,6 +1,8 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {Checkbox, Form, FormField} from 'semantic-ui-react';
+import {
+  Checkbox, Form, FormField
+} from 'semantic-ui-react';
 
 export default class OptionsContent extends Component {
   render() {

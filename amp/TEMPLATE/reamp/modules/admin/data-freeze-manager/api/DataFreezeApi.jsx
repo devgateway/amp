@@ -1,6 +1,6 @@
-import {deleteJson, fetchJson, postJson} from 'amp/tools';
-import {ACCESS_DENIED_STATUS} from '../common/Constants';
-
+import { postJson, delay, fetchJson, deleteJson } from 'amp/tools';
+import { loadTranslations } from 'amp/modules/translate';
+import {ACCESS_DENIED_STATUS} from  '../common/Constants';
 class DataFreezeApi {
     static getDataFreezeEventList( data ) {
         const url = '/rest/data-freeze/event/list?offset=' + data.paging.offset + '&count=' + data.paging.recordsPerPage + '&orderby=' + data.sorting.orderBy + '&sort=' + data.sorting.sortOrder;

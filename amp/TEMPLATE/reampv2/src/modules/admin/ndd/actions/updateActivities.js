@@ -1,10 +1,10 @@
 import {
-    invokeUpdateActivities,
-    updateActivitiesError,
-    updateActivitiesPending,
-    updateActivitiesSuccess
+  invokeUpdateActivities,
+  updateActivitiesPending,
+  updateActivitiesError,
+  updateActivitiesSuccess
 } from './updateActivitiesAction';
-import {UPDATE_ACTIVITIES_EP} from '../constants/Constants';
+import { UPDATE_ACTIVITIES_EP } from '../constants/Constants';
 
 let timer;
 const GET = 'GET';

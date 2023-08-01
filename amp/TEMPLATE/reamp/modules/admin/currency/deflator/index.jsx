@@ -1,15 +1,15 @@
 import * as AMP from "amp/architecture";
 import React from "react";
-import {CURRENCIES_LIST, INFLATION_RATES, INFLATION_SOURCES} from "amp/config/endpoints";
-import {fetchJson, postJson} from "amp/tools";
-import {MenuItem, Nav, NavDropdown, NavItem} from "react-bootstrap";
+import {CURRENCIES_LIST, INFLATION_SOURCES, INFLATION_RATES} from "amp/config/endpoints";
+import {fetchJson, postJson, callFunc} from "amp/tools";
+import {Nav, NavItem, NavDropdown, MenuItem} from "react-bootstrap";
 import cn from "classnames";
+import {Glyphicon, Alert} from "react-bootstrap";
 import * as ConstantCurrencies from "./constant-currencies";
 import * as InflationRates from "./rates";
 import * as Rate from "./rates/rate";
 import * as InflationSources from "./sources";
 import {RequestStatus} from "./tools";
-
 require('./style.less');
 
 const TABS = {

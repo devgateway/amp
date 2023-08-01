@@ -1,24 +1,24 @@
-import React, {Component} from 'react';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import HorizontalFilters from '../filters/HorizontalFilters';
 import './map.css';
 import MapHome from '../../map/MapHome';
 import PopupOverlay from '../popups/popupOverlay';
 import CountryPopupOverlay from '../popups/CountryPopupOverlay';
-import {loadActivitiesDetails} from '../../../actions/callReports';
+import { loadActivitiesDetails } from '../../../actions/callReports';
 import SimplePopup from '../popups/homepopup/SimplePopup';
-import {SSCTranslationContext} from '../../StartUp';
+import { SSCTranslationContext } from '../../StartUp';
 import {
-    generateStructureBasedOnModalitiesProjectCount,
-    generateStructureBasedOnSectorProjectCount,
-    getChartData
+  generateStructureBasedOnModalitiesProjectCount,
+  generateStructureBasedOnSectorProjectCount,
+  getChartData
 } from '../../../utils/ProjectUtils';
-import {ACTIVITY_ID, PROJECT_TITLE} from '../../../utils/FieldsConstants';
-import {DOWNLOAD_CHART, HOME_CHART, MODALITY_CHART} from '../../../utils/constants';
+import { ACTIVITY_ID, PROJECT_TITLE } from '../../../utils/FieldsConstants';
+import { DOWNLOAD_CHART, HOME_CHART, MODALITY_CHART } from '../../../utils/constants';
 import DataDownloadContainer from '../../dataDownload/DataDownloadContainer';
-import {populateFilters} from '../../../utils/exportUtils';
+import { populateFilters } from '../../../utils/exportUtils';
 
 class MapContainer extends Component {
   getExportData() {

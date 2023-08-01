@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
-import {applyMiddleware, compose, createStore} from 'redux';
+import React, { Component } from 'react';
+import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
-import {Provider} from 'react-redux';
+import { Provider } from 'react-redux';
 import rootReducer from './reducers/rootReducer';
 import Startup from './components/StartUp';
 import ReportGeneratorRouter from './components/ReportGenerator.router';

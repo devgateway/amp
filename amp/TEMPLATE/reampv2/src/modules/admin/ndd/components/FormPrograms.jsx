@@ -1,15 +1,17 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
-import {NDDContext} from './Startup';
+import { NDDContext } from './Startup';
 import './css/style.css';
 import ProgramSelectGroupList from './ProgramSelectGroupList';
 import Header from './Header';
-import {DST_PROGRAM, PROGRAM, PROGRAM_MAPPING, SRC_PROGRAM} from '../constants/Constants';
+import {
+  DST_PROGRAM, PROGRAM, PROGRAM_MAPPING, SRC_PROGRAM
+} from '../constants/Constants';
 import * as Utils from '../utils/Utils';
-import {sendNDDError, sendNDDPending, sendNDDSaving} from '../reducers/saveNDDReducer';
-import {updateActivitiesError, updateActivitiesPending} from '../reducers/updateActivitiesReducer';
+import { sendNDDError, sendNDDPending, sendNDDSaving } from '../reducers/saveNDDReducer';
+import { updateActivitiesError, updateActivitiesPending } from '../reducers/updateActivitiesReducer';
 import saveNDD from '../actions/saveNDD';
 import updateActivities from '../actions/updateActivities';
 import Notifications from './Notifications';

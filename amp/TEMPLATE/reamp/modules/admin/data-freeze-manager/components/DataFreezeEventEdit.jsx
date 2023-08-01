@@ -1,12 +1,19 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import React, {
+    Component,
+    PropTypes
+} from 'react';
+import {
+    connect
+} from 'react-redux';
+import {
+    bindActionCreators
+} from 'redux';
+import * as startUp from '../actions/StartUpAction';
 import * as commonListsActions from '../actions/CommonListsActions';
 import * as dataFreezeActions from '../actions/DataFreezeActions';
 import DatePicker from 'react-date-picker';
 import moment from 'moment';
 import * as Constants from '../common/Constants';
-
 require('../styles/less/main.less');
 require('react-date-picker/base.css');
 require('react-date-picker/theme/hackerone.css');

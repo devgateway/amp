@@ -1,9 +1,11 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import * as reportsActions from '../actions/ReportsActions';
-import {Modal} from 'react-bootstrap';
-
+import { Modal } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
+import moment from 'moment';
+import * as Constants from '../common/Constants';
 class RemarksPopup extends Component {
     constructor( props, context ) {
         super( props, context );

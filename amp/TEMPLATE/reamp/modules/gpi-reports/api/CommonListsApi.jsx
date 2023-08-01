@@ -1,6 +1,5 @@
-import {fetchJson} from 'amp/tools';
-
-class CommonListsApi {
+import { postJson, delay, fetchJson } from 'amp/tools';
+class CommonListsApi {    
    static getOrgList(group) {  
        var url = group ? '/rest/filters/org-groups' : '/rest/gpi/report/donors/';
          return new Promise((resolve, reject) => {

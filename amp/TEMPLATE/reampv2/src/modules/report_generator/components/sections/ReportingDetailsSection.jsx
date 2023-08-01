@@ -1,29 +1,28 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {Form, Grid, GridColumn, TextArea} from 'semantic-ui-react';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import OptionsList from './OptionsList';
-import {ReportGeneratorContext} from '../StartUp';
 import {
-    FUNDING_GROUPING_RADIO_OPTIONS,
-    OPTIONS_CHECKBOX_OPTIONS,
-    TOTAL_GROUPING_CHECKBOX_OPTIONS,
-    TOTAL_GROUPING_RADIO_OPTIONS
+  Form,
+  Grid, GridColumn, TextArea
+} from 'semantic-ui-react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import OptionsList from './OptionsList';
+import { ReportGeneratorContext } from '../StartUp';
+import {
+  FUNDING_GROUPING_RADIO_OPTIONS, OPTIONS_CHECKBOX_OPTIONS,
+  TOTAL_GROUPING_CHECKBOX_OPTIONS,
+  TOTAL_GROUPING_RADIO_OPTIONS
 } from '../../utils/constants';
 import OptionsContent from './OptionsContent';
 import {
-    updateReportDetailsAllowEmptyFundingColumns,
-    updateReportDetailsAlsoShowPledges,
-    updateReportDetailsDescription,
-    updateReportDetailsFundingGrouping,
-    updateReportDetailsShowOriginalCurrencies,
-    updateReportDetailsSplitByFunding,
-    updateReportDetailsTotalGrouping,
-    updateReportDetailsTotalsOnly,
-    updateReportDetailsUseAboveFilters
+  updateReportDetailsTotalGrouping, updateReportDetailsTotalsOnly,
+  updateReportDetailsFundingGrouping, updateReportDetailsAllowEmptyFundingColumns,
+  updateReportDetailsSplitByFunding,
+  updateReportDetailsShowOriginalCurrencies,
+  updateReportDetailsDescription,
+  updateReportDetailsAlsoShowPledges, updateReportDetailsUseAboveFilters
 } from '../../actions/stateUIActions';
-import {hasFilters, translate} from '../../utils/Utils';
+import { hasFilters, translate } from '../../utils/Utils';
 
 class ReportingDetailSection extends Component {
   // eslint-disable-next-line no-unused-vars

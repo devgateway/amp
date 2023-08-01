@@ -1,7 +1,7 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import '../popups.css';
 import PropTypes from 'prop-types';
-import {SSCTranslationContext} from '../../../StartUp';
+import { SSCTranslationContext } from '../../../StartUp';
 
 const CountryPopupOverlayTitle = ({ countriesMessage, updateCountriesMessage }) => {
   const translationsContext = useContext(SSCTranslationContext);

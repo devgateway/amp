@@ -1,10 +1,14 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import '../popups.css';
 import ReactTooltip from 'react-tooltip';
 import PropTypes from 'prop-types';
-import {SSCTranslationContext} from '../../../StartUp';
-import {SECTOR_MODALITY_LEADING_LEFT, SECTOR_MODALITY_MIN_SIZE, SECTORS_CHART} from '../../../../utils/constants';
-import {calculateUpdatedValuesForDropDowns} from '../../../../utils/Utils';
+import { SSCTranslationContext } from '../../../StartUp';
+import {
+  SECTOR_MODALITY_LEADING_LEFT,
+  SECTOR_MODALITY_MIN_SIZE,
+  SECTORS_CHART
+} from '../../../../utils/constants';
+import { calculateUpdatedValuesForDropDowns } from '../../../../utils/Utils';
 import CountryFlag from '../../../utils/CountryFlag';
 
 class CountryPopupHeader extends Component {

@@ -1,9 +1,10 @@
 import {
-    ACTIVITY_LOAD_FAILED,
-    ACTIVITY_LOAD_LOADED,
     ACTIVITY_LOAD_LOADING,
+    ACTIVITY_LOAD_LOADED,
+    ACTIVITY_LOAD_FAILED,
     ACTIVITY_WS_INFO_LOADED
 } from '../actions/ActivityActions.jsx';
+import {ACTIVITY_WS_INFO_LOADING} from "../actions/ActivityActions";
 
 const defaultState = {
     activity: undefined,

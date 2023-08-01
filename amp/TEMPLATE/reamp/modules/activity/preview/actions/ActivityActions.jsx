@@ -1,40 +1,32 @@
 import ActivityApi from '../api/ActivityApi.jsx';
 import {
-    ACTIVITY_FORM_URL,
-    ACTIVITY_FORM_URL_SSC,
-    ACTIVITY_WORKSPACE_LEAD_DATA,
-    CALENDAR_ID,
-    CALENDAR_IS_FISCAL,
-    COMPARE_ACTIVITY_URL,
     FM_ROOT,
     FUNDING_INFORMATION,
-    HIDE_CONTACTS_PUBLIC_VIEW,
+    TRANSACTION_ID,
+    ACTIVITY_FORM_URL,
+    ACTIVITY_WORKSPACE_LEAD_DATA,
+    CALENDAR_IS_FISCAL,
     IS_FISCAL,
-    PUBLIC_VERSION_HISTORY,
-    REGIONAL_FUNDINGS,
+    CALENDAR_ID,
     REORDER_FUNDING_ITEM,
     RTL_DIRECTION,
     SHOW_ACTIVITY_WORKSPACES,
-    TEAM_ID,
-    TRANSACTION_ID,
     VERSION_HISTORY_URL,
-    WORKSPACE_TYPE,
-    WORKSPACE_TYPE_MANAGEMENT
+    COMPARE_ACTIVITY_URL,
+    PUBLIC_CHANGE_SUMMARY,
+    TEAM_ID,
+    PUBLIC_VERSION_HISTORY,
+    HIDE_CONTACTS_PUBLIC_VIEW,
+    ACTIVITY_FORM_URL_SSC,
+    REGIONAL_FUNDINGS,
+    WORKSPACE_TYPE_MANAGEMENT,
+    WORKSPACE_TYPE
 } from '../common/ReampConstants.jsx';
 import DateUtils from '../utils/DateUtils.jsx';
 import HydratorHelper from '../utils/HydratorHelper.jsx';
 import {
-    ActivityConstants,
-    ActivityLinks,
-    CommonActivityHelper,
-    Constants,
-    CurrencyRatesManager,
-    FeatureManager,
-    FeatureManagerConstants,
-    FieldPathConstants,
-    FieldsManager,
-    FmManagerHelper,
-    NumberUtils,
+    FieldsManager, FieldPathConstants, ActivityConstants, FeatureManagerConstants, FeatureManager,
+    FmManagerHelper, CommonActivityHelper, Constants, NumberUtils, CurrencyRatesManager, ActivityLinks,
     WorkspaceConstants
 } from "amp-ui";
 import processPossibleValues from '../common/PossibleValuesHelper.jsx';
@@ -43,7 +35,7 @@ import ActivityFundingTotals from '../utils/ActivityFundingTotals.jsx';
 import translate from '../utils/translate.jsx';
 import * as ContactAction from './ContactsAction.jsx';
 import * as ResourceAction from './ResourceAction.jsx';
-import {ACTIVITY_PREVIEW_URL} from "../common/ReampConstants";
+import { ACTIVITY_PREVIEW_URL } from "../common/ReampConstants";
 
 export const ACTIVITY_LOAD_LOADING = 'ACTIVITY_LOAD_LOADING';
 export const ACTIVITY_LOAD_LOADED = 'ACTIVITY_LOAD_LOADED';

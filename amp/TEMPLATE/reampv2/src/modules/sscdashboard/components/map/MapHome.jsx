@@ -1,23 +1,25 @@
-import React, {Component} from 'react';
-import {CircleMarker, Map, Popup, TileLayer, ZoomControl} from 'react-leaflet';
+import React, { Component } from 'react';
+import {
+  Map, TileLayer, CircleMarker, Popup, ZoomControl
+} from 'react-leaflet';
 import * as L from 'leaflet';
 import Control from 'react-leaflet-control';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import CenterIcon from '../../images/icons/centermap.png';
 import '../../../../App.css';
 import ConnectionLayer from './d3Layer/ConnectionLayer';
 import {
-    NON_SELECTED_BUBBLE_COLOR,
-    NON_SELECTED_LINE_COLOR,
-    SELECTED_BUBBLE_COLOR,
-    SELECTED_LINE_COLOR
+  NON_SELECTED_LINE_COLOR,
+  SELECTED_BUBBLE_COLOR,
+  NON_SELECTED_BUBBLE_COLOR,
+  SELECTED_LINE_COLOR
 } from '../../utils/constants';
 import '../layout/map/map.css';
 import HomePopup from '../layout/popups/homepopup/HomePopup';
-import {CENTRO_ID, EXTRA_INFO} from '../../utils/FieldsConstants';
-import {SSCTranslationContext} from '../StartUp';
+import { EXTRA_INFO, CENTRO_ID } from '../../utils/FieldsConstants';
+import { SSCTranslationContext } from '../StartUp';
 
 class MapHome extends Component {
   // TODO map config should come from configuration

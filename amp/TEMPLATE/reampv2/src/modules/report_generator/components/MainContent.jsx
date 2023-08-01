@@ -1,19 +1,23 @@
-import React, {Component} from 'react';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import md5 from 'md5';
-import {Grid, GridColumn, GridRow} from 'semantic-ui-react';
+import {
+  Grid, GridColumn, GridRow
+} from 'semantic-ui-react';
 import MainMenu from './MainMenu';
 import ColumnsSection from './sections/ColumnsSection';
 import ReportingDetailSection from './sections/ReportingDetailsSection';
 import MeasuresSection from './sections/MeasuresSection';
 import NavigationButtons from './sections/NavigationButtons';
 import PreviewSection from './sections/PreviewSection';
-import {getPreview, updatePreviewId} from '../actions/previewActions';
-import {ReportGeneratorContext} from './StartUp';
+import { getPreview, updatePreviewId } from '../actions/previewActions';
+import { ReportGeneratorContext } from './StartUp';
 
-import {areEnoughDataForPreview, convertReportType, convertTotalGrouping, javaHashCode} from '../utils/Utils';
+import {
+  convertReportType, convertTotalGrouping, javaHashCode, areEnoughDataForPreview
+} from '../utils/Utils';
 
 class MainContent extends Component {
   constructor() {

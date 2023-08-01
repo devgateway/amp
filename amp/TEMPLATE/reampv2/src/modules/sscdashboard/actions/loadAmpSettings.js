@@ -1,6 +1,7 @@
-import {fetchAmpSettingsError, fetchAmpSettingsPending, fetchAmpSettingsSuccess} from './startupAction';
-import {fetchApiData} from '../../../utils/apiOperations';
-import {API_AMP_SETTINGS_URL} from '../utils/constants';
+import { fetchAmpSettingsPending, fetchAmpSettingsError, fetchAmpSettingsSuccess }
+    from './startupAction';
+import { fetchApiData } from '../../../utils/apiOperations';
+import { API_AMP_SETTINGS_URL } from '../utils/constants';
 
 function loadAmpSettings() {
   return dispatch => {

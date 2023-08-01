@@ -1,11 +1,11 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import '../popups.css';
 import ReactTooltip from 'react-tooltip';
-import {printChart, printInnerCharts} from '../../../../utils/PrintUtils';
-import {exportToXLS} from '../../../../utils/exportUtils';
-import {PNG_FORMAT} from '../../../../utils/constants';
-import {SSCTranslationContext} from '../../../StartUp';
+import { printChart, printInnerCharts } from '../../../../utils/PrintUtils';
+import { exportToXLS } from '../../../../utils/exportUtils';
+import { PNG_FORMAT } from '../../../../utils/constants';
+import { SSCTranslationContext } from '../../../StartUp';
 import PrintCountryCharts from './PrintCountryCharts';
 
 class CountryPopupExport extends Component {

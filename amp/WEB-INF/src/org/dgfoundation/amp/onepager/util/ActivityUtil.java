@@ -3,30 +3,6 @@
  */
 package org.dgfoundation.amp.onepager.util;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import javax.jcr.Node;
-import javax.jcr.RepositoryException;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -47,43 +23,12 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.dbentity.AmpActivityContact;
-import org.digijava.module.aim.dbentity.AmpActivityDocument;
-import org.digijava.module.aim.dbentity.AmpActivityFields;
-import org.digijava.module.aim.dbentity.AmpActivityGroup;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpAgreement;
-import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
-import org.digijava.module.aim.dbentity.AmpComments;
-import org.digijava.module.aim.dbentity.AmpComponent;
-import org.digijava.module.aim.dbentity.AmpComponentFunding;
-import org.digijava.module.aim.dbentity.AmpContentTranslation;
-import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpFundingAmount;
-import org.digijava.module.aim.dbentity.AmpFundingDetail;
-import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
-import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponse;
-import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponseDocument;
-import org.digijava.module.aim.dbentity.AmpOrgRole;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpPerformanceRule;
-import org.digijava.module.aim.dbentity.AmpRole;
-import org.digijava.module.aim.dbentity.AmpStructure;
-import org.digijava.module.aim.dbentity.AmpStructureImg;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
-import org.digijava.module.aim.dbentity.ApprovalStatus;
-import org.digijava.module.aim.dbentity.FundingInformationItem;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.ActivityVersionUtil;
-import org.digijava.module.aim.util.AuditLoggerUtil;
-import org.digijava.module.aim.util.ContactInfoUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.LuceneUtil;
-import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.util.*;
 import org.digijava.module.contentrepository.exception.JCRSessionException;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
@@ -97,8 +42,19 @@ import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.Hibernate;
 import org.hibernate.LockMode;
 import org.hibernate.LockOptions;
-import org.hibernate.query.Query;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
+
+import javax.jcr.Node;
+import javax.jcr.RepositoryException;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Util class used to manipulate an activity
@@ -423,7 +379,7 @@ public class ActivityUtil {
     public static boolean isApproved(AmpActivityVersion activity) {
         ApprovalStatus approvalStatus = activity.getApprovalStatus();
         return ApprovalStatus.approved.equals(approvalStatus)
-                || ApprovalStatus.started_approved.equals(approvalStatus);
+                || ApprovalStatus.startedapproved.equals(approvalStatus);
     }
 
     private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityVersion a) {
@@ -595,7 +551,7 @@ public class ActivityUtil {
         } else {
             // Validation is OF in GS activity approved
             if (newActivity) {
-                a.setApprovalStatus(ApprovalStatus.started_approved);
+                a.setApprovalStatus(ApprovalStatus.startedapproved);
             } else {
                 a.setApprovalStatus(ApprovalStatus.approved);
             }
@@ -664,7 +620,7 @@ public class ActivityUtil {
         if (isProjectValidationOn(validation)) {
             return Boolean.FALSE.equals(isDraft) && ApprovalStatus.approved.equals(approvalStatus);
         }
-        ApprovalStatus allowed = isNewActivity ? ApprovalStatus.started_approved : ApprovalStatus.approved;
+        ApprovalStatus allowed = isNewActivity ? ApprovalStatus.startedapproved : ApprovalStatus.approved;
         return allowed.equals(approvalStatus);
     }
 

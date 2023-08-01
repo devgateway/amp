@@ -22,24 +22,20 @@
 
 package org.digijava.kernel.util;
 
+import org.apache.log4j.Logger;
+import org.digijava.kernel.entity.ModuleInstance;
+import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.request.SiteDomain;
+import org.digijava.kernel.viewmanager.ViewConfig;
+import org.digijava.kernel.viewmanager.ViewConfigFactory;
+import org.hibernate.Session;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.HashSet;
-import java.util.Iterator;
-
-import org.apache.log4j.Logger;
-import org.digijava.kernel.entity.ModuleInstance;
-import org.digijava.kernel.exception.DgException;
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.request.SiteDomain;
-import org.digijava.kernel.viewmanager.ViewConfig;
-import org.digijava.kernel.viewmanager.ViewConfigFactory;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 public class SiteManager {
 
@@ -133,10 +129,9 @@ public class SiteManager {
                 getTemplateViewConfig(templateName);
             HashSet moduleInstances = new HashSet(templateViewConfig.
                 getReferencedInstances(false));
-            Iterator instancesIter = moduleInstances.iterator();
-            while (instancesIter.hasNext()) {
+            for (Object instance : moduleInstances) {
                 ModuleInstance moduleInstance = (ModuleInstance)
-                    instancesIter.next();
+                        instance;
                 moduleInstance.setSite(site);
                 moduleInstance.setPermitted(true);
                 moduleInstance.setRealInstance(null);

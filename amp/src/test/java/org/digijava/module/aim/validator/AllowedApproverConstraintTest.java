@@ -1,26 +1,6 @@
 package org.digijava.module.aim.validator;
 
-import static org.digijava.module.aim.helper.Constants.PROJECT_VALIDATION_FOR_ALL_EDITS;
-import static org.digijava.module.aim.helper.Constants.PROJECT_VALIDATION_FOR_NEW_ONLY;
-import static org.digijava.module.aim.helper.Constants.PROJECT_VALIDATION_OFF;
-import static org.digijava.module.aim.helper.Constants.PROJECT_VALIDATION_ON;
-import static org.digijava.module.aim.validator.ConstraintMatchers.hasViolation;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.emptyIterable;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.util.Date;
-import java.util.Set;
-
-import javax.validation.ConstraintViolation;
-
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
-import org.digijava.module.aim.dbentity.ApprovalStatus;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -34,6 +14,18 @@ import org.mockito.Matchers;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+
+import javax.validation.ConstraintViolation;
+import java.util.Date;
+import java.util.Set;
+
+import static org.digijava.module.aim.helper.Constants.*;
+import static org.digijava.module.aim.validator.ConstraintMatchers.hasViolation;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.emptyIterable;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Nadejda Mandrescu
@@ -227,7 +219,7 @@ public class AllowedApproverConstraintTest extends AbstractActivityValidatorTest
 
     @Test
     public void testValidApprovedByForNewActivityValidationOff() {
-        AmpActivity newActivity = getAmpActivity(ampTeamMember, ampTeamMember, ApprovalStatus.started_approved);
+        AmpActivity newActivity = getAmpActivity(ampTeamMember, ampTeamMember, ApprovalStatus.startedapproved);
 
         mockValidation(PROJECT_VALIDATION_OFF, PROJECT_VALIDATION_FOR_ALL_EDITS, newActivity, null);
 
@@ -239,7 +231,7 @@ public class AllowedApproverConstraintTest extends AbstractActivityValidatorTest
     @Test
     public void testValidApprovedByWhenValidationIsOffForOldActivity() {
         AmpActivity newActivity = getAmpActivity(ampTeamMember, ampTeamMember, ApprovalStatus.approved);
-        AmpActivity oldActivity = getAmpActivity(ampTeamMember, ampTeamMember, ApprovalStatus.started_approved);
+        AmpActivity oldActivity = getAmpActivity(ampTeamMember, ampTeamMember, ApprovalStatus.startedapproved);
 
         mockValidation(PROJECT_VALIDATION_OFF, PROJECT_VALIDATION_FOR_ALL_EDITS, newActivity, oldActivity);
 

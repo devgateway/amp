@@ -16,7 +16,7 @@ public enum ApprovalStatus implements Identifiable {
     created("created", 0),
     approved("approved", 1),
     edited("edited", 2),
-    started_approved("startedapproved", 3),
+    startedapproved("startedapproved", 3),
     started("started", 4),
     /**
      * Not in use. Synonym to rejected?

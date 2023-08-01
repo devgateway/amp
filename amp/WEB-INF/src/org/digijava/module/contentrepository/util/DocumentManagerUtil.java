@@ -1,33 +1,5 @@
 package org.digijava.module.contentrepository.util;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.jcr.Node;
-import javax.jcr.NodeIterator;
-import javax.jcr.PathNotFoundException;
-import javax.jcr.Property;
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
-import javax.jcr.version.Version;
-import javax.jcr.version.VersionHistory;
-import javax.jcr.version.VersionIterator;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.apache.jackrabbit.api.JackrabbitRepository;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessage;
@@ -51,21 +23,33 @@ import org.digijava.module.aim.util.ResourceManagerSettingsUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.contentrepository.action.DocumentManager;
 import org.digijava.module.contentrepository.action.SelectDocumentDM;
-import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
-import org.digijava.module.contentrepository.dbentity.CrSharedDoc;
-import org.digijava.module.contentrepository.dbentity.NodeLastApprovedVersion;
-import org.digijava.module.contentrepository.dbentity.TeamNodePendingVersion;
-import org.digijava.module.contentrepository.dbentity.TeamNodeState;
+import org.digijava.module.contentrepository.dbentity.*;
 import org.digijava.module.contentrepository.exception.CrException;
 import org.digijava.module.contentrepository.exception.NoNodeInVersionNodeException;
 import org.digijava.module.contentrepository.exception.NoVersionsFoundException;
 import org.digijava.module.contentrepository.form.DocumentManagerForm;
-import org.digijava.module.contentrepository.helper.CrConstants;
-import org.digijava.module.contentrepository.helper.DocumentData;
-import org.digijava.module.contentrepository.helper.NodeWrapper;
-import org.digijava.module.contentrepository.helper.ObjectReferringDocument;
-import org.digijava.module.contentrepository.helper.TeamInformationBeanDM;
+import org.digijava.module.contentrepository.helper.*;
 import org.hibernate.query.Query;
+import org.hibernate.type.IntegerType;
+import org.hibernate.type.StringType;
+
+import javax.jcr.*;
+import javax.jcr.version.Version;
+import javax.jcr.version.VersionHistory;
+import javax.jcr.version.VersionIterator;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.*;
 
 
 public class DocumentManagerUtil {
@@ -790,7 +774,8 @@ public class DocumentManagerUtil {
             String queryString="select count(r.sharedNodeVersionUUID) from " + CrSharedDoc.class.getName() + 
             " r where r.sharedNodeVersionUUID='"+versionUUID+"' and r.state!="+CrConstants.PENDING_STATUS;
             qry=session.createQuery(queryString);
-            int amount=(Integer)qry.uniqueResult();
+            Long longAmount = (Long) qry.uniqueResult();
+            int amount=longAmount.intValue();
             if(amount>0){
                 retVal=true;
             }
@@ -813,7 +798,8 @@ public class DocumentManagerUtil {
             session=PersistenceManager.getRequestDBSession();
             String queryString="select count(r) from " + CrSharedDoc.class.getName() +" r where r.nodeUUID='"+nodeUUID+"' and r.state="+CrConstants.PENDING_STATUS;
             qry=session.createQuery(queryString);
-            int amount=(Integer)qry.uniqueResult();
+            Long longAmount = (Long) qry.uniqueResult();
+            int amount=longAmount.intValue();
             if(amount>0){
                 retVal=true;
             }
@@ -832,10 +818,11 @@ public class DocumentManagerUtil {
             String queryString="select count(r) from " + CrSharedDoc.class.getName() +" r " +
                     "where r.nodeUUID=:nodeUUID and r.state=:state and r.sharedNodeVersionUUID=:versionUUID" ;
             qry=session.createQuery(queryString);
-            qry.setString("nodeUUID", nodeUUID);
-            qry.setString("versionUUID", versionUUID);
-            qry.setInteger("state", CrConstants.PENDING_STATUS);
-            int amount=(Integer)qry.uniqueResult();
+            qry.setParameter("nodeUUID", nodeUUID, StringType.INSTANCE);
+            qry.setParameter("versionUUID", versionUUID, StringType.INSTANCE);
+            qry.setParameter("state", CrConstants.PENDING_STATUS, IntegerType.INSTANCE);
+            Long longAmount = (Long) qry.uniqueResult();
+            int amount=longAmount.intValue();
             if(amount>0){
                 retVal=true;
             }
@@ -871,9 +858,16 @@ public class DocumentManagerUtil {
     }
     
     public static List<NodeLastApprovedVersion> getLastApprovedVersions() {
-        return PersistenceManager.getRequestDBSession()
-                .createCriteria(NodeLastApprovedVersion.class)
-                .list();
+        org.hibernate.Session session = PersistenceManager.getRequestDBSession();
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<NodeLastApprovedVersion> criteriaQuery = criteriaBuilder.createQuery(NodeLastApprovedVersion.class);
+        Root<NodeLastApprovedVersion> root = criteriaQuery.from(NodeLastApprovedVersion.class);
+        criteriaQuery.select(root);
+        Query<NodeLastApprovedVersion> query = session.createQuery(criteriaQuery);
+
+
+        return query.list();
+
     }
     
     public static List<TeamNodePendingVersion> getPendingVersionsForResource(String nodeUUID){
@@ -998,14 +992,15 @@ public class DocumentManagerUtil {
         JackrabbitRepository repository         = (JackrabbitRepository)sContext.getAttribute( CrConstants.JACKRABBIT_REPOSITORY );
         if ( repository == null ) {
             logger.warn("No repository found! Only normal if AMP was not used at all !");
-        } else
-        repository.shutdown();
-        logger.info("Jackrabbit repository shutdown succesfully !");
+        } else {
+            repository.shutdown();
+            logger.info("Jackrabbit repository shutdown succesfully !");
+        }
     }
     
     public static boolean privateDocumentsExist(Session session, TeamMember teamMember) {
         String userName = teamMember.getEmail();
-        String teamId = "" + teamMember.getTeamId();
+        String teamId = String.valueOf(teamMember.getTeamId());
         Node node = DocumentManagerUtil.getNodeByPath(session, "private/" + teamId + "/" + userName);
         
         if (node != null) {
@@ -1043,7 +1038,9 @@ public class DocumentManagerUtil {
             session=PersistenceManager.getRequestDBSession();
             queryString="select count(r.nodeUUID) from " + CrSharedDoc.class.getName() + " r where r.team="+teamMember.getTeamId()+" and r.state="+CrConstants.SHARED_AMONG_WORKSPACES;
             qry=session.createQuery(queryString);
-            retVal=(Integer)qry.uniqueResult()>0?true:false;
+            Long longValue = (Long) qry.uniqueResult();
+            int value=longValue.intValue();
+            retVal= value > 0;
         } catch (Exception e) {
             logger.error("Couldn't Load Resourcess: " + e.toString());
         }
@@ -1059,7 +1056,9 @@ public class DocumentManagerUtil {
             session=PersistenceManager.getRequestDBSession();
             queryString="select count(r) from " + CrDocumentNodeAttributes.class.getName() + " r";
             qry=session.createQuery(queryString);
-            retVal=(Integer)qry.uniqueResult()>0?true:false;
+            Long longValue = (Long) qry.uniqueResult();
+            int value=longValue.intValue();
+            retVal= value > 0;
         } catch (Exception e) {
             logger.error("Couldn't Load Resourcess: " + e.toString());
         }

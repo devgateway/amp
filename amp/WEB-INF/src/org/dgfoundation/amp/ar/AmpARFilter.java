@@ -6,9 +6,29 @@
  */
 package org.dgfoundation.amp.ar;
 
-import static java.util.Collections.emptySet;
-import static java.util.stream.Collectors.toSet;
+import com.google.common.collect.ImmutableSet;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+import org.dgfoundation.amp.PropertyListable;
+import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.newreports.AmountsUnits;
+import org.dgfoundation.amp.newreports.IReportEnvironment;
+import org.dgfoundation.amp.newreports.ReportEnvBuilder;
+import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.annotations.reports.IgnorePersistence;
+import org.digijava.module.aim.ar.util.FilterUtil;
+import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.Constants.GlobalSettings;
+import org.digijava.module.aim.helper.FormatHelper;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.*;
+import org.digijava.module.aim.util.caching.AmpCaching;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
+import javax.servlet.http.HttpServletRequest;
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
@@ -19,59 +39,10 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
-import javax.servlet.http.HttpServletRequest;
-
-import com.google.common.collect.ImmutableSet;
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-import org.dgfoundation.amp.PropertyListable;
-import org.dgfoundation.amp.Util;
-import org.dgfoundation.amp.newreports.AmountsUnits;
-import org.dgfoundation.amp.newreports.ReportEnvBuilder;
-import org.dgfoundation.amp.newreports.IReportEnvironment;
-import org.digijava.kernel.request.TLSUtils;
-import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.annotations.reports.IgnorePersistence;
-import org.digijava.module.aim.ar.util.FilterUtil;
-import org.digijava.module.aim.dbentity.AmpApplicationSettings;
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
-import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
-import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
-import org.digijava.module.aim.dbentity.AmpOrgGroup;
-import org.digijava.module.aim.dbentity.AmpOrgType;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpReports;
-import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.dbentity.ApprovalStatus;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.Constants.GlobalSettings;
-import org.digijava.module.aim.helper.FormatHelper;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.CurrencyUtil;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.DynLocationManagerUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.FiscalCalendarUtil;
-import org.digijava.module.aim.util.caching.AmpCaching;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import static java.util.Collections.emptySet;
+import static java.util.stream.Collectors.toSet;
 
 
 /**
@@ -143,14 +114,14 @@ public class AmpARFilter extends PropertyListable {
     public static final Set<ApprovalStatus> ACTIVITY_STATUS = ImmutableSet.of(
             ApprovalStatus.approved,
             ApprovalStatus.edited,
-            ApprovalStatus.started_approved,
+            ApprovalStatus.startedapproved,
             ApprovalStatus.started,
             ApprovalStatus.not_approved,
             ApprovalStatus.rejected);
 
     public static final Set<ApprovalStatus> VALIDATED_ACTIVITY_STATUS = ImmutableSet.of(
             ApprovalStatus.approved,
-            ApprovalStatus.started_approved);
+            ApprovalStatus.startedapproved);
 
     public static final Set<ApprovalStatus> UNVALIDATED_ACTIVITY_STATUS = ImmutableSet.of(
             ApprovalStatus.started,

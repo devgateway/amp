@@ -5,25 +5,6 @@
 
 package org.digijava.module.aim.util;
 
-import java.lang.reflect.Method;
-import java.math.BigInteger;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.stream.Collectors;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
@@ -41,48 +22,11 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.admin.helper.AmpActivityFake;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityGroup;
-import org.digijava.module.aim.dbentity.AmpActivityLocation;
-import org.digijava.module.aim.dbentity.AmpActivityProgram;
-import org.digijava.module.aim.dbentity.AmpActivitySector;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicatorOption;
-import org.digijava.module.aim.dbentity.AmpApplicationSettings;
-import org.digijava.module.aim.dbentity.AmpAuditLogger;
 import org.digijava.module.aim.dbentity.AmpComponent;
-import org.digijava.module.aim.dbentity.AmpComponentFunding;
-import org.digijava.module.aim.dbentity.AmpContentTranslation;
-import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpFundingAmount;
-import org.digijava.module.aim.dbentity.AmpFundingDetail;
-import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.dbentity.AmpIssues;
-import org.digijava.module.aim.dbentity.AmpOrgRole;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpRole;
-import org.digijava.module.aim.dbentity.AmpStructure;
-import org.digijava.module.aim.dbentity.AmpStructureImg;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.dbentity.ApprovalStatus;
-import org.digijava.module.aim.dbentity.IPAContract;
-import org.digijava.module.aim.dbentity.IPAContractDisbursement;
-import org.digijava.module.aim.dbentity.IndicatorActivity;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.ActivityForm;
-import org.digijava.module.aim.helper.ActivityHistory;
-import org.digijava.module.aim.helper.ActivityItem;
-import org.digijava.module.aim.helper.Components;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.CurrencyWorker;
-import org.digijava.module.aim.helper.DateConversion;
-import org.digijava.module.aim.helper.FormatHelper;
-import org.digijava.module.aim.helper.FundingDetail;
-import org.digijava.module.aim.helper.FundingValidator;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.helper.*;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -90,15 +34,22 @@ import org.digijava.module.categorymanager.util.IdWithValueShim;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.hibernate.Hibernate;
 import org.hibernate.ObjectNotFoundException;
-import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.jdbc.ReturningWork;
 import org.hibernate.jdbc.Work;
+import org.hibernate.query.Query;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.type.StringType;
 import org.joda.time.Period;
+
+import java.lang.reflect.Method;
+import java.math.BigInteger;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils.ACTIVITY_FM_ID;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityInterchangeUtils.WORKSPACE_PREFIX;
@@ -325,7 +276,7 @@ public class ActivityUtil {
                             " and (latestAct.draft=false or latestAct.draft is null) "
                                     + "and latestAct.approvalStatus IN ('%s', '%s') ",
                             ApprovalStatus.approved.getDbName(),
-                            ApprovalStatus.started_approved.getDbName()));
+                            ApprovalStatus.startedapproved.getDbName()));
                     List<AmpTeam> teams = new ArrayList<AmpTeam>();
                     TeamUtil.getTeams(team, teams);
                     String relatedOrgs = "", teamIds = "";
@@ -1940,14 +1891,14 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         AmpActivityVersion activity = (AmpActivityVersion) session.load(AmpActivityVersion.class, activityId);
         Query qry = session.createQuery(String.format("SELECT act FROM " + AmpActivityVersion.class.getName()
                         + " act WHERE approval_status in ( '%s','%s' ) "
-                        + " and act.ampActivityGroup.ampActivityGroupId = ? "
-                        + " and act.ampActivityId <> ? "
+                        + " and act.ampActivityGroup.ampActivityGroupId = :groupId "
+                        + " and act.ampActivityId <> :activityId "
                         + " ORDER BY act.ampActivityId DESC",
                 ApprovalStatus.approved.getDbName(),
-                ApprovalStatus.started_approved.getDbName()))
+                ApprovalStatus.startedapproved.getDbName()))
                 .setMaxResults(1);
-        qry.setParameter(0, activity.getAmpActivityGroup().getAmpActivityGroupId());
-        qry.setParameter(1, activityId);
+        qry.setParameter("groupId", activity.getAmpActivityGroup().getAmpActivityGroupId(), LongType.INSTANCE);
+        qry.setParameter("activityId", activityId, LongType.INSTANCE);
         return (qry.list().size() > 0 ? (AmpActivityVersion) qry.list().get(0) : null);
     }
 
@@ -1956,9 +1907,9 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         AmpActivityVersion currentActivity = (AmpActivityVersion) session.load(AmpActivityVersion.class, activityId);
 
         Query qry = session.createQuery("SELECT act FROM " + AmpActivityVersion.class.getName()
-                + " act WHERE act.ampActivityGroup.ampActivityGroupId = ? ORDER BY act.ampActivityId DESC")
+                + " act WHERE act.ampActivityGroup.ampActivityGroupId = :activityId ORDER BY act.ampActivityId DESC")
                 .setMaxResults(ActivityVersionUtil.numberOfVersions());
-        qry.setParameter(0, currentActivity.getAmpActivityGroup().getAmpActivityGroupId());
+        qry.setParameter("activityId", currentActivity.getAmpActivityGroup().getAmpActivityGroupId(), LongType.INSTANCE);
         List<AmpActivityVersion> activities = new ArrayList<AmpActivityVersion>(qry.list());
 
         return getActivitiesHistory(activities);
@@ -2019,11 +1970,9 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 
         Session session = PersistenceManager.getRequestDBSession();
 
-        List<Long> validatedActivityIds = (List<Long>) session.createNativeQuery(filterQuery)
+        return (List<Long>) session.createNativeQuery(filterQuery)
                 .addScalar("amp_activity_id", StandardBasicTypes.LONG)
                 .list();
-
-        return validatedActivityIds;
     }
 
     public static List<Long> getValidatedActivityIds() {
@@ -2053,10 +2002,8 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             return Collections.emptyList();
         }
 
-        List<Long> result = PersistenceManager.getSession().createNativeQuery(query)
+        return (List<Long>) PersistenceManager.getSession().createNativeQuery(query)
                 .addScalar("amp_activity_id", LongType.INSTANCE).list();
-
-        return result;
     }
 
     public static boolean canValidateActivity(AmpActivityVersion activity, TeamMember teamMember) {

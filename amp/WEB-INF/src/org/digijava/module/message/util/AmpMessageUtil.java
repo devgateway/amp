@@ -1,12 +1,5 @@
 package org.digijava.module.message.util;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -16,19 +9,19 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.message.dbentity.AmpAlert;
-import org.digijava.module.message.dbentity.AmpEmail;
-import org.digijava.module.message.dbentity.AmpEmailReceiver;
-import org.digijava.module.message.dbentity.AmpMessage;
-import org.digijava.module.message.dbentity.AmpMessageSettings;
-import org.digijava.module.message.dbentity.AmpMessageState;
-import org.digijava.module.message.dbentity.TemplateAlert;
+import org.digijava.module.message.dbentity.*;
 import org.digijava.module.message.helper.MessageConstants;
 import org.hibernate.Criteria;
-import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
+
+import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 public class AmpMessageUtil {
     private static Logger logger = Logger.getLogger(AmpMessageUtil.class);
@@ -199,8 +192,9 @@ public class AmpMessageUtil {
             query=session.createQuery(queryString);                         
             query.setParameter("tmId", tmId);
                         query.setParameter("hidden", hidden);
-            retValue=((Integer)query.uniqueResult()).intValue();
-                        
+            Long longValue = (Long) query.uniqueResult();
+            retValue=longValue.intValue();
+
                        /* Someone may change msgStoragePerMsgType (make it more then it was previously). 
                         In this case we need to unhide some states which are marked as hidden in db*/
                         

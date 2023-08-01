@@ -38,7 +38,7 @@ public class ActivityCloser {
         for (AmpActivityVersion ver : closeableActivities) {
 
             if ("On".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PROJECTS_VALIDATION))) {
-                newStatus = ver.getApprovalStatus().equals(ApprovalStatus.started_approved)
+                newStatus = ver.getApprovalStatus().equals(ApprovalStatus.startedapproved)
                         ? ApprovalStatus.started : ApprovalStatus.edited;
             }
 

@@ -1,22 +1,5 @@
 package org.digijava.module.aim.validator;
 
-import static org.digijava.module.aim.dbentity.ApprovalStatus.approved;
-import static org.digijava.module.aim.dbentity.ApprovalStatus.rejected;
-import static org.digijava.module.aim.dbentity.ApprovalStatus.started;
-import static org.digijava.module.aim.dbentity.ApprovalStatus.started_approved;
-import static org.digijava.module.aim.helper.Constants.PROJECT_VALIDATION_FOR_ALL_EDITS;
-import static org.digijava.module.aim.helper.Constants.PROJECT_VALIDATION_OFF;
-import static org.digijava.module.aim.helper.Constants.PROJECT_VALIDATION_ON;
-import static org.digijava.module.aim.validator.ConstraintMatchers.hasViolation;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.emptyIterable;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.when;
-
-import java.util.Set;
-
-import javax.validation.ConstraintViolation;
-
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DbUtil;
@@ -31,6 +14,17 @@ import org.mockito.Matchers;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+
+import javax.validation.ConstraintViolation;
+import java.util.Set;
+
+import static org.digijava.module.aim.dbentity.ApprovalStatus.*;
+import static org.digijava.module.aim.helper.Constants.*;
+import static org.digijava.module.aim.validator.ConstraintMatchers.hasViolation;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.emptyIterable;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Nadejda Mandrescu
@@ -204,7 +198,7 @@ public class ApprovalStatusConstraintTest extends AbstractActivityValidatorTest<
     public void testSubmitNewStartedApprovedActivityValidationOff() {
         AmpActivity activity = new AmpActivity();
         activity.setDraft(false);
-        activity.setApprovalStatus(started_approved);
+        activity.setApprovalStatus(startedapproved);
 
         mockValidation(PROJECT_VALIDATION_OFF, PROJECT_VALIDATION_FOR_ALL_EDITS, activity);
 
@@ -217,7 +211,7 @@ public class ApprovalStatusConstraintTest extends AbstractActivityValidatorTest<
     public void testDraftNewStartedApprovedActivityValidationOff() {
         AmpActivity activity = new AmpActivity();
         activity.setDraft(true);
-        activity.setApprovalStatus(started_approved);
+        activity.setApprovalStatus(startedapproved);
 
         mockValidation(PROJECT_VALIDATION_OFF, PROJECT_VALIDATION_FOR_ALL_EDITS, activity);
 
@@ -230,7 +224,7 @@ public class ApprovalStatusConstraintTest extends AbstractActivityValidatorTest<
     public void testSubmitNewStartedApprovedActivityValidationOn() {
         AmpActivity activity = new AmpActivity();
         activity.setDraft(false);
-        activity.setApprovalStatus(started_approved);
+        activity.setApprovalStatus(startedapproved);
 
         mockValidation(PROJECT_VALIDATION_ON, PROJECT_VALIDATION_FOR_ALL_EDITS, activity);
 

@@ -1,18 +1,18 @@
 package org.digijava.kernel.persistence;
 
-import static org.digijava.kernel.persistence.InMemoryTeamMemberManager.TEST_TEAM_MEMBER_ID;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.dgfoundation.amp.activity.builder.ActivityBuilder;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.springframework.util.Assert;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.digijava.kernel.persistence.InMemoryTeamMemberManager.TEST_TEAM_MEMBER_ID;
 
 /**
  * Non-persistent implementation of {@code InMemoryManager} which is backed by an in-memory map.
@@ -63,7 +63,7 @@ public class InMemoryActivityManager implements InMemoryManager<AmpActivityVersi
                 .withDraft(false)
                 .withGroup(group1)
                 .withActivityCreator(creator)
-                .withApprovalStatus(ApprovalStatus.started_approved)
+                .withApprovalStatus(ApprovalStatus.startedapproved)
                 .withTeam(creator.getAmpTeam())
                 .getActivity());
         activityGroupVersions.put(1L, 1L);

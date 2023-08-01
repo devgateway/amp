@@ -1,6 +1,7 @@
 package org.digijava.module.aim.helper;
 
 import org.apache.commons.lang.time.DateUtils;
+import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.algo.ValueWrapper;
 import org.dgfoundation.amp.algo.VivificatingMap;
@@ -14,24 +15,6 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.util.ActivityUtil;
-
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Types;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import org.apache.log4j.Logger;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -39,6 +22,13 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.message.jobs.AmpJobsUtil;
 import org.hibernate.jdbc.Work;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptySet;
@@ -206,7 +196,7 @@ public final class SummaryChangesService {
                                 + "       OR isolated IS NULL ) ",
                         Constants.ACTIVITY_NEEDS_APPROVAL_STATUS,
                         ApprovalStatus.approved.getDbName(),
-                        ApprovalStatus.started_approved.getDbName());
+                        ApprovalStatus.startedapproved.getDbName());
 
                 ArrayList<FilterParam> params = new ArrayList<FilterParam>();
                 params.add(new FilterParam(DateUtils.addDays(fromDate, -1), Types.TIMESTAMP));

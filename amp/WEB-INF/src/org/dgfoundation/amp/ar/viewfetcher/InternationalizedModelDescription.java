@@ -1,22 +1,17 @@
 package org.dgfoundation.amp.ar.viewfetcher;
 
-import java.lang.reflect.Field;
-import java.sql.SQLException;
-import java.util.*;
-
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
-import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.translation.util.ContentTranslationUtil;
-import org.hibernate.mapping.Column;
-import org.hibernate.mapping.PersistentClass;
 import org.hibernate.metamodel.internal.MetamodelImpl;
+import org.hibernate.persister.entity.AbstractEntityPersister;
 import org.hibernate.persister.entity.EntityPersister;
 import org.hibernate.persister.entity.SingleTableEntityPersister;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import java.lang.reflect.Field;
+import java.util.*;
 
 /**
  * class holding the description of the i18n fields from a Hibernate model (identified by class name)
@@ -25,9 +20,7 @@ import javax.persistence.PersistenceContext;
  *
  */
 public class InternationalizedModelDescription {
-    @PersistenceContext
-    private EntityManager entityManager;
-    
+
     public final String className;
     
     public final HashMap<String, InternationalizedPropertyDescription> properties = new HashMap<String, InternationalizedPropertyDescription>();
@@ -51,8 +44,8 @@ public class InternationalizedModelDescription {
 //          throw new RuntimeException("Could not get RAW JDBC Connection", e);
 //      }
 //  }
-public EntityPersister getPersister(final Class<?> modelClazz) {
-      entityManager=  PersistenceManager.getSession().getEntityManagerFactory().createEntityManager();
+public static EntityPersister getPersister(final Class<?> modelClazz) {
+    EntityManager entityManager=  PersistenceManager.getRequestDBSession().getEntityManagerFactory().createEntityManager();
     final MetamodelImpl metamodel = (MetamodelImpl) entityManager.getMetamodel();
     final EntityPersister entityPersister = metamodel.entityPersister(modelClazz);
     if (entityPersister instanceof SingleTableEntityPersister) {
@@ -84,8 +77,8 @@ public EntityPersister getPersister(final Class<?> modelClazz) {
         if (modelClass.getAnnotation(TranslatableClass.class) == null)
             throw new RuntimeException("asked to scan class " + modelClass + ", which is translatable");
             
-        String keyColumnName = Arrays.stream(((SingleTableEntityPersister)getPersister(modelClass)).getKeyColumnNames()).iterator().next();
-        String modelTableName = ((SingleTableEntityPersister)getPersister(modelClass)).getTableName();
+        String keyColumnName = Arrays.stream(((AbstractEntityPersister)getPersister(modelClass)).getKeyColumnNames()).iterator().next();
+        String modelTableName = ((AbstractEntityPersister)getPersister(modelClass)).getTableName();
         Set<String> existingColumns = SQLUtils.getTableColumns(modelTableName);
         boolean idColumnExists = existingColumns.contains(keyColumnName);
                 

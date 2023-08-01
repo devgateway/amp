@@ -177,15 +177,22 @@
 	</http>
 
 
+	<beans:bean id="securityContextLogoutHandler" class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler" />
+
 	<beans:bean id="logoutFilter" class="org.springframework.security.web.authentication.logout.LogoutFilter">
-		<beans:constructor-arg index="0" value="/showLayout.do/?layout=login" />
-		<beans:constructor-arg index="1">
+		<beans:constructor-arg value="/showLayout.do/?layout=login" />
+		<beans:constructor-arg>
 			<beans:list>
-				<beans:bean id="securityContextLogoutHandler" class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler" />
+				<beans:ref bean="securityContextLogoutHandler" />
 			</beans:list>
 		</beans:constructor-arg>
-<!--		<beans:property name="filterProcessesUrl" value="/j_spring_logout" />-->
+		<beans:property name="logoutRequestMatcher">
+			<beans:bean class="org.springframework.security.web.util.matcher.AntPathRequestMatcher">
+				<beans:constructor-arg value="/j_spring_logout" />
+			</beans:bean>
+		</beans:property>
 	</beans:bean>
+
 	<!-- set the digestEntryPoint to set up the HTTP headers for digest -->
 	<http entry-point-ref="digestEntryPoint" realm="AMP-Realm" use-expressions="false">
 		<!-- do not allow anonymous tokens, they are enabled by default ! -->

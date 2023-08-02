@@ -327,7 +327,6 @@ public class FiscalCalendarUtil {
         cal.setTime(date);
         DateTime dateTime = new DateTime(chronology);
         dateTime = dateTime.withDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH));
-        // clear any HH:mm:ss
         dateTime = dateTime.minusMillis(dateTime.getMillisOfDay());
         return dateTime;
     }

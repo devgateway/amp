@@ -365,11 +365,9 @@ public class RequestUtils {
 
         if (includeLocal) {
             return ipAddress;
-        } else {
-            /**
-             * @todo verify for local address
-             */
-        }
+        }  /**
+         * @todo verify for local address
+         */
 
         return ipAddress;
     }
@@ -383,7 +381,7 @@ public class RequestUtils {
      */
     public static String getFullModuleUrl(HttpServletRequest request) {
 
-        StringBuffer url = new StringBuffer(1024);
+        StringBuilder url = new StringBuilder(1024);
 
         ModuleInstance moduleInstance = getModuleInstance(request);
         String rootUrl = DgUtil.getCurrRootUrl(request);

@@ -6,10 +6,11 @@
  */
 package org.dgfoundation.amp.ar.view.pdf;
 
-import com.lowagie.text.Font;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.PdfPTable;
+
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.cell.TextCell;
@@ -31,7 +32,7 @@ public class TextCellPDF extends PDFExporter {
      * @param table
      * @param item
      */
-    public TextCellPDF(PdfPTable table, Viewable item,Long ownerId) {
+    public TextCellPDF(PdfPTable table, Viewable item, Long ownerId) {
         super(table, item,ownerId);
         // TODO Auto-generated constructor stub
     }

@@ -6,10 +6,11 @@
  */
 package org.dgfoundation.amp.ar.view.pdf;
 
-import com.lowagie.text.Font;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.PdfPTable;
+
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 import org.dgfoundation.amp.ar.CellColumn;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.Viewable;
@@ -47,8 +48,13 @@ public class CellColumnPDF extends PDFExporter {
          {
              c.invokeExporter(this);
          }
-         else 
+         else
+         {
+             Font myfont = new Font(Font.FontFamily.valueOf("Verdana"), Font.ITALIC, 13);
+
              table.addCell(new PdfPCell(new Paragraph(" ",new Font(ExportActivityToPDF.basefont, 10, Font.NORMAL))));
+
+         }
     }
 
 }

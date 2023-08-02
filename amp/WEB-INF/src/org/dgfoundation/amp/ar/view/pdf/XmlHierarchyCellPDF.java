@@ -3,9 +3,10 @@
  */
 package org.dgfoundation.amp.ar.view.pdf;
 
-import com.lowagie.text.*;
-import com.lowagie.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.PdfPTable;
+
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.cell.XmlHierarchyCell;
@@ -25,7 +26,7 @@ public class XmlHierarchyCellPDF extends PDFExporter {
      * @param table
      * @param item
      */
-    public XmlHierarchyCellPDF(PdfPTable table, Viewable item,Long ownerId) {
+    public XmlHierarchyCellPDF(PdfPTable table, Viewable item, Long ownerId) {
         super(table, item,ownerId);
         // TODO Auto-generated constructor stub
     }

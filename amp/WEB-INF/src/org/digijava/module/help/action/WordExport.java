@@ -3,8 +3,9 @@
  */
 package org.digijava.module.help.action;
 
-import com.lowagie.text.*;
-import com.lowagie.text.html.simpleparser.HTMLWorker;
+
+import com.itextpdf.text.*;
+import com.itextpdf.text.html.simpleparser.HTMLWorker;
 import com.lowagie.text.rtf.RtfWriter2;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
@@ -49,8 +50,8 @@ public class WordExport extends Action {
             String moduleInstance = RequestUtils.getModuleInstance(request).getInstanceName();
             //
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            Document document = new Document(PageSize.A4);          
-            RtfWriter2 writer2 = RtfWriter2.getInstance(document, baos);
+            Document document = new Document(PageSize.A4);
+//            RtfWriter2 writer2 = RtfWriter2.getInstance(document, baos);
             //
             document.open();
             Font titleFont = FontFactory.getFont("Arial", 24, Font.BOLD);
@@ -64,7 +65,7 @@ public class WordExport extends Action {
             writechild(20, helpTopics, moduleInstance, TLSUtils.getSite(), TLSUtils.getLangCode(), document);
             //
             document.close();
-            writer2.close();
+//            writer2.close();
             response.setContentLength(baos.size());
             ServletOutputStream out = response.getOutputStream();
             baos.writeTo(out);

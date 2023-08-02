@@ -1,6 +1,6 @@
 package org.dgfoundation.amp.gpi.reports.export.pdf;
 
-import com.lowagie.text.Element;
+import com.itextpdf.text.Element;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.gpi.reports.GPIReportConstants;
 

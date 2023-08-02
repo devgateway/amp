@@ -6,10 +6,12 @@
  */
 package org.dgfoundation.amp.ar.view.pdf;
 
-import com.lowagie.text.Font;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.PdfPTable;
+
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.ReportData;
@@ -19,7 +21,6 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.action.ExportActivityToPDF;
 import org.digijava.module.aim.dbentity.AmpReports;
 
-import java.awt.*;
 import java.util.List;
 
 /**
@@ -130,7 +131,7 @@ public class TrailCellsPDF extends PDFExporter {
                 PdfPCell pdfc2 = new PdfPCell(new Paragraph(ExportActivityToPDF.postprocessText(result+" ("+grd.getTotalUniqueRows()+")"),totalFont));
                 pdfc2.setColspan(grd.getTotalDepth());
                 table.addCell(pdfc2);
-                getExportState().currentBackColor = new Color(235,235,235);
+                getExportState().currentBackColor = new BaseColor(235,235,235);
                 pdfc2.setBackgroundColor(getExportState().currentBackColor);
             }else{
                 pdfc = new PdfPCell(new Paragraph(ExportActivityToPDF.postprocessText(result+" ("+grd.getTotalUniqueRows()+")"),totalFont));
@@ -142,7 +143,7 @@ public class TrailCellsPDF extends PDFExporter {
 //                      pdfc.setColspan(span);
 //                  }
 //              }
-                getExportState().currentBackColor = new Color(235,235,235);
+                getExportState().currentBackColor = new BaseColor(235,235,235);
                 pdfc.setBackgroundColor(getExportState().currentBackColor);
                 table.addCell(pdfc);
             }

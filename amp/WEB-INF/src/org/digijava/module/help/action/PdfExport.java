@@ -3,9 +3,10 @@
  */
 package org.digijava.module.help.action;
 
-import com.lowagie.text.*;
-import com.lowagie.text.html.simpleparser.HTMLWorker;
-import com.lowagie.text.pdf.PdfWriter;
+
+import com.itextpdf.text.*;
+import com.itextpdf.text.html.simpleparser.HTMLWorker;
+import com.itextpdf.text.pdf.PdfWriter;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -53,7 +54,7 @@ public class PdfExport extends Action {
             Site site = RequestUtils.getSite(request);
             //
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            Document document = new Document(PageSize.A4);          
+            Document document = new Document(PageSize.A4);
             PdfWriter pdfWriter = PdfWriter.getInstance(document, baos);
             //
             document.open();

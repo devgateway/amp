@@ -6,8 +6,8 @@
  */
 package org.digijava.module.aim.action;
 
-import com.lowagie.text.*;
-import com.lowagie.text.pdf.*;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.*;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -79,13 +79,13 @@ public class PDFExportAction extends Action implements PdfPageEvent
         // This a temporary fix to avoid stack overflow error in large reports AMP-5324
         // temporary my a$$
         Rectangle page = new Rectangle(new Float("1500"), new Float("1500"));
-        Document document = new Document(page.rotate(),5, 5, 15, 50);               
+        Document document = new Document(page.rotate(),5, 5, 15, 50);
             
         //
         response.setContentType("application/pdf");
         response.setHeader("Content-Disposition", ResponseUtil.encodeContentDispositionForDownload(request, report.getName() + ".pdf"));
         //
-        PdfWriter writer = PdfWriter.getInstance(document,response.getOutputStream());      
+        PdfWriter writer = PdfWriter.getInstance(document,response.getOutputStream());
         //
         writer.setPageEvent(this);
         // noteFromSession=AmpReports.getNote(request.getSession());    
@@ -237,11 +237,7 @@ public class PDFExportAction extends Action implements PdfPageEvent
                 String urlPrefix = this.request.getRequestURL().substring(0, end); 
                 try {
                     logo = Image.getInstance(urlPrefix + "/TEMPLATE/ampTemplate/images/AMPLogo.png");
-                } catch (BadElementException e) {
-                    e.printStackTrace();
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
+                } catch (BadElementException | IOException e) {
                     e.printStackTrace();
                 }
                 PdfPCell pdfc;  
@@ -267,7 +263,7 @@ public class PDFExportAction extends Action implements PdfPageEvent
             }                                                       
             if (this.request.getAttribute("statementPositionOptions").equals("0")) {//header        
                 PdfPCell pdfc;
-                    Font font = new Font(Font.COURIER, 8, Font.COURIER);        
+                    Font font = new Font(Font.FontFamily.valueOf(BaseFont.COURIER), 8);
                 pdfc = new PdfPCell(new Paragraph(stmt, font));
                 pdfc.setPaddingBottom(10);
                 pdfc.setPaddingTop(10);
@@ -286,7 +282,7 @@ public class PDFExportAction extends Action implements PdfPageEvent
         translatedReportDescription=TranslatorWorker.translateText("Description:");
     
         PdfPCell pdfc;
-            Font titleFont = new Font(Font.COURIER, 8, Font.COURIER);       
+            Font titleFont = new Font(Font.FontFamily.valueOf(BaseFont.COURIER), 8);
             //Font titleFont = new Font(Font.COURIER, 16, Font.BOLD);               
         pdfc = new PdfPCell(new Paragraph(rd.getName(),titleFont));
         pdfc.setPaddingBottom(10);
@@ -306,7 +302,7 @@ public class PDFExportAction extends Action implements PdfPageEvent
         //translatedNotes
         //ArConstants.SELECTED_CURRENCY
         //Currency
-            Font currencyFont = new Font(Font.COURIER, 10, Font.ITALIC);
+            Font currencyFont = new Font(Font.FontFamily.valueOf(BaseFont.COURIER), 10, Font.ITALIC);
         pdfc = new PdfPCell(new Paragraph(translatedAmount+": "+translatedCurrency,currencyFont));
         pdfc.setPaddingBottom(2);
         pdfc.setPaddingTop(2);

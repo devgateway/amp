@@ -6,16 +6,17 @@
  */
 package org.dgfoundation.amp.ar.view.pdf;
 
-import com.lowagie.text.Font;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.PdfPTable;
+
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.Viewable;
 import org.digijava.module.aim.action.ExportActivityToPDF;
 
-import java.awt.*;
 import java.util.Iterator;
 
 /**
@@ -32,8 +33,8 @@ public class GroupReportDataPDF extends PDFExporter
      */
     public ReportPdfExportState state;
     
-    private static Color alternateColorA = new Color(185,219,243);
-    private static Color alternateColorB = new Color(0,156,205);
+    private static BaseColor alternateColorA = new BaseColor(185,219,243);
+    private static BaseColor alternateColorB = new BaseColor(0,156,205);
     
     /**
      * @param parent
@@ -73,11 +74,10 @@ public class GroupReportDataPDF extends PDFExporter
             }   
             table.addCell(pdfc);
         }
-        Iterator i=grd.getItems().iterator();
-        while (i.hasNext()) {
-                Viewable element = (Viewable) i.next();
+        for (org.dgfoundation.amp.ar.ReportData reportData : grd.getItems()) {
+            Viewable element = (Viewable) reportData;
             element.invokeExporter(this);
-        
+
         }
 
         //add trail cells

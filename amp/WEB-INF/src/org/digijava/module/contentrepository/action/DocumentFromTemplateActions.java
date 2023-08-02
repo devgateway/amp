@@ -1,10 +1,9 @@
 package org.digijava.module.contentrepository.action;
 
-import com.lowagie.text.Element;
-import com.lowagie.text.Font;
-import com.lowagie.text.PageSize;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.pdf.PdfWriter;
+
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.lowagie.text.rtf.RtfWriter2;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
@@ -35,6 +34,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.ByteArrayOutputStream;
 import java.util.*;
+import java.util.List;
+
 /**
  * contians actions , that can be done while trying to create document using Templates
  * @author Dare
@@ -150,13 +151,13 @@ public class DocumentFromTemplateActions extends DispatchAction {
      * @return
      */
     private String  createPdf(List<SubmittedValueHolder> pdfContent, String pdfName,Long documentType, String documentOwnerType,HttpServletRequest request){
-        com.lowagie.text.Document doc = new com.lowagie.text.Document(PageSize.A4);
+        Document doc = new Document(PageSize.A4);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
              PdfWriter.getInstance(doc, baos);
              doc.open();
-             com.lowagie.text.Font pageTitleFont = com.lowagie.text.FontFactory.getFont("Arial", 24, com.lowagie.text.Font.BOLD);
-             com.lowagie.text.Font plainFont = new Font(Font.TIMES_ROMAN, 10);
+            Font pageTitleFont = FontFactory.getFont("Arial", 24, Font.BOLD);
+             Font plainFont = new Font(Font.FontFamily.valueOf(BaseFont.TIMES_ROMAN), 10);
              Paragraph pageTitle = new Paragraph(pdfName, pageTitleFont);
              pageTitle.setAlignment(Element.ALIGN_CENTER);
              doc.add(pageTitle);
@@ -195,13 +196,13 @@ public class DocumentFromTemplateActions extends DispatchAction {
     
     
     private String createWord(List<SubmittedValueHolder> docContent, String docName, Long documentType, String documentOwnerType,HttpServletRequest request){
-        com.lowagie.text.Document doc = new com.lowagie.text.Document(PageSize.A4);
+        Document doc = new Document(PageSize.A4);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
-            RtfWriter2.getInstance(doc, baos);
+//            RtfWriter2.getInstance(doc, baos);
             doc.open();
-            com.lowagie.text.Font pageTitleFont = com.lowagie.text.FontFactory.getFont("Arial", 24, com.lowagie.text.Font.BOLD);
-            com.lowagie.text.Font plainFont = new Font(Font.TIMES_ROMAN, 10);
+            Font pageTitleFont = FontFactory.getFont("Arial", 24, Font.BOLD);
+            Font plainFont = new Font(Font.FontFamily.valueOf(BaseFont.TIMES_ROMAN), 10);
             Paragraph pageTitle = new Paragraph(docName, pageTitleFont);
             pageTitle.setAlignment(Element.ALIGN_CENTER);
             doc.add(pageTitle);

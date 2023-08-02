@@ -5,7 +5,7 @@
   "proxy": "http://localhost:8080",
   "scripts": {
     "start": "node scripts/start.js",
-    "build": "PUBLIC_URL=/ node scripts/build.js",
+    "build": "PUBLIC_URL=/TEMPLATE/reampv2/packages/container/build/ node scripts/build.js",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix"
   },
   "browserslist": {

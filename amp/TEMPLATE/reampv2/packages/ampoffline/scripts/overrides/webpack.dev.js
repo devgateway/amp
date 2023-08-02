@@ -30,6 +30,11 @@ const override = config => {
 
   config.output.publicPath = 'http://localhost:3001/';
 
+    config.devServer = {
+        ...config.devServer,
+        historyApiFallback: true,
+    }
+
   config.module.rules = [
     ...config.module.rules,
     {

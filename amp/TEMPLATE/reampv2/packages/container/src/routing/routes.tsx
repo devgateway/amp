@@ -6,6 +6,12 @@ const AmpOfflineLazy = React.lazy(() => import('../components/AmpOffline'));
 
 export const routes: RouteObject[] = [
     {
+        path: '/',
+        element: (
+            <div>reampv2</div>
+        ),
+    },
+    {
         path: 'ampoffline',
         element: (
             <Suspense fallback={<div className="loading"/>}>

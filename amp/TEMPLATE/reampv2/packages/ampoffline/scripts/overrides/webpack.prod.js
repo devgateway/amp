@@ -1,35 +1,45 @@
 const {ModuleFederationPlugin} = require('webpack').container;
-const ppackageJson = require('../../package.json');
 
 const webpackConfigPath = 'react-scripts/config/webpack.config';
 // eslint-disable-next-line import/no-dynamic-require
-const webpackDev = require(webpackConfigPath);
+const webpackConfig = require(webpackConfigPath);
+const packageJson = require("../../package.json");
 
 const override = config => {
     // eslint-disable-next-line global-require
     const moduleFederationPlugin = new ModuleFederationPlugin({
-        name: 'container',
+        name: 'ampoffline',
         filename: 'remoteEntry.js',
-        remotes: {
-            'ampoffline': 'ampoffline@http://localhost:3001/remoteEntry.js',
+        exposes: {
+            './AmpOfflineApp': './src/bootstrap',
         },
         shared: {
-            ...ppackageJson.dependencies,
+            ...packageJson.dependencies,
             react: {
                 singleton: true,
-                requiredVersion: ppackageJson.dependencies.react,
+                requiredVersion: packageJson.dependencies.react,
             },
             'react-dom': {
                 singleton: true,
-                requiredVersion: ppackageJson.dependencies['react-dom'],
-            },
-        },
+                requiredVersion: packageJson.dependencies['react-dom'],
+            }
+        }
     });
+
     config.plugins.push(moduleFederationPlugin);
+    config.mode = 'production';
 
     config.devServer = {
         ...config.devServer,
         historyApiFallback: true,
+    }
+    config.output = {
+        // Make sure to use [name] or [id] in output.filename
+        //  when using multiple entry points
+        ...config.output,
+        publicPath: '/TEMPLATE/reampv2/packages/ampoffline/build/',
+        filename: '[name].bundle.js',
+        chunkFilename: '[id].bundle.js'
     };
 
     config.module.rules = [
@@ -45,7 +55,8 @@ const override = config => {
     return config;
 };
 
-require.cache[require.resolve(webpackConfigPath)].exports = env => override(webpackDev(env));
+require.cache[require.resolve(webpackConfigPath)].exports = env => override(webpackConfig(env));
 
 // eslint-disable-next-line import/no-dynamic-require
 module.exports = require(webpackConfigPath);
+

@@ -137,13 +137,16 @@ public class SiteCache implements Runnable {
         }
     };
 
-    public static final Comparator<ModuleInstance> moduleInstanceComparator = (i1, i2) -> {
-        int result;
-        result = i1.getModuleName().compareTo(i2.getModuleName());
-        if (result == 0) {
-            result = i1.getInstanceName().compareTo(i2.getInstanceName());
+    public static final Comparator<ModuleInstance> moduleInstanceComparator = new Comparator<ModuleInstance>() {
+        public int compare(ModuleInstance i1,
+                            ModuleInstance i2) {
+            int result;
+            result = i1.getModuleName().compareTo(i2.getModuleName());
+            if (result == 0) {
+                result = i1.getInstanceName().compareTo(i2.getInstanceName());
+            }
+            return result;
         }
-        return result;
     };
 
     private java.util.List sharedInstances;
@@ -160,7 +163,7 @@ public class SiteCache implements Runnable {
 
     private SiteCache() {
         this.appScopeCache = DigiCacheManager.getInstance().getCache(Constants.APP_SCOPE_REGION);
-        cacheVersion = new Long(1);
+        cacheVersion = 1L;
         try {
             load(false);
         }
@@ -172,7 +175,7 @@ public class SiteCache implements Runnable {
     private void handleVersioning() {
         Long versionFromCache = (Long) appScopeCache.get(appScopeKey);
         if (versionFromCache == null) {
-            versionFromCache = new Long(0);
+            versionFromCache = 0L;
         }
 
         if (!cacheVersion.equals(versionFromCache)) {
@@ -205,29 +208,26 @@ public class SiteCache implements Runnable {
             
             newSharedInstances = new ArrayList<ModuleInstance>(session.createQuery(queryString).list());
 
-            Collections.sort(newSharedInstances, moduleInstanceComparator);
+            newSharedInstances.sort(moduleInstanceComparator);
 
             queryString = "from " + SiteDomain.class.getName() + " sd left join fetch sd.site site " +
                           " left join fetch site.translationLanguages left join fetch site.userLanguages " +
                           " left join fetch site.countries";
-            
-            Iterator<SiteDomain> iter = session.createQuery(queryString).list().iterator();
-            while (iter.hasNext()) {
-                SiteDomain siteDomain = iter.next();
 
+            for (SiteDomain siteDomain : (Iterable<SiteDomain>) session.createQuery(queryString).list()) {
                 String path = siteDomain.getSitePath() == null ? "" :
-                    siteDomain.getSitePath().trim();
+                        siteDomain.getSitePath().trim();
                 SortedMap<String, SiteDomain> siteDomainPathes = (SortedMap<String, SiteDomain>) siteDomainCache.get(
-                    siteDomain.getSiteDomain().trim());
+                        siteDomain.getSiteDomain().trim());
                 if (siteDomainPathes == null) {
                     siteDomainPathes = new TreeMap<String, SiteDomain>(reverseStringComparator);
                     siteDomainCache.put(siteDomain.getSiteDomain().trim(),
-                                        siteDomainPathes);
+                            siteDomainPathes);
                 }
                 siteDomainPathes.put(path, siteDomain);
 
                 Site site = siteDomain.getSite();
-                if( site != null ) {
+                if (site != null) {
                     if (!siteCache.containsKey(site.getId())) {
                         siteCache.put(site.getId(), new CachedSite(site));
                         sitesByStringIdCache.put(site.getSiteId(), new CachedSite(site));
@@ -244,9 +244,7 @@ public class SiteCache implements Runnable {
             throw new DgException("load() failed ",ex);
         }
 
-        Iterator iter = siteCache.values().iterator();
-        while (iter.hasNext()) {
-            CachedSite cachedSite = (CachedSite) iter.next();
+        for (CachedSite cachedSite : siteCache.values()) {
             synchronizePreferences(siteCache, cachedSite);
         }
 
@@ -259,7 +257,7 @@ public class SiteCache implements Runnable {
             boolean putBack = false;
             Long versionFromCache = (Long) appScopeCache.get(appScopeKey);
             if (versionFromCache == null) {
-                versionFromCache = new Long(0);
+                versionFromCache = 0L;
                 putBack = true;
             }
 

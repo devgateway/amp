@@ -608,6 +608,7 @@ public class RequestProcessor
                         }
                     }
 
+
                 requiredInstance = DgUtil.getRequiredInstance(request, moduleName,
                     moduleInstance);
 
@@ -683,7 +684,6 @@ public class RequestProcessor
                 if (logger.isDebugEnabled()) {
                     logger.debug("Action " + mapping.getPath() + " has empty security constraints and user is not logged in");
                 }
-                result = false;
             }
             else {
                 // If user is logged in and there are no additional requirements
@@ -712,17 +712,15 @@ public class RequestProcessor
                     ModuleInstance realInstance = moduleInstance.
                         getRealInstance() == null ?
                         moduleInstance : moduleInstance.getRealInstance();
-
-                    Iterator iter = requiredPermissions.iterator();
                     boolean permitted = false;
-                    while (iter.hasNext()) {
-                        Integer item = (Integer) iter.next();
+                    for (Object requiredPermission : requiredPermissions) {
+                        Integer item = (Integer) requiredPermission;
                         permitted = DgSecurityManager.permitted(subject,
-                            currentSite, realInstance,
-                            item.intValue());
+                                currentSite, realInstance,
+                                item);
                         if (permitted) {
                             if (logger.isDebugEnabled()) {
-                                logger.debug("Required action #" + item.intValue() + " is set");
+                                logger.debug("Required action #" + item + " is set");
                             }
                             break;
                         }
@@ -737,11 +735,10 @@ public class RequestProcessor
                         if (logger.isDebugEnabled()) {
                             logger.debug("Action " + mapping.getPath() + " is not permitted");
                         }
-                        result = false;
                     }
                 }
             }
-            if (result == false) {
+            if (!result) {
                 logger.debug("Action " + mapping.getPath() + " is redirecting to login...");
                 doLogin(request, response);
             }
@@ -749,11 +746,11 @@ public class RequestProcessor
 
         if (context != null) {
             context.putAttribute(Constants.ACTION_ROLES_PROCESS_RESULT,
-                                 new Boolean(result));
+                    result);
         }
         else {
             request.setAttribute(Constants.ACTION_ROLES_PROCESS_RESULT,
-                                 new Boolean(result));
+                    result);
         }
         return result;
 

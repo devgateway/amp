@@ -111,8 +111,7 @@ public class DgUtil {
      * @return root site
      */
     public static Site getRootSite(Site site) {
-        Site rootSite = SiteCache.getInstance().getRootSite(site);
-        return rootSite;
+        return SiteCache.getInstance().getRootSite(site);
     }
 
     /**
@@ -130,10 +129,9 @@ public class DgUtil {
                                               boolean isTranslator) {
         Locale language = null;
         if (isTranslator) {
-            Iterator iter = SiteCache.getInstance().getTranslationLanguages(
-                site).iterator();
-            while (iter.hasNext()) {
-                Locale item = (Locale) iter.next();
+            for (Object o : SiteCache.getInstance().getTranslationLanguages(
+                    site)) {
+                Locale item = (Locale) o;
                 if (item.getCode().equals(langCode)) {
                     language = item;
                     break;
@@ -141,10 +139,7 @@ public class DgUtil {
             }
         }
         else {
-            Iterator iter = SiteCache.getInstance().getUserLanguages(site).
-                iterator();
-            while (iter.hasNext()) {
-                Locale item = (Locale) iter.next();
+            for (Locale item : SiteCache.getInstance().getUserLanguages(site)) {
                 if (item.getCode().equals(langCode)) {
                     language = item;
                     break;
@@ -173,7 +168,7 @@ public class DgUtil {
 
         try {
             UserPreferencesPK key = new UserPreferencesPK(user, rootSite);
-            preferences = (UserLangPreferences) session.load(UserLangPreferences.class, key);
+            preferences = session.load(UserLangPreferences.class, key);
 
             logger.debug("Updating user language preferences");
             preferences.setNavigationLanguage(language);
@@ -195,9 +190,9 @@ public class DgUtil {
         if (language.getCode().equals(tm.getAppSettings().getLanguage()))
             return;
         tm.getAppSettings().setLanguage(language.getCode());
-        AmpTeamMember atm = (AmpTeamMember) PersistenceManager.getSession().get(AmpTeamMember.class, tm.getMemberId());
+        AmpTeamMember atm = PersistenceManager.getRequestDBSession().get(AmpTeamMember.class, tm.getMemberId());
         AmpTeam team = atm.getAmpTeam();
-        PersistenceManager.getSession().createQuery("update " + AmpApplicationSettings.class.getName() + " aas SET language='" + language.getCode() + "' where aas.team.ampTeamId = " + team.getAmpTeamId()).executeUpdate();
+        PersistenceManager.getRequestDBSession().createQuery("update " + AmpApplicationSettings.class.getName() + " aas SET language='" + language.getCode() + "' where aas.team.ampTeamId = " + team.getAmpTeamId()).executeUpdate();
     }
 
     public static void saveWorkspaceLanguagePreferences(HttpServletRequest request, AmpTeam ampTeam, User user) {
@@ -289,7 +284,7 @@ public class DgUtil {
         preferences.setNavigationLanguage(navigLanguage);
         preferences.setAlertsLanguage(user.getRegisterLanguage());
 
-        preferences.setContentLanguages(new HashSet(SiteCache.getInstance().
+        preferences.setContentLanguages(new HashSet<>(SiteCache.getInstance().
             getUserLanguages(rootSite)));
 
         return preferences;
@@ -364,11 +359,11 @@ public class DgUtil {
             // Determine language using cookies
             Cookie[] cookies = request.getCookies();
             if (cookies != null) {
-                for (int i = 0; i < cookies.length; i++) {
-                    if (cookies[i].getName().equals("digi_language")) {
-                        language = getSupportedLanguage(cookies[i].getValue(),
-                            currentSite,
-                            isLocalTranslatorForSite(request));
+                for (Cookie cookie : cookies) {
+                    if (cookie.getName().equals("digi_language")) {
+                        language = getSupportedLanguage(cookie.getValue(),
+                                currentSite,
+                                isLocalTranslatorForSite(request));
                         if (language != null) {
                             break;
                         }
@@ -398,9 +393,9 @@ public class DgUtil {
             // Accept-Language was not set in header, container puts server's
             // default locale there. That's why we need this check
             if (request.getHeader("Accept-Language") != null) {
-                Enumeration enumLocales = request.getLocales();
+                Enumeration<java.util.Locale> enumLocales = request.getLocales();
                 while (enumLocales.hasMoreElements()) {
-                    java.util.Locale locale = (java.util.Locale) enumLocales.
+                    java.util.Locale locale = enumLocales.
                         nextElement();
 
                     language = getSupportedLanguage(locale.getLanguage(),
@@ -463,7 +458,7 @@ public class DgUtil {
             return;
         }
 
-        Session session = null;
+        Session session;
         try {
 
             UserLangPreferences preferences;
@@ -472,7 +467,7 @@ public class DgUtil {
 
             UserPreferencesPK key = new UserPreferencesPK(currentUser, rootSite);
             try {
-                preferences = (UserLangPreferences) session.load(
+                preferences = session.load(
                     UserLangPreferences.class, key);
                 logger.debug("Updating user language preferences");
             }
@@ -494,11 +489,11 @@ public class DgUtil {
     }
 
     public static String generateUID(String value, boolean hashIt) {
-        MessageDigest md = null;
-        StringBuffer buf = null;
+        MessageDigest md;
+        StringBuilder buf;
 
-        String data = (new Double(Math.random()).toString() +
-                       new Long(System.currentTimeMillis()).toString());
+        String data = (Math.random() +
+                Long.toString(System.currentTimeMillis()));
         if (hashIt && value != null) {
             data += value;
         }
@@ -509,11 +504,11 @@ public class DgUtil {
             md.update(data.getBytes());
             byte[] digest = md.digest();
 
-            buf = new StringBuffer();
+            buf = new StringBuilder();
 
-            for (int i = 0; i < digest.length; i++) {
-                buf.append( (Character.forDigit( (digest[i] & 0xF0) >> 4, 16)));
-                buf.append( (Character.forDigit( (digest[i] & 0xF), 16)));
+            for (byte b : digest) {
+                buf.append((Character.forDigit((b & 0xF0) >> 4, 16)));
+                buf.append((Character.forDigit((b & 0xF), 16)));
             }
         }
         catch (NoSuchAlgorithmException ex) {
@@ -523,7 +518,7 @@ public class DgUtil {
         }
 
         return (value == null || hashIt) ? buf.toString() :
-            value + buf.toString();
+            value + buf;
 
     }
 
@@ -692,15 +687,12 @@ public class DgUtil {
         Site currentSite = RequestUtils.getSite(request);
         ModuleInstance requiredInstance = new ModuleInstance();
         requiredInstance.setSite(currentSite);
-        System.out.println(requiredInstance);
 
         requiredInstance.setModuleName(moduleName);
         requiredInstance.setInstanceName(moduleInstance);
-        System.out.println(requiredInstance);
 
         List allowedInstances = SiteCache.getInstance().getInstances(
             currentSite);
-        System.out.println(allowedInstances);
         logger.debug("Allowed instances: " + allowedInstances);
         int index = Collections.binarySearch(allowedInstances, requiredInstance,
                                              SiteCache.moduleInstanceComparator);
@@ -733,7 +725,7 @@ public class DgUtil {
         // determine current user language
         Locale language = DgUtil.getLanguageFromRequest(request);
         logger.debug("Navigation language, determined from request is: " +
-                     language == null ? null : language.getCode());        
+                     language == null ? null : language.getCode());
         
        setSessionLanguage(request, response, language);
 
@@ -769,7 +761,9 @@ public class DgUtil {
      */
     public static boolean isLocalTranslatorForSite(HttpServletRequest request) {
         Site currentSite = RequestUtils.getSite(request);
-        Subject subject = DgSecurityManager.getSubject(request);
+//                Subject subject = RequestUtils.getSubject(request);
+
+        Subject subject = RequestUtils.getSubject(request);
 
         return DgSecurityManager.permitted(subject, currentSite,
                                            ResourcePermission.INT_TRANSLATE);
@@ -783,7 +777,10 @@ public class DgUtil {
      */
     public static boolean isLocalTranslatorForSite(HttpServletRequest request,
         Site site) {
-        Subject subject = DgSecurityManager.getSubject(request);
+//                Subject subject = RequestUtils.getSubject(request);
+
+        Subject subject = RequestUtils.getSubject(request);
+
 
         return DgSecurityManager.permitted(subject, site,
                                            ResourcePermission.INT_TRANSLATE);
@@ -797,7 +794,10 @@ public class DgUtil {
      */
     public static boolean isSiteAdministrator(HttpServletRequest request) {
         Site currentSite = RequestUtils.getSite(request);
-        Subject subject = DgSecurityManager.getSubject(request);
+//                Subject subject = RequestUtils.getSubject(request);
+
+        Subject subject = RequestUtils.getSubject(request);
+
 
         return DgSecurityManager.permitted(subject, currentSite,
                                            ResourcePermission.INT_ADMIN);
@@ -812,7 +812,10 @@ public class DgUtil {
      */
     public static boolean isSiteAdministrator(HttpServletRequest request,
                                               Site site) {
-        Subject subject = DgSecurityManager.getSubject(request);
+//                Subject subject = RequestUtils.getSubject(request);
+
+        Subject subject = RequestUtils.getSubject(request);
+
 
         return DgSecurityManager.permitted(subject, site,
                                            ResourcePermission.INT_ADMIN);
@@ -834,7 +837,10 @@ public class DgUtil {
         }
 
         Site currentSite = RequestUtils.getSite(request);
-        Subject subject = DgSecurityManager.getSubject(request);
+//                Subject subject = RequestUtils.getSubject(request);
+
+        Subject subject = RequestUtils.getSubject(request);
+
         ModuleInstance moduleInstance = getRealModuleInstance(request);
 
         return DgSecurityManager.permitted(subject, currentSite, moduleInstance,
@@ -851,7 +857,8 @@ public class DgUtil {
     public static boolean isGroupTranslatorForSite(HttpServletRequest request) {
         Site currentSite = RequestUtils.getSite(request);
         Site rootSite = getRootSite(currentSite);
-        Subject subject = DgSecurityManager.getSubject(request);
+                Subject subject = RequestUtils.getSubject(request);
+
 
         return DgSecurityManager.permitted(subject, rootSite,
                                            ResourcePermission.INT_TRANSLATE);
@@ -866,7 +873,8 @@ public class DgUtil {
     public static boolean isGroupTranslatorForSite(HttpServletRequest request,
         Site site) {
         Site rootSite = getRootSite(site);
-        Subject subject = DgSecurityManager.getSubject(request);
+                Subject subject = RequestUtils.getSubject(request);
+
 
         return DgSecurityManager.permitted(subject, rootSite,
                                            ResourcePermission.INT_TRANSLATE);

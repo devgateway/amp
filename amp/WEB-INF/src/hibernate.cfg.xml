@@ -2,10 +2,11 @@
 <!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd" [<!ENTITY dialect SYSTEM "classpath://hibernate-dialect.xml">]>
 <hibernate-configuration>		
  <session-factory>
-  <property name="transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
+  <property name="hibernate.transaction.coordinator_class">jdbc</property>
   <property name="connection.datasource">java:comp/env/ampDS</property>
   &dialect;
   <property name="current_session_context_class">thread</property>
+  <property name="hibernate.cache.ehcache.missing_cache_strategy">create</property>
   <property name="max_fetch_depth">0</property>
   <property name="default_batch_fetch_size">20</property>
   <property name="order_updates">true</property>

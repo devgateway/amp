@@ -170,10 +170,10 @@ public class AccessLogger
             entry.setIdentityPattern(action.getIdentityPattern());
             //entry.setParameters(new HashMap(request.getParameterMap()));
 
-            HashMap params = new HashMap();
-            Enumeration enumParamNames = request.getParameterNames();
+            HashMap params = new HashMap<>();
+            Enumeration<String> enumParamNames = request.getParameterNames();
             while (enumParamNames.hasMoreElements()) {
-                String paramName = (String)enumParamNames.nextElement();
+                String paramName = enumParamNames.nextElement();
                 String paramValue = request.getParameter(paramName);
 
                 params.put(paramName, paramValue);
@@ -211,10 +211,10 @@ public class AccessLogger
         DigiConfig config = DigiConfigManager.getConfig();
         if (config.isEnableLogging()) {
             int buffSize = config.getAccessLogBuffSize() == null ? BUFFER_SIZE :
-                config.getAccessLogBuffSize().intValue();
+                    config.getAccessLogBuffSize();
 
             int poolSize = config.getAccessLogPoolSize() == null ? POOL_SIZE :
-                config.getAccessLogPoolSize().intValue();
+                    config.getAccessLogPoolSize();
 
             logger.info("Creating access logger. Buffer size: " + buffSize + ", pool size: " + poolSize);
             asyncBuffer = new AsyncBuffer(

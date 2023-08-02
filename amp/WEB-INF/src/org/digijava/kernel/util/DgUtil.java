@@ -51,7 +51,7 @@ import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.jsoup.Jsoup;
-import org.jsoup.safety.Whitelist;
+import org.jsoup.safety.Safelist;
 
 import javax.security.auth.Subject;
 import javax.servlet.http.Cookie;
@@ -1854,7 +1854,7 @@ public class DgUtil {
         if (content == null) {
             return null;
         }
-        String noTags = Jsoup.clean(content, Whitelist.none());
+        String noTags = Jsoup.clean(content, Safelist.none());
         String noNbsp = noTags.replace("&nbsp;", " ");
         return StringUtils.normalizeSpace(StringEscapeUtils.unescapeHtml4(noNbsp));
     }

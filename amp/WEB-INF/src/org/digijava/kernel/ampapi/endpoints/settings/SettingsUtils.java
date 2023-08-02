@@ -761,7 +761,8 @@ public class SettingsUtils {
             try {
                 reportSettings.setYearsRangeFilterRule(start, end);
             } catch (Exception e) {
-                logger.error(e.getMessage());
+
+                logger.error(e.getMessage(),e);
             }
         }
     }

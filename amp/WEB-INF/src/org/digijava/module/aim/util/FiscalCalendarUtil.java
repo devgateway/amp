@@ -356,7 +356,7 @@ public class FiscalCalendarUtil {
     private static DateTime getDateTime(AmpFiscalCalendar fromCal, Integer year, int daysOffset, 
             AmpFiscalCalendar toCal) {
         Calendar tmpCal = Calendar.getInstance();
-        tmpCal.set(year, 0, 1, 0, 0, 0);
+        tmpCal.set(year, Calendar.JANUARY, 1, 0, 0, 0);
         
         if (fromCal == null) {
             tmpCal.add(Calendar.DAY_OF_YEAR, daysOffset);

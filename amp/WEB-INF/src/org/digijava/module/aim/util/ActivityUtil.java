@@ -215,8 +215,8 @@ public class ActivityUtil {
           Query query = session.createQuery(oql);
 
           setSearchActivitiesQueryParams(query, ampThemeId, statusCode, donorOrgId, fromDate, toDate, locationId, teamMember);
-
-          result = (Integer)query.uniqueResult();
+            Long longValue = (Long) query.uniqueResult();
+            result= longValue.intValue();
         }
         catch (Exception ex) {
           throw new DgException("Cannot count activities for NPD",ex);
@@ -1675,7 +1675,8 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         Integer retVal = null;
         try {
             Query qry= session.createQuery("select count(a) from " +AmpActivityVersion.class.getName() +" a where a.ampActivityId="+versionId);
-            retVal = (Integer)qry.uniqueResult();
+            Long longValue = (Long) qry.uniqueResult();
+            retVal= longValue.intValue();
         } catch (Exception e) {
             e.printStackTrace();
         }       

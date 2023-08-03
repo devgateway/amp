@@ -94,7 +94,7 @@ public abstract class ResourcePermission
             if (v == null) {
                 throw new RuntimeException("Unkonow security action: " + action);
             } else {
-                mask = mask | modifySecurityAction(( (Integer) v).intValue());
+                mask = mask | modifySecurityAction(v);
             }
         }
         return mask;
@@ -196,7 +196,7 @@ public abstract class ResourcePermission
         Iterator iter = getCodesToActions().entrySet().iterator();
         while (iter.hasNext()) {
             Map.Entry item = (Map.Entry)iter.next();
-            int code = ((Integer)item.getKey()).intValue();
+            int code = (Integer) item.getKey();
             String name = (String)item.getValue();
 
             if ((code | tmpMask) == tmpMask) {

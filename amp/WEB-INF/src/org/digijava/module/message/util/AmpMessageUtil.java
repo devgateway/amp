@@ -16,6 +16,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
+import org.hibernate.type.LongType;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
@@ -274,8 +275,9 @@ public class AmpMessageUtil {
             query=session.createQuery(queryString);                         
             query.setParameter("tmId", tmId);
                         query.setParameter("hidden", hidden);
-            retValue=((Integer)query.uniqueResult()).intValue();            
-        }catch(Exception ex) {          
+            Long longValue = (Long) query.uniqueResult();
+            retValue= longValue.intValue();
+        }catch(Exception ex) {
             logger.error("Unable to Load Messages", ex);
             throw new AimException("Unable to Load Messages", ex);          
         }
@@ -462,9 +464,10 @@ public class AmpMessageUtil {
             queryString="select count(state.id) from "+AmpMessageState.class.getName()+" state, "+clazz.getName()+" msg where"+
             " msg.id=state.message.id and state.senderId = :tmId and msg.draft="+draft+" and state.messageHidden=true"; 
             query=session.createQuery(queryString);         
-            query.setLong("tmId", tmId);    
+            query.setParameter("tmId", tmId, LongType.INSTANCE);
             if(query.list().size()>0){
-                hiddenMsgs=((Integer)query.uniqueResult()).intValue();
+                Long longValue = (Long) query.uniqueResult();
+                hiddenMsgs= longValue.intValue();
                 if(hiddenMsgs>0){
                     full=true;
                 }

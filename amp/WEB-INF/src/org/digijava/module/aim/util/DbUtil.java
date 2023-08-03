@@ -29,6 +29,7 @@ import org.hibernate.jdbc.Work;
 import org.hibernate.query.Query;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.LongType;
+import org.hibernate.type.ObjectType;
 import org.hibernate.type.StringType;
 
 import javax.servlet.http.HttpServletRequest;
@@ -1794,8 +1795,9 @@ public class DbUtil {
             }
             Query qry = session.createQuery(queryString);
             qry.setParameter("name", name, StringType.INSTANCE);
-            Integer amount = (Integer) qry.uniqueResult();
-            if (amount != null && amount.intValue() > 0) {
+            Long longValue = (Long) qry.uniqueResult();
+            Integer amount= longValue.intValue();
+            if (amount > 0) {
                 duplicateName = true;
             }
         } catch (Exception e) {
@@ -1988,7 +1990,7 @@ public class DbUtil {
 
     public static List<AmpField> getAmpFields() {
         String queryString = "select o from " + AmpField.class.getName() + " o ";
-        return PersistenceManager.getSession().createQuery(queryString).list();
+        return PersistenceManager.getRequestDBSession().createQuery(queryString).list();
     }
 
     public static List<AmpComments> getAllCommentsByField(Long fid, Long aid) {
@@ -2026,9 +2028,8 @@ public class DbUtil {
                     + "where (o.activity=:aid)";
             qry = session.createQuery(queryString);
             qry.setParameter("aid", aid, LongType.INSTANCE);
-            Iterator itr = qry.list().iterator();
-            while (itr.hasNext()) {
-                AmpActivityBudgetStructure bs = (AmpActivityBudgetStructure) itr.next();
+            for (Object o : qry.list()) {
+                AmpActivityBudgetStructure bs = (AmpActivityBudgetStructure) o;
                 budgetStructure.add(bs);
             }
         } catch (Exception e) {
@@ -2117,12 +2118,12 @@ public class DbUtil {
                 ind.setIndicatorCode(indc.getIndicatorCode());
                 ind.setName(indc.getName());
                 ind.setQuestion(new ArrayList());
-                iter2 = session.createFilter(indc.getQuestions(), "order by this.questionNumber asc").list().iterator();
                 // iter2 = session.createFilter(((AmpAhsurveyIndicator)
                 // session.load(AmpAhsurveyIndicator.class,
                 // indc.getAmpIndicatorId())).getQuestions(),
                 // "order by this.questionNumber asc").list().iterator();
                 Iterator iter3 = null;
+                iter2 = session.createFilter(indc.getQuestions(), "order by this.questionNumber asc").list().iterator();
                 while (iter2.hasNext()) {
                     AmpAhsurveyQuestion q = (AmpAhsurveyQuestion) iter2.next();
                     Question ques = new Question();
@@ -2134,7 +2135,7 @@ public class DbUtil {
                         while (iter3.hasNext()) {
                             AmpAhsurveyResponse res = (AmpAhsurveyResponse) iter3.next();
                             if (res.getAmpQuestionId().getAmpQuestionId().equals(q.getAmpQuestionId())) {
-                                if (q.getQuestionNumber().intValue() == 1) {
+                                if (q.getQuestionNumber() == 1) {
                                     if ("yes".equalsIgnoreCase(res.getResponse()))
                                         ansFlag = true;
                                 }
@@ -2148,15 +2149,14 @@ public class DbUtil {
                                 // difference(%) between planned & actual
                                 // disbursement(s)
                                 if ("calculated".equalsIgnoreCase(q.getAmpTypeId().getName())) {
-                                    if (q.getQuestionNumber().intValue() == 10) {
+                                    if (q.getQuestionNumber() == 10) {
                                         if (ansFlag) {
-                                            Iterator itr4 = fundingSet.iterator();
                                             Iterator itr5 = null;
                                             double actual = 0.0;
                                             double planned = 0.0;
                                             AmpFundingDetail fd = null;
-                                            while (itr4.hasNext()) {
-                                                AmpFunding ampf = (AmpFunding) itr4.next();
+                                            for (Object o : fundingSet) {
+                                                AmpFunding ampf = (AmpFunding) o;
                                                 itr5 = ampf.getFundingDetails().iterator();
                                                 while (itr5.hasNext()) {
                                                     fd = (AmpFundingDetail) itr5.next();
@@ -2317,7 +2317,7 @@ public class DbUtil {
         }
 
         List<CountryBean> sortedCountrieList = new ArrayList<>(trnCnCol);
-        Collections.sort(sortedCountrieList, new HelperTrnCountryNameComparator(navLang.getCode()));
+        sortedCountrieList.sort(new HelperTrnCountryNameComparator(navLang.getCode()));
         return sortedCountrieList;
     }
 
@@ -2333,8 +2333,8 @@ public class DbUtil {
                     + " where (msg.key IN (:msgLangKey)) and (msg.siteId=:siteId) and (msg.locale=:locale)";
 
             Query qry = PersistenceManager.getSession().createQuery(queryString);
-            qry.setString("siteId", site.getId().toString());
-            qry.setString("locale", navLang.getCode());
+            qry.setParameter("siteId", site.getId().toString(), StringType.INSTANCE);
+            qry.setParameter("locale", navLang.getCode(), StringType.INSTANCE);
             qry.setParameterList("msgLangKey", countriesByMsgKey.keySet());
 
             List<Message> translations = qry.list();
@@ -2420,7 +2420,7 @@ public class DbUtil {
                     relatedObj = org;
                 }
                 query = session.createQuery(qhl);
-                query.setEntity("relatedObj", relatedObj);
+                query.setParameter("relatedObj", relatedObj, ObjectType.INSTANCE);
                 query.executeUpdate();
             } catch (Exception e) {
                 logger.error("Delete Failed: " + e.toString());
@@ -2488,8 +2488,7 @@ public class DbUtil {
             collator = Collator.getInstance(locale);
             collator.setStrength(Collator.TERTIARY);
 
-            int result = collator.compare(o1.getName(), o2.getName());
-            return result;
+            return collator.compare(o1.getName(), o2.getName());
         }
     }
 
@@ -2511,8 +2510,7 @@ public class DbUtil {
                 collator.setStrength(Collator.TERTIARY);
             }
 
-            int result = collator.compare(o1.getOrgGrpName(), o2.getOrgGrpName());
-            return result;
+            return collator.compare(o1.getOrgGrpName(), o2.getOrgGrpName());
         }
     }
 
@@ -2597,8 +2595,7 @@ public class DbUtil {
             collator = Collator.getInstance(locale);
             collator.setStrength(Collator.TERTIARY);
 
-            int result = collator.compare(o1.getOrgType(), o2.getOrgType());
-            return result;
+            return collator.compare(o1.getOrgType(), o2.getOrgType());
         }
     }
 
@@ -2857,11 +2854,12 @@ public class DbUtil {
             String orgTypeName = AmpOrgType.hqlStringForName("o");
             String queryString = "select count(*) from " + AmpOrgType.class.getName() + " o where upper(" + orgTypeName
                     + ") like upper('" + name + "')";
-            if (groupId != null && groupId.longValue() != 0) {
+            if (groupId != null && groupId != 0) {
                 queryString += " and o.ampOrgTypeId!=" + groupId;
             }
             qry = sess.createQuery(queryString);
-            count = ((Integer) qry.uniqueResult()).intValue();
+            Long longValue = (Long) qry.uniqueResult();
+            count= longValue.intValue();
         } catch (Exception e) {
             logger.error("Exception while getting org types amount:" + e.getMessage());
         }
@@ -2876,11 +2874,12 @@ public class DbUtil {
             sess = PersistenceManager.getRequestDBSession();
             String queryString = "select count(*) from " + AmpOrgType.class.getName()
                     + " o where upper(o.orgTypeCode) like upper('" + code + "')";
-            if (typeId != null && typeId.longValue() != 0) {
+            if (typeId != null && typeId != 0) {
                 queryString += " and o.ampOrgTypeId!=" + typeId;
             }
             qry = sess.createQuery(queryString);
-            count = ((Integer) qry.uniqueResult()).intValue();
+            Long longValue = (Long) qry.uniqueResult();
+            count= longValue.intValue();
         } catch (Exception e) {
             logger.error("Exception while getting org types by code:" + e.getMessage());
         }
@@ -3049,11 +3048,11 @@ public class DbUtil {
      * Count agreements with the specified code.
      */
     public static Integer countAgreementsByCode(String agreementCode) {
-        return (Integer) PersistenceManager.getSession()
+        return ((Long) PersistenceManager.getSession()
                 .createCriteria(AmpAgreement.class)
                 .setProjection(Projections.count("id"))
                 .add(Restrictions.sqlRestriction("trim({alias}.code) = ?", agreementCode, StringType.INSTANCE))
-                .uniqueResult();
+                .uniqueResult()).intValue();
     }
     
     public static boolean hasDonorRole(Long id){
@@ -3065,10 +3064,11 @@ public class DbUtil {
             String queryString = "select count(*) from "    + AmpOrgRole.class.getName()
                     + " r where (r.organisation.id = :orgId) and r.role.roleCode = :code";
             query = session.createQuery(queryString);
-            query.setLong("orgId", id); 
-            query.setString("code", Constants.FUNDING_AGENCY);
-            Integer count = (Integer) query.uniqueResult();         
-            result = count > 0;         
+            query.setParameter("orgId", id, LongType.INSTANCE);
+            query.setParameter("code", Constants.FUNDING_AGENCY, StringType.INSTANCE);
+            Long longValue = (Long) query.uniqueResult();
+            int count = longValue.intValue();
+            result = count > 0;
         } catch (Exception e) {
             logger.error("Exception from hasDonorRole()", e);
         }

@@ -97,7 +97,7 @@ public class GPIReport9b extends GPIAbstractReport {
                     // To understand this part it reads this way: IF the
                     // Actual Disbursement (on indicator 9b) is the actual
                     // commitment (on fundings) then...
-                    int transactionType = ((Integer) data[8]).intValue();
+                    int transactionType = (Integer) data[8];
                     if (setup.getIndicator9bDisbursements().equals("ACTUAL_COMMITMENTS")) {
                         if (auxCategoryValue.equalsIgnoreCase("actual") && transactionType == Constants.COMMITMENT) {
                             useFundingDetail = true;

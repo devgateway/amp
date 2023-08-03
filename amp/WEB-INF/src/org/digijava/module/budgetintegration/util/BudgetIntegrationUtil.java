@@ -44,8 +44,9 @@ public final class BudgetIntegrationUtil {
         if (date != null) {
             qry.setParameter("date", date);
         }
+        Long longValue = (Long) qry.uniqueResult();
+        return longValue.intValue();
         
-        return (Integer) qry.uniqueResult();
     }
 
     public static void deleteResult(Set<AmpInterchangeableResult> results) {

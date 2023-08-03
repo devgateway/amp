@@ -97,7 +97,7 @@ public class GPIReport6 extends GPIAbstractReport {
                     // To understand this part it reads this way: IF the
                     // Actual Disbursement (on indicator 6) is the actual
                     // commitment (on fundings) then...
-                    int transactionType = ((Integer) data[8]).intValue();
+                    int transactionType = (Integer) data[8];
                     if (setup.getIndicator6ScheduledDisbursements().equals("ACTUAL_COMMITMENTS")) {
                         if (auxCategoryValue.equalsIgnoreCase("actual") && transactionType == Constants.COMMITMENT) {
                             useFundingDetail = true;

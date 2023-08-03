@@ -11,6 +11,8 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.Session;
 import org.hibernate.criterion.Projections;
 import org.hibernate.query.Query;
+import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
 
 import java.util.List;
 
@@ -88,10 +90,11 @@ public class ContactInfoUtil {
             }
             query=session.createQuery(queryString);
             if(id!=null){
-                query.setLong("id", id);
+                query.setParameter("id", id, LongType.INSTANCE);
             }
-            query.setString("email", email);
-            retValue=(Integer)query.uniqueResult();
+            query.setParameter("email", email, StringType.INSTANCE);
+            Long longValue = (Long) query.uniqueResult();
+            retValue= longValue.intValue();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -114,7 +117,8 @@ public class ContactInfoUtil {
                 queryString+=" where cont.name like '"+alpha+"%'";
             }           
             query=session.createQuery(queryString);
-            retValue=(Integer)query.uniqueResult();
+            Long longValue = (Long) query.uniqueResult();
+            retValue= longValue.intValue();
         } catch (Exception e) {
             e.printStackTrace();
         }

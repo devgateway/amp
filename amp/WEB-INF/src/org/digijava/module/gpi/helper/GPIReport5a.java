@@ -98,7 +98,7 @@ public class GPIReport5a extends GPIAbstractReport {
                     // To understand this part it reads this way: IF the
                     // Actual Disbursement (on indicator 5a) is the actual
                     // commitment (on fundings) then...
-                    int transactionType = ((Integer) data[8]).intValue();
+                    int transactionType = (Integer) data[8];
                     if (setup.getIndicator5aActualDisbursement().equals("ACTUAL_COMMITMENTS")) {
                         if (auxCategoryValue.equalsIgnoreCase("actual") && transactionType == Constants.COMMITMENT) {
                             column = 1;

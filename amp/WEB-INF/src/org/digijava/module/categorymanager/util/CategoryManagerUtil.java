@@ -487,7 +487,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
     }
 
     public static boolean isExitingAmpCategoryValue(String categoryKey, Long id, boolean onlyVisible) {
-        Integer count = (Integer) PersistenceManager.getSession().createQuery(
+        Long count = (Long) PersistenceManager.getSession().createQuery(
                 "select count(a) from " + AmpCategoryValue.class.getName()
                 + " a where a.id=:id "
                 + (onlyVisible ? "and (a.deleted=false or a.deleted is null) " : "") 
@@ -495,7 +495,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
             .setParameter("id", id)
             .setParameter("keyName", categoryKey)
             .uniqueResult();
-        return count == 1;
+        return count.intValue() == 1;
     }
 
     /**

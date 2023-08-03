@@ -27,6 +27,7 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.hibernate.NonUniqueResultException;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.hibernate.type.LongType;
 
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -933,9 +934,9 @@ public class DynLocationManagerUtil {
                         + " loc where (loc.parentCategoryValue=:cvId)";
                 Query qry = dbSession.createQuery(queryString);
                 qry.setCacheable(true);
-                qry.setLong("cvId", cvLocationType.getId());
-                int returnValue = (Integer) qry.uniqueResult();
-                return returnValue;
+                qry.setParameter("cvId", cvLocationType.getId(), LongType.INSTANCE);
+                Long longValue = (Long) qry.uniqueResult();
+                return longValue.intValue();
             }
         } catch (Exception e) {
             e.printStackTrace();

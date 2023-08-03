@@ -57,7 +57,8 @@ public final class DataFreezeUtil {
         Session dbSession = PersistenceManager.getSession();
         String queryString = "select count(*) from " + AmpDataFreezeSettings.class.getName();
         Query query = dbSession.createQuery(queryString);
-        return (Integer) query.uniqueResult();
+        Long longValue = (Long) query.uniqueResult();
+        return longValue.intValue();
     }
 
     public static AmpDataFreezeSettings getLatestFreezingConfiguration() {

@@ -925,7 +925,8 @@ public class SectorUtil {
                 queryString += " and cc.id!=" + id;
             }
             query = session.createQuery(queryString);
-            retValue = (Integer) query.uniqueResult();
+            Long longValue = (Long) query.uniqueResult();
+            retValue= longValue.intValue();
         } catch (Exception e) {
             e.printStackTrace();
         }

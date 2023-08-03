@@ -81,9 +81,8 @@ public class MonthlyInfoWorker {
         try {
             List months = getMonthYears(fp, false);
             if (months != null && months.size() > 0) {
-                Iterator iter = months.iterator();
-                while (iter.hasNext()) {
-                    Object[] dates = (Object[]) iter.next();
+                for (Object o : months) {
+                    Object[] dates = (Object[]) o;
                     Integer month = (Integer) dates[0];
                     Integer year = (Integer) dates[1];
 
@@ -105,10 +104,8 @@ public class MonthlyInfoWorker {
                     comparison.setPlannedDisbursement(getSumAmounts(monthPlannedDisb, currCode));
 
 
-
                     List monthActualDisbOrder = getMonthlyData(ampFundingId, Constants.DISBURSEMENT_ORDER, Constants.ACTUAL, month, year);
                     comparison.setDisbOrders(getSumAmounts(monthActualDisbOrder, currCode));
-
 
 
                     List monthPlannedExp = getMonthlyData(ampFundingId, Constants.EXPENDITURE, Constants.PLANNED, month, year);
@@ -178,9 +175,8 @@ public class MonthlyInfoWorker {
         try {
             List months = getMonthYears(fp, true);
             if (months != null && months.size() > 0) {
-                Iterator iter = months.iterator();
-                while (iter.hasNext()) {
-                    Object[] dates = (Object[]) iter.next();
+                for (Object o : months) {
+                    Object[] dates = (Object[]) o;
                     Integer month = (Integer) dates[0];
                     Integer year = (Integer) dates[1];
                     List monthPlanned = getMonthlyData(ampFundingId, transactionType, Constants.PLANNED, month, year);

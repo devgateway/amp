@@ -567,7 +567,7 @@ public class ComponentsUtil {
             Iterator itr = qry.list().iterator();
             if (itr.hasNext()) {
                 Integer cnt = (Integer) itr.next();
-                if (cnt.intValue() > 0)
+                if (cnt > 0)
                     duplicatesExist = true;
             }
         } catch (Exception ex) {

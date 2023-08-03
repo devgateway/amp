@@ -171,7 +171,7 @@ public class TeamMemberUtil {
                     + " where (teamMember.deleted is null or teamMember.deleted = false) and t.ampTeamId=:teamId and "
                     + " (role.teamHead=true or role.approver=true)";
             qry = session.createQuery(queryString);
-            qry.setLong("teamId", teamId);
+            qry.setParameter("teamId", teamId, LongType.INSTANCE);
             @SuppressWarnings("unchecked")
             List<AmpTeamMember> list = (List<AmpTeamMember>) qry.list();
             if (list != null) {
@@ -224,8 +224,9 @@ public class TeamMemberUtil {
     }
 
     private static boolean hasInfo(Session session, String queryString, Long ampTeamMemberId) {
-        Query query = session.createQuery(queryString).setLong("memberId", ampTeamMemberId);
-        return ((Integer)query.uniqueResult() > 0);
+        Query query = session.createQuery(queryString).setParameter("memberId", ampTeamMemberId, LongType.INSTANCE);
+        Long longValue = (Long) query.uniqueResult();
+        return longValue.intValue() > 0;
     }
 
     public static Collection getMembersUsingRole(Long roleId) {

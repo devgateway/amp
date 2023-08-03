@@ -17,6 +17,7 @@ import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
 import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -54,7 +55,8 @@ public class GPIUtils {
         Session dbSession = PersistenceManager.getSession();
         String queryString = "select count(*) from " + AmpGPINiAidOnBudget.class.getName();
         Query query = dbSession.createQuery(queryString);
-        return (Integer) query.uniqueResult();
+        Long longValue = (Long) query.uniqueResult();
+        return longValue.intValue();
     }   
 
     public static AmpOrganisation getOrganisation(Long id) {
@@ -138,8 +140,9 @@ public class GPIUtils {
         String queryString = "select count(*) from " + AmpGPINiDonorNotes.class.getName() + " donorNotes where donorNotes.donor.ampOrgId in (:donorIds) and indicatorCode = :indicatorCode";
         Query query = dbSession.createQuery(queryString);
         query.setParameterList("donorIds", getVerifiedOrgsList());
-        query.setString("indicatorCode", indicatorCode);
-        return (Integer) query.uniqueResult();
+        query.setParameter("indicatorCode", indicatorCode, StringType.INSTANCE);
+        Long longValue = (Long) query.uniqueResult();
+        return longValue.intValue();
     }
     
     public static List<AmpGPINiDonorNotes> getDonorNotesList(Integer offset, Integer count, String orderBy,

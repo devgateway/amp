@@ -405,15 +405,12 @@ public final class XmlPatcherUtil {
      * Returns the count of the list of discovered XmlPatches
      * 
      * @return the Hibernate query result
-     * @throws DgException
      * @throws HibernateException
-     * @throws SQLException
      */
     public static Integer countAllDiscoveredPatches()
-            throws DgException, HibernateException, SQLException {
+            throws HibernateException {
         Session session = PersistenceManager.getRequestDBSession();
-            Integer ret= ((Integer)session.createQuery("select count(*) from " + AmpXmlPatch.class.getName()).iterate().next()).intValue();
-        return ret;
+        return ((Long)session.createQuery("select count(*) from " + AmpXmlPatch.class.getName()).iterate().next()).intValue();
     }
     
     

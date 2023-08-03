@@ -81,9 +81,9 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable<
         // not used, calculated value, see getIndex() method
     }
 
-//    public String toString() {
-//        return value;
-//    }
+    public String toString() {
+        return value;
+    }
     public Object getIdentifier() {
         return this.getId();
     }
@@ -150,11 +150,7 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable<
     public boolean equalsForVersioning(Object obj) {
         AmpCategoryValue aux = (AmpCategoryValue) obj;
         if (aux != null) {
-            if (aux.getAmpCategoryClass().getName().equals(this.getAmpCategoryClass().getName())) {
-                return true;
-            } else {
-                return false;
-            }
+            return aux.getAmpCategoryClass().getName().equals(this.getAmpCategoryClass().getName());
         }
         return false;
     }

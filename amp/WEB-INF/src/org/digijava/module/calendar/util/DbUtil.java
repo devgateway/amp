@@ -1202,13 +1202,11 @@ public class DbUtil {
 
             if (status != null)
                 q.setParameter("status", status, StringType.INSTANCE);
-
-            Integer uniqueResult = ( (Integer) q.uniqueResult());
+            Long longValue = (Long) q.uniqueResult();
+            Integer uniqueResult = longValue.intValue();
             logger.debug("uniquie result:" + uniqueResult);
 
-            if (uniqueResult != null) {
-                result = uniqueResult.intValue();
-            }
+            result = uniqueResult;
 
         }
         catch (Exception ex) {
@@ -1257,7 +1255,8 @@ public class DbUtil {
             .add(Restrictions.or(Restrictions.idEq(null), Restrictions.ne("id", id)));
             criteria.setProjection(Projections.rowCount());
             criteria.list();
-            retValue =(Integer) criteria.uniqueResult();
+            Long longValue = (Long) criteria.uniqueResult();
+            retValue= longValue.intValue();
             } catch (Exception e) {
             e.printStackTrace();
         }

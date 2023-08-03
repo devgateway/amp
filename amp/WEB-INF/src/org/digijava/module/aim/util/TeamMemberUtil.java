@@ -216,6 +216,7 @@ public class TeamMemberUtil {
         hasInfoRelated |= hasInfo(session, "select count(*) from " + AmpCalendarAttendee.class.getName() + " calatt "
                 + "where calatt.member.ampTeamMemId=:memberId ", ampTeamMemberId);
 
+
         // Verify for reports that are owned by this user
         hasInfoRelated |= hasInfo(session, "select count(*) from " + AmpReports.class.getName() + " rep " + "where rep"
                 + ".ownerId=:memberId ", ampTeamMemberId);

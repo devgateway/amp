@@ -8,7 +8,6 @@
 				<param name="sequence">amp_activity_group_seq</param>
 			</generator>
 		</id>
-
 		<version name="version" type="java.lang.Long">
 			<column name="version" not-null="true" default="0"/>
 		</version>

@@ -716,15 +716,45 @@ public class FeaturesUtil {
      * to get all the Global settings
      */
     public static List<AmpGlobalSettings> getGlobalSettings() {
-        List<AmpGlobalSettings> coll = null;
+        List<AmpGlobalSettings> coll =  new ArrayList<>();
         Session session = null;
         String qryStr = null;
         Query qry = null;
         try {
             session = PersistenceManager.getRequestDBSession();
-            qryStr = "select gs from " + AmpGlobalSettings.class.getName() + " gs ";
-            qry = session.createQuery(qryStr);
-            coll = qry.list();
+            String queryString = "SELECT gs.globalId, gs.globalSettingsName, gs.globalSettingsValue, gs.globalSettingsPossibleValues, " +
+                    "gs.globalSettingsDescription, gs.section, gs.valueTranslatable " +
+                    "FROM " + AmpGlobalSettings.class.getName() + " gs ";
+
+            Query<Object[]> query = session.createQuery(queryString, Object[].class);
+            List<Object[]> resultList = query.getResultList();
+
+//            List<AmpGlobalSettings> ampGlobalSettingsList = new ArrayList<>();
+            for (Object[] result : resultList) {
+                Long globalId = (Long) result[0];
+                String globalSettingsName = (String) result[1];
+                String globalSettingsValue = (String) result[2];
+                String globalSettingsPossibleValues = (String) result[3];
+                String globalSettingsDescription = (String) result[4];
+                String section = (String) result[5];
+                Boolean valueTranslatable = (Boolean) result[6];
+//                Map<String, String> possibleValuesIds = (Map<String, String>) result[7];
+
+                AmpGlobalSettings ampGlobalSettings = new AmpGlobalSettings();
+                ampGlobalSettings.setGlobalId(globalId);
+                ampGlobalSettings.setGlobalSettingsName(globalSettingsName);
+                ampGlobalSettings.setGlobalSettingsValue(globalSettingsValue);
+                ampGlobalSettings.setGlobalSettingsPossibleValues(globalSettingsPossibleValues);
+                ampGlobalSettings.setGlobalSettingsDescription(globalSettingsDescription);
+                ampGlobalSettings.setSection(section);
+                ampGlobalSettings.setValueTranslatable(valueTranslatable);
+
+                coll.add(ampGlobalSettings);
+            }
+
+//            qryStr = "select gs from " + AmpGlobalSettings.class.getName() + " gs ";
+//            qry = session.createQuery(qryStr, AmpGlobalSettings.class);
+//            coll = qry.list();
         }
         catch (Exception ex) {
             logger.error(ex, ex);

@@ -56,7 +56,11 @@ public class AmpGlobalSettings implements Serializable {
     
     @JsonIgnore
     private Boolean internal;
-    
+
+    public Boolean getInternal() {
+        return internal;
+    }
+
     public Boolean getValueTranslatable() {
         return valueTranslatable;
     }

@@ -3,6 +3,8 @@ package org.digijava.kernel.ampregistry;
 import org.digijava.module.aim.dbentity.AmpOfflineRelease;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.client.ClientProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,12 +27,15 @@ public class JerseyAmpRegistryClient implements AmpRegistryClient {
     private static final Integer JERSEY_CONNECT_TIMEOUT = getPropertyConnectTimeout();
     private static final Integer JERSEY_READ_TIMEOUT = getPropertyReadTimeout();
 
-    private Client client;
+    private final Client client;
 
-    private String baseUrl;
+    private final String baseUrl;
 
     public JerseyAmpRegistryClient() {
-        client = ClientBuilder.newClient();
+        ClientConfig config = new ClientConfig();
+        config.property(ClientProperties.CONNECT_TIMEOUT, 10000);
+        config.property(ClientProperties.READ_TIMEOUT, 10000);
+        client = ClientBuilder.newClient(config);
 
         baseUrl = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMP_REGISTRY_URL);
     }

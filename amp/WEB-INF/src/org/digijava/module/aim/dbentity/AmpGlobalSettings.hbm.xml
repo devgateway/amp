@@ -8,16 +8,16 @@
 				<param name="sequence">amp_global_settings_seq</param>
 			</generator>
 		</id>
-		<property name="globalSettingsName" column="settingsName" type="java.lang.String" />
-		<property name="globalSettingsValue" column="settingsValue" type="java.lang.String" />
-		<property name="globalSettingsPossibleValues" column="possibleValues"
+		<property name="globalSettingsName" column="settingsname" type="java.lang.String" />
+		<property name="globalSettingsValue" column="settingsvalue" type="java.lang.String" />
+		<property name="globalSettingsPossibleValues" column="possiblevalues"
 			type="java.lang.String" />
-		<property name="globalSettingsDescription" column="description" type="text" />
+		<property name="globalSettingsDescription" column="description" type="java.lang.String" />
 		<property name="section" column="section" type="java.lang.String" />
 		<property name="valueTranslatable" column="value_translatable" type="java.lang.Boolean" />
 		
 		<property name="internal" type="java.lang.Boolean" not-null="true">
-		      <column name="internal" default="false"></column>
+			<column name="internal" default="false"/>
 		</property>
 	</class>
 </hibernate-mapping>

@@ -82,7 +82,7 @@ public class QueryEngine extends Action{
             }
         }
         
-        reportMeta.setType( new Long(ArConstants.DONOR_TYPE) );
+        reportMeta.setType((long) ArConstants.DONOR_TYPE);
         reportMeta.setUpdatedDate( new Date(System.currentTimeMillis()) );
         reportMeta.setHideActivities( false );
         reportMeta.setOptions( "A" );

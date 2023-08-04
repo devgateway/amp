@@ -637,9 +637,8 @@ public class DbUtil {
             String queryString = "select r from " + AmpReports.class.getName() + " r " + "where (r.ampReportId=:id)";
             Query qry = session.createQuery(queryString);
             qry.setParameter("id", id, LongType.INSTANCE);
-            Iterator itr = qry.list().iterator();
-            while (itr.hasNext()) {
-                ampReports = (AmpReports) itr.next();
+            for (Object o : qry.list()) {
+                ampReports = (AmpReports) o;
             }
             // end
         } catch (Exception ex) {

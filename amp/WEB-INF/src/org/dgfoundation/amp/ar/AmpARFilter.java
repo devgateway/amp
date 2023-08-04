@@ -877,7 +877,7 @@ public class AmpARFilter extends PropertyListable {
         this.setApprovalStatusSelected(null);
         this.setProjectImplementingUnits(null);
         this.setSortByAsc(true);
-        this.setHierarchySorters(new ArrayList<String>());
+        this.setHierarchySorters(new ArrayList<>());
         this.setIncludeLocationChildren(true);
         this.budgetExport = false;
 
@@ -1084,11 +1084,11 @@ public class AmpARFilter extends PropertyListable {
             Integer maximumFractionDigits, Boolean customUseGroupings, Integer groupingSize) {
         DecimalFormat usedDecimalFormat = FormatHelper.getDecimalFormat();
 
-        Character defaultDecimalSymbol  = usedDecimalFormat.getDecimalFormatSymbols().getDecimalSeparator();
-        Integer defaultDecimalPlaces    = usedDecimalFormat.getMaximumFractionDigits();
-        Character defaultGroupSeparator = usedDecimalFormat.getDecimalFormatSymbols().getGroupingSeparator();
-        Boolean defaultUseGrouping  = usedDecimalFormat.isGroupingUsed();
-        Integer defaultGroupSize        = usedDecimalFormat.getGroupingSize();
+        char defaultDecimalSymbol  = usedDecimalFormat.getDecimalFormatSymbols().getDecimalSeparator();
+        int defaultDecimalPlaces    = usedDecimalFormat.getMaximumFractionDigits();
+        char defaultGroupSeparator = usedDecimalFormat.getDecimalFormatSymbols().getGroupingSeparator();
+        boolean defaultUseGrouping  = usedDecimalFormat.isGroupingUsed();
+        int defaultGroupSize        = usedDecimalFormat.getGroupingSize();
 
         DecimalFormat custom = new DecimalFormat();
         DecimalFormatSymbols ds = new DecimalFormatSymbols();
@@ -1169,11 +1169,10 @@ public class AmpARFilter extends PropertyListable {
     protected static String generatePledgesProgramFilterSubquery(Collection<AmpTheme> s, String classificationName){
         if (s == null || s.isEmpty())
             return null;
-        String subquery = "SELECT fpp.pledge_id FROM amp_funding_pledges_program fpp inner join amp_theme p on fpp.amp_program_id=p.amp_theme_id "
+        return "SELECT fpp.pledge_id FROM amp_funding_pledges_program fpp inner join amp_theme p on fpp.amp_program_id=p.amp_theme_id "
                 + "inner join AMP_PROGRAM_SETTINGS ps on ps.amp_program_settings_id=getprogramsettingid(fpp.amp_program_id) where ps.name='" + classificationName + "' AND "
                 + " fpp.amp_program_id in ("
                 + Util.toCSStringForIN(s) + ")";
-        return subquery;
     }
 
     /**
@@ -1206,8 +1205,7 @@ public class AmpARFilter extends PropertyListable {
 
         String REGION_SELECTED_FILTER = "";
         if (locationSelected != null) {
-            Set<AmpCategoryValueLocations> allSelectedLocations = new HashSet<AmpCategoryValueLocations>();
-            allSelectedLocations.addAll(locationSelected);
+            Set<AmpCategoryValueLocations> allSelectedLocations = new HashSet<AmpCategoryValueLocations>(locationSelected);
 
             DynLocationManagerUtil.populateWithDescendants(allSelectedLocations, locationSelected, false);
             this.pledgesLocations = new ArrayList<AmpCategoryValueLocations>();
@@ -1217,11 +1215,10 @@ public class AmpARFilter extends PropertyListable {
             this.relatedLocations = allSelectedLocations;
 
             String allSelectedLocationString = Util.toCSString(allSelectedLocations);
-            String subSelect = "SELECT aal.pledge_id FROM amp_funding_pledges_location aal, amp_location al " +
+
+            REGION_SELECTED_FILTER  = "SELECT aal.pledge_id FROM amp_funding_pledges_location aal, amp_location al " +
                     "WHERE ( aal.location_id=al.location_id AND " +
                     "al.location_id IN (" + allSelectedLocationString + ") )";
-
-            REGION_SELECTED_FILTER  = subSelect;
         }
 
         if (donnorgAgency != null && donnorgAgency.size() > 0){
@@ -1671,13 +1668,8 @@ public class AmpARFilter extends PropertyListable {
                 if (i < propertyDescriptors.length)
                     ret.append("; ");
             }
-        } catch (IntrospectionException e) {
-            logger.error(e.getMessage(), e);
-        } catch (IllegalArgumentException e) {
-            logger.error(e.getMessage(), e);
-        } catch (IllegalAccessException e) {
-            logger.error(e.getMessage(), e);
-        } catch (InvocationTargetException e) {
+        } catch (IntrospectionException | IllegalArgumentException | IllegalAccessException |
+                 InvocationTargetException e) {
             logger.error(e.getMessage(), e);
         }
         return ret.toString();

@@ -178,7 +178,7 @@ public class ReportManager {
      * @return
      */
     private Integer generateReportToken() {
-        Integer reportToken = UUID.randomUUID().toString().hashCode();
+        int reportToken = UUID.randomUUID().toString().hashCode();
         if (reportToken > 0) {
             return reportToken * (-1);
         }

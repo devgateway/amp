@@ -158,13 +158,10 @@ public class RequestProcessor
         String key = addModule ? "/" + moduleName + actionPath :
             actionPath;
         boolean matched = false;
-        Iterator iter = digiModuleSecurity.getActions().
-            iterator();
-        while (iter.hasNext()) {
+        for (Object o : digiModuleSecurity.getActions()) {
             org.digijava.kernel.config.moduleconfig.Action
-                digiAction = (org.digijava.kernel.config.
-                              moduleconfig.Action) iter.
-                next();
+                    digiAction = (org.digijava.kernel.config.
+                    moduleconfig.Action) o;
 
             if (actionPath.matches(digiAction.getPattern())) {
                 matched = true;
@@ -173,21 +170,19 @@ public class RequestProcessor
                     // If login is not required, no action permissions are
                     // required too
                     actionPermissions.put(key, null);
-                }
-                else if ( (digiAction.getValue() == null) ||
-                         (digiAction.getValue().trim().length() == 0)) {
+                } else if ((digiAction.getValue() == null) ||
+                        (digiAction.getValue().trim().length() == 0)) {
                     // If login is required and nothing more
                     actionPermissions.put(key, new ArrayList());
-                }
-                else {
+                } else {
                     // If some action permissions are required
                     StringTokenizer st = new StringTokenizer(digiAction.
-                        getValue(), ",");
+                            getValue(), ",");
                     ArrayList list = new ArrayList();
                     while (st.hasMoreElements()) {
-                        list.add(new Integer(ResourcePermission.
-                                             getActionCode(st.nextToken().
-                            trim())));
+                        list.add(ResourcePermission.
+                                getActionCode(st.nextToken().
+                                        trim()));
                     }
                     actionPermissions.put(key, list);
                 }
@@ -208,8 +203,8 @@ public class RequestProcessor
                 }
                 else {
                     ArrayList list = new ArrayList();
-                    list.add(new Integer(ResourcePermission.
-                                         getActionCode(defaultAction)));
+                    list.add(ResourcePermission.
+                            getActionCode(defaultAction));
                     actionPermissions.put(key, list);
                 }
             }
@@ -218,9 +213,7 @@ public class RequestProcessor
     }
 
     private boolean checkForIdInQuery(String url){
-        if (url.indexOf('~') > -1 || url.indexOf("id=") > -1 || url.indexOf("Id=") > -1)
-            return true;
-        return false;
+        return url.indexOf('~') > -1 || url.contains("id=") || url.contains("Id=");
     }
     
     public void process(HttpServletRequest request,
@@ -239,7 +232,7 @@ public class RequestProcessor
             if (idx > -1){
                 commonURL = commonURL.substring(0, idx);
             }
-            String oldCommonURL = new String(commonURL);
+            String oldCommonURL = commonURL;
 
 
             String actionPath = request.getRequestURL().substring(request.getRequestURL().indexOf("/", request.getRequestURL().indexOf("://") + 3));
@@ -250,13 +243,13 @@ public class RequestProcessor
             }
 
             if (referrer != null){
-                String commonREF = new String(referrer);
+                String commonREF = referrer;
                 commonREF = commonREF.substring(commonREF.indexOf("://") + 3);
                 idx = commonREF.indexOf('/');
                 if (idx > -1){
                     commonREF = commonREF.substring(0, idx);
                 }
-                
+
                 if (commonREF.compareTo(commonURL) != 0 ){
                     commonURL = new String(request.getRequestURL());
                     if (request.getQueryString() != null)
@@ -278,7 +271,7 @@ public class RequestProcessor
                 }
             }
         }
-        
+
         super.process(request, response);
 
     }

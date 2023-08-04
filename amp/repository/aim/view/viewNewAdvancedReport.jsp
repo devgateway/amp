@@ -200,7 +200,7 @@
         </div>
     </div>
 </logic:notEqual>
-<%// see AMP-30664 for details <jsp:include page="/repository/aim/view/saveReports/dynamicSaveReportsAndFilters.jsp"/>%>
+<jsp:include page="/repository/aim/view/saveReports/dynamicSaveReportsAndFilters.jsp"/>
 <%
     counter++;
     ReportContextData.getFromRequest().setProgressValue(counter);

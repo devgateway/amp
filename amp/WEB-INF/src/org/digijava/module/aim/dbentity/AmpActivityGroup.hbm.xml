@@ -6,6 +6,7 @@
 		<id name="ampActivityGroupId" column="amp_activity_group_id" type="java.lang.Long">
 			<generator class="native">
 				<param name="sequence">amp_activity_group_seq</param>
+				<param name="allocationSize">1</param>
 			</generator>
 		</id>
 		<version name="version" type="java.lang.Long">

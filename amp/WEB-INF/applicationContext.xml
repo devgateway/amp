@@ -145,7 +145,6 @@
 		<csrf disabled="true"/>
 		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
     </http>
-
 	<http pattern="/translation/showNewAdvancedTranslation.do**" use-expressions="false"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
 		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<csrf disabled="true"/>

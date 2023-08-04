@@ -21,6 +21,7 @@
   <property name="connection.pool_size">15</property>
   <property name="hibernate.connection.pool_size">15</property>
   <property name="hibernate.hikari.maximumPoolSize">15</property> <!-- Adjust the pool size as needed -->
+  <property name="hibernate.dialect">org.dgfoundation.amp.ar.viewfetcher.AmpPostgresDialect</property>
 
   <property name="hibernate.cache.ehcache.missing_cache_strategy">create</property>
 

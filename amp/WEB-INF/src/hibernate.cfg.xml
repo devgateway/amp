@@ -4,6 +4,8 @@
  <session-factory>
   <property name="hibernate.transaction.coordinator_class">jdbc</property>
   <property name="connection.datasource">java:comp/env/ampDS</property>
+  <property name="hibernate.dialect">org.dgfoundation.amp.ar.viewfetcher.AmpPostgresDialect</property>
+
   &dialect;
   <property name="current_session_context_class">thread</property>
   <property name="hibernate.cache.ehcache.missing_cache_strategy">create</property>

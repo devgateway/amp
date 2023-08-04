@@ -22,6 +22,7 @@
 	<http pattern="/aim/default/displayFlag.do**" security="none" />
 
     <http pattern="/translation/switchLanguage.do**" use-expressions="false"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+		<csrf disabled="true"/>
         <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
     </http>
 
@@ -49,9 +50,11 @@
 
 	<http pattern="/viewNewAdvancedReport.do**" use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
  		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<csrf disabled="true"/>
 	</http>
 	<http pattern="/aim/viewNewAdvancedReport.do**" use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
  		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<csrf disabled="true"/>
 	</http>
 	<http pattern="/aim/xlsExport.do**" security="none" />
 

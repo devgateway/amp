@@ -10,7 +10,9 @@ import org.hibernate.criterion.CriteriaQuery;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.dialect.Dialect;
-import org.hibernate.dialect.PostgreSQLDialect;
+import org.hibernate.dialect.PostgreSQL95Dialect;
+import org.hibernate.engine.jdbc.spi.JdbcServices;
+import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.engine.spi.TypedValue;
 
 import java.sql.*;
@@ -298,7 +300,11 @@ public class SQLUtils {
 
             @Override
             public String toSqlString(Criteria criteria, CriteriaQuery criteriaQuery) throws HibernateException {
-                Dialect dialect = criteriaQuery.getFactory().getDialect();
+                SessionFactoryImplementor sessionFactoryImplementor = criteriaQuery.getFactory();
+                JdbcServices jdbcServices = sessionFactoryImplementor.getJdbcServices();
+
+                Dialect dialect = jdbcServices.getDialect();
+
                 String[] columns = criteriaQuery.findColumns(propertyName, criteria);
                 String entityName = criteriaQuery.getEntityName(criteria);
               
@@ -308,7 +314,7 @@ public class SQLUtils {
                 if (ids.length!=1)
                     throw new HibernateException("We do not support multiple identifiers just yet!");
 
-                if ( dialect instanceof PostgreSQLDialect ) {
+                if ( dialect instanceof PostgreSQL95Dialect ) {
                     String ret = " " + ids[0] + " = any(contentmatch('" + entityName + "','" + propertyName + "','"
                             + locale + "', ?)) OR ";
                     ret+=" unaccent(" + columns[0] + ") ilike " +  "unaccent(?)";

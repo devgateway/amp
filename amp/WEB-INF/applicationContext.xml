@@ -162,7 +162,8 @@
 
     <http pattern="/aim/viewTeamReports.do*" use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
         <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-    </http>
+		<csrf disabled="true"/>
+	</http>
 	<http pattern="/aim/reportWizard.do*" use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
 		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<csrf disabled="true"/>
@@ -170,17 +171,20 @@
 
     <http pattern="/um/user/showResetForm.do*" use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
         <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-    </http>
+		<csrf disabled="true"/>
+	</http>
 
     <http pattern="/um/userResetPassword.do*" use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
         <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-    </http>
+		<csrf disabled="true"/>
+	</http>
 
     <http pattern="/index.do*"  use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
         <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
     </http>
 	<http pattern="/translation/showNewAdvancedTranslation.do*"  use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
 		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<csrf disabled="true"/>
 	</http>
 
 

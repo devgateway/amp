@@ -33,6 +33,7 @@ public class GeoRegion implements Group {
     private String type;
     private String active;
 
+
     public GeoRegion() {
     }
 
@@ -41,6 +42,10 @@ public class GeoRegion implements Group {
         this.id = id;
         this.type = type;
         this.active = "true";
+    }
+
+    public String getActive() {
+        return active;
     }
 
     public String getId() {

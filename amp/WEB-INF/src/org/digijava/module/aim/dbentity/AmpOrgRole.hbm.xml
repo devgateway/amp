@@ -4,8 +4,8 @@
 	<class name="org.digijava.module.aim.dbentity.AmpOrgRole" table="AMP_ORG_ROLE">
 		<cache usage="read-write" />
 		<id name="ampOrgRoleId" column="amp_org_role_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_ORG_ROLE_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_ORG_ROLE_seq</param>
 			</generator>
 		</id>
 		<property name="percentage" column="percentage" type="java.lang.Float"></property>

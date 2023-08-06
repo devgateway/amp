@@ -5,8 +5,8 @@
 		table="AMP_APPLICATION_SETTINGS">
 		<cache usage="read-write" />
 		<id name="ampAppSettingsId" column="amp_app_settings_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">amp_application_settings_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">amp_application_settings_seq</param>
 			</generator>
 		</id>
 		<property name="defaultRecordsPerPage" column="def_rec_per_page" type="java.lang.Integer" />

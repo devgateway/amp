@@ -4,8 +4,8 @@
 	<class name="org.digijava.kernel.user.User" table="DG_USER" lazy="false">
 		<cache usage="read-write" />
 		<id column="ID" name="id" type="java.lang.Long" unsaved-value="null">
-			<generator class="native">
-				<param name="sequence">dg_user_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">dg_user_seq</param>
 			</generator>
 		</id>
 		<property name="creationDate" column="CREATION_DATE" type="java.util.Date" />

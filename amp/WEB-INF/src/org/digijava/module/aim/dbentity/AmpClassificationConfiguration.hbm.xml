@@ -5,8 +5,8 @@
 		table="AMP_CLASSIFICATION_CONFIG">
 		<cache usage="read-write" />
 		<id name="id" column="id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_CLASSIFICATION_CONFIG_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_CLASSIFICATION_CONFIG_seq</param>
 			</generator>
 		</id>
 

@@ -4,8 +4,8 @@
 	<class name="org.digijava.module.aim.dbentity.AmpGlobalSettings" table="AMP_GLOBAL_SETTINGS">
 		<cache usage="read-write" />
 		<id name="globalId" column="id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">amp_global_settings_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">amp_global_settings_seq</param>
 			</generator>
 		</id>
 		<property name="globalSettingsName" column="settingsname" type="java.lang.String" />

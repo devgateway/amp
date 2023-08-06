@@ -4,8 +4,8 @@
 	<class name="org.digijava.module.aim.dbentity.AmpComments" table="AMP_COMMENTS">
 		<cache usage="read-write" />
 		<id name="ampCommentId" column="amp_comment_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_COMMENTS_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_COMMENTS_seq</param>
 			</generator>
 		</id>
 		<property name="comment" column="comment_" type="text" />

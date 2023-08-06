@@ -3,8 +3,8 @@
 <hibernate-mapping>
 	<class name="org.digijava.module.content.dbentity.AmpContentItemThumbnail" table="AMP_CONTENT_ITEM_THUMBNAIL">
 		<id name="ampContentItemThumbnailId" column="AMP_CONTENT_THUMBNAIL_ITEM_ID" type="java.lang.Long" unsaved-value="null">
-			<generator class="native" >
-			<param name="sequence">AMP_CONTENT_ITEM_THUMBNAIL_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator" >
+			<param name="sequence_name">AMP_CONTENT_ITEM_THUMBNAIL_seq</param>
 			</generator>
 		</id>
 		<many-to-one name="contentItem" column="AMP_CONTENT_ITEM_ID" class="org.digijava.module.content.dbentity.AmpContentItem" cascade="none"/>

@@ -4,8 +4,8 @@
 	<class name="org.digijava.module.aim.dbentity.AmpActivityGroup"
 		table="AMP_ACTIVITY_GROUP" lazy="false">
 		<id name="ampActivityGroupId" column="amp_activity_group_id" type="java.lang.Long">
-<!--			<generator class="native">-->
-<!--				<param name="sequence">amp_activity_group_seq</param>-->
+<!--			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">-->
+<!--				<param name="sequence_name">amp_activity_group_seq</param>-->
 <!--				<param name="allocationSize">1</param>-->
 <!--			</generator>-->
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">

@@ -6,8 +6,8 @@
 		table="AMP_GPI_NI_INDICATOR">
 		<cache usage="read-write" />
 		<id name="ampGPINiIndicatorId" column="amp_gpi_ni_indicator_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_GPI_NI_INDICATOR_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_GPI_NI_INDICATOR_seq</param>
 			</generator>
 		</id>
 		

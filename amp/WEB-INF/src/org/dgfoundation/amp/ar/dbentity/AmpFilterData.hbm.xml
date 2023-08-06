@@ -4,8 +4,8 @@
 	<class name="org.dgfoundation.amp.ar.dbentity.AmpFilterData" table="AMP_FILTER_DATA">
 		<cache usage="read-write" />
 		<id name="id" column="id" type="java.lang.Long">
-<!--			<generator class="native">-->
-<!--				<param name="sequence">AMP_FILTER_DATA_seq</param>-->
+<!--			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">-->
+<!--				<param name="sequence_name">AMP_FILTER_DATA_seq</param>-->
 <!--				<param name="allocationSize">1</param>-->
 <!--			</generator>-->
 			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">

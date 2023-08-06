@@ -6,8 +6,8 @@
 		<cache usage="read-write"/>
 
 		<id column="id" name="id" type="java.lang.Long" unsaved-value="null">
-			<generator class="native">
-				<param name="sequence">AMP_STRUCTURE_IMG_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_STRUCTURE_IMG_seq</param>
 			</generator>
 		</id>
 		<property name="imgFileName" column="img_file_name" type="java.lang.String"/>

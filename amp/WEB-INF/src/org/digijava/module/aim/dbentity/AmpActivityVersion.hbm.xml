@@ -293,8 +293,8 @@
 	<class name="org.digijava.module.aim.dbentity.AmpActivityVersion" table="amp_activity_version" optimistic-lock="all" dynamic-update="true" lazy="true">
 		<cache usage="read-write" />
 		<id name="ampActivityId" column="amp_activity_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_ACTIVITY_VERSION_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_ACTIVITY_VERSION_seq</param>
 			</generator>
 		</id>
 		
@@ -304,8 +304,8 @@
 	<class name="org.digijava.module.aim.dbentity.AmpActivity" table="amp_activity" polymorphism="explicit" lazy="true">
 		<cache usage="read-write" />
 		<id name="ampActivityId" column="amp_activity_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_ACTIVITY_VERSION_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_ACTIVITY_VERSION_seq</param>
 			</generator>
 		</id>
 		<!-- 

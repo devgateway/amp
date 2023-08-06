@@ -33,7 +33,7 @@ XRegExp = XRegExp || (function (undef) {
             extensibility: false
         },
 
-// Store native methods to use and restore ("org.hibernate.id.enhanced.SequenceStyleGenerator" is an ES3 reserved keyword)
+// Store native methods to use and restore ("native" is an ES3 reserved keyword)
         nativ = {
             exec: RegExp.prototype.exec,
             test: RegExp.prototype.test,

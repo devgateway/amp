@@ -53,6 +53,20 @@ public class DocumentFromTemplateActions extends DispatchAction {
         myForm.setTemplates(tempDocs);
         return mapping.findForward("forward");
     }
+    @Override
+    public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String action = request.getParameter("actType");
+        if (action.equalsIgnoreCase("saveDocument"))
+        {
+            return saveDocument(mapping, form, request, response);
+        }
+        if (action.equalsIgnoreCase("getTemplate"))
+        {
+            return  getTemplate(mapping,form, request, response);
+        }
+        return loadTemplates(mapping, form, request, response);
+
+    }
     
     public ActionForward getTemplate(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception {
         CreateDocFromTemplateForm myForm=(CreateDocFromTemplateForm)form;
@@ -115,7 +129,7 @@ public class DocumentFromTemplateActions extends DispatchAction {
                 }
             }
             
-            Collections.sort(submittedValsHolder, new TemplateDocsUtil.SubmittedValuesOrdinaryNumberComparator());      
+            submittedValsHolder.sort(new TemplateDocsUtil.SubmittedValuesOrdinaryNumberComparator());
             //create pdf or word from the list
             String nodeuuid=null;
             if(myForm.getDocType()!=null){
@@ -241,8 +255,7 @@ public class DocumentFromTemplateActions extends DispatchAction {
     
     private TeamMember getCurrentTeamMember( HttpServletRequest request ) {
         HttpSession httpSession     = request.getSession();
-        TeamMember teamMember       = (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
-        return teamMember;
+        return (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
     }
     
     private void clearForm(CreateDocFromTemplateForm form){

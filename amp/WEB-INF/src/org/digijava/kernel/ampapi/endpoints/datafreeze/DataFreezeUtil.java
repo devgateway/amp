@@ -15,6 +15,7 @@ import org.digijava.module.aim.util.AmpDateUtils;
 import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
 import org.hibernate.query.Query;
+import org.hibernate.type.LongType;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -77,7 +78,7 @@ public final class DataFreezeUtil {
                 + " and ampActivityFrozen.frozen=true and "
                 + " (ampActivityFrozen.deleted = false or ampActivityFrozen.deleted = null)";
         Query query = createHibernateQuery(queryString);
-        query.setLong("ampActivityId", ampActivityId);
+        query.setParameter("ampActivityId", ampActivityId, LongType.INSTANCE);
         return (AmpActivityFrozen) query.uniqueResult();
     }
 

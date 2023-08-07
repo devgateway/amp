@@ -177,6 +177,11 @@
 		<csrf disabled="true"/>
 	</http>
 
+	<http pattern="/contentrepository/docFromTemplate.do*" use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<csrf disabled="true"/>
+	</http>
+
     <http pattern="/um/userResetPassword.do*" use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
         <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<csrf disabled="true"/>

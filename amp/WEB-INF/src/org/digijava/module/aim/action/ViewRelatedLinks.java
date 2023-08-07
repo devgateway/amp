@@ -93,18 +93,16 @@ public class ViewRelatedLinks extends Action {
                 Collection<DocumentData> docCollection = DocumentManagerUtil.createDocumentDataCollectionFromSession(request);
                 if(docCollection != null )
                 {
-                    Iterator<DocumentData> docIterator = docCollection.iterator();
-                    while(docIterator.hasNext()){
-                         org.digijava.module.contentrepository.helper.DocumentData documentData = (org.digijava.module.contentrepository.helper.DocumentData)docIterator.next();
-                         Documents document = new Documents();
-                         document.setTitle(documentData.getTitle());
-                         document.setUuid(documentData.getUuid());
-                         document.setFile((documentData.getWebLink() == null)?true:false);
-                         document.setFileName(documentData.getName());
-                         document.setActivityName(activityName);
-                         document.setActivityId(ampActivityId);
-                         document.setUrl(documentData.getWebLink());
-                         pagedCol.add(document);
+                    for (DocumentData documentData : docCollection) {
+                        Documents document = new Documents();
+                        document.setTitle(documentData.getTitle());
+                        document.setUuid(documentData.getUuid());
+                        document.setFile((documentData.getWebLink() == null) ? true : false);
+                        document.setFileName(documentData.getName());
+                        document.setActivityName(activityName);
+                        document.setActivityId(ampActivityId);
+                        document.setUrl(documentData.getWebLink());
+                        pagedCol.add(document);
                     }
                 }
                 DocumentManagerUtil.logoutJcrSessions(request);

@@ -140,9 +140,8 @@ public class ConfirmCalendarItems
 
        calendForm.setSelected(false);
        if (calendForm.getEventsList() != null ){
-           Iterator iter = calendForm.getEventsList().iterator();
-           while(iter.hasNext()) {
-               CalendarItemForm.EventInfo item = (CalendarItemForm.EventInfo) iter.next();
+           for (Object o : calendForm.getEventsList()) {
+               CalendarItemForm.EventInfo item = (CalendarItemForm.EventInfo) o;
 
                if (item.isSelected()) {
                    calendForm.setSelected(true);

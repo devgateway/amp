@@ -204,17 +204,16 @@ public class ConfigLoaderListener
             verify=false;
             logger.warn("Memory Allocation Check Disabled! THIS SHOULD ONLY BE USED IN DEVELOPMENT ENVIRONMENTS !!");
         }
-             
-        Iterator iter = ManagementFactory.getMemoryPoolMXBeans().iterator();  
-        while(iter.hasNext()){  
-           MemoryPoolMXBean item = (MemoryPoolMXBean) iter.next();  
-               MemoryUsage mu = item.getUsage();  
-               long used      = mu.getUsed()/MB;  
-               long committed = mu.getCommitted()/MB;  
-               long max       = mu.getMax()/MB;  
-               logger.info("MEMORY Type "+item.getName()+": Used="+used+"m; Committed="+committed+"m; Max="+max+"m");
-               String setting=compat.getProperty("jvm."+item.getName().replaceAll(" ","").toLowerCase());
-               if(verify && setting!=null && Long.parseLong(setting)>max) throw new IncompatibleEnvironmentException("The JVM does not have enough memory allocated. Memory Type "+item.getName()+"; Max available="+max+"m; Max required="+Long.parseLong(setting)+"m"+DISABLE_MEM_PARAM); 
+
+        for (MemoryPoolMXBean item : ManagementFactory.getMemoryPoolMXBeans()) {
+            MemoryUsage mu = item.getUsage();
+            long used = mu.getUsed() / MB;
+            long committed = mu.getCommitted() / MB;
+            long max = mu.getMax() / MB;
+            logger.info("MEMORY Type " + item.getName() + ": Used=" + used + "m; Committed=" + committed + "m; Max=" + max + "m");
+            String setting = compat.getProperty("jvm." + item.getName().replaceAll(" ", "").toLowerCase());
+            if (verify && setting != null && Long.parseLong(setting) > max)
+                throw new IncompatibleEnvironmentException("The JVM does not have enough memory allocated. Memory Type " + item.getName() + "; Max available=" + max + "m; Max required=" + Long.parseLong(setting) + "m" + DISABLE_MEM_PARAM);
         }
         long maxMemAvaiable=Runtime.getRuntime().maxMemory()/MB;
         logger.info("MEMORY Total Max: "+maxMemAvaiable+"m");

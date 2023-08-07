@@ -99,16 +99,14 @@ public class ParisIndicatorManager extends Action
             String quid2 = request.getParameter("qid2");
             Long a = new Long(quid2);
             Collection editQuest = ParisUtil.getParisQuestionToBeEdited(a);
-            Iterator itr = editQuest.iterator();
-            while(itr.hasNext())
-            {
-                AmpAhsurveyQuestion ampAhSurveyQuestion = (AmpAhsurveyQuestion) itr.next();
+            for (Object o : editQuest) {
+                AmpAhsurveyQuestion ampAhSurveyQuestion = (AmpAhsurveyQuestion) o;
                 parisForm.setPiQuestionId(ampAhSurveyQuestion.getAmpQuestionId());
                 parisForm.setPiQuestionGot(ampAhSurveyQuestion.getQuestionText());
                 parisForm.setPiQuestionIndicatorId(ampAhSurveyQuestion.getAmpIndicatorId().getAmpIndicatorId());
                 parisForm.setPiQuestId(ampAhSurveyQuestion.getQuestionNumber());
                 parisForm.setPiQuestTypeId(ampAhSurveyQuestion.getAmpTypeId().getAmpTypeId());
-                
+
             }
             return mapping.findForward("parisEditQuest");
         }
@@ -138,15 +136,13 @@ public class ParisIndicatorManager extends Action
             
             /*for indicator*/
             Collection indicatorValue =ParisUtil.getParisIndicatorToBeEdited(t);
-            Iterator itr1 = indicatorValue.iterator();
-            while(itr1.hasNext())
-            {
-                AmpAhsurveyIndicator ampAhSurveyIndicator = (AmpAhsurveyIndicator) itr1.next();
+            for (Object o : indicatorValue) {
+                AmpAhsurveyIndicator ampAhSurveyIndicator = (AmpAhsurveyIndicator) o;
                 parisForm.setAddNewIndicatorCode(ampAhSurveyIndicator.getIndicatorCode());
                 parisForm.setAddNewIndicatorText(ampAhSurveyIndicator.getName());
                 parisForm.setIndicatorNumber(ampAhSurveyIndicator.getIndicatorNumber());
                 parisForm.setNumberOfQuestions(ampAhSurveyIndicator.getTotalQuestions());
-                
+
             }
             return mapping.findForward(("parisIndiEdit"));
         }

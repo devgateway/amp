@@ -2172,7 +2172,7 @@ public class FeaturesUtil {
 
         java.io.StringReader in = new java.io.StringReader(theString.toLowerCase());
         boolean precededBySpace = true;
-        StringBuffer properCase = new StringBuffer();    
+        StringBuilder properCase = new StringBuilder();
         while(true) {      
             int i = in.read();
             if (i == -1)  break;      
@@ -2199,9 +2199,7 @@ public class FeaturesUtil {
     public static Boolean isShowComponentFundingByYear() {
         String componentFundingByYearStr = FeaturesUtil
         .getGlobalSettingValue(Constants.GLOBAL_SHOW_COMPONENT_FUNDING_BY_YEAR);
-        if (componentFundingByYearStr != null && "On".equals(componentFundingByYearStr))
-            return true;
-        return false;
+        return componentFundingByYearStr != null && "On".equals(componentFundingByYearStr);
     }
 
     public static void switchLogicInstance() {

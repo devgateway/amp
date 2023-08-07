@@ -204,12 +204,10 @@ public class ShowActivityPrintPreview
                 // loading organizations and thier project ids.                
                 Collection orgProjIdsSet = DbUtil.getActivityInternalId(activity.getAmpActivityId());
                 if(orgProjIdsSet != null) {
-                    Iterator projIdItr = orgProjIdsSet.iterator();
                     Collection temp = new ArrayList();
-                    while(projIdItr.hasNext()) {
+                    for (Object o : orgProjIdsSet) {
                         AmpActivityInternalId actIntId = (
-                            AmpActivityInternalId) projIdItr
-                            .next();
+                                AmpActivityInternalId) o;
                         OrgProjectId projId = new OrgProjectId();
                         projId.setId(actIntId.getId());
                         projId.setOrganisation(actIntId.getOrganisation());
@@ -217,10 +215,10 @@ public class ShowActivityPrintPreview
                         temp.add(projId);
                     }
                     if(temp != null && temp.size() > 0) {
-                        OrgProjectId orgProjectIds[] = new OrgProjectId[
+                        OrgProjectId[] orgProjectIds = new OrgProjectId[
                             temp
                             .size()];
-                        Object arr[] = temp.toArray();
+                        Object[] arr = temp.toArray();
                         for(int i = 0; i < arr.length; i++) {
                             orgProjectIds[i] = (OrgProjectId) arr[i];
                         }
@@ -380,8 +378,8 @@ public class ShowActivityPrintPreview
                 ArrayList regFunds = new ArrayList();
                 Iterator rItr=null;
                 if(activity.getRegionalFundings()!=null) {
-                    rItr = activity.getRegionalFundings().iterator();
                     eaForm.getFunding().setRegionTotalDisb(0);
+                    rItr = activity.getRegionalFundings().iterator();
                     while(rItr.hasNext()) {
                         AmpRegionalFunding ampRegFund = (AmpRegionalFunding)
                             rItr
@@ -389,9 +387,8 @@ public class ShowActivityPrintPreview
 
                         double disb = 0;
                         if(ampRegFund.getAdjustmentType().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey()) &&
-                           ampRegFund.getTransactionType().intValue() == 1)
-                            disb = ampRegFund.getTransactionAmountWithFormatConversion().
-                                doubleValue();
+                                ampRegFund.getTransactionType() == 1)
+                            disb = ampRegFund.getTransactionAmountWithFormatConversion();
                
                         eaForm.getFunding().setRegionTotalDisb(eaForm.getFunding().getRegionTotalDisb() +
                                                   disb);
@@ -405,13 +402,12 @@ public class ShowActivityPrintPreview
                                            .getCurrencyName());
                         fd.setTransactionAmount(DecimalToText
                                                 .ConvertDecimalToText(
-                                                    ampRegFund
-                                                    .getTransactionAmountWithFormatConversion().doubleValue()));
+                                                        ampRegFund
+                                                                .getTransactionAmountWithFormatConversion()));
                         fd.setTransactionDate(DateConversion.convertDateToString(ampRegFund.getTransactionDate()));
                         fd.setFiscalYear(DateConversion.convertDateToFiscalYearString(ampRegFund.getTransactionDate()));
 
-                        fd.setTransactionType(ampRegFund.getTransactionType()
-                                              .intValue());
+                        fd.setTransactionType(ampRegFund.getTransactionType());
 
                         RegionalFunding regFund = new RegionalFunding();
                         
@@ -419,7 +415,7 @@ public class ShowActivityPrintPreview
                                             .getId());
                         regFund.setRegionName(ampRegFund.getRegionLocation().getName());
 
-                        if(regFunds.contains(regFund) == false) {
+                        if(!regFunds.contains(regFund)) {
                             regFunds.add(regFund);
                         }
 
@@ -427,17 +423,17 @@ public class ShowActivityPrintPreview
                         regFund = (RegionalFunding) regFunds.get(index);
                         if(fd.getTransactionType() == 0) { // commitments
                             if(regFund.getCommitments() == null) {
-                                regFund.setCommitments(new ArrayList());
+                                regFund.setCommitments(new ArrayList<>());
                             }
                             regFund.getCommitments().add(fd);
                         } else if(fd.getTransactionType() == 1) { // disbursements
                             if(regFund.getDisbursements() == null) {
-                                regFund.setDisbursements(new ArrayList());
+                                regFund.setDisbursements(new ArrayList<>());
                             }
                             regFund.getDisbursements().add(fd);
                         } else if(fd.getTransactionType() == 2) { // expenditures
                             if(regFund.getExpenditures() == null) {
-                                regFund.setExpenditures(new ArrayList());
+                                regFund.setExpenditures(new ArrayList<>());
                             }
                             regFund.getExpenditures().add(fd);
                         }
@@ -449,26 +445,25 @@ public class ShowActivityPrintPreview
        
 
                 // Sort the funding details based on Transaction date.
-                Iterator itr1 = regFunds.iterator();
                 int index = 0;
-                while(itr1.hasNext()) {
-                    RegionalFunding regFund = (RegionalFunding) itr1.next();
+                for (Object fund : regFunds) {
+                    RegionalFunding regFund = (RegionalFunding) fund;
                     List list = null;
-                    if(regFund.getCommitments() != null) {
+                    if (regFund.getCommitments() != null) {
                         list = new ArrayList(regFund.getCommitments());
-                        Collections.sort(list, FundingValidator.dateComp);
+                        list.sort(FundingValidator.dateComp);
                     }
                     regFund.setCommitments(list);
                     list = null;
-                    if(regFund.getDisbursements() != null) {
+                    if (regFund.getDisbursements() != null) {
                         list = new ArrayList(regFund.getDisbursements());
-                        Collections.sort(list, FundingValidator.dateComp);
+                        list.sort(FundingValidator.dateComp);
                     }
                     regFund.setDisbursements(list);
                     list = null;
-                    if(regFund.getExpenditures() != null) {
+                    if (regFund.getExpenditures() != null) {
                         list = new ArrayList(regFund.getExpenditures());
-                        Collections.sort(list, FundingValidator.dateComp);
+                        list.sort(FundingValidator.dateComp);
                     }
                     regFund.setExpenditures(list);
                     regFunds.set(index++, regFund);

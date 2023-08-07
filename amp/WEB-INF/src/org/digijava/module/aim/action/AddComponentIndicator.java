@@ -45,13 +45,12 @@ public class AddComponentIndicator extends Action
             compForm.setIndicatorId(null);
         }
         else if(event.equalsIgnoreCase("edit")){
-            Iterator itr = ComponentsUtil.getComponentIndicator(new Long(idS)).iterator();
-            while(itr.hasNext()){
-            AmpComponentsIndicators ampComInd = (AmpComponentsIndicators)itr.next();
-            compForm.setIndicatorId(ampComInd.getAmpCompIndId());
-            compForm.setCompIndicatorName(ampComInd.getName());
-            compForm.setCompIndicatorCode(ampComInd.getCode());
-            compForm.setCompIndicatorDesc(ampComInd.getDescription());
+            for (Object o : ComponentsUtil.getComponentIndicator(new Long(idS))) {
+                AmpComponentsIndicators ampComInd = (AmpComponentsIndicators) o;
+                compForm.setIndicatorId(ampComInd.getAmpCompIndId());
+                compForm.setCompIndicatorName(ampComInd.getName());
+                compForm.setCompIndicatorCode(ampComInd.getCode());
+                compForm.setCompIndicatorDesc(ampComInd.getDescription());
             }
         }
         else if(event.equalsIgnoreCase("save"))

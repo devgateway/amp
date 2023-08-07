@@ -363,28 +363,26 @@ public class DbUtil {
             ArrayList removeArray = new ArrayList();
 
             if(user.getInterests() != null) {
-                Iterator iter = user.getInterests().iterator();
-                while(iter.hasNext()) {
-                    Interests item = (Interests) iter.next();
+                for (Object o : user.getInterests()) {
+                    Interests item = (Interests) o;
 
                     List list = getGeoupsBySiteId(item.getSite().getId());
-                    Iterator iterGroups = list.iterator();
-                    while(iterGroups.hasNext()) {
-                        Group group = (Group) iterGroups.next();
-                        if(group.isMemberGroup()) {
-                            if(item.getUser() != null) {
+                    for (Object value : list) {
+                        Group group = (Group) value;
+                        if (group.isMemberGroup()) {
+                            if (item.getUser() != null) {
                                 org.digijava.module.admin.util.DbUtil.
-                                    addUsersToGroup(
-                                        group.getId(), new Long[] {user.getId()});
+                                        addUsersToGroup(
+                                                group.getId(), new Long[]{user.getId()});
                             } else {
                                 org.digijava.module.admin.util.DbUtil.
-                                    removeUserFromGroup(
-                                        group.getId(), user.getId());
+                                        removeUserFromGroup(
+                                                group.getId(), user.getId());
                             }
                         }
                     }
 
-                    if(item.getUser() == null) {
+                    if (item.getUser() == null) {
                         session.delete(item);
                         removeArray.add(item);
                     }
@@ -443,19 +441,17 @@ public class DbUtil {
 
             // Is becoming a member of Member group of corresponding site
             if(user.getInterests() != null) {
-                Iterator iter = user.getInterests().iterator();
-                while(iter.hasNext()) {
-                    Interests item = (Interests) iter.next();
+                for (Object o : user.getInterests()) {
+                    Interests item = (Interests) o;
 
                     List list = getGeoupsBySiteId(item.getSite().getId());
-                    Iterator iterGroups = list.iterator();
-                    while(iterGroups.hasNext()) {
-                        Group group = (Group) iterGroups.next();
-                        if(group.isMemberGroup()) {
-                            if(item.getUser() != null) {
+                    for (Object value : list) {
+                        Group group = (Group) value;
+                        if (group.isMemberGroup()) {
+                            if (item.getUser() != null) {
                                 org.digijava.module.admin.util.DbUtil.
-                                    addUsersToGroup(
-                                        group.getId(), new Long[] {user.getId()});
+                                        addUsersToGroup(
+                                                group.getId(), new Long[]{user.getId()});
                             }
                         }
                     }
@@ -745,10 +741,8 @@ public class DbUtil {
 
                 interests = query.list();
                 if(interests != null) {
-                    Iterator iter = interests.iterator();
-                    while(iter.hasNext()) {
-                        Interests item = (Interests) iter.next();
-                        return item;
+                    for (Object interest : interests) {
+                        return (Interests) interest;
                     }
                 }
             }

@@ -145,12 +145,12 @@ public class VisibilityManager extends MultiAction {
         
         // Create a new Collection only with AmpModulesVisibility object not repeated (can't change the query because is used elsewhere). 
         Collection modulesGrouped = new ArrayList<AmpModulesVisibility>();
-        Iterator iter = modules.iterator();
         String nameAux = "";
-        while(iter.hasNext()){
-            AmpModulesVisibility auxAmp = (AmpModulesVisibility) iter.next();
+
+        for (Object module : modules) {
+            AmpModulesVisibility auxAmp = (AmpModulesVisibility) module;
             // Assuming the query is ordered by name.
-            if(!nameAux.equals(auxAmp.getName())){
+            if (!nameAux.equals(auxAmp.getName())) {
                 modulesGrouped.add(auxAmp);
                 nameAux = auxAmp.getName();
             }
@@ -502,7 +502,7 @@ public class VisibilityManager extends MultiAction {
                             scanner.useDelimiter (System.getProperty("line.separator"));
                             while(scanner.hasNext()) {
                                 String s=scanner.next();
-                                if(s.indexOf("<module:display")>=0)
+                                if(s.contains("<module:display"))
                                 {
                                     String aux="";
                                     if(s.indexOf(">",(s.indexOf("<module:display"))+1)<0)

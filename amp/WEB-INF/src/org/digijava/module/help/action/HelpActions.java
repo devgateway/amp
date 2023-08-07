@@ -308,9 +308,8 @@ public class HelpActions extends DispatchAction {
                 }
             }
         }
-        String shortBody = aux.substring(0, 100).replaceAll("\\<.*?\\>", "")+"..."; 
-        
-        return shortBody;
+
+        return aux.substring(0, 100).replaceAll("\\<.*?\\>", "")+"...";
     }
     
     /**
@@ -1060,7 +1059,7 @@ public class HelpActions extends DispatchAction {
     
     private List<Long> getTopicsIds(String ids){
         List<Long> topicsIds=new ArrayList<Long>();
-        while(ids.indexOf(",")!= -1){
+        while(ids.contains(",")){
             Long id= new Long(ids.substring(0,ids.indexOf(",")).trim());
             topicsIds.add(id);
             ids=ids.substring(ids.indexOf(",")+1);

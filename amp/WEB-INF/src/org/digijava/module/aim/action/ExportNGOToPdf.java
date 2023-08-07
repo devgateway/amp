@@ -374,14 +374,12 @@ public class ExportNGOToPdf extends Action {
         String organizations="";
         String currentRecord = null;
         if(orgs!=null){
-            Iterator<AmpOrgRecipient> orgIter=orgs.iterator();
-            while(orgIter.hasNext()){
-                AmpOrgRecipient organisation=orgIter.next();
-                currentRecord= BULLETCHAR+organisation.getOrganization().getName();
-                if(organisation.getDescription()!=null&&!organisation.getDescription().trim().equals("")){
-                    currentRecord+=" ("+organisation.getDescription()+")";
+            for (AmpOrgRecipient organisation : orgs) {
+                currentRecord = BULLETCHAR + organisation.getOrganization().getName();
+                if (organisation.getDescription() != null && !organisation.getDescription().trim().equals("")) {
+                    currentRecord += " (" + organisation.getDescription() + ")";
                 }
-                organizations+= currentRecord+NEWLINECHAR;
+                organizations += currentRecord + NEWLINECHAR;
 
             }
         }       
@@ -396,17 +394,15 @@ public class ExportNGOToPdf extends Action {
          
         columnName= TranslatorWorker.translateText("Sector Prefernces");
         Collection<ActivitySector> activitySectors=editForm.getSectors();
-        String sectors="";
+        StringBuilder sectors= new StringBuilder();
         currentRecord = null;
         if(activitySectors!=null){
-            Iterator<ActivitySector> activitySectorsIter=activitySectors.iterator();
-            while(activitySectorsIter.hasNext()){
-                ActivitySector activitySector=activitySectorsIter.next();
-                currentRecord = BULLETCHAR+activitySector.getSectorName(); 
-                sectors+= currentRecord + NEWLINECHAR;
+            for (ActivitySector activitySector : activitySectors) {
+                currentRecord = BULLETCHAR + activitySector.getSectorName();
+                sectors.append(currentRecord).append(NEWLINECHAR);
             }
         }
-        createGeneralInfoRow(generalInformationTable,columnName,sectors,null);
+        createGeneralInfoRow(generalInformationTable,columnName, sectors.toString(),null);
         
         buildEmptyCell(generalInformationTable, 2);
         
@@ -438,17 +434,15 @@ public class ExportNGOToPdf extends Action {
         
         columnName= TranslatorWorker.translateText("Organization Intervention Location");
         Collection<Location> selectedLocations=editForm.getSelectedLocs();
-        String locations="";
+        StringBuilder locations= new StringBuilder();
         currentRecord = null;   
         if(selectedLocations!=null){
-            Iterator<Location> locationIter=selectedLocations.iterator();
-            while(locationIter.hasNext()){
-                Location location=locationIter.next();
-                currentRecord = BULLETCHAR+location.getAmpCVLocation().getName() +" ("+location.getPercent()+"%) "; 
-                locations+= currentRecord +NEWLINECHAR;             
+            for (Location location : selectedLocations) {
+                currentRecord = BULLETCHAR + location.getAmpCVLocation().getName() + " (" + location.getPercent() + "%) ";
+                locations.append(currentRecord).append(NEWLINECHAR);
             }
         }
-        createGeneralInfoRow(generalInformationTable,columnName,locations,null);
+        createGeneralInfoRow(generalInformationTable,columnName, locations.toString(),null);
         
         generalInformationCell.addElement(generalInformationTable);     
         mainLayout.addCell(generalInformationCell);

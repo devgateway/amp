@@ -244,17 +244,16 @@ public class AmpAuthenticationFilter
                         Constants.EDIT_ACT_LIST);
                     String sessId = null;
                     if(editActMap != null) {
-                        Iterator itr1 = editActMap.keySet().iterator();
-                        while(itr1.hasNext()) {
-                            sessId = (String) itr1.next();
+                        for (Object o : editActMap.keySet()) {
+                            sessId = (String) o;
                             Long tempActId = (Long) editActMap.get(sessId);
 
                             //logger.info("tempActId = " + tempActId + " actId = " + actId);
-                            if(tempActId.longValue() == actId.longValue()) {
+                            if (tempActId.longValue() == actId.longValue()) {
                                 editActMap.remove(sessId);
                                 //logger.info("Removed the entry for " + actId);
                                 ampContext.setAttribute(Constants.EDIT_ACT_LIST,
-                                    editActMap);
+                                        editActMap);
                                 break;
                             }
                         }

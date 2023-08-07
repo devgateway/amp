@@ -627,15 +627,13 @@ public class IndicatorUtil {
 //beginTransaction();
             Set<AmpIndicatorValue> indValues=connection.getValues();                    
             if(indValues!=null && indValues.size()>0){
-                Iterator<AmpIndicatorValue> iter=indValues.iterator();
-                while(iter.hasNext()){
-                    AmpIndicatorValue indicatorValue=iter.next();
-                    AmpLocation location=indicatorValue.getLocation();
-                    if (location!=null){
-                        if(location.getAmpLocationId()==null){
+                for (AmpIndicatorValue indicatorValue : indValues) {
+                    AmpLocation location = indicatorValue.getLocation();
+                    if (location != null) {
+                        if (location.getAmpLocationId() == null) {
                             session.save(location);
-                        }else {
-                            AmpLocation oldLocation=(AmpLocation) session.load(AmpLocation.class, location.getAmpLocationId());
+                        } else {
+                            AmpLocation oldLocation = (AmpLocation) session.load(AmpLocation.class, location.getAmpLocationId());
                             oldLocation.setDescription(location.getDescription());
                             oldLocation.setGisCoordinates(location.getGisCoordinates());
                             oldLocation.setIso3Code(location.getIso3Code());
@@ -645,7 +643,7 @@ public class IndicatorUtil {
                             //indicatorValue.setLocation(oldLocation);                                  
                             session.update(oldLocation);
                         }
-                        
+
                     }
                 }
             }
@@ -1749,24 +1747,21 @@ public class IndicatorUtil {
             try
             {
                 session = PersistenceManager.getRequestDBSession();
-                Iterator indValItr = prgIndValues.iterator();
-                while(indValItr.hasNext())
-                {
+                for (AmpPrgIndicatorValue prgIndValue : prgIndValues) {
                     AmpThemeIndicatorValue ampThIndVal = null;
-                    AmpPrgIndicatorValue ampPrgIndVal = (AmpPrgIndicatorValue) indValItr.next();
-                    if(ampPrgIndVal.getIndicatorValueId() == null){
+                    if (prgIndValue.getIndicatorValueId() == null) {
                         ampThIndVal = new AmpThemeIndicatorValue();
-                    }else{
-                                                ampThIndVal = (AmpThemeIndicatorValue) session.load(AmpThemeIndicatorValue.class,ampPrgIndVal.getIndicatorValueId());
+                    } else {
+                        ampThIndVal = (AmpThemeIndicatorValue) session.load(AmpThemeIndicatorValue.class, prgIndValue.getIndicatorValueId());
                     }
-                    ampThIndVal.setValueAmount(ampPrgIndVal.getValAmount());
-                    ampThIndVal.setCreationDate(DateConversion.getDate(ampPrgIndVal.getCreationDate()));
-                    ampThIndVal.setValueType(ampPrgIndVal.getValueType());
+                    ampThIndVal.setValueAmount(prgIndValue.getValAmount());
+                    ampThIndVal.setCreationDate(DateConversion.getDate(prgIndValue.getCreationDate()));
+                    ampThIndVal.setValueType(prgIndValue.getValueType());
                     ampThIndVal.setIndicatorId(ampInd);
 //beginTransaction();
                     session.saveOrUpdate(ampThIndVal);
                     //tx.commit();
-                    }
+                }
                 }
             
             catch(Exception ex)

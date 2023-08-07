@@ -154,10 +154,8 @@ public class OrgGroupManager extends Action {
                         if (alpha!=null && !alpha.equalsIgnoreCase("view all")){
                             orgsForCurrentAlpha=new ArrayList<AmpOrgGroup>();
                             if(ampOrg!=null){
-                                Iterator<AmpOrgGroup> it=ampOrg.iterator();
-                                while(it.hasNext()) {
-                                    AmpOrgGroup orgGroup=it.next();
-                                    if(orgGroup.getOrgGrpName().toUpperCase().startsWith(alpha)){
+                                for (AmpOrgGroup orgGroup : ampOrg) {
+                                    if (orgGroup.getOrgGrpName().toUpperCase().startsWith(alpha)) {
                                         orgsForCurrentAlpha.add(orgGroup);
                                     }
                                 }

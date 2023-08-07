@@ -203,9 +203,7 @@ public class ContentManager extends DispatchAction {
         contentForm.getContentThumbnailsRemoved().add(contentItemThumbnailRemoved);
         // Reindex the remaining thumbnails
         int reIndex = 0;
-        Iterator<AmpContentItemThumbnail> itr = contentForm.getSortedContentThumbnails().iterator();
-        while(itr.hasNext()){
-            AmpContentItemThumbnail current = itr.next();
+        for (AmpContentItemThumbnail current : contentForm.getSortedContentThumbnails()) {
             current.setPlaceholder(reIndex);
             reIndex++;
         }

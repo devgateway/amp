@@ -232,9 +232,8 @@ public class AmpMessageUtil {
             query.setParameter("hidden", true );
             query.setMaxResults(limit);
             if(!query.list().isEmpty()){
-                Iterator<AmpMessageState> iterState=query.list().iterator();
-                while(iterState.hasNext()){
-                    unhideMessageState(iterState.next().getId());
+                for (AmpMessageState ampMessageState : (Iterable<AmpMessageState>) query.list()) {
+                    unhideMessageState(ampMessageState.getId());
                 }
             }                       
         }catch(Exception ex) {          

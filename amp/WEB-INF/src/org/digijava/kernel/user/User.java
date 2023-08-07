@@ -443,10 +443,8 @@ public class User
     public boolean hasVerifiedOrganizationId(Long ampOrgId) {
         if(ampOrgId == null) return false;
         //If it's not there, check in the Set<AmpOrganisation> assignedOrgs
-        Iterator<AmpOrganisation> it = this.assignedOrgs.iterator();
-        while(it.hasNext()){
-            AmpOrganisation currentOrganization = it.next();
-            if(currentOrganization.getAmpOrgId().equals(ampOrgId))
+        for (AmpOrganisation currentOrganization : this.assignedOrgs) {
+            if (currentOrganization.getAmpOrgId().equals(ampOrgId))
                 return true;
         }
         return false;

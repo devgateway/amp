@@ -95,9 +95,8 @@ public class SectorSelectedForIndicator extends Action {
             }else if(prevSelSectors.size()==0){
                     actSect.setSectorPercentage(FormatHelper.formatPercentage(new Float(100)));
             }else if(prevSelSectors.size()==1){
-                Iterator prevItr = prevSelSectors.iterator();
-                while(prevItr.hasNext()) {
-                    ActivitySector oldSect = (ActivitySector) prevItr.next();
+                for (Object prevSelSector : prevSelSectors) {
+                    ActivitySector oldSect = (ActivitySector) prevSelSector;
 //                        if(oldSect.getSectorPercentage().equals("100")){
 //                            oldSect.setSectorPercentage(null);
 //                        }

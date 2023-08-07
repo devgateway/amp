@@ -649,9 +649,8 @@ public class CompareActivityVersions extends DispatchAction {
             Set<AmpActivityContact> contacts = new HashSet<AmpActivityContact>();
             Set<AmpActivityContact> activityContacts = auxActivity.getActivityContacts();
             if (activityContacts != null){
-                Iterator<AmpActivityContact> it = activityContacts.iterator();
-                while(it.hasNext()){
-                    actCont = it.next();
+                for (AmpActivityContact activityContact : activityContacts) {
+                    actCont = activityContact;
                     actCont.setId(null);
                     actCont.setActivity(auxActivity);
                     session.save(actCont);

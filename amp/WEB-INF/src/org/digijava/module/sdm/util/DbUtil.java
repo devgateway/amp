@@ -461,12 +461,10 @@ public class DbUtil {
             if(document.getId()==null){
                 session.save(document);
                 if(document.getItems()!=null){
-                    Iterator<SdmItem> iter=document.getItems().iterator();
-                    while(iter.hasNext()){
-                        SdmItem oldItem = iter.next();
+                    for (SdmItem oldItem : document.getItems()) {
                         oldItem.setDocument(document);
                         //save item
-                         session.save(oldItem);
+                        session.save(oldItem);
                     }
                 }
             }

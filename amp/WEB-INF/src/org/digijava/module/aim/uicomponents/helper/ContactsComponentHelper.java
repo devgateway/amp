@@ -15,16 +15,10 @@ public class ContactsComponentHelper {
         if(col==null){
             col=new ArrayList<E>();         
         }else{
-            Iterator<E> iterator=col.iterator();
-            while(iterator.hasNext()){
-                E element=iterator.next();
-                if(comparator.compare(element, item) ==0){
-//                  if(element instanceof AmpActivityContact){                      
-//                      iterator.remove();
-//                  }                   
-                    iterator.remove();
-                }
-            }
+            //                  if(element instanceof AmpActivityContact){
+            //                      iterator.remove();
+            //                  }
+            col.removeIf(element -> comparator.compare(element, item) == 0);
         }
         //add item to collection
 //      if(item instanceof AmpActivityContact){

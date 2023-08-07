@@ -85,10 +85,7 @@ public class Sdm {
         Set<SdmItem> sdmItems = this.getItems();
         SdmItem  result = null;
 
-        Iterator<SdmItem> iter = sdmItems.iterator();
-        while(iter.hasNext()) {
-            SdmItem item = iter.next();
-
+        for (SdmItem item : sdmItems) {
             if (item.getParagraphOrder().equals(index)) {
                 result = item;
                 break;

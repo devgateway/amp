@@ -234,13 +234,11 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
         
         List<AmpComponentFunding> auxFundings = new ArrayList<AmpComponentFunding>(this.fundings);
         auxFundings.sort(COMPONENT_FUNDING_COMPARATOR);
-        Iterator<AmpComponentFunding> iter = auxFundings.iterator();
-        
-        while(iter.hasNext()) {
-            AmpComponentFunding funding = iter.next();
+
+        for (AmpComponentFunding funding : auxFundings) {
             String transactionType = "";
-            
-            switch (funding.getTransactionType().intValue()) {
+
+            switch (funding.getTransactionType()) {
                 case 0:
                     transactionType = "Commitments";
                     break;
@@ -257,11 +255,11 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
                     transactionType = "MTEF Projection";
                     break;
             }
-            
-            out.getOutputs().add(new Output(null, new String[] { "Trn" }, new Object[] { transactionType }));
-            out.getOutputs().add(new Output(null, new String[] { "Value" }, new Object[] {
-                             " " + funding.getAdjustmentType().getValue() + " - " , funding.getTransactionAmount(),
-                            " ", funding.getCurrency(), " - ", funding.getTransactionDate()}));
+
+            out.getOutputs().add(new Output(null, new String[]{"Trn"}, new Object[]{transactionType}));
+            out.getOutputs().add(new Output(null, new String[]{"Value"}, new Object[]{
+                    " " + funding.getAdjustmentType().getValue() + " - ", funding.getTransactionAmount(),
+                    " ", funding.getCurrency(), " - ", funding.getTransactionDate()}));
         }
         
         
@@ -270,16 +268,14 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
     
     @Override
     public Object getValue() {
-        StringBuffer ret = new StringBuffer();
-        ret.append("-" + this.code+ "-" + this.description + "-" + this.Url + "-" + this.creationdate);
+        StringBuilder ret = new StringBuilder();
+        ret.append("-").append(this.code).append("-").append(this.description).append("-").append(this.Url).append("-").append(this.creationdate);
         
         List<AmpComponentFunding> auxFundings = new ArrayList<AmpComponentFunding>(this.fundings);
         auxFundings.sort(COMPONENT_FUNDING_COMPARATOR);
-        Iterator<AmpComponentFunding> iter = auxFundings.iterator();
-        
-        while(iter.hasNext()) {
-            AmpComponentFunding funding = iter.next();
-            ret.append(funding.getTransactionType() + "-" + funding.getTransactionAmount() + "-" + funding.getCurrency() + "-" + funding.getTransactionDate());
+
+        for (AmpComponentFunding funding : auxFundings) {
+            ret.append(funding.getTransactionType()).append("-").append(funding.getTransactionAmount()).append("-").append(funding.getCurrency()).append("-").append(funding.getTransactionDate());
         }
         
         return ret.toString();
@@ -293,9 +289,7 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
         
         if (auxComponent.getFundings() != null && auxComponent.getFundings().size() > 0) {
             Set<AmpComponentFunding> auxSetFundings = new HashSet<AmpComponentFunding>();
-            Iterator<AmpComponentFunding> it = auxComponent.getFundings().iterator();
-            while (it.hasNext()) {
-                AmpComponentFunding auxComponentFunding = it.next();
+            for (AmpComponentFunding auxComponentFunding : auxComponent.getFundings()) {
                 AmpComponentFunding newComponentFunding = (AmpComponentFunding) auxComponentFunding.clone();
                 newComponentFunding.setAmpComponentFundingId(null);
                 newComponentFunding.setComponent(auxComponent);

@@ -35,10 +35,8 @@ public class MEIndicatorsUtil
                                 + AmpMEIndicatorValue.class.getName() + " actInd";
             qry = session.createQuery(queryString);
             actIdCol = qry.list();
-            Iterator itrIds = actIdCol.iterator();
-            while(itrIds.hasNext())
-            {
-                AmpActivity ampAct = (AmpActivity) itrIds.next();
+            for (Object o : actIdCol) {
+                AmpActivity ampAct = (AmpActivity) o;
                 AllActivities actList = new AllActivities();
                 actList.setActivityId(ampAct.getAmpActivityId());
                 actList.setActivityName(ampAct.getName());
@@ -304,31 +302,26 @@ public class MEIndicatorsUtil
         AmpMEIndicators ampMEInd = new AmpMEIndicators();
         ampMEInd.setAmpMEIndId(indId);
         colMeIndValIds = MEIndicatorsUtil.getMeIndValIds(indId);
-        Iterator itr = colMeIndValIds.iterator();
-        while(itr.hasNext())
-        {
-            ampMEIndVal = (AmpMEIndicatorValue) itr.next();
+        for (Object colMeIndValId : colMeIndValIds) {
+            ampMEIndVal = (AmpMEIndicatorValue) colMeIndValId;
             ampMECurrValIds = MEIndicatorsUtil.getMeCurrValIds(ampMEIndVal.getAmpMeIndValId());
 
-            if(ampMECurrValIds != null)
-            {
+            if (ampMECurrValIds != null) {
                 AmpMECurrValHistory ampMECurrVal = null;
-                Iterator itrCurrVal = ampMECurrValIds.iterator();
-                while(itrCurrVal.hasNext())
-                {
-                    ampMECurrVal = (AmpMECurrValHistory) itrCurrVal.next();
+                for (Object ampMECurrValId : ampMECurrValIds) {
+                    ampMECurrVal = (AmpMECurrValHistory) ampMECurrValId;
                     try {
-                    DbUtil.delete(ampMECurrVal);
+                        DbUtil.delete(ampMECurrVal);
                     } catch (JDBCException e) {
                         logger.error(e.getMessage(), e);
+                    }
                 }
             }
-            }
             try {
-            DbUtil.delete(ampMEIndVal);
+                DbUtil.delete(ampMEIndVal);
             } catch (JDBCException e) {
                 logger.error(e.getMessage(), e);
-        }
+            }
         }
         try {
         DbUtil.delete(ampMEInd);

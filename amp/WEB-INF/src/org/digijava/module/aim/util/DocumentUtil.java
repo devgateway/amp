@@ -168,8 +168,8 @@ public class DocumentUtil {
     }
 
     private static List<ManagedDocument> getContentItems(Node node) throws RepositoryException {
-        NodeIterator iter = node.getNodes();
         ArrayList<ManagedDocument> nodeList = new ArrayList<>();
+        NodeIterator iter = node.getNodes();
         while(iter.hasNext()) {
             Node childItem = (Node) iter.next();
 

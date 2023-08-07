@@ -228,10 +228,9 @@ public static Date SimpleDateGregorianToEthiopian(String date, CalendarConversor
             List row = (List) it.next();
             if(view.equals(CalendarOptions.CALENDAR_VIEW_WEEKLY) ||
                view.equals(CalendarOptions.CALENDAR_VIEW_DAYLY)) {
-                Iterator itemIt = row.iterator();
-                while(itemIt.hasNext()) {
-                    DateNavigatorItem item = (DateNavigatorItem) itemIt.next();
-                    if(item.isSelected()) {
+                for (Object o : row) {
+                    DateNavigatorItem item = (DateNavigatorItem) o;
+                    if (item.isSelected()) {
                         navigatorItems.add(item);
                     }
                 }
@@ -281,20 +280,19 @@ public static Date SimpleDateGregorianToEthiopian(String date, CalendarConversor
             calendar.setStartDate(AmpUtil.SimpleDateGregorianToEthiopian(sdf.format(calendar.getStartDate()).toString(), convert));
             calendar.setEndDate(AmpUtil.SimpleDateGregorianToEthiopian(sdf.format(calendar.getEndDate()).toString(), convert));
          }
-        Iterator it = navigatorItems.iterator();
-        while(it.hasNext()) {
-            DateNavigatorItem navigatorItem = (DateNavigatorItem) it.next();
+        for (Object item : navigatorItems) {
+            DateNavigatorItem navigatorItem = (DateNavigatorItem) item;
             int itemStartTimestamp = getNavigatorItemLeftTimestamp(navigatorItem.getDateBreakDown(), view);
             int itemEndTimestamp = getNavigatorItemRightTimestamp(navigatorItem.getDateBreakDown(), view);
-            String  eventTypeName=null;
-            if(ampCalendar.getEventsType()!=null){
+            String eventTypeName = null;
+            if (ampCalendar.getEventsType() != null) {
                 AmpCategoryValue ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromDb(ampCalendar.getEventsType().getId());
-                if (ampCategoryValue != null){
-                    eventTypeName=ampCategoryValue.getValue();
+                if (ampCategoryValue != null) {
+                    eventTypeName = ampCategoryValue.getValue();
                 }
             }
             ampCalendarGraph.getGraphItems().add(getAmpCalendarGraphItem(eventTypeName, calendarStartTimestamp,
-                calendarEndTimestamp, itemStartTimestamp, itemEndTimestamp));
+                    calendarEndTimestamp, itemStartTimestamp, itemEndTimestamp));
         }
         return ampCalendarGraph;
     }

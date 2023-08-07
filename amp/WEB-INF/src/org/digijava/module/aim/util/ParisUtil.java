@@ -168,10 +168,8 @@ public class ParisUtil {
                                 + "where (name like '" + name + "' && indicator_code like '" + code + "')";
             qry = session.createQuery(queryString);
             col = qry.list();
-            Iterator itr = col.iterator();
-            while(itr.hasNext())
-            {
-                piInd = (AmpAhsurveyIndicator) itr.next();
+            for (Object o : col) {
+                piInd = (AmpAhsurveyIndicator) o;
             }
         }
         catch(Exception e)

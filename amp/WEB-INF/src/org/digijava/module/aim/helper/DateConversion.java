@@ -141,15 +141,15 @@ public class DateConversion
             //logger.debug("getYear passed String" + s ) ;
         int yr = 0 ;
         if ( s != null && s.length() != 0 )     {
-            String strYr = "" ;
+            StringBuilder strYr = new StringBuilder();
             char[] arr = s.toCharArray() ;
             int i = s.length() - 1 ;
             while( arr[i] != '/' )
             {
-                strYr += arr[i] ;
+                strYr.append(arr[i]);
                 i-- ;
             }
-            StringBuffer sb = new StringBuffer(strYr) ;
+            StringBuilder sb = new StringBuilder(strYr.toString()) ;
             sb.reverse() ;
             yr= Integer.parseInt(sb.toString()) ;
         }

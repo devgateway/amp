@@ -191,23 +191,22 @@ public class TranslatorManager extends Action {
                                 } else {
                                     keywords = Arrays.asList(tMngForm.getKeywords());
                                 }
-                                    
-                                    Iterator<Message> trnsIterator=tHP.getTranslations().iterator();                                    
-                                    while(trnsIterator.hasNext()){
-                                        Message msg=(Message)trnsIterator.next();                                       
+
+                                for (Message message : (Iterable<Message>) tHP.getTranslations()) {
+                                    Message msg = message;
                                     // now overwrite,update or insert
                                     // non-existing translation
-                                        if(actionName.compareTo("nonexisting")==0){
-                                            updateNonExistingTranslationMessage(msg,tMngForm.getSelectedImportedLanguages()[i],request);
-                                            logger.info("updating non existing...."+msg.getKey());
-                                        }else if(actionName.compareTo("update")==0){                                            
-                                            overrideOrUpdateTrns(msg,tMngForm.getSelectedImportedLanguages()[i],actionName,keywords,skipOrUpdateTrnsWithKeywords,request);
-                                            logger.info("updating new tr msg...."+msg.getKey());
-                                        }else if(actionName.compareTo("overwrite")==0){                                         
-                                            overrideOrUpdateTrns(msg,tMngForm.getSelectedImportedLanguages()[i],actionName,keywords,skipOrUpdateTrnsWithKeywords,request);
-                                            logger.info("inserting...."+msg.getKey());
-                                        }
+                                    if (actionName.compareTo("nonexisting") == 0) {
+                                        updateNonExistingTranslationMessage(msg, tMngForm.getSelectedImportedLanguages()[i], request);
+                                        logger.info("updating non existing...." + msg.getKey());
+                                    } else if (actionName.compareTo("update") == 0) {
+                                        overrideOrUpdateTrns(msg, tMngForm.getSelectedImportedLanguages()[i], actionName, keywords, skipOrUpdateTrnsWithKeywords, request);
+                                        logger.info("updating new tr msg...." + msg.getKey());
+                                    } else if (actionName.compareTo("overwrite") == 0) {
+                                        overrideOrUpdateTrns(msg, tMngForm.getSelectedImportedLanguages()[i], actionName, keywords, skipOrUpdateTrnsWithKeywords, request);
+                                        logger.info("inserting...." + msg.getKey());
                                     }
+                                }
                                 }
                             }
                         }
@@ -281,19 +280,17 @@ public class TranslatorManager extends Action {
                 session = PersistenceManager.getRequestDBSession();
                 qryStr  = "select m from "+ Message.class.getName() + " m where m.locale='"+language+"'";
                 qry= session.createQuery(qryStr);
-                Iterator<Message> itr = qry.list().iterator();
-                while(itr.hasNext()){
-                    Message msg= (Message)itr.next();
+            for (Message message : (Iterable<Message>) qry.list()) {
                 // MessageGroup class key is equal to the message key, from
                 // which it was created
-                    MessageGroup msgGroup=map.get(msg.getKey());
-                    if(msgGroup==null){
-                        msgGroup=new MessageGroup(msg);
-                    }else{
-                        msgGroup.addMessage(msg);
-                    }
-                    map.put(msgGroup.getKey(), msgGroup);
+                MessageGroup msgGroup = map.get(((Message) message).getKey());
+                if (msgGroup == null) {
+                    msgGroup = new MessageGroup((Message) message);
+                } else {
+                    msgGroup.addMessage((Message) message);
                 }
+                map.put(msgGroup.getKey(), msgGroup);
+            }
         } catch (Exception ex) {
             logger.error("Exception : " + ex.getMessage());
             ex.printStackTrace(System.out);

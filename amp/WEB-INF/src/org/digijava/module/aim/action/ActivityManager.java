@@ -298,7 +298,7 @@ public class ActivityManager extends Action {
 
     private List<Long> getActsIds(String ids){
         List<Long> actsIds=new ArrayList<Long>();
-        while(ids.indexOf(",")!= -1){
+        while(ids.contains(",")){
             Long id= new Long(ids.substring(0,ids.indexOf(",")).trim());
             actsIds.add(id);
             ids=ids.substring(ids.indexOf(",")+1);

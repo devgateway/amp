@@ -635,10 +635,10 @@ public class CompleteTranslationAction extends DispatchAction
         }catch(WorkerException we){
             logger.error("ActionClass.Exception.err { \"CompleteTranslationAction\" }");
         }
-        Iterator<String> it = ls.iterator();
         int c=0;
         int startFrom = 0;
         int count = 0;
+        Iterator<String> it = ls.iterator();
         while(it.hasNext())
         {
             c=c+1;
@@ -647,7 +647,7 @@ public class CompleteTranslationAction extends DispatchAction
                 String key1 = it.next().toString();
 
                 if(request.getParameter("startFrom") != null)
-                     startFrom = new Integer(request.getParameter("startFrom")).intValue();
+                     startFrom = new Integer(request.getParameter("startFrom"));
                 else
                   startFrom = 0;
                 List<TranslatorBean> sm = new ArrayList<TranslatorBean>();
@@ -662,46 +662,39 @@ public class CompleteTranslationAction extends DispatchAction
                 }catch(WorkerException we){
                     logger.error("ActionClass.Exception.err { \"CompleteTranslationAction\" }");
                 }
-                for(int i=0 ; i<sm.size();i++)
-                {
-
-                    TranslatorBean tb = (TranslatorBean)sm.get(i);
+                for (TranslatorBean translatorBean : sm) {
 
                     Message source = new Message();
                     Message target = new Message();
 
-                    if(tb.getSrcMsg() != null)
-                        source = tb.getSrcMsg();
+                    if (translatorBean.getSrcMsg() != null)
+                        source = translatorBean.getSrcMsg();
 
-                    if(tb.getTragetMsg() != null)
-                        target = tb.getTragetMsg();
+                    if (translatorBean.getTragetMsg() != null)
+                        target = translatorBean.getTragetMsg();
                     long time = 0;
-                    if(source.getCreated()!=null)
+                    if (source.getCreated() != null)
                         time = source.getCreated().getTime();
 
-                    if(target.getMessage() == null){
-                        //System.out.println("TARGET MESSAGE IS NULL");
-                    }
+                    //System.out.println("TARGET MESSAGE IS NULL");
 
-                    if(source.getMessage() == null){
-                        //System.out.println("SOURCE MESSAGE IS NULL");
-                    }
+                    //System.out.println("SOURCE MESSAGE IS NULL");
 
-                    if((source.getMessage()!=null)&&((time>=0)||(source.getCreated()==null))){
+                    if ((source.getMessage() != null) && ((time >= 0) || (source.getCreated() == null))) {
                         String targetSiteId = target.getSiteId();
                         String sourceSiteId = source.getSiteId();
 
-                        if(sourceSiteId == null){
-                            sourceSiteId="";
+                        if (sourceSiteId == null) {
+                            sourceSiteId = "";
                         }
-                        if(targetSiteId == null){
-                            targetSiteId="";
+                        if (targetSiteId == null) {
+                            targetSiteId = "";
                         }
 
-                        if(target.getMessage() == null){
-                            message.add(new ValueBean(source.getKey(),source.getMessage(),"",sourceSiteId,targetSiteId, tb.isNeedsUpdate()));
-                        }else{
-                            message.add(new ValueBean(source.getKey(),source.getMessage(),target.getMessage(),sourceSiteId,targetSiteId,tb.isNeedsUpdate()));
+                        if (target.getMessage() == null) {
+                            message.add(new ValueBean(source.getKey(), source.getMessage(), "", sourceSiteId, targetSiteId, ((TranslatorBean) translatorBean).isNeedsUpdate()));
+                        } else {
+                            message.add(new ValueBean(source.getKey(), source.getMessage(), target.getMessage(), sourceSiteId, targetSiteId, ((TranslatorBean) translatorBean).isNeedsUpdate()));
                         }
                     }
 

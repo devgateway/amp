@@ -675,12 +675,11 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         try {
 
             List result = session.createNativeQuery("Select * from ( select amp_activity_id, amp_activity_group_id, date_updated, rank() over (PARTITION BY amp_activity_group_id order by date_updated desc) as rank from amp_activity_version order by amp_activity_group_id) as SQ where sq.rank > "+size).list();
-            Iterator iter = result.iterator();
             List<Long> idActivities = new ArrayList<Long>();
-            while(iter.hasNext()){
-                Object[] objects = (Object[]) iter.next();
-                 BigInteger id = (BigInteger) objects[0];
-                 idActivities.add(id.longValue());
+            for (Object o : result) {
+                Object[] objects = (Object[]) o;
+                BigInteger id = (BigInteger) objects[0];
+                idActivities.add(id.longValue());
             }
             if(idActivities.size()>0){
                 String qryGroups = "select av from "
@@ -1090,18 +1089,14 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         
         Collection col =qry1.list();
         if (col != null && col.size() > 0) {
-            Iterator<AmpActivityVersion> itrAmp = col.iterator();
-            while(itrAmp.hasNext()){
-                AmpActivityVersion actVersion = itrAmp.next();
+            for (AmpActivityVersion actVersion : (Iterable<AmpActivityVersion>) col) {
                 actVersion.setMergeSource1(null);
                 session.update(actVersion);
             }
         }
         col =qry2.list();
         if (col != null && col.size() > 0) {
-            Iterator<AmpActivityVersion> itrAmp = col.iterator();
-            while(itrAmp.hasNext()){
-                AmpActivityVersion actVersion = itrAmp.next();
+            for (AmpActivityVersion actVersion : (Iterable<AmpActivityVersion>) col) {
                 actVersion.setMergeSource2(null);
                 session.update(actVersion);
             }
@@ -1144,12 +1139,11 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         qry = session.createQuery(queryString);
         qry.setParameter("ampActId", ampActivityId, LongType.INSTANCE);
         col = qry.list();
-        
-        Iterator itrIndAct = col.iterator();
-        while(itrIndAct.hasNext()){
-            IndicatorActivity indAct =(IndicatorActivity)itrIndAct.next();
-            session.delete(indAct);
-        }
+
+      for (Object o : col) {
+          IndicatorActivity indAct = (IndicatorActivity) o;
+          session.delete(indAct);
+      }
       
   }
 
@@ -1300,14 +1294,12 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 
           Set<AmpFunding> fundings = act.getFunding();
           if (fundings != null) {
-              Iterator<AmpFunding> fundItr = act.getFunding().iterator();
-              while(fundItr.hasNext()) {
-                  AmpFunding ampFunding = fundItr.next();
+              for (AmpFunding ampFunding : act.getFunding()) {
                   org.digijava.module.aim.logic.FundingCalculationsHelper calculations = new org.digijava.module.aim.logic.FundingCalculationsHelper();
                   calculations.doCalculations(ampFunding, tocode);
                   //apply program percent
-                  result.AddActual(calculations.getTotActualComm().doubleValue()*percent/100);
-                  result.AddActualDisb(calculations.getTotActualDisb().doubleValue()*percent/100);
+                  result.AddActual(calculations.getTotActualComm().doubleValue() * percent / 100);
+                  result.AddActualDisb(calculations.getTotActualDisb().doubleValue() * percent / 100);
               }
           }
         }

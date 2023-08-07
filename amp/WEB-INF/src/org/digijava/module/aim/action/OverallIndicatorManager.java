@@ -77,38 +77,35 @@ public class OverallIndicatorManager extends Action
         Collection subPrograms = new ArrayList();
         Collection indicatorsById = new ArrayList();
         allIndForm.setAllThemes(allThemes);
-        Iterator itr = allThemes.iterator();
         Collection doubleColl = new ArrayList();
         HashMap  hMap = new HashMap();
         HashMap themeMap = new HashMap();
-        while(itr.hasNext()) {
-            AmpTheme tmpAmpTheme = (AmpTheme)itr.next();
-             subPrograms = ProgramUtil.getAllSubThemes(tmpAmpTheme.getAmpThemeId());
-                Iterator _itr = subPrograms.iterator();
-                    while(_itr.hasNext()) {
-                        AmpTheme _tmpTheme = (AmpTheme)_itr.next();
-                        AmpTheme finalTheme = new AmpTheme();
-                        finalTheme.setName(_tmpTheme.getName());
-                        finalTheme.setAmpThemeId(_tmpTheme.getAmpThemeId());
-                        finalTheme.setIndicators(_tmpTheme.getIndicators());
-                        doubleColl.add(finalTheme);
-                        indicatorsById = ProgramUtil.getThemeIndicators(finalTheme.getAmpThemeId());
-                        themeMap.put(finalTheme.getAmpThemeId(),indicatorsById);
-                    }
-            hMap.put(tmpAmpTheme.getAmpThemeId(),subPrograms);
+        for (Object allTheme : allThemes) {
+            AmpTheme tmpAmpTheme = (AmpTheme) allTheme;
+            subPrograms = ProgramUtil.getAllSubThemes(tmpAmpTheme.getAmpThemeId());
+            for (Object subProgram : subPrograms) {
+                AmpTheme _tmpTheme = (AmpTheme) subProgram;
+                AmpTheme finalTheme = new AmpTheme();
+                finalTheme.setName(_tmpTheme.getName());
+                finalTheme.setAmpThemeId(_tmpTheme.getAmpThemeId());
+                finalTheme.setIndicators(_tmpTheme.getIndicators());
+                doubleColl.add(finalTheme);
+                indicatorsById = ProgramUtil.getThemeIndicators(finalTheme.getAmpThemeId());
+                themeMap.put(finalTheme.getAmpThemeId(), indicatorsById);
+            }
+            hMap.put(tmpAmpTheme.getAmpThemeId(), subPrograms);
         }
         allIndForm.setMap(hMap);
         allIndForm.setThemeIndi(themeMap);
         allIndForm.setSubPrograms(doubleColl);
         allIndForm.setDoubleColl(doubleColl);
         Collection allPrg = null;   
-        Iterator prgItr = null;     
         allPrg = ProgramUtil.getAllThemesIndicators();
-        prgItr = allPrg.iterator();
+        Iterator prgItr = allPrg.iterator();
         while(prgItr.hasNext()) {
             AllThemes theme =(AllThemes)prgItr.next();
             List prgInds=new ArrayList(theme.getAllPrgIndicators());
-            Collections.sort(prgInds, new ProgramUtil.HelperAllPrgIndicatorNameComparator());
+            prgInds.sort(new ProgramUtil.HelperAllPrgIndicatorNameComparator());
             theme.setAllPrgIndicators(prgInds);
         }
         allIndForm.setPrgIndicators(allPrg);

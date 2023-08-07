@@ -732,28 +732,26 @@ public class ExportOrganizationToExcel extends DispatchAction {
         cell.setCellStyle(subHeaderCS);
         
         List<AmpOrgRecipient> orgs=editForm.getRecipients();
-        String organizations="";
+        StringBuilder organizations= new StringBuilder();
         String longestOrgRecord = "";
         String currentRecord = null;
         if(orgs!=null){
-            Iterator<AmpOrgRecipient> orgIter=orgs.iterator();
-            while(orgIter.hasNext()){
-                AmpOrgRecipient organisation=orgIter.next();
-                currentRecord= BULLETCHAR+organisation.getOrganization().getName();
-                if(organisation.getDescription()!=null&&!organisation.getDescription().trim().equals("")){
-                    currentRecord+=" ("+organisation.getDescription()+")";
+            for (AmpOrgRecipient organisation : orgs) {
+                currentRecord = BULLETCHAR + organisation.getOrganization().getName();
+                if (organisation.getDescription() != null && !organisation.getDescription().trim().equals("")) {
+                    currentRecord += " (" + organisation.getDescription() + ")";
                 }
-                if(currentRecord.length() > longestOrgRecord.length()){
+                if (currentRecord.length() > longestOrgRecord.length()) {
                     longestOrgRecord = currentRecord;
                 }
-                organizations+= currentRecord+NEWLINECHAR;
+                organizations.append(currentRecord).append(NEWLINECHAR);
 
             }
         }
         
         setColspan(sheet, cellNum, longestOrgRecord);
         cell = row.createCell(cellNum++);
-        value = new HSSFRichTextString(organizations);
+        value = new HSSFRichTextString(organizations.toString());
         cell.setCellValue(value);
         cell.setCellStyle(regularCS);
         
@@ -792,21 +790,19 @@ public class ExportOrganizationToExcel extends DispatchAction {
         String longestSectRecord = "";
         currentRecord = null;       
         Collection<ActivitySector> activitySectors = editForm.getSectors();
-        String sectors="";
+        StringBuilder sectors= new StringBuilder();
         if(activitySectors!=null){
-            Iterator<ActivitySector> activitySectorsIter=activitySectors.iterator();
-            while(activitySectorsIter.hasNext()){
-                ActivitySector activitySector=activitySectorsIter.next();
-                currentRecord = BULLETCHAR+activitySector.getSectorName(); 
-                sectors+= currentRecord + NEWLINECHAR;
-                if(currentRecord.length() > longestSectRecord.length()){
+            for (ActivitySector activitySector : activitySectors) {
+                currentRecord = BULLETCHAR + activitySector.getSectorName();
+                sectors.append(currentRecord).append(NEWLINECHAR);
+                if (currentRecord.length() > longestSectRecord.length()) {
                     longestSectRecord = currentRecord;
                 }
             }
         }
         setColspan(sheet, cellNum, longestSectRecord);
         cell = row.createCell(cellNum++);
-        value = new HSSFRichTextString(sectors);
+        value = new HSSFRichTextString(sectors.toString());
         cell.setCellValue(value);
         cell.setCellStyle(regularCS);
         
@@ -921,16 +917,14 @@ public class ExportOrganizationToExcel extends DispatchAction {
         
         
         Collection<Location> selectedLocations=editForm.getSelectedLocs();
-        String locations="";
+        StringBuilder locations= new StringBuilder();
         String longestLocRecord = "";
         currentRecord = null;   
         if(selectedLocations!=null){
-            Iterator<Location> locationIter=selectedLocations.iterator();
-            while(locationIter.hasNext()){
-                Location location=locationIter.next();
-                currentRecord = BULLETCHAR+location.getAmpCVLocation().getName() ; 
-                locations+= currentRecord +" ("+location.getPercent()+"%) "+NEWLINECHAR;
-                if(currentRecord.length() > longestLocRecord.length()){
+            for (Location location : selectedLocations) {
+                currentRecord = BULLETCHAR + location.getAmpCVLocation().getName();
+                locations.append(currentRecord).append(" (").append(location.getPercent()).append("%) ").append(NEWLINECHAR);
+                if (currentRecord.length() > longestLocRecord.length()) {
                     longestLocRecord = currentRecord;
                 }
 
@@ -938,7 +932,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
         }
         setColspan(sheet, cellNum, longestLocRecord);
         cell = row.createCell(cellNum++);
-        value = new HSSFRichTextString(locations);
+        value = new HSSFRichTextString(locations.toString());
         cell.setCellValue(value);
         cell.setCellStyle(regularCS);
         

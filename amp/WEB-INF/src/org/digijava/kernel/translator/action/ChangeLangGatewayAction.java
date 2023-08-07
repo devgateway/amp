@@ -79,31 +79,27 @@ public final class ChangeLangGatewayAction extends Action {
 
         //first check for site-domain/site-path mapping to the destination locale...
         java.util.Collection col = RequestUtils.getSite(request).getSiteDomains();
-        java.util.Iterator it = col.iterator();
 
-        while(it.hasNext()){
-            org.digijava.kernel.request.SiteDomain domain =(org.digijava.kernel.request.SiteDomain)it.next();
-            if(domain.getLanguage() != null && domain.getLanguage().getCode().equals(selectedLocale)){
+        for (Object o : col) {
+            org.digijava.kernel.request.SiteDomain domain = (org.digijava.kernel.request.SiteDomain) o;
+            if (domain.getLanguage() != null && domain.getLanguage().getCode().equals(selectedLocale)) {
                 localeUrl = DgUtil.getSiteUrl(domain, request);
                 break;
             }
 
-            if(logger.isDebugEnabled())
+            if (logger.isDebugEnabled())
                 logger.debug(" domain object got " + domain);
         }
 
 
 
         if(localeUrl.equals("")){
-            it = col.iterator();
-            while(it.hasNext()){
-                org.digijava.kernel.request.SiteDomain domain1 = (org.digijava.kernel.request.SiteDomain)it.next();
-                if(domain1.getLanguage() == null){
+            for (Object o : col) {
+                org.digijava.kernel.request.SiteDomain domain1 = (org.digijava.kernel.request.SiteDomain) o;
+                if (domain1.getLanguage() == null) {
 
-                    if(localeUrl.equals("")){
-                        localeUrl = DgUtil.getSiteUrl(domain1, request);
-                        break;
-                    }
+                    localeUrl = DgUtil.getSiteUrl(domain1, request);
+                    break;
                 }
             }
         }

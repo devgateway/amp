@@ -61,9 +61,8 @@ public class SearchOrganisation extends Action {
                 String[] alphaArray = new String[26];
                 int i = 0;
                 for(char c = 'A'; c <= 'Z'; c++) {
-                    Iterator itr = col.iterator();
-                    while(itr.hasNext()) {
-                        AmpOrganisation org = (AmpOrganisation) itr.next();
+                    for (Object o : col) {
+                        AmpOrganisation org = (AmpOrganisation) o;
                         if (org.getName().toUpperCase().indexOf(c) == 0) {
                             alphaArray[i++] = String.valueOf(c);
                             break;
@@ -81,9 +80,8 @@ public class SearchOrganisation extends Action {
             if (!alpha.equals("viewAll")) {
                 eaForm.setStartAlphaFlag(false);
                 colAlpha = new ArrayList();
-                Iterator itr = col.iterator();
-                while(itr.hasNext()) {
-                    AmpOrganisation org = (AmpOrganisation) itr.next();
+                for (Object o : col) {
+                    AmpOrganisation org = (AmpOrganisation) o;
                     if (org.getName().toUpperCase().startsWith(alpha)) {
                         colAlpha.add(org);
                     }

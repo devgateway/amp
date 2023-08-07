@@ -83,13 +83,9 @@ public class GPISetupUtil {
         Collection<GPIDefaultFilters> defaultFilters =  qrySavedDonorTypes.list();
         
         List<AmpOrgType> types = DbUtil.getAllOrgTypesOfPortfolio();
-        Iterator<AmpOrgType> iterTypes = types.iterator();
-        while(iterTypes.hasNext()) {
-            AmpOrgType type = iterTypes.next();
-            Iterator<GPIDefaultFilters> iFilters = defaultFilters.iterator();
-            while(iFilters.hasNext()) {
-                GPIDefaultFilters auxFilter = iFilters.next();
-                if(type.getAmpOrgTypeId().toString().equals(auxFilter.getValue())) {
+        for (AmpOrgType type : types) {
+            for (GPIDefaultFilters auxFilter : defaultFilters) {
+                if (type.getAmpOrgTypeId().toString().equals(auxFilter.getValue())) {
                     ret.add(auxFilter.getValue());
                 }
             }

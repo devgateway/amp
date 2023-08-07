@@ -8,7 +8,7 @@ import { TRN_PREFIX } from '../utils/constants';
 import styles from '@devgateway/amp-settings'
 import { NDDTranslationContext } from './StartUp';
 
-const SettingsWidget = require('../../../../../ampTemplate/node_modules/amp-settings/dist/amp-settings');
+const SettingsWidget = require('@devgateway/amp-settings');
 
 const widget = new SettingsWidget.SettingsWidget({
   el: 'settings-popup',

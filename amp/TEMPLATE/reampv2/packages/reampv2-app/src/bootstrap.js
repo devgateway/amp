@@ -1,6 +1,3 @@
-<<<<<<<< HEAD:amp/TEMPLATE/reampv2/src/index.js
-import('./bootstrap');
-========
 import 'react-app-polyfill/ie11';
 import 'react-app-polyfill/stable';
 import React from 'react';
@@ -9,6 +6,8 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import boilerplate from '@devgateway/amp-boilerplate';
+// amp-filter css
+import '@devgateway/amp-boilerplate/src/components/amp-filter/amp-filter.css';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -34,4 +33,3 @@ if (!getParameterByName('embedded')) {
 }
 
 serviceWorker.unregister();
->>>>>>>> task/GGW-39/pilot-mfe:amp/TEMPLATE/reampv2/packages/reampv2-app/src/bootstrap.js

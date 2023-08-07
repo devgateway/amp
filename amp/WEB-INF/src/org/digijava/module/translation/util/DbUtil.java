@@ -31,6 +31,7 @@ import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -127,19 +128,18 @@ public class DbUtil {
                     Message.class.getName() +
             " msg where msg.siteId = :siteId and msg.locale = :sourceLang and msg.key like '%:%'");
 
-            q.setString("siteId", siteId.toString());
-            q.setString("sourceLang", sourceLang);
+            q.setParameter("siteId", siteId.toString(), StringType.INSTANCE);
+            q.setParameter("sourceLang", sourceLang,StringType.INSTANCE);
 
             List keyList = q.list();
 
             if (keyList != null) {
-                Iterator iter = keyList.iterator();
-                while (iter.hasNext()) {
-                    String key = (String) iter.next();
+                for (Object o : keyList) {
+                    String key = (String) o;
                     String prefix = key.trim();
                     prefix = key.split(":")[0].trim();
 
-                    if (!keyPrefixes.contains( (String) prefix)) {
+                    if (!keyPrefixes.contains((String) prefix)) {
                         keyPrefixes.add(prefix);
                     }
                 }
@@ -285,9 +285,9 @@ public class DbUtil {
             logger.debug("Query:" + queryString);
 
             Query q = session.createQuery(queryString);
-            q.setString("siteId", siteId.toString());
+            q.setParameter("siteId", siteId.toString(),StringType.INSTANCE);
             if (langCode != null) {
-                q.setString("langCode", langCode);
+                q.setParameter("langCode", langCode,StringType.INSTANCE);
             }
             q.setFirstResult(firstResult);
             q.setMaxResults(maxResult);
@@ -349,9 +349,9 @@ public class DbUtil {
             logger.debug("Query:" + queryString);
 
             Query q = session.createQuery(queryString);
-            q.setString("siteId", siteId.toString());
+            q.setParameter("siteId", siteId.toString(),StringType.INSTANCE);
             if (langCode != null) {
-                q.setString("langCode", langCode);
+                q.setParameter("langCode", langCode,StringType.INSTANCE);
             }
             q.setFirstResult(firstResult);
             q.setMaxResults(maxResult);
@@ -412,9 +412,9 @@ public class DbUtil {
             logger.debug("Query:" + queryString);
 
             Query q = session.createQuery(queryString);
-            q.setString("siteId", siteId.toString());
+            q.setParameter("siteId", siteId.toString(),StringType.INSTANCE);
             if (langCode != null) {
-                q.setString("langCode", langCode);
+                q.setParameter("langCode", langCode,StringType.INSTANCE);
             }
             q.setFirstResult(firstResult);
             q.setMaxResults(maxResult);

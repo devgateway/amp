@@ -18,6 +18,10 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
+import org.hibernate.type.BooleanType;
+import org.hibernate.type.DateType;
+import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -41,7 +45,7 @@ public class AmpUserUtil {
             String queryString = "select u from " + User.class.getName() + " u"
                     + " where u.banned=:banned and u.globalAdmin=false order by u.email";
             qry = session.createQuery(queryString);
-            qry.setBoolean("banned", getBanned);
+            qry.setParameter("banned", getBanned, BooleanType.INSTANCE);
             users = qry.list();
         } catch (Exception e) {
             logger.error("Unable to get user");
@@ -66,8 +70,8 @@ public class AmpUserUtil {
             String queryString = "select u from " + User.class.getName() + " u"
                     + " where u.emailVerified=:emailVerified and u.banned=:banned order by u.email";
             qry = session.createQuery(queryString);
-            qry.setBoolean("emailVerified", false);
-            qry.setBoolean("banned", true);
+            qry.setParameter("emailVerified", false, BooleanType.INSTANCE);
+            qry.setParameter("banned", true, BooleanType.INSTANCE);
             users = qry.list();
         } catch (Exception e) {
             logger.error("Unable to get user");
@@ -267,11 +271,11 @@ public class AmpUserUtil {
                         }
                         queryString+=" order by u.email";
             qry=session.createQuery(queryString);
-            qry.setLong("teamId", teamId);
+            qry.setParameter("teamId", teamId, LongType.INSTANCE);
                         if(keyword!=null&&keyword.length()>0){
-                            qry.setString("keyword", keyword);
+                            qry.setParameter("keyword", keyword, StringType.INSTANCE);
                         }
-            qry.setBoolean("banned", false);            
+            qry.setParameter("banned", false, BooleanType.INSTANCE);
             retVal=qry.list();
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -293,9 +297,9 @@ public class AmpUserUtil {
                     + " tm where (tm.deleted is null or tm.deleted = false) and tm.ampTeam.ampTeamId=:teamId) "
                     + " and u.banned=:banned order by concat(u.firstNames,' ',u.lastName)";
             query = session.createQuery(queryString);
-            query.setString("searchStr", searchStr + "%");
-            query.setLong("teamId", teamId);
-            query.setBoolean("banned", false);
+            query.setParameter("searchStr", searchStr + "%",StringType.INSTANCE);
+            query.setParameter("teamId", teamId, LongType.INSTANCE);
+            query.setParameter("banned", false, BooleanType.INSTANCE);
             users = query.list();
         } catch (Exception ex) {
             logger.error("couldn't load user " + ex.getMessage(), ex);
@@ -321,8 +325,8 @@ public class AmpUserUtil {
                     +" group by al.authorEmail)";*/
             qry = session.createQuery(queryString);
             Date startDate = new Date(112, 2, 1);//March,2013
-            qry.setDate("startDate", startDate);
-            qry.setDate("compareDate", lastActivity);
+            qry.setParameter("startDate", startDate, DateType.INSTANCE);
+            qry.setParameter("compareDate", lastActivity,DateType.INSTANCE);
             usersEmailAddr = qry.list();
         } catch (Exception e) {
             logger.error("Unable to get list of emails");

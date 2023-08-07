@@ -69,9 +69,9 @@ public class CategoryManagerUtil {
                         + "where (m.locale=:langIso and m.key=:translationKey and m.siteId=:thisSiteId)";
 
             Query qry       = session.createQuery(qryStr);
-            qry.setString("langIso", lang);
-            qry.setString("translationKey", key.toLowerCase());
-            qry.setString("thisSiteId", TLSUtils.getThreadLocalInstance().site.getId().toString());
+            qry.setParameter("langIso", lang,StringType.INSTANCE);
+            qry.setParameter("translationKey", key.toLowerCase(),StringType.INSTANCE);
+            qry.setParameter("thisSiteId", TLSUtils.getThreadLocalInstance().site.getId().toString(),StringType.INSTANCE);
 
             Message m       = (Message)qry.uniqueResult();
             if ( m == null ) {
@@ -429,7 +429,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
                 + AmpCategoryClass.class.getName()
                 + " c where c.name=:name";
             qry         = dbSession.createQuery(queryString);
-            qry.setString("name", name);
+            qry.setParameter("name", name,StringType.INSTANCE);
 
 
 
@@ -688,7 +688,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
             //AmpCategoryClass dbCategory       = new AmpCategoryClass();
                 String queryString  = "select c from " + AmpCategoryClass.class.getName() + " c where c.keyName=:key";
                 Query query         = dbSession.createQuery(queryString);
-                query.setString("key", key);
+                query.setParameter("key", key,StringType.INSTANCE);
                 query.setCacheable(true);
                 col = query.list();
                 if (col.isEmpty())
@@ -732,7 +732,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
                 + AmpCategoryClass.class.getName()
                 + " c where c.keyName=:categoryKey";
             qry         = dbSession.createQuery(queryString);
-            qry.setString("categoryKey", categoryKey );
+            qry.setParameter("categoryKey", categoryKey ,StringType.INSTANCE);
             
             List<AmpCategoryClass> resultList       = qry.list();
             

@@ -71,10 +71,10 @@ public class FeaturesUtil {
     public static List<String> getAssignedToTeams (Long templateId) {
         List<String> retVal = null;
         Session sess = PersistenceManager.getSession();
-        StringBuilder qs = new StringBuilder("select t.name from ").
-                append(AmpTeam.class.getName()).append(" t  where t.fmTemplate=:TEMPLATE_ID");
-        Query q = sess.createQuery(qs.toString());
-        q.setLong("TEMPLATE_ID", templateId);
+        String qs = "select t.name from " +
+                AmpTeam.class.getName() + " t  where t.fmTemplate=:TEMPLATE_ID";
+        Query q = sess.createQuery(qs);
+        q.setParameter("TEMPLATE_ID", templateId, LongType.INSTANCE);
         List<String> tmpVal = q.list();
         if (!tmpVal.isEmpty())
             retVal = tmpVal;
@@ -1871,7 +1871,7 @@ public class FeaturesUtil {
             session = PersistenceManager.getRequestDBSession();
             AmpModulesVisibility module = (AmpModulesVisibility) session.load(AmpModulesVisibility.class,moduleId);
             qryStr = "select f from " + AmpFeaturesVisibility.class.getName() + " f  where f.name = :featureName";
-            qry = session.createQuery(qryStr).setString("featureName", featureName);
+            qry = session.createQuery(qryStr).setParameter("featureName", featureName,StringType.INSTANCE);
 //            AmpFeaturesVisibility feature = (AmpFeaturesVisibility) qry.uniqueResult();//returns multiple rsuts
             AmpFeaturesVisibility feature = (AmpFeaturesVisibility) qry.list().get(0);
             if (feature != null){
@@ -2283,11 +2283,11 @@ public class FeaturesUtil {
                 queryString += " and (parent.name=:parentModuleName) ";
             }
             Query qry = session.createQuery(queryString);
-            qry.setString("moduleName", moduleName);
+            qry.setParameter("moduleName", moduleName,StringType.INSTANCE);
             if (parentModuleName != null) {
-                qry.setString("parentModuleName", parentModuleName);
+                qry.setParameter("parentModuleName", parentModuleName,StringType.INSTANCE);
             }
-            qry.setLong("defTemplId", defTemplId);
+            qry.setParameter("defTemplId", defTemplId, LongType.INSTANCE);
             if (qry.list() != null && qry.list().size() > 0) {
                 module = (AmpModulesVisibility) qry.uniqueResult();
             }

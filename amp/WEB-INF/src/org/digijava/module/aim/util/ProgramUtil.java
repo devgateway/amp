@@ -30,6 +30,9 @@ import org.hibernate.query.Query;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
@@ -1350,11 +1353,9 @@ public class ProgramUtil {
             tempPrg.add(ampThemetemp);
             if(!themeCol.isEmpty())
             {
-                Iterator itr = themeCol.iterator();
                 AmpTheme tempTheme = new AmpTheme();
-                while(itr.hasNext())
-                {
-                    tempTheme = (AmpTheme) itr.next();
+                for (AmpTheme ampTheme : themeCol) {
+                    tempTheme = ampTheme;
                     tempPrg.addAll(getRelatedThemes(tempTheme.getAmpThemeId()));
                 }
             }
@@ -1363,8 +1364,8 @@ public class ProgramUtil {
 
 
         public static String getThemesHierarchyXML(Collection<AmpTheme> allAmpThemes) throws Exception {
-            String result = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-            result += "<progTree>\n";
+            StringBuilder result = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+            result.append("<progTree>\n");
             if (allAmpThemes != null && allAmpThemes.size() > 0) {
 
                 //make hieararchy of programs wrapped into TreeItem
@@ -1372,13 +1373,13 @@ public class ProgramUtil {
                         new ProgramHierarchyDefinition(), new XMLtreeItemFactory());
 
                 //get XML from each top level item. They will handle subitems.
-                for (Iterator treeItemIter = themeTree.iterator(); treeItemIter.hasNext(); ) {
-                    TreeItem item = (TreeItem) treeItemIter.next();
-                    result += item.getXml();
+                for (Object o : themeTree) {
+                    TreeItem item = (TreeItem) o;
+                    result.append(item.getXml());
                 }
             }
-            result += "</progTree>\n";
-            return result;
+            result.append("</progTree>\n");
+            return result.toString();
         }
         public static AmpActivityProgramSettings getAmpActivityProgramSettings(Long id) throws DgException {
             return (AmpActivityProgramSettings) PersistenceManager.getRequestDBSession().load(AmpActivityProgramSettings.class, id);
@@ -1394,7 +1395,7 @@ public class ProgramUtil {
                                     + AmpActivityProgramSettings.class.getName()+ " ap "
                                     + "where ap.name=:name";
                     Query qry = session.createQuery(queryString);
-                    qry.setString("name", name);
+                    qry.setParameter("name", name,StringType.INSTANCE);
                     qry.setCacheable(false);
                 programSettings = (AmpActivityProgramSettings) qry.uniqueResult();
 
@@ -1413,7 +1414,7 @@ public class ProgramUtil {
           }
           Query qry = PersistenceManager.getSession().createQuery(queryString);
           if (excludeIndirect) {
-              qry.setString("indirectName", INDIRECT_PRIMARY_PROGRAM);
+              qry.setParameter("indirectName", INDIRECT_PRIMARY_PROGRAM, StringType.INSTANCE);
           }
 
           List<AmpActivityProgramSettings> programSettings = qry.list();
@@ -1480,9 +1481,8 @@ public class ProgramUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             if (settings != null) {
-                Iterator settingsIter = settings.iterator();
-                while (settingsIter.hasNext()) {
-                    AmpActivityProgramSettings setting = (AmpActivityProgramSettings) settingsIter.next();
+                for (Object o : settings) {
+                    AmpActivityProgramSettings setting = (AmpActivityProgramSettings) o;
                     if (setting.getDefaultHierarchy() != null
                             && setting.getDefaultHierarchy().getAmpThemeId() != null) {
                         AmpActivityProgramSettings oldSetting = (AmpActivityProgramSettings) session.
@@ -1515,70 +1515,67 @@ public class ProgramUtil {
         if (themes == null || themes.size() == 0) {
             return "<center><b>" + translatedText + "</b></<center>";
         }
-         String retVal;
-        retVal = "<table width=\"100%\" cellPadding=\"0\" cellSpacing=\"0\" valign=\"top\" align=\"left\" bgcolor=\"#ffffff\" border=\"0\" style=\"border-collapse: collapse;\">\n";
-        Iterator iter = themes.iterator();
+         StringBuilder retVal;
+        retVal = new StringBuilder("<table width=\"100%\" cellPadding=\"0\" cellSpacing=\"0\" valign=\"top\" align=\"left\" bgcolor=\"#ffffff\" border=\"0\" style=\"border-collapse: collapse;\">\n");
         int rc = 0;
-        while (iter.hasNext()) {
-            TreeItem item = (TreeItem) iter.next();
+        for (Object o : themes) {
+            TreeItem item = (TreeItem) o;
             AmpTheme theme = (AmpTheme) item.getMember();
-            retVal += "<tr><td>&nbsp;</td><td width=\"100%\">\n";
+            retVal.append("<tr><td>&nbsp;</td><td width=\"100%\">\n");
 
 
             // visible div start
-            retVal += "<div>";// id=\"div_theme_"+theme.getAmpThemeId()+"\"";
-            retVal += " <table class=\"inside\" width=\"100%\" border=\"0\" style=\"margin-bottom:1px\">";
-            if (rc++%2 == 0){
-                retVal += "<tr bgcolor=\"#F2F2F2\" class=\"tableEven\" onmouseover=\"this.className='Hovered'\" onmouseout=\"this.className='tableEven'\">";
-            }else{
-                retVal += "<tr bgcolor=\"#F2F2F2\" class=\"tableOdd\" onmouseover=\"this.className='Hovered'\" onmouseout=\"this.className='tableOdd'\">";
+            retVal.append("<div>");// id=\"div_theme_"+theme.getAmpThemeId()+"\"";
+            retVal.append(" <table class=\"inside\" width=\"100%\" border=\"0\" style=\"margin-bottom:1px\">");
+            if (rc++ % 2 == 0) {
+                retVal.append("<tr bgcolor=\"#F2F2F2\" class=\"tableEven\" onmouseover=\"this.className='Hovered'\" onmouseout=\"this.className='tableEven'\">");
+            } else {
+                retVal.append("<tr bgcolor=\"#F2F2F2\" class=\"tableOdd\" onmouseover=\"this.className='Hovered'\" onmouseout=\"this.className='tableOdd'\">");
             }
-            retVal += "   <td class=\"inside\" width=\"1%\" >";
-            retVal += "     <img id=\"img_" + theme.getAmpThemeId()+ "\" onclick=\"expandProgram(" + theme.getAmpThemeId()+ ")\" src=\"/TEMPLATE/ampTemplate/images/tree_plus.gif\"/>\n";
-            retVal += "     <img id=\"imgh_"+ theme.getAmpThemeId()+ "\" onclick=\"collapseProgram("+ theme.getAmpThemeId()+ ")\" src=\"/TEMPLATE/ampTemplate/images/tree_minus.gif\"  style=\"display : none;\"/>\n";
-            retVal += "   </td>";
-            if (level>1){
-                retVal += "   <td class=\"inside\" width=\"1%\">";
-                retVal += "     <img src=\"/TEMPLATE/ampTemplate/images/link_out_bot.gif\"/>\n";
-                retVal += "   </td>";
-                retVal += "   <td class=\"inside\" width=\"1%\">";
-                retVal += "     <img src=\""+getLevelImage(level)+"\" />\n";
-                retVal += "   </td>";
+            retVal.append("   <td class=\"inside\" width=\"1%\" >");
+            retVal.append("     <img id=\"img_").append(theme.getAmpThemeId()).append("\" onclick=\"expandProgram(").append(theme.getAmpThemeId()).append(")\" src=\"/TEMPLATE/ampTemplate/images/tree_plus.gif\"/>\n");
+            retVal.append("     <img id=\"imgh_").append(theme.getAmpThemeId()).append("\" onclick=\"collapseProgram(").append(theme.getAmpThemeId()).append(")\" src=\"/TEMPLATE/ampTemplate/images/tree_minus.gif\"  style=\"display : none;\"/>\n");
+            retVal.append("   </td>");
+            if (level > 1) {
+                retVal.append("   <td class=\"inside\" width=\"1%\">");
+                retVal.append("     <img src=\"/TEMPLATE/ampTemplate/images/link_out_bot.gif\"/>\n");
+                retVal.append("   </td>");
+                retVal.append("   <td class=\"inside\" width=\"1%\">");
+                retVal.append("     <img src=\"").append(getLevelImage(level)).append("\" />\n");
+                retVal.append("   </td>");
             }
-            retVal += "   <td  class=\"progName inside\">";
-            retVal += "    <a href=\"javascript:editProgram("+ theme.getAmpThemeId()+ ")\" style=\"font-weight:bold;\">"+org.digijava.module.aim.util.DbUtil.filter(((AmpTheme) item.getMember()).getName())+"</a>\n";
-            retVal += "   </td>";
-            retVal += "   <td class=\"progCode inside\"  width=\"45%\" nowrap=\"nowrap\">("+ org.digijava.module.aim.util.DbUtil.filter(((AmpTheme) item.getMember()).getThemeCode()) + ")</td>";
-            retVal += "   <td class=\"inside\" nowrap=\"nowrap\" width=\"10%\">";
-            retVal += "     <a href=\"javascript:addSubProgram('5','"+theme.getAmpThemeId() +"','"+level+"','"+org.digijava.module.aim.util.DbUtil.filter(theme.getEncodeName())+"')\">"+TranslatorWorker.translateText("Add Sub Program")+"</a> \n";
-            retVal += "   </td>";
-            retVal += "   <td class=\"inside\" nowrap=\"nowrap\" width=\"10%\">";
-            retVal += "     <a href=\"javascript:assignIndicators('"+theme.getAmpThemeId() +"')\">" + TranslatorWorker.translateText("Manage Indicators") + "</a>\n";
-            retVal += "   </td>";
-            retVal += "   <td class=\"inside\" width=\"12\">";
-            retVal += "     <a href=\"/aim/themeManager.do~event=delete~themeId="+theme.getAmpThemeId()+"\" onclick=\"return deleteProgram()\"><img src=\"/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif\" border=\"0\"></a>";
-            retVal += "   </td>";
-            retVal += " </tr></table>";
-            retVal += "</div>\n";
+            retVal.append("   <td  class=\"progName inside\">");
+            retVal.append("    <a href=\"javascript:editProgram(").append(theme.getAmpThemeId()).append(")\" style=\"font-weight:bold;\">").append(DbUtil.filter(((AmpTheme) item.getMember()).getName())).append("</a>\n");
+            retVal.append("   </td>");
+            retVal.append("   <td class=\"progCode inside\"  width=\"45%\" nowrap=\"nowrap\">(").append(DbUtil.filter(((AmpTheme) item.getMember()).getThemeCode())).append(")</td>");
+            retVal.append("   <td class=\"inside\" nowrap=\"nowrap\" width=\"10%\">");
+            retVal.append("     <a href=\"javascript:addSubProgram('5','").append(theme.getAmpThemeId()).append("','").append(level).append("','").append(DbUtil.filter(theme.getEncodeName())).append("')\">").append(TranslatorWorker.translateText("Add Sub Program")).append("</a> \n");
+            retVal.append("   </td>");
+            retVal.append("   <td class=\"inside\" nowrap=\"nowrap\" width=\"10%\">");
+            retVal.append("     <a href=\"javascript:assignIndicators('").append(theme.getAmpThemeId()).append("')\">").append(TranslatorWorker.translateText("Manage Indicators")).append("</a>\n");
+            retVal.append("   </td>");
+            retVal.append("   <td class=\"inside\" width=\"12\">");
+            retVal.append("     <a href=\"/aim/themeManager.do~event=delete~themeId=").append(theme.getAmpThemeId()).append("\" onclick=\"return deleteProgram()\"><img src=\"/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif\" border=\"0\"></a>");
+            retVal.append("   </td>");
+            retVal.append(" </tr></table>");
+            retVal.append("</div>\n");
 
             // hidden div start
-            retVal += "<div id=\"div_theme_" + theme.getAmpThemeId()+ "\" style=\"display : none;\">\n";
+            retVal.append("<div id=\"div_theme_").append(theme.getAmpThemeId()).append("\" style=\"display : none;\">\n");
             if (item.getChildren() != null || item.getChildren().size() > 0) {
-                retVal += renderLevel(item.getChildren(), level+1,request);
+                retVal.append(renderLevel(item.getChildren(), level + 1, request));
             }
-            retVal += "</div>\n";
+            retVal.append("</div>\n");
 
-            retVal += "</td></tr>\n";
+            retVal.append("</td></tr>\n");
         }
-        retVal += "</table>\n";
-        return retVal;
+        retVal.append("</table>\n");
+        return retVal.toString();
     }
 
     public static String getLevelImage(int level) {
         switch (level) {
-        case 0:
-            return "../ampTemplate/images/arrow_right.gif";
-        case 1:
+        case 0: case 1:
             return "../ampTemplate/images/arrow_right.gif";
         case 2:
             return "../ampTemplate/images/square1.gif";
@@ -1616,14 +1613,13 @@ public class ProgramUtil {
     }
 
     public static String getNameOfProgramSettingsUsed(Long programId) {
-        Collection programSettings                  = getProgramSetttingsUsed(programId);
+        Collection programSettings   = getProgramSetttingsUsed(programId);
 
-        Iterator iter   = programSettings.iterator();
-        String result   = "";
-        while ( iter.hasNext() ) {
-            AmpActivityProgramSettings aaps         = (AmpActivityProgramSettings) iter.next();
-            if ( aaps.getName() != null )
-                result  += "'" + aaps.getName() + "'" + ", ";
+        StringBuilder result   = new StringBuilder();
+        for (Object programSetting : programSettings) {
+            AmpActivityProgramSettings aaps = (AmpActivityProgramSettings) programSetting;
+            if (aaps.getName() != null)
+                result.append("'").append(aaps.getName()).append("'").append(", ");
         }
         if ( result.length() > 0 )
             return result.substring(0, result.length() - 2);
@@ -1637,7 +1633,7 @@ public class ProgramUtil {
             sess = PersistenceManager.getRequestDBSession();
             String qryString        = "select a from " + AmpActivityProgramSettings.class.getName() + " a where (a.defaultHierarchy=:program) ";
             Query qry           = sess.createQuery(qryString);
-            qry.setLong("program", programId);
+            qry.setParameter("program", programId, LongType.INSTANCE);
             Collection result   = qry.list();
             return result;
         }
@@ -1677,13 +1673,11 @@ public class ProgramUtil {
     {
         try
         {
-            Iterator<AmpTheme> progIter = userSelection.iterator();
-            while ( progIter.hasNext()  ) {
-                AmpTheme program        = progIter.next();
-                Collection<AmpTheme> descendentPrograms = ProgramUtil.getRelatedThemes( program.getAmpThemeId() );
-                activityFilterCol.addAll( descendentPrograms );
-                columnDataCol.addAll(  descendentPrograms );
-                columnDataCol.addAll( ProgramUtil.getAncestorThemes(program) );
+            for (AmpTheme program : userSelection) {
+                Collection<AmpTheme> descendentPrograms = ProgramUtil.getRelatedThemes(program.getAmpThemeId());
+                activityFilterCol.addAll(descendentPrograms);
+                columnDataCol.addAll(descendentPrograms);
+                columnDataCol.addAll(ProgramUtil.getAncestorThemes(program));
             }
         }
         catch(DgException e)
@@ -1890,10 +1884,17 @@ public class ProgramUtil {
     }
 
     public static Map<AmpTheme, Set<AmpTheme>> loadProgramMappings() {
-        List<AmpThemeMapping> list = PersistenceManager.getRequestDBSession()
-                .createCriteria(AmpThemeMapping.class)
-                    .setCacheable(false)
-                .list();
+
+        Session session = PersistenceManager.getRequestDBSession();
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<AmpThemeMapping> criteriaQuery = criteriaBuilder.createQuery(AmpThemeMapping.class);
+        Root<AmpThemeMapping> root = criteriaQuery.from(AmpThemeMapping.class);
+
+        criteriaQuery.select(root);
+        Query<AmpThemeMapping> query = session.createQuery(criteriaQuery);
+        query.setCacheable(false);
+
+        List<AmpThemeMapping> list = query.list();
 
         TreeMap<AmpTheme, Set<AmpTheme>> mappedPrograms = list.stream().collect(groupingBy(
                 AmpThemeMapping::getSrcTheme,

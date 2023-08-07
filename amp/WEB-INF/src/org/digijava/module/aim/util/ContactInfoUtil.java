@@ -208,10 +208,10 @@ public class ContactInfoUtil {
             queryString.append(" order by cont.function desc ");
             query = session.createQuery(queryString.toString());
             if(isNameProvided){
-                query.setString("name", "%"+ name+"%");
+                query.setParameter("name", "%"+ name+"%",StringType.INSTANCE);
             }
             if(isLastNameProvided){
-                query.setString("lastname", "%"+ lastname+"%"); 
+                query.setParameter("lastname", "%"+ lastname+"%",StringType.INSTANCE);
             }
             contacts = query.list();
         } catch (Exception e) {

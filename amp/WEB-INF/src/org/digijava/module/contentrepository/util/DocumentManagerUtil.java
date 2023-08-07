@@ -444,17 +444,15 @@ public class DocumentManagerUtil {
                 }
                 Query query         = session.createQuery(queryString);
                 if ( CrDocumentNodeAttributes.class.getName().equals(className) ) {
-                    query.setString("publicVersionUUID", uuid);
+                    query.setParameter("publicVersionUUID", uuid,StringType.INSTANCE);
                 }
-                query.setString("uuid", uuid);
+                query.setParameter("uuid", uuid,StringType.INSTANCE);
                 
                 Collection<? extends ObjectReferringDocument> objsUsingDoc  = query.list();  
                 
                 if ( objsUsingDoc != null && objsUsingDoc.size() > 0) {
                     number                                          = objsUsingDoc.size();
-                    Iterator<? extends ObjectReferringDocument> iter    = objsUsingDoc.iterator(); 
-                    while( iter.hasNext() ) {
-                        ObjectReferringDocument obj     = iter.next();
+                    for (ObjectReferringDocument obj : objsUsingDoc) {
                         obj.remove(session);
                     } 
                 }

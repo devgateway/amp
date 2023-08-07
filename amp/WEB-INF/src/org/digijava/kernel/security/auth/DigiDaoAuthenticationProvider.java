@@ -27,6 +27,7 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.ShaCrypt;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -93,8 +94,8 @@ public class DigiDaoAuthenticationProvider
         try {
             session = PersistenceManager.getRequestDBSession();
             Query q = session.createQuery("from " + User.class.getName() +
-                    " u where lower(u.email) =? ");
-            q.setString(0, email.toLowerCase());
+                    " u where lower(u.email) =:email ");
+            q.setParameter("email", email.toLowerCase(), StringType.INSTANCE);
             q.setCacheable(true);
 
             List results = q.list();

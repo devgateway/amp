@@ -39,9 +39,7 @@ import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.jdbc.ReturningWork;
 import org.hibernate.jdbc.Work;
 import org.hibernate.query.Query;
-import org.hibernate.type.LongType;
-import org.hibernate.type.StandardBasicTypes;
-import org.hibernate.type.StringType;
+import org.hibernate.type.*;
 import org.joda.time.Period;
 
 import java.lang.reflect.Method;
@@ -343,20 +341,20 @@ public class ActivityUtil {
           TeamMember teamMember) {
 
       if (ampThemeId != null) {
-          query.setLong("ampThemeId", ampThemeId.longValue());
+          query.setParameter("ampThemeId", ampThemeId, LongType.INSTANCE);
         }
 
         if (fromDate != null) {
-          query.setDate("FromDate", fromDate);
+          query.setParameter("FromDate", fromDate, DateType.INSTANCE);
         }
         if (toDate != null) {
-          query.setDate("ToDate", toDate);
+          query.setParameter("ToDate", toDate,DateType.INSTANCE);
         }
         if (locationId != null) {
-          query.setLong("LocationID", locationId.longValue());
+          query.setParameter("LocationID", locationId, LongType.INSTANCE);
         }
         if (teamMember!=null && teamMember.getTeamId()!=null&&!teamMember.getTeamAccessType().equals("Management")){
-          query.setLong("teamId", teamMember.getTeamId());
+          query.setParameter("teamId", teamMember.getTeamId(), LongType.INSTANCE);
         }
 
   }
@@ -370,7 +368,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 
   public static List<AmpActivityLocation> getActivityLocations(Long activityId) {
       String queryString = "select locs.* from amp_activity_location locs where (locs.amp_activity_id=:actId) ";
-      return PersistenceManager.getSession().createNativeQuery(queryString).addEntity(AmpActivityLocation.class)
+      return PersistenceManager.getRequestDBSession().createNativeQuery(queryString).addEntity(AmpActivityLocation.class)
               .setParameter("actId", activityId, LongType.INSTANCE).list();
   }
 
@@ -996,8 +994,8 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
               AmpActivityVersion.class.getName(), dateField, dateField);
       List<AmpActivityVersion> aavs = PersistenceManager.getSession()
               .createQuery(queryString)
-              .setDate("minDate", minDate)
-              .setDate("maxDate", maxDate)
+              .setParameter("minDate", minDate,DateType.INSTANCE)
+              .setParameter("maxDate", maxDate,DateType.INSTANCE)
               .list();
       try {
           List<AmpActivityVersion> res = new ArrayList<>();
@@ -1025,7 +1023,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                         + " date_updated <= ( current_date - %s ) and approval_status in ( %s ))" ,
                 AmpActivityVersion.class.getName(), AmpActivity.class.getName(), daysToValidation, Constants.ACTIVITY_NEEDS_APPROVAL_STATUS);
 
-        return PersistenceManager.getSession()
+        return PersistenceManager.getRequestDBSession()
                 .createQuery(queryString)
                 .list();
 
@@ -1311,7 +1309,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
   public static List<AmpActivityProgram> getActivityProgramsByProgramType(Long actId, String settingName) {
       String queryString = "select ap from " +AmpActivityProgram.class.getName() +
               " ap join ap.programSetting s where (ap.activity=:actId) and (s.name=:settingName)";
-      return PersistenceManager.getSession().createQuery(queryString).setLong("actId",actId).setString("settingName",settingName).list();
+      return PersistenceManager.getSession().createQuery(queryString).setParameter("actId",actId, LongType.INSTANCE).setParameter("settingName",settingName,StringType.INSTANCE).list();
   }
  
   public static class HelperAmpActivityNameComparator
@@ -1603,7 +1601,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
             
             Query qry = session.createQuery(queryString);
            if (isSearchByName) {
-               qry.setString("searchTerm", "%" + searchTerm + "%");
+               qry.setParameter("searchTerm", "%" + searchTerm + "%",StringType.INSTANCE);
            }
 
             if (frozenActivityIds != null && frozenActivityIds.size() > 0
@@ -1730,7 +1728,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                 String qryString            = "update " + AmpActivityVersion.class.getName()  + 
                         " av  set av.archived=:archived where av.ampActivityId in (" + Util.toCSStringForIN(activityIds) + ")";
                 Query query                 = session.createQuery(qryString);
-                query.setBoolean("archived", status);
+                query.setParameter("archived", status, BooleanType.INSTANCE);
                 query.executeUpdate();
                 session.flush();
             }

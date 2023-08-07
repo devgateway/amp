@@ -18,6 +18,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
 
 import java.util.*;
 
@@ -146,7 +147,7 @@ public class DbHelper {
         try {
             session = PersistenceManager.getRequestDBSession();
             q = session.createQuery(queryString.toString());
-            q.setString("name", name.trim());
+            q.setParameter("name", name.trim(), StringType.INSTANCE);
             result = (ArrayList) q.list();
             if (result.size() > 0) {
                 stt = (AmpStructureType) result.get(0);

@@ -39,6 +39,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -58,7 +59,7 @@ public class DbUtil {
 
             String queryString = "from " + User.class.getName() + " rs where rs.email = :email";
             Query query = sess.createQuery(queryString);
-            query.setString("email", email);
+            query.setParameter("email", email, StringType.INSTANCE);
             
             Iterator iter = query.iterate();
             
@@ -95,7 +96,7 @@ public class DbUtil {
 
             String queryString = "from " + User.class.getName() + " rs where rs.email = :email";
             Query query = sess.createQuery(queryString);
-            query.setString("email", user);
+            query.setParameter("email", user,StringType.INSTANCE);
             
             Iterator iter = query.iterate();
 //////////////////////
@@ -170,7 +171,7 @@ public class DbUtil {
 //beginTransaction();
             String queryString = "from " + User.class.getName() + " rs where rs.email = :email";
             Query query = session.createQuery(queryString);
-            query.setString("email", email);
+            query.setParameter("email", email,StringType.INSTANCE);
             
             Iterator iter = query.iterate();
             User iterUser = null;
@@ -236,7 +237,7 @@ public class DbUtil {
             
             String queryString = "from " + User.class.getName() + " rs where trim(lower(rs.email)) = :email";
             Query query = session.createQuery(queryString);
-            query.setString("email", user);
+            query.setParameter("email", user,StringType.INSTANCE);
             
             Iterator iter = query.iterate();
             User iterUser = null;
@@ -485,7 +486,7 @@ public class DbUtil {
             //"from " + User.class.getName() + " rs where sha1(concat(cast(rs.email as byte),rs.id))=:hash and rs.emailVerified=false"; 
             String queryString = "select ID from DG_USER where sha1((cast(EMAIL as bytea) || cast(cast(ID as text)as bytea)))=:hash and EMAIL_VERIFIED=false";
             Query query = session.createNativeQuery(queryString);
-            query.setString("hash", id);
+            query.setParameter("hash", id,StringType.INSTANCE);
             iduser = (BigInteger) query.uniqueResult();
             if (iduser!= null){
                 User user = (User) session.load(User.class, iduser.longValue());
@@ -514,7 +515,7 @@ public class DbUtil {
 
             String queryString = "from " + User.class.getName() + " rs where trim(lower(rs.email)) = :email";
             Query query = sess.createQuery(queryString);
-            query.setString("email", email.toLowerCase().trim());
+            query.setParameter("email", email.toLowerCase().trim(),StringType.INSTANCE);
             
             Iterator iter = query.list().iterator();
             if(iter.hasNext()) {
@@ -536,18 +537,18 @@ public class DbUtil {
 
         String queryString = "from " + User.class.getName() + " rs where trim(lower(rs.email)) = :email";
         Query query = sess.createQuery(queryString);
-        query.setString("email", email.toLowerCase().trim());
+        query.setParameter("email", email.toLowerCase().trim(),StringType.INSTANCE);
         
         Iterator iter = query.list().iterator();
         if(!iter.hasNext()) {
             iscorrect = true;
         }
-        for (Iterator iterator = query.list().iterator(); iterator.hasNext();) {
-            User user = (User) iterator.next();
-            if (user.getId().compareTo(id)==0){
+        for (Object o : query.list()) {
+            User user = (User) o;
+            if (user.getId().compareTo(id) == 0) {
                 iscorrect = true;
-            }else{
-                iscorrect =false;
+            } else {
+                iscorrect = false;
                 break;
             }
         }
@@ -570,7 +571,7 @@ public class DbUtil {
             ResetPassword resetPassword;
             boolean create = true;
             try {
-                resetPassword = (ResetPassword) session.load(ResetPassword.class, new Long(userId));
+                resetPassword = session.load(ResetPassword.class, new Long(userId));
                 create = false;
             } catch(ObjectNotFoundException ex2) {
                 resetPassword = new ResetPassword();
@@ -942,7 +943,7 @@ public class DbUtil {
         StringBuilder qs = new StringBuilder("From ").
                 append(SuspendLogin.class.getName()).
                 append(" sl where sl.name = :NAME");
-        return (SuspendLogin) PersistenceManager.getSession().createQuery(qs.toString()).setString("NAME", name).uniqueResult();
+        return (SuspendLogin) PersistenceManager.getSession().createQuery(qs.toString()).setParameter("NAME", name,StringType.INSTANCE).uniqueResult();
     }
 
     public static List<User> getAllUsers() {
@@ -953,14 +954,14 @@ public class DbUtil {
     }
 
     public static List<SuspendLogin> getUserSuspendReasonsFromDB (User user) {
-        StringBuilder qs = new StringBuilder("From ")
-            .append(SuspendLogin.class.getName())
-            .append(" sl where :USER_ID in elements(sl.users)")
-            .append(" and sl.active = true and (sl.expires=false or")
-            .append(" (sl.expires=true and sl.suspendTil > current_date()))");
-        return PersistenceManager.getSession()
-                .createQuery(qs.toString())
-                .setLong("USER_ID", user.getId())
+        String qs = "From " +
+                SuspendLogin.class.getName() +
+                " sl where :USER_ID in elements(sl.users)" +
+                " and sl.active = true and (sl.expires=false or" +
+                " (sl.expires=true and sl.suspendTil > current_date()))";
+        return PersistenceManager.getRequestDBSession()
+                .createQuery(qs)
+                .setParameter("USER_ID", user.getId(), LongType.INSTANCE)
                 .setCacheable(true)
                 .list();
     }

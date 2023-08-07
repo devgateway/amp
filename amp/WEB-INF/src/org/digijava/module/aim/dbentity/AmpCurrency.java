@@ -10,6 +10,7 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
 
 import java.io.Serializable;
 
@@ -159,8 +160,8 @@ public class AmpCurrency implements Serializable, Comparable<AmpCurrency>, Ident
                                 "OR (f.fromCurrencyCode = :baseCurrencyCode AND f.toCurrencyCode = :currencyCode) AND f.exchangeRate IS NOT NULL";
             
             Query q = PersistenceManager.getRequestDBSession().createQuery(queryString);
-            q.setString("currencyCode", currencyCode);
-            q.setString("baseCurrencyCode", baseCurrencyCode);
+            q.setParameter("currencyCode", currencyCode, StringType.INSTANCE);
+            q.setParameter("baseCurrencyCode", baseCurrencyCode,StringType.INSTANCE);
             long cnt = PersistenceManager.getLong(q.uniqueResult());
             boolean result = (cnt > 0);
             _is_rate_cache = result;

@@ -45,6 +45,8 @@ import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
+import org.hibernate.type.TimestampType;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -1206,9 +1208,9 @@ public class TranslatorWorker {
                     " where  msg.key=:key" +
                     " and  msg.locale=:locale " +
                     " and  msg.siteId=:siteId")
-                    .setString("key",message.getKey())
-                    .setString("locale",message.getLocale())
-                    .setString("siteId",message.getSiteId())
+                    .setParameter("key",message.getKey(), StringType.INSTANCE)
+                    .setParameter("locale",message.getLocale(),StringType.INSTANCE)
+                    .setParameter("siteId",message.getSiteId(),StringType.INSTANCE)
                     .executeUpdate(); 
 
             //Remove from queue too.
@@ -1260,7 +1262,7 @@ public class TranslatorWorker {
             ses = PersistenceManager.getSession();
 //beginTransaction();
             Query q = ses.createQuery(queryString);
-            q.setString("msgKey", processKeyCase(key.trim()));
+            q.setParameter("msgKey", processKeyCase(key.trim()),StringType.INSTANCE);
 
             messages = q.list();
             for(Message msg:messages)
@@ -1298,16 +1300,16 @@ public class TranslatorWorker {
             ses = PersistenceManager.getSession();
             Query q = ses.createQuery(queryString);
             if (isCaseSensitiveKeys()) {
-                q.setString("msgKey", key.trim());
+                q.setParameter("msgKey", key.trim(),StringType.INSTANCE);
             }else{
-                q.setString("msgKey", processKeyCase(key.trim()));
+                q.setParameter("msgKey", processKeyCase(key.trim()),StringType.INSTANCE);
             }
-            q.setTimestamp("stamp", expTimestamp);
+            q.setParameter("stamp", expTimestamp, TimestampType.INSTANCE);
             Long countLong = (Long) q.uniqueResult();
 
             Integer count = countLong.intValue();
 
-            result = count.intValue() > 0;
+            result = count > 0;
 
         }
         catch (HibernateException e) {
@@ -1462,8 +1464,8 @@ public class TranslatorWorker {
             session = PersistenceManager.getSession();
             String oql = "from "+Message.class.getName()+" as m where m.key = :key and m.siteId = :SiteId";
             Query query = session.createQuery(oql);
-            query.setString("key", key);
-            query.setString("SiteId", siteId.toString());
+            query.setParameter("key", key,StringType.INSTANCE);
+            query.setParameter("SiteId", siteId.toString(),StringType.INSTANCE);
             result = query.list();
         } catch (Exception e) {
             throw new WorkerException(e);
@@ -1480,7 +1482,7 @@ public class TranslatorWorker {
             session = PersistenceManager.getRequestDBSession();
             String oql = "select distinct m.key from "+Message.class.getName()+" as m where m.siteId = :siteId order by  m.key";
             Query query =session.createQuery(oql);
-            query.setString("siteId", siteId.toString());
+            query.setParameter("siteId", siteId.toString(),StringType.INSTANCE);
             keys = query.list();
         } catch (Exception e) {
             throw new WorkerException(e);
@@ -1506,8 +1508,8 @@ public class TranslatorWorker {
                 + " as m where m.key in (select m1.key from " + Message.class.getName()
                     + " as m1 group by m1.key having count(m1.key)=1) and  m.siteId =:siteId and m.locale=:locale order by  m.key ";
                 Query query = session.createQuery(oql);
-                query.setString("siteId",  Site.getIdOf(site).toString());
-                query.setString("locale", locale);
+                query.setParameter("siteId",  Site.getIdOf(site).toString(),StringType.INSTANCE);
+                query.setParameter("locale", locale,StringType.INSTANCE);
                 messages=query.list();
         } catch (Exception e) {
             throw new WorkerException(e);
@@ -1734,7 +1736,7 @@ public class TranslatorWorker {
         boolean recreateLuceneIndex = false;
 
         ses = PersistenceManager.getSession();
-        int deletedEntities = ses.createQuery(queryString).setTimestamp("stamp", new Timestamp(date.getTime())).executeUpdate();
+        int deletedEntities = ses.createQuery(queryString).setParameter("stamp", new Timestamp(date.getTime()), TimestampType.INSTANCE).executeUpdate();
         if (deletedEntities > 0) {
             recreateLuceneIndex = true;
         }

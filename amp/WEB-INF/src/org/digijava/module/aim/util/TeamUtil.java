@@ -24,6 +24,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.hibernate.type.BooleanType;
+import org.hibernate.type.IntegerType;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
 
@@ -309,7 +310,7 @@ public class TeamUtil {
             String qryStr = "select t from " + AmpTeam.class.getName() + " t "
                     + "where (" + teamNameHql + "=:name)";
             Query qry = session.createQuery(qryStr);
-            qry.setString("name", team.getName());
+            qry.setParameter("name", team.getName(),StringType.INSTANCE);
             if(qry.list().size() > 0) {
                 // throw new AimException("Cannot create team: The team name " +
                 // team.getName() + " already exist");
@@ -324,15 +325,15 @@ public class TeamUtil {
                     + AmpFiscalCalendar.class.getName() + " fiscal "
                     + "where (fiscal.name=:cal) or (fiscal.yearOffset=:yearOffset)";
             qry = session.createQuery(qryStr);
-            qry.setString("cal", "Gregorian Calendar");
-            qry.setInteger("yearOffset", 0);
+            qry.setParameter("cal", "Gregorian Calendar",StringType.INSTANCE);
+            qry.setParameter("yearOffset", 0, IntegerType.INSTANCE);
             List<AmpFiscalCalendar> calendars = qry.list();
             AmpFiscalCalendar fiscal = null;
             if(calendars.size() > 0) {
-                for(Iterator<AmpFiscalCalendar> itr = calendars.iterator(); itr.hasNext(); ) {
-                    fiscal = (AmpFiscalCalendar) itr.next();
+                for (AmpFiscalCalendar calendar : calendars) {
+                    fiscal = calendar;
                     logger.debug("[createTeam(-)] fiscal calendar - " + fiscal.getName());
-                    if(fiscal != null)
+                    if (fiscal != null)
                         break;
                 }
             } 
@@ -346,7 +347,7 @@ public class TeamUtil {
             AmpApplicationSettings ampAppSettings = new AmpApplicationSettings();
             ampAppSettings.setTeam(team);
             //ampAppSettings.setMember(null);
-            ampAppSettings.setDefaultRecordsPerPage(new Integer(10));
+            ampAppSettings.setDefaultRecordsPerPage(10);
             ampAppSettings.setCurrency(curr);
             ampAppSettings.setFiscalCalendar(fiscal);
             ampAppSettings.setLanguage("en");
@@ -1153,7 +1154,7 @@ public class TeamUtil {
                 }
                 qry = session.createQuery(queryString.toString());
                 if(keyword!=null){
-                    qry.setString("name", "%" + keyword + "%");
+                    qry.setParameter("name", "%" + keyword + "%",StringType.INSTANCE);
                 } 
                 qry.setParameterList("params", childIds);
                 activities = qry.list();
@@ -1371,7 +1372,7 @@ public class TeamUtil {
            }
            
             session = PersistenceManager.getRequestDBSession();
-            AmpTeam team = (AmpTeam) session.load(AmpTeam.class, teamId);
+            AmpTeam team = session.load(AmpTeam.class, teamId);
             
             /*AMP-2685 Team leader should not see all reports*/
             AmpTeamMember ampteammember = TeamMemberUtil.getAmpTeamMember(memberId);
@@ -1657,7 +1658,7 @@ public class TeamUtil {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select tr.report.ampReportId from "+ AmpTeamReports.class.getName()+ " tr where (tr.team=:teamId) ";            
             Query qry = session.createQuery(queryString);
-            qry.setLong("teamId", id);
+            qry.setParameter("teamId", id, LongType.INSTANCE);
             List ids=qry.list();
             List<AmpReports> ret=new ArrayList<AmpReports>();
             if(ids.size()>0){

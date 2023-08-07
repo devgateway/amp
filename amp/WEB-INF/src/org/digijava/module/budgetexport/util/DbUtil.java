@@ -13,6 +13,9 @@ import org.digijava.module.budgetexport.dbentity.AmpBudgetExportProject;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.hibernate.type.BooleanType;
+import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -269,9 +272,9 @@ public class DbUtil {
             }
             Query q = sess.createQuery(queryStr.toString());
             q.setCacheable(true);
-            q.setString("PRJ_NAME", projectName);
+            q.setParameter("PRJ_NAME", projectName, StringType.INSTANCE);
             if (projectId != null) {
-                q.setLong("PRJ_ID", projectId);
+                q.setParameter("PRJ_ID", projectId, LongType.INSTANCE);
             }
             retVal = q.list().size() > 0;
 
@@ -295,10 +298,10 @@ public class DbUtil {
             }
             Query q = sess.createQuery(queryStr.toString());
             q.setCacheable(true);
-            q.setLong("PRJ_ID", projectID);
-            q.setString("RULE_NAME", ruleName);
+            q.setParameter("PRJ_ID", projectID, LongType.INSTANCE);
+            q.setParameter("RULE_NAME", ruleName,StringType.INSTANCE);
             if (ruleId != null) {
-                q.setLong("RULE_ID", ruleId);
+                q.setParameter("RULE_ID", ruleId, LongType.INSTANCE);
             }
             retVal = q.list().size() > 0;
         } catch (Exception ex) {
@@ -321,10 +324,10 @@ public class DbUtil {
 
             Query q = sess.createQuery(queryStr.toString());
             q.setCacheable(true);
-            q.setLong("PRJ_ID", projectID);
-            q.setString("VIEW_NAME", viewName);
+            q.setParameter("PRJ_ID", projectID, LongType.INSTANCE);
+            q.setParameter("VIEW_NAME", viewName,StringType.INSTANCE);
             if (ruleId != null) {
-                q.setLong("RULE_ID", ruleId);
+                q.setParameter("RULE_ID", ruleId, LongType.INSTANCE);
             }
             retVal = q.list().size() > 0;
         } catch (Exception ex) {
@@ -345,7 +348,7 @@ public class DbUtil {
             queryStr.append(" report where report.budgetExporter=:budgetExporter");
             
             Query q = sess.createQuery(queryStr.toString());
-            q.setBoolean("budgetExporter", true);
+            q.setParameter("budgetExporter", true, BooleanType.INSTANCE);
             
             List <Object[]> tmpList = q.list();
 

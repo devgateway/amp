@@ -34,6 +34,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
 
 import javax.servlet.http.HttpServletRequest;
@@ -621,18 +622,17 @@ public class DbUtil {
                                           " itm where itm.document.id=:docId" +
                                           " and itm.paragraphOrder=:paragraphId" +
                                           " and itm.realType=:itemType");
-            query.setLong("docId", sdmId);
-            query.setLong("paragraphId", paragraphId);
-            query.setString("itemType", SdmItem.TYPE_IMG);
+            query.setParameter("docId", sdmId, LongType.INSTANCE);
+            query.setParameter("paragraphId", paragraphId, LongType.INSTANCE);
+            query.setParameter("itemType", SdmItem.TYPE_IMG,StringType.INSTANCE);
             query.setCacheable(true);
 
             List result = query.list();
 
             if (result.size() != 0) {
                 Object[] resultRow = (Object[]) result.get(0);
-                ImageInfo imageInfo = new ImageInfo( (String) (resultRow[0]),
+                return new ImageInfo( (String) (resultRow[0]),
                                           (byte[]) (resultRow[1]));
-                return imageInfo;
             }
 
        }
@@ -654,8 +654,8 @@ public class DbUtil {
             session = PersistenceManager.getRequestDBSession();
             Query query = session.createQuery("select itm from " +SdmItem.class.getName() +
                                           " itm where itm.document.id=:docId and itm.paragraphOrder=:paragraphId");
-            query.setLong("docId", sdmId);
-            query.setLong("paragraphId", paragraphId);
+            query.setParameter("docId", sdmId, LongType.INSTANCE);
+            query.setParameter("paragraphId", paragraphId, LongType.INSTANCE);
 
             result = (SdmItem)query.uniqueResult();
        }

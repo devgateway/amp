@@ -14,6 +14,8 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,7 +97,7 @@ public class ReportTestingUtils
             String queryString = "select r from " + AmpReports.class.getName()
                     + " r WHERE " + AmpReports.hqlStringForName("r") + "=:reportname";
             qry = session.createQuery(queryString);
-            qry.setString("reportname", reportName);
+            qry.setParameter("reportname", reportName, StringType.INSTANCE);
             reports = qry.list();
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -122,7 +124,7 @@ public class ReportTestingUtils
             String queryString = "select " + AmpActivityVersion.hqlStringForName("r") + "FROM " + AmpActivityVersion.class.getName()
                     + " r WHERE r.ampActivityId=:activityId";
             qry = session.createQuery(queryString);
-            qry.setLong("activityId", activityId);
+            qry.setParameter("activityId", activityId, LongType.INSTANCE);
             activities = qry.list();            
             if (activities.size() >= 1)
                 return activities.get(0);           
@@ -152,8 +154,7 @@ public class ReportTestingUtils
         try
         {
             String queryString = "select act from " + AmpActivity.class.getName() + " act WHERE " + AmpActivityVersion.hqlStringForName("act") + "=:activityName";
-            AmpActivityVersion act = (AmpActivityVersion) PersistenceManager.getRequestDBSession().createQuery(queryString).setString("activityName", actName).list().get(0);
-            return act;
+            return (AmpActivityVersion) PersistenceManager.getRequestDBSession().createQuery(queryString).setParameter("activityName", actName,StringType.INSTANCE).list().get(0);
         }
         catch(Exception e)
         {
@@ -166,7 +167,7 @@ public class ReportTestingUtils
         try
         {
             String queryString = "select act.ampActivityId from " + AmpActivity.class.getName() + " act WHERE " + AmpActivityVersion.hqlStringForName("act") + "=:activityName";
-            List<Long> ids = PersistenceManager.getRequestDBSession().createQuery(queryString).setString("activityName", actName).list();
+            List<Long> ids = PersistenceManager.getRequestDBSession().createQuery(queryString).setParameter("activityName", actName,StringType.INSTANCE).list();
             
             if (ids.isEmpty())
                 throw new RuntimeException("no activities with name " + actName + " found");

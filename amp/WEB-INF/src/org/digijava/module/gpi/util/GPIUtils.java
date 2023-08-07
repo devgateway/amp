@@ -12,6 +12,7 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
 
 import java.util.*;
 
@@ -322,8 +323,8 @@ public class GPIUtils {
     
     public static List<AmpGPISurveyQuestion> getQuestionsByCode(String code) {
         Session session = PersistenceManager.getSession();
-        Query query = session.createNativeQuery("SELECT * FROM amp_gpi_survey_question agsq WHERE amp_indicator_id = (SELECT amp_indicator_id FROM amp_gpi_survey_indicator agsi WHERE indicator_code like ?)")
-                .addEntity(AmpGPISurveyQuestion.class).setString(0, code);
+        Query query = session.createNativeQuery("SELECT * FROM amp_gpi_survey_question agsq WHERE amp_indicator_id = (SELECT amp_indicator_id FROM amp_gpi_survey_indicator agsi WHERE indicator_code like :code)")
+                .addEntity(AmpGPISurveyQuestion.class).setParameter("code", code, StringType.INSTANCE);
         //List<AmpGPISurveyQuestion> list = new ArrayList<AmpGPISurveyQuestion>();
         return query.list();
     }

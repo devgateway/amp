@@ -4,6 +4,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpQuartzJobClass;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
 
 import java.util.Collection;
 
@@ -33,7 +34,7 @@ public class QuartzJobClassUtils {
             Session session = PersistenceManager.getRequestDBSession();
             String queryString = "select cls from " + AmpQuartzJobClass.class.getName() + " cls where cls.name=:name";
             Query query = session.createQuery(queryString);
-            query.setString("name", name);
+            query.setParameter("name", name, StringType.INSTANCE);
             if (!query.list().isEmpty()) {
                 return (AmpQuartzJobClass) query.iterate().next();
             } else {
@@ -49,7 +50,7 @@ public class QuartzJobClassUtils {
             Session session = PersistenceManager.getRequestDBSession();
             String queryString = "select cls from " + AmpQuartzJobClass.class.getName() + " cls where cls.classFullname=:classfullname";
             Query query = session.createQuery(queryString);
-            query.setString("classfullname", classfullname);
+            query.setParameter("classfullname", classfullname,StringType.INSTANCE);
             if (!query.list().isEmpty()) {
                 return (AmpQuartzJobClass) query.iterate().next();
             } else {

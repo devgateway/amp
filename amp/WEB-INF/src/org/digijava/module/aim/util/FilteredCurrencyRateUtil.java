@@ -6,6 +6,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpFilteredCurrencyRate;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
 
 import java.sql.SQLException;
 import java.util.HashSet;
@@ -106,8 +107,8 @@ public class FilteredCurrencyRateUtil {
            String queryString   = "select f from " + AmpFilteredCurrencyRate.class.getName() +  " f  " +
                 "where f.fromCurrency.currencyCode=:fromCurrencyCode AND f.toCurrency.currencyCode=:toCurrencyCode" ;
            Query query              = sess.createQuery(queryString);
-           query.setString("toCurrencyCode", toCurrencyCode);
-           query.setString("fromCurrencyCode", fromCurrencyCode);
+           query.setParameter("toCurrencyCode", toCurrencyCode, StringType.INSTANCE);
+           query.setParameter("fromCurrencyCode", fromCurrencyCode,StringType.INSTANCE);
            
            result   = query.list().size()!=0 ;
        }

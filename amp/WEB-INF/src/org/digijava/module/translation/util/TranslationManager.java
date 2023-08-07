@@ -49,6 +49,8 @@ import org.digijava.module.translation.security.TranslateSecurityManager;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
+import org.hibernate.type.TimestampType;
 
 import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletRequest;
@@ -461,12 +463,12 @@ public class TranslationManager {
 
             query.setParameter("localeId", srcLocale);
             if (prefix != null) {
-                query.setString("prefix", prefix + ":%");
+                query.setParameter("prefix", prefix + ":%", StringType.INSTANCE);
             }
-            query.setTimestamp("stamp", expTimestamp);
+            query.setParameter("stamp", expTimestamp, TimestampType.INSTANCE);
 
             if (keyPattern != null) {
-                query.setString("keyPattern", "%" + keyPattern + "%");
+                query.setParameter("keyPattern", "%" + keyPattern + "%",StringType.INSTANCE);
             }
 
             keys = query.list();

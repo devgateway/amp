@@ -27,6 +27,7 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.Collator;
@@ -635,8 +636,8 @@ public class TeamMemberUtil {
                     + AmpTeamMember.class.getName()
                     + " tm where (tm.user=:user) and  (tm.ampTeam=:ampTeam) ";
             qry = session.createQuery(queryString);
-            qry.setLong("user", user.getId());
-            qry.setLong("ampTeam", ampTeam.getAmpTeamId());
+            qry.setParameter("user", user.getId(), LongType.INSTANCE);
+            qry.setParameter("ampTeam", ampTeam.getAmpTeamId(), LongType.INSTANCE);
             Iterator itr = qry.list().iterator();
             if (itr.hasNext()) {
                 member = (AmpTeamMember) itr.next();
@@ -661,9 +662,8 @@ public class TeamMemberUtil {
             Query qry = session.createQuery(queryString);
             qry.setParameter("teamId", teamId, LongType.INSTANCE);
             qry.setParameter("memId", mem.getAmpTeamMemId(), LongType.INSTANCE);
-            Iterator itr = qry.list().iterator();
-            while (itr.hasNext()) {
-                TeamMember tm = new TeamMember((AmpTeamMember) itr.next());
+            for (Object o : qry.list()) {
+                TeamMember tm = new TeamMember((AmpTeamMember) o);
                 col.add(tm);
             }
         } catch (Exception e) {
@@ -684,7 +684,7 @@ public class TeamMemberUtil {
                     + " inner join m.ampTeam team inner join m.ampMemberRole role"
                     + " where (m.deleted is null or m.deleted = false) and m.user=:memberId";
             q = session.createQuery(query);
-            q.setLong("memberId", userId);
+            q.setParameter("memberId", userId, LongType.INSTANCE);
             helpers = q.list();
 
         } catch (Exception e) {
@@ -833,7 +833,7 @@ public class TeamMemberUtil {
                     " tm where (tm.deleted is null or tm.deleted = false) and (tm.user.id=:user)";
             qry = session.createQuery(queryString);
             qry.setCacheable(true);
-            qry.setLong("user", user.getId());
+            qry.setParameter("user", user.getId(), LongType.INSTANCE);
             col = qry.list();
         } catch (Exception e) {
             logger.error("Unable to get TeamMembers" + e.getMessage());
@@ -853,7 +853,7 @@ public class TeamMemberUtil {
             queryString = "select tm from " + AmpTeamMember.class.getName() + " tm where (tm.deleted is null or tm" +
                     ".deleted = false) and tm.user.email=:usermail and tm.ampTeam=" + teamId;
             qry = session.createQuery(queryString);
-            qry.setString("usermail", email);
+            qry.setParameter("usermail", email, StringType.INSTANCE);
             retVal = (AmpTeamMember) qry.uniqueResult();
         } catch (Exception e) {
             logger.error("Unable to get TeamMember" + e.getMessage());
@@ -873,8 +873,8 @@ public class TeamMemberUtil {
             queryString = "select tm from " + AmpTeamMember.class.getName() + " tm where (tm.deleted is null or "
                     + "tm.deleted = false) and tm.user.email=:usermail and tm.ampTeam.name=:teamName";
             qry = session.createQuery(queryString);
-            qry.setString("usermail", email);
-            qry.setString("teamName", teamName);
+            qry.setParameter("usermail", email,StringType.INSTANCE);
+            qry.setParameter("teamName", teamName,StringType.INSTANCE);
             return (AmpTeamMember) qry.uniqueResult();
         } catch (Exception e) {
             logger.error("Unable to get TeamMember ", e);
@@ -1162,7 +1162,7 @@ public class TeamMemberUtil {
                 }
 
                 qryStr = "delete AmpDesktopTabSelection dts where dts.owner=:memberId";
-                qry = session.createQuery(qryStr).setLong("memberId", amId);
+                qry = session.createQuery(qryStr).setParameter("memberId", amId, LongType.INSTANCE);
                 qry.executeUpdate();
                 deleteTeamMember(ampMember);
 

@@ -12,6 +12,9 @@ import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.help.dbentity.HelpTopic;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.hibernate.type.IntegerType;
+import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Iterator;
@@ -50,12 +53,12 @@ public class GlossaryUtil {
         }
         Session session = PersistenceManager.getRequestDBSession();
         Query query = session.createQuery(oql);
-        query.setInteger("GLOSS_TYPE",TYPE_GLOSSARY);
+        query.setParameter("GLOSS_TYPE",TYPE_GLOSSARY, IntegerType.INSTANCE);
         if (moduleInstance != null){
-            query.setString("MOD_INST", moduleInstance);
+            query.setParameter("MOD_INST", moduleInstance, StringType.INSTANCE);
         }
         if (site != null){
-            query.setString("SITE_ID", site.getSiteId());
+            query.setParameter("SITE_ID", site.getSiteId(),StringType.INSTANCE);
         }
         result = query.list();
         return result;
@@ -128,22 +131,22 @@ public class GlossaryUtil {
         }
         Session session = PersistenceManager.getRequestDBSession();
         Query query = session.createQuery(oql);
-        query.setInteger("GLOSS_TYPE",TYPE_GLOSSARY);
+        query.setParameter("GLOSS_TYPE",TYPE_GLOSSARY, IntegerType.INSTANCE);
         if (locale!=null && locale.length()>0){
-            query.setString("LANG", locale);
+            query.setParameter("LANG", locale,StringType.INSTANCE);
         }
         if (keyWords!=null && keyWords.size()>0){
             int c = 0;
             for (String kw : keyWords) {
-                query.setString("KEY_WORD_"+c, "%"+kw.toLowerCase()+"%");
+                query.setParameter("KEY_WORD_"+c, "%"+kw.toLowerCase()+"%",StringType.INSTANCE);
                 c++;
             }
         }
         if (moduleInstance != null){
-            query.setString("MOD_INST", moduleInstance);
+            query.setParameter("MOD_INST", moduleInstance,StringType.INSTANCE);
         }
         if (site != null){
-            query.setString("SITE_ID", site.getSiteId());
+            query.setParameter("SITE_ID", site.getSiteId(),StringType.INSTANCE);
         }
         result = query.list();
         return result;
@@ -170,7 +173,7 @@ public class GlossaryUtil {
                 if (c>0) {
                     queryStr.append(" or ");
                 }
-                queryStr.append("lower(unaccent(trn.message)) like lower(unaccent(:KEY_WORD_" + c + "))");
+                queryStr.append("lower(unaccent(trn.message)) like lower(unaccent(:KEY_WORD_").append(c).append("))");
                 c++;
             }
             queryStr.append(" )");
@@ -201,22 +204,22 @@ public class GlossaryUtil {
         if (keyWords!=null && keyWords.size()>0){
             int c = 0;
             for (String kw : keyWords) {
-                query.setString("KEY_WORD_"+c, "%"+kw+"%");
+                query.setParameter("KEY_WORD_"+c, "%"+kw+"%",StringType.INSTANCE);
                 c++;
             }
         }
 
         if (moduleInstance != null){
-            query.setString("MOD_INST", moduleInstance);
+            query.setParameter("MOD_INST", moduleInstance,StringType.INSTANCE);
         }
 
         if (site != null){
-            query.setString("SITE_ID", site.getSiteId());
+            query.setParameter("SITE_ID", site.getSiteId(),StringType.INSTANCE);
             //query.setLong("SITE_ID_LONG", site.getId());
         }
 
         if (locale!=null && locale.length()>0){
-            query.setString("LANG", locale);
+            query.setParameter("LANG", locale,StringType.INSTANCE);
         }
         retVal = query.list();
 
@@ -234,10 +237,9 @@ public class GlossaryUtil {
         String oql = " from " + HelpTopic.class.getName()+ " as ht where ht.topicType=:GLOSS_TYPE and ht.helpTopicId=:TOPIC_ID";
         Session session = PersistenceManager.getRequestDBSession();
         Query query = session.createQuery(oql);
-        query.setInteger("GLOSS_TYPE",TYPE_GLOSSARY);
-        query.setLong("TOPIC_ID",id);
-        HelpTopic result = (HelpTopic) query.uniqueResult();
-        return result;
+        query.setParameter("GLOSS_TYPE",TYPE_GLOSSARY, IntegerType.INSTANCE);
+        query.setParameter("TOPIC_ID",id, LongType.INSTANCE);
+        return (HelpTopic) query.uniqueResult();
     }
     
     /**
@@ -319,7 +321,7 @@ public class GlossaryUtil {
         try {
             String queryString = "from "+ HelpTopic.class.getName() + " topic where topic.parent.helpTopicId=:id";
             Query query = dbSession.createQuery(queryString);
-            query.setLong("id", topic.getHelpTopicId());
+            query.setParameter("id", topic.getHelpTopicId(), LongType.INSTANCE);
             helpTopics = query.list();
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -355,11 +357,11 @@ public class GlossaryUtil {
                 queryString += "and (topic.parent.helpTopicId=:id)";
             }
             query = session.createQuery(queryString);   
-            query.setInteger("GLOSS_TYPE",TYPE_GLOSSARY);
-            query.setString("siteId", site.getSiteId());
-            query.setString("moduleInstance", moduleInstance);
+            query.setParameter("GLOSS_TYPE",TYPE_GLOSSARY, IntegerType.INSTANCE);
+            query.setParameter("siteId", site.getSiteId(),StringType.INSTANCE);
+            query.setParameter("moduleInstance", moduleInstance,StringType.INSTANCE);
             if (parentId != null) {
-                query.setLong("id", parentId);
+                query.setParameter("id", parentId, LongType.INSTANCE);
             }
             helpTopics = query.list();          
 

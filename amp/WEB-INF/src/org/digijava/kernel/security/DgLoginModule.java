@@ -36,6 +36,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
 
 import javax.security.auth.Subject;
 import javax.security.auth.callback.Callback;
@@ -385,7 +386,7 @@ public class DgLoginModule
                              " u where lower(u.email) = :email";
             
         Query query = session.createQuery(queryString);
-        query.setString("email", email.toLowerCase());
+        query.setParameter("email", email.toLowerCase(), StringType.INSTANCE);
             
         list = query.list();
 

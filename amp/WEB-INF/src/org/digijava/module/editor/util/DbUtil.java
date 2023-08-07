@@ -37,6 +37,8 @@ import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import org.hibernate.type.IntegerType;
+import org.hibernate.type.StringType;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -75,9 +77,9 @@ public class DbUtil {
                                           Editor.class.getName() +
                                           " e where (e.siteId=:siteId) and (e.editorKey=:editorKey) and (e.language!=:language)");
 
-            q.setString("siteId", site.getSiteId());
-            q.setString("editorKey", editorKey);
-            q.setString("language", language);
+            q.setParameter("siteId", site.getSiteId(), StringType.INSTANCE);
+            q.setParameter("editorKey", editorKey,StringType.INSTANCE);
+            q.setParameter("language", language,StringType.INSTANCE);
 
             items = q.list();
         }
@@ -109,8 +111,8 @@ public class DbUtil {
                             + Editor.class.getName()
                             + " e where (e.siteId=:siteId) and (e.editorKey=:editorKey)");
 
-            q.setString("siteId", site.getSiteId());
-            q.setString("editorKey", editorKey);
+            q.setParameter("siteId", site.getSiteId(),StringType.INSTANCE);
+            q.setParameter("editorKey", editorKey,StringType.INSTANCE);
 
             items = q.list();
         } catch (Exception ex) {
@@ -126,8 +128,8 @@ public class DbUtil {
         List<Editor> items = new ArrayList<Editor>();
         try {
             Query q = session.createQuery("from "+ Editor.class.getName()+ " e where (e.siteId=:siteId) and (e.editorKey=:editorKey)");
-            q.setString("siteId", site.getSiteId());
-            q.setString("editorKey", editorKey);
+            q.setParameter("siteId", site.getSiteId(),StringType.INSTANCE);
+            q.setParameter("editorKey", editorKey,StringType.INSTANCE);
 
             items = q.list();
         } catch (Exception ex) {
@@ -176,7 +178,7 @@ public class DbUtil {
             Query q = session.createQuery("from " + Editor.class.getName() +
                 " e where (e.siteId=:siteId) order by e.orderIndex");
 
-            q.setString("siteId", site.getSiteId());
+            q.setParameter("siteId", site.getSiteId(),StringType.INSTANCE);
 
             @SuppressWarnings("unchecked")
             List<Editor> result = q.list();
@@ -208,9 +210,9 @@ public class DbUtil {
                 "and e.language=:language " +
                 "order by e.orderIndex");
 
-            q.setString("siteId", site.getSiteId());
-            q.setString("groupName", groupName);
-            q.setString("language", lang);
+            q.setParameter("siteId", site.getSiteId(),StringType.INSTANCE);
+            q.setParameter("groupName", groupName,StringType.INSTANCE);
+            q.setParameter("language", lang,StringType.INSTANCE);
 
             @SuppressWarnings("unchecked")
             List<Editor> result = q.list();
@@ -244,18 +246,17 @@ public class DbUtil {
             session = PersistenceManager.getRequestDBSession();
             try {
                 Query q = session.createQuery("from " + Editor.class.getName() +" e where e.siteId=:siteId and e.editorKey=:editorKey");
-                    q.setString("siteId", site.getSiteId());
-                    q.setString("editorKey", editorKey);
+                    q.setParameter("siteId", site.getSiteId(),StringType.INSTANCE);
+                    q.setParameter("editorKey", editorKey,StringType.INSTANCE);
                     //q.setString("language", language);
                     @SuppressWarnings("unchecked")
                     Collection<Editor> edits=q.list();
-                    for (Iterator iterator = edits.iterator(); iterator.hasNext();) {
-                        Editor editor = (Editor) iterator.next();
-                        if (editor.getLanguage().equalsIgnoreCase(language) && !"".equalsIgnoreCase(editor.getBody())){
-                            item = editor;
-                            break;
-                        }
+                for (Editor editor : edits) {
+                    if (editor.getLanguage().equalsIgnoreCase(language) && !"".equalsIgnoreCase(editor.getBody())) {
+                        item = editor;
+                        break;
                     }
+                }
             }
             catch (ObjectNotFoundException ex1) {
                 logger.error("DbUtil:getEditor:Unable to get Editor item", ex1);
@@ -276,9 +277,9 @@ public class DbUtil {
             session = PersistenceManager.getRequestDBSession();
             try {
                 Query q = session.createQuery("from " + Editor.class.getName() +" e where e.siteId=:siteId and e.editorKey=:editorKey and e.language=:language");
-                    q.setString("siteId", siteId);
-                    q.setString("editorKey", editorKey);
-                    q.setString("language", language);
+                    q.setParameter("siteId", siteId,StringType.INSTANCE);
+                    q.setParameter("editorKey", editorKey,StringType.INSTANCE);
+                    q.setParameter("language", language,StringType.INSTANCE);
                     item = (Editor)q.uniqueResult();
             }
             catch (ObjectNotFoundException ex1) {
@@ -304,8 +305,8 @@ public class DbUtil {
                                           " e where (e.siteId=:siteId) and " +
                                           "(e.orderIndex=:orderIndex)");
 
-            q.setString("siteId", site.getSiteId());
-            q.setInteger("orderIndex", new Integer(orderIndex));
+            q.setParameter("siteId", site.getSiteId(),StringType.INSTANCE);
+            q.setParameter("orderIndex", orderIndex, IntegerType.INSTANCE);
 
             @SuppressWarnings("unchecked")
             List<Editor> result = q.list();
@@ -343,8 +344,8 @@ public class DbUtil {
             Query q = session.createQuery("from " + Editor.class.getName() + 
                 " e where (e.editorKey=:editorKey) and (e.language=:language)");
 
-            q.setString("editorKey", editorKey);
-            q.setString("language", language);
+            q.setParameter("editorKey", editorKey,StringType.INSTANCE);
+            q.setParameter("language", language,StringType.INSTANCE);
 
             @SuppressWarnings("unchecked")
             List<Editor> result = q.list();
@@ -526,9 +527,9 @@ public class DbUtil {
                 "select e.body from " + Editor.class.getName() + " e " +
                 " where (e.siteId=:siteId) and (e.editorKey=:editorKey) and e.language=:language");
           //  q.setCacheable(true);
-            q.setString("siteId", site.getSiteId());
-            q.setString("editorKey", editorKey);
-            q.setString("language", language);
+            q.setParameter("siteId", site.getSiteId(),StringType.INSTANCE);
+            q.setParameter("editorKey", editorKey,StringType.INSTANCE);
+            q.setParameter("language", language,StringType.INSTANCE);
             body=(String)q.uniqueResult();
         }
         catch (Exception ex) {
@@ -580,9 +581,9 @@ public class DbUtil {
                 " where (e.siteId=:siteId) and (e.editorKey=:editorKey) and (e.language=:language)");
 
             q.setCacheable(true);
-            q.setString("siteId", site.getSiteId());
-            q.setString("editorKey", editorKey);
-            q.setString("language", language);
+            q.setParameter("siteId", site.getSiteId(),StringType.INSTANCE);
+            q.setParameter("editorKey", editorKey,StringType.INSTANCE);
+            q.setParameter("language", language,StringType.INSTANCE);
 
             @SuppressWarnings("unchecked")
             List<String> result = q.list();

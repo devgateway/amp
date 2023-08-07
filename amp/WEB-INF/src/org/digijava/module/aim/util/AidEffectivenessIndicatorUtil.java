@@ -8,6 +8,9 @@ import org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicatorOption;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.hibernate.type.BooleanType;
+import org.hibernate.type.IntegerType;
+import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
 
 import java.util.*;
@@ -53,10 +56,10 @@ public class AidEffectivenessIndicatorUtil {
         query.setParameter("keyword", "%" + keyword + "%");
 
         if (activeOnly) {
-            query.setBoolean("active", true);
+            query.setParameter("active", true, BooleanType.INSTANCE);
         }
         if (indicatorType >= 0) {
-            query.setInteger("indicatorType", indicatorType);
+            query.setParameter("indicatorType", indicatorType, IntegerType.INSTANCE);
         }
 
         return  (List<AmpAidEffectivenessIndicator>)query.list();
@@ -169,13 +172,13 @@ public class AidEffectivenessIndicatorUtil {
         String queryStr = "delete from amp_modules_templates where module in " +
                 "(select id from amp_modules_visibility where name = :name)";
         Query query = session.createNativeQuery(queryStr);
-        query.setString("name", AID_EFFECTIVENESS_INDICATOR_VISIBILITY_PREFIX + indicator.getFmName());
+        query.setParameter("name", AID_EFFECTIVENESS_INDICATOR_VISIBILITY_PREFIX + indicator.getFmName(),StringType.INSTANCE);
         query.executeUpdate();
 
 
         queryStr = "delete from amp_modules_visibility where name = :name";
         query = session.createNativeQuery(queryStr);
-        query.setString("name", AID_EFFECTIVENESS_INDICATOR_VISIBILITY_PREFIX + indicator.getFmName());
+        query.setParameter("name", AID_EFFECTIVENESS_INDICATOR_VISIBILITY_PREFIX + indicator.getFmName(),StringType.INSTANCE);
         query.executeUpdate();
     }
 
@@ -187,7 +190,7 @@ public class AidEffectivenessIndicatorUtil {
         Session session = PersistenceManager.getSession();
         String queryStr = "select count(*) from amp_modules_visibility where lower (name) = :name";
         Query query = session.createNativeQuery(queryStr);
-        query.setString("name", (AID_EFFECTIVENESS_INDICATOR_VISIBILITY_PREFIX + indicatorName).toLowerCase());
+        query.setParameter("name", (AID_EFFECTIVENESS_INDICATOR_VISIBILITY_PREFIX + indicatorName).toLowerCase(),StringType.INSTANCE);
         int count = Integer.parseInt(query.uniqueResult().toString());
 
         // if indicator with this name has not been found, we create one
@@ -201,8 +204,8 @@ public class AidEffectivenessIndicatorUtil {
             if (resultList != null && resultList.size() > 0) {
                 queryStr = "insert into amp_modules_visibility values(nextval('amp_modules_visibility_seq'), :name, '', 't', :parent)";
                 query = session.createNativeQuery(queryStr);
-                query.setString("name", AID_EFFECTIVENESS_INDICATOR_VISIBILITY_PREFIX + indicatorName);
-                query.setLong("parent", Long.parseLong(resultList.get(0).toString()));
+                query.setParameter("name", AID_EFFECTIVENESS_INDICATOR_VISIBILITY_PREFIX + indicatorName,StringType.INSTANCE);
+                query.setParameter("parent", Long.parseLong(resultList.get(0).toString()), LongType.INSTANCE);
                 query.executeUpdate();
             }
         }

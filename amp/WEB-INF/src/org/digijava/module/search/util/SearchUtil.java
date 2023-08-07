@@ -28,6 +28,7 @@ import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StandardBasicTypes;
+import org.hibernate.type.StringType;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -453,9 +454,9 @@ public class SearchUtil {
         Query qry = session.createQuery(query.toString());
 
         if (hasComputedOrgs) {
-            qry.setString("roleCode", "DN");
+            qry.setParameter("roleCode", "DN", StringType.INSTANCE);
         } else {
-            qry.setString("roleCode", roleCode);
+            qry.setParameter("roleCode", roleCode,StringType.INSTANCE);
             addKeywordParameters(qry, keywords);
         }
 
@@ -464,20 +465,19 @@ public class SearchUtil {
             if (!hasComputedOrgs) {
                 activities.addAll(result);
             } else {
-                StringBuilder queryString = new StringBuilder();
-                queryString.append(" select act from ");
-                queryString.append(AmpActivity.class.getName());
-                queryString.append(" act ");
-                queryString.append(" inner join act.orgrole role ");
-                queryString.append(" inner join role.organisation org ");
-                queryString.append(" inner join role.role roleCode ");
-                queryString.append(" where roleCode.roleCode=:roleCode ");
-                queryString.append(" and act.ampActivityId in (");
-                queryString.append(Util.toCSStringForIN(result));
-                queryString.append(")");
-                queryString.append(" and " + buildLike(keywords, orgNameHql, searchMode) + " ");
-                qry = session.createQuery(queryString.toString());
-                qry.setString("roleCode", roleCode);
+                String queryString = " select act from " +
+                        AmpActivity.class.getName() +
+                        " act " +
+                        " inner join act.orgrole role " +
+                        " inner join role.organisation org " +
+                        " inner join role.role roleCode " +
+                        " where roleCode.roleCode=:roleCode " +
+                        " and act.ampActivityId in (" +
+                        Util.toCSStringForIN(result) +
+                        ")" +
+                        " and " + buildLike(keywords, orgNameHql, searchMode) + " ";
+                qry = session.createQuery(queryString);
+                qry.setParameter("roleCode", roleCode,StringType.INSTANCE);
                 addKeywordParameters(qry, keywords);
                 if (result != null && !result.isEmpty()) {
                     result = qry.list();

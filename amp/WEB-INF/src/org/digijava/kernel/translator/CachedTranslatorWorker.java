@@ -34,6 +34,7 @@ import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -233,15 +234,12 @@ public class CachedTranslatorWorker extends TranslatorWorker {
             ses = PersistenceManager.getSession();
 //beginTransaction();
             Query q = ses.createQuery(queryString);
-            q.setString("msgKey", processKeyCase(key.trim()));
+            q.setParameter("msgKey", processKeyCase(key.trim()), StringType.INSTANCE);
             
             messages = q.list();
-            
-            @SuppressWarnings("unchecked")
-            Iterator it = messages.iterator();
 
-            while (it.hasNext()) {
-                Message msg = (Message) it.next();
+            for (Object message : messages) {
+                Message msg = (Message) message;
                 msg.setCreated(timestamp);
                 ses.update(msg);
                 messageCache.put(msg, msg);

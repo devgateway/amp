@@ -27,10 +27,7 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.jdbc.Work;
 import org.hibernate.query.Query;
-import org.hibernate.type.IntegerType;
-import org.hibernate.type.LongType;
-import org.hibernate.type.ObjectType;
-import org.hibernate.type.StringType;
+import org.hibernate.type.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
@@ -430,7 +427,7 @@ public class DbUtil {
                 + " and act.draft != :draftValue";
         Query q = PersistenceManager.getSession().createQuery(queryString);
         q.setParameter("ampTeamId", ampTeamId, LongType.INSTANCE);
-        q.setBoolean("draftValue", true);
+        q.setParameter("draftValue", true, BooleanType.INSTANCE);
 
         return q.list();
     }
@@ -511,7 +508,7 @@ public class DbUtil {
                 + "and role.activity = a.ampActivityId";
         return PersistenceManager.getSession()
                 .createQuery(queryString)
-                .setLong("orgId", orgId)
+                .setParameter("orgId", orgId, LongType.INSTANCE)
                 .list();
     }
 
@@ -522,7 +519,7 @@ public class DbUtil {
                 + "and (f.organisation=:orgId)";
         return PersistenceManager.getRequestDBSession()
                 .createQuery(queryString)
-                .setLong("orgId", orgId)
+                .setParameter("orgId", orgId, LongType.INSTANCE)
                 .list();
     }
 
@@ -550,10 +547,9 @@ public class DbUtil {
             String queryString = "select a from " + AmpApplicationSettings.class.getName()
                     + " a where (a.defaultTeamReport=:repId)";
             qry = session.createQuery(queryString);
-            qry.setLong("repId", reportId);
-            Iterator itr = qry.list().iterator();
-            while (itr.hasNext()) {
-                ampAppSettings = (AmpApplicationSettings) itr.next();
+            qry.setParameter("repId", reportId, LongType.INSTANCE);
+            for (Object o : qry.list()) {
+                ampAppSettings = (AmpApplicationSettings) o;
                 ampAppSettings.setDefaultTeamReport(null);
                 update(ampAppSettings);
                 // //////System.out.println("Am updatat: " +
@@ -598,10 +594,9 @@ public class DbUtil {
             String queryString = "select a from " + AmpApplicationSettings.class.getName()
                     + " a where (a.team=:teamId) ";
             qry = session.createQuery(queryString);
-            qry.setLong("teamId", teamId);
-            Iterator itr = qry.list().iterator();
-            while (itr.hasNext()) {
-                ampAppSettings = (AmpApplicationSettings) itr.next();
+            qry.setParameter("teamId", teamId, LongType.INSTANCE);
+            for (Object o : qry.list()) {
+                ampAppSettings = (AmpApplicationSettings) o;
                 if (ampAppSettings != null)
                     break;
             }
@@ -768,7 +763,7 @@ public class DbUtil {
             String queryString = "select o from " + AmpCurrency.class.getName()
                     + " o where (o.calendar=:ampFisCalId) and o.activeFlag = 1 and virtual = true";
             qry = sess.createQuery(queryString);
-            qry.setLong("ampFisCalId", fiscalCalId);
+            qry.setParameter("ampFisCalId", fiscalCalId, LongType.INSTANCE);
             list = qry.list();
 
         } catch (Exception e) {
@@ -788,7 +783,7 @@ public class DbUtil {
             String queryString = "select o from " + AmpApplicationSettings.class.getName()
                     + " o where (o.fiscalCalendar=:ampFisCalId)";
             qry = sess.createQuery(queryString);
-            qry.setLong("ampFisCalId", fiscalCalId);
+            qry.setParameter("ampFisCalId", fiscalCalId, LongType.INSTANCE);
             Iterator<AmpApplicationSettings> itr = qry.list().iterator();
             col = new ArrayList();
             while (itr.hasNext()) {
@@ -909,7 +904,7 @@ public class DbUtil {
             appendNotIn("org.ampOrgId", excludeIds, queryString);
 
             Query qry = session.createQuery(queryString.toString());
-            qry.setLong("orgType", orgType);
+            qry.setParameter("orgType", orgType, LongType.INSTANCE);
             return qry.list();
         } catch (Exception ex) {
             throw new RuntimeException(ex);
@@ -1011,13 +1006,13 @@ public class DbUtil {
             queryString.append(" order by org.name ");
             q = session.createQuery(queryString.toString());
             if (orgCond) {
-                q.setLong("orgId", orgId);
+                q.setParameter("orgId", orgId, LongType.INSTANCE);
             }
             if (groupCond) {
-                q.setLong("groupId", groupId);
+                q.setParameter("groupId", groupId, LongType.INSTANCE);
             }
             if (typeCond) {
-                q.setLong("typeId", typeId);
+                q.setParameter("typeId", typeId, LongType.INSTANCE);
             }
 
             organizations = q.list();
@@ -1095,7 +1090,7 @@ public class DbUtil {
 
         Query q = PersistenceManager.getSession().createQuery(queryString);
         if (orgGroupId != null)
-            q.setLong("orgGroupId", orgGroupId);
+            q.setParameter("orgGroupId", orgGroupId, LongType.INSTANCE);
         return getOrgSkeletonsFromQuery(q);
     }
 
@@ -1138,7 +1133,7 @@ public class DbUtil {
 
         Query query = PersistenceManager.getSession().createQuery(queryString.toString());
         if (orgGroupId != null && orgGroupId != -1) {
-            query.setLong("orgGroupId", orgGroupId);
+            query.setParameter("orgGroupId", orgGroupId, LongType.INSTANCE);
         }
 
         String orgIds = Util.toCSStringForIN(query.list());
@@ -1230,7 +1225,7 @@ public class DbUtil {
             String queryString = "select f from " + AmpOrgType.class.getName()
                     + " f where (f.orgTypeCode=:ampOrgTypeCode)";
             qry = session.createQuery(queryString);
-            qry.setString("ampOrgTypeCode", ampOrgTypeCode);
+            qry.setParameter("ampOrgTypeCode", ampOrgTypeCode,StringType.INSTANCE);
             Iterator itr = qry.list().iterator();
             if (itr.hasNext()) {
                 ampOrgType = (AmpOrgType) itr.next();
@@ -2775,7 +2770,7 @@ public class DbUtil {
             queryString = "select o from " + AmpOrganisation.class.getName() + " o where (TRIM(" + orgName
                     + ")=:orgName) and (o.deleted is null or o.deleted = false) ";
             qry = sess.createQuery(queryString);
-            qry.setString("orgName", name);
+            qry.setParameter("orgName", name,StringType.INSTANCE);
 
             List result = qry.list();
             if (result.size() > 0) {

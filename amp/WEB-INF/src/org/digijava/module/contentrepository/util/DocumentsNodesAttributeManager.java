@@ -8,6 +8,7 @@ import org.digijava.module.contentrepository.exception.CrException;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
@@ -85,7 +86,7 @@ public class DocumentsNodesAttributeManager {
         Session session = PersistenceManager.getRequestDBSession();
         String queryStr = "SELECT a FROM " + CrDocumentNodeAttributes.class.getName() + " a WHERE uuid=:uuid";
         Query query = session.createQuery(queryStr);
-        query.setString("uuid", uuid);
+        query.setParameter("uuid", uuid, StringType.INSTANCE);
         CrDocumentNodeAttributes docNodeAtt = (CrDocumentNodeAttributes) query.uniqueResult();
         
         if (docNodeAtt != null) {

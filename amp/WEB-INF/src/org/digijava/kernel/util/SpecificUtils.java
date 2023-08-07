@@ -32,6 +32,7 @@ import org.digijava.kernel.request.SiteDomain;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -223,13 +224,12 @@ public class SpecificUtils {
             session = PersistenceManager.getSession();
             Query q = session.createQuery("from " +
                                           OracleLocale.class.getName() +
-                                          " rs where rs.locale.code=?");
-            q.setString(0, locale.getCode());
+                                          " rs where rs.locale.code=:code");
+            q.setParameter("code", locale.getCode(), StringType.INSTANCE);
             q.setCacheable(true);
             q.setCacheRegion(SpecificUtils.class.getName() + ".queries");
-            Iterator iter = q.list().iterator();
-            while (iter.hasNext()) {
-                result = (OracleLocale) iter.next();
+            for (Object o : q.list()) {
+                result = (OracleLocale) o;
             }
         }
         catch (Exception ex) {

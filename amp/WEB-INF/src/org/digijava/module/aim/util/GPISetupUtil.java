@@ -5,6 +5,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.*;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -61,8 +62,8 @@ public class GPISetupUtil {
             Session session = PersistenceManager.getRequestDBSession();
             String qry = "FROM " + GPIDefaultFilters.class.getName() + " as df WHERE df.key LIKE :key_ AND df.value LIKE :value_";
             GPIDefaultFilters filter = (GPIDefaultFilters) session.createQuery(qry)
-                .setString("key_", GPIDefaultFilters.GPI_DEFAULT_FILTER_ORG_GROUP)
-                .setString("value_", id.toString())
+                .setParameter("key_", GPIDefaultFilters.GPI_DEFAULT_FILTER_ORG_GROUP, StringType.INSTANCE)
+                .setParameter("value_", id.toString(),StringType.INSTANCE)
                 .uniqueResult();
             if(filter == null) {
                 filter = new GPIDefaultFilters();

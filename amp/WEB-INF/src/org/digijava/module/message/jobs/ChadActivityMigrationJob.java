@@ -8,6 +8,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
@@ -137,8 +138,8 @@ public class ChadActivityMigrationJob extends ConnectionCleaningJob implements S
                     "from AmpCategoryValueLocations\n"
                             + "where name=:name\n"
                             + "and id<>:oldId")
-                    .setString("name", loc.getName())
-                    .setLong("oldId", loc.getId())
+                    .setParameter("name", loc.getName(), StringType.INSTANCE)
+                    .setParameter("oldId", loc.getId(), LongType.INSTANCE)
                     .uniqueResult();
         } else {
             return parentLocation;

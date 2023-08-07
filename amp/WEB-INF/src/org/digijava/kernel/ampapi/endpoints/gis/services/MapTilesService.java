@@ -11,6 +11,7 @@ import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
@@ -89,7 +90,7 @@ public final class MapTilesService {
     
     public void updateOfflineChangeLog(Session session) throws RepositoryException {
         Query query = session.createQuery("from AmpOfflineChangelog item where item.entityName = :entityName");
-        query.setString("entityName", SyncConstants.Entities.MAP_TILES);
+        query.setParameter("entityName", SyncConstants.Entities.MAP_TILES, StringType.INSTANCE);
         AmpOfflineChangelog changelog = (AmpOfflineChangelog) query.uniqueResult();
                 
         if (changelog == null) {

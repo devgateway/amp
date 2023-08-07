@@ -160,7 +160,7 @@ public class GPIUtils {
         query.setFirstResult(startAt);
         query.setMaxResults(maxResults);
         query.setParameterList("donorIds", getVerifiedOrgsList());
-        query.setString("indicatorCode", indicatorCode);
+        query.setParameter("indicatorCode", indicatorCode,StringType.INSTANCE);
         return query.list();
     }   
 
@@ -169,7 +169,7 @@ public class GPIUtils {
         String queryString = "SELECT donorNotes FROM " + AmpGPINiDonorNotes.class.getName() + " donorNotes "
                 + "WHERE indicatorCode = :indicatorCode ";
         Query query = dbSession.createQuery(queryString);
-        query.setString("indicatorCode", code);
+        query.setParameter("indicatorCode", code,StringType.INSTANCE);
         return query.list();
     }
     

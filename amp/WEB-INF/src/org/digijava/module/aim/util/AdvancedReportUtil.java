@@ -10,6 +10,9 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.*;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.hibernate.type.BooleanType;
+import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
 
 import java.text.Collator;
 import java.util.*;
@@ -134,7 +137,7 @@ public final class AdvancedReportUtil {
     public static AmpColumns getColumnByName(String name){
         return (AmpColumns) PersistenceManager.getSession()
                 .createQuery("SELECT c FROM " + AmpColumns.class.getName() + " c WHERE c.columnName=:name")
-                .setString("name", name).uniqueResult();
+                .setParameter("name", name, StringType.INSTANCE).uniqueResult();
     }
     
     public static List<AmpMeasures> getMeasureList()
@@ -154,7 +157,7 @@ public final class AdvancedReportUtil {
     
     public static AmpMeasures getMeasureByName(String name) {
         try {
-            AmpMeasures ret = (AmpMeasures) PersistenceManager.getSession().createQuery("SELECT c FROM " + AmpMeasures.class.getName() + " c WHERE c.measureName = :name").setString("name", name).uniqueResult();
+            AmpMeasures ret = (AmpMeasures) PersistenceManager.getSession().createQuery("SELECT c FROM " + AmpMeasures.class.getName() + " c WHERE c.measureName = :name").setParameter("name", name,StringType.INSTANCE).uniqueResult();
             if (ret == null)
                 throw new RuntimeException("no measure with name " + name + " exists");
             return ret;
@@ -173,7 +176,7 @@ public final class AdvancedReportUtil {
             session = PersistenceManager.getSession();
             String sqlQuery = "select c from "+ AmpMeasures.class.getName() + " c where c.type=:type";
             query = session.createQuery(sqlQuery);
-            query.setString("type", type);
+            query.setParameter("type", type,StringType.INSTANCE);
             return new ArrayList<AmpMeasures>(query.list());
         }
         catch(Exception e)
@@ -209,15 +212,14 @@ public final class AdvancedReportUtil {
                 queryString+=" and report.ampReportId!=:dbReportId";
             }
             query = session.createQuery(queryString);
-            query.setLong("ownerId", ownerId);
-            query.setString("name", reportTitle.trim());
-            query.setBoolean("drilldownTab", drilldownTab);
+            query.setParameter("ownerId", ownerId, LongType.INSTANCE);
+            query.setParameter("name", reportTitle.trim(),StringType.INSTANCE);
+            query.setParameter("drilldownTab", drilldownTab, BooleanType.INSTANCE);
             if (dbReportId != null)
             {
-                query.setLong("dbReportId", dbReportId);
+                query.setParameter("dbReportId", dbReportId, LongType.INSTANCE);
             }
-            boolean exists = !query.list().isEmpty();
-            return exists;
+            return !query.list().isEmpty();
         } 
         catch (Exception ex)
         {

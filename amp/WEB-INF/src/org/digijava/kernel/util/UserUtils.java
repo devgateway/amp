@@ -42,6 +42,7 @@ import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
 
 import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletRequest;
@@ -422,14 +423,13 @@ public class UserUtils {
             }
 
             Query query = session.createQuery(queryString);
-            query.setString("criteriaLow", criteriaLow);
-            query.setString("criteriaLowConcat", criteriaLowConcat);
+            query.setParameter("criteriaLow", criteriaLow, StringType.INSTANCE);
+            query.setParameter("criteriaLowConcat", criteriaLowConcat,StringType.INSTANCE);
 
             userList = query.list();
 
-            Iterator userIter = userList.iterator();
-            while (userIter.hasNext()) {
-                User user = (User) userIter.next();
+            for (Object o : userList) {
+                User user = (User) o;
                 ProxyHelper.initializeObject(user);
             }
 

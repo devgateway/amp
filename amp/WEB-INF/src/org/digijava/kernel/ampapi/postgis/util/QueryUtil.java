@@ -30,6 +30,7 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.jdbc.Work;
 import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.io.ParseException;
 import org.locationtech.jts.io.WKTReader;
@@ -401,7 +402,7 @@ public class QueryUtil {
             Query qry = dbSession.createQuery(queryString);
             qry.setCacheable(true);
             if (admLevel != null)
-                qry.setString("admLevel", admLevel.getLabel().toUpperCase());
+                qry.setParameter("admLevel", admLevel.getLabel().toUpperCase(), StringType.INSTANCE);
             return qry.list();
          
      }

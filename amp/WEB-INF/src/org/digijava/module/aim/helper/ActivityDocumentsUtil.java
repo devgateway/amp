@@ -10,6 +10,7 @@ import org.digijava.module.aim.exception.NoDocumentTypeException;
 import org.digijava.module.contentrepository.action.SelectDocumentDM;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
@@ -52,7 +53,7 @@ public class ActivityDocumentsUtil {
                 " where ad.ampActivity=a AND ad.uuid=:uuid";
             
             qry     = session.createQuery(queryString);
-            qry.setString("uuid", uuid);
+            qry.setParameter("uuid", uuid, StringType.INSTANCE);
             
             Collection<String> ret  = qry.list();
             return ret;

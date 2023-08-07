@@ -8,6 +8,8 @@ import org.digijava.module.contentrepository.dbentity.CrDocumentsToOrganisations
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
+import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -101,8 +103,8 @@ public class DocumentOrganizationManager {
         String queryString = "DELETE FROM " + CrDocumentsToOrganisations.class.getName() + " dto WHERE "
                 + "dto.uuid=:uuid AND dto.ampOrganisation=:ampOrganisationId";
         Query query = hbSession.createQuery(queryString);
-        query.setString("uuid", uuid);
-        query.setLong("ampOrganisationId", ampOrganisationId);
+        query.setParameter("uuid", uuid, StringType.INSTANCE);
+        query.setParameter("ampOrganisationId", ampOrganisationId, LongType.INSTANCE);
         query.executeUpdate();
 
         invalidateChachedMap();

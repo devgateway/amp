@@ -16,6 +16,7 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
 
 import java.text.Collator;
 import java.util.*;
@@ -64,7 +65,7 @@ public final class LocationUtil {
             String queryString  = "select l from " + AmpCategoryValueLocations.class.getName()
                     + " l where l.geoCode =:geoCode order by l.id";
             Query qry = session.createQuery(queryString);
-            qry.setString("geoCode", geoCode);
+            qry.setParameter("geoCode", geoCode, StringType.INSTANCE);
             
             Collection result   = qry.list();
             if ( result != null && result.size() > 0 ) {

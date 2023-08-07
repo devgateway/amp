@@ -158,9 +158,9 @@ public class CurrencyUtil {
                     "where (cRate.toCurrencyCode=:code) and (cRate.fromCurrencyCode=:fromCode) and" +
                     "(cRate.exchangeRateDate=:date)";
             Query qry = PersistenceManager.getSession().createQuery(qryStr);
-            qry.setString("code", cRate.getToCurrencyCode());
-            qry.setString("fromCode", cRate.getFromCurrencyCode());
-            qry.setDate("date", cRate.getExchangeRateDate());
+            qry.setParameter("code", cRate.getToCurrencyCode(),StringType.INSTANCE);
+            qry.setParameter("fromCode", cRate.getFromCurrencyCode(),StringType.INSTANCE);
+            qry.setParameter("date", cRate.getExchangeRateDate(),DateType.INSTANCE);
 
             Iterator<AmpCurrencyRate> itr = qry.list().iterator();
             if (itr.hasNext()) {
@@ -245,9 +245,9 @@ public class CurrencyUtil {
                     "where (cRate.toCurrencyCode=:code) and (cRate.fromCurrencyCode=:fromCode) and" +
                     "(cRate.exchangeRateDate=:date)";
             qry = session.createQuery(qryStr);
-            qry.setString("code", cRate.getToCurrencyCode());
-            qry.setString("fromCode", cRate.getFromCurrencyCode());
-            qry.setDate("date", cRate.getExchangeRateDate());
+            qry.setParameter("code", cRate.getToCurrencyCode(),StringType.INSTANCE);
+            qry.setParameter("fromCode", cRate.getFromCurrencyCode(),StringType.INSTANCE);
+            qry.setParameter("date", cRate.getExchangeRateDate(),DateType.INSTANCE);
 
             exists = !qry.list().isEmpty();
 
@@ -273,7 +273,7 @@ public class CurrencyUtil {
             Iterator itr = qry.list().iterator();
             if (itr.hasNext()) {
                 AmpCurrency curr = (AmpCurrency) itr.next();
-                curr.setActiveFlag(new Integer(status));
+                curr.setActiveFlag(status);
 //beginTransaction();
                 session.update(curr);
                 //tx.commit();
@@ -662,17 +662,17 @@ public class CurrencyUtil {
                     + " f where (f.toCurrencyCode=:currencyCode and f.fromCurrencyCode=:baseCurrencyCode) "
                     + "order by f.exchangeRateDate desc limit 1";
             q = session.createQuery(queryString);
-            q.setString("currencyCode", currencyCode);
-            q.setString("baseCurrencyCode", baseCurrCode);
+            q.setParameter("currencyCode", currencyCode,StringType.INSTANCE);
+            q.setParameter("baseCurrencyCode", baseCurrCode,StringType.INSTANCE);
             List rates = q.list();
             Double result = null;
             if (rates == null || rates.isEmpty()) {
                 logger.debug("No exchange rate value found for currency: " + currencyCode);
-                result = new Double(1.0);
+                result = 1.0;
             } else {
                 result = (Double) rates.iterator().next();
             }
-            return result.doubleValue();
+            return result;
         } catch (Exception ex) {
             logger.debug("Unable to get exchange rate from database", ex);
             throw new AimException("Error retriving currency exchange rate for " + currencyCode, ex);

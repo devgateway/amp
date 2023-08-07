@@ -965,8 +965,8 @@ public class DbUtil {
 
             String queryString = "from " + CalendarSettings.class.getName() + " rs where rs.siteId=:siteId and rs.instanceId=:instanceId";
             Query query = session.createQuery(queryString);
-            query.setString("siteId", siteId);
-            query.setString("instanceId", instanceId);
+            query.setParameter("siteId", siteId,StringType.INSTANCE);
+            query.setParameter("instanceId", instanceId,StringType.INSTANCE);
 
             iter = query.iterate();
 

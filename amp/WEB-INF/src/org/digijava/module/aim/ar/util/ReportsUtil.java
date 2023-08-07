@@ -16,6 +16,7 @@ import org.digijava.module.aim.util.caching.AmpCaching;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -95,11 +96,11 @@ public class ReportsUtil {
             qry.setCacheable(true);
             
             if (roleCodeNeededInQuery)
-                qry = qry.setString("roleCode", roleCode);
+                qry = qry.setParameter("roleCode", roleCode, StringType.INSTANCE);
             
             col = qry.list();
 
-            Collections.sort(col, new Comparator<AmpOrganisation>() {
+            col.sort(new Comparator<AmpOrganisation>() {
                 public int compare(AmpOrganisation o1, AmpOrganisation o2) {
                     return o1.getName().trim().compareTo(o2.getName().trim());
                 }

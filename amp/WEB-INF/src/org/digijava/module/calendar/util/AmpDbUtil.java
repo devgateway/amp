@@ -422,10 +422,10 @@ public class AmpDbUtil {
               }
             
             if (instanceId != null) {
-                query.setString("instanceId", instanceId);
+                query.setParameter("instanceId", instanceId,StringType.INSTANCE);
             }
             if (siteId != null) {
-                query.setString("siteId", siteId);
+                query.setParameter("siteId", siteId,StringType.INSTANCE);
             }
             
                 return query.list();

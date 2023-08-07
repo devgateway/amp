@@ -311,7 +311,7 @@ public class AuditLoggerUtil {
                 + AmpAuditLogger.class.getName()
                 + " f where f.teamName=:teamname";
             qry = session.createQuery(qryStr);
-                        qry.setString("teamname", teamname);
+                        qry.setParameter("teamname", teamname,StringType.INSTANCE);
             col = qry.list();
         } catch (Exception ex) {
             logger.error("Exception : " + ex.getMessage());

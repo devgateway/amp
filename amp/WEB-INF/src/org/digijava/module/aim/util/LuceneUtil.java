@@ -40,6 +40,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.jdbc.ReturningWork;
+import org.hibernate.type.StringType;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -133,8 +134,8 @@ public class LuceneUtil implements Serializable {
         try {
             Session session=PersistenceManager.getRequestDBSession();
 
-            org.hibernate.Query query=session.createQuery(oql);
-            query.setString("theName", name);
+            org.hibernate.query.Query query=session.createQuery(oql);
+            query.setParameter("theName", name, StringType.INSTANCE);
 
             return ((AmpLuceneIndexStamp)query.uniqueResult());
         } catch (Exception e) {
@@ -156,8 +157,8 @@ public class LuceneUtil implements Serializable {
         boolean oldRecordDeleted = false;
         try {
             Session session = PersistenceManager.getRequestDBSession();
-            org.hibernate.Query query = session.createQuery(oql);
-            query.setString("theName", name);
+            org.hibernate.query.Query query = session.createQuery(oql);
+            query.setParameter("theName", name,StringType.INSTANCE);
             List<AmpLuceneIndexStamp> stamps = query.list();
             // Delete all fund stamps for this module name.
             if (stamps != null && stamps.size() > 0) {
@@ -209,12 +210,11 @@ public class LuceneUtil implements Serializable {
     static public boolean deleteDirectory(File path) {
         if(path.exists()) {
             File[] files = path.listFiles();
-            for(int i=0; i<files.length; i++) {
-                if(files[i].isDirectory()) {
-                    deleteDirectory(files[i]);
-                }
-                else {
-                    files[i].delete();
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    deleteDirectory(file);
+                } else {
+                    file.delete();
                 }
             }
         }

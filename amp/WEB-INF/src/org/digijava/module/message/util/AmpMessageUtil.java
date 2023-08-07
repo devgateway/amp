@@ -17,6 +17,7 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
 import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
@@ -776,7 +777,7 @@ public class AmpMessageUtil {
                     " (SELECT count(rec) from " +AmpEmailReceiver.class.getName() + " rec " +
                             "WHERE rec.email=email AND rec.status like :sentStatus ))" ;
             query=session.createQuery(queryString);
-            query.setString("sentStatus", MessageConstants.SENT_STATUS );
+            query.setParameter("sentStatus", MessageConstants.SENT_STATUS , StringType.INSTANCE);
             emails=query.list();
         } catch (Exception e) {
             logger.error("couldn't load Emails" + e.getMessage());  
@@ -850,7 +851,7 @@ public class AmpMessageUtil {
             queryString="select concat(prop.contact.name,"+"' ',"+"prop.contact.lastname), prop.value from " + AmpContactProperty.class.getName() + " prop where prop.name=:contEmail" +
                     " and prop.value is not null and trim(prop.value) like '%@%.%'  and prop.contact.name is not null and trim(prop.contact.name)!='' and prop.contact.lastname is not null and trim(prop.contact.lastname)!=''";
             query=session.createQuery(queryString);
-            query.setString("contEmail", Constants.CONTACT_PROPERTY_NAME_EMAIL);
+            query.setParameter("contEmail", Constants.CONTACT_PROPERTY_NAME_EMAIL,StringType.INSTANCE);
             contacts=query.list();
         } catch (Exception ex) {
             logger.error("couldn't load Contacts " ,ex);    
@@ -903,8 +904,8 @@ public class AmpMessageUtil {
             queryString="select concat(prop.contact.name,"+"' ',"+"prop.contact.lastname), prop.value from " + AmpContactProperty.class.getName() + " prop where prop.name=:contEmail" +
                     " and prop.value is not null and trim(prop.value) like '%@%.%'  and prop.contact.name is not null and trim(prop.contact.name)!='' and prop.contact.lastname is not null and trim(prop.contact.lastname)!='' and (lower(prop.contact.lastname) like lower(:searchStr) or lower(prop.contact.name) like lower(:searchStr))";
             query=session.createQuery(queryString);
-            query.setString("contEmail", Constants.CONTACT_PROPERTY_NAME_EMAIL);
-            query.setString("searchStr", searchStr + "%");
+            query.setParameter("contEmail", Constants.CONTACT_PROPERTY_NAME_EMAIL,StringType.INSTANCE);
+            query.setParameter("searchStr", searchStr + "%",StringType.INSTANCE);
             contacts=query.list();
         } catch (Exception ex) {
             logger.error("couldn't load Contacts " , ex);

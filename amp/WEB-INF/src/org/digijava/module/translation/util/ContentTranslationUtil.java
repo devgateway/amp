@@ -20,6 +20,8 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.hibernate.*;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
+import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
@@ -720,8 +722,8 @@ public class ContentTranslationUtil {
             query.append(" t where t.objectClass=:objectClass");
             query.append(" and t.objectId=:objectId");
             Query qry = session.createQuery(query.toString());
-            qry.setString("objectClass", objClass);
-            qry.setLong("objectId", objectId);
+            qry.setParameter("objectClass", objClass, StringType.INSTANCE);
+            qry.setParameter("objectId", objectId, LongType.INSTANCE);
             qry.executeUpdate();
         } catch (Exception e) {
             logger.error("Can't delete field translations", e);

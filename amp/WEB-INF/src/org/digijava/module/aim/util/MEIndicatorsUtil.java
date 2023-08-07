@@ -11,6 +11,7 @@ import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -145,14 +146,12 @@ public class MEIndicatorsUtil
                             AmpMEIndicatorValue.class.getName() + " " +
                             "indVal inner join indVal.indicator me where (indVal.activityId=:actId) and me.name=:name" ;
                         qry = session.createQuery(qryStr);
-                        qry.setLong("actId",actId);
-                        qry.setString("name",name);
-                        if(qry!=null){
-                                Iterator <Long> meIter= qry.list().iterator();
-                                if(meIter.hasNext()){
-                                     id=meIter.next();
-                                }
-                        }
+                        qry.setParameter("actId",actId, LongType.INSTANCE);
+                        qry.setParameter("name",name, StringType.INSTANCE);
+                    Iterator<Long> meIter = qry.list().iterator();
+                    if(meIter.hasNext()){
+                         id=meIter.next();
+                    }
 
                 }
         }

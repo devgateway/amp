@@ -40,6 +40,7 @@ import org.digijava.kernel.user.Group;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
 
 import java.security.Permission;
 import java.security.PermissionCollection;
@@ -342,7 +343,7 @@ public class SiteUtils {
                                           " s, where (s.siteId=:siteId)");
             q.setCacheable(true);
             q.setCacheRegion(Constants.KERNEL_QUERY_CACHE_REGION);
-            q.setString("siteId", siteName);
+            q.setParameter("siteId", siteName, StringType.INSTANCE);
 
             List result = q.list();
             if (result.size() != 0) {

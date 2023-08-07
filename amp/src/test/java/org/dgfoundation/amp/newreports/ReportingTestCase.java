@@ -24,6 +24,7 @@ import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.Constants;
+import org.hibernate.type.StringType;
 import org.junit.Rule;
 
 import java.util.*;
@@ -154,7 +155,7 @@ public abstract class ReportingTestCase extends AmpTestCase {
     }
     
     public static AmpReportColumn ampReportColumnForColName(String colName, long order) {
-        AmpColumns col = (AmpColumns) PersistenceManager.getSession().createQuery("FROM " + AmpColumns.class.getName() + " c WHERE c.columnName=:colName").setString("colName", colName).uniqueResult();
+        AmpColumns col = (AmpColumns) PersistenceManager.getSession().createQuery("FROM " + AmpColumns.class.getName() + " c WHERE c.columnName=:colName").setParameter("colName", colName, StringType.INSTANCE).uniqueResult();
         if (col == null)
             throw new RuntimeException("column with name <" + colName + "> not found!");
         

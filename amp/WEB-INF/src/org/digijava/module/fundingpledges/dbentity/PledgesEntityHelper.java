@@ -12,6 +12,8 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
+import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -53,10 +55,10 @@ public class PledgesEntityHelper {
     private static void setParameter(Query query, int i, Object val)
     {
         if (val instanceof Long)
-            query.setLong(i, (Long) val);
+            query.setParameter(i, (Long) val, LongType.INSTANCE);
         else
             if (val instanceof String)
-                query.setString(i, (String) val);
+                query.setParameter(i, (String)val, StringType.INSTANCE);
         else
             query.setParameter(i, val); // hope for the best
     }

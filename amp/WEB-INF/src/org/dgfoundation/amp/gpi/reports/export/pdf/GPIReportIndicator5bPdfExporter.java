@@ -28,7 +28,7 @@ public class GPIReportIndicator5bPdfExporter extends GPIReportPdfExporter {
         table.setWidthPercentage(45f);
         table.setHorizontalAlignment(0);
         
-        Font bfBold14 = new Font(com.itextpdf.text.Font.FontFamily.valueOf(BaseFont.HELVETICA), 13, Font.BOLD, new BaseColor(0, 0, 0));
+        Font bfBold14 = new Font(com.itextpdf.text.Font.FontFamily.HELVETICA, 13, Font.BOLD, new BaseColor(0, 0, 0));
         BaseColor bkgColor = BaseColor.ORANGE;
         
         for (int i = 0; i < report.getPage().getHeaders().size(); i++) {

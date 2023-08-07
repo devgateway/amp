@@ -32,10 +32,10 @@ import java.util.List;
 
 public class ExportNGOToPdf extends Action {
     
-    private static final Font plainFont = new Font(Font.FontFamily.valueOf(BaseFont.COURIER), 11,Font.NORMAL);
-    private static final Font titleFont = new Font(Font.FontFamily.valueOf(BaseFont.COURIER), 11,Font.BOLD);
-    private static final Font headingsFont = new Font(Font.FontFamily.valueOf(BaseFont.COURIER), 12,Font.BOLD, BaseColor.BLUE);
-    private static final Font contactTableHeaderFont = new Font(Font.FontFamily.valueOf(BaseFont.COURIER), 11,Font.BOLD,BaseColor.WHITE);
+    private static final Font plainFont = new Font(Font.FontFamily.COURIER, 11,Font.NORMAL);
+    private static final Font titleFont = new Font(Font.FontFamily.COURIER, 11,Font.BOLD);
+    private static final Font headingsFont = new Font(Font.FontFamily.COURIER, 12,Font.BOLD, BaseColor.BLUE);
+    private static final Font contactTableHeaderFont = new Font(Font.FontFamily.COURIER, 11,Font.BOLD,BaseColor.WHITE);
     private final static char BULLETCHAR = '\u2022';
     private final static char NEWLINECHAR = '\n';
     
@@ -43,7 +43,7 @@ public class ExportNGOToPdf extends Action {
     public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
         AddOrgForm editForm = (AddOrgForm) form;
         
-        Font headerFont = new Font(Font.FontFamily.valueOf(BaseFont.COURIER), 11, Font.BOLD, new BaseColor(255, 255, 255));
+        Font headerFont = new Font(Font.FontFamily.COURIER, 11, Font.BOLD, new BaseColor(255, 255, 255));
         Paragraph p1=null;
         String columnName="";
         String columnVal="";

@@ -68,7 +68,7 @@ public class GPIReportIndicator1Output1PdfExporter extends GPIReportPdfExporter 
         // set table width a percentage of the page width
         table.setWidthPercentage(100f);
 
-        Font bfBold14 = new Font(Font.FontFamily.valueOf(BaseFont.HELVETICA), 11, Font.BOLD, new BaseColor(0, 0, 0));
+        Font bfBold14 = new Font(Font.FontFamily.HELVETICA, 11, Font.BOLD, new BaseColor(0, 0, 0));
         BaseColor bkgColor = BaseColor.ORANGE;
 
         Map<String, GPIReportOutputColumn> columns = report.getSummary().keySet().stream()
@@ -104,7 +104,7 @@ public class GPIReportIndicator1Output1PdfExporter extends GPIReportPdfExporter 
 
     @Override
     public void renderReportTableHeader(GPIReport report, PdfPTable table) {
-        Font bfBold11 = new Font(Font.FontFamily.valueOf(BaseFont.HELVETICA), 7, Font.BOLD, new BaseColor(0, 0, 0));
+        Font bfBold11 = new Font(Font.FontFamily.HELVETICA, 7, Font.BOLD, new BaseColor(0, 0, 0));
         BaseColor bkgColor = BaseColor.LIGHT_GRAY;
 
         insertCell(table, getHeaderColumnLabel(GPIReportConstants.COLUMN_YEAR), Element.ALIGN_CENTER, 1, 1,
@@ -149,7 +149,7 @@ public class GPIReportIndicator1Output1PdfExporter extends GPIReportPdfExporter 
 
     @Override
     protected void renderReportTableData(GPIReport report, PdfPTable table) {
-        Font bf7 = new Font(Font.FontFamily.valueOf(BaseFont.HELVETICA), 7);
+        Font bf7 = new Font(Font.FontFamily.HELVETICA, 7);
         BaseColor bkgColor = BaseColor.WHITE;
 
         Map<String, GPIReportOutputColumn> columns = new HashMap<>();
@@ -220,7 +220,7 @@ public class GPIReportIndicator1Output1PdfExporter extends GPIReportPdfExporter 
     private void insertSupportiveDocumentsCells(PdfPTable table, BaseColor bkgColor,
             Map<String, GPIReportOutputColumn> columns, Map<GPIReportOutputColumn, String> rowData) {
 
-        Font urlFont = new Font(Font.FontFamily.valueOf(BaseFont.HELVETICA), 7);
+        Font urlFont = new Font(Font.FontFamily.HELVETICA, 7);
         urlFont.setColor(BaseColor.BLUE);
         urlFont.setStyle(Font.UNDERLINE);
 
@@ -273,7 +273,7 @@ public class GPIReportIndicator1Output1PdfExporter extends GPIReportPdfExporter 
         // set table width a percentage of the page width
         table.setWidthPercentage(100f);
 
-        Font bfBold10 = new Font(Font.FontFamily.valueOf(BaseFont.HELVETICA), 10, Font.BOLD, new BaseColor(0, 0, 0));
+        Font bfBold10 = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD, new BaseColor(0, 0, 0));
         BaseColor bkgColor = BaseColor.LIGHT_GRAY;
         
         insertCell(table, TranslatorWorker.translateText("Date"), Element.ALIGN_CENTER, 1, 1, bfBold10, bkgColor);
@@ -282,7 +282,7 @@ public class GPIReportIndicator1Output1PdfExporter extends GPIReportPdfExporter 
         
         table.setHeaderRows(1);
         
-        Font font = new Font(Font.FontFamily.valueOf(BaseFont.HELVETICA), 9);
+        Font font = new Font(Font.FontFamily.HELVETICA, 9);
         bkgColor = BaseColor.WHITE;
         
         List<GPIRemark> remarks = GPIReportUtils.getRemarksForIndicator1(report);

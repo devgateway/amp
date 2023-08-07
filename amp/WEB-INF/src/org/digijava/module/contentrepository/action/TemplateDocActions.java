@@ -26,7 +26,7 @@ public class TemplateDocActions extends DispatchAction {
         TemplateDocManagerForm myForm=(TemplateDocManagerForm)form;
         List<TemplateDoc> tempDocs=TemplateDocsUtil.getTemplateDocs();
         if(tempDocs!=null && tempDocs.size()>0){
-            Collections.sort(tempDocs, new TemplateDocsUtil.HelperTempDocNameComparator());         
+            tempDocs.sort(new TemplateDocsUtil.HelperTempDocNameComparator());
         }
         myForm.setTemplates(tempDocs);
         //clear session if needed
@@ -88,7 +88,7 @@ public class TemplateDocActions extends DispatchAction {
         session.setAttribute("fields", pendingFields);
         
         //sort with ordinary number
-        Collections.sort(myForm.getPendingFields(), new TemplateDocsUtil.HelperTempDocFieldOrdinaryNumberComparator());
+        myForm.getPendingFields().sort(new TemplateDocsUtil.HelperTempDocFieldOrdinaryNumberComparator());
         return mapping.findForward("createEdit");
     }
     

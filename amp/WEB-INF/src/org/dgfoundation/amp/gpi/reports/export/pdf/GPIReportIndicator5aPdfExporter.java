@@ -37,7 +37,7 @@ public class GPIReportIndicator5aPdfExporter extends GPIReportPdfExporter {
         table.setWidthPercentage(50f);
         table.setHorizontalAlignment(0);
 
-        Font bfBold14 = new Font(Font.FontFamily.valueOf(BaseFont.HELVETICA), 12, Font.BOLD, new BaseColor(0, 0, 0));
+        Font bfBold14 = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD, new BaseColor(0, 0, 0));
         BaseColor bkgColor = BaseColor.ORANGE;
 
         for (int i = 0; i < report.getPage().getHeaders().size(); i++) {
@@ -57,10 +57,10 @@ public class GPIReportIndicator5aPdfExporter extends GPIReportPdfExporter {
     }
 
     public void renderReportTableHeader(GPIReport report, PdfPTable table) {
-        Font bfBold11 = new Font(Font.FontFamily.valueOf(BaseFont.HELVETICA), 9, Font.BOLD, new BaseColor(0, 0, 0));
+        Font bfBold11 = new Font(Font.FontFamily.HELVETICA, 9, Font.BOLD, new BaseColor(0, 0, 0));
         BaseColor bkgColor = BaseColor.LIGHT_GRAY;
 
-        report.getPage().getHeaders().stream().forEach(
+        report.getPage().getHeaders().forEach(
                 column -> insertCell(table, getHeaderColumnName(column), Element.ALIGN_CENTER, 1, bfBold11, bkgColor));
 
         table.setHeaderRows(1);
@@ -69,7 +69,7 @@ public class GPIReportIndicator5aPdfExporter extends GPIReportPdfExporter {
 
     @Override
     protected void renderReportTableData(GPIReport report, PdfPTable table) {
-        Font bf11 = new Font(Font.FontFamily.valueOf(BaseFont.HELVETICA), 9);
+        Font bf11 = new Font(Font.FontFamily.HELVETICA, 9);
         BaseColor bkgColor = BaseColor.WHITE;
 
         report.getPage().getContents().forEach(row -> {

@@ -29,7 +29,7 @@ public class GPIReportIndicator1Output2PdfExporter extends GPIReportPdfExporter 
 
     @Override
     public void renderReportTableHeader(GPIReport report, PdfPTable table) {
-        Font bfBold11 = new Font(com.itextpdf.text.Font.FontFamily.valueOf(BaseFont.HELVETICA), 10, Font.BOLD, new BaseColor(0, 0, 0));
+        Font bfBold11 = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD, new BaseColor(0, 0, 0));
         BaseColor bkgColor = BaseColor.LIGHT_GRAY;
 
         insertCell(table, GPIReportConstants.COLUMN_YEAR, Element.ALIGN_CENTER, 1, bfBold11, bkgColor);
@@ -42,7 +42,7 @@ public class GPIReportIndicator1Output2PdfExporter extends GPIReportPdfExporter 
 
     @Override
     public void renderReportTableData(GPIReport report, PdfPTable table) {
-        Font bf11 = new Font(Font.FontFamily.valueOf(BaseFont.HELVETICA), 10);
+        Font bf11 = new Font(Font.FontFamily.HELVETICA, 10);
         BaseColor bkgColor = BaseColor.WHITE;
 
         GPIReportOutputColumn yearColumn = report.getPage().getHeaders().get(0);

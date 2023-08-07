@@ -37,7 +37,7 @@ public class GPIReportIndicator9bPdfExporter extends GPIReportPdfExporter {
         // set table width a percentage of the page width
         table.setWidthPercentage(DEFAULT_TABLE_WIDTH_PERCENTAGE);
         
-        Font bfBold14 = new Font(com.itextpdf.text.Font.FontFamily.valueOf(BaseFont.HELVETICA), FONT_SIZE_SUMMARY, Font.BOLD, new BaseColor(0, 0, 0));
+        Font bfBold14 = new Font(com.itextpdf.text.Font.FontFamily.HELVETICA, FONT_SIZE_SUMMARY, Font.BOLD, new BaseColor(0, 0, 0));
         BaseColor bkgColor = BaseColor.ORANGE;
         
         Map<String, GPIReportOutputColumn> columns = report.getSummary().keySet().stream()

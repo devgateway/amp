@@ -97,7 +97,7 @@ public class GPIReportPdfExporter implements GPIReportExporter {
     }
     
     public void renderReportSettings(GPIReport report, Paragraph body) {
-        Font bf10 = new Font(Font.FontFamily.valueOf(BaseFont.HELVETICA), FONT_SIZE_SETTINGS);
+        Font bf10 = new Font(Font.FontFamily.HELVETICA, FONT_SIZE_SETTINGS);
         
         String units = report.getSpec().getSettings().getUnitsOption().userMessage;
         String currency = report.getSettings().getCurrencyCode();
@@ -116,7 +116,7 @@ public class GPIReportPdfExporter implements GPIReportExporter {
         // set table width a percentage of the page width
         table.setWidthPercentage(100f);
         
-        Font bfBold14 = new Font(Font.FontFamily.valueOf(BaseFont.HELVETICA), FONT_SIZE_SUMMARY, Font.BOLD, new BaseColor(0, 0, 0));
+        Font bfBold14 = new Font(Font.FontFamily.HELVETICA, FONT_SIZE_SUMMARY, Font.BOLD, new BaseColor(0, 0, 0));
         BaseColor bkgColor = BaseColor.ORANGE;
 
         for (int i = 0; i < report.getPage().getHeaders().size(); i++) {
@@ -147,7 +147,7 @@ public class GPIReportPdfExporter implements GPIReportExporter {
     }
 
     public void renderReportTableHeader(GPIReport report, PdfPTable table) {
-        Font bfBold11 = new Font(Font.FontFamily.valueOf(BaseFont.HELVETICA), 10, Font.BOLD, new BaseColor(0, 0, 0));
+        Font bfBold11 = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD, new BaseColor(0, 0, 0));
         BaseColor bkgColor = BaseColor.LIGHT_GRAY;
         
         List<GPIReportOutputColumn> columns = getDataTableColumns(report);
@@ -159,7 +159,7 @@ public class GPIReportPdfExporter implements GPIReportExporter {
     }
 
     protected void renderReportTableData(GPIReport report, PdfPTable table) {
-        Font bf10 = new Font(Font.FontFamily.valueOf(BaseFont.HELVETICA), 10);
+        Font bf10 = new Font(Font.FontFamily.HELVETICA, 10);
         BaseColor bkgColor = BaseColor.WHITE;
         
         List<GPIReportOutputColumn> columns = getDataTableColumns(report);

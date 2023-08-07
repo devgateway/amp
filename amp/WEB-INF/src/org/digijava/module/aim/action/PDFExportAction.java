@@ -263,7 +263,7 @@ public class PDFExportAction extends Action implements PdfPageEvent
             }                                                       
             if (this.request.getAttribute("statementPositionOptions").equals("0")) {//header        
                 PdfPCell pdfc;
-                    Font font = new Font(Font.FontFamily.valueOf(BaseFont.COURIER), 8);
+                    Font font = new Font(Font.FontFamily.COURIER, 8);
                 pdfc = new PdfPCell(new Paragraph(stmt, font));
                 pdfc.setPaddingBottom(10);
                 pdfc.setPaddingTop(10);
@@ -282,7 +282,7 @@ public class PDFExportAction extends Action implements PdfPageEvent
         translatedReportDescription=TranslatorWorker.translateText("Description:");
     
         PdfPCell pdfc;
-            Font titleFont = new Font(Font.FontFamily.valueOf(BaseFont.COURIER), 8);
+            Font titleFont = new Font(Font.FontFamily.COURIER, 8);
             //Font titleFont = new Font(Font.COURIER, 16, Font.BOLD);               
         pdfc = new PdfPCell(new Paragraph(rd.getName(),titleFont));
         pdfc.setPaddingBottom(10);
@@ -302,7 +302,7 @@ public class PDFExportAction extends Action implements PdfPageEvent
         //translatedNotes
         //ArConstants.SELECTED_CURRENCY
         //Currency
-            Font currencyFont = new Font(Font.FontFamily.valueOf(BaseFont.COURIER), 10, Font.ITALIC);
+            Font currencyFont = new Font(Font.FontFamily.COURIER, 10, Font.ITALIC);
         pdfc = new PdfPCell(new Paragraph(translatedAmount+": "+translatedCurrency,currencyFont));
         pdfc.setPaddingBottom(2);
         pdfc.setPaddingTop(2);

@@ -30,44 +30,48 @@ public class ManageFieldAction extends Action{
         List<TemplateFieldHelper> pendingFields=(List<TemplateFieldHelper>) session.getAttribute("fields");
         
         TemplateFieldHelper field = getTemplateFieldHelperFromList(pendingFields,myForm.getTemplateDocFieldTemporaryId());
-        if(action.equals("manage")){ //user clicked on "Manage Field" button
-            if(myForm.getTemplateDocFieldTemporaryId()!=null){              
-                field.setFieldType(myForm.getSelectedFieldType());
-                // fill form possible values with field's values
-                myForm.setPossibleValuesForField(field.getValues());
-            }           
-        }else if (action.equals("deleteValue")){ //user wants to remove already existing value of the field         
-            //fill possible values first
-            fillFieldPossibleValues(myForm);
-            //remove value
-            String valueTempid=request.getParameter("valueId"); 
-            PossibleValueHelper posValToRemove=getTemplateFieldHelperValue(myForm.getPossibleValuesForField(), valueTempid);
-            myForm.getPossibleValuesForField().remove(posValToRemove);      
-            
-        }else if (action.equals("addNewValue")){
-            if(myForm.getPossibleValuesForField()==null){           
-                myForm.setPossibleValuesForField(new ArrayList<PossibleValueHelper>());
-                myForm.getPossibleValuesForField().add( new PossibleValueHelper("pv_"+new Date().getTime()));
-            }else{
+        switch (action) {
+            case "manage":  //user clicked on "Manage Field" button
+                if (myForm.getTemplateDocFieldTemporaryId() != null) {
+                    field.setFieldType(myForm.getSelectedFieldType());
+                    // fill form possible values with field's values
+                    myForm.setPossibleValuesForField(field.getValues());
+                }
+                break;
+            case "deleteValue":  //user wants to remove already existing value of the field
+                //fill possible values first
                 fillFieldPossibleValues(myForm);
-                 
-                //create new array of possible values
-                List<PossibleValueHelper> oldValues= myForm.getPossibleValuesForField();
-                List<PossibleValueHelper> newArray= new ArrayList<PossibleValueHelper>(oldValues.size()+1);
-                newArray.addAll(oldValues);
-                newArray.add(new PossibleValueHelper("pv_"+new Date().getTime()));
-                myForm.setPossibleValuesForField(newArray);
-            }
-        }else if (action.equals("saveValues")){
-            //if this field already has assigned some values etc. we should load it. Otherwise create first empty field
-            if(field.getValues()==null){
-                field.setValues(new ArrayList<PossibleValueHelper>());                                  
-            }
-            fillFieldPossibleValues(myForm);
-            field.setValues(myForm.getPossibleValuesForField());
-            //put fields in session
-            session.setAttribute("fields", pendingFields);
-            return mapping.findForward("fill");
+                //remove value
+                String valueTempid = request.getParameter("valueId");
+                PossibleValueHelper posValToRemove = getTemplateFieldHelperValue(myForm.getPossibleValuesForField(), valueTempid);
+                myForm.getPossibleValuesForField().remove(posValToRemove);
+
+                break;
+            case "addNewValue":
+                if (myForm.getPossibleValuesForField() == null) {
+                    myForm.setPossibleValuesForField(new ArrayList<PossibleValueHelper>());
+                    myForm.getPossibleValuesForField().add(new PossibleValueHelper("pv_" + new Date().getTime()));
+                } else {
+                    fillFieldPossibleValues(myForm);
+
+                    //create new array of possible values
+                    List<PossibleValueHelper> oldValues = myForm.getPossibleValuesForField();
+                    List<PossibleValueHelper> newArray = new ArrayList<PossibleValueHelper>(oldValues.size() + 1);
+                    newArray.addAll(oldValues);
+                    newArray.add(new PossibleValueHelper("pv_" + new Date().getTime()));
+                    myForm.setPossibleValuesForField(newArray);
+                }
+                break;
+            case "saveValues":
+                //if this field already has assigned some values etc. we should load it. Otherwise create first empty field
+                if (field.getValues() == null) {
+                    field.setValues(new ArrayList<PossibleValueHelper>());
+                }
+                fillFieldPossibleValues(myForm);
+                field.setValues(myForm.getPossibleValuesForField());
+                //put fields in session
+                session.setAttribute("fields", pendingFields);
+                return mapping.findForward("fill");
         }
         
         hasAddMoreValuesRight(myForm);

@@ -143,6 +143,7 @@ public class ExportActivityToPDF extends Action {
             byte[] fontFile = IOUtils.toByteArray(inputStream);
 
             BaseFont result = BaseFont.createFont("Arial.ttf", BaseFont.IDENTITY_H, true, true, fontFile, null);
+
             IOUtils.closeQuietly(inputStream);
 
             return result;

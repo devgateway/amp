@@ -85,7 +85,11 @@ public class AMPActivityService implements ActivityService {
             EditorStore editorStore, Site site) throws Exception {
         
         Session session = PersistenceManager.getRequestDBSession();
-        Transaction transaction= session.beginTransaction();
+        Transaction transaction= session.getTransaction();
+        if (transaction==null || !transaction.isActive())
+        {
+            transaction=session.beginTransaction();
+        }
         AmpActivityVersion ampActivityVersion= saveActivityNewVersion(newActivity, translations, cumulativeTranslations, modifiedBy,
                 Boolean.TRUE.equals(newActivity.getDraft()), draftChange,
                 session, saveContext, editorStore, site);

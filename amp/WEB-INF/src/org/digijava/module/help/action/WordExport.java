@@ -4,9 +4,6 @@
 package org.digijava.module.help.action;
 
 
-import com.itextpdf.text.*;
-import com.itextpdf.text.html.simpleparser.HTMLWorker;
-import com.lowagie.text.rtf.RtfWriter2;
 import org.apache.log4j.Logger;
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;

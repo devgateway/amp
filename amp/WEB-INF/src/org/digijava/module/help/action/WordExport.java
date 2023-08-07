@@ -75,7 +75,6 @@ public class WordExport extends Action {
         } catch (Exception ex) {
             logger.error("error", ex);
         }
-
         return null;
     }
 //    public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {

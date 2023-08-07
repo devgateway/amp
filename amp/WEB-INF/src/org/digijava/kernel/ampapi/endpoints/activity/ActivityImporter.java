@@ -199,7 +199,7 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
             // error is not always logged at source; better duplicate it than have none
             logger.error("Import failed", e);
             if (e instanceof ActivityLockNotGrantedException) {
-                logger.error("Cannot aquire lock during IATI update for activity " + activityId);
+                logger.error("Cannot acquire lock during IATI update for activity " + activityId);
                 Long userId = ((ActivityLockNotGrantedException) e).getUserId();
                 String memberName = TeamMemberUtil.getTeamMember(userId).getMemberName();
                 errors.put(ActivityErrors.ACTIVITY_IS_BEING_EDITED.id,

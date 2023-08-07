@@ -264,7 +264,7 @@ public class ActivityUtil {
               String ids = OrganisationUtil.getComputationOrgsQry(team);
               if(ids.length()>1){
               ids = ids.substring(0, ids.length() - 1);
-                whereTeamStatement.append("  and ( latestAct.team.ampTeamId =:teamId or  role.organisation.ampOrgId in(" + ids+"))");
+                whereTeamStatement.append("  and ( latestAct.team.ampTeamId =:teamId or  role.organisation.ampOrgId in(").append(ids).append("))");
               }
               relatedOrgsCriteria=true;
           }
@@ -277,24 +277,23 @@ public class ActivityUtil {
                             ApprovalStatus.startedapproved.getDbName()));
                     List<AmpTeam> teams = new ArrayList<AmpTeam>();
                     TeamUtil.getTeams(team, teams);
-                    String relatedOrgs = "", teamIds = "";
+                    StringBuilder relatedOrgs = new StringBuilder();
+                    StringBuilder teamIds = new StringBuilder();
                     for (AmpTeam tm : teams) {
                         if (tm.getComputation() != null && tm.getComputation()) {
-                            relatedOrgs += OrganisationUtil.getComputationOrgsQry(tm);
+                            relatedOrgs.append(OrganisationUtil.getComputationOrgsQry(tm));
                             relatedOrgsCriteria=true;
                         }
-                        teamIds += tm.getAmpTeamId() + ",";
+                        teamIds.append(tm.getAmpTeamId()).append(",");
                     }
                     if (relatedOrgs.length() > 1) {
-                        relatedOrgs = relatedOrgs.substring(0,
-                                relatedOrgs.length() - 1);
-                        whereTeamStatement.append("  and ( latestAct.team.ampTeamId ="+team.getAmpTeamId()+" or  role.organisation.ampOrgId in("
-                                + relatedOrgs + "))");
+                        relatedOrgs = new StringBuilder(relatedOrgs.substring(0,
+                                relatedOrgs.length() - 1));
+                        whereTeamStatement.append("  and ( latestAct.team.ampTeamId =").append(team.getAmpTeamId()).append(" or  role.organisation.ampOrgId in(").append(relatedOrgs).append("))");
                     }
                     if (teamIds.length() > 1) {
-                        teamIds = teamIds.substring(0, teamIds.length() - 1);
-                        whereTeamStatement.append(" and latestAct.team.ampTeamId in ( " + teamIds
-                                + ")");
+                        teamIds = new StringBuilder(teamIds.substring(0, teamIds.length() - 1));
+                        whereTeamStatement.append(" and latestAct.team.ampTeamId in ( ").append(teamIds).append(")");
                     }
 
                 } else {

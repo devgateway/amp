@@ -272,8 +272,8 @@ public class ActivityUtil {
         saveProjectCosts(a, session);
         saveStructures(a, session);
 
+
         if (createNewVersion){
-            //a.setAmpActivityId(null); //hibernate will save as a new version
             session.save(a);
         }
         else{

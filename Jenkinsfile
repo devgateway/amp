@@ -52,6 +52,9 @@ def countries
 def environment
 
 stage('Build') {
+    steps {
+        sh "git submodule update --recursive"
+    }
 
     timeout(15) {
         milestone()

@@ -52,10 +52,6 @@ def countries
 def environment
 
 stage('Build') {
-    steps {
-        sh "git submodule update --recursive"
-    }
-
     timeout(15) {
         milestone()
         environment = input(
@@ -68,6 +64,7 @@ stage('Build') {
 
     node {
         checkout scm
+        sh "git submodule update --recursive"
 
         // Find AMP version
         codeVersion = readMavenPom(file: 'amp/pom.xml').version

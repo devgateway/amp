@@ -104,7 +104,7 @@ public class DbUtil {
     public static List<Editor> getEditorList(String editorKey, Site site) throws EditorException {
 
         Session session = null;
-        List<Editor> items = new ArrayList<Editor>();
+        List<Editor> items;
         try {
             session = PersistenceManager.getRequestDBSession();
             Query q = session.createQuery("from "

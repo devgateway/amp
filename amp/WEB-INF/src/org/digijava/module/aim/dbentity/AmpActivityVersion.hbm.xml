@@ -44,7 +44,7 @@
 		<property name="changeType" column="change_type" type="java.lang.String" />
 		<property name="lastImportedAt" column="last_imported_at" type="java.util.Date" />
 		<many-to-one name="lastImportedBy" column="last_imported_by"
-			class="org.digijava.kernel.user.User" cascade="none" />
+			class="org.digijava.kernel.user.User" cascade="all" />
 
 		<property name="deleted" column="deleted" type="java.lang.Boolean" />
 
@@ -102,10 +102,10 @@
 
 			
 		<many-to-one name="team" column="amp_team_id"
-			class="org.digijava.module.aim.dbentity.AmpTeam" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpTeam" cascade="all" />
 
 		<many-to-one name="activityCreator" column="activity_creator"
-			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="all" />
 
 		<property name="approvalStatus" column="approval_status">
 		    <type name="org.digijava.module.aim.dbentity.NamedEnumType">
@@ -119,13 +119,13 @@
 		<property name="lineMinRank" column="line_min_rank" type="java.lang.Integer" />
 		
 		<many-to-one name="ampActivityGroup" column="amp_activity_group_id"
-			class="org.digijava.module.aim.dbentity.AmpActivityGroup" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpActivityGroup" cascade="all" />
 
 		<property name="modifiedDate" column="modified_date" type="java.util.Date" />
 		<many-to-one name="modifiedBy" column="modified_by"
-			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="all" />
 
-		<set name="selectedEffectivenessIndicatorOptions" table="AMP_ACTIVITY_EFFECTIVENESS_INDICATOR_OPTIONS" lazy="false" cascade="none">
+		<set name="selectedEffectivenessIndicatorOptions" table="AMP_ACTIVITY_EFFECTIVENESS_INDICATOR_OPTIONS" lazy="false" cascade="all">
 			<cache usage="read-write" />
 			<key column="amp_activity_id" />
 			<many-to-many class="org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicatorOption"
@@ -133,7 +133,7 @@
 		</set>
 
 
-		<set name="categories" table="AMP_ACTIVITIES_CATEGORYVALUES" lazy="false" cascade="none">
+		<set name="categories" table="AMP_ACTIVITIES_CATEGORYVALUES" lazy="false" cascade="all">
 			<cache usage="read-write" />
 			<key column="amp_activity_id" />
 			<many-to-many class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue"
@@ -264,7 +264,7 @@
 		</set>
 
 		<many-to-one name="approvedBy" column="approvedBy"
-			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="all" />
 		<property name="approvalDate" column="approvalDate" type="java.util.Date" />
 
 		<set name="activityContacts" inverse="true" cascade="delete" lazy="false">
@@ -274,9 +274,9 @@
 		
 		<property name="mergedActivity" column="merged_activity" type="java.lang.Boolean" />
 		<many-to-one name="mergeSource1" column="merge_source1"
-			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="all" />
 		<many-to-one name="mergeSource2" column="merge_source2"
-			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="all" />
 
 		<property name="activityType" column="activity_type" type="java.lang.Long" />
 		<property name="proposedProjectLife" column="proposed_project_life" type="java.lang.Integer" />

@@ -10,7 +10,7 @@
 		<property name="lastModDate" column="LAST_MOD_DATE" type="java.util.Date" />
 		<property name="url" column="URL" type="java.lang.String" />
 		<many-to-one name="user" column="USER_ID" class="org.digijava.kernel.user.User"
-			cascade="none" />
+			cascade="all" />
 		<property name="creationIp" column="CREATION_IP" type="java.lang.String" />
 		<property name="title" column="TITLE" type="java.lang.String" />
 		<property name="body" column="BODY" type="text" />

@@ -29,19 +29,19 @@
 		<property column="ORGANIZATION_TYPE_OTHER" name="organizationTypeOther" type="text" />
 		<property name="address" column="ADDRESS" type="java.lang.String" />
 		<many-to-one name="country" column="COUNTRY_ISO"
-			class="org.digijava.kernel.dbentity.Country" cascade="none" />
+			class="org.digijava.kernel.dbentity.Country" cascade="all" />
 		<many-to-one name="region" column="region_id"
-			class="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" cascade="all" />
 		<many-to-one name="photo" column="image_id" class="org.digijava.kernel.entity.Image"
 			cascade="all" />
 		<many-to-one name="organizationType" column="ORGANIZATION_TYPE_ID"
-			class="org.digijava.kernel.entity.OrganizationType" cascade="none" />
+			class="org.digijava.kernel.entity.OrganizationType" cascade="all" />
 
 		<many-to-one name="registerLanguage" column="REGISTRATION_LANGUAGE"
-			class="org.digijava.kernel.entity.Locale" cascade="none" />
+			class="org.digijava.kernel.entity.Locale" cascade="all" />
 		<property name="globalAdmin" column="GLOBAL_ADMIN" type="boolean" />
 		
-		<many-to-one name="userExtension" column="user_ext_id" class="org.digijava.module.aim.dbentity.AmpUserExtension" cascade="none" />
+		<many-to-one name="userExtension" column="user_ext_id" class="org.digijava.module.aim.dbentity.AmpUserExtension" cascade="all" />
 
 		<set name="interests" cascade="all" lazy="true">
 			<cache usage="read-write" />
@@ -52,7 +52,7 @@
 		<set name="groups" table="DG_USER_GROUP" lazy="true">
 			<cache usage="read-write" />
 			<key column="USER_ID" />
-			<many-to-many class="org.digijava.kernel.user.Group" column="GROUP_ID" />
+			<many-to-many class="org.digijava.kernel.user.Group"  column="GROUP_ID" />
 		</set>
 
 		<set name="contacts" cascade="all" lazy="true" inverse="true">
@@ -60,9 +60,9 @@
 			<one-to-many class="org.digijava.kernel.user.UserContactInfo" />
 		</set>
 
-		<many-to-one name="registeredThrough" column="REGISTERED_THROUGH" class="org.digijava.kernel.request.Site" cascade="none" />
+		<many-to-one name="registeredThrough" column="REGISTERED_THROUGH" class="org.digijava.kernel.request.Site" cascade="all" />
 		
-		<set name="assignedOrgs" table="DG_USER_ORGS" lazy="true" cascade="none">
+		<set name="assignedOrgs" table="DG_USER_ORGS" lazy="true" cascade="all">
 		 	<cache usage="read-write" />
  	 	 	<key column="USER_ID" />
  	        <many-to-many class="org.digijava.module.aim.dbentity.AmpOrganisation" column="ORG_ID"/>

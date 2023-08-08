@@ -71,10 +71,10 @@ public class FeaturesUtil {
     public static List<String> getAssignedToTeams (Long templateId) {
         List<String> retVal = null;
         Session sess = PersistenceManager.getSession();
-        String qs = "select t.name from " +
-                AmpTeam.class.getName() + " t  where t.fmTemplate=:TEMPLATE_ID";
-        Query q = sess.createQuery(qs);
-        q.setParameter("TEMPLATE_ID", templateId, LongType.INSTANCE);
+        StringBuilder qs = new StringBuilder("select t.name from ").
+                append(AmpTeam.class.getName()).append(" t  where t.fmTemplate=:TEMPLATE_ID");
+        Query q = sess.createQuery(qs.toString());
+        q.setLong("TEMPLATE_ID", templateId);
         List<String> tmpVal = q.list();
         if (!tmpVal.isEmpty())
             retVal = tmpVal;
@@ -1427,7 +1427,7 @@ public class FeaturesUtil {
             + " a where a.name=:fieldName ";
             q = session.createQuery(queryString, AmpFieldsVisibility.class);
             q.setParameter("fieldName", fieldName, StringType.INSTANCE);
-            id = q.getSingleResult();
+            id = q.getResultStream().findFirst().orElse(null);
 //            System.out.println(c);
 //
             System.out.println(id);

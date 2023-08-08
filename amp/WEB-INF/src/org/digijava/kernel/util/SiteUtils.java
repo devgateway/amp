@@ -367,8 +367,8 @@ public class SiteUtils {
      * @throws DgException if error occurs
      */
     public static List getChildSites(long parentId) throws DgException {
-        List sites = null;
-        Session session = null;
+        List sites;
+        Session session;
         try {
             session = PersistenceManager.getSession();
             Query query = session.createQuery("from " +

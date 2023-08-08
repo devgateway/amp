@@ -4,6 +4,7 @@ const webpackConfigPath = 'react-scripts/config/webpack.config';
 // eslint-disable-next-line import/no-dynamic-require
 const webpackConfig = require(webpackConfigPath);
 const ppackageJson = require("../../package.json");
+const packageJson = require("create-react-app/package.json");
 
 const DOMAIN_NAME = 'http://localhost:8080';
 const PUBLIC_PATH = '/TEMPLATE/reampv2/packages/container/build/';
@@ -19,13 +20,21 @@ const override = config => {
         shared: {
             ...ppackageJson.dependencies,
             react: {
-                singleton: true,
-                requiredVersion: ppackageJson.dependencies.react,
+                import: 'react', // the "react" package will be used a provided and fallback module
+                shareKey: 'newReact', // under this name the shared module will be placed in the share scope
+                shareScope: 'default', // share scope with this name will be used
+                singleton: true, // only a single version of the shared module is allowed
             },
             'react-dom': {
                 singleton: true,
                 requiredVersion: ppackageJson.dependencies['react-dom'],
             },
+            'react-router-dom': {
+                import: 'react-router-dom',
+                singleton: true,
+                shareKey: 'react-router-dom-new',
+                shareScope: 'default',
+            }
         },
     });
     config.plugins.push(moduleFederationPlugin);

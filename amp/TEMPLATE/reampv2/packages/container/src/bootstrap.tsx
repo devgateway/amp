@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import boilerplate from './amp-boilerplate';
+//@ts-ignore
+const boilerplate = require('@tmugo/amp-boilerplate/dist/amp-boilerplate');
 
 const Root = () => (
     <React.StrictMode>

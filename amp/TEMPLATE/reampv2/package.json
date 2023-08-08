@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "workspaces": [
-    "packages/**/*"
+    "packages/*"
   ],
   "scripts": {
     "start": "lerna run start",
@@ -16,5 +16,10 @@
   "devDependencies": {
     "lerna": "^7.1.4",
     "nx": "^16.6.0"
+  },
+  "dependencies": {
+    "fs": "^0.0.1-security",
+    "jquery-ui": "^1.10.5",
+    "use-sync-external-store": "^1.2.0"
   }
 }

@@ -4,6 +4,7 @@ const ppackageJson = require('../../package.json');
 const webpackConfigPath = 'react-scripts/config/webpack.config';
 // eslint-disable-next-line import/no-dynamic-require
 const webpackDev = require(webpackConfigPath);
+const packageJson = require("create-react-app/package.json");
 
 const override = config => {
     // eslint-disable-next-line global-require
@@ -16,13 +17,23 @@ const override = config => {
         shared: {
             ...ppackageJson.dependencies,
             react: {
-                singleton: true,
-                requiredVersion: ppackageJson.dependencies.react,
+                import: 'react', // the "react" package will be used a provided and fallback module
+                shareKey: 'newReact', // under this name the shared module will be placed in the share scope
+                shareScope: 'default', // share scope with this name will be used
+                singleton: true, // only a single version of the shared module is allowed
             },
             'react-dom': {
-                singleton: true,
-                requiredVersion: ppackageJson.dependencies['react-dom'],
+                import: 'react-dom', // the "react" package will be used a provided and fallback module
+                shareKey: 'react-dom', // under this name the shared module will be placed in the share scope
+                shareScope: 'legacy', // share scope with this name will be used
+                singleton: true, // only a single version of the shared module is allowed
             },
+            'react-router-dom': {
+                import: 'react-router-dom',
+                singleton: true,
+                shareKey: 'react-router-dom',
+                shareScope: 'default',
+            }
         },
     });
     config.plugins.push(moduleFederationPlugin);

@@ -20,6 +20,12 @@ export const routes: RouteObject[] = [
         )
     },
     {
+        path: 'reampv2-app',
+        element: (
+            <div>reampv2-app</div>
+        )
+    },
+    {
         //not found
         path: '*',
         element: (

@@ -5,9 +5,9 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import boilerplate from '@devgateway/amp-boilerplate';
 // amp-filter css
-import '@devgateway/amp-boilerplate/src/components/amp-filter/amp-filter.css';
+import '@tmugo/amp-filter/dist/amp-filter.css';
+const boilerplate = require('@tmugo/amp-boilerplate/dist/amp-boilerplate');
 
 ReactDOM.render(
   <React.StrictMode>

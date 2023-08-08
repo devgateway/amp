@@ -5,10 +5,10 @@ import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import { TRN_PREFIX } from '../utils/constants';
 // eslint-disable-next-line no-unused-vars
-import styles from '@devgateway/amp-settings'
+
 import { NDDTranslationContext } from './StartUp';
 
-const SettingsWidget = require('@devgateway/amp-settings');
+const SettingsWidget = require('@tmugo/amp-settings/dist/amp-settings');
 
 const widget = new SettingsWidget.SettingsWidget({
   el: 'settings-popup',

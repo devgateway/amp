@@ -20,8 +20,16 @@ const override = config => {
                 requiredVersion: packageJson.dependencies.react,
             },
             'react-dom': {
+                import: 'react-dom', // the "react" package will be used a provided and fallback module
+                shareKey: 'react-dom', // under this name the shared module will be placed in the share scope
+                shareScope: 'legacy', // share scope with this name will be used
+                singleton: true, // only a single version of the shared module is allowed
+            },
+            'react-router-dom': {
+                import: 'react-router-dom',
+                shareKey: 'react-router-dom-old',
+                shareScope: 'default',
                 singleton: true,
-                requiredVersion: packageJson.dependencies['react-dom'],
             }
         }
     })
@@ -37,7 +45,10 @@ const override = config => {
 
     config.resolve.fallback = {
         ...config.resolve.fallback,
-        stream: require.resolve('stream-browserify')
+        stream: require.resolve('stream-browserify'),
+        fs: false,
+        os: false,
+        path: false
     };
 
     config.module.rules = [

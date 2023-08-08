@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 // eslint-disable-next-line no-unused-vars
-import styles from '@devgateway/amp-settings/dist/amp-settings.css';
+import styles from '@tmugo/amp-settings/dist/amp-settings.css';
 import { ReportGeneratorContext } from './StartUp';
 import {
   URL_SETTINGS_REPORTS, REPORTS
@@ -12,7 +12,8 @@ import { fetchGlobalSettings } from '../actions/settingsActions';
 import { extractSettings } from '../reducers/utils/settingsDataConverter';
 import { updateAppliedSettings } from '../actions/stateUIActions';
 import { translate } from '../utils/Utils';
-import SettingsWidget from '@devgateway/amp-settings';
+
+const SettingsWidget = require('@tmugo/amp-settings/dist/amp-settings');
 
 let widget = null;
 

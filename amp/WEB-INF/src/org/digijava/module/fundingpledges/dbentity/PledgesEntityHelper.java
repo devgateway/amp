@@ -37,7 +37,7 @@ public class PledgesEntityHelper {
         for(int i = 0; i < n / 2; i++) 
         {
             String fieldName = (String) values[2 * i];
-            queryBld.append(" AND (p." + fieldName + " = ?)");
+            queryBld.append(" AND (p.").append(fieldName).append(" = value").append(i).append(")");
         }
         
         Query query = PersistenceManager.getSession().createQuery(queryBld.toString());
@@ -55,12 +55,12 @@ public class PledgesEntityHelper {
     private static void setParameter(Query query, int i, Object val)
     {
         if (val instanceof Long)
-            query.setParameter(i, (Long) val, LongType.INSTANCE);
+            query.setParameter("value"+i, (Long) val, LongType.INSTANCE);
         else
             if (val instanceof String)
-                query.setParameter(i, (String)val, StringType.INSTANCE);
+                query.setParameter("value"+i, (String)val, StringType.INSTANCE);
         else
-            query.setParameter(i, val); // hope for the best
+            query.setParameter("value"+i, val); // hope for the best
     }
     
     public static List<FundingPledges> getPledges()

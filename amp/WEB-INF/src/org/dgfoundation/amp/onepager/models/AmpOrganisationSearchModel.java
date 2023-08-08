@@ -105,7 +105,7 @@ public class AmpOrganisationSearchModel extends AbstractAmpAutoCompleteModel<Amp
             }
             
             Integer maxResults = (Integer) getParams().get(AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS);
-            if (maxResults != null && maxResults.intValue() != 0) {
+            if (maxResults != null && maxResults != 0) {
             sqlQuery = sqlQuery + " LIMIT " + maxResults;
             }
             

@@ -17,5 +17,6 @@
 		<property name="notice" column="NOTICE" type="java.lang.String" />
 		<property name="orderIndex" column="ORDER_INDEX" type="int" />
 		<property name="groupName" column="GROUP_NAME" type="java.lang.String" />
+
 	</class>
 </hibernate-mapping>

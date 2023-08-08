@@ -215,7 +215,7 @@ public class ActivityUtil {
                 }
 
                 a.setAmpActivityGroup(tmpGroup);
-                a.setMember(new HashSet());
+                a.setMember(new HashSet<>());
                 a.setAmpActivityId(null);
                 if (oldA.getAmpActivityId() != null)
                     session.evict(oldA);
@@ -470,7 +470,7 @@ public class ActivityUtil {
             AmpActivityVersion oldA, boolean newActivity, boolean rejected) {
         boolean teamLeadFlag =  isApprover(ampCurrentMember);
         Boolean crossTeamValidation = ampCurrentMember.getAmpTeam().getCrossteamvalidation();
-        Boolean isSameWorkspace = ampCurrentMember.getAmpTeam().getAmpTeamId().equals(a.getTeam().getAmpTeamId());
+        boolean isSameWorkspace = ampCurrentMember.getAmpTeam().getAmpTeamId().equals(a.getTeam().getAmpTeamId());
 
         // Check if validation is ON in GS and APP Settings
         String validation = getValidationSetting(ampCurrentMember);
@@ -657,7 +657,7 @@ public class ActivityUtil {
             return new AmpActivityVersion();
         }
 
-        Session session = am.getHibernateSession();//am.getSession();
+        Session session = AmpActivityModel.getHibernateSession();//am.getSession();
 
 
         //am.setTransaction(session.beginTransaction());
@@ -731,18 +731,14 @@ public class ActivityUtil {
         HashSet<AmpComments> delComm = s.getMetaData(OnePagerConst.COMMENTS_DELETED_ITEMS);
 
         if (delComm != null){
-            Iterator<AmpComments> di = delComm.iterator();
-            while (di.hasNext()) {
-                AmpComments tComm = (AmpComments) di.next();
+            for (AmpComments tComm : delComm) {
                 session.delete(tComm);
             }
         }
 
         if (newComm != null){
-            Iterator<AmpComments> ni = newComm.iterator();
-            while (ni.hasNext()) {
-                AmpComments tComm = (AmpComments) ni.next();
-                if (ActivityVersionUtil.isVersioningEnabled() && !draft){
+            for (AmpComments tComm : newComm) {
+                if (ActivityVersionUtil.isVersioningEnabled() && !draft) {
                     try {
                         tComm = (AmpComments) tComm.prepareMerge(a);
                     } catch (CloneNotSupportedException e) {
@@ -751,7 +747,7 @@ public class ActivityUtil {
                 }
 
                 if (tComm.getMemberId() == null)
-                    tComm.setMemberId(((AmpAuthWebSession)org.apache.wicket.Session.get()).getAmpCurrentMember());
+                    tComm.setMemberId(((AmpAuthWebSession) org.apache.wicket.Session.get()).getAmpCurrentMember());
                 if (tComm.getAmpActivityId() == null)
                     tComm.setAmpActivityId(a);
                 session.saveOrUpdate(tComm);
@@ -772,14 +768,12 @@ public class ActivityUtil {
         if (editors == null) {
             return;
         }
-        Iterator<String> it = editors.keySet().iterator();
-        while (it.hasNext()) {
-            String key = (String) it.next();
+        for (String key : editors.keySet()) {
             String oldKey = editorStore.getOldKey().get(key);
             Map<String, String> values = editors.get(key);
             Set<String> locales = values.keySet();
 
-            for (String locale: locales){
+            for (String locale : locales) {
                 String value = values.get(locale);
 
                 if (value == null || value.trim().length() == 0)
@@ -788,10 +782,8 @@ public class ActivityUtil {
                 try {
                     boolean editorFound = false;
                     List<Editor> edList = DbUtil.getEditorList(oldKey, site);
-                    Iterator<Editor> it2 = edList.iterator();
-                    while (it2.hasNext()) {
-                        Editor editor = (Editor) it2.next();
-                        if (editor.getLanguage().equals(locale)){
+                    for (Editor editor : edList) {
+                        if (editor.getLanguage().equals(locale)) {
                             //editor.setBody(value);
                             editorFound = true;
 
@@ -803,7 +795,7 @@ public class ActivityUtil {
                             toSaveEditor.setEditorKey(key);
                             session.save(toSaveEditor);
 
-                            if (!createNewVersion){
+                            if (!createNewVersion) {
                                 //we need to delete the old editor since this is not a new activity version
                                 session.delete(editor);
                             }
@@ -812,7 +804,7 @@ public class ActivityUtil {
                         }
                     }
 
-                    if (!editorFound){
+                    if (!editorFound) {
                         //add new editor
                         Editor editor = new Editor();
                         editor.setBody(value);
@@ -874,7 +866,7 @@ public class ActivityUtil {
         if (af != null && Hibernate.isInitialized(af)) {
             agreements = af.stream()
                     .filter(f -> f.getAgreement() != null && Hibernate.isInitialized(f.getAgreement()))
-                    .map(f -> f.getAgreement())
+                    .map(AmpFunding::getAgreement)
                     .collect(Collectors.toSet());
         }
 
@@ -984,7 +976,8 @@ public class ActivityUtil {
      * @param file
      */
     private static FormFile generateFormFile(FileUpload file) {
-        FormFile formFile = new FormFile() {
+
+        return new FormFile() {
 
             @Override
             public void setFileSize(int arg0) {
@@ -1027,8 +1020,6 @@ public class ActivityUtil {
             public void destroy() {
             }
         };
-
-        return formFile;
     }
 
     /**
@@ -1413,11 +1404,9 @@ public class ActivityUtil {
         int rangeNumber = FeaturesUtil
                 .getGlobalSettingValueInteger(GlobalSettingsConstants.NUMBER_OF_YEARS_IN_RANGE);
 
-        List<String> years = Stream.iterate(rangeStartYear, i -> i + 1)
-                .limit(rangeNumber).map(i -> i.toString())
+        return Stream.iterate(rangeStartYear, i -> i + 1)
+                .limit(rangeNumber).map(Object::toString)
                 .collect(Collectors.toList());
-
-        return years;
     }
 
     public static boolean isFiscalYearInRange(int year) {
@@ -1435,7 +1424,7 @@ public class ActivityUtil {
      * @param item
      */
     public static Long calculateFundingDetailCheckSum(FundingInformationItem item) {
-        Long checkSum = 0L;
+        long checkSum = 0L;
         checkSum += checkSum + (item.getTransactionAmount() != null ? item.getTransactionAmount().hashCode() : 0L);
         checkSum += checkSum
                 + (item.getAbsoluteTransactionAmount() != null ? item.getAbsoluteTransactionAmount().hashCode() : 0L);

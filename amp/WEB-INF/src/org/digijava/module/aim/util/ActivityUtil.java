@@ -761,23 +761,18 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                 
                 List<AmpFunding> organizations = new ArrayList<>(actItem.getFunding());
                 if (organizations != null && organizations.size() > 1) {
-                    Collections.sort(organizations, new Comparator<AmpFunding>() {
-                        public int compare(AmpFunding o1, AmpFunding o2) {
-                            return o1.getAmpDonorOrgId().getName().compareTo(o2.getAmpDonorOrgId().getName());
-                        }
-                    });
+                    organizations.sort(Comparator.comparing(o -> o.getAmpDonorOrgId().getName()));
                 }
 
-                for (Object fndObj : organizations) {
-                    AmpFunding fnd = (AmpFunding) fndObj;
-                    donorNames.append(fnd.getAmpDonorOrgId().getName());
+                for (AmpFunding fndObj : organizations) {
+                    donorNames.append(fndObj.getAmpDonorOrgId().getName());
                     donorNames.append(",");
                 }
                 donorNameActivityMap.put(donorNames.toString(), actItem);
 
             } else {
                 if (noFundingActivities == null) {
-                    noFundingActivities = new ArrayList <AmpActivityVersion> ();
+                    noFundingActivities = new ArrayList<>();
                 }
                 noFundingActivities.add(actItem);
             }
@@ -809,7 +804,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
     
       String queryString = "select con from " + IPAContract.class.getName()
           + " con " + "where (con.activity=:activityId)";
-      Query qry = PersistenceManager.getSession().createQuery(queryString).setLong("activityId",activityId );
+      Query qry = PersistenceManager.getSession().createQuery(queryString).setParameter("activityId",activityId, LongType.INSTANCE );
       List<IPAContract> contrcats = qry.list();
       String cc = "";
       for(IPAContract c:contrcats){
@@ -818,11 +813,11 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
           for(IPAContractDisbursement cd:c.getDisbursements())
           {
               if (cd.getAmount() != null)
-                  td += cd.getAmount().doubleValue();
+                  td += cd.getAmount();
           }
           if(c.getDibusrsementsGlobalCurrency()!=null)
                cc=c.getDibusrsementsGlobalCurrency().getCurrencyCode();
-          c.setTotalDisbursements(new Double(td));
+          c.setTotalDisbursements(td);
           c.setExecutionRate(ActivityUtil.computeExecutionRateFromTotalAmount(c, c.getTotalAmountCurrency().getCurrencyCode()));
           c.setFundingTotalDisbursements(ActivityUtil.computeFundingDisbursementIPA(c, cc));
           c.setFundingExecutionRate(ActivityUtil.computeExecutionRateFromContractTotalValue(c, cc));  

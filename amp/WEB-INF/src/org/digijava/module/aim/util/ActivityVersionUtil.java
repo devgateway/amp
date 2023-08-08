@@ -222,9 +222,8 @@ public class ActivityVersionUtil {
         Class clazz = AmpActivityFields.class;
         
         Field[] fields = clazz.getDeclaredFields();//clazz.getFields();
-        for (int i = 0; i < fields.length; i++) {
-            Field field = fields[i];
-            if (Collection.class.isAssignableFrom(field.getType())){
+        for (Field field : fields) {
+            if (Collection.class.isAssignableFrom(field.getType())) {
                 logger.debug("Init set: " + field.getName());
                 initSet(out, field);
             }

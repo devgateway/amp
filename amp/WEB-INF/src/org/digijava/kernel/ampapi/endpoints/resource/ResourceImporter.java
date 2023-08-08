@@ -154,9 +154,7 @@ public class ResourceImporter extends ObjectImporter<AmpResource> {
             }
         } catch (RuntimeException e) {
             // FIXME is any other RuntimeException simply ignored?
-            if (e instanceof RuntimeException) {
-                throw new RuntimeException("Failed to create resource", e);
-            }
+            throw new RuntimeException("Failed to create resource", e);
         }
 
         return this;

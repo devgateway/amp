@@ -6,8 +6,8 @@ import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.metamodel.internal.MetamodelImpl;
 import org.hibernate.persister.entity.AbstractEntityPersister;
-import org.hibernate.persister.entity.EntityPersister;
-import org.hibernate.persister.entity.SingleTableEntityPersister;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityManager;
 import java.lang.reflect.Field;
@@ -15,23 +15,23 @@ import java.util.*;
 
 /**
  * class holding the description of the i18n fields from a Hibernate model (identified by class name)
- * the constructor scans the Hibernate configuration and reflects on the class name 
- * @author Dolghier Constantin
+ * the constructor scans the Hibernate configuration and reflects on the class name
  *
+ * @author Dolghier Constantin
  */
 public class InternationalizedModelDescription {
+    private static final Logger logger = LoggerFactory.getLogger(InternationalizedModelDescription.class);
 
     public final String className;
-    
+
     public final HashMap<String, InternationalizedPropertyDescription> properties = new HashMap<String, InternationalizedPropertyDescription>();
-    
-    private InternationalizedModelDescription(Class<?> modelClass)
-    {
+
+    private InternationalizedModelDescription(Class<?> modelClass) {
         this.className = modelClass.getName();
         scanClass(modelClass);
     }
 
-//  public static java.sql.Connection connection = initConnection();
+    //  public static java.sql.Connection connection = initConnection();
 //  
 //  private static java.sql.Connection initConnection()
 //  {
@@ -44,21 +44,26 @@ public class InternationalizedModelDescription {
 //          throw new RuntimeException("Could not get RAW JDBC Connection", e);
 //      }
 //  }
-public static EntityPersister getPersister(final Class<?> modelClazz) {
-    EntityManager entityManager=  PersistenceManager.getRequestDBSession().getEntityManagerFactory().createEntityManager();
-    final MetamodelImpl metamodel = (MetamodelImpl) entityManager.getMetamodel();
-    final EntityPersister entityPersister = metamodel.entityPersister(modelClazz);
-    if (entityPersister instanceof SingleTableEntityPersister) {
-        return entityPersister;
-    } else {
-        throw new IllegalArgumentException(modelClazz + " does not map to a single table.");
+    public static AbstractEntityPersister getPersister(final Class<?> modelClazz) {
+        EntityManager entityManager = PersistenceManager.getRequestDBSession().getEntityManagerFactory().createEntityManager();
+        final MetamodelImpl metamodel = (MetamodelImpl) entityManager.getMetamodel();
+        return (AbstractEntityPersister) metamodel.entityPersister(modelClazz);
     }
-}
 
-    public String getColumnNameByPropertyName(String propertyName,  Class<?> modelClazz) {
+    public static boolean isEntity(final Class<?> modelClazz) {
+        try {
+            getPersister(modelClazz);
+            return true;
+        } catch (Exception e) {
+            logger.error("Seems this is not an entity: " + modelClazz, e);
+            return false;
+        }
+    }
+
+    public String getColumnNameByPropertyName(String propertyName, Class<?> modelClazz) {
         int propertyIndex = getPersister(modelClazz).getEntityMetamodel().getPropertyIndex(propertyName);
         if (propertyIndex != -1) {
-            String[] columnNames = ((SingleTableEntityPersister)getPersister(modelClazz)).getPropertyColumnNames(propertyIndex);
+            String[] columnNames = getPersister(modelClazz).getPropertyColumnNames(propertyIndex);
             // In a single table inheritance strategy, typically there will be only one column name per property
             if (columnNames.length > 0) {
                 return columnNames[0];
@@ -70,27 +75,25 @@ public static EntityPersister getPersister(final Class<?> modelClazz) {
         }
     }
 
-    protected void scanClass(Class<?> modelClass)
-    {
+    protected void scanClass(Class<?> modelClass) {
         //System.out.println("IMD: scanning class " + modelClass);
-        
+
         if (modelClass.getAnnotation(TranslatableClass.class) == null)
             throw new RuntimeException("asked to scan class " + modelClass + ", which is translatable");
-            
-        String keyColumnName = Arrays.stream(((AbstractEntityPersister)getPersister(modelClass)).getKeyColumnNames()).iterator().next();
-        String modelTableName = ((AbstractEntityPersister)getPersister(modelClass)).getTableName();
+
+        String keyColumnName = Arrays.stream(((AbstractEntityPersister) getPersister(modelClass)).getKeyColumnNames()).iterator().next();
+        String modelTableName = ((AbstractEntityPersister) getPersister(modelClass)).getTableName();
         Set<String> existingColumns = SQLUtils.getTableColumns(modelTableName);
         boolean idColumnExists = existingColumns.contains(keyColumnName);
-                
+
         if (!idColumnExists)
             throw new RuntimeException(String.format("could not scan model %s: key column %s does not exist in table %s", modelClass, keyColumnName, modelTableName));
-        
+
         ArrayList<Field> fields = new ArrayList<Field>();
         ContentTranslationUtil.getAllFields(fields, modelClass); // getting into _fields_ the list of all the fields of the class
-                
-        for(Field field:fields)
-        {
-            if (field.getAnnotation(TranslatableField.class) != null){
+
+        for (Field field : fields) {
+            if (field.getAnnotation(TranslatableField.class) != null) {
 
                 // field is translated, make an entry for it
                 if (!field.getType().getName().equals("java.lang.String"))
@@ -105,17 +108,15 @@ public static EntityPersister getPersister(final Class<?> modelClazz) {
             }
         }
     }
-    
+
     /**
      * global repository for models - used for caching the results of scanning a class
      */
     private final static Map<String, InternationalizedModelDescription> globalRepository = Collections.synchronizedMap(new HashMap<String, InternationalizedModelDescription>());
     private final static Object imdLock = new Object();
-    
-    public static InternationalizedModelDescription getForClass(Class<?> clazz)
-    {
-        synchronized(imdLock)
-        {
+
+    public static InternationalizedModelDescription getForClass(Class<?> clazz) {
+        synchronized (imdLock) {
             String className = clazz.getName();
             if (!globalRepository.containsKey(className))
                 globalRepository.put(className, new InternationalizedModelDescription(clazz));
@@ -123,8 +124,7 @@ public static EntityPersister getPersister(final Class<?> modelClazz) {
         }
     }
 
-    public static InternationalizedPropertyDescription getForProperty(Class<?> clazz, String propertyName)
-    {
+    public static InternationalizedPropertyDescription getForProperty(Class<?> clazz, String propertyName) {
         return getForClass(clazz).properties.get(propertyName);
     }
 }

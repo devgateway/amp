@@ -63,7 +63,7 @@ public class AmpFieldInfoProvider implements FieldInfoProvider {
     private void initializeDeclaringClassOfFieldIfNeeded(Field field) {
         synchronized (lock) {
             Class clazz = getActualFieldClass(field);
-            if (classFieldInfo.get(clazz) == null) {
+            if (classFieldInfo.get(clazz) == null && InternationalizedModelDescription.isEntity(clazz)) {
                 initializeFields(clazz);
             }
         }
@@ -87,27 +87,25 @@ public class AmpFieldInfoProvider implements FieldInfoProvider {
 //            return;
 //        }
         try {
-            EntityPersister entityPersister = InternationalizedModelDescription.getPersister(clazz);
+            AbstractEntityPersister entityPersister = InternationalizedModelDescription.getPersister(clazz);
 
 //        AbstractEntityPersister entityPersister = (AbstractEntityPersister) meta;
-            final String tableName =((AbstractEntityPersister)entityPersister).getTableName();
-            PersistenceManager.getSession().doWork(new Work() {
-                public void execute(Connection conn) throws SQLException {
-                    String allSectorsQuery = "SELECT column_name, data_type, character_maximum_length "
-                            + "FROM INFORMATION_SCHEMA.COLUMNS WHERE character_maximum_length IS NOT NULL "
-                            + "AND table_name = '" + tableName + "'";
-                    try (RsInfo rsi = SQLUtils.rawRunQuery(conn, allSectorsQuery, null)) {
-                        ResultSet rs = rsi.rs;
-                        while (rs.next()) {
-                            dbTypes.put(rs.getString("column_name"), rs.getString("data_type"));
-                            maxLengths.put(rs.getString("column_name"), rs.getInt("character_maximum_length"));
-                        }
-                        rs.close();
+            final String tableName = entityPersister.getTableName();
+            PersistenceManager.getSession().doWork(conn -> {
+                String allSectorsQuery = "SELECT column_name, data_type, character_maximum_length "
+                        + "FROM INFORMATION_SCHEMA.COLUMNS WHERE character_maximum_length IS NOT NULL "
+                        + "AND table_name = '" + tableName + "'";
+                try (RsInfo rsi = SQLUtils.rawRunQuery(conn, allSectorsQuery, null)) {
+                    ResultSet rs = rsi.rs;
+                    while (rs.next()) {
+                        dbTypes.put(rs.getString("column_name"), rs.getString("data_type"));
+                        maxLengths.put(rs.getString("column_name"), rs.getInt("character_maximum_length"));
                     }
+                    rs.close();
                 }
             });
 
-            String[] identityNames = ((AbstractEntityPersister)entityPersister).getIdentifierColumnNames();
+            String[] identityNames = entityPersister.getIdentifierColumnNames();
             if (identityNames.length > 0) {
                 String fieldName = entityPersister.getIdentifierPropertyName();
                 Field field = FieldUtils.getField(clazz, fieldName, true);
@@ -120,7 +118,7 @@ public class AmpFieldInfoProvider implements FieldInfoProvider {
 
             String[] propertyNames = entityPersister.getPropertyNames();
             for (int i = 0; i < propertyNames.length; i++) {
-                String[] columnNames = ((AbstractEntityPersister)entityPersister).getPropertyColumnNames(i);
+                String[] columnNames = entityPersister.getPropertyColumnNames(i);
                 if (columnNames.length > 0) {
                     String fieldName = propertyNames[i];
                     Field field = FieldUtils.getField(clazz, fieldName, true);

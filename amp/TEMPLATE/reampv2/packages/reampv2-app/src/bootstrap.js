@@ -7,14 +7,8 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 // amp-filter css
 import '@tmugo/amp-filter/dist/amp-filter.css';
+import reportWebVitals from "ampoffiline/src/reportWebVitals";
 const boilerplate = require('@tmugo/amp-boilerplate/dist/amp-boilerplate');
-
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
 
 function getParameterByName(name, url = window.location.href) {
   name = name.replace(/[[\]]/g, '\\$&');
@@ -33,3 +27,20 @@ if (!getParameterByName('embedded')) {
 }
 
 serviceWorker.unregister();
+
+const Root = () => (
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+);
+
+export const mount = (el) => {
+  if (el) {
+    ReactDOM.render(<Root />, el);
+  }
+
+  // If you want to start measuring performance in your app, pass a function
+  // to log results (for example: reportWebVitals(console.log))
+  // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+  reportWebVitals();
+}

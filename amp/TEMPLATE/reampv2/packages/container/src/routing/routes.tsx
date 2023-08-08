@@ -3,6 +3,7 @@ import  { RouteObject } from 'react-router-dom';
 import NotFound from "../components/layouts/NotFound";
 
 const AmpOfflineLazy = React.lazy(() => import('../components/AmpOffline'));
+const Reampv2Lazy = React.lazy(() => import('../components/Reampv2'));
 
 export const routes: RouteObject[] = [
     {
@@ -22,7 +23,9 @@ export const routes: RouteObject[] = [
     {
         path: 'reampv2-app',
         element: (
-            <div>reampv2-app</div>
+            <Suspense fallback={<div className="loading"/>}>
+                <Reampv2Lazy/>
+            </Suspense>
         )
     },
     {

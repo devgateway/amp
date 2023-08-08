@@ -71,7 +71,7 @@
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpFundingDetail" />
 		</set>
 
-		<many-to-one cascade="all-delete-orphan" name="ampActivityId" column="amp_activity_id" class="org.digijava.module.aim.dbentity.AmpActivityVersion" index="idx_amp_funding_amp_activity_id" />
+		<many-to-one cascade="all" name="ampActivityId" column="amp_activity_id" class="org.digijava.module.aim.dbentity.AmpActivityVersion" index="idx_amp_funding_amp_activity_id" />
 			
 		<many-to-one name="typeOfAssistance" column="type_of_assistance_category_va"
 			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />

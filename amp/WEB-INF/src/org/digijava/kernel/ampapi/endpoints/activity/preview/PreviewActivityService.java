@@ -286,11 +286,13 @@ public final class PreviewActivityService {
         Long actualCategoryValueId = CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getIdInDatabase();
 
         Double totalActualCommitments = transactions.getOrDefault(ArConstants.COMMITMENT.toLowerCase(),
-                        Collections.emptyList()).stream().filter(t -> t.getAdjustmentType().equals(actualCategoryValueId)).
+                        Collections.emptyList()).stream().filter(t ->
+                        t.getAdjustmentType().equals(actualCategoryValueId)).
                 collect(Collectors.summingDouble(PreviewFundingTransaction::getTransactionAmount));
 
         Double totalActualDisbursements = transactions.getOrDefault(ArConstants.DISBURSEMENT.toLowerCase(),
-                        Collections.emptyList()).stream().filter(t -> t.getAdjustmentType().equals(actualCategoryValueId)).
+                        Collections.emptyList()).stream().filter(t ->
+                        t.getAdjustmentType().equals(actualCategoryValueId)).
                 collect(Collectors.summingDouble(PreviewFundingTransaction::getTransactionAmount));
 
         return totalActualCommitments != 0 || totalActualDisbursements != 0

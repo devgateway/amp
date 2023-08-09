@@ -1,13 +1,9 @@
 package org.digijava.module.aim.dbentity;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
 import org.hibernate.HibernateException;
-import org.hibernate.engine.spi.SessionImplementor;
-import org.hibernate.internal.util.ReflectHelper;
-import org.hibernate.property.access.spi.Getter;
-import org.hibernate.property.access.spi.GetterMethodImpl;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.type.EnumType;
+import org.hibernate.usertype.ParameterizedType;
 
 import java.lang.reflect.Method;
 import java.sql.PreparedStatement;
@@ -16,52 +12,63 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.Properties;
 
-/**
- * @author Octavian Ciubotaru
- */
-public class NamedEnumType extends EnumType {
+public class NamedEnumType extends EnumType implements ParameterizedType {
 
-    private BiMap<Enum, String> values = HashBiMap.create();
+    private Class<? extends Enum> enumClass;
+    private Method getter;
+    private Method inverseGetter;
 
     @Override
     public void setParameterValues(Properties parameters) {
-        parameters.setProperty(NAMED, "true");
-
-        String valueProperty = parameters.getProperty("valueProperty");
+        super.setParameterValues(parameters);
 
         String enumClassName = parameters.getProperty(ENUM);
-        Class<? extends Enum> enumClass;
-        try {
-            enumClass = ReflectHelper.classForName(enumClassName, this.getClass()).asSubclass(Enum.class);
-        } catch (ClassNotFoundException e) {
-            throw new HibernateException("Enum class not found", e);
-        }
-        Method getterMethod = ReflectHelper.findGetterMethod(enumClass, valueProperty);
-        Getter getter = new GetterMethodImpl(enumClass, valueProperty, getterMethod);
+        String valueProperty = parameters.getProperty("valueProperty");
 
-        for (Enum enumConstant : enumClass.getEnumConstants()) {
-            values.put(enumConstant, (String) getter.get(enumConstant));
+        try {
+            enumClass = Class.forName(enumClassName).asSubclass(Enum.class);
+            getter = enumClass.getMethod(valueProperty);
+            inverseGetter = enumClass.getMethod("valueOf", String.class);
+        } catch (ClassNotFoundException | NoSuchMethodException e) {
+            throw new HibernateException("Enum class or getter not found", e);
         }
-        super.setParameterValues(parameters);
     }
 
-    public Object nullSafeGet(ResultSet rs, String[] names, SessionImplementor session,
-                              Object owner) throws SQLException {
+    @Override
+    public Object nullSafeGet(
+            ResultSet rs,
+            String[] names,
+            SharedSessionContractImplementor session,
+            Object owner
+    ) throws SQLException {
         String value = rs.getString(names[0]);
         if (rs.wasNull() || value == null) {
             return null;
         } else {
-            return values.inverse().get(value);
+            try {
+                return inverseGetter.invoke(enumClass, value);
+            } catch (Exception e) {
+                throw new HibernateException("Error invoking inverse getter", e);
+            }
         }
     }
 
-    public void nullSafeSet(PreparedStatement st, Object value, int index,
-                            SessionImplementor session) throws HibernateException, SQLException {
-        String jdbcValue = value != null ? values.get((Enum) value) : null;
-        if (jdbcValue == null) {
+    @Override
+    public void nullSafeSet(
+            PreparedStatement st,
+            Object value,
+            int index,
+            SharedSessionContractImplementor session
+    ) throws HibernateException, SQLException {
+        if (value == null) {
             st.setNull(index, Types.VARCHAR);
         } else {
-            st.setString(index, jdbcValue);
+            try {
+                String jdbcValue = (String) getter.invoke(value);
+                st.setString(index, jdbcValue);
+            } catch (Exception e) {
+                throw new HibernateException("Error invoking getter", e);
+            }
         }
     }
 }

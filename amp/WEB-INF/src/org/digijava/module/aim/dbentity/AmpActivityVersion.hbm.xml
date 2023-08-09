@@ -108,10 +108,10 @@
 			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="all" />
 
 		<property name="approvalStatus" column="approval_status">
-		    <type name="org.hibernate.type.EnumType">
+		    <type name="org.digijava.module.aim.dbentity.NamedEnumType">
         		<param name="enumClass">org.digijava.module.aim.dbentity.ApprovalStatus</param>
+        		<param name="valueProperty">dbName</param>
         		<param name="type">12</param>
-<!--        		<param name="valueProperty">dbName</param>-->
         	</type>
 		</property>
 

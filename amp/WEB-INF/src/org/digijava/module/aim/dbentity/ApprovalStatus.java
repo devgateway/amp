@@ -24,8 +24,8 @@ public enum ApprovalStatus implements Identifiable {
     not_approved("not_approved", 5),
     rejected("rejected", 6);
 
-    private String dbName;
-    private Integer id;
+    private final String dbName;
+    private final Integer id;
 
     ApprovalStatus(String dbName, Integer id) {
         this.dbName = dbName;

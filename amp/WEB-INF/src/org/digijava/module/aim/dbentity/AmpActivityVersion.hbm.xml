@@ -111,7 +111,6 @@
 		    <type name="org.digijava.module.aim.dbentity.NamedEnumType">
         		<param name="enumClass">org.digijava.module.aim.dbentity.ApprovalStatus</param>
         		<param name="valueProperty">dbName</param>
-        		<param name="type">12</param>
         	</type>
 		</property>
 
@@ -305,6 +304,7 @@
 			<key column="amp_activity_last_version_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityGroup" />
 		</set>
+
 		
 		&activityFields;
 	</class>

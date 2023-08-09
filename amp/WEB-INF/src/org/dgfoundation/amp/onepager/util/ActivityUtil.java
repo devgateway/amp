@@ -474,6 +474,7 @@ public class ActivityUtil {
     private static void setActivityStatus(AmpTeamMember ampCurrentMember, boolean savedAsDraft, AmpActivityFields a,
             AmpActivityVersion oldA, boolean newActivity, boolean rejected) {
         boolean teamLeadFlag =  isApprover(ampCurrentMember);
+        System.out.println("Teamleadd? "+teamLeadFlag);
         Boolean crossTeamValidation = ampCurrentMember.getAmpTeam().getCrossteamvalidation();
         boolean isSameWorkspace = ampCurrentMember.getAmpTeam().getAmpTeamId().equals(a.getTeam().getAmpTeamId());
 
@@ -563,6 +564,8 @@ public class ActivityUtil {
             a.setApprovedBy(ampCurrentMember);
             a.setApprovalDate(Calendar.getInstance().getTime());
         }
+        System.out.println("Approval;");
+        System.out.println(a.getApprovalStatus());
     }
 
     /**
@@ -638,6 +641,7 @@ public class ActivityUtil {
     }
 
     private static boolean isProjectValidationOn(String validation) {
+        System.out.println("Validation: "+validation);
         return !Constants.PROJECT_VALIDATION_OFF.equalsIgnoreCase(validation);
     }
 

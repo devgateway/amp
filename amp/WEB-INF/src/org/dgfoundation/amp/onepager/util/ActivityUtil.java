@@ -112,10 +112,10 @@ public class ActivityUtil {
     public static AmpActivityVersion saveActivity(AmpActivityVersion oldA, Collection<AmpContentTranslation> values, AmpTeamMember ampCurrentMember, Site site, Locale locale, String rootRealPath, boolean draft, SaveContext saveContext) {
         Session session;
         EditorStore editorStore;
-        System.out.println(saveContext.getSource());
-        System.out.println(saveContext.isPrepareToSave());
-        System.out.println(saveContext.isRejected());
-        System.out.println(saveContext.isUpdateActivityStatus());
+        logger.info(saveContext.getSource());
+        logger.info(saveContext.isPrepareToSave());
+        logger.info(saveContext.isRejected());
+        logger.info(saveContext.isUpdateActivityStatus());
         if (saveContext.getSource() == ActivitySource.ACTIVITY_FORM) {
             session = AmpActivityModel.getHibernateSession();
 
@@ -474,7 +474,7 @@ public class ActivityUtil {
     private static void setActivityStatus(AmpTeamMember ampCurrentMember, boolean savedAsDraft, AmpActivityFields a,
             AmpActivityVersion oldA, boolean newActivity, boolean rejected) {
         boolean teamLeadFlag =  isApprover(ampCurrentMember);
-        System.out.println("Teamleadd? "+teamLeadFlag);
+        logger.info("Teamleadd? "+teamLeadFlag);
         Boolean crossTeamValidation = ampCurrentMember.getAmpTeam().getCrossteamvalidation();
         boolean isSameWorkspace = ampCurrentMember.getAmpTeam().getAmpTeamId().equals(a.getTeam().getAmpTeamId());
 
@@ -564,8 +564,8 @@ public class ActivityUtil {
             a.setApprovedBy(ampCurrentMember);
             a.setApprovalDate(Calendar.getInstance().getTime());
         }
-        System.out.println("Approval;");
-        System.out.println(a.getApprovalStatus());
+        logger.info("Approval;");
+        logger.info(a.getApprovalStatus());
     }
 
     /**
@@ -641,7 +641,7 @@ public class ActivityUtil {
     }
 
     private static boolean isProjectValidationOn(String validation) {
-        System.out.println("Validation: "+validation);
+        logger.info("Validation: "+validation);
         return !Constants.PROJECT_VALIDATION_OFF.equalsIgnoreCase(validation);
     }
 

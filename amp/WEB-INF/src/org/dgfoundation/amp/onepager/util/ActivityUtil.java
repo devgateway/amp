@@ -230,6 +230,7 @@ public class ActivityUtil {
         if (context.isPrepareToSave()) {
             prepareToSave(a, oldA, ampCurrentMember, draft, context);
         }
+        logger.info("Status after prepare :"+a.getApprovalStatus());
 
         if (a.getAmpActivityGroup() == null){
             //we need to create a group for this activity
@@ -244,7 +245,7 @@ public class ActivityUtil {
         setCreationTimeOnStructureImages(a);
 
         AmpActivityGroup group = a.getAmpActivityGroup();
-        if (group == null){
+        if (group.getAmpActivityGroupId() == null){
             throw new RuntimeException("Non-existent group should have been added by now!");
         }
 
@@ -277,6 +278,7 @@ public class ActivityUtil {
         saveProjectCosts(a, session);
         saveStructures(a, session);
 
+        logger.info("Status towards save :"+a.getApprovalStatus());
 
         if (createNewVersion){
             session.save(a);
@@ -886,7 +888,7 @@ public class ActivityUtil {
         AmpAuthWebSession s = (AmpAuthWebSession) org.apache.wicket.Session.get();
 
         if (a.getActivityDocuments() == null) {
-            a.setActivityDocuments(new HashSet<AmpActivityDocument>());
+            a.setActivityDocuments(new HashSet<>());
         }
 
         HashSet<TemporaryActivityDocument> newResources = s.getMetaData(OnePagerConst.RESOURCES_NEW_ITEMS);

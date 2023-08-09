@@ -11,7 +11,8 @@ const override = config => {
         name: 'reampv2App',
         filename: 'remoteEntry.js',
         exposes: {
-            './Reampv2App': './src/bootstrap'
+            './Reampv2App': './src/bootstrap',
+            './routes': './src/App.route',
         },
         shared: {
             ...packageJson.dependencies,

@@ -4,7 +4,10 @@ import('./bootstrap').then(({ mount }) => {
     const appRoot = document.getElementById(DIV_ROOT_ID);
 
     if (appRoot) {
-        mount(appRoot);
+        console.log('Mounting app')
+        mount({
+            el: appRoot,
+        });
     }
 });
 

@@ -8,6 +8,7 @@ import * as serviceWorker from './serviceWorker';
 // amp-filter css
 import '@tmugo/amp-filter/dist/amp-filter.css';
 import reportWebVitals from "ampoffiline/src/reportWebVitals";
+
 // const boilerplate = require('@tmugo/amp-boilerplate/dist/amp-boilerplate');
 //
 // function getParameterByName(name, url = window.location.href) {
@@ -27,14 +28,14 @@ import reportWebVitals from "ampoffiline/src/reportWebVitals";
 // }
 
 serviceWorker.unregister();
-
+console.log('reampv2 app bootstrap');
 const Root = () => (
     <React.StrictMode>
       <App />
     </React.StrictMode>
 );
 
-export const mount = (el) => {
+export const mount = ({ el  }) => {
   if (el) {
     ReactDOM.render(<Root />, el);
   }

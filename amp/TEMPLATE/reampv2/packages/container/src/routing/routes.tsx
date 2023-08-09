@@ -7,24 +7,18 @@ const Reampv2Lazy = React.lazy(() => import('../components/Reampv2'));
 
 export const routes: RouteObject[] = [
     {
-        path: '/',
+        path: '/reampv2-app',
         element: (
-            <div>reampv2</div>
-        ),
+            <Suspense fallback={<div className="loading"/>}>
+                <Reampv2Lazy/>
+            </Suspense>
+        )
     },
     {
         path: 'ampoffline',
         element: (
             <Suspense fallback={<div className="loading"/>}>
                 <AmpOfflineLazy/>
-            </Suspense>
-        )
-    },
-    {
-        path: '/reampv2-app/*',
-        element: (
-            <Suspense fallback={<div className="loading"/>}>
-                <Reampv2Lazy/>
             </Suspense>
         )
     },

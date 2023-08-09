@@ -9,23 +9,25 @@ const Reampv2 = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
+    console.log("location", location);
+
     useEffect(() => {
-        const app1NavigationEventHandler = (event: any) => {
+        const reampv2EventHandler = (event: any) => {
             const pathname = event.detail;
-            const newPathname = `${reampv2Basename}`;
+            const newPathname = `${reampv2Basename}${pathname}`;
 
             console.log("new pathname", newPathname);
-            if (newPathname === location.pathname) {
+            if (newPathname === location.hash) {
                 return;
             }
             navigate(newPathname);
         };
-        window.addEventListener("[reampv2] navigated", app1NavigationEventHandler);
+        window.addEventListener("[reampv2] navigated", reampv2EventHandler);
 
         return () => {
             window.removeEventListener(
                 "[reampv2] navigated",
-                app1NavigationEventHandler
+                reampv2EventHandler
             );
         };
 
@@ -35,9 +37,10 @@ const Reampv2 = () => {
     // Listen for shell location changes and dispatch a notification.
     useEffect(() => {
         if (location.pathname.startsWith(reampv2Basename)) {
+            console.log("dispatching event");
             window.dispatchEvent(
                 new CustomEvent("[container] navigated", {
-                    detail: location.pathname.replace(reampv2Basename, ""),
+                    detail: location.hash,
                 })
             );
         }
@@ -52,7 +55,9 @@ const Reampv2 = () => {
             return;
         }
 
-        unmountRef.current = mount(ref.current);
+        unmountRef.current = mount({
+            el: ref.current,
+        });
         isFirstRunRef.current = false;
     }, [location]);
 

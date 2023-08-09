@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import AppRoute from './App.route';
+import NavigationManager from "./NavigationManager";
 
 class App extends Component {
   componentDidMount() {
@@ -12,7 +13,9 @@ class App extends Component {
 
   render() {
     return (
-      <AppRoute />
+        <NavigationManager>
+          <AppRoute />
+        </NavigationManager>
     );
   }
 }

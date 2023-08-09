@@ -216,7 +216,6 @@ public class ActivityUtil {
                 }
                 a.setAmpActivityGroup(tmpGroup);
                 a.setMember(new HashSet<>());
-//                a.setAmpActivityId(null);
                 if (oldA.getAmpActivityId() != null)
                     session.evict(oldA);
             } catch (CloneNotSupportedException e) {

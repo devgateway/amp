@@ -198,6 +198,7 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
         } catch (Throwable e) {
             // error is not always logged at source; better duplicate it than have none
             logger.error("Import failed", e);
+            e.printStackTrace();
             if (e instanceof ActivityLockNotGrantedException) {
                 logger.error("Cannot acquire lock during IATI update for activity " + activityId);
                 Long userId = ((ActivityLockNotGrantedException) e).getUserId();

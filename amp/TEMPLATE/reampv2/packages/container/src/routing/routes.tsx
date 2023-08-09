@@ -21,7 +21,7 @@ export const routes: RouteObject[] = [
         )
     },
     {
-        path: 'reampv2-app',
+        path: '/reampv2-app/*',
         element: (
             <Suspense fallback={<div className="loading"/>}>
                 <Reampv2Lazy/>

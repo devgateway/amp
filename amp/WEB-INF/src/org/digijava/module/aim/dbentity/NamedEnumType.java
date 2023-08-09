@@ -37,7 +37,7 @@ public class NamedEnumType extends EnumType {
         String enumClassName = parameters.getProperty(ENUM);
         Class<? extends Enum> enumClass;
         try {
-            enumClass = ReflectHelper.classForName(enumClassName, this.getClass()).asSubclass(Enum.class);
+            enumClass = ReflectHelper.classForName(enumClassName, this.getClass());
         } catch (ClassNotFoundException e) {
             throw new HibernateException("Enum class not found", e);
         }
@@ -49,7 +49,6 @@ public class NamedEnumType extends EnumType {
             values.put(enumConstant, (String) getter.get(enumConstant));
         }
         parameters.put(EnumType.ENUM, enumClass.getName());
-        this.setParameterValues(parameters);
         super.setParameterValues(parameters);
     }
 

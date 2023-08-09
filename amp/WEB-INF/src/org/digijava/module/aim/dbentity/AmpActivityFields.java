@@ -485,7 +485,7 @@ LoggerIdentifiable, Cloneable {
                             fmPath = "/Activity Form/Funding/Overview Section/Revised Project Cost")
             })
     @VersionableCollection(fieldTitle = "Project Costs")
-    private Set<AmpFundingAmount> costAmounts = new HashSet<>();
+    protected Set<AmpFundingAmount> costAmounts = new HashSet<>();
     
     /**
      * 
@@ -678,7 +678,7 @@ LoggerIdentifiable, Cloneable {
     @Interchangeable(fieldTitle = ActivityFieldsConstants.APPROVAL_STATUS, pickIdOnly = true, importable = true)
     @PossibleValues(ApprovalStatusPossibleValuesProvider.class)
     @VersionableFieldSimple(fieldTitle = "Approval Status", blockSingleChange = true)
-    private ApprovalStatus approvalStatus;
+    protected ApprovalStatus approvalStatus;
 
     // Aid Harmonization Survey Set
     // @Interchangeable(fieldTitle = "Surveys",fmPath="/Activity Form/Paris Indicators")

@@ -107,6 +107,7 @@ public class AmpActivityVersion extends AmpActivityFields implements Versionable
     public String toString() {
         return "AmpActivityVersion{" +
                 "rejectMessage='" + rejectMessage + '\'' +
+                "approvalStatus='" + approvalStatus + '\'' +
                 ", groups=" + groups +
                 ", projectImpact='" + projectImpact + '\'' +
                 ", activitySummary='" + activitySummary + '\'' +

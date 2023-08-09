@@ -8,6 +8,7 @@ import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.util.Output;
 
 import java.util.Date;
+import java.util.Set;
 
 /**
  * @author aartimon@dginternational.org
@@ -23,7 +24,16 @@ public class AmpActivityVersion extends AmpActivityFields implements Versionable
      *    
      */
     protected String rejectMessage;
-    
+    private Set<AmpActivityGroup> groups;
+
+    public Set<AmpActivityGroup> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(Set<AmpActivityGroup> groups) {
+        this.groups = groups;
+    }
+
 
     public AmpActivityVersion() {
     }

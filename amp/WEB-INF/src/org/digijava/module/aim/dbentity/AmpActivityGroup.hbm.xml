@@ -24,11 +24,13 @@
 		<many-to-one name="ampActivityLastVersion" column="amp_activity_last_version_id" class="org.digijava.module.aim.dbentity.AmpActivityVersion" 
 		cascade="all" index="idx_amp_activity_group_last_activity_id" not-null="false" />
 
-		<set name="activities" inverse="true" lazy="true" cascade="all-delete-orphan">
+		<set name="activities" inverse="true" lazy="true" cascade="all-delete-orphan" >
 			<cache usage="read-write" />
 			<key column="amp_activity_group_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityVersion" />
 		</set>
+
+
 		
 	</class>
 

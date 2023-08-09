@@ -211,7 +211,7 @@ public class ActivityUtil {
                     tmpGroup = new AmpActivityGroup();
                     tmpGroup.setAmpActivityLastVersion(a);
 
-                    session.save(tmpGroup);
+                    tmpGroup= (AmpActivityGroup) session.save(tmpGroup);
                 }
 
                 a.setAmpActivityGroup(tmpGroup);
@@ -232,8 +232,9 @@ public class ActivityUtil {
             //we need to create a group for this activity
             AmpActivityGroup tmpGroup = new AmpActivityGroup();
             tmpGroup.setAmpActivityLastVersion(a);
+            tmpGroup= (AmpActivityGroup) session.save(tmpGroup);
             a.setAmpActivityGroup(tmpGroup);
-            session.save(tmpGroup);
+
         }
 
         setCreationTimeOnStructureImages(a);

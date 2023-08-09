@@ -145,7 +145,7 @@ public class PledgesFormTests extends ReportsTestCase {
     {
         FundingPledges pledge = PledgesEntityHelper.getPledgesById(3L);
         assertTrue(PledgesEntityHelper.getPledges().size() > 0); // more like a check on non-crashing
-        assertTrue(PledgesEntityHelper.getFundingRelatedToPledges(pledge).size() == 0);
+        assertEquals(0, PledgesEntityHelper.getFundingRelatedToPledges(pledge).size());
         assertEquals(1, PledgesEntityHelper.getPledgesByDonorGroup(18L).size());
         assertEquals("Test pledge 1", PledgesEntityHelper.getPledgesByDonorGroup(18L).get(0).getTitleFreeText());
         assertEquals(0, PledgesEntityHelper.getPledgesByDonor(21696L).size());

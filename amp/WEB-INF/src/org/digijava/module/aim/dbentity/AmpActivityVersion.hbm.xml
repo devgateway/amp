@@ -13,7 +13,7 @@
 		<property name="budget" column="budget" type="java.lang.Integer" />
 
 		<property name="iatiIdentifier" column="iati_identifier" type="java.lang.String" />
-		
+
 		<property name="description" column="description" type="text"  index="amp_activity_version_description_idx" />
 		<property name="lessonsLearned" column="lessons_learned" type="text"  index="amp_activity_version_lessons_learned_idx" />
 		<property name="statusOtherInfo" column="status_other_info" type="text" />
@@ -24,10 +24,10 @@
 		<property name="purpose" column="purpose" type="text" index="amp_activity_version_purpose_idx" />
 
 		<property name="projectComments" column="projectComments" type="text" index="amp_activity_version_project_comments_idx" />
-		
+
 		<property name="projectImpact" column="project_impact" type="text" index="amp_activity_version_project_impact_idx" />
 		<property name="activitySummary" column="activity_summary" type="text" index="amp_activity_version_activity_summary_idx" />
-		
+
 		<property name="conditionality" column="conditionality" type="text" />
 		<property name="projectManagement" column="project_management" type="text" />
 
@@ -120,6 +120,8 @@
 
 		<many-to-one name="ampActivityGroup" column="amp_activity_group_id"
 			class="org.digijava.module.aim.dbentity.AmpActivityGroup" cascade="all" />
+
+
 
 		<property name="modifiedDate" column="modified_date" type="java.util.Date" />
 		<many-to-one name="modifiedBy" column="modified_by"
@@ -280,13 +282,13 @@
 
 		<property name="activityType" column="activity_type" type="java.lang.Long" />
 		<property name="proposedProjectLife" column="proposed_project_life" type="java.lang.Integer" />
-		
+
 		<set name="costAmounts" cascade="all-delete-orphan" inverse="true" lazy="false">
 			<key column="amp_activity_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpFundingAmount" />
 		</set>
 
-	' 
+	'
 	>
 ]>
 <hibernate-mapping>
@@ -297,6 +299,11 @@
 				<param name="sequence_name">AMP_ACTIVITY_VERSION_seq</param>
 			</generator>
 		</id>
+		<set name="groups" inverse="true" lazy="true" cascade="all-delete-orphan" >
+			<cache usage="read-write" />
+			<key column="amp_activity_last_version_id" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityGroup" />
+		</set>
 		
 		&activityFields;
 	</class>

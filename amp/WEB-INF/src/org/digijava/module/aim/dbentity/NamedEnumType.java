@@ -5,6 +5,8 @@ import com.google.common.collect.HashBiMap;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.type.EnumType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -17,6 +19,7 @@ import java.util.Map;
 import java.util.Properties;
 
 public class NamedEnumType extends EnumType {
+    private final Logger logger = LoggerFactory.getLogger(NamedEnumType.class);
     private BiMap<Enum, String> values = HashBiMap.create();
 
     @Override
@@ -37,6 +40,7 @@ public class NamedEnumType extends EnumType {
         Method getter;
         try {
             getter = enumClass.getMethod(getterMethodName);
+            logger.info("Getter is: "+getter.getName());
         } catch (NoSuchMethodException e) {
             throw new HibernateException("Getter method not found for enum value", e);
         }

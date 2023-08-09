@@ -11,7 +11,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.Properties;
-
 public class NamedEnumType extends EnumType implements ParameterizedType {
 
     private Class<? extends Enum> enumClass;

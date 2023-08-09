@@ -26,6 +26,7 @@ public class NamedEnumType extends EnumType {
     @Override
     public void setParameterValues(Properties parameters) {
         parameters.setProperty(NAMED, "true");
+        parameters.setProperty(TYPE, "12");
 
         String valueProperty = parameters.getProperty("valueProperty");
 

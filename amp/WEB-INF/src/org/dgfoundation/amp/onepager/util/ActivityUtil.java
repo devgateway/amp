@@ -281,11 +281,12 @@ public class ActivityUtil {
         logger.info("Status towards save :"+a.getApprovalStatus());
         logger.info("Status towards save :"+a.getApprovalStatus().getDbName());
         logger.info("Activity Version :"+ a);
-
         if (createNewVersion){
+            a.setApprovalStatus(a.getApprovalStatus());
             session.save(a);
         }
         else{
+            a.setApprovalStatus(a.getApprovalStatus());
             session.saveOrUpdate(a);
             //session.update(a);
         }

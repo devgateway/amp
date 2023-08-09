@@ -211,7 +211,8 @@ public class ActivityUtil {
                     tmpGroup = new AmpActivityGroup();
                     tmpGroup.setAmpActivityLastVersion(a);
 
-                    tmpGroup= (AmpActivityGroup) session.save(tmpGroup);
+                    Long id = (Long) session.save(tmpGroup);
+                    tmpGroup.setAmpActivityGroupId(id);
                 }
 
                 a.setAmpActivityGroup(tmpGroup);
@@ -232,7 +233,8 @@ public class ActivityUtil {
             //we need to create a group for this activity
             AmpActivityGroup tmpGroup = new AmpActivityGroup();
             tmpGroup.setAmpActivityLastVersion(a);
-            tmpGroup= (AmpActivityGroup) session.save(tmpGroup);
+            Long id = (Long) session.save(tmpGroup);
+            tmpGroup.setAmpActivityGroupId(id);
             a.setAmpActivityGroup(tmpGroup);
 
         }

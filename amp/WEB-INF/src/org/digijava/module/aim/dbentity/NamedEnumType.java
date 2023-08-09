@@ -30,6 +30,7 @@ public class NamedEnumType extends EnumType {
     @Override
     public void setParameterValues(Properties parameters) {
         parameters.setProperty(NAMED, "true");
+        parameters.setProperty(TYPE,String.valueOf(Types.VARCHAR) );
 
         String valueProperty = parameters.getProperty("valueProperty");
 
@@ -47,6 +48,8 @@ public class NamedEnumType extends EnumType {
         for (Enum enumConstant : enumClass.getEnumConstants()) {
             values.put(enumConstant, (String) getter.get(enumConstant));
         }
+        parameters.put(EnumType.ENUM, enumClass.getName());
+        this.setParameterValues(parameters);
         super.setParameterValues(parameters);
     }
 

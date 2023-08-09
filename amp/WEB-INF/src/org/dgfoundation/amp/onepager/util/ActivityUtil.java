@@ -279,6 +279,7 @@ public class ActivityUtil {
         saveStructures(a, session);
 
         logger.info("Status towards save :"+a.getApprovalStatus());
+        logger.info("Status towards save :"+a.getApprovalStatus().getDbName());
         logger.info("Activity Version :"+ a);
 
         if (createNewVersion){

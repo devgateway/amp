@@ -37,7 +37,7 @@ public class PledgesEntityHelper {
         for(int i = 0; i < n / 2; i++) 
         {
             String fieldName = (String) values[2 * i];
-            queryBld.append(" AND (p.").append(fieldName).append(" = value").append(i).append(")");
+            queryBld.append(" AND (p.").append(fieldName).append(" = :value").append(i).append(")");
         }
         
         Query query = PersistenceManager.getSession().createQuery(queryBld.toString());

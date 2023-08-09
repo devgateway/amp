@@ -214,7 +214,6 @@ public class ActivityUtil {
                     Long id = (Long) session.save(tmpGroup);
                     tmpGroup.setAmpActivityGroupId(id);
                 }
-
                 a.setAmpActivityGroup(tmpGroup);
                 a.setMember(new HashSet<>());
 //                a.setAmpActivityId(null);

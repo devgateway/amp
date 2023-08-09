@@ -21,6 +21,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import javax.persistence.FlushModeType;
 import java.util.HashMap;
 
 /**
@@ -171,7 +172,7 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
             try {
                 hibernateSession.flush();        
                 hibernateSession.getTransaction().commit();
-                hibernateSession.setFlushMode(FlushMode.AUTO);
+                hibernateSession.setFlushMode(FlushModeType.AUTO);
             }
             catch (Throwable t)
             {

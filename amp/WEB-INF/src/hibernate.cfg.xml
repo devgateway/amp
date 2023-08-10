@@ -23,5 +23,7 @@
   <property name="jdbc.use_streams_for_binary">true</property>
   <property name="query.substitutions">true 1, false 0, yes 'Y', no 'N'</property>
   <property name="hbm2ddl.auto">update</property>
+  <property name="hibernate.event.merge.entity_copy_observer" >allow</property>
+
  </session-factory>
 </hibernate-configuration>

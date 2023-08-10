@@ -101,7 +101,7 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
         if(hibernateSession==null || !hibernateSession.isOpen())  {
             try {
                 hibernateSession = PersistenceManager.openNewSession();
-                hibernateSession.setFlushMode(FlushMode.MANUAL);
+                hibernateSession.setFlushMode(FlushModeType.COMMIT);
                 hibernateSession.beginTransaction();
                 s.getHttpSession().setAttribute(OnePagerConst.ONE_PAGER_HIBERNATE_SESSION_KEY, hibernateSession);
             } catch (HibernateException e) {
@@ -172,7 +172,7 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
             try {
                 hibernateSession.flush();        
                 hibernateSession.getTransaction().commit();
-                hibernateSession.setFlushMode(FlushModeType.AUTO);
+                hibernateSession.setFlushMode(FlushModeType.COMMIT);
             }
             catch (Throwable t)
             {
@@ -192,7 +192,8 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
                     logger.error("Could not rollback transaction after exception!", rbEx);
                 }
             }
-            finally { 
+            finally {
+                hibernateSession.clear();
                 hibernateSession.close(); 
             }
             if (exceptionToThrow != null)

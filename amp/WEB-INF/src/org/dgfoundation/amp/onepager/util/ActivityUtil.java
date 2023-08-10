@@ -39,10 +39,7 @@ import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.message.triggers.ActivityValidationWorkflowTrigger;
 import org.digijava.module.translation.util.ContentTranslationUtil;
-import org.hibernate.Hibernate;
-import org.hibernate.LockMode;
-import org.hibernate.LockOptions;
-import org.hibernate.Session;
+import org.hibernate.*;
 import org.hibernate.query.Query;
 
 import javax.jcr.Node;
@@ -52,6 +49,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -202,6 +200,8 @@ public class ActivityUtil {
         //is versioning activated?
         boolean createNewVersion = (draft == draftChange) && ActivityVersionUtil.isVersioningEnabled();
         boolean isActivityForm = context.getSource() == ActivitySource.ACTIVITY_FORM;
+        if (oldA.getAmpActivityId() != null)
+            session.evict(oldA);
         if (createNewVersion){
             try {
                 AmpActivityGroup tmpGroup = a.getAmpActivityGroup();
@@ -215,13 +215,16 @@ public class ActivityUtil {
                     tmpGroup = new AmpActivityGroup();
                     tmpGroup.setAmpActivityLastVersion(a);
 
+                                      //TODO this is a temporary status for the case when we have a new activity and we want to create a new version
+                            a.setApprovalStatus(ApprovalStatus.created);
                     Long id = (Long) session.save(tmpGroup);
                     tmpGroup.setAmpActivityGroupId(id);
+                                      a.setAmpActivityGroup(tmpGroup);
+                                      session.save(a);
+
                 }
-                a.setAmpActivityGroup(tmpGroup);
                 a.setMember(new HashSet<>());
-                if (oldA.getAmpActivityId() != null)
-                    session.evict(oldA);
+
             } catch (CloneNotSupportedException e) {
                 logger.error("Can't clone current Activity: ", e);
             }
@@ -249,14 +252,16 @@ public class ActivityUtil {
             throw new RuntimeException("Non-existent group should have been added by now!");
         }
 
-        if (!newActivity){
+        if (!newActivity) {
+            session.clear();
             //existing activity
             //previousVersion for current activity
-            if (group.getAmpActivityLastVersion().getAmpActivityId().equals(a.getAmpActivityId())) {
-                forceVersionIncrement(session, group);
-            }
-            group.setAmpActivityLastVersion(a);
-            session.update(group);
+                if (group.getAmpActivityLastVersion().getAmpActivityId().equals(a.getAmpActivityId())) {
+                    forceVersionIncrement(session, group);
+                }
+                group.setAmpActivityLastVersion(a);
+                session.merge(group);
+
         }
 
         a.setAmpActivityGroup(group);
@@ -278,24 +283,19 @@ public class ActivityUtil {
         saveProjectCosts(a, session);
         saveStructures(a, session);
 
-        logger.info("Status towards save :"+a.getApprovalStatus());
-        logger.info("Status towards save :"+a.getApprovalStatus().getDbName());
-        logger.info("Activity Version :"+ a);
         if (createNewVersion){
-            a.setApprovalStatus(a.getApprovalStatus());
             session.save(a);
         }
         else{
-            a.setApprovalStatus(a.getApprovalStatus());
-            session.saveOrUpdate(a);
-            //session.update(a);
+//            session.saveOrUpdate(a);
+            session.merge(a);
         }
 
         updatePerformanceRules(oldA, a);
 
         if (newActivity){
             a.setAmpId(org.digijava.module.aim.util.ActivityUtil.generateAmpId(ampCurrentMember.getUser(), a.getAmpActivityId(), session));
-            session.update(a);
+            session.merge(a);
         }
 
         updateIndirectPrograms(a, session);
@@ -356,7 +356,7 @@ public class ActivityUtil {
         String additionalDetails = determineDetails(teamMember, activity, newActivity);
         TeamMember tm = teamMember.toTeamMember();
         if (!newActivity) {
-            AuditLoggerUtil.logActivityUpdate(tm, activity, Arrays.asList(additionalDetails));
+            AuditLoggerUtil.logActivityUpdate(tm, activity, Collections.singletonList(additionalDetails));
         } else {
             try {
                 AuditLoggerUtil.logObject(tm, activity, "add", additionalDetails);
@@ -1095,7 +1095,7 @@ public class ActivityUtil {
                             InputStream fileData = null;
                             try {
                                 if (nw.getNode().hasProperty(CrConstants.PROPERTY_DATA))
-                                    fileData = nw.getNode().getProperty(CrConstants.PROPERTY_DATA).getStream();
+                                    fileData = nw.getNode().getProperty(CrConstants.PROPERTY_DATA).getBinary().getStream();
                                 //                                  .getBinary().getStream();
                                 if (nw.getNode().hasProperty(CrConstants.PROPERTY_FILE_SIZE))
                                     fileSize = Bytes.bytes(nw.getNode().getProperty(CrConstants.PROPERTY_FILE_SIZE).getLong());
@@ -1253,8 +1253,7 @@ public class ActivityUtil {
 
     private static boolean shouldResponseToBeUpdated(AmpGPINiSurveyResponse surveyResponse, AmpGPINiSurveyResponse
             tempGPINiSurveyResponse) {
-        return (tempGPINiSurveyResponse.getAmpGPINiSurvey().getAmpOrgRole().getOrganisation().getAmpOrgId()
-                == surveyResponse.getAmpGPINiSurvey().getAmpOrgRole().getOrganisation().getAmpOrgId()
+        return (Objects.equals(tempGPINiSurveyResponse.getAmpGPINiSurvey().getAmpOrgRole().getOrganisation().getAmpOrgId(), surveyResponse.getAmpGPINiSurvey().getAmpOrgRole().getOrganisation().getAmpOrgId())
                 && tempGPINiSurveyResponse.getAmpGPINiQuestion().getCode()
                 .equals(surveyResponse.getAmpGPINiQuestion().getCode()));
     }
@@ -1326,29 +1325,46 @@ public class ActivityUtil {
     }
 
     private static void saveAnnualProjectBudgets(AmpActivityVersion a,
-            Session session) throws Exception {
+            Session session) {
         if (a.getAmpActivityId() != null) {
             for (AmpAnnualProjectBudget annualBudget : a.getAnnualProjectBudgets()){
                 annualBudget.setActivity(a);
-                session.saveOrUpdate(annualBudget);
+                if( annualBudget.getAmpAnnualProjectBudgetId()==null)
+                {
+                    session.saveOrUpdate(annualBudget);
+                }
+                else
+                {
+                    session.merge(annualBudget);
+                }
             }
         }
     }
 
-    private static void saveStructures(AmpActivityVersion a, Session session) throws Exception {
+    private static void saveStructures(AmpActivityVersion a, Session session) {
         if (a.getAmpActivityId() != null) {
             for (AmpStructure structure : a.getStructures()) {
                 structure.setActivity(a);
-                session.saveOrUpdate(structure);
+                if (structure.getAmpStructureId()==null) {
+                    session.saveOrUpdate(structure);
+                }
+                else
+                {
+                    session.merge(structure);
+                }
             }
         }
     }
 
-    private static void saveProjectCosts(AmpActivityVersion a, Session session) throws Exception {
+    private static void saveProjectCosts(AmpActivityVersion a, Session session) {
         if (a.getCostAmounts() != null) {
             for (AmpFundingAmount afa : a.getCostAmounts()) {
                 afa.setActivity(a);
-                session.saveOrUpdate(afa);
+                if (afa.getAmpFundingAmountId()==null){
+                    session.saveOrUpdate(afa);
+                }else {
+                    session.merge(afa);
+                }
             }
         }
 

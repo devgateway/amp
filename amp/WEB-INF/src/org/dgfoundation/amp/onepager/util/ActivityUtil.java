@@ -178,6 +178,7 @@ public class ActivityUtil {
             AmpTeamMember ampCurrentMember, boolean draft,
             boolean draftChange, Session session, SaveContext context,
             EditorStore editorStore, Site site) throws Exception {
+        session.clear();
 
         AmpActivityVersion oldA = a;
         boolean newActivity = isNewActivity(a);

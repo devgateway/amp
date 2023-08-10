@@ -28,7 +28,6 @@ public class JerseyAmpRegistryClient implements AmpRegistryClient {
     private static final Integer JERSEY_READ_TIMEOUT = getPropertyReadTimeout();
 
     private final Client client;
-
     private final String baseUrl;
 
     public JerseyAmpRegistryClient() {

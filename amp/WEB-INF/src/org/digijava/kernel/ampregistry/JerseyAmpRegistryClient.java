@@ -33,8 +33,8 @@ public class JerseyAmpRegistryClient implements AmpRegistryClient {
 
     public JerseyAmpRegistryClient() {
         ClientConfig config = new ClientConfig();
-        config.property(ClientProperties.CONNECT_TIMEOUT, 10000);
-        config.property(ClientProperties.READ_TIMEOUT, 10000);
+        config.property(ClientProperties.CONNECT_TIMEOUT, JERSEY_CONNECT_TIMEOUT);
+        config.property(ClientProperties.READ_TIMEOUT, JERSEY_READ_TIMEOUT);
         client = ClientBuilder.newClient(config);
 
         baseUrl = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMP_REGISTRY_URL);

@@ -906,7 +906,7 @@ public class EditActivity extends Action {
                 eaForm.setGpiSurvey(activity.getGpiSurvey());
                 for (AmpGPISurvey survey : activity.getGpiSurvey()) {
                     List<AmpGPISurveyResponse> list = new ArrayList<>(survey.getResponses());
-                    Collections.sort(list, new AmpGPISurveyResponse.AmpGPISurveyResponseComparator());
+                    list.sort(new AmpGPISurveyResponse.AmpGPISurveyResponseComparator());
                     gpiSurveys.add(list);
                 }
                 request.setAttribute("gpiSurveys", gpiSurveys);
@@ -968,23 +968,21 @@ public class EditActivity extends Action {
           // loading organizations and thier project ids.
           Set orgProjIdsSet = activity.getInternalIds();
           if (orgProjIdsSet != null) {
-            Iterator projIdItr = orgProjIdsSet.iterator();
             Collection temp = new ArrayList();
-            while (projIdItr.hasNext()) {
-              AmpActivityInternalId actIntId = (
-                  AmpActivityInternalId) projIdItr
-                  .next();
-              OrgProjectId projId = new OrgProjectId();
-              projId.setId(actIntId.getId());
-              projId.setOrganisation(actIntId.getOrganisation());
-              projId.setProjectId(actIntId.getInternalId());
-              temp.add(projId);
-            }
+              for (Object o : orgProjIdsSet) {
+                  AmpActivityInternalId actIntId = (
+                          AmpActivityInternalId) o;
+                  OrgProjectId projId = new OrgProjectId();
+                  projId.setId(actIntId.getId());
+                  projId.setOrganisation(actIntId.getOrganisation());
+                  projId.setProjectId(actIntId.getInternalId());
+                  temp.add(projId);
+              }
             if (temp != null && temp.size() > 0) {
               OrgProjectId orgProjectIds[] = new OrgProjectId[
                   temp
                   .size()];
-              Object arr[] = temp.toArray();
+              Object[] arr = temp.toArray();
               for (int i = 0; i < arr.length; i++) {
                 orgProjectIds[i] = (OrgProjectId) arr[i];
               }
@@ -1008,16 +1006,12 @@ public class EditActivity extends Action {
                     CategoryConstants.IMPLEMENTATION_LEVEL_KEY, activity.getCategories());
             AmpCategoryValue implLocValue                   = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
                     CategoryConstants.IMPLEMENTATION_LOCATION_KEY, activity.getCategories());
-            boolean setFullPercForDefaultCountry    = false;
-            if ( !"true".equals( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALLOW_PERCENTAGES_FOR_ALL_COUNTRIES ) ) &&
-                    implLevel!=null && implLocValue!=null &&
-                            CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL.equalsCategoryValue(implLevel) &&
-                            CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.equalsCategoryValue(implLocValue)
-            ) {
-                setFullPercForDefaultCountry            = true;
-            }
+            boolean setFullPercForDefaultCountry    = !"true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALLOW_PERCENTAGES_FOR_ALL_COUNTRIES)) &&
+                    implLevel != null && implLocValue != null &&
+                    CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL.equalsCategoryValue(implLevel) &&
+                    CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.equalsCategoryValue(implLocValue);
 
-            while (locIter.hasNext()) {
+              while (locIter.hasNext()) {
                 AmpActivityLocation actLoc = (AmpActivityLocation) locIter.next();  //AMP-2250
                 if (actLoc == null)
                     continue;
@@ -1073,7 +1067,7 @@ public class EditActivity extends Action {
               }
             }
 
-              Collections.sort(locs, new HelperLocationAncestorLocationNamesAsc(langCode));
+              locs.sort(new HelperLocationAncestorLocationNamesAsc(langCode));
               eaForm.getLocation().setSelectedLocs(locs);
           }
 

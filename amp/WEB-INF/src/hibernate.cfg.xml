@@ -7,6 +7,7 @@
   <property name="hibernate.dialect">org.dgfoundation.amp.ar.viewfetcher.AmpPostgresDialect</property>
   &dialect;
   <property name="current_session_context_class">thread</property>
+  <property name="hibernate.enable_lazy_load_no_trans">true</property>
   <property name="hibernate.cache.ehcache.missing_cache_strategy">create</property>
   <property name="max_fetch_depth">0</property>
   <property name="default_batch_fetch_size">20</property>

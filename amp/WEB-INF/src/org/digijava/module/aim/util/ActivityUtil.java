@@ -1882,6 +1882,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                 ApprovalStatus.approved.getDbName(),
                 ApprovalStatus.startedapproved.getDbName()))
                 .setMaxResults(1);
+        session.clear();
         qry.setParameter("groupId", activity.getAmpActivityGroup().getAmpActivityGroupId(), LongType.INSTANCE);
         qry.setParameter("activityId", activityId, LongType.INSTANCE);
         return (qry.list().size() > 0 ? (AmpActivityVersion) qry.list().get(0) : null);

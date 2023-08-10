@@ -43,6 +43,9 @@ import org.hibernate.query.Query;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.security.Permission;
 import java.security.PermissionCollection;
 import java.util.*;
@@ -144,8 +147,18 @@ public class SiteUtils {
      * @return Site if found. null - if not
      */
     private static Site getSiteByName(String siteName) {
-        return (Site) PersistenceManager.getSession().createCriteria(Site.class)
-                .add(Restrictions.eq("siteId", siteName))
+        Session session = PersistenceManager.getSession();
+
+        session.clear();
+
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Site> criteriaQuery = criteriaBuilder.createQuery(Site.class);
+        Root<Site> siteRoot = criteriaQuery.from(Site.class);
+
+        criteriaQuery.select(siteRoot)
+                .where(criteriaBuilder.equal(siteRoot.get("siteId"), siteName));
+
+        return session.createQuery(criteriaQuery)
                 .setCacheable(true)
                 .setCacheRegion(Constants.KERNEL_QUERY_CACHE_REGION)
                 .uniqueResult();

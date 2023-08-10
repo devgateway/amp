@@ -579,6 +579,7 @@ public class PersistenceManager {
         }
         Session sess = sf().getCurrentSession();
         sess.setFlushMode(FlushModeType.AUTO);
+
         Transaction transaction = sess.getTransaction();
         if (transaction == null || !transaction.isActive()) {
             sess.beginTransaction();
@@ -602,7 +603,7 @@ public class PersistenceManager {
         synchronized (sessionStackTraceMap){
             if(sessionStackTraceMap.get(sess)==null)
                 //logger.error(String.format("Thread #%d: storing new Session %d", Thread.currentThread().getId(), System.identityHashCode(sess)));
-                sessionStackTraceMap.put(sess,new Object[] {new Long(System.currentTimeMillis()),Thread.currentThread().getStackTrace()});
+                sessionStackTraceMap.put(sess,new Object[] {System.currentTimeMillis(),Thread.currentThread().getStackTrace()});
         }
     }
 

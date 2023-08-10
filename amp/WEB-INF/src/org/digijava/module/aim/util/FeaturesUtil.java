@@ -862,6 +862,7 @@ public class FeaturesUtil {
 
         try {
             hbsession=PersistenceManager.getRequestDBSession();
+            hbsession.clear();
             qryStr = "select f from " + AmpTemplatesVisibility.class.getName() +
             " f";
             qry = hbsession.createQuery(qryStr);

@@ -1690,6 +1690,7 @@ public class TeamUtil {
 
         try {
             session = PersistenceManager.getSession();
+            session.clear();
             String teamNameHql = AmpTeam.hqlStringForName("t");
             String queryString = "select t from " + AmpTeam.class.getName() + " t "
                     + "left outer join fetch t.organizations "
@@ -1727,6 +1728,7 @@ public class TeamUtil {
         
         try {
             session = PersistenceManager.getSession();
+            session.clear();
             String teamNameHql = AmpTeam.hqlStringForName("t");
             StringBuilder queryString =new StringBuilder();
             queryString.append("select t from ");

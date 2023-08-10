@@ -683,6 +683,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
     public static AmpCategoryClass loadAmpCategoryClassByKey(String key)
     {
         Session dbSession = PersistenceManager.getSession();
+        dbSession.clear();
         List<AmpCategoryClass> col;
         try {
             //AmpCategoryClass dbCategory       = new AmpCategoryClass();

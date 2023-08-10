@@ -19,9 +19,9 @@
 		<property column="autoClosedOnExpiration" name="autoClosedOnExpiration" type="java.lang.Boolean" />
 		
 		<many-to-one name="ampActivityLastVersion" column="amp_activity_last_version_id" class="org.digijava.module.aim.dbentity.AmpActivityVersion" 
-		cascade="merge" index="idx_amp_activity_group_last_activity_id" not-null="false" />
+		cascade="delete" index="idx_amp_activity_group_last_activity_id" not-null="false" />
 
-		<set name="activities" inverse="true" lazy="false" cascade="merge" >
+		<set name="activities" inverse="true" lazy="false" cascade="delete" >
 			<cache usage="read-write" />
 			<key column="amp_activity_group_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityVersion" />

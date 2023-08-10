@@ -102,7 +102,7 @@
 
 
 		<many-to-one name="team" column="amp_team_id"
-			class="org.digijava.module.aim.dbentity.AmpTeam" cascade="merge" />
+			class="org.digijava.module.aim.dbentity.AmpTeam" cascade="delete" />
 
 		<many-to-one name="activityCreator" column="activity_creator"
 			class="org.digijava.module.aim.dbentity.AmpTeamMember"/>
@@ -119,13 +119,13 @@
 		<property name="lineMinRank" column="line_min_rank" type="java.lang.Integer" />
 
 		<many-to-one name="ampActivityGroup" column="amp_activity_group_id"
-			class="org.digijava.module.aim.dbentity.AmpActivityGroup" cascade="merge" />
+			class="org.digijava.module.aim.dbentity.AmpActivityGroup" cascade="delete" />
 
 
 
 		<property name="modifiedDate" column="modified_date" type="java.util.Date" />
 		<many-to-one name="modifiedBy" column="modified_by"
-			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="merge" />
+			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="delete" />
 
 		<set name="selectedEffectivenessIndicatorOptions" table="AMP_ACTIVITY_EFFECTIVENESS_INDICATOR_OPTIONS" lazy="false" cascade="all">
 			<cache usage="read-write" />
@@ -135,7 +135,7 @@
 		</set>
 
 
-		<set name="categories" table="AMP_ACTIVITIES_CATEGORYVALUES" lazy="false" cascade="merge">
+		<set name="categories" table="AMP_ACTIVITIES_CATEGORYVALUES" lazy="false" cascade="delete">
 			<cache usage="read-write" />
 			<key column="amp_activity_id" />
 			<many-to-many class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue"
@@ -247,13 +247,13 @@
             <one-to-many class="org.digijava.module.aim.dbentity.AmpAnnualProjectBudget" />
    		 </set>
 
-		<set name="actPrograms" cascade="merge" inverse="true">
+		<set name="actPrograms" cascade="delete" inverse="true">
 			<cache usage="read-write" />
 			<key column="amp_activity_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityProgram" />
 		</set>
 
-		<set name="actBudgetStructure" cascade="merge" inverse="true">
+		<set name="actBudgetStructure" cascade="delete" inverse="true">
 			<cache usage="read-write" />
 			<key column="amp_activity_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityBudgetStructure" />
@@ -283,7 +283,7 @@
 		<property name="activityType" column="activity_type" type="java.lang.Long" />
 		<property name="proposedProjectLife" column="proposed_project_life" type="java.lang.Integer" />
 
-		<set name="costAmounts" cascade="merge" inverse="true" lazy="false">
+		<set name="costAmounts" cascade="delete" inverse="true" lazy="false">
 			<key column="amp_activity_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpFundingAmount" />
 		</set>

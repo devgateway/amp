@@ -1,10 +1,9 @@
 const {ModuleFederationPlugin} = require('webpack').container;
-const ppackageJson = require('../../package.json');
+const packageJson = require('../../package.json');
 
 const webpackConfigPath = 'react-scripts/config/webpack.config';
 // eslint-disable-next-line import/no-dynamic-require
 const webpackDev = require(webpackConfigPath);
-const packageJson = require("create-react-app/package.json");
 
 const override = config => {
     // eslint-disable-next-line global-require
@@ -16,7 +15,7 @@ const override = config => {
              'reampv2App': 'reampv2App@http://localhost:3002/remoteEntry.js',
         },
         shared: {
-            ...ppackageJson.dependencies,
+            ...packageJson.dependencies,
             react: {
                 import: 'react', // the "react" package will be used a provided and fallback module
                 shareKey: 'newReact', // under this name the shared module will be placed in the share scope

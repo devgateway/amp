@@ -2,53 +2,51 @@ import React, {MutableRefObject, useEffect, useRef} from 'react';
 import {mount} from 'reampv2App/Reampv2App';
 import {useLocation, useNavigate} from "react-router-dom";
 
-const reampv2Basename = '/reampv2-app';
+const reampv2Basename = '#/reampv2-app';
 
 const Reampv2 = () => {
     const ref: MutableRefObject<any> = useRef(null);
-    const navigate = useNavigate();
     const location = useLocation();
+    const navigate = useNavigate();
 
-    console.log("location", location);
-
+    // Listen to navigation events dispatched inside reampv2 mfe.
     useEffect(() => {
-        const reampv2EventHandler = (event: any) => {
+        const reampv2NavigationEventHandler = (event: any) => {
             const pathname = event.detail;
+            console.log('Event in reampv2 +++++++', pathname);
             const newPathname = `${reampv2Basename}${pathname}`;
 
-            console.log("new pathname", newPathname);
-            if (newPathname === location.hash) {
+            if (newPathname === location.pathname) {
                 return;
             }
-            navigate(newPathname);
+            navigate(pathname);
         };
-        window.addEventListener("[reampv2] navigated", reampv2EventHandler);
+        window.addEventListener("[reampv2] navigated", reampv2NavigationEventHandler);
 
         return () => {
             window.removeEventListener(
                 "[reampv2] navigated",
-                reampv2EventHandler
+                reampv2NavigationEventHandler
             );
         };
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location]);
 
     // Listen for shell location changes and dispatch a notification.
     useEffect(() => {
-        if (location.pathname.startsWith(reampv2Basename)) {
-            console.log("dispatching event");
-            window.dispatchEvent(
-                new CustomEvent("[container] navigated", {
-                    detail: location.hash,
-                })
-            );
-        }
-    }, [location]);
+        console.log('loc', location)
+            if (location.pathname.startsWith(reampv2Basename)) {
+                window.dispatchEvent(
+                    new CustomEvent("[container] navigated", {
+                        detail: location.hash.replace("#/", ""),
+                    })
+                );
+            }
+        },
+        [location]
+    );
 
     const isFirstRunRef = useRef(true);
-    const unmountRef = useRef(() => {
-    });
+    const unmountRef = useRef(() => {});
 
     useEffect(() => {
         if (!isFirstRunRef.current) {
@@ -57,6 +55,7 @@ const Reampv2 = () => {
 
         unmountRef.current = mount({
             el: ref.current,
+            standalone: false
         });
         isFirstRunRef.current = false;
     }, [location]);

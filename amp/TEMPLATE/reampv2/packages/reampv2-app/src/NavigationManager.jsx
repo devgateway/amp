@@ -1,33 +1,39 @@
 import React, {useEffect} from 'react'
-import {createHashHistory} from "history";
+import {matchRoutes, useLocation, useNavigate} from "react-router-dom";
+import routes from "./routing/routes";
 
 const NavigationManager = ({ children }) => {
-    const history = createHashHistory();
-    const location = history.location;
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    console.log('NavigationManager', location);
+
 
     useEffect(() => {
+        debugger;
         function containerNavigationHandler(event) {
             const pathname = event.detail;
-            console.log('containerNavigationHandler', event)
-            if (location.hash === pathname) {
-                return;
+            console.log('containerNavigationHandler========>', pathname);
+            if (location.pathname !== pathname || !matchRoutes(routes, { pathname })) {
+                return void 0;
             }
-            history.push(pathname);
+            navigate(pathname);
         }
 
         window.addEventListener('[container] navigated', containerNavigationHandler);
 
+
         return () => {
-            window.removeEventListener('[container] navigated', containerNavigationHandler);
+           window.removeEventListener('[container] navigated', containerNavigationHandler);
         }
         // eslint-disable-next-line
     }, []);
 
     // useEffect(() => {
-    //     window.dispatchEvent(
-    //         new CustomEvent("[reampv2] navigated", {detail: location.hash})
-    //     );
-    // }, [location]);
+    //     console.log('NavigationManager===============>', location);
+    //     const reampv2Event = new CustomEvent("[reampv2] navigated", {detail: location.hash });
+    //     window.dispatchEvent(reampv2Event);
+    // }, [location.hash]);
 
     return children;
 }

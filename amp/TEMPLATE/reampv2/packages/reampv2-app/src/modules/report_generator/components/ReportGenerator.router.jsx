@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
+import {Route, Routes} from 'react-router-dom';
 import '../../../App.css';
 import ReportGeneratorHome from './ReportGeneratorHome';
 
 class ReportGeneratorRouter extends Component {
   render() {
     return (
-      <>
-        <Route path="/report_generator" exact component={ReportGeneratorHome} />
-        <Route path="/report_generator/:id" component={ReportGeneratorHome} />
-      </>
+      <Routes>
+        <Route path="/" exact element={<ReportGeneratorHome/>} />
+        <Route path="/:id" element={<ReportGeneratorHome/>} />
+      </Routes>
     );
   }
 }

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -31,23 +31,31 @@ import {
 } from '../utils/constants';
 import { setColumnsData, setHierarchiesData, setMeasuresData } from '../actions/mementoAction';
 import { fetchLanguages } from '../actions/languagesActions';
+import {useLocation, useParams} from "react-router-dom";
 
-class ReportGeneratorHome extends Component {
-  constructor() {
-    super();
-    this.state = { showChildren: false, errors: null };
+
+const ReportGeneratorHome = (props) => {
+  const {
+    _getMetadata, _fetchReport,  _updateProfile, _updateId, translations,
+    _updateReportDetailsFundingGrouping, _setColumnsData, _setMeasuresData, _setHierarchiesData,
+    _setInitialHierarchies, _fetchLanguages, _markExistingReportSanitized, _updateColumnsSelected,
+    _updateMeasuresSelected, _updateMeasuresSorting, layoutLoaded, results, profile, uiReducer, _save, _saveNew,
+      _runReport
+  } = props;
+
+  // Only logged users can use the tab generator.
+  if (layoutLoaded && results.logged !== true && profile === PROFILE_TAB) {
+    window.location.href = '/';
   }
 
-  componentDidMount() {
-    const {
-      _getMetadata, _fetchReport, location, _updateProfile, _updateId, translations,
-      _updateReportDetailsFundingGrouping, _setColumnsData, _setMeasuresData, _setHierarchiesData,
-      _setInitialHierarchies, _fetchLanguages, _markExistingReportSanitized, _updateColumnsSelected,
-      _updateMeasuresSelected, _updateMeasuresSorting,
-    } = this.props;
+  const [showChildren, setShowChildren] = useState(false);
+    const [errors, setErrors] = useState([]);
+
+  useEffect(() => {
     _fetchLanguages();
     // eslint-disable-next-line react/destructuring-assignment,react/prop-types
-    const { id } = this.props.match.params;
+    const { id } = useParams();
+    const location = useLocation();
     const typeFromURL = new URLSearchParams(location.search).get('type');
     const profileFromURL = new URLSearchParams(location.search).get('profile');
 
@@ -59,18 +67,18 @@ class ReportGeneratorHome extends Component {
         _updateProfile(profile);
         if (reportMetadata.payload) {
           return _getMetadata(reportMetadata.payload.type, profile).then((apiMetaData) => {
-            this.setState({ showChildren: true });
+            setShowChildren(true);
 
             // AMP-30290: We need to remove columns that are not available in the API anymore.
             const sanitizedSelectedColumns = reportMetadata.payload.columns
-              .filter(i => apiMetaData.payload.columns.find(j => j.id === i.id));
+                .filter(i => apiMetaData.payload.columns.find(j => j.id === i.id));
             _updateColumnsSelected(sanitizedSelectedColumns.map(i => i.id));
             const sanitizedSelectedMeasures = reportMetadata.payload.measures
-              .filter(i => apiMetaData.payload.measures.find(j => i.id === j.id));
+                .filter(i => apiMetaData.payload.measures.find(j => i.id === j.id));
             _updateMeasuresSelected(sanitizedSelectedMeasures.map(i => i.id));
             _updateMeasuresSorting(sanitizedSelectedMeasures.map(i => i.id));
             const sanitizedHierarchies = reportMetadata.payload.hierarchies
-              .filter(i => sanitizedSelectedColumns.find(j => j.id === i.id));
+                .filter(i => sanitizedSelectedColumns.find(j => j.id === i.id));
 
             // Save original columns and measures for "reset".
             _setColumnsData((Object.assign([], sanitizedSelectedColumns)).map(i => i.id));
@@ -78,8 +86,8 @@ class ReportGeneratorHome extends Component {
 
             // Load hierarchies into Redux's state.
             const _hierarchies = apiMetaData.payload.columns
-              .filter(i => sanitizedSelectedColumns.find(j => j.id === i.id))
-              .filter(i => i.hierarchy);
+                .filter(i => sanitizedSelectedColumns.find(j => j.id === i.id))
+                .filter(i => i.hierarchy);
             const _hierarchiesOrder = [];
             sanitizedHierarchies.forEach(i => {
               _hierarchiesOrder.push(i.id);
@@ -103,7 +111,8 @@ class ReportGeneratorHome extends Component {
           });
         } else {
           // eslint-disable-next-line max-len
-          return this.setState({ errors: [<ErrorMessage visible message={translate('errorLoadingReport', profile, translations)} />] });
+          setErrors([<ErrorMessage visible message={translate('errorLoadingReport', profile, translations)} />]);
+          return void 0;
         }
       });
     } else {
@@ -112,12 +121,11 @@ class ReportGeneratorHome extends Component {
       _getMetadata(typeFromURL, profileFromURL);
       _updateReportDetailsFundingGrouping(revertReportType(typeFromURL));
       // eslint-disable-next-line react/no-did-mount-set-state
-      this.setState({ showChildren: true });
+      setShowChildren(true);
     }
-  }
+  }, []);
 
-  commonReport = (isNew, isDynamic) => {
-    const { uiReducer } = this.props;
+  const commonReport = (isNew, isDynamic) => {
     const body = {
       id: isNew ? null : uiReducer.id,
       name: !isDynamic ? uiReducer.reportDetails.name : RUN_REPORT_NAME,
@@ -162,26 +170,7 @@ class ReportGeneratorHome extends Component {
     return body;
   }
 
-  saveReport = (open) => {
-    const { _save, uiReducer } = this.props;
-    const body = this.commonReport(false, false);
-    return _save(uiReducer.id, body).then(response => this.processAfterSave(response, open));
-  }
-
-  saveNewReport = (open) => {
-    const { _saveNew } = this.props;
-    const body = this.commonReport(true, false);
-    return _saveNew(body).then(response => this.processAfterSave(response, open));
-  }
-
-  runReport = () => {
-    const { _runReport } = this.props;
-    const body = this.commonReport(true, true);
-    return _runReport(body).then(response => this.processAfterSave(response, true));
-  }
-
-  processAfterSave = (response, open) => {
-    const { translations, uiReducer, profile } = this.props;
+  const processAfterSave = (response, open) => {
     if (response.error) {
       const errors = [];
       Object.keys(response.error).forEach(i => {
@@ -189,7 +178,7 @@ class ReportGeneratorHome extends Component {
         errors.push({ id: i, label: trnLabel || response.error[i] });
       });
       if (errors.length > 0) {
-        this.setState({ errors: errors.map(i => <ErrorMessage key={i.id} visible message={i.label} />) });
+        setErrors(errors.map(i => <ErrorMessage key={i.id} visible message={i.label} />));
       }
       return null;
     }
@@ -206,29 +195,38 @@ class ReportGeneratorHome extends Component {
     return null;
   }
 
-  render() {
-    const { showChildren: canLoadChildren, errors } = this.state;
-    const { layoutLoaded, results, profile } = this.props;
+  const saveReport = (open) => {
+    const body = commonReport(false, false);
+    return _save(uiReducer.id, body).then(response => processAfterSave(response, open));
+  }
 
-    // Only logged users can use the tab generator.
-    if (layoutLoaded && results.logged !== true && profile === PROFILE_TAB) {
-      window.location.href = '/';
-    }
+  const saveNewReport = (open) => {
+    const body = commonReport(true, false);
+    return _saveNew(body).then(response => processAfterSave(response, open));
+  }
 
-    return (
+  const runReport = () => {
+    const body = commonReport(true, true);
+    return _runReport(body).then(response => processAfterSave(response, true));
+  }
+
+  return (
       <Container>
         <MainHeader />
-        <FiltersAndSettings loading={!canLoadChildren} />
+        <FiltersAndSettings loading={!showChildren} />
         {errors ? (
-          <Segment className="errors_segment">
-            {errors}
-          </Segment>
+            <Segment className="errors_segment">
+              {errors.map((error) => (
+                  <div key={error}>
+                      {error}
+                  </div>
+              ))}
+            </Segment>
         ) : null}
-        <MainContent saveNewReport={this.saveNewReport} saveReport={this.saveReport} runReport={this.runReport} />
+        <MainContent saveNewReport={saveNewReport} saveReport={saveReport} runReport={runReport} />
       </Container>
-    );
-  }
-}
+  );
+};
 
 const mapStateToProps = state => ({
   translations: state.translationsReducer.translations,
@@ -263,7 +261,6 @@ ReportGeneratorHome.propTypes = {
   _fetchReport: PropTypes.func.isRequired,
   _updateProfile: PropTypes.func.isRequired,
   _updateId: PropTypes.func.isRequired,
-  location: PropTypes.object.isRequired,
   translations: PropTypes.object.isRequired,
   _saveNew: PropTypes.func.isRequired,
   _save: PropTypes.func.isRequired,
@@ -289,7 +286,5 @@ ReportGeneratorHome.defaultProps = {
   layoutLoaded: false,
   results: undefined,
 };
-
-ReportGeneratorHome.contextType = ReportGeneratorContext;
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReportGeneratorHome);

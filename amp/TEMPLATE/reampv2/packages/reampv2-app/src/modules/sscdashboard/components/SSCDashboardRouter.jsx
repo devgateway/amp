@@ -1,19 +1,16 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
+import {Outlet, Route, Routes} from 'react-router-dom';
 import '../../../App.css';
 import SssDashboardHome from '../SscDashboardHome';
 import PrinterFriendly from '../utils/PrinterFriendly';
 
-class SSCDashboardRouter extends Component {
-  render() {
+const SSCDashboardRouter = () => {
     return (
-      <>
-        <Route path="/ssc/print" exact component={PrinterFriendly} />
-        <Route path="/ssc" exact component={SssDashboardHome} />
-
-      </>
+      <Routes>
+        <Route path="/print"  element={<PrinterFriendly />} />
+        <Route path="/" element={<SssDashboardHome />} />
+      </Routes>
     );
-  }
 }
 
 export default SSCDashboardRouter;

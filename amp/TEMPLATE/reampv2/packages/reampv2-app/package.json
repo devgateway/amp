@@ -1,6 +1,6 @@
 {
-  "name": "create-react-app",
-  "version": "0.2.0",
+  "name": "reampv2",
+  "version": "1.0.1",
   "private": true,
   "proxy": "http://localhost:8080",
   "dependencies": {
@@ -56,8 +56,7 @@
     "react-leaflet-custom-control": "^1.3.5",
     "react-plotly.js": "^2.6.0",
     "react-redux": "^7.2.0",
-    "react-router": "^5.1.2",
-    "react-router-dom": "^5.1.2",
+    "react-router-dom": "^6.14.2",
     "react-scripts": "^5.0.1",
     "react-spinner": "^0.2.7",
     "react-spinners": "^0.13.8",

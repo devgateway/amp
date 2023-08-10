@@ -20,6 +20,7 @@
   "dependencies": {
     "fs": "^0.0.1-security",
     "jquery-ui": "^1.10.5",
+    "react-router-dom": "^6.14.2",
     "use-sync-external-store": "^1.2.0"
   }
 }

@@ -14,6 +14,7 @@ import * as CallReports from './actions/callReports';
 import * as LoadFilters from './actions/loadFilters';
 import './utils/print.css';
 import PrintDummy from './utils/PrintDummy';
+import {Outlet} from "react-router-dom";
 
 class SscDashboardHome extends Component {
   constructor(props) {
@@ -303,6 +304,7 @@ class SscDashboardHome extends Component {
           </div>
           <PrintDummy />
         </div>
+        <Outlet />
       </>
     );
   }

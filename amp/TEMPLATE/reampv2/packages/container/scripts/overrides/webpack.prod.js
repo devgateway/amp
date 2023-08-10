@@ -4,7 +4,6 @@ const webpackConfigPath = 'react-scripts/config/webpack.config';
 // eslint-disable-next-line import/no-dynamic-require
 const webpackConfig = require(webpackConfigPath);
 const ppackageJson = require("../../package.json");
-const packageJson = require("create-react-app/package.json");
 
 const DOMAIN_NAME = 'http://localhost:8080';
 const PUBLIC_PATH = '/TEMPLATE/reampv2/packages/container/build/';

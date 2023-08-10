@@ -12,7 +12,7 @@ const override = config => {
         filename: 'remoteEntry.js',
         exposes: {
             './Reampv2App': './src/bootstrap',
-            './routes': './src/App.route',
+            './Reampv2Routes': './src/routing/routes',
         },
         shared: {
             ...packageJson.dependencies,
@@ -29,7 +29,7 @@ const override = config => {
             'react-router-dom': {
                 import: 'react-router-dom',
                 shareKey: 'react-router-dom-old',
-                shareScope: 'default',
+                shareScope: 'legacy',
                 singleton: true,
             }
         }

@@ -554,9 +554,7 @@ public class CompareActivityVersions extends DispatchAction {
                     .getOldActivity().getAmpActivityId());
     
             // Insert fields selected by user into AmpActity properties.
-            Iterator<CompareOutput> iter = auxData.iterator();
-            while (iter.hasNext()) {
-                CompareOutput co = iter.next();
+            for (CompareOutput co : auxData) {
                 Method auxMethod = ActivityVersionUtil.getMethodFromFieldName(co.getFieldOutput().getName(),
                         AmpActivityFields.class, "set");
                 // Get value as object.
@@ -585,17 +583,17 @@ public class CompareActivityVersions extends DispatchAction {
                     }
                     //session.update(auxActivity);
                 }
-        
-                if (remOriginalValueObject != null){
+
+                if (remOriginalValueObject != null) {
                     Class[] params = auxMethod.getParameterTypes();
                     if (params != null && params[0].getName().contains("java.util.Set")) {
                         Class clazz = remOriginalValueObject.getClass();
                         String idProperty = session.getSessionFactory().getClassMetadata(clazz)
                                 .getIdentifierPropertyName();
-                
+
                         Method method = clazz.getMethod("get" + Strings.capitalize(idProperty));
                         Long remId = (Long) method.invoke(remOriginalValueObject);
-                
+
                         Method auxGetMethod = ActivityVersionUtil.getMethodFromFieldName(co.getFieldOutput().getName(),
                                 AmpActivityVersion.class, "get");
                         Set auxSet = (Set) auxGetMethod.invoke(oldActivity);
@@ -604,19 +602,18 @@ public class CompareActivityVersions extends DispatchAction {
                             while (it.hasNext()) {
                                 Object tmp = (Object) it.next();
                                 Long tmpId = (Long) method.invoke(tmp);
-                        
-                                if (tmpId.compareTo(remId) == 0){
+
+                                if (tmpId.compareTo(remId) == 0) {
                                     it.remove();
                                     break;
                                 }
                             }
                         }
                         auxMethod.invoke(oldActivity, auxSet);
-                    }
-                    else{
-                        if (addOriginalValueObject == null){
+                    } else {
+                        if (addOriginalValueObject == null) {
                             // this is the case where no value was selected;
-                            auxMethod.invoke(oldActivity, (Object)null);
+                            auxMethod.invoke(oldActivity, (Object) null);
                         }
                     }
                 }

@@ -1634,7 +1634,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                 session.delete(ampActivityVersion);
             }
         } else {
-            AmpActivityVersion ampAct = (AmpActivityVersion) session.load(AmpActivityVersion.class, ampActId);
+            AmpActivityVersion ampAct = session.load(AmpActivityVersion.class, ampActId);
             deleteFullActivityContent(ampAct, session);
             session.delete(ampAct);
         }

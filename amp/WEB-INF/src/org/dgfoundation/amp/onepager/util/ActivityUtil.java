@@ -178,7 +178,6 @@ public class ActivityUtil {
             AmpTeamMember ampCurrentMember, boolean draft,
             boolean draftChange, Session session, SaveContext context,
             EditorStore editorStore, Site site) throws Exception {
-        session.clear();
 
         AmpActivityVersion oldA = a;
         boolean newActivity = isNewActivity(a);
@@ -285,7 +284,10 @@ public class ActivityUtil {
         saveStructures(a, session);
 
         if (createNewVersion){
+           if (a.getAmpActivityId()==null)
             session.save(a);
+           else
+               session.merge(a);
         }
         else{
 //            session.saveOrUpdate(a);

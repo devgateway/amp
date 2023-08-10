@@ -180,7 +180,7 @@ public class ActivityVersionUtil {
         String gsValue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.VERSION_QUEUE_SIZE);
         if (gsValue != null) {
             try {
-                aux = Integer.valueOf(gsValue).intValue();
+                aux = Integer.parseInt(gsValue);
             } catch (NumberFormatException e) {
                 logger.error(e.getMessage(), e);
             }

@@ -588,11 +588,7 @@ public final class PerformanceRuleManager {
      */
     public void deleteActivityPerformanceRule(Session session, Long activityId) {
         String deleteQuery = "DELETE FROM amp_activity_performance_rule WHERE amp_activity_id = %s";
-        session.doWork(new Work() {
-            public void execute(Connection conn) throws SQLException {
-                SQLUtils.executeQuery(conn, String.format(deleteQuery, activityId));
-            }
-        });
+        session.doWork(conn -> SQLUtils.executeQuery(conn, String.format(deleteQuery, activityId)));
     }
     
     /**

@@ -33,7 +33,7 @@
 		<property name="comments" column="Comments" type="java.lang.String" />
 
 		<many-to-one name="activityId" column="activity_id"
-			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="delete" />
 		<!-- 
 			<many-to-one name="meIndicatorId" column="me_indicator_id" 
 			class="org.digijava.module.aim.dbentity.AmpMEIndicators" cascade="none"/>	

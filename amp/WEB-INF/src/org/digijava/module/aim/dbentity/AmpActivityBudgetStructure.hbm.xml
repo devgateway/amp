@@ -12,7 +12,7 @@
 		</id>
 
 		<many-to-one name="activity" column="amp_activity_id"
-			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" not-null="true" />
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="delete" not-null="true" />
 
 		<property name="budgetStructureName" column="budget_structure_name" type="java.lang.String" />
 

@@ -11,7 +11,7 @@
 		<property column="name" name="name" type="text" />
 		<property column="issueDate" name="issueDate" type="java.util.Date" />
 		<many-to-one name="activity" column="amp_activity_id"
-			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="delete" />
 		<set name="measures" cascade="all" inverse="true" order-by="amp_measure_id asc">
 			<cache usage="read-write" />
 			<key column="amp_issue_id" />

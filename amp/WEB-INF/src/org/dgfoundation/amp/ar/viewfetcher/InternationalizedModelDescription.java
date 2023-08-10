@@ -55,7 +55,7 @@ public class InternationalizedModelDescription {
             getPersister(modelClazz);
             return true;
         } catch (Exception e) {
-            logger.error("Seems this is not an entity: " + modelClazz, e);
+            logger.error("Seems this is not an entity: " + modelClazz);
             return false;
         }
     }

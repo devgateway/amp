@@ -220,7 +220,10 @@ public class ActivityUtil {
                     Long id = (Long) session.save(tmpGroup);
                     tmpGroup.setAmpActivityGroupId(id);
                                       a.setAmpActivityGroup(tmpGroup);
-                                      session.save(a);
+                    if (a.getAmpActivityId()==null)
+                        session.save(a);
+                    else
+                        session.merge(a);
 
                 }
                 a.setMember(new HashSet<>());
@@ -282,12 +285,16 @@ public class ActivityUtil {
         saveAnnualProjectBudgets(a, session);
         saveProjectCosts(a, session);
         saveStructures(a, session);
-
         if (createNewVersion){
            if (a.getAmpActivityId()==null)
             session.save(a);
-           else
-               session.merge(a);
+           else {
+               if (session.get(AmpActivityVersion.class, a.getAmpActivityId())!=null)
+               {
+                   session.evict(session.get(AmpActivityVersion.class, a.getAmpActivityId()));
+               }
+               session.saveOrUpdate(a);
+           }
         }
         else{
 //            session.saveOrUpdate(a);

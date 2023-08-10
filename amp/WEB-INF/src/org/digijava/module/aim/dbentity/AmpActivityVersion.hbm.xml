@@ -275,10 +275,10 @@
 		</set>
 
 		<property name="mergedActivity" column="merged_activity" type="java.lang.Boolean" />
-<!--		<many-to-one name="mergeSource1" column="merge_source1"-->
-<!--			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="all-delete-orphan" />-->
-<!--		<many-to-one name="mergeSource2" column="merge_source2"-->
-<!--			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="all-delete-orphan" />-->
+		<many-to-one name="mergeSource1" column="merge_source1"
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="delete" />
+		<many-to-one name="mergeSource2" column="merge_source2"
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="delete" />
 
 		<property name="activityType" column="activity_type" type="java.lang.Long" />
 		<property name="proposedProjectLife" column="proposed_project_life" type="java.lang.Integer" />

@@ -1043,13 +1043,13 @@ public class LuceneUtil implements Serializable {
     }
 
     private static String getBudgetCodesForActivity(AmpActivityVersion newActivity) {
-        StringBuffer sBuffer = new StringBuffer();
+        StringBuilder sBuffer = new StringBuilder();
         if (newActivity.getOrgrole() != null && Hibernate.isInitialized(newActivity.getOrgrole()) ) {
             for (AmpOrgRole role : newActivity.getOrgrole()) {
                 if(role.getBudgets()!=null && Hibernate.isInitialized(role.getBudgets())){
                     for (AmpOrgRoleBudget budget : role.getBudgets()){
                         if (budget.getBudgetCode() != null) {
-                            sBuffer.append(budget.getBudgetCode() + " ; ");
+                            sBuffer.append(budget.getBudgetCode()).append(" ; ");
                         }
                     }
                 }

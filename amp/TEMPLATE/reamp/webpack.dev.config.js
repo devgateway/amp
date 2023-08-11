@@ -81,12 +81,19 @@ module.exports = {
 
             {test: /\.json$/, loader: 'json'},
             {test: /\.css$/, exclude: /\.useable\.css$/, loader: "style!css"},
-            {test: /\.less$/, loader: "style!css!less"}
+            {test: /\.less$/, loader: "style!css!less"},
+            {
+                enforce: 'pre',
+                test: /\.js$/,
+                loader: 'source-map-loader',
+                exclude: /node_modules/
+            }
         ]
     },
-    devtool: 'source-map-inline',
-
+    debug: true,
+    devtool: 'inline-source-map',
     resolve: {
+        symlinks: false,
         extensions: ['', '.js', '.es6', '.jsx'],
         alias: {
             'react': path.join(__dirname, 'node_modules', 'react'),

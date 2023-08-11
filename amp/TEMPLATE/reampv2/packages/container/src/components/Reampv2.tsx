@@ -2,7 +2,7 @@ import React, {MutableRefObject, useEffect, useRef} from 'react';
 import {mount} from 'reampv2App/Reampv2App';
 import {useLocation, useNavigate} from "react-router-dom";
 
-const reampv2Basename = '#/reampv2-app';
+const reampv2Basename = '/reampv2-app';
 
 const Reampv2 = () => {
     const ref: MutableRefObject<any> = useRef(null);
@@ -13,7 +13,6 @@ const Reampv2 = () => {
     useEffect(() => {
         const reampv2NavigationEventHandler = (event: any) => {
             const pathname = event.detail;
-            console.log('Event in reampv2 +++++++', pathname);
             const newPathname = `${reampv2Basename}${pathname}`;
 
             if (newPathname === location.pathname) {
@@ -33,20 +32,17 @@ const Reampv2 = () => {
 
     // Listen for shell location changes and dispatch a notification.
     useEffect(() => {
-        console.log('loc', location)
-            if (location.pathname.startsWith(reampv2Basename)) {
-                window.dispatchEvent(
-                    new CustomEvent("[container] navigated", {
-                        detail: location.hash.replace("#/", ""),
-                    })
-                );
+            if (location.pathname === reampv2Basename) {
+                const reampv2NavigationEvent = new CustomEvent("[container] navigated", {
+                    detail: location.hash.replace("#/", ""),
+                });
+                window.dispatchEvent(reampv2NavigationEvent);
             }
-        },
-        [location]
-    );
+            }, [location]);
 
     const isFirstRunRef = useRef(true);
-    const unmountRef = useRef(() => {});
+    const unmountRef = useRef(() => {
+    });
 
     useEffect(() => {
         if (!isFirstRunRef.current) {

@@ -1,5 +1,5 @@
 import React from 'react';
-import {createBrowserRouter, createHashRouter, HashRouter, Route, RouterProvider, Routes} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import routesArray from "./routes";
 
 const AppRouter = () => {

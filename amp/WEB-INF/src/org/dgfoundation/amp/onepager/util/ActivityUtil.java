@@ -1372,14 +1372,31 @@ public class ActivityUtil {
     private static void saveProjectCosts(AmpActivityVersion a, Session session) {
         if (a.getCostAmounts() != null) {
             for (AmpFundingAmount afa : a.getCostAmounts()) {
-                afa.setActivity(a);
                 if (afa.getAmpFundingAmountId() == null) {
+                    String hql = "FROM "+ AmpFundingAmount.class.getName()+ " e WHERE e.activity= :activityValue";
+                    List<AmpFundingAmount> results = session.createQuery(hql, AmpFundingAmount.class)
+                            .setParameter("activityValue", afa.getActivity())
+                            .list();
+                    if (!results.isEmpty())
+                    {
+                        for (AmpFundingAmount ampFundingAmount: results) {
+                            if (ampFundingAmount.getFunType().equals(afa.getFunType())) {
+
+                                ampFundingAmount.setActivity(null);
+                                session.merge(ampFundingAmount);
+                            }
+                        }
+                        session.flush();
+
+                    }
+                    afa.setActivity(a);
                     session.saveOrUpdate(afa);
                 } else {
                     session.merge(afa);
                 }
             }
         }
+
 
     }
 

@@ -1376,7 +1376,7 @@ public class ActivityUtil {
                     String hql = "FROM "+ AmpFundingAmount.class.getName()+ " e WHERE e.funType = :fundingTypeValue and e.activity= :activityValue";
                     List<AmpFundingAmount> results = session.createQuery(hql, AmpFundingAmount.class)
                             .setParameter("activityValue", afa.getActivity(), ObjectType.INSTANCE)
-                            .setParameter("fundingTypeValue", afa.getFunType(), IntegerType.INSTANCE)
+                            .setParameter("fundingTypeValue", afa.getFunType())
                             .list();
                     if (!results.isEmpty())
                     {

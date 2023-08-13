@@ -39,11 +39,10 @@ import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.message.triggers.ActivityValidationWorkflowTrigger;
 import org.digijava.module.translation.util.ContentTranslationUtil;
-import org.hibernate.Hibernate;
-import org.hibernate.LockMode;
-import org.hibernate.LockOptions;
-import org.hibernate.Session;
+import org.hibernate.*;
 import org.hibernate.query.Query;
+import org.hibernate.type.IntegerType;
+import org.hibernate.type.ObjectType;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
@@ -1373,9 +1372,19 @@ public class ActivityUtil {
     private static void saveProjectCosts(AmpActivityVersion a, Session session) {
         if (a.getCostAmounts() != null) {
             for (AmpFundingAmount afa : a.getCostAmounts()) {
-                afa.setActivity(a);
                 if (afa.getAmpFundingAmountId() == null) {
-//                    String hql = "FROM "+ AmpFunding + "where amp_activity_id= :value and type";
+                    String hql = "FROM "+ AmpFundingAmount.class.getName()+ " e WHERE e.funType = :fundingTypeValue and e.activity= :activityValue";
+                    List<AmpFundingAmount> results = session.createQuery(hql, AmpFundingAmount.class)
+                            .setParameter("activityValue", afa.getActivity(), ObjectType.INSTANCE)
+                            .setParameter("fundingTypeValue", afa.getFunType(), IntegerType.INSTANCE)
+                            .list();
+                    if (!results.isEmpty())
+                    {
+                        afa.setActivity(null);
+                        session.merge(afa);
+                        session.flush();
+                    }
+                    afa.setActivity(a);
                     session.saveOrUpdate(afa);
                 } else {
                     session.merge(afa);

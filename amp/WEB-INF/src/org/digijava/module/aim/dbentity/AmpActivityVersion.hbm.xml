@@ -283,11 +283,10 @@
 		<property name="activityType" column="activity_type" type="java.lang.Long" />
 		<property name="proposedProjectLife" column="proposed_project_life" type="java.lang.Integer" />
 
-		<set name="costAmounts" cascade="delete" inverse="true" lazy="false">
+		<set name="costAmounts" cascade="all-delete-orphan" inverse="true" lazy="false">
 			<key column="amp_activity_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpFundingAmount" />
 		</set>
-
 	'
 	>
 ]>

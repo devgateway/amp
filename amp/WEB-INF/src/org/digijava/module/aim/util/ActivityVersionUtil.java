@@ -17,6 +17,7 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.version.exception.CannotGetLastVersionForVersionException;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.hibernate.type.LongType;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
@@ -198,7 +199,7 @@ public class ActivityVersionUtil {
             String queryStr = "SELECT v.ampActivityGroup.ampActivityLastVersion.ampActivityId  FROM " +AmpActivityVersion.class.getName() +
                     " v  WHERE v.ampActivityId=:oldActivityId";
             Query query     = session.createQuery(queryStr);
-            query.setLong("oldActivityId", oldActivity);
+            query.setParameter("oldActivityId", oldActivity, LongType.INSTANCE);
             Long id     = (Long)query.uniqueResult();
             return id;
         } catch (Exception e) {
@@ -229,7 +230,7 @@ public class ActivityVersionUtil {
             }
         }
 
-        out.setAmpActivityGroup(null);
+//        out.setAmpActivityGroup(null);
         return out;
     }
     

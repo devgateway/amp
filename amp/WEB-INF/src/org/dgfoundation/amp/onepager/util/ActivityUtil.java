@@ -229,18 +229,19 @@ public class ActivityUtil {
                         session.merge(a);
 
                 }
-                session.flush();
+//                session.flush();
                 a.setMember(new HashSet<>());
 
             } catch (CloneNotSupportedException e) {
                 logger.error("Can't clone current Activity: ", e);
             }
         }
+        logger.info("Object before prepare :" + a.getApprovalStatus());
 
         if (context.isPrepareToSave()) {
             prepareToSave(a, oldA, ampCurrentMember, draft, context);
         }
-        logger.info("Status after prepare :" + a.getApprovalStatus());
+        logger.info("Object after prepare :" + a.getApprovalStatus());
 
         if (a.getAmpActivityGroup() == null) {
             //we need to create a group for this activity
@@ -251,7 +252,7 @@ public class ActivityUtil {
             a.setAmpActivityGroup(tmpGroup);
 
         }
-        session.flush();
+//        session.flush();
 
         setCreationTimeOnStructureImages(a);
 
@@ -1374,12 +1375,14 @@ public class ActivityUtil {
             for (AmpFundingAmount afa : a.getCostAmounts()) {
                 afa.setActivity(a);
                 if (afa.getAmpFundingAmountId() == null) {
+//                    String hql = "FROM "+ AmpFunding + "where amp_activity_id= :value and type";
                     session.saveOrUpdate(afa);
                 } else {
                     session.merge(afa);
                 }
             }
         }
+
 
     }
 

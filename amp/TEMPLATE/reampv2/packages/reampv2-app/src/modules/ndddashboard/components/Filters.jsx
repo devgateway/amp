@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import FilterOutputItem from './FilterOutputItem';
 import { TRN_PREFIX } from '../utils/constants';
 
-import Filter from '@tmugo/amp-filter';
+import Filter from '@devgateway/amp-filter/dist/amp-filter';
 
 const filter = new Filter({
   draggable: true,

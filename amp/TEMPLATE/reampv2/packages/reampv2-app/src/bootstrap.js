@@ -6,9 +6,9 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 // amp-filter css
-import '@tmugo/amp-filter/dist/amp-filter.css';
+import '@devgateway/amp-filter/dist/amp-filter.css';
 
-const boilerplate = require('@tmugo/amp-boilerplate/dist/amp-boilerplate');
+const boilerplate = require('@devgateway/amp-boilerplate/dist/amp-boilerplate');
 
 
 serviceWorker.unregister();

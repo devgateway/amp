@@ -8,7 +8,7 @@ import { TRN_PREFIX } from '../utils/constants';
 
 import { NDDTranslationContext } from './StartUp';
 
-const SettingsWidget = require('@tmugo/amp-settings/dist/amp-settings');
+const SettingsWidget = require('@devgateway/amp-settings/dist/amp-settings');
 
 const widget = new SettingsWidget.SettingsWidget({
   el: 'settings-popup',

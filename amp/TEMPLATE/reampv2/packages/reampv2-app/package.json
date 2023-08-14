@@ -4,6 +4,9 @@
   "private": true,
   "proxy": "http://localhost:8080",
   "dependencies": {
+    "@devgateway/amp-boilerplate": "github:devgateway/amp-boilerplate",
+    "@devgateway/amp-filter": "github:devgateway/amp-filter",
+    "@devgateway/amp-settings": "github:devgateway/amp-settings",
     "@fortawesome/fontawesome-svg-core": "^1.2.30",
     "@fortawesome/free-solid-svg-icons": "^5.14.0",
     "@fortawesome/react-fontawesome": "^0.1.11",
@@ -17,9 +20,6 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
-    "@tmugo/amp-boilerplate": "^0.1.2",
-    "@tmugo/amp-filter": "^0.2.1",
-    "@tmugo/amp-settings": "^0.1.4",
     "@tmugo/react-infinite-carousel": "^2.0.4",
     "babel-eslint": "^10.1.0",
     "bootstrap": "^4.5.3",
@@ -98,6 +98,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.22.10",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "cross-env": "^7.0.3",
     "eslint-config-airbnb": "^18.2.0",

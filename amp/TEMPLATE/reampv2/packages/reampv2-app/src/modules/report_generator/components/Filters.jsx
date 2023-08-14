@@ -13,7 +13,7 @@ import {
 import { toggleIcon } from '../utils/appliedFiltersExtenalCode';
 import { translate, hasFilters } from '../utils/Utils';
 
-const Filter = require('@tmugo/amp-filter');
+const Filter = require('@devgateway/amp-filter/dist/amp-filter');
 
 let filter = null;
 

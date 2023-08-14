@@ -22,9 +22,11 @@ const routes = [
             {
                 path: "ssc/*",
                 element: (
-                    <Suspense fallback={<div>Loading...</div>}>
-                        <SSCDashboardApp />
-                    </Suspense>
+                    <NavigationManager>
+                        <Suspense fallback={<div>Loading...</div>}>
+                            <SSCDashboardApp />
+                        </Suspense>
+                    </NavigationManager>
                 )
             },
             {

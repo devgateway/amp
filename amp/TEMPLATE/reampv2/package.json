@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "workspaces": [
-    "packages/*"
+    "packages/**/*"
   ],
   "scripts": {
     "start": "lerna run start",
@@ -15,7 +15,8 @@
   "license": "GPL-3.0",
   "devDependencies": {
     "lerna": "^7.1.4",
-    "nx": "^16.6.0"
+    "nx": "^16.6.0",
+    "nx-cloud": "^16.3.0"
   },
   "dependencies": {
     "fs": "^0.0.1-security",

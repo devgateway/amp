@@ -42,6 +42,7 @@ import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.*;
 import org.hibernate.query.Query;
 import org.hibernate.type.IntegerType;
+import org.hibernate.type.LongType;
 import org.hibernate.type.ObjectType;
 
 import javax.jcr.Node;
@@ -303,7 +304,7 @@ public class ActivityUtil {
 //            session.saveOrUpdate(a);
             session.merge(a);
         }
-        session.flush();
+//        session.flush();
 
         updatePerformanceRules(oldA, a);
 
@@ -1390,11 +1391,11 @@ public class ActivityUtil {
                             if (fundingAmount.getFunType().equals(afa.getFunType())) {
 
                                 fundingAmount.setActivity(null);
-                                session.merge(fundingAmount);
+                                Query qry = session.createQuery("update " + AmpFundingAmount.class.getName() + " a set a.activity= :activityValue where a.ampFundingAmountId= :fundingAmountId");
+                                qry.setParameter("activityValue", null).setParameter("fundingAmountId",fundingAmount.getAmpFundingAmountId(), LongType.INSTANCE).executeUpdate();
                             }
 
                         });
-                        session.flush();
                     }
 
                     afa.setActivity(a);

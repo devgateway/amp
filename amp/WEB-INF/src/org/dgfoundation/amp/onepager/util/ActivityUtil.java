@@ -55,6 +55,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.util.Objects.isNull;
+
 /**
  * Util class used to manipulate an activity
  *
@@ -317,6 +319,14 @@ public class ActivityUtil {
         logAudit(ampCurrentMember, a, newActivity);
 
         return a;
+    }
+    private static <T> void cleanObjectFromSession(Session session, Class<T> objectClass, Long id)
+    {
+        T object = session.get(objectClass, id);
+        if (!isNull(object))
+        {
+            session.evict(object);
+        }
     }
 
     private static void updateMultiStakeholderField(AmpActivityVersion a) {
@@ -1377,22 +1387,22 @@ public class ActivityUtil {
                     List<AmpFundingAmount> results = session.createQuery(hql, AmpFundingAmount.class)
                             .setParameter("activityValue", afa.getActivity())
                             .list();
-                    if (!results.isEmpty())
-                    {
-                        for (AmpFundingAmount ampFundingAmount: results) {
-                            if (ampFundingAmount.getFunType().equals(afa.getFunType())) {
-
-                                ampFundingAmount.setActivity(null);
-                                session.merge(ampFundingAmount);
-                            }
+                    Transaction tx =session.getTransaction();
+                    results.forEach(fundingAmount->{
+                        if (fundingAmount.getFunType().equals(afa.getFunType()))
+                        {
+                            AmpFundingAmount item = session.load(AmpFundingAmount.class, fundingAmount.getAmpFundingAmountId());
+                            session.delete(item);
                         }
-                        session.flush();
 
-                    }
+                    });
+                    tx.commit();
+
                     afa.setActivity(a);
                     session.saveOrUpdate(afa);
                 } else {
-                    session.merge(afa);
+                    cleanObjectFromSession(session, AmpFundingAmount.class,afa.getAmpFundingAmountId());
+                    session.update(afa);
                 }
             }
         }

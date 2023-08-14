@@ -1387,16 +1387,16 @@ public class ActivityUtil {
                     List<AmpFundingAmount> results = session.createQuery(hql, AmpFundingAmount.class)
                             .setParameter("activityValue", afa.getActivity())
                             .list();
-                    Transaction tx =session.getTransaction();
                     results.forEach(fundingAmount->{
                         if (fundingAmount.getFunType().equals(afa.getFunType()))
                         {
-                            AmpFundingAmount item = session.load(AmpFundingAmount.class, fundingAmount.getAmpFundingAmountId());
-                            session.delete(item);
+
+                            fundingAmount.setActivity(null);
+                            session.merge(fundingAmount);
                         }
 
                     });
-                    tx.commit();
+                    session.flush();
 
                     afa.setActivity(a);
                     session.saveOrUpdate(afa);

@@ -296,9 +296,7 @@ public class ActivityUtil {
             if (a.getAmpActivityId() == null)
                 session.save(a);
             else {
-                if (session.get(AmpActivityVersion.class, a.getAmpActivityId()) != null) {
-                    session.evict(session.get(AmpActivityVersion.class, a.getAmpActivityId()));
-                }
+               cleanObjectFromSession(session,AmpActivityVersion.class, a.getAmpActivityId());
                 session.saveOrUpdate(a);
             }
         } else {
@@ -1387,16 +1385,17 @@ public class ActivityUtil {
                     List<AmpFundingAmount> results = session.createQuery(hql, AmpFundingAmount.class)
                             .setParameter("activityValue", afa.getActivity())
                             .list();
-                    results.forEach(fundingAmount->{
-                        if (fundingAmount.getFunType().equals(afa.getFunType()))
-                        {
+                    if (results!=null && !results.isEmpty()) {
+                        results.forEach(fundingAmount -> {
+                            if (fundingAmount.getFunType().equals(afa.getFunType())) {
 
-                            fundingAmount.setActivity(null);
-                            session.merge(fundingAmount);
-                        }
+                                fundingAmount.setActivity(null);
+                                session.merge(fundingAmount);
+                            }
 
-                    });
-                    session.flush();
+                        });
+                        session.flush();
+                    }
 
                     afa.setActivity(a);
                     session.saveOrUpdate(afa);

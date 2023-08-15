@@ -21,11 +21,8 @@ import org.dgfoundation.amp.menu.MenuUtils;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.gpi.GPIEPConstants;
-import org.digijava.kernel.ampapi.endpoints.security.dto.AuthenticationRequest;
-import org.digijava.kernel.ampapi.endpoints.security.dto.LayoutInformation;
-import org.digijava.kernel.ampapi.endpoints.security.dto.MenuItemStructure;
-import org.digijava.kernel.ampapi.endpoints.security.dto.UserSessionInformation;
-import org.digijava.kernel.ampapi.endpoints.security.dto.WorkspaceInfo;
+import org.digijava.kernel.ampapi.endpoints.security.dto.*;
+import org.digijava.kernel.ampapi.endpoints.security.dto.UserManager;
 import org.digijava.kernel.ampapi.endpoints.util.AmpApiToken;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.request.TLSUtils;
@@ -355,5 +352,32 @@ public class SecurityService {
         }
     
         return layout;
+    }
+
+    public UserManager createUser(CreateUserRequest createUser) {
+        // Get session of logged in user and check if its an admin
+        String adminSession = (String) TLSUtils.getRequest().getSession().getAttribute("ampAdmin");
+        logger.info("Creating user is admin: " + adminSession);
+
+        if ( adminSession == null || adminSession.equals("no") ) {
+            ApiErrorResponseService.reportForbiddenAccess(SecurityErrors.NOT_ALLOWED);
+        }
+
+        String firstName = createUser.getFirstName();
+        String lastName = createUser.getLastName();
+        String email = createUser.getEmail();
+        String confirmEmail = createUser.getEmailConfirmation();
+        String password = createUser.getPassword();
+        String passwordConfirmation = createUser.getPasswordConfirmation();
+
+        // Validation
+        if (StringUtils.isBlank(firstName) || StringUtils.isBlank(lastName) ||
+                StringUtils.isBlank(email) || StringUtils.isBlank(confirmEmail) ||
+                StringUtils.isBlank(password) || StringUtils.isBlank(passwordConfirmation))
+        {
+            ApiErrorResponseService.reportError(BAD_REQUEST, SecurityErrors.FILL_FORM_CORRECTLY);
+        }
+
+        return new UserManager(firstName, lastName, email);
     }
 }

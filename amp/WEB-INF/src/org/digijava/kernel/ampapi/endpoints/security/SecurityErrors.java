@@ -50,4 +50,7 @@ public class SecurityErrors {
     public static final ApiErrorMessage USER_SUSPENDED = new ApiErrorMessage(ERROR_CLASS_SECURITY_ID, 13,
             "User Suspsended");
 
+    public static final ApiErrorMessage FILL_FORM_CORRECTLY = new ApiErrorMessage(ERROR_CLASS_SECURITY_ID, 14,
+            "Please fill the form correctly");
+
 }

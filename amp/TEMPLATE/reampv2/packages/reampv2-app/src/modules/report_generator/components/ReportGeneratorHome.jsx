@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -31,31 +31,24 @@ import {
 } from '../utils/constants';
 import { setColumnsData, setHierarchiesData, setMeasuresData } from '../actions/mementoAction';
 import { fetchLanguages } from '../actions/languagesActions';
-import {useLocation, useParams} from "react-router-dom";
+import {withRouter} from "../../../utils/components/WithRouter";
 
-
-const ReportGeneratorHome = (props) => {
-  const {
-    _getMetadata, _fetchReport,  _updateProfile, _updateId, translations,
-    _updateReportDetailsFundingGrouping, _setColumnsData, _setMeasuresData, _setHierarchiesData,
-    _setInitialHierarchies, _fetchLanguages, _markExistingReportSanitized, _updateColumnsSelected,
-    _updateMeasuresSelected, _updateMeasuresSorting, layoutLoaded, results, profile, uiReducer, _save, _saveNew,
-      _runReport
-  } = props;
-
-  // Only logged users can use the tab generator.
-  if (layoutLoaded && results.logged !== true && profile === PROFILE_TAB) {
-    window.location.href = '/';
+class ReportGeneratorHome extends Component {
+  constructor() {
+    super();
+    this.state = { showChildren: false, errors: null };
   }
 
-  const [showChildren, setShowChildren] = useState(false);
-    const [errors, setErrors] = useState([]);
-
-  useEffect(() => {
+  componentDidMount() {
+    const {
+      _getMetadata, _fetchReport, location, _updateProfile, _updateId, translations,
+      _updateReportDetailsFundingGrouping, _setColumnsData, _setMeasuresData, _setHierarchiesData,
+      _setInitialHierarchies, _fetchLanguages, _markExistingReportSanitized, _updateColumnsSelected,
+      _updateMeasuresSelected, _updateMeasuresSorting,
+    } = this.props;
     _fetchLanguages();
     // eslint-disable-next-line react/destructuring-assignment,react/prop-types
-    const { id } = useParams();
-    const location = useLocation();
+    const { id } = this.props.params;
     const typeFromURL = new URLSearchParams(location.search).get('type');
     const profileFromURL = new URLSearchParams(location.search).get('profile');
 
@@ -67,7 +60,7 @@ const ReportGeneratorHome = (props) => {
         _updateProfile(profile);
         if (reportMetadata.payload) {
           return _getMetadata(reportMetadata.payload.type, profile).then((apiMetaData) => {
-            setShowChildren(true);
+            this.setState({ showChildren: true });
 
             // AMP-30290: We need to remove columns that are not available in the API anymore.
             const sanitizedSelectedColumns = reportMetadata.payload.columns
@@ -111,8 +104,7 @@ const ReportGeneratorHome = (props) => {
           });
         } else {
           // eslint-disable-next-line max-len
-          setErrors([<ErrorMessage visible message={translate('errorLoadingReport', profile, translations)} />]);
-          return void 0;
+          return this.setState({ errors: [<ErrorMessage visible message={translate('errorLoadingReport', profile, translations)} />] });
         }
       });
     } else {
@@ -121,11 +113,12 @@ const ReportGeneratorHome = (props) => {
       _getMetadata(typeFromURL, profileFromURL);
       _updateReportDetailsFundingGrouping(revertReportType(typeFromURL));
       // eslint-disable-next-line react/no-did-mount-set-state
-      setShowChildren(true);
+      this.setState({ showChildren: true });
     }
-  }, []);
+  }
 
-  const commonReport = (isNew, isDynamic) => {
+  commonReport = (isNew, isDynamic) => {
+    const { uiReducer } = this.props;
     const body = {
       id: isNew ? null : uiReducer.id,
       name: !isDynamic ? uiReducer.reportDetails.name : RUN_REPORT_NAME,
@@ -170,7 +163,26 @@ const ReportGeneratorHome = (props) => {
     return body;
   }
 
-  const processAfterSave = (response, open) => {
+  saveReport = (open) => {
+    const { _save, uiReducer } = this.props;
+    const body = this.commonReport(false, false);
+    return _save(uiReducer.id, body).then(response => this.processAfterSave(response, open));
+  }
+
+  saveNewReport = (open) => {
+    const { _saveNew } = this.props;
+    const body = this.commonReport(true, false);
+    return _saveNew(body).then(response => this.processAfterSave(response, open));
+  }
+
+  runReport = () => {
+    const { _runReport } = this.props;
+    const body = this.commonReport(true, true);
+    return _runReport(body).then(response => this.processAfterSave(response, true));
+  }
+
+  processAfterSave = (response, open) => {
+    const { translations, uiReducer, profile } = this.props;
     if (response.error) {
       const errors = [];
       Object.keys(response.error).forEach(i => {
@@ -178,7 +190,7 @@ const ReportGeneratorHome = (props) => {
         errors.push({ id: i, label: trnLabel || response.error[i] });
       });
       if (errors.length > 0) {
-        setErrors(errors.map(i => <ErrorMessage key={i.id} visible message={i.label} />));
+        this.setState({ errors: errors.map(i => <ErrorMessage key={i.id} visible message={i.label} />) });
       }
       return null;
     }
@@ -195,38 +207,29 @@ const ReportGeneratorHome = (props) => {
     return null;
   }
 
-  const saveReport = (open) => {
-    const body = commonReport(false, false);
-    return _save(uiReducer.id, body).then(response => processAfterSave(response, open));
-  }
+  render() {
+    const { showChildren: canLoadChildren, errors } = this.state;
+    const { layoutLoaded, results, profile } = this.props;
 
-  const saveNewReport = (open) => {
-    const body = commonReport(true, false);
-    return _saveNew(body).then(response => processAfterSave(response, open));
-  }
+    // Only logged users can use the tab generator.
+    if (layoutLoaded && results.logged !== true && profile === PROFILE_TAB) {
+      window.location.href = '/';
+    }
 
-  const runReport = () => {
-    const body = commonReport(true, true);
-    return _runReport(body).then(response => processAfterSave(response, true));
+    return (
+        <Container>
+          <MainHeader />
+          <FiltersAndSettings loading={!canLoadChildren} />
+          {errors ? (
+              <Segment className="errors_segment">
+                {errors}
+              </Segment>
+          ) : null}
+          <MainContent saveNewReport={this.saveNewReport} saveReport={this.saveReport} runReport={this.runReport} />
+        </Container>
+    );
   }
-
-  return (
-      <Container>
-        <MainHeader />
-        <FiltersAndSettings loading={!showChildren} />
-        {errors ? (
-            <Segment className="errors_segment">
-              {errors.map((error) => (
-                  <div key={error}>
-                      {error}
-                  </div>
-              ))}
-            </Segment>
-        ) : null}
-        <MainContent saveNewReport={saveNewReport} saveReport={saveReport} runReport={runReport} />
-      </Container>
-  );
-};
+}
 
 const mapStateToProps = state => ({
   translations: state.translationsReducer.translations,
@@ -261,6 +264,7 @@ ReportGeneratorHome.propTypes = {
   _fetchReport: PropTypes.func.isRequired,
   _updateProfile: PropTypes.func.isRequired,
   _updateId: PropTypes.func.isRequired,
+  location: PropTypes.object.isRequired,
   translations: PropTypes.object.isRequired,
   _saveNew: PropTypes.func.isRequired,
   _save: PropTypes.func.isRequired,
@@ -287,4 +291,5 @@ ReportGeneratorHome.defaultProps = {
   results: undefined,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ReportGeneratorHome);
+ReportGeneratorHome.contextType = ReportGeneratorContext;
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ReportGeneratorHome));

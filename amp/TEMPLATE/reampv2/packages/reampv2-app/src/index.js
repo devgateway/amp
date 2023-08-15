@@ -4,7 +4,7 @@ import('./bootstrap').then(({ mount }) => {
     const appRoot = document.getElementById(DIV_ROOT_ID);
 
     if (appRoot) {
-        console.log('Mounting app')
+        console.log('Mounting reampv2 app')
         mount({
             mountPoint: appRoot,
             routingStrategy: 'browser'

@@ -6,8 +6,6 @@ const NavigationManager = ({ children }) => {
     const location = useLocation();
     const navigate = useNavigate();
 
-    console.log('reampv2========', location)
-
     useEffect(() => {
         function containerNavigationHandler(event) {
             const pathname = event.detail;
@@ -26,7 +24,6 @@ const NavigationManager = ({ children }) => {
     }, [location]);
 
     useEffect(() => {
-        console.log('debug current location before dispatch', location)
         const reampv2Event = new CustomEvent("[reampv2] navigated", { detail: location.pathname })
         window.dispatchEvent(reampv2Event);
 

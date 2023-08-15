@@ -9,9 +9,7 @@ const Reampv2 = () => {
     const ref = useRef<HTMLDivElement>(null);
     const location = useLocation();
     const navigate = useNavigate();
-
-    console.log('cont++++++++', location);
-
+    
     // Listen to navigation events dispatched inside reampv2 mfe.
     useEffect(() => {
         const reampv2NavigationEventHandler = (event: Event) => {

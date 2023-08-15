@@ -38,4 +38,10 @@ export const mount = ({ mountPoint, routingStrategy , standalone = true}) => {
     }
 
     serviceWorker.register();
+    //unmount the app if it is not in use
+    return () => {
+        if (!mountPoint) {
+            ReactDOM.unmountComponentAtNode(mountPoint);
+        }
+    }
 }

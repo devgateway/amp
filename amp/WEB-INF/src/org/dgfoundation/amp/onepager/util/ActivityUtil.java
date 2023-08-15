@@ -502,7 +502,7 @@ public class ActivityUtil {
     private static void setActivityStatus(AmpTeamMember ampCurrentMember, boolean savedAsDraft, AmpActivityFields a,
                                           AmpActivityVersion oldA, boolean newActivity, boolean rejected) {
         boolean teamLeadFlag = isApprover(ampCurrentMember);
-        logger.info("Teamleadd? " + teamLeadFlag);
+        logger.info("Teamlead? " + teamLeadFlag);
         Boolean crossTeamValidation = ampCurrentMember.getAmpTeam().getCrossteamvalidation();
         boolean isSameWorkspace = ampCurrentMember.getAmpTeam().getAmpTeamId().equals(a.getTeam().getAmpTeamId());
 
@@ -592,8 +592,6 @@ public class ActivityUtil {
             a.setApprovedBy(ampCurrentMember);
             a.setApprovalDate(Calendar.getInstance().getTime());
         }
-        logger.info("Approval;");
-        logger.info(a.getApprovalStatus());
     }
 
     /**

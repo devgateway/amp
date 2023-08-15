@@ -1,20 +1,12 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import './App.css';
-// import AppRoute from './App.route';
-// import NavigationManager from "./NavigationManager";
-// import {createHashHistory} from "history";
-import AppRouter from "./routing";
+import {RouterProvider} from "react-router-dom";
+import {createRouter} from "./routing";
 
-const App = () => {
-    // useEffect(() => {
-    //     // Detect changes in params after the '#'.
-    //     window.addEventListener('hashchange', () => {
-    //         window.location.reload();
-    //     }, false);
-    // }, []);
-
+const App = ({ routingStrategy }) => {
+    const router = createRouter({ routingStrategy });
     return (
-        <AppRouter/>
+        <RouterProvider router={router} />
     );
 }
 

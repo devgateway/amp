@@ -12,7 +12,10 @@ const AmpOffline = () => {
             return;
         }
 
-        unmountRef.current = mount(ref.current);
+        unmountRef.current = mount({
+            el: ref.current,
+            standalone: false
+        });
         isFirstRunRef.current = false;
     }, []);
 

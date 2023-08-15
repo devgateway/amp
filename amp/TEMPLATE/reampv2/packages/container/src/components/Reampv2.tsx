@@ -1,24 +1,26 @@
-import React, {MutableRefObject, useEffect, useRef} from 'react';
+import React, { useEffect, useRef} from 'react';
 import {mount} from 'reampv2App/Reampv2App';
 import {useLocation, useNavigate} from "react-router-dom";
+import {REAMPV2_APP_NAME} from "../utils/constants";
 
-const reampv2Basename = '/reampv2-app';
+const reampv2Basename = `/${REAMPV2_APP_NAME}`;
 
 const Reampv2 = () => {
-    const ref: MutableRefObject<any> = useRef(null);
+    const ref = useRef<HTMLDivElement>(null);
     const location = useLocation();
     const navigate = useNavigate();
 
+    console.log('cont++++++++', location);
+
     // Listen to navigation events dispatched inside reampv2 mfe.
     useEffect(() => {
-        const reampv2NavigationEventHandler = (event: any) => {
-            const pathname = event.detail;
+        const reampv2NavigationEventHandler = (event: Event) => {
+            const pathname = (event as CustomEvent<string>).detail;
             const newPathname = `${reampv2Basename}${pathname}`;
-
             if (newPathname === location.pathname) {
                 return;
             }
-            navigate(pathname);
+            navigate(newPathname);
         };
         window.addEventListener("[reampv2] navigated", reampv2NavigationEventHandler);
 
@@ -30,36 +32,44 @@ const Reampv2 = () => {
         };
     }, [location]);
 
-    // Listen for shell location changes and dispatch a notification.
+    // Listen for container location changes and dispatch a notification.
     useEffect(() => {
-            if (location.pathname === reampv2Basename) {
-                const reampv2NavigationEvent = new CustomEvent("[container] navigated", {
-                    detail: location.hash.replace("#/", ""),
-                });
-                window.dispatchEvent(reampv2NavigationEvent);
-            }
-            }, [location]);
+        console.log('pathname', location.pathname)
+        console.log('replace', location.pathname.replace(reampv2Basename, ""))
+        if (location.pathname.startsWith(reampv2Basename)) {
+            window.dispatchEvent(
+                new CustomEvent("[container] navigated", {
+                    detail: location.pathname.replace(reampv2Basename, ""),
+                })
+            );
+        }
+    }, [location]);
 
     const isFirstRunRef = useRef(true);
-    const unmountRef = useRef(() => {
-    });
-
-    useEffect(() => {
-        if (!isFirstRunRef.current) {
-            return;
-        }
-
-        unmountRef.current = mount({
-            el: ref.current,
-            standalone: false
-        });
-        isFirstRunRef.current = false;
-    }, [location]);
+    const unmountRef = useRef(() => {});
+    // Mount reampv2 MFE
+    useEffect(
+        () => {
+            if (!isFirstRunRef.current) {
+                return;
+            }
+            unmountRef.current = mount({
+                mountPoint : ref.current!,
+                initialPathName: location.pathname.replace(
+                    reampv2Basename,
+                    ''
+                ),
+                standalone: false
+            });
+            isFirstRunRef.current = false;
+        },
+        [location],
+    );
 
     useEffect(() => unmountRef.current, []);
 
     return (
-        <div ref={ref}/>
+        <div ref={ref} id="reampv2-app-mfe" />
     );
 }
 export default Reampv2

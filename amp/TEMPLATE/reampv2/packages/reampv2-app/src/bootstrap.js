@@ -5,25 +5,20 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-// amp-filter css
 import '@devgateway/amp-filter/dist/amp-filter.css';
-
 const boilerplate = require('@devgateway/amp-boilerplate/dist/amp-boilerplate');
 
-
-serviceWorker.unregister();
-console.log('reampv2 app bootstrap');
-const Root = () => {
+const Root = ({ routingStrategy }) => {
     return (
         <React.StrictMode>
-            <App/>
+            <App routingStrategy={routingStrategy}/>
         </React.StrictMode>
     )
 };
 
-export const mount = ({el, standalone = true}) => {
-    if (el) {
-        ReactDOM.render(<Root/>, el);
+export const mount = ({ mountPoint, routingStrategy , standalone = true}) => {
+    if (mountPoint) {
+        ReactDOM.render(<Root routingStrategy={routingStrategy }/>, mountPoint);
     }
 
     if (standalone) {
@@ -41,4 +36,6 @@ export const mount = ({el, standalone = true}) => {
             new boilerplate.layout({});
         }
     }
+
+    serviceWorker.register();
 }

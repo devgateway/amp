@@ -6,7 +6,8 @@ import('./bootstrap').then(({ mount }) => {
     if (appRoot) {
         console.log('Mounting app')
         mount({
-            el: appRoot,
+            mountPoint: appRoot,
+            routingStrategy: 'browser'
         });
     }
 });

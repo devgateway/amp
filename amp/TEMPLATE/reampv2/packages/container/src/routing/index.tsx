@@ -1,10 +1,11 @@
 import React from 'react';
-import {RouterProvider, createHashRouter} from 'react-router-dom';
+import {RouterProvider, createHashRouter, createBrowserRouter} from 'react-router-dom';
 import {routes} from "./routes";
 
-const router = createHashRouter(routes);
+
 
 const Router = () => {
+    const router = createBrowserRouter(routes);
     return (
         <>
             <RouterProvider router={router}/>

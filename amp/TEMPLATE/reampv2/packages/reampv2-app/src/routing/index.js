@@ -1,12 +1,12 @@
-import React from 'react';
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import routesArray from "./routes";
+import { createBrowserRouter, createMemoryRouter } from "react-router-dom";
+import {RoutingStrategies} from "../utils/Constants";
+import routes from "./routes";
 
-const AppRouter = () => {
-    const router = createBrowserRouter(routesArray)
-    return (
-        <RouterProvider router={router} />
-    );
+export const createRouter = ({ routingStrategy }) => {
+    if (routingStrategy === RoutingStrategies.BROWSER) {
+        return createBrowserRouter(routes);
+    }
+
+    const initialEntries = ["/"]
+    return createMemoryRouter(routes, { initialEntries });
 }
-export default AppRouter;
-

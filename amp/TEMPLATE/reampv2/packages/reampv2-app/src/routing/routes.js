@@ -20,13 +20,12 @@ const routes = [
         ),
         children: [
             {
-                path: "ssc/*",
+                path: "/ssc/*",
+                index: true,
                 element: (
-                    <NavigationManager>
                         <Suspense fallback={<div>Loading...</div>}>
                             <SSCDashboardApp />
                         </Suspense>
-                    </NavigationManager>
                 )
             },
             {

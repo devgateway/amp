@@ -26,9 +26,10 @@ const NavigationManager = ({ children }) => {
     }, [location]);
 
     useEffect(() => {
-        window.dispatchEvent(
-            new CustomEvent("[reampv2] navigated", { detail: location.pathname })
-        );
+        console.log('debug current location before dispatch', location)
+        const reampv2Event = new CustomEvent("[reampv2] navigated", { detail: location.pathname })
+        window.dispatchEvent(reampv2Event);
+
     }, [location]);
 
     return children;

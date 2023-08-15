@@ -5,7 +5,7 @@ import {routes} from "./routes";
 
 
 const Router = () => {
-    const router = createBrowserRouter(routes);
+    const router = createHashRouter(routes);
     return (
         <>
             <RouterProvider router={router}/>

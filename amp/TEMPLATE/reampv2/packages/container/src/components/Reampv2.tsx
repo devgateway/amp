@@ -17,6 +17,7 @@ const Reampv2 = () => {
         const reampv2NavigationEventHandler = (event: Event) => {
             const pathname = (event as CustomEvent<string>).detail;
             const newPathname = `${reampv2Basename}${pathname}`;
+
             if (newPathname === location.pathname) {
                 return;
             }
@@ -34,14 +35,12 @@ const Reampv2 = () => {
 
     // Listen for container location changes and dispatch a notification.
     useEffect(() => {
-        console.log('pathname', location.pathname)
-        console.log('replace', location.pathname.replace(reampv2Basename, ""))
         if (location.pathname.startsWith(reampv2Basename)) {
-            window.dispatchEvent(
-                new CustomEvent("[container] navigated", {
-                    detail: location.pathname.replace(reampv2Basename, ""),
-                })
-            );
+            const containerEvent = new CustomEvent("[container] navigated", {
+                detail: location.pathname.replace(reampv2Basename, ""),
+            });
+
+            window.dispatchEvent(containerEvent);
         }
     }, [location]);
 

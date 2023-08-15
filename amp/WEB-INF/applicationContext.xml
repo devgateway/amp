@@ -126,16 +126,20 @@
    -->
     <http pattern="/calendar/showCalendarView.do**" use-expressions="false"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
         <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-    </http>
+		<csrf disabled="true"/>
+	</http>
     <http pattern="/calendar/default/showCalendarView.do**" use-expressions="false"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
         <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-    </http>
+		<csrf disabled="true"/>
+	</http>
     <http pattern="/calendar/showCalendarEvent.do**" use-expressions="false"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
         <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<csrf disabled="true"/>
     </http>
     <http pattern="/calendar/showEvents.do**" use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
         <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-    </http>
+		<csrf disabled="true"/>
+	</http>
     <http pattern="/gis/pdfExport.do**" use-expressions="false" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
         <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
     </http>

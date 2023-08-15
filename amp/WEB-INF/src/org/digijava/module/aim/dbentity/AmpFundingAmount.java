@@ -166,7 +166,7 @@ public class AmpFundingAmount implements Comparable<AmpFundingAmount>, Serializa
     @Override
     public Output getOutput() {
         Output out = new Output();
-        out.setOutputs(new ArrayList<Output>());
+        out.setOutputs(new ArrayList<>());
         if (funType != null) {
             out.getOutputs().add(new Output(null, new String[]{"Type"}, new Object[]{
                     StringUtils.capitalize(StringUtils.lowerCase(funType.name()))}));

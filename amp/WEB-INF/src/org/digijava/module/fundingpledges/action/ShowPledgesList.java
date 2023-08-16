@@ -7,6 +7,8 @@ import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 import org.digijava.module.fundingpledges.form.ViewPledgesForm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,6 +18,7 @@ import java.util.List;
 import java.util.TreeSet;
 
 public class ShowPledgesList extends Action {
+    private final static Logger logger = LoggerFactory.getLogger(ShowPledgesList.class);
 
     public ActionForward execute(ActionMapping mapping,
             ActionForm form,
@@ -34,6 +37,8 @@ public class ShowPledgesList extends Action {
         ViewPledgesForm plForm = (ViewPledgesForm) form;
         
         List<FundingPledges> pledges = PledgesEntityHelper.getPledges();
+        logger.info("All pledges: "+pledges);
+
         Collections.sort(pledges);
 
         

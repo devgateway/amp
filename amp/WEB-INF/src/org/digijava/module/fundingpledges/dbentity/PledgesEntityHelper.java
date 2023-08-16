@@ -39,11 +39,14 @@ public class PledgesEntityHelper {
             String fieldName = (String) values[2 * i];
             queryBld.append(" AND (p.").append(fieldName).append(" = :value").append(i).append(")");
         }
-        
+
+        logger.info("Pledges Query: "+ queryBld);
         Query query = PersistenceManager.getSession().createQuery(queryBld.toString());
         for(int i = 0; i < n / 2; i++)
             setParameter(query, i, values[i * 2 + 1]);
-        return new ArrayList<T>(query.list());
+        List res = query.list();
+        logger.info("Pledge list: "+res);
+        return new ArrayList<T>(res);
     }
     
     /**

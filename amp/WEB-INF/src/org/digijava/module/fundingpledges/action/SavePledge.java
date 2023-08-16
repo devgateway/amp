@@ -112,8 +112,13 @@ public class SavePledge extends Action {
         pledge.setAdditionalInformation(plForm.getAdditionalInformation());
         pledge.setWhoAuthorizedPledge(plForm.getWhoAuthorizedPledge());
         pledge.setFurtherApprovalNedded(plForm.getFurtherApprovalNedded());
-
-        session.saveOrUpdate(pledge);
+        if (pledge.getId()==null) {
+            session.persist(pledge);
+        }
+        else
+        {
+            session.merge(pledge);
+        }
         logger.info("Saved pledge: "+pledge);
         AuditLoggerUtil.logObject(request, pledge, action, null);
 
@@ -124,7 +129,13 @@ public class SavePledge extends Action {
         doSaveLocations(session, pledge, plForm.getSelectedLocs());
         doSaveFunding(session, pledge, plForm.getSelectedFunding());
         doSaveDocuments(session, pledge, plForm.getSelectedDocs(), plForm.getInitialDocuments());
-        session.saveOrUpdate(pledge);
+        if (pledge.getId()==null) {
+            session.persist(pledge);
+        }
+        else
+        {
+            session.merge(pledge);
+        }
         logger.info("Saved pledge again: "+pledge);
         boolean newPledge = plForm.isNewPledge();
         try {
@@ -134,6 +145,7 @@ public class SavePledge extends Action {
             logger.error("error while trying to update lucene logs:", e);
         }
         logger.info("Res: "+validationErrors);
+        session.flush();
 
 
         return validationErrors;

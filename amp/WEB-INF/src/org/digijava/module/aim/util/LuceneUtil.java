@@ -341,7 +341,7 @@ public class LuceneUtil implements Serializable {
                 while (createIndex(chunkNo, mId, fsWriter) != null){
                     chunkNo++;
                 }
-                fsWriter.optimize();
+                fsWriter.forceMerge(1);
                 fsWriter.close();
                 long stopTime = System.currentTimeMillis();
                 
@@ -675,7 +675,7 @@ public class LuceneUtil implements Serializable {
                 list.clear();
 
                 try {
-                    indexWriter.optimize();
+                    indexWriter.forceMerge(1);
                     // indexWriter.close();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -962,7 +962,7 @@ public class LuceneUtil implements Serializable {
             if (doc != null) {
                 try {
                     indexWriter.addDocument(doc);
-                    indexWriter.optimize();
+                    indexWriter.forceMerge(1);
                     indexWriter.close();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -1031,7 +1031,7 @@ public class LuceneUtil implements Serializable {
                 if (doc != null) {
                     try {
                         indexWriter.addDocument(doc);
-                        indexWriter.optimize();
+                        indexWriter.forceMerge(1);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

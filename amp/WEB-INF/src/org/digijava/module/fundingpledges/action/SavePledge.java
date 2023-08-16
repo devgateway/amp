@@ -119,7 +119,6 @@ public class SavePledge extends Action {
         {
             session.merge(pledge);
         }
-        logger.info("Saved pledge: "+pledge);
         AuditLoggerUtil.logObject(request, pledge, action, null);
 
         doSaveContact1(pledge, plForm.getContact1());
@@ -136,7 +135,6 @@ public class SavePledge extends Action {
         {
             session.merge(pledge);
         }
-        logger.info("Saved pledge again: "+pledge);
         session.flush();
         logger.info("Pledge errors: "+validationErrors);
         boolean newPledge = plForm.isNewPledge();

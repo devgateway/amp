@@ -137,6 +137,8 @@ public class SavePledge extends Action {
             session.merge(pledge);
         }
         logger.info("Saved pledge again: "+pledge);
+        session.flush();
+        logger.info("Pledge errors: "+validationErrors);
         boolean newPledge = plForm.isNewPledge();
         try {
             LuceneUtil.addUpdatePledge(TLSUtils.getRequest().getServletContext().getRealPath("/"), !newPledge,
@@ -144,8 +146,7 @@ public class SavePledge extends Action {
         } catch (Exception e) {
             logger.error("error while trying to update lucene logs:", e);
         }
-        logger.info("Pledge errors: "+validationErrors);
-        session.flush();
+
 
 
         return validationErrors;

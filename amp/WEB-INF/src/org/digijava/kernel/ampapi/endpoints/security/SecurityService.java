@@ -359,16 +359,20 @@ public class SecurityService {
         String adminSession = (String) TLSUtils.getRequest().getSession().getAttribute("ampAdmin");
         logger.info("Creating user is admin: " + adminSession);
 
-        if ( adminSession == null || adminSession.equals("no") ) {
-            ApiErrorResponseService.reportForbiddenAccess(SecurityErrors.NOT_ALLOWED);
-        }
-
+        User user = null;
         String firstName = createUser.getFirstName();
         String lastName = createUser.getLastName();
         String email = createUser.getEmail();
         String confirmEmail = createUser.getEmailConfirmation();
         String password = createUser.getPassword();
         String passwordConfirmation = createUser.getPasswordConfirmation();
+        String notificationEmail = createUser.getNotificationEmail();
+        String repeatNotificationEmail = createUser.getRepeatNotificationEmail();
+        boolean notificationEmailEnabled = createUser.getNotificationEmailEnabled();
+
+        if ( adminSession == null || adminSession.equals("no") ) {
+            ApiErrorResponseService.reportForbiddenAccess(SecurityErrors.NOT_ALLOWED);
+        }
 
         // Validation
         if (StringUtils.isBlank(firstName) || StringUtils.isBlank(lastName) ||
@@ -378,6 +382,17 @@ public class SecurityService {
             ApiErrorResponseService.reportError(BAD_REQUEST, SecurityErrors.FILL_FORM_CORRECTLY);
         }
 
+        if (notificationEmailEnabled){
+            if(StringUtils.isBlank(notificationEmail) || StringUtils.isBlank(repeatNotificationEmail)){
+                ApiErrorResponseService.reportError(BAD_REQUEST, SecurityErrors.NOTIFICATION_EMAIL_NOT_NULL);
+            } else {
+                if (!notificationEmail.equals(repeatNotificationEmail)) {
+                    ApiErrorResponseService.reportError(BAD_REQUEST, SecurityErrors.NOTIFICATION_EMAIL_NOT_EQUAL);
+                }
+            }
+        }
+
         return new UserManager(firstName, lastName, email);
     }
+
 }

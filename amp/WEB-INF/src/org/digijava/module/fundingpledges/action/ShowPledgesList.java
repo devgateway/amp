@@ -37,11 +37,11 @@ public class ShowPledgesList extends Action {
         ViewPledgesForm plForm = (ViewPledgesForm) form;
         
         List<FundingPledges> pledges = PledgesEntityHelper.getPledges();
-        logger.info("All pledges: "+pledges);
 
         Collections.sort(pledges);
+        logger.info("All pledges: "+pledges);
 
-        
+
         for (FundingPledges pledge : pledges) {
             pledge.setYearsList(new TreeSet<>());
             for (FundingPledgesDetails fpd : pledge.getFundingPledgesDetails()) {

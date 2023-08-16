@@ -7,7 +7,7 @@
 				<param name="sequence_name">amp_offline_compatible_version_range_seq</param>
 			</generator>
 		</id>
-		<property name="fromVersion" column="from_version" type="org.digijava.kernel.services.AmpOfflineVersion" not-null="true" />
-		<property name="toVersion" column="to_version" type="org.digijava.kernel.services.AmpOfflineVersion" not-null="true" />
+		<property name="fromVersion" column="from_version" type="org.digijava.kernel.services.AmpOfflineVersionType" not-null="true" />
+		<property name="toVersion" column="to_version" type="org.digijava.kernel.services.AmpOfflineVersionType" not-null="true" />
 	</class>
 </hibernate-mapping>

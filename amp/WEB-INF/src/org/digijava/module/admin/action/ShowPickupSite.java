@@ -30,7 +30,11 @@ import org.digijava.module.admin.form.PickupForm;
 import org.digijava.module.admin.helper.pickup.PickupItem;
 import org.digijava.module.admin.helper.pickup.SitePickupSource;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 
 public class ShowPickupSite
     extends Action {

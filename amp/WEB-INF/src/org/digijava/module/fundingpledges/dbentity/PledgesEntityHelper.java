@@ -45,7 +45,6 @@ public class PledgesEntityHelper {
         for(int i = 0; i < n / 2; i++)
             setParameter(query, i, values[i * 2 + 1]);
         List res = query.list();
-        logger.info("Pledge list: "+res);
         return new ArrayList<T>(res);
     }
     

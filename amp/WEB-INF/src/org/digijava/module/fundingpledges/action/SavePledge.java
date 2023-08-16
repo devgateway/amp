@@ -75,12 +75,12 @@ public class SavePledge extends Action {
         if (plForm.isNewPledge())
             return false; // not allowed to create a new pledge with preexisting name
         
-        return plForm.getPledgeId() == preexistingPledgeWithSameName.getId();
+        return Objects.equals(plForm.getPledgeId(), preexistingPledgeWithSameName.getId());
     }
     
     protected List<ValidationError> doSave(PledgeForm plForm, HttpServletRequest request) throws Exception {
         String action = "add";
-        Session session = PersistenceManager.getSession();
+        Session session = PersistenceManager.getRequestDBSession();
 
         List<ValidationError> res = new ArrayList<>();
 

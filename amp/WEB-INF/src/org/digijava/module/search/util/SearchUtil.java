@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
 
 public class SearchUtil {
 
-    private static Logger logger = Logger.getLogger(SearchUtil.class);
+    private static final Logger logger = Logger.getLogger(SearchUtil.class);
 
     public static final int QUERY_ALL = -1;
     public static final int ACTIVITIES = 0;
@@ -101,8 +101,8 @@ public class SearchUtil {
                         + AmpTeamReports.class.getName()
                         + " tr inner join  tr.report r2 where tr.team=:teamId and tr.teamView = true))";
                 qry = session.createQuery(queryString);
-                qry.setLong("ampTeamMemId", tm.getMemberId());
-                qry.setLong("teamId", tm.getTeamId());
+                qry.setParameter("ampTeamMemId", tm.getMemberId(), LongType.INSTANCE);
+                qry.setParameter("teamId", tm.getTeamId(), LongType.INSTANCE);
                 addKeywordParameters(qry, keywords);
                 col = qry.list();
 
@@ -118,14 +118,14 @@ public class SearchUtil {
     }
     
     public static String buildLike(List<String> keywords, String field, int searchMode) {
-        String query = "";
+        StringBuilder query = new StringBuilder();
         String operator = searchMode == KEYWORDS_ALL ? "AND" : "OR";
         for (int index = 1; index < keywords.size() + 1; index++) {
-            query += (query != "" ? " " + operator + " " : "") + " lower(" + field + ") LIKE :keyword" + index + " ";
+            query.append(!query.toString().equals("") ? " " + operator + " " : "").append(" lower(").append(field).append(") LIKE :keyword").append(index).append(" ");
         }
-        query = "( " + query + ")";
+        query = new StringBuilder("( " + query + ")");
 
-        return query;
+        return query.toString();
     }
     
     public static void addKeywordParameters(Query qry, List<String> keywords) {
@@ -175,8 +175,8 @@ public class SearchUtil {
                         + " or r.id in (select r2.id from " + AmpTeamReports.class.getName()
                         + " tr inner join  tr.report r2 where tr.team=:teamId and tr.teamView = true))";
                 qry = session.createQuery(queryString);
-                qry.setLong("ampTeamMemId", tm.getMemberId());
-                qry.setLong("teamId", tm.getTeamId());
+                qry.setParameter("ampTeamMemId", tm.getMemberId(), LongType.INSTANCE);
+                qry.setParameter("teamId", tm.getTeamId(), LongType.INSTANCE);
                 addKeywordParameters(qry, keywords);
                 col = qry.list();
 
@@ -319,7 +319,7 @@ public class SearchUtil {
                 javax.jcr.query.QueryManager qm = folderNode.getSession().getWorkspace().getQueryManager();
                 javax.jcr.query.Query q = qm.createQuery(
                         "SELECT * FROM nt:base WHERE jcr:path LIKE '/team/" + tm.getTeamId() + "/%' ",
-                        javax.jcr.query.Query.SQL);
+                        javax.jcr.query.Query.JCR_SQL2);
 
                 javax.jcr.query.QueryResult result = q.execute();
                 NodeIterator it = result.getNodes();
@@ -337,7 +337,7 @@ public class SearchUtil {
                 }
                 q = qm.createQuery(
                         "SELECT * FROM nt:base WHERE jcr:path LIKE '/private/" + tm.getTeamId() + "/" + tm.getEmail()
-                                + "/%' " + "", javax.jcr.query.Query.SQL);
+                                + "/%' ", javax.jcr.query.Query.JCR_SQL2);
 
                 result = q.execute();
                 it = result.getNodes();
@@ -441,7 +441,7 @@ public class SearchUtil {
         query.append(")");
         query.append(" and roleCode.roleCode=:roleCode ");
         if (!hasComputedOrgs) {
-            query.append(" and " + buildLike(keywords, orgNameHql, searchMode) + " ");
+            query.append(" and ").append(buildLike(keywords, orgNameHql, searchMode)).append(" ");
             if (tm.getTeamAccessType().equals("Management")) {
                 query.append(String.format(
                         " and (act.draft=false or act.draft is null) and act.approvalStatus in ('%s', '%s') ",
@@ -508,14 +508,11 @@ public class SearchUtil {
     
     public static List<String> buildKeywordsList(String keywordString) {
         keywordString = keywordString.replace("*", "").toLowerCase();
-        
-        Set<String> keywords =  Arrays.asList(keywordString.split(" ")).stream()
-            .map(word -> word.trim())
-            .filter(word -> StringUtils.isNotBlank(word))
-            .map(word -> StringEscapeUtils.escapeSql(word))
-            .collect(Collectors.toSet());
-        
-        return new ArrayList<String>(keywords);
+
+        return Arrays.stream(keywordString.split(" "))
+                .map(String::trim)
+                .filter(StringUtils::isNotBlank)
+                .map(StringEscapeUtils::escapeSql).distinct().collect(Collectors.toList());
     }
 
 }

@@ -966,7 +966,39 @@ public class PledgeForm extends ActionForm implements Serializable {
         AmpCategoryValue acv = CategoryManagerUtil.loadAcvOrNull(acvlId);
         return acv == null ? null : acv.getValue();
     }
-    
+
+    @Override
+    public String toString() {
+        return "PledgeForm{" +
+                "pledgeId=" + pledgeId +
+                ", selectedOrgId=" + selectedOrgId +
+                ", selectedOrgGrpId=" + selectedOrgGrpId +
+                ", titleFreeText='" + titleFreeText + '\'' +
+                ", contact1=" + contact1 +
+                ", contact2=" + contact2 +
+                ", additionalInformation='" + additionalInformation + '\'' +
+                ", whoAuthorizedPledge='" + whoAuthorizedPledge + '\'' +
+                ", furtherApprovalNedded='" + furtherApprovalNedded + '\'' +
+                ", pledgeTitleId=" + pledgeTitleId +
+                ", pledgeStatusId=" + pledgeStatusId +
+                ", createdDate='" + createdDate + '\'' +
+                ", year='" + year + '\'' +
+                ", locationsMultiselect=" + locationsMultiselect +
+                ", implemLocationLevel=" + implemLocationLevel +
+                ", levelId=" + levelId +
+                ", selectedLocs=" + selectedLocs +
+                ", selectedRootProgram=" + selectedRootProgram +
+                ", selectedProgs=" + selectedProgs +
+                ", selectedRootSector=" + selectedRootSector +
+                ", selectedSectors=" + selectedSectors +
+                ", selectedFunding=" + selectedFunding +
+                ", selectedDocs=" + selectedDocs +
+                ", initialDocuments=" + initialDocuments +
+                ", effectiveName='" + effectiveName + '\'' +
+                ", files=" + files +
+                '}';
+    }
+
 //  @java.lang.Override
 //  @java.lang.SuppressWarnings("all")
 //  public java.lang.String toString() {

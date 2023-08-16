@@ -94,7 +94,7 @@ public class AddPledge extends Action {
             if (request.getParameter("heartBeat") != null)
             {
                 doHeartBeat(plForm, request.getParameter("heartBeat"));
-//                return null;
+                return null;
             }
             logger.info("Request params: "+request);
 

@@ -539,4 +539,48 @@ public class FundingPledges implements Comparable<FundingPledges>, Serializable,
     public Object getIdentifier() {
         return this.id;
     }
+
+    @Override
+    public String toString() {
+        return "FundingPledges{" +
+                "id=" + id +
+                ", createdDate=" + createdDate +
+                ", title=" + title +
+                ", status=" + status +
+                ", titleFreeText='" + titleFreeText + '\'' +
+                ", additionalInformation='" + additionalInformation + '\'' +
+                ", whoAuthorizedPledge='" + whoAuthorizedPledge + '\'' +
+                ", furtherApprovalNedded='" + furtherApprovalNedded + '\'' +
+                ", organization=" + organization +
+                ", organizationGroup=" + organizationGroup +
+                ", sectorlist=" + sectorlist +
+                ", locationlist=" + locationlist +
+                ", programlist=" + programlist +
+                ", fundingPledgesDetails=" + fundingPledgesDetails +
+                ", contactName='" + contactName + '\'' +
+                ", contactAddress='" + contactAddress + '\'' +
+                ", contactEmail='" + contactEmail + '\'' +
+                ", contactTitle='" + contactTitle + '\'' +
+                ", contactMinistry='" + contactMinistry + '\'' +
+                ", contactTelephone='" + contactTelephone + '\'' +
+                ", contactFax='" + contactFax + '\'' +
+                ", contactOrganization=" + contactOrganization +
+                ", contactAlternativeName='" + contactAlternativeName + '\'' +
+                ", contactAlternativeTelephone='" + contactAlternativeTelephone + '\'' +
+                ", contactAlternativeEmail='" + contactAlternativeEmail + '\'' +
+                ", contactName_1='" + contactName_1 + '\'' +
+                ", contactAddress_1='" + contactAddress_1 + '\'' +
+                ", contactEmail_1='" + contactEmail_1 + '\'' +
+                ", contactTitle_1='" + contactTitle_1 + '\'' +
+                ", contactMinistry_1='" + contactMinistry_1 + '\'' +
+                ", contactTelephone_1='" + contactTelephone_1 + '\'' +
+                ", contactFax_1='" + contactFax_1 + '\'' +
+                ", contactOrganization_1=" + contactOrganization_1 +
+                ", contactAlternativeName_1='" + contactAlternativeName_1 + '\'' +
+                ", contactAlternativeTelephone_1='" + contactAlternativeTelephone_1 + '\'' +
+                ", contactAlternativeEmail_1='" + contactAlternativeEmail_1 + '\'' +
+                ", yearsList=" + yearsList +
+                ", documents=" + documents +
+                '}';
+    }
 }

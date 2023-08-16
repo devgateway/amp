@@ -35,9 +35,10 @@ public class ShowPledgesList extends Action {
         
         List<FundingPledges> pledges = PledgesEntityHelper.getPledges();
         Collections.sort(pledges);
+
         
         for (FundingPledges pledge : pledges) {
-            pledge.setYearsList(new TreeSet<String>());
+            pledge.setYearsList(new TreeSet<>());
             for (FundingPledgesDetails fpd : pledge.getFundingPledgesDetails()) {
                 pledge.getYearsList().add(fpd.getDatesDescription());
             }

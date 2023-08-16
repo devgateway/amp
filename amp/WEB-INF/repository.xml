@@ -15,7 +15,7 @@
         
         </AccessManager>
         
-        <LoginModule class="org.apache.jackrabbit.core.security.SimpleLoginModule">
+        <LoginModule class="org.apache.jackrabbit.core.security.simple.SimpleLoginModule">
         
         </LoginModule>
     </Security>

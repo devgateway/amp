@@ -84,16 +84,16 @@ public class SavePledge extends Action {
         String action = "add";
         Session session = PersistenceManager.getRequestDBSession();
 
-        List<ValidationError> res = new ArrayList<>();
+        List<ValidationError> validationErrors = new ArrayList<>();
 
         if (plForm.getUseFreeText() && (!checkNameUniqueness(plForm))) {
-            res.add(new org.dgfoundation.amp.forms.ValidationError(
+            validationErrors.add(new org.dgfoundation.amp.forms.ValidationError(
                     TranslatorWorker.translateText("A different pledge with the same name exists")));
         }
-        res.addAll(validateFunding(plForm.getSelectedFunding()));
-        res.addAll(validateDocuments(plForm.getSelectedDocs()));
-        if (res.size() > 0) {
-            return res;
+        validationErrors.addAll(validateFunding(plForm.getSelectedFunding()));
+        validationErrors.addAll(validateDocuments(plForm.getSelectedDocs()));
+        if (validationErrors.size() > 0) {
+            return validationErrors;
         }
 
         FundingPledges pledge;
@@ -114,7 +114,7 @@ public class SavePledge extends Action {
         pledge.setFurtherApprovalNedded(plForm.getFurtherApprovalNedded());
 
         session.saveOrUpdate(pledge);
-        logger.info("Saved pledge");
+        logger.info("Saved pledge: "+pledge);
         AuditLoggerUtil.logObject(request, pledge, action, null);
 
         doSaveContact1(pledge, plForm.getContact1());
@@ -125,7 +125,7 @@ public class SavePledge extends Action {
         doSaveFunding(session, pledge, plForm.getSelectedFunding());
         doSaveDocuments(session, pledge, plForm.getSelectedDocs(), plForm.getInitialDocuments());
         session.saveOrUpdate(pledge);
-        logger.info("Saved pledge again");
+        logger.info("Saved pledge again: "+pledge);
         boolean newPledge = plForm.isNewPledge();
         try {
             LuceneUtil.addUpdatePledge(TLSUtils.getRequest().getServletContext().getRealPath("/"), !newPledge,
@@ -133,10 +133,10 @@ public class SavePledge extends Action {
         } catch (Exception e) {
             logger.error("error while trying to update lucene logs:", e);
         }
-        logger.info("Res: "+res);
+        logger.info("Res: "+validationErrors);
 
 
-        return res;
+        return validationErrors;
     }
     
     protected  void doSaveContact1(FundingPledges pledge, PledgeFormContact contact1) {

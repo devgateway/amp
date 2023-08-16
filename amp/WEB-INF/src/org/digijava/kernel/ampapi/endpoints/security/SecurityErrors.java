@@ -53,9 +53,14 @@ public class SecurityErrors {
     public static final ApiErrorMessage FILL_FORM_CORRECTLY = new ApiErrorMessage(ERROR_CLASS_SECURITY_ID, 14,
             "Please fill the form correctly");
 
+    public static final ApiErrorMessage EMAIL_NOT_EQUAL = new ApiErrorMessage(ERROR_CLASS_SECURITY_ID, 15,
+            "Email should be equal to repeat email.");
     public static final ApiErrorMessage NOTIFICATION_EMAIL_NOT_EQUAL = new ApiErrorMessage(ERROR_CLASS_SECURITY_ID, 15,
             "Notification email should be equal to repeat notification email.");
 
     public static final ApiErrorMessage NOTIFICATION_EMAIL_NOT_NULL = new ApiErrorMessage(ERROR_CLASS_SECURITY_ID, 16,
             "Notification email and repeat notification email should not be empty.");
+
+    public static final ApiErrorMessage NOT_VALID_EMAIL = new ApiErrorMessage(ERROR_CLASS_SECURITY_ID, 17,
+            "Please use valid email address.");
 }

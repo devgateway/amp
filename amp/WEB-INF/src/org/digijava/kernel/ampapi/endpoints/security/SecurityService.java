@@ -9,6 +9,8 @@ import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -380,6 +382,13 @@ public class SecurityService {
                 StringUtils.isBlank(password) || StringUtils.isBlank(passwordConfirmation))
         {
             ApiErrorResponseService.reportError(BAD_REQUEST, SecurityErrors.FILL_FORM_CORRECTLY);
+        } else {
+            // Check if its a valid email and if use with the same email exists
+            if(!isValidEmail(email) || !isValidEmail(confirmEmail)){
+                ApiErrorResponseService.reportError(BAD_REQUEST, SecurityErrors.NOT_VALID_EMAIL);
+            } else if(!email.equals(confirmEmail)){
+                ApiErrorResponseService.reportError(BAD_REQUEST, SecurityErrors.EMAIL_NOT_EQUAL);
+            }
         }
 
         if (notificationEmailEnabled){
@@ -393,6 +402,13 @@ public class SecurityService {
         }
 
         return new UserManager(firstName, lastName, email);
+    }
+
+    public static boolean isValidEmail(String email) {
+        String regex = "^[A-Za-z0-9+_.-]+@(.+)$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 
 }

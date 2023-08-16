@@ -69,7 +69,7 @@
     <logger name="net.sf.ehcache.hibernate" level="ERROR" />
 
     <!-- SET to TRACE in order to see queries and their value, INFO is default -->
-    <logger name="org.hibernate.SQL" level="INFO" />
+    <logger name="org.hibernate.SQL" level="TRACE" />
     <logger name="javax.ws.rs.client" level="TRACE" />
 
     <!-- SET to TRACE in order to see queries and their value, INFO is default -->

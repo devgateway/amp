@@ -55,12 +55,15 @@ public class SecurityErrors {
 
     public static final ApiErrorMessage EMAIL_NOT_EQUAL = new ApiErrorMessage(ERROR_CLASS_SECURITY_ID, 15,
             "Email should be equal to repeat email.");
-    public static final ApiErrorMessage NOTIFICATION_EMAIL_NOT_EQUAL = new ApiErrorMessage(ERROR_CLASS_SECURITY_ID, 15,
+    public static final ApiErrorMessage NOTIFICATION_EMAIL_NOT_EQUAL = new ApiErrorMessage(ERROR_CLASS_SECURITY_ID, 16,
             "Notification email should be equal to repeat notification email.");
 
-    public static final ApiErrorMessage NOTIFICATION_EMAIL_NOT_NULL = new ApiErrorMessage(ERROR_CLASS_SECURITY_ID, 16,
+    public static final ApiErrorMessage NOTIFICATION_EMAIL_NOT_NULL = new ApiErrorMessage(ERROR_CLASS_SECURITY_ID, 17,
             "Notification email and repeat notification email should not be empty.");
 
-    public static final ApiErrorMessage NOT_VALID_EMAIL = new ApiErrorMessage(ERROR_CLASS_SECURITY_ID, 17,
+    public static final ApiErrorMessage NOT_VALID_EMAIL = new ApiErrorMessage(ERROR_CLASS_SECURITY_ID, 18,
             "Please use valid email address.");
+
+    public static final ApiErrorMessage USER_EMAIL_EXISTS = new ApiErrorMessage(ERROR_CLASS_SECURITY_ID, 19,
+            "User with the same email exists, please use another email.");
 }

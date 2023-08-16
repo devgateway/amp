@@ -388,6 +388,11 @@ public class SecurityService {
                 ApiErrorResponseService.reportError(BAD_REQUEST, SecurityErrors.NOT_VALID_EMAIL);
             } else if(!email.equals(confirmEmail)){
                 ApiErrorResponseService.reportError(BAD_REQUEST, SecurityErrors.EMAIL_NOT_EQUAL);
+            }else {
+                user = UserUtils.getUserByEmailAddress(email);
+                if(user != null){
+                    ApiErrorResponseService.reportError(BAD_REQUEST, SecurityErrors.USER_EMAIL_EXISTS);
+                }
             }
         }
 
@@ -397,6 +402,8 @@ public class SecurityService {
             } else {
                 if (!notificationEmail.equals(repeatNotificationEmail)) {
                     ApiErrorResponseService.reportError(BAD_REQUEST, SecurityErrors.NOTIFICATION_EMAIL_NOT_EQUAL);
+                } else if(!isValidEmail(notificationEmail) || !isValidEmail(repeatNotificationEmail)){
+                    ApiErrorResponseService.reportError(BAD_REQUEST, SecurityErrors.NOT_VALID_EMAIL);
                 }
             }
         }

@@ -113,7 +113,7 @@ public class SavePledge extends Action {
         pledge.setWhoAuthorizedPledge(plForm.getWhoAuthorizedPledge());
         pledge.setFurtherApprovalNedded(plForm.getFurtherApprovalNedded());
         if (pledge.getId()==null) {
-            session.persist(pledge);
+            session.save(pledge);
         }
         else
         {
@@ -130,7 +130,7 @@ public class SavePledge extends Action {
         doSaveFunding(session, pledge, plForm.getSelectedFunding());
         doSaveDocuments(session, pledge, plForm.getSelectedDocs(), plForm.getInitialDocuments());
         if (pledge.getId()==null) {
-            session.persist(pledge);
+            session.save(pledge);
         }
         else
         {
@@ -144,7 +144,7 @@ public class SavePledge extends Action {
         } catch (Exception e) {
             logger.error("error while trying to update lucene logs:", e);
         }
-        logger.info("Res: "+validationErrors);
+        logger.info("Pledge errors: "+validationErrors);
         session.flush();
 
 

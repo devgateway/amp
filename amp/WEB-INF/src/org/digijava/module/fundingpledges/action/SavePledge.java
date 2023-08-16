@@ -31,8 +31,10 @@ public class SavePledge extends Action {
 //  AmpPledgeFake pledge = null;
     
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
-    {           
-            PledgeForm plForm = (PledgeForm) form;
+    {
+        logger.info("We do pledges here in savePledge");
+
+        PledgeForm plForm = (PledgeForm) form;
             List<ValidationError> errors = new ArrayList<>();
             try
             {

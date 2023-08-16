@@ -10,6 +10,8 @@ import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 import org.digijava.module.fundingpledges.form.PledgeForm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,6 +26,7 @@ public class AddPledge extends Action {
     public final static String PLEDGE_TIMESTAMP_EDITED_BY_CURRENT_SESSION_ATTR = "pledgeEditorTimestamp"; // session[this] = the last time this user has edited a pledge
     //public final static String PLEDGE_ID_EDITED_BY_CURRENT_SESSION_ATTR = "pledgeEditorId"; // session[this] = the id of the pledge currently edited by user
     public final static Long PLEDGE_EDITOR_EXCLUSIVITY_TIMEOUT = 2000l; // nr. of miliseconds 
+    private final static Logger logger = LoggerFactory.getLogger(AddPledge.class);
     
     public boolean equalIds(Long a, Long b){
         if (a == null)
@@ -82,9 +85,11 @@ public class AddPledge extends Action {
             ActionForm form,
             HttpServletRequest request,
             HttpServletResponse response) throws java.lang.Exception {
+        logger.info("We do pledges here in addPledge");
             
             //request.setAttribute("bootstrap_insert", true); // for the big layout to know to adapt the page for modern-web-standards insets
             PledgeForm plForm = (PledgeForm) form;
+
             
             if (request.getParameter("heartBeat") != null)
             {

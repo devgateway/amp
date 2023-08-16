@@ -97,7 +97,7 @@ public class SavePledge extends Action {
         }
 
         FundingPledges pledge;
-        logger.info("Pledge here: "+plForm);
+        logger.info("PledgeForm here: "+plForm);
         if (plForm.isNewPledge()) {
             pledge = new FundingPledges();
             pledge.setCreatedDate(new Date());

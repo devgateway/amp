@@ -222,7 +222,7 @@ public class VisibilityManager extends MultiAction {
             FeaturesUtil.deleteOneField(idf);
 
         }
-        logger.info("       ....finished to delete all fields!");
+        logger.info("...finished to delete all fields!");
         logger.info("Deleting all features...");
         for (Long idf : allFeaturesId) {
             FeaturesUtil.deleteOneFeature(idf);

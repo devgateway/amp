@@ -24,6 +24,8 @@ public class UserManager {
     @JsonProperty(SecurityConstants.EMAIL)
     @ApiModelProperty(example = "atltest@amp.org")
     private String email;
+    @JsonProperty(SecurityConstants.IS_BANNED)
+    private boolean isBanned;
 
 
     public UserManager(String firstName, String lastName, String email) {
@@ -73,5 +75,13 @@ public class UserManager {
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 '}';
+    }
+
+    public boolean isBanned() {
+        return isBanned;
+    }
+
+    public void setBanned(boolean banned) {
+        this.isBanned = banned;
     }
 }

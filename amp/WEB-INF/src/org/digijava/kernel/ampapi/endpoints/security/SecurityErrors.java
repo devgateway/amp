@@ -66,4 +66,7 @@ public class SecurityErrors {
 
     public static final ApiErrorMessage USER_EMAIL_EXISTS = new ApiErrorMessage(ERROR_CLASS_SECURITY_ID, 19,
             "User with the same email exists, please use another email.");
+
+    public static final ApiErrorMessage PASSWORD_VALIDATION = new ApiErrorMessage(ERROR_CLASS_SECURITY_ID, 20,
+            "Please enter a password which meets the minimum password requirements.");
 }

@@ -28,6 +28,7 @@ import org.digijava.kernel.ampapi.endpoints.security.dto.UserManager;
 import org.digijava.kernel.ampapi.endpoints.util.AmpApiToken;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.security.PasswordPolicyValidator;
 import org.digijava.kernel.services.AmpVersionInfo;
 import org.digijava.kernel.services.AmpVersionService;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -358,16 +359,17 @@ public class SecurityService {
 
     public UserManager createUser(CreateUserRequest createUser) {
         // Get session of logged in user and check if its an admin
+        HttpServletRequest request = TLSUtils.getRequest();
         String adminSession = (String) TLSUtils.getRequest().getSession().getAttribute("ampAdmin");
         logger.info("Creating user is admin: " + adminSession);
 
-        User user = null;
+        User user = new User();
         String firstName = createUser.getFirstName();
         String lastName = createUser.getLastName();
         String email = createUser.getEmail();
         String confirmEmail = createUser.getEmailConfirmation();
-        String password = createUser.getPassword();
-        String passwordConfirmation = createUser.getPasswordConfirmation();
+        String password = createUser.getPassword().trim();
+        String passwordConfirmation = createUser.getPasswordConfirmation().trim();
         String notificationEmail = createUser.getNotificationEmail();
         String repeatNotificationEmail = createUser.getRepeatNotificationEmail();
         boolean notificationEmailEnabled = createUser.getNotificationEmailEnabled();
@@ -377,6 +379,30 @@ public class SecurityService {
         }
 
         // Validation
+        validateUserFields(firstName, lastName, email, confirmEmail, password, passwordConfirmation,
+                            notificationEmail, repeatNotificationEmail, notificationEmailEnabled);
+
+        // Convert to user data
+        user.setFirstNames(firstName);
+        user.setLastName(lastName);
+        user.setEmail(email);
+        user.setPassword(password);
+        user.setSalt(password);
+        user.setNotificationEmailEnabled(notificationEmailEnabled);
+        if(notificationEmailEnabled){
+            user.setNotificationEmail(notificationEmail);
+        }
+        user.setBanned(true);
+        // set client IP address
+        user.setModifyingIP(RequestUtils.getRemoteAddress(request));
+        // register through
+        user.setRegisteredThrough(RequestUtils.getSite(request));
+
+        return new UserManager(firstName, lastName, email);
+    }
+
+    private void validateUserFields(String firstName, String lastName, String email, String confirmEmail, String password, String passwordConfirmation,
+                                    String notificationEmail, String repeatNotificationEmail, boolean notificationEmailEnabled){
         if (StringUtils.isBlank(firstName) || StringUtils.isBlank(lastName) ||
                 StringUtils.isBlank(email) || StringUtils.isBlank(confirmEmail) ||
                 StringUtils.isBlank(password) || StringUtils.isBlank(passwordConfirmation))
@@ -389,7 +415,7 @@ public class SecurityService {
             } else if(!email.equals(confirmEmail)){
                 ApiErrorResponseService.reportError(BAD_REQUEST, SecurityErrors.EMAIL_NOT_EQUAL);
             }else {
-                user = UserUtils.getUserByEmailAddress(email);
+                User user = UserUtils.getUserByEmailAddress(email);
                 if(user != null){
                     ApiErrorResponseService.reportError(BAD_REQUEST, SecurityErrors.USER_EMAIL_EXISTS);
                 }
@@ -408,9 +434,11 @@ public class SecurityService {
             }
         }
 
-        return new UserManager(firstName, lastName, email);
+        // Password validator
+        if (!PasswordPolicyValidator.isValid(password, email)) {
+            ApiErrorResponseService.reportError(BAD_REQUEST, SecurityErrors.PASSWORD_VALIDATION);
+        }
     }
-
     public static boolean isValidEmail(String email) {
         String regex = "^[A-Za-z0-9+_.-]+@(.+)$";
         Pattern pattern = Pattern.compile(regex);

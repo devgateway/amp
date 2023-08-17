@@ -26,6 +26,9 @@ import org.digijava.kernel.ampapi.endpoints.gpi.GPIEPConstants;
 import org.digijava.kernel.ampapi.endpoints.security.dto.*;
 import org.digijava.kernel.ampapi.endpoints.security.dto.UserManager;
 import org.digijava.kernel.ampapi.endpoints.util.AmpApiToken;
+import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.entity.UserLangPreferences;
+import org.digijava.kernel.mail.DgEmailManager;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.security.PasswordPolicyValidator;
@@ -33,10 +36,7 @@ import org.digijava.kernel.services.AmpVersionInfo;
 import org.digijava.kernel.services.AmpVersionService;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.kernel.util.SiteUtils;
-import org.digijava.kernel.util.SpringUtil;
-import org.digijava.kernel.util.UserUtils;
+import org.digijava.kernel.util.*;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
@@ -47,6 +47,8 @@ import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
+import org.digijava.module.um.exception.UMException;
+import org.digijava.module.um.util.DbUtil;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
@@ -359,6 +361,7 @@ public class SecurityService {
 
     public UserManager createUser(CreateUserRequest createUser) {
         // Get session of logged in user and check if its an admin
+        try{
         HttpServletRequest request = TLSUtils.getRequest();
         String adminSession = (String) TLSUtils.getRequest().getSession().getAttribute("ampAdmin");
         logger.info("Creating user is admin: " + adminSession);
@@ -397,8 +400,45 @@ public class SecurityService {
         user.setModifyingIP(RequestUtils.getRemoteAddress(request));
         // register through
         user.setRegisteredThrough(RequestUtils.getSite(request));
+        // set default language
+        user.setRegisterLanguage(RequestUtils
+                .getNavigationLanguage(request));
+
+        user.setEmailVerified(false);
+
+        SiteDomain siteDomain = (SiteDomain) request
+                .getAttribute(org.digijava.kernel.Constants.CURRENT_SITE);
+
+        // ------------- SET USER LANGUAGES
+//        UserLangPreferences userLangPreferences = new UserLangPreferences(
+//                user, DgUtil.getRootSite(siteDomain.getSite()));
+//
+//        Locale language = new Locale();
+//        language.setCode(userRegisterForm.getSelectedLanguage());
+//
+//        // set alert language
+//        userLangPreferences.setAlertsLanguage(language);
+// set navigation language
+//        userLangPreferences.setNavigationLanguage(language);
+//        user.setUserLangPreferences(userLangPreferences);
+            DbUtil.registerUser(user);
+
+
+        // Send verification email
+        boolean isMailActivate = FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.USER_REGISTRATION_BY_MAIL);
+
+        if (isMailActivate) {
+            System.out.println("send activation email");
+        } else {
+            user.setEmailVerified(true);
+        }
 
         return new UserManager(firstName, lastName, email);
+        } catch (Exception e) {
+            logger.error("Exception from RegisterUser", e);
+            throw new RuntimeException(e);
+        }
+
     }
 
     private void validateUserFields(String firstName, String lastName, String email, String confirmEmail, String password, String passwordConfirmation,

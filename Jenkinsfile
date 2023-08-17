@@ -64,7 +64,6 @@ stage('Build') {
 
     node {
         checkout scm
-        sh "git submodule update --recursive"
 
         // Find AMP version
         codeVersion = readMavenPom(file: 'amp/pom.xml').version

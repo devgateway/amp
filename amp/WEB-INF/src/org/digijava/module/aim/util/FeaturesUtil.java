@@ -836,10 +836,10 @@ public class FeaturesUtil {
      * @return
      */
     public static Collection getAMPTemplatesVisibility() {
-        Session session = null;
-        Collection col = new ArrayList();
-        String qryStr = null;
-        Query qry = null;
+        Session session;
+        Collection col = new ArrayList<>();
+        String qryStr;
+        Query qry;
 
         try {
             session = PersistenceManager.getRequestDBSession();
@@ -855,7 +855,7 @@ public class FeaturesUtil {
     }
 
     public static Collection getAMPTemplatesVisibilityWithSession() {
-        Collection col = new ArrayList();
+        Collection col = new ArrayList<>();
         String qryStr = null;
         Query qry = null;
         Session hbsession=null;
@@ -1199,7 +1199,6 @@ public class FeaturesUtil {
         System.out.println(ft);
         TreeSet<AmpTemplatesVisibility> mySet = new TreeSet<AmpTemplatesVisibility>(FeaturesUtil.ALPHA_ORDER);
         mySet.addAll(PersistenceManager.getSession().createQuery("from " + AmpModulesVisibility.class.getName()).list());
-        System.out.println(mySet);
         ft.setAllItems(mySet);
         return ft;
     }
@@ -1759,13 +1758,11 @@ public class FeaturesUtil {
         try {
             session = PersistenceManager.getSession();
             module.setName(moduleName);
-            if(hasLevel!=null && "no".compareTo(hasLevel)==0)
-                module.setHasLevel(false);
-            else module.setHasLevel(true);
+            module.setHasLevel(hasLevel == null || "no".compareTo(hasLevel) != 0);
             session.save(module);
             String gsValue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NEW_FIELDS_VISIBILITY);
             if (gsValue != null && gsValue.equalsIgnoreCase("on")){
-                template = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class,templateId);
+                template = session.load(AmpTemplatesVisibility.class,templateId);
                 template.getItems().add(module);
                 session.update(template);
             }
@@ -1782,15 +1779,13 @@ public class FeaturesUtil {
         AmpTemplatesVisibility template = null;
         try {
             session = PersistenceManager.getSession();
-            AmpModulesVisibility parent = (AmpModulesVisibility) session.load(AmpModulesVisibility.class, parentId);
+            AmpModulesVisibility parent = session.load(AmpModulesVisibility.class, parentId);
             
             module.setName(moduleName);
             module.setParent(parent);
-            if(hasLevel!=null && "no".compareTo(hasLevel)==0)
-                module.setHasLevel(false);
-            else module.setHasLevel(true);
+            module.setHasLevel(hasLevel == null || "no".compareTo(hasLevel) != 0);
             
-            if(parent.getSubmodules()==null) parent.setSubmodules(new HashSet());
+            if(parent.getSubmodules()==null) parent.setSubmodules(new HashSet<>());
             parent.getSubmodules().add(module);
             
             session.update(parent);
@@ -1798,7 +1793,7 @@ public class FeaturesUtil {
             
             String gsValue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NEW_FIELDS_VISIBILITY);
             if (gsValue != null && gsValue.equalsIgnoreCase("on")){
-                template = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class,
+                template = session.load(AmpTemplatesVisibility.class,
                         templateId);
                 template.getItems().add(module);
                 session.update(template);
@@ -1819,7 +1814,7 @@ public class FeaturesUtil {
         AmpModulesVisibility moduleParent;
         try {
             session = PersistenceManager.getSession();
-            module = (AmpModulesVisibility) session.load(AmpModulesVisibility.class,id);
+            module = session.load(AmpModulesVisibility.class,id);
             moduleParent = getModuleVisibility(moduleParentName);
             module.setParent(moduleParent);
             session.save(module);
@@ -1894,8 +1889,8 @@ public class FeaturesUtil {
         Session session = null;
         AmpTemplatesVisibility ft = new AmpTemplatesVisibility();
         try {
-            session = PersistenceManager.getSession();
-            ft = (AmpTemplatesVisibility) session.get(AmpTemplatesVisibility.class,
+            session = PersistenceManager.getRequestDBSession();
+            ft = session.get(AmpTemplatesVisibility.class,
                     id);
             List list = session.createQuery("from " +
                     AmpModulesVisibility.class.getName() ). list();

@@ -166,16 +166,14 @@ public class VisibilityManagerExportHelper {
         Session hbsession;
         try {
             hbsession = PersistenceManager.getRequestDBSession();
-            for (Iterator<TemplateType> templateIt = vtemplate.getTemplate().iterator(); templateIt.hasNext();) {
-                TemplateType xmlTemplate = templateIt.next();
-                
+            for (TemplateType xmlTemplate : (Iterable<TemplateType>) vtemplate.getTemplate()) {
                 AmpTemplatesVisibility visibilityTemplate = new AmpTemplatesVisibility();
                 String templateName = getImportedTemplateName(xmlTemplate);
                 visibilityTemplate.setName(templateName);
-                
+
                 AmpTreeVisibility ampTreeVisibility = new AmpTreeVisibility();
                 ampTreeVisibility.buildAmpTreeVisibilityMultiLevel(FeaturesUtil.getDefaultAmpTemplateVisibility());
-                
+
                 visibilityTemplate.setItems(new TreeSet<AmpObjectVisibility>());
                 visibilityTemplate.setFeatures(new TreeSet<AmpFeaturesVisibility>());
                 visibilityTemplate.setFields(new TreeSet<AmpFieldsVisibility>());
@@ -190,7 +188,7 @@ public class VisibilityManagerExportHelper {
                 }
 
                 hbsession.save(visibilityTemplate);
-                
+
             }
         } catch (HibernateException e) {
             throw new RuntimeException(e);

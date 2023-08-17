@@ -1,10 +1,10 @@
-[submodule "amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate"]
-	path = amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate
-	url = git@github.com:devgateway/amp-boilerplate.git
-	branch = master
-	ignore = dirty
 [submodule "amp/TEMPLATE/ampTemplate/node_modules/amp-filter"]
 	path = amp/TEMPLATE/ampTemplate/node_modules/amp-filter
 	url = git@github.com:devgateway/amp-filter.git
 	branch = main
+	ignore = dirty
+[submodule "amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate"]
+	path = amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate
+	url = git@github.com:devgateway/amp-boilerplate.git
+	branch = master
 	ignore = dirty

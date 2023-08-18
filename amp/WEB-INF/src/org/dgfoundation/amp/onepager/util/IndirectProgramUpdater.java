@@ -14,6 +14,7 @@ import org.hibernate.Session;
 import java.math.BigDecimal;
 import java.util.*;
 
+import static java.util.Collections.emptyList;
 import static java.util.Collections.emptySet;
 import static java.util.stream.Collectors.*;
 import static org.digijava.kernel.ampapi.endpoints.ndd.NDDService.getMappingLevel;
@@ -118,8 +119,10 @@ public class IndirectProgramUpdater {
         while (program.getIndlevel() > getMappingLevel(MAPPING_PROGRAM_LEVEL)) {
             program = program.getParentThemeId();
         }
+            return new ArrayList<>(themeMapping.getOrDefault(program, emptySet()));
         }
+        return emptyList();
 
-        return new ArrayList<>(themeMapping.getOrDefault(program, emptySet()));
+
     }
 }

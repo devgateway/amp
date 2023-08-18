@@ -247,7 +247,8 @@
             <one-to-many class="org.digijava.module.aim.dbentity.AmpAnnualProjectBudget" />
    		 </set>
 
-		<set name="actPrograms" cascade="delete" inverse="true">
+
+		<set name="actPrograms" cascade="all-delete-orphan" inverse="true">
 			<cache usage="read-write" />
 			<key column="amp_activity_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityProgram" />

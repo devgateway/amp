@@ -37,8 +37,20 @@ public class LoggedUserInformation {
     @JsonProperty("address")
     private String address;
 
-    @JsonProperty("country")
-    private String country;
+    @JsonProperty("countryIso")
+    private String countryIso;
+
+    @JsonProperty("organizationName")
+    private String organizationName;
+
+    @JsonProperty("organizationTypeId")
+    private String organizationTypeId;
+
+    @JsonProperty("languageCode")
+    private String languageCode;
+
+    @JsonProperty("organizationGroupId")
+    private Long organizationGroupId;
 
     public LoggedUserInformation(String firstName, String lastName, String email) {
         this.firstName = firstName;
@@ -122,10 +134,42 @@ public class LoggedUserInformation {
     }
 
     public String getCountry() {
-        return country;
+        return countryIso;
     }
 
     public void setCountry(String country) {
-        this.country = country;
+        this.countryIso = country;
+    }
+
+    public String getOrganizationName() {
+        return organizationName;
+    }
+
+    public void setOrganizationName(String organizationName) {
+        this.organizationName = organizationName;
+    }
+
+    public String getOrganizationTypeId() {
+        return organizationTypeId;
+    }
+
+    public void setOrganizationTypeId(String organizationTypeId) {
+        this.organizationTypeId = organizationTypeId;
+    }
+
+    public String getLanguageCode() {
+        return languageCode;
+    }
+
+    public void setLanguageCode(String languageCode) {
+        this.languageCode = languageCode;
+    }
+
+    public Long getOrganizationGroupId() {
+        return organizationGroupId;
+    }
+
+    public void setOrganizationGroupId(Long organizationGroupId) {
+        this.organizationGroupId = organizationGroupId;
     }
 }

@@ -37,6 +37,8 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.*;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.AmpUserExtension;
+import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
@@ -45,6 +47,7 @@ import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
+import org.digijava.module.um.util.AmpUserUtil;
 import org.digijava.module.um.util.DbUtil;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -79,6 +82,24 @@ public class UserManagerService {
         }
         userManager.setAddress(user.getAddress());
         userManager.setCountry(user.getCountry().getIso());
+        userManager.setLanguageCode(user.getRegisterLanguage().getCode());
+
+        try {
+            AmpUserExtension userExt = AmpUserUtil.getAmpUserExtension(user);
+            if (userExt.getOrgGroup() != null) {
+                userManager.setOrganizationGroupId(userExt.getOrgGroup().getAmpOrgGrpId());
+            }
+            if (userExt.getOrgType() != null) {
+                userManager.setOrganizationTypeId(userExt.getOrgType().getAmpOrgTypeId().toString());
+            }
+            if (userExt.getOrganization() != null) {
+                userManager.setOrganizationName(userExt.getOrganization().getName());
+            }
+        } catch (AimException e) {
+            logger.error("Exception from getting User extention", e);
+            throw new RuntimeException(e);
+        }
+
         return userManager;
     }
 

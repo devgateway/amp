@@ -1,4 +1,4 @@
-package org.digijava.kernel.ampapi.endpoints.security.dto;
+package org.digijava.kernel.ampapi.endpoints.security.dto.usermanager;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
@@ -6,11 +6,11 @@ import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.security.SecurityConstants;
 
 /**
- * Usermanager information
+ * Loggedin user for editing
  *
  * @author Denis Mbugua
  */
-public class UserManager {
+public class LoggedUserInformation {
     @JsonProperty(EPConstants.ID)
     private Long id;
     @JsonProperty(SecurityConstants.FIRST_NAME)
@@ -27,8 +27,20 @@ public class UserManager {
     @JsonProperty(SecurityConstants.IS_BANNED)
     private boolean isBanned;
 
+    @JsonProperty("notificationEmailEnabled")
+    private Boolean notificationEmailEnabled;
 
-    public UserManager(String firstName, String lastName, String email) {
+    @JsonProperty("notificationEmail")
+    @ApiModelProperty(example = "other@amp.org")
+    private String notificationEmail;
+
+    @JsonProperty("address")
+    private String address;
+
+    @JsonProperty("country")
+    private String country;
+
+    public LoggedUserInformation(String firstName, String lastName, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -83,5 +95,37 @@ public class UserManager {
 
     public void setBanned(boolean banned) {
         this.isBanned = banned;
+    }
+
+    public Boolean getNotificationEmailEnabled() {
+        return notificationEmailEnabled;
+    }
+
+    public void setNotificationEmailEnabled(Boolean notificationEmailEnabled) {
+        this.notificationEmailEnabled = notificationEmailEnabled;
+    }
+
+    public String getNotificationEmail() {
+        return notificationEmail;
+    }
+
+    public void setNotificationEmail(String notificationEmail) {
+        this.notificationEmail = notificationEmail;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 }

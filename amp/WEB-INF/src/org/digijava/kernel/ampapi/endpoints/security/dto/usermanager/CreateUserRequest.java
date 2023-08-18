@@ -1,4 +1,4 @@
-package org.digijava.kernel.ampapi.endpoints.security.dto;
+package org.digijava.kernel.ampapi.endpoints.security.dto.usermanager;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;

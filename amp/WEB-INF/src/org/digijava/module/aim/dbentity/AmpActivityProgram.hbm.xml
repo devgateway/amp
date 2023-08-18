@@ -15,7 +15,7 @@
 			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="delete"  not-null="true" />
 
 		<many-to-one name="program" column="amp_program_id"
-			class="org.digijava.module.aim.dbentity.AmpTheme" cascade="none" not-null="true" lazy="false"/>
+			class="org.digijava.module.aim.dbentity.AmpTheme" cascade="all" not-null="true" lazy="false"/>
 
 		<property name="programPercentage" column="program_percentage" type="java.lang.Float" />
 

@@ -40,6 +40,10 @@ public class CreateUserRequest {
     @ApiModelProperty(example = "other@amp.org")
     private String repeatNotificationEmail;
 
+    @JsonProperty("selectedLanguage")
+    @ApiModelProperty(required = true, example = "en")
+    private String selectedLanguage;
+
     public CreateUserRequest() {
     }
 
@@ -114,5 +118,13 @@ public class CreateUserRequest {
 
     public void setRepeatNotificationEmail(String repeatNotificationEmail) {
         this.repeatNotificationEmail = repeatNotificationEmail;
+    }
+
+    public String getSelectedLanguage() {
+        return selectedLanguage;
+    }
+
+    public void setSelectedLanguage(String selectedLanguage) {
+        this.selectedLanguage = selectedLanguage;
     }
 }

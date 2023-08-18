@@ -410,25 +410,27 @@ public class SecurityService {
                 .getAttribute(org.digijava.kernel.Constants.CURRENT_SITE);
 
         // ------------- SET USER LANGUAGES
-//        UserLangPreferences userLangPreferences = new UserLangPreferences(
-//                user, DgUtil.getRootSite(siteDomain.getSite()));
-//
-//        Locale language = new Locale();
-//        language.setCode(userRegisterForm.getSelectedLanguage());
-//
-//        // set alert language
-//        userLangPreferences.setAlertsLanguage(language);
-// set navigation language
-//        userLangPreferences.setNavigationLanguage(language);
-//        user.setUserLangPreferences(userLangPreferences);
-            DbUtil.registerUser(user);
+        UserLangPreferences userLangPreferences = new UserLangPreferences(
+                user, DgUtil.getRootSite(siteDomain.getSite()));
 
+        Locale language = new Locale();
+        language.setCode(createUser.getSelectedLanguage());
+
+        // set alert language
+        userLangPreferences.setAlertsLanguage(language);
+        //set navigation language
+        userLangPreferences.setNavigationLanguage(language);
+        user.setUserLangPreferences(userLangPreferences);
+
+        DbUtil.registerUser(user);
+        DgUtil.saveUserLanguagePreferences(user, request, language);
 
         // Send verification email
         boolean isMailActivate = FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.USER_REGISTRATION_BY_MAIL);
 
         if (isMailActivate) {
             System.out.println("send activation email");
+            sendMail(language, siteDomain);
         } else {
             user.setEmailVerified(true);
         }
@@ -484,6 +486,29 @@ public class SecurityService {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
+    }
+
+    private void sendMail(Locale language, SiteDomain siteDomain){
+        String des1 = "Welcome to AMP!";
+        String des2 = "AMP Administrator has created your user profile.";
+        String des3 = "Your login information:";
+        String des4 = "Username: ";
+        String cri1 = "password: ";
+        String pti1 = "Please change your password when you first login to AMP in order to keep it private.";
+
+
+        String langCode = language.getCode();
+        des1 = TranslatorWorker.translateText(des1, langCode, siteDomain.getSite());
+        des2 = TranslatorWorker.translateText(des2, langCode, siteDomain.getSite());
+        des3 = TranslatorWorker.translateText(des3, langCode, siteDomain.getSite());
+        des4 = TranslatorWorker.translateText(des4, langCode, siteDomain.getSite());
+        cri1 = TranslatorWorker.translateText(cri1, langCode, siteDomain.getSite());
+        pti1 = TranslatorWorker.translateText(pti1, langCode, siteDomain.getSite());
+
+
+        String des = des1+ '\n'+'\n'+des2 +'\n'+ des3 +'\n'+'\n'+'\t'+'\t'+ des4;
+        String cri = ""+'\n'+'\t'+'\t'+cri1;
+        String pti = ""+'\n'+'\n'+ pti1;
     }
 
 }

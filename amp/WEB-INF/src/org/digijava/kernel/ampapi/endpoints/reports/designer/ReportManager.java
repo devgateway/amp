@@ -82,6 +82,7 @@ public class ReportManager {
 
     public ReportManager createOrUpdateReport(ReportRequest reportRequest, final Long reportId,
                                               final Boolean isDynamic) {
+
         authorize(isDynamic);
 
         this.reportRequest = reportRequest;
@@ -135,6 +136,7 @@ public class ReportManager {
     }
 
     private void authorize(final Boolean isDynamic) {
+        logger.info("Dynamic: "+isDynamic +"Member: "+TeamUtil.getCurrentMember());
         if (TeamUtil.getCurrentMember() == null && !isDynamic) {
             ApiErrorResponseService.reportUnauthorisedAccess(SecurityErrors.NOT_AUTHENTICATED);
         }

@@ -52,7 +52,8 @@ public class ActionAuthorizer {
         }
 
         Collection<AuthRule> authRules = ruleHierarchy.getEffectiveRules(apiMethod.authTypes());
-        
+        logger.info("Authenticated: "+AuthRule.AUTHENTICATED +"User: "+TeamUtil.getCurrentUser());
+
         if (authRules.contains(AuthRule.AUTHENTICATED) && TeamUtil.getCurrentUser() == null) {
             ApiErrorResponseService.reportUnauthorisedAccess(SecurityErrors.NOT_AUTHENTICATED);
         }

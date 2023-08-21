@@ -122,7 +122,6 @@
 			class="org.digijava.module.aim.dbentity.AmpActivityGroup" cascade="delete" />
 
 
-
 		<property name="modifiedDate" column="modified_date" type="java.util.Date" />
 		<many-to-one name="modifiedBy" column="modified_by"
 			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="delete" />
@@ -170,8 +169,6 @@
 			<key column="amp_activity_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityLocation" />
 		</set>
-
-
 
 
 		<set name="internalIds" cascade="all-delete-orphan" inverse="true">

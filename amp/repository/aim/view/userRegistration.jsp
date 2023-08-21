@@ -274,21 +274,29 @@
                     </tr>
                   </logic:notEmpty>
 
+
                   <tr>
                     <td align=left class=title noWrap colspan="3"><digi:trn>All fields marked with an</digi:trn><FONT color=red><B> * </B></FONT><digi:trn>are required.</digi:trn>
                       <digi:trn key="um:userValidEmail"> Please use a valid e-mail address.</digi:trn>              </td>
                   </tr>
                   <tr>
-                    <td colspan="8" height=15>&nbsp;</td>
+                    <td colspan="4" height=15>&nbsp;</td>
                   </tr>
                   <tr>
                     <td class=f-names noWrap width="175" style="padding-bottom:10px;"><FONT color=red>*</FONT>
                       <digi:trn key="um:firstName">First Name</digi:trn>              </td>
                     <td align="right" width="145" style="padding-bottom:10px;"><html:text property="firstNames" size="20" styleClass="inp-text"/>              </td>
 
-                    <td class=f-names noWrap width="200" style="padding-bottom:10px;display: inline-block;"><FONT color=red>*</FONT>
-                      <digi:trn key="um:lastName">Last Name</digi:trn>              </td>
-                    <td align="right" width="145" style="padding-bottom:10px; display: inline-block;"><html:text property="lastName" size="20" styleClass="inp-text"/>              </td>
+                    <td class=f-names noWrap style="padding-bottom:10px;display: flex;">
+                      <div style="width: 200px;padding-right: 10px;">
+                        <FONT color=red>*</FONT>
+                        <digi:trn key="um:lastName" >Last Name</digi:trn>
+                      </div>
+                      <div>
+                        <html:text property="lastName" size="20" styleClass="inp-text"/>
+                      </div>
+                    </td>
+                            </td>
                   </tr>
                   <tr>
                     <td class=f-names noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>
@@ -359,7 +367,6 @@
                     </html:select>              </td>
                     <td></td>
                     <td></td>
-                    <td></td>
 
                   </tr>
                   <tr>
@@ -377,7 +384,7 @@
                     </html:select>              </td>
                     <td></td>
                     <td></td>
-                    <td></td>
+
                   </tr>
                   <tr>
                     <td class="f-names orgtype" noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>
@@ -393,7 +400,7 @@
                       </html:select>              </td>
                     <td></td>
                     <td></td>
-                    <td></td>
+
                   </tr>
                   <!-- <tr>
 
@@ -424,22 +431,30 @@
                     </html:select>              </td>
                     <td></td>
                     <td></td>
-                    <td></td>
+
                   </tr>
-                  <tr colspan="3">
+                  <tr colspan="3" style="position: relative;">
                     <td>&nbsp;</td>
                     <td>&nbsp;</td>
-                    <td align="right" style="padding-top:20px;padding-right:10px;" class="reg_butt"><c:set var="btnSubmit">
-                      <digi:trn key="btn:submit">Submit</digi:trn>
-                    </c:set>
+                    <td align="right" style="padding-top:20px;padding-right:10px; display: flex;">
+                        <span class="reg_butt" style="width: 85px; margin-right: 0 !important;">
+                             <c:set var="btnSubmit">
+                                 <digi:trn key="btn:submit">Submit</digi:trn>
+                             </c:set>
                       <html:submit value="${btnSubmit}" styleClass="buttonx" onclick="return validate();" styleId="registerUserBtn"/>
+                        </span>
+
+<%--                      Reset Button --%>
+                      <span>
+                        <c:set var="btnReset">
+                          <digi:trn key="btn:reset">Reset</digi:trn>
+                        </c:set>
+                      <input type="button" class="buttonx" style="width: 85px; margin-right: 0 !important;" value="${btnReset}" onclick="return resetFields();"/>
+                      </span>
+
                     </td>
-                    <td align="left" style="padding-top:20px;padding-left:10px;" class="reg_butt">
-                      <c:set var="btnReset">
-                        <digi:trn key="btn:reset">Reset</digi:trn>
-                      </c:set>
-                      <input type="button" class="buttonx" value="${btnReset}" onclick="return resetFields();"/>
-                    </td>
+
+
                     <td></td>
                   </tr>
                   <tr>

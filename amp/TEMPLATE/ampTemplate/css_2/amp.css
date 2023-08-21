@@ -532,7 +532,7 @@ div.adminicon{float:right;}
 
 
 /*-----rafy-----*/
-div.reg_form_container{width:1000px; text-align: left;}
+div.reg_form_container{width:auto; text-align: left; margin-left: -50px;}
 div.reg_form_container table {margin:0 auto; }
 /* Modify the input boxes - timothymugo */
 div.reg_form_container input,div.reg_form_container form input, div.reg_form_container form select{border:1px solid #e6e9ed;height:32px; font-size: 12px; font-weight: 500; width: 280px; padding: 5px 20px; border-radius: 5px;}

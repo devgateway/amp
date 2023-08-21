@@ -65,15 +65,13 @@ public class ReportManager {
 
     private AmpReports report;
 
-    private Integer reportToken;
-
     private final ReportColumnProvider columnProvider;
 
     private final ReportMeasureProvider measureProvider;
 
-    private List<ReportValidator> fieldsValidators = new ArrayList<>();
+    private final List<ReportValidator> fieldsValidators = new ArrayList<>();
 
-    private List<ReportValidator> reportValidators = new ArrayList<>();
+    private final List<ReportValidator> reportValidators = new ArrayList<>();
 
     public ReportManager(final ReportColumnProvider columnProvider, final ReportMeasureProvider measureProvider) {
         this.columnProvider = columnProvider;
@@ -151,7 +149,7 @@ public class ReportManager {
      *  The list is limited to {@link#Constants.MAX_REPORTS_IN_SESSION}
      */
     private void persistDynamicReport() {
-        reportToken = generateReportToken();
+        Integer reportToken = generateReportToken();
 
         MaxSizeLinkedHashMap<Integer, AmpReports> reportsList = Optional.ofNullable(TLSUtils.getReportStack())
                 .orElse(new MaxSizeLinkedHashMap<>(Constants.MAX_REPORTS_IN_SESSION));
@@ -296,8 +294,8 @@ public class ReportManager {
                     }
                 } else {
                     ReportColumn titleAmpColumn = getAvailableColumns().stream()
-                            .filter(h -> h.getName().equals(PROJECT_TITLE)).findAny()
-                            .get();
+                            .filter(h -> h.getName().equals(PROJECT_TITLE)).findAny().orElseThrow(RuntimeException::new);
+
 
                     AmpReportColumn projectTitleColumn = new AmpReportColumn();
                     projectTitleColumn.setColumn(getAmpColumnById(titleAmpColumn.getId()));
@@ -310,7 +308,7 @@ public class ReportManager {
     }
 
     private Set<AmpReportColumn> getReportColumns(final List<Long> columns) {
-        Long orderId = 0L;
+        long orderId = 0L;
         TreeSet<AmpReportColumn> reportColumns = new TreeSet<>();
         for (Long columnId : columns) {
             AmpReportColumn reportColumn = new AmpReportColumn();
@@ -326,7 +324,7 @@ public class ReportManager {
     private Set<AmpReportHierarchy> getReportHierarchies(final List<Long> hierarchies) {
         TreeSet<AmpReportHierarchy> reportHierarchies = new TreeSet<>();
         if (hierarchies != null && !hierarchies.isEmpty()) {
-            Long levelId = 0L;
+            long levelId = 0L;
             for (Long columnId : hierarchies) {
                 AmpReportHierarchy reportHierarchy = new AmpReportHierarchy();
                 reportHierarchy.setColumn(getAmpColumnById(columnId));
@@ -340,7 +338,7 @@ public class ReportManager {
     }
 
     private Set<AmpReportMeasures> getReportMeasures(final List<Long> measures) {
-        Long orderId = 0L;
+        long orderId = 0L;
         TreeSet<AmpReportMeasures> reportMeasures = new TreeSet<>();
         for (Long measureId : measures) {
             AmpReportMeasures reportMeasure = new AmpReportMeasures();
@@ -354,11 +352,11 @@ public class ReportManager {
     }
 
     private AmpColumns getAmpColumnById(final Long columnId) {
-        return (AmpColumns) PersistenceManager.getSession().get(AmpColumns.class, columnId);
+        return PersistenceManager.getSession().get(AmpColumns.class, columnId);
     }
 
     private AmpMeasures getAmpMeasureById(final Long columnId) {
-        return (AmpMeasures) PersistenceManager.getSession().get(AmpMeasures.class, columnId);
+        return PersistenceManager.getSession().get(AmpMeasures.class, columnId);
     }
 
     @Nullable

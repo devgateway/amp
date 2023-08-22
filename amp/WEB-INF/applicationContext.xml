@@ -129,11 +129,11 @@
 		<csrf disabled="true"/>
 	</http>
 
-	<http pattern="/aim/postLogin.do**">
+	<http pattern="/aim/postLogin.do**" entry-point-ref="digestEntryPoint" realm="AMP-Realm">
 		<intercept-url pattern="/**" access="permitAll" />
 		<csrf disabled="true"/>
 	</http>
-	<http pattern="/content/displayThumbnail.do**">
+	<http pattern="/content/displayThumbnail.do**" entry-point-ref="digestEntryPoint" realm="AMP-Realm">
 		<intercept-url pattern="/**" access="permitAll" />
 		<csrf disabled="true"/>
 	</http>

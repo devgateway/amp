@@ -58,6 +58,9 @@ public class LoggedUserInformation {
         this.email = email;
     }
 
+    public LoggedUserInformation() {
+    }
+
 
     public Long getId() {
         return id;

@@ -187,7 +187,23 @@ public class UserManagerService {
 
     }
 
-    private void validateUserFields(String firstName, String lastName, String email, String confirmEmail, String password, String passwordConfirmation,
+    public LoggedUserInformation updateUserProfile(LoggedUserInformation updateUser) {
+        // Get session of logged in user and check if its an admin
+        try {
+            HttpServletRequest request = TLSUtils.getRequest();
+            String adminSession = (String) TLSUtils.getRequest().getSession().getAttribute("ampAdmin");
+            logger.info("Creating user is admin: " + adminSession);
+
+            User user = new User();
+
+            return new LoggedUserInformation();
+        } catch (Exception e) {
+            logger.error("Exception from RegisterUser", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+        private void validateUserFields(String firstName, String lastName, String email, String confirmEmail, String password, String passwordConfirmation,
                                     String notificationEmail, String repeatNotificationEmail, boolean notificationEmailEnabled){
         if (StringUtils.isBlank(firstName) || StringUtils.isBlank(lastName) ||
                 StringUtils.isBlank(email) || StringUtils.isBlank(confirmEmail) ||

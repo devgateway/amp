@@ -187,7 +187,7 @@ public class UserManagerService {
 
     }
 
-    public LoggedUserInformation updateUserProfile(LoggedUserInformation updateUser) {
+    public LoggedUserInformation updateUserProfile(Long id, LoggedUserInformation updateUser) {
         // Get session of logged in user and check if its an admin
         try {
             HttpServletRequest request = TLSUtils.getRequest();

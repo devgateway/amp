@@ -12,6 +12,7 @@ import org.digijava.kernel.ampapi.endpoints.contact.dto.ContactView;
 import org.digijava.kernel.ampapi.endpoints.contact.dto.SwaggerContact;
 import org.digijava.kernel.ampapi.endpoints.security.dto.usermanager.CreateUserRequest;
 import org.digijava.kernel.ampapi.endpoints.security.dto.usermanager.LoggedUserInformation;
+import org.digijava.kernel.ampapi.endpoints.security.dto.usermanager.UpdateUserInformation;
 import org.digijava.kernel.ampapi.endpoints.security.services.UserManagerService;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.module.aim.dbentity.AmpContact;
@@ -53,7 +54,7 @@ public class UserManager {
     @ApiMethod(authTypes = {AuthRule.AUTHENTICATED}, id = "updateUser", ui = false)
     @ApiOperation("Update an existing user profile")
     public LoggedUserInformation updateUserProfile(@ApiParam("id of the existing user") @PathParam("id") Long id,
-                                                   LoggedUserInformation user) {
-        return userManagerService.updateUserProfile(user);
+                                                   UpdateUserInformation user) {
+        return userManagerService.updateUserProfile(id, user);
     }
 }

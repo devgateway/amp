@@ -39,7 +39,6 @@
     <http pattern="/aim/showChangePassword.do**" security="none" />
 
     <http pattern="/aim/changePassword.do**" security="none" />
-    <http pattern="/aim/postLogin.do**" security="none" />
 
     <http pattern="/aim/showEmailForm.do**" security="none" />
 
@@ -129,9 +128,6 @@
         <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<csrf disabled="true"/>
 	</http>
-
-
-
     <http pattern="/calendar/default/showCalendarView.do**" use-expressions="false"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
         <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<csrf disabled="true"/>

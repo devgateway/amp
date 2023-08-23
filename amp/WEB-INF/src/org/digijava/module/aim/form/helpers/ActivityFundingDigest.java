@@ -120,31 +120,29 @@ public class ActivityFundingDigest {
      * @param debug - whether to output debugging information to the results strings
      */
     public void populateFromFundings(AmpActivityVersion activity, String toCurrCode, TeamMember tm, boolean debug) {
-        Collection<AmpFunding> fundings = activity.getFunding();
+        Set<AmpFunding> fundings = activity.getFunding();
         FundingCalculationsHelper activityTotalCalculations = new FundingCalculationsHelper();
         activityTotalCalculations.setDebug(debug);
-        Set<Long> fundingOrgIds = new HashSet<Long>();
-        ArrayList<FundingOrganization> fundingOrgs = new ArrayList<FundingOrganization>();
-        Iterator<AmpFunding> fundItr = fundings.iterator();
-        
-        while (fundItr.hasNext()) {
-            AmpFunding ampFunding = fundItr.next();
+        Set<Long> fundingOrgIds = new HashSet<>();
+        ArrayList<FundingOrganization> fundingOrgs = new ArrayList<>();
+
+        for (AmpFunding ampFunding : fundings) {
             AmpRole fundingSourceRole = ampFunding.getSourceRole();
             if (fundingSourceRole != null &&
                     (Constants.FUNDING_AGENCY.equals(fundingSourceRole.getRoleCode()) ||
-                    !ampFunding.getFundingDetails().isEmpty())) {
+                            !ampFunding.getFundingDetails().isEmpty())) {
                 AmpOrganisation org = ampFunding.getAmpDonorOrgId();
                 if (org == null || org.getAmpOrgId() == null) continue;
                 FundingOrganization fundOrg = new FundingOrganization(ampFunding);
                 Funding fund = new Funding(ampFunding, activityTotalCalculations, toCurrCode, false /*isPreview*/, tm);
                 if (fund.getFundingDetails() != null && fund.getFundingDetails().size() > 0) {
-                    if (this.getFundingDetails() == null) this.setFundingDetails(new ArrayList<FundingDetail>());
-                    this.getFundingDetails().addAll(new ArrayList<FundingDetail>(fund.getFundingDetails()));
+                    if (this.getFundingDetails() == null) this.setFundingDetails(new ArrayList<>());
+                    this.getFundingDetails().addAll(new ArrayList<>(fund.getFundingDetails()));
                 }
                 int index = fundingOrgs.indexOf(fundOrg);
-                
+
                 if (index > -1) {
-                    fundOrg = (FundingOrganization)fundingOrgs.get(index);
+                    fundOrg = fundingOrgs.get(index);
                 }
                 if (fundOrg.getFundings() == null) fundOrg.setFundings(new ArrayList<Funding>());
                 fundOrg.getFundings().add(fund);
@@ -166,7 +164,7 @@ public class ActivityFundingDigest {
                 FundingOrganization fundingOrganization = new FundingOrganization();
                 fundingOrganization.setAmpOrgId(aor.getOrganisation().getAmpOrgId());
                 fundingOrganization.setOrgName(aor.getOrganisation().getName());
-                fundingOrganization.setFundings(new ArrayList<Funding>());
+                fundingOrganization.setFundings(new ArrayList<>());
                 fundingOrgs.add(fundingOrganization);
                 fundingOrgIds.add(aor.getAmpOrgRoleId());
             }

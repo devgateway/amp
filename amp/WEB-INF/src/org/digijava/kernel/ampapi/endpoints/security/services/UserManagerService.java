@@ -2,9 +2,7 @@ package org.digijava.kernel.ampapi.endpoints.security.services;
 
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,9 +11,9 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.menu.MenuConstants;
-import org.dgfoundation.amp.menu.MenuItem;
-import org.dgfoundation.amp.menu.MenuUtils;
+import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
+import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
+import org.digijava.kernel.ampapi.endpoints.contact.ContactEPConstants;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.gpi.GPIEPConstants;
@@ -24,6 +22,7 @@ import org.digijava.kernel.ampapi.endpoints.security.SecurityService;
 import org.digijava.kernel.ampapi.endpoints.security.dto.*;
 import org.digijava.kernel.ampapi.endpoints.security.dto.usermanager.CreateUserRequest;
 import org.digijava.kernel.ampapi.endpoints.security.dto.usermanager.LoggedUserInformation;
+import org.digijava.kernel.ampapi.endpoints.security.dto.usermanager.UpdateUserInformation;
 import org.digijava.kernel.ampapi.endpoints.security.dto.usermanager.UserManager;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.UserLangPreferences;
@@ -45,13 +44,10 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
-import org.digijava.module.gateperm.core.GatePermConst;
-import org.digijava.module.gateperm.util.PermissionUtil;
+
 import org.digijava.module.um.util.AmpUserUtil;
 import org.digijava.module.um.util.DbUtil;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
+
 public class UserManagerService {
     private static final Logger logger = Logger.getLogger(SecurityService.class);
 
@@ -90,7 +86,7 @@ public class UserManagerService {
                 userManager.setOrganizationGroupId(userExt.getOrgGroup().getAmpOrgGrpId());
             }
             if (userExt.getOrgType() != null) {
-                userManager.setOrganizationTypeId(userExt.getOrgType().getAmpOrgTypeId().toString());
+                userManager.setOrganizationTypeId(userExt.getOrgType().getAmpOrgTypeId());
             }
             if (userExt.getOrganization() != null) {
                 userManager.setOrganizationName(userExt.getOrganization().getName());
@@ -120,6 +116,7 @@ public class UserManagerService {
             String notificationEmail = createUser.getNotificationEmail();
             String repeatNotificationEmail = createUser.getRepeatNotificationEmail();
             boolean notificationEmailEnabled = createUser.getNotificationEmailEnabled();
+            boolean isUpdateUserEmail = true;
 
             if ( adminSession == null || adminSession.equals("no") ) {
                 ApiErrorResponseService.reportForbiddenAccess(SecurityErrors.NOT_ALLOWED);
@@ -127,7 +124,7 @@ public class UserManagerService {
 
             // Validation
             validateUserFields(firstName, lastName, email, confirmEmail, password, passwordConfirmation,
-                    notificationEmail, repeatNotificationEmail, notificationEmailEnabled);
+                    notificationEmail, repeatNotificationEmail, notificationEmailEnabled, isUpdateUserEmail);
 
             // Convert to user data
             user.setFirstNames(firstName);
@@ -187,24 +184,56 @@ public class UserManagerService {
 
     }
 
-    public LoggedUserInformation updateUserProfile(Long id, LoggedUserInformation updateUser) {
+    public LoggedUserInformation updateUserProfile(Long userId, UpdateUserInformation updateUser) {
         // Get session of logged in user and check if its an admin
-        try {
+//        try {
             HttpServletRequest request = TLSUtils.getRequest();
-            String adminSession = (String) TLSUtils.getRequest().getSession().getAttribute("ampAdmin");
-            logger.info("Creating user is admin: " + adminSession);
+//            String adminSession = (String) TLSUtils.getRequest().getSession().getAttribute("ampAdmin");
+//            logger.info("Creating user is admin: " + adminSession);
 
             User user = new User();
+            String firstName = updateUser.getFirstName();
+            String lastName = updateUser.getLastName();
+            String email = updateUser.getEmail();
+            String password = updateUser.getPassword().trim();
+            String passwordConfirmation = updateUser.getPasswordConfirmation().trim();
+            String notificationEmail = updateUser.getNotificationEmail();
+            String repeatNotificationEmail = updateUser.getRepeatNotificationEmail();
+            boolean notificationEmailEnabled = updateUser.getNotificationEmailEnabled();
+            boolean isUpdateUserEmail = true;
 
-            return new LoggedUserInformation();
-        } catch (Exception e) {
-            logger.error("Exception from RegisterUser", e);
-            throw new RuntimeException(e);
-        }
+            // confirm if user exists for security purpose
+            if(userId != null && updateUser.getId() != null){
+                if (!userId.equals(updateUser.getId())) {
+                    ApiErrorResponseService.reportError(BAD_REQUEST, SecurityErrors.USER_ID_INVALID);
+                }
+            }else {
+                ApiErrorResponseService.reportError(BAD_REQUEST, SecurityErrors.USER_ID_INVALID);
+            }
+
+            // For security purposes also make sure that only user can edit their profiles
+            User loggedUser = TeamUtil.getCurrentUser();
+            if(loggedUser.getId() != updateUser.getId()){
+                ApiErrorResponseService.reportForbiddenAccess(SecurityErrors.NOT_ALLOWED);
+            } else {
+                // if its the same email don't update it since it will cause unique type error
+                if(Objects.equals(loggedUser.getEmail(), updateUser.getEmail())) {
+                    isUpdateUserEmail = false;
+                }
+            }
+            // Validation
+            validateUserFields(firstName, lastName, email, email, password, passwordConfirmation,
+                    notificationEmail, repeatNotificationEmail, notificationEmailEnabled, isUpdateUserEmail);
+
+            return new LoggedUserInformation(firstName, lastName, email);
+//        } catch (Exception e) {
+//            logger.error("Exception from RegisterUser", e);
+//            throw new RuntimeException(e);
+//        }
     }
 
         private void validateUserFields(String firstName, String lastName, String email, String confirmEmail, String password, String passwordConfirmation,
-                                    String notificationEmail, String repeatNotificationEmail, boolean notificationEmailEnabled){
+                                    String notificationEmail, String repeatNotificationEmail, boolean notificationEmailEnabled, boolean isUpdateUserEmail){
         if (StringUtils.isBlank(firstName) || StringUtils.isBlank(lastName) ||
                 StringUtils.isBlank(email) || StringUtils.isBlank(confirmEmail) ||
                 StringUtils.isBlank(password) || StringUtils.isBlank(passwordConfirmation))
@@ -216,7 +245,7 @@ public class UserManagerService {
                 ApiErrorResponseService.reportError(BAD_REQUEST, SecurityErrors.NOT_VALID_EMAIL);
             } else if(!email.equals(confirmEmail)){
                 ApiErrorResponseService.reportError(BAD_REQUEST, SecurityErrors.EMAIL_NOT_EQUAL);
-            }else {
+            }else if(isUpdateUserEmail){
                 User user = UserUtils.getUserByEmailAddress(email);
                 if(user != null){
                     ApiErrorResponseService.reportError(BAD_REQUEST, SecurityErrors.USER_EMAIL_EXISTS);

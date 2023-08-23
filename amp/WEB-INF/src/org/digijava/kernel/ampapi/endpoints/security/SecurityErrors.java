@@ -69,4 +69,7 @@ public class SecurityErrors {
 
     public static final ApiErrorMessage PASSWORD_VALIDATION = new ApiErrorMessage(ERROR_CLASS_SECURITY_ID, 20,
             "Please enter a password which meets the minimum password requirements.");
+
+    public static final ApiErrorMessage USER_ID_INVALID = new ApiErrorMessage(ERROR_CLASS_SECURITY_ID, 21,
+            "Please provide the correct user id.");
 }

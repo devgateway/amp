@@ -48,7 +48,7 @@ public class UserManager {
         return userManagerService.createUser(user);
     }
 
-    @POST
+    @PUT
     @Path("/update/user/{id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = {AuthRule.AUTHENTICATED}, id = "updateUser", ui = false)

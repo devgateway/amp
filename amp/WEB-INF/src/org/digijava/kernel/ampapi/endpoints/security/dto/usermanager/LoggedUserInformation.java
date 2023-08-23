@@ -44,7 +44,7 @@ public class LoggedUserInformation {
     private String organizationName;
 
     @JsonProperty("organizationTypeId")
-    private String organizationTypeId;
+    private Long organizationTypeId;
 
     @JsonProperty("languageCode")
     private String languageCode;
@@ -152,11 +152,11 @@ public class LoggedUserInformation {
         this.organizationName = organizationName;
     }
 
-    public String getOrganizationTypeId() {
+    public Long getOrganizationTypeId() {
         return organizationTypeId;
     }
 
-    public void setOrganizationTypeId(String organizationTypeId) {
+    public void setOrganizationTypeId(Long organizationTypeId) {
         this.organizationTypeId = organizationTypeId;
     }
 

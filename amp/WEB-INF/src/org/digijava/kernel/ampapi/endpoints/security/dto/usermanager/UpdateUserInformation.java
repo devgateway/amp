@@ -28,13 +28,13 @@ public class UpdateUserInformation {
     @ApiModelProperty(required = true, example = "other@amp.org")
     private String notificationEmail;
 
+    @JsonProperty("repeatNotificationEmail")
+    @ApiModelProperty(required = true, example = "other@amp.org")
+    private String repeatNotificationEmail;
+
     @JsonProperty("address")
-    private String mailingAddress;
+    private String address;
 
-
-    @JsonProperty("emailConfirmation")
-    @ApiModelProperty(required = true, example = "atltest@amp.org")
-    private String emailConfirmation;
 
     @JsonProperty("password")
     @ApiModelProperty(required = true, example = "abc")
@@ -96,19 +96,11 @@ public class UpdateUserInformation {
     }
 
     public String getMailingAddress() {
-        return mailingAddress;
+        return address;
     }
 
-    public void setMailingAddress(String mailingAddress) {
-        this.mailingAddress = mailingAddress;
-    }
-
-    public String getEmailConfirmation() {
-        return emailConfirmation;
-    }
-
-    public void setEmailConfirmation(String emailConfirmation) {
-        this.emailConfirmation = emailConfirmation;
+    public void setMailingAddress(String address) {
+        this.address = address;
     }
 
     public String getPassword() {
@@ -125,5 +117,13 @@ public class UpdateUserInformation {
 
     public void setPasswordConfirmation(String passwordConfirmation) {
         this.passwordConfirmation = passwordConfirmation;
+    }
+
+    public String getRepeatNotificationEmail() {
+        return repeatNotificationEmail;
+    }
+
+    public void setRepeatNotificationEmail(String repeatNotificationEmail) {
+        this.repeatNotificationEmail = repeatNotificationEmail;
     }
 }

@@ -875,11 +875,12 @@ public class TeamUtil {
             //session.saveOrUpdate(appSettings);
             
             if(member.getAmpMemberRole().getTeamHead()!=null&&member.getAmpMemberRole().getTeamHead()) {
-                AmpTeam team = (AmpTeam) session.load(AmpTeam.class, (Serializable) member.getAmpTeam().getIdentifier());
+                AmpTeam team = session.load(AmpTeam.class, (Serializable) member.getAmpTeam().getIdentifier());
                 team.setTeamLead(member);
                 session.saveOrUpdate(team);
             }
-            User user = (User) session.load(User.class, member.getUser().getId());
+            session.flush();
+            User user = session.load(User.class, member.getUser().getId());
             String qryStr = "select grp from " + Group.class.getName()
                 + " grp " + "where (grp.key=:key) and (grp.site=:sid)";
             Query qry = session.createQuery(qryStr);

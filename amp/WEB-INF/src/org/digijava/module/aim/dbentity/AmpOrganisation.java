@@ -738,7 +738,7 @@ public class AmpOrganisation implements Comparable<AmpOrganisation>, Identifiabl
         return users;
     }
 
-    public void setUsers(Set users) {
+    public void setUsers(Set<User> users) {
         this.users = users;
     }
 

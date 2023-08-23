@@ -35,6 +35,7 @@ import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.core.Permissible;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.hibernate.type.LongType;
 
 import javax.validation.Valid;
 import java.io.Serializable;
@@ -1162,11 +1163,11 @@ LoggerIdentifiable, Cloneable {
         /**
          * @param set
          */
-        public void setInternalIds(Set set) {
+        public void setInternalIds(Set<AmpActivityInternalId> set) {
             internalIds = set;
         }
 
-        public void setIssues(Set set) {
+        public void setIssues(Set<AmpIssues> set) {
             issues = set;
         }
 
@@ -2168,15 +2169,11 @@ LoggerIdentifiable, Cloneable {
                 Session session = PersistenceManager.getSession();
                 String queryString = "select distinct donor from " + AmpFunding.class.getName() + " f inner join f.ampDonorOrgId donor inner join f.ampActivityId act ";
                 queryString += " where act.ampActivityId=:activityId";
-                Query qry = session.createQuery(queryString).setLong("activityId", this.getAmpActivityId());
+                Query qry = session.createQuery(queryString).setParameter("activityId", this.getAmpActivityId(), LongType.INSTANCE);
 
                 List<AmpOrganisation> organizations = qry.list();
                 if (organizations != null && organizations.size() > 1) {
-                    Collections.sort(organizations, new Comparator<AmpOrganisation>() {
-                        public int compare(AmpOrganisation o1, AmpOrganisation o2) {
-                            return o1.getName().compareTo(o2.getName());
-                        }
-                    });
+                    organizations.sort(Comparator.comparing(AmpOrganisation::getName));
                 }
 
                 for (AmpOrganisation donor : organizations) {

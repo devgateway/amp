@@ -12,10 +12,7 @@ import org.digijava.module.aim.util.Output;
 import org.digijava.module.aim.util.SerializableComparator;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 
 public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Versionable, Cloneable {
@@ -146,9 +143,9 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
         if (this.additionalInfo != null && this.additionalInfo.trim().length() > 0)
             out.getOutputs().add(new Output(null, new String[] {"Department/Division"}, new Object[] {this.additionalInfo}));
         if (this.budgets != null){
-            StringBuffer budgetCode = new StringBuffer();
+            StringBuilder budgetCode = new StringBuilder();
             for (AmpOrgRoleBudget budget :budgets) {
-            budgetCode.append(budget.getBudgetCode()+ ","); 
+            budgetCode.append(budget.getBudgetCode()).append(",");
             }
             if (budgetCode.length()>0) {
                 out.getOutputs().add(new Output(null, new String[] {"Budget Code"}, new Object[] {budgetCode.substring(0,budgetCode.length()-1)}));
@@ -160,11 +157,11 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
 
     @Override
     public Object getValue() {
-        StringBuffer budgetCode = new StringBuffer();
+        StringBuilder budgetCode = new StringBuilder();
         for (AmpOrgRoleBudget budget :budgets) {
-        budgetCode.append(budget.getBudgetCode()+ ","); 
+        budgetCode.append(budget.getBudgetCode()).append(",");
         }
-        return "" + this.percentage + "" + this.additionalInfo + ""+budgetCode.toString();
+        return this.percentage + this.additionalInfo + budgetCode;
     }
     
     @Override
@@ -297,5 +294,17 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
     public void setGpiNiSurveys(Set<AmpGPINiSurvey> gpiNiSurveys) {
         this.gpiNiSurveys = gpiNiSurveys;
     }
-    
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AmpOrgRole that = (AmpOrgRole) o;
+        return Objects.equals(organisation, that.organisation);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(activity, organisation);
+    }
 }

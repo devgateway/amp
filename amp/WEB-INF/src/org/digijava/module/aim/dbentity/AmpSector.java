@@ -393,4 +393,13 @@ public class AmpSector implements Serializable, Identifiable,
     public boolean isSoftDeleted() {
         return Boolean.TRUE.equals(this.deleted);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AmpSector ampSector = (AmpSector) o;
+        return  Objects.equals(ampSectorId, ampSector.ampSectorId);
+    }
+
 }

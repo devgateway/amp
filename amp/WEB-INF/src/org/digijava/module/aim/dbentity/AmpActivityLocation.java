@@ -10,6 +10,7 @@ import org.digijava.module.aim.util.TreeNodeAware;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Connection between Activity and Location.
@@ -145,5 +146,19 @@ public class AmpActivityLocation implements Versionable, Serializable, Cloneable
     @Override
     public AmpAutoCompleteDisplayable<AmpCategoryValueLocations> getTreeNode() {
         return location;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AmpActivityLocation that = (AmpActivityLocation) o;
+        return Objects.equals(location.getId(), that.location.getId());
+    }
+
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(activity, location);
     }
 }

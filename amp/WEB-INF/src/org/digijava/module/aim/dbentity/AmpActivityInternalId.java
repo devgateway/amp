@@ -8,6 +8,7 @@ import org.digijava.module.aim.util.Output;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class AmpActivityInternalId implements Serializable, Versionable, Cloneable {
     //IATI-check: used. 
@@ -105,4 +106,16 @@ public class AmpActivityInternalId implements Serializable, Versionable, Cloneab
         return super.clone();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AmpActivityInternalId that = (AmpActivityInternalId) o;
+        return Objects.equals(organisation, that.organisation);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(organisation, ampActivity);
+    }
 }

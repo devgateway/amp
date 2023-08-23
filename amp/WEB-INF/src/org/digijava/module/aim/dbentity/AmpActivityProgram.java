@@ -12,6 +12,7 @@ import org.digijava.module.aim.util.TreeNodeAware;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public class AmpActivityProgram implements Versionable, Serializable, Cloneable, TreeNodeAware<AmpTheme> {
@@ -152,5 +153,18 @@ public class AmpActivityProgram implements Versionable, Serializable, Cloneable,
     @Override
     public AmpAutoCompleteDisplayable<AmpTheme> getTreeNode() {
         return program;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AmpActivityProgram that = (AmpActivityProgram) o;
+        return Objects.equals(program, that.program) ;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(activity,  program);
     }
 }

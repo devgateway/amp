@@ -129,9 +129,7 @@ public class DynLocationManagerUtil {
             Query qry = dbSession.createQuery(queryString);
             locations = qry.list();
 
-            Iterator<AmpCategoryValueLocations> iter = locations.iterator();
-            while (iter.hasNext()) {
-                AmpCategoryValueLocations loc = iter.next();
+            for (AmpCategoryValueLocations loc : locations) {
                 locationsMap.put(loc.getId(), loc);
             }
 

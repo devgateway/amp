@@ -217,12 +217,6 @@ public class AmpTheme implements Serializable, SoftDeletable, Identifiable, ARDi
     @Override
     public boolean equals(Object obj) {
         if(!(obj instanceof AmpTheme)) return false;
-        if (obj == null)
-            throw new NullPointerException();
-
-        if (!(obj instanceof AmpTheme))
-            throw new ClassCastException();
-
         AmpTheme theme = (AmpTheme) obj;
         return (theme.getAmpThemeId().equals(ampThemeId));
     }

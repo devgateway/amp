@@ -830,7 +830,7 @@ public class IndicatorUtil {
 
             }
             if (ActivityVersionUtil.isVersioningEnabled()) {
-                AmpActivityVersion act = (AmpActivityVersion) session.load(AmpActivityVersion.class, actInd.getActivityId());
+                AmpActivityVersion act = session.load(AmpActivityVersion.class, actInd.getActivityId());
                 Hibernate.initialize(act);
                 Hibernate.initialize(act.getActivityContacts());
                 AmpActivityGroup tmpGroup = act.getAmpActivityGroup();

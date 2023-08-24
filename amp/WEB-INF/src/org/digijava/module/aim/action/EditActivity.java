@@ -966,20 +966,18 @@ public class EditActivity extends Action {
               activity.getProposedCompletionDate()));*/
 
           // loading organizations and thier project ids.
-          Set orgProjIdsSet = activity.getInternalIds();
+          Set<AmpActivityInternalId> orgProjIdsSet = activity.getInternalIds();
           if (orgProjIdsSet != null) {
             Collection temp = new ArrayList();
-              for (Object o : orgProjIdsSet) {
-                  AmpActivityInternalId actIntId = (
-                          AmpActivityInternalId) o;
+              for (AmpActivityInternalId o : orgProjIdsSet) {
                   OrgProjectId projId = new OrgProjectId();
-                  projId.setId(actIntId.getId());
-                  projId.setOrganisation(actIntId.getOrganisation());
-                  projId.setProjectId(actIntId.getInternalId());
+                  projId.setId(o.getId());
+                  projId.setOrganisation(o.getOrganisation());
+                  projId.setProjectId(o.getInternalId());
                   temp.add(projId);
               }
-            if (temp != null && temp.size() > 0) {
-              OrgProjectId orgProjectIds[] = new OrgProjectId[
+            if (temp.size() > 0) {
+              OrgProjectId[] orgProjectIds = new OrgProjectId[
                   temp
                   .size()];
               Object[] arr = temp.toArray();
@@ -998,7 +996,6 @@ public class EditActivity extends Action {
           if (ampLocs != null && ampLocs.size() > 0) {
            List<Location> locs = new ArrayList<Location>();
 
-            Iterator locIter = ampLocs.iterator();
             boolean maxLevel = false;
 
             AmpCategoryValueLocations defCountry    = DynLocationManagerUtil.getDefaultCountry();
@@ -1010,7 +1007,7 @@ public class EditActivity extends Action {
                     implLevel != null && implLocValue != null &&
                     CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL.equalsCategoryValue(implLevel) &&
                     CategoryConstants.IMPLEMENTATION_LOCATION_ADM_LEVEL_0.equalsCategoryValue(implLocValue);
-
+              Iterator locIter = ampLocs.iterator();
               while (locIter.hasNext()) {
                 AmpActivityLocation actLoc = (AmpActivityLocation) locIter.next();  //AMP-2250
                 if (actLoc == null)

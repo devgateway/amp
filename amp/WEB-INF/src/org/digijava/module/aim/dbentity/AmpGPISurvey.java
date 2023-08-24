@@ -54,46 +54,38 @@ public class AmpGPISurvey implements Versionable, Serializable, Cloneable, Compa
     @Override
     public Object getValue() {
 
-        Comparator surveyComparator = new Comparator() {
-            public int compare(Object o1, Object o2) {
-                AmpGPISurveyResponse aux1 = (AmpGPISurveyResponse) o1;
-                AmpGPISurveyResponse aux2 = (AmpGPISurveyResponse) o2;
-                return aux1.getAmpQuestionId().getQuestionNumber().compareTo(aux2.getAmpQuestionId().getQuestionNumber());
-            }
+        Comparator surveyComparator = (o1, o2) -> {
+            AmpGPISurveyResponse aux1 = (AmpGPISurveyResponse) o1;
+            AmpGPISurveyResponse aux2 = (AmpGPISurveyResponse) o2;
+            return aux1.getAmpQuestionId().getQuestionNumber().compareTo(aux2.getAmpQuestionId().getQuestionNumber());
         };
 
-        String ret = "";
+        StringBuilder ret = new StringBuilder();
         List<AmpGPISurveyResponse> auxList = new ArrayList<AmpGPISurveyResponse>(this.responses);
-        Collections.sort(auxList, surveyComparator);
-        Iterator<AmpGPISurveyResponse> iter = auxList.iterator();
-        while (iter.hasNext()) {
-            AmpGPISurveyResponse auxResponse = iter.next();
-            ret = ret + ((auxResponse.getResponse() != null && !auxResponse.getResponse().equals("nil")) ? auxResponse.getResponse() : "-");
+        auxList.sort(surveyComparator);
+        for (AmpGPISurveyResponse auxResponse : auxList) {
+            ret.append((auxResponse.getResponse() != null && !auxResponse.getResponse().equals("nil")) ? auxResponse.getResponse() : "-");
         }
-        return ret;
+        return ret.toString();
     }
 
     @Override
     public Output getOutput() {
-        Comparator surveyComparator = new Comparator() {
-            public int compare(Object o1, Object o2) {
-                AmpGPISurveyResponse aux1 = (AmpGPISurveyResponse) o1;
-                AmpGPISurveyResponse aux2 = (AmpGPISurveyResponse) o2;
-                return aux1.getAmpQuestionId().getAmpQuestionId().compareTo(aux2.getAmpQuestionId().getAmpQuestionId());
-            }
+        Comparator surveyComparator = (o1, o2) -> {
+            AmpGPISurveyResponse aux1 = (AmpGPISurveyResponse) o1;
+            AmpGPISurveyResponse aux2 = (AmpGPISurveyResponse) o2;
+            return aux1.getAmpQuestionId().getAmpQuestionId().compareTo(aux2.getAmpQuestionId().getAmpQuestionId());
         };
 
         Output out = new Output();
-        out.setOutputs(new ArrayList<Output>());
+        out.setOutputs(new ArrayList<>());
         out.getOutputs().add(new Output(new ArrayList(), new String[] { "Questions" }, new Object[] { "" }));
         Output questions = out.getOutputs().get(out.getOutputs().size() - 1);
 
         if (this.responses != null) {
             List<AmpGPISurveyResponse> auxList = new ArrayList<AmpGPISurveyResponse>(this.responses);
-            Collections.sort(auxList, surveyComparator);
-            Iterator<AmpGPISurveyResponse> iter = auxList.iterator();
-            while (iter.hasNext()) {
-                AmpGPISurveyResponse auxResponse = iter.next();
+            auxList.sort(surveyComparator);
+            for (AmpGPISurveyResponse auxResponse : auxList) {
                 Output auxOutResp = new Output();
                 auxOutResp.setTitle(auxResponse.getOutput().getTitle());
                 auxOutResp.setValue(auxResponse.getOutput().getValue());
@@ -111,10 +103,9 @@ public class AmpGPISurvey implements Versionable, Serializable, Cloneable, Compa
         aux.ampActivityId = newActivity;
         aux.ampGPISurveyId = null;
         if (aux.responses != null && aux.responses.size() > 0) {
-            Set<AmpGPISurveyResponse> responses = new HashSet<AmpGPISurveyResponse>();
-            Iterator<AmpGPISurveyResponse> i = aux.responses.iterator();
-            while (i.hasNext()) {
-                AmpGPISurveyResponse newResp = (AmpGPISurveyResponse) i.next().clone();
+            Set<AmpGPISurveyResponse> responses = new HashSet<>();
+            for (AmpGPISurveyResponse respons : aux.responses) {
+                AmpGPISurveyResponse newResp = (AmpGPISurveyResponse) respons.clone();
                 newResp.setAmpGPISurveyId(aux);
                 newResp.setAmpReponseId(null);
                 responses.add(newResp);

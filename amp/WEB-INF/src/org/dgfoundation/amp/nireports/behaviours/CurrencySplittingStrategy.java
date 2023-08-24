@@ -80,13 +80,12 @@ public class CurrencySplittingStrategy implements VSplitStrategy {
      * @return
      */
     public static VSplitStrategy getInstance(AmpCurrency usedCurrency) {
-        VSplitStrategy byCurrency = new CurrencySplittingStrategy(cell -> 
-                            new ComparableValue<String>(
-                                    getCurrencyCode(usedCurrency, cell.getCell()),
-                                    getCurrencyValue(usedCurrency, cell.getCell())), 
+
+        return new CurrencySplittingStrategy(cell ->
+                new ComparableValue<>(
+                        getCurrencyCode(usedCurrency, cell.getCell()),
+                        getCurrencyValue(usedCurrency, cell.getCell())),
                             usedCurrency);
-        
-        return byCurrency;
     }
 
     @Override

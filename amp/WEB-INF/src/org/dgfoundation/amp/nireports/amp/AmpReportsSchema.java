@@ -34,6 +34,8 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletContext;
 import java.math.BigDecimal;
@@ -58,6 +60,8 @@ import static org.dgfoundation.amp.nireports.schema.NiDimension.*;
  */
 public class AmpReportsSchema extends AbstractReportsSchema {
 
+    private static  final Logger logger = LoggerFactory.getLogger(AmpReportsSchema.class);
+
     /**
      * the number to add to pledge ids in tables joined with activity tables
      */
@@ -68,6 +72,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
      * (e.g. {@link AmpDifferentialColumn}, {@link AmpFundingColumn})
      */
     public boolean ENABLE_CACHING = true;
+
 
     /**
      * the hierarchies which are transaction-level. Please see <a href='https://wiki.dgfoundation.org/display/AMPDOC/2.+NiReports+Configuration%3A+the+schema#id-2.NiReportsConfiguration:theschema-3.4.2.Typesofhierarchicalcolumns'>here</a> for more details
@@ -1617,6 +1622,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
                 && engine.spec.isShowOriginalCurrency();
         
         if (splitByCurrencies) {
+            logger.info("Raw: "+raw);
+            logger.info("Used currency: "+scratch.usedCurrency);
+            logger.info("Strategy: "+CurrencySplittingStrategy.getInstance(scratch.usedCurrency));
             raw.add(CurrencySplittingStrategy.getInstance(scratch.usedCurrency));
         }
 

@@ -304,7 +304,14 @@ public class NiReportsEngine implements IdsAcceptorsBuilder {
         Set<String> hiddenHierarchies = spec.getInvisibleHierarchyNames();
         Predicate<Column> isHiddenHierarchy = c -> hiddenHierarchies.contains(c.name);
         Predicate<Column> columnFilter = yearRangeSetting.or(emptyLeaf).or(isHiddenHierarchy);
-        this.headers = new NiHeaderInfo(this, pruneHeaders(this.headers.rootColumn, columnFilter), headers.nrHierarchies);
+        try {
+            this.headers = new NiHeaderInfo(this, pruneHeaders(this.headers.rootColumn, columnFilter), headers.nrHierarchies);
+
+        }catch (Exception e)
+        {
+            logger.info("An error occurred here: "+e.getMessage());
+            e.printStackTrace();
+        }
         this.reportOutput = this.reportOutput.accept(new NiReportOutputCleaner(this.headers));
         if (spec.getSorters() != null && !spec.getSorters().isEmpty())
             timer.run("sorting", this::sortOutput);

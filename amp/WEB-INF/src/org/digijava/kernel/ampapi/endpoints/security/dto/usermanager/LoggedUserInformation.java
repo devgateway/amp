@@ -40,6 +40,8 @@ public class LoggedUserInformation {
     @JsonProperty("countryIso")
     private String countryIso;
 
+    @JsonProperty("organizationId")
+    private Long organizationId;
     @JsonProperty("organizationName")
     private String organizationName;
 
@@ -174,5 +176,13 @@ public class LoggedUserInformation {
 
     public void setOrganizationGroupId(Long organizationGroupId) {
         this.organizationGroupId = organizationGroupId;
+    }
+
+    public Long getOrganizationId() {
+        return organizationId;
+    }
+
+    public void setOrganizationId(Long organizationId) {
+        this.organizationId = organizationId;
     }
 }

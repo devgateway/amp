@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.digijava.kernel.Constants;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
 import org.digijava.kernel.ampapi.endpoints.contact.ContactEPConstants;
@@ -24,6 +25,7 @@ import org.digijava.kernel.ampapi.endpoints.security.dto.usermanager.CreateUserR
 import org.digijava.kernel.ampapi.endpoints.security.dto.usermanager.LoggedUserInformation;
 import org.digijava.kernel.ampapi.endpoints.security.dto.usermanager.UpdateUserInformation;
 import org.digijava.kernel.ampapi.endpoints.security.dto.usermanager.UserManager;
+import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.UserLangPreferences;
 import org.digijava.kernel.request.SiteDomain;
@@ -34,17 +36,15 @@ import org.digijava.kernel.services.AmpVersionService;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.*;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.dbentity.AmpUserExtension;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.exception.AimException;
-import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
+import org.digijava.module.um.exception.UMException;
 import org.digijava.module.um.util.AmpUserUtil;
 import org.digijava.module.um.util.DbUtil;
 
@@ -90,6 +90,7 @@ public class UserManagerService {
             }
             if (userExt.getOrganization() != null) {
                 userManager.setOrganizationName(userExt.getOrganization().getName());
+                userManager.setOrganizationId(userExt.getOrganization().getAmpOrgId());
             }
         } catch (AimException e) {
             logger.error("Exception from getting User extention", e);
@@ -117,6 +118,7 @@ public class UserManagerService {
             String repeatNotificationEmail = createUser.getRepeatNotificationEmail();
             boolean notificationEmailEnabled = createUser.getNotificationEmailEnabled();
             boolean isUpdateUserEmail = true;
+            boolean isUpdateUser = false;
 
             if ( adminSession == null || adminSession.equals("no") ) {
                 ApiErrorResponseService.reportForbiddenAccess(SecurityErrors.NOT_ALLOWED);
@@ -124,7 +126,7 @@ public class UserManagerService {
 
             // Validation
             validateUserFields(firstName, lastName, email, confirmEmail, password, passwordConfirmation,
-                    notificationEmail, repeatNotificationEmail, notificationEmailEnabled, isUpdateUserEmail);
+                    notificationEmail, repeatNotificationEmail, notificationEmailEnabled, isUpdateUserEmail, isUpdateUser);
 
             // Convert to user data
             user.setFirstNames(firstName);
@@ -185,22 +187,20 @@ public class UserManagerService {
     }
 
     public LoggedUserInformation updateUserProfile(Long userId, UpdateUserInformation updateUser) {
-        // Get session of logged in user and check if its an admin
-//        try {
             HttpServletRequest request = TLSUtils.getRequest();
-//            String adminSession = (String) TLSUtils.getRequest().getSession().getAttribute("ampAdmin");
-//            logger.info("Creating user is admin: " + adminSession);
 
             User user = new User();
+            Long updateUserId = updateUser.getId();
             String firstName = updateUser.getFirstName();
             String lastName = updateUser.getLastName();
             String email = updateUser.getEmail();
-            String password = updateUser.getPassword().trim();
-            String passwordConfirmation = updateUser.getPasswordConfirmation().trim();
+            String password = null;
+            String passwordConfirmation = null;
             String notificationEmail = updateUser.getNotificationEmail();
             String repeatNotificationEmail = updateUser.getRepeatNotificationEmail();
             boolean notificationEmailEnabled = updateUser.getNotificationEmailEnabled();
             boolean isUpdateUserEmail = true;
+            boolean isUpdateUser = true;
 
             // confirm if user exists for security purpose
             if(userId != null && updateUser.getId() != null){
@@ -223,22 +223,84 @@ public class UserManagerService {
             }
             // Validation
             validateUserFields(firstName, lastName, email, email, password, passwordConfirmation,
-                    notificationEmail, repeatNotificationEmail, notificationEmailEnabled, isUpdateUserEmail);
+                    notificationEmail, repeatNotificationEmail, notificationEmailEnabled, isUpdateUserEmail, isUpdateUser);
 
-            return new LoggedUserInformation(firstName, lastName, email);
-//        } catch (Exception e) {
-//            logger.error("Exception from RegisterUser", e);
-//            throw new RuntimeException(e);
-//        }
+            // User preparation
+            if (updateUserId != null) {
+                user = UserUtils.getUser(updateUserId);
+            }
+            user.setId(updateUserId);
+            user.setFirstNames(firstName);
+            user.setLastName(lastName);
+            user.setEmail(email);
+            user.setNotificationEmailEnabled(notificationEmailEnabled);
+            if(notificationEmailEnabled){
+                user.setNotificationEmail(notificationEmail);
+            }
+            // set client IP address
+            user.setModifyingIP(RequestUtils.getRemoteAddress(request));
+
+            Country country = org.digijava.module.aim.util.DbUtil.getDgCountry(updateUser.getCountryIso());
+            user.setCountry(country);
+
+            SiteDomain siteDomain = (SiteDomain) request.getAttribute(Constants.CURRENT_SITE);
+            UserLangPreferences userLangPreferences = new UserLangPreferences(user, DgUtil.getRootSite(siteDomain.getSite()));
+
+            Locale language = new Locale();
+            language.setCode(updateUser.getLanguageCode());
+
+            userLangPreferences.setAlertsLanguage(language);
+            userLangPreferences.setNavigationLanguage(RequestUtils.getNavigationLanguage(request));
+
+            user.setUserLangPreferences(userLangPreferences);
+
+        AmpUserExtension userExt= null;
+        try {
+            userExt = AmpUserUtil.getAmpUserExtension(user);
+        } catch (AimException e) {
+            logger.error("Exception from getAmpUserExtension", e);
+            throw new RuntimeException(e);
+        }
+        if (userExt==null){
+                userExt=new AmpUserExtension(new AmpUserExtensionPK(user));
+            }
+
+            if (userExt!=null){
+                AmpOrgType orgType=org.digijava.module.aim.util.DbUtil.getAmpOrgType(updateUser.getOrganizationTypeId());
+                userExt.setOrgType(orgType);
+                AmpOrgGroup orgGroup=org.digijava.module.aim.util.DbUtil.getAmpOrgGroup(updateUser.getOrganizationGroupId());
+                userExt.setOrgGroup(orgGroup);
+                AmpOrganisation organ = org.digijava.module.aim.util.DbUtil.getOrganisation(updateUser.getOrganizationId());
+                userExt.setOrganization(organ);
+                user.setOrganizationName(organ.getName());
+
+                try {
+                    AmpUserUtil.saveAmpUserExtension(userExt);
+                } catch (AimException e) {
+                    logger.error("Exception from Amp User Extention", e);
+                    throw new RuntimeException(e);
+                }
+            }
+
+        try {
+            DbUtil.updateUser(user);
+        } catch (UMException e) {
+            logger.error("Exception from Update user profile api.", e);
+            throw new RuntimeException(e);
+        }
+        return new LoggedUserInformation(firstName, lastName, email);
     }
 
         private void validateUserFields(String firstName, String lastName, String email, String confirmEmail, String password, String passwordConfirmation,
-                                    String notificationEmail, String repeatNotificationEmail, boolean notificationEmailEnabled, boolean isUpdateUserEmail){
+                                    String notificationEmail, String repeatNotificationEmail, boolean notificationEmailEnabled, boolean isUpdateUserEmail, boolean isUpdateUser){
         if (StringUtils.isBlank(firstName) || StringUtils.isBlank(lastName) ||
-                StringUtils.isBlank(email) || StringUtils.isBlank(confirmEmail) ||
-                StringUtils.isBlank(password) || StringUtils.isBlank(passwordConfirmation))
+                StringUtils.isBlank(email) || StringUtils.isBlank(confirmEmail))
         {
             ApiErrorResponseService.reportError(BAD_REQUEST, SecurityErrors.FILL_FORM_CORRECTLY);
+        } else if(!isUpdateUser){
+            if(StringUtils.isBlank(password) || StringUtils.isBlank(passwordConfirmation)){
+                ApiErrorResponseService.reportError(BAD_REQUEST, SecurityErrors.PASSWORD_FIELD_REQUIRED);
+            }
         } else {
             // Check if its a valid email and if use with the same email exists
             if(!isValidEmail(email) || !isValidEmail(confirmEmail)){

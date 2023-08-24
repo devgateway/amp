@@ -44,6 +44,24 @@ public class UpdateUserInformation {
     @ApiModelProperty(required = true, example = "abc")
     private String passwordConfirmation;
 
+    @JsonProperty("countryIso")
+    private String countryIso;
+
+    @JsonProperty("languageCode")
+    private String languageCode;
+
+    @JsonProperty("organizationId")
+    private Long organizationId;
+
+    @JsonProperty("organizationName")
+    private String organizationName;
+
+    @JsonProperty("organizationTypeId")
+    private Long organizationTypeId;
+
+    @JsonProperty("organizationGroupId")
+    private Long organizationGroupId;
+
     public UpdateUserInformation() {
     }
 
@@ -125,5 +143,53 @@ public class UpdateUserInformation {
 
     public void setRepeatNotificationEmail(String repeatNotificationEmail) {
         this.repeatNotificationEmail = repeatNotificationEmail;
+    }
+
+    public String getCountryIso() {
+        return countryIso;
+    }
+
+    public void setCountryIso(String countryIso) {
+        this.countryIso = countryIso;
+    }
+
+    public String getLanguageCode() {
+        return languageCode;
+    }
+
+    public void setLanguageCode(String languageCode) {
+        this.languageCode = languageCode;
+    }
+
+    public Long getOrganizationTypeId() {
+        return organizationTypeId;
+    }
+
+    public void setOrganizationTypeId(Long organizationTypeId) {
+        this.organizationTypeId = organizationTypeId;
+    }
+
+    public Long getOrganizationGroupId() {
+        return organizationGroupId;
+    }
+
+    public void setOrganizationGroupId(Long organizationGroupId) {
+        this.organizationGroupId = organizationGroupId;
+    }
+
+    public Long getOrganizationId() {
+        return organizationId;
+    }
+
+    public void setOrganizationId(Long organizationId) {
+        this.organizationId = organizationId;
+    }
+
+    public String getOrganizationName() {
+        return organizationName;
+    }
+
+    public void setOrganizationName(String organizationName) {
+        this.organizationName = organizationName;
     }
 }

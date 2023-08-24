@@ -72,4 +72,7 @@ public class SecurityErrors {
 
     public static final ApiErrorMessage USER_ID_INVALID = new ApiErrorMessage(ERROR_CLASS_SECURITY_ID, 21,
             "Please provide the correct user id.");
+
+    public static final ApiErrorMessage PASSWORD_FIELD_REQUIRED = new ApiErrorMessage(ERROR_CLASS_SECURITY_ID, 22,
+            "Password fields are required.");
 }

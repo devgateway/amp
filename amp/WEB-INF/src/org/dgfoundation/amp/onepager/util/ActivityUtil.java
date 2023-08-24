@@ -284,6 +284,7 @@ public class ActivityUtil {
         } else {
             updateFiscalYears(a);
         }
+
         saveEditors(session, createNewVersion, editorStore, site);
 
         saveAgreements(a, session, isActivityForm);
@@ -740,21 +741,11 @@ public class ActivityUtil {
             return;
         }
 
-        Iterator<AmpComponent> componentIterator = components.iterator();
-        while (componentIterator.hasNext()) {
-            AmpComponent ampComponent = componentIterator.next();
-
+        for (AmpComponent ampComponent : components) {
             if (Hibernate.isInitialized(ampComponent.getFundings())) {
                 if (ampComponent.getFundings() != null) {
-                    Iterator<AmpComponentFunding> ampComponentFundingsIterator = ampComponent.getFundings().iterator();
 
-                    while (ampComponentFundingsIterator.hasNext()) {
-                        AmpComponentFunding acf = ampComponentFundingsIterator.next();
-
-                        if (acf.getTransactionAmount() == null) {
-                            ampComponentFundingsIterator.remove();
-                        }
-                    }
+                    ampComponent.getFundings().removeIf(acf -> acf.getTransactionAmount() == null);
                 }
             }
         }
@@ -1174,6 +1165,7 @@ public class ActivityUtil {
 
         // insert new resources in the system
         insertGPINiResources(a, newResources);
+
     }
 
     /**
@@ -1189,8 +1181,8 @@ public class ActivityUtil {
                     if (tempOrgRole.getGpiNiSurvey() != null) {
                         for (AmpGPINiSurveyResponse tempGPINiSurveyResponse : tempOrgRole.getGpiNiSurvey()
                                 .getResponses()) {
-                            if (tempGPINiSurveyResponse.getOldKey() == surveyResponse
-                                    .getAmpGPINiSurveyResponseId()) {
+                            if (Objects.equals(tempGPINiSurveyResponse.getOldKey(), surveyResponse
+                                    .getAmpGPINiSurveyResponseId())) {
 
                                 Set<AmpGPINiSurveyResponseDocument> docsToBeRemoved = tempGPINiSurveyResponse
                                         .getSupportingDocuments().stream()

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.digijava.kernel.user.TruBudgetIntentGroup" table="trubudget_intent_group">
+        <id name="id" column="trubudget_intent_group_id" type="java.lang.Long" unsaved-value="null">
+            <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+                <param name="sequence_name">trubudget_intent_group_seq</param>
+            </generator>
+        </id>
+        <property name="name" column="trubudget_intent_group_name" type="java.lang.String"/>
+
+        <set name="intents" table="trubudget_intent" inverse="true" fetch="select">
+            <key column="intent_group"/>
+            <one-to-many class="org.digijava.kernel.user.TruBudgetIntent"/>
+        </set>
+    </class>
+</hibernate-mapping>

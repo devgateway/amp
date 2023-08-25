@@ -5,21 +5,21 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.util.Set;
 
-@Entity
-@Table(name = "trubudget_intent_group")
-@Cacheable
-@DynamicUpdate
+//@Entity
+//@Table(name = "trubudget_intent_group")
+//@Cacheable
+//@DynamicUpdate
 public class TruBudgetIntentGroup {
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "trubudget_intent_group_seq")
-    @SequenceGenerator(name = "trubudget_intent_group_seq", sequenceName = "trubudget_intent_group_seq", allocationSize = 1)
-    @Column(name = "trubudget_intent_group_id")
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "trubudget_intent_group_seq")
+//    @SequenceGenerator(name = "trubudget_intent_group_seq", sequenceName = "trubudget_intent_group_seq", allocationSize = 1)
+//    @Column(name = "trubudget_intent_group_id")
     private Long id;
-    @Column(name = "trubudget_intent_group_name")
+//    @Column(name = "trubudget_intent_group_name")
     private String name;
 
 
-    @OneToMany(mappedBy = "intentGroup")
+//    @OneToMany(mappedBy = "intentGroup")
     private Set<TruBudgetIntent> intents;
 
     public Set<TruBudgetIntent> getIntents() {

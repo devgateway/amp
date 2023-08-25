@@ -70,6 +70,7 @@ public class UserManagerService {
 
         LoggedUserInformation userManager = new LoggedUserInformation(user.getFirstNames(), user.getLastName(), user.getEmail());
         userManager.setId(user.getId());
+        userManager.setEmail(user.getEmail());
         userManager.setNotificationEmailEnabled(user.isNotificationEmailEnabled());
         if(userManager.getNotificationEmailEnabled() != null) {
             if(userManager.getNotificationEmailEnabled()){
@@ -80,22 +81,7 @@ public class UserManagerService {
         userManager.setCountry(user.getCountry().getIso());
         userManager.setLanguageCode(user.getRegisterLanguage().getCode());
 
-        try {
-            AmpUserExtension userExt = AmpUserUtil.getAmpUserExtension(user);
-            if (userExt.getOrgGroup() != null) {
-                userManager.setOrganizationGroupId(userExt.getOrgGroup().getAmpOrgGrpId());
-            }
-            if (userExt.getOrgType() != null) {
-                userManager.setOrganizationTypeId(userExt.getOrgType().getAmpOrgTypeId());
-            }
-            if (userExt.getOrganization() != null) {
-                userManager.setOrganizationName(userExt.getOrganization().getName());
-                userManager.setOrganizationId(userExt.getOrganization().getAmpOrgId());
-            }
-        } catch (AimException e) {
-            logger.error("Exception from getting User extention", e);
-            throw new RuntimeException(e);
-        }
+        userExtention(user, userManager);
 
         return userManager;
     }
@@ -187,72 +173,72 @@ public class UserManagerService {
     }
 
     public LoggedUserInformation updateUserProfile(Long userId, UpdateUserInformation updateUser) {
-            HttpServletRequest request = TLSUtils.getRequest();
+        HttpServletRequest request = TLSUtils.getRequest();
 
-            User user = new User();
-            Long updateUserId = updateUser.getId();
-            String firstName = updateUser.getFirstName();
-            String lastName = updateUser.getLastName();
-            String email = updateUser.getEmail();
-            String password = null;
-            String passwordConfirmation = null;
-            String notificationEmail = updateUser.getNotificationEmail();
-            String repeatNotificationEmail = updateUser.getRepeatNotificationEmail();
-            boolean notificationEmailEnabled = updateUser.getNotificationEmailEnabled();
-            boolean isUpdateUserEmail = true;
-            boolean isUpdateUser = true;
+        User user = new User();
+        Long updateUserId = updateUser.getId();
+        String firstName = updateUser.getFirstName();
+        String lastName = updateUser.getLastName();
+        String email = updateUser.getEmail();
+        String password = null;
+        String passwordConfirmation = null;
+        String notificationEmail = updateUser.getNotificationEmail();
+        String repeatNotificationEmail = updateUser.getRepeatNotificationEmail();
+        boolean notificationEmailEnabled = updateUser.getNotificationEmailEnabled();
+        boolean isUpdateUserEmail = true;
+        boolean isUpdateUser = true;
 
             // confirm if user exists for security purpose
-            if(userId != null && updateUser.getId() != null){
-                if (!userId.equals(updateUser.getId())) {
-                    ApiErrorResponseService.reportError(BAD_REQUEST, SecurityErrors.USER_ID_INVALID);
-                }
-            }else {
+        if(userId != null && updateUser.getId() != null){
+            if (!userId.equals(updateUser.getId())) {
                 ApiErrorResponseService.reportError(BAD_REQUEST, SecurityErrors.USER_ID_INVALID);
             }
+        }else {
+            ApiErrorResponseService.reportError(BAD_REQUEST, SecurityErrors.USER_ID_INVALID);
+        }
 
-            // For security purposes also make sure that only user can edit their profiles
-            User loggedUser = TeamUtil.getCurrentUser();
-            if(loggedUser.getId() != updateUser.getId()){
-                ApiErrorResponseService.reportForbiddenAccess(SecurityErrors.NOT_ALLOWED);
-            } else {
-                // if its the same email don't update it since it will cause unique type error
-                if(Objects.equals(loggedUser.getEmail(), updateUser.getEmail())) {
-                    isUpdateUserEmail = false;
-                }
+        // For security purposes also make sure that only user can edit their profiles
+        User loggedUser = TeamUtil.getCurrentUser();
+        if(loggedUser.getId() != updateUser.getId()){
+            ApiErrorResponseService.reportForbiddenAccess(SecurityErrors.NOT_ALLOWED);
+        } else {
+            // if its the same email don't update it since it will cause unique type error
+            if(Objects.equals(loggedUser.getEmail(), updateUser.getEmail())) {
+                isUpdateUserEmail = false;
             }
-            // Validation
-            validateUserFields(firstName, lastName, email, email, password, passwordConfirmation,
-                    notificationEmail, repeatNotificationEmail, notificationEmailEnabled, isUpdateUserEmail, isUpdateUser);
+        }
+        // Validation
+        validateUserFields(firstName, lastName, email, email, password, passwordConfirmation,
+                notificationEmail, repeatNotificationEmail, notificationEmailEnabled, isUpdateUserEmail, isUpdateUser);
 
-            // User preparation
-            if (updateUserId != null) {
-                user = UserUtils.getUser(updateUserId);
-            }
-            user.setId(updateUserId);
-            user.setFirstNames(firstName);
-            user.setLastName(lastName);
-            user.setEmail(email);
-            user.setNotificationEmailEnabled(notificationEmailEnabled);
-            if(notificationEmailEnabled){
-                user.setNotificationEmail(notificationEmail);
-            }
-            // set client IP address
-            user.setModifyingIP(RequestUtils.getRemoteAddress(request));
+        // User preparation
+        if (updateUserId != null) {
+            user = UserUtils.getUser(updateUserId);
+        }
+        user.setId(updateUserId);
+        user.setFirstNames(firstName);
+        user.setLastName(lastName);
+        user.setEmail(email);
+        user.setNotificationEmailEnabled(notificationEmailEnabled);
+        if(notificationEmailEnabled){
+            user.setNotificationEmail(notificationEmail);
+        }
+        // set client IP address
+        user.setModifyingIP(RequestUtils.getRemoteAddress(request));
 
-            Country country = org.digijava.module.aim.util.DbUtil.getDgCountry(updateUser.getCountryIso());
-            user.setCountry(country);
+        Country country = org.digijava.module.aim.util.DbUtil.getDgCountry(updateUser.getCountryIso());
+        user.setCountry(country);
 
-            SiteDomain siteDomain = (SiteDomain) request.getAttribute(Constants.CURRENT_SITE);
-            UserLangPreferences userLangPreferences = new UserLangPreferences(user, DgUtil.getRootSite(siteDomain.getSite()));
+        SiteDomain siteDomain = (SiteDomain) request.getAttribute(Constants.CURRENT_SITE);
+        UserLangPreferences userLangPreferences = new UserLangPreferences(user, DgUtil.getRootSite(siteDomain.getSite()));
 
-            Locale language = new Locale();
-            language.setCode(updateUser.getLanguageCode());
+        Locale language = new Locale();
+        language.setCode(updateUser.getLanguageCode());
 
-            userLangPreferences.setAlertsLanguage(language);
-            userLangPreferences.setNavigationLanguage(RequestUtils.getNavigationLanguage(request));
+        userLangPreferences.setAlertsLanguage(language);
+        userLangPreferences.setNavigationLanguage(RequestUtils.getNavigationLanguage(request));
 
-            user.setUserLangPreferences(userLangPreferences);
+        user.setUserLangPreferences(userLangPreferences);
 
         AmpUserExtension userExt= null;
         try {
@@ -288,7 +274,8 @@ public class UserManagerService {
             logger.error("Exception from Update user profile api.", e);
             throw new RuntimeException(e);
         }
-        return new LoggedUserInformation(firstName, lastName, email);
+        //return new LoggedUserInformation(firstName, lastName, email);
+        return  createUserProfileInformation(user);
     }
 
         private void validateUserFields(String firstName, String lastName, String email, String confirmEmail, String password, String passwordConfirmation,
@@ -360,5 +347,48 @@ public class UserManagerService {
         String des = des1+ '\n'+'\n'+des2 +'\n'+ des3 +'\n'+'\n'+'\t'+'\t'+ des4;
         String cri = ""+'\n'+'\t'+'\t'+cri1;
         String pti = ""+'\n'+'\n'+ pti1;
+    }
+
+    public LoggedUserInformation createUserProfileInformation(User user) {
+
+        LoggedUserInformation userProfileInformation = new LoggedUserInformation();
+
+        userProfileInformation.setId(user.getId());
+        userProfileInformation.setFirstName(user.getFirstNames());
+        userProfileInformation.setLastName(user.getLastName());
+        userProfileInformation.setEmail(user.getEmail());
+        userProfileInformation.setAddress(user.getAddress());
+        userProfileInformation.setCountry(user.getCountry().getIso());
+        userProfileInformation.setLanguageCode(user.getRegisterLanguage().getCode());
+        userProfileInformation.setAddress(user.getAddress());
+        userProfileInformation.setNotificationEmailEnabled(user.isNotificationEmailEnabled());
+        userProfileInformation.setBanned(user.isBanned());
+        if(userProfileInformation.getNotificationEmailEnabled() != null) {
+            if(userProfileInformation.getNotificationEmailEnabled()){
+                userProfileInformation.setNotificationEmail(user.getNotificationEmail());
+            }
+        }
+
+        userExtention(user, userProfileInformation);
+        return userProfileInformation;
+    }
+
+    public void userExtention(User user, LoggedUserInformation userInfo){
+        try {
+            AmpUserExtension userExt = AmpUserUtil.getAmpUserExtension(user);
+            if (userExt.getOrgGroup() != null) {
+                userInfo.setOrganizationGroupId(userExt.getOrgGroup().getAmpOrgGrpId());
+            }
+            if (userExt.getOrgType() != null) {
+                userInfo.setOrganizationTypeId(userExt.getOrgType().getAmpOrgTypeId());
+            }
+            if (userExt.getOrganization() != null) {
+                userInfo.setOrganizationName(userExt.getOrganization().getName());
+                userInfo.setOrganizationId(userExt.getOrganization().getAmpOrgId());
+            }
+        } catch (AimException e) {
+            logger.error("Exception from getting User extention", e);
+            throw new RuntimeException(e);
+        }
     }
 }

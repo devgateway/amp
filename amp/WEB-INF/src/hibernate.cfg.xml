@@ -19,6 +19,7 @@
   <property name="show_sql">false</property>
   <property name="use_sql_comments">false</property>
   <property name="jdbc.batch_size">20</property>
+  <property name="hibernate.hbm2ddl.auto">update</property>
   <property name="jdbc.batch_versioned_data">true</property>
   <property name="jdbc.use_get_generated_keys">true</property>
   <property name="jdbc.use_streams_for_binary">true</property>

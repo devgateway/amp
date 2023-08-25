@@ -97,7 +97,7 @@ public class RegisterUser extends Action {
                 user.setNotificationEmail(userRegisterForm.getNotificationEmail());
             }
             
-            user.setOrganizationTypeOther(new String(" "));
+            user.setOrganizationTypeOther(" ");
             
 
             // set country
@@ -167,8 +167,8 @@ public class RegisterUser extends Action {
                 
                 
                 String des = des1+ '\n'+'\n'+des2 +'\n'+ des3 +'\n'+'\n'+'\t'+'\t'+ des4;
-                String cri = ""+'\n'+'\t'+'\t'+cri1;
-                String pti = ""+'\n'+'\n'+ pti1;
+                String cri = String.valueOf('\n')+'\t'+'\t'+cri1;
+                String pti = String.valueOf('\n')+'\n'+ pti1;
                 
                 DbUtil.registerUser(user);
                 DgUtil.saveUserLanguagePreferences(user, request, language);
@@ -186,7 +186,7 @@ public class RegisterUser extends Action {
                  /* END - Ignore on MEGE !! */ 
                 Site site = RequestUtils.getSite(request);
                 Group memberGroup = org.digijava.module.aim.util.DbUtil.getGroup(Group.MEMBERS,site.getId());
-                Long uid[] = new Long[1];
+                Long[] uid = new Long[1];
                 uid[0] = user.getId();
                 org.digijava.module.admin.util.DbUtil.addUsersToGroup(memberGroup.getId(),uid);
                 

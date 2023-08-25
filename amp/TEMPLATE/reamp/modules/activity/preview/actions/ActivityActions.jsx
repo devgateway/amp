@@ -20,7 +20,8 @@ import {
     ACTIVITY_FORM_URL_SSC,
     REGIONAL_FUNDINGS,
     WORKSPACE_TYPE_MANAGEMENT,
-    WORKSPACE_TYPE
+    WORKSPACE_TYPE,
+    MULTILINGUAL
 } from '../common/ReampConstants.jsx';
 import DateUtils from '../utils/DateUtils.jsx';
 import HydratorHelper from '../utils/HydratorHelper.jsx';
@@ -72,19 +73,20 @@ export function loadActivityForActivityPreview(activityId) {
                     ResourceAction.loadResourcesForActivity(activity)(dispatch, ownProps);
                     //TODO find a better way to filter out non enabled paths
                     const activityFieldsManagerTemp = new FieldsManager(fieldsDef, [],
-                        settings.language, Logger);
+                        settings.language, Logger, null, settings[MULTILINGUAL]);
                     const enabledPaths = paths.filter(path => activityFieldsManagerTemp.isFieldPathEnabled(path));
                     Promise.all([ActivityApi.fetchPossibleValues(enabledPaths),
                     ActivityApi.fetchFundingInformation(activityId, settings[Constants.EFFECTIVE_CURRENCY].id)])
                         .then(([possibleValuesCollectionAPI, activityFundingInformation]) => {
+                            //TODO: check why prefix is null
                             const activityFieldsManager = new FieldsManager(fieldsDef,
-                                processPossibleValues(possibleValuesCollectionAPI), settings.language, Logger);
+                                processPossibleValues(possibleValuesCollectionAPI), settings.language, Logger, null, settings[MULTILINGUAL]);
                             _populateFMTree(fmTree);
                             _configureNumberUtils(settings);
 
-                            ActivityApi.fetchValuesForHydration(HydratorHelper.fetchRequestDataForHydration(activity,
-                                activityFieldsManager, ''),
-                                activityInfo.activityWorkspace[WorkspaceConstants.TEMPLATE_ID])
+                            let fieldsToHydrate = HydratorHelper.fetchRequestDataForHydration(activity, activityFieldsManager, '');
+
+                            ActivityApi.fetchValuesForHydration(fieldsToHydrate, activityInfo.activityWorkspace[WorkspaceConstants.TEMPLATE_ID])
                                 .then(valuesForHydration => {
                                     HydratorHelper.hydrateObject(activity, activityFieldsManager, '',
                                         null, valuesForHydration);
@@ -193,7 +195,7 @@ export function loadActivityForActivityPreview(activityId) {
                                     transactionListInWsCurrency.find(tiwc => tiwc[TRANSACTION_ID] === t[TRANSACTION_ID]);
                                 t[ActivityConstants.TRANSACTION_AMOUNT] = transactionInWsCurrency[ActivityConstants.TRANSACTION_AMOUNT];
                                 // TODO convert the whole curreny not only the code
-                                t[ActivityConstants.CURRENCY].value = currencyCode;
+                                t[ActivityConstants.CURRENCY] = currencyCode; // change a number to the string code of the currency
                             });
                         }
                     });

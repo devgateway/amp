@@ -3,6 +3,7 @@ package org.digijava.module.um.action;
 import org.apache.struts.action.*;
 import org.digijava.kernel.Constants;
 import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.entity.TruBudgetIntent;
 import org.digijava.kernel.entity.UserLangPreferences;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.request.Site;
@@ -80,20 +81,19 @@ public class ViewEditUser extends Action {
                             DbUtil.updateUser(user);
                         }
                         if ( ampTeamMembers != null && ampTeamMembers.size() > 0 ) {
-                            String teamNames    = "";
-                            Iterator iter       = ampTeamMembers.iterator();
-                            while ( iter.hasNext() ) {
-                                AmpTeamMember atm   = (AmpTeamMember) iter.next();
-                                AmpTeam team        = atm.getAmpTeam();
-                                if (team != null && team.getName() != null)  {
+                            StringBuilder teamNames    = new StringBuilder();
+                            for (Object ampTeamMember : ampTeamMembers) {
+                                AmpTeamMember atm = (AmpTeamMember) ampTeamMember;
+                                AmpTeam team = atm.getAmpTeam();
+                                if (team != null && team.getName() != null) {
                                     if (teamNames.length() == 0)
-                                        teamNames   += "'" + team.getName() + "'";
+                                        teamNames.append("'").append(team.getName()).append("'");
                                     else
-                                        teamNames   += ", '" + team.getName() + "'";
+                                        teamNames.append(", '").append(team.getName()).append("'");
                                 }
                             }
                             errors.add("title",
-                                    new ActionMessage("error.um.userIsInTeams", teamNames));
+                                    new ActionMessage("error.um.userIsInTeams", teamNames.toString()));
                         }
                         if ( ampTeamMembers == null ) {
                             errors.add("title",new ActionMessage("error.um.errorBanning"));
@@ -171,7 +171,10 @@ public class ViewEditUser extends Action {
             uForm.setEmailerror(false);
             uForm.setExemptFromDataFreezing(false);
             uForm.setNationalCoordinator(false);
-            
+            Collection<TruBudgetIntent> intents = org.digijava.module.aim.util.DbUtil.getTruBudgetIntents();
+            uForm.setTruBudgetIntents(intents);
+
+
             if (user != null) {
                 uForm.setMailingAddress(user.getAddress());
                 AmpUserExtension userExt = AmpUserUtil.getAmpUserExtension(user);

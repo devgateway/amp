@@ -22,6 +22,7 @@ package org.digijava.module.um.form;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.validator.ValidatorForm;
+import org.digijava.kernel.entity.TruBudgetIntent;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
@@ -77,8 +78,8 @@ public class AddUserForm  extends ValidatorForm {
     private Boolean pledgeSuperUser;
     private Collection contentLanguages;
     private Collection navigationLanguages;
-    private Collection truBudgetIntents;
-    private Collection selectedTruBudgetIntents;
+    private Collection<TruBudgetIntent> truBudgetIntents;
+    private String[] selectedTruBudgetIntents;
     private String selectedLanguage;
     private String[] contentSelectedLanguages;
     private String organizationTypeOther;
@@ -658,19 +659,19 @@ public class AddUserForm  extends ValidatorForm {
         this.notificationEmail = notificationEmail;
     }
 
-    public Collection getTruBudgetIntents() {
+    public Collection<TruBudgetIntent> getTruBudgetIntents() {
         return truBudgetIntents;
     }
 
-    public void setTruBudgetIntents(Collection truBudgetIntents) {
+    public void setTruBudgetIntents(Collection<TruBudgetIntent> truBudgetIntents) {
         this.truBudgetIntents = truBudgetIntents;
     }
 
-    public Collection getSelectedTruBudgetIntents() {
+    public String[] getSelectedTruBudgetIntents() {
         return selectedTruBudgetIntents;
     }
 
-    public void setSelectedTruBudgetIntents(Collection selectedTruBudgetIntents) {
+    public void setSelectedTruBudgetIntents(String[] selectedTruBudgetIntents) {
         this.selectedTruBudgetIntents = selectedTruBudgetIntents;
     }
 }

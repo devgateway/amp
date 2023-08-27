@@ -67,7 +67,7 @@ public class AddUser extends Action {
 
                     registerForm.setCountryResidence(countrieCol);
                     logger.debug("sortedCountries.size : " + countrieCol.size());
-                    Collection intents = org.digijava.module.aim.util.DbUtil.getTruBudgetIntents();
+                    Collection<TruBudgetIntent> intents = org.digijava.module.aim.util.DbUtil.getTruBudgetIntents();
                     registerForm.setTruBudgetIntents(intents);
 
                     //set default country from global settings.

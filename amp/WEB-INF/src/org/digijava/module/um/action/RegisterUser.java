@@ -12,6 +12,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.Constants;
 import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.entity.TruBudgetIntent;
 import org.digijava.kernel.entity.UserLangPreferences;
 import org.digijava.kernel.mail.DgEmailManager;
 import org.digijava.kernel.request.Site;
@@ -30,6 +31,11 @@ import org.digijava.module.um.util.AmpUserUtil;
 import org.digijava.module.um.util.DbUtil;
 
 import javax.servlet.http.HttpSession;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+
+import static org.digijava.module.aim.util.DbUtil.getTruBudgetIntentsByName;
 
 public class RegisterUser extends Action {
 
@@ -62,8 +68,13 @@ public class RegisterUser extends Action {
             User user = new User(userRegisterForm.getEmail().toLowerCase(),
                     userRegisterForm.getFirstNames(), userRegisterForm
                             .getLastName());
+            String[] intents = userRegisterForm.getSelectedTruBudgetIntents();
+            List<TruBudgetIntent> truBudgetIntents = getTruBudgetIntentsByName(intents);
+            logger.info("Intents: "+ truBudgetIntents);
 
+            user.setTruBudgetIntents(new HashSet<>(truBudgetIntents));
             // set client IP address
+
             user.setModifyingIP(RequestUtils.getRemoteAddress(request));
 
             if (!PasswordPolicyValidator.isValid(userRegisterForm.getPassword(), userRegisterForm.getEmail())) {

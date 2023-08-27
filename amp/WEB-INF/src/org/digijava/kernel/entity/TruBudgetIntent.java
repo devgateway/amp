@@ -1,11 +1,12 @@
 package org.digijava.kernel.entity;
 
-import org.digijava.kernel.user.TruBudgetIntentGroup;
+import org.digijava.kernel.user.User;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
 import java.io.Serializable;
+import java.util.Set;
 
 @Table(name = "trubudget_intent")
 @Cacheable
@@ -23,9 +24,7 @@ public class TruBudgetIntent implements Serializable {
 
     private String truBudgetIntentDisplayName;
 
-//    @ManyToOne
-//    @JoinColumn(name = "intent_group")
-    private TruBudgetIntentGroup intentGroup;
+    private Set<User> users;
 
     public Long getId() {
         return id;
@@ -43,13 +42,6 @@ public class TruBudgetIntent implements Serializable {
         this.truBudgetIntentName = truBudgetIntentName;
     }
 
-    public TruBudgetIntentGroup getIntentGroup() {
-        return intentGroup;
-    }
-
-    public void setIntentGroup(TruBudgetIntentGroup intentGroup) {
-        this.intentGroup = intentGroup;
-    }
 
     public String getTruBudgetIntentDisplayName() {
         return truBudgetIntentDisplayName;
@@ -57,5 +49,13 @@ public class TruBudgetIntent implements Serializable {
 
     public void setTruBudgetIntentDisplayName(String truBudgetIntentDisplayName) {
         this.truBudgetIntentDisplayName = truBudgetIntentDisplayName;
+    }
+
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
     }
 }

@@ -83,6 +83,7 @@ public class User
 
     private Set<AmpOrganisation> assignedOrgs;
     private Date passwordChangedAt;
+    private Set<TruBudgetIntent> truBudgetIntents;
 
     public User() {}
 
@@ -542,7 +543,13 @@ public class User
         
         return email;
     }
+    public Set<TruBudgetIntent> getTruBudgetIntents() {
+        return truBudgetIntents;
+    }
 
+    public void setTruBudgetIntents(Set<TruBudgetIntent> truBudgetIntents) {
+        this.truBudgetIntents = truBudgetIntents;
+    }
     @Override
     public String toString() {
         return "User{" +
@@ -589,4 +596,6 @@ public class User
                 ", passwordChangedAt=" + passwordChangedAt +
                 '}';
     }
+
+
 }

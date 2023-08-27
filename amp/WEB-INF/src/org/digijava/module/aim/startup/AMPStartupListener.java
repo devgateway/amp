@@ -254,6 +254,12 @@ public class AMPStartupListener extends HttpServlet implements
 //                String addForeignKeySql = "ALTER TABLE trubudget_intent ADD CONSTRAINT fk_intent_group "
 //                        + "FOREIGN KEY (intent_group) REFERENCES trubudget_intent_group (trubudget_intent_group_id)";
 //                statement.executeUpdate(addForeignKeySql);
+                String relationSql="CREATE TABLE IF NOT EXISTS user_trubudget_intent (\n" +
+                        "    user_id BIGINT REFERENCES DG_USER(id),\n" +
+                        "    trubudget_intent_id BIGINT REFERENCES trubudget_intent(trubudget_intent_id),\n" +
+                        "    PRIMARY KEY (user_id, trubudget_intent_id)\n" +
+                        ");";
+                statement.executeUpdate(relationSql);
             } catch (SQLException e) {
                 // Handle the exception
                 e.printStackTrace();

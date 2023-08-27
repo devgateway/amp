@@ -61,6 +61,28 @@ public class DbUtil {
 
     }
 
+    public static  List<TruBudgetIntent> getTruBudgetIntentsByName(String [] names)
+    {
+        Session session = PersistenceManager.getRequestDBSession();
+        try {
+            StringBuilder convertedNames = new StringBuilder("(");
+            for (String name: names){
+                convertedNames.append("'").append(name).append("'").append(",");
+            }
+            String c = convertedNames.toString().replaceAll(",$", "");
+            c+=")";
+            logger.info("Intent query: "+c);
+
+            return session.createNativeQuery(" SELECT t. * FROM trubudget_intent t WHERE trubudget_intent_name in "+c, TruBudgetIntent.class).list();
+
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+
+    }
+
     /**
      * Used in the AMP-23713.xml patch. Can be reused for other tables, but
      * highly inadvisable to be edited itself.

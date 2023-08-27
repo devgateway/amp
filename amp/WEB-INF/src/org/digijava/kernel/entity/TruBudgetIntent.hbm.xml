@@ -13,6 +13,9 @@
         <property name="truBudgetIntentDisplayName" column="trubudget_intent_display_name" type="java.lang.String"/>
 
 <!--        <many-to-one name="intentGroup" column="intent_group" class="org.digijava.kernel.user.TruBudgetIntentGroup" />-->
-
+        <set name="users" table="user_trubudget_intent" inverse="true">
+            <key column="trubudget_intent_id"/>
+            <many-to-many column="user_id" class="org.digijava.kernel.user.User"/>
+        </set>
     </class>
 </hibernate-mapping>

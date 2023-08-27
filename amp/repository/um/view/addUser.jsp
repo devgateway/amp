@@ -482,7 +482,7 @@
 											<tr>
 												<td width="3%">&nbsp;</td>
 												<td align=right class=f-names noWrap>
-													<FONT color=red>*</FONT>
+<%--													<FONT color=red>*</FONT>--%>
 													<digi:trn key="um:truBudgetIntents">TruBudget Permissions </digi:trn></td>
 												<td align="left">
 													<html:select property="selectedTruBudgetIntents" styleClass="inp-text" multiple="true">

@@ -2,6 +2,7 @@ package org.digijava.module.um.form;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.entity.TruBudgetIntent;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
@@ -71,6 +72,7 @@ public class ViewEditUserForm extends ActionForm {
     private Collection workspaces;
     private Collection ampRoles;
     private Collection assignedWorkspaces;
+    private Collection<TruBudgetIntent> truBudgetIntents;
     private Long teamId;
     private Long role;
     private boolean emailerror;
@@ -432,5 +434,12 @@ public class ViewEditUserForm extends ActionForm {
     public void setNotificationEmail(String notificationEmail) {
         this.notificationEmail = notificationEmail;
     }
-    
+
+    public Collection<TruBudgetIntent> getTruBudgetIntents() {
+        return truBudgetIntents;
+    }
+
+    public void setTruBudgetIntents(Collection<TruBudgetIntent> truBudgetIntents) {
+        this.truBudgetIntents = truBudgetIntents;
+    }
 }

@@ -331,6 +331,19 @@ function validateUserInfo(){
 																             </html:select>
 																		</td>
 																	</tr>
+																	<tr>
+																		<td width="3%">&nbsp;</td>
+																		<td align=right class=f-names noWrap>
+<%--																			<FONT color=red>*</FONT>--%>
+																			<digi:trn key="um:truBudgetIntents">TruBudget Permissions </digi:trn></td>
+																		<td align="left">
+																			<html:select property="selectedTruBudgetIntents" styleClass="inp-text" multiple="true">
+																				<c:forEach var="cn"	items="${umViewEditUserForm.truBudgetIntents}">
+																					<html:option value="${cn.truBudgetIntentName}"><c:out value="${cn.truBudgetIntentDisplayName}"></c:out></html:option>
+																				</c:forEach>
+																			</html:select>
+																		</td>
+																	</tr>
                                                           			<tr>
 																		<td width="169" align="right" height="30"style="font-size: 11px;
     font-weight: bold; color:#000;">

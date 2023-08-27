@@ -17,6 +17,7 @@ public class TruBudgetIntent implements Serializable {
     private Long id;
 //    @Column(name = "trubudget_intent_name")
     private String truBudgetIntentName;
+    private String truBudgetIntentDisplayName;
 
 //    @ManyToOne
 //    @JoinColumn(name = "intent_group")
@@ -44,5 +45,13 @@ public class TruBudgetIntent implements Serializable {
 
     public void setIntentGroup(TruBudgetIntentGroup intentGroup) {
         this.intentGroup = intentGroup;
+    }
+
+    public String getTruBudgetIntentDisplayName() {
+        return truBudgetIntentDisplayName;
+    }
+
+    public void setTruBudgetIntentDisplayName(String truBudgetIntentDisplayName) {
+        this.truBudgetIntentDisplayName = truBudgetIntentDisplayName;
     }
 }

@@ -381,13 +381,12 @@ public final class XmlPatcherUtil {
      * 
      * @see XmlPatcherConstants.PatchStates
      * @return the Hibernate query result
-     * @throws DgException
      * @throws HibernateException
-     * @throws SQLException
      */
     public static List<AmpXmlPatch> getAllDiscoveredUnclosedPatches()
-            throws DgException, HibernateException, SQLException {
+            throws HibernateException {
         Session session = PersistenceManager.getRequestDBSession();
+        session.clear();
         Query query = session
                 .createQuery("from " + AmpXmlPatch.class.getName()
                         + " p WHERE p.state NOT IN ("
@@ -419,12 +418,10 @@ public final class XmlPatcherUtil {
      * Returns the list of discovered XmlPatches
      * 
      * @return the Hibernate query result
-     * @throws DgException
      * @throws HibernateException
-     * @throws SQLException
      */
     public static List<AmpXmlPatch> getAllDiscoveredPatches()
-            throws DgException, HibernateException, SQLException {
+            throws HibernateException {
         Session session = PersistenceManager.getRequestDBSession();
 //beginTransaction();
         Query query = session
@@ -456,12 +453,10 @@ public final class XmlPatcherUtil {
      * @param startIndexInt - the start of index
      * @param records - the max number of records
      * @return the Hibernate query result
-     * @throws DgException
      * @throws HibernateException
-     * @throws SQLException
      */
     public static List<Object[]> getAllDiscoveredPatches(int startIndexInt,int recordsInt,String sortBy,String dir)
-            throws DgException, HibernateException, SQLException {
+            throws HibernateException {
         Session session = PersistenceManager.getRequestDBSession();
         if(sortBy.equals("attempts")) sortBy="count(l)";else sortBy="p."+sortBy;
         Query query = session
@@ -505,7 +500,6 @@ public final class XmlPatcherUtil {
         bis.close();
         byte[] md5sum = algorithm.digest();
         BigInteger bigInt = new BigInteger(1, md5sum);
-        String md5 = bigInt.toString(16);
-        return md5;
+        return bigInt.toString(16);
     }
 }

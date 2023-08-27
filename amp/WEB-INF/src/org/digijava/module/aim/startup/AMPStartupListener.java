@@ -34,6 +34,7 @@ import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import javax.management.MBeanServer;
 import javax.servlet.ServletContext;
@@ -41,6 +42,8 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.http.HttpServlet;
 import java.lang.management.ManagementFactory;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Properties;
@@ -180,12 +183,12 @@ public class AMPStartupListener extends HttpServlet implements
             runCacheRefreshingQuery("update_sector_level_caches_internal", "sector");
             runCacheRefreshingQuery("update_organisation_caches_internal", "organisation");
             ContentRepositoryManager.initialize();
-            
             checkDatabaseSanity();
             initNiReports();
             importGazeteer();
             registerEhCacheMBeans();
             initAPI();
+            runQuery();
 
             new SwaggerConfigurer().configure();
 
@@ -194,6 +197,71 @@ public class AMPStartupListener extends HttpServlet implements
             logger.error("Exception while initialising AMP :" + e.getMessage(), e);
             throw new Error(e);
         }
+    }
+
+    public void runQuery()
+    {
+        logger.info("Creating trubudget relations");
+        Session session = PersistenceManager.openNewSession();
+
+        Transaction transaction = session.beginTransaction();
+
+        // Using Hibernate's native SQL execution
+        session.doWork(connection -> {
+            try (Statement statement = connection.createStatement()) {
+                String intentSeq="CREATE SEQUENCE IF NOT EXISTS trubudget_intent_seq;";
+//                String groupSeq="CREATE SEQUENCE IF NOT EXISTS trubudget_intent_group_seq;";
+                statement.executeUpdate(intentSeq);
+//                statement.executeUpdate(groupSeq);
+//                String createIntentGroupSql ="CREATE TABLE IF NOT EXISTS trubudget_intent_group ("
+//                        +"trubudget_intent_group_id BIGINT DEFAULT nextval('trubudget_intent_group_seq') PRIMARY KEY,"
+//                        +"trubudget_intent_group_name VARCHAR(255)"
+//                        +");";
+//                statement.executeUpdate(createIntentGroupSql);
+                String createIntentSql = "CREATE TABLE IF NOT EXISTS trubudget_intent ("
+                        + "trubudget_intent_id BIGINT DEFAULT nextval('trubudget_intent_seq') PRIMARY KEY,"
+                        + "trubudget_intent_name VARCHAR(255),"
+                        + "trubudget_intent_display_name VARCHAR(255)"
+                        + ")";
+                statement.executeUpdate(createIntentSql);
+                String insertStatement="INSERT INTO trubudget_intent (trubudget_intent_name, trubudget_intent_display_name)\n" +
+                        "VALUES\n" +
+                        "    ('global.listPermissions', 'List Permissions'),\n" +
+                        "    ('global.grantPermission', 'Grant Permission'),\n" +
+                        "    ('global.grantAllPermissions', 'Grant All Permissions'),\n" +
+                        "    ('global.revokePermission', 'Revoke Permission'),\n" +
+                        "    ('global.createProject', 'Create Project'),\n" +
+                        "    ('global.createUser', 'Create User'),\n" +
+                        "    ('global.enableUser', 'Enable User'),\n" +
+                        "    ('global.disableUser', 'Disable User'),\n" +
+                        "    ('global.listAssignments', 'List Assignments'),\n" +
+                        "    ('global.createGroup', 'Create Group'),\n" +
+                        "    ('network.registerNode', 'Register Node'),\n" +
+                        "    ('network.list', 'List Nodes'),\n" +
+                        "    ('network.listActive', 'List Active Nodes'),\n" +
+                        "    ('network.voteForPermission', 'Vote for Permission'),\n" +
+                        "    ('network.approveNewOrganization', 'Approve New Organization'),\n" +
+                        "    ('network.approveNewNodeForExistingOrganization', 'Approve New Node for Existing Organization'),\n" +
+                        "    ('network.declineNode', 'Decline Node'),\n" +
+                        "    ('provisioning.start', 'Start Provisioning'),\n" +
+                        "    ('provisioning.end', 'End Provisioning'),\n" +
+                        "    ('provisioning.get', 'Get Provisioning Status') ON CONFLICT (trubudget_intent_name) DO NOTHING;\n";
+                statement.executeUpdate(insertStatement);
+
+//                String addColumnSql = "ALTER TABLE trubudget_intent ADD COLUMN IF NOT EXISTS intent_group INTEGER";
+//                statement.executeUpdate(addColumnSql);
+//
+//                String addForeignKeySql = "ALTER TABLE trubudget_intent ADD CONSTRAINT fk_intent_group "
+//                        + "FOREIGN KEY (intent_group) REFERENCES trubudget_intent_group (trubudget_intent_group_id)";
+//                statement.executeUpdate(addForeignKeySql);
+            } catch (SQLException e) {
+                // Handle the exception
+                e.printStackTrace();
+            }
+        });
+
+        transaction.commit();
+        session.close();
     }
 
     public void registerEhCacheMBeans() {

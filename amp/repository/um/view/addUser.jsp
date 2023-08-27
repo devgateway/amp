@@ -478,6 +478,20 @@
 													</html:select></td>
 	
 											</tr>
+
+											<tr>
+												<td width="3%">&nbsp;</td>
+												<td align=right class=f-names noWrap>
+													<FONT color=red>*</FONT>
+													<digi:trn key="um:truBudgetIntents">TruBudget Permissions </digi:trn></td>
+												<td align="left">
+													<html:select property="selectedTruBudgetIntents" styleClass="inp-text" multiple="true">
+														<c:forEach var="cn"	items="${umAddUserForm.truBudgetIntents}">
+															<html:option value="${cn.truBudgetIntentName}"><c:out value="${cn.truBudgetIntentDisplayName}"></c:out></html:option>
+														</c:forEach>
+													</html:select>
+												</td>
+											</tr>
  											<module:display name="Pledges" parentModule="PROJECT MANAGEMENT">
 											<tr>
 												<td  width="3%">&nbsp;</td>
@@ -536,6 +550,7 @@
 													</c:set> 
 													<html:submit value="${btnCancel}" styleClass="dr-menu" onclick="return cancel()" /></td>
 											</tr>
+
 											<tr>
 												<td colspan=3>&nbsp;</td>
 											</tr>

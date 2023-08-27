@@ -21,6 +21,7 @@
 	<hibernate-classes required="false">              
 		<!-- kernel classes -->
 		<hibernate-class>org.digijava.kernel.request.SiteDomain</hibernate-class>
+		<hibernate-class>org.digijava.kernel.entity.TruBudgetIntent</hibernate-class>
 		<hibernate-class>org.digijava.kernel.entity.Address</hibernate-class>
 		<hibernate-class>org.digijava.kernel.entity.GeoRegion</hibernate-class>
 		<hibernate-class>org.digijava.kernel.user.User</hibernate-class>

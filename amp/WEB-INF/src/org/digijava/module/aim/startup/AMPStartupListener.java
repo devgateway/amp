@@ -220,7 +220,7 @@ public class AMPStartupListener extends HttpServlet implements
 //                statement.executeUpdate(createIntentGroupSql);
                 String createIntentSql = "CREATE TABLE IF NOT EXISTS trubudget_intent ("
                         + "trubudget_intent_id BIGINT DEFAULT nextval('trubudget_intent_seq') PRIMARY KEY,"
-                        + "trubudget_intent_name VARCHAR(255),"
+                        + "trubudget_intent_name VARCHAR(255) UNIQUE,"
                         + "trubudget_intent_display_name VARCHAR(255)"
                         + ")";
                 statement.executeUpdate(createIntentSql);

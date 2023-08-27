@@ -1,8 +1,7 @@
 package org.digijava.kernel.user;
 
-import org.hibernate.annotations.DynamicUpdate;
+import org.digijava.kernel.entity.TruBudgetIntent;
 
-import javax.persistence.*;
 import java.util.Set;
 
 //@Entity

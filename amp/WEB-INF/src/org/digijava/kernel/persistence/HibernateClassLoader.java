@@ -99,9 +99,8 @@ public class HibernateClassLoader {
      */
     public static void initialize(HashMap config) {
 
-        Iterator iterModules = config.keySet().iterator();
-        while (iterModules.hasNext()) {
-            String moduleName = (String) iterModules.next();
+        for (Object o : config.keySet()) {
+            String moduleName = (String) o;
             ModuleConfig moduleConfig = (ModuleConfig) config.get(moduleName);
 
             HibernateClasses classes = moduleConfig.getHibernateClasses();

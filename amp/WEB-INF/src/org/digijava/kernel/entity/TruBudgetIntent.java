@@ -1,22 +1,26 @@
-package org.digijava.kernel.user;
+package org.digijava.kernel.entity;
 
+import org.digijava.kernel.user.TruBudgetIntentGroup;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
 import java.io.Serializable;
 
-//@Entity
-//@Table(name = "trubudget_intent")
-//@Cacheable
-//@DynamicUpdate
+@Table(name = "trubudget_intent")
+@Cacheable
+@DynamicUpdate
+@Entity
 public class TruBudgetIntent implements Serializable {
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "trubudget_intent_seq")
-//    @SequenceGenerator(name = "trubudget_intent_seq", sequenceName = "trubudget_intent_seq", allocationSize = 1)
-//    @Column(name = "trubudget_intent_id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "trubudget_intent_seq")
+    @SequenceGenerator(name = "trubudget_intent_seq", sequenceName = "trubudget_intent_seq", allocationSize = 1)
+    @Column(name = "trubudget_intent_id")
     private Long id;
-//    @Column(name = "trubudget_intent_name")
+    @Column(name = "trubudget_intent_name")
     private String truBudgetIntentName;
+    @Column(name = "trubudget_intent_display_name")
+
     private String truBudgetIntentDisplayName;
 
 //    @ManyToOne

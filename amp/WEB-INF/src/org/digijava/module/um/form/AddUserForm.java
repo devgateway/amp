@@ -77,6 +77,8 @@ public class AddUserForm  extends ValidatorForm {
     private Boolean pledgeSuperUser;
     private Collection contentLanguages;
     private Collection navigationLanguages;
+    private Collection truBudgetIntents;
+    private Collection selectedTruBudgetIntents;
     private String selectedLanguage;
     private String[] contentSelectedLanguages;
     private String organizationTypeOther;
@@ -655,5 +657,20 @@ public class AddUserForm  extends ValidatorForm {
     public void setNotificationEmail(String notificationEmail) {
         this.notificationEmail = notificationEmail;
     }
-    
+
+    public Collection getTruBudgetIntents() {
+        return truBudgetIntents;
+    }
+
+    public void setTruBudgetIntents(Collection truBudgetIntents) {
+        this.truBudgetIntents = truBudgetIntents;
+    }
+
+    public Collection getSelectedTruBudgetIntents() {
+        return selectedTruBudgetIntents;
+    }
+
+    public void setSelectedTruBudgetIntents(Collection selectedTruBudgetIntents) {
+        this.selectedTruBudgetIntents = selectedTruBudgetIntents;
+    }
 }

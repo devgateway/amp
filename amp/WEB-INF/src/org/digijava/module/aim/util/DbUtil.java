@@ -12,6 +12,7 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.Group;
+import org.digijava.kernel.entity.TruBudgetIntent;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpComponent;
@@ -43,6 +44,20 @@ public class DbUtil {
 
     public static String filter(String text) {
         return filter(text, false);
+
+    }
+
+    public static  List<TruBudgetIntent> getTruBudgetIntents()
+    {
+        Session session = PersistenceManager.getRequestDBSession();
+        try {
+            return session.createNativeQuery(" SELECT t. * FROM trubudget_intent t ORDER BY trubudget_intent_name", TruBudgetIntent.class).list();
+
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
 
     }
 

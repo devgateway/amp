@@ -14,6 +14,7 @@ RUN --mount=type=cache,target=/root/.npm \
 
 FROM node as compile-amp-boilerplate
 WORKDIR /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate
+COPY TEMPLATE/ampTemplate/node_modules/amp-boilerplate/.git .
 COPY TEMPLATE/ampTemplate/node_modules/amp-boilerplate .
 COPY --from=compile-amp-translate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-translate ../amp-translate
 RUN --mount=type=cache,target=/root/.npm \
@@ -22,6 +23,7 @@ RUN --mount=type=cache,target=/root/.npm \
 
 FROM node as compile-amp-filter
 WORKDIR /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-filter
+COPY TEMPLATE/ampTemplate/node_modules/amp-filter/.git .
 COPY --from=compile-amp-translate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-translate ../amp-translate
 COPY TEMPLATE/ampTemplate/node_modules/amp-filter .
 # HACK otherwise amp-filter won't compile!

@@ -422,8 +422,7 @@ public class DbUtil {
             user.setPassword(ShaCrypt.crypt(user.getPassword().trim()).trim());
 
             // set hashed password
-            user.setSalt(new Long(user.getPassword().trim().hashCode()).
-                         toString());
+            user.setSalt(Long.toString(user.getPassword().trim().hashCode()));
 
             // update user
             session.save(user);

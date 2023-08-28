@@ -26,6 +26,9 @@ public class TruBudgetIntent implements Serializable {
 
     private Set<User> users;
 
+    @Transient
+    private Boolean userHas;
+
     public Long getId() {
         return id;
     }
@@ -57,5 +60,13 @@ public class TruBudgetIntent implements Serializable {
 
     public void setUsers(Set<User> users) {
         this.users = users;
+    }
+
+    public Boolean getUserHas() {
+        return userHas;
+    }
+
+    public void setUserHas(Boolean userHas) {
+        this.userHas = userHas;
     }
 }

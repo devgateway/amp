@@ -81,7 +81,7 @@ public class AddUser extends Action {
                     Set languages = SiteUtils.getUserLanguages(RequestUtils
                             .getSite(request));
 
-                    HashMap translations = new HashMap();
+                    HashMap translations = new HashMap<>();
                     iterator = TrnUtil.getLanguages(
                             RequestUtils.getNavigationLanguage(request).getCode())
                             .iterator();
@@ -90,13 +90,13 @@ public class AddUser extends Action {
                         translations.put(item.getCode(), item);
                     }
                     //sort languages
-                    List sortedLanguages = new ArrayList();
+                    List sortedLanguages = new ArrayList<>();
                     iterator = languages.iterator();
                     while (iterator.hasNext()) {
                         Locale item = (Locale) iterator.next();
                         sortedLanguages.add(translations.get(item.getCode()));
                     }
-                    Collections.sort(sortedLanguages, TrnUtil.localeNameComparator);
+                    sortedLanguages.sort(TrnUtil.localeNameComparator);
 
                     registerForm.setNavigationLanguages(sortedLanguages);
 

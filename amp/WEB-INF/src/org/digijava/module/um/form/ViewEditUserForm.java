@@ -79,7 +79,9 @@ public class ViewEditUserForm extends ActionForm {
     private boolean banReadOnly;
     private Boolean exemptFromDataFreezing;
     private boolean nationalCoordinator;
-    
+    private String[] selectedTruBudgetIntents;
+
+
     public boolean isEmailerror() {
         return emailerror;
     }
@@ -441,5 +443,13 @@ public class ViewEditUserForm extends ActionForm {
 
     public void setTruBudgetIntents(Collection<TruBudgetIntent> truBudgetIntents) {
         this.truBudgetIntents = truBudgetIntents;
+    }
+
+    public String[] getSelectedTruBudgetIntents() {
+        return selectedTruBudgetIntents;
+    }
+
+    public void setSelectedTruBudgetIntents(String[] selectedTruBudgetIntents) {
+        this.selectedTruBudgetIntents = selectedTruBudgetIntents;
     }
 }

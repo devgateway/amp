@@ -30,6 +30,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.*;
+import java.util.stream.Collectors;
+
+import static org.digijava.module.aim.util.DbUtil.getTruBudgetIntentsByName;
 
 public class ViewEditUser extends Action {
 
@@ -46,7 +49,7 @@ public class ViewEditUser extends Action {
 
         if (userId != null) {
             user = UserUtils.getUser(userId);
-        } else if (uForm.getEmail() != null) {
+        } else if (uForm.getEmail() != null && user==null) {
             user = UserUtils.getUserByEmailAddress(uForm.getEmail());
         }else{
             return mapping.findForward("forward");
@@ -171,7 +174,16 @@ public class ViewEditUser extends Action {
             uForm.setEmailerror(false);
             uForm.setExemptFromDataFreezing(false);
             uForm.setNationalCoordinator(false);
+            Set<String> intentNames = user.getTruBudgetIntents().stream().map(TruBudgetIntent::getTruBudgetIntentName).collect(Collectors.toSet());
+
             Collection<TruBudgetIntent> intents = org.digijava.module.aim.util.DbUtil.getTruBudgetIntents();
+            intents.forEach(intent->
+            {
+                if (intentNames.contains(intent.getTruBudgetIntentName()))
+                {
+                    intent.setUserHas(true);
+                }
+            });
             uForm.setTruBudgetIntents(intents);
 
 
@@ -298,6 +310,11 @@ public class ViewEditUser extends Action {
                         userExt.setOrganization(organ);
                         AmpUserUtil.saveAmpUserExtension(userExt);
                     }
+
+                    String[] intents = uForm.getSelectedTruBudgetIntents();
+                    List<TruBudgetIntent> truBudgetIntents = getTruBudgetIntentsByName(intents);
+
+                    user.setTruBudgetIntents(new HashSet<>(truBudgetIntents));
 
                     user.setCountry(org.digijava.module.aim.util.DbUtil.getDgCountry(uForm.getSelectedCountryIso()));
                     if(uForm.getSelectedRegionId()==-1){

@@ -35,7 +35,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
-import static org.digijava.module.aim.util.DbUtil.getTruBudgetIntentsByName;
+import static org.digijava.module.um.util.DbUtil.getTruBudgetIntentsByName;
 
 public class RegisterUser extends Action {
 
@@ -226,5 +226,6 @@ public class RegisterUser extends Action {
             userRegisterForm.reset(mapping, request);
             return (mapping.findForward("index"));
         }
+
     }
 }

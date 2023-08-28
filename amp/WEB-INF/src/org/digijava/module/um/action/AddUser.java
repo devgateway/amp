@@ -25,6 +25,8 @@ import org.digijava.module.um.util.DbUtil;
 import javax.servlet.http.HttpSession;
 import java.util.*;
 
+import static org.digijava.module.um.util.DbUtil.getTruBudgetIntents;
+
 public class AddUser extends Action {
 
     private static Logger logger = Logger.getLogger(AddUser.class);
@@ -67,7 +69,7 @@ public class AddUser extends Action {
 
                     registerForm.setCountryResidence(countrieCol);
                     logger.debug("sortedCountries.size : " + countrieCol.size());
-                    Collection<TruBudgetIntent> intents = org.digijava.module.aim.util.DbUtil.getTruBudgetIntents();
+                    Collection<TruBudgetIntent> intents = getTruBudgetIntents();
                     registerForm.setTruBudgetIntents(intents);
 
                     //set default country from global settings.

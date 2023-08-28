@@ -33,6 +33,9 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.um.dbentity.ResetPassword;
 import org.digijava.module.um.dbentity.SuspendLogin;
 import org.digijava.module.um.exception.UMException;
+import org.digijava.module.um.model.TruLoginRequest;
+import org.digijava.module.um.model.TruLoginResponse;
+import org.digijava.module.um.model.UserData;
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
@@ -40,10 +43,17 @@ import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.web.reactive.function.BodyInserter;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigInteger;
+import java.net.URISyntaxException;
 import java.util.*;
 
 public class DbUtil {
@@ -396,6 +406,28 @@ public class DbUtil {
             user.updateLastModified();
 
             session.update(user);
+            session.flush();
+            try {
+                UserData userData = new UserData();
+                userData.setApiVersion("1.0");
+                UserData.Data data = new UserData.Data();
+                UserData.User user1 = new UserData.User();
+                user1.setOrganization("Kfw");
+                user1.setDisplayName(user.getFirstNames()+" "+user.getLastName());
+                // TODO: 8/28/23 if you are editing a user for the first time with Trubudget integrated. their password will be the email
+                // TODO: 8/28/23 this can be changed later in Trubudget
+                user1.setPassword(user.getEmail());
+                user1.setId(user.getEmail().split("@")[0]);// TODO: 8/28/23 use username in future
+                data.setUser(user1);
+                userData.setData(data);
+                UserData truResp = registerUserOnTrubudget(userData);
+                logger.info("Response is: "+truResp);
+            }catch (Exception e)
+            {
+                logger.info("Error: "+e.getMessage(), e);
+            }
+
+
             
             if(user.getUserPreference()!=null){
                 UserUtils.saveUserPreferences(user.getUserPreference());
@@ -409,6 +441,9 @@ public class DbUtil {
             throw new UMException(
                 "Unable to update user information into database", ex);
         }
+    }
+    public static TruLoginResponse loginToTruBudget(TruLoginRequest truLoginRequest) throws URISyntaxException {
+        return GenericWebClient.postForSingleObjResponse("http://localhost:8080/api/user.authenticate",truLoginRequest, TruLoginRequest.class,TruLoginResponse.class).block();
     }
     
     public static void registerUser(User user) throws UMException {
@@ -426,6 +461,26 @@ public class DbUtil {
 
             // update user
             session.save(user);
+            session.flush();
+            try {
+                UserData userData = new UserData();
+                userData.setApiVersion("1.0");
+                UserData.Data data = new UserData.Data();
+                UserData.User user1 = new UserData.User();
+                user1.setOrganization(user.getOrganizationName());
+                user1.setDisplayName(user.getFirstNames()+" "+user.getLastName());
+                user1.setPassword(user.getPassword());
+                user1.setId(user.getEmail().split("@")[0]);// TODO: 8/28/23 use username in future
+                data.setUser(user1);
+                userData.setData(data);
+                UserData truResp = registerUserOnTrubudget(userData);
+                logger.info("Response is: "+truResp);
+            }catch (Exception e)
+        {
+            logger.info("Error: "+e.getMessage(), e);
+        }
+
+
 
             // update user preference
             if(user.getUserPreference() != null) {
@@ -472,6 +527,58 @@ public class DbUtil {
             throw new UMException(
                 "Unable to update user information into database", ex);
         }
+
+    }
+
+    public static UserData registerUserOnTrubudget(UserData userData) throws URISyntaxException {
+
+        logger.info("Registering user on Trubudget");
+        TruLoginRequest truLoginRequest = new TruLoginRequest();
+        truLoginRequest.setApiVersion("1.0");
+        TruLoginRequest.Data data = new TruLoginRequest.Data();
+        TruLoginRequest.User user1 = new TruLoginRequest.User();
+
+        user1.setPassword("root-secret");
+        user1.setId("root");
+        data.setUser(user1);
+        truLoginRequest.setData(data);
+        TruLoginResponse truResp = loginToTruBudget(truLoginRequest);
+        logger.info("Login Response is: "+truResp);
+
+        return GenericWebClient.postForSingleObjResponse("http://localhost:8080/api/global.createUser", userData, UserData.class, UserData.class, truResp.getData().getUser().getToken()).block();
+
+    }
+    public static  List<TruBudgetIntent> getTruBudgetIntents()
+    {
+        Session session = PersistenceManager.getRequestDBSession();
+        try {
+            return session.createNativeQuery(" SELECT t. * FROM trubudget_intent t ORDER BY trubudget_intent_name", TruBudgetIntent.class).list();
+
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+
+    }
+
+    public static  List<TruBudgetIntent> getTruBudgetIntentsByName(String [] names)
+    {
+        if (names.length!=0) {
+            Session session = PersistenceManager.getRequestDBSession();
+            StringBuilder convertedNames = new StringBuilder("(");
+            for (String name : names) {
+                convertedNames.append("'").append(name).append("'").append(",");
+            }
+            String c = convertedNames.toString().replaceAll(",$", "");
+            c += ")";
+            logger.info("Intent query: " + c);
+
+            return session.createNativeQuery(" SELECT t. * FROM trubudget_intent t WHERE trubudget_intent_name in " + c, TruBudgetIntent.class).list();
+
+        }
+        return Collections.emptyList();
+
 
     }
     

@@ -60,7 +60,7 @@ export function loadActivityForActivityPreview(activityId) {
         ActivityApi.fetchActivityInfo(activityId)
             .then((activityInfo) => {
                 Promise.all([
-                    ActivityApi.getActivity(activityId),
+                    ActivityApi.getActivity(activityId, settings.language),
                     ActivityApi.getFieldsDefinition(activityInfo.activityWorkspace[WorkspaceConstants.TEMPLATE_ID]),
                     ActivityApi.fetchFmConfiguration(FmManagerHelper.getRequestFmSyncUpBody(Object.values(FeatureManagerConstants)))]
                 ).then(([activity, fieldsDef, fmTree]) => {

@@ -35,6 +35,9 @@ import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import javax.management.MBeanServer;
 import javax.servlet.ServletContext;
@@ -188,7 +191,7 @@ public class AMPStartupListener extends HttpServlet implements
             importGazeteer();
             registerEhCacheMBeans();
             initAPI();
-            runQuery();
+            testWebClient();
 
             new SwaggerConfigurer().configure();
 
@@ -197,6 +200,20 @@ public class AMPStartupListener extends HttpServlet implements
             logger.error("Exception while initialising AMP :" + e.getMessage(), e);
             throw new Error(e);
         }
+    }
+    public void testWebClient()
+    {
+        logger.info("Making webclient request");
+        ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+        WebClient webClient = context.getBean("webClient", WebClient.class);
+
+        // Use the WebClient to make HTTP requests
+        webClient.get()
+                .uri("https://api.example.com/data")
+                .retrieve()
+                .bodyToMono(String.class)
+                .subscribe(response -> System.out.println("Response: " + response));
+
     }
 
     public void runQuery()

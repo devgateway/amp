@@ -15,6 +15,9 @@
 	<beans:import resource="classpath:/applicationContext.xml" />
 
 	<beans:bean id="customHttpFirewall" class="org.springframework.security.web.firewall.DefaultHttpFirewall"/>
+
+
+
 	<http-firewall ref="customHttpFirewall"/>
 
 

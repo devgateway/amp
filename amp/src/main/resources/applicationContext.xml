@@ -8,5 +8,7 @@
             http://www.springframework.org/schema/context/spring-context.xsd">
 
     <context:component-scan base-package="org.digijava.kernel.ampapi.endpoints.security.services"/>
+    <bean id="webClient" class="org.digijava.module.aim.startup.WebClientFactoryBean" />
+    <bean id="clientHttpConnector" class="org.springframework.http.client.reactive.ReactorClientHttpConnector" />
 
 </beans>

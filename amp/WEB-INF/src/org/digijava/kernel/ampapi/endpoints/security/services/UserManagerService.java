@@ -86,12 +86,13 @@ public class UserManagerService {
         return userManager;
     }
 
-    public UserManager createUser(CreateUserRequest createUser) {
+    public LoggedUserInformation createUser(CreateUserRequest createUser) {
         // Get session of logged in user and check if its an admin
-        try{
+
             HttpServletRequest request = TLSUtils.getRequest();
             String adminSession = (String) TLSUtils.getRequest().getSession().getAttribute("ampAdmin");
             logger.info("Creating user is admin: " + adminSession);
+            String languageCode = TLSUtils.getLangCode();
 
             User user = new User();
             String firstName = createUser.getFirstName();
@@ -106,9 +107,9 @@ public class UserManagerService {
             boolean isUpdateUserEmail = true;
             boolean isUpdateUser = false;
 
-            if ( adminSession == null || adminSession.equals("no") ) {
-                ApiErrorResponseService.reportForbiddenAccess(SecurityErrors.NOT_ALLOWED);
-            }
+//            if ( adminSession == null || adminSession.equals("no") ) {
+//                ApiErrorResponseService.reportForbiddenAccess(SecurityErrors.NOT_ALLOWED);
+//            }
 
             // Validation
             validateUserFields(firstName, lastName, email, confirmEmail, password, passwordConfirmation,
@@ -143,7 +144,7 @@ public class UserManagerService {
                     user, DgUtil.getRootSite(siteDomain.getSite()));
 
             Locale language = new Locale();
-            language.setCode(createUser.getSelectedLanguage());
+            language.setCode(languageCode);
 
             // set alert language
             userLangPreferences.setAlertsLanguage(language);
@@ -151,8 +152,13 @@ public class UserManagerService {
             userLangPreferences.setNavigationLanguage(language);
             user.setUserLangPreferences(userLangPreferences);
 
+        try {
             DbUtil.registerUser(user);
-            DgUtil.saveUserLanguagePreferences(user, request, language);
+        } catch (UMException e) {
+            logger.error("Exception from register new user", e);
+            throw new RuntimeException(e);
+        }
+        DgUtil.saveUserLanguagePreferences(user, request, language);
 
             // Send verification email
             boolean isMailActivate = FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.USER_REGISTRATION_BY_MAIL);
@@ -164,12 +170,7 @@ public class UserManagerService {
                 user.setEmailVerified(true);
             }
 
-            return new UserManager(firstName, lastName, email);
-        } catch (Exception e) {
-            logger.error("Exception from RegisterUser", e);
-            throw new RuntimeException(e);
-        }
-
+        return createUserProfileInformation(user);
     }
 
     public LoggedUserInformation updateUserProfile(Long userId, UpdateUserInformation updateUser) {
@@ -274,7 +275,7 @@ public class UserManagerService {
             logger.error("Exception from Update user profile api.", e);
             throw new RuntimeException(e);
         }
-        //return new LoggedUserInformation(firstName, lastName, email);
+
         return  createUserProfileInformation(user);
     }
 
@@ -358,8 +359,13 @@ public class UserManagerService {
         userProfileInformation.setLastName(user.getLastName());
         userProfileInformation.setEmail(user.getEmail());
         userProfileInformation.setAddress(user.getAddress());
-        userProfileInformation.setCountry(user.getCountry().getIso());
-        userProfileInformation.setLanguageCode(user.getRegisterLanguage().getCode());
+        if(user.getCountry() != null){
+            userProfileInformation.setCountry(user.getCountry().getIso());
+        }
+        if(user.getRegisterLanguage() != null){
+            userProfileInformation.setLanguageCode(user.getRegisterLanguage().getCode());
+        }
+
         userProfileInformation.setAddress(user.getAddress());
         userProfileInformation.setNotificationEmailEnabled(user.isNotificationEmailEnabled());
         userProfileInformation.setBanned(user.isBanned());

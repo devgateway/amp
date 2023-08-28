@@ -40,11 +40,10 @@ public class UserManager {
     @POST
     @Path("/create/user")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    @ApiMethod(authTypes = {AuthRule.AUTHENTICATED}, id = "createAmpUser", ui = false)
     @ApiOperation(value = "Create amp user API.",
             notes = "<p>This endpoint creates a new amp user in user manager. All the fields are required.</p>\n")
 
-    public org.digijava.kernel.ampapi.endpoints.security.dto.usermanager.UserManager createUser(@ApiParam(required = true) CreateUserRequest user) {
+    public LoggedUserInformation createUser(@ApiParam(required = true) CreateUserRequest user) {
         return userManagerService.createUser(user);
     }
 

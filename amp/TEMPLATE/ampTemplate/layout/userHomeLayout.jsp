@@ -61,7 +61,7 @@
 		
 		<!-- END LOADING NEW TABS NECESSARY FILES -->
 		<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/common/lib/object_hash.js"></script>
-		<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/dist/amp-boilerplate.js"/>"></script>
+		<script type="text/javascript" src="<digi:file src="/TEMPLATE/reampv2/packages/container/build/main.bundle.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate//tabs/js/lib/jquery.min.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/tabs/js/lib/jquery-ui.min.js"/>"></script>	
         <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/script/common/CommonFilterUtils.js"/>"></script>
@@ -77,6 +77,7 @@
      	
 	<body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 	<div id="amp-header"></div>
+	<div id="__amp_container_root"></div>
 <%-- 	 <digi:secure authenticated="false"> --%>
 <%-- 		<logic:notPresent name="currentMember" scope="session"> --%>
 <%-- 			<digi:insert attribute="headerTop" />	 --%>

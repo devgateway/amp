@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 //@ts-ignore
@@ -11,6 +10,8 @@ const Root = () => (
         <App />
     </React.StrictMode>
 );
+
+console.log('Loading reampv2 app +++++++++++++')
 
 function getParameterByName(name: any, url = window.location.href) {
     name = name.replace(/[[\]]/g, '\\$&');

@@ -114,6 +114,7 @@ stage('Build') {
                                 "--ssh default " +
                                 "-t ${image} " +
                                 "--build-arg BUILD_SOURCE='${tag}' " +
+                                "--build-arg AMP_URL='${ampUrl}' " +
                                 "--build-arg AMP_PULL_REQUEST='${pr}' " +
                                 "--build-arg AMP_BRANCH='${branch}' " +
                                 "--build-arg AMP_REGISTRY_PRIVATE_KEY='${registryKey}' " +

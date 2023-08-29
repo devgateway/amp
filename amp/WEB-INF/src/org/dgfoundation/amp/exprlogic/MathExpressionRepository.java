@@ -1,13 +1,13 @@
 package org.dgfoundation.amp.exprlogic;
 
-import java.math.BigDecimal;
-import java.util.Hashtable;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.dyn.DynamicColumnsUtil;
 import org.digijava.module.aim.dbentity.AmpColumns;
+
+import java.math.BigDecimal;
+import java.util.Hashtable;
+import java.util.List;
 
 /**
  * 

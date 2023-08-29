@@ -22,13 +22,13 @@
 
 package org.digijava.kernel.security;
 
-import java.io.Serializable;
-import java.security.Permission;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.security.permission.ObjectPermission;
 import org.digijava.kernel.util.SiteCache;
+
+import java.io.Serializable;
+import java.security.Permission;
 
 public class SitePermission
     extends ObjectPermission implements Serializable {

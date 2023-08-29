@@ -22,12 +22,12 @@
 
 package org.digijava.kernel.dbentity;
 
-import java.io.Serializable;
-import java.util.function.Function;
-
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
+
+import java.io.Serializable;
+import java.util.function.Function;
 
 /**
  * The value object class for the Countries. Maps to the table PL_COUNTRIES

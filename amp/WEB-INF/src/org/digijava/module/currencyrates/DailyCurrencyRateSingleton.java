@@ -1,16 +1,11 @@
 package org.digijava.module.currencyrates;
 
-import java.lang.reflect.Constructor;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Collection;
-import java.util.Date;
-
 import org.apache.log4j.Logger;
-import org.digijava.module.aim.dbentity.AmpCurrencyRate;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+
+import java.lang.reflect.Constructor;
+import java.util.Date;
 
 /**
  * 

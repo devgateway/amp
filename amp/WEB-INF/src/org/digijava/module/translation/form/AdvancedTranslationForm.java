@@ -22,14 +22,13 @@
 
 package org.digijava.module.translation.form;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.module.common.action.PaginationForm;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AdvancedTranslationForm
     extends PaginationForm {

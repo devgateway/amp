@@ -1,8 +1,8 @@
 package org.digijava.module.aim.helper;
 
-import java.util.List;
-
 import org.digijava.module.aim.dbentity.AmpIndicator;
+
+import java.util.List;
 
 public class IndicatorThemeBean {
     

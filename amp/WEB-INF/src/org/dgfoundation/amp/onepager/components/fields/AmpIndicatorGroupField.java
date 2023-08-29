@@ -4,13 +4,14 @@
  */
 package org.dgfoundation.amp.onepager.components.fields;
 
-import java.util.Date;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.convert.IConverter;
 import org.dgfoundation.amp.onepager.converters.CustomDoubleConverter;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
+
+import java.util.Date;
 
 /**
  * Group of fields for ME Indicator

@@ -5,8 +5,8 @@
 		table="AMP_MESSAGE_SETTINGS">
 
 		<id name="id" column="message_settings_Id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_MESSAGE_SETTINGS_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_MESSAGE_SETTINGS_seq</param>
 			</generator>
 		</id>
 

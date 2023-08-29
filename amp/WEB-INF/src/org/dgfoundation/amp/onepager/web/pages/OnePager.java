@@ -4,20 +4,6 @@
  */
 package org.dgfoundation.amp.onepager.web.pages;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.TreeSet;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
@@ -35,31 +21,7 @@ import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.features.AmpActivityFormFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpAidEffectivenessFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpBudgetStructureFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpComponentsFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpContactsFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpContractingFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpCrossCuttingIssuesFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpFormSectionFeaturePanel;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpGPIFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpGPINiFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpIdentificationFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpInternalIdsFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpIssuesFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpLineMinistryObservationsFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpLocationFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpMEFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpPIFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpPlanningFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpProgramFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalFundingFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalObservationsFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpRelatedOrganizationsFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpResourcesFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpSectorsFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpStructuresFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.sections.*;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.dgfoundation.amp.onepager.util.ActivityUtil;
@@ -78,6 +40,13 @@ import org.digijava.module.gateperm.util.PermissionUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author mpostelnicu@dgateway.org since Sep 22, 2010

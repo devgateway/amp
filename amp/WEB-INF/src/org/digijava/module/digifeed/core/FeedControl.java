@@ -6,27 +6,15 @@
  */
 package org.digijava.module.digifeed.core;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.io.PrintWriter;
-import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.zip.GZIPOutputStream;
+import org.apache.log4j.Logger;
+import org.digijava.module.digifeed.exception.UninitializedDigifeedException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.log4j.Logger;
-import org.digijava.module.digifeed.exception.UninitializedDigifeedException;
+import java.io.*;
+import java.lang.reflect.Constructor;
+import java.util.*;
+import java.util.zip.GZIPOutputStream;
 
 /**
  * 

@@ -589,10 +589,12 @@ public class UnixCrypt extends Object
    */
    public static final String crypt(String salt, String original)
    {
-      while(salt.length() < 2)
-         salt += "A";
+       StringBuilder saltBuilder = new StringBuilder(salt);
+       while(saltBuilder.length() < 2)
+         saltBuilder.append("A");
+       salt = saltBuilder.toString();
 
-      StringBuffer buffer = new StringBuffer("             ");
+       StringBuilder buffer = new StringBuilder("             ");
 
       char charZero = salt.charAt(0);
       char charOne  = salt.charAt(1);
@@ -605,20 +607,17 @@ public class UnixCrypt extends Object
 
       byte key[] = new byte[8];
 
-      for(int i = 0; i < key.length; i ++)
-         key[i] = (byte)0;
-
-      for(int i = 0; i < key.length && i < original.length(); i ++)
+       for(int i = 0; i < key.length && i < original.length(); i ++)
       {
-         int iChar = (int)original.charAt(i);
+         int iChar = original.charAt(i);
 
          key[i] = (byte)(iChar << 1);
       }
 
-      int schedule[] = des_set_key(key);
-      int out[]      = body(schedule, Eswap0, Eswap1);
+      int[] schedule = des_set_key(key);
+      int[] out = body(schedule, Eswap0, Eswap1);
 
-      byte b[] = new byte[9];
+      byte[] b = new byte[9];
 
       intToFourBytes(out[0], b, 0);
       intToFourBytes(out[1], b, 4);

@@ -4,8 +4,8 @@
 	<class name="org.digijava.module.aim.dbentity.AmpLocationIndicatorValue" table="AMP_LOCATION_INDICATOR_VALUE" lazy="false">
 		<cache usage="read-write" />
 		<id name="id" column="id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_LOCATION_INDICATOR_VALUE_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_LOCATION_INDICATOR_VALUE_seq</param>
 			</generator>
 		</id>
 		<many-to-one name="location" column="location_id"

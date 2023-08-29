@@ -1,9 +1,9 @@
 package org.digijava.kernel.ampapi.endpoints.indicator;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
+
+import java.util.List;
 
 public class PopulationLayerRequest {
     

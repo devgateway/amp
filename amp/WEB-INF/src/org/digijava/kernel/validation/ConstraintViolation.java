@@ -1,11 +1,11 @@
 package org.digijava.kernel.validation;
 
+import com.google.common.collect.ImmutableMap;
+import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+
 import java.util.Map;
 import java.util.Objects;
 import java.util.StringJoiner;
-
-import com.google.common.collect.ImmutableMap;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 
 /**
  * Describes a constraint violation. This object exposes the constraint violation context (path and attributes)

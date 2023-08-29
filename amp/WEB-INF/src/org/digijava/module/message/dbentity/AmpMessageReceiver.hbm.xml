@@ -4,8 +4,8 @@
 	<class name="org.digijava.module.message.dbentity.AmpMessageReceiver" table="AMP_MESSAGE_RECEIVER">
 
 		<id name="id" column="message_receiver_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_MESSAGE_RECEIVER_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_MESSAGE_RECEIVER_seq</param>
 			</generator>
 		</id>
 

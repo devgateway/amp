@@ -3,10 +3,6 @@
  */
 package org.dgfoundation.amp.permissionmanager.components.features.tables;
 
-import java.io.Serializable;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -20,6 +16,10 @@ import org.dgfoundation.amp.permissionmanager.components.features.fields.AmpPMAj
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMFieldPermissionViewer;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMPermContentBean;
 import org.digijava.module.gateperm.core.Permission;
+
+import java.io.Serializable;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author dan

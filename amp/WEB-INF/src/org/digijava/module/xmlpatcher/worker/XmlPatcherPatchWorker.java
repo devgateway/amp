@@ -6,8 +6,6 @@
  */
 package org.digijava.module.xmlpatcher.worker;
 
-import java.util.Iterator;
-
 import org.digijava.module.xmlpatcher.core.XmlPatcherWorkerFactory;
 import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatchLog;
 import org.digijava.module.xmlpatcher.exception.XmlPatcherWorkerException;
@@ -15,6 +13,8 @@ import org.digijava.module.xmlpatcher.jaxb.Patch;
 import org.digijava.module.xmlpatcher.jaxb.Script;
 import org.digijava.module.xmlpatcher.jaxb.ScriptGroup;
 import org.digijava.module.xmlpatcher.jaxb.Trigger;
+
+import java.util.Iterator;
 
 /**
  * XmlPatcherPatchWorker

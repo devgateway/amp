@@ -5,13 +5,12 @@
 	<class name="org.digijava.module.aim.dbentity.AmpFundingAmount" table="AMP_FUNDING_AMOUNT">
 		<cache usage="read-write" />
 		<id name="ampFundingAmountId" column="amp_funding_amount_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_FUNDING_AMOUNT_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_FUNDING_AMOUNT_seq</param>
 			</generator>
 		</id>
-		
-		<many-to-one name="activity" column="amp_activity_id" class="org.digijava.module.aim.dbentity.AmpActivityVersion" 
-		index="idx_amp_funding_amount_amp_activity_id"  unique-key="activityType"/>
+		<many-to-one name="activity" column="amp_activity_id" class="org.digijava.module.aim.dbentity.AmpActivityVersion"
+					 index="idx_amp_funding_amount_amp_activity_id"  unique-key="activityType"/>
 		
 		<property name="funAmount" column="amount" type="java.lang.Double" />
 		<property name="funDate" column="date" type="java.util.Date" />

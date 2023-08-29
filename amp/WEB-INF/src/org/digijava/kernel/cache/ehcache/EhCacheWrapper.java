@@ -1,17 +1,12 @@
 package org.digijava.kernel.cache.ehcache;
 
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
-
 import org.digijava.kernel.cache.AbstractCache;
+
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * Simple EHCache wrapper.

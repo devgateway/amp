@@ -4,10 +4,6 @@
 */
 package org.dgfoundation.amp.onepager.components.features.tables;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -23,16 +19,14 @@ import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.validators.AmpUniqueComponentTitleValidator;
-import org.digijava.module.aim.dbentity.AmpActivityGroup;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpComponent;
-import org.digijava.module.aim.dbentity.AmpComponentFunding;
-import org.digijava.module.aim.dbentity.AmpComponentType;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.util.ComponentsUtil;
 
-import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_DESCRIPTION;
-import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_TITLE;
-import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.COMPONENT_TYPE;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.*;
 
 /**
  * @author aartimon@dginternational.org

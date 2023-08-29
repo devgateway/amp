@@ -1,10 +1,11 @@
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-import java.util.Date;
-import org.digijava.kernel.ampapi.endpoints.serializers.ISO8601DateSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModelProperty;
+import org.digijava.kernel.ampapi.endpoints.serializers.ISO8601DateSerializer;
+
+import java.io.Serializable;
+import java.util.Date;
 
 public class AmpDataFreezeSettings implements Serializable {
 

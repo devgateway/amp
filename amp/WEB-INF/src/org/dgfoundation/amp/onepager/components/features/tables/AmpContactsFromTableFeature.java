@@ -4,13 +4,6 @@
  */
 package org.dgfoundation.amp.onepager.components.features.tables;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -30,7 +23,6 @@ import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.events.ContactChangedEvent;
-import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.dgfoundation.amp.onepager.models.AmpContactSearchModel;
 import org.dgfoundation.amp.onepager.models.AmpReadOnlyModel;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
@@ -42,6 +34,8 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.hibernate.Hibernate;
+
+import java.util.*;
 
 /**
  * @author dmihaila@dginternational.org

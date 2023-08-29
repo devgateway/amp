@@ -6,8 +6,6 @@
  */
 package org.dgfoundation.amp.ar;
 
-import java.util.HashSet;
-
 /**
  * 
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org

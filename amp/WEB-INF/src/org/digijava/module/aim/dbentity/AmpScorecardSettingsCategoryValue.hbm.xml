@@ -5,8 +5,8 @@
 		table="AMP_SCORECARD_SETTINGS_CATEGORY_VALUE">
 		<cache usage="read-write" />
 		<id name="ampScorecardSettingsCategoryValueId" column="id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_SCORECARD_SETTINGS_CATEGORY_VALUE_SEQ</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_SCORECARD_SETTINGS_CATEGORY_VALUE_SEQ</param>
 			</generator>
 		</id>
 	<many-to-one column="AMP_SCORECARD_SETTINGS_ID" name="ampScorecardSettings"

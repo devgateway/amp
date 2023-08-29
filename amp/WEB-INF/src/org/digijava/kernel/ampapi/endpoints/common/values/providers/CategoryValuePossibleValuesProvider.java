@@ -1,9 +1,9 @@
 package org.digijava.kernel.ampapi.endpoints.common.values.providers;
 
-import java.util.List;
-
 import org.digijava.kernel.ampapi.endpoints.activity.CategoryValueExtraInfo;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+
+import java.util.List;
 
 /**
  * @author Nadejda Mandrescu

@@ -1,21 +1,17 @@
 package org.dgfoundation.amp.gpi.reports;
 
-import static java.util.stream.Collectors.groupingBy;
+import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.newreports.GeneratedReport;
+import org.dgfoundation.amp.nireports.formulas.NiFormula;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.newreports.GeneratedReport;
-import org.dgfoundation.amp.nireports.formulas.NiFormula;
+import static java.util.stream.Collectors.groupingBy;
 
 /**
  * A utility class to transform a GeneratedReport to GPI Report 1 Output 2

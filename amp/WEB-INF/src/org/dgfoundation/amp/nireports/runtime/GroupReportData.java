@@ -1,15 +1,11 @@
 package org.dgfoundation.amp.nireports.runtime;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import static java.util.stream.Collectors.toList;
-
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.output.nicells.NiSplitCell;
+
+import java.util.*;
+
+import static java.util.stream.Collectors.toList;
 
 
 /**

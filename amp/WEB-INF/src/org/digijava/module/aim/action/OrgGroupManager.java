@@ -1,16 +1,5 @@
 package org.digijava.module.aim.action ;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Vector;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -19,6 +8,11 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.form.OrgGroupManagerForm;
 import org.digijava.module.aim.util.DbUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.util.*;
 
 public class OrgGroupManager extends Action {
 
@@ -160,10 +154,8 @@ public class OrgGroupManager extends Action {
                         if (alpha!=null && !alpha.equalsIgnoreCase("view all")){
                             orgsForCurrentAlpha=new ArrayList<AmpOrgGroup>();
                             if(ampOrg!=null){
-                                Iterator<AmpOrgGroup> it=ampOrg.iterator();
-                                while(it.hasNext()) {
-                                    AmpOrgGroup orgGroup=it.next();
-                                    if(orgGroup.getOrgGrpName().toUpperCase().startsWith(alpha)){
+                                for (AmpOrgGroup orgGroup : ampOrg) {
+                                    if (orgGroup.getOrgGrpName().toUpperCase().startsWith(alpha)) {
                                         orgsForCurrentAlpha.add(orgGroup);
                                     }
                                 }

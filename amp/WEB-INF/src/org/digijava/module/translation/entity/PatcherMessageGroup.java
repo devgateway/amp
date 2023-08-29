@@ -1,9 +1,9 @@
 package org.digijava.module.translation.entity;
 
-import java.util.Collection;
-
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.translator.TranslatorWorker;
+
+import java.util.Collection;
 
 /**
  * Group of messages with same translation key.

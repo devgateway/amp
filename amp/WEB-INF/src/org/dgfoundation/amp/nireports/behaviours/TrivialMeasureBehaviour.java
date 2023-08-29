@@ -1,19 +1,9 @@
 package org.dgfoundation.amp.nireports.behaviours;
 
-import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.function.BiFunction;
-
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportSettings;
 import org.dgfoundation.amp.newreports.ReportSpecification;
-import org.dgfoundation.amp.nireports.Cell;
-import org.dgfoundation.amp.nireports.ImmutablePair;
-import org.dgfoundation.amp.nireports.NiPrecisionSetting;
-import org.dgfoundation.amp.nireports.NiReportsEngine;
-import org.dgfoundation.amp.nireports.NumberedCell;
+import org.dgfoundation.amp.nireports.*;
 import org.dgfoundation.amp.nireports.formulas.NiFormula;
 import org.dgfoundation.amp.nireports.output.nicells.NiAmountCell;
 import org.dgfoundation.amp.nireports.output.nicells.NiFormulaicAmountCell;
@@ -22,9 +12,15 @@ import org.dgfoundation.amp.nireports.output.nicells.NiSplitCell;
 import org.dgfoundation.amp.nireports.runtime.ColumnContents;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
+import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
 import org.dgfoundation.amp.nireports.schema.TimeRange;
-import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
+
+import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.function.BiFunction;
 
 /**
  * The behaviour of a trivial measure. <br />

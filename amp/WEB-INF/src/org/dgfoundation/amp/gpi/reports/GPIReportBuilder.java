@@ -1,10 +1,10 @@
 package org.dgfoundation.amp.gpi.reports;
 
-import java.util.Map;
-
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.digijava.kernel.ampapi.endpoints.settings.Settings;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
+
+import java.util.Map;
 
 /**
  * A utility class to build a GPI Report from {@link GeneratedReport} generated

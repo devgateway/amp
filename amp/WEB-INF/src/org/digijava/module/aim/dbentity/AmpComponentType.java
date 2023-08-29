@@ -1,12 +1,12 @@
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-import java.util.Set;
-
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.Identifiable;
+
+import java.io.Serializable;
+import java.util.Set;
 
 @TranslatableClass(displayName = "Component Type")
 public class AmpComponentType implements ARDimensionable, Serializable, Identifiable {

@@ -1,14 +1,5 @@
 package org.dgfoundation.amp.nireports.amp.indicators;
 
-import static org.dgfoundation.amp.algo.AmpCollections.any;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.StringJoiner;
-import java.util.function.BiFunction;
-import java.util.function.Predicate;
-
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.DoubleCell;
@@ -19,6 +10,15 @@ import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.StringJoiner;
+import java.util.function.BiFunction;
+import java.util.function.Predicate;
+
+import static org.dgfoundation.amp.algo.AmpCollections.any;
 
 /**
  * This behaviour matches {@link TextualTokenBehaviour} with the exception of how horizontal reduce is done.

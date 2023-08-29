@@ -1,13 +1,13 @@
 package org.digijava.module.aim.repository;
 
-import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.RESOURCE;
-import static org.digijava.kernel.services.sync.model.SyncConstants.Ops.DELETED;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpOfflineChangelog;
 
 import java.util.Date;
 import java.util.List;
 
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpOfflineChangelog;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Entities.RESOURCE;
+import static org.digijava.kernel.services.sync.model.SyncConstants.Ops.DELETED;
 
 /**
  * @author Octavian Ciubotaru

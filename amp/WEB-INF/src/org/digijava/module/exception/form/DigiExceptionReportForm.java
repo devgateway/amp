@@ -22,10 +22,12 @@
 
 package org.digijava.module.exception.form;
 
-import javax.servlet.http.*;
+import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.exception.ExceptionInfo;
 
-import org.apache.struts.action.*;
-import org.digijava.kernel.exception.*;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * <p>Title: </p>

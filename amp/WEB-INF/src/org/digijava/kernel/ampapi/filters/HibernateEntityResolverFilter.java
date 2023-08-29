@@ -1,16 +1,10 @@
 package org.digijava.kernel.ampapi.filters;
 
-import java.io.IOException;
-
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.EntityResolver;
+
+import javax.servlet.*;
+import java.io.IOException;
 
 /**
  * Filter that enables resolution of hibernate entities referenced as ids during jackson deserialization.

@@ -22,12 +22,6 @@
 
 package org.digijava.module.admin.util;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.StringTokenizer;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.error.AMPException;
 import org.digijava.kernel.ampapi.endpoints.config.utils.ConfigHelper;
@@ -42,9 +36,14 @@ import org.digijava.kernel.user.User;
 import org.digijava.module.admin.exception.AdminException;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.helper.KeyValue;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+import org.hibernate.type.BooleanType;
+import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
+
+import java.util.*;
 
 public class DbUtil {
 
@@ -72,7 +71,7 @@ public class DbUtil {
             session = PersistenceManager.getRequestDBSession();
             Query q = session
                     .createQuery("from " + Locale.class.getName() + " l where l.available=true and l.code=:code");
-            q.setString("code", code);
+            q.setParameter("code", code, StringType.INSTANCE);
             if (q.uniqueResult() != null) {
                 available = true;
             }
@@ -190,7 +189,7 @@ public class DbUtil {
             Iterator iter = null;
             String queryString = "select g from " + Group.class.getName() + " g where g.key=:key";
             Query query = session.createQuery(queryString);
-            query.setString("key", key);
+            query.setParameter("key", key,StringType.INSTANCE);
             iter = query.iterate();
             while (iter.hasNext()) {
                 group = (Group) iter.next();
@@ -332,8 +331,8 @@ public class DbUtil {
                     + " or lower(d.siteDbDomain) like :siteKey or lower(d.sitePath) like :siteKey "
                     + " or lower(d.siteDbDomain || d.sitePath) like :domainUrl)";
             Query query = session.createQuery(queryString);
-            query.setString("siteKey", siteKey);
-            query.setString("domainUrl", domainUrl);
+            query.setParameter("siteKey", siteKey,StringType.INSTANCE);
+            query.setParameter("domainUrl", domainUrl,StringType.INSTANCE);
 
             Iterator iterator = query.iterate();
 
@@ -430,14 +429,14 @@ public class DbUtil {
                 String queryString = "select sd.site from " + SiteDomain.class.getName()
                         + " sd where sd.siteDbDomain=:siteDomain and sd.sitePath is null";
                 Query query = session.createQuery(queryString);
-                query.setString("siteDomain", domain);
+                query.setParameter("siteDomain", domain,StringType.INSTANCE);
                 iter = query.iterate();
             } else {
                 String queryString = "select sd.site from " + SiteDomain.class.getName()
                         + " sd where sd.siteDbDomain=:siteDomain and sd.sitePath=:sitePath";
                 Query query = session.createQuery(queryString);
-                query.setString("siteDomain", domain);
-                query.setString("sitePath", path);
+                query.setParameter("siteDomain", domain,StringType.INSTANCE);
+                query.setParameter("sitePath", path,StringType.INSTANCE);
 
                 iter = query.iterate();
             }
@@ -490,8 +489,8 @@ public class DbUtil {
                     + " mi where mi.site.id != :siteId and mi.moduleName = :moduleName "
                     + " and mi.realInstance is null";
             Query query = session.createQuery(queryString);
-            query.setLong("siteId", siteId);
-            query.setString("moduleName", module);
+            query.setParameter("siteId", siteId, LongType.INSTANCE);
+            query.setParameter("moduleName", module,StringType.INSTANCE);
 
             sites = query.list();
         } catch (Exception ex) {
@@ -640,8 +639,8 @@ public class DbUtil {
                 + " gr.site.inheritSecurity = :inheritSecurity and gr.parentId = :parentId";
 
         Query query = session.createQuery(queryString);
-        query.setBoolean("inheritSecurity", Boolean.TRUE);
-        query.setLong("parentId", groupId);
+        query.setParameter("inheritSecurity", Boolean.TRUE, BooleanType.INSTANCE);
+        query.setParameter("parentId", groupId, LongType.INSTANCE);
 
         Iterator iter = query.iterate();
         while (iter.hasNext()) {
@@ -776,7 +775,7 @@ public class DbUtil {
         if (tableName == null || tableName.length() == 0)
             return ret;
 
-        List<Object[]> ls = PersistenceManager.getSession().createSQLQuery("select id, value from " + tableName).list();
+        List<Object[]> ls = PersistenceManager.getSession().createNativeQuery("select id, value from " + tableName).list();
         for (Object[] obj : ls) {
             KeyValue keyValue = new KeyValue(PersistenceManager.getString(obj[0]),
                     PersistenceManager.getString(obj[1]));
@@ -791,7 +790,7 @@ public class DbUtil {
         session = PersistenceManager.getSession();
         qryStr = "select gs from " + AmpGlobalSettings.class.getName() + " gs where gs.globalSettingsName = :globalSettingsName ";
         qry = session.createQuery(qryStr);
-        qry.setString("globalSettingsName", name);
+        qry.setParameter("globalSettingsName", name,StringType.INSTANCE);
         AmpGlobalSettings ags = (AmpGlobalSettings) qry.list().get(0);
         updateGlobalSetting(ags, value);
     }
@@ -803,7 +802,7 @@ public class DbUtil {
         session = PersistenceManager.getSession();
         qryStr = "select gs from " + AmpGlobalSettings.class.getName() + " gs where gs.globalId = :id ";
         qry = session.createQuery(qryStr);
-        qry.setLong("id", id.longValue());
+        qry.setParameter("id", id, LongType.INSTANCE);
 
         AmpGlobalSettings ags = (AmpGlobalSettings) qry.list().get(0);
 

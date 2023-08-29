@@ -50,6 +50,7 @@
 
     <!-- Limit the org.quartz category to INFO as its DEBUG is verbose -->
     <logger name="org.quartz" level="INFO" />
+    <logger name="org.springframework.security" level="TRACE" />
 
     <logger name="org.digijava" level="INFO" /> <!-- DEBUG default -->
 
@@ -69,6 +70,7 @@
 
     <!-- SET to TRACE in order to see queries and their value, INFO is default -->
     <logger name="org.hibernate.SQL" level="INFO" />
+    <logger name="javax.ws.rs.client" level="TRACE" />
 
     <!-- SET to TRACE in order to see queries and their value, INFO is default -->
     <logger name="org.hibernate.type" level="INFO" />

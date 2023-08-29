@@ -3,9 +3,6 @@
  */
 package org.dgfoundation.amp.onepager.models;
 
-import java.io.Serializable;
-import java.lang.reflect.Method;
-
 import org.apache.log4j.Logger;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -13,6 +10,9 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.util.string.Strings;
 import org.hibernate.Session;
 import org.hibernate.proxy.HibernateProxy;
+
+import java.io.Serializable;
+import java.lang.reflect.Method;
 
 /**
  * 

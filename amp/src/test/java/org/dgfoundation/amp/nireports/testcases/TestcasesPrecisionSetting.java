@@ -1,9 +1,9 @@
 package org.dgfoundation.amp.nireports.testcases;
 
+import org.dgfoundation.amp.nireports.NiPrecisionSetting;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-
-import org.dgfoundation.amp.nireports.NiPrecisionSetting;
 
 public class TestcasesPrecisionSetting implements NiPrecisionSetting {
 

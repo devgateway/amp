@@ -3,12 +3,9 @@
  */
 package org.dgfoundation.amp.ar.cell;
 
-import java.util.Iterator;
-import java.util.Set;
-
-import org.dgfoundation.amp.ar.ArConstants;
-import org.digijava.module.aim.logic.AmountCalculator;
 import org.digijava.module.aim.logic.Logic;
+
+import java.util.Set;
 
 /**
  * @author mihai

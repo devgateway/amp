@@ -1,11 +1,5 @@
 package org.digijava.module.aim.helper ;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.Comparator;
-import java.util.Date;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.onepager.models.MTEFYearsModel;
@@ -18,6 +12,12 @@ import org.joda.time.Period;
 import org.joda.time.PeriodType;
 import org.joda.time.format.PeriodFormatter;
 import org.joda.time.format.PeriodFormatterBuilder;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Comparator;
+import java.util.Date;
 
 
 public class DateConversion
@@ -141,15 +141,15 @@ public class DateConversion
             //logger.debug("getYear passed String" + s ) ;
         int yr = 0 ;
         if ( s != null && s.length() != 0 )     {
-            String strYr = "" ;
+            StringBuilder strYr = new StringBuilder();
             char[] arr = s.toCharArray() ;
             int i = s.length() - 1 ;
             while( arr[i] != '/' )
             {
-                strYr += arr[i] ;
+                strYr.append(arr[i]);
                 i-- ;
             }
-            StringBuffer sb = new StringBuffer(strYr) ;
+            StringBuilder sb = new StringBuilder(strYr.toString()) ;
             sb.reverse() ;
             yr= Integer.parseInt(sb.toString()) ;
         }

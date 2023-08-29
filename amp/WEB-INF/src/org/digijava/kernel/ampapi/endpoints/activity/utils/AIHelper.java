@@ -1,15 +1,15 @@
 package org.digijava.kernel.ampapi.endpoints.activity.utils;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.util.Map;
-import java.util.UUID;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.ActivityImporter;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * Helper methods for Activity Import

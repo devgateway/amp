@@ -1,15 +1,14 @@
 package org.digijava.module.aim.validator.contact;
 
 
-import static java.lang.annotation.ElementType.FIELD;
-
+import javax.validation.Constraint;
+import javax.validation.Payload;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import javax.validation.Constraint;
-import javax.validation.Payload;
+import static java.lang.annotation.ElementType.FIELD;
 
 /**
  * <p>Ensure that there is only one primary contact in activity contact type collection</p>

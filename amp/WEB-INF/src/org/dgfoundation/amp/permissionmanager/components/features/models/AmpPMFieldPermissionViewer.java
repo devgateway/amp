@@ -3,13 +3,13 @@
  */
 package org.dgfoundation.amp.permissionmanager.components.features.models;
 
-import java.io.Serializable;
-import java.util.Set;
-
 import org.apache.commons.lang.StringUtils;
 import org.dgfoundation.amp.permissionmanager.web.PMUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.gateperm.core.PermissionMap;
+
+import java.io.Serializable;
+import java.util.Set;
 
 /**
  * @author dan

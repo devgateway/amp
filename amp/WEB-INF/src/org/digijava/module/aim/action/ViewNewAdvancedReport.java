@@ -6,30 +6,12 @@
  */
 package org.digijava.module.aim.action;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.dgfoundation.amp.ar.ARUtil;
-import org.dgfoundation.amp.ar.AmpARFilter;
-import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.ar.GenericViews;
-import org.dgfoundation.amp.ar.GroupReportData;
-import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.ar.MetaInfo;
-import org.dgfoundation.amp.ar.ReportContextData;
+import org.dgfoundation.amp.ar.*;
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.currency.inflation.CCExchangeRate;
 import org.dgfoundation.amp.newreports.GeneratedReport;
@@ -42,11 +24,7 @@ import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.dbentity.AmpApplicationSettings;
-import org.digijava.module.aim.dbentity.AmpReportHierarchy;
-import org.digijava.module.aim.dbentity.AmpReportLog;
-import org.digijava.module.aim.dbentity.AmpReports;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.form.AdvancedReportForm;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.AmpMath;
@@ -54,6 +32,12 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.translation.util.MultilingualInputFieldValues;
 import org.hibernate.Session;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.*;
 
 /**
  * 

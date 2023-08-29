@@ -1,8 +1,8 @@
 package org.digijava.module.message.helper;
 
-import java.util.List;
-
 import org.digijava.module.sdm.dbentity.Sdm;
+
+import java.util.List;
 
 public class MessageHelper {    
     private Long msgId;

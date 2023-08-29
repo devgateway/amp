@@ -22,13 +22,11 @@
 
 package org.digijava.kernel.startup;
 
-import javax.servlet.http.*;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import org.apache.log4j.Logger;
 import org.digijava.commons.asyncdispatcher.AsyncBuffer;
-import org.digijava.commons.asyncdispatcher.*;
-import org.apache.log4j.*;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 public class UrlPreloaderThread
     extends Thread {

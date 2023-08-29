@@ -3,8 +3,6 @@
  */
 package org.digijava.module.budgetexport.reports.implementation;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -13,9 +11,9 @@ import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.view.xls.GroupReportDataXLS;
 import org.dgfoundation.amp.ar.view.xls.IntWrapper;
-import org.dgfoundation.amp.ar.view.xls.ReportHeadingsXLS;
-import org.dgfoundation.amp.ar.view.xls.TrailCellsXLS;
 import org.digijava.module.aim.form.AdvancedReportForm;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author alex

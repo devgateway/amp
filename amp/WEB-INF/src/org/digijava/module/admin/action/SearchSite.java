@@ -22,28 +22,21 @@
 
 package org.digijava.module.admin.action;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.request.Site;
-import org.digijava.kernel.request.SiteDomain;
-import org.digijava.module.admin.exception.AdminException;
-import org.digijava.module.admin.form.SearchSiteForm;
-import org.digijava.module.admin.util.DbUtil;
-import org.digijava.kernel.Constants;
-import org.digijava.kernel.user.User;
 import org.digijava.kernel.security.DgSecurityManager;
 import org.digijava.kernel.security.ResourcePermission;
 import org.digijava.kernel.util.DgUtil;
-import java.util.Set;
-import java.util.Iterator;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.admin.form.SearchSiteForm;
+import org.digijava.module.admin.util.DbUtil;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
 
 public class SearchSite
     extends Action {

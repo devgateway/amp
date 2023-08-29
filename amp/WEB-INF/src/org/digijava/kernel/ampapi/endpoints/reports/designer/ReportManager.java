@@ -18,53 +18,24 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.errors.GenericErrors;
-import org.digijava.kernel.ampapi.endpoints.reports.designer.validators.ReportColumnValidator;
-import org.digijava.kernel.ampapi.endpoints.reports.designer.validators.ReportHierarchyValidator;
-import org.digijava.kernel.ampapi.endpoints.reports.designer.validators.ReportMeasureValidator;
-import org.digijava.kernel.ampapi.endpoints.reports.designer.validators.ReportMeasurelessHierarchiesAmountColumnsValidator;
-import org.digijava.kernel.ampapi.endpoints.reports.designer.validators.ReportMeasurelessHierarchiesValidator;
-import org.digijava.kernel.ampapi.endpoints.reports.designer.validators.ReportNameValidator;
-import org.digijava.kernel.ampapi.endpoints.reports.designer.validators.ReportNonSummaryColumnsHierarchiesValidator;
-import org.digijava.kernel.ampapi.endpoints.reports.designer.validators.ReportSummaryValidator;
-import org.digijava.kernel.ampapi.endpoints.reports.designer.validators.ReportTabMaxMeasuresSizeValidator;
-import org.digijava.kernel.ampapi.endpoints.reports.designer.validators.ReportTypeValidator;
-import org.digijava.kernel.ampapi.endpoints.reports.designer.validators.ReportUniqueNameValidator;
-import org.digijava.kernel.ampapi.endpoints.reports.designer.validators.ReportValidator;
+import org.digijava.kernel.ampapi.endpoints.reports.designer.validators.*;
 import org.digijava.kernel.ampapi.endpoints.security.SecurityErrors;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.MaxSizeLinkedHashMap;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.dbentity.AmpColumns;
-import org.digijava.module.aim.dbentity.AmpContentTranslation;
-import org.digijava.module.aim.dbentity.AmpMeasures;
-import org.digijava.module.aim.dbentity.AmpReportColumn;
-import org.digijava.module.aim.dbentity.AmpReportHierarchy;
-import org.digijava.module.aim.dbentity.AmpReportMeasures;
-import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.AdvancedReportUtil;
-import org.digijava.module.aim.util.CurrencyUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.FiscalCalendarUtil;
-import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.aim.util.*;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.digijava.module.translation.util.MultilingualInputFieldValues;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.UUID;
+import java.util.*;
 
 import static java.lang.Boolean.TRUE;
 import static org.dgfoundation.amp.ar.ColumnConstants.PROJECT_TITLE;
@@ -94,15 +65,13 @@ public class ReportManager {
 
     private AmpReports report;
 
-    private Integer reportToken;
-
     private final ReportColumnProvider columnProvider;
 
     private final ReportMeasureProvider measureProvider;
 
-    private List<ReportValidator> fieldsValidators = new ArrayList<>();
+    private final List<ReportValidator> fieldsValidators = new ArrayList<>();
 
-    private List<ReportValidator> reportValidators = new ArrayList<>();
+    private final List<ReportValidator> reportValidators = new ArrayList<>();
 
     public ReportManager(final ReportColumnProvider columnProvider, final ReportMeasureProvider measureProvider) {
         this.columnProvider = columnProvider;
@@ -111,6 +80,7 @@ public class ReportManager {
 
     public ReportManager createOrUpdateReport(ReportRequest reportRequest, final Long reportId,
                                               final Boolean isDynamic) {
+
         authorize(isDynamic);
 
         this.reportRequest = reportRequest;
@@ -164,6 +134,7 @@ public class ReportManager {
     }
 
     private void authorize(final Boolean isDynamic) {
+        logger.info("Dynamic: "+isDynamic +"Member: "+TeamUtil.getCurrentMember());
         if (TeamUtil.getCurrentMember() == null && !isDynamic) {
             ApiErrorResponseService.reportUnauthorisedAccess(SecurityErrors.NOT_AUTHENTICATED);
         }
@@ -178,7 +149,7 @@ public class ReportManager {
      *  The list is limited to {@link#Constants.MAX_REPORTS_IN_SESSION}
      */
     private void persistDynamicReport() {
-        reportToken = generateReportToken();
+        Integer reportToken = generateReportToken();
 
         MaxSizeLinkedHashMap<Integer, AmpReports> reportsList = Optional.ofNullable(TLSUtils.getReportStack())
                 .orElse(new MaxSizeLinkedHashMap<>(Constants.MAX_REPORTS_IN_SESSION));
@@ -207,7 +178,7 @@ public class ReportManager {
      * @return
      */
     private Integer generateReportToken() {
-        Integer reportToken = UUID.randomUUID().toString().hashCode();
+        int reportToken = UUID.randomUUID().toString().hashCode();
         if (reportToken > 0) {
             return reportToken * (-1);
         }
@@ -323,8 +294,8 @@ public class ReportManager {
                     }
                 } else {
                     ReportColumn titleAmpColumn = getAvailableColumns().stream()
-                            .filter(h -> h.getName().equals(PROJECT_TITLE)).findAny()
-                            .get();
+                            .filter(h -> h.getName().equals(PROJECT_TITLE)).findAny().orElseThrow(RuntimeException::new);
+
 
                     AmpReportColumn projectTitleColumn = new AmpReportColumn();
                     projectTitleColumn.setColumn(getAmpColumnById(titleAmpColumn.getId()));
@@ -337,7 +308,7 @@ public class ReportManager {
     }
 
     private Set<AmpReportColumn> getReportColumns(final List<Long> columns) {
-        Long orderId = 0L;
+        long orderId = 0L;
         TreeSet<AmpReportColumn> reportColumns = new TreeSet<>();
         for (Long columnId : columns) {
             AmpReportColumn reportColumn = new AmpReportColumn();
@@ -353,7 +324,7 @@ public class ReportManager {
     private Set<AmpReportHierarchy> getReportHierarchies(final List<Long> hierarchies) {
         TreeSet<AmpReportHierarchy> reportHierarchies = new TreeSet<>();
         if (hierarchies != null && !hierarchies.isEmpty()) {
-            Long levelId = 0L;
+            long levelId = 0L;
             for (Long columnId : hierarchies) {
                 AmpReportHierarchy reportHierarchy = new AmpReportHierarchy();
                 reportHierarchy.setColumn(getAmpColumnById(columnId));
@@ -367,7 +338,7 @@ public class ReportManager {
     }
 
     private Set<AmpReportMeasures> getReportMeasures(final List<Long> measures) {
-        Long orderId = 0L;
+        long orderId = 0L;
         TreeSet<AmpReportMeasures> reportMeasures = new TreeSet<>();
         for (Long measureId : measures) {
             AmpReportMeasures reportMeasure = new AmpReportMeasures();
@@ -381,11 +352,11 @@ public class ReportManager {
     }
 
     private AmpColumns getAmpColumnById(final Long columnId) {
-        return (AmpColumns) PersistenceManager.getSession().get(AmpColumns.class, columnId);
+        return PersistenceManager.getSession().get(AmpColumns.class, columnId);
     }
 
     private AmpMeasures getAmpMeasureById(final Long columnId) {
-        return (AmpMeasures) PersistenceManager.getSession().get(AmpMeasures.class, columnId);
+        return PersistenceManager.getSession().get(AmpMeasures.class, columnId);
     }
 
     @Nullable

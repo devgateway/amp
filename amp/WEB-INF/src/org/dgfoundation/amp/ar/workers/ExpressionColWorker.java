@@ -6,20 +6,16 @@
  */
 package org.dgfoundation.amp.ar.workers;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import org.dgfoundation.amp.ar.ArConstants;
-import org.dgfoundation.amp.ar.CellColumn;
-import org.dgfoundation.amp.ar.GroupColumn;
-import org.dgfoundation.amp.ar.ReportGenerator;
-import org.dgfoundation.amp.ar.TotalAmountColumn;
+import org.dgfoundation.amp.ar.*;
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.cell.ExpressionAmountCell;
 import org.dgfoundation.amp.exprlogic.TokenExpression;
 import org.dgfoundation.amp.exprlogic.TokenRepository;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * 

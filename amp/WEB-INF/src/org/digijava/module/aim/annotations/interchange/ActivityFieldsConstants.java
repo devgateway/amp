@@ -4,12 +4,12 @@
 package org.digijava.module.aim.annotations.interchange;
 
 
-import java.util.Map;
-
 import com.google.common.collect.ImmutableMap;
 import org.digijava.kernel.ampapi.endpoints.common.field.FieldMap;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+
+import java.util.Map;
 
 /**
  * Stores activity fields related constants used in annotations for reuse

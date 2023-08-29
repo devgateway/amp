@@ -1,11 +1,11 @@
 package org.digijava.module.xmlpatcher.core;
 
+import org.dgfoundation.amp.algo.AlgoUtils;
+
 import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import org.dgfoundation.amp.algo.AlgoUtils;
 
 /**
  * a class encoding a SQL patch to be used by {@link SimpleSQLPatcher}

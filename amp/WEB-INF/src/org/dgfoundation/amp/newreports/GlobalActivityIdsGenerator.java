@@ -1,10 +1,10 @@
 package org.dgfoundation.amp.newreports;
 
-import java.util.Set;
-
 import org.dgfoundation.amp.diffcaching.DatabaseChangedDetector;
 import org.dgfoundation.amp.diffcaching.ExpiringCacher;
 import org.digijava.module.aim.util.ActivityUtil;
+
+import java.util.Set;
 
 /**
  * Returns all activity ids for filtering in computed workspaces. Activities must match the following criteria:

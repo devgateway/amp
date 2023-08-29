@@ -22,13 +22,6 @@
 
 package org.digijava.kernel.taglib.html;
 
-import java.text.MessageFormat;
-import java.util.Iterator;
-import java.util.ResourceBundle;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.jsp.JspException;
-
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.Globals;
@@ -42,6 +35,12 @@ import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.jsp.JspException;
+import java.text.MessageFormat;
+import java.util.Iterator;
+import java.util.ResourceBundle;
 
 /**
  * Custom tag that retrieves internationalized message

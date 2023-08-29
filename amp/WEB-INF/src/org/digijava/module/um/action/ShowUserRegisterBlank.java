@@ -22,27 +22,21 @@
 
 package org.digijava.module.um.action;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.translator.util.TrnCountry;
 import org.digijava.kernel.translator.util.TrnLocale;
 import org.digijava.kernel.translator.util.TrnUtil;
-import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.um.form.UserRegisterForm;
 import org.digijava.module.um.util.DbUtil;
-import org.digijava.kernel.translator.util.TrnCountry;
-import org.digijava.kernel.util.SiteUtils;
+
+import java.util.*;
 
 /**
  * <p>Title: DiGiJava</p>

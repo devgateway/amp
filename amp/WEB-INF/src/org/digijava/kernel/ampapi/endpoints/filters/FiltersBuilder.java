@@ -3,13 +3,13 @@
  */
 package org.digijava.kernel.ampapi.endpoints.filters;
 
+import org.digijava.kernel.ampapi.endpoints.settings.SettingField;
+import org.digijava.kernel.ampapi.endpoints.settings.SettingOptions;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
-
-import org.digijava.kernel.ampapi.endpoints.settings.SettingField;
-import org.digijava.kernel.ampapi.endpoints.settings.SettingOptions;
 
 
 /**

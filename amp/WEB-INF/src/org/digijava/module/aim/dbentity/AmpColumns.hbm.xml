@@ -4,8 +4,8 @@
 	<class name="org.digijava.module.aim.dbentity.AmpColumns" table="AMP_COLUMNS" lazy="false">
 		<cache usage="read-write" />
 		<id name="columnId" column="columnId" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_COLUMNS_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_COLUMNS_seq</param>
 			</generator>
 		</id>
 		<property column="columnName" name="columnName" type="java.lang.String" unique="true" />

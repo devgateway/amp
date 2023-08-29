@@ -18,12 +18,7 @@ import org.apache.wicket.validation.validator.RangeValidator;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.AmpRequiredComponentContainer;
 import org.dgfoundation.amp.onepager.components.features.items.AmpAgreementItemPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpBooleanChoiceField;
-import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpFundingSummaryPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.*;
 import org.dgfoundation.amp.onepager.events.FundingSectionSummaryEvent;
 import org.dgfoundation.amp.onepager.models.ValueToSetModel;
 import org.digijava.module.aim.dbentity.AmpFunding;
@@ -36,13 +31,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FUNDING_PROJECT_JOINT_DECISION_LABEL;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FUNDING_PROJECT_MONITORING_LABEL;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FUNDING_PROJECT_PROBLEMS_LABEL;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FUNDING_PROJECT_RESULTS_AVAILABLE_LABEL;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FUNDING_PROJECT_RESULTS_LINK_LABEL;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FUNDING_PROJECT_SUSTAINABILITY_LABEL;
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FUNDING_VULNERABLE_GROUP_LABEL;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.*;
 
 /**
  * @author mpostelnicu@dgateway.org since Nov 4, 2010

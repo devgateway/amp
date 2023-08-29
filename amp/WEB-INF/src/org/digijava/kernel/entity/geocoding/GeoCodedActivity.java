@@ -1,14 +1,14 @@
 package org.digijava.kernel.entity.geocoding;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModelProperty;
 import org.digijava.kernel.ampapi.endpoints.serializers.GeoCodedActivityVersionSerializer;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents an activity that is being geo coded.

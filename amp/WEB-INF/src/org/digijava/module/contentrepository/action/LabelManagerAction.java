@@ -3,31 +3,22 @@
  */
 package org.digijava.module.contentrepository.action;
 
-import java.io.PrintStream;
-import java.util.List;
-
-import javax.jcr.Node;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import net.sf.json.JSONArray;
 import net.sf.json.JsonConfig;
-
 import org.apache.log4j.Logger;
-import org.apache.struts.action.ActionErrors;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
+import org.apache.struts.action.*;
 import org.dgfoundation.amp.utils.MultiAction;
-import org.digijava.module.aim.action.DeleteSector;
-import org.digijava.module.categorymanager.action.CategoryManager;
 import org.digijava.module.contentrepository.form.LabelManagerForm;
 import org.digijava.module.contentrepository.jcrentity.Label;
 import org.digijava.module.contentrepository.jcrentity.LabelDAO;
 import org.digijava.module.contentrepository.jcrentity.RootLabel;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
+
+import javax.jcr.Node;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.PrintStream;
+import java.util.List;
 
 /**
  * @author Alex Gartner

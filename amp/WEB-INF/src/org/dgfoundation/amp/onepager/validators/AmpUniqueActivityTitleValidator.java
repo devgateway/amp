@@ -3,22 +3,17 @@
  */
 package org.dgfoundation.amp.onepager.validators;
 
-import java.lang.reflect.Field;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
-import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
-import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.categorymanager.util.IdWithValueShim;
+
+import java.lang.reflect.Field;
 
 /**
  * @author mihai

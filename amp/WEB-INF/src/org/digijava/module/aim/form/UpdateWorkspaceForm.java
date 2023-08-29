@@ -1,11 +1,5 @@
 package org.digijava.module.aim.form;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.TreeSet;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
@@ -13,6 +7,11 @@ import org.digijava.module.aim.multistepwizard.MultiStepActionForm;
 import org.digijava.module.aim.multistepwizard.annotation.Checkbox;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.TreeSet;
 
 public class UpdateWorkspaceForm extends MultiStepActionForm{
     private Long selectedOrgId;

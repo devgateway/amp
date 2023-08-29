@@ -5,25 +5,6 @@
 package org.digijava.module.aim.util;
 
 
-import java.text.Collator;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -31,30 +12,28 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpComments;
-import org.digijava.module.aim.dbentity.AmpContact;
-import org.digijava.module.aim.dbentity.AmpDesktopTabSelection;
-import org.digijava.module.aim.dbentity.AmpReports;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
-import org.digijava.module.aim.dbentity.AmpTeamReports;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.AmpCalendarAttendee;
 import org.digijava.module.contentrepository.helper.TeamMemberMail;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.LogicalExpression;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
+
+import javax.servlet.http.HttpServletRequest;
+import java.text.Collator;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class TeamMemberUtil {
 
@@ -193,7 +172,7 @@ public class TeamMemberUtil {
                     + " where (teamMember.deleted is null or teamMember.deleted = false) and t.ampTeamId=:teamId and "
                     + " (role.teamHead=true or role.approver=true)";
             qry = session.createQuery(queryString);
-            qry.setLong("teamId", teamId);
+            qry.setParameter("teamId", teamId, LongType.INSTANCE);
             @SuppressWarnings("unchecked")
             List<AmpTeamMember> list = (List<AmpTeamMember>) qry.list();
             if (list != null) {
@@ -238,6 +217,7 @@ public class TeamMemberUtil {
         hasInfoRelated |= hasInfo(session, "select count(*) from " + AmpCalendarAttendee.class.getName() + " calatt "
                 + "where calatt.member.ampTeamMemId=:memberId ", ampTeamMemberId);
 
+
         // Verify for reports that are owned by this user
         hasInfoRelated |= hasInfo(session, "select count(*) from " + AmpReports.class.getName() + " rep " + "where rep"
                 + ".ownerId=:memberId ", ampTeamMemberId);
@@ -246,8 +226,9 @@ public class TeamMemberUtil {
     }
 
     private static boolean hasInfo(Session session, String queryString, Long ampTeamMemberId) {
-        Query query = session.createQuery(queryString).setLong("memberId", ampTeamMemberId);
-        return ((Integer)query.uniqueResult() > 0);
+        Query query = session.createQuery(queryString).setParameter("memberId", ampTeamMemberId, LongType.INSTANCE);
+        Long longValue = (Long) query.uniqueResult();
+        return longValue.intValue() > 0;
     }
 
     public static Collection getMembersUsingRole(Long roleId) {
@@ -655,8 +636,8 @@ public class TeamMemberUtil {
                     + AmpTeamMember.class.getName()
                     + " tm where (tm.user=:user) and  (tm.ampTeam=:ampTeam) ";
             qry = session.createQuery(queryString);
-            qry.setLong("user", user.getId());
-            qry.setLong("ampTeam", ampTeam.getAmpTeamId());
+            qry.setParameter("user", user.getId(), LongType.INSTANCE);
+            qry.setParameter("ampTeam", ampTeam.getAmpTeamId(), LongType.INSTANCE);
             Iterator itr = qry.list().iterator();
             if (itr.hasNext()) {
                 member = (AmpTeamMember) itr.next();
@@ -681,9 +662,8 @@ public class TeamMemberUtil {
             Query qry = session.createQuery(queryString);
             qry.setParameter("teamId", teamId, LongType.INSTANCE);
             qry.setParameter("memId", mem.getAmpTeamMemId(), LongType.INSTANCE);
-            Iterator itr = qry.list().iterator();
-            while (itr.hasNext()) {
-                TeamMember tm = new TeamMember((AmpTeamMember) itr.next());
+            for (Object o : qry.list()) {
+                TeamMember tm = new TeamMember((AmpTeamMember) o);
                 col.add(tm);
             }
         } catch (Exception e) {
@@ -704,7 +684,7 @@ public class TeamMemberUtil {
                     + " inner join m.ampTeam team inner join m.ampMemberRole role"
                     + " where (m.deleted is null or m.deleted = false) and m.user=:memberId";
             q = session.createQuery(query);
-            q.setLong("memberId", userId);
+            q.setParameter("memberId", userId, LongType.INSTANCE);
             helpers = q.list();
 
         } catch (Exception e) {
@@ -853,7 +833,7 @@ public class TeamMemberUtil {
                     " tm where (tm.deleted is null or tm.deleted = false) and (tm.user.id=:user)";
             qry = session.createQuery(queryString);
             qry.setCacheable(true);
-            qry.setLong("user", user.getId());
+            qry.setParameter("user", user.getId(), LongType.INSTANCE);
             col = qry.list();
         } catch (Exception e) {
             logger.error("Unable to get TeamMembers" + e.getMessage());
@@ -873,7 +853,7 @@ public class TeamMemberUtil {
             queryString = "select tm from " + AmpTeamMember.class.getName() + " tm where (tm.deleted is null or tm" +
                     ".deleted = false) and tm.user.email=:usermail and tm.ampTeam=" + teamId;
             qry = session.createQuery(queryString);
-            qry.setString("usermail", email);
+            qry.setParameter("usermail", email, StringType.INSTANCE);
             retVal = (AmpTeamMember) qry.uniqueResult();
         } catch (Exception e) {
             logger.error("Unable to get TeamMember" + e.getMessage());
@@ -893,8 +873,8 @@ public class TeamMemberUtil {
             queryString = "select tm from " + AmpTeamMember.class.getName() + " tm where (tm.deleted is null or "
                     + "tm.deleted = false) and tm.user.email=:usermail and tm.ampTeam.name=:teamName";
             qry = session.createQuery(queryString);
-            qry.setString("usermail", email);
-            qry.setString("teamName", teamName);
+            qry.setParameter("usermail", email,StringType.INSTANCE);
+            qry.setParameter("teamName", teamName,StringType.INSTANCE);
             return (AmpTeamMember) qry.uniqueResult();
         } catch (Exception e) {
             logger.error("Unable to get TeamMember ", e);
@@ -1182,7 +1162,7 @@ public class TeamMemberUtil {
                 }
 
                 qryStr = "delete AmpDesktopTabSelection dts where dts.owner=:memberId";
-                qry = session.createQuery(qryStr).setLong("memberId", amId);
+                qry = session.createQuery(qryStr).setParameter("memberId", amId, LongType.INSTANCE);
                 qry.executeUpdate();
                 deleteTeamMember(ampMember);
 

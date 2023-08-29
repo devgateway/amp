@@ -4,13 +4,12 @@
 */
 package org.dgfoundation.amp.onepager.models;
 
-import java.util.Collection;
-import java.util.Set;
-import java.util.TreeSet;
-
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
+
+import java.util.Collection;
+import java.util.TreeSet;
 
 /**
  * Model used to interface with the {@link DropDownChoice} component

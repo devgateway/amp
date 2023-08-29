@@ -8,6 +8,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
@@ -54,13 +55,13 @@ public class ChadActivityMigrationJob extends ConnectionCleaningJob implements S
 
     private void deleteSubPrefectures() {
         PersistenceManager.getSession()
-                .createSQLQuery("update amp_category_value_location\n"
+                .createNativeQuery("update amp_category_value_location\n"
                         + "set deleted=true\n"
                         + "where location_name='N''DJAMENA' and id=9612\n")
                 .executeUpdate();
 
         PersistenceManager.getSession()
-                .createSQLQuery("update amp_category_value_location adm3\n"
+                .createNativeQuery("update amp_category_value_location adm3\n"
                         + "set deleted=true\n"
                         + "from amp_category_value_location adm0\n"
                         + "join amp_category_value_location adm1 on adm1.parent_location=adm0.id\n"
@@ -137,8 +138,8 @@ public class ChadActivityMigrationJob extends ConnectionCleaningJob implements S
                     "from AmpCategoryValueLocations\n"
                             + "where name=:name\n"
                             + "and id<>:oldId")
-                    .setString("name", loc.getName())
-                    .setLong("oldId", loc.getId())
+                    .setParameter("name", loc.getName(), StringType.INSTANCE)
+                    .setParameter("oldId", loc.getId(), LongType.INSTANCE)
                     .uniqueResult();
         } else {
             return parentLocation;
@@ -163,7 +164,7 @@ public class ChadActivityMigrationJob extends ConnectionCleaningJob implements S
     }
 
     private List<Long> getADM3ActivityIds() {
-        return PersistenceManager.getSession().createSQLQuery(
+        return PersistenceManager.getSession().createNativeQuery(
         "select distinct a.amp_activity_id\n"
                 + "from amp_activity a\n"
                 + "         join amp_activity_location al on a.amp_activity_id=al.amp_activity_id\n"
@@ -177,7 +178,7 @@ public class ChadActivityMigrationJob extends ConnectionCleaningJob implements S
     }
 
     private List<Long> getADM2NdjamenaActivityIds() {
-        return PersistenceManager.getSession().createSQLQuery(
+        return PersistenceManager.getSession().createNativeQuery(
         "select distinct a.amp_activity_id\n"
                 + "from amp_activity a\n"
                 + "join amp_activity_location al on a.amp_activity_id=al.amp_activity_id\n"

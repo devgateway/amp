@@ -1,15 +1,5 @@
 package org.dgfoundation.amp.nireports.behaviours;
 
-import java.time.LocalDate;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import static org.dgfoundation.amp.algo.AmpCollections.any;
-import static org.dgfoundation.amp.algo.AmpCollections.sorted;
-
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.DateCell;
@@ -18,8 +8,14 @@ import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
 import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
-import org.dgfoundation.amp.nireports.schema.TimeRange;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
+import org.dgfoundation.amp.nireports.schema.TimeRange;
+
+import java.time.LocalDate;
+import java.util.*;
+
+import static org.dgfoundation.amp.algo.AmpCollections.any;
+import static org.dgfoundation.amp.algo.AmpCollections.sorted;
 
 /**
  * the behaviour of a {@link DateCell}-populated column.

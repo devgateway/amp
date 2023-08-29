@@ -1,10 +1,5 @@
 package org.digijava.module.aim.action;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -15,7 +10,11 @@ import org.digijava.module.aim.dbentity.IndicatorTheme;
 import org.digijava.module.aim.form.ThemeForm;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.ProgramUtil;
-import org.digijava.module.aim.util.ProgramUtil.ThemeIdComparator;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 
 public class SearchAmpIndicators extends Action {
@@ -146,9 +145,8 @@ public class SearchAmpIndicators extends Action {
                 String[] alphaArray = new String[26];
                 int i = 0;
                 for(char c = 'A'; c <= 'Z'; c++) {
-                    Iterator itr = col.iterator();
-                    while(itr.hasNext()) {
-                        AmpIndicator org = (AmpIndicator) itr.next();
+                    for (Object o : col) {
+                        AmpIndicator org = (AmpIndicator) o;
                         if (org.getName().toUpperCase().indexOf(c) == 0) {
                             alphaArray[i++] = String.valueOf(c);
                             break;
@@ -166,9 +164,8 @@ public class SearchAmpIndicators extends Action {
             if (!alpha.equals("viewAll")) {
                 eaForm.setStartAlphaFlag(false);
                 colAlpha = new ArrayList();
-                Iterator itr = col.iterator();
-                while(itr.hasNext()) {
-                    AmpIndicator org = (AmpIndicator) itr.next();
+                for (Object o : col) {
+                    AmpIndicator org = (AmpIndicator) o;
                     if (org.getName().toUpperCase().startsWith(alpha)) {
                         colAlpha.add(org);
                     }

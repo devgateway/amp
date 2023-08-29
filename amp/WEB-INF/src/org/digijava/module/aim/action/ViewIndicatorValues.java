@@ -1,16 +1,6 @@
 package org.digijava.module.aim.action;
 
 
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -24,6 +14,11 @@ import org.digijava.module.aim.form.ViewIndicatorForm;
 import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class ViewIndicatorValues extends TilesAction {
 

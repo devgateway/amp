@@ -5,10 +5,10 @@
 
 package org.digijava.module.aim.helper;
 
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
+
 import java.util.Collection;
 import java.util.Comparator;
-
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
 
 /**
  * The class represents a regional funding object which contains 

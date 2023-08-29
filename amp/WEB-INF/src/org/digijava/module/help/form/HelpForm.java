@@ -1,15 +1,15 @@
 package org.digijava.module.help.form;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.upload.FormFile;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.module.help.dbentity.HelpTopic;
 import org.digijava.module.help.helper.HelpTopicsTreeItem;
 import org.digijava.module.sdm.dbentity.Sdm;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class HelpForm extends ActionForm {
     private static final long serialVersionUID = 1L;

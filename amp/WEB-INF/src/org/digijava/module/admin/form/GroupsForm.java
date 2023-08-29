@@ -22,13 +22,13 @@
 
 package org.digijava.module.admin.form;
 
-import java.util.ArrayList;
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 
 public class GroupsForm
     extends ActionForm {

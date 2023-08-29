@@ -22,23 +22,16 @@
 
 package org.digijava.kernel.request;
 
-import java.io.IOException;
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import org.apache.log4j.Logger;
+import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.request.searchfriendly.FriendlyRequestProcessor;
+import org.digijava.kernel.util.RequestUtils;
+
+import javax.servlet.*;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.log4j.Logger;
-import org.digijava.kernel.exception.DgException;
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.searchfriendly.FriendlyRequestProcessor;
-import org.digijava.kernel.util.RequestUtils;
+import java.io.IOException;
 
 /**
  * This servlet is associated to the "/" pattern. It will be loaded when someone

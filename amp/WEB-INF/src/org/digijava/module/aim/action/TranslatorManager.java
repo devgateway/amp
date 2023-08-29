@@ -3,29 +3,9 @@ package org.digijava.module.aim.action;
 * @ author Dan Mihaila
 * co-author dare :D :D
 */
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 
 import org.apache.log4j.Logger;
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.*;
 import org.apache.struts.upload.FormFile;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -39,10 +19,18 @@ import org.digijava.module.translation.jaxb.Language;
 import org.digijava.module.translation.jaxb.ObjectFactory;
 import org.digijava.module.translation.jaxb.Translations;
 import org.digijava.module.translation.jaxb.Trn;
-import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 
-import java.util.Arrays;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.util.*;
 
 //TODO replaced with ImportExportTranslations.java in translator module. Remove this file. see AMP-9085
 @Deprecated
@@ -203,23 +191,22 @@ public class TranslatorManager extends Action {
                                 } else {
                                     keywords = Arrays.asList(tMngForm.getKeywords());
                                 }
-                                    
-                                    Iterator<Message> trnsIterator=tHP.getTranslations().iterator();                                    
-                                    while(trnsIterator.hasNext()){
-                                        Message msg=(Message)trnsIterator.next();                                       
+
+                                for (Message message : (Iterable<Message>) tHP.getTranslations()) {
+                                    Message msg = message;
                                     // now overwrite,update or insert
                                     // non-existing translation
-                                        if(actionName.compareTo("nonexisting")==0){
-                                            updateNonExistingTranslationMessage(msg,tMngForm.getSelectedImportedLanguages()[i],request);
-                                            logger.info("updating non existing...."+msg.getKey());
-                                        }else if(actionName.compareTo("update")==0){                                            
-                                            overrideOrUpdateTrns(msg,tMngForm.getSelectedImportedLanguages()[i],actionName,keywords,skipOrUpdateTrnsWithKeywords,request);
-                                            logger.info("updating new tr msg...."+msg.getKey());
-                                        }else if(actionName.compareTo("overwrite")==0){                                         
-                                            overrideOrUpdateTrns(msg,tMngForm.getSelectedImportedLanguages()[i],actionName,keywords,skipOrUpdateTrnsWithKeywords,request);
-                                            logger.info("inserting...."+msg.getKey());
-                                        }
+                                    if (actionName.compareTo("nonexisting") == 0) {
+                                        updateNonExistingTranslationMessage(msg, tMngForm.getSelectedImportedLanguages()[i], request);
+                                        logger.info("updating non existing...." + msg.getKey());
+                                    } else if (actionName.compareTo("update") == 0) {
+                                        overrideOrUpdateTrns(msg, tMngForm.getSelectedImportedLanguages()[i], actionName, keywords, skipOrUpdateTrnsWithKeywords, request);
+                                        logger.info("updating new tr msg...." + msg.getKey());
+                                    } else if (actionName.compareTo("overwrite") == 0) {
+                                        overrideOrUpdateTrns(msg, tMngForm.getSelectedImportedLanguages()[i], actionName, keywords, skipOrUpdateTrnsWithKeywords, request);
+                                        logger.info("inserting...." + msg.getKey());
                                     }
+                                }
                                 }
                             }
                         }
@@ -293,19 +280,17 @@ public class TranslatorManager extends Action {
                 session = PersistenceManager.getRequestDBSession();
                 qryStr  = "select m from "+ Message.class.getName() + " m where m.locale='"+language+"'";
                 qry= session.createQuery(qryStr);
-                Iterator<Message> itr = qry.list().iterator();
-                while(itr.hasNext()){
-                    Message msg= (Message)itr.next();
+            for (Message message : (Iterable<Message>) qry.list()) {
                 // MessageGroup class key is equal to the message key, from
                 // which it was created
-                    MessageGroup msgGroup=map.get(msg.getKey());
-                    if(msgGroup==null){
-                        msgGroup=new MessageGroup(msg);
-                    }else{
-                        msgGroup.addMessage(msg);
-                    }
-                    map.put(msgGroup.getKey(), msgGroup);
+                MessageGroup msgGroup = map.get(((Message) message).getKey());
+                if (msgGroup == null) {
+                    msgGroup = new MessageGroup((Message) message);
+                } else {
+                    msgGroup.addMessage((Message) message);
                 }
+                map.put(msgGroup.getKey(), msgGroup);
+            }
         } catch (Exception ex) {
             logger.error("Exception : " + ex.getMessage());
             ex.printStackTrace(System.out);

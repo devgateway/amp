@@ -4,15 +4,15 @@
  */
 package org.dgfoundation.amp.onepager.components.fields;
 
-import java.util.Collection;
-import java.util.List;
-
 import org.apache.wicket.markup.html.form.AbstractChoice;
 import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.models.AmpMultiValueDropDownChoiceModel;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
  * @author mpostelnicu@dgateway.org since Nov 2, 2010

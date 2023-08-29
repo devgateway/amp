@@ -1,10 +1,10 @@
 package org.dgfoundation.amp.nireports.behaviours;
 
-import java.math.BigDecimal;
-import java.util.function.BiFunction;
-
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.schema.TimeRange;
+
+import java.math.BigDecimal;
+import java.util.function.BiFunction;
 
 /**
  * @author Viorel Chihai

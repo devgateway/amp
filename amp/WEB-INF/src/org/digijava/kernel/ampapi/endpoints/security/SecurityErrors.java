@@ -1,8 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.security;
 
-import static org.digijava.kernel.ampapi.endpoints.errors.ApiError.ERROR_CLASS_SECURITY_ID;
-
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+
+import static org.digijava.kernel.ampapi.endpoints.errors.ApiError.ERROR_CLASS_SECURITY_ID;
 
 /**
  * Defines security specific errors

@@ -1,9 +1,9 @@
 package org.dgfoundation.amp.newreports;
 
+import org.dgfoundation.amp.algo.AmpCollections;
+
 import java.time.LocalDate;
 import java.util.Map;
-
-import org.dgfoundation.amp.algo.AmpCollections;
 
 /**
  * a @link {@link ReportCell} containing a number of dates 

@@ -1,6 +1,11 @@
 package org.dgfoundation.amp.nireports.amp.indicators;
 
-import static org.dgfoundation.amp.algo.AmpCollections.any;
+import org.dgfoundation.amp.algo.AmpCollections;
+import org.dgfoundation.amp.nireports.DateCell;
+import org.dgfoundation.amp.nireports.behaviours.DateTokenBehaviour;
+import org.dgfoundation.amp.nireports.output.nicells.NiDateCell;
+import org.dgfoundation.amp.nireports.runtime.NiCell;
+import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -9,12 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
-import org.dgfoundation.amp.algo.AmpCollections;
-import org.dgfoundation.amp.nireports.DateCell;
-import org.dgfoundation.amp.nireports.behaviours.DateTokenBehaviour;
-import org.dgfoundation.amp.nireports.output.nicells.NiDateCell;
-import org.dgfoundation.amp.nireports.runtime.NiCell;
-import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
+import static org.dgfoundation.amp.algo.AmpCollections.any;
 
 /**
  * This behaviour matches {@link DateTokenBehaviour} with the exception of how horizontal reduce is done.

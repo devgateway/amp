@@ -6,10 +6,9 @@
  */
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-import java.util.Iterator;
-
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
+
+import java.io.Serializable;
 
 public class AmpFeaturesVisibility extends AmpObjectVisibility implements Serializable {
 

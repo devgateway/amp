@@ -1,8 +1,5 @@
 package org.dgfoundation.amp.reports.converters;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.dgfoundation.amp.ar.AmpARFilter;
@@ -14,6 +11,9 @@ import org.dgfoundation.amp.newreports.ReportElement;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Octavian Ciubotaru

@@ -1,51 +1,6 @@
 package org.dgfoundation.amp.nireports.amp;
 
-import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.ADM_LEVEL_4;
-import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.ADM_LEVEL_0;
-import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.ADM_LEVEL_3;
-import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.LEVEL_RAW;
-import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.ADM_LEVEL_1;
-import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.ADM_LEVEL_2;
-import static org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimension.LEVEL_ORGANISATION;
-import static org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimension.LEVEL_ORGANISATION_GROUP;
-import static org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimension.LEVEL_ORGANISATION_TYPE;
-import static org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension.LEVEL_ROOT;
-import static org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension.LEVEL_SUBSECTOR;
-import static org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension.LEVEL_SUBSUBSECTOR;
-import static org.dgfoundation.amp.nireports.formulas.NiFormula.PERCENTAGE;
-import static org.dgfoundation.amp.nireports.formulas.NiFormula.PERCENTAGEIFLOWER;
-import static org.dgfoundation.amp.nireports.formulas.NiFormula.SUBTRACT;
-import static org.dgfoundation.amp.nireports.formulas.NiFormula.SUBTRACTIFGREATER;
-import static org.dgfoundation.amp.nireports.formulas.NiFormula.VARIABLE;
-import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_0;
-import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_1;
-import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_2;
-import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_3;
-import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_4;
-import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_5;
-import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_6;
-import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_7;
-import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_8;
-import static org.dgfoundation.amp.nireports.schema.NiDimension.LEVEL_ALL_IDS;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
-import javax.servlet.ServletContext;
-
+import com.google.common.collect.ImmutableMap;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -56,50 +11,18 @@ import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.currencyconvertor.AmpCurrencyConvertor;
 import org.dgfoundation.amp.currencyconvertor.CurrencyConvertor;
 import org.dgfoundation.amp.error.AMPException;
-import org.dgfoundation.amp.newreports.GroupingCriteria;
-import org.dgfoundation.amp.newreports.ReportExecutor;
-import org.dgfoundation.amp.newreports.ReportRenderWarning;
-import org.dgfoundation.amp.newreports.ReportSpecification;
-import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.nireports.AbstractReportsSchema;
-import org.dgfoundation.amp.nireports.CategAmountCell;
-import org.dgfoundation.amp.nireports.Cell;
-import org.dgfoundation.amp.nireports.NiFilters;
-import org.dgfoundation.amp.nireports.NiReportsEngine;
-import org.dgfoundation.amp.nireports.NiUtils;
-import org.dgfoundation.amp.nireports.amp.dimensions.CategoriesDimension;
-import org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension;
-import org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimension;
-import org.dgfoundation.amp.nireports.amp.dimensions.ProgramsDimension;
-import org.dgfoundation.amp.nireports.amp.dimensions.RawLocationsDimension;
-import org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension;
+import org.dgfoundation.amp.newreports.*;
+import org.dgfoundation.amp.nireports.*;
+import org.dgfoundation.amp.nireports.amp.dimensions.*;
 import org.dgfoundation.amp.nireports.amp.indicators.IndicatorDateTokenBehaviour;
 import org.dgfoundation.amp.nireports.amp.indicators.IndicatorTextualTokenBehaviour;
-import org.dgfoundation.amp.nireports.behaviours.CurrencySplittingStrategy;
-import org.dgfoundation.amp.nireports.behaviours.FilteredMeasureBehaviour;
-import org.dgfoundation.amp.nireports.behaviours.GeneratedIntegerBehaviour;
-import org.dgfoundation.amp.nireports.behaviours.TaggedMeasureBehaviour;
-import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
+import org.dgfoundation.amp.nireports.behaviours.*;
 import org.dgfoundation.amp.nireports.formulas.NiFormula;
 import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.VSplitStrategy;
-import org.dgfoundation.amp.nireports.schema.Behaviour;
-import org.dgfoundation.amp.nireports.schema.BooleanDimension;
-import org.dgfoundation.amp.nireports.schema.NiComputedColumn;
-import org.dgfoundation.amp.nireports.schema.NiDimension;
-import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
-import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
-import org.dgfoundation.amp.nireports.schema.NiLinearCombinationTransactionMeasure;
-import org.dgfoundation.amp.nireports.schema.NiMultipliedFilterTransactionMeasure;
-import org.dgfoundation.amp.nireports.schema.NiReportColumn;
-import org.dgfoundation.amp.nireports.schema.NiReportMeasure;
-import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
-import org.dgfoundation.amp.nireports.schema.NiTransactionContextMeasure;
-import org.dgfoundation.amp.nireports.schema.NiTransactionMeasure;
-import org.dgfoundation.amp.nireports.schema.PerformanceAlertTypeDimension;
-import org.dgfoundation.amp.nireports.schema.SchemaSpecificScratchpad;
-import org.dgfoundation.amp.nireports.schema.TimeRange;
+import org.dgfoundation.amp.nireports.schema.*;
+import org.dgfoundation.amp.nireports.schema.NiDimension.*;
 import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -111,8 +34,22 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.ImmutableMap;
+import javax.servlet.ServletContext;
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.*;
+import static org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimension.*;
+import static org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension.*;
+import static org.dgfoundation.amp.nireports.formulas.NiFormula.*;
+import static org.dgfoundation.amp.nireports.schema.NiDimension.*;
 
 /**
  * the big, glorious, immaculate, AMP NiReports schema.
@@ -122,6 +59,8 @@ import com.google.common.collect.ImmutableMap;
  *
  */
 public class AmpReportsSchema extends AbstractReportsSchema {
+
+    private static  final Logger logger = LoggerFactory.getLogger(AmpReportsSchema.class);
 
     /**
      * the number to add to pledge ids in tables joined with activity tables
@@ -133,6 +72,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
      * (e.g. {@link AmpDifferentialColumn}, {@link AmpFundingColumn})
      */
     public boolean ENABLE_CACHING = true;
+
 
     /**
      * the hierarchies which are transaction-level. Please see <a href='https://wiki.dgfoundation.org/display/AMPDOC/2.+NiReports+Configuration%3A+the+schema#id-2.NiReportsConfiguration:theschema-3.4.2.Typesofhierarchicalcolumns'>here</a> for more details
@@ -1182,7 +1122,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
                 SQLUtils.insert(conn, "amp_measures", "measureid", "amp_measures_seq", Arrays.asList("measurename", "aliasname", "type", "description"), values);
                 MeasuresVisibility.resetMeasuresList();
             }
-            return toBeAdded.stream().map(z -> z.toString()).collect(Collectors.toSet());
+            return toBeAdded.stream().map(Object::toString).collect(Collectors.toSet());
         });
     }
     
@@ -1682,6 +1622,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
                 && engine.spec.isShowOriginalCurrency();
         
         if (splitByCurrencies) {
+            logger.info("Raw: "+raw);
+            logger.info("Used currency: "+scratch.usedCurrency);
+            logger.info("Strategy: "+CurrencySplittingStrategy.getInstance(scratch.usedCurrency));
             raw.add(CurrencySplittingStrategy.getInstance(scratch.usedCurrency));
         }
 

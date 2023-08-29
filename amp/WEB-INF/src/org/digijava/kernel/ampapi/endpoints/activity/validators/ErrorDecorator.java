@@ -1,10 +1,9 @@
 package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
-import java.util.Map;
-
 import org.digijava.kernel.ampapi.endpoints.common.values.BadInput;
-import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+
+import java.util.Map;
 
 /**
  * @author Octavian Ciubotaru

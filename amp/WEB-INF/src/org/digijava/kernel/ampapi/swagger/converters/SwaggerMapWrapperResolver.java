@@ -1,20 +1,18 @@
 package org.digijava.kernel.ampapi.swagger.converters;
 
-import java.lang.reflect.Type;
-import java.util.Iterator;
-
 import com.fasterxml.jackson.databind.JavaType;
-
-import org.digijava.kernel.ampapi.endpoints.activity.dto.SwaggerActivity;
-import org.digijava.kernel.ampapi.endpoints.contact.dto.SwaggerContact;
-import org.digijava.kernel.ampapi.endpoints.dto.SwaggerMapWrapper;
-import org.digijava.kernel.ampapi.endpoints.resource.dto.SwaggerResource;
-
 import io.swagger.converter.ModelConverter;
 import io.swagger.converter.ModelConverterContext;
 import io.swagger.jackson.AbstractModelConverter;
 import io.swagger.models.Model;
 import io.swagger.util.Json;
+import org.digijava.kernel.ampapi.endpoints.activity.dto.SwaggerActivity;
+import org.digijava.kernel.ampapi.endpoints.contact.dto.SwaggerContact;
+import org.digijava.kernel.ampapi.endpoints.dto.SwaggerMapWrapper;
+import org.digijava.kernel.ampapi.endpoints.resource.dto.SwaggerResource;
+
+import java.lang.reflect.Type;
+import java.util.Iterator;
 
 /**
  * @author Nadejda Mandrescu

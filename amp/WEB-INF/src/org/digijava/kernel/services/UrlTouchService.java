@@ -22,18 +22,17 @@
 
 package org.digijava.kernel.services;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
-
 import org.apache.log4j.Logger;
 import org.digijava.commons.asyncdispatcher.AsyncBuffer;
 import org.digijava.commons.asyncdispatcher.AsyncHandler;
 import org.digijava.kernel.service.AbstractServiceImpl;
 import org.digijava.kernel.service.ServiceContext;
 import org.digijava.kernel.service.ServiceException;
-import org.digijava.kernel.service.ServiceManager;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 
 public class UrlTouchService
     extends AbstractServiceImpl implements AsyncHandler {

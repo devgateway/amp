@@ -1,9 +1,9 @@
 package org.digijava.kernel.ampapi.endpoints.ndd;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
+
+import java.util.List;
 
 /**
  * @author Octavian Ciubotaru

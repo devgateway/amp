@@ -3,17 +3,6 @@
  */
 package org.digijava.kernel.ampapi.endpoints.security;
 
-import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.menu.MenuConstants;
@@ -23,19 +12,16 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.gpi.GPIEPConstants;
 import org.digijava.kernel.ampapi.endpoints.security.dto.*;
-import org.digijava.kernel.ampapi.endpoints.security.dto.usermanager.CreateUserRequest;
-import org.digijava.kernel.ampapi.endpoints.security.dto.usermanager.LoggedUserInformation;
-import org.digijava.kernel.ampapi.endpoints.security.dto.usermanager.UserManager;
-import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.entity.UserLangPreferences;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.kernel.security.PasswordPolicyValidator;
 import org.digijava.kernel.services.AmpVersionInfo;
 import org.digijava.kernel.services.AmpVersionService;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
-import org.digijava.kernel.util.*;
+import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.SiteUtils;
+import org.digijava.kernel.util.SpringUtil;
+import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
@@ -46,10 +32,17 @@ import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
-import org.digijava.module.um.util.DbUtil;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 
 /**
  * Security Endpoint related services like menu, footer, user
@@ -356,6 +349,4 @@ public class SecurityService {
     
         return layout;
     }
-
-
 }

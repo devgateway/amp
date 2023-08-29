@@ -1,16 +1,15 @@
 package org.digijava.kernel.ampapi.swagger.converters;
 
-import java.lang.reflect.Type;
-import java.util.Iterator;
-
-import javax.xml.bind.JAXBElement;
-
 import com.fasterxml.jackson.databind.JavaType;
 import io.swagger.converter.ModelConverter;
 import io.swagger.converter.ModelConverterContext;
 import io.swagger.jackson.AbstractModelConverter;
 import io.swagger.models.Model;
 import io.swagger.util.Json;
+
+import javax.xml.bind.JAXBElement;
+import java.lang.reflect.Type;
+import java.util.Iterator;
 
 /**
  * This converter handles elements that are wrapped with JAXBElement.

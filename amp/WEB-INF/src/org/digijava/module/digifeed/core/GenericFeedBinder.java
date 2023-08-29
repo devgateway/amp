@@ -6,14 +6,13 @@
  */
 package org.digijava.module.digifeed.core;
 
+import org.apache.log4j.Logger;
+
+import javax.xml.bind.JAXBException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import javax.xml.bind.JAXBException;
-
-import org.apache.log4j.Logger;
 
 /**
  * 

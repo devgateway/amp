@@ -15,56 +15,13 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.dbentity.AmpActivityInternalId;
-import org.digijava.module.aim.dbentity.AmpActivityLocation;
-import org.digijava.module.aim.dbentity.AmpActivitySector;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
-import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
-import org.digijava.module.aim.dbentity.AmpComponentFunding;
-import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpField;
-import org.digijava.module.aim.dbentity.AmpFundingAmount;
-import org.digijava.module.aim.dbentity.AmpGPISurvey;
-import org.digijava.module.aim.dbentity.AmpGPISurveyResponse;
-import org.digijava.module.aim.dbentity.AmpGlobalSettings;
-import org.digijava.module.aim.dbentity.AmpOrgRole;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpRegionalFunding;
-import org.digijava.module.aim.dbentity.AmpRole;
-import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpStructure;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.ProposedProjCost;
-import org.digijava.module.aim.helper.ActivitySector;
-import org.digijava.module.aim.helper.ApplicationSettings;
-import org.digijava.module.aim.helper.Components;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.CurrencyWorker;
-import org.digijava.module.aim.helper.DateConversion;
-import org.digijava.module.aim.helper.DecimalToText;
-import org.digijava.module.aim.helper.FormatHelper;
-import org.digijava.module.aim.helper.FundingDetail;
-import org.digijava.module.aim.helper.FundingValidator;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.helper.Location;
-import org.digijava.module.aim.helper.ManagedDocument;
-import org.digijava.module.aim.helper.OrgProjectId;
-import org.digijava.module.aim.helper.RegionalFunding;
-import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.ActivityUtil;
-import org.digijava.module.aim.util.ComponentsUtil;
-import org.digijava.module.aim.util.CurrencyUtil;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.DecimalWraper;
-import org.digijava.module.aim.util.DocumentUtil;
-import org.digijava.module.aim.util.DynLocationManagerUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.IndicatorUtil;
+import org.digijava.module.aim.helper.*;
+import org.digijava.module.aim.util.*;
 import org.digijava.module.aim.util.LocationUtil.HelperLocationAncestorLocationNamesAsc;
-import org.digijava.module.aim.util.MEIndicatorsUtil;
-import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -73,12 +30,7 @@ import org.hibernate.Hibernate;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 //import org.digijava.module.aim.helper.Issues;
 
@@ -252,12 +204,10 @@ public class ShowActivityPrintPreview
                 // loading organizations and thier project ids.                
                 Collection orgProjIdsSet = DbUtil.getActivityInternalId(activity.getAmpActivityId());
                 if(orgProjIdsSet != null) {
-                    Iterator projIdItr = orgProjIdsSet.iterator();
                     Collection temp = new ArrayList();
-                    while(projIdItr.hasNext()) {
+                    for (Object o : orgProjIdsSet) {
                         AmpActivityInternalId actIntId = (
-                            AmpActivityInternalId) projIdItr
-                            .next();
+                                AmpActivityInternalId) o;
                         OrgProjectId projId = new OrgProjectId();
                         projId.setId(actIntId.getId());
                         projId.setOrganisation(actIntId.getOrganisation());
@@ -265,10 +215,10 @@ public class ShowActivityPrintPreview
                         temp.add(projId);
                     }
                     if(temp != null && temp.size() > 0) {
-                        OrgProjectId orgProjectIds[] = new OrgProjectId[
+                        OrgProjectId[] orgProjectIds = new OrgProjectId[
                             temp
                             .size()];
-                        Object arr[] = temp.toArray();
+                        Object[] arr = temp.toArray();
                         for(int i = 0; i < arr.length; i++) {
                             orgProjectIds[i] = (OrgProjectId) arr[i];
                         }
@@ -428,8 +378,8 @@ public class ShowActivityPrintPreview
                 ArrayList regFunds = new ArrayList();
                 Iterator rItr=null;
                 if(activity.getRegionalFundings()!=null) {
-                    rItr = activity.getRegionalFundings().iterator();
                     eaForm.getFunding().setRegionTotalDisb(0);
+                    rItr = activity.getRegionalFundings().iterator();
                     while(rItr.hasNext()) {
                         AmpRegionalFunding ampRegFund = (AmpRegionalFunding)
                             rItr
@@ -437,9 +387,8 @@ public class ShowActivityPrintPreview
 
                         double disb = 0;
                         if(ampRegFund.getAdjustmentType().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey()) &&
-                           ampRegFund.getTransactionType().intValue() == 1)
-                            disb = ampRegFund.getTransactionAmountWithFormatConversion().
-                                doubleValue();
+                                ampRegFund.getTransactionType() == 1)
+                            disb = ampRegFund.getTransactionAmountWithFormatConversion();
                
                         eaForm.getFunding().setRegionTotalDisb(eaForm.getFunding().getRegionTotalDisb() +
                                                   disb);
@@ -453,13 +402,12 @@ public class ShowActivityPrintPreview
                                            .getCurrencyName());
                         fd.setTransactionAmount(DecimalToText
                                                 .ConvertDecimalToText(
-                                                    ampRegFund
-                                                    .getTransactionAmountWithFormatConversion().doubleValue()));
+                                                        ampRegFund
+                                                                .getTransactionAmountWithFormatConversion()));
                         fd.setTransactionDate(DateConversion.convertDateToString(ampRegFund.getTransactionDate()));
                         fd.setFiscalYear(DateConversion.convertDateToFiscalYearString(ampRegFund.getTransactionDate()));
 
-                        fd.setTransactionType(ampRegFund.getTransactionType()
-                                              .intValue());
+                        fd.setTransactionType(ampRegFund.getTransactionType());
 
                         RegionalFunding regFund = new RegionalFunding();
                         
@@ -467,7 +415,7 @@ public class ShowActivityPrintPreview
                                             .getId());
                         regFund.setRegionName(ampRegFund.getRegionLocation().getName());
 
-                        if(regFunds.contains(regFund) == false) {
+                        if(!regFunds.contains(regFund)) {
                             regFunds.add(regFund);
                         }
 
@@ -475,17 +423,17 @@ public class ShowActivityPrintPreview
                         regFund = (RegionalFunding) regFunds.get(index);
                         if(fd.getTransactionType() == 0) { // commitments
                             if(regFund.getCommitments() == null) {
-                                regFund.setCommitments(new ArrayList());
+                                regFund.setCommitments(new ArrayList<>());
                             }
                             regFund.getCommitments().add(fd);
                         } else if(fd.getTransactionType() == 1) { // disbursements
                             if(regFund.getDisbursements() == null) {
-                                regFund.setDisbursements(new ArrayList());
+                                regFund.setDisbursements(new ArrayList<>());
                             }
                             regFund.getDisbursements().add(fd);
                         } else if(fd.getTransactionType() == 2) { // expenditures
                             if(regFund.getExpenditures() == null) {
-                                regFund.setExpenditures(new ArrayList());
+                                regFund.setExpenditures(new ArrayList<>());
                             }
                             regFund.getExpenditures().add(fd);
                         }
@@ -497,26 +445,25 @@ public class ShowActivityPrintPreview
        
 
                 // Sort the funding details based on Transaction date.
-                Iterator itr1 = regFunds.iterator();
                 int index = 0;
-                while(itr1.hasNext()) {
-                    RegionalFunding regFund = (RegionalFunding) itr1.next();
+                for (Object fund : regFunds) {
+                    RegionalFunding regFund = (RegionalFunding) fund;
                     List list = null;
-                    if(regFund.getCommitments() != null) {
+                    if (regFund.getCommitments() != null) {
                         list = new ArrayList(regFund.getCommitments());
-                        Collections.sort(list, FundingValidator.dateComp);
+                        list.sort(FundingValidator.dateComp);
                     }
                     regFund.setCommitments(list);
                     list = null;
-                    if(regFund.getDisbursements() != null) {
+                    if (regFund.getDisbursements() != null) {
                         list = new ArrayList(regFund.getDisbursements());
-                        Collections.sort(list, FundingValidator.dateComp);
+                        list.sort(FundingValidator.dateComp);
                     }
                     regFund.setDisbursements(list);
                     list = null;
-                    if(regFund.getExpenditures() != null) {
+                    if (regFund.getExpenditures() != null) {
                         list = new ArrayList(regFund.getExpenditures());
-                        Collections.sort(list, FundingValidator.dateComp);
+                        list.sort(FundingValidator.dateComp);
                     }
                     regFund.setExpenditures(list);
                     regFunds.set(index++, regFund);

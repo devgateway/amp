@@ -1,23 +1,10 @@
 package org.digijava.module.budgetexport.serviceimport.impl;
 
 
-import org.apache.axis.AxisFault;
 import org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapRule;
 import org.digijava.module.budgetexport.serviceimport.ObjectRetriever;
 
-import java.net.MalformedURLException;
 import java.util.Map;
-
-import org.apache.axis.client.Service;
-import org.apache.axis.client.Call;
-import org.apache.axis.message.SOAPEnvelope;
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
-
-import javax.xml.rpc.ServiceException;
-import java.io.InputStream;
-import java.io.ByteArrayInputStream;
-import java.net.URL;
 
 /**
  * User: flyer

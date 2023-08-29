@@ -1,17 +1,16 @@
 package org.digijava.module.calendar.form;
 
-import java.util.Collection;
-import java.util.GregorianCalendar;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.user.User;
 import org.digijava.module.calendar.entity.DateBreakDown;
 import org.digijava.module.calendar.entity.DateNavigator;
 import org.digijava.module.calendar.entity.EventsFilter;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Collection;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 public class CalendarViewForm  extends ActionForm {
     

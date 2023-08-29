@@ -4,8 +4,6 @@
  */
 package org.digijava.module.digifeed.action;
 
-import java.util.Map;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -13,6 +11,8 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.util.ResponseUtil;
 import org.digijava.module.digifeed.core.FeedControl;
+
+import java.util.Map;
 
 /**
  * 

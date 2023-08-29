@@ -1,11 +1,5 @@
 package org.dgfoundation.amp.nireports.output.sorting;
 
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
@@ -14,6 +8,8 @@ import org.dgfoundation.amp.nireports.output.NiGroupReportData;
 import org.dgfoundation.amp.nireports.output.NiReportData;
 import org.dgfoundation.amp.nireports.output.NiReportDataVisitor;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
+
+import java.util.*;
 
 import static java.util.stream.Collectors.toMap;
 

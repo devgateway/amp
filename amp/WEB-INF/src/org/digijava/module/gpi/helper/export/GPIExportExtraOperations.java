@@ -1,8 +1,8 @@
 package org.digijava.module.gpi.helper.export;
 
-import java.util.Collection;
-
 import org.digijava.module.parisindicator.helper.row.PIReportAbstractRow;
+
+import java.util.Collection;
 
 public interface GPIExportExtraOperations {
 

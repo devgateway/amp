@@ -1,19 +1,16 @@
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.values.providers.SectorPossibleValuesProvider;
 import org.digijava.kernel.validators.common.RequiredValidator;
-import org.digijava.module.aim.annotations.interchange.Interchangeable;
-import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
-import org.digijava.module.aim.annotations.interchange.InterchangeableId;
-import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
-import org.digijava.module.aim.annotations.interchange.PossibleValues;
+import org.digijava.module.aim.annotations.interchange.*;
 import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.aim.util.TreeNodeAware;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Objects;
 
 public class AmpActivitySector implements Versionable, Serializable, Cloneable, TreeNodeAware<AmpSector> {
 
@@ -83,11 +80,8 @@ public class AmpActivitySector implements Versionable, Serializable, Cloneable, 
     @Override
     public boolean equalsForVersioning(Object obj) {
         AmpActivitySector aux = (AmpActivitySector) obj;
-        if (this.classificationConfig.equals(aux.getClassificationConfig())
-                && this.sectorId.getAmpSectorId().equals(aux.getSectorId().getAmpSectorId())) {
-            return true;
-        }
-        return false;
+        return this.classificationConfig.equals(aux.getClassificationConfig())
+                && this.sectorId.getAmpSectorId().equals(aux.getSectorId().getAmpSectorId());
     }
     
     public Object getValue() {
@@ -138,5 +132,18 @@ public class AmpActivitySector implements Versionable, Serializable, Cloneable, 
     @Override
     public AmpAutoCompleteDisplayable<AmpSector> getTreeNode() {
         return sectorId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AmpActivitySector that = (AmpActivitySector) o;
+        return Objects.equals(sectorId, that.sectorId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(activityId, sectorId, sectorPercentage, classificationConfig);
     }
 }

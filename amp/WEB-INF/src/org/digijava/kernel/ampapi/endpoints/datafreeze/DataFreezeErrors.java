@@ -1,8 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.datafreeze;
 
-import static org.digijava.kernel.ampapi.endpoints.errors.ApiError.ERROR_CLASS_DATAFREEZE_ID;
-
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+
+import static org.digijava.kernel.ampapi.endpoints.errors.ApiError.ERROR_CLASS_DATAFREEZE_ID;
 
 public class DataFreezeErrors {
     

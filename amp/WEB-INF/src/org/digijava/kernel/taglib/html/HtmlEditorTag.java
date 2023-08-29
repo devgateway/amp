@@ -22,11 +22,11 @@
 
 package org.digijava.kernel.taglib.html;
 
-import javax.servlet.jsp.JspException;
-
 import org.apache.struts.taglib.TagUtils;
 import org.apache.struts.taglib.html.BaseInputTag;
 import org.apache.struts.taglib.html.Constants;
+
+import javax.servlet.jsp.JspException;
 
 @Deprecated
 public class HtmlEditorTag

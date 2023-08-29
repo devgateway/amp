@@ -1,15 +1,15 @@
 package org.dgfoundation.amp.ar.amp212;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import org.dgfoundation.amp.nireports.schema.ConstantNiDimension;
 import org.dgfoundation.amp.nireports.schema.DimensionSnapshot;
 import org.dgfoundation.amp.nireports.schema.IdsAcceptor;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.testutils.AmpTestCase;
 import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * 

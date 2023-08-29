@@ -3,13 +3,13 @@
  */
 package org.dgfoundation.amp.menu.dynamic;
 
-import java.util.Collection;
-
 import org.dgfoundation.amp.menu.MenuConstants;
 import org.dgfoundation.amp.menu.MenuItem;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
+
+import java.util.Collection;
 
 /**
  * Builds dynamic workspace menu structure for the current user

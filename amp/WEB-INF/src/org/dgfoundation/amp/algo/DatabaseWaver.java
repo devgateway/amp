@@ -1,11 +1,11 @@
 package org.dgfoundation.amp.algo;
 
+import org.dgfoundation.amp.Util;
+import org.digijava.kernel.persistence.PersistenceManager;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import org.dgfoundation.amp.Util;
-import org.digijava.kernel.persistence.PersistenceManager;
 
 /**
  * a waver which selects ids using a query like SELECT DISTINCT(BLA) FROM FOO WHERE X IN (in)
@@ -32,7 +32,7 @@ public class DatabaseWaver implements Waver<Long>{
         if (in == null)
             return result;
         String query = this.query.replace("$", Util.toCSStringForIN(in));
-        List<?> ids = PersistenceManager.getSession().createSQLQuery(query).list();
+        List<?> ids = PersistenceManager.getSession().createNativeQuery(query).list();
         for(Object longAsObj:ids)
             result.add(PersistenceManager.getLong(longAsObj));
         return result;

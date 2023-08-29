@@ -11,11 +11,11 @@
 	<RepositoryLockMechanism class="org.apache.jackrabbit.core.util.CooperativeFileLock" />
     <!-- Security configuration -->
     <Security appName="Jackrabbit">
-        <AccessManager class="org.apache.jackrabbit.core.security.SimpleAccessManager">
+        <AccessManager class="org.apache.jackrabbit.core.security.simple.SimpleAccessManager">
         
         </AccessManager>
         
-        <LoginModule class="org.apache.jackrabbit.core.security.SimpleLoginModule">
+        <LoginModule class="org.apache.jackrabbit.core.security.simple.SimpleLoginModule">
         
         </LoginModule>
     </Security>

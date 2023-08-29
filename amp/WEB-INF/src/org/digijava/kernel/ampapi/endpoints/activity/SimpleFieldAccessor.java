@@ -1,11 +1,11 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
+import org.apache.commons.lang3.reflect.FieldUtils;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
-
-import org.apache.commons.lang3.reflect.FieldUtils;
 
 /**
  * Treats collections as values. In order to edit a collection one has to retrieve the collection, edit it, then write

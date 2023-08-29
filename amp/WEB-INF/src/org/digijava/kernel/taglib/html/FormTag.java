@@ -22,11 +22,6 @@
 
 package org.digijava.kernel.taglib.html;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.PageContext;
-
 import org.apache.struts.taglib.TagUtils;
 import org.apache.struts.taglib.html.Constants;
 import org.digijava.kernel.request.Site;
@@ -36,6 +31,11 @@ import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.util.SiteConfigUtils;
 import org.digijava.kernel.util.SiteUtils;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.PageContext;
 
 /**
  * <p>Title: DiGiJava</p>

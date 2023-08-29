@@ -26,18 +26,15 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.request.SiteDomain;
-import org.digijava.module.admin.form.SiteForm;
-import org.digijava.module.admin.form.SiteInstancesForm;
 import org.digijava.kernel.entity.ModuleInstance;
-import org.digijava.module.admin.util.DbUtil;
 import org.digijava.kernel.request.Site;
-import org.digijava.kernel.util.DgUtil;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.admin.form.ReferencedInstForm;
+import org.digijava.module.admin.util.DbUtil;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import org.digijava.kernel.util.RequestUtils;
 
 public class ShowMasterInstances
     extends Action {

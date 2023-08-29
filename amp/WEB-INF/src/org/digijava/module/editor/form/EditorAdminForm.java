@@ -22,13 +22,13 @@
 
 package org.digijava.module.editor.form;
 
-import org.apache.struts.action.ActionForm;
-import java.util.List;
-import org.apache.struts.action.ActionMapping;
-import javax.servlet.http.HttpServletRequest;
 import org.apache.struts.action.ActionErrors;
-import java.util.regex.Pattern;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 public class EditorAdminForm extends ActionForm {
     private List siteEditors;

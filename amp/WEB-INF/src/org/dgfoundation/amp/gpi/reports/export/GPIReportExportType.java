@@ -1,19 +1,7 @@
 package org.dgfoundation.amp.gpi.reports.export;
 
-import org.dgfoundation.amp.gpi.reports.export.excel.GPIReportIndicator1Output1XlsxExporter;
-import org.dgfoundation.amp.gpi.reports.export.excel.GPIReportIndicator1Output2XlsxExporter;
-import org.dgfoundation.amp.gpi.reports.export.excel.GPIReportIndicator5aXlsxExporter;
-import org.dgfoundation.amp.gpi.reports.export.excel.GPIReportIndicator5bXlsxExporter;
-import org.dgfoundation.amp.gpi.reports.export.excel.GPIReportIndicator6XlsxExporter;
-import org.dgfoundation.amp.gpi.reports.export.excel.GPIReportIndicator9bXlsxExporter;
-import org.dgfoundation.amp.gpi.reports.export.excel.GPIReportXlsxExporter;
-import org.dgfoundation.amp.gpi.reports.export.pdf.GPIReportIndicator1Output1PdfExporter;
-import org.dgfoundation.amp.gpi.reports.export.pdf.GPIReportIndicator1Output2PdfExporter;
-import org.dgfoundation.amp.gpi.reports.export.pdf.GPIReportIndicator5aPdfExporter;
-import org.dgfoundation.amp.gpi.reports.export.pdf.GPIReportIndicator5bPdfExporter;
-import org.dgfoundation.amp.gpi.reports.export.pdf.GPIReportIndicator6PdfExporter;
-import org.dgfoundation.amp.gpi.reports.export.pdf.GPIReportIndicator9bPdfExporter;
-import org.dgfoundation.amp.gpi.reports.export.pdf.GPIReportPdfExporter;
+import org.dgfoundation.amp.gpi.reports.export.excel.*;
+import org.dgfoundation.amp.gpi.reports.export.pdf.*;
 
 /**
  * Enum that holds the gpi report exporters

@@ -1,15 +1,5 @@
 package org.dgfoundation.amp.nireports.behaviours;
 
-import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.TreeSet;
-
-import static org.dgfoundation.amp.algo.AmpCollections.any;
-
 import org.dgfoundation.amp.ar.cell.TextCell;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.Cell;
@@ -18,8 +8,13 @@ import org.dgfoundation.amp.nireports.output.nicells.NiOutCell;
 import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 import org.dgfoundation.amp.nireports.schema.Behaviour;
-import org.dgfoundation.amp.nireports.schema.TimeRange;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
+import org.dgfoundation.amp.nireports.schema.TimeRange;
+
+import java.math.BigDecimal;
+import java.util.*;
+
+import static org.dgfoundation.amp.algo.AmpCollections.any;
 
 /**
  * The {@link Behaviour} of a Percentageful texts column. 

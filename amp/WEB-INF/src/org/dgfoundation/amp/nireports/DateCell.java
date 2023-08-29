@@ -1,14 +1,14 @@
 package org.dgfoundation.amp.nireports;
 
-import java.time.LocalDate;
-import java.util.Map;
-import java.util.Comparator;
-import java.util.Optional;
-
 import org.dgfoundation.amp.nireports.meta.MetaInfoSet;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
+
+import java.time.LocalDate;
+import java.util.Comparator;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * a {@link Cell} which holds a date. Coordinates are empty unless it has a mainLevel (in which case it will have exactly one coordinate, as per the general contract of {@link Cell})

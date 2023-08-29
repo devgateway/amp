@@ -1,8 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.common;
 
-import java.lang.reflect.Field;
-
 import org.apache.log4j.Logger;
+
+import java.lang.reflect.Field;
 
 /**
  * @author Octavian Ciubotaru

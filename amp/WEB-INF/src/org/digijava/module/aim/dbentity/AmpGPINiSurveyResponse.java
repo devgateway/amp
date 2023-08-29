@@ -1,10 +1,10 @@
 package org.digijava.module.aim.dbentity;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-
-import org.apache.commons.lang3.StringUtils;
 
 public class AmpGPINiSurveyResponse implements Serializable, Cloneable {
 

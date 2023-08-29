@@ -1,16 +1,16 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import static java.util.stream.Collectors.toList;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Holds one possible value for a field. Immutable.

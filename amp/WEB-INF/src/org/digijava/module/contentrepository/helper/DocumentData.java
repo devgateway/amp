@@ -1,18 +1,17 @@
 package org.digijava.module.contentrepository.helper;
 
-import java.io.Serializable;
-import java.util.Calendar;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.jcrentity.Label;
-import org.digijava.module.contentrepository.util.DocumentOrganizationManager;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
+import org.digijava.module.contentrepository.util.DocumentOrganizationManager;
+
+import java.io.Serializable;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 public class DocumentData implements Comparable<DocumentData>, Serializable {
     public static final Comparator<DocumentData> COMPARATOR_BY_NAME = new Comparator<DocumentData>(){

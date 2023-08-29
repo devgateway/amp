@@ -1,40 +1,18 @@
 package org.digijava.kernel.ampapi.endpoints.gpi;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Set;
-import java.util.stream.Collectors;
-import javax.jcr.Node;
-import javax.servlet.http.HttpServletRequest;
-
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.gpi.reports.GPIDocument;
 import org.dgfoundation.amp.gpi.reports.GPIDonorActivityDocument;
 import org.dgfoundation.amp.gpi.reports.GPIRemark;
-import org.digijava.kernel.ampapi.endpoints.dto.Org;
-import org.digijava.kernel.ampapi.endpoints.dto.SaveResult;
-import org.digijava.kernel.ampapi.endpoints.dto.YearWithRange;
-import org.digijava.kernel.ampapi.endpoints.dto.YearsForCalendar;
+import org.digijava.kernel.ampapi.endpoints.dto.*;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorResponseService;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
-import org.digijava.kernel.ampapi.endpoints.dto.ResultPage;
 import org.digijava.kernel.ampapi.endpoints.errors.GenericErrors;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
-import org.digijava.module.aim.dbentity.AmpGPINiAidOnBudget;
-import org.digijava.module.aim.dbentity.AmpGPINiDonorNotes;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.dbentity.AmpGPINiQuestion.GPINiQuestionType;
-import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponseDocument;
-import org.digijava.module.aim.dbentity.AmpOrgRole;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
@@ -45,9 +23,14 @@ import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.translation.exotic.AmpDateFormatter;
 import org.digijava.module.translation.exotic.AmpDateFormatterFactory;
-import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 import org.joda.time.DateTime;
+
+import javax.jcr.Node;
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 

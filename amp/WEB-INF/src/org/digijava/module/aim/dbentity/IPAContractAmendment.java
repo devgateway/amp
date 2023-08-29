@@ -1,14 +1,14 @@
 package org.digijava.module.aim.dbentity;
 
+import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.common.util.DateTimeUtil;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import org.digijava.module.aim.util.CurrencyUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.common.util.DateTimeUtil;
 
 public class IPAContractAmendment implements Serializable, Cloneable {
 

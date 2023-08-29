@@ -1,20 +1,15 @@
 package org.digijava.module.parisindicator.helper.export;
 
-import java.io.FileOutputStream;
-import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.FormatHelper;
-import org.digijava.module.parisindicator.helper.row.PIReport4Row;
 import org.digijava.module.parisindicator.helper.row.PIReport5bRow;
 import org.digijava.module.parisindicator.helper.row.PIReportAbstractRow;
 import org.digijava.module.parisindicator.util.PIConstants;
+
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+import java.util.*;
 
 public class PIReport5bExport extends PIAbstractExport implements PIExportExtraOperations {
 

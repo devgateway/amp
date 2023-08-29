@@ -1,7 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import java.util.List;
-
 import org.dgfoundation.amp.onepager.helper.EditorStore;
 import org.dgfoundation.amp.onepager.util.SaveContext;
 import org.digijava.kernel.exception.DgException;
@@ -9,6 +7,8 @@ import org.digijava.kernel.request.Site;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+
+import java.util.List;
 
 public interface ActivityService {
     

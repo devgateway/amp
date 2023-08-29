@@ -1,9 +1,9 @@
 package org.digijava.module.aim.form;
 
-import java.util.ArrayList;
-
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.budget.dbentity.AmpDepartments;
+
+import java.util.ArrayList;
 
 public class DepartmentsManagerForm extends ActionForm {
 

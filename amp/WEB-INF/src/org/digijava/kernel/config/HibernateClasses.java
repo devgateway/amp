@@ -22,8 +22,8 @@
 
 package org.digijava.kernel.config;
 
-import java.util.Vector;
 import java.util.Iterator;
+import java.util.Vector;
 
 /**
  * Data class, used by Digester to parse digi.xml.

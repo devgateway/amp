@@ -1,9 +1,5 @@
 package org.digijava.kernel.validators.activity;
 
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Supplier;
-
 import org.apache.commons.lang3.StringUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.validators.ValidationErrors;
@@ -11,6 +7,10 @@ import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.content.ContentRepositoryManager;
 import org.digijava.kernel.validation.ConstraintValidator;
 import org.digijava.kernel.validation.ConstraintValidatorContext;
+
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Supplier;
 
 /**
  * Validates if the value points to an existing private resource.

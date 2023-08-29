@@ -22,13 +22,6 @@
 
 package org.digijava.module.admin.action;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -41,6 +34,8 @@ import org.digijava.kernel.viewmanager.ViewConfig;
 import org.digijava.kernel.viewmanager.ViewConfigFactory;
 import org.digijava.module.admin.form.SiteInstancesForm;
 import org.digijava.module.admin.util.DbUtil;
+
+import java.util.*;
 
 public class ShowSiteInstances extends Action {
 

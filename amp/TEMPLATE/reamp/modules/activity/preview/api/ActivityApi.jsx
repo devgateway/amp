@@ -7,10 +7,7 @@ import {
 
 export default class ActivityApi {
     static getActivity(activityId, language = 'en') {
-        let url = ACTIVITY_API + activityId;
-        if (language != 'en') {
-            url += '?language=' + language;
-        }
+        const url = ACTIVITY_API + activityId + '?language=' + language;
         return ApiHelper._fetchData(url);
     }
 

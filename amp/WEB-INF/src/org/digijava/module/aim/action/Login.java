@@ -18,12 +18,17 @@ import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
+import org.digijava.module.um.model.TruLoginRequest;
+import org.digijava.module.um.model.TruLoginResponse;
+import reactor.core.publisher.Mono;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.*;
+
+import static org.digijava.module.um.util.DbUtil.loginToTruBudget;
 
 
 /**
@@ -138,6 +143,21 @@ public class Login extends Action {
                  * registered user but has not yet been assigned a team
                  */
                 //
+
+                //login to trubudget
+                TruLoginRequest truLoginRequest = new TruLoginRequest();
+                truLoginRequest.setApiVersion("1.0");
+                TruLoginRequest.Data data = new TruLoginRequest.Data();
+                TruLoginRequest.User user1 = new TruLoginRequest.User();
+
+                user1.setPassword(lForm.getUserId());
+                user1.setId(lForm.getUserId().split("@")[0]);
+                data.setUser(user1);
+                truLoginRequest.setData(data);
+                Mono<TruLoginResponse> truResp = loginToTruBudget(truLoginRequest);
+                truResp.subscribe(truLoginResponse -> logger.info("Trubudget login response: "+truLoginResponse));
+
+
                 Collection members = TeamMemberUtil.getTeamMembers(lForm.getUserId());
                 if (members == null || members.size() == 0) {
                     if (siteAdmin == true) { // user is a site admin

@@ -12,19 +12,29 @@ import org.digijava.kernel.ampapi.endpoints.security.ApiAuthentication;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
+import org.digijava.module.aim.form.LoginForm;
+import org.digijava.module.um.model.TruLoginRequest;
+import org.digijava.module.um.model.TruLoginResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import reactor.core.publisher.Mono;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
+
+import static org.digijava.module.um.util.DbUtil.loginToTruBudget;
 
 /**
  * @author mihai
  *
  */
 public class AmpPostLoginAction extends Action {
+    private static Logger logger = LoggerFactory.getLogger(AmpPostLoginAction.class);
+
     
     
     @Override
@@ -34,6 +44,7 @@ public class AmpPostLoginAction extends Action {
         
         response.setContentType("text/plain");
         PrintWriter out = response.getWriter();
+
         
         String id = request.getParameter("j_autoWorkspaceId");
         request.getSession().setAttribute("j_autoWorkspaceId", id);
@@ -45,6 +56,18 @@ public class AmpPostLoginAction extends Action {
         } catch(DgException ex) {
             throw new RuntimeException(ex);
         }
+        TruLoginRequest truLoginRequest = new TruLoginRequest();
+        truLoginRequest.setApiVersion("1.0");
+        TruLoginRequest.Data data = new TruLoginRequest.Data();
+        TruLoginRequest.User user1 = new TruLoginRequest.User();
+        user1.setPassword(currentUser.getEmail());
+        user1.setId(currentUser.getEmail().split("@")[0]);
+        data.setUser(user1);
+        truLoginRequest.setData(data);
+        Mono<TruLoginResponse> truResp = loginToTruBudget(truLoginRequest);
+        truResp.subscribe(truLoginResponse -> logger.info("Trubudget login response: "+truLoginResponse));
+
+
 
         ApiErrorMessage res = ApiAuthentication.login(currentUser, request);
         if(res != null) {

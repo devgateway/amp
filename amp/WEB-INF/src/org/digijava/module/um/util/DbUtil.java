@@ -33,9 +33,10 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.um.dbentity.ResetPassword;
 import org.digijava.module.um.dbentity.SuspendLogin;
 import org.digijava.module.um.exception.UMException;
+import org.digijava.module.um.model.TruGrantPermissionRequest;
 import org.digijava.module.um.model.TruLoginRequest;
 import org.digijava.module.um.model.TruLoginResponse;
-import org.digijava.module.um.model.UserData;
+import org.digijava.module.um.model.TruUserData;
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
@@ -43,12 +44,9 @@ import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.web.reactive.function.BodyInserter;
-import org.springframework.web.reactive.function.BodyInserters;
-import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -408,11 +406,11 @@ public class DbUtil {
             session.update(user);
             session.flush();
             try {
-                UserData userData = new UserData();
+                TruUserData userData = new TruUserData();
                 userData.setApiVersion("1.0");
-                UserData.Data data = new UserData.Data();
-                UserData.User user1 = new UserData.User();
-                user1.setOrganization("Kfw");
+                TruUserData.Data data = new TruUserData.Data();
+                TruUserData.User user1 = new TruUserData.User();
+                user1.setOrganization("KfW");
                 user1.setDisplayName(user.getFirstNames()+" "+user.getLastName());
                 // TODO: 8/28/23 if you are editing a user for the first time with Trubudget integrated. their password will be the email
                 // TODO: 8/28/23 this can be changed later in Trubudget
@@ -420,8 +418,9 @@ public class DbUtil {
                 user1.setId(user.getEmail().split("@")[0]);// TODO: 8/28/23 use username in future
                 data.setUser(user1);
                 userData.setData(data);
-                UserData truResp = registerUserOnTrubudget(userData);
-                logger.info("Response is: "+truResp);
+                registerUserOnTrubudget(userData, user);
+                session.update(user);
+                session.flush();
             }catch (Exception e)
             {
                 logger.info("Error: "+e.getMessage(), e);
@@ -442,8 +441,8 @@ public class DbUtil {
                 "Unable to update user information into database", ex);
         }
     }
-    public static TruLoginResponse loginToTruBudget(TruLoginRequest truLoginRequest) throws URISyntaxException {
-        return GenericWebClient.postForSingleObjResponse("http://localhost:8080/api/user.authenticate",truLoginRequest, TruLoginRequest.class,TruLoginResponse.class).block();
+    public static Mono<TruLoginResponse> loginToTruBudget(TruLoginRequest truLoginRequest) throws URISyntaxException {
+        return GenericWebClient.postForSingleObjResponse("http://localhost:8080/api/user.authenticate",truLoginRequest, TruLoginRequest.class,TruLoginResponse.class);
     }
     
     public static void registerUser(User user) throws UMException {
@@ -454,6 +453,7 @@ public class DbUtil {
 //beginTransaction();
 
             // set encrypted password
+            String plainTextPass=user.getPassword();
             user.setPassword(ShaCrypt.crypt(user.getPassword().trim()).trim());
 
             // set hashed password
@@ -462,23 +462,28 @@ public class DbUtil {
             // update user
             session.save(user);
             session.flush();
+
             try {
-                UserData userData = new UserData();
+                TruUserData userData = new TruUserData();
                 userData.setApiVersion("1.0");
-                UserData.Data data = new UserData.Data();
-                UserData.User user1 = new UserData.User();
-                user1.setOrganization(user.getOrganizationName());
+                TruUserData.Data data = new TruUserData.Data();
+                TruUserData.User user1 = new TruUserData.User();
+                user1.setOrganization("KfW");
                 user1.setDisplayName(user.getFirstNames()+" "+user.getLastName());
-                user1.setPassword(user.getPassword());
+                user1.setPassword(user.getEmail());
                 user1.setId(user.getEmail().split("@")[0]);// TODO: 8/28/23 use username in future
                 data.setUser(user1);
                 userData.setData(data);
-                UserData truResp = registerUserOnTrubudget(userData);
-                logger.info("Response is: "+truResp);
+                registerUserOnTrubudget(userData, user);
+                user.setTruBudgetEnabled(true);
+                session.update(user);
+                session.flush();
+
             }catch (Exception e)
         {
             logger.info("Error: "+e.getMessage(), e);
         }
+
 
 
 
@@ -530,7 +535,7 @@ public class DbUtil {
 
     }
 
-    public static UserData registerUserOnTrubudget(UserData userData) throws URISyntaxException {
+    public static void registerUserOnTrubudget(TruUserData userData, User user) throws URISyntaxException {
 
         logger.info("Registering user on Trubudget");
         TruLoginRequest truLoginRequest = new TruLoginRequest();
@@ -542,10 +547,45 @@ public class DbUtil {
         user1.setId("root");
         data.setUser(user1);
         truLoginRequest.setData(data);
-        TruLoginResponse truResp = loginToTruBudget(truLoginRequest);
-        logger.info("Login Response is: "+truResp);
+        Mono<TruLoginResponse> truResp = loginToTruBudget(truLoginRequest);
+        truResp.subscribe(truLoginResponse -> {
 
-        return GenericWebClient.postForSingleObjResponse("http://localhost:8080/api/global.createUser", userData, UserData.class, UserData.class, truResp.getData().getUser().getToken()).block();
+
+        TruUserData res = null;
+        if (user.getTruBudgetEnabled())
+        {
+            logger.info("We already have a trubudget account for this user email/username.");
+        }
+        else {
+            try {
+                res = GenericWebClient.postForSingleObjResponse("http://localhost:8080/api/global.createUser", userData, TruUserData.class, TruUserData.class, truLoginResponse.getData().getUser().getToken()).block();
+
+            }catch (Exception e)
+            {
+                logger.info("Error occurred here: "+e.getMessage(),e);
+            }
+
+        }
+
+             if (!user.getTruBudgetIntents().isEmpty()) {
+                 TruUserData finalRes = res;
+                 Flux.range(0, user.getTruBudgetIntents().size())
+                         .flatMap(index -> {
+                             TruGrantPermissionRequest permData = new TruGrantPermissionRequest();
+                             TruGrantPermissionRequest.Data data1 = new TruGrantPermissionRequest.Data();
+                             data1.setIdentity(finalRes !=null? finalRes.getData().getUser().getId():user.getEmail().split("@")[0]);
+                             data1.setIntent(new ArrayList<>(user.getTruBudgetIntents()).get(index).getTruBudgetIntentName());
+                             permData.setData(data1);
+                             permData.setApiVersion("1.0");
+                             try {
+                                 return GenericWebClient.postForSingleObjResponse("http://localhost:8080/api/global.grantPermission", permData, TruGrantPermissionRequest.class, String.class, truLoginResponse.getData().getUser().getToken()).subscribeOn(Schedulers.parallel());
+                             } catch (URISyntaxException e) {
+                                 throw new RuntimeException(e);
+                             }
+                         }).subscribe(response -> logger.info("Permission response: " + response));
+             }
+        });
+
 
     }
     public static  List<TruBudgetIntent> getTruBudgetIntents()

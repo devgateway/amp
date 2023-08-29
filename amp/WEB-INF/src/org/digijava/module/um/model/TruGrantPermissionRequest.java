@@ -2,7 +2,7 @@ package org.digijava.module.um.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class GrantPermissionRequest {
+public class TruGrantPermissionRequest {
     @JsonProperty("apiVersion")
     private String apiVersion;
 

@@ -31,10 +31,12 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableValue;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpUserExtension;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.Identifiable;
 
 import javax.security.auth.Subject;
 import java.io.Serializable;
+import java.sql.Clob;
 import java.util.*;
 
 @InterchangeableValue(UserValueProvider.class)
@@ -58,7 +60,7 @@ public class User
     private Boolean pledgeSuperUser;
     private Site registeredThrough;
     private Set interests;
-    private java.sql.Clob bio;
+    private Clob bio;
     private Image portrait;
     private String organizationName;
     private OrganizationType organizationType;
@@ -83,7 +85,16 @@ public class User
 
     private Set<AmpOrganisation> assignedOrgs;
     private Date passwordChangedAt;
-    private Set<TruBudgetIntent> truBudgetIntents;
+    private Set<TruBudgetIntent> truBudgetIntents= new HashSet<>();
+    private Boolean truBudgetEnabled=false;
+
+    public Boolean getTruBudgetEnabled() {
+        return truBudgetEnabled;
+    }
+
+    public void setTruBudgetEnabled(Boolean truBudgetEnabled) {
+        this.truBudgetEnabled = truBudgetEnabled;
+    }
 
     public User() {}
 
@@ -97,7 +108,7 @@ public class User
         this.lastName = lastName;
         this.emailVerified = false;
         this.emailBouncing = false;
-        this.noAlertsUntil = new Date(java.lang.System.currentTimeMillis());
+        this.noAlertsUntil = new Date(System.currentTimeMillis());
         //this.password = ;
         //this.salt = ;
         //this.passQuestion = passQuestion;
@@ -319,11 +330,11 @@ public class User
         this.photo = photo;
     }
 
-    public java.sql.Clob getBio() {
+    public Clob getBio() {
         return bio;
     }
 
-    public void setBio(java.sql.Clob bio) {
+    public void setBio(Clob bio) {
         this.bio = bio;
     }
 
@@ -463,7 +474,7 @@ public class User
         Iterator<AmpOrganisation> it = this.assignedOrgs.iterator();
         while (it.hasNext()) {
             AmpOrganisation currentOrganization = it.next();
-            if (org.digijava.module.aim.util.DbUtil.hasDonorRole(currentOrganization.getAmpOrgId()))
+            if (DbUtil.hasDonorRole(currentOrganization.getAmpOrgId()))
                 return true;
         }
         return false;

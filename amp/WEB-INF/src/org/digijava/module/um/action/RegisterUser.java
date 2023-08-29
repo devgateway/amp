@@ -63,7 +63,7 @@ public class RegisterUser extends Action {
             return (mapping.getInputForward());
         try {
 
-            boolean isMailAvtive = FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.USER_REGISTRATION_BY_MAIL);
+            boolean isMailActive = FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.USER_REGISTRATION_BY_MAIL);
             
             User user = new User(userRegisterForm.getEmail().toLowerCase(),
                     userRegisterForm.getFirstNames(), userRegisterForm
@@ -72,7 +72,8 @@ public class RegisterUser extends Action {
             List<TruBudgetIntent> truBudgetIntents = getTruBudgetIntentsByName(intents);
             logger.info("Intents: "+ truBudgetIntents);
 
-            user.setTruBudgetIntents(new HashSet<>(truBudgetIntents));
+            user.getTruBudgetIntents().addAll(new HashSet<>(truBudgetIntents));
+            user.setTruBudgetIntents(user.getTruBudgetIntents());
             // set client IP address
 
             user.setModifyingIP(RequestUtils.getRemoteAddress(request));
@@ -184,7 +185,7 @@ public class RegisterUser extends Action {
                 DbUtil.registerUser(user);
                 DgUtil.saveUserLanguagePreferences(user, request, language);
 
-                if (isMailAvtive) {
+                if (isMailActive) {
                     if(userRegisterForm.isSendEmail()) {
                         String description = des + user.getEmail() + cri + userRegisterForm.getPassword() + pti;
                         String title = TranslatorWorker.translateText("Registration Confirmation", langCode, siteDomain.getSite());

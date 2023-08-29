@@ -25,6 +25,9 @@
 		<property name="passAnswer" column="PASS_ANSWER" type="java.lang.String" />
 		<property name="url" column="URL" type="java.lang.String" />
 		<property name="banned" column="BANNED" type="boolean" />
+		<property name="truBudgetEnabled" type="java.lang.Boolean" >
+			<column name="trubudget_enabled" default="false"/>
+		</property>
 		<property name="referral" column="REFERRAL" type="java.lang.String" />
 		<property column="ORGANIZATION_TYPE_OTHER" name="organizationTypeOther" type="text" />
 		<property name="address" column="ADDRESS" type="java.lang.String" />
@@ -41,7 +44,7 @@
 			class="org.digijava.kernel.entity.Locale" cascade="none" />
 		<property name="globalAdmin" column="GLOBAL_ADMIN" type="boolean" />
 
-		<set name="truBudgetIntents" table="user_trubudget_intent">
+		<set name="truBudgetIntents" table="user_trubudget_intent" cascade="merge">
 			<key column="user_id"/>
 			<many-to-many column="trubudget_intent_id" class="org.digijava.kernel.entity.TruBudgetIntent"/>
 		</set>

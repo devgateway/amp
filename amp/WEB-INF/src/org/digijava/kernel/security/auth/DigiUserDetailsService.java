@@ -88,15 +88,14 @@ public class DigiUserDetailsService
     protected UserDetails getUserDetails(User user) throws DataAccessException {
         Collection<? extends GrantedAuthority> authorities = getAssignedAuthorities(user);
 
-        UserDetails ud = new org.springframework.security.core.userdetails.User(user.getEmail(),
+        return new org.springframework.security.core.userdetails.User(user.getEmail(),
             user.getPassword(), true, true, true, true, authorities);
 
-        return ud;
     }
 
     protected Collection<? extends GrantedAuthority> getAssignedAuthorities(User user) throws
         DataAccessException {
-        Set authorities = new HashSet();
+        Set<GrantedAuthority> authorities = new HashSet<>();
 
         authorities.add(new SimpleGrantedAuthority("ROLE_AUTHENTICATED"));
        
@@ -113,22 +112,14 @@ public class DigiUserDetailsService
                     "Unable to load groups for user: " + user.getId(), ex);
             }
 
-            Iterator groupIter = user.getGroups().iterator();
-            while (groupIter.hasNext()) {
-                Group group = (Group) groupIter.next();
+            for (Object o : user.getGroups()) {
+                Group group = (Group) o;
                 authorities.add(new SimpleGrantedAuthority(
-                    "GROUP_" +
-                    group.getSite().getSiteId() + "_" + group.getName()));
+                        "GROUP_" +
+                                group.getSite().getSiteId() + "_" + group.getName()));
             }
         }
-        Collection<GrantedAuthority> result = new ArrayList<GrantedAuthority>();
-        Iterator iter = authorities.iterator();
-        int i = 0;
-        while (iter.hasNext()) {
-            GrantedAuthority item = (GrantedAuthority) iter.next();
-            result.add(item);
-        }
-        return  result;
+        return  new ArrayList<>(authorities);
     }
 
     public boolean isPopulateGroupAuthorities() {

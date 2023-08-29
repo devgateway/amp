@@ -2,7 +2,7 @@ package org.digijava.module.um.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class UserData {
+public class TruUserData {
     @JsonProperty("apiVersion")
     private String apiVersion;
 

@@ -41,10 +41,9 @@ public class GenericWebClient {
      * @throws URISyntaxException
      * toDo: Define custom exceptions
      * NOTE: Custom Exceptions must in order of 4xx to 5xx
-     * E...  -> Array of custom exceptions
+     * String...  -> Array of tokens for auth
      */
 
-    @SafeVarargs
     public  static<T,V> Mono<V> postForSingleObjResponse(String url, T request, Class<T> requestClass, Class<V> responseClass, String... token) throws URISyntaxException {
         logger.info("Making post for single object: "+request);
         return myWebClient().post()
@@ -65,7 +64,7 @@ public class GenericWebClient {
                                 .flatMap(body -> Mono.error(new RuntimeException("Bad Request Error. Response: " + body))))
                 .bodyToMono(responseClass)
                 .onErrorResume(Mono::error)
-                .retryWhen(Retry.backoff(3, Duration.of(2, ChronoUnit.SECONDS))
+                .retryWhen(Retry.backoff(1, Duration.of(2, ChronoUnit.SECONDS))
                         .onRetryExhaustedThrow(((retryBackoffSpec, retrySignal) -> new Throwable(retrySignal.failure()))));
 
 

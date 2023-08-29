@@ -65,14 +65,14 @@ public class AddNewIndicator
                  indicator.setCode(newIndForm.getCode());
                  indicator.setType(newIndForm.getType());
                  if (newIndForm.getActivitySectors()!=null && newIndForm.getActivitySectors().size()>0){
-                     indicator.setSectors(new HashSet<AmpSector>());
-                     for (Iterator sectorIt = newIndForm.getActivitySectors().iterator(); sectorIt.hasNext();) {
+                     indicator.setSectors(new HashSet<>());
+                     for (Object o : newIndForm.getActivitySectors()) {
                          //This is awful! why is here AmpActivitySector???!!
-                        ActivitySector actSector = (ActivitySector) sectorIt.next();
-                        AmpSector sector=SectorUtil.getAmpSector(actSector.getSectorId());
-                        sector.setAmpSectorId(actSector.getSectorId());
-                        indicator.getSectors().add(sector);
-                    }
+                         ActivitySector actSector = (ActivitySector) o;
+                         AmpSector sector = SectorUtil.getAmpSector(actSector.getSectorId());
+                         sector.setAmpSectorId(actSector.getSectorId());
+                         indicator.getSectors().add(sector);
+                     }
                  }
                  
                  if (indicator.getSectors() == null

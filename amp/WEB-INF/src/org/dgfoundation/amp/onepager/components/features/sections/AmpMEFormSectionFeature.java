@@ -60,10 +60,10 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
         //final IModel<Set<IndicatorActivity>> setModel = new PropertyModel<Set<IndicatorActivity>>(am, "indicators");
         
         if (am.getObject().getIndicators() == null){
-            am.getObject().setIndicators(new HashSet<IndicatorActivity>());
+            am.getObject().setIndicators(new HashSet<>());
         }
         final IModel<List<IndicatorActivity>>  listModel = OnePagerUtil 
-                .getReadOnlyListModelFromSetModel(new PropertyModel(am, "indicators"));
+                .getReadOnlyListModelFromSetModel(new PropertyModel<>(am, "indicators"));
         
         final AmpUniqueCollectionValidatorField<IndicatorActivity> uniqueCollectionValidationField = new AmpUniqueCollectionValidatorField<IndicatorActivity>(
                 "uniqueMEValidator", listModel, "Unique MEs Validator") {
@@ -169,23 +169,21 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
                     return TranslatorUtil.getTranslation("Descending");
             }
         };
-        add(new AmpSelectFieldPanel("indType", new PropertyModel(newInd, "type"), typeCol, "Type", false, true, cr));
+        add(new AmpSelectFieldPanel("indType", new PropertyModel<>(newInd, "type"), typeCol, "Type", false, true, cr));
 
 
         
         
         
         final AmpClassificationConfiguration sectorClassification = SectorUtil.getPrimaryConfigClassification();
-        final IModel<Set<AmpSector>> sectorSetModel = new PropertyModel<Set<AmpSector>>(
+        final IModel<Set<AmpSector>> sectorSetModel = new PropertyModel<>(
                 newInd, "sectors");
 
         IModel<List<AmpSector>> sectorListModel = new AbstractReadOnlyModel<List<AmpSector>>() {
 
             @Override
             public List<AmpSector> getObject() {
-                ArrayList<AmpSector> ret = new ArrayList<AmpSector>();
-                ret.addAll(sectorSetModel.getObject());
-                return ret;
+                return new ArrayList<>(sectorSetModel.getObject());
             }
         };
 
@@ -319,32 +317,21 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
     
     private AmpIndicator getNewIndicator() {
         AmpIndicator newInd = new AmpIndicator();
-        newInd.setSectors(new HashSet<AmpSector>());
+        newInd.setSectors(new HashSet<>());
         newInd.setCreationDate(new Date());
         return newInd;
     }
 
     private IModel<AmpIndicator> getNewIndicatorModel() {
-        return new Model(getNewIndicator());
+        return new Model<>(getNewIndicator());
     }
     
     protected void updateVisibility(IModel<AmpIndicator> indicatorModel){
         AmpIndicator ind = indicatorModel.getObject();
-                if(ind.getSectors()==null||ind.getSectors().isEmpty()){
-                    sectorAdded=false;
-                }
-                else{
-                    sectorAdded=true;
-                }
-        if (ind.getCode() == null)
-            codeSelected = false;
-        else
-            codeSelected = true;
-        
-        if (ind.getName() == null || ind.getName() == "")
-            titleSelected = false;
-        else
-            titleSelected = true;
+        sectorAdded= ind.getSectors() != null && !ind.getSectors().isEmpty();
+        codeSelected = ind.getCode() != null;
+
+        titleSelected = ind.getName() != null && !Objects.equals(ind.getName(), "");
 
         if (codeSelected && titleSelected&&sectorAdded){
             indicatorFeedbackContainer.setVisible(false);

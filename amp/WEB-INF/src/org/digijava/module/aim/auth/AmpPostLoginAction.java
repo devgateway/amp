@@ -25,6 +25,7 @@ import reactor.core.publisher.Mono;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
+import java.util.Objects;
 
 import static org.digijava.module.um.util.DbUtil.loginToTruBudget;
 
@@ -56,6 +57,7 @@ public class AmpPostLoginAction extends Action {
         } catch(DgException ex) {
             throw new RuntimeException(ex);
         }
+        //login into TruBudget
         TruLoginRequest truLoginRequest = new TruLoginRequest();
         truLoginRequest.setApiVersion("1.0");
         TruLoginRequest.Data data = new TruLoginRequest.Data();
@@ -65,7 +67,14 @@ public class AmpPostLoginAction extends Action {
         data.setUser(user1);
         truLoginRequest.setData(data);
         Mono<TruLoginResponse> truResp = loginToTruBudget(truLoginRequest);
-        truResp.subscribe(truLoginResponse -> logger.info("Trubudget login response: "+truLoginResponse));
+        try {
+            TruLoginResponse truLoginResponse = truResp.block();
+            // TODO: 8/29/23 -- this token to be used for TruBudget requests in Login.java and AmpPostLoginAction.java
+            logger.info("Trubudget login response: " + Objects.requireNonNull(truLoginResponse).getData());
+        }catch (Exception e)
+        {
+            logger.info("Error during login: "+e.getMessage(),e);
+        }
 
 
 

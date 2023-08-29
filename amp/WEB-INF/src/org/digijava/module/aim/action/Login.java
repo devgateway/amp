@@ -154,15 +154,21 @@ public class Login extends Action {
                 user1.setId(lForm.getUserId().split("@")[0]);
                 data.setUser(user1);
                 truLoginRequest.setData(data);
-                Mono<TruLoginResponse> truResp = loginToTruBudget(truLoginRequest);
-                truResp.subscribe(truLoginResponse -> logger.info("Trubudget login response: "+truLoginResponse));
+                try {
+                    Mono<TruLoginResponse> truResp = loginToTruBudget(truLoginRequest);
+                    truResp.subscribe(truLoginResponse -> logger.info("Trubudget login response: "+truLoginResponse));
+                }catch (Exception e)
+                {
+                    logger.info("Trubudget login: "+e.getMessage(),e);
+                }
+
 
 
                 Collection members = TeamMemberUtil.getTeamMembers(lForm.getUserId());
                 if (members == null || members.size() == 0) {
                     if (siteAdmin == true) { // user is a site admin
                         // set the session variable 'ampAdmin' to the value 'yes'
-                        session.setAttribute("ampAdmin", new String("yes"));
+                        session.setAttribute("ampAdmin", "yes");
                         // create a TeamMember object and set it to a session variabe 'currentMember'
                         TeamMember tm = new TeamMember(usr);
                         tm.setTeamName(TranslatorWorker.translateText("AMP Administrator"));

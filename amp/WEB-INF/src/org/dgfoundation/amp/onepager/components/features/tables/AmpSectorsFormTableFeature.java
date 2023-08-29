@@ -51,7 +51,7 @@ public class AmpSectorsFormTableFeature extends
             final AmpClassificationConfiguration sectorClassification)
             throws Exception {
         super(id, am, fmName, false, true);
-        final IModel<Set<AmpActivitySector>> setModel = new PropertyModel<Set<AmpActivitySector>>(
+        final IModel<Set<AmpActivitySector>> setModel = new PropertyModel<>(
                 am, "sectors");
         if (setModel.getObject() == null)
             setModel.setObject(new HashSet<AmpActivitySector>());

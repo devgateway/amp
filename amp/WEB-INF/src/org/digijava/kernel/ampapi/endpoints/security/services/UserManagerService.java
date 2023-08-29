@@ -91,8 +91,6 @@ public class UserManagerService {
         // Get session of logged in user and check if its an admin
 
         HttpServletRequest request = TLSUtils.getRequest();
-        String adminSession = (String) TLSUtils.getRequest().getSession().getAttribute("ampAdmin");
-        logger.info("Creating user is admin: " + adminSession);
         String languageCode = TLSUtils.getLangCode();
 
         String firstName = createUser.getFirstName();
@@ -106,10 +104,6 @@ public class UserManagerService {
         boolean notificationEmailEnabled = createUser.getNotificationEmailEnabled();
         boolean isUpdateUserEmail = true;
         boolean isUpdateUser = false;
-
-        //if ( adminSession == null || adminSession.equals("no") ) {
-        //ApiErrorResponseService.reportForbiddenAccess(SecurityErrors.NOT_ALLOWED);
-        //}
 
         // Validation
         validateUserFields(firstName, lastName, email, confirmEmail, password, passwordConfirmation,
@@ -345,7 +339,6 @@ public class UserManagerService {
         String des4 = "Username: ";
         String cri1 = "password: ";
         String pti1 = "Please change your password when you first login to AMP in order to keep it private.";
-
 
         String langCode = language.getCode();
         des1 = TranslatorWorker.translateText(des1, langCode, siteDomain.getSite());

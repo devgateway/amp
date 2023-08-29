@@ -170,10 +170,6 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
             }
         };
         add(new AmpSelectFieldPanel("indType", new PropertyModel<>(newInd, "type"), typeCol, "Type", false, true, cr));
-
-
-        
-        
         
         final AmpClassificationConfiguration sectorClassification = SectorUtil.getPrimaryConfigClassification();
         final IModel<Set<AmpSector>> sectorSetModel = new PropertyModel<>(

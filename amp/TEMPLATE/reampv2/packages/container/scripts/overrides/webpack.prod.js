@@ -5,7 +5,7 @@ const webpackConfigPath = 'react-scripts/config/webpack.config';
 const webpackConfig = require(webpackConfigPath);
 const ppackageJson = require("../../package.json");
 
-const DOMAIN_NAME = 'http://localhost:8080';
+const DOMAIN_NAME = process.env.AMP_URL;
 const PUBLIC_PATH = '/TEMPLATE/reampv2/packages/container/build/';
 
 const override = config => {

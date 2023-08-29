@@ -28,6 +28,7 @@ import org.digijava.kernel.ampapi.endpoints.security.dto.usermanager.UserManager
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.UserLangPreferences;
+import org.digijava.kernel.mail.DgEmailManager;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.security.PasswordPolicyValidator;
@@ -89,68 +90,78 @@ public class UserManagerService {
     public LoggedUserInformation createUser(CreateUserRequest createUser) {
         // Get session of logged in user and check if its an admin
 
-            HttpServletRequest request = TLSUtils.getRequest();
-            String adminSession = (String) TLSUtils.getRequest().getSession().getAttribute("ampAdmin");
-            logger.info("Creating user is admin: " + adminSession);
-            String languageCode = TLSUtils.getLangCode();
+        HttpServletRequest request = TLSUtils.getRequest();
+        String adminSession = (String) TLSUtils.getRequest().getSession().getAttribute("ampAdmin");
+        logger.info("Creating user is admin: " + adminSession);
+        String languageCode = TLSUtils.getLangCode();
 
-            User user = new User();
-            String firstName = createUser.getFirstName();
-            String lastName = createUser.getLastName();
-            String email = createUser.getEmail();
-            String confirmEmail = createUser.getEmailConfirmation();
-            String password = createUser.getPassword().trim();
-            String passwordConfirmation = createUser.getPasswordConfirmation().trim();
-            String notificationEmail = createUser.getNotificationEmail();
-            String repeatNotificationEmail = createUser.getRepeatNotificationEmail();
-            boolean notificationEmailEnabled = createUser.getNotificationEmailEnabled();
-            boolean isUpdateUserEmail = true;
-            boolean isUpdateUser = false;
+        String firstName = createUser.getFirstName();
+        String lastName = createUser.getLastName();
+        String email = createUser.getEmail();
+        String confirmEmail = createUser.getEmailConfirmation();
+        String password = createUser.getPassword().trim();
+        String passwordConfirmation = createUser.getPasswordConfirmation().trim();
+        String notificationEmail = createUser.getNotificationEmail();
+        String repeatNotificationEmail = createUser.getRepeatNotificationEmail();
+        boolean notificationEmailEnabled = createUser.getNotificationEmailEnabled();
+        boolean isUpdateUserEmail = true;
+        boolean isUpdateUser = false;
 
-//            if ( adminSession == null || adminSession.equals("no") ) {
-//                ApiErrorResponseService.reportForbiddenAccess(SecurityErrors.NOT_ALLOWED);
-//            }
+        //if ( adminSession == null || adminSession.equals("no") ) {
+        //ApiErrorResponseService.reportForbiddenAccess(SecurityErrors.NOT_ALLOWED);
+        //}
 
-            // Validation
-            validateUserFields(firstName, lastName, email, confirmEmail, password, passwordConfirmation,
-                    notificationEmail, repeatNotificationEmail, notificationEmailEnabled, isUpdateUserEmail, isUpdateUser);
+        // Validation
+        validateUserFields(firstName, lastName, email, confirmEmail, password, passwordConfirmation,
+                notificationEmail, repeatNotificationEmail, notificationEmailEnabled, isUpdateUserEmail, isUpdateUser);
 
-            // Convert to user data
-            user.setFirstNames(firstName);
-            user.setLastName(lastName);
-            user.setEmail(email);
-            user.setPassword(password);
-            user.setSalt(password);
-            user.setNotificationEmailEnabled(notificationEmailEnabled);
-            if(notificationEmailEnabled){
-                user.setNotificationEmail(notificationEmail);
-            }
-            user.setBanned(true);
-            // set client IP address
-            user.setModifyingIP(RequestUtils.getRemoteAddress(request));
-            // register through
-            user.setRegisteredThrough(RequestUtils.getSite(request));
-            // set default language
-            user.setRegisterLanguage(RequestUtils
-                    .getNavigationLanguage(request));
+        // Convert to user data
+        User user = new User();
+        user.setFirstNames(firstName);
+        user.setLastName(lastName);
+        user.setEmail(email);
+        user.setPassword(password);
+        user.setSalt(password);
+        user.setNotificationEmailEnabled(notificationEmailEnabled);
+        if(notificationEmailEnabled){
+            user.setNotificationEmail(notificationEmail);
+        }
+        user.setBanned(true);
+        // set client IP address
+        user.setModifyingIP(RequestUtils.getRemoteAddress(request));
+        // register through
+        user.setRegisteredThrough(RequestUtils.getSite(request));
+        // set default language
+        user.setRegisterLanguage(RequestUtils
+                .getNavigationLanguage(request));
 
-            user.setEmailVerified(false);
+        user.setEmailVerified(false);
 
-            SiteDomain siteDomain = (SiteDomain) request
-                    .getAttribute(org.digijava.kernel.Constants.CURRENT_SITE);
+        SiteDomain siteDomain = (SiteDomain) request
+                .getAttribute(org.digijava.kernel.Constants.CURRENT_SITE);
 
-            // ------------- SET USER LANGUAGES
-            UserLangPreferences userLangPreferences = new UserLangPreferences(
-                    user, DgUtil.getRootSite(siteDomain.getSite()));
+        // ------------- SET USER LANGUAGES
+        UserLangPreferences userLangPreferences = new UserLangPreferences(
+                user, DgUtil.getRootSite(siteDomain.getSite()));
 
-            Locale language = new Locale();
-            language.setCode(languageCode);
+        Locale language = new Locale();
+        language.setCode(languageCode);
 
-            // set alert language
-            userLangPreferences.setAlertsLanguage(language);
-            //set navigation language
-            userLangPreferences.setNavigationLanguage(language);
-            user.setUserLangPreferences(userLangPreferences);
+        // set alert language
+        userLangPreferences.setAlertsLanguage(language);
+        //set navigation language
+        userLangPreferences.setNavigationLanguage(language);
+        user.setUserLangPreferences(userLangPreferences);
+
+        // Send verification email
+        boolean isMailActivate = FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.USER_REGISTRATION_BY_MAIL);
+
+        if (isMailActivate) {
+            System.out.println("send activation email");
+            sendMail(language, siteDomain, user, createUser);
+        } else {
+            user.setEmailVerified(true);
+        }
 
         try {
             DbUtil.registerUser(user);
@@ -160,16 +171,16 @@ public class UserManagerService {
         }
         DgUtil.saveUserLanguagePreferences(user, request, language);
 
-            // Send verification email
-            boolean isMailActivate = FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.USER_REGISTRATION_BY_MAIL);
-
-            if (isMailActivate) {
-                System.out.println("send activation email");
-                sendMail(language, siteDomain);
-            } else {
-                user.setEmailVerified(true);
-            }
-
+        //save amp user extensions;
+        AmpUserExtension userExt=new AmpUserExtension();
+        AmpUserExtensionPK extPK=new AmpUserExtensionPK(user);
+        userExt.setAmpUserExtId(extPK);
+        try {
+            AmpUserUtil.saveAmpUserExtension(userExt);
+        } catch (AimException e) {
+            logger.error("Exception from creating request user extentions", e);
+            throw new RuntimeException(e);
+        }
         return createUserProfileInformation(user);
     }
 
@@ -279,7 +290,7 @@ public class UserManagerService {
         return  createUserProfileInformation(user);
     }
 
-        private void validateUserFields(String firstName, String lastName, String email, String confirmEmail, String password, String passwordConfirmation,
+    private void validateUserFields(String firstName, String lastName, String email, String confirmEmail, String password, String passwordConfirmation,
                                     String notificationEmail, String repeatNotificationEmail, boolean notificationEmailEnabled, boolean isUpdateUserEmail, boolean isUpdateUser){
         if (StringUtils.isBlank(firstName) || StringUtils.isBlank(lastName) ||
                 StringUtils.isBlank(email) || StringUtils.isBlank(confirmEmail))
@@ -289,19 +300,19 @@ public class UserManagerService {
             if(StringUtils.isBlank(password) || StringUtils.isBlank(passwordConfirmation)){
                 ApiErrorResponseService.reportError(BAD_REQUEST, SecurityErrors.PASSWORD_FIELD_REQUIRED);
             }
-        } else {
+        }
             // Check if its a valid email and if use with the same email exists
             if(!isValidEmail(email) || !isValidEmail(confirmEmail)){
                 ApiErrorResponseService.reportError(BAD_REQUEST, SecurityErrors.NOT_VALID_EMAIL);
             } else if(!email.equals(confirmEmail)){
                 ApiErrorResponseService.reportError(BAD_REQUEST, SecurityErrors.EMAIL_NOT_EQUAL);
             }else if(isUpdateUserEmail){
-                User user = UserUtils.getUserByEmailAddress(email);
-                if(user != null){
+                User userExists = UserUtils.getUserByEmailAddress(email);
+                if(userExists != null){
                     ApiErrorResponseService.reportError(BAD_REQUEST, SecurityErrors.USER_EMAIL_EXISTS);
                 }
             }
-        }
+
 
         if (notificationEmailEnabled){
             if(StringUtils.isBlank(notificationEmail) || StringUtils.isBlank(repeatNotificationEmail)){
@@ -327,7 +338,7 @@ public class UserManagerService {
         return matcher.matches();
     }
 
-    private void sendMail(Locale language, SiteDomain siteDomain){
+    private void sendMail(Locale language, SiteDomain siteDomain, User user, CreateUserRequest createUser){
         String des1 = "Welcome to AMP!";
         String des2 = "AMP Administrator has created your user profile.";
         String des3 = "Your login information:";
@@ -348,6 +359,15 @@ public class UserManagerService {
         String des = des1+ '\n'+'\n'+des2 +'\n'+ des3 +'\n'+'\n'+'\t'+'\t'+ des4;
         String cri = ""+'\n'+'\t'+'\t'+cri1;
         String pti = ""+'\n'+'\n'+ pti1;
+
+        String description = des + user.getEmail() + cri + createUser.getPassword() + pti;
+        String title = TranslatorWorker.translateText("Registration Confirmation", langCode, siteDomain.getSite());
+        try {
+            DgEmailManager.sendMail(user.getEmail(), title, description);
+        } catch (Exception e) {
+            logger.error("Exception from sending registration email", e);
+            throw new RuntimeException(e);
+        }
     }
 
     public LoggedUserInformation createUserProfileInformation(User user) {
@@ -382,15 +402,17 @@ public class UserManagerService {
     public void userExtention(User user, LoggedUserInformation userInfo){
         try {
             AmpUserExtension userExt = AmpUserUtil.getAmpUserExtension(user);
-            if (userExt.getOrgGroup() != null) {
-                userInfo.setOrganizationGroupId(userExt.getOrgGroup().getAmpOrgGrpId());
-            }
-            if (userExt.getOrgType() != null) {
-                userInfo.setOrganizationTypeId(userExt.getOrgType().getAmpOrgTypeId());
-            }
-            if (userExt.getOrganization() != null) {
-                userInfo.setOrganizationName(userExt.getOrganization().getName());
-                userInfo.setOrganizationId(userExt.getOrganization().getAmpOrgId());
+            if(userExt != null){
+                if (userExt.getOrgGroup() != null) {
+                    userInfo.setOrganizationGroupId(userExt.getOrgGroup().getAmpOrgGrpId());
+                }
+                if (userExt.getOrgType() != null) {
+                    userInfo.setOrganizationTypeId(userExt.getOrgType().getAmpOrgTypeId());
+                }
+                if (userExt.getOrganization() != null) {
+                    userInfo.setOrganizationName(userExt.getOrganization().getName());
+                    userInfo.setOrganizationId(userExt.getOrganization().getAmpOrgId());
+                }
             }
         } catch (AimException e) {
             logger.error("Exception from getting User extention", e);

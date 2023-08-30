@@ -190,7 +190,7 @@ public class AMPStartupListener extends HttpServlet implements
             registerEhCacheMBeans();
             initAPI();
 //            testWebClient();
-            runQuery();
+//            runQuery();
 
             new SwaggerConfigurer().configure();
 

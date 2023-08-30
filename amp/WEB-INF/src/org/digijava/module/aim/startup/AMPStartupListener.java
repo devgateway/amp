@@ -119,7 +119,7 @@ public class AMPStartupListener extends HttpServlet implements
             try {
                 AmpReportsSchema.getInstance().maintainDescriptions();
 
-            }catch (Exception e)
+            }catch (Throwable e)
             {
                 logger.info("Error occurred: "+e.getMessage(),e);
             }

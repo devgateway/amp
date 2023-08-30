@@ -116,7 +116,13 @@ public class AMPStartupListener extends HttpServlet implements
             if (FeaturesUtil.getDefaultFlag() != null)
                 ampContext.setAttribute(Constants.DEF_FLAG_EXIST, Boolean.TRUE);
 
-            AmpReportsSchema.getInstance().maintainDescriptions();
+            try {
+                AmpReportsSchema.getInstance().maintainDescriptions();
+
+            }catch (Exception e)
+            {
+                logger.info("Error: "+e.getMessage(),e);
+            }
 
             AmpTreeVisibility ampTreeVisibility = new AmpTreeVisibility();
             // get the default amp template

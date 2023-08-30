@@ -19,8 +19,8 @@ const override = config => {
         name: 'container',
         filename: 'remoteEntry.js',
         remotes: {
-            'ampoffline': `ampoffline@${DOMAIN_NAME}/TEMPLATE/reampv2/packages/ampoffline/build/remoteEntry.js`,
-            'reampv2App': `reampv2App@${DOMAIN_NAME}/TEMPLATE/reampv2/packages/reampv2-app/build/remoteEntry.js`,
+            'ampoffline': `ampoffline@/TEMPLATE/reampv2/packages/ampoffline/build/remoteEntry.js`,
+            'reampv2App': `reampv2App@/TEMPLATE/reampv2/packages/reampv2-app/build/remoteEntry.js`,
         },
         shared: {
             ...ppackageJson.dependencies,

@@ -121,7 +121,7 @@ public class AMPStartupListener extends HttpServlet implements
 
             }catch (Exception e)
             {
-                logger.info("Error: "+e.getMessage(),e);
+                logger.info("Error occurred: "+e.getMessage(),e);
             }
 
             AmpTreeVisibility ampTreeVisibility = new AmpTreeVisibility();

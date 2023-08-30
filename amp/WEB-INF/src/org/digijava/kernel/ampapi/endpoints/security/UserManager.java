@@ -29,7 +29,7 @@ public class UserManager {
     private UserManagerService userManagerService = UserManagerService.getInstance();
 
     @GET
-    @Path("/user/")
+    @Path("/user/profile")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = AuthRule.AUTHENTICATED, id = "user", ui = false)
     @ApiOperation("Get user session information for update.")
@@ -48,7 +48,7 @@ public class UserManager {
     }
 
     @PUT
-    @Path("/update/user/{id}")
+    @Path("/update/user/profile/{id}")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     @ApiMethod(authTypes = {AuthRule.AUTHENTICATED}, id = "updateUser", ui = false)
     @ApiOperation("Update an existing user profile")

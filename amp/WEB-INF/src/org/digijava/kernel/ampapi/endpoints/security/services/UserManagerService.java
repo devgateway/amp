@@ -79,7 +79,7 @@ public class UserManagerService {
             }
         }
         userManager.setAddress(user.getAddress());
-        userManager.setCountry(user.getCountry().getIso());
+        userManager.setCountryIso(user.getCountry().getIso());
         userManager.setLanguageCode(user.getRegisterLanguage().getCode());
 
         userExtention(user, userManager);
@@ -186,6 +186,7 @@ public class UserManagerService {
         String firstName = updateUser.getFirstName();
         String lastName = updateUser.getLastName();
         String email = updateUser.getEmail();
+        String address = updateUser.getAddress();
         String password = null;
         String passwordConfirmation = null;
         String notificationEmail = updateUser.getNotificationEmail();
@@ -225,6 +226,7 @@ public class UserManagerService {
         user.setFirstNames(firstName);
         user.setLastName(lastName);
         user.setEmail(email);
+        user.setAddress(address);
         user.setNotificationEmailEnabled(notificationEmailEnabled);
         if(notificationEmailEnabled){
             user.setNotificationEmail(notificationEmail);
@@ -373,7 +375,7 @@ public class UserManagerService {
         userProfileInformation.setEmail(user.getEmail());
         userProfileInformation.setAddress(user.getAddress());
         if(user.getCountry() != null){
-            userProfileInformation.setCountry(user.getCountry().getIso());
+            userProfileInformation.setCountryIso(user.getCountry().getIso());
         }
         if(user.getRegisterLanguage() != null){
             userProfileInformation.setLanguageCode(user.getRegisterLanguage().getCode());

@@ -138,14 +138,6 @@ public class LoggedUserInformation {
         this.address = address;
     }
 
-    public String getCountry() {
-        return countryIso;
-    }
-
-    public void setCountry(String country) {
-        this.countryIso = country;
-    }
-
     public String getOrganizationName() {
         return organizationName;
     }
@@ -184,5 +176,13 @@ public class LoggedUserInformation {
 
     public void setOrganizationId(Long organizationId) {
         this.organizationId = organizationId;
+    }
+
+    public String getCountryIso() {
+        return countryIso;
+    }
+
+    public void setCountryIso(String countryIso) {
+        this.countryIso = countryIso;
     }
 }

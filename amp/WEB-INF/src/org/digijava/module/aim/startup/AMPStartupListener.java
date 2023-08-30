@@ -103,18 +103,18 @@ public class AMPStartupListener extends HttpServlet implements
         try {
             ampContext = sce.getServletContext();
             SERVLET_CONTEXT_ROOT_REAL_PATH = ampContext.getRealPath("/");
-            ampContext.setAttribute(Constants.ME_FEATURE, new Boolean(true));
-            ampContext.setAttribute(Constants.AA_FEATURE, new Boolean(true));
-            ampContext.setAttribute(Constants.PI_FEATURE, new Boolean(true));
-            ampContext.setAttribute(Constants.CL_FEATURE, new Boolean(true));
-            ampContext.setAttribute(Constants.DC_FEATURE, new Boolean(true));
-            ampContext.setAttribute(Constants.SC_FEATURE, new Boolean(true));
-            ampContext.setAttribute(Constants.MS_FEATURE, new Boolean(true));
-            ampContext.setAttribute(Constants.LB_FEATURE, new Boolean(true));
-            ampContext.setAttribute(Constants.SA_FEATURE, new Boolean(true));
+            ampContext.setAttribute(Constants.ME_FEATURE, Boolean.TRUE);
+            ampContext.setAttribute(Constants.AA_FEATURE, Boolean.TRUE);
+            ampContext.setAttribute(Constants.PI_FEATURE, Boolean.TRUE);
+            ampContext.setAttribute(Constants.CL_FEATURE, Boolean.TRUE);
+            ampContext.setAttribute(Constants.DC_FEATURE, Boolean.TRUE);
+            ampContext.setAttribute(Constants.SC_FEATURE, Boolean.TRUE);
+            ampContext.setAttribute(Constants.MS_FEATURE, Boolean.TRUE);
+            ampContext.setAttribute(Constants.LB_FEATURE, Boolean.TRUE);
+            ampContext.setAttribute(Constants.SA_FEATURE, Boolean.TRUE);
 
             if (FeaturesUtil.getDefaultFlag() != null)
-                ampContext.setAttribute(Constants.DEF_FLAG_EXIST, new Boolean(true));
+                ampContext.setAttribute(Constants.DEF_FLAG_EXIST, Boolean.TRUE);
 
             AmpReportsSchema.getInstance().maintainDescriptions();
 
@@ -154,7 +154,7 @@ public class AMPStartupListener extends HttpServlet implements
             PermissionUtil.getAvailableGates(ampContext);
 
             // initialize permissible simple name singleton
-            GatePermConst.availablePermissiblesBySimpleNames = new Hashtable<String, Class>();
+            GatePermConst.availablePermissiblesBySimpleNames = new Hashtable<>();
             for (int i = 0; i < GatePermConst.availablePermissibles.length; i++) {
                 GatePermConst.availablePermissiblesBySimpleNames.put(
                         GatePermConst.availablePermissibles[i].getSimpleName(),
@@ -175,9 +175,7 @@ public class AMPStartupListener extends HttpServlet implements
             
             logger.info("loading the activity->pledge view twins configuration and checking for consistency...");
             int a = PledgesToActivitiesBridge.ACTIVITY_VIEW_TO_PLEDGE_VIEW.size();
-            if (a < 0)
-                throw new RuntimeException("should not happen!");
-            
+
             logger.info("loading the column ancestorship relationships and checking for consistency with the database...");
             logger.info("loaded relationships for " + ARDimension.columnAncestors.size() + " columns"); // DO NOT DELETE THIS LINE! it has the sideeffect of checking database for consistency (else it will crash anyway at the first run report)
             
@@ -191,7 +189,8 @@ public class AMPStartupListener extends HttpServlet implements
             importGazeteer();
             registerEhCacheMBeans();
             initAPI();
-            testWebClient();
+//            testWebClient();
+            runQuery();
 
             new SwaggerConfigurer().configure();
 
@@ -216,7 +215,7 @@ public class AMPStartupListener extends HttpServlet implements
 
     }
 
-    public void runQuery()
+    public static void runQuery()
     {
         logger.info("Creating trubudget relations");
         Session session = PersistenceManager.openNewSession();
@@ -277,6 +276,14 @@ public class AMPStartupListener extends HttpServlet implements
                         "    PRIMARY KEY (user_id, trubudget_intent_id)\n" +
                         ");";
                 statement.executeUpdate(relationSql);
+                String insertIntoGlobalSettings="INSERT INTO amp_global_settings(settingsname,settingsvalue,possiblevalues,description,section,value_translatable,internal)" +
+                        "VALUES\n" +
+                        " ('isEnabled','true','t_Boolean','Is Trubudget enabled for this deployment','trubudget',NULL,'true'),"+
+                        " ('baseUrl','http://localhost:8080/api/','','Trubudget base url','trubudget',NULL,'true'),"+
+                        " ('rootUser','root','','Trubudget username for root user','trubudget',NULL,'true'),"+
+                        "('rootPassword','root-secret','','Trubudget password for root user','trubudget',NULL,'true'),"+
+                        "('organization','KfW','','Organization name to be used for this deployment','trubudget',NULL,'true') ON CONFLICT (settingsname,section) DO NOTHING";
+//                statement.executeUpdate(insertIntoGlobalSettings);
             } catch (SQLException e) {
                 // Handle the exception
                 e.printStackTrace();

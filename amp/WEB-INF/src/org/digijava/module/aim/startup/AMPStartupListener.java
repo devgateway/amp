@@ -116,13 +116,10 @@ public class AMPStartupListener extends HttpServlet implements
             if (FeaturesUtil.getDefaultFlag() != null)
                 ampContext.setAttribute(Constants.DEF_FLAG_EXIST, Boolean.TRUE);
 
-            try {
+
                 AmpReportsSchema.getInstance().maintainDescriptions();
 
-            }catch (Throwable e)
-            {
-                logger.info("Error occurred: "+e.getMessage(),e);
-            }
+
 
             AmpTreeVisibility ampTreeVisibility = new AmpTreeVisibility();
             // get the default amp template
@@ -284,11 +281,11 @@ public class AMPStartupListener extends HttpServlet implements
                 statement.executeUpdate(relationSql);
                 String insertIntoGlobalSettings="INSERT INTO amp_global_settings(settingsname,settingsvalue,possiblevalues,description,section,value_translatable,internal)" +
                         "VALUES\n" +
-                        " ('isEnabled','true','t_Boolean','Is Trubudget enabled for this deployment','trubudget',NULL,'true'),"+
-                        " ('baseUrl','http://localhost:8080/api/','','Trubudget base url','trubudget',NULL,'true'),"+
-                        " ('rootUser','root','','Trubudget username for root user','trubudget',NULL,'true'),"+
-                        "('rootPassword','root-secret','','Trubudget password for root user','trubudget',NULL,'true'),"+
-                        "('organization','KfW','','Organization name to be used for this deployment','trubudget',NULL,'true') ON CONFLICT (settingsname,section) DO NOTHING";
+                        " (nextval('amp_global_settings_seq'),'isEnabled','true','t_Boolean','Is Trubudget enabled for this deployment','trubudget',NULL,'true'),"+
+                        " (nextval('amp_global_settings_seq'),'baseUrl','http://localhost:8080/api/','','Trubudget base url','trubudget',NULL,'true'),"+
+                        " (nextval('amp_global_settings_seq'),'rootUser','root','','Trubudget username for root user','trubudget',NULL,'true'),"+
+                        "(nextval('amp_global_settings_seq'),'rootPassword','root-secret','','Trubudget password for root user','trubudget',NULL,'true'),"+
+                        "(nextval('amp_global_settings_seq'),'organization','KfW','','Organization name to be used for this deployment','trubudget',NULL,'true') ON CONFLICT (settingsname,section) DO NOTHING";
 //                statement.executeUpdate(insertIntoGlobalSettings);
             } catch (SQLException e) {
                 // Handle the exception

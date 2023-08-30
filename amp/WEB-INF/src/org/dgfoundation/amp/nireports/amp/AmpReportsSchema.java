@@ -358,7 +358,13 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         no_dimension(ColumnConstants.DESCRIPTION_OF_COMPONENT_FUNDING, "v_component_funding_description");
         
         degenerate_dimension(ColumnConstants.DISASTER_RESPONSE_MARKER, "v_disaster_response_marker", boolDimension);
-        no_entity(ColumnConstants.DISBURSEMENT_ID, "v_disbursement_id");
+        try {
+            no_entity(ColumnConstants.DISBURSEMENT_ID, "v_disbursement_id");
+
+        }catch (Exception e)
+        {
+            logger.info("Error occurred: "+e.getMessage(),e);
+        }
         no_dimension(ColumnConstants.DONOR_CONTACT_ORGANIZATION, "v_donor_cont_org");
         no_entity(ColumnConstants.ENVIRONMENT, "v_environment", DG_EDITOR_POSTPROCESSOR);
         no_entity(ColumnConstants.EQUAL_OPPORTUNITY, "v_equalopportunity", DG_EDITOR_POSTPROCESSOR);

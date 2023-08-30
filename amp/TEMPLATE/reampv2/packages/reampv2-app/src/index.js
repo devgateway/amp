@@ -7,7 +7,7 @@ import('./bootstrap').then(({ mount }) => {
         console.log('Mounting reampv2 app')
         mount({
             mountPoint: appRoot,
-            routingStrategy: 'browser'
+            routingStrategy: 'browser',
         });
     }
 });

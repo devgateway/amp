@@ -8,17 +8,17 @@ import * as serviceWorker from './serviceWorker';
 import '@devgateway/amp-filter/dist/amp-filter.css';
 const boilerplate = require('@devgateway/amp-boilerplate/dist/amp-boilerplate');
 
-const Root = ({ routingStrategy }) => {
+const Root = ({ routingStrategy, initialPathName }) => {
     return (
         <React.StrictMode>
-            <App routingStrategy={routingStrategy}/>
+            <App routingStrategy={routingStrategy} initialPathName={initialPathName}/>
         </React.StrictMode>
     )
 };
 
-export const mount = ({ mountPoint, routingStrategy , standalone = true}) => {
+export const mount = ({ mountPoint, routingStrategy , initialPathName = '/', standalone = true}) => {
     if (mountPoint) {
-        ReactDOM.render(<Root routingStrategy={routingStrategy }/>, mountPoint);
+        ReactDOM.render(<Root routingStrategy={routingStrategy} initialPathName={initialPathName}/>, mountPoint);
     }
 
     if (standalone) {

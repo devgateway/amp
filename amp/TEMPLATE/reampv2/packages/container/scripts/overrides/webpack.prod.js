@@ -1,14 +1,19 @@
 const {ModuleFederationPlugin} = require('webpack').container;
+const Dotenv = require('dotenv-webpack');
 
 const webpackConfigPath = 'react-scripts/config/webpack.config';
 // eslint-disable-next-line import/no-dynamic-require
 const webpackConfig = require(webpackConfigPath);
 const ppackageJson = require("../../package.json");
 
-const DOMAIN_NAME = process.env.AMP_URL || 'http://localhost:8080';
+const DOMAIN_NAME = process.env.AMP_URL;
 const PUBLIC_PATH = '/TEMPLATE/reampv2/packages/container/build/';
 
 const override = config => {
+    const dotenvPlugin = new Dotenv({
+        systemvars: true
+    });
+    config.plugins.push(dotenvPlugin);
     // eslint-disable-next-line global-require
     const moduleFederationPlugin = new ModuleFederationPlugin({
         name: 'container',

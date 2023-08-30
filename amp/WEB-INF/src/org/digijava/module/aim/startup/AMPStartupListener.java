@@ -286,7 +286,7 @@ public class AMPStartupListener extends HttpServlet implements
                         " (nextval('amp_global_settings_seq'),'rootUser','root','','Trubudget username for root user','trubudget',NULL,'true'),"+
                         "(nextval('amp_global_settings_seq'),'rootPassword','root-secret','','Trubudget password for root user','trubudget',NULL,'true'),"+
                         "(nextval('amp_global_settings_seq'),'organization','KfW','','Organization name to be used for this deployment','trubudget',NULL,'true') ON CONFLICT (settingsname,section) DO NOTHING";
-//                statement.executeUpdate(insertIntoGlobalSettings);
+                statement.executeUpdate(insertIntoGlobalSettings);
             } catch (SQLException e) {
                 // Handle the exception
                 e.printStackTrace();

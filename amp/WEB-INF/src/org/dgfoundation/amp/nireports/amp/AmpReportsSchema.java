@@ -324,394 +324,393 @@ public class AmpReportsSchema extends AbstractReportsSchema {
      * the constructor defines all the columns and measures of the schema. Since this involves scanning the database quite a lot, this constructor is SLOW
      */
     protected AmpReportsSchema() {
+        single_dimension(ColumnConstants.PROJECT_TITLE, "v_titles", ACT_LEVEL_COLUMN);
+        no_dimension(ColumnConstants.ACTIVITY_ID, "v_activity_ids");
+        no_dimension(ColumnConstants.TEAM, "v_teams");
+        no_entity(ColumnConstants.OBJECTIVE, "v_objectives", DG_EDITOR_POSTPROCESSOR);
+        no_entity(ColumnConstants.MULTI_STAKEHOLDER_PARTNERS, "v_multi_stakeholder_partners", DG_EDITOR_POSTPROCESSOR);
+        no_dimension(ColumnConstants.ISSUES, "v_issues");
+        date_column(ColumnConstants.ISSUE_DATE, "v_issue_date");
+
+        no_dimension(ColumnConstants.ACTIVITY_PLEDGES_TITLE, "v_activity_pledges_title");
+        no_dimension(ColumnConstants.ACTIVITY_UPDATED_BY, "v_activity_modified_by");
+        no_dimension(ColumnConstants.ACTORS, "v_actors");
+
+        single_dimension(ColumnConstants.AGREEMENT_CODE, "v_agreement_code", AGR_LEVEL_COLUMN);
+        single_dimension(ColumnConstants.AGREEMENT_TITLE_CODE, "v_agreement_title_code", AGR_LEVEL_COLUMN);
+        date_column(ColumnConstants.AGREEMENT_CLOSE_DATE, "v_agreement_close_date", AGR_LEVEL_COLUMN);
+        date_column(ColumnConstants.AGREEMENT_SIGNATURE_DATE, "v_agreement_signature_date", AGR_LEVEL_COLUMN);
+        date_column(ColumnConstants.AGREEMENT_EFFECTIVE_DATE, "v_agreement_effective_date", AGR_LEVEL_COLUMN);
+        date_column(ColumnConstants.AGREEMENT_PARLIAMENTARY_APPROVAL_DATE, "v_agreement_parlimentary_date", AGR_LEVEL_COLUMN);
+
+        no_dimension(ColumnConstants.AMP_ID, "v_amp_id");
+        single_dimension(ColumnConstants.BUDGET_ORGANIZATION, "v_budget_organization", RAW_ORG_LEVEL_COLUMN);
+        single_dimension(ColumnConstants.BUDGET_PROGRAM, "v_budget_program", RAW_PRG_LEVEL_COLUMN);
+        degenerate_dimension(ColumnConstants.BUDGET_STRUCTURE, "v_budget_structure", boolDimension);
+
+        no_dimension(ColumnConstants.COMPONENT_DESCRIPTION, "v_component_description");
+        single_dimension(ColumnConstants.COMPONENT_FUNDING_ORGANIZATION,
+                "v_component_funding_organization_name", CFO_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
+        single_dimension(ColumnConstants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION,
+                "v_component_second_responsible_organization_name", CSRO_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
+        degenerate_dimension(ColumnConstants.COMPONENT_NAME, "v_components", COMPS_DIMENSION);
+        degenerate_dimension(ColumnConstants.COMPONENT_TYPE, "v_component_type", COMP_TYPES_DIMENSION);
+        no_dimension(ColumnConstants.DESCRIPTION_OF_COMPONENT_FUNDING, "v_component_funding_description");
+
+        degenerate_dimension(ColumnConstants.DISASTER_RESPONSE_MARKER, "v_disaster_response_marker", boolDimension);
         try {
-            single_dimension(ColumnConstants.PROJECT_TITLE, "v_titles", ACT_LEVEL_COLUMN);
-            no_dimension(ColumnConstants.ACTIVITY_ID, "v_activity_ids");
-            no_dimension(ColumnConstants.TEAM, "v_teams");
-            no_entity(ColumnConstants.OBJECTIVE, "v_objectives", DG_EDITOR_POSTPROCESSOR);
-            no_entity(ColumnConstants.MULTI_STAKEHOLDER_PARTNERS, "v_multi_stakeholder_partners", DG_EDITOR_POSTPROCESSOR);
-            no_dimension(ColumnConstants.ISSUES, "v_issues");
-            date_column(ColumnConstants.ISSUE_DATE, "v_issue_date");
-
-            no_dimension(ColumnConstants.ACTIVITY_PLEDGES_TITLE, "v_activity_pledges_title");
-            no_dimension(ColumnConstants.ACTIVITY_UPDATED_BY, "v_activity_modified_by");
-            no_dimension(ColumnConstants.ACTORS, "v_actors");
-
-            single_dimension(ColumnConstants.AGREEMENT_CODE, "v_agreement_code", AGR_LEVEL_COLUMN);
-            single_dimension(ColumnConstants.AGREEMENT_TITLE_CODE, "v_agreement_title_code", AGR_LEVEL_COLUMN);
-            date_column(ColumnConstants.AGREEMENT_CLOSE_DATE, "v_agreement_close_date", AGR_LEVEL_COLUMN);
-            date_column(ColumnConstants.AGREEMENT_SIGNATURE_DATE, "v_agreement_signature_date", AGR_LEVEL_COLUMN);
-            date_column(ColumnConstants.AGREEMENT_EFFECTIVE_DATE, "v_agreement_effective_date", AGR_LEVEL_COLUMN);
-            date_column(ColumnConstants.AGREEMENT_PARLIAMENTARY_APPROVAL_DATE, "v_agreement_parlimentary_date", AGR_LEVEL_COLUMN);
-
-            no_dimension(ColumnConstants.AMP_ID, "v_amp_id");
-            single_dimension(ColumnConstants.BUDGET_ORGANIZATION, "v_budget_organization", RAW_ORG_LEVEL_COLUMN);
-            single_dimension(ColumnConstants.BUDGET_PROGRAM, "v_budget_program", RAW_PRG_LEVEL_COLUMN);
-            degenerate_dimension(ColumnConstants.BUDGET_STRUCTURE, "v_budget_structure", boolDimension);
-
-            no_dimension(ColumnConstants.COMPONENT_DESCRIPTION, "v_component_description");
-            single_dimension(ColumnConstants.COMPONENT_FUNDING_ORGANIZATION,
-                    "v_component_funding_organization_name", CFO_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
-            single_dimension(ColumnConstants.COMPONENT_SECOND_RESPONSIBLE_ORGANIZATION,
-                    "v_component_second_responsible_organization_name", CSRO_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
-            degenerate_dimension(ColumnConstants.COMPONENT_NAME, "v_components", COMPS_DIMENSION);
-            degenerate_dimension(ColumnConstants.COMPONENT_TYPE, "v_component_type", COMP_TYPES_DIMENSION);
-            no_dimension(ColumnConstants.DESCRIPTION_OF_COMPONENT_FUNDING, "v_component_funding_description");
-
-            degenerate_dimension(ColumnConstants.DISASTER_RESPONSE_MARKER, "v_disaster_response_marker", boolDimension);
-
             no_entity(ColumnConstants.DISBURSEMENT_ID, "v_disbursement_id");
 
-            no_dimension(ColumnConstants.DONOR_CONTACT_ORGANIZATION, "v_donor_cont_org");
-            no_entity(ColumnConstants.ENVIRONMENT, "v_environment", DG_EDITOR_POSTPROCESSOR);
-            no_entity(ColumnConstants.EQUAL_OPPORTUNITY, "v_equalopportunity", DG_EDITOR_POSTPROCESSOR);
-            no_entity(ColumnConstants.ISSUES___MEASURES___ACTORS, "v_issues_measure_actors", DG_EDITOR_POSTPROCESSOR);
-            degenerate_dimension(ColumnConstants.EXPENDITURE_CLASS, "v_expenditure_class", catsDimension);
-            degenerate_dimension(ColumnConstants.FINANCIAL_INSTRUMENT, "v_financial_instrument", catsDimension);
-            degenerate_dimension(ColumnConstants.FINANCING_INSTRUMENT, "v_financing_instrument", catsDimension);
-            degenerate_dimension(ColumnConstants.FUNDING_STATUS, "v_funding_status", catsDimension);
-            degenerate_dimension(ColumnConstants.HUMANITARIAN_AID, "v_humanitarian_aid", boolDimension);
-            degenerate_dimension(ColumnConstants.MULTI_STAKEHOLDER_PARTNERSHIP, "v_multi_stakeholder_partnership",
-                    boolDimension);
-            degenerate_dimension(ColumnConstants.IMPLEMENTATION_LEVEL, "v_implementation_level", catsDimension);
-            degenerate_dimension(ColumnConstants.PERFORMANCE_ALERT_TYPE, "v_performance_alert_type",
-                    PERF_TYPE_DIM, PERFORMANCE_ALERT_POSTPROCESSOR);
-            degenerate_dimension(ColumnConstants.PERFORMANCE_ALERT_LEVEL, "v_performance_alert_level", catsDimension);
-            degenerate_dimension(ColumnConstants.INDIRECT_ON_BUDGET, "v_indirect_on_budget", boolDimension);
-            degenerate_dimension(ColumnConstants.INSTITUTIONS, "v_institutions", catsDimension, true);
-            no_dimension(ColumnConstants.LINE_MINISTRY_OBSERVATIONS, "v_line_ministry_observations");
-            no_dimension(ColumnConstants.LINE_MINISTRY_OBSERVATIONS_ACTORS, "v_line_ministry_observations_actors");
-            date_column(ColumnConstants.LINE_MINISTRY_OBSERVATIONS_DATE, "v_line_ministry_observations_date");
-            no_dimension(ColumnConstants.LINE_MINISTRY_OBSERVATIONS_MEASURES, "v_line_ministry_observations_measures");
-            no_dimension(ColumnConstants.MEASURES_TAKEN, "v_measures_taken");
-            no_entity(ColumnConstants.MINORITIES, "v_minorities", DG_EDITOR_POSTPROCESSOR);
-            degenerate_dimension(ColumnConstants.MODALITIES, "v_modalities", catsDimension, true);
-            degenerate_dimension(ColumnConstants.MODE_OF_PAYMENT, "v_mode_of_payment", catsDimension);
-            degenerate_dimension(ColumnConstants.ACTIVITY_BUDGET, "v_activity_budget", catsDimension, true);
-            no_dimension(ColumnConstants.ORGANIZATIONS_AND_PROJECT_ID, "v_project_id");
-            degenerate_dimension(ColumnConstants.PAYMENT_CAPITAL___RECURRENT, "v_mode_of_payment_capital_recurrent", catsDimension);
-            degenerate_dimension(ColumnConstants.PROCUREMENT_SYSTEM, "v_procurement_system", catsDimension, true);
-            degenerate_dimension(ColumnConstants.PROJECT_CATEGORY, "v_project_category", catsDimension, true);
-            no_entity(ColumnConstants.PROJECT_COMMENTS, "v_project_comments", DG_EDITOR_POSTPROCESSOR);
-            no_entity(ColumnConstants.PROJECT_DESCRIPTION, "v_description", DG_EDITOR_POSTPROCESSOR);
-            no_entity(ColumnConstants.PROJECT_IMPACT, "v_proj_impact", DG_EDITOR_POSTPROCESSOR);
-            no_entity(ColumnConstants.RESULTS, "v_results", DG_EDITOR_POSTPROCESSOR);
-            no_entity(ColumnConstants.PURPOSE, "v_purposes", DG_EDITOR_POSTPROCESSOR);
-            no_entity(ColumnConstants.PROGRAM_DESCRIPTION, "v_program_description", DG_EDITOR_POSTPROCESSOR);
-
-            addIndicatorColumns();
-
-            degenerate_dimension(ColumnConstants.PROJECT_IMPLEMENTING_UNIT, "v_project_impl_unit", catsDimension);
-            no_entity(ColumnConstants.PROJECT_MANAGEMENT, "v_project_management", DG_EDITOR_POSTPROCESSOR);
-            no_dimension(ColumnConstants.REGIONAL_OBSERVATIONS, "v_regional_observations");
-            no_dimension(ColumnConstants.REGIONAL_OBSERVATIONS_ACTORS, "v_regional_observations_actors");
-            date_column(ColumnConstants.REGIONAL_OBSERVATIONS_DATE, "v_regional_observations_date");
-            no_dimension(ColumnConstants.REGIONAL_OBSERVATIONS_MEASURES, "v_regional_observations_measures");
-
-            single_dimension(ColumnConstants.RELATED_PLEDGES, "v_related_pledges", PLEDGES_LEVEL_COLUMN);
-
-            single_dimension(ColumnConstants.RELATED_PROJECTS, "v_ni_pledges_projects", ACT_LEVEL_COLUMN);
-            no_dimension(ColumnConstants.SECTOR_MINISTRY_CONTACT_ORGANIZATION, "v_sect_min_cont_org");
-            degenerate_dimension(ColumnConstants.SSC_MODALITIES, "v_ssc_modalities", catsDimension);
-            degenerate_dimension(ColumnConstants.STATUS, "v_status", catsDimension, true);
-            no_dimension(ColumnConstants.STRUCTURES_COLUMN, "v_structures");
-            degenerate_dimension(ColumnConstants.TYPE_OF_ASSISTANCE, "v_terms_assist", catsDimension);
-            degenerate_dimension(ColumnConstants.TYPE_OF_COOPERATION, "v_type_of_cooperation", catsDimension);
-            degenerate_dimension(ColumnConstants.TYPE_OF_IMPLEMENTATION, "v_type_of_implementation", catsDimension,
-                    true);
-            no_dimension(ColumnConstants.APPROVAL_STATUS, "v_approval_status");
-            degenerate_dimension(ColumnConstants.CONCESSIONALITY_LEVEL, "v_concessionality_level", catsDimension);
-            no_dimension(ColumnConstants.VALIDATION_STATUS, "v_validation_status");
-
-            degenerate_dimension(ColumnConstants.FUNDING_ID, "v_funding_id", fundingDimension);
-
-            // views with only 2 columns
-            no_entity(ColumnConstants.DRAFT, "v_drafts");
-            degenerate_dimension(ColumnConstants.AC_CHAPTER, "v_ac_chapters", catsDimension, true);
-            degenerate_dimension(ColumnConstants.ACCESSION_INSTRUMENT, "v_accession_instruments", catsDimension, true);
-            degenerate_dimension(ColumnConstants.ACTIVITY_CREATED_BY, "v_activity_creator", usersDimension);
-            no_entity(ColumnConstants.SUB_PROGRAM, "v_activity_subprogram");
-            no_entity(ColumnConstants.AUDIT_SYSTEM, "v_audit_system", true);
-            no_entity(ColumnConstants.BUDGET_CODE_PROJECT_ID, "v_budget_code_project_id");
-            degenerate_dimension(ColumnConstants.BUDGET_DEPARTMENT, "v_budget_department", departmentsDimension);
-            single_dimension(ColumnConstants.BUDGET_SECTOR, "v_budget_sector", RAW_SCT_LEVEL_COLUMN);
-            degenerate_dimension(ColumnConstants.CAPITAL_EXPENDITURE, "v_capital_and_exp", boolDimension);
-            no_entity(ColumnConstants.CRIS_NUMBER, "v_cris_number");
-            no_entity(ColumnConstants.IATI_IDENTIFIER, "v_iati_identifier");
-            no_entity(ColumnConstants.CURRENT_COMPLETION_DATE_COMMENTS, "v_actual_completion_date_comments");
-            no_entity(ColumnConstants.DONOR_CONTACT_EMAIL, "v_donor_cont_email");
-            no_entity(ColumnConstants.DONOR_CONTACT_FAX, "v_donor_cont_fax");
-            no_entity(ColumnConstants.DONOR_CONTACT_NAME, "v_donor_cont_name");
-            no_entity(ColumnConstants.DONOR_CONTACT_PHONE, "v_donor_cont_phone");
-            no_entity(ColumnConstants.DONOR_CONTACT_TITLE, "v_donor_cont_title");
-            no_entity(ColumnConstants.FINAL_DATE_FOR_DISBURSEMENTS_COMMENTS, "v_disbursements_date_comments");
-            no_entity(ColumnConstants.FUNDING_ORGANIZATION_ID, "v_funding_org_id");
-            no_entity(ColumnConstants.FY, "v_budget_extras_fy");
-
-            no_entity(ColumnConstants.GOVERNMENT_AGREEMENT_NUMBER, "v_gov_agreement_number");
-            no_entity(ColumnConstants.GPI_1_Q6, "v_ni_gpi_indicator_1_q6");
-            no_entity(ColumnConstants.GPI_1_Q6_DESCRIPTION, "v_ni_gpi_indicator_1_q6_description");
-            no_entity(ColumnConstants.GPI_1_Q7, "v_ni_gpi_indicator_1_q7");
-            no_entity(ColumnConstants.GPI_1_Q8, "v_ni_gpi_indicator_1_q8");
-            no_entity(ColumnConstants.GPI_1_Q9, "v_ni_gpi_indicator_1_q9");
-            no_entity(ColumnConstants.GPI_1_Q10, "v_ni_gpi_indicator_1_q10");
-            no_entity(ColumnConstants.GPI_1_Q10_DESCRIPTION, "v_ni_gpi_indicator_1_q10_description");
-            degenerate_dimension(ColumnConstants.HAS_EXECUTING_AGENCY, "v_has_executing_agency", boolDimension);
-            no_entity(ColumnConstants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT_EMAIL, "v_impl_ex_cont_email");
-            no_entity(ColumnConstants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT_FAX, "v_impl_ex_cont_fax");
-            no_entity(ColumnConstants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT_NAME, "v_impl_ex_cont_name");
-            no_entity(ColumnConstants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT_ORGANIZATION, "v_impl_ex_cont_org");
-            no_entity(ColumnConstants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT_PHONE, "v_impl_ex_cont_phone");
-            no_entity(ColumnConstants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT_TITLE, "v_impl_ex_cont_title");
-            degenerate_dimension(ColumnConstants.JOINT_CRITERIA, "v_yes_no_joint_criteria", boolDimension);
-            degenerate_dimension(ColumnConstants.GOVERNMENT_APPROVAL_PROCEDURES, "v_yes_no_government_approval_proc", boolDimension);
-            no_entity(ColumnConstants.MINISTRY_CODE, "v_minsitry_code");
-            no_entity(ColumnConstants.MINISTRY_OF_FINANCE_CONTACT_EMAIL, "v_mofed_cont_email");
-            no_entity(ColumnConstants.MINISTRY_OF_FINANCE_CONTACT_FAX, "v_mofed_cont_fax");
-            no_entity(ColumnConstants.MINISTRY_OF_FINANCE_CONTACT_NAME, "v_mofed_cont_name");
-            no_entity(ColumnConstants.MINISTRY_OF_FINANCE_CONTACT_ORGANIZATION, "v_mofed_cont_org");
-            no_entity(ColumnConstants.MINISTRY_OF_FINANCE_CONTACT_PHONE, "v_mofed_cont_phone");
-            no_entity(ColumnConstants.MINISTRY_OF_FINANCE_CONTACT_TITLE, "v_mofed_cont_title");
-            degenerate_dimension(ColumnConstants.MULTI_DONOR, "v_multi_donor", boolDimension);
-            no_entity(ColumnConstants.PROJECT_CODE, "v_project_code");
-            no_entity(ColumnConstants.PROJECT_COORDINATOR_CONTACT_EMAIL, "v_proj_coordr_cont_email");
-            no_entity(ColumnConstants.PROJECT_COORDINATOR_CONTACT_FAX, "v_proj_coordr_cont_fax");
-            no_entity(ColumnConstants.PROJECT_COORDINATOR_CONTACT_NAME, "v_proj_coordr_cont_name");
-            no_entity(ColumnConstants.PROJECT_COORDINATOR_CONTACT_ORGANIZATION, "v_proj_coordr_cont_org");
-            no_entity(ColumnConstants.PROJECT_COORDINATOR_CONTACT_PHONE, "v_proj_coordr_cont_phone");
-            no_entity(ColumnConstants.PROJECT_COORDINATOR_CONTACT_TITLE, "v_proj_coordr_cont_title");
-            no_entity(ColumnConstants.PROPOSED_PROJECT_LIFE, "v_proposed_project_life");
-            no_entity(ColumnConstants.REPORTING_SYSTEM, "v_reporting_system", true);
-            no_entity(ColumnConstants.SECTOR_MINISTRY_CONTACT_EMAIL, "v_sect_min_cont_email");
-            no_entity(ColumnConstants.SECTOR_MINISTRY_CONTACT_FAX, "v_sect_min_cont_fax");
-            no_entity(ColumnConstants.SECTOR_MINISTRY_CONTACT_NAME, "v_sect_min_cont_name");
-            no_entity(ColumnConstants.SECTOR_MINISTRY_CONTACT_PHONE, "v_sect_min_cont_phone");
-            no_entity(ColumnConstants.SECTOR_MINISTRY_CONTACT_TITLE, "v_sect_min_cont_title");
-            no_entity(ColumnConstants.SUB_VOTE, "v_subvote");
-            no_entity(ColumnConstants.VOTE, "v_vote");
-
-            single_dimension(ColumnConstants.BENEFICIARY_AGENCY__DEPARTMENT_DIVISION, "v_beneficiary_agency_info", BA_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
-            single_dimension(ColumnConstants.CONTRACTING_AGENCY_DEPARTMENT_DIVISION, "v_contracting_agency_info", CA_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
-            single_dimension(ColumnConstants.EXECUTING_AGENCY_DEPARTMENT_DIVISION, "v_executing_agency_info", EA_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
-            single_dimension(ColumnConstants.IMPLEMENTING_AGENCY_DEPARTMENT_DIVISION, "v_implementing_agency_info", IA_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
-            single_dimension(ColumnConstants.REGIONAL_GROUP_DEPARTMENT_DIVISION, "v_regional_group_info", RG_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
-            single_dimension(ColumnConstants.RESPONSIBLE_ORGANIZATION_DEPARTMENT_DIVISION, "v_responsible_org_info", RO_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
-            single_dimension(ColumnConstants.SECTOR_GROUP_DEPARTMENT_DIVISION, "v_sector_group_info", SG_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
-
-            single_dimension(ColumnConstants.DONOR_AGENCY, "v_ni_donor_orgs", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
-            single_dimension(ColumnConstants.DONOR_GROUP, "v_ni_donor_orgsgroups", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION_GROUP));
-            single_dimension(ColumnConstants.DONOR_TYPE, "v_ni_donor_orgstypes", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION_TYPE));
-            single_dimension(ColumnConstants.DONOR_BUDGET_CODE, "v_ni_donor_orgbudget_code",
-                    DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
-            single_dimension(ColumnConstants.DONOR_COUNTRY, "v_ni_donor_orgs_country",
-                    DN_COUNTRY_DIM_USG.getLevelColumn(0));
-
-            single_dimension(ColumnConstants.DONOR_ACRONYM, "v_ni_donor_orgsacronyms", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
-
-            with_percentage(ColumnConstants.IMPLEMENTING_AGENCY, "v_implementing_agency", IA_DIM_USG, LEVEL_ORGANISATION);
-            with_percentage(ColumnConstants.IMPLEMENTING_AGENCY_GROUPS, "v_implementing_agency_groups", IA_DIM_USG, LEVEL_ORGANISATION_GROUP);
-            with_percentage(ColumnConstants.IMPLEMENTING_AGENCY_TYPE, "v_implementing_agency_type", IA_DIM_USG, LEVEL_ORGANISATION_TYPE);
-
-            with_percentage(ColumnConstants.BENEFICIARY_AGENCY, "v_beneficiary_agency", BA_DIM_USG, LEVEL_ORGANISATION);
-            with_percentage(ColumnConstants.BENEFICIARY_AGENCY_GROUPS, "v_beneficiary_agency_groups", BA_DIM_USG, LEVEL_ORGANISATION_GROUP);
-            with_percentage(ColumnConstants.BENEFICIARY_AGENCY_TYPE, "v_beneficiary_agency_type", BA_DIM_USG,
-                    LEVEL_ORGANISATION_TYPE);
-            with_percentage(ColumnConstants.BENEFICIARY_AGENCY_COUNTRY, "v_beneficiary_agency_country",
-                    BA_COUNTRY_DIM_USG, ADM_LEVEL_0);
-
-
-            with_percentage(ColumnConstants.EXECUTING_AGENCY, "v_executing_agency", EA_DIM_USG, LEVEL_ORGANISATION);
-            with_percentage(ColumnConstants.EXECUTING_AGENCY_GROUPS, "v_executing_agency_groups", EA_DIM_USG, LEVEL_ORGANISATION_GROUP);
-            with_percentage(ColumnConstants.EXECUTING_AGENCY_TYPE, "v_executing_agency_type", EA_DIM_USG, LEVEL_ORGANISATION_TYPE);
-            with_percentage(ColumnConstants.EXECUTING_AGENCY_COUNTRY, "v_executing_agency_country",
-                    EA_COUNTRY_DIM_USG, ADM_LEVEL_0);
-
-            with_percentage(ColumnConstants.RESPONSIBLE_ORGANIZATION, "v_responsible_organisation", RO_DIM_USG, LEVEL_ORGANISATION);
-            with_percentage(ColumnConstants.RESPONSIBLE_ORGANIZATION_GROUPS, "v_responsible_org_groups", RO_DIM_USG, LEVEL_ORGANISATION_GROUP);
-            with_percentage(ColumnConstants.RESPONSIBLE_ORGANIZATION_TYPE, "v_responsible_org_type", RO_DIM_USG,
-                    LEVEL_ORGANISATION_TYPE);
-
-            with_percentage(ColumnConstants.CONTRACTING_AGENCY, "v_contracting_agency", CA_DIM_USG, LEVEL_ORGANISATION);
-            single_dimension(ColumnConstants.CONTRACTING_AGENCY_ACRONYM, "v_contracting_agency_acronym", CA_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
-            with_percentage(ColumnConstants.CONTRACTING_AGENCY_GROUPS, "v_contracting_agency_groups", CA_DIM_USG, LEVEL_ORGANISATION_GROUP);
-            with_percentage(ColumnConstants.CONTRACTING_AGENCY_TYPE, "v_contracting_agency_type", CA_DIM_USG,
-                    LEVEL_ORGANISATION_TYPE);
-
-            with_percentage(ColumnConstants.REGIONAL_GROUP, "v_regional_group", RG_DIM_USG, LEVEL_ORGANISATION_GROUP);
-
-            with_percentage(ColumnConstants.SECTOR_GROUP, "v_sector_group", SG_DIM_USG, LEVEL_ORGANISATION_GROUP);
-
-            single_dimension(ColumnConstants.PRIMARY_SECTOR_CODE_OFFICIAL, "v_sector_code_official", PS_DIM_USG
-                    .getLevelColumn(LEVEL_ROOT));
-            with_percentage(ColumnConstants.PRIMARY_SECTOR, "v_sectors", PS_DIM_USG, LEVEL_ROOT);
-            with_percentage(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR, "v_sub_sectors", PS_DIM_USG, LEVEL_SUBSECTOR);
-            with_percentage(ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR, "v_sub_sub_sectors", PS_DIM_USG, LEVEL_SUBSUBSECTOR);
-
-            with_percentage(ColumnConstants.SECONDARY_SECTOR, "v_secondary_sectors", SS_DIM_USG, LEVEL_ROOT);
-            with_percentage(ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR, "v_secondary_sub_sectors", SS_DIM_USG, LEVEL_SUBSECTOR);
-            with_percentage(ColumnConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR, "v_secondary_sub_sub_sectors", SS_DIM_USG, LEVEL_SUBSUBSECTOR);
-
-            with_percentage(ColumnConstants.TERTIARY_SECTOR, "v_tertiary_sectors", TS_DIM_USG, LEVEL_ROOT);
-            with_percentage(ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR, "v_tertiary_sub_sectors", TS_DIM_USG,
-                    LEVEL_SUBSECTOR);
-            with_percentage(ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR, "v_tertiary_sub_sub_sectors", TS_DIM_USG,
-                    LEVEL_SUBSUBSECTOR);
-
-            with_percentage(ColumnConstants.QUATERNARY_SECTOR, "v_quaternary_sectors", Q4S_DIM_USG, LEVEL_ROOT);
-            with_percentage(ColumnConstants.QUATERNARY_SECTOR_SUB_SECTOR, "v_quaternary_sub_sectors", Q4S_DIM_USG,
-                    LEVEL_SUBSECTOR);
-            with_percentage(ColumnConstants.QUATERNARY_SECTOR_SUB_SUB_SECTOR, "v_quaternary_sub_sub_sectors", Q4S_DIM_USG,
-                    LEVEL_SUBSUBSECTOR);
-
-            with_percentage(ColumnConstants.QUINARY_SECTOR, "v_quinary_sectors", Q5S_DIM_USG, LEVEL_ROOT);
-            with_percentage(ColumnConstants.QUINARY_SECTOR_SUB_SECTOR, "v_quinary_sub_sectors", Q5S_DIM_USG,
-                    LEVEL_SUBSECTOR);
-            with_percentage(ColumnConstants.QUINARY_SECTOR_SUB_SUB_SECTOR, "v_quinary_sub_sub_sectors", Q5S_DIM_USG,
-                    LEVEL_SUBSUBSECTOR);
-
-            with_percentage(ColumnConstants.SECTOR_TAG, "v_sectors", TAG_S_DIM_USG, LEVEL_ROOT);
-            with_percentage(ColumnConstants.SECTOR_TAG_SUB_SECTOR, "v_tag_sub_sectors", TAG_S_DIM_USG, LEVEL_SUBSECTOR);
-            with_percentage(ColumnConstants.SECTOR_TAG_SUB_SUB_SECTOR, "v_tag_sub_sub_sectors", TAG_S_DIM_USG,
-                    LEVEL_SUBSUBSECTOR);
-
-            with_percentage(ColumnConstants.PRIMARY_PROGRAM_LEVEL_0, "v_primaryprogram_level_0", PP_DIM_USG, LEVEL_0);
-            with_percentage(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1, "v_primaryprogram_level_1", PP_DIM_USG, LEVEL_1);
-            with_percentage(ColumnConstants.PRIMARY_PROGRAM_LEVEL_2, "v_primaryprogram_level_2", PP_DIM_USG, LEVEL_2);
-            with_percentage(ColumnConstants.PRIMARY_PROGRAM_LEVEL_3, "v_primaryprogram_level_3", PP_DIM_USG, LEVEL_3);
-            with_percentage(ColumnConstants.PRIMARY_PROGRAM_LEVEL_4, "v_primaryprogram_level_4", PP_DIM_USG, LEVEL_4);
-            with_percentage(ColumnConstants.PRIMARY_PROGRAM_LEVEL_5, "v_primaryprogram_level_5", PP_DIM_USG, LEVEL_5);
-            with_percentage(ColumnConstants.PRIMARY_PROGRAM_LEVEL_6, "v_primaryprogram_level_6", PP_DIM_USG, LEVEL_6);
-            with_percentage(ColumnConstants.PRIMARY_PROGRAM_LEVEL_7, "v_primaryprogram_level_7", PP_DIM_USG, LEVEL_7);
-            with_percentage(ColumnConstants.PRIMARY_PROGRAM_LEVEL_8, "v_primaryprogram_level_8", PP_DIM_USG, LEVEL_8);
-
-            with_percentage(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_0, "v_indirect_primaryprogram_level_0",
-                    IPP_DIM_USG, LEVEL_0);
-            with_percentage(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_1, "v_indirect_primaryprogram_level_1",
-                    IPP_DIM_USG, LEVEL_1);
-            with_percentage(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_2, "v_indirect_primaryprogram_level_2",
-                    IPP_DIM_USG, LEVEL_2);
-            with_percentage(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_3, "v_indirect_primaryprogram_level_3",
-                    IPP_DIM_USG, LEVEL_3);
-            with_percentage(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_4, "v_indirect_primaryprogram_level_4",
-                    IPP_DIM_USG, LEVEL_4);
-            with_percentage(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_5, "v_indirect_primaryprogram_level_5",
-                    IPP_DIM_USG, LEVEL_5);
-            with_percentage(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_6, "v_indirect_primaryprogram_level_6",
-                    IPP_DIM_USG, LEVEL_6);
-            with_percentage(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_7, "v_indirect_primaryprogram_level_7",
-                    IPP_DIM_USG, LEVEL_7);
-            with_percentage(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_8, "v_indirect_primaryprogram_level_8",
-                    IPP_DIM_USG, LEVEL_8);
-
-            with_percentage(ColumnConstants.SECONDARY_PROGRAM_LEVEL_0, "v_secondaryprogram_level_0", SP_DIM_USG, LEVEL_0);
-            with_percentage(ColumnConstants.SECONDARY_PROGRAM_LEVEL_1, "v_secondaryprogram_level_1", SP_DIM_USG, LEVEL_1);
-            with_percentage(ColumnConstants.SECONDARY_PROGRAM_LEVEL_2, "v_secondaryprogram_level_2", SP_DIM_USG, LEVEL_2);
-            with_percentage(ColumnConstants.SECONDARY_PROGRAM_LEVEL_3, "v_secondaryprogram_level_3", SP_DIM_USG, LEVEL_3);
-            with_percentage(ColumnConstants.SECONDARY_PROGRAM_LEVEL_4, "v_secondaryprogram_level_4", SP_DIM_USG, LEVEL_4);
-            with_percentage(ColumnConstants.SECONDARY_PROGRAM_LEVEL_5, "v_secondaryprogram_level_5", SP_DIM_USG, LEVEL_5);
-            with_percentage(ColumnConstants.SECONDARY_PROGRAM_LEVEL_6, "v_secondaryprogram_level_6", SP_DIM_USG, LEVEL_6);
-            with_percentage(ColumnConstants.SECONDARY_PROGRAM_LEVEL_7, "v_secondaryprogram_level_7", SP_DIM_USG, LEVEL_7);
-            with_percentage(ColumnConstants.SECONDARY_PROGRAM_LEVEL_8, "v_secondaryprogram_level_8", SP_DIM_USG, LEVEL_8);
-
-            with_percentage(ColumnConstants.TERTIARY_PROGRAM_LEVEL_0, "v_tertiaryprogram_level_0", TP_DIM_USG, LEVEL_0);
-            with_percentage(ColumnConstants.TERTIARY_PROGRAM_LEVEL_1, "v_tertiaryprogram_level_1", TP_DIM_USG, LEVEL_1);
-            with_percentage(ColumnConstants.TERTIARY_PROGRAM_LEVEL_2, "v_tertiaryprogram_level_2", TP_DIM_USG, LEVEL_2);
-            with_percentage(ColumnConstants.TERTIARY_PROGRAM_LEVEL_3, "v_tertiaryprogram_level_3", TP_DIM_USG, LEVEL_3);
-            with_percentage(ColumnConstants.TERTIARY_PROGRAM_LEVEL_4, "v_tertiaryprogram_level_4", TP_DIM_USG, LEVEL_4);
-            with_percentage(ColumnConstants.TERTIARY_PROGRAM_LEVEL_5, "v_tertiaryprogram_level_5", TP_DIM_USG, LEVEL_5);
-            with_percentage(ColumnConstants.TERTIARY_PROGRAM_LEVEL_6, "v_tertiaryprogram_level_6", TP_DIM_USG, LEVEL_6);
-            with_percentage(ColumnConstants.TERTIARY_PROGRAM_LEVEL_7, "v_tertiaryprogram_level_7", TP_DIM_USG, LEVEL_7);
-            with_percentage(ColumnConstants.TERTIARY_PROGRAM_LEVEL_8, "v_tertiaryprogram_level_8", TP_DIM_USG, LEVEL_8);
-
-            with_percentage(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_0, "v_nationalobjectives_level_0",
-                    NPO_DIM_USG, LEVEL_0);
-            with_percentage(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1, "v_nationalobjectives_level_1", NPO_DIM_USG, LEVEL_1);
-            with_percentage(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_2, "v_nationalobjectives_level_2", NPO_DIM_USG, LEVEL_2);
-            with_percentage(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_3, "v_nationalobjectives_level_3", NPO_DIM_USG, LEVEL_3);
-            with_percentage(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_4, "v_nationalobjectives_level_4", NPO_DIM_USG, LEVEL_4);
-            with_percentage(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_5, "v_nationalobjectives_level_5", NPO_DIM_USG, LEVEL_5);
-            with_percentage(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_6, "v_nationalobjectives_level_6", NPO_DIM_USG, LEVEL_6);
-            with_percentage(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_7, "v_nationalobjectives_level_7", NPO_DIM_USG, LEVEL_7);
-            with_percentage(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_8, "v_nationalobjectives_level_8", NPO_DIM_USG, LEVEL_8);
-
-            with_percentage(ColumnConstants.LOCATION_ADM_LEVEL_0, "v_adm_level_0", LOC_DIM_USG, ADM_LEVEL_0);
-            with_percentage(ColumnConstants.LOCATION_ADM_LEVEL_1, "v_adm_level_1", LOC_DIM_USG, ADM_LEVEL_1);
-            with_percentage(ColumnConstants.LOCATION_ADM_LEVEL_2, "v_adm_level_2", LOC_DIM_USG, ADM_LEVEL_2);
-            with_percentage(ColumnConstants.LOCATION_ADM_LEVEL_3, "v_adm_level_3", LOC_DIM_USG, ADM_LEVEL_3);
-            with_percentage(ColumnConstants.LOCATION_ADM_LEVEL_4, "v_adm_level_4", LOC_DIM_USG, ADM_LEVEL_4);
-            with_percentage(ColumnConstants.LOCATION, "v_raw_locations", LOC_DIM_USG, LEVEL_RAW);
-            with_percentage(ColumnConstants.GEOCODE, "v_geocodes", LOC_DIM_USG, LEVEL_RAW);
-            degenerate_dimension(ColumnConstants.RAW_LOCATION, "v_raw_locations", RAW_LOCS_DIMENSION);
-
-            single_dimension(ColumnConstants.REGIONAL_REGION, "v_adm_level_1", LOC_DIM_USG.getLevelColumn(ADM_LEVEL_1));
-
-            single_dimension(ColumnConstants.GRACE_PERIOD, "v_grace_period", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
-            date_column(ColumnConstants.MATURITY, "v_maturity", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
-            date_column(ColumnConstants.RATIFICATION_DATE, "v_ratification_date", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
-            single_dimension(ColumnConstants.INTEREST_RATE, "v_interest_rate", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
-
-            addMtefColumns();
-            addPseudoComputedColumns();
-            addColumn(new PPCColumn(ColumnConstants.PROPOSED_PROJECT_AMOUNT, "v_proposed_cost"));
-            amountColumns.add(ColumnConstants.PROPOSED_PROJECT_AMOUNT);
-            addColumn(new PPCColumn(ColumnConstants.REVISED_PROJECT_AMOUNT, "v_revised_project_cost"));
-            amountColumns.add(ColumnConstants.REVISED_PROJECT_AMOUNT);
-
-            date_column(ColumnConstants.ACTIVITY_CREATED_ON, "v_creation_date");
-            date_column(ColumnConstants.ACTIVITY_UPDATED_ON, "v_updated_date");
-            date_column(ColumnConstants.ACTUAL_APPROVAL_DATE, "v_actual_approval_date");
-            date_column(ColumnConstants.ACTUAL_COMPLETION_DATE, "v_actual_completion_date");
-            date_column(ColumnConstants.ACTUAL_START_DATE, "v_actual_start_date");
-            date_column(ColumnConstants.DONOR_COMMITMENT_DATE, "v_donor_commitment_date");
-            date_column(ColumnConstants.FINAL_DATE_FOR_CONTRACTING, "v_contracting_date");
-            date_column(ColumnConstants.FINAL_DATE_FOR_DISBURSEMENTS, "v_disbursements_date");
-            date_column(ColumnConstants.FUNDING_CLASSIFICATION_DATE, "v_funding_classification_date");
-            date_column(ColumnConstants.EFFECTIVE_FUNDING_DATE, "v_effective_funding_date");
-            date_column(ColumnConstants.FUNDING_CLOSING_DATE, "v_funding_closing_date");
-            date_column(ColumnConstants.FUNDING_END_DATE, "v_funding_end_date");
-            date_column(ColumnConstants.FUNDING_START_DATE, "v_funding_start_date");
-            date_column(ColumnConstants.ORIGINAL_COMPLETION_DATE, "v_original_completion_date");
-            date_column(ColumnConstants.PROPOSED_APPROVAL_DATE, "v_actual_proposed_date");
-            date_column(ColumnConstants.PLEDGES_DETAIL_START_DATE, "v_pledges_funding_start_date");
-            date_column(ColumnConstants.PLEDGES_DETAIL_END_DATE, "v_pledges_funding_end_date");
-            date_column(ColumnConstants.PROPOSED_COMPLETION_DATE, "v_proposed_completion_date");
-            date_column(ColumnConstants.PROPOSED_START_DATE, "v_proposed_start_date");
-
-            degenerate_dimension(ColumnConstants.PROJECT_RESULTS_AVAILABLE, "v_project_results_available", boolDimension);
-            no_entity(ColumnConstants.PROJECT_RESULTS_LINK, "v_project_results_link");
-            no_entity(ColumnConstants.PROJECT_JOINT_DECISION, "v_project_joint_decision");
-            no_entity(ColumnConstants.PROJECT_MONITORING, "v_project_monitoring");
-            no_entity(ColumnConstants.PROJECT_SUSTAINABILITY, "v_project_sustainability");
-            no_entity(ColumnConstants.PROJECT_PROBLEMS, "v_project_problems");
-            degenerate_dimension(ColumnConstants.VULNERABLE_GROUP, "v_vulnerable_group", catsDimension);
-
-            addPledgeColumns();
-
-            addTrivialMeasures();
-            addUnfilteredTrivialMeasures();
-            addFundingFlowMeasures();
-            addTaggedMeasures();
-            addFilteredTrivialMeasures();
-            addComputedLinearMeasures();
-            addSscMeasures();
-            addFormulaMeasures();
-
-            addDividingMeasure(MeasureConstants.PLEDGES_PERCENTAGE_OF_DISBURSEMENT, MeasureConstants.ACTUAL_DISBURSEMENTS, false);
-            addMeasure(new ForecastExecutionRateMeasure(MeasureConstants.FORECAST_EXECUTION_RATE));
-            addColumn(new NiComputedColumn<>(ColumnConstants.ACTIVITY_COUNT, null, GeneratedIntegerBehaviour.ENTITIES_COUNT_BEHAVIOUR, columnDescriptions.get(ColumnConstants.ACTIVITY_COUNT)));
-
-            subDimensions.initialize(getColumns());
-
-            donorFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_DONOR_FUNDING, "v_ni_donor_funding", subDimensions);
-            pledgeFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_PLEDGE_FUNDING, "v_ni_pledges_funding", subDimensions);
-            componentFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_COMPONENT_FUNDING, "v_ni_component_funding", subDimensions);
-            gpiFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_GPI_FUNDING, "v_ni_gpi_funding", subDimensions);
-            regionalFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_REGIONAL_FUNDING,
-                    "v_ni_regional_funding", subDimensions);
-        }catch (Exception exception)
+        }catch (Exception e)
         {
-            logger.info("Error occurred in ampreportschema: "+ exception.getMessage(),exception);
+            e.printStackTrace();
         }
+        no_dimension(ColumnConstants.DONOR_CONTACT_ORGANIZATION, "v_donor_cont_org");
+        no_entity(ColumnConstants.ENVIRONMENT, "v_environment", DG_EDITOR_POSTPROCESSOR);
+        no_entity(ColumnConstants.EQUAL_OPPORTUNITY, "v_equalopportunity", DG_EDITOR_POSTPROCESSOR);
+        no_entity(ColumnConstants.ISSUES___MEASURES___ACTORS, "v_issues_measure_actors", DG_EDITOR_POSTPROCESSOR);
+        degenerate_dimension(ColumnConstants.EXPENDITURE_CLASS, "v_expenditure_class", catsDimension);
+        degenerate_dimension(ColumnConstants.FINANCIAL_INSTRUMENT, "v_financial_instrument", catsDimension);
+        degenerate_dimension(ColumnConstants.FINANCING_INSTRUMENT, "v_financing_instrument", catsDimension);
+        degenerate_dimension(ColumnConstants.FUNDING_STATUS, "v_funding_status", catsDimension);
+        degenerate_dimension(ColumnConstants.HUMANITARIAN_AID, "v_humanitarian_aid", boolDimension);
+        degenerate_dimension(ColumnConstants.MULTI_STAKEHOLDER_PARTNERSHIP, "v_multi_stakeholder_partnership",
+                boolDimension);
+        degenerate_dimension(ColumnConstants.IMPLEMENTATION_LEVEL, "v_implementation_level", catsDimension);
+        degenerate_dimension(ColumnConstants.PERFORMANCE_ALERT_TYPE, "v_performance_alert_type",
+                PERF_TYPE_DIM, PERFORMANCE_ALERT_POSTPROCESSOR);
+        degenerate_dimension(ColumnConstants.PERFORMANCE_ALERT_LEVEL, "v_performance_alert_level", catsDimension);
+        degenerate_dimension(ColumnConstants.INDIRECT_ON_BUDGET, "v_indirect_on_budget", boolDimension);
+        degenerate_dimension(ColumnConstants.INSTITUTIONS, "v_institutions", catsDimension, true);
+        no_dimension(ColumnConstants.LINE_MINISTRY_OBSERVATIONS, "v_line_ministry_observations");
+        no_dimension(ColumnConstants.LINE_MINISTRY_OBSERVATIONS_ACTORS, "v_line_ministry_observations_actors");
+        date_column(ColumnConstants.LINE_MINISTRY_OBSERVATIONS_DATE, "v_line_ministry_observations_date");
+        no_dimension(ColumnConstants.LINE_MINISTRY_OBSERVATIONS_MEASURES, "v_line_ministry_observations_measures");
+        no_dimension(ColumnConstants.MEASURES_TAKEN, "v_measures_taken");
+        no_entity(ColumnConstants.MINORITIES, "v_minorities", DG_EDITOR_POSTPROCESSOR);
+        degenerate_dimension(ColumnConstants.MODALITIES, "v_modalities", catsDimension, true);
+        degenerate_dimension(ColumnConstants.MODE_OF_PAYMENT, "v_mode_of_payment", catsDimension);
+        degenerate_dimension(ColumnConstants.ACTIVITY_BUDGET, "v_activity_budget", catsDimension, true);
+        no_dimension(ColumnConstants.ORGANIZATIONS_AND_PROJECT_ID, "v_project_id");
+        degenerate_dimension(ColumnConstants.PAYMENT_CAPITAL___RECURRENT, "v_mode_of_payment_capital_recurrent", catsDimension);
+        degenerate_dimension(ColumnConstants.PROCUREMENT_SYSTEM, "v_procurement_system", catsDimension, true);
+        degenerate_dimension(ColumnConstants.PROJECT_CATEGORY, "v_project_category", catsDimension, true);
+        no_entity(ColumnConstants.PROJECT_COMMENTS, "v_project_comments", DG_EDITOR_POSTPROCESSOR);
+        no_entity(ColumnConstants.PROJECT_DESCRIPTION, "v_description", DG_EDITOR_POSTPROCESSOR);
+        no_entity(ColumnConstants.PROJECT_IMPACT, "v_proj_impact", DG_EDITOR_POSTPROCESSOR);
+        no_entity(ColumnConstants.RESULTS, "v_results", DG_EDITOR_POSTPROCESSOR);
+        no_entity(ColumnConstants.PURPOSE, "v_purposes", DG_EDITOR_POSTPROCESSOR);
+        no_entity(ColumnConstants.PROGRAM_DESCRIPTION, "v_program_description", DG_EDITOR_POSTPROCESSOR);
+
+        addIndicatorColumns();
+
+        degenerate_dimension(ColumnConstants.PROJECT_IMPLEMENTING_UNIT, "v_project_impl_unit", catsDimension);
+        no_entity(ColumnConstants.PROJECT_MANAGEMENT, "v_project_management", DG_EDITOR_POSTPROCESSOR);
+        no_dimension(ColumnConstants.REGIONAL_OBSERVATIONS, "v_regional_observations");
+        no_dimension(ColumnConstants.REGIONAL_OBSERVATIONS_ACTORS, "v_regional_observations_actors");
+        date_column(ColumnConstants.REGIONAL_OBSERVATIONS_DATE, "v_regional_observations_date");
+        no_dimension(ColumnConstants.REGIONAL_OBSERVATIONS_MEASURES, "v_regional_observations_measures");
+
+        single_dimension(ColumnConstants.RELATED_PLEDGES, "v_related_pledges", PLEDGES_LEVEL_COLUMN);
+
+        single_dimension(ColumnConstants.RELATED_PROJECTS, "v_ni_pledges_projects", ACT_LEVEL_COLUMN);
+        no_dimension(ColumnConstants.SECTOR_MINISTRY_CONTACT_ORGANIZATION, "v_sect_min_cont_org");
+        degenerate_dimension(ColumnConstants.SSC_MODALITIES, "v_ssc_modalities", catsDimension);
+        degenerate_dimension(ColumnConstants.STATUS, "v_status", catsDimension, true);
+        no_dimension(ColumnConstants.STRUCTURES_COLUMN, "v_structures");
+        degenerate_dimension(ColumnConstants.TYPE_OF_ASSISTANCE, "v_terms_assist", catsDimension);
+        degenerate_dimension(ColumnConstants.TYPE_OF_COOPERATION, "v_type_of_cooperation", catsDimension);
+        degenerate_dimension(ColumnConstants.TYPE_OF_IMPLEMENTATION, "v_type_of_implementation", catsDimension,
+                true);
+        no_dimension(ColumnConstants.APPROVAL_STATUS, "v_approval_status");
+        degenerate_dimension(ColumnConstants.CONCESSIONALITY_LEVEL, "v_concessionality_level", catsDimension);
+        no_dimension(ColumnConstants.VALIDATION_STATUS, "v_validation_status");
+
+        degenerate_dimension(ColumnConstants.FUNDING_ID, "v_funding_id", fundingDimension);
+
+        // views with only 2 columns
+        no_entity(ColumnConstants.DRAFT, "v_drafts");
+        degenerate_dimension(ColumnConstants.AC_CHAPTER, "v_ac_chapters", catsDimension, true);
+        degenerate_dimension(ColumnConstants.ACCESSION_INSTRUMENT, "v_accession_instruments", catsDimension, true);
+        degenerate_dimension(ColumnConstants.ACTIVITY_CREATED_BY, "v_activity_creator", usersDimension);
+        no_entity(ColumnConstants.SUB_PROGRAM, "v_activity_subprogram");
+        no_entity(ColumnConstants.AUDIT_SYSTEM, "v_audit_system", true);
+        no_entity(ColumnConstants.BUDGET_CODE_PROJECT_ID, "v_budget_code_project_id");
+        degenerate_dimension(ColumnConstants.BUDGET_DEPARTMENT, "v_budget_department", departmentsDimension);
+        single_dimension(ColumnConstants.BUDGET_SECTOR, "v_budget_sector", RAW_SCT_LEVEL_COLUMN);
+        degenerate_dimension(ColumnConstants.CAPITAL_EXPENDITURE, "v_capital_and_exp", boolDimension);
+        no_entity(ColumnConstants.CRIS_NUMBER, "v_cris_number");
+        no_entity(ColumnConstants.IATI_IDENTIFIER, "v_iati_identifier");
+        no_entity(ColumnConstants.CURRENT_COMPLETION_DATE_COMMENTS, "v_actual_completion_date_comments");
+        no_entity(ColumnConstants.DONOR_CONTACT_EMAIL, "v_donor_cont_email");
+        no_entity(ColumnConstants.DONOR_CONTACT_FAX, "v_donor_cont_fax");
+        no_entity(ColumnConstants.DONOR_CONTACT_NAME, "v_donor_cont_name");
+        no_entity(ColumnConstants.DONOR_CONTACT_PHONE, "v_donor_cont_phone");
+        no_entity(ColumnConstants.DONOR_CONTACT_TITLE, "v_donor_cont_title");
+        no_entity(ColumnConstants.FINAL_DATE_FOR_DISBURSEMENTS_COMMENTS, "v_disbursements_date_comments");
+        no_entity(ColumnConstants.FUNDING_ORGANIZATION_ID, "v_funding_org_id");
+        no_entity(ColumnConstants.FY, "v_budget_extras_fy");
+
+        no_entity(ColumnConstants.GOVERNMENT_AGREEMENT_NUMBER, "v_gov_agreement_number");
+        no_entity(ColumnConstants.GPI_1_Q6, "v_ni_gpi_indicator_1_q6");
+        no_entity(ColumnConstants.GPI_1_Q6_DESCRIPTION, "v_ni_gpi_indicator_1_q6_description");
+        no_entity(ColumnConstants.GPI_1_Q7, "v_ni_gpi_indicator_1_q7");
+        no_entity(ColumnConstants.GPI_1_Q8, "v_ni_gpi_indicator_1_q8");
+        no_entity(ColumnConstants.GPI_1_Q9, "v_ni_gpi_indicator_1_q9");
+        no_entity(ColumnConstants.GPI_1_Q10, "v_ni_gpi_indicator_1_q10");
+        no_entity(ColumnConstants.GPI_1_Q10_DESCRIPTION, "v_ni_gpi_indicator_1_q10_description");
+        degenerate_dimension(ColumnConstants.HAS_EXECUTING_AGENCY, "v_has_executing_agency", boolDimension);
+        no_entity(ColumnConstants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT_EMAIL, "v_impl_ex_cont_email");
+        no_entity(ColumnConstants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT_FAX, "v_impl_ex_cont_fax");
+        no_entity(ColumnConstants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT_NAME, "v_impl_ex_cont_name");
+        no_entity(ColumnConstants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT_ORGANIZATION, "v_impl_ex_cont_org");
+        no_entity(ColumnConstants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT_PHONE, "v_impl_ex_cont_phone");
+        no_entity(ColumnConstants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT_TITLE, "v_impl_ex_cont_title");
+        degenerate_dimension(ColumnConstants.JOINT_CRITERIA, "v_yes_no_joint_criteria", boolDimension);
+        degenerate_dimension(ColumnConstants.GOVERNMENT_APPROVAL_PROCEDURES, "v_yes_no_government_approval_proc", boolDimension);
+        no_entity(ColumnConstants.MINISTRY_CODE, "v_minsitry_code");
+        no_entity(ColumnConstants.MINISTRY_OF_FINANCE_CONTACT_EMAIL, "v_mofed_cont_email");
+        no_entity(ColumnConstants.MINISTRY_OF_FINANCE_CONTACT_FAX, "v_mofed_cont_fax");
+        no_entity(ColumnConstants.MINISTRY_OF_FINANCE_CONTACT_NAME, "v_mofed_cont_name");
+        no_entity(ColumnConstants.MINISTRY_OF_FINANCE_CONTACT_ORGANIZATION, "v_mofed_cont_org");
+        no_entity(ColumnConstants.MINISTRY_OF_FINANCE_CONTACT_PHONE, "v_mofed_cont_phone");
+        no_entity(ColumnConstants.MINISTRY_OF_FINANCE_CONTACT_TITLE, "v_mofed_cont_title");
+        degenerate_dimension(ColumnConstants.MULTI_DONOR, "v_multi_donor", boolDimension);
+        no_entity(ColumnConstants.PROJECT_CODE, "v_project_code");
+        no_entity(ColumnConstants.PROJECT_COORDINATOR_CONTACT_EMAIL, "v_proj_coordr_cont_email");
+        no_entity(ColumnConstants.PROJECT_COORDINATOR_CONTACT_FAX, "v_proj_coordr_cont_fax");
+        no_entity(ColumnConstants.PROJECT_COORDINATOR_CONTACT_NAME, "v_proj_coordr_cont_name");
+        no_entity(ColumnConstants.PROJECT_COORDINATOR_CONTACT_ORGANIZATION, "v_proj_coordr_cont_org");
+        no_entity(ColumnConstants.PROJECT_COORDINATOR_CONTACT_PHONE, "v_proj_coordr_cont_phone");
+        no_entity(ColumnConstants.PROJECT_COORDINATOR_CONTACT_TITLE, "v_proj_coordr_cont_title");
+        no_entity(ColumnConstants.PROPOSED_PROJECT_LIFE, "v_proposed_project_life");
+        no_entity(ColumnConstants.REPORTING_SYSTEM, "v_reporting_system", true);
+        no_entity(ColumnConstants.SECTOR_MINISTRY_CONTACT_EMAIL, "v_sect_min_cont_email");
+        no_entity(ColumnConstants.SECTOR_MINISTRY_CONTACT_FAX, "v_sect_min_cont_fax");
+        no_entity(ColumnConstants.SECTOR_MINISTRY_CONTACT_NAME, "v_sect_min_cont_name");
+        no_entity(ColumnConstants.SECTOR_MINISTRY_CONTACT_PHONE, "v_sect_min_cont_phone");
+        no_entity(ColumnConstants.SECTOR_MINISTRY_CONTACT_TITLE, "v_sect_min_cont_title");
+        no_entity(ColumnConstants.SUB_VOTE, "v_subvote");
+        no_entity(ColumnConstants.VOTE, "v_vote");
+
+        single_dimension(ColumnConstants.BENEFICIARY_AGENCY__DEPARTMENT_DIVISION, "v_beneficiary_agency_info", BA_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
+        single_dimension(ColumnConstants.CONTRACTING_AGENCY_DEPARTMENT_DIVISION, "v_contracting_agency_info", CA_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
+        single_dimension(ColumnConstants.EXECUTING_AGENCY_DEPARTMENT_DIVISION, "v_executing_agency_info", EA_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
+        single_dimension(ColumnConstants.IMPLEMENTING_AGENCY_DEPARTMENT_DIVISION, "v_implementing_agency_info", IA_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
+        single_dimension(ColumnConstants.REGIONAL_GROUP_DEPARTMENT_DIVISION, "v_regional_group_info", RG_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
+        single_dimension(ColumnConstants.RESPONSIBLE_ORGANIZATION_DEPARTMENT_DIVISION, "v_responsible_org_info", RO_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
+        single_dimension(ColumnConstants.SECTOR_GROUP_DEPARTMENT_DIVISION, "v_sector_group_info", SG_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
+
+        single_dimension(ColumnConstants.DONOR_AGENCY, "v_ni_donor_orgs", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
+        single_dimension(ColumnConstants.DONOR_GROUP, "v_ni_donor_orgsgroups", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION_GROUP));
+        single_dimension(ColumnConstants.DONOR_TYPE, "v_ni_donor_orgstypes", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION_TYPE));
+        single_dimension(ColumnConstants.DONOR_BUDGET_CODE, "v_ni_donor_orgbudget_code",
+                DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
+        single_dimension(ColumnConstants.DONOR_COUNTRY, "v_ni_donor_orgs_country",
+                DN_COUNTRY_DIM_USG.getLevelColumn(0));
+
+        single_dimension(ColumnConstants.DONOR_ACRONYM, "v_ni_donor_orgsacronyms", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
+
+        with_percentage(ColumnConstants.IMPLEMENTING_AGENCY, "v_implementing_agency", IA_DIM_USG, LEVEL_ORGANISATION);
+        with_percentage(ColumnConstants.IMPLEMENTING_AGENCY_GROUPS, "v_implementing_agency_groups", IA_DIM_USG, LEVEL_ORGANISATION_GROUP);
+        with_percentage(ColumnConstants.IMPLEMENTING_AGENCY_TYPE, "v_implementing_agency_type", IA_DIM_USG, LEVEL_ORGANISATION_TYPE);
+
+        with_percentage(ColumnConstants.BENEFICIARY_AGENCY, "v_beneficiary_agency", BA_DIM_USG, LEVEL_ORGANISATION);
+        with_percentage(ColumnConstants.BENEFICIARY_AGENCY_GROUPS, "v_beneficiary_agency_groups", BA_DIM_USG, LEVEL_ORGANISATION_GROUP);
+        with_percentage(ColumnConstants.BENEFICIARY_AGENCY_TYPE, "v_beneficiary_agency_type", BA_DIM_USG,
+                LEVEL_ORGANISATION_TYPE);
+        with_percentage(ColumnConstants.BENEFICIARY_AGENCY_COUNTRY, "v_beneficiary_agency_country",
+                BA_COUNTRY_DIM_USG, ADM_LEVEL_0);
+
+
+        with_percentage(ColumnConstants.EXECUTING_AGENCY, "v_executing_agency", EA_DIM_USG, LEVEL_ORGANISATION);
+        with_percentage(ColumnConstants.EXECUTING_AGENCY_GROUPS, "v_executing_agency_groups", EA_DIM_USG, LEVEL_ORGANISATION_GROUP);
+        with_percentage(ColumnConstants.EXECUTING_AGENCY_TYPE, "v_executing_agency_type", EA_DIM_USG, LEVEL_ORGANISATION_TYPE);
+        with_percentage(ColumnConstants.EXECUTING_AGENCY_COUNTRY, "v_executing_agency_country",
+                EA_COUNTRY_DIM_USG, ADM_LEVEL_0);
+
+        with_percentage(ColumnConstants.RESPONSIBLE_ORGANIZATION, "v_responsible_organisation", RO_DIM_USG, LEVEL_ORGANISATION);
+        with_percentage(ColumnConstants.RESPONSIBLE_ORGANIZATION_GROUPS, "v_responsible_org_groups", RO_DIM_USG, LEVEL_ORGANISATION_GROUP);
+        with_percentage(ColumnConstants.RESPONSIBLE_ORGANIZATION_TYPE, "v_responsible_org_type", RO_DIM_USG,
+                LEVEL_ORGANISATION_TYPE);
+
+        with_percentage(ColumnConstants.CONTRACTING_AGENCY, "v_contracting_agency", CA_DIM_USG, LEVEL_ORGANISATION);
+        single_dimension(ColumnConstants.CONTRACTING_AGENCY_ACRONYM, "v_contracting_agency_acronym", CA_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
+        with_percentage(ColumnConstants.CONTRACTING_AGENCY_GROUPS, "v_contracting_agency_groups", CA_DIM_USG, LEVEL_ORGANISATION_GROUP);
+        with_percentage(ColumnConstants.CONTRACTING_AGENCY_TYPE, "v_contracting_agency_type", CA_DIM_USG,
+                LEVEL_ORGANISATION_TYPE);
+
+        with_percentage(ColumnConstants.REGIONAL_GROUP, "v_regional_group", RG_DIM_USG, LEVEL_ORGANISATION_GROUP);
+
+        with_percentage(ColumnConstants.SECTOR_GROUP, "v_sector_group", SG_DIM_USG, LEVEL_ORGANISATION_GROUP);
+
+        single_dimension(ColumnConstants.PRIMARY_SECTOR_CODE_OFFICIAL, "v_sector_code_official", PS_DIM_USG
+                .getLevelColumn(LEVEL_ROOT));
+        with_percentage(ColumnConstants.PRIMARY_SECTOR, "v_sectors", PS_DIM_USG, LEVEL_ROOT);
+        with_percentage(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR, "v_sub_sectors", PS_DIM_USG, LEVEL_SUBSECTOR);
+        with_percentage(ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR, "v_sub_sub_sectors", PS_DIM_USG, LEVEL_SUBSUBSECTOR);
+
+        with_percentage(ColumnConstants.SECONDARY_SECTOR, "v_secondary_sectors", SS_DIM_USG, LEVEL_ROOT);
+        with_percentage(ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR, "v_secondary_sub_sectors", SS_DIM_USG, LEVEL_SUBSECTOR);
+        with_percentage(ColumnConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR, "v_secondary_sub_sub_sectors", SS_DIM_USG, LEVEL_SUBSUBSECTOR);
+
+        with_percentage(ColumnConstants.TERTIARY_SECTOR, "v_tertiary_sectors", TS_DIM_USG, LEVEL_ROOT);
+        with_percentage(ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR, "v_tertiary_sub_sectors", TS_DIM_USG,
+                LEVEL_SUBSECTOR);
+        with_percentage(ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR, "v_tertiary_sub_sub_sectors", TS_DIM_USG,
+                LEVEL_SUBSUBSECTOR);
+
+        with_percentage(ColumnConstants.QUATERNARY_SECTOR, "v_quaternary_sectors", Q4S_DIM_USG, LEVEL_ROOT);
+        with_percentage(ColumnConstants.QUATERNARY_SECTOR_SUB_SECTOR, "v_quaternary_sub_sectors", Q4S_DIM_USG,
+                LEVEL_SUBSECTOR);
+        with_percentage(ColumnConstants.QUATERNARY_SECTOR_SUB_SUB_SECTOR, "v_quaternary_sub_sub_sectors", Q4S_DIM_USG,
+                LEVEL_SUBSUBSECTOR);
+
+        with_percentage(ColumnConstants.QUINARY_SECTOR, "v_quinary_sectors", Q5S_DIM_USG, LEVEL_ROOT);
+        with_percentage(ColumnConstants.QUINARY_SECTOR_SUB_SECTOR, "v_quinary_sub_sectors", Q5S_DIM_USG,
+                LEVEL_SUBSECTOR);
+        with_percentage(ColumnConstants.QUINARY_SECTOR_SUB_SUB_SECTOR, "v_quinary_sub_sub_sectors", Q5S_DIM_USG,
+                LEVEL_SUBSUBSECTOR);
+
+        with_percentage(ColumnConstants.SECTOR_TAG, "v_sectors", TAG_S_DIM_USG, LEVEL_ROOT);
+        with_percentage(ColumnConstants.SECTOR_TAG_SUB_SECTOR, "v_tag_sub_sectors", TAG_S_DIM_USG, LEVEL_SUBSECTOR);
+        with_percentage(ColumnConstants.SECTOR_TAG_SUB_SUB_SECTOR, "v_tag_sub_sub_sectors", TAG_S_DIM_USG,
+                LEVEL_SUBSUBSECTOR);
+
+        with_percentage(ColumnConstants.PRIMARY_PROGRAM_LEVEL_0, "v_primaryprogram_level_0", PP_DIM_USG, LEVEL_0);
+        with_percentage(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1, "v_primaryprogram_level_1", PP_DIM_USG, LEVEL_1);
+        with_percentage(ColumnConstants.PRIMARY_PROGRAM_LEVEL_2, "v_primaryprogram_level_2", PP_DIM_USG, LEVEL_2);
+        with_percentage(ColumnConstants.PRIMARY_PROGRAM_LEVEL_3, "v_primaryprogram_level_3", PP_DIM_USG, LEVEL_3);
+        with_percentage(ColumnConstants.PRIMARY_PROGRAM_LEVEL_4, "v_primaryprogram_level_4", PP_DIM_USG, LEVEL_4);
+        with_percentage(ColumnConstants.PRIMARY_PROGRAM_LEVEL_5, "v_primaryprogram_level_5", PP_DIM_USG, LEVEL_5);
+        with_percentage(ColumnConstants.PRIMARY_PROGRAM_LEVEL_6, "v_primaryprogram_level_6", PP_DIM_USG, LEVEL_6);
+        with_percentage(ColumnConstants.PRIMARY_PROGRAM_LEVEL_7, "v_primaryprogram_level_7", PP_DIM_USG, LEVEL_7);
+        with_percentage(ColumnConstants.PRIMARY_PROGRAM_LEVEL_8, "v_primaryprogram_level_8", PP_DIM_USG, LEVEL_8);
+
+        with_percentage(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_0, "v_indirect_primaryprogram_level_0",
+                IPP_DIM_USG, LEVEL_0);
+        with_percentage(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_1, "v_indirect_primaryprogram_level_1",
+                IPP_DIM_USG, LEVEL_1);
+        with_percentage(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_2, "v_indirect_primaryprogram_level_2",
+                IPP_DIM_USG, LEVEL_2);
+        with_percentage(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_3, "v_indirect_primaryprogram_level_3",
+                IPP_DIM_USG, LEVEL_3);
+        with_percentage(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_4, "v_indirect_primaryprogram_level_4",
+                IPP_DIM_USG, LEVEL_4);
+        with_percentage(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_5, "v_indirect_primaryprogram_level_5",
+                IPP_DIM_USG, LEVEL_5);
+        with_percentage(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_6, "v_indirect_primaryprogram_level_6",
+                IPP_DIM_USG, LEVEL_6);
+        with_percentage(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_7, "v_indirect_primaryprogram_level_7",
+                IPP_DIM_USG, LEVEL_7);
+        with_percentage(ColumnConstants.INDIRECT_PRIMARY_PROGRAM_LEVEL_8, "v_indirect_primaryprogram_level_8",
+                IPP_DIM_USG, LEVEL_8);
+
+        with_percentage(ColumnConstants.SECONDARY_PROGRAM_LEVEL_0, "v_secondaryprogram_level_0", SP_DIM_USG, LEVEL_0);
+        with_percentage(ColumnConstants.SECONDARY_PROGRAM_LEVEL_1, "v_secondaryprogram_level_1", SP_DIM_USG, LEVEL_1);
+        with_percentage(ColumnConstants.SECONDARY_PROGRAM_LEVEL_2, "v_secondaryprogram_level_2", SP_DIM_USG, LEVEL_2);
+        with_percentage(ColumnConstants.SECONDARY_PROGRAM_LEVEL_3, "v_secondaryprogram_level_3", SP_DIM_USG, LEVEL_3);
+        with_percentage(ColumnConstants.SECONDARY_PROGRAM_LEVEL_4, "v_secondaryprogram_level_4", SP_DIM_USG, LEVEL_4);
+        with_percentage(ColumnConstants.SECONDARY_PROGRAM_LEVEL_5, "v_secondaryprogram_level_5", SP_DIM_USG, LEVEL_5);
+        with_percentage(ColumnConstants.SECONDARY_PROGRAM_LEVEL_6, "v_secondaryprogram_level_6", SP_DIM_USG, LEVEL_6);
+        with_percentage(ColumnConstants.SECONDARY_PROGRAM_LEVEL_7, "v_secondaryprogram_level_7", SP_DIM_USG, LEVEL_7);
+        with_percentage(ColumnConstants.SECONDARY_PROGRAM_LEVEL_8, "v_secondaryprogram_level_8", SP_DIM_USG, LEVEL_8);
+
+        with_percentage(ColumnConstants.TERTIARY_PROGRAM_LEVEL_0, "v_tertiaryprogram_level_0", TP_DIM_USG, LEVEL_0);
+        with_percentage(ColumnConstants.TERTIARY_PROGRAM_LEVEL_1, "v_tertiaryprogram_level_1", TP_DIM_USG, LEVEL_1);
+        with_percentage(ColumnConstants.TERTIARY_PROGRAM_LEVEL_2, "v_tertiaryprogram_level_2", TP_DIM_USG, LEVEL_2);
+        with_percentage(ColumnConstants.TERTIARY_PROGRAM_LEVEL_3, "v_tertiaryprogram_level_3", TP_DIM_USG, LEVEL_3);
+        with_percentage(ColumnConstants.TERTIARY_PROGRAM_LEVEL_4, "v_tertiaryprogram_level_4", TP_DIM_USG, LEVEL_4);
+        with_percentage(ColumnConstants.TERTIARY_PROGRAM_LEVEL_5, "v_tertiaryprogram_level_5", TP_DIM_USG, LEVEL_5);
+        with_percentage(ColumnConstants.TERTIARY_PROGRAM_LEVEL_6, "v_tertiaryprogram_level_6", TP_DIM_USG, LEVEL_6);
+        with_percentage(ColumnConstants.TERTIARY_PROGRAM_LEVEL_7, "v_tertiaryprogram_level_7", TP_DIM_USG, LEVEL_7);
+        with_percentage(ColumnConstants.TERTIARY_PROGRAM_LEVEL_8, "v_tertiaryprogram_level_8", TP_DIM_USG, LEVEL_8);
+
+        with_percentage(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_0, "v_nationalobjectives_level_0",
+                NPO_DIM_USG, LEVEL_0);
+        with_percentage(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1, "v_nationalobjectives_level_1", NPO_DIM_USG, LEVEL_1);
+        with_percentage(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_2, "v_nationalobjectives_level_2", NPO_DIM_USG, LEVEL_2);
+        with_percentage(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_3, "v_nationalobjectives_level_3", NPO_DIM_USG, LEVEL_3);
+        with_percentage(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_4, "v_nationalobjectives_level_4", NPO_DIM_USG, LEVEL_4);
+        with_percentage(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_5, "v_nationalobjectives_level_5", NPO_DIM_USG, LEVEL_5);
+        with_percentage(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_6, "v_nationalobjectives_level_6", NPO_DIM_USG, LEVEL_6);
+        with_percentage(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_7, "v_nationalobjectives_level_7", NPO_DIM_USG, LEVEL_7);
+        with_percentage(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_8, "v_nationalobjectives_level_8", NPO_DIM_USG, LEVEL_8);
+
+        with_percentage(ColumnConstants.LOCATION_ADM_LEVEL_0, "v_adm_level_0", LOC_DIM_USG, ADM_LEVEL_0);
+        with_percentage(ColumnConstants.LOCATION_ADM_LEVEL_1, "v_adm_level_1", LOC_DIM_USG, ADM_LEVEL_1);
+        with_percentage(ColumnConstants.LOCATION_ADM_LEVEL_2, "v_adm_level_2", LOC_DIM_USG, ADM_LEVEL_2);
+        with_percentage(ColumnConstants.LOCATION_ADM_LEVEL_3, "v_adm_level_3", LOC_DIM_USG, ADM_LEVEL_3);
+        with_percentage(ColumnConstants.LOCATION_ADM_LEVEL_4, "v_adm_level_4", LOC_DIM_USG, ADM_LEVEL_4);
+        with_percentage(ColumnConstants.LOCATION, "v_raw_locations", LOC_DIM_USG, LEVEL_RAW);
+        with_percentage(ColumnConstants.GEOCODE, "v_geocodes", LOC_DIM_USG, LEVEL_RAW);
+        degenerate_dimension(ColumnConstants.RAW_LOCATION, "v_raw_locations", RAW_LOCS_DIMENSION);
+
+        single_dimension(ColumnConstants.REGIONAL_REGION, "v_adm_level_1", LOC_DIM_USG.getLevelColumn(ADM_LEVEL_1));
+
+        single_dimension(ColumnConstants.GRACE_PERIOD, "v_grace_period", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
+        date_column(ColumnConstants.MATURITY, "v_maturity", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
+        date_column(ColumnConstants.RATIFICATION_DATE, "v_ratification_date", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
+        single_dimension(ColumnConstants.INTEREST_RATE, "v_interest_rate", DONOR_DIM_USG.getLevelColumn(LEVEL_ORGANISATION));
+
+        addMtefColumns();
+        addPseudoComputedColumns();
+        addColumn(new PPCColumn(ColumnConstants.PROPOSED_PROJECT_AMOUNT, "v_proposed_cost"));
+        amountColumns.add(ColumnConstants.PROPOSED_PROJECT_AMOUNT);
+        addColumn(new PPCColumn(ColumnConstants.REVISED_PROJECT_AMOUNT, "v_revised_project_cost"));
+        amountColumns.add(ColumnConstants.REVISED_PROJECT_AMOUNT);
+
+        date_column(ColumnConstants.ACTIVITY_CREATED_ON, "v_creation_date");
+        date_column(ColumnConstants.ACTIVITY_UPDATED_ON, "v_updated_date");
+        date_column(ColumnConstants.ACTUAL_APPROVAL_DATE, "v_actual_approval_date");
+        date_column(ColumnConstants.ACTUAL_COMPLETION_DATE, "v_actual_completion_date");
+        date_column(ColumnConstants.ACTUAL_START_DATE, "v_actual_start_date");
+        date_column(ColumnConstants.DONOR_COMMITMENT_DATE, "v_donor_commitment_date");
+        date_column(ColumnConstants.FINAL_DATE_FOR_CONTRACTING, "v_contracting_date");
+        date_column(ColumnConstants.FINAL_DATE_FOR_DISBURSEMENTS, "v_disbursements_date");
+        date_column(ColumnConstants.FUNDING_CLASSIFICATION_DATE, "v_funding_classification_date");
+        date_column(ColumnConstants.EFFECTIVE_FUNDING_DATE, "v_effective_funding_date");
+        date_column(ColumnConstants.FUNDING_CLOSING_DATE, "v_funding_closing_date");
+        date_column(ColumnConstants.FUNDING_END_DATE, "v_funding_end_date");
+        date_column(ColumnConstants.FUNDING_START_DATE, "v_funding_start_date");
+        date_column(ColumnConstants.ORIGINAL_COMPLETION_DATE, "v_original_completion_date");
+        date_column(ColumnConstants.PROPOSED_APPROVAL_DATE, "v_actual_proposed_date");
+        date_column(ColumnConstants.PLEDGES_DETAIL_START_DATE, "v_pledges_funding_start_date");
+        date_column(ColumnConstants.PLEDGES_DETAIL_END_DATE, "v_pledges_funding_end_date");
+        date_column(ColumnConstants.PROPOSED_COMPLETION_DATE, "v_proposed_completion_date");
+        date_column(ColumnConstants.PROPOSED_START_DATE, "v_proposed_start_date");
+
+        degenerate_dimension(ColumnConstants.PROJECT_RESULTS_AVAILABLE, "v_project_results_available", boolDimension);
+        no_entity(ColumnConstants.PROJECT_RESULTS_LINK, "v_project_results_link");
+        no_entity(ColumnConstants.PROJECT_JOINT_DECISION, "v_project_joint_decision");
+        no_entity(ColumnConstants.PROJECT_MONITORING, "v_project_monitoring");
+        no_entity(ColumnConstants.PROJECT_SUSTAINABILITY, "v_project_sustainability");
+        no_entity(ColumnConstants.PROJECT_PROBLEMS, "v_project_problems");
+        degenerate_dimension(ColumnConstants.VULNERABLE_GROUP, "v_vulnerable_group", catsDimension);
+
+        addPledgeColumns();
+
+        addTrivialMeasures();
+        addUnfilteredTrivialMeasures();
+        addFundingFlowMeasures();
+        addTaggedMeasures();
+        addFilteredTrivialMeasures();
+        addComputedLinearMeasures();
+        addSscMeasures();
+        addFormulaMeasures();
+
+        addDividingMeasure(MeasureConstants.PLEDGES_PERCENTAGE_OF_DISBURSEMENT, MeasureConstants.ACTUAL_DISBURSEMENTS, false);
+        addMeasure(new ForecastExecutionRateMeasure(MeasureConstants.FORECAST_EXECUTION_RATE));
+        addColumn(new NiComputedColumn<>(ColumnConstants.ACTIVITY_COUNT, null, GeneratedIntegerBehaviour.ENTITIES_COUNT_BEHAVIOUR, columnDescriptions.get(ColumnConstants.ACTIVITY_COUNT)));
+
+        subDimensions.initialize(getColumns());
+
+        donorFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_DONOR_FUNDING, "v_ni_donor_funding", subDimensions);
+        pledgeFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_PLEDGE_FUNDING, "v_ni_pledges_funding", subDimensions);
+        componentFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_COMPONENT_FUNDING, "v_ni_component_funding", subDimensions);
+        gpiFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_GPI_FUNDING, "v_ni_gpi_funding", subDimensions);
+        regionalFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_REGIONAL_FUNDING,
+                "v_ni_regional_funding", subDimensions);
     }
 
     private void addIndicatorColumns() {

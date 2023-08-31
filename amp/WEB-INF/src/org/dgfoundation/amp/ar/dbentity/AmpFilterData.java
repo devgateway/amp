@@ -8,7 +8,6 @@ import org.digijava.module.aim.util.Identifiable;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.hibernate.type.LongType;
-
 import java.beans.PropertyDescriptor;
 import java.io.Serializable;
 import java.lang.reflect.Constructor;

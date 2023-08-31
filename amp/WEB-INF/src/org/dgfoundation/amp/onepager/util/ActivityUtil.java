@@ -1248,7 +1248,7 @@ public class ActivityUtil {
 
                                     if (tempGPINiSurveyResponse.getSupportingDocuments() == null) {
                                         tempGPINiSurveyResponse.setSupportingDocuments(new
-                                                HashSet<AmpGPINiSurveyResponseDocument>());
+                                                HashSet<>());
                                     }
 
                                     tempGPINiSurveyResponse.getSupportingDocuments().add(responseDocument);

@@ -1165,6 +1165,7 @@ public class ActivityUtil {
 
         // insert new resources in the system
         insertGPINiResources(a, newResources);
+        session.flush();
 
     }
 
@@ -1248,7 +1249,7 @@ public class ActivityUtil {
 
                                     if (tempGPINiSurveyResponse.getSupportingDocuments() == null) {
                                         tempGPINiSurveyResponse.setSupportingDocuments(new
-                                                HashSet<AmpGPINiSurveyResponseDocument>());
+                                                HashSet<>());
                                     }
 
                                     tempGPINiSurveyResponse.getSupportingDocuments().add(responseDocument);

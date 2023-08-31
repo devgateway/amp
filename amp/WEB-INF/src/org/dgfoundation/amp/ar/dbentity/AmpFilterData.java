@@ -58,7 +58,7 @@ public class AmpFilterData implements Serializable {
             if ( field == null )
                 return;
             PropertyDescriptor pd       = new PropertyDescriptor(this.propertyName, parentObject.getClass() );
-            Object fieldObj             = pd.getReadMethod().invoke(parentObject, new Object[0]);
+            Object fieldObj             = pd.getReadMethod().invoke(parentObject);
             
             Object element              = this.instantiateFilterObject( parentObject.getClass() );
             
@@ -135,7 +135,7 @@ public class AmpFilterData implements Serializable {
                 Object fieldObj;
                 try {
                     pd = new PropertyDescriptor(field.getName(), srcObj.getClass());
-                    fieldObj = pd.getReadMethod().invoke(srcObj, new Object[0]);
+                    fieldObj = pd.getReadMethod().invoke(srcObj);
                     if (fieldObj == null)
                         continue;
                 } catch (Exception e) {

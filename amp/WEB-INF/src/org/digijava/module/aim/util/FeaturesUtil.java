@@ -1265,9 +1265,7 @@ public class FeaturesUtil {
                     AmpModulesVisibility f = (AmpModulesVisibility) it.next();
                     f.getTemplates().remove(ft);
                 }
-//                ft.clearFields();
-//                ft.getFeatures().clear();
-//                ft.getItems().clear();
+
                 hbsession.delete(ft);
                 hbsession.getTransaction().commit();
             }

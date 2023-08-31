@@ -15,7 +15,7 @@
 		<property name="textResponse" column="text_response" type="text" />		
 				
 		<many-to-one name="questionOption" column="question_option_id"
-			class="org.digijava.module.aim.dbentity.AmpGPINiQuestionOption" cascade="merge"
+			class="org.digijava.module.aim.dbentity.AmpGPINiQuestionOption" cascade="none"
 			not-null="false" />
 			
 		<many-to-one name="ampGPINiSurvey" column="amp_gpi_ni_survey_id"
@@ -23,7 +23,7 @@
 			not-null="true" index="idx_amp_gpi_ni_survey_response_amp_gpi_ni_survey_id" />
 			
 		<many-to-one name="ampGPINiQuestion" column="amp_gpi_ni_question_id"
-			class="org.digijava.module.aim.dbentity.AmpGPINiQuestion" cascade="persist"
+			class="org.digijava.module.aim.dbentity.AmpGPINiQuestion" cascade="merge"
 			not-null="true" />
 		
 		<set name="supportingDocuments" lazy="false" inverse="true">

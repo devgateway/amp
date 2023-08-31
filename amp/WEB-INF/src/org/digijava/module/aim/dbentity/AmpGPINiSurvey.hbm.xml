@@ -13,12 +13,12 @@
 		<property name="surveyDate" column="survey_date" type="java.util.Date" />		
 		<many-to-one name="ampOrgRole" column="amp_org_role_id" class="org.digijava.module.aim.dbentity.AmpOrgRole"
 			unique="true" />
-
 			<set name="responses" table="AMP_GPI_NI_SURVEY_RESPONSE" inverse="true"
-			cascade="merge">
+			cascade="all">
 			<cache usage="read-write" />
 			<key column="amp_gpi_ni_survey_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpGPINiSurveyResponse" />
 		</set>
+
 	</class>
 </hibernate-mapping>

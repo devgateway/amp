@@ -1165,7 +1165,7 @@ public class ActivityUtil {
 
         // insert new resources in the system
         insertGPINiResources(a, newResources);
-
+        session.flush();
     }
 
     /**

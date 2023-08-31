@@ -23,7 +23,7 @@
 		<property name="requiresDataEntry" column="requires_data_entry" type="java.lang.Boolean" />
 		
 		<many-to-one name="ampGPINiIndicator" column="amp_gpi_ni_indicator_id"
-			class="org.digijava.module.aim.dbentity.AmpGPINiIndicator" cascade="all" not-null="true" />
+			class="org.digijava.module.aim.dbentity.AmpGPINiIndicator" cascade="merge" not-null="true" />
 			
 		<set name="options" table="AMP_GPI_NI_QUESTION_OPTION" inverse="true" lazy="false" cascade="none">
 			<cache usage="read-write" />

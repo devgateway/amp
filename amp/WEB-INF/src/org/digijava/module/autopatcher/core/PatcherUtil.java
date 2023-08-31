@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.nio.file.Files;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
@@ -24,7 +25,7 @@ public class PatcherUtil {
     public static class PatchFilesComparator implements java.util.Comparator<File>
     {
         public int compare(File f1, File f2) {
-            return ((Long)f1.lastModified()).compareTo((Long)(f2.lastModified()));
+            return Long.compare(f1.lastModified(), (f2.lastModified()));
         }
 
     }
@@ -38,8 +39,7 @@ public class PatcherUtil {
         Query query = session.createQuery("select p.absolutePatchName from "
                 + PatchFile.class.getName() + " p");
         List col = query.list();
-        TreeSet ret=new TreeSet();
-        ret.addAll(col);
+        TreeSet ret = new TreeSet(col);
         return ret;
     
     }
@@ -50,7 +50,7 @@ public class PatcherUtil {
         algorithm.reset();
 
         BufferedInputStream bis = new BufferedInputStream(
-                new FileInputStream(f));
+                Files.newInputStream(f.toPath()));
 
         byte[] buffer = new byte[8192];
         int read = 0;
@@ -60,8 +60,7 @@ public class PatcherUtil {
         bis.close();
         byte[] md5sum = algorithm.digest();
         BigInteger bigInt = new BigInteger(1, md5sum);
-        String md5 = bigInt.toString(16);
-        return md5;
+        return bigInt.toString(16);
     }
 
     public static Collection<File> getAllPatchesFiles(String abstractPatchesLocation)
@@ -72,14 +71,14 @@ public class PatcherUtil {
             throw new InvalidPatchRepositoryException(
                     "Patches repository needs to be a dir!");
         String[] files = dir.list();
-        for (int i = 0; i < files.length; i++) {
+        for (int i = 0; i < Objects.requireNonNull(files).length; i++) {
             File f = new File(dir, files[i]);
             if (f.isDirectory() && !f.getName().equals("CVS") && !f.getName().equals(".svn"))
                 patchFiles.addAll(getAllPatchesFiles(f.getAbsolutePath()));
             if(!f.isDirectory())
                 patchFiles.add(f);
         }
-        Collections.sort(patchFiles, new PatchFilesComparator());
+        patchFiles.sort(new PatchFilesComparator());
         return patchFiles;
     }
 

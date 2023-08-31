@@ -20,6 +20,5 @@
 			<key column="amp_gpi_ni_survey_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpGPINiSurveyResponse" />
 		</set>
-
 	</class>
 </hibernate-mapping>

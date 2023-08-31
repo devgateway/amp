@@ -19,7 +19,7 @@
 			not-null="false" />
 			
 		<many-to-one name="ampGPINiSurvey" column="amp_gpi_ni_survey_id"
-			class="org.digijava.module.aim.dbentity.AmpGPINiSurvey" cascade="all-delete-orphan"
+			class="org.digijava.module.aim.dbentity.AmpGPINiSurvey" cascade="all"
 			not-null="true" index="idx_amp_gpi_ni_survey_response_amp_gpi_ni_survey_id" />
 			
 		<many-to-one name="ampGPINiQuestion" column="amp_gpi_ni_question_id"

@@ -12,7 +12,8 @@
 		</id>			
 		<property name="surveyDate" column="survey_date" type="java.util.Date" />		
 		<many-to-one name="ampOrgRole" column="amp_org_role_id" class="org.digijava.module.aim.dbentity.AmpOrgRole"
-			unique="true" />		
+			unique="true" />
+
 			<set name="responses" table="AMP_GPI_NI_SURVEY_RESPONSE" inverse="true"
 			cascade="all">
 			<cache usage="read-write" />

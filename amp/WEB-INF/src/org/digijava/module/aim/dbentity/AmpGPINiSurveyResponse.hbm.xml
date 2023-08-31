@@ -19,14 +19,14 @@
 			not-null="false" />
 			
 		<many-to-one name="ampGPINiSurvey" column="amp_gpi_ni_survey_id"
-			class="org.digijava.module.aim.dbentity.AmpGPINiSurvey" cascade="save-update"
+			class="org.digijava.module.aim.dbentity.AmpGPINiSurvey" cascade="merge"
 			not-null="true" index="idx_amp_gpi_ni_survey_response_amp_gpi_ni_survey_id" />
 			
 		<many-to-one name="ampGPINiQuestion" column="amp_gpi_ni_question_id"
-			class="org.digijava.module.aim.dbentity.AmpGPINiQuestion" cascade="save-update"
+			class="org.digijava.module.aim.dbentity.AmpGPINiQuestion" cascade="merge"
 			not-null="true" />
 		
-		<set name="supportingDocuments" lazy="false" inverse="true" cascade="save-update,all-delete-orphan">
+		<set name="supportingDocuments" lazy="false" inverse="true" cascade="all-delete-orphan">
 			<cache usage="read-write" />
 			<key column="amp_gpi_ni_survey_response_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpGPINiSurveyResponseDocument" />

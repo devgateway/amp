@@ -26,7 +26,7 @@
 			class="org.digijava.module.aim.dbentity.AmpGPINiQuestion" cascade="merge"
 			not-null="true" />
 		
-		<set name="supportingDocuments" lazy="false" inverse="true" cascade="merge">
+		<set name="supportingDocuments" lazy="false" inverse="true" cascade="merge,all-delete-orphan">
 			<cache usage="read-write" />
 			<key column="amp_gpi_ni_survey_response_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpGPINiSurveyResponseDocument" />

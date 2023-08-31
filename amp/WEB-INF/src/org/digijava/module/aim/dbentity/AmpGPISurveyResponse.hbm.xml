@@ -10,10 +10,10 @@
 		</id>
 
 		<many-to-one name="ampGPISurveyId" column="amp_gpisurvey_id"
-			class="org.digijava.module.aim.dbentity.AmpGPISurvey" cascade="save-update" not-null="true" />
+			class="org.digijava.module.aim.dbentity.AmpGPISurvey" cascade="persist" not-null="true" />
 
 		<many-to-one name="ampQuestionId" column="amp_question_id"
-			class="org.digijava.module.aim.dbentity.AmpGPISurveyQuestion" cascade="save-update" not-null="true" />
+			class="org.digijava.module.aim.dbentity.AmpGPISurveyQuestion" cascade="persist" not-null="true" />
 
 		<property name="response" column="response" type="java.lang.String" />
         <property name="references" column="references_col" type="java.lang.String" not-null="false" />

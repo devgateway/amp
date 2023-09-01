@@ -1,18 +1,10 @@
 package org.dgfoundation.amp.nireports;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.SortedMap;
-import java.util.TreeMap;
-
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.nireports.output.NiReportsFormatter;
-import org.dgfoundation.amp.nireports.runtime.CellColumn;
-import org.dgfoundation.amp.nireports.runtime.Column;
-import org.dgfoundation.amp.nireports.runtime.GroupColumn;
-import org.dgfoundation.amp.nireports.runtime.HeaderCalculator;
-import org.dgfoundation.amp.nireports.runtime.VSplitStrategy;
+import org.dgfoundation.amp.nireports.runtime.*;
+
+import java.util.*;
 
 /**
  * the header layout of a NiReport. The headers of a report are a forest of trees. The trees are as follows:

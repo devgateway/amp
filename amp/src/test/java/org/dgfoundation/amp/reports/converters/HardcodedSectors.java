@@ -1,11 +1,11 @@
 package org.dgfoundation.amp.reports.converters;
 
+import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpSectorScheme;
+
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpSectorScheme;
 
 /**
  * @author Viorel Chihai

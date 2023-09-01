@@ -1,11 +1,11 @@
 package org.digijava.module.contentrepository.form;
 
-import java.util.List;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.module.contentrepository.dbentity.template.TemplateDoc;
 import org.digijava.module.contentrepository.helper.template.TemplateFieldHelper;
+
+import java.util.List;
 
 
 public class TemplateDocManagerForm extends ActionForm {

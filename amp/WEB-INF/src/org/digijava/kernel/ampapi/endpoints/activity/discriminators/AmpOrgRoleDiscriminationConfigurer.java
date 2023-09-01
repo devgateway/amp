@@ -1,13 +1,13 @@
 package org.digijava.kernel.ampapi.endpoints.activity.discriminators;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.dgfoundation.amp.algo.Memoizer;
 import org.digijava.kernel.ampapi.discriminators.DiscriminationConfigurer;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.util.OrganisationUtil;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Octavian Ciubotaru

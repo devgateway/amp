@@ -1,8 +1,5 @@
 package org.digijava.module.help.action;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -12,6 +9,9 @@ import org.digijava.module.help.dbentity.HelpTopic;
 import org.digijava.module.help.form.GlossaryForm;
 import org.digijava.module.help.util.GlossaryUtil;
 import org.digijava.module.help.util.HelpUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Adds new glossary topic to db

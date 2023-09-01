@@ -6,8 +6,8 @@
  */
 package org.digijava.module.message.triggers;
 
-import org.digijava.module.message.helper.Event;
 import org.digijava.module.message.helper.AmpMessageWorker;
+import org.digijava.module.message.helper.Event;
 
 public abstract class Trigger {
 

@@ -1,13 +1,10 @@
 package org.dgfoundation.amp.nireports.testcases;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-
 import org.dgfoundation.amp.ar.Column;
 import org.dgfoundation.amp.ar.ColumnReportData;
-import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.testutils.ColumnComparator;
+
+import java.util.Arrays;
 
 /**
  * a model (sketch) for a flat (sub)report - a ColumnReportData instance

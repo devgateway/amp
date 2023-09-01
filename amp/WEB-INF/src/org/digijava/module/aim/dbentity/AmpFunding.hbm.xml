@@ -5,8 +5,8 @@
 	<class name="org.digijava.module.aim.dbentity.AmpFunding" table="AMP_FUNDING">
 		<cache usage="read-write" />
 		<id name="ampFundingId" column="amp_funding_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_FUNDING_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_FUNDING_seq</param>
 			</generator>
 		</id>
 
@@ -71,7 +71,7 @@
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpFundingDetail" />
 		</set>
 
-		<many-to-one name="ampActivityId" column="amp_activity_id" class="org.digijava.module.aim.dbentity.AmpActivityVersion" index="idx_amp_funding_amp_activity_id" />
+		<many-to-one cascade="delete" name="ampActivityId" column="amp_activity_id" class="org.digijava.module.aim.dbentity.AmpActivityVersion" index="idx_amp_funding_amp_activity_id" />
 			
 		<many-to-one name="typeOfAssistance" column="type_of_assistance_category_va"
 			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />

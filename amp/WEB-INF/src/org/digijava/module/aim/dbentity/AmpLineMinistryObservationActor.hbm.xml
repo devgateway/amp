@@ -4,8 +4,8 @@
 	<class name="org.digijava.module.aim.dbentity.AmpLineMinistryObservationActor" table="AMP_LINE_MINISTRY_OBS_ACTOR">
 		<cache usage="read-write" />
 		<id name="ampLineMinistryObservationActorId" column="amp_line_ministry_obs_actor_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_LINE_MINISTRY_OBS_ACTOR_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_LINE_MINISTRY_OBS_ACTOR_seq</param>
 			</generator>
 		</id>
 		<property column="name" name="name" type="text" />

@@ -24,10 +24,9 @@ package org.digijava.kernel.job.sample;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.job.AbstractSingletonJob;
-import org.quartz.JobExecutionException;
 import org.quartz.JobExecutionContext;
-import org.digijava.kernel.job.JobCachedObject;
-import java.text.SimpleDateFormat;
+import org.quartz.JobExecutionException;
+
 import java.util.Date;
 
 public class TestJob

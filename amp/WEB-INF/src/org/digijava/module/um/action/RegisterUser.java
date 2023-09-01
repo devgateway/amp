@@ -5,8 +5,6 @@
 package org.digijava.module.um.action;
 
 
-import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -18,23 +16,20 @@ import org.digijava.kernel.entity.UserLangPreferences;
 import org.digijava.kernel.mail.DgEmailManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
+import org.digijava.kernel.security.PasswordPolicyValidator;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.dbentity.AmpOrgGroup;
-import org.digijava.module.aim.dbentity.AmpOrgType;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpUserExtension;
-import org.digijava.module.aim.dbentity.AmpUserExtensionPK;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.um.form.AddUserForm;
 import org.digijava.module.um.util.AmpUserUtil;
 import org.digijava.module.um.util.DbUtil;
 
-import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.security.PasswordPolicyValidator;
+import javax.servlet.http.HttpSession;
 
 public class RegisterUser extends Action {
 

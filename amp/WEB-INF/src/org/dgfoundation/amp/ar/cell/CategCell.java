@@ -6,10 +6,6 @@
  */
 package org.dgfoundation.amp.ar.cell;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
 import org.dgfoundation.amp.ar.Categorizable;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.MetaInfoSet;

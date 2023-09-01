@@ -22,17 +22,12 @@
 
 package org.digijava.module.sdm.util;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.log4j.Logger;
 import org.digijava.module.sdm.dbentity.Sdm;
 import org.digijava.module.sdm.dbentity.SdmItem;
 import org.digijava.module.sdm.form.SdmForm;
-import java.util.StringTokenizer;
+
+import java.util.*;
 
 /**
  * <p>Title: DiGiJava</p>

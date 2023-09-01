@@ -3,8 +3,8 @@
 <hibernate-mapping>
 	<class name="org.digijava.module.content.dbentity.AmpContentItem" table="AMP_CONTENT_ITEM">
 		<id column="AMP_CONTENT_ITEM_ID" name="ampContentItemId" type="java.lang.Long" unsaved-value="null">
-			<generator class="native">
-				<param name="sequence">amp_content_item_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">amp_content_item_seq</param>
 			</generator>
 		</id>
 		<property name="pageCode" column="PAGECODE" type="java.lang.String" />

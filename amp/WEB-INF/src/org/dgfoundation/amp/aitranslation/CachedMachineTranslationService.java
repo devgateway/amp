@@ -1,17 +1,5 @@
 package org.dgfoundation.amp.aitranslation;
 
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
-import static org.digijava.module.aim.helper.GlobalSettingsConstants.MACHINE_TRANSLATION_MAX_CHARACTERS;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Predicate;
-
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.apache.commons.lang3.tuple.Pair;
@@ -21,6 +9,18 @@ import org.digijava.module.aim.dbentity.MachineTranslationCharactersUsed;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Predicate;
+
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
+import static org.digijava.module.aim.helper.GlobalSettingsConstants.MACHINE_TRANSLATION_MAX_CHARACTERS;
 
 /**
  * This a IMachineTranslationService wrapper that uses caches translations and limits monthly usage is there is any.

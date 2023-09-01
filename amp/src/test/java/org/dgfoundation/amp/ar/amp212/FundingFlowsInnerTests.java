@@ -1,30 +1,26 @@
 package org.dgfoundation.amp.ar.amp212;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.TreeSet;
-import java.util.function.Predicate;
-
-import org.digijava.kernel.translator.LocalizableLabel;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.nireports.Cell;
 import org.dgfoundation.amp.nireports.ComparableValue;
 import org.dgfoundation.amp.nireports.amp.MetaCategory;
-import org.dgfoundation.amp.nireports.runtime.CellColumn;
-import org.dgfoundation.amp.nireports.runtime.ColumnContents;
-import org.dgfoundation.amp.nireports.runtime.ColumnReportData;
-import org.dgfoundation.amp.nireports.runtime.NiCell;
-import org.dgfoundation.amp.nireports.runtime.VSplitStrategy;
+import org.dgfoundation.amp.nireports.runtime.*;
 import org.dgfoundation.amp.nireports.schema.NiDimension;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.dgfoundation.amp.nireports.testcases.LoggingIdsAcceptors;
 import org.dgfoundation.amp.nireports.testcases.generic.HardcodedReportsTestSchema;
 import org.dgfoundation.amp.nireports.testcases.generic.dimensions.OrganizationsTestDimension;
+import org.digijava.kernel.translator.LocalizableLabel;
 import org.digijava.module.aim.helper.Constants;
 import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.TreeSet;
+import java.util.function.Predicate;
 
 public class FundingFlowsInnerTests extends NiTestCase {
         

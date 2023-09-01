@@ -1,13 +1,13 @@
 package org.dgfoundation.amp.nireports.behaviours;
 
+import org.dgfoundation.amp.nireports.amp.MetaCategory;
+import org.dgfoundation.amp.nireports.output.nicells.NiAmountCell;
+import org.dgfoundation.amp.nireports.runtime.NiCell;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
-import org.dgfoundation.amp.nireports.amp.MetaCategory;
-import org.dgfoundation.amp.nireports.output.nicells.NiAmountCell;
-import org.dgfoundation.amp.nireports.runtime.NiCell;
 
 /**
  * the behaviour of an entity which filter the cells by a value

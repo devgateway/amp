@@ -4,10 +4,6 @@
 */
 package org.dgfoundation.amp.onepager.components.features.sections;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpSectorsFormTableFeature;
@@ -15,6 +11,8 @@ import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.util.SectorUtil;
+
+import java.util.List;
 
 /**
  * @author mpostelnicu@dgateway.org

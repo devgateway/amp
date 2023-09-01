@@ -1,8 +1,5 @@
 package org.digijava.kernel.validators.common;
 
-import java.util.Collection;
-import java.util.Map;
-
 import org.apache.commons.lang3.StringUtils;
 import org.digijava.kernel.ampapi.endpoints.activity.TranslationSettings;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
@@ -11,6 +8,9 @@ import org.digijava.kernel.ampapi.endpoints.dto.MultilingualContent;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.validation.ConstraintValidator;
 import org.digijava.kernel.validation.ConstraintValidatorContext;
+
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * @author Octavian Ciubotaru

@@ -1,9 +1,9 @@
 package org.dgfoundation.amp.newreports;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * a concrete implementation of {@link ReportFilters}

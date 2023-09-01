@@ -1,11 +1,9 @@
 package org.digijava.module.aim.form;
 
-import java.util.List;
-
 import org.apache.struts.action.ActionForm;
-import org.digijava.module.aim.form.EditActivityForm.Identification;
 import org.digijava.module.aim.util.InvalidDataUtil;
-import org.digijava.module.aim.form.EditActivityForm;
+
+import java.util.List;
 
 /**
  * Form for invalid data lists

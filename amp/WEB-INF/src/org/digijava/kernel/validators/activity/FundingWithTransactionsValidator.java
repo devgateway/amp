@@ -1,9 +1,9 @@
 package org.digijava.kernel.validators.activity;
 
-import java.util.Collection;
-
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
+
+import java.util.Collection;
 
 /**
  * Some fields become required when there is at least one transaction.

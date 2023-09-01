@@ -19,62 +19,31 @@ import org.digijava.kernel.util.collections.CollectionUtils;
 import org.digijava.kernel.util.collections.HierarchyDefinition;
 import org.digijava.kernel.util.collections.HierarchyMember;
 import org.digijava.kernel.util.collections.HierarchyMemberFactory;
-import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
-import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.dbentity.AmpIndicatorSector;
-import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.dbentity.AmpThemeIndicatorValue;
-import org.digijava.module.aim.dbentity.AmpThemeIndicators;
-import org.digijava.module.aim.dbentity.AmpThemeMapping;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.exception.AimException;
-import org.digijava.module.aim.helper.ActivityIndicator;
-import org.digijava.module.aim.helper.ActivitySector;
-import org.digijava.module.aim.helper.AllMEIndicators;
-import org.digijava.module.aim.helper.AllPrgIndicators;
-import org.digijava.module.aim.helper.AllThemes;
-import org.digijava.module.aim.helper.AmpIndSectors;
-import org.digijava.module.aim.helper.AmpPrgIndicator;
-import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
-import org.digijava.module.aim.helper.DateConversion;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.helper.IndicatorsBean;
-import org.digijava.module.aim.helper.TreeItem;
+import org.digijava.module.aim.helper.*;
 import org.hibernate.CacheMode;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import java.util.*;
 
 import static java.util.Collections.emptySet;
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.mapping;
-import static java.util.stream.Collectors.toCollection;
+import static java.util.stream.Collectors.*;
 import static org.digijava.kernel.ampapi.endpoints.ndd.DashboardService.MAX_LEVELS;
 import static org.digijava.module.aim.helper.GlobalSettingsConstants.MAPPING_DESTINATION_PROGRAM;
 import static org.digijava.module.aim.helper.GlobalSettingsConstants.MAPPING_SOURCE_PROGRAM;
 
 public class ProgramUtil {
-    private static Logger logger = Logger.getLogger(ProgramUtil.class);
+    private static final Logger logger = Logger.getLogger(ProgramUtil.class);
 
     @Deprecated
     public static final int YAERS_LIST_START = 2000;
@@ -107,20 +76,20 @@ public class ProgramUtil {
                 if (programs!= null && programs.size() >0){
                     result = new ArrayList();
                     long t = 1;
-                    for (Iterator iter = programs.iterator(); iter.hasNext();) {
-                        AmpTheme OldProg = (AmpTheme) iter.next();
-                        AmpTheme prog= getThemeById(OldProg.getAmpThemeId());
+                    for (Object program : programs) {
+                        AmpTheme OldProg = (AmpTheme) program;
+                        AmpTheme prog = getThemeById(OldProg.getAmpThemeId());
                         Set indicators = prog.getIndicators();
-                        if (indicators!=null && indicators.size()>0){
-                            for (Iterator indicIter = indicators.iterator(); indicIter.hasNext();) {
-                                AmpThemeIndicators indicator = (AmpThemeIndicators) indicIter.next();
+                        if (indicators != null && indicators.size() > 0) {
+                            for (Object o : indicators) {
+                                AmpThemeIndicators indicator = (AmpThemeIndicators) o;
                                 ActivityIndicator aiBean = new ActivityIndicator();
                                 aiBean.setIndicatorId(indicator.getAmpThemeIndId());
 
                                 aiBean.setIndicatorName(indicator.getName());
                                 aiBean.setIndicatorCode(indicator.getCode());
-                                aiBean.setIndicatorValId(new Long(t*1));
-                                aiBean.setActivityId(new Long(t*1));
+                                aiBean.setIndicatorValId(t);
+                                aiBean.setActivityId(t);
                                 aiBean.setDefaultInd(false);
                                 ++t;
                                 result.add(aiBean);
@@ -265,8 +234,7 @@ public class ProgramUtil {
                         + " t where t.parentThemeId is null";
                 Query qry = PersistenceManager.getRequestDBSession().createQuery(queryString);
                 qry.setCacheable(false);
-                List<AmpTheme> themes = qry.list();
-                return themes;
+                return (List<AmpTheme>) qry.list();
             } catch (Exception e) {
                 throw new RuntimeException("Cannot search parent themes", e);
             }
@@ -286,11 +254,10 @@ public class ProgramUtil {
                 }
                 Query qry = PersistenceManager.getRequestDBSession().createQuery(queryString);
                 if (excludeIndirect) {
-                    qry.setString("indirectName", INDIRECT_PRIMARY_PROGRAM);
+                    qry.setParameter("indirectName", INDIRECT_PRIMARY_PROGRAM, StringType.INSTANCE);
                 }
 
-                List<AmpTheme> themes = qry.list();
-                return themes;
+                return (List<AmpTheme>) qry.list();
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -345,9 +312,8 @@ public class ProgramUtil {
                 session.setCacheMode(CacheMode.REFRESH);
                 qry.setCacheable(false);
                 themes = qry.list();
-                Collections.sort(themes, new Comparator<AmpTheme>() {
-                    public int compare(AmpTheme a, AmpTheme b)
-                    {
+                themes.sort(new Comparator<AmpTheme>() {
+                    public int compare(AmpTheme a, AmpTheme b) {
                         return a.getName().compareTo(b.getName());
                     }
                 });
@@ -385,18 +351,14 @@ public class ProgramUtil {
             Collection colThInd = new ArrayList();
             Collection colTh = null;
             colTh = getAllPrograms();
-            Iterator itrColTh = colTh.iterator();
-            while(itrColTh.hasNext())
-            {
-                AmpTheme ampTh1 = (AmpTheme) itrColTh.next();
+            for (Object value : colTh) {
+                AmpTheme ampTh1 = (AmpTheme) value;
                 AllThemes tempAllThemes = new AllThemes();
                 tempAllThemes.setProgramId(ampTh1.getAmpThemeId());
                 tempAllThemes.setProgramName(ampTh1.getName());
                 Collection allInds = new ArrayList();
-                Iterator itr = getThemeIndicators(ampTh1.getAmpThemeId()).iterator();
-                while(itr.hasNext())
-                {
-                    AmpPrgIndicator ampPrg = (AmpPrgIndicator) itr.next();
+                for (Object o : getThemeIndicators(ampTh1.getAmpThemeId())) {
+                    AmpPrgIndicator ampPrg = (AmpPrgIndicator) o;
                     AllPrgIndicators prgInd = new AllPrgIndicators();
                     prgInd.setIndicatorId(ampPrg.getIndicatorId());
                     prgInd.setName(ampPrg.getName());
@@ -423,18 +385,14 @@ public class ProgramUtil {
             Collection colThInd = new ArrayList();
             Collection colTh = null;
             colTh = getAllMainPrograms();
-            Iterator itrColTh = colTh.iterator();
-            while(itrColTh.hasNext())
-            {
-                AmpTheme ampTh1 = (AmpTheme) itrColTh.next();
+            for (Object o : colTh) {
+                AmpTheme ampTh1 = (AmpTheme) o;
                 AllThemes tempAllThemes = new AllThemes();
                 tempAllThemes.setProgramId(ampTh1.getAmpThemeId());
                 tempAllThemes.setProgramName(ampTh1.getName());
                 Collection allInds = new ArrayList();
-                Iterator itr = getThemeIndicators(ampTh1.getAmpThemeId()).iterator();
-                while(itr.hasNext())
-                {
-                    AmpPrgIndicator ampPrg = (AmpPrgIndicator) itr.next();
+                for (Object value : getThemeIndicators(ampTh1.getAmpThemeId())) {
+                    AmpPrgIndicator ampPrg = (AmpPrgIndicator) value;
                     AllPrgIndicators prgInd = new AllPrgIndicators();
                     prgInd.setIndicatorId(ampPrg.getIndicatorId());
                     prgInd.setName(ampPrg.getName());
@@ -472,10 +430,9 @@ public class ProgramUtil {
                 throw new AimException(ex);
             }
             Collection mainProgram = new ArrayList();;
-            Iterator itr = colPrg.iterator();
-            while(itr.hasNext()) {
-                AmpTheme tmpTheme = (AmpTheme)itr.next();
-                if(tmpTheme.getParentThemeId()==null || tmpTheme.getParentThemeId().getAmpThemeId().intValue()==0) {
+            for (Object o : colPrg) {
+                AmpTheme tmpTheme = (AmpTheme) o;
+                if (tmpTheme.getParentThemeId() == null || tmpTheme.getParentThemeId().getAmpThemeId().intValue() == 0) {
                     mainProgram.add(tmpTheme);
                 }
             }
@@ -526,7 +483,7 @@ public class ProgramUtil {
     }
 
     public static String getHierarchyName(AmpTheme prog) {
-        String result = "";
+        StringBuilder result = new StringBuilder();
         List<AmpTheme> progs = new ArrayList<AmpTheme>();
         AmpTheme curProg = prog;
         while (curProg.getParentThemeId() != null) {
@@ -537,13 +494,12 @@ public class ProgramUtil {
 
         Collections.reverse(progs);
 
-        for (ListIterator<AmpTheme> iterator = progs.listIterator(); iterator.hasNext();) {
-            AmpTheme p = (AmpTheme) iterator.next();
-            result += p.getName() + " > ";
+        for (AmpTheme p : progs) {
+            result.append(p.getName()).append(" > ");
         }
 
-        result += prog.getName();
-        return result;
+        result.append(prog.getName());
+        return result.toString();
     }
 
         public static Collection getSectorIndicator(Long themeIndicatorId)
@@ -558,10 +514,8 @@ public class ProgramUtil {
                                     + " SectInd where (SectInd.themeIndicatorId=:themeIndicatorId)";
                 Query qry = session.createQuery(queryString);
                 qry.setParameter("themeIndicatorId",themeIndicatorId,LongType.INSTANCE);
-                Iterator indItr = qry.list().iterator();
-                while(indItr.hasNext())
-                {
-                    AmpIndicatorSector IndSector = (AmpIndicatorSector) indItr.next();
+                for (Object o : qry.list()) {
+                    AmpIndicatorSector IndSector = (AmpIndicatorSector) o;
                     AmpIndSectors Indsectors = new AmpIndSectors();
                     Indsectors.setAmpIndicatorSectorId(IndSector.getAmpIndicatorSectorId());
                     Indsectors.setSectorId(IndSector.getSectorId());
@@ -590,10 +544,8 @@ public class ProgramUtil {
                 session = PersistenceManager.getRequestDBSession();
                 tempAmpTheme = (AmpTheme) session.load(AmpTheme.class,ampThemeId);
                 Set themeIndSet = tempAmpTheme.getIndicators();
-                Iterator itrIndSet = themeIndSet.iterator();
-                while(itrIndSet.hasNext())
-                {
-                    AmpThemeIndicators tempThemeInd = (AmpThemeIndicators) itrIndSet.next();
+                for (Object o : themeIndSet) {
+                    AmpThemeIndicators tempThemeInd = (AmpThemeIndicators) o;
                     AmpPrgIndicator tempPrgInd = new AmpPrgIndicator();
                     Long ampThemeIndId = tempThemeInd.getAmpThemeIndId();
                     tempPrgInd.setIndicatorId(ampThemeIndId);
@@ -617,9 +569,7 @@ public class ProgramUtil {
         Set indicators = new HashSet();
         ArrayList programs = (ArrayList) getRelatedThemes(programId);
         if (programs != null) {
-            Iterator<AmpTheme> iterProgram = programs.iterator();
-            while (iterProgram.hasNext()) {
-                AmpTheme program = iterProgram.next();
+            for (AmpTheme program : (Iterable<AmpTheme>) programs) {
                 Set inds = IndicatorUtil.getIndicatorThemeConnections(program);
                 if (inds != null) {
                     indicators.addAll(inds);
@@ -642,10 +592,8 @@ public class ProgramUtil {
                                     + " thIndValId where (thIndValId.indicatorId=:indicatorId)";
                 Query qry = session.createQuery(queryString);
                 qry.setParameter("indicatorId",themeIndicatorId,LongType.INSTANCE);
-                Iterator indItr = qry.list().iterator();
-                while(indItr.hasNext())
-                {
-                    AmpThemeIndicatorValue tempThIndVal = (AmpThemeIndicatorValue) indItr.next();
+                for (Object o : qry.list()) {
+                    AmpThemeIndicatorValue tempThIndVal = (AmpThemeIndicatorValue) o;
                     AmpPrgIndicatorValue tempPrgIndVal = new AmpPrgIndicatorValue();
                     tempPrgIndVal.setIndicatorValueId(tempThIndVal.getAmpThemeIndValId());
                     tempPrgIndVal.setValueType(tempThIndVal.getValueType());
@@ -708,108 +656,85 @@ public class ProgramUtil {
                 tempCol1 = qry.list();
                 if(!tempCol1.isEmpty())
                 {
-                    Iterator tempItrCol1 = tempCol1.iterator();
-                    while(tempItrCol1.hasNext())
-                    {
-                        AmpTheme ampTheme1 = (AmpTheme) tempItrCol1.next();
+                    for (Object o : tempCol1) {
+                        AmpTheme ampTheme1 = (AmpTheme) o;
                         parentThemeId = ampTheme1.getAmpThemeId();
                         allSubThemes.add(ampTheme1);
                         //  level 2 starts
-                        String queryString2 = "select subT from " +AmpTheme.class.getName()
-                                            + " subT where (subT.parentThemeId=:parentThemeId)";
+                        String queryString2 = "select subT from " + AmpTheme.class.getName()
+                                + " subT where (subT.parentThemeId=:parentThemeId)";
                         qry = session.createQuery(queryString2);
-                        qry.setParameter("parentThemeId",parentThemeId,LongType.INSTANCE);
+                        qry.setParameter("parentThemeId", parentThemeId, LongType.INSTANCE);
                         tempCol2 = qry.list();
-                        if(!tempCol2.isEmpty())
-                        {
-                            Iterator tempItrCol2 = tempCol2.iterator();
-                            while(tempItrCol2.hasNext())
-                            {
-                                AmpTheme ampTheme2 = (AmpTheme) tempItrCol2.next();
+                        if (!tempCol2.isEmpty()) {
+                            for (Object o4 : tempCol2) {
+                                AmpTheme ampTheme2 = (AmpTheme) o4;
                                 parentThemeId = ampTheme2.getAmpThemeId();
                                 allSubThemes.add(ampTheme2);
                                 //  level 3 starts
-                                String queryString3 = "select subT from " +AmpTheme.class.getName()
-                                                    + " subT where (subT.parentThemeId=:parentThemeId)";
+                                String queryString3 = "select subT from " + AmpTheme.class.getName()
+                                        + " subT where (subT.parentThemeId=:parentThemeId)";
                                 qry = session.createQuery(queryString3);
-                                qry.setParameter("parentThemeId",parentThemeId,LongType.INSTANCE);
+                                qry.setParameter("parentThemeId", parentThemeId, LongType.INSTANCE);
                                 tempCol3 = qry.list();
-                                if(!tempCol3.isEmpty())
-                                {
-                                    Iterator tempItrCol3 = tempCol3.iterator();
-                                    while(tempItrCol3.hasNext())
-                                    {
-                                        AmpTheme ampTheme3 = (AmpTheme) tempItrCol3.next();
+                                if (!tempCol3.isEmpty()) {
+                                    for (Object o3 : tempCol3) {
+                                        AmpTheme ampTheme3 = (AmpTheme) o3;
                                         parentThemeId = ampTheme3.getAmpThemeId();
                                         allSubThemes.add(ampTheme3);
                                         //  level 4 starts
-                                        String queryString4 = "select subT from " +AmpTheme.class.getName()
-                                                            + " subT where (subT.parentThemeId=:parentThemeId)";
+                                        String queryString4 = "select subT from " + AmpTheme.class.getName()
+                                                + " subT where (subT.parentThemeId=:parentThemeId)";
                                         qry = session.createQuery(queryString4);
-                                        qry.setParameter("parentThemeId",parentThemeId,LongType.INSTANCE);
+                                        qry.setParameter("parentThemeId", parentThemeId, LongType.INSTANCE);
                                         tempCol4 = qry.list();
-                                        if(!tempCol4.isEmpty())
-                                        {
-                                            Iterator tempItrCol4 = tempCol4.iterator();
-                                            while(tempItrCol4.hasNext())
-                                            {
-                                                AmpTheme ampTheme4 = (AmpTheme) tempItrCol4.next();
+                                        if (!tempCol4.isEmpty()) {
+                                            for (Object o2 : tempCol4) {
+                                                AmpTheme ampTheme4 = (AmpTheme) o2;
                                                 parentThemeId = ampTheme4.getAmpThemeId();
                                                 allSubThemes.add(ampTheme4);
                                                 //  level 5 starts
-                                                String queryString5 = "select subT from " +AmpTheme.class.getName()
-                                                                    + " subT where (subT.parentThemeId=:parentThemeId)";
+                                                String queryString5 = "select subT from " + AmpTheme.class.getName()
+                                                        + " subT where (subT.parentThemeId=:parentThemeId)";
                                                 qry = session.createQuery(queryString5);
-                                                qry.setParameter("parentThemeId",parentThemeId,LongType.INSTANCE);
+                                                qry.setParameter("parentThemeId", parentThemeId, LongType.INSTANCE);
                                                 tempCol5 = qry.list();
-                                                if(!tempCol5.isEmpty())
-                                                {
-                                                    Iterator tempItrCol5 = tempCol5.iterator();
-                                                    while(tempItrCol5.hasNext())
-                                                    {
-                                                        AmpTheme ampTheme5 = (AmpTheme) tempItrCol5.next();
+                                                if (!tempCol5.isEmpty()) {
+                                                    for (Object o1 : tempCol5) {
+                                                        AmpTheme ampTheme5 = (AmpTheme) o1;
                                                         parentThemeId = ampTheme5.getAmpThemeId();
                                                         allSubThemes.add(ampTheme5);
                                                         //  level 6 starts
-                                                        String queryString6 = "select subT from " +AmpTheme.class.getName()
-                                                                            + " subT where (subT.parentThemeId=:parentThemeId)";
+                                                        String queryString6 = "select subT from " + AmpTheme.class.getName()
+                                                                + " subT where (subT.parentThemeId=:parentThemeId)";
                                                         qry = session.createQuery(queryString6);
-                                                        qry.setParameter("parentThemeId",parentThemeId,LongType.INSTANCE);
+                                                        qry.setParameter("parentThemeId", parentThemeId, LongType.INSTANCE);
                                                         tempCol6 = qry.list();
-                                                        if(!tempCol6.isEmpty())
-                                                        {
-                                                            Iterator tempItrCol6 = tempCol6.iterator();
-                                                            while(tempItrCol6.hasNext())
-                                                            {
-                                                                AmpTheme ampTheme6 = (AmpTheme) tempItrCol6.next();
+                                                        if (!tempCol6.isEmpty()) {
+                                                            for (Object element : tempCol6) {
+                                                                AmpTheme ampTheme6 = (AmpTheme) element;
                                                                 parentThemeId = ampTheme6.getAmpThemeId();
                                                                 allSubThemes.add(ampTheme6);
                                                                 //  level 7 starts
-                                                                String queryString7 = "select subT from " +AmpTheme.class.getName()
-                                                                                    + " subT where (subT.parentThemeId=:parentThemeId)";
+                                                                String queryString7 = "select subT from " + AmpTheme.class.getName()
+                                                                        + " subT where (subT.parentThemeId=:parentThemeId)";
                                                                 qry = session.createQuery(queryString7);
-                                                                qry.setParameter("parentThemeId",parentThemeId,LongType.INSTANCE);
+                                                                qry.setParameter("parentThemeId", parentThemeId, LongType.INSTANCE);
                                                                 tempCol7 = qry.list();
-                                                                if(!tempCol7.isEmpty())
-                                                                {
-                                                                    Iterator tempItrCol7 = tempCol7.iterator();
-                                                                    while(tempItrCol7.hasNext())
-                                                                    {
-                                                                        AmpTheme ampTheme7 = (AmpTheme) tempItrCol7.next();
+                                                                if (!tempCol7.isEmpty()) {
+                                                                    for (Object value : tempCol7) {
+                                                                        AmpTheme ampTheme7 = (AmpTheme) value;
                                                                         parentThemeId = ampTheme7.getAmpThemeId();
                                                                         allSubThemes.add(ampTheme7);
                                                                         //  level 8 starts
-                                                                        String queryString8 = "select subT from " +AmpTheme.class.getName()
-                                                                                            + " subT where (subT.parentThemeId=:parentThemeId)";
+                                                                        String queryString8 = "select subT from " + AmpTheme.class.getName()
+                                                                                + " subT where (subT.parentThemeId=:parentThemeId)";
                                                                         qry = session.createQuery(queryString8);
-                                                                        qry.setParameter("parentThemeId",parentThemeId,LongType.INSTANCE);
+                                                                        qry.setParameter("parentThemeId", parentThemeId, LongType.INSTANCE);
                                                                         tempCol8 = qry.list();
-                                                                        if(!tempCol8.isEmpty())
-                                                                        {
-                                                                            Iterator tempItrCol8 = tempCol8.iterator();
-                                                                            while(tempItrCol8.hasNext())
-                                                                            {
-                                                                                AmpTheme ampTheme8 = (AmpTheme) tempItrCol8.next();
+                                                                        if (!tempCol8.isEmpty()) {
+                                                                            for (Object item : tempCol8) {
+                                                                                AmpTheme ampTheme8 = (AmpTheme) item;
                                                                                 allSubThemes.add(ampTheme8);
                                                                             }
                                                                         }
@@ -1110,15 +1035,13 @@ public class ProgramUtil {
             try
             {
                 session = PersistenceManager.getRequestDBSession();
-                Iterator indValItr = prgIndValues.iterator();
-                while(indValItr.hasNext())
-                {
+                for (Object prgIndValue : prgIndValues) {
                     AmpThemeIndicatorValue ampThIndVal = null;
-                    AmpPrgIndicatorValue ampPrgIndVal = (AmpPrgIndicatorValue) indValItr.next();
-                    if(ampPrgIndVal.getIndicatorValueId() == null)
+                    AmpPrgIndicatorValue ampPrgIndVal = (AmpPrgIndicatorValue) prgIndValue;
+                    if (ampPrgIndVal.getIndicatorValueId() == null)
                         ampThIndVal = new AmpThemeIndicatorValue();
                     else
-                        ampThIndVal = (AmpThemeIndicatorValue) session.load(AmpThemeIndicatorValue.class,ampPrgIndVal.getIndicatorValueId());
+                        ampThIndVal = (AmpThemeIndicatorValue) session.load(AmpThemeIndicatorValue.class, ampPrgIndVal.getIndicatorValueId());
                     ampThIndVal.setValueAmount(ampPrgIndVal.getValAmount());
                     ampThIndVal.setCreationDate(DateConversion.getDate(ampPrgIndVal.getCreationDate()));
                     ampThIndVal.setValueType(ampPrgIndVal.getValueType());
@@ -1184,15 +1107,13 @@ public class ProgramUtil {
                     Set sectors = new HashSet();
                    Collection sect=tempPrgInd.getIndSectores();
                    if(sect!=null&&sect.size()>0){
-                     Iterator <ActivitySector> sectIter=sect.iterator();
-                      while(sectIter.hasNext()){
-                          ActivitySector sector=sectIter.next();
-                          if(tempPrgInd.getIndicatorId()==null||!SectorUtil.getIndIcatorSector(tempPrgInd.getIndicatorId(), sector.getSectorId())){
-                          AmpIndicatorSector amps = new AmpIndicatorSector();
-                           amps.setThemeIndicatorId(ampThemeInd);
-                           amps.setSectorId(SectorUtil.getAmpSector(sector.getSectorId()));
-                           ampThemeInd.getSectors().add(amps);
-                          }
+                       for (ActivitySector sector : (Iterable<ActivitySector>) sect) {
+                           if (tempPrgInd.getIndicatorId() == null || !SectorUtil.getIndIcatorSector(tempPrgInd.getIndicatorId(), sector.getSectorId())) {
+                               AmpIndicatorSector amps = new AmpIndicatorSector();
+                               amps.setThemeIndicatorId(ampThemeInd);
+                               amps.setSectorId(SectorUtil.getAmpSector(sector.getSectorId()));
+                               ampThemeInd.getSectors().add(amps);
+                           }
                        }
                    }
 
@@ -1210,9 +1131,8 @@ public class ProgramUtil {
                 //session.saveOrUpdate(tempAmpTheme);
 
                 if(tempPrgInd.getPrgIndicatorValues()!=null && tempPrgInd.getPrgIndicatorValues().size()!=0){
-                    Iterator indItr = tempPrgInd.getPrgIndicatorValues().iterator();
-                    while(indItr.hasNext()) {
-                        AmpPrgIndicatorValue prgIndValue = (AmpPrgIndicatorValue) indItr.next();
+                    for (Object o : tempPrgInd.getPrgIndicatorValues()) {
+                        AmpPrgIndicatorValue prgIndValue = (AmpPrgIndicatorValue) o;
                         AmpThemeIndicatorValue indValue = new AmpThemeIndicatorValue();
                         indValue.setValueType(prgIndValue.getValueType());
                         indValue.setValueAmount(prgIndValue.getValAmount());
@@ -1433,11 +1353,9 @@ public class ProgramUtil {
             tempPrg.add(ampThemetemp);
             if(!themeCol.isEmpty())
             {
-                Iterator itr = themeCol.iterator();
                 AmpTheme tempTheme = new AmpTheme();
-                while(itr.hasNext())
-                {
-                    tempTheme = (AmpTheme) itr.next();
+                for (AmpTheme ampTheme : themeCol) {
+                    tempTheme = ampTheme;
                     tempPrg.addAll(getRelatedThemes(tempTheme.getAmpThemeId()));
                 }
             }
@@ -1446,8 +1364,8 @@ public class ProgramUtil {
 
 
         public static String getThemesHierarchyXML(Collection<AmpTheme> allAmpThemes) throws Exception {
-            String result = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-            result += "<progTree>\n";
+            StringBuilder result = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+            result.append("<progTree>\n");
             if (allAmpThemes != null && allAmpThemes.size() > 0) {
 
                 //make hieararchy of programs wrapped into TreeItem
@@ -1455,13 +1373,13 @@ public class ProgramUtil {
                         new ProgramHierarchyDefinition(), new XMLtreeItemFactory());
 
                 //get XML from each top level item. They will handle subitems.
-                for (Iterator treeItemIter = themeTree.iterator(); treeItemIter.hasNext(); ) {
-                    TreeItem item = (TreeItem) treeItemIter.next();
-                    result += item.getXml();
+                for (Object o : themeTree) {
+                    TreeItem item = (TreeItem) o;
+                    result.append(item.getXml());
                 }
             }
-            result += "</progTree>\n";
-            return result;
+            result.append("</progTree>\n");
+            return result.toString();
         }
         public static AmpActivityProgramSettings getAmpActivityProgramSettings(Long id) throws DgException {
             return (AmpActivityProgramSettings) PersistenceManager.getRequestDBSession().load(AmpActivityProgramSettings.class, id);
@@ -1477,7 +1395,7 @@ public class ProgramUtil {
                                     + AmpActivityProgramSettings.class.getName()+ " ap "
                                     + "where ap.name=:name";
                     Query qry = session.createQuery(queryString);
-                    qry.setString("name", name);
+                    qry.setParameter("name", name,StringType.INSTANCE);
                     qry.setCacheable(false);
                 programSettings = (AmpActivityProgramSettings) qry.uniqueResult();
 
@@ -1496,7 +1414,7 @@ public class ProgramUtil {
           }
           Query qry = PersistenceManager.getSession().createQuery(queryString);
           if (excludeIndirect) {
-              qry.setString("indirectName", INDIRECT_PRIMARY_PROGRAM);
+              qry.setParameter("indirectName", INDIRECT_PRIMARY_PROGRAM, StringType.INSTANCE);
           }
 
           List<AmpActivityProgramSettings> programSettings = qry.list();
@@ -1563,9 +1481,8 @@ public class ProgramUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             if (settings != null) {
-                Iterator settingsIter = settings.iterator();
-                while (settingsIter.hasNext()) {
-                    AmpActivityProgramSettings setting = (AmpActivityProgramSettings) settingsIter.next();
+                for (Object o : settings) {
+                    AmpActivityProgramSettings setting = (AmpActivityProgramSettings) o;
                     if (setting.getDefaultHierarchy() != null
                             && setting.getDefaultHierarchy().getAmpThemeId() != null) {
                         AmpActivityProgramSettings oldSetting = (AmpActivityProgramSettings) session.
@@ -1598,70 +1515,67 @@ public class ProgramUtil {
         if (themes == null || themes.size() == 0) {
             return "<center><b>" + translatedText + "</b></<center>";
         }
-         String retVal;
-        retVal = "<table width=\"100%\" cellPadding=\"0\" cellSpacing=\"0\" valign=\"top\" align=\"left\" bgcolor=\"#ffffff\" border=\"0\" style=\"border-collapse: collapse;\">\n";
-        Iterator iter = themes.iterator();
+         StringBuilder retVal;
+        retVal = new StringBuilder("<table width=\"100%\" cellPadding=\"0\" cellSpacing=\"0\" valign=\"top\" align=\"left\" bgcolor=\"#ffffff\" border=\"0\" style=\"border-collapse: collapse;\">\n");
         int rc = 0;
-        while (iter.hasNext()) {
-            TreeItem item = (TreeItem) iter.next();
+        for (Object o : themes) {
+            TreeItem item = (TreeItem) o;
             AmpTheme theme = (AmpTheme) item.getMember();
-            retVal += "<tr><td>&nbsp;</td><td width=\"100%\">\n";
+            retVal.append("<tr><td>&nbsp;</td><td width=\"100%\">\n");
 
 
             // visible div start
-            retVal += "<div>";// id=\"div_theme_"+theme.getAmpThemeId()+"\"";
-            retVal += " <table class=\"inside\" width=\"100%\" border=\"0\" style=\"margin-bottom:1px\">";
-            if (rc++%2 == 0){
-                retVal += "<tr bgcolor=\"#F2F2F2\" class=\"tableEven\" onmouseover=\"this.className='Hovered'\" onmouseout=\"this.className='tableEven'\">";
-            }else{
-                retVal += "<tr bgcolor=\"#F2F2F2\" class=\"tableOdd\" onmouseover=\"this.className='Hovered'\" onmouseout=\"this.className='tableOdd'\">";
+            retVal.append("<div>");// id=\"div_theme_"+theme.getAmpThemeId()+"\"";
+            retVal.append(" <table class=\"inside\" width=\"100%\" border=\"0\" style=\"margin-bottom:1px\">");
+            if (rc++ % 2 == 0) {
+                retVal.append("<tr bgcolor=\"#F2F2F2\" class=\"tableEven\" onmouseover=\"this.className='Hovered'\" onmouseout=\"this.className='tableEven'\">");
+            } else {
+                retVal.append("<tr bgcolor=\"#F2F2F2\" class=\"tableOdd\" onmouseover=\"this.className='Hovered'\" onmouseout=\"this.className='tableOdd'\">");
             }
-            retVal += "   <td class=\"inside\" width=\"1%\" >";
-            retVal += "     <img id=\"img_" + theme.getAmpThemeId()+ "\" onclick=\"expandProgram(" + theme.getAmpThemeId()+ ")\" src=\"/TEMPLATE/ampTemplate/images/tree_plus.gif\"/>\n";
-            retVal += "     <img id=\"imgh_"+ theme.getAmpThemeId()+ "\" onclick=\"collapseProgram("+ theme.getAmpThemeId()+ ")\" src=\"/TEMPLATE/ampTemplate/images/tree_minus.gif\"  style=\"display : none;\"/>\n";
-            retVal += "   </td>";
-            if (level>1){
-                retVal += "   <td class=\"inside\" width=\"1%\">";
-                retVal += "     <img src=\"/TEMPLATE/ampTemplate/images/link_out_bot.gif\"/>\n";
-                retVal += "   </td>";
-                retVal += "   <td class=\"inside\" width=\"1%\">";
-                retVal += "     <img src=\""+getLevelImage(level)+"\" />\n";
-                retVal += "   </td>";
+            retVal.append("   <td class=\"inside\" width=\"1%\" >");
+            retVal.append("     <img id=\"img_").append(theme.getAmpThemeId()).append("\" onclick=\"expandProgram(").append(theme.getAmpThemeId()).append(")\" src=\"/TEMPLATE/ampTemplate/images/tree_plus.gif\"/>\n");
+            retVal.append("     <img id=\"imgh_").append(theme.getAmpThemeId()).append("\" onclick=\"collapseProgram(").append(theme.getAmpThemeId()).append(")\" src=\"/TEMPLATE/ampTemplate/images/tree_minus.gif\"  style=\"display : none;\"/>\n");
+            retVal.append("   </td>");
+            if (level > 1) {
+                retVal.append("   <td class=\"inside\" width=\"1%\">");
+                retVal.append("     <img src=\"/TEMPLATE/ampTemplate/images/link_out_bot.gif\"/>\n");
+                retVal.append("   </td>");
+                retVal.append("   <td class=\"inside\" width=\"1%\">");
+                retVal.append("     <img src=\"").append(getLevelImage(level)).append("\" />\n");
+                retVal.append("   </td>");
             }
-            retVal += "   <td  class=\"progName inside\">";
-            retVal += "    <a href=\"javascript:editProgram("+ theme.getAmpThemeId()+ ")\" style=\"font-weight:bold;\">"+org.digijava.module.aim.util.DbUtil.filter(((AmpTheme) item.getMember()).getName())+"</a>\n";
-            retVal += "   </td>";
-            retVal += "   <td class=\"progCode inside\"  width=\"45%\" nowrap=\"nowrap\">("+ org.digijava.module.aim.util.DbUtil.filter(((AmpTheme) item.getMember()).getThemeCode()) + ")</td>";
-            retVal += "   <td class=\"inside\" nowrap=\"nowrap\" width=\"10%\">";
-            retVal += "     <a href=\"javascript:addSubProgram('5','"+theme.getAmpThemeId() +"','"+level+"','"+org.digijava.module.aim.util.DbUtil.filter(theme.getEncodeName())+"')\">"+TranslatorWorker.translateText("Add Sub Program")+"</a> \n";
-            retVal += "   </td>";
-            retVal += "   <td class=\"inside\" nowrap=\"nowrap\" width=\"10%\">";
-            retVal += "     <a href=\"javascript:assignIndicators('"+theme.getAmpThemeId() +"')\">" + TranslatorWorker.translateText("Manage Indicators") + "</a>\n";
-            retVal += "   </td>";
-            retVal += "   <td class=\"inside\" width=\"12\">";
-            retVal += "     <a href=\"/aim/themeManager.do~event=delete~themeId="+theme.getAmpThemeId()+"\" onclick=\"return deleteProgram()\"><img src=\"/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif\" border=\"0\"></a>";
-            retVal += "   </td>";
-            retVal += " </tr></table>";
-            retVal += "</div>\n";
+            retVal.append("   <td  class=\"progName inside\">");
+            retVal.append("    <a href=\"javascript:editProgram(").append(theme.getAmpThemeId()).append(")\" style=\"font-weight:bold;\">").append(DbUtil.filter(((AmpTheme) item.getMember()).getName())).append("</a>\n");
+            retVal.append("   </td>");
+            retVal.append("   <td class=\"progCode inside\"  width=\"45%\" nowrap=\"nowrap\">(").append(DbUtil.filter(((AmpTheme) item.getMember()).getThemeCode())).append(")</td>");
+            retVal.append("   <td class=\"inside\" nowrap=\"nowrap\" width=\"10%\">");
+            retVal.append("     <a href=\"javascript:addSubProgram('5','").append(theme.getAmpThemeId()).append("','").append(level).append("','").append(DbUtil.filter(theme.getEncodeName())).append("')\">").append(TranslatorWorker.translateText("Add Sub Program")).append("</a> \n");
+            retVal.append("   </td>");
+            retVal.append("   <td class=\"inside\" nowrap=\"nowrap\" width=\"10%\">");
+            retVal.append("     <a href=\"javascript:assignIndicators('").append(theme.getAmpThemeId()).append("')\">").append(TranslatorWorker.translateText("Manage Indicators")).append("</a>\n");
+            retVal.append("   </td>");
+            retVal.append("   <td class=\"inside\" width=\"12\">");
+            retVal.append("     <a href=\"/aim/themeManager.do~event=delete~themeId=").append(theme.getAmpThemeId()).append("\" onclick=\"return deleteProgram()\"><img src=\"/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif\" border=\"0\"></a>");
+            retVal.append("   </td>");
+            retVal.append(" </tr></table>");
+            retVal.append("</div>\n");
 
             // hidden div start
-            retVal += "<div id=\"div_theme_" + theme.getAmpThemeId()+ "\" style=\"display : none;\">\n";
+            retVal.append("<div id=\"div_theme_").append(theme.getAmpThemeId()).append("\" style=\"display : none;\">\n");
             if (item.getChildren() != null || item.getChildren().size() > 0) {
-                retVal += renderLevel(item.getChildren(), level+1,request);
+                retVal.append(renderLevel(item.getChildren(), level + 1, request));
             }
-            retVal += "</div>\n";
+            retVal.append("</div>\n");
 
-            retVal += "</td></tr>\n";
+            retVal.append("</td></tr>\n");
         }
-        retVal += "</table>\n";
-        return retVal;
+        retVal.append("</table>\n");
+        return retVal.toString();
     }
 
     public static String getLevelImage(int level) {
         switch (level) {
-        case 0:
-            return "../ampTemplate/images/arrow_right.gif";
-        case 1:
+        case 0: case 1:
             return "../ampTemplate/images/arrow_right.gif";
         case 2:
             return "../ampTemplate/images/square1.gif";
@@ -1699,14 +1613,13 @@ public class ProgramUtil {
     }
 
     public static String getNameOfProgramSettingsUsed(Long programId) {
-        Collection programSettings                  = getProgramSetttingsUsed(programId);
+        Collection programSettings   = getProgramSetttingsUsed(programId);
 
-        Iterator iter   = programSettings.iterator();
-        String result   = "";
-        while ( iter.hasNext() ) {
-            AmpActivityProgramSettings aaps         = (AmpActivityProgramSettings) iter.next();
-            if ( aaps.getName() != null )
-                result  += "'" + aaps.getName() + "'" + ", ";
+        StringBuilder result   = new StringBuilder();
+        for (Object programSetting : programSettings) {
+            AmpActivityProgramSettings aaps = (AmpActivityProgramSettings) programSetting;
+            if (aaps.getName() != null)
+                result.append("'").append(aaps.getName()).append("'").append(", ");
         }
         if ( result.length() > 0 )
             return result.substring(0, result.length() - 2);
@@ -1720,7 +1633,7 @@ public class ProgramUtil {
             sess = PersistenceManager.getRequestDBSession();
             String qryString        = "select a from " + AmpActivityProgramSettings.class.getName() + " a where (a.defaultHierarchy=:program) ";
             Query qry           = sess.createQuery(qryString);
-            qry.setLong("program", programId);
+            qry.setParameter("program", programId, LongType.INSTANCE);
             Collection result   = qry.list();
             return result;
         }
@@ -1760,13 +1673,11 @@ public class ProgramUtil {
     {
         try
         {
-            Iterator<AmpTheme> progIter = userSelection.iterator();
-            while ( progIter.hasNext()  ) {
-                AmpTheme program        = progIter.next();
-                Collection<AmpTheme> descendentPrograms = ProgramUtil.getRelatedThemes( program.getAmpThemeId() );
-                activityFilterCol.addAll( descendentPrograms );
-                columnDataCol.addAll(  descendentPrograms );
-                columnDataCol.addAll( ProgramUtil.getAncestorThemes(program) );
+            for (AmpTheme program : userSelection) {
+                Collection<AmpTheme> descendentPrograms = ProgramUtil.getRelatedThemes(program.getAmpThemeId());
+                activityFilterCol.addAll(descendentPrograms);
+                columnDataCol.addAll(descendentPrograms);
+                columnDataCol.addAll(ProgramUtil.getAncestorThemes(program));
             }
         }
         catch(DgException e)
@@ -1973,10 +1884,17 @@ public class ProgramUtil {
     }
 
     public static Map<AmpTheme, Set<AmpTheme>> loadProgramMappings() {
-        List<AmpThemeMapping> list = PersistenceManager.getRequestDBSession()
-                .createCriteria(AmpThemeMapping.class)
-                    .setCacheable(false)
-                .list();
+
+        Session session = PersistenceManager.getRequestDBSession();
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<AmpThemeMapping> criteriaQuery = criteriaBuilder.createQuery(AmpThemeMapping.class);
+        Root<AmpThemeMapping> root = criteriaQuery.from(AmpThemeMapping.class);
+
+        criteriaQuery.select(root);
+        Query<AmpThemeMapping> query = session.createQuery(criteriaQuery);
+        query.setCacheable(false);
+
+        List<AmpThemeMapping> list = query.list();
 
         TreeMap<AmpTheme, Set<AmpTheme>> mappedPrograms = list.stream().collect(groupingBy(
                 AmpThemeMapping::getSrcTheme,

@@ -4,8 +4,8 @@
 	<class name="org.digijava.module.aim.dbentity.AmpField" table="AMP_FIELD">
 		<cache usage="read-write" />
 		<id name="ampFieldId" column="amp_field_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_FIELD_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_FIELD_seq</param>
 			</generator>
 		</id>
 		<property name="fieldName" column="field_name" type="java.lang.String" />

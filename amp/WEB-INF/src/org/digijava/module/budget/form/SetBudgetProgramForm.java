@@ -1,9 +1,9 @@
 package org.digijava.module.budget.form;
 
-import java.util.ArrayList;
-
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.dbentity.AmpTheme;
+
+import java.util.ArrayList;
 
 public class SetBudgetProgramForm extends ActionForm{
 

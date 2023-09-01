@@ -1,12 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.reports.designer.builder;
 
 import org.digijava.kernel.ampapi.endpoints.common.CategoryValueLabel;
-import org.digijava.kernel.ampapi.endpoints.reports.designer.ReportColumn;
-import org.digijava.kernel.ampapi.endpoints.reports.designer.ReportDesigner;
-import org.digijava.kernel.ampapi.endpoints.reports.designer.ReportMeasure;
-import org.digijava.kernel.ampapi.endpoints.reports.designer.ReportOption;
-import org.digijava.kernel.ampapi.endpoints.reports.designer.ReportProfile;
-import org.digijava.kernel.ampapi.endpoints.reports.designer.ReportType;
+import org.digijava.kernel.ampapi.endpoints.reports.designer.*;
 
 import java.util.List;
 

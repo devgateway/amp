@@ -3,13 +3,13 @@
  */
 package org.dgfoundation.amp.visibility.data;
 
+import org.apache.log4j.Logger;
+import org.digijava.module.aim.util.FeaturesUtil;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
-import org.apache.log4j.Logger;
-import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * Single point of reference for all FM settings groups 

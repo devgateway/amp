@@ -1,11 +1,11 @@
 package org.dgfoundation.amp.reports.converters;
 
+import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
+import org.digijava.module.aim.dbentity.AmpTheme;
+
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
-import org.digijava.module.aim.dbentity.AmpTheme;
 
 /**
  * @author Octavian Ciubotaru

@@ -1,11 +1,5 @@
 package org.digijava.module.aim.dbentity ;
 
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.Set;
-
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.DonorDimension;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
@@ -25,6 +19,9 @@ import org.digijava.module.budget.dbentity.AmpBudgetSector;
 import org.digijava.module.budget.dbentity.AmpDepartments;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+
+import java.io.Serializable;
+import java.util.*;
 
 @TranslatableClass (displayName = "Organisation")
 @InterchangeableValue(OrganisationValueProvider.class)
@@ -741,8 +738,20 @@ public class AmpOrganisation implements Comparable<AmpOrganisation>, Identifiabl
         return users;
     }
 
-    public void setUsers(Set users) {
+    public void setUsers(Set<User> users) {
         this.users = users;
     }
 
-}   
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AmpOrganisation that = (AmpOrganisation) o;
+        return Objects.equals(ampOrgId, that.ampOrgId);
+    }
+
+//    @Override
+//    public int hashCode() {
+//        return Objects.hash(ampOrgId, name, orgType, dacOrgCode, orgIsoCode, description, orgCode, orgGroup, ampFiscalCalId, ampSecSchemeId, fundingorgid, deleted, budgetOrgCode, acronymAndName, orgTypeCode, orgGrpId, address, countryId, orgUrl, acronym, region, implemLocationLevel, locations, staffInfos, country, recipients, addressAbroad, taxNumber, primaryPurpose, minPlanRegNumb, legalPersonNum, legalPersonRegDate, minPlanRegDate, organizationBudgetInfos, survey, calendar, segmentCode, sectors, documents, otherInformation, lineMinRegDate, operFuncApprDate, receiptLegPersonalityAct, surveyByPointOfDeliveryDonor, organizationContacts, orgBackground, orgDescription, orgKeyAreas, parentsector, departments, budgetsectors, lineMinRegNumber, translateable, users);
+//    }
+}

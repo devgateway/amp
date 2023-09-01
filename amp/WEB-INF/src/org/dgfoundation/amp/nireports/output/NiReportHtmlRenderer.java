@@ -1,8 +1,5 @@
 package org.dgfoundation.amp.nireports.output;
 
-import java.util.Optional;
-import java.util.SortedMap;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.nireports.NiHeaderInfo;
@@ -12,6 +9,9 @@ import org.dgfoundation.amp.nireports.output.nicells.NiSplitCell;
 import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.Column;
+
+import java.util.Optional;
+import java.util.SortedMap;
 
 /**
  * renders the result of running a NiReport to a html string. See {@link NiReportOutputBuilder}.

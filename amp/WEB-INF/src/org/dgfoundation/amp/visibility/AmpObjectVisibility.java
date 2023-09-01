@@ -5,16 +5,16 @@
  */
 package org.dgfoundation.amp.visibility;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.Set;
-import java.util.TreeSet;
-
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.gateperm.core.ClusterIdentifiable;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.core.Permissible;
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * @author dan

@@ -1,16 +1,9 @@
 
 package org.digijava.module.currencyrates;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.currency.inflation.CCExchangeRate;
 import org.digijava.kernel.mail.DgEmailManager;
-import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpCurrencyRate;
@@ -21,9 +14,10 @@ import org.digijava.module.aim.util.FilteredCurrencyRateUtil;
 import org.digijava.module.calendar.util.AmpDbUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.message.jobs.ConnectionCleaningJob;
-import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+
+import java.util.*;
 
 /**
  * 

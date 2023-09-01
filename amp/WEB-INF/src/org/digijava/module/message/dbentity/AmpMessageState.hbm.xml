@@ -4,8 +4,8 @@
 	<class name="org.digijava.module.message.dbentity.AmpMessageState" table="AMP_MESSAGE_STATE">
 		<cache usage="read-write" />
 		<id name="id" column="message_state_Id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_MESSAGE_STATE_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_MESSAGE_STATE_seq</param>
 			</generator>
 		</id>
 		

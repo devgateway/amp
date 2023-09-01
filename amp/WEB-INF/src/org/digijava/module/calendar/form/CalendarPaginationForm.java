@@ -22,10 +22,11 @@
 
 package org.digijava.module.calendar.form;
 
-import javax.servlet.http.HttpServletRequest;
-import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMapping;
 import org.digijava.module.common.action.PaginationForm;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * <p>Title: </p>

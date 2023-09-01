@@ -1,8 +1,5 @@
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-import java.util.*;
-
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.SectorDimension;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
@@ -12,11 +9,10 @@ import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.donorReport.OrgProfileValue;
 import org.digijava.module.aim.helper.donorReport.ValueTranslatabePair;
-import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
-import org.digijava.module.aim.util.HierarchyListable;
-import org.digijava.module.aim.util.Identifiable;
-import org.digijava.module.aim.util.NameableOrIdentifiable;
-import org.digijava.module.aim.util.SoftDeletable;
+import org.digijava.module.aim.util.*;
+
+import java.io.Serializable;
+import java.util.*;
 
 
 @TranslatableClass (displayName = "Sector")
@@ -397,4 +393,13 @@ public class AmpSector implements Serializable, Identifiable,
     public boolean isSoftDeleted() {
         return Boolean.TRUE.equals(this.deleted);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AmpSector ampSector = (AmpSector) o;
+        return  Objects.equals(ampSectorId, ampSector.ampSectorId);
+    }
+
 }

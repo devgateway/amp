@@ -1,20 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.filetype;
 
-import static org.digijava.module.aim.helper.GlobalSettingsConstants.CR_MAX_FILE_SIZE;
-import static org.digijava.module.aim.helper.GlobalSettingsConstants.DEFAULT_RESOURCES_SORT_COLUMN;
-import static org.digijava.module.aim.helper.GlobalSettingsConstants.LIMIT_FILE_TYPE_FOR_UPLOAD;
-
-import java.util.LinkedHashSet;
-import java.util.List;
-
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.dgfoundation.amp.error.AMPException;
@@ -23,6 +8,14 @@ import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.module.admin.util.DbUtil;
 import org.digijava.module.aim.dbentity.AmpFileType;
 import org.digijava.module.aim.util.FeaturesUtil;
+
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.util.LinkedHashSet;
+import java.util.List;
+
+import static org.digijava.module.aim.helper.GlobalSettingsConstants.*;
 
 /**
  * FileTypes Endpoint provides supported file types in AMP

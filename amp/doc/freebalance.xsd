@@ -8,13 +8,13 @@
 <!-- ************************************************** -->
 
 <xs:schema targetNamespace="http://digijava.org/module/digifeed/feeds/fb/freebalance.xml"
-	xmlns="http://digijava.org/module/digifeed/feeds/fb/freebalance.xml"
-	xmlns:fb="http://digijava.org/module/digifeed/feeds/fb/freebalance.xml"
-	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
-	xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" elementFormDefault="qualified"
-	id="fb" xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema" jaxb:version="1.0"
-	jaxb:extensionBindingPrefixes="xjc">
+           xmlns="http://digijava.org/module/digifeed/feeds/fb/freebalance.xml"
+           xmlns:fb="http://digijava.org/module/digifeed/feeds/fb/freebalance.xml"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+           xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" elementFormDefault="qualified"
+           id="fb"
+           xmlns:xsd="http://www.w3.org/2001/XMLSchema" jaxb:version="1.0"
+           jaxb:extensionBindingPrefixes="xjc">
 
 	<!-- begin XJC internal parsing directives (please ignore when constructing a non XJC parser/publisher)-->
 	<xsd:annotation>

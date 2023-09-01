@@ -22,11 +22,11 @@
 
 package org.digijava.module.calendar.dbentity;
 
-import java.util.Date;
-
 import org.apache.log4j.Logger;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
+
+import java.util.Date;
 
 public class CalendarItem implements LoggerIdentifiable{
 

@@ -1,17 +1,15 @@
 package org.digijava.kernel.ampapi.endpoints.activity.validators;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
 import org.apache.commons.validator.routines.FloatValidator;
-import org.digijava.kernel.ampapi.endpoints.activity.ActivityErrors;
 import org.digijava.kernel.ampapi.endpoints.activity.ObjectImporter;
 import org.digijava.kernel.ampapi.endpoints.activity.field.APIField;
 import org.digijava.kernel.ampapi.endpoints.activity.field.FieldType;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.module.common.util.DateTimeUtil;
+
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 
 /**

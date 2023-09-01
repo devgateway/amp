@@ -1,24 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.activity;
 
-import static org.digijava.kernel.ampapi.endpoints.activity.SaveMode.DRAFT;
-import static org.digijava.kernel.ampapi.endpoints.activity.SaveMode.SUBMIT;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.function.Function;
-import java.util.function.Supplier;
-
-import javax.servlet.http.HttpServletResponse;
-
 import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -57,24 +38,10 @@ import org.digijava.kernel.validators.activity.AgreementCodeValidator;
 import org.digijava.kernel.validators.activity.PrivateResourceValidator;
 import org.digijava.kernel.validators.activity.UniqueActivityTitleValidator;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
-import org.digijava.module.aim.dbentity.AmpActivityContact;
-import org.digijava.module.aim.dbentity.AmpActivityFields;
-import org.digijava.module.aim.dbentity.AmpActivityLocation;
-import org.digijava.module.aim.dbentity.AmpActivitySector;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
-import org.digijava.module.aim.dbentity.AmpContentTranslation;
-import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpFundingAmount;
-import org.digijava.module.aim.dbentity.AmpRole;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.ActivityVersionUtil;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.Identifiable;
-import org.digijava.module.aim.util.TeamMemberUtil;
-import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.aim.util.*;
 import org.digijava.module.aim.validator.ActivityValidationContext;
 import org.digijava.module.aim.validator.groups.API;
 import org.digijava.module.aim.validator.groups.Submit;
@@ -82,6 +49,16 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.editor.dbentity.Editor;
 import org.hibernate.StaleStateException;
+
+import javax.servlet.http.HttpServletResponse;
+import java.lang.reflect.Field;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
+import static org.digijava.kernel.ampapi.endpoints.activity.SaveMode.DRAFT;
+import static org.digijava.kernel.ampapi.endpoints.activity.SaveMode.SUBMIT;
 
 /**
  * Imports a new activity or updates an existing one
@@ -221,8 +198,9 @@ public class ActivityImporter extends ObjectImporter<ActivitySummary> {
         } catch (Throwable e) {
             // error is not always logged at source; better duplicate it than have none
             logger.error("Import failed", e);
+            e.printStackTrace();
             if (e instanceof ActivityLockNotGrantedException) {
-                logger.error("Cannot aquire lock during IATI update for activity " + activityId);
+                logger.error("Cannot acquire lock during IATI update for activity " + activityId);
                 Long userId = ((ActivityLockNotGrantedException) e).getUserId();
                 String memberName = TeamMemberUtil.getTeamMember(userId).getMemberName();
                 errors.put(ActivityErrors.ACTIVITY_IS_BEING_EDITED.id,

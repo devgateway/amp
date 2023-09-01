@@ -3,23 +3,23 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.devgateway</groupId>
     <artifactId>amp</artifactId>
-    <version>3.5.5.1-SNAPSHOT</version>
+    <version>4.0-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>Aid Management Platform</name>
     <properties>
         <wicketVersion>6.29.0</wicketVersion>
         <tomcatVersion>8.5.73</tomcatVersion>
-        <springSecurityVersion>3.1.4.RELEASE</springSecurityVersion>
-        <springVersion>3.0.7.RELEASE</springVersion>
+        <springSecurityVersion>5.6.11</springSecurityVersion>
+        <springVersion>5.3.28</springVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jackrabbit.version>2.16.2</jackrabbit.version>
         <lucene.version>3.6.2</lucene.version>
         <jersey.version>1.19</jersey.version>
-        <jackson.version>2.9.5</jackson.version>
+        <jackson.version>2.14.2</jackson.version>
         <swagger.version>1.5.20</swagger.version>
         <powermock.version>1.6.6</powermock.version>
-        <buildSource></buildSource>
-        <buildDate></buildDate>
+        <buildSource/>
+        <buildDate/>
     </properties>
     <repositories>
         <repository>
@@ -43,11 +43,11 @@
     </pluginRepositories>
 
     <dependencies>
-    <dependency>
-    <groupId>org.mockito</groupId>
-    <artifactId>mockito-core</artifactId>
-    <version>1.10.19</version>
-</dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>1.10.19</version>
+        </dependency>
         <dependency>
             <groupId>org.powermock</groupId>
             <artifactId>powermock-module-junit4</artifactId>
@@ -81,7 +81,7 @@
             <version>4.1.4</version>
         </dependency>
         <dependency>
-            <groupId>axis</groupId>
+            <groupId>org.apache.axis</groupId>
             <artifactId>axis</artifactId>
             <version>1.4</version>
         </dependency>
@@ -90,11 +90,13 @@
             <artifactId>batik</artifactId>
             <version>1.5</version>
         </dependency>
+
         <dependency>
-            <groupId>org.beanshell</groupId>
+            <groupId>org.apache-extras.beanshell</groupId>
             <artifactId>bsh</artifactId>
-            <version>2.0b4</version>
+            <version>2.0b6</version>
         </dependency>
+
         <dependency>
             <groupId>cglib</groupId>
             <artifactId>cglib</artifactId>
@@ -108,7 +110,7 @@
         <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
-            <version>1.8.0</version>
+            <version>1.9.4</version>
         </dependency>
         <dependency>
             <groupId>commons-chain</groupId>
@@ -118,13 +120,14 @@
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>1.4</version>
+            <version>1.16.0</version>
         </dependency>
         <dependency>
-            <groupId>commons-collections</groupId>
-            <artifactId>commons-collections</artifactId>
-            <version>3.1</version>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>4.4</version>
         </dependency>
+
 
         <dependency>
             <groupId>org.apache.tomcat</groupId>
@@ -156,12 +159,12 @@
         <dependency>
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
-            <version>1.2.1</version>
+            <version>1.5</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.5</version>
+            <version>2.8.0</version>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>
@@ -217,10 +220,16 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
         <dependency>
-            <groupId>dom4j</groupId>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>5.2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.dom4j</groupId>
             <artifactId>dom4j</artifactId>
-            <version>1.6.1</version>
+            <version>2.1.3</version>
         </dependency>
         <dependency>
             <groupId>net.sf.ehcache</groupId>
@@ -249,44 +258,56 @@
         </dependency>
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
-            <artifactId>hibernate-jpa-2.0-api</artifactId>
-            <version>1.0.1.Final</version>
+            <artifactId>hibernate-jpa-2.1-api</artifactId>
+            <version>1.0.2.Final</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>4.2.13.Final</version>
+            <version>5.6.15.Final</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.glassfish.jaxb</groupId>
+                    <artifactId>jaxb-runtime</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
+
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-ehcache</artifactId>
-            <version>4.2.13.Final</version>
+            <version>5.6.15.Final</version>
         </dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-validator</artifactId>
-			<version>5.1.1.Final</version>
+        <dependency>
+            <groupId>org.hibernate.common</groupId>
+            <artifactId>hibernate-commons-annotations</artifactId>
+            <version>5.1.2.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>5.1.2.Final</version>
             <exclusions>
-            <exclusion>
-                <groupId>com.fasterxml</groupId>
-                <artifactId>classmate</artifactId>
-            </exclusion>
+                <exclusion>
+                    <groupId>com.fasterxml</groupId>
+                    <artifactId>classmate</artifactId>
+                </exclusion>
             </exclusions>
-		</dependency>
+        </dependency>
         <dependency>
             <groupId>com.fasterxml</groupId>
             <artifactId>classmate</artifactId>
             <version>1.1.0</version>
         </dependency>
-		<dependency>
-			<groupId>org.thymeleaf</groupId>
-			<artifactId>thymeleaf-spring3</artifactId>
-			<version>2.1.4.RELEASE</version>
-		</dependency>
+        <dependency>
+            <groupId>org.thymeleaf</groupId>
+            <artifactId>thymeleaf-spring5</artifactId>
+            <version>3.1.2.RELEASE</version>
+        </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-spatial</artifactId>
-            <version>4.0</version>
+            <version>5.6.15.Final</version>
             <exclusions>
                 <exclusion>
                     <groupId>postgresql</groupId>
@@ -298,7 +319,7 @@
         <dependency>
             <groupId>com.lowagie</groupId>
             <artifactId>itext</artifactId>
-            <version>2.1.7</version>
+            <version>4.2.2</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.bouncycastle</groupId>
@@ -309,7 +330,7 @@
         <dependency>
             <groupId>com.lowagie</groupId>
             <artifactId>itext-rtf</artifactId>
-            <version>2.1.3</version>
+            <version>2.1.7</version>
         </dependency>
         <dependency>
             <groupId>javax.jcr</groupId>
@@ -413,9 +434,10 @@
         </dependency>
         <dependency>
             <groupId>org.jdom</groupId>
-            <artifactId>jdom</artifactId>
-            <version>1.1</version>
+            <artifactId>jdom2</artifactId>
+            <version>2.0.6.1</version>
         </dependency>
+
         <dependency>
             <groupId>sleepycat</groupId>
             <artifactId>je</artifactId>
@@ -439,14 +461,15 @@
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-hibernate4</artifactId>
+            <artifactId>jackson-datatype-hibernate5</artifactId>
             <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
-            <version>1.7.1</version>
+            <version>1.16.1</version>
         </dependency>
+
 
         <dependency>
             <groupId>jfree</groupId>
@@ -464,10 +487,15 @@
             <artifactId>jsf-api</artifactId>
             <version>1.1_02</version>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>javax.ws.rs</groupId>-->
+<!--            <artifactId>jsr311-api</artifactId>-->
+<!--            <version>1.1.1</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>javax.ws.rs</groupId>
-            <artifactId>jsr311-api</artifactId>
-            <version>1.1.1</version>
+            <artifactId>javax.ws.rs-api</artifactId>
+            <version>2.1</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet.jsp.jstl</groupId>
@@ -483,6 +511,16 @@
                     <groupId>javax.servlet.jsp</groupId>
                 </exclusion>
             </exclusions>
+        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.glassfish.jersey</groupId>-->
+<!--            <artifactId>jax-rs-ri</artifactId>-->
+<!--            <version>2.0-rc1</version>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>org.glassfish.jersey.inject</groupId>
+            <artifactId>jersey-hk2</artifactId>
+            <version>2.40</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish.web</groupId>
@@ -508,7 +546,7 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
-             <scope>test</scope>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.hamcrest</groupId>
@@ -522,11 +560,11 @@
             <version>1.3</version>
         </dependency>
         <dependency>
-        	<groupId>org.unitils</groupId>
-    		<artifactId>unitils-core</artifactId>
-    		<version>3.4.2</version>
-    		<scope>test</scope>
-    	</dependency>
+            <groupId>org.unitils</groupId>
+            <artifactId>unitils-core</artifactId>
+            <version>3.4.2</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-analyzers</artifactId>
@@ -554,43 +592,63 @@
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-asm</artifactId>
-            <version>${springVersion}</version>
+            <artifactId>spring-jdbc</artifactId>
+            <version>5.3.28</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>5.3.28</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-beans</artifactId>
-            <version>${springVersion}</version>
+            <version>5.3.28</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-            <version>${springVersion}</version>
+            <version>5.3.28</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
-            <version>${springVersion}</version>
+            <version>5.3.28</version>
         </dependency>
+
+
+        <!--        <dependency>-->
+        <!--            <groupId>org.springframework</groupId>-->
+        <!--            <artifactId>spring-asm</artifactId>-->
+        <!--            <version>${springVersion}</version>-->
+        <!--        </dependency>-->
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-expression</artifactId>
-            <version>${springVersion}</version>
+            <version>5.3.28</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-tx</artifactId>
-            <version>${springVersion}</version>
+            <version>5.3.28</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
-            <version>${springVersion}</version>
+            <version>5.3.28</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jcl</artifactId>
+            <version>5.3.28</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
-            <version>${springVersion}</version>
+            <version>5.3.28</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -732,6 +790,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
+            <version>30.1-jre</version>
         </dependency>
         <dependency>
             <groupId>org.apache.wicket</groupId>
@@ -846,8 +905,9 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.3.1</version>
+            <version>42.5.1</version>
         </dependency>
+
         <dependency>
             <groupId>com.sun.mail</groupId>
             <artifactId>mailapi</artifactId>
@@ -890,70 +950,49 @@
             <artifactId>xmlworker</artifactId>
             <version>5.5.0</version>
         </dependency>
-        <dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-core</artifactId>
-            <version>${jersey.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.jersey.contribs</groupId>
-            <artifactId>jersey-spring</artifactId>
-            <version>${jersey.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring-core</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring-beans</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring-aop</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring-context</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring-web</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
 
         <dependency>
-            <groupId>com.sun.jersey</groupId>
+            <groupId>org.glassfish.jersey.inject</groupId>
+            <artifactId>jersey-hk2</artifactId>
+            <version>2.40</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.containers</groupId>
+            <artifactId>jersey-container-servlet-core</artifactId>
+            <version>2.40</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-server</artifactId>
-            <version>${jersey.version}</version>
+            <version>2.40</version>
         </dependency>
         <dependency>
-            <groupId>com.sun.jersey</groupId>
+            <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-client</artifactId>
-            <version>${jersey.version}</version>
+            <version>2.40</version>
         </dependency>
         <dependency>
-            <groupId>com.sun.jersey.contribs</groupId>
-            <artifactId>jersey-multipart</artifactId>
-            <version>${jersey.version}</version>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-common</artifactId>
+            <version>2.40</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-multipart</artifactId>
+            <version>2.40</version>
         </dependency>
         <dependency>
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
-            <version>0.9.10</version>
+            <version>0.10.2</version>
         </dependency>
+
         <dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-json</artifactId>
-            <version>${jersey.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.codehaus.jackson</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-json-jackson</artifactId>
+            <version>2.40</version>
         </dependency>
+
 
         <dependency>
             <groupId>com.mashape.unirest</groupId>
@@ -973,11 +1012,11 @@
             <scope>test</scope>
         </dependency>
 
-		<dependency>
-			<groupId>org.apache.tika</groupId>
-			<artifactId>tika-core</artifactId>
-			<version>1.18</version>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.tika</groupId>
+            <artifactId>tika-core</artifactId>
+            <version>1.18</version>
+        </dependency>
 
         <dependency>
             <groupId>org.passay</groupId>
@@ -991,26 +1030,43 @@
             </exclusions>
         </dependency>
 
+<!--        <dependency>-->
+<!--            <groupId>io.swagger</groupId>-->
+<!--            <artifactId>swagger-core</artifactId>-->
+<!--            <version>${swagger.version}</version>-->
+<!--        </dependency>-->
         <dependency>
-            <groupId>io.swagger</groupId>
+            <groupId>io.swagger.core.v3</groupId>
             <artifactId>swagger-core</artifactId>
-            <version>${swagger.version}</version>
+            <version>2.2.9</version>
         </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>io.swagger</groupId>-->
+<!--            <artifactId>swagger-annotations</artifactId>-->
+<!--            <version>${swagger.version}</version>-->
+<!--        </dependency>-->
         <dependency>
-            <groupId>io.swagger</groupId>
+            <groupId>io.swagger.core.v3</groupId>
             <artifactId>swagger-annotations</artifactId>
-            <version>${swagger.version}</version>
+            <version>2.2.9</version>
         </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>io.swagger</groupId>-->
+<!--            <artifactId>swagger-jersey-jaxrs</artifactId>-->
+<!--            <version>${swagger.version}</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>io.swagger</groupId>
-            <artifactId>swagger-jersey-jaxrs</artifactId>
-            <version>${swagger.version}</version>
+            <artifactId>swagger-jersey2-jaxrs</artifactId>
+            <version>1.6.11</version>
         </dependency>
 
         <dependency>
             <groupId>net.bull.javamelody</groupId>
             <artifactId>javamelody-core</artifactId>
-            <version>1.75.0</version>
+            <version>1.88.0</version>
         </dependency>
         <dependency>
             <groupId>net.sf.saxon</groupId>
@@ -1214,7 +1270,7 @@
                         </goals>
                         <phase>process-resources</phase>
                         <configuration>
-                             <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>
+                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1234,7 +1290,7 @@
                         </goals>
                         <phase>process-resources</phase>
                         <configuration>
-                             <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-state</workingDirectory>
+                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-state</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1245,7 +1301,7 @@
                         <phase>process-resources</phase>
                         <configuration>
                             <arguments>ci</arguments>
-               			    <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-state</workingDirectory>
+                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-state</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1255,7 +1311,7 @@
                         </goals>
                         <phase>process-resources</phase>
                         <configuration>
-                             <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-translate</workingDirectory>
+                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-translate</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1266,7 +1322,7 @@
                         <phase>process-resources</phase>
                         <configuration>
                             <arguments>ci</arguments>
-               			    <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-translate</workingDirectory>
+                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-translate</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1276,7 +1332,7 @@
                         </goals>
                         <phase>process-resources</phase>
                         <configuration>
-                             <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-boilerplate</workingDirectory>
+                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-boilerplate</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1287,7 +1343,7 @@
                         <phase>process-resources</phase>
                         <configuration>
                             <arguments>ci</arguments>
-               			    <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-boilerplate</workingDirectory>
+                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-boilerplate</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1298,7 +1354,7 @@
                         <phase>process-resources</phase>
                         <configuration>
                             <arguments>run build</arguments>
-               				<workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-boilerplate</workingDirectory>
+                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-boilerplate</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1308,7 +1364,7 @@
                         </goals>
                         <phase>process-resources</phase>
                         <configuration>
-                             <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-filter</workingDirectory>
+                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-filter</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1319,7 +1375,7 @@
                         <phase>process-resources</phase>
                         <configuration>
                             <arguments>ci</arguments>
-               			    <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-filter</workingDirectory>
+                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-filter</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1330,7 +1386,7 @@
                         <phase>process-resources</phase>
                         <configuration>
                             <arguments>run build</arguments>
-               				<workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-filter</workingDirectory>
+                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-filter</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1340,7 +1396,7 @@
                         </goals>
                         <phase>process-resources</phase>
                         <configuration>
-                             <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/gis-layers-manager</workingDirectory>
+                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/gis-layers-manager</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1351,7 +1407,7 @@
                         <phase>process-resources</phase>
                         <configuration>
                             <arguments>ci</arguments>
-               			    <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/gis-layers-manager</workingDirectory>
+                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/gis-layers-manager</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1362,7 +1418,7 @@
                         <phase>process-resources</phase>
                         <configuration>
                             <arguments>run build</arguments>
-               				<workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/gis-layers-manager</workingDirectory>
+                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/gis-layers-manager</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1372,7 +1428,7 @@
                         </goals>
                         <phase>process-resources</phase>
                         <configuration>
-                             <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-settings</workingDirectory>
+                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-settings</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1383,7 +1439,7 @@
                         <phase>process-resources</phase>
                         <configuration>
                             <arguments>ci</arguments>
-               			    <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-settings</workingDirectory>
+                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-settings</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1394,7 +1450,7 @@
                         <phase>process-resources</phase>
                         <configuration>
                             <arguments>run build</arguments>
-               				<workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-settings</workingDirectory>
+                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-settings</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1405,7 +1461,7 @@
                         <phase>process-resources</phase>
                         <configuration>
                             <arguments>ci</arguments>
-               			    <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>
+                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1416,7 +1472,7 @@
                         <phase>process-resources</phase>
                         <configuration>
                             <arguments>run build</arguments>
-               				<workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>
+                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1427,7 +1483,7 @@
                         <phase>test</phase>
                         <configuration>
                             <arguments>run test</arguments>
-               				<workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>
+                            <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/gisModule/dev</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -1437,10 +1493,10 @@
                         </goals>
                         <phase>process-resources</phase>
                         <configuration>
-                             <workingDirectory>${project.basedir}/TEMPLATE/reampv2</workingDirectory>
+                            <workingDirectory>${project.basedir}/TEMPLATE/reampv2</workingDirectory>
                         </configuration>
                     </execution>
-					 <execution>
+                    <execution>
                         <id>npm ci for reampv2</id>
                         <goals>
                             <goal>npm</goal>
@@ -1448,20 +1504,20 @@
                         <phase>process-resources</phase>
                         <configuration>
                             <arguments>ci</arguments>
-               			    <workingDirectory>${project.basedir}/TEMPLATE/reampv2</workingDirectory>
+                            <workingDirectory>${project.basedir}/TEMPLATE/reampv2</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
-	                   <id>npm run build reampv2</id>
-	                       <goals>
-		                       <goal>npm</goal>
-	                        </goals>
-	                    <phase>process-resources</phase>
-	                    <configuration>
-		                   <arguments>run build</arguments>
-		                <workingDirectory>${project.basedir}/TEMPLATE/reampv2</workingDirectory>
-	                    </configuration>
-                  </execution>
+                        <id>npm run build reampv2</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <phase>process-resources</phase>
+                        <configuration>
+                            <arguments>run build</arguments>
+                            <workingDirectory>${project.basedir}/TEMPLATE/reampv2</workingDirectory>
+                        </configuration>
+                    </execution>
                     <execution>
                         <id>install node and npm for reamp</id>
                         <goals>
@@ -1469,10 +1525,10 @@
                         </goals>
                         <phase>process-resources</phase>
                         <configuration>
-                             <workingDirectory>${project.basedir}/TEMPLATE/reamp</workingDirectory>
+                            <workingDirectory>${project.basedir}/TEMPLATE/reamp</workingDirectory>
                         </configuration>
                     </execution>
-					 <execution>
+                    <execution>
                         <id>npm ci for reamp</id>
                         <goals>
                             <goal>npm</goal>
@@ -1480,20 +1536,20 @@
                         <phase>process-resources</phase>
                         <configuration>
                             <arguments>ci</arguments>
-               			    <workingDirectory>${project.basedir}/TEMPLATE/reamp</workingDirectory>
+                            <workingDirectory>${project.basedir}/TEMPLATE/reamp</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
-	                   <id>npm run build</id>
-	                       <goals>
-		                       <goal>npm</goal>
-	                        </goals>
-	                    <phase>process-resources</phase>
-	                    <configuration>
-		                   <arguments>run build</arguments>
-		                <workingDirectory>${project.basedir}/TEMPLATE/reamp</workingDirectory>
-	                    </configuration>
-                  </execution>
+                        <id>npm run build</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <phase>process-resources</phase>
+                        <configuration>
+                            <arguments>run build</arguments>
+                            <workingDirectory>${project.basedir}/TEMPLATE/reamp</workingDirectory>
+                        </configuration>
+                    </execution>
                     <execution>
                         <id>npm ci for Dashboards</id>
                         <goals>
@@ -1517,21 +1573,21 @@
                         </configuration>
                     </execution>
                 </executions>
-                </plugin>
+            </plugin>
 
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.0.0-M2</version>
-                    <configuration>
-                        <includes>
-                            <include>**/Test*.java</include>
-                            <include>**/*Test.java</include>
-                            <include>**/*Testcases.java</include>
-                            <include>**/*Tests*.java</include>
-                        </includes>
-                        <excludes>
-                            <!--suites are running tests twice-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M2</version>
+                <configuration>
+                    <includes>
+                        <include>**/Test*.java</include>
+                        <include>**/*Test.java</include>
+                        <include>**/*Testcases.java</include>
+                        <include>**/*Tests*.java</include>
+                    </includes>
+                    <excludes>
+                        <!--suites are running tests twice-->
                         <exclude>**/*TestSuite.java</exclude>
                     </excludes>
                     <excludedGroups>

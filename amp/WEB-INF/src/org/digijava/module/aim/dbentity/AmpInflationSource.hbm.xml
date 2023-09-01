@@ -4,8 +4,8 @@
 	<class name="org.digijava.module.aim.dbentity.AmpInflationSource" table="AMP_INFLATION_SOURCE" lazy="false">
 		<cache usage="read-write" />
 		<id name="id" column="amp_inflation_source_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_INFLATION_SOURCE_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_INFLATION_SOURCE_seq</param>
 			</generator>
 		</id>
 

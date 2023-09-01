@@ -18,27 +18,22 @@
 
 package org.digijava.module.common.util;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Properties;
-import java.util.StringTokenizer;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
+import org.apache.log4j.Logger;
+import org.digijava.kernel.taglib.util.TagUtil;
+import org.digijava.kernel.util.DgUtil;
+import org.digijava.module.common.exception.BBCodeException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
-
-import org.apache.log4j.Logger;
-import org.digijava.kernel.taglib.util.TagUtil;
-import org.digijava.kernel.util.DgUtil;
-import org.digijava.module.common.exception.BBCodeException;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Properties;
+import java.util.StringTokenizer;
+import java.util.regex.Pattern;
 
 public class BBCodeParser {
 

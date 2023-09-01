@@ -4,14 +4,14 @@
  */
 package org.digijava.module.aim.helper;
 
+import org.apache.log4j.Logger;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.StringTokenizer;
-
-import org.apache.log4j.Logger;
 
 /**
  * Helper class for loading currency rates from a Comma Seperated Value (CSV) file

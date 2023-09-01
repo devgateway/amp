@@ -1,9 +1,9 @@
 package org.digijava.module.content.form;
 
-import java.util.Collection;
-
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.content.dbentity.AmpContentItem;
+
+import java.util.Collection;
 
 public class ContentManagerForm extends ActionForm {
 

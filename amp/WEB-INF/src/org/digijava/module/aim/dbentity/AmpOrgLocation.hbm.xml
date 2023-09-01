@@ -4,8 +4,8 @@
     <class name="org.digijava.module.aim.dbentity.AmpOrgLocation" table="AMP_ORG_LOCATION" lazy="false">
         <cache usage="read-write" />
         <id name="ampOrgLocId" column="amp_org_loc_id" type="java.lang.Long">
-            <generator class="native">
-                <param name="sequence">AMP_ORG_LOCATION_seq</param>
+            <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+                <param name="sequence_name">AMP_ORG_LOCATION_seq</param>
             </generator>
         </id>
         <property name="percent" column="percent" type="java.lang.Double" />

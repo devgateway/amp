@@ -3,11 +3,11 @@
  */
 package org.digijava.module.contentrepository.form;
 
-import java.util.List;
-import java.util.Set;
-
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author Alex Gartner

@@ -6,8 +6,8 @@
 		table="AMP_DEPARTMENTS">
 		<cache usage="read-write" />
 		<id name="id" column="id_department" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_DEPARTMENTS_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_DEPARTMENTS_seq</param>
 			</generator>
 		</id>
 		<set name="organisations" table="AMP_ORGANISATION_DEPARTMENTS" lazy="true">

@@ -1,15 +1,15 @@
 package org.digijava.kernel.ampapi.endpoints.filters;
 
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.util.ProgramUtil;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * This class generates the filter list (tree) object for pledges programs

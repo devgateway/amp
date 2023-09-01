@@ -1,22 +1,20 @@
 package org.digijava.module.calendar.form;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Team;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.calendar.entity.DateBreakDown;
-import org.digijava.module.message.helper.MessageConstants;
-import org.digijava.module.aim.helper.Constants;
+
+import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
+import java.util.Collection;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Map;
 
 public class CalendarEventForm
     extends ActionForm {

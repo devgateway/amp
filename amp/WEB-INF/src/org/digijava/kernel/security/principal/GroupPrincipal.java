@@ -22,10 +22,10 @@
 
 package org.digijava.kernel.security.principal;
 
+import org.digijava.kernel.user.Group;
+
 import java.io.Serializable;
 import java.security.Principal;
-
-import org.digijava.kernel.user.Group;
 
 public class GroupPrincipal
     implements Principal, Serializable {

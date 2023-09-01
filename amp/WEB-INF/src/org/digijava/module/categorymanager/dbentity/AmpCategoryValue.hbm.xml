@@ -4,8 +4,8 @@
 	<class name="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" table="AMP_CATEGORY_VALUE" lazy="false">
 		<cache usage="read-write" />
 		<id name="id" column="id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_CATEGORY_VALUE_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_CATEGORY_VALUE_seq</param>
 			</generator>
 		</id>
 

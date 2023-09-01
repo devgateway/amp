@@ -3,17 +3,15 @@
  */
 package org.dgfoundation.amp.ar;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import org.dgfoundation.amp.ar.cell.AmountCell;
-import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.cell.ComputedMeasureCell;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
 import org.dgfoundation.amp.exprlogic.Values;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * 

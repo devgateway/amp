@@ -4,18 +4,16 @@
  */
 package org.dgfoundation.amp.onepager.components.fields;
 
-import java.util.Collection;
-import java.util.List;
-
 import org.apache.wicket.markup.html.form.AbstractChoice;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.ListMultipleChoice;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.util.WildcardListModel;
 import org.dgfoundation.amp.onepager.models.AmpMultiValueDropDownChoiceModel;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
  * FM Wrapper for a select field. (both single and multi-selects)

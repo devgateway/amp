@@ -1,16 +1,14 @@
 package org.digijava.kernel.ampapi.endpoints.serializers;
 
-import java.io.IOException;
-
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
-
+import io.swagger.models.Model;
+import io.swagger.models.ModelImpl;
 import org.digijava.kernel.ampapi.endpoints.dto.MultilingualContent;
 import org.digijava.kernel.ampapi.swagger.converters.ModelDescriber;
 
-import io.swagger.models.Model;
-import io.swagger.models.ModelImpl;
+import java.io.IOException;
 
 /**
  * @author Nadejda Mandrescu

@@ -1,11 +1,10 @@
 package org.dgfoundation.amp.globalsettings;
 
-import java.io.IOException;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
-
-import org.digijava.module.aim.util.FeaturesUtil;
+import java.io.IOException;
 
 public class GlobalSettingsTagClass extends BodyTagSupport{
 

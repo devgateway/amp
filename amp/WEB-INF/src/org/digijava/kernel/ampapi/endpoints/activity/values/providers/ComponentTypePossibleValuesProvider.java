@@ -1,14 +1,14 @@
 package org.digijava.kernel.ampapi.endpoints.activity.values.providers;
 
-import static java.util.stream.Collectors.toList;
-
-import java.util.List;
-
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValue;
 import org.digijava.kernel.ampapi.endpoints.activity.PossibleValuesProvider;
 import org.digijava.kernel.ampapi.endpoints.common.TranslatorService;
 import org.digijava.module.aim.dbentity.AmpComponentType;
 import org.digijava.module.aim.util.ComponentsUtil;
+
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * @author Nadejda Mandrescu

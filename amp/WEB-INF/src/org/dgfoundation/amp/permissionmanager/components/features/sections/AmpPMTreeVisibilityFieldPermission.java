@@ -3,15 +3,15 @@
  */
 package org.dgfoundation.amp.permissionmanager.components.features.sections;
 
-import javax.swing.tree.TreeModel;
-
 import org.apache.wicket.ajax.IAjaxIndicatorAware;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.extensions.markup.html.tree.AbstractTree;
 import org.apache.wicket.extensions.markup.html.tree.BaseTree;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
+import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMCheckBoxTree;
+
+import javax.swing.tree.TreeModel;
 
 /**
  * @author dan

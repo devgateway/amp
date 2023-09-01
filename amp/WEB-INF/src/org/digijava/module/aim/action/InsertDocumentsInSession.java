@@ -1,18 +1,17 @@
 package org.digijava.module.aim.action;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpOrganisationDocument;
 import org.digijava.module.contentrepository.action.SelectDocumentDM;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 public class InsertDocumentsInSession extends Action {
     public ActionForward execute(ActionMapping mapping, ActionForm form,

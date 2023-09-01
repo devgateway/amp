@@ -6,31 +6,20 @@
  */
 package org.dgfoundation.amp.ar.workers;
 
-import java.math.BigDecimal;
-import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
 import org.dgfoundation.amp.Util;
-import org.dgfoundation.amp.ar.AmpARFilter;
-import org.dgfoundation.amp.ar.AmpReportGenerator;
-import org.dgfoundation.amp.ar.ArConstants;
-import org.dgfoundation.amp.ar.CellColumn;
-import org.dgfoundation.amp.ar.Column;
-import org.dgfoundation.amp.ar.GroupColumn;
-import org.dgfoundation.amp.ar.MetaInfo;
-import org.dgfoundation.amp.ar.ReportContextData;
-import org.dgfoundation.amp.ar.ReportGenerator;
-import org.dgfoundation.amp.ar.TotalComputedAmountColumn;
+import org.dgfoundation.amp.ar.*;
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.cell.ComputedAmountCell;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
+
+import java.math.BigDecimal;
+import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Iterator;
 
 public class ComputedAmountColWorker extends MetaCellColumnWorker {
 

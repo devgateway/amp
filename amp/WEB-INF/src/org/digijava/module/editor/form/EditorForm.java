@@ -22,14 +22,14 @@
 
 package org.digijava.module.editor.form;
 
-import java.util.Collection;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
 import org.digijava.module.editor.dbentity.Editor;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Collection;
+import java.util.List;
 
 /**
  *

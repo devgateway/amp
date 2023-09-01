@@ -1,33 +1,20 @@
 package org.dgfoundation.amp.reports.converters;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.TreeMap;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.error.AMPException;
-import org.dgfoundation.amp.newreports.ReportColumn;
-import org.dgfoundation.amp.newreports.ReportMeasure;
-import org.dgfoundation.amp.newreports.ReportSpecification;
-import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.newreports.SortingInfo;
+import org.dgfoundation.amp.newreports.*;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.module.aim.ar.util.FilterUtil;
-import org.digijava.module.aim.dbentity.AmpColumns;
-import org.digijava.module.aim.dbentity.AmpMeasures;
-import org.digijava.module.aim.dbentity.AmpReportColumn;
-import org.digijava.module.aim.dbentity.AmpReportHierarchy;
-import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
+
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * Converter for {@link AmpReports} to {@link ReportSpecification}

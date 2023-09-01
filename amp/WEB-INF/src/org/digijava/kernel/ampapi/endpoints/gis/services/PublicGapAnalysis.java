@@ -1,7 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.gis.services;
 
-import javax.ws.rs.core.Response;
-
 import org.digijava.kernel.ampapi.endpoints.errors.ApiEMGroup;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.exception.AmpWebApplicationException;
@@ -12,6 +10,8 @@ import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorUtils;
 import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+
+import javax.ws.rs.core.Response;
 
 /**
  * Gap Analysis execution over client side indicator layers  

@@ -1,7 +1,5 @@
 package org.digijava.module.aim.dbentity;
 
-import java.util.Set;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -10,6 +8,8 @@ import io.swagger.annotations.ApiModelProperty;
 import org.digijava.kernel.ampapi.endpoints.performance.AmpCategoryValueSerializer;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleConstants;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+
+import java.util.Set;
 
 /**
  * 

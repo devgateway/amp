@@ -1,11 +1,10 @@
 package org.digijava.module.aim.helper;
 
-import java.io.IOException;
-import java.util.Date;
-
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.BodyTagSupport;
+import java.io.IOException;
+import java.util.Date;
 
 public class FormatDateHelperTag extends BodyTagSupport {
 

@@ -22,10 +22,10 @@
 
 package org.digijava.kernel.entity;
 
-import java.io.Serializable;
-
-import org.digijava.kernel.request.Site;
 import org.digijava.kernel.Constants;
+import org.digijava.kernel.request.Site;
+
+import java.io.Serializable;
 
 public class ModuleInstance implements Serializable {
 

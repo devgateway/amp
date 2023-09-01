@@ -1,8 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.indicator;
 
-import static org.digijava.kernel.ampapi.endpoints.errors.ApiError.ERROR_CLASS_INDICATOR_ID;
-
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
+
+import static org.digijava.kernel.ampapi.endpoints.errors.ApiError.ERROR_CLASS_INDICATOR_ID;
 
 public class IndicatorErrors {
     

@@ -1,16 +1,12 @@
 package org.digijava.module.currencyrates;
 
+import org.apache.log4j.Logger;
+import org.quartz.*;
+import org.quartz.impl.StdSchedulerFactory;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-
-import org.apache.log4j.Logger;
-import org.quartz.JobDetail;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
-import org.quartz.SchedulerFactory;
-import org.quartz.SimpleTrigger;
-import org.quartz.impl.StdSchedulerFactory;
 
 /**
  * 

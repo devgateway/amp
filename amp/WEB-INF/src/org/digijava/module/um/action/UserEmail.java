@@ -22,19 +22,9 @@
 
 package org.digijava.module.um.action;
 
-import java.util.HashMap;
-
-import javax.mail.Address;
-import javax.mail.internet.InternetAddress;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.*;
 import org.digijava.kernel.config.Smtp;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.Message;
@@ -42,14 +32,14 @@ import org.digijava.kernel.mail.DgEmailManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
-import org.digijava.kernel.util.DgUtil;
-import org.digijava.kernel.util.DigiConfigManager;
-import org.digijava.kernel.util.I18NHelper;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.kernel.util.UserUtils;
+import org.digijava.kernel.util.*;
 import org.digijava.module.um.form.UserEmailForm;
 import org.digijava.module.um.util.DbUtil;
 import org.digijava.module.um.util.UmUtil;
+
+import javax.mail.Address;
+import javax.mail.internet.InternetAddress;
+import java.util.HashMap;
 
 /**
  *

@@ -5,11 +5,11 @@
  */
 package org.digijava.module.xmlpatcher.scheduler;
 
+import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatch;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-
-import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatch;
 
 /**
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org Provides support for

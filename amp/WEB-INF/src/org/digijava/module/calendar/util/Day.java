@@ -1,6 +1,7 @@
 package org.digijava.module.calendar.util;
-import java.util.* ;
-import java.io.* ;
+
+import java.io.UnsupportedEncodingException;
+import java.util.LinkedList;
 
 public class Day {
    /* Variables for Ethiopian day */ 

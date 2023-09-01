@@ -1,24 +1,17 @@
 package org.digijava.module.aim.action ;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.*;
 import org.apache.struts.actions.DispatchAction;
 import org.dgfoundation.amp.ar.ARUtil;
-import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.form.AddOrgTypeForm;
 import org.digijava.module.aim.util.DbUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 
 public class EditOrgType extends DispatchAction {

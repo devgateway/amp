@@ -22,29 +22,20 @@
 
 package org.digijava.kernel.user;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
-import javax.security.auth.Subject;
-
+import org.digijava.kernel.ampapi.endpoints.common.valueproviders.UserValueProvider;
 import org.digijava.kernel.dbentity.Country;
-import org.digijava.kernel.entity.Entity;
-import org.digijava.kernel.entity.Image;
 import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.entity.OrganizationType;
-import org.digijava.kernel.entity.UserLangPreferences;
-import org.digijava.kernel.entity.UserPreferences;
+import org.digijava.kernel.entity.*;
 import org.digijava.kernel.request.Site;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValue;
-import org.digijava.kernel.ampapi.endpoints.common.valueproviders.UserValueProvider;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpUserExtension;
 import org.digijava.module.aim.util.Identifiable;
+
+import javax.security.auth.Subject;
+import java.io.Serializable;
+import java.util.*;
 
 @InterchangeableValue(UserValueProvider.class)
 public class User
@@ -452,10 +443,8 @@ public class User
     public boolean hasVerifiedOrganizationId(Long ampOrgId) {
         if(ampOrgId == null) return false;
         //If it's not there, check in the Set<AmpOrganisation> assignedOrgs
-        Iterator<AmpOrganisation> it = this.assignedOrgs.iterator();
-        while(it.hasNext()){
-            AmpOrganisation currentOrganization = it.next();
-            if(currentOrganization.getAmpOrgId().equals(ampOrgId))
+        for (AmpOrganisation currentOrganization : this.assignedOrgs) {
+            if (currentOrganization.getAmpOrgId().equals(ampOrgId))
                 return true;
         }
         return false;
@@ -554,4 +543,50 @@ public class User
         return email;
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "subject=" + subject +
+                ", firstNames='" + firstNames + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", emailVerified=" + emailVerified +
+                ", emailBouncing=" + emailBouncing +
+                ", noAlertsUntil=" + noAlertsUntil +
+                ", password='" + password + '\'' +
+                ", salt='" + salt + '\'' +
+                ", passQuestion='" + passQuestion + '\'' +
+                ", passAnswer='" + passAnswer + '\'' +
+                ", url='" + url + '\'' +
+                ", banned=" + banned +
+                ", pledger=" + pledger +
+                ", pledgeSuperUser=" + pledgeSuperUser +
+                ", registeredThrough=" + registeredThrough +
+                ", interests=" + interests +
+                ", bio=" + bio +
+                ", portrait=" + portrait +
+                ", organizationName='" + organizationName + '\'' +
+                ", organizationType=" + organizationType +
+                ", referral='" + referral + '\'' +
+                ", country=" + country +
+                ", region=" + region +
+                ", sitePreferences=" + sitePreferences +
+                ", groups=" + groups +
+                ", siteContentLocales=" + siteContentLocales +
+                ", address='" + address + '\'' +
+                ", photo=" + photo +
+                ", userPreference=" + userPreference +
+                ", userLangPreferences=" + userLangPreferences +
+                ", registerLanguage=" + registerLanguage +
+                ", globalAdmin=" + globalAdmin +
+                ", organizationTypeOther='" + organizationTypeOther + '\'' +
+                ", contacts=" + contacts +
+                ", userExtension=" + userExtension +
+                ", exemptFromDataFreezing=" + exemptFromDataFreezing +
+                ", notificationEmailEnabled=" + notificationEmailEnabled +
+                ", notificationEmail='" + notificationEmail + '\'' +
+                ", assignedOrgs=" + assignedOrgs +
+                ", passwordChangedAt=" + passwordChangedAt +
+                '}';
+    }
 }

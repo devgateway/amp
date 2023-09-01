@@ -1,12 +1,11 @@
 package org.digijava.kernel.ampapi.endpoints.contact.dto;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
+import io.swagger.annotations.ApiModel;
 import org.digijava.kernel.ampapi.endpoints.contact.ContactEPConstants;
 import org.digijava.kernel.ampapi.endpoints.dto.SwaggerMapWrapper;
 
-import io.swagger.annotations.ApiModel;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Used only for documentation in Swagger

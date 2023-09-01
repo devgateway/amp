@@ -23,12 +23,7 @@
 package org.digijava.kernel.viewmanager;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 public class DependencyWalker {
     Map files;

@@ -1,24 +1,9 @@
 package org.digijava.module.message.action;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Unmarshaller;
-
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.*;
 import org.apache.struts.actions.DispatchAction;
 import org.apache.struts.upload.FormFile;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.message.dbentity.TemplateAlert;
 import org.digijava.module.message.form.AmpMessageForm;
@@ -26,9 +11,13 @@ import org.digijava.module.message.jaxb.AlertTemplateType;
 import org.digijava.module.message.jaxb.Messaging;
 import org.digijava.module.message.jaxb.TemplatesList;
 import org.digijava.module.message.util.AmpMessageUtil;
-import org.digijava.kernel.translator.TranslatorWorker;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Unmarshaller;
+import java.io.*;
+import java.util.List;
 
 
 public class ExportAndImportTemplates extends DispatchAction {

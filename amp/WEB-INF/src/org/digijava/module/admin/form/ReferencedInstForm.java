@@ -22,26 +22,11 @@
 
 package org.digijava.module.admin.form;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
-import java.util.Collection;
-import org.digijava.kernel.entity.Locale;
+
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
-import java.util.List;
-import org.digijava.kernel.util.SiteConfigUtils;
-import java.util.HashMap;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.TreeSet;
-import java.util.Vector;
-import java.util.Map;
-import org.digijava.kernel.entity.ModuleInstance;
-import java.util.Set;
-import java.util.Iterator;
 
 public class ReferencedInstForm
     extends ActionForm {

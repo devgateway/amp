@@ -1,16 +1,10 @@
 package org.dgfoundation.amp.onepager.components;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.wicket.markup.html.form.IFormModelUpdateListener;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
+
+import java.util.*;
 
 public abstract class ListEditor<T> extends RepeatingView implements IFormModelUpdateListener{
     private static final long serialVersionUID = 1L;

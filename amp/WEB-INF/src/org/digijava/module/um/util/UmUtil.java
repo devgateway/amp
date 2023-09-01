@@ -22,15 +22,14 @@
 
 package org.digijava.module.um.util;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.List;
-import org.digijava.kernel.util.DgUtil;
+import org.digijava.kernel.dbentity.Country;
+import org.digijava.kernel.entity.ContentAlert;
+import org.digijava.kernel.entity.Interests;
+import org.digijava.kernel.entity.OrganizationType;
 import org.digijava.kernel.request.Site;
-import javax.servlet.http.HttpServletRequest;
-
-import org.digijava.module.aim.dbentity.AmpApplicationSettings;
+import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.DgUtil;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
@@ -38,18 +37,12 @@ import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.um.dbentity.SuspendLogin;
 import org.digijava.module.um.exception.UMException;
-import org.digijava.kernel.entity.Interests;
-import org.digijava.kernel.entity.OrganizationType;
-import org.digijava.kernel.entity.ContentAlert;
-import java.util.ArrayList;
-import org.digijava.kernel.user.User;
-import java.util.Comparator;
-import java.security.SecureRandom;
-import java.security.MessageDigest;
+
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.SecureRandom;
 import java.util.*;
-import org.digijava.kernel.dbentity.Country;
-import org.digijava.kernel.util.RequestUtils;
 
 
 public class UmUtil {

@@ -3,8 +3,8 @@
 <hibernate-mapping>
 	<class name="org.digijava.module.calendar.dbentity.RecurrCalEvent" table="DG_RECURR_EVENT">
 		<id column="ID" name="id" type="java.lang.Long" unsaved-value="null">
-			<generator class="native">
-				<param name="sequence">dg_recurr_event_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">dg_recurr_event_seq</param>
 			</generator>
 		</id>
 		<many-to-one name="calendar" column="CALENDAR_ID"

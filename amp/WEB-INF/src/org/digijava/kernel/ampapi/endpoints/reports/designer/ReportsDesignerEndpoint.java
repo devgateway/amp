@@ -1,10 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.reports.designer;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import org.digijava.kernel.ampapi.endpoints.common.JsonApiResponse;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiError;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiRuntimeException;
@@ -12,13 +8,7 @@ import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 /**
@@ -61,7 +51,7 @@ public class ReportsDesignerEndpoint {
             @ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, reference = "JsonApiResponse",
                     message = "error if invalid configuration is received")})
     @POST
-    @Path("/")
+    
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public final JsonApiResponse<Report> createReport(@ApiParam("reportId") ReportRequest reportRequest,
                                                   @QueryParam("isDynamic") @DefaultValue("false") Boolean isDynamic) {

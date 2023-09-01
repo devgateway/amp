@@ -4,8 +4,8 @@
 	<class name="org.digijava.module.gateperm.core.Permission" table="PERM_PERMISSION" lazy="false">
 		<cache usage="read-write" />
 		<id name="id" column="id" type="java.lang.Long" unsaved-value="null">
-			<generator class="native">
-				<param name="sequence">perm_permission_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">perm_permission_seq</param>
 			</generator>
 		</id>
 		<set name="compositeLinkedPermissions" table="PERM_COMP_PERMISSION_MAP" inverse="true" lazy="false">

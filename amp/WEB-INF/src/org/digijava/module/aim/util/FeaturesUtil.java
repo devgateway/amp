@@ -1,21 +1,5 @@
 package org.digijava.module.aim.util;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.concurrent.ConcurrentHashMap;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.newreports.AmountsUnits;
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
@@ -26,30 +10,24 @@ import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.dbentity.AmpColumnsOrder;
-import org.digijava.module.aim.dbentity.AmpComponentType;
-import org.digijava.module.aim.dbentity.AmpFeature;
-import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
-import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
-import org.digijava.module.aim.dbentity.AmpGlobalSettings;
-import org.digijava.module.aim.dbentity.AmpHomeThumbnail;
-import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
-import org.digijava.module.aim.dbentity.AmpModulesVisibility;
-import org.digijava.module.aim.dbentity.AmpSiteFlag;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
-import org.digijava.module.aim.dbentity.FeatureTemplates;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Flag;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.Logic;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.hibernate.type.IntegerType;
+import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author medea
@@ -738,15 +716,45 @@ public class FeaturesUtil {
      * to get all the Global settings
      */
     public static List<AmpGlobalSettings> getGlobalSettings() {
-        List<AmpGlobalSettings> coll = null;
+        List<AmpGlobalSettings> coll =  new ArrayList<>();
         Session session = null;
         String qryStr = null;
         Query qry = null;
         try {
             session = PersistenceManager.getRequestDBSession();
-            qryStr = "select gs from " + AmpGlobalSettings.class.getName() + " gs ";
-            qry = session.createQuery(qryStr);
-            coll = qry.list();
+            String queryString = "SELECT gs.globalId, gs.globalSettingsName, gs.globalSettingsValue, gs.globalSettingsPossibleValues, " +
+                    "gs.globalSettingsDescription, gs.section, gs.valueTranslatable " +
+                    "FROM " + AmpGlobalSettings.class.getName() + " gs ";
+
+            Query<Object[]> query = session.createQuery(queryString, Object[].class);
+            List<Object[]> resultList = query.getResultList();
+
+//            List<AmpGlobalSettings> ampGlobalSettingsList = new ArrayList<>();
+            for (Object[] result : resultList) {
+                Long globalId = (Long) result[0];
+                String globalSettingsName = (String) result[1];
+                String globalSettingsValue = (String) result[2];
+                String globalSettingsPossibleValues = (String) result[3];
+                String globalSettingsDescription = (String) result[4];
+                String section = (String) result[5];
+                Boolean valueTranslatable = (Boolean) result[6];
+//                Map<String, String> possibleValuesIds = (Map<String, String>) result[7];
+
+                AmpGlobalSettings ampGlobalSettings = new AmpGlobalSettings();
+                ampGlobalSettings.setGlobalId(globalId);
+                ampGlobalSettings.setGlobalSettingsName(globalSettingsName);
+                ampGlobalSettings.setGlobalSettingsValue(globalSettingsValue);
+                ampGlobalSettings.setGlobalSettingsPossibleValues(globalSettingsPossibleValues);
+                ampGlobalSettings.setGlobalSettingsDescription(globalSettingsDescription);
+                ampGlobalSettings.setSection(section);
+                ampGlobalSettings.setValueTranslatable(valueTranslatable);
+
+                coll.add(ampGlobalSettings);
+            }
+
+//            qryStr = "select gs from " + AmpGlobalSettings.class.getName() + " gs ";
+//            qry = session.createQuery(qryStr, AmpGlobalSettings.class);
+//            coll = qry.list();
         }
         catch (Exception ex) {
             logger.error(ex, ex);
@@ -828,10 +836,10 @@ public class FeaturesUtil {
      * @return
      */
     public static Collection getAMPTemplatesVisibility() {
-        Session session = null;
-        Collection col = new ArrayList();
-        String qryStr = null;
-        Query qry = null;
+        Session session;
+        Collection col = new ArrayList<>();
+        String qryStr;
+        Query qry;
 
         try {
             session = PersistenceManager.getRequestDBSession();
@@ -847,13 +855,14 @@ public class FeaturesUtil {
     }
 
     public static Collection getAMPTemplatesVisibilityWithSession() {
-        Collection col = new ArrayList();
+        Collection col = new ArrayList<>();
         String qryStr = null;
         Query qry = null;
         Session hbsession=null;
 
         try {
             hbsession=PersistenceManager.getRequestDBSession();
+            hbsession.clear();
             qryStr = "select f from " + AmpTemplatesVisibility.class.getName() +
             " f";
             qry = hbsession.createQuery(qryStr);
@@ -1186,7 +1195,8 @@ public class FeaturesUtil {
      * @throws HibernateException
      */
     public static AmpTemplatesVisibility getTemplateVisibility(Long id) {
-        AmpTemplatesVisibility ft = (AmpTemplatesVisibility) PersistenceManager.getSession().load(AmpTemplatesVisibility.class, id);
+        AmpTemplatesVisibility ft = PersistenceManager.getRequestDBSession().load(AmpTemplatesVisibility.class, id);
+        System.out.println(ft);
         TreeSet<AmpTemplatesVisibility> mySet = new TreeSet<AmpTemplatesVisibility>(FeaturesUtil.ALPHA_ORDER);
         mySet.addAll(PersistenceManager.getSession().createQuery("from " + AmpModulesVisibility.class.getName()).list());
         ft.setAllItems(mySet);
@@ -1406,20 +1416,21 @@ public class FeaturesUtil {
     public static AmpFieldsVisibility getFieldVisibility(String fieldName) {
 
         Session session = null;
-        Query q = null;
-        Collection c = null;
+        Query<AmpFieldsVisibility> q = null;
+        Object c = null;
         AmpFieldsVisibility id = null;
 
         try {
             session = PersistenceManager.getSession();
-            String queryString = new String();
+            String queryString;
             queryString = "select a from " + AmpFieldsVisibility.class.getName()
-            + " a where (a.name=:fieldName) ";
-            q = session.createQuery(queryString);
+            + " a where a.name=:fieldName ";
+            q = session.createQuery(queryString, AmpFieldsVisibility.class);
             q.setParameter("fieldName", fieldName, StringType.INSTANCE);
-            c = q.list();
-            if(c.size()!=0)
-                id=(AmpFieldsVisibility) c.iterator().next();
+            id = q.getResultStream().findFirst().orElse(null);
+//            System.out.println(c);
+//
+            System.out.println(id);
 
         }
         catch (Exception ex) {
@@ -1747,13 +1758,11 @@ public class FeaturesUtil {
         try {
             session = PersistenceManager.getSession();
             module.setName(moduleName);
-            if(hasLevel!=null && "no".compareTo(hasLevel)==0)
-                module.setHasLevel(false);
-            else module.setHasLevel(true);
+            module.setHasLevel(hasLevel == null || "no".compareTo(hasLevel) != 0);
             session.save(module);
             String gsValue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NEW_FIELDS_VISIBILITY);
             if (gsValue != null && gsValue.equalsIgnoreCase("on")){
-                template = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class,templateId);
+                template = session.load(AmpTemplatesVisibility.class,templateId);
                 template.getItems().add(module);
                 session.update(template);
             }
@@ -1770,15 +1779,13 @@ public class FeaturesUtil {
         AmpTemplatesVisibility template = null;
         try {
             session = PersistenceManager.getSession();
-            AmpModulesVisibility parent = (AmpModulesVisibility) session.load(AmpModulesVisibility.class, parentId);
+            AmpModulesVisibility parent = session.load(AmpModulesVisibility.class, parentId);
             
             module.setName(moduleName);
             module.setParent(parent);
-            if(hasLevel!=null && "no".compareTo(hasLevel)==0)
-                module.setHasLevel(false);
-            else module.setHasLevel(true);
+            module.setHasLevel(hasLevel == null || "no".compareTo(hasLevel) != 0);
             
-            if(parent.getSubmodules()==null) parent.setSubmodules(new HashSet());
+            if(parent.getSubmodules()==null) parent.setSubmodules(new HashSet<>());
             parent.getSubmodules().add(module);
             
             session.update(parent);
@@ -1786,7 +1793,7 @@ public class FeaturesUtil {
             
             String gsValue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NEW_FIELDS_VISIBILITY);
             if (gsValue != null && gsValue.equalsIgnoreCase("on")){
-                template = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class,
+                template = session.load(AmpTemplatesVisibility.class,
                         templateId);
                 template.getItems().add(module);
                 session.update(template);
@@ -1807,7 +1814,7 @@ public class FeaturesUtil {
         AmpModulesVisibility moduleParent;
         try {
             session = PersistenceManager.getSession();
-            module = (AmpModulesVisibility) session.load(AmpModulesVisibility.class,id);
+            module = session.load(AmpModulesVisibility.class,id);
             moduleParent = getModuleVisibility(moduleParentName);
             module.setParent(moduleParent);
             session.save(module);
@@ -1828,12 +1835,13 @@ public class FeaturesUtil {
         Query qry;      
         String qryStr;
         try {
-            session = PersistenceManager.getSession();
-            AmpFeaturesVisibility feature = (AmpFeaturesVisibility) session.load(AmpFeaturesVisibility.class, featureId);
+            session = PersistenceManager.getRequestDBSession();
+            AmpFeaturesVisibility feature = session.load(AmpFeaturesVisibility.class, featureId);
             qryStr = "select f from " + AmpFieldsVisibility.class.getName() + " f  where f.name = :fieldName"; ;
             qry = session.createQuery(qryStr);
-            qry.setString("fieldName", fieldName);
+            qry.setParameter("fieldName", fieldName,StringType.INSTANCE);
             AmpFieldsVisibility field = (AmpFieldsVisibility) qry.uniqueResult();
+            System.out.println(field);
             if (field != null){             
                 feature.getOrCreateItems().add(field);
                 field.setParent(feature);
@@ -1856,12 +1864,13 @@ public class FeaturesUtil {
         String qryStr;
         try {
 
-            session = PersistenceManager.getSession();
+            session = PersistenceManager.getRequestDBSession();
             AmpModulesVisibility module = (AmpModulesVisibility) session.load(AmpModulesVisibility.class,moduleId);
             qryStr = "select f from " + AmpFeaturesVisibility.class.getName() + " f  where f.name = :featureName";
-            qry = session.createQuery(qryStr).setString("featureName", featureName);
-            AmpFeaturesVisibility feature = (AmpFeaturesVisibility) qry.uniqueResult();
-            if (feature != null){               
+            qry = session.createQuery(qryStr).setParameter("featureName", featureName,StringType.INSTANCE);
+//            AmpFeaturesVisibility feature = (AmpFeaturesVisibility) qry.uniqueResult();//returns multiple rsuts
+            AmpFeaturesVisibility feature = (AmpFeaturesVisibility) qry.list().get(0);
+            if (feature != null){
                 module.getOrCreateItems().add(feature);
                 feature.setParent(module);
                 session.saveOrUpdate(feature);
@@ -1880,8 +1889,8 @@ public class FeaturesUtil {
         Session session = null;
         AmpTemplatesVisibility ft = new AmpTemplatesVisibility();
         try {
-            session = PersistenceManager.getSession();
-            ft = (AmpTemplatesVisibility) session.get(AmpTemplatesVisibility.class,
+            session = PersistenceManager.getRequestDBSession();
+            ft = session.get(AmpTemplatesVisibility.class,
                     id);
             List list = session.createQuery("from " +
                     AmpModulesVisibility.class.getName() ). list();
@@ -2148,7 +2157,7 @@ public class FeaturesUtil {
     {
         String qryStr = "select gs.globalSettingsValue from " + AmpGlobalSettings.class.getName() +
                     " gs where gs.globalSettingsName = 'Default Country' ";
-        Query qry = PersistenceManager.getSession().createQuery(qryStr); 
+        Query qry = PersistenceManager.getRequestDBSession().createQuery(qryStr);
         String defaultCountryIso = (String) qry.uniqueResult();
         return defaultCountryIso;
     }
@@ -2159,7 +2168,7 @@ public class FeaturesUtil {
 
         java.io.StringReader in = new java.io.StringReader(theString.toLowerCase());
         boolean precededBySpace = true;
-        StringBuffer properCase = new StringBuffer();    
+        StringBuilder properCase = new StringBuilder();
         while(true) {      
             int i = in.read();
             if (i == -1)  break;      
@@ -2186,9 +2195,7 @@ public class FeaturesUtil {
     public static Boolean isShowComponentFundingByYear() {
         String componentFundingByYearStr = FeaturesUtil
         .getGlobalSettingValue(Constants.GLOBAL_SHOW_COMPONENT_FUNDING_BY_YEAR);
-        if (componentFundingByYearStr != null && "On".equals(componentFundingByYearStr))
-            return true;
-        return false;
+        return componentFundingByYearStr != null && "On".equals(componentFundingByYearStr);
     }
 
     public static void switchLogicInstance() {
@@ -2227,15 +2234,15 @@ public class FeaturesUtil {
             String queryString = "select fv from " +AmpModulesVisibility.class.getName() +
             " mv inner join mv.items fv "+
             " inner join fv.templates tmpl" +
-            " where (mv.name=:moduleName) and (fv.name=:featureName)" +
-            " and (tmpl.id=:defTemplId)";
+            " where mv.name=:moduleName and fv.name=:featureName" +
+            " and tmpl.id=:defTemplId";
             Query qry = session.createQuery(queryString);
-            qry.setString("featureName", featureName);
-            qry.setString("moduleName", moduleName);
-            qry.setLong("defTemplId", defTemplId);
-            if (qry.list() != null && qry.list().size() > 0) {
-                feature = (AmpFeaturesVisibility) qry.uniqueResult();
-            }
+            qry.setParameter("featureName", featureName,StringType.INSTANCE);
+            qry.setParameter("moduleName", moduleName, StringType.INSTANCE);
+            qry.setParameter("defTemplId", defTemplId, LongType.INSTANCE);
+//            if (qry.list() != null && qry.list().size() > 0) {
+            feature = (AmpFeaturesVisibility) qry.uniqueResult();
+//            }
 
 
         } catch (Exception e) {
@@ -2272,11 +2279,11 @@ public class FeaturesUtil {
                 queryString += " and (parent.name=:parentModuleName) ";
             }
             Query qry = session.createQuery(queryString);
-            qry.setString("moduleName", moduleName);
+            qry.setParameter("moduleName", moduleName,StringType.INSTANCE);
             if (parentModuleName != null) {
-                qry.setString("parentModuleName", parentModuleName);
+                qry.setParameter("parentModuleName", parentModuleName,StringType.INSTANCE);
             }
-            qry.setLong("defTemplId", defTemplId);
+            qry.setParameter("defTemplId", defTemplId, LongType.INSTANCE);
             if (qry.list() != null && qry.list().size() > 0) {
                 module = (AmpModulesVisibility) qry.uniqueResult();
             }

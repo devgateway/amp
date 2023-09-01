@@ -1,25 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.settings;
 
-import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
-import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getCalendarCurrenciesField;
-import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getCalendarField;
-import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getCurrencyField;
-import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getFundingTypeField;
-import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getReportAmountFormatField;
-import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getReportAmountUnits;
-import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getReportYearRangeField;
-import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getResourceManagerSettings;
-
-import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.List;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.dgfoundation.amp.newreports.ReportSpecification;
@@ -30,6 +10,18 @@ import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.ampapi.endpoints.util.PublicConstants;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.util.DbUtil;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.List;
+
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
+import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.*;
 
 /**
  * This endpoint returns settings definitions for each module. Settings

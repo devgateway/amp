@@ -1,9 +1,9 @@
 package org.digijava.module.message.triggers;
 
-import java.util.Date;
-
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.message.helper.Event;
+
+import java.util.Date;
 
 public class NotApprovedActivityTrigger extends Trigger {
 

@@ -22,29 +22,23 @@
 
 package org.digijava.module.um.action;
 
+import org.apache.struts.action.*;
+import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.entity.UserPreferences;
+import org.digijava.kernel.translator.util.TrnUtil;
+import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.um.form.UserProfileForm;
+import org.digijava.module.um.util.DbUtil;
+import org.digijava.module.um.util.InterestsCallback;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.entity.UserPreferences;
-import org.digijava.kernel.translator.util.TrnUtil;
-import org.digijava.kernel.user.User;
-import org.digijava.kernel.util.DgUtil;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.um.form.UserProfileForm;
-import org.digijava.module.um.util.DbUtil;
-import org.digijava.module.um.util.InterestsCallback;
 
 /**
  * <p>Title: DiGiJava</p>

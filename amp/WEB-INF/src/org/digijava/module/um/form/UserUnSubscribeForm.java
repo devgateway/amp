@@ -23,10 +23,11 @@
 package org.digijava.module.um.form;
 
 //
-import java.util.Collection;
 
 import org.apache.struts.validator.ValidatorForm;
+
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 
 /**
  * <p>Title: DiGiJava</p>

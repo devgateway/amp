@@ -26,9 +26,12 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.entity.ModuleInstance;
+import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.user.UserInfo;
 import org.digijava.kernel.util.DgUtil;
+import org.digijava.kernel.util.ModuleUtils;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.calendar.dbentity.Calendar;
 import org.digijava.module.calendar.dbentity.CalendarItem;
@@ -36,10 +39,8 @@ import org.digijava.module.calendar.form.CalendarItemForm;
 import org.digijava.module.calendar.util.CalendarUtil;
 import org.digijava.module.calendar.util.DbUtil;
 import org.digijava.module.common.util.BBCodeParser;
-import org.digijava.kernel.request.Site;
+
 import javax.security.auth.Subject;
-import org.digijava.kernel.entity.ModuleInstance;
-import org.digijava.kernel.util.ModuleUtils;
 
 /**
  * Action displayes details of event item identified by activeCalendarItem identity(if not null)

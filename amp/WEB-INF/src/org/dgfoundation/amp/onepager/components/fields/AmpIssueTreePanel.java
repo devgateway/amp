@@ -4,8 +4,6 @@
  */
 package org.dgfoundation.amp.onepager.components.fields;
 
-import java.util.*;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -18,15 +16,9 @@ import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
-import org.digijava.module.aim.dbentity.AmpActor;
-import org.digijava.module.aim.dbentity.AmpIssues;
-import org.digijava.module.aim.dbentity.AmpLineMinistryObservation;
-import org.digijava.module.aim.dbentity.AmpLineMinistryObservationActor;
-import org.digijava.module.aim.dbentity.AmpLineMinistryObservationMeasure;
-import org.digijava.module.aim.dbentity.AmpMeasure;
-import org.digijava.module.aim.dbentity.AmpRegionalObservation;
-import org.digijava.module.aim.dbentity.AmpRegionalObservationActor;
-import org.digijava.module.aim.dbentity.AmpRegionalObservationMeasure;
+import org.digijava.module.aim.dbentity.*;
+
+import java.util.*;
 
 /**
  * @author aartimon@dginternational.org

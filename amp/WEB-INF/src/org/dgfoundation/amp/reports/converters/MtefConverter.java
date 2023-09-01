@@ -1,11 +1,11 @@
 package org.dgfoundation.amp.reports.converters;
 
+import org.dgfoundation.amp.newreports.ReportElement;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-
-import org.dgfoundation.amp.newreports.ReportElement;
 
 /**
  * singleton class used for injecting into a ReportSpecificationImpl the data needed for including the MTEF columns

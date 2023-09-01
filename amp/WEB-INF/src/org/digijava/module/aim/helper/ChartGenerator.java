@@ -5,22 +5,6 @@
 
 package org.digijava.module.aim.helper;
 
-import java.awt.*;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.request.Site;
@@ -47,6 +31,16 @@ import org.jfree.chart.servlet.ServletUtilities;
 import org.jfree.chart.urls.StandardCategoryURLGenerator;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.awt.*;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.net.URLDecoder;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 

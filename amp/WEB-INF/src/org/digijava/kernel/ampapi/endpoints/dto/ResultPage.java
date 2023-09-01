@@ -1,10 +1,10 @@
 package org.digijava.kernel.ampapi.endpoints.dto;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.annotations.ApiModelProperty;
+
+import java.util.List;
 
 /**
  * 

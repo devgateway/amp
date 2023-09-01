@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <web-app xmlns="http://java.sun.com/xml/ns/javaee"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
-  version="3.0"> 
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+		 version="3.0">
 
 	<display-name>AMP 2.0</display-name>
 	<description>Aid Management Platform</description>
@@ -43,45 +43,45 @@
 	<!--                 SEGMENT END                 -->
 	<!--  ADD ENTRIES BELOW -->
 
-   <filter>
-      <filter-name>characterEncodingFilter</filter-name>
-      <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
-      <init-param>
-         <param-name>encoding</param-name>
-         <param-value>utf-8</param-value>
-      </init-param>
-   </filter>
-   
-   <filter>
-        <filter-name>populateTLSRequestFilter</filter-name>
-        <filter-class>org.digijava.kernel.request.PopulateTLSRequestFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>populateTLSRequestFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-        <dispatcher>REQUEST</dispatcher>
-        <dispatcher>ERROR</dispatcher>
-    </filter-mapping>
-   
+	<filter>
+		<filter-name>characterEncodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>utf-8</param-value>
+		</init-param>
+	</filter>
+
+	<filter>
+		<filter-name>populateTLSRequestFilter</filter-name>
+		<filter-class>org.digijava.kernel.request.PopulateTLSRequestFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>populateTLSRequestFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>ERROR</dispatcher>
+	</filter-mapping>
+
 	<filter>
 		<filter-name>HibernateFilter</filter-name>
 		<filter-class>org.digijava.kernel.startup.HibernateSessionRequestFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>HibernateFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-        <dispatcher>REQUEST</dispatcher>
+	</filter>
+	<filter-mapping>
+		<filter-name>HibernateFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
 		<dispatcher>ERROR</dispatcher>
-    </filter-mapping>
+	</filter-mapping>
 
-   <filter>
-      <filter-name>springSecurityFilterChain</filter-name>
-      <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-   </filter>
-   <filter-mapping>
-      <filter-name>springSecurityFilterChain</filter-name>
-      <url-pattern>/*</url-pattern>
-   </filter-mapping>
+	<filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
 
 	<!-- Web listener -->
 	<listener>
@@ -91,29 +91,29 @@
 	</listener>
 
 	<filter-mapping>
-        <filter-name>characterEncodingFilter</filter-name>
-        <url-pattern>/*</url-pattern>
+		<filter-name>characterEncodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
 		<dispatcher>REQUEST</dispatcher>
 		<dispatcher>ERROR</dispatcher>
 	</filter-mapping>
-	
-    <listener>
-        <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
-    </listener>	
+
 	<listener>
-    	<listener-class>org.digijava.kernel.startup.AmpSessionListener</listener-class>
+		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+	</listener>
+	<listener>
+		<listener-class>org.digijava.kernel.startup.AmpSessionListener</listener-class>
 	</listener>
 
 	<!-- Correct EhCache shutdown -->
- 	<listener>
-          <listener-class>net.sf.ehcache.constructs.web.ShutdownListener</listener-class>
-     </listener>
-     
-    <context-param>
+	<listener>
+		<listener-class>net.sf.ehcache.constructs.web.ShutdownListener</listener-class>
+	</listener>
+
+	<context-param>
 		<param-name>log4jExposeWebAppRoot</param-name>
 		<param-value>false</param-value>
 	</context-param>
-     
+
 	<context-param>
 		<param-name>patchAMP</param-name>
 		<param-value>
@@ -123,22 +123,22 @@
 
 
 	<!-- Apache Wicket -->
-    <filter>
-        <filter-name>OnePagerApplication</filter-name>
-        <filter-class>org.apache.wicket.protocol.http.WicketFilter</filter-class>
-        <init-param>
-          <param-name>applicationClassName</param-name>
-          <param-value>org.dgfoundation.amp.onepager.OnePagerApp</param-value>
-        </init-param>
+	<filter>
+		<filter-name>OnePagerApplication</filter-name>
+		<filter-class>org.apache.wicket.protocol.http.WicketFilter</filter-class>
 		<init-param>
-            <param-name>configuration</param-name>
-            <param-value>deployment</param-value>
+			<param-name>applicationClassName</param-name>
+			<param-value>org.dgfoundation.amp.onepager.OnePagerApp</param-value>
 		</init-param>
-    </filter>
-    <filter-mapping>
-        <filter-name>OnePagerApplication</filter-name>
-        <url-pattern>/wicket/*</url-pattern>
-    </filter-mapping>
+		<init-param>
+			<param-name>configuration</param-name>
+			<param-value>deployment</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>OnePagerApplication</filter-name>
+		<url-pattern>/wicket/*</url-pattern>
+	</filter-mapping>
 
 	<filter>
 		<filter-name>showMasterLayout</filter-name>
@@ -150,7 +150,7 @@
 		<filter-name>showMasterLayout</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-	
+
 	<listener>
 		<listener-class>
 			org.digijava.module.aim.startup.AMPStartupListener
@@ -162,9 +162,6 @@
 		<listener-class>org.digijava.module.aim.startup.QuartzStartupListener</listener-class>
 	</listener>
 
-	<listener>
-		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
-	</listener>
 	<listener>
 		<listener-class>
 			org.springframework.web.context.ContextLoaderListener
@@ -222,33 +219,30 @@
 	<!-- Jersey Servlet  -->
 	<servlet>
 		<servlet-name>AMP API End Points</servlet-name>
-		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
 		<init-param>
-		    <param-name>com.sun.jersey.config.property.packages</param-name>
-		    <param-value>
-                io.swagger.jaxrs.json,
-                io.swagger.jaxrs.listing,
-                org.digijava.kernel.ampapi.endpoints
-            </param-value>
-	    </init-param>
-    	<init-param>
-			<param-name>com.sun.jersey.spi.container.ContainerRequestFilters</param-name>
-			<param-value>org.digijava.kernel.ampapi.authentication.AuthRequestFilter</param-value>
-		</init-param>
-    	<init-param>
-			<param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name>
-			<param-value>org.digijava.kernel.ampapi.endpoints.common.ApiResponseFilter</param-value>
+			<param-name>jersey.config.server.provider.packages</param-name>
+			<param-value>
+				io.swagger.jaxrs.json,
+				io.swagger.jaxrs.listing,
+				org.digijava.kernel.ampapi.endpoints
+			</param-value>
 		</init-param>
 		<init-param>
-			<param-name>com.sun.jersey.spi.container.ResourceFilters</param-name>
-			<param-value>org.digijava.kernel.ampapi.endpoints.security.AuthorizerResourceFilterFactory</param-value>
+			<param-name>jersey.config.server.provider.classnames</param-name>
+			<param-value>
+				org.digijava.kernel.ampapi.authentication.AuthRequestFilter,
+				org.digijava.kernel.ampapi.endpoints.common.ApiResponseFilter,
+				org.digijava.kernel.ampapi.endpoints.security.AuthorizerResourceFilterFactory,
+				org.glassfish.jersey.media.multipart.MultiPartFeature
+			</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
-	 </servlet>
- 	<servlet-mapping>
+	</servlet>
+	<servlet-mapping>
 		<servlet-name>AMP API End Points</servlet-name>
- 		<url-pattern>/rest/*</url-pattern>
- 	</servlet-mapping>
+		<url-pattern>/rest/*</url-pattern>
+	</servlet-mapping>
 	<!-- End Jersey  -->
 
 	<servlet>
@@ -272,14 +266,14 @@
 				/repository/help/struts-config.xml,
 				/repository/contentrepository/struts-config.xml, /repository/categorymanager/struts-config.xml,
 				/repository/sdm/struts-config.xml,
-				/repository/message/struts-config.xml,				
+				/repository/message/struts-config.xml,
 				/repository/parisindicator/struts-config.xml,
 				/repository/search/struts-config.xml,
 				/repository/content/struts-config.xml,
 				/repository/xmlpatcher/struts-config.xml,
 				/repository/esrigis/struts-config.xml,
 				/repository/budgetexport/struts-config.xml,
-				/repository/gpi/struts-config.xml				
+				/repository/gpi/struts-config.xml
 			</param-value>
 		</init-param>
 		<init-param>
@@ -325,95 +319,95 @@
 		<location>/exceptionHandle.do</location>
 	</error-page>
 	<error-page>
-	<error-code>403</error-code>
+		<error-code>403</error-code>
 		<location>/showLayout.do?layout=login</location>
 	</error-page>
-	
+
 	<error-page>
 		<error-code>404</error-code>
 		<location>/exceptionHandle.do</location>
 	</error-page>
 	<jsp-config>
-	<taglib>
-		<taglib-uri>/taglib/struts-bean</taglib-uri>
-		<taglib-location>/WEB-INF/struts-bean.tld</taglib-location>
-	</taglib>
-	<taglib>
-		<taglib-uri>/taglib/struts-html</taglib-uri>
-		<taglib-location>/WEB-INF/struts-html.tld</taglib-location>
-	</taglib>
-	<taglib>
-		<taglib-uri>/taglib/struts-logic</taglib-uri>
-		<taglib-location>/WEB-INF/struts-logic.tld</taglib-location>
-	</taglib>
-	<taglib>
-		<taglib-uri>/taglib/struts-nested</taglib-uri>
-		<taglib-location>/WEB-INF/struts-nested.tld</taglib-location>
-	</taglib>
-	<taglib>
-		<taglib-uri>/taglib/struts-tiles</taglib-uri>
-		<taglib-location>/WEB-INF/struts-tiles.tld</taglib-location>
-	</taglib>
-	<taglib>
-		<taglib-uri>/taglib/digijava</taglib-uri>
-		<taglib-location>/WEB-INF/digijava.tld</taglib-location>
-	</taglib>
-	<taglib>
-		<taglib-uri>/taglib/gateperm</taglib-uri>
-		<taglib-location>/repository/gateperm/gateperm.tld</taglib-location>
-	</taglib>
-	<taglib>
-		<taglib-uri>/taglib/category</taglib-uri>
-		<taglib-location>/WEB-INF/category.tld</taglib-location>
-	</taglib>
-	<taglib>
-		<taglib-uri>/taglib/globalsettings</taglib-uri>
-		<taglib-location>/WEB-INF/globalsettings.tld</taglib-location>
-	</taglib>
-	<taglib>
-		<taglib-uri>/taglib/resourcesettings</taglib-uri>
-		<taglib-location>/WEB-INF/resourcesettings.tld</taglib-location>
-	</taglib>
-	<taglib>
-		<taglib-uri>/taglib/aim</taglib-uri>
-		<taglib-location>/WEB-INF/aim.tld</taglib-location>
-	</taglib>
-	<taglib>
-		<taglib-uri>/taglib/moduleVisibility</taglib-uri>
-		<taglib-location>/WEB-INF/moduleVisibility.tld</taglib-location>
-	</taglib>
-	<taglib>
-		<taglib-uri>/taglib/featureVisibility</taglib-uri>
-		<taglib-location>
-			/WEB-INF/featureVisibility.tld
-		</taglib-location>
-	</taglib>
-	<taglib>
-		<taglib-uri>/taglib/fieldVisibility</taglib-uri>
-		<taglib-location>/WEB-INF/fieldVisibility.tld</taglib-location>
-	</taglib>
-	<taglib>
-		<taglib-uri>/taglib/editlivejava</taglib-uri>
-		<taglib-location>/WEB-INF/taglib.tld</taglib-location>
-	</taglib>
-	<taglib>
-		<taglib-uri>/taglib/jstl-core</taglib-uri>
-		<taglib-location>/WEB-INF/c.tld</taglib-location>
-	</taglib>
-	<taglib>
-		<taglib-uri>/taglib/fmt</taglib-uri>
-		<taglib-location>/WEB-INF/tld/fmt.tld</taglib-location>
-	</taglib>
-	<taglib>
-		<taglib-uri>/taglib/displaytag</taglib-uri>
-		<taglib-location>
-			/WEB-INF/tld/displaytag-11.tld
-		</taglib-location>
-	</taglib>
-	<taglib>
-		<taglib-uri>/taglib/jstl-functions</taglib-uri>
-		<taglib-location>/WEB-INF/fn.tld</taglib-location>
-	</taglib>
+		<taglib>
+			<taglib-uri>/taglib/struts-bean</taglib-uri>
+			<taglib-location>/WEB-INF/struts-bean.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>/taglib/struts-html</taglib-uri>
+			<taglib-location>/WEB-INF/struts-html.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>/taglib/struts-logic</taglib-uri>
+			<taglib-location>/WEB-INF/struts-logic.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>/taglib/struts-nested</taglib-uri>
+			<taglib-location>/WEB-INF/struts-nested.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>/taglib/struts-tiles</taglib-uri>
+			<taglib-location>/WEB-INF/struts-tiles.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>/taglib/digijava</taglib-uri>
+			<taglib-location>/WEB-INF/digijava.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>/taglib/gateperm</taglib-uri>
+			<taglib-location>/repository/gateperm/gateperm.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>/taglib/category</taglib-uri>
+			<taglib-location>/WEB-INF/category.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>/taglib/globalsettings</taglib-uri>
+			<taglib-location>/WEB-INF/globalsettings.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>/taglib/resourcesettings</taglib-uri>
+			<taglib-location>/WEB-INF/resourcesettings.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>/taglib/aim</taglib-uri>
+			<taglib-location>/WEB-INF/aim.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>/taglib/moduleVisibility</taglib-uri>
+			<taglib-location>/WEB-INF/moduleVisibility.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>/taglib/featureVisibility</taglib-uri>
+			<taglib-location>
+				/WEB-INF/featureVisibility.tld
+			</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>/taglib/fieldVisibility</taglib-uri>
+			<taglib-location>/WEB-INF/fieldVisibility.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>/taglib/editlivejava</taglib-uri>
+			<taglib-location>/WEB-INF/taglib.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>/taglib/jstl-core</taglib-uri>
+			<taglib-location>/WEB-INF/c.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>/taglib/fmt</taglib-uri>
+			<taglib-location>/WEB-INF/tld/fmt.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>/taglib/displaytag</taglib-uri>
+			<taglib-location>
+				/WEB-INF/tld/displaytag-11.tld
+			</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>/taglib/jstl-functions</taglib-uri>
+			<taglib-location>/WEB-INF/fn.tld</taglib-location>
+		</taglib>
 	</jsp-config>
 
 	<security-constraint>

@@ -1,13 +1,12 @@
 package org.dgfoundation.amp.testutils;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
-import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpReports;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class PledgesFilterModifier extends AmpReportModifier {
     List<String> pledgeNames;

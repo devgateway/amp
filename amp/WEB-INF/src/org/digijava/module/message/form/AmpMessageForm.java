@@ -1,9 +1,5 @@
 package org.digijava.module.message.form;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.upload.FormFile;
 import org.apache.struts.util.LabelValueBean;
@@ -14,6 +10,10 @@ import org.digijava.module.message.dbentity.TemplateAlert;
 import org.digijava.module.message.helper.MessageHelper;
 import org.digijava.module.message.helper.ReciverName;
 import org.digijava.module.sdm.dbentity.Sdm;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 public class AmpMessageForm extends ActionForm {
     /**

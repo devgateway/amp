@@ -4,8 +4,8 @@
 	<class name="org.digijava.module.aim.dbentity.AmpIndicator" table="AMP_INDICATOR">
 		<cache usage="read-write" />
 		<id name="indicatorId" column="indicator_id">
-			<generator class="native">
-				<param name="sequence">AMP_INDICATOR_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_INDICATOR_seq</param>
 			</generator>
 		</id>
 

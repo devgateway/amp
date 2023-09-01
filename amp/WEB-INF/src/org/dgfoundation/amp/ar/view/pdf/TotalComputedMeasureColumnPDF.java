@@ -3,10 +3,9 @@
  */
 package org.dgfoundation.amp.ar.view.pdf;
 
+import com.itextpdf.text.pdf.PdfPTable;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.Viewable;
-
-import com.lowagie.text.pdf.PdfPTable;
 
 /**
  * 
@@ -20,7 +19,7 @@ public class TotalComputedMeasureColumnPDF extends TotalAmountColumnPDF {
     }
 
     public TotalComputedMeasureColumnPDF(PdfPTable table, Viewable item,
-            Long ownerId) {
+                                         Long ownerId) {
         super(table, item, ownerId);
         // TODO Auto-generated constructor stub
     }

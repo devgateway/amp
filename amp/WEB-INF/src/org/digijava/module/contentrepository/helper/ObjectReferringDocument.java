@@ -3,8 +3,8 @@
  */
 package org.digijava.module.contentrepository.helper;
 
-import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.kernel.validators.activity.PrivateResourceValidator;
+import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;

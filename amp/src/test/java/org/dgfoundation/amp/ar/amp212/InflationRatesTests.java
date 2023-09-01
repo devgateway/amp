@@ -1,12 +1,5 @@
 package org.dgfoundation.amp.ar.amp212;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.validation.ConstraintViolationException;
-
 import org.dgfoundation.amp.currency.ConstantCurrency;
 import org.dgfoundation.amp.currency.CurrencyInflationUtil;
 import org.dgfoundation.amp.currency.inflation.CCExchangeRate;
@@ -22,6 +15,12 @@ import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.hibernate.Session;
 import org.junit.Test;
+
+import javax.validation.ConstraintViolationException;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * testcases for Currency Deflator (https://jira.dgfoundation.org/browse/AMP-20534)

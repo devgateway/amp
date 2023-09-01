@@ -9,7 +9,6 @@ import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.StringTokenizer;
 
 /**
  * @author mihai

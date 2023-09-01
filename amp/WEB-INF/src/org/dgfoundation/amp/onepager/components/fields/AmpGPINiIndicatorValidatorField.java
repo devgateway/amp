@@ -1,12 +1,5 @@
 package org.dgfoundation.amp.onepager.components.fields;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.OnePagerConst;
@@ -16,6 +9,9 @@ import org.dgfoundation.amp.onepager.validators.AmpGPINiIndicatorValidator;
 import org.digijava.module.aim.dbentity.AmpGPINiQuestion.GPINiQuestionType;
 import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponse;
 import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponseDocument;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * This field can be used to validate the GPI Ni responses and show an error

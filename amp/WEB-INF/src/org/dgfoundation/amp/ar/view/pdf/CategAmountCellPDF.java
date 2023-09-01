@@ -6,10 +6,9 @@
  */
 package org.dgfoundation.amp.ar.view.pdf;
 
+import com.itextpdf.text.pdf.PdfPTable;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.Viewable;
-
-import com.lowagie.text.pdf.PdfPTable;
 
 /**
  * 
@@ -28,7 +27,7 @@ public class CategAmountCellPDF extends AmountCellPDF {
      * @param table
      * @param item
      */
-    public CategAmountCellPDF(PdfPTable table, Viewable item,Long ownerId) {
+    public CategAmountCellPDF(PdfPTable table, Viewable item, Long ownerId) {
         super(table, item,ownerId);
         // TODO Auto-generated constructor stub
     }

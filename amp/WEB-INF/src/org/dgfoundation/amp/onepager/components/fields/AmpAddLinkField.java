@@ -4,8 +4,6 @@
 */
 package org.dgfoundation.amp.onepager.components.fields;
 
-import org.apache.wicket.ajax.AjaxRequestTarget;
-
 /**
  * @author mpostelnicu@dgateway.org
  * since Nov 10, 2010

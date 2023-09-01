@@ -22,19 +22,19 @@
 
 package org.digijava.module.admin.action;
 
-import java.util.List;
-import java.util.Iterator;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.util.SiteCache;
 import org.digijava.module.admin.form.LocalesForm;
 import org.digijava.module.admin.util.DbUtil;
-import org.digijava.kernel.util.SiteCache;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * <p>Title: DiGiJava</p>

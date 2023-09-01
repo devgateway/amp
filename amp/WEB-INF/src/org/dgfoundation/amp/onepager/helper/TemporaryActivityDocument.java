@@ -1,10 +1,10 @@
 package org.dgfoundation.amp.onepager.helper;
 
-import java.util.List;
-
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.contentrepository.jcrentity.Label;
+
+import java.util.List;
 
 public class TemporaryActivityDocument extends TemporaryDocument {
     private static final long serialVersionUID = 1L;

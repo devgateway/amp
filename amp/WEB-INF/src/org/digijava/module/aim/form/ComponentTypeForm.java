@@ -1,13 +1,12 @@
 package org.digijava.module.aim.form;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpComponentType;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.Serializable;
+import java.util.ArrayList;
 
 public class ComponentTypeForm extends ActionForm implements Serializable {
     private static final long serialVersionUID = 5155457392821477753L;

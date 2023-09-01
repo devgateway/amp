@@ -1,16 +1,16 @@
 package org.dgfoundation.amp.nireports;
 
-import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-
 import org.dgfoundation.amp.nireports.meta.CategCell;
 import org.dgfoundation.amp.nireports.schema.NiDimension.Coordinate;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.schema.NiDimension.NiDimensionUsage;
 import org.dgfoundation.amp.nireports.schema.NiReportedEntity;
+
+import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * an immutable piece of data used for the disaggregated phases of the report. Being the abstract root the classes' hierarchy output by {@link NiReportedEntity#fetch(NiReportsEngine)}, this is the basic granularity with which data is fed into NiReports.

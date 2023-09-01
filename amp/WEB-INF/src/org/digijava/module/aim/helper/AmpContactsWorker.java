@@ -1,15 +1,15 @@
 package org.digijava.module.aim.helper;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpContactPhoneProperty;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class AmpContactsWorker {
     

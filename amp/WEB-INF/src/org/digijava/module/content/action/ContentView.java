@@ -1,11 +1,5 @@
 package org.digijava.module.content.action;
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -14,6 +8,11 @@ import org.apache.struts.tiles.actions.TilesAction;
 import org.digijava.module.content.dbentity.AmpContentItem;
 import org.digijava.module.content.form.ContentForm;
 import org.digijava.module.content.util.DbUtil;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 public class ContentView extends TilesAction {
     public ActionForward execute(ComponentContext context,

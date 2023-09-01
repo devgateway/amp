@@ -1,32 +1,17 @@
 package org.digijava.kernel.ampapi.endpoints.common;
 
-import java.util.List;
-
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.dgfoundation.amp.ar.ColumnConstants;
-import org.digijava.kernel.ampapi.endpoints.filters.ApprovalStatusFilterListManager;
-import org.digijava.kernel.ampapi.endpoints.filters.FilterList;
-import org.digijava.kernel.ampapi.endpoints.filters.FiltersConstants;
-import org.digijava.kernel.ampapi.endpoints.filters.FiltersManager;
-import org.digijava.kernel.ampapi.endpoints.filters.WorkspaceFilterListManager;
-import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
-import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
-import org.digijava.kernel.ampapi.endpoints.util.FilterComponentType;
-import org.digijava.kernel.ampapi.endpoints.util.FilterDataType;
-import org.digijava.kernel.ampapi.endpoints.util.FilterDefinition;
-import org.digijava.kernel.ampapi.endpoints.util.FilterFieldType;
-import org.digijava.kernel.ampapi.endpoints.util.FilterReportType;
+import org.digijava.kernel.ampapi.endpoints.filters.*;
+import org.digijava.kernel.ampapi.endpoints.util.*;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.digijava.kernel.request.TLSUtils;
+
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 /**
  * Filters Endpoint

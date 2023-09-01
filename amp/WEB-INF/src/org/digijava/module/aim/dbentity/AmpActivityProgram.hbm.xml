@@ -6,13 +6,13 @@
 		table="AMP_ACTIVITY_PROGRAM">
 		<cache usage="read-write" />
 		<id name="ampActivityProgramId" column="amp_activity_program_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_ACTIVITY_PROGRAM_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_ACTIVITY_PROGRAM_seq</param>
 			</generator>
 		</id>
 
 		<many-to-one name="activity" column="amp_activity_id"
-			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" not-null="true" />
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none"  not-null="true" />
 
 		<many-to-one name="program" column="amp_program_id"
 			class="org.digijava.module.aim.dbentity.AmpTheme" cascade="none" not-null="true" lazy="false"/>

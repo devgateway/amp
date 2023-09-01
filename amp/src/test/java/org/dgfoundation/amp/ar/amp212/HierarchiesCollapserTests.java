@@ -1,8 +1,5 @@
 package org.dgfoundation.amp.ar.amp212;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.ReportCollapsingStrategy;
 import org.dgfoundation.amp.nireports.ReportHierarchiesCollapser;
@@ -13,6 +10,9 @@ import org.dgfoundation.amp.nireports.runtime.ReportData;
 import org.dgfoundation.amp.nireports.schema.NiDimension.LevelColumn;
 import org.dgfoundation.amp.nireports.testcases.generic.HardcodedReportsTestSchema;
 import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * tests for {@link ReportHierarchiesCollapser}

@@ -22,13 +22,13 @@
 
 package org.digijava.kernel.request;
 
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.digijava.kernel.entity.Entity;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.ModuleInstance;
+
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Site
 extends Entity implements Serializable {

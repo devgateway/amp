@@ -22,11 +22,9 @@
 
 package org.digijava.module.translation.taglib;
 
-import javax.servlet.jsp.tagext.BodyContent;
 import org.apache.log4j.Logger;
-import java.io.IOException;
-import javax.servlet.jsp.JspWriter;
-import javax.servlet.http.HttpServletRequest;
+
+import javax.servlet.jsp.tagext.BodyContent;
 
 /**
  * Custom tag that retrieves internationalized message

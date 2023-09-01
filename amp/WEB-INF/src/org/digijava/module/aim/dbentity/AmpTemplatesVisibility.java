@@ -6,11 +6,11 @@
  */
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-import java.util.*;
-
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
 import org.digijava.module.aim.util.FeaturesUtil;
+
+import java.io.Serializable;
+import java.util.*;
 
 public class AmpTemplatesVisibility extends AmpObjectVisibility implements Serializable, Cloneable {
     /**

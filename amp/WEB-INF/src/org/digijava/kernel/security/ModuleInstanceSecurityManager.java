@@ -22,11 +22,10 @@
 
 package org.digijava.kernel.security;
 
-import java.security.Principal;
+import org.digijava.kernel.security.permission.ObjectPermission;
 
 import javax.security.auth.Subject;
-
-import org.digijava.kernel.security.permission.ObjectPermission;
+import java.security.Principal;
 
 public class ModuleInstanceSecurityManager
     extends AbstractObjectSecurityManager {

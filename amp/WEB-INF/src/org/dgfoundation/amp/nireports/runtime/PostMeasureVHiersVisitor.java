@@ -1,9 +1,10 @@
 package org.dgfoundation.amp.nireports.runtime;
 
-import java.util.List;
-import java.util.stream.Collectors;
 import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.schema.NiReportsSchema;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * a {@link ColumnVisitor} which performs the post-measures splitting of the report.

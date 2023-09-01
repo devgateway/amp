@@ -1,22 +1,19 @@
 package org.digijava.module.budget.helper;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.budget.dbentity.AmpDepartments;
 import org.digijava.module.budget.dbentity.AmpBudgetSector;
-import org.hibernate.Query;
+import org.digijava.module.budget.dbentity.AmpDepartments;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 public class BudgetDbUtil {
     private static Logger logger = Logger.getLogger(DbUtil.class);

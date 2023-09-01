@@ -1,12 +1,11 @@
 package org.digijava.module.esrigis.form;
 
-import java.util.ArrayList;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 
 public class StructuresImporterForm extends ActionForm{
     /**

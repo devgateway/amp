@@ -1,10 +1,10 @@
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
+
+import java.io.Serializable;
 
 public class AmpStructureCoordinate implements Serializable, Cloneable {
 

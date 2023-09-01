@@ -1,9 +1,9 @@
 package org.digijava.module.aim.form;
 
-import java.util.Collection;
-
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.helper.IndicatorsBean;
+
+import java.util.Collection;
 
 public class ViewIndicatorsForm  extends ActionForm {
 

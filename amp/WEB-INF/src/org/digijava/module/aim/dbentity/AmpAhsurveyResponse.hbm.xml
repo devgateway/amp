@@ -4,8 +4,8 @@
 	<class name="org.digijava.module.aim.dbentity.AmpAhsurveyResponse"
 		table="AMP_AHSURVEY_RESPONSE">
 		<id name="ampReponseId" column="amp_response_id" type="java.lang.Long">
-			<generator class="native">
-				<param name="sequence">AMP_AHSURVEY_RESPONSE_seq</param>
+			<generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+				<param name="sequence_name">AMP_AHSURVEY_RESPONSE_seq</param>
 			</generator>
 		</id>
 

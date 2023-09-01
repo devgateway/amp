@@ -3,8 +3,6 @@
  */
 package org.dgfoundation.amp.ar.cell;
 
-import java.util.Set;
-
 import org.dgfoundation.amp.ar.MetaInfo;
 
 /**

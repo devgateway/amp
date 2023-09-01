@@ -1,15 +1,5 @@
 package org.dgfoundation.amp.nireports.behaviours;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
 import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.newreports.ReportSettings;
 import org.dgfoundation.amp.nireports.CategAmountCell;
@@ -20,6 +10,12 @@ import org.dgfoundation.amp.nireports.output.nicells.NiFormulaicAmountCell;
 import org.dgfoundation.amp.nireports.runtime.NiCell;
 import org.dgfoundation.amp.nireports.schema.NiFormulaicMeasure;
 import org.dgfoundation.amp.nireports.schema.TimeRange;
+
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * the behaviour of an entity which has value = formula(tokens). The trail cells get their tokens' values from V-reduction. <br />

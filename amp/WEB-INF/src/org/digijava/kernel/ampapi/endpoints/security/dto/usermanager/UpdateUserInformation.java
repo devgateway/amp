@@ -21,6 +21,10 @@ public class UpdateUserInformation {
     @ApiModelProperty(required = true, example = "atltest@amp.org")
     private String email;
 
+    @JsonProperty("emailConfirmation")
+    @ApiModelProperty(required = true, example = "atltest@amp.org")
+    private String emailConfirmation;
+
     @JsonProperty("notificationEmailEnabled")
     private Boolean notificationEmailEnabled;
 
@@ -175,5 +179,13 @@ public class UpdateUserInformation {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getEmailConfirmation() {
+        return emailConfirmation;
+    }
+
+    public void setEmailConfirmation(String emailConfirmation) {
+        this.emailConfirmation = emailConfirmation;
     }
 }

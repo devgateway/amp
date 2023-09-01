@@ -186,6 +186,7 @@ public class UserManagerService {
         String firstName = updateUser.getFirstName();
         String lastName = updateUser.getLastName();
         String email = updateUser.getEmail();
+        String confirmEmail = updateUser.getEmailConfirmation();
         String address = updateUser.getAddress();
         String password = null;
         String passwordConfirmation = null;
@@ -195,7 +196,7 @@ public class UserManagerService {
         boolean isUpdateUserEmail = true;
         boolean isUpdateUser = true;
 
-            // confirm if user exists for security purpose
+        // confirm if user exists for security purpose
         if(userId != null && updateUser.getId() != null){
             if (!userId.equals(updateUser.getId())) {
                 ApiErrorResponseService.reportError(BAD_REQUEST, SecurityErrors.USER_ID_INVALID);
@@ -215,7 +216,7 @@ public class UserManagerService {
             }
         }
         // Validation
-        validateUserFields(firstName, lastName, email, email, password, passwordConfirmation,
+        validateUserFields(firstName, lastName, email, confirmEmail, password, passwordConfirmation,
                 notificationEmail, repeatNotificationEmail, notificationEmailEnabled, isUpdateUserEmail, isUpdateUser);
 
         // User preparation

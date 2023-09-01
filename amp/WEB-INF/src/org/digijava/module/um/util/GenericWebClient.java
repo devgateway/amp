@@ -65,7 +65,7 @@ public class GenericWebClient {
                 .bodyToMono(responseClass)
                 .onErrorResume(Mono::error)
                 .retryWhen(Retry.backoff(1, Duration.of(2, ChronoUnit.SECONDS))
-                        .onRetryExhaustedThrow(((retryBackoffSpec, retrySignal) -> new Throwable(retrySignal.failure()))));
+                        .onRetryExhaustedThrow(((retryBackoffSpec, retrySignal) -> new RuntimeException(retrySignal.failure()))));
 
 
     }

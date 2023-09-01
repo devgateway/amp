@@ -12,6 +12,7 @@ import org.digijava.kernel.ampapi.endpoints.security.ApiAuthentication;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
+import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.form.LoginForm;
 import org.digijava.module.um.model.TruLoginRequest;
 import org.digijava.module.um.model.TruLoginResponse;
@@ -25,9 +26,10 @@ import reactor.core.publisher.Mono;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
+import java.util.List;
 import java.util.Objects;
 
-import static org.digijava.module.um.util.DbUtil.loginToTruBudget;
+import static org.digijava.module.um.util.DbUtil.*;
 
 /**
  * @author mihai
@@ -57,16 +59,18 @@ public class AmpPostLoginAction extends Action {
         } catch(DgException ex) {
             throw new RuntimeException(ex);
         }
+        List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
+
         //login into TruBudget
         TruLoginRequest truLoginRequest = new TruLoginRequest();
-        truLoginRequest.setApiVersion("1.0");
+        truLoginRequest.setApiVersion(getSettingValue(settings, "apiVersion"));
         TruLoginRequest.Data data = new TruLoginRequest.Data();
         TruLoginRequest.User user1 = new TruLoginRequest.User();
         user1.setPassword(currentUser.getEmail());
         user1.setId(currentUser.getEmail().split("@")[0]);
         data.setUser(user1);
         truLoginRequest.setData(data);
-        Mono<TruLoginResponse> truResp = loginToTruBudget(truLoginRequest);
+        Mono<TruLoginResponse> truResp = loginToTruBudget(truLoginRequest,settings);
         try {
             TruLoginResponse truLoginResponse = truResp.block();
             // TODO: 8/29/23 -- this token to be used for TruBudget requests in Login.java and AmpPostLoginAction.java

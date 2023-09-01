@@ -279,12 +279,14 @@ public class AMPStartupListener extends HttpServlet implements
                         "    PRIMARY KEY (user_id, trubudget_intent_id)\n" +
                         ");";
                 statement.executeUpdate(relationSql);
+
                 String insertIntoGlobalSettings="INSERT INTO amp_global_settings(id,settingsname,settingsvalue,possiblevalues,description,section,value_translatable,internal) \n" +
                         "                        VALUES\n" +
                         "                         (nextval('amp_global_settings_seq'),'isEnabled','true','t_Boolean','Is Trubudget enabled for this deployment','trubudget',NULL,true),\n" +
                         "                         (nextval('amp_global_settings_seq'),'baseUrl','http://localhost:8080/api/','','Trubudget base url','trubudget',NULL,true),\n" +
                         "                         (nextval('amp_global_settings_seq'),'rootUser','root','','Trubudget username for root user','trubudget',NULL,true),\n" +
                         "                        (nextval('amp_global_settings_seq'),'rootPassword','root-secret','','Trubudget password for root user','trubudget',NULL,true),\n" +
+                        "                        (nextval('amp_global_settings_seq'),'apiVersion','1.0','','Trubudget api version','trubudget',NULL,true),\n" +
                         "                        (nextval('amp_global_settings_seq'),'organization','KfW','','Organization name to be used for this deployment','trubudget',NULL,true) ON CONFLICT (settingsname,section) DO NOTHING";
                 statement.executeUpdate(insertIntoGlobalSettings);
             } catch (Exception e) {

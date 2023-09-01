@@ -10,6 +10,7 @@ import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.kernel.util.UserUtils;
+import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.LoginForm;
 import org.digijava.module.aim.helper.Constants;
@@ -28,7 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.*;
 
-import static org.digijava.module.um.util.DbUtil.loginToTruBudget;
+import static org.digijava.module.um.util.DbUtil.*;
 
 
 /**
@@ -143,10 +144,11 @@ public class Login extends Action {
                  * registered user but has not yet been assigned a team
                  */
                 //
+                List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
 
                 //login to trubudget
                 TruLoginRequest truLoginRequest = new TruLoginRequest();
-                truLoginRequest.setApiVersion("1.0");
+                truLoginRequest.setApiVersion(getSettingValue(settings,"apiVersion"));
                 TruLoginRequest.Data data = new TruLoginRequest.Data();
                 TruLoginRequest.User user1 = new TruLoginRequest.User();
 
@@ -155,7 +157,7 @@ public class Login extends Action {
                 data.setUser(user1);
                 truLoginRequest.setData(data);
                 try {
-                    Mono<TruLoginResponse> truResp = loginToTruBudget(truLoginRequest);
+                    Mono<TruLoginResponse> truResp = loginToTruBudget(truLoginRequest,settings);
                     truResp.subscribe(truLoginResponse -> logger.info("Trubudget login response: "+truLoginResponse));
                 }catch (Exception e)
                 {

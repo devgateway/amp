@@ -27,6 +27,7 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.*;
+import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -68,9 +69,9 @@ public class DbUtil {
             String queryString = "from " + User.class.getName() + " rs where rs.email = :email";
             Query query = sess.createQuery(queryString);
             query.setParameter("email", email, StringType.INSTANCE);
-            
+
             Iterator iter = query.iterate();
-            
+
             while(iter.hasNext()) {
                 User iterUser = (User) iter.next();
                 userId = iterUser.getId().longValue();
@@ -105,7 +106,7 @@ public class DbUtil {
             String queryString = "from " + User.class.getName() + " rs where rs.email = :email";
             Query query = sess.createQuery(queryString);
             query.setParameter("email", user,StringType.INSTANCE);
-            
+
             Iterator iter = query.iterate();
 //////////////////////
             while(iter.hasNext()) {
@@ -170,7 +171,7 @@ public class DbUtil {
      */
     public static boolean ResetPassword(String email, String code, String newPassword) throws
         UMException {
-        
+
         Transaction tx = null;
         Session session = null;
         try {
@@ -180,7 +181,7 @@ public class DbUtil {
             String queryString = "from " + User.class.getName() + " rs where rs.email = :email";
             Query query = session.createQuery(queryString);
             query.setParameter("email", email,StringType.INSTANCE);
-            
+
             Iterator iter = query.iterate();
             User iterUser = null;
             while(iter.hasNext()) {
@@ -242,11 +243,11 @@ public class DbUtil {
         Session session = null;
         try {
             session = org.digijava.kernel.persistence.PersistenceManager.getSession();
-            
+
             String queryString = "from " + User.class.getName() + " rs where trim(lower(rs.email)) = :email";
             Query query = session.createQuery(queryString);
             query.setParameter("email", user,StringType.INSTANCE);
-            
+
             Iterator iter = query.iterate();
             User iterUser = null;
             while(iter.hasNext()) {
@@ -347,7 +348,7 @@ public class DbUtil {
 
             throw new UMException(
                 "Unable to update user information into database", ex);
-        } 
+        }
         try {
             UserUtils.saveUserPreferences(user.getUserPreference());
             UserUtils.saveUserLangPreferences(user.getUserLangPreferences());
@@ -369,6 +370,7 @@ public class DbUtil {
         Session session = null;
         try {
             session = PersistenceManager.getRequestDBSession();
+            tx = session.getTransaction();
             ArrayList removeArray = new ArrayList();
 
             if(user.getInterests() != null) {
@@ -424,10 +426,14 @@ public class DbUtil {
             }catch (Exception e)
             {
                 logger.info("Error: "+e.getMessage(), e);
+                tx.rollback();
+
             }
 
 
-            
+
+
+
             if(user.getUserPreference()!=null){
                 UserUtils.saveUserPreferences(user.getUserPreference());
             }
@@ -441,15 +447,30 @@ public class DbUtil {
                 "Unable to update user information into database", ex);
         }
     }
-    public static Mono<TruLoginResponse> loginToTruBudget(TruLoginRequest truLoginRequest) throws URISyntaxException {
-        return GenericWebClient.postForSingleObjResponse("http://localhost:8080/api/user.authenticate",truLoginRequest, TruLoginRequest.class,TruLoginResponse.class);
+    public static Mono<TruLoginResponse> loginToTruBudget(TruLoginRequest truLoginRequest, List<AmpGlobalSettings> settings) throws URISyntaxException {
+        return GenericWebClient.postForSingleObjResponse(getSettingValue(settings,"baseUrl")+"user.authenticate",truLoginRequest, TruLoginRequest.class,TruLoginResponse.class);
     }
-    
+
+    public static List<AmpGlobalSettings> getGlobalSettingsBySection(String sectionName)
+    {
+        Session session = PersistenceManager.getRequestDBSession();
+        Query<AmpGlobalSettings> query = session.createQuery("FROM "+AmpGlobalSettings.class.getName()+" gs WHERE gs.section= :sectionName", AmpGlobalSettings.class);
+        query.setCacheable(true);
+        query.setParameter("sectionName", sectionName);
+
+        return query.list();
+    }
+    public static String getSettingValue(List<AmpGlobalSettings> globalSettings, String settingName)
+    {
+    return globalSettings.stream().filter(x->x.getGlobalSettingsName().equals(settingName)).findFirst().orElseThrow(()->new RuntimeException("Unable to find setting for name: "+settingName)).getGlobalSettingsValue();
+    }
+
     public static void registerUser(User user) throws UMException {
         Transaction tx = null;
         Session session = null;
         try {
-            session = PersistenceManager.getSession();
+            session = PersistenceManager.getRequestDBSession();
+            tx = session.getTransaction();
 //beginTransaction();
 
             // set encrypted password
@@ -482,6 +503,7 @@ public class DbUtil {
             }catch (Exception e)
         {
             logger.info("Error: "+e.getMessage(), e);
+            tx.rollback();
         }
 
 
@@ -536,18 +558,18 @@ public class DbUtil {
     }
 
     public static void registerUserOnTrubudget(TruUserData userData, User user) throws URISyntaxException {
-
+        List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
         logger.info("Registering user on Trubudget");
         TruLoginRequest truLoginRequest = new TruLoginRequest();
-        truLoginRequest.setApiVersion("1.0");
+        truLoginRequest.setApiVersion(getSettingValue(settings, "apiVersion"));
         TruLoginRequest.Data data = new TruLoginRequest.Data();
         TruLoginRequest.User user1 = new TruLoginRequest.User();
 
-        user1.setPassword("root-secret");
-        user1.setId("root");
+        user1.setPassword(getSettingValue(settings,"rootPassword"));
+        user1.setId(getSettingValue(settings,"rootUser"));
         data.setUser(user1);
         truLoginRequest.setData(data);
-        Mono<TruLoginResponse> truResp = loginToTruBudget(truLoginRequest);
+        Mono<TruLoginResponse> truResp = loginToTruBudget(truLoginRequest,settings);
         truResp.subscribe(truLoginResponse -> {
 
 
@@ -558,7 +580,7 @@ public class DbUtil {
         }
         else {
             try {
-                res = GenericWebClient.postForSingleObjResponse("http://localhost:8080/api/global.createUser", userData, TruUserData.class, TruUserData.class, truLoginResponse.getData().getUser().getToken()).block();
+                res = GenericWebClient.postForSingleObjResponse(getSettingValue(settings,"baseUrl")+"api/global.createUser", userData, TruUserData.class, TruUserData.class, truLoginResponse.getData().getUser().getToken()).block();
 
             }catch (Exception e)
             {
@@ -576,14 +598,16 @@ public class DbUtil {
                              data1.setIdentity(finalRes !=null? finalRes.getData().getUser().getId():user.getEmail().split("@")[0]);
                              data1.setIntent(new ArrayList<>(user.getTruBudgetIntents()).get(index).getTruBudgetIntentName());
                              permData.setData(data1);
-                             permData.setApiVersion("1.0");
+                             permData.setApiVersion(getSettingValue(settings,"apiVersion"));
                              try {
-                                 return GenericWebClient.postForSingleObjResponse("http://localhost:8080/api/global.grantPermission", permData, TruGrantPermissionRequest.class, String.class, truLoginResponse.getData().getUser().getToken()).subscribeOn(Schedulers.parallel());
+                                 return GenericWebClient.postForSingleObjResponse(getSettingValue(settings,"baseUrl")+"api/global.grantPermission", permData, TruGrantPermissionRequest.class, String.class, truLoginResponse.getData().getUser().getToken()).subscribeOn(Schedulers.parallel());
                              } catch (URISyntaxException e) {
                                  throw new RuntimeException(e);
                              }
                          }).subscribe(response -> logger.info("Permission response: " + response));
              }
+        },throwable -> {
+            throw new RuntimeException(throwable.getMessage());
         });
 
 
@@ -621,28 +645,25 @@ public class DbUtil {
 
 
     }
-    
+
     public static boolean registerUser(String id) throws UMException {
-        Session session = null;
+        Session session;
         boolean verified = false;
-        Transaction tx = null;
         BigInteger iduser;
         try {
             session = PersistenceManager.getSession();
-            //"from " + User.class.getName() + " rs where sha1(concat(cast(rs.email as byte),rs.id))=:hash and rs.emailVerified=false"; 
+            //"from " + User.class.getName() + " rs where sha1(concat(cast(rs.email as byte),rs.id))=:hash and rs.emailVerified=false";
             String queryString = "select ID from DG_USER where sha1((cast(EMAIL as bytea) || cast(cast(ID as text)as bytea)))=:hash and EMAIL_VERIFIED=false";
             Query query = session.createNativeQuery(queryString);
             query.setParameter("hash", id,StringType.INSTANCE);
             iduser = (BigInteger) query.uniqueResult();
             if (iduser!= null){
-                User user = (User) session.load(User.class, iduser.longValue());
+                User user = session.load(User.class, iduser.longValue());
                 user.setBanned(false);
                 user.setEmailVerified(true);
                 user.updateLastModified();
                 session.update(user);
                 verified = true;
-            }else{
-                verified = false;
             }
         } catch (Exception ex0) {
             logger.debug("isRegisteredEmail() failed", ex0);
@@ -662,7 +683,7 @@ public class DbUtil {
             String queryString = "from " + User.class.getName() + " rs where trim(lower(rs.email)) = :email";
             Query query = sess.createQuery(queryString);
             query.setParameter("email", email.toLowerCase().trim(),StringType.INSTANCE);
-            
+
             Iterator iter = query.list().iterator();
             if(iter.hasNext()) {
                 iscorrect = true;
@@ -673,7 +694,7 @@ public class DbUtil {
         }
         return iscorrect;
     }
-    
+
     public static boolean EmailExist(String email, Long id) throws
     UMException {
     Session sess = null;
@@ -684,7 +705,7 @@ public class DbUtil {
         String queryString = "from " + User.class.getName() + " rs where trim(lower(rs.email)) = :email";
         Query query = sess.createQuery(queryString);
         query.setParameter("email", email.toLowerCase().trim(),StringType.INSTANCE);
-        
+
         Iterator iter = query.list().iterator();
         if(!iter.hasNext()) {
             iscorrect = true;
@@ -698,7 +719,7 @@ public class DbUtil {
                 break;
             }
         }
-        
+
     } catch(Exception ex0) {
         logger.debug("isRegisteredEmail() failed", ex0);
         throw new UMException(ex0.getMessage(), ex0);
@@ -706,7 +727,7 @@ public class DbUtil {
 
     return iscorrect;
 }
-    
+
     public static void saveResetPassword(long userId, String code) throws
         UMException {
         Session session = null;
@@ -941,7 +962,7 @@ public class DbUtil {
                                  " g where g.site.id = :siteId";
             Query query = session.createQuery(queryString);
             query.setLong("siteId", siteId);
-            
+
             groups = query.list();
         } catch(Exception ex) {
             logger.debug("Unable to get Group list from database ", ex);

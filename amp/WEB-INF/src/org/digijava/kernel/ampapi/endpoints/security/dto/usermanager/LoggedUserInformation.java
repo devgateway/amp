@@ -13,18 +13,18 @@ import org.digijava.kernel.ampapi.endpoints.security.SecurityConstants;
 public class LoggedUserInformation {
     @JsonProperty(EPConstants.ID)
     private Long id;
-    @JsonProperty(SecurityConstants.FIRST_NAME)
+    @JsonProperty("firstName")
     @ApiModelProperty(example = "ATL")
     private String firstName;
 
-    @JsonProperty(SecurityConstants.LAST_NAME)
+    @JsonProperty("lastName")
     @ApiModelProperty(example = "ATL")
     private String lastName;
 
     @JsonProperty(SecurityConstants.EMAIL)
     @ApiModelProperty(example = "atltest@amp.org")
     private String email;
-    @JsonProperty(SecurityConstants.IS_BANNED)
+    @JsonProperty("isBanned")
     private boolean isBanned;
 
     @JsonProperty("notificationEmailEnabled")

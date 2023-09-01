@@ -9,11 +9,11 @@ public class UpdateUserInformation {
     @JsonProperty(EPConstants.ID)
     @ApiModelProperty(required = true)
     private Long id;
-    @JsonProperty(SecurityConstants.FIRST_NAME)
+    @JsonProperty("firstName")
     @ApiModelProperty(required = true, example = "ATL")
     private String firstName;
 
-    @JsonProperty(SecurityConstants.LAST_NAME)
+    @JsonProperty("lastName")
     @ApiModelProperty(example = "ATL")
     private String lastName;
 

@@ -177,10 +177,7 @@ public class XmlPatcherService extends AbstractServiceImpl {
                 log.setFileChecksum(XmlPatcherUtil.getFileMD5(new File(
                         XmlPatcherUtil.getXmlPatchAbsoluteFileName(ampPatch,
                                 serviceContext))));
-            } catch (NoSuchAlgorithmException e) {
-                logger.error(e.getMessage(), e);
-                throw new RuntimeException(e);
-            } catch (IOException e) {
+            } catch (NoSuchAlgorithmException | IOException e) {
                 logger.error(e.getMessage(), e);
                 throw new RuntimeException(e);
             }

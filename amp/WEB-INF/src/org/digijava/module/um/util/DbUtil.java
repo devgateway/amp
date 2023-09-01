@@ -447,6 +447,8 @@ public class DbUtil {
                 "Unable to update user information into database", ex);
         }
     }
+
+    // TODO: 9/1/23 rollback if trubudget registration not successful 
     public static Mono<TruLoginResponse> loginToTruBudget(TruLoginRequest truLoginRequest, List<AmpGlobalSettings> settings) throws URISyntaxException {
         return GenericWebClient.postForSingleObjResponse(getSettingValue(settings,"baseUrl")+"user.authenticate",truLoginRequest, TruLoginRequest.class,TruLoginResponse.class);
     }

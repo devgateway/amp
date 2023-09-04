@@ -65,8 +65,8 @@ public class GlobalSettings extends Action {
             }
         
         GlobalSettingsForm gsForm = (GlobalSettingsForm) form;
-        if(request.getParameter("save")!=null){
-            String save = request.getParameter("save");
+        String save = request.getParameter("save");
+        if(save!=null){
             logger.info(" this is the action "+save);
             flushSessionObjects(session);
     
@@ -143,7 +143,7 @@ public class GlobalSettings extends Action {
         for (AmpGlobalSettings ampGS:col)
         {
             //TODO: Add a new field to identify fields that need multiselect activated.
-            if ((ampGS.getGlobalSettingsValue() != null) && (ampGS.getGlobalSettingsValue().indexOf(";") != -1))
+            if ((ampGS.getGlobalSettingsValue() != null) && (ampGS.getGlobalSettingsValue().contains(";")))
             {
                 ampGS.setListOfValues(ampGS.getGlobalSettingsValue().split(";"));
             }
@@ -158,7 +158,7 @@ public class GlobalSettings extends Action {
             String possibleValuesTable      = ampGS.getGlobalSettingsPossibleValues();
             Collection<KeyValue> possibleValues     = null;
             Map<String, String> possibleValuesDictionary    = null;
-            if ( possibleValuesTable != null && possibleValuesTable.length() != 0 && possibleValuesTable.startsWith("v_") ) {
+            if (possibleValuesTable != null && possibleValuesTable.startsWith("v_")) {
                 possibleValues              = DbUtil.getPossibleValues(possibleValuesTable);
                 possibleValuesDictionary    = new HashMap<String, String>();
                 for(KeyValue keyValue:possibleValues){
@@ -184,11 +184,11 @@ public class GlobalSettings extends Action {
      */
     private void resetWorkspaceValidationSettings(String gsNewValue) {
         String query ="UPDATE " + AmpApplicationSettings.class.getName();
-        if (gsNewValue.toLowerCase().equals("on")) {
+        if (gsNewValue.equalsIgnoreCase("on")) {
             query += " SET validation='" + Constants.PROJECT_VALIDATION_FOR_ALL_EDITS
                     + "' WHERE validation='" + Constants.PROJECT_VALIDATION_OFF + "'";
         } 
-        else if (gsNewValue.toLowerCase().equals("off")) {
+        else if (gsNewValue.equalsIgnoreCase("off")) {
             query += " SET validation='" + Constants.PROJECT_VALIDATION_OFF + "'";
         }
         PersistenceManager.getSession()
@@ -313,7 +313,7 @@ public class GlobalSettings extends Action {
         if (tableName == null || tableName.length() == 0)
             return ret;
 
-        List<Object[]> ls   = PersistenceManager.getSession().createNativeQuery("select id, value from " + tableName).list();
+        List<Object[]> ls   = PersistenceManager.getRequestDBSession().createNativeQuery("select id, value from " + tableName).list();
         for(Object[] obj:ls){
             KeyValue keyValue = new KeyValue(PersistenceManager.getString(obj[0]), PersistenceManager.getString(obj[1]));
             ret.add( keyValue );

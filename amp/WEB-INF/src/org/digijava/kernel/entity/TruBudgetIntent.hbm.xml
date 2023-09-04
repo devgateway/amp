@@ -3,17 +3,17 @@
         "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-    <class name="org.digijava.kernel.entity.TruBudgetIntent" table="trubudget_intent">
+    <class name="org.digijava.kernel.entity.TruBudgetIntent" table="amp_trubudget_intent">
         <id name="id" column="trubudget_intent_id" type="java.lang.Long" unsaved-value="null">
             <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
-                <param name="sequence_name">trubudget_intent_seq</param>
+                <param name="sequence_name">amp_trubudget_intent_seq</param>
             </generator>
         </id>
         <property name="truBudgetIntentName" column="trubudget_intent_name" type="java.lang.String" unique="true"/>
         <property name="truBudgetIntentDisplayName" column="trubudget_intent_display_name" type="java.lang.String"/>
 
 <!--        <many-to-one name="intentGroup" column="intent_group" class="org.digijava.kernel.user.TruBudgetIntentGroup" />-->
-        <set name="users" table="user_trubudget_intent" inverse="true">
+        <set name="users" table="amp_user_trubudget_intent" inverse="true">
             <key column="trubudget_intent_id"/>
             <many-to-many column="user_id" class="org.digijava.kernel.user.User"/>
         </set>

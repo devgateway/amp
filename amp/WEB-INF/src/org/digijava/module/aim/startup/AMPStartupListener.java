@@ -228,43 +228,43 @@ public class AMPStartupListener extends HttpServlet implements
         // Using Hibernate's native SQL execution
         session.doWork(connection -> {
             try (Statement statement = connection.createStatement()) {
-                String intentSeq="CREATE SEQUENCE IF NOT EXISTS trubudget_intent_seq;";
+                String intentSeq="CREATE SEQUENCE IF NOT EXISTS amp_trubudget_intent_seq;";
 //                String groupSeq="CREATE SEQUENCE IF NOT EXISTS trubudget_intent_group_seq;";
-                statement.executeUpdate(intentSeq);
+//                statement.executeUpdate(intentSeq);
 //                statement.executeUpdate(groupSeq);
 //                String createIntentGroupSql ="CREATE TABLE IF NOT EXISTS trubudget_intent_group ("
 //                        +"trubudget_intent_group_id BIGINT DEFAULT nextval('trubudget_intent_group_seq') PRIMARY KEY,"
 //                        +"trubudget_intent_group_name VARCHAR(255)"
 //                        +");";
 //                statement.executeUpdate(createIntentGroupSql);
-                String createIntentSql = "CREATE TABLE IF NOT EXISTS trubudget_intent ("
+                String createIntentSql = "CREATE TABLE IF NOT EXISTS amp_trubudget_intent ("
                         + "trubudget_intent_id BIGINT DEFAULT nextval('trubudget_intent_seq') PRIMARY KEY,"
                         + "trubudget_intent_name VARCHAR(255) UNIQUE,"
                         + "trubudget_intent_display_name VARCHAR(255)"
                         + ")";
-                statement.executeUpdate(createIntentSql);
-                String insertStatement="INSERT INTO trubudget_intent (trubudget_intent_name, trubudget_intent_display_name)\n" +
+//                statement.executeUpdate(createIntentSql);
+                String insertStatement="INSERT INTO amp_trubudget_intent (trubudget_intent_id,trubudget_intent_name, trubudget_intent_display_name)\n" +
                         "VALUES\n" +
-                        "    ('global.listPermissions', 'List Permissions'),\n" +
-                        "    ('global.grantPermission', 'Grant Permission'),\n" +
-                        "    ('global.grantAllPermissions', 'Grant All Permissions'),\n" +
-                        "    ('global.revokePermission', 'Revoke Permission'),\n" +
-                        "    ('global.createProject', 'Create Project'),\n" +
-                        "    ('global.createUser', 'Create User'),\n" +
-                        "    ('global.enableUser', 'Enable User'),\n" +
-                        "    ('global.disableUser', 'Disable User'),\n" +
-                        "    ('global.listAssignments', 'List Assignments'),\n" +
-                        "    ('global.createGroup', 'Create Group'),\n" +
-                        "    ('network.registerNode', 'Register Node'),\n" +
-                        "    ('network.list', 'List Nodes'),\n" +
-                        "    ('network.listActive', 'List Active Nodes'),\n" +
-                        "    ('network.voteForPermission', 'Vote for Permission'),\n" +
-                        "    ('network.approveNewOrganization', 'Approve New Organization'),\n" +
-                        "    ('network.approveNewNodeForExistingOrganization', 'Approve New Node for Existing Organization'),\n" +
-                        "    ('network.declineNode', 'Decline Node'),\n" +
-                        "    ('provisioning.start', 'Start Provisioning'),\n" +
-                        "    ('provisioning.end', 'End Provisioning'),\n" +
-                        "    ('provisioning.get', 'Get Provisioning Status') ON CONFLICT (trubudget_intent_name) DO NOTHING;\n";
+                        "    (nextval('amp_trubudget_intent_seq'),'global.listPermissions', 'List Permissions'),\n" +
+                        "    (nextval('amp_trubudget_intent_seq'),'global.grantPermission', 'Grant Permission'),\n" +
+                        "    (nextval('amp_trubudget_intent_seq'),'global.grantAllPermissions', 'Grant All Permissions'),\n" +
+                        "    (nextval('amp_trubudget_intent_seq'),'global.revokePermission', 'Revoke Permission'),\n" +
+                        "    (nextval('amp_trubudget_intent_seq'),'global.createProject', 'Create Project'),\n" +
+                        "    (nextval('amp_trubudget_intent_seq'),'global.createUser', 'Create User'),\n" +
+                        "    (nextval('amp_trubudget_intent_seq'),'global.enableUser', 'Enable User'),\n" +
+                        "    (nextval('amp_trubudget_intent_seq'),'global.disableUser', 'Disable User'),\n" +
+                        "    (nextval('amp_trubudget_intent_seq'),'global.listAssignments', 'List Assignments'),\n" +
+                        "    (nextval('amp_trubudget_intent_seq'),'global.createGroup', 'Create Group'),\n" +
+                        "    (nextval('amp_trubudget_intent_seq'),'network.registerNode', 'Register Node'),\n" +
+                        "    (nextval('amp_trubudget_intent_seq'),'network.list', 'List Nodes'),\n" +
+                        "    (nextval('amp_trubudget_intent_seq'),'network.listActive', 'List Active Nodes'),\n" +
+                        "    (nextval('amp_trubudget_intent_seq'),'network.voteForPermission', 'Vote for Permission'),\n" +
+                        "    (nextval('amp_trubudget_intent_seq'),'network.approveNewOrganization', 'Approve New Organization'),\n" +
+                        "    (nextval('amp_trubudget_intent_seq'),'network.approveNewNodeForExistingOrganization', 'Approve New Node for Existing Organization'),\n" +
+                        "    (nextval('amp_trubudget_intent_seq'),'network.declineNode', 'Decline Node'),\n" +
+                        "    (nextval('amp_trubudget_intent_seq'),'provisioning.start', 'Start Provisioning'),\n" +
+                        "    (nextval('amp_trubudget_intent_seq'),'provisioning.end', 'End Provisioning'),\n" +
+                        "    (nextval('amp_trubudget_intent_seq'),'provisioning.get', 'Get Provisioning Status') ON CONFLICT (trubudget_intent_name) DO NOTHING;\n";
                 statement.executeUpdate(insertStatement);
 
 //                String addColumnSql = "ALTER TABLE trubudget_intent ADD COLUMN IF NOT EXISTS intent_group INTEGER";
@@ -273,7 +273,7 @@ public class AMPStartupListener extends HttpServlet implements
 //                String addForeignKeySql = "ALTER TABLE trubudget_intent ADD CONSTRAINT fk_intent_group "
 //                        + "FOREIGN KEY (intent_group) REFERENCES trubudget_intent_group (trubudget_intent_group_id)";
 //                statement.executeUpdate(addForeignKeySql);
-                String relationSql="CREATE TABLE IF NOT EXISTS user_trubudget_intent (\n" +
+                String relationSql="CREATE TABLE IF NOT EXISTS amp_user_trubudget_intent (\n" +
                         "    user_id BIGINT REFERENCES DG_USER(id),\n" +
                         "    trubudget_intent_id BIGINT REFERENCES trubudget_intent(trubudget_intent_id),\n" +
                         "    PRIMARY KEY (user_id, trubudget_intent_id)\n" +

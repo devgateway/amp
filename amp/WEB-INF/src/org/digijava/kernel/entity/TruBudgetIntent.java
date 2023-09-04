@@ -8,14 +8,14 @@ import javax.persistence.Entity;
 import java.io.Serializable;
 import java.util.Set;
 
-@Table(name = "trubudget_intent")
+@Table(name = "amp_trubudget_intent")
 @Cacheable
 @DynamicUpdate
 @Entity
 public class TruBudgetIntent implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "trubudget_intent_seq")
-    @SequenceGenerator(name = "trubudget_intent_seq", sequenceName = "trubudget_intent_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_trubudget_intent_seq")
+    @SequenceGenerator(name = "amp_trubudget_intent_seq", sequenceName = "amp_trubudget_intent_seq", allocationSize = 1)
     @Column(name = "trubudget_intent_id")
     private Long id;
     @Column(name = "trubudget_intent_name")

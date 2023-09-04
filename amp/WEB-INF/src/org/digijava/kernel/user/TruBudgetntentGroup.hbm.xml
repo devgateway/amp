@@ -12,7 +12,7 @@
         </id>
         <property name="name" column="trubudget_intent_group_name" type="java.lang.String"/>
 
-        <set name="intents" table="trubudget_intent" inverse="true" fetch="select">
+        <set name="intents" table="amp_trubudget_intent" inverse="true" fetch="select">
             <key column="intent_group"/>
             <one-to-many class="org.digijava.kernel.entity.TruBudgetIntent"/>
         </set>

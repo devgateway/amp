@@ -65,6 +65,7 @@
 	sections.add("funding");
 	sections.add("date");
 	sections.add("user");
+	sections.add("trubudget");
 %>
 
 
@@ -279,7 +280,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 <jsp:include page="teamPagesHeader.jsp"  />
 <!-- End of Logo -->
 <html:hidden property="event" value="view"/>
-<h1 style="text-align:left;" class="admintitle">General Settings</h1>
+<h1 style="text-align:left;" class="admintitle">Global Settings</h1>
 <digi:errors/>
 <logic:notEmpty name="aimGlobalSettingsForm" property="gsfCol">
 	<logic:iterate name="aimGlobalSettingsForm" property="gsfCol" id="globalSett" type="org.digijava.module.aim.dbentity.AmpGlobalSettings ">

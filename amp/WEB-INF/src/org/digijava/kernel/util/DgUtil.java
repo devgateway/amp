@@ -74,13 +74,6 @@ public class DgUtil {
 
     private static final int FASTSPLIT_MAXSIZE = 2048;
 
-    private static final Comparator userComparator = new Comparator() {
-        public int compare(Object o1, Object o2) {
-            return ( (User) o1).getId().compareTo( ( (User) o2).getId());
-        }
-
-    };
-
     /**
      * Returns current site domain, using which the request was performed, or
      * null, if request does not contain site information

@@ -278,11 +278,11 @@ public class TranslatorManager extends Action {
             for (Message message : (Iterable<Message>) qry.list()) {
                 // MessageGroup class key is equal to the message key, from
                 // which it was created
-                MessageGroup msgGroup = map.get(((Message) message).getKey());
+                MessageGroup msgGroup = map.get(message.getKey());
                 if (msgGroup == null) {
-                    msgGroup = new MessageGroup((Message) message);
+                    msgGroup = new MessageGroup(message);
                 } else {
-                    msgGroup.addMessage((Message) message);
+                    msgGroup.addMessage(message);
                 }
                 map.put(msgGroup.getKey(), msgGroup);
             }

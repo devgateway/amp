@@ -39,7 +39,6 @@ public class GeoCoderClient {
 
     private static final String PATH_ACTIVITY_PROCESS = "activity/process";
     private static final String PATH_QUEUE = "queue";
-    private static final String PATH_AMP_LOCATIONS = "amp/locations";
 
     public GeoCoderClient() {
         client = ClientBuilder.newClient();

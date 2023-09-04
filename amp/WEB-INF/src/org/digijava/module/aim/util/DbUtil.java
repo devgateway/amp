@@ -8,6 +8,7 @@ import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.entity.Message;
+import org.digijava.kernel.entity.geocoding.GeoCodingProcess;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
@@ -30,6 +31,10 @@ import org.hibernate.jdbc.Work;
 import org.hibernate.query.Query;
 import org.hibernate.type.*;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.sql.Connection;
@@ -3028,19 +3033,34 @@ public class DbUtil {
      * get colors ordered by threshold
      */
     public static List<AmpColorThreshold> getColorThresholds() {
-        return PersistenceManager.getSession().createCriteria(AmpColorThreshold.class)
-                .addOrder(org.hibernate.criterion.Order.asc("thresholdStart")).list();
+        Session session = PersistenceManager.getRequestDBSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<AmpColorThreshold> criteriaQuery = builder.createQuery(AmpColorThreshold.class);
+        Root<AmpColorThreshold> root = criteriaQuery.from(AmpColorThreshold.class);
+        criteriaQuery.select(root).orderBy(builder.asc(root.get("thresholdStart")));
+        return session.createQuery(criteriaQuery).list();
+//        return PersistenceManager.getSession().createCriteria(AmpColorThreshold.class)
+//                .addOrder(org.hibernate.criterion.Order.asc("thresholdStart")).list();
     }
 
     /*
      * Count agreements with the specified code.
      */
     public static Integer countAgreementsByCode(String agreementCode) {
-        return ((Long) PersistenceManager.getSession()
-                .createCriteria(AmpAgreement.class)
-                .setProjection(Projections.count("id"))
-                .add(Restrictions.sqlRestriction("trim({alias}.code) = ?", agreementCode, StringType.INSTANCE))
-                .uniqueResult()).intValue();
+        Session session =PersistenceManager.getRequestDBSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Long> criteriaQuery = builder.createQuery(Long.class);
+        Root<AmpAgreement> root = criteriaQuery.from(AmpAgreement.class);
+        Predicate restriction = builder.equal(
+                builder.trim(root.get("code")), agreementCode.trim()
+        );
+        criteriaQuery.select(builder.count(root.get("id"))).where(restriction);
+        return session.createQuery(criteriaQuery).uniqueResult().intValue();
+//        return ((Long) PersistenceManager.getSession()
+//                .createCriteria(AmpAgreement.class)
+//                .setProjection(Projections.count("id"))
+//                .add(Restrictions.sqlRestriction("trim({alias}.code) = ?", agreementCode, StringType.INSTANCE))
+//                .uniqueResult()).intValue();
     }
     
     public static boolean hasDonorRole(Long id){

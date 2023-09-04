@@ -159,8 +159,7 @@ public class PersistenceManager {
      * @return
      */
     public static Session openNewSession() {
-        org.hibernate.Session openSession = sf.openSession();
-        return openSession;
+        return sf.openSession();
     }
 
     /**
@@ -209,17 +208,16 @@ public class PersistenceManager {
         // print open sessions
         boolean found=false;
         synchronized (sessionStackTraceMap) {
-            Iterator<Session> iterator = PersistenceManager.sessionStackTraceMap.keySet().iterator();
-            while (iterator.hasNext()) {
-                Session session = (Session) iterator.next();
-                if(session.isOpen()) {
-                    found=true;
-                    Object o[] = sessionStackTraceMap.get(session);
+            for (Session session : PersistenceManager.sessionStackTraceMap.keySet()) {
+                if (session.isOpen()) {
+                    found = true;
+                    Object[] o = sessionStackTraceMap.get(session);
                     StackTraceElement[] stackTraceElements = (StackTraceElement[]) o[1];
-                    logger.info("Session opened "+(System.currentTimeMillis()-(Long)o[0])+" miliseconds ago is still open. Will force closure, recorded stack trace: ");
-                    for (int i = 3; i < stackTraceElements.length && i < 8; i++) logger.info(stackTraceElements[i].toString());
+                    logger.info("Session opened " + (System.currentTimeMillis() - (Long) o[0]) + " miliseconds ago is still open. Will force closure, recorded stack trace: ");
+                    for (int i = 3; i < stackTraceElements.length && i < 8; i++)
+                        logger.info(stackTraceElements[i].toString());
                     logger.info("Forcing Hibernate session close...");
-                    try  {
+                    try {
                         session.clear();
                         session.close();
                         logger.info("Hibernate Session Close succeeded");
@@ -261,7 +259,7 @@ public class PersistenceManager {
                 if (!target.equalsIgnoreCase("kernel")) {
                     Object modConfig = DigiConfigManager.getModulesConfig().get(target);
                     if (modConfig != null) {
-                        modulesConfig = new HashMap();
+                        modulesConfig = new HashMap<>();
                         modulesConfig.put(target, modConfig);
                     }
                 }
@@ -400,7 +398,7 @@ public class PersistenceManager {
             logger.debug("Using region " + region.getType());
         }
         if (forcePrecache || (!forcePrecache && region.getSize() <= 0)) {
-            Map precache = new HashMap();
+            Map precache = new HashMap<>();
             try {
                 Class clazz = Class.forName(className);
                 ClassMetadata meta = sf.getClassMetadata(clazz);
@@ -410,17 +408,15 @@ public class PersistenceManager {
                     return;
                 }
                 List rows = session.createQuery(precacheHql).list();
-                Iterator rowIter = rows.iterator();
-                while (rowIter.hasNext()) {
-                    Object item = rowIter.next();
-                    Serializable id = meta.getIdentifier(item,(SessionImplementor)session);
+                for (Object item : rows) {
+                    Serializable id = meta.getIdentifier(item, (SessionImplementor) session);
                     if (id == null) {
-                        String errMsg = "One of the object identities is null for class: " +className;
+                        String errMsg = "One of the object identities is null for class: " + className;
                         logger.error(errMsg);
                         throw new DgException(errMsg);
                     }
                     //Separate case for translations: we need to process translation keys.
-                    if (Message.class.getName().equals(className) && !config.isCaseSensitiveTranslatioKeys()){
+                    if (Message.class.getName().equals(className) && !config.isCaseSensitiveTranslatioKeys()) {
                         Message msgId = (Message) id;
                         Message msg = (Message) item;
                         TranslatorWorker.getInstance().processKeyCase(msg);
@@ -674,7 +670,7 @@ public class PersistenceManager {
      * @param obj
      * @return
      */
-    public final static Integer getInteger(Object obj)
+    public static Integer getInteger(Object obj)
     {
         if (obj == null)
             return null;
@@ -692,7 +688,7 @@ public class PersistenceManager {
      * @param obj
      * @return
      */
-    public final static String getString(Object obj)
+    public static String getString(Object obj)
     {
         if (obj == null)
             return null;
@@ -706,7 +702,7 @@ public class PersistenceManager {
      * @param obj
      * @return
      */
-    public final static Double getDouble(Object obj)
+    public static Double getDouble(Object obj)
     {
         if (obj == null)
             return null;
@@ -719,7 +715,7 @@ public class PersistenceManager {
         throw new RuntimeException("cannot convert object of class " + obj.getClass().getName() + " to double");
     }
 
-    public final static Boolean getBoolean(Object obj) {
+    public static Boolean getBoolean(Object obj) {
         if (obj == null)
             return null;
         if (obj instanceof Boolean)
@@ -820,12 +816,10 @@ public class PersistenceManager {
 
     private static void removeSessionFromMap(Session session) {
         synchronized (sessionStackTraceMap) {
-            if (sessionStackTraceMap.containsKey(session)) {
-                //logger.error(String.format("Thread #%d: removing Session %d", Thread.currentThread().getId(), System.identityHashCode(session)));
-                sessionStackTraceMap.remove(session);
-            } else {
-                //logger.error(String.format("Thread #%d: trying to cleanup nonexisting Session %d", Thread.currentThread().getId(), System.identityHashCode(session)));
-            }
+            //logger.error(String.format("Thread #%d: removing Session %d", Thread.currentThread().getId(), System.identityHashCode(session)));
+            //logger.error(String.format("Thread #%d: trying to cleanup nonexisting Session %d", Thread.currentThread().getId(), System.identityHashCode(session)));
+            sessionStackTraceMap.remove(session);
+
         }
     }
 

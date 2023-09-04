@@ -49,7 +49,7 @@ public class DownloadAmpOfflineReleasesJob extends NonConcurrentJob {
     private final AmpRegistryService ampRegistryService = AmpRegistryService.INSTANCE;
 
     @Override
-    public void executeNonConcurrentInternal(JobExecutionContext context) throws JobExecutionException {
+    public void executeNonConcurrentInternal(JobExecutionContext context) {
         if (FeaturesUtil.isAmpOfflineEnabled()) {
             Set<AmpOfflineRelease> newReleases = new HashSet<>();
             PersistenceManager.inTransaction(() -> {
@@ -62,7 +62,7 @@ public class DownloadAmpOfflineReleasesJob extends NonConcurrentJob {
                 }
             });
 
-            newReleases.forEach(release -> persistRelease(release));
+            newReleases.forEach(this::persistRelease);
 
             saveReleasesInDb(newReleases);
             removeIncompatibleReleases();

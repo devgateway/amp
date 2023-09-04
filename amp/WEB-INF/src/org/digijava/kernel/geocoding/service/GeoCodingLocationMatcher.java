@@ -20,7 +20,7 @@ public final class GeoCodingLocationMatcher {
     private static final long MIN_FUZZY_DISTANCE = 10;
     private static final double MAX_COORD_DISTANCE = 0.0001;
 
-    private static FuzzyScore fz = new FuzzyScore(Locale.getDefault());
+    private static final FuzzyScore fz = new FuzzyScore(Locale.getDefault());
 
     private GeoCodingLocationMatcher() {
 
@@ -65,10 +65,10 @@ public final class GeoCodingLocationMatcher {
 
     private static boolean matchByGeoCode(final AmpCategoryValueLocations ampLocation,
                                    final GeoCoderClient.GeoCodingLocation location) {
-        if (StringUtils.isBlank(ampLocation.getGeoCode()) || StringUtils.isBlank("" + location.getGeoCode())) {
+        if (StringUtils.isBlank(ampLocation.getGeoCode()) || StringUtils.isBlank(String.valueOf(location.getGeoCode()))) {
             return false;
         }
-        return StringUtils.equalsIgnoreCase(ampLocation.getGeoCode(), "" + location.getGeoCode());
+        return StringUtils.equalsIgnoreCase(ampLocation.getGeoCode(), String.valueOf(location.getGeoCode()));
     }
 
     private static boolean matchByCoordinates(final AmpCategoryValueLocations ampLocation,

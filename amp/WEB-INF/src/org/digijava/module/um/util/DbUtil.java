@@ -420,9 +420,11 @@ public class DbUtil {
                 user1.setId(user.getEmail().split("@")[0]);// TODO: 8/28/23 use username in future
                 data.setUser(user1);
                 userData.setData(data);
-                registerUserOnTrubudget(userData, user);
-                session.update(user);
-                session.flush();
+                if(registerUserOnTrubudget(userData, user)) {
+                    user.setTruBudgetEnabled(true);
+                    session.update(user);
+                    session.flush();
+                }
             }catch (Exception e)
             {
                 logger.info("Error: "+e.getMessage(), e);
@@ -497,10 +499,11 @@ public class DbUtil {
                 user1.setId(user.getEmail().split("@")[0]);// TODO: 8/28/23 use username in future
                 data.setUser(user1);
                 userData.setData(data);
-                registerUserOnTrubudget(userData, user);
-                user.setTruBudgetEnabled(true);
-                session.update(user);
-                session.flush();
+                if(registerUserOnTrubudget(userData, user)) {
+                    user.setTruBudgetEnabled(true);
+                    session.update(user);
+                    session.flush();
+                }
 
             }catch (Exception e)
         {
@@ -559,8 +562,12 @@ public class DbUtil {
 
     }
 
-    public static void registerUserOnTrubudget(TruUserData userData, User user) throws URISyntaxException {
+    public static boolean registerUserOnTrubudget(TruUserData userData, User user) throws URISyntaxException {
         List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
+        if (!getSettingValue(settings,"isEnabled").equals("true")) {
+            logger.info("Trubudget is not enabled for this site.");
+            return false;
+        }
         logger.info("Registering user on Trubudget");
         TruLoginRequest truLoginRequest = new TruLoginRequest();
         truLoginRequest.setApiVersion(getSettingValue(settings, "apiVersion"));
@@ -611,7 +618,7 @@ public class DbUtil {
         },throwable -> {
             throw new RuntimeException(throwable.getMessage());
         });
-
+        return true;
 
     }
     public static  List<TruBudgetIntent> getTruBudgetIntents()

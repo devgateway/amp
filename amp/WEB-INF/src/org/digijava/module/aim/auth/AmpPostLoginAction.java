@@ -60,24 +60,26 @@ public class AmpPostLoginAction extends Action {
             throw new RuntimeException(ex);
         }
         List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
+        if (getSettingValue(settings,"isEnabled").equals("true")) {
 
-        //login into TruBudget
-        TruLoginRequest truLoginRequest = new TruLoginRequest();
-        truLoginRequest.setApiVersion(getSettingValue(settings, "apiVersion"));
-        TruLoginRequest.Data data = new TruLoginRequest.Data();
-        TruLoginRequest.User user1 = new TruLoginRequest.User();
-        user1.setPassword(currentUser.getEmail());
-        user1.setId(currentUser.getEmail().split("@")[0]);
-        data.setUser(user1);
-        truLoginRequest.setData(data);
-        Mono<TruLoginResponse> truResp = loginToTruBudget(truLoginRequest,settings);
-        try {
-            TruLoginResponse truLoginResponse = truResp.block();
-            // TODO: 8/29/23 -- this token to be used for TruBudget requests in Login.java and AmpPostLoginAction.java
-            logger.info("Trubudget login response: " + Objects.requireNonNull(truLoginResponse).getData());
-        }catch (Exception e)
-        {
-            logger.info("Error during login: "+e.getMessage(),e);
+
+            //login into TruBudget
+            TruLoginRequest truLoginRequest = new TruLoginRequest();
+            truLoginRequest.setApiVersion(getSettingValue(settings, "apiVersion"));
+            TruLoginRequest.Data data = new TruLoginRequest.Data();
+            TruLoginRequest.User user1 = new TruLoginRequest.User();
+            user1.setPassword(currentUser.getEmail());
+            user1.setId(currentUser.getEmail().split("@")[0]);
+            data.setUser(user1);
+            truLoginRequest.setData(data);
+            Mono<TruLoginResponse> truResp = loginToTruBudget(truLoginRequest, settings);
+            try {
+                TruLoginResponse truLoginResponse = truResp.block();
+                // TODO: 8/29/23 -- this token to be used for TruBudget requests in Login.java and AmpPostLoginAction.java
+                logger.info("Trubudget login response: " + Objects.requireNonNull(truLoginResponse).getData());
+            } catch (Exception e) {
+                logger.info("Error during login: " + e.getMessage(), e);
+            }
         }
 
 

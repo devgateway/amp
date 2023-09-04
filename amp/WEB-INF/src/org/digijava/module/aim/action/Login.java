@@ -145,23 +145,24 @@ public class Login extends Action {
                  */
                 //
                 List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
+                if (getSettingValue(settings,"isEnabled").equals("true")) {
 
-                //login to trubudget
-                TruLoginRequest truLoginRequest = new TruLoginRequest();
-                truLoginRequest.setApiVersion(getSettingValue(settings,"apiVersion"));
-                TruLoginRequest.Data data = new TruLoginRequest.Data();
-                TruLoginRequest.User user1 = new TruLoginRequest.User();
+                    //login to trubudget
+                    TruLoginRequest truLoginRequest = new TruLoginRequest();
+                    truLoginRequest.setApiVersion(getSettingValue(settings, "apiVersion"));
+                    TruLoginRequest.Data data = new TruLoginRequest.Data();
+                    TruLoginRequest.User user1 = new TruLoginRequest.User();
 
-                user1.setPassword(lForm.getUserId());
-                user1.setId(lForm.getUserId().split("@")[0]);
-                data.setUser(user1);
-                truLoginRequest.setData(data);
-                try {
-                    Mono<TruLoginResponse> truResp = loginToTruBudget(truLoginRequest,settings);
-                    truResp.subscribe(truLoginResponse -> logger.info("Trubudget login response: "+truLoginResponse));
-                }catch (Exception e)
-                {
-                    logger.info("Trubudget login: "+e.getMessage(),e);
+                    user1.setPassword(lForm.getUserId());
+                    user1.setId(lForm.getUserId().split("@")[0]);
+                    data.setUser(user1);
+                    truLoginRequest.setData(data);
+                    try {
+                        Mono<TruLoginResponse> truResp = loginToTruBudget(truLoginRequest, settings);
+                        truResp.subscribe(truLoginResponse -> logger.info("Trubudget login response: " + truLoginResponse));
+                    } catch (Exception e) {
+                        logger.info("Trubudget login: " + e.getMessage(), e);
+                    }
                 }
 
 

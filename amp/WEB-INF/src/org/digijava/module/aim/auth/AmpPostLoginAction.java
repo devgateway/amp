@@ -75,7 +75,7 @@ public class AmpPostLoginAction extends Action {
             Mono<TruLoginResponse> truResp = loginToTruBudget(truLoginRequest, settings);
             try {
                 TruLoginResponse truLoginResponse = truResp.block();
-                // TODO: 8/29/23 -- this token to be used for TruBudget requests in Login.java and AmpPostLoginAction.java
+                // TODO: 8/29/23 -- cache this token to be used for TruBudget requests in Login.java and AmpPostLoginAction.java
                 logger.info("Trubudget login response: " + Objects.requireNonNull(truLoginResponse).getData());
             } catch (Exception e) {
                 logger.info("Error during login: " + e.getMessage(), e);

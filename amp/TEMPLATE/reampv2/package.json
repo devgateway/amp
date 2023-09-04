@@ -7,7 +7,7 @@
     "packages/**/*"
   ],
   "scripts": {
-    "start": "lerna run start",
+    "start": "DISABLE_ESLINT=true lerna run start",
     "build": "lerna run build",
     "graph": "nx graph"
   },

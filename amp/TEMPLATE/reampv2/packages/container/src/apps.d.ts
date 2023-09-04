@@ -17,3 +17,9 @@ declare module  'reampv2App/Reampv2Routes' {
     const routes: RouteObject[];
     export default routes;
 }
+
+declare module  'userManager/UserManagerApp' {
+    const UserManagerApp: React.ComponentType;
+    export const mount: ({ mountPoint, initialPathName } : { mountPoint: HTMLElement | null, initialPathName?: string }) => () => void;
+    export default UserManagerApp;
+}

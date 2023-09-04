@@ -33,7 +33,7 @@ public class CleanIATIResourceJob extends ConnectionCleaningJob {
 
     private final Logger logger = LoggerFactory.getLogger(CleanIATIResourceJob.class);
 
-    private ResourceService resourceService = new ResourceService();
+    private final ResourceService resourceService = new ResourceService();
 
     @Override
     public void executeInternal(JobExecutionContext context) throws JobExecutionException {

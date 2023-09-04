@@ -52,7 +52,7 @@ public class RegisterWithAmpRegistryJob extends ConnectionCleaningJob {
 
     private final Logger logger = LoggerFactory.getLogger(RegisterWithAmpRegistryJob.class);
 
-    private AmpRegistryService ampRegistryService = AmpRegistryService.INSTANCE;
+    private final AmpRegistryService ampRegistryService = AmpRegistryService.INSTANCE;
 
     @Override
     public void executeInternal(JobExecutionContext context) throws JobExecutionException {

@@ -268,8 +268,8 @@ public class TranslatorManager extends Action {
     }
     
     private void fillMapWithTranslationsForALanguage(String language,Map<String,MessageGroup> map){     
-        Session session = null;
-        String qryStr = null;       
+        Session session;
+        String qryStr;
         Query qry;      
         try{
                 session = PersistenceManager.getRequestDBSession();

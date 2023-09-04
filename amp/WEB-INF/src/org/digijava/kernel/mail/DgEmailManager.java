@@ -58,12 +58,11 @@ public class DgEmailManager {
     private static final String DEFAULT_ENCODING_EX = "ISO-8859-1";
     private static String DEFAULT_ENCODING = null;
 
-    private static String[] SCHEMA_ARRAY = {
+    private static final String[] SCHEMA_ARRAY = {
         "http", "https", "ftp"};
-    private static String SCHEMA_DELIMITER = "://";
 
-    private static Logger logger = Logger.getLogger(DgEmailManager.class);
-    private static Logger emailLogger = Logger.getLogger("amp-email");
+    private static final Logger logger = Logger.getLogger(DgEmailManager.class);
+    private static final Logger emailLogger = Logger.getLogger("amp-email");
     private static Pattern CarReturnPattern = null;
 
     /**
@@ -84,7 +83,7 @@ public class DgEmailManager {
 
         CarReturnPattern = Pattern.compile("(\r|\n|\r\n|\n\r)");
 
-        locale2encoding = new HashMap();
+        locale2encoding = new HashMap<>();
 
         InputStream inStream = DgEmailManager.class.getClassLoader().
             getResourceAsStream("org/digijava/kernel/mail/locales.properties");
@@ -164,19 +163,19 @@ public class DgEmailManager {
 //      strHtml = strHtml.replaceAll("[\n\r]", "<br />");
 
         int startIndex = 0;
+        String SCHEMA_DELIMITER = "://";
         while ( (startIndex = strHtml.indexOf(SCHEMA_DELIMITER, startIndex)) >=
                0) {
             boolean isLink = false;
             int schemaLength = 0;
 
-            for (int i = 0; i < SCHEMA_ARRAY.length; i++) {
-                if ( (startIndex - SCHEMA_ARRAY[i].length() >= 0) &&
-                    strHtml.substring(startIndex - SCHEMA_ARRAY[i].length(),
-                                      startIndex).equals(SCHEMA_ARRAY[i])) {
+            for (String s : SCHEMA_ARRAY) {
+                if ((startIndex - s.length() >= 0) &&
+                        strHtml.startsWith(s, startIndex - s.length())) {
 
-                    startIndex -= SCHEMA_ARRAY[i].length();
-                    schemaLength = SCHEMA_ARRAY[i].length() +
-                        SCHEMA_DELIMITER.length();
+                    startIndex -= s.length();
+                    schemaLength = s.length() +
+                            SCHEMA_DELIMITER.length();
                     isLink = true;
                 }
             }
@@ -217,7 +216,7 @@ public class DgEmailManager {
 
             strHtml = strHtml.substring(0, startIndex) +
                 link +
-                strHtml.substring(startIndex + linkLength, strHtml.length());
+                strHtml.substring(startIndex + linkLength);
 
             startIndex += link.length();
         }
@@ -497,7 +496,7 @@ public class DgEmailManager {
         logger.info("Finished getting session default instance");
 
 
-        Address addresses[] = null;
+        Address[] addresses = null;
         if (forwardEmails.isEnabled() && forwardEmails.getEmails() != null) {
             addresses = new Address[forwardEmails.getEmails().size()];
             for (int i = 0; i < forwardEmails.getEmails().size(); i++) {
@@ -543,8 +542,7 @@ public class DgEmailManager {
     private static void logEmail(Address[] to, String from, String subject, String text, String charset, boolean asHtml) {
         String toEmails = "";
         if (to != null) {
-            toEmails = "[" + String.join(", ",
-                    Arrays.asList(to).stream().map(Address::toString).collect(Collectors.toList())) + "]";
+            toEmails = "[" + Arrays.stream(to).map(Address::toString).collect(Collectors.joining(", ")) + "]";
         }
         emailLogger.debug("Sending mail from " + from + " to " + (to != null ? toEmails : "none")
                 + " recipient(s). Subject: "
@@ -755,14 +753,13 @@ public class DgEmailManager {
         transport.connect(smtp.getHost(), smtp.getUserName(), smtp.getUserPassword());
 
         int numOfSuccesses = 0;
-        Iterator iter = emailMessages.iterator();
-        while (iter.hasNext()) {
-            PlainTextEmailMessage emailMessage = (PlainTextEmailMessage) iter. next();
+        for (Object o : emailMessages) {
+            PlainTextEmailMessage emailMessage = (PlainTextEmailMessage) o;
 
             // We create mime message, recipient,
             // to, subject and message content
             MimeMessage message = createMimeMessage(session, emailMessage,
-                addresses);
+                    addresses);
             try {
                 message.saveChanges(); // implicit with send()
                 transport.sendMessage(message, message.getAllRecipients());
@@ -770,9 +767,8 @@ public class DgEmailManager {
                 if (callback != null) {
                     callback.sendSuccessed(emailMessage);
                 }
-                numOfSuccesses ++;
-            }
-            catch (MessagingException ex) {
+                numOfSuccesses++;
+            } catch (MessagingException ex) {
                 if (callback != null) {
                     callback.sendError(emailMessage, ex.getMessage(), ex);
                 }
@@ -900,7 +896,7 @@ public class DgEmailManager {
         final Address[] bcc, final String subject,
         final String text, final String charset, final boolean asHtml, final boolean rtl) {
 
-        PlainTextEmailMessage emailMessage = new PlainTextEmailMessage() {
+        return new PlainTextEmailMessage() {
             public Address getSender() {
                 return from;
             }
@@ -937,7 +933,6 @@ public class DgEmailManager {
               return rtl;
             }
         };
-        return emailMessage;
     }
 
 

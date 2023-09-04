@@ -46,7 +46,7 @@ public class DownloadAmpOfflineReleasesJob extends NonConcurrentJob {
     private AmpVersionService ampVersionService;
     private AmpOfflineService ampOfflineService;
 
-    private AmpRegistryService ampRegistryService = AmpRegistryService.INSTANCE;
+    private final AmpRegistryService ampRegistryService = AmpRegistryService.INSTANCE;
 
     @Override
     public void executeNonConcurrentInternal(JobExecutionContext context) throws JobExecutionException {

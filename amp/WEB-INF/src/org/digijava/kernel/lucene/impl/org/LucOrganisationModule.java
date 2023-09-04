@@ -73,8 +73,7 @@ public class LucOrganisationModule implements LucModule<AmpOrganisation> {
 
     @Override
     public Term getIdFieldTerm(AmpOrganisation item) {
-        Term term = new Term(FIELD_ID, item.getAmpOrgId().toString());
-        return term;
+        return new Term(FIELD_ID, item.getAmpOrgId().toString());
     }
 
     @Override

@@ -1251,8 +1251,7 @@ public class FeaturesUtil {
         Session hbsession=null;
         try {
             hbsession=PersistenceManager.getRequestDBSession();
-            AmpTemplatesVisibility ft = new AmpTemplatesVisibility();
-            ft = (AmpTemplatesVisibility) hbsession.load(AmpTemplatesVisibility.class,id);
+            AmpTemplatesVisibility ft = hbsession.load(AmpTemplatesVisibility.class,id);
 
             if (ft != null) {
                 for (AmpFieldsVisibility f : ft.getFields()) {
@@ -1271,12 +1270,10 @@ public class FeaturesUtil {
             }
         }
         catch (Exception ex) {
-            if (hbsession != null && hbsession.getTransaction().isActive()) {
-                hbsession.getTransaction().rollback();
-            }
             logger.error(ex.getMessage(), ex);
             return false;
-        } finally {
+        }
+        finally {
             if (hbsession != null) {
                 hbsession.close();
             }

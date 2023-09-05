@@ -1,35 +1,35 @@
-import React, {useEffect} from 'react'
-import {matchRoutes, useLocation, useNavigate} from "react-router-dom";
-import { routes } from "../routing/routes";
+// eslint-disable-next-line no-unused-vars
+import React, { useEffect } from 'react';
+import { matchRoutes, useLocation, useNavigate } from 'react-router-dom';
+import { routes } from '../routing/routes';
 
 const NavigationManager = ({ children }: { children: any }) => {
-    const location = useLocation();
-    const navigate = useNavigate();
+  const location = useLocation();
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        function containerNavigationHandler(event: CustomEvent) {
-            const pathname = event.detail;
-            if (location.pathname === pathname || !matchRoutes(routes, { pathname })) {
-                return;
-            }
-            navigate(pathname);
-        }
+  useEffect(() => {
+    function containerNavigationHandler(event: CustomEvent) {
+      const pathname = event.detail;
+      if (location.pathname === pathname || !matchRoutes(routes, { pathname })) {
+        return;
+      }
+      navigate(pathname);
+    }
 
-        //@ts-ignore
-        window.addEventListener("[container] navigated", containerNavigationHandler);
+    // @ts-ignore
+    window.addEventListener('[container] navigated', containerNavigationHandler);
 
-        return () => {
-            //@ts-ignore
-            window.removeEventListener("[container] navigated", containerNavigationHandler);
-        };
-    }, [location]);
+    return () => {
+      // @ts-ignore
+      window.removeEventListener('[container] navigated', containerNavigationHandler);
+    };
+  }, [location]);
 
-    useEffect(() => {
-        const reampv2Event = new CustomEvent("[myapp] navigated", { detail: location.pathname })
-        window.dispatchEvent(reampv2Event);
+  useEffect(() => {
+    const userManagerEvent = new CustomEvent('[UserManager] navigated', { detail: location.pathname });
+    window.dispatchEvent(userManagerEvent);
+  }, [location]);
 
-    }, [location]);
-
-    return children;
-}
+  return children;
+};
 export default NavigationManager;

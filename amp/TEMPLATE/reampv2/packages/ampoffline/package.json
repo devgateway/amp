@@ -19,7 +19,7 @@
   },
   "scripts": {
     "start": "node scripts/start.js",
-    "build": "PUBLIC_URL=/TEMPLATE/reampv2/build/ampoffline/latest/ node scripts/build.js",
+    "build": "PUBLIC_URL=/TEMPLATE/reampv2/build/ampoffline/ node scripts/build.js",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix"
   },
   "browserslist": {

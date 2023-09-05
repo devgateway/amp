@@ -1,41 +1,41 @@
 {
-  "extends" : [
-    "standard",
-    "plugin:react/recommended",
-    "airbnb",
-    "airbnb-typescript",
-    "airbnb/hooks"
-  ],
-  "parserOptions": {
-    "project": "./tsconfig.json"
-  },
-  "rules" : {
-    "quotes": [
-      "error",
-      "single",
-      {
-        "avoidEscape": true,
-        "allowTemplateLiterals": true
-      }
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": [
+        "plugin:react/recommended",
+        "airbnb"
     ],
-    "arrow-parens": [
-      "off"
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 12,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react",
+        "@typescript-eslint"
     ],
-    "consistent-return": "off",
-    "comma-dangle": "off",
-    "@typescript-eslint/comma-dangle": [
-      "error",
-      "never"
-    ],
-    "semi": [
-      "error",
-      "always"
-    ],
-    "no-else-return": 0,
-    "no-param-reassign": 0,
-    "jsx-a11y/no-static-element-interactions": "off",
-    "jsx-a11y/click-events-have-key-events": "off",
-    "react/no-danger": "off",
-    "react/jsx-space-before-closing": "off"
-  }
+    "rules": {
+        "import/no-unresolved": "off",
+        "import/extensions": "off",
+        "import/prefer-default-export": "off",
+        "import/no-extraneous-dependencies": "off",
+        "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
+        "max-len": ["error", { "code": 300 }],
+        "consistent-return": "off",
+        "no-shadow": "off",
+        "no-param-reassign": "off",
+        "react/destructuring-assignment": "off",
+        "react/prop-types": "off",
+        "react/function-component-definition": "off",
+        "react/jsx-no-useless-fragment": "off",
+        "react/jsx-closing-tag-location": "off",
+        "react/jsx-closing-bracket-location": "off",
+        "react/jsx-indent-props": "off",
+        "react/jsx-indent": "off"
+    }
 }

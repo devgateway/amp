@@ -1,5 +1,7 @@
 ///<reference types="react" />
 
+import React from "react";
+
 declare  module 'ampoffline/AmpOfflineApp' {
     const AmpOfflineApp: React.ComponentType;
     export const mount: ({ el, standalone = false } : { el: HTMLElement | null, standalone?: boolean }) => () => void;
@@ -22,4 +24,11 @@ declare module  'userManager/UserManagerApp' {
     const UserManagerApp: React.ComponentType;
     export const mount: ({ mountPoint, initialPathName } : { mountPoint: HTMLElement | null, initialPathName?: string }) => () => void;
     export default UserManagerApp;
+}
+
+declare module  'userManager/EditProfileModal' {
+    const EditProfileModal: React.FC<{ show: boolean,
+        setShow: React.Dispatch<React.SetStateAction<boolean>> }>;
+    export default EditProfileModal;
+
 }

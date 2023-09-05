@@ -1,0 +1,81 @@
+.viewmodal_wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.view_one_item {
+    width: 100%;
+    text-align: left;
+    margin: 0 1%;
+}
+
+.view_row {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    padding: 20px 10px !important;
+    transition: 1s ease-out;
+}
+
+.view_row_full {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    padding: 10px;
+    flex-direction: column;
+}
+
+.input_field {
+    width: 100%;
+    height: 40px;
+    font-size: 16px;
+}
+
+.input_field_checkbox {
+    width: 100%;
+}
+
+/* Remove arrows from number input fields */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.modal_button {
+    width: 200px;
+}
+
+.modal_footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px 40px;
+}
+
+.modal_form_group  {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.input_label {
+    font-weight: 600;
+    color: #225977;
+    font-size: 14px;
+}
+
+.modal_backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3) !important;
+    z-index: 100;
+}

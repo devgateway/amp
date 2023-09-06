@@ -12,7 +12,7 @@ const override = (config) => {
     filename: 'remoteEntry.js',
     exposes: {
       './UserManagerApp': './src/bootstrap',
-      './EditProfileModal': './src/components/EditProfile.tsx'
+      './EditProfileModal': './src/components/RemoteEditProfileModal',
     },
     shared: {
       ...packageJson.dependencies,

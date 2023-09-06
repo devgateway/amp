@@ -1,5 +1,5 @@
 import React, { useEffect, useRef} from 'react';
-import {mount} from 'userManager/UserManagerApp';
+import {mount} from "userManager/UserManagerApp";
 import {useLocation, useNavigate} from "react-router-dom";
 import {USER_MANAGER_APP_NAME} from "../utils/constants";
 

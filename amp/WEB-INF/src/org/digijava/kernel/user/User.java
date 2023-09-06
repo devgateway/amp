@@ -34,6 +34,7 @@ import org.digijava.module.aim.dbentity.AmpUserExtension;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.Identifiable;
 
+import javax.persistence.Transient;
 import javax.security.auth.Subject;
 import java.io.Serializable;
 import java.sql.Clob;
@@ -86,6 +87,8 @@ public class User
     private Set<AmpOrganisation> assignedOrgs;
     private Date passwordChangedAt;
     private Set<TruBudgetIntent> truBudgetIntents= new HashSet<>();
+    @Transient
+    private transient Set<TruBudgetIntent> initialTruBudgetIntents= new HashSet<>();
     private Boolean truBudgetEnabled=false;
 
     public Boolean getTruBudgetEnabled() {
@@ -609,4 +612,11 @@ public class User
     }
 
 
+    public Set<TruBudgetIntent> getInitialTruBudgetIntents() {
+        return initialTruBudgetIntents;
+    }
+
+    public void setInitialTruBudgetIntents(Set<TruBudgetIntent> initialTruBudgetIntents) {
+        this.initialTruBudgetIntents = initialTruBudgetIntents;
+    }
 }

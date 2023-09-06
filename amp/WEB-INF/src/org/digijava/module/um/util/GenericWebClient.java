@@ -63,7 +63,7 @@ public class GenericWebClient {
                         response.bodyToMono(String.class)
                                 .flatMap(body -> Mono.error(new RuntimeException("Bad Request Error. Response: " + body))))
                 .bodyToMono(responseClass)
-                .onErrorResume(Mono::error)
+                .doOnError(Throwable::printStackTrace)
                 .retryWhen(Retry.backoff(1, Duration.of(2, ChronoUnit.SECONDS))
                         .onRetryExhaustedThrow(((retryBackoffSpec, retrySignal) -> new RuntimeException(retrySignal.failure()))));
 

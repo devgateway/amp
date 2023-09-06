@@ -73,6 +73,7 @@ public class RegisterUser extends Action {
             logger.info("Intents: "+ truBudgetIntents);
 
 //            user.getTruBudgetIntents().addAll(new HashSet<>(truBudgetIntents));
+            user.setInitialTruBudgetIntents(new HashSet<>(user.getTruBudgetIntents()));
             user.setTruBudgetIntents(new HashSet<>(truBudgetIntents));
             // set client IP address
 

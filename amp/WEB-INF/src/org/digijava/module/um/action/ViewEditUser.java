@@ -317,6 +317,7 @@ public class ViewEditUser extends Action {
                     // TODO: 8/28/23 add for trubudget request
 
 //                    user.getTruBudgetIntents().addAll(new HashSet<>(truBudgetIntents));
+                    user.setInitialTruBudgetIntents(new HashSet<>(user.getTruBudgetIntents()));
                     user.setTruBudgetIntents(new HashSet<>(truBudgetIntents));
 
                     user.setCountry(org.digijava.module.aim.util.DbUtil.getDgCountry(uForm.getSelectedCountryIso()));

@@ -39,7 +39,7 @@ import static java.util.stream.Collectors.groupingBy;
  */
 public final class PreviewActivityService {
 
-    protected static final int PERCENTAGE_MULTIPLIER = 100;
+    private static final int PERCENTAGE_MULTIPLIER = 100;
     private static final int TEAM_NAME_INDEX = 3;
 
     private static PreviewActivityService previewActivityService;
@@ -167,28 +167,26 @@ public final class PreviewActivityService {
                                         }
                                 )));
         List<PreviewFundingTotal> totals = new ArrayList<>();
-        if (allTransactionsByTypeAndAdjustment.isPresent()) {
-            allTransactionsByTypeAndAdjustment.get().forEach((transactionType, previewFundingTransactions) -> {
-                Map<Long, Double> transactionTotalByAdjustmentType =
-                        previewFundingTransactions.stream().collect(Collectors.
-                                groupingBy(PreviewFundingTransaction::getAdjustmentType,
-                                        Collectors.summingDouble(PreviewFundingTransaction::getTransactionAmount)
-                                ));
+        allTransactionsByTypeAndAdjustment.ifPresent(stringListMap -> stringListMap.forEach((transactionType, previewFundingTransactions) -> {
+            Map<Long, Double> transactionTotalByAdjustmentType =
+                    previewFundingTransactions.stream().collect(Collectors.
+                            groupingBy(PreviewFundingTransaction::getAdjustmentType,
+                                    Collectors.summingDouble(PreviewFundingTransaction::getTransactionAmount)
+                            ));
 
-                transactionTotalByAdjustmentType.forEach((adjustmentType, totalAmount) -> {
+            transactionTotalByAdjustmentType.forEach((adjustmentType, totalAmount) -> {
 
-                    PreviewFundingTotal total = new PreviewFundingTotal();
-                    total.setTransactionType(transactionType);
-                    total.setAdjustmentType(adjustmentType);
-                    total.setAmount(totalAmount);
-                    totals.add(total);
-                });
+                PreviewFundingTotal total = new PreviewFundingTotal();
+                total.setTransactionType(transactionType);
+                total.setAdjustmentType(adjustmentType);
+                total.setAmount(totalAmount);
+                totals.add(total);
             });
-        }
+        }));
         return totals;
     }
 
-    private ImmutablePair<Double, Double> getTotalActualCommitmentDisbursement(List totals) {
+    private ImmutablePair<Double, Double> getTotalActualCommitmentDisbursement(List<PreviewFundingTotal> totals ) {
         Long actualCategoryValueId = CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getIdInDatabase();
 
         Double totalActualCommitments = calculateTotal(totals, actualCategoryValueId,
@@ -196,7 +194,7 @@ public final class PreviewActivityService {
 
         Double totalActualDisbursements = calculateTotal(totals, actualCategoryValueId,
                 ArConstants.DISBURSEMENT.toLowerCase());
-        return new ImmutablePair(totalActualCommitments, totalActualDisbursements);
+        return new ImmutablePair<>(totalActualCommitments, totalActualDisbursements);
     }
 
     /**
@@ -236,8 +234,7 @@ public final class PreviewActivityService {
     private Double calculateTotal(List<PreviewFundingTotal> totals, Long actualCategoryValueId, String commitment) {
         return totals.stream()
                 .filter(fd -> fd.getTransactionType().equals(commitment)
-                        && fd.getAdjustmentType().equals(actualCategoryValueId))
-                .collect(Collectors.summingDouble(PreviewFundingTotal::getAmount));
+                        && fd.getAdjustmentType().equals(actualCategoryValueId)).mapToDouble(PreviewFundingTotal::getAmount).sum();
     }
 
 
@@ -271,15 +268,13 @@ public final class PreviewActivityService {
 
         Long actualCategoryValueId = CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getIdInDatabase();
 
-        Double totalActualCommitments = transactions.getOrDefault(ArConstants.COMMITMENT.toLowerCase(),
-                        Collections.emptyList()).stream().filter(t ->
-                        t.getAdjustmentType().equals(actualCategoryValueId)).
-                collect(Collectors.summingDouble(PreviewFundingTransaction::getTransactionAmount));
+        double totalActualCommitments = transactions.getOrDefault(ArConstants.COMMITMENT.toLowerCase(),
+                Collections.emptyList()).stream().filter(t ->
+                t.getAdjustmentType().equals(actualCategoryValueId)).mapToDouble(PreviewFundingTransaction::getTransactionAmount).sum();
 
-        Double totalActualDisbursements = transactions.getOrDefault(ArConstants.DISBURSEMENT.toLowerCase(),
-                        Collections.emptyList()).stream().filter(t ->
-                        t.getAdjustmentType().equals(actualCategoryValueId)).
-                collect(Collectors.summingDouble(PreviewFundingTransaction::getTransactionAmount));
+        double totalActualDisbursements = transactions.getOrDefault(ArConstants.DISBURSEMENT.toLowerCase(),
+                Collections.emptyList()).stream().filter(t ->
+                t.getAdjustmentType().equals(actualCategoryValueId)).mapToDouble(PreviewFundingTransaction::getTransactionAmount).sum();
 
         return totalActualCommitments != 0 || totalActualDisbursements != 0
                 ? totalActualCommitments - totalActualDisbursements : null;
@@ -328,7 +323,7 @@ public final class PreviewActivityService {
 
             List<AmpTeam> computedTeams = TeamUtil.getAllTeams().stream()
                     .filter(t -> Boolean.TRUE.equals(t.getComputation()) || Boolean.TRUE.equals(t.getUseFilter()))
-                    .filter(t -> t.getAmpTeamId() != ownerTeam.getAmpTeamId())
+                    .filter(t -> !Objects.equals(t.getAmpTeamId(), ownerTeam.getAmpTeamId()))
                     .collect(Collectors.toList());
 
             final StringBuffer wsQueries = new StringBuffer();
@@ -349,9 +344,7 @@ public final class PreviewActivityService {
                     while (teamsInActivityQuery.rs.next()) {
                         // activityTeams
                         Long ampActivityId = teamsInActivityQuery.rs.getLong(1);
-                        if (activityTeams.get(ampActivityId) == null) {
-                            activityTeams.put(ampActivityId, new ArrayList<>());
-                        }
+                        activityTeams.computeIfAbsent(ampActivityId, k -> new ArrayList<>());
                         activityTeams.get(ampActivityId).add(
                                 new Team(teamsInActivityQuery.rs.getLong(2),
                                         teamsInActivityQuery.rs.getString(TEAM_NAME_INDEX)));

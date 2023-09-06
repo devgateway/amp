@@ -37,7 +37,6 @@ public class AmpAgreementSearchModel extends
     protected Collection<AmpAgreement> load() {
         Collection<AmpAgreement> ret = null;
         try {
-            ret = new ArrayList<>();
             Session session = PersistenceManager.getRequestDBSession();
             Integer maxResults = (Integer) getParams().get(
                     AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS);

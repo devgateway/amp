@@ -72,8 +72,8 @@ public class RegisterUser extends Action {
             List<TruBudgetIntent> truBudgetIntents = getTruBudgetIntentsByName(intents);
             logger.info("Intents: "+ truBudgetIntents);
 
-            user.getTruBudgetIntents().addAll(new HashSet<>(truBudgetIntents));
-            user.setTruBudgetIntents(user.getTruBudgetIntents());
+//            user.getTruBudgetIntents().addAll(new HashSet<>(truBudgetIntents));
+            user.setTruBudgetIntents(new HashSet<>(truBudgetIntents));
             // set client IP address
 
             user.setModifyingIP(RequestUtils.getRemoteAddress(request));

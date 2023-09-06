@@ -582,14 +582,31 @@ public class DbUtil {
         truResp.subscribe(truLoginResponse -> {
 
 
-        TruUserData res = null;
         if (user.getTruBudgetEnabled())
         {
             logger.info("We already have a trubudget account for this user email/username.");
         }
         else {
             try {
-                res = GenericWebClient.postForSingleObjResponse(getSettingValue(settings,"baseUrl")+"api/global.createUser", userData, TruUserData.class, TruUserData.class, truLoginResponse.getData().getUser().getToken()).block();
+                GenericWebClient.postForSingleObjResponse(getSettingValue(settings,"baseUrl")+"api/global.createUser", userData, TruUserData.class, TruUserData.class, truLoginResponse.getData().getUser().getToken()).subscribe(response->{
+                    logger.info("Create user response: " + response);
+                    if (!user.getTruBudgetIntents().isEmpty()) {
+                        Flux.range(0, user.getTruBudgetIntents().size())
+                                .flatMap(index -> {
+                                    TruGrantPermissionRequest permData = new TruGrantPermissionRequest();
+                                    TruGrantPermissionRequest.Data data1 = new TruGrantPermissionRequest.Data();
+                                    data1.setIdentity(response !=null? response.getData().getUser().getId():user.getEmail().split("@")[0]);
+                                    data1.setIntent(new ArrayList<>(user.getTruBudgetIntents()).get(index).getTruBudgetIntentName());
+                                    permData.setData(data1);
+                                    permData.setApiVersion(getSettingValue(settings,"apiVersion"));
+                                    try {
+                                        return GenericWebClient.postForSingleObjResponse(getSettingValue(settings,"baseUrl")+"api/global.grantPermission", permData, TruGrantPermissionRequest.class, String.class, truLoginResponse.getData().getUser().getToken());
+                                    } catch (URISyntaxException e) {
+                                        return Flux.error(new RuntimeException(e));
+                                    }
+                                }).subscribeOn(Schedulers.parallel()).subscribe(permissionResponse->logger.info("Permission response:ss " + permissionResponse));
+                    }
+                });
 
             }catch (Exception e)
             {
@@ -598,23 +615,7 @@ public class DbUtil {
 
         }
 
-             if (!user.getTruBudgetIntents().isEmpty()) {
-                 TruUserData finalRes = res;
-                 Flux.range(0, user.getTruBudgetIntents().size())
-                         .flatMap(index -> {
-                             TruGrantPermissionRequest permData = new TruGrantPermissionRequest();
-                             TruGrantPermissionRequest.Data data1 = new TruGrantPermissionRequest.Data();
-                             data1.setIdentity(finalRes !=null? finalRes.getData().getUser().getId():user.getEmail().split("@")[0]);
-                             data1.setIntent(new ArrayList<>(user.getTruBudgetIntents()).get(index).getTruBudgetIntentName());
-                             permData.setData(data1);
-                             permData.setApiVersion(getSettingValue(settings,"apiVersion"));
-                             try {
-                                 return GenericWebClient.postForSingleObjResponse(getSettingValue(settings,"baseUrl")+"api/global.grantPermission", permData, TruGrantPermissionRequest.class, String.class, truLoginResponse.getData().getUser().getToken()).subscribeOn(Schedulers.parallel());
-                             } catch (URISyntaxException e) {
-                                 throw new RuntimeException(e);
-                             }
-                         }).subscribe(response -> logger.info("Permission response: " + response));
-             }
+
         },throwable -> {
             throw new RuntimeException(throwable.getMessage());
         });

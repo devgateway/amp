@@ -1445,10 +1445,8 @@ public class ActivityUtil {
         for (IndicatorActivity indicator : indicators) {
             AmpIndicator ind = (AmpIndicator) PersistenceManager.getSession()
                     .get(AmpIndicator.class, indicator.getIndicator().getIndicatorId());
-            List<Long> programIds = ind.getPrograms().stream()
-                    .map(AmpTheme::getAmpThemeId)
-                    .collect(Collectors.toList());
-            if (programIds.contains(program.getProgram().getAmpThemeId())) {
+            Long programId = ind.getProgram().getAmpThemeId();
+            if (programId.equals(program.getProgram().getAmpThemeId())) {
                 return true;
             }
         }

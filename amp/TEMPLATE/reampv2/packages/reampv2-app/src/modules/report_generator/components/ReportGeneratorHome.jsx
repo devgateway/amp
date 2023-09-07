@@ -49,8 +49,9 @@ class ReportGeneratorHome extends Component {
     _fetchLanguages();
     // eslint-disable-next-line react/destructuring-assignment,react/prop-types
     const { id } = this.props.params;
-    const typeFromURL = new URLSearchParams(location.search).get('type');
-    const profileFromURL = new URLSearchParams(location.search).get('profile');
+    const searchPrams = this.props.searchParams;
+    const typeFromURL = searchPrams.get('type');
+    const profileFromURL =searchPrams.get('profile');
 
     // If this is a saved report then ignore type and profile params from the URL.
     if (id) {

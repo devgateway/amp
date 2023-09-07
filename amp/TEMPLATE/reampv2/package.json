@@ -20,6 +20,7 @@
     "nx-cloud": "^16.3.0"
   },
   "dependencies": {
+    "@devgateway/amp-boilerplate": "github:devgateway/amp-boilerplate",
     "fs": "^0.0.1-security",
     "jquery-ui": "^1.10.5",
     "react-router-dom": "^6.14.2",

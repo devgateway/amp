@@ -4,6 +4,7 @@ export interface MountOptions {
     mountPoint: HTMLElement;
     routingStrategy: RoutingStrategies;
     initialPathName?: string;
+    standalone?: boolean;
 }
 
 export interface UserProfile {

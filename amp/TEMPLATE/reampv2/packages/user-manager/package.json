@@ -22,6 +22,7 @@
     ]
   },
   "dependencies": {
+    "@devgateway/amp-boilerplate": "github:devgateway/amp-boilerplate",
     "@reduxjs/toolkit": "^1.9.5",
     "@testing-library/jest-dom": "^6.1.2",
     "@testing-library/react": "^14.0.0",

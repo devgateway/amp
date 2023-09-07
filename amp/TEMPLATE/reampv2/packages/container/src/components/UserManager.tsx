@@ -56,6 +56,7 @@ const UserManager = () => {
                     userManagerBasename,
                     ''
                 ),
+                standalone: false,
             });
             isFirstRunRef.current = false;
         },

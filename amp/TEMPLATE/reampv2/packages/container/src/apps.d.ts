@@ -14,7 +14,7 @@ declare module  'reampv2App/Reampv2App' {
 
 declare module  'userManager/UserManagerApp' {
     const UserManagerApp: React.ComponentType;
-    export const mount: ({ mountPoint, initialPathName } : { mountPoint: HTMLElement | null, initialPathName?: string }) => () => void;
+    export const mount: ({ mountPoint, initialPathName, standalone = false } : { mountPoint: HTMLElement | null, initialPathName?: string, standalone?: boolean }) => () => void;
     export default UserManagerApp;
 }
 

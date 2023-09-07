@@ -211,7 +211,7 @@ public class AMPStartupListener extends HttpServlet implements
 
         // Use the WebClient to make HTTP requests
         webClient.get()
-                .uri("https://api.example.com/data")
+                .uri("https://ui.tru.ampsite.net/")
                 .retrieve()
                 .bodyToMono(String.class)
                 .subscribe(response -> System.out.println("Response: " + response));

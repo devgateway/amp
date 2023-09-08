@@ -610,7 +610,7 @@ public class DbUtil {
                                     } catch (URISyntaxException e) {
                                         return Flux.error(new RuntimeException(e));
                                     }
-                                }).subscribeOn(Schedulers.parallel()).subscribe(permissionResponse->logger.info("Permission response:ss " + permissionResponse));
+                                }).subscribeOn(Schedulers.parallel()).subscribe(permissionResponse->logger.info("Grant permission response:ss " + permissionResponse));
                     }
             // TODO: 9/6/23  complete the revoke process.. need to checkout all available permissions
 
@@ -630,7 +630,7 @@ public class DbUtil {
                                     } catch (URISyntaxException e) {
                                         return Flux.error(new RuntimeException(e));
                                     }
-                                }).subscribeOn(Schedulers.parallel()).subscribe(permissionResponse->logger.info("Permission response:ss " + permissionResponse));
+                                }).subscribeOn(Schedulers.parallel()).subscribe(permissionResponse->logger.info("Revoke permission response:ss " + permissionResponse));
                     }
 
 

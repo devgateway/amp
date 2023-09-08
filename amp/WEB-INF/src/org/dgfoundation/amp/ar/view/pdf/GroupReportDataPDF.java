@@ -17,8 +17,6 @@ import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.Viewable;
 import org.digijava.module.aim.action.ExportActivityToPDF;
 
-import java.util.Iterator;
-
 /**
  * 
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org

@@ -22,7 +22,6 @@ import org.dgfoundation.amp.nireports.output.nicells.NiTextCell;
 import org.dgfoundation.amp.nireports.runtime.CellColumn;
 import org.dgfoundation.amp.nireports.runtime.VSplitStrategy;
 import org.dgfoundation.amp.nireports.schema.*;
-import org.dgfoundation.amp.nireports.schema.NiDimension.*;
 import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -45,11 +44,22 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.LEVEL_0;
+import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.LEVEL_1;
+import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.LEVEL_2;
+import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.LEVEL_3;
+import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.LEVEL_4;
+import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.LEVEL_5;
+import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.LEVEL_6;
+import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.LEVEL_7;
+import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.LEVEL_8;
+import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.LEVEL_ALL_IDS;
+import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.LevelColumn;
+import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.NiDimensionUsage;
 import static org.dgfoundation.amp.nireports.amp.dimensions.LocationsDimension.*;
 import static org.dgfoundation.amp.nireports.amp.dimensions.OrganisationsDimension.*;
 import static org.dgfoundation.amp.nireports.amp.dimensions.SectorsDimension.*;
 import static org.dgfoundation.amp.nireports.formulas.NiFormula.*;
-import static org.dgfoundation.amp.nireports.schema.NiDimension.*;
 
 /**
  * the big, glorious, immaculate, AMP NiReports schema.

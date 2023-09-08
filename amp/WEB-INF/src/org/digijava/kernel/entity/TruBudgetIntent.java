@@ -3,8 +3,8 @@ package org.digijava.kernel.entity;
 import org.digijava.kernel.user.User;
 import org.hibernate.annotations.DynamicUpdate;
 
-import javax.persistence.*;
 import javax.persistence.Entity;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
 

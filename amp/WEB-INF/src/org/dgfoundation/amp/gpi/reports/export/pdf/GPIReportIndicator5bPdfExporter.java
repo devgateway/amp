@@ -2,7 +2,6 @@ package org.dgfoundation.amp.gpi.reports.export.pdf;
 
 
 import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import org.dgfoundation.amp.ar.ColumnConstants;

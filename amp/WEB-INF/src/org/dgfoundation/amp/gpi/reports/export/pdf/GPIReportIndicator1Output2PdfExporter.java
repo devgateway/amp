@@ -4,7 +4,6 @@ import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPTable;
 import org.dgfoundation.amp.gpi.reports.GPIReport;
 import org.dgfoundation.amp.gpi.reports.GPIReportConstants;

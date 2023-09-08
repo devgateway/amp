@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
 
 public class AddNewIndicator
     extends Action {

@@ -22,7 +22,6 @@
 
 package org.digijava.module.sdm.dbentity;
 
-import java.util.Iterator;
 import java.util.Set;
 
 /**

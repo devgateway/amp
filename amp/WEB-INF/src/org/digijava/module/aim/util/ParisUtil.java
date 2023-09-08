@@ -10,7 +10,6 @@ import org.hibernate.type.IntegerType;
 import org.hibernate.type.LongType;
 
 import java.util.Collection;
-import java.util.Iterator;
 
 
 /**

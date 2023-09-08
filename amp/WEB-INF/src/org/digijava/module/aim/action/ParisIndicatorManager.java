@@ -13,7 +13,6 @@ import org.digijava.module.aim.util.ParisUtil;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Collection;
-import java.util.Iterator;
 
 /**
  * created on 01/05/06

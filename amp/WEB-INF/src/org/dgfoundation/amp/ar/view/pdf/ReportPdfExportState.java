@@ -4,7 +4,6 @@ package org.dgfoundation.amp.ar.view.pdf;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.pdf.PdfPCell;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 /**

@@ -38,7 +38,6 @@ import org.digijava.module.calendar.util.DbUtil;
 import org.digijava.module.common.dbentity.ItemStatus;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**

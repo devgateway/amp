@@ -16,7 +16,6 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
-import org.hibernate.type.StringType;
 
 import java.text.Collator;
 import java.util.*;

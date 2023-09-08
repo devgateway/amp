@@ -13,7 +13,6 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
-import org.digijava.module.aim.form.LoginForm;
 import org.digijava.module.um.model.TruLoginRequest;
 import org.digijava.module.um.model.TruLoginResponse;
 import org.slf4j.Logger;

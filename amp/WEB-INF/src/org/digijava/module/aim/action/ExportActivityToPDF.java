@@ -1,11 +1,7 @@
 package org.digijava.module.aim.action;
 
 import com.google.common.base.Strings;
-import com.itextpdf.text.Font;
 import com.itextpdf.text.*;
-import com.itextpdf.text.Image;
-import com.itextpdf.text.List;
-import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
@@ -50,7 +46,6 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.*;
-
 
 import static org.digijava.module.aim.helper.Constants.CURRENT_MEMBER;
 

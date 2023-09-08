@@ -42,7 +42,6 @@ import javax.persistence.criteria.Root;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 public class CachedTranslatorWorker extends TranslatorWorker {

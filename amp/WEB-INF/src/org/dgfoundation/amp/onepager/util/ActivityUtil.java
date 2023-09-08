@@ -39,11 +39,12 @@ import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.message.triggers.ActivityValidationWorkflowTrigger;
 import org.digijava.module.translation.util.ContentTranslationUtil;
-import org.hibernate.*;
+import org.hibernate.Hibernate;
+import org.hibernate.LockMode;
+import org.hibernate.LockOptions;
+import org.hibernate.Session;
 import org.hibernate.query.Query;
-import org.hibernate.type.IntegerType;
 import org.hibernate.type.LongType;
-import org.hibernate.type.ObjectType;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;

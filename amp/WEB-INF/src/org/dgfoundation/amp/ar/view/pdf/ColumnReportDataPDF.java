@@ -17,7 +17,6 @@ import org.dgfoundation.amp.ar.*;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.action.ExportActivityToPDF;
 
-
 import java.util.ArrayList;
 import java.util.List;
 

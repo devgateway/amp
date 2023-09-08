@@ -45,7 +45,6 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.http.HttpServlet;
 import java.lang.management.ManagementFactory;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Collection;
 import java.util.Hashtable;

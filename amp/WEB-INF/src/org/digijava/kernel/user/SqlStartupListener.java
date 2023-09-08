@@ -1,11 +1,10 @@
 package org.digijava.kernel.user;
+
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.jdbc.Work;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.stereotype.Component;
 
 import java.sql.SQLException;
 import java.sql.Statement;

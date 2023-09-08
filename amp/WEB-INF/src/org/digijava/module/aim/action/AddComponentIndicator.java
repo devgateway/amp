@@ -9,7 +9,6 @@ import org.digijava.module.aim.util.ComponentsUtil;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.Iterator;
 
 public class AddComponentIndicator extends Action 
 {

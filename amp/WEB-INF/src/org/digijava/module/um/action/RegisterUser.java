@@ -31,7 +31,6 @@ import org.digijava.module.um.util.AmpUserUtil;
 import org.digijava.module.um.util.DbUtil;
 
 import javax.servlet.http.HttpSession;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 

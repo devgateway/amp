@@ -38,7 +38,6 @@ import org.digijava.kernel.service.ServiceManager;
 import org.digijava.kernel.services.siteidentity.SiteIdentityService;
 import org.digijava.kernel.user.Group;
 import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;

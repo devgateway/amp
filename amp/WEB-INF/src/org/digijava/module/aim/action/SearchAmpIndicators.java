@@ -13,7 +13,6 @@ import org.digijava.module.aim.util.ProgramUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 

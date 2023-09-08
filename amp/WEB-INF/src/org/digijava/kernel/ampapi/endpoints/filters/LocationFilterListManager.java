@@ -2,17 +2,15 @@ package org.digijava.kernel.ampapi.endpoints.filters;
 
 import com.google.common.collect.ImmutableMap;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
-import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationSkeleton;
+import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.hibernate.Session;
-import org.hibernate.query.Query;
 
 import java.util.*;
 import java.util.stream.Collectors;

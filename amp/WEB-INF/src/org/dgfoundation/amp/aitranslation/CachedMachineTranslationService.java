@@ -3,7 +3,6 @@ package org.dgfoundation.amp.aitranslation;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.apache.commons.lang3.tuple.Pair;
-import org.digijava.kernel.entity.geocoding.GeoCodingProcess;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.MachineTranslation;
 import org.digijava.module.aim.dbentity.MachineTranslationCharactersUsed;

@@ -22,7 +22,6 @@ import org.hibernate.type.StringType;
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 public class AmpMessageUtil {

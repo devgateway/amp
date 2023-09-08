@@ -3,7 +3,6 @@ package org.digijava.module.contentrepository.action;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.lowagie.text.rtf.RtfWriter2;
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
@@ -36,8 +35,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.ByteArrayOutputStream;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 /**
  * contians actions , that can be done while trying to create document using Templates

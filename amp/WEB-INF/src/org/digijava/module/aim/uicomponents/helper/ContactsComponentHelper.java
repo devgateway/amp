@@ -7,7 +7,6 @@ import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.Iterator;
 
 public class ContactsComponentHelper {
     

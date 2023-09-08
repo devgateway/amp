@@ -9,7 +9,12 @@ const NavigationManager = ({ children }: { children: any }) => {
 
   useEffect(() => {
     function containerNavigationHandler(event: CustomEvent) {
-      const pathname = event.detail;
+      let pathname: string = event.detail;
+
+      if (pathname.includes('user-manager')) {
+        pathname = pathname.replace('user-manager', '');
+      }
+
       if (location.pathname === pathname || !matchRoutes(routes, { pathname })) {
         return;
       }

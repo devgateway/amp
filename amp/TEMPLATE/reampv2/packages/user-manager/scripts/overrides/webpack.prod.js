@@ -28,10 +28,22 @@ const override = (config) => {
       },
       'react-router-dom': {
         import: 'react-router-dom',
-        shareKey: 'react-router-dom-old',
+        shareKey: 'react-router-dom',
         shareScope: 'default',
         singleton: true,
       },
+      'semantic-ui-react': {
+        import: 'semantic-ui-react',
+        shareKey: 'semantic-ui-react',
+        shareScope: 'legacy',
+        singleton: true,
+      },
+      'semantic-ui-css': {
+        import: 'semantic-ui-css',
+        shareKey: 'semantic-ui-css',
+        shareScope: 'legacy',
+        singleton: true,
+      }
     },
   });
 

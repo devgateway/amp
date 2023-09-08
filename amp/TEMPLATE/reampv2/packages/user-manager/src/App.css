@@ -1,0 +1,15 @@
+.ui .form .fields {
+    margin: 20px 30px !important;
+}
+
+.ui.form .field>label {
+    font-weight: 600 !important;
+    color: #225977 !important;
+    font-size: 14px !important;
+    margin-bottom: 10px !important;
+}
+
+.ui.modal>.actions {
+    background: #ffffff !important;
+    padding: 20px 43px !important;
+}

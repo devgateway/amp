@@ -38,7 +38,7 @@ const override = config => {
             'react-router-dom': {
                 import: 'react-router-dom',
                 singleton: true,
-                shareKey: 'react-router-dom-new',
+                shareKey: 'react-router-dom',
                 shareScope: 'default',
             }
         },

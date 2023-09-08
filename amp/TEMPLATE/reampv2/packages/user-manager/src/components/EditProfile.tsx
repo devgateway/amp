@@ -1,8 +1,9 @@
 import React, { useRef, useState } from 'react';
 import {
-  Button, Col, Form, Modal, Row,
-} from 'react-bootstrap';
+  Button, Checkbox, Form, Modal,
+} from 'semantic-ui-react';
 import { Formik, FormikProps } from 'formik';
+import { useNavigate } from 'react-router-dom';
 import styles from './css/Modal.module.css';
 import { useAppDispatch, useAppSelector } from '../utils/hooks';
 import { EditUserProfile } from '../types';
@@ -16,6 +17,8 @@ export interface EditProfileProps {
 
 const EditProfile: React.FC<EditProfileProps> = (props) => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
   const modalRef = useRef(null);
 
   const userProfile = useAppSelector((state) => state.userProfile.user);
@@ -34,7 +37,11 @@ const EditProfile: React.FC<EditProfileProps> = (props) => {
     return;
   }
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false);
+    navigate(-1);
+  };
+
   // eslint-disable-next-line no-unused-vars
   const handleSetAltEmail = () => setUseNotificationEmail(!useNotificationEmail);
 
@@ -61,29 +68,20 @@ const EditProfile: React.FC<EditProfileProps> = (props) => {
     organizationGroupId: userProfile.organizationGroupId,
   };
 
-  window.addEventListener('openUserModal', () => {
-    setShow(true);
-    console.log('openUserModal inside user manager');
-  });
-
   return (
         <>
             {userProfile
                 && (
                     <div>
                         <Modal
-                            size="lg"
-                            show={show}
-                            onHide={handleClose}
-                            centered
-                            animation={false}
-                            backdropClassName={styles.modal_backdrop}
-                            backdrop="static"
-                            keyboard={false}
+                            onClose={handleClose}
+                            onOpen={() => setShow(true)}
+                            open={show}
                             ref={modalRef}
+                            closeIcon
                         >
-                            <Modal.Header closeButton>
-                                <Modal.Title>Edit Profile</Modal.Title>
+                            <Modal.Header>
+                                Edit Profile
                             </Modal.Header>
                             <Formik
                                 validationSchema={editProfileSchema}
@@ -93,34 +91,32 @@ const EditProfile: React.FC<EditProfileProps> = (props) => {
                             >
                                 {(props) => (
                                     <>
+                                      <Modal.Description>
                                         <Form noValidate onSubmit={props.handleSubmit}>
-                                            <Modal.Body>
-                                                <div>
-
-                                                    <div className={styles.modal_form_group}>
-                                                        <Row className={styles.view_row}>
-                                                            <Form.Group as={Col} className={styles.view_item} controlId="firstName">
-                                                                <Form.Label className={styles.input_label}>
-                                                                    First
-                                                                    Name
-                                                                </Form.Label>
-                                                                <Form.Control
+                                            <Modal.Content image>
+                                                    <div className={styles.form_section}>
+                                                        <Form.Group>
+                                                            <Form.Field className={styles.view_item} required>
+                                                                <label htmlFor="fistName" className={styles.input_label}>
+                                                                    First Name
+                                                                </label>
+                                                                <input
                                                                     type="text"
                                                                     placeholder="Enter First Name"
                                                                     name="firstName"
+                                                                    id="firstName"
                                                                     onChange={props.handleChange}
                                                                     onBlur={props.handleBlur}
                                                                     className={`${styles.input_field} ${(props.errors.firstName && props.touched.firstName) && styles.text_is_invalid}`}
                                                                     defaultValue={props.values.firstName}
                                                                 />
-                                                            </Form.Group>
+                                                            </Form.Field>
 
-                                                            <Form.Group as={Col} className={styles.view_item} controlId="lastName">
-                                                                <Form.Label className={styles.input_label}>
-                                                                    Last
-                                                                    Name
-                                                                </Form.Label>
-                                                                <Form.Control
+                                                            <Form.Field className={styles.view_item} required>
+                                                                <label htmlFor="lastName" className={styles.input_label}>
+                                                                    Last Name
+                                                                </label>
+                                                                <input
                                                                     type="text"
                                                                     placeholder="Enter Last Name"
                                                                     name="lastName"
@@ -129,17 +125,15 @@ const EditProfile: React.FC<EditProfileProps> = (props) => {
                                                                     className={`${styles.input_field} ${(props.errors.lastName && props.touched.lastName) && styles.text_is_invalid}`}
                                                                     defaultValue={props.values.lastName}
                                                                 />
-                                                            </Form.Group>
-                                                        </Row>
+                                                            </Form.Field>
+                                                        </Form.Group>
 
-                                                        <Row className={styles.view_row}>
-                                                            <Form.Group className={styles.view_item} as={Col} controlId="email">
-                                                                <Form.Label
-                                                                    className={styles.input_label}
-                                                                >
+                                                        <Form.Group>
+                                                            <Form.Field className={styles.view_item} required>
+                                                                <label htmlFor="email" className={styles.input_label}>
                                                                     Email
-                                                                </Form.Label>
-                                                                <Form.Control
+                                                                </label>
+                                                                <input
                                                                     type="email"
                                                                     placeholder="john@doe.com"
                                                                     name="email"
@@ -148,14 +142,13 @@ const EditProfile: React.FC<EditProfileProps> = (props) => {
                                                                     className={`${styles.input_field} ${(props.errors.email && props.touched.email) && styles.text_is_invalid}`}
                                                                     defaultValue={props.values.email}
                                                                 />
-                                                            </Form.Group>
+                                                            </Form.Field>
 
-                                                            <Form.Group as={Col} className={styles.view_item} controlId="emailConfirmation">
-                                                                <Form.Label className={styles.input_label}>
-                                                                    Repeat
-                                                                    Email
-                                                                </Form.Label>
-                                                                <Form.Control
+                                                            <Form.Field className={styles.view_item} required>
+                                                                <label htmlFor="emailConfirmation" className={styles.input_label}>
+                                                                    Repeat Email
+                                                                </label>
+                                                                <input
                                                                     type="email"
                                                                     placeholder="john@doe.com"
                                                                     name="emailConfirmation"
@@ -164,33 +157,34 @@ const EditProfile: React.FC<EditProfileProps> = (props) => {
                                                                     className={`${styles.input_field} ${(props.errors.emailConfirmation && props.touched.emailConfirmation) && styles.text_is_invalid}`}
                                                                     defaultValue={props.values.email}
                                                                 />
-                                                            </Form.Group>
-                                                        </Row>
-                                                         <br />
+                                                            </Form.Field>
+                                                        </Form.Group>
+                                                        <br />
                                                         <br />
                                                     </div>
 
-                                                    <div className={styles.modal_form_group}>
-                                                      <Row className={styles.checkbox_wrapper}>
-                                                        <Form.Check
-                                                            type="checkbox"
-                                                            label="Use a different email for email notifications"
-                                                            defaultChecked={props.values.notificationEmailEnabled ?? false}
-                                                            name="notificationEmailEnabled"
-                                                            onChange={props.handleChange}
-                                                            onBlur={props.handleBlur}
-                                                        />
-                                                      </Row>
+                                                    <div className={styles.form_section}>
+                                                        <Form.Group className={styles.checkbox_wrapper}>
+                                                            <Form.Field
+                                                                control={Checkbox}
+                                                                label="Use a different email for email notifications"
+                                                                defaultChecked={props.values.notificationEmailEnabled ?? false}
+                                                                name="notificationEmailEnabled"
+                                                                id="notificationEmailEnabled"
+                                                                onChange={props.handleChange}
+                                                                onBlur={props.handleBlur}
+                                                            />
+                                                        </Form.Group>
 
                                                         {
                                                             props.values.notificationEmailEnabled && (
-                                                                <Row className={styles.view_row}>
-                                                                    <Form.Group as={Col} className={styles.view_item} controlId="notificationEmail">
-                                                                        <Form.Label className={styles.input_label}>
+                                                                <Form.Group>
+                                                                    <Form.Field className={styles.view_item}>
+                                                                        <label htmlFor="notificationEmail" className={styles.input_label}>
                                                                             Alternative
                                                                             Email
-                                                                        </Form.Label>
-                                                                        <Form.Control
+                                                                        </label>
+                                                                        <input
                                                                             type="email"
                                                                             placeholder="john@doe.com"
                                                                             name="notificationEmail"
@@ -199,15 +193,13 @@ const EditProfile: React.FC<EditProfileProps> = (props) => {
                                                                             className={`${styles.input_field} ${(props.errors.notificationEmail && props.touched.notificationEmail) && styles.text_is_invalid}`}
                                                                             defaultValue={props.values.notificationEmail}
                                                                         />
-                                                                    </Form.Group>
+                                                                    </Form.Field>
 
-                                                                    <Form.Group as={Col} className={styles.view_item} controlId="repeatNotificationEmail">
-                                                                        <Form.Label className={styles.input_label}>
-                                                                            Repeat
-                                                                            Alternative
-                                                                            Email
-                                                                        </Form.Label>
-                                                                        <Form.Control
+                                                                    <Form.Field className={styles.view_item}>
+                                                                        <label className={styles.input_label}>
+                                                                            Repeat Alternative Email
+                                                                        </label>
+                                                                        <input
                                                                             type="email"
                                                                             placeholder="john@doe.com"
                                                                             name="repeatNotificationEmail"
@@ -217,38 +209,39 @@ const EditProfile: React.FC<EditProfileProps> = (props) => {
                                                                             defaultValue={props.values.notificationEmail}
                                                                         />
 
-                                                                    </Form.Group>
-                                                                </Row>
+                                                                    </Form.Field>
+                                                                </Form.Group>
                                                             )
                                                         }
 
                                                     </div>
-
-                                                </div>
-
-                                            </Modal.Body>
-                                            <Modal.Footer className={styles.modal_footer}>
-                                                <Button
-                                                    className={styles.modal_button}
-                                                    onClick={handleClose}
-                                                    variant="danger"
-                                                >
-                                                    Cancel
-                                                </Button>
-                                                <Button
-                                                    type="submit"
-                                                    className={styles.modal_button}
-                                                    variant="success"
-                                                >
-                                                    Save
-                                                </Button>
-                                            </Modal.Footer>
+                                            </Modal.Content>
                                         </Form>
+                                      </Modal.Description>
+
+                                      <Modal.Actions>
+                                          <Button
+                                              negative
+                                              onClick={handleClose}
+                                              className={styles.modal_button}
+                                          >
+                                            Cancel
+                                          </Button>
+                                          <Button
+                                              type="submit"
+                                              positive
+                                              className={styles.modal_button}
+                                              // @ts-ignore
+                                              onClick={props.handleSubmit}
+                                          >
+                                            Save
+                                          </Button>
+                                      </Modal.Actions>
+
                                     </>
                                 )}
 
                             </Formik>
-
                         </Modal>
 
                     </div>

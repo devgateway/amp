@@ -5,6 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { RoutingStrategies } from './utils/constants';
 import { MountOptions } from './types';
+import 'semantic-ui-css/semantic.min.css';
 
 const boilerplate = require('@devgateway/amp-boilerplate/dist/amp-boilerplate');
 

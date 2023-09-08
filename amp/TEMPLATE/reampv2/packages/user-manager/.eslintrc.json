@@ -36,6 +36,8 @@
         "react/jsx-closing-tag-location": "off",
         "react/jsx-closing-bracket-location": "off",
         "react/jsx-indent-props": "off",
-        "react/jsx-indent": "off"
+        "react/jsx-indent": "off",
+        "jsx-a11y/label-has-associated-control": "off",
+        "jsx-a11y/label-has-for": "off"
     }
 }

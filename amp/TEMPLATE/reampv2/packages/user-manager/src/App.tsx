@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { RoutingStrategies } from './utils/constants';
 import { createRouter } from './routing';
 import { store } from './reducers/store';
+import './App.css';
 
 interface AppProps {
   routingStrategy: RoutingStrategies;

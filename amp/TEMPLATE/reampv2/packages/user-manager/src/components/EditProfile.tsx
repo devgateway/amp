@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Button, Checkbox, Form, Modal,
 } from 'semantic-ui-react';
@@ -15,7 +15,7 @@ export interface EditProfileProps {
     setShow: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const EditProfile: React.FC<EditProfileProps> = (props) => {
+const EditProfile: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -23,7 +23,12 @@ const EditProfile: React.FC<EditProfileProps> = (props) => {
 
   const userProfile = useAppSelector((state) => state.userProfile.user);
 
-  const { show, setShow } = props;
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    setShow(true);
+  }, []);
+
   const getNotificationEmailEnabled = () => {
     if (userProfile) {
       return userProfile.notificationEmailEnabled;

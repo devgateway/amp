@@ -11,8 +11,7 @@ const override = (config) => {
     name: 'newapp',
     filename: 'remoteEntry.js',
     exposes: {
-      './NewMfeApp': './src/bootstrap',
-      './EditUserProfileModal': './src/components/EditProfile.tsx'
+      './NewMfeApp': './src/bootstrap'
     },
     shared: {
       ...packageJson.dependencies,

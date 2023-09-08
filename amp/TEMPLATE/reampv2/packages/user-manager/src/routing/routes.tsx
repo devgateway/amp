@@ -15,9 +15,20 @@ export const routes: RouteObject[] = [
       {
         index: true,
         element: (
-          <Home />
+            <div>
+              <Home />
+            </div>
+
         ),
       },
+
+      {
+        path: 'edit-profile',
+        element: (
+            <Home />
+        ),
+      },
+
     ],
   },
   {

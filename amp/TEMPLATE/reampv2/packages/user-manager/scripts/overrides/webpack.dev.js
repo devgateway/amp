@@ -11,8 +11,7 @@ const override = (config) => {
     name: 'userManager',
     filename: 'remoteEntry.js',
     exposes: {
-      './UserManagerApp': './src/bootstrap',
-      './EditProfileModal': './src/components/RemoteEditProfileModal',
+      './UserManagerApp': './src/bootstrap'
     },
     shared: {
       ...packageJson.dependencies,

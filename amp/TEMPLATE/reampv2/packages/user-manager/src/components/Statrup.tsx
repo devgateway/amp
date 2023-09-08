@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import EditProfile from './EditProfile';
+import React, { useEffect } from 'react';
 import { fetchUserProfile } from '../reducers/fetchUserProfileReducer';
 import { useAppDispatch } from '../utils/hooks';
+import EditProfile from './EditProfile';
 
 function Statrup() {
   const dispatch = useAppDispatch();
-  const [show, setShow] = useState(false);
 
   window.addEventListener('openUserModal', (e) => {
-    setShow(true);
     console.log(e);
     console.log('openUserModal inside user manager');
   });
@@ -18,7 +16,7 @@ function Statrup() {
   }, []);
   return (
     <div className="App">
-      <EditProfile show={show} setShow={setShow} />
+      <EditProfile />
     </div>
   );
 }

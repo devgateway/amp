@@ -44,7 +44,10 @@ export const routes: RouteObject[] = [
         //not found
         path: '*',
         element: (
-            <div />
+            <CrossNavigationManager>
+                <div />
+            </CrossNavigationManager>
+
         )
     },
 ]

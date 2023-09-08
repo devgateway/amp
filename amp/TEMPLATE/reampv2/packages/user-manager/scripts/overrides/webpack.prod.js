@@ -8,10 +8,14 @@ const packageJson = require('../../package.json');
 const override = (config) => {
   // eslint-disable-next-line global-require
   const moduleFederationPlugin = new ModuleFederationPlugin({
-    name: 'newapp',
+    name: 'userManager',
     filename: 'remoteEntry.js',
     exposes: {
-      './NewMfeApp': './src/bootstrap'
+      './UserManagerApp': './src/bootstrap'
+    },
+    remotes: {
+      'reampv2App': `reampv2App@/TEMPLATE/reampv2/packages/reampv2-app/build/remoteEntry.js`,
+      'ampoffline': `ampoffline@/TEMPLATE/reampv2/packages/ampoffline/build/remoteEntry.js`,
     },
     shared: {
       ...packageJson.dependencies,
@@ -57,7 +61,7 @@ const override = (config) => {
     // Make sure to use [name] or [id] in output.filename
     //  when using multiple entry points
     ...config.output,
-    publicPath: '/myapp/build/',
+    publicPath: '/TEMPLATE/reampv2/packages/user-manager/build/',
     filename: '[name].bundle.js',
     chunkFilename: '[id].bundle.js',
   };

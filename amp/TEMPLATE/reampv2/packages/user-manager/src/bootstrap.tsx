@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import { RoutingStrategies } from './utils/constants';
 import { MountOptions } from './types';
 import 'semantic-ui-css/semantic.min.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 const boilerplate = require('@devgateway/amp-boilerplate/dist/amp-boilerplate');
 

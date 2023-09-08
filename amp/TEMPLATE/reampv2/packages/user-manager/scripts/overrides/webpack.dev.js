@@ -13,6 +13,10 @@ const override = (config) => {
     exposes: {
       './UserManagerApp': './src/bootstrap'
     },
+    remotes: {
+      'reampv2App': 'reampv2App@http://localhost:3002/remoteEntry.js',
+      'ampoffline': 'ampoffline@http://localhost:3001/remoteEntry.js',
+    },
     shared: {
       ...packageJson.dependencies,
       react: {

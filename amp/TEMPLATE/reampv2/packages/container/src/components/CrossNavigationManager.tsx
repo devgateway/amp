@@ -7,13 +7,20 @@ const CrossNavigationManager = ({ children }: { children?: React.ReactNode }) =>
     const location = useLocation();
 
     useEffect(() => {
-        localStorage.setItem('currentPath', location.pathname);
+
         window.addEventListener(EDIT_PROFILE_MODAL_EVENT_NAME, (e: any) => {
             if (location.pathname === USER_MANAGER_APP_NAME){
                 return;
             }
 
-            navigate(`/${USER_MANAGER_APP_NAME}/edit-profile`);
+            const nextPath = `/${USER_MANAGER_APP_NAME}/edit-profile`;
+
+            if (location.pathname === nextPath){
+                return;
+            }
+
+            localStorage.setItem('currentPath', location.pathname);
+            navigate(nextPath);
         });
 
         return () => {

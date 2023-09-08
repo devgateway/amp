@@ -3,6 +3,8 @@ import React, { useEffect } from 'react';
 import { matchRoutes, useLocation, useNavigate } from 'react-router-dom';
 import { routes } from '../routing/routes';
 
+const reampv2Basename = '/reampv2-app';
+
 const NavigationManager = ({ children }: { children: any }) => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -33,6 +35,16 @@ const NavigationManager = ({ children }: { children: any }) => {
   useEffect(() => {
     const userManagerEvent = new CustomEvent('[UserManager] navigated', { detail: location.pathname });
     window.dispatchEvent(userManagerEvent);
+  }, [location]);
+
+  useEffect(() => {
+    if (location.pathname.startsWith(reampv2Basename)) {
+      const containerEvent = new CustomEvent('[reampv2] navigated', {
+        detail: location.pathname.replace(reampv2Basename, ''),
+      });
+
+      window.dispatchEvent(containerEvent);
+    }
   }, [location]);
 
   return children;

@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { toast } from 'react-toastify';
 import { EditUserProfile, UserProfile } from '../types';
 import { REST_EDIT_USER_PROFILE } from '../utils/constants';
 
@@ -29,9 +30,11 @@ export const editUserProfile = createAsyncThunk(
     const data: UserProfile | any = await response.json();
 
     if (response.status !== 200) {
+      toast.error('Error updating user profile');
       return rejectWithValue(data);
     }
 
+    toast.success('User profile updated');
     return data;
   },
 );

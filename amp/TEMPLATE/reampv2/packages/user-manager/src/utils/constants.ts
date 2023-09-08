@@ -7,3 +7,5 @@ export const enum RoutingStrategies {
     // eslint-disable-next-line no-unused-vars
     MEMORY = 'memory'
 }
+
+export const REAMPV2_APP_NAME = 'reampv2-app';

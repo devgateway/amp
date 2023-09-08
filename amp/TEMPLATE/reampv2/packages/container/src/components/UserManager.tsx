@@ -12,7 +12,7 @@ const UserManager = () => {
 
     // Listen to navigation events dispatched inside UserManager mfe.
     useEffect(() => {
-        const reampv2NavigationEventHandler = (event: Event) => {
+        const userManagerNavigationEventHandler = (event: Event) => {
             const pathname = (event as CustomEvent<string>).detail;
             const newPathname = `${userManagerBasename}${pathname}`;
 
@@ -21,12 +21,12 @@ const UserManager = () => {
             }
             navigate(newPathname);
         };
-        window.addEventListener("[UserManager] navigated", reampv2NavigationEventHandler);
+        window.addEventListener("[UserManager] navigated", userManagerNavigationEventHandler);
 
         return () => {
             window.removeEventListener(
                 "[UserManager] navigated",
-                reampv2NavigationEventHandler
+                userManagerNavigationEventHandler
             );
         };
     }, [location]);

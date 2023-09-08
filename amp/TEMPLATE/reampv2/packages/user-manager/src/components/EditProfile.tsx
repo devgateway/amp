@@ -43,8 +43,15 @@ const EditProfile: React.FC = () => {
   }
 
   const handleClose = () => {
+    const previousPath = localStorage.getItem('currentPath');
+    if (previousPath) {
+      const goBackEvent = new CustomEvent('[UserManager] navigated', { detail: previousPath });
+      window.dispatchEvent(goBackEvent);
+    } else {
+      navigate(-1);
+    }
+
     setShow(false);
-    navigate(-1);
   };
 
   // eslint-disable-next-line no-unused-vars
@@ -79,7 +86,7 @@ const EditProfile: React.FC = () => {
                 && (
                     <div>
                         <Modal
-                            onClose={handleClose}
+                            onClose={() => handleClose()}
                             onOpen={() => setShow(true)}
                             open={show}
                             ref={modalRef}

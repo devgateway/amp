@@ -1,10 +1,10 @@
 import React from 'react';
 import './Home.css';
-import Statrup from '../components/Statrup';
+import Startup from '../components/Startup';
 
 function Home() {
   return (
-   <Statrup />
+   <Startup />
   );
 }
 export default Home;

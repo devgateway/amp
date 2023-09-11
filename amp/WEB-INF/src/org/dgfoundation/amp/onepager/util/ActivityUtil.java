@@ -316,7 +316,9 @@ public class ActivityUtil {
 
         logAudit(ampCurrentMember, a, newActivity);
 //        session.flush();
-        ProjectUtil.createProject(a);
+        if (TeamUtil.getCurrentUser().getTruBudgetEnabled()) {
+            ProjectUtil.createProject(a);
+        }
 
         return a;
     }

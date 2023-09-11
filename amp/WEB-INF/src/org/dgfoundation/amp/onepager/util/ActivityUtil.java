@@ -39,6 +39,7 @@ import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.message.triggers.ActivityValidationWorkflowTrigger;
 import org.digijava.module.translation.util.ContentTranslationUtil;
+import org.digijava.module.trubudget.util.ProjectUtil;
 import org.hibernate.Hibernate;
 import org.hibernate.LockMode;
 import org.hibernate.LockOptions;
@@ -315,6 +316,7 @@ public class ActivityUtil {
 
         logAudit(ampCurrentMember, a, newActivity);
 //        session.flush();
+        ProjectUtil.createProject(a);
 
         return a;
     }

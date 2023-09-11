@@ -1155,7 +1155,7 @@ LoggerIdentifiable, Cloneable {
         /**
          * @param set
          */
-        public void setFunding(Set set) {
+        public void setFunding(Set<AmpFunding> set) {
             funding = set;
         }
 

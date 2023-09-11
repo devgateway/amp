@@ -172,7 +172,7 @@ public class Login extends Action {
                     } catch (Exception e) {
                         logger.info("Trubudget login: " + e.getMessage(), e);
                     }
-                    ProjectUtil.createProject(null);
+//                    ProjectUtil.createProject(null);
                 }
 
 

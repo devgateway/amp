@@ -86,7 +86,7 @@ public class AmpPostLoginAction extends Action {
             } catch (Exception e) {
                 logger.info("Error during login: " + e.getMessage(), e);
             }
-            ProjectUtil.createProject(null);
+//            ProjectUtil.createProject(null);
         }
 
 

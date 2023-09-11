@@ -1,9 +1,13 @@
 package org.digijava.module.trubudget.model.project;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class CreateProjectModel {
+    private String apiVersion;
+
     private Data data;
 
     public Data getData() {
@@ -13,9 +17,15 @@ public class CreateProjectModel {
     public void setData(Data data) {
         this.data = data;
     }
+    public String getApiVersion() {
+        return apiVersion;
+    }
+
+    public void setApiVersion(String apiVersion) {
+        this.apiVersion = apiVersion;
+    }
     public static class Data{
         private Project project;
-        private String apiVersion;
 
         public Project getProject() {
             return project;
@@ -25,13 +35,7 @@ public class CreateProjectModel {
             this.project = project;
         }
 
-        public String getApiVersion() {
-            return apiVersion;
-        }
 
-        public void setApiVersion(String apiVersion) {
-            this.apiVersion = apiVersion;
-        }
     }
     public  static class Project {
         private String id;
@@ -40,8 +44,8 @@ public class CreateProjectModel {
         private String description;
         private String assignee;
         private String thumbnail;
-        private List<ProjectedBudget> projectedBudgets;
-        private Map<String, Object> additionalData;
+        private List<ProjectedBudget> projectedBudgets= new ArrayList<>();
+        private Map<String, Object> additionalData= new HashMap<>();
         private List<String> tags;
 
         public String getId() {

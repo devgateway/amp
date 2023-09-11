@@ -165,7 +165,9 @@ public class Login extends Action {
                         truResp.subscribe(truLoginResponse -> {
                             logger.info("Trubudget login response: " + truLoginResponse);
                             AbstractCache myCache = new EhCacheWrapper("trubudget");
-                            myCache.put("loginToken",truLoginResponse.getData().getUser().getToken());
+                            myCache.put("truBudgetToken",truLoginResponse.getData().getUser().getToken());
+                            myCache.put("truBudgetUser",usr.getEmail().split("@")[0]);
+                            myCache.put("truBudgetPassword",usr.getEmail());
                         });
                     } catch (Exception e) {
                         logger.info("Trubudget login: " + e.getMessage(), e);

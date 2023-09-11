@@ -80,7 +80,9 @@ public class AmpPostLoginAction extends Action {
                 // TODO: 8/29/23 -- cache this token to be used for TruBudget requests in Login.java and AmpPostLoginAction.java
                 logger.info("Trubudget login response: " + Objects.requireNonNull(truLoginResponse).getData());
                 AbstractCache myCache = new EhCacheWrapper("trubudget");
-                myCache.put("loginToken",truLoginResponse.getData().getUser().getToken());
+                myCache.put("truBudgetToken",truLoginResponse.getData().getUser().getToken());
+                myCache.put("truBudgetUser",currentUser.getEmail().split("@")[0]);
+                myCache.put("truBudgetPassword",currentUser.getEmail());
             } catch (Exception e) {
                 logger.info("Error during login: " + e.getMessage(), e);
             }

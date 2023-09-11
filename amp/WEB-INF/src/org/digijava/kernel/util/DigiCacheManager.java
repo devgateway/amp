@@ -63,8 +63,7 @@ public class DigiCacheManager {
     public synchronized AbstractCache getCache(String region) {
         
         if (cacheManager != null) {
-            AbstractCache cache = cacheManager.getCache(region); 
-            return cache;
+            return cacheManager.getCache(region);
         } else {
             throw new IllegalStateException("cacheManager isn't configured");
         }

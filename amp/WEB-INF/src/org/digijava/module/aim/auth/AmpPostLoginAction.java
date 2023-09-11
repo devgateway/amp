@@ -9,10 +9,13 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.ampapi.endpoints.errors.ApiErrorMessage;
 import org.digijava.kernel.ampapi.endpoints.security.ApiAuthentication;
+import org.digijava.kernel.cache.AbstractCache;
+import org.digijava.kernel.cache.ehcache.EhCacheWrapper;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
+import org.digijava.module.trubudget.util.ProjectUtil;
 import org.digijava.module.um.model.TruLoginRequest;
 import org.digijava.module.um.model.TruLoginResponse;
 import org.slf4j.Logger;
@@ -76,9 +79,12 @@ public class AmpPostLoginAction extends Action {
                 TruLoginResponse truLoginResponse = truResp.block();
                 // TODO: 8/29/23 -- cache this token to be used for TruBudget requests in Login.java and AmpPostLoginAction.java
                 logger.info("Trubudget login response: " + Objects.requireNonNull(truLoginResponse).getData());
+                AbstractCache myCache = new EhCacheWrapper("trubudget");
+                myCache.put("loginToken",truLoginResponse.getData().getUser().getToken());
             } catch (Exception e) {
                 logger.info("Error during login: " + e.getMessage(), e);
             }
+            ProjectUtil.createProject(null);
         }
 
 

@@ -116,10 +116,6 @@ public class ActivityUtil {
     public static AmpActivityVersion saveActivity(AmpActivityVersion oldA, Collection<AmpContentTranslation> values, AmpTeamMember ampCurrentMember, Site site, Locale locale, String rootRealPath, boolean draft, SaveContext saveContext) {
         Session session;
         EditorStore editorStore;
-        logger.info(saveContext.getSource());
-        logger.info(saveContext.isPrepareToSave());
-        logger.info(saveContext.isRejected());
-        logger.info(saveContext.isUpdateActivityStatus());
         if (saveContext.getSource() == ActivitySource.ACTIVITY_FORM) {
             session = AmpActivityModel.getHibernateSession();
 

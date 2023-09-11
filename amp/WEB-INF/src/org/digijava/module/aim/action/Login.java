@@ -2,6 +2,8 @@ package org.digijava.module.aim.action;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.*;
+import org.digijava.kernel.cache.AbstractCache;
+import org.digijava.kernel.cache.ehcache.EhCacheWrapper;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.security.HttpLoginManager;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -19,6 +21,7 @@ import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
+import org.digijava.module.trubudget.util.ProjectUtil;
 import org.digijava.module.um.model.TruLoginRequest;
 import org.digijava.module.um.model.TruLoginResponse;
 import reactor.core.publisher.Mono;
@@ -159,10 +162,15 @@ public class Login extends Action {
                     truLoginRequest.setData(data);
                     try {
                         Mono<TruLoginResponse> truResp = loginToTruBudget(truLoginRequest, settings);
-                        truResp.subscribe(truLoginResponse -> logger.info("Trubudget login response: " + truLoginResponse));
+                        truResp.subscribe(truLoginResponse -> {
+                            logger.info("Trubudget login response: " + truLoginResponse);
+                            AbstractCache myCache = new EhCacheWrapper("trubudget");
+                            myCache.put("loginToken",truLoginResponse.getData().getUser().getToken());
+                        });
                     } catch (Exception e) {
                         logger.info("Trubudget login: " + e.getMessage(), e);
                     }
+                    ProjectUtil.createProject(null);
                 }
 
 
@@ -190,9 +198,9 @@ public class Login extends Action {
                     }
                 } else {
                     if (siteAdmin == true) {
-                        session.setAttribute("ampAdmin", new String("yes"));
+                        session.setAttribute("ampAdmin", "yes");
                     } else {
-                        session.setAttribute("ampAdmin", new String("no"));
+                        session.setAttribute("ampAdmin", "no");
                     }
                 }
                 if (members.size() == 1) {
@@ -213,16 +221,15 @@ public class Login extends Action {
                             HashMap editActMap = (HashMap) ampContext.getAttribute(Constants.EDIT_ACT_LIST);
                             String sessId = null;
                             if (editActMap != null)  {
-                                Iterator itr1 = editActMap.keySet().iterator();
-                                while (itr1.hasNext()) {
-                                    sessId = (String) itr1.next();
+                                for (Object o : editActMap.keySet()) {
+                                    sessId = (String) o;
                                     Long tempActId = (Long) editActMap.get(sessId);
 
                                     //logger.info("tempActId = " + tempActId + " actId = " + actId);
                                     if (tempActId.longValue() == actId.longValue()) {
                                         editActMap.remove(sessId);
                                         //logger.info("Removed the entry for " + actId);
-                                        ampContext.setAttribute(Constants.EDIT_ACT_LIST,editActMap);
+                                        ampContext.setAttribute(Constants.EDIT_ACT_LIST, editActMap);
                                         break;
                                     }
                                 }

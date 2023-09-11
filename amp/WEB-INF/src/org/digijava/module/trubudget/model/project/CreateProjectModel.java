@@ -1,4 +1,4 @@
-package org.digijava.module.trubudget.model;
+package org.digijava.module.trubudget.model.project;
 
 import java.util.List;
 import java.util.Map;

@@ -1,7 +1,9 @@
-package org.digijava.module.trubudget.model;
+package org.digijava.module.trubudget.model.subproject;
 
 
-public class EditProjectModel {
+import java.util.Map;
+
+public class EditSubProjectModel {
     private String apiVersion;
     private Data data;
 
@@ -24,8 +26,10 @@ public class EditProjectModel {
     }
     public static class Data {
         private String projectId;
+        private String subprojectId;
         private String displayName;
         private String description;
+        private Map<String , Object> additionalData;
 
         // Getters and setters for projectId, displayName, and description
 
@@ -52,7 +56,23 @@ public class EditProjectModel {
         public void setDescription(String description) {
             this.description = description;
         }
-}
+
+        public String getSubprojectId() {
+            return subprojectId;
+        }
+
+        public void setSubprojectId(String subprojectId) {
+            this.subprojectId = subprojectId;
+        }
+
+        public Map<String, Object> getAdditionalData() {
+            return additionalData;
+        }
+
+        public void setAdditionalData(Map<String, Object> additionalData) {
+            this.additionalData = additionalData;
+        }
+    }
 
 
 }

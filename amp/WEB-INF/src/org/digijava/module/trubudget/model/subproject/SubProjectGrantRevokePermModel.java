@@ -1,7 +1,7 @@
-package org.digijava.module.trubudget.model;
+package org.digijava.module.trubudget.model.subproject;
 
 
-public class ProjectGrantPermModel {
+public class SubProjectGrantRevokePermModel {
     private String apiVersion;
     private Data data;
 
@@ -24,6 +24,7 @@ public class ProjectGrantPermModel {
     }
     public static class Data {
         private String projectId;
+        private String subprojectId;
         private String identity;
         private String intent;
 
@@ -51,6 +52,14 @@ public class ProjectGrantPermModel {
 
         public void setIntent(String intent) {
             this.intent = intent;
+        }
+
+        public String getSubprojectId() {
+            return subprojectId;
+        }
+
+        public void setSubprojectId(String subprojectId) {
+            this.subprojectId = subprojectId;
         }
     }
 }

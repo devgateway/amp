@@ -1,7 +1,7 @@
-package org.digijava.module.trubudget.model;
+package org.digijava.module.trubudget.model.project;
 
 
-public class EditProjectedModel {
+public class EditProjectedBudgetModel {
     private String apiVersion;
     private Data data;
 

@@ -646,8 +646,8 @@ public class DbUtil {
 
         }catch (Exception e)
         {
-            e.printStackTrace();
-            throw new RuntimeException(e.getMessage());
+           logger.info("Error during intent fetch ",e);
+           throw new RuntimeException(e);
         }
 
     }

@@ -29,7 +29,7 @@ import static org.digijava.module.um.util.DbUtil.getTruBudgetIntents;
 
 public class AddUser extends Action {
 
-    private static Logger logger = Logger.getLogger(AddUser.class);
+    private static final Logger logger = Logger.getLogger(AddUser.class);
 
     public ActionForward execute(ActionMapping mapping, ActionForm form,
             javax.servlet.http.HttpServletRequest request,
@@ -56,7 +56,7 @@ public class AddUser extends Action {
                     // set country resident data
                     registerForm.setRegistrationByEmail(FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.USER_REGISTRATION_BY_MAIL));
 
-                    HashMap countriesMap = new HashMap();
+                    HashMap countriesMap = new HashMap<>();
                     Iterator iterator = TrnUtil.getCountries(
                             RequestUtils.getNavigationLanguage(request).getCode())
                             .iterator();
@@ -65,10 +65,10 @@ public class AddUser extends Action {
                         countriesMap.put(item.getIso(), item);
                     }
                     // sort countries
-                    Collection<CountryBean> countrieCol = org.digijava.module.aim.util.DbUtil.getTranlatedCountries(request);
+                    Collection<CountryBean> countriesCol = org.digijava.module.aim.util.DbUtil.getTranlatedCountries(request);
 
-                    registerForm.setCountryResidence(countrieCol);
-                    logger.debug("sortedCountries.size : " + countrieCol.size());
+                    registerForm.setCountryResidence(countriesCol);
+                    logger.debug("sortedCountries.size : " + countriesCol.size());
                     Collection<TruBudgetIntent> intents = getTruBudgetIntents();
                     registerForm.setTruBudgetIntents(intents);
 

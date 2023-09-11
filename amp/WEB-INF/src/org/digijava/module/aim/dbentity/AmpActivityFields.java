@@ -137,7 +137,7 @@ LoggerIdentifiable, Cloneable {
             interValidators = @InterchangeableValidator(value = RequiredValidator.class, groups = Submit.class,
                     fmPath = "/Activity Form/Identification/Required Validator for Description"))
     @VersionableFieldTextEditor(fieldTitle = "Description")
-    protected String description ;
+    protected String description;
 
     @Interchangeable(fieldTitle = "Project Comments", importable = true, fmPath = "/Activity Form/Identification/Project Comments")
     @VersionableFieldTextEditor(fieldTitle = "Project Comments")

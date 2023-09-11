@@ -288,8 +288,9 @@ public final class ActivityInterchangeUtils {
      */
     public static Map<String, Object> getActivity(Long projectId, boolean isOfflineClientCall) {
         Map<String, Object> activity = getActivity(projectId, null);
+
         if (!isOfflineClientCall
-                && FeaturesUtil.isVisibleModule("/REPORTING/Activity Preview/Hide Documents if no donor")) {
+                && FeaturesUtil.isVisibleModule("Hide Documents if No Donor")) {
             filterPropertyBasedOnUserPermission(activity, projectId);
         }
             return activity;

@@ -39,6 +39,7 @@ import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.message.triggers.ActivityValidationWorkflowTrigger;
 import org.digijava.module.translation.util.ContentTranslationUtil;
+import org.digijava.module.trubudget.dbentity.TruBudgetActivity;
 import org.digijava.module.trubudget.util.ProjectUtil;
 import org.hibernate.Hibernate;
 import org.hibernate.LockMode;
@@ -316,8 +317,17 @@ public class ActivityUtil {
 
         logAudit(ampCurrentMember, a, newActivity);
 //        session.flush();
+        // TODO: 9/12/23 check if project is already existing
         if (TeamUtil.getCurrentUser().getTruBudgetEnabled()) {
-            ProjectUtil.createProject(a);
+            TruBudgetActivity truBudgetActivity = ProjectUtil.isActivityAlreadyInTrubudget(a.getAmpActivityId());
+            if (truBudgetActivity==null) {
+                ProjectUtil.createProject(a);
+            }
+            else
+            {
+                //update project
+                ProjectUtil.updateProject(truBudgetActivity.getTruBudgetId(),a);
+            }
         }
 
         return a;

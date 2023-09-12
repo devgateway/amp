@@ -56,10 +56,12 @@ input[type=number] {
     border-bottom: none;
 }
 
-.input_label {font-weight: 600 !important;
+.input_label {
+    font-weight: 600 !important;
     color: #225977 !important;
     font-size: 14px !important;
     margin-bottom: 12px;
+    margin-top: 8px;
 
 }
 
@@ -129,4 +131,10 @@ input[type=number] {
 
 .form_section:last-child {
     border-bottom: none;
+}
+
+.Modal_feedback_message {
+    margin: 10px 0 !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
 }

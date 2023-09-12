@@ -34,6 +34,7 @@ const Reampv2 = () => {
     // Listen for container location changes and dispatch a notification.
     useEffect(() => {
         if (location.pathname.startsWith(reampv2Basename)) {
+            localStorage.setItem('currentPath', location.pathname);
             const containerEvent = new CustomEvent("[container] navigated", {
                 detail: location.pathname.replace(reampv2Basename, ""),
             });

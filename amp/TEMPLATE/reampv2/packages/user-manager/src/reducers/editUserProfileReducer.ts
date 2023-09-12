@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 import { EditUserProfile, UserProfile } from '../types';
 import { REST_EDIT_USER_PROFILE } from '../utils/constants';
+import { errorHelper } from '../utils/errorHelper';
 
 const REDUCER_NAME = 'editUserProfile';
 
@@ -53,7 +54,7 @@ const editUserProfileSlice = createSlice({
     });
     builder.addCase(editUserProfile.rejected, (state, action) => {
       state.loading = false;
-      state.error = action.payload;
+      state.error = errorHelper(action.payload);
     });
   },
 });

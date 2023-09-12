@@ -1,13 +1,19 @@
 import React, { useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { fetchUserProfile } from '../reducers/fetchUserProfileReducer';
-import { useAppDispatch } from '../utils/hooks';
+import { useAppDispatch, useAppSelector } from '../utils/hooks';
 import EditProfile from './EditProfile';
+import { fetchTranslations } from '../reducers/translationsReducer';
+import defaultTranslationsPack from '../config/initialTranslations.json';
+
+export const TranslationsContext = React.createContext(defaultTranslationsPack);
 
 const Startup = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
+
+  const userProfileLoading = useAppSelector((state) => state.userProfile.loading);
+  const translationsLoading = useAppSelector((state) => state.translations.loading);
 
   useEffect(() => {
     // eslint-disable-next-line no-unused-vars
@@ -21,13 +27,23 @@ const Startup = () => {
   }, []);
 
   useEffect(() => {
+    dispatch(fetchTranslations(defaultTranslationsPack));
     dispatch(fetchUserProfile());
   }, []);
 
   return (
-    <div className="App">
-      <EditProfile />
-    </div>
+      <>
+        {
+            userProfileLoading || translationsLoading
+              ? <div>Loading...</div>
+              : (
+                    <div className="App">
+                      <EditProfile />
+                    </div>
+              )
+        }
+      </>
+
   );
 };
 

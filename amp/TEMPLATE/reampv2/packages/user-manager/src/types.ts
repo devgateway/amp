@@ -1,4 +1,5 @@
 import { RoutingStrategies } from './utils/constants';
+import translationPack from './config/initialTranslations.json';
 
 export interface MountOptions {
     mountPoint: HTMLElement;
@@ -30,3 +31,5 @@ export interface EditUserProfile extends Omit<UserProfile, 'banned' | 'isBanned'
     emailConfirmation?: string;
     repeatNotificationEmail?: string;
 }
+
+export type TranslationsPack = typeof translationPack;

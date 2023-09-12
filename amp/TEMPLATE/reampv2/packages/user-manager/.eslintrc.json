@@ -35,10 +35,16 @@
         "react/jsx-no-useless-fragment": "off",
         "react/jsx-closing-tag-location": "off",
         "react/jsx-closing-bracket-location": "off",
+        "react/require-default-props": "off",
         "react/jsx-indent-props": "off",
         "react/jsx-indent": "off",
         "jsx-a11y/label-has-associated-control": "off",
         "jsx-a11y/label-has-for": "off",
-        "no-unused-vars": "warn"
+        "no-unused-vars": "warn",
+        "comma-dangle": "off",
+        "object-curly-spacing": "warn",
+        "object-curly-newline": "warn",
+        "jsx-quotes": "warn",
+        "quotes": "warn"
     }
 }

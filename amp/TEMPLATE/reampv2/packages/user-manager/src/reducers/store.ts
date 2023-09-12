@@ -3,6 +3,7 @@ import {
 } from '@reduxjs/toolkit';
 import userProfileReducer from './fetchUserProfileReducer';
 import editUserProfileReducer from './editUserProfileReducer';
+import translationsReducer from './translationsReducer';
 
 // fetches the redux data from local storage
 const loadState = () => {
@@ -19,6 +20,7 @@ const persistedState = loadState();
 const staticReducers = {
   userProfile: userProfileReducer,
   editUserProfile: editUserProfileReducer,
+  translations: translationsReducer
 };
 
 const initialStore = {

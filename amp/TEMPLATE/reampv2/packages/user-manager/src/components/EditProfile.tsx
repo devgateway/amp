@@ -6,24 +6,25 @@ import { Formik, FormikProps } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import styles from './css/Modal.module.css';
 import { useAppDispatch, useAppSelector } from '../utils/hooks';
-import { EditUserProfile } from '../types';
+import { EditUserProfile, UserProfile } from '../types';
 import { editProfileSchema } from '../utils/validators';
 import { editUserProfile } from '../reducers/editUserProfileReducer';
-
-export interface EditProfileProps {
-    show: boolean;
-    setShow: React.Dispatch<React.SetStateAction<boolean>>;
-}
+import ResultModal from './ResultModal';
+import { updateUser } from '../reducers/fetchUserProfileReducer';
 
 const EditProfile: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const translations = useAppSelector((state) => state.translations.translations);
+  const editUserProfileState = useAppSelector((state) => state.editUserProfile);
 
   const modalRef = useRef(null);
 
   const userProfile = useAppSelector((state) => state.userProfile.user);
 
   const [show, setShow] = useState(false);
+  const [showResultModal, setShowResultModal] = useState(false);
+  const [resultModalContent, setResultModalContent] = useState('');
 
   useEffect(() => {
     setShow(true);
@@ -37,6 +38,23 @@ const EditProfile: React.FC = () => {
   };
   const [useNotificationEmail, setUseNotificationEmail] = useState(getNotificationEmailEnabled());
   const formikRef = useRef<FormikProps<EditUserProfile>>(null);
+
+  const handleResult = () => {
+    if (!editUserProfileState.loading && editUserProfileState.error) {
+      setResultModalContent('Error updating profile.');
+      setShowResultModal(true);
+    }
+
+    if (!editUserProfileState.loading && !editUserProfileState.error) {
+      dispatch(updateUser(editUserProfileState.user as UserProfile));
+      setResultModalContent('Profile updated successfully.');
+      setShowResultModal(true);
+    }
+  };
+
+  useEffect(() => {
+    handleResult();
+  }, [editUserProfileState]);
 
   if (!userProfile) {
     return;
@@ -91,6 +109,7 @@ const EditProfile: React.FC = () => {
                             open={show}
                             ref={modalRef}
                             closeIcon
+                            dimmer="blurring"
                         >
                             <Modal.Header>
                                 Edit Profile
@@ -110,11 +129,11 @@ const EditProfile: React.FC = () => {
                                                         <Form.Group>
                                                             <Form.Field className={styles.view_item} required>
                                                                 <label htmlFor="fistName" className={styles.input_label}>
-                                                                    First Name
+                                                                    {translations['amp.user-manager:first-name']}
                                                                 </label>
                                                                 <input
                                                                     type="text"
-                                                                    placeholder="Enter First Name"
+                                                                    placeholder={translations['amp.user-manager:enter-first-name']}
                                                                     name="firstName"
                                                                     id="firstName"
                                                                     onChange={props.handleChange}
@@ -122,28 +141,45 @@ const EditProfile: React.FC = () => {
                                                                     className={`${styles.input_field} ${(props.errors.firstName && props.touched.firstName) && styles.text_is_invalid}`}
                                                                     defaultValue={props.values.firstName}
                                                                 />
+                                                              {
+                                                                props.errors.firstName && props.touched.firstName
+                                                                    && (
+                                                                        <h6>
+                                                                            {props.errors.firstName}
+                                                                        </h6>
+                                                                    )
+                                                              }
                                                             </Form.Field>
 
                                                             <Form.Field className={styles.view_item} required>
                                                                 <label htmlFor="lastName" className={styles.input_label}>
-                                                                    Last Name
+                                                                  {translations['amp.user-manager:last-name']}
                                                                 </label>
                                                                 <input
                                                                     type="text"
-                                                                    placeholder="Enter Last Name"
+                                                                    placeholder={translations['amp.user-manager:enter-last-name']}
                                                                     name="lastName"
                                                                     onChange={props.handleChange}
                                                                     onBlur={props.handleBlur}
                                                                     className={`${styles.input_field} ${(props.errors.lastName && props.touched.lastName) && styles.text_is_invalid}`}
                                                                     defaultValue={props.values.lastName}
                                                                 />
+
+                                                              {
+                                                                  props.errors.lastName && props.touched.lastName
+                                                                  && (
+                                                                      <h6>
+                                                                            {props.errors.lastName}
+                                                                        </h6>
+                                                                  )
+                                                              }
                                                             </Form.Field>
                                                         </Form.Group>
 
                                                         <Form.Group>
                                                             <Form.Field className={styles.view_item} required>
                                                                 <label htmlFor="email" className={styles.input_label}>
-                                                                    Email
+                                                                    {translations['amp.user-manager:email']}
                                                                 </label>
                                                                 <input
                                                                     type="email"
@@ -154,11 +190,20 @@ const EditProfile: React.FC = () => {
                                                                     className={`${styles.input_field} ${(props.errors.email && props.touched.email) && styles.text_is_invalid}`}
                                                                     defaultValue={props.values.email}
                                                                 />
+
+                                                              {
+                                                                  props.errors.email && props.touched.email
+                                                                  && (
+                                                                      <h6>
+                                                                            {props.errors.email}
+                                                                        </h6>
+                                                                  )
+                                                              }
                                                             </Form.Field>
 
                                                             <Form.Field className={styles.view_item} required>
                                                                 <label htmlFor="emailConfirmation" className={styles.input_label}>
-                                                                    Repeat Email
+                                                                  {translations['amp.user-manager:repeat-email']}
                                                                 </label>
                                                                 <input
                                                                     type="email"
@@ -169,6 +214,15 @@ const EditProfile: React.FC = () => {
                                                                     className={`${styles.input_field} ${(props.errors.emailConfirmation && props.touched.emailConfirmation) && styles.text_is_invalid}`}
                                                                     defaultValue={props.values.email}
                                                                 />
+
+                                                              {
+                                                                  props.errors.emailConfirmation && props.touched.emailConfirmation
+                                                                  && (
+                                                                      <h6>
+                                                                            {props.errors.emailConfirmation}
+                                                                        </h6>
+                                                                  )
+                                                              }
                                                             </Form.Field>
                                                         </Form.Group>
                                                         <br />
@@ -179,7 +233,7 @@ const EditProfile: React.FC = () => {
                                                         <Form.Group className={styles.checkbox_wrapper}>
                                                             <Form.Field
                                                                 control={Checkbox}
-                                                                label="Use a different email for email notifications"
+                                                                label={translations['amp.user-manager:receive-notifications']}
                                                                 defaultChecked={props.values.notificationEmailEnabled ?? false}
                                                                 name="notificationEmailEnabled"
                                                                 id="notificationEmailEnabled"
@@ -193,8 +247,7 @@ const EditProfile: React.FC = () => {
                                                                 <Form.Group>
                                                                     <Form.Field className={styles.view_item}>
                                                                         <label htmlFor="notificationEmail" className={styles.input_label}>
-                                                                            Alternative
-                                                                            Email
+                                                                          {translations['amp.user-manager:alternative-email']}
                                                                         </label>
                                                                         <input
                                                                             type="email"
@@ -205,11 +258,20 @@ const EditProfile: React.FC = () => {
                                                                             className={`${styles.input_field} ${(props.errors.notificationEmail && props.touched.notificationEmail) && styles.text_is_invalid}`}
                                                                             defaultValue={props.values.notificationEmail}
                                                                         />
+
+                                                                      {
+                                                                          props.errors.notificationEmail && props.touched.notificationEmail
+                                                                          && (
+                                                                              <h6>
+                                                                            {props.errors.notificationEmail}
+                                                                        </h6>
+                                                                          )
+                                                                      }
                                                                     </Form.Field>
 
                                                                     <Form.Field className={styles.view_item}>
                                                                         <label className={styles.input_label}>
-                                                                            Repeat Alternative Email
+                                                                          {translations['amp.user-manager:repeat-alternative-email']}
                                                                         </label>
                                                                         <input
                                                                             type="email"
@@ -220,6 +282,15 @@ const EditProfile: React.FC = () => {
                                                                             className={`${styles.input_field} ${(props.errors.repeatNotificationEmail && props.touched.repeatNotificationEmail) && styles.text_is_invalid}`}
                                                                             defaultValue={props.values.notificationEmail}
                                                                         />
+
+                                                                      {
+                                                                          props.errors.repeatNotificationEmail && props.touched.repeatNotificationEmail
+                                                                          && (
+                                                                              <h6>
+                                                                            {props.errors.repeatNotificationEmail}
+                                                                        </h6>
+                                                                          )
+                                                                      }
 
                                                                     </Form.Field>
                                                                 </Form.Group>
@@ -237,7 +308,7 @@ const EditProfile: React.FC = () => {
                                               onClick={handleClose}
                                               className={styles.modal_button}
                                           >
-                                            Cancel
+                                            {translations['amp.user-manager:cancel']}
                                           </Button>
                                           <Button
                                               type="submit"
@@ -246,9 +317,11 @@ const EditProfile: React.FC = () => {
                                               // @ts-ignore
                                               onClick={props.handleSubmit}
                                           >
-                                            Save
+                                            {translations['amp.user-manager:save']}
                                           </Button>
                                       </Modal.Actions>
+
+                                      <ResultModal content={resultModalContent} open={showResultModal} />
 
                                     </>
                                 )}

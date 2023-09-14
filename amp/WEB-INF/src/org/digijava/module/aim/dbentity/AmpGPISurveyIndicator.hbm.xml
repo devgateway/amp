@@ -19,7 +19,7 @@
 		<property name="showAsIndicator" column="show_as_indicator" type="java.lang.Boolean"/>
 
 		<set name="questions" table="AMP_GPISURVEY_QUESTION" inverse="true" lazy="true"
-			cascade="none">
+			cascade="merge">
 			<cache usage="read-write" />
 			<key column="amp_indicator_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpGPISurveyQuestion" />

@@ -14,7 +14,7 @@
 		<property name="questionText" column="question_text" type="java.lang.String" />
 
 		<many-to-one name="ampIndicatorId" column="amp_indicator_id"
-			class="org.digijava.module.aim.dbentity.AmpGPISurveyIndicator" cascade="all" not-null="true" />
+			class="org.digijava.module.aim.dbentity.AmpGPISurveyIndicator" cascade="merge" not-null="true" />
 			
 		<many-to-one name="parentQuestion" column="parent_question_id"
 			class="org.digijava.module.aim.dbentity.AmpGPISurveyQuestion" cascade="none" not-null="false" />			

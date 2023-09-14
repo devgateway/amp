@@ -487,6 +487,7 @@
 													</html:select></td>
 	
 											</tr>
+												<c:if test="${umAddUserForm.truBudgetEnabled=='true'}">
 
 											<tr>
 												<td width="3%">&nbsp;</td>
@@ -521,6 +522,7 @@
 																   size="20" autocomplete="new-password" />
 												</td>
 											</tr>
+											</c:if>
  											<module:display name="Pledges" parentModule="PROJECT MANAGEMENT">
 											<tr>
 												<td  width="3%">&nbsp;</td>

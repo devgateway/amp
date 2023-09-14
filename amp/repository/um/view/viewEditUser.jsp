@@ -331,6 +331,8 @@ function validateUserInfo(){
 																             </html:select>
 																		</td>
 																	</tr>
+																		<c:if test="${umViewEditUserForm.truBudgetEnabled=='true'}">
+
 																	<tr>
 																		<td align=right style="font-size: 11px;">
 <%--																			<FONT color=red>*</FONT>--%>
@@ -343,27 +345,14 @@ function validateUserInfo(){
 																			</html:select>
 																		</td>
 																	</tr>
+
 																	<tr>
-																		<c:set var="translation">
-																			<digi:trn key="um:truBudgetPassword">Change TruBudget password</digi:trn>
-																		</c:set>
-																		<td width="169" valign="top" align="right"
-																			height="30" style="font-size: 11px;
+																		<td width="169" align="right" height="30"style="font-size: 11px;
     font-weight: bold; color:#000;">
-																			<div style="margin-top: 10px;">
-																				<digi:trn key="um:truBudgetPassword">Trubudget Password:</digi:trn>
-																			</div>
+																			<digi:trn key="aim:viewEditUser:confirmPassword">New Trubudget Password:</digi:trn>
 																		</td>
-																		<td width="380" valign="top" height="30" colspan="2" class="inputcontainer">
-																			<html:password name="umViewEditUserForm"
-																						   property="truBudgetPassword"
-																						   redisplay="false"/>
-																			<div style="padding-left: 2px; margin: 5px">
-																				<div style="display: none" class="pwd_container" id="pwd_container">
-																					<span class="pwstrength_viewport_verdict">&nbsp;</span>
-																					<span class="pwstrength_viewport_progress"></span>
-																				</div>
-																			</div>
+																		<td width="380" height="30" colspan="2"  class="inputcontainer">
+																			<html:password name="umViewEditUserForm" property="truBudgetPassword" redisplay="false"/>
 																		</td>
 																	</tr>
 <%--																	<tr>--%>
@@ -375,7 +364,9 @@ function validateUserInfo(){
 <%--																			<html:password name="umViewEditUserForm" property="confirmNewPassword" redisplay="false"/>--%>
 <%--																		</td>--%>
 <%--																	</tr>--%>
-                                                          			<tr>
+																	</c:if>
+
+																	<tr>
 																		<td width="169" align="right" height="30"style="font-size: 11px;
     font-weight: bold; color:#000;">
                                                                     		<digi:trn key="aim:viewEditUser:mailingAddress">Mailing address</digi:trn>

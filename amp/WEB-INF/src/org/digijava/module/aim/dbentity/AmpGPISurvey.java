@@ -117,7 +117,7 @@ public class AmpGPISurvey implements Versionable, Serializable, Cloneable, Compa
         } else {
             aux.setResponses(null);
         }
-        logger.info("Merging responses. "+responses);
+        logger.info("Merging responses. "+aux.getResponses());
 
         return aux;
     }

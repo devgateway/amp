@@ -141,7 +141,7 @@ public class ViewEditUser extends Action {
             }
 
             uForm.setRegions(DynLocationManagerUtil.getLocationsOfTypeAdmLevel1OfDefCountry());
-            
+            uForm.setTruBudgetPassword(UmUtil.decrypt(user.getTruBudgetPassword(),user.getTruBudgetKeyGen()));
             Collection<AmpOrgType> orgTypeCol = DbUtil.getAllOrgTypes();
             if (orgTypeCol != null) {
                 uForm.setOrgTypes(orgTypeCol);

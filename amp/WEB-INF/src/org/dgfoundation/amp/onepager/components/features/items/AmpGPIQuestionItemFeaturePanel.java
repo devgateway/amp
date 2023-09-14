@@ -32,9 +32,7 @@ public class AmpGPIQuestionItemFeaturePanel extends AmpFeaturePanel<AmpGPISurvey
         super(id, surveyIndicator, fmName, true);
 
         if (surveyIndicator.getObject() != null) {
-            Iterator<AmpGPISurveyQuestion> it = surveyIndicator.getObject().getQuestions().iterator();
-            while (it.hasNext()) {
-                AmpGPISurveyQuestion qq = (AmpGPISurveyQuestion) it.next();
+            for (AmpGPISurveyQuestion qq : surveyIndicator.getObject().getQuestions()) {
                 qq.getAmpTypeId().getName();
             }
         }
@@ -46,7 +44,7 @@ public class AmpGPIQuestionItemFeaturePanel extends AmpFeaturePanel<AmpGPISurvey
             public List<AmpGPISurveyQuestion> getObject() {
                 Set<AmpGPISurveyQuestion> set = (Set<AmpGPISurveyQuestion>) surveyIndicator.getObject().getQuestions();
                 ArrayList<AmpGPISurveyQuestion> list = new ArrayList<AmpGPISurveyQuestion>(set);
-                Collections.sort(list, new AmpGPISurveyQuestion.GPISurveyQuestionComparator());
+                list.sort(new AmpGPISurveyQuestion.GPISurveyQuestionComparator());
 
                 ArrayList<AmpGPISurveyQuestion> listOrderedByParent = new ArrayList<AmpGPISurveyQuestion>();
 
@@ -74,9 +72,7 @@ public class AmpGPIQuestionItemFeaturePanel extends AmpFeaturePanel<AmpGPISurvey
                 Set<AmpGPISurveyResponse> responses = survey.getObject().getResponses();
 
                 AmpGPISurveyResponse response = null;
-                Iterator<AmpGPISurveyResponse> it = responses.iterator();
-                while (it.hasNext()) {
-                    AmpGPISurveyResponse rs = (AmpGPISurveyResponse) it.next();
+                for (AmpGPISurveyResponse rs : responses) {
                     if (rs.getAmpQuestionId().getAmpQuestionId().compareTo(item.getModelObject().getAmpQuestionId()) == 0) {
                         response = rs;
                         break;
@@ -87,7 +83,8 @@ public class AmpGPIQuestionItemFeaturePanel extends AmpFeaturePanel<AmpGPISurvey
                     response.setAmpGPISurveyId(survey.getObject());
                     response.setAmpQuestionId(item.getModelObject());
                     responses.add(response);
-                }               
+                }
+                logger.info("Responses :"+ responses);
 
                 // Create a label with a dynamic value (in this case a question from DB) that can be translatable and can have a tooltip.
                 /*AmpLabelFieldPanel indName = new AmpLabelFieldPanel("qtext", new Model<String>(""), 

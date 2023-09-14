@@ -329,6 +329,44 @@ Please do not attempt to use the Notification Email as user login.
               <td class=f-names noWrap style="padding-bottom:10px;"><digi:trn key="um:mailingAddress">Mailing Address </digi:trn>              </td>
               <td align="right" style="padding-bottom:10px;"><html:text property="mailingAddress" size="20" styleClass="inp-text"/>              </td>
             </tr>
+
+            <c:if test="${aimUserRegisterForm.truBudgetEnabled=='true'}">
+
+              <tr>
+                <td width="3%">&nbsp;</td>
+                <td align=right class=f-names noWrap>
+                    <%--													<FONT color=red>*</FONT>--%>
+                  <digi:trn key="um:truBudgetIntents">TruBudget Permissions </digi:trn></td>
+                <td align="left">
+                  <html:select property="selectedTruBudgetIntents" styleClass="inp-text" multiple="true">
+                    <c:forEach var="cn"	items="${aimUserRegisterForm.truBudgetIntents}">
+                      <html:option value="${cn.truBudgetIntentName}"><c:out value="${cn.truBudgetIntentDisplayName}"></c:out></html:option>
+                    </c:forEach>
+                  </html:select>
+                </td>
+              </tr>
+              <tr>
+                <td width="3%">&nbsp;</td>
+                <td align=right class=f-names noWrap>
+                  <FONT color=red>*</FONT>
+                  <digi:trn key="um:repPassword">Enter TruBudget Password</digi:trn></td>
+                <td align="left">
+                  <html:password styleId="userPassword" property="truBudgetPassword"
+                                 size="20" autocomplete="new-password" />
+                </td>
+              </tr>
+              <tr>
+                <td width="3%">&nbsp;</td>
+                <td align=right class=f-names noWrap>
+                  <FONT color=red>*</FONT>
+                  <digi:trn key="um:repPassword">Repeat TruBudget Password</digi:trn></td>
+                <td align="left">
+                  <html:password styleId="userPasswordConfirmation" property="truBudgetPasswordConfirmation"
+                                 size="20" autocomplete="new-password" />
+                </td>
+              </tr>
+            </c:if>
+
             <tr>
               <td class=f-names noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>
                 <digi:trn key="um:organizationType">Organization Type </digi:trn>              </td>

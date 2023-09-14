@@ -147,6 +147,7 @@ public class ViewEditUser extends Action {
                 uForm.setOrgTypes(orgTypeCol);
             }
 
+
             uForm.setMailingAddress(null);
             uForm.setFirstNames(null);
             uForm.setLastName(null);

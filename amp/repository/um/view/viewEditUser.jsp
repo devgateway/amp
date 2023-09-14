@@ -360,7 +360,7 @@ function validateUserInfo(){
 																	<tr>
 																		<td width="169" align="right" height="30" style="font-size: 11px;
     font-weight: bold; color:#000;">
-																			<digi:trn key="aim:viewEditUser:confirmPassword">New TruBudget Password:</digi:trn>
+																			<digi:trn key="aim:viewEditUser:truBudgetPassword">New TruBudget Password:</digi:trn>
 																		</td>
 																		<td width="380" height="30" colspan="2"  class="inputcontainer">
 																			<html:password name="umViewEditUserForm" property="truBudgetPassword" redisplay="false"/>

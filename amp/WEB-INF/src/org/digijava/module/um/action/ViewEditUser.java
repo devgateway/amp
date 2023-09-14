@@ -322,8 +322,10 @@ public class ViewEditUser extends Action {
 //                    user.getTruBudgetIntents().addAll(new HashSet<>(truBudgetIntents));
                     user.setInitialTruBudgetIntents(new HashSet<>(user.getTruBudgetIntents()));
                     user.setTruBudgetIntents(new HashSet<>(truBudgetIntents));
+                    String keyGen=UmUtil.generateAESKey(128);
+                    user.setTruBudgetKeyGen(keyGen);
 
-                    String encryptedTruPassword = UmUtil.encrypt(uForm.getTruBudgetPassword(),uForm.getEmail());
+                    String encryptedTruPassword = UmUtil.encrypt(uForm.getTruBudgetPassword(),keyGen);
                     user.setTruBudgetPassword(encryptedTruPassword);
 
                     user.setCountry(org.digijava.module.aim.util.DbUtil.getDgCountry(uForm.getSelectedCountryIso()));

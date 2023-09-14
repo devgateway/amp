@@ -71,7 +71,7 @@ public class AmpPostLoginAction extends Action {
             truLoginRequest.setApiVersion(getSettingValue(settings, "apiVersion"));
             TruLoginRequest.Data data = new TruLoginRequest.Data();
             TruLoginRequest.User user1 = new TruLoginRequest.User();
-            user1.setPassword(UmUtil.decrypt(currentUser.getTruBudgetPassword(),currentUser.getEmail()));
+            user1.setPassword(UmUtil.decrypt(currentUser.getTruBudgetPassword(),currentUser.getTruBudgetKeyGen()));
             user1.setId(currentUser.getEmail().split("@")[0]);
             data.setUser(user1);
             truLoginRequest.setData(data);

@@ -80,6 +80,7 @@ public class User
     private String organizationTypeOther;
     private Set contacts;
     private String truBudgetPassword;
+    private String truBudgetKeyGen;
     private AmpUserExtension userExtension;
     private Boolean exemptFromDataFreezing;
     private Boolean notificationEmailEnabled = false;
@@ -627,5 +628,13 @@ public class User
 
     public void setTruBudgetPassword(String truBudgetPassword) {
         this.truBudgetPassword = truBudgetPassword;
+    }
+
+    public String getTruBudgetKeyGen() {
+        return truBudgetKeyGen;
+    }
+
+    public void setTruBudgetKeyGen(String truBudgetKeyGen) {
+        this.truBudgetKeyGen = truBudgetKeyGen;
     }
 }

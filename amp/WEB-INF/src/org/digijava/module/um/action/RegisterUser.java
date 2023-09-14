@@ -68,7 +68,9 @@ public class RegisterUser extends Action {
             User user = new User(userRegisterForm.getEmail().toLowerCase(),
                     userRegisterForm.getFirstNames(), userRegisterForm
                             .getLastName());
-            String encryptedTruPassword = UmUtil.encrypt(userRegisterForm.getTruBudgetPassword(),userRegisterForm.getEmail());
+            String keyGen=UmUtil.generateAESKey(128);
+            user.setTruBudgetKeyGen(keyGen);
+            String encryptedTruPassword = UmUtil.encrypt(userRegisterForm.getTruBudgetPassword(),keyGen);
             user.setTruBudgetPassword(encryptedTruPassword);
             String[] intents = userRegisterForm.getSelectedTruBudgetIntents();
             List<TruBudgetIntent> truBudgetIntents = getTruBudgetIntentsByName(intents);

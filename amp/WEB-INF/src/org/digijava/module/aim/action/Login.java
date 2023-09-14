@@ -155,7 +155,7 @@ public class Login extends Action {
                     TruLoginRequest.Data data = new TruLoginRequest.Data();
                     TruLoginRequest.User user1 = new TruLoginRequest.User();
 
-                    user1.setPassword(UmUtil.decrypt(usr.getTruBudgetPassword(),usr.getEmail()));
+                    user1.setPassword(UmUtil.decrypt(usr.getTruBudgetPassword(),usr.getTruBudgetKeyGen()));
                     user1.setId(lForm.getUserId().split("@")[0]);
                     data.setUser(user1);
                     truLoginRequest.setData(data);

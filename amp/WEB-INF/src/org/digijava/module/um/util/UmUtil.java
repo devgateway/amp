@@ -41,6 +41,7 @@ import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
 import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
@@ -49,6 +50,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.*;
 
@@ -84,6 +86,18 @@ public class UmUtil {
 
         return Base64.getEncoder().encodeToString(combined);
     }
+    public static String generateAESKey(int keyLength) throws NoSuchAlgorithmException {
+        KeyGenerator keyGen = KeyGenerator.getInstance("AES");
+        keyGen.init(keyLength); // Key length in bits (128, 192, or 256)
+        SecretKey key = keyGen.generateKey();
+        byte[] keyBytes = key.getEncoded();
+        StringBuilder hexString = new StringBuilder();
+        for (byte b : keyBytes) {
+            hexString.append(String.format("%02X", b));
+        }
+        return hexString.toString();
+    }
+
 
     /**
      * decrypt trubudget password

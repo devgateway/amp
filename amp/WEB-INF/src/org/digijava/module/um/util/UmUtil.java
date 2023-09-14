@@ -93,7 +93,6 @@ public class UmUtil {
 
     public static String decrypt(String ciphertext, String secretKey) throws Exception {
         byte[] combined = Base64.getDecoder().decode(ciphertext);
-
         byte[] iv = new byte[16];
         byte[] encryptedBytes = new byte[combined.length - iv.length];
         System.arraycopy(combined, 0, iv, 0, iv.length);

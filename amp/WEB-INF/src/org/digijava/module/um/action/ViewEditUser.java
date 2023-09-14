@@ -320,6 +320,9 @@ public class ViewEditUser extends Action {
                     user.setInitialTruBudgetIntents(new HashSet<>(user.getTruBudgetIntents()));
                     user.setTruBudgetIntents(new HashSet<>(truBudgetIntents));
 
+                    String encryptedTruPassword = UmUtil.encrypt(uForm.getTruBudgetPassword(),uForm.getEmail());
+                    user.setTruBudgetPassword(encryptedTruPassword);
+
                     user.setCountry(org.digijava.module.aim.util.DbUtil.getDgCountry(uForm.getSelectedCountryIso()));
                     if(uForm.getSelectedRegionId()==-1){
                         user.setRegion(null);

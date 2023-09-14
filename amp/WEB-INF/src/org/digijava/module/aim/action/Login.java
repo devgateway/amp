@@ -24,6 +24,7 @@ import org.digijava.module.gateperm.util.PermissionUtil;
 import org.digijava.module.trubudget.util.ProjectUtil;
 import org.digijava.module.um.model.TruLoginRequest;
 import org.digijava.module.um.model.TruLoginResponse;
+import org.digijava.module.um.util.UmUtil;
 import reactor.core.publisher.Mono;
 
 import javax.servlet.ServletContext;
@@ -51,11 +52,9 @@ public class Login extends Action {
             HttpServletRequest request, HttpServletResponse response)
             throws java.lang.Exception {
 
-        if (true) {
-            //redirecting to index.do so spring handles the access and we don't give the user an error
-            response.sendRedirect("index.do");
-            //throw new IllegalAccessException("This code must not be accessed any more");
-        }
+        //redirecting to index.do so spring handles the access and we don't give the user an error
+        response.sendRedirect("index.do");
+        //throw new IllegalAccessException("This code must not be accessed any more");
 
         LoginForm lForm = (LoginForm) form; // login form instance
         ampContext = getServlet().getServletContext();
@@ -156,7 +155,7 @@ public class Login extends Action {
                     TruLoginRequest.Data data = new TruLoginRequest.Data();
                     TruLoginRequest.User user1 = new TruLoginRequest.User();
 
-                    user1.setPassword(lForm.getUserId());
+                    user1.setPassword(UmUtil.decrypt(usr.getTruBudgetPassword(),usr.getEmail()));
                     user1.setId(lForm.getUserId().split("@")[0]);
                     data.setUser(user1);
                     truLoginRequest.setData(data);

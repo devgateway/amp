@@ -33,5 +33,7 @@
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpGPISurveyQuestion" />
 		</set>
 
+
+
 	</class>
 </hibernate-mapping>

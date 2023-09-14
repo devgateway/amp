@@ -18,6 +18,7 @@ import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.trubudget.util.ProjectUtil;
 import org.digijava.module.um.model.TruLoginRequest;
 import org.digijava.module.um.model.TruLoginResponse;
+import org.digijava.module.um.util.UmUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -55,7 +56,7 @@ public class AmpPostLoginAction extends Action {
         request.getSession().setAttribute("j_autoWorkspaceId", id);
         
         Authentication authResult = SecurityContextHolder.getContext().getAuthentication();
-        User currentUser = null;
+        User currentUser;
         try {
             currentUser = getUser(authResult);
         } catch(DgException ex) {
@@ -70,7 +71,7 @@ public class AmpPostLoginAction extends Action {
             truLoginRequest.setApiVersion(getSettingValue(settings, "apiVersion"));
             TruLoginRequest.Data data = new TruLoginRequest.Data();
             TruLoginRequest.User user1 = new TruLoginRequest.User();
-            user1.setPassword(currentUser.getEmail());
+            user1.setPassword(UmUtil.decrypt(currentUser.getTruBudgetPassword(),currentUser.getEmail()));
             user1.setId(currentUser.getEmail().split("@")[0]);
             data.setUser(user1);
             truLoginRequest.setData(data);

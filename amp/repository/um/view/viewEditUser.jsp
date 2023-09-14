@@ -351,7 +351,7 @@ function validateUserInfo(){
 																			height="30" style="font-size: 11px;
     font-weight: bold; color:#000;">
 																			<div style="margin-top: 10px;">
-																				<digi:trn key="um:truBudgetPassword">Password:</digi:trn>
+																				<digi:trn key="um:truBudgetPassword">Trubudget Password:</digi:trn>
 																			</div>
 																		</td>
 																		<td width="380" valign="top" height="30" colspan="2" class="inputcontainer">

@@ -32,8 +32,8 @@ import javax.servlet.http.HttpSession;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.digijava.module.um.util.DbUtil.getTruBudgetIntents;
-import static org.digijava.module.um.util.DbUtil.getTruBudgetIntentsByName;
+import static org.digijava.module.um.util.DbUtil.*;
+import static org.digijava.module.um.util.DbUtil.getSettingValue;
 
 public class ViewEditUser extends Action {
 
@@ -186,6 +186,8 @@ public class ViewEditUser extends Action {
                 }
             });
             uForm.setTruBudgetIntents(intents);
+            List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
+            uForm.setTruBudgetEnabled(getSettingValue(settings,"isEnabled"));
 
 
             if (user != null) {

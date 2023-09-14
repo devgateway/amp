@@ -102,7 +102,8 @@ public class AddUserForm  extends ValidatorForm {
     
     private Boolean notificationEmailEnabled;
     private String notificationEmail;
-    
+    private String truBudgetEnabled;
+
     public String[] getSelectedItems() {
         return this.selectedItems;
     }
@@ -398,7 +399,14 @@ public class AddUserForm  extends ValidatorForm {
     public void setContentSelectedLanguages(String[] contentSelectedLanguages) {
         this.contentSelectedLanguages = contentSelectedLanguages;
     }
+    public String getTruBudgetEnabled() {
 
+        return truBudgetEnabled;
+    }
+
+    public void setTruBudgetEnabled(String truBudgetEnabled) {
+        this.truBudgetEnabled = truBudgetEnabled;
+    }
     /**
      * Reset all input
      *

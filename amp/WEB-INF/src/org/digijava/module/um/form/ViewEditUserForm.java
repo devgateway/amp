@@ -55,6 +55,7 @@ public class ViewEditUserForm extends ActionForm {
     private Collection<AmpCategoryValueLocations> regions;
     
     private String selectedLanguageCode;
+    private String truBudgetEnabled;
     private Collection languages;
 
     private String event;
@@ -461,5 +462,14 @@ public class ViewEditUserForm extends ActionForm {
 
     public void setTruBudgetPassword(String truBudgetPassword) {
         this.truBudgetPassword = truBudgetPassword;
+    }
+
+    public String getTruBudgetEnabled() {
+
+        return truBudgetEnabled;
+    }
+
+    public void setTruBudgetEnabled(String truBudgetEnabled) {
+        this.truBudgetEnabled = truBudgetEnabled;
     }
 }

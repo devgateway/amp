@@ -11,6 +11,7 @@ import org.digijava.kernel.translator.util.TrnLocale;
 import org.digijava.kernel.translator.util.TrnUtil;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
+import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CountryBean;
 import org.digijava.module.aim.helper.TeamMember;
@@ -21,6 +22,9 @@ import org.digijava.module.um.util.DbUtil;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import java.util.*;
+
+import static org.digijava.module.um.util.DbUtil.getGlobalSettingsBySection;
+import static org.digijava.module.um.util.DbUtil.getSettingValue;
 
 public class ShowUserRegister extends Action {
 
@@ -79,6 +83,8 @@ public class ShowUserRegister extends Action {
 
                     //set default country from global settings.
                     registerForm.setSelectedCountryResidence(FeaturesUtil.getGlobalSettingValue(Constants.GLOBAL_DEFAULT_COUNTRY));
+                    List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
+                    registerForm.setTruBudgetEnabled(getSettingValue(settings,"isEnabled"));
                     
                     
                     // set default web site

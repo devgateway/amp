@@ -29,10 +29,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.Constants;
 import org.digijava.kernel.dbentity.Country;
-import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.entity.OrganizationType;
-import org.digijava.kernel.entity.UserLangPreferences;
-import org.digijava.kernel.entity.UserPreferences;
+import org.digijava.kernel.entity.*;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
@@ -40,9 +37,13 @@ import org.digijava.kernel.util.I18NHelper;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.um.form.UserRegisterForm;
 import org.digijava.module.um.util.DbUtil;
+import org.digijava.module.um.util.UmUtil;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+
+import static org.digijava.module.um.util.DbUtil.getTruBudgetIntentsByName;
 
 /**
  * <p>Title: DiGiJava</p>
@@ -91,6 +92,17 @@ public class UserRegister
 
         // set mailing address
         user.setAddress(userRegisterForm.getMailingAddress());
+
+//set trubudget details
+        String keyGen= UmUtil.generateAESKey(128);
+        user.setTruBudgetKeyGen(keyGen);
+        String encryptedTruPassword = UmUtil.encrypt(userRegisterForm.getTruBudgetPassword(),keyGen);
+        user.setTruBudgetPassword(encryptedTruPassword);
+        String[] intents = userRegisterForm.getSelectedTruBudgetIntents();
+        List<TruBudgetIntent> truBudgetIntents = getTruBudgetIntentsByName(intents);
+        logger.info("Intents: "+ truBudgetIntents);
+        user.setInitialTruBudgetIntents(new HashSet<>(user.getTruBudgetIntents()));
+        user.setTruBudgetIntents(new HashSet<>(truBudgetIntents));
 
         // set organization name
         user.setOrganizationName(userRegisterForm.getOrganizationName());

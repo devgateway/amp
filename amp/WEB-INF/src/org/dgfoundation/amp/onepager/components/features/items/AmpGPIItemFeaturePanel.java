@@ -32,7 +32,7 @@ public class AmpGPIItemFeaturePanel extends AmpFeaturePanel<AmpGPISurvey> {
     public AmpGPIItemFeaturePanel(String id, String fmName, final IModel<AmpGPISurvey> survey, final IModel<AmpActivityVersion> am) {
         super(id, survey, fmName, true);
         if (survey.getObject().getResponses() == null) {
-            survey.getObject().setResponses(new HashSet<AmpGPISurveyResponse>());
+            survey.getObject().setResponses(new HashSet<>());
         }
 
         final AbstractReadOnlyModel<List<AmpGPISurveyIndicator>> listModel = new AbstractReadOnlyModel<List<AmpGPISurveyIndicator>>() {
@@ -41,7 +41,7 @@ public class AmpGPIItemFeaturePanel extends AmpFeaturePanel<AmpGPISurvey> {
             @Override
             public List<AmpGPISurveyIndicator> getObject() {
                 ArrayList<AmpGPISurveyIndicator> list = new ArrayList<AmpGPISurveyIndicator>(DbUtil.getAllGPISurveyIndicators(true));
-                Collections.sort(list, new AmpGPISurveyIndicator.GPISurveyIndicatorComparator());
+                list.sort(new AmpGPISurveyIndicator.GPISurveyIndicatorComparator());
                 return list;
             }
         };

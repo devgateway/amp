@@ -84,7 +84,7 @@ public class AmpGPIQuestionItemFeaturePanel extends AmpFeaturePanel<AmpGPISurvey
                     response.setAmpQuestionId(item.getModelObject());
                     responses.add(response);
                 }
-                logger.info("Responses :"+ responses);
+//                logger.info("Responses :"+ responses);
 
                 // Create a label with a dynamic value (in this case a question from DB) that can be translatable and can have a tooltip.
                 /*AmpLabelFieldPanel indName = new AmpLabelFieldPanel("qtext", new Model<String>(""), 

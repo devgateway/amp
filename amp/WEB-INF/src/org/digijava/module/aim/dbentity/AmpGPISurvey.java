@@ -1,11 +1,14 @@
 package org.digijava.module.aim.dbentity;
 
 import org.digijava.module.aim.util.Output;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.*;
 
 public class AmpGPISurvey implements Versionable, Serializable, Cloneable, Comparable<AmpGPISurvey> {
+    private final static Logger logger = LoggerFactory.getLogger(AmpGPISurvey.class);
 
     //IATI-check: to be ignored
     private Long ampGPISurveyId;
@@ -102,18 +105,20 @@ public class AmpGPISurvey implements Versionable, Serializable, Cloneable, Compa
         AmpGPISurvey aux = (AmpGPISurvey) clone();
         aux.ampActivityId = newActivity;
         aux.ampGPISurveyId = null;
-        if (aux.responses != null && aux.responses.size() > 0) {
+        if (aux.getResponses() != null && aux.getResponses().size() > 0) {
             Set<AmpGPISurveyResponse> responses = new HashSet<>();
-            for (AmpGPISurveyResponse respons : aux.responses) {
+            for (AmpGPISurveyResponse respons : aux.getResponses()) {
                 AmpGPISurveyResponse newResp = (AmpGPISurveyResponse) respons.clone();
                 newResp.setAmpGPISurveyId(aux);
                 newResp.setAmpReponseId(null);
                 responses.add(newResp);
             }
-            aux.responses = responses;
+            aux.setResponses(responses);
         } else {
-            aux.responses = null;
+            aux.setResponses(null);
         }
+        logger.info("Merging responses. "+responses);
+
         return aux;
     }
 

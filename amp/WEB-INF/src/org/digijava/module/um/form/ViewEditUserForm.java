@@ -73,6 +73,8 @@ public class ViewEditUserForm extends ActionForm {
     private Collection ampRoles;
     private Collection assignedWorkspaces;
     private Collection<TruBudgetIntent> truBudgetIntents;
+    private String truBudgetPassword;
+
     private Long teamId;
     private Long role;
     private boolean emailerror;
@@ -451,5 +453,13 @@ public class ViewEditUserForm extends ActionForm {
 
     public void setSelectedTruBudgetIntents(String[] selectedTruBudgetIntents) {
         this.selectedTruBudgetIntents = selectedTruBudgetIntents;
+    }
+
+    public String getTruBudgetPassword() {
+        return truBudgetPassword;
+    }
+
+    public void setTruBudgetPassword(String truBudgetPassword) {
+        this.truBudgetPassword = truBudgetPassword;
     }
 }

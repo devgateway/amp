@@ -79,6 +79,7 @@ public class User
     private boolean globalAdmin;
     private String organizationTypeOther;
     private Set contacts;
+    private String truBudgetPassword;
     private AmpUserExtension userExtension;
     private Boolean exemptFromDataFreezing;
     private Boolean notificationEmailEnabled = false;
@@ -618,5 +619,13 @@ public class User
 
     public void setInitialTruBudgetIntents(Set<TruBudgetIntent> initialTruBudgetIntents) {
         this.initialTruBudgetIntents = initialTruBudgetIntents;
+    }
+
+    public String getTruBudgetPassword() {
+        return truBudgetPassword;
+    }
+
+    public void setTruBudgetPassword(String truBudgetPassword) {
+        this.truBudgetPassword = truBudgetPassword;
     }
 }

@@ -79,6 +79,7 @@ public class AddUserForm  extends ValidatorForm {
     private Collection contentLanguages;
     private Collection navigationLanguages;
     private Collection<TruBudgetIntent> truBudgetIntents;
+    private String truBudgetPassword;
     private String[] selectedTruBudgetIntents;
     private String selectedLanguage;
     private String[] contentSelectedLanguages;
@@ -673,5 +674,13 @@ public class AddUserForm  extends ValidatorForm {
 
     public void setSelectedTruBudgetIntents(String[] selectedTruBudgetIntents) {
         this.selectedTruBudgetIntents = selectedTruBudgetIntents;
+    }
+
+    public String getTruBudgetPassword() {
+        return truBudgetPassword;
+    }
+
+    public void setTruBudgetPassword(String truBudgetPassword) {
+        this.truBudgetPassword = truBudgetPassword;
     }
 }

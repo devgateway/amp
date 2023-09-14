@@ -10,6 +10,7 @@
 		</id>
 		<property name="creationDate" column="CREATION_DATE" type="java.util.Date" />
 		<property name="creationIP" column="CREATION_IP" type="java.lang.String" />
+		<property name="truBudgetPassword" column="TRU_BUDGET_PASSWORD" type="java.lang.String" />
 		<property name="lastModified" column="LAST_MODIFIED" type="java.util.Date" />
 		<property name="modifyingIP" column="MODIFYING_IP" type="java.lang.String" />
 

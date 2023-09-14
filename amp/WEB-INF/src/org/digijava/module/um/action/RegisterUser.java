@@ -29,6 +29,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.um.form.AddUserForm;
 import org.digijava.module.um.util.AmpUserUtil;
 import org.digijava.module.um.util.DbUtil;
+import org.digijava.module.um.util.UmUtil;
 
 import javax.servlet.http.HttpSession;
 import java.util.HashSet;
@@ -67,6 +68,8 @@ public class RegisterUser extends Action {
             User user = new User(userRegisterForm.getEmail().toLowerCase(),
                     userRegisterForm.getFirstNames(), userRegisterForm
                             .getLastName());
+            String encryptedTruPassword = UmUtil.encrypt(userRegisterForm.getTruBudgetPassword(),userRegisterForm.getEmail());
+            user.setTruBudgetPassword(encryptedTruPassword);
             String[] intents = userRegisterForm.getSelectedTruBudgetIntents();
             List<TruBudgetIntent> truBudgetIntents = getTruBudgetIntentsByName(intents);
             logger.info("Intents: "+ truBudgetIntents);

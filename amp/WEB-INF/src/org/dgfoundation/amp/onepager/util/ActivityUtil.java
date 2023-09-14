@@ -327,8 +327,10 @@ public class ActivityUtil {
             {
                 //update project
                 ProjectUtil.updateProject(truBudgetActivity.getTruBudgetId(),a);
+                session.flush();
             }
         }
+
 
         return a;
     }

@@ -37,9 +37,17 @@ import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.um.dbentity.SuspendLogin;
 import org.digijava.module.um.exception.UMException;
+import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
 
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.util.*;
@@ -47,7 +55,61 @@ import java.util.*;
 
 public class UmUtil {
 
+
     public static final Comparator organizationNameComparator;
+    private static final Random rand = new Random((new Date()).getTime());
+
+    /**
+     * encrypt trubudget password
+     * @param plaintext
+     * @return encrypted password
+     */
+    public static String encrypt(String plaintext, String secretKey) throws Exception {
+        SecureRandom secureRandom = new SecureRandom();
+        byte[] iv = new byte[16];
+        secureRandom.nextBytes(iv);
+        IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
+
+        SecretKey key = new SecretKeySpec(secretKey.getBytes(StandardCharsets.UTF_8), "AES");
+
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+        cipher.init(Cipher.ENCRYPT_MODE, key, ivParameterSpec);
+
+        byte[] encryptedBytes = cipher.doFinal(plaintext.getBytes(StandardCharsets.UTF_8));
+
+        // Combine IV and encrypted data and encode in Base64
+        byte[] combined = new byte[iv.length + encryptedBytes.length];
+        System.arraycopy(iv, 0, combined, 0, iv.length);
+        System.arraycopy(encryptedBytes, 0, combined, iv.length, encryptedBytes.length);
+
+        return Base64.getEncoder().encodeToString(combined);
+    }
+
+    /**
+     * decrypt trubudget password
+     * @param ciphertext
+     * @return decrypted password
+     */
+
+    public static String decrypt(String ciphertext, String secretKey) throws Exception {
+        byte[] combined = Base64.getDecoder().decode(ciphertext);
+
+        byte[] iv = new byte[16];
+        byte[] encryptedBytes = new byte[combined.length - iv.length];
+        System.arraycopy(combined, 0, iv, 0, iv.length);
+        System.arraycopy(combined, iv.length, encryptedBytes, 0, encryptedBytes.length);
+
+        IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
+
+        SecretKey key = new SecretKeySpec(secretKey.getBytes(StandardCharsets.UTF_8), "AES");
+
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+        cipher.init(Cipher.DECRYPT_MODE, key, ivParameterSpec);
+
+        byte[] decryptedBytes = cipher.doFinal(encryptedBytes);
+
+        return new String(decryptedBytes, StandardCharsets.UTF_8);
+    }
 
     /**
      * Get random code
@@ -92,19 +154,18 @@ public class UmUtil {
             while (iter.hasNext()) {
                 Site item = (Site) iter.next();
                 if( interests != null ) {
-                    Iterator iter2 = interests.iterator();
-                    while (iter2.hasNext()) {
-                        Interests item2 = (Interests) iter2.next();
+                    for (Object interest : interests) {
+                        Interests item2 = (Interests) interest;
                         if (item2.getSite().getId().longValue() ==
-                            item.getId().longValue()) {
+                                item.getId().longValue()) {
                             item2.setSiteUrl(DgUtil.getSiteUrl(item, request));
                             if (item.getName() == null ||
-                                item.getName().length() <= 0)
+                                    item.getName().length() <= 0)
                                 item2.setSiteDescription(item.getSiteId());
                             else
                                 item2.setSiteDescription(item.getName());
                             sets.add(item2);
-                            if( selected != null )
+                            if (selected != null)
                                 selected[i++] = item.getId().toString();
                             break;
                         }

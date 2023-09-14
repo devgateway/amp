@@ -127,6 +127,8 @@
         lastname = document.umAddUserForm.lastName.value;
         password = document.umAddUserForm.password.value;
         passwordConfirmation = document.umAddUserForm.passwordConfirmation.value;
+        truBudgetPassword = document.umAddUserForm.truBudgetPassword.value;
+		truBudgetPasswordConfirmation = document.umAddUserForm.truBudgetPasswordConfirmation.value;
         selectedOrgType = document.umAddUserForm.selectedOrgType.value;
         selectedOrgGroup = document.umAddUserForm.selectedOrgGroup.value;
         selectedOrganizationId = document.umAddUserForm.selectedOrganizationId.value;
@@ -190,6 +192,13 @@
 			alert("${translation}");
         	return false;
         }
+		if(truBudgetPassword !== truBudgetPasswordConfirmation){
+			<c:set var="translation">
+			<digi:trn key="error.registration.NoPasswordMatch">Both Trubudget Passwords must be the same</digi:trn>
+			</c:set>
+			alert("${translation}");
+			return false;
+		}
         if(selectedOrgType=="-1"){
 			<c:set var="translation">
 			<digi:trn key="error.registration.enterorganizationother">Please enter Organization Type</digi:trn>
@@ -490,6 +499,26 @@
 															<html:option value="${cn.truBudgetIntentName}"><c:out value="${cn.truBudgetIntentDisplayName}"></c:out></html:option>
 														</c:forEach>
 													</html:select>
+												</td>
+											</tr>
+											<tr>
+												<td width="3%">&nbsp;</td>
+												<td align=right class=f-names noWrap>
+													<FONT color=red>*</FONT>
+													<digi:trn key="um:repPassword">Enter TruBudget Password</digi:trn></td>
+												<td align="left">
+													<html:password styleId="userPassword" property="truBudgetPassword"
+																   size="20" autocomplete="new-password" />
+												</td>
+											</tr>
+											<tr>
+												<td width="3%">&nbsp;</td>
+												<td align=right class=f-names noWrap>
+													<FONT color=red>*</FONT>
+													<digi:trn key="um:repPassword">Repeat TruBudget Password</digi:trn></td>
+												<td align="left">
+													<html:password styleId="userPasswordConfirmation" property="truBudgetPasswordConfirmation"
+																   size="20" autocomplete="new-password" />
 												</td>
 											</tr>
  											<module:display name="Pledges" parentModule="PROJECT MANAGEMENT">

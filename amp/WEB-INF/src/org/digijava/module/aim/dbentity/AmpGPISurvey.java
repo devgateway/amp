@@ -108,14 +108,14 @@ public class AmpGPISurvey implements Versionable, Serializable, Cloneable, Compa
         aux.ampActivityId = newActivity;
         aux.ampGPISurveyId = null;
         if (aux.responses != null && aux.responses.size() > 0) {
-            Set<AmpGPISurveyResponse> responses = new HashSet<AmpGPISurveyResponse>();
+            Set<AmpGPISurveyResponse> responses = new HashSet<>();
             for (AmpGPISurveyResponse respons : aux.responses) {
                 AmpGPISurveyResponse newResp = (AmpGPISurveyResponse) respons.clone();
                 newResp.setAmpGPISurveyId(aux);
                 newResp.setAmpReponseId(null);
-                responses.add(newResp);
+                aux.responses.add(newResp);
             }
-            aux.responses = responses;
+//            aux.responses.addAll(responses);
         } else {
             aux.responses = null;
         }

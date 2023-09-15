@@ -794,6 +794,7 @@ public class ActivityUtil {
                 session.saveOrUpdate(tComm);
             }
         }
+        session.flush();
     }
 
     private static EditorStore getSessionEditorStore() {

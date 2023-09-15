@@ -123,6 +123,7 @@ public class AmpGPISurvey implements Versionable, Serializable, Cloneable, Compa
         }
         logger.info("Merging responses. "+aux.getResponses());
         session.saveOrUpdate(aux);
+        session.merge(aux.ampActivityId);
         session.flush();
 
         return aux;

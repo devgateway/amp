@@ -374,13 +374,10 @@
                 <td class=f-names noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>
                   <digi:trn key="um:truBudgetIntents">TruBudget Permissions </digi:trn>              </td>
                 <td align="right"  class="orgtype" style="padding-bottom:10px;">
-                  <html:select  property="selectedTruBudgetIntents" multiple="true" styleClass="inp-text" >
+                  <html:select property="selectedTruBudgetIntents" multiple="true" styleClass="inp-text" >
                     <html:optionsCollection name="aimUserRegisterForm" property="truBudgetIntents" value="truBudgetIntentName" label="truBudgetIntentDisplayName" />
                   </html:select>
                 </td>
-                <td>&nbsp;</td>
-                <td class=f-names noWrap style="padding-bottom:10px;"><digi:trn key="um:mailingAddress">Mailing Address </digi:trn>              </td>
-                <td align="right" style="padding-bottom:10px;"><html:text property="mailingAddress" size="20" styleClass="inp-text"/>              </td>
               </tr>
 
 

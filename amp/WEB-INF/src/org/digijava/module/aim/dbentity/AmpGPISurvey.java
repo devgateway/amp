@@ -145,13 +145,4 @@ public class AmpGPISurvey implements Versionable, Serializable, Cloneable, Compa
         this.responses = responses;
     }
 
-    @Override
-    public String toString() {
-        return "AmpGPISurvey{" +
-                "ampGPISurveyId=" + ampGPISurveyId +
-                ", ampActivityId=" + ampActivityId +
-                ", responses=" + responses +
-                ", surveyDate=" + surveyDate +
-                '}';
-    }
 }

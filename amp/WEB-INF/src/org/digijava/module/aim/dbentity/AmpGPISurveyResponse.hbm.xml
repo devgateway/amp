@@ -9,7 +9,7 @@
 			</generator>
 		</id>
 
-		<many-to-one name="ampGPISurveyId" column="amp_gpisurvey_id" cascade="none"
+		<many-to-one name="ampGPISurveyId" column="amp_gpisurvey_id" cascade="persist"
 			class="org.digijava.module.aim.dbentity.AmpGPISurvey" not-null="true" />
 
 		<many-to-one name="ampQuestionId" column="amp_question_id" cascade="none"

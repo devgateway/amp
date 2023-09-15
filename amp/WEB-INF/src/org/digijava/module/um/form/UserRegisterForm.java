@@ -91,6 +91,16 @@ public class UserRegisterForm
     private Collection<TruBudgetIntent> truBudgetIntents;
     private String[] selectedTruBudgetIntents;
     private String truBudgetPassword;
+
+    public String getTruBudgetPasswordConfirmation() {
+        return truBudgetPasswordConfirmation;
+    }
+
+    public void setTruBudgetPasswordConfirmation(String truBudgetPasswordConfirmation) {
+        this.truBudgetPasswordConfirmation = truBudgetPasswordConfirmation;
+    }
+
+    private String truBudgetPasswordConfirmation;
     private String truBudgetEnabled;
 
     public Collection<TruBudgetIntent> getTruBudgetIntents() {

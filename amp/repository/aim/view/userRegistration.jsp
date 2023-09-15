@@ -358,17 +358,29 @@
 
             <c:if test="${aimUserRegisterForm.truBudgetEnabled=='true'}">
 
+<%--              <tr>--%>
+<%--                <td align=right class=f-names noWrap>--%>
+<%--                    &lt;%&ndash;													<FONT color=red>*</FONT>&ndash;%&gt;--%>
+<%--                  <digi:trn key="um:truBudgetIntents">TruBudget Permissions </digi:trn></td>--%>
+<%--                <td align="left">--%>
+<%--                  <html:select property="selectedTruBudgetIntents" styleClass="inp-text" multiple="true">--%>
+<%--                    <c:forEach var="cn"	items="${aimUserRegisterForm.truBudgetIntents}">--%>
+<%--                      <html:option value="${cn.truBudgetIntentName}"><c:out value="${cn.truBudgetIntentDisplayName}"></c:out></html:option>--%>
+<%--                    </c:forEach>--%>
+<%--                  </html:select>--%>
+<%--                </td>--%>
+<%--              </tr>--%>
               <tr>
-                <td align=right class=f-names noWrap>
-                    <%--													<FONT color=red>*</FONT>--%>
-                  <digi:trn key="um:truBudgetIntents">TruBudget Permissions </digi:trn></td>
-                <td align="left">
-                  <html:select property="selectedTruBudgetIntents" styleClass="inp-text" multiple="true">
-                    <c:forEach var="cn"	items="${aimUserRegisterForm.truBudgetIntents}">
-                      <html:option value="${cn.truBudgetIntentName}"><c:out value="${cn.truBudgetIntentDisplayName}"></c:out></html:option>
-                    </c:forEach>
+                <td class=f-names noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>
+                  <digi:trn key="um:truBudgetIntents">TruBudget Permissions </digi:trn>              </td>
+                <td align="right"  class="orgtype" style="padding-bottom:10px;">
+                  <html:select  property="selectedTruBudgetIntents" multiple="true" styleClass="inp-text" >
+                    <html:optionsCollection name="aimUserRegisterForm" property="truBudgetIntents" value="truBudgetIntentName" label="truBudgetIntentDisplayName" />
                   </html:select>
                 </td>
+                <td>&nbsp;</td>
+                <td class=f-names noWrap style="padding-bottom:10px;"><digi:trn key="um:mailingAddress">Mailing Address </digi:trn>              </td>
+                <td align="right" style="padding-bottom:10px;"><html:text property="mailingAddress" size="20" styleClass="inp-text"/>              </td>
               </tr>
 
 
@@ -384,7 +396,7 @@
                 </div>
               </td>
               <td class=f-names valign="top" noWrap width="200" style="padding-bottom:10px;display: inline-block;"><FONT color=red>*</FONT>
-                <digi:trn key="um:truBudgetPassword">Repeat TruBudget Password </digi:trn>              </td>
+                <digi:trn key="um:truBudgetPasswordConfirmation">Repeat TruBudget Password </digi:trn>              </td>
               <td align="right" valign="top" style="padding-bottom:10px;display: inline-block;"><html:password property="truBudgetPasswordConfirmation" size="20" styleClass="inp-text" />              </td>
             </tr>
             </c:if>

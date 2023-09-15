@@ -375,7 +375,7 @@
                 <td width="3%">&nbsp;</td>
                 <td align=right class=f-names noWrap>
                   <FONT color=red>*</FONT>
-                  <digi:trn key="um:repPassword">Enter TruBudget Password</digi:trn></td>
+                  <digi:trn key="um:truBudgetPassword">Enter TruBudget Password</digi:trn></td>
                 <td align="left">
                   <html:password styleId="userPassword" property="truBudgetPassword"
                                  size="20" autocomplete="new-password" />
@@ -385,9 +385,9 @@
                 <td width="3%">&nbsp;</td>
                 <td align=right class=f-names noWrap>
                   <FONT color=red>*</FONT>
-                  <digi:trn key="um:repPassword">Repeat TruBudget Password</digi:trn></td>
+                  <digi:trn key="um:truBudgetPassword">Repeat TruBudget Password</digi:trn></td>
                 <td align="left">
-                  <html:password styleId="userPasswordConfirmation" property="truBudgetPasswordConfirmation"
+                  <html:password styleId="userPassword" property="truBudgetPasswordConfirmation"
                                  size="20" autocomplete="new-password" />
                 </td>
               </tr>

@@ -105,33 +105,27 @@ public class AmpGPISurvey implements Versionable, Serializable, Cloneable, Compa
     @Override
     public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
         AmpGPISurvey aux = (AmpGPISurvey) clone();
-        aux.setAmpActivityId(newActivity);
-        aux.setAmpGPISurveyId(null);
-//        Session session= PersistenceManager.getRequestDBSession();
-        if (aux.getResponses() != null && aux.getResponses().size() > 0) {
-            Set<AmpGPISurveyResponse> responses = new HashSet<>();
-            for (AmpGPISurveyResponse respons : aux.getResponses()) {
+        aux.ampActivityId = newActivity;
+        aux.ampGPISurveyId = null;
+        if (aux.responses != null && aux.responses.size() > 0) {
+            Set<AmpGPISurveyResponse> responses = new HashSet<AmpGPISurveyResponse>();
+            for (AmpGPISurveyResponse respons : aux.responses) {
                 AmpGPISurveyResponse newResp = (AmpGPISurveyResponse) respons.clone();
                 newResp.setAmpGPISurveyId(aux);
                 newResp.setAmpReponseId(null);
-//                session.save(newResp);
                 responses.add(newResp);
             }
-            aux.setResponses(responses);
+            aux.responses = responses;
         } else {
-            aux.setResponses(null);
+            aux.responses = null;
         }
-        logger.info("Merging responses. "+aux.getResponses());
-//        session.saveOrUpdate(aux);
-//        session.merge(aux.ampActivityId);
-//        session.flush();
-
         return aux;
     }
 
     @Override
     public Object clone() throws CloneNotSupportedException {
         // TODO Auto-generated method stub
+        logger.info("Super surver is: "+super.clone());
         return super.clone();
     }
 
@@ -150,5 +144,14 @@ public class AmpGPISurvey implements Versionable, Serializable, Cloneable, Compa
     public void setResponses(Set<AmpGPISurveyResponse> responses) {
         this.responses = responses;
     }
-    
+
+    @Override
+    public String toString() {
+        return "AmpGPISurvey{" +
+                "ampGPISurveyId=" + ampGPISurveyId +
+                ", ampActivityId=" + ampActivityId +
+                ", responses=" + responses +
+                ", surveyDate=" + surveyDate +
+                '}';
+    }
 }

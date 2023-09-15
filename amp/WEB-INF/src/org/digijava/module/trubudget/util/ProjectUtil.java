@@ -58,7 +58,7 @@ public class ProjectUtil {
 
             for (AmpFundingDetail ampFundingDetail : ampFunding.getFundingDetails()) {
                 String adjustmentType = ampFundingDetail.getAdjustmentType().getValue();
-                // TODO: 9/15/23 use adjustmentType to determine actual/planned  
+                // TODO: 9/15/23 use adjustmentType to determine actual/planned
                 Double amount = ampFundingDetail.getTransactionAmount();
                 String currency = ampFundingDetail.getAmpCurrencyId().getCurrencyCode();
                 String organization = ampFundingDetail.getAmpFundingId().getAmpDonorOrgId().getName();

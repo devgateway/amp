@@ -564,6 +564,7 @@ public class DbUtil {
         userData.setApiVersion(getSettingValue(settings, "apiVersion"));
         userData.getData().getUser().setOrganization(getSettingValue(settings, "organization"));
         logger.info("Registering user on Trubudget");
+        logger.info("Settings: "+settings);
         TruLoginRequest truLoginRequest = new TruLoginRequest();
         truLoginRequest.setApiVersion(getSettingValue(settings, "apiVersion"));
         TruLoginRequest.Data data = new TruLoginRequest.Data();

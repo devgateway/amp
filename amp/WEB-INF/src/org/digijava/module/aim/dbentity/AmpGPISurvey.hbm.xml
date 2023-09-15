@@ -15,7 +15,7 @@
 			not-null="true" />
 
 		<set name="responses" table="AMP_GPISURVEY_RESPONSE" inverse="true"
-			cascade="save-update">
+			cascade="merge">
 			<cache usage="read-write" />
 			<key column="amp_gpisurvey_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpGPISurveyResponse" />

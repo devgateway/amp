@@ -1,5 +1,6 @@
 package org.digijava.module.aim.dbentity;
 
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.util.Output;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -118,6 +119,8 @@ public class AmpGPISurvey implements Versionable, Serializable, Cloneable, Compa
             aux.setResponses(null);
         }
         logger.info("Merging responses. "+aux.getResponses());
+        PersistenceManager.getRequestDBSession().saveOrUpdate(aux);
+        PersistenceManager.getRequestDBSession().flush();
 
         return aux;
     }

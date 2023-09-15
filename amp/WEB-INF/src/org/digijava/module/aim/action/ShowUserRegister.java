@@ -6,6 +6,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.entity.TruBudgetIntent;
 import org.digijava.kernel.translator.util.TrnCountry;
 import org.digijava.kernel.translator.util.TrnLocale;
 import org.digijava.kernel.translator.util.TrnUtil;
@@ -23,8 +24,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import java.util.*;
 
-import static org.digijava.module.um.util.DbUtil.getGlobalSettingsBySection;
-import static org.digijava.module.um.util.DbUtil.getSettingValue;
+import static org.digijava.module.um.util.DbUtil.*;
 
 public class ShowUserRegister extends Action {
 
@@ -85,7 +85,8 @@ public class ShowUserRegister extends Action {
                     registerForm.setSelectedCountryResidence(FeaturesUtil.getGlobalSettingValue(Constants.GLOBAL_DEFAULT_COUNTRY));
                     List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
                     registerForm.setTruBudgetEnabled(getSettingValue(settings,"isEnabled"));
-                    
+                    Collection<TruBudgetIntent> intents = getTruBudgetIntents();
+                     registerForm.setTruBudgetIntents(intents);
                     
                     // set default web site
                     registerForm.setWebSite("http://");

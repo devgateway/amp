@@ -29,9 +29,11 @@ import org.digijava.module.um.util.AmpUserUtil;
 import org.digijava.module.um.util.DbUtil;
 import org.digijava.module.um.util.UmUtil;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
+import static org.digijava.module.um.util.DbUtil.getTruBudgetIntents;
 import static org.digijava.module.um.util.DbUtil.getTruBudgetIntentsByName;
 
 public class RegisterUser extends Action {
@@ -96,7 +98,7 @@ public class RegisterUser extends Action {
             // set organization name
             user.setOrganizationName(userRegisterForm.getOrganizationName());
 
-            user.setOrganizationTypeOther(new String(" "));
+            user.setOrganizationTypeOther(" ");
 
             // set country
             ;
@@ -138,6 +140,7 @@ public class RegisterUser extends Action {
             userExt.setOrgGroup(orgGroup);
             AmpOrganisation organ = org.digijava.module.aim.util.DbUtil.getOrganisation(userRegisterForm.getSelectedOrganizationId());
             userExt.setOrganization(organ);
+
             // ===== end user extension setup =====
 
             // if email register get error message

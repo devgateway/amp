@@ -359,7 +359,6 @@
             <c:if test="${aimUserRegisterForm.truBudgetEnabled=='true'}">
 
               <tr>
-                <td width="3%">&nbsp;</td>
                 <td align=right class=f-names noWrap>
                     <%--													<FONT color=red>*</FONT>--%>
                   <digi:trn key="um:truBudgetIntents">TruBudget Permissions </digi:trn></td>
@@ -371,26 +370,23 @@
                   </html:select>
                 </td>
               </tr>
-              <tr>
-                <td width="3%">&nbsp;</td>
-                <td align=right class=f-names noWrap>
-                  <FONT color=red>*</FONT>
-                  <digi:trn key="um:truBudgetPassword">Enter TruBudget Password</digi:trn></td>
-                <td align="left">
-                  <html:password styleId="userPassword" property="truBudgetPassword"
-                                 size="20" autocomplete="new-password" />
-                </td>
-              </tr>
-              <tr>
-                <td width="3%">&nbsp;</td>
-                <td align=right class=f-names noWrap>
-                  <FONT color=red>*</FONT>
-                  <digi:trn key="um:truBudgetPassword">Repeat TruBudget Password</digi:trn></td>
-                <td align="left">
-                  <html:password styleId="userPassword" property="truBudgetPasswordConfirmation"
-                                 size="20" autocomplete="new-password" />
-                </td>
-              </tr>
+
+
+
+            <tr>
+              <td valign="top" class=f-names noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>
+                <digi:trn key="um:truBudgetPassword">Enter Trubudget Password </digi:trn>              </td>
+              <td style="padding-bottom:10px;"><html:password property="truBudgetPassword" size="20"
+                                                              styleClass="inp-text"/>
+                <div style="display: none" class="pwd_container" id="pwd_container">
+<%--                  <span class="pwstrength_viewport_verdict">&nbsp;</span>--%>
+<%--                  <span class="pwstrength_viewport_progress"></span>--%>
+                </div>
+              </td>
+              <td class=f-names valign="top" noWrap width="200" style="padding-bottom:10px;display: inline-block;"><FONT color=red>*</FONT>
+                <digi:trn key="um:truBudgetPassword">Repeat TruBudget Password </digi:trn>              </td>
+              <td align="right" valign="top" style="padding-bottom:10px;display: inline-block;"><html:password property="truBudgetPasswordConfirmation" size="20" styleClass="inp-text" />              </td>
+            </tr>
             </c:if>
 
             <tr>

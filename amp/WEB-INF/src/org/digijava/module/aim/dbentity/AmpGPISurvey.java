@@ -105,16 +105,16 @@ public class AmpGPISurvey implements Versionable, Serializable, Cloneable, Compa
     @Override
     public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
         AmpGPISurvey aux = (AmpGPISurvey) clone();
-        aux.ampActivityId = newActivity;
-        aux.ampGPISurveyId = null;
-        Session session= PersistenceManager.getRequestDBSession();
+        aux.setAmpActivityId(newActivity);
+        aux.setAmpGPISurveyId(null);
+//        Session session= PersistenceManager.getRequestDBSession();
         if (aux.getResponses() != null && aux.getResponses().size() > 0) {
             Set<AmpGPISurveyResponse> responses = new HashSet<>();
             for (AmpGPISurveyResponse respons : aux.getResponses()) {
                 AmpGPISurveyResponse newResp = (AmpGPISurveyResponse) respons.clone();
                 newResp.setAmpGPISurveyId(aux);
                 newResp.setAmpReponseId(null);
-                session.save(newResp);
+//                session.save(newResp);
                 responses.add(newResp);
             }
             aux.setResponses(responses);
@@ -122,9 +122,9 @@ public class AmpGPISurvey implements Versionable, Serializable, Cloneable, Compa
             aux.setResponses(null);
         }
         logger.info("Merging responses. "+aux.getResponses());
-        session.saveOrUpdate(aux);
-        session.merge(aux.ampActivityId);
-        session.flush();
+//        session.saveOrUpdate(aux);
+//        session.merge(aux.ampActivityId);
+//        session.flush();
 
         return aux;
     }

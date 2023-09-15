@@ -2,6 +2,7 @@ package org.digijava.module.aim.dbentity;
 
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.util.Output;
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -106,12 +107,14 @@ public class AmpGPISurvey implements Versionable, Serializable, Cloneable, Compa
         AmpGPISurvey aux = (AmpGPISurvey) clone();
         aux.ampActivityId = newActivity;
         aux.ampGPISurveyId = null;
+        Session session= PersistenceManager.getRequestDBSession();
         if (aux.getResponses() != null && aux.getResponses().size() > 0) {
             Set<AmpGPISurveyResponse> responses = new HashSet<>();
             for (AmpGPISurveyResponse respons : aux.getResponses()) {
                 AmpGPISurveyResponse newResp = (AmpGPISurveyResponse) respons.clone();
                 newResp.setAmpGPISurveyId(aux);
                 newResp.setAmpReponseId(null);
+                session.save(newResp);
                 responses.add(newResp);
             }
             aux.setResponses(responses);
@@ -119,8 +122,8 @@ public class AmpGPISurvey implements Versionable, Serializable, Cloneable, Compa
             aux.setResponses(null);
         }
         logger.info("Merging responses. "+aux.getResponses());
-        PersistenceManager.getRequestDBSession().saveOrUpdate(aux);
-        PersistenceManager.getRequestDBSession().flush();
+        session.saveOrUpdate(aux);
+        session.flush();
 
         return aux;
     }

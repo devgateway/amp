@@ -4,6 +4,7 @@ package org.digijava.module.um.util;
 import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.handler.timeout.WriteTimeoutHandler;
+import io.netty.resolver.DefaultAddressResolverGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -25,8 +26,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class GenericWebClient {
 
-    private static final long TIMEOUT = 5000;
-    private static final int CONNECT_TIMEOUT = 5000;
+    private static final long TIMEOUT = 50000;
+    private static final int CONNECT_TIMEOUT = 50000;
 
     private static  final Logger logger = LoggerFactory.getLogger(GenericWebClient.class);
     /**
@@ -64,7 +65,7 @@ public class GenericWebClient {
                                 .flatMap(body -> Mono.error(new RuntimeException("Bad Request Error. Response: " + body))))
                 .bodyToMono(responseClass)
                 .doOnError(Throwable::printStackTrace)
-                .retryWhen(Retry.backoff(1, Duration.of(2, ChronoUnit.SECONDS))
+                .retryWhen(Retry.backoff(3, Duration.of(2, ChronoUnit.SECONDS))
                         .onRetryExhaustedThrow(((retryBackoffSpec, retrySignal) -> new RuntimeException(retrySignal.failure()))));
 
 
@@ -145,7 +146,7 @@ public class GenericWebClient {
     }
 
     private static WebClient myWebClient() {
-        HttpClient httpClient = HttpClient.create()
+        HttpClient httpClient = HttpClient.create().resolver(DefaultAddressResolverGroup.INSTANCE)
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, CONNECT_TIMEOUT)
                 .responseTimeout(Duration.ofMillis(TIMEOUT))
                 .doOnConnected(conn ->

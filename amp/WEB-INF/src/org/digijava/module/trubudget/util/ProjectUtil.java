@@ -58,17 +58,22 @@ public class ProjectUtil {
 
             for (AmpFundingDetail ampFundingDetail : ampFunding.getFundingDetails()) {
                 String adjustmentType = ampFundingDetail.getAdjustmentType().getValue();
-                // TODO: 9/15/23 use adjustmentType to determine actual/planned
+                Integer transactionType = ampFundingDetail.getTransactionType();
+
                 Double amount = ampFundingDetail.getTransactionAmount();
                 String currency = ampFundingDetail.getAmpCurrencyId().getCurrencyCode();
                 String organization = ampFundingDetail.getAmpFundingId().getAmpDonorOrgId().getName();
                 String assistanceType = ampFundingDetail.getAmpFundingId().getTypeOfAssistance().getValue();
                 String fundingStatus = ampFundingDetail.getAmpFundingId().getFundingStatus().getValue();
                 CreateProjectModel.ProjectedBudget projectedBudget = new CreateProjectModel.ProjectedBudget();
-                projectedBudget.setOrganization(organization);
-                projectedBudget.setValue(BigDecimal.valueOf(amount).toString());
-                projectedBudget.setCurrencyCode(currency);
-                project.getProjectedBudgets().add(projectedBudget);
+                if (Objects.equals(adjustmentType, "Actual") && transactionType==0)//project budget is created using actual commitment
+                {
+                    projectedBudget.setOrganization(organization);
+                    projectedBudget.setValue(BigDecimal.valueOf(amount).toString());
+                    projectedBudget.setCurrencyCode(currency);
+                    project.getProjectedBudgets().add(projectedBudget);
+                }
+
                 Map<String, Object> detail = new HashMap<>();
                 detail.put("organization", organization);
                 detail.put("adjustmentType", adjustmentType);
@@ -76,6 +81,7 @@ public class ProjectUtil {
                 detail.put("fundingStatus", fundingStatus);
                 detail.put("projectedBudget", projectedBudget);
                 fundingDetails.add(detail);
+
                 Map<String, Object> additionalData = project.getAdditionalData();
                 if (additionalData.containsKey("fundingDetails")) {
                     // TODO: 9/11/23 getdetails list and add to it

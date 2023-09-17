@@ -330,7 +330,7 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
         String currency = this.getAmpCurrencyId() == null ? "NOCUR" : this.getAmpCurrencyId().getCurrencyCode();
         String recipient = this.getRecipientOrg() == null ? "NOORG" : this.getRecipientOrg().getName();
         String trTypeName = "NOTRTYPE";
-        switch (getTransactionType().intValue()) {
+        switch (getTransactionType()) {
         case 0: 
             trTypeName = "Commitment";
             break;

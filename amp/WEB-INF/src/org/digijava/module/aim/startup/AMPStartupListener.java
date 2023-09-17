@@ -316,7 +316,6 @@ public class AMPStartupListener extends HttpServlet implements
         logger.info("Checking for columns in AmpReportSchema to be migrated to measures...");
         printResultIfNonVoid(AmpReportsSchema.getInstance().migrateColumns());
     }
-
     /**
      * runs a "cache refresh" function and checks that it returned ok
      * @param funcName

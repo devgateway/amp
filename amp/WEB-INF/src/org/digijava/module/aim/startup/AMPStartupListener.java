@@ -290,7 +290,7 @@ public class AMPStartupListener extends HttpServlet implements
                 statement.executeUpdate(insertIntoGlobalSettings);
             } catch (Exception e) {
                 // Handle the exception
-                logger.info("Error occurred during trubudget querying", e);
+                logger.info("Error occurred during trubudget init db  operations", e);
             }
         });
 

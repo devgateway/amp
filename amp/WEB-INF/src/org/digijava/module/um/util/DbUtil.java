@@ -461,7 +461,9 @@ public class DbUtil {
     }
     public static String getSettingValue(List<AmpGlobalSettings> globalSettings, String settingName)
     {
-    return globalSettings.stream().filter(x->x.getGlobalSettingsName().equals(settingName)).findFirst().orElseThrow(()->new RuntimeException("Unable to find setting for name: "+settingName)).getGlobalSettingsValue();
+    String value = globalSettings.stream().filter(x->x.getGlobalSettingsName().equals(settingName)).findFirst().orElseThrow(()->new RuntimeException("Unable to find setting for name: "+settingName)).getGlobalSettingsValue();
+    logger.info("Setting value: "+value);
+    return value;
     }
 
     public static void registerUser(User user) throws UMException {
@@ -564,6 +566,7 @@ public class DbUtil {
         userData.setApiVersion(getSettingValue(settings, "apiVersion"));
         userData.getData().getUser().setOrganization(getSettingValue(settings, "organization"));
         logger.info("Registering user on Trubudget");
+        // TODO: 9/15/23 check why the baseUrl setting is empty on haiti
         logger.info("Settings: "+settings);
         TruLoginRequest truLoginRequest = new TruLoginRequest();
         truLoginRequest.setApiVersion(getSettingValue(settings, "apiVersion"));

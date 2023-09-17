@@ -293,11 +293,9 @@ public class AMPStartupListener extends HttpServlet implements
                 logger.info("Error occurred during trubudget init db  operations", e);
             }
         });
-
         transaction.commit();
         session.close();
     }
-
     public void registerEhCacheMBeans() {
         MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
         CacheManager cacheManager = CacheManager.getInstance();

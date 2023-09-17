@@ -86,7 +86,7 @@ public class ProjectUtil {
         project.setThumbnail("sampleThumbNail");
         data.setProject(project);
         projectModel.setData(data);
-        GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "/api/global.createProject", projectModel, CreateProjectModel.class, String.class, token).subscribe(
+        GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/global.createProject", projectModel, CreateProjectModel.class, String.class, token).subscribe(
                 response -> logger.info("Create project response: " + response)
         );
         Session session = PersistenceManager.getRequestDBSession();
@@ -119,7 +119,7 @@ public class ProjectUtil {
         data.setDescription(ampActivityVersion.getDescription());
         data.setDisplayName(ampActivityVersion.getName());
         editProjectModel.setData(data);
-        GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "/api/project.update", editProjectModel, EditProjectModel.class, String.class, token).subscribe(res -> {
+        GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/project.update", editProjectModel, EditProjectModel.class, String.class, token).subscribe(res -> {
             logger.info("Update project response: "+res);
 
         });
@@ -139,7 +139,7 @@ public class ProjectUtil {
                 data1.setProjectId(projectId);
                 projectedBudget.setData(data1);
 
-                    GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "/api/project.budget.updateProjected", projectedBudget, EditProjectedBudgetModel.class, String.class, token).subscribeOn(Schedulers.parallel())
+                    GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/project.budget.updateProjected", projectedBudget, EditProjectedBudgetModel.class, String.class, token).subscribeOn(Schedulers.parallel())
                             .subscribe(res2->logger.info("Update budget response: "+res2));
 
             }

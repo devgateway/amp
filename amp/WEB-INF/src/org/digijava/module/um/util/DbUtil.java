@@ -447,7 +447,7 @@ public class DbUtil {
 
     // TODO: 9/1/23 rollback if trubudget registration not successful 
     public static Mono<TruLoginResponse> loginToTruBudget(TruLoginRequest truLoginRequest, List<AmpGlobalSettings> settings) throws URISyntaxException {
-        return GenericWebClient.postForSingleObjResponse(getSettingValue(settings,"baseUrl")+"/api/user.authenticate",truLoginRequest, TruLoginRequest.class,TruLoginResponse.class);
+        return GenericWebClient.postForSingleObjResponse(getSettingValue(settings,"baseUrl")+"api/user.authenticate",truLoginRequest, TruLoginRequest.class,TruLoginResponse.class);
     }
     public static List<AmpGlobalSettings> getGlobalSettingsBySection(String sectionName)
     {
@@ -583,7 +583,7 @@ public class DbUtil {
             TruUserData response = null;
 
                 try {
-                    response =GenericWebClient.postForSingleObjResponse(getSettingValue(settings,"baseUrl")+"/api/global.createUser", userData, TruUserData.class, TruUserData.class, truLoginResponse.getData().getUser().getToken()).block();
+                    response =GenericWebClient.postForSingleObjResponse(getSettingValue(settings,"baseUrl")+"api/global.createUser", userData, TruUserData.class, TruUserData.class, truLoginResponse.getData().getUser().getToken()).block();
                     logger.info("Create user response: " + response);
                 }catch (Exception e)
                 {
@@ -609,7 +609,7 @@ public class DbUtil {
                                     permData.setData(data1);
                                     permData.setApiVersion(getSettingValue(settings,"apiVersion"));
                                     try {
-                                        return GenericWebClient.postForSingleObjResponse(getSettingValue(settings,"baseUrl")+"/api/global.grantPermission", permData, TruGrantPermissionRequest.class, String.class, truLoginResponse.getData().getUser().getToken());
+                                        return GenericWebClient.postForSingleObjResponse(getSettingValue(settings,"baseUrl")+"api/global.grantPermission", permData, TruGrantPermissionRequest.class, String.class, truLoginResponse.getData().getUser().getToken());
                                     } catch (URISyntaxException e) {
                                         return Flux.error(new RuntimeException(e));
                                     }
@@ -629,7 +629,7 @@ public class DbUtil {
                                     permData.setData(data1);
                                     permData.setApiVersion(getSettingValue(settings,"apiVersion"));
                                     try {
-                                        return GenericWebClient.postForSingleObjResponse(getSettingValue(settings,"baseUrl")+"/api/user.intent.revokePermission", permData, TruRevokePermissionRequest.class, String.class, truLoginResponse.getData().getUser().getToken());
+                                        return GenericWebClient.postForSingleObjResponse(getSettingValue(settings,"baseUrl")+"api/user.intent.revokePermission", permData, TruRevokePermissionRequest.class, String.class, truLoginResponse.getData().getUser().getToken());
                                     } catch (URISyntaxException e) {
                                         return Flux.error(new RuntimeException(e));
                                     }

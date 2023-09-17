@@ -449,7 +449,6 @@ public class DbUtil {
     public static Mono<TruLoginResponse> loginToTruBudget(TruLoginRequest truLoginRequest, List<AmpGlobalSettings> settings) throws URISyntaxException {
         return GenericWebClient.postForSingleObjResponse(getSettingValue(settings,"baseUrl")+"/api/user.authenticate",truLoginRequest, TruLoginRequest.class,TruLoginResponse.class);
     }
-
     public static List<AmpGlobalSettings> getGlobalSettingsBySection(String sectionName)
     {
         Session session = PersistenceManager.getRequestDBSession();

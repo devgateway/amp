@@ -66,7 +66,7 @@ public class ProjectUtil {
                 String assistanceType = ampFundingDetail.getAmpFundingId().getTypeOfAssistance().getValue();
                 String fundingStatus = ampFundingDetail.getAmpFundingId().getFundingStatus().getValue();
                 CreateProjectModel.ProjectedBudget projectedBudget = new CreateProjectModel.ProjectedBudget();
-                if (Objects.equals(adjustmentType, "Actual") && transactionType==0)//project budget is created using actual commitment
+                if (Objects.equals(adjustmentType, "Actual") && transactionType==0)//project budget is created using "actual commitment"
                 {
                     projectedBudget.setOrganization(organization);
                     projectedBudget.setValue(BigDecimal.valueOf(amount).toString());

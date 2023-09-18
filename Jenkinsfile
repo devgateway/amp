@@ -57,7 +57,7 @@ stage('Build') {
         milestone()
         environment = input(
                 message: "Server to deploy",
-                parameters: [choice(choices: ["${env.AMP_STAGING_HOSTNAME}", "${env.AMP_DE_HOSTNAME}"], name: 'environment')])
+                parameters: [choice(choices: ["${env.AMP_STAGING_HOSTNAME}", "${env.AMP_DE_HOSTNAME}" , "${env.AMP_TRAINING_HOSTNAME}"], name: 'environment')])
         milestone()
     }
 
@@ -92,7 +92,11 @@ stage('Build') {
     if ("${environment}".toLowerCase().contains("ampdevde")) {
         ampUrl = "http://amp-${country}-${tag}.de.ampsite.net/"
     } else {
-        ampUrl = "http://amp-${country}-${tag}.stg.ampsite.net/"
+        if ("${environment}".toLowerCase().contains("ampdevtraining")) {
+            ampUrl = "http://amp-${country}-${tag}.training.ampsite.net/"
+            } else {
+                ampUrl = "http://amp-${country}-${tag}.stg.ampsite.net/"
+        }
     }
 
     println "amp url is ${ampUrl}"

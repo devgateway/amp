@@ -657,7 +657,7 @@ public class DbUtil {
     {
         Session session = PersistenceManager.getRequestDBSession();
         try {
-            return session.createNativeQuery(" SELECT t. * FROM amp_trubudget_sub_intent t WHERE mother_intent_name='"+motherName+"'", SubIntents.class).list();
+            return session.createNativeQuery(" SELECT t. * FROM amp_trubudget_sub_intent t WHERE mother_intent_name='"+motherName+"'", SubIntents.class).setCacheable(true).list();
 
         }catch (Exception e)
         {

@@ -9,7 +9,7 @@
                 <param name="sequence_name">amp_trubudget_intent_seq</param>
             </generator>
         </id>
-        <property name="truBudgetIntentName" column="trubudget_intent_name" type="java.lang.String" unique="true"/>
+        <property name="truBudgetIntentName" column="trubudget_intent_name" type="java.lang.String" unique-key="unique_perm"/>
         <property name="truBudgetIntentDisplayName" column="trubudget_intent_display_name" type="java.lang.String"/>
 
 <!--        <many-to-one name="intentGroup" column="intent_group" class="org.digijava.kernel.user.TruBudgetIntentGroup" />-->

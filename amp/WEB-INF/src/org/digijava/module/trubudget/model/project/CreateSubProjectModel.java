@@ -4,6 +4,7 @@ package org.digijava.module.trubudget.model.project;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -53,17 +54,17 @@ public class CreateSubProjectModel {
 
     public static class Subproject {
         private String id;
-        private String status;
+        private String status="open";
         private String displayName;
         private String description;
         private String assignee;
         private String validator;
         @JsonProperty("workflowitemType")
-        private String workflowitemType;
+        private String workflowitemType="general";
         private String currency;
         private List<CreateProjectModel.ProjectedBudget> projectedBudgets= new ArrayList<>();
 
-        private Map<String, Object> additionalData;
+        private Map<String, Object> additionalData= new HashMap<>();
 
         // Getters and setters for id, status, displayName, description, amount, assignee, currency, and additionalData
 

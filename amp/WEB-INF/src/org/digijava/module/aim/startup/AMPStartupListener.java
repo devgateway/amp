@@ -265,6 +265,7 @@ public class AMPStartupListener extends HttpServlet implements
                         "    (nextval('amp_trubudget_intent_seq'),'provisioning.start', 'Start Provisioning'),\n" +
                         "    (nextval('amp_trubudget_intent_seq'),'provisioning.end', 'End Provisioning'),\n" +
                         "    (nextval('amp_trubudget_intent_seq'),'provisioning.get', 'Get Provisioning Status') ON CONFLICT (trubudget_intent_name) DO NOTHING;\n";
+                logger.info("Inserting global intents");
                 statement.executeUpdate(insertStatement);
 
                 String insertSubIntentsStatement ="INSERT INTO amp_trubudget_sub_intent (sub_trubudget_intent_id,sub_trubudget_intent_name,mother_intent_name)" +
@@ -275,16 +276,16 @@ public class AMPStartupListener extends HttpServlet implements
                         " (nextval('amp_trubudget_sub_intent_seq'),'project.createSubproject', 'project'),"+
                         " (nextval('amp_trubudget_sub_intent_seq'),'project.intent.grantPermission', 'project'),"+
                         " (nextval('amp_trubudget_sub_intent_seq'),'project.intent.revokePermission', 'project'),"+
-                        " (nextval('amp_trubudget_sub_intent_seq'),'project.budget.updateProjected', 'project')" +
-                        " (nextval('amp_trubudget_sub_intent_seq'),'subproject.budget.updateProjected', 'subproject')" +
-                        " (nextval('amp_trubudget_sub_intent_seq'),'subproject.update', 'subproject')" +
-                        " (nextval('amp_trubudget_sub_intent_seq'),'subproject.intent.revokePermission', 'subproject')" +
-                        " (nextval('amp_trubudget_sub_intent_seq'),'subproject.reorderWorkflowitems', 'subproject')" +
-                        " (nextval('amp_trubudget_sub_intent_seq'),'subproject.createWorkflowitem', 'subproject')" +
-                        " (nextval('amp_trubudget_sub_intent_seq'),'subproject.close', 'subproject')" +
+                        " (nextval('amp_trubudget_sub_intent_seq'),'project.budget.updateProjected', 'project')," +
+                        " (nextval('amp_trubudget_sub_intent_seq'),'subproject.budget.updateProjected', 'subproject')," +
+                        " (nextval('amp_trubudget_sub_intent_seq'),'subproject.update', 'subproject')," +
+                        " (nextval('amp_trubudget_sub_intent_seq'),'subproject.intent.revokePermission', 'subproject')," +
+                        " (nextval('amp_trubudget_sub_intent_seq'),'subproject.reorderWorkflowitems', 'subproject')," +
+                        " (nextval('amp_trubudget_sub_intent_seq'),'subproject.createWorkflowitem', 'subproject')," +
+                        " (nextval('amp_trubudget_sub_intent_seq'),'subproject.close', 'subproject')," +
                         " (nextval('amp_trubudget_sub_intent_seq'),'subproject.assign', 'subproject')" +
                         " ON CONFLICT (sub_trubudget_intent_name,mother_intent_name) DO NOTHING";
-
+                logger.info("Inserting sub intents");
                 statement.executeUpdate(insertSubIntentsStatement);
 //                String addColumnSql = "ALTER TABLE trubudget_intent ADD COLUMN IF NOT EXISTS intent_group INTEGER";
 //                statement.executeUpdate(addColumnSql);

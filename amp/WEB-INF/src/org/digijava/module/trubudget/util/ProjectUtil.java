@@ -5,6 +5,7 @@ import org.digijava.kernel.cache.ehcache.EhCacheWrapper;
 import org.digijava.kernel.entity.trubudget.SubIntents;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.trubudget.dbentity.SubProjectComponent;
 import org.digijava.module.trubudget.dbentity.TruBudgetActivity;
 import org.digijava.module.trubudget.model.project.*;
 import org.digijava.module.trubudget.model.subproject.EditSubProjectModel;
@@ -16,6 +17,7 @@ import org.hibernate.query.Query;
 import org.hibernate.type.LongType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
 import java.math.BigDecimal;
@@ -85,34 +87,42 @@ public class ProjectUtil {
         project.setThumbnail("sampleThumbNail");
         data.setProject(project);
         projectModel.setData(data);
-        GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/global.createProject", projectModel, CreateProjectModel.class, String.class, token).subscribe(
-                response -> logger.info("Create project response: " + response)
-        );
         List<SubIntents> subIntents = getSubIntentsByMother("project");
-        subIntents.forEach(subIntent -> {
-            ProjectGrantRevokePermModel projectGrantRevokePermModel = new ProjectGrantRevokePermModel();
-            ProjectGrantRevokePermModel.Data data1 = new ProjectGrantRevokePermModel.Data();
-            data1.setProjectId(project.getId());
-            data1.setIdentity(user);
-            data1.setIntent(subIntent.getSubTruBudgetIntentName());
-            projectGrantRevokePermModel.setData(data1);
-            projectGrantRevokePermModel.setApiVersion(getSettingValue(settings, "apiVersion"));
-            try {
-                GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/project.intent.grantPermission", projectGrantRevokePermModel, ProjectGrantRevokePermModel.class, String.class, token).subscribeOn(Schedulers.parallel()).subscribe(
-                        response -> logger.info("Grant project permission response: " + response)
-                );
-            } catch (URISyntaxException e) {
-                throw new RuntimeException(e);
-            }
-
-        });
         Session session = PersistenceManager.getRequestDBSession();
-        TruBudgetActivity truBudgetActivity = new TruBudgetActivity();
-        truBudgetActivity.setAmpActivityId(ampActivityVersion.getAmpActivityId());
-        truBudgetActivity.setTruBudgetId(project.getId());
-        session.saveOrUpdate(truBudgetActivity);
+        GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/global.createProject", projectModel, CreateProjectModel.class, String.class, token).subscribe(
+                response ->{
+                    logger.info("Create project response: " + response);
+                    subIntents.forEach(subIntent -> {
+                        ProjectGrantRevokePermModel projectGrantRevokePermModel = new ProjectGrantRevokePermModel();
+                        ProjectGrantRevokePermModel.Data data1 = new ProjectGrantRevokePermModel.Data();
+                        data1.setProjectId(project.getId());
+                        data1.setIdentity(user);
+                        data1.setIntent(subIntent.getSubTruBudgetIntentName());
+                        projectGrantRevokePermModel.setData(data1);
+                        projectGrantRevokePermModel.setApiVersion(getSettingValue(settings, "apiVersion"));
+                        try {
+                            GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/project.intent.grantPermission", projectGrantRevokePermModel, ProjectGrantRevokePermModel.class, String.class, token).subscribeOn(Schedulers.parallel()).subscribe(
+                                    response1 -> logger.info("Grant project permission response: " + response1)
+                            );
+                        } catch (URISyntaxException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                    });
+
+                    TruBudgetActivity truBudgetActivity = new TruBudgetActivity();
+                    truBudgetActivity.setAmpActivityId(ampActivityVersion.getAmpActivityId());
+                    truBudgetActivity.setTruBudgetId(project.getId());
+                    session.saveOrUpdate(truBudgetActivity);
+
+
+
+                }
+        );
+
+            createSubProjects(ampActivityVersion, project.getId(),settings);
         session.flush();
-        createSubProjects(ampActivityVersion, project.getId());
+
     }
 
     public static TruBudgetActivity isActivityAlreadyInTrubudget(Long activityId) {
@@ -172,11 +182,10 @@ public class ProjectUtil {
 
             }
         }
-        createSubProjects(ampActivityVersion, projectId);
+        createSubProjects(ampActivityVersion, projectId,settings);
 
     }
-    public static void createSubProjects(AmpActivityVersion ampActivityVersion, String projectId) throws URISyntaxException {
-        List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
+    public static void createSubProjects(AmpActivityVersion ampActivityVersion, String projectId, List<AmpGlobalSettings> settings) throws URISyntaxException {
 
         AbstractCache myCache = new EhCacheWrapper("trubudget");
         String token = (String) myCache.get("truBudgetToken");
@@ -184,7 +193,8 @@ public class ProjectUtil {
         logger.info("Trubudget Cached Token:" + token);
         for (AmpComponent ampComponent: ampActivityVersion.getComponents())
         {
-            if (ampComponent.getSubProjectId()==null) {//create subproject
+            Optional<SubProjectComponent> subProjectComponent = PersistenceManager.getRequestDBSession().createQuery("FROM "+SubProjectComponent.class.getName()+" sb WHERE sb.componentId="+ampComponent.getAmpComponentId(), SubProjectComponent.class).stream().findAny();
+            if (!subProjectComponent.isPresent()) {//create subproject
                 CreateSubProjectModel createSubProjectModel = new CreateSubProjectModel();
                 CreateSubProjectModel.Data data = new CreateSubProjectModel.Data();
                 CreateSubProjectModel.Subproject subproject = new CreateSubProjectModel.Subproject();
@@ -197,7 +207,7 @@ public class ProjectUtil {
                         if (componentFunding.getTransactionType() == 0 && Objects.equals(componentFunding.getAdjustmentType().getValue(), "Planned")) {
 //                            totalFunding = totalFunding.add(BigDecimal.valueOf(componentFunding.getTransactionAmount()));
                             CreateProjectModel.ProjectedBudget projectedBudget = new CreateProjectModel.ProjectedBudget();
-                            projectedBudget.setOrganization(componentFunding.getReportingOrganization().getName());
+                            projectedBudget.setOrganization(componentFunding.getReportingOrganization()!=null?componentFunding.getReportingOrganization().getName():"Funding Org");
                             projectedBudget.setValue(BigDecimal.valueOf(componentFunding.getTransactionAmount()).toString());
                             projectedBudget.setCurrencyCode(componentFunding.getCurrency().getCurrencyCode());
                             subproject.getProjectedBudgets().add(projectedBudget);
@@ -214,36 +224,48 @@ public class ProjectUtil {
                 data.setSubproject(subproject);
                 createSubProjectModel.setApiVersion(getSettingValue(settings, "apiVersion"));
                 createSubProjectModel.setData(data);
-                GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/project.createSubproject", createSubProjectModel, CreateSubProjectModel.class, String.class, token).subscribeOn(Schedulers.parallel())
-                        .subscribe(res2 -> logger.info("Create subproject response: " + res2));
                 List<SubIntents> subIntents = getSubIntentsByMother("subproject");
-                subIntents.forEach(subIntent -> {
-                    SubProjectGrantRevokePermModel subProjectGrantRevokePermModel = new SubProjectGrantRevokePermModel();
-                    SubProjectGrantRevokePermModel.Data data2 = new SubProjectGrantRevokePermModel.Data();
-                    data2.setProjectId(projectId);
-                    data2.setIdentity(user);
-                    data2.setIntent(subIntent.getSubTruBudgetIntentName());
-                    subProjectGrantRevokePermModel.setData(data2);
-                    subProjectGrantRevokePermModel.setApiVersion(getSettingValue(settings, "apiVersion"));
-                    try {
-                        GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/subproject.intent.grantPermission", subProjectGrantRevokePermModel, SubProjectGrantRevokePermModel.class, String.class, token).subscribeOn(Schedulers.parallel()).subscribe(
-                                response -> logger.info("Grant subproject permission response: " + response)
-                        );
-                    } catch (URISyntaxException e) {
-                        throw new RuntimeException(e);
-                    }
-
-                });
-                ampComponent.setSubProjectId(subproject.getId());
                 Session session = PersistenceManager.getRequestDBSession();
-                session.merge(ampComponent);
-                session.flush();
+                try {
+                    GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/project.createSubproject", createSubProjectModel, CreateSubProjectModel.class, String.class, token)
+                            .subscribe(res-> {
+                                logger.info("Create subproject response: "+res);
+                                        subIntents.forEach(subIntent -> {
+                                            SubProjectGrantRevokePermModel subProjectGrantRevokePermModel = new SubProjectGrantRevokePermModel();
+                                            SubProjectGrantRevokePermModel.Data data2 = new SubProjectGrantRevokePermModel.Data();
+                                            data2.setProjectId(projectId);
+                                            data2.setSubprojectId(subproject.getId());
+                                            data2.setIdentity(user);
+                                            data2.setIntent(subIntent.getSubTruBudgetIntentName());
+                                            subProjectGrantRevokePermModel.setData(data2);
+                                            subProjectGrantRevokePermModel.setApiVersion(getSettingValue(settings, "apiVersion"));
+                                            try {
+                                                GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/subproject.intent.grantPermission", subProjectGrantRevokePermModel, SubProjectGrantRevokePermModel.class, String.class, token).subscribeOn(Schedulers.parallel()).subscribe(
+                                                        response -> logger.info("Grant subproject permission response: " + response)
+                                                );
+                                            } catch (URISyntaxException e) {
+                                                throw new RuntimeException(e);
+                                            }
+
+                                        });
+                                SubProjectComponent subProjectComponent1 = new SubProjectComponent();
+                                subProjectComponent1.setComponentId(ampComponent.getAmpComponentId());
+                                subProjectComponent1.setSubProjectId(subproject.getId());
+                                session.saveOrUpdate(subProjectComponent1);
+                                    });
+
+                }catch (Exception e)
+                {
+                    logger.info("Error during subproject creation");
+                    e.printStackTrace();
+                }
+//                session.flush();
             }
             else {//update subProject
                 EditSubProjectModel editSubProjectModel = new EditSubProjectModel();
                 EditSubProjectModel.Data data = new EditSubProjectModel.Data();
                 data.setProjectId(projectId);
-                data.setSubprojectId(ampComponent.getSubProjectId());
+                data.setSubprojectId(subProjectComponent.get().getSubProjectId());
                 data.setDescription(ampComponent.getDescription());
                 data.setDisplayName(ampComponent.getTitle());
                 editSubProjectModel.setData(data);
@@ -256,9 +278,9 @@ public class ProjectUtil {
                         EditSubProjectedBudgetModel editSubProjectedBudgetModel = new EditSubProjectedBudgetModel();
                         EditSubProjectedBudgetModel.Data data1 = new EditSubProjectedBudgetModel.Data();
                         data1.setProjectId(projectId);
-                        data1.setSubprojectId(ampComponent.getSubProjectId());
+                        data1.setSubprojectId(subProjectComponent.get().getSubProjectId());
                         data1.setValue(BigDecimal.valueOf(componentFunding.getTransactionAmount()).toString());
-                        data1.setOrganization(componentFunding.getReportingOrganization().getName());
+                        data1.setOrganization(componentFunding.getReportingOrganization()!=null?componentFunding.getReportingOrganization().getName():"Funding Org");
                         editSubProjectedBudgetModel.setData(data1);
                         editSubProjectedBudgetModel.setApiVersion(getSettingValue(settings, "apiVersion"));
                         GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/subproject.budget.updateProjected", editSubProjectedBudgetModel, EditSubProjectedBudgetModel.class, String.class, token).subscribeOn(Schedulers.parallel())

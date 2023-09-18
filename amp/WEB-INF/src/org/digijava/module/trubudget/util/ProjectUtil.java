@@ -346,7 +346,6 @@ public class ProjectUtil {
                             }
                         }
                     }
-//                    subproject.setCurrency(new ArrayList<>(ampComponent.getFundings()).get(0).getCurrency().getCurrencyCode());
                 }
             }
         }

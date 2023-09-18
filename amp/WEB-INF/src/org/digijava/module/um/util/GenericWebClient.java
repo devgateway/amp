@@ -146,7 +146,7 @@ public class GenericWebClient {
     }
 
     private static WebClient myWebClient() {
-        HttpClient httpClient = HttpClient.create().resolver(DefaultAddressResolverGroup.INSTANCE)
+        HttpClient httpClient = HttpClient.create()
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, CONNECT_TIMEOUT)
                 .responseTimeout(Duration.ofMillis(TIMEOUT))
                 .doOnConnected(conn ->

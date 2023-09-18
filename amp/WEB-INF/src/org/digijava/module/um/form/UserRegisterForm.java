@@ -21,7 +21,7 @@ package org.digijava.module.um.form;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.validator.ValidatorForm;
-import org.digijava.kernel.entity.TruBudgetIntent;
+import org.digijava.kernel.entity.trubudget.TruBudgetIntent;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;

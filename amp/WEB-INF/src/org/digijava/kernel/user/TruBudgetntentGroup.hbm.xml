@@ -14,7 +14,7 @@
 
         <set name="intents" table="amp_trubudget_intent" inverse="true" fetch="select">
             <key column="intent_group"/>
-            <one-to-many class="org.digijava.kernel.entity.TruBudgetIntent"/>
+            <one-to-many class="org.digijava.kernel.entity.trubudget.TruBudgetIntent"/>
         </set>
     </class>
 </hibernate-mapping>

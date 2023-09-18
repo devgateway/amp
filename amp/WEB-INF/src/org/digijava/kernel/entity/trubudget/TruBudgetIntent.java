@@ -1,4 +1,4 @@
-package org.digijava.kernel.entity;
+package org.digijava.kernel.entity.trubudget;
 
 import org.digijava.kernel.user.User;
 import org.hibernate.annotations.DynamicUpdate;

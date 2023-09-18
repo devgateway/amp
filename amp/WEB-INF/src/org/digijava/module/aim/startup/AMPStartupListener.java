@@ -245,6 +245,7 @@ public class AMPStartupListener extends HttpServlet implements
                 String insertStatement="INSERT INTO amp_trubudget_intent (trubudget_intent_id,trubudget_intent_name, trubudget_intent_display_name)\n" +
                         "VALUES\n" +
                         "    (nextval('amp_trubudget_intent_seq'),'global.listPermissions', 'List Permissions'),\n" +
+                        "    (nextval('amp_trubudget_intent_seq'),'project.intent.grantPermission', 'Grant permissions to project.'),\n" +
                         "    (nextval('amp_trubudget_intent_seq'),'global.grantPermission', 'Grant Permission'),\n" +
                         "    (nextval('amp_trubudget_intent_seq'),'global.grantAllPermissions', 'Grant All Permissions'),\n" +
                         "    (nextval('amp_trubudget_intent_seq'),'global.revokePermission', 'Revoke Permission'),\n" +
@@ -266,6 +267,17 @@ public class AMPStartupListener extends HttpServlet implements
                         "    (nextval('amp_trubudget_intent_seq'),'provisioning.get', 'Get Provisioning Status') ON CONFLICT (trubudget_intent_name) DO NOTHING;\n";
                 statement.executeUpdate(insertStatement);
 
+                String insertSubIntentsStatement ="INSERT INTO amp_trubudget_sub_intent (sub_trubudget_intent_id,sub_trubudget_intent_name,mother_intent_name)" +
+                        "VALUES" +
+                        " (nextval('amp_trubudget_sub_intent_seq'),'project.assign', 'project'),"+
+                        " (nextval('amp_trubudget_sub_intent_seq'),'project.close', 'project'),"+
+                        " (nextval('amp_trubudget_sub_intent_seq'),'project.update', 'project'),"+
+                        " (nextval('amp_trubudget_sub_intent_seq'),'project.createSubproject', 'project'),"+
+                        " (nextval('amp_trubudget_sub_intent_seq'),'project.intent.grantPermission', 'project'),"+
+                        " (nextval('amp_trubudget_sub_intent_seq'),'project.intent.revokePermission', 'project'),"+
+                        " (nextval('amp_trubudget_sub_intent_seq'),'project.budget.updateProjected', 'project') ON CONFLICT (sub_trubudget_intent_name,mother_intent_name) DO NOTHING";
+
+                statement.executeUpdate(insertSubIntentsStatement);
 //                String addColumnSql = "ALTER TABLE trubudget_intent ADD COLUMN IF NOT EXISTS intent_group INTEGER";
 //                statement.executeUpdate(addColumnSql);
 //

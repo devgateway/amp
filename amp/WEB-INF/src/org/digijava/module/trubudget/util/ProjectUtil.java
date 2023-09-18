@@ -2,26 +2,23 @@ package org.digijava.module.trubudget.util;
 
 import org.digijava.kernel.cache.AbstractCache;
 import org.digijava.kernel.cache.ehcache.EhCacheWrapper;
+import org.digijava.kernel.entity.trubudget.SubIntents;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
-import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.trubudget.dbentity.TruBudgetActivity;
 import org.digijava.module.trubudget.model.project.CreateProjectModel;
 import org.digijava.module.trubudget.model.project.EditProjectModel;
 import org.digijava.module.trubudget.model.project.EditProjectedBudgetModel;
-import org.digijava.module.um.model.TruLoginRequest;
-import org.digijava.module.um.model.TruLoginResponse;
+import org.digijava.module.trubudget.model.project.ProjectGrantRevokePermModel;
 import org.digijava.module.um.util.GenericWebClient;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.hibernate.type.LongType;
-import org.hibernate.type.StringType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
 import java.math.BigDecimal;
@@ -29,8 +26,7 @@ import java.net.URISyntaxException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.digijava.module.um.util.DbUtil.getGlobalSettingsBySection;
-import static org.digijava.module.um.util.DbUtil.getSettingValue;
+import static org.digijava.module.um.util.DbUtil.*;
 
 public class ProjectUtil {
     private static final Logger logger = LoggerFactory.getLogger(ProjectUtil.class);
@@ -95,6 +91,24 @@ public class ProjectUtil {
         GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/global.createProject", projectModel, CreateProjectModel.class, String.class, token).subscribe(
                 response -> logger.info("Create project response: " + response)
         );
+        List<SubIntents> subIntents = getSubIntentsByMother("project");
+        subIntents.forEach(subIntent -> {
+            ProjectGrantRevokePermModel projectGrantRevokePermModel = new ProjectGrantRevokePermModel();
+            ProjectGrantRevokePermModel.Data data1 = new ProjectGrantRevokePermModel.Data();
+            data1.setProjectId(project.getId());
+            data1.setIdentity(user);
+            data1.setIntent(subIntent.getSubTruBudgetIntentName());
+            projectGrantRevokePermModel.setData(data1);
+            projectGrantRevokePermModel.setApiVersion(getSettingValue(settings, "apiVersion"));
+            try {
+                GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/project.intent.grantPermission", projectGrantRevokePermModel, ProjectGrantRevokePermModel.class, String.class, token).subscribeOn(Schedulers.parallel()).subscribe(
+                        response -> logger.info("Grant project permission response: " + response)
+                );
+            } catch (URISyntaxException e) {
+                throw new RuntimeException(e);
+            }
+
+        });
         Session session = PersistenceManager.getRequestDBSession();
         TruBudgetActivity truBudgetActivity = new TruBudgetActivity();
         truBudgetActivity.setAmpActivityId(ampActivityVersion.getAmpActivityId());
@@ -110,6 +124,8 @@ public class ProjectUtil {
 //        query.setParameter("truBudgetId",truBudgetId, StringType.INSTANCE);
         return query.stream().findAny().orElse(null);
     }
+
+
 
     public static void updateProject(String projectId, AmpActivityVersion ampActivityVersion) throws URISyntaxException {
 
@@ -133,6 +149,9 @@ public class ProjectUtil {
         for (AmpFunding ampFunding : ampActivityVersion.getFunding()) {
 
             for (AmpFundingDetail ampFundingDetail : ampFunding.getFundingDetails()) {
+                String adjustmentType = ampFundingDetail.getAdjustmentType().getValue();
+                Integer transactionType = ampFundingDetail.getTransactionType();
+
                 Double amount = ampFundingDetail.getTransactionAmount();
                 String currency = ampFundingDetail.getAmpCurrencyId().getCurrencyCode();
                 String organization = ampFundingDetail.getAmpFundingId().getAmpDonorOrgId().getName();
@@ -144,9 +163,12 @@ public class ProjectUtil {
                 data1.setCurrencyCode(currency);
                 data1.setProjectId(projectId);
                 projectedBudget.setData(data1);
-
+                if (Objects.equals(adjustmentType, "Actual") && transactionType==0)//project budget is edited using "actual commitment"
+                {
                     GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/project.budget.updateProjected", projectedBudget, EditProjectedBudgetModel.class, String.class, token).subscribeOn(Schedulers.parallel())
                             .subscribe(res2->logger.info("Update budget response: "+res2));
+                }
+
 
             }
         }

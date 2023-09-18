@@ -12,7 +12,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.Constants;
 import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.entity.TruBudgetIntent;
+import org.digijava.kernel.entity.trubudget.TruBudgetIntent;
 import org.digijava.kernel.entity.UserLangPreferences;
 import org.digijava.kernel.mail.DgEmailManager;
 import org.digijava.kernel.request.Site;

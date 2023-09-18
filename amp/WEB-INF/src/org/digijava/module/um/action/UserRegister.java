@@ -30,6 +30,7 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.Constants;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.entity.*;
+import org.digijava.kernel.entity.trubudget.TruBudgetIntent;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;

@@ -1,6 +1,6 @@
 package org.digijava.kernel.user;
 
-import org.digijava.kernel.entity.TruBudgetIntent;
+import org.digijava.kernel.entity.trubudget.TruBudgetIntent;
 
 import java.util.Set;
 

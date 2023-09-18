@@ -21,6 +21,8 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.*;
+import org.digijava.kernel.entity.trubudget.SubIntents;
+import org.digijava.kernel.entity.trubudget.TruBudgetIntent;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
@@ -42,6 +44,8 @@ import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
+import org.jetbrains.annotations.NotNull;
+import reactor.core.CorePublisher;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
@@ -605,14 +609,8 @@ public class DbUtil {
                                     TruGrantPermissionRequest permData = new TruGrantPermissionRequest();
                                     TruGrantPermissionRequest.Data data1 = new TruGrantPermissionRequest.Data();
                                     data1.setIdentity(finalResponse !=null? finalResponse.getData().getUser().getId():user.getEmail().split("@")[0]);
-                                    data1.setIntent(new ArrayList<>(user.getTruBudgetIntents()).get(index).getTruBudgetIntentName());
-                                    permData.setData(data1);
-                                    permData.setApiVersion(getSettingValue(settings,"apiVersion"));
-                                    try {
-                                        return GenericWebClient.postForSingleObjResponse(getSettingValue(settings,"baseUrl")+"api/global.grantPermission", permData, TruGrantPermissionRequest.class, String.class, truLoginResponse.getData().getUser().getToken());
-                                    } catch (URISyntaxException e) {
-                                        return Flux.error(new RuntimeException(e));
-                                    }
+                                    return grantPermRequest(settings, truLoginResponse, permData, data1,new ArrayList<>(user.getTruBudgetIntents()).get(index).getTruBudgetIntentName());
+
                                 }).subscribeOn(Schedulers.parallel()).subscribe(permissionResponse->logger.info("Grant permission response:ss " + permissionResponse));
                     }
             // TODO: 9/6/23  complete the revoke process.. need to checkout all available permissions
@@ -640,6 +638,32 @@ public class DbUtil {
         });
         return true;
 
+    }
+
+    @NotNull
+    private static CorePublisher<String> grantPermRequest(List<AmpGlobalSettings> settings, TruLoginResponse truLoginResponse, TruGrantPermissionRequest permData, TruGrantPermissionRequest.Data data1, String intent) {
+        data1.setIntent(intent);
+        permData.setData(data1);
+        permData.setApiVersion(getSettingValue(settings,"apiVersion"));
+        try {
+
+            return GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/global.grantPermission", permData, TruGrantPermissionRequest.class, String.class, truLoginResponse.getData().getUser().getToken());
+        } catch (URISyntaxException e) {
+            return Flux.error(new RuntimeException(e));
+        }
+    }
+
+    public static List<SubIntents> getSubIntentsByMother(String motherName)
+    {
+        Session session = PersistenceManager.getRequestDBSession();
+        try {
+            return session.createNativeQuery(" SELECT t. * FROM amp_trubudget_sub_intent t WHERE mother_intent_name='"+motherName+"'", SubIntents.class).list();
+
+        }catch (Exception e)
+        {
+            logger.info("Error during intent fetch ",e);
+            throw new RuntimeException(e);
+        }
     }
     public static  List<TruBudgetIntent> getTruBudgetIntents()
     {

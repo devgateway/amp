@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 import org.apache.struts.action.*;
 import org.digijava.kernel.Constants;
 import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.entity.TruBudgetIntent;
+import org.digijava.kernel.entity.trubudget.TruBudgetIntent;
 import org.digijava.kernel.entity.UserLangPreferences;
 import org.digijava.kernel.mail.DgEmailManager;
 import org.digijava.kernel.request.Site;
@@ -29,11 +29,9 @@ import org.digijava.module.um.util.AmpUserUtil;
 import org.digijava.module.um.util.DbUtil;
 import org.digijava.module.um.util.UmUtil;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
-import static org.digijava.module.um.util.DbUtil.getTruBudgetIntents;
 import static org.digijava.module.um.util.DbUtil.getTruBudgetIntentsByName;
 
 public class RegisterUser extends Action {

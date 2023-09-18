@@ -3,7 +3,7 @@
         "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-    <class name="org.digijava.kernel.entity.TruBudgetIntent" table="amp_trubudget_intent">
+    <class name="org.digijava.kernel.entity.trubudget.TruBudgetIntent" table="amp_trubudget_intent">
         <id name="id" column="trubudget_intent_id" type="java.lang.Long" unsaved-value="null">
             <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
                 <param name="sequence_name">amp_trubudget_intent_seq</param>

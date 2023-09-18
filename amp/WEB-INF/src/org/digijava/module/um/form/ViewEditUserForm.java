@@ -2,7 +2,7 @@ package org.digijava.module.um.form;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.entity.TruBudgetIntent;
+import org.digijava.kernel.entity.trubudget.TruBudgetIntent;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;

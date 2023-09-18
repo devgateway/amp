@@ -3,7 +3,7 @@ package org.digijava.module.um.action;
 import org.apache.struts.action.*;
 import org.digijava.kernel.Constants;
 import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.entity.TruBudgetIntent;
+import org.digijava.kernel.entity.trubudget.TruBudgetIntent;
 import org.digijava.kernel.entity.UserLangPreferences;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.request.Site;

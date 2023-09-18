@@ -48,7 +48,7 @@
 
 		<set name="truBudgetIntents" table="amp_user_trubudget_intent" cascade="merge">
 			<key column="user_id"/>
-			<many-to-many column="trubudget_intent_id" class="org.digijava.kernel.entity.TruBudgetIntent"/>
+			<many-to-many column="trubudget_intent_id" class="org.digijava.kernel.entity.trubudget.TruBudgetIntent"/>
 		</set>
 
 		<many-to-one name="userExtension" column="user_ext_id" class="org.digijava.module.aim.dbentity.AmpUserExtension" cascade="none" />

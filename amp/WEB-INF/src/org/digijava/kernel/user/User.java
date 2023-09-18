@@ -26,6 +26,7 @@ import org.digijava.kernel.ampapi.endpoints.common.valueproviders.UserValueProvi
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.*;
+import org.digijava.kernel.entity.trubudget.TruBudgetIntent;
 import org.digijava.kernel.request.Site;
 import org.digijava.module.aim.annotations.interchange.InterchangeableValue;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;

@@ -6,7 +6,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.entity.TruBudgetIntent;
+import org.digijava.kernel.entity.trubudget.TruBudgetIntent;
 import org.digijava.kernel.translator.util.TrnCountry;
 import org.digijava.kernel.translator.util.TrnLocale;
 import org.digijava.kernel.translator.util.TrnUtil;

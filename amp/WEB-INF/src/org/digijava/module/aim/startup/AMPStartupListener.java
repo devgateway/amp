@@ -285,6 +285,12 @@ public class AMPStartupListener extends HttpServlet implements
                         " (nextval('amp_trubudget_sub_intent_seq'),'subproject.createWorkflowitem', 'subproject')," +
                         " (nextval('amp_trubudget_sub_intent_seq'),'subproject.close', 'subproject')," +
                         " (nextval('amp_trubudget_sub_intent_seq'),'subproject.assign', 'subproject')" +
+                        " (nextval('amp_trubudget_sub_intent_seq'),'workflowitem.assign', 'workflowitem')" +
+                        " (nextval('amp_trubudget_sub_intent_seq'),'workflowitem.update', 'workflowitem')" +
+                        " (nextval('amp_trubudget_sub_intent_seq'),'workflowitem.close', 'workflowitem')" +
+                        " (nextval('amp_trubudget_sub_intent_seq'),'workflowitem.validateDocument', 'workflowitem')" +
+                        " (nextval('amp_trubudget_sub_intent_seq'),'workflowitem.intent.revokePermission', 'workflowitem')" +
+                        " (nextval('amp_trubudget_sub_intent_seq'),'workflowitem.intent.grantPermission', 'workflowitem')" +
                         " ON CONFLICT (sub_trubudget_intent_name,mother_intent_name) DO NOTHING";
                 logger.info("Inserting sub intents");
                 statement.executeUpdate(insertSubIntentsStatement);

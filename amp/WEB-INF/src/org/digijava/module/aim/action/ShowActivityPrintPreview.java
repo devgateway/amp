@@ -950,15 +950,11 @@ public class ShowActivityPrintPreview
 
             Collection<AmpComponentFunding> fundingComponentActivity = ActivityUtil.getFundingComponentActivity(
                     tempComp.getComponentId());
-            Iterator cItr = fundingComponentActivity.iterator();
-            while (cItr.hasNext()) {
-                AmpComponentFunding ampCompFund = (AmpComponentFunding) cItr
-                        .next();
-
+            for (AmpComponentFunding ampCompFund : fundingComponentActivity) {
                 double disb = 0;
                 if (ampCompFund.getAdjustmentType().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())
-                    && ampCompFund.getTransactionType().intValue() == 1)
-                    disb = ampCompFund.getTransactionAmount().doubleValue();
+                        && ampCompFund.getTransactionType() == 1)
+                    disb = ampCompFund.getTransactionAmount();
 
                 eaForm.getComponents().setCompTotalDisb(eaForm.getComponents().getCompTotalDisb() + disb);
                 FundingDetail fd = new FundingDetail();
@@ -970,7 +966,7 @@ public class ShowActivityPrintPreview
                 fd.setTransactionAmount(FormatHelper.formatNumber(ampCompFund.getTransactionAmount().doubleValue()));
                 fd.setTransactionDate(DateConversion.convertDateToLocalizedString(ampCompFund.getTransactionDate()));
                 fd.setFiscalYear(DateConversion.convertDateToFiscalYearString(ampCompFund.getTransactionDate()));
-                fd.setTransactionType(ampCompFund.getTransactionType().intValue());
+                fd.setTransactionType(ampCompFund.getTransactionType());
                 fd.setComponentOrganisation(ampCompFund.getReportingOrganization());
                 fd.setComponentSecondResponsibleOrganization(ampCompFund.getComponentSecondResponsibleOrganization());
                 fd.setComponentTransactionDescription(ampCompFund.getDescription());
@@ -1023,10 +1019,8 @@ public class ShowActivityPrintPreview
         double frmExRt = Util.getExchange(fundDet.getCurrencyCode(),dt);
         String toCurrCode = CurrencyUtil.getAmpcurrency( appSet.getCurrencyId() ).getCurrencyCode();
         double toExRt = Util.getExchange(toCurrCode,dt);
-    
-        double amt = CurrencyWorker.convert1(FormatHelper.parseDouble(fundDet.getTransactionAmount()),frmExRt,toExRt);
-        
-        return amt;
+
+        return CurrencyWorker.convert1(FormatHelper.parseDouble(fundDet.getTransactionAmount()),frmExRt,toExRt);
         
     }
 

@@ -1,6 +1,8 @@
 package org.digijava.module.trubudget.model.subproject;
 
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,15 +38,23 @@ public class CreateWorkFlowItemModel {
         private String amountType;
         private String billingDate;
         private String dueDate;
-        private String exchangeRate;
-        private List<Document> documents;
-        private Map<String, Object> additionalData;
-        private String workflowitemType;
+        private String exchangeRate="1.0";
+
+        private String status="open";
+        private List<Document> documents= new ArrayList<>();
+        private Map<String, Object> additionalData= new HashMap<>();
+        private String workflowitemType="general";
 
         // Getters and setters for projectId, subprojectId, displayName, description,
         // amount, assignee, currency, amountType, billingDate, dueDate, exchangeRate,
         // documents, additionalData, and workflowitemType
+        public String getStatus() {
+            return status;
+        }
 
+        public void setStatus(String status) {
+            this.status = status;
+        }
         public String getProjectId() {
             return projectId;
         }

@@ -7,12 +7,15 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.trubudget.dbentity.TruBudgetActivity;
 import org.digijava.module.trubudget.model.project.*;
+import org.digijava.module.trubudget.model.subproject.CreateWorkFlowItemModel;
 import org.digijava.module.trubudget.model.subproject.EditSubProjectModel;
 import org.digijava.module.trubudget.model.subproject.EditSubProjectedBudgetModel;
 import org.digijava.module.trubudget.model.subproject.SubProjectGrantRevokePermModel;
+import org.digijava.module.trubudget.model.workflowitem.WFItemGrantRevokePermModel;
 import org.digijava.module.um.util.GenericWebClient;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.hibernate.type.LocalDateTimeType;
 import org.hibernate.type.LongType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -248,6 +251,7 @@ public class ProjectUtil {
                 }
 
                 ampComponent.setSubProjectComponentId(subproject.getId());
+                createUpdateWorkflowItems(ampActivityVersion,projectId, subproject.getId(), settings);
             }
             else {//update subProject
                 EditSubProjectModel editSubProjectModel = new EditSubProjectModel();
@@ -278,7 +282,74 @@ public class ProjectUtil {
 
                     }
                 }
+                createUpdateWorkflowItems(ampActivityVersion,projectId, ampComponent.getSubProjectComponentId(), settings);
+
             }
         }
     }
-}
+    public static void createUpdateWorkflowItems(AmpActivityVersion ampActivityVersion, String projectId, String subProjectId, List<AmpGlobalSettings> settings) throws URISyntaxException {
+        AbstractCache myCache = new EhCacheWrapper("trubudget");
+        String token = (String) myCache.get("truBudgetToken");
+        String user = (String) myCache.get("truBudgetUser");
+        logger.info("Trubudget Cached Token:" + token);
+        for (AmpComponent ampComponent: ampActivityVersion.getComponents()) {
+            // TODO: 9/19/23 look for a way of associating given subproject with workflow item 
+            if (ampComponent.getSubProjectComponentId() == null) {//
+
+                if (!ampComponent.getFundings().isEmpty()) {
+                    for (AmpComponentFunding componentFunding : ampComponent.getFundings()) {
+                        if (componentFunding.getTransactionType() == 1 && (Objects.equals(componentFunding.getAdjustmentType().getValue(), "Planned") || Objects.equals(componentFunding.getAdjustmentType().getValue(), "Actual"))) {
+                            CreateWorkFlowItemModel createWorkFlowItemModel = new CreateWorkFlowItemModel();
+                            createWorkFlowItemModel.setApiVersion(getSettingValue(settings, "apiVersion"));
+                            CreateWorkFlowItemModel.Data data = new CreateWorkFlowItemModel.Data();
+                            data.setProjectId(projectId);
+                            data.setSubprojectId(subProjectId);
+                            data.setAssignee(user);
+                            data.setDescription(ampComponent.getDescription());
+                            data.setDisplayName(ampComponent.getTitle());
+                            data.setAmount(BigDecimal.valueOf(componentFunding.getTransactionAmount()).toString());
+                            data.setCurrency(componentFunding.getCurrency().getCurrencyCode());
+                            data.setAmountType(Objects.equals(componentFunding.getAdjustmentType().getValue(), "Planned") ?"allocated":"paid");
+                            data.setBillingDate(String.valueOf(componentFunding.getTransactionDate()));
+                            data.setDueDate(String.valueOf(componentFunding.getReportingDate()));
+                            createWorkFlowItemModel.setData(data);
+                            List<SubIntents> subIntents = getSubIntentsByMother("workflowitem");
+                            try {
+                                GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/subproject.createWorkflowitem", createWorkFlowItemModel, CreateWorkFlowItemModel.class, String.class, token)
+                                        .subscribe(res-> {
+                                            logger.info("Create WorkflowItem response: "+res);
+                                            subIntents.forEach(subIntent -> {
+                                                WFItemGrantRevokePermModel wfItemGrantRevokePermModel = new WFItemGrantRevokePermModel();
+                                                WFItemGrantRevokePermModel.Data data2 = new WFItemGrantRevokePermModel.Data();
+                                                data2.setProjectId(projectId);
+                                                data2.setSubprojectId(subProjectId);
+                                                data2.setIdentity(user);
+                                                data2.setIntent(subIntent.getSubTruBudgetIntentName());
+                                                wfItemGrantRevokePermModel.setData(data2);
+                                                wfItemGrantRevokePermModel.setApiVersion(getSettingValue(settings, "apiVersion"));
+                                                try {
+                                                    GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/workflowitem.intent.grantPermission", wfItemGrantRevokePermModel, WFItemGrantRevokePermModel.class, String.class, token).subscribeOn(Schedulers.parallel()).subscribe(
+                                                            response -> logger.info("Grant workflowitem permission response: " + response)
+                                                    );
+                                                } catch (URISyntaxException e) {
+                                                    throw new RuntimeException(e);
+                                                }
+
+                                            });
+
+                                        });
+
+                            }catch (Exception e)
+                            {
+                                logger.info("Error during subproject creation");
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+//                    subproject.setCurrency(new ArrayList<>(ampComponent.getFundings()).get(0).getCurrency().getCurrencyCode());
+                }
+            }
+        }
+
+    }
+    }

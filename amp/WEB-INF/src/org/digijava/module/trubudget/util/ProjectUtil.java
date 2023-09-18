@@ -112,6 +112,7 @@ public class ProjectUtil {
         truBudgetActivity.setTruBudgetId(project.getId());
         session.saveOrUpdate(truBudgetActivity);
         session.flush();
+        createSubProjects(ampActivityVersion, project.getId());
     }
 
     public static TruBudgetActivity isActivityAlreadyInTrubudget(Long activityId) {
@@ -171,6 +172,8 @@ public class ProjectUtil {
 
             }
         }
+        createSubProjects(ampActivityVersion, projectId);
+
     }
     public static void createSubProjects(AmpActivityVersion ampActivityVersion, String projectId) throws URISyntaxException {
         List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
@@ -197,6 +200,7 @@ public class ProjectUtil {
                             projectedBudget.setOrganization(componentFunding.getReportingOrganization().getName());
                             projectedBudget.setValue(BigDecimal.valueOf(componentFunding.getTransactionAmount()).toString());
                             projectedBudget.setCurrencyCode(componentFunding.getCurrency().getCurrencyCode());
+                            subproject.getProjectedBudgets().add(projectedBudget);
                         }
                     }
                     subproject.setCurrency(new ArrayList<>(ampComponent.getFundings()).get(0).getCurrency().getCurrencyCode());

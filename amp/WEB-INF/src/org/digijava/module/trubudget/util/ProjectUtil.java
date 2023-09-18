@@ -189,19 +189,15 @@ public class ProjectUtil {
         logger.info("Trubudget Cached Token:" + token);
         for (AmpComponent ampComponent: ampActivityVersion.getComponents())
         {
-//            Optional<SubProjectComponent> subProjectComponent = PersistenceManager.getRequestDBSession().createQuery("FROM "+SubProjectComponent.class.getName()+" sb WHERE sb.component="+ampComponent.getAmpComponentId(), SubProjectComponent.class).stream().findAny();
             if (ampComponent.getSubProjectComponentId()==null) {//create subproject
                 CreateSubProjectModel createSubProjectModel = new CreateSubProjectModel();
                 CreateSubProjectModel.Data data = new CreateSubProjectModel.Data();
                 CreateSubProjectModel.Subproject subproject = new CreateSubProjectModel.Subproject();
                 subproject.setId(UUID.randomUUID().toString().replaceAll("-", ""));
-//            subproject.setAmount(ampComponent.);
                 subproject.setDisplayName(ampComponent.getTitle());
-//                BigDecimal totalFunding = BigDecimal.ZERO;
                 if (!ampComponent.getFundings().isEmpty()) {
                     for (AmpComponentFunding componentFunding : ampComponent.getFundings()) {
                         if (componentFunding.getTransactionType() == 0 && Objects.equals(componentFunding.getAdjustmentType().getValue(), "Planned")) {
-//                            totalFunding = totalFunding.add(BigDecimal.valueOf(componentFunding.getTransactionAmount()));
                             CreateProjectModel.ProjectedBudget projectedBudget = new CreateProjectModel.ProjectedBudget();
                             projectedBudget.setOrganization(componentFunding.getReportingOrganization()!=null?componentFunding.getReportingOrganization().getName():"Funding Org");
                             projectedBudget.setValue(BigDecimal.valueOf(componentFunding.getTransactionAmount()).toString());
@@ -211,7 +207,6 @@ public class ProjectUtil {
                     }
                     subproject.setCurrency(new ArrayList<>(ampComponent.getFundings()).get(0).getCurrency().getCurrencyCode());
                 }
-//                subproject.setAmount(totalFunding.toString());
                 subproject.setAssignee(user);
                 subproject.setValidator(user);
                 subproject.setDescription(ampComponent.getDescription());
@@ -221,7 +216,6 @@ public class ProjectUtil {
                 createSubProjectModel.setApiVersion(getSettingValue(settings, "apiVersion"));
                 createSubProjectModel.setData(data);
                 List<SubIntents> subIntents = getSubIntentsByMother("subproject");
-                Session session = PersistenceManager.getRequestDBSession();
                 try {
                     GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/project.createSubproject", createSubProjectModel, CreateSubProjectModel.class, String.class, token)
                             .subscribe(res-> {
@@ -252,13 +246,8 @@ public class ProjectUtil {
                     logger.info("Error during subproject creation");
                     e.printStackTrace();
                 }
-//                SubProjectComponent subProjectComponent1 = new SubProjectComponent();
-//                subProjectComponent1.setComponent(ampComponent);
-//                subProjectComponent1.setSubProjectId(subproject.getId());
+
                 ampComponent.setSubProjectComponentId(subproject.getId());
-//                session.merge(ampComponent);
-//                session.save(subProjectComponent1);
-//                session.flush();
             }
             else {//update subProject
                 EditSubProjectModel editSubProjectModel = new EditSubProjectModel();

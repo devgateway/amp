@@ -17,7 +17,6 @@ import org.hibernate.query.Query;
 import org.hibernate.type.LongType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
 import java.math.BigDecimal;
@@ -110,17 +109,19 @@ public class ProjectUtil {
 
                     });
 
-                    TruBudgetActivity truBudgetActivity = new TruBudgetActivity();
-                    truBudgetActivity.setAmpActivityId(ampActivityVersion.getAmpActivityId());
-                    truBudgetActivity.setTruBudgetId(project.getId());
-                    session.saveOrUpdate(truBudgetActivity);
+
 
 
 
                 }
         );
 
-            createSubProjects(ampActivityVersion, project.getId(),settings);
+            createUpdateSubProjects(ampActivityVersion, project.getId(),settings);
+        TruBudgetActivity truBudgetActivity = new TruBudgetActivity();
+        truBudgetActivity.setAmpActivityId(ampActivityVersion.getAmpActivityId());
+        truBudgetActivity.setTruBudgetId(project.getId());
+        session.save(truBudgetActivity);
+
         session.flush();
 
     }
@@ -182,10 +183,10 @@ public class ProjectUtil {
 
             }
         }
-        createSubProjects(ampActivityVersion, projectId,settings);
+        createUpdateSubProjects(ampActivityVersion, projectId,settings);
 
     }
-    public static void createSubProjects(AmpActivityVersion ampActivityVersion, String projectId, List<AmpGlobalSettings> settings) throws URISyntaxException {
+    public static void createUpdateSubProjects(AmpActivityVersion ampActivityVersion, String projectId, List<AmpGlobalSettings> settings) throws URISyntaxException {
 
         AbstractCache myCache = new EhCacheWrapper("trubudget");
         String token = (String) myCache.get("truBudgetToken");
@@ -193,6 +194,11 @@ public class ProjectUtil {
         logger.info("Trubudget Cached Token:" + token);
         for (AmpComponent ampComponent: ampActivityVersion.getComponents())
         {
+            if (ampComponent.getAmpComponentId()==null)
+            {
+//                PersistenceManager.getRequestDBSession().save(ampComponent);
+                PersistenceManager.getRequestDBSession().flush();
+            }
             Optional<SubProjectComponent> subProjectComponent = PersistenceManager.getRequestDBSession().createQuery("FROM "+SubProjectComponent.class.getName()+" sb WHERE sb.componentId="+ampComponent.getAmpComponentId(), SubProjectComponent.class).stream().findAny();
             if (!subProjectComponent.isPresent()) {//create subproject
                 CreateSubProjectModel createSubProjectModel = new CreateSubProjectModel();
@@ -248,10 +254,7 @@ public class ProjectUtil {
                                             }
 
                                         });
-                                SubProjectComponent subProjectComponent1 = new SubProjectComponent();
-                                subProjectComponent1.setComponentId(ampComponent.getAmpComponentId());
-                                subProjectComponent1.setSubProjectId(subproject.getId());
-                                session.saveOrUpdate(subProjectComponent1);
+
                                     });
 
                 }catch (Exception e)
@@ -259,7 +262,11 @@ public class ProjectUtil {
                     logger.info("Error during subproject creation");
                     e.printStackTrace();
                 }
-//                session.flush();
+                SubProjectComponent subProjectComponent1 = new SubProjectComponent();
+                subProjectComponent1.setComponentId(ampComponent.getAmpComponentId());
+                subProjectComponent1.setSubProjectId(subproject.getId());
+                session.save(subProjectComponent1);
+                session.flush();
             }
             else {//update subProject
                 EditSubProjectModel editSubProjectModel = new EditSubProjectModel();
@@ -268,7 +275,9 @@ public class ProjectUtil {
                 data.setSubprojectId(subProjectComponent.get().getSubProjectId());
                 data.setDescription(ampComponent.getDescription());
                 data.setDisplayName(ampComponent.getTitle());
+
                 editSubProjectModel.setData(data);
+
                 editSubProjectModel.setApiVersion(getSettingValue(settings, "apiVersion"));
                 //call edit
                 GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/subproject.update", editSubProjectModel, EditSubProjectModel.class, String.class, token)

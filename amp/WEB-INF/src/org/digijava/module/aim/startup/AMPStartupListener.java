@@ -280,6 +280,7 @@ public class AMPStartupListener extends HttpServlet implements
                         " (nextval('amp_trubudget_sub_intent_seq'),'subproject.budget.updateProjected', 'subproject')," +
                         " (nextval('amp_trubudget_sub_intent_seq'),'subproject.update', 'subproject')," +
                         " (nextval('amp_trubudget_sub_intent_seq'),'subproject.intent.revokePermission', 'subproject')," +
+                        " (nextval('amp_trubudget_sub_intent_seq'),'subproject.intent.grantPermission', 'subproject')," +
                         " (nextval('amp_trubudget_sub_intent_seq'),'subproject.reorderWorkflowitems', 'subproject')," +
                         " (nextval('amp_trubudget_sub_intent_seq'),'subproject.createWorkflowitem', 'subproject')," +
                         " (nextval('amp_trubudget_sub_intent_seq'),'subproject.close', 'subproject')," +

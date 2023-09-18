@@ -1,6 +1,7 @@
 package org.digijava.module.trubudget.model.subproject;
 
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class EditSubProjectModel {
@@ -29,7 +30,7 @@ public class EditSubProjectModel {
         private String subprojectId;
         private String displayName;
         private String description;
-        private Map<String , Object> additionalData;
+        private Map<String , Object> additionalData= new HashMap<>();
 
         // Getters and setters for projectId, displayName, and description
 

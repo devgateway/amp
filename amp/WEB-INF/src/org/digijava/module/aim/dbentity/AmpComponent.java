@@ -51,7 +51,15 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
     private java.sql.Timestamp creationdate;
 
     private String code;
+    private String subProjectId;
 
+    public String getSubProjectId() {
+        return subProjectId;
+    }
+
+    public void setSubProjectId(String subProjectId) {
+        this.subProjectId = subProjectId;
+    }
     @InterchangeableDiscriminator(discriminatorField = "transactionType",
         configurer = AmpComponentFundingDiscriminationConfigurer.class,
         settings = {

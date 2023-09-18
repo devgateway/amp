@@ -275,7 +275,15 @@ public class AMPStartupListener extends HttpServlet implements
                         " (nextval('amp_trubudget_sub_intent_seq'),'project.createSubproject', 'project'),"+
                         " (nextval('amp_trubudget_sub_intent_seq'),'project.intent.grantPermission', 'project'),"+
                         " (nextval('amp_trubudget_sub_intent_seq'),'project.intent.revokePermission', 'project'),"+
-                        " (nextval('amp_trubudget_sub_intent_seq'),'project.budget.updateProjected', 'project') ON CONFLICT (sub_trubudget_intent_name,mother_intent_name) DO NOTHING";
+                        " (nextval('amp_trubudget_sub_intent_seq'),'project.budget.updateProjected', 'project')" +
+                        " (nextval('amp_trubudget_sub_intent_seq'),'subproject.budget.updateProjected', 'subproject')" +
+                        " (nextval('amp_trubudget_sub_intent_seq'),'subproject.update', 'subproject')" +
+                        " (nextval('amp_trubudget_sub_intent_seq'),'subproject.intent.revokePermission', 'subproject')" +
+                        " (nextval('amp_trubudget_sub_intent_seq'),'subproject.reorderWorkflowitems', 'subproject')" +
+                        " (nextval('amp_trubudget_sub_intent_seq'),'subproject.createWorkflowitem', 'subproject')" +
+                        " (nextval('amp_trubudget_sub_intent_seq'),'subproject.close', 'subproject')" +
+                        " (nextval('amp_trubudget_sub_intent_seq'),'subproject.assign', 'subproject')" +
+                        " ON CONFLICT (sub_trubudget_intent_name,mother_intent_name) DO NOTHING";
 
                 statement.executeUpdate(insertSubIntentsStatement);
 //                String addColumnSql = "ALTER TABLE trubudget_intent ADD COLUMN IF NOT EXISTS intent_group INTEGER";

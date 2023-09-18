@@ -1,6 +1,10 @@
 package org.digijava.module.trubudget.model.project;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class CreateSubProjectModel {
@@ -52,9 +56,13 @@ public class CreateSubProjectModel {
         private String status;
         private String displayName;
         private String description;
-        private String amount;
         private String assignee;
+        private String validator;
+        @JsonProperty("workflowitemType")
+        private String workflowitemType;
         private String currency;
+        private List<CreateProjectModel.ProjectedBudget> projectedBudgets= new ArrayList<>();
+
         private Map<String, Object> additionalData;
 
         // Getters and setters for id, status, displayName, description, amount, assignee, currency, and additionalData
@@ -91,13 +99,6 @@ public class CreateSubProjectModel {
             this.description = description;
         }
 
-        public String getAmount() {
-            return amount;
-        }
-
-        public void setAmount(String amount) {
-            this.amount = amount;
-        }
 
         public String getAssignee() {
             return assignee;
@@ -121,6 +122,30 @@ public class CreateSubProjectModel {
 
         public void setAdditionalData(Map<String, Object> additionalData) {
             this.additionalData = additionalData;
+        }
+
+        public String getValidator() {
+            return validator;
+        }
+
+        public void setValidator(String validator) {
+            this.validator = validator;
+        }
+
+        public String getWorkflowitemType() {
+            return workflowitemType;
+        }
+
+        public void setWorkflowitemType(String workflowitemType) {
+            this.workflowitemType = workflowitemType;
+        }
+
+        public List<CreateProjectModel.ProjectedBudget> getProjectedBudgets() {
+            return projectedBudgets;
+        }
+
+        public void setProjectedBudgets(List<CreateProjectModel.ProjectedBudget> projectedBudgets) {
+            this.projectedBudgets = projectedBudgets;
         }
     }
 }

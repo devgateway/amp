@@ -4,15 +4,12 @@ import org.digijava.kernel.cache.AbstractCache;
 import org.digijava.kernel.cache.ehcache.EhCacheWrapper;
 import org.digijava.kernel.entity.trubudget.SubIntents;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpFundingDetail;
-import org.digijava.module.aim.dbentity.AmpGlobalSettings;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.trubudget.dbentity.TruBudgetActivity;
-import org.digijava.module.trubudget.model.project.CreateProjectModel;
-import org.digijava.module.trubudget.model.project.EditProjectModel;
-import org.digijava.module.trubudget.model.project.EditProjectedBudgetModel;
-import org.digijava.module.trubudget.model.project.ProjectGrantRevokePermModel;
+import org.digijava.module.trubudget.model.project.*;
+import org.digijava.module.trubudget.model.subproject.EditSubProjectModel;
+import org.digijava.module.trubudget.model.subproject.EditSubProjectedBudgetModel;
+import org.digijava.module.trubudget.model.subproject.SubProjectGrantRevokePermModel;
 import org.digijava.module.um.util.GenericWebClient;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
@@ -170,6 +167,101 @@ public class ProjectUtil {
                 }
 
 
+
+
+            }
+        }
+    }
+    public static void createSubProjects(AmpActivityVersion ampActivityVersion, String projectId) throws URISyntaxException {
+        List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
+
+        AbstractCache myCache = new EhCacheWrapper("trubudget");
+        String token = (String) myCache.get("truBudgetToken");
+        String user = (String) myCache.get("truBudgetUser");
+        logger.info("Trubudget Cached Token:" + token);
+        for (AmpComponent ampComponent: ampActivityVersion.getComponents())
+        {
+            if (ampComponent.getSubProjectId()==null) {//create subproject
+                CreateSubProjectModel createSubProjectModel = new CreateSubProjectModel();
+                CreateSubProjectModel.Data data = new CreateSubProjectModel.Data();
+                CreateSubProjectModel.Subproject subproject = new CreateSubProjectModel.Subproject();
+                subproject.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+//            subproject.setAmount(ampComponent.);
+                subproject.setDisplayName(ampComponent.getTitle());
+//                BigDecimal totalFunding = BigDecimal.ZERO;
+                if (!ampComponent.getFundings().isEmpty()) {
+                    for (AmpComponentFunding componentFunding : ampComponent.getFundings()) {
+                        if (componentFunding.getTransactionType() == 0 && Objects.equals(componentFunding.getAdjustmentType().getValue(), "Planned")) {
+//                            totalFunding = totalFunding.add(BigDecimal.valueOf(componentFunding.getTransactionAmount()));
+                            CreateProjectModel.ProjectedBudget projectedBudget = new CreateProjectModel.ProjectedBudget();
+                            projectedBudget.setOrganization(componentFunding.getReportingOrganization().getName());
+                            projectedBudget.setValue(BigDecimal.valueOf(componentFunding.getTransactionAmount()).toString());
+                            projectedBudget.setCurrencyCode(componentFunding.getCurrency().getCurrencyCode());
+                        }
+                    }
+                    subproject.setCurrency(new ArrayList<>(ampComponent.getFundings()).get(0).getCurrency().getCurrencyCode());
+                }
+//                subproject.setAmount(totalFunding.toString());
+                subproject.setAssignee(user);
+                subproject.setValidator(user);
+                subproject.setDescription(ampComponent.getDescription());
+
+                data.setProjectId(projectId);
+                data.setSubproject(subproject);
+                createSubProjectModel.setApiVersion(getSettingValue(settings, "apiVersion"));
+                createSubProjectModel.setData(data);
+                GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/project.createSubproject", createSubProjectModel, CreateSubProjectModel.class, String.class, token).subscribeOn(Schedulers.parallel())
+                        .subscribe(res2 -> logger.info("Create subproject response: " + res2));
+                List<SubIntents> subIntents = getSubIntentsByMother("subproject");
+                subIntents.forEach(subIntent -> {
+                    SubProjectGrantRevokePermModel subProjectGrantRevokePermModel = new SubProjectGrantRevokePermModel();
+                    SubProjectGrantRevokePermModel.Data data2 = new SubProjectGrantRevokePermModel.Data();
+                    data2.setProjectId(projectId);
+                    data2.setIdentity(user);
+                    data2.setIntent(subIntent.getSubTruBudgetIntentName());
+                    subProjectGrantRevokePermModel.setData(data2);
+                    subProjectGrantRevokePermModel.setApiVersion(getSettingValue(settings, "apiVersion"));
+                    try {
+                        GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/subproject.intent.grantPermission", subProjectGrantRevokePermModel, SubProjectGrantRevokePermModel.class, String.class, token).subscribeOn(Schedulers.parallel()).subscribe(
+                                response -> logger.info("Grant subproject permission response: " + response)
+                        );
+                    } catch (URISyntaxException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                });
+                ampComponent.setSubProjectId(subproject.getId());
+                Session session = PersistenceManager.getRequestDBSession();
+                session.merge(ampComponent);
+                session.flush();
+            }
+            else {//update subProject
+                EditSubProjectModel editSubProjectModel = new EditSubProjectModel();
+                EditSubProjectModel.Data data = new EditSubProjectModel.Data();
+                data.setProjectId(projectId);
+                data.setSubprojectId(ampComponent.getSubProjectId());
+                data.setDescription(ampComponent.getDescription());
+                data.setDisplayName(ampComponent.getTitle());
+                editSubProjectModel.setData(data);
+                editSubProjectModel.setApiVersion(getSettingValue(settings, "apiVersion"));
+                //call edit
+                GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/subproject.update", editSubProjectModel, EditSubProjectModel.class, String.class, token)
+                        .subscribe(res2->logger.info("Update subproject response: "+res2));
+                if (!ampComponent.getFundings().isEmpty()) {
+                    for (AmpComponentFunding componentFunding : ampComponent.getFundings()) {
+                        EditSubProjectedBudgetModel editSubProjectedBudgetModel = new EditSubProjectedBudgetModel();
+                        EditSubProjectedBudgetModel.Data data1 = new EditSubProjectedBudgetModel.Data();
+                        data1.setProjectId(projectId);
+                        data1.setSubprojectId(ampComponent.getSubProjectId());
+                        data1.setValue(BigDecimal.valueOf(componentFunding.getTransactionAmount()).toString());
+                        data1.setOrganization(componentFunding.getReportingOrganization().getName());
+                        editSubProjectedBudgetModel.setData(data1);
+                        editSubProjectedBudgetModel.setApiVersion(getSettingValue(settings, "apiVersion"));
+                        GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/subproject.budget.updateProjected", editSubProjectedBudgetModel, EditSubProjectedBudgetModel.class, String.class, token).subscribeOn(Schedulers.parallel())
+                                .subscribe(res2->logger.info("Update subproject budget response: "+res2));
+
+                    }
+                }
             }
         }
     }

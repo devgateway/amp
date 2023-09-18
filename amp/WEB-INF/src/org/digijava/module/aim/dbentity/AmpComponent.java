@@ -17,6 +17,7 @@ import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.Output;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.*;
 
 import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.*;
@@ -48,7 +49,7 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
     @TranslatableField
     private String description;
 
-    private java.sql.Timestamp creationdate;
+    private Timestamp creationdate;
 
     private String code;
 
@@ -66,6 +67,15 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
                     importable = true)
     })
     private Set<AmpComponentFunding> fundings = new HashSet<>();
+    private String subProjectComponentId;
+
+    public String getSubProjectComponentId() {
+        return subProjectComponentId;
+    }
+
+    public void setSubProjectComponentId(String subProjectComponentId) {
+        this.subProjectComponentId = subProjectComponentId;
+    }
 
     public static class AmpComponentComparator implements Comparator<AmpComponent>{
         @Override
@@ -171,10 +181,10 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
     }
      */
     
-    public java.sql.Timestamp getCreationdate() {
+    public Timestamp getCreationdate() {
         return creationdate;
     }
-    public void setCreationdate(java.sql.Timestamp creationdate) {
+    public void setCreationdate(Timestamp creationdate) {
         this.creationdate = creationdate;
     }
     

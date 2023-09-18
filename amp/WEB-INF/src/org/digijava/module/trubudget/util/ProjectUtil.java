@@ -5,7 +5,6 @@ import org.digijava.kernel.cache.ehcache.EhCacheWrapper;
 import org.digijava.kernel.entity.trubudget.SubIntents;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.*;
-import org.digijava.module.trubudget.dbentity.SubProjectComponent;
 import org.digijava.module.trubudget.dbentity.TruBudgetActivity;
 import org.digijava.module.trubudget.model.project.*;
 import org.digijava.module.trubudget.model.subproject.EditSubProjectModel;
@@ -109,10 +108,6 @@ public class ProjectUtil {
 
                     });
 
-
-
-
-
                 }
         );
 
@@ -122,7 +117,7 @@ public class ProjectUtil {
         truBudgetActivity.setTruBudgetId(project.getId());
         session.save(truBudgetActivity);
 
-        session.flush();
+//        session.flush();
 
     }
 
@@ -194,13 +189,8 @@ public class ProjectUtil {
         logger.info("Trubudget Cached Token:" + token);
         for (AmpComponent ampComponent: ampActivityVersion.getComponents())
         {
-            if (ampComponent.getAmpComponentId()==null)
-            {
-//                PersistenceManager.getRequestDBSession().save(ampComponent);
-                PersistenceManager.getRequestDBSession().flush();
-            }
-            Optional<SubProjectComponent> subProjectComponent = PersistenceManager.getRequestDBSession().createQuery("FROM "+SubProjectComponent.class.getName()+" sb WHERE sb.componentId="+ampComponent.getAmpComponentId(), SubProjectComponent.class).stream().findAny();
-            if (!subProjectComponent.isPresent()) {//create subproject
+//            Optional<SubProjectComponent> subProjectComponent = PersistenceManager.getRequestDBSession().createQuery("FROM "+SubProjectComponent.class.getName()+" sb WHERE sb.component="+ampComponent.getAmpComponentId(), SubProjectComponent.class).stream().findAny();
+            if (ampComponent.getSubProjectComponentId()==null) {//create subproject
                 CreateSubProjectModel createSubProjectModel = new CreateSubProjectModel();
                 CreateSubProjectModel.Data data = new CreateSubProjectModel.Data();
                 CreateSubProjectModel.Subproject subproject = new CreateSubProjectModel.Subproject();
@@ -262,17 +252,19 @@ public class ProjectUtil {
                     logger.info("Error during subproject creation");
                     e.printStackTrace();
                 }
-                SubProjectComponent subProjectComponent1 = new SubProjectComponent();
-                subProjectComponent1.setComponentId(ampComponent.getAmpComponentId());
-                subProjectComponent1.setSubProjectId(subproject.getId());
-                session.save(subProjectComponent1);
-                session.flush();
+//                SubProjectComponent subProjectComponent1 = new SubProjectComponent();
+//                subProjectComponent1.setComponent(ampComponent);
+//                subProjectComponent1.setSubProjectId(subproject.getId());
+                ampComponent.setSubProjectComponentId(subproject.getId());
+//                session.merge(ampComponent);
+//                session.save(subProjectComponent1);
+//                session.flush();
             }
             else {//update subProject
                 EditSubProjectModel editSubProjectModel = new EditSubProjectModel();
                 EditSubProjectModel.Data data = new EditSubProjectModel.Data();
                 data.setProjectId(projectId);
-                data.setSubprojectId(subProjectComponent.get().getSubProjectId());
+                data.setSubprojectId(ampComponent.getSubProjectComponentId());
                 data.setDescription(ampComponent.getDescription());
                 data.setDisplayName(ampComponent.getTitle());
 
@@ -287,7 +279,7 @@ public class ProjectUtil {
                         EditSubProjectedBudgetModel editSubProjectedBudgetModel = new EditSubProjectedBudgetModel();
                         EditSubProjectedBudgetModel.Data data1 = new EditSubProjectedBudgetModel.Data();
                         data1.setProjectId(projectId);
-                        data1.setSubprojectId(subProjectComponent.get().getSubProjectId());
+                        data1.setSubprojectId(ampComponent.getSubProjectComponentId());
                         data1.setValue(BigDecimal.valueOf(componentFunding.getTransactionAmount()).toString());
                         data1.setOrganization(componentFunding.getReportingOrganization()!=null?componentFunding.getReportingOrganization().getName():"Funding Org");
                         editSubProjectedBudgetModel.setData(data1);

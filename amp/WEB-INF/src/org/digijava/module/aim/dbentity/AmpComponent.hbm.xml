@@ -11,6 +11,7 @@
 		</id>
 
 		<property column="title" name="title" type="java.lang.String" />
+		<property column="sub_project_component_id" name="subProjectComponentId" type="java.lang.String" />
 		<property column="description" name="description" type="text" />
 		<property column="code" name="code" type="java.lang.String" />
 		<property column="creation_date" name="creationdate" type="java.sql.Timestamp" />

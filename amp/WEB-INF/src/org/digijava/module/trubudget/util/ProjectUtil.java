@@ -22,6 +22,8 @@ import reactor.core.scheduler.Schedulers;
 
 import java.math.BigDecimal;
 import java.net.URISyntaxException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -306,8 +308,9 @@ public class ProjectUtil {
                             data.setAmount(BigDecimal.valueOf(componentFunding.getTransactionAmount()).toString());
                             data.setCurrency(componentFunding.getCurrency().getCurrencyCode());
                             data.setAmountType(Objects.equals(componentFunding.getAdjustmentType().getValue(), "Planned") ?"allocated":"paid");
-                            data.setBillingDate(String.valueOf(componentFunding.getTransactionDate()));
-                            data.setDueDate(String.valueOf(componentFunding.getReportingDate()));
+                            data.setBillingDate(convertToISO8601(componentFunding.getTransactionDate()));
+                            data.setDueDate(convertToISO8601(componentFunding.getTransactionDate()));//set approprite date
+//                            data.setDueDate(String.valueOf(componentFunding.getReportingDate()));
                             createWorkFlowItemModel.setData(data);
                             List<SubIntents> subIntents = getSubIntentsByMother("workflowitem");
                             try {
@@ -344,5 +347,10 @@ public class ProjectUtil {
                     }
         }
 
+    }
+
+    public static String convertToISO8601(Date date) {
+        Instant instant = date.toInstant();
+        return instant.toString();
     }
     }

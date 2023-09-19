@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 import { IMG_VALUE } from '../common/Constants';
+import {bindActionCreators} from "redux";
+import {connect} from "react-redux";
 
 
  class HeaderToolTip extends Component {
@@ -39,3 +41,17 @@ import { IMG_VALUE } from '../common/Constants';
           );
      }
 }
+
+
+function mapStateToProps( state, ownProps ) {
+    return {
+        translations: state.startUp.translations,
+        translate: state.startUp.translate
+    }
+}
+
+function mapDispatchToProps( dispatch ) {
+    return {actions: bindActionCreators({}, dispatch)}
+}
+
+export default connect( mapStateToProps, mapDispatchToProps )( HeaderToolTip );

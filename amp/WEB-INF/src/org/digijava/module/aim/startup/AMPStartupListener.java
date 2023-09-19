@@ -293,6 +293,7 @@ public class AMPStartupListener extends HttpServlet implements
                         " (nextval('amp_trubudget_sub_intent_seq'),'workflowitem.intent.grantPermission', 'workflowitem')" +
                         " ON CONFLICT (sub_trubudget_intent_name,mother_intent_name) DO NOTHING";
                 logger.info("Inserting sub intents");
+
                 statement.executeUpdate(insertSubIntentsStatement);
 //                String addColumnSql = "ALTER TABLE trubudget_intent ADD COLUMN IF NOT EXISTS intent_group INTEGER";
 //                statement.executeUpdate(addColumnSql);

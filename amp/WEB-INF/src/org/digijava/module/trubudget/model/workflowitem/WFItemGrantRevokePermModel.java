@@ -27,6 +27,7 @@ public class WFItemGrantRevokePermModel {
         private String subprojectId;
         private String identity;
         private String intent;
+        private String workflowitemId;
 
         // Getters and setters for projectId, identity, and intent
 
@@ -60,6 +61,14 @@ public class WFItemGrantRevokePermModel {
 
         public void setSubprojectId(String subprojectId) {
             this.subprojectId = subprojectId;
+        }
+
+        public String getWorkflowitemId() {
+            return workflowitemId;
+        }
+
+        public void setWorkflowitemId(String workflowitemId) {
+            this.workflowitemId = workflowitemId;
         }
     }
 }

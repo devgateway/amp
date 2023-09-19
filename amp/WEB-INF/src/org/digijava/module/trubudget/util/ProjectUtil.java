@@ -11,6 +11,7 @@ import org.digijava.module.trubudget.model.subproject.CreateWorkFlowItemModel;
 import org.digijava.module.trubudget.model.subproject.EditSubProjectModel;
 import org.digijava.module.trubudget.model.subproject.EditSubProjectedBudgetModel;
 import org.digijava.module.trubudget.model.subproject.SubProjectGrantRevokePermModel;
+import org.digijava.module.trubudget.model.workflowitem.CreateWFResponseModel;
 import org.digijava.module.trubudget.model.workflowitem.WFItemGrantRevokePermModel;
 import org.digijava.module.um.util.GenericWebClient;
 import org.hibernate.Session;
@@ -22,8 +23,9 @@ import reactor.core.scheduler.Schedulers;
 
 import java.math.BigDecimal;
 import java.net.URISyntaxException;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -66,7 +68,7 @@ public class ProjectUtil {
                 if (Objects.equals(adjustmentType, "Actual") && transactionType==0)//project budget is created using "actual commitment"
                 {
                     projectedBudget.setOrganization(organization);
-                    projectedBudget.setValue(BigDecimal.valueOf(amount).toString());
+                    projectedBudget.setValue(BigDecimal.valueOf(amount).toPlainString());
                     projectedBudget.setCurrencyCode(currency);
                     project.getProjectedBudgets().add(projectedBudget);
                 }
@@ -167,7 +169,7 @@ public class ProjectUtil {
                 projectedBudget.setApiVersion(getSettingValue(settings, "apiVersion"));
                 EditProjectedBudgetModel.Data data1 = new EditProjectedBudgetModel.Data();
                 data1.setOrganization(organization);
-                data1.setValue(BigDecimal.valueOf(amount).toString());
+                data1.setValue(BigDecimal.valueOf(amount).toPlainString());
                 data1.setCurrencyCode(currency);
                 data1.setProjectId(projectId);
                 projectedBudget.setData(data1);
@@ -204,7 +206,7 @@ public class ProjectUtil {
                         if (componentFunding.getTransactionType() == 0 && Objects.equals(componentFunding.getAdjustmentType().getValue(), "Planned")) {
                             CreateProjectModel.ProjectedBudget projectedBudget = new CreateProjectModel.ProjectedBudget();
                             projectedBudget.setOrganization(componentFunding.getReportingOrganization()!=null?componentFunding.getReportingOrganization().getName():"Funding Org");
-                            projectedBudget.setValue(BigDecimal.valueOf(componentFunding.getTransactionAmount()).toString());
+                            projectedBudget.setValue(BigDecimal.valueOf(componentFunding.getTransactionAmount()).toPlainString());
                             projectedBudget.setCurrencyCode(componentFunding.getCurrency().getCurrencyCode());
                             subproject.getProjectedBudgets().add(projectedBudget);
                         }
@@ -274,7 +276,8 @@ public class ProjectUtil {
                         EditSubProjectedBudgetModel.Data data1 = new EditSubProjectedBudgetModel.Data();
                         data1.setProjectId(projectId);
                         data1.setSubprojectId(ampComponent.getSubProjectComponentId());
-                        data1.setValue(BigDecimal.valueOf(componentFunding.getTransactionAmount()).toString());
+                        data1.setCurrencyCode(componentFunding.getCurrency().getCurrencyCode());
+                        data1.setValue(BigDecimal.valueOf(componentFunding.getTransactionAmount()).toPlainString());
                         data1.setOrganization(componentFunding.getReportingOrganization()!=null?componentFunding.getReportingOrganization().getName():"Funding Org");
                         editSubProjectedBudgetModel.setData(data1);
                         editSubProjectedBudgetModel.setApiVersion(getSettingValue(settings, "apiVersion"));
@@ -293,7 +296,7 @@ public class ProjectUtil {
         String token = (String) myCache.get("truBudgetToken");
         String user = (String) myCache.get("truBudgetUser");
         logger.info("Trubudget Cached Token:" + token);
-
+// TODO: 9/19/23 add status field on AMpCOmponent to allow user select status
                 if (!ampComponent.getFundings().isEmpty()) {
                     for (AmpComponentFunding componentFunding : ampComponent.getFundings()) {
                         if (componentFunding.getTransactionType() == 1 && (Objects.equals(componentFunding.getAdjustmentType().getValue(), "Planned") || Objects.equals(componentFunding.getAdjustmentType().getValue(), "Actual"))) {
@@ -305,16 +308,16 @@ public class ProjectUtil {
                             data.setAssignee(user);
                             data.setDescription(ampComponent.getDescription());
                             data.setDisplayName(ampComponent.getTitle());
-                            data.setAmount(BigDecimal.valueOf(componentFunding.getTransactionAmount()).toString());
+                            data.setAmount(BigDecimal.valueOf(componentFunding.getTransactionAmount()).toPlainString());
                             data.setCurrency(componentFunding.getCurrency().getCurrencyCode());
-                            data.setAmountType(Objects.equals(componentFunding.getAdjustmentType().getValue(), "Planned") ?"allocated":"paid");
+                            data.setAmountType(Objects.equals(componentFunding.getAdjustmentType().getValue(), "Planned") ?"allocated":"disbursed");
                             data.setBillingDate(convertToISO8601(componentFunding.getTransactionDate()));
-                            data.setDueDate(convertToISO8601(componentFunding.getTransactionDate()));//set approprite date
+                            data.setDueDate(convertToISO8601AndAddDays(componentFunding.getTransactionDate(), 10));//set approprite date
 //                            data.setDueDate(String.valueOf(componentFunding.getReportingDate()));
                             createWorkFlowItemModel.setData(data);
                             List<SubIntents> subIntents = getSubIntentsByMother("workflowitem");
                             try {
-                                GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/subproject.createWorkflowitem", createWorkFlowItemModel, CreateWorkFlowItemModel.class, String.class, token)
+                                GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/subproject.createWorkflowitem", createWorkFlowItemModel, CreateWorkFlowItemModel.class, CreateWFResponseModel.class, token)
                                         .subscribe(res-> {
                                             logger.info("Create WorkflowItem response: "+res);
                                             subIntents.forEach(subIntent -> {
@@ -323,6 +326,7 @@ public class ProjectUtil {
                                                 data2.setProjectId(projectId);
                                                 data2.setSubprojectId(subProjectId);
                                                 data2.setIdentity(user);
+                                                data2.setWorkflowitemId(res.getData().getWorkflowitem().getId());
                                                 data2.setIntent(subIntent.getSubTruBudgetIntentName());
                                                 wfItemGrantRevokePermModel.setData(data2);
                                                 wfItemGrantRevokePermModel.setApiVersion(getSettingValue(settings, "apiVersion"));
@@ -350,6 +354,14 @@ public class ProjectUtil {
     }
 
     public static String convertToISO8601(Date date) {
+        Instant instant = date.toInstant();
+        return instant.toString();
+    }
+
+    public static String convertToISO8601AndAddDays(Date date, int daysToAdd) {
+        LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate newLocalDate = localDate.plusDays(daysToAdd);
+         date = Date.from(newLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
         Instant instant = date.toInstant();
         return instant.toString();
     }

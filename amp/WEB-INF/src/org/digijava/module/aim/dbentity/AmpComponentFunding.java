@@ -29,6 +29,10 @@ public class AmpComponentFunding implements Cloneable, Serializable {
     private Long ampComponentFundingId;
 
     private Integer transactionType;
+    
+    private String wfItemId;
+
+
 
     @Interchangeable(fieldTitle = COMPONENT_FUNDING_ADJUSTMENT_TYPE, importable = true, pickIdOnly = true,
             fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_FUNDING_ADJUSTMENT_TYPE,
@@ -68,7 +72,13 @@ public class AmpComponentFunding implements Cloneable, Serializable {
 
     @InterchangeableBackReference
     private AmpComponent component;
+    public String getWfItemId() {
+        return wfItemId;
+    }
 
+    public void setWfItemId(String wfItemId) {
+        this.wfItemId = wfItemId;
+    }
     /**
      * @return Returns the adjustmentType.
      */

@@ -3,6 +3,8 @@ package org.digijava.module.trubudget.model.workflowitem;
 
 import org.digijava.module.trubudget.model.subproject.CreateWorkFlowItemModel;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,8 +35,8 @@ public class EditWFItemModel {
         private String workflowitemId;
         private String displayName;
         private String description;
-        private Map<String , Object> additionalData;
-        private List<CreateWorkFlowItemModel.Document> documents;
+        private Map<String , Object> additionalData= new HashMap<>();
+        private List<CreateWorkFlowItemModel.Document> documents=new ArrayList<>();
 
         // Getters and setters for projectId, displayName, and description
 

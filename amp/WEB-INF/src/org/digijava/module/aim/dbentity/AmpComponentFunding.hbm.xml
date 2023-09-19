@@ -11,6 +11,7 @@
 		</id>
 
 		<property name="transactionType" column="transaction_type" type="java.lang.Integer" />
+		<property name="wfItemId" column="wf_item_id" type="java.lang.String" />
 		<!--  property name="adjustmentType" column="adjustment_type" type="java.lang.Integer" /-->
 		<property name="transactionDate" column="transaction_date" type="java.util.Date" />
 		<property name="reportingDate" column="reporting_date" type="java.util.Date" />

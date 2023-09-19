@@ -12,6 +12,7 @@ import org.digijava.module.trubudget.model.subproject.EditSubProjectModel;
 import org.digijava.module.trubudget.model.subproject.EditSubProjectedBudgetModel;
 import org.digijava.module.trubudget.model.subproject.SubProjectGrantRevokePermModel;
 import org.digijava.module.trubudget.model.workflowitem.CreateWFResponseModel;
+import org.digijava.module.trubudget.model.workflowitem.EditWFItemModel;
 import org.digijava.module.trubudget.model.workflowitem.WFItemGrantRevokePermModel;
 import org.digijava.module.um.util.GenericWebClient;
 import org.hibernate.Session;
@@ -300,26 +301,27 @@ public class ProjectUtil {
                 if (!ampComponent.getFundings().isEmpty()) {
                     for (AmpComponentFunding componentFunding : ampComponent.getFundings()) {
                         if (componentFunding.getTransactionType() == 1 && (Objects.equals(componentFunding.getAdjustmentType().getValue(), "Planned") || Objects.equals(componentFunding.getAdjustmentType().getValue(), "Actual"))) {
+                            if (componentFunding.getWfItemId()==null){//create new wfItem
                             CreateWorkFlowItemModel createWorkFlowItemModel = new CreateWorkFlowItemModel();
                             createWorkFlowItemModel.setApiVersion(getSettingValue(settings, "apiVersion"));
                             CreateWorkFlowItemModel.Data data = new CreateWorkFlowItemModel.Data();
                             data.setProjectId(projectId);
                             data.setSubprojectId(subProjectId);
                             data.setAssignee(user);
-                            data.setDescription(ampComponent.getDescription());
-                            data.setDisplayName(ampComponent.getTitle());
+                            data.setDescription(componentFunding.getDescription());
+                            data.setDisplayName(componentFunding.getComponent().getTitle());
                             data.setAmount(BigDecimal.valueOf(componentFunding.getTransactionAmount()).toPlainString());
                             data.setCurrency(componentFunding.getCurrency().getCurrencyCode());
-                            data.setAmountType(Objects.equals(componentFunding.getAdjustmentType().getValue(), "Planned") ?"allocated":"disbursed");
+                            data.setAmountType(Objects.equals(componentFunding.getAdjustmentType().getValue(), "Planned") ? "allocated" : "disbursed");
                             data.setBillingDate(convertToISO8601(componentFunding.getTransactionDate()));
-                            data.setDueDate(convertToISO8601AndAddDays(componentFunding.getTransactionDate(), 10));//set approprite date
-//                            data.setDueDate(String.valueOf(componentFunding.getReportingDate()));
+                            data.setDueDate(convertToISO8601AndAddDays(componentFunding.getTransactionDate(), Integer.parseInt(getSettingValue(settings, "workFlowItemDueDays"))));//set approprite date
                             createWorkFlowItemModel.setData(data);
                             List<SubIntents> subIntents = getSubIntentsByMother("workflowitem");
                             try {
                                 GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/subproject.createWorkflowitem", createWorkFlowItemModel, CreateWorkFlowItemModel.class, CreateWFResponseModel.class, token)
-                                        .subscribe(res-> {
-                                            logger.info("Create WorkflowItem response: "+res);
+                                        .subscribe(res -> {
+                                            logger.info("Create WorkflowItem response: " + res);
+                                            componentFunding.setWfItemId(res.getData().getWorkflowitem().getId());
                                             subIntents.forEach(subIntent -> {
                                                 WFItemGrantRevokePermModel wfItemGrantRevokePermModel = new WFItemGrantRevokePermModel();
                                                 WFItemGrantRevokePermModel.Data data2 = new WFItemGrantRevokePermModel.Data();
@@ -342,12 +344,27 @@ public class ProjectUtil {
 
                                         });
 
-                            }catch (Exception e)
-                            {
+                            } catch (Exception e) {
                                 logger.info("Error during subproject creation");
                                 e.printStackTrace();
                             }
                         }
+                            else {//update wfItem
+                                EditWFItemModel editWFItemModel = new EditWFItemModel();
+                                EditWFItemModel.Data data = new EditWFItemModel.Data();
+                                data.setProjectId(projectId);
+                                data.setSubprojectId(subProjectId);
+                                data.setWorkflowitemId(componentFunding.getWfItemId());
+                                data.setDisplayName(componentFunding.getComponent().getTitle());
+                                data.setDescription(componentFunding.getDescription());
+                                GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/workflowitem.update", editWFItemModel, EditWFItemModel.class, String.class, token)
+                                        .subscribe(res -> {
+                                                logger.info("Edit WFItem response: "+res);
+                                        });
+                            }
+                    }
+
+
                     }
         }
 

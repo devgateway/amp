@@ -21,6 +21,7 @@ const override = config => {
         remotes: {
             'ampoffline': `ampoffline@/TEMPLATE/reampv2/packages/ampoffline/build/remoteEntry.js`,
             'reampv2App': `reampv2App@/TEMPLATE/reampv2/packages/reampv2-app/build/remoteEntry.js`,
+            'userManager': `userManager@/TEMPLATE/reampv2/packages/user-manager/build/remoteEntry.js`
         },
         shared: {
             ...ppackageJson.dependencies,
@@ -37,7 +38,7 @@ const override = config => {
             'react-router-dom': {
                 import: 'react-router-dom',
                 singleton: true,
-                shareKey: 'react-router-dom-new',
+                shareKey: 'react-router-dom',
                 shareScope: 'default',
             }
         },

@@ -12,8 +12,16 @@ declare module  'reampv2App/Reampv2App' {
     export default ReampV2App;
 }
 
-declare module  'reampv2App/Reampv2Routes' {
-    import { RouteObject } from "react-router-dom";
-    const routes: RouteObject[];
-    export default routes;
+declare module  'userManager/UserManagerApp' {
+    const UserManagerApp: React.ComponentType;
+    export const mount: ({ mountPoint, initialPathName, standalone = false } : { mountPoint: HTMLElement | null, initialPathName?: string, standalone?: boolean }) => () => void;
+    export default UserManagerApp;
+}
+
+declare module  'userManager/EditProfileModal' {
+    import { Store } from "redux";
+    const EditProfileModal: React.FC<{ show: boolean,
+        setShow: React.Dispatch<React.SetStateAction<boolean>>, store: Store }>;
+    export default EditProfileModal;
+
 }

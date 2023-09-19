@@ -1,12 +1,9 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import Router from "./routing";
 
-function App() {
-
-
+const App = () => {
     return (
         <div>
-
             <Router />
         </div>
     );

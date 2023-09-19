@@ -1,5 +1,5 @@
 import React, { useEffect, useRef} from 'react';
-import {mount} from 'reampv2App/Reampv2App';
+import {mount} from "reampv2App/Reampv2App";
 import {useLocation, useNavigate} from "react-router-dom";
 import {REAMPV2_APP_NAME} from "../utils/constants";
 
@@ -9,7 +9,7 @@ const Reampv2 = () => {
     const ref = useRef<HTMLDivElement>(null);
     const location = useLocation();
     const navigate = useNavigate();
-    
+
     // Listen to navigation events dispatched inside reampv2 mfe.
     useEffect(() => {
         const reampv2NavigationEventHandler = (event: Event) => {
@@ -34,6 +34,7 @@ const Reampv2 = () => {
     // Listen for container location changes and dispatch a notification.
     useEffect(() => {
         if (location.pathname.startsWith(reampv2Basename)) {
+            localStorage.setItem('currentPath', location.pathname);
             const containerEvent = new CustomEvent("[container] navigated", {
                 detail: location.pathname.replace(reampv2Basename, ""),
             });

@@ -12,7 +12,8 @@ const override = config => {
         filename: 'remoteEntry.js',
         remotes: {
             'ampoffline': 'ampoffline@http://localhost:3001/remoteEntry.js',
-             'reampv2App': 'reampv2App@http://localhost:3002/remoteEntry.js',
+            'reampv2App': 'reampv2App@http://localhost:3002/remoteEntry.js',
+            'userManager': 'userManager@http://localhost:3003/remoteEntry.js'
         },
         shared: {
             ...packageJson.dependencies,

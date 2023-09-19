@@ -5,6 +5,7 @@ import org.digijava.kernel.cache.ehcache.EhCacheWrapper;
 import org.digijava.kernel.entity.trubudget.SubIntents;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.trubudget.dbentity.AmpComponentFundingTruWF;
 import org.digijava.module.trubudget.dbentity.TruBudgetActivity;
 import org.digijava.module.trubudget.model.project.*;
 import org.digijava.module.trubudget.model.subproject.CreateWorkFlowItemModel;
@@ -301,7 +302,8 @@ public class ProjectUtil {
                 if (!ampComponent.getFundings().isEmpty()) {
                     for (AmpComponentFunding componentFunding : ampComponent.getFundings()) {
                         if (componentFunding.getTransactionType() == 1 && (Objects.equals(componentFunding.getAdjustmentType().getValue(), "Planned") || Objects.equals(componentFunding.getAdjustmentType().getValue(), "Actual"))) {
-                            if (componentFunding.getWfItemId()==null){//create new wfItem
+                            AmpComponentFundingTruWF ampComponentFundingTruWF = PersistenceManager.getRequestDBSession().createQuery("FROM "+AmpComponentFundingTruWF.class.getName()+" act WHERE act.ampComponentFundingId="+componentFunding.getAmpComponentFundingId(), AmpComponentFundingTruWF.class).stream().findAny().orElse(null);
+                            if (ampComponentFundingTruWF==null){//create new wfItem
                             CreateWorkFlowItemModel createWorkFlowItemModel = new CreateWorkFlowItemModel();
                             createWorkFlowItemModel.setApiVersion(getSettingValue(settings, "apiVersion"));
                             CreateWorkFlowItemModel.Data data = new CreateWorkFlowItemModel.Data();
@@ -316,12 +318,16 @@ public class ProjectUtil {
                             data.setBillingDate(convertToISO8601(componentFunding.getTransactionDate()));
                             data.setDueDate(convertToISO8601AndAddDays(componentFunding.getTransactionDate(), Integer.parseInt(getSettingValue(settings, "workFlowItemDueDays"))));//set approprite date
                             createWorkFlowItemModel.setData(data);
+                            Session session =PersistenceManager.getRequestDBSession();
                             List<SubIntents> subIntents = getSubIntentsByMother("workflowitem");
                             try {
                                 GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/subproject.createWorkflowitem", createWorkFlowItemModel, CreateWorkFlowItemModel.class, CreateWFResponseModel.class, token)
                                         .subscribe(res -> {
                                             logger.info("Create WorkflowItem response: " + res);
-                                            componentFunding.setWfItemId(res.getData().getWorkflowitem().getId());
+                                            AmpComponentFundingTruWF ampComponentFundingTruWF1 = new AmpComponentFundingTruWF();
+                                            ampComponentFundingTruWF1.setAmpComponentFundingId(componentFunding.getAmpComponentFundingId());
+                                            ampComponentFundingTruWF1.setTruWFId(res.getData().getWorkflowitem().getId());
+                                            session.save(ampComponentFundingTruWF1);
                                             subIntents.forEach(subIntent -> {
                                                 WFItemGrantRevokePermModel wfItemGrantRevokePermModel = new WFItemGrantRevokePermModel();
                                                 WFItemGrantRevokePermModel.Data data2 = new WFItemGrantRevokePermModel.Data();
@@ -351,16 +357,21 @@ public class ProjectUtil {
                         }
                             else {//update wfItem
                                 EditWFItemModel editWFItemModel = new EditWFItemModel();
+                                editWFItemModel.setApiVersion(getSettingValue(settings, "apiVersion"));
                                 EditWFItemModel.Data data = new EditWFItemModel.Data();
                                 data.setProjectId(projectId);
                                 data.setSubprojectId(subProjectId);
-                                data.setWorkflowitemId(componentFunding.getWfItemId());
-                                data.setDisplayName(componentFunding.getComponent().getTitle());
                                 data.setDescription(componentFunding.getDescription());
+                                data.setWorkflowitemId(ampComponentFundingTruWF.getTruWFId());
+                                data.setDisplayName(componentFunding.getComponent().getTitle());
+                                data.setAmount(BigDecimal.valueOf(componentFunding.getTransactionAmount()).toPlainString());
+                                data.setCurrency(componentFunding.getCurrency().getCurrencyCode());
+                                data.setAmountType(Objects.equals(componentFunding.getAdjustmentType().getValue(), "Planned") ? "allocated" : "disbursed");
+                                data.setBillingDate(convertToISO8601(componentFunding.getTransactionDate()));
+                                data.setDueDate(convertToISO8601AndAddDays(componentFunding.getTransactionDate(), Integer.parseInt(getSettingValue(settings, "workFlowItemDueDays"))));//set approprite date
+                                editWFItemModel.setData(data);
                                 GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/workflowitem.update", editWFItemModel, EditWFItemModel.class, String.class, token)
-                                        .subscribe(res -> {
-                                                logger.info("Edit WFItem response: "+res);
-                                        });
+                                        .subscribe(res -> logger.info("Edit WFItem response: "+res));
                             }
                     }
 

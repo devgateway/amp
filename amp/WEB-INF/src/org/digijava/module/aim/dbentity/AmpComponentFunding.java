@@ -29,8 +29,7 @@ public class AmpComponentFunding implements Cloneable, Serializable {
     private Long ampComponentFundingId;
 
     private Integer transactionType;
-    
-    private String wfItemId;
+
 
 
 
@@ -72,13 +71,7 @@ public class AmpComponentFunding implements Cloneable, Serializable {
 
     @InterchangeableBackReference
     private AmpComponent component;
-    public String getWfItemId() {
-        return wfItemId;
-    }
 
-    public void setWfItemId(String wfItemId) {
-        this.wfItemId = wfItemId;
-    }
     /**
      * @return Returns the adjustmentType.
      */

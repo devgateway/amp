@@ -34,6 +34,12 @@ public class EditWFItemModel {
         private String subprojectId;
         private String workflowitemId;
         private String displayName;
+        private String amountType;
+        private String amount;
+        private String currency;
+        private String exchangeRate="1.0";
+        private String billingDate;
+        private String dueDate;
         private String description;
         private Map<String , Object> additionalData= new HashMap<>();
         private List<CreateWorkFlowItemModel.Document> documents=new ArrayList<>();
@@ -94,6 +100,54 @@ public class EditWFItemModel {
 
         public void setDocuments(List<CreateWorkFlowItemModel.Document> documents) {
             this.documents = documents;
+        }
+
+        public String getAmountType() {
+            return amountType;
+        }
+
+        public void setAmountType(String amountType) {
+            this.amountType = amountType;
+        }
+
+        public String getAmount() {
+            return amount;
+        }
+
+        public void setAmount(String amount) {
+            this.amount = amount;
+        }
+
+        public String getCurrency() {
+            return currency;
+        }
+
+        public void setCurrency(String currency) {
+            this.currency = currency;
+        }
+
+        public String getExchangeRate() {
+            return exchangeRate;
+        }
+
+        public void setExchangeRate(String exchangeRate) {
+            this.exchangeRate = exchangeRate;
+        }
+
+        public String getBillingDate() {
+            return billingDate;
+        }
+
+        public void setBillingDate(String billingDate) {
+            this.billingDate = billingDate;
+        }
+
+        public String getDueDate() {
+            return dueDate;
+        }
+
+        public void setDueDate(String dueDate) {
+            this.dueDate = dueDate;
         }
     }
 

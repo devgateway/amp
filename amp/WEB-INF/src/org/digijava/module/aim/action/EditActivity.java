@@ -1804,11 +1804,11 @@ public class EditActivity extends Action {
     private void getComponents(AmpActivityVersion activity, EditActivityForm eaForm, String toCurrCode) {
 
 //      Collection activityComponents = activity.getComponents();
-        List<Components<FundingDetail>> selectedComponents = new ArrayList<Components<FundingDetail>>();
+        List<Components<FundingDetail>> selectedComponents = new ArrayList<>();
 //      Iterator compItr = componets.iterator();
         for(AmpComponent temp : activity.getComponents()) {
 //          AmpComponent temp = (AmpComponent) compItr.next();
-            Components<FundingDetail> tempComp = new Components<FundingDetail>();
+            Components<FundingDetail> tempComp = new Components<>();
             tempComp.setTitle(temp.getTitle());
             tempComp.setComponentId(temp.getAmpComponentId());
             tempComp.setType_Id((temp.getType() != null) ? temp.getType().getType_id() : null);
@@ -1820,28 +1820,26 @@ public class EditActivity extends Action {
             }
             tempComp.setCode(temp.getCode());
             tempComp.setUrl(temp.getUrl());
-            tempComp.setCommitments(new ArrayList<FundingDetail>());
-            tempComp.setDisbursements(new ArrayList<FundingDetail>());
-            tempComp.setExpenditures(new ArrayList<FundingDetail>());
+            tempComp.setCommitments(new ArrayList<>());
+            tempComp.setDisbursements(new ArrayList<>());
+            tempComp.setExpenditures(new ArrayList<>());
 
             Collection<AmpComponentFunding> fundingComponentActivity = temp.getFundings();
-            Iterator<AmpComponentFunding> cItr = fundingComponentActivity.iterator();
 
-            while (cItr.hasNext()) {
-                AmpComponentFunding ampCompFund = (AmpComponentFunding) cItr.next();
-
+            for (AmpComponentFunding ampCompFund : fundingComponentActivity) {
                 double disb = 0;
 
                 if (ampCompFund.getAdjustmentType().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())
-                        && ampCompFund.getTransactionType().intValue() == 1)
-                disb = ampCompFund.getTransactionAmount().doubleValue();
+                        && ampCompFund.getTransactionType() == 1) {
+                    disb = ampCompFund.getTransactionAmount();
+                }
 
                 eaForm.getComponents().setCompTotalDisb(eaForm.getComponents().getCompTotalDisb() + disb);
 
                 FundingDetail fd = new FundingDetail();
-                fd.setAdjustmentTypeName(ampCompFund.getAdjustmentType() );
+                fd.setAdjustmentTypeName(ampCompFund.getAdjustmentType());
 
-            //  fd.setAdjustmentType(ampCompFund.getAdjustmentType().intValue());
+                //  fd.setAdjustmentType(ampCompFund.getAdjustmentType().intValue());
 
                 fd.setAmpComponentFundingId(ampCompFund.getAmpComponentFundingId());
 
@@ -1855,7 +1853,7 @@ public class EditActivity extends Action {
 
 
                 fd.setCurrencyCode(toCurrCode);
-                fd.setTransactionAmount(FormatHelper.formatNumber( amt.getValue()));
+                fd.setTransactionAmount(FormatHelper.formatNumber(amt.getValue()));
 
 
                 fd.setCurrencyName(ampCompFund.getCurrency().getCurrencyName());
@@ -1865,7 +1863,7 @@ public class EditActivity extends Action {
                 fd.setComponentOrganisation(ampCompFund.getReportingOrganization());
                 fd.setComponentSecondResponsibleOrganization(ampCompFund.getComponentSecondResponsibleOrganization());
                 fd.setComponentTransactionDescription(ampCompFund.getDescription());
-                
+
                 if (fd.getTransactionType() == 0) {
 
                     tempComp.getCommitments().add(fd);
@@ -1881,33 +1879,31 @@ public class EditActivity extends Action {
         }
 
         // Sort the funding details based on Transaction date.
-        Iterator compIterator = selectedComponents.iterator();
         int index = 0;
-        while (compIterator.hasNext()) {
-            Components components = (Components) compIterator.next();
-            if (components.getType_Id() != null) {
-                AmpComponentType type = ComponentsUtil.getComponentTypeById(components.getType_Id());
-                components.setTypeName(type.getName());
+        for (Components<FundingDetail> selectedComponent : selectedComponents) {
+            if (selectedComponent.getType_Id() != null) {
+                AmpComponentType type = ComponentsUtil.getComponentTypeById(selectedComponent.getType_Id());
+                selectedComponent.setTypeName(type.getName());
             }
             List list = null;
-            if (components.getCommitments() != null) {
-                list = new ArrayList(components.getCommitments());
+            if (selectedComponent.getCommitments() != null) {
+                list = new ArrayList(((Components) selectedComponent).getCommitments());
                 list.sort(FundingValidator.dateComp);
             }
-            components.setCommitments(list);
+            selectedComponent.setCommitments(list);
             list = null;
-            if (components.getDisbursements() != null) {
-                list = new ArrayList(components.getDisbursements());
-                Collections.sort(list, FundingValidator.dateComp);
-            }
-            components.setDisbursements(list);
-            list = null;
-            if (components.getExpenditures() != null) {
-                list = new ArrayList(components.getExpenditures());
+            if (((Components) selectedComponent).getDisbursements() != null) {
+                list = new ArrayList<>(selectedComponent.getDisbursements());
                 list.sort(FundingValidator.dateComp);
             }
-            components.setExpenditures(list);
-            selectedComponents.set(index++, components);
+            selectedComponent.setDisbursements(list);
+            list = null;
+            if (selectedComponent.getExpenditures() != null) {
+                list = new ArrayList<>(((Components) selectedComponent).getExpenditures());
+                list.sort(FundingValidator.dateComp);
+            }
+            selectedComponent.setExpenditures(list);
+            selectedComponents.set(index++, selectedComponent);
         }
 
         eaForm.getComponents().setSelectedComponents(selectedComponents);

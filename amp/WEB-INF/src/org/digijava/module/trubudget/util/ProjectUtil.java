@@ -15,7 +15,6 @@ import org.digijava.module.trubudget.model.workflowitem.WFItemGrantRevokePermMod
 import org.digijava.module.um.util.GenericWebClient;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
-import org.hibernate.type.LocalDateTimeType;
 import org.hibernate.type.LongType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -251,7 +250,7 @@ public class ProjectUtil {
                 }
 
                 ampComponent.setSubProjectComponentId(subproject.getId());
-                createUpdateWorkflowItems(ampActivityVersion,projectId, subproject.getId(), settings);
+                createUpdateWorkflowItems(projectId, subproject.getId(),ampComponent, settings);
             }
             else {//update subProject
                 EditSubProjectModel editSubProjectModel = new EditSubProjectModel();
@@ -282,19 +281,16 @@ public class ProjectUtil {
 
                     }
                 }
-                createUpdateWorkflowItems(ampActivityVersion,projectId, ampComponent.getSubProjectComponentId(), settings);
+                createUpdateWorkflowItems(projectId, ampComponent.getSubProjectComponentId(),ampComponent, settings);
 
             }
         }
     }
-    public static void createUpdateWorkflowItems(AmpActivityVersion ampActivityVersion, String projectId, String subProjectId, List<AmpGlobalSettings> settings) throws URISyntaxException {
+    public static void createUpdateWorkflowItems(String projectId, String subProjectId, AmpComponent ampComponent, List<AmpGlobalSettings> settings) throws URISyntaxException {
         AbstractCache myCache = new EhCacheWrapper("trubudget");
         String token = (String) myCache.get("truBudgetToken");
         String user = (String) myCache.get("truBudgetUser");
         logger.info("Trubudget Cached Token:" + token);
-        for (AmpComponent ampComponent: ampActivityVersion.getComponents()) {
-            // TODO: 9/19/23 look for a way of associating given subproject with workflow item 
-            if (ampComponent.getSubProjectComponentId() == null) {//
 
                 if (!ampComponent.getFundings().isEmpty()) {
                     for (AmpComponentFunding componentFunding : ampComponent.getFundings()) {
@@ -346,8 +342,6 @@ public class ProjectUtil {
                             }
                         }
                     }
-                }
-            }
         }
 
     }

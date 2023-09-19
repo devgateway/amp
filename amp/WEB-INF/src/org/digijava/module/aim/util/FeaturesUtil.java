@@ -1273,11 +1273,6 @@ public class FeaturesUtil {
             logger.error(ex.getMessage(), ex);
             return false;
         }
-        finally {
-            if (hbsession != null) {
-                hbsession.close();
-            }
-        }
         return true;
     }
 

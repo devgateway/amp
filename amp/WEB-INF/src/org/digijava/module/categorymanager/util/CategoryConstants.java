@@ -97,7 +97,9 @@ public class CategoryConstants {
     public static final String PROPOSE_PRJC_DATE_KEY        = "funDate";
 
     public static final String ADJUSTMENT_TYPE_NAME         = "Adjustment Type";
+    public static final String COMPONENT_FUNDING_STATUS         = "Component Funding Status";
     public static final String ADJUSTMENT_TYPE_KEY          = "adjustment_type";
+    public static final String COMPONENT_FUNDING_STATUS_KEY          = "component_funding_status";
 
     public static final String TRANSACTION_TYPE_NAME        = "Transaction Type";
     public static final String TRANSACTION_TYPE_KEY         = "transaction_type";

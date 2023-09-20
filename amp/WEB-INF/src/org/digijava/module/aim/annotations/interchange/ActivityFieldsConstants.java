@@ -60,6 +60,7 @@ public class ActivityFieldsConstants {
     public static final String COMPONENT_FUNDING_AMOUNT = "Amount";
     public static final String COMPONENT_FUNDING_TRANSACTION_DATE = "Transaction Date";
     public static final String COMPONENT_FUNDING_ADJUSTMENT_TYPE = CategoryConstants.ADJUSTMENT_TYPE_NAME;
+    public static final String COMPONENT_FUNDING_STATUS = CategoryConstants.COMPONENT_FUNDING_STATUS;
     public static final String COMPONENT_FUNDING_TRANSACTION_TYPE = "Transaction Type";
     public static final String DONOR_ORGANIZATION = "Donor Organization";
     public static final String RESPONSIBLE_ORGANIZATION = "Responsible Organization";

@@ -164,7 +164,7 @@ implements AmpRequiredComponentContainer{
              AmpCategorySelectFieldPanel status = new AmpCategorySelectFieldPanel(
                     "status", CategoryConstants.ACTIVITY_STATUS_KEY,
                     new AmpCategoryValueByKeyModel(
-                            new PropertyModel<Set<AmpCategoryValue>>(am,"categories"),
+                            new PropertyModel<>(am, "categories"),
                             CategoryConstants.ACTIVITY_STATUS_KEY),
                             CategoryConstants.ACTIVITY_STATUS_NAME, true, false, null,
                      AmpFMTypes.MODULE);

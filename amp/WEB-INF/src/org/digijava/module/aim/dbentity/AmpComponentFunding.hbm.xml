@@ -28,5 +28,8 @@
 			class="org.digijava.module.aim.dbentity.AmpComponent" />
 		<many-to-one name="adjustmentType" column="adjustment_type" 
 		    class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
+
+		<many-to-one name="componentFundingStatus" column="component_funding_status"
+					 class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 	</class>
 </hibernate-mapping>

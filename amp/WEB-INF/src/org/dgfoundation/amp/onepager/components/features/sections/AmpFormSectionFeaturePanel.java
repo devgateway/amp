@@ -44,9 +44,9 @@ public class AmpFormSectionFeaturePanel extends AmpFeaturePanel {
 
     public void setFolded(boolean folded){
         if (folded)
-            mrk.add(new AttributeAppender("style", new Model("display: none;"), ""));
+            mrk.add(new AttributeAppender("style", new Model<>("display: none;"), ""));
         else
-            mrk.add(new AttributeAppender("style", new Model("display: block;"), ""));
+            mrk.add(new AttributeAppender("style", new Model<>("display: block;"), ""));
             
     }
 }

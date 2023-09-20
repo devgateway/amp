@@ -39,6 +39,21 @@ public class AmpComponentFunding implements Cloneable, Serializable {
             discriminatorOption = CategoryConstants.ADJUSTMENT_TYPE_KEY)
     private AmpCategoryValue adjustmentType;
 
+
+    @Interchangeable(fieldTitle = COMPONENT_FUNDING_STATUS, importable = true, pickIdOnly = true,
+            fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_FUNDING_STATUS,
+            interValidators = @InterchangeableValidator(RequiredValidator.class),
+            discriminatorOption = CategoryConstants.COMPONENT_FUNDING_STATUS_KEY)
+    private AmpCategoryValue componentFundingStatus;
+
+    public AmpCategoryValue getComponentFundingStatus() {
+        return componentFundingStatus;
+    }
+
+    public void setComponentFundingStatus(AmpCategoryValue componentFundingStatus) {
+        this.componentFundingStatus = componentFundingStatus;
+    }
+
     @Interchangeable(fieldTitle = COMPONENT_FUNDING_TRANSACTION_DATE, importable = true,
             fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_FUNDING_TRANSACTION_DATE,
             interValidators = @InterchangeableValidator(RequiredValidator.class))

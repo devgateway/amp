@@ -32,5 +32,6 @@
 		</set>
 		<many-to-one name="defaultUsedValue" column="default_used_value"
 					 class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
+
 	</class>
 </hibernate-mapping>

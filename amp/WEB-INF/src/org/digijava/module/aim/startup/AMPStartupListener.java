@@ -326,6 +326,18 @@ public class AMPStartupListener extends HttpServlet implements
                         "                        (nextval('amp_global_settings_seq'),'workFlowItemDueDays','10','t_Integer','Number of days for a workflow item to be due.','trubudget',NULL,true),\n" +
                         "                        (nextval('amp_global_settings_seq'),'organization','KfW','','Organization name to be used for this deployment','trubudget',NULL,true) ON CONFLICT (settingsname,section) DO NOTHING";
                 statement.executeUpdate(insertIntoGlobalSettings);
+                String insertStatusClass ="INSERT INTO amp_category_class(id, category_name, keyname, description, is_multiselect, is_ordered)" +
+                        " VALUES (nextval('amp_category_class_seq'), 'Component Funding Status' , 'component_funding_status', '', 'f', 'f')";
+                statement.executeUpdate(insertStatusClass);
+                String alterTable="ALTER TABLE AMP_CATEGORY_VALUE\n" +
+                        "ADD CONSTRAINT unique_value_index_constraint UNIQUE (category_value, index_column)";
+                statement.executeUpdate(alterTable);
+                String insertStatusValues ="INSERT INTO amp_category_value(id, category_value, amp_category_class_id, index_column)" +
+                        " VALUES " +
+                        "(nextval('amp_category_value_seq'), 'Open',(select id from amp_category_class where keyname='component_funding_status'), 0)," +
+                        "(nextval('amp_category_value_seq'), 'Closed',(select id from amp_category_class where keyname='component_funding_status'), 1),"+
+                        "(nextval('amp_category_value_seq'), 'Rejected',(select id from amp_category_class where keyname='component_funding_status'), 2)  ON CONFLICT (index_column,category_value) DO NOTHING";
+                statement.executeUpdate(insertStatusValues);
             } catch (Exception e) {
                 // Handle the exception
                 logger.info("Error occurred during trubudget init db  operations", e);

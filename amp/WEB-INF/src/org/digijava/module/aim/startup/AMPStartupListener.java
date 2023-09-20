@@ -329,14 +329,50 @@ public class AMPStartupListener extends HttpServlet implements
                 String insertStatusClass ="INSERT INTO amp_category_class(id, category_name, keyname, description, is_multiselect, is_ordered)" +
                         " VALUES (nextval('amp_category_class_seq'), 'Component Funding Status' , 'component_funding_status', '', 'f', 'f')";
                 statement.executeUpdate(insertStatusClass);
-                String alterTable="ALTER TABLE AMP_CATEGORY_VALUE\n" +
-                        "ADD CONSTRAINT unique_value_index_constraint UNIQUE (category_value, index_column)";
-                statement.executeUpdate(alterTable);
-                String insertStatusValues ="INSERT INTO amp_category_value(id, category_value, amp_category_class_id, index_column)" +
-                        " VALUES " +
-                        "(nextval('amp_category_value_seq'), 'Open',(select id from amp_category_class where keyname='component_funding_status'), 0)," +
-                        "(nextval('amp_category_value_seq'), 'Closed',(select id from amp_category_class where keyname='component_funding_status'), 1),"+
-                        "(nextval('amp_category_value_seq'), 'Rejected',(select id from amp_category_class where keyname='component_funding_status'), 2)  ON CONFLICT (index_column,category_value) DO NOTHING";
+//                String alterTable="ALTER TABLE AMP_CATEGORY_VALUE\n" +
+//                        "ADD CONSTRAINT unique_value_index_constraint UNIQUE (category_value, index_column)";
+//                statement.executeUpdate(alterTable);
+                String insertStatusValues ="INSERT INTO amp_category_value (id, category_value, amp_category_class_id, index_column)\n" +
+                        "SELECT\n" +
+                        "    nextval('amp_category_value_seq'),\n" +
+                        "    'Open',\n" +
+                        "    (SELECT id FROM amp_category_class WHERE keyname = 'component_funding_status'),\n" +
+                        "    0\n" +
+                        "WHERE NOT EXISTS (\n" +
+                        "    SELECT 1\n" +
+                        "    FROM amp_category_value\n" +
+                        "    WHERE\n" +
+                        "        amp_category_class_id = (SELECT id FROM amp_category_class WHERE keyname = 'component_funding_status')\n" +
+                        "        AND category_value = 'Open'\n" +
+                        ");\n" +
+                        "\n" +
+                        "INSERT INTO amp_category_value (id, category_value, amp_category_class_id, index_column)\n" +
+                        "SELECT\n" +
+                        "    nextval('amp_category_value_seq'),\n" +
+                        "    'Closed',\n" +
+                        "    (SELECT id FROM amp_category_class WHERE keyname = 'component_funding_status'),\n" +
+                        "    1\n" +
+                        "WHERE NOT EXISTS (\n" +
+                        "    SELECT 1\n" +
+                        "    FROM amp_category_value\n" +
+                        "    WHERE\n" +
+                        "        amp_category_class_id = (SELECT id FROM amp_category_class WHERE keyname = 'component_funding_status')\n" +
+                        "        AND category_value = 'Closed'\n" +
+                        ");\n" +
+                        "\n" +
+                        "INSERT INTO amp_category_value (id, category_value, amp_category_class_id, index_column)\n" +
+                        "SELECT\n" +
+                        "    nextval('amp_category_value_seq'),\n" +
+                        "    'Rejected',\n" +
+                        "    (SELECT id FROM amp_category_class WHERE keyname = 'component_funding_status'),\n" +
+                        "    2\n" +
+                        "WHERE NOT EXISTS (\n" +
+                        "    SELECT 1\n" +
+                        "    FROM amp_category_value\n" +
+                        "    WHERE\n" +
+                        "        amp_category_class_id = (SELECT id FROM amp_category_class WHERE keyname = 'component_funding_status')\n" +
+                        "        AND category_value = 'Rejected'\n" +
+                        ");\n";
                 statement.executeUpdate(insertStatusValues);
             } catch (Exception e) {
                 // Handle the exception

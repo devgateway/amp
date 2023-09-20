@@ -62,6 +62,7 @@ public class AmpComponentsFundingSubsectionFeature extends
             public void onClick(AjaxRequestTarget target) {
                 AmpComponentFunding cf = new AmpComponentFunding();
                 cf.setAdjustmentType(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getAmpCategoryValueFromDB());
+                cf.setComponentFundingStatus(CategoryConstants.COMPONENT_FUNDING_STATUS_OPEN.getAmpCategoryValueFromDB());
                 cf.setComponent(componentModel.getObject());
                 cf.setTransactionAmount(0d);
                 cf.setCurrency(CurrencyUtil.getWicketWorkspaceCurrency());

@@ -2149,7 +2149,7 @@ public class DbUtil {
                                                 itr5 = ampf.getFundingDetails().iterator();
                                                 while (itr5.hasNext()) {
                                                     fd = (AmpFundingDetail) itr5.next();
-                                                    if (fd.getTransactionType().intValue() == 1) {
+                                                    if (fd.getTransactionType() == 1) {
                                                         if (fd.getAdjustmentType().getValue()
                                                                 .equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED
                                                                         .getValueKey()))
@@ -2165,7 +2165,7 @@ public class DbUtil {
                                                 res.setResponse("nil");
                                             else {
                                                 NumberFormat formatter = new DecimalFormat("#.##");
-                                                Double percent = new Double((actual * 100) / planned);
+                                                Double percent = (actual * 100) / planned;
                                                 res.setResponse(formatter.format(percent));
                                             }
                                         } else

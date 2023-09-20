@@ -600,28 +600,25 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
           components.setExpenditures(new ArrayList());
 
           Collection<AmpComponentFunding> componentsFunding = ampComp.getFundings();
-          Iterator compFundIterator = componentsFunding.iterator();
-          while (compFundIterator.hasNext()) {
-            AmpComponentFunding cf = (AmpComponentFunding) compFundIterator.next();
-            FundingDetail fd = new FundingDetail();
-            fd.setAdjustmentTypeName(cf.getAdjustmentType());
- 
-            fd.setCurrencyCode(cf.getCurrency().getCurrencyCode());
-            fd.setCurrencyName(cf.getCurrency().getCurrencyName());
-            fd.setTransactionAmount(FormatHelper.formatNumber(cf.getTransactionAmount().doubleValue()));
-            fd.setTransactionDate(DateConversion.convertDateToLocalizedString(cf.getTransactionDate()));
-            fd.setFiscalYear(DateConversion.convertDateToFiscalYearString(cf.getTransactionDate()));
-            fd.setTransactionType(cf.getTransactionType().intValue());
-            if (fd.getTransactionType() == Constants.COMMITMENT) {
-              components.getCommitments().add(fd);
+            for (AmpComponentFunding cf : componentsFunding) {
+                FundingDetail fd = new FundingDetail();
+                fd.setAdjustmentTypeName(cf.getAdjustmentType());
+                fd.setComponentFundingStatus(cf.getComponentFundingStatus());
+
+                fd.setCurrencyCode(cf.getCurrency().getCurrencyCode());
+                fd.setCurrencyName(cf.getCurrency().getCurrencyName());
+                fd.setTransactionAmount(FormatHelper.formatNumber(cf.getTransactionAmount().doubleValue()));
+                fd.setTransactionDate(DateConversion.convertDateToLocalizedString(cf.getTransactionDate()));
+                fd.setFiscalYear(DateConversion.convertDateToFiscalYearString(cf.getTransactionDate()));
+                fd.setTransactionType(cf.getTransactionType());
+                if (fd.getTransactionType() == Constants.COMMITMENT) {
+                    components.getCommitments().add(fd);
+                } else if (fd.getTransactionType() == Constants.DISBURSEMENT) {
+                    components.getDisbursements().add(fd);
+                } else if (fd.getTransactionType() == Constants.EXPENDITURE) {
+                    components.getExpenditures().add(fd);
+                }
             }
-            else if (fd.getTransactionType() == Constants.DISBURSEMENT) {
-              components.getDisbursements().add(fd);
-            }
-            else if (fd.getTransactionType() == Constants.EXPENDITURE) {
-              components.getExpenditures().add(fd);
-            }
-          }
           List list = null;
           if (components.getCommitments() != null) {
             list = new ArrayList(components.getCommitments());

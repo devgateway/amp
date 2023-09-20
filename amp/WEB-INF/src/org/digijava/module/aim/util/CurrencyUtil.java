@@ -730,7 +730,7 @@ public class CurrencyUtil {
      * @return
      */
     public static AmpCurrency getWorkspaceCurrency(TeamMember tm) {
-        AmpCurrency currency = null;
+        AmpCurrency currency;
         if (tm != null && tm.getAppSettings() != null) {
             currency = getAmpcurrency(tm.getAppSettings().getCurrencyId());
             if (currency != null) {

@@ -25,6 +25,17 @@ public class FundingDetail implements Serializable, Comparable
     
     private Date reportingDate;
     private AmpCategoryValue adjustmentTypeName;
+
+    public AmpCategoryValue getComponentFundingStatus() {
+        return componentFundingStatus;
+    }
+
+    public void setComponentFundingStatus(AmpCategoryValue componentFundingStatus) {
+        this.componentFundingStatus = componentFundingStatus;
+    }
+
+    private AmpCategoryValue componentFundingStatus;
+
     private AmpCategoryValue projectionTypeName;
     private AmpCategoryValue expenditureClass;
     private String transactionDate;

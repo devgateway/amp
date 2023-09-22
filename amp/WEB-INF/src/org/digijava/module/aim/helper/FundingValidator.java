@@ -15,22 +15,20 @@ public class FundingValidator {
     private static ArrayList list1;
     private static ArrayList list2;
     
-    public static Comparator dateComp = new Comparator() {
-        public int compare(Object e1,Object e2) {
-            if (e1 instanceof FundingDetail && e2 instanceof FundingDetail) {
-                FundingDetail fd1 = (FundingDetail) e1;
-                FundingDetail fd2 = (FundingDetail) e2;
-                Date dt1 = DateConversion.getLocalizedDate(fd1.getTransactionDate());
-                Date dt2 = DateConversion.getLocalizedDate(fd2.getTransactionDate());
-                if (((dt1 == null)&&(dt2 == null))||(dt1.equals(dt2))) {
-                    return fd2.getAdjustmentTypeName().compareTo(fd1.getAdjustmentTypeName());
-                } else {
-                    return (dt1.compareTo(dt2));
-                }
-                
+    public static Comparator dateComp = (e1, e2) -> {
+        if (e1 instanceof FundingDetail && e2 instanceof FundingDetail) {
+            FundingDetail fd1 = (FundingDetail) e1;
+            FundingDetail fd2 = (FundingDetail) e2;
+            Date dt1 = DateConversion.getLocalizedDate(fd1.getTransactionDate());
+            Date dt2 = DateConversion.getLocalizedDate(fd2.getTransactionDate());
+            if (((dt1 == null)&&(dt2 == null))||(Objects.equals(dt1, dt2))) {
+                return fd2.getAdjustmentTypeName().compareTo(fd1.getAdjustmentTypeName());
+            } else {
+                return (dt1.compareTo(dt2));
             }
-            throw new ClassCastException();
+
         }
+        throw new ClassCastException();
     };
 
     private static void makeCumulativeAmounts() {
@@ -46,7 +44,7 @@ public class FundingValidator {
             amt = CurrencyWorker.convert1(amt,frmExRt,toExRt);          
             
             value += amt;
-            fd.setTransactionAmount(""+value);
+            fd.setTransactionAmount(String.valueOf(value));
             list1.set(i,fd);                
         }
         
@@ -62,7 +60,7 @@ public class FundingValidator {
             amt = CurrencyWorker.convert1(amt,frmExRt,toExRt);          
             
             value += amt;
-            fd.setTransactionAmount(""+value);
+            fd.setTransactionAmount(String.valueOf(value));
             list2.set(i,fd);
         }
     }
@@ -103,13 +101,13 @@ public class FundingValidator {
             temp = new ArrayList(col1);
         }
         list1 = new ArrayList();
-        for (int i = 0;i < temp.size();i ++) {
-            FundingDetail fd = (FundingDetail) temp.get(i);
+        for (Object o : temp) {
+            FundingDetail fd = (FundingDetail) o;
             FundingDetail newFd = new FundingDetail();
             newFd.setCurrencyCode(fd.getCurrencyCode());
             newFd.setTransactionAmount(fd.getTransactionAmount());
             newFd.setTransactionDate(fd.getTransactionDate());
-            
+
             if (fd.getAdjustmentTypeName().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
                 list1.add(newFd);
             }
@@ -117,8 +115,8 @@ public class FundingValidator {
 
         temp = new ArrayList(col2);
         list2 = new ArrayList();
-        for (int i = 0;i < temp.size();i ++) {
-            FundingDetail fd = (FundingDetail) temp.get(i);
+        for (Object o : temp) {
+            FundingDetail fd = (FundingDetail) o;
             FundingDetail newFd = new FundingDetail();
             newFd.setCurrencyCode(fd.getCurrencyCode());
             newFd.setTransactionAmount(fd.getTransactionAmount());
@@ -126,8 +124,8 @@ public class FundingValidator {
             list2.add(newFd);
         }       
         
-        Collections.sort(list1,dateComp);
-        Collections.sort(list2,dateComp);
+        list1.sort(dateComp);
+        list2.sort(dateComp);
         makeCumulativeAmounts();
         return validate();
     }

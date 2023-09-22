@@ -67,6 +67,16 @@
                                                                                 </digi:trn>
                                                                             </td>
                                                                         </module:display>
+
+                                                                        <module:display name="/Activity Form/Components/Component/Components Commitments"
+                                                                                        parentModule="/Activity Form/Components/Component">
+                                                                            <td width="100">
+                                                                                <digi:trn key="aim:${fd.componentFundingStatus.ampCategoryClass.name}">
+                                                                                    <b><c:out value="${fd.componentFundingStatus}" /></b>
+                                                                                </digi:trn>
+                                                                            </td>
+                                                                        </module:display>
+
                                                                         <module:display name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Amount"
                                                                                         parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
                                                                             <td align="right" width="100">

@@ -73,6 +73,13 @@ public class AmpComponentsFundingFormTableFeature extends
                     item.add(adjustmentTypes);
 
 
+
+
+                } catch(Exception e) {
+                    logger.info("Unable to add adjustment type dropdown: ",e);
+                }
+                try {
+
                     AmpCategorySelectFieldPanel componentFundingStatus = new AmpCategorySelectFieldPanel(
                             "componentFundingStatus", CategoryConstants.COMPONENT_FUNDING_STATUS_KEY,
                             new PropertyModel<>(model, "componentFundingStatus"),
@@ -80,11 +87,12 @@ public class AmpComponentsFundingFormTableFeature extends
                             false, false, false, null, false);
                     componentFundingStatus.getChoiceContainer().setRequired(true);
                     componentFundingStatus.getChoiceContainer().add(new AttributeModifier("style", "width: 100px;"));
-                        item.add(componentFundingStatus);
-
-                } catch(Exception e) {
-                    logger.error("AmpCategoryGroupFieldPanel initialization failed");
+                    item.add(componentFundingStatus);
+                } catch (Exception e)
+                {
+                    logger.info("Unable to add component funding status dropdown: ",e);
                 }
+
 
                 // read the list of organizations from related organizations page, and
                 // create a unique set with the orgs chosen

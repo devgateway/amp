@@ -35,9 +35,9 @@ public class AmpComponentsFormSectionFeature extends
     public AmpComponentsFormSectionFeature(String id, String fmName,
             final IModel<AmpActivityVersion> am) throws Exception {
         super(id, fmName, am);
-        final PropertyModel<Set<AmpComponent>> setModel=new PropertyModel<Set<AmpComponent>>(am,"components");
+        final PropertyModel<Set<AmpComponent>> setModel= new PropertyModel<>(am, "components");
         if (setModel.getObject() == null)
-            setModel.setObject(new TreeSet<AmpComponent>());
+            setModel.setObject(new TreeSet<>());
         final ListEditor<AmpComponent> list;
 
         IModel<List<AmpComponent>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(setModel); 

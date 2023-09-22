@@ -9,6 +9,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -54,8 +55,16 @@ public class FMSettingsMediator {
         FMSettings fmGroup = getFMSettings(fmGroupName, templateId);
         
         if (fmGroup != null) {
-            return fmGroup.getEnabledSettings(templateId);
+            Set<String> enabledSettings = fmGroup.getEnabledSettings(templateId);
+            if (Objects.equals(fmGroupName, FMGROUP_MENU)) {
+                if (!FeaturesUtil.isVisibleModule("/GIS")) {
+                    enabledSettings.remove("Map");
+                }
+            }
+
+            return enabledSettings;
         }
+
         
         return Collections.emptySet();
     }

@@ -383,7 +383,7 @@ public class ProjectUtil {
                                         .subscribe(res -> logger.info("Edit WFItem response: "+res));
 
                                 try {
-                                    closeWorkFlowItem(componentFunding,settings,projectId,subProjectId,ampComponentFundingTruWF.getTruWFId(),"Closed",token);
+                                    closeWorkFlowItem(componentFunding,settings,projectId,subProjectId,ampComponentFundingTruWF.getTruWFId(),componentFunding.getComponentFundingStatus().getValue(),token);
                                 } catch (URISyntaxException e) {
                                     logger.info("Error when closing wf item ",e);
                                     throw new RuntimeException(e);

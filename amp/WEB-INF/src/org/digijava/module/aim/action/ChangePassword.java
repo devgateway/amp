@@ -31,21 +31,19 @@ public class ChangePassword extends Action {
 
         if (cpForm.getUserId() != null && cpForm.getOldPassword() != null && cpForm.getNewPassword() != null) {
             try {
-                if (! DbUtil.isRegisteredEmail(cpForm.getUserId())) {
+                if (!DbUtil.isRegisteredEmail(cpForm.getUserId())) {
                     errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.invalidUserId"));
                     saveErrors(request, errors);
                     return mapping.getInputForward();
                 }
 
-                if (! DbUtil.isCorrectPassword(cpForm.getUserId(), cpForm.getOldPassword())) {
+                if (!DbUtil.isCorrectPassword(cpForm.getUserId(), cpForm.getOldPassword())) {
                     errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.invalidPassword"));
                     saveErrors(request, errors);
                     return mapping.getInputForward();
                 }
 
-                DbUtil.updatePassword(cpForm.getUserId(),
-                        cpForm.getOldPassword(),
-                        cpForm.getNewPassword());
+                DbUtil.updatePassword(cpForm.getUserId(), cpForm.getOldPassword(), cpForm.getNewPassword());
 
 
             } catch (Exception e) {

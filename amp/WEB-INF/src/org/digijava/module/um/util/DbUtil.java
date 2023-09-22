@@ -234,23 +234,14 @@ public class DbUtil {
         Session session = null;
         try {
             session = org.digijava.kernel.persistence.PersistenceManager.getSession();
-            
-            String queryString = "from " + User.class.getName() + " rs where trim(lower(rs.email)) = :email";
-            Query query = session.createQuery(queryString);
-            query.setParameter("email", user,StringType.INSTANCE);
-            
-            Iterator iter = query.iterate();
-            User iterUser = null;
-            while(iter.hasNext()) {
-                iterUser = (User) iter.next();
-            }
-//beginTransaction();
-            iterUser.setPassword(ShaCrypt.crypt(newPassword.trim()).trim());
-            iterUser.setSalt(new Long(newPassword.trim().hashCode()).toString());
-            iterUser.updateLastModified();
-            session.save(iterUser);
+            User foundUser = UserUtils.getUserByEmailAddress(user);
 
-            //tx.commit();
+            foundUser.setPassword(ShaCrypt.crypt(newPassword.trim()).trim());
+            foundUser.setSalt(Long.toString(newPassword.trim().hashCode()));
+            foundUser.updateLastModified();
+
+            session.update(foundUser);
+            session.getTransaction().commit();
 
         } catch(Exception ex) {
             logger.debug("Unable to update user information into database", ex);

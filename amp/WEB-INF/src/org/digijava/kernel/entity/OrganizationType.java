@@ -23,9 +23,15 @@
 package org.digijava.kernel.entity;
 
 
+import org.digijava.module.aim.annotations.translation.TranslatableClass;
+import org.digijava.module.aim.annotations.translation.TranslatableField;
+
+@TranslatableClass(displayName = "orgType")
 public class OrganizationType {
 
     private String id;
+
+    @TranslatableField
     private String type;
 
     public OrganizationType() {}

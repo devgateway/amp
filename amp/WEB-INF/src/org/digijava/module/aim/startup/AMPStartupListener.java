@@ -327,7 +327,7 @@ public class AMPStartupListener extends HttpServlet implements
                         "                        (nextval('amp_global_settings_seq'),'organization','KfW','','Organization name to be used for this deployment','trubudget',NULL,true) ON CONFLICT (settingsname,section) DO NOTHING";
                 statement.executeUpdate(insertIntoGlobalSettings);
                 String insertStatusClass ="INSERT INTO amp_category_class(id, category_name, keyname, description, is_multiselect, is_ordered)" +
-                        " VALUES (nextval('amp_category_class_seq'), 'Component Funding Status' , 'component_funding_status', '', 'f', 'f')";
+                        " VALUES (nextval('amp_category_class_seq'), 'Component Funding Status' , 'component_funding_status', '', 'f', 'f') ON CONFLICT(keyname) DO NOTHING";
                 statement.executeUpdate(insertStatusClass);
 //                String alterTable="ALTER TABLE AMP_CATEGORY_VALUE\n" +
 //                        "ADD CONSTRAINT unique_value_index_constraint UNIQUE (category_value, index_column)";

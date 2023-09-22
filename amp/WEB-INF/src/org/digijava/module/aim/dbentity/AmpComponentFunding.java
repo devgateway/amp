@@ -50,6 +50,10 @@ public class AmpComponentFunding implements Cloneable, Serializable {
         return componentFundingStatus;
     }
 
+    public String getComponentFundingStatusFormatted() {
+        return componentFundingStatus.getValue().toLowerCase();
+    }
+
     public void setComponentFundingStatus(AmpCategoryValue componentFundingStatus) {
         this.componentFundingStatus = componentFundingStatus;
     }

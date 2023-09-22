@@ -12,6 +12,7 @@ import org.digijava.module.trubudget.model.subproject.CreateWorkFlowItemModel;
 import org.digijava.module.trubudget.model.subproject.EditSubProjectModel;
 import org.digijava.module.trubudget.model.subproject.EditSubProjectedBudgetModel;
 import org.digijava.module.trubudget.model.subproject.SubProjectGrantRevokePermModel;
+import org.digijava.module.trubudget.model.workflowitem.CloseWFItemModel;
 import org.digijava.module.trubudget.model.workflowitem.CreateWFResponseModel;
 import org.digijava.module.trubudget.model.workflowitem.EditWFItemModel;
 import org.digijava.module.trubudget.model.workflowitem.WFItemGrantRevokePermModel;
@@ -310,7 +311,7 @@ public class ProjectUtil {
                             data.setProjectId(projectId);
                             data.setSubprojectId(subProjectId);
                             data.setAssignee(user);
-                            data.setStatus((Objects.equals(componentFunding.getComponentFundingStatusFormatted(), "closed") || Objects.equals(componentFunding.getComponentFundingStatusFormatted(), "rejected"))?"closed":"open");
+//                            data.setStatus((Objects.equals(componentFunding.getComponentFundingStatusFormatted(), "closed") || Objects.equals(componentFunding.getComponentFundingStatusFormatted(), "rejected"))?"closed":"open");
                             data.setDescription(componentFunding.getDescription());
                             data.setDisplayName(componentFunding.getComponent().getTitle());
                             data.setAmount(BigDecimal.valueOf(componentFunding.getTransactionAmount()).toPlainString());
@@ -348,6 +349,13 @@ public class ProjectUtil {
                                                 }
 
                                             });
+                                           //workflow close
+                                            try {
+                                                closeWorkFlowItem(componentFunding,settings,projectId,subProjectId,res.getData().getWorkflowitem().getId(),"Closed",token);
+                                            } catch (URISyntaxException e) {
+                                                logger.info("Error when closing wf item ",e);
+                                                throw new RuntimeException(e);
+                                            }
 
                                         });
 
@@ -373,6 +381,13 @@ public class ProjectUtil {
                                 editWFItemModel.setData(data);
                                 GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/workflowitem.update", editWFItemModel, EditWFItemModel.class, String.class, token)
                                         .subscribe(res -> logger.info("Edit WFItem response: "+res));
+
+                                try {
+                                    closeWorkFlowItem(componentFunding,settings,projectId,subProjectId,ampComponentFundingTruWF.getTruWFId(),"Closed",token);
+                                } catch (URISyntaxException e) {
+                                    logger.info("Error when closing wf item ",e);
+                                    throw new RuntimeException(e);
+                                }
                             }
                     }
 
@@ -380,6 +395,26 @@ public class ProjectUtil {
                     }
         }
 
+    }
+    public static void closeWorkFlowItem(AmpComponentFunding ampComponentFunding, List<AmpGlobalSettings> settings, String projectId, String subProjectId, String workFlowItemId, String rejectReason, String token) throws URISyntaxException {
+        if (Objects.equals(ampComponentFunding.getComponentFundingStatusFormatted(), "closed") || Objects.equals(ampComponentFunding.getComponentFundingStatusFormatted(), "closed")){
+            //workflow close
+            CloseWFItemModel closeWFItemModel = new CloseWFItemModel();
+            closeWFItemModel.setApiVersion(getSettingValue(settings, "apiVersion"));
+            CloseWFItemModel.Data data = new CloseWFItemModel.Data();
+            data.setProjectId(projectId);
+            data.setSubprojectId(subProjectId);
+            data.setWorkflowitemId(workFlowItemId);
+            data.setRejectReason(rejectReason);
+            closeWFItemModel.setData(data);
+
+            GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/workflowitem.close", closeWFItemModel, CloseWFItemModel.class, String.class, token)
+                    .subscribe(res -> {
+                        logger.info("WF close response: "+res);
+                    });
+
+
+        }
     }
 
     public static String convertToISO8601(Date date) {

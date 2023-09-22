@@ -26,6 +26,16 @@ public class CloseWFItemModel {
         private String subprojectId;
         private String workflowitemId;
 
+        public String getRejectReason() {
+            return rejectReason;
+        }
+
+        public void setRejectReason(String rejectReason) {
+            this.rejectReason = rejectReason;
+        }
+
+        private String rejectReason;
+
         public String getProjectId() {
             return projectId;
         }

@@ -24,6 +24,9 @@ public class FMSettingsMediator {
     public static final String FMGROUP_MODULES = "MODULES";
     public static final String FMGROUP_MENU = "MENU";
 
+    public static final String MODULE_GIS = "/GIS";
+    public static final String MODULE_MAP = "Map";
+
     /** stores all fm groups classes that are manageable via this proxy */
     private static Map<String, Class<? extends FMSettings>> registeredFMGroups = initFMGroups();
     
@@ -57,8 +60,8 @@ public class FMSettingsMediator {
         if (fmGroup != null) {
             Set<String> enabledSettings = fmGroup.getEnabledSettings(templateId);
             if (Objects.equals(fmGroupName, FMGROUP_MENU)) {
-                if (!FeaturesUtil.isVisibleModule("/GIS")) {
-                    enabledSettings.remove("Map");
+                if (!FeaturesUtil.isVisibleModule(MODULE_GIS)) {
+                    enabledSettings.remove(MODULE_MAP);
                 }
             }
 

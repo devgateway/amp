@@ -55,4 +55,4 @@ public class OrganizationType {
         this.id = id;
     }
 
-}
+ }

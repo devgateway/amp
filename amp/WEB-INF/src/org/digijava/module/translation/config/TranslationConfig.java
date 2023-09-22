@@ -25,7 +25,6 @@ package org.digijava.module.translation.config;
 import org.apache.commons.digester.Digester;
 import org.digijava.kernel.config.KeyValuePair;
 import org.digijava.kernel.util.DigesterFactory;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;

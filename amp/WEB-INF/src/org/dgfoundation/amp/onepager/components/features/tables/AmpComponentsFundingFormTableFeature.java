@@ -65,12 +65,22 @@ public class AmpComponentsFundingFormTableFeature extends
                 try{
                     AmpCategorySelectFieldPanel adjustmentTypes = new AmpCategorySelectFieldPanel(
                             "adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_KEY,
-                            new PropertyModel<AmpCategoryValue>(model,"adjustmentType"),
+                            new PropertyModel<>(model, "adjustmentType"),
                             COMPONENT_FUNDING_ADJUSTMENT_TYPE, //fmname
                             false, false, false, null, false);
                     adjustmentTypes.getChoiceContainer().setRequired(true);
                     adjustmentTypes.getChoiceContainer().add(new AttributeModifier("style", "width: 100px;"));
                     item.add(adjustmentTypes);
+
+
+                    AmpCategorySelectFieldPanel componentFundingStatus = new AmpCategorySelectFieldPanel(
+                            "componentFundingStatus", CategoryConstants.COMPONENT_FUNDING_STATUS_KEY,
+                            new PropertyModel<>(model, "componentFundingStatus"),
+                            COMPONENT_FUNDING_STATUS, //fmname
+                            false, false, false, null, false);
+                    componentFundingStatus.getChoiceContainer().setRequired(true);
+                    componentFundingStatus.getChoiceContainer().add(new AttributeModifier("style", "width: 100px;"));
+                        item.add(componentFundingStatus);
 
                 } catch(Exception e) {
                     logger.error("AmpCategoryGroupFieldPanel initialization failed");
@@ -93,13 +103,13 @@ public class AmpComponentsFundingFormTableFeature extends
                         model, orgsList);
                 item.add(secondOrgSelect);
 
-                AmpFundingAmountComponent amountComponent = new AmpFundingAmountComponent<AmpComponentFunding>("fundingAmount",
+                AmpFundingAmountComponent amountComponent = new AmpFundingAmountComponent<>("fundingAmount",
                         model, COMPONENT_FUNDING_AMOUNT, "transactionAmount", COMPONENT_FUNDING_CURRENCY,
-                        "currency", COMPONENT_FUNDING_TRANSACTION_DATE, "transactionDate", false,"6");
+                        "currency", COMPONENT_FUNDING_TRANSACTION_DATE, "transactionDate", false, "6");
                 amountComponent.getAmount().getTextContainer().setRequired(false);
                 item.add(amountComponent);
 
-                AmpTextFieldPanel<String> description = new AmpTextFieldPanel<String>("description", new PropertyModel<String>(model, "description"), COMPONENT_FUNDING_DESCRIPTION, false);
+                AmpTextFieldPanel<String> description = new AmpTextFieldPanel<>("description", new PropertyModel<>(model, "description"), COMPONENT_FUNDING_DESCRIPTION, false);
                 item.add(description);
 
                 item.add(new ListEditorRemoveButton("delete", "Delete"));
@@ -114,8 +124,8 @@ public class AmpComponentsFundingFormTableFeature extends
                                                                        IModel<AmpComponentFunding> model,
                                                                        AbstractReadOnlyModel<List<AmpOrganisation>>
                                                                                orgsList) {
-        AmpSelectFieldPanel<AmpOrganisation> selectField = new AmpSelectFieldPanel<AmpOrganisation>(id,
-                new PropertyModel<AmpOrganisation>(model, expression), orgsList, fmName
+        AmpSelectFieldPanel<AmpOrganisation> selectField = new AmpSelectFieldPanel<>(id,
+                new PropertyModel<>(model, expression), orgsList, fmName
                 , false, true, null, false);
         selectField.add(UpdateEventBehavior.of(FundingOrgListUpdateEvent.class));
         selectField.getChoiceContainer().add(new AttributeModifier("style", "width: 100px;"));
@@ -135,16 +145,13 @@ public class AmpComponentsFundingFormTableFeature extends
 
             @Override
             public List<AmpComponentFunding> getObject() {
-                List<AmpComponentFunding> result = new ArrayList<AmpComponentFunding>();
+                List<AmpComponentFunding> result = new ArrayList<>();
                 Set<AmpComponentFunding> allComp = compFundsModel.getObject();
                 if (allComp != null){
-                    Iterator<AmpComponentFunding> iterator = allComp.iterator();
-                    while (iterator.hasNext()) {
-                        AmpComponentFunding comp = (AmpComponentFunding) iterator
-                        .next();
+                    for (AmpComponentFunding comp : allComp) {
                         if (comp.getTransactionType() == transactionType)
                             //if (comp.getComponent().hashCode() == componentModel.getObject().hashCode())
-                                result.add(comp);
+                            result.add(comp);
                     }
                 }
                 

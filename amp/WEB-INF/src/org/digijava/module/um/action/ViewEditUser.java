@@ -426,8 +426,7 @@ public class ViewEditUser extends Action {
                             saveErrors(request, errors);
 
                         } else {
-                            UserUtils.setPassword(user, newPassword);
-                            DbUtil.updateUser(user);
+                            DbUtil.updatePassword(user.getEmail(), newPassword);
                             uForm.setDisplaySuccessMessage(true);
                         }
                     }

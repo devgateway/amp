@@ -172,7 +172,9 @@ export function loadActivityForActivityPreview(activityId) {
         const fundings = activity[ActivityConstants.FUNDINGS];
         if (activity[ActivityConstants.PPC_AMOUNT] && activityFundingInformation[ActivityConstants.PPC_AMOUNT]) {
             activity[ActivityConstants.PPC_AMOUNT].amount = activityFundingInformation[ActivityConstants.PPC_AMOUNT];
-            activity[ActivityConstants.PPC_AMOUNT].currency.value = currencyCode;
+            if (activity[ActivityConstants.PPC_AMOUNT].currency !== undefined) {
+                activity[ActivityConstants.PPC_AMOUNT].currency.value = currencyCode;
+            }
         }
         const transactions = [...FieldPathConstants.TRANSACTION_TYPES,
         ActivityConstants.ESTIMATED_DISBURSEMENTS, ActivityConstants.MTEF_PROJECTIONS];

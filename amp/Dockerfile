@@ -14,7 +14,6 @@ RUN --mount=type=cache,target=/root/.npm \
 
 FROM node as compile-amp-boilerplate
 WORKDIR /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-boilerplate
-COPY TEMPLATE/ampTemplate/node_modules/amp-boilerplate/.git .
 COPY TEMPLATE/ampTemplate/node_modules/amp-boilerplate .
 COPY --from=compile-amp-translate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-translate ../amp-translate
 RUN --mount=type=cache,target=/root/.npm \
@@ -23,7 +22,6 @@ RUN --mount=type=cache,target=/root/.npm \
 
 FROM node as compile-amp-filter
 WORKDIR /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-filter
-COPY TEMPLATE/ampTemplate/node_modules/amp-filter/.git .
 COPY --from=compile-amp-translate /tmp/amp/TEMPLATE/ampTemplate/node_modules/amp-translate ../amp-translate
 COPY TEMPLATE/ampTemplate/node_modules/amp-filter .
 # HACK otherwise amp-filter won't compile!
@@ -115,7 +113,7 @@ COPY --from=compile-gis-layers-manager /tmp/amp/TEMPLATE/ampTemplate/node_module
 COPY --from=compile-gis-module /tmp/amp/TEMPLATE/ampTemplate/gisModule/dist TEMPLATE/ampTemplate/gisModule/dist
 COPY --from=compile-dashboard /tmp/amp/TEMPLATE/ampTemplate/dashboard/build TEMPLATE/ampTemplate/dashboard/build
 COPY --from=compile-reamp /tmp/amp/TEMPLATE/reamp TEMPLATE/reamp
-COPY --from=compile-reampv2 /tmp/amp/TEMPLATE/reampv2 TEMPLATE/reampv2
+COPY --from=compile-reampv2 /tmp/amp/TEMPLATE/reampv2/build TEMPLATE/reampv2/build
 ARG BUILD_SOURCE
 RUN --mount=type=cache,target=/root/.m2 \
     mvn -B test war:exploded \

@@ -97,7 +97,7 @@
 
 	<http pattern="/TEMPLATE/reamp/modules/ampoffline/download/**" security="none" />
 	<http pattern="/TEMPLATE/reamp/modules/activity/preview/**" security="none" />
-	<http pattern="/TEMPLATE/reampv2/**" security="none" />
+	<http pattern="/TEMPLATE/reampv2/build/**" security="none" />
 
     <http pattern="/TEMPLATE/ampTemplate/saikuui_reports/**" security="none" />
 

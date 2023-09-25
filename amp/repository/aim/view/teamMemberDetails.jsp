@@ -89,7 +89,7 @@
 										</digi:link>
 										<span class="breadcrump_sep"><b>�</b></span>
 										<c:set var="translation">
-										su	<digi:trn key="aim:clickToViewWorkspaceOverview">Click here to view Workspace Overview</digi:trn>
+											<digi:trn key="aim:clickToViewWorkspaceOverview">Click here to view Workspace Overview</digi:trn>
 										</c:set>
 										<digi:link href="/workspaceOverview.do" name="bcparams" styleClass="l_sm" title="${translation}">
 										<digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn></digi:link>

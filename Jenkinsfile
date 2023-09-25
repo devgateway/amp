@@ -52,6 +52,7 @@ def countries
 def environment
 
 stage('Build') {
+
     timeout(15) {
         milestone()
         environment = input(
@@ -108,13 +109,11 @@ stage('Build') {
 
                 sshagent(credentials: ['GitHubDgReadOnlyKey']) {
                     withEnv(['DOCKER_BUILDKIT=1']) {
-                        sh "ssh-add -L"
                         sh "docker build " +
                                 "--progress=plain " +
                                 "--ssh default " +
                                 "-t ${image} " +
                                 "--build-arg BUILD_SOURCE='${tag}' " +
-                                "--build-arg AMP_URL='${ampUrl}' " +
                                 "--build-arg AMP_PULL_REQUEST='${pr}' " +
                                 "--build-arg AMP_BRANCH='${branch}' " +
                                 "--build-arg AMP_REGISTRY_PRIVATE_KEY='${registryKey}' " +

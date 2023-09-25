@@ -254,7 +254,7 @@ public class DbUtil {
     }
 
     public static List getGroupUsers(Long id) throws AdminException {
-        ArrayList users = new ArrayList();
+        List<User> users = new ArrayList();
         ;
         Session session = null;
         try {
@@ -299,7 +299,7 @@ public class DbUtil {
             for (Long userId : userIds) {
                 User user = session.load(User.class, userId);
                 user.getGroups().add(group);
-                session.save(user);
+                session.saveOrUpdate(user);
             }
             session.flush();
             // tx.commit();
@@ -312,7 +312,7 @@ public class DbUtil {
     public static List searchSite(String siteKey) throws AdminException {
 
         Session session = null;
-        List siteList = new ArrayList();
+        List siteList = new ArrayList<>();
 
         try {
             session = PersistenceManager.getSession();

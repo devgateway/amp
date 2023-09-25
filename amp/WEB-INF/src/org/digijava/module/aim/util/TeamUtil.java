@@ -879,7 +879,6 @@ public class TeamUtil {
                 team.setTeamLead(member);
                 session.saveOrUpdate(team);
             }
-            session.flush();
             User user = session.load(User.class, member.getUser().getId());
             String qryStr = "select grp from " + Group.class.getName()
                 + " grp " + "where (grp.key=:key) and (grp.site=:sid)";
@@ -891,6 +890,9 @@ public class TeamUtil {
             if(itr.hasNext())
                 group = (Group) itr.next();
             user.getGroups().add(group);
+            session.saveOrUpdate(user);
+            session.flush();
+
             //tx.commit();
             logger.debug("User added to group " + group.getName());
         } catch(Exception e) {

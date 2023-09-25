@@ -260,9 +260,7 @@ public class DbUtil {
         try {
             session = PersistenceManager.getSession();
             Group group = (Group) session.load(Group.class, id);
-            Iterator iter = group.getUsers().iterator();
-            while (iter.hasNext()) {
-                User user = (User) iter.next();
+            for (User user : group.getUsers()) {
                 users.add(user);
             }
 
@@ -281,6 +279,8 @@ public class DbUtil {
             Group group = (Group) session.load(Group.class, groupId);
             User user = (User) session.load(User.class, userId);
             user.getGroups().remove(group);
+            session.save(user);
+            session.flush();
             // tx.commit();
         } catch (Exception ex) {
             logger.debug("Unable to remove User from group ", ex);

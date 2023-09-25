@@ -185,16 +185,16 @@ public class DbUtil {
         Group group = null;
         Session session = null;
         try {
-            session = PersistenceManager.getSession();
+            session = PersistenceManager.getRequestDBSession();
             Iterator iter = null;
             String queryString = "select g from " + Group.class.getName() + " g where g.key=:key";
-            Query query = session.createQuery(queryString);
+            Query<Group> query = session.createQuery(queryString, Group.class);
             query.setParameter("key", key,StringType.INSTANCE);
-            iter = query.iterate();
-            while (iter.hasNext()) {
-                group = (Group) iter.next();
-                break;
-            }
+            group = (Group) query.stream().findAny().orElse(null);
+//            while (iter.hasNext()) {
+//                group = (Group) iter.next();
+//                break;
+//            }
         } catch (Exception ex) {
             logger.debug("Unable to get group from database ", ex);
             throw new AdminException("Unable to get group from database ", ex);

@@ -886,9 +886,9 @@ public class TeamUtil {
             qry.setParameter("key", Group.EDITORS, StringType.INSTANCE);
             qry.setParameter("sid", site.getId(), LongType.INSTANCE);
             Iterator itr = qry.list().iterator();
-            Group group = null;
-            if(itr.hasNext())
-                group = (Group) itr.next();
+            Group group =(Group) qry.stream().findAny().orElse(null);
+//            if(itr.hasNext())
+//                group = (Group) itr.next();
             user.getGroups().add(group);
             session.saveOrUpdate(user);
             session.flush();

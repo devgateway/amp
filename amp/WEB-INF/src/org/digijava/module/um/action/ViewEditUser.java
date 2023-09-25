@@ -393,9 +393,9 @@ public class ViewEditUser extends Action {
                 Long wId = new Long(request.getParameter("wId"));
                 TeamMemberUtil.removeTeamMembers(new Long[]{wId});
                 Collection asWS = uForm.getAssignedWorkspaces();
-                for(java.util.Iterator it = asWS.iterator(); it.hasNext(); ){
-                    AmpTeamMember newMember = (AmpTeamMember)it.next();
-                    if(newMember.getAmpTeamMemId().compareTo(wId)==0){
+                for (Object asW : asWS) {
+                    AmpTeamMember newMember = (AmpTeamMember) asW;
+                    if (newMember.getAmpTeamMemId().compareTo(wId) == 0) {
                         asWS.remove(newMember);
                         break;
                     }

@@ -395,6 +395,7 @@ public class DbUtil {
             if(user.getUserLangPreferences()!=null){
                 UserUtils.saveUserLangPreferences(user.getUserLangPreferences());
             }
+            session.flush();
         } catch(Exception ex) {
             logger.debug("Unable to update user information into database", ex);
 

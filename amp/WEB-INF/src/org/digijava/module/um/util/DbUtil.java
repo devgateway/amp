@@ -233,16 +233,16 @@ public class DbUtil {
                                       String newPassword) throws
         UMException {
 
-        Session session = null;
+        Session session;
         try {
-            session = PersistenceManager.getSession();
+            session = PersistenceManager.getRequestDBSession();
 
             User userToUpdate = UserUtils.getUserByEmailAddress(user);
             userToUpdate.setPassword(ShaCrypt.crypt(newPassword.trim()).trim());
-            userToUpdate.setSalt(new Long(newPassword.trim().hashCode()).toString());
+            userToUpdate.setSalt(Long.toString(newPassword.trim().hashCode()));
             userToUpdate.updateLastModified();
             session.saveOrUpdate(userToUpdate);
-            session.getTransaction().commit();
+            session.flush();
 
         } catch(Exception ex) {
             logger.debug("Unable to update user information into database", ex);

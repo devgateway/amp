@@ -7,4 +7,3 @@
 [submodule "amp/TEMPLATE/ampTemplate/node_modules/amp-filter"]
 	path = amp/TEMPLATE/ampTemplate/node_modules/amp-filter
 	url = https://github.com/devgateway/amp-filter.git
-	branch = main

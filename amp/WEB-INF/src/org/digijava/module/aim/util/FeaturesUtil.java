@@ -24,7 +24,6 @@ import org.hibernate.type.IntegerType;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
 
-import javax.persistence.TypedQuery;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import java.util.*;
@@ -41,9 +40,9 @@ public class FeaturesUtil {
     private static Map<String, AmpGlobalSettings> globalSettingsCache = null;
 
     public static String errorLog = "";
-
+    
     public final static String AMP_TREE_VISIBILITY_ATTR = "ampTreeVisibility";
-
+    
     public static void logGlobalSettingsCache() {
         String log = "";
         for (AmpGlobalSettings ampGlobalSetting:globalSettingsCache.values()) {
@@ -56,7 +55,7 @@ public class FeaturesUtil {
     public static synchronized Map<String, AmpGlobalSettings> getGlobalSettingsCache() {
         return globalSettingsCache;
     }
-
+    
     public static synchronized void buildGlobalSettingsCache(List<AmpGlobalSettings> globalSettings) {
         globalSettingsCache = new HashMap<String, AmpGlobalSettings>();
         for (AmpGlobalSettings sett : globalSettings) {
@@ -87,22 +86,22 @@ public class FeaturesUtil {
         for (AmpTemplatesVisibility tv : templates) {
             tv.setUsedByTeamsNames(getAssignedToTeams(tv.getId()));
         }
-    }
-
-    public static Double applyThousandsForVisibility(Double amount)
+    }   
+    
+    public static Double applyThousandsForVisibility(Double amount) 
     {
         if (amount == null)
             return null;
         return amount / AmountsUnits.getDefaultValue().divider;
     }
 
-    public static Double applyThousandsForEntry(Double amount)
+    public static Double applyThousandsForEntry(Double amount) 
     {
         if (amount == null)
             return null;
         return amount * AmountsUnits.getDefaultValue().divider;
     }
-
+    
     public static Collection getAMPFeatures() {
         Session session = null;
         Collection col = new ArrayList();
@@ -155,7 +154,7 @@ public class FeaturesUtil {
         return getTemplateFeatures(template.getTemplateId());
 
     }
-
+    
     public static FeatureTemplates getActiveTemplate(){
         FeatureTemplates template = getTemplate(getGlobalSettingValue(GlobalSettingsConstants.FEATURE_TEMPLATE));
         return template;
@@ -164,12 +163,12 @@ public class FeaturesUtil {
     public static AmpFeature toggleFeature(Integer featureId) {
         Session session = null;
         AmpFeature feature = null;
-
+        
         session = PersistenceManager.getSession();
         feature = (AmpFeature) session.load(AmpFeature.class,featureId);
         feature.setActive(!feature.isActive());
         session.update(feature);
-
+    
         return feature;
     }
 
@@ -412,7 +411,7 @@ public class FeaturesUtil {
             logger.error(e.getMessage(), e);
         }
     }
-
+    
     public static AmpHomeThumbnail getAmpHomeThumbnail(int placeholder) {
         Session session = null;
         Query q = null;
@@ -430,10 +429,10 @@ public class FeaturesUtil {
                 thumbnail=(AmpHomeThumbnail) c.iterator().next();
         } catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
-        }
+        } 
         return thumbnail;
     }
-
+    
     public static Collection getAllCountryFlags() {
         Session session = null;
         Collection col = new ArrayList();
@@ -611,7 +610,7 @@ public class FeaturesUtil {
     }
 
     public static AmpGlobalSettings getGlobalSetting(String globalSettingName) {
-
+        
         AmpGlobalSettings ampGlobalSettings = null;
         List<AmpGlobalSettings> coll = null;
         Session session = null;
@@ -635,7 +634,7 @@ public class FeaturesUtil {
             return null;
         return ampGlobalSettings;
     }
-
+    
 
     public static void updateGlobalSetting(AmpGlobalSettings ampGlobalSettings) {
         Session session = null;
@@ -659,7 +658,7 @@ public class FeaturesUtil {
             }
         }
     }
-
+    
     public static String getGlobalSettingValue(String globalSettingName) {
         if (globalSettingsCache == null)
             buildGlobalSettingsCache(getGlobalSettings());
@@ -669,7 +668,7 @@ public class FeaturesUtil {
             return null;
         return value.getGlobalSettingsValue();
     }
-
+    
     public static boolean getGlobalSettingValueBoolean(String globalSettingName) {
         String globalValue = getGlobalSettingValue(globalSettingName);
         return (globalValue != null && globalValue.equalsIgnoreCase("true"));
@@ -693,7 +692,7 @@ public class FeaturesUtil {
         String globalValue = getGlobalSettingValue(globalSettingName);
         return globalValue != null ? Long.parseLong(globalValue) : -1l;
     }
-
+    
     public static Integer getGlobalSettingValueInteger(String globalSettingName) {
         String globalValue = getGlobalSettingValue(globalSettingName);
         return globalValue != null ? Integer.parseInt(globalValue) : -1;
@@ -709,7 +708,7 @@ public class FeaturesUtil {
         ret = getGlobalSettingValue(key).split(";");
         return ret;
     }
-
+    
     /*
      * edited by Govind G Dalwani
      */
@@ -717,15 +716,50 @@ public class FeaturesUtil {
      * to get all the Global settings
      */
     public static List<AmpGlobalSettings> getGlobalSettings() {
+        List<AmpGlobalSettings> coll =  new ArrayList<>();
+        Session session = null;
+        String qryStr = null;
+        Query qry = null;
         try {
-            Session session = PersistenceManager.getRequestDBSession();
-            String queryString = String.format("FROM %s", AmpGlobalSettings.class.getName());
-            TypedQuery<AmpGlobalSettings> query = session.createQuery(queryString, AmpGlobalSettings.class);
-            return query.getResultList();
-        } catch (Exception e) {
-            logger.error("Cannot load Global Settings list", e);
-            return Collections.emptyList();
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "SELECT gs.globalId, gs.globalSettingsName, gs.globalSettingsValue, gs.globalSettingsPossibleValues, " +
+                    "gs.globalSettingsDescription, gs.section, gs.valueTranslatable " +
+                    "FROM " + AmpGlobalSettings.class.getName() + " gs ";
+
+            Query<Object[]> query = session.createQuery(queryString, Object[].class);
+            List<Object[]> resultList = query.getResultList();
+
+//            List<AmpGlobalSettings> ampGlobalSettingsList = new ArrayList<>();
+            for (Object[] result : resultList) {
+                Long globalId = (Long) result[0];
+                String globalSettingsName = (String) result[1];
+                String globalSettingsValue = (String) result[2];
+                String globalSettingsPossibleValues = (String) result[3];
+                String globalSettingsDescription = (String) result[4];
+                String section = (String) result[5];
+                Boolean valueTranslatable = (Boolean) result[6];
+//                Map<String, String> possibleValuesIds = (Map<String, String>) result[7];
+
+                AmpGlobalSettings ampGlobalSettings = new AmpGlobalSettings();
+                ampGlobalSettings.setGlobalId(globalId);
+                ampGlobalSettings.setGlobalSettingsName(globalSettingsName);
+                ampGlobalSettings.setGlobalSettingsValue(globalSettingsValue);
+                ampGlobalSettings.setGlobalSettingsPossibleValues(globalSettingsPossibleValues);
+                ampGlobalSettings.setGlobalSettingsDescription(globalSettingsDescription);
+                ampGlobalSettings.setSection(section);
+                ampGlobalSettings.setValueTranslatable(valueTranslatable);
+
+                coll.add(ampGlobalSettings);
+            }
+
+//            qryStr = "select gs from " + AmpGlobalSettings.class.getName() + " gs ";
+//            qry = session.createQuery(qryStr, AmpGlobalSettings.class);
+//            coll = qry.list();
         }
+        catch (Exception ex) {
+            logger.error(ex, ex);
+        }
+        return coll;
     }
 
     /*

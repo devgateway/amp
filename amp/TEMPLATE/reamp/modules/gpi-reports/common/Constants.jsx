@@ -4,7 +4,6 @@ export const CALENDAR_SETTING = 'calendar-id';
 export const ETH_BASE_CALENDAR = 'ETH-CAL';
 export const GREG_BASE_CALENDAR = 'GREG-CAL';
 export const EP_DATE_FORMAT =  'YYYY-MM-DD';
-export const CALENDAR_IS_FISCAL = 'is-fiscal';
 
 export const NATIONAL_BUDGET_EXECUTION_PROCEDURES = 'National Budget Execution Procedures';
 export const NATIONAL_FINANCIAL_REPORTING_PROCEDURES = 'National Financial Reporting Procedures';

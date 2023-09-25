@@ -21,7 +21,6 @@ import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
-import org.digijava.module.trubudget.util.ProjectUtil;
 import org.digijava.module.um.model.TruLoginRequest;
 import org.digijava.module.um.model.TruLoginResponse;
 import org.digijava.module.um.util.UmUtil;

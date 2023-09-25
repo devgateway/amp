@@ -18,6 +18,7 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 
 import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.*;
 
@@ -29,6 +30,8 @@ public class AmpComponentFunding implements Cloneable, Serializable {
     private Long ampComponentFundingId;
 
     private Integer transactionType;
+
+//    private Set<AmpComponentFundingDocuments> fundingDocuments;
 
 
 

@@ -12,6 +12,7 @@ import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpNewResourceFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.events.FundingOrgListUpdateEvent;
@@ -119,6 +120,11 @@ public class AmpComponentsFundingFormTableFeature extends
 
                 AmpTextFieldPanel<String> description = new AmpTextFieldPanel<>("description", new PropertyModel<>(model, "description"), COMPONENT_FUNDING_DESCRIPTION, false);
                 item.add(description);
+
+//                final AmpNewResourceFieldPanel<AmpActivityVersion> newDoc =
+//                        new AmpNewResourceFieldPanel<AmpActivityVersion>("addNewDocument", am, "Add New Document", resourcesList, false);
+//                newDoc.setOutputMarkupId(true);
+//                add(newDoc);
 
                 item.add(new ListEditorRemoveButton("delete", "Delete"));
             }

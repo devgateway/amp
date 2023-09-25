@@ -64,10 +64,7 @@ public class AmpActivityDocument extends ObjectReferringDocument implements Seri
         AmpActivityDocument aux = (AmpActivityDocument) obj;
         String original = this.getUuid() != null ? this.getUuid() : "";
         String copy = aux.getUuid() != null ? aux.getUuid() : "";
-        if (original.equals(copy)) {
-            return true;
-        }
-        return false;
+        return original.equals(copy);
     }
 
     @Override

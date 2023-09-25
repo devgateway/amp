@@ -80,7 +80,7 @@ public class AddUserForm  extends ValidatorForm {
     private Collection navigationLanguages;
     private Collection<TruBudgetIntent> truBudgetIntents;
     private String truBudgetPassword;
-    private String[] selectedTruBudgetIntents;
+    private String[] selectedTruBudgetIntents={};
     private String selectedLanguage;
     private String[] contentSelectedLanguages;
     private String organizationTypeOther;

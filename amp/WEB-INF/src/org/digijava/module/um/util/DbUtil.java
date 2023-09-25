@@ -367,8 +367,8 @@ public class DbUtil {
     public static void updateUser(User user) throws
         UMException {
 
-        Transaction tx = null;
-        Session session = null;
+        Transaction tx;
+        Session session;
         try {
             session = PersistenceManager.getRequestDBSession();
             tx = session.getTransaction();

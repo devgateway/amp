@@ -70,7 +70,7 @@ public class User
     private Country country;
     private AmpCategoryValueLocations region;
     private HashMap sitePreferences;
-    private Set groups;
+    private Set<Group> groups=new HashSet<>();
     private HashMap siteContentLocales;
     private String address;
     private Image photo;
@@ -260,7 +260,7 @@ public class User
         return registeredThrough;
     }
 
-    public Set getGroups() {
+    public Set<Group> getGroups() {
         return groups;
     }
 
@@ -324,7 +324,7 @@ public class User
         this.banned = banned;
     }
 
-    public void setGroups(Set groups) {
+    public void setGroups(Set<Group> groups) {
         this.groups = groups;
     }
 
@@ -477,9 +477,7 @@ public class User
             return false;
         }
 
-        Iterator<AmpOrganisation> it = this.assignedOrgs.iterator();
-        while (it.hasNext()) {
-            AmpOrganisation currentOrganization = it.next();
+        for (AmpOrganisation currentOrganization : this.assignedOrgs) {
             if (DbUtil.hasDonorRole(currentOrganization.getAmpOrgId()))
                 return true;
         }

@@ -70,7 +70,7 @@ public class Group
 
     private Site site;
     private String key;
-    private Set users;
+    private Set<User> users=new HashSet<>();
     private Set<AmpMenuEntryInView> menuEntries= new HashSet<>();
 
     public Set<AmpMenuEntryInView> getMenuEntries() {
@@ -192,11 +192,11 @@ public class Group
         return null;
     }
 
-    public Set getUsers() {
+    public Set<User> getUsers() {
         return users;
     }
 
-    public void setUsers(Set users) {
+    public void setUsers(Set<User> users) {
         this.users = users;
     }
 

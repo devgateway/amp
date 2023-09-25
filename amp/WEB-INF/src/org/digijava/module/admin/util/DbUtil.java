@@ -294,12 +294,13 @@ public class DbUtil {
         try {
             session = PersistenceManager.getSession();
             // beginTransaction();
-            Group group = (Group) session.load(Group.class, groupId);
-            for (int i = 0; i < userIds.length; i++) {
-                User user = (User) session.load(User.class, userIds[i]);
+            Group group = session.load(Group.class, groupId);
+            for (Long userId : userIds) {
+                User user = session.load(User.class, userId);
                 user.getGroups().add(group);
+                session.save(user);
             }
-            // tx.commit();
+            session.flush();
         } catch (Exception ex) {
             logger.debug("Unable to add Users to group ", ex);
             throw new AdminException("Unable to add Users to group ", ex);

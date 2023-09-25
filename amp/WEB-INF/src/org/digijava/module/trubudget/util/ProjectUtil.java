@@ -190,6 +190,18 @@ public class ProjectUtil {
         createUpdateSubProjects(ampActivityVersion, projectId,settings);
 
     }
+
+    public static void closeProject(AmpActivityVersion ampActivityVersion,List<AmpGlobalSettings>settings,String projectId, String token) throws URISyntaxException {
+        CloseProjectModel closeProjectModel = new CloseProjectModel();
+        closeProjectModel.setApiVersion(getSettingValue(settings, "apiVersion"));
+        CloseProjectModel.Data data = new CloseProjectModel.Data();
+        data.setProjectId(projectId);
+        closeProjectModel.setData(data);
+
+            GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/project.close", closeProjectModel, CloseProjectModel.class, String.class, token)
+                    .subscribe(res -> logger.info("WF close response: "+res));
+
+    }
     public static void createUpdateSubProjects(AmpActivityVersion ampActivityVersion, String projectId, List<AmpGlobalSettings> settings) throws URISyntaxException {
 
         AbstractCache myCache = new EhCacheWrapper("trubudget");
@@ -408,20 +420,18 @@ public class ProjectUtil {
             closeWFItemModel.setData(data);
 
             GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/workflowitem.close", closeWFItemModel, CloseWFItemModel.class, String.class, token)
-                    .subscribe(res -> {
-                        logger.info("WF close response: "+res);
-                    });
+                    .subscribe(res -> logger.info("WF close response: "+res));
 
 
         }
     }
 
-    public static String convertToISO8601(Date date) {
+    private static String convertToISO8601(Date date) {
         Instant instant = date.toInstant();
         return instant.toString();
     }
 
-    public static String convertToISO8601AndAddDays(Date date, int daysToAdd) {
+    private static String convertToISO8601AndAddDays(Date date, int daysToAdd) {
         LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         LocalDate newLocalDate = localDate.plusDays(daysToAdd);
          date = Date.from(newLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant());

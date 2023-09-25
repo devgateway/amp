@@ -1217,27 +1217,27 @@ public class FeaturesUtil {
         Session hbsession=null;
         try {
             hbsession=PersistenceManager.getRequestDBSession();
-            AmpTemplatesVisibility ft = hbsession.load(AmpTemplatesVisibility.class,id);
+            AmpTemplatesVisibility ft = new AmpTemplatesVisibility();
+            ft = (AmpTemplatesVisibility) hbsession.load(AmpTemplatesVisibility.class,id);
 
-            if (ft != null) {
-                for (AmpFieldsVisibility f : ft.getFields()) {
-                    f.getTemplates().remove(ft);
-                }
-                for (AmpFeaturesVisibility f : ft.getFeatures()) {
-                    f.getTemplates().remove(ft);
-                }
-                for (Iterator it = ft.getItems().iterator(); it.hasNext(); ) {
-                    AmpModulesVisibility f = (AmpModulesVisibility) it.next();
-                    f.getTemplates().remove(ft);
-                }
-
-                hbsession.delete(ft);
-                hbsession.getTransaction().commit();
+            for (AmpFieldsVisibility f:ft.getFields()) {
+                f.getTemplates().remove(ft);
             }
+            for (AmpFeaturesVisibility f:ft.getFeatures()) {
+                f.getTemplates().remove(ft);
+            }
+            for (Iterator it = ft.getItems().iterator(); it.hasNext();) {
+                AmpModulesVisibility f = (AmpModulesVisibility) it.next();
+                f.getTemplates().remove(ft);
+            }
+            ft.clearFields();
+            ft.getFeatures().clear();
+            ft.getItems().clear();
+            hbsession.delete(ft);
+            
         }
         catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
-            return false;
         }
         return true;
     }

@@ -276,8 +276,8 @@ public class DbUtil {
         try {
             session = PersistenceManager.getSession();
             // beginTransaction();
-            Group group = (Group) session.load(Group.class, groupId);
-            User user = (User) session.load(User.class, userId);
+            Group group = session.load(Group.class, groupId);
+            User user = session.load(User.class, userId);
             user.getGroups().remove(group);
             session.save(user);
             session.flush();

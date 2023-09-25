@@ -274,13 +274,15 @@ public class DbUtil {
     }
 
     public static void removeUserFromGroup(Long groupId, Long userId) throws AdminException {
-        Session session = null;
+        Session session;
         try {
             session = PersistenceManager.getSession();
             // beginTransaction();
-            Group group = (Group) session.load(Group.class, groupId);
-            User user = (User) session.load(User.class, userId);
+            Group group = session.load(Group.class, groupId);
+            User user = session.load(User.class, userId);
             user.getGroups().remove(group);
+            session.save(user);
+            session.flush();
             // tx.commit();
         } catch (Exception ex) {
             logger.debug("Unable to remove User from group ", ex);
@@ -294,11 +296,13 @@ public class DbUtil {
         try {
             session = PersistenceManager.getSession();
             // beginTransaction();
-            Group group = (Group) session.load(Group.class, groupId);
-            for (int i = 0; i < userIds.length; i++) {
-                User user = (User) session.load(User.class, userIds[i]);
+            Group group = session.load(Group.class, groupId);
+            for (Long userId : userIds) {
+                User user = session.load(User.class, userId);
                 user.getGroups().add(group);
+                session.save(user);
             }
+            session.flush();
             // tx.commit();
         } catch (Exception ex) {
             logger.debug("Unable to add Users to group ", ex);

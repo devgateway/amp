@@ -259,10 +259,9 @@ public class DbUtil {
         Session session = null;
         try {
             session = PersistenceManager.getSession();
-            Group group = (Group) session.load(Group.class, id);
-            Iterator iter = group.getUsers().iterator();
-            while (iter.hasNext()) {
-                User user = (User) iter.next();
+            Group group = session.load(Group.class, id);
+            for (Object o : group.getUsers()) {
+                User user = (User) o;
                 users.add(user);
             }
 

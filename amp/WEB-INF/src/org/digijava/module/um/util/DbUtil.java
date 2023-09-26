@@ -56,6 +56,8 @@ import java.math.BigInteger;
 import java.net.URISyntaxException;
 import java.util.*;
 
+import static java.util.Objects.isNull;
+
 public class DbUtil {
     private static Logger logger = Logger.getLogger(DbUtil.class);
 
@@ -68,16 +70,18 @@ public class DbUtil {
                 getSession();
 
             String queryString = "from " + User.class.getName() + " rs where rs.email = :email";
-            Query query = sess.createQuery(queryString);
+            Query<User> query = sess.createQuery(queryString, User.class);
             query.setParameter("email", email, StringType.INSTANCE);
 
-            Iterator iter = query.iterate();
+//            Iterator iter = query.iterate();
+            User iterUser = query.stream().findAny().orElse(null);
+            userId = iterUser.getId();
 
-            while(iter.hasNext()) {
-                User iterUser = (User) iter.next();
-                userId = iterUser.getId().longValue();
-                break;
-            }
+//            while(iter.hasNext()) {
+//                User iterUser = (User) iter.next();
+//                userId = iterUser.getId().longValue();
+//                break;
+//            }
 
         } catch(Exception ex0) {
             logger.debug("Unable to get user information from database", ex0);
@@ -174,21 +178,23 @@ public class DbUtil {
         UMException {
 
         Transaction tx = null;
-        Session session = null;
+        Session session;
         try {
             session = org.digijava.kernel.persistence.PersistenceManager.
                 getSession();
 //beginTransaction();
             String queryString = "from " + User.class.getName() + " rs where rs.email = :email";
-            Query query = session.createQuery(queryString);
+            Query<User> query = session.createQuery(queryString, User.class);
             query.setParameter("email", email,StringType.INSTANCE);
 
-            Iterator iter = query.iterate();
-            User iterUser = null;
-            while(iter.hasNext()) {
-                iterUser = (User) iter.next();
-                break;
-            }
+//            Iterator iter = query.iterate();
+//            User iterUser = null;
+            User iterUser = query.stream().findAny().orElse(null);
+
+//            while(iter.hasNext()) {
+//                iterUser = (User) iter.next();
+//                break;
+//            }
             if(iterUser == null) {
                 logger.warn("Attempt to reset password for unknown user: " + email);
                 return false;
@@ -209,7 +215,7 @@ public class DbUtil {
             }
 
             iterUser.setPassword(ShaCrypt.crypt(newPassword.trim()).trim());
-            iterUser.setSalt(new Long(newPassword.trim().hashCode()).toString());
+            iterUser.setSalt(Long.toString(newPassword.trim().hashCode()));
             session.update(iterUser);
             session.delete(resetPassword);
             //tx.commit();
@@ -217,13 +223,6 @@ public class DbUtil {
         } catch(Exception ex) {
             logger.debug("Unable to update user information into database", ex);
 
-            if(tx != null) {
-                try {
-                    tx.rollback();
-                } catch(HibernateException ex1) {
-                    logger.warn("rollback() failed ", ex1);
-                }
-            }
             throw new UMException(
                 "Unable to update user information into database", ex);
         }
@@ -243,26 +242,26 @@ public class DbUtil {
                                       String newPassword) throws
         UMException {
 
-        Session session = null;
+        Session session;
         try {
             session = org.digijava.kernel.persistence.PersistenceManager.getSession();
 
             String queryString = "from " + User.class.getName() + " rs where trim(lower(rs.email)) = :email";
-            Query query = session.createQuery(queryString);
+            Query<User> query = session.createQuery(queryString, User.class);
             query.setParameter("email", user,StringType.INSTANCE);
 
-            Iterator iter = query.iterate();
-            User iterUser = null;
-            while(iter.hasNext()) {
-                iterUser = (User) iter.next();
+//            Iterator iter = query.iterate();
+            User iterUser = query.stream().findAny().orElse(null);
+//            while(iter.hasNext()) {
+//                iterUser = (User) iter.next();
+//            }
+            if (!isNull(iterUser)) {
+                iterUser.setPassword(ShaCrypt.crypt(newPassword.trim()).trim());
+                iterUser.setSalt(Long.toString(newPassword.trim().hashCode()));
+                iterUser.updateLastModified();
+                session.saveOrUpdate(iterUser);
+                session.flush();
             }
-//beginTransaction();
-            iterUser.setPassword(ShaCrypt.crypt(newPassword.trim()).trim());
-            iterUser.setSalt(new Long(newPassword.trim().hashCode()).toString());
-            iterUser.updateLastModified();
-            session.save(iterUser);
-
-            //tx.commit();
 
         } catch(Exception ex) {
             logger.debug("Unable to update user information into database", ex);

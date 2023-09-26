@@ -15,7 +15,9 @@ import org.digijava.module.categorymanager.dbentity.AmpLinkedCategoriesState;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.hibernate.type.EntityType;
 import org.hibernate.type.LongType;
+import org.hibernate.type.ObjectType;
 import org.hibernate.type.StringType;
 
 import java.lang.reflect.Field;
@@ -749,7 +751,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
                 ampCategoryValue.setValue(value);
                 ampCategoryValue.setAmpCategoryClass(ampCategoryClass);
                 ampCategoryValue.setIndex( ampCategoryClass.getPossibleValues().size() );
-                
+
                 List<AmpCategoryValue> tempList     = new ArrayList<AmpCategoryValue>();
                 tempList.addAll(ampCategoryClass.getPossibleValues());
                 tempList.add( ampCategoryValue );
@@ -783,18 +785,18 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
      */
     public static boolean verifyDeletionProtectionForCategoryValue (String categoryKey, String valueKey ) {
         Field[] fields  = CategoryConstants.class.getDeclaredFields();
-        for (int i=0; i< fields.length; i++  ) {
-            Class fieldClass    = fields[i].getType();
-            if ( fieldClass.equals( HardCodedCategoryValue.class ) ) {
+        for (Field field : fields) {
+            Class fieldClass = field.getType();
+            if (fieldClass.equals(HardCodedCategoryValue.class)) {
                 HardCodedCategoryValue proprietyValue;
                 try {
-                    proprietyValue = (HardCodedCategoryValue)fields[i].get(null);
+                    proprietyValue = (HardCodedCategoryValue) field.get(null);
                 } catch (Exception e) {
                     e.printStackTrace();
                     continue;
                 }
-                if ( proprietyValue.getCategoryKey().equals(categoryKey) 
-                        && proprietyValue.getValueKey().equals(valueKey) 
+                if (proprietyValue.getCategoryKey().equals(categoryKey)
+                        && proprietyValue.getValueKey().equals(valueKey)
                         && proprietyValue.isProtectOnDelete()) {
                     return true;
                 }
@@ -821,8 +823,8 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
             dbSession = PersistenceManager.getRequestDBSession();
             queryString = "select c from "  + AmpLinkedCategoriesState.class.getName()+ " c where c.mainCategory=:mainCategory and c.linkedCategory=:usedCategory";
             qry         = dbSession.createQuery(queryString);
-            qry.setEntity("mainCategory", mainCategory);
-            qry.setEntity("usedCategory", usedCategory);
+            qry.setParameter("mainCategory", mainCategory, ObjectType.INSTANCE);
+            qry.setParameter("usedCategory", usedCategory, ObjectType.INSTANCE);
             retVal = (AmpLinkedCategoriesState)qry.uniqueResult();
         } catch (Exception e) {
             logger.error("Failed to get state ", e);

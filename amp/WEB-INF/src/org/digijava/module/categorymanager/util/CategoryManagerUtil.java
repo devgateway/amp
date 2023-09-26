@@ -23,10 +23,7 @@ import org.hibernate.type.StringType;
 import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
-import java.nio.charset.CharacterCodingException;
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetDecoder;
-import java.nio.charset.CodingErrorAction;
+import java.nio.charset.*;
 import java.util.*;
 
 public class CategoryManagerUtil {
@@ -96,11 +93,9 @@ public class CategoryManagerUtil {
             logger.info("Couldn't get AmpCategoryValue because one of the parameters is null");
             return null;
         }
-        Iterator<AmpCategoryValue> iterator = col.iterator();
-        
-        while ( iterator.hasNext() ) {
-            AmpCategoryValue val        = iterator.next();
-            if ( ampCategoryValueId.equals(val.getId()) )
+
+        for (AmpCategoryValue val : col) {
+            if (ampCategoryValueId.equals(val.getId()))
                 return val;
         }
         return null;
@@ -118,10 +113,9 @@ public class CategoryManagerUtil {
             logger.info("Couldn't get AmpCategoryValue because one of the parameters is null");
             return null;
         }
-        Iterator iterator   = values.iterator();
-        while( iterator.hasNext() ) {
-            AmpCategoryValue ampCategoryValue   = (AmpCategoryValue)iterator.next();
-            if ( ampCategoryValue.getAmpCategoryClass().getId().longValue() == categoryId.longValue() ) {
+        for (Object value : values) {
+            AmpCategoryValue ampCategoryValue = (AmpCategoryValue) value;
+            if (ampCategoryValue.getAmpCategoryClass().getId().longValue() == categoryId.longValue()) {
                 return ampCategoryValue;
             }
         }
@@ -152,24 +146,20 @@ public class CategoryManagerUtil {
     public static List<AmpEventType>  getAmpEventColors() throws NoCategoryClassException{
 List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>(); 
         
-        AmpCategoryClass categoryClass = CategoryManagerUtil.loadAmpCategoryClassByKey(CategoryConstants.EVENT_TYPE_KEY);   
-        Iterator<AmpCategoryValue> categoryClassIter = categoryClass.getPossibleValues().iterator();
-         while(categoryClassIter.hasNext()){
+        AmpCategoryClass categoryClass = CategoryManagerUtil.loadAmpCategoryClassByKey(CategoryConstants.EVENT_TYPE_KEY);
+        for (AmpCategoryValue ampCategoryValue : categoryClass.getPossibleValues()) {
             AmpEventType eventType = new AmpEventType();
-            AmpCategoryValue item = (AmpCategoryValue) categoryClassIter.next();
-             eventType.setName(item.getValue());
-             eventType.setId(item.getId());
-             Set<AmpCategoryValue> usedValues = item.getUsedValues();
-             if (usedValues==null || usedValues.size()==0) {
-                 eventType.setColor("grey"); //here select grey color by default if it's not seted on category manager. Thus the event doesn't lose on calendar view.
-             } else {
-                Iterator<AmpCategoryValue> it = usedValues.iterator();
-                while (it.hasNext()){
-                    AmpCategoryValue categoryValueItem = (AmpCategoryValue) it.next();
+            eventType.setName(ampCategoryValue.getValue());
+            eventType.setId(ampCategoryValue.getId());
+            Set<AmpCategoryValue> usedValues = ampCategoryValue.getUsedValues();
+            if (usedValues == null || usedValues.size() == 0) {
+                eventType.setColor("grey"); //here select grey color by default if it's not seted on category manager. Thus the event doesn't lose on calendar view.
+            } else {
+                for (AmpCategoryValue categoryValueItem : usedValues) {
                     eventType.setColor(categoryValueItem.getValue());
                 }
-             }
-             eventTypeList.add(eventType);
+            }
+            eventTypeList.add(eventType);
         }
         return eventTypeList;
         
@@ -270,8 +260,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
             Iterator it=returnCollection.iterator();
             if(it.hasNext())
             {
-                AmpCategoryValue x=(AmpCategoryValue)it.next();
-                return x;
+                return (AmpCategoryValue)it.next();
             }
         }
         return null;
@@ -360,10 +349,8 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
         );
         if ( unorderedSet != null)  {       
             if ( categoryKey != null ) {
-                Iterator<AmpCategoryValue> iter     = unorderedSet.iterator();
-                while ( iter.hasNext() ) {
-                    AmpCategoryValue item               = iter.next();
-                    if ( item.getAmpCategoryClass().getKeyName().equals(categoryKey) )
+                for (AmpCategoryValue item : unorderedSet) {
+                    if (item.getAmpCategoryClass().getKeyName().equals(categoryKey))
                         returnSet.add(item);
                 }
             }
@@ -394,7 +381,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
                 + AmpCategoryClass.class.getName()
                 + " c where c.id=:id";
             qry         = dbSession.createQuery(queryString);
-            qry.setLong("id", categoryId);
+            qry.setParameter("id", categoryId, LongType.INSTANCE);
 
 
 
@@ -474,7 +461,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
             shouldOrderAlphabetically   = ampCategoryClass.getIsOrdered();
         }
         else
-            shouldOrderAlphabetically   = ordered.booleanValue();
+            shouldOrderAlphabetically   = ordered;
 
         List<AmpCategoryValue> ampCategoryValues            = ampCategoryClass.getPossibleValues();
 
@@ -494,8 +481,8 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
                 + " a where a.id=:id "
                 + (onlyVisible ? "and (a.deleted=false or a.deleted is null) " : "") 
                 + "and a.ampCategoryClass.keyName=:keyName")
-            .setParameter("id", id)
-            .setParameter("keyName", categoryKey)
+            .setParameter("id", id, LongType.INSTANCE)
+            .setParameter("keyName", categoryKey, StringType.INSTANCE)
             .uniqueResult();
         return count.intValue() == 1;
     }
@@ -612,7 +599,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
             shouldOrderAlphabetically   = ampCategoryClass.getIsOrdered();
         }
         else
-            shouldOrderAlphabetically   = ordered.booleanValue();
+            shouldOrderAlphabetically   = ordered;
     
         List<AmpCategoryValue> ampCategoryValues        = ampCategoryClass.getPossibleValues();
     
@@ -632,7 +619,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
     public static String asciiStringFilter (String input) {
         byte [] bytearray       = input.getBytes(); 
         
-        CharsetDecoder decoder  = Charset.forName("US-ASCII").newDecoder();
+        CharsetDecoder decoder  = StandardCharsets.US_ASCII.newDecoder();
         decoder.replaceWith("_");
         decoder.onMalformedInput(CodingErrorAction.REPLACE);
         decoder.onUnmappableCharacter(CodingErrorAction.REPLACE);
@@ -647,13 +634,11 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
     }
     
     public static String getTranslationKeyForCategoryName(String classKeyName) {
-            String translationKey       = "cm:category_" + classKeyName + "_name";
-            return translationKey;
+        return "cm:category_" + classKeyName + "_name";
         
     }
     public static String getTranslationKeyForCategoryDescription(String classKeyName) {
-        String translationKey       = "cm:category_" + classKeyName + "_description";
-        return translationKey;
+        return "cm:category_" + classKeyName + "_description";
     
     }
     /**

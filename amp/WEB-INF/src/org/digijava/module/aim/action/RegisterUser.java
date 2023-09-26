@@ -152,10 +152,12 @@ public class RegisterUser extends Action {
 
                 Site site = RequestUtils.getSite(request);
                 Group memberGroup = org.digijava.module.aim.util.DbUtil.getGroup(Group.MEMBERS,site.getId());
+                Group translatorGroup = org.digijava.module.aim.util.DbUtil.getGroup(Group.TRANSLATORS,site.getId());
                 Long[] uid = new Long[1];
                 uid[0] = user.getId();
                 org.digijava.module.admin.util.DbUtil.addUsersToGroup(memberGroup.getId(),uid);
-                
+                org.digijava.module.admin.util.DbUtil.addUsersToGroup(translatorGroup.getId(),uid);
+
                 if (userRegisterForm.getNationalCoordinator()) {
                     Group nationalCoordGroup = org.digijava.module.admin.util.DbUtil.getGroupByKey(Group.NATIONAL_COORDINATORS);
                     org.digijava.module.admin.util.DbUtil.addUsersToGroup(nationalCoordGroup.getId(),uid);                                          

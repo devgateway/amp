@@ -1,4 +1,4 @@
-import React, {memo} from 'react';
+import React, {memo, useEffect} from 'react';
 import {useLocation, useNavigate, useParams, useSearchParams} from 'react-router-dom';
 
 export const withRouter = (Component) => {
@@ -6,16 +6,29 @@ export const withRouter = (Component) => {
         const navigate = useNavigate();
         const location = useLocation();
         const params = useParams();
-        const [ searchParams] = useSearchParams();
+        const [ searchParams, setSearchParams] = useSearchParams();
+
+        useEffect(() => {
+            setSearchParams(localStorage.getItem("searchParams") || "");
+        }, []);
+
+        console.log('my searchParams', searchParams.get('profile'))
 
         return (
-            <Component
-                navigate={navigate}
-                location={location}
-                params={params}
-                searchParams={searchParams}
-                {...props}
-            />
+            <>
+                {searchParams.get('profile') ? (
+                    <Component
+                        navigate={navigate}
+                        location={location}
+                        params={params}
+                        searchParams={searchParams}
+                        {...props}
+                    />
+                ) : (
+                    <div>loading...</div>
+                )}
+            </>
+
         );
     });
 };

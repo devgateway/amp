@@ -27,7 +27,7 @@ import java.nio.charset.*;
 import java.util.*;
 
 public class CategoryManagerUtil {
-    private static Logger logger = Logger.getLogger(CategoryManagerUtil.class);
+    private static final Logger logger = Logger.getLogger(CategoryManagerUtil.class);
 
     /**
      * Looks up the AmpCategoryValue with id = categoryValueId. If not null it adds it to the Set someSet.

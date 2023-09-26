@@ -349,7 +349,7 @@
               <td align="right"  class="orgtype" style="padding-bottom:10px;">
               	<html:select  property="selectedCountryResidence" styleClass="inp-text" >
                   <html:optionsCollection name="aimUserRegisterForm" property="countryResidence" value="iso" label="name" />
-                </html:select>              
+                </html:select>
               </td>
               <td>&nbsp;</td>
               <td class=f-names noWrap style="padding-bottom:10px;"><digi:trn key="um:mailingAddress">Mailing Address </digi:trn>              </td>

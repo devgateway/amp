@@ -462,9 +462,11 @@ public class SiteUtils {
                     group.setParentId(parentGroup.getId());
                 }
                 site.getGroups().add(group);
+                PersistenceManager.getRequestDBSession().saveOrUpdate(site);
                 existingDefGroups.add(item.getValue());
             }
         }
+        PersistenceManager.getRequestDBSession().flush();
     }
 
     /**

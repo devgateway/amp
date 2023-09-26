@@ -230,7 +230,9 @@ public class DbUtil {
         return true;
 
     }
-
+    public static void updatePassword(String user, String newPassword) throws UMException{
+        updatePassword(user, null, newPassword);
+    }
     /**
      * Update password in database see table
      *
@@ -449,7 +451,7 @@ public class DbUtil {
         }
     }
 
-    // TODO: 9/1/23 rollback if trubudget registration not successful 
+    // TODO: 9/1/23 rollback if trubudget registration not successful
     public static Mono<TruLoginResponse> loginToTruBudget(TruLoginRequest truLoginRequest, List<AmpGlobalSettings> settings) throws URISyntaxException {
         return GenericWebClient.postForSingleObjResponse(getSettingValue(settings,"baseUrl")+"api/user.authenticate",truLoginRequest, TruLoginRequest.class,TruLoginResponse.class);
     }
@@ -717,6 +719,8 @@ public class DbUtil {
                 user.updateLastModified();
                 session.update(user);
                 verified = true;
+            }else{
+                verified = false;
             }
         } catch (Exception ex0) {
             logger.debug("isRegisteredEmail() failed", ex0);

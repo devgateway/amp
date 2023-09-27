@@ -22,6 +22,8 @@
   },
   "dependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@devgateway/amp-boilerplate": "github:devgateway/amp-boilerplate",
+    "@reduxjs/toolkit": "^1.9.5",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
@@ -31,8 +33,10 @@
     "@types/react-dom": "^18.2.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-redux": "^8.1.2",
     "react-router-dom": "^6.14.2",
     "react-scripts": "^5.0.1",
+    "redux": "^4.2.1",
     "web-vitals": "^3.4.0"
   },
   "devDependencies": {

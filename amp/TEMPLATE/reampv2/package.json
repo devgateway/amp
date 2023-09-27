@@ -7,19 +7,21 @@
     "packages/**/*"
   ],
   "scripts": {
-    "start": "lerna run start",
+    "start": "DISABLE_ESLINT=true lerna run start",
     "build": "lerna run build",
     "graph": "nx graph"
   },
   "author": "",
   "license": "GPL-3.0",
   "devDependencies": {
+    "@module-federation/dashboard-plugin": "^2.7.4",
     "dotenv-webpack": "^8.0.1",
     "lerna": "^7.1.4",
     "nx": "^16.6.0",
     "nx-cloud": "^16.3.0"
   },
   "dependencies": {
+    "@devgateway/amp-boilerplate": "github:devgateway/amp-boilerplate",
     "fs": "^0.0.1-security",
     "jquery-ui": "^1.10.5",
     "react-router-dom": "^6.14.2",

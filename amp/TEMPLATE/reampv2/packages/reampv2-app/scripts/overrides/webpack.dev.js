@@ -31,6 +31,18 @@ const override = config => {
                 shareKey: 'react-router-dom-old',
                 shareScope: 'legacy',
                 singleton: true,
+            },
+            'semantic-ui-react': {
+                import: 'semantic-ui-react',
+                shareKey: 'semantic-ui-react-old',
+                shareScope: 'legacy',
+                singleton: true,
+            },
+            'semantic-ui-css': {
+                import: 'semantic-ui-css',
+                shareKey: 'semantic-ui-css-old',
+                shareScope: 'legacy',
+                singleton: true,
             }
         }
     })

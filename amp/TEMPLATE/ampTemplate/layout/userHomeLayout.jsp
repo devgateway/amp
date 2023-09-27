@@ -73,7 +73,6 @@
 
 		<!-- Javascript for the micro-frontends -->
 		<script type="text/javascript" src="<digi:file src="/TEMPLATE/reampv2/packages/container/build/main.bundle.js"/>"></script>
-		<script type="text/javascript" src="<digi:file src="/TEMPLATE/reampv2/packages/user-manager/build/main.bundle.js"/>"></script>
 		
         
 	</head>

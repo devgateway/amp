@@ -12,8 +12,6 @@ export const withRouter = (Component) => {
             setSearchParams(localStorage.getItem("searchParams") || "");
         }, []);
 
-        console.log('my searchParams', searchParams.get('profile'))
-
         return (
             <>
                 {searchParams.get('profile') ? (

@@ -19,8 +19,11 @@ const Reampv2 = () => {
             if (newPathname === location.pathname) {
                 return;
             }
-            localStorage.setItem("searchParams", location.search);
-            navigate(newPathname);
+            // localStorage.setItem("searchParams", location.search);
+            navigate({
+                pathname: newPathname,
+                search: location.search,
+            });
         };
         window.addEventListener("[reampv2] navigated", reampv2NavigationEventHandler);
 

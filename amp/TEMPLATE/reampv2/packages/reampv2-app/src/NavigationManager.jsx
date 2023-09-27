@@ -10,11 +10,15 @@ const NavigationManager = ({ children }) => {
     useEffect(() => {
         function containerNavigationHandler(event) {
             const pathname = event.detail;
-            console.log('my pathname gotcha', pathname)
             if (location.pathname === pathname || !matchRoutes(routes, { pathname })) {
                 return;
             }
-            navigate(pathname);
+
+            const searchParamsString = searchParams.toString();
+            navigate({
+                pathname,
+                search: searchParamsString ? `?${searchParamsString}` : "",
+            });
         }
 
         window.addEventListener("[container] navigated", containerNavigationHandler);

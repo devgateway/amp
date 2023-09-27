@@ -43,6 +43,7 @@ import org.digijava.module.um.form.UserRegisterForm;
 import org.digijava.module.um.util.DbUtil;
 import org.digijava.module.um.util.UmUtil;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -103,7 +104,10 @@ public class UserRegister
         String encryptedTruPassword = UmUtil.encrypt(userRegisterForm.getTruBudgetPassword(),keyGen);
         user.setTruBudgetPassword(encryptedTruPassword);
         String[] intents = userRegisterForm.getSelectedTruBudgetIntents();
-        List<TruBudgetIntent> truBudgetIntents = getTruBudgetIntentsByName(intents);
+        List<TruBudgetIntent> truBudgetIntents = new ArrayList<>();
+        if (intents!=null) {
+            truBudgetIntents= getTruBudgetIntentsByName(intents);
+        }
         logger.info("Intents: "+ truBudgetIntents);
         user.setInitialTruBudgetIntents(new HashSet<>(user.getTruBudgetIntents()));
         user.setTruBudgetIntents(new HashSet<>(truBudgetIntents));

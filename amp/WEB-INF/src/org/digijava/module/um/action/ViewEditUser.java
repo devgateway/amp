@@ -315,7 +315,10 @@ public class ViewEditUser extends Action {
                     }
 
                     String[] intents = uForm.getSelectedTruBudgetIntents();
-                    List<TruBudgetIntent> truBudgetIntents = getTruBudgetIntentsByName(intents);
+                    List<TruBudgetIntent> truBudgetIntents = new ArrayList<>();
+                    if (intents!=null) {
+                        truBudgetIntents= getTruBudgetIntentsByName(intents);
+                    }
                     // TODO: 8/28/23 add for trubudget request
 
 //                    user.getTruBudgetIntents().addAll(new HashSet<>(truBudgetIntents));

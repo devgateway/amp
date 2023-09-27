@@ -416,7 +416,8 @@ public class DbUtil {
                 user1.setDisplayName(user.getFirstNames()+" "+user.getLastName());
                 // TODO: 8/28/23 if you are editing a user for the first time with Trubudget integrated. their password will be the email
                 // TODO: 8/28/23 this can be changed later in Trubudget
-                user1.setPassword(UmUtil.decrypt(user.getTruBudgetPassword(),user.getTruBudgetKeyGen()));
+                String pass = UmUtil.decrypt(user.getTruBudgetPassword(),user.getTruBudgetKeyGen());
+                user1.setPassword(pass);
                 user1.setId(user.getEmail().split("@")[0]);// TODO: 8/28/23 use username in future
                 data.setUser(user1);
                 userData.setData(data);

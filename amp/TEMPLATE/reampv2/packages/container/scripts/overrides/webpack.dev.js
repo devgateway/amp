@@ -18,15 +18,21 @@ const override = config => {
         shared: {
             ...packageJson.dependencies,
             react: {
-                requiredVersion: packageJson.dependencies.react,
+                import: 'react',
+                shareKey: 'newReact',
+                shareScope: 'default',
                 singleton: true,
             },
             'react-dom': {
-                requiredVersion: packageJson.dependencies['react-dom'],
+                import: 'react-dom',
+                shareKey: 'newReactDom',
+                shareScope: 'default',
                 singleton: true, // only a single version of the shared module is allowed
             },
             'react-router-dom': {
-                requiredVersion: packageJson.dependencies['react-router-dom'],
+                import: 'react-router-dom',
+                shareKey: 'newReactRouterDom',
+                shareScope: 'default',
                 singleton: true
             }
         },

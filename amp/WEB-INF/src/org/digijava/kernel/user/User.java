@@ -24,7 +24,6 @@ package org.digijava.kernel.user;
 
 import org.digijava.kernel.ampapi.endpoints.common.valueproviders.UserValueProvider;
 import org.digijava.kernel.dbentity.Country;
-import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.*;
 import org.digijava.kernel.entity.trubudget.TruBudgetIntent;
 import org.digijava.kernel.request.Site;
@@ -39,7 +38,10 @@ import javax.persistence.Transient;
 import javax.security.auth.Subject;
 import java.io.Serializable;
 import java.sql.Clob;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 @InterchangeableValue(UserValueProvider.class)
 public class User

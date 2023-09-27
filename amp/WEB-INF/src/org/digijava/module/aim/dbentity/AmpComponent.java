@@ -16,7 +16,6 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.Output;
 
-import javax.persistence.ElementCollection;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.*;

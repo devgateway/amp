@@ -15,7 +15,6 @@ import org.digijava.module.categorymanager.dbentity.AmpLinkedCategoriesState;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
-import org.hibernate.type.EntityType;
 import org.hibernate.type.LongType;
 import org.hibernate.type.ObjectType;
 import org.hibernate.type.StringType;
@@ -23,7 +22,10 @@ import org.hibernate.type.StringType;
 import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
-import java.nio.charset.*;
+import java.nio.charset.CharacterCodingException;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CodingErrorAction;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class CategoryManagerUtil {

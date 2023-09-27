@@ -3,7 +3,6 @@ package org.digijava.kernel.entity.trubudget;
 import org.digijava.kernel.user.User;
 import org.hibernate.annotations.DynamicUpdate;
 
-import javax.persistence.Entity;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;

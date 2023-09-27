@@ -1,8 +1,6 @@
 package org.digijava.module.aim.dbentity;
 
-import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.util.Output;
-import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

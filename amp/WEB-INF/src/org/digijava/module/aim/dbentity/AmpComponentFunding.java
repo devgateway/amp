@@ -18,7 +18,6 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
 
 import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.*;
 

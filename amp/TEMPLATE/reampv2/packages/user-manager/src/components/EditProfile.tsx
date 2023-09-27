@@ -3,7 +3,6 @@ import {
   Button, Checkbox, Form, Modal,
 } from 'semantic-ui-react';
 import { Formik, FormikProps } from 'formik';
-import { useNavigate } from 'react-router-dom';
 import styles from './css/Modal.module.css';
 import { useAppDispatch, useAppSelector } from '../utils/hooks';
 import { EditUserProfile, UserProfile } from '../types';
@@ -14,7 +13,7 @@ import { updateUser } from '../reducers/fetchUserProfileReducer';
 
 const EditProfile: React.FC = () => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const translations = useAppSelector((state) => state.translations.translations);
   const editUserProfileState = useAppSelector((state) => state.editUserProfile);
 
@@ -65,8 +64,6 @@ const EditProfile: React.FC = () => {
     if (previousPath) {
       const goBackEvent = new CustomEvent('[UserManager] navigated', { detail: previousPath });
       window.dispatchEvent(goBackEvent);
-    } else {
-      navigate(-1);
     }
 
     setShow(false);

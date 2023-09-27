@@ -13,10 +13,6 @@ const override = (config) => {
     exposes: {
       './UserManagerApp': './src/bootstrap'
     },
-    remotes: {
-      'reampv2App': 'reampv2App@http://localhost:3002/remoteEntry.js',
-      'ampoffline': 'ampoffline@http://localhost:3001/remoteEntry.js',
-    },
     shared: {
       ...packageJson.dependencies,
       react: {
@@ -24,27 +20,19 @@ const override = (config) => {
         requiredVersion: packageJson.dependencies.react,
       },
       'react-dom': {
-        import: 'react-dom', // the "react" package will be used a provided and fallback module
-        shareKey: 'react-dom', // under this name the shared module will be placed in the share scope
-        shareScope: 'legacy', // share scope with this name will be used
+        requiredVersion: packageJson.dependencies['react-dom'],
         singleton: true, // only a single version of the shared module is allowed
       },
       'react-router-dom': {
-        import: 'react-router-dom',
-        shareKey: 'react-router-dom',
-        shareScope: 'legacy',
+        requiredVersion: packageJson.dependencies['react-router-dom'],
         singleton: true,
       },
       'semantic-ui-react': {
-        import: 'semantic-ui-react',
-        shareKey: 'semantic-ui-react',
-        shareScope: 'legacy',
+        requiredVersion: packageJson.dependencies['semantic-ui-react'],
         singleton: true,
       },
       'semantic-ui-css': {
-        import: 'semantic-ui-css',
-        shareKey: 'semantic-ui-css',
-        shareScope: 'legacy',
+        requiredVersion: packageJson.dependencies['semantic-ui-css'],
         singleton: true,
       }
     },

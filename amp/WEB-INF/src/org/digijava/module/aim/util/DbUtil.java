@@ -716,11 +716,9 @@ public class DbUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select c from " + Country.class.getName() + " c " + "where (c.iso=:iso)";
-            Query qry = session.createQuery(queryString);
+            Query<Country> qry = session.createQuery(queryString,Country.class);
             qry.setParameter("iso", iso, StringType.INSTANCE);
-            for (Object o : qry.list()) {
-                country = (Country) o;
-            }
+            country= qry.stream().findAny().orElse(null);
 
         } catch (Exception e) {
             logger.error("Exception from getDgCountry()", e);
@@ -741,7 +739,7 @@ public class DbUtil {
             qry = sess.createQuery(queryString);
             qry.setParameter("ampFisCalId", fiscalCalId, LongType.INSTANCE);
             Iterator<AmpOrganisation> itr = qry.list().iterator();
-            col = new ArrayList<AmpOrganisation>();
+            col = new ArrayList<>();
             while (itr.hasNext()) {
                 col.add(itr.next());
             }

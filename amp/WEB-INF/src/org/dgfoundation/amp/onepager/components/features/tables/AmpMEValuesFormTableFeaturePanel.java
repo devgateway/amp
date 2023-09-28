@@ -12,7 +12,7 @@ import org.dgfoundation.amp.onepager.converters.CustomDoubleConverter;
 import org.dgfoundation.amp.onepager.models.AbstractMixedSetModel;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
-
+import org.digijava.module.aim.dbentity.IndicatorActivity;
 import java.util.Set;
 
 public abstract class AmpMEValuesFormTableFeaturePanel extends AmpMEFormTableFeaturePanel<AmpIndicator, AmpIndicatorValue> {
@@ -22,25 +22,24 @@ public abstract class AmpMEValuesFormTableFeaturePanel extends AmpMEFormTableFea
     protected IModel<Set<AmpIndicatorValue>> setModel;
 
     public AmpMEValuesFormTableFeaturePanel(
-            String id, IModel<AmpIndicator> model, String fmName, boolean hideLeadingNewLine, int titleHeaderColSpan) throws Exception {
+            String id, IModel<AmpIndicator> model, IModel<IndicatorActivity> indicatorActivity, String fmName, boolean hideLeadingNewLine, int titleHeaderColSpan) throws Exception {
         super(id, model, fmName, hideLeadingNewLine);
 
         getTableId().add(new AttributeModifier("width", "620"));
 
         setTitleHeaderColSpan(titleHeaderColSpan);
-        parentModel = new PropertyModel<>(model, "indicatorValues");
+        parentModel = new PropertyModel<>(indicatorActivity, "values");
 
         setModel = new AbstractMixedSetModel<AmpIndicatorValue>(parentModel) {
             @Override
             public boolean condition(AmpIndicatorValue item) {
-                return true;
+                return item.getValueType() == AmpIndicatorValue.ACTUAL;
             }
         };
     }
 
     protected AmpTextFieldPanel<Double> getActualValue(ListItem<AmpIndicatorValue> item){
         return  new AmpTextFieldPanel<Double>("actualValue", new PropertyModel<>(item.getModel(), "value"), "Actual Value") {
-
             public IConverter getInternalConverter(java.lang.Class<?> type) {
                 return CustomDoubleConverter.INSTANCE;
             }

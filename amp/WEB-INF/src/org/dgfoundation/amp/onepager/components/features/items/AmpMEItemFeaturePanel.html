@@ -10,38 +10,50 @@
 	</a>
 	<div class="invisible-item">
 		<table width="100%" border="0" cellspacing="2" cellpadding="2" class="activity_me">
-			<tr>
-				<td colspan="2">
-					<span wicket:id="logframe"></span>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2">
-					<hr>
-				</td>
-			</tr>
+<!--			<tr>-->
+<!--				<td colspan="2">-->
+<!--					<span wicket:id="logframe"></span>-->
+<!--				</td>-->
+<!--			</tr>-->
+<!--			<tr>-->
+<!--				<td colspan="2">-->
+<!--					<hr>-->
+<!--				</td>-->
+<!--			</tr>-->
 
 			<tr>
-				<td colspan="2" align="left">
-					<span wicket:id="valuesSubsection"></span>
+				<td colspan="2">
+					<div>
+						<div>
+							<b><span>Base Values: </span></b><span wicket:id = "base"></span> <b><span>Base Date: </span></b> <span wicket:id = "baseDate"></span>
+							<b><span>Target Values: </span></b><span wicket:id = "target"></span> <b><span>Target Date: </span></b> <span wicket:id = "targetDate"></span>
+						</div>
+						<div wicket:id="valuesSubsection"></div>
+						<span wicket:id="addActualValue"></span>
+					</div>
 				</td>
 			</tr>
+<!--			<tr>-->
+<!--				<td colspan="2">-->
+<!--					<hr>-->
+<!--				</td>-->
+<!--			</tr>-->
 
-			<tr>
-				<td colspan="2" align="left">
-					<span wicket:id="risk"/>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2" align="left">
-					<hr>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2" align="left">
-					<span wicket:id="setValues" />
-				</td>
-			</tr>
+<!--			<tr>-->
+<!--				<td colspan="2" align="left">-->
+<!--					<span wicket:id="risk"/>-->
+<!--				</td>-->
+<!--			</tr>-->
+<!--			<tr>-->
+<!--				<td colspan="2" align="left">-->
+<!--					<hr>-->
+<!--				</td>-->
+<!--			</tr>-->
+<!--			<tr>-->
+<!--				<td colspan="2" align="left">-->
+<!--					<span wicket:id="setValues" />-->
+<!--				</td>-->
+<!--			</tr>-->
 			</table>
 		</div>
 </wicket:extend>

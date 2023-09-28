@@ -3,6 +3,7 @@
  */
 package org.dgfoundation.amp.onepager.components.features.items;
 
+import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
@@ -10,10 +11,14 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
+import org.dgfoundation.amp.onepager.components.QuarterInformationPanel;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
-import org.dgfoundation.amp.onepager.components.features.subsections.AmpMEValuesSubsectionFeature;
+//import org.dgfoundation.amp.onepager.components.features.subsections.AmpMEValuesSubsectionFeature;
+import org.dgfoundation.amp.onepager.components.features.tables.AmpMEActualValuesFormTableFeaturePanel;
+import org.dgfoundation.amp.onepager.components.features.tables.AmpMEValuesFormTableFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpIndicatorGroupField;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.dgfoundation.amp.onepager.translation.TranslatedChoiceRenderer;
 import org.digijava.module.aim.dbentity.*;
@@ -21,6 +26,7 @@ import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,7 +36,7 @@ import java.util.Set;
  */
 public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
 
-
+    private static Logger logger = Logger.getLogger(AmpMEItemFeaturePanel.class);
     /**
      * @param id
      * @param fmName
@@ -68,10 +74,54 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
                 new TranslatedChoiceRenderer<AmpIndicatorRiskRatings>(), false);
         add(riskSelect);
 
-        final AmpMEValuesSubsectionFeature valuesSubsection = new AmpMEValuesSubsectionFeature("valuesSubsection",
-                fmName, indicator);
+        final AmpIndicatorValue baseVal = new AmpIndicatorValue(AmpIndicatorValue.BASE);
+        final AmpIndicatorValue targetVal = new AmpIndicatorValue(AmpIndicatorValue.TARGET);
 
-        add(valuesSubsection);
+        final Model<Boolean> valuesSet = new Model<Boolean>(false);
+
+        for (AmpIndicatorValue val : values.getObject()){
+            switch (val.getValueType()) {
+                case AmpIndicatorValue.BASE:
+                    val.copyValuesTo(baseVal);
+                    break;
+                case AmpIndicatorValue.TARGET:
+                    val.copyValuesTo(targetVal);
+                    valuesSet.setObject(true);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        final Label indicatorBaseValueLabel = new Label("base", new PropertyModel<String>(baseVal, "value"));
+        add(indicatorBaseValueLabel);
+
+        final Label indicatorBaseDateLabel = new Label("baseDate", new PropertyModel<String>(baseVal, "valueDate"));
+        add(indicatorBaseDateLabel);
+
+        final Label indicatorTargetValueLabel = new Label("target", new PropertyModel<String>(targetVal, "value"));
+        add(indicatorTargetValueLabel);
+
+        final Label indicatorTargetDateLabel = new Label("targetDate", new PropertyModel<String>(targetVal, "valueDate"));
+        add(indicatorTargetDateLabel);
+
+        AmpMEActualValuesFormTableFeaturePanel valuesTable = new AmpMEActualValuesFormTableFeaturePanel("valuesSubsection", indicator, conn, "Actual Values", false, 7);
+        add(valuesTable);
+
+        AmpAjaxLinkField addActualValue = new AmpAjaxLinkField("addActualValue", "Add Actual Value", "Add Actual Value") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                AmpIndicatorValue value = new AmpIndicatorValue();
+
+                value.setValueDate(new Date(System.currentTimeMillis()));
+                value.setValueType(AmpIndicatorValue.ACTUAL);
+                valuesTable.getEditorList().addItem(value);
+                target.add(valuesTable);
+                target.appendJavaScript(QuarterInformationPanel.getJSUpdate(getSession()));
+            }
+        };
+
+        add(addActualValue);
 
         AmpAjaxLinkField setValue = new AmpAjaxLinkField("setValues", "Set Value", "Set Value") {
             @Override

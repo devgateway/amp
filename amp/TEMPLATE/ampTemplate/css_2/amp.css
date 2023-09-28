@@ -115,7 +115,7 @@ td.inside_inner_title { border-width: 1px 1px 1px 1px;border-color: #CCC; border
 .header { height:51px;text-align:center;width:1000px;margin:0 auto;position:relative;}
 .logo {color:#FFFFFF; font-size:14px; font-weight:bold; float:left;padding:0px; width:480px; border: 0px; margin: 8px 0px 0px 0px; display: inline;}
 .logo a {color:#FFFFFF; text-decoration: none !important;  display: table-cell;}
-.flag {width:30px; height: 20px; border: 0px; vertical-align: middle; float:left;margin-right:4px;}
+.flag {width:30px; height: 30px; border: 0px; vertical-align: middle; float:left;margin-right:4px;}
 .logo .title {display: table-cell; padding-left: 8px; vertical-align: middle; }
 .logo .title .label {display: block; text-align: left;}
 .top_nav {position:absolute; right:30px; top:30px;}

@@ -48,7 +48,7 @@ import java.util.*;
 
 public class DbUtil {
 
-    private static Logger logger = Logger.getLogger(DbUtil.class);
+    private static final Logger logger = Logger.getLogger(DbUtil.class);
 
     public static List getAvailableLanguages() throws AdminException {
 

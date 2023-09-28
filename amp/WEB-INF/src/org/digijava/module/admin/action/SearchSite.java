@@ -54,19 +54,18 @@ public class SearchSite
 
         siteList = DbUtil.searchSite(siteForm.getSiteKey().trim());
 
-        ListIterator iterator = siteList.listIterator();
-        while (iterator.hasNext()) {
-            Site currentSite = (Site) iterator.next();
+        for (Object o : siteList) {
+            Site currentSite = (Site) o;
 
             String adminLink;
             boolean delete;
 
             boolean permitted = DgSecurityManager.permitted(RequestUtils.
-                getSubject(request), currentSite,
-                ResourcePermission.INT_ADMIN);
+                            getSubject(request), currentSite,
+                    ResourcePermission.INT_ADMIN);
 
             if (permitted) {
-                adminLink = DgUtil.getSiteUrl(currentSite,request)+"/admin";
+                adminLink = DgUtil.getSiteUrl(currentSite, request) + "/admin";
                 delete = true;
             } else {
                 adminLink = null;

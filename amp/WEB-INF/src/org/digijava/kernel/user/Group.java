@@ -113,7 +113,7 @@ public class Group
      * @deprecated this method is subject of remove
      */
     public Set getPermissions() {
-        return new HashSet();
+        return new HashSet<>();
     }
 
     /**

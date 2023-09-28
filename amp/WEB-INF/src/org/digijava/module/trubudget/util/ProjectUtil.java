@@ -120,7 +120,7 @@ public class ProjectUtil {
                 }
         );
 
-            createUpdateSubProjects(ampActivityVersion, project.getId(),settings);
+        createUpdateSubProjects(ampActivityVersion, project.getId(),settings);
         TruBudgetActivity truBudgetActivity = new TruBudgetActivity();
         truBudgetActivity.setAmpActivityId(ampActivityVersion.getAmpActivityId());
         truBudgetActivity.setTruBudgetId(project.getId());

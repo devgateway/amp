@@ -476,7 +476,7 @@ public class DbUtil {
         try {
             session = PersistenceManager.getSession();
             //"from " + User.class.getName() + " rs where sha1(concat(cast(rs.email as byte),rs.id))=:hash and rs.emailVerified=false"; 
-            String queryString = "select ID from DG_USER where encode(digest(EMAIL::text || id::text, 'sha1'), 'hex')=:hash and EMAIL_VERIFIED=false";
+            String queryString = "select ID from DG_USER where encode(digest(CAST(EMAIL as text) || CAST(id as text), 'sha1'), 'hex')=:hash and EMAIL_VERIFIED=false";
             Query query = session.createNativeQuery(queryString);
             query.setParameter("hash", id,StringType.INSTANCE);
             iduser = (BigInteger) query.uniqueResult();

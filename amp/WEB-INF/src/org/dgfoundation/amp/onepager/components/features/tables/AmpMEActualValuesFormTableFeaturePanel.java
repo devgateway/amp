@@ -4,8 +4,11 @@ import org.apache.log4j.Logger;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.convert.IConverter;
+import org.dgfoundation.amp.onepager.OnePagerUtil;
+import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.ListItem;
 import org.dgfoundation.amp.onepager.components.MEListEditor;
+import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpIndicatorGroupField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
@@ -38,6 +41,17 @@ public class AmpMEActualValuesFormTableFeaturePanel extends AmpMEValuesFormTable
 
                     AmpDatePickerFieldPanel date = new AmpDatePickerFieldPanel("actualDate", new PropertyModel<>(item.getModel(), "valueDate"), "Actual Date");
                     item.add(date);
+
+                    item.add(new ListEditorRemoveButton("delActualValue", "Delete Actual Value"){
+                        protected void onClick(org.apache.wicket.ajax.AjaxRequestTarget target) {
+//                            AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
+//                            super.onClick(target);
+//                            parent.getFundingInfo().configureRequiredFields();
+//                            target.add(parent.getFundingInfo());
+//                            target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
+//                            target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));
+                        };
+                    });
                 }
             };
 

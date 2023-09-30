@@ -9,6 +9,7 @@ import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.ListItem;
 import org.dgfoundation.amp.onepager.components.MEListEditor;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpMEFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpIndicatorGroupField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
@@ -30,7 +31,6 @@ public class AmpMEActualValuesFormTableFeaturePanel extends AmpMEValuesFormTable
                 @Override
                 protected void onPopulateItem(ListItem<AmpIndicatorValue> item) {
                     super.onPopulateItem(item);
-//                   appendActualValueToItem(item);
                     AmpTextFieldPanel<Double> valuefield = new AmpTextFieldPanel<Double>("actualValue", new PropertyModel<>(item.getModel(), "value"), "Actual Value"){
                         public IConverter getInternalConverter(java.lang.Class<?> type) {
                             return CustomDoubleConverter.INSTANCE;
@@ -44,12 +44,9 @@ public class AmpMEActualValuesFormTableFeaturePanel extends AmpMEValuesFormTable
 
                     item.add(new ListEditorRemoveButton("delActualValue", "Delete Actual Value"){
                         protected void onClick(org.apache.wicket.ajax.AjaxRequestTarget target) {
-//                            AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
-//                            super.onClick(target);
-//                            parent.getFundingInfo().configureRequiredFields();
-//                            target.add(parent.getFundingInfo());
-//                            target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
-//                            target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));
+                            super.onClick(target);
+                            target.add(AmpMEActualValuesFormTableFeaturePanel.this);
+                            target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(AmpMEActualValuesFormTableFeaturePanel.this));
                         };
                     });
                 }

@@ -23,6 +23,7 @@
 		<hibernate-class>org.digijava.kernel.request.SiteDomain</hibernate-class>
 		<hibernate-class>org.digijava.kernel.entity.trubudget.TruBudgetIntent</hibernate-class>
 		<hibernate-class>org.digijava.kernel.entity.trubudget.SubIntents</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpComponentFundingDocument</hibernate-class>
 		<hibernate-class>org.digijava.module.trubudget.dbentity.TruBudgetActivity</hibernate-class>
 		<hibernate-class>org.digijava.module.trubudget.dbentity.AmpComponentFundingTruWF</hibernate-class>
 		<hibernate-class>org.digijava.kernel.entity.Address</hibernate-class>

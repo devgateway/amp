@@ -31,5 +31,11 @@
 
 		<many-to-one name="componentFundingStatus" column="component_funding_status"
 					 class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
+
+		<set name="componentFundingDocuments" lazy="false" inverse="true" cascade="all-delete-orphan">
+			<cache usage="read-write" />
+			<key column="amp_component_funding_id" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpComponentFundingDocument" />
+		</set>
 	</class>
 </hibernate-mapping>

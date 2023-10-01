@@ -11,9 +11,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
-import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.*;
 import org.dgfoundation.amp.onepager.events.FundingOrgListUpdateEvent;
 import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.dgfoundation.amp.onepager.models.AbstractMixedSetModel;
@@ -90,7 +88,21 @@ public class AmpComponentsFundingFormTableFeature extends
                 {
                     logger.info("Unable to add component funding status dropdown: ",e);
                 }
+                try {
+                    final AmpComponentFundingResourcesTableFeature resourcesList =
+                            new AmpComponentFundingResourcesTableFeature("componentFundingDocuments", "Component Funding Documents", model);
+                    item.add(resourcesList);
 
+                    final AmpComponentFundingNewResourceFieldPanel newDoc =
+                        new AmpComponentFundingNewResourceFieldPanel("addNewComponentFundingDocument", model, "Add New Document", resourcesList);
+                newDoc.setOutputMarkupId(true);
+                item.add(newDoc);
+                }catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+
+//
 
                 // read the list of organizations from related organizations page, and
                 // create a unique set with the orgs chosen

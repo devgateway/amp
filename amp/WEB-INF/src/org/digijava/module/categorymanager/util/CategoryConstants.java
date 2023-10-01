@@ -98,6 +98,7 @@ public class CategoryConstants {
 
     public static final String ADJUSTMENT_TYPE_NAME         = "Adjustment Type";
     public static final String COMPONENT_FUNDING_STATUS         = "Component Funding Status";
+    public static final String COMPONENT_FUNDING_DOCUMENTS        = "Component Funding Documents";
     public static final String ADJUSTMENT_TYPE_KEY          = "adjustment_type";
     public static final String COMPONENT_FUNDING_STATUS_KEY          = "component_funding_status";
 

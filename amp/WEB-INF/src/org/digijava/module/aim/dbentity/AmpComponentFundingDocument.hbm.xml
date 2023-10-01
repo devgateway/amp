@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="org.digijava.module.aim.dbentity.AmpComponentFundingDocument"
+           table="AMP_COMPONENT_FUNDING_DOCUMENTS">
+        <cache usage="read-write" />
+        <id name="id" column="id" type="java.lang.Long">
+            <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+                <param name="sequence_name">AMP_COMPONENT_FUNDING_DOCUMENTS_seq</param>
+            </generator>
+        </id>
+        <property name="uuid" column="uuid" type="java.lang.String" />
+<!--        <property name="documentType" column="document_type" type="java.lang.String" />-->
+        <many-to-one name="ampComponentFunding" column="amp_component_funding_id"
+                     class="org.digijava.module.aim.dbentity.AmpComponentFunding" cascade="none" not-null="true" />
+    </class>
+</hibernate-mapping>

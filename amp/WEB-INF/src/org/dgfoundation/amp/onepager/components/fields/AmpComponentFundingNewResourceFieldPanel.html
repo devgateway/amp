@@ -1,0 +1,61 @@
+<wicket:extend>
+
+
+
+<!--  <span wicket:id="featureLabel"/>-->
+
+  <table align="center" width="100%">
+    <tr><td align="center" background="/TEMPLATE/ampTemplate/img_2/ins_header.gif" class="inside">
+      <a href="#" wicket:id="componentFundingDocumentPanelLink" class="slider">
+        <span wicket:id="componentFundingDocumentLinkText"/>
+      </a>
+    </td></tr>
+  </table>
+
+  <div wicket:id="componentFundingDocumentResourcePanel" class="invisible-item">
+    <form wicket:id="componentFundingDocumentForm">
+      <table width="100%">
+        <tr>
+          <td>
+            <span wicket:id="componentFundingDocumentDocTitle" />
+          </td>
+<!--          <td>-->
+<!--            <span wicket:id="docType" />-->
+<!--          </td>-->
+        </tr>
+        <tr>
+          <td>
+            <span wicket:id="componentFundingDocumentDocDesc" />
+          </td>
+          <td>
+            <span wicket:id="componentFundingDocumentDocNote" />
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <div style="white-space: nowrap;" >
+              <span wicket:id="componentFundingDocumentResourceLabel">...</span><span style="color: red;">*</span>
+              <span class="upfile" wicket:id="componentFundingDocumentFile" />
+<!--              <span wicket:id="webLink" />-->
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <div class="clearing">
+              <span wicket:id="componentFundingDocumentAjaxSubmit" class="resourceButtonPosition" />
+              <span wicket:id="componentFundingDocumentCancel"/>
+            </div>
+          </td>
+        </tr>
+<!--        <tr>-->
+<!--          <td class="inside" colspan="2">-->
+<!--                        <span wicket:id="webLinkFeedbackContainer" style="color: red;">-->
+<!--                            <span wicket:id="webLinkFeedbackLabel" class="feedbacklabel.error"></span>-->
+<!--                        </span>-->
+<!--          </td>-->
+<!--        </tr>-->
+      </table>
+    </form>
+  </div>
+</wicket:extend>

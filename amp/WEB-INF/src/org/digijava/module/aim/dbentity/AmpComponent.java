@@ -9,6 +9,7 @@ import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpComponentFundingDiscriminationConfigurer;
 import org.digijava.kernel.ampapi.endpoints.activity.values.providers.ComponentTypePossibleValuesProvider;
 import org.digijava.kernel.validators.common.RequiredValidator;
+import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
 import org.digijava.module.aim.annotations.interchange.*;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
@@ -48,6 +49,9 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
             fmPath="/Activity Form/Components/Component/Component Information/Description")
     @TranslatableField
     private String description;
+
+
+
 
     private Timestamp creationdate;
 

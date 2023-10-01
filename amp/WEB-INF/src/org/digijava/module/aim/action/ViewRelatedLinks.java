@@ -123,7 +123,7 @@ public class ViewRelatedLinks extends Action {
 //              AmpActivityVersion  activity = ActivityUtil.getProjectChannelOverview(actId);
 //              Set docList = new HashSet();
 //              if (activity != null) {
-//                  Iterator itr = DbUtil.getActivityDocuments(actId).iterator();
+//                  Iterator itr = DbUtil.getComponentFundingDocuments(actId).iterator();
 //                  boolean found = false;
 //                  while (itr.hasNext()) {
 //                      CMSContentItem cmsItem = (CMSContentItem) itr.next();

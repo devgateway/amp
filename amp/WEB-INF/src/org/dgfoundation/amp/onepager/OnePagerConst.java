@@ -5,10 +5,7 @@
 package org.dgfoundation.amp.onepager;
 
 import org.apache.wicket.MetaDataKey;
-import org.dgfoundation.amp.onepager.helper.EditorStore;
-import org.dgfoundation.amp.onepager.helper.ResourceTranslationStore;
-import org.dgfoundation.amp.onepager.helper.TemporaryActivityDocument;
-import org.dgfoundation.amp.onepager.helper.TemporaryGPINiDocument;
+import org.dgfoundation.amp.onepager.helper.*;
 import org.digijava.kernel.startup.AmpSessionListener;
 import org.digijava.module.aim.dbentity.*;
 
@@ -34,7 +31,9 @@ public final class OnePagerConst {
     
     
     public static final MetaDataKey<HashSet<TemporaryActivityDocument>> RESOURCES_NEW_ITEMS = new MetaDataKey<HashSet<TemporaryActivityDocument>>(){};
+    public static final MetaDataKey<HashSet<TemporaryComponentFundingDocument>> COMPONENT_FUNDING_NEW_ITEMS = new MetaDataKey<HashSet<TemporaryComponentFundingDocument>>(){};
     public static final MetaDataKey<HashSet<AmpActivityDocument>> RESOURCES_DELETED_ITEMS = new MetaDataKey<HashSet<AmpActivityDocument>>(){};
+    public static final MetaDataKey<HashSet<AmpComponentFundingDocument>> COMPONENT_FUNDING_DELETED_ITEMS = new MetaDataKey<HashSet<AmpComponentFundingDocument>>(){};
     public static final MetaDataKey<HashSet<TemporaryActivityDocument>> RESOURCES_EXISTING_ITEM_TITLES = new MetaDataKey<HashSet<TemporaryActivityDocument>>(){};
     public static final MetaDataKey<HashMap<String,ResourceTranslationStore>> RESOURCES_TRANSLATIONS = new MetaDataKey<HashMap<String,ResourceTranslationStore>>(){};
     

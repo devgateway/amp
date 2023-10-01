@@ -8,6 +8,7 @@ package org.digijava.module.aim.dbentity;
 import org.digijava.kernel.ampapi.endpoints.activity.visibility.FMVisibility;
 import org.digijava.kernel.validators.activity.ComponentFundingOrgRoleValidator;
 import org.digijava.kernel.validators.common.RequiredValidator;
+import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
 import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
 import org.digijava.module.aim.annotations.interchange.InterchangeableId;
@@ -18,6 +19,8 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.*;
 
@@ -48,6 +51,17 @@ public class AmpComponentFunding implements Cloneable, Serializable {
             discriminatorOption = CategoryConstants.COMPONENT_FUNDING_STATUS_KEY)
     private AmpCategoryValue componentFundingStatus;
 
+    public Set<AmpComponentFundingDocument> getComponentFundingDocuments() {
+        return componentFundingDocuments;
+    }
+
+    public void setComponentFundingDocuments(Set<AmpComponentFundingDocument> componentFundingDocuments) {
+        this.componentFundingDocuments = componentFundingDocuments;
+    }
+
+    @Interchangeable(fieldTitle = "Component Funding Documents",  fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_FUNDING_DOCS, importable = true)
+    @VersionableCollection(fieldTitle = "Component Funding Documents")
+    protected Set<AmpComponentFundingDocument> componentFundingDocuments = new HashSet<>();
     public AmpCategoryValue getComponentFundingStatus() {
         return componentFundingStatus;
     }

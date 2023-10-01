@@ -1,14 +1,21 @@
 package org.dgfoundation.amp.onepager.components.features.tables;
 
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.ExternalLink;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
+import org.apache.wicket.util.file.File;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
@@ -57,7 +64,7 @@ public class AmpComponentFundingResourcesTableFeature extends AmpFormTableFeatur
         final IModel<Set<AmpComponentFundingDocument>> setModel = new PropertyModel<Set<AmpComponentFundingDocument>>(am, "componentFundingDocuments");
 
         if (am.getObject().getComponentFundingDocuments() == null)
-            am.getObject().setComponentFundingDocuments(new HashSet<AmpComponentFundingDocument>());
+            am.getObject().setComponentFundingDocuments(new HashSet<>());
 
         IModel<List<TemporaryComponentFundingDocument>> listModel = new AbstractReadOnlyModel<List<TemporaryComponentFundingDocument>>() {
 
@@ -66,14 +73,14 @@ public class AmpComponentFundingResourcesTableFeature extends AmpFormTableFeatur
             private List<TemporaryComponentFundingDocument> getExistingObject() {
                 Iterator<AmpComponentFundingDocument> it = setModel.getObject().iterator();
                 List<TemporaryComponentFundingDocument> ret = new ArrayList<TemporaryComponentFundingDocument>();
-                HashSet<TemporaryComponentFundingDocument> existingDocTitles = new HashSet<TemporaryComponentFundingDocument>();
+                HashSet<TemporaryComponentFundingDocument> existingDocTitles = new HashSet<>();
 
                 while (it.hasNext()) {
                     AmpComponentFundingDocument d = it.next();
                     Node node = DocumentManagerUtil.getWriteNode(d.getUuid(), SessionUtil.getCurrentServletRequest());
                     NodeWrapper nw = new NodeWrapper(node);
 
-                    if (node == null || nw == null)
+                    if (node == null)
                         continue;
 
                     /**
@@ -106,7 +113,7 @@ public class AmpComponentFundingResourcesTableFeature extends AmpFormTableFeatur
                     }
                 }
 
-                getSession().setMetaData(OnePagerConst.RESOURCES_EXISTING_ITEM_TITLES, existingDocTitles);
+                getSession().setMetaData(OnePagerConst.COMPONENT_FUNDING_EXISTING_ITEM_TITLES, existingDocTitles);
                 refreshExistingDocs = false;
                 return ret;
             }
@@ -115,17 +122,17 @@ public class AmpComponentFundingResourcesTableFeature extends AmpFormTableFeatur
             public List<TemporaryComponentFundingDocument> getObject() {
                 HashSet<TemporaryComponentFundingDocument> newItems = getSession().getMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS);
                 if (newItems == null)
-                    newItems = new HashSet<TemporaryComponentFundingDocument>();
+                    newItems = new HashSet<>();
                 HashSet<AmpComponentFundingDocument> delItems = getSession().getMetaData(OnePagerConst.COMPONENT_FUNDING_DELETED_ITEMS);
                 if (delItems == null)
-                    delItems = new HashSet<AmpComponentFundingDocument>();
+                    delItems = new HashSet<>();
 
                 if (refreshExistingDocs)
                     existingTmpDocs = getExistingObject();
                 List<TemporaryComponentFundingDocument> ret = new ArrayList<>(existingTmpDocs);
 
                 if (am.getObject().getComponentFundingDocuments() == null)
-                    am.getObject().setComponentFundingDocuments(new HashSet<AmpComponentFundingDocument>());
+                    am.getObject().setComponentFundingDocuments(new HashSet<>());
 
                 for (AmpComponentFundingDocument d : setModel.getObject()) {
                     //check if marked for delete
@@ -173,7 +180,7 @@ public class AmpComponentFundingResourcesTableFeature extends AmpFormTableFeatur
                         id = document.getNewTemporaryDocumentId();
                     }
                     Model<String> newResourceIdModel = new Model<String>(id);
-                    final ResourceTranslationModel titleModel = new ResourceTranslationModel(new PropertyModel<String>(item.getModel().getObject(), "title"), newResourceIdModel);
+                    final ResourceTranslationModel titleModel = new ResourceTranslationModel(new PropertyModel<>(item.getModel().getObject(), "title"), newResourceIdModel);
                     final AmpTextFieldPanel<String> name = new AmpTextFieldPanel<String>("componentFundingDocumentTitle", titleModel, "Title", AmpFMTypes.MODULE, Boolean.TRUE);
                     name.setEnabled(false);
                     name.getTextContainer().setRequired(true);
@@ -188,7 +195,7 @@ public class AmpComponentFundingResourcesTableFeature extends AmpFormTableFeatur
                     item.add(new Label("componentFundingDocumentResourceName", item.getModel().getObject().getFileName()));
                 }
 
-                AmpDeleteLinkField delComponentDoc = new AmpDeleteLinkField("componentFundingDocumentDelete", "Delete Resource") {
+                AmpDeleteLinkField delComponentDoc = new AmpDeleteLinkField("componentFundingDocumentDelete", "Component Funding Document Delete Resource") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
                         if (item.getModelObject().isExisting()) {
@@ -205,8 +212,8 @@ public class AmpComponentFundingResourcesTableFeature extends AmpFormTableFeatur
                         target.add(list.getParent());
                     }
                 };
-//                item.add(delComponentDoc);
-                item.add(new ListEditorRemoveButton("componentFundingDocumentDelete", "Component Funding Document Delete Resource"));
+                item.add(delComponentDoc);
+//                item.add(new ListEditorRemoveButton("componentFundingDocumentDelete", "Component Funding Document Delete Resource"));
 
                 PropertyModel<Date> dateModel = new PropertyModel<Date>(item.getModel(), "date.time");
                 String pattern = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
@@ -226,40 +233,40 @@ public class AmpComponentFundingResourcesTableFeature extends AmpFormTableFeatur
                 else
                     drs = new DownloadResourceStream(item.getModelObject().getFile(), item.getModelObject().getFileName());
 
-//                String webLink = item.getModelObject().getWebLink();
-//
-//                if (webLink != null && webLink.length() > 0) {
-//                    if (!webLink.startsWith("http"))
-//                        webLink = "http://" + webLink;
-//                    ExternalLink link = new ExternalLink("download", new Model<String>(webLink));
-//                    item.add(link);
-//                    WebMarkupContainer downloadLinkImg = new WebMarkupContainer("downloadImage");
-//                    downloadLinkImg.add(new AttributeModifier("src", new Model("/TEMPLATE/ampTemplate/img_2/ico_attachment.png")));
-//                    link.add(downloadLinkImg);
-//                } else {
-//                    Link downloadLink = new Link("download") {
-//                        @Override
-//                        public void onClick() {
-//                            getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(drs, drs.getFileName()));
-//                        }
-//                    };
-//                    item.add(downloadLink);
-//
-//                    String contentType = item.getModelObject().getFileName();
-//                    int index = contentType.lastIndexOf('.');
-//
-//                    String extension = contentType.substring(index + 1, contentType.length());
-//                    String extPath = "/TEMPLATE/ampTemplate/images/icons/" + extension + ".gif";
-//                    File extImgFile = new File(WebApplication.get().getServletContext().getRealPath(extPath));
-//                    if (!extImgFile.exists())
-//                        extPath = "/TEMPLATE/ampTemplate/images/icons/default.icon.gif";
-//                    else
-//                        extPath = "/TEMPLATE/ampTemplate/images/icons/" + extension + ".gif";
-//
-//                    WebMarkupContainer downloadLinkImg = new WebMarkupContainer("downloadImage");
-//                    downloadLinkImg.add(new AttributeModifier("src", new Model<>(extPath)));
-//                    downloadLink.add(downloadLinkImg);
-//                }
+                String webLink = item.getModelObject().getWebLink();
+
+                if (webLink != null && webLink.length() > 0) {
+                    if (!webLink.startsWith("http"))
+                        webLink = "http://" + webLink;
+                    ExternalLink link = new ExternalLink("componentFundingDocumentDownload", new Model<>(webLink));
+                    item.add(link);
+                    WebMarkupContainer downloadLinkImg = new WebMarkupContainer("componentFundingDocumentDownloadImage");
+                    downloadLinkImg.add(new AttributeModifier("src", new Model("/TEMPLATE/ampTemplate/img_2/ico_attachment.png")));
+                    link.add(downloadLinkImg);
+                } else {
+                    Link downloadLink = new Link("componentFundingDocumentDownload") {
+                        @Override
+                        public void onClick() {
+                            getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(drs, drs.getFileName()));
+                        }
+                    };
+                    item.add(downloadLink);
+
+                    String contentType = item.getModelObject().getFileName();
+                    int index = contentType.lastIndexOf('.');
+
+                    String extension = contentType.substring(index + 1, contentType.length());
+                    String extPath = "/TEMPLATE/ampTemplate/images/icons/" + extension + ".gif";
+                    File extImgFile = new File(WebApplication.get().getServletContext().getRealPath(extPath));
+                    if (!extImgFile.exists())
+                        extPath = "/TEMPLATE/ampTemplate/images/icons/default.icon.gif";
+                    else
+                        extPath = "/TEMPLATE/ampTemplate/images/icons/" + extension + ".gif";
+
+                    WebMarkupContainer downloadLinkImg = new WebMarkupContainer("componentFundingDocumentDownloadImage");
+                    downloadLinkImg.add(new AttributeModifier("src", new Model<>(extPath)));
+                    downloadLink.add(downloadLinkImg);
+                }
 
 
             }

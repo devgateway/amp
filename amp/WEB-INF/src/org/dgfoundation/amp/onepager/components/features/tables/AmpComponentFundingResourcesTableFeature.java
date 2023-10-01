@@ -10,6 +10,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerConst;
+import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpLabelFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
@@ -156,11 +157,11 @@ public class AmpComponentFundingResourcesTableFeature extends AmpFormTableFeatur
             @Override
             protected void populateItem(final ListItem<TemporaryComponentFundingDocument> item) {
                 if (item.getModel() == null && item.getModelObject() == null) {
-                    logger.error("yoh");
+                    logger.info("yoh here");
                     return;
                 }
 
-                TemporaryDocument document = (TemporaryDocument) item.getModelObject();
+                TemporaryDocument document = item.getModelObject();
 
                 if (!ContentTranslationUtil.multilingualIsEnabled()) {
                     item.add(new Label("componentFundingDocumentTitle", item.getModel().getObject().getTitle()));
@@ -187,15 +188,35 @@ public class AmpComponentFundingResourcesTableFeature extends AmpFormTableFeatur
                     item.add(new Label("componentFundingDocumentResourceName", item.getModel().getObject().getFileName()));
                 }
 
+                AmpDeleteLinkField delComponentDoc = new AmpDeleteLinkField("componentFundingDocumentDelete", "Delete Resource") {
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        if (item.getModelObject().isExisting()) {
+                            HashSet<AmpComponentFundingDocument> delItems = getSession().getMetaData(OnePagerConst.COMPONENT_FUNDING_DELETED_ITEMS);
+                            if (delItems == null) {
+                                delItems = new HashSet<>();
+                                getSession().setMetaData(OnePagerConst.COMPONENT_FUNDING_DELETED_ITEMS, delItems);
+                            }
+                            delItems.add(item.getModelObject().getExistingDocument());
+                        } else {
+                            HashSet<TemporaryComponentFundingDocument> newItems = getSession().getMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS);
+                            newItems.remove(item.getModelObject());
+                        }
+                        target.add(list.getParent());
+                    }
+                };
+//                item.add(delComponentDoc);
+                item.add(new ListEditorRemoveButton("componentFundingDocumentDelete", "Component Funding Document Delete Resource"));
+
                 PropertyModel<Date> dateModel = new PropertyModel<Date>(item.getModel(), "date.time");
                 String pattern = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
                 pattern = pattern.replace('m', 'M');
                 SimpleDateFormat formater = new SimpleDateFormat(pattern);
                 String formatedDate = formater.format(dateModel.getObject());
 
-                item.add(new AmpLabelFieldPanel<>("componentFundingDocumentDate", new Model<String>(formatedDate), "Component Funding Document Date", true));
-                item.add(new AmpLabelFieldPanel<String>("componentFundingDocumentYear", new PropertyModel<>(item.getModel(), "year"), "Component Funding Document Year", true));
-                item.add(new AmpLabelFieldPanel<Double>("componentFundingDocumentSize", new PropertyModel<>(item.getModel(), "fileSize"), "Component Funding Document Size", true));
+                item.add(new Label("componentFundingDocumentDate", formatedDate));
+                item.add(new Label("componentFundingDocumentYear",item.getModel().getObject().getYear()));
+                item.add(new Label("componentFundingDocumentSize", item.getModel().getObject().getFileSize()));
 //                item.add(new AmpLabelFieldPanel<String>("docType", new PropertyModel<String>(item.getModel(), "type.label"), "Document Type", true));
 
                 final DownloadResourceStream drs;
@@ -240,24 +261,7 @@ public class AmpComponentFundingResourcesTableFeature extends AmpFormTableFeatur
 //                    downloadLink.add(downloadLinkImg);
 //                }
 
-                AmpDeleteLinkField delRelOrg = new AmpDeleteLinkField("componentFundingDocumentDelete", "Delete Resource") {
-                    @Override
-                    public void onClick(AjaxRequestTarget target) {
-                        if (item.getModelObject().isExisting()) {
-                            HashSet<AmpComponentFundingDocument> delItems = getSession().getMetaData(OnePagerConst.COMPONENT_FUNDING_DELETED_ITEMS);
-                            if (delItems == null) {
-                                delItems = new HashSet<AmpComponentFundingDocument>();
-                                getSession().setMetaData(OnePagerConst.COMPONENT_FUNDING_DELETED_ITEMS, delItems);
-                            }
-                            delItems.add(item.getModelObject().getExistingDocument());
-                        } else {
-                            HashSet<TemporaryComponentFundingDocument> newItems = getSession().getMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS);
-                            newItems.remove(item.getModelObject());
-                        }
-                        target.add(list.getParent());
-                    }
-                };
-                item.add(delRelOrg);
+
             }
         };
 

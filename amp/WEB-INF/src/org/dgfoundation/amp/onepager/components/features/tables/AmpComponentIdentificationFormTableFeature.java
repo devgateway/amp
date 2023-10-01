@@ -70,15 +70,12 @@ public class AmpComponentIdentificationFormTableFeature extends AmpSubsectionFea
                     AmpComponentType object,
                     int index,
                     String selected) {
-                if (object.getSelectable())
-                    return false;
-                else
-                    return true;
+                return !object.getSelectable();
             }
         };
         compTypes.setOutputMarkupId(true);
         compTypes.getChoiceContainer().setRequired(true);
-        compTypes.getChoiceContainer().add(new AttributeAppender("style", true, new Model("max-width: 300px"), ";"));
+        compTypes.getChoiceContainer().add(new AttributeAppender("style", true, new Model<>("max-width: 300px"), ";"));
         add(compTypes);
         
         final AmpTextFieldPanel<String> name = new AmpTextFieldPanel<String>("name", new PropertyModel<String>(componentModel, "title"), COMPONENT_TITLE);

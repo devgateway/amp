@@ -40,10 +40,7 @@ import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 public class AmpComponentFundingNewResourceFieldPanel extends AmpFeaturePanel {
 
@@ -65,22 +62,22 @@ public class AmpComponentFundingNewResourceFieldPanel extends AmpFeaturePanel {
     final protected String CONTENT_TYPE_INTERNAL_ERROR = "*" + TranslatorUtil.getTranslatedText("Internal error during the content validation");
 
     boolean webLinkFormatCorrect;
-    protected Model<String> newResourceIdModel = new Model<String>();
+    protected Model<String> newResourceIdModel = new Model<>();
 
     public AmpComponentFundingNewResourceFieldPanel(final String id,
                                     final IModel<AmpComponentFunding> model,
                                     final String fmName,
-                                    final AmpComponentFundingResourcesTableFeature resourcesList) throws Exception {
+                                    final AmpComponentFundingResourcesTableFeature resourcesList) {
 
         super(id, model, fmName, true);
 
         TemporaryComponentFundingDocument tmpDoc = new TemporaryComponentFundingDocument ();
-        String docId =generateResourceKey("newComponentResource");
+        String docId =generateResourceKey("newResource");
         newResourceIdModel.setObject(docId);
         tmpDoc.setNewTemporaryDocumentId(docId);
-        final IModel<TemporaryComponentFundingDocument> td = new Model<TemporaryComponentFundingDocument>(tmpDoc);
+        final IModel<TemporaryComponentFundingDocument> td = new Model<>(tmpDoc);
         final ResourceTranslationModel titleModel = new ResourceTranslationModel(new PropertyModel<String>(td, "title"),newResourceIdModel);
-        final AmpTextFieldPanel<String> name = new AmpTextFieldPanel<String>("componentFundingDocumentDocTitle",titleModel , "Title", AmpFMTypes.MODULE,Boolean.TRUE);
+        final AmpTextFieldPanel<String> name = new AmpTextFieldPanel<>("componentFundingDocumentDocTitle", titleModel, "Title", AmpFMTypes.MODULE, Boolean.TRUE);
         name.setTextContainerDefaultMaxSize();
         name.setOutputMarkupId(true);
         final ResourceTranslationModel descModel = new ResourceTranslationModel(new PropertyModel<String>(td, "description"),newResourceIdModel);
@@ -93,7 +90,7 @@ public class AmpComponentFundingNewResourceFieldPanel extends AmpFeaturePanel {
         //FileUploadField file = new FileUploadField("file", new AmpFileUploadModel(new PropertyModel<FileUpload>(td, "file")));
         //file.setOutputMarkupId(true);
 
-        String componentId = "newComponentResource";
+        String componentId = "new";
         if (model.getObject().getAmpComponentFundingId() != null)
             componentId = Long.toString(model.getObject().getAmpComponentFundingId());
         final Model<FileItem> fileItemModel = new Model<FileItem>();
@@ -152,7 +149,7 @@ public class AmpComponentFundingNewResourceFieldPanel extends AmpFeaturePanel {
                     tmp.setTranslatedNoteList(getTranslationsForField(tmp.getNewTemporaryDocumentId(),"description"));
                     newItemsSet.add(tmp);
                     TemporaryComponentFundingDocument tmpDoc = new TemporaryComponentFundingDocument();
-                    String docId = generateResourceKey("newComponentResource");
+                    String docId = generateResourceKey("newResource");
                     newResourceIdModel.setObject(docId);
                     tmpDoc.setNewTemporaryDocumentId(docId);
                     td.setObject(tmpDoc);
@@ -330,7 +327,7 @@ public class AmpComponentFundingNewResourceFieldPanel extends AmpFeaturePanel {
     }
 
     private List<ResourceTranslation> getTranslationsForField (String id, String field) {
-        List<ResourceTranslation> translationsList = null;
+        List<ResourceTranslation> translationsList;
         HashMap<String, ResourceTranslationStore> translationMap = Session.get().getMetaData(
                 OnePagerConst.RESOURCES_TRANSLATIONS);
         if (translationMap != null) {

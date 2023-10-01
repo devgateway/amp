@@ -8,6 +8,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
@@ -23,6 +24,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -58,6 +60,12 @@ public class AmpComponentsFundingFormTableFeature extends
             @Override
             protected void onPopulateItem(org.dgfoundation.amp.onepager.components.ListItem<AmpComponentFunding> item) {
                 IModel<AmpComponentFunding> model = item.getModel();
+                if (model.getObject().getComponentFundingDocuments() == null)
+                    model.getObject().setComponentFundingDocuments(new HashSet<>());
+                if (getSession().getMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS) == null)
+                    getSession().setMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS, new HashSet());
+                if (getSession().getMetaData(OnePagerConst.COMPONENT_FUNDING_DELETED_ITEMS) == null)
+                    getSession().setMetaData(OnePagerConst.COMPONENT_FUNDING_DELETED_ITEMS, new HashSet());
                 try{
                     AmpCategorySelectFieldPanel adjustmentTypes = new AmpCategorySelectFieldPanel(
                             "adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_KEY,

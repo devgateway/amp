@@ -47,7 +47,7 @@ public class AmpComponentFundingNewResourceFieldPanel extends AmpFeaturePanel {
 
     private static final long serialVersionUID = 1L;
 
-//    protected WebMarkupContainer webLinkFeedbackContainer;
+    protected WebMarkupContainer webLinkFeedbackContainer;
     protected Label webLinkFeedbackLabel;
     boolean resourceIsURL = false;
     protected boolean pathSelected;
@@ -211,8 +211,8 @@ public class AmpComponentFundingNewResourceFieldPanel extends AmpFeaturePanel {
         form.add(submit);
         form.add(createCancelButton());
 
-//        createWebLinkFeedbackContainer();
-//        form.add(webLinkFeedbackContainer);
+        createWebLinkFeedbackContainer();
+        form.add(webLinkFeedbackContainer);
     }
 
     protected AjaxLink createAddNewLink(final String fmName) {
@@ -246,15 +246,15 @@ public class AmpComponentFundingNewResourceFieldPanel extends AmpFeaturePanel {
         };
     }
 
-//    protected void createWebLinkFeedbackContainer() {
-//        webLinkFeedbackContainer = new WebMarkupContainer("webLinkFeedbackContainer");
-//        webLinkFeedbackContainer.setOutputMarkupId(true);
-//        webLinkFeedbackContainer.setOutputMarkupPlaceholderTag(true);
-//        webLinkFeedbackContainer.setVisible(false);
-//
-//        webLinkFeedbackLabel = new Label("webLinkFeedbackLabel", new Model<String>(DEFAULT_MESSAGE));
-//        webLinkFeedbackContainer.add(webLinkFeedbackLabel);
-//    }
+    protected void createWebLinkFeedbackContainer() {
+        webLinkFeedbackContainer = new WebMarkupContainer("webLinkFeedbackContainer");
+        webLinkFeedbackContainer.setOutputMarkupId(true);
+        webLinkFeedbackContainer.setOutputMarkupPlaceholderTag(true);
+        webLinkFeedbackContainer.setVisible(false);
+
+        webLinkFeedbackLabel = new Label("webLinkFeedbackLabel", new Model<String>(DEFAULT_MESSAGE));
+        webLinkFeedbackContainer.add(webLinkFeedbackLabel);
+    }
 
     protected boolean updateVisibility(TemporaryDocument resource, boolean newResourceIsWebLink) {
         boolean noErrors = true;

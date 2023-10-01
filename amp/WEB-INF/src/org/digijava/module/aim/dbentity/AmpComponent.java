@@ -6,6 +6,7 @@
 package org.digijava.module.aim.dbentity;
 
 import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpComponentFundingDiscriminationConfigurer;
 import org.digijava.kernel.ampapi.endpoints.activity.values.providers.ComponentTypePossibleValuesProvider;
 import org.digijava.kernel.validators.common.RequiredValidator;
@@ -309,6 +310,7 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
                 AmpComponentFunding newComponentFunding = (AmpComponentFunding) auxComponentFunding.clone();
                 newComponentFunding.setAmpComponentFundingId(null);
                 newComponentFunding.setComponent(auxComponent);
+                ActivityUtil.saveComponentFundingResources(newComponentFunding);
                 auxSetFundings.add(newComponentFunding);
             }
             auxComponent.setFundings(auxSetFundings);

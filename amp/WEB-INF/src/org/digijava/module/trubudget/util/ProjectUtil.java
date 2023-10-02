@@ -1,5 +1,9 @@
 package org.digijava.module.trubudget.util;
 
+import org.apache.commons.fileupload.FileItem;
+import org.dgfoundation.amp.onepager.AmpAuthWebSession;
+import org.dgfoundation.amp.onepager.OnePagerConst;
+import org.dgfoundation.amp.onepager.helper.TemporaryComponentFundingDocument;
 import org.digijava.kernel.cache.AbstractCache;
 import org.digijava.kernel.cache.ehcache.EhCacheWrapper;
 import org.digijava.kernel.entity.trubudget.SubIntents;
@@ -24,8 +28,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.core.scheduler.Schedulers;
 
+import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -322,6 +329,28 @@ public class ProjectUtil {
                             data.setProjectId(projectId);
                             data.setSubprojectId(subProjectId);
                             data.setAssignee(user);
+                            List<CreateWorkFlowItemModel.Document> docs = new ArrayList<>();
+                            AmpAuthWebSession s = ( AmpAuthWebSession) org.apache.wicket.Session.get();
+                                HashSet<TemporaryComponentFundingDocument> newResources =s.getMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS);
+                                newResources.addAll(s.getMetaData(OnePagerConst.COMPONENT_FUNDING_EXISTING_ITEM_TITLES));
+                                for (TemporaryComponentFundingDocument temporaryComponentFundingDocument: newResources)
+                                {
+                                    try {
+                                        CreateWorkFlowItemModel.Document doc = new CreateWorkFlowItemModel.Document();
+                                        doc.setFileName(temporaryComponentFundingDocument.getFileName());
+                                        File file = temporaryComponentFundingDocument.getFile().writeToTempFile();
+
+                                        byte[] fileContent = Files.readAllBytes(file.toPath());
+                                        doc.setBase64(Base64.getEncoder().encodeToString(fileContent));
+                                        docs.add(doc);
+                                    }catch (Exception e)
+                                    {
+                                        logger.error("Error during workflow creation ",e);
+                                    }
+
+
+                                }
+                                data.setDocuments(docs);
 //                            data.setStatus((Objects.equals(componentFunding.getComponentFundingStatusFormatted(), "closed") || Objects.equals(componentFunding.getComponentFundingStatusFormatted(), "rejected"))?"closed":"open");
                             data.setDescription(componentFunding.getDescription());
                             data.setDisplayName(componentFunding.getComponent().getTitle());
@@ -389,6 +418,28 @@ public class ProjectUtil {
                                 data.setAmountType(Objects.equals(componentFunding.getAdjustmentType().getValue(), "Planned") ? "allocated" : "disbursed");
                                 data.setBillingDate(convertToISO8601(componentFunding.getTransactionDate()));
                                 data.setDueDate(convertToISO8601AndAddDays(componentFunding.getTransactionDate(), Integer.parseInt(getSettingValue(settings, "workFlowItemDueDays"))));//set approprite date
+                                List<CreateWorkFlowItemModel.Document> docs = new ArrayList<>();
+                                AmpAuthWebSession s = ( AmpAuthWebSession) org.apache.wicket.Session.get();
+                                HashSet<TemporaryComponentFundingDocument> newResources =s.getMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS);
+                                newResources.addAll(s.getMetaData(OnePagerConst.COMPONENT_FUNDING_EXISTING_ITEM_TITLES));
+                                for (TemporaryComponentFundingDocument temporaryComponentFundingDocument: newResources)
+                                {
+                                    try {
+                                        CreateWorkFlowItemModel.Document doc = new CreateWorkFlowItemModel.Document();
+                                        doc.setFileName(temporaryComponentFundingDocument.getFileName());
+                                        File file = temporaryComponentFundingDocument.getFile().writeToTempFile();
+
+                                        byte[] fileContent = Files.readAllBytes(file.toPath());
+                                        doc.setBase64(Base64.getEncoder().encodeToString(fileContent));
+                                        docs.add(doc);
+                                    }catch (Exception e)
+                                    {
+                                        logger.error("Error during workflow creation ",e);
+                                    }
+
+
+                                }
+                                data.setDocuments(docs);
                                 editWFItemModel.setData(data);
                                 GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/workflowitem.update", editWFItemModel, EditWFItemModel.class, String.class, token)
                                         .subscribe(res -> logger.info("Edit WFItem response: "+res));

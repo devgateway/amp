@@ -218,7 +218,7 @@ public class AmpComponentFundingResourcesTableFeature extends AmpFormTableFeatur
                 item.add(delComponentDoc);
 //                item.add(new ListEditorRemoveButton("componentFundingDocumentDelete", "Component Funding Document Delete Resource"));
 
-                PropertyModel<Date> dateModel = new PropertyModel<Date>(item.getModel(), "date.time");
+                PropertyModel<Date> dateModel = new PropertyModel<>(item.getModel(), "date.time");
                 String pattern = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
                 pattern = pattern.replace('m', 'M');
                 SimpleDateFormat formater = new SimpleDateFormat(pattern);

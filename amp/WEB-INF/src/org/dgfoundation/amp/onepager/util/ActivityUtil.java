@@ -287,7 +287,7 @@ public class ActivityUtil {
         saveAgreements(a, session, isActivityForm);
         saveContacts(a, session, (draft != draftChange), ampCurrentMember);
 
-        updateComponentFunding(a, session);
+        updateComponentFunding(a);
         saveAnnualProjectBudgets(a, session);
         saveProjectCosts(a, session);
         saveStructures(a, session);
@@ -745,7 +745,7 @@ public class ActivityUtil {
     }
 
 
-    private static void updateComponentFunding(AmpActivityVersion a, Session session) {
+    private static void updateComponentFunding(AmpActivityVersion a) {
         Set<AmpComponent> components = a.getComponents();
 
         if (components == null) {
@@ -756,7 +756,13 @@ public class ActivityUtil {
             if (Hibernate.isInitialized(ampComponent.getFundings())) {
                 if (ampComponent.getFundings() != null) {
 
-                    ampComponent.getFundings().removeIf(acf -> acf.getTransactionAmount() == null);
+                    ampComponent.getFundings().forEach(acf -> {
+                        if (acf.getTransactionAmount() == null)
+                        {
+                            ampComponent.getFundings().remove(acf);
+                        }
+                        saveComponentFundingResources(acf);
+                    });
                 }
             }
         }

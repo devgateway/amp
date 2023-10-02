@@ -310,7 +310,7 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
                 AmpComponentFunding newComponentFunding = (AmpComponentFunding) auxComponentFunding.clone();
                 newComponentFunding.setAmpComponentFundingId(null);
                 newComponentFunding.setComponent(auxComponent);
-                ActivityUtil.saveComponentFundingResources(newComponentFunding);
+//                ActivityUtil.saveComponentFundingResources(newComponentFunding);
                 auxSetFundings.add(newComponentFunding);
             }
             auxComponent.setFundings(auxSetFundings);

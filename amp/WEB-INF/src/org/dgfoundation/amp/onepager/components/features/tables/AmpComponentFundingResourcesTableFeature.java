@@ -59,6 +59,9 @@ public class AmpComponentFundingResourcesTableFeature extends AmpFormTableFeatur
                                         final IModel<AmpComponentFunding> am) throws Exception {
         super(id, am, fmName);
         super.setTitleHeaderColSpan(10);
+        getSession().setMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS, new HashSet<>());
+//        getSession().setMetaData(OnePagerConst.COMPONENT_FUNDING_DELETED_ITEMS, new HashSet<>());
+//        getSession().setMetaData(OnePagerConst.COMPONENT_FUNDING_EXISTING_ITEM_TITLES, new HashSet<>());
 
 
         final IModel<Set<AmpComponentFundingDocument>> setModel = new PropertyModel<Set<AmpComponentFundingDocument>>(am, "componentFundingDocuments");
@@ -241,7 +244,7 @@ public class AmpComponentFundingResourcesTableFeature extends AmpFormTableFeatur
                     ExternalLink link = new ExternalLink("componentFundingDocumentDownload", new Model<>(webLink));
                     item.add(link);
                     WebMarkupContainer downloadLinkImg = new WebMarkupContainer("componentFundingDocumentDownloadImage");
-                    downloadLinkImg.add(new AttributeModifier("src", new Model("/TEMPLATE/ampTemplate/img_2/ico_attachment.png")));
+                    downloadLinkImg.add(new AttributeModifier("src", new Model<>("/TEMPLATE/ampTemplate/img_2/ico_attachment.png")));
                     link.add(downloadLinkImg);
                 } else {
                     Link downloadLink = new Link("componentFundingDocumentDownload") {

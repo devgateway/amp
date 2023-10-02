@@ -321,7 +321,7 @@ public class ProjectUtil {
                 if (!ampComponent.getFundings().isEmpty()) {
                     for (AmpComponentFunding componentFunding : ampComponent.getFundings()) {
                         if (componentFunding.getTransactionType() == 1 && (Objects.equals(componentFunding.getAdjustmentType().getValue(), "Planned") || Objects.equals(componentFunding.getAdjustmentType().getValue(), "Actual"))) {
-                            AmpComponentFundingTruWF ampComponentFundingTruWF = PersistenceManager.getRequestDBSession().createQuery("FROM "+AmpComponentFundingTruWF.class.getName()+" act WHERE act.ampComponentFundingId="+componentFunding.getAmpComponentFundingId(), AmpComponentFundingTruWF.class).stream().findAny().orElse(null);
+                            AmpComponentFundingTruWF ampComponentFundingTruWF = PersistenceManager.getRequestDBSession().createQuery("FROM "+AmpComponentFundingTruWF.class.getName()+" act WHERE act.ampComponentFundingId="+componentFunding.getAmpComponentFundingId()+" AND act.ampComponentFundingId IS NOT NULL", AmpComponentFundingTruWF.class).stream().findAny().orElse(null);
                             if (ampComponentFundingTruWF==null){//create new wfItem
                             CreateWorkFlowItemModel createWorkFlowItemModel = new CreateWorkFlowItemModel();
                             createWorkFlowItemModel.setApiVersion(getSettingValue(settings, "apiVersion"));
@@ -383,6 +383,7 @@ public class ProjectUtil {
                                                 }
                                                 e.printStackTrace();
                                             } finally {
+                                                session.flush();
                                                 session.close();
                                             }
                                             subIntents.forEach(subIntent -> {

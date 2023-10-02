@@ -79,6 +79,7 @@ public class FileUploadBehavior extends Behavior {
         variables.put("uploadFailedMsg", TranslatorUtil.getTranslatedText("Upload failed! Please try again."));
         variables.put("uploadStartedMsg", TranslatorUtil.getTranslatedText("Upload started, please wait..."));
         variables.put("uploadFailedTooBigMsg", TranslatorUtil.getTranslatedText("The file size limit is {size} MB. This file exceeds the limit.").replace("{size}", maxFileSizeGS));
+        variables.put("uploadFailedTooSmallMsg", TranslatorUtil.getTranslatedText("This file is empty.Please upload a non-empty file."));
         variables.put("uploadMaxFileSize", Long.toString(Bytes.megabytes(Long.parseLong(maxFileSizeGS)).bytes()));
         variables.put("uploadNoFileLabel", TranslatorWorker.translateText("No file chosen"));
 

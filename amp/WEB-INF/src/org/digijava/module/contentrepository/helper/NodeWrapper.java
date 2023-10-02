@@ -120,6 +120,7 @@ public class NodeWrapper{
             this.node = newNode;
 
         } catch(RepositoryException e) {
+            e.printStackTrace();
             ActionMessage error = new ActionMessage("error.contentrepository.addFile:badPath");
             errors.add("title", error);
             logger.error(error.getValues(), e);
@@ -414,7 +415,7 @@ public class NodeWrapper{
                 if(tempDoc.getYearofPublication()!=null){
                     Integer yearofPublication = new Integer(tempDoc.yearofPublication);
                     yearofPublicationDate= Calendar.getInstance();
-                    yearofPublicationDate.set(yearofPublication.intValue(), 1, 1);
+                    yearofPublicationDate.set(yearofPublication, Calendar.FEBRUARY, 1);
                 }
                 populateNode(isANewVersion,newNode, tempDoc.getTitle(), tempDoc.getDescription(), tempDoc.getNotes(), 
                     contentType, tempDoc.getCmDocTypeId(), teamMember.getEmail(), teamMember.getTeamId(), yearofPublicationDate,

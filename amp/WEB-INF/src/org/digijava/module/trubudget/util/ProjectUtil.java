@@ -1,6 +1,5 @@
 package org.digijava.module.trubudget.util;
 
-import org.apache.commons.fileupload.FileItem;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.helper.TemporaryComponentFundingDocument;
@@ -22,6 +21,7 @@ import org.digijava.module.trubudget.model.workflowitem.EditWFItemModel;
 import org.digijava.module.trubudget.model.workflowitem.WFItemGrantRevokePermModel;
 import org.digijava.module.um.util.GenericWebClient;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.hibernate.type.LongType;
 import org.slf4j.Logger;
@@ -29,7 +29,6 @@ import org.slf4j.LoggerFactory;
 import reactor.core.scheduler.Schedulers;
 
 import java.io.File;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -37,6 +36,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 import static org.digijava.module.um.util.DbUtil.*;
@@ -361,16 +361,30 @@ public class ProjectUtil {
                             data.setBillingDate(convertToISO8601(componentFunding.getTransactionDate()));
                             data.setDueDate(convertToISO8601AndAddDays(componentFunding.getTransactionDate(), Integer.parseInt(getSettingValue(settings, "workFlowItemDueDays"))));//set approprite date
                             createWorkFlowItemModel.setData(data);
-                            Session session =PersistenceManager.getRequestDBSession();
+//                            Session session =PersistenceManager.getRequestDBSession();
+                                Session session = PersistenceManager.openNewSession();
+                                AtomicReference<Transaction> transaction = new AtomicReference<>();
+                            AmpComponentFundingTruWF ampComponentFundingTruWF1 = new AmpComponentFundingTruWF();
                             List<SubIntents> subIntents = getSubIntentsByMother("workflowitem");
                             try {
                                 GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/subproject.createWorkflowitem", createWorkFlowItemModel, CreateWorkFlowItemModel.class, CreateWFResponseModel.class, token)
                                         .subscribe(res -> {
                                             logger.info("Create WorkflowItem response: " + res);
-                                            AmpComponentFundingTruWF ampComponentFundingTruWF1 = new AmpComponentFundingTruWF();
                                             ampComponentFundingTruWF1.setAmpComponentFundingId(componentFunding.getAmpComponentFundingId());
                                             ampComponentFundingTruWF1.setTruWFId(res.getData().getWorkflowitem().getId());
-                                            session.save(ampComponentFundingTruWF1);
+                                            try {
+                                                transaction.set(session.beginTransaction());
+                                                // Perform database operations here
+                                                session.save(ampComponentFundingTruWF1);
+                                                transaction.get().commit();
+                                            } catch (Exception e) {
+                                                if (transaction.get() != null) {
+                                                    transaction.get().rollback();
+                                                }
+                                                e.printStackTrace();
+                                            } finally {
+                                                session.close();
+                                            }
                                             subIntents.forEach(subIntent -> {
                                                 WFItemGrantRevokePermModel wfItemGrantRevokePermModel = new WFItemGrantRevokePermModel();
                                                 WFItemGrantRevokePermModel.Data data2 = new WFItemGrantRevokePermModel.Data();

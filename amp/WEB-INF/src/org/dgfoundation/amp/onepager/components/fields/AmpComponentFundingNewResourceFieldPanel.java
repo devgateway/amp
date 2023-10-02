@@ -219,7 +219,8 @@ public class AmpComponentFundingNewResourceFieldPanel extends AmpFeaturePanel {
         final String newDocumentGenKey = TranslatorWorker.generateTrnKey(fmName);
         final AjaxLink addNewLink = new AjaxLink("componentFundingDocumentPanelLink"){
             public void onClick(AjaxRequestTarget target) {
-                target.prependJavaScript(OnePagerUtil.getToggleChildrenJS(this));
+//                target.prependJavaScript(OnePagerUtil.getToggleChildrenJS(this));
+                target.prependJavaScript(OnePagerUtil.getToggleChildrenJSComponentFunding(this, getToggleId()));
             }
 
             @Override
@@ -345,12 +346,21 @@ public class AmpComponentFundingNewResourceFieldPanel extends AmpFeaturePanel {
             link.setOutputMarkupId(true);
             link.add(new AttributeAppender("style", new Model<String>("text-decoration: underline; color: #0CAD0C;"), ""));
             link.add(new AttributeModifier("key", key));
-            link.add(new AttributeModifier("onclick", "$('#" + getToggleId() + "').slideToggle();spawnEditBox(this.id)"));
+//            link.add(new AttributeModifier("onclick", "$('#" + getToggleId() + "').slideToggle();spawnEditBox(this.id)"));
+            link.add(new AttributeModifier("onclick", String.format("$(this).closest('tr.wicketFundingRowItem').find('#%s').slideToggle();spawnEditBox(this.id)",getToggleId())));
+//            link.add(new AttributeModifier("onclick", "toggleElement(this, '" + getToggleId() + "');spawnEditBox(this.id)"));
+//            link.add(new AttributeModifier("onclick", "var row = $(this).closest('tr'); var element = row.find('#" + getToggleId() + "'); element.slideToggle(); return false;spawnEditBox(this.id)"));
+
         } else {
             link.add(AttributeModifier.remove("key"));
             link.add(AttributeModifier.remove("style"));
             link.add(AttributeModifier.remove("onclick"));
-            link.add(new AttributeModifier("onclick", "$('#" + getToggleId()  + "').slideToggle();"));
+//            link.add(new AttributeModifier("onclick", "$('#" + getToggleId()  + "').slideToggle();"));
+            link.add(new AttributeModifier("onclick", String.format("$(this).closest('tr.wicketFundingRowItem').find('#%s').slideToggle();",getToggleId())));
+//            link.add(new AttributeModifier("onclick", "console.log('Link clicked'); var row = $(this).closest('tr'); var element = row.find('#" + getToggleId() + "'); console.log(element); element.slideToggle(); return false;"));
+
+//            link.add(new AttributeModifier("onclick", "toggleElement(this, '" + getToggleId() + "');"));
+
         }
     }
 

@@ -75,6 +75,8 @@ public final class OnePagerConst {
 
     final static String toggleJS= "$('#%s').click(function(){$(this).siblings('div:first').slideToggle();return false;})";
     final static String toggleChildrenJS = "$('#%s').find('a.slider').click(function(){$(this).siblings('div:first').slideToggle();return false;})";
+    final static String toggleChildrenJSComponent = "$('#%s').find('a.slider').click(function(){$(this).closest('tr.wicketFundingRowItem').find('#%s').slideToggle();return false;})";
+
     final static String clickToggleJS= "$('#%s').siblings('div:first').slideToggle();";
     final static String clickToggle2JS= "$('#%s').find('div:first').find('div:first').slideToggle();";
     final static String toggleJSPM ="$(document).ready(function(){$('#%s').click(function(){$(this).siblings('div:first').slideToggle();return false;});})";

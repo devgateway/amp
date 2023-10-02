@@ -1,6 +1,9 @@
 package org.digijava.module.trubudget.model.workflowitem;
 
+import org.digijava.module.trubudget.model.subproject.CreateWorkFlowItemModel;
+
 import java.util.List;
+
 
 public class CreateWFResponseModel {
     private String apiVersion;
@@ -83,6 +86,13 @@ public class CreateWFResponseModel {
                 this.id = id;
             }
 
+            @Override
+            public String toString() {
+                return "Project{" +
+                        "id='" + id + '\'' +
+                        '}';
+            }
+
             // Constructors, getters, and setters
         }
 
@@ -97,12 +107,19 @@ public class CreateWFResponseModel {
                 this.id = id;
             }
 
+            @Override
+            public String toString() {
+                return "Subproject{" +
+                        "id='" + id + '\'' +
+                        '}';
+            }
+
             // Constructors, getters, and setters
         }
 
         public static class Workflowitem {
             private String id;
-            private List<String> documents;
+            private List<CreateWorkFlowItemModel.Document> documents;
 
             public String getId() {
                 return id;
@@ -112,11 +129,11 @@ public class CreateWFResponseModel {
                 this.id = id;
             }
 
-            public List<String> getDocuments() {
+            public List<CreateWorkFlowItemModel.Document> getDocuments() {
                 return documents;
             }
 
-            public void setDocuments(List<String> documents) {
+            public void setDocuments(List<CreateWorkFlowItemModel.Document> documents) {
                 this.documents = documents;
             }
 

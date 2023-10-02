@@ -24,6 +24,15 @@ public class CreateProjectModel {
     public void setApiVersion(String apiVersion) {
         this.apiVersion = apiVersion;
     }
+
+    @Override
+    public String toString() {
+        return "CreateProjectModel{" +
+                "apiVersion='" + apiVersion + '\'' +
+                ", data=" + data +
+                '}';
+    }
+
     public static class Data{
         private Project project;
 
@@ -36,6 +45,12 @@ public class CreateProjectModel {
         }
 
 
+        @Override
+        public String toString() {
+            return "Data{" +
+                    "project=" + project +
+                    '}';
+        }
     }
     public  static class Project {
         private String id;
@@ -119,6 +134,21 @@ public class CreateProjectModel {
         public void setTags(List<String> tags) {
             this.tags = tags;
         }
+
+        @Override
+        public String toString() {
+            return "Project{" +
+                    "id='" + id + '\'' +
+                    ", status='" + status + '\'' +
+                    ", displayName='" + displayName + '\'' +
+                    ", description='" + description + '\'' +
+                    ", assignee='" + assignee + '\'' +
+                    ", thumbnail='" + thumbnail + '\'' +
+                    ", projectedBudgets=" + projectedBudgets +
+                    ", additionalData=" + additionalData +
+                    ", tags=" + tags +
+                    '}';
+        }
     }
     public static class ProjectedBudget {
         private String organization;
@@ -147,6 +177,15 @@ public class CreateProjectModel {
 
         public void setCurrencyCode(String currencyCode) {
             this.currencyCode = currencyCode;
+        }
+
+        @Override
+        public String toString() {
+            return "ProjectedBudget{" +
+                    "organization='" + organization + '\'' +
+                    ", value='" + value + '\'' +
+                    ", currencyCode='" + currencyCode + '\'' +
+                    '}';
         }
     }
 }

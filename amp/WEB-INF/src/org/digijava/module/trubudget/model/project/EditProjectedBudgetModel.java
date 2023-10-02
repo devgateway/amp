@@ -22,6 +22,15 @@ public class EditProjectedBudgetModel {
     public void setData(Data data) {
         this.data = data;
     }
+
+    @Override
+    public String toString() {
+        return "EditProjectedBudgetModel{" +
+                "apiVersion='" + apiVersion + '\'' +
+                ", data=" + data +
+                '}';
+    }
+
     public static class Data {
         private String projectId;
         private String organization;
@@ -61,7 +70,17 @@ public class EditProjectedBudgetModel {
         public void setValue(String value) {
             this.value = value;
         }
-}
+
+        @Override
+        public String toString() {
+            return "Data{" +
+                    "projectId='" + projectId + '\'' +
+                    ", organization='" + organization + '\'' +
+                    ", currencyCode='" + currencyCode + '\'' +
+                    ", value='" + value + '\'' +
+                    '}';
+        }
+    }
 
 
 }

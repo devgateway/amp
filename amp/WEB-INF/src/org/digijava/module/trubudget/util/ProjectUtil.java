@@ -338,6 +338,7 @@ public class ProjectUtil {
                                     try {
                                         CreateWorkFlowItemModel.Document doc = new CreateWorkFlowItemModel.Document();
                                         doc.setFileName(temporaryComponentFundingDocument.getFileName());
+                                        doc.setId(UUID.randomUUID().toString());
                                         File file = temporaryComponentFundingDocument.getFile().writeToTempFile();
 
                                         byte[] fileContent = Files.readAllBytes(file.toPath());
@@ -428,6 +429,7 @@ public class ProjectUtil {
                                         CreateWorkFlowItemModel.Document doc = new CreateWorkFlowItemModel.Document();
                                         doc.setFileName(temporaryComponentFundingDocument.getFileName());
                                         File file = temporaryComponentFundingDocument.getFile().writeToTempFile();
+                                        doc.setId(UUID.randomUUID().toString());
 
                                         byte[] fileContent = Files.readAllBytes(file.toPath());
                                         doc.setBase64(Base64.getEncoder().encodeToString(fileContent));

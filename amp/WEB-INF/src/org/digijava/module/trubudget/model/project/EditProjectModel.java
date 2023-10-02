@@ -22,6 +22,15 @@ public class EditProjectModel {
     public void setData(Data data) {
         this.data = data;
     }
+
+    @Override
+    public String toString() {
+        return "EditProjectModel{" +
+                "apiVersion='" + apiVersion + '\'' +
+                ", data=" + data +
+                '}';
+    }
+
     public static class Data {
         private String projectId;
         private String displayName;
@@ -52,7 +61,16 @@ public class EditProjectModel {
         public void setDescription(String description) {
             this.description = description;
         }
-}
+
+        @Override
+        public String toString() {
+            return "Data{" +
+                    "projectId='" + projectId + '\'' +
+                    ", displayName='" + displayName + '\'' +
+                    ", description='" + description + '\'' +
+                    '}';
+        }
+    }
 
 
 }

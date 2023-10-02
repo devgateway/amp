@@ -25,6 +25,15 @@ public class EditSubProjectModel {
     public void setData(Data data) {
         this.data = data;
     }
+
+    @Override
+    public String toString() {
+        return "EditSubProjectModel{" +
+                "apiVersion='" + apiVersion + '\'' +
+                ", data=" + data +
+                '}';
+    }
+
     public static class Data {
         private String projectId;
         private String subprojectId;
@@ -72,6 +81,17 @@ public class EditSubProjectModel {
 
         public void setAdditionalData(Map<String, Object> additionalData) {
             this.additionalData = additionalData;
+        }
+
+        @Override
+        public String toString() {
+            return "Data{" +
+                    "projectId='" + projectId + '\'' +
+                    ", subprojectId='" + subprojectId + '\'' +
+                    ", displayName='" + displayName + '\'' +
+                    ", description='" + description + '\'' +
+                    ", additionalData=" + additionalData +
+                    '}';
         }
     }
 

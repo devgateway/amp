@@ -166,6 +166,27 @@ public class CreateWorkFlowItemModel {
         public void setWorkflowitemType(String workflowitemType) {
             this.workflowitemType = workflowitemType;
         }
+
+        @Override
+        public String toString() {
+            return "Data{" +
+                    "projectId='" + projectId + '\'' +
+                    ", subprojectId='" + subprojectId + '\'' +
+                    ", displayName='" + displayName + '\'' +
+                    ", description='" + description + '\'' +
+                    ", amount='" + amount + '\'' +
+                    ", assignee='" + assignee + '\'' +
+                    ", currency='" + currency + '\'' +
+                    ", amountType='" + amountType + '\'' +
+                    ", billingDate='" + billingDate + '\'' +
+                    ", dueDate='" + dueDate + '\'' +
+                    ", exchangeRate='" + exchangeRate + '\'' +
+                    ", status='" + status + '\'' +
+                    ", documents=" + documents +
+                    ", additionalData=" + additionalData +
+                    ", workflowitemType='" + workflowitemType + '\'' +
+                    '}';
+        }
     }
 
     public static class Document {
@@ -197,6 +218,15 @@ public class CreateWorkFlowItemModel {
 
         public void setFileName(String fileName) {
             this.fileName = fileName;
+        }
+
+        @Override
+        public String toString() {
+            return "Document{" +
+                    "id='" + id + '\'' +
+                    ", base64='" + base64 + '\'' +
+                    ", fileName='" + fileName + '\'' +
+                    '}';
         }
     }
 

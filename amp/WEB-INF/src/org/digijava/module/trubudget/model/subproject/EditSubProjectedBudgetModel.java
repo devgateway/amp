@@ -22,6 +22,15 @@ public class EditSubProjectedBudgetModel {
     public void setData(Data data) {
         this.data = data;
     }
+
+    @Override
+    public String toString() {
+        return "EditSubProjectedBudgetModel{" +
+                "apiVersion='" + apiVersion + '\'' +
+                ", data=" + data +
+                '}';
+    }
+
     public static class Data {
         private String projectId;
         private String subprojectId;
@@ -69,6 +78,17 @@ public class EditSubProjectedBudgetModel {
 
         public void setSubprojectId(String subprojectId) {
             this.subprojectId = subprojectId;
+        }
+
+        @Override
+        public String toString() {
+            return "Data{" +
+                    "projectId='" + projectId + '\'' +
+                    ", subprojectId='" + subprojectId + '\'' +
+                    ", organization='" + organization + '\'' +
+                    ", currencyCode='" + currencyCode + '\'' +
+                    ", value='" + value + '\'' +
+                    '}';
         }
     }
 

@@ -29,6 +29,15 @@ public class EditWFItemModel {
     public void setData(Data data) {
         this.data = data;
     }
+
+    @Override
+    public String toString() {
+        return "EditWFItemModel{" +
+                "apiVersion='" + apiVersion + '\'' +
+                ", data=" + data +
+                '}';
+    }
+
     public static class Data {
         private String projectId;
         private String subprojectId;
@@ -148,6 +157,25 @@ public class EditWFItemModel {
 
         public void setDueDate(String dueDate) {
             this.dueDate = dueDate;
+        }
+
+        @Override
+        public String toString() {
+            return "Data{" +
+                    "projectId='" + projectId + '\'' +
+                    ", subprojectId='" + subprojectId + '\'' +
+                    ", workflowitemId='" + workflowitemId + '\'' +
+                    ", displayName='" + displayName + '\'' +
+                    ", amountType='" + amountType + '\'' +
+                    ", amount='" + amount + '\'' +
+                    ", currency='" + currency + '\'' +
+                    ", exchangeRate='" + exchangeRate + '\'' +
+                    ", billingDate='" + billingDate + '\'' +
+                    ", dueDate='" + dueDate + '\'' +
+                    ", description='" + description + '\'' +
+                    ", additionalData=" + additionalData +
+                    ", documents=" + documents +
+                    '}';
         }
     }
 

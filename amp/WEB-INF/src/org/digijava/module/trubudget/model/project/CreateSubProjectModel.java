@@ -29,6 +29,15 @@ public class CreateSubProjectModel {
     public void setData(Data data) {
         this.data = data;
     }
+
+    @Override
+    public String toString() {
+        return "CreateSubProjectModel{" +
+                "apiVersion='" + apiVersion + '\'' +
+                ", data=" + data +
+                '}';
+    }
+
     public static class Data {
         private String projectId;
         private Subproject subproject;
@@ -49,6 +58,14 @@ public class CreateSubProjectModel {
 
         public void setSubproject(Subproject subproject) {
             this.subproject = subproject;
+        }
+
+        @Override
+        public String toString() {
+            return "Data{" +
+                    "projectId='" + projectId + '\'' +
+                    ", subproject=" + subproject +
+                    '}';
         }
     }
 
@@ -147,6 +164,22 @@ public class CreateSubProjectModel {
 
         public void setProjectedBudgets(List<CreateProjectModel.ProjectedBudget> projectedBudgets) {
             this.projectedBudgets = projectedBudgets;
+        }
+
+        @Override
+        public String toString() {
+            return "Subproject{" +
+                    "id='" + id + '\'' +
+                    ", status='" + status + '\'' +
+                    ", displayName='" + displayName + '\'' +
+                    ", description='" + description + '\'' +
+                    ", assignee='" + assignee + '\'' +
+                    ", validator='" + validator + '\'' +
+                    ", workflowitemType='" + workflowitemType + '\'' +
+                    ", currency='" + currency + '\'' +
+                    ", projectedBudgets=" + projectedBudgets +
+                    ", additionalData=" + additionalData +
+                    '}';
         }
     }
 }

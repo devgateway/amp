@@ -109,6 +109,7 @@ const EditProfile: React.FC = () => {
                             open={show}
                             ref={modalRef}
                             closeIcon
+                            centered
                             dimmer="blurring"
                         >
                             <Modal.Header>

@@ -21,13 +21,9 @@ const EditProfile: React.FC = () => {
 
   const userProfile = useAppSelector((state) => state.userProfile.user);
 
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(true);
   const [showResultModal, setShowResultModal] = useState(false);
   const [resultModalContent, setResultModalContent] = useState('');
-
-  useEffect(() => {
-    setShow(true);
-  }, []);
 
   const getNotificationEmailEnabled = () => {
     if (userProfile) {
@@ -44,8 +40,9 @@ const EditProfile: React.FC = () => {
       setShowResultModal(true);
     }
 
-    if (!editUserProfileState.loading && !editUserProfileState.error) {
-      dispatch(updateUser(editUserProfileState.user as UserProfile));
+    if (!editUserProfileState.loading && !editUserProfileState.error && editUserProfileState.user) {
+      const previousUser = userProfile as UserProfile;
+      dispatch(updateUser(editUserProfileState.user as UserProfile || previousUser));
       setResultModalContent('Profile updated successfully.');
       setShowResultModal(true);
     }
@@ -54,6 +51,9 @@ const EditProfile: React.FC = () => {
   useEffect(() => {
     handleResult();
   }, [editUserProfileState]);
+
+  console.log('userProfile', userProfile);
+  console.log('showState', show);
 
   if (!userProfile) {
     return;

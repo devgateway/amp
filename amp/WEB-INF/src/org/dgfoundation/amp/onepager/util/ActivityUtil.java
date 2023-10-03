@@ -1050,11 +1050,9 @@ public class ActivityUtil {
     private static void deleteComponentFundingResources(AmpComponentFunding a, HashSet<AmpComponentFundingDocument> deletedResources) {
         if (deletedResources != null) {
             for (AmpComponentFundingDocument tmpDoc : deletedResources) {
-                Iterator<AmpComponentFundingDocument> it2 = a.getComponentFundingDocuments().iterator();
-                while (it2.hasNext()) {
-                    AmpComponentFundingDocument existDoc = (AmpComponentFundingDocument) it2.next();
+                for (AmpComponentFundingDocument existDoc : a.getComponentFundingDocuments()) {
                     if (existDoc.getUuid().compareTo(tmpDoc.getUuid()) == 0) {
-                        it2.remove();
+                        a.getComponentFundingDocuments().remove(existDoc);
                         break;
                     }
                 }

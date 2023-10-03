@@ -64,37 +64,39 @@ public class ProjectUtil {
         project.setTags(Arrays.stream((ampActivityVersion.getName() + " " + ampActivityVersion.getDescription()).split(" ")).filter(x -> x.length() <= 15).collect(Collectors.toList()));
         List<Map<String, Object>> fundingDetails = new ArrayList<>();
         for (AmpFunding ampFunding : ampActivityVersion.getFunding()) {
+            if (ampFunding.getFundingDetails()!=null) {
 
-            for (AmpFundingDetail ampFundingDetail : ampFunding.getFundingDetails()) {
-                String adjustmentType = ampFundingDetail.getAdjustmentType().getValue();
-                Integer transactionType = ampFundingDetail.getTransactionType();
+                for (AmpFundingDetail ampFundingDetail : ampFunding.getFundingDetails()) {
+                    String adjustmentType = ampFundingDetail.getAdjustmentType().getValue();
+                    Integer transactionType = ampFundingDetail.getTransactionType();
 
-                Double amount = ampFundingDetail.getTransactionAmount();
-                String currency = ampFundingDetail.getAmpCurrencyId().getCurrencyCode();
-                String organization = ampFundingDetail.getAmpFundingId().getAmpDonorOrgId().getName();
-                String assistanceType = ampFundingDetail.getAmpFundingId().getTypeOfAssistance().getValue();
-                String fundingStatus = ampFundingDetail.getAmpFundingId().getFundingStatus().getValue();
-                CreateProjectModel.ProjectedBudget projectedBudget = new CreateProjectModel.ProjectedBudget();
-                if (Objects.equals(adjustmentType, "Actual") && transactionType==0)//project budget is created using "actual commitment"
-                {
-                    projectedBudget.setOrganization(organization);
-                    projectedBudget.setValue(BigDecimal.valueOf(amount).toPlainString());
-                    projectedBudget.setCurrencyCode(currency);
-                    project.getProjectedBudgets().add(projectedBudget);
-                }
+                    Double amount = ampFundingDetail.getTransactionAmount();
+                    String currency = ampFundingDetail.getAmpCurrencyId().getCurrencyCode();
+                    String organization = ampFundingDetail.getAmpFundingId().getAmpDonorOrgId().getName();
+                    String assistanceType = ampFundingDetail.getAmpFundingId().getTypeOfAssistance().getValue();
+                    String fundingStatus = ampFundingDetail.getAmpFundingId().getFundingStatus().getValue();
+                    CreateProjectModel.ProjectedBudget projectedBudget = new CreateProjectModel.ProjectedBudget();
+                    if (Objects.equals(adjustmentType, "Actual") && transactionType == 0)//project budget is created using "actual commitment"
+                    {
+                        projectedBudget.setOrganization(organization);
+                        projectedBudget.setValue(BigDecimal.valueOf(amount).toPlainString());
+                        projectedBudget.setCurrencyCode(currency);
+                        project.getProjectedBudgets().add(projectedBudget);
+                    }
 
-                Map<String, Object> detail = new HashMap<>();
-                detail.put("organization", organization);
-                detail.put("adjustmentType", adjustmentType);
-                detail.put("assistanceType", assistanceType);
-                detail.put("fundingStatus", fundingStatus);
-                detail.put("projectedBudget", projectedBudget);
-                fundingDetails.add(detail);
+                    Map<String, Object> detail = new HashMap<>();
+                    detail.put("organization", organization);
+                    detail.put("adjustmentType", adjustmentType);
+                    detail.put("assistanceType", assistanceType);
+                    detail.put("fundingStatus", fundingStatus);
+                    detail.put("projectedBudget", projectedBudget);
+                    fundingDetails.add(detail);
 
-                Map<String, Object> additionalData = project.getAdditionalData();
-                if (additionalData.containsKey("fundingDetails")) {
-                    // TODO: 9/11/23 getdetails list and add to it
-                    additionalData.get("fundingDetails");
+                    Map<String, Object> additionalData = project.getAdditionalData();
+                    if (additionalData.containsKey("fundingDetails")) {
+                        // TODO: 9/11/23 getdetails list and add to it
+                        additionalData.get("fundingDetails");
+                    }
                 }
             }
         }
@@ -167,31 +169,30 @@ public class ProjectUtil {
         });
 
         for (AmpFunding ampFunding : ampActivityVersion.getFunding()) {
+            if (ampFunding.getFundingDetails()!=null) {
+                for (AmpFundingDetail ampFundingDetail : ampFunding.getFundingDetails()) {
+                    String adjustmentType = ampFundingDetail.getAdjustmentType().getValue();
+                    Integer transactionType = ampFundingDetail.getTransactionType();
 
-            for (AmpFundingDetail ampFundingDetail : ampFunding.getFundingDetails()) {
-                String adjustmentType = ampFundingDetail.getAdjustmentType().getValue();
-                Integer transactionType = ampFundingDetail.getTransactionType();
+                    Double amount = ampFundingDetail.getTransactionAmount();
+                    String currency = ampFundingDetail.getAmpCurrencyId().getCurrencyCode();
+                    String organization = ampFundingDetail.getAmpFundingId().getAmpDonorOrgId().getName();
+                    EditProjectedBudgetModel projectedBudget = new EditProjectedBudgetModel();
+                    projectedBudget.setApiVersion(getSettingValue(settings, "apiVersion"));
+                    EditProjectedBudgetModel.Data data1 = new EditProjectedBudgetModel.Data();
+                    data1.setOrganization(organization);
+                    data1.setValue(BigDecimal.valueOf(amount).toPlainString());
+                    data1.setCurrencyCode(currency);
+                    data1.setProjectId(projectId);
+                    projectedBudget.setData(data1);
+                    if (Objects.equals(adjustmentType, "Actual") && transactionType == 0)//project budget is edited using "actual commitment"
+                    {
+                        GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/project.budget.updateProjected", projectedBudget, EditProjectedBudgetModel.class, String.class, token).subscribeOn(Schedulers.parallel())
+                                .subscribe(res2 -> logger.info("Update budget response: " + res2));
+                    }
 
-                Double amount = ampFundingDetail.getTransactionAmount();
-                String currency = ampFundingDetail.getAmpCurrencyId().getCurrencyCode();
-                String organization = ampFundingDetail.getAmpFundingId().getAmpDonorOrgId().getName();
-                EditProjectedBudgetModel projectedBudget = new EditProjectedBudgetModel();
-                projectedBudget.setApiVersion(getSettingValue(settings, "apiVersion"));
-                EditProjectedBudgetModel.Data data1 = new EditProjectedBudgetModel.Data();
-                data1.setOrganization(organization);
-                data1.setValue(BigDecimal.valueOf(amount).toPlainString());
-                data1.setCurrencyCode(currency);
-                data1.setProjectId(projectId);
-                projectedBudget.setData(data1);
-                if (Objects.equals(adjustmentType, "Actual") && transactionType==0)//project budget is edited using "actual commitment"
-                {
-                    GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/project.budget.updateProjected", projectedBudget, EditProjectedBudgetModel.class, String.class, token).subscribeOn(Schedulers.parallel())
-                            .subscribe(res2->logger.info("Update budget response: "+res2));
+
                 }
-
-
-
-
             }
         }
         createUpdateSubProjects(ampActivityVersion, projectId,settings);
@@ -423,6 +424,7 @@ public class ProjectUtil {
                             }
                         }
                             else {//update wfItem
+                                //a WF item can only be edited if it's status is 'open'
                                 EditWFItemModel editWFItemModel = new EditWFItemModel();
                                 editWFItemModel.setApiVersion(getSettingValue(settings, "apiVersion"));
                                 EditWFItemModel.Data data = new EditWFItemModel.Data();

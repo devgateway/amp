@@ -60,13 +60,11 @@ const EditProfile: React.FC = () => {
   }
 
   const handleClose = () => {
-    const previousPath = localStorage.getItem('currentPath');
-    if (previousPath) {
-      const goBackEvent = new CustomEvent('[UserManager] navigated', { detail: previousPath });
-      window.dispatchEvent(goBackEvent);
-    }
-
+    const previousURL = localStorage.getItem('PREVIOUS_URL');
     setShow(false);
+    if (previousURL) {
+      window.location.replace(previousURL);
+    }
   };
 
   const handleCloseResultModal = () => {

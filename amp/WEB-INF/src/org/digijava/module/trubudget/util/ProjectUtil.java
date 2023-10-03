@@ -331,8 +331,8 @@ public class ProjectUtil {
                             data.setAssignee(user);
                             List<CreateWorkFlowItemModel.Document> docs = new ArrayList<>();
                             AmpAuthWebSession s = ( AmpAuthWebSession) org.apache.wicket.Session.get();
-                                HashSet<TemporaryComponentFundingDocument> newResources =s.getMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS);
-                                newResources.addAll(s.getMetaData(OnePagerConst.COMPONENT_FUNDING_EXISTING_ITEM_TITLES));
+                                HashSet<TemporaryComponentFundingDocument> newResources =s.getMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS).get(componentFunding.getJustAnId());
+//                                newResources.addAll(s.getMetaData(OnePagerConst.COMPONENT_FUNDING_EXISTING_ITEM_TITLES).get(componentFunding.getJustAnId()));
                                 for (TemporaryComponentFundingDocument temporaryComponentFundingDocument: newResources)
                                 {
                                     try {
@@ -352,6 +352,7 @@ public class ProjectUtil {
 
                                 }
                                 data.setDocuments(docs);
+                                newResources.clear();
 //                            data.setStatus((Objects.equals(componentFunding.getComponentFundingStatusFormatted(), "closed") || Objects.equals(componentFunding.getComponentFundingStatusFormatted(), "rejected"))?"closed":"open");
                             data.setDescription(componentFunding.getDescription());
                             data.setDisplayName(componentFunding.getComponent().getTitle());
@@ -436,8 +437,8 @@ public class ProjectUtil {
                                 data.setDueDate(convertToISO8601AndAddDays(componentFunding.getTransactionDate(), Integer.parseInt(getSettingValue(settings, "workFlowItemDueDays"))));//set approprite date
                                 List<CreateWorkFlowItemModel.Document> docs = new ArrayList<>();
                                 AmpAuthWebSession s = ( AmpAuthWebSession) org.apache.wicket.Session.get();
-                                HashSet<TemporaryComponentFundingDocument> newResources =s.getMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS);
-                                newResources.addAll(s.getMetaData(OnePagerConst.COMPONENT_FUNDING_EXISTING_ITEM_TITLES));
+                                HashSet<TemporaryComponentFundingDocument> newResources =s.getMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS).get(componentFunding.getJustAnId());
+//                                newResources.addAll(s.getMetaData(OnePagerConst.COMPONENT_FUNDING_EXISTING_ITEM_TITLES).get(componentFunding.getJustAnId()));
                                 for (TemporaryComponentFundingDocument temporaryComponentFundingDocument: newResources)
                                 {
                                     try {
@@ -456,6 +457,7 @@ public class ProjectUtil {
 
 
                                 }
+                                newResources.clear();
                                 data.setDocuments(docs);
                                 editWFItemModel.setData(data);
                                 GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/workflowitem.update", editWFItemModel, EditWFItemModel.class, String.class, token)

@@ -2,9 +2,12 @@ package org.dgfoundation.amp.onepager.components.features.tables;
 
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -28,6 +31,7 @@ import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
 import org.dgfoundation.amp.onepager.models.ResourceTranslationModel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.SessionUtil;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpComponentFundingDocument;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.helper.Constants;
@@ -59,12 +63,12 @@ public class AmpComponentFundingResourcesTableFeature extends AmpFormTableFeatur
                                         final IModel<AmpComponentFunding> am) throws Exception {
         super(id, am, fmName);
         super.setTitleHeaderColSpan(10);
-        getSession().setMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS, new HashSet<>());
+//        getSession().setMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS, new HashSet<>());
 //        getSession().setMetaData(OnePagerConst.COMPONENT_FUNDING_DELETED_ITEMS, new HashSet<>());
 //        getSession().setMetaData(OnePagerConst.COMPONENT_FUNDING_EXISTING_ITEM_TITLES, new HashSet<>());
 
 
-        final IModel<Set<AmpComponentFundingDocument>> setModel = new PropertyModel<Set<AmpComponentFundingDocument>>(am, "componentFundingDocuments");
+        final IModel<Set<AmpComponentFundingDocument>> setModel = new PropertyModel<>(am, "componentFundingDocuments");
 
         if (am.getObject().getComponentFundingDocuments() == null)
             am.getObject().setComponentFundingDocuments(new HashSet<>());
@@ -75,7 +79,7 @@ public class AmpComponentFundingResourcesTableFeature extends AmpFormTableFeatur
 
             private List<TemporaryComponentFundingDocument> getExistingObject() {
                 Iterator<AmpComponentFundingDocument> it = setModel.getObject().iterator();
-                List<TemporaryComponentFundingDocument> ret = new ArrayList<TemporaryComponentFundingDocument>();
+                List<TemporaryComponentFundingDocument> ret = new ArrayList<>();
                 HashSet<TemporaryComponentFundingDocument> existingDocTitles = new HashSet<>();
 
                 while (it.hasNext()) {
@@ -115,18 +119,34 @@ public class AmpComponentFundingResourcesTableFeature extends AmpFormTableFeatur
                         existingDocTitles.add(td);
                     }
                 }
+                String justAnId= am.getObject().getJustAnId();
 
-                getSession().setMetaData(OnePagerConst.COMPONENT_FUNDING_EXISTING_ITEM_TITLES, existingDocTitles);
+                MetaDataKey<HashMap<String, HashSet<TemporaryComponentFundingDocument>>> metaDataKey = OnePagerConst.COMPONENT_FUNDING_EXISTING_ITEM_TITLES;
+
+                HashMap<String, HashSet<TemporaryComponentFundingDocument>> metaData = getSession().getMetaData(metaDataKey);
+
+                if (metaData == null) {
+                    metaData = new HashMap<>();
+
+                }
+                getSession().setMetaData(metaDataKey, metaData);
+
+                HashSet<TemporaryComponentFundingDocument> existingSet = metaData.computeIfAbsent(justAnId, k -> new HashSet<>());
+
+                existingSet.addAll(existingDocTitles);
                 refreshExistingDocs = false;
                 return ret;
             }
 
+
+
             @Override
             public List<TemporaryComponentFundingDocument> getObject() {
-                HashSet<TemporaryComponentFundingDocument> newItems = getSession().getMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS);
+                HashSet<TemporaryComponentFundingDocument> newItems = getSession().getMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS).get(am.getObject().getJustAnId());
                 if (newItems == null)
                     newItems = new HashSet<>();
-                HashSet<AmpComponentFundingDocument> delItems = getSession().getMetaData(OnePagerConst.COMPONENT_FUNDING_DELETED_ITEMS);
+                HashMap<String,HashSet<AmpComponentFundingDocument>> delItemsMap = getSession().getMetaData(OnePagerConst.COMPONENT_FUNDING_DELETED_ITEMS);
+                HashSet<AmpComponentFundingDocument> delItems = delItemsMap.get(am.getObject().getJustAnId());
                 if (delItems == null)
                     delItems = new HashSet<>();
 
@@ -198,23 +218,30 @@ public class AmpComponentFundingResourcesTableFeature extends AmpFormTableFeatur
                     item.add(new Label("componentFundingDocumentResourceName", item.getModel().getObject().getFileName()));
                 }
 
-                AmpDeleteLinkField delComponentDoc = new AmpDeleteLinkField("componentFundingDocumentDelete", "Component Funding Document Delete Resource") {
+                AjaxLink delComponentDoc = new AjaxLink("componentFundingDocumentDelete", setModel) {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
                         if (item.getModelObject().isExisting()) {
-                            HashSet<AmpComponentFundingDocument> delItems = getSession().getMetaData(OnePagerConst.COMPONENT_FUNDING_DELETED_ITEMS);
-                            if (delItems == null) {
-                                delItems = new HashSet<>();
-                                getSession().setMetaData(OnePagerConst.COMPONENT_FUNDING_DELETED_ITEMS, delItems);
+                            MetaDataKey<HashMap<String, HashSet<AmpComponentFundingDocument>>> metaDataKey = OnePagerConst.COMPONENT_FUNDING_DELETED_ITEMS;
+
+                            HashMap<String, HashSet<AmpComponentFundingDocument>> metaData = getSession().getMetaData(metaDataKey);
+
+                            if (metaData == null) {
+                                metaData = new HashMap<>();
+
                             }
+                            getSession().setMetaData(metaDataKey, metaData);
+                            HashSet<AmpComponentFundingDocument> delItems = metaData.computeIfAbsent(am.getObject().getJustAnId(), k -> new HashSet<>());
                             delItems.add(item.getModelObject().getExistingDocument());
                         } else {
-                            HashSet<TemporaryComponentFundingDocument> newItems = getSession().getMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS);
+                            HashSet<TemporaryComponentFundingDocument> newItems = getSession().getMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS).get(am.getObject().getJustAnId());
                             newItems.remove(item.getModelObject());
                         }
                         target.add(list.getParent());
                     }
                 };
+                // TODO: 10/2/23 add some style to
+                delComponentDoc.add(new Button("deleteComponentFundingDocButton").add(new Label("deleteComponentFundingDocLabel", TranslatorWorker.translateText("Del"))));
                 item.add(delComponentDoc);
 //                item.add(new ListEditorRemoveButton("componentFundingDocumentDelete", "Component Funding Document Delete Resource"));
 

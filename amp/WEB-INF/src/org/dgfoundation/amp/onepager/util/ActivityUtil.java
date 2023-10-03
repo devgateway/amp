@@ -57,6 +57,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.Objects.isNull;
+import static org.digijava.module.um.util.DbUtil.getGlobalSettingsBySection;
+import static org.digijava.module.um.util.DbUtil.getSettingValue;
 
 /**
  * Util class used to manipulate an activity
@@ -316,7 +318,7 @@ public class ActivityUtil {
         logAudit(ampCurrentMember, a, newActivity);
 //        session.flush();
         // TODO: 9/12/23 check if project is already existing
-        if (TeamUtil.getCurrentUser().getTruBudgetEnabled()) {
+        if (getSettingValue(getGlobalSettingsBySection("trubudget"),"isEnabled").equalsIgnoreCase("true")&&TeamUtil.getCurrentUser().getTruBudgetEnabled()) {
             TruBudgetActivity truBudgetActivity = ProjectUtil.isActivityAlreadyInTrubudget(a.getAmpActivityId());
             if (truBudgetActivity==null) {
                 ProjectUtil.createProject(a);
@@ -952,9 +954,9 @@ public class ActivityUtil {
             a.setComponentFundingDocuments(new HashSet<>());
         }
 
-        HashSet<TemporaryComponentFundingDocument> newResources = s.getMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS);
-        HashSet<AmpComponentFundingDocument> deletedResources = s.getMetaData(OnePagerConst.COMPONENT_FUNDING_DELETED_ITEMS);
-        HashSet<TemporaryComponentFundingDocument> existingTitles = s.getMetaData(OnePagerConst.COMPONENT_FUNDING_EXISTING_ITEM_TITLES);
+        HashSet<TemporaryComponentFundingDocument> newResources = s.getMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS).get(a.getJustAnId());
+        HashSet<AmpComponentFundingDocument> deletedResources = s.getMetaData(OnePagerConst.COMPONENT_FUNDING_DELETED_ITEMS).get(a.getJustAnId());
+        HashSet<TemporaryComponentFundingDocument> existingTitles = s.getMetaData(OnePagerConst.COMPONENT_FUNDING_EXISTING_ITEM_TITLES).get(a.getJustAnId());
 
         // update titles when multilingual is enabled
         if (ContentTranslationUtil.multilingualIsEnabled()) {
@@ -966,6 +968,9 @@ public class ActivityUtil {
 
         // insert new resources in the system
         insertComponentFundingResources(a, newResources);
+        if (!(getSettingValue(getGlobalSettingsBySection("trubudget"),"isEnabled").equalsIgnoreCase("true")&&TeamUtil.getCurrentUser().getTruBudgetEnabled()) || a.getTransactionType() != 1) {
+            newResources.clear();
+        }
     }
 
     private static void insertComponentFundingResources(AmpComponentFunding a, HashSet<TemporaryComponentFundingDocument> newResources) {

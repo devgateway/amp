@@ -31,11 +31,11 @@ public final class OnePagerConst {
     
     
     public static final MetaDataKey<HashSet<TemporaryActivityDocument>> RESOURCES_NEW_ITEMS = new MetaDataKey<HashSet<TemporaryActivityDocument>>(){};
-    public static final MetaDataKey<HashSet<TemporaryComponentFundingDocument>> COMPONENT_FUNDING_NEW_ITEMS = new MetaDataKey<HashSet<TemporaryComponentFundingDocument>>(){};
+    public static final MetaDataKey<HashMap<String,HashSet<TemporaryComponentFundingDocument>>> COMPONENT_FUNDING_NEW_ITEMS = new MetaDataKey<HashMap<String,HashSet<TemporaryComponentFundingDocument>>>(){};
     public static final MetaDataKey<HashSet<AmpActivityDocument>> RESOURCES_DELETED_ITEMS = new MetaDataKey<HashSet<AmpActivityDocument>>(){};
-    public static final MetaDataKey<HashSet<AmpComponentFundingDocument>> COMPONENT_FUNDING_DELETED_ITEMS = new MetaDataKey<HashSet<AmpComponentFundingDocument>>(){};
+    public static final MetaDataKey<HashMap<String,HashSet<AmpComponentFundingDocument>>> COMPONENT_FUNDING_DELETED_ITEMS = new MetaDataKey<HashMap<String,HashSet<AmpComponentFundingDocument>>>(){};
     public static final MetaDataKey<HashSet<TemporaryActivityDocument>> RESOURCES_EXISTING_ITEM_TITLES = new MetaDataKey<HashSet<TemporaryActivityDocument>>(){};
-    public static final MetaDataKey<HashSet<TemporaryComponentFundingDocument>> COMPONENT_FUNDING_EXISTING_ITEM_TITLES = new MetaDataKey<HashSet<TemporaryComponentFundingDocument>>(){};
+    public static final MetaDataKey<HashMap<String,HashSet<TemporaryComponentFundingDocument>>> COMPONENT_FUNDING_EXISTING_ITEM_TITLES = new MetaDataKey<HashMap<String,HashSet<TemporaryComponentFundingDocument>>>(){};
     public static final MetaDataKey<HashMap<String,ResourceTranslationStore>> RESOURCES_TRANSLATIONS = new MetaDataKey<HashMap<String,ResourceTranslationStore>>(){};
     
     public static final MetaDataKey<HashSet<TemporaryGPINiDocument>> GPI_RESOURCES_NEW_ITEMS = new MetaDataKey<HashSet<TemporaryGPINiDocument>>(){};

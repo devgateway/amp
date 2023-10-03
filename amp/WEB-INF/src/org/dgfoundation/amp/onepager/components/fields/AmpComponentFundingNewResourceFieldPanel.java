@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.onepager.components.fields;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -138,11 +139,25 @@ public class AmpComponentFundingNewResourceFieldPanel extends AmpFeaturePanel {
 
                     tmp.setDate(Calendar.getInstance());
                     tmp.setYear(String.valueOf((tmp.getDate()).get(Calendar.YEAR)));
-                    HashSet<TemporaryComponentFundingDocument> newItemsSet = getSession().getMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS);
-                    if (newItemsSet == null) {
-                        newItemsSet = new HashSet<TemporaryComponentFundingDocument>();
-                        getSession().setMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS, newItemsSet);
+//                    HashSet<TemporaryComponentFundingDocument> newItemsSet = getSession().getMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS).get(model.getObject().getJustAnId());
+//                    if (newItemsSet == null) {
+//                        newItemsSet = new HashSet<>();
+////                        getSession().getMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS).get(model.getObject().getJustAnId()).addAll(newItemsSet);
+//                    }
+
+                    MetaDataKey<HashMap<String, HashSet<TemporaryComponentFundingDocument>>> metaDataKey = OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS;
+
+                    HashMap<String, HashSet<TemporaryComponentFundingDocument>> metaData = getSession().getMetaData(metaDataKey);
+
+                    if (metaData == null) {
+                        metaData = new HashMap<>();
                     }
+                    getSession().setMetaData(metaDataKey, metaData);
+
+                    HashSet<TemporaryComponentFundingDocument> newItemsSet = metaData.computeIfAbsent(model.getObject().getJustAnId(), k -> new HashSet<>());
+
+
+//                    existingSet.addAll(newItemsSet);
 
                     tmp.setTranslatedDescriptionList(getTranslationsForField(tmp.getNewTemporaryDocumentId(),"description"));
                     tmp.setTranslatedTitleList(getTranslationsForField(tmp.getNewTemporaryDocumentId(),"title"));

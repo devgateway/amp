@@ -33,6 +33,16 @@ public class AmpComponentFunding implements Cloneable, Serializable {
 
     private Integer transactionType;
 
+    private String justAnId;
+
+    public String getJustAnId() {
+        return justAnId;
+    }
+
+    public void setJustAnId(String justAnId) {
+        this.justAnId = justAnId;
+    }
+
 //    private Set<AmpComponentFundingDocuments> fundingDocuments;
 
 

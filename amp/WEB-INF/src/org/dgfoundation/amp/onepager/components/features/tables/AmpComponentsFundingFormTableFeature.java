@@ -23,10 +23,7 @@ import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.*;
 
@@ -62,10 +59,12 @@ public class AmpComponentsFundingFormTableFeature extends
                 IModel<AmpComponentFunding> model = item.getModel();
                 if (model.getObject().getComponentFundingDocuments() == null)
                     model.getObject().setComponentFundingDocuments(new HashSet<>());
-                if (getSession().getMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS) == null)
-                    getSession().setMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS, new HashSet());
+                if (getSession().getMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS)== null)
+                    getSession().setMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS,new HashMap<>());
                 if (getSession().getMetaData(OnePagerConst.COMPONENT_FUNDING_DELETED_ITEMS) == null)
-                    getSession().setMetaData(OnePagerConst.COMPONENT_FUNDING_DELETED_ITEMS, new HashSet());
+                    getSession().setMetaData(OnePagerConst.COMPONENT_FUNDING_DELETED_ITEMS,  new HashMap<>());
+                if (getSession().getMetaData(OnePagerConst.COMPONENT_FUNDING_EXISTING_ITEM_TITLES) == null)
+                    getSession().setMetaData(OnePagerConst.COMPONENT_FUNDING_EXISTING_ITEM_TITLES,  new HashMap<>());
                 try{
                     AmpCategorySelectFieldPanel adjustmentTypes = new AmpCategorySelectFieldPanel(
                             "adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_KEY,

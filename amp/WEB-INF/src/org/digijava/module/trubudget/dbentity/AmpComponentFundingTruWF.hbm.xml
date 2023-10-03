@@ -10,7 +10,7 @@
             </generator>
         </id>
         <property name="truWFId" column="tru_wf_id" type="java.lang.String"/>
-        <property name="ampComponentFundingId" column="amp_component_funding_id" type="java.lang.Long"/>
+        <property name="ampComponentFundingId" column="amp_component_funding_id" type="java.lang.String"/>
 
     </class>
 </hibernate-mapping>

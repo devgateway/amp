@@ -321,7 +321,7 @@ public class ProjectUtil {
                 if (!ampComponent.getFundings().isEmpty()) {
                     for (AmpComponentFunding componentFunding : ampComponent.getFundings()) {
                         if (componentFunding.getTransactionType() == 1 && (Objects.equals(componentFunding.getAdjustmentType().getValue(), "Planned") || Objects.equals(componentFunding.getAdjustmentType().getValue(), "Actual"))) {
-                            AmpComponentFundingTruWF ampComponentFundingTruWF = PersistenceManager.getRequestDBSession().createQuery("FROM "+AmpComponentFundingTruWF.class.getName()+" act WHERE act.ampComponentFundingId="+componentFunding.getAmpComponentFundingId()+" AND act.ampComponentFundingId IS NOT NULL", AmpComponentFundingTruWF.class).stream().findAny().orElse(null);
+                            AmpComponentFundingTruWF ampComponentFundingTruWF = PersistenceManager.getRequestDBSession().createQuery("FROM "+AmpComponentFundingTruWF.class.getName()+" act WHERE act.ampComponentFundingId= '"+componentFunding.getJustAnId()+"' AND act.ampComponentFundingId IS NOT NULL", AmpComponentFundingTruWF.class).stream().findAny().orElse(null);
                             if (ampComponentFundingTruWF==null){//create new wfItem
                             CreateWorkFlowItemModel createWorkFlowItemModel = new CreateWorkFlowItemModel();
                             createWorkFlowItemModel.setApiVersion(getSettingValue(settings, "apiVersion"));
@@ -333,26 +333,26 @@ public class ProjectUtil {
                             AmpAuthWebSession s = ( AmpAuthWebSession) org.apache.wicket.Session.get();
                                 HashSet<TemporaryComponentFundingDocument> newResources =s.getMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS).get(componentFunding.getJustAnId());
 //                                newResources.addAll(s.getMetaData(OnePagerConst.COMPONENT_FUNDING_EXISTING_ITEM_TITLES).get(componentFunding.getJustAnId()));
-                                for (TemporaryComponentFundingDocument temporaryComponentFundingDocument: newResources)
-                                {
-                                    try {
-                                        CreateWorkFlowItemModel.Document doc = new CreateWorkFlowItemModel.Document();
-                                        doc.setFileName(temporaryComponentFundingDocument.getFileName());
-                                        doc.setId(UUID.randomUUID().toString());
-                                        File file = temporaryComponentFundingDocument.getFile().writeToTempFile();
+                                if (newResources!=null) {
+                                    for (TemporaryComponentFundingDocument temporaryComponentFundingDocument : newResources) {
+                                        try {
+                                            CreateWorkFlowItemModel.Document doc = new CreateWorkFlowItemModel.Document();
+                                            doc.setFileName(temporaryComponentFundingDocument.getFileName());
+                                            doc.setId(UUID.randomUUID().toString());
+                                            File file = temporaryComponentFundingDocument.getFile().writeToTempFile();
 
-                                        byte[] fileContent = Files.readAllBytes(file.toPath());
-                                        doc.setBase64(Base64.getEncoder().encodeToString(fileContent));
-                                        docs.add(doc);
-                                    }catch (Exception e)
-                                    {
-                                        logger.error("Error during workflow creation ",e);
+                                            byte[] fileContent = Files.readAllBytes(file.toPath());
+                                            doc.setBase64(Base64.getEncoder().encodeToString(fileContent));
+                                            docs.add(doc);
+                                        } catch (Exception e) {
+                                            logger.error("Error during workflow creation ", e);
+                                        }
+
+
                                     }
-
-
+                                    data.setDocuments(docs);
+                                    newResources.clear();
                                 }
-                                data.setDocuments(docs);
-                                newResources.clear();
 //                            data.setStatus((Objects.equals(componentFunding.getComponentFundingStatusFormatted(), "closed") || Objects.equals(componentFunding.getComponentFundingStatusFormatted(), "rejected"))?"closed":"open");
                             data.setDescription(componentFunding.getDescription());
                             data.setDisplayName(componentFunding.getComponent().getTitle());
@@ -371,20 +371,21 @@ public class ProjectUtil {
                                 GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/subproject.createWorkflowitem", createWorkFlowItemModel, CreateWorkFlowItemModel.class, CreateWFResponseModel.class, token)
                                         .subscribe(res -> {
                                             logger.info("Create WorkflowItem response: " + res);
-                                            ampComponentFundingTruWF1.setAmpComponentFundingId(componentFunding.getAmpComponentFundingId());
+                                            ampComponentFundingTruWF1.setAmpComponentFundingId(componentFunding.getJustAnId());
                                             ampComponentFundingTruWF1.setTruWFId(res.getData().getWorkflowitem().getId());
                                             try {
                                                 transaction.set(session.beginTransaction());
                                                 // Perform database operations here
                                                 session.save(ampComponentFundingTruWF1);
                                                 transaction.get().commit();
+                                                session.flush();
                                             } catch (Exception e) {
                                                 if (transaction.get() != null) {
                                                     transaction.get().rollback();
                                                 }
                                                 e.printStackTrace();
                                             } finally {
-                                                session.flush();
+//                                                session.flush();
                                                 session.close();
                                             }
                                             subIntents.forEach(subIntent -> {
@@ -439,26 +440,26 @@ public class ProjectUtil {
                                 AmpAuthWebSession s = ( AmpAuthWebSession) org.apache.wicket.Session.get();
                                 HashSet<TemporaryComponentFundingDocument> newResources =s.getMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS).get(componentFunding.getJustAnId());
 //                                newResources.addAll(s.getMetaData(OnePagerConst.COMPONENT_FUNDING_EXISTING_ITEM_TITLES).get(componentFunding.getJustAnId()));
-                                for (TemporaryComponentFundingDocument temporaryComponentFundingDocument: newResources)
-                                {
-                                    try {
-                                        CreateWorkFlowItemModel.Document doc = new CreateWorkFlowItemModel.Document();
-                                        doc.setFileName(temporaryComponentFundingDocument.getFileName());
-                                        File file = temporaryComponentFundingDocument.getFile().writeToTempFile();
-                                        doc.setId(UUID.randomUUID().toString());
+                                if (newResources!=null) {
+                                    for (TemporaryComponentFundingDocument temporaryComponentFundingDocument : newResources) {
+                                        try {
+                                            CreateWorkFlowItemModel.Document doc = new CreateWorkFlowItemModel.Document();
+                                            doc.setFileName(temporaryComponentFundingDocument.getFileName());
+                                            File file = temporaryComponentFundingDocument.getFile().writeToTempFile();
+                                            doc.setId(UUID.randomUUID().toString());
 
-                                        byte[] fileContent = Files.readAllBytes(file.toPath());
-                                        doc.setBase64(Base64.getEncoder().encodeToString(fileContent));
-                                        docs.add(doc);
-                                    }catch (Exception e)
-                                    {
-                                        logger.error("Error during workflow creation ",e);
+                                            byte[] fileContent = Files.readAllBytes(file.toPath());
+                                            doc.setBase64(Base64.getEncoder().encodeToString(fileContent));
+                                            docs.add(doc);
+                                        } catch (Exception e) {
+                                            logger.error("Error during workflow creation ", e);
+                                        }
+
+
                                     }
-
-
+                                    newResources.clear();
+                                    data.setDocuments(docs);
                                 }
-                                newResources.clear();
-                                data.setDocuments(docs);
                                 editWFItemModel.setData(data);
                                 GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/workflowitem.update", editWFItemModel, EditWFItemModel.class, String.class, token)
                                         .subscribe(res -> logger.info("Edit WFItem response: "+res));

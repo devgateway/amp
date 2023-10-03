@@ -33,14 +33,14 @@ public class AmpComponentFundingTruWF {
         this.truWFId = truWFId;
     }
 
-    @Column(name = "amp_component_funding_id")
-    private Long ampComponentFundingId;
+    @Column(name = "amp_component_funding_id")//we use the justAnId field.. a unique uuid.
+    private String ampComponentFundingId;
 
-    public Long getAmpComponentFundingId() {
+    public String getAmpComponentFundingId() {
         return ampComponentFundingId;
     }
 
-    public void setAmpComponentFundingId(Long ampComponentFundingId) {
+    public void setAmpComponentFundingId(String ampComponentFundingId) {
         this.ampComponentFundingId = ampComponentFundingId;
     }
 

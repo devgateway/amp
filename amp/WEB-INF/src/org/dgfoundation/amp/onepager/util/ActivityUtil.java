@@ -767,7 +767,9 @@ public class ActivityUtil {
                     });
                 }
             }
+
         }
+
     }
 
     private static void saveComments(AmpActivityVersion a, Session session, boolean draft) {
@@ -969,7 +971,8 @@ public class ActivityUtil {
         // insert new resources in the system
         insertComponentFundingResources(a, newResources);
         if (!(getSettingValue(getGlobalSettingsBySection("trubudget"),"isEnabled").equalsIgnoreCase("true")&&TeamUtil.getCurrentUser().getTruBudgetEnabled()) || a.getTransactionType() != 1) {
-            newResources.clear();
+            if (newResources!=null)
+                newResources.clear();
         }
     }
 

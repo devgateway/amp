@@ -40,7 +40,7 @@
 		<link href='tabs/fonts/open-sans.css' rel='stylesheet' type='text/css'>
 		<!-- Icon Font - Font Awesome -->
 		<link href="tabs/fonts/font-awesome.min.css" rel="stylesheet">
-        
+
 		<link rel="stylesheet" href="tabs/css/bootstrap.css">
 		<link rel="stylesheet" href="tabs/css/bootstrap-theme.css">
 		<link rel="stylesheet" href="tabs/css/jquery-ui.css">

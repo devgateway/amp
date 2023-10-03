@@ -69,6 +69,11 @@ const EditProfile: React.FC = () => {
     setShow(false);
   };
 
+  const handleCloseResultModal = () => {
+    setShowResultModal(false);
+    handleClose();
+  };
+
   // eslint-disable-next-line no-unused-vars
   const handleSetAltEmail = () => setUseNotificationEmail(!useNotificationEmail);
 
@@ -318,7 +323,7 @@ const EditProfile: React.FC = () => {
                                           </Button>
                                       </Modal.Actions>
 
-                                      <ResultModal content={resultModalContent} open={showResultModal} />
+                                      <ResultModal onClose={handleCloseResultModal} content={resultModalContent} open={showResultModal} />
 
                                     </>
                                 )}

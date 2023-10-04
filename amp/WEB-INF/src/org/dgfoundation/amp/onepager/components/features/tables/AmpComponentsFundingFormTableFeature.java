@@ -58,7 +58,7 @@ public class AmpComponentsFundingFormTableFeature extends
             protected void onPopulateItem(org.dgfoundation.amp.onepager.components.ListItem<AmpComponentFunding> item) {
                 IModel<AmpComponentFunding> model = item.getModel();
                 if (model.getObject().getComponentFundingDocuments() == null)
-                    model.getObject().setComponentFundingDocuments(new HashSet<>());
+                    model.getObject().getComponentFundingDocuments().addAll(new HashSet<>());
                 if (getSession().getMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS)== null)
                     getSession().setMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS,new HashMap<>());
                 if (getSession().getMetaData(OnePagerConst.COMPONENT_FUNDING_DELETED_ITEMS) == null)

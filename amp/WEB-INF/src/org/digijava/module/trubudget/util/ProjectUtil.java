@@ -293,20 +293,22 @@ public class ProjectUtil {
                 //call edit
                 GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/subproject.update", editSubProjectModel, EditSubProjectModel.class, String.class, token)
                         .subscribe(res2->logger.info("Update subproject response: "+res2));
-                if (!ampComponent.getFundings().isEmpty()) {
-                    for (AmpComponentFunding componentFunding : ampComponent.getFundings()) {
-                        EditSubProjectedBudgetModel editSubProjectedBudgetModel = new EditSubProjectedBudgetModel();
-                        EditSubProjectedBudgetModel.Data data1 = new EditSubProjectedBudgetModel.Data();
-                        data1.setProjectId(projectId);
-                        data1.setSubprojectId(ampComponent.getSubProjectComponentId());
-                        data1.setCurrencyCode(componentFunding.getCurrency().getCurrencyCode());
-                        data1.setValue(BigDecimal.valueOf(componentFunding.getTransactionAmount()).toPlainString());
-                        data1.setOrganization(componentFunding.getReportingOrganization()!=null?componentFunding.getReportingOrganization().getName():"Funding Org");
-                        editSubProjectedBudgetModel.setData(data1);
-                        editSubProjectedBudgetModel.setApiVersion(getSettingValue(settings, "apiVersion"));
-                        GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/subproject.budget.updateProjected", editSubProjectedBudgetModel, EditSubProjectedBudgetModel.class, String.class, token).subscribeOn(Schedulers.parallel())
-                                .subscribe(res2->logger.info("Update subproject budget response: "+res2));
+                if (ampComponent.getFundings()!=null) {
+                    if (!ampComponent.getFundings().isEmpty()) {
+                        for (AmpComponentFunding componentFunding : ampComponent.getFundings()) {
+                            EditSubProjectedBudgetModel editSubProjectedBudgetModel = new EditSubProjectedBudgetModel();
+                            EditSubProjectedBudgetModel.Data data1 = new EditSubProjectedBudgetModel.Data();
+                            data1.setProjectId(projectId);
+                            data1.setSubprojectId(ampComponent.getSubProjectComponentId());
+                            data1.setCurrencyCode(componentFunding.getCurrency().getCurrencyCode());
+                            data1.setValue(BigDecimal.valueOf(componentFunding.getTransactionAmount()).toPlainString());
+                            data1.setOrganization(componentFunding.getReportingOrganization() != null ? componentFunding.getReportingOrganization().getName() : "Funding Org");
+                            editSubProjectedBudgetModel.setData(data1);
+                            editSubProjectedBudgetModel.setApiVersion(getSettingValue(settings, "apiVersion"));
+                            GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/subproject.budget.updateProjected", editSubProjectedBudgetModel, EditSubProjectedBudgetModel.class, String.class, token).subscribeOn(Schedulers.parallel())
+                                    .subscribe(res2 -> logger.info("Update subproject budget response: " + res2));
 
+                        }
                     }
                 }
                 createUpdateWorkflowItems(projectId, ampComponent.getSubProjectComponentId(),ampComponent, settings);
@@ -319,22 +321,23 @@ public class ProjectUtil {
         String token = (String) myCache.get("truBudgetToken");
         String user = (String) myCache.get("truBudgetUser");
         logger.info("Trubudget Cached Token:" + token);
+        if (ampComponent.getFundings()!=null) {
                 if (!ampComponent.getFundings().isEmpty()) {
                     for (AmpComponentFunding componentFunding : ampComponent.getFundings()) {
                         if (componentFunding.getTransactionType() == 1 && (Objects.equals(componentFunding.getAdjustmentType().getValue(), "Planned") || Objects.equals(componentFunding.getAdjustmentType().getValue(), "Actual"))) {
-                            AmpComponentFundingTruWF ampComponentFundingTruWF = PersistenceManager.getRequestDBSession().createQuery("FROM "+AmpComponentFundingTruWF.class.getName()+" act WHERE act.ampComponentFundingId= '"+componentFunding.getJustAnId()+"' AND act.ampComponentFundingId IS NOT NULL", AmpComponentFundingTruWF.class).stream().findAny().orElse(null);
-                            if (ampComponentFundingTruWF==null){//create new wfItem
-                            CreateWorkFlowItemModel createWorkFlowItemModel = new CreateWorkFlowItemModel();
-                            createWorkFlowItemModel.setApiVersion(getSettingValue(settings, "apiVersion"));
-                            CreateWorkFlowItemModel.Data data = new CreateWorkFlowItemModel.Data();
-                            data.setProjectId(projectId);
-                            data.setSubprojectId(subProjectId);
-                            data.setAssignee(user);
-                            List<CreateWorkFlowItemModel.Document> docs = new ArrayList<>();
-                            AmpAuthWebSession s = ( AmpAuthWebSession) org.apache.wicket.Session.get();
-                                HashSet<TemporaryComponentFundingDocument> newResources =s.getMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS).get(componentFunding.getJustAnId());
+                            AmpComponentFundingTruWF ampComponentFundingTruWF = PersistenceManager.getRequestDBSession().createQuery("FROM " + AmpComponentFundingTruWF.class.getName() + " act WHERE act.ampComponentFundingId= '" + componentFunding.getJustAnId() + "' AND act.ampComponentFundingId IS NOT NULL", AmpComponentFundingTruWF.class).stream().findAny().orElse(null);
+                            if (ampComponentFundingTruWF == null) {//create new wfItem
+                                CreateWorkFlowItemModel createWorkFlowItemModel = new CreateWorkFlowItemModel();
+                                createWorkFlowItemModel.setApiVersion(getSettingValue(settings, "apiVersion"));
+                                CreateWorkFlowItemModel.Data data = new CreateWorkFlowItemModel.Data();
+                                data.setProjectId(projectId);
+                                data.setSubprojectId(subProjectId);
+                                data.setAssignee(user);
+                                List<CreateWorkFlowItemModel.Document> docs = new ArrayList<>();
+                                AmpAuthWebSession s = (AmpAuthWebSession) org.apache.wicket.Session.get();
+                                HashSet<TemporaryComponentFundingDocument> newResources = s.getMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS).get(componentFunding.getJustAnId());
 //                                newResources.addAll(s.getMetaData(OnePagerConst.COMPONENT_FUNDING_EXISTING_ITEM_TITLES).get(componentFunding.getJustAnId()));
-                                if (newResources!=null) {
+                                if (newResources != null) {
                                     for (TemporaryComponentFundingDocument temporaryComponentFundingDocument : newResources) {
                                         try {
                                             CreateWorkFlowItemModel.Document doc = new CreateWorkFlowItemModel.Document();
@@ -355,75 +358,75 @@ public class ProjectUtil {
                                     newResources.clear();
                                 }
 //                            data.setStatus((Objects.equals(componentFunding.getComponentFundingStatusFormatted(), "closed") || Objects.equals(componentFunding.getComponentFundingStatusFormatted(), "rejected"))?"closed":"open");
-                            data.setDescription(componentFunding.getDescription());
-                            data.setDisplayName(componentFunding.getComponent().getTitle());
-                            data.setAmount(BigDecimal.valueOf(componentFunding.getTransactionAmount()).toPlainString());
-                            data.setCurrency(componentFunding.getCurrency().getCurrencyCode());
-                            data.setAmountType(Objects.equals(componentFunding.getAdjustmentType().getValue(), "Planned") ? "allocated" : "disbursed");
-                            data.setBillingDate(convertToISO8601(componentFunding.getTransactionDate()));
-                            data.setDueDate(convertToISO8601AndAddDays(componentFunding.getTransactionDate(), Integer.parseInt(getSettingValue(settings, "workFlowItemDueDays"))));//set approprite date
-                            createWorkFlowItemModel.setData(data);
+                                data.setDescription(componentFunding.getDescription());
+                                data.setDisplayName(componentFunding.getComponent().getTitle());
+                                data.setAmount(BigDecimal.valueOf(componentFunding.getTransactionAmount()).toPlainString());
+                                data.setCurrency(componentFunding.getCurrency().getCurrencyCode());
+                                data.setAmountType(Objects.equals(componentFunding.getAdjustmentType().getValue(), "Planned") ? "allocated" : "disbursed");
+                                data.setBillingDate(convertToISO8601(componentFunding.getTransactionDate()));
+                                data.setDueDate(convertToISO8601AndAddDays(componentFunding.getTransactionDate(), Integer.parseInt(getSettingValue(settings, "workFlowItemDueDays"))));//set approprite date
+                                createWorkFlowItemModel.setData(data);
 //                            Session session =PersistenceManager.getRequestDBSession();
                                 Session session = PersistenceManager.openNewSession();
                                 AtomicReference<Transaction> transaction = new AtomicReference<>();
-                            AmpComponentFundingTruWF ampComponentFundingTruWF1 = new AmpComponentFundingTruWF();
-                            List<SubIntents> subIntents = getSubIntentsByMother("workflowitem");
-                            try {
-                                GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/subproject.createWorkflowitem", createWorkFlowItemModel, CreateWorkFlowItemModel.class, CreateWFResponseModel.class, token)
-                                        .subscribe(res -> {
-                                            logger.info("Create WorkflowItem response: " + res);
-                                            ampComponentFundingTruWF1.setAmpComponentFundingId(componentFunding.getJustAnId());
-                                            ampComponentFundingTruWF1.setTruWFId(res.getData().getWorkflowitem().getId());
-                                            try {
-                                                transaction.set(session.beginTransaction());
-                                                // Perform database operations here
-                                                session.save(ampComponentFundingTruWF1);
-                                                transaction.get().commit();
-                                                session.flush();
-                                            } catch (Exception e) {
-                                                if (transaction.get() != null) {
-                                                    transaction.get().rollback();
-                                                }
-                                                e.printStackTrace();
-                                            } finally {
-//                                                session.flush();
-                                                session.close();
-                                            }
-                                            subIntents.forEach(subIntent -> {
-                                                WFItemGrantRevokePermModel wfItemGrantRevokePermModel = new WFItemGrantRevokePermModel();
-                                                WFItemGrantRevokePermModel.Data data2 = new WFItemGrantRevokePermModel.Data();
-                                                data2.setProjectId(projectId);
-                                                data2.setSubprojectId(subProjectId);
-                                                data2.setIdentity(user);
-                                                data2.setWorkflowitemId(res.getData().getWorkflowitem().getId());
-                                                data2.setIntent(subIntent.getSubTruBudgetIntentName());
-                                                wfItemGrantRevokePermModel.setData(data2);
-                                                wfItemGrantRevokePermModel.setApiVersion(getSettingValue(settings, "apiVersion"));
+                                AmpComponentFundingTruWF ampComponentFundingTruWF1 = new AmpComponentFundingTruWF();
+                                List<SubIntents> subIntents = getSubIntentsByMother("workflowitem");
+                                try {
+                                    GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/subproject.createWorkflowitem", createWorkFlowItemModel, CreateWorkFlowItemModel.class, CreateWFResponseModel.class, token)
+                                            .subscribe(res -> {
+                                                logger.info("Create WorkflowItem response: " + res);
+                                                ampComponentFundingTruWF1.setAmpComponentFundingId(componentFunding.getJustAnId());
+                                                ampComponentFundingTruWF1.setTruWFId(res.getData().getWorkflowitem().getId());
                                                 try {
-                                                    GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/workflowitem.intent.grantPermission", wfItemGrantRevokePermModel, WFItemGrantRevokePermModel.class, String.class, token).subscribeOn(Schedulers.parallel()).subscribe(
-                                                            response -> logger.info("Grant workflowitem permission response: " + response)
-                                                    );
+                                                    transaction.set(session.beginTransaction());
+                                                    // Perform database operations here
+                                                    session.save(ampComponentFundingTruWF1);
+                                                    session.flush();
+                                                    transaction.get().commit();
+
+                                                } catch (Exception e) {
+                                                    if (transaction.get() != null) {
+                                                        transaction.get().rollback();
+                                                    }
+                                                    e.printStackTrace();
+                                                } finally {
+//                                                session.flush();
+                                                    session.close();
+                                                }
+                                                subIntents.forEach(subIntent -> {
+                                                    WFItemGrantRevokePermModel wfItemGrantRevokePermModel = new WFItemGrantRevokePermModel();
+                                                    WFItemGrantRevokePermModel.Data data2 = new WFItemGrantRevokePermModel.Data();
+                                                    data2.setProjectId(projectId);
+                                                    data2.setSubprojectId(subProjectId);
+                                                    data2.setIdentity(user);
+                                                    data2.setWorkflowitemId(res.getData().getWorkflowitem().getId());
+                                                    data2.setIntent(subIntent.getSubTruBudgetIntentName());
+                                                    wfItemGrantRevokePermModel.setData(data2);
+                                                    wfItemGrantRevokePermModel.setApiVersion(getSettingValue(settings, "apiVersion"));
+                                                    try {
+                                                        GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/workflowitem.intent.grantPermission", wfItemGrantRevokePermModel, WFItemGrantRevokePermModel.class, String.class, token).subscribeOn(Schedulers.parallel()).subscribe(
+                                                                response -> logger.info("Grant workflowitem permission response: " + response)
+                                                        );
+                                                    } catch (URISyntaxException e) {
+                                                        throw new RuntimeException(e);
+                                                    }
+
+                                                });
+                                                //workflow close
+                                                try {
+                                                    closeWorkFlowItem(componentFunding, settings, projectId, subProjectId, res.getData().getWorkflowitem().getId(), "Closed", token);
                                                 } catch (URISyntaxException e) {
+                                                    logger.info("Error when closing wf item ", e);
                                                     throw new RuntimeException(e);
                                                 }
 
                                             });
-                                           //workflow close
-                                            try {
-                                                closeWorkFlowItem(componentFunding,settings,projectId,subProjectId,res.getData().getWorkflowitem().getId(),"Closed",token);
-                                            } catch (URISyntaxException e) {
-                                                logger.info("Error when closing wf item ",e);
-                                                throw new RuntimeException(e);
-                                            }
 
-                                        });
-
-                            } catch (Exception e) {
-                                logger.info("Error during subproject creation");
-                                e.printStackTrace();
-                            }
-                        }
-                            else {//update wfItem
+                                } catch (Exception e) {
+                                    logger.info("Error during subproject creation");
+                                    e.printStackTrace();
+                                }
+                            } else {//update wfItem
                                 //a WF item can only be edited if it's status is 'open'
                                 EditWFItemModel editWFItemModel = new EditWFItemModel();
                                 editWFItemModel.setApiVersion(getSettingValue(settings, "apiVersion"));
@@ -439,10 +442,10 @@ public class ProjectUtil {
                                 data.setBillingDate(convertToISO8601(componentFunding.getTransactionDate()));
                                 data.setDueDate(convertToISO8601AndAddDays(componentFunding.getTransactionDate(), Integer.parseInt(getSettingValue(settings, "workFlowItemDueDays"))));//set approprite date
                                 List<CreateWorkFlowItemModel.Document> docs = new ArrayList<>();
-                                AmpAuthWebSession s = ( AmpAuthWebSession) org.apache.wicket.Session.get();
-                                HashSet<TemporaryComponentFundingDocument> newResources =s.getMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS).get(componentFunding.getJustAnId());
+                                AmpAuthWebSession s = (AmpAuthWebSession) org.apache.wicket.Session.get();
+                                HashSet<TemporaryComponentFundingDocument> newResources = s.getMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS).get(componentFunding.getJustAnId());
 //                                newResources.addAll(s.getMetaData(OnePagerConst.COMPONENT_FUNDING_EXISTING_ITEM_TITLES).get(componentFunding.getJustAnId()));
-                                if (newResources!=null) {
+                                if (newResources != null) {
                                     for (TemporaryComponentFundingDocument temporaryComponentFundingDocument : newResources) {
                                         try {
                                             CreateWorkFlowItemModel.Document doc = new CreateWorkFlowItemModel.Document();
@@ -464,19 +467,20 @@ public class ProjectUtil {
                                 }
                                 editWFItemModel.setData(data);
                                 GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/workflowitem.update", editWFItemModel, EditWFItemModel.class, String.class, token)
-                                        .subscribe(res -> logger.info("Edit WFItem response: "+res));
+                                        .subscribe(res -> logger.info("Edit WFItem response: " + res));
 
                                 try {
-                                    closeWorkFlowItem(componentFunding,settings,projectId,subProjectId,ampComponentFundingTruWF.getTruWFId(),componentFunding.getComponentFundingStatus().getValue(),token);
+                                    closeWorkFlowItem(componentFunding, settings, projectId, subProjectId, ampComponentFundingTruWF.getTruWFId(), componentFunding.getComponentFundingStatus().getValue(), token);
                                 } catch (URISyntaxException e) {
-                                    logger.info("Error when closing wf item ",e);
+                                    logger.info("Error when closing wf item ", e);
                                     throw new RuntimeException(e);
                                 }
                             }
-                    }
+                        }
 
 
                     }
+                }
         }
 
     }

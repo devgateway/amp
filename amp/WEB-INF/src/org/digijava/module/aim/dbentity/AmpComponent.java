@@ -211,17 +211,15 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
     
     private static final Comparator<AmpComponentFunding> COMPONENT_FUNDING_COMPARATOR = new Comparator<AmpComponentFunding>() {
         public int compare(AmpComponentFunding o1, AmpComponentFunding o2) {
-            AmpComponentFunding aux1 = (AmpComponentFunding) o1;
-            AmpComponentFunding aux2 = (AmpComponentFunding) o2;
 
-            if (aux1.getTransactionType().equals(aux2.getTransactionType())) {
-                if (aux1.getTransactionAmount().equals(aux2.getTransactionAmount())) {
-                    return aux1.getTransactionDate().compareTo(aux2.getTransactionDate());
+            if (o1.getTransactionType().equals(o2.getTransactionType())) {
+                if (o1.getTransactionAmount().equals(o2.getTransactionAmount())) {
+                    return o1.getTransactionDate().compareTo(o2.getTransactionDate());
                 } else {
-                    return aux1.getTransactionAmount().compareTo(aux2.getTransactionAmount());
+                    return o1.getTransactionAmount().compareTo(o2.getTransactionAmount());
                 }
             } else {
-                return aux1.getTransactionType().compareTo(aux2.getTransactionType());
+                return o1.getTransactionType().compareTo(o2.getTransactionType());
             }
         }
     };

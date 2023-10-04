@@ -38,10 +38,7 @@ import org.digijava.module.message.triggers.ActivityValidationWorkflowTrigger;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.digijava.module.trubudget.dbentity.TruBudgetActivity;
 import org.digijava.module.trubudget.util.ProjectUtil;
-import org.hibernate.Hibernate;
-import org.hibernate.LockMode;
-import org.hibernate.LockOptions;
-import org.hibernate.Session;
+import org.hibernate.*;
 import org.hibernate.query.Query;
 import org.hibernate.type.LongType;
 
@@ -953,7 +950,7 @@ public class ActivityUtil {
         AmpAuthWebSession s = (AmpAuthWebSession) org.apache.wicket.Session.get();
 
         if (a.getComponentFundingDocuments() == null) {
-            a.setComponentFundingDocuments(new HashSet<>());
+            a.getComponentFundingDocuments().addAll(new HashSet<>());
         }
 
         HashSet<TemporaryComponentFundingDocument> newResources = s.getMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS).get(a.getJustAnId());
@@ -1048,16 +1045,24 @@ public class ActivityUtil {
     }
 
     private static void deleteComponentFundingResources(AmpComponentFunding a, HashSet<AmpComponentFundingDocument> deletedResources) {
+        Session session = PersistenceManager.getRequestDBSession();
+        Transaction transaction=session.getTransaction();
+
         if (deletedResources != null) {
             for (AmpComponentFundingDocument tmpDoc : deletedResources) {
-                for (AmpComponentFundingDocument existDoc : a.getComponentFundingDocuments()) {
-                    if (existDoc.getUuid().compareTo(tmpDoc.getUuid()) == 0) {
-                        a.getComponentFundingDocuments().remove(existDoc);
-                        break;
-                    }
-                }
+
+                tmpDoc.setAmpComponentFunding(null);
+                        session.update(tmpDoc);
+
+
             }
         }
+        session.flush();
+
+        transaction.commit();
+//        session.close();
+
+
     }
 
     private static void updateComponentFundingResourcesTitles(HashSet<TemporaryComponentFundingDocument> newResources,

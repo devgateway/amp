@@ -949,7 +949,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         if (componentSet != null) {
             for (AmpComponent component : componentSet) {
                 for (AmpComponentFunding funding : component.getFundings()) {
-                    verifySet(new PropertyModel<Set>(component, "fundings"), alertIfDisbursementBiggerCommitments,
+                    verifySet(new PropertyModel<>(component, "fundings"), alertIfDisbursementBiggerCommitments,
                         alertIfExpenditureBiggerDisbursement, commitmentErrors, expenditureErrors, funding.getComponent(),
                         TranslatorUtil.getTranslatedText(OnePager.COMPONENTS_SECTION_NAME) + ": " +
                         funding.getComponent().getTitle());

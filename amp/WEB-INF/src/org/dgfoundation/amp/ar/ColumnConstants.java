@@ -171,6 +171,7 @@ public class ColumnConstants {
     public static final String NATIONAL_PLANNING_OBJECTIVES = "National Planning Objectives";
     public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_0 = "National Planning Objectives Level 0";
     public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_1 = "National Planning Objectives Level 1";
+    public static final String NATIONAL_PLANNING_OBJECTIVES_CODE = "National Planning Objectives Code";
     public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_2 = "National Planning Objectives Level 2";
     public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_3 = "National Planning Objectives Level 3";
     public static final String NATIONAL_PLANNING_OBJECTIVES_LEVEL_4 = "National Planning Objectives Level 4";

@@ -17,12 +17,22 @@ import org.digijava.module.aim.dbentity.AmpIndicatorValue;
  * 
  * @author aartimon@dginternational.org
  * @since Feb 10, 2011
+ * @updated by tmugo@developmentgateway.org
+ * @since Apr 21, 2023
  */
 public class AmpIndicatorGroupField extends AmpFieldPanel<AmpIndicatorValue>{
 
     private static final long serialVersionUID = 0L;
     private AmpTextFieldPanel<Double> value;
     private AmpDatePickerFieldPanel date;
+
+    private AmpTextFieldPanel<Double> revisedValue;
+
+    private AmpDatePickerFieldPanel revisedDate;
+
+    public AmpTextFieldPanel<Double> getRevisedValue() {
+        return revisedValue;
+    }
     
     public AmpTextFieldPanel<Double> getValue() {
         return value;
@@ -52,9 +62,8 @@ public class AmpIndicatorGroupField extends AmpFieldPanel<AmpIndicatorValue>{
         date = new AmpDatePickerFieldPanel("valueDate", new PropertyModel<Date>(model, "valueDate"), fieldPrefix + " Date");
         date.getDate().setRequired(true);
         add(date);
-        
-        AmpTextAreaFieldPanel comments  = new AmpTextAreaFieldPanel("comment", new PropertyModel<String>(model, "comment"), fieldPrefix + " Comments", false);
-        add(comments);
+
+
     }
 
 
@@ -63,7 +72,6 @@ public class AmpIndicatorGroupField extends AmpFieldPanel<AmpIndicatorValue>{
         this.fmType = AmpFMTypes.MODULE;
         
         value = new AmpTextFieldPanel<Double>("value", val, fieldPrefix + " Value", false, false) {
-
 
             public IConverter getInternalConverter(java.lang.Class<?> type) {
                 return CustomDoubleConverter.INSTANCE;
@@ -77,8 +85,10 @@ public class AmpIndicatorGroupField extends AmpFieldPanel<AmpIndicatorValue>{
         if (fieldPrefix.compareTo("Revised") != 0)
             date.getDate().setRequired(isRequired);
         add(date);
+
         
         AmpTextAreaFieldPanel comments = new AmpTextAreaFieldPanel("comment", comment, fieldPrefix + " Comments", false);
         add(comments);
     }
+
 }

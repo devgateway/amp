@@ -6,6 +6,7 @@ package org.dgfoundation.amp.onepager.components.features.tables;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
@@ -17,7 +18,6 @@ import org.apache.wicket.util.visit.IVisitor;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.FundingListEditor;
-import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.ListItem;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
@@ -43,7 +43,7 @@ public class AmpDonorCommitmentsFormTableFeature extends
         AmpDonorFormTableFeaturePanel {
 
     private boolean alertIfDisbursmentBiggerCommitments = false;
-
+    private static Logger logger = Logger.getLogger(AmpDonorCommitmentsFormTableFeature.class);
     /**
      * @param id
      * @param model
@@ -65,7 +65,7 @@ public class AmpDonorCommitmentsFormTableFeature extends
 
                 AmpFundingAmountComponent amountComponent = getFundingAmountComponent(item.getModel());
                 item.add(amountComponent);
-                item.add(UpdateEventBehavior.of(FreezingUpdateEvent.class));                
+                item.add(UpdateEventBehavior.of(FreezingUpdateEvent.class));
                 addFreezingvalidator(item);
                 IModel<List<FundingPledges>> pledgesModel = new LoadableDetachableModel<List<FundingPledges>>() {
                     protected java.util.List<FundingPledges> load() {
@@ -100,17 +100,16 @@ public class AmpDonorCommitmentsFormTableFeature extends
                 });
                 //we create the role selector for recipient organization for commitments
                 item.add(OnePagerUtil.getFundingFlowRoleSelector(model, item.getModel()));
-                
+
                 //disaster response marker
                 final AmpBooleanChoiceField disasterResponse = new AmpBooleanChoiceField("disasterResponse", new PropertyModel<Boolean>(
                         item.getModel(), "disasterResponse"),"Disaster Response");
                 item.add(getDisasterValidator(disasterResponse));
 
-                item.add(disasterResponse); 
+                item.add(disasterResponse);
             }
-
-            
         };
+
         add(list);
         addExpandableList();
     }

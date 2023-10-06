@@ -99,26 +99,31 @@
  }
 
  function toggleChildrenVisibility(callerId) {
+	 debugger;
      caller = document.getElementById(callerId);
      inputs = caller.getElementsByTagName('input');
      for (i = 1; i < inputs.length; i++) {
+		 // This code is executed only when caller has children
          if (inputs[i].type == "checkbox") {
-             if (inputs[0].checked || inputs[i].id.indexOf("moduleEdit") == 0 ||
-                 inputs[i].id.indexOf("featureEdit") == 0 ||
-                 inputs[i].id.indexOf("fieldEdit") == 0 ||
-                 inputs[i].id.indexOf("moduleMandatory") == 0 ||
-                 inputs[i].id.indexOf("featureMandatory") == 0 ||
-                 inputs[i].id.indexOf("fieldMandatory") == 0) continue;
-             inputs[i].checked = false;
+             if (inputs[i].id.indexOf("moduleEdit") == 0 ||
+				 inputs[i].id.indexOf("featureEdit") == 0 ||
+				 inputs[i].id.indexOf("fieldEdit") == 0 ||
+				 inputs[i].id.indexOf("moduleMandatory") == 0 ||
+				 inputs[i].id.indexOf("featureMandatory") == 0 ||
+				 inputs[i].id.indexOf("fieldMandatory") == 0) continue;
+
+			 inputs[i].checked = inputs[0].checked;
          }
      }
 
      if (inputs[0].checked == true) {
          toggleParentVisibility(caller);
-     }
+     } else {
+		 if (checkAllChildrenAreUnchecked(caller)) toggleParentVisibility(caller, false);
+	 }
  }
 
- function toggleParentVisibility(item) {
+ function toggleParentVisibility(item, visibility = true) {
      hasParentCheckbox = true;
      if (item.parentElement.getAttribute('name') == 'dhtmltreeArray') {
          parent = item.parentElement.parentElement.parentElement;
@@ -130,13 +135,37 @@
      if (parent) {
          if (parent.getElementsByTagName('input')) {
              var checkboxItem = parent.getElementsByTagName('input')[0];
-             checkboxItem.checked = true;
+             checkboxItem.checked = visibility;
          }
 
          if (parent && hasParentCheckbox) {
-             toggleParentVisibility(parent);
+             if (visibility) toggleParentVisibility(parent, visibility);
+			 else {
+				 if (checkAllChildrenAreUnchecked(parent)) toggleParentVisibility(parent, visibility);
+			 }
          }
  	}
+ }
+
+ // This function is used to know if all children are unchecked
+ function checkAllChildrenAreUnchecked(item) {
+	 if (item.parentElement.getAttribute('name') == 'dhtmltreeArray') {
+		 parent = item.parentElement.parentElement.parentElement;
+	 } else {
+		 parent = item.parentElement.parentElement;
+	 }
+
+	 if (parent) {
+		 inputs = parent.getElementsByTagName('input');
+		 for (i = 1; i < inputs.length; i++) {
+			 if (inputs[i].type == "checkbox") {
+				 if (inputs[i].checked == true) {
+					 return false;
+				 }
+			 }
+		 }
+		 return true;
+	 } else return false;
  }
 
  function toggleParentVisibilityOfTheField(itemId) {
@@ -375,12 +404,12 @@
  		valid = true
  	}
  	return valid;
- 	
+
  }
 
  function checkAmountUsingSymbols(amount,groupSymbol,decimalSymbol){
  		var validChars= "0123456789"+groupSymbol+decimalSymbol;
- 		
+
  		for (i = 0;  i < amount.length;  i++) {
  			var ch = amount.charAt(i);
  			if (validChars.indexOf(ch)==-1){
@@ -406,7 +435,7 @@
  	if (options == null)
  		options = 'channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,location=yes';
  	var windowname = 'popup' + new Date().getTime();
- 	
+
  	var openedWindow = window.open('', windowname, 'channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,location=yes');
  	if (navigator.appName.indexOf('Microsoft Internet Explorer') > -1){ //Workaround to allow HTTP REFERER to be sent in IE (AMP-12638)
  		var referLink = document.createElement('a');

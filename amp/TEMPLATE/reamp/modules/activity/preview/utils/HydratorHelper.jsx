@@ -28,10 +28,13 @@ export default class HydratorHelper {
                     fieldToHydrate = parent + "~";
                 }
                 fieldToHydrate = fieldToHydrate + objectField;
-                if (fieldsManager.getFieldDef(fieldToHydrate)) {
-                    if (fieldsManager.getFieldDef(fieldToHydrate)['id_only'] === true) {
+
+                const fieldDefinition = fieldsManager.getFieldDef(fieldToHydrate);
+                if (fieldDefinition) {
+                    if (fieldDefinition['id_only'] === true) {
                         if (objectToHydrate[objectField]) {
                             if (!valuesForHydration) {
+                                //If we don't have values for hydration, means that we need to fill on RequestData what fields we need to hydrate
                                 if (requestData[fieldToHydrate]) {
                                     requestData[fieldToHydrate].push(objectToHydrate[objectField]);
                                 } else {
@@ -41,6 +44,7 @@ export default class HydratorHelper {
                                 objectToHydrate[objectField] = valuesForHydration[fieldToHydrate]
                                     .find(field => field.id === objectToHydrate[objectField]);
                             }
+
                             if (objectToHydrate[objectField]['ancestor-values']) {
                                 objectToHydrate[objectField][ActivityConstants.HIERARCHICAL_VALUE] =
                                     objectToHydrate[objectField]['ancestor-values'].map(i=>'[' + i + ']').join('');

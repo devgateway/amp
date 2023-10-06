@@ -600,6 +600,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 
         single_dimension(ColumnConstants.PRIMARY_SECTOR_CODE_OFFICIAL, "v_sector_code_official", PS_DIM_USG
                 .getLevelColumn(LEVEL_ROOT));
+        single_dimension(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_CODE, "v_nationalobjectives_code", PS_DIM_USG
+                .getLevelColumn(LEVEL_ROOT));
         with_percentage(ColumnConstants.PRIMARY_SECTOR, "v_sectors", PS_DIM_USG, LEVEL_ROOT);
         with_percentage(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR, "v_sub_sectors", PS_DIM_USG, LEVEL_SUBSECTOR);
         with_percentage(ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR, "v_sub_sub_sectors", PS_DIM_USG, LEVEL_SUBSUBSECTOR);

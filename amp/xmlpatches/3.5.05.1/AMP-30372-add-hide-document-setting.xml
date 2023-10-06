@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>AMP-30372</jira>
+    <keyword>Add hide document settings</keyword>
+    <author>jdeanquin</author>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                insert into amp_modules_visibility (id, name, haslevel, parent)
+                select nextval('amp_modules_visibility_seq'),
+                'Activity Preview',
+                true,
+                (select id
+                from amp_modules_visibility
+                where name = 'REPORTING')
+                where not exists(select 1
+                from amp_modules_visibility
+                where name = 'Activity Preview'
+                and parent = (select id
+                from amp_modules_visibility
+                where name = 'REPORTING'));
+
+
+                insert into amp_modules_visibility (id, name, haslevel, parent)
+                values (nextval('amp_modules_visibility_seq'), '/REPORTING/Activity Preview/Hide Documents if no donor', true, (select id
+                from amp_modules_visibility
+                where name = 'Activity Preview'
+                and parent = (select id
+                from amp_modules_visibility
+                where name = 'REPORTING')));
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

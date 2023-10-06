@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.currency.ConstantCurrency;
 import org.dgfoundation.amp.menu.AmpView;
@@ -24,6 +25,7 @@ import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.SiteUtils;
+import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
@@ -37,6 +39,7 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
+import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.ResourceManagerSettingsUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.common.util.DateTimeUtil;
@@ -50,6 +53,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -159,6 +163,35 @@ public class SettingsUtils {
     }
 
     /**
+     * @return enabled program settings/schemes
+     */
+    private static SettingOptions getEnabledProgramSettings() {
+        List<AmpActivityProgramSettings> programSettings = ProgramUtil.getEnabledProgramSettings();
+        List<SettingOptions.Option> options = new ArrayList<>();
+
+        programSettings.forEach(programSetting -> {
+            String programName = programSetting.getName();
+
+            if (Objects.equals(programName, ColumnConstants.PRIMARY_PROGRAM)) {
+                programName = ColumnConstants.PRIMARY_PROGRAM_LEVEL_1;
+            } else if (Objects.equals(programName, ColumnConstants.SECONDARY_PROGRAM)) {
+                programName = ColumnConstants.SECONDARY_PROGRAM_LEVEL_1;
+            }else if (Objects.equals(programName, ColumnConstants.TERTIARY_PROGRAM)) {
+                programName = ColumnConstants.TERTIARY_PROGRAM_LEVEL_1;
+            }else if (Objects.equals(programName, ColumnConstants.NATIONAL_PLAN_OBJECTIVE)) {
+                programName = ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1;
+            }
+
+            SettingOptions.Option option = new SettingOptions.Option(programName, String.valueOf(programSetting.getName()),true);
+            options.add(option);
+        });
+
+        String defaultId = options.size() > 0 ? options.get(0).value : null;
+        return new SettingOptions(defaultId, options);
+    }
+
+
+    /**
      * Provides current report settings
      *
      * @param spec
@@ -231,7 +264,6 @@ public class SettingsUtils {
 
         return null;
     }
-
     static SettingField getCalendarCurrenciesField() {
         return getSettingFieldForOptions(SettingsConstants.CALENDAR_CURRENCIES_ID, getCalendarCurrencySettings());
     }
@@ -246,6 +278,10 @@ public class SettingsUtils {
 
     static SettingField getFundingTypeField(Set<String> measures) {
         return getSettingFieldForOptions(SettingsConstants.FUNDING_TYPE_ID, getFundingTypeSettings(measures));
+    }
+
+    static SettingField getEnabledProgramField() {
+        return getSettingFieldForOptions(SettingsConstants.PROGRAM_SETTINGS, getEnabledProgramSettings());
     }
 
     static SettingField getReportAmountFormatField() {
@@ -503,6 +539,13 @@ public class SettingsUtils {
         addDateSetting(settings, GlobalSettingsConstants.GIS_DEFAUL_MIN_YEAR_RANGE,
                 SettingsConstants.GIS_DEFAULT_MIN_DATE, SettingsConstants.GIS_DEFAULT_MIN_YEAR_RANGE,
                 gsFiscalCalendar, currentCalendar, false);
+        addDateSetting(settings, Constants.GlobalSettings.END_YEAR_DEFAULT_VALUE,
+                SettingsConstants.REPORT_DEFAULT_MAX_DATE, SettingsConstants.REPORT_DEFAULT_MAX_DATE,
+                gsFiscalCalendar, currentCalendar, true);
+        addDateSetting(settings, Constants.GlobalSettings.START_YEAR_DEFAULT_VALUE,
+                SettingsConstants.REPORT_DEFAULT_MIN_DATE, SettingsConstants.REPORT_DEFAULT_MIN_DATE,
+                gsFiscalCalendar, currentCalendar, false);
+
     }
 
     private static void addDateSetting(AmpGeneralSettings settings, String globalSettingsName, String dateSettingsName,
@@ -518,6 +561,10 @@ public class SettingsUtils {
             settings.setGisDefaultMaxYearRange(yearNumber);
         } else if (yearSettingsName.equals(SettingsConstants.GIS_DEFAULT_MIN_YEAR_RANGE)) {
             settings.setGisDefaultMinYearRange(yearNumber);
+        } else if (yearSettingsName.equals(SettingsConstants.REPORT_DEFAULT_MAX_YEAR_RANGE)) {
+            settings.setReportDefaultMaxYearRange(yearNumber);
+        } else if (yearSettingsName.equals(SettingsConstants.REPORT_DEFAULT_MIN_YEAR_RANGE)) {
+            settings.setReportDefaultMinYearRange(yearNumber);
         }
 
         if (!StringUtils.equals(yearNumber, "-1")) {
@@ -541,6 +588,10 @@ public class SettingsUtils {
                 settings.setGisDefaultMaxDate(formattedDate);
             } else if (dateSettingsName.equals(SettingsConstants.GIS_DEFAULT_MIN_DATE)) {
                 settings.setGisDefaultMinDate(formattedDate);
+            } else if (dateSettingsName.equals(SettingsConstants.REPORT_DEFAULT_MAX_DATE)) {
+                settings.setReportDefaultMaxDate(formattedDate);
+            } else if (dateSettingsName.equals(SettingsConstants.REPORT_DEFAULT_MIN_DATE)) {
+                settings.setReportDefaultMinDate(formattedDate);
             }
         }
     }

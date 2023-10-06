@@ -29,13 +29,15 @@ export default function activityReducer(state: Object = defaultState, action: Ob
                 activityFundingTotals: action.payload.activityFundingTotals,
                 currencyRatesManager: action.payload.currencyRatesManager,
                 isActivityLoading: false,
-                isActivityLoaded: true
+                isActivityLoaded: true,
+                reportingTotals: action.payload.reportingTotals
             };
         case ACTIVITY_LOAD_FAILED:
             return {
                 ...state,
                 error: action.payload.error,
-                isActivityLoading: false
+                isActivityLoading: false,
+                isActivityLoaded: true
             };
         case ACTIVITY_WS_INFO_LOADED:
             return {...state, activityWsInfo: action.payload.activityWsInfo};

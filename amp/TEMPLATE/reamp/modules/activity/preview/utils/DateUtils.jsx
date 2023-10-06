@@ -28,4 +28,8 @@ export default class DateUtils {
             }
         }
     }
+
+    static getYearFromDate(date) {
+        return Moment(date).year();
+    }
 }

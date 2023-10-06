@@ -14,7 +14,8 @@ public enum TopChartType {
     @JsonProperty("re") RE,
     @JsonProperty("ps") PS,
     @JsonProperty("dg") DG,
-    @JsonProperty("ndd") NDD;
+    @JsonProperty("ndd") NDD,
+    @JsonProperty("pr") PR;
 
     public static TopChartType fromString(String value) {
         value = value.toUpperCase();

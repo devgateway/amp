@@ -466,15 +466,7 @@ public class DgEmailManager {
 
     public static void sendMail(Address[] to, String from, Address[] cc, Address[] bcc, String subject, String text, String charset, boolean asHtml,
                                 boolean log, boolean rtl) throws java.lang.Exception {
-        String toEmails = "";
-        if (to != null) {
-            toEmails = "[" + String.join(", ",
-                    Arrays.asList(to).stream().map(Address::toString).collect(Collectors.toList())) + "]";
-        }
-        emailLogger.debug("Sending mail from " + from + " to " + (to != null ? toEmails : "none")
-                + " recipient(s). Subject: "
-                + subject + ". Encoding: " + charset + ". asHtml: " + asHtml);
-        emailLogger.debug("Mail text:\n" + text);
+        logEmail(to, from, subject, text, charset, asHtml);
 
         if (!EMAIL_SENDING_ENABLED) {
             return;
@@ -560,17 +552,38 @@ public class DgEmailManager {
             throw ex;
         }
     }
-    
-    
+
+    private static void logEmail(Address[] to, String from, String subject, String text, String charset, boolean asHtml) {
+        String toEmails = "";
+        if (to != null) {
+            toEmails = "[" + String.join(", ",
+                    Arrays.asList(to).stream().map(Address::toString).collect(Collectors.toList())) + "]";
+        }
+        emailLogger.debug("Sending mail from " + from + " to " + (to != null ? toEmails : "none")
+                + " recipient(s). Subject: "
+                + subject + ". Encoding: " + charset + ". asHtml: " + asHtml);
+        emailLogger.debug("Mail text:\n" + text);
+    }
+
+
     public static void sendMail(Address[] to,String from,AmpMessage ampMessage,Sdm attachmentsHolder) throws Exception{     
-        // Get SMTP object from configuration file, see digi.xml for more details
+        // Get SMTP object from configuration file, see digi.xml for more detail
+        String subject = ampMessage.getName();
+        String text = ampMessage.getDescription();
+
+        logEmail(to, from, subject, text, DEFAULT_ENCODING, false);
+
+        if (!EMAIL_SENDING_ENABLED) {
+            return;
+        }
+
         Smtp smtp = DigiConfigManager.getConfig().getSmtp();
         ForwardEmails forwardEmails = DigiConfigManager.getConfig().getForwardEmails();
 
         // Mail session needs property,
         // we create default property key and fill it
         Properties props = new Properties();
-        props.put("mail.smtp.host", smtp.getHost());        
+        props.put("mail.smtp.host", smtp.getHost());
         if (smtp.getUserName() != null && smtp.getUserPassword() != null) {
             props.put("mail.smtp.auth", "true");
         }
@@ -590,11 +603,11 @@ public class DgEmailManager {
          }
         message.setFrom(new InternetAddress(from));
         message.addRecipients(Message.RecipientType.TO, to);
-        message.setSubject(ampMessage.getName(),DEFAULT_ENCODING);
+        message.setSubject(subject,DEFAULT_ENCODING);
         message.setSentDate(new Date());        
         // Set the email message text.
         MimeBodyPart messagePart = new MimeBodyPart();
-        messagePart.setText(ampMessage.getDescription());
+        messagePart.setText(text);
         
         
         Multipart multipart = new MimeMultipart();

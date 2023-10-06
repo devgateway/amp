@@ -70,7 +70,14 @@ public class SettingsConstants {
     public static final String GIS_DEFAULT_MAX_DATE = "gis-default-max-date";
     public static final String GIS_DEFAULT_MIN_DATE = "gis-default-min-date";
 
+    public static final String REPORT_DEFAULT_MAX_DATE = "report-default-max-date";
 
+    public static final String REPORT_DEFAULT_MIN_DATE = "report-default-min-date";
+
+    public static final String REPORT_DEFAULT_MAX_YEAR_RANGE = "report-default-max-year-range";
+    public static final String REPORT_DEFAULT_MIN_YEAR_RANGE = "report-default-min-year-range";
+
+    public static final String PROGRAM_SETTINGS = "program-settings";
 
 
     /** {id, value} map for settings fields ID-NAME map */
@@ -96,6 +103,7 @@ public class SettingsConstants {
         put(YEAR_FROM, "From:");
         put(YEAR_TO, "To:");
         put(YEAR_ALL, "All");
+        put(PROGRAM_SETTINGS, "Program Settings");
         put(SORT_COLUMN, GlobalSettingsConstants.DEFAULT_RESOURCES_SORT_COLUMN);
         put(MAXIMUM_FILE_SIZE, GlobalSettingsConstants.CR_MAX_FILE_SIZE );
         put(LIMIT_FILE_TO_UPLOAD, GlobalSettingsConstants.LIMIT_FILE_TYPE_FOR_UPLOAD);

@@ -11,6 +11,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.form.ChangePasswordForm;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.um.util.DbUtil;
 import org.digijava.kernel.security.PasswordPolicyValidator;
 
@@ -22,7 +23,6 @@ public class ChangePassword extends Action {
                                  ActionForm form,
                                  HttpServletRequest request,
                                  HttpServletResponse response) throws java.lang.Exception {
-
 
         ChangePasswordForm cpForm = (ChangePasswordForm) form;
         ActionMessages errors = new ActionMessages();
@@ -59,6 +59,7 @@ public class ChangePassword extends Action {
                 saveErrors(request, errors);
                 return mapping.getInputForward();
             }
+
             return mapping.findForward("success");
         } else {
             return mapping.findForward("changePassword");

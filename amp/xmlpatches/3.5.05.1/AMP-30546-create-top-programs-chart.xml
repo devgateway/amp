@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../../doc/xmlpatcher.xsd ">
+    <jira>AMP-30546</jira>
+    <keyword>Add top programs chart to feature visibility</keyword>
+    <author>timothymugo</author>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                insert into amp_features_visibility (id, name, haslevel, parent) values
+                (nextval('amp_features_visibility_seq'), 'Top Programs', true, (select id from amp_modules_visibility where name = '/Dashboards'));
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

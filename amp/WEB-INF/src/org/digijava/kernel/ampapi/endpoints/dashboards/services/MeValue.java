@@ -1,4 +1,4 @@
-package org.digijava.kernel.ampapi.endpoints.ndd.me;
+package org.digijava.kernel.ampapi.endpoints.dashboards.services;
 
 public class MeValue {
     private String year;

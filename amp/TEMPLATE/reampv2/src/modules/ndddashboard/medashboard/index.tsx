@@ -2,15 +2,27 @@ import React from 'react';
 import { connect } from 'react-redux';
 import MainDashboardContainer from './components/MainDashboardContainer';
 import { Container, Row, Col } from 'react-bootstrap';
+import PrintDummy from "../../sscdashboard/utils/PrintDummy";
 
+interface MeDashboardHomeProps {
+  filters: any;
+  dashboardSettings?: any;
+  settings?: any;
+  globalSettings?: any;
+}
 
-const MeDashboardHome = (props: any) => {
+const MeDashboardHome: React.FC<MeDashboardHomeProps> = (props) => {
+  const { filters, settings } = props;
+
   return (
-      <Container>
+      <Container style={{
+        marginRight: '-15px', marginLeft: '-15px', border: '1px solid #ddd', borderBottom: 'none', backgroundColor: '#ffffff'
+      }}>
         <Row md={12} style={{
           paddingTop: 10,
           paddingBottom: 30,
           borderBottom: '1px solid #ccc',
+          backgroundColor: '#ffffff !important',
         }}>
           <Col md={12}>
             <span style={{
@@ -24,7 +36,8 @@ const MeDashboardHome = (props: any) => {
             </span>
           </Col>
         </Row>
-        <MainDashboardContainer />
+        <MainDashboardContainer filters={filters} settings={settings} />
+        <PrintDummy/>
       </Container>
 
   );

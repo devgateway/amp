@@ -4,7 +4,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { NDDTranslationContext } from './StartUp';
-import MainDashboardContainer from './MainDashboardContainer';
 import HeaderContainer from './HeaderContainer';
 import { callReport, callTopReport, clearTopReport } from '../actions/callReports';
 import { CURRENCY_CODE, DIRECT, FUNDING_TYPE } from '../utils/constants';
@@ -12,7 +11,7 @@ import loadDashboardSettings from '../actions/loadDashboardSettings';
 import { getMappings } from '../actions/getMappings';
 import { DST_PROGRAM, SRC_PROGRAM } from '../../admin/ndd/constants/Constants';
 import { getSharedData } from '../actions/getSharedData';
-import PrintDummy from '../../sscdashboard/utils/PrintDummy';
+import NDDDashboardTabs from './NDDDashboardTabs';
 import { printChart } from '../../sscdashboard/utils/PrintUtils';
 import './print.css';
 import { removeFilter } from '../utils/Utils';
@@ -55,7 +54,7 @@ const NDDDashboardHome = (props) => {
     return Promise.resolve();
   }
 
-  useEffect( () => {
+  useEffect(() => {
     const { embedded } = state;
     const { id } = props.match.params;
 
@@ -112,7 +111,7 @@ const NDDDashboardHome = (props) => {
     };
 
     fetchData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const resetChartAfterUnClick = () => {
@@ -163,11 +162,11 @@ const NDDDashboardHome = (props) => {
     fundingByYearSource
   } = state;
 
-  const onChangeSource = (e)=> {
-    setState( prevState=> ({
-        ...prevState,
-        fundingByYearSource: e.target.value
-      })
+  const onChangeSource = (e) => {
+    setState(prevState => ({
+      ...prevState,
+      fundingByYearSource: e.target.value
+    })
     );
   }
 
@@ -214,7 +213,7 @@ const NDDDashboardHome = (props) => {
   }
 
   const { translations } = useContext(NDDTranslationContext);
-  const downloadImage = ()=> {
+  const downloadImage = () => {
     printChart(translations['amp.ndd.dashboard:page-title'], 'ndd-main-container',
       [], 'png', false, 'print-simple-dummy-container', false);
   }
@@ -223,42 +222,43 @@ const NDDDashboardHome = (props) => {
 
 
   return (
-    <Container fluid className="main-container" id="ndd-main-container">
-      <div className="row header" style={{ marginRight: '-30px', marginLeft: '-30px' }}>
+    <Container>
+      <div className="row header" style={{marginRight: '-30px', marginLeft: '-30px'}}>
         {mapping && settings && globalSettings && selectedPrograms && !embedded ? (
-          <HeaderContainer
-            onApplySettings={onApplySettings}
-            onApplyFilters={onApplyFilters}
-            filters={filters}
-            globalSettings={globalSettings}
-            settings={settings}
-            fundingType={fundingType}
-            selectedPrograms={selectedPrograms}
-            dashboardId={dashboardId} />
+            <HeaderContainer
+                onApplySettings={onApplySettings}
+                onApplyFilters={onApplyFilters}
+                filters={filters}
+                globalSettings={globalSettings}
+                settings={settings}
+                fundingType={fundingType}
+                selectedPrograms={selectedPrograms}
+                dashboardId={dashboardId}/>
         ) : null}
       </div>
-      <MainDashboardContainer
-        handleOuterChartClick={memoizedHandleChartClick}
-        selectedDirectProgram={selectedDirectProgram}
-        filters={filters}
-        ndd={ndd}
-        nddLoaded={nddLoaded}
-        nddLoadingPending={nddLoadingPending}
-        dashboardSettings={dashboardSettings}
-        onChangeFundingType={onChangeFundingType}
-        onChangeProgram={onChangeProgram}
-        fundingType={fundingType}
-        selectedPrograms={selectedPrograms}
-        mapping={mapping}
-        settings={settings}
-        globalSettings={globalSettings}
-        noIndirectMapping={noIndirectMapping}
-        downloadImage={memoizedDownloadImage}
-        embedded={embedded}
-        onChangeSource={memoizedOnChangeSource}
-        fundingByYearSource={fundingByYearSource}
+
+      <NDDDashboardTabs
+          handleOuterChartClick={memoizedHandleChartClick}
+          selectedDirectProgram={selectedDirectProgram}
+          filters={filters}
+          ndd={ndd}
+          nddLoaded={nddLoaded}
+          nddLoadingPending={nddLoadingPending}
+          dashboardSettings={dashboardSettings}
+          onChangeFundingType={onChangeFundingType}
+          onChangeProgram={onChangeProgram}
+          fundingType={fundingType}
+          selectedPrograms={selectedPrograms}
+          mapping={mapping}
+          settings={settings}
+          globalSettings={globalSettings}
+          noIndirectMapping={noIndirectMapping}
+          downloadImage={memoizedDownloadImage}
+          embedded={embedded}
+          onChangeSource={memoizedOnChangeSource}
+          fundingByYearSource={fundingByYearSource}
+          translations={translations}
       />
-      <PrintDummy />
     </Container>
   );
 }

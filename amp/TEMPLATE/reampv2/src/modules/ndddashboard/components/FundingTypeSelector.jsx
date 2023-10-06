@@ -1,12 +1,16 @@
-import React, { useCallback } from 'react';
+import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-const FundingTypeSelector = (props) => {
-  const { dashboardSettings, onChange, defaultValue } = props;
+class FundingTypeSelector extends Component {
+  constructor(props) {
+    super(props);
+    this.generateDropdown = this.generateDropdown.bind(this);
+  }
 
-  const generateDropdown = useCallback(() => {
+  generateDropdown() {
+    const { dashboardSettings, onChange, defaultValue } = this.props;
     const options = dashboardSettings.find(s => s.id === 'funding-type');
     return (
       <form className="form-inline dash-form dash-adj-type">
@@ -19,15 +23,35 @@ const FundingTypeSelector = (props) => {
         <span className="cheat-lineheight" />
       </form>
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }
 
-  return (
-    <div className="panel-footer clearfix">
-      {generateDropdown()}
-    </div>
-  );
-};
+  render() {
+    return (
+      <div className="panel-footer clearfix">
+        {/* <div className="pull-right">
+          <div className="btn-group">
+            <a
+              data-toggle="tooltip"
+              title=""
+              className="btn btn-sm btn-default download"
+              target="_blank">
+              <span className="glyphicon glyphicon-cloud-download" />
+            </a>
+            <button
+              data-toggle="tooltip"
+              title=""
+              type="button"
+              className="btn btn-sm btn-default expand hidden-xs hidden-sm"
+              data-original-title="Expand chart">
+              <span className="glyphicon glyphicon-fullscreen" />
+            </button>
+          </div>
+        </div> */}
+        {this.generateDropdown()}
+      </div>
+    );
+  }
+}
 
 const mapStateToProps = state => ({
   ndd: state.reportsReducer.ndd,

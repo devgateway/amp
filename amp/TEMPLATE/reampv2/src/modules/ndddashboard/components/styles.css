@@ -69,7 +69,7 @@ h3 {
 }
 
 .loading {
-    background-image: url("../../../assets/loading.gif");
+    background-image: url("/TEMPLATE/reampv2/public/assets/loading.gif");
     background-size: contain;
     background-repeat: no-repeat;
     height: 100px;
@@ -186,7 +186,7 @@ h3 {
 }
 .radio-fy-source {
     display: inline-block;
-    padding-left: 16px;
+    padding-left: 5px;
     padding-right: 15px;
 }
 
@@ -309,4 +309,117 @@ h3 {
     height: 100%;
     background-color: rgba(0, 0, 0, 0.6);
     z-index: 100;
+}
+
+.nav {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+    margin-left: -14px;
+}
+
+.nav-item:first-child {
+    margin-left: 48px;
+    margin-right: 10px;
+}
+
+/* .nav-item:last-child {
+    margin-left: 0;
+    margin-right: 0;
+} */
+
+.nav-link {
+    font-size: 20px;
+    font-weight: 500;
+    color: #f5f5f5;
+    padding: 8px 12px;
+    background-color: #c2c2c2;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    box-shadow: 10px 10px 52px -10px rgba(227,227,227,0.79);
+}
+
+.nav-link.active {
+    background-color: #205581;
+    color: #f5f5f5;
+}
+
+
+.nav-link:focus, .nav-link:hover {
+    text-decoration: none
+}
+
+.nav-link.disabled {
+    color: #6c757d;
+    pointer-events: none;
+    cursor: default
+}
+
+.nav-tabs {
+    border-bottom: none;
+}
+
+.nav-tabs .nav-item {
+    margin-bottom: -2px
+}
+
+
+.nav-tabs .nav-link {
+    border: 1px solid transparent;
+    border-top-left-radius: .25rem;
+    border-top-right-radius: .25rem;
+    width: 400px;
+}
+
+.nav-tabs .nav-link:focus, .nav-tabs .nav-link:hover {
+    border-color: #e9ecef #e9ecef #dee2e6
+}
+
+.nav-tabs .nav-link.disabled {
+    color: #6c757d;
+    background-color: transparent;
+    border-color: transparent
+}
+
+.nav-tabs .nav-item.show .nav-link, .nav-tabs  {
+    color: black;
+    background-color: #fff;
+    border-color: #dee2e6 #dee2e6 #fff
+}
+
+.nav-tabs .dropdown-menu {
+    margin-top: -1px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0
+}
+
+.info-icon {
+    height: 15px;
+    width: 15px;
+    float: left;
+    margin-right: 3px;
+    top: 2px;
+    position: relative;
+}
+
+.tooltip {
+    opacity: 1;
+}
+
+.tab-content {
+    border: 1px solid #dee2e6;
+    display: grid;
+}
+
+.tab-pane {
+    margin-bottom: 20px;
+    background-color: #ffffff;
+}
+
+.fade {
+    opacity: 1;
 }

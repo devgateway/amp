@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -24,21 +24,19 @@ const Plot = createPlotlyComponent(Plotly);
 export const SRC_DIRECT = '0';
 const SRC_INDIRECT = '1';
 
-const FundingByYearChart = (props) => {
-  const {
-    data, selectedDirectProgram, fundingByYearSource, settings, translations, globalSettings, selectedPrograms,
-    _callYearDetailReport, fundingType, filters, yearDetailPending, yearDetail, error, dashboardSettings, onChangeSource
-  } = props;
-  const [showLegend, setShowLegend] = useState(false);
-  const [legendTop, setLegendTop] = useState(0);
-  const [legendLeft, setLegendLeft] = useState(0);
-  const [tooltipData, setTooltipData] = useState(null);
-  const [showDetail, setShowDetail] = useState(false);
-  const [year, setYear] = useState(null);
-  const [programName, setProgramName] = useState(null);
+class FundingByYearChart extends Component {
+  constructor(props) {
+    super(props);
+    this.getValues = this.getValues.bind(this);
+    this.state = {
+      showLegend: false, legendTop: 0, legendLeft: 0, tooltipData: null, showDetail: false
+    };
+  }
 
-  const getValues = () => {
+  getValues() {
+    const { selectedDirectProgram, fundingByYearSource } = this.props;
     const ret = [];
+    const { data } = this.props;
     if (data && data.length > 0) {
       const sourceData = (fundingByYearSource === SRC_DIRECT
         ? data.map(i => i[DIRECT_PROGRAM])
@@ -52,7 +50,7 @@ const FundingByYearChart = (props) => {
           const item = ret.find(j => j[CODE] === program[CODE]);
           const auxAmounts = i.amountsByYear;
           if (item) {
-            item.values = sortAmountsByYear(addAmountsByYear(item.values, Object.keys(auxAmounts)
+            item.values = this.sortAmountsByYear(this.addAmountsByYear(item.values, Object.keys(auxAmounts)
               .map(j => ({ [j]: auxAmounts[j] }))));
           } else {
             ret.push({
@@ -66,19 +64,19 @@ const FundingByYearChart = (props) => {
         }
       });
       ret.forEach(i => {
-        i.values = sortAmountsByYear(fillGapsInYears(i.values));
+        i.values = this.sortAmountsByYear(this.fillGapsInYears(i.values));
       });
     }
     return ret;
   }
 
   // eslint-disable-next-line class-methods-use-this,react/sort-comp
-  const sortAmountsByYear = (values) => {
+  sortAmountsByYear(values) {
     return values.sort((i, j) => (Object.keys(i)[0] - Object.keys(j)[0]));
   }
 
   // eslint-disable-next-line class-methods-use-this
-  const addAmountsByYear = (current, values) => {
+  addAmountsByYear(current, values) {
     const ret = current;
     current.forEach((item, i) => {
       const key = Object.keys(item)[0];
@@ -100,7 +98,7 @@ const FundingByYearChart = (props) => {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  const fillGapsInYears = (values) => {
+  fillGapsInYears(values) {
     const ret = values;
     const min = Math.min(...values.map(i => parseInt(Object.keys(i)[0], 10)));
     const max = Math.max(...values.map(i => parseInt(Object.keys(i)[0], 10)));
@@ -112,25 +110,26 @@ const FundingByYearChart = (props) => {
     return ret;
   }
 
-
-  const onHover = (data) => {
+  onHover = (data) => {
     const { text } = data.points[0].data;
     const lines = Math.ceil(text.length / 30);
-    setShowLegend(true);
-    setLegendTop(data.event.pointerY - 20 - (lines * 25));
-    setLegendLeft(data.event.pointerX - 100);
-    setTooltipData(data);
+    this.setState({
+      showLegend: true,
+      legendTop: data.event.pointerY - 20 - (lines * 25),
+      legendLeft: data.event.pointerX - 100,
+      tooltipData: data
+    });
   }
 
-  const onUnHover = () => {
-    setShowLegend(false);
-    setTooltipData(null);
+  onUnHover = () => {
+    this.setState({ showLegend: false, tooltipData: null });
   }
 
-  const onClick = (event) => {
-    setShowDetail(true);
-    setYear(event.points[0].x);
-    setProgramName(event.points[0].data.text);
+  onClick = (event) => {
+    const {
+      _callYearDetailReport, settings, filters, fundingType, selectedPrograms, fundingByYearSource
+    } = this.props;
+    this.setState({ showDetail: true, year: event.points[0].x, programName: event.points[0].data.text });
     const newSettings = { ...settings };
     newSettings.isShowInnerChartDataForActivitiesDetail = (fundingByYearSource === SRC_INDIRECT);
     newSettings.dontUseMapping = (selectedPrograms && selectedPrograms.length === 1);
@@ -142,15 +141,19 @@ const FundingByYearChart = (props) => {
       newSettings);
   }
 
-  const createModalWindow = () => {
+  createModalWindow = () => {
+    const {
+      translations, yearDetailPending, yearDetail, error, fundingType, settings, globalSettings, dashboardSettings
+    } = this.props;
     const fundingTypeDescription = dashboardSettings.find(i => i.id === FUNDING_TYPE).value.options
       .find(ft => ft.id === fundingType);
+    const { showDetail, year, programName } = this.state;
     return (
       <YearDetail
         translations={translations}
         show={showDetail}
         handleClose={() => {
-          setShowDetail(false);
+          this.setState({ showDetail: false });
         }}
         data={yearDetail}
         loading={yearDetailPending}
@@ -162,7 +165,9 @@ const FundingByYearChart = (props) => {
     );
   }
 
-  const createTooltip = () => {
+  createTooltip = () => {
+    const { tooltipData } = this.state;
+    const { settings, translations, globalSettings } = this.props;
     if (tooltipData) {
       const year = tooltipData.points[0].x;
       return (
@@ -184,7 +189,8 @@ const FundingByYearChart = (props) => {
     return null;
   }
 
-  const getColor = (source, i) => {
+  getColor(source, i) {
+    const { selectedDirectProgram, selectedPrograms } = this.props;
     if (source === SRC_DIRECT) {
       if (selectedDirectProgram == null) {
         return getCustomColor(i, selectedPrograms[0]);
@@ -196,13 +202,15 @@ const FundingByYearChart = (props) => {
     }
   }
 
-  const canEnableShowIndirectDataOption = () => {
+  canEnableShowIndirectDataOption = () => {
+    const { data, selectedDirectProgram } = this.props;
     const ret = data.find(d => d.indirectPrograms.length > 0) && !selectedDirectProgram;
     return ret;
   }
 
   // eslint-disable-next-line class-methods-use-this
-  const calculateYAxisAbbreviations = (annotations, directData) => {
+  calculateYAxisAbbreviations = (annotations, directData) => {
+    const { translations, globalSettings } = this.props;
     const newAnnotations = annotations;
     let biggest = 0;
     directData.forEach(i => {
@@ -221,14 +229,14 @@ const FundingByYearChart = (props) => {
       const formatter = formatKMB(translations, globalSettings.precision, globalSettings.decimalSeparator, false);
       for (let i = 25; i <= 100; i += 25) {
         newAnnotations.push({
-          text: formatter(getTickValue(biggest, i)),
+          text: formatter(this.getTickValue(biggest, i)),
           align: 'right',
           xref: 'paper',
           x: 0,
           xanchor: 'right',
           xshift: 25,
           yref: 'y',
-          y: getTickValue(biggest, i),
+          y: this.getTickValue(biggest, i),
           yanchor: 'auto',
           yshift: 0,
           showarrow: false
@@ -239,144 +247,148 @@ const FundingByYearChart = (props) => {
   }
 
   // eslint-disable-next-line no-mixed-operators
-  const getTickValue = (total, i) => (total * i / 100)
+  getTickValue = (total, i) => (total * i / 100)
 
-  // useEffect(() => {
-  //   generate2LevelColors();
-  // }, [selectedDirectProgram, selectedPrograms]);
-
-  const directData = getValues();
-
-  let annotations = directData.length === 0 ? [
-    {
-      text: translations[`${TRN_PREFIX}no-data`],
-      xref: 'paper',
-      yref: 'paper',
-      showarrow: false,
-      font: {
-        size: 20,
-      },
-    },
-  ] : [];
-
-  annotations = calculateYAxisAbbreviations(annotations, directData);
-
-  return (
-    <div>
-      <div className="funding-by-year-radios">
-        <div className="title-fy-source">
-          {fundingByYearSource === SRC_DIRECT ? translations[`${TRN_PREFIX}direct`]
-            : translations[`${TRN_PREFIX}indirect`]}
-        </div>
-        <div className="radio-fy-source">
-          <input
-            type="radio"
-            id="fy-direct"
-            name="fy-source"
-            value="0"
-            checked={fundingByYearSource === SRC_DIRECT ? 'checked' : null}
-            onChange={onChangeSource} />
-          <label htmlFor="fy-direct">
-            {translations[`${TRN_PREFIX}fy-direct`]}
-          </label>
-        </div>
-        {canEnableShowIndirectDataOption() ? (
+  render() {
+    const {
+      translations, globalSettings, onChangeSource, fundingByYearSource
+    } = this.props;
+    const {
+      showLegend, legendTop, legendLeft
+    } = this.state;
+    const directData = this.getValues();
+    /* const transition = {
+      duration: 2000,
+      easing: 'cubic-in-out'
+    }; */
+    let annotations = directData.length === 0 ? [
+      {
+        text: translations[`${TRN_PREFIX}no-data`],
+        xref: 'paper',
+        yref: 'paper',
+        showarrow: false,
+        font: {
+          size: 20
+        }
+      }
+    ] : [];
+    annotations = this.calculateYAxisAbbreviations(annotations, directData);
+    return (
+      <div>
+        <div className="funding-by-year-radios">
+          <div className="title-fy-source">
+            {fundingByYearSource === SRC_DIRECT ? translations[`${TRN_PREFIX}direct`]
+              : translations[`${TRN_PREFIX}indirect`]}
+          </div>
           <div className="radio-fy-source">
             <input
               type="radio"
-              id="fy-indirect"
+              id="fy-direct"
               name="fy-source"
-              value="1"
-              checked={fundingByYearSource === SRC_INDIRECT ? 'checked' : null}
+              value="0"
+              checked={fundingByYearSource === SRC_DIRECT ? 'checked' : null}
               onChange={onChangeSource} />
-            <label htmlFor="fy-indirect">
-              {translations[`${TRN_PREFIX}fy-indirect`]}
+            <label htmlFor="fy-direct">
+              {translations[`${TRN_PREFIX}fy-direct`]}
             </label>
           </div>
-        ) : null}
-      </div>
-      <Plot
-        key="fundingByYearChart"
-        data={
-          directData.map(i => ({
-            x: i.values.map(j => Object.keys(j)[0]),
-            y: i.values.map(j => j[Object.keys(j)[0]]),
-            text: i.name,
-            extraData: directData,
-            hoverinfo: 'none',
-            name: '',
-            type: 'scatter',
-            mode: 'lines+markers',
-            line: {
-              shape: 'spline',
-              smoothing: 0.5,
-              dash: 'solid',
-              width: 2,
-              color: getColor(fundingByYearSource, i),
-            },
-            marker: {
-              size: 7,
-              color: 'white',
+          {this.canEnableShowIndirectDataOption() ? (
+            <div className="radio-fy-source">
+              <input
+                type="radio"
+                id="fy-indirect"
+                name="fy-source"
+                value="1"
+                checked={fundingByYearSource === SRC_INDIRECT ? 'checked' : null}
+                onChange={onChangeSource} />
+              <label htmlFor="fy-indirect">
+                {translations[`${TRN_PREFIX}fy-indirect`]}
+              </label>
+            </div>
+          ) : null}
+        </div>
+        <Plot
+          key="fundingByYearChart"
+          data={
+            directData.map(i => ({
+              x: i.values.map(j => Object.keys(j)[0]),
+              y: i.values.map(j => j[Object.keys(j)[0]]),
+              text: i.name,
+              extraData: directData,
+              hoverinfo: 'none',
+              name: '',
+              type: 'scatter',
+              mode: 'lines+markers',
               line: {
-                color: getColor(fundingByYearSource, i),
+                shape: 'spline',
+                smoothing: 0.5,
+                dash: 'solid',
                 width: 2,
+                color: this.getColor(fundingByYearSource, i),
               },
+              marker: {
+                size: 7,
+                color: 'white',
+                line: {
+                  color: this.getColor(fundingByYearSource, i),
+                  width: 2,
+                }
+              }
+            }))
+          }
+          layout={{
+            autosize: true,
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            height: 400,
+            title: '',
+            showlegend: false,
+            /* transition, */
+            margin: {
+              l: 60,
+              r: 30,
+              b: 50,
+              t: 20,
+              pad: 10
             },
-          }))
-        }
-        layout={{
-          autosize: true,
-          paper_bgcolor: 'rgba(0,0,0,0)',
-          height: 400,
-          title: '',
-          showlegend: false,
-          /* transition, */
-          margin: {
-            l: 60,
-            r: 30,
-            b: 50,
-            t: 20,
-            pad: 10
-          },
-          annotations,
-          xaxis: {
-            showgrid: false,
-            showline: false,
-            autotick: false,
-            tickangle: 45,
-            fixedrange: true,
-            automargin: true
-          },
-          yaxis: {
-            automargin: true,
-            fixedrange: true,
-            visible: true,
-            showline: false,
-            showticklabels: false
-          },
-          hovermode: 'closest',
-          separators: globalSettings.decimalSeparator + globalSettings.groupSeparator
-        }}
-        config={{ displaylogo: false, responsive: true, displayModeBar: false }}
-        useResizeHandler
-        style={{ width: '100%', height: '100%', cursor: 'pointer' }}
-        onHover={event => onHover(event)}
-        onUnHover={() => onUnHover()}
-        onClick={event => onClick(event)}
-      />
-      <div
-        style={{
-          display: (!showLegend ? 'none' : 'block'),
-          top: legendTop,
-          left: legendLeft
-        }}
-        className="line-legend-wrapper">
-        {createTooltip()}
+            annotations,
+            xaxis: {
+              showgrid: false,
+              showline: false,
+              autotick: false,
+              tickangle: 45,
+              fixedrange: true,
+              automargin: true
+            },
+            yaxis: {
+              automargin: true,
+              fixedrange: true,
+              visible: true,
+              showline: false,
+              showticklabels: false
+            },
+            hovermode: 'closest',
+            separators: globalSettings.decimalSeparator + globalSettings.groupSeparator
+          }}
+          config={{ displaylogo: false, responsive: true, displayModeBar: false }}
+          useResizeHandler
+          style={{ width: '100%', height: '100%', cursor: 'pointer' }}
+          onHover={event => this.onHover(event)}
+          onUnhover={() => this.onUnHover()}
+          onClick={(event) => this.onClick(event)}
+        />
+        <div
+          style={{
+            display: (!showLegend ? 'none' : 'block'),
+            top: legendTop,
+            left: legendLeft
+          }}
+          className="line-legend-wrapper">
+          {this.createTooltip()}
+        </div>
+        {this.createModalWindow()}
       </div>
-      {createModalWindow()}
-    </div>
-  )
-
+    );
+  }
 }
 
 FundingByYearChart.propTypes = {

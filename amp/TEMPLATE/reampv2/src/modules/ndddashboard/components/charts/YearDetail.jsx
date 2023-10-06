@@ -1,28 +1,23 @@
-import React, { useCallback } from 'react';
-import { Button, Modal } from 'react-bootstrap';
+import React, { Component } from 'react';
+import { Button } from 'react-bootstrap';
+import Modal from 'react-bootstrap-modal';
 import PropTypes from 'prop-types';
 import { TRN_PREFIX } from '../../utils/constants';
 import { formatOnlyNumber, getAmountsInWord } from '../../utils/Utils';
 
 const MAX_RECORDS = 50;
 
-const YearDetail = (props) => {
-  const {
-    translations,
-    show,
-    handleClose,
-    data,
-    loading,
-    error,
-    fundingTypeDescription,
-    currencyCode,
-    globalSettings,
-    title
-  } = props;
+export default class YearDetail extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { recordsVisible: MAX_RECORDS };
+  }
 
-  const [recordsVisible, setRecordsVisible] = React.useState(MAX_RECORDS);
-
-  const createTable = useCallback(() => {
+  createTable = () => {
+    const {
+      data, translations, fundingTypeDescription, currencyCode, globalSettings
+    } = this.props;
+    const { recordsVisible } = this.state;
     const rows = [];
     data.forEach((i, j) => {
       rows.push(
@@ -42,7 +37,6 @@ const YearDetail = (props) => {
         </tr>
       );
     });
-
     return (
       <div>
         <span style={{ fontWeight: 'bold' }}>
@@ -63,48 +57,49 @@ const YearDetail = (props) => {
         </table>
         {recordsVisible < rows.length
           ? (
-            <Button variant="success" onClick={() => loadMore()}>
+            <Button variant="success" onClick={this.loadMore}>
               {`${`${translations[`${TRN_PREFIX}load-more`]} ${recordsVisible}`}/${rows.length}`}
             </Button>
           )
           : null}
       </div>
     );
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const loadMore = () => {
-    setRecordsVisible(recordsVisible + MAX_RECORDS);
   }
 
-  const handleModalClose = () => {
-    setRecordsVisible(MAX_RECORDS);
+  loadMore = () => {
+    const { recordsVisible } = this.state;
+    this.setState({ recordsVisible: recordsVisible + MAX_RECORDS });
+  }
+
+  handleClose = () => {
+    const { handleClose } = this.props;
+    this.setState({ recordsVisible: MAX_RECORDS });
     handleClose();
   }
 
-  return (
-    <Modal
-      show={show}
-      onHide={handleModalClose}
-      centered
-      backdrop='static'
-      backdropClassName='modal_backdrop'>
-      <Modal.Header closeButton>
-        <Modal.Title>{title}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        {loading
-          ? <div className="loading" style={{ top: '5%', marginTop: '5px' }} />
-          : null}
-        {!loading && (!data || data.length === 0) && !error
-          ? <span>{translations[`${TRN_PREFIX}no-data`]}</span>
-          : null}
-        {data && data.length > 0 ? <div className="detail-table-container">{createTable()}</div> : null}
-        {error ? <span className="error">{JSON.stringify(error)}</span> : null}
-      </Modal.Body>
-    </Modal>
-  );
-};
+  render() {
+    const {
+      translations, show, data, loading, error, title
+    } = this.props;
+    return (
+      <Modal show={show} onHide={this.handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>{title}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {loading
+            ? <div className="loading" style={{ top: '5%', marginTop: '5px' }} />
+            : null}
+          {!loading && (!data || data.length === 0) && !error
+            ? <span>{translations[`${TRN_PREFIX}no-data`]}</span>
+            : null}
+          {data && data.length > 0 ? <div className="detail-table-container">{this.createTable()}</div> : null}
+          {error ? <span className="error">{JSON.stringify(error)}</span> : null}
+        </Modal.Body>
+      </Modal>
+    );
+  }
+}
 
 YearDetail.propTypes = {
   translations: PropTypes.object.isRequired,
@@ -123,5 +118,3 @@ YearDetail.defaultProps = {
   error: undefined,
   data: null
 };
-
-export default YearDetail;

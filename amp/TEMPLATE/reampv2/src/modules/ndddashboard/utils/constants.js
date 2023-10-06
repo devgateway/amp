@@ -67,3 +67,19 @@ export const CHART_COLOR_MAP = new Map();
 export const BASE_VALUE_COLOR = '#008efa'
 export const CURRENT_VALUE_COLOR = '#ff9b29'
 export const TARGET_VALUE_COLOR = '#5d9d2f'
+
+export const BASE_VALUE ='BaseLine'
+export const CURRENT_VALUE ='Current'
+export const TARGET_VALUE ='Target'
+
+export const PROGRESS_TRACKING_DASHBOARDS = 'PROGRESS TRACKING DASHBOARDS'
+
+export const REST_PROGRAM_CONFIGURATION = '/rest/dashboard/programConfiguration';
+export const REST_FM_SETTINGS = '/rest/common/fm/flat';
+export const REST_SECTORS = '/rest/dashboard/sectors';
+export const REST_INDICATORS = '/rest/dashboard/me/indicators';
+export const REST_INDICATORS_BY_PROGRAM = '/rest/dashboard/me/indicatorsByProgram';
+export const REST_PROGRAM_PROGRESS_REPORT = '/rest/dashboard/me/programReport';
+export const REST_INDICATOR_REPORT = '/rest/dashboard/me/indicatorReport'
+
+export const DEFAULT_REPORTING_PERIOD = 5;

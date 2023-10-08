@@ -349,6 +349,7 @@ public class ActivityUtil {
         });
         session.flush();
 
+
     }
     private static <T> void cleanObjectFromSession(Session session, Class<T> objectClass, Long id)
     {

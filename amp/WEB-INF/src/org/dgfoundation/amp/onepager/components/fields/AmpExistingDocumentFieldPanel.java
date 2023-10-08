@@ -142,7 +142,7 @@ public class AmpExistingDocumentFieldPanel extends AmpFeaturePanel {
     private void configureTranslationMode (AjaxLink link, String key, String id) {
         if (TranslatorUtil.isTranslatorMode(getSession())){
             link.setOutputMarkupId(true);
-            link.add(new AttributeAppender("style", new Model<String>("text-decoration: underline; color: #0CAD0C;"), ""));
+            link.add(new AttributeAppender("style", new Model<>("text-decoration: underline; color: #0CAD0C;"), ""));
             link.add(new AttributeModifier("key", key));
             link.add(new AttributeModifier("onclick", "$('#"+id+"').slideToggle();spawnEditBox(this.id)"));
         } else{

@@ -513,7 +513,7 @@ public class DocumentManagerUtil {
     
     public static Node getUserPrivateNode(Session jcrSession, TeamMember teamMember) {
         String userName = teamMember.getEmail();
-        String teamId = "" + teamMember.getTeamId();
+        String teamId = String.valueOf(teamMember.getTeamId());
         return DocumentManagerUtil.getNodeByPath(jcrSession, "private/" + teamId + "/" + userName);
     }
     

@@ -202,10 +202,11 @@ public class ActivityUtil {
         boolean isActivityForm = context.getSource() == ActivitySource.ACTIVITY_FORM;
         if (oldA.getAmpActivityId() != null)
             session.evict(oldA);
+        Set<AmpComponent> components = a.getComponents();
         if (createNewVersion) {
             try {
                 AmpActivityGroup tmpGroup = a.getAmpActivityGroup();
-                Set<AmpComponent> components = a.getComponents();
+
                 a = ActivityVersionUtil.cloneActivity(a);
                 if (a.getAmpActivityId()!=null) {//do this only on update
                     a.setComponents(components);
@@ -332,8 +333,22 @@ public class ActivityUtil {
             }
         }
 
-
+        updateComponents(a);
         return a;
+    }
+
+    private static  void updateComponents(AmpActivityVersion ampActivityVersion)
+    {
+        Session session = PersistenceManager.getRequestDBSession();
+        Query<AmpComponent> query = session.createQuery("FROM "+AmpComponent.class.getName()+" ac  WHERE ac.activity=:activity AND ac.activity IS NOT NULL", AmpComponent.class);
+        query.setParameter("activity", ampActivityVersion.getAmpActivityId(), LongType.INSTANCE);
+        query.stream().filter(x->!ampActivityVersion.getComponents().stream().map(AmpComponent::getAmpComponentId).collect(Collectors.toList()).contains(x.getAmpComponentId())).forEach(z->{
+            z.setActivity(null);//we can also delete this component permanently
+            session.update(z);
+
+        });
+        session.flush();
+
     }
     private static <T> void cleanObjectFromSession(Session session, Class<T> objectClass, Long id)
     {

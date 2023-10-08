@@ -376,6 +376,9 @@ public class AMPStartupListener extends HttpServlet implements
                 statement.executeUpdate(insertStatusValues);
                 String updateDocs="ALTER TABLE AMP_COMPONENT_FUNDING_DOCUMENTS ALTER COLUMN amp_component_funding_id DROP NOT NULL;";
                 statement.executeUpdate(updateDocs);
+
+                String updateComponents="ALTER TABLE AMP_COMPONENTS ALTER COLUMN amp_activity_id DROP NOT NULL;";
+                statement.executeUpdate(updateComponents);
             } catch (Exception e) {
                 // Handle the exception
                 logger.info("Error occurred during trubudget init db  operations", e);

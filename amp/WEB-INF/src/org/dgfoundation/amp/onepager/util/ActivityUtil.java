@@ -205,11 +205,15 @@ public class ActivityUtil {
         if (createNewVersion) {
             try {
                 AmpActivityGroup tmpGroup = a.getAmpActivityGroup();
-
+                Set<AmpComponent> components = a.getComponents();
                 a = ActivityVersionUtil.cloneActivity(a);
+                if (a.getAmpActivityId()!=null) {//do this only on update
+                    a.setComponents(components);
+                }
                 //keeping session.clear() only for acitivity form as it was before
                 if (isActivityForm)
                     session.clear();
+                a.setMember(new HashSet<>());
                 if (tmpGroup == null) {
                     //we need to create a group for this activity
                     tmpGroup = new AmpActivityGroup();
@@ -227,7 +231,7 @@ public class ActivityUtil {
 
                 }
 //                session.flush();
-                a.setMember(new HashSet<>());
+
                 session.flush();
 
             } catch (CloneNotSupportedException e) {

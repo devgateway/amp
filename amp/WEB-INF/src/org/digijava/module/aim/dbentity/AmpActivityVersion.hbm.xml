@@ -184,7 +184,7 @@
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpFunding" />
 		</set>
 
-		<set name="components" cascade="merge" inverse="true">
+		<set name="components" cascade="all-delete-orphan" inverse="true">
 			<cache usage="read-write" />
 			<key column="amp_activity_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpComponent" />

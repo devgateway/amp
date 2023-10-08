@@ -146,7 +146,8 @@ public class Login extends Action {
                  */
                 //
                 List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
-                if (usr.getTruBudgetEnabled()) {
+                if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true") && usr.getTruBudgetEnabled()) {
+
 
                     //login to trubudget
                     TruLoginRequest truLoginRequest = new TruLoginRequest();

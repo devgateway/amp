@@ -224,17 +224,19 @@ public class ProjectUtil {
                 CreateSubProjectModel.Subproject subproject = new CreateSubProjectModel.Subproject();
                 subproject.setId(UUID.randomUUID().toString().replaceAll("-", ""));
                 subproject.setDisplayName(ampComponent.getTitle());
-                if (!ampComponent.getFundings().isEmpty()) {
-                    for (AmpComponentFunding componentFunding : ampComponent.getFundings()) {
-                        if (componentFunding.getTransactionType() == 0 && Objects.equals(componentFunding.getAdjustmentType().getValue(), "Planned")) {
-                            CreateProjectModel.ProjectedBudget projectedBudget = new CreateProjectModel.ProjectedBudget();
-                            projectedBudget.setOrganization(componentFunding.getReportingOrganization()!=null?componentFunding.getReportingOrganization().getName():"Funding Org");
-                            projectedBudget.setValue(BigDecimal.valueOf(componentFunding.getTransactionAmount()).toPlainString());
-                            projectedBudget.setCurrencyCode(componentFunding.getCurrency().getCurrencyCode());
-                            subproject.getProjectedBudgets().add(projectedBudget);
+                if (ampComponent.getFundings()!=null) {
+                    if (!ampComponent.getFundings().isEmpty()) {
+                        for (AmpComponentFunding componentFunding : ampComponent.getFundings()) {
+                            if (componentFunding.getTransactionType() == 0 && Objects.equals(componentFunding.getAdjustmentType().getValue(), "Planned")) {
+                                CreateProjectModel.ProjectedBudget projectedBudget = new CreateProjectModel.ProjectedBudget();
+                                projectedBudget.setOrganization(componentFunding.getReportingOrganization() != null ? componentFunding.getReportingOrganization().getName() : "Funding Org");
+                                projectedBudget.setValue(BigDecimal.valueOf(componentFunding.getTransactionAmount()).toPlainString());
+                                projectedBudget.setCurrencyCode(componentFunding.getCurrency().getCurrencyCode());
+                                subproject.getProjectedBudgets().add(projectedBudget);
+                            }
                         }
+                        subproject.setCurrency(new ArrayList<>(ampComponent.getFundings()).get(0).getCurrency().getCurrencyCode());
                     }
-                    subproject.setCurrency(new ArrayList<>(ampComponent.getFundings()).get(0).getCurrency().getCurrencyCode());
                 }
                 subproject.setAssignee(user);
                 subproject.setValidator(user);

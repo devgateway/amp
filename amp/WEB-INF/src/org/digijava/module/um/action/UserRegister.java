@@ -39,6 +39,7 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.I18NHelper;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.um.form.UserRegisterForm;
 import org.digijava.module.um.util.DbUtil;
 import org.digijava.module.um.util.UmUtil;
@@ -48,7 +49,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static org.digijava.module.um.util.DbUtil.getTruBudgetIntentsByName;
+import static org.digijava.module.um.util.DbUtil.*;
 
 /**
  * <p>Title: DiGiJava</p>
@@ -99,18 +100,22 @@ public class UserRegister
         user.setAddress(userRegisterForm.getMailingAddress());
 
 //set trubudget details
-        String keyGen= UmUtil.generateAESKey(128);
-        user.setTruBudgetKeyGen(keyGen);
-        String encryptedTruPassword = UmUtil.encrypt(userRegisterForm.getTruBudgetPassword(),keyGen);
-        user.setTruBudgetPassword(encryptedTruPassword);
-        String[] intents = userRegisterForm.getSelectedTruBudgetIntents();
-        List<TruBudgetIntent> truBudgetIntents = new ArrayList<>();
-        if (intents!=null) {
-            truBudgetIntents= getTruBudgetIntentsByName(intents);
+        List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
+
+        if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true")) {
+            String keyGen = UmUtil.generateAESKey(128);
+            user.setTruBudgetKeyGen(keyGen);
+            String encryptedTruPassword = UmUtil.encrypt(userRegisterForm.getTruBudgetPassword(), keyGen);
+            user.setTruBudgetPassword(encryptedTruPassword);
+            String[] intents = userRegisterForm.getSelectedTruBudgetIntents();
+            List<TruBudgetIntent> truBudgetIntents = new ArrayList<>();
+            if (intents != null) {
+                truBudgetIntents = getTruBudgetIntentsByName(intents);
+            }
+            logger.info("Intents: " + truBudgetIntents);
+            user.setInitialTruBudgetIntents(new HashSet<>(user.getTruBudgetIntents()));
+            user.setTruBudgetIntents(new HashSet<>(truBudgetIntents));
         }
-        logger.info("Intents: "+ truBudgetIntents);
-        user.setInitialTruBudgetIntents(new HashSet<>(user.getTruBudgetIntents()));
-        user.setTruBudgetIntents(new HashSet<>(truBudgetIntents));
 
         // set organization name
         user.setOrganizationName(userRegisterForm.getOrganizationName());

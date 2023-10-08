@@ -313,22 +313,26 @@ public class ViewEditUser extends Action {
                         userExt.setOrganization(organ);
                         AmpUserUtil.saveAmpUserExtension(userExt);
                     }
+                    List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
 
-                    String[] intents = uForm.getSelectedTruBudgetIntents();
-                    List<TruBudgetIntent> truBudgetIntents = new ArrayList<>();
-                    if (intents!=null) {
-                        truBudgetIntents= getTruBudgetIntentsByName(intents);
-                    }
-                    // TODO: 8/28/23 add for trubudget request
+                    if (getSettingValue(settings,"isEnabled").equalsIgnoreCase("true")) {
+
+                        String[] intents = uForm.getSelectedTruBudgetIntents();
+                        List<TruBudgetIntent> truBudgetIntents = new ArrayList<>();
+                        if (intents != null) {
+                            truBudgetIntents = getTruBudgetIntentsByName(intents);
+                        }
+                        // TODO: 8/28/23 add for trubudget request
 
 //                    user.getTruBudgetIntents().addAll(new HashSet<>(truBudgetIntents));
-                    user.setInitialTruBudgetIntents(new HashSet<>(user.getTruBudgetIntents()));
-                    user.setTruBudgetIntents(new HashSet<>(truBudgetIntents));
-                    String keyGen=UmUtil.generateAESKey(128);
-                    user.setTruBudgetKeyGen(keyGen);
+                        user.setInitialTruBudgetIntents(new HashSet<>(user.getTruBudgetIntents()));
+                        user.setTruBudgetIntents(new HashSet<>(truBudgetIntents));
+                        String keyGen = UmUtil.generateAESKey(128);
+                        user.setTruBudgetKeyGen(keyGen);
 
-                    String encryptedTruPassword = UmUtil.encrypt(uForm.getTruBudgetPassword(),keyGen);
-                    user.setTruBudgetPassword(encryptedTruPassword);
+                        String encryptedTruPassword = UmUtil.encrypt(uForm.getTruBudgetPassword(), keyGen);
+                        user.setTruBudgetPassword(encryptedTruPassword);
+                    }
 
                     user.setCountry(org.digijava.module.aim.util.DbUtil.getDgCountry(uForm.getSelectedCountryIso()));
                     if(uForm.getSelectedRegionId()==-1){

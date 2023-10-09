@@ -347,7 +347,7 @@ public class ActivityUtil {
             session.update(z);
 
         });
-        session.flush();
+//        session.flush();
 
 
     }

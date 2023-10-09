@@ -318,6 +318,7 @@ public class ActivityUtil {
         updateIndirectPrograms(a, session);
 
         logAudit(ampCurrentMember, a, newActivity);
+        updateComponents(a);
 //        session.flush();
         // TODO: 9/12/23 check if project is already existing
         if (getSettingValue(getGlobalSettingsBySection("trubudget"),"isEnabled").equalsIgnoreCase("true")&&TeamUtil.getCurrentUser().getTruBudgetEnabled()) {
@@ -333,7 +334,7 @@ public class ActivityUtil {
             }
         }
 
-        updateComponents(a);
+
         return a;
     }
 
@@ -342,11 +343,8 @@ public class ActivityUtil {
         Session session = PersistenceManager.getRequestDBSession();
         Query<AmpComponent> query = session.createQuery("FROM "+AmpComponent.class.getName()+" ac  WHERE ac.activity=:activity AND ac.activity IS NOT NULL", AmpComponent.class);
         query.setParameter("activity", ampActivityVersion.getAmpActivityId(), LongType.INSTANCE);
-        query.stream().filter(x->!ampActivityVersion.getComponents().stream().map(AmpComponent::getAmpComponentId).collect(Collectors.toList()).contains(x.getAmpComponentId())).forEach(z->{
-            z.setActivity(null);//we can also delete this component permanently
-            session.update(z);
-
-        });
+        //            z.setActivity(null);//we can also delete this component permanently
+        query.stream().filter(x->!ampActivityVersion.getComponents().stream().map(AmpComponent::getAmpComponentId).collect(Collectors.toList()).contains(x.getAmpComponentId())).forEach(session::delete);
 //        session.flush();
 
 
@@ -1066,20 +1064,19 @@ public class ActivityUtil {
 
     private static void deleteComponentFundingResources(AmpComponentFunding a, HashSet<AmpComponentFundingDocument> deletedResources) {
         Session session = PersistenceManager.getRequestDBSession();
-        Transaction transaction=session.getTransaction();
+//        Transaction transaction=session.getTransaction();
 
         if (deletedResources != null) {
             for (AmpComponentFundingDocument tmpDoc : deletedResources) {
-
                 tmpDoc.setAmpComponentFunding(null);
-                        session.update(tmpDoc);
+                        session.delete(tmpDoc);
 
 
             }
         }
-        session.flush();
+//        session.flush();
 
-        transaction.commit();
+//        transaction.commit();
 //        session.close();
 
 

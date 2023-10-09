@@ -257,7 +257,7 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
                         if (item.getModelObject().isExisting()) {
                             HashSet<AmpActivityDocument> delItems = getSession().getMetaData(OnePagerConst.RESOURCES_DELETED_ITEMS);
                             if (delItems == null) {
-                                delItems = new HashSet<AmpActivityDocument>();
+                                delItems = new HashSet<>();
                                 getSession().setMetaData(OnePagerConst.RESOURCES_DELETED_ITEMS, delItems);
                             }
                             delItems.add(item.getModelObject().getExistingDocument());

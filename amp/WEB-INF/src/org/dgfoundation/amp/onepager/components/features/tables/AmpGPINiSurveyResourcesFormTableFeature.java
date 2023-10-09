@@ -211,7 +211,7 @@ public class AmpGPINiSurveyResourcesFormTableFeature
                             newItems.remove(item.getModelObject());
                         }
                         target.add(list.getParent());
-                        responseValidationFields.stream().forEach(r -> r.reloadValidationField(target, false));
+                        responseValidationFields.forEach(r -> r.reloadValidationField(target, false));
                     }
                 };
                 item.add(delRelOrg);

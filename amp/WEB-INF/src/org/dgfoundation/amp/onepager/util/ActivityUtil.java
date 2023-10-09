@@ -1068,8 +1068,11 @@ public class ActivityUtil {
 
         if (deletedResources != null) {
             for (AmpComponentFundingDocument tmpDoc : deletedResources) {
-                tmpDoc.setAmpComponentFunding(null);
-                        session.delete(tmpDoc);
+//                tmpDoc.setAmpComponentFunding(null);
+                if (tmpDoc!=null){
+                    a.getComponentFundingDocuments().remove(tmpDoc);
+                }
+                       // session.delete(tmpDoc);
 
 
             }
@@ -1291,13 +1294,8 @@ public class ActivityUtil {
     private static void deleteResources(AmpActivityVersion a, HashSet<AmpActivityDocument> deletedResources) {
         if (deletedResources != null) {
             for (AmpActivityDocument tmpDoc : deletedResources) {
-                Iterator<AmpActivityDocument> it2 = a.getActivityDocuments().iterator();
-                while (it2.hasNext()) {
-                    AmpActivityDocument existDoc = (AmpActivityDocument) it2.next();
-                    if (existDoc.getUuid().compareTo(tmpDoc.getUuid()) == 0) {
-                        it2.remove();
-                        break;
-                    }
+                if (tmpDoc!=null) {
+                    a.getActivityDocuments().remove(tmpDoc);
                 }
             }
         }

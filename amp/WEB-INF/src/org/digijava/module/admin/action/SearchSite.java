@@ -36,7 +36,6 @@ import org.digijava.module.admin.util.DbUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 
 public class SearchSite
     extends Action {

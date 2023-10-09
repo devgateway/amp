@@ -19,9 +19,11 @@ import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpComponentFundingResourcesTableFeature;
-import org.dgfoundation.amp.onepager.components.features.tables.AmpResourcesFormTableFeature;
 import org.dgfoundation.amp.onepager.components.upload.FileUploadPanel;
-import org.dgfoundation.amp.onepager.helper.*;
+import org.dgfoundation.amp.onepager.helper.ResourceTranslation;
+import org.dgfoundation.amp.onepager.helper.ResourceTranslationStore;
+import org.dgfoundation.amp.onepager.helper.TemporaryComponentFundingDocument;
+import org.dgfoundation.amp.onepager.helper.TemporaryDocument;
 import org.dgfoundation.amp.onepager.models.ResourceTranslationModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;
@@ -30,18 +32,18 @@ import org.digijava.kernel.ampapi.endpoints.filetype.FileTypeManager;
 import org.digijava.kernel.ampapi.endpoints.filetype.FileTypeValidationResponse;
 import org.digijava.kernel.ampapi.endpoints.filetype.FileTypeValidationStatus;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 
 public class AmpComponentFundingNewResourceFieldPanel extends AmpFeaturePanel {
 

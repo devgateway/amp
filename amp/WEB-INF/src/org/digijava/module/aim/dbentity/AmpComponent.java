@@ -6,11 +6,9 @@
 package org.digijava.module.aim.dbentity;
 
 import org.dgfoundation.amp.ar.ArConstants;
-import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.digijava.kernel.ampapi.endpoints.activity.discriminators.AmpComponentFundingDiscriminationConfigurer;
 import org.digijava.kernel.ampapi.endpoints.activity.values.providers.ComponentTypePossibleValuesProvider;
 import org.digijava.kernel.validators.common.RequiredValidator;
-import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
 import org.digijava.module.aim.annotations.interchange.*;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;

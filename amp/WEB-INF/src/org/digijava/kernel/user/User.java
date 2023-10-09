@@ -66,7 +66,7 @@ public class User
     private Country country;
     private AmpCategoryValueLocations region;
     private HashMap sitePreferences;
-    private Set groups;
+    private Set<Group> groups= new HashSet<>();
     private HashMap siteContentLocales;
     private String address;
     private Image photo;
@@ -242,7 +242,7 @@ public class User
         return registeredThrough;
     }
 
-    public Set getGroups() {
+    public Set<Group> getGroups() {
         return groups;
     }
 
@@ -306,7 +306,7 @@ public class User
         this.banned = banned;
     }
 
-    public void setGroups(Set groups) {
+    public void setGroups(Set<Group> groups) {
         this.groups = groups;
     }
 

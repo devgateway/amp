@@ -115,7 +115,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
      * {@link #onBeforeRender()} method is overiden and adds a JS function
      * wrapping the {@link AbstractAmpAutoCompleteModel} callbackUrl
      */
-    private AbstractDefaultAjaxBehavior onSelectBehavior;
+    private final AbstractDefaultAjaxBehavior onSelectBehavior;
 
     /**
      * The list model parameters, if any

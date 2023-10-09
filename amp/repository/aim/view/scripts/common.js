@@ -99,7 +99,6 @@
  }
 
  function toggleChildrenVisibility(callerId) {
-	 debugger;
      caller = document.getElementById(callerId);
      inputs = caller.getElementsByTagName('input');
      for (i = 1; i < inputs.length; i++) {

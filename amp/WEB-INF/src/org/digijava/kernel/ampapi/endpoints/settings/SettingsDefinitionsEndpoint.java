@@ -4,6 +4,7 @@ import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getCalendarCurrenciesField;
 import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getCalendarField;
 import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getCurrencyField;
+import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getEnabledProgramField;
 import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getFundingTypeField;
 import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getReportAmountFormatField;
 import static org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils.getReportAmountUnits;
@@ -53,7 +54,7 @@ public class SettingsDefinitionsEndpoint {
                     + "funding type.")
     public final List<SettingField> getSettingDefinitionsForDashboards() {
         return Arrays.asList(getCurrencyField(true), getCalendarField(), getCalendarCurrenciesField(),
-                getFundingTypeField(new LinkedHashSet<>(GisConstants.FUNDING_TYPES)));
+                getFundingTypeField(new LinkedHashSet<>(GisConstants.FUNDING_TYPES)), getEnabledProgramField());
     }
 
     @GET

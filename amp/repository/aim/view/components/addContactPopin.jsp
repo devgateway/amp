@@ -133,11 +133,11 @@
 							<c:forEach var="phone" items="${contact.properties}">
 									<c:if test="${phone.name=='contact phone'}">
 									<c:choose>
-									<c:when test="${fn:length(phone.actualPhoneNumber)>13}">
-										<li title="${phone.actualPhoneNumber}"><digi:trn>${phone.phoneCategory}</digi:trn>&nbsp;${fn:substring(phone.actualPhoneNumber,0,10)}...</li> 	
+									<c:when test="${fn:length(phone.value)>13}">
+										<li title="${phone.value}"><digi:trn>${phone.phoneCategory}</digi:trn>&nbsp;${fn:substring(phone.value,0,10)}...</li>
 									</c:when>
 									<c:otherwise>
-										<li><digi:trn><c:out value="${phone.phoneCategory}"/></digi:trn>&nbsp;<c:out value="${phone.actualPhoneNumber}"/></li>
+										<li><digi:trn><c:out value="${phone.phoneCategory}"/></digi:trn>&nbsp;<c:out value="${phone.value}"/></li>
 									</c:otherwise>
 									</c:choose>
 										

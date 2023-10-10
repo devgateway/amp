@@ -185,7 +185,7 @@ FiltersAndSettings.propTypes = {
   settings: PropTypes.object,
   translations: PropTypes.object.isRequired,
   profile: PropTypes.string,
-  reportGlobalSettings: PropTypes.object.isRequired,
+  reportGlobalSettings: PropTypes.any,
   _updateAppliedFilters: PropTypes.func.isRequired,
   filters: PropTypes.object,
   html: PropTypes.string,

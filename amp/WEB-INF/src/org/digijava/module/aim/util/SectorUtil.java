@@ -1,19 +1,5 @@
 package org.digijava.module.aim.util;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.algo.AlgoUtils;
@@ -40,6 +26,20 @@ import org.hibernate.Transaction;
 import org.hibernate.jdbc.Work;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.LongType;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Utility class for persisting all Sector with Scheme related entities
@@ -180,6 +180,10 @@ public class SectorUtil {
     }
 
     public static List<AmpSector> getAllParentSectors() {
+      return getAllParentSectors(false);
+    }
+
+    public static List<AmpSector> getAllParentSectors(boolean includeDeleted) {
         Session session = null;
         List<AmpSector> col = null;
 
@@ -197,8 +201,11 @@ public class SectorUtil {
                     + AmpSector.class.getName()
                     + " s "
                     + " where parent_sector_id is null and amp_sec_scheme_id = "
-                    + auxConfig.getClassification().getAmpSecSchemeId()
-                    + " and (s.deleted is null or s.deleted = false)  order by " + AmpSector.hqlStringForName("s");
+                    + auxConfig.getClassification().getAmpSecSchemeId();
+            if (!includeDeleted) {
+                queryString += " and (s.deleted is null or s.deleted = false) ";
+            }
+            queryString += " order by " + AmpSector.hqlStringForName("s");
             qry = session.createQuery(queryString);
             col = qry.list();
 

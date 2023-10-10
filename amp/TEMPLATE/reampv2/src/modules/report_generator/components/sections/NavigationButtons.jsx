@@ -59,5 +59,5 @@ NavigationButtons.propTypes = {
   nextClick: PropTypes.func.isRequired,
   translations: PropTypes.object.isRequired,
   tab: PropTypes.number.isRequired,
-  profile: PropTypes.string.isRequired,
+  profile: PropTypes.string,
 };

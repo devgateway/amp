@@ -6,17 +6,17 @@
  */
 package org.dgfoundation.amp.ar;
 
+import org.apache.commons.collections.MapUtils;
+import org.digijava.module.aim.helper.Constants;
+
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 import java.util.Set;
-
-import org.apache.commons.collections.MapUtils;
-import org.digijava.module.aim.helper.Constants;
 
 /**
  * 
@@ -102,8 +102,9 @@ public final class ArConstants {
     public final static int REGIONAL_TYPE = 3;
     public final static int PLEDGES_TYPE = 5;
     public final static int GPI_TYPE = 6;
-    public final static Set<Integer> LEGAL_REPORT_TYPES = Collections.unmodifiableSet(new HashSet<Integer>(Arrays.asList(
-            DONOR_TYPE, COMPONENT_TYPE, REGIONAL_TYPE, PLEDGES_TYPE, GPI_TYPE
+    public static final int INDICATOR_TYPE = 7;
+    public static final Set<Integer> LEGAL_REPORT_TYPES = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
+            DONOR_TYPE, COMPONENT_TYPE, REGIONAL_TYPE, PLEDGES_TYPE, GPI_TYPE, INDICATOR_TYPE
             )));
     
     //metainfo values:

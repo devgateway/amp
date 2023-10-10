@@ -87,7 +87,7 @@ public class TranslationUtil {
         return loadTranslationsForField(clazz, field.getName(), fieldValue, parentObjectId);
     }
 
-    private static Map<String, String> loadTranslationsForField(Class<?> clazz, String propertyName, String fieldValue,
+    public static Map<String, String> loadTranslationsForField(Class<?> clazz, String propertyName, String fieldValue,
             Long id) {
         Map<String, String> translations = new LinkedHashMap<String, String>();
 

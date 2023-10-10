@@ -263,7 +263,7 @@ SaveModal.propTypes = {
   hierarchies: PropTypes.object,
   measures: PropTypes.object,
   profile: PropTypes.string,
-  languages: PropTypes.object,
+  languages: PropTypes.any,
   globalSettings: PropTypes.object,
 };
 

@@ -45,7 +45,7 @@ OptionsContent.propTypes = {
   selectedRadio: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   selectedCheckboxes: PropTypes.array,
   changeRadioList: PropTypes.func.isRequired,
-  changeCheckList: PropTypes.array.isRequired,
+  changeCheckList: PropTypes.any,
   loading: PropTypes.bool,
 };
 
@@ -55,4 +55,6 @@ OptionsContent.defaultProps = {
   selectedRadio: undefined,
   selectedCheckboxes: [],
   loading: false,
+  changeRadioList: () => {},
+  changeCheckList: [],
 };

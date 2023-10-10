@@ -22,7 +22,8 @@ public enum MetaCategory {
     GPI_9B_Q1("gpi_9b_q1"),
     GPI_9B_Q2("gpi_9b_q2"),
     GPI_9B_Q3("gpi_9b_q3"),
-    GPI_9B_Q4("gpi_9b_q4");
+    GPI_9B_Q4("gpi_9b_q4"),
+    INDICATOR_VALUE_TYPE("value_type");
     
     public final String category;
     private MetaCategory(String category) {

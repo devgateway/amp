@@ -3,30 +3,6 @@
  */
 package org.dgfoundation.amp.onepager.util;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import javax.jcr.Node;
-import javax.jcr.RepositoryException;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -51,6 +27,8 @@ import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
+import org.digijava.module.aim.dbentity.AmpActivityProgram;
+import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAgreement;
 import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
@@ -64,16 +42,20 @@ import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponse;
 import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponseDocument;
+import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPerformanceRule;
 import org.digijava.module.aim.dbentity.AmpRole;
+import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpStructureImg;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
+import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.dbentity.FundingInformationItem;
+import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -99,8 +81,29 @@ import org.hibernate.LockMode;
 import org.hibernate.LockOptions;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
+
+import javax.jcr.Node;
+import javax.jcr.RepositoryException;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Util class used to manipulate an activity
@@ -1417,6 +1420,36 @@ public class ActivityUtil {
             }
         }
 
+
+        return false;
+    }
+
+    public static boolean hasSectorIndicatorsInActivity(AmpActivityVersion activity, AmpActivitySector sector) {
+        Set<IndicatorActivity> indicators = activity.getIndicators();
+        for (IndicatorActivity indicator : indicators) {
+            AmpIndicator ind = (AmpIndicator) PersistenceManager.getSession()
+                    .get(AmpIndicator.class, indicator.getIndicator().getIndicatorId());
+            List<Long> sectorIds = ind.getSectors().stream()
+                    .map(AmpSector::getAmpSectorId)
+                    .collect(Collectors.toList());
+            if (sectorIds.contains(sector.getSectorId().getAmpSectorId())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static boolean hasProgramIndicatorsInActivity(AmpActivityVersion activity, AmpActivityProgram program) {
+        Set<IndicatorActivity> indicators = activity.getIndicators();
+        for (IndicatorActivity indicator : indicators) {
+            AmpIndicator ind = (AmpIndicator) PersistenceManager.getSession()
+                    .get(AmpIndicator.class, indicator.getIndicator().getIndicatorId());
+            Long programId = ind.getProgram().getAmpThemeId();
+            if (programId.equals(program.getProgram().getAmpThemeId())) {
+                return true;
+            }
+        }
 
         return false;
     }

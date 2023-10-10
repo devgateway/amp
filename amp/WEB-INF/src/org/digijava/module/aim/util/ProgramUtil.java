@@ -12,6 +12,7 @@ import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.DatabaseWaver;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.digijava.kernel.ampapi.endpoints.ndd.NDDService;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -22,6 +23,7 @@ import org.digijava.kernel.util.collections.HierarchyMemberFactory;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorSector;
+import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.AmpThemeIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpThemeIndicators;
@@ -1597,6 +1599,19 @@ public class ProgramUtil {
                         } else {
                             oldSetting.setDefaultHierarchy(null);
                         }
+
+                        if (setting.getStartDate() != null) {
+                            oldSetting.setStartDate(setting.getStartDate());
+                        } else {
+                            oldSetting.setStartDate(null);
+                        }
+
+                        if (setting.getEndDate() != null) {
+                            oldSetting.setEndDate(setting.getEndDate());
+                        } else {
+                            oldSetting.setEndDate(null);
+                        }
+
                         session.update(oldSetting);
                     }
 
@@ -2066,4 +2081,47 @@ public class ProgramUtil {
         return currentLevel;
     }
 
+    /**
+     * Returns the default hierarchy programs for the themes
+     * @return List<AmpTheme>
+     */
+    public static List<AmpTheme> getDefaultHierarchyPrograms () {
+        AmpTheme indirectProgram = NDDService.getDstIndirectProgramRoot();
+
+        List<AmpTheme> defaultHierarchyPrograms = new ArrayList<>();
+
+        try {
+            defaultHierarchyPrograms = getAllThemes();
+        } catch (DgException e) {
+            logger.error("Error while getting all themes", e);
+        }
+
+        if (indirectProgram != null) {
+            defaultHierarchyPrograms.remove(indirectProgram);
+        }
+
+        return defaultHierarchyPrograms;
+    }
+
+    public static AmpActivityProgramSettings getProgramSettingFromTheme(AmpTheme theme) {
+        AmpActivityProgramSettings setting = null;
+        List<AmpActivityProgramSettings> settings = getAmpActivityProgramSettingsList(false);
+
+
+        while (theme.getIndlevel() != 1) {
+            theme = theme.getParentThemeId();
+        }
+
+        for (AmpActivityProgramSettings s : settings) {
+            if (s.getDefaultHierarchy() != null && s.getDefaultHierarchy().getAmpThemeId().equals(theme.getRootTheme().getAmpThemeId())) {
+                setting = s;
+                break;
+            }
+        }
+
+
+
+
+        return setting;
+    }
 }

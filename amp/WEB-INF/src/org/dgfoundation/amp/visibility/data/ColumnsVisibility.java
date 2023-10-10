@@ -270,7 +270,7 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
         put(ColumnConstants.CONTRACTING_AGENCY_TYPE, ColumnConstants.CONTRACTING_AGENCY);
         put(ColumnConstants.SECTOR_GROUP_DEPARTMENT_DIVISION, ColumnConstants.SECTOR_GROUP);
         put(ColumnConstants.REGIONAL_GROUP_DEPARTMENT_DIVISION, ColumnConstants.REGIONAL_GROUP);
-        
+
         String[][] contacts = new String[][] {
             {"Donor Contact", ColumnConstants.DONOR_CONTACT_ORGANIZATION}, 
             {"Sector Ministry Contact", ColumnConstants.SECTOR_MINISTRY_CONTACT_ORGANIZATION},

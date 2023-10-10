@@ -1,0 +1,33 @@
+.viewmodal_wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.view_row {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    padding: 10px 30px;
+}
+
+.view_row_full {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    padding: 10px 30px;
+    flex-direction: column;
+}
+
+.array_item {
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    max-width: 80%;
+}
+
+.view_item {
+    width: 50%;
+    text-align: left;
+}

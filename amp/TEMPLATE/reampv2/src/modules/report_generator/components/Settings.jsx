@@ -20,6 +20,7 @@ let widget = null;
 class Settings extends Component {
   constructor(props) {
     super(props);
+    this.settingsPopup = React.createRef();
     this.state = {
       show: false, changed: false
     };
@@ -37,7 +38,7 @@ class Settings extends Component {
     });
 
     // eslint-disable-next-line react/no-string-refs
-    widget.setElement(this.refs.settingsPopup);
+    widget.setElement(this.settingsPopup);
     widget.on('applySettings', this.applySettings);
     widget.on('close', this.hideSettings);
     _fetchGlobalSettings(settingsURL).then((action) => {
@@ -98,7 +99,7 @@ class Settings extends Component {
           ) : null}
           <div
             id="settings-popup"
-            ref="settingsPopup"
+            ref={this.settingsPopup}
             style={{
               display: (!show ? 'none' : 'block'),
               padding: '0px',

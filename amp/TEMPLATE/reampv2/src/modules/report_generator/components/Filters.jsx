@@ -20,6 +20,7 @@ let filter = null;
 class Filters extends Component {
   constructor(props) {
     super(props);
+    this.filterPopup = React.createRef();
     this.state = {
       show: false, showFiltersList: false, filterLoaded: false,
     };
@@ -44,7 +45,7 @@ class Filters extends Component {
 
       return filter.loaded.then(() => {
         // eslint-disable-next-line react/no-string-refs
-        filter.setElement(this.refs.filterPopup);
+        filter.setElement(this.filterPopup);
 
         /* IMPORTANT: AT THIS POINT WE ASSUME THE REPORT DATA HAVE BEEN FETCHED!
         (through 'loading' prop in FiltersAndSettings.jsx). We deserialize (only one time) with empty/saved
@@ -148,8 +149,7 @@ class Filters extends Component {
             ) : null}
           </>
         ) : <div style={{ float: 'left' }}><Loader active inline /></div>}
-        {/* eslint-disable-next-line react/no-string-refs */}
-        <div id="filter-popup" ref="filterPopup" style={{ display: (!show ? 'none' : 'block') }} />
+        <div id="filter-popup" ref={this.filterPopup} style={{ display: (!show ? 'none' : 'block') }} />
       </>
     );
   }
@@ -181,7 +181,7 @@ Filters.propTypes = {
   _updateAppliedFilters: PropTypes.func.isRequired,
   _updateReportDetailsUseAboveFilters: PropTypes.func.isRequired,
   filters: PropTypes.object,
-  type: PropTypes.string.isRequired,
+  type: PropTypes.string,
   _getMetadata: PropTypes.func.isRequired,
   profile: PropTypes.string,
   appliedSectionChange: PropTypes.func.isRequired,

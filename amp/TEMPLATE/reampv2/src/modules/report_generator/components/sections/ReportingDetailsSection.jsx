@@ -25,6 +25,11 @@ import {
 import { hasFilters, translate } from '../../utils/Utils';
 
 class ReportingDetailSection extends Component {
+  constructor(props) {
+    super(props);
+    this.textAreaNode = React.createRef();
+    this.state = {}
+  }
   // eslint-disable-next-line no-unused-vars
   componentDidUpdate(prevProps, prevState, snapshot) {
     const { selectedTotalGrouping, selectedFundingGrouping } = this.props;
@@ -123,7 +128,7 @@ class ReportingDetailSection extends Component {
           title={translate('reportDescription', profile, translations)}
           tooltip={translate('reportDescriptionTooltip', profile, translations)} >
           <Form className="description">
-            <TextArea value={description} onChange={this.changeDescription} />
+            <TextArea value={description || ''} onChange={this.changeDescription} ref={this.textAreaNode}/>
           </Form>
         </OptionsList>
       </GridColumn>

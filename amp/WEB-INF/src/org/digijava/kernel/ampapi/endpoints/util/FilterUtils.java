@@ -270,6 +270,8 @@ public class FilterUtils {
         mapSimpleColumn(FiltersConstants.TYPE_OF_ASSISTANCE, ColumnConstants.TYPE_OF_ASSISTANCE);
         mapSimpleColumn(FiltersConstants.WORKSPACES, ColumnConstants.WORKSPACES);
         mapSimpleColumn(FiltersConstants.ADMINISTRATIVE_LEVEL_2, ColumnConstants.LOCATION_ADM_LEVEL_2);
+
+        mapSimpleColumn(FiltersConstants.INDICATOR_NAME, ColumnConstants.INDICATOR_NAME);
     }
 
     private void mapSimpleColumn(String filterId, String columnName) {

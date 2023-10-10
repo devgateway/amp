@@ -449,22 +449,22 @@
 
 @font-face {
   font-family: 'Open Sans';
-  src: url('/TEMPLATE/ampTemplate/gisModule/dist/fonts/open_sans_light/OpenSans-Light-webfont.eot');
-  src: url('/TEMPLATE/ampTemplate/gisModule/dist/fonts/open_sans_light/OpenSans-Light-webfont.eot?#iefix') format('embedded-opentype'), url('/TEMPLATE/ampTemplate/gisModule/dist/fonts/open_sans_light/OpenSans-Light-webfont.woff') format('woff'), url('/TEMPLATE/ampTemplate/gisModule/dist/fonts/open_sans_light/OpenSans-Light-webfont.ttf') format('truetype'), url('/TEMPLATE/ampTemplate/gisModule/dist/fonts/open_sans_light/OpenSans-Light-webfont.svg#open_sanslight') format('svg');
+  src: url('./assets/fonts/open_sans_extrabold/OpenSans-ExtraBold-webfont.eot');
+  src: url('./assets/fonts/open_sans_extrabold/OpenSans-ExtraBold-webfont.eot?#iefix') format('embedded-opentype'), url('./assets/fonts/open_sans_light/OpenSans-Light-webfont.woff') format('woff'), url('./assets/fonts/open_sans_light/OpenSans-Light-webfont.ttf') format('truetype'), url('./assets/fonts/open_sans_light/OpenSans-Light-webfont.svg#open_sanslight') format('svg');
   font-weight: 300;
   font-style: normal;
 }
 @font-face {
   font-family: 'Open Sans';
-  src: url('/TEMPLATE/ampTemplate/gisModule/dist/fonts/open_sans_extrabold/OpenSans-ExtraBold-webfont.eot');
-  src: url('/TEMPLATE/ampTemplate/gisModule/dist/fonts/open_sans_extrabold/OpenSans-ExtraBold-webfont.eot?#iefix') format('embedded-opentype'), url('/TEMPLATE/ampTemplate/gisModule/dist/fonts/open_sans_extrabold/OpenSans-ExtraBold-webfont.woff') format('woff'), url('/TEMPLATE/ampTemplate/gisModule/dist/fonts/open_sans_extrabold/OpenSans-ExtraBold-webfont.ttf') format('truetype'), url('/TEMPLATE/ampTemplate/gisModule/dist/fonts/open_sans_extrabold/OpenSans-ExtraBold-webfont.svg#open_sansextrabold') format('svg');
+  src: url('./assets/fonts/open_sans_extrabold/OpenSans-ExtraBold-webfont.eot');
+  src: url('./assets/fonts/open_sans_extrabold/OpenSans-ExtraBold-webfont.eot?#iefix') format('embedded-opentype'), url('./assets/fonts/open_sans_extrabold/OpenSans-ExtraBold-webfont.woff') format('woff'), url('./assets/fonts/open_sans_extrabold/OpenSans-ExtraBold-webfont.ttf') format('truetype'), url('./assets/fonts/open_sans_extrabold/OpenSans-ExtraBold-webfont.svg#open_sansextrabold') format('svg');
   font-weight: 600;
   font-style: normal;
 }
 @font-face {
   font-family: 'Open Sans';
-  src: url('/TEMPLATE/ampTemplate/gisModule/dist/fonts/open_sans_extrabold/OpenSans-ExtraBold-webfont.eot');
-  src: url('/TEMPLATE/ampTemplate/gisModule/dist/fonts/open_sans_extrabold/OpenSans-ExtraBold-webfont.eot?#iefix') format('embedded-opentype'), url('/TEMPLATE/ampTemplate/gisModule/dist/fonts/open_sans_extrabold/OpenSans-ExtraBold-webfont.woff') format('woff'), url('/TEMPLATE/ampTemplate/gisModule/dist/fonts/open_sans_extrabold/OpenSans-ExtraBold-webfont.ttf') format('truetype'), url('/TEMPLATE/ampTemplate/gisModule/dist/fonts/open_sans_extrabold/OpenSans-ExtraBold-webfont.svg#open_sansextrabold') format('svg');
+  src: url('./assets/fonts/open_sans_extrabold/OpenSans-ExtraBold-webfont.eot');
+  src: url('./assets/fonts/open_sans_extrabold/OpenSans-ExtraBold-webfont.eot?#iefix') format('embedded-opentype'), url('./assets/fonts/open_sans_extrabold/OpenSans-ExtraBold-webfont.woff') format('woff'), url('./assets/fonts/open_sans_extrabold/OpenSans-ExtraBold-webfont.ttf') format('truetype'), url('./assets/fonts/open_sans_extrabold/OpenSans-ExtraBold-webfont.svg#open_sansextrabold') format('svg');
   font-weight: 800;
   font-style: normal;
 }

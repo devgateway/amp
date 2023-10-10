@@ -1,8 +1,5 @@
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
-import java.util.Date;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.validators.common.RequiredValidator;
 import org.digijava.module.aim.annotations.interchange.Interchangeable;
@@ -10,6 +7,9 @@ import org.digijava.module.aim.annotations.interchange.InterchangeableBackRefere
 import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.common.util.DateTimeUtil;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Indicator Value entity.
@@ -27,10 +27,10 @@ public class AmpIndicatorValue implements Serializable, Cloneable{
      * 
      * Thanks!
      */
-    public static final int TARGET=0;
-    public static final int ACTUAL=1;
-    public static final int BASE=2;
-    public static final int REVISED=3;
+    public static final int TARGET = 0;
+    public static final int ACTUAL = 1;
+    public static final int BASE = 2;
+    public static final int REVISED = 3;
     
 
 

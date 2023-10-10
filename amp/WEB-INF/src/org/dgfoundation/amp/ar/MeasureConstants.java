@@ -99,5 +99,8 @@ public class MeasureConstants {
     
     public static final String FORECAST_EXECUTION_RATE = "Forecast Execution Rate";
 
+    //type = I
+    public static final String INDICATOR_ACTUAL_VALUE = "Indicator Actual Value";
+
     public static final String ALWAYS_PRESENT = "Always Present";
 }

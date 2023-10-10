@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {  useContext } from 'react';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -15,11 +15,36 @@ import { NDDTranslationContext } from './StartUp';
 import TopChartContainer from './TopChartContainer';
 import { SELECTED_COLORS } from '../utils/constants';
 import { ALL_PROGRAMS } from '../../admin/ndd/constants/Constants';
+import PrintDummy from "../../sscdashboard/utils/PrintDummy";
 
-class MainDashboardContainer extends Component {
-  // eslint-disable-next-line react/sort-comp
-  generate2LevelColors() {
-    const { selectedDirectProgram, selectedPrograms, ndd } = this.props;
+const MainDashboardContainer = (props) => {
+  const {
+    selectedDirectProgram,
+    selectedPrograms,
+    ndd,
+    mapping,
+    error,
+    nddLoadingPending,
+    nddLoaded,
+    dashboardSettings,
+    onChangeFundingType,
+    fundingType,
+    onChangeProgram,
+    noIndirectMapping,
+    settings,
+    handleOuterChartClick,
+    globalSettings,
+    filters,
+    top,
+    topLoaded,
+    topLoadingPending,
+    downloadImage,
+    embedded,
+    onChangeSource,
+    fundingByYearSource
+  } = props;
+
+  const generate2LevelColors = () => {
     if (selectedPrograms && selectedDirectProgram) {
       const subColors = SELECTED_COLORS.get(`${selectedPrograms[0]}_${selectedDirectProgram.code}`);
       const countArray = ndd.filter(p => p.directProgram.programLvl1.code === selectedDirectProgram.code);
@@ -31,11 +56,7 @@ class MainDashboardContainer extends Component {
     }
   }
 
-  generateSectionTitle = () => {
-    const {
-      mapping,
-      selectedPrograms
-    } = this.props;
+  const generateSectionTitle = () => {
     let title = '';
     if (mapping && selectedPrograms) {
       title = mapping[ALL_PROGRAMS].find(i => `${i.id}` === selectedPrograms[0]).value;
@@ -46,166 +67,145 @@ class MainDashboardContainer extends Component {
     return title;
   }
 
-  render() {
-    const {
-      error,
-      ndd,
-      nddLoadingPending,
-      nddLoaded,
-      dashboardSettings,
-      onChangeFundingType,
-      fundingType,
-      mapping,
-      onChangeProgram,
-      selectedPrograms,
-      noIndirectMapping,
-      settings,
-      selectedDirectProgram,
-      handleOuterChartClick,
-      globalSettings,
-      filters,
-      top,
-      topLoaded,
-      topLoadingPending,
-      downloadImage,
-      embedded,
-      onChangeSource,
-      fundingByYearSource
-    } = this.props;
-    const { translations } = this.context;
-    if (error) {
-      // TODO proper error handling
-      return (<div>ERROR</div>);
-    } else {
-      this.generate2LevelColors();
-      return (
-        <>
-          <Row style={{
-            marginRight: '-15px', marginLeft: '-15px', border: '1px solid #ddd', borderBottom: 'none'
-          }}>
-            <Col md={12} style={{ paddingRight: 0, paddingLeft: 0 }}>
-              <div className="section_title">
-                <span>
-                  {this.generateSectionTitle()}
-                </span>
-                {!embedded && nddLoaded && !nddLoadingPending ? (
-                  <div className="export-wrapper">
-                    <div
-                      className="download-image"
-                    >
-                      <span
-                        className="glyphicon glyphicon-cloud-download download-image-img "
-                        onClick={() => downloadImage()} />
-                    </div>
+  const { translations } = useContext(NDDTranslationContext);
+
+  if (error) {
+    return (<div>ERROR</div>);
+  } else {
+    generate2LevelColors();
+    return (
+      <>
+        <Row style={{
+          marginRight: '-15px', marginLeft: '-15px', border: '1px solid #ddd', borderBottom: 'none', backgroundColor: '#ffffff'
+        }}>
+          <Col md={12} style={{ paddingRight: 0, paddingLeft: 0 }}>
+            <div className="section_title">
+              <span>
+                {generateSectionTitle()}
+              </span>
+              {!embedded && nddLoaded && !nddLoadingPending ? (
+                <div className="export-wrapper">
+                  <div
+                    className="download-image"
+                  >
+                    <span
+                      className="glyphicon glyphicon-cloud-download download-image-img "
+                      onClick={() => downloadImage()} />
                   </div>
-                ) : (null)}
-              </div>
-            </Col>
-          </Row>
-          <Row style={{
-            marginRight: '-15px',
-            marginLeft: '-15px',
-            border: '1px solid #ddd',
-            display: 'flex',
-            borderTop: 'none',
-            backgroundColor: 'white'
-          }}>
-            {nddLoaded && !nddLoadingPending
-              ? (
-                <>
-                  <Col md={5} style={{ paddingRight: 0, paddingLeft: 0, backgroundColor: 'white' }}>
-                    <div className="chart-container">
-                      <div className="chart">
-                        <PieChartTypeSelector
-                          onChange={onChangeProgram}
-                          defaultValue={fundingType}
-                          mapping={mapping}
-                          noIndirectMapping={noIndirectMapping}
-                          selectedPrograms={selectedPrograms} />
-                        <NestedDonutsProgramChart
-                          data={ndd}
-                          settings={settings}
-                          globalSettings={globalSettings}
-                          selectedDirectProgram={selectedDirectProgram}
-                          handleOuterChartClick={handleOuterChartClick}
-                          selectedPrograms={selectedPrograms}
-                        />
-                      </div>
-                      <div className="buttons" style={{ position: 'absolute', bottom: 0 }}>
-                        {dashboardSettings && !nddLoadingPending
-                          ? (
-                            <FundingTypeSelector
-                              onChange={onChangeFundingType}
-                              defaultValue={fundingType}
-                              noIndirectMapping={noIndirectMapping} />
-                          ) : null}
-                      </div>
-                    </div>
-                  </Col>
-                  <Col md={7} style={{ paddingLeft: 0, paddingRight: 0 }}>
-                    <TopChartContainer
-                      noIndirectMapping={noIndirectMapping}
-                      ndd={ndd}
-                      globalSettings={globalSettings}
-                      mapping={mapping}
-                      settings={settings}
-                      top={top}
-                      topLoaded={topLoaded}
-                      topLoadingPending={topLoadingPending}
-                      selectedDirectProgram={selectedDirectProgram}
-                      nddLoaded={nddLoaded}
-                      selectedPrograms={selectedPrograms}
-                      nddLoadingPending={nddLoadingPending} />
-                  </Col>
-                </>
-              ) : (
-                <Col
-                  md={12}
-                  style={{
-                    paddingRight: 0, paddingLeft: 0, backgroundColor: 'white', height: 400
-                  }}>
-                  <div className="loading loading-absolute" />
-                </Col>
-              )}
-          </Row>
-          {!embedded ? (
-            <>
-              <Row>
-                <Col md={12}>
-                  <div className="separator" />
-                </Col>
-              </Row>
-              <Row style={{ marginRight: '-15px', marginLeft: '-15px', border: '1px solid #ddd' }}>
-                <Col md={12} style={{ paddingLeft: 0, paddingRight: 0 }}>
+                </div>
+              ) : (null)}
+            </div>
+          </Col>
+        </Row>
+        <Row style={{
+          marginRight: '-15px',
+          marginLeft: '-15px',
+          border: 'none',
+          display: 'flex',
+          borderTop: 'none',
+          backgroundColor: '#ffffff'
+        }}>
+          {nddLoaded && !nddLoadingPending
+            ? (
+              <>
+                <Col md={5} style={{ paddingRight: 0, paddingLeft: 0, backgroundColor: 'white' }}>
                   <div className="chart-container">
                     <div className="chart">
-                      <div className="section_title">
-                        <span>{translations['amp.dashboard:funding-over-time']}</span>
-                      </div>
-                      {nddLoaded && !nddLoadingPending ? (
-                        <FundingByYearChart
-                          selectedDirectProgram={selectedDirectProgram}
-                          selectedPrograms={selectedPrograms}
-                          settings={settings}
-                          filters={filters}
-                          fundingType={fundingType}
-                          globalSettings={globalSettings}
-                          data={ndd}
-                          onChangeSource={onChangeSource}
-                          fundingByYearSource={fundingByYearSource}
-                        />
-                      ) : <div className="loading" />}
+                      <PieChartTypeSelector
+                        onChange={onChangeProgram}
+                        defaultValue={fundingType}
+                        mapping={mapping}
+                        noIndirectMapping={noIndirectMapping}
+                        selectedPrograms={selectedPrograms} />
+                      <NestedDonutsProgramChart
+                        data={ndd}
+                        settings={settings}
+                        globalSettings={globalSettings}
+                        selectedDirectProgram={selectedDirectProgram}
+                        handleOuterChartClick={handleOuterChartClick}
+                        selectedPrograms={selectedPrograms}
+                      />
+                    </div>
+                    <div className="buttons" style={{ position: 'absolute', bottom: 0 }}>
+                      {dashboardSettings && !nddLoadingPending
+                        ? (
+                          <FundingTypeSelector
+                            onChange={onChangeFundingType}
+                            defaultValue={fundingType}
+                            noIndirectMapping={noIndirectMapping} />
+                        ) : null}
                     </div>
                   </div>
                 </Col>
-              </Row>
-            </>
-          ) : (null)}
-        </>
-      );
-    }
+                <Col md={7} style={{ paddingLeft: 0, paddingRight: 0 }}>
+                  <TopChartContainer
+                    noIndirectMapping={noIndirectMapping}
+                    ndd={ndd}
+                    globalSettings={globalSettings}
+                    mapping={mapping}
+                    settings={settings}
+                    top={top}
+                    topLoaded={topLoaded}
+                    topLoadingPending={topLoadingPending}
+                    selectedDirectProgram={selectedDirectProgram}
+                    nddLoaded={nddLoaded}
+                    selectedPrograms={selectedPrograms}
+                    nddLoadingPending={nddLoadingPending} />
+                </Col>
+              </>
+            ) : (
+              <Col
+                md={12}
+                style={{
+                  paddingRight: 0, paddingLeft: 0, backgroundColor: 'white', height: 3000
+                }}>
+                <div className="loading loading-absolute" />
+              </Col>
+            )}
+        </Row>
+        {!embedded ? (
+          <>
+            <Row style={{
+              borderBottom: '1px solid #ddd', height: 400, marginRight: '-15px', marginLeft: '-15px', backgroundColor: 'white'
+            }}>
+              <Col md={12} style={{ paddingLeft: 0, paddingRight: 0, backgroundColor: 'white' }}>
+                {/* <div className="chart"> */}
+                  <div className="section_title" style={{ backgroundColor: 'white', marginTop: '2%', marginBottom: '0.2%' }}>
+                    <span>{translations['amp.dashboard:funding-over-time']}</span>
+                  </div>
+
+                  {nddLoaded && !nddLoadingPending ? (
+                    <FundingByYearChart
+                      selectedDirectProgram={selectedDirectProgram}
+                      selectedPrograms={selectedPrograms}
+                      settings={settings}
+                      filters={filters}
+                      fundingType={fundingType}
+                      globalSettings={globalSettings}
+                      data={ndd}
+                      onChangeSource={onChangeSource}
+                      fundingByYearSource={fundingByYearSource}
+                    />
+                  ) : (
+                    <Col
+                    md={12}
+                    style={{
+                      paddingRight: 0, paddingLeft: 0, backgroundColor: 'white', height: 3000
+                    }}>
+                    <div className="loading loading-absolute" />
+                  </Col>
+                  )}
+                {/* </div> */}
+              </Col>
+            </Row>
+            <PrintDummy />
+          </>
+        ) : null}
+      </>
+    );
   }
 }
+
 
 const mapStateToProps = state => ({
   top: state.reportsReducer.top,
@@ -260,4 +260,3 @@ MainDashboardContainer.defaultProps = {
   dashboardSettings: null,
   embedded: false
 };
-MainDashboardContainer.contextType = NDDTranslationContext;

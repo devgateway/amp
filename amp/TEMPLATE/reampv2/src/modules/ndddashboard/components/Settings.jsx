@@ -21,7 +21,6 @@ const widget = new SettingsWidget.SettingsWidget({
 class Settings extends Component {
   constructor(props) {
     super(props);
-    this.settingsPopup = React.createRef();
     this.state = {
       show: false
     };
@@ -31,7 +30,7 @@ class Settings extends Component {
     const { settings } = this.props;
     widget.restoreFromSaved(settings);
     // eslint-disable-next-line react/no-string-refs
-    widget.setElement(this.settingsPopup);
+    widget.setElement(this.refs.settingsPopup);
     widget.on('applySettings', this.applySettings);
     widget.on('close', this.hideSettings);
   }
@@ -76,7 +75,7 @@ class Settings extends Component {
         </div>
         <div
           id="settings-popup"
-          ref={this.settingsPopup}
+          ref="settingsPopup"
           style={{
             display: (!show ? 'none' : 'block'),
             padding: '0px',

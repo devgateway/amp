@@ -151,7 +151,7 @@ public class FiltersConstants {
     public static final String PRIMARY_PROGRAM_LEVEL_6 = "primary-program-level-6";
     public static final String PRIMARY_PROGRAM_LEVEL_7 = "primary-program-level-7";
     public static final String PRIMARY_PROGRAM_LEVEL_8 = "primary-program-level-8";
-    public static final String INDIRECT_PRIMARY_PROGRAM_LEVEL = "primary-program-level";
+    public static final String INDIRECT_PRIMARY_PROGRAM_LEVEL = "indirect-primary-program-level";
 
     public static final String INDIRECT_PRIMARY_PROGRAM_LEVEL_0 = INDIRECT_PRIMARY_PROGRAM_LEVEL + "-0";
     public static final String INDIRECT_PRIMARY_PROGRAM_LEVEL_1 = INDIRECT_PRIMARY_PROGRAM_LEVEL + "-1";

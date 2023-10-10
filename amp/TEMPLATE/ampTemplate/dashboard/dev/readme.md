@@ -30,15 +30,35 @@ $ npm install
 Development
 -----------
 
-Build everything, run a development server with livereload, with one easy command:
+Build everything, run a development server with livereload, with the following steps:
 
+Replace the following line in `app/index.html` with the following:
+
+```html
+<script src="compiled-js/app.js"></script>
 ```
-$ gulp dev
-````
+
+<br />
+
+with the following:
+
+```html
+<script src="http://localhost:3000/TEMPLATE/ampTemplate/dashboard/dev/app/compiled-js/app.js"></script>
+```
+
+<br />
+
+Then run the following command:
+
+```bash
+gulp dev
+```
+
+Ensure that the tomcat server has started on [`localhost:8080`](http://localhost:8080)
 
 You can access the dashboards now at
 
-[`localhost:3000/TEMPLATE/ampTemplate/dashboard/dev/app/index.html`](http://localhost:3000/TEMPLATE/ampTemplate/dashboard/dev/app/index.html)
+[`http://localhost:8080/TEMPLATE/ampTemplate/dashboard/dev/app/index.html`](http://localhost:8080/TEMPLATE/ampTemplate/dashboard/dev/app/index.html)
 
 
 Testing

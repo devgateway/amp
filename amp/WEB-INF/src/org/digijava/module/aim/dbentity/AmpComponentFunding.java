@@ -61,28 +61,15 @@ public class AmpComponentFunding implements Cloneable, Serializable {
             discriminatorOption = CategoryConstants.COMPONENT_FUNDING_STATUS_KEY)
     private AmpCategoryValue componentFundingStatus;
 
+
+    @Interchangeable(fieldTitle = "Component Funding Documents",  fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_FUNDING_DOCS, importable = true)
+    @VersionableCollection(fieldTitle = "Component Funding Documents")
+    private Set<AmpComponentFundingDocument> componentFundingDocuments = new HashSet<>();
+
     public Set<AmpComponentFundingDocument> getComponentFundingDocuments() {
         return componentFundingDocuments;
     }
 
-    public void setComponentFundingDocuments(Set<AmpComponentFundingDocument> componentFundingDocuments) {
-        this.componentFundingDocuments = componentFundingDocuments;
-    }
-
-    @Interchangeable(fieldTitle = "Component Funding Documents",  fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_FUNDING_DOCS, importable = true)
-    @VersionableCollection(fieldTitle = "Component Funding Documents")
-    protected Set<AmpComponentFundingDocument> componentFundingDocuments = new HashSet<>();
-    public AmpCategoryValue getComponentFundingStatus() {
-        return componentFundingStatus;
-    }
-
-    public String getComponentFundingStatusFormatted() {
-        return componentFundingStatus.getValue().toLowerCase();
-    }
-
-    public void setComponentFundingStatus(AmpCategoryValue componentFundingStatus) {
-        this.componentFundingStatus = componentFundingStatus;
-    }
 
     @Interchangeable(fieldTitle = COMPONENT_FUNDING_TRANSACTION_DATE, importable = true,
             fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_FUNDING_TRANSACTION_DATE,
@@ -297,6 +284,23 @@ public class AmpComponentFunding implements Cloneable, Serializable {
      *
      * }
      */
+
+    public AmpCategoryValue getComponentFundingStatus() {
+        return componentFundingStatus;
+    }
+
+    public String getComponentFundingStatusFormatted() {
+        return componentFundingStatus.getValue().toLowerCase();
+    }
+
+    public void setComponentFundingDocuments(Set<AmpComponentFundingDocument> componentFundingDocuments) {
+        this.componentFundingDocuments = componentFundingDocuments;
+    }
+
+
+    public void setComponentFundingStatus(AmpCategoryValue componentFundingStatus) {
+        this.componentFundingStatus = componentFundingStatus;
+    }
 
     @Override
     public Object clone() throws CloneNotSupportedException {

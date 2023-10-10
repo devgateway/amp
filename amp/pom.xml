@@ -1321,7 +1321,7 @@
                         </goals>
                         <phase>process-resources</phase>
                         <configuration>
-                            <arguments>ci</arguments>
+                            <arguments>install</arguments>
                             <workingDirectory>${project.basedir}/TEMPLATE/ampTemplate/node_modules/amp-translate</workingDirectory>
                         </configuration>
                     </execution>

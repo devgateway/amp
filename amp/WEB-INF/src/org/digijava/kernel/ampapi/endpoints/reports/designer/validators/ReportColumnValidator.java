@@ -6,7 +6,9 @@ import org.digijava.kernel.ampapi.endpoints.reports.designer.ReportColumnProvide
 import org.digijava.kernel.ampapi.endpoints.reports.designer.ReportProfile;
 import org.digijava.kernel.ampapi.endpoints.reports.designer.ReportRequest;
 import org.digijava.kernel.ampapi.endpoints.reports.designer.ReportType;
+import org.digijava.module.aim.dbentity.AmpColumns;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,6 +31,7 @@ public class ReportColumnValidator implements ReportValidator {
     private boolean isEmpty;
 
     private List<String> invalidIds;
+    private List<String> invalidColumnsNames;
 
     public ReportColumnValidator(final ReportColumnProvider columnProvider) {
         this.columnProvider = columnProvider;
@@ -53,6 +56,17 @@ public class ReportColumnValidator implements ReportValidator {
                 .map(String::valueOf)
                 .collect(Collectors.toList());
 
+        if (!invalidIds.isEmpty()) {
+            invalidColumnsNames = new ArrayList<>();
+            for (String id : invalidIds) {
+                final int idNumber = Integer.parseInt(id);
+                AmpColumns ampColumn = columnProvider.fetchAmpColumns().stream().filter(column -> column.getColumnId() == idNumber).collect(Collectors.toList()).get(0);
+                String name = columnProvider.translatorService.translateText( ampColumn.getColumnName() );
+                String errorText = " -> [" + id + "] " + name;
+                invalidColumnsNames.add(errorText);
+            }
+        }
+
         return invalidIds.isEmpty();
     }
 
@@ -61,7 +75,8 @@ public class ReportColumnValidator implements ReportValidator {
             return REPORT_FIELD_REQUIRED.withDetails(COLUMNS);
         }
 
-        return REPORT_INVALID_COLUMNS.withDetails(invalidIds);
+        //return REPORT_INVALID_COLUMNS.withDetails(invalidIds);
+        return REPORT_INVALID_COLUMNS.withDetails(invalidColumnsNames);
     }
 
 }

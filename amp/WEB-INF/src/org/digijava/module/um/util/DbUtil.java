@@ -75,13 +75,10 @@ public class DbUtil {
 
 //            Iterator iter = query.iterate();
             User iterUser = query.stream().findAny().orElse(null);
-            userId = iterUser.getId();
+            if (iterUser!=null)
+                userId = iterUser.getId();
 
-//            while(iter.hasNext()) {
-//                User iterUser = (User) iter.next();
-//                userId = iterUser.getId().longValue();
-//                break;
-//            }
+
 
         } catch(Exception ex0) {
             logger.debug("Unable to get user information from database", ex0);
@@ -100,8 +97,8 @@ public class DbUtil {
      */
     public static boolean isCorrectPassword(String user, String pass) throws
         UMException {
-        Session sess = null;
-        String compare = null;
+        Session sess;
+        String compare;
         String encryptPassword = null;
         boolean iscorrect = false;
         try {
@@ -109,13 +106,12 @@ public class DbUtil {
                 getSession();
 
             String queryString = "from " + User.class.getName() + " rs where rs.email = :email";
-            Query query = sess.createQuery(queryString);
+            Query<User> query = sess.createQuery(queryString, User.class);
             query.setParameter("email", user,StringType.INSTANCE);
 
-            Iterator iter = query.iterate();
-//////////////////////
+            Iterator<User> iter = query.iterate();
             while(iter.hasNext()) {
-                User iterUser = (User) iter.next();
+                User iterUser = iter.next();
 
                 for(int i = 0; i < 3; i++) {
 
@@ -156,7 +152,6 @@ public class DbUtil {
 
             }
 
-/////////////////////
 
         } catch(Exception ex0) {
             logger.debug("isCorrectPassword() failed", ex0);
@@ -177,32 +172,25 @@ public class DbUtil {
     public static boolean ResetPassword(String email, String code, String newPassword) throws
         UMException {
 
-        Transaction tx = null;
         Session session;
         try {
             session = org.digijava.kernel.persistence.PersistenceManager.
                 getSession();
-//beginTransaction();
             String queryString = "from " + User.class.getName() + " rs where rs.email = :email";
             Query<User> query = session.createQuery(queryString, User.class);
             query.setParameter("email", email,StringType.INSTANCE);
 
-//            Iterator iter = query.iterate();
-//            User iterUser = null;
             User iterUser = query.stream().findAny().orElse(null);
 
-//            while(iter.hasNext()) {
-//                iterUser = (User) iter.next();
-//                break;
-//            }
+
             if(iterUser == null) {
                 logger.warn("Attempt to reset password for unknown user: " + email);
                 return false;
             }
 
-            ResetPassword resetPassword = null;
+            ResetPassword resetPassword;
             try {
-                resetPassword = (ResetPassword) session.load(ResetPassword.class,
+                resetPassword = session.load(ResetPassword.class,
                     iterUser.getId());
             } catch(ObjectNotFoundException ex2) {
                 logger.warn("User " + email + " have not requested password reset change");
@@ -218,7 +206,6 @@ public class DbUtil {
             iterUser.setSalt(Long.toString(newPassword.trim().hashCode()));
             session.update(iterUser);
             session.delete(resetPassword);
-            //tx.commit();
 
         } catch(Exception ex) {
             logger.debug("Unable to update user information into database", ex);
@@ -250,11 +237,8 @@ public class DbUtil {
             Query<User> query = session.createQuery(queryString, User.class);
             query.setParameter("email", user,StringType.INSTANCE);
 
-//            Iterator iter = query.iterate();
             User iterUser = query.stream().findAny().orElse(null);
-//            while(iter.hasNext()) {
-//                iterUser = (User) iter.next();
-//            }
+
             if (!isNull(iterUser)) {
                 iterUser.setPassword(ShaCrypt.crypt(newPassword.trim()).trim());
                 iterUser.setSalt(Long.toString(newPassword.trim().hashCode()));
@@ -304,15 +288,13 @@ public class DbUtil {
     public static void updateUserBio(User user) throws
         UMException {
 
-        Session session = null;
+        Session session;
         try {
             session = PersistenceManager.getSession();
 
             user.updateLastModified();
 
-//beginTransaction();
             session.update(user);
-            //tx.commit();
         } catch(Exception ex) {
             logger.debug("Unable to update user information into database", ex);
 
@@ -336,15 +318,13 @@ public class DbUtil {
     public static void updateUserMarket(User user) throws
         UMException {
 
-        Session session = null;
+        Session session;
         try {
             session = PersistenceManager.getSession();
 
             user.updateLastModified();
 
-//beginTransaction();
             session.update(user);
-            //tx.commit();
         } catch(Exception ex) {
             logger.debug("Unable to update user information into database", ex);
 
@@ -373,7 +353,7 @@ public class DbUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             tx = session.getTransaction();
-            ArrayList removeArray = new ArrayList();
+            ArrayList removeArray = new ArrayList<>();
 
             if(user.getInterests() != null) {
                 for (Object o : user.getInterests()) {
@@ -403,7 +383,7 @@ public class DbUtil {
             }
 
             if(removeArray.size() > 0)
-                user.getInterests().removeAll(removeArray);
+                removeArray.forEach(user.getInterests()::remove);
 
             user.updateLastModified();
 
@@ -477,10 +457,7 @@ public class DbUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             tx = session.getTransaction();
-//beginTransaction();
 
-            // set encrypted password
-            String plainTextPass=user.getPassword();
             user.setPassword(ShaCrypt.crypt(user.getPassword().trim()).trim());
 
             // set hashed password

@@ -58,7 +58,7 @@ public final class Constants {
     public static final int TO_YEAR = 2005 ;
 
     public static final String DISCREPANCY = "DI";
-    public static final Long MOFED_ORG_ID= new Long(12);
+    public static final Long MOFED_ORG_ID= 12L;
     public static final String DEFAULT_CURRENCY = "USD" ;
     //public static final Long ETH_FY = new Long(1) ;
     //public static final Long ETH_CAL = new Long(5) ;
@@ -87,40 +87,40 @@ public final class Constants {
     public static final int NUM_RECORDS = 10 ;
     public static final String LOAN = "L" ;
     public static final String GRANT = "G" ;
-    public static final Long DESKTOP = new Long(1) ;
-    public static final Long CALENDAR = new Long(1) ;
-    public static final Long CURRENCY = new Long(2) ;
-    public static final Long DONORS = new Long(3) ;
-    public static final Long REGION = new Long(4) ;
-    public static final Long SECTOR = new Long(5) ;
-    public static final Long STATUS = new Long(6) ;
-    public static final Long YEAR_RANGE = new Long(7) ;
-    public static final Long PERSPECTIVE = new Long(8) ;
-    public static final Long FINANCING_INSTRUMENT = new Long(9) ;
-    public static final Long ACTUAL_PLANNED = new Long(10) ;
-    public static final Long STARTDATE_CLOSEDATE = new Long(11) ;
+    public static final Long DESKTOP = 1L;
+    public static final Long CALENDAR = 1L;
+    public static final Long CURRENCY = 2L;
+    public static final Long DONORS = 3L;
+    public static final Long REGION = 4L;
+    public static final Long SECTOR = 5L;
+    public static final Long STATUS = 6L;
+    public static final Long YEAR_RANGE = 7L;
+    public static final Long PERSPECTIVE = 8L;
+    public static final Long FINANCING_INSTRUMENT = 9L;
+    public static final Long ACTUAL_PLANNED = 10L;
+    public static final Long STARTDATE_CLOSEDATE = 11L;
 // Report Pages Constants Set
-    public static final Long QUARTER_PIPELINE = new Long(9);
-    public static final Long QUARTERLYBYSECTOR = new Long(12);
-    public static final Long QUARTERLYBYPROJECT = new Long(11);
-    public static final Long QUARTERLYMULTIDONOR = new Long(10);
-    public static final Long TREND = new Long(8);
-    public static final Long PIPELINE = new Long(7);
-    public static final Long DATERANGE = new Long(6);
-    public static final Long SECTORBYPROJECT = new Long(5);
-    public static final Long MULTILATERALDONOR = new Long(3);
-    public static final Long PROJECTBYDONOR = new Long(4);
-    public static final Long PHYSICALCOMPONENT = new Long(13);
+    public static final Long QUARTER_PIPELINE = 9L;
+    public static final Long QUARTERLYBYSECTOR = 12L;
+    public static final Long QUARTERLYBYPROJECT = 11L;
+    public static final Long QUARTERLYMULTIDONOR = 10L;
+    public static final Long TREND = 8L;
+    public static final Long PIPELINE = 7L;
+    public static final Long DATERANGE = 6L;
+    public static final Long SECTORBYPROJECT = 5L;
+    public static final Long MULTILATERALDONOR = 3L;
+    public static final Long PROJECTBYDONOR = 4L;
+    public static final Long PHYSICALCOMPONENT = 13L;
 //  public static final Long YEAR_RANGE = new Long(1) ;
     public static final String DIRECT_BUDGET_SUPPORT = "1" ;
     public static final String PROGRAM_SUPPORT = "6" ;
     public static final String PROJECT_SUPPORT = "3" ;
     public static final String OTHER_AID = "4" ;
-    public static final Long STATUS_PLANNED = new Long(5) ;
+    public static final Long STATUS_PLANNED = 5L;
 
-    public static final Integer ORIGINAL = new Integer(0);
-    public static final Integer REVISED = new Integer(1);
-    public static final Integer CURRENT = new Integer(2);
+    public static final Integer ORIGINAL = 0;
+    public static final Integer REVISED = 1;
+    public static final Integer CURRENT = 2;
     
     public static final String USER_WORKSPACES="USER_WORKSPACES";
     //Removed by Govind

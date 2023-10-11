@@ -359,7 +359,7 @@ public class DbUtil {
                 for (Object o : user.getInterests()) {
                     Interests item = (Interests) o;
 
-                    List list = getGeoupsBySiteId(item.getSite().getId());
+                    List list = getGroupsBySiteId(item.getSite().getId());
                     for (Object value : list) {
                         Group group = (Group) value;
                         if (group.isMemberGroup()) {
@@ -508,7 +508,7 @@ public class DbUtil {
                 for (Object o : user.getInterests()) {
                     Interests item = (Interests) o;
 
-                    List list = getGeoupsBySiteId(item.getSite().getId());
+                    List list = getGroupsBySiteId(item.getSite().getId());
                     for (Object value : list) {
                         Group group = (Group) value;
                         if (group.isMemberGroup()) {
@@ -696,8 +696,6 @@ public class DbUtil {
                 user.updateLastModified();
                 session.update(user);
                 verified = true;
-            }else{
-                verified = false;
             }
         } catch (Exception ex0) {
             logger.debug("isRegisteredEmail() failed", ex0);
@@ -709,19 +707,16 @@ public class DbUtil {
 
     public static boolean isRegisteredEmail(String email) throws
         UMException {
-        Session sess = null;
-        boolean iscorrect = false;
+        Session sess;
+        boolean iscorrect;
         try {
             sess = PersistenceManager.getSession();
 
             String queryString = "from " + User.class.getName() + " rs where trim(lower(rs.email)) = :email";
-            Query query = sess.createQuery(queryString);
+            Query<User> query = sess.createQuery(queryString, User.class);
             query.setParameter("email", email.toLowerCase().trim(),StringType.INSTANCE);
+            iscorrect = query.stream().findAny().isPresent();
 
-            Iterator iter = query.list().iterator();
-            if(iter.hasNext()) {
-                iscorrect = true;
-            }
         } catch(Exception ex0) {
             logger.debug("isRegisteredEmail() failed", ex0);
             throw new UMException(ex0.getMessage(), ex0);
@@ -731,22 +726,18 @@ public class DbUtil {
 
     public static boolean EmailExist(String email, Long id) throws
     UMException {
-    Session sess = null;
-    boolean iscorrect = false;
+    Session sess;
+    boolean iscorrect;
     try {
         sess = PersistenceManager.getSession();
 
         String queryString = "from " + User.class.getName() + " rs where trim(lower(rs.email)) = :email";
-        Query query = sess.createQuery(queryString);
+        Query<User> query = sess.createQuery(queryString, User.class);
         query.setParameter("email", email.toLowerCase().trim(),StringType.INSTANCE);
 
-        Iterator iter = query.list().iterator();
-        if(!iter.hasNext()) {
-            iscorrect = true;
-        }
-        for (Object o : query.list()) {
-            User user = (User) o;
-            if (user.getId().compareTo(id) == 0) {
+        iscorrect = !query.stream().findAny().isPresent();
+        for (User o : query.list()) {
+            if (o.getId().compareTo(id) == 0) {
                 iscorrect = true;
             } else {
                 iscorrect = false;
@@ -764,15 +755,14 @@ public class DbUtil {
 
     public static void saveResetPassword(long userId, String code) throws
         UMException {
-        Session session = null;
+        Session session;
         try {
             session = org.digijava.kernel.persistence.PersistenceManager.getSession();
-//beginTransaction();
 
             ResetPassword resetPassword;
             boolean create = true;
             try {
-                resetPassword = session.load(ResetPassword.class, new Long(userId));
+                resetPassword = session.load(ResetPassword.class, userId);
                 create = false;
             } catch(ObjectNotFoundException ex2) {
                 resetPassword = new ResetPassword();
@@ -787,7 +777,6 @@ public class DbUtil {
                 session.update(resetPassword);
             }
 
-            //tx.commit();
         } catch(Exception ex) {
             logger.debug("Unable to put reset password record into database", ex);
             throw new UMException(
@@ -849,17 +838,17 @@ public class DbUtil {
      */
     public static List getList(String className, String order) throws
         UMException {
-        Session session = null;
-        List list = null;
-        String find = null;
+        Session session;
+        List list;
+        String find;
         try {
             session = PersistenceManager.getSession();
 
             if(order != null && order.trim().length() > 0) {
-                find = new String("from " + className +
-                                  " rs order by rs." + order);
+                find = "from " + className +
+                        " rs order by rs." + order;
             } else {
-                find = new String("from " + className);
+                find = "from " + className;
             }
 
             Query query = session.createQuery(find);
@@ -883,11 +872,11 @@ public class DbUtil {
                                        HttpServletRequest request) throws
         UMException {
         User result;
-        Session session = null;
+        Session session;
 
         try {
             session = PersistenceManager.getSession();
-            result = (User) session.load(User.class, activeUserId);
+            result = session.load(User.class, activeUserId);
             ProxyHelper.initializeObject(result);
 
             Site site = RequestUtils.getSite(request);
@@ -909,7 +898,6 @@ public class DbUtil {
 
     public static List searchUsers(String criteria) throws UMException {
 
-        Session session = null;
         List userList;
 
         try {
@@ -932,7 +920,7 @@ public class DbUtil {
      */
     public static Interests getInterestBySite(Site site, User user) throws UMException {
         List interests = null;
-        Session session = null;
+        Session session;
         try {
             if(site != null) {
                 session = PersistenceManager.getSession();
@@ -963,7 +951,7 @@ public class DbUtil {
      */
     public static List getTopicsSites(Site site) throws UMException {
         List sites = null;
-        Session session = null;
+        Session session;
         try {
             if(site != null) {
                 session = PersistenceManager.getSession();
@@ -987,15 +975,16 @@ public class DbUtil {
      * @return
      * @throws UMException
      */
-    public static List getGeoupsBySiteId(Long siteId) throws UMException {
-        List groups = null;
+    public static List getGroupsBySiteId(Long siteId) throws UMException {
+        List groups;
         Session session = null;
         try {
+            session = PersistenceManager.getRequestDBSession();
 
             String queryString = "from " + Group.class.getName() +
                                  " g where g.site.id = :siteId";
             Query query = session.createQuery(queryString);
-            query.setLong("siteId", siteId);
+            query.setParameter("siteId", siteId, LongType.INSTANCE);
 
             groups = query.list();
         } catch(Exception ex) {
@@ -1012,7 +1001,7 @@ public class DbUtil {
      */
     public static Collection getAllOrgGroup() {
         Session session = null;
-        Collection col = new ArrayList();
+        Collection col = new ArrayList<>();
         try {
             session = PersistenceManager.getSession();
             String q = "select grp from " + AmpOrgGroup.class.getName() + " grp";
@@ -1032,8 +1021,8 @@ public class DbUtil {
     public static Collection getOrgByGroup(Long Id) {
 
         Session sess = null;
-        Collection col = new ArrayList();
-        Query qry = null;
+        Collection col = new ArrayList<>();
+        Query qry;
 
         try {
             sess = PersistenceManager.getSession();
@@ -1056,7 +1045,7 @@ public class DbUtil {
      */
     public static Collection getAllOrgTypes() {
         Session session = null;
-        Collection col = new ArrayList();
+        Collection col = new ArrayList<>();
         try {
             session = PersistenceManager.getSession();
             String q = "select type from " + AmpOrgType.class.getName() + " type order by type asc";
@@ -1076,7 +1065,7 @@ public class DbUtil {
     public static Collection getOrgGroupByType(Long Id) {
 
         Session sess = null;
-        Collection col = new ArrayList();
+        Collection col = new ArrayList<>();
         Query qry = null;
 
         try {
@@ -1102,7 +1091,7 @@ public class DbUtil {
     public static Collection getOrgByType(Long Id) {
 
         Session sess = null;
-        Collection col = new ArrayList();
+        Collection col = new ArrayList<>();
         Query qry = null;
 
         try {
@@ -1120,8 +1109,8 @@ public class DbUtil {
     }
 
     public static List<SuspendLogin> getSuspendedLoginObjs() {
-        StringBuilder qs = new StringBuilder("From ").append(SuspendLogin.class.getName());
-        return PersistenceManager.getSession().createQuery(qs.toString()).list();
+        String qs = "From " + SuspendLogin.class.getName();
+        return PersistenceManager.getSession().createQuery(qs, SuspendLogin.class).list();
     }
 
     public static void saveSuspendedLoginObj(SuspendLogin sl) {
@@ -1141,10 +1130,10 @@ public class DbUtil {
     }
 
     public static SuspendLogin getSuspendedLoginObjByName(String name) {
-        StringBuilder qs = new StringBuilder("From ").
-                append(SuspendLogin.class.getName()).
-                append(" sl where sl.name = :NAME");
-        return (SuspendLogin) PersistenceManager.getSession().createQuery(qs.toString()).setParameter("NAME", name,StringType.INSTANCE).uniqueResult();
+        String qs = "From " +
+                SuspendLogin.class.getName() +
+                " sl where sl.name = :NAME";
+        return (SuspendLogin) PersistenceManager.getSession().createQuery(qs).setParameter("NAME", name,StringType.INSTANCE).uniqueResult();
     }
 
     public static List<User> getAllUsers() {
@@ -1161,7 +1150,7 @@ public class DbUtil {
                 " and sl.active = true and (sl.expires=false or" +
                 " (sl.expires=true and sl.suspendTil > current_date()))";
         return PersistenceManager.getRequestDBSession()
-                .createQuery(qs)
+                .createQuery(qs, SuspendLogin.class)
                 .setParameter("USER_ID", user.getId(), LongType.INSTANCE)
                 .setCacheable(true)
                 .list();

@@ -218,7 +218,7 @@ public class ProjectUtil {
         logger.info("Trubudget Cached Token:" + token);
         for (AmpComponent ampComponent: ampActivityVersion.getComponents())
         {
-            if (ampComponent.getSubProjectComponentId()==null) {//create subproject
+            if (ampComponent.getAmpComponentTruBudgetSubProjectId()==null) {//create subproject
                 CreateSubProjectModel createSubProjectModel = new CreateSubProjectModel();
                 CreateSubProjectModel.Data data = new CreateSubProjectModel.Data();
                 CreateSubProjectModel.Subproject subproject = new CreateSubProjectModel.Subproject();
@@ -278,14 +278,14 @@ public class ProjectUtil {
                     e.printStackTrace();
                 }
 
-                ampComponent.setSubProjectComponentId(subproject.getId());
+                ampComponent.setAmpComponentTruBudgetSubProjectId(subproject.getId());
                 createUpdateWorkflowItems(projectId, subproject.getId(),ampComponent, settings);
             }
             else {//update subProject
                 EditSubProjectModel editSubProjectModel = new EditSubProjectModel();
                 EditSubProjectModel.Data data = new EditSubProjectModel.Data();
                 data.setProjectId(projectId);
-                data.setSubprojectId(ampComponent.getSubProjectComponentId());
+                data.setSubprojectId(ampComponent.getAmpComponentTruBudgetSubProjectId());
                 data.setDescription(ampComponent.getDescription());
                 data.setDisplayName(ampComponent.getTitle());
 
@@ -301,7 +301,7 @@ public class ProjectUtil {
                             EditSubProjectedBudgetModel editSubProjectedBudgetModel = new EditSubProjectedBudgetModel();
                             EditSubProjectedBudgetModel.Data data1 = new EditSubProjectedBudgetModel.Data();
                             data1.setProjectId(projectId);
-                            data1.setSubprojectId(ampComponent.getSubProjectComponentId());
+                            data1.setSubprojectId(ampComponent.getAmpComponentTruBudgetSubProjectId());
                             data1.setCurrencyCode(componentFunding.getCurrency().getCurrencyCode());
                             data1.setValue(BigDecimal.valueOf(componentFunding.getTransactionAmount()).toPlainString());
                             data1.setOrganization(componentFunding.getReportingOrganization() != null ? componentFunding.getReportingOrganization().getName() : "Funding Org");
@@ -313,7 +313,7 @@ public class ProjectUtil {
                         }
                     }
                 }
-                createUpdateWorkflowItems(projectId, ampComponent.getSubProjectComponentId(),ampComponent, settings);
+                createUpdateWorkflowItems(projectId, ampComponent.getAmpComponentTruBudgetSubProjectId(),ampComponent, settings);
 
             }
         }

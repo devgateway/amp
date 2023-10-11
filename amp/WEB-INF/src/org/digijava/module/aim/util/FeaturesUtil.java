@@ -58,7 +58,7 @@ public class FeaturesUtil {
     }
 
     public static synchronized void buildGlobalSettingsCache(List<AmpGlobalSettings> globalSettings) {
-        globalSettingsCache = new HashMap<String, AmpGlobalSettings>();
+        globalSettingsCache = new HashMap<>();
         for (AmpGlobalSettings sett : globalSettings) {
             globalSettingsCache.put(sett.getGlobalSettingsName(), sett);
         }

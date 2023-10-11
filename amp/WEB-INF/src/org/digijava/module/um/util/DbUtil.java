@@ -1137,10 +1137,10 @@ public class DbUtil {
     }
 
     public static List<User> getAllUsers() {
-        StringBuilder qs = new StringBuilder("From ").
-            append(User.class.getName()).
-            append(" u order by u.firstNames");
-        return PersistenceManager.getSession().createQuery(qs.toString()).list();
+        String qs = "From " +
+                User.class.getName() +
+                " u order by u.firstNames";
+        return PersistenceManager.getSession().createQuery(qs, User.class).list();
     }
 
     public static List<SuspendLogin> getUserSuspendReasonsFromDB (User user) {

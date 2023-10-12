@@ -654,11 +654,9 @@ public class ContentTranslationUtil {
             final FieldTranslationPack ftp) {
         PersistenceManager.getSession().doWork(
             new org.hibernate.jdbc.Work() {
-                public void execute(Connection conn) throws SQLException {
-                    Session newSession = null;
-                    try {
-                        newSession = PersistenceManager.sf().withOptions().connection(conn).openSession();
-
+                public void execute(Connection conn) {
+                    try (Session newSession = PersistenceManager.sf().withOptions().connection(conn).openSession()) {
+                        Transaction transaction= newSession.beginTransaction();
                         String objClass = ftp.getObjClass();
                         String fieldName = ftp.getFieldName();
 
@@ -681,14 +679,11 @@ public class ContentTranslationUtil {
                         }
 
                         newSession.flush();
-                    } 
-                    catch (Exception e) {
+                        transaction.commit();
+                    } catch (Exception e) {
                         logger.error("can't save field translations", e);
                         if (e.getCause() != null && e.getCause() instanceof SQLException && ((SQLException) e.getCause()).getNextException() != null)
-                            logger.error("Next exception: "+ ((SQLException) e.getCause()).getNextException());
-                    }
-                    finally {
-                        newSession.close();
+                            logger.error("Next exception: " + ((SQLException) e.getCause()).getNextException());
                     }
                 }
             });

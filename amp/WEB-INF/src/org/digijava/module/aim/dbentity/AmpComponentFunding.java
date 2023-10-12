@@ -69,8 +69,6 @@ public class AmpComponentFunding implements Cloneable, Serializable {
     public Set<AmpComponentFundingDocument> getComponentFundingDocuments() {
         return componentFundingDocuments;
     }
-
-
     @Interchangeable(fieldTitle = COMPONENT_FUNDING_TRANSACTION_DATE, importable = true,
             fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_FUNDING_TRANSACTION_DATE,
             interValidators = @InterchangeableValidator(RequiredValidator.class))

@@ -323,7 +323,7 @@ public class ActivityUtil {
         logAudit(ampCurrentMember, a, newActivity);
         updateComponents(a,session);
         session.flush();
-        session.getTransaction().commit();
+//        session.getTransaction().commit();
 //        session.refresh(a);
         // TODO: 9/12/23 check if project is already existing
         Query<AmpComponent> query = session.createQuery("FROM "+AmpComponent.class.getName()+" ac  WHERE ac.activity=:activity AND ac.activity IS NOT NULL", AmpComponent.class).setCacheable(true);

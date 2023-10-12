@@ -17,7 +17,7 @@ export default class HeaderContainer extends Component {
       </div>
     );
   }
-}
+};
 
 HeaderContainer.propTypes = {
   onApplyFilters: PropTypes.func.isRequired,

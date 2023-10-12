@@ -6,6 +6,8 @@ import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.ProgramUtil;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Date;
 import java.util.Map;
 
 public class AmpActivityProgramSettings implements Serializable, Identifiable {
@@ -115,6 +117,13 @@ public class AmpActivityProgramSettings implements Serializable, Identifiable {
         private boolean allowMultiple;
         private Long ampProgramSettingsId;
         private String name;
+
+        private Date startDate;
+
+        private Date endDate;
+
+        private Collection<AmpTheme> children;
+
         public AmpTheme getDefaultHierarchy() {
                 return defaultHierarchy;
         }
@@ -170,6 +179,8 @@ public class AmpActivityProgramSettings implements Serializable, Identifiable {
                 this.name = name;
                 this.allowMultiple = false;
                 this.defaultHierarchy = null;
+                this.startDate = null;
+                this.endDate = null;
         }
 
         @Override
@@ -181,5 +192,29 @@ public class AmpActivityProgramSettings implements Serializable, Identifiable {
     @Override
     public String toString() {
         return name;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public Collection<AmpTheme> getChildren() {
+        return children;
+    }
+
+    public void setChildren(Collection<AmpTheme> children) {
+        this.children = children;
     }
 }

@@ -6,8 +6,8 @@ import {
 
 
 export default class ActivityApi {
-    static getActivity(activityId) {
-        const url = ACTIVITY_API + activityId;
+    static getActivity(activityId, language = 'en') {
+        const url = ACTIVITY_API + activityId + '?language=' + language;
         return ApiHelper._fetchData(url);
     }
 

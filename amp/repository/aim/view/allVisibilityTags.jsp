@@ -723,7 +723,8 @@ deleted 6 fields, do not reinsert
 
 
 <field:display name="National Planning Objectives" feature="NPD Programs"></field:display>
-<field:display name="National Planning Objectives Level 1" feature="NPD Programs"></field:display> 
+<field:display name="National Planning Objectives Level 1" feature="NPD Programs"></field:display>
+<field:display name="National Planning Objectives Code" feature="NPD Programs"></field:display>
 <field:display name="National Planning Objectives Level 2" feature="NPD Programs"></field:display> 
 <field:display name="National Planning Objectives Level 3" feature="NPD Programs"></field:display> 
 <field:display name="National Planning Objectives Level 4" feature="NPD Programs"></field:display> 

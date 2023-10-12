@@ -1,24 +1,52 @@
 package org.digijava.kernel.ampapi.endpoints.dashboards;
 
+import static org.dgfoundation.amp.ar.MeasureConstants.ACTUAL_DISBURSEMENTS;
+import static org.dgfoundation.amp.ar.MeasureConstants.PLANNED_DISBURSEMENTS;
+
+import java.util.List;
+
+import javax.ws.rs.DefaultValue;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+
 import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.base.MoreObjects;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
-import org.digijava.kernel.ampapi.endpoints.dashboards.services.*;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.MeReportDTO;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.MeService;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.ProgressReportDTO;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.AmpColorThresholdWrapper;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMap;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMapConfigService;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMapConfigs;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.ProjectAmounts;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.FundingTypeChartData;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.AidPredictabilityChartData;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.TopDescription;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.TopChartData;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.TopChartType;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.TopsChartService;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.DashboardsService;
+import org.digijava.kernel.ampapi.endpoints.dashboards.services.HeatMapService;
 import org.digijava.kernel.ampapi.endpoints.gis.SettingsAndFiltersParameters;
+import org.digijava.kernel.ampapi.endpoints.indicator.IndicatorYearValues;
+import org.digijava.kernel.ampapi.endpoints.indicator.manager.IndicatorManagerService;
+import org.digijava.kernel.ampapi.endpoints.indicator.manager.MEIndicatorDTO;
+import org.digijava.kernel.ampapi.endpoints.indicator.manager.ProgramSchemeDTO;
+import org.digijava.kernel.ampapi.endpoints.indicator.manager.SectorDTO;
 import org.digijava.kernel.ampapi.endpoints.security.AuthRule;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.module.esrigis.dbentity.AmpApiState;
 import org.digijava.module.esrigis.dbentity.ApiStateType;
-
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import java.util.List;
-
-import static org.dgfoundation.amp.ar.MeasureConstants.ACTUAL_DISBURSEMENTS;
-import static org.dgfoundation.amp.ar.MeasureConstants.PLANNED_DISBURSEMENTS;
 
 /**
  * 
@@ -211,4 +239,118 @@ public class EndPoints {
         new HeatMapConfigService().saveHeatMapAdminSettings(config);
     }
 
+    @GET
+    @Path("sectors")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "getMeSectors")
+    @ApiOperation(value = "Retrieve and provide a list of M&E sectors.")
+    public final List<SectorDTO> getSectors() {
+        return new IndicatorManagerService().getSectors();
+    }
+
+    @GET
+    @Path("indicators")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "getMeIndicators")
+    @ApiOperation(value = "Retrieve and provide a list of M&E indicators.")
+    public final List<MEIndicatorDTO> getIndicators() {
+        return new IndicatorManagerService().getMEIndicators();
+    }
+
+    @GET
+    @Path("programConfiguration")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "getMeProgramConfiguration")
+    @ApiOperation(value = "Retrieve and provide a list of M&E program configurations.")
+    public final List<ProgramSchemeDTO> getProgramConfiguration() {
+        return MeService.getProgramConfiguration();
+    }
+
+    /**
+     * Returns indicator values for indicators attached to a program
+     *   [{
+     *         "baseValue": 1000,
+     *         "actualValues": [
+     *             {
+     *                 "year": 2021,
+     *                 "value": 0
+     *             },
+     *             {
+     *                 "year": 2022,
+     *                 "value": 3000.000000000000
+     *             },
+     *             {
+     *                 "year": 2023,
+     *                 "value": 553.000000000000
+     *             }
+     *         ],
+     *         "targetValue": 3000,
+     *         "indicatorId": 11
+     *     },]
+     * @param id
+     * @param params
+     * @return
+     */
+    @POST
+    @Path("/me/programReport/{id}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "getMeProgramReport")
+    @ApiOperation(value = "Returns indicator values for program.")
+    public List<IndicatorYearValues> getIndicatorYearValuesByProgram(@PathParam("id") Long id,
+                                                                     SettingsAndFiltersParameters params) {
+        return new MeService().getIndicatorValuesByProgramId(id, params);
+    }
+
+    @GET
+    @Path("/me/indicatorsByProgram/{id}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "getMeIndicatorsByProgram")
+    @ApiOperation(value = "Retrieve and provide a list of M&E indicators by program.")
+    public final List<MEIndicatorDTO> getIndicatorsByProgram(@PathParam("id") Long programId) {
+        return new MeService().getIndicatorsByProgram(programId);
+    }
+
+    /**
+     * Returns indicator values for indicator
+     * {
+     *         "baseValue": 1000,
+     *         "actualValues": [
+     *             {
+     *                 "year": 2021,
+     *                 "value": 0
+     *             },
+     *             {
+     *                 "year": 2022,
+     *                 "value": 3000.000000000000
+     *             },
+     *             {
+     *                 "year": 2023,
+     *                 "value": 553.000000000000
+     *             }
+     *         ],
+     *         "targetValue": 3000,
+     *         "indicatorId": 11
+     *     }
+     * @param id
+     * @param params
+     * @return
+     */
+    @POST
+    @Path("/me/indicatorReport/{id}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "getValuesForIndicator")
+    @ApiOperation(value = "Returns indicator values for indicator.")
+    public IndicatorYearValues getIndicatorYearValuesByIndicator(@PathParam("id") Long id,
+                                                                 SettingsAndFiltersParameters params) {
+        return new MeService().getIndicatorYearValuesByIndicatorId(id, params);
+    }
+
+    @GET
+    @Path("/me/indicatorsBySector/{id}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @ApiMethod(id = "getMeIndicatorsBySectorReport")
+    @ApiOperation(value = "Retrieve and provide a list of M&E indicators by sector.")
+    public final List<MEIndicatorDTO> getIndicatorsBySector(@PathParam("id") Long sectorId) {
+        return new MeService().getIndicatorsBySector(sectorId);
+    }
 }

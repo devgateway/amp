@@ -11,7 +11,11 @@ import org.dgfoundation.amp.currencyconvertor.CurrencyConvertor;
 import org.dgfoundation.amp.diffcaching.ActivityInvalidationDetector;
 import org.dgfoundation.amp.diffcaching.ExpiringCacher;
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
-import org.dgfoundation.amp.nireports.*;
+import org.dgfoundation.amp.nireports.CategAmountCell;
+import org.dgfoundation.amp.nireports.IdValuePair;
+import org.dgfoundation.amp.nireports.ImmutablePair;
+import org.dgfoundation.amp.nireports.NiPrecisionSetting;
+import org.dgfoundation.amp.nireports.NiReportsEngine;
 import org.dgfoundation.amp.nireports.amp.diff.CategAmountCellProto;
 import org.dgfoundation.amp.nireports.amp.diff.DifferentialCache;
 import org.dgfoundation.amp.nireports.behaviours.TrivialMeasureBehaviour;
@@ -32,7 +36,14 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static java.util.stream.Collectors.toCollection;
 
@@ -61,7 +72,7 @@ import static java.util.stream.Collectors.toCollection;
  * @author Dolghier Constantin
  *
  */
-public class AmpFundingColumn extends PsqlSourcedColumn<CategAmountCell> {
+public class AmpFundingColumn extends AmpAmountColumn {
 
     /**
      * {@link #getName()} in case this column is used to fetch "Donor Funding"

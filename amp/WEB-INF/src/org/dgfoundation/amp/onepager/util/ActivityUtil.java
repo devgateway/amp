@@ -23,12 +23,49 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.dbentity.AmpActivityContact;
+import org.digijava.module.aim.dbentity.AmpActivityDocument;
+import org.digijava.module.aim.dbentity.AmpActivityFields;
+import org.digijava.module.aim.dbentity.AmpActivityGroup;
+import org.digijava.module.aim.dbentity.AmpActivityProgram;
+import org.digijava.module.aim.dbentity.AmpActivitySector;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpAgreement;
+import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
+import org.digijava.module.aim.dbentity.AmpComments;
+import org.digijava.module.aim.dbentity.AmpComponent;
+import org.digijava.module.aim.dbentity.AmpComponentFunding;
+import org.digijava.module.aim.dbentity.AmpContentTranslation;
+import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpFundingAmount;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
+import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponse;
+import org.digijava.module.aim.dbentity.AmpGPINiSurveyResponseDocument;
+import org.digijava.module.aim.dbentity.AmpIndicator;
+import org.digijava.module.aim.dbentity.AmpOrgRole;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpPerformanceRule;
+import org.digijava.module.aim.dbentity.AmpRole;
+import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpStructure;
+import org.digijava.module.aim.dbentity.AmpStructureImg;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
+import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.dbentity.ApprovalStatus;
+import org.digijava.module.aim.dbentity.FundingInformationItem;
+import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.*;
+import org.digijava.module.aim.util.ActivityVersionUtil;
+import org.digijava.module.aim.util.AuditLoggerUtil;
+import org.digijava.module.aim.util.ContactInfoUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.LuceneUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.contentrepository.exception.JCRSessionException;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
@@ -39,11 +76,11 @@ import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.message.triggers.ActivityValidationWorkflowTrigger;
 import org.digijava.module.translation.util.ContentTranslationUtil;
-import org.hibernate.*;
-import org.hibernate.query.Query;
-import org.hibernate.type.IntegerType;
-import org.hibernate.type.LongType;
-import org.hibernate.type.ObjectType;
+import org.hibernate.Hibernate;
+import org.hibernate.LockMode;
+import org.hibernate.LockOptions;
+import org.hibernate.Query;
+import org.hibernate.Session;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
@@ -52,15 +89,24 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static java.util.Objects.isNull;
-
 /**
  * Util class used to manipulate an activity
- *
  * @author aartimon@dginternational.org
  * @since Jun 17, 2011
  */
@@ -79,10 +125,10 @@ public class ActivityUtil {
      *
      * @param am
      */
-    public static void saveActivity(AmpActivityModel am, boolean draft, boolean rejected) {
+    public static void saveActivity(AmpActivityModel am, boolean draft,boolean rejected){
 
         AmpAuthWebSession wicketSession = (AmpAuthWebSession) org.apache.wicket.Session.get();
-        if (!wicketSession.getLocale().getLanguage().equals(TLSUtils.getLangCode())) {
+        if (!wicketSession.getLocale().getLanguage().equals(TLSUtils.getLangCode())){
             logger.error("WRONG LANGUAGE: TLSUtils(" + TLSUtils.getLangCode() + ") vs Wicket(" + wicketSession.getLocale().getLanguage() + ")");
         }
 
@@ -115,10 +161,6 @@ public class ActivityUtil {
     public static AmpActivityVersion saveActivity(AmpActivityVersion oldA, Collection<AmpContentTranslation> values, AmpTeamMember ampCurrentMember, Site site, Locale locale, String rootRealPath, boolean draft, SaveContext saveContext) {
         Session session;
         EditorStore editorStore;
-        logger.info(saveContext.getSource());
-        logger.info(saveContext.isPrepareToSave());
-        logger.info(saveContext.isRejected());
-        logger.info(saveContext.isUpdateActivityStatus());
         if (saveContext.getSource() == ActivitySource.ACTIVITY_FORM) {
             session = AmpActivityModel.getHibernateSession();
 
@@ -150,7 +192,7 @@ public class ActivityUtil {
     }
 
     public static void prepareToSave(AmpActivityVersion a, AmpActivityVersion oldA,
-                                     AmpTeamMember ampCurrentMember, boolean draft, SaveContext context) {
+            AmpTeamMember ampCurrentMember, boolean draft, SaveContext context) {
         boolean newActivity = isNewActivity(oldA == null ? a : oldA);
 
         updateModifyCreateInfo(a, ampCurrentMember, newActivity);
@@ -163,12 +205,12 @@ public class ActivityUtil {
             setActivityStatus(ampCurrentMember, draft, a, oldA, newActivity, context.isRejected());
         }
     }
-
+    
     public static AmpActivityVersion saveActivityNewVersion(AmpActivityVersion a,
-                                                            Collection<AmpContentTranslation> translations, List<AmpContentTranslation> cumulativeTranslations,
-                                                            AmpTeamMember ampCurrentMember, boolean draft,
-                                                            Session session, SaveContext context, EditorStore editorStore, Site site) throws Exception {
-
+            Collection<AmpContentTranslation> translations, List<AmpContentTranslation> cumulativeTranslations,
+            AmpTeamMember ampCurrentMember, boolean draft,
+            Session session, SaveContext context, EditorStore editorStore, Site site) throws Exception {
+        
         boolean draftChange = detectDraftChange(a, draft);
         return saveActivityNewVersion(a, translations, cumulativeTranslations, ampCurrentMember, draft,
                 draftChange, session, context, editorStore, site);
@@ -179,10 +221,10 @@ public class ActivityUtil {
      * returns newActivity
      */
     public static AmpActivityVersion saveActivityNewVersion(AmpActivityVersion a,
-                                                            Collection<AmpContentTranslation> translations, List<AmpContentTranslation> cumulativeTranslations,
-                                                            AmpTeamMember ampCurrentMember, boolean draft,
-                                                            boolean draftChange, Session session, SaveContext context,
-                                                            EditorStore editorStore, Site site) throws Exception {
+            Collection<AmpContentTranslation> translations, List<AmpContentTranslation> cumulativeTranslations,
+            AmpTeamMember ampCurrentMember, boolean draft,
+            boolean draftChange, Session session, SaveContext context,
+            EditorStore editorStore, Site site) throws Exception {
 
         AmpActivityVersion oldA = a;
         boolean newActivity = isNewActivity(a);
@@ -205,9 +247,7 @@ public class ActivityUtil {
         //is versioning activated?
         boolean createNewVersion = (draft == draftChange) && ActivityVersionUtil.isVersioningEnabled();
         boolean isActivityForm = context.getSource() == ActivitySource.ACTIVITY_FORM;
-        if (oldA.getAmpActivityId() != null)
-            session.evict(oldA);
-        if (createNewVersion) {
+        if (createNewVersion){
             try {
                 AmpActivityGroup tmpGroup = a.getAmpActivityGroup();
 
@@ -215,64 +255,51 @@ public class ActivityUtil {
                 //keeping session.clear() only for acitivity form as it was before
                 if (isActivityForm)
                     session.clear();
-                if (tmpGroup == null) {
+                if (tmpGroup == null){
                     //we need to create a group for this activity
                     tmpGroup = new AmpActivityGroup();
                     tmpGroup.setAmpActivityLastVersion(a);
 
-                    //TODO this is a temporary status for the case when we have a new activity and we want to create a new version
-                    a.setApprovalStatus(ApprovalStatus.created);
-                    Long id = (Long) session.save(tmpGroup);
-                    tmpGroup.setAmpActivityGroupId(id);
-                    a.setAmpActivityGroup(tmpGroup);
-                    if (a.getAmpActivityId() == null)
-                        session.save(a);
-                    else
-                        session.merge(a);
-
+                    session.save(tmpGroup);
                 }
-//                session.flush();
-                a.setMember(new HashSet<>());
 
+                a.setAmpActivityGroup(tmpGroup);
+                a.setMember(new HashSet());
+                a.setAmpActivityId(null);
+                if (oldA.getAmpActivityId() != null)
+                    session.evict(oldA);
             } catch (CloneNotSupportedException e) {
                 logger.error("Can't clone current Activity: ", e);
             }
         }
-        logger.info("Object before prepare :" + a);
 
         if (context.isPrepareToSave()) {
             prepareToSave(a, oldA, ampCurrentMember, draft, context);
         }
-        logger.info("Object after prepare :" + a);
 
-        if (a.getAmpActivityGroup() == null) {
+        if (a.getAmpActivityGroup() == null){
             //we need to create a group for this activity
             AmpActivityGroup tmpGroup = new AmpActivityGroup();
             tmpGroup.setAmpActivityLastVersion(a);
-            session.save(tmpGroup);
-//            tmpGroup.setAmpActivityGroupId(id);
             a.setAmpActivityGroup(tmpGroup);
-
+            session.save(tmpGroup);
         }
-//        session.flush();
 
         setCreationTimeOnStructureImages(a);
 
         AmpActivityGroup group = a.getAmpActivityGroup();
-        if (group.getAmpActivityGroupId() == null) {
+        if (group == null){
             throw new RuntimeException("Non-existent group should have been added by now!");
         }
 
-        if (!newActivity) {
-            session.clear();
+        if (!newActivity){
             //existing activity
             //previousVersion for current activity
             if (group.getAmpActivityLastVersion().getAmpActivityId().equals(a.getAmpActivityId())) {
                 forceVersionIncrement(session, group);
             }
             group.setAmpActivityLastVersion(a);
-            session.merge(group);
-
+            session.update(group);
         }
 
         a.setAmpActivityGroup(group);
@@ -284,7 +311,6 @@ public class ActivityUtil {
         } else {
             updateFiscalYears(a);
         }
-
         saveEditors(session, createNewVersion, editorStore, site);
 
         saveAgreements(a, session, isActivityForm);
@@ -294,40 +320,28 @@ public class ActivityUtil {
         saveAnnualProjectBudgets(a, session);
         saveProjectCosts(a, session);
         saveStructures(a, session);
-        if (createNewVersion) {
-            if (a.getAmpActivityId() == null)
-                session.save(a);
-            else {
-               cleanObjectFromSession(session,AmpActivityVersion.class, a.getAmpActivityId());
-                session.saveOrUpdate(a);
-            }
-        } else {
-//            session.saveOrUpdate(a);
-            session.merge(a);
+
+        if (createNewVersion){
+            //a.setAmpActivityId(null); //hibernate will save as a new version
+            session.save(a);
         }
-//        session.flush();
+        else{
+            session.saveOrUpdate(a);
+            //session.update(a);
+        }
 
         updatePerformanceRules(oldA, a);
 
-        if (newActivity) {
+        if (newActivity){
             a.setAmpId(org.digijava.module.aim.util.ActivityUtil.generateAmpId(ampCurrentMember.getUser(), a.getAmpActivityId(), session));
-            session.merge(a);
+            session.update(a);
         }
 
         updateIndirectPrograms(a, session);
 
         logAudit(ampCurrentMember, a, newActivity);
-//        session.flush();
 
         return a;
-    }
-    private static <T> void cleanObjectFromSession(Session session, Class<T> objectClass, Long id)
-    {
-        T object = session.get(objectClass, id);
-        if (!isNull(object))
-        {
-            session.evict(object);
-        }
     }
 
     private static void updateMultiStakeholderField(AmpActivityVersion a) {
@@ -343,7 +357,7 @@ public class ActivityUtil {
     public static boolean detectDraftChange(AmpActivityVersion a, boolean draft) {
         return Boolean.TRUE.equals(a.getDraft()) != draft;
     }
-
+    
     public static <T extends AmpActivityFields> boolean isNewActivity(T a) {
         // it would be nicer to rely upon AMP ID, but some old activities may lack it
         return a.getAmpActivityId() == null;
@@ -356,7 +370,7 @@ public class ActivityUtil {
      * @param teamMember
      */
     public static void updateModifyCreateInfo(AmpActivityVersion activity, AmpTeamMember teamMember,
-                                              boolean newActivity) {
+            boolean newActivity) {
         Date updateDate = Calendar.getInstance().getTime();
 
         activity.setUpdatedDate(updateDate);
@@ -381,7 +395,7 @@ public class ActivityUtil {
         String additionalDetails = determineDetails(teamMember, activity, newActivity);
         TeamMember tm = teamMember.toTeamMember();
         if (!newActivity) {
-            AuditLoggerUtil.logActivityUpdate(tm, activity, Collections.singletonList(additionalDetails));
+            AuditLoggerUtil.logActivityUpdate(tm, activity, Arrays.asList(additionalDetails));
         } else {
             try {
                 AuditLoggerUtil.logObject(tm, activity, "add", additionalDetails);
@@ -413,8 +427,8 @@ public class ActivityUtil {
 
     public static boolean isApproved(AmpActivityVersion activity) {
         ApprovalStatus approvalStatus = activity.getApprovalStatus();
-        return ApprovalStatus.approved.equals(approvalStatus)
-                || ApprovalStatus.startedapproved.equals(approvalStatus);
+        return ApprovalStatus.APPROVED.equals(approvalStatus)
+                || ApprovalStatus.STARTED_APPROVED.equals(approvalStatus);
     }
 
     private static void updatePerformanceRules(AmpActivityVersion oldA, AmpActivityVersion a) {
@@ -488,11 +502,11 @@ public class ActivityUtil {
         }
     }
 
-    private static void setCreationTimeOnStructureImages(AmpActivityVersion activity) {
-        if (activity.getStructures() != null) {
-            for (AmpStructure str : activity.getStructures()) {
-                if (str.getImages() != null) {
-                    for (AmpStructureImg img : str.getImages()) {
+    private static void setCreationTimeOnStructureImages(AmpActivityVersion activity){
+        if (activity.getStructures() != null){
+            for(AmpStructure str :  activity.getStructures()){
+                if (str.getImages() != null){
+                    for(AmpStructureImg img : str.getImages()){
                         img.setStructure(str);
                         img.setCreationTime(System.currentTimeMillis());
                     }
@@ -502,11 +516,10 @@ public class ActivityUtil {
     }
 
     private static void setActivityStatus(AmpTeamMember ampCurrentMember, boolean savedAsDraft, AmpActivityFields a,
-                                          AmpActivityVersion oldA, boolean newActivity, boolean rejected) {
-        boolean teamLeadFlag = isApprover(ampCurrentMember);
-        logger.info("Teamlead? " + teamLeadFlag);
+            AmpActivityVersion oldA, boolean newActivity, boolean rejected) {
+        boolean teamLeadFlag =  isApprover(ampCurrentMember);
         Boolean crossTeamValidation = ampCurrentMember.getAmpTeam().getCrossteamvalidation();
-        boolean isSameWorkspace = ampCurrentMember.getAmpTeam().getAmpTeamId().equals(a.getTeam().getAmpTeamId());
+        Boolean isSameWorkspace = ampCurrentMember.getAmpTeam().getAmpTeamId().equals(a.getTeam().getAmpTeamId());
 
         // Check if validation is ON in GS and APP Settings
         String validation = getValidationSetting(ampCurrentMember);
@@ -514,23 +527,23 @@ public class ActivityUtil {
             if (teamLeadFlag) {
                 if (savedAsDraft) {
                     if (rejected) {
-                        a.setApprovalStatus(ApprovalStatus.rejected);
+                        a.setApprovalStatus(ApprovalStatus.REJECTED);
                     } else {
                         if (newActivity) {
-                            a.setApprovalStatus(ApprovalStatus.started);
+                            a.setApprovalStatus(ApprovalStatus.STARTED);
                         } else {
                             if (oldA.getApprovalStatus() != null
-                                    && ApprovalStatus.started.equals(oldA.getApprovalStatus()))
-                                a.setApprovalStatus(ApprovalStatus.started);
+                                    && ApprovalStatus.STARTED.equals(oldA.getApprovalStatus()))
+                                a.setApprovalStatus(ApprovalStatus.STARTED);
                             else
-                                a.setApprovalStatus(ApprovalStatus.edited);
+                                a.setApprovalStatus(ApprovalStatus.EDITED);
                         }
                     }
                 } else {
                     // If activity belongs to the same workspace where TL/AP is
                     // logged set it validated
                     if (isSameWorkspace) {
-                        a.setApprovalStatus(ApprovalStatus.approved);
+                        a.setApprovalStatus(ApprovalStatus.APPROVED);
                         a.setApprovedBy(ampCurrentMember);
                         a.setApprovalDate(Calendar.getInstance().getTime());
                     } else {
@@ -540,14 +553,14 @@ public class ActivityUtil {
                          * set it validated
                          */
                         if (crossTeamValidation) {
-                            a.setApprovalStatus(ApprovalStatus.approved);
+                            a.setApprovalStatus(ApprovalStatus.APPROVED);
                             a.setApprovedBy(ampCurrentMember);
                             a.setApprovalDate(Calendar.getInstance().getTime());
                         } else {
-                            if (ApprovalStatus.started.equals(oldA.getApprovalStatus())) {
-                                a.setApprovalStatus(ApprovalStatus.started);
+                            if (ApprovalStatus.STARTED.equals(oldA.getApprovalStatus())) {
+                                a.setApprovalStatus(ApprovalStatus.STARTED);
                             } else {
-                                a.setApprovalStatus(ApprovalStatus.edited);
+                                a.setApprovalStatus(ApprovalStatus.EDITED);
                             }
                         }
                     }
@@ -556,28 +569,28 @@ public class ActivityUtil {
                 if (Constants.PROJECT_VALIDATION_FOR_NEW_ONLY.equals(validation)) {
                     if (newActivity) {
                         // all the new activities will have the started status
-                        a.setApprovalStatus(ApprovalStatus.started);
+                        a.setApprovalStatus(ApprovalStatus.STARTED);
                     } else {
                         // if we edit an existing not validated status it will
                         // keep the old status - started
                         if (oldA.getApprovalStatus() != null
-                                && ApprovalStatus.started.equals(oldA.getApprovalStatus()))
-                            a.setApprovalStatus(ApprovalStatus.started);
-                            // if we edit an existing activity that is validated or
-                            // startedvalidated or edited
+                                && ApprovalStatus.STARTED.equals(oldA.getApprovalStatus()))
+                            a.setApprovalStatus(ApprovalStatus.STARTED);
+                        // if we edit an existing activity that is validated or
+                        // startedvalidated or edited
                         else
-                            a.setApprovalStatus(ApprovalStatus.approved);
+                            a.setApprovalStatus(ApprovalStatus.APPROVED);
                     }
                 } else {
                     if (Constants.PROJECT_VALIDATION_FOR_ALL_EDITS.equals(validation)) {
                         if (newActivity) {
-                            a.setApprovalStatus(ApprovalStatus.started);
+                            a.setApprovalStatus(ApprovalStatus.STARTED);
                         } else {
                             if (oldA.getApprovalStatus() != null
-                                    && ApprovalStatus.started.equals(oldA.getApprovalStatus()))
-                                a.setApprovalStatus(ApprovalStatus.started);
+                                    && ApprovalStatus.STARTED.equals(oldA.getApprovalStatus()))
+                                a.setApprovalStatus(ApprovalStatus.STARTED);
                             else
-                                a.setApprovalStatus(ApprovalStatus.edited);
+                                a.setApprovalStatus(ApprovalStatus.EDITED);
                         }
                     }
                 }
@@ -587,9 +600,9 @@ public class ActivityUtil {
         } else {
             // Validation is OF in GS activity approved
             if (newActivity) {
-                a.setApprovalStatus(ApprovalStatus.startedapproved);
+                a.setApprovalStatus(ApprovalStatus.STARTED_APPROVED);
             } else {
-                a.setApprovalStatus(ApprovalStatus.approved);
+                a.setApprovalStatus(ApprovalStatus.APPROVED);
             }
             a.setApprovedBy(ampCurrentMember);
             a.setApprovalDate(Calendar.getInstance().getTime());
@@ -599,9 +612,8 @@ public class ActivityUtil {
     /**
      * Verifies if the team member can approve an activity from the specified team
      * See {@link #setActivityStatus(AmpTeamMember, boolean, AmpActivityFields, AmpActivityVersion, boolean, boolean)}
-     *
-     * @param atm               the team member to check
-     * @param activityTeamId    the team id that activity belongs to that the TM can have the approval right
+     * @param atm the team member to check
+     * @param activityTeamId the team id that activity belongs to that the TM can have the approval right
      * @param oldApprovalStatus the old approval status
      * @return true if the user is allowed to approve the activity
      */
@@ -612,20 +624,20 @@ public class ActivityUtil {
                 boolean isSameWorkspace = atm.getAmpTeam().getAmpTeamId().equals(activityTeamId);
                 return isSameWorkspace || atm.getAmpTeam().getCrossteamvalidation();
             } else if (Constants.PROJECT_VALIDATION_FOR_NEW_ONLY.equals(validation)) {
-                return oldApprovalStatus != null && !oldApprovalStatus.equals(ApprovalStatus.started);
+                return oldApprovalStatus != null && !oldApprovalStatus.equals(ApprovalStatus.STARTED);
             }
         } else {
             return true;
         }
         return false;
     }
-
+    
     /**
-     * An activity can be rejected only if:
-     * 1. the activity is not new
-     * 2. the activity is not draft
-     * 3. the validation settings is set to on
-     * 4. the user is approver of the workspace or is the teamlead of the ws
+     *  An activity can be rejected only if:
+     *  1. the activity is not new
+     *  2. the activity is not draft
+     *  3. the validation settings is set to on
+     *  4. the user is approver of the workspace or is the teamlead of the ws
      *
      * @param atm
      * @param isDraft
@@ -636,7 +648,7 @@ public class ActivityUtil {
         return BooleanUtils.isFalse(isNewActivity) && BooleanUtils.isFalse(isDraft)
                 && isProjectValidationOn(getValidationSetting(atm)) && isApprover(atm);
     }
-
+    
     /**
      * Detect if the teammember is approver of the workspace or is the teamlead of the ws
      *
@@ -649,15 +661,15 @@ public class ActivityUtil {
     }
 
     public static boolean canApproveWith(ApprovalStatus approvalStatus, AmpTeamMember atm, boolean isNewActivity,
-                                         Boolean isDraft) {
+            Boolean isDraft) {
         if (atm == null) {
             return false;
         }
         String validation = getValidationSetting(atm);
         if (isProjectValidationOn(validation)) {
-            return Boolean.FALSE.equals(isDraft) && ApprovalStatus.approved.equals(approvalStatus);
+            return Boolean.FALSE.equals(isDraft) && ApprovalStatus.APPROVED.equals(approvalStatus);
         }
-        ApprovalStatus allowed = isNewActivity ? ApprovalStatus.startedapproved : ApprovalStatus.approved;
+        ApprovalStatus allowed = isNewActivity ? ApprovalStatus.STARTED_APPROVED : ApprovalStatus.APPROVED;
         return allowed.equals(approvalStatus);
     }
 
@@ -670,7 +682,6 @@ public class ActivityUtil {
     }
 
     private static boolean isProjectValidationOn(String validation) {
-        logger.info("Validation: " + validation);
         return !Constants.PROJECT_VALIDATION_OFF.equalsIgnoreCase(validation);
     }
 
@@ -686,17 +697,16 @@ public class ActivityUtil {
 
     /**
      * Method used to load the last version of an object
-     *
      * @param am
      * @param id
      * @return activity loaded
      */
     public static AmpActivityVersion load(AmpActivityModel am, Long id) {
-        if (id == null) {
+        if (id == null){
             return new AmpActivityVersion();
         }
 
-        Session session = AmpActivityModel.getHibernateSession();//am.getSession();
+        Session session = am.getHibernateSession();//am.getSession();
 
 
         //am.setTransaction(session.beginTransaction());
@@ -708,7 +718,7 @@ public class ActivityUtil {
 
         //check the activity group for the last version of an activity
         AmpActivityGroup group = act.getAmpActivityGroup();
-        if (group == null) { //Activity created previous to the versioning system?
+        if (group == null){ //Activity created previous to the versioning system?
             //we need to create a group for this activity
             group = new AmpActivityGroup();
             group.setAmpActivityLastVersion(act);
@@ -730,6 +740,7 @@ public class ActivityUtil {
             act.getIndicators().size();
 
 
+
         return act;
     }
 
@@ -741,32 +752,46 @@ public class ActivityUtil {
             return;
         }
 
-        for (AmpComponent ampComponent : components) {
+        Iterator<AmpComponent> componentIterator = components.iterator();
+        while (componentIterator.hasNext()) {
+            AmpComponent ampComponent = componentIterator.next();
+
             if (Hibernate.isInitialized(ampComponent.getFundings())) {
                 if (ampComponent.getFundings() != null) {
+                    Iterator<AmpComponentFunding> ampComponentFundingsIterator = ampComponent.getFundings().iterator();
 
-                    ampComponent.getFundings().removeIf(acf -> acf.getTransactionAmount() == null);
+                    while (ampComponentFundingsIterator.hasNext()) {
+                        AmpComponentFunding acf = ampComponentFundingsIterator.next();
+
+                        if (acf.getTransactionAmount() == null) {
+                            ampComponentFundingsIterator.remove();
+                        }
+                    }
                 }
             }
         }
     }
 
     private static void saveComments(AmpActivityVersion a, Session session, boolean draft) {
-        AmpAuthWebSession s = (AmpAuthWebSession) org.apache.wicket.Session.get();
+        AmpAuthWebSession s =  (AmpAuthWebSession) org.apache.wicket.Session.get();
 
 
         HashSet<AmpComments> newComm = s.getMetaData(OnePagerConst.COMMENTS_ITEMS);
         HashSet<AmpComments> delComm = s.getMetaData(OnePagerConst.COMMENTS_DELETED_ITEMS);
 
-        if (delComm != null) {
-            for (AmpComments tComm : delComm) {
+        if (delComm != null){
+            Iterator<AmpComments> di = delComm.iterator();
+            while (di.hasNext()) {
+                AmpComments tComm = (AmpComments) di.next();
                 session.delete(tComm);
             }
         }
 
-        if (newComm != null) {
-            for (AmpComments tComm : newComm) {
-                if (ActivityVersionUtil.isVersioningEnabled() && !draft) {
+        if (newComm != null){
+            Iterator<AmpComments> ni = newComm.iterator();
+            while (ni.hasNext()) {
+                AmpComments tComm = (AmpComments) ni.next();
+                if (ActivityVersionUtil.isVersioningEnabled() && !draft){
                     try {
                         tComm = (AmpComments) tComm.prepareMerge(a);
                     } catch (CloneNotSupportedException e) {
@@ -775,7 +800,7 @@ public class ActivityUtil {
                 }
 
                 if (tComm.getMemberId() == null)
-                    tComm.setMemberId(((AmpAuthWebSession) org.apache.wicket.Session.get()).getAmpCurrentMember());
+                    tComm.setMemberId(((AmpAuthWebSession)org.apache.wicket.Session.get()).getAmpCurrentMember());
                 if (tComm.getAmpActivityId() == null)
                     tComm.setAmpActivityId(a);
                 session.saveOrUpdate(tComm);
@@ -784,7 +809,7 @@ public class ActivityUtil {
     }
 
     private static EditorStore getSessionEditorStore() {
-        AmpAuthWebSession s = (AmpAuthWebSession) org.apache.wicket.Session.get();
+        AmpAuthWebSession s =  (AmpAuthWebSession) org.apache.wicket.Session.get();
         return s.getMetaData(OnePagerConst.EDITOR_ITEMS);
     }
 
@@ -796,12 +821,14 @@ public class ActivityUtil {
         if (editors == null) {
             return;
         }
-        for (String key : editors.keySet()) {
+        Iterator<String> it = editors.keySet().iterator();
+        while (it.hasNext()) {
+            String key = (String) it.next();
             String oldKey = editorStore.getOldKey().get(key);
             Map<String, String> values = editors.get(key);
             Set<String> locales = values.keySet();
 
-            for (String locale : locales) {
+            for (String locale: locales){
                 String value = values.get(locale);
 
                 if (value == null || value.trim().length() == 0)
@@ -810,8 +837,10 @@ public class ActivityUtil {
                 try {
                     boolean editorFound = false;
                     List<Editor> edList = DbUtil.getEditorList(oldKey, site);
-                    for (Editor editor : edList) {
-                        if (editor.getLanguage().equals(locale)) {
+                    Iterator<Editor> it2 = edList.iterator();
+                    while (it2.hasNext()) {
+                        Editor editor = (Editor) it2.next();
+                        if (editor.getLanguage().equals(locale)){
                             //editor.setBody(value);
                             editorFound = true;
 
@@ -823,7 +852,7 @@ public class ActivityUtil {
                             toSaveEditor.setEditorKey(key);
                             session.save(toSaveEditor);
 
-                            if (!createNewVersion) {
+                            if (!createNewVersion){
                                 //we need to delete the old editor since this is not a new activity version
                                 session.delete(editor);
                             }
@@ -832,7 +861,7 @@ public class ActivityUtil {
                         }
                     }
 
-                    if (!editorFound) {
+                    if (!editorFound){
                         //add new editor
                         Editor editor = new Editor();
                         editor.setBody(value);
@@ -853,9 +882,8 @@ public class ActivityUtil {
 
     /**
      * Method to save/update agreements into hibernate session
-     *
-     * @param a              the AmpActivityVersion object
-     * @param session        the Hibernate Session
+     * @param a     the AmpActivityVersion object
+     * @param session   the Hibernate Session
      * @param isActivityForm the parameter used to decide the source of the agreements (wicket session, activity object)
      */
     private static void saveAgreements(AmpActivityVersion a, Session session, boolean isActivityForm) {
@@ -873,7 +901,6 @@ public class ActivityUtil {
 
     /**
      * Get the agreements from the Wicket session
-     *
      * @return Set<AmpAgreement>
      */
     private static Set<AmpAgreement> getAgreementsFromActivityForm() {
@@ -886,7 +913,6 @@ public class ActivityUtil {
     /**
      * get Agreements from the activity object.
      * Usually this method will process activities created/updated via Activity API endpoints
-     *
      * @param a the AmpActivityVersion object
      * @return Set<AmpAgreement>
      */
@@ -897,7 +923,7 @@ public class ActivityUtil {
         if (af != null && Hibernate.isInitialized(af)) {
             agreements = af.stream()
                     .filter(f -> f.getAgreement() != null && Hibernate.isInitialized(f.getAgreement()))
-                    .map(AmpFunding::getAgreement)
+                    .map(f -> f.getAgreement())
                     .collect(Collectors.toSet());
         }
 
@@ -908,7 +934,7 @@ public class ActivityUtil {
         AmpAuthWebSession s = (AmpAuthWebSession) org.apache.wicket.Session.get();
 
         if (a.getActivityDocuments() == null) {
-            a.setActivityDocuments(new HashSet<>());
+            a.setActivityDocuments(new HashSet<AmpActivityDocument>());
         }
 
         HashSet<TemporaryActivityDocument> newResources = s.getMetaData(OnePagerConst.RESOURCES_NEW_ITEMS);
@@ -996,7 +1022,7 @@ public class ActivityUtil {
                 } catch (JCRSessionException ex) {
                     // we catch the exception and show a warning, but allow the activity to be saved
                     logger.warn("The JCR Session couldn't be opened. " + "The document " + tdd.getName()
-                            + " will not be saved.", ex);
+                    + " will not be saved.", ex);
                 }
             }
         }
@@ -1004,12 +1030,10 @@ public class ActivityUtil {
 
     /**
      * For Document Manager compatibility purposes
-     *
      * @param file
      */
     private static FormFile generateFormFile(FileUpload file) {
-
-        return new FormFile() {
+        FormFile formFile = new FormFile() {
 
             @Override
             public void setFileSize(int arg0) {
@@ -1052,6 +1076,8 @@ public class ActivityUtil {
             public void destroy() {
             }
         };
+
+        return formFile;
     }
 
     /**
@@ -1079,7 +1105,7 @@ public class ActivityUtil {
      * @param existingTitles
      */
     private static void updateResourcesTitles(HashSet<TemporaryActivityDocument> newResources,
-                                              HashSet<AmpActivityDocument> deletedResources, HashSet<TemporaryActivityDocument> existingTitles) {
+            HashSet<AmpActivityDocument> deletedResources, HashSet<TemporaryActivityDocument> existingTitles) {
         if (existingTitles != null) {
             HttpServletRequest req = SessionUtil.getCurrentServletRequest();
 
@@ -1096,13 +1122,13 @@ public class ActivityUtil {
                     //In that scenario we act as if we were changing the document name
                     boolean onlyOneLanguageSaved = nw.getTitle() == null;
                     if (onlyOneLanguageSaved || !nw.getTitle().equals(d.getTitle())) {
-                        logger.warn("lang " + TLSUtils.getLangCode());
+                        logger.warn("lang "+TLSUtils.getLangCode());
                         if (onlyOneLanguageSaved) {
                             populateTranslatedTitles(d, nw);
                         }
 
                         if (d.getWebLink() != null && d.getWebLink().trim().length() > 0 &&
-                                (d.getFileName() == null || d.getFileName().trim().length() == 0)) {
+                                (d.getFileName() == null || d.getFileName().trim().length()==0)) {
                             d.setFileName(d.getWebLink());
                         }
 
@@ -1113,7 +1139,7 @@ public class ActivityUtil {
                             InputStream fileData = null;
                             try {
                                 if (nw.getNode().hasProperty(CrConstants.PROPERTY_DATA))
-                                    fileData = nw.getNode().getProperty(CrConstants.PROPERTY_DATA).getBinary().getStream();
+                                    fileData = nw.getNode().getProperty(CrConstants.PROPERTY_DATA).getStream();
                                 //                                  .getBinary().getStream();
                                 if (nw.getNode().hasProperty(CrConstants.PROPERTY_FILE_SIZE))
                                     fileSize = Bytes.bytes(nw.getNode().getProperty(CrConstants.PROPERTY_FILE_SIZE).getLong());
@@ -1165,14 +1191,14 @@ public class ActivityUtil {
 
         // insert new resources in the system
         insertGPINiResources(a, newResources);
-
     }
 
     /**
+     *
      * @param deletedResources
      */
     private static void deleteGPINiResources(AmpActivityVersion a, HashSet<AmpGPINiSurveyResponseDocument>
-            deletedResources) {
+    deletedResources) {
         if (deletedResources != null) {
             for (AmpGPINiSurveyResponseDocument tmpDoc : deletedResources) {
                 AmpGPINiSurveyResponse surveyResponse = tmpDoc.getSurveyResponse();
@@ -1181,8 +1207,8 @@ public class ActivityUtil {
                     if (tempOrgRole.getGpiNiSurvey() != null) {
                         for (AmpGPINiSurveyResponse tempGPINiSurveyResponse : tempOrgRole.getGpiNiSurvey()
                                 .getResponses()) {
-                            if (Objects.equals(tempGPINiSurveyResponse.getOldKey(), surveyResponse
-                                    .getAmpGPINiSurveyResponseId())) {
+                            if (tempGPINiSurveyResponse.getOldKey() == surveyResponse
+                                    .getAmpGPINiSurveyResponseId()) {
 
                                 Set<AmpGPINiSurveyResponseDocument> docsToBeRemoved = tempGPINiSurveyResponse
                                         .getSupportingDocuments().stream()
@@ -1243,7 +1269,7 @@ public class ActivityUtil {
                             for (AmpGPINiSurveyResponse tempGPINiSurveyResponse : tempOrgRole.getGpiNiSurvey()
                                     .getResponses()) {
                                 if (shouldResponseToBeUpdated(surveyResponse, tempGPINiSurveyResponse)
-                                ) {
+                                        ) {
                                     responseDocument.setSurveyResponse(tempGPINiSurveyResponse);
 
                                     if (tempGPINiSurveyResponse.getSupportingDocuments() == null) {
@@ -1262,7 +1288,7 @@ public class ActivityUtil {
                 } catch (JCRSessionException ex) {
                     // we catch the exception and show a warning, but allow the activity to be saved
                     logger.warn("The JCR Session couldn't be opened. " + "The document " + tdd.getName()
-                            + " will not be saved.", ex);
+                    + " will not be saved.", ex);
                 }
 
             }
@@ -1271,21 +1297,22 @@ public class ActivityUtil {
 
     private static boolean shouldResponseToBeUpdated(AmpGPINiSurveyResponse surveyResponse, AmpGPINiSurveyResponse
             tempGPINiSurveyResponse) {
-        return (Objects.equals(tempGPINiSurveyResponse.getAmpGPINiSurvey().getAmpOrgRole().getOrganisation().getAmpOrgId(), surveyResponse.getAmpGPINiSurvey().getAmpOrgRole().getOrganisation().getAmpOrgId())
+        return (tempGPINiSurveyResponse.getAmpGPINiSurvey().getAmpOrgRole().getOrganisation().getAmpOrgId()
+                == surveyResponse.getAmpGPINiSurvey().getAmpOrgRole().getOrganisation().getAmpOrgId()
                 && tempGPINiSurveyResponse.getAmpGPINiQuestion().getCode()
                 .equals(surveyResponse.getAmpGPINiQuestion().getCode()));
     }
 
     public static void saveContacts(AmpActivityVersion a, Session session, boolean checkForContactsRemoval,
-                                    AmpTeamMember teamMember) throws Exception {
-        Set<AmpActivityContact> activityContacts = a.getActivityContacts();
+            AmpTeamMember teamMember) throws Exception {
+        Set<AmpActivityContact> activityContacts=a.getActivityContacts();
         // if activity contains contact,which is not in contact list, we should remove it
         Long oldActivityId = a.getAmpActivityId();
-        if (oldActivityId != null) {
-            if (checkForContactsRemoval || !ActivityVersionUtil.isVersioningEnabled()) {
+        if(oldActivityId != null){
+            if(checkForContactsRemoval || !ActivityVersionUtil.isVersioningEnabled()){
                 //List<AmpActivityContact> activityDbContacts=ContactInfoUtil.getActivityContacts(oldActivityId);
-                List<Long> activityDbContactsIds = ContactInfoUtil.getActivityContactIds(oldActivityId);
-                if (activityDbContactsIds != null && activityDbContactsIds.size() > 0) {
+                List<Long> activityDbContactsIds=ContactInfoUtil.getActivityContactIds(oldActivityId);
+                if(activityDbContactsIds!=null && activityDbContactsIds.size()>0){
                     for (Long actContactId : activityDbContactsIds) {
                         int count = 0;
                         if (activityContacts != null) {
@@ -1310,7 +1337,7 @@ public class ActivityUtil {
 
         //to avoid saving the same contact twice on the same session, we keep track of the
         //already saved ones.
-        Map<Long, Boolean> savedContacts = new HashMap<Long, Boolean>();
+        Map <Long,Boolean> savedContacts = new HashMap <Long,Boolean> ();
         AmpTeamMember creator = teamMember;
         if (creator == null) {
             creator = TeamMemberUtil.getCurrentAmpTeamMember(TLSUtils.getRequest());
@@ -1343,61 +1370,31 @@ public class ActivityUtil {
     }
 
     private static void saveAnnualProjectBudgets(AmpActivityVersion a,
-                                                 Session session) {
+            Session session) throws Exception {
         if (a.getAmpActivityId() != null) {
-            for (AmpAnnualProjectBudget annualBudget : a.getAnnualProjectBudgets()) {
+            for (AmpAnnualProjectBudget annualBudget : a.getAnnualProjectBudgets()){
                 annualBudget.setActivity(a);
-                if (annualBudget.getAmpAnnualProjectBudgetId() == null) {
-                    session.saveOrUpdate(annualBudget);
-                } else {
-                    session.merge(annualBudget);
-                }
+                session.saveOrUpdate(annualBudget);
             }
         }
     }
 
-    private static void saveStructures(AmpActivityVersion a, Session session) {
+    private static void saveStructures(AmpActivityVersion a, Session session) throws Exception {
         if (a.getAmpActivityId() != null) {
             for (AmpStructure structure : a.getStructures()) {
                 structure.setActivity(a);
-                if (structure.getAmpStructureId() == null) {
-                    session.saveOrUpdate(structure);
-                } else {
-                    session.merge(structure);
-                }
+                session.saveOrUpdate(structure);
             }
         }
     }
 
-    private static void saveProjectCosts(AmpActivityVersion a, Session session) {
+    private static void saveProjectCosts(AmpActivityVersion a, Session session) throws Exception {
         if (a.getCostAmounts() != null) {
             for (AmpFundingAmount afa : a.getCostAmounts()) {
-                if (afa.getAmpFundingAmountId() == null) {
-                    String hql = "FROM "+ AmpFundingAmount.class.getName()+ " e WHERE e.activity= :activityValue";
-                    List<AmpFundingAmount> results = session.createQuery(hql, AmpFundingAmount.class)
-                            .setParameter("activityValue", afa.getActivity())
-                            .list();
-                    if (results!=null && !results.isEmpty()) {
-                        results.forEach(fundingAmount -> {
-                            if (fundingAmount.getFunType().equals(afa.getFunType())) {
-
-                                fundingAmount.setActivity(null);
-                                Query qry = session.createQuery("update " + AmpFundingAmount.class.getName() + " a set a.activity= :activityValue where a.ampFundingAmountId= :fundingAmountId");
-                                qry.setParameter("activityValue", null).setParameter("fundingAmountId",fundingAmount.getAmpFundingAmountId(), LongType.INSTANCE).executeUpdate();
-                            }
-
-                        });
-                    }
-
-                    afa.setActivity(a);
-                    session.saveOrUpdate(afa);
-                } else {
-                    cleanObjectFromSession(session, AmpFundingAmount.class,afa.getAmpFundingAmountId());
-                    session.update(afa);
-                }
+                afa.setActivity(a);
+                session.saveOrUpdate(afa);
             }
         }
-
 
     }
 
@@ -1416,13 +1413,43 @@ public class ActivityUtil {
         for (AmpFunding ampFunding : fundings) {
             if (ampFunding.getAmpDonorOrgId().getAmpOrgId().equals(org.getAmpOrgId())
                     && ((ampFunding.getSourceRole() == null && role.getRoleCode().equals(Constants.FUNDING_AGENCY))
-                    || (ampFunding.getSourceRole() != null
-                    && ampFunding.getSourceRole().getRoleCode().equals(role.getRoleCode())))) {
+                            || (ampFunding.getSourceRole() != null
+                            && ampFunding.getSourceRole().getRoleCode().equals(role.getRoleCode())))) {
 
                 return true;
             }
         }
 
+
+        return false;
+    }
+
+    public static boolean hasSectorIndicatorsInActivity(AmpActivityVersion activity, AmpActivitySector sector) {
+        Set<IndicatorActivity> indicators = activity.getIndicators();
+        for (IndicatorActivity indicator : indicators) {
+            AmpIndicator ind = (AmpIndicator) PersistenceManager.getSession()
+                    .get(AmpIndicator.class, indicator.getIndicator().getIndicatorId());
+            List<Long> sectorIds = ind.getSectors().stream()
+                    .map(AmpSector::getAmpSectorId)
+                    .collect(Collectors.toList());
+            if (sectorIds.contains(sector.getSectorId().getAmpSectorId())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static boolean hasProgramIndicatorsInActivity(AmpActivityVersion activity, AmpActivityProgram program) {
+        Set<IndicatorActivity> indicators = activity.getIndicators();
+        for (IndicatorActivity indicator : indicators) {
+            AmpIndicator ind = (AmpIndicator) PersistenceManager.getSession()
+                    .get(AmpIndicator.class, indicator.getIndicator().getIndicatorId());
+            Long programId = ind.getProgram().getAmpThemeId();
+            if (programId.equals(program.getProgram().getAmpThemeId())) {
+                return true;
+            }
+        }
 
         return false;
     }
@@ -1439,7 +1466,7 @@ public class ActivityUtil {
         Set<AmpComponentFunding> componentFundings = activity.getComponents().stream()
                 .flatMap(c -> c.getFundings().stream())
                 .filter(c -> c.getReportingOrganization() != null
-                        || c.getComponentSecondResponsibleOrganization() != null)
+                || c.getComponentSecondResponsibleOrganization() != null)
                 .collect(Collectors.toSet());
 
         for (AmpComponentFunding acf : componentFundings) {
@@ -1457,7 +1484,6 @@ public class ActivityUtil {
 
     /**
      * Get the range list of fiscal years (FY field from budget extras component, identification section in AF)
-     *
      * @return
      */
     public static List<String> getFiscalYearsRange() {
@@ -1466,9 +1492,11 @@ public class ActivityUtil {
         int rangeNumber = FeaturesUtil
                 .getGlobalSettingValueInteger(GlobalSettingsConstants.NUMBER_OF_YEARS_IN_RANGE);
 
-        return Stream.iterate(rangeStartYear, i -> i + 1)
-                .limit(rangeNumber).map(Object::toString)
+        List<String> years = Stream.iterate(rangeStartYear, i -> i + 1)
+                .limit(rangeNumber).map(i -> i.toString())
                 .collect(Collectors.toList());
+
+        return years;
     }
 
     public static boolean isFiscalYearInRange(int year) {
@@ -1486,7 +1514,7 @@ public class ActivityUtil {
      * @param item
      */
     public static Long calculateFundingDetailCheckSum(FundingInformationItem item) {
-        long checkSum = 0L;
+        Long checkSum = 0L;
         checkSum += checkSum + (item.getTransactionAmount() != null ? item.getTransactionAmount().hashCode() : 0L);
         checkSum += checkSum
                 + (item.getAbsoluteTransactionAmount() != null ? item.getAbsoluteTransactionAmount().hashCode() : 0L);

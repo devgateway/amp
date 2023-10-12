@@ -31,7 +31,15 @@ function setupFileUpload(componentId, componentUrl, componentParamName){
                     $('#uploadLabel').text("${uploadNoFileLabel}");
                     $(this).find('[role=fileUploadedMsg]').html('');
                     $(this).find('[role=fileUploadedMsg]').hide();
-                } else {
+                }  else if (data.title === '') {
+                    alert("Document Title must be present.");
+                    $('#uploadLabel').text("${uploadNoFileLabel}");
+                    $(this).find('[role=fileUploadedMsg]').html('');
+                    $(this).find('[role=fileUploadedMsg]').hide();
+                }
+
+
+                    else {
 		            	$(this).find('[role=fileUploadedMsg]').show();
 		                $(this).find('[role=fileUploadedMsg]').html(" \"" + "${uploadStartedMsg}" + data.files[0].size + "\" bytes");            	
 		                data.submit();

@@ -75,7 +75,6 @@ public class ReportColumnValidator implements ReportValidator {
             return REPORT_FIELD_REQUIRED.withDetails(COLUMNS);
         }
 
-        //return REPORT_INVALID_COLUMNS.withDetails(invalidIds);
         return REPORT_INVALID_COLUMNS.withDetails(invalidColumnsNames);
     }
 

@@ -74,7 +74,6 @@ public class AmpComponentFunding implements Cloneable, Serializable {
             interValidators = @InterchangeableValidator(RequiredValidator.class))
     private Date transactionDate;
 
-    // @Interchangeable(fieldTitle="Reporting Date")
     private Date reportingDate;
 
     @Interchangeable(fieldTitle = COMPONENT_FUNDING_AMOUNT, importable = true,
@@ -87,7 +86,6 @@ public class AmpComponentFunding implements Cloneable, Serializable {
             dependencies = {ComponentFundingOrgRoleValidator.ORGANIZATION_PRESENT_KEY})
     private AmpOrganisation reportingOrganization;
 
-    //@Interchangeable(fieldTitle = COMPONENT_SECOND_REPORTING_ORGANIZATION, importable = true, pickIdOnly = true)
     private AmpOrganisation componentSecondResponsibleOrganization;
 
     @Interchangeable(fieldTitle = COMPONENT_FUNDING_CURRENCY, importable = true, pickIdOnly = true,

@@ -321,18 +321,23 @@ public class ActivityUtil {
         updateIndirectPrograms(a, session);
 
         logAudit(ampCurrentMember, a, newActivity);
-        updateComponents(a);
-//        session.flush();
+        updateComponents(a,session);
+        session.flush();
+        session.getTransaction().commit();
+//        session.refresh(a);
         // TODO: 9/12/23 check if project is already existing
+        Query<AmpComponent> query = session.createQuery("FROM "+AmpComponent.class.getName()+" ac  WHERE ac.activity=:activity AND ac.activity IS NOT NULL", AmpComponent.class).setCacheable(true);
+        query.setParameter("activity", a.getAmpActivityId(), LongType.INSTANCE);
+//        a.setComponents(new HashSet<>(query.list()));
         if (getSettingValue(getGlobalSettingsBySection("trubudget"),"isEnabled").equalsIgnoreCase("true")&&TeamUtil.getCurrentUser().getTruBudgetEnabled()) {
             TruBudgetActivity truBudgetActivity = ProjectUtil.isActivityAlreadyInTrubudget(a.getAmpActivityId());
             if (truBudgetActivity==null) {
-                ProjectUtil.createProject(a);
+                ProjectUtil.createProject(a,query.list());
             }
             else
             {
                 //update project
-                ProjectUtil.updateProject(truBudgetActivity.getTruBudgetId(),a);
+                ProjectUtil.updateProject(truBudgetActivity.getTruBudgetId(),a,query.list());
 //                session.flush();
             }
         }
@@ -341,14 +346,15 @@ public class ActivityUtil {
         return a;
     }
 
-    private static  void updateComponents(AmpActivityVersion ampActivityVersion)
+    private static  void updateComponents(AmpActivityVersion ampActivityVersion, Session session)
     {
-        Session session = PersistenceManager.getRequestDBSession();
+//        Session session = PersistenceManager.getRequestDBSession();
         Query<AmpComponent> query = session.createQuery("FROM "+AmpComponent.class.getName()+" ac  WHERE ac.activity=:activity AND ac.activity IS NOT NULL", AmpComponent.class);
         query.setParameter("activity", ampActivityVersion.getAmpActivityId(), LongType.INSTANCE);
         //            z.setActivity(null);//we can also delete this component permanently
         query.stream().filter(x->!ampActivityVersion.getComponents().stream().map(AmpComponent::getAmpComponentId).collect(Collectors.toList()).contains(x.getAmpComponentId())).forEach(session::delete);
 //        session.flush();
+
 
 
     }

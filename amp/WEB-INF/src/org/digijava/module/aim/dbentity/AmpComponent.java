@@ -71,16 +71,8 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
     })
     private Set<AmpComponentFunding> fundings = new HashSet<>();
 
-    private String ampComponentTruBudgetSubProjectId;
 
 
-    public String getAmpComponentTruBudgetSubProjectId() {
-        return ampComponentTruBudgetSubProjectId;
-    }
-
-    public void setAmpComponentTruBudgetSubProjectId(String ampComponentTruBudgetSubProjectId) {
-        this.ampComponentTruBudgetSubProjectId = ampComponentTruBudgetSubProjectId;
-    }
 
     public static class AmpComponentComparator implements Comparator<AmpComponent>{
         @Override

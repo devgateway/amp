@@ -9,6 +9,7 @@ import org.digijava.kernel.entity.trubudget.SubIntents;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.trubudget.dbentity.AmpComponentFundingTruWF;
+import org.digijava.module.trubudget.dbentity.AmpComponentTruSubProject;
 import org.digijava.module.trubudget.dbentity.TruBudgetActivity;
 import org.digijava.module.trubudget.model.project.*;
 import org.digijava.module.trubudget.model.subproject.CreateWorkFlowItemModel;
@@ -44,7 +45,7 @@ import static org.digijava.module.um.util.DbUtil.*;
 public class ProjectUtil {
     private static final Logger logger = LoggerFactory.getLogger(ProjectUtil.class);
 
-    public static void createProject(AmpActivityVersion ampActivityVersion) throws URISyntaxException {
+    public static void createProject(AmpActivityVersion ampActivityVersion, List<AmpComponent> ampComponents) throws URISyntaxException {
         List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
 
         AbstractCache myCache = new EhCacheWrapper("trubudget");
@@ -129,7 +130,7 @@ public class ProjectUtil {
                 }
         );
 
-        createUpdateSubProjects(ampActivityVersion, project.getId(),settings);
+        createUpdateSubProjects(ampComponents, project.getId(),settings);
         TruBudgetActivity truBudgetActivity = new TruBudgetActivity();
         truBudgetActivity.setAmpActivityId(ampActivityVersion.getAmpActivityId());
         truBudgetActivity.setTruBudgetId(project.getId());
@@ -149,7 +150,7 @@ public class ProjectUtil {
 
 
 
-    public static void updateProject(String projectId, AmpActivityVersion ampActivityVersion) throws URISyntaxException {
+    public static void updateProject(String projectId, AmpActivityVersion ampActivityVersion, List<AmpComponent> ampComponents) throws URISyntaxException {
 
         AbstractCache myCache = new EhCacheWrapper("trubudget");
         String token = (String) myCache.get("truBudgetToken");
@@ -195,7 +196,7 @@ public class ProjectUtil {
                 }
             }
         }
-        createUpdateSubProjects(ampActivityVersion, projectId,settings);
+        createUpdateSubProjects(ampComponents, projectId,settings);
 
     }
 
@@ -210,15 +211,17 @@ public class ProjectUtil {
                     .subscribe(res -> logger.info("WF close response: "+res));
 
     }
-    public static void createUpdateSubProjects(AmpActivityVersion ampActivityVersion, String projectId, List<AmpGlobalSettings> settings) throws URISyntaxException {
+    public static void createUpdateSubProjects(List<AmpComponent> components, String projectId, List<AmpGlobalSettings> settings) throws URISyntaxException {
 
         AbstractCache myCache = new EhCacheWrapper("trubudget");
         String token = (String) myCache.get("truBudgetToken");
         String user = (String) myCache.get("truBudgetUser");
         logger.info("Trubudget Cached Token:" + token);
-        for (AmpComponent ampComponent: ampActivityVersion.getComponents())
+        for (AmpComponent ampComponent:components)
         {
-            if (ampComponent.getAmpComponentTruBudgetSubProjectId()==null) {//create subproject
+            AmpComponentTruSubProject ampComponentTruSubProject = PersistenceManager.getRequestDBSession().createQuery("FROM " + AmpComponentTruSubProject.class.getName() + " act WHERE act.ampComponentId= " + ampComponent.getAmpComponentId() + " AND act.ampComponentId IS NOT NULL", AmpComponentTruSubProject.class).stream().findAny().orElse(null);
+
+            if (ampComponentTruSubProject==null) {//create subproject
                 CreateSubProjectModel createSubProjectModel = new CreateSubProjectModel();
                 CreateSubProjectModel.Data data = new CreateSubProjectModel.Data();
                 CreateSubProjectModel.Subproject subproject = new CreateSubProjectModel.Subproject();
@@ -278,14 +281,19 @@ public class ProjectUtil {
                     e.printStackTrace();
                 }
 
-                ampComponent.setAmpComponentTruBudgetSubProjectId(subproject.getId());
+//                ampComponent.setAmpComponentTruBudgetSubProjectId(subproject.getId());
+                Session session = PersistenceManager.getRequestDBSession();
+                ampComponentTruSubProject = new AmpComponentTruSubProject();
+                ampComponentTruSubProject.setAmpComponentId(ampComponent.getAmpComponentId());
+                ampComponentTruSubProject.setTruSubProjectId(subproject.getId());
+                session.save(ampComponentTruSubProject);
                 createUpdateWorkflowItems(projectId, subproject.getId(),ampComponent, settings);
             }
             else {//update subProject
                 EditSubProjectModel editSubProjectModel = new EditSubProjectModel();
                 EditSubProjectModel.Data data = new EditSubProjectModel.Data();
                 data.setProjectId(projectId);
-                data.setSubprojectId(ampComponent.getAmpComponentTruBudgetSubProjectId());
+                data.setSubprojectId(ampComponentTruSubProject.getTruSubProjectId());
                 data.setDescription(ampComponent.getDescription());
                 data.setDisplayName(ampComponent.getTitle());
 
@@ -301,7 +309,7 @@ public class ProjectUtil {
                             EditSubProjectedBudgetModel editSubProjectedBudgetModel = new EditSubProjectedBudgetModel();
                             EditSubProjectedBudgetModel.Data data1 = new EditSubProjectedBudgetModel.Data();
                             data1.setProjectId(projectId);
-                            data1.setSubprojectId(ampComponent.getAmpComponentTruBudgetSubProjectId());
+                            data1.setSubprojectId(ampComponentTruSubProject.getTruSubProjectId());
                             data1.setCurrencyCode(componentFunding.getCurrency().getCurrencyCode());
                             data1.setValue(BigDecimal.valueOf(componentFunding.getTransactionAmount()).toPlainString());
                             data1.setOrganization(componentFunding.getReportingOrganization() != null ? componentFunding.getReportingOrganization().getName() : "Funding Org");
@@ -313,7 +321,7 @@ public class ProjectUtil {
                         }
                     }
                 }
-                createUpdateWorkflowItems(projectId, ampComponent.getAmpComponentTruBudgetSubProjectId(),ampComponent, settings);
+                createUpdateWorkflowItems(projectId, ampComponentTruSubProject.getTruSubProjectId(),ampComponent, settings);
 
             }
         }

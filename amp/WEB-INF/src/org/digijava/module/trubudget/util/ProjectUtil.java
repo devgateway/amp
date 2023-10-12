@@ -359,7 +359,6 @@ public class ProjectUtil {
                                     data.setDocuments(docs);
                                     newResources.clear();
                                 }
-//                            data.setStatus((Objects.equals(componentFunding.getComponentFundingStatusFormatted(), "closed") || Objects.equals(componentFunding.getComponentFundingStatusFormatted(), "rejected"))?"closed":"open");
                                 data.setDescription(componentFunding.getDescription());
                                 data.setDisplayName(componentFunding.getComponent().getTitle());
                                 data.setAmount(BigDecimal.valueOf(componentFunding.getTransactionAmount()).toPlainString());

@@ -228,6 +228,7 @@ public class ProjectUtil {
                 subproject.setId(UUID.randomUUID().toString().replaceAll("-", ""));
                 subproject.setDisplayName(ampComponent.getTitle());
                 subproject.setCurrency("USD");
+                subproject.setCurrency(getSettingValue(settings, "defaultSubProjectCurrency")!=null?getSettingValue(settings, "defaultSubProjectCurrency"):"USD");
                 if (ampComponent.getFundings()!=null) {
                     if (!ampComponent.getFundings().isEmpty()) {
                         for (AmpComponentFunding componentFunding : ampComponent.getFundings()) {

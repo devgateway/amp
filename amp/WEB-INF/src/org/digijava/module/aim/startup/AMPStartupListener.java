@@ -323,6 +323,7 @@ public class AMPStartupListener extends HttpServlet implements
                         "                         (nextval('amp_global_settings_seq'),'rootUser','root','','Trubudget username for root user','trubudget',NULL,true),\n" +
                         "                        (nextval('amp_global_settings_seq'),'rootPassword','root-secret','','Trubudget password for root user','trubudget',NULL,true),\n" +
                         "                        (nextval('amp_global_settings_seq'),'apiVersion','1.0','','Trubudget api version','trubudget',NULL,true),\n" +
+                        "                        (nextval('amp_global_settings_seq'),'defaultSubProjectCurrency','USD','','Trubudget default sub project currency','trubudget',NULL,true),\n" +
                         "                        (nextval('amp_global_settings_seq'),'workFlowItemDueDays','10','t_Integer','Number of days for a workflow item to be due.','trubudget',NULL,true),\n" +
                         "                        (nextval('amp_global_settings_seq'),'organization','KfW','','Organization name to be used for this deployment','trubudget',NULL,true) ON CONFLICT (settingsname,section) DO NOTHING";
                 statement.executeUpdate(insertIntoGlobalSettings);

@@ -224,7 +224,6 @@ public class CreateWorkFlowItemModel {
         public String toString() {
             return "Document{" +
                     "id='" + id + '\'' +
-                    ", base64='" + base64 + '\'' +
                     ", fileName='" + fileName + '\'' +
                     '}';
         }

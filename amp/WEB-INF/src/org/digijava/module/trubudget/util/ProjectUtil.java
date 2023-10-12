@@ -64,7 +64,6 @@ public class ProjectUtil {
         project.setDescription(ampActivityVersion.getDescription());
         project.setStatus("open");// TODO: 9/11/23 set correct status
         project.setTags(Arrays.stream((ampActivityVersion.getName() + " " + ampActivityVersion.getDescription()).split(" ")).filter(x -> x.length() <= 15).collect(Collectors.toList()));
-        List<Map<String, Object>> fundingDetails = new ArrayList<>();
         for (AmpFunding ampFunding : ampActivityVersion.getFunding()) {
             if (ampFunding.getFundingDetails()!=null) {
 
@@ -75,8 +74,6 @@ public class ProjectUtil {
                     Double amount = ampFundingDetail.getTransactionAmount();
                     String currency = ampFundingDetail.getAmpCurrencyId().getCurrencyCode();
                     String organization = ampFundingDetail.getAmpFundingId().getAmpDonorOrgId().getName();
-                    String assistanceType = ampFundingDetail.getAmpFundingId().getTypeOfAssistance().getValue();
-                    String fundingStatus = ampFundingDetail.getAmpFundingId().getFundingStatus().getValue();
                     CreateProjectModel.ProjectedBudget projectedBudget = new CreateProjectModel.ProjectedBudget();
                     if (Objects.equals(adjustmentType, "Actual") && transactionType == 0)//project budget is created using "actual commitment"
                     {
@@ -86,19 +83,7 @@ public class ProjectUtil {
                         project.getProjectedBudgets().add(projectedBudget);
                     }
 
-                    Map<String, Object> detail = new HashMap<>();
-                    detail.put("organization", organization);
-                    detail.put("adjustmentType", adjustmentType);
-                    detail.put("assistanceType", assistanceType);
-                    detail.put("fundingStatus", fundingStatus);
-                    detail.put("projectedBudget", projectedBudget);
-                    fundingDetails.add(detail);
 
-                    Map<String, Object> additionalData = project.getAdditionalData();
-                    if (additionalData.containsKey("fundingDetails")) {
-                        // TODO: 9/11/23 getdetails list and add to it
-                        additionalData.get("fundingDetails");
-                    }
                 }
             }
         }

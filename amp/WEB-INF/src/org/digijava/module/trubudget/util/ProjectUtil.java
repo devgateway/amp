@@ -227,6 +227,7 @@ public class ProjectUtil {
                 CreateSubProjectModel.Subproject subproject = new CreateSubProjectModel.Subproject();
                 subproject.setId(UUID.randomUUID().toString().replaceAll("-", ""));
                 subproject.setDisplayName(ampComponent.getTitle());
+                subproject.setCurrency("USD");
                 if (ampComponent.getFundings()!=null) {
                     if (!ampComponent.getFundings().isEmpty()) {
                         for (AmpComponentFunding componentFunding : ampComponent.getFundings()) {

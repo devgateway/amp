@@ -330,7 +330,8 @@ public class ActivityUtil {
         query.setParameter("activity", a.getAmpActivityId(), LongType.INSTANCE);
 //        a.setComponents(new HashSet<>(query.list()));
         if (getSettingValue(getGlobalSettingsBySection("trubudget"),"isEnabled").equalsIgnoreCase("true")&&TeamUtil.getCurrentUser().getTruBudgetEnabled()) {
-            TruBudgetActivity truBudgetActivity = ProjectUtil.isActivityAlreadyInTrubudget(a.getAmpActivityId());
+            TruBudgetActivity truBudgetActivity = ProjectUtil.activityAlreadyInTrubudget(a.getAmpActivityId());
+            logger.info("TrubudgetActivity found "+truBudgetActivity);
             if (truBudgetActivity==null) {
                 ProjectUtil.createProject(a,query.list());
             }

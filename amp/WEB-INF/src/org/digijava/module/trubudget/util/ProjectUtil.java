@@ -126,7 +126,7 @@ public class ProjectUtil {
 
     }
 
-    public static TruBudgetActivity isActivityAlreadyInTrubudget(Long activityId) {
+    public static TruBudgetActivity activityAlreadyInTrubudget(Long activityId) {
         Session session = PersistenceManager.getRequestDBSession();
         Query<TruBudgetActivity> query = session.createQuery("FROM " + TruBudgetActivity.class.getName() + " ta WHERE ta.ampActivityId=:ampActivityId", TruBudgetActivity.class);
         query.setParameter("ampActivityId", activityId, LongType.INSTANCE);

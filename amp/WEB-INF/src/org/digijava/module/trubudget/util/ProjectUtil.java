@@ -482,7 +482,7 @@ public class ProjectUtil {
 
     }
     public static void closeWorkFlowItem(AmpComponentFunding ampComponentFunding, List<AmpGlobalSettings> settings, String projectId, String subProjectId, String workFlowItemId, String rejectReason, String token) throws URISyntaxException {
-        if (Objects.equals(ampComponentFunding.getComponentFundingStatusFormatted(), "closed") || Objects.equals(ampComponentFunding.getComponentFundingStatusFormatted(), "closed")){
+        if (Objects.equals(ampComponentFunding.getComponentFundingStatusFormatted(), "closed") || Objects.equals(ampComponentFunding.getComponentFundingStatusFormatted(), "rejected")){
             //workflow close
             CloseWFItemModel closeWFItemModel = new CloseWFItemModel();
             closeWFItemModel.setApiVersion(getSettingValue(settings, "apiVersion"));
@@ -490,7 +490,7 @@ public class ProjectUtil {
             data.setProjectId(projectId);
             data.setSubprojectId(subProjectId);
             data.setWorkflowitemId(workFlowItemId);
-            data.setRejectReason(rejectReason);
+            data.setRejectReason(Objects.equals(ampComponentFunding.getComponentFundingStatusFormatted(), "closed") ?rejectReason:"");
             closeWFItemModel.setData(data);
 
             GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/workflowitem.close", closeWFItemModel, CloseWFItemModel.class, String.class, token)

@@ -59,6 +59,7 @@ public class ProjectUtil {
         CreateProjectModel.Project project = new CreateProjectModel.Project();
         project.setAssignee(user);
         project.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+        logger.info("Project Name is: "+ampActivityVersion.getName());
         project.setDisplayName(ampActivityVersion.getName());
         project.setDescription(ampActivityVersion.getDescription());
         project.setStatus("open");// TODO: 9/11/23 set correct status

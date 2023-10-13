@@ -349,14 +349,10 @@ public class ActivityUtil {
 
     private static  void updateComponents(AmpActivityVersion ampActivityVersion, Session session)
     {
-//        Session session = PersistenceManager.getRequestDBSession();
         Query<AmpComponent> query = session.createQuery("FROM "+AmpComponent.class.getName()+" ac  WHERE ac.activity=:activity AND ac.activity IS NOT NULL", AmpComponent.class);
         query.setParameter("activity", ampActivityVersion.getAmpActivityId(), LongType.INSTANCE);
         //            z.setActivity(null);//we can also delete this component permanently
         query.stream().filter(x->!ampActivityVersion.getComponents().stream().map(AmpComponent::getAmpComponentId).collect(Collectors.toList()).contains(x.getAmpComponentId())).forEach(session::delete);
-//        session.flush();
-
-
 
     }
     private static <T> void cleanObjectFromSession(Session session, Class<T> objectClass, Long id)

@@ -1,7 +1,7 @@
 import { errorHelper } from "../../../admin/indicator_manager/utils/errorHelper";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import {PROGRESS_TRACKING_DASHBOARDS, REST_FM_SETTINGS} from "../../utils/constants";
-import {extractFmColumnsData} from "../utils/data";
+import { PROGRESS_TRACKING_DASHBOARDS, REST_FM_SETTINGS} from "../../utils/constants";
+import { extractFmColumnsData } from "../utils/data";
 
 const REDUCER_NAME = 'fm';
 

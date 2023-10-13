@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { ColumnDescription } from 'react-bootstrap-table-next';
+import { ColumnDescription } from '@musicstory/react-bootstrap-table-next';
 import SkeletonTable from './Table';
 import styles from './IndicatorTable.module.css';
 import { DefaultComponentProps, IndicatorObjectType } from '../../types';

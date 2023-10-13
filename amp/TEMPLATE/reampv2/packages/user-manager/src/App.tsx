@@ -17,10 +17,11 @@ const App: React.FC<AppProps> = (props) => {
   const router = createRouter({ routingStrategy, initialPathName });
 
   return (
-      <Provider store={store}>
+      <>
+          <Provider store={store}>
               <RouterProvider router={router} />
-      </Provider>
-
+          </Provider>
+      </>
   );
 };
 

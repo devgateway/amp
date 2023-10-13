@@ -3,16 +3,20 @@ import React, { useEffect, useState } from 'react';
 import {
   Col, Row, Button, Form
 } from 'react-bootstrap';
-import BootstrapTable, { PaginationOptions } from 'react-bootstrap-table-next';
-import paginationFactory from 'react-bootstrap-table2-paginator';
-import filterFactory, { FilterFactoryProps } from 'react-bootstrap-table2-filter';
+//@ts-ignore
+import BootstrapTable, { PaginationOptions } from '@musicstory/react-bootstrap-table-next';
+// @ts-ignore
+import paginationFactory from '@musicstory/react-bootstrap-table2-paginator';
+// @ts-ignore
+import filterFactory, { FilterFactoryProps } from '@musicstory/react-bootstrap-table2-filter';
 import 'react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css';
-import ToolkitProvider, { Search, CSVExport, ToolkitContextType } from 'react-bootstrap-table2-toolkit';
+//@ts-ignore
+import ToolkitProvider, { Search, CSVExport, ToolkitContextType } from '@murasoftware/react-bootstrap-table2-toolkit';
 import styles from './Table.module.css';
 import AddNewIndicatorModal from '../modals/AddNewIndicatorModal';
 import { DefaultComponentProps, SectorObjectType } from '../../types';
 import { useSelector, useDispatch } from 'react-redux';
-import { setSizePerPage} from '../../reducers/fetchIndicatorsReducer';
+import { setSizePerPage } from '../../reducers/fetchIndicatorsReducer';
 
 interface SkeletonTableProps extends DefaultComponentProps {
   columns: any;
@@ -51,7 +55,7 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
   const paginationOptions: PaginationOptions = {
     paginationSize: 4,
     pageStartIndex: 1,
-    alwaysShowAllBtns: true,       
+    alwaysShowAllBtns: true,
     sizePerPageList: [
       {
         text: '10',
@@ -115,7 +119,7 @@ const SkeletonTable: React.FC<SkeletonTableProps> = (props) => {
 
   const filterOptions: FilterFactoryProps = {
     afterFilter: (result: any, column: any) => {
-      // console.log(result, column); 
+      // console.log(result, column);
     }
   };
 

@@ -56,7 +56,10 @@ const override = config => {
 
     config.resolve.fallback = {
         ...config.resolve.fallback,
-        stream: require.resolve('stream-browserify')
+        stream: require.resolve('stream-browserify'),
+        fs: false,
+        os: false,
+        path: false
     };
 
     config.output = {

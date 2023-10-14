@@ -14,6 +14,7 @@
 		<!--  property name="adjustmentType" column="adjustment_type" type="java.lang.Integer" /-->
 		<property name="transactionDate" column="transaction_date" type="java.util.Date" />
 		<property name="reportingDate" column="reporting_date" type="java.util.Date" />
+		<property name="componentRejectReason" column="reject_reason" type="java.lang.String" />
 		<property name="justAnId" column="just_an_id" type="java.lang.String" />
 		<property access="field" name="transactionAmount" column="transaction_amount"
 			type="java.lang.Double" />

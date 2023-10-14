@@ -61,7 +61,7 @@ public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
             model = (IModel<String>) new EditorWrapperModel((IModel<String>) model, id);
         }
         final IModel<String> finalModel = model;
-        textAreaContainer = new TextArea<String>("richText", TranslationDecorator.proxyModel((IModel<String>) model)){
+        textAreaContainer = new TextArea<String>("richText", TranslationDecorator.proxyModel(model)){
             @Override
             protected void onInitialize() {
                 //get validators and put them in the {@link TranslatableValidators}

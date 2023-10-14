@@ -603,6 +603,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                   FundingDetail fd = new FundingDetail();
                   fd.setAdjustmentTypeName(cf.getAdjustmentType());
                   fd.setComponentFundingStatus(cf.getComponentFundingStatus());
+                  fd.setComponentRejectReason(cf.getComponentRejectReason());
 
                   fd.setCurrencyCode(cf.getCurrency().getCurrencyCode());
                   fd.setCurrencyName(cf.getCurrency().getCurrencyName());

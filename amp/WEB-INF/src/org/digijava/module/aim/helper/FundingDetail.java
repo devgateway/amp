@@ -36,6 +36,16 @@ public class FundingDetail implements Serializable, Comparable
 
     private AmpCategoryValue componentFundingStatus;
 
+    public String getComponentRejectReason() {
+        return componentRejectReason;
+    }
+
+    public void setComponentRejectReason(String componentRejectReason) {
+        this.componentRejectReason = componentRejectReason;
+    }
+
+    private String componentRejectReason="";
+
     private AmpCategoryValue projectionTypeName;
     private AmpCategoryValue expenditureClass;
     private String transactionDate;

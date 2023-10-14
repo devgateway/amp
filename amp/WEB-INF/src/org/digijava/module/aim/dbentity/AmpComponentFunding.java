@@ -62,6 +62,12 @@ public class AmpComponentFunding implements Cloneable, Serializable {
     private AmpCategoryValue componentFundingStatus;
 
 
+    @Interchangeable(fieldTitle = "Reject Reason", importable = true, pickIdOnly = true,
+            fmPath = FMVisibility.PARENT_FM + "/" + "Reject Reason",
+            interValidators = @InterchangeableValidator(RequiredValidator.class))
+    private String componentRejectReason="";
+
+
     @Interchangeable(fieldTitle = "Component Funding Documents",  fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_FUNDING_DOCS, importable = true)
     @VersionableCollection(fieldTitle = "Component Funding Documents")
     private Set<AmpComponentFundingDocument> componentFundingDocuments = new HashSet<>();
@@ -99,6 +105,15 @@ public class AmpComponentFunding implements Cloneable, Serializable {
 
     @InterchangeableBackReference
     private AmpComponent component;
+
+    public String getComponentRejectReason() {
+        return componentRejectReason;
+    }
+
+    public void setComponentRejectReason(String componentRejectReason) {
+        this.componentRejectReason = componentRejectReason;
+    }
+
 
     /**
      * @return Returns the adjustmentType.

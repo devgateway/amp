@@ -5,6 +5,9 @@
 package org.dgfoundation.amp.onepager.components.features.tables;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -12,10 +15,8 @@ import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
-import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpComponentFundingNewResourceFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.*;
+import org.dgfoundation.amp.onepager.events.ContactChangedEvent;
 import org.dgfoundation.amp.onepager.events.FundingOrgListUpdateEvent;
 import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.dgfoundation.amp.onepager.models.AbstractMixedSetModel;
@@ -24,6 +25,7 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
 import java.util.*;
@@ -78,19 +80,36 @@ public class AmpComponentsFundingFormTableFeature extends
                     adjustmentTypes.getChoiceContainer().add(new AttributeModifier("style", "width: 100px;"));
                     item.add(adjustmentTypes);
 
-
-
-
                 } catch(Exception e) {
                     logger.info("Unable to add adjustment type dropdown: ",e);
                 }
                 try {
+                     AmpTextAreaFieldPanel rejectReason = new AmpTextAreaFieldPanel("componentRejectReason",  new PropertyModel<>(model, "componentRejectReason"), "Reject Reason", false, false, false);
+                    rejectReason.setOutputMarkupId(true);
+                    rejectReason.setVisible(false);
+                    rejectReason.add(new AttributeModifier("style", "display: none;"));
+                    item.add(rejectReason);
 
                     AmpCategorySelectFieldPanel componentFundingStatus = new AmpCategorySelectFieldPanel(
                             "componentFundingStatus", CategoryConstants.COMPONENT_FUNDING_STATUS_KEY,
                             new PropertyModel<>(model, "componentFundingStatus"),
                             COMPONENT_FUNDING_STATUS, //fmname
-                            false, false, false, null, false);
+                            false, false, false, null, false)
+                            ;
+                    componentFundingStatus.getChoiceContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
+                        @Override
+                        protected void onUpdate(AjaxRequestTarget target) {
+                            String selectedValue = model.getObject().getComponentFundingStatus().getValue();
+                            logger.info("Selected Status: "+selectedValue);
+                            if ("rejected".equalsIgnoreCase(selectedValue)) {
+                                target.appendJavaScript("$('#" + rejectReason.getMarkupId() + "').show();");
+                            } else {
+                                target.appendJavaScript("$('#" + rejectReason.getMarkupId() + "').hide();");
+                            }
+
+
+                        }
+                    });
                     componentFundingStatus.getChoiceContainer().setRequired(true);
                     componentFundingStatus.getChoiceContainer().add(new AttributeModifier("style", "width: 100px;"));
                     item.add(componentFundingStatus);

@@ -1858,6 +1858,7 @@ public class EditActivity extends Action {
 
                 fd.setCurrencyName(ampCompFund.getCurrency().getCurrencyName());
                 fd.setComponentFundingStatus(ampCompFund.getComponentFundingStatus());
+                fd.setComponentRejectReason(ampCompFund.getComponentRejectReason());
                 fd.setTransactionDate(DateConversion.convertDateToLocalizedString(ampCompFund.getTransactionDate()));
                 fd.setFiscalYear(DateConversion.convertDateToFiscalYearString(ampCompFund.getTransactionDate()));
                 fd.setTransactionType(ampCompFund.getTransactionType());

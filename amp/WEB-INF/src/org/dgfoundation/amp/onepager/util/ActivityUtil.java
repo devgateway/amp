@@ -88,6 +88,7 @@ public class ActivityUtil {
             logger.error("WRONG LANGUAGE: TLSUtils(" + TLSUtils.getLangCode() + ") vs Wicket(" + wicketSession.getLocale().getLanguage() + ")");
         }
 
+
         AmpTeamMember ampCurrentMember = wicketSession.getAmpCurrentMember();
 
         ServletContext sc = wicketSession.getHttpSession().getServletContext();

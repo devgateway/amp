@@ -343,7 +343,7 @@ public class ActivityUtil {
                 ProjectUtil.updateProject(truBudgetActivity.getTruBudgetId(),a,query.list());
 //                session.flush();
             }
-            new Thread(ProjectUtil::end).start();
+//            new Thread(ProjectUtil::end).start();
 
         }
 

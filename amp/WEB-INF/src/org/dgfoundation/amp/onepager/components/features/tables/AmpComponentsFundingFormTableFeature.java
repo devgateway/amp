@@ -25,12 +25,18 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.trubudget.model.workflowitem.WorkflowItemDetailsModel;
+import org.digijava.module.trubudget.util.ProjectUtil;
 
+import java.net.URISyntaxException;
 import java.util.*;
 
 import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.*;
+import static org.digijava.module.um.util.DbUtil.getGlobalSettingsBySection;
+import static org.digijava.module.um.util.DbUtil.getSettingValue;
 
 /**
  * @author aartimon@dginternational.org 
@@ -70,6 +76,22 @@ public class AmpComponentsFundingFormTableFeature extends
                     getSession().setMetaData(OnePagerConst.COMPONENT_FUNDING_DELETED_ITEMS,  new HashMap<>());
                 if (getSession().getMetaData(OnePagerConst.COMPONENT_FUNDING_EXISTING_ITEM_TITLES) == null)
                     getSession().setMetaData(OnePagerConst.COMPONENT_FUNDING_EXISTING_ITEM_TITLES,  new HashMap<>());
+//                item.add(new AttributeModifier("style",""))
+                if (getSettingValue(getGlobalSettingsBySection("trubudget"),"isEnabled").equalsIgnoreCase("true")&& TeamUtil.getCurrentUser().getTruBudgetEnabled()) {
+                    if (model.getObject().getTransactionType()==1) {
+                        try {
+                            WorkflowItemDetailsModel workflowItemDetailsModel = ProjectUtil.getWFItemDetails(model.getObject());
+                            if (workflowItemDetailsModel!=null && workflowItemDetailsModel.getData()!=null) {
+                                if (!workflowItemDetailsModel.getData().getWorkflowitem().getData().getStatus().equalsIgnoreCase("open")) {
+                                    item.add(new AttributeModifier("style", "pointer-events: none; opacity: 0.5;"));
+                                }
+                            }
+
+                        } catch (URISyntaxException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }
                 try{
                     AmpCategorySelectFieldPanel adjustmentTypes = new AmpCategorySelectFieldPanel(
                             "adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_KEY,
@@ -90,6 +112,7 @@ public class AmpComponentsFundingFormTableFeature extends
                     if (!model.getObject().getComponentFundingStatus().getValue().equalsIgnoreCase("rejected")) {
                         rejectReason.add(new AttributeModifier("style", "display: none;"));
                     }
+
                     item.add(rejectReason);
 
                     AmpCategorySelectFieldPanel componentFundingStatus = new AmpCategorySelectFieldPanel(

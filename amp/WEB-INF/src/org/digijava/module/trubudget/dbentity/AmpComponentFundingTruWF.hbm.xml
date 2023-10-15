@@ -10,6 +10,8 @@
             </generator>
         </id>
         <property name="truWFId" column="tru_wf_id" type="java.lang.String"/>
+        <property name="truProjectId" column="tru_project_id" type="java.lang.String"/>
+        <property name="truSubprojectId" column="tru_subproject_id" type="java.lang.String"/>
         <property name="ampComponentFundingId" column="amp_component_funding_id" type="java.lang.String"/>
 
     </class>

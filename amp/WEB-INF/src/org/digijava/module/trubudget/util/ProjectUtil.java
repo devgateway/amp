@@ -8,6 +8,7 @@ import org.digijava.kernel.cache.ehcache.EhCacheWrapper;
 import org.digijava.kernel.entity.trubudget.SubIntents;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.trubudget.dbentity.AmpComponentFundingTruWF;
 import org.digijava.module.trubudget.dbentity.AmpComponentTruSubProject;
 import org.digijava.module.trubudget.dbentity.TruBudgetActivity;
@@ -16,10 +17,7 @@ import org.digijava.module.trubudget.model.subproject.CreateWorkFlowItemModel;
 import org.digijava.module.trubudget.model.subproject.EditSubProjectModel;
 import org.digijava.module.trubudget.model.subproject.EditSubProjectedBudgetModel;
 import org.digijava.module.trubudget.model.subproject.SubProjectGrantRevokePermModel;
-import org.digijava.module.trubudget.model.workflowitem.CloseWFItemModel;
-import org.digijava.module.trubudget.model.workflowitem.CreateWFResponseModel;
-import org.digijava.module.trubudget.model.workflowitem.EditWFItemModel;
-import org.digijava.module.trubudget.model.workflowitem.WFItemGrantRevokePermModel;
+import org.digijava.module.trubudget.model.workflowitem.*;
 import org.digijava.module.um.util.GenericWebClient;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -37,13 +35,47 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 import static org.digijava.module.um.util.DbUtil.*;
 
 public class ProjectUtil {
     private static final Logger logger = LoggerFactory.getLogger(ProjectUtil.class);
+    private static Session session;
+    private static Transaction transaction;
+
+    public static void init()
+    {
+        session= PersistenceManager.openNewSession();
+        transaction= session.beginTransaction();
+
+    }
+
+    public static void  end()
+    {
+        Transaction transaction = session.getTransaction();
+        while (true){
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            if (!transaction.isActive()){
+                session.close();
+                break;
+            }
+        }
+    }
+    public static void refreshSession()
+    {
+        if (!session.isOpen()){
+            session = PersistenceManager.openNewSession();
+            transaction= session.beginTransaction();
+        }
+        if (!transaction.isActive()){
+            transaction=session.beginTransaction();
+        }
+    }
 
     public static void createProject(AmpActivityVersion ampActivityVersion, List<AmpComponent> ampComponents) throws URISyntaxException {
         List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
@@ -64,6 +96,7 @@ public class ProjectUtil {
         project.setDescription(ampActivityVersion.getDescription());
         project.setStatus("open");// TODO: 9/11/23 set correct status
         project.setTags(Arrays.stream((ampActivityVersion.getName() + " " + ampActivityVersion.getDescription()).split(" ")).filter(x -> x.length() <= 15).collect(Collectors.toList()));
+        AmpAuthWebSession s = (AmpAuthWebSession) org.apache.wicket.Session.get();
         for (AmpFunding ampFunding : ampActivityVersion.getFunding()) {
             if (ampFunding.getFundingDetails()!=null) {
 
@@ -91,10 +124,21 @@ public class ProjectUtil {
         data.setProject(project);
         projectModel.setData(data);
         List<SubIntents> subIntents = getSubIntentsByMother("project");
-        Session session = PersistenceManager.getRequestDBSession();
         GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/global.createProject", projectModel, CreateProjectModel.class, String.class, token).subscribe(
                 response ->{
                     logger.info("Create project response: " + response);
+                    try {
+                        refreshSession();
+                        TruBudgetActivity truBudgetActivity = new TruBudgetActivity();
+                        truBudgetActivity.setAmpActivityId(ampActivityVersion.getAmpActivityId());
+                        truBudgetActivity.setTruBudgetId(project.getId());
+                        session.save(truBudgetActivity);
+                        session.flush();
+                        transaction.commit();
+                        createUpdateSubProjects(ampComponents, project.getId(),settings,s);
+                    } catch (URISyntaxException e) {
+                        throw new RuntimeException(e);
+                    }
                     subIntents.forEach(subIntent -> {
                         ProjectGrantRevokePermModel projectGrantRevokePermModel = new ProjectGrantRevokePermModel();
                         ProjectGrantRevokePermModel.Data data1 = new ProjectGrantRevokePermModel.Data();
@@ -111,16 +155,15 @@ public class ProjectUtil {
                             throw new RuntimeException(e);
                         }
 
+
+
+
                     });
 
                 }
         );
 
-        createUpdateSubProjects(ampComponents, project.getId(),settings);
-        TruBudgetActivity truBudgetActivity = new TruBudgetActivity();
-        truBudgetActivity.setAmpActivityId(ampActivityVersion.getAmpActivityId());
-        truBudgetActivity.setTruBudgetId(project.getId());
-        session.save(truBudgetActivity);
+
 
 //        session.flush();
 
@@ -150,8 +193,15 @@ public class ProjectUtil {
         data.setDescription(ampActivityVersion.getDescription());
         data.setDisplayName(ampActivityVersion.getName());
         editProjectModel.setData(data);
+        AmpAuthWebSession s = (AmpAuthWebSession) org.apache.wicket.Session.get();
         GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/project.update", editProjectModel, EditProjectModel.class, String.class, token).subscribe(res -> {
             logger.info("Update project response: "+res);
+            try {
+                createUpdateSubProjects(ampComponents, projectId,settings,s);
+            } catch (URISyntaxException e) {
+                throw new RuntimeException(e);
+            }
+
 
         });
 
@@ -182,7 +232,6 @@ public class ProjectUtil {
                 }
             }
         }
-        createUpdateSubProjects(ampComponents, projectId,settings);
 
     }
 
@@ -197,7 +246,7 @@ public class ProjectUtil {
                     .subscribe(res -> logger.info("WF close response: "+res));
 
     }
-    public static void createUpdateSubProjects(List<AmpComponent> components, String projectId, List<AmpGlobalSettings> settings) throws URISyntaxException {
+    public static void createUpdateSubProjects(List<AmpComponent> components, String projectId, List<AmpGlobalSettings> settings, AmpAuthWebSession ampAuthWebSession) throws URISyntaxException {
 
         AbstractCache myCache = new EhCacheWrapper("trubudget");
         String token = (String) myCache.get("truBudgetToken");
@@ -205,15 +254,16 @@ public class ProjectUtil {
         logger.info("Trubudget Cached Token:" + token);
         for (AmpComponent ampComponent:components)
         {
-            AmpComponentTruSubProject ampComponentTruSubProject = PersistenceManager.getRequestDBSession().createQuery("FROM " + AmpComponentTruSubProject.class.getName() + " act WHERE act.ampComponentId= " + ampComponent.getAmpComponentId() + " AND act.ampComponentId IS NOT NULL", AmpComponentTruSubProject.class).stream().findAny().orElse(null);
+            refreshSession();
 
-            if (ampComponentTruSubProject==null) {//create subproject
+            final AmpComponentTruSubProject[] ampComponentTruSubProject = {session.createQuery("FROM " + AmpComponentTruSubProject.class.getName() + " act WHERE act.ampComponentId= " + ampComponent.getAmpComponentId() + " AND act.ampComponentId IS NOT NULL", AmpComponentTruSubProject.class).stream().findAny().orElse(null)};
+
+            if (ampComponentTruSubProject[0] ==null) {//create subproject
                 CreateSubProjectModel createSubProjectModel = new CreateSubProjectModel();
                 CreateSubProjectModel.Data data = new CreateSubProjectModel.Data();
                 CreateSubProjectModel.Subproject subproject = new CreateSubProjectModel.Subproject();
                 subproject.setId(UUID.randomUUID().toString().replaceAll("-", ""));
                 subproject.setDisplayName(ampComponent.getTitle());
-                subproject.setCurrency("USD");
                 subproject.setCurrency(getSettingValue(settings, "defaultSubProjectCurrency")!=null?getSettingValue(settings, "defaultSubProjectCurrency"):"USD");
                 if (ampComponent.getFundings()!=null) {
                     if (!ampComponent.getFundings().isEmpty()) {
@@ -242,6 +292,23 @@ public class ProjectUtil {
                     GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/project.createSubproject", createSubProjectModel, CreateSubProjectModel.class, String.class, token)
                             .subscribe(res-> {
                                 logger.info("Create subproject response: "+res);
+                                refreshSession();
+
+                                ampComponentTruSubProject[0] =new AmpComponentTruSubProject();
+
+
+                                ampComponentTruSubProject[0].setAmpComponentId(ampComponent.getAmpComponentId());
+                                ampComponentTruSubProject[0].setTruSubProjectId(subproject.getId());
+                                session.save(ampComponentTruSubProject[0]);
+
+                                try {
+                                    session.flush();
+
+                                    transaction.commit();
+                                    createUpdateWorkflowItems(projectId, subproject.getId(),ampComponent, settings, ampAuthWebSession);
+                                } catch (URISyntaxException e) {
+                                    throw new RuntimeException(e);
+                                }
                                         subIntents.forEach(subIntent -> {
                                             SubProjectGrantRevokePermModel subProjectGrantRevokePermModel = new SubProjectGrantRevokePermModel();
                                             SubProjectGrantRevokePermModel.Data data2 = new SubProjectGrantRevokePermModel.Data();
@@ -250,11 +317,14 @@ public class ProjectUtil {
                                             data2.setIdentity(user);
                                             data2.setIntent(subIntent.getSubTruBudgetIntentName());
                                             subProjectGrantRevokePermModel.setData(data2);
+
                                             subProjectGrantRevokePermModel.setApiVersion(getSettingValue(settings, "apiVersion"));
                                             try {
                                                 GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/subproject.intent.grantPermission", subProjectGrantRevokePermModel, SubProjectGrantRevokePermModel.class, String.class, token).subscribeOn(Schedulers.parallel()).subscribe(
-                                                        response -> logger.info("Grant subproject permission response: " + response)
-                                                );
+                                                        response ->{
+                                                            logger.info("Grant subproject permission response: " + response);
+
+                                                        } );
                                             } catch (URISyntaxException e) {
                                                 throw new RuntimeException(e);
                                             }
@@ -270,18 +340,13 @@ public class ProjectUtil {
                 }
 
 //                ampComponent.setAmpComponentTruBudgetSubProjectId(subproject.getId());
-                Session session = PersistenceManager.getRequestDBSession();
-                ampComponentTruSubProject = new AmpComponentTruSubProject();
-                ampComponentTruSubProject.setAmpComponentId(ampComponent.getAmpComponentId());
-                ampComponentTruSubProject.setTruSubProjectId(subproject.getId());
-                session.save(ampComponentTruSubProject);
-                createUpdateWorkflowItems(projectId, subproject.getId(),ampComponent, settings);
+
             }
             else {//update subProject
                 EditSubProjectModel editSubProjectModel = new EditSubProjectModel();
                 EditSubProjectModel.Data data = new EditSubProjectModel.Data();
                 data.setProjectId(projectId);
-                data.setSubprojectId(ampComponentTruSubProject.getTruSubProjectId());
+                data.setSubprojectId(ampComponentTruSubProject[0].getTruSubProjectId());
                 data.setDescription(ampComponent.getDescription());
                 data.setDisplayName(ampComponent.getTitle());
 
@@ -297,24 +362,31 @@ public class ProjectUtil {
                             EditSubProjectedBudgetModel editSubProjectedBudgetModel = new EditSubProjectedBudgetModel();
                             EditSubProjectedBudgetModel.Data data1 = new EditSubProjectedBudgetModel.Data();
                             data1.setProjectId(projectId);
-                            data1.setSubprojectId(ampComponentTruSubProject.getTruSubProjectId());
+                            data1.setSubprojectId(ampComponentTruSubProject[0].getTruSubProjectId());
                             data1.setCurrencyCode(componentFunding.getCurrency().getCurrencyCode());
                             data1.setValue(BigDecimal.valueOf(componentFunding.getTransactionAmount()).toPlainString());
                             data1.setOrganization(componentFunding.getReportingOrganization() != null ? componentFunding.getReportingOrganization().getName() : "Funding Org");
                             editSubProjectedBudgetModel.setData(data1);
                             editSubProjectedBudgetModel.setApiVersion(getSettingValue(settings, "apiVersion"));
                             GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/subproject.budget.updateProjected", editSubProjectedBudgetModel, EditSubProjectedBudgetModel.class, String.class, token).subscribeOn(Schedulers.parallel())
-                                    .subscribe(res2 -> logger.info("Update subproject budget response: " + res2));
+                                    .subscribe(res2 ->{
+                                        logger.info("Update subproject budget response: " + res2) ;
+                                        try {
+                                            createUpdateWorkflowItems(projectId, ampComponentTruSubProject[0].getTruSubProjectId(),ampComponent, settings,ampAuthWebSession);
+                                        } catch (URISyntaxException e) {
+                                            throw new RuntimeException(e);
+                                        }
+
+                                    } );
 
                         }
                     }
                 }
-                createUpdateWorkflowItems(projectId, ampComponentTruSubProject.getTruSubProjectId(),ampComponent, settings);
 
             }
         }
     }
-    public static void createUpdateWorkflowItems(String projectId, String subProjectId, AmpComponent ampComponent, List<AmpGlobalSettings> settings) throws URISyntaxException {
+    public static void createUpdateWorkflowItems(String projectId, String subProjectId, AmpComponent ampComponent, List<AmpGlobalSettings> settings, AmpAuthWebSession ampAuthWebSession) throws URISyntaxException {
         AbstractCache myCache = new EhCacheWrapper("trubudget");
         String token = (String) myCache.get("truBudgetToken");
         String user = (String) myCache.get("truBudgetUser");
@@ -323,7 +395,7 @@ public class ProjectUtil {
                 if (!ampComponent.getFundings().isEmpty()) {
                     for (AmpComponentFunding componentFunding : ampComponent.getFundings()) {
                         if (componentFunding.getTransactionType() == 1 && (Objects.equals(componentFunding.getAdjustmentType().getValue(), "Planned") || Objects.equals(componentFunding.getAdjustmentType().getValue(), "Actual"))) {
-                            AmpComponentFundingTruWF ampComponentFundingTruWF = PersistenceManager.getRequestDBSession().createQuery("FROM " + AmpComponentFundingTruWF.class.getName() + " act WHERE act.ampComponentFundingId= '" + componentFunding.getJustAnId() + "' AND act.ampComponentFundingId IS NOT NULL", AmpComponentFundingTruWF.class).stream().findAny().orElse(null);
+                            AmpComponentFundingTruWF ampComponentFundingTruWF = session.createQuery("FROM " + AmpComponentFundingTruWF.class.getName() + " act WHERE act.ampComponentFundingId= '" + componentFunding.getJustAnId() + "' AND act.ampComponentFundingId IS NOT NULL", AmpComponentFundingTruWF.class).stream().findAny().orElse(null);
                             if (ampComponentFundingTruWF == null) {//create new wfItem
                                 CreateWorkFlowItemModel createWorkFlowItemModel = new CreateWorkFlowItemModel();
                                 createWorkFlowItemModel.setApiVersion(getSettingValue(settings, "apiVersion"));
@@ -332,8 +404,8 @@ public class ProjectUtil {
                                 data.setSubprojectId(subProjectId);
                                 data.setAssignee(user);
                                 List<CreateWorkFlowItemModel.Document> docs = new ArrayList<>();
-                                AmpAuthWebSession s = (AmpAuthWebSession) org.apache.wicket.Session.get();
-                                HashSet<TemporaryComponentFundingDocument> newResources = s.getMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS).get(componentFunding.getJustAnId());
+//                                AmpAuthWebSession s = (AmpAuthWebSession) org.apache.wicket.Session.get();
+                                HashSet<TemporaryComponentFundingDocument> newResources = ampAuthWebSession.getMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS).get(componentFunding.getJustAnId());
 //                                newResources.addAll(s.getMetaData(OnePagerConst.COMPONENT_FUNDING_EXISTING_ITEM_TITLES).get(componentFunding.getJustAnId()));
                                 if (newResources != null) {
                                     for (TemporaryComponentFundingDocument temporaryComponentFundingDocument : newResources) {
@@ -363,9 +435,6 @@ public class ProjectUtil {
                                 data.setBillingDate(convertToISO8601(componentFunding.getTransactionDate()));
                                 data.setDueDate(convertToISO8601AndAddDays(componentFunding.getTransactionDate(), Integer.parseInt(getSettingValue(settings, "workFlowItemDueDays"))));//set approprite date
                                 createWorkFlowItemModel.setData(data);
-//                            Session session =PersistenceManager.getRequestDBSession();
-                                Session session = PersistenceManager.openNewSession();
-                                AtomicReference<Transaction> transaction = new AtomicReference<>();
                                 AmpComponentFundingTruWF ampComponentFundingTruWF1 = new AmpComponentFundingTruWF();
                                 List<SubIntents> subIntents = getSubIntentsByMother("workflowitem");
                                 try {
@@ -373,22 +442,21 @@ public class ProjectUtil {
                                             .subscribe(res -> {
                                                 logger.info("Create WorkflowItem response: " + res);
                                                 ampComponentFundingTruWF1.setAmpComponentFundingId(componentFunding.getJustAnId());
+                                                ampComponentFundingTruWF1.setTruProjectId(projectId);
+                                                ampComponentFundingTruWF1.setTruSubprojectId(subProjectId);
                                                 ampComponentFundingTruWF1.setTruWFId(res.getData().getWorkflowitem().getId());
                                                 try {
-                                                    transaction.set(session.beginTransaction());
+                                                    refreshSession();
+
                                                     // Perform database operations here
                                                     session.save(ampComponentFundingTruWF1);
+
                                                     session.flush();
-                                                    transaction.get().commit();
+                                                    transaction.commit();
 
                                                 } catch (Exception e) {
-                                                    if (transaction.get() != null) {
-                                                        transaction.get().rollback();
-                                                    }
+
                                                     e.printStackTrace();
-                                                } finally {
-//                                                session.flush();
-                                                    session.close();
                                                 }
                                                 subIntents.forEach(subIntent -> {
                                                     WFItemGrantRevokePermModel wfItemGrantRevokePermModel = new WFItemGrantRevokePermModel();
@@ -439,8 +507,8 @@ public class ProjectUtil {
                                 data.setBillingDate(convertToISO8601(componentFunding.getTransactionDate()));
                                 data.setDueDate(convertToISO8601AndAddDays(componentFunding.getTransactionDate(), Integer.parseInt(getSettingValue(settings, "workFlowItemDueDays"))));//set approprite date
                                 List<CreateWorkFlowItemModel.Document> docs = new ArrayList<>();
-                                AmpAuthWebSession s = (AmpAuthWebSession) org.apache.wicket.Session.get();
-                                HashSet<TemporaryComponentFundingDocument> newResources = s.getMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS).get(componentFunding.getJustAnId());
+//                                AmpAuthWebSession s = (AmpAuthWebSession) org.apache.wicket.Session.get();
+                                HashSet<TemporaryComponentFundingDocument> newResources = ampAuthWebSession.getMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS).get(componentFunding.getJustAnId());
 //                                newResources.addAll(s.getMetaData(OnePagerConst.COMPONENT_FUNDING_EXISTING_ITEM_TITLES).get(componentFunding.getJustAnId()));
                                 if (newResources != null) {
                                     for (TemporaryComponentFundingDocument temporaryComponentFundingDocument : newResources) {
@@ -521,4 +589,20 @@ public class ProjectUtil {
         Instant instant = date.toInstant();
         return instant.toString();
     }
+
+    public static WorkflowItemDetailsModel getWFItemDetails(AmpComponentFunding componentFunding) throws URISyntaxException {
+        if (getSettingValue(getGlobalSettingsBySection("trubudget"),"isEnabled").equalsIgnoreCase("true")&& TeamUtil.getCurrentUser().getTruBudgetEnabled()) {
+            List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
+        AbstractCache myCache = new EhCacheWrapper("trubudget");
+        String token = (String) myCache.get("truBudgetToken");
+        AmpComponentFundingTruWF ampComponentFundingTruWF = PersistenceManager.getRequestDBSession().createQuery("FROM " + AmpComponentFundingTruWF.class.getName() + " act WHERE act.ampComponentFundingId= '" + componentFunding.getJustAnId() + "' AND act.ampComponentFundingId IS NOT NULL", AmpComponentFundingTruWF.class).stream().findAny().orElse(null);
+        if (ampComponentFundingTruWF!=null) {
+            return GenericWebClient.getForSingleObjResponse(getSettingValue(settings, "baseUrl") + String.format("api/workflowitem.viewDetails?projectId=%s&subprojectId=%s&workflowitemId=%s", ampComponentFundingTruWF.getTruProjectId(), ampComponentFundingTruWF.getTruSubprojectId(), ampComponentFundingTruWF.getTruWFId()), WorkflowItemDetailsModel.class, token)
+                    .onErrorReturn(new WorkflowItemDetailsModel()).block();
+        }
+        }
+        return null;
     }
+
+
+}

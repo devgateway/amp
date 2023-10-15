@@ -634,7 +634,7 @@ public class DbUtil {
 
     public static List<SubIntents> getSubIntentsByMother(String motherName)
     {
-        Session session = PersistenceManager.getRequestDBSession();
+        Session session = PersistenceManager.openNewSession();
         try {
             return session.createNativeQuery(" SELECT t. * FROM amp_trubudget_sub_intent t WHERE mother_intent_name='"+motherName+"'", SubIntents.class).setCacheable(true).list();
 

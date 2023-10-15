@@ -25,6 +25,28 @@ public class AmpComponentFundingTruWF {
     @Column(name = "tru_wf_id")
     private String truWFId;
 
+
+
+    @Column(name = "tru_project_id")
+    private String truProjectId;
+    @Column(name = "tru_subproject_id")
+    private String truSubprojectId;
+
+    public String getTruProjectId() {
+        return truProjectId;
+    }
+
+    public void setTruProjectId(String truProjectId) {
+        this.truProjectId = truProjectId;
+    }
+
+    public String getTruSubprojectId() {
+        return truSubprojectId;
+    }
+
+    public void setTruSubprojectId(String truSubprojectId) {
+        this.truSubprojectId = truSubprojectId;
+    }
     public String getTruWFId() {
         return truWFId;
     }

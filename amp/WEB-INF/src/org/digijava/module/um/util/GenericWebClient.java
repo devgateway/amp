@@ -129,11 +129,17 @@ public class GenericWebClient {
      * @param <V>
      * @throws URISyntaxException
      */
-    @SafeVarargs
-    public  static<V, E extends Exception> Mono<V> getForSingleObjResponse(String url, Class<V> responseClass, E... exceptions) throws URISyntaxException {
+    public  static<V> Mono<V> getForSingleObjResponse(String url, Class<V> responseClass, String... token) throws URISyntaxException {
         return myWebClient().get()
                 .uri(new URI(url))
+                .headers(httpHeaders ->{
+                    if (token.length>=1)
+                    {
+                        httpHeaders.setBearerAuth(token[0]);
+                    }
+                })
                 .retrieve()
+
                 .onStatus(HttpStatus::is5xxServerError, response ->
                         response.bodyToMono(String.class)
                                 .flatMap(body -> Mono.error(new RuntimeException("Internal server error occurred. Response: " + body))))

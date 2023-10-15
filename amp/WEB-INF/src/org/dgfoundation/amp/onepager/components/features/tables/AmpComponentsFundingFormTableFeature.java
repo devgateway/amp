@@ -81,9 +81,11 @@ public class AmpComponentsFundingFormTableFeature extends
                     if (model.getObject().getTransactionType()==1) {
                         try {
                             WorkflowItemDetailsModel workflowItemDetailsModel = ProjectUtil.getWFItemDetails(model.getObject());
-                            if (workflowItemDetailsModel!=null && workflowItemDetailsModel.getData()!=null) {
-                                if (!workflowItemDetailsModel.getData().getWorkflowitem().getData().getStatus().equalsIgnoreCase("open")) {
-                                    item.add(new AttributeModifier("style", "pointer-events: none; opacity: 0.5;"));
+                            if (workflowItemDetailsModel!=null) {
+                                if (workflowItemDetailsModel.getData()!=null) {
+                                    if (!workflowItemDetailsModel.getData().getWorkflowitem().getData().getStatus().equalsIgnoreCase("open")) {
+                                        item.add(new AttributeModifier("style", "pointer-events: none; opacity: 0.5;"));
+                                    }
                                 }
                             }
 

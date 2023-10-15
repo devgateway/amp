@@ -9,7 +9,13 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.validators.activity.FundingWithTransactionsValidator;
 import org.digijava.kernel.validators.activity.PledgeOrgValidator;
 import org.digijava.kernel.validators.common.RequiredValidator;
-import org.digijava.module.aim.annotations.interchange.*;
+import org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants;
+import org.digijava.module.aim.annotations.interchange.Independent;
+import org.digijava.module.aim.annotations.interchange.Interchangeable;
+import org.digijava.module.aim.annotations.interchange.InterchangeableBackReference;
+import org.digijava.module.aim.annotations.interchange.InterchangeableDiscriminator;
+import org.digijava.module.aim.annotations.interchange.InterchangeableId;
+import org.digijava.module.aim.annotations.interchange.InterchangeableValidator;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.Constants;
@@ -22,9 +28,23 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
-import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.*;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FUNDING_ITEM_CLASSIFICATION_FM_PATH;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FUNDING_PROJECT_JOINT_DECISION_LABEL;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FUNDING_PROJECT_MONITORING_LABEL;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FUNDING_PROJECT_PROBLEMS_LABEL;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FUNDING_PROJECT_RESULTS_AVAILABLE_LABEL;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FUNDING_PROJECT_RESULTS_LINK_LABEL;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FUNDING_PROJECT_SUSTAINABILITY_LABEL;
+import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.FUNDING_VULNERABLE_GROUP_LABEL;
 import static org.digijava.kernel.ampapi.endpoints.activity.ActivityEPConstants.RequiredValidation.ALWAYS;
 
 @TranslatableClass(displayName = "Funding")
@@ -238,52 +258,57 @@ public class AmpFunding implements Serializable, Versionable, Cloneable, Identif
     @Override
     public boolean equalsForVersioning(Object obj) {
         AmpFunding auxFunding = (AmpFunding)obj;
-        return this.groupVersionedFunding != null && this.groupVersionedFunding.equals(auxFunding.getGroupVersionedFunding());
+        if (this.groupVersionedFunding != null && this.groupVersionedFunding.equals(auxFunding.getGroupVersionedFunding())) {
+            return true;
+        }
+        return false;
     }
     
     @Override
     public Object getValue() {
         // Compare fields from AmpFunding.
-        StringBuilder ret = new StringBuilder();
-        ret.append("-Type of Assistance:").append(this.typeOfAssistance != null ? this.typeOfAssistance.getEncodedValue() : "");
-        ret.append("-Financing Instrument:").append(this.financingInstrument != null ? this.financingInstrument.getEncodedValue() : "");
-        ret.append("-Funding classification date:").append(this.financingInstrument != null ? this.financingInstrument.getEncodedValue() : "");
-        ret.append("-Conditions:").append(this.conditions == null ? "" : this.conditions.trim());
-        ret.append("-Donor Objective:").append(this.donorObjective == null ? "" : this.donorObjective.trim());
-        ret.append("-Active:").append(this.active);
-        ret.append("-Delegated Cooperation:").append(this.delegatedCooperation);
-        ret.append("-Delegated Partner:").append(this.delegatedPartner);
-        ret.append("-Mode Of Payment:").append(this.modeOfPayment != null ? this.modeOfPayment.getEncodedValue() : "");
-        ret.append("-Concessionality Level:").append(this.concessionalityLevel != null ? this.concessionalityLevel.getEncodedValue() : "");
-        ret.append("-Funding Status:").append(this.fundingStatus != null ? this.fundingStatus.getEncodedValue() : "");
-        ret.append("-Funding Status:").append(this.financingId != null ? this.financingId : "");
-        ret.append("-Vulnerability Groups:").append(this.vulnerableGroup != null ? this.vulnerableGroup : "");
-        ret.append("-Donor Objective:").append(this.donorObjective == null ? "" : this.donorObjective.trim());
-        ret.append("-Projects Results Link:").append(this.projectResultsLink == null ? "" : this.projectResultsLink.trim());
+        StringBuffer ret = new StringBuffer();
+        ret.append("-Type of Assistance:" + (this.typeOfAssistance != null ? this.typeOfAssistance.getEncodedValue() : ""));
+        ret.append("-Financing Instrument:" + (this.financingInstrument != null ? this.financingInstrument.getEncodedValue() : ""));
+        ret.append("-Funding classification date:" + (this.financingInstrument != null ? this.financingInstrument.getEncodedValue() : ""));
+        ret.append("-Conditions:" + (this.conditions == null ? "" : this.conditions.trim()));
+        ret.append("-Donor Objective:" + (this.donorObjective == null ? "" : this.donorObjective.trim()));
+        ret.append("-Active:" + this.active);
+        ret.append("-Delegated Cooperation:" + this.delegatedCooperation);
+        ret.append("-Delegated Partner:" + this.delegatedPartner);
+        ret.append("-Mode Of Payment:" + (this.modeOfPayment != null ? this.modeOfPayment.getEncodedValue() : ""));
+        ret.append("-Concessionality Level:" + (this.concessionalityLevel != null ? this.concessionalityLevel.getEncodedValue() : ""));
+        ret.append("-Funding Status:" + (this.fundingStatus != null ? this.fundingStatus.getEncodedValue() : ""));
+        ret.append("-Funding Status:" + (this.financingId != null ? this.financingId : ""));
+        ret.append("-Vulnerability Groups:" + (this.vulnerableGroup != null ? this.vulnerableGroup : ""));
+        ret.append("-Donor Objective:" + (this.donorObjective == null ? "" : this.donorObjective.trim()));
+        ret.append("-Projects Results Link:" + (this.projectResultsLink == null ? "" : this.projectResultsLink.trim()));
         if (this.agreement != null)
-            ret.append("-Agreement:").append(this.agreement.getValue());
+            ret.append("-Agreement:" + this.agreement.getValue());
         // Compare fields from AmpFundingDetail.
         List<AmpFundingDetail> auxDetails = new ArrayList<AmpFundingDetail>(this.fundingDetails);
-        auxDetails.sort(fundingDetailsComparator);
-        for (AmpFundingDetail auxDetail : auxDetails) {
-            ret.append(auxDetail.getTransactionType()).append("-").append(auxDetail.getTransactionAmount()).append("-").append(auxDetail.getAmpCurrencyId()).append("-").append(auxDetail.getTransactionDate());
+        Collections.sort(auxDetails, fundingDetailsComparator);
+        Iterator<AmpFundingDetail> iter = auxDetails.iterator();
+        while (iter.hasNext()) {
+            AmpFundingDetail auxDetail = iter.next();
+            ret.append(auxDetail.getTransactionType() + "-" + auxDetail.getTransactionAmount() + "-" + auxDetail.getAmpCurrencyId() + "-" + auxDetail.getTransactionDate());
             if (auxDetail.getPledgeid() != null) ret.append(auxDetail.getPledgeid().getId());
-            ret.append("-").append(auxDetail.getDisbOrderId());
-            if (auxDetail.getContract() != null) ret.append("-").append(auxDetail.getContract().getId());
-            ret.append("-").append(auxDetail.getExpCategory());
-            ret.append("-").append(auxDetail.getDisbursementOrderRejected());
-            if (auxDetail.getRecipientOrg() != null)
-                ret.append("- recipient ").append(auxDetail.getRecipientOrg().getAmpOrgId()).append(" with role of ").append(auxDetail.getRecipientRole().getAmpRoleId());
+            ret.append("-" + auxDetail.getDisbOrderId());
+            if (auxDetail.getContract() != null) ret.append("-" + auxDetail.getContract().getId());
+            ret.append("-" + auxDetail.getExpCategory());
+            ret.append("-" + auxDetail.getDisbursementOrderRejected());
+            if (auxDetail.getRecipientOrg() != null) ret.append("- recipient " + auxDetail.getRecipientOrg().getAmpOrgId() + " with role of " + auxDetail.getRecipientRole().getAmpRoleId());
         }
 
         // Compare fields from AmpFundingMTEFProjection.
         List<AmpFundingMTEFProjection> auxMTEFProjection = new ArrayList<AmpFundingMTEFProjection>(this
                 .mtefProjections);
-        auxMTEFProjection.sort(fundingMTEFProjectionComparator);
+        Collections.sort(auxMTEFProjection, fundingMTEFProjectionComparator);
         for (AmpFundingMTEFProjection projection : auxMTEFProjection) {
-            ret.append(projection.getTransactionType()).append("-").append(projection.getAmount()).append("-").append(projection.getAmpCurrencyId()).append("-").append(projection.getProjectionDate());
+            ret.append(projection.getTransactionType() + "-" + projection.getAmount() + "-"
+                    + projection.getAmpCurrencyId() + "-" + projection.getProjectionDate());
             if (projection.getAdjustmentType() != null) {
-                ret.append("-").append(projection.getAdjustmentType().getId());
+                ret.append("-" + projection.getAdjustmentType().getId());
             }
         }
         return ret.toString();
@@ -370,101 +395,97 @@ public class AmpFunding implements Serializable, Versionable, Cloneable, Identif
         boolean trnEDD = false;
         boolean trnRoF = false;
         List<AmpFundingDetail> auxDetails = new ArrayList(this.fundingDetails);
-        auxDetails.sort(fundingDetailsComparator);
-        for (AmpFundingDetail detail : auxDetails) {
+        Collections.sort(auxDetails, fundingDetailsComparator);
+        Iterator<AmpFundingDetail> iter = auxDetails.iterator();
+        while (iter.hasNext()) {
             boolean error = false;
-            AmpFundingDetail auxDetail = detail;
+            AmpFundingDetail auxDetail = iter.next();
             String transactionType = "";
             String extraValues = "";
             Output auxOutDetail = null;
-            switch (auxDetail.getTransactionType()) {
-                case Constants.COMMITMENT:
-                    transactionType = "Commitments";
-                    if (auxDetail.getPledgeid() != null) {
-                        if (auxDetail.getPledgeid().getTitle() != null) {
-                            extraValues = " - " + auxDetail.getPledgeid().getTitle().getValue();
-                        }
+            switch (auxDetail.getTransactionType().intValue()) {
+            case Constants.COMMITMENT:
+                transactionType = "Commitments";
+                if (auxDetail.getPledgeid() != null) {
+                    if (auxDetail.getPledgeid().getTitle() != null) {
+                        extraValues = " - " + auxDetail.getPledgeid().getTitle().getValue();
                     }
-                    if (!trnComm) {
-                        out.getOutputs().add(new Output(new ArrayList<Output>(), new String[]{transactionType}, new Object[]{""}));
-                        trnComm = true;
-                    }
-                    break;
+                }
+                if (!trnComm) {
+                    out.getOutputs().add(new Output(new ArrayList<Output>(), new String[]{transactionType}, new Object[]{""}));
+                    trnComm = true;
+                }
+                break;
 
-                case Constants.DISBURSEMENT:
-                    transactionType = " Disbursements";
-                    if (auxDetail.getDisbOrderId() != null && auxDetail.getDisbOrderId().trim().length() > 0)
-                        extraValues += " - " + auxDetail.getDisbOrderId();
-                    if (auxDetail.getContract() != null)
-                        extraValues += " - " + auxDetail.getContract().getContractName();
-                    if (auxDetail.getPledgeid() != null) {
-                        if (auxDetail.getPledgeid().getTitle() != null) {
-                            extraValues = " - " + auxDetail.getPledgeid().getTitle().getValue();
-                        }
+            case Constants.DISBURSEMENT:
+                transactionType = " Disbursements";
+                if (auxDetail.getDisbOrderId() != null && auxDetail.getDisbOrderId().trim().length() > 0) extraValues += " - " + auxDetail.getDisbOrderId();
+                if (auxDetail.getContract() != null) extraValues += " - " + auxDetail.getContract().getContractName();
+                if (auxDetail.getPledgeid() != null) {
+                    if (auxDetail.getPledgeid().getTitle() != null) {
+                        extraValues = " - " + auxDetail.getPledgeid().getTitle().getValue();
                     }
-                    if (!trnDisb) {
-                        out.getOutputs().add(new Output(new ArrayList<Output>(), new String[]{transactionType}, new Object[]{""}));
-                        trnDisb = true;
-                    }
-                    break;
+                }
+                if (!trnDisb) {
+                    out.getOutputs().add(new Output(new ArrayList<Output>(), new String[]{transactionType}, new Object[]{""}));
+                    trnDisb = true;
+                }
+                break;
 
-                case Constants.EXPENDITURE:
-                    transactionType = " Expenditures";
-                    if (auxDetail.getExpCategory() != null && auxDetail.getExpCategory().trim().length() > 0)
-                        extraValues += " - " + auxDetail.getExpCategory();
-                    if (!trnExp) {
-                        out.getOutputs().add(new Output(new ArrayList<Output>(), new String[]{transactionType}, new Object[]{""}));
-                        trnExp = true;
-                    }
-                    break;
+            case Constants.EXPENDITURE:
+                transactionType = " Expenditures";
+                if (auxDetail.getExpCategory() != null && auxDetail.getExpCategory().trim().length() > 0) extraValues += " - " + auxDetail.getExpCategory();
+                if (!trnExp) {
+                    out.getOutputs().add(new Output(new ArrayList<Output>(), new String[]{transactionType}, new Object[]{""}));
+                    trnExp = true;
+                }
+                break;
 
-                case Constants.DISBURSEMENT_ORDER:
-                    transactionType = " Disbursement Orders";
-                    if (auxDetail.getDisbOrderId() != null && auxDetail.getDisbOrderId().trim().length() > 0)
-                        extraValues += " - " + auxDetail.getDisbOrderId();
-                    if (auxDetail.getContract() != null)
-                        extraValues += " - " + auxDetail.getContract().getContractName();
-                    if (auxDetail.getDisbursementOrderRejected() != null) {
-                        if (auxDetail.getDisbursementOrderRejected()) extraValues += " - Rejected";
-                        else extraValues += " - Not Rejected";
-                    }
-                    if (!trnDisbOrder) {
-                        out.getOutputs().add(new Output(new ArrayList<Output>(), new String[]{transactionType}, new Object[]{""}));
-                        trnDisbOrder = true;
-                    }
-                    break;
+            case Constants.DISBURSEMENT_ORDER:
+                transactionType = " Disbursement Orders";
+                if (auxDetail.getDisbOrderId() != null && auxDetail.getDisbOrderId().trim().length() > 0) extraValues += " - " + auxDetail.getDisbOrderId();
+                if (auxDetail.getContract() != null) extraValues += " - " + auxDetail.getContract().getContractName();
+                if (auxDetail.getDisbursementOrderRejected() != null) {
+                    if (auxDetail.getDisbursementOrderRejected()) extraValues += " - Rejected"; else extraValues += " - Not Rejected";
+                }
+                if (!trnDisbOrder) {
+                    out.getOutputs().add(new Output(new ArrayList<Output>(), new String[]{transactionType}, new Object[]{""}));
+                    trnDisbOrder = true;
+                }
+                break;
 
-                case Constants.ESTIMATED_DONOR_DISBURSEMENT:
-                    transactionType = " Estimated Donor Disbursements";
-                    if (!trnEDD) {
-                        out.getOutputs().add(new Output(new ArrayList<Output>(), new String[]{transactionType}, new Object[]{""}));
-                        trnEDD = true;
-                    }
-                    break;
+            case Constants.ESTIMATED_DONOR_DISBURSEMENT:
+                transactionType = " Estimated Donor Disbursements";
+                if (!trnEDD) {
+                    out.getOutputs().add(new Output(new ArrayList<Output>(), new String[]{transactionType}, new Object[]{""}));
+                    trnEDD = true;
+                }
+                break;
 
-                case Constants.RELEASE_OF_FUNDS:
-                    transactionType = " Release of Funds";
-                    if (!trnRoF) {
-                        out.getOutputs().add(new Output(new ArrayList<Output>(), new String[]{transactionType}, new Object[]{""}));
-                        trnRoF = true;
-                    }
-                    break;
+            case Constants.RELEASE_OF_FUNDS:
+                transactionType = " Release of Funds";
+                if (!trnRoF) {
+                    out.getOutputs().add(new Output(new ArrayList<Output>(), new String[]{transactionType}, new Object[]{""}));
+                    trnRoF = true;
+                }
+                break;
 
-                default:
-                    error = true;
-                    break;
+            default:
+                error = true;
+                break;
 
             }
             if (!error) {
                 String recipientInfo = "";
-                if (auxDetail.getRecipientOrg() != null)
-                    recipientInfo = String.format(" to %s as %s", auxDetail.getRecipientOrg().getName(), auxDetail.getRecipientRole().getName());
+                if (auxDetail.getRecipientOrg() != null) recipientInfo = String.format(" to %s as %s", auxDetail.getRecipientOrg().getName(), auxDetail.getRecipientRole().getName());
                 String adjustment = auxDetail.getAdjustmentType().getValue();
                 auxOutDetail = out.getOutputs().get(out.getOutputs().size() - 1);
                 auxOutDetail.getOutputs().add(new Output(null, new String[]{""}, new Object[]{adjustment, " - ", auxDetail.getTransactionAmount(), " ", auxDetail.getAmpCurrencyId(), " - ", auxDetail.getTransactionDate(), extraValues + recipientInfo}));
             }
         }
-        for (AmpFundingMTEFProjection mtef : this.mtefProjections) {
+        Iterator<AmpFundingMTEFProjection> it2 = this.mtefProjections.iterator();
+        while (it2.hasNext()) {
+            AmpFundingMTEFProjection mtef = (AmpFundingMTEFProjection)it2.next();
             if (!trnMTEF) {
                 out.getOutputs().add(new Output(new ArrayList<Output>(), new String[]{"MTEF Projection"}, new Object[]{""}));
                 trnMTEF = true;
@@ -1025,18 +1046,5 @@ public class AmpFunding implements Serializable, Versionable, Cloneable, Identif
     @Override
     public Object getIdentifier() {
         return ampFundingId;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        AmpFunding that = (AmpFunding) o;
-        return Objects.equals(ampDonorOrgId, that.ampDonorOrgId);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash( ampDonorOrgId, ampActivityId);
     }
 }

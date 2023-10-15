@@ -28,6 +28,5 @@
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpComponentFunding" />
 		</set>
 
-
 	</class>
 </hibernate-mapping>

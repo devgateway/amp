@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -98,7 +99,7 @@ public class NodeWrapper{
                     contentType             = formFile.getContentType();
                     int uploadedFileSize    = formFile.getFileSize(); // This is in bytes
                     
-                    newNode.setProperty( CrConstants.PROPERTY_NAME, new String(formFile.getFileName().getBytes("UTF8"), "UTF8"));
+                    newNode.setProperty( CrConstants.PROPERTY_NAME, new String(formFile.getFileName().getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
                     newNode.setProperty( CrConstants.PROPERTY_FILE_SIZE, uploadedFileSize );
                 }
             }

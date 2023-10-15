@@ -139,9 +139,12 @@ public class AmpComponentFundingResourcesTableFeature extends AmpFormTableFeatur
 
             @Override
             public List<TemporaryComponentFundingDocument> getObject() {
-                HashSet<TemporaryComponentFundingDocument> newItems = getSession().getMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS).get(am.getObject().getJustAnId());
-                if (newItems == null)
-                    newItems = new HashSet<>();
+                HashSet<TemporaryComponentFundingDocument> newItems = new HashSet<>();
+                if (getSession().getMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS) != null){
+                    newItems = getSession().getMetaData(OnePagerConst.COMPONENT_FUNDING_NEW_ITEMS).get(am.getObject().getJustAnId());
+                    }
+//                if (newItems == null)
+//                    newItems = new HashSet<>();
                 HashMap<String,HashSet<AmpComponentFundingDocument>> delItemsMap = getSession().getMetaData(OnePagerConst.COMPONENT_FUNDING_DELETED_ITEMS);
                 HashSet<AmpComponentFundingDocument> delItems = delItemsMap.get(am.getObject().getJustAnId());
                 if (delItems == null)

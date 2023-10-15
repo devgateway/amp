@@ -69,7 +69,7 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
                     fmPath = "/Activity Form/Components/Component/Components Expenditures/Expenditure Table",
                     importable = true)
     })
-    private Set<AmpComponentFunding> fundings = new HashSet<>();
+    private Set<AmpComponentFunding> fundings = new LinkedHashSet<>();
 
 
 
@@ -89,8 +89,7 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
                 return -1;
             if (o1.getTitle() == null)
                 return 1;
-            int ret = o1.getTitle().compareTo(o2.getTitle());
-            return ret;
+            return o1.getTitle().compareTo(o2.getTitle());
         }
     }
 
@@ -217,7 +216,7 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
     @Override
     public Output getOutput() {
         Output out = new Output();
-        out.setOutputs(new ArrayList<Output>());
+        out.setOutputs(new ArrayList<>());
         
         out.getOutputs().add(
                 new Output(null, new String[] { "Title" }, new Object[] { this.title != null ? this.title
@@ -276,7 +275,7 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
         StringBuilder ret = new StringBuilder();
         ret.append("-").append(this.code).append("-").append(this.description).append("-").append(this.Url).append("-").append(this.creationdate);
         
-        List<AmpComponentFunding> auxFundings = new ArrayList<AmpComponentFunding>(this.fundings);
+        List<AmpComponentFunding> auxFundings = new ArrayList<>(this.fundings);
         auxFundings.sort(COMPONENT_FUNDING_COMPARATOR);
 
         for (AmpComponentFunding funding : auxFundings) {
@@ -293,7 +292,7 @@ public class AmpComponent implements Serializable, Comparable<AmpComponent>, Ver
         auxComponent.setAmpComponentId(null);
         
         if (auxComponent.getFundings() != null && auxComponent.getFundings().size() > 0) {
-            Set<AmpComponentFunding> auxSetFundings = new HashSet<AmpComponentFunding>();
+            Set<AmpComponentFunding> auxSetFundings = new LinkedHashSet<>();
             for (AmpComponentFunding auxComponentFunding : auxComponent.getFundings()) {
                 AmpComponentFunding newComponentFunding = (AmpComponentFunding) auxComponentFunding.clone();
                 newComponentFunding.setAmpComponentFundingId(null);

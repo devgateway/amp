@@ -591,7 +591,7 @@ LoggerIdentifiable, Cloneable {
     
     @Interchangeable(fieldTitle = "Components", importable = true, fmPath = "/Activity Form/Components")
     @VersionableCollection(fieldTitle = ActivityFieldsConstants.COMPONENTS)
-    protected Set<AmpComponent> components = new HashSet<>();
+    protected Set<AmpComponent> components = new LinkedHashSet<>();
 
     @Interchangeable(fieldTitle = "Structures", importable = true, fmPath = "/Activity Form/Structures")
     @VersionableCollection(fieldTitle = "Structures")

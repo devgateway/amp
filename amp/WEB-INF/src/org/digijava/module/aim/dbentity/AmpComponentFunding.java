@@ -20,6 +20,7 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import static org.digijava.module.aim.annotations.interchange.ActivityFieldsConstants.*;
@@ -70,7 +71,7 @@ public class AmpComponentFunding implements Cloneable, Serializable {
 
     @Interchangeable(fieldTitle = "Component Funding Documents",  fmPath = FMVisibility.PARENT_FM + "/" + COMPONENT_FUNDING_DOCS, importable = true)
     @VersionableCollection(fieldTitle = "Component Funding Documents")
-    private Set<AmpComponentFundingDocument> componentFundingDocuments = new HashSet<>();
+    private Set<AmpComponentFundingDocument> componentFundingDocuments = new LinkedHashSet<>();
 
     public Set<AmpComponentFundingDocument> getComponentFundingDocuments() {
         return componentFundingDocuments;

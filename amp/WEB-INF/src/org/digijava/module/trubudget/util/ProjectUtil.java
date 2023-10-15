@@ -486,12 +486,21 @@ public class ProjectUtil {
             //workflow close
             CloseWFItemModel closeWFItemModel = new CloseWFItemModel();
             closeWFItemModel.setApiVersion(getSettingValue(settings, "apiVersion"));
-            CloseWFItemModel.Data data = new CloseWFItemModel.Data();
-            data.setProjectId(projectId);
-            data.setSubprojectId(subProjectId);
-            data.setWorkflowitemId(workFlowItemId);
-            data.setRejectReason(Objects.equals(ampComponentFunding.getComponentFundingStatusFormatted(), "closed") ?rejectReason:"");
-            closeWFItemModel.setData(data);
+            if (ampComponentFunding.getComponentFundingStatus().getValue().equalsIgnoreCase("closed")) {
+                CloseWFItemModel.Data data = new CloseWFItemModel.Data();
+                data.setProjectId(projectId);
+                data.setSubprojectId(subProjectId);
+                data.setWorkflowitemId(workFlowItemId);
+                closeWFItemModel.setData(data);
+            }
+            else {
+                CloseWFItemModel.RejectData data = new CloseWFItemModel.RejectData();
+                data.setProjectId(projectId);
+                data.setSubprojectId(subProjectId);
+                data.setWorkflowitemId(workFlowItemId);
+                data.setRejectReason(ampComponentFunding.getComponentRejectReason());
+                closeWFItemModel.setData(data);
+            }
 
             GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/workflowitem.close", closeWFItemModel, CloseWFItemModel.class, String.class, token)
                     .subscribe(res -> logger.info("WF close response: "+res));

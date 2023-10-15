@@ -77,6 +77,14 @@
                                                                             </td>
                                                                         </module:display>
 
+
+                                                                        <module:display name="/Activity Form/Components/Component/Components Commitments"
+                                                                                        parentModule="/Activity Form/Components/Component">
+                                                                            <td width="100">
+                                                                                    <b><c:out value="${fd.componentRejectReason}" /></b>
+                                                                            </td>
+                                                                        </module:display>
+
                                                                         <module:display name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Amount"
                                                                                         parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
                                                                             <td align="right" width="100">

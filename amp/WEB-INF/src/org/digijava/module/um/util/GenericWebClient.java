@@ -25,8 +25,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class GenericWebClient {
 
-    private static final long TIMEOUT = 50000;
-    private static final int CONNECT_TIMEOUT = 50000;
+    private static final long TIMEOUT = 100000;
+    private static final int CONNECT_TIMEOUT = 100000;
 
     private static  final Logger logger = LoggerFactory.getLogger(GenericWebClient.class);
     /**

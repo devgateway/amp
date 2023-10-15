@@ -86,8 +86,10 @@ public class AmpComponentsFundingFormTableFeature extends
                 try {
                      AmpTextAreaFieldPanel rejectReason = new AmpTextAreaFieldPanel("componentRejectReason",  new PropertyModel<>(model, "componentRejectReason"), "Reject Reason", false, false, false);
                     rejectReason.setOutputMarkupId(true);
-                    rejectReason.setVisible(false);
-                    rejectReason.add(new AttributeModifier("style", "display: none;"));
+//                    rejectReason.setVisible(false);
+                    if (!model.getObject().getComponentFundingStatus().getValue().equalsIgnoreCase("rejected")) {
+                        rejectReason.add(new AttributeModifier("style", "display: none;"));
+                    }
                     item.add(rejectReason);
 
                     AmpCategorySelectFieldPanel componentFundingStatus = new AmpCategorySelectFieldPanel(

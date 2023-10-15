@@ -20,22 +20,10 @@ public class CloseWFItemModel {
         this.data = data;
     }
 
-    public static class Data
-    {
+    public static class Data{
         private String projectId;
         private String subprojectId;
         private String workflowitemId;
-
-        public String getRejectReason() {
-            return rejectReason;
-        }
-
-        public void setRejectReason(String rejectReason) {
-            this.rejectReason = rejectReason;
-        }
-
-        private String rejectReason;
-
         public String getProjectId() {
             return projectId;
         }
@@ -59,5 +47,23 @@ public class CloseWFItemModel {
         public void setWorkflowitemId(String workflowitemId) {
             this.workflowitemId = workflowitemId;
         }
+    }
+
+
+    public static class RejectData extends Data
+    {
+        private String rejectReason;
+
+
+        public String getRejectReason() {
+            return rejectReason;
+        }
+
+        public void setRejectReason(String rejectReason) {
+            this.rejectReason = rejectReason;
+        }
+
+
+
     }
 }

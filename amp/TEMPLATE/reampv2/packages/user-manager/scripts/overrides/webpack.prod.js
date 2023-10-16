@@ -20,31 +20,33 @@ const override = (config) => {
     shared: {
       ...packageJson.dependencies,
       react: {
-        singleton: true,
-        requiredVersion: packageJson.dependencies.react,
+        import: 'react', // the "react" package will be used a provided and fallback module
+        shareKey: 'newReact', // under this name the shared module will be placed in the share scope
+        shareScope: 'default', // share scope with this name will be used
+        singleton: true, // only a single version of the shared module is allowed
       },
       'react-dom': {
         import: 'react-dom', // the "react" package will be used a provided and fallback module
-        shareKey: 'react-dom', // under this name the shared module will be placed in the share scope
-        shareScope: 'legacy', // share scope with this name will be used
+        shareKey: 'newReactDom', // under this name the shared module will be placed in the share scope
+        shareScope: 'default', // share scope with this name will be used
         singleton: true, // only a single version of the shared module is allowed
       },
       'react-router-dom': {
         import: 'react-router-dom',
-        shareKey: 'react-router-dom',
+        shareKey: 'newReactRouterDom',
         shareScope: 'default',
         singleton: true,
       },
       'semantic-ui-react': {
         import: 'semantic-ui-react',
-        shareKey: 'semantic-ui-react',
-        shareScope: 'legacy',
+        shareKey: 'newSemanticUiReact',
+        shareScope: 'default',
         singleton: true,
       },
       'semantic-ui-css': {
         import: 'semantic-ui-css',
-        shareKey: 'semantic-ui-css',
-        shareScope: 'legacy',
+        shareKey: 'newSemanticUiCss',
+        shareScope: 'default',
         singleton: true,
       }
     },

@@ -180,6 +180,7 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.IPAContractDisbursement</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.IPAContractAmendment</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpIndicatorValue</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpIndicatorGlobalValue</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.IndicatorConnection</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpClassificationConfiguration</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpCategoryValueLocations</hibernate-class>

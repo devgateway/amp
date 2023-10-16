@@ -62,6 +62,7 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
     private AmpDonorFundingInfoSubsectionFeature fundingInfo;
     private AmpDonorDisbursementsSubsectionFeature disbursements;
     private Integer item;
+
     public AmpFundingItemFeaturePanel(String id, String fmName,
             final IModel<AmpFunding> fundingModel,final IModel<AmpActivityVersion> am, final AmpDonorFundingFormSectionFeature parent,Integer item) throws Exception {
         super(id, fundingModel, fmName, true);

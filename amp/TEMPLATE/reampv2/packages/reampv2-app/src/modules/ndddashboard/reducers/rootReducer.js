@@ -7,6 +7,14 @@ import shareLinkReducer from './shareLinkReducer';
 import sharedDataReducer from './sharedDataReducer';
 import mappingsReducer from './mappingsReducer';
 
+//me dashboard
+import programConfigurationReducer from '../medashboard/reducers/fetchProgramConfigurationReducer';
+import indicatorsByProgramReducer from '../medashboard/reducers/fetchIndicatorsByProgramReducer';
+import programReportReducer from '../medashboard/reducers/fetchProgramReportReducer';
+import fetchIndicatorsReducer from '../medashboard/reducers/fetchIndicatorsReducer';
+import indicatorReportReducer from '../medashboard/reducers/fetchIndicatorReportReducer';
+import fetchFmReducer from "../medashboard/reducers/fetchFmReducer";
+
 export default combineReducers({
   startupReducer,
   translationsReducer,
@@ -14,5 +22,11 @@ export default combineReducers({
   dashboardSettingsReducer,
   shareLinkReducer,
   sharedDataReducer,
-  mappingsReducer
+  mappingsReducer,
+  programConfigurationReducer,
+  indicatorsByProgramReducer,
+  programReportReducer,
+  fetchIndicatorsReducer,
+  indicatorReportReducer,
+  fetchFmReducer
 });

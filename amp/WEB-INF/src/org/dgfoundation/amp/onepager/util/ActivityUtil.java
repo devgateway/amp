@@ -79,10 +79,10 @@ public class ActivityUtil {
      *
      * @param am
      */
-    public static void saveActivity(AmpActivityModel am, boolean draft, boolean rejected) {
+    public static void saveActivity(AmpActivityModel am, boolean draft,boolean rejected){
 
         AmpAuthWebSession wicketSession = (AmpAuthWebSession) org.apache.wicket.Session.get();
-        if (!wicketSession.getLocale().getLanguage().equals(TLSUtils.getLangCode())) {
+        if (!wicketSession.getLocale().getLanguage().equals(TLSUtils.getLangCode())){
             logger.error("WRONG LANGUAGE: TLSUtils(" + TLSUtils.getLangCode() + ") vs Wicket(" + wicketSession.getLocale().getLanguage() + ")");
         }
 
@@ -1423,6 +1423,36 @@ public class ActivityUtil {
             }
         }
 
+
+        return false;
+    }
+
+    public static boolean hasSectorIndicatorsInActivity(AmpActivityVersion activity, AmpActivitySector sector) {
+        Set<IndicatorActivity> indicators = activity.getIndicators();
+        for (IndicatorActivity indicator : indicators) {
+            AmpIndicator ind = (AmpIndicator) PersistenceManager.getSession()
+                    .get(AmpIndicator.class, indicator.getIndicator().getIndicatorId());
+            List<Long> sectorIds = ind.getSectors().stream()
+                    .map(AmpSector::getAmpSectorId)
+                    .collect(Collectors.toList());
+            if (sectorIds.contains(sector.getSectorId().getAmpSectorId())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static boolean hasProgramIndicatorsInActivity(AmpActivityVersion activity, AmpActivityProgram program) {
+        Set<IndicatorActivity> indicators = activity.getIndicators();
+        for (IndicatorActivity indicator : indicators) {
+            AmpIndicator ind = (AmpIndicator) PersistenceManager.getSession()
+                    .get(AmpIndicator.class, indicator.getIndicator().getIndicatorId());
+            Long programId = ind.getProgram().getAmpThemeId();
+            if (programId.equals(program.getProgram().getAmpThemeId())) {
+                return true;
+            }
+        }
 
         return false;
     }

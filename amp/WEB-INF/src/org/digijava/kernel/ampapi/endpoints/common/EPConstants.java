@@ -57,7 +57,7 @@ public class EPConstants {
     public static final String SUMMARY = "summary";
     public static final String GROUPING_OPTION = "groupingOption";
     public static final String INCLUDE_LOCATION_CHILDREN = "include-location-children";
-    
+
     // report type & activities configurations
     public static final String DEFAULT_REPORT_TYPE = "D";
     /** maps API report type to internal report type ids */
@@ -65,26 +65,27 @@ public class EPConstants {
         put("D", ArConstants.DONOR_TYPE);
         put("C", ArConstants.COMPONENT_TYPE);
         put("P", ArConstants.PLEDGES_TYPE);
+        put("R", ArConstants.REGIONAL_TYPE);
     }};
-    
+
     public static final Map<String, List<String>> REPORT_TYPE_ACTIVITY_MAP = new HashMap<String, List<String>>() {{
         put("D", ActivityType.STR_VALUES);
         put("C", Arrays.asList(ActivityType.ACTIVITY.toString(), ActivityType.SSC_ACTIVITY.toString()));
         put("P", Arrays.asList(ActivityType.PLEDGE.toString()));
     }};
-    
+
     public static final String ERROR = "error";
     public static final String NA = "N/A";
-    
+
     public static final String FILTERS = "filters";
-    
+
     // settings
     public static final String SETTINGS = "settings";
-    
+
     // map import/export
     public static final String API_STATE_REPORT_EXPORT_DESCRIPTION = "Export to Map";
     public static final String API_STATE_REPORT_EXPORT = "reportExportId=";
-    
+
     // fm constants
     public static final String REPORTING_FIELDS = "reporting-fields";
     public static final String ENABLED_MODULES = "enabled-modules";

@@ -159,7 +159,7 @@ ColumnSorter.propTypes = {
   keyPrefix: PropTypes.string.isRequired,
   translations: PropTypes.object.isRequired,
   selected: PropTypes.array,
-  profile: PropTypes.string.isRequired,
+  profile: PropTypes.any,
   isLoading: PropTypes.bool,
 };
 

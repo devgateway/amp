@@ -3,6 +3,7 @@ import {FieldsManager} from 'amp-ui';
 import LoggerManager from '../utils/LoggerManager';
 import processPossibleValues from '../common/PossibleValuesHelper.jsx';
 import { ResourceConstants, ActivityConstants } from 'amp-ui';
+import {MULTILINGUAL} from "amp/modules/activity/preview/common/ReampConstants";
 
 export const RESOURCES_LOAD_LOADING = 'RESOURCES_LOAD_LOADING';
 export const RESOURCES_LOAD_LOADED = 'RESOURCES_LOAD_LOADED';
@@ -23,7 +24,7 @@ export const loadResourcesForActivity = (activity) => (dispatch, ownProps) => {
 export const loadHydratedResources = (ids) => (dispatch, ownProps) => {
     const resourcesFields = [ResourceConstants.RESOURCE_TYPE, ResourceConstants.TYPE];
     const { settings } = ownProps().startUpReducer;
-    Promise.all([ResourceApi.fetchResources(ids),
+    Promise.all([ResourceApi.fetchResources(ids, settings.language),
         ResourceApi.getResourcesEnabledFields(), ResourceApi.fetchPossibleValues(resourcesFields)])
         .then(([resourcesByUUIDRaw, rFields, possibleValuesCollection]) => {
             const resourcesByUUID = {};
@@ -32,7 +33,7 @@ export const loadHydratedResources = (ids) => (dispatch, ownProps) => {
                 r.id = r.uuid;
             });
             const resourceFieldsManager = new FieldsManager(rFields, processPossibleValues(possibleValuesCollection),
-                settings.language,LoggerManager);
+                settings.language,LoggerManager, null, settings[MULTILINGUAL]);
             dispatch({
                 type: RESOURCES_LOAD_LOADED,
                 payload: {

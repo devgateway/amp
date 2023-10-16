@@ -1,5 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.dashboards.services;
 
+import com.google.common.base.CharMatcher;
+import org.apache.commons.lang3.StringUtils;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.*;
@@ -135,6 +137,15 @@ public class TopsChartService {
                 applyFilter(FilterUtils.INSTANCE.idFromColumnName(ColumnConstants.DONOR_GROUP));
                 title = TranslatorWorker.translateText(DashboardConstants.TOP_DONOR_GROUPS);
                 name = DashboardConstants.TOP_DONOR_GROUPS;
+                break;
+            case PR:
+                String selectedProgramScheme = (String) config.getSettings().get("program-settings");
+                String fundingType = (String) config.getSettings().get("funding-type");
+                setColumn(selectedProgramScheme);
+                applyFilter(FilterUtils.INSTANCE.idFromColumnName(fundingType));
+
+                title = TranslatorWorker.translateText(DashboardConstants.TOP_PROGRAMS);
+                name = DashboardConstants.TOP_PROGRAMS;
                 break;
             case NDD:
                 setColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_1);

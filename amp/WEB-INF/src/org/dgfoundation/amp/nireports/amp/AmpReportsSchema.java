@@ -1122,7 +1122,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
                 SQLUtils.insert(conn, "amp_measures", "measureid", "amp_measures_seq", Arrays.asList("measurename", "aliasname", "type", "description"), values);
                 MeasuresVisibility.resetMeasuresList();
             }
-            return toBeAdded.stream().map(Object::toString).collect(Collectors.toSet());
+            return toBeAdded.stream().map(z -> z.toString()).collect(Collectors.toSet());
         });
     }
     
@@ -1194,7 +1194,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
 //      addMeasure(new AmpTrivialMeasure(MeasureConstants.PIPELINE_RELEASE_OF_FUNDS, Constants.PIPELINE, "Pipeline", false));
         
         addMeasure(new AmpTrivialMeasure(MeasureConstants.PLEDGES_ACTUAL_PLEDGE, Constants.PLEDGE));
-        
+
+        addMeasure(new AmpIndicatorMeasure(MeasureConstants.INDICATOR_ACTUAL_VALUE, AmpIndicatorValue.ACTUAL));
+
         return this;
     }
     
@@ -1389,6 +1391,9 @@ public class AmpReportsSchema extends AbstractReportsSchema {
             case ArConstants.REGIONAL_TYPE:
                 return regionalFundingColumn;
 
+            case ArConstants.INDICATOR_TYPE:
+                return indicatorColumn;
+
             default:
                 throw new RuntimeException(String.format("report type %d not implemented in NiReports yet", engine.spec.getReportType()));
         }
@@ -1576,7 +1581,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
     @Override
     public boolean isTransactionLevelHierarchy(NiReportColumn<?> col, NiReportsEngine engine) {
         //return col.isTransactionLevelHierarchy();
-        AmpFundingColumn funding = this.getFundingFetcher(engine);
+        AmpAmountColumn funding = this.getFundingFetcher(engine);
         return funding.isTransactionLevelHierarchy(col);
         //return super.isTransactionLevelHierarchy(col, engine);
     }

@@ -1,4 +1,4 @@
-package org.digijava.kernel.ampapi.endpoints.gis;
+package org.digijava.kernel.ampapi.endpoints.serializers;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;

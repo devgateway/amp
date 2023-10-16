@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="false" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-30738</jira>
+	<keyword>Views</keyword>
+	<author>Julian de Anquin</author>
+	<description>recreate view, this will always be the last version of the view</description>
+	<trigger type="all">
+		<condition type="custom">
+			<script returnVar="val">
+				<lang type="sql">
+					SELECT settingsvalue FROM amp_global_settings where settingsname='Recreate the views on the next server restart';
+				</lang>
+			</script>
+ 			<test>val.equalsIgnoreCase("true")</test>
+		</condition>
+	</trigger>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				DROP VIEW IF EXISTS v_nationalobjectives_code CASCADE;
+				CREATE OR REPLACE VIEW v_nationalobjectives_code AS
+				SELECT a.amp_activity_id, COALESCE(t.theme_code, '#') AS national_planning_objectives_code, a.amp_program_id
+				FROM amp_activity_program a
+				JOIN amp_theme t ON t.amp_theme_id = a.amp_program_id
+				JOIN amp_program_settings aps ON aps.amp_program_settings_id = a.program_setting
+				WHERE aps.name::text = 'National Plan Objective'::text;
+        	</lang>
+		</script>
+	</apply>
+</tns:patch>

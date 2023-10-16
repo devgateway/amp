@@ -16,6 +16,8 @@ import org.dgfoundation.amp.onepager.helper.*;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.kernel.ampapi.endpoints.performance.PerformanceRuleManager;
+import org.digijava.kernel.cache.AbstractCache;
+import org.digijava.kernel.cache.ehcache.EhCacheWrapper;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
@@ -207,9 +209,9 @@ public class ActivityUtil {
         boolean isActivityForm = context.getSource() == ActivitySource.ACTIVITY_FORM;
         if (oldA.getAmpActivityId() != null)
             session.evict(oldA);
-        Set<AmpComponent> components = a.getComponents();
-        Set<AmpFunding> funding = a.getFunding();
-        Set<AmpOrgRole> orgRoles = a.getOrgrole();
+//        Set<AmpComponent> components = a.getComponents();
+//        Set<AmpFunding> funding = a.getFunding();
+//        Set<AmpOrgRole> orgRoles = a.getOrgrole();
         if (createNewVersion) {
             try {
                 AmpActivityGroup tmpGroup = a.getAmpActivityGroup();
@@ -648,8 +650,20 @@ public class ActivityUtil {
             TruBudgetActivity truBudgetActivity  = PersistenceManager.getRequestDBSession().createQuery("FROM "+TruBudgetActivity.class.getName()+" ta WHERE ta.ampActivityId="+a.getAmpActivityId(), TruBudgetActivity.class).stream().findAny().orElse(null);
             if (truBudgetActivity!=null)
             {
+
                 try {
-                    ProjectUtil.closeProject(truBudgetActivity.getTruBudgetId());
+                    List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
+
+
+                    String token = ProjectUtil.getTrubudgetToken();
+                    new Thread(()-> {
+                        try {
+                            ProjectUtil.closeProject(truBudgetActivity.getTruBudgetId(),settings, token);
+                        } catch (Exception e) {
+                            logger.info("Error during project close",e);
+                        }
+                    }).start();
+
                 } catch (Exception e) {
                     logger.info("An error during project close: ",e);
                 }

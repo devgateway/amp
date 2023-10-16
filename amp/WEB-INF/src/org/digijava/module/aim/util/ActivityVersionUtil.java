@@ -233,7 +233,7 @@ public class ActivityVersionUtil {
 //
 ////        out.setAmpActivityGroup(null);
         AmpActivityVersion out = SerializationUtils.clone(in);
-        out.setAmpActivityGroup(null);
+//        out.setAmpActivityGroup(null);
 
         return out;
     }

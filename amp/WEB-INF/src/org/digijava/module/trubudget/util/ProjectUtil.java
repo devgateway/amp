@@ -22,6 +22,7 @@ import org.hibernate.query.Query;
 import org.hibernate.type.LongType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
 import java.io.File;
@@ -78,7 +79,7 @@ public class ProjectUtil {
         List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
 
         AbstractCache myCache = new EhCacheWrapper("trubudget");
-        String token = (String) myCache.get("truBudgetToken");
+        String token = ProjectUtil.getTrubudgetToken();
         String user = (String) myCache.get("truBudgetUser");
         logger.info("Trubudget Cached Token:" + token);
         CreateProjectModel projectModel = new CreateProjectModel();
@@ -178,8 +179,7 @@ public class ProjectUtil {
 
     public static void updateProject(String projectId, AmpActivityVersion ampActivityVersion, List<AmpComponent> ampComponents) throws URISyntaxException {
 
-        AbstractCache myCache = new EhCacheWrapper("trubudget");
-        String token = (String) myCache.get("truBudgetToken");
+        String token = ProjectUtil.getTrubudgetToken();
         logger.info("Trubudget Cached Token:" + token);
 
         List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
@@ -232,32 +232,57 @@ public class ProjectUtil {
 
     }
 
-    public static void closeProject(String projectId) throws URISyntaxException {
-        List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
+    public static void closeProject(String projectId,List<AmpGlobalSettings> settings, String token) throws URISyntaxException {
 
-        AbstractCache myCache = new EhCacheWrapper("trubudget");
-        String token = (String) myCache.get("truBudgetToken");
         CloseProjectModel closeProjectModel = new CloseProjectModel();
         closeProjectModel.setApiVersion(getSettingValue(settings, "apiVersion"));
         CloseProjectModel.Data data = new CloseProjectModel.Data();
         data.setProjectId(projectId);
         closeProjectModel.setData(data);
+        refreshSession();
        session.createQuery("FROM " + AmpComponentTruSubProject.class.getName() + " act WHERE act.truProjectId= '" + projectId + "'", AmpComponentTruSubProject.class).list().forEach(
                 subProject->{
                     try {
                         // TODO: 10/16/23 add functionality to close wf
-//                        AmpComponentFundingTruWF ampComponentFundingTruWF = session.createQuery("FROM " + AmpComponentFundingTruWF.class.getName() + " act WHERE act.truSubprojectId= '" + subProject.getTruSubProjectId() + "'", AmpComponentFundingTruWF.class).stream().findAny().orElse(null);
-//                        WorkflowItemDetailsModel workflowItemDetailsModel = getWFItemDetails(ampComponentFundingTruWF);
-//                        if(workflowItemDetailsModel!=null) {
-//                            if (workflowItemDetailsModel.getData().getWorkflowitem().getData().getStatus().equalsIgnoreCase("open")) {
-////                                closeWorkFlowItem();
-//                            }
-//                        }
-                        String res = closeSubProject(settings,projectId,subProject.getTruSubProjectId(), token);
-                        logger.info("Subproject close response: Item "+subProject.getTruSubProjectId()+":Res : "+res);
-                    } catch (URISyntaxException e) {
+                        session.createQuery("FROM " + AmpComponentFundingTruWF.class.getName() + " act WHERE act.truSubprojectId= '" + subProject.getTruSubProjectId() + "'", AmpComponentFundingTruWF.class).list().forEach(ampComponentFundingTruWF->{
+                                    WorkflowItemDetailsModel workflowItemDetailsModel;
+                                    try {
+                                        workflowItemDetailsModel = getWFItemDetails(ampComponentFundingTruWF,settings, token);
+                                    } catch (URISyntaxException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                    if(workflowItemDetailsModel!=null) {
+                                        if (workflowItemDetailsModel.getData().getWorkflowitem().getData().getStatus().equalsIgnoreCase("open")) {
+                                            CloseWFItemModel closeWFItemModel = new CloseWFItemModel();
+                                            closeWFItemModel.setApiVersion(getSettingValue(settings, "apiVersion"));
+                                            CloseWFItemModel.Data data1 = new CloseWFItemModel.Data();
+                                            data1.setProjectId(subProject.getTruProjectId());
+                                            data1.setSubprojectId(subProject.getTruSubProjectId());
+                                            data1.setWorkflowitemId(workflowItemDetailsModel.getData().getWorkflowitem().getData().getId());
+                                            closeWFItemModel.setData(data1);
+                                            try {
+                                               String res = closeWorkFlowItemForReal(closeWFItemModel, settings, token).block();
+                                                logger.info("Workflow close response: Item "+closeWFItemModel.getData().getWorkflowitemId()+":Res : "+res);
+
+                                            } catch (URISyntaxException e) {
+                                                throw new RuntimeException(e);
+                                            }
+                                        }
+                                    }
+                        });
+                        } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
+
+                    try {
+                        String res = closeSubProject(settings,projectId,subProject.getTruSubProjectId(), token);
+                        logger.info("Subproject close response: Item "+subProject.getTruSubProjectId()+":Res : "+res);
+
+                    } catch (URISyntaxException e) {
+                        logger.error("Error during subproject close ",e);
+                    }
+
+
                 }
         );
 
@@ -265,6 +290,12 @@ public class ProjectUtil {
         GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/project.close", closeProjectModel, CloseProjectModel.class, String.class, token)
                     .subscribe(res -> logger.info("Project close response: "+res));
 
+    }
+
+    public static String getTrubudgetToken()
+    {
+        AbstractCache myCache = new EhCacheWrapper("trubudget");
+        return (String) myCache.get("truBudgetToken");
     }
 
     public static String closeSubProject(List<AmpGlobalSettings>settings, String projectId,String subProjectId, String token) throws URISyntaxException {
@@ -282,7 +313,7 @@ public class ProjectUtil {
     public static void createUpdateSubProjects(List<AmpComponent> components, String projectId, List<AmpGlobalSettings> settings, AmpAuthWebSession ampAuthWebSession) throws URISyntaxException {
 
         AbstractCache myCache = new EhCacheWrapper("trubudget");
-        String token = (String) myCache.get("truBudgetToken");
+        String token = ProjectUtil.getTrubudgetToken();
         String user = (String) myCache.get("truBudgetUser");
         logger.info("Trubudget Cached Token:" + token);
         for (AmpComponent ampComponent:components)
@@ -421,7 +452,7 @@ public class ProjectUtil {
     }
     public static void createUpdateWorkflowItems(String projectId, String subProjectId, AmpComponent ampComponent, List<AmpGlobalSettings> settings, AmpAuthWebSession ampAuthWebSession) throws URISyntaxException {
         AbstractCache myCache = new EhCacheWrapper("trubudget");
-        String token = (String) myCache.get("truBudgetToken");
+        String token = ProjectUtil.getTrubudgetToken();
         String user = (String) myCache.get("truBudgetUser");
         logger.info("Trubudget Cached Token:" + token);
         if (ampComponent.getFundings()!=null) {
@@ -512,7 +543,7 @@ public class ProjectUtil {
                                                 });
                                                 //workflow close
                                                 try {
-                                                    closeWorkFlowItem(componentFunding, settings, projectId, subProjectId, res.getData().getWorkflowitem().getId(), "Closed", token);
+                                                    closeWorkFlowItem(componentFunding, settings, projectId, subProjectId, res.getData().getWorkflowitem().getId(), token);
                                                 } catch (URISyntaxException e) {
                                                     logger.info("Error when closing wf item ", e);
                                                     throw new RuntimeException(e);
@@ -568,7 +599,7 @@ public class ProjectUtil {
                                         .subscribe(res -> logger.info("Edit WFItem response: " + res));
 
                                 try {
-                                    closeWorkFlowItem(componentFunding, settings, projectId, subProjectId, ampComponentFundingTruWF.getTruWFId(), componentFunding.getComponentFundingStatus().getValue(), token);
+                                    closeWorkFlowItem(componentFunding, settings, projectId, subProjectId, ampComponentFundingTruWF.getTruWFId(), token);
                                 } catch (URISyntaxException e) {
                                     logger.info("Error when closing wf item ", e);
                                     throw new RuntimeException(e);
@@ -582,7 +613,7 @@ public class ProjectUtil {
         }
 
     }
-    public static void closeWorkFlowItem(AmpComponentFunding ampComponentFunding, List<AmpGlobalSettings> settings, String projectId, String subProjectId, String workFlowItemId, String rejectReason, String token) throws URISyntaxException {
+    public static void closeWorkFlowItem(AmpComponentFunding ampComponentFunding, List<AmpGlobalSettings> settings, String projectId, String subProjectId, String workFlowItemId, String token) throws URISyntaxException {
         if (Objects.equals(ampComponentFunding.getComponentFundingStatusFormatted(), "closed") || Objects.equals(ampComponentFunding.getComponentFundingStatusFormatted(), "rejected")){
             //workflow close
             CloseWFItemModel closeWFItemModel = new CloseWFItemModel();
@@ -603,11 +634,14 @@ public class ProjectUtil {
                 closeWFItemModel.setData(data);
             }
 
-            GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/workflowitem.close", closeWFItemModel, CloseWFItemModel.class, String.class, token)
-                    .subscribe(res -> logger.info("WF close response: "+res));
+          closeWorkFlowItemForReal(closeWFItemModel,settings,token)
+                  .subscribe(res -> logger.info("WF close response: "+res));
 
 
         }
+    }
+    public static Mono<String> closeWorkFlowItemForReal(CloseWFItemModel closeWFItemModel, List<AmpGlobalSettings> settings, String token) throws URISyntaxException {
+        return GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/workflowitem.close", closeWFItemModel, CloseWFItemModel.class, String.class, token);
     }
 
     private static String convertToISO8601(Date date) {
@@ -623,11 +657,9 @@ public class ProjectUtil {
         return instant.toString();
     }
 
-    public static WorkflowItemDetailsModel getWFItemDetails(AmpComponentFundingTruWF ampComponentFundingTruWF) throws URISyntaxException {
+    public static WorkflowItemDetailsModel getWFItemDetails(AmpComponentFundingTruWF ampComponentFundingTruWF, List<AmpGlobalSettings> settings,String token) throws URISyntaxException {
         if (getSettingValue(getGlobalSettingsBySection("trubudget"),"isEnabled").equalsIgnoreCase("true")&& TeamUtil.getCurrentUser().getTruBudgetEnabled()) {
-            List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
-        AbstractCache myCache = new EhCacheWrapper("trubudget");
-        String token = (String) myCache.get("truBudgetToken");
+
         if (ampComponentFundingTruWF!=null) {
             return GenericWebClient.getForSingleObjResponse(getSettingValue(settings, "baseUrl") + String.format("api/workflowitem.viewDetails?projectId=%s&subprojectId=%s&workflowitemId=%s", ampComponentFundingTruWF.getTruProjectId(), ampComponentFundingTruWF.getTruSubprojectId(), ampComponentFundingTruWF.getTruWFId()), WorkflowItemDetailsModel.class, token)
                     .onErrorReturn(new WorkflowItemDetailsModel()).block();

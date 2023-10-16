@@ -93,7 +93,8 @@ public class ProjectUtil {
         project.setDisplayName(ampActivityVersion.getName());
         project.setDescription(ampActivityVersion.getDescription());
         project.setStatus("open");// TODO: 9/11/23 set correct status
-        project.setTags(Arrays.stream((ampActivityVersion.getName() + " " + ampActivityVersion.getDescription()).split(" ")).filter(x -> x.length() <= 15).collect(Collectors.toList()));
+        List<String> tags =Arrays.stream((ampActivityVersion.getName() + " " + ampActivityVersion.getDescription()).trim().split(" ")).filter(x -> x.length() <= 15 && x.length() >= 1).collect(Collectors.toList());
+        project.setTags(tags);
         AmpAuthWebSession s = (AmpAuthWebSession) org.apache.wicket.Session.get();
         for (AmpFunding ampFunding : ampActivityVersion.getFunding()) {
             if (ampFunding.getFundingDetails()!=null) {
@@ -232,14 +233,14 @@ public class ProjectUtil {
 
     }
 
-    public static void closeProject(String projectId,List<AmpGlobalSettings> settings, String token) throws URISyntaxException {
+    public static void closeProject(String projectId,List<AmpGlobalSettings> settings, String token, Session session) throws URISyntaxException {
 
         CloseProjectModel closeProjectModel = new CloseProjectModel();
         closeProjectModel.setApiVersion(getSettingValue(settings, "apiVersion"));
         CloseProjectModel.Data data = new CloseProjectModel.Data();
         data.setProjectId(projectId);
         closeProjectModel.setData(data);
-        refreshSession();
+//        refreshSession();
        session.createQuery("FROM " + AmpComponentTruSubProject.class.getName() + " act WHERE act.truProjectId= '" + projectId + "'", AmpComponentTruSubProject.class).list().forEach(
                 subProject->{
                     try {

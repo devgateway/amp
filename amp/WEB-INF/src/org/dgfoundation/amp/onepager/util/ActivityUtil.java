@@ -40,10 +40,7 @@ import org.digijava.module.message.triggers.ActivityValidationWorkflowTrigger;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.digijava.module.trubudget.dbentity.TruBudgetActivity;
 import org.digijava.module.trubudget.util.ProjectUtil;
-import org.hibernate.Hibernate;
-import org.hibernate.LockMode;
-import org.hibernate.LockOptions;
-import org.hibernate.Session;
+import org.hibernate.*;
 import org.hibernate.query.Query;
 import org.hibernate.type.LongType;
 
@@ -647,26 +644,32 @@ public class ActivityUtil {
         }
         if (a.getApprovalStatus().equals(ApprovalStatus.approved)|| a.getApprovalStatus().equals(ApprovalStatus.rejected))
         {
-            TruBudgetActivity truBudgetActivity  = PersistenceManager.getRequestDBSession().createQuery("FROM "+TruBudgetActivity.class.getName()+" ta WHERE ta.ampActivityId="+a.getAmpActivityId(), TruBudgetActivity.class).stream().findAny().orElse(null);
-            if (truBudgetActivity!=null)
-            {
+            if (getSettingValue(getGlobalSettingsBySection("trubudget"),"isEnabled").equalsIgnoreCase("true")&&TeamUtil.getCurrentUser().getTruBudgetEnabled()) {
+
+                TruBudgetActivity truBudgetActivity  = PersistenceManager.getRequestDBSession().createQuery("FROM "+TruBudgetActivity.class.getName()+" ta WHERE ta.ampActivityId="+a.getAmpActivityId(), TruBudgetActivity.class).stream().findAny().orElse(null);
+            if (truBudgetActivity!=null) {
 
                 try {
                     List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
 
 
                     String token = ProjectUtil.getTrubudgetToken();
-                    new Thread(()-> {
-                        try {
-                            ProjectUtil.closeProject(truBudgetActivity.getTruBudgetId(),settings, token);
-                        } catch (Exception e) {
-                            logger.info("Error during project close",e);
-                        }
-                    }).start();
+//                    new Thread(()-> {
+                    try {
+                        Session session = PersistenceManager.openNewSession();
+                        Transaction transaction = session.beginTransaction();
+                        ProjectUtil.closeProject(truBudgetActivity.getTruBudgetId(), settings, token, session);
+                        session.flush();
+                        transaction.commit();
+                    } catch (Exception e) {
+                        logger.info("Error during project close", e);
+                    }
+//                    }).start();
 
                 } catch (Exception e) {
-                    logger.info("An error during project close: ",e);
+                    logger.info("An error during project close: ", e);
                 }
+            }
             }
         }
     }

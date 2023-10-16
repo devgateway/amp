@@ -7,7 +7,7 @@
       "esnext"
     ],
     "typeRoots": [
-      "./node_modules/@types",
+      "../../node_modules/@types",
       "./src/modules/admin/indicator_manager/@types"
     ],
     "allowJs": true,
@@ -22,9 +22,9 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react"
+    "jsx": "react-jsx"
   },
   "include": [
-    "src"
+    "src/*"
   ]
 }

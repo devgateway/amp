@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "workspaces": [
-    "packages/**/*"
+    "packages/*"
   ],
   "scripts": {
     "start": "DISABLE_ESLINT=true lerna run start",

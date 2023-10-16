@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModelProperty;
-import org.digijava.kernel.ampapi.endpoints.gis.LocalizedDateSerializer;
 import org.digijava.kernel.ampapi.endpoints.gis.services.AdmLevel;
 import org.digijava.kernel.ampapi.endpoints.serializers.LocalizedDateSerializer;
 import org.digijava.module.aim.dbentity.AmpIndicatorColor;

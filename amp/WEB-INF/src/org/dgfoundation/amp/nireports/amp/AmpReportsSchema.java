@@ -30,6 +30,7 @@ import org.digijava.kernel.translator.LocalizableLabel;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.module.aim.dbentity.AmpColumns;
+import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -280,6 +281,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
     private AmpFundingColumn componentFundingColumn;
     private AmpFundingColumn gpiFundingColumn;
     private AmpFundingColumn regionalFundingColumn;
+    private AmpIndicatorColumn indicatorColumn;
 
     /**
      * Map<amp_column_name, view_column_name>
@@ -311,6 +313,10 @@ public class AmpReportsSchema extends AbstractReportsSchema {
             .put(ColumnConstants.PROJECT_RESULTS_AVAILABLE, "project_results_available_id")
             .put(ColumnConstants.VULNERABLE_GROUP, "vulnerable_group_id")
             .put(ColumnConstants.DONOR_COUNTRY, "donor_org_country_id")
+            .build());
+
+    private SubDimensions indicatorSubDimensions = new SubDimensions(new ImmutableMap.Builder<String, String>()
+            .put(ColumnConstants.INDICATOR_NAME, "me_indicator_id")
             .build());
 
     /**
@@ -703,6 +709,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
         pledgeFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_PLEDGE_FUNDING, "v_ni_pledges_funding", subDimensions);
         componentFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_COMPONENT_FUNDING, "v_ni_component_funding", subDimensions);
         gpiFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_GPI_FUNDING, "v_ni_gpi_funding", subDimensions);
+        indicatorColumn = new AmpIndicatorColumn("Indicator Values", "v_ni_indicator_funding", indicatorSubDimensions);
         regionalFundingColumn = new AmpFundingColumn(AmpFundingColumn.ENTITY_REGIONAL_FUNDING,
                 "v_ni_regional_funding", subDimensions);
     }
@@ -1391,8 +1398,8 @@ public class AmpReportsSchema extends AbstractReportsSchema {
             case ArConstants.REGIONAL_TYPE:
                 return regionalFundingColumn;
 
-            case ArConstants.INDICATOR_TYPE:
-                return indicatorColumn;
+//            case ArConstants.INDICATOR_TYPE:
+//                return indicatorColumn;
 
             default:
                 throw new RuntimeException(String.format("report type %d not implemented in NiReports yet", engine.spec.getReportType()));
@@ -1581,7 +1588,7 @@ public class AmpReportsSchema extends AbstractReportsSchema {
     @Override
     public boolean isTransactionLevelHierarchy(NiReportColumn<?> col, NiReportsEngine engine) {
         //return col.isTransactionLevelHierarchy();
-        AmpAmountColumn funding = this.getFundingFetcher(engine);
+        AmpFundingColumn funding = this.getFundingFetcher(engine);
         return funding.isTransactionLevelHierarchy(col);
         //return super.isTransactionLevelHierarchy(col, engine);
     }

@@ -1,19 +1,32 @@
-import React, {memo} from 'react';
-import {useLocation, useNavigate, useParams} from 'react-router-dom';
+import React, {memo, useEffect} from 'react';
+import {useLocation, useNavigate, useParams, useSearchParams} from 'react-router-dom';
 
 export const withRouter = (Component) => {
     return memo((props) => {
         const navigate = useNavigate();
         const location = useLocation();
         const params = useParams();
+        const [ searchParams, setSearchParams] = useSearchParams();
+
+        useEffect(() => {
+            setSearchParams(localStorage.getItem("searchParams") || "");
+        }, []);
 
         return (
-            <Component
-                navigate={navigate}
-                location={location}
-                params={params}
-                {...props}
-            />
+            <>
+                {searchParams.get('profile') ? (
+                    <Component
+                        navigate={navigate}
+                        location={location}
+                        params={params}
+                        searchParams={searchParams}
+                        {...props}
+                    />
+                ) : (
+                    <div>loading...</div>
+                )}
+            </>
+
         );
     });
 };

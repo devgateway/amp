@@ -40,7 +40,7 @@
 		<link href='tabs/fonts/open-sans.css' rel='stylesheet' type='text/css'>
 		<!-- Icon Font - Font Awesome -->
 		<link href="tabs/fonts/font-awesome.min.css" rel="stylesheet">
-        
+
 		<link rel="stylesheet" href="tabs/css/bootstrap.css">
 		<link rel="stylesheet" href="tabs/css/bootstrap-theme.css">
 		<link rel="stylesheet" href="tabs/css/jquery-ui.css">
@@ -61,7 +61,6 @@
 		
 		<!-- END LOADING NEW TABS NECESSARY FILES -->
 		<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/common/lib/object_hash.js"></script>
-		<script type="text/javascript" src="<digi:file src="/TEMPLATE/reampv2/packages/container/build/main.bundle.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate//tabs/js/lib/jquery.min.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/tabs/js/lib/jquery-ui.min.js"/>"></script>	
         <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/script/common/CommonFilterUtils.js"/>"></script>
@@ -70,7 +69,10 @@
         <script type="text/javascript">
          $.noConflict(true);
         </script>
-        <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/node_modules/amp-settings/dist/amp-settings.js"/>"></script> 
+        <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/node_modules/amp-settings/dist/amp-settings.js"/>"></script>
+
+		<!-- Javascript for the micro-frontends -->
+		<script type="text/javascript" src="<digi:file src="/TEMPLATE/reampv2/packages/container/build/main.bundle.js"/>"></script>
 		
         
 	</head>

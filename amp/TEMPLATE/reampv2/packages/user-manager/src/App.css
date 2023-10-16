@@ -10,6 +10,11 @@
     margin-top: 8px !important;
 }
 
+.ui .modal {
+    height: max-content;
+    position: relative !important;
+}
+
 .ui.modal>.actions {
     background: #ffffff !important;
     padding: 20px 43px !important;

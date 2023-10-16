@@ -21,6 +21,7 @@ import org.dgfoundation.amp.onepager.events.FundingOrgListUpdateEvent;
 import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.dgfoundation.amp.onepager.models.AbstractMixedSetModel;
 import org.dgfoundation.amp.onepager.models.AmpRelatedOrgsModel;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
@@ -28,6 +29,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.trubudget.dbentity.AmpComponentFundingTruWF;
 import org.digijava.module.trubudget.model.workflowitem.WorkflowItemDetailsModel;
 import org.digijava.module.trubudget.util.ProjectUtil;
 
@@ -79,17 +81,21 @@ public class AmpComponentsFundingFormTableFeature extends
 //                item.add(new AttributeModifier("style",""))
                 if (getSettingValue(getGlobalSettingsBySection("trubudget"),"isEnabled").equalsIgnoreCase("true")&& TeamUtil.getCurrentUser().getTruBudgetEnabled()) {
                     if (model.getObject().getTransactionType()==1) {
-                        try {
-                            WorkflowItemDetailsModel workflowItemDetailsModel = ProjectUtil.getWFItemDetails(model.getObject());
+                        PersistenceManager.getRequestDBSession().createQuery("FROM " + AmpComponentFundingTruWF.class.getName() + " act WHERE act.ampComponentFundingId= '" + model.getObject().getJustAnId() + "' AND act.ampComponentFundingId IS NOT NULL", AmpComponentFundingTruWF.class).stream().findAny().ifPresent(ampComponentFundingTruWF->{
+                            WorkflowItemDetailsModel workflowItemDetailsModel = null;
+                            try {
+                                workflowItemDetailsModel = ProjectUtil.getWFItemDetails(ampComponentFundingTruWF);
+                            } catch (Exception e) {
+                                logger.info("Error when getting WF details: ",e);
+                            }
                             if (workflowItemDetailsModel!=null && workflowItemDetailsModel.getData()!=null) {
                                 if (!workflowItemDetailsModel.getData().getWorkflowitem().getData().getStatus().equalsIgnoreCase("open")) {
                                     item.add(new AttributeModifier("style", "pointer-events: none; opacity: 0.5;"));
                                 }
                             }
+                       });
 
-                        } catch (URISyntaxException e) {
-                            throw new RuntimeException(e);
-                        }
+
                     }
                 }
                 try{

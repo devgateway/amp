@@ -919,12 +919,11 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         //DonorFunding
         Set fundingSet = activity.getFunding();
         if (fundingSet != null){
-            for (Iterator<AmpFunding> iterator = fundingSet.iterator(); iterator.hasNext(); ) {
-                AmpFunding funding = iterator.next();
-                verifySet(new PropertyModel<Set>(funding, "fundingDetails"),  alertIfDisbursementBiggerCommitments,
+            for (AmpFunding funding : (Iterable<AmpFunding>) fundingSet) {
+                verifySet(new PropertyModel<Set>(funding, "fundingDetails"), alertIfDisbursementBiggerCommitments,
                         alertIfExpenditureBiggerDisbursement, commitmentErrors, expenditureErrors, funding,
                         TranslatorUtil.getTranslatedText(OnePager.DONOR_FUNDING_SECTION_NAME) + ": " +
-                        funding.getAmpDonorOrgId().getAcronymAndName()+" ["+funding.getGroupVersionedFunding()+"]");
+                                funding.getAmpDonorOrgId().getAcronymAndName() + " [" + funding.getGroupVersionedFunding() + "]");
             }
         }
 
@@ -932,15 +931,14 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         Set regionalSet = activity.getRegionalFundings();
         if (regionalSet != null){
             HashSet<Long> verifiedRegions = new HashSet<Long>();
-            for (Iterator<AmpRegionalFunding> iterator = regionalSet.iterator(); iterator.hasNext(); ){
-                AmpRegionalFunding funding = iterator.next();
+            for (AmpRegionalFunding funding : (Iterable<AmpRegionalFunding>) regionalSet) {
                 if (funding.getRegionLocation() == null || verifiedRegions.contains(funding.getRegionLocation().getId()))
                     continue;
                 verifiedRegions.add(funding.getRegionLocation().getId());
                 verifySet(new PropertyModel<Set>(am, "regionalFundings"), alertIfDisbursementBiggerCommitments,
                         alertIfExpenditureBiggerDisbursement, commitmentErrors, expenditureErrors, funding.getRegionLocation(),
                         TranslatorUtil.getTranslatedText(OnePager.REGIONAL_FUNDING_SECTION_NAME) + ": " +
-                        funding.getRegionLocation().getAutoCompleteLabel());
+                                funding.getRegionLocation().getAutoCompleteLabel());
             }
         }
 

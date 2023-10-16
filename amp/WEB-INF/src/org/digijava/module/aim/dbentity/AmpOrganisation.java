@@ -116,6 +116,15 @@ public class AmpOrganisation implements Comparable<AmpOrganisation>, Identifiabl
     private boolean translateable   = true;
 
     private Set<User> users;
+    private Set<AmpFunding> funding;
+
+    public Set<AmpFunding> getFunding() {
+        return funding;
+    }
+
+    public void setFunding(Set<AmpFunding> funding) {
+        this.funding = funding;
+    }
 
     @OrganizationReportColumn(columnName="Line Ministry Registration Number",propertyType=PropertyType.NGO)
     public String getLineMinRegNumber() {

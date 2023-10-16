@@ -1,5 +1,6 @@
 package org.digijava.module.aim.util;
 
+import org.apache.commons.lang3.SerializationUtils;
 import org.apache.log4j.Logger;
 import org.apache.wicket.util.string.Strings;
 import org.digijava.kernel.exception.DgException;
@@ -218,19 +219,22 @@ public class ActivityVersionUtil {
      * @throws CloneNotSupportedException
      */
     public static AmpActivityVersion cloneActivity(AmpActivityVersion in) throws CloneNotSupportedException {
-        AmpActivityVersion out = (AmpActivityVersion) in.clone();
-        
-        Class clazz = AmpActivityFields.class;
-        
-        Field[] fields = clazz.getDeclaredFields();//clazz.getFields();
-        for (Field field : fields) {
-            if (Collection.class.isAssignableFrom(field.getType())) {
-                logger.debug("Init set: " + field.getName());
-                initSet(out, field);
-            }
-        }
+//        AmpActivityVersion out = (AmpActivityVersion) in.clone();
+//
+//        Class clazz = AmpActivityFields.class;
+//
+//        Field[] fields = clazz.getDeclaredFields();//clazz.getFields();
+//        for (Field field : fields) {
+//            if (Collection.class.isAssignableFrom(field.getType())) {
+//                logger.debug("Init set: " + field.getName());
+//                initSet(out, field);
+//            }
+//        }
+//
+////        out.setAmpActivityGroup(null);
+        AmpActivityVersion out = SerializationUtils.clone(in);
+        out.setAmpActivityGroup(null);
 
-//        out.setAmpActivityGroup(null);
         return out;
     }
     

@@ -385,22 +385,28 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
         Session session = PersistenceManager.getRequestDBSession();
         try {
 //session.flush();
-            result = (AmpActivityVersion) session.get(AmpActivityVersion.class, id);
+            result = session.get(AmpActivityVersion.class, id);
             session.evict(result);
-            result = (AmpActivityVersion) session.get(AmpActivityVersion.class, id);
+            result = session.get(AmpActivityVersion.class, id);
             Hibernate.initialize(result.getInternalIds());
             Hibernate.initialize(result.getLocations());
             Hibernate.initialize(result.getSectors());
             Hibernate.initialize(result.getFunding());
             if (result.getFunding() != null) {
-                for(Object obj:result.getFunding()){
-                    AmpFunding funding = (AmpFunding) obj;
-                    Hibernate.initialize(funding.getFundingDetails());
-                    Hibernate.initialize(funding.getMtefProjections());
+                for(AmpFunding obj:result.getFunding()){
+                    Hibernate.initialize(obj.getFundingDetails());
+                    Hibernate.initialize(obj.getMtefProjections());
                 }
             }
+
             Hibernate.initialize(result.getActivityDocuments());
             Hibernate.initialize(result.getComponents());
+            if (result.getComponents()!=null)
+            {
+                for(AmpComponent obj:result.getComponents()){
+                    Hibernate.initialize(obj.getFundings());
+                }
+            }
             Hibernate.initialize(result.getOrgrole());
             //we need to initialize role from org role
             if (result.getOrgrole() != null) {

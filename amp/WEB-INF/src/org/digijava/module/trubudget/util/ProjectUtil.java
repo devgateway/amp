@@ -13,10 +13,7 @@ import org.digijava.module.trubudget.dbentity.AmpComponentFundingTruWF;
 import org.digijava.module.trubudget.dbentity.AmpComponentTruSubProject;
 import org.digijava.module.trubudget.dbentity.TruBudgetActivity;
 import org.digijava.module.trubudget.model.project.*;
-import org.digijava.module.trubudget.model.subproject.CreateWorkFlowItemModel;
-import org.digijava.module.trubudget.model.subproject.EditSubProjectModel;
-import org.digijava.module.trubudget.model.subproject.EditSubProjectedBudgetModel;
-import org.digijava.module.trubudget.model.subproject.SubProjectGrantRevokePermModel;
+import org.digijava.module.trubudget.model.subproject.*;
 import org.digijava.module.trubudget.model.workflowitem.*;
 import org.digijava.module.um.util.GenericWebClient;
 import org.hibernate.Session;
@@ -235,15 +232,51 @@ public class ProjectUtil {
 
     }
 
-    public static void closeProject(AmpActivityVersion ampActivityVersion,List<AmpGlobalSettings>settings,String projectId, String token) throws URISyntaxException {
+    public static void closeProject(String projectId) throws URISyntaxException {
+        List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
+
+        AbstractCache myCache = new EhCacheWrapper("trubudget");
+        String token = (String) myCache.get("truBudgetToken");
         CloseProjectModel closeProjectModel = new CloseProjectModel();
         closeProjectModel.setApiVersion(getSettingValue(settings, "apiVersion"));
         CloseProjectModel.Data data = new CloseProjectModel.Data();
         data.setProjectId(projectId);
         closeProjectModel.setData(data);
+       session.createQuery("FROM " + AmpComponentTruSubProject.class.getName() + " act WHERE act.truProjectId= '" + projectId + "'", AmpComponentTruSubProject.class).list().forEach(
+                subProject->{
+                    try {
+                        // TODO: 10/16/23 add functionality to close wf
+//                        AmpComponentFundingTruWF ampComponentFundingTruWF = session.createQuery("FROM " + AmpComponentFundingTruWF.class.getName() + " act WHERE act.truSubprojectId= '" + subProject.getTruSubProjectId() + "'", AmpComponentFundingTruWF.class).stream().findAny().orElse(null);
+//                        WorkflowItemDetailsModel workflowItemDetailsModel = getWFItemDetails(ampComponentFundingTruWF);
+//                        if(workflowItemDetailsModel!=null) {
+//                            if (workflowItemDetailsModel.getData().getWorkflowitem().getData().getStatus().equalsIgnoreCase("open")) {
+////                                closeWorkFlowItem();
+//                            }
+//                        }
+                        String res = closeSubProject(settings,projectId,subProject.getTruSubProjectId(), token);
+                        logger.info("Subproject close response: Item "+subProject.getTruSubProjectId()+":Res : "+res);
+                    } catch (URISyntaxException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+        );
 
-            GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/project.close", closeProjectModel, CloseProjectModel.class, String.class, token)
-                    .subscribe(res -> logger.info("WF close response: "+res));
+
+        GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/project.close", closeProjectModel, CloseProjectModel.class, String.class, token)
+                    .subscribe(res -> logger.info("Project close response: "+res));
+
+    }
+
+    public static String closeSubProject(List<AmpGlobalSettings>settings, String projectId,String subProjectId, String token) throws URISyntaxException {
+        CloseSubProjectModel closeSubProjectModel = new CloseSubProjectModel();
+        closeSubProjectModel.setApiVersion(getSettingValue(settings, "apiVersion"));
+        CloseSubProjectModel.Data data = new CloseSubProjectModel.Data();
+        data.setProjectId(projectId);
+        data.setSubprojectId(subProjectId);
+        closeSubProjectModel.setData(data);
+
+        return GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/subproject.close", closeSubProjectModel, CloseSubProjectModel.class, String.class, token)
+                .block();
 
     }
     public static void createUpdateSubProjects(List<AmpComponent> components, String projectId, List<AmpGlobalSettings> settings, AmpAuthWebSession ampAuthWebSession) throws URISyntaxException {
@@ -299,8 +332,8 @@ public class ProjectUtil {
 
                                 ampComponentTruSubProject[0].setAmpComponentId(ampComponent.getAmpComponentId());
                                 ampComponentTruSubProject[0].setTruSubProjectId(subproject.getId());
+                                ampComponentTruSubProject[0].setTruProjectId(projectId);
                                 session.save(ampComponentTruSubProject[0]);
-
                                 try {
                                     session.flush();
 
@@ -590,12 +623,11 @@ public class ProjectUtil {
         return instant.toString();
     }
 
-    public static WorkflowItemDetailsModel getWFItemDetails(AmpComponentFunding componentFunding) throws URISyntaxException {
+    public static WorkflowItemDetailsModel getWFItemDetails(AmpComponentFundingTruWF ampComponentFundingTruWF) throws URISyntaxException {
         if (getSettingValue(getGlobalSettingsBySection("trubudget"),"isEnabled").equalsIgnoreCase("true")&& TeamUtil.getCurrentUser().getTruBudgetEnabled()) {
             List<AmpGlobalSettings> settings = getGlobalSettingsBySection("trubudget");
         AbstractCache myCache = new EhCacheWrapper("trubudget");
         String token = (String) myCache.get("truBudgetToken");
-        AmpComponentFundingTruWF ampComponentFundingTruWF = PersistenceManager.getRequestDBSession().createQuery("FROM " + AmpComponentFundingTruWF.class.getName() + " act WHERE act.ampComponentFundingId= '" + componentFunding.getJustAnId() + "' AND act.ampComponentFundingId IS NOT NULL", AmpComponentFundingTruWF.class).stream().findAny().orElse(null);
         if (ampComponentFundingTruWF!=null) {
             return GenericWebClient.getForSingleObjResponse(getSettingValue(settings, "baseUrl") + String.format("api/workflowitem.viewDetails?projectId=%s&subprojectId=%s&workflowitemId=%s", ampComponentFundingTruWF.getTruProjectId(), ampComponentFundingTruWF.getTruSubprojectId(), ampComponentFundingTruWF.getTruWFId()), WorkflowItemDetailsModel.class, token)
                     .onErrorReturn(new WorkflowItemDetailsModel()).block();

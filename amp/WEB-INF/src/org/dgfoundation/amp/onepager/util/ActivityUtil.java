@@ -52,6 +52,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -207,14 +208,18 @@ public class ActivityUtil {
         if (oldA.getAmpActivityId() != null)
             session.evict(oldA);
         Set<AmpComponent> components = a.getComponents();
+        Set<AmpFunding> funding = a.getFunding();
+        Set<AmpOrgRole> orgRoles = a.getOrgrole();
         if (createNewVersion) {
             try {
                 AmpActivityGroup tmpGroup = a.getAmpActivityGroup();
 
                 a = ActivityVersionUtil.cloneActivity(a);
-                if (a.getAmpActivityId()!=null) {//do this only on update
-                    a.setComponents(components);
-                }
+//                if (a.getAmpActivityId()!=null) {//do this only on update
+//                    a.setComponents(components);
+//                    a.setFunding(funding);
+//                    a.setOrgrole(orgRoles);
+//                }
                 //keeping session.clear() only for acitivity form as it was before
                 if (isActivityForm)
                     session.clear();
@@ -238,6 +243,7 @@ public class ActivityUtil {
 //                session.flush();
 
                 session.flush();
+//                session.clear();
 
             } catch (CloneNotSupportedException e) {
                 logger.error("Can't clone current Activity: ", e);
@@ -279,6 +285,9 @@ public class ActivityUtil {
             session.merge(group);
 
         }
+//        for (AmpOrgRole ampOrgRole: a.getOrgrole()){
+//            session.saveOrUpdate(ampOrgRole);
+//        }
 
         a.setAmpActivityGroup(group);
         updateMultiStakeholderField(a);
@@ -324,6 +333,7 @@ public class ActivityUtil {
         logAudit(ampCurrentMember, a, newActivity);
         updateComponents(a,session);
         session.flush();
+//        session.clear();
 //        session.getTransaction().commit();
 //        session.refresh(a);
         // TODO: 9/12/23 check if project is already existing
@@ -632,6 +642,18 @@ public class ActivityUtil {
             }
             a.setApprovedBy(ampCurrentMember);
             a.setApprovalDate(Calendar.getInstance().getTime());
+        }
+        if (a.getApprovalStatus().equals(ApprovalStatus.approved)|| a.getApprovalStatus().equals(ApprovalStatus.rejected))
+        {
+            TruBudgetActivity truBudgetActivity  = PersistenceManager.getRequestDBSession().createQuery("FROM "+TruBudgetActivity.class.getName()+" ta WHERE ta.ampActivityId="+a.getAmpActivityId(), TruBudgetActivity.class).stream().findAny().orElse(null);
+            if (truBudgetActivity!=null)
+            {
+                try {
+                    ProjectUtil.closeProject(truBudgetActivity.getTruBudgetId());
+                } catch (Exception e) {
+                    logger.info("An error during project close: ",e);
+                }
+            }
         }
     }
 

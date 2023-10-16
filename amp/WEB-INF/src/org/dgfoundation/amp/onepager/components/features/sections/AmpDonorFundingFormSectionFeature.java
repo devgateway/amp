@@ -488,8 +488,8 @@ public class AmpDonorFundingFormSectionFeature extends
 
         funding.setAmpDonorOrgId(org);
         funding.setAmpActivityId(am.getObject());
-        funding.setMtefProjections(new HashSet<AmpFundingMTEFProjection>());
-        funding.setFundingDetails(new HashSet<AmpFundingDetail>());
+        funding.setMtefProjections(new HashSet<>());
+        funding.setFundingDetails(new HashSet<>());
         funding.setGroupVersionedFunding(System.currentTimeMillis());
         
         // if it is a ssc activity we set a default type of assistance

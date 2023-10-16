@@ -25,6 +25,17 @@ public class AmpComponentTruSubProject {
     @Column(name = "amp_component_id")
     private Long ampComponentId;
 
+    public String getTruProjectId() {
+        return truProjectId;
+    }
+
+    public void setTruProjectId(String truProjectId) {
+        this.truProjectId = truProjectId;
+    }
+
+    @Column(name = "tru_project_id")
+    private String truProjectId;
+
     @Column(name = "tru_sub_project_id")
     private String truSubProjectId;
 

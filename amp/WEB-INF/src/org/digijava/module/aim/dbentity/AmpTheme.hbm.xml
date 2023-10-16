@@ -40,7 +40,7 @@
 		<!-- <many-to-one name="activityId" column="amp_activity_id"
 			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" not-null="false" />
 			-->
-		<set name="indicators" lazy="false" cascade="delete-orphan" inverse="true">
+		<set name="indicators" lazy="false" cascade="merge,delete-orphan" inverse="true">
 			<key column="theme_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.IndicatorTheme" />
 		</set>

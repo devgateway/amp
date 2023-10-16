@@ -11,7 +11,7 @@
 		</id>
 
 		<many-to-one name="activityId" column="amp_activity_id"
-			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" not-null="true" />
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" not-null="true" />
 		
 		<many-to-one name="sectorId" column="amp_sector_id"
 			class="org.digijava.module.aim.dbentity.AmpSector" cascade="none" not-null="true" />

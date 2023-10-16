@@ -29,7 +29,7 @@
 			class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" />
 
 		<many-to-one name="activity" column="activity_id"
-			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" />
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" />
 
 		<property name="startOfTendering" column="start_of_tendering" type="java.util.Date" />
 

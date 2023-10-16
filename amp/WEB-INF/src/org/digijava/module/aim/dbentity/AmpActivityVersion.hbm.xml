@@ -147,18 +147,18 @@
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityDocument" />
 		</set>
 
-		<set name="orgrole" cascade="all-delete-orphan" inverse="true">
+		<set name="orgrole" cascade="merge,delete-orphan" inverse="true">
 			<key column="activity" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpOrgRole" />
 		</set>
 
-		<set name="sectors" cascade="all-delete-orphan" inverse="true">
+		<set name="sectors" cascade="merge,delete-orphan" inverse="true">
 			<cache usage="read-write" />
 			<key column="amp_activity_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivitySector" />
 		</set>
 
-		<set name="contracts" cascade="all-delete-orphan" inverse="true">
+		<set name="contracts" cascade="merge,delete-orphan" inverse="true">
 			<cache usage="read-write" />
 			<key column="activity_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.IPAContract" />
@@ -178,7 +178,7 @@
 		</set>
 
 
-		<set name="funding" cascade="all-delete-orphan" inverse="true" order-by="index">
+		<set name="funding" cascade="merge,delete-orphan" inverse="true" order-by="index">
 			<cache usage="read-write" />
 			<key column="amp_activity_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpFunding" />

@@ -12,8 +12,7 @@
 		<property name="additionalInfo" column="additional_info" type="java.lang.String" />
 		<!-- <property name="budgetCode" column="budget_code" type="java.lang.String" />
 		 -->
-		 <many-to-one name="activity" class="org.digijava.module.aim.dbentity.AmpActivityVersion"
-			cascade="delete" />
+		 <many-to-one name="activity" class="org.digijava.module.aim.dbentity.AmpActivityVersion"/>
 		<many-to-one name="organisation" class="org.digijava.module.aim.dbentity.AmpOrganisation"
 			cascade="none" />
 		<many-to-one name="role" class="org.digijava.module.aim.dbentity.AmpRole" cascade="none" />

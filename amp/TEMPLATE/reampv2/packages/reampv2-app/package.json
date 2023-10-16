@@ -10,6 +10,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.30",
     "@fortawesome/free-solid-svg-icons": "^5.14.0",
     "@fortawesome/react-fontawesome": "^0.1.11",
+    "@murasoftware/react-bootstrap-table2-toolkit": "^2.2.4",
     "@musicstory/react-bootstrap-table-next": "^1.0.5",
     "@musicstory/react-bootstrap-table2-editor": "^1.0.1",
     "@musicstory/react-bootstrap-table2-filter": "^1.0.1",
@@ -60,6 +61,7 @@
     "react-redux": "^7.2.0",
     "react-router-dom": "^6.14.2",
     "react-scripts": "^5.0.1",
+    "react-select": "^5.7.7",
     "react-spinner": "^0.2.7",
     "react-spinners": "^0.13.8",
     "react-table": "^7.3.2",
@@ -70,6 +72,8 @@
     "redux-thunk": "^2.3.0",
     "semantic-ui-react": "^2.0.3",
     "stream-browserify": "^3.0.0",
+    "sweetalert2": "^11.7.2",
+    "sweetalert2-react-content": "^4.0.0",
     "yup": "^0.32.11"
   },
   "scripts": {
@@ -107,6 +111,8 @@
     "@types/dateformat": "^5.0.0",
     "@types/node": "^16.18.11",
     "@types/react": "^17.0.2",
+    "@types/react-bootstrap-table-next": "^4.0.20",
+    "@types/react-bootstrap-table2-paginator": "^2.1.3",
     "@types/react-dom": "^17.0.2",
     "@types/react-redux": "^7.1.24",
     "cross-env": "7.0.3",

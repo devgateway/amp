@@ -7,10 +7,12 @@
       "esnext"
     ],
     "typeRoots": [
-      "../../node_modules/@types",
-      "./src/modules/admin/indicator_manager/@types"
+      "./node_modules/@types",
+      "./src/@types",
+      "./src/react-app-env.d.ts"
     ],
     "allowJs": true,
+    "noImplicitAny": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,

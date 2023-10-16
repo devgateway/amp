@@ -13,3 +13,5 @@ declare module 'Yup' {
         toJavascriptDate(): StringSchema;
     }
 }
+
+declare module '@murasoftware/react-bootstrap-table2-toolkit';

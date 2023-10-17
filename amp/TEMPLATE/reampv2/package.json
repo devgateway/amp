@@ -17,8 +17,8 @@
     "@module-federation/dashboard-plugin": "^2.7.4",
     "dotenv-webpack": "^8.0.1",
     "lerna": "^7.1.4",
-    "nx": "^16.6.0",
-    "nx-cloud": "^16.3.0"
+    "nx": "^16.10.0",
+    "nx-cloud": "^16.5.2"
   },
   "dependencies": {
     "fs": "^0.0.1-security",

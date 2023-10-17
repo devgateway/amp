@@ -3,12 +3,13 @@ package org.digijava.kernel.entity.trubudget;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Table(name = "amp_trubudget_sub_intent")
 @Cacheable
 @DynamicUpdate
 @Entity
-public class SubIntents {
+public class SubIntents implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_trubudget_sub_intent_seq")
     @SequenceGenerator(name = "amp_trubudget_sub_intent_seq", sequenceName = "amp_trubudget_sub_intent_seq", allocationSize = 1)

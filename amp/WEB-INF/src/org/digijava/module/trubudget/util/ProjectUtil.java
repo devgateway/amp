@@ -1,5 +1,6 @@
 package org.digijava.module.trubudget.util;
 
+import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.helper.TemporaryComponentFundingDocument;
@@ -66,7 +67,7 @@ public class ProjectUtil {
     }
     public static void refreshSession()
     {
-        if (!session.isOpen()){
+        if (session==null || !session.isOpen()){
             session = PersistenceManager.openNewSession();
             transaction= session.beginTransaction();
         }
@@ -234,7 +235,8 @@ public class ProjectUtil {
     }
 
     public static void closeProject(String projectId,List<AmpGlobalSettings> settings, String token, Session session) throws URISyntaxException {
-
+//        Session session = PersistenceManager.openNewSession();
+//        Transaction transaction = session.beginTransaction();
         CloseProjectModel closeProjectModel = new CloseProjectModel();
         closeProjectModel.setApiVersion(getSettingValue(settings, "apiVersion"));
         CloseProjectModel.Data data = new CloseProjectModel.Data();
@@ -245,6 +247,7 @@ public class ProjectUtil {
                 subProject->{
                     try {
                         // TODO: 10/16/23 add functionality to close wf
+//                        refreshSession();
                         session.createQuery("FROM " + AmpComponentFundingTruWF.class.getName() + " act WHERE act.truSubprojectId= '" + subProject.getTruSubProjectId() + "'", AmpComponentFundingTruWF.class).list().forEach(ampComponentFundingTruWF->{
                                     WorkflowItemDetailsModel workflowItemDetailsModel;
                                     try {
@@ -286,6 +289,7 @@ public class ProjectUtil {
 
                 }
         );
+//       session.close();
 
 
         GenericWebClient.postForSingleObjResponse(getSettingValue(settings, "baseUrl") + "api/project.close", closeProjectModel, CloseProjectModel.class, String.class, token)
@@ -478,11 +482,14 @@ public class ProjectUtil {
                                             CreateWorkFlowItemModel.Document doc = new CreateWorkFlowItemModel.Document();
                                             doc.setFileName(temporaryComponentFundingDocument.getFileName());
                                             doc.setId(UUID.randomUUID().toString());
-                                            File file = temporaryComponentFundingDocument.getFile().writeToTempFile();
-
-                                            byte[] fileContent = Files.readAllBytes(file.toPath());
+//                                            File file = temporaryComponentFundingDocument.getFile().writeToTempFile();
+                                            FileUpload fileUpload = temporaryComponentFundingDocument.getFile();
+                                            if (fileUpload != null)
+                                            {
+                                                byte[] fileContent =fileUpload.getBytes();
                                             doc.setBase64(Base64.getEncoder().encodeToString(fileContent));
                                             docs.add(doc);
+                                            }
                                         } catch (Exception e) {
                                             logger.error("Error during workflow creation ", e);
                                         }
@@ -580,12 +587,15 @@ public class ProjectUtil {
                                         try {
                                             CreateWorkFlowItemModel.Document doc = new CreateWorkFlowItemModel.Document();
                                             doc.setFileName(temporaryComponentFundingDocument.getFileName());
-                                            File file = temporaryComponentFundingDocument.getFile().writeToTempFile();
+//                                            File file = temporaryComponentFundingDocument.getFile().writeToTempFile();
                                             doc.setId(UUID.randomUUID().toString());
+                                            FileUpload fileUpload = temporaryComponentFundingDocument.getFile();
+                                            if (fileUpload != null) {
 
-                                            byte[] fileContent = Files.readAllBytes(file.toPath());
-                                            doc.setBase64(Base64.getEncoder().encodeToString(fileContent));
-                                            docs.add(doc);
+                                                byte[] fileContent = fileUpload.getBytes();
+                                                doc.setBase64(Base64.getEncoder().encodeToString(fileContent));
+                                                docs.add(doc);
+                                            }
                                         } catch (Exception e) {
                                             logger.error("Error during workflow creation ", e);
                                         }
@@ -659,13 +669,12 @@ public class ProjectUtil {
     }
 
     public static WorkflowItemDetailsModel getWFItemDetails(AmpComponentFundingTruWF ampComponentFundingTruWF, List<AmpGlobalSettings> settings,String token) throws URISyntaxException {
-        if (getSettingValue(getGlobalSettingsBySection("trubudget"),"isEnabled").equalsIgnoreCase("true")&& TeamUtil.getCurrentUser().getTruBudgetEnabled()) {
 
         if (ampComponentFundingTruWF!=null) {
             return GenericWebClient.getForSingleObjResponse(getSettingValue(settings, "baseUrl") + String.format("api/workflowitem.viewDetails?projectId=%s&subprojectId=%s&workflowitemId=%s", ampComponentFundingTruWF.getTruProjectId(), ampComponentFundingTruWF.getTruSubprojectId(), ampComponentFundingTruWF.getTruWFId()), WorkflowItemDetailsModel.class, token)
                     .onErrorReturn(new WorkflowItemDetailsModel()).block();
         }
-        }
+
         return null;
     }
 

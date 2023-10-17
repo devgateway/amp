@@ -655,7 +655,8 @@ public class ActivityUtil {
 
 
                     String token = ProjectUtil.getTrubudgetToken();
-//                    new Thread(()-> {
+                    new Thread(()-> {
+                        logger.info("Started background task for closing project.");
                     try {
                         Session session = PersistenceManager.openNewSession();
                         Transaction transaction = session.beginTransaction();
@@ -665,7 +666,7 @@ public class ActivityUtil {
                     } catch (Exception e) {
                         logger.info("Error during project close", e);
                     }
-//                    }).start();
+                    }).start();
 
                 } catch (Exception e) {
                     logger.info("An error during project close: ", e);

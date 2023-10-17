@@ -40,10 +40,7 @@ import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 public class AmpComponentFundingNewResourceFieldPanel extends AmpFeaturePanel {
 
@@ -122,6 +119,7 @@ public class AmpComponentFundingNewResourceFieldPanel extends AmpFeaturePanel {
             @Override
             protected void onSubmit() {
                 TemporaryComponentFundingDocument tmp = td.getObject();
+
                 if (fileItemModel.getObject() != null)
                     tmp.setFile(new FileUpload(fileItemModel.getObject()));
 

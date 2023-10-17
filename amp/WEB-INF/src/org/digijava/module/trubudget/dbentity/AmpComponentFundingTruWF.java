@@ -3,11 +3,13 @@ package org.digijava.module.trubudget.dbentity;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.io.Serializable;
+
 @Table(name = "amp_component_funding_tru_wf")
 @Cacheable
 @DynamicUpdate
 @Entity
-public class AmpComponentFundingTruWF {
+public class AmpComponentFundingTruWF implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "amp_component_funding_tru_wf_seq")
     @SequenceGenerator(name = "amp_component_funding_tru_wf_seq", sequenceName = "amp_component_funding_tru_wf_seq", allocationSize = 1)

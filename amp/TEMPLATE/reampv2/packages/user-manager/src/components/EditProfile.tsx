@@ -11,7 +11,7 @@ import { editUserProfile } from '../reducers/editUserProfileReducer';
 import ResultModal from './ResultModal';
 import { updateUser } from '../reducers/fetchUserProfileReducer';
 
-const EditProfile: React.FC = () => {
+const EditProfile = () => {
   const dispatch = useAppDispatch();
   // const navigate = useNavigate();
   const translations = useAppSelector((state) => state.translations.translations);

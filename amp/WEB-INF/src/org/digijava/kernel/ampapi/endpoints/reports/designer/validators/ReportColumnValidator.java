@@ -61,8 +61,8 @@ public class ReportColumnValidator implements ReportValidator {
             for (String id : invalidIds) {
                 final int idNumber = Integer.parseInt(id);
                 AmpColumns ampColumn = columnProvider.fetchAmpColumns().stream().filter(column -> column.getColumnId() == idNumber).collect(Collectors.toList()).get(0);
-                String name = columnProvider.translatorService.translateText( ampColumn.getColumnName() );
-                String errorText = " -> [" + id + "] " + name;
+                String name = columnProvider.getTranslatorService().translateText( ampColumn.getColumnName() );
+                String errorText = " - [" + id + "] " + name;
                 invalidColumnsNames.add(errorText);
             }
         }

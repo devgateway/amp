@@ -16,6 +16,8 @@ import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.dbentity.ApprovalStatus;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Identifiable;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValueDto;
 import org.digijava.module.common.util.DateTimeUtil;
 
 /**
@@ -120,7 +122,12 @@ public class ObjectExporter<T> {
      * <p>If the value is {@link Identifiable} then it's id is returned.
      */
     private Object readFieldWithPossibleValues(APIField field, Object value) {
-        if (ApprovalStatus.class.isAssignableFrom(field.getApiType().getType())) {
+        if (Identifiable.class.isAssignableFrom(field.getApiType().getType()) &&
+                field.getFieldName().equals("adjustment_type")) {
+            AmpCategoryValueDto categoryValueDto = new AmpCategoryValueDto((Long)((Identifiable) value).getIdentifier(), ((AmpCategoryValue) value).getValue());
+            return categoryValueDto;
+        }
+        else if (ApprovalStatus.class.isAssignableFrom(field.getApiType().getType())) {
             return value == null ? null : ((ApprovalStatus) value).getId();
         } else if (Identifiable.class.isAssignableFrom(field.getApiType().getType())) {
             return value == null ? null : ((Identifiable) value).getIdentifier();

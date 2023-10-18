@@ -132,6 +132,10 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
 
                 if (refreshExistingDocs)
                     existingTmpDocs = getExistingObject();
+                if (existingTmpDocs==null)
+                {
+                    existingTmpDocs=new ArrayList<>();
+                }
                 ret.addAll(existingTmpDocs);
 
                 if (am.getObject().getActivityDocuments() == null)
